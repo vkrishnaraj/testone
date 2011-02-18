@@ -50,8 +50,9 @@ public class SalvageBox {
 		this.displayId = displayId;
 	}
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="salvage_id", nullable=false)
+	@ManyToOne
+	@JoinColumn(name = "salvage_id", nullable = true)
+	@Fetch(FetchMode.SELECT)
 	public Salvage getSalvage() {
 		return salvage;
 	}
@@ -78,7 +79,7 @@ public class SalvageBox {
 		this.type = type;
 	}
 
-	@OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "box", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@OrderBy(clause = "item_id")
 	@Fetch(FetchMode.SELECT)
 	public Set<SalvageItem> getSalvageItems() {

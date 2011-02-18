@@ -251,6 +251,8 @@
 
 		<form-bean name="bagbuzzeditorForm" type="com.bagnet.nettracer.tracing.forms.BagBuzzEditorForm" />
 		<form-bean name="bagbuzzsearchForm" type="com.bagnet.nettracer.tracing.forms.BagBuzzSearchForm" />
+		<form-bean name="salvageSearchForm" type="com.bagnet.nettracer.tracing.forms.salvage.SalvageSearchForm" />
+		<form-bean name="salvageEditForm" type="com.bagnet.nettracer.tracing.forms.salvage.SalvageEditForm" />
 
 	</form-beans>
 	<!-- global exception -->
@@ -484,6 +486,9 @@
 		<forward name="view_only_dispute" path="view_only_dispute" />
 		
 		<forward name="manage_dispute" path="manage_dispute" />
+		
+		<forward name="salvage_search" path="salvage_search" />
+		<forward name="salvage_edit" path="salvage_edit" />
 		
 	</global-forwards>
 
@@ -790,8 +795,9 @@
 		<!-- search dispute -->
 		<action path="/searchDispute" type="com.bagnet.nettracer.tracing.actions.SearchDisputeAction" name="searchDisputeForm" scope="request" validate="false"></action>
 		
-
-		
+		<!-- salvage -->
+		<action path="/salvageSearch" type="com.bagnet.nettracer.tracing.actions.salvage.SalvageSearchAction" name="salvageSearchForm" scope="request" validate="false"></action>
+		<action path="/salvageEdit" type="com.bagnet.nettracer.tracing.actions.salvage.SalvageEditAction" name="salvageEditForm" scope="session" validate="false"></action>		
 
 	</action-mappings>
 

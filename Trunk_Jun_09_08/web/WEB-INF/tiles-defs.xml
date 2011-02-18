@@ -806,4 +806,12 @@
 	<definition name="manage_dispute" extends="user_menu">
         <put name="center"   value="/pages/dispute/manage_dispute.jsp"/>
     </definition>
+
+	<definition name="salvage_search" extends="user_menu">
+        <put name="center"   value="/pages/salvage/salvage_search.jsp"/>
+    </definition>
+    
+    <definition name="salvage_edit" extends="user_menu">
+        <put name="center"   value="/pages/salvage/salvage_edit.jsp"/>
+    </definition>
  </tiles-definitions>

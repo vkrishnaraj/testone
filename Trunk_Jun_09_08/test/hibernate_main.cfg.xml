@@ -17,7 +17,7 @@
 	<property name="jdbc.use_scrollable_resultset">false</property>
 	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
 	<property name="company.code">B6</property>
-	<!--<property name="hibernate.show_sql">true</property>-->
+	<property name="hibernate.show_sql">true</property>
 			
 	<!-- c3p0 -->
 	<property name="hibernate.c3p0.acquire_increment">1</property> 
@@ -234,6 +234,11 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.DisputeResolutionTask"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.dr.Dispute"/>
+		
+		<mapping class="com.bagnet.nettracer.tracing.db.salvage.Salvage"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageBox"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageItem"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageOHDReference"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.TaskActivity"/>
     </session-factory>

@@ -27,6 +27,7 @@ public class Salvage {
 	private Date salvageDate;
 	private String pickedUpByLName;
 	private String pickedUpByFName;
+	private int status;
 	private Set<SalvageBox> salvageBoxes;
 	private Set<SalvageOHDReference> ohdReferences;
 	
@@ -43,7 +44,7 @@ public class Salvage {
 	
 	@Column(name="companycode_id", length=2)
 	public String getCompanyCodeId() {
-		return this.companyCodeId;
+		return companyCodeId;
 	}
 	
 	public void setCompanyCodeId(String companyCodeId) {
@@ -61,7 +62,7 @@ public class Salvage {
 	
 	@Column(name="pickedupby_lname", length=30)
 	public String getPickedUpByLName() {
-		return this.pickedUpByLName;
+		return pickedUpByLName;
 	}
 	
 	public void setPickedUpByLName(String pickedUpByLName) {
@@ -70,15 +71,24 @@ public class Salvage {
 	
 	@Column(name="pickedupby_fname", length=30)
 	public String getPickedUpByFName() {
-		return this.pickedUpByFName;
+		return pickedUpByFName;
 	}
 	
 	public void setPickedUpByFName(String pickedUpByFName) {
 		this.pickedUpByFName = pickedUpByFName;
 	}
 	
-	@OneToMany(mappedBy = "boxId", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	@OrderBy(clause = "box_id")
+	@Column(name="status")
+	public int getStatus() {
+		return status;
+	}
+	
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
+	@OneToMany(mappedBy = "salvage", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OrderBy(clause = "display_id")
 	@Fetch(FetchMode.SELECT)
 	public Set<SalvageBox> getSalvageBoxes() {
 		return salvageBoxes;
@@ -88,7 +98,7 @@ public class Salvage {
 		this.salvageBoxes = salvageBoxes;
 	}
 	
-	@OneToMany(mappedBy = "ohdId", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "salvage", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@OrderBy(clause = "ohd_id")
 	@Fetch(FetchMode.SELECT)
 	public Set<SalvageOHDReference> getOhdReferences() {

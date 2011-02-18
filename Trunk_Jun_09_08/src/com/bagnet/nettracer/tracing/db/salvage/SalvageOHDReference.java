@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -40,8 +42,9 @@ public class SalvageOHDReference {
 		this.ohdId = ohdId;
 	}
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="salvage_id", nullable=false)
+	@ManyToOne
+	@JoinColumn(name = "salvage_id", nullable = true)
+	@Fetch(FetchMode.SELECT)
 	public Salvage getSalvage() {
 		return salvage;
 	}

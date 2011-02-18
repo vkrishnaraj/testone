@@ -30,17 +30,17 @@ import java.util.Set;
 import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.db.Address;
+import com.bagnet.nettracer.tracing.db.TraceAddress;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
-import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
-import com.bagnet.nettracer.tracing.db.Item;
-import com.bagnet.nettracer.tracing.db.Item_Inventory;
-import com.bagnet.nettracer.tracing.db.Itinerary;
-import com.bagnet.nettracer.tracing.db.OHD_Address;
-import com.bagnet.nettracer.tracing.db.OHD_Inventory;
-import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
-import com.bagnet.nettracer.tracing.db.OHD_Passenger;
-import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.TraceIncident_Claimcheck;
+import com.bagnet.nettracer.tracing.db.TraceItem;
+import com.bagnet.nettracer.tracing.db.TraceItem_Inventory;
+import com.bagnet.nettracer.tracing.db.TraceItinerary;
+import com.bagnet.nettracer.tracing.db.TraceOHD_Address;
+import com.bagnet.nettracer.tracing.db.TraceOHD_Inventory;
+import com.bagnet.nettracer.tracing.db.TraceOHD_Itinerary;
+import com.bagnet.nettracer.tracing.db.TraceOHD_Passenger;
+import com.bagnet.nettracer.tracing.db.TracePassenger;
 import com.bagnet.nettracer.tracing.db.TraceIncident;
 import com.bagnet.nettracer.tracing.db.TraceOHD;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
@@ -205,7 +205,7 @@ public enum MatchElement {
 		if (om != null && om.getCompanycode_ID() != null
 				&& om.getMembershipnum() != null
 				&& om.getMembershipnum().trim().length() > 0) {
-			for (Passenger pax : (Set<Passenger>) incident.getPassengers()) {
+			for (TracePassenger pax : (Set<TracePassenger>) incident.getPassengers()) {
 				AirlineMembership im = pax.getMembership();
 				if (im != null) {
 					if (im.getCompanycode_ID() != null && im.getMembershipnum() != null
@@ -244,11 +244,11 @@ public enum MatchElement {
 		ArrayList<Name> ohdNames = new ArrayList<Name>();
 
 		// Get incident names
-		for (Passenger pax : (Set<Passenger>) incident.getPassengers()) {
+		for (TracePassenger pax : (Set<TracePassenger>) incident.getPassengers()) {
 			incNames.add(new Name(pax.getFirstname(), pax.getMiddlename(), pax
 					.getLastname()));
 		}
-		for (Item item : (List<Item>) incident.getItemlist()) {
+		for (TraceItem item : (List<TraceItem>) incident.getItemlist()) {
 			if (item != null) {
 				incNames.add(new Name(item.getFnameonbag(), item.getMnameonbag(), item
 						.getLnameonbag()));
@@ -256,7 +256,7 @@ public enum MatchElement {
 		}
 
 		// Get ohd names
-		for (OHD_Passenger pax : (Set<OHD_Passenger>) ohd.getPassengers()) {
+		for (TraceOHD_Passenger pax : (Set<TraceOHD_Passenger>) ohd.getPassengers()) {
 			ohdNames.add(new Name(pax.getFirstname(), pax.getMiddlename(), pax
 					.getLastname()));
 		}
@@ -293,10 +293,10 @@ public enum MatchElement {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
-		for (Passenger incPax : (Set<Passenger>) incident.getPassengers()) {
-			for (Address ia : (Set<Address>) incPax.getAddresses()) {
-				for (OHD_Passenger ohdPax : (Set<OHD_Passenger>) ohd.getPassengers()) {
-					for (OHD_Address oa : (Set<OHD_Address>) ohdPax.getAddresses()) {
+		for (TracePassenger incPax : (Set<TracePassenger>) incident.getPassengers()) {
+			for (TraceAddress ia : (Set<TraceAddress>) incPax.getAddresses()) {
+				for (TraceOHD_Passenger ohdPax : (Set<TraceOHD_Passenger>) ohd.getPassengers()) {
+					for (TraceOHD_Address oa : (Set<TraceOHD_Address>) ohdPax.getAddresses()) {
 						if (ia.getAddress1() != null && ia.getAddress2() != null
 								&& ia.getState_ID() != null && ia.getZip() != null) {
 							String incString = StringUtils.join(" ", ia.getAddress1(), ia
@@ -341,10 +341,10 @@ public enum MatchElement {
 		// that order below, one should be commented out.
 
 		// Pick the highest percent matching segment.
-		for (Itinerary i : (Set<Itinerary>) incident.getItinerary()) {
+		for (TraceItinerary i : (Set<TraceItinerary>) incident.getItinerary()) {
 			String incItinSeg = i.getLegfrom() + " " + i.getLegto() + " "
 					+ i.getFlightnum();
-			for (OHD_Itinerary it : (Set<OHD_Itinerary>) ohd.getItinerary()) {
+			for (TraceOHD_Itinerary it : (Set<TraceOHD_Itinerary>) ohd.getItinerary()) {
 				String ohdItinSeg = it.getLegfrom() + " " + it.getLegto() + " "
 						+ it.getFlightnum();
 				MatchResult result = MatchUtils
@@ -407,10 +407,10 @@ public enum MatchElement {
 			TraceIncident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
-		for (Passenger incPax : (Set<Passenger>) incident.getPassengers()) {
-			for (Address ia : (Set<Address>) incPax.getAddresses()) {
-				for (OHD_Passenger ohdPax : (Set<OHD_Passenger>) ohd.getPassengers()) {
-					for (OHD_Address oa : (Set<OHD_Address>) ohdPax.getAddresses()) {
+		for (TracePassenger incPax : (Set<TracePassenger>) incident.getPassengers()) {
+			for (TraceAddress ia : (Set<TraceAddress>) incPax.getAddresses()) {
+				for (TraceOHD_Passenger ohdPax : (Set<TraceOHD_Passenger>) ohd.getPassengers()) {
+					for (TraceOHD_Address oa : (Set<TraceOHD_Address>) ohdPax.getAddresses()) {
 						MatchResult result = MatchUtils.stringCompare(e, ia.getEmail(), oa
 								.getEmail());
 
@@ -441,8 +441,8 @@ public enum MatchElement {
 		ArrayList<String> ohdPhones = new ArrayList<String>();
 
 		// Get all incident phone numbers
-		for (Passenger incPax : (Set<Passenger>) incident.getPassengers()) {
-			for (Address a : (Set<Address>) incPax.getAddresses()) {
+		for (TracePassenger incPax : (Set<TracePassenger>) incident.getPassengers()) {
+			for (TraceAddress a : (Set<TraceAddress>) incPax.getAddresses()) {
 				if (a.getHomephone() != null)
 					incPhones.add(a.getHomephone());
 				if (a.getWorkphone() != null)
@@ -457,8 +457,8 @@ public enum MatchElement {
 		}
 
 		// Get all TraceOHD phone numbers
-		for (OHD_Passenger ohdPax : (Set<OHD_Passenger>) ohd.getPassengers()) {
-			for (OHD_Address a : (Set<OHD_Address>) ohdPax.getAddresses()) {
+		for (TraceOHD_Passenger ohdPax : (Set<TraceOHD_Passenger>) ohd.getPassengers()) {
+			for (TraceOHD_Address a : (Set<TraceOHD_Address>) ohdPax.getAddresses()) {
 				if (a.getHomephone() != null)
 					ohdPhones.add(a.getHomephone());
 				if (a.getWorkphone() != null)
@@ -521,7 +521,7 @@ public enum MatchElement {
 			ohdTenDigitTag = ohdBagTag;
 		}
 
-		for (Incident_Claimcheck iClaim : (Set<Incident_Claimcheck>) incident
+		for (TraceIncident_Claimcheck iClaim : (Set<TraceIncident_Claimcheck>) incident
 				.getClaimchecks()) {
 			String originalIncString = null;
 			String originalOhdString = ohd.getClaimnum();
@@ -582,7 +582,7 @@ public enum MatchElement {
 			TraceIncident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
-		for (Item item : (List<Item>) incident.getItemlist()) {
+		for (TraceItem item : (List<TraceItem>) incident.getItemlist()) {
 
 			// We are going to use the manufacturer name and only add the result
 			// if we have a 100% match.
@@ -619,7 +619,7 @@ public enum MatchElement {
 			return results;
 		}
 
-		for (Item item : (List<Item>) incident.getItemlist()) {
+		for (TraceItem item : (List<TraceItem>) incident.getItemlist()) {
 			if (item != null) {
 				if (item.getColor() != null && item.getColor().trim().length() > 0) {
 					if (item.getColor().equals(ohdColor)) {
@@ -674,7 +674,7 @@ public enum MatchElement {
 			return results;
 		}
 
-		for (Item item : (List<Item>) incident.getItemlist()) {
+		for (TraceItem item : (List<TraceItem>) incident.getItemlist()) {
 			if (item != null && item.getBagtype() != null
 					&& item.getBagtype().trim().length() > 0) {
 				if (item.getBagtype().equals(ohdType)) {
@@ -725,7 +725,7 @@ public enum MatchElement {
 		if (ohd.getXdescelement_ID_3() != traceX)
 			ohdElements.add(new Integer(ohd.getXdescelement_ID_3()));
 
-		for (Item item : (List<Item>) incident.getItemlist()) {
+		for (TraceItem item : (List<TraceItem>) incident.getItemlist()) {
 			ArrayList<Integer> matched = new ArrayList<Integer>();
 
 			if (item != null) {
@@ -770,10 +770,10 @@ public enum MatchElement {
 
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 
-		for (Item item : (List<Item>) incident.getItemlist()) {
+		for (TraceItem item : (List<TraceItem>) incident.getItemlist()) {
 			if (item != null) {
-				for (Item_Inventory i : (Set<Item_Inventory>) item.getInventory()) {
-					for (OHD_Inventory oi : (Set<OHD_Inventory>) ohd.getItems()) {
+				for (TraceItem_Inventory i : (Set<TraceItem_Inventory>) item.getInventory()) {
+					for (TraceOHD_Inventory oi : (Set<TraceOHD_Inventory>) ohd.getItems()) {
 						String incCatType = i.getCachedCategory();
 						String ohdCatType = oi.getCachedCategory();
 						String incContent = StringUtils.removePronouns(i.getDescription());

@@ -831,6 +831,21 @@ public class TracingConstants {
 	
 	public static final String NON_REVENUE_CODES_KEY = "non.revenue.codes";
 	
+	// MJS: salvage constants
+	public static final int SALVAGE_DEFAULT = 0;
+	public static final int SALVAGE_LOW_VALUE = 1;
+	public static final int SALVAGE_HIGH_VALUE = 2;
+	
+	public static final int SALVAGE_OPEN = 0;
+	public static final int SALVAGE_CLOSED = 1;
+	public static final int SALVAGE_ALL = 2;
+	
+	public static final String SALVAGE_SEARCH = "salvage_search";
+	public static final String SALVAGE_EDIT = "salvage_edit";
+	
+	public static final String JSP_DELETE_SALVAGE_BOX = "salvage_box";
+	public static final String JSP_DELETE_SALVAGE_ITEM = "salvage_item";
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;

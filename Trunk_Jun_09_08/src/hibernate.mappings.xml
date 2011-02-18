@@ -86,6 +86,14 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.ExpensePayout"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/ExpenseType.hbm.xml"/>
 
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceItem.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceItinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TracePassenger.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceAddress.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD_Inventory.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD_Passenger.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD_Address.hbm.xml"/>
+
 		<mapping resource="com/bagnet/nettracer/tracing/db/LogEvent.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/LogEventThrowable.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/ClaimProrate.hbm.xml"/>
@@ -100,9 +108,12 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Match_Detail.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHDRequest.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Itinerary.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD_Itinerary.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item_Photo.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Item_Inventory.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceItem_Inventory.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Claimcheck.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/TraceIncident_Claimcheck.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/DbLocale.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/ReceiptDbLocale.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Log_Itinerary.hbm.xml"/>
@@ -125,6 +136,10 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Rule.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Property.hbm.xml"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.Comment"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.salvage.Salvage"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageBox"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageItem"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageOHDReference"/>
 		
 		<!-- WorldTracer Stuff -->
 		<mapping resource="com/bagnet/nettracer/tracing/db/Worldtracer_Actionfiles.hbm.xml"/>
