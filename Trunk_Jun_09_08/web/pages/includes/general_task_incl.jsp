@@ -49,9 +49,6 @@ if (hasPermission) {
 				<tr><td width ="20%"><bean:message key="colname.agentassigned_nobr" />:</td><td><bean:write name="sessionTaskContainer" property="assigned_agent.username"/></td></tr>
 				<tr><td width ="20%"><bean:message key="generaltask.timestarted" />:</td><td><bean:write name="sessionTaskContainer" property="opened_timestamp"/>&nbsp;&nbsp;<input type="button" value="<bean:message key="button.task.pause"/>" onclick="" id="button"></td></tr>
 		 		<tr><td width ="20%"><bean:message key="generaltask.description" />:</td><td><bean:message name="sessionTaskContainer" property="description"/></td></tr>
-		 		
-
-		  
 				<tr><td colspan="2">
           <span style="float:left">
           	<input type="button" value="<bean:message key="button.task.complete" />" onclick="" id="button">
@@ -59,11 +56,11 @@ if (hasPermission) {
           <span style="float:right">
           	<select id="task.defer.time" class="dropdown">
           		<option value=""><bean:message key="select.please_select" /></option>
-          		<option value="30min"><bean:message key="generaltask.defer.30min" /></option>
-          		<option value="2hr"><bean:message key="generaltask.defer.2hr" /></option>
-          		<option value="4hr"><bean:message key="generaltask.defer.4hr" /></option>
-          		<option value="12hr"><bean:message key="generaltask.defer.12hr" /></option>
-          		<option value="24hr"><bean:message key="generaltask.defer.24hr" /></option>
+          		<option value="30"><bean:message key="generaltask.defer.30min" /></option>
+          		<option value="120"><bean:message key="generaltask.defer.2hr" /></option>
+          		<option value="240"><bean:message key="generaltask.defer.4hr" /></option>
+          		<option value="720"><bean:message key="generaltask.defer.12hr" /></option>
+          		<option value="1440"><bean:message key="generaltask.defer.24hr" /></option>
           	</select>
           	<input type="button" value="<bean:message key="button.task.defer" />" onclick="" id="button">&nbsp;&nbsp;
           	<input type="button" value="<bean:message key="button.task.abort" />" onclick="" id="button">

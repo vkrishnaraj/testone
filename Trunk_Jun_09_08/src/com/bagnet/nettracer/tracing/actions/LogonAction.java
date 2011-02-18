@@ -32,8 +32,11 @@ import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ForwardNotice;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask;
 import com.bagnet.nettracer.tracing.dto.ActivityDTO;
 import com.bagnet.nettracer.tracing.dto.PcnSearchDTO;
 import com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm;
@@ -136,6 +139,25 @@ public class LogonAction extends Action {
 			response.addDateHeader("Expires", -1);
 			return mapping.findForward(TracingConstants.PASS_RESET);
 		}
+		
+		/// TEST BEGINS
+//		public final static int TASK_MANAGER_OPEN = 83;
+//		public final static int TASK_MANAGER_PROCESSED = 84;
+//		public final static int TASK_MANAGER_CLOSED = 85;
+		TwoDayTask obj = new TwoDayTask();
+		
+		obj.setAssigned_agent(agent);
+		obj.setOpened_timestamp(new Date());
+		Status s = new Status();
+		s.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
+		obj.setStatus(s);
+		obj.setTask_id(123);
+		Incident i = new Incident();
+		i.setIncident_ID("ATLUS00000001");
+		obj.setIncident(i);
+		session.setAttribute("sessionTaskContainer", obj);
+		
+		// TEST ENDS
 
 		int expiredays = agent.getStation().getCompany().getVariable().getPass_expire_days();
 		if (expiredays > 0) {
