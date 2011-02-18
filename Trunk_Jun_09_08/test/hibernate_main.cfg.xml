@@ -234,6 +234,8 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.DisputeResolutionTask"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.dr.Dispute"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.TaskActivity"/>
     </session-factory>
 
 </hibernate-configuration>

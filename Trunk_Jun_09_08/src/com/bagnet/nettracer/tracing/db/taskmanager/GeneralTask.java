@@ -1,17 +1,24 @@
 package com.bagnet.nettracer.tracing.db.taskmanager;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -58,11 +65,30 @@ public class GeneralTask {
 		assigned_agent = assignedAgent;
 	}
 	
+	public Date getDeferment_timestamp() {
+		return deferment_timestamp;
+	}
+
+	public void setDeferment_timestamp(Date deferment_timestamp) {
+		this.deferment_timestamp = deferment_timestamp;
+	}
+	
 	long task_id;
 	Date opened_timestamp;
 	Date closed_timestamp;
 	Status status;
 	Agent assigned_agent;
-
+	Date deferment_timestamp;
+	List<TaskActivity> activities;
+	
+	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+//	@org.hibernate.annotations.IndexColumn(name = "bagnumber")
+	@Fetch(FetchMode.SELECT)
+	public List<TaskActivity> getActivities() {
+		return activities;
+	}
+	public void setActivities(List<TaskActivity> activities) {
+		this.activities = activities;
+	}
 	
 }
