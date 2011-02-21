@@ -22,37 +22,9 @@
 
   </SCRIPT>
   
-  <script language="javascript">
-    
-function goprev() {
-  o = document.searchIncidentForm;
-  o.prevpage.value = "1";
-  o.pagination.value="1";
-  o.submit();
-}
-
-function gonext() {
-  o = document.searchIncidentForm;
-  o.nextpage.value="1";
-  o.pagination.value="1";
-  o.submit();
-}
-
-function gopage(i) {
-  o = document.searchIncidentForm;
-  o.currpage.value = i;
-  o.pagination.value="1";
-  o.submit();
-
-}
-function updatePagination() {
-    return true;
-}
-
-  </script>
   
   <jsp:include page="/pages/includes/validation_search.jsp" />
-  <html:form action="incomingReports.do" method="post" focus="incident_ID" onsubmit="fillzero(this.incident_ID, 13); return validateSearch(this);">
+  <html:form action="/logon.do?taskmanager=1">
   
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   
@@ -84,6 +56,11 @@ function updatePagination() {
             <table class="form2" cellspacing="0" cellpadding="0">
 
             </table>
+            <logic:notPresent name="resultlist" scope="request">
+            <center>
+               <h1 class="green">No new tasks</h1>
+              </center>
+              </logic:notPresent>
             <logic:present name="resultlist" scope="request">
               <h1 class="green">
                 <bean:message key="header.morningduties.incidentlist" />
@@ -143,13 +120,6 @@ function updatePagination() {
                       <bean:message key="colname.itinerary" />
                     </b>
                   </td>
-                  <logic:notEmpty name="searchIncidentForm" property="flightnum">
-                    <td>
-                      <b>
-                        <bean:message key="colname.flightnum" />
-                      </b>
-                    </td>
-                  </logic:notEmpty>
                   <td >
                     <b>
                       <bean:message key="colname.claimnum" />
@@ -225,14 +195,6 @@ function updatePagination() {
                       </logic:iterate>
                       &nbsp;
                     </td>
-
-
-                    <logic:notEmpty name="searchIncidentForm" property="flightnum">
-                      <td>
-                        <bean:write name="searchIncidentForm" property="airline" />
-                        <bean:write name="searchIncidentForm" property="flightnum" />
-                      </td>
-                    </logic:notEmpty>
                     <td>
                       <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
                         <logic:present name="item_list" property="claimchecknum">
@@ -284,19 +246,7 @@ function updatePagination() {
                     </td>
                   </tr>
                 </logic:iterate>
-                <tr>
-                  <td colspan="<logic:notEmpty name="searchIncidentForm" property="flightnum">13</logic:notEmpty> <logic:empty name="searchIncidentForm" property="flightnum">12</logic:empty>">
-                    
-                    <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                    
-                  </td>
-                </tr>
                 
               </table>
-              <script language=javascript>
-                
-  document.location.href="#result";
-
-              </script>
             </logic:present>
           </html:form>
