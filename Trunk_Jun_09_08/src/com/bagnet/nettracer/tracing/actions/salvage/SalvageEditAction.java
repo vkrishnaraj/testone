@@ -142,9 +142,7 @@ public class SalvageEditAction extends CheckedAction {
 		salvage.setSalvageBoxes(salvageBoxes);
 		salvage.setOhdReferences(ohdReferences);
 		
-//		SalvageOHDReference ref = new SalvageOHDReference();
-//		ref.setSalvage(salvage);
-//		ohdReferences.add(ref);
+
 		return salvage;
 	}
 
@@ -258,10 +256,12 @@ public class SalvageEditAction extends CheckedAction {
 			String ohdId = request.getParameter("onhand");
 			ohdId = StringUtils.fillzero(ohdId.trim());
 			OHD ohd = SalvageDAO.loadOhd(ohdId);
-			SalvageOHDReference ref = new SalvageOHDReference();
-			ref.setSalvage(salvage);
-			ref.setOhdId(ohd.getOHD_ID());
-			salvage.getOhdReferences().add(ref);
+			if (ohd != null) {
+				SalvageOHDReference ref = new SalvageOHDReference();
+				ref.setSalvage(salvage);
+				ref.setOhdId(ohd.getOHD_ID());
+				salvage.getOhdReferences().add(ref);
+			}
 			
 		}
 		

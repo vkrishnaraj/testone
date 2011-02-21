@@ -26,7 +26,7 @@ import com.bagnet.nettracer.tracing.db.salvage.SalvageOHDReference;
 import com.bagnet.nettracer.tracing.forms.salvage.SalvageSearchForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-@SuppressWarnings("rawtypes")
+
 public class SalvageDAO {
 	
 	private static final String EXCEPTION_MESSAGE = "Exception in SalvageDAO";
@@ -172,11 +172,6 @@ public class SalvageDAO {
 		return ohd;
 	}
 
-	public static void saveCompleteSalvage(Salvage salvage) {
-		
-		
-	}
-
 	
 	public static boolean saveCompleteSalvage(Salvage salvage, Agent a) {
 		boolean success = false;
@@ -188,38 +183,12 @@ public class SalvageDAO {
 		
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			
-			
-			for (SalvageBox box : salvage.getSalvageBoxes()) {
-				for (SalvageItem item : box.getSalvageItems()) {
-					
-						
-					if (item.getLostAndFoundId() != null) {
-						LostAndFoundIncident lf = SalvageDAO.loadLostAndFound(item.getLostAndFoundId());
-						if (lf != null) {
-							Status reportStatus = new Status();
-							reportStatus.setStatus_ID(41);
-							Status disposal_status = new Status();
-							disposal_status.setStatus_ID(TracingConstants.LF_STATUS_SALVAGED);
-							
-							lf.setReport_status(reportStatus);
-							lf.setDisposal_status(disposal_status);
-							LostFoundBMO.insertLostFound(lf, a, session);
-						
-							logger.info("Closed: " + lf.getFile_ref_number());
-						}
-					}
-		
-				}
-			}
-				
 
+			closeFoundObjects(salvage, a, session);
 			closeOhds(salvage, a, session);
 			
 			transaction = session.beginTransaction();
-			
 			session.merge(salvage);
-			
 			transaction.commit();
 			success = true;
 		} catch (Exception e) {
@@ -233,6 +202,30 @@ public class SalvageDAO {
 			}
 		}
 		return success;
+	}
+
+	private static void closeFoundObjects(Salvage salvage, Agent a, Session session) {
+		for (SalvageBox box : salvage.getSalvageBoxes()) {
+			for (SalvageItem item : box.getSalvageItems()) {
+				
+					
+				if (item.getLostAndFoundId() != null) {
+					LostAndFoundIncident lf = SalvageDAO.loadLostAndFound(item.getLostAndFoundId());
+					if (lf != null) {
+						Status reportStatus = new Status();
+						reportStatus.setStatus_ID(41);
+						Status disposal_status = new Status();
+						disposal_status.setStatus_ID(TracingConstants.LF_STATUS_SALVAGED);
+						
+						lf.setReport_status(reportStatus);
+						lf.setDisposal_status(disposal_status);
+						LostFoundBMO.insertLostFound(lf, a, session);
+					
+						logger.info("Closed: " + lf.getFile_ref_number());
+					}
+				}
+			}
+		}
 	}
 	
 

@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
@@ -97,6 +98,7 @@ public class SalvageBox {
 		this.salvageItems = salvageItems;
 	}
 
+	@Transient
 	public SalvageItem getSalvageItem(int i) {
 		ArrayList<SalvageItem> itemList;
 		if (getSalvageItems() != null && i < getSalvageItems().size()) {
