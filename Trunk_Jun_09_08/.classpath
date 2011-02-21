@@ -62,7 +62,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jars/backport-util-concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/catalina.jar"/>
-	<classpathentry kind="lib" path="lib/jars/delivery-rynns.jar"/>
 	<classpathentry kind="lib" path="lib/jars/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="lib/jars/aspectjweaver.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ejb3-persistence.jar"/>
@@ -147,5 +146,6 @@
 	<classpathentry kind="lib" path="C:/hornetq-2.0.0.GA/lib/jboss-mc.jar"/>
 	<classpathentry kind="lib" path="lib/jars/libphonenumber-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/jars/java-core-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/jars/deliverySERV.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

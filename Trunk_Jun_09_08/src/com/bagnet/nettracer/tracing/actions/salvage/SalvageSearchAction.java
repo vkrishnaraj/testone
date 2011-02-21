@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -21,36 +20,29 @@ import com.bagnet.nettracer.tracing.forms.salvage.SalvageSearchForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class SalvageSearchAction extends CheckedAction {
-	
-	private static Logger logger = Logger.getLogger(SalvageSearchAction.class);
-	
-	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		
+
+	@SuppressWarnings("unchecked")
+	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+
 		HttpSession session = request.getSession();
 		TracerUtils.checkSession(session);
-		
+
 		if (session.getAttribute("user") == null || form == null) {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
-		
+
 		Agent agent = (Agent) session.getAttribute("user");
-//		SalvageSearchForm myForm = (SalvageSearchForm) form;
-//		LinkedHashSet<Salvage> resultSet = SalvageDAO.getSalvagesFromSearchForm(myForm, agent);
 		Set<Salvage> resultSet = SalvageDAO.getSalvagesFromSearchForm((SalvageSearchForm) form, agent);
-		ActionForward forward = null;
 
 		if (resultSet == null) {
 			resultSet = new LinkedHashSet<Salvage>();
-		} else if (resultSet.size() == 1) {
-			response.sendRedirect("salvageEdit.do?salvageId=" + ((Salvage) resultSet.toArray()[0]).getSalvageId());
 		} else {
 			request.setAttribute("resultList", resultSet);
-			forward = mapping.findForward(TracingConstants.SALVAGE_SEARCH);
+
 		}
 
-		return forward;
+		return mapping.findForward(TracingConstants.SALVAGE_SEARCH);
 	}
-	
+
 }

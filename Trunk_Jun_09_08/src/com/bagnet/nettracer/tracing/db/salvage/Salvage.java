@@ -11,11 +11,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
+
+import com.bagnet.nettracer.tracing.db.TimeZone;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Table(name = "salvage")
@@ -30,6 +35,7 @@ public class Salvage {
 	private int status;
 	private Set<SalvageBox> salvageBoxes;
 	private Set<SalvageOHDReference> ohdReferences;
+	
 	
 	@Id
 	@GeneratedValue
@@ -88,6 +94,7 @@ public class Salvage {
 	}
 	
 	@OneToMany(mappedBy = "salvage", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN) 
 	@OrderBy(clause = "display_id")
 	@Fetch(FetchMode.SELECT)
 	public Set<SalvageBox> getSalvageBoxes() {
@@ -99,6 +106,7 @@ public class Salvage {
 	}
 	
 	@OneToMany(mappedBy = "salvage", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	@OrderBy(clause = "ohd_id")
 	@Fetch(FetchMode.SELECT)
 	public Set<SalvageOHDReference> getOhdReferences() {
@@ -107,6 +115,11 @@ public class Salvage {
 	
 	public void setOhdReferences(Set<SalvageOHDReference> ohdReferences) {
 		this.ohdReferences = ohdReferences;
+	}
+	
+	@Transient
+	public String getDisSalvageDate(String dateFormat) {
+		return DateUtils.formatDate(getSalvageDate(), dateFormat, "", null);
 	}
 	
 }

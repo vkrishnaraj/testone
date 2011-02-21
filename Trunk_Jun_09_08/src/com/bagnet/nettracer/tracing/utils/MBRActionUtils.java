@@ -54,7 +54,7 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
  */
 public class MBRActionUtils {
 	
-	private static Logger logger = Logger.getLogger(MBRActionUtils.class);
+	static Logger logger = Logger.getLogger(MBRActionUtils.class);
 	
 	public static boolean actionAdd(IncidentForm theform, HttpServletRequest request, Agent user) {
 		// when adding or deleting from the page,
@@ -71,7 +71,7 @@ public class MBRActionUtils {
 			String parameter = (String) e.nextElement();
 			if (parameter.indexOf("addinventory") > -1) {
 				String index = parameter.substring(parameter.indexOf("[")+1, java.lang.Math.min(parameter.indexOf("]"), parameter.length()));				
-				numberToAdd = getNumberToAdd(request, "addNumInventory[" + index + "]" );
+				numberToAdd = TracerUtils.getNumberToAdd(request, "addNumInventory[" + index + "]" );
 				fileindex = Integer.parseInt(parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]")));
 				
 				for (int i=0; i<numberToAdd; ++i) {
@@ -101,7 +101,7 @@ public class MBRActionUtils {
 		}
 		// add passenger
 		if (request.getParameter("addPassenger") != null) {
-			numberToAdd = getNumberToAdd(request, "addPassengerNum");
+			numberToAdd = TracerUtils.getNumberToAdd(request, "addPassengerNum");
 			for (int i=0; i<numberToAdd; ++i) {
 				theform.getPassenger(theform.getPassengerlist().size());
 			}
@@ -111,7 +111,7 @@ public class MBRActionUtils {
 
 		// add claimcheck
 		if (request.getParameter("addclaimcheck") != null) {
-			numberToAdd = getNumberToAdd(request, "addclaimcheckNum");
+			numberToAdd = TracerUtils.getNumberToAdd(request, "addclaimcheckNum");
 			for (int i=0; i<numberToAdd; ++i) {
 				theform.getClaimcheck(theform.getClaimchecklist().size());
 			}
@@ -120,7 +120,7 @@ public class MBRActionUtils {
 		}
 		// add new item box
 		if (request.getParameter("additem") != null) {
-			numberToAdd = getNumberToAdd(request, "additemNum");
+			numberToAdd = TracerUtils.getNumberToAdd(request, "additemNum");
 			for (int i=0; i<numberToAdd; ++i) {
 	
 				Item item = theform.getItem(theform.getItemlist().size(), TracingConstants.LOST_DELAY);
@@ -140,7 +140,7 @@ public class MBRActionUtils {
 		}
 
 		if (request.getParameter("addarticles") != null) {
-			numberToAdd = getNumberToAdd(request, "addarticlesNum");
+			numberToAdd = TracerUtils.getNumberToAdd(request, "addarticlesNum");
 			for (int i=0; i<numberToAdd; ++i) {	
 				Articles a = theform.getArticle(theform.getArticlelist().size());
 				a.setCurrency_ID(user.getDefaultcurrency());
@@ -150,7 +150,7 @@ public class MBRActionUtils {
 		}
 		// add new itinerary box
 		if (request.getParameter("addpassit") != null) {		
-			numberToAdd = getNumberToAdd(request, "addpassitNum");
+			numberToAdd = TracerUtils.getNumberToAdd(request, "addpassitNum");
 			for (int i=0; i<numberToAdd; ++i) {
 				theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.PASSENGER_ROUTING);
 			}
@@ -158,7 +158,7 @@ public class MBRActionUtils {
 			return true;
 		}
 		if (request.getParameter("addbagit") != null) {
-			numberToAdd = getNumberToAdd(request, "addbagitNum");
+			numberToAdd = TracerUtils.getNumberToAdd(request, "addbagitNum");
 			for (int i=0; i<numberToAdd; ++i) {
 				theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.BAGGAGE_ROUTING);
 			}
@@ -167,17 +167,6 @@ public class MBRActionUtils {
 		}
 
 		return false;
-	}
-
-	private static int getNumberToAdd(HttpServletRequest request, String namedParameter) {
-		try {
-			if (request.getParameter(namedParameter) != null) {
-				return Integer.parseInt(request.getParameter(namedParameter));
-			}
-		} catch (Exception e) {
-			logger.error("Error adding certain number of items to form for variable " + namedParameter, e);
-		}
-		return 1;
 	}
 
 	public static boolean actionDelete(IncidentForm theform, HttpServletRequest request) {

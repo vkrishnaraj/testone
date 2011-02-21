@@ -20,8 +20,8 @@ public class SalvageItem {
 
 	private int itemId;
 	private SalvageBox box;
-	private String description;
-	private int quantity;
+	private String description = "";
+	private int quantity = 1;
 	private int type; // valid values are: 0 - default, 1-low value, 2-high value
 	private String lostAndFoundId;
 	
@@ -37,7 +37,7 @@ public class SalvageItem {
 	}
 	
 	@ManyToOne
-	@JoinColumn(name = "box_id", nullable = true)
+	@JoinColumn(name = "box_id", nullable = false)
 	@Fetch(FetchMode.SELECT)
 	public SalvageBox getBox() {
 		return box;
@@ -74,7 +74,7 @@ public class SalvageItem {
 		this.type = type;
 	}
 	
-	@Column(name="lostandfound_id", length=13, nullable=false)
+	@Column(name="lostandfound_id", length=13, nullable=true)
 	public String getLostAndFoundId() {
 		return this.lostAndFoundId;
 	}

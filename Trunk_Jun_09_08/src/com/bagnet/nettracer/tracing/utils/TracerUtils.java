@@ -1659,4 +1659,15 @@ public class TracerUtils {
 		return nonRevenueCodes;
 	}
 
+	public static int getNumberToAdd(HttpServletRequest request, String namedParameter) {
+		try {
+			if (request.getParameter(namedParameter) != null) {
+				return Integer.parseInt(request.getParameter(namedParameter));
+			}
+		} catch (Exception e) {
+			MBRActionUtils.logger.error("Error adding certain number of items to form for variable " + namedParameter, e);
+		}
+		return 1;
+	}
+
 }

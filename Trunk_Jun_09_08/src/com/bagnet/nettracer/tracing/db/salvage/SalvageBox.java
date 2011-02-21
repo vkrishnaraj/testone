@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.salvage;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OrderBy;
@@ -22,7 +24,11 @@ import org.hibernate.annotations.Proxy;
 @Table(name = "salvage_box")
 @Proxy(lazy = false)
 public class SalvageBox {
-
+	public static final int TYPE_DEFAULT = 0;
+	public static final int TYPE_LOW_VALUE = 1;
+	public static final int TYPE_HIGH_VALUE = 2;
+	
+	
 	private int boxId;
 	private int displayId;
 	private Salvage salvage;
@@ -51,7 +57,7 @@ public class SalvageBox {
 	}
 	
 	@ManyToOne
-	@JoinColumn(name = "salvage_id", nullable = true)
+	@JoinColumn(name = "salvage_id", nullable = false)
 	@Fetch(FetchMode.SELECT)
 	public Salvage getSalvage() {
 		return salvage;
@@ -80,6 +86,7 @@ public class SalvageBox {
 	}
 
 	@OneToMany(mappedBy = "box", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN) 
 	@OrderBy(clause = "item_id")
 	@Fetch(FetchMode.SELECT)
 	public Set<SalvageItem> getSalvageItems() {
@@ -89,5 +96,15 @@ public class SalvageBox {
 	public void setSalvageItems(Set<SalvageItem> salvageItems) {
 		this.salvageItems = salvageItems;
 	}
-	
+
+	public SalvageItem getSalvageItem(int i) {
+		ArrayList<SalvageItem> itemList;
+		if (getSalvageItems() != null && i < getSalvageItems().size()) {
+			itemList = new ArrayList<SalvageItem>(getSalvageItems());
+			return itemList.get(i);
+		}
+		return null;
+		
+	}
+
 }

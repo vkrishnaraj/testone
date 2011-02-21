@@ -81,7 +81,7 @@
                   <bean:message key="button.reset" />
                 </html:reset>
 				  &nbsp;				
-				<html:button property="salvageId" styleId="button" onclick="document.location.href='salvageEdit.do'">
+				<html:button property="salvageId" styleId="button" onclick="document.location.href='salvageEdit.do?create_new=1'">
           			<bean:message key="salvage.create_new" />
           		</html:button>
                 </td>
@@ -103,12 +103,12 @@
                   </td>
                   <td>
                     <b>
-                      <bean:message key="colname.salvage_status" />
+                      <bean:message key="colname.salvage_date" />
                     </b>
                   </td>
                   <td>
                     <b>
-                      <bean:message key="colname.salvage_date" />
+                      <bean:message key="colname.salvage_status" />
                     </b>
                   </td>
                   <td>
@@ -120,7 +120,14 @@
                 <logic:iterate id="results" name="resultList" type="com.bagnet.nettracer.tracing.db.salvage.Salvage">
                   <tr>
                     <td>
-                      <a href='salvageEdit.do?salvageId=<bean:write name="results" property="salvageId" />'><bean:write name="results" property="salvageId" /></a>
+                      <a href='salvageEdit.do?salvageId=<bean:write name="results" property="salvageId" />'>
+                      <bean:write name="results" property="salvageId" />
+                      </a>
+                    </td>
+                    <td>
+                      <a href='salvageEdit.do?salvageId=<bean:write name="results" property="salvageId" />'>
+                      <%=results.getDisSalvageDate(a.getDateformat().getFormat()) %>
+                      </a>
                     </td>
                     <td>
                     	<logic:equal name="results" property="status" value="0">
@@ -130,11 +137,9 @@
                       		<bean:message key="salvage.status_closed" />
                     	</logic:equal>
                     </td>
+                    
                     <td>
-                      <bean:write name="results" property="salvageDate" />
-                    </td>
-                    <td>
-                      <bean:write name="results" property="pickedUpByLName" />,&nbsp;<bean:write name="results" property="pickedUpByFName" />
+                      <bean:write name="results" property="pickedUpByLName" />
                     </td>
                   </tr>
                 </logic:iterate> 

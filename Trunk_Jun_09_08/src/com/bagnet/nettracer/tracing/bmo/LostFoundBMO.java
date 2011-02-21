@@ -101,6 +101,51 @@ public class LostFoundBMO {
 		}
 		return true;
 	}
+	
+	public static boolean insertLostFound(LostAndFoundIncident iDTO, Agent mod_agent, Session sess) throws HibernateException {
+		Transaction t = null;
+		boolean nullSession = false;
+		
+		
+		try {
+			if (sess == null) {
+				sess = HibernateWrapper.getSession().openSession();
+				nullSession = true;
+			}
+			
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(iDTO);
+			
+				
+
+			if (iDTO.getFiling_agent().getStation().getCompany().getVariable().getAudit_lost_found() == 1) {
+				Audit_LostAndFoundIncident audit_lfi = AuditLostFoundUtils.getAuditLostAndFound(iDTO, mod_agent);
+				if (audit_lfi != null) {
+					
+					sess.save(audit_lfi);
+					
+				}
+			}
+			t.commit();
+
+		} catch (Exception e) {
+			logger.error("unable to insert into database: " + e);
+
+			if (t != null)
+				t.rollback();
+			return false;
+		} finally {
+
+			if (nullSession && sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+		return true;
+	}
 
 	/**
 	 * Obtain company record based on passed in company code

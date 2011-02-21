@@ -338,6 +338,8 @@ public class TracingConstants {
 	public final static int TASK_STATUS_WAITING = 20;
 	public final static int TASK_STATUS_DELETED = 28;
 	public final static int TASK_STATUS_NOT_COMPLETED = 79;
+	
+	public final static int LF_STATUS_SALVAGED = 45;
 
 	// match status
 	public final static int MATCH_STATUS_OPEN = 15;
@@ -843,8 +845,9 @@ public class TracingConstants {
 	public static final String SALVAGE_SEARCH = "salvage_search";
 	public static final String SALVAGE_EDIT = "salvage_edit";
 	
-	public static final String JSP_DELETE_SALVAGE_BOX = "salvage_box";
-	public static final String JSP_DELETE_SALVAGE_ITEM = "salvage_item";
+	public static final String JSP_DELETE_SALVAGE_BOX = "delSalvageBox";
+	public static final String JSP_DELETE_SALVAGE_ITEM = "delSalvageItem";
+	public static final String JSP_DELETE_SALVAGE_OHD= "delSalvageOhd";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

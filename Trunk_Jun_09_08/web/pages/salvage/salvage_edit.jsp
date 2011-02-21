@@ -13,7 +13,8 @@
   	String cssFormClass = "form2_dam";
 %>
   
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+  
+<%@page import="com.bagnet.nettracer.tracing.db.salvage.SalvageItem"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -36,7 +37,7 @@
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.salvage_details" />
-            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+            
           </h1>
 	      <span class="reqfield">*</span>
 	      <bean:message key="message.required" /> 
@@ -46,12 +47,15 @@
                 <td>
                   <bean:message key="colname.salvage_id" />
                   <br>
-                  <html:text property="salvage.salvageId" size="10" styleClass="textfield" styleId="sId" disabled="true" />
+
+                  	<html:text property="salvage.salvageId" size="10" styleClass="textfield" styleId="sId" disabled="true" />
+
+                  
                 </td>
                 <td>
                 	<bean:message key="colname.salvage_status" />
                 	<br>
-                	<html:select property="salvage.status" styleClass="dropdown" disabled="true">
+                	<html:select name="salvageEditForm" property="salvage.status" styleClass="dropdown" disabled="true">
 	                  <html:option value="0">
 	                    <bean:message key="salvage.status_open" />
 	                  </html:option>
@@ -60,7 +64,7 @@
 	                  </html:option>
 	                </html:select>
                 </td>
-                <td nowrap>
+                <td nowrap="nowrap">
                   <bean:message key="colname.salvage_date" />
                   (<%= a.getDateformat().getFormat() %>)
                   <br>
@@ -68,42 +72,70 @@
                 </td>
                 </tr>
                 </table>
-                <a name="baginfo"></a>
-  <h1 class="green">
-      <bean:message key="header.salvage_box_details" />
-      <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#damaged_bag_reports/work_damaged_bag_information.htm');return false;">
-          <img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0">
-      </a>
+                
+                
+                
+                <!--  BEGINNING OF OHDS -->
+                  <h1 class="green">
+      <bean:message key="header.salvage_onhands" />
       </h1>
       <span class="reqfield">*</span>
       <bean:message key="message.required" /> 
-      <logic:iterate id="box" indexId="i" name="salvageEditForm" property="salvage.salvageBoxes" type="com.bagnet.nettracer.tracing.db.salvage.SalvageBox">
-      <logic:notEqual name="box" property="type" value="0">
-        <div id="<%= TracingConstants.JSP_DELETE_SALVAGE_BOX %>_<%=i%>">
+      
+      
+
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 		  <tr>
 		  	<td>
-		  		<bean:message key="colname.box_id" /><br />
-		  		<html:text name="box" property="displayId" size="4" disabled="true" />
+		  		<b><bean:message key="label.salvage_ohd" /></b><br />
 		  	</td>
 		  	<td>
-		  		<bean:message key="colname.description" /><br />
-		  		<html:text name="box" property="description" maxlength="255" size="80" />
-		  	</td>
-		  	<td>
-		  		<bean:message key="colname.value" /><br />
-				<html:select name="box" property="type" styleClass="dropdown" >
-				  <html:option value="" />
-                  <html:option value="<%= String.valueOf(TracingConstants.SALVAGE_LOW_VALUE) %>">
-                    <bean:message key="salvage.low_value" />
-                  </html:option>
-                  <html:option value="<%= String.valueOf(TracingConstants.SALVAGE_HIGH_VALUE) %>">
-                    <bean:message key="salvage.high_value" />
-                  </html:option>
-                </html:select>
+		  		<b><bean:message key="label.salvage_ohd_action" /></b><br />
 		  	</td>
 		  </tr>
-		  <logic:iterate indexId="j" id="item" name="box" property="salvageItems" >
+		  <logic:iterate id="salvageOhd" indexId="i" name="salvageEditForm" property="salvage.ohdReferences" type="com.bagnet.nettracer.tracing.db.salvage.SalvageOHDReference">
+          <tr id="<%= TracingConstants.JSP_DELETE_SALVAGE_OHD %>_<%=i%>">
+           	<td>
+           		<bean:write name="salvageOhd" property="ohdId"/>
+           	</td>
+           	<td>
+            	<input type="button" value="<bean:message key="button.delete_salvage_ohd" />"
+            	onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_SALVAGE_OHD %>_<%=i %>', 
+                '<bean:message key="header.salvage" />', 0)"
+            	id="button" >
+           	</td>
+          </tr>
+          </logic:iterate>
+          <tr>
+          <td colspan="3">&nbsp;</td>
+          </tr>          
+          <tr>
+          <td colspan="3" align="middle">
+          <input type="text" size="13" value="" name="onhand">&nbsp;
+		 	<input type="submit" name="addOnhands" value='<bean:message key="button.add_salvage_ohd" />' id="button"/>
+          </td>
+          </tr>
+      </table><br />
+      
+      
+    <p>&nbsp;</p>
+   
+    
+                <!-- BEGINNING OF LOOSE ITEMS -->
+                  <h1 class="green">
+      <bean:message key="header.salvage_miscellaneous_items" />
+      </h1>
+      <span class="reqfield">*</span>
+      <bean:message key="message.required" /> 
+      
+      
+      <logic:iterate id="salvageBox" indexId="i" name="salvageEditForm" property="salvage.salvageBoxes" type="com.bagnet.nettracer.tracing.db.salvage.SalvageBox">
+      <logic:equal name="salvageBox" property="type" value="0">
+        <div id="<%= TracingConstants.JSP_DELETE_SALVAGE_BOX %>_<%=i%>">
+        <a name="anchor_<%=i %>"></a>
+        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+
+		  <logic:iterate indexId="j" id="salvageItem" name="salvageBox" property="salvageItems" >
           <tr id="<%= TracingConstants.JSP_DELETE_SALVAGE_ITEM %>_<%=i%>_<%=j%>">
             <td><br />
             	<input type="button" value="<bean:message key="button.delete_salvage_item" />"
@@ -113,11 +145,13 @@
            	</td>
            	<td>
            		<bean:message key="colname.description" /><br />
-		  		<html:text name="item" property="description" maxlength="255" size="80" />
+           		<input type="text" name="salvageBox[<%=i %>].salvageItem[<%=j %>].description" maxlength="255" size="60" value="<%=((SalvageItem)salvageItem).getDescription()%>" class="textfield">
+
            	</td>
            	<td>
            		<bean:message key="colname.quantity" /><br />
-		  		<html:text name="item" property="quantity" size="4" />
+           		           		<input type="text" name="salvageBox[<%=i %>].salvageItem[<%=j %>].quantity" maxlength="255" size="4" value="<%=((SalvageItem)salvageItem).getQuantity()%>" class="textfield">
+		  		
            	</td>
           </tr>
           </logic:iterate>
@@ -125,25 +159,92 @@
           <td colspan="3">&nbsp;</td>
           </tr>          
           <tr>
-          <td colspan="3">
-            <select name="additemNum">
+          <td colspan="3" align="middle">
+            <input type="text" size="13" value="" name="addLostFoundId[<%=i %>]">&nbsp;
+		 	<input type="submit" name="addLostFoundButton[<%=i %>]" value='<bean:message key="button.add_lost_found_item" />' id="button"/>
+          </td>
+          </tr>
+      </table><br />
+      </div>
+      </logic:equal>
+    </logic:iterate>
+                <p>&nbsp;</p>
+                
+                <!--  BEGINNING OF BOXES -->
+  <h1 class="green">
+      <bean:message key="header.salvage_box_details" />
+      </h1>
+      <span class="reqfield">*</span>
+      <bean:message key="message.required" /> 
+      <logic:iterate id="salvageBox" indexId="i" name="salvageEditForm" property="salvage.salvageBoxes" type="com.bagnet.nettracer.tracing.db.salvage.SalvageBox">
+      <logic:notEqual name="salvageBox" property="type" value="0">
+        <div id="<%= TracingConstants.JSP_DELETE_SALVAGE_BOX %>_<%=i%>">
+        <a name="anchor_<%=i %>"></a>
+        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+		  <tr>
+		  	<td>
+		  		<bean:message key="colname.box_id" /><br />
+		  		<html:text name="salvageBox" property="displayId" size="4" disabled="true" indexed="true" styleClass="textfield"/>
+		  	</td>
+		  	<td>
+		  		<bean:message key="colname.description" /><br />
+		  		<html:text name="salvageBox" property="description" maxlength="255" size="80" indexed="true" styleClass="textfield"/>
+		  	</td>
+		  	<td>
+		  		<bean:message key="colname.value" /><br />
+				<html:select name="salvageBox" property="type" styleClass="dropdown" indexed="true">
+                  <html:option value="<%= String.valueOf(TracingConstants.SALVAGE_LOW_VALUE) %>">
+                    <bean:message key="salvage.low_value" />
+                  </html:option>
+                  <html:option value="<%= String.valueOf(TracingConstants.SALVAGE_HIGH_VALUE) %>">
+                    <bean:message key="salvage.high_value" />
+                  </html:option>
+                </html:select>
+		  	</td>
+		  </tr>
+		  <logic:iterate indexId="j" id="salvageItem" name="salvageBox" property="salvageItems" >
+          <tr id="<%= TracingConstants.JSP_DELETE_SALVAGE_ITEM %>_<%=i%>_<%=j%>">
+            <td><br />
+            	<input type="button" value="<bean:message key="button.delete_salvage_item" />"
+            	onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_SALVAGE_ITEM %>_<%=i %>_<%=j%>', 
+                '<bean:message key="header.salvage" />', 0)"
+            	id="button" >
+           	</td>
+           	<td>
+           		<bean:message key="colname.description" /><br />
+           		<input type="text" name="salvageBox[<%=i %>].salvageItem[<%=j %>].description" maxlength="255" size="60" value="<%=((SalvageItem)salvageItem).getDescription()%>" class="textfield">
+
+           	</td>
+           	<td>
+           		<bean:message key="colname.quantity" /><br />
+           		           		<input type="text" name="salvageBox[<%=i %>].salvageItem[<%=j %>].quantity" maxlength="255" size="4" value="<%=((SalvageItem)salvageItem).getQuantity()%>" class="textfield">
+		  		
+           	</td>
+          </tr>
+          </logic:iterate>
+          <tr>
+          <td colspan="3">&nbsp;</td>
+          </tr>          
+          <tr>
+          <td colspan="3" align="middle">
+            <select name="addItemNum[<%=i %>]">
 	          <option value="1">1</option>
 	          <option value="2">2</option>
 	          <option value="3">3</option>
 	          <option value="4">4</option>
 	          <option value="5">5</option>
 	        </select>
-    
-		    <html:submit property="additem" styleId="button">
-		      <bean:message key="button.add_salvage_item" />
-		    </html:submit>
+
+		    <input type="submit" name="addItems[<%=i %>]" value='<bean:message key="button.add_salvage_item" />' id="button" />
+		 	&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" size="13" value="" name="addLostFoundId[<%=i %>]">&nbsp;
+		 	<input type="submit" name="addLostFoundButton[<%=i %>]" value='<bean:message key="button.add_lost_found_item" />' id="button"/>
           </td>
           </tr>
           <tr>
           <td colspan="3">
             <input type="button" value="<bean:message key="button.delete_salvage_box" />" 
-            onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_SALVAGE_BOX %>_<%=i%>', 
-            '<bean:message key="header.salvage" />')" >
+            onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_SALVAGE_BOX %>_<%=i %>', 
+            '<bean:message key="header.salvage" />')" id="button">
           </td>
         </tr>
       </table><br />
@@ -152,7 +253,7 @@
     </logic:iterate>
    
     <center>
-            <select name="addboxNum">
+        <select name="addBoxNum">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -160,53 +261,27 @@
           <option value="5">5</option>
         </select>
     
-    <html:submit property="addbox" styleId="button">
-      <bean:message key="button.add_salvage_box" />
-    </html:submit></center>
-    <script language="JavaScript">
-      
+    <input type="submit" name="addBoxes" value='<bean:message key="button.add_salvage_box" />' id="button" />
+    
+    <p>&nbsp;</p>
+    <hr/>
 
-
-// for (var j=0;j<document.salvagesalvageEditForm.length;j++) {
-//    currentElement = document.salvagesalvageEditForm.elements[j];
-//    currentElementName=currentElement.name;
-//    
-//    if (currentElementName.indexOf("manufacturer_ID") != -1)
-//    {
-//    	var pos = currentElementName.indexOf("[");
-//			var pos2 = currentElementName.indexOf("]");
-//  		pos = currentElementName.substring(pos+1,pos2);
-//			if (currentElement.value == TracingConstants.MANUFACTURER_OTHER_ID %>) {
-//				document.getElementById("manu_other" + pos).style.visibility = "visible";
-//  
-//      } else {
-//				document.getElementById("manu_other" + pos).style.visibility = "hidden";
-//			}
-//    }
-//    
-//	}
-
-	
-
-    </script>
-    <br>
-    <br>
-    &nbsp;&nbsp;&uarr;
-    <a href="#"><bean:message key="link.to_top" /></a>
-    <br>
-    <br>
-            <tr>
-              <td colspan="3" align="center" valign="top">
-                	<html:button property="salvageId" styleId="button" onclick="document.location.href='salvageEdit.do?save=true'">
-        				<bean:message key="button.save_salvage" />
-        			</html:button>
-					&nbsp;
-                	<html:button property="salvageId" styleId="button" onclick="document.location.href='salvageEdit.do?submit=true'">
-        				<bean:message key="button.submit_salvage" />
-        			</html:button>
-              </td>
-            </tr>
-            <tr><td>&nbsp;</td></tr>            
+  <p>&nbsp;</p>
+              <logic:equal name="salvageEditForm" property="salvage.status" value="0">
+              <input type="submit" name="save" value='<bean:message key="button.save_salvage" />' id="button" />
+                	
+        			
+					<p>&nbsp;</p>
+					<bean:message key="salvage.pickedUpByLName" />:&nbsp;
+					<html:text property="salvage.pickedUpByLName" size="30" styleId="textfield"/>
+					&nbsp;<input type="button" name="completeSalvageButton"
+                      value='<bean:message key="button.submit_salvage" />'
+                      id="button" onclick="if(confirm('<bean:message key="button.submit_salvage.confirm" />')) {document.forms[0].completeSalvage.value='1'; document.forms[0].submit();}"/>
+                	<input type="hidden" name="completeSalvage" value="0"/>
+                	</logic:equal>
+            
+        </center>
+                        
       	</div>
       	</td>
       	</tr>           
