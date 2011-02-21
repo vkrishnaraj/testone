@@ -330,6 +330,10 @@
     	<put name="center" value="/pages/taskmanager/view_incoming_incidents.jsp"/>
     </definition>
     
+    <definition name="view_morning_duties" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_morning_duties.jsp"/>
+    </definition>
+    
     <definition name="view_worldtraceractionfiles" extends="user_menu">
     	<put name="center" value="/pages/worldtracer/worldtracer_viewaf_main.jsp"/>
     </definition>

@@ -47,11 +47,11 @@ if (hasPermission) {
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 				<tr><td width ="20%"><bean:message key="generaltask.tasktype" />:</td><td><strong><bean:message name="sessionTaskContainer" property="label"/></strong></td></tr>
 				<tr><td width ="20%"><bean:message key="colname.agentassigned_nobr" />:</td><td><bean:write name="sessionTaskContainer" property="assigned_agent.username"/></td></tr>
-				<tr><td width ="20%"><bean:message key="generaltask.timestarted" />:</td><td><bean:write name="sessionTaskContainer" property="opened_timestamp"/>&nbsp;&nbsp;<input type="button" value="<bean:message key="button.task.pause"/>" onclick="" id="button"></td></tr>
+				<tr><td width ="20%"><bean:message key="generaltask.timestarted" />:</td><td><bean:write name="sessionTaskContainer" property="opened_timestamp"/>&nbsp;&nbsp;<input type="button" value="<bean:message key="button.task.pause"/>" onclick='document.location.href="GeneralTask.do?pause=1";return true;' id="button"></td></tr>
 		 		<tr><td width ="20%"><bean:message key="generaltask.description" />:</td><td><bean:message name="sessionTaskContainer" property="description"/></td></tr>
 				<tr><td colspan="2">
           <span style="float:left">
-          	<input type="button" value="<bean:message key="button.task.complete" />" onclick="" id="button">
+          	<input type="button" value="<bean:message key="button.task.complete" />" onclick='document.location.href="GeneralTask.do?complete=1";return true;' id="button">
           </span>
           <span style="float:right">
           	<select id="task.defer.time" class="dropdown">
@@ -62,8 +62,8 @@ if (hasPermission) {
           		<option value="720"><bean:message key="generaltask.defer.12hr" /></option>
           		<option value="1440"><bean:message key="generaltask.defer.24hr" /></option>
           	</select>
-          	<input type="button" value="<bean:message key="button.task.defer" />" onclick="" id="button">&nbsp;&nbsp;
-          	<input type="button" value="<bean:message key="button.task.abort" />" onclick="" id="button">
+          	<input type="button" value="<bean:message key="button.task.defer" />" onclick='document.location.href="GeneralTask.do?defer=1";return true;' id="button">&nbsp;&nbsp;
+          	<input type="button" value="<bean:message key="button.task.abort" />" onclick='document.location.href="GeneralTask.do?abort=1";return true;' id="button">
           </span>
 		  </td>
           </tr>

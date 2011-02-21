@@ -333,6 +333,7 @@
 		<forward name="viewcreatedrequests" path="view_created_requests" />
 		<forward name="viewincomingbags" path="view_incoming_bags" />
 		<forward name="viewincomingincidents" path="view_incoming_incidents" />
+		<forward name="viewmorningduties" path="view_morning_duties" />
 
 		<forward name="viewworldtraceractionfiles" path="view_worldtraceractionfiles" />
 		<forward name="viewworldtracerafviewraw" path="view_worldtracerafviewraw" />
@@ -625,6 +626,8 @@
 		<action path="/worldtracersearch" type="com.bagnet.nettracer.tracing.actions.WorldTracerSearchAction" name="worldtracerafForm" scope="request" validate="false"></action>
 
 		<action path="/bagbuzzeditor" type="com.bagnet.nettracer.tracing.actions.BagBuzzEditorAction" name="bagbuzzeditorForm" scope="request" validate="false"></action>"
+		
+		<action path="/GeneralTask" type="com.bagnet.nettracer.tracing.actions.GeneralTaskAction"  scope="request" validate="false"></action>"
 
 		<action path="/bagbuzzsearch" type="com.bagnet.nettracer.tracing.actions.BagBuzzSearchAction" name="bagbuzzsearchForm" scope="request" validate="false"></action>"
 
