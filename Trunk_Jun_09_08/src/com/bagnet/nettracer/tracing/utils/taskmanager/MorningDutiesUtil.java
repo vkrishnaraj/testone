@@ -460,25 +460,30 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 							+ "'))";
 			break;
 		case FOURDAY:
-//			end.add(Calendar.DATE, -3);
-//			sql = "((i.createdate = '" 
-//				+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-//					+ "' and i.createtime < '" 
-//					+ DateUtils.formatDate(end.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-//							+ "') or i.createdate < '"
-//							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-//							+ "')";
-			start.add(Calendar.DATE, -90);
+			
 			end.add(Calendar.DATE, -3);
-			sql = "((i.createdate > '" 
-				+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-				+ "' and i.createtime >= '" 
-				+ DateUtils.formatDate(start.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "') or (i.createdate = '"
-							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
+			sql = "((i.createdate = '" 
+				+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
 					+ "' and i.createtime < '" 
-					+ DateUtils.formatDate(start.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "'))";
+					+ DateUtils.formatDate(end.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+							+ "') or i.createdate < '"
+							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
+							+ "')";
+			
+			
+//			start.add(Calendar.DATE, -90);
+//			end.add(Calendar.DATE, -3);
+//			sql = "((i.createdate > '" 
+//				+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
+//				+ "' and i.createtime >= '" 
+//				+ DateUtils.formatDate(start.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+//							+ "') or (i.createdate = '"
+//							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
+//					+ "' and i.createtime < '" 
+//					+ DateUtils.formatDate(start.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+//							+ "'))";
+			
+			
 			break;
 		default:
 			sql = "1=1";
