@@ -253,6 +253,11 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_BAGBUZZ = "BagBuzz";
 	public static final String SYSTEM_COMPONENT_NAME_BAGBUZZ_ADMIN = "BagBuzzAdmin";
 	
+	public static final String SYSTEM_COMPONENT_NAME_MANAGE_TASK = "Manage Tasks";
+	public static final String SYSTEM_COMPONENT_NAME_MANAGE_TWO_DAY_CALL = "Manage Two Day Call";
+	public static final String SYSTEM_COMPONENT_NAME_MANAGE_THREE_DAY_CALL = "Manage Three Day Call";
+	public static final String SYSTEM_COMPONENT_NAME_MANAGE_FOUR_DAY_CALL = "Manage Four Day Call";
+	
 	//fault dispute
 	public static final String SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE = "Dispute Fault Code"; 
 	public final static String SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE = "Manage Fault Dispute";
@@ -367,6 +372,9 @@ public class TracingConstants {
 	public final static int TASK_MANAGER_OPEN = 83;
 	public final static int TASK_MANAGER_PROCESSED = 84;
 	public final static int TASK_MANAGER_CLOSED = 85;
+	public final static int TASK_MANAGER_PAUSED = 96;
+	public final static int TASK_MANAGER_WORKING = 97;
+	
 	
 	// BagBuzz status
 	public final static int BAGBUZZ_NEW = 86;
@@ -530,6 +538,7 @@ public class TracingConstants {
 
 	public final static String VIEW_INCOMING_BAG_LIST = "viewincomingbags";
 	public final static String VIEW_INCOMING_INCIDENTS = "viewincomingincidents";
+	public final static String VIEW_MORNING_DUTIES = "viewmorningduties";
 	
 	// world tracer forwards
 	public final static String VIEW_WORLDTRACER_ACTION_FILES = "viewworldtraceractionfiles";

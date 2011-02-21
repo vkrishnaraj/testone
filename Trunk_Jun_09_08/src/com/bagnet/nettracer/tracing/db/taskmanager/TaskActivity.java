@@ -32,6 +32,8 @@ public class TaskActivity {
 	public void setTask(GeneralTask task) {
 		this.task = task;
 	}
+	@ManyToOne
+	@JoinColumn(name = "agent_ID", nullable = false)
 	public Agent getAgent() {
 		return agent;
 	}
