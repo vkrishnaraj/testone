@@ -130,16 +130,16 @@ public class GeneralTaskAction extends Action{
 				//agent is explicitly loading a task from the task list
 				gtask = MorningDutiesUtil.getTaskByIncidentId(user, request.getParameter("incident"), day);
 				if(gtask != null){
-					if(gtask.getStatus().getStatus_ID() != TracingConstants.TASK_MANAGER_OPEN){
-						gtask = null;
-					}else{
+					if(gtask.getStatus().getStatus_ID() == TracingConstants.TASK_MANAGER_OPEN
+							|| (gtask.getAssigned_agent().getAgent_ID() == user.getAgent_ID() 
+									&& gtask.getStatus().getStatus_ID() == TracingConstants.TASK_MANAGER_PAUSED)){
 						//TODO need to lock task
 						Status s = new Status();
 						s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
 						TaskManagerBMO.saveTask(gtask);
+					}else{
+						gtask = null;
 					}
-					//TODO if paused
-					//TODO if deferred
 				} else {
 					//no task found, create new task
 					Incident incident = new Incident();
