@@ -20,4 +20,8 @@ public class FourDayTask extends MorningDutiesTask {
 	public String getLabel() {
 		return "TASK_LABEL_4DAY";
 	}
+	@Transient
+	public String getKey() {
+		return "4";
+	}
 }

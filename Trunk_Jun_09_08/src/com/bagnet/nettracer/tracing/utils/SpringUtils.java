@@ -6,6 +6,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.bagnet.nettracer.integrations.events.ClientEventHandler;
 import com.bagnet.nettracer.integrations.reports.CustomReportBMO;
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
+import com.bagnet.nettracer.tracing.bmo.LockBMO;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
@@ -30,6 +31,8 @@ public class SpringUtils {
 	private static final String WORLDTRACER_TX_BMO = "wtTx-bmo";
 
 	private static final String ACTIONFILE_MANAGER = "actionFileManager";
+	
+	private static final String LOCK_BMO = "lockBMO";
 	
 	static {
 		try {
@@ -78,6 +81,9 @@ public class SpringUtils {
 		return (ActionFileManager) getBean(ACTIONFILE_MANAGER);
 	}
 	
+	public static LockBMO getLockBmo(){
+		return (LockBMO) getBean(LOCK_BMO);
+	}
 	
 	public static RuleMapper getWtRuleMap() {
 		return (RuleMapper) getBean(WORLDTRACER_RULE_MAP);

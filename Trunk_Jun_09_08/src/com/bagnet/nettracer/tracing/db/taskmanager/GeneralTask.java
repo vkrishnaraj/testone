@@ -21,6 +21,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Agent;
 
@@ -81,6 +82,15 @@ public abstract class GeneralTask {
 	Agent assigned_agent;
 	Date deferment_timestamp;
 	List<TaskActivity> activities;
+	Lock lock;
+	
+	@Transient
+	public Lock getLock() {
+		return lock;
+	}
+	public void setLock(Lock lock) {
+		this.lock = lock;
+	}
 	
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 //	@org.hibernate.annotations.IndexColumn(name = "bagnumber")
@@ -99,6 +109,11 @@ public abstract class GeneralTask {
 	
 	@Transient
 	public String getLabel() {
+		return null;
+	}
+	
+	@Transient
+	public String getKey() {
 		return null;
 	}
 }

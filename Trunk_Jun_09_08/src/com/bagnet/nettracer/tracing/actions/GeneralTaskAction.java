@@ -101,7 +101,7 @@ public class GeneralTaskAction extends Action{
 		}
 		if(request.getParameter("defer") != null){
 			System.out.println("defer");
-			MorningDutiesUtil.deferTask(user, task, 30);
+			MorningDutiesUtil.deferTask(user, task, new Integer(request.getParameter("defer_time")));
 			MorningDutiesUtil.addActivity(user, task, MorningDutiesUtil.ResolutionType.DEFERED, getDuration((Date)session.getAttribute("sessionTaskStartTime")));
 			MorningDutiesTask gtask = (MorningDutiesTask)MorningDutiesUtil.getTask(user, day);
 			if(gtask == null){
@@ -134,9 +134,13 @@ public class GeneralTaskAction extends Action{
 							|| (gtask.getAssigned_agent().getAgent_ID() == user.getAgent_ID() 
 									&& gtask.getStatus().getStatus_ID() == TracingConstants.TASK_MANAGER_PAUSED)){
 						//TODO need to lock task
-						Status s = new Status();
-						s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
-						TaskManagerBMO.saveTask(gtask);
+						if(MorningDutiesUtil.lockTask(gtask)!=null){
+							Status s = new Status();
+							s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
+							TaskManagerBMO.saveTask(gtask);
+						}else{
+							gtask = null;
+						}
 					}else{
 						gtask = null;
 					}

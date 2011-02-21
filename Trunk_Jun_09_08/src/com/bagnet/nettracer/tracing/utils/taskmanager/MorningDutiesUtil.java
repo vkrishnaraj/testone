@@ -15,11 +15,14 @@ import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.LockBMO;
 import com.bagnet.nettracer.tracing.bmo.TaskManagerBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.Lock.LockType;
 import com.bagnet.nettracer.tracing.db.dr.Dispute;
 import com.bagnet.nettracer.tracing.db.taskmanager.FourDayTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
@@ -29,6 +32,10 @@ import com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.wt.WorldTracerException;
+import com.bagnet.nettracer.wt.WorldTracerLockException;
+import com.bagnet.nettracer.wt.connector.CaptchaException;
 
 public class MorningDutiesUtil extends TaskManagerUtil {
 	private static Logger logger = Logger.getLogger(HibernateUtils.class);
@@ -51,6 +58,48 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		}
 	}
 
+	public static GeneralTask lockTask(GeneralTask task){
+		String key = null;
+		if (task instanceof MorningDutiesTask){
+			if(((MorningDutiesTask)task).getIncident() != null && ((MorningDutiesTask)task).getIncident().getIncident_ID() != null
+					&& ((MorningDutiesTask)task).getIncident().getIncident_ID().trim().length() > 0){
+				key = ((MorningDutiesTask)task).getKey() + ((MorningDutiesTask)task).getIncident().getIncident_ID();
+			}
+		}
+		
+		
+		if(key == null){
+			return null;
+		}
+		LockBMO lockBmo = SpringUtils.getLockBmo();
+		Lock lock = null;
+		int i = 0;
+		try {
+			do {
+				i++;
+				try {
+					lock = lockBmo.createLock(LockType.TM_INCIDENT, key, 3600000L);
+				} catch (Exception ex) {
+					logger.info("GeneralTask for " + key
+							+ " alreaedy locked, waiting..");
+					try {
+						Thread.sleep(1000L);
+					} catch (InterruptedException e) {
+						throw new Exception(
+								"unable to acquire lock " + key, e);
+					}
+				}
+			} while (lock == null && i < 4);
+			if(lock == null) {
+				throw new Exception("unable to lock incident " + key);
+			}
+			task.setLock(lock);
+			return task;
+		} catch (Exception e) {
+			return null;
+		} 
+	}
+	
 	public static GeneralTask createTask(Agent agent, Object o, int day) {
 		Incident inc = (Incident) o;
 		MorningDutiesTask mdt = null;
@@ -71,6 +120,9 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		Status s = new Status();
 		s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
 		mdt.setStatus(s);
+		if(lockTask(mdt) == null){
+			return null;
+		}
 
 		return TaskManagerBMO.saveTask(mdt);
 	}
@@ -82,6 +134,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		task.setAssigned_agent(agent);
 		task.setClosed_timestamp(DateUtils.convertToGMTDate(new Date()));
 		TaskManagerBMO.saveTask(task);
+		unlockTaskIncident(task.getLock());
 	}
 	
 	
@@ -95,6 +148,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		t.setStatus(s);
 		t.setAssigned_agent(agent);
 		TaskManagerBMO.saveTask(t);
+		unlockTaskIncident(task.getLock());
 	}
 	
 	public static void abortTask(Agent agent, MorningDutiesTask task){
@@ -105,6 +159,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		t.setStatus(s);
 		t.setAssigned_agent(agent);
 		TaskManagerBMO.saveTask(t);
+		unlockTaskIncident(task.getLock());
 	}
 	
 	public static void pauseTask(Agent agent, MorningDutiesTask task){
@@ -114,6 +169,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		t.setStatus(s);
 		t.setAssigned_agent(agent);
 		TaskManagerBMO.saveTask(t);
+		unlockTaskIncident(task.getLock());
 	}
 	
 	public static boolean hasPermission(Agent agent){
@@ -225,20 +281,71 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 	}
 	
 	public static GeneralTask getTask(Agent agent, int day) {
-		GeneralTask task = getTaskManagerTask(agent, day);
-		if (task != null) {
-			return task;
-		}
+		//		GeneralTask task = getTaskManagerTask(agent, day);
+		//		if (task != null) {
+		//			return task;
+		//		}
+
 		Incident inc = getIncident(agent, day);
 		if (inc != null) {
-			return createTask(agent, inc, day);
+			//do we already have a defered or aborted task for this incident
+			GeneralTask gtask = getTaskByIncidentId(agent, inc.getIncident_ID(), day);
+			if(gtask == null){
+				//we don't have a task, create one
+				return createTask(agent, inc, day);
+			}
+			if(gtask.getStatus().getStatus_ID() == TracingConstants.TASK_MANAGER_OPEN && gtask.getDeferment_timestamp().getTime() < DateUtils.convertToGMTDate(new Date()).getTime()){
+				if(MorningDutiesUtil.lockTask(gtask)!=null){
+					Status s = new Status();
+					s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
+					TaskManagerBMO.saveTask(gtask);
+					return gtask;
+				}
+			}
 		}
 		// didn't find a task
 		return null;
 	}
 
-	public static void lockTask(GeneralTask task) {
-
+	public static Lock lockTaskIncident(String incident_id, int day) throws Exception{
+		if(incident_id == null || incident_id.trim().length() == 0){
+			throw new Exception("incident_id is null or empty");
+		}
+		String id = incident_id + "_" + day;
+		LockBMO lockBmo = SpringUtils.getLockBmo();
+		Lock lock = null;
+		int i = 0;
+		try {
+			do {
+				i++;
+				try {
+					lock = lockBmo.createLock(LockType.TM_INCIDENT, id, 3600000L);
+				} catch (Exception ex) {
+					logger.info("Morning duties for " + id
+							+ " alreaedy locked, waiting..");
+					try {
+						Thread.sleep(1000L);
+					} catch (InterruptedException e) {
+						throw new Exception(
+								"unable to acquire lock " + id, e);
+					}
+				}
+			} while (lock == null && i < 4);
+			if(lock == null) {
+				throw new Exception("unable to lock incident " + id);
+			}
+			return lock;
+		} catch (Exception e) {
+			throw new WorldTracerException("unable to load summary", e);
+		} finally {
+			if (lock != null) {
+				lockBmo.releaseLock(lock);
+			}
+		}
+	}
+	
+	public static void unlockTaskIncident(Lock lock){
+		SpringUtils.getLockBmo().releaseLock(lock);
 	}
 
 	private static GeneralTask getTaskManagerTask(Agent agent, int day) {
