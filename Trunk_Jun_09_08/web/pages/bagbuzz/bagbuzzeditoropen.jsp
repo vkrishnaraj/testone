@@ -29,7 +29,7 @@
 <table>
 <tr>
 <td>
-<h1>BagBuzz Editor</h1>
+<h1><bean:message key="header.bagbuzzeditor" /></h1>
 </td>
 </tr>
 <tr>

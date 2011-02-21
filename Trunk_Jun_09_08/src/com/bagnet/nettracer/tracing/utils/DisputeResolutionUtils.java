@@ -7,15 +7,21 @@ package com.bagnet.nettracer.tracing.utils;
 
 
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.forms.IncidentForm;
+
 
 /**
  * @author void
@@ -37,14 +43,26 @@ public class DisputeResolutionUtils {
 		return result;
 	}
 	
-	public static Incident lockIncident(String incident_ID) throws HibernateException {
+	public static Incident lockIncident(String incident_ID, IncidentForm theForm){
 		Incident result = IncidentUtils.findIncidentByID(incident_ID);
+		Station faultStation = new Station();
+		if(theForm != null && theForm.getFaultstation_id() > 0){
+			faultStation = StationBMO.getStation(theForm.getFaultstation_id());
+		}
 		
 		if (result != null) {
 			if (! result.isLocked()) {
 				Session sess = HibernateWrapper.getSession().openSession();
 				Transaction t = null;
 				try {
+					if(theForm != null){
+						t = sess.beginTransaction();
+						Station s = (Station) sess.load(Station.class, theForm.getFaultstation().getStation_ID());
+						result.setFaultstation(s);
+						result.setLoss_code(theForm.getLoss_code());
+						sess.saveOrUpdate(result);
+						t.commit();
+					}
 					t = sess.beginTransaction();
 					result.setLocked(true);
 					sess.update(result);
@@ -72,6 +90,10 @@ public class DisputeResolutionUtils {
 		}
 		
 		return result;
+	}
+	
+	public static Incident lockIncident(String incident_ID) throws HibernateException {
+		return lockIncident(incident_ID, null);
 	}
 	
 	public static Incident unlockIncident(String incident_ID) throws HibernateException {

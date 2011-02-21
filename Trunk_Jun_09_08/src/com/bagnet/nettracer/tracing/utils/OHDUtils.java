@@ -1693,7 +1693,7 @@ public class OHDUtils {
 	}
 	
 	//manage fault dispute
-	public static int getDisputeCount(boolean dirtyRead) {
+	public static int getDisputeCount(boolean dirtyRead, int lzId, int stationId) {
 		Session sess = null;
 		try {
 			if(dirtyRead) {
@@ -1702,12 +1702,23 @@ public class OHDUtils {
 			else {
 				sess = HibernateWrapper.getSession().openSession();
 			}
+//			String sql = "select count(dispute.dispute_res_id)";
+//			sql += " from com.bagnet.nettracer.tracing.db.dr.Dispute dispute where 1=1";
+//			sql += " and dispute.status = :status";
+
 			String sql = "select count(dispute.dispute_res_id)";
 			sql += " from com.bagnet.nettracer.tracing.db.dr.Dispute dispute where 1=1";
 			sql += " and dispute.status = :status";
-
+			sql += " and (dispute.incident.stationassigned.station_ID = :station or dispute.incident.stationassigned.lz_ID = :lz)";
+			
 			Query q = sess.createQuery(sql);
 			q.setInteger("status", TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN);
+
+			q.setParameter("station", stationId);
+			q.setParameter("lz", lzId);
+			
+//			logger.error("getDisputeCount() : lzId = " + lzId + " and stationId = " + stationId);
+			
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();

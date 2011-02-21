@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.utils;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 
 public class StringTemplateProcessor {
 
@@ -75,7 +76,7 @@ public class StringTemplateProcessor {
 						Object o = classReference.get(method.getDeclaringClass());
 						String str = (String) method.invoke(o);
 						if (str != null) {
-							output = output.replaceAll("\\{" + toparse + "\\}", str);
+							output = output.replaceAll("\\{" + toparse + "\\}", Matcher.quoteReplacement(str));
 						} else {
 							output = output.replaceAll("\\{" + toparse + "\\}", "");
 						}

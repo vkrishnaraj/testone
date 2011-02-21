@@ -100,7 +100,7 @@
                   &nbsp;</span></a>
             </dd>
             <dd>
-              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>'><span class="aab">&nbsp;
+              <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=view'><span class="aab">&nbsp;
                   <br />
                   &nbsp;</span>
                 <span class="bbb"><bean:message key="menu.dispute.resolution" /></span>
@@ -118,6 +118,7 @@
       <td id="middlecolumn">
         
         <div id="maincontent">
+
           <span class="reqfield">*</span>
           <bean:message key="message.dispute.details" />
           <font color=red>
@@ -128,6 +129,14 @@
             <input type="hidden" name="close" value="1">
             <jsp:include page="/pages/includes/disputereport_ro_incl.jsp" />
           </table>
-         
+
+
+       <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){%>
+       		<center>
+       		<input type="submit" id="button" value='Edit Dispute Resolution' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=reopen";return false;'>	
+       			</center>
+       <%} %>
         </div>
+       </td>
+       </tr>
     </html:form>

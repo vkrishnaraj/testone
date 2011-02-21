@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.core;
 public interface UpdateIncidentFaultCodesDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateIncidentFaultCodesDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s46C2824FBA7D2A16453E6357E9EA151B").resolveHandle("updateincidentfaultcodes0679doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateIncidentFaultCodesDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("updateincidentfaultcodes0679doctype");
     
     /**
      * Gets the "updateIncidentFaultCodes" element
@@ -42,7 +42,7 @@ public interface UpdateIncidentFaultCodesDocument extends org.apache.xmlbeans.Xm
     public interface UpdateIncidentFaultCodes extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateIncidentFaultCodes.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s46C2824FBA7D2A16453E6357E9EA151B").resolveHandle("updateincidentfaultcodesf43eelemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateIncidentFaultCodes.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("updateincidentfaultcodesf43eelemtype");
         
         /**
          * Gets the "session_id" element

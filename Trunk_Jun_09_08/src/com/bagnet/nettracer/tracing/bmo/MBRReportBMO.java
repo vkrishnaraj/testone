@@ -483,7 +483,7 @@ public class MBRReportBMO {
 
 		drb = reportStyleSelector(drb, reportColumns, reportStyle);
 		
-		drb.setAllowDetailSplit(false);
+		//drb.setAllowDetailSplit(false);
 
 		//drb.addAutoText(AutoText.AUTOTEXT_PAGE_X_OF_Y, AutoText.POSITION_FOOTER, AutoText.ALIGMENT_CENTER);
 		drb.setUseFullPageWidth(true);

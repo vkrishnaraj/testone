@@ -253,7 +253,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.BagBuzzTask"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.DisputeResolutionTask"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz"/>
-
+		<mapping class="com.bagnet.nettracer.tracing.db.Precoder"/>
 		
 			
 	

@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface IncidentPhone extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(IncidentPhone.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s98498240CE6F1B624A7006D6B1A5311F").resolveHandle("incidentphone65f9type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(IncidentPhone.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sECD53D12A3B16E559E57ADA881AD63EA").resolveHandle("incidentphone65f9type");
     
     /**
      * Gets the "number" element

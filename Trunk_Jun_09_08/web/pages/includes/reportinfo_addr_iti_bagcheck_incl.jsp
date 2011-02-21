@@ -70,7 +70,7 @@
 		<% } %>
 	}
 	
-	window.onload = toggleRevenueCodesVisible;
+	
 
   </SCRIPT>
   
@@ -439,6 +439,8 @@
 	  <h1 class="green">
 
 		  <script language="javaScript">
+		  		toggleRevenueCodesVisible();
+		  
 			  function swap(field, i, j) {
 
 				  var swap1 = document.getElementsByName('theitinerary[' + i + '].' + field)[0];

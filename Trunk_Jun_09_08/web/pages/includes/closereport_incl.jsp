@@ -16,6 +16,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
 
+
 <%
 
   int lossCodeInt = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();
@@ -92,19 +93,24 @@
       </div>
     </td>
     <td align="center" valign="baseline">
-      <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
     	<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
     		  String incidentId = "" + request.getAttribute("incident");
     		  if (DisputeResolutionUtils.isIncidentLocked(incidentId)) {
     	%>
-    		<input type="submit" id="button" value='<bean:message key="button.unlock.fault.information" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=unlock";return false;'>
+    	              <html:submit property="unlock_fault" styleId="button">
+                      <bean:message key="button.unlock.fault.information" />
+                    </html:submit>
+
     	<%		  
     		  } else {
     	%>
-    		<input type="submit" id="button" value='<bean:message key="button.lock.fault.information" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=lock";return false;'>	    	
+      				<logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+    	              <html:submit property="lock_fault" styleId="button">
+                      <bean:message key="button.lock.fault.information" />
+                      </html:submit>
+      				</logic:equal>
     	<% 	  } 
     	   }  %>
-      </logic:equal>
     </td>
 </tr>
 <tr>

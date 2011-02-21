@@ -188,6 +188,43 @@ public class Utils {
 		}
 		return bb;
 	}
+
+	
+//TODO loupas - replace the other delete	
+//	public static void deleteBagBuzzTemp(BagBuzz bb){
+//		String updateBagBuzz = "update com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz bb set status = :status where bagbuzz_id = :bbid";
+//		
+//		Session sess = HibernateWrapper.getSession().openSession();
+//		Transaction t = null;
+//		
+//		Query bbq = sess.createQuery(updateBagBuzz);
+//		bbq.setLong("status", TracingConstants.BAGBUZZ_DELETED);
+//		bbq.setLong("bbid", bb.getBagbuzz_id());
+//		
+//		try{
+//			t = sess.beginTransaction();
+//			bbq.executeUpdate();
+//			t.commit();
+//		} catch (Exception e){
+//			logger.error("Error Saving: ", e);
+//			e.printStackTrace();
+//			if (t != null) {
+//				try {
+//					t.rollback();
+//				} catch (Exception ex) {
+//					logger.error("Error Saving: ", ex);
+//				}
+//			}
+//		} finally {
+//			if (sess != null) {
+//				try {
+//					sess.close();
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//	}
 	
 	public static void deleteBagBuzz(BagBuzz bb){
 		Status s = new Status();

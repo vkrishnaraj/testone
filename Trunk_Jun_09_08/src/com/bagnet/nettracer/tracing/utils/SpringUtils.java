@@ -21,6 +21,7 @@ public class SpringUtils {
 	public final static String CUSTOM_REPORT_BMO = "customReportBmo";
 	public final static String WORLDTRACER_SERVICE = "wtService";
 	public final static String EVENT_HANDLER = "eventHandler";
+	public final static String PRECODER = "precoder";
 
 	private static final String WORLDTRACER_CONNECTOR = "wtConnector";
 	private static final String WORLDTRACER_CONNECTION_POOL = "wtConnectionPool";
@@ -51,6 +52,10 @@ public class SpringUtils {
 	
 	public static CustomReportBMO getCustomReportBMO() {
 		return (CustomReportBMO) getBean(CUSTOM_REPORT_BMO);
+	}
+	
+	public static Precoder getPrecoder(){
+		return (Precoder) getBean(PRECODER);
 	}
 	
 	public static WorldTracerService getWorldTracerService() {

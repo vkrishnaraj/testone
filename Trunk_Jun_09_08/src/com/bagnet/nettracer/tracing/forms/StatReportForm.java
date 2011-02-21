@@ -52,6 +52,18 @@ public final class StatReportForm extends ValidatorForm {
 	private String arrivaldate;
 
 	private String[] faultstation_ID;
+	
+	private String[] previousFaultStation_ID;
+	
+	public String[] getPreviousFaultStation_ID() {
+		return previousFaultStation_ID;
+	}
+
+	public void setPreviousFaultStation_ID(String[] previousFaultStation_ID) {
+		this.previousFaultStation_ID = previousFaultStation_ID;
+	}
+	
+	
 	private int loss_code;
 	
 	private Integer[] loss_code_combo;

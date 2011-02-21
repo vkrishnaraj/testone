@@ -165,7 +165,13 @@
           </logic:iterate>
           <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <input type="hidden" name="close" value="1">
+           <html:hidden name="close" property="close" value="1"/>
+           	<% if (DisputeResolutionUtils.isIncidentLocked(request.getAttribute("incident").toString())) { %>
+            <jsp:include page="/pages/includes/closereport_no_lock_ro_incl.jsp" />
+            <% } else { %>
             <jsp:include page="/pages/includes/closereport_incl.jsp" />
+            <% } %>
+            
           </table>
           <jsp:include page="/pages/includes/remarkclose_incl.jsp" />
         </div>

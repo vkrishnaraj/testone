@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.core;
 public interface InsertOHDDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertOHDDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s46C2824FBA7D2A16453E6357E9EA151B").resolveHandle("insertohd321adoctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertOHDDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("insertohd321adoctype");
     
     /**
      * Gets the "insertOHD" element
@@ -42,7 +42,7 @@ public interface InsertOHDDocument extends org.apache.xmlbeans.XmlObject
     public interface InsertOHD extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertOHD.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s46C2824FBA7D2A16453E6357E9EA151B").resolveHandle("insertohda8b8elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertOHD.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("insertohda8b8elemtype");
         
         /**
          * Gets the "session_id" element

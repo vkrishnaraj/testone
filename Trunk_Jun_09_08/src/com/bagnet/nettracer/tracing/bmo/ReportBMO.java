@@ -2680,6 +2680,26 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				intc = intc.substring(0,intc.length() - 1);
 				sql += " and d.determined_station_ID in (" + intc + ") ";
 			}
+			
+			String intPreviousFaultStation = "";
+			if (srDTO.getPreviousFaultStation_ID() != null) {
+				for (int i = 0; i < srDTO.getPreviousFaultStation_ID().length; i++) {
+					intPreviousFaultStation += srDTO.getPreviousFaultStation_ID()[i] + ",";
+				}
+			}
+
+			if (intPreviousFaultStation.length() > 0 && srDTO.getPreviousFaultStation_ID() != null && !srDTO.getPreviousFaultStation_ID()[0].equals("0")) {
+				intPreviousFaultStation = intPreviousFaultStation.substring(0,intPreviousFaultStation.length() - 1);
+				sql += " and d.before_dispute_fault_station_ID in (" + intPreviousFaultStation + ") ";
+			}
+			
+			if (srDTO.getAgent() != null && srDTO.getAgent().trim().length() > 0){
+				String agent = srDTO.getAgent();
+				agent = agent.replaceAll("\'", "");
+				sql += " and dagent.username = \'" + agent + "\' ";
+			}
+			
+			logger.error("sql segment is : " + sql);
 
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone

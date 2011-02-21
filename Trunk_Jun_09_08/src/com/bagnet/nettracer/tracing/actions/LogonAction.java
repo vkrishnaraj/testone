@@ -423,7 +423,7 @@ public class LogonAction extends Action {
 																						entries = x;
 																					} 																					
 																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE)) {														
-																					int x = OHDUtils.getDisputeCount(true);
+																					int x = OHDUtils.getDisputeCount(true, agent.getStation().getLz_ID(), agent.getStation().getStation_ID());
 																					if (x != -1) {
 																						entries = x;
 																					} 																					
@@ -447,22 +447,7 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					}
-																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_MANAGE_2DAY_CALL)){																				
-																					int x = com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.getTwoDayCount(agent);
-																					if (x != -1) {
-																						entries = x;
-																					}
-																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_MANAGE_3DAY_CALL)){
-																					int x = com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.getThreeDayCount(agent);
-																					if (x != -1) {
-																						entries = x;
-																					}
-																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_MANAGE_4DAY_CALL)){
-																					int x = com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.getFourDayCount(agent);
-																					if (x != -1) {
-																						entries = x;
-																					}
-																				}
+																				}																				
 																			}
 																		}
 																	}

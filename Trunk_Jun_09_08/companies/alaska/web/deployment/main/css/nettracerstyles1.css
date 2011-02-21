@@ -83,7 +83,7 @@ form {
 	background-color:#E0EDFB;
 }
 #bodytable #bottomcell {
-	background-color:#004990;
+	background-color:#1F6390;
 	vertical-align:bottom;
 	border-top:1px solid #000000;
 }
@@ -110,28 +110,28 @@ td#header {
 td#header.cssstandardthreecolumn { 
 	background-image:url(../images/nettracer/header_bg_noconf.gif);
 	background-repeat:no-repeat;
-	background-color: #FFF;
+	background-color: #001934;
 }
 div#headercontent {
 	float:right;
 	margin:3px;
 }
 table#headercontent td{
-	color:#004990;
+	color:#FFFFFF;
 	text-align:right;
 }
 table#headercontent a{
-	color:#004990;
+	color:#FFFFFF;
 	text-decoration:none;
 }
 table#headercontent a:hover{
-	color:#004990;
+	color:#FFFFFF;
 	text-decoration:underline;
 }
 
 /* horizontal text links menu */
 td#headermenucell {
-	background-color:#004990;
+	background-color:#1F6390;
 	vertical-align:middle;
 	height: 24px;
 	text-align:left;
@@ -342,7 +342,7 @@ td.white{
 }
 
 td.header{
-	background-color:#004990;
+	background-color:#1F6390;
 	color:#fff;
 }
 

@@ -274,9 +274,11 @@ ResourceBundle bundle = ResourceBundle.getBundle(
   }
 
   if(ccCount > bagIndices.length) {
+  /*
         alert('<%= (String) bundle.getString( "error.validation.too.many.claimchecks")%>');
         document.getElementById("claimcheck["+firstClaimcheckIndex+"].claimchecknum").focus();
         return false;
+  */
   }
     
     

@@ -32,7 +32,8 @@ import com.usairways.www.cbro.baggage_scanner.wsdl.LoadScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.LoadULDScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.NetTracerScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.QohScanType;
-import com.usairways.www.cbro.baggage_scanner.wsdl.ScanPointsStub;
+//import com.usairways.www.cbro.baggage_scanner.wsdl.ScanPointsStub;
+import com.usairways.cbro.baggage.scanning.spi.bean.ScanPoints1ServiceBeanServiceStub;
 import com.usairways.www.cbro.baggage_scanner.wsdl.ScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TagType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TaskType;
@@ -59,10 +60,11 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber, int timeout) {
 		String endpoint = PropertyBMO.getValue(PROPERTY_SCAN_HISTORY_ENDPOINT);
 		
-		
-		ScanPointsStub stub = null;
+		ScanPoints1ServiceBeanServiceStub stub = null;
+		//ScanPointsStub stub = null;
 		try {
-			stub = new ScanPointsStub(endpoint);
+			//stub = new ScanPointsStub(endpoint);
+			stub = new ScanPoints1ServiceBeanServiceStub(endpoint);
 		} catch (AxisFault e) {
 			e.printStackTrace();
 		}
@@ -87,7 +89,8 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 		sp.setStartTime(startCal);
 		sp.setEndTime(endCal);
 		TagType tag = sp.addNewTag();
-		tag.setType(TagType.Type.B);
+		//tag.setType(TagType.Type.B);
+		tag.setType("B");
 		tag.setStringValue(bagTagNumber.trim().toUpperCase());
 
 		GetScanPointsResponseDocument responseDoc = null;
@@ -99,6 +102,10 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 		} catch (RemoteException e) {
 			logger.error("Exception thrown with Scan Request: " + bagTagNumber, e);
 			newDto.setErrorResponse("scanner.communicationError");
+			return newDto;
+		} catch (Exception e){
+			logger.error("Exception thrown with Scan Request: " + bagTagNumber, e);
+			newDto.setErrorResponse("scanner.communicationError.unknownerror");
 			return newDto;
 		}
 		

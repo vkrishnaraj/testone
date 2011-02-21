@@ -70,6 +70,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
+import com.bagnet.nettracer.tracing.utils.PrecoderResult;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -103,9 +104,15 @@ public class IncidentBMO {
 			Incident oldinc = null;
 			String incident_id = iDTO.getIncident_ID();
 			boolean isnew = false;
+			PrecoderResult precoderResult = null;
 			if (incident_id == null || incident_id.length() <= 0) {
 				isnew = true;
 				iDTO.setIncident_ID(getIncidentID(iDTO.getStationcreated()));
+				precoderResult = SpringUtils.getPrecoder().getFaultStationAndLossCode(iDTO);
+				if(precoderResult != null){
+					iDTO.setLoss_code(precoderResult.getLossCode());
+					iDTO.setFaultstation(precoderResult.getFaultStation());
+				}
 				
 				long versionId = IncidentChecklistBMO.getActiveChecklistVersion(null).getVersion_id();
 				iDTO.setChecklist_version(versionId);
@@ -193,7 +200,9 @@ public class IncidentBMO {
 							"Baggage Claim (" + iDTO.getIncident_ID() + ") created on " + formateddatetime,
 							iDTO.getRecordlocator());
 				}
-		
+				if(precoderResult != null){
+					com.bagnet.nettracer.tracing.bmo.PrecoderBMO.insert(iDTO.getIncident_ID(), precoderResult);
+				}
 			}
 		
 			// check to see if we opened the report, if we did, then open all
@@ -273,9 +282,15 @@ public class IncidentBMO {
 			Incident oldinc = null;
 			String incident_id = iDTO.getIncident_ID();
 			boolean isnew = false;
+			PrecoderResult precoderResult = null;
 			if (incident_id == null || incident_id.length() <= 0) {
 				isnew = true;
 				iDTO.setIncident_ID(getIncidentID(iDTO.getStationcreated()));
+				precoderResult = SpringUtils.getPrecoder().getFaultStationAndLossCode(iDTO);
+				if(precoderResult != null){
+					iDTO.setLoss_code(precoderResult.getLossCode());
+					iDTO.setFaultstation(precoderResult.getFaultStation());
+				}
 				
 				long versionId = IncidentChecklistBMO.getActiveChecklistVersion(null).getVersion_id();
 				iDTO.setChecklist_version(versionId);
@@ -361,6 +376,9 @@ public class IncidentBMO {
 					SpringUtils.getReservationIntegration().writeCommentToPNR(
 							"Baggage Claim (" + iDTO.getIncident_ID() + ") created on " + formateddatetime,
 							iDTO.getRecordlocator());
+				}
+				if(precoderResult != null){
+					com.bagnet.nettracer.tracing.bmo.PrecoderBMO.insert(iDTO.getIncident_ID(), precoderResult);
 				}
 
 			}

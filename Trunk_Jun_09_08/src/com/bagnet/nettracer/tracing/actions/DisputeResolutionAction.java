@@ -46,6 +46,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		HttpSession session = request.getSession();
 		
 		String forwardTarget = TracingConstants.NO_PERMISSION;
+		String redirect = null;
 
 		// check session
 		TracerUtils.checkSession(session);
@@ -78,6 +79,13 @@ public class DisputeResolutionAction extends CheckedAction {
 			
 			if (actionType.equalsIgnoreCase("start")) {
 				forwardTarget = TracingConstants.DISPUTE_RESOLUTION;
+			} else if (actionType.equalsIgnoreCase("reopen")){ 
+				if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, user)) {
+					forwardTarget = TracingConstants.NO_PERMISSION;
+				} else {
+					forwardTarget = viewToResolveDispute(incident, request);	
+				}
 			} else if (actionType.equalsIgnoreCase("new")) {
 				forwardTarget = createNew(incident, theform, user);
 			} else if (actionType.equalsIgnoreCase("viewToResolve")) {		//only authorized agent can update existing dispute
@@ -88,7 +96,6 @@ public class DisputeResolutionAction extends CheckedAction {
 					forwardTarget = viewToResolveDispute(incident, request);	
 				}
 			} else if (actionType.equalsIgnoreCase("view")) {	// view only existing
-				
 				forwardTarget = viewExisting(incident, request);
 			} else if (actionType.equalsIgnoreCase("manage")) {	// list all disputes limited access
 				forwardTarget = TracingConstants.VIEW_DISPUTES;
@@ -99,86 +106,31 @@ public class DisputeResolutionAction extends CheckedAction {
 				String myAcceptDisputeBtn = "" + resourceBundle.getString("button.accept.dispute");
 				String myDenyDisputeBtn = "" + resourceBundle.getString("button.deny.dispute");
 				
+				boolean success = true;
 				String whichButton = "";
 				String myButton = "" + theform.getBtnUpdateDispute();
 				if(myButton.equalsIgnoreCase(myAcceptDisputeBtn)) {
 					whichButton += myAcceptDisputeBtn;
 					//do accept dispute action here
-					acceptDispute(incident, user);
+					success = acceptDispute(incident, user);
 				} else if (myButton.equalsIgnoreCase(myDenyDisputeBtn)) {
 					whichButton += myDenyDisputeBtn;
-					denyDispute(incident, user);
+					success = denyDispute(incident, user);
 				} else if (myButton.equalsIgnoreCase(myManuallyModifyDisputeBtn)) {
 					whichButton += myManuallyModifyDisputeBtn;
-					manuallyModifyDispute(incident, theform, user);
+					success = manuallyModifyDispute(incident, theform, user);
 				} 
 				
 				DisputeResolutionUtils.lockIncident(incident); 
 				DisputeResolutionUtils.auditIncidentLockOrUnlock(incident, user);
 				//DisputeResolutionUtils.lockIncidentWithAudit(incident, user);
-				
+				request.setAttribute("incident_id", incident);
+				if(success){
+					request.setAttribute("success", 1);
+				}
 				forwardTarget = TracingConstants.DISPUTE_RESOLUTION_UPDATE_SUCCESS;
-			} else if (actionType.equalsIgnoreCase("lock")) {
-				//set incident lock attribute to true
-				DisputeResolutionUtils.lockIncident(incident);
-				DisputeResolutionUtils.auditIncidentLockOrUnlock(incident, user);
-				//DisputeResolutionUtils.lockIncidentWithAudit(incident, user);
-				
-				String form_incident_id = null;
-				Dispute myDispute = null;
-				if(theform.getIncident_ID() != null) {
-					form_incident_id = theform.getIncident_ID();
-					request.setAttribute("incident", form_incident_id);
-					myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
-				}
-				
-				boolean disputeProcess = false;
-				if (myDispute != null) {
-					disputeProcess = true;
-				} 
-//				request.setAttribute("disputeProcess", disputeProcess);
-				request.setAttribute("currentstatus", TracingConstants.MBR_STATUS_CLOSED);
-				
-				// to handle different types of incidents: ld, dam, ma
-				String appropriateForwardTarget = TracingConstants.LD_CLOSE_READ_ONLY;
-				if (incidentType == TracingConstants.MISSING_ARTICLES) {
-					appropriateForwardTarget = TracingConstants.MISSING_CLOSE_READ_ONLY;
-				} else if (incidentType == TracingConstants.DAMAGED_BAG) {
-					appropriateForwardTarget = TracingConstants.DAMAGED_CLOSE_READ_ONLY;
-				}
-				
-				forwardTarget = appropriateForwardTarget;
-			} else if (actionType.equalsIgnoreCase("unlock")) {
-				//set incident lock attribute to false
-				DisputeResolutionUtils.unlockIncident(incident);
-				DisputeResolutionUtils.auditIncidentLockOrUnlock(incident, user);
-				//DisputeResolutionUtils.unlockIncidentWithAudit(incident, user);
-				
-				String form_incident_id = null;
-				Dispute myDispute = null;
-				if(theform.getIncident_ID() != null) {
-					form_incident_id = theform.getIncident_ID();
-					request.setAttribute("incident", form_incident_id);
-					myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
-				}
-				
-				boolean disputeProcess = false;
-				if (myDispute != null) {
-					disputeProcess = true;
-				} 
-//				request.setAttribute("disputeProcess", disputeProcess);
-				request.setAttribute("currentstatus", TracingConstants.MBR_STATUS_CLOSED);
-				
-				// to handle different types of incidents: ld, dam, ma
-				String appropriateForwardTarget = TracingConstants.LD_CLOSE;
-				if (incidentType == TracingConstants.MISSING_ARTICLES) {
-					appropriateForwardTarget = TracingConstants.MISSING_CLOSE;
-				} else if (incidentType == TracingConstants.DAMAGED_BAG) {
-					appropriateForwardTarget = TracingConstants.DAMAGED_CLOSE;
-				}
-				
-				forwardTarget = appropriateForwardTarget;
-			}			
+				//forwardTarget = TracingConstants.VIEW_DISPUTES;
+			}
 		} else if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, user)) {
 			if (actionType.equalsIgnoreCase("start")) {
 				forwardTarget = TracingConstants.DISPUTE_RESOLUTION;
@@ -225,14 +177,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		}
 		catch (Exception e) {
 		}
-		List bag_items = theform.getItemlist();
 		
-
-		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
-			forwardTarget = TracingConstants.NO_PERMISSION;
-
-
 		return mapping.findForward(forwardTarget);
 	}
 	private String createNew(String incident, IncidentForm theform, Agent user) {
@@ -317,7 +262,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		return TracingConstants.MANAGE_DISPUTE;
 	}
 	
-	private void acceptDispute(String incidentId, Agent user) {
+	private boolean acceptDispute(String incidentId, Agent user) {
 		Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incidentId);
 		
 		Status status = new Status();
@@ -332,10 +277,10 @@ public class DisputeResolutionAction extends CheckedAction {
 		myDispute.setDeterminedLossCode(myDispute.getSuggestedLossCode());
 		
 //		DisputeUtils.saveDispute(myDispute);
-		DisputeUtils.saveDisputeAndUpdateIncident(myDispute, incidentId, user);
+		return DisputeUtils.saveDisputeAndUpdateIncident(myDispute, incidentId, user);
 	}
 	
-	private void denyDispute(String incidentId, Agent user) {
+	private boolean denyDispute(String incidentId, Agent user) {
 		Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incidentId);
 		
 		Status status = new Status();
@@ -349,10 +294,10 @@ public class DisputeResolutionAction extends CheckedAction {
 		
 		myDispute.setDeterminedLossCode(myDispute.getBeforeDisputeLossCode());
 		
-		DisputeUtils.saveDispute(myDispute);
+		return DisputeUtils.saveDispute(myDispute);
 	}
 	
-	private void manuallyModifyDispute(String incidentId, IncidentForm theform, Agent user) {
+	private boolean manuallyModifyDispute(String incidentId, IncidentForm theform, Agent user) {
 		Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incidentId);
 		
 		Status status = new Status();
@@ -370,7 +315,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		myDispute.setResolutionRemarks(theform.getResolutionRemarks());
 		
 //		DisputeUtils.saveDispute(myDispute);
-		DisputeUtils.saveDisputeAndUpdateIncident(myDispute, incidentId, user);
+		return DisputeUtils.saveDisputeAndUpdateIncident(myDispute, incidentId, user);
 	}
 	
 	private String getTypeOfChangeInDispute(

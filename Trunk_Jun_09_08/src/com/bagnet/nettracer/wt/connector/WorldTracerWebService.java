@@ -569,6 +569,8 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			for (Item item: (Set<Item>) bdo1.getItems()) {
 				aero.nettracer.serviceprovider.wt_1_0.common.Item i = new aero.nettracer.serviceprovider.wt_1_0.common.Item();
 				i.setBagNumber(item.getBagnumber() + 1);
+				i.setColor(item.getColor());
+				i.setType(item.getBagtype());
 				al.add(i);	
 			}
 			GregorianCalendar acal = new GregorianCalendar();

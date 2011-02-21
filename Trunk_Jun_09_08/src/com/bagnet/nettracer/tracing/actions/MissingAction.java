@@ -193,7 +193,18 @@ public class MissingAction extends CheckedAction {
 		
 		if (theform.getIncident_ID() != null) request.setAttribute("incident",theform.getIncident_ID());
 
-		if (MBRActionUtils.actionClose(theform, request, user, errors)) {
+		if (request.getParameter("lock_fault") != null){
+			DisputeResolutionUtils.lockIncident(theform.getIncident_ID(),theform);
+			theform.setLocked(true);
+			request.removeAttribute("lock_fault");
+		}
+		if (request.getParameter("unlock_fault") != null){
+			DisputeResolutionUtils.unlockIncident(theform.getIncident_ID());
+			theform.setLocked(false);
+			request.removeAttribute("unlock_fault");
+		}
+		
+		if(MBRActionUtils.actionClose(theform, request, user, errors)) {
 			saveMessages(request, errors);
 			
 			//		 AJAX CALL
@@ -210,10 +221,6 @@ public class MissingAction extends CheckedAction {
 				}
 
 				if(currentStatus == TracingConstants.MBR_STATUS_CLOSED) {
-					//if locked and does not have lock permission then they get read only
-					if (isIncidentLocked) {
-						return mapping.findForward(TracingConstants.MISSING_CLOSE_READ_ONLY);
-					}
 					
 					//if it is closed user can only edit it if they have the permission to edit closed files
 					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_MISSING_LOSS_CODES, user)) {
@@ -226,10 +233,6 @@ public class MissingAction extends CheckedAction {
 				}
 				//not closed
 				else {
-					if (isIncidentLocked) {
-						return mapping.findForward(TracingConstants.MISSING_CLOSE_READ_ONLY);
-					}
-					
 					return (mapping.findForward(TracingConstants.MISSING_CLOSE));
 				}
 			}

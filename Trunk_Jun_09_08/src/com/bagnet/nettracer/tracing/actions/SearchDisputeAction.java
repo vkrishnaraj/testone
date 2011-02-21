@@ -69,7 +69,7 @@ public class SearchDisputeAction extends CheckedAction {
 		
 		// search
 		List<Dispute> resultList = new ArrayList<Dispute>();
-		int rowcount = -1;
+		long rowcount = -1;
 		
 		String incidentIdFromSearchForm = theform.getIncident_ID();
 		//if the incident id is specified, then it comes from search button
@@ -93,8 +93,8 @@ public class SearchDisputeAction extends CheckedAction {
 			}
 			forwardTarget = TracingConstants.VIEW_ONLY_DISPUTE;
 		} else {
-			resultList = DisputeUtils.getDisputeList(null);
-			if (resultList == null || resultList.size() <= 0) {
+			rowcount = DisputeUtils.getDisputeCount(user);
+			if (rowcount <= 0) {
 				ActionMessages errors = new ActionMessages();
 				ActionMessage error = new ActionMessage("error.nosearchresult");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -102,8 +102,6 @@ public class SearchDisputeAction extends CheckedAction {
 				forwardTarget = TracingConstants.VIEW_DISPUTES;
 			} else {
 				// get total records
-				rowcount = resultList.size();
-
 				Dispute dispute = null;
 
 				/** ************ pagination ************* */

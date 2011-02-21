@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.core;
 public interface UpdateBdoDeliveryResponseDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateBdoDeliveryResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s46C2824FBA7D2A16453E6357E9EA151B").resolveHandle("updatebdodeliveryresponseeba1doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateBdoDeliveryResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("updatebdodeliveryresponseeba1doctype");
     
     /**
      * Gets the "UpdateBdoDeliveryResponse" element
@@ -42,7 +42,7 @@ public interface UpdateBdoDeliveryResponseDocument extends org.apache.xmlbeans.X
     public interface UpdateBdoDeliveryResponse extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateBdoDeliveryResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s46C2824FBA7D2A16453E6357E9EA151B").resolveHandle("updatebdodeliveryresponse7d46elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateBdoDeliveryResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("updatebdodeliveryresponse7d46elemtype");
         
         /**
          * Gets the "return" element

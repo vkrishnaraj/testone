@@ -43,6 +43,22 @@
        </html:select>
      </td>
    </tr>
+      
+   <tr>
+       <td>
+         <bean:message key="colname.previous.fault.station.nobr" />
+         :
+       </td>
+
+     <td>
+       <html:select property="previousFaultStation_ID" styleClass="dropdown" multiple="true">
+         <html:option value="0">
+           <bean:message key="select.all" />
+         </html:option>
+         <html:options collection="airlineallstationlist" property="station_ID" labelProperty="stationcode" />
+       </html:select>
+     </td>
+   </tr>
 
  <tr>
    <td>

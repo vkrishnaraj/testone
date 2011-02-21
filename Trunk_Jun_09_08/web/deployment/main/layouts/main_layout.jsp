@@ -74,7 +74,7 @@ response.addDateHeader("Expires", -1);
 
 <!--[if lt IE 7]>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu2.js"></script>
-<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/fixed.js"></script>
+</script>
 <![endif]-->
 </logic:present>
 <style type="text/css">

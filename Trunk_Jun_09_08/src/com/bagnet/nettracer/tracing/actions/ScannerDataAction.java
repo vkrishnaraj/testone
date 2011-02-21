@@ -169,7 +169,12 @@ public class ScannerDataAction extends Action {
 			
 			// Obtain the appropriate scannerDataSource
 			ScannerDataSource scannerDataSource =	(ScannerDataSource) SpringUtils.getBean(SpringUtils.SCANNER_DATA_SOURCE);
-			ScannerDTO dto = scannerDataSource.getScannerData(startDate, endDate, bagTagNumber);
+			ScannerDTO dto = null;
+			try{
+				dto = scannerDataSource.getScannerData(startDate, endDate, bagTagNumber);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 			request.setAttribute("resultList", dto.getScannerDataDTOs());
 			
 			if (request.getParameter("generateReport") != null && 

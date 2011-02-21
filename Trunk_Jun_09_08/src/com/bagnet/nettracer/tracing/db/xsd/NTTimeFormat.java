@@ -1,0 +1,166 @@
+/*
+ * XML Type:  NTTimeFormat
+ * Namespace: http://db.tracing.nettracer.bagnet.com/xsd
+ * Java type: com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat
+ *
+ * Automatically generated - do not modify.
+ */
+package com.bagnet.nettracer.tracing.db.xsd;
+
+
+/**
+ * An XML NTTimeFormat(@http://db.tracing.nettracer.bagnet.com/xsd).
+ *
+ * This is a complex type.
+ */
+public interface NTTimeFormat extends org.apache.xmlbeans.XmlObject
+{
+    public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(NTTimeFormat.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sECD53D12A3B16E559E57ADA881AD63EA").resolveHandle("nttimeformataf5dtype");
+    
+    /**
+     * Gets the "format" element
+     */
+    java.lang.String getFormat();
+    
+    /**
+     * Gets (as xml) the "format" element
+     */
+    org.apache.xmlbeans.XmlString xgetFormat();
+    
+    /**
+     * Tests for nil "format" element
+     */
+    boolean isNilFormat();
+    
+    /**
+     * True if has "format" element
+     */
+    boolean isSetFormat();
+    
+    /**
+     * Sets the "format" element
+     */
+    void setFormat(java.lang.String format);
+    
+    /**
+     * Sets (as xml) the "format" element
+     */
+    void xsetFormat(org.apache.xmlbeans.XmlString format);
+    
+    /**
+     * Nils the "format" element
+     */
+    void setNilFormat();
+    
+    /**
+     * Unsets the "format" element
+     */
+    void unsetFormat();
+    
+    /**
+     * Gets the "timeformat_ID" element
+     */
+    int getTimeformatID();
+    
+    /**
+     * Gets (as xml) the "timeformat_ID" element
+     */
+    org.apache.xmlbeans.XmlInt xgetTimeformatID();
+    
+    /**
+     * True if has "timeformat_ID" element
+     */
+    boolean isSetTimeformatID();
+    
+    /**
+     * Sets the "timeformat_ID" element
+     */
+    void setTimeformatID(int timeformatID);
+    
+    /**
+     * Sets (as xml) the "timeformat_ID" element
+     */
+    void xsetTimeformatID(org.apache.xmlbeans.XmlInt timeformatID);
+    
+    /**
+     * Unsets the "timeformat_ID" element
+     */
+    void unsetTimeformatID();
+    
+    /**
+     * A factory class with static methods for creating instances
+     * of this type.
+     */
+    
+    public static final class Factory
+    {
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat newInstance() {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newInstance( type, null ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat newInstance(org.apache.xmlbeans.XmlOptions options) {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newInstance( type, options ); }
+        
+        /** @param xmlAsString the string value to parse */
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(java.lang.String xmlAsString) throws org.apache.xmlbeans.XmlException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xmlAsString, type, null ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(java.lang.String xmlAsString, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xmlAsString, type, options ); }
+        
+        /** @param file the file from which to load an xml document */
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(java.io.File file) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( file, type, null ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(java.io.File file, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( file, type, options ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(java.net.URL u) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( u, type, null ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(java.net.URL u, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( u, type, options ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(java.io.InputStream is) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( is, type, null ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(java.io.InputStream is, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( is, type, options ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(java.io.Reader r) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( r, type, null ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(java.io.Reader r, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, java.io.IOException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( r, type, options ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(javax.xml.stream.XMLStreamReader sr) throws org.apache.xmlbeans.XmlException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( sr, type, null ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(javax.xml.stream.XMLStreamReader sr, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( sr, type, options ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(org.w3c.dom.Node node) throws org.apache.xmlbeans.XmlException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, null ); }
+        
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( node, type, options ); }
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, null ); }
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat parse(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+          return (com.bagnet.nettracer.tracing.db.xsd.NTTimeFormat) org.apache.xmlbeans.XmlBeans.getContextTypeLoader().parse( xis, type, options ); }
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+          return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, null ); }
+        
+        /** @deprecated {@link org.apache.xmlbeans.xml.stream.XMLInputStream} */
+        public static org.apache.xmlbeans.xml.stream.XMLInputStream newValidatingXMLInputStream(org.apache.xmlbeans.xml.stream.XMLInputStream xis, org.apache.xmlbeans.XmlOptions options) throws org.apache.xmlbeans.XmlException, org.apache.xmlbeans.xml.stream.XMLStreamException {
+          return org.apache.xmlbeans.XmlBeans.getContextTypeLoader().newValidatingXMLInputStream( xis, type, options ); }
+        
+        private Factory() { } // No instance of this class allowed
+    }
+}

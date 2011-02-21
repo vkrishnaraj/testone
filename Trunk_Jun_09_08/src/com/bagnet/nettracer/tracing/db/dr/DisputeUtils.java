@@ -21,9 +21,11 @@ import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 public class DisputeUtils {
 	private static Logger logger = Logger.getLogger(DisputeUtils.class);
 	
-	public static List<Dispute> getDisputeList(Object user){
-		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d where 1=1 ";
+	public static long getDisputeCount(Agent user){
+		String sql = "select count (d.dispute_res_id) from com.bagnet.nettracer.tracing.db.dr.Dispute d where 1=1 ";
 		sql += " and d.status = :status";
+		sql += " and (d.incident.stationassigned.station_ID = :station or d.incident.stationassigned.lz_ID = :lz)";
+		
 		Query q = null;
 		
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -31,13 +33,18 @@ public class DisputeUtils {
 			q = sess.createQuery(sql.toString());
 			q.setInteger("status", TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN);
 			
-			LinkedHashSet<Dispute> qlhs = new LinkedHashSet<Dispute>(q.list());
-			List<Dispute> al = new ArrayList<Dispute>(qlhs);
-			return al;
+			q.setParameter("station", user.getStation().getStation_ID());
+			q.setParameter("lz", user.getStation().getLz_ID());		
+			
+//			logger.error("getDisputeList() : lzId = " + user.getStation().getLz_ID() + " and stationId = " + user.getStation().getStation_ID());
+			
+			List l = q.list();
+			Long ret = (Long)l.get(0);
+			return ret.longValue();
 		} catch (Exception e) {
 			logger.error("unable to list disputes " + e);
 			e.printStackTrace();
-			return null;
+			return -1;
 		} finally {
 			if (sess != null) {
 				try {
@@ -53,12 +60,18 @@ public class DisputeUtils {
 			boolean dirtyRead){
 		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d where 1=1 ";
 		sql += " and d.status = :status";
+		sql += " and (d.incident.stationassigned.station_ID = :station or d.incident.stationassigned.lz_ID = :lz)";
 		Query q = null;
 		
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			q = sess.createQuery(sql.toString());
 			q.setInteger("status", TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN);
+			
+			q.setParameter("station", user.getStation().getStation_ID());
+			q.setParameter("lz", user.getStation().getLz_ID());	
+			
+//			logger.error("getPaginatedDisputeList() : lzId = " + user.getStation().getLz_ID() + " and stationId = " + user.getStation().getStation_ID());
 			
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;

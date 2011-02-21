@@ -57,11 +57,22 @@ public class StatReportDTO {
 	private String arrivaldate;
 
 	private String[] faultstation_ID;
+	private String[] previousFaultStation_ID;
+	
+	public String[] getPreviousFaultStation_ID() {
+		return previousFaultStation_ID;
+	}
+
+	public void setPreviousFaultStation_ID(String[] previousFaultStation_ID) {
+		this.previousFaultStation_ID = previousFaultStation_ID;
+	}
+
 	private int loss_code;
 	private Integer[] loss_code_combo;
 	private String primary_sort_order;
 	private String secondary_sort_order;
 	
+
 	public String getSecondary_sort_order() {
 		return secondary_sort_order;
 	}

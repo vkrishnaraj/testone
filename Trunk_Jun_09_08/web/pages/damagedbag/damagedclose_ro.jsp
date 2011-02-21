@@ -143,7 +143,10 @@
 			    		  String incidentId = "" + request.getAttribute("incident");
 			    		  if (DisputeResolutionUtils.isIncidentLocked(incidentId)) {
 			    	%>
-			    		<input type="submit" id="button" value='<bean:message key="button.unlock.fault.information" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=unlock";return false;'>
+			    		<html:hidden name="close" property="close" value="1"/>
+			    	<html:submit property="unlock_fault" styleId="button">
+                      <bean:message key="button.unlock.fault.information" />
+                    </html:submit>
 			    	<%    } 
 			    	   } %>
 			    </logic:equal>

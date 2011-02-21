@@ -35,6 +35,9 @@
 
 	<bean id="eventHandler"
 		class="com.bagnet.clients.${event.class.path}.ClientEventHandlerImpl" />
+		
+	<bean id="precoder"
+		class="com.bagnet.clients.${precoder.class.path}.PrecoderImpl" />
 
 	<!-- Hibernate config -->
 	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper"

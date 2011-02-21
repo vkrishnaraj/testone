@@ -238,7 +238,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/TraceOHD.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/TraceIncident.hbm.xml"/>	
 		<mapping resource="com/bagnet/nettracer/tracing/db/TraceIncident_Claimcheck.hbm.xml"/>
-		
+		<mapping class="com.bagnet.nettracer.tracing.db.Precoder"/>
 
 		
 		

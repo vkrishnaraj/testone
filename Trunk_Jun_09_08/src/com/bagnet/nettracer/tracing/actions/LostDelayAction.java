@@ -272,8 +272,11 @@ public class LostDelayAction extends CheckedAction {
 			disputeProcess = true;
 		} 
 
-		ServletContext sc = getServlet().getServletContext();
-		String realpath = sc.getRealPath("/");
+		String realpath = null;
+		if (getServlet() != null){
+			ServletContext sc = getServlet().getServletContext();
+			realpath = sc.getRealPath("/");
+		}
 		
 		if(request.getAttribute("faultCompanyList") == null || request.getAttribute("faultstationlist") == null) {
 			if(UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.LOST_DELAY)) {
@@ -325,6 +328,17 @@ public class LostDelayAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
 
+		if (request.getParameter("lock_fault") != null){
+			DisputeResolutionUtils.lockIncident(theform.getIncident_ID(),theform);
+			theform.setLocked(true);
+			request.removeAttribute("lock_fault");
+		}
+		if (request.getParameter("unlock_fault") != null){
+			DisputeResolutionUtils.unlockIncident(theform.getIncident_ID());
+			theform.setLocked(false);
+			request.removeAttribute("unlock_fault");
+		}
+		
 		// close report
 		if(MBRActionUtils.actionClose(theform, request, user, errors)) {
 			saveMessages(request, errors);
@@ -339,11 +353,6 @@ public class LostDelayAction extends CheckedAction {
 				}
 
 				if(currentStatus == TracingConstants.MBR_STATUS_CLOSED) {
-//					request.setAttribute("disputeProcess", disputeProcess);
-					// if locked and does not have lock permission then they get read only
-					if (isIncidentLocked) {
-						return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
-					}
 					
 					//if it is closed user can only edit it if they have the permission to edit closed files
 					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES, user)) {
@@ -356,10 +365,6 @@ public class LostDelayAction extends CheckedAction {
 				}
 				//not closed
 				else {
-//					request.setAttribute("disputeProcess", disputeProcess);
-					if (isIncidentLocked) {
-						return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
-					}
 					return (mapping.findForward(TracingConstants.LD_CLOSE));
 				}
 		}
@@ -469,6 +474,8 @@ public class LostDelayAction extends CheckedAction {
 		if (request.getParameter("disputeFault") != null) {
 			handleDisputeFault(mapping, theform, request, response);
 		}
+		
+
 
 		// save incident
 		if(request.getParameter("save") != null || request.getParameter("close") != null
@@ -596,9 +603,9 @@ public class LostDelayAction extends CheckedAction {
 				}
 				
 //				request.setAttribute("disputeProcess", disputeProcess);
-				if (isIncidentLocked) {
-					return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
-				}
+//				if (isIncidentLocked) {
+//					return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
+//				}
 				return (mapping.findForward(TracingConstants.LD_CLOSE));
 			}
 			else {
