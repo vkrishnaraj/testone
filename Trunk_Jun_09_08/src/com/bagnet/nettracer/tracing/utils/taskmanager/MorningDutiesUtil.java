@@ -177,20 +177,23 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		return false;
 	}
 	
-	private static String getQuery(Agent agent, int day){
-		return "from com.bagnet.nettracer.tracing.db.Incident i "
+	private static String getQuery(Agent agent, int day, boolean order){
+		String sql =  "from com.bagnet.nettracer.tracing.db.Incident i "
 		+ "where 1=1 "
 		+ "and i.itemtype.itemType_ID = 1 "
 		+ "and i.status.status_ID = :status " 
 		+ "and (i.stationassigned.station_ID = :station or i.stationassigned.lz_ID = :lz) "
 		+ "and i.incident_ID not in (select m.incident.incident_ID from "
 		+ getDayTask(day) + " m where m.status.status_ID != :taskStatus or deferment_timestamp > :curTime) "
-		+ "and " + getDateRange(day) 
-		+ "order by createdate asc, createtime asc";
+		+ "and " + getDateRange(day);
+		if(order){
+			sql += " order by createdate asc, createtime asc";
+		}
+		return sql;
 	}
 	
 	public static List<Incident> getTaskList(Agent agent, int day) {
-		String sql = getQuery(agent, day);
+		String sql = getQuery(agent, day, true);
 		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -208,7 +211,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 	
 	public static List<GeneralTask> getPaginatedDisputeList(Agent user, int day, int rowsperpage, int currpage, boolean iscount,
 			boolean dirtyRead){
-		String sql = getQuery(user, day);
+		String sql = getQuery(user, day, true);
 		
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -355,7 +358,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 	}
 
 	private static Incident getIncident(Agent agent, int day) {
-		String sql = getQuery(agent, day);
+		String sql = getQuery(agent, day, true);
 
 		
 
@@ -386,7 +389,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 	}
 	
 	private static int getIncidentCount(Agent agent, int day){
-		String sql = "select count (i.incident_ID) " + getQuery(agent, day); 
+		String sql = "select count (i.incident_ID) " + getQuery(agent, day, false); 
 		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
