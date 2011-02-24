@@ -87,18 +87,7 @@ public class GeneralTaskAction extends Action{
 			}
 			
 			
-			long rowcount = 0;
-			switch (day){
-			case 2:
-				rowcount = MorningDutiesUtil.getTwoDayCount(user);
-				break;
-			case 3:
-				rowcount = MorningDutiesUtil.getThreeDayCount(user);
-				break;
-			case 4:
-				rowcount = MorningDutiesUtil.getFourDayCount(user);
-				break;
-			}
+			long rowcount = MorningDutiesUtil.getCount(user, day);
 			
 			int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 
@@ -135,6 +124,7 @@ public class GeneralTaskAction extends Action{
 //					request.setAttribute("pauselist", pauselist);
 //				}
 				response.sendRedirect("GeneralTask.do?tasklist=" + day);
+				return null;
 //				return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
 			}
 			session.setAttribute("sessionTaskContainer", gtask);
@@ -169,6 +159,7 @@ public class GeneralTaskAction extends Action{
 //					request.setAttribute("pauselist", pauselist);
 //				}
 				response.sendRedirect("GeneralTask.do?tasklist=" + day);
+				return null;
 //				return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
 			}
 			session.setAttribute("sessionTaskContainer", gtask);

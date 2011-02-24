@@ -14,7 +14,6 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LockBMO;
 import com.bagnet.nettracer.tracing.bmo.TaskManagerBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -23,7 +22,6 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Lock.LockType;
-import com.bagnet.nettracer.tracing.db.dr.Dispute;
 import com.bagnet.nettracer.tracing.db.taskmanager.FourDayTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
@@ -34,8 +32,6 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.wt.WorldTracerException;
-import com.bagnet.nettracer.wt.WorldTracerLockException;
-import com.bagnet.nettracer.wt.connector.CaptchaException;
 
 public class MorningDutiesUtil extends TaskManagerUtil {
 	private static Logger logger = Logger.getLogger(HibernateUtils.class);
@@ -58,45 +54,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		}
 	}
 
-	public static GeneralTask lockTask(GeneralTask task){
-		String key = null;
-		if (task instanceof MorningDutiesTask){
-			if(((MorningDutiesTask)task).getIncident() != null && ((MorningDutiesTask)task).getIncident().getIncident_ID() != null
-					&& ((MorningDutiesTask)task).getIncident().getIncident_ID().trim().length() > 0){
-				key = ((MorningDutiesTask)task).getKey() + ((MorningDutiesTask)task).getIncident().getIncident_ID();
-			}
-		}
-		if(key == null){
-			return null;
-		}
-		LockBMO lockBmo = SpringUtils.getLockBmo();
-		Lock lock = null;
-		int i = 0;
-		try {
-			do {
-				i++;
-				try {
-					lock = lockBmo.createLock(LockType.TM_INCIDENT, key, 3600000L);
-				} catch (Exception ex) {
-					logger.info("GeneralTask for " + key
-							+ " alreaedy locked, waiting..");
-					try {
-						Thread.sleep(1000L);
-					} catch (InterruptedException e) {
-						throw new Exception(
-								"unable to acquire lock " + key, e);
-					}
-				}
-			} while (lock == null && i < 4);
-			if(lock == null) {
-				throw new Exception("unable to lock incident " + key);
-			}
-			task.setLock(lock);
-			return task;
-		} catch (Exception e) {
-			return null;
-		} 
-	}
+
 	
 	public static GeneralTask createTask(Agent agent, Object o, int day) {
 		Incident inc = (Incident) o;
@@ -170,19 +128,38 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		unlockTaskIncident(task.getLock());
 	}
 	
-	private static String getQuery(Agent agent, int day, boolean order){
+	public static TaskActivity addActivity(Agent agent, GeneralTask task, ResolutionType resolution, long duration){
+		TaskActivity ta = new TaskActivity();
+		ta.setTask(task);
+		ta.setAgent(agent);
+		ta.setResolution(resolution.description());
+		ta.setDuration(duration);
+		ta.setCompletetime(DateUtils.convertToGMTDate(new Date()));
+		return TaskManagerBMO.saveTaskActivity(ta);
+	}
+	
+	public static int getCount(Agent agent, int day){
+		return getOpenCount(agent, day) + getIncidentCount(agent, day);
+	}
+	
+	public static List<Incident> getPauseList(Agent user, int day) {
 		String sql =  "from com.bagnet.nettracer.tracing.db.Incident i "
 		+ "where 1=1 "
-		+ "and i.itemtype.itemType_ID = 1 "
-		+ "and i.status.status_ID = :status " 
-		+ "and (i.stationassigned.station_ID = :station or i.stationassigned.lz_ID = :lz) "
-		+ "and i.incident_ID not in (select m.incident.incident_ID from "
-		+ getDayTask(day) + " m where m.status.status_ID != :taskStatus or deferment_timestamp > :curTime) "
-		+ "and " + getDateRange(day);
-		if(order){
-			sql += " order by createdate asc, createtime asc";
-		}
-		return sql;
+		+ "and i.incident_ID in (select m.incident.incident_ID from "
+		+ getDayTask(day) + " m "
+		+ "where 1=1 "
+		+ "and m.assigned_agent = :agentID "
+		+ "and m.status = :status) ";
+
+		Query q = null;
+		System.out.println(sql);
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		q.setInteger("agentID", user.getAgent_ID());
+		q.setLong("status", TracingConstants.TASK_MANAGER_PAUSED);
+		List<Incident> result = q.list();
+		sess.close();
+		return result;
 	}
 	
 	public static List<Incident> getTaskList(Agent agent, int day) {
@@ -237,14 +214,27 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		}
 	}
 	
-	public static TaskActivity addActivity(Agent agent, GeneralTask task, ResolutionType resolution, long duration){
-		TaskActivity ta = new TaskActivity();
-		ta.setTask(task);
-		ta.setAgent(agent);
-		ta.setResolution(resolution.description());
-		ta.setDuration(duration);
-		ta.setCompletetime(DateUtils.convertToGMTDate(new Date()));
-		return TaskManagerBMO.saveTaskActivity(ta);
+	public static GeneralTask getTask(Agent agent, int day) {
+
+		Incident inc = getIncident(agent, day);
+		if (inc != null) {
+			//do we already have a defered or aborted task for this incident
+			GeneralTask gtask = getTaskByIncidentId(agent, inc.getIncident_ID(), day);
+			if(gtask == null){
+				//we don't have a task, create one
+				return createTask(agent, inc, day);
+			}
+			if(gtask.getStatus().getStatus_ID() == TracingConstants.TASK_MANAGER_OPEN && gtask.getDeferment_timestamp().getTime() < DateUtils.convertToGMTDate(new Date()).getTime()){
+				if(MorningDutiesUtil.lockTask(gtask)!=null){
+					Status s = new Status();
+					s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
+					TaskManagerBMO.saveTask(gtask);
+					return gtask;
+				}
+			}
+		}
+		// didn't find a task
+		return null;
 	}
 	
 	public static MorningDutiesTask getTaskByIncidentId(Agent agent, String incident_id, int day){
@@ -274,85 +264,80 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		return null;
 	}
 	
-	public static GeneralTask getTask(Agent agent, int day) {
-		//		GeneralTask task = getTaskManagerTask(agent, day);
-		//		if (task != null) {
-		//			return task;
-		//		}
+	public static int getMorningDutiesReportCount(int day, int lz_id, int offset){
+		Date startOfDay = getStartOfDay();
+		GregorianCalendar closedCutoff = new GregorianCalendar(
+				TimeZone.getTimeZone("GMT"));
+		closedCutoff.setTime(startOfDay);
+		closedCutoff.add(Calendar.DATE, -day + 1);
+		
+		String sql = "select count(i.incident_ID) from com.bagnet.nettracer.tracing.db.Incident i "
+			+ "where 1=1 "
+			+ "and i.itemtype.itemType_ID = 1 "
+			+ "and " + getDateRange(day, offset)
+			+ " and (close_date is null or close_date > '" 
+			+  DateUtils.formatDate(closedCutoff.getTime(),TracingConstants.getDBDateTimeFormat(HibernateWrapper.getConfig().getProperties()),null, null) + "') ";
 
-		Incident inc = getIncident(agent, day);
-		if (inc != null) {
-			//do we already have a defered or aborted task for this incident
-			GeneralTask gtask = getTaskByIncidentId(agent, inc.getIncident_ID(), day);
-			if(gtask == null){
-				//we don't have a task, create one
-				return createTask(agent, inc, day);
-			}
-			if(gtask.getStatus().getStatus_ID() == TracingConstants.TASK_MANAGER_OPEN && gtask.getDeferment_timestamp().getTime() < DateUtils.convertToGMTDate(new Date()).getTime()){
-				if(MorningDutiesUtil.lockTask(gtask)!=null){
-					Status s = new Status();
-					s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
-					TaskManagerBMO.saveTask(gtask);
-					return gtask;
-				}
-			}
+		if (lz_id > 0){
+			sql += " and i.stationassigned.lz_ID = :lz";
 		}
-		// didn't find a task
-		return null;
-	}
-
-	public static Lock lockTaskIncident(String incident_id, int day) throws Exception{
-		if(incident_id == null || incident_id.trim().length() == 0){
-			throw new Exception("incident_id is null or empty");
+		
+		System.out.println(sql);
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		
+		if (lz_id > 0){
+			q.setParameter("lz", lz_id);
 		}
-		String id = incident_id + "_" + day;
-		LockBMO lockBmo = SpringUtils.getLockBmo();
-		Lock lock = null;
-		int i = 0;
-		try {
-			do {
-				i++;
-				try {
-					lock = lockBmo.createLock(LockType.TM_INCIDENT, id, 3600000L);
-				} catch (Exception ex) {
-					logger.info("Morning duties for " + id
-							+ " alreaedy locked, waiting..");
-					try {
-						Thread.sleep(1000L);
-					} catch (InterruptedException e) {
-						throw new Exception(
-								"unable to acquire lock " + id, e);
-					}
-				}
-			} while (lock == null && i < 4);
-			if(lock == null) {
-				throw new Exception("unable to lock incident " + id);
-			}
-			return lock;
-		} catch (Exception e) {
-			throw new WorldTracerException("unable to load summary", e);
-		} finally {
-			if (lock != null) {
-				lockBmo.releaseLock(lock);
-			}
+		
+		List result = q.list();
+		if (result.size() > 0) {
+			return ((Long) result.get(0)).intValue();
 		}
+		return -1;
 	}
 	
-	public static void unlockTaskIncident(Lock lock){
-		SpringUtils.getLockBmo().releaseLock(lock);
+	public static int getMorningDutiesReportCompletedCount(int day, int station_id, int offset){
+		String sql = "select count(i.incident_ID) from com.bagnet.nettracer.tracing.db.Incident i "
+			+ "where 1=1 "
+			+ "and i.itemtype.itemType_ID = 1 "
+			+ "and " + getDateRange(day, offset)
+			+ " and i.incident_ID in (select m.incident.incident_ID from "
+					+ getDayTask(day) + " m where m.status.status_ID = :taskStatus)";
+		
+		System.out.println(sql);
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_CLOSED);
+		List result = q.list();
+		if (result.size() > 0) {
+			return ((Long) result.get(0)).intValue();
+		}
+		return -1;
 	}
-
-	private static GeneralTask getTaskManagerTask(Agent agent, int day) {
-		//TODO build me
-		String sql = "";
-		return null;
+	
+	
+	
+	
+	private static String getQuery(Agent agent, int day, boolean order){
+		String sql =  "from com.bagnet.nettracer.tracing.db.Incident i "
+		+ "where 1=1 "
+		+ "and i.itemtype.itemType_ID = 1 "
+		+ "and i.status.status_ID = :status " 
+		+ "and (i.stationassigned.station_ID = :station or i.stationassigned.lz_ID = :lz) "
+		+ "and i.incident_ID not in (select m.incident.incident_ID from "
+		+ getDayTask(day) + " m where m.status.status_ID != :taskStatus or deferment_timestamp > :curTime) "
+		+ "and " + getDateRange(day);
+		if(order){
+			sql += " order by createdate asc, createtime asc";
+		}
+		return sql;
 	}
 
 	private static Incident getIncident(Agent agent, int day) {
 		String sql = getQuery(agent, day, true);
-
-		
-
 		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -362,6 +347,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		q.setParameter("lz", agent.getStation().getLz_ID());
 		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
 		q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
+		q.setMaxResults(1);
 		List result = q.list();
 		if (result.size() > 0) {
 			return (Incident) result.get(0);
@@ -369,15 +355,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		return null;
 	}
 	
-	public static int getTwoDayCount(Agent agent){
-		return TaskManagerBMO.getOpenTwoDayCount(agent) + getIncidentCount(agent, TWODAY);
-	}
-	public static int getThreeDayCount(Agent agent){
-		return TaskManagerBMO.getOpenThreeDayCount(agent) + getIncidentCount(agent, THREEDAY);
-	}
-	public static int getFourDayCount(Agent agent){
-		return TaskManagerBMO.getOpenFourDayCount(agent) + getIncidentCount(agent, FOURDAY);
-	}
+
 	
 	private static int getIncidentCount(Agent agent, int day){
 		String sql = "select count (i.incident_ID) " + getQuery(agent, day, false); 
@@ -397,18 +375,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		return -1;
 	}
 
-	private static String getDayTask(int day){
-		switch(day){
-		case 2:
-			return "com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask";
-		case 3:
-			return "com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask";
-		case 4:
-			return "com.bagnet.nettracer.tracing.db.taskmanager.FourDayTask";
-		default:
-			return null;
-		}
-	}
+
 	
 	protected static Date getStartOfDay(){
 		GregorianCalendar now = new GregorianCalendar(new SimpleTimeZone(
@@ -483,78 +450,35 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		return sql;
 	}
 
-	public static List<Incident> getPauseList(Agent user, int day) {
-		String sql =  "from com.bagnet.nettracer.tracing.db.Incident i "
-		+ "where 1=1 "
-		+ "and i.incident_ID in (select m.incident.incident_ID from "
-		+ getDayTask(day) + " m "
-		+ "where 1=1 "
-		+ "and m.assigned_agent = :agentID "
-		+ "and m.status = :status) ";
 
-		Query q = null;
-		System.out.println(sql);
-		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setInteger("agentID", user.getAgent_ID());
-		q.setLong("status", TracingConstants.TASK_MANAGER_PAUSED);
-		List<Incident> result = q.list();
-		sess.close();
-		return result;
-	}
 
-	public static int getMorningDutiesCount(int day, int lz_id, int offset){
-		Date startOfDay = getStartOfDay();
-		GregorianCalendar closedCutoff = new GregorianCalendar(
-				TimeZone.getTimeZone("GMT"));
-		closedCutoff.setTime(startOfDay);
-		closedCutoff.add(Calendar.DATE, -day + 1);
-		
-		String sql = "select count(i.incident_ID) from com.bagnet.nettracer.tracing.db.Incident i "
-			+ "where 1=1 "
-			+ "and i.itemtype.itemType_ID = 1 "
-			+ "and " + getDateRange(day, offset)
-			+ " and (close_date is null or close_date > '" 
-			+  DateUtils.formatDate(closedCutoff.getTime(),TracingConstants.getDBDateTimeFormat(HibernateWrapper.getConfig().getProperties()),null, null) + "') ";
-
-		if (lz_id > 0){
-			sql += " and i.stationassigned.lz_ID = :lz";
+	
+	private static String getDayTask(int day){
+		switch(day){
+		case 2:
+			return "com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask";
+		case 3:
+			return "com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask";
+		case 4:
+			return "com.bagnet.nettracer.tracing.db.taskmanager.FourDayTask";
+		default:
+			return null;
 		}
-		
-		System.out.println(sql);
-		Query q = null;
-		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		
-		if (lz_id > 0){
-			q.setParameter("lz", lz_id);
-		}
-		
-		List result = q.list();
-		if (result.size() > 0) {
-			return ((Long) result.get(0)).intValue();
-		}
-		return -1;
 	}
 	
-	public static int getMorningDutiesCompletedCount(int day, int station_id, int offset){
-		String sql = "select count(i.incident_ID) from com.bagnet.nettracer.tracing.db.Incident i "
+	private static int getOpenCount(Agent agent, int day){
+		String sql = "select count(task_id) from "
+			+ getDayTask(day) + " mdt "
 			+ "where 1=1 "
-			+ "and i.itemtype.itemType_ID = 1 "
-			+ "and " + getDateRange(day, offset)
-			+ " and i.incident_ID in (select m.incident.incident_ID from "
-					+ getDayTask(day) + " m where m.status.status_ID = :taskStatus)";
-		
-		System.out.println(sql);
+			+ "and mdt.assigned_agent = :agentID "
+			+ "and mdt.status = :status ";
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(sql.toString());
-		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_CLOSED);
+		q.setInteger("agentID", agent.getAgent_ID());
+		q.setLong("status", TracingConstants.TASK_MANAGER_PAUSED);
 		List result = q.list();
-		if (result.size() > 0) {
-			return ((Long) result.get(0)).intValue();
-		}
-		return -1;
+		return ((Long) result.get(0)).intValue();
 	}
 	
 }

@@ -105,47 +105,4 @@ public class TaskManagerBMO {
 		return getTaskById(task.getTask_id()).getActivities();
 	}
 	
-	public static int getOpenTwoDayCount(Agent agent){
-		String sql = "select count(task_id) from com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask mdt "
-			+ "where 1=1 "
-			+ "and mdt.assigned_agent = :agentID "
-			+ "and mdt.status = :status ";
-
-	Query q = null;
-	Session sess = HibernateWrapper.getSession().openSession();
-	q = sess.createQuery(sql.toString());
-	q.setInteger("agentID", agent.getAgent_ID());
-	q.setLong("status", TracingConstants.TASK_MANAGER_PAUSED);
-	List result = q.list();
-	return ((Long) result.get(0)).intValue();
-	}
-	public static int getOpenThreeDayCount(Agent agent){
-		String sql = "select count(task_id) from com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask mdt "
-			+ "where 1=1 "
-			+ "and mdt.assigned_agent = :agentID "
-			+ "and mdt.status = :status ";
-
-	Query q = null;
-	Session sess = HibernateWrapper.getSession().openSession();
-	q = sess.createQuery(sql.toString());
-	q.setInteger("agentID", agent.getAgent_ID());
-	q.setLong("status", TracingConstants.TASK_MANAGER_PAUSED);
-	List result = q.list();
-	return ((Long) result.get(0)).intValue();
-	}
-	public static int getOpenFourDayCount(Agent agent){
-		String sql = "select count(task_id) from com.bagnet.nettracer.tracing.db.taskmanager.FourDayTask mdt "
-			+ "where 1=1 "
-			+ "and mdt.assigned_agent = :agentID "
-			+ "and mdt.status = :status ";
-
-	Query q = null;
-	Session sess = HibernateWrapper.getSession().openSession();
-	q = sess.createQuery(sql.toString());
-	q.setInteger("agentID", agent.getAgent_ID());
-	q.setLong("status", TracingConstants.TASK_MANAGER_PAUSED);
-	List result = q.list();
-	return ((Long) result.get(0)).intValue();
-	}	
-	
 }

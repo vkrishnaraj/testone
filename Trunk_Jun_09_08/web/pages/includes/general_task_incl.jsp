@@ -39,6 +39,8 @@ if (hasPermission) {
     }
   }
 %>
+
+
   <h1 class="green">
     <bean:message key="header.nettracer.currentTask" />
   </h1>
@@ -51,7 +53,7 @@ if (hasPermission) {
 		 		<tr><td width ="20%"><bean:message key="generaltask.description" />:</td><td><bean:message name="sessionTaskContainer" property="description"/></td></tr>
 				<tr><td colspan="2">
           <span style="float:left">
-          	<input type="button" value="<bean:message key="button.task.complete" />" onclick='document.location.href="GeneralTask.do?complete=1";return true;' id="button">
+          	<input type="button" value="<bean:message key="button.task.complete" />" onclick='if(confirm("Have you saved all of your changes?")){document.location.href="GeneralTask.do?complete=1";}' id="button">
           </span>
           <span style="float:right">
           	<select id="task.defer.time" name="defer_time" class="dropdown">

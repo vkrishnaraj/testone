@@ -81,9 +81,7 @@ function updatePagination() {
             <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <br>
-             <center>
-            	<input type="button" value="Start Working!" onclick='document.location.href="GeneralTask.do?gettask=<%=day%>";return true;' id="button">
-            </center>
+
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
             <table class="form2" cellspacing="0" cellpadding="0">
@@ -290,6 +288,10 @@ function updatePagination() {
               </center>
               </logic:notPresent>
             <logic:present name="resultlist" scope="request">
+            <center>
+            	<input type="button" value="Start Working!" onclick='document.location.href="GeneralTask.do?gettask=<%=day%>";return true;' id="button">
+            </center>
+            <br/>
               <h1 class="green">
                 <bean:message key="header.morningduties.incidentlist" />
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>

@@ -448,17 +448,20 @@ public class LogonAction extends Action {
 																						entries = x;
 																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_MANAGE_2DAY_CALL)){																				
-																					int x = com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.getTwoDayCount(agent);
+																					int x = com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.getCount(agent, 
+																							com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.TWODAY);
 																					if (x != -1) {
 																						entries = x;
 																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_MANAGE_3DAY_CALL)){
-																					int x = com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.getThreeDayCount(agent);
+																					int x = com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.getCount(agent,
+																							com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.THREEDAY);
 																					if (x != -1) {
 																						entries = x;
 																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_MANAGE_4DAY_CALL)){
-																					int x = com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.getFourDayCount(agent);
+																					int x = com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.getCount(agent,
+																							com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil.FOURDAY);
 																					if (x != -1) {
 																						entries = x;
 																					}
