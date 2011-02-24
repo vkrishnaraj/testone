@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
+import com.bagnet.nettracer.tracing.forms.GeneralTaskForm;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
@@ -27,7 +30,9 @@ public class GeneralTaskAction extends Action{
 			throws Exception {
 		System.out.println("GeneralTaskAction");
 		
+		
 		HttpSession session = request.getSession();
+		GeneralTaskForm theForm = (GeneralTaskForm)form;
 		
 		Agent user = (Agent) session.getAttribute("user");
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
@@ -56,17 +61,68 @@ public class GeneralTaskAction extends Action{
 			System.out.println("complete");
 			Integer i = new Integer(request.getParameter("tasklist"));
 			day = i.intValue();
-			List<Incident> incidentList = MorningDutiesUtil.getTaskList(user, day);
-			if(incidentList != null && incidentList.size() > 0){
-				request.setAttribute("resultlist", incidentList);
-			}
+			
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
+			int currpage = 1;
+			int end = 10;
+			int pages = 13;
+			
+			
+//			List<Incident> incidentList = MorningDutiesUtil.getTaskList(user, day);
+
 			request.setAttribute("day", day);
 			List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
 			if(pauselist != null && pauselist.size() > 0){
 				request.setAttribute("pauselist", pauselist);
 			}
+			currpage = theForm.getCurrpage() != null ? Integer.parseInt(theForm.getCurrpage()) : 0;
+			if (theForm.getNextpage() != null && theForm.getNextpage().equals("1"))
+				currpage++;
+			if (theForm.getPrevpage() != null && theForm.getPrevpage().equals("1"))
+				currpage--;
+			
+			List<Incident> incidentList = MorningDutiesUtil.getPaginatedDisputeList(user, day, rowsperpage, currpage);
+			if(incidentList != null && incidentList.size() > 0){
+				request.setAttribute("resultlist", incidentList);
+			}
+			
+			
+			long rowcount = 0;
+			switch (day){
+			case 2:
+				rowcount = MorningDutiesUtil.getTwoDayCount(user);
+				break;
+			case 3:
+				rowcount = MorningDutiesUtil.getThreeDayCount(user);
+				break;
+			case 4:
+				rowcount = MorningDutiesUtil.getFourDayCount(user);
+				break;
+			}
+			
+			int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
+
+			if (totalpages <= currpage) {
+				currpage = 0;
+				request.setAttribute("currpage", "0");
+			}
+
+			if (currpage + 1 == totalpages)
+				request.setAttribute("end", "1");
+			if (totalpages > 1) {
+				ArrayList al = new ArrayList();
+				for (int j = 0; j < totalpages; j++) {
+					al.add(Integer.toString(j));
+				}
+				request.setAttribute("pages", al);
+			}
+			
+			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
+			request.setAttribute("currpage", Integer.toString(currpage));
+//			request.setAttribute("end", end);
 			return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
 		}
+
 		if(request.getParameter("complete") != null){
 			System.out.println("complete");
 			MorningDutiesUtil.closeTask(user, task);
@@ -74,11 +130,12 @@ public class GeneralTaskAction extends Action{
 			MorningDutiesTask gtask = (MorningDutiesTask)MorningDutiesUtil.getTask(user, day);
 			if(gtask == null){
 				request.setAttribute("day", day);
-				List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
-				if(pauselist != null && pauselist.size() > 0){
-					request.setAttribute("pauselist", pauselist);
-				}
-				return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
+//				List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
+//				if(pauselist != null && pauselist.size() > 0){
+//					request.setAttribute("pauselist", pauselist);
+//				}
+				response.sendRedirect("GeneralTask.do?tasklist=" + day);
+//				return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
 			}
 			session.setAttribute("sessionTaskContainer", gtask);
 			session.setAttribute("sessionTaskStartTime", new Date());
@@ -88,16 +145,17 @@ public class GeneralTaskAction extends Action{
 			System.out.println("pause");
 			MorningDutiesUtil.pauseTask(user, task);
 			MorningDutiesUtil.addActivity(user, task, MorningDutiesUtil.ResolutionType.PAUSED, getDuration((Date)session.getAttribute("sessionTaskStartTime")));
-			List<Incident> incidentList = MorningDutiesUtil.getTaskList(user, day);
-			if(incidentList != null && incidentList.size() > 0){
-				request.setAttribute("resultlist", incidentList);
-			}
+//			List<Incident> incidentList = MorningDutiesUtil.getTaskList(user, day);
+//			if(incidentList != null && incidentList.size() > 0){
+//				request.setAttribute("resultlist", incidentList);
+//			}
 			request.setAttribute("day", day);
-			List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
-			if(pauselist != null && pauselist.size() > 0){
-				request.setAttribute("pauselist", pauselist);
-			}
-			return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
+//			List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
+//			if(pauselist != null && pauselist.size() > 0){
+//				request.setAttribute("pauselist", pauselist);
+//			}
+			response.sendRedirect("GeneralTask.do?tasklist=" + day);
+//			return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
 		}
 		if(request.getParameter("defer") != null){
 			System.out.println("defer");
@@ -106,11 +164,12 @@ public class GeneralTaskAction extends Action{
 			MorningDutiesTask gtask = (MorningDutiesTask)MorningDutiesUtil.getTask(user, day);
 			if(gtask == null){
 				request.setAttribute("day", day);
-				List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
-				if(pauselist != null && pauselist.size() > 0){
-					request.setAttribute("pauselist", pauselist);
-				}
-				return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
+//				List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
+//				if(pauselist != null && pauselist.size() > 0){
+//					request.setAttribute("pauselist", pauselist);
+//				}
+				response.sendRedirect("GeneralTask.do?tasklist=" + day);
+//				return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
 			}
 			session.setAttribute("sessionTaskContainer", gtask);
 			session.setAttribute("sessionTaskStartTime", new Date());

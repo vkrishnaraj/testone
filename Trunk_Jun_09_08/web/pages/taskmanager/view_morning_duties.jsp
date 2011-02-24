@@ -9,6 +9,8 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
   int day = 0;
+  
+  request.setAttribute("", null);
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -22,9 +24,37 @@
 
   </SCRIPT>
   
+  <script language="javascript">
+    
+function goprev() {
+  o = document.generaltaskForm;
+  o.prevpage.value = "1";
+  o.pagination.value="1";
+  o.submit();
+}
+
+function gonext() {
+  o = document.generaltaskForm;
+  o.nextpage.value="1";
+  o.pagination.value="1";
+  o.submit();
+}
+
+function gopage(i) {
+	  o = document.generaltaskForm;
+	  o.currpage.value = i;
+	  o.pagination.value="1";
+	  o.submit();
+}
+function updatePagination() {
+    return true;
+}
+
+  </script>
+  
   
   <jsp:include page="/pages/includes/validation_search.jsp" />
-  <html:form action="/logon.do?taskmanager=1">
+  <html:form action="GeneralTask.do?tasklist=4">
   
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   
@@ -51,13 +81,17 @@
             <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <br>
+             <center>
+            	<input type="button" value="Start Working!" onclick='document.location.href="GeneralTask.do?gettask=<%=day%>";return true;' id="button">
+            </center>
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
             <table class="form2" cellspacing="0" cellpadding="0">
-
             </table>
             
             <!-- BEGIN -->
+            
+
             
             <logic:present name="pauselist" scope="request">
               <h1 class="green">
@@ -440,7 +474,11 @@
                     </td>
                   </tr>
                 </logic:iterate>
-                
+                <tr>
+					<td colspan="12"> <jsp:include
+						page="/pages/includes/pagination_incl.jsp" /> 
+					</td>
+				</tr>
               </table>
             </logic:present>
           </html:form>

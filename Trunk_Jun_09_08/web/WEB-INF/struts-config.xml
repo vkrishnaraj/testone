@@ -253,6 +253,7 @@
 		<form-bean name="bagbuzzsearchForm" type="com.bagnet.nettracer.tracing.forms.BagBuzzSearchForm" />
 		<form-bean name="salvageSearchForm" type="com.bagnet.nettracer.tracing.forms.salvage.SalvageSearchForm" />
 		<form-bean name="salvageEditForm" type="com.bagnet.nettracer.tracing.forms.salvage.SalvageEditForm" />
+		<form-bean name="generaltaskForm" type="com.bagnet.nettracer.tracing.forms.GeneralTaskForm" />
 
 	</form-beans>
 	<!-- global exception -->
@@ -627,7 +628,7 @@
 
 		<action path="/bagbuzzeditor" type="com.bagnet.nettracer.tracing.actions.BagBuzzEditorAction" name="bagbuzzeditorForm" scope="request" validate="false"></action>"
 		
-		<action path="/GeneralTask" type="com.bagnet.nettracer.tracing.actions.GeneralTaskAction"  scope="request" validate="false"></action>"
+		<action path="/GeneralTask" type="com.bagnet.nettracer.tracing.actions.GeneralTaskAction"  name="generaltaskForm" scope="request" validate="false"></action>"
 
 		<action path="/bagbuzzsearch" type="com.bagnet.nettracer.tracing.actions.BagBuzzSearchAction" name="bagbuzzsearchForm" scope="request" validate="false"></action>"
 

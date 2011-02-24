@@ -66,8 +66,6 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 				key = ((MorningDutiesTask)task).getKey() + ((MorningDutiesTask)task).getIncident().getIncident_ID();
 			}
 		}
-		
-		
 		if(key == null){
 			return null;
 		}
@@ -172,11 +170,6 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		unlockTaskIncident(task.getLock());
 	}
 	
-	public static boolean hasPermission(Agent agent){
-		//TODO build me
-		return false;
-	}
-	
 	private static String getQuery(Agent agent, int day, boolean order){
 		String sql =  "from com.bagnet.nettracer.tracing.db.Incident i "
 		+ "where 1=1 "
@@ -209,8 +202,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		return al;
 	}
 	
-	public static List<GeneralTask> getPaginatedDisputeList(Agent user, int day, int rowsperpage, int currpage, boolean iscount,
-			boolean dirtyRead){
+	public static List<Incident> getPaginatedDisputeList(Agent user, int day, int rowsperpage, int currpage){
 		String sql = getQuery(user, day, true);
 		
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -227,9 +219,8 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 				q.setFirstResult(startnum);
 				q.setMaxResults(rowsperpage);
 			}
-			
-			LinkedHashSet<GeneralTask> qlhs = new LinkedHashSet<GeneralTask>(q.list());
-			List<GeneralTask> al = new ArrayList<GeneralTask>(qlhs);
+			LinkedHashSet<Incident> qlhs = new LinkedHashSet<Incident>(q.list());
+			List<Incident> al = new ArrayList<Incident>(qlhs);
 			return al;
 		} catch (Exception e) {
 			logger.error("unable to list tasks in paginated fashion " + e);
@@ -419,14 +410,22 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		}
 	}
 	
-	protected static String getDateRange(int day) {
+	protected static Date getStartOfDay(){
 		GregorianCalendar now = new GregorianCalendar(new SimpleTimeZone(
 				-(3600000 * 12), "-12GMT"));
 		now.set(Calendar.SECOND, 0);
 		now.set(Calendar.MILLISECOND, 0);
 		now.set(Calendar.MINUTE, 0);
 		now.set(Calendar.HOUR_OF_DAY, 0);
-		Date startOfDay = DateUtils.convertToGMTDate(now.getTime());
+		return DateUtils.convertToGMTDate(now.getTime());
+	}
+	
+	protected static String getDateRange(int day) {
+		return getDateRange(day, 0);
+	}
+	
+	protected static String getDateRange(int day, int report_offset) {
+		Date startOfDay = getStartOfDay();
 
 		GregorianCalendar start = new GregorianCalendar(
 				TimeZone.getTimeZone("GMT"));
@@ -434,6 +433,11 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		GregorianCalendar end = new GregorianCalendar(
 				TimeZone.getTimeZone("GMT"));
 		end.setTime(startOfDay);
+		
+		//setting offset for reporting so we can get the two/three/four day reports from one, two, three...days ago
+		start.add(Calendar.DATE, -report_offset);
+		end.add(Calendar.DATE, -report_offset);
+		
 		String sql = "";
 		switch (day) {
 		case TWODAY:
@@ -472,21 +476,6 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 							+ "') or i.createdate < '"
 							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
 							+ "')";
-			
-			
-//			start.add(Calendar.DATE, -90);
-//			end.add(Calendar.DATE, -3);
-//			sql = "((i.createdate > '" 
-//				+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-//				+ "' and i.createtime >= '" 
-//				+ DateUtils.formatDate(start.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-//							+ "') or (i.createdate = '"
-//							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-//					+ "' and i.createtime < '" 
-//					+ DateUtils.formatDate(start.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-//							+ "'))";
-			
-			
 			break;
 		default:
 			sql = "1=1";
@@ -514,6 +503,58 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		return result;
 	}
 
+	public static int getMorningDutiesCount(int day, int lz_id, int offset){
+		Date startOfDay = getStartOfDay();
+		GregorianCalendar closedCutoff = new GregorianCalendar(
+				TimeZone.getTimeZone("GMT"));
+		closedCutoff.setTime(startOfDay);
+		closedCutoff.add(Calendar.DATE, -day + 1);
+		
+		String sql = "select count(i.incident_ID) from com.bagnet.nettracer.tracing.db.Incident i "
+			+ "where 1=1 "
+			+ "and i.itemtype.itemType_ID = 1 "
+			+ "and " + getDateRange(day, offset)
+			+ " and (close_date is null or close_date > '" 
+			+  DateUtils.formatDate(closedCutoff.getTime(),TracingConstants.getDBDateTimeFormat(HibernateWrapper.getConfig().getProperties()),null, null) + "') ";
 
-
+		if (lz_id > 0){
+			sql += " and i.stationassigned.lz_ID = :lz";
+		}
+		
+		System.out.println(sql);
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		
+		if (lz_id > 0){
+			q.setParameter("lz", lz_id);
+		}
+		
+		List result = q.list();
+		if (result.size() > 0) {
+			return ((Long) result.get(0)).intValue();
+		}
+		return -1;
+	}
+	
+	public static int getMorningDutiesCompletedCount(int day, int station_id, int offset){
+		String sql = "select count(i.incident_ID) from com.bagnet.nettracer.tracing.db.Incident i "
+			+ "where 1=1 "
+			+ "and i.itemtype.itemType_ID = 1 "
+			+ "and " + getDateRange(day, offset)
+			+ " and i.incident_ID in (select m.incident.incident_ID from "
+					+ getDayTask(day) + " m where m.status.status_ID = :taskStatus)";
+		
+		System.out.println(sql);
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_CLOSED);
+		List result = q.list();
+		if (result.size() > 0) {
+			return ((Long) result.get(0)).intValue();
+		}
+		return -1;
+	}
+	
 }
