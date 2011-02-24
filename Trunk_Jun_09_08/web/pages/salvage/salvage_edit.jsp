@@ -29,12 +29,15 @@
   <jsp:include page="/pages/includes/validation_search.jsp" />
   <html:form focus="sId" action="salvageEdit.do" method="post" onsubmit="return validateSearch(this);">
   <input type="hidden" name="delete_these_elements" value="" />
-  <jsp:include page="/pages/includes/taskmanager_header.jsp" />
+  <jsp:include page="salvage_header.jsp" />
     
     <tr>
       
       <td id="middlecolumn">        
         <div id="maincontent">
+             <logic:present name="reportfile" scope="request">
+	                  <center><a href="#" onclick="openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request"/>','report',800,600);return false;"><b><bean:message key="link.view_report" /></b></a></center>
+	              </logic:present>
           <h1 class="green">
             <bean:message key="header.salvage_details" />
             
@@ -149,6 +152,17 @@
 
            	</td>
            	<td>
+		  		<bean:message key="colname.value" /><br />
+				<select name="salvageBox[<%=i %>].salvageItem[<%=j %>].type" class="dropdown" >
+                  <option value="<%= String.valueOf(TracingConstants.SALVAGE_LOW_VALUE) %>" <% if (((SalvageItem)salvageItem).getType() == TracingConstants.SALVAGE_LOW_VALUE) { %>selected<% };%>>
+                    <bean:message key="salvage.low_value" />
+                  </option>
+                  <option value="<%= String.valueOf(TracingConstants.SALVAGE_HIGH_VALUE) %>" <% if (((SalvageItem)salvageItem).getType() == TracingConstants.SALVAGE_HIGH_VALUE) { %>selected<% };%>>
+                    <bean:message key="salvage.high_value" />
+                  </option>
+                </select>
+		  	</td>
+           	<td>
            		<bean:message key="colname.quantity" /><br />
            		           		<input type="text" name="salvageBox[<%=i %>].salvageItem[<%=j %>].quantity" maxlength="255" size="4" value="<%=((SalvageItem)salvageItem).getQuantity()%>" class="textfield">
 		  		
@@ -156,10 +170,20 @@
           </tr>
           </logic:iterate>
           <tr>
-          <td colspan="3">&nbsp;</td>
+          <td colspan="4">&nbsp;</td>
           </tr>          
           <tr>
-          <td colspan="3" align="middle">
+          <td colspan="4" align="middle">
+          <select name="addItemNum[<%=i %>]">
+	          <option value="1">1</option>
+	          <option value="2">2</option>
+	          <option value="3">3</option>
+	          <option value="4">4</option>
+	          <option value="5">5</option>
+	        </select>
+
+		    <input type="submit" name="addItems[<%=i%>]" value='<bean:message key="button.add_salvage_item" />' id="button" />
+		 	&nbsp;&nbsp;&nbsp;&nbsp;
             <input type="text" size="13" value="" name="addLostFoundId[<%=i %>]">&nbsp;
 		 	<input type="submit" name="addLostFoundButton[<%=i %>]" value='<bean:message key="button.add_lost_found_item" />' id="button"/>
           </td>
@@ -279,10 +303,11 @@
                       id="button" onclick="if(confirm('<bean:message key="button.submit_salvage.confirm" />')) {document.forms[0].completeSalvage.value='1'; document.forms[0].submit();}"/>
                 	<input type="hidden" name="completeSalvage" value="0"/>
                 	</logic:equal>
-            
+      			   
+                	            
         </center>
                         
       	</div>
       	</td>
-      	</tr>           
+      	</tr>
     </html:form>

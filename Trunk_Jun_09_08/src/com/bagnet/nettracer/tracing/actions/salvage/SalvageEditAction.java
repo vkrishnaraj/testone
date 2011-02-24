@@ -8,6 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,6 +19,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
+import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.SalvageDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -86,13 +88,21 @@ public class SalvageEditAction extends CheckedAction {
 				// HANDLE SAVE
 				SalvageDAO.saveSalvage(salvage);
 			} else if (request.getParameter("completeSalvage") != null && request.getParameter("completeSalvage").equals("1")) {
+				// generate salvage receipt
+				// transmit to ocs
 				// HANDLE COMPLETION OF SALVAGE
 				completeSalvage(salvage, user);
+			} else if (request.getParameter("print_report") != null) {
+				// HANDLE REPORT (??? LIKELY TO MOVE ???)
+				ServletContext sc = getServlet().getServletContext();
+				String rootPath = sc.getRealPath("/");
+				ReportBMO rBmo = new ReportBMO(request);
+				String reportFile = rBmo.createSalvageReport(rootPath, salvage.getSalvageId(), user);
+				if (reportFile != null) {
+					request.setAttribute("reportfile", reportFile);
+					request.setAttribute("outputtype", TracingConstants.REPORT_OUTPUT_XLS);
+				}
 			}
-
-			// HANDLE TRANSMIT TO OCS
-
-			// HANDLE REPORT (??? LIKELY TO MOVE ???)
 
 		}
 

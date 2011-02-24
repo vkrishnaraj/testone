@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRParameter;
@@ -59,12 +60,12 @@ import org.hibernate.criterion.Expression;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
-import ar.com.fdvs.dj.domain.AutoText;
 import ar.com.fdvs.dj.domain.CustomExpression;
 import ar.com.fdvs.dj.domain.DJCalculation;
 import ar.com.fdvs.dj.domain.DynamicReport;
 import ar.com.fdvs.dj.domain.Style;
 import ar.com.fdvs.dj.domain.builders.ColumnBuilder;
+import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
 import ar.com.fdvs.dj.domain.builders.DynamicReportBuilder;
 import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
 import ar.com.fdvs.dj.domain.builders.GroupBuilder;
@@ -86,12 +87,15 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.other.JRGovernedFileVirtualizer;
 import com.bagnet.nettracer.other.JRMaxFilesException;
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.reporting.SalvageReport;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.SalvageDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Report;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.salvage.Salvage;
 import com.bagnet.nettracer.tracing.dto.DisputeResolutionReportDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
@@ -4634,4 +4638,63 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 		return result;
 	}
+	
+	public String createSalvageReport(String root, int salvageId, Agent user) {
+		Salvage salvage = SalvageDAO.loadSalvage(salvageId);
+		if (salvage == null || root == null) {
+			return null;
+		}
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+		Map parameters = new HashMap();
+		
+		String fileName = ReportingConstants.SALVAGE_REPORT_NAME + "_" + salvageId + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String outputpath = root + ReportingConstants.REPORT_TMP_PATH + fileName;
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
+		virtualizer.setReadOnly(false);
+		
+		String airLine = CompanyBMO.getCompany(salvage.getCompanyCodeId()).getCompanydesc();
+		
+		FastReportBuilder drb = new FastReportBuilder();
+		drb.setTitle(resources.getString("report.salvage.header") + " " + airLine + " " + salvage.getSalvageId());
+		drb.setSubtitle(resources.getString("report.salvage.date") + " " + (DateUtils.formatDate(salvage.getSalvageDate(), user.getDateformat().getFormat(), "", null)));
+		try {
+			Style header = new Style();
+			header.setBackgroundColor(java.awt.Color.WHITE);
+			header.setOverridesExistingStyle(true);
+			drb.addColumn("", "col1", String.class.getName(), 50, header, header);
+			drb.addColumn("", "col2", String.class.getName(), 200, header, header);
+			drb.addColumn("", "col3", String.class.getName(), 50, header, header);
+			drb.addColumn("", "col4", String.class.getName(), 50, header, header);			
+			
+			DynamicReport report = drb.build();
+			JRDataSource data = new JRBeanCollectionDataSource(new SalvageReport(resources).getSalvageReportItems(salvage));
+			
+			JasperPrint jp = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), data);
+			parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+			parameters.put(JExcelApiExporterParameter.JASPER_PRINT,  jp);
+			parameters.put(JExcelApiExporterParameter.OUTPUT_FILE_NAME, outputpath);
+			parameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, false);
+			parameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
+			parameters.put(JExcelApiExporterParameter.IGNORE_PAGE_MARGINS, false);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, false);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, false);
+			parameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, true); 
+			parameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, true);
+			
+			
+			JExcelApiExporter exporter = new JExcelApiExporter();
+			exporter.setParameters(parameters);
+			exporter.exportReport();
+		} catch (ColumnBuilderException cbe) {
+			cbe.printStackTrace();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} catch (JRException jre) {
+			jre.printStackTrace();
+		} 
+		virtualizer.cleanup();
+		return fileName;
+	}
+	
+	
 }
