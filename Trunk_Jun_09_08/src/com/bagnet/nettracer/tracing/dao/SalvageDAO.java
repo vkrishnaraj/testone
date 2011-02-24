@@ -239,6 +239,11 @@ public class SalvageDAO {
 			try {
 				OHD ohd = OhdBMO.getOHDByID(ref.getOhdId(), session);
 				if (ohd.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_CLOSED) {
+					
+					Status disposal_status = new Status();
+					disposal_status.setStatus_ID(TracingConstants.LF_STATUS_SALVAGED);
+					ohd.setDisposal_status(disposal_status);
+					
 					ohd.setStatus(closedStatus);
 					OhdBMO.updateOHD(ohd, a, session);
 				} else {
