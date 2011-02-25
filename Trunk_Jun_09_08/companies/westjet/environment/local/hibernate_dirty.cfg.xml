@@ -11,7 +11,7 @@
     <session-factory>	
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
-		<property name="hibernate.connection.url">jdbc:mysql://192.168.2.145:3306/nettracer_westjet</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/nettracer_westjet</property>
 		<property name="hibernate.connection.username">nettracer</property>
 		<property name="hibernate.connection.password">nettracer</property>
 		<property name="hibernate.show_sql">false</property>
@@ -35,6 +35,7 @@
 		<property name="hibernate.cache.use_second_level_cache">true</property>
 		<property name="hibernate.cache.use_query_cache">false</property>
 		&mappings;
+		
     </session-factory>
 
 </hibernate-configuration>

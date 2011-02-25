@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -30,6 +31,7 @@ import com.bagnet.nettracer.tracing.db.salvage.SalvageBox;
 import com.bagnet.nettracer.tracing.db.salvage.SalvageItem;
 import com.bagnet.nettracer.tracing.db.salvage.SalvageOHDReference;
 import com.bagnet.nettracer.tracing.forms.salvage.SalvageEditForm;
+import com.bagnet.nettracer.tracing.utils.EmailUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -91,13 +93,18 @@ public class SalvageEditAction extends CheckedAction {
 				// generate salvage receipt
 				// transmit to ocs
 				// HANDLE COMPLETION OF SALVAGE
+				ServletContext sc = getServlet().getServletContext();
+				String rootPath = sc.getRealPath("/");
+				String reportFile = getSalvageReport(request, user, salvage, rootPath);
+				if (reportFile != null) {
+					EmailUtils.emailSalvageSummary(rootPath + ReportingConstants.REPORT_TMP_PATH + reportFile, user, salvage);
+				}
 				completeSalvage(salvage, user);
 			} else if (request.getParameter("print_report") != null) {
 				// HANDLE REPORT (??? LIKELY TO MOVE ???)
 				ServletContext sc = getServlet().getServletContext();
 				String rootPath = sc.getRealPath("/");
-				ReportBMO rBmo = new ReportBMO(request);
-				String reportFile = rBmo.createSalvageReport(rootPath, salvage.getSalvageId(), user);
+				String reportFile = getSalvageReport(request, user, salvage, rootPath);
 				if (reportFile != null) {
 					request.setAttribute("reportfile", reportFile);
 					request.setAttribute("outputtype", TracingConstants.REPORT_OUTPUT_XLS);
@@ -348,6 +355,11 @@ public class SalvageEditAction extends CheckedAction {
 		}
 
 		return false;
+	}
+	
+	private String getSalvageReport(HttpServletRequest request, Agent user, Salvage salvage, String rootPath) {
+		ReportBMO rBmo = new ReportBMO(request);
+		return rBmo.createSalvageReport(rootPath, salvage.getSalvageId(), user);
 	}
 
 }

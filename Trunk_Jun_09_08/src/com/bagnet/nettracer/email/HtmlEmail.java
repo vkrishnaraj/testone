@@ -15,6 +15,7 @@
  */
 package com.bagnet.nettracer.email;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -23,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
 import javax.activation.URLDataSource;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
@@ -71,7 +73,7 @@ public class HtmlEmail extends MultiPartEmail {
 
 	/** Defintion of the length of generated CID's */
 	public static final int CID_LENGTH = 10;
-
+	
 	/**
 	 * Set the text content.
 	 * 
@@ -256,7 +258,7 @@ public class HtmlEmail extends MultiPartEmail {
 				subContainerHTML.addBodyPart((BodyPart) iter.next());
 			}
 		}
-
+		
 		// add sub containers to message
 		this.addPart(subContainer);
 
@@ -320,4 +322,5 @@ public class HtmlEmail extends MultiPartEmail {
 			}
 		}
 	}
+	
 }
