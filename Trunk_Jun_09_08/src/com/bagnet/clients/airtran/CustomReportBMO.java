@@ -749,7 +749,7 @@ public class CustomReportBMO implements
 
 			case ReportingConstants.RPT_20_CUSTOM_55:
 				creportdata = createDisputeResolutionReport(srDTO, ReportBMO.getCustomReport(55).getResource_key(), request, user);
-				break;
+				return creportdata;
 			
 		}
 		return null;
