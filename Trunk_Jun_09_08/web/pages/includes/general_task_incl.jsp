@@ -50,7 +50,6 @@ if (hasPermission) {
 				<tr><td width ="20%"><bean:message key="generaltask.tasktype" />:</td><td><strong><bean:message name="sessionTaskContainer" property="label"/></strong></td></tr>
 				<tr><td width ="20%"><bean:message key="colname.agentassigned_nobr" />:</td><td><bean:write name="sessionTaskContainer" property="assigned_agent.username"/></td></tr>
 				<tr><td width ="20%"><bean:message key="generaltask.timestarted" />:</td><td><bean:write name="sessionTaskContainer" property="opened_timestamp"/>&nbsp;&nbsp;<input type="button" value="<bean:message key="button.task.pause"/>" onclick='document.location.href="GeneralTask.do?pause=1";return true;' id="button"></td></tr>
-		 		<tr><td width ="20%"><bean:message key="generaltask.description" />:</td><td><bean:message name="sessionTaskContainer" property="description"/></td></tr>
 				<tr><td colspan="2">
           <span style="float:left">
           	<input type="button" value="<bean:message key="button.task.complete" />" onclick='if(confirm("Have you saved all of your changes?")){document.location.href="GeneralTask.do?complete=1";}' id="button">
