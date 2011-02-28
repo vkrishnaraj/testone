@@ -128,7 +128,7 @@
                 </html:option>
               </html:select>
             </td>
-            <td colspan="2">
+            <td colspan="3">
               <bean:message key="colname.job_title" />
               <br>
               <html:text name="passenger" indexed="true" property="jobtitle" size="30" maxlength="25" styleClass="textfield" />
