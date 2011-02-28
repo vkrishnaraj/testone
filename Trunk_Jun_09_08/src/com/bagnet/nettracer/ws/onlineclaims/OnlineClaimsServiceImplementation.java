@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.dao.AuthorizationException;
 import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -318,8 +319,7 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 				
 				if (c == null) {
 					c = new OnlineClaim();
-					Incident i = new Incident();
-					i.setIncident_ID(incidentId);
+					Incident i = IncidentBMO.getIncidentByID(incidentId, sess);
 					c.setIncident(i);
 					c.setStatus(ClaimStatus.NEW.toString());
 					dao.saveOnlineClaimWsUseOnly(c, incidentId, null);
