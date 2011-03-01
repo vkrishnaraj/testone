@@ -855,8 +855,6 @@ public class MBRActionUtils {
 								ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN));
 							}
 							
-							ohd_obj.setMatched_incident(null);
-							oBMO.insertOHD(ohd_obj, theform.getAgent());
 						} else {
 							// change item to open only
 							item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
@@ -864,6 +862,10 @@ public class MBRActionUtils {
 
 						break;
 					}
+				}
+				if (ohd_obj != null) {
+					ohd_obj.setMatched_incident(null);
+					oBMO.insertOHD(ohd_obj, theform.getAgent());
 				}
 				//empty out claim ohd
 				ic.setOHD_ID("");
