@@ -214,6 +214,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		}
 	}
 	
+	
 	public static GeneralTask getTask(Agent agent, int day) {
 
 		Incident inc = getIncident(agent, day);
@@ -224,7 +225,9 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 				//we don't have a task, create one
 				return createTask(agent, inc, day);
 			}
-			if(gtask.getStatus().getStatus_ID() == TracingConstants.TASK_MANAGER_OPEN && gtask.getDeferment_timestamp().getTime() < DateUtils.convertToGMTDate(new Date()).getTime()){
+			if(gtask.getStatus().getStatus_ID() == TracingConstants.TASK_MANAGER_OPEN && 
+					(gtask.getDeferment_timestamp() == null ||
+							gtask.getDeferment_timestamp().getTime() < DateUtils.convertToGMTDate(new Date()).getTime())){
 				if(MorningDutiesUtil.lockTask(gtask)!=null){
 					Status s = new Status();
 					s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
