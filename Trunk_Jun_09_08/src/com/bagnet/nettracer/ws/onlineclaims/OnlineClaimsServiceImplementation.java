@@ -322,7 +322,7 @@ public class OnlineClaimsServiceImplementation extends OnlineClaimsServiceSkelet
 					Incident i = IncidentBMO.getIncidentByID(incidentId, sess);
 					c.setIncident(i);
 					c.setStatus(ClaimStatus.NEW.toString());
-					dao.saveOnlineClaimWsUseOnly(c, incidentId, null);
+					dao.saveOnlineClaimWsUseOnly(c, incidentId, null, sess);
 				}
 				Claim ret = dao.convertClaimDbToWs(c);
 				ret.setClaimType(inc.getItemtype().getItemType_ID());

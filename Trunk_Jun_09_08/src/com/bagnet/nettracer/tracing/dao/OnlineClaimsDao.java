@@ -250,20 +250,27 @@ public class OnlineClaimsDao {
 		}
 		return claim;
 	}
-
+	
 	public OnlineClaim saveOnlineClaimWsUseOnly(OnlineClaim claim, String incidentId, Agent agent) throws AuthorizationException {
+		return saveOnlineClaimWsUseOnly(claim, incidentId, agent, null);
+	}
+
+	public OnlineClaim saveOnlineClaimWsUseOnly(OnlineClaim claim, String incidentId, Agent agent, Session sess) throws AuthorizationException {
 		boolean isNew = true;
 		boolean contactUpdateOnly = false;
 		OnlineClaim existingDbClaim = null;
+		boolean sessProvided = true;
 
 		if (claim != null && claim.getClaimId() != 0) {
 			isNew = false;
 		}
 
-		Session sess = null;
 		Transaction t = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if (sess == null) {
+				sessProvided = false;
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			t = sess.beginTransaction();
 			if (!isNew) {
 				existingDbClaim = (OnlineClaim) sess.load(OnlineClaim.class, claim.getClaimId());
@@ -294,8 +301,13 @@ public class OnlineClaimsDao {
 						sess.delete(i);
 					}
 					
-					sess.delete(existingDbClaim.getMailingAddress());
-					sess.delete(existingDbClaim.getPermanentAddress());
+					if (existingDbClaim.getMailingAddress() != null) {
+						sess.delete(existingDbClaim.getMailingAddress());
+					}
+
+					if (existingDbClaim.getPermanentAddress() != null) {
+						sess.delete(existingDbClaim.getPermanentAddress());
+					}
 					
 					
 					BeanUtils.copyProperties(claim, existingDbClaim);
@@ -346,7 +358,7 @@ public class OnlineClaimsDao {
 			logger.error(EXCEPTION_LOADING_CLAIM, e);
 			e.printStackTrace();
 		} finally {
-			if (sess != null)
+			if (sess != null && !sessProvided)
 				sess.close();
 		}
 		return null;
