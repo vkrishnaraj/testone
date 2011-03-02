@@ -6,7 +6,9 @@ import org.apache.axis2.AxisFault;
 
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Incident;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
+import com.nettracer.claims.core.model.IncidentBean;
 import com.nettracer.claims.core.model.PassengerBean;
 import com.nettracer.claims.utils.ClaimsProperties;
 
@@ -22,6 +24,11 @@ public interface OnlineClaimsWS {
 
 	PassengerView getPassengerView(String claimNumber, String lastName)
 			throws AxisFault, RemoteException;
+
+	Incident getIncident(String pnr, String lastName, String firstName)
+			throws AxisFault, RemoteException;
+	
+	String saveIncident(IncidentBean bean, Incident incident)	throws AxisFault, RemoteException;
 
 	boolean savePassengerInfo(PassengerBean passengerBean, Claim claim)	throws AxisFault, RemoteException;
 
@@ -43,4 +50,6 @@ public interface OnlineClaimsWS {
 			Claim claim)throws AxisFault, RemoteException;
 
 	public boolean saveFinalCLaim(PassengerBean passengerBean, Claim claim)throws AxisFault, RemoteException;
+	
+	public IncidentBean getIncidentData(Incident incident);
 }

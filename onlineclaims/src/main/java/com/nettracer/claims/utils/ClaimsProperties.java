@@ -13,6 +13,8 @@ public class ClaimsProperties {
 	private static ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
 	public static final String WS_LOCATION = "ws_location";
+	public static final String SCANS_AVAILABLE = "scans_available";
+	public static final String MOBILE_LOCATION = "mobile_location";
 
 	private static final Logger logger = Logger.getLogger(ClaimsProperties.class);
 

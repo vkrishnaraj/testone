@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	template="/layout/passengertemplate_mobile.xhtml">
+
+
+	<ui:define name="pageTitle">US Airways | Bag Tracking Summary</ui:define>
+
+	<ui:define name="mainContent">
+		<script type="text/javascript" src="../_js/passengerFont.js"></script>
+		<h:form id="directionForm">
+
+			<div class="container containerfull">
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Bag tracking summary</h1>
+			</div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody" align="left"><!-- Start body content -->
+
+
+			<div class="clear htxlg"></div>
+
+<h:outputText id="dirpass" styleClass="bodycopy" value="#{passengerDirectionList[0].displayText}" /> 
+
+			<div class="clear htxlg"></div>
+			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
+			<p>File number:</p>
+			<span><h:outputText
+				value="#{passengerBean.passengerData.incidentID}"
+				styleClass="formLabel" /></span>
+
+			<p>Date file opened:</p>
+			<span><h:outputText
+				value="#{passengerBean.passengerData.dispcreatetime}"
+				styleClass="formLabel" /></span>
+
+			<p>File status:</p>
+			<span><h:outputText
+				value="#{passengerBean.passengerData.incidentStatus}"
+				styleClass="formLabel" /></span>
+			</h:panelGrid>
+			<div class="clear htxlg"></div>
+			<a4j:repeat value="#{passengerBean.passengerData.passengersArray}"
+				var="passenger" rowKeyVar="rowIndex">
+				<h3><h:outputText value="#{passenger.firstname} "
+					styleClass="formLabel" />&nbsp;&nbsp;<h:outputText
+					value=" #{passenger.lastname}" styleClass="formLabel" /></h3>
+
+
+				<div class="clear htxsm"></div>
+				
+				<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
+				<p>Home phone:</p>
+				<span><h:outputText value="#{passenger.homephone}"
+					styleClass="formLabel" /></span>
+
+				<p>Business phone:</p>
+				<span><h:outputText value="#{passenger.workphone}"
+					styleClass="formLabel" /></span>
+
+				<p>Mobile phone:</p>
+				<span><h:outputText value="#{passenger.mobile}"
+					styleClass="formLabel" /></span>
+
+				<p>Hotel:</p>
+				<span><h:outputText value="#{passenger.hotel}"
+					styleClass="formLabel" /></span>
+
+				<p>Email:</p>
+				<span><h:outputText value="#{passenger.email}"
+					styleClass="formLabel" /></span>
+					
+				</h:panelGrid>
+				<div class="clear"></div>
+			</a4j:repeat>
+
+
+			<div class="clear htxlg"></div>
+
+			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
+				 <p>Comments:</p>
+
+<span><h:outputText
+				value="#{passengerBean.passengerData.comments}"
+				styleClass="formLabel" /></span>
+                 			
+			</h:panelGrid>
+			<div class="clear htmd"></div>
+
+			<div class="clear"></div>
+			<!-- End body content --></div>
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerfootergradient footerfull"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+
+
+
+
+			<div class="container containerfull">
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Baggage information</h1>
+			</div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody" align="left"><!-- Start body content --> 
+				
+				<a4j:repeat value="#{passengerBean.passengerData.itemsArray}"
+				var="item" rowKeyVar="rowIndex">
+			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
+				<p>Bag Tag:</p>
+				<span><h:outputText value="#{item.claimchecknum}"
+					styleClass="formLabel" /></span>
+				<p>Status:</p>
+				<span><h:outputText value="#{item.bagstatus}"
+					styleClass="formLabel" /></span>
+			</h:panelGrid>
+			<div class="clear htxlg"></div>
+			</a4j:repeat>
+				
+				
+				<!-- End body content -->
+			</div>
+
+			
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerfootergradient footerfull"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+
+
+			
+			<h:panelGroup rendered="#{passengerBean.scansAvailable}">
+			<div class="container containerfull">
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Claim Checks</h1>
+			</div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody" align="left"><!-- Start body content --> 
+				
+				<a4j:repeat value="#{passengerBean.passengerData.claimChecksArray}"
+				var="check" rowKeyVar="checkIndex">
+			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
+				<p>Claim Check ID:</p>
+				<span><h:outputText value="#{check.tag}"
+					styleClass="formLabel" /></span>
+			</h:panelGrid><br/>
+			<table width="100%">
+			<tr><th>Location:</th><th>Type:</th><th>Date:</th></tr>
+			
+				<a4j:repeat value="#{check.scansArray}"
+				var="scans" rowKeyVar="scanIndex">
+			<tr>
+			<td><div class="listitem">
+				<span><h:outputText value="#{scans.location}"
+					styleClass="formLabel" /></span>
+			</div></td>
+			<td><div class="listitem">
+				<span><h:outputText value="#{scans.type}"
+					styleClass="formLabel" /></span>
+			</div></td>
+			<td><div class="listitem">
+				<span><h:outputText value="#{scans.timestamp}"
+					styleClass="formLabel" /></span>
+			</div></td>
+			</tr>
+			</a4j:repeat>
+			</table>
+			<div class="clear htxlg"></div>
+			</a4j:repeat>
+				
+				
+				<!-- End body content -->
+			</div>
+
+			
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerfootergradient footerfull"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+			</h:panelGroup>
+
+
+			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

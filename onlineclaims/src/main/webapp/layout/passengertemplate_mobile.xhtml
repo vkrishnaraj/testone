@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+	
+<f:view contentType="text/html" encoding="UTF-8">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title><ui:insert name="pageTitle">Facelets Template</ui:insert></title>
+	<link rel="stylesheet" type="text/css" href="/pax-view/_css/browserInit.css"/>
+	<link rel="stylesheet" type="text/css" href="/pax-view/_css/common.css"/>
+	<link rel="stylesheet" type="text/css" href="/pax-view/_css/master.css"/>
+	<link rel="stylesheet" type="text/css" href="/pax-view/_css/topnav.css"/>
+	<link rel="stylesheet" type="text/css" href="/pax-view/_css/baggage.css"/>
+	<link rel="stylesheet" type="text/css" href="/pax-view/_css/mobile.css"/>
+	<!--[if IE]>
+		<link rel="stylesheet" type="text/css" href="iehacks.css" />
+	<![endif]--> 
+	
+	<link rel="javascript" type="text/javascript" href="/pax-view/_js/iehover-fix.js"/>
+	<link rel="javascript" type="text/javascript" href="/pax-view/_js/nav.js"/>
+	<link rel="javascript" type="text/javascript" href="/pax-view/_js/safariCheck.js"/>
+	
+		
+</head>
+	<!--<div id="header">
+		<ui:include src="header.xhtml" />
+	</div>
+-->
+<body >
+	<!--<div id="footer">
+		<ui:include src="footer.xhtml" />
+	</div>
+	
+	-->
+	
+<div class="pagewrapper" align="center">
+	<div class="header">
+		<a href="http://www.usairways.com/"><img src="/pax-view/_images/logo_header_mobile.gif" alt="US Airways | Home Page" class="logo"/></a>
+		<div class="clear"></div>
+		<style type="text/css">@import url("/pax-view/_css/topnav.css");</style>
+		<!--[if lt IE 7]><script type="text/javascript" src="/_js/iehover-fix.js"></script><![endif]-->
+		<!-- <script type="text/javascript" src="/_js/nav.js"></script> -->
+		<script type="text/javascript" src="/pax-view/_js/safariCheck.js"></script>
+	</div>
+<div class="wrappercontent">
+	<div class="wrappercontentbody">
+			
+		<ui:insert name="mainContent" />
+			
+		<h:form>
+		<h:panelGroup rendered="#{sessionPassengerBean.logoutRenderer}">
+		<div class="clear">&#160;</div>
+		<div style="text-align:center; width: 100%;">
+						<h:commandButton id="logoutButton"
+							value="Log Out"
+							action="#{passengerController.passengerLogout}"
+							tabindex="4" styleClass="button140pxred loginbutton140pxred" height="3em" width="14em"/>
+		</div>
+		</h:panelGroup>
+		</h:form>
+		<div class="clear"></div>
+
+	</div><!-- ends wrappercontentbody -->
+</div><!-- ends wrappercontent -->
+
+
+	<div class="footer_new">
+		<div class="footer_new_inner">
+		<div class="footer_new_text"><a href="#" class="white">Copyright &copy; 2011 NetTracer, Inc</a></div>
+		</div>
+	</div> 
+
+</div><!-- ends pagewrapper -->
+	
+	
+	
+</body>
+</f:view>
+</html>
+

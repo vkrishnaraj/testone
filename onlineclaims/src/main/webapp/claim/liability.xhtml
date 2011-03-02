@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	template="/layout/passengertemplate.xhtml">
+
+
+	<ui:define name="pageTitle">US Airways | Bag Tracking Summary</ui:define>
+
+	<ui:define name="mainContent">
+		<script type="text/javascript" src="../_js/passengerFont.js"></script>
+		<h:form id="directionForm">
+			<div id="langSelect"><h:outputText value="FontSize" /> <h:outputText
+				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
+				value="&#160;" /> <a id="font1" style="font-size: 8pt;"
+				href="javascript:decreaseFontSize();">A</a> <h:outputText
+				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
+				value="&#160;" /> <a id="font2" style="font-size: 10pt;"
+				href="javascript:mediumFontSize();">A</a> <h:outputText
+				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
+				value="&#160;" /> <a id="font3" style="font-size: 12pt;"
+				href="javascript:increaseFontSize();">A</a></div>
+
+
+
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">NOTICE OF BAGGAGE LIABILITY LIMITATIONS</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content -->
+
+
+			<p>
+			For domestic travel between points within the United States (except for domestic portions of
+international journeys), US Airways liability for loss of, damage to, or delay in delivery of a
+passenger’s checked baggage is limited to $3,300 per ticketed passenger unless a higher value
+is declared in advance and additional charges are paid.
+			</p><br/><p>
+Excess valuation may not be declared on certain types of valuable articles. US Airways assumes
+no liability for high value, fragile, or perishable items carried in connection with domestic travel.
+			</p><br/><p>
+For international travel (including domestic portion of international journeys) to which the Montreal
+Convention applies, liability for loss, delay, or damage is limited to 1,131 SDR per passenger
+for baggage, whether checked or unchecked, unless a higher value is declared in advance and
+additional charges are paid. Exchange rates are available at www.IMF.com.
+			</p>
+
+			<!-- End body content --></div>
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+
+
+
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">LIABILITY LIMITATIONS</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content -->
+
+			<p>
+			For tracing purposes, please list all items regardless of liability. As detailed in our Terms of
+Transportation, US Airways is not liable for loss, damage to, or delay of perishable property; nor
+liable for damage caused by fragile articles, liquids, or perishables.
+			</p>
+			<br/>
+			<p>
+These limits of liability are applicable for domestic travel within the United States.
+<ul>
+<li>
+Electronic Components/Equipment &amp; Related Items
+</li><li>
+Computer Hardware/Software &amp; Related Items
+</li><li>
+Photographic/Cinematographic Audio/Video Equipment &amp; Related Items
+</li><li>
+Currency
+</li><li>
+Silverware
+</li><li>
+Negotiable Papers/Securities/Documents
+</li><li>
+Spirits
+</li><li>
+Precious Metals/Stones
+</li><li>
+Books/Manuscripts/Publications
+</li><li>
+Optics
+</li><li>
+Natural Fur Products
+</li><li>
+Sound Reproduction Equipment &amp; Related Items
+</li><li>
+Keys
+</li><li>
+Antiques/Heirlooms/Collectibles
+</li><li>
+Blueprints
+</li><li>
+Artistic Items
+</li><li>
+Business Samples/Equipment/Documents &amp; Irreplaceable Items
+</li><li>
+Jewelry
+</li><li>
+Lifesaving Medication
+</li>
+</ul>
+			</p>
+
+			<!-- End body content --></div>
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+
+
+
+			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<h:outputText value="&#160;" styleClass="passfontstyle" />
+			<h:outputText value="&#160;" styleClass="passfontstyle" />
+			<div><h:commandButton id="dirforward" value="CONTINUE" tabindex="0"
+				action="#{passengerController.gotoPassengerInfo}"
+				styleClass="button140pxredextended fright" />
+				
+				</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
 import com.nettracer.claims.faces.util.File;
+import com.nettracer.claims.utils.ClaimsProperties;
 
 
 
@@ -468,5 +469,9 @@ public class PassengerBean {
 			}
 		}
 		return false;
+	}
+	
+	public boolean isScansAvailable() {
+		return ClaimsProperties.isTrue(ClaimsProperties.SCANS_AVAILABLE);
 	}
 }

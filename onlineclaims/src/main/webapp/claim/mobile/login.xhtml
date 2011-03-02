@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/passengertemplate_mobile.xhtml">
+
+	<ui:define name="pageTitle">Application | Passenger Login</ui:define>
+
+	<ui:define name="mainContent">
+		<h:form id="loginPassengerForm">
+			
+			<div class="container containerfull">
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Delayed Baggage Search</h1>
+			</div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbody">
+			<div id="htadj2ra"><!-- makes two inline divs the same height -->
+			<!-- Start body content -->  <a4j:outputPanel
+				id="passOutPutPanel" ajaxRendered="true">
+				<h:panelGrid id="mainPassPanel" columns="1">
+					<t:messages id="passLoginMsg" errorClass="loginerrormsg"
+						infoClass="infomsg" />
+					<h:outputText value="&#160;" />
+					(<img src="/pax-view/_images/reqbullet.gif" class="reqbullet"/>Required )
+					<br/>
+					<p>&nbsp;<br /></p>
+					<h:panelGrid id="loginPassengerPanel" columns="1" width="100%"
+						rowClasses="vertTop" > <!--  columnClasses="colMin,colMax">  -->
+						<h:column>
+						<h:outputText
+							value="#{passengerLoginController.loginLabel.lastName}"
+							styleClass="formLabel" /><img src="/pax-view/_images/reqbullet.gif" class="reqbullet"/></h:column>
+						<h:inputText id="lastName" styleClass="inputWidth"
+							value="#{passengerLoginController.loginBean.lastName}"
+							tabindex="1"
+							validatorMessage="#{passengerLoginController.loginLabel.lastName} :
+								#{passengerLoginController.loginLabel.validateLength} 20"
+							style="text-transform: uppercase;">
+							<f:validateLength maximum="20" />
+							<f:converter converterId="convertToUpper" />
+						</h:inputText>
+						<h:outputText value="&#160;" />
+						<h:outputText value="&#160;" />
+						
+						
+												<h:column><h:outputText
+							value="#{passengerLoginController.loginLabel.claimNumber}"
+							styleClass="formLabel" /><img src="/pax-view/_images/reqbullet.gif" class="reqbullet"/></h:column>
+						<h:column>
+						<h:inputText id="claimNumber" styleClass="inputWidth"
+							value="#{passengerLoginController.loginBean.claimNumber}"
+							validatorMessage="#{passengerLoginController.loginLabel.claimNumber} :
+								#{passengerLoginController.loginLabel.validateLength} 20"
+							tabindex="2" label="Claim Number">
+							<f:validateLength maximum="20" />
+						</h:inputText>
+						<div class="submsg">example PHLUS12345678<br/><br/>We apologize that your baggage was delayed. You can look here for the most current information about your baggage.</div>
+						</h:column>
+						
+						
+						<h:outputText value="&#160;" />
+						<h:outputText value="&#160;" />
+						
+						
+						<h:commandLink
+							value="#{passengerLoginController.loginLabel.tryDiffImage}"
+							styleClass="commandLink" style="text-decoration: underline;" />
+							<h:panelGrid id="captchaPanel" columns="1" width="100%"
+						rowClasses="vertTop"  columnClasses="captchaSize">
+						<t:captcha
+							captchaSessionKeyName="#{passengerLoginController.captchaBean.sessionKeyName}"
+							imageHeight="100%" imageWidth="100%" />
+							</h:panelGrid>
+						<h:outputText value="&#160;" />
+						<h:outputText value="&#160;" />
+						<h:outputText
+							value="#{passengerLoginController.loginLabel.captchaText}"
+							styleClass="formLabel" />
+						<h:inputText id="captcha" styleClass="inputWidth"
+							value="#{passengerLoginController.captchaBean.value}"
+							tabindex="3" />
+						<h:outputText value="&#160;" />
+						<h:outputText id="captchaStatus"
+							value="#{passengerLoginController.captchaBean.status}"
+							styleClass="captchaerrormsg" />
+						<h:outputText value="&#160;" />
+						<h:outputText value="&#160;" />
+					</h:panelGrid>
+					<h:column>
+						<div style="text-align:center; width: 100%;">
+						<h:commandButton id="passLoginContinue"
+							value="#{passengerLoginController.loginLabel.continueButton}"
+							action="#{passengerLoginController.gotoDirectionPage}"
+							tabindex="4" styleClass="button140pxred loginbutton140pxred" height="3em" width="14em"/>
+						</div>
+						</h:column>
+				</h:panelGrid>
+			</a4j:outputPanel> <!-- End body content --></div>
+			<!-- ends the htadj2ra div --></div>
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerfootergradient footerfull"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+		</h:form>
+	</ui:define>
+
+
+
+</ui:composition>

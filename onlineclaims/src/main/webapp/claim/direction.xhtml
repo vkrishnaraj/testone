@@ -54,7 +54,7 @@
 				styleClass="formLabel" /></span></div>
 
 			<div class="listitem">
-			<p>Date received:</p>
+			<p>Date file opened:</p>
 			<span><h:outputText
 				value="#{passengerBean.passengerData.dispcreatetime}"
 				styleClass="formLabel" /></span></div>
@@ -68,9 +68,9 @@
 			<div class="clear htxlg"></div>
 			<a4j:repeat value="#{passengerBean.passengerData.passengersArray}"
 				var="passenger" rowKeyVar="rowIndex">
-				<h3><h:outputText value="#{passenger.firstname}"
-					styleClass="formLabel" />&nbsp;<h:outputText
-					value="#{passenger.lastname}" styleClass="formLabel" /></h3>
+				<h3><h:outputText value="#{passenger.firstname} "
+					styleClass="formLabel" />&nbsp;&nbsp;<h:outputText
+					value=" #{passenger.lastname}" styleClass="formLabel" /></h3>
 
 
 				<div class="clear htxsm"></div>
@@ -184,16 +184,80 @@
 			<!-- ends container -->
 
 
+			
+			<h:panelGroup rendered="#{passengerBean.scansAvailable}">
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Claim Checks</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content --> 
+				
+				<a4j:repeat value="#{passengerBean.passengerData.claimChecksArray}"
+				var="check" rowKeyVar="checkIndex">
+			<div class="listitem">
+				<p>Claim Check ID:</p>
+				<span><h:outputText value="#{check.tag}"
+					styleClass="formLabel" /></span>
+			</div><br/>
+			<table width="400px">
+			<tr><th>Location:</th><th>Type:</th><th>Date:</th></tr>
+			
+				<a4j:repeat value="#{check.scansArray}"
+				var="scans" rowKeyVar="scanIndex">
+			<tr>
+			<td><div class="listitem">
+				<span><h:outputText value="#{scans.location}"
+					styleClass="formLabel" /></span>
+			</div></td>
+			<td><div class="listitem">
+				<span><h:outputText value="#{scans.type}"
+					styleClass="formLabel" /></span>
+			</div></td>
+			<td><div class="listitem">
+				<span><h:outputText value="#{scans.timestamp}"
+					styleClass="formLabel" /></span>
+			</div></td>
+			</tr>
+			</a4j:repeat>
+			</table>
+			<div class="clear htxlg"></div>
+			</a4j:repeat>
+				
+				
+				<!-- End body content -->
+			</div>
+
+			
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+			</h:panelGroup>
+
 
 			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
 			</div>
 			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
-			</div>
+			</div><br/><br/>
+			<h:outputText value="In the unlikely event that your baggage is not returned to you within the first five (5) days,
+it will be necessary to complete a Passenger Property Form." styleClass="passfontstyle" /><br/><br/>
 			<h:outputText value="&#160;" styleClass="passfontstyle" />
 			<h:outputText value="&#160;" styleClass="passfontstyle" />
 			<div><h:commandButton id="dirforward" rendered="#{passengerBean.onlineAvailable}"
 				value="#{passengerDirectionList[1].displayText}" tabindex="0"
-				action="#{passengerController.gotoPassengerInfo}"
+				action="#{passengerController.gotoPPFInstruction}"
 				styleClass="button140pxredextended fright" />
 			<!--	<h:commandButton id="formforward" rendered="#{!passengerBean.onlineAvailable}"
 				value="Baggage Information and Passenger Property Form" tabindex="0"

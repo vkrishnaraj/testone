@@ -12,8 +12,8 @@
 				</div>
 					
 					<h:panelGrid columns="2" width="100%">
-						<h:panelGroup > 
-							<h:panelGrid columns="2" cellspacing="3px">
+					<!-- 	<h:panelGroup > 
+							<h:panelGrid columns="2" cellspacing="3px"> -->
 								<h:panelGroup > 
 									<t:outputText value="#{passengerController.flightLabel.differentAirlineTicket}" styleClass="formLabel"/>
 									<h:graphicImage value="../_images/reqbullet.gif"  
@@ -52,52 +52,8 @@
 									<f:validateLength maximum="6"/>
 								</t:inputText>
 			
-							</h:panelGrid>
-						</h:panelGroup>
-						
-						<h:panelGroup >
-						<a4j:region renderRegionOnly="true" >
-						<a4j:outputPanel id="ticketTablePanel" ajaxRendered="true" >
-							<rich:dataTable id="ticketTable"   headerClass="TableHeader" rowKeyVar="rowIndex"
-										value="#{passengerBean.bagTagList}" border="0" var="item">
-								<rich:column>
-									<f:facet name="header">
-										<h:panelGroup >
-											<t:outputText value="#{passengerController.flightLabel.bagTagNumbers}"  styleClass="formLabel"/>
-											<h:graphicImage value="../_images/reqbullet.gif"  
-												rendered="true"/>
-										</h:panelGroup>
-									</f:facet>
-									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout" required="true" 
-											requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-											'#{passengerController.flightLabel.bagTagNumbers}'"
-											readonly="#{passengerController.readOnlyOnSubmitted}"
-											label="Bag Tag Number Row#{rowIndex+1}">
-										<f:validateLength maximum="10"/>
-									</t:inputText>
-								</rich:column>
-								
-								<rich:column>
-									<f:facet name="header">
-										<h:panelGroup >
-											<t:outputText value="#{passengerController.flightLabel.bagArrival}"  styleClass="formLabel"/>
-											<h:graphicImage value="../_images/reqbullet.gif"  
-												rendered="true"/>
-										</h:panelGroup>
-									</f:facet>
-									<h:selectOneRadio   value="#{item.bagArrivalStatus}" required="true"
-										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-											'#{passengerController.flightLabel.bagArrival}'"
-											disabled="#{passengerController.readOnlyOnSubmitted}"
-										label="Bag Arrival Status Row#{rowIndex+1}">
-										<f:selectItem itemLabel="Yes&#160;" itemValue="true" />
-										<f:selectItem itemLabel="No" itemValue="false" />
-									</h:selectOneRadio>
-								</rich:column>
-							</rich:dataTable>
-							</a4j:outputPanel>
-							</a4j:region>
-						</h:panelGroup>
+					<!--  		</h:panelGrid>
+						</h:panelGroup> -->
 						
 					</h:panelGrid>
 					

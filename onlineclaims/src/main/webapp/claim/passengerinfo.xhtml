@@ -7,16 +7,16 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	template="/layout/passengertemplate.xhtml">
-	
-	
-	<ui:define name="pageTitle">NetTracer: Application | About Your Bags</ui:define>
+
+	<ui:define name="pageTitle">NetTracer: Application | Passenger Information</ui:define>
 	
 	<ui:define name="mainContent">
-	<script type="text/javascript" src="../_js/passengerFont.js"></script>
-	<h:form id="appForm">
+	<script type="text/javascript" src="../_js/passengerFont.js">
+	</script>
+	<a4j:form id="appForm">
 	<div>
 		<div id="step">
-			<t:outputText value="Step 3 of 6" />
+			<t:outputText value="Step 1 of 6" />
 		</div>
 		
 		<div id="langSelect">
@@ -24,22 +24,22 @@
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
-			<a id="font1"  href="javascript:decreaseFontSize();">A</a>
+			<a id="font1" style="font-size: 8pt;" href="javascript:decreaseFontSize();">A</a>
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
-			<a id="font2"  href="javascript:mediumFontSize();">A</a>
+			<a id="font2" style="font-size: 10pt;" href="javascript:mediumFontSize();">A</a>
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
 			<h:outputText value="&#160;" />
-			<a id="font3"  href="javascript:increaseFontSize();">A</a>
+			<a id="font3" style="font-size: 12pt;" href="javascript:increaseFontSize();">A</a>
 		</div>
 	
 	</div>
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
-				<h1 class="dkblue">Descriptive Text</h1>
+				<h1 class="dkblue">Instructions</h1>
 			  	</div>
 				<div class="containerTR"></div>
 				<div class="containercontent gradientsmall">
@@ -49,9 +49,8 @@
 						
 						<!-- Start body content -->
 						
-						<h:panelGrid  width="95%">
-							<t:outputText value="#{passengerController.bagDetailsLabel.bagDescriptiveText}" styleClass="bodycopy"/>
-						</h:panelGrid>
+						<t:outputText value="#{passengerController.passengerInfoLabel.passengerInfoDescriptiveText}" 
+							styleClass="bodycopy"/>
 							
 					  	<!-- End body content -->
 				 	 </div>
@@ -69,10 +68,10 @@
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
-				<h1 class="dkblue">Passenger Property Form | About Your Bags
+				<h1 class="dkblue">Passenger Property Form | Passenger Information
 				</h1>
 				<h3 style="margin-top: 8px;"><h:outputText value="Help" id="helpButton" styleClass="helpButton dkblue"/></h3>							
-							<rich:componentControl for="helpmodalpanel4"  
+							<rich:componentControl for="helpmodalpanel"  
 								attachTo="helpButton" operation="show" event="onclick" /> 
 			  </div>
 				<div class="containerTR"></div>
@@ -84,34 +83,43 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagRequiredFieldMessage}"  
-							styleClass="requiredField"/>	
+					<t:outputText value="#{passengerController.passengerInfoLabel.requiredFieldMessage}" styleClass="bodycopy"/>	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
-					<rich:messages id="bagMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
-					<rich:spacer width="100%" height="15" title="" />
+					<rich:messages id="passInfoMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
 				</div>
+				<rich:spacer width="100%" height="10" title=""/>
 				
 				<div>
-					<rich:modalPanel id="helpmodalpanel4" autosized="true" minHeight="380" 
+					<rich:modalPanel id="helpmodalpanel" autosized="true" minHeight="380" 
 						zindex="10" minWidth="380" height="380" width="500" left="500" top="50" >
 						<f:facet name="controls">
 								<h:panelGroup >
-									<a4j:commandLink value="Close" limitToList="true"
+									<a4j:commandLink value="Close" 
+									style="text-decoration: underline; cursor: pointer; margin-right: 22px;" 
 											immediate="true"	id="linkToHidePanel" />
-										<rich:componentControl for="helpmodalpanel4"
+										<rich:componentControl for="helpmodalpanel"
 											attachTo="linkToHidePanel" operation="hide" event="onclick" />
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody">
-							<h:outputText value="#{passengerController.bagDetailsLabel.bagHelp}"  styleClass="bodycopy"/>
+							<h:outputText value="#{passengerController.passengerInfoLabel.passengerInfoHelp}" styleClass="bodycopy"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
 				
 				<div>
-					<ui:include src="bag/aboutyourbag.xhtml" />
+					<ui:include src="passenger-permanentaddress.xhtml" />
+				</div>
+				<div>
+					<ui:include src="passenger-mailingaddress.xhtml" />
+				</div>
+				<div>
+					<ui:include src="passenger-voicecontact.xhtml" />
+				</div>
+				<div>
+					<ui:include src="passenger-personalinfo.xhtml" />
 				</div>
 							
 					  	<!-- End body content -->
@@ -139,26 +147,24 @@
 				<rich:spacer width="290px"/>
 			
 				<h:commandButton id="savePassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
-						  action="#{passengerController.saveBagInfo}"
-				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
+				 		tabindex="25" action="#{passengerController.savePassengerInfo}"
 						styleClass="button140pxred button140pxred2" />
 				
 				<rich:spacer width="20px"/>
 			
-				<h:commandButton id="prevFlightInfo" value="#{passengerController.flightLabel.flightPrevious}"
-				 	 immediate="true"  action="#{passengerController.goBackToFlightDetails}"
+				<h:commandButton id="cancelPassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoCancel}"
+				 	tabindex="26" immediate="true" action="#{passengerController.cancel}"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoForward}"
-				 	action="#{passengerController.gotoFileUpload}"
+				 	tabindex="27" action="#{passengerController.gotoFlightDetails}"
 					styleClass="button140pxred button140pxred2" />
 				
 			
 			</div>
 			
-		</h:form>
-			<div><ui:include src="bag/bagtypechart.xhtml" /></div>
+		</a4j:form>
 	</ui:define>
 </ui:composition>

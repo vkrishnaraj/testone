@@ -59,46 +59,75 @@
   <!-- Passenger side Navigation -->
   <navigation-case>
    <from-outcome>passengerLogout</from-outcome>
-   <to-view-id>/passenger/login.do</to-view-id>
+   <to-view-id>/claim/login.do</to-view-id>
   </navigation-case>
   <navigation-case>
    <from-outcome>gotoDirectionPage</from-outcome>
-   <to-view-id>/passenger/direction.do</to-view-id>
+   <to-view-id>/claim/direction.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoPPFInstruction</from-outcome>
+   <to-view-id>/claim/instruction.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoLiability</from-outcome>
+   <to-view-id>/claim/liability.do</to-view-id>
    <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>gotoPassengerInfo</from-outcome>
-   <to-view-id>/passenger/passengerinfo.do</to-view-id>
+   <to-view-id>/claim/passengerinfo.do</to-view-id>
    <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>gotoFlightDetails</from-outcome>
-   <to-view-id>/passenger/flightinfo.do</to-view-id>
+   <to-view-id>/claim/flightinfo.do</to-view-id>
    <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>gotoBagDetails</from-outcome>
-   <to-view-id>/passenger/baginfo.do</to-view-id>
+   <to-view-id>/claim/baginfo.do</to-view-id>
    <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>gotoSubmitClaim</from-outcome>
-   <to-view-id>/passenger/submit-claim.do</to-view-id>
+   <to-view-id>/claim/submit-claim.do</to-view-id>
    <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>gotoSavedScreen</from-outcome>
-   <to-view-id>/passenger/saved-screen.do</to-view-id>
+   <to-view-id>/claim/saved-screen.do</to-view-id>
    <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>gotoFileUpload</from-outcome>
-   <to-view-id>/passenger/file-upload.do</to-view-id>
+   <to-view-id>/claim/file-upload.do</to-view-id>
    <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>gotoFraudQuestion</from-outcome>
-   <to-view-id>/passenger/additional-info.do</to-view-id>
+   <to-view-id>/claim/additional-info.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <!-- Mobile Navigation -->
+  
+  <navigation-case>
+   <from-outcome>gotoMobileDirectionPage</from-outcome>
+   <to-view-id>/claim/mobile/direction.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <!-- Self Serve Incident Navigation -->
+  
+  <navigation-case>
+   <from-outcome>gotoStepOnePage</from-outcome>
+   <to-view-id>/incident/mobile/stepone.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoStepTwoPage</from-outcome>
+   <to-view-id>/incident/mobile/steptwo.do</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>

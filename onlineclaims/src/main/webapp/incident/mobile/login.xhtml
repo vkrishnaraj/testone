@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	template="/layout/incidenttemplate_mobile.xhtml">
+
+	<ui:define name="pageTitle">Application | Passenger Login</ui:define>
+
+	<ui:define name="mainContent">
+
+		<h:form id="loginPassengerForm">
+
+			<div class="container containerfull">
+			<div class="containerheader headerfull">
+			<h1 class="dkblue"><h:outputText
+				value="#{msg.login_title_bagmanage}" /></h1>
+			</div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbody">
+			<div id="htadj2ra"><!-- makes two inline divs the same height -->
+			<a4j:outputPanel id="passOutPutPanel" ajaxRendered="true"> <!-- Start body content --> 
+				<h:panelGrid id="mainPassPanel" columns="1">
+					<t:messages id="passLoginMsg" errorClass="loginerrormsg"
+						infoClass="infomsg" />
+					<h:outputText value="&#160;" />
+					<div class="submsg"><h:outputText
+						value="#{msg.login_text_directions}" /></div>
+					<br />
+					<h:column>
+						<h:outputText value="#{msg.login_label_req1}" />
+						<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+						<h:outputText value="#{msg.login_label_req2}" />
+					</h:column>
+					<br />
+					<p>&nbsp;<br />
+					</p>
+					<h:panelGrid id="loginPassengerPanel" columns="1" width="100%"
+						rowClasses="vertTop">
+						<!--  columnClasses="colMin,colMax">  -->
+						<h:column>
+							<h:outputText value="#{msg.login_label_lname}"
+								styleClass="formLabel" />
+							<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+						</h:column>
+						<h:inputText id="lastName" styleClass="inputWidth"
+							value="#{incidentLoginController.loginBean.lastName}"
+							tabindex="1"
+							validatorMessage="#{incidentLoginController.loginLabel.lastName} :
+								#{incidentLoginController.loginLabel.validateLength} 20"
+							style="text-transform: uppercase;">
+							<f:validateLength maximum="20" />
+							<f:converter converterId="convertToUpper" />
+						</h:inputText>
+						<h:outputText value="&#160;" />
+						<h:outputText value="&#160;" />
+
+
+						<h:column>
+							<h:outputText value="#{msg.login_label_fname}"
+								styleClass="formLabel" />
+							<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+						</h:column>
+						<h:column>
+							<h:inputText id="firstName" styleClass="inputWidth"
+								value="#{incidentLoginController.loginBean.firstName}"
+								validatorMessage="#{incidentLoginController.loginLabel.claimNumber} :
+								#{incidentLoginController.loginLabel.validateLength} 20"
+								tabindex="2" label="First Name">
+								<f:validateLength maximum="20" />
+							</h:inputText>
+						</h:column>
+
+
+						<h:outputText value="&#160;" />
+						<h:outputText value="&#160;" />
+
+
+						<h:column>
+							<h:outputText value="#{msg.login_label_confcode}"
+								styleClass="formLabel" />
+							<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+						</h:column>
+						<h:column>
+							<h:inputText id="confNumber" styleClass="inputWidth"
+								value="#{incidentLoginController.loginBean.confNumber}"
+								validatorMessage="#{incidentLoginController.loginLabel.claimNumber} :
+								#{incidentLoginController.loginLabel.validateLength} 20"
+								tabindex="2" label="Confirmation Code">
+								<f:validateLength maximum="20" />
+							</h:inputText>
+						</h:column>
+
+
+						<h:outputText value="&#160;" />
+						<h:outputText value="&#160;" />
+
+
+						<h:commandLink value="#{msg.login_label_diffimage}"
+							styleClass="commandLink" style="text-decoration: underline;" />
+						<h:panelGrid id="captchaPanel" columns="1" width="100%"
+							rowClasses="vertTop" columnClasses="captchaSize">
+							<t:captcha
+								captchaSessionKeyName="#{incidentLoginController.captchaBean.sessionKeyName}"
+								imageHeight="100%" imageWidth="100%" />
+						</h:panelGrid>
+						<h:outputText value="&#160;" />
+						<h:outputText value="&#160;" />
+						<h:outputText value="#{msg.login_label_captcha}"
+							styleClass="formLabel" />
+						<h:inputText id="captcha" styleClass="inputWidth"
+							value="#{incidentLoginController.captchaBean.value}" tabindex="3" />
+						<h:outputText value="&#160;" />
+						<h:outputText id="captchaStatus"
+							value="#{incidentLoginController.captchaBean.status}"
+							styleClass="captchaerrormsg" />
+						<h:outputText value="&#160;" />
+						<h:outputText value="&#160;" />
+					</h:panelGrid>
+					<h:column>
+						<div style="text-align: center; width: 100%;"><h:commandButton
+							id="passLoginContinue" value="#{msg.ui_button_continue}"
+							action="#{incidentLoginController.gotoStepOne}" tabindex="4"
+							styleClass="button140pxred loginbutton140pxred" height="3em"
+							width="14em" /></div>
+					</h:column>
+				</h:panelGrid>
+			</a4j:outputPanel> <!-- End body content --></div>
+			<!-- ends the htadj2ra div --></div>
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerfootergradient footerfull"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+		</h:form>
+	</ui:define>
+
+
+
+</ui:composition>

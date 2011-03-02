@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	template="/layout/passengertemplate.xhtml">
+
+
+	<ui:define name="pageTitle">US Airways | Bag Tracking Summary</ui:define>
+
+	<ui:define name="mainContent">
+		<script type="text/javascript" src="../_js/passengerFont.js"></script>
+		<h:form id="directionForm">
+			<div id="langSelect"><h:outputText value="FontSize" /> <h:outputText
+				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
+				value="&#160;" /> <a id="font1" style="font-size: 8pt;"
+				href="javascript:decreaseFontSize();">A</a> <h:outputText
+				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
+				value="&#160;" /> <a id="font2" style="font-size: 10pt;"
+				href="javascript:mediumFontSize();">A</a> <h:outputText
+				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
+				value="&#160;" /> <a id="font3" style="font-size: 12pt;"
+				href="javascript:increaseFontSize();">A</a></div>
+
+
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">CUSTOMER INSTRUCTIONS</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content --> 
+			
+			<p>	
+			Please accept our sincere apology for the mishandling of your property. We understand your
+concern and realize the inconvenience this causes. US Airways will make every effort to
+merit your future business by handling your report in an efficient and equitable manner. Your
+cooperation and patience are greatly appreciated.
+			</p><br/>
+			<p>
+While our efforts to locate your property continue, it is imperative that you complete this claim
+form and submit it to us within 45 days after your flight date. The most intensive phase of tracing
+is based on the accuracy of the information provided and completed in its entirety with a detailed
+description of each individual item contained within the bag(s) or the items that are missing.
+			</p><br/>
+			<p>
+If your claim involves more than one piece of baggage, please itemize each bag and its contents
+separately. Failure to include the requested information may affect the processing of your claim.
+			<ul>
+			<li>
+Customer copy of the flight ticket or E-Ticket receipt
+			</li><li>
+Claim form must be signed by all affected customers
+			</li><li>
+Original proof of purchase for items valued at $150 USD or higher
+			</li><li>
+Baggage claim checks
+			</li><li>
+Excess value receipt, if excess value was declared
+			</li><li>
+Receipts are required for all interim reimbursement
+			</li><li>
+For European customers only, complete bank information on next page	
+			</li>
+			</ul>
+			</p>
+				<!-- End body content -->
+			</div>
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+
+
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">CLAIM RESOLUTION INFORMATION</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content --> 
+			
+			<p>	
+			Tracing of your property began as soon as you reported the mishandling to our agent.
+			</p>
+				<!-- End body content -->
+			</div>
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+
+			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+			<h:outputText value="&#160;" styleClass="passfontstyle" />
+			<h:outputText value="&#160;" styleClass="passfontstyle" />
+			<div><h:commandButton id="dirforward" value="CONTINUE" tabindex="0"
+				action="#{passengerController.gotoLiability}"
+				styleClass="button140pxredextended fright" />
+				
+				</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

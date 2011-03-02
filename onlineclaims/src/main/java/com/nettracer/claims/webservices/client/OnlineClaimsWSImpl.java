@@ -12,6 +12,9 @@ import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger;
 import com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument;
 import com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument;
+import com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument;
+import com.bagnet.nettracer.ws.onlineclaims.AuthIncidentDocument.AuthIncident;
+import com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument;
 import com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument;
 import com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument;
 import com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument;
@@ -23,14 +26,20 @@ import com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserDocument.AuthAdminUser;
 import com.bagnet.nettracer.ws.onlineclaims.AuthPassengerDocument.AuthPassenger;
 import com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument.LoadClaim;
 import com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument.SaveClaim;
+import com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument;
+import com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.SaveNewIncident;
+import com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Contents;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Incident;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Phone;
 import com.nettracer.claims.core.model.Address;
 import com.nettracer.claims.core.model.Bag;
 import com.nettracer.claims.core.model.Content;
+import com.nettracer.claims.core.model.IncidentBagBean;
+import com.nettracer.claims.core.model.IncidentBean;
 import com.nettracer.claims.core.model.Itinerary;
 import com.nettracer.claims.core.model.Passenger;
 import com.nettracer.claims.core.model.PassengerBean;
@@ -78,8 +87,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          AuthPassengerResponseDocument response = stub.authPassenger(request);
          // Process response
 		 return response.getAuthPassengerResponse().getReturn();
-	}
-	
+	}	
 	
 
 	@Override
@@ -135,7 +143,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			String wSPVItem2=itemArray[i].getAddress2();
 		}*/
 		if(passengerBean.getItineraryList().size() == 0){
-			for(int i=0;i<5;i++){
+			for(int i=0;i<1;i++){
 				passengerBean.getItineraryList().add(new Itinerary());
 			}
 		}
@@ -428,7 +436,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          claim.setWhereDidYouFileReport(passengerBean.getFileReportCity());
          claim.setReportedToAnotherAirline(passengerBean.getReportAnotherAirline());
          claim.setTicketWithAnotherAirline(passengerBean.getDifferentAirlineTicket());
-         //claim.setTicketNumber(""); //To be implemented later
+         claim.setTicketNumber(passengerBean.getTicketNumber()); //To be implemented later
          
          //Bag Tags
          setBagTags(passengerBean.getBagTagList(),claim);
@@ -871,7 +879,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 											wsContent.setPurchasedDate(content.getPurchasedDate());
 											wsContent.setPrice(content.getPrice());
 											wsContent.setCurrency(content.getCurrency());
-											wsContentArray[j]=wsContent;
+											wsContentArray[k]=wsContent;
 											wsContent=null; //GC
 											content=null;
 										}
@@ -983,6 +991,72 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			wsFileArray=null; //GC
 		}
 
+	}
+
+	@Override
+	public Incident getIncident(String pnr, String lastName, String firstName)
+			throws AxisFault, RemoteException {
+		 OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub(ENDPOINT);
+         // Prepare XML documents for request 
+         AuthIncidentDocument request = AuthIncidentDocument.Factory.newInstance();
+         AuthIncident subDoc1 = request.addNewAuthIncident();
+         subDoc1.setPnr(pnr);
+         subDoc1.setLastName(lastName);
+         subDoc1.setFirstName(firstName);
+         // Set System Username & PW
+         NtAuth subDoc2 = subDoc1.addNewAuth();
+         subDoc2.setUsername(SYSTEM_USERNAME);
+         subDoc2.setPassword(SYSTEM_PASSWORD);
+         // Perform Web Service Request
+         AuthIncidentResponseDocument response = stub.authIncident(request);
+         // Process response
+		 return response.getAuthIncidentResponse().getReturn();
+	}
+	
+	@Override
+	public String saveIncident(IncidentBean bean, Incident incident)
+			throws AxisFault, RemoteException {
+		 OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub(ENDPOINT);
+         // Prepare XML documents for request 
+         SaveNewIncidentDocument request = SaveNewIncidentDocument.Factory.newInstance();
+         SaveNewIncident subDoc1 = request.addNewSaveNewIncident();
+         subDoc1.setPnr(incident.getPnr());
+         subDoc1.setLastName(incident.getLastName());
+         subDoc1.setFirstName(incident.getFirstName());
+         extractInputFromIncidentBean(bean, incident);
+         subDoc1.setIncident(incident);
+         // Set System Username & PW
+         NtAuth subDoc2 = subDoc1.addNewAuth();
+         subDoc2.setUsername(SYSTEM_USERNAME);
+         subDoc2.setPassword(SYSTEM_PASSWORD);
+         // Perform Web Service Request
+         SaveNewIncidentResponseDocument response = stub.saveNewIncident(request);
+         // Process response
+		 return response.getSaveNewIncidentResponse().getReturn();
+		
+	}
+	
+	private void extractInputFromIncidentBean(IncidentBean bean, Incident incident) {
+        /**
+         *  PUT A WHOLE BUNCH OF CODE THAT CONVERTS IncidentBean to an Incident HERE!!!!
+         */
+	}
+	
+	@Override
+	public IncidentBean getIncidentData(Incident incident) {
+		IncidentBean toReturn = new IncidentBean();
+		List<String> claims = new ArrayList<String>();
+		List<IncidentBagBean> bags = new ArrayList<IncidentBagBean>();
+		for (String claim : incident.getClaimCheckArray()) {
+			claims.add(claim);
+			bags.add(new IncidentBagBean());
+		}
+		toReturn.setClaimCheck(claims);
+		toReturn.setBag(bags);
+		toReturn.setFirstName(incident.getFirstName());
+		toReturn.setLastName(incident.getLastName());
+		toReturn.setPnr(incident.getPnr());
+		return toReturn;
 	}
 
 

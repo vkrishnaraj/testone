@@ -121,6 +121,54 @@
 	</h:panelGrid>
 
 	<rich:spacer width="100%" height="18" title="" />
+	
+	
+						
+						<h:panelGroup >
+						<a4j:region renderRegionOnly="true" >
+						<a4j:outputPanel id="ticketTablePanel" ajaxRendered="true" >
+							<rich:dataTable id="ticketTable"   headerClass="TableHeader" rowKeyVar="rowIndex"
+										value="#{passengerBean.bagTagList}" border="0" var="item">
+								<rich:column>
+									<f:facet name="header">
+										<h:panelGroup >
+											<t:outputText value="#{passengerController.flightLabel.bagTagNumbers}"  styleClass="formLabel"/>
+											<h:graphicImage value="../_images/reqbullet.gif"  
+												rendered="true"/>
+										</h:panelGroup>
+									</f:facet>
+									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout" required="true" 
+											requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+											'#{passengerController.flightLabel.bagTagNumbers}'"
+											readonly="#{passengerController.readOnlyOnSubmitted}"
+											label="Bag Tag Number Row#{rowIndex+1}">
+										<f:validateLength maximum="10"/>
+									</t:inputText>
+								</rich:column>
+								
+								<rich:column>
+									<f:facet name="header">
+										<h:panelGroup >
+											<t:outputText value="#{passengerController.flightLabel.bagArrival}"  styleClass="formLabel"/>
+											<h:graphicImage value="../_images/reqbullet.gif"  
+												rendered="true"/>
+										</h:panelGroup>
+									</f:facet>
+									<h:selectOneRadio   value="#{item.bagArrivalStatus}" required="true"
+										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+											'#{passengerController.flightLabel.bagArrival}'"
+											disabled="#{passengerController.readOnlyOnSubmitted}"
+										label="Bag Arrival Status Row#{rowIndex+1}">
+										<f:selectItem itemLabel="Yes&#160;" itemValue="true" />
+										<f:selectItem itemLabel="No" itemValue="false" />
+									</h:selectOneRadio>
+								</rich:column>
+							</rich:dataTable>
+							</a4j:outputPanel>
+							</a4j:region>
+						</h:panelGroup>
+						
+	<rich:spacer width="100%" height="18" title="" />
 
 	<h:panelGrid columns="3" width="75%">
 	
@@ -303,7 +351,7 @@
 		<rich:spacer width="100%" height="15" title=""/>
 
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.declaredValue}" styleClass="formLabel"/>
+			<t:outputText value="&nbsp;&nbsp;&nbsp;#{passengerController.flightLabel.declaredValue}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<a4j:outputPanel id="declVal" ajaxRendered="true">
 			<h:graphicImage value="../_images/reqbullet.gif"  
@@ -411,7 +459,7 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.differentClaimCheck}" styleClass="formLabel"/>
+				value="&#160;&#160;&#160;#{passengerController.flightLabel.differentClaimCheck}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.differentClaimCheckState  eq 2}" />
@@ -439,7 +487,7 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.reroutedCityAirline}" styleClass="formLabel"/> 
+			<t:outputText value="&#160;&#160;&#160;#{passengerController.flightLabel.reroutedCityAirline}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
 			<a4j:outputPanel id="rerouteCity" ajaxRendered="true">
 			<h:graphicImage value="../_images/reqbullet.gif" 
@@ -471,7 +519,7 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.reason}" styleClass="formLabel"/> 
+			<t:outputText value="&#160;&#160;&#160;#{passengerController.flightLabel.reason}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
 			<h:graphicImage value="../_images/reqbullet.gif" 
 				rendered="#{passengerController.flightLabel.reasonState  eq 2}" /> 

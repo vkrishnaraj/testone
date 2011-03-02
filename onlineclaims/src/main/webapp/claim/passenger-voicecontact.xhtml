@@ -11,13 +11,17 @@
 					<t:outputText  value="#{passengerController.passengerInfoLabel.voiceContact}" styleClass="subHeader"/>	
 				</div>
 					<rich:spacer width="100%" height="15" title="" />
-					
+				<table cellpadding="5" style="width:90%">
+				<tr>
+				<td style="width:17%;">
+					<div>
 					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneHome}" />
 					<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
 							rendered="#{passengerController.passengerInfoLabel.phoneHomeState eq 2}"/>
-					<t:outputText styleClass="formLabel" value=":"/>
-					<t:inputText id="pi20" value="#{passengerBean.address[0].phoneHome}"  style="77%"
+							</div>
+							</td><td style="width:34%; padding-bottom: 5px">
+					<t:inputText id="pi20" value="#{passengerBean.address[0].phoneHome}"  style="width:90%;"
 							required="#{passengerController.passengerInfoLabel.phoneHomeState eq 2}" tabindex="19"
 							readonly="#{passengerController.passengerInfoLabel.phoneHomeState eq 3}"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
@@ -27,14 +31,15 @@
 							label="#{passengerController.passengerInfoLabel.phoneHome}">
 						<f:validateLength maximum="50"/>
 					</t:inputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" /><h:outputText value="&#160;" />
-					
+							</td><td style="width:12%;">
+					<div>
 					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneMobile}" />
 					<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
 							rendered="#{passengerController.passengerInfoLabel.phoneMobileState eq 2}"/>
-					<t:outputText styleClass="formLabel" value=":"/>
-					<t:inputText id="pi21" value="#{passengerBean.address[0].phoneMobile}"  style="77%"
+							</div>
+							</td><td style="width:37%; padding-top: 5px">
+					<t:inputText id="pi21" value="#{passengerBean.address[0].phoneMobile}"  style="width:100%;"
 							required="#{passengerController.passengerInfoLabel.phoneMobileState eq 2}" tabindex="20"
 							readonly="#{passengerController.passengerInfoLabel.phoneMobileState eq 3}"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
@@ -44,14 +49,17 @@
 							label="#{passengerController.passengerInfoLabel.phoneMobile}">
 						<f:validateLength maximum="50"/>
 					</t:inputText>
-					<div><h:outputText value="&#160;" /></div>
-					
+							</td>
+							</tr><tr>
+							<td>
+					<div>
 					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneFax}" />
 					<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
 							rendered="#{passengerController.passengerInfoLabel.phoneFaxState eq 2}"/>
-					<t:outputText styleClass="formLabel" value=":"/>
-					<t:inputText id="pi22" value="#{passengerBean.address[0].phoneFax}"  style="77%"
+							</div>
+							</td><td>
+					<t:inputText id="pi22" value="#{passengerBean.address[0].phoneFax}"  style="width:90%;"
 							required="#{passengerController.passengerInfoLabel.phoneFaxState eq 2}" tabindex="21"
 							readonly="#{passengerController.passengerInfoLabel.phoneFaxState eq 3}"
 								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
@@ -61,15 +69,15 @@
 							label="#{passengerController.passengerInfoLabel.phoneFax}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" /><h:outputText value="&#160;" />
-					
-					
+							</td><td>					
+					<div>
 					<t:outputText styleClass="formLabel" value="#{passengerController.passengerInfoLabel.phoneBusiness}" />
 					<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
 							rendered="#{passengerController.passengerInfoLabel.phoneBusinessState eq 2}"/>
-					<t:outputText styleClass="formLabel" value=":"/>
-					<t:inputText id="pi23" value="#{passengerBean.address[0].phoneBusiness}"  style="77%"
+							</div>
+							</td><td>
+					<t:inputText id="pi23" value="#{passengerBean.address[0].phoneBusiness}"  style="width:100%;"
 							required="#{passengerController.passengerInfoLabel.phoneBusinessState eq 2}" tabindex="22"
 							readonly="#{passengerController.passengerInfoLabel.phoneBusinessState eq 3}"
 							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
@@ -79,6 +87,9 @@
 							label="#{passengerController.passengerInfoLabel.phoneBusiness}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
+						</td>
+						</tr>
+						</table>
 					
 					<div><rich:spacer width="100%" height="15" title="" /></div>
 					

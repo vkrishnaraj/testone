@@ -46,6 +46,7 @@ import com.nettracer.claims.faces.util.File;
 import com.nettracer.claims.faces.util.FileHelper;
 import com.nettracer.claims.faces.util.FileUploadBean;
 import com.nettracer.claims.passenger.LoginBean;
+import com.nettracer.claims.utils.ClaimsProperties;
 import com.nettracer.claims.webservices.client.OnlineClaimsWS;
 
 /**
@@ -130,6 +131,44 @@ public class PassengerController {
 				e.printStackTrace();
 			}
 			return "gotoPassengerInfo";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+
+	/**
+	 * This is the 1st step for a passenger to fill up his claims form
+	 * 
+	 * @return String
+	 */
+
+	public String gotoLiability() {
+		logger.debug("gotoLiability method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			return "gotoLiability";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+
+	/**
+	 * This is the 1st step for a passenger to fill up his claims form
+	 * 
+	 * @return String
+	 */
+
+	public String gotoPPFInstruction() {
+		logger.debug("gotoPPFInstruction method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			return "gotoPPFInstruction";
 		} else {
 			FacesUtil.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
@@ -716,8 +755,9 @@ public class PassengerController {
 							if(b.getContentList() != null){
 								b.getContentList().clear();
 							}
-							for(int i=1;i<=4;i++){
+							for(int i=1;i<=1;i++){
 								Content content=new Content();
+								content.setPrice(0.0);
 								contentList.add(content);
 							}
 							b.setContentList(contentList);
@@ -771,7 +811,9 @@ public class PassengerController {
 	public String addMoreItems(){
 		logger.info("addMoreItems method call");
 		Bag bag=getBags().get(getBagIndex());
-		bag.getContentList().add(new Content());
+		Content tempContent = new Content();
+		tempContent.setPrice(0.0);
+		bag.getContentList().add(tempContent);
 		bags.set(getBagIndex(), bag);
 		passengerBean.setBagList(bags);
 		/*FacesContext context = FacesUtil.getFacesContext();
