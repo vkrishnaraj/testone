@@ -1,33 +1,19 @@
 package com.bagnet.nettracer.tracing.bmo;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ChecklistTask;
 import com.bagnet.nettracer.tracing.db.ChecklistTaskOption;
 import com.bagnet.nettracer.tracing.db.ChecklistVersion;
-import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.IncidentChecklist;
-
-import com.bagnet.nettracer.tracing.utils.IncidentUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class IncidentChecklistBMO {
 
@@ -239,5 +225,36 @@ public class IncidentChecklistBMO {
 			}
 		}
 	}
+
+	//(4) use what's in List<IncidentChecklist> to modify default ChecklistVersion
+	public static ChecklistVersion updateIncidentChecklistVersion(ChecklistVersion defaultChecklistVersion, 
+															List<IncidentChecklist> checklistCurrentStatus) {
+		ChecklistVersion result = null;
+		//loop through all checklistTasks for this version and use ChecklistTask.snapshotData 
+		//transient field to hold the current status information for each task -  
+		List<ChecklistTask> myDefaultListOfTasks = defaultChecklistVersion.getChecklistTasks();
+		if(myDefaultListOfTasks != null) {
+			Iterator<ChecklistTask> it=myDefaultListOfTasks.iterator();
+			while(it.hasNext()){
+				ChecklistTask myTask = (ChecklistTask)it.next();
+				//loop through the checklistCurrentStatus for any match
+				if(checklistCurrentStatus != null) {
+					Iterator<IncidentChecklist> itCurrentStatus = checklistCurrentStatus.iterator();
+					while(itCurrentStatus.hasNext()) {
+						IncidentChecklist currentStatus = (IncidentChecklist) itCurrentStatus.next();
+						
+						if( myTask.getId() == currentStatus.getChecklistTask().getId()) {
+							myTask.setSnapshotData(currentStatus);
+						}
+					}
+				}
+			}
+		}
+		//defaultChecklistVersion.setChecklistTasks(myDefaultListOfTasks);
+		result = defaultChecklistVersion;
 		
+		return result;
+	}
+		
+	
 }

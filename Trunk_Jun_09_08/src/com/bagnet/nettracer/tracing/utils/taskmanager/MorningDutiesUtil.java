@@ -14,11 +14,16 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.IncidentChecklistBMO;
 import com.bagnet.nettracer.tracing.bmo.LockBMO;
 import com.bagnet.nettracer.tracing.bmo.TaskManagerBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.ChecklistTask;
+import com.bagnet.nettracer.tracing.db.ChecklistVersion;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.IncidentChecklist;
 import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Lock.LockType;
@@ -351,11 +356,88 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		return -1;
 	}
 	
-	public static String validateWork(MorningDutiesTask task){
-//		return "Your error message here";
+	public static String validateWork(MorningDutiesTask taskVal){
+		
+		if (taskVal instanceof TwoDayTask) {
+			String taskIdentifier = "checklist.task.one";
+			String ifValidationFailureError = "checklist.task.one.validation.failure";
+			
+			return validateCallPerformed(taskVal.getIncident().getIncident_ID(), taskIdentifier, ifValidationFailureError);			
+		
+		} else if (taskVal instanceof ThreeDayTask) {
+			String taskIdentifier = "checklist.task.two";
+			String ifValidationFailureError = "checklist.task.two.validation.failure";
+			
+			return validateCallPerformed(taskVal.getIncident().getIncident_ID(), taskIdentifier, ifValidationFailureError);			
+			
+		} else if (taskVal instanceof FourDayTask) {
+			String taskIdentifier = "checklist.task.three";
+			String ifValidationFailureError = "checklist.task.three.validation.failure";
+			
+			return validateCallPerformed(taskVal.getIncident().getIncident_ID(), taskIdentifier, ifValidationFailureError);			
+			
+		}
+		
 		return null;
 	}
+
+	private static String validateCallPerformed(String incidentId, String taskIdentifier, String ifValidationFailureError) {
+		ChecklistVersion v = getChecklistForIncident(incidentId);
+		List<ChecklistTask> tasks = v.getChecklistTasks();
+		ChecklistTask activeTask = null;
+		
+		for (ChecklistTask t: tasks) {
+			if (t.getDescription().equals(taskIdentifier)) {
+				activeTask = t;
+			}
+		}
+		
+		if (activeTask != null && activeTask.getSnapshotData() != null && activeTask.getSnapshotData().getId() > 0) {
+			return null;
+		} else {
+			return ifValidationFailureError;
+		}
+	}
 	
+	//main method - to package the Incident Checklist related data for view
+	private static ChecklistVersion getChecklistForIncident(String incidentId) {
+		ChecklistVersion result = null;
+		
+		Session sess = null;
+		try {
+			
+			sess = HibernateWrapper.getSession().openSession();
+			
+			//(1) get incident checklist version from this incident
+			Incident incident = IncidentBMO.getIncidentByID(incidentId, sess);
+			long myIncidentChecklistVersion_id = incident.getChecklist_version();
+			
+			//(2) load default the object graph for this version
+			ChecklistVersion defaultChecklistVersion = 
+				IncidentChecklistBMO.getChecklistVersionById(myIncidentChecklistVersion_id, sess);
+			
+			//(3) get incident_checklist for this incident - this tells what has been done so far
+			List<IncidentChecklist> checklistCurrentStatus = 
+				IncidentChecklistBMO.getIncidentChecklistByIncidentId(incident.getIncident_ID(), sess);
+			
+			//(4) use what's in (3) to modify (2) - result is to be pushed to view
+			result = IncidentChecklistBMO.updateIncidentChecklistVersion(defaultChecklistVersion, checklistCurrentStatus);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return result;
+	}
 	
 	private static String getQuery(Agent agent, int day, boolean order){
 		String sql =  "from com.bagnet.nettracer.tracing.db.Incident i "
