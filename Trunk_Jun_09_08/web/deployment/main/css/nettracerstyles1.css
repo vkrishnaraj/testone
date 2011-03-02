@@ -202,7 +202,7 @@ table#pageheaderright td {
 	padding:0px;
 	text-align:left;
 }
-table#pageheaderright a {
+table#pageheaderright a, td#pageheaderright a {
 	background-position:top;
 	color: #2758AF;
 	font-size:1.0em;
@@ -212,7 +212,9 @@ table#pageheaderright a {
 	padding:0px 2px;
 }
 table#pageheaderright a:hover, 
-table#pageheaderright a:active {
+table#pageheaderright a:active,
+td#pageheaderright a:hover,
+td#pageheaderright a:active {
 	text-decoration:underline;
 	color:#166AAE;
 }

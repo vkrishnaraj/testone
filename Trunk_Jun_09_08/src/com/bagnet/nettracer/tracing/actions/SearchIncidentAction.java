@@ -246,14 +246,19 @@ public class SearchIncidentAction extends Action {
 		// go to specific MBR report based on the incident id from parameter or from
 		// the search result
 		if ((incident != null && incident.length() > 0) || foundinc != null) {
+			Incident inc = foundinc;
 
 			//special case for prompt for print receipt
 			if (request.getParameter("receipt") != null) {
 				//forward to prompt receipt parameters.
+				if (request.getParameter("new") != null) {
+					inc = bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES);
+					bs.populateIncidentFormFromIncidentObj(null, theform, user, TracingConstants.LOST_DELAY, new IncidentBMO(), inc, true);
+					session.setAttribute("incidentForm", theform);
+				}
 				return (mapping.findForward(TracingConstants.RECEIPT_PARAMS));
 			}
 
-			Incident inc = foundinc;
 			if (foundinc == null) {
 				inc = bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES);
 				session.setAttribute("incidentObj", inc);

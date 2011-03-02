@@ -352,4 +352,28 @@ height: 300px;
 padding: 20px 20px 20px 20px ;
 overflow: auto;
 }
- 
+
+p.warning {
+	color: #ff0000;
+	text-align: center;	
+}
+
+td#printreceipt a {
+	background-position:top;
+	color: #2758AF;
+	font-size:1.0em;
+	font-weight:bold;
+	text-align:center;
+	text-decoration:none;
+	padding:0px 2px;
+}
+
+td#printreceipt a:hover,
+td#printreceipt a:active {
+	text-decoration:underline;
+	color:#166AAE;
+}
+
+a img.printreceipt {
+	text-decoration:none;
+}
