@@ -164,7 +164,12 @@ function updatePagination() {
                   </td>
                   <td>
                     <b>
-                      <bean:message key="colname.incident_create_date_short" />
+                      <bean:message key="dispute.incident_create_date_short" />
+                    </b>
+                  </td>
+                  <td>
+                    <b>
+                      <bean:message key="dispute.dispute_create_date_short" />
                     </b>
                   </td>
                   <td>
@@ -201,6 +206,9 @@ function updatePagination() {
                   <tr>
                     <td>
                       <a href='disputeResolution.do?id=<bean:write name="incident" property="incident_ID"/>&actionType=viewToResolve'><bean:write name="incident" property="incident_ID" /></a>
+                    </td>
+                    <td>
+                      <bean:write name="incident" property="displaydate" />
                     </td>
                     <td>
                       <bean:write name="dispute" property="dispTimestampCreated" />

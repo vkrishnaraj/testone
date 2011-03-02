@@ -335,6 +335,7 @@
 		<forward name="viewincomingbags" path="view_incoming_bags" />
 		<forward name="viewincomingincidents" path="view_incoming_incidents" />
 		<forward name="viewmorningduties" path="view_morning_duties" />
+		<forward name="morningdutiesupdated" path="morning_duties_updated" />
 
 		<forward name="viewworldtraceractionfiles" path="view_worldtraceractionfiles" />
 		<forward name="viewworldtracerafviewraw" path="view_worldtracerafviewraw" />

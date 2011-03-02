@@ -104,6 +104,10 @@ public class StatReportAction extends Action {
 			if ((daform.getStarttime() != null && daform.getStarttime().length() > 0) || (daform.getCstarttime() != null && daform.getCstarttime().length() > 0)) {
 
 				reportfile = rBMO.createReport(reportpath, srDTO, user);
+			} else if (customreportnum != null && reportnum != null 
+					&&new Integer(customreportnum).intValue() == ReportingConstants.RPT_20_CUSTOM_101 
+					&& new Integer(reportnum).intValue() == ReportingConstants.RPT_20){
+				reportfile = rBMO.createReport(reportpath, srDTO, user);
 			}
 			else {
 				rBMO.setErrormsg("error.missingRequired");

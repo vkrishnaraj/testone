@@ -176,6 +176,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		List result = q.list();
 		LinkedHashSet<Incident> qlhs = new LinkedHashSet<Incident>(q.list());
 		List<Incident> al = new ArrayList<Incident>(qlhs);
+		sess.close();
 		return al;
 	}
 	
@@ -214,10 +215,37 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		}
 	}
 	
+	public static GeneralTask hasAssignedTask(Agent agent){
+		String sql = "from com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask mdt"
+				+ " where 1=1"
+				+ " and mdt.assigned_agent.agent_ID = :agent"
+				+ " and (mdt.status.status_ID = :working or mdt.status.status_ID = :paused)";
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		
+		q.setParameter("agent", agent.getAgent_ID());
+		q.setParameter("working", TracingConstants.TASK_MANAGER_WORKING);
+		q.setParameter("paused", TracingConstants.TASK_MANAGER_PAUSED);
+
+		List result = q.list();
+		LinkedHashSet<MorningDutiesTask> qlhs = new LinkedHashSet<MorningDutiesTask>(q.list());
+		List<MorningDutiesTask> al = new ArrayList<MorningDutiesTask>(qlhs);
+		sess.close();
+		if(al.size() > 0){
+			return al.get(0);
+		}
+		return null;
+	}
 	
 	public static GeneralTask getTask(Agent agent, int day) {
 
-		Incident inc = getIncident(agent, day);
+		//check European stations first
+		Incident inc = getEuIncident(agent, day);
+		if(inc == null){
+			inc = getIncident(agent, day);
+		}
+		
 		if (inc != null) {
 			//do we already have a defered or aborted task for this incident
 			GeneralTask gtask = getTaskByIncidentId(agent, inc.getIncident_ID(), day);
@@ -295,6 +323,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		}
 		
 		List result = q.list();
+		sess.close();
 		if (result.size() > 0) {
 			return ((Long) result.get(0)).intValue();
 		}
@@ -315,13 +344,17 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		q = sess.createQuery(sql.toString());
 		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_CLOSED);
 		List result = q.list();
+		sess.close();
 		if (result.size() > 0) {
 			return ((Long) result.get(0)).intValue();
 		}
 		return -1;
 	}
 	
-	
+	public static String validateWork(MorningDutiesTask task){
+//		return "Your error message here";
+		return null;
+	}
 	
 	
 	private static String getQuery(Agent agent, int day, boolean order){
@@ -332,13 +365,37 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		+ "and (i.stationassigned.station_ID = :station or i.stationassigned.lz_ID = :lz) "
 		+ "and i.incident_ID not in (select m.incident.incident_ID from "
 		+ getDayTask(day) + " m where m.status.status_ID != :taskStatus or deferment_timestamp > :curTime) "
-		+ "and " + getDateRange(day);
+		+ "and " + getDateRange(day)
+		+ " and i.incident_ID not in (select lockKey from com.bagnet.nettracer.tracing.db.Lock where lockType = '" + LockType.TM_INCIDENT + "') "
+		+ "";
 		if(order){
 			sql += " order by createdate asc, createtime asc";
 		}
 		return sql;
 	}
 
+	private static Incident getEuIncident(Agent agent, int day){
+		String sql = getQuery(agent, day, false);
+		sql += " and i.stationcreated.stationcode in ('CDG','TLV','LGW','MUC','OSL','VCE','ATH','FRA','MAD','DUB','AMS','ZRH','GLA','FCO','MAN','LHR','BRU','LIS','BCN') ";
+		sql += " order by createdate asc, createtime asc";
+		System.out.println(sql);
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
+		q.setParameter("station", agent.getStation().getStation_ID());
+		q.setParameter("lz", agent.getStation().getLz_ID());
+		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
+		q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
+		q.setMaxResults(1);
+		List result = q.list();
+		sess.close();
+		if (result.size() > 0) {
+			return (Incident) result.get(0);
+		}
+		return null;
+	}
+	
 	private static Incident getIncident(Agent agent, int day) {
 		String sql = getQuery(agent, day, true);
 		System.out.println(sql);
@@ -352,6 +409,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
 		q.setMaxResults(1);
 		List result = q.list();
+		sess.close();
 		if (result.size() > 0) {
 			return (Incident) result.get(0);
 		}
@@ -372,6 +430,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
 		q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
 		List result = q.list();
+		sess.close();
 		if (result.size() > 0) {
 			return ((Long) result.get(0)).intValue();
 		}
@@ -481,6 +540,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		q.setInteger("agentID", agent.getAgent_ID());
 		q.setLong("status", TracingConstants.TASK_MANAGER_PAUSED);
 		List result = q.list();
+		sess.close();
 		return ((Long) result.get(0)).intValue();
 	}
 	

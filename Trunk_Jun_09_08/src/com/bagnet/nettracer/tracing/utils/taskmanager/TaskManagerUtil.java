@@ -19,7 +19,8 @@ public abstract class TaskManagerUtil {
 		if (task instanceof MorningDutiesTask){
 			if(((MorningDutiesTask)task).getIncident() != null && ((MorningDutiesTask)task).getIncident().getIncident_ID() != null
 					&& ((MorningDutiesTask)task).getIncident().getIncident_ID().trim().length() > 0){
-				key = ((MorningDutiesTask)task).getKey() + ((MorningDutiesTask)task).getIncident().getIncident_ID();
+//				key = ((MorningDutiesTask)task).getKey() + ((MorningDutiesTask)task).getIncident().getIncident_ID();
+				key = ((MorningDutiesTask)task).getIncident().getIncident_ID();
 			}
 		}
 		if(key == null){
@@ -32,7 +33,7 @@ public abstract class TaskManagerUtil {
 			do {
 				i++;
 				try {
-					lock = lockBmo.createLock(LockType.TM_INCIDENT, key, 3600000L);
+					lock = lockBmo.createLock(LockType.TM_INCIDENT, key, 300000L);
 				} catch (Exception ex) {
 					logger.info("GeneralTask for " + key
 							+ " alreaedy locked, waiting..");
@@ -43,7 +44,7 @@ public abstract class TaskManagerUtil {
 								"unable to acquire lock " + key, e);
 					}
 				}
-			} while (lock == null && i < 4);
+			} while (lock == null && i < 2);
 			if(lock == null) {
 				throw new Exception("unable to lock incident " + key);
 			}
@@ -55,7 +56,9 @@ public abstract class TaskManagerUtil {
 	}
 	
 	public static void unlockTaskIncident(Lock lock){
+		if(lock != null){
 		SpringUtils.getLockBmo().releaseLock(lock);
+		}
 	}
 	
 }

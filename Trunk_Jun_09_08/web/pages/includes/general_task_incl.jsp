@@ -73,10 +73,6 @@ if (hasPermission) {
 
       <br>
       <br>
-      &nbsp;&nbsp;&uarr;
-      <a href="#"><bean:message key="link.to_top" /></a>
-      <br>
-      <br>
 
 </c:if>
 <% } %>

@@ -113,9 +113,14 @@ function updatePagination() {
                   </td>
                   <td>
                     <b>
-                      <bean:message key="colname.incident_create_date_short" />
+                      <bean:message key="dispute.incident_create_date_short" />
                     </b>
-                  </td>                  
+                  </td>
+                  <td>
+                    <b>
+                      <bean:message key="dispute.dispute_create_date_short" />
+                    </b>
+                  </td>                 
                   <td>
                     <b>
                       <bean:message key="colname.fault.station" />
@@ -158,8 +163,11 @@ function updatePagination() {
                     </logic:notEqual>
                     </td>
                     <td>
+                      <bean:write name="incident" property="displaydate" />
+                    </td>
+                    <td>
                       <bean:write name="dispute" property="dispTimestampCreated" />
-                    </td>                    
+                    </td>                   
                     <td>
                       <bean:write name="beforeDisputeFaultStation" property="stationcode" />
                     </td>

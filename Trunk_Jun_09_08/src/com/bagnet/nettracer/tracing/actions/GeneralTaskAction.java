@@ -36,29 +36,32 @@ public class GeneralTaskAction extends Action{
 		
 		Agent user = (Agent) session.getAttribute("user");
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
-				+ ".do", user)
-				&& !UserPermissions
+				+ ".do", user))
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		if(!UserPermissions
 						.hasPermission(
 								TracingConstants.SYSTEM_COMPONENT_MANAGE_TASKS,
-								user))
+								user)){
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		}
 		
 		
 		MorningDutiesTask task = (MorningDutiesTask) session.getAttribute("sessionTaskContainer");
 		int minutes = 0;
-		int day = 0;
-		if(task instanceof com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask ){
-			day = MorningDutiesUtil.TWODAY;
-		}
-		if(task instanceof com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask ){
-			day = MorningDutiesUtil.THREEDAY;
-		}
-		if(task instanceof com.bagnet.nettracer.tracing.db.taskmanager.FourDayTask ){
-			day = MorningDutiesUtil.FOURDAY;
-		}
+		int day = getDay(task);
 		
 		if(request.getParameter("tasklist") != null){
 			System.out.println("complete");
+			//check first to see if agent has a task currently opened
+			MorningDutiesTask hasTask = (MorningDutiesTask)MorningDutiesUtil.hasAssignedTask(user);
+			if(hasTask != null){
+				session.setAttribute("day", getDay(hasTask));
+				session.setAttribute("sessionTaskContainer", hasTask);
+				session.setAttribute("sessionTaskStartTime", new Date());
+				response.sendRedirect("searchIncident.do?incident=" + hasTask.getIncident().getIncident_ID());
+			}
+			
 			Integer i = new Integer(request.getParameter("tasklist"));
 			day = i.intValue();
 			
@@ -66,9 +69,6 @@ public class GeneralTaskAction extends Action{
 			int currpage = 1;
 			int end = 10;
 			int pages = 13;
-			
-			
-//			List<Incident> incidentList = MorningDutiesUtil.getTaskList(user, day);
 
 			request.setAttribute("day", day);
 			List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
@@ -113,66 +113,62 @@ public class GeneralTaskAction extends Action{
 		}
 
 		if(request.getParameter("complete") != null){
+			boolean success = true;
 			System.out.println("complete");
+			//validate
+			String error = MorningDutiesUtil.validateWork(task);
+			if(error != null){
+				//we have an error message
+				request.setAttribute("day", day);
+				request.setAttribute("errorMsg", error);
+				request.setAttribute("Incident_ID", task.getIncident().getIncident_ID());
+				return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
+			}
+			
 			MorningDutiesUtil.closeTask(user, task);
 			MorningDutiesUtil.addActivity(user, task, MorningDutiesUtil.ResolutionType.WORKED, getDuration((Date)session.getAttribute("sessionTaskStartTime")));
-			MorningDutiesTask gtask = (MorningDutiesTask)MorningDutiesUtil.getTask(user, day);
-			if(gtask == null){
+			//TODO check success
+			//if success, go to success page
+			if(success){
+				request.setAttribute("gettaskbutton", 1);
 				request.setAttribute("day", day);
-//				List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
-//				if(pauselist != null && pauselist.size() > 0){
-//					request.setAttribute("pauselist", pauselist);
-//				}
-				response.sendRedirect("GeneralTask.do?tasklist=" + day);
-				return null;
-//				return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
+				return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
 			}
-			session.setAttribute("sessionTaskContainer", gtask);
-			session.setAttribute("sessionTaskStartTime", new Date());
-			response.sendRedirect("searchIncident.do?incident=" + gtask.getIncident().getIncident_ID());
+			//else, go to error page
 		}
 		if(request.getParameter("pause") != null){
 			System.out.println("pause");
 			MorningDutiesUtil.pauseTask(user, task);
 			MorningDutiesUtil.addActivity(user, task, MorningDutiesUtil.ResolutionType.PAUSED, getDuration((Date)session.getAttribute("sessionTaskStartTime")));
-//			List<Incident> incidentList = MorningDutiesUtil.getTaskList(user, day);
-//			if(incidentList != null && incidentList.size() > 0){
-//				request.setAttribute("resultlist", incidentList);
-//			}
 			request.setAttribute("day", day);
-//			List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
-//			if(pauselist != null && pauselist.size() > 0){
-//				request.setAttribute("pauselist", pauselist);
-//			}
-			response.sendRedirect("GeneralTask.do?tasklist=" + day);
-//			return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
+			request.setAttribute("taskmanagerbutton", 1);
+			return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
 		}
 		if(request.getParameter("defer") != null){
 			System.out.println("defer");
 			MorningDutiesUtil.deferTask(user, task, new Integer(request.getParameter("defer_time")));
 			MorningDutiesUtil.addActivity(user, task, MorningDutiesUtil.ResolutionType.DEFERED, getDuration((Date)session.getAttribute("sessionTaskStartTime")));
-			MorningDutiesTask gtask = (MorningDutiesTask)MorningDutiesUtil.getTask(user, day);
-			if(gtask == null){
-				request.setAttribute("day", day);
-//				List<Incident> pauselist = MorningDutiesUtil.getPauseList(user, day);
-//				if(pauselist != null && pauselist.size() > 0){
-//					request.setAttribute("pauselist", pauselist);
-//				}
-				response.sendRedirect("GeneralTask.do?tasklist=" + day);
-				return null;
-//				return (mapping.findForward(TracingConstants.VIEW_MORNING_DUTIES));
-			}
-			session.setAttribute("sessionTaskContainer", gtask);
-			session.setAttribute("sessionTaskStartTime", new Date());
-			response.sendRedirect("searchIncident.do?incident=" + gtask.getIncident().getIncident_ID());
+			request.setAttribute("day", day);
+			request.setAttribute("gettaskbutton", 1);
+			return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
 		}
 		if(request.getParameter("abort") != null){
 			System.out.println("abort");
 			MorningDutiesUtil.abortTask(user, task);
 			MorningDutiesUtil.addActivity(user, task, MorningDutiesUtil.ResolutionType.ABORTED, getDuration((Date)session.getAttribute("sessionTaskStartTime")));
-			response.sendRedirect("logon.do?taskmanager=1");
+			request.setAttribute("day", day);
+			request.setAttribute("taskmanagerbutton", 1);
+			return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
 		}
 		if(request.getParameter("gettask") != null){
+			//First check to see if agent has a task already
+			MorningDutiesTask hasTask = (MorningDutiesTask)MorningDutiesUtil.hasAssignedTask(user);
+			if(hasTask != null){
+				session.setAttribute("sessionTaskContainer", hasTask);
+				session.setAttribute("sessionTaskStartTime", new Date());
+				response.sendRedirect("searchIncident.do?incident=" + hasTask.getIncident().getIncident_ID());
+			}
+			
 			MorningDutiesTask gtask = null;
 			Integer i = new Integer(request.getParameter("gettask"));
 			day = i.intValue();
@@ -224,5 +220,19 @@ public class GeneralTaskAction extends Action{
 			duration = end.getTime() - start.getTime();
 		}
 		return duration;
+	}
+	
+	private static int getDay(MorningDutiesTask task){
+		int day = 0;
+		if(task instanceof com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask ){
+			day = MorningDutiesUtil.TWODAY;
+		}
+		if(task instanceof com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask ){
+			day = MorningDutiesUtil.THREEDAY;
+		}
+		if(task instanceof com.bagnet.nettracer.tracing.db.taskmanager.FourDayTask ){
+			day = MorningDutiesUtil.FOURDAY;
+		}
+		return day;
 	}
 }

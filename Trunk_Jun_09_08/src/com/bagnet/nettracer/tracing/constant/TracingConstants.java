@@ -539,6 +539,7 @@ public class TracingConstants {
 	public final static String VIEW_INCOMING_BAG_LIST = "viewincomingbags";
 	public final static String VIEW_INCOMING_INCIDENTS = "viewincomingincidents";
 	public final static String VIEW_MORNING_DUTIES = "viewmorningduties";
+	public final static String MORNING_DUTIES_UPDATED = "morningdutiesupdated";
 	
 	// world tracer forwards
 	public final static String VIEW_WORLDTRACER_ACTION_FILES = "viewworldtraceractionfiles";

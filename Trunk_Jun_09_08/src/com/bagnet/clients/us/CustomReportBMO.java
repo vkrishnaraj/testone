@@ -5,6 +5,7 @@
  */
 package com.bagnet.clients.us;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,17 +15,30 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JExcelApiExporter;
+import net.sf.jasperreports.engine.export.JExcelApiExporterParameter;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
+import ar.com.fdvs.dj.core.DynamicJasperHelper;
+import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
+import ar.com.fdvs.dj.domain.DynamicReport;
+import ar.com.fdvs.dj.domain.Style;
+import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
+
 import com.bagnet.clients.us.reports.LzReportDTO;
 import com.bagnet.clients.us.reports.PerformanceReportDTO;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -33,7 +47,10 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.LzUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesDJReport;
+import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
 /**
  * @author Administrator
@@ -60,6 +77,9 @@ public class CustomReportBMO implements
 			case ReportingConstants.RPT_20_CUSTOM_55:
 				creportdata = createDisputeResolutionReport(srDTO, ReportBMO.getCustomReport(55).getResource_key(), request, user);
 				break;
+			case ReportingConstants.RPT_20_CUSTOM_101:
+				creportdata = createMorningDutiesReport(srDTO, ReportBMO.getCustomReport(101).getResource_key(), request, user);		
+				break;
 		}
 		return creportdata;
 	}
@@ -71,6 +91,122 @@ public class CustomReportBMO implements
 		return rbmo.create_dispute_resolution_rpt(srDTO, 0, ReportingConstants.RPT_55_NAME, "Dispute Resolution Report");
 	}
 
+	private String createMorningDutiesReport(StatReportDTO srDTO, String resource_key, HttpServletRequest request, Agent user) {
+		// TODO Auto-generated method stub
+//		ReportBMO rbmo= new ReportBMO(request);
+//		rbmo.setUser(user);
+//		return rbmo.createMorningDutiesReport(srDTO, 0, ReportingConstants.RPT_101_NAME, "Morning Duties Report");
+		
+		ArrayList <Station> lzList = new ArrayList();
+		lzList.add(StationBMO.getStationByCode("HQ1", "US"));
+		lzList.add(StationBMO.getStationByCode("HQ2", "US"));
+		lzList.add(StationBMO.getStationByCode("HQ3", "US"));
+		lzList.add(StationBMO.getStationByCode("HQ4", "US"));
+		Station s = new Station();
+		s.setStationcode("Total");
+		s.setStation_ID(-1);
+		lzList.add(s);
+		
+		ArrayList <MorningDutiesDJReport> reportList = new ArrayList();
+		for(Station station:lzList){
+			MorningDutiesDJReport report = new MorningDutiesDJReport();
+			report.setStation(station);
+			int station_id = -1;
+			if(station != null ){
+				station_id = station.getLz_ID();
+			}
+
+			report.setDayTwoCount(MorningDutiesUtil.getMorningDutiesReportCount(MorningDutiesUtil.TWODAY, station_id, 0));
+			report.setDayThreeCount(MorningDutiesUtil.getMorningDutiesReportCount(MorningDutiesUtil.THREEDAY, station_id, 0));
+			report.setDayFourCount(MorningDutiesUtil.getMorningDutiesReportCount(MorningDutiesUtil.FOURDAY, station_id, 0));
+
+			//yesterday's calls
+			report.setyDayTwoCount(MorningDutiesUtil.getMorningDutiesReportCount(MorningDutiesUtil.TWODAY, station_id, 1));
+			report.setyDayThreeCount(MorningDutiesUtil.getMorningDutiesReportCount(MorningDutiesUtil.THREEDAY, station_id, 1));
+			report.setyDayFourCount(MorningDutiesUtil.getMorningDutiesReportCount(MorningDutiesUtil.FOURDAY, station_id, 1));
+
+			report.setyDayTwoComplete(MorningDutiesUtil.getMorningDutiesReportCompletedCount(MorningDutiesUtil.TWODAY, station_id, 1));
+			report.setyDayThreeComplete(MorningDutiesUtil.getMorningDutiesReportCompletedCount(MorningDutiesUtil.THREEDAY, station_id, 1));
+			report.setyDayFourComplete(MorningDutiesUtil.getMorningDutiesReportCompletedCount(MorningDutiesUtil.FOURDAY, station_id, 1));
+			reportList.add(report);
+		}
+
+
+
+		try{
+			Map parameters = new HashMap();
+			FastReportBuilder drb = new FastReportBuilder();
+
+			String outfile = ReportingConstants.RPT_101_NAME + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate())) + ".xls";
+			String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + outfile;
+
+			DynamicReport report = drb.build();
+			drb.addColumn("Station", "station.stationcode", String.class.getName(), 75, false);
+
+			Style style = new Style();
+			Style header = new Style();
+			header.setBackgroundColor(java.awt.Color.YELLOW);
+			style.setBackgroundColor(java.awt.Color.blue);
+			style.setTextColor(java.awt.Color.BLUE);
+			drb.addColumn("Today's Total Calls", "totalCalls", Integer.class.getName(), 75, style, null);
+			drb.addColumn("2nd Day Calls", "dayTwoCount", Integer.class.getName(), 75, style, null);
+			drb.addColumn("3rd Day Calls", "dayThreeCount", Integer.class.getName(), 75, style, null);
+			drb.addColumn("4th Day Calls", "dayFourCount", Integer.class.getName(), 75, style, null);
+
+			style = new Style();
+			//		style.setBackgroundColor(java.awt.Color.BLUE);
+			style.setTextColor(java.awt.Color.RED);
+			drb.addColumn("Yesterday's Total Calls", "totalYesterdayCalls", Integer.class.getName(), 75, style, null);
+			drb.addColumn("Completed", "yDayTwoComplete", Integer.class.getName(), 75, style, null);
+			drb.addColumn("Percentage", "yesterdaysTotalPercent", Integer.class.getName(), 75, style, null);
+
+			style = new Style();
+			//		style.setBackgroundColor(java.awt.Color.BLUE);
+			style.setTextColor(java.awt.Color.GREEN);
+			drb.addColumn("Yesterday's 2nd Day Calls", "yDayTwoCount", Integer.class.getName(), 75, style, null);
+			drb.addColumn("Completed", "yDayTwoComplete", Integer.class.getName(), 75, style, null);
+			drb.addColumn("Percentage", "yesterdaysTwoPercent", Integer.class.getName(), 75, style, null);
+
+			style = new Style();
+			//		style.setBackgroundColor(java.awt.Color.BLUE);
+			style.setTextColor(java.awt.Color.MAGENTA);
+			drb.addColumn("Yesterday's 3rd Day Calls", "yDayThreeCount", Integer.class.getName(), 75, style, null);
+			drb.addColumn("Completed", "yDayThreeComplete", Integer.class.getName(), 75, style, null);
+			drb.addColumn("Percentage", "yesterdaysThreePercent", Integer.class.getName(), 75, style, null);
+
+			style = new Style();
+			//		style.setBackgroundColor(java.awt.Color.BLUE);
+			style.setTextColor(java.awt.Color.BLUE);
+			drb.addColumn("Yesterday's 4th Day Calls", "yDayFourCount", Integer.class.getName(), 75, style, null);
+			drb.addColumn("Completed", "yDayFourComplete", Integer.class.getName(), 75, style, null);
+			drb.addColumn("Percentage", "yesterdaysFourPercent", Integer.class.getName(), 75, style, null);
+
+			JasperPrint jp = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), reportList);
+
+			parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+			parameters.put(JExcelApiExporterParameter.JASPER_PRINT,  jp);
+			parameters.put(JExcelApiExporterParameter.OUTPUT_FILE_NAME, outputpath);
+			parameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, false);
+			parameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
+			parameters.put(JExcelApiExporterParameter.IGNORE_PAGE_MARGINS, true);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, true);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true);
+			parameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, true); 
+			parameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, true);
+
+			JExcelApiExporter exporter = new JExcelApiExporter();
+			exporter.setParameters(parameters);
+			exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, outputpath);	
+			exporter.exportReport();
+			return outfile;
+		} catch (Exception e){
+			logger.error("unable to create report " + e);
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+	
 	private String createPerformanceReport(StatReportDTO srDTO,
 			String resource_key,HttpServletRequest request) {
 		
