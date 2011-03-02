@@ -5,6 +5,7 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+
 <tr>
   
   <td id="middlecolumn">
@@ -16,7 +17,7 @@
           <logic:present name="errorMsg" scope="request">
           <bean:message key="generaltask.taskupdatefailed" />
    		  <br/>
-          <bean:write name="errorMsg" scope="request"/>
+          <bean:message name="errorMsg" scope="request"/>
           <br/>
           <br/>
           <a href='lostDelay.do?incident_ID=<bean:write name="Incident_ID" scope="request"/>'><bean:write name="Incident_ID" scope="request" /></a>

@@ -95,7 +95,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		task.setAssigned_agent(agent);
 		task.setClosed_timestamp(DateUtils.convertToGMTDate(new Date()));
 		TaskManagerBMO.saveTask(task);
-		unlockTaskIncident(task.getLock());
+		unlockTaskIncident(task.getLock(), (MorningDutiesTask)task);
 	}
 	
 	
@@ -109,7 +109,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		t.setStatus(s);
 		t.setAssigned_agent(agent);
 		TaskManagerBMO.saveTask(t);
-		unlockTaskIncident(task.getLock());
+		unlockTaskIncident(task.getLock(), (MorningDutiesTask)task);
 	}
 	
 	public static void abortTask(Agent agent, MorningDutiesTask task){
@@ -120,7 +120,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		t.setStatus(s);
 		t.setAssigned_agent(agent);
 		TaskManagerBMO.saveTask(t);
-		unlockTaskIncident(task.getLock());
+		unlockTaskIncident(task.getLock(),(MorningDutiesTask)task);
 	}
 	
 	public static void pauseTask(Agent agent, MorningDutiesTask task){
@@ -130,7 +130,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		t.setStatus(s);
 		t.setAssigned_agent(agent);
 		TaskManagerBMO.saveTask(t);
-		unlockTaskIncident(task.getLock());
+		unlockTaskIncident(task.getLock(),(MorningDutiesTask)task);
 	}
 	
 	public static TaskActivity addActivity(Agent agent, GeneralTask task, ResolutionType resolution, long duration){
@@ -157,7 +157,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		+ "and m.status = :status) ";
 
 		Query q = null;
-		System.out.println(sql);
+//		System.out.println(sql);
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(sql.toString());
 		q.setInteger("agentID", user.getAgent_ID());
@@ -169,7 +169,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 	
 	public static List<Incident> getTaskList(Agent agent, int day) {
 		String sql = getQuery(agent, day, true);
-		System.out.println(sql);
+//		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(sql.toString());
@@ -318,7 +318,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 			sql += " and i.stationassigned.lz_ID = :lz";
 		}
 		
-		System.out.println(sql);
+//		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(sql.toString());
@@ -343,7 +343,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 			+ " and i.incident_ID in (select m.incident.incident_ID from "
 					+ getDayTask(day) + " m where m.status.status_ID = :taskStatus)";
 		
-		System.out.println(sql);
+//		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(sql.toString());
@@ -460,7 +460,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		String sql = getQuery(agent, day, false);
 		sql += " and i.stationcreated.stationcode in ('CDG','TLV','LGW','MUC','OSL','VCE','ATH','FRA','MAD','DUB','AMS','ZRH','GLA','FCO','MAN','LHR','BRU','LIS','BCN') ";
 		sql += " order by createdate asc, createtime asc";
-		System.out.println(sql);
+//		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(sql.toString());
@@ -480,7 +480,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 	
 	private static Incident getIncident(Agent agent, int day) {
 		String sql = getQuery(agent, day, true);
-		System.out.println(sql);
+//		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(sql.toString());
@@ -502,7 +502,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 	
 	private static int getIncidentCount(Agent agent, int day){
 		String sql = "select count (i.incident_ID) " + getQuery(agent, day, false); 
-		System.out.println(sql);
+//		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(sql.toString());

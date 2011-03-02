@@ -28,7 +28,7 @@ public class GeneralTaskAction extends Action{
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		System.out.println("GeneralTaskAction");
+//		System.out.println("GeneralTaskAction");
 		
 		
 		HttpSession session = request.getSession();
@@ -52,7 +52,7 @@ public class GeneralTaskAction extends Action{
 		int day = getDay(task);
 		
 		if(request.getParameter("tasklist") != null){
-			System.out.println("complete");
+//			System.out.println("complete");
 			//check first to see if agent has a task currently opened
 			MorningDutiesTask hasTask = (MorningDutiesTask)MorningDutiesUtil.hasAssignedTask(user);
 			if(hasTask != null){
@@ -114,11 +114,12 @@ public class GeneralTaskAction extends Action{
 
 		if(request.getParameter("complete") != null){
 			boolean success = true;
-			System.out.println("complete");
+//			System.out.println("complete");
 			//validate
 			String error = MorningDutiesUtil.validateWork(task);
 			if(error != null){
 				//we have an error message
+				
 				request.setAttribute("day", day);
 				request.setAttribute("errorMsg", error);
 				request.setAttribute("Incident_ID", task.getIncident().getIncident_ID());
@@ -132,32 +133,36 @@ public class GeneralTaskAction extends Action{
 			if(success){
 				request.setAttribute("gettaskbutton", 1);
 				request.setAttribute("day", day);
+				session.removeAttribute("sessionTaskContainer");
 				return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
 			}
 			//else, go to error page
 		}
 		if(request.getParameter("pause") != null){
-			System.out.println("pause");
+//			System.out.println("pause");
 			MorningDutiesUtil.pauseTask(user, task);
 			MorningDutiesUtil.addActivity(user, task, MorningDutiesUtil.ResolutionType.PAUSED, getDuration((Date)session.getAttribute("sessionTaskStartTime")));
 			request.setAttribute("day", day);
 			request.setAttribute("taskmanagerbutton", 1);
+			session.removeAttribute("sessionTaskContainer");
 			return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
 		}
 		if(request.getParameter("defer") != null){
-			System.out.println("defer");
+//			System.out.println("defer");
 			MorningDutiesUtil.deferTask(user, task, new Integer(request.getParameter("defer_time")));
 			MorningDutiesUtil.addActivity(user, task, MorningDutiesUtil.ResolutionType.DEFERED, getDuration((Date)session.getAttribute("sessionTaskStartTime")));
 			request.setAttribute("day", day);
 			request.setAttribute("gettaskbutton", 1);
+			session.removeAttribute("sessionTaskContainer");
 			return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
 		}
 		if(request.getParameter("abort") != null){
-			System.out.println("abort");
+//			System.out.println("abort");
 			MorningDutiesUtil.abortTask(user, task);
 			MorningDutiesUtil.addActivity(user, task, MorningDutiesUtil.ResolutionType.ABORTED, getDuration((Date)session.getAttribute("sessionTaskStartTime")));
 			request.setAttribute("day", day);
 			request.setAttribute("taskmanagerbutton", 1);
+			session.removeAttribute("sessionTaskContainer");
 			return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
 		}
 		if(request.getParameter("gettask") != null){
