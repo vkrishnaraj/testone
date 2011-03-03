@@ -113,7 +113,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 		
 		logger.debug("Scanner response: " + responseDoc);
 		
-		for (int i = 0; i < 17; ++i) {
+		for (int i = 0; i < 18; ++i) {
 			//logger.info("Iteration: " + i);
 			Object[] arr = null;
 			switch (i) {
@@ -133,6 +133,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 				case 14: if (out.getUnloadArray() != null ) arr = out.getUnloadArray(); break;
 				case 15: if (out.getUnloadULDArray() != null ) arr = out.getUnloadULDArray(); break;
 				case 16: if (out.getLoadBagArray() != null ) arr = out.getLoadBagArray(); break;
+				case 17: if (out.getUldLoadBagArray() != null ) arr = out.getUldLoadBagArray(); break;
 			}
 			
 			
