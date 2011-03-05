@@ -264,8 +264,8 @@ public class MoveToLZThread {
 				
 				ArrayList<Incident> incidentList = new ArrayList<Incident>();
 				incidentList.addAll(getIncidentsToMove(company, ld_days, TracingConstants.LOST_DELAY, sess, lzList));
-				incidentList.addAll(getIncidentsToMove(company, dg_days, TracingConstants.MISSING_ARTICLES, sess, lzList));
-				incidentList.addAll(getIncidentsToMove(company, ma_days, TracingConstants.DAMAGED_BAG, sess, lzList));
+				incidentList.addAll(getIncidentsToMove(company, ma_days, TracingConstants.MISSING_ARTICLES, sess, lzList));
+				incidentList.addAll(getIncidentsToMove(company, dg_days, TracingConstants.DAMAGED_BAG, sess, lzList));
 	
 				ArrayList<Bucket> buckets = null;
 
