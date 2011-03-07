@@ -35,7 +35,8 @@ public class Dispute {
 	private long dispute_res_id;
 	private Status status;
 	private Date created_timestamp;
-	
+	private Date resolution_timestamp;
+
 	//private Incident incident;
 	private Incident incident;
 	
@@ -79,6 +80,14 @@ public class Dispute {
 	}
 	public void setCreated_timestamp(Date created_timestamp) {
 		this.created_timestamp = created_timestamp;
+	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	public Date getResolution_timestamp() {
+		return resolution_timestamp;
+	}
+	public void setResolution_timestamp(Date resolution_timestamp) {
+		this.resolution_timestamp = resolution_timestamp;
 	}
 	
 //	public String getIncident() {
@@ -182,6 +191,16 @@ public class Dispute {
 	@Transient
 	public String getDispTimestampCreated() {
 		Date completedate = DateUtils.convertToDate(getCreated_timestamp().toString() + " " + getCreated_timestamp().toString(), TracingConstants.DB_DATETIMEFORMAT,
+				null);
+		return DateUtils.formatDate(completedate, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+	}
+	
+	@Transient
+	public String getDispTimestampResolved() {
+		if(getResolution_timestamp() == null){
+			return "";
+		}
+		Date completedate = DateUtils.convertToDate(getResolution_timestamp().toString() + " " + getResolution_timestamp().toString(), TracingConstants.DB_DATETIMEFORMAT,
 				null);
 		return DateUtils.formatDate(completedate, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 	}

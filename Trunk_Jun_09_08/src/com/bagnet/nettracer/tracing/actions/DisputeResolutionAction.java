@@ -33,6 +33,7 @@ import com.bagnet.nettracer.tracing.db.dr.DisputeUtils;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -265,6 +266,7 @@ public class DisputeResolutionAction extends CheckedAction {
 	private boolean acceptDispute(String incidentId, Agent user) {
 		Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incidentId);
 		
+		myDispute.setResolution_timestamp(DateUtils.convertToGMTDate(new Date()));
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.DISPUTE_RESOLUTION_STATUS_APPROVED);
 		myDispute.setStatus(status);
@@ -283,6 +285,7 @@ public class DisputeResolutionAction extends CheckedAction {
 	private boolean denyDispute(String incidentId, Agent user) {
 		Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incidentId);
 		
+		myDispute.setResolution_timestamp(DateUtils.convertToGMTDate(new Date()));
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.DISPUTE_RESOLUTION_STATUS_DENIED);
 		myDispute.setStatus(status);
@@ -300,6 +303,7 @@ public class DisputeResolutionAction extends CheckedAction {
 	private boolean manuallyModifyDispute(String incidentId, IncidentForm theform, Agent user) {
 		Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incidentId);
 		
+		myDispute.setResolution_timestamp(DateUtils.convertToGMTDate(new Date()));
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.DISPUTE_RESOLUTION_STATUS_MANUAL_CHANGE);
 		myDispute.setStatus(status);

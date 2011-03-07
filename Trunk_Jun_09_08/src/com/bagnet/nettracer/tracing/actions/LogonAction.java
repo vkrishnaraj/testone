@@ -436,7 +436,7 @@ public class LogonAction extends Action {
 																					//itemized 3 for damaged
 																					OnlineClaimsDao d = new OnlineClaimsDao();
 																					
-																					int x = d.getSubmittedCount();
+																					int x = d.getSubmittedCount(agent.getStation().getLz_ID(),agent.getStation().getStation_ID());
 																					if (x != -1) {
 																						entries = x;
 																					}

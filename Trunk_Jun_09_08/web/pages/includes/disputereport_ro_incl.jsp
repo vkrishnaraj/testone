@@ -83,6 +83,9 @@
 				
 				<logic:notEqual name="status" property="status_ID" value='<%="" + TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN%>'>
             	<tr>
+            	<td nowrap>Resolved Date: <bean:write name="dispute" property="dispTimestampResolved" /></td>
+            	</tr>
+            	<tr>
 				  <td nowrap>Dispute Resolution: <%="" + request.getAttribute("statusDesc") %></td>
 				  <td nowrap>Resolution Agent: <bean:write name="resolutionAgent" property="username" /></td>
 				</tr>

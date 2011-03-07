@@ -14,14 +14,22 @@
       <tr>
         <td>
           <h1 class="green">
+          
+          
           <logic:present name="errorMsg" scope="request">
-          <bean:message key="generaltask.taskupdatefailed" />
-   		  <br/>
           <bean:message name="errorMsg" scope="request"/>
           <br/>
           <br/>
-          <a href='lostDelay.do?incident_ID=<bean:write name="Incident_ID" scope="request"/>'><bean:write name="Incident_ID" scope="request" /></a>
+          	<logic:present name="Incident_ID" scope="request">
+          	<a href='lostDelay.do?incident_ID=<bean:write name="Incident_ID" scope="request"/>'><bean:write name="Incident_ID" scope="request" /></a>
+          	</logic:present>
+          	<logic:present name="taskmanagerbutton" scope="request">
+  			<input type="button" value="Return to Task Manager" onclick='document.location.href="logon.do?taskmanager=1";' id="button">
+  			</logic:present>   
           </logic:present>
+          
+          
+          
           <logic:notPresent name="errorMsg" scope="request">
           <bean:message key="generaltask.taskupdatedsuccessfully" />
           	<br/>

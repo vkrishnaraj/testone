@@ -50,11 +50,13 @@ function updatePagination() {
     return true;
 }
 
+
   </script>
   
+  <%String action = "GeneralTask.do?tasklist=" + request.getAttribute("day"); %>
   
   <jsp:include page="/pages/includes/validation_search.jsp" />
-  <html:form action="GeneralTask.do?tasklist=4">
+  <html:form action='<%=action%>'>
   
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   

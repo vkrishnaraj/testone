@@ -249,6 +249,7 @@ public class DisputeResolutionReportBMO {
 		
 		//getting report header title from resource bundle
 		String reportHeadingDisputeDate = "Dispute Date";
+		String reportHeadingResolutionDate = "Resolution Date";
 		String reportHeadingIncidentNumber = "Report ID";
 		String reportHeadingStatus = "Status";
 		String reportHeadingDisputingAgent = "Disputing Agent";
@@ -267,6 +268,11 @@ public class DisputeResolutionReportBMO {
 		String myDisputeDateFromResource = resourceBundle.getString("report.dispute.heading.dispute.date");
 		if (!( myDisputeDateFromResource == null || myDisputeDateFromResource.equalsIgnoreCase("") )) {
 			reportHeadingDisputeDate = myDisputeDateFromResource;
+		}
+		
+		String myResolutionDateFromResource = resourceBundle.getString("report.dispute.heading.resolution.date");
+		if (!( myResolutionDateFromResource == null || myResolutionDateFromResource.equalsIgnoreCase("") )) {
+			reportHeadingResolutionDate = myResolutionDateFromResource;
 		}
 
 		String myIncidentNumber = resourceBundle.getString("report.dispute.heading.incident.number");
@@ -405,6 +411,11 @@ public class DisputeResolutionReportBMO {
 				.setColumnProperty("reportDateCreated", String.class.getName()).setTitle(
 				reportHeadingDisputeDate).setWidth(new Integer(40))	
 				.setStyle(detailStyle).setHeaderStyle(headerStyle).build(); //30
+		
+		AbstractColumn columnResolvedDate = ColumnBuilder.getNew()
+				.setColumnProperty("reportDateResolved", String.class.getName()).setTitle(
+				reportHeadingResolutionDate).setWidth(new Integer(40))	
+				.setStyle(detailStyle).setHeaderStyle(headerStyle).build(); //30
 
 		AbstractColumn columnReportNumber = ColumnBuilder.getNew()
 				.setColumnProperty("incident_id", String.class.getName()).setTitle(
@@ -466,6 +477,7 @@ public class DisputeResolutionReportBMO {
 
 		
 		drb.addColumn(columnDisputeDate);
+		drb.addColumn(columnResolvedDate);
 		drb.addColumn(columnReportNumber);
 		drb.addColumn(columnStatus);
 		drb.addColumn(columnDisputingAgent);
@@ -515,6 +527,7 @@ public class DisputeResolutionReportBMO {
 		
 		//getting report header title from reource bundle
 		String reportHeadingDisputeDate = "Dispute Date";
+		String reportHeadingResolutionDate = "Resolution Date";
 		String reportHeadingIncidentNumber = "Report ID";
 		String reportHeadingStatus = "Status";
 		String reportHeadingDisputingAgent = "Disputing Agent";
@@ -531,7 +544,12 @@ public class DisputeResolutionReportBMO {
 		if (!( myDisputeDateFromResource == null || myDisputeDateFromResource.equalsIgnoreCase("") )) {
 			reportHeadingDisputeDate = myDisputeDateFromResource;
 		}
-
+		
+		String myResolutionDateFromResource = resourceBundle.getString("report.dispute.heading.resolution.date");
+		if (!( myDisputeDateFromResource == null || myDisputeDateFromResource.equalsIgnoreCase("") )) {
+			reportHeadingResolutionDate = myResolutionDateFromResource;
+		}
+		
 		String myIncidentNumber = resourceBundle.getString("report.dispute.heading.incident.number");
 		if (!( myIncidentNumber == null || myIncidentNumber.equalsIgnoreCase("") )) {
 			reportHeadingIncidentNumber = myIncidentNumber;
@@ -588,6 +606,7 @@ public class DisputeResolutionReportBMO {
 		}
 		
     	drb = drb.addColumn(reportHeadingDisputeDate, "reportDateCreated", String.class.getName(), 30);
+    	drb = drb.addColumn(reportHeadingResolutionDate, "reportDateResolved", String.class.getName(), 30);
 		drb = drb.addColumn(reportHeadingIncidentNumber,"incident_id",String.class.getName(),54);
 		drb = drb.addColumn(reportHeadingStatus,"statusDesc",String.class.getName(),30);
 		drb = drb.addColumn(reportHeadingDisputingAgent,"disputeAgentName",String.class.getName(),24);

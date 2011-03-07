@@ -101,6 +101,21 @@ public class DisputeResolutionReportDTO {
 		return DateUtils.formatDate(tempdate, _DATEFORMAT, null, _TIMEZONE);
 
 	}
+	
+	public Date getDate_resolved() {
+		return date_resolved;
+	}
+	public void setDate_resolved(Date date_resolved) {
+		this.date_resolved = date_resolved;
+	}
+	public String getReportDateResolved() {
+		java.util.Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getDate_resolved(), TracingConstants.DB_DATEFORMAT, null, null) + " "
+				+ DateUtils.formatDate(getDate_resolved(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
+		return DateUtils.formatDate(tempdate, _DATEFORMAT, null, _TIMEZONE);
+	}
+	public void setReportDateResolved(String reportDateResolved) {
+		this.reportDateResolved = reportDateResolved;
+	}
 
 //	public String getStatusDesc() {
 //		String result = "" + TracerUtils.getText(Status.getKey((Integer) status), "");
@@ -137,7 +152,12 @@ public class DisputeResolutionReportDTO {
 
 
 	private Date date_created;
+
+
+
+	private Date date_resolved;
 	private String reportDateCreated;
+	private String reportDateResolved;
 	private String incident_id;
 	private int status;
 	private String statusDesc;

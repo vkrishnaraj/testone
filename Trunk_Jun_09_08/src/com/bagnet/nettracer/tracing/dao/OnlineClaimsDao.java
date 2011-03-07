@@ -43,11 +43,22 @@ public class OnlineClaimsDao {
 	 * This queries the entire system.
 	 */
 	public int getSubmittedCount() {
-		
+		return getSubmittedCount(0,0);
+	}
+	
+	public int getSubmittedCount(int lzId, int stationId){
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery("select count(o) from com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim o where status = :status");
+			String sql = "select count(o) from com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim o where status = :status";
+			if(lzId > 0 && stationId > 0){
+			  sql += " and (o.incident.stationassigned.station_ID = :station or o.incident.stationassigned.lz_ID = :lz)";
+			}
+			Query q = sess.createQuery(sql);
+			if(lzId > 0 && stationId > 0){
+				q.setParameter("station", stationId);
+				q.setParameter("lz", lzId);
+			}
 			q.setParameter("status", STATUS_SUBMITTED);
 			Long r = (Long) q.uniqueResult();
 			return r.intValue();
@@ -58,7 +69,6 @@ public class OnlineClaimsDao {
 			sess.close();
 		}
 		return 0;
-		
 	}
 
 	

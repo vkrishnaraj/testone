@@ -60,6 +60,7 @@ import org.hibernate.criterion.Expression;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
+import ar.com.fdvs.dj.domain.AutoText;
 import ar.com.fdvs.dj.domain.CustomExpression;
 import ar.com.fdvs.dj.domain.DJCalculation;
 import ar.com.fdvs.dj.domain.DynamicReport;
@@ -113,6 +114,8 @@ import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesDJReport;
+import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
 /**
  * @author Administrator
@@ -2659,7 +2662,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			ResultSet rs = null;
 			String sql = "select * from dispute d where 1=1";   
 			
-			sql = "select d.created_timestamp,d.Incident_ID,d.status_ID,"
+			sql = "select d.created_timestamp,d.resolution_timestamp,d.Incident_ID,d.status_ID,"
 				+ " dagent.username disputingagentusername,wagent.username workingagentusername,"
 				+ " d.typeOfChange,"
 				+ " d.beforeDisputeLossCode,prestation.stationcode beforedisputefaultstation,"
@@ -2769,6 +2772,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				sr = new DisputeResolutionReportDTO();
 
 				sr.setDate_created(rs.getDate("created_timestamp"));
+				sr.setDate_resolved(rs.getDate("resolution_timestamp"));
 				sr.setIncident_id(rs.getString("Incident_ID"));
 				sr.setStatus(rs.getInt("status_ID"));
 				sr.setStatusDesc(TracerUtils.getText(Status.getKey((Integer) sr.getStatus()), user));
@@ -4638,6 +4642,8 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 		return result;
 	}
+	
+
 	
 	public String createSalvageReport(String root, int salvageId, Agent user) {
 		Salvage salvage = SalvageDAO.loadSalvage(salvageId);

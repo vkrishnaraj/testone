@@ -38,6 +38,8 @@ public class Station implements Serializable {
 	private boolean active;
 	private String wt_stationcode;
 	private String emailLanguage;
+	
+	private int priority;
 
 	/**
 	 * @hibernate.property type="string"
@@ -409,6 +411,20 @@ public class Station implements Serializable {
 
 	public void setEmailLanguage(String emailLanguage) {
 		this.emailLanguage = emailLanguage;
+	}
+	
+	/**
+	 * @hibernate.property type="integer"
+	 * 
+	 * @param priority
+	 *          The priority to set.
+	 */
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 	
 }

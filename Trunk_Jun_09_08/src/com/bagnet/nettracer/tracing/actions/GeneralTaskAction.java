@@ -81,7 +81,7 @@ public class GeneralTaskAction extends Action{
 			if (theForm.getPrevpage() != null && theForm.getPrevpage().equals("1"))
 				currpage--;
 			
-			List<Incident> incidentList = MorningDutiesUtil.getPaginatedDisputeList(user, day, rowsperpage, currpage);
+			List<Incident> incidentList = MorningDutiesUtil.getPaginatedList(user, day, rowsperpage, currpage);
 			if(incidentList != null && incidentList.size() > 0){
 				request.setAttribute("resultlist", incidentList);
 			}
@@ -204,11 +204,19 @@ public class GeneralTaskAction extends Action{
 				
 			} else {
 				//agent clicked getTask
-				gtask = (MorningDutiesTask)MorningDutiesUtil.getTask(user, day);
+				int attempts = 0;
+				do{
+					gtask = (MorningDutiesTask)MorningDutiesUtil.getTask(user, day);
+					System.out.println("getting task attempt: " + (attempts + 1));
+				}while(gtask == null && attempts++ < 2);
 			}
 			if (gtask == null){
 				//TODO redirect error task not availiable
-				return null;
+				
+				request.setAttribute("errorMsg", "generaltask.taskunavailable");
+				request.setAttribute("taskmanagerbutton", 1);
+				session.removeAttribute("sessionTaskContainer");
+				return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
 			}
 			session.setAttribute("sessionTaskContainer", gtask);
 			session.setAttribute("sessionTaskStartTime", new Date());

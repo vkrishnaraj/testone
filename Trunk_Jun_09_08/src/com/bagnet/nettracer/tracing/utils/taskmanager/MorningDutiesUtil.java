@@ -17,6 +17,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentChecklistBMO;
 import com.bagnet.nettracer.tracing.bmo.LockBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.TaskManagerBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -185,7 +186,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		return al;
 	}
 	
-	public static List<Incident> getPaginatedDisputeList(Agent user, int day, int rowsperpage, int currpage){
+	public static List<Incident> getPaginatedList(Agent user, int day, int rowsperpage, int currpage){
 		String sql = getQuery(user, day, true);
 		
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -244,12 +245,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 	}
 	
 	public static GeneralTask getTask(Agent agent, int day) {
-
-		//check European stations first
-		Incident inc = getEuIncident(agent, day);
-		if(inc == null){
-			inc = getIncident(agent, day);
-		}
+		Incident inc = getIncident(agent, day);
 		
 		if (inc != null) {
 			//do we already have a defered or aborted task for this incident
@@ -451,7 +447,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		+ " and i.incident_ID not in (select lockKey from com.bagnet.nettracer.tracing.db.Lock where lockType = '" + LockType.TM_INCIDENT + "') "
 		+ "";
 		if(order){
-			sql += " order by createdate asc, createtime asc";
+			sql += " order by i.stationcreated.priority asc, createdate asc, createtime asc";
 		}
 		return sql;
 	}
