@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-
-<jasperReport name="LostDelayReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LostDelayReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="480"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -62,7 +63,7 @@
 					<pen lineWidth="2.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-10" mode="Opaque" x="139" y="444" width="85" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -75,7 +76,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-11" mode="Opaque" x="139" y="460" width="325" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -88,7 +89,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
-			<textField pattern="(###)###-####" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="(###)###-####" isBlankWhenNull="false">
 				<reportElement key="textField-12" mode="Opaque" x="139" y="476" width="149" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -101,7 +102,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{phone}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-13" mode="Opaque" x="139" y="493" width="329" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -114,7 +115,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-14" mode="Opaque" x="139" y="509" width="328" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -127,7 +128,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-15" mode="Opaque" x="166" y="526" width="269" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -140,7 +141,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{city_st_zip}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-16" mode="Opaque" x="139" y="544" width="327" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -221,7 +222,7 @@
 				</textElement>
 				<text><![CDATA[Morada 2:]]></text>
 			</staticText>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-29" positionType="Float" mode="Opaque" x="9" y="84" width="130" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -234,7 +235,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{prettydate}]]></textFieldExpression>
 			</textField>
-			<image scaleImage="RetainShape" onErrorType="Blank" hyperlinkType="None">
+			<image scaleImage="RetainShape" onErrorType="Blank">
 				<reportElement key="image-1" x="2" y="2" width="137" height="62">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
@@ -275,39 +276,39 @@
 				<text><![CDATA[Apos 24 Horas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-42" positionType="Float" mode="Opaque" x="9" y="239" width="506" height="89" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-42" positionType="Float" mode="Opaque" x="9" y="239" width="506" height="81" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Se o atraso da sua bagagem exceder as 24horas, o rastreamento dos seus bens sera supervisionado por uma equipa dedicada de agents especialistas do nosso centro de Resolucao de Bagagem. Pode esperar actualizacoes periodicas de um especialista durante o processo de rastreamento.
 
 Se precisar de ajuda nos primeiros 5 dias, apos o preenchimento do formularo, voce pode entrar em contacto com a US, em US AIRWAYS BAGGAGE CALL CENTER: 1−800−371−4771.
-Na Europa, ligue 0080024567890.
+Para passageiros viajando com destino a Europa, por favor contactar US Airways no 0800 002 456 7890
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-45" positionType="Float" mode="Opaque" x="9" y="330" width="215" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-45" positionType="Float" mode="Opaque" x="9" y="327" width="215" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Ou entao pode verificar o status no nosso site:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-46" positionType="Float" mode="Opaque" x="233" y="332" width="211" height="22" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-46" positionType="Float" mode="Opaque" x="184" y="342" width="211" height="21" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[www.usairways.com/baggage]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-47" positionType="Float" mode="Opaque" x="9" y="361" width="506" height="14" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-47" positionType="Float" mode="Opaque" x="9" y="364" width="506" height="14" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Apos 5 Dias]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="9" y="377" width="506" height="67" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="9" y="380" width="506" height="63" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -327,14 +328,14 @@ Na Europa, ligue 0080024567890.
 				</textElement>
 				<text><![CDATA[Este relatorio nao reconhece autoridade.
 
-A responsabilidade pela perda ou dano da bagagem e limitada, em conformidade com as disposicoes aplicaveis nos Termos de Transporte Aereo da US Airways. A informacao e encontrada em www.usairways.com. 
+A responsabilidade pela perda ou dano da bagagem e limitada, em conformidade com as disposicoes aplicaveis nos Termos de Transporte Aereo da US Airways. A informacao e encontrada em www.usairways.com.
 
-US Airways nao assume responsabilidades por objectos valiosos, items comerciais, incluindo mas nao limitados a: dinheiro, papeis negociaveis, titulis, documentos de negocios insubstituiveis, manuscritos, livros, publicacoes, equipamentos fotograficos ou electronicos, intrumentos musicais joias, pratas, metais preciosos, peles, antiguidades, artefactos, pinturas, e outras obras de arte, e amostras de medicamentos que salvam vidas em bagagem registada e bagagem de mao.  
+US Airways nao assume responsabilidades por objectos valiosos, items comerciais, incluindo mas nao limitados a: dinheiro, papeis negociaveis, titulis, documentos de negocios insubstituiveis, manuscritos, livros, publicacoes, equipamentos fotograficos ou electronicos, intrumentos musicais joias, pratas, metais preciosos, peles, antiguidades, artefactos, pinturas, e outras obras de arte, e amostras de medicamentos que salvam vidas em bagagem registada e bagagem de mao.
 
 A menos que o valor seja declarado, a responsabilidade por danos resultante de perda, atraso, ou dano da bagagem, a tutela da US Airways e limitada a USD 3.3300 para viagens domesticas da US Airways. Para viagens internacionais onde incluam pontos domesticos, por favor consulte os Termos de Transporte aereo da US Airways
 ]]></text>
 			</staticText>
-			<image scaleImage="RetainShape" hyperlinkType="None">
+			<image scaleImage="RetainShape">
 				<reportElement key="image-2" x="474" y="690" width="76" height="38">
 					<printWhenExpression><![CDATA[new Boolean($P{powered}.length() > 0)]]></printWhenExpression>
 				</reportElement>
@@ -346,7 +347,7 @@ A menos que o valor seja declarado, a responsabilidade por danos resultante de p
 				</box>
 				<imageExpression class="java.lang.String"><![CDATA[$P{powered}]]></imageExpression>
 			</image>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-54" mode="Opaque" x="470" y="444" width="71" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -366,7 +367,7 @@ A menos que o valor seja declarado, a responsabilidade por danos resultante de p
 				</textElement>
 				<text><![CDATA[Localizacao:]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-56" mode="Opaque" x="269" y="444" width="96" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>

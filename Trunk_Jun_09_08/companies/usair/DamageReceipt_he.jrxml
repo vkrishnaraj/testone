@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-
-<jasperReport name="DamageReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DamageReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -36,19 +37,19 @@
 		<![CDATA[select incident_ID from incident]]>
 	</queryString>
 	<background>
-		<band/>
+		<band />
 	</background>
 	<title>
-		<band/>
+		<band />
 	</title>
 	<pageHeader>
-		<band height="729">
+		<band height="729" >
 			<staticText>
 				<reportElement key="textField-1" mode="Opaque" x="193" y="22" width="313" height="23" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[טופס נזק לכבודה]]></text>
+				<text><![CDATA[×˜×•×¤×¡ × ×–×§ ×œ×›×‘×•×“×”]]></text>
 			</staticText>
 			<line>
 				<reportElement key="line-1" mode="Opaque" x="2" y="77" width="549" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -74,7 +75,7 @@
 					<pen lineWidth="2.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-21" mode="Opaque" x="11" y="85" width="130" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -87,7 +88,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{prettydate}]]></textFieldExpression>
 			</textField>
-			<image scaleImage="RetainShape" hyperlinkType="None">
+			<image scaleImage="RetainShape">
 				<reportElement key="image-1" x="3" y="2" width="137" height="62">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
@@ -105,9 +106,9 @@
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[
-באותו זמן בו דיווחתם על הנזק שנגרם לכבודתכם בדלפק יו.אס.איירוייס בשדה התעופה, נציג החברה צריך היה להציג בפניכם פתרון שהכי יתאים לצרכיכם. ברוב המקרים נציג יו.אס.איירוייס יציע לכם שהכבודה תתוקן על ידי 
-Rynn’s Luggage חברה מקצועית
-אם כבודתכם נשלחה לתיקון, הנכם יכולים לבדוק את מצב הטיפול בכבודה באתר
+×‘×�×•×ª×• ×–×ž×Ÿ ×‘×• ×“×™×•×•×—×ª×� ×¢×œ ×”× ×–×§ ×©× ×’×¨×� ×œ×›×‘×•×“×ª×›×� ×‘×“×œ×¤×§ ×™×•.×�×¡.×�×™×™×¨×•×™×™×¡ ×‘×©×“×” ×”×ª×¢×•×¤×”, × ×¦×™×’ ×”×—×‘×¨×” ×¦×¨×™×š ×”×™×” ×œ×”×¦×™×’ ×‘×¤× ×™×›×� ×¤×ª×¨×•×Ÿ ×©×”×›×™ ×™×ª×�×™×� ×œ×¦×¨×›×™×›×�. ×‘×¨×•×‘ ×”×ž×§×¨×™×� × ×¦×™×’ ×™×•.×�×¡.×�×™×™×¨×•×™×™×¡ ×™×¦×™×¢ ×œ×›×� ×©×”×›×‘×•×“×” ×ª×ª×•×§×Ÿ ×¢×œ ×™×“×™
+Rynnâ€™s Luggage ×—×‘×¨×” ×ž×§×¦×•×¢×™×ª
+×�×� ×›×‘×•×“×ª×›×� × ×©×œ×—×” ×œ×ª×™×§×•×Ÿ, ×”× ×›×� ×™×›×•×œ×™×� ×œ×‘×“×•×§ ×�×ª ×ž×¦×‘ ×”×˜×™×¤×•×œ ×‘×›×‘×•×“×” ×‘×�×ª×¨
 ]]></text>
 			</staticText>
 			<staticText>
@@ -115,11 +116,12 @@ Rynn’s Luggage חברה מקצועית
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[לקבלת עזרה בתהליך, ניתן ליצור קשר:
-US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
+				<text><![CDATA[×œ×§×‘×œ×ª ×¢×–×¨×” ×‘×ª×”×œ×™×š, × ×™×ª×Ÿ ×œ×™×¦×•×¨ ×§×©×¨:
+US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771
+×œ× ×•×¡×¢×™×� ×”×˜×¡×™×� ×œ×�×™×¨×•×¤×”, ×˜×œ×¤×•×Ÿ â€“ 008-00245607890
 
-כאשר יו.אס.איירוייס מוציאה לפועל נוהל סטנדרטי לטיפול בלקוח, החברה אינה אחראית לנסיבות בהם כבודה ניזוקה עקב בלאי טבעי. יו.אס.איירוייס אינה אחראית לנזק כגון: סריטות, שחיקות, שקעים, כתמים, קרעים ונזק לגלגלים וידיות נשלפות עקב בלאי טיבעי.
-אנו שוב מתנצלים על הטיפול הכושל בכבודתכם ואנו יודעים שנוכל לפתור זאת לשביעות רצונכם.
+×›×�×©×¨ ×™×•.×�×¡.×�×™×™×¨×•×™×™×¡ ×ž×•×¦×™×�×” ×œ×¤×•×¢×œ × ×•×”×œ ×¡×˜× ×“×¨×˜×™ ×œ×˜×™×¤×•×œ ×‘×œ×§×•×—, ×”×—×‘×¨×” ×�×™× ×” ×�×—×¨×�×™×ª ×œ× ×¡×™×‘×•×ª ×‘×”×� ×›×‘×•×“×” × ×™×–×•×§×” ×¢×§×‘ ×‘×œ×�×™ ×˜×‘×¢×™. ×™×•.×�×¡.×�×™×™×¨×•×™×™×¡ ×�×™× ×” ×�×—×¨×�×™×ª ×œ× ×–×§ ×›×’×•×Ÿ: ×¡×¨×™×˜×•×ª, ×©×—×™×§×•×ª, ×©×§×¢×™×�, ×›×ª×ž×™×�, ×§×¨×¢×™×� ×•× ×–×§ ×œ×’×œ×’×œ×™×� ×•×™×“×™×•×ª × ×©×œ×¤×•×ª ×¢×§×‘ ×‘×œ×�×™ ×˜×™×‘×¢×™.
+×�× ×• ×©×•×‘ ×ž×ª× ×¦×œ×™×� ×¢×œ ×”×˜×™×¤×•×œ ×”×›×•×©×œ ×‘×›×‘×•×“×ª×›×� ×•×�× ×• ×™×•×“×¢×™×� ×©× ×•×›×œ ×œ×¤×ª×•×¨ ×–×�×ª ×œ×©×‘×™×¢×•×ª ×¨×¦×•× ×›×�.
 ]]></text>
 			</staticText>
 			<staticText>
@@ -129,7 +131,7 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 				</textElement>
 				<text><![CDATA[Netbags.com]]></text>
 			</staticText>
-			<image scaleImage="RetainShape" hyperlinkType="None">
+			<image scaleImage="RetainShape">
 				<reportElement key="image-2" x="475" y="690" width="76" height="38">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
@@ -146,16 +148,16 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[כתובת 1 :]]></text>
+				<text><![CDATA[×›×ª×•×‘×ª 1 :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-26" mode="Opaque" x="442" y="500" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[עיר, מדינה, מיקוד:]]></text>
+				<text><![CDATA[×¢×™×¨, ×ž×“×™× ×”, ×ž×™×§×•×“:]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-56" mode="Opaque" x="203" y="411" width="86" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -173,9 +175,9 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[טלפון:]]></text>
+				<text><![CDATA[×˜×œ×¤×•×Ÿ:]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-10" mode="Opaque" x="349" y="412" width="101" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -188,7 +190,7 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-11" mode="Opaque" x="77" y="429" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -201,7 +203,7 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-54" mode="Opaque" x="35" y="411" width="42" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -214,7 +216,7 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{stationname}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-13" mode="Opaque" x="70" y="467" width="345" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -232,23 +234,23 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[תאריך:]]></text>
+				<text><![CDATA[×ª×�×¨×™×š:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-28" mode="Opaque" x="442" y="485" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[כתובת 2 :]]></text>
+				<text><![CDATA[×›×ª×•×‘×ª 2 :]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-27" mode="Opaque" x="442" y="518" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[מספר תג :]]></text>
+				<text><![CDATA[×ž×¡×¤×¨ ×ª×’ :]]></text>
 			</staticText>
-			<textField pattern="(###)###-####" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="(###)###-####" isBlankWhenNull="false">
 				<reportElement key="textField-12" mode="Opaque" x="250" y="451" width="165" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -266,16 +268,16 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[מידע על תלונת נוסע:]]></text>
+				<text><![CDATA[×ž×™×“×¢ ×¢×œ ×ª×œ×•× ×ª × ×•×¡×¢:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-23" mode="Opaque" x="435" y="432" width="101" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[שם הנוסע:]]></text>
+				<text><![CDATA[×©×� ×”× ×•×¡×¢:]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-16" mode="Opaque" x="72" y="518" width="343" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -293,9 +295,9 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[מידע נוסף:]]></text>
+				<text><![CDATA[×ž×™×“×¢ × ×•×¡×£:]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-15" mode="Opaque" x="74" y="500" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -313,33 +315,33 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[מקום פתיחת התלונה:]]></text>
+				<text><![CDATA[×ž×§×•×� ×¤×ª×™×—×ª ×”×ª×œ×•× ×”:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-22" mode="Opaque" x="462" y="412" width="74" height="17" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[מספר תלונה:]]></text>
+				<text><![CDATA[×ž×¡×¤×¨ ×ª×œ×•× ×”:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-50" mode="Opaque" x="31" y="551" width="506" height="106" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[ * הטופס הנ"ל אינו מהווה אחריות.
- * האחריות לאובדן או נזק למזוודה הינה מוגבלת בהתאם לתקנות יו.אס.איירוייס, תנאי נסיעה,
-    WWW.USAIRWAYS.COM     המידה נמצא באתר
- * יו.אס.איירוייס אינה נוטלת על עצמה אחריות לדברי ערך או פריטים מסחריים כולל, אבל לא מוגבל ל-
-    כסף, ניירות סחירים, בטחונות, מסמכים עיסקיים, ספרים, כתבי יד, ציוד צילום או ציוד חשמלי, כלי נגינה,
-    תכשיטים, כלי כסף, מתכות יקרות ערך, פרוות, עתיקות, יצירות אומנות, ציורים ועבודות אומנות אחרות, 
-    תרופות מצילות חיים או דוגמיות, אשר נישלחים בכבודת בטן או בכבודת יד.
- * אחריות על נזק מוכח כתוצאה מאובדן, איחור או נזק למזוודה, כשהמזוודה בחזקת יו.אס.איירוייס מוגבל
-    ל- 3,300 $ לנסיעה בתוך ארה"ב, אלא אם כן הוצהר על נזק חריג.
-    ליעדים מחוץ לארה"ב (כולל נסיעות חלקיות בתוך ארה"ב) ניתן לפנות ליו.אס.איירוייס, תנאי נסיעה
+				<text><![CDATA[ * ×”×˜×•×¤×¡ ×”× "×œ ×�×™× ×• ×ž×”×•×•×” ×�×—×¨×™×•×ª.
+ * ×”×�×—×¨×™×•×ª ×œ×�×•×‘×“×Ÿ ×�×• × ×–×§ ×œ×ž×–×•×•×“×” ×”×™× ×” ×ž×•×’×‘×œ×ª ×‘×”×ª×�×� ×œ×ª×§× ×•×ª ×™×•.×�×¡.×�×™×™×¨×•×™×™×¡, ×ª× ×�×™ × ×¡×™×¢×”,
+    WWW.USAIRWAYS.COM     ×”×ž×™×“×” × ×ž×¦×� ×‘×�×ª×¨
+ * ×™×•.×�×¡.×�×™×™×¨×•×™×™×¡ ×�×™× ×” × ×•×˜×œ×ª ×¢×œ ×¢×¦×ž×” ×�×—×¨×™×•×ª ×œ×“×‘×¨×™ ×¢×¨×š ×�×• ×¤×¨×™×˜×™×� ×ž×¡×—×¨×™×™×� ×›×•×œ×œ, ×�×‘×œ ×œ×� ×ž×•×’×‘×œ ×œ-
+    ×›×¡×£, × ×™×™×¨×•×ª ×¡×—×™×¨×™×�, ×‘×˜×—×•× ×•×ª, ×ž×¡×ž×›×™×� ×¢×™×¡×§×™×™×�, ×¡×¤×¨×™×�, ×›×ª×‘×™ ×™×“, ×¦×™×•×“ ×¦×™×œ×•×� ×�×• ×¦×™×•×“ ×—×©×ž×œ×™, ×›×œ×™ × ×’×™× ×”,
+    ×ª×›×©×™×˜×™×�, ×›×œ×™ ×›×¡×£, ×ž×ª×›×•×ª ×™×§×¨×•×ª ×¢×¨×š, ×¤×¨×•×•×ª, ×¢×ª×™×§×•×ª, ×™×¦×™×¨×•×ª ×�×•×ž× ×•×ª, ×¦×™×•×¨×™×� ×•×¢×‘×•×“×•×ª ×�×•×ž× ×•×ª ×�×—×¨×•×ª,
+    ×ª×¨×•×¤×•×ª ×ž×¦×™×œ×•×ª ×—×™×™×� ×�×• ×“×•×’×ž×™×•×ª, ×�×©×¨ × ×™×©×œ×—×™×� ×‘×›×‘×•×“×ª ×‘×˜×Ÿ ×�×• ×‘×›×‘×•×“×ª ×™×“.
+ * ×�×—×¨×™×•×ª ×¢×œ × ×–×§ ×ž×•×›×— ×›×ª×•×¦×�×” ×ž×�×•×‘×“×Ÿ, ×�×™×—×•×¨ ×�×• × ×–×§ ×œ×ž×–×•×•×“×”, ×›×©×”×ž×–×•×•×“×” ×‘×—×–×§×ª ×™×•.×�×¡.×�×™×™×¨×•×™×™×¡ ×ž×•×’×‘×œ
+    ×œ- 3,300 $ ×œ× ×¡×™×¢×” ×‘×ª×•×š ×�×¨×”"×‘, ×�×œ×� ×�×� ×›×Ÿ ×”×•×¦×”×¨ ×¢×œ × ×–×§ ×—×¨×™×’.
+    ×œ×™×¢×“×™×� ×ž×—×•×¥ ×œ×�×¨×”"×‘ (×›×•×œ×œ × ×¡×™×¢×•×ª ×—×œ×§×™×•×ª ×‘×ª×•×š ×�×¨×”"×‘) × ×™×ª×Ÿ ×œ×¤× ×•×ª ×œ×™×•.×�×¡.×�×™×™×¨×•×™×™×¡, ×ª× ×�×™ × ×¡×™×¢×”
 ]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-14" mode="Opaque" x="71" y="482" width="344" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -355,18 +357,18 @@ US AIRWAYS BAGGAGE CALL CENTER 1-800-371-4771  Europe:  00800 245 678 90
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band/>
+		<band />
 	</columnHeader>
 	<detail>
-		<band/>
+		<band />
 	</detail>
 	<columnFooter>
-		<band/>
+		<band />
 	</columnFooter>
 	<pageFooter>
-		<band/>
+		<band />
 	</pageFooter>
 	<summary>
-		<band/>
+		<band />
 	</summary>
 </jasperReport>

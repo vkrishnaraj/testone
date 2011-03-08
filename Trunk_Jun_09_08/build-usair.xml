@@ -70,6 +70,8 @@
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_es.jrxml" />
+
 		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_he.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_he.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_he.jrxml" />

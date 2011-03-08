@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-
-<jasperReport name="DamageReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DamageReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -33,13 +34,13 @@
 	<parameter name="stationname" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="powered" class="java.lang.String" isForPrompting="false"/>
 	<background>
-		<band/>
+		<band />
 	</background>
 	<title>
-		<band/>
+		<band />
 	</title>
 	<pageHeader>
-		<band height="729">
+		<band height="729" >
 			<staticText>
 				<reportElement key="textField-1" mode="Opaque" x="193" y="22" width="313" height="23" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
@@ -59,7 +60,7 @@
 					<pen lineWidth="2.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-2" mode="Opaque" x="270" y="405" width="96" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -72,7 +73,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{createdate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-4" mode="Opaque" x="125" y="405" width="101" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -85,7 +86,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-5" mode="Opaque" x="125" y="422" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -98,7 +99,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
-			<textField pattern="(###)###-####" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="(###)###-####" isBlankWhenNull="false">
 				<reportElement key="textField-6" mode="Opaque" x="125" y="439" width="165" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -111,7 +112,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{phone}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-7" mode="Opaque" x="125" y="457" width="345" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -124,7 +125,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-8" mode="Opaque" x="125" y="474" width="344" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -137,7 +138,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address2}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-9" mode="Opaque" x="140" y="492" width="326" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -150,7 +151,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{city_st_zip}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-10" mode="Opaque" x="175" y="511" width="293" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -238,7 +239,7 @@
 				</textElement>
 				<text><![CDATA[Morada 2:]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-21" mode="Opaque" x="11" y="85" width="130" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -251,7 +252,7 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{prettydate}]]></textFieldExpression>
 			</textField>
-			<image scaleImage="RetainShape" hyperlinkType="None">
+			<image scaleImage="RetainShape">
 				<reportElement key="image-1" x="3" y="2" width="137" height="62">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
@@ -280,7 +281,7 @@ Na altura em que reportou o dano na sua bagagem pessoalmente a US Airways, no ae
 				<text><![CDATA[Se necessitar de assistencia durente este processo, pode contactar a US em:
 
 US AIRWAYS BAGGAGE CALL CENTRE 1-800-371-4771
-Europa 00800 245 678 90
+Para passageiros viajando com destino a Europa, por favor contactar US Airways no 0800 002 456 7890
 
 Quando a US Airways realiza o seu processo normal de tratamento de bagagem, nao devera ser responsabilizada pelo desgaste normal da mesma. A US Airways nao assume responsabilidade por danos como arranhoes, manchas, cortes e danos nas rodas e nas pegas manuais que possam resultar de desgaste normal.
 
@@ -308,14 +309,14 @@ Mais uma vez pedimos desculpa pelo incomodo e sabemos que podemos resolver esta 
 				</textElement>
 				<text><![CDATA[Este relatorio nao reconhece autoridade.
 
-A responsabilidade pela perda ou dano da bagagem e limitada, em conformidade com as disposicoes aplicaveis nos Termos de Transporte Aereo da US Airways. A informacao e encontrada em www.usairways.com. 
+A responsabilidade pela perda ou dano da bagagem e limitada, em conformidade com as disposicoes aplicaveis nos Termos de Transporte Aereo da US Airways. A informacao e encontrada em www.usairways.com.
 
-US Airways nao assume responsabilidades por objectos valiosos, items comerciais, incluindo mas nao limitados a: dinheiro, papeis negociaveis, titulis, documentos de negocios insubstituiveis, manuscritos, livros, publicacoes, equipamentos fotograficos ou electronicos, intrumentos musicais joias, pratas, metais preciosos, peles, antiguidades, artefactos, pinturas, e outras obras de arte, e amostras de medicamentos que salvam vidas em bagagem registada e bagagem de mao.  
+US Airways nao assume responsabilidades por objectos valiosos, items comerciais, incluindo mas nao limitados a: dinheiro, papeis negociaveis, titulis, documentos de negocios insubstituiveis, manuscritos, livros, publicacoes, equipamentos fotograficos ou electronicos, intrumentos musicais joias, pratas, metais preciosos, peles, antiguidades, artefactos, pinturas, e outras obras de arte, e amostras de medicamentos que salvam vidas em bagagem registada e bagagem de mao.
 
 A menos que o valor seja declarado, a responsabilidade por danos resultante de perda, atraso, ou dano da bagagem, a tutela da US Airways e limitada a USD 3.3300 para viagens domesticas da US Airways. Para viagens internacionais onde incluam pontos domesticos, por favor consulte os Termos de Transporte aereo da US Airways
 ]]></text>
 			</staticText>
-			<image scaleImage="RetainShape" hyperlinkType="None">
+			<image scaleImage="RetainShape">
 				<reportElement key="image-2" x="475" y="690" width="76" height="38">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
@@ -327,7 +328,7 @@ A menos que o valor seja declarado, a responsabilidade por danos resultante de p
 				</box>
 				<imageExpression class="java.lang.String"><![CDATA[$P{powered}]]></imageExpression>
 			</image>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-37" mode="Opaque" x="471" y="405" width="71" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -350,18 +351,18 @@ A menos que o valor seja declarado, a responsabilidade por danos resultante de p
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band/>
+		<band />
 	</columnHeader>
 	<detail>
-		<band/>
+		<band />
 	</detail>
 	<columnFooter>
-		<band/>
+		<band />
 	</columnFooter>
 	<pageFooter>
-		<band/>
+		<band />
 	</pageFooter>
 	<summary>
-		<band/>
+		<band />
 	</summary>
 </jasperReport>
