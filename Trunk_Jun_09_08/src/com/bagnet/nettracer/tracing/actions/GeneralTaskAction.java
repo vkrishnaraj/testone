@@ -208,6 +208,8 @@ public class GeneralTaskAction extends Action{
 						if(MorningDutiesUtil.lockTask(gtask)!=null){
 							Status s = new Status();
 							s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
+							gtask.setStatus(s);
+							gtask.setAssigned_agent(user);
 							TaskManagerBMO.saveTask(gtask);
 						}else{
 							gtask = null;

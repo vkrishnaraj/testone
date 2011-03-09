@@ -261,6 +261,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 					Status s = new Status();
 					s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
 					gtask.setStatus(s);
+					gtask.setAssigned_agent(agent);
 					TaskManagerBMO.saveTask(gtask);
 					return gtask;
 				}
