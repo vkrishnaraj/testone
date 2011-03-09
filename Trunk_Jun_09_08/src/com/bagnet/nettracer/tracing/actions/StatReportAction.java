@@ -158,6 +158,12 @@ public class StatReportAction extends Action {
 			return (mapping.findForward(TracingConstants.STAT_REPORT_MAIN));
 		} else {
 			daform.init();
+			//set custom default outputtype selection
+			if (customreportnum != null && reportnum != null 
+					&&new Integer(customreportnum).intValue() == ReportingConstants.RPT_20_CUSTOM_101 
+					&& new Integer(reportnum).intValue() == ReportingConstants.RPT_20){
+				daform.setOutputtype(2);//default to xls
+			}
 		}
 
 		daform.setReportnum(Integer.valueOf(reportnum).intValue());

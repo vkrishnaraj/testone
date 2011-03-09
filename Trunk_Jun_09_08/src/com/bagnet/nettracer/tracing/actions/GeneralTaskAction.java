@@ -13,10 +13,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.TaskManagerBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
 import com.bagnet.nettracer.tracing.forms.GeneralTaskForm;
@@ -35,6 +37,19 @@ public class GeneralTaskAction extends Action{
 		GeneralTaskForm theForm = (GeneralTaskForm)form;
 		
 		Agent user = (Agent) session.getAttribute("user");
+		
+		if(session.getAttribute("sessionTaskManagerOriginalStation") != null){
+			Station originalStation = (Station)session.getAttribute("sessionTaskManagerOriginalStation");
+			if(originalStation != null){
+				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_VIEW, user)) {
+					session.setAttribute("cbroStationID", (new Integer(originalStation.getStation_ID())).toString());
+					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_MGMT, user)) {
+						user.setStation(originalStation);
+					}
+				}
+			}
+		}
+		
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
 				+ ".do", user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
@@ -56,10 +71,13 @@ public class GeneralTaskAction extends Action{
 			//check first to see if agent has a task currently opened
 			MorningDutiesTask hasTask = (MorningDutiesTask)MorningDutiesUtil.hasAssignedTask(user);
 			if(hasTask != null){
+				request.setAttribute("errorMsg", "generaltask.task.in.progress");
 				session.setAttribute("day", getDay(hasTask));
 				session.setAttribute("sessionTaskContainer", hasTask);
 				session.setAttribute("sessionTaskStartTime", new Date());
-				response.sendRedirect("searchIncident.do?incident=" + hasTask.getIncident().getIncident_ID());
+				request.setAttribute("Incident_ID", hasTask.getIncident().getIncident_ID());
+				return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));
+//				response.sendRedirect("searchIncident.do?incident=" + hasTask.getIncident().getIncident_ID());
 			}
 			
 			Integer i = new Integer(request.getParameter("tasklist"));
@@ -113,6 +131,7 @@ public class GeneralTaskAction extends Action{
 		}
 
 		if(request.getParameter("complete") != null){
+			
 			boolean success = true;
 //			System.out.println("complete");
 			//validate
@@ -171,7 +190,8 @@ public class GeneralTaskAction extends Action{
 			if(hasTask != null){
 				session.setAttribute("sessionTaskContainer", hasTask);
 				session.setAttribute("sessionTaskStartTime", new Date());
-				response.sendRedirect("searchIncident.do?incident=" + hasTask.getIncident().getIncident_ID());
+//				response.sendRedirect("searchIncident.do?incident=" + hasTask.getIncident().getIncident_ID());
+				response.sendRedirect("GeneralTask.do?loadIncident=" + hasTask.getIncident().getIncident_ID());
 			}
 			
 			MorningDutiesTask gtask = null;
@@ -220,9 +240,28 @@ public class GeneralTaskAction extends Action{
 			}
 			session.setAttribute("sessionTaskContainer", gtask);
 			session.setAttribute("sessionTaskStartTime", new Date());
-			response.sendRedirect("searchIncident.do?incident=" + gtask.getIncident().getIncident_ID());
+//			response.sendRedirect("searchIncident.do?incident=" + gtask.getIncident().getIncident_ID());
+			response.sendRedirect("GeneralTask.do?loadIncident=" + gtask.getIncident().getIncident_ID());
+			return null;
 		}
 		
+		if(request.getParameter("loadIncident") != null){
+			System.out.println("loading the incident");
+			String incident_ID = request.getParameter("loadIncident");
+			MorningDutiesTask t = (MorningDutiesTask)session.getAttribute("sessionTaskContainer");
+			if(t != null && t.getIncident() != null && t.getIncident().getStationassigned() != null){
+				Station station = t.getIncident().getStationassigned();
+				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_VIEW, user)) {
+					session.setAttribute("cbroStationID", (new Integer(station.getStation_ID())).toString());
+					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_MGMT, user)) {
+						session.setAttribute("sessionTaskManagerOriginalStation", user.getStation());
+						user.setStation(station);
+					}
+				}
+			}
+			response.sendRedirect("searchIncident.do?incident=" + incident_ID);
+			return null;
+		}
 		return null;
 	}
 

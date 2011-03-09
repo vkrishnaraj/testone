@@ -36,6 +36,8 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask;
 import com.bagnet.nettracer.tracing.dto.ActivityDTO;
 import com.bagnet.nettracer.tracing.dto.PcnSearchDTO;
@@ -61,6 +63,7 @@ import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
 public class LogonAction extends Action {
 
@@ -240,6 +243,21 @@ public class LogonAction extends Action {
 				}
 			}
 		}
+		
+		//check if the agent has any outstanding MorningDutiesTask
+		//TODO this is a US Air specific task, check to see of this can be a General Task function
+		
+		
+		ArrayList <GeneralTask> alertList = new ArrayList<GeneralTask>();
+		
+		MorningDutiesTask hasTask = (MorningDutiesTask)MorningDutiesUtil.hasAssignedTask(agent);
+		if(hasTask != null){
+			session.setAttribute("sessionTaskContainer", hasTask);;
+			alertList.add(hasTask);
+		}
+		
+		request.setAttribute("taskManagerAlerts", alertList);
+		
 
 		if (taskList != null && agent != null) {
 			ArrayList list = new ArrayList();

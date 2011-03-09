@@ -524,21 +524,22 @@ public class MBRActionUtils {
 			theform.setStationassigned_ID(user.getStation().getStation_ID());
 			//theform.setFaultstation(new Station());
 			
-			// MJS: set the fault station
+			// MLL: making blanket change, fault station is always going to be agent station
 			theform.setFaultstation(new Station());
-			int defaultStationCode = theform.getAgent().getStation().getCompany().getVariable().getDefault_station_code();
-			if (defaultStationCode > 0) {
-				theform.getFaultstation().setStation_ID(defaultStationCode);
-			} else {
-				theform.getFaultstation().setStation_ID(theform.getStationassigned().getStation_ID());
-			}
+			theform.getFaultstation().setStation_ID(user.getStation().getStation_ID());
 			
 			// MJS: set the loss code
 			int defaultLossCode = theform.getAgent().getStation().getCompany().getVariable().getDefault_loss_code();
-			if (defaultLossCode > 0) {
-				theform.setLoss_code(defaultLossCode);
+			if(type == TracingConstants.DAMAGED_BAG && PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_DEFAULT_DAM_CODE) > 0){
+				theform.setLoss_code(PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_DEFAULT_DAM_CODE));
+			} else if (type == TracingConstants.MISSING_ARTICLES && PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_DEFAULT_PIL_CODE) > 0){
+				theform.setLoss_code(PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_DEFAULT_PIL_CODE));
 			} else {
-				theform.setLoss_code(0);
+				if (defaultLossCode > 0) {
+					theform.setLoss_code(defaultLossCode);
+				} else {
+					theform.setLoss_code(0);
+				}
 			}
 			
 			// set agent

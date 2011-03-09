@@ -116,4 +116,9 @@ public abstract class GeneralTask {
 	public String getKey() {
 		return null;
 	}
+	
+	@Transient
+	public String getAlert() {
+		return "Example";
+	}
 }

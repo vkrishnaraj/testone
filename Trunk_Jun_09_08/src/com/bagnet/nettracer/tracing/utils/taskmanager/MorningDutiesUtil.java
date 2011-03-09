@@ -260,6 +260,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 				if(MorningDutiesUtil.lockTask(gtask)!=null){
 					Status s = new Status();
 					s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
+					gtask.setStatus(s);
 					TaskManagerBMO.saveTask(gtask);
 					return gtask;
 				}
@@ -611,12 +612,13 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 			+ getDayTask(day) + " mdt "
 			+ "where 1=1 "
 			+ "and mdt.assigned_agent = :agentID "
-			+ "and mdt.status = :status ";
+			+ "and (mdt.status = :statusPaused or mdt.status = :statusWorking)";
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(sql.toString());
 		q.setInteger("agentID", agent.getAgent_ID());
-		q.setLong("status", TracingConstants.TASK_MANAGER_PAUSED);
+		q.setLong("statusPaused", TracingConstants.TASK_MANAGER_PAUSED);
+		q.setLong("statusWorking", TracingConstants.TASK_MANAGER_WORKING);
 		List result = q.list();
 		sess.close();
 		return ((Long) result.get(0)).intValue();

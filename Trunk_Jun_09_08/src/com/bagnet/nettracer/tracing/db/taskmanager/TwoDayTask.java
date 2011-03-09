@@ -5,6 +5,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -25,5 +26,10 @@ public class TwoDayTask extends MorningDutiesTask {
 	@Transient
 	public String getKey() {
 		return "2";
+	}
+	@Transient
+	public String getAlert() {
+		String s = "Second Day Call currently in progress.  Continue working  <a href='GeneralTask.do?loadIncident=" + this.getIncident().getIncident_ID() + "'>" + this.getIncident().getIncident_ID() + "</a>";
+		return StringEscapeUtils.unescapeHtml(s);
 	}
 }

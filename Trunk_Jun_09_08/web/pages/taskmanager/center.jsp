@@ -8,6 +8,9 @@
 <%@ page import="org.apache.struts.action.DynaActionForm" %>
 <%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask" %>
+<%@ page import="java.util.Iterator" %>
+<%@ taglib prefix="nt" uri="http://nettracerTags"%> 
 
 <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <tr>
@@ -92,6 +95,23 @@
 
 				%>
 		
+		
+	
+		<center>
+		<h2>
+		<%
+			List list = (List)request.getAttribute("taskManagerAlerts");
+			if(list != null){
+				Iterator i = list.iterator();
+				while(i.hasNext()){
+					GeneralTask task = (GeneralTask)i.next();
+					out.println(task.getAlert());
+				}
+			
+			}
+		%>
+		</h2>
+		</center>
 		
 		
         <table class="form2" cellspacing="0" cellpadding="0">
