@@ -91,7 +91,10 @@
 
 	<service name="FoundPropertyService">
 		<port name="FoundPropertyServiceSOAP" binding="tns:FoundPropertyServiceSOAPBinding">
+			<!-- QA test URL  -->
 			<soap:address location="https://webservice-qa.worldtracer.aero/FoundPropertyService/0.1"/>
+			<!-- Production URL  -->
+			<!-- soap:address location="https://webservice.worldtracer.aero/FoundPropertyService/0.1"/>  -->
 		</port>
 	</service>
 </definitions>

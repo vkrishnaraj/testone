@@ -128,7 +128,10 @@
 	</binding>
 	<service name="RushBagService">
 		<port name="RushBagServiceSOAP" binding="tns:RushBagServiceSOAPBinding">
+			<!-- QA test URL  -->
 			<soap:address location="https://webservice-qa.worldtracer.aero/RushBagService/0.1"/>
+			<!-- Production URL  -->
+			<!-- soap:address location="https://webservice.worldtracer.aero/RushBagService/0.1"/>  -->
 		</port>
 	</service>
 </definitions>

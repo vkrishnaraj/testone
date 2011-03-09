@@ -15,6 +15,10 @@
 			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_TracingStateChangeRQ.xsd"/>
 			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ReadRetiredRecordRQ.xsd"/>
 			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_SearchRetiredRecordsRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_DeliveryOrderCreateRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_RecordReopenRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_RecordReassignRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_RecordSendRQ.xsd"/>
 		</xs:schema>
 	</types>
 	<message name="OnhandBagsCreateRQ">
@@ -55,6 +59,18 @@
 	</message>
 	<message name="SearchRetiredRecordsRQ">
 		<part name="request" element="wtr:WTR_SearchRetiredRecordsRQ"/>
+	</message>
+	<message name="DeliveryOrderCreateRQ">
+		<part name="request" element="wtr:WTR_DeliveryOrderCreateRQ"/>
+	</message>
+	<message name="RecordReopenRQ">
+		<part name="request" element="wtr:WTR_RecordReopenRQ"/>
+	</message>
+	<message name="RecordReassignRQ">
+		<part name="request" element="wtr:WTR_RecordReassignRQ"/>
+	</message>
+	<message name="RecordSendRQ">
+		<part name="request" element="wtr:WTR_RecordSendRQ"/>
 	</message>
 
 	<message name="StatusRS">
@@ -101,6 +117,22 @@
 		<operation name="SearchRetired">
 			<input message="tns:SearchRetiredRecordsRQ"/>
 			<output message="tns:BagsSearchRS"/>
+		</operation>
+		<operation name="CreateDeliveryOrder">
+			<input message="tns:DeliveryOrderCreateRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="Reopen">
+			<input message="tns:RecordReopenRQ"/>
+			<output message="tns:BagsCreateRS"/>
+		</operation>
+		<operation name="Reassign">
+			<input message="tns:RecordReassignRQ"/>
+			<output message="tns:BagsCreateRS"/>
+		</operation>
+		<operation name="Send">
+			<input message="tns:RecordSendRQ"/>
+			<output message="tns:StatusRS"/>
 		</operation>
 	</portType>
 
@@ -186,11 +218,46 @@
 				<soap:body use="literal"/>
 			</output>
 		</operation>
+		<operation name="CreateDeliveryOrder">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Reopen">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Reassign">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Send">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
 	</binding>
 
 	<service name="OnhandBagService">
 		<port name="OnhandBagServiceSOAP" binding="tns:OnhandBagServiceSOAPBinding">
+			<!-- QA test URL  -->
 			<soap:address location="https://webservice-qa.worldtracer.aero/OnhandBagService/0.1"/>
+			<!-- Production URL  -->
+			<!-- soap:address location="https://webservice.worldtracer.aero/OnhandBagService/0.1"/>  -->
 		</port>
 	</service>
 </definitions>

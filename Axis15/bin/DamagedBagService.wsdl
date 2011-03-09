@@ -13,6 +13,11 @@
 			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_CloseRecordsRQ.xsd"/>
 			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ReadRetiredRecordRQ.xsd"/>
 			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_SearchRetiredRecordsRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_ReactivateRetiredRecordRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_DeliveryOrderCreateRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_RecordReassignRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_RecordSendRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_NotifyPassengerRQ.xsd"/>
 		</xs:schema>
 	</types>
 	<message name="DamagedBagsCreateRQ">
@@ -45,6 +50,25 @@
 	<message name="SearchRetiredRecordsRQ">
 		<part name="request" element="wtr:WTR_SearchRetiredRecordsRQ"/>
 	</message>
+	<message name="ReactivateRetiredRecordRQ">
+		<part name="request" element="wtr:WTR_ReactivateRetiredRecordRQ"/>
+	</message>
+	<message name="DeliveryOrderCreateRQ">
+		<part name="request" element="wtr:WTR_DeliveryOrderCreateRQ"/>
+	</message>
+	<message name="RecordReassignRQ">
+		<part name="request" element="wtr:WTR_RecordReassignRQ"/>
+	</message>
+	<message name="RecordSendRQ">
+		<part name="request" element="wtr:WTR_RecordSendRQ"/>
+	</message>
+	<message name="NotifyPassengerRQ">
+		<part name="request" element="wtr:WTR_NotifyPassengerRQ"/>
+	</message>
+	<message name="RetiredDamagedBagsUpdateRQ">
+		<part name="request" element="wtr:WTR_RetiredDamagedBagsUpdateRQ"/>
+	</message>
+
 	<message name="StatusRS">
 		<part name="response" element="wtr:WTR_StatusRS"/>
 	</message>
@@ -77,6 +101,30 @@
 		<operation name="SearchRetired">
 			<input message="tns:SearchRetiredRecordsRQ"/>
 			<output message="tns:BagsSearchRS"/>
+		</operation>
+		<operation name="ReactivateRetired">
+			<input message="tns:ReactivateRetiredRecordRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="CreateDeliveryOrder">
+			<input message="tns:DeliveryOrderCreateRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="Reassign">
+			<input message="tns:RecordReassignRQ"/>
+			<output message="tns:BagsCreateRS"/>
+		</operation>
+		<operation name="Send">
+			<input message="tns:RecordSendRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="NotifyPassenger">
+			<input message="tns:NotifyPassengerRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="UpdateRetired">
+			<input message="tns:RetiredDamagedBagsUpdateRQ"/>
+			<output message="tns:StatusRS"/>
 		</operation>
 	</portType>
 
@@ -138,11 +186,62 @@
 				<soap:body use="literal"/>
 			</output>
 		</operation>
+		<operation name="ReactivateRetired">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="CreateDeliveryOrder">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Reassign">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="Send">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="NotifyPassenger">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="UpdateRetired">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
 	</binding>
 
 	<service name="DamagedBagService">
 		<port name="DamagedBagServiceSOAP" binding="tns:DamagedBagServiceSOAPBinding">
+			<!-- QA test URL  -->
 			<soap:address location="https://webservice-qa.worldtracer.aero/DamagedBagService/0.1"/>
+			<!-- Prodution URL  -->
+			<!-- soap:address location="https://webservice.worldtracer.aero/DamagedBagService/0.1"/>  -->
 		</port>
 	</service>
 </definitions>

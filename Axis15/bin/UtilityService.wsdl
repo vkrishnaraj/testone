@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.sita.aero/bag/wtr/UtilityService" xmlns:wtr="http://www.sita.aero/bag/wtr/2009/01" xmlns:xs="http://www.w3.org/2001/XMLSchema" name="UtilityService" targetNamespace="http://www.sita.aero/bag/wtr/UtilityService">
+	<types>
+		<xs:schema targetNamespace="http://www.sita.aero/bag/wtr/UtilityService">
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_TeletypeMsgSendRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_StatusRS.xsd"/>
+		</xs:schema>
+	</types>
+	
+	<message name="TeletypeMsgSendRQ">
+		<part element="wtr:WTR_TeletypeMsgSendRQ" name="request"/>
+	</message>
+
+	<message name="StatusRS">
+		<part element="wtr:WTR_StatusRS" name="response"/>
+	</message>
+
+	<portType name="UtilityService">
+		<operation name="SendTeletypeMsg">
+			<input message="tns:TeletypeMsgSendRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+	</portType>
+
+	<binding name="UtilityServiceSOAPBinding" type="tns:UtilityService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="SendTeletypeMsg">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+
+	<service name="UtilityService">
+		<port binding="tns:UtilityServiceSOAPBinding" name="UtilityServiceSOAP">
+			<!-- QA test URL  -->
+			<soap:address location="https://webservice-qa.worldtracer.aero/UtilityService/0.1"/>
+			<!-- Production URL  -->
+			<!-- soap:address location="https://webservice.worldtracer.aero/UtilityService/0.1"/>  -->
+		</port>
+	</service>
+</definitions>

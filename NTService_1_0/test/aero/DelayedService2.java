@@ -54,7 +54,7 @@ import aero.sita.www.bag.wtr._2009._01.WTRStatusRSDocument;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType.BaggageItinerary;
 import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument.WTRCloseRecordsRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument.WTRDelayedBagsCreateRQ;
-import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQDocument.WTRDelayedBagsRecUpdateRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQType;
 import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRQDocument.WTRInboxMessageCountRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRReadRecordRQDocument.WTRReadRecordRQ;
 import aero.sita.www.bag.wtr.delayedbagservice.DelayedBagServiceStub;

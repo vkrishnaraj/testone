@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://www.sita.aero/bag/wtr/InboxService" xmlns:wtr="http://www.sita.aero/bag/wtr/2009/01" xmlns:xs="http://www.w3.org/2001/XMLSchema" name="InboxService" targetNamespace="http://www.sita.aero/bag/wtr/InboxService">
+	<types>
+		<xs:schema targetNamespace="http://www.sita.aero/bag/wtr/InboxService">
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_InboxMessageCountRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_InboxMessageCountRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_InboxMessageEraseRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_InboxMessageReadRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_InboxMessageReadRS.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_InboxMessageSendRQ.xsd"/>
+			<xs:import namespace="http://www.sita.aero/bag/wtr/2009/01" schemaLocation="../xsd/WTR_StatusRS.xsd"/>
+		</xs:schema>
+	</types>
+	
+	<message name="InboxMessageCountRQ">
+		<part element="wtr:WTR_InboxMessageCountRQ" name="request"/>
+	</message>
+	<message name="InboxMessageCountRS">
+		<part element="wtr:WTR_InboxMessageCountRS" name="response"/>
+	</message>
+
+	<message name="InboxMessageReadRQ">
+		<part element="wtr:WTR_InboxMessageReadRQ" name="request"/>
+	</message>
+	<message name="InboxMessageReadRS">
+		<part element="wtr:WTR_InboxMessageReadRS" name="response"/>
+	</message>
+
+	<message name="InboxMessageEraseRQ">
+		<part element="wtr:WTR_InboxMessageEraseRQ" name="request"/>
+	</message>
+
+	<message name="InboxMessageSendRQ">
+		<part element="wtr:WTR_InboxMessageSendRQ" name="request"/>
+	</message>
+
+	<message name="StatusRS">
+		<part element="wtr:WTR_StatusRS" name="response"/>
+	</message>
+
+	<portType name="InboxService">
+		<operation name="GetMessageCount">
+			<input message="tns:InboxMessageCountRQ"/>
+			<output message="tns:InboxMessageCountRS"/>
+		</operation>
+		<operation name="ReadMessages">
+			<input message="tns:InboxMessageReadRQ"/>
+			<output message="tns:InboxMessageReadRS"/>
+		</operation>
+		<operation name="EraseMessages">
+			<input message="tns:InboxMessageEraseRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+		<operation name="SendMessage">
+			<input message="tns:InboxMessageSendRQ"/>
+			<output message="tns:StatusRS"/>
+		</operation>
+	</portType>
+
+	<binding name="InboxServiceSOAPBinding" type="tns:InboxService">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="GetMessageCount">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="ReadMessages">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="EraseMessages">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+		<operation name="SendMessage">
+			<input>
+				<soap:body use="literal"/>
+			</input>
+			<output>
+				<soap:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+
+	<service name="InboxService">
+		<port binding="tns:InboxServiceSOAPBinding" name="InboxServiceSOAP">
+			<!-- QA test URL  -->
+			<soap:address location="https://webservice-qa.worldtracer.aero/InboxService/0.1"/>
+			<!-- Production URL  -->
+			<!-- soap:address location="https://webservice.worldtracer.aero/InboxService/0.1"/>  -->
+		</port>
+	</service>
+</definitions>
