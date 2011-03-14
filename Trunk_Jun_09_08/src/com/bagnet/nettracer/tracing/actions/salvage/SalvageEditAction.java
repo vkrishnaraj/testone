@@ -62,7 +62,7 @@ public class SalvageEditAction extends CheckedAction {
 
 			// If the user is creating a new salvage from scratch, set up
 			// basic new salvage object, collections, objects.
-			salvage = createNewSalvage();
+			salvage = createNewSalvage(user.getCompanycode_ID());
 
 		} else if (salvageId != null) {
 
@@ -123,10 +123,13 @@ public class SalvageEditAction extends CheckedAction {
 		SalvageDAO.saveCompleteSalvage(salvage, a);
 	}
 
-	private Salvage createNewSalvage() {
+	private Salvage createNewSalvage(String companyCodeId) {
 		Salvage salvage;
 		salvage = new Salvage();
 		LinkedHashSet<SalvageBox> salvageBoxes = new LinkedHashSet<SalvageBox>();
+		
+		// Set the company code
+		salvage.setCompanyCodeId(companyCodeId);
 		
 		// Create default box
 		SalvageBox box = new SalvageBox();
@@ -159,7 +162,6 @@ public class SalvageEditAction extends CheckedAction {
 		salvage.setSalvageBoxes(salvageBoxes);
 		salvage.setOhdReferences(ohdReferences);
 		
-
 		return salvage;
 	}
 
