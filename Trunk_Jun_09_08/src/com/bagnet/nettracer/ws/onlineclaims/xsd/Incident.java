@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Incident extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Incident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sECD53D12A3B16E559E57ADA881AD63EA").resolveHandle("incident1c81type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Incident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s3120780053B2C9C6ED89C37135AF9582").resolveHandle("incident1c81type");
     
     /**
      * Gets the "authID" element
@@ -472,6 +472,116 @@ public interface Incident extends org.apache.xmlbeans.XmlObject
      * Unsets the "lastName" element
      */
     void unsetLastName();
+    
+    /**
+     * Gets the "membershipNumber" element
+     */
+    java.lang.String getMembershipNumber();
+    
+    /**
+     * Gets (as xml) the "membershipNumber" element
+     */
+    org.apache.xmlbeans.XmlString xgetMembershipNumber();
+    
+    /**
+     * Tests for nil "membershipNumber" element
+     */
+    boolean isNilMembershipNumber();
+    
+    /**
+     * True if has "membershipNumber" element
+     */
+    boolean isSetMembershipNumber();
+    
+    /**
+     * Sets the "membershipNumber" element
+     */
+    void setMembershipNumber(java.lang.String membershipNumber);
+    
+    /**
+     * Sets (as xml) the "membershipNumber" element
+     */
+    void xsetMembershipNumber(org.apache.xmlbeans.XmlString membershipNumber);
+    
+    /**
+     * Nils the "membershipNumber" element
+     */
+    void setNilMembershipNumber();
+    
+    /**
+     * Unsets the "membershipNumber" element
+     */
+    void unsetMembershipNumber();
+    
+    /**
+     * Gets the "membershipStatus" element
+     */
+    java.lang.String getMembershipStatus();
+    
+    /**
+     * Gets (as xml) the "membershipStatus" element
+     */
+    org.apache.xmlbeans.XmlString xgetMembershipStatus();
+    
+    /**
+     * Tests for nil "membershipStatus" element
+     */
+    boolean isNilMembershipStatus();
+    
+    /**
+     * True if has "membershipStatus" element
+     */
+    boolean isSetMembershipStatus();
+    
+    /**
+     * Sets the "membershipStatus" element
+     */
+    void setMembershipStatus(java.lang.String membershipStatus);
+    
+    /**
+     * Sets (as xml) the "membershipStatus" element
+     */
+    void xsetMembershipStatus(org.apache.xmlbeans.XmlString membershipStatus);
+    
+    /**
+     * Nils the "membershipStatus" element
+     */
+    void setNilMembershipStatus();
+    
+    /**
+     * Unsets the "membershipStatus" element
+     */
+    void unsetMembershipStatus();
+    
+    /**
+     * Gets the "numPassengers" element
+     */
+    int getNumPassengers();
+    
+    /**
+     * Gets (as xml) the "numPassengers" element
+     */
+    org.apache.xmlbeans.XmlInt xgetNumPassengers();
+    
+    /**
+     * True if has "numPassengers" element
+     */
+    boolean isSetNumPassengers();
+    
+    /**
+     * Sets the "numPassengers" element
+     */
+    void setNumPassengers(int numPassengers);
+    
+    /**
+     * Sets (as xml) the "numPassengers" element
+     */
+    void xsetNumPassengers(org.apache.xmlbeans.XmlInt numPassengers);
+    
+    /**
+     * Unsets the "numPassengers" element
+     */
+    void unsetNumPassengers();
     
     /**
      * Gets the "osi" element

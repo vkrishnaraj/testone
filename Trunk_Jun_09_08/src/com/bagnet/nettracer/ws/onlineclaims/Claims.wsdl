@@ -195,6 +195,9 @@
                     <xs:element minOccurs="0" name="firstName" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="itinerary" nillable="true" type="ax21:IncidentItinerary"/>
                     <xs:element minOccurs="0" name="lastName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="membershipNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="membershipStatus" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="numPassengers" type="xs:int"/>
                     <xs:element minOccurs="0" name="osi" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="phone" nillable="true" type="ax21:IncidentPhone"/>
                     <xs:element minOccurs="0" name="pnr" nillable="true" type="xs:string"/>
@@ -228,6 +231,7 @@
                     <xs:element minOccurs="0" name="departureCity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="departureDate" nillable="true" type="xs:date"/>
                     <xs:element minOccurs="0" name="flightNum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="type" type="xs:int"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="IncidentPhone">

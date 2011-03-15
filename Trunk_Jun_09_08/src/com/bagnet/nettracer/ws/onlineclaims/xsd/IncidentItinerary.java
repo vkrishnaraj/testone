@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface IncidentItinerary extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(IncidentItinerary.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sECD53D12A3B16E559E57ADA881AD63EA").resolveHandle("incidentitineraryb116type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(IncidentItinerary.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s3120780053B2C9C6ED89C37135AF9582").resolveHandle("incidentitineraryb116type");
     
     /**
      * Gets the "airline" element
@@ -257,6 +257,36 @@ public interface IncidentItinerary extends org.apache.xmlbeans.XmlObject
      * Unsets the "flightNum" element
      */
     void unsetFlightNum();
+    
+    /**
+     * Gets the "type" element
+     */
+    int getType();
+    
+    /**
+     * Gets (as xml) the "type" element
+     */
+    org.apache.xmlbeans.XmlInt xgetType();
+    
+    /**
+     * True if has "type" element
+     */
+    boolean isSetType();
+    
+    /**
+     * Sets the "type" element
+     */
+    void setType(int type);
+    
+    /**
+     * Sets (as xml) the "type" element
+     */
+    void xsetType(org.apache.xmlbeans.XmlInt type);
+    
+    /**
+     * Unsets the "type" element
+     */
+    void unsetType();
     
     /**
      * A factory class with static methods for creating instances

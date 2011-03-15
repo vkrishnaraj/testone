@@ -2,6 +2,7 @@ package com.bagnet.clients.us;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
+import com.bagnet.nettracer.tracing.db.OnlineIncidentAuthorization;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -166,6 +168,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 
 			SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
 			ProactiveNotification pcn = new ProactiveNotification();
+			OnlineIncidentAuthorization oia = new OnlineIncidentAuthorization();
 			
 			// If we have a valid-enough claim check number we can process it.
 			if (ohd_log.getOhd().getClaimnum() != null && ohd_log.getOhd().getClaimnum().trim().length() > 0) {
@@ -192,19 +195,26 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 					if (booking.getPassengers() != null && booking.getPassengers().sizeOfPassengerArray() > 0) {
 						Passenger pax = booking.getPassengers().getPassengerArray(0);
 						
+						int passIndex = 0;
+						int tempIndex = 0;
 						for(Passenger p: booking.getPassengers().getPassengerArray()) {
 							for (Baggage bag: p.getBaggageList().getBaggageArray()) {
 								if (bag.getBagTag().equalsIgnoreCase(ohd_log.getOhd().getClaimnum())) {
 									pax = p;
+									passIndex = tempIndex;
 									break;
 								}
 							}
+							tempIndex++;
 						}
 					
 						StringBuilder sb = new StringBuilder("");
 						StringUtils.appendIfNotNull(sb, pax.getFirstName());
 						StringUtils.appendIfNotNull(sb, pax.getLastName());
 						pcn.setName(sb.toString());
+						pcn.setPassIndex(passIndex);
+						oia.setFirstName(pax.getFirstName());
+						oia.setLastName(pax.getLastName());
 						
 					} else {
 						logger.info("Aborting PCN generation: No name information."+ refId);
@@ -213,6 +223,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 					
 					if (booking.getRecordLocator() != null && booking.getRecordLocator().trim().length() > 0) {
 						pcn.setLocator(booking.getRecordLocator());
+						oia.setPnr(booking.getRecordLocator());
 					} else {
 						logger.info("Aborting PCN generation: No record locator."+ refId);
 						return;
@@ -260,6 +271,14 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 										pcn.setMissedFlightDate(segment.getDepartureEstimated().getTime());
 										pcn.setMissedFlightNumber(segment.getFlightNumber());
 										pcn.setMissedFlightDestination(segment.getArrivalStation());
+										Calendar arrivalCal = new GregorianCalendar();
+										if (segment.getArrivalActual() != null) {
+											arrivalCal = segment.getArrivalActual();
+										} else {
+											arrivalCal.add(Calendar.HOUR, 4);
+										}
+										arrivalCal.add(Calendar.HOUR, PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_OIA_HOURS_BEFORE_EXPIRE));
+										oia.setExpireTime(arrivalCal.getTime());
 									}
 								}
 							}
@@ -278,6 +297,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 						logger.info("Aborting PCN generation: No itinerary for "+ refId);
 						return;
 					}
+					
 				}
 			}
 		
@@ -300,14 +320,16 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 					
 				} else {
 					ohd_log.setPcn(pcn);
+					pcn.setOia(oia);
 					t = sess.beginTransaction();
+					sess.save(oia);
 					sess.save(pcn);
 					sess.saveOrUpdate(ohd_log);
 					t.commit();
 				}
 			} catch (Exception e) {
 				
-				logger.error("Exception encountered loading & saving PNC " + refId, e);
+				logger.error("Exception encountered loading & saving PCN " + refId, e);
 
 				// TODO: Remove this next line
 				e.printStackTrace();

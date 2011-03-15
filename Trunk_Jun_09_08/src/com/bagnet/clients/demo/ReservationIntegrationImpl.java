@@ -2,6 +2,7 @@ package com.bagnet.clients.demo;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -15,6 +16,10 @@ import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Incident;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentAddress;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentItinerary;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone;
 
 public class ReservationIntegrationImpl extends
 		com.bagnet.clients.defaul.ReservationIntegrationImpl implements
@@ -111,6 +116,47 @@ public class ReservationIntegrationImpl extends
 		session.setAttribute("incidentForm", form);
 		
 		return new ArrayList<String>();
+	}
+	
+	public Incident populateIncidentForWS(Incident incident, int passIndex) {
+		incident.addClaimCheck("US112233");
+		incident.addClaimCheck("US332211");
+		IncidentItinerary itin;
+		itin = incident.addNewItinerary();
+		itin.setAirline("US");
+		itin.setFlightNum("111");
+		itin.setArrivalCity("ATL");
+		itin.setDepartureCity("JFK");
+		itin.setArrivalDate(new GregorianCalendar());
+		itin.setDepartureDate(new GregorianCalendar());
+		itin.setType(TracingConstants.PASSENGER_ROUTING);
+		itin = incident.addNewItinerary();
+		itin.setAirline("US");
+		itin.setFlightNum("111");
+		itin.setArrivalCity("ATL");
+		itin.setDepartureCity("JFK");
+		itin.setArrivalDate(new GregorianCalendar());
+		itin.setDepartureDate(new GregorianCalendar());
+		itin.setType(TracingConstants.BAGGAGE_ROUTING);
+		// ITIN TYPE?
+		
+		IncidentAddress iAddr = incident.addNewDeliveryAddress();
+		iAddr.setAddress1("123 Test");
+		iAddr.setAddress2("APT 321");
+		iAddr.setCity("Test City");
+		iAddr.setState("GA");
+		iAddr.setPostalCode("30152");
+		iAddr.setCountry("US");
+		
+		incident.setEmail("test@email.com");
+		IncidentPhone iPhone = incident.addNewPhone();
+		iPhone.setNumber("123-321-1234");
+		iPhone.setType(0);
+		
+		iPhone = incident.addNewPhone();
+		iPhone.setNumber("323-121-4321");
+		iPhone.setType(1);
+		return incident;
 	}
 
 	public ArrayList<String> writeCommentToPNR(String comment,

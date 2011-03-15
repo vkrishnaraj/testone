@@ -15,13 +15,39 @@ public class Incident {
 	private int authStatus;
 	private int authID;
 	private String osi;
+	private int numPassengers;
+	private String membershipNumber;
+	private String membershipStatus;
 	
 	public static final int AUTH_FAILURE = 0;
 	public static final int AUTH_COMPLETE = 1;
 	public static final int AUTH_EXPIRED = 2;
 	public static final int AUTH_SUCCESS = 3;
 	
-	
+
+	public int getNumPassengers() {
+		return numPassengers;
+	}
+
+	public void setNumPassengers(int numPassengers) {
+		this.numPassengers = numPassengers;
+	}
+
+	public String getMembershipNumber() {
+		return membershipNumber;
+	}
+
+	public void setMembershipNumber(String membershipNumber) {
+		this.membershipNumber = membershipNumber;
+	}
+
+	public String getMembershipStatus() {
+		return membershipStatus;
+	}
+
+	public void setMembershipStatus(String membershipStatus) {
+		this.membershipStatus = membershipStatus;
+	}
 
 	public int getAuthID() {
 		return authID;

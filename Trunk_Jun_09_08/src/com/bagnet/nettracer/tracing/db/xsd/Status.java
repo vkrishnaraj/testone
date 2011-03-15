@@ -16,7 +16,7 @@ package com.bagnet.nettracer.tracing.db.xsd;
 public interface Status extends com.bagnet.nettracer.tracing.db.i8n.xsd.LocaleBasedObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Status.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sECD53D12A3B16E559E57ADA881AD63EA").resolveHandle("status2315type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Status.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s3120780053B2C9C6ED89C37135AF9582").resolveHandle("status2315type");
     
     /**
      * Gets the "key" element

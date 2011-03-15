@@ -257,7 +257,7 @@ public class IncidentBMO {
 				t.rollback();
 			return -1;
 		} catch (Exception e) {
-			logger.error("unable to insert into database: " + e);
+			logger.error("unable to insert into database: " + e.toString());
 		
 			if (t != null)
 				t.rollback();

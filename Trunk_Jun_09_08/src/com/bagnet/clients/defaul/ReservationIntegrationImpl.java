@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Incident;
 
 public class ReservationIntegrationImpl implements
 		com.bagnet.nettracer.integrations.reservation.ReservationIntegration {
@@ -50,6 +51,10 @@ public class ReservationIntegrationImpl implements
 
 	public ArrayList<String> populateOhdForm(HttpServletRequest request,
 			OnHandForm form) {
+		return null;
+	}
+	
+	public Incident populateIncidentForWS(Incident incident, int passIndex) {
 		return null;
 	}
 

@@ -1,7 +1,9 @@
 package com.bagnet.clients.us;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,6 +24,10 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Incident;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentAddress;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentItinerary;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone;
 import com.usairways.lcc.aat_sharesws.services_asmx.Baggage;
 import com.usairways.lcc.aat_sharesws.services_asmx.Booking;
 import com.usairways.lcc.aat_sharesws.services_asmx.Itinerary;
@@ -53,6 +59,35 @@ public class ReservationIntegrationImpl extends
 		businessClass.add("Z");
 		businessClass.add("I");
 		businessClass.add("J");
+	}
+
+
+	private boolean getBooking(String recordLocator) {
+		ArrayList<String> errors = new ArrayList<String>();
+		try {
+			SharesIntegrationWrapper wrapper = new SharesIntegrationWrapper();
+			// Record Locator
+			
+			boolean result = true;
+			if (recordLocator != null && recordLocator.trim().length() > 0) {
+				// If searching bag record locator				
+				result = wrapper.getBookingByKey(recordLocator, null);
+			} else {				
+				return false;
+			}
+			
+			if (result) {
+				// Get the booking
+				booking = wrapper.getBooking();
+				pnrContents = wrapper.getPnrContents();
+				return true;
+			}
+
+		} catch (Exception e) {
+			logger.error(e.getStackTrace());
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 
@@ -559,7 +594,146 @@ public class ReservationIntegrationImpl extends
 			itinCount ++;
 		}
 	}
-
+	
+	
+	public Incident populateIncidentForWS(Incident incident, int passIndex) {
+		boolean pnrAvailable = getBooking(incident.getPnr());
+		if (pnrAvailable) {
+						
+			if (pnrContents != null) {
+				incident.setOsi(pnrContents);
+			}
+			
+			if (booking.getPassengers() != null) {
+				Passenger[] aPax = booking.getPassengers().getPassengerArray();
+							
+				if (aPax.length > passIndex && aPax[passIndex] != null) {
+					Passenger pax = aPax[passIndex];
+					incident.setNumPassengers(aPax.length);
+										
+					incident.setMembershipNumber(pax.getFrequentFlierNumber());
+					if (pax.getFrequentFlierNumber() != null && pax.getFrequentFlierNumber().trim().length() > 0) {
+						if (pax.getFrequentFlierStatus() != null && pax.getFrequentFlierStatus().length() > 0) {
+							incident.setMembershipStatus(pax.getFrequentFlierStatus());	
+						} else {
+							incident.setMembershipStatus("Basic");
+						}	
+					}
+					
+					IncidentAddress iAddr = incident.addNewDeliveryAddress();
+					incident.setEmail(fMap.mapString(NetTracerField.ADDR_EMAIL, pax.getEmailAddress())); //EMAIL
+					
+					PassengerAddress[] pAddrs = pax.getPassengerAddresses().getPassengerAddressArray();
+					if (pAddrs.length > 0) {
+						PassengerAddress pAddr = pAddrs[0];
+						iAddr.setAddress1(fMap.mapString(NetTracerField.ADDRESS1, pAddr.getAddressLine1()));
+						iAddr.setAddress2(fMap.mapString(NetTracerField.ADDRESS2, pAddr.getAddressLine2() + " " + pAddr.getAddressLine3()));
+						iAddr.setCity(fMap.mapString(NetTracerField.ADDR_CITY, pAddr.getCity()));
+						iAddr.setCountry(fMap.mapString(NetTracerField.ADDR_COUNTRY, pAddr.getCountryCode()));
+						iAddr.setPostalCode(fMap.mapString(NetTracerField.ADDR_ZIP, pAddr.getPostalCode()));
+						if (iAddr.getCountry().equals(TracingConstants.US_COUNTRY_CODE)) {
+							iAddr.setState(fMap.mapString(NetTracerField.ADDR_STATE, pAddr.getProvinceState()));					
+						} else {
+							iAddr.setProvince(fMap.mapString(NetTracerField.ADDR_PROVINCE, pAddr.getProvinceState()));
+						}				
+						if (!pAddr.getPhone().trim().equals("000-")) {
+							IncidentPhone iPhone = incident.addNewPhone();
+							iPhone.setNumber(fMap.mapString(NetTracerField.ADDR_PHONE, pAddr.getPhone()));
+							iPhone.setType(0);    // 												PUT STATIC FINAL VARIABLES SOMEWHERE AND USE HERE!!!
+						}
+					}
+				}
+			}
+			
+			String highestClassService = null;
+			// Passenger Itinerary
+			if (booking.getPassengerItinerary() != null) {
+				Itinerary[] itin = booking.getPassengerItinerary().getItineraryArray();
+				if (itin.length > 0) {
+					int i = 0;
+					if (itin[i].getSegments() != null) {
+						Segment[] segs = itin[i].getSegments().getSegmentArray();
+						for (int j=0; j<segs.length; ++j) {
+							IncidentItinerary iItin = incident.addNewItinerary();
+							Segment seg = segs[j];
+			
+							Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+							Long nowtime = ((new Date()).getTime()) / 3600000;
+							Long timeDifference = nowtime - deptime;
+							
+							highestClassService = processService(seg.getServiceClass(), highestClassService);
+							
+							if (timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) {
+						
+								iItin.setAirline(seg.getCarrierCode());
+								iItin.setFlightNum(seg.getFlightNumber());
+								iItin.setDepartureCity(seg.getDepartureStation());
+								iItin.setArrivalCity(seg.getArrivalStation());
+								Calendar cal = new GregorianCalendar();
+								cal.setTime(seg.getDepartureEstimated().getTime());
+								iItin.setDepartureDate(cal);
+								cal.setTime(seg.getArrivalEstimated().getTime());
+								iItin.setArrivalDate(cal);
+								
+								iItin.setType(TracingConstants.PASSENGER_ROUTING);
+							}
+						}
+					} else {
+						IncidentItinerary iItin = incident.addNewItinerary();
+						iItin.setType(TracingConstants.PASSENGER_ROUTING);
+					}
+				} else {
+					IncidentItinerary iItin = incident.addNewItinerary();
+					iItin.setType(TracingConstants.PASSENGER_ROUTING);
+				}
+			}
+			
+			if (highestClassService != null) {
+				incident.setMembershipStatus(incident.getMembershipStatus() + "/" + highestClassService);
+			}
+			
+			// Baggage Itinerary
+			if (booking.getBaggageItinerary() != null) {
+				Itinerary[] itin = booking.getBaggageItinerary().getItineraryArray();
+				if (itin.length > 0) {
+					int i = 0;
+					if (itin[i].getSegments() != null) {
+						Segment[] segs = itin[i].getSegments().getSegmentArray();
+						for (int j=0; j<segs.length; ++j) {
+							
+							Segment seg = segs[j];
+							
+							Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+							Long nowtime = ((new Date()).getTime()) / 3600000;
+							Long timeDifference = nowtime - deptime;
+														
+							if (timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) {
+								IncidentItinerary iItin = incident.addNewItinerary();
+								iItin.setAirline(seg.getCarrierCode());
+								iItin.setFlightNum(seg.getFlightNumber());
+								iItin.setDepartureCity(seg.getDepartureStation());
+								iItin.setArrivalCity(seg.getArrivalStation());
+								Calendar cal = new GregorianCalendar();
+								cal.setTime(seg.getDepartureEstimated().getTime());
+								iItin.setDepartureDate(cal);
+								cal.setTime(seg.getArrivalEstimated().getTime());
+								iItin.setArrivalDate(cal);
+								
+								iItin.setType(TracingConstants.BAGGAGE_ROUTING);
+							}
+						}
+					} else {
+						IncidentItinerary iItin = incident.addNewItinerary();
+						iItin.setType(TracingConstants.BAGGAGE_ROUTING);
+					}
+				}
+			} else {
+				IncidentItinerary iItin = incident.addNewItinerary();
+				iItin.setType(TracingConstants.BAGGAGE_ROUTING);
+			}
+		}
+		return incident;
+	}
 	
 	
 	private String processService(String serviceClass, String highestClassService) {

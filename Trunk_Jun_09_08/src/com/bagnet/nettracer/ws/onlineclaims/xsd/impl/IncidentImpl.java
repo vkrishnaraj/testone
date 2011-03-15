@@ -41,11 +41,17 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "itinerary");
     private static final javax.xml.namespace.QName LASTNAME$20 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "lastName");
-    private static final javax.xml.namespace.QName OSI$22 = 
+    private static final javax.xml.namespace.QName MEMBERSHIPNUMBER$22 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "membershipNumber");
+    private static final javax.xml.namespace.QName MEMBERSHIPSTATUS$24 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "membershipStatus");
+    private static final javax.xml.namespace.QName NUMPASSENGERS$26 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "numPassengers");
+    private static final javax.xml.namespace.QName OSI$28 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "osi");
-    private static final javax.xml.namespace.QName PHONE$24 = 
+    private static final javax.xml.namespace.QName PHONE$30 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "phone");
-    private static final javax.xml.namespace.QName PNR$26 = 
+    private static final javax.xml.namespace.QName PNR$32 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "pnr");
     
     
@@ -1449,6 +1455,348 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
+     * Gets the "membershipNumber" element
+     */
+    public java.lang.String getMembershipNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(MEMBERSHIPNUMBER$22, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "membershipNumber" element
+     */
+    public org.apache.xmlbeans.XmlString xgetMembershipNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(MEMBERSHIPNUMBER$22, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "membershipNumber" element
+     */
+    public boolean isNilMembershipNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(MEMBERSHIPNUMBER$22, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "membershipNumber" element
+     */
+    public boolean isSetMembershipNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(MEMBERSHIPNUMBER$22) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "membershipNumber" element
+     */
+    public void setMembershipNumber(java.lang.String membershipNumber)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(MEMBERSHIPNUMBER$22, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(MEMBERSHIPNUMBER$22);
+            }
+            target.setStringValue(membershipNumber);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "membershipNumber" element
+     */
+    public void xsetMembershipNumber(org.apache.xmlbeans.XmlString membershipNumber)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(MEMBERSHIPNUMBER$22, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(MEMBERSHIPNUMBER$22);
+            }
+            target.set(membershipNumber);
+        }
+    }
+    
+    /**
+     * Nils the "membershipNumber" element
+     */
+    public void setNilMembershipNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(MEMBERSHIPNUMBER$22, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(MEMBERSHIPNUMBER$22);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "membershipNumber" element
+     */
+    public void unsetMembershipNumber()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(MEMBERSHIPNUMBER$22, 0);
+        }
+    }
+    
+    /**
+     * Gets the "membershipStatus" element
+     */
+    public java.lang.String getMembershipStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(MEMBERSHIPSTATUS$24, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "membershipStatus" element
+     */
+    public org.apache.xmlbeans.XmlString xgetMembershipStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(MEMBERSHIPSTATUS$24, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "membershipStatus" element
+     */
+    public boolean isNilMembershipStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(MEMBERSHIPSTATUS$24, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "membershipStatus" element
+     */
+    public boolean isSetMembershipStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(MEMBERSHIPSTATUS$24) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "membershipStatus" element
+     */
+    public void setMembershipStatus(java.lang.String membershipStatus)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(MEMBERSHIPSTATUS$24, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(MEMBERSHIPSTATUS$24);
+            }
+            target.setStringValue(membershipStatus);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "membershipStatus" element
+     */
+    public void xsetMembershipStatus(org.apache.xmlbeans.XmlString membershipStatus)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(MEMBERSHIPSTATUS$24, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(MEMBERSHIPSTATUS$24);
+            }
+            target.set(membershipStatus);
+        }
+    }
+    
+    /**
+     * Nils the "membershipStatus" element
+     */
+    public void setNilMembershipStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(MEMBERSHIPSTATUS$24, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(MEMBERSHIPSTATUS$24);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "membershipStatus" element
+     */
+    public void unsetMembershipStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(MEMBERSHIPSTATUS$24, 0);
+        }
+    }
+    
+    /**
+     * Gets the "numPassengers" element
+     */
+    public int getNumPassengers()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(NUMPASSENGERS$26, 0);
+            if (target == null)
+            {
+                return 0;
+            }
+            return target.getIntValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "numPassengers" element
+     */
+    public org.apache.xmlbeans.XmlInt xgetNumPassengers()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(NUMPASSENGERS$26, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "numPassengers" element
+     */
+    public boolean isSetNumPassengers()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(NUMPASSENGERS$26) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "numPassengers" element
+     */
+    public void setNumPassengers(int numPassengers)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(NUMPASSENGERS$26, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(NUMPASSENGERS$26);
+            }
+            target.setIntValue(numPassengers);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "numPassengers" element
+     */
+    public void xsetNumPassengers(org.apache.xmlbeans.XmlInt numPassengers)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(NUMPASSENGERS$26, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(NUMPASSENGERS$26);
+            }
+            target.set(numPassengers);
+        }
+    }
+    
+    /**
+     * Unsets the "numPassengers" element
+     */
+    public void unsetNumPassengers()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(NUMPASSENGERS$26, 0);
+        }
+    }
+    
+    /**
      * Gets the "osi" element
      */
     public java.lang.String getOsi()
@@ -1457,7 +1805,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(OSI$22, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(OSI$28, 0);
             if (target == null)
             {
                 return null;
@@ -1475,7 +1823,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(OSI$22, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(OSI$28, 0);
             return target;
         }
     }
@@ -1489,7 +1837,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(OSI$22, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(OSI$28, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -1503,7 +1851,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(OSI$22) != 0;
+            return get_store().count_elements(OSI$28) != 0;
         }
     }
     
@@ -1516,10 +1864,10 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(OSI$22, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(OSI$28, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(OSI$22);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(OSI$28);
             }
             target.setStringValue(osi);
         }
@@ -1534,10 +1882,10 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(OSI$22, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(OSI$28, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(OSI$22);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(OSI$28);
             }
             target.set(osi);
         }
@@ -1552,10 +1900,10 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(OSI$22, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(OSI$28, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(OSI$22);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(OSI$28);
             }
             target.setNil();
         }
@@ -1569,7 +1917,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(OSI$22, 0);
+            get_store().remove_element(OSI$28, 0);
         }
     }
     
@@ -1582,7 +1930,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(PHONE$24, targetList);
+            get_store().find_all_element_users(PHONE$30, targetList);
             com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone[] result = new com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone[targetList.size()];
             targetList.toArray(result);
             return result;
@@ -1598,7 +1946,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().find_element_user(PHONE$24, i);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().find_element_user(PHONE$30, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -1616,7 +1964,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().find_element_user(PHONE$24, i);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().find_element_user(PHONE$30, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -1633,7 +1981,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PHONE$24);
+            return get_store().count_elements(PHONE$30);
         }
     }
     
@@ -1645,7 +1993,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            arraySetterHelper(phoneArray, PHONE$24);
+            arraySetterHelper(phoneArray, PHONE$30);
         }
     }
     
@@ -1658,7 +2006,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().find_element_user(PHONE$24, i);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().find_element_user(PHONE$30, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -1676,7 +2024,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().find_element_user(PHONE$24, i);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().find_element_user(PHONE$30, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -1694,7 +2042,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().insert_element_user(PHONE$24, i);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().insert_element_user(PHONE$30, i);
             return target;
         }
     }
@@ -1708,7 +2056,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().add_element_user(PHONE$24);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone)get_store().add_element_user(PHONE$30);
             return target;
         }
     }
@@ -1721,7 +2069,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PHONE$24, i);
+            get_store().remove_element(PHONE$30, i);
         }
     }
     
@@ -1734,7 +2082,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PNR$26, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PNR$32, 0);
             if (target == null)
             {
                 return null;
@@ -1752,7 +2100,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PNR$26, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PNR$32, 0);
             return target;
         }
     }
@@ -1766,7 +2114,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PNR$26, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PNR$32, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -1780,7 +2128,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PNR$26) != 0;
+            return get_store().count_elements(PNR$32) != 0;
         }
     }
     
@@ -1793,10 +2141,10 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PNR$26, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PNR$32, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PNR$26);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PNR$32);
             }
             target.setStringValue(pnr);
         }
@@ -1811,10 +2159,10 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PNR$26, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PNR$32, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PNR$26);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PNR$32);
             }
             target.set(pnr);
         }
@@ -1829,10 +2177,10 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PNR$26, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PNR$32, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PNR$26);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PNR$32);
             }
             target.setNil();
         }
@@ -1846,7 +2194,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PNR$26, 0);
+            get_store().remove_element(PNR$32, 0);
         }
     }
 }

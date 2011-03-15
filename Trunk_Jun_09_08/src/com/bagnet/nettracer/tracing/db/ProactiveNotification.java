@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -48,6 +49,10 @@ public class ProactiveNotification {
 	@Fetch(FetchMode.SELECT)
 	private Set<OHD_Log> ohd_logs;
 	
+	@OneToOne
+	@JoinColumn(name = "oia_ID", nullable = true)
+	private OnlineIncidentAuthorization oia;
+	
 	@Column(length = 40)
 	private String name;
 	
@@ -66,8 +71,33 @@ public class ProactiveNotification {
 	@Basic
 	private String missedFlightDestination;
 	
+	@Column(length = 2)
+	private int passIndex;
+	
+	@Basic
+	private String membershipNumber;
+	
+	@Basic
+	private String membershipAirline;
+	
 	@Transient
 	private boolean finalFlightsMatch;
+
+	public OnlineIncidentAuthorization getOia() {
+		return oia;
+	}
+
+	public void setOia(OnlineIncidentAuthorization oia) {
+		this.oia = oia;
+	}
+
+	public int getPassIndex() {
+		return passIndex;
+	}
+
+	public void setPassIndex(int passIndex) {
+		this.passIndex = passIndex;
+	}
 
 	public Status getStatus() {
 		return status;

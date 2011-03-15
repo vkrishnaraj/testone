@@ -9,6 +9,15 @@ public class IncidentItinerary {
 	private String flightNum;
 	private Date departureDate;
 	private Date arrivalDate;
+	private int type;
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 
 	public String getDepartureCity() {
 		return departureCity;

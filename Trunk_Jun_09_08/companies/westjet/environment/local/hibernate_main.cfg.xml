@@ -274,6 +274,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/TraceIncident.hbm.xml"/>	
 		<mapping resource="com/bagnet/nettracer/tracing/db/TraceIncident_Claimcheck.hbm.xml"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.Precoder"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.OnlineIncidentAuthorization"/>
     </session-factory>
 
 </hibernate-configuration>

@@ -31,6 +31,8 @@ public class IncidentItineraryImpl extends org.apache.xmlbeans.impl.values.XmlCo
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "departureDate");
     private static final javax.xml.namespace.QName FLIGHTNUM$10 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "flightNum");
+    private static final javax.xml.namespace.QName TYPE$12 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "type");
     
     
     /**
@@ -780,6 +782,98 @@ public class IncidentItineraryImpl extends org.apache.xmlbeans.impl.values.XmlCo
         {
             check_orphaned();
             get_store().remove_element(FLIGHTNUM$10, 0);
+        }
+    }
+    
+    /**
+     * Gets the "type" element
+     */
+    public int getType()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TYPE$12, 0);
+            if (target == null)
+            {
+                return 0;
+            }
+            return target.getIntValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "type" element
+     */
+    public org.apache.xmlbeans.XmlInt xgetType()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(TYPE$12, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "type" element
+     */
+    public boolean isSetType()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(TYPE$12) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "type" element
+     */
+    public void setType(int type)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TYPE$12, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TYPE$12);
+            }
+            target.setIntValue(type);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "type" element
+     */
+    public void xsetType(org.apache.xmlbeans.XmlInt type)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(TYPE$12, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(TYPE$12);
+            }
+            target.set(type);
+        }
+    }
+    
+    /**
+     * Unsets the "type" element
+     */
+    public void unsetType()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(TYPE$12, 0);
         }
     }
 }

@@ -79,6 +79,9 @@ public class PropertyBMO {
 	public static final String PROPERTY_LIMIT_OHD_FAULT_AIRLINE = "limit.ohd.fault.airline";
 	public static final String DISPLAY_NON_REVENUE_CODES = "display.non.revenue.codes";
 	
+	public static final String PROPERTY_OIA_AGENT = "oia.agent";
+	public static final String PROPERTY_OIA_HOURS_BEFORE_EXPIRE = "oia.hours.before.expire";
+	
 	public static final String PROPERTY_DEFAULT_DAM_CODE = "default.dam.code";
 	public static final String PROPERTY_DEFAULT_PIL_CODE = "default.pil.code";
 
