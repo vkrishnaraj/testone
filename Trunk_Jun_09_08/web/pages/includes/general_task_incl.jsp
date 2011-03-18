@@ -60,8 +60,6 @@ if (hasPermission) {
           		<option value="30"><bean:message key="generaltask.defer.30min" /></option>
           		<option value="120"><bean:message key="generaltask.defer.2hr" /></option>
           		<option value="240"><bean:message key="generaltask.defer.4hr" /></option>
-          		<option value="720"><bean:message key="generaltask.defer.12hr" /></option>
-          		<option value="1440"><bean:message key="generaltask.defer.24hr" /></option>
           	</select>
           	<input type="button" value="<bean:message key="button.task.defer" />" onclick='var time=document.forms[0].defer_time.value;document.location.href="GeneralTask.do?defer=1&defer_time="+time;' id="button">&nbsp;&nbsp;
           	<input type="button" value="<bean:message key="button.task.abort" />" onclick='document.location.href="GeneralTask.do?abort=1";return true;' id="button">
