@@ -24,7 +24,7 @@ public class DisputeUtils {
 	public static long getDisputeCount(Agent user){
 		String sql = "select count (d.dispute_res_id) from com.bagnet.nettracer.tracing.db.dr.Dispute d where 1=1 ";
 		sql += " and d.status = :status";
-		sql += " and (d.incident.stationassigned.station_ID = :station or d.incident.stationassigned.lz_ID = :lz)";
+		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz)";
 		
 		Query q = null;
 		
@@ -60,7 +60,7 @@ public class DisputeUtils {
 			boolean dirtyRead){
 		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d where 1=1 ";
 		sql += " and d.status = :status";
-		sql += " and (d.incident.stationassigned.station_ID = :station or d.incident.stationassigned.lz_ID = :lz)";
+		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz)";
 		Query q = null;
 		
 		Session sess = HibernateWrapper.getSession().openSession();

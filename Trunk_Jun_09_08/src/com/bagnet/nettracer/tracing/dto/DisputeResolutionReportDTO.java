@@ -154,7 +154,22 @@ public class DisputeResolutionReportDTO {
 	private Date date_created;
 
 
+	private Date date_incident_created;
+	public Date getDate_incident_created() {
+		return date_incident_created;
+	}
+	public void setDate_incident_created(Date date_incident_created) {
+		this.date_incident_created = date_incident_created;
+	}
 
+	public String getReportIncidentDateCreate() {
+		java.util.Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getDate_incident_created(), TracingConstants.DB_DATEFORMAT, null, null) + " "
+				+ DateUtils.formatDate(getDate_incident_created(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
+		return DateUtils.formatDate(tempdate, _DATEFORMAT, null, _TIMEZONE);
+	}
+	
+	private String reportIncidentDateCreate;
+	
 	private Date date_resolved;
 	private String reportDateCreated;
 	private String reportDateResolved;

@@ -248,6 +248,7 @@ public class DisputeResolutionReportBMO {
 		}
 		
 		//getting report header title from resource bundle
+		String reportHeadingIncidentDate = "Incident Date";
 		String reportHeadingDisputeDate = "Dispute Date";
 		String reportHeadingResolutionDate = "Resolution Date";
 		String reportHeadingIncidentNumber = "Report ID";
@@ -262,9 +263,11 @@ public class DisputeResolutionReportBMO {
 		String reportHeadingNewFaultStation = "New Fault Station";
 		String reportHeadingNewLossCode = "New Fault Code";
 		
-		
+		String myIncidentDateFromResource = resourceBundle.getString("report.dispute.heading.incident.date");
+		if (!( myIncidentDateFromResource == null || myIncidentDateFromResource.equalsIgnoreCase("") )) {
+			reportHeadingIncidentDate = myIncidentDateFromResource;
+		}
 
-		
 		String myDisputeDateFromResource = resourceBundle.getString("report.dispute.heading.dispute.date");
 		if (!( myDisputeDateFromResource == null || myDisputeDateFromResource.equalsIgnoreCase("") )) {
 			reportHeadingDisputeDate = myDisputeDateFromResource;
@@ -407,6 +410,11 @@ public class DisputeResolutionReportBMO {
 			.setColumnSpace(new Integer(5));
 
 		
+		AbstractColumn columnIncidentDate = ColumnBuilder.getNew()
+				.setColumnProperty("reportIncidentDateCreate", String.class.getName()).setTitle(
+				reportHeadingIncidentDate).setWidth(new Integer(40))	
+				.setStyle(detailStyle).setHeaderStyle(headerStyle).build(); //30
+		
 		AbstractColumn columnDisputeDate = ColumnBuilder.getNew()
 				.setColumnProperty("reportDateCreated", String.class.getName()).setTitle(
 				reportHeadingDisputeDate).setWidth(new Integer(40))	
@@ -475,7 +483,7 @@ public class DisputeResolutionReportBMO {
 				detailStyle).setHeaderStyle(headerStyle).build(); //20
 
 
-		
+		drb.addColumn(columnIncidentDate);
 		drb.addColumn(columnDisputeDate);
 		drb.addColumn(columnResolvedDate);
 		drb.addColumn(columnReportNumber);
@@ -526,6 +534,7 @@ public class DisputeResolutionReportBMO {
 		FastReportBuilder drb = new FastReportBuilder();
 		
 		//getting report header title from reource bundle
+		String reportHeadingIncidentDate = "Incident Date";
 		String reportHeadingDisputeDate = "Dispute Date";
 		String reportHeadingResolutionDate = "Resolution Date";
 		String reportHeadingIncidentNumber = "Report ID";
@@ -539,6 +548,11 @@ public class DisputeResolutionReportBMO {
 		String reportHeadingSuggestedLossCode = "Suggested Fault Code";
 		String reportHeadingNewFaultStation = "New Fault Station";
 		String reportHeadingNewLossCode = "New Fault Code";
+		
+		String myIncidentDateFromResource = resourceBundle.getString("report.dispute.heading.incident.date");
+		if (!( myIncidentDateFromResource == null || myIncidentDateFromResource.equalsIgnoreCase("") )) {
+			reportHeadingIncidentDate = myIncidentDateFromResource;
+		}
 		
 		String myDisputeDateFromResource = resourceBundle.getString("report.dispute.heading.dispute.date");
 		if (!( myDisputeDateFromResource == null || myDisputeDateFromResource.equalsIgnoreCase("") )) {
@@ -605,6 +619,7 @@ public class DisputeResolutionReportBMO {
 			reportHeadingNewLossCode = myNewLossCodeFromResource;
 		}
 		
+		drb = drb.addColumn(reportHeadingIncidentDate, "reportIncidentDateCreate", String.class.getName(), 30);
     	drb = drb.addColumn(reportHeadingDisputeDate, "reportDateCreated", String.class.getName(), 30);
     	drb = drb.addColumn(reportHeadingResolutionDate, "reportDateResolved", String.class.getName(), 30);
 		drb = drb.addColumn(reportHeadingIncidentNumber,"incident_id",String.class.getName(),54);

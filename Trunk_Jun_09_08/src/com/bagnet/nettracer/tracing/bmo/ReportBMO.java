@@ -2662,19 +2662,20 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			ResultSet rs = null;
 			String sql = "select * from dispute d where 1=1";   
 			
-			sql = "select d.created_timestamp,d.resolution_timestamp,d.Incident_ID,d.status_ID,"
+			sql = "select i.createdate, d.created_timestamp,d.resolution_timestamp,d.Incident_ID,d.status_ID,"
 				+ " dagent.username disputingagentusername,wagent.username workingagentusername,"
 				+ " d.typeOfChange,"
 				+ " d.beforeDisputeLossCode,prestation.stationcode beforedisputefaultstation,"
 				+ " d.suggestedLossCode,suggestedstation.stationcode suggestedfaultstation,"
 				+ " d.determinedLossCode,d.determined_station_ID,determinedfaultstation.stationcode newfaultstation"
-				+ " from dispute d,agent dagent,agent wagent,station prestation,station suggestedstation,station determinedfaultstation"
+				+ " from dispute d,agent dagent,agent wagent,station prestation,station suggestedstation,station determinedfaultstation, incident i"
 				+ " where 1=1"
 				+ " and d.dispute_agent_ID = dagent.Agent_ID"
 				+ " and d.resolution_agent_ID = wagent.Agent_ID"
 				+ " and d.before_dispute_fault_station_ID = prestation.Station_ID"
 				+ " and d.suggested_station_ID = suggestedstation.Station_ID"
-				+ " and d.determined_station_ID = determinedfaultstation.Station_ID";
+				+ " and d.determined_station_ID = determinedfaultstation.Station_ID"
+				+ " and d.Incident_ID = i.Incident_ID";
 				
 			String intc = "";
 			if (srDTO.getStation_ID() != null) {
@@ -2771,6 +2772,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			while (rs.next()) {
 				sr = new DisputeResolutionReportDTO();
 
+				sr.setDate_incident_created(rs.getDate("createdate"));
 				sr.setDate_created(rs.getDate("created_timestamp"));
 				sr.setDate_resolved(rs.getDate("resolution_timestamp"));
 				sr.setIncident_id(rs.getString("Incident_ID"));
