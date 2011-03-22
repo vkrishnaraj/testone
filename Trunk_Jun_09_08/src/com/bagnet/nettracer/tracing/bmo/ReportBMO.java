@@ -2707,7 +2707,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				sql += " and dagent.username = \'" + agent + "\' ";
 			}
 			
-			logger.error("sql segment is : " + sql);
+//			logger.error("sql segment is : " + sql);
 
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
