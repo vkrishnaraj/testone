@@ -57,7 +57,11 @@ public class LockBMO extends HibernateDaoSupport {
 	@Transactional
 	public void releaseLock(Lock lock) {
 		Session sess = getSession(false);
-		sess.delete(lock);
+		try {
+			sess.delete(lock);
+		} catch (Exception ex) {
+			logger.error("LOCK FAILED TO DELETE: " + ex);
+		}
 	}
 
 }
