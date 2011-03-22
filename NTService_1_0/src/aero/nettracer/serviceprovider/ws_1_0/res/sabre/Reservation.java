@@ -330,7 +330,7 @@ public class Reservation implements ReservationInterface {
 			String command = "*" + pnr;
 			String commandString = genericCommand(connParams, command);
 			SabreParseDTO dto = parseForBaggageInfo(commandString);
-
+			res.setOsi(commandString);
 			int numberChecked = dto.getBags().size();
 
 			for (SabreParsedBags bag : dto.getBags()) {
@@ -347,6 +347,29 @@ public class Reservation implements ReservationInterface {
 				i.setTimeChecked(itin.getCheckedTime());
 				i.setDepartureCity(itin.getDepartureCity());
 				i.setFlightnum(itin.getFlight());
+				
+				// Logical fix for departuretime not being present for bag itins.
+				Calendar schdeparttime = itin.getCheckedTime();
+				for (Itinerary it: res.getPassengerItineraryArray()) {
+					try {
+						if (i.getAirline().equals(it.getAirline()) 
+								&& i.getArrivalCity().equals(it.getArrivalCity())
+								&& i.getDepartureCity().equals(it.getDepartureCity())
+								&& i.getFlightnum().equals(it.getFlightnum())
+								) {
+							schdeparttime = it.getSchdeparttime();
+							
+							break;
+						}
+					} catch (Exception ex) {
+						// Ignore
+					}
+				}
+				
+				if (schdeparttime != null) {
+					i.setSchdeparttime(schdeparttime);
+				}
+				
 			}
 
 			int checkedLocation = 0;
