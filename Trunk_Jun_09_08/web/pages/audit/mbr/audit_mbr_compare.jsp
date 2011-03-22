@@ -313,7 +313,7 @@ function updatePagination() {
                 <logic:match name="audit_incident" property="reportmethod" value="4">
                 	<bean:message key="select.kiosk" />
                 </logic:match>
-                <logic:greaterThan value="4">
+                <logic:greaterThan name="audit_incident" property="reportmethod" value="4">
                 	<bean:write name="audit_incident" property="reportmethod" />
                 </logic:greaterThan>
               </td>
