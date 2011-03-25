@@ -358,6 +358,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 			t.commit();
 			return true;
 		} catch (Exception ex) {
+			logger.error("Exception occured saving the OIA ", ex);
 			t.rollback();
 		}
 		return false;
