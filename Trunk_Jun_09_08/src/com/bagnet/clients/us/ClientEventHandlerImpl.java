@@ -271,9 +271,13 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 										pcn.setMissedFlightDate(segment.getDepartureEstimated().getTime());
 										pcn.setMissedFlightNumber(segment.getFlightNumber());
 										pcn.setMissedFlightDestination(segment.getArrivalStation());
+										Calendar year2010 = new GregorianCalendar();
+										year2010.set(2010, 0, 1);
 										Calendar arrivalCal = new GregorianCalendar();
-										if (segment.getArrivalActual() != null) {
+										if (segment.getArrivalActual() != null && segment.getArrivalActual().after(year2010)) {
 											arrivalCal = segment.getArrivalActual();
+										} else if (segment.getArrivalEstimated() != null && segment.getArrivalEstimated().after(year2010)) {
+											arrivalCal = segment.getArrivalEstimated();
 										} else {
 											arrivalCal.add(Calendar.HOUR, 4);
 										}
@@ -320,9 +324,10 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 					
 				} else {
 					ohd_log.setPcn(pcn);
-					pcn.setOia(oia);
+					if (saveOia(oia, t, sess)) {
+						pcn.setOia(oia);
+					}
 					t = sess.beginTransaction();
-					sess.save(oia);
 					sess.save(pcn);
 					sess.saveOrUpdate(ohd_log);
 					t.commit();
@@ -344,6 +349,18 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 			}
 		
 		}
+	}
+	
+	private boolean saveOia(OnlineIncidentAuthorization oia, Transaction t, Session sess) {
+		try {
+			t = sess.beginTransaction();
+			sess.save(oia);
+			t.commit();
+			return true;
+		} catch (Exception ex) {
+			t.rollback();
+		}
+		return false;
 	}
 
 	private ProactiveNotification getExistingPcnIfExists(ProactiveNotification pcn, Session sess) {
