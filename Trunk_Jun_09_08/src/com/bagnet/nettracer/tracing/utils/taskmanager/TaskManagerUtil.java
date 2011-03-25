@@ -56,15 +56,19 @@ public abstract class TaskManagerUtil {
 	}
 	
 	public static void unlockTaskIncident(Lock lock, MorningDutiesTask task){
-		if(lock != null){
-			SpringUtils.getLockBmo().releaseLock(lock);
-		} else {
-			if(task != null && task.getIncident() != null){
-				lock = SpringUtils.getLockBmo().loadLock(LockType.TM_INCIDENT, task.getIncident().getIncident_ID());
-				if(lock != null){
-					SpringUtils.getLockBmo().releaseLock(lock);
+		try {
+			if(lock != null){
+				SpringUtils.getLockBmo().releaseLock(lock);
+			} else {
+				if(task != null && task.getIncident() != null){
+					lock = SpringUtils.getLockBmo().loadLock(LockType.TM_INCIDENT, task.getIncident().getIncident_ID());
+					if(lock != null){
+						SpringUtils.getLockBmo().releaseLock(lock);
+					}
 				}
 			}
+		} catch (Exception e) {
+			// Ignore any exceptions release the lock.
 		}
 	}
 	
