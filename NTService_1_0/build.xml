@@ -141,6 +141,20 @@
 			<include name="**/common/pojo/*.class" />
 			<include name="**/**/*.xml" />
 		</jar>
+		
+		<jar destfile="${dist.dir}/nt_fs.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">
+			<metainf dir="${src.dir}/../metadata">
+				<include name="ejb-jar.xml"/>
+			</metainf>
+			<include name="${build.dir}/services-war/WEB-INF/classes/" />
+			<include name="**/**/Hello*.class" />
+			<include name="**/**/PrivacyPermissions*.class" />
+			<include name="**/**/HibernateWrapper.class" />
+			<include name="**/**/PrivacyPermissionsBMO.class" />
+			<include name="**/common/db/*.class" />
+			<include name="**/common/pojo/*.class" />
+			<include name="**/**/*.xml" />
+		</jar>
 
 		<ear destfile="${dist.dir}/NTServices_1_0.ear" appxml="${src.dir}/../metadata/application.xml">
 			<fileset dir="${dist.dir}" includes="*.jar,*.war"/>

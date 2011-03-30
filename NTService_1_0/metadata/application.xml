@@ -22,4 +22,7 @@
    <module>
       <java>nt_mdb.jar</java>
    </module>
+      <module>
+      <java>nt_fs.jar</java>
+   </module>
 </application>
