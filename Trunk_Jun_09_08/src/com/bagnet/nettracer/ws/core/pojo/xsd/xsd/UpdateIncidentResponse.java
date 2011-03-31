@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd.xsd;
 public interface UpdateIncidentResponse extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateIncidentResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("updateincidentresponse6b97type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateIncidentResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sA8F8261E145052D27C869A3548949452").resolveHandle("updateincidentresponse6b97type");
     
     /**
      * Gets the "errorResponse" element

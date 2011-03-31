@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.core;
 public interface LogoffResponseDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LogoffResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("logoffresponsee606doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LogoffResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sA8F8261E145052D27C869A3548949452").resolveHandle("logoffresponsee606doctype");
     
     /**
      * Gets the "logoffResponse" element
@@ -42,7 +42,7 @@ public interface LogoffResponseDocument extends org.apache.xmlbeans.XmlObject
     public interface LogoffResponse extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LogoffResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("logoffresponse8f5eelemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LogoffResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sA8F8261E145052D27C869A3548949452").resolveHandle("logoffresponse8f5eelemtype");
         
         /**
          * Gets the "return" element

@@ -112,6 +112,9 @@ public class PrecoderImpl implements Precoder{
 	}
 	
 	private boolean hasSameItin(List<Itinerary> a, List<Itinerary> b){
+		if (b.size() == 0) {
+			return true;
+		}
 		if(a.size() != b.size()){
 			return false;
 		}

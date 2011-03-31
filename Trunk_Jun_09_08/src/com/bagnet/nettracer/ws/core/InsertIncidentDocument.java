@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.core;
 public interface InsertIncidentDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertIncidentDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("insertincidentb425doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertIncidentDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sA8F8261E145052D27C869A3548949452").resolveHandle("insertincidentb425doctype");
     
     /**
      * Gets the "insertIncident" element
@@ -42,7 +42,7 @@ public interface InsertIncidentDocument extends org.apache.xmlbeans.XmlObject
     public interface InsertIncident extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertIncident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s45E1E5C329E9FFAAC1A63D087AEED0C2").resolveHandle("insertincidentb13eelemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(InsertIncident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sA8F8261E145052D27C869A3548949452").resolveHandle("insertincidentb13eelemtype");
         
         /**
          * Gets the "session_id" element
