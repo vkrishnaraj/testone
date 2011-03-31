@@ -3215,8 +3215,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							item.setContent(contentList.toArray(new Content[0]));
 						}
 					}
-
-					item.setManufacturer(ores.getOnHandBag().getBrandInfo().getStringValue());
+					
+					if(ores.getOnHandBag().getBrandInfo() != null){
+						item.setManufacturer(ores.getOnHandBag().getBrandInfo().getStringValue());
+					}
 					if (ores.getOnHandBag().getBagTag() != null) {
 						ClaimCheck cc = new ClaimCheck();
 						rohd.setClaimCheck(cc);
