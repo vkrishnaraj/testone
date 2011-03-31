@@ -20,7 +20,6 @@ import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionType;
 import aero.nettracer.serviceprovider.wt_1_0.services.ishares.service.CommandNotProperlyFormedException;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WorldTracerHttpClient;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.connection.WtHttpClient;
 
 public abstract class AbstractServiceManager implements ServiceManagerInterface {
