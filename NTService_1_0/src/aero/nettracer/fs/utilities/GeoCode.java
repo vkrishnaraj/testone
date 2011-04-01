@@ -84,6 +84,9 @@ public class GeoCode {
 	private static GeoLocation lookupLoc(GeoParsedAddress parsed, String zip,
 			String state, boolean useFIPs, boolean usePrefix, Session sess) {
 		GeoLocation returnMe = null;
+		if (state == null || state.trim().equals("") || state.length() != 2) {
+			return returnMe;
+		}
 		String address = parsed.getName() + " " + parsed.getType();
 		if (usePrefix) {
 			if (parsed.getPrefix() != null
