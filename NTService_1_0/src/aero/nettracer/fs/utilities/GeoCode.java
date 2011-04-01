@@ -5,17 +5,27 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+
+import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class GeoCode {
 
 	public static final double MILES_PER_LATITUDE = 69;
 	public static HashMap<String, String> fips_to_states;
 	public static HashMap<String, String> states_to_fips;
+	private static Logger logger = Logger.getLogger(GeoCode.class);
 
 	public static GeoLocation locate(String address, String city, String state,
 			String zip, String province, String country, Session sess) {
+		boolean nullSession = (sess == null);
+		
+		try {
+			if (nullSession) {
+				sess = HibernateWrapper.getGeoSession().openSession();
+			}
 		if (country.equalsIgnoreCase("US")) {
 			GeoParsedAddress parsed = parse(address, city, state, zip);
 			if (parsed != null) {
@@ -33,6 +43,19 @@ public class GeoCode {
 					}
 				}
 				return toReturn;
+			}
+		}
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null && nullSession) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
 			}
 		}
 		return null;
@@ -239,7 +262,7 @@ public class GeoCode {
 		return distance / MILES_PER_LATITUDE;
 	}
 
-	public static void loadStates() {
+	private static void loadStates() {
 		if (states_to_fips == null) {
 			states_to_fips = new HashMap<String, String>();
 			states_to_fips.put("AK", "02");
@@ -297,7 +320,7 @@ public class GeoCode {
 		}
 	}
 
-	public static void loadFips() {
+	private static void loadFips() {
 		if (fips_to_states == null) {
 			fips_to_states = new HashMap<String, String>();
 			fips_to_states.put("02", "AK");
