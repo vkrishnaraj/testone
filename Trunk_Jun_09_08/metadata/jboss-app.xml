@@ -1,0 +1,9 @@
+<jboss-app>
+   <loader-repository> 
+   com.nettracer:archive=one-war-to-rule-them-all
+        <loader-repository-config> 
+     java2ParentDelegation=false 
+     </loader-repository-config> 
+   
+   </loader-repository> 
+</jboss-app>
