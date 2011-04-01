@@ -254,6 +254,10 @@
 		<form-bean name="salvageSearchForm" type="com.bagnet.nettracer.tracing.forms.salvage.SalvageSearchForm" />
 		<form-bean name="salvageEditForm" type="com.bagnet.nettracer.tracing.forms.salvage.SalvageEditForm" />
 		<form-bean name="generaltaskForm" type="com.bagnet.nettracer.tracing.forms.GeneralTaskForm" />
+		<form-bean name="privacyPermissionsForm" type="com.bagnet.nettracer.tracing.forms.PrivacyPermissionsForm"/>
+		
+		
+		
 
 	</form-beans>
 	<!-- global exception -->
@@ -353,6 +357,8 @@
 		<forward name="viewbagbuzzeditor" path="view_bagbuzzeditor" />
 		<forward name="viewbagbuzzsearch" path="view_bagbuzzsearch" />
 		<forward name="viewbagbuzzview" path="view_bagbuzzview" />
+		
+		<forward name="viewprivacypermissions" path="view_privacypermissions"/>
 
 
 		<forward name="viewworldtracersusrit" path="view_worldtracer_sus_rit" />
@@ -628,6 +634,8 @@
 		<action path="/worldtracersearch" type="com.bagnet.nettracer.tracing.actions.WorldTracerSearchAction" name="worldtracerafForm" scope="request" validate="false"></action>
 
 		<action path="/bagbuzzeditor" type="com.bagnet.nettracer.tracing.actions.BagBuzzEditorAction" name="bagbuzzeditorForm" scope="request" validate="false"></action>"
+		
+		<action path="/privacypermissions" type="com.bagnet.nettracer.tracing.actions.PrivacyPermissionsAction" name="privacyPermissionsForm" scope="session" validate="false"></action>"
 		
 		<action path="/GeneralTask" type="com.bagnet.nettracer.tracing.actions.GeneralTaskAction"  name="generaltaskForm" scope="request" validate="false"></action>"
 

@@ -19,7 +19,7 @@ public class PrivacyPermissionsBean implements PrivacyPermissionsRemote, Privacy
 		return null;
 	}
 	
-	@Transactional
+
 	public PrivacyPermissions getPrivacyPermissions(String companycode, PrivacyPermissions.AccessLevelType level){
 		if(companycode == null || level == null) return null;
 		Session sess = HibernateWrapper.getSession().openSession();

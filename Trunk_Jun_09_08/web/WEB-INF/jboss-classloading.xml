@@ -1,0 +1,17 @@
+
+<classloading xmlns="urn:jboss:classloading:1.0"
+              domain="DefaultDomain"
+              top-level-classloader="true"
+              export-all="NON_EMPTY"
+              import-all="true">
+</classloading>
+
+<!-- 
+<classloading xmlns="urn:jboss:classloading:1.0"
+              domain="IsolatedDomain_WJ"
+              export-all="NON_EMPTY"
+              parent-domain="DefaultDomain"
+              import-all="false">
+</classloading>
+
+ -->

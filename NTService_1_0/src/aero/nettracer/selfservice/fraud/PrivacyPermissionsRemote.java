@@ -7,7 +7,8 @@ import org.jboss.ejb3.annotation.RemoteBinding;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 
 
-@RemoteBinding(clientBindUrl="sslsocket://192.168.2.145:4850", jndiBinding="permissionsSSL")
+//@RemoteBinding(clientBindUrl="sslsocket://127.0.0.1:4850")
+//	, jndiBinding="permissionsSSL")
 @Remote
 public interface PrivacyPermissionsRemote {
 	public PrivacyPermissions getPrivacyPermissions(String companycode, PrivacyPermissions.AccessLevelType level);

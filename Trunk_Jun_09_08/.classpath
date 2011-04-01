@@ -147,5 +147,6 @@
 	<classpathentry kind="lib" path="lib/jars/libphonenumber-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/jars/java-core-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/jars/deliverySERV.jar"/>
+    <classpathentry kind="lib" path="lib/jars/nt_fs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

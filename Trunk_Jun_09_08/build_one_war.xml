@@ -1,0 +1,1802 @@
+<project name="1.75" default="build-jetblue-dev" basedir=".">
+
+	<property file="user.properties" />
+	<property file="common.properties" />
+	<property environment="env" />
+	<property name="lib" value="lib/jars" />
+	<property name="buildlib" value="lib/build-client" />
+	<property name="artifact.dir" value="${build.dir}/artifacts/" />
+	<property name="ant.regexp.matcherimpl" value="org.apache.tools.ant.util.regexp.JakartaOroRegexp" />
+	<property name="main-class" value="com.bagnet.nettracer.cronjob.NettracerCron" />
+	<taskdef name="hibernatedoclet" classname="org.xdoclet.ant.XDocletTask">
+		<classpath refid="project.classpath" />
+	</taskdef>
+	<target name="init" unless="flag">
+		<patternset id="java.files">
+			<include name="**/**/*.java" />
+		</patternset>
+		<patternset id="class.files">
+			<include name="**/**/*.class" />
+		</patternset>
+		<patternset id="jar.files">
+			<include name="**/*.jar" />
+			<include name="**/*.zip" />
+		</patternset>
+		<patternset id="xml.files">
+			<include name="**/**/*.xml" />
+		</patternset>
+		<patternset id="hbm.xml.files">
+			<include name="**/**/*.hbm.xml" />
+		</patternset>
+		<!-- Create a flag property to ensure 'init' runs only once-->
+		<property name="flag" value="true" />
+		<!-- Standard echo to indentify current build phase -->
+		<!-- Create the time stamp -->
+		<tstamp />
+		<mkdir dir="${build.dir}/${ant_project_name}_web/classes" />
+		<mkdir dir="${build.dir}/dist/web" />
+		<mkdir dir="${build.dir}/${ant_project_name}_app/classes" />
+		<mkdir dir="${build.dir}/dist/app" />
+		<mkdir dir="${build.dir}/dist/cron" />
+		<mkdir dir="${build.dir}/${ant_project_name}/classes" />
+		<mkdir dir="${build.dir}/${ant_project_name}/ddl" />
+		<mkdir dir="${artifact.dir}/${ant_project_name}" />
+		<mkdir dir="${artifact.dir}/${ant_project_name}/zip" />
+
+		<mkdir dir="${build.dir}/webservices/passengerview" />
+
+		<path id="project.classpath">
+			<fileset dir="${lib.build-client.dir}">
+				<patternset refid="jar.files" />
+			</fileset>
+			<fileset dir="${lib.jar.dir}">
+				<patternset refid="jar.files" />
+			</fileset>
+			<fileset dir="${basedir}/lib/provided">
+				<patternset refid="jar.files" />
+			</fileset>
+			<fileset dir="${basedir}/lib/client-us">
+				<patternset refid="jar.files" />
+			</fileset>
+		</path>
+	</target>
+
+	<target name="clean">
+		<antcall target="delete" />
+		<delete dir="other" />
+	</target>
+
+
+	<target name="all" depends="clean,package-web" />
+
+	<target name="fast_all" depends="package-web2">
+		<delete dir="${app.deploy.dir.jb5}/tracer.war" failonerror="false" />
+		<delete file="${app.deploy.dir.jb5}/tracer.war" failonerror="false" />
+
+		<!--<copy todir="${app.deploy.dir.jb5}">
+			<fileset dir="${build.dir}/dist/web">
+				<include name="${ant_war_name}.war" />
+			</fileset>
+		</copy>-->
+
+	</target>
+	
+	<target name="build-war" depends="resources2">
+		
+		<!-- time stamp for a build -->
+		<tstamp>
+			<format property="VERSION" pattern="yyyyMMdd-HHmm " locale="en" />
+		</tstamp>
+
+		<delete dir="${build.dir}/${ant_project_name}/webWorking" failonerror="false" includeemptydirs="true" />
+			
+		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
+			<fileset dir="${basedir}/companies/${ant_project_name}/web">
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
+			<fileset dir="${basedir}/web">
+				<exclude name="**/web.xml" />
+				<exclude name="WEB-INF/classes/**/*.*" />
+			</fileset>
+		</copy>
+		<!--
+		<replaceregexp match="\s+" replace=" " flags="g" byline="false">
+			<fileset dir="${build.dir}/${ant_project_name}/webWorking" includes="**/*.jsp" />
+		</replaceregexp>
+		-->
+		
+		<war destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
+			<fileset dir="${build.dir}/${ant_project_name}/webWorking" />
+			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
+			<lib dir="${lib.jar.dir}">
+				<include name="sqljdbc.jar"/>
+			</lib>
+			<!--
+			<lib dir="${lib.jar.dir}">
+				<include name="sqljdbc.jar"/>
+				<include name="ehcache*.jar"/>
+				<include name="hibernate*.jar"/>
+				<include name="ajaxtags*.jar"/>
+				-->
+				<!--
+				<exclude name="log4j*.*" />
+				<exclude name="servlet.jar" />
+				-->
+			<!--
+			</lib>
+			-->
+		</war>
+		
+	</target>
+
+	<target name="build" depends="init,compile-web"  />
+
+	<!-- This is used  -->
+	<target name="compile-web" depends="init">
+		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}_web/classes" debug="on"
+			
+			memoryinitialsize="256m"       memorymaximumsize="256m"
+			>
+			<classpath refid="project.classpath" />
+			<exclude name="com/bagnet/nettracer/cronjob/**" />
+			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl" />
+			<exclude name="com/bagnet/clients/us/**" unless="include.us" />
+			<exclude name="com/bagnet/clients/demo/**" unless="include.demo" />
+			<exclude name="com/bagnet/clients/ws/**" unless="include.ws" />
+			<exclude name="com/bagnet/clients/b6/**" unless="include.b6" />
+		</javac>
+	</target>
+
+	<target name="deploy-local-app" depends="all">
+		<copy todir="${app.deploy.dir.jb5}">
+			<fileset dir="${build.dir}/dist/web">
+				<include name="*.war" />
+			</fileset>
+		</copy>
+	</target>
+
+
+	<!-- Copy any resource or configuration files -->
+
+	<target name="resources2" >
+		<copy todir="${build.dir}/${ant_project_name}_web/classes" includeEmptyDirs="no">
+			<fileset dir="src">
+				<patternset>
+					<include name="**/*.conf" />
+					<include name="**/*.properties" />
+					<include name="**/*.xml" />
+					<include name="**/*.html" />
+					<include name="**/*.wsdl" />
+					<include name="**/*.0" />
+					<include name="**/*.jpg" />
+				</patternset>
+			</fileset>
+		</copy>
+	</target>
+
+
+	<!-- Copy any resource or configuration files -->
+	<target name="resources">
+
+		<copy todir="${build.dir}/${ant_project_name}_web/classes" includeEmptyDirs="no">
+			<fileset dir="src">
+				<patternset>
+					<include name="**/*.conf" />
+					<include name="**/*.properties" />
+					<include name="**/*.xml" />
+					<include name="**/*.html" />
+				</patternset>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="hibernate_generate" description="Generates Hibernate class descriptor files." depends="compile-web">
+		<hibernatedoclet>
+			<fileset dir="src">
+				<include name="com/bagnet/nettracer/tracing/db/*.java" />
+				<include name="com/bagnet/nettracer/tracing/db/audit/*.java" />
+				<exclude name="com/bagnet/nettracer/tracing/db/Incident.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/ExpensePayout.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/Claim.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/CrmFile.java"/>
+			</fileset>
+			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="src/" version="3.0" />
+		</hibernatedoclet>
+
+		<replace dir="src" value="&lt;hibernate-mapping default-lazy=&quot;false&quot;&gt;">
+			<include name="com/bagnet/nettracer/tracing/db/*.hbm.xml" />
+			<include name="com/bagnet/nettracer/tracing/db/audit/*.hbm.xml" />
+			<replacetoken><![CDATA[<hibernate-mapping>]]></replacetoken>
+		</replace>
+
+	</target>
+
+	<taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask">
+		<classpath refid="project.classpath" />
+	</taskdef>
+
+
+	<target name="jasper_compile" description="generate .jasper compiled files from jrxml." depends="compile-web">
+		<jrc srcdir="${basedir}/web/reports">
+			<classpath>
+				<path refid="project.classpath" />
+				<path location="${build.dir}/${ant_project_name}_web/classes" />
+			</classpath>
+			<include name="**/*.jrxml"/>
+		</jrc>
+
+	</target>
+
+
+	<!-- Exclusions need to happen here....-->
+	<target name="package-web" depends="resources">
+		<!-- time stamp for a build -->
+		<tstamp>
+			<format property="VERSION" pattern="yyyyMMdd-HHmm " locale="en" />
+		</tstamp>
+
+		<war destfile="${build.dir}/dist/web/${ant_project_name}.war" webxml="${basedir}/web/WEB-INF/web.xml">
+			<fileset dir="${basedir}/web">
+				<exclude name="**/web.xml" />
+			</fileset>
+			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
+			<lib dir="${lib.jar.dir}">
+				<exclude name="log4j*.*" />
+			</lib>
+		</war>
+	</target>
+
+	<target name="package-web2" depends="resources2">
+		<!-- time stamp for a build -->
+		<tstamp>
+			<format property="VERSION" pattern="yyyyMMdd-HHmm " locale="en" />
+		</tstamp>
+
+		<delete dir="${build.dir}/${ant_project_name}/webWorking" failonerror="false" includeemptydirs="true" />
+			
+		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
+			<fileset dir="${basedir}/companies/${ant_project_name}/web">
+				<exclude name="**/*/jboss-web.xml"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
+			<fileset dir="${basedir}/web">
+				<exclude name="**/web.xml" />
+				<exclude name="WEB-INF/classes/**/*.*" />
+				<exclude name="**/*/jboss-web.xml"/>
+			</fileset>
+		</copy>
+		<!--
+		<replaceregexp match="\s+" replace=" " flags="g" byline="false">
+			<fileset dir="${build.dir}/${ant_project_name}/webWorking" includes="**/*.jsp" />
+		</replaceregexp>
+		-->
+		
+		<war destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
+			<fileset dir="${build.dir}/${ant_project_name}/webWorking" />
+			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
+			<lib dir="${lib.jar.dir}">
+				<exclude name="log4j*.*" />
+				<exclude name="servlet.jar" />
+				<exclude name="netty.jar" />
+				<exclude name="mysql-connector-java*.jar" />
+			</lib>
+		</war>
+	</target>
+
+
+	<target name="jar-gensrc">
+		<jar destfile="${build.dir}/tracerfiles.jar">
+			<fileset dir="${build.dir}/tracer_web/classes" />
+		</jar>
+	</target>
+
+	<target name="compile-gensrc" depends="init,gen-src">
+		<javac srcdir="${build.gen-src.dir}/${ant_project_name}_app" fork="true" destdir="${build.dir}/${ant_project_name}_app/classes" debug="on" sourcepath="${basedir}/ejbsrc:${basedir}/src">
+			<classpath>
+				<path refid="project.classpath" />
+			</classpath>
+		</javac>
+		<javac srcdir="${build.gen-src.dir}/${ant_project_name}_app" fork="true" destdir="${build.gen-src.dir}/${ant_project_name}_app/classes" debug="on" sourcepath="${basedir}/ejbsrc:${basedir}/src">
+			<classpath>
+				<pathelement location="${root.dir}/tmp/${ant_project_name}_app/classes" />
+				<path refid="project.classpath" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="gen-src" depends="init">
+		<antcall target="gen-ejb" />
+	</target>
+
+	<!-- Exclusions need to happen here....-->
+
+	<target name="gen-ejb" depends="init">
+		<taskdef name="ejbdoclet" classname="xdoclet.modules.ejb.EjbDocletTask">
+			<classpath refid="project.classpath" />
+		</taskdef>
+
+		<ejbdoclet destdir="${build.gen-src.dir}/${ant_project_name}_app" excludedtags="@version,@author,@todo" ejbspec="2.0" force="false" verbose="false">
+			<fileset dir="${basedir}/ejbsrc">
+				<include name="**/*.java" />
+			</fileset>
+
+			<remoteinterface />
+			<localinterface />
+			<homeinterface />
+			<localhomeinterface />
+
+			<dataobject />
+			<valueobject />
+
+			<entitypk />
+
+			<entitycmp />
+			<entitybmp />
+
+			<session />
+
+			<deploymentdescriptor destdir="${build.dir}/gen/gen-conf/${ant_project_name}_app/META-INF" validatexml="true" mergedir="${build.dir}/gen/gen-conf/${ant_project_name}_app/META-INF" description="deployment">
+				<!--configParam name="clientjar" value="concert-common.jar"/-->
+			</deploymentdescriptor>
+
+			<jboss version="3.2" unauthenticatedPrincipal="nobody" xmlencoding="UTF-8" destdir="${build.dir}/gen/gen-conf/${ant_project_name}_app/META-INF" validatexml="true" preferredrelationmapping="relation-table" />
+		</ejbdoclet>
+	</target>
+
+	
+	
+	<target name="build-ear">
+		<antcall target="build-westjet-local"/>
+		
+		<copy todir="${build.dir}/dist/web/lib" >
+			<fileset dir="${lib.jar.dir}"/>
+		</copy>
+		
+		  <jar destfile="${build.dir}/dist/web/tplib.jar"
+		       basedir="${build.dir}/dist/web/lib"
+		       includes="*.jar"
+		  	   excludes="log4j*.*,servlet.jar,sqljdbc.jar"
+	/>
+	  	   <!--
+	  	   ,commons-logging*.jar
+	excludes="sqljdbc.jar,log4j*.*,servlet.jar,ehcache*.jar,hibernate*.jar,ajaxtags*.jar"
+-->	  
+		
+		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/metadata/application.xml">
+			<fileset dir="${build.dir}/dist/web" includes="tplib.jar,*.war"/>
+			<zipfileset dir="${basedir}/metadata" prefix="META-INF">
+			  <include name="jboss-app.xml"/>
+			</zipfileset>
+
+		</ear>
+		
+		<copy todir="${app.deploy.dir.jb5}">
+			<fileset dir="${build.dir}">
+				<include name="tracer.ear" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="build-all-ear">
+		<antcall target="build-westjet-local"/>
+		<antcall target="build-jetblue-local"/>
+		
+		<copy todir="${build.dir}/dist/web/lib" >
+			<fileset dir="${lib.jar.dir}"
+			includes="*.jar"
+			excludes="mysql-connector-java*.jar,
+					  netty.jar"
+			/>
+		</copy> 
+		
+		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/metadata/application.xml">
+			<fileset dir="${build.dir}/dist/web" includes="tplib.jar,*.war"/>
+
+		</ear>
+		
+		<copy todir="${app.deploy.dir.jb5}">
+			<fileset dir="${build.dir}">
+				<include name="tracer.ear" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="build-ws-ear">
+		<antcall target="build-westjet-local"/>
+		
+		<copy todir="${build.dir}/dist/web/lib" >
+			<fileset dir="${lib.jar.dir}"
+			includes="*.jar"
+			excludes="mysql-connector-java*.jar,
+					  netty.jar"
+			/>
+		</copy> 
+		
+		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/metadata/application.xml">
+			<fileset dir="${build.dir}/dist/web" includes="tplib.jar,*.war"/>
+
+		</ear>
+		
+		<copy todir="${app.deploy.dir.jb5}">
+			<fileset dir="${build.dir}">
+				<include name="tracer.ear" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="build-dev" depends="delete">
+		<property name="ant_project_name" value="tracer" />
+		<property name="ant_war_name" value="tracer" />
+		<property name="include.demo" value="1" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/tracer/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/tracer/report_email.html" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
+		<copy todir="${basedir}/web/pages/login" file="companies/tracer/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/tracer/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/tracer/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/tracer/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/tracer/hibernate_reporting.cfg.xml" />
+
+		<antcall target="fast_all">
+			<param name="ant_project_name" value="tracer" />
+		</antcall>
+		<antcall target="delete" />
+	</target>
+	
+	<target name="build-alaska-demo" depends="delete">
+		<property name="ant_project_name" value="alaska" />
+		<property name="ant_war_name" value="alaska" />
+		<property name="include.demo" value="1" />
+		<copy todir="${basedir}/web/reports" file="companies/alaska/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/alaska/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/alaska/MissingReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/alaska/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/alaska/report_email.html" />
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/alaska/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/alaska/ApplicationResources_es.properties" />
+		<copy todir="${basedir}/web/pages/login" file="companies/alaska/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/alaska/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/alaska/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/alaska/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/alaska/hibernate_reporting.cfg.xml" />
+
+		<antcall target="fast_all">
+			<param name="ant_project_name" value="alaska" />
+		</antcall>
+		<antcall target="delete" />
+	</target>
+
+
+
+	<target name="build-airtran" depends="delete">
+		<property name="ant_project_name" value="airtran" />
+		<property name="ant_war_name" value="airtran" />
+		<property name="include.fl" value="1" />
+		<property name="include.demo" value="1" />
+		<antcall target="airtran-libraries-create" />
+		<copy todir="${basedir}/web/reports" file="companies/airtran/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/airtran/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/airtran/MissingReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/airtran/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/airtran/report_email.html" />
+		<copy todir="${basedir}/web/pages/login" file="companies/airtran/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/airtran/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/airtran/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/airtran/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/airtran/hibernate_reporting.cfg.xml" />
+
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/airtran/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+		<antcall target="airtran-libraries-cleanup"/>
+	</target>
+
+	<target name="build-xjet" depends="delete">
+		<copy todir="${basedir}/web/reports" file="companies/xjet/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/xjet/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/xjet/MissingReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/xjet/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/xjet/report_email.html" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
+		<copy todir="${basedir}/web/pages/login" file="companies/xjet/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/xjet/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/xjet/hibernate_main.cfg.xml" />
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<param name="overrideResource" value="${basedir}/companies/xjet/ApplicationResources.properties" />
+			<param name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<antcall target="fast_all">
+			<param name="ant_project_name" value="tracer" />
+		</antcall>
+		<antcall target="delete" />
+	</target>
+
+
+	<target name="build-azul-qa" depends="delete">
+		<property name="ant_project_name" value="azul" />
+		<property name="ant_war_name" value="azul-qa" />
+		<property name="environment" value="qa" />
+
+		<copy todir="${basedir}/src" file="companies/azul/environment/qa/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/qa/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/qa/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/qa/hibernate_reporting.cfg.xml" />
+		<property name="environment" value="training" />
+		<antcall target="donotrun-build-azul" />
+	</target>
+
+
+	<target name="build-azul-training" depends="delete">
+		<property name="ant_project_name" value="azul" />
+		<property name="ant_war_name" value="azul-training" />
+
+		<copy todir="${basedir}/src" file="companies/azul/environment/training/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/training/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/training/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/training/hibernate_reporting.cfg.xml" />
+		<property name="environment" value="training" />
+		<antcall target="donotrun-build-azul" />
+	</target>
+
+	<target name="build-azul-prod" depends="delete">
+		<antcall target="hibernate_generate" />
+		<property name="ant_project_name" value="azul" />
+		<property name="ant_war_name" value="azul-prod" />
+		<property name="environment" value="production" />
+
+		<copy todir="${basedir}/src" file="companies/azul/environment/production/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/production/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/production/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/production/hibernate_reporting.cfg.xml" />
+		<antcall target="donotrun-build-azul" />
+	</target>
+
+	<target name="donotrun-build-azul">
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/azul/ApplicationResources_pt.properties" />
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/azul/environment/${environment}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<copy todir="${basedir}/web/reports" file="companies/azul/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/azul/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/azul/MissingReceipt.jrxml" />
+
+		<ant target="jasper_compile" antfile="build-gen.xml"/>
+
+		<copy todir="${basedir}/src" file="companies/azul/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/azul/report_email.html" />
+
+		<!-- Hibernate main dependent on environment -->
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/azul/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<ant target="fast_all" antfile="build-gen.xml"/>
+		<ant target="delete" antfile="build-gen.xml"/>
+	</target>
+
+	<target name="build-spirit-dev" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit-dev" />
+
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/production/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/production/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/production/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_dirty.cfg.xml" />
+        <copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_reporting.cfg.xml" />
+		<antcall target="donotrun-build-spirit" />
+	</target>
+
+	<target name="build-spirit-test" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit-test" />
+
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/spirittest/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/spirittest/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/tracer.properties" />
+		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_reporting.cfg.xml" />
+		<antcall target="donotrun-build-spirit" />
+	</target>
+
+	<target name="build-spirit-qa" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit-qa" />
+
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/spiritqa/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/spiritqa/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/tracer.properties" />
+		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_reporting.cfg.xml" />
+		<antcall target="donotrun-build-spirit" />
+	</target>
+
+	<target name="build-spirit-prod" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit-prod" />
+
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/production/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/production/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/production/tracer.properties" />
+		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_reporting.cfg.xml" />
+		<antcall target="donotrun-build-spirit" />
+	</target>
+
+	<target name="donotrun-build-spirit">
+		<copy todir="${basedir}/web/reports" file="companies/spirit/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/spirit/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/spirit/MissingReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+
+		<!-- Image based on environment -->
+		<copy todir="${basedir}/src" file="companies/spirit/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/spirit/report_email.html" />
+
+		<!-- Login page based on environment -->
+
+		<copy todir="${basedir}/web/pages/login" file="companies/tracer/login/center.jsp" />
+
+		<!-- Hibernate main dependent on environment -->
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/spirit/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/spirit/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/spirit/tracer.properties" />
+			<property name="tertiaryResource" value="${basedir}/companies/spirit/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<antcall target="fast_all">
+			<param name="ant_project_name" value="spirit" />
+		</antcall>
+		<antcall target="delete" />
+	</target>
+
+
+
+	<target name="build-jetblue-all">
+		<antcall target="build-jetblue-qa" />
+		<antcall target="build-jetblue-training" />
+		<antcall target="build-jetblue-prod" />
+	</target>
+
+
+	<target name="build-jetblue-dev" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="include.demo" value="1" />
+		<property name="include.us" value="1" />
+		<property name="ant_war_name" value="b6dev" />
+		<property name="jetblue.init.complete" value="true" />
+		<property name="environment.name" value="dev"/>
+		<!--<antcall target="hibernate_generate"/>-->
+		<antcall target="donotrun-build-jetblue" />
+	</target>
+
+	<target name="build-jetblue-qa" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="ant_war_name" value="b6qa" />
+		<property name="jetblue.init.complete" value="true" />
+		<property name="environment.name" value="qa"/>
+		<antcall target="donotrun-build-jetblue" />
+	</target>
+	
+	<target name="build-jetblue-qa-sabre" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="ant_war_name" value="b6qa-sabre" />
+		<property name="jetblue.init.complete" value="true" />
+		<property name="environment.name" value="qa-sabre"/>
+		<antcall target="donotrun-build-jetblue" />
+	</target>
+
+	<target name="build-jetblue-training" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="ant_war_name" value="b6training" />
+		<property name="environment.name" value="training"/>
+		<property name="jetblue.init.complete" value="true" />
+		<antcall target="donotrun-build-jetblue" />
+	</target>
+
+	<target name="build-jetblue-prod" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="ant_war_name" value="b6prod" />
+		<property name="environment.name" value="prod"/>
+		<property name="jetblue.init.complete" value="true" />
+		<antcall target="donotrun-build-jetblue" />
+	</target>
+
+
+	<target name="donotrun-build-jetblue" if="jetblue.init.complete">
+		<property name="include.b6" value="1" />
+		<copy todir="${basedir}/web/pages/login" file="companies/jetblue/environment/${environment.name}/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/jetblue/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/jetblue/report_email_es.html" />
+		<copy todir="${basedir}/src" file="companies/jetblue/custom_ui.properties" />
+		<copy todir="${basedir}/web/reports" file="companies/jetblue/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/jetblue/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/jetblue/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/jetblue/ApplicationResources_es.properties" />
+
+			
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/jetblue/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/jetblue/tracer.properties" />
+			<property name="tertiaryResource" value="${basedir}/companies/jetblue/environment/${environment.name}/tracer.properties"/>
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+
+			<antcall target="jetblue-libraries-create" />
+			<antcall target="jasper_compile" />
+
+		
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+		<antcall target="jetblue-libraries-cleanup" />
+		<delete file="${basedir}/src/report_email_es.html" />
+	</target>
+
+	<target name="build-westjet-all">
+		<antcall target="build-westjet-test" />
+		<antcall target="build-westjet-qa" />
+		<antcall target="build-westjet-prod" />
+	</target>
+
+	<target name="build-westjet-local" depends="delete">
+		<property name="ant_project_name" value="westjet" />
+		<property name="ant_war_name" value="wjtest" />
+		<property name="westjet.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-westjet" />
+	</target>
+
+	<target name="build-westjet-test" depends="delete">
+		<property name="ant_project_name" value="westjet" />
+		<property name="ant_war_name" value="wjtest" />
+		<property name="westjet.init.complete" value="true" />
+		<property name="environment.name" value="test" />
+		<antcall target="donotrun-build-westjet" />
+	</target>
+
+	<target name="build-westjet-qa" depends="delete">
+		<property name="ant_project_name" value="westjet" />
+		<property name="ant_war_name" value="wjqa" />
+		<property name="westjet.init.complete" value="true" />
+		<property name="environment.name" value="qa" />
+		<antcall target="donotrun-build-westjet" />
+	</target>
+
+	<target name="build-westjet-prod" depends="delete">
+		<property name="ant_project_name" value="westjet" />
+		<property name="ant_war_name" value="wjprod" />
+		<property name="westjet.init.complete" value="true" />
+		<property name="environment.name" value="prod" />
+		<antcall target="donotrun-build-westjet" />
+	</target>
+
+
+	<target name="donotrun-build-westjet" if="westjet.init.complete">
+		<property name="include.ws" value="1" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/westjet/environment/${environment.name}/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/pages/login" file="companies/westjet/environment/${environment.name}/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/report_email_fr.html" />
+		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/LostDelayReceipt_fr.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/DamageReceipt_fr.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/MissingReceipt_fr.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/westjet/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/westjet/pax_comm_email.html" />
+		<copy todir="${basedir}/src" file="companies/westjet/pax_comm_email_fr.html" />
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/westjet/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/westjet/ApplicationResources_fr.properties" />
+		<!--
+		<antcall target="build-war" />
+		-->
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+		<delete file="${basedir}/src/report_email_fr.html" />
+	</target>
+
+
+	<target name="build-southwest" depends="delete">
+		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/southwest/nettracerstyles1.css" />
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/southwest/formstyles.css" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/southwest/header_bg.gif" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/southwest/header_bg_noconf.gif" />
+		<copy todir="${basedir}/src" file="companies/southwest/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/southwest/report_email.html" />
+		<copy todir="${basedir}/web/reports" file="companies/southwest/receipt/logo.jpg" />
+		<copy todir="${basedir}/web/reports" file="companies/southwest/bdo/bdologo.gif" />
+
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
+		<copy todir="${basedir}/web/pages/login" file="companies/tracer/login/center.jsp" />
+		<copy todir="${basedir}/web/pages/passengerview" file="companies/tracer/passengerview/passengerview.jsp" />
+		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/required_fields_incl.jsp" />
+		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/analytics.jsp" />
+		<copy todir="${basedir}/src" file="companies/tracer/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/tracer/hibernate_main.cfg.xml" />
+
+		<antcall target="fast_all">
+			<param name="ant_project_name" value="tracer" />
+		</antcall>
+		<antcall target="delete" />
+	</target>
+
+
+	<target name="build-virginamerica" depends="delete">
+		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/virginamerica/nettracerstyles1.css" />
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/virginamerica/formstyles.css" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/virginamerica/header_bg.gif" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/virginamerica/header_bg_noconf.gif" />
+		<copy todir="${basedir}/src" file="companies/virginamerica/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/virginamerica/report_email.html" />
+
+		<copy todir="${basedir}/web/reports" file="companies/tracer/receipt/logo.jpg" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo/bdologo.gif" />
+
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
+		<copy todir="${basedir}/web/pages/login" file="companies/tracer/login/center.jsp" />
+		<copy todir="${basedir}/web/pages/passengerview" file="companies/tracer/passengerview/passengerview.jsp" />
+		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/required_fields_incl.jsp" />
+		<copy todir="${basedir}/web/pages/includes" file="companies/tracer/includes/analytics.jsp" />
+		<copy todir="${basedir}/src" file="companies/tracer/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/tracer/hibernate_main.cfg.xml" />
+
+		<antcall target="fast_all">
+			<param name="ant_project_name" value="tracer" />
+		</antcall>
+		<antcall target="delete" />
+	</target>
+
+	<target name="delete">
+		<delete file="${basedir}/src/custom_ui.properties" />
+		<delete file="${basedir}/src/report_email.html" />
+		<delete file="${basedir}/src/report_email_es.html" />
+		<delete file="${basedir}/src/report_email_fr.html" />
+		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources_es.properties" />
+		<delete file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources_fr.properties" />
+		<delete file="${basedir}/web/WEB-INF/jboss-app.xml" />
+		<delete file="${basedir}/web/pages/login/center.jsp" />
+		<delete file="${basedir}/web/WEB-INF/context.xml" />
+		<delete file="${basedir}/src/hibernate_main.cfg.xml" />
+		<delete file="${basedir}/src/hibernate_dirty.cfg.xml" />
+		<delete file="${basedir}/src/hibernate_demo.cfg.xml" />
+		<delete file="${basedir}/src/hibernate_qa.cfg.xml" />
+		<delete file="${basedir}/src/hibernate_reporting.cfg.xml" />
+		<delete file="${basedir}/src/tracer.properties" />
+		<delete file="${basedir}/web/reports/LostDelayReceipt.jrxml" />
+		<delete file="${basedir}/web/reports/LostDelayReceipt.jasper" />
+		<delete file="${basedir}/web/reports/DamageReceipt.jrxml" />
+		<delete file="${basedir}/web/reports/DamageReceipt.jasper" />
+		<delete file="${basedir}/web/reports/MissingReceipt.jrxml" />
+		<delete file="${basedir}/web/reports/MissingReceipt.jasper" />
+		<delete file="${basedir}/web/reports/LostDelayReceipt_fr.jrxml" />
+		<delete file="${basedir}/web/reports/LostDelayReceipt_fr.jasper" />
+		<delete file="${basedir}/web/reports/DamageReceipt_fr.jrxml" />
+		<delete file="${basedir}/web/reports/DamageReceipt_fr.jasper" />
+		<delete file="${basedir}/web/reports/MissingReceipt_fr.jrxml" />
+		<delete file="${basedir}/web/reports/MissingReceipt_fr.jasper" />
+
+	</target>
+
+
+
+
+	<target name="package-app" depends="package-web">
+		<!--target name="package-app" depends="init,build"-->
+		<ear destfile="${build.dir}/dist/app/${ant_project_name}.ear" appxml="${basedir}/companies/${ant_project_name}/application.xml">
+			<fileset dir="${build.dir}/dist/web">
+				<include name="${ant_project_name}.war" />
+			</fileset>
+		</ear>
+
+		<copy todir="${app.deploy.dir.jb5}">
+			<fileset dir="${build.dir}/dist/app">
+				<include name="${ant_project_name}.ear" />
+			</fileset>
+		</copy>
+	</target>
+
+
+	<!-- jameleon stuff -->
+	<path id="classpath">
+		<fileset dir="jameleon-2.0.1.lib">
+			<include name="**/*.jar" />
+		</fileset>
+		<pathelement location="build" />
+	</path>
+
+	<!-- run tests on local jboss -->
+	<target name="run_local_tests" depends="prepare">
+		<antcall target="execute.testcases">
+			<param name="url" value="localhost" />
+		</antcall>
+	</target>
+
+	<!-- run tests on nwa jboss -->
+	<target name="run_nwa_tests" depends="prepare">
+		<antcall target="execute.testcases">
+			<param name="url" value="nwa" />
+		</antcall>
+	</target>
+
+	<target name="prepare" depends="build2, copyRes, register.functions" />
+
+	<target name="execute.testcases" description="Executes a series of test cases">
+		<taskdef name="jmln-test" classname="net.sf.jameleon.ant.ExecuteTestCaseTask" classpathref="classpath" />
+		<jmln-test>
+			<fileset dir="scripts">
+				<include name="${url}/*.xml" />
+			</fileset>
+		</jmln-test>
+	</target>
+
+	<target name="register.functions" description="Register function points in the tst/src directory.">
+		<taskdef name="jmln-register" classname="net.sf.jameleon.ant.JameleonXDoclet" classpathref="classpath" />
+		<jmln-register outputdir="build">
+			<fileset dir="jameleon_src/java">
+				<include name="**/*.java" />
+			</fileset>
+		</jmln-register>
+	</target>
+
+	<target name="init2" description="creates the needed directories">
+		<mkdir dir="build" />
+		<tstamp />
+	</target>
+
+	<target name="build2" depends="init2" description="This should not be called independently.">
+		<javac srcdir="jameleon_src/java" destdir="build" debug="on" deprecation="on" optimize="on" classpathref="classpath" />
+	</target>
+
+	<target name="copyRes">
+		<copy todir="build">
+			<fileset dir="res">
+				<include name="**/**" />
+			</fileset>
+		</copy>
+	</target>
+
+
+	<target name="run.jameleon.gui" description="Runs the GUI">
+		<java classname="net.sf.jameleon.ui.JameleonUI" classpathref="classpath" />
+	</target>
+
+	<!-- build passivetracer.jar -->
+	<target name="passivetracerbuild">
+
+		<antcall target="clean" />
+		<antcall target="hibernate_generate" />
+		<antcall target="build-dev" />
+
+		<mkdir dir="${build.dir}/passivetracer/src" />
+
+		<!-- copy java files to src -->
+		<copy todir="${build.dir}/passivetracer/src">
+			<fileset dir="${build.dir}/${ant_project_name}_web/classes">
+				<include name="**/**/**/cronjob/tracing/*.class" />
+				<include name="**/**/**/email/*.class" />
+				<include name="**/**/**/hibernate/*.class" />
+				<include name="**/**/**/logging/*.class" />
+				<include name="**/**/**/match/*.class" />
+				<include name="**/**/**/tracing/db/*.class" />
+				<include name="**/**/**/tracing/db/*.xml" />
+				<include name="**/**/**/tracing/resources/*.properties" />
+				<include name="**/**/**/tracing/utils/*.class" />
+				<include name="**/**/**/tracing/bmo/*.class" />
+			</fileset>
+		</copy>
+
+
+		<!-- make jar file for schema -->
+
+		<jar destfile="${build.dir}/passivetracer/passivetracer.jar" basedir="${build.dir}/passivetracer/src">
+		</jar>
+
+
+		<!-- <copy todir="C:/nettracer_service/passivetracer" file="${build.dir}/passivetracer/passivetracer.jar" /> -->
+
+		<!-- clean up -->
+	</target>
+
+	<target name="test">
+		<antcall target="clean" />
+		<antcall target="hibernate_generate" />
+		<antcall target="build-dev" />
+		<mkdir dir="${build.dir}/Test/src" />
+		<copy todir="${build.dir}/Test/src">
+			<fileset dir="${build.dir}/${ant_project_name}_web/classes">
+
+			</fileset>
+		</copy>
+		<jar destfile="${build.dir}/Test/Test.jar" basedir="${build.dir}/Test/src">
+			<manifest>
+				<attribute name="Main-Class" value="${main-class}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- web service -->
+	<path id="base.libraries">
+		<pathelement location="${build.classes}" />
+		<fileset dir="${axis2.home}\lib">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<property name="axis2.classpath" value="base.libraries" />
+
+
+	<!-- run build dev first -->
+
+	<!-- core ws build -->
+
+	<target name="ntcoreservice_completeRebuild">
+		<antcall target="ntcoreservice_java2wsdl" />
+		<antcall target="ntcoreservice_wsdl2java" />
+	</target>
+
+	<target name="ntcoreservice_java2wsdl" depends="build-dev">
+		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
+
+		<Java2WSDLTask classPath="${build.dir}/${ant_project_name}_web/classes" className="com.bagnet.nettracer.ws.core.NTCoreService" outputLocation="src/com/bagnet/nettracer/ws/core" outputFileName="NTCoreService.wsdl">
+		</Java2WSDLTask>
+
+	</target>
+
+	<target name="ntcoreservice_wsdl2java">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
+			<arg value="-uri" />
+			<arg file="src/com/bagnet/nettracer/ws/core/NTCoreService.wsdl" />
+
+			<arg value="-o" />
+			<arg file="${build.dir}/webservices/core" />
+
+			<arg value="-ss" />
+			<arg value="-sd" />
+			<arg value="-g" />
+
+			<arg value="-d" />
+			<arg value="xmlbeans" />
+
+		</java>
+
+		<!-- copy services.xml to web-inf -->
+		<copy todir="${basedir}/web/WEB-INF/services/NTCoreService/META-INF" file="${build.dir}/webservices/core/resources/services.xml" />
+
+		<!-- copy java files to src -->
+		<copy todir="${basedir}/src" overwrite="true">
+			<fileset dir="${build.dir}/webservices/core/src">
+				<include name="**/**/*.java" />
+				<exclude name="**/org/**" />
+			</fileset>
+		</copy>
+
+
+		<!-- make jar file for schema -->
+
+		<mkdir dir="${build.dir}/webservices/core/temp" />
+		<move todir="${build.dir}/webservices/core/temp">
+			<fileset dir="${build.dir}/webservices/core/resources">
+				<include name="*schema*/**/*.class" />
+				<include name="*schema*/**/*.xsb" />
+			</fileset>
+		</move>
+
+		<jar destfile="${build.dir}/webservices/core/ntwscore_schemas.jar" basedir="${build.dir}/webservices/core/temp">
+		</jar>
+
+		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/core/ntwscore_schemas.jar" />
+
+		<replace file="${basedir}/web/WEB-INF/services/NTCoreService/META-INF/services.xml">
+			<replacetoken><![CDATA[com.bagnet.nettracer.ws.core.NTCoreServiceSkeleton]]></replacetoken>
+			<replacevalue><![CDATA[com.bagnet.nettracer.ws.core.NTCoreServiceImplementation]]></replacevalue>
+		</replace>
+
+		<!-- clean up -->
+
+
+	</target>
+
+
+
+	<!-- passenger view ws 1.1-->
+	<target name="passengerview_java2wsdl" depends="build-dev">
+		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
+
+		<Java2WSDLTask classPath="${build.dir}/${ant_project_name}_web/classes" 
+			className="com.bagnet.nettracer.ws.v1_1.PaxView" 
+			outputLocation="src/com/bagnet/nettracer/ws/v1_1" outputFileName="PaxView.wsdl">
+		</Java2WSDLTask>
+
+	</target>
+	
+	<target name="aaa_java2wsdl" depends="build-dev">
+		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
+
+		<Java2WSDLTask classPath="${build.dir}/${ant_project_name}_web/classes" 
+			className="com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService" 
+			outputLocation="src/com/bagnet/nettracer/ws/onlineclaims" outputFileName="Claims.wsdl">
+		</Java2WSDLTask>
+
+	</target>
+	
+	<target name="aaa_wsdl2java">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
+			<arg value="-uri" />
+			<arg file="src/com/bagnet/nettracer/ws/onlineclaims/Claims.wsdl" />
+
+			<arg value="-o" />
+			<arg file="${build.dir}/webservices/claims" />
+
+			<arg value="-ss" />
+			<arg value="-sd" />
+			<arg value="-g" />
+
+			<arg value="-d" />
+			<arg value="xmlbeans" />
+
+		</java>
+
+		<!-- copy services.xml to web-inf -->
+		
+		<!--
+		<copy todir="${basedir}/web/WEB-INF/services/OnlineClaims/META-INF" file="${build.dir}/webservices/claims/resources/services.xml" />
+		-->
+		
+		<!-- copy java files to src 
+		-->
+		<copy todir="${basedir}/src">
+			<fileset dir="${build.dir}/webservices/claims/src">
+				<include name="**/**/*.java" />
+				<exclude name="**/org/**" />
+			</fileset>
+		</copy>
+		<!--
+
+		 make jar file for schema
+		
+		<mkdir dir="${build.dir}/webservices/claims/temp" />
+		<move todir="${build.dir}/webservices/claims/temp">
+			<fileset dir="${build.dir}/webservices/claims/resources">
+				<include name="*schema*/**/*.class" />
+				<include name="*schema*/**/*.xsb" />
+			</fileset>
+		</move>
+
+		
+		<jar destfile="${build.dir}/webservices/claims/onlineclaims_schemas.jar" basedir="${build.dir}/webservices/claims/temp">
+		</jar>
+
+		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/claims/onlineclaims_schemas.jar" />
+		
+		<replace file="${basedir}/web/WEB-INF/services/OnlineClaims/META-INF/services.xml">
+			<replacetoken><![CDATA[com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceSkeleton]]></replacetoken>
+			<replacevalue><![CDATA[com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceImplementation]]></replacevalue>
+		</replace>-->
+		
+
+		<!-- clean up -->
+		
+		<!--<delete dir="${build.dir}/webservices/claims" />-->
+	</target>
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<target name="passengerview_wsdl2java">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
+			<arg value="-uri" />
+			<arg file="src/com/bagnet/nettracer/ws/v1_1/PaxView.wsdl" />
+
+			<arg value="-o" />
+			<arg file="${build.dir}/webservices/passengerview" />
+
+			<arg value="-ss" />
+			<arg value="-sd" />
+			<arg value="-g" />
+
+			<arg value="-d" />
+			<arg value="xmlbeans" />
+
+		</java>
+
+		<!-- copy services.xml to web-inf -->
+		<!--
+		<copy todir="${basedir}/web/WEB-INF/services/PaxView/META-INF" file="${build.dir}/webservices/passengerview/resources/services.xml" />
+		-->
+		<!-- copy java files to src 
+		
+		<copy todir="${basedir}/src">
+			<fileset dir="${build.dir}/webservices/passengerview/src">
+				<include name="**/**/*.java" />
+				<exclude name="**/org/**" />
+			</fileset>
+		</copy>
+		-->
+
+		<!-- make jar file for schema -->
+		<!--
+		<mkdir dir="${build.dir}/webservices/passengerview/temp" />
+		<move todir="${build.dir}/webservices/passengerview/temp">
+			<fileset dir="${build.dir}/webservices/passengerview/resources">
+				<include name="*schema*/**/*.class" />
+				<include name="*schema*/**/*.xsb" />
+			</fileset>
+		</move>
+
+		
+		<jar destfile="${build.dir}/webservices/passengerview/paxview_1_1_schemas.jar" basedir="${build.dir}/webservices/passengerview/temp">
+		</jar>
+
+		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/passengerview/paxview_1_1_schemas.jar" />
+		
+		<replace file="${basedir}/web/WEB-INF/services/NTPassengerViewService/META-INF/services.xml">
+			<replacetoken><![CDATA[com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceSkeleton]]></replacetoken>
+			<replacevalue><![CDATA[com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceImplementation]]></replacevalue>
+		</replace>
+		-->
+
+		<!-- clean up -->
+		<!--
+		<delete dir="${build.dir}/webservices/passengerview/temp" />
+		<delete dir="${build.dir}/webservices/passengerview/resources" />
+		<delete dir="${build.dir}/webservices/passengerview/src" />
+		-->
+	</target>
+
+
+
+	<target name="simplifyResourceFiles">
+		<java classname="SimplifyResources" classpath="${basedir}/utils">
+			<arg line="${defaultResource} ${overrideResource} ${destinationResource}" />
+		</java>
+	</target>
+
+	<target name="compile-core" depends="init">
+		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}/classes" debug="on">
+			<classpath refid="project.classpath" />
+			<exclude name="com/bagnet/nettracer/tracing/actions/**/*.*" />
+			<exclude name="com/bagnet/nettracer/ws/**/*.*" />
+			<exclude name="com/bagnet/nettracer/tracing/forms/**/*.*" />
+			<exclude name="com/bagnet/nettracer/servlets/**/*.*" />
+			<exclude name="com/bagnet/nettracer/cronjob/**/*.*" />
+			<exclude name="com/bagnet/clients/airtran/**/*.*" />
+			<exclude name="com/bagnet/clients/b6/**/*.*" unless="include.b6" />
+		</javac>
+	</target>
+
+	<target name="hibernate_generate_core" description="Generates Hibernate class descriptor files.">
+		<hibernatedoclet>
+			<fileset dir="src">
+				<exclude name="com/bagnet/nettracer/tracing/db/Incident.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/ExpensePayout.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/Claim.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/CrmFile.java"/>
+				
+				<include name="com/bagnet/nettracer/tracing/db/*.java" />
+				
+				<include name="com/bagnet/nettracer/tracing/db/audit/*.java" />
+			</fileset>
+			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${build.dir}/${ant_project_name}/classes" version="3.0" />
+		</hibernatedoclet>
+
+		<replace dir="${build.dir}/${ant_project_name}/classes" value="&lt;hibernate-mapping default-lazy=&quot;false&quot; &gt;">
+			<include name="com/bagnet/nettracer/tracing/db/*.hbm.xml" />
+			<include name="com/bagnet/nettracer/tracing/db/audit/*.hbm.xml" />
+			<replacetoken><![CDATA[<hibernate-mapping>]]></replacetoken>
+		</replace>
+	</target>
+
+	<target name="build-core-jar" depends="hibernate_generate_core, compile-core">
+		<jar destfile="${artifact.dir}/${ant_project_name}/tracer-core.jar"
+			basedir="${build.dir}/${ant_project_name}/classes"
+			includes="**/*.class,**/*.xml" />
+	</target>
+
+	<path id="cron-class-path">
+		<fileset dir="${lib.build-client.dir}" id="cronjar1">
+			<patternset refid="jar.files" />
+			<exclude name="commons-collections*.*" />
+			<exclude name="backport*.*" />
+			<exclude name="quartz*.*" />
+		</fileset>
+		<fileset dir="${lib.jar.dir}" id="cronjar2">
+
+			<exclude name="backport-util*.jar" />
+			<exclude name="commons-collections*.*" />
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${lib.build-cron.dir}" id="cronjar3">
+			<include name="backport-util*.jar" />
+			<include name="commons-collections*.jar" />
+			<include name="quartz*.jar" />
+			<include name="spring*.jar" />
+			<include name="wrapper.jar" />
+		</fileset>
+	</path>
+	<target name="compile-cron" depends="init">
+		<javac srcdir="src" destdir="${build.dir}/${ant_project_name}/classes" debug="on">
+			<classpath refid="cron-class-path" />
+			<include name="com/bagnet/nettracer/cronjob/**/*.*" />
+		</javac>
+	</target>
+
+	<target name="build-cron-jar" depends="hibernate_generate_core,compile-core,compile-cron">
+		<mkdir dir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources" />
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/${ant_project_name}/ApplicationResources.properties" />
+			<property name="destinationResource" value="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/${ant_project_name}/tracer.properties" />
+			<property name="tertiaryResource" value="${basedir}/companies/${ant_project_name}/environment/${sub_path}tracer.properties"/>
+			<property name="destinationResource" value="${build.dir}/${ant_project_name}/classes/tracer.properties" />
+		</ant>
+
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_main.cfg.xml" overwrite="true" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_dirty.cfg.xml" overwrite="true"/>
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_reporting.cfg.xml" overwrite="true"/>
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/dozerBeanMapping.xml" />
+		
+		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
+		<copy tofile="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob/cronJobs.xml" file="${cron.job.config.file}" overwrite="true" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/cron/config/log4j.properties" />
+		<jar destfile="${artifact.dir}/${ant_project_name}/${jarprefix}tracer-cron.jar"
+			basedir="${build.dir}/${ant_project_name}/classes"
+			includes="**/*.class,**/*.xml,**/*.properties">
+		</jar>
+	</target>
+
+	<target name="wjtest-build-cron">
+		<property name="ant_project_name" value="westjet" />
+		<property name="sub_path" value="test/" />
+		<property name="cron.job.config.file" value="companies/westjet/environment/test/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="wstest-" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="wjqa-build-cron">
+		<property name="ant_project_name" value="westjet" />
+		<property name="sub_path" value="qa/" />
+		<property name="jarprefix" value="wsqa-" />
+		<property name="cron.job.config.file" value="companies/westjet/environment/qa/jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+
+	<target name="wjprod-build-cron">
+		<property name="ant_project_name" value="westjet" />
+		<property name="sub_path" value="prod/" />
+		<property name="jarprefix" value="wsprod-" />
+		<property name="cron.job.config.file" value="companies/westjet/environment/prod/jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="jetblue-build-cron-qa">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="sub_path" value="qa/" />
+		<property name="jarprefix" value="qa-" />
+		<property name="cron.job.config.file" value="companies/jetblue/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+	<target name="jetblue-build-cron-training">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="sub_path" value="training/" />
+		<property name="jarprefix" value="training-" />
+		<property name="cron.job.config.file" value="companies/jetblue/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="jetblue-build-cron-prod">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="sub_path" value="prod/" />
+		<property name="jarprefix" value="prod-" />
+		<property name="cron.job.config.file" value="companies/jetblue/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="azul-build-cron-prod">
+		<property name="ant_project_name" value="azul" />
+		<property name="sub_path" value="production/" />
+		<property name="jarprefix" value="prod-" />
+		<property name="cron.job.config.file" value="companies/azul/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+	
+	<target name="azul-build-cron-training">
+		<property name="ant_project_name" value="azul" />
+		<property name="sub_path" value="training/" />
+		<property name="jarprefix" value="training-" />
+		<property name="cron.job.config.file" value="companies/azul/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>	
+	
+	<target name="azul-build-cron-qa">
+		<property name="ant_project_name" value="azul" />
+		<property name="sub_path" value="qa/" />
+		<property name="jarprefix" value="qa-" />
+		<property name="cron.job.config.file" value="companies/azul/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>	
+
+	<target name="spirit-build-cron-test">
+		<property name="ant_project_name" value="spirit" />
+		<property name="sub_path" value="spirittest/" />
+		<property name="jarprefix" value="spirittest-" />
+		<property name="cron.job.config.file" value="companies/spirit/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="spirit-build-cron-qa">
+		<property name="ant_project_name" value="spirit" />
+		<property name="sub_path" value="spiritqa/" />
+		<property name="jarprefix" value="spiritqa-" />
+		<property name="cron.job.config.file" value="companies/spirit/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+
+	<target name="usair-build-cron">
+		<property name="ant_project_name" value="usair" />
+		<property name="sub_path" value="" />
+		<antcall target="build-cron-service" />
+	</target>
+	
+	<target name="alaska-build-cron-demo">
+		<property name="ant_project_name" value="alaska" />
+		<property name="sub_path" value="demo/" />
+		<property name="jarprefix" value="alaska-demo-" />
+		<property name="cron.job.config.file" value="companies/alaska/jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="usair-build-cron-all">
+		<antcall target="usair-build-cron-dev" />
+		<antcall target="usair-build-cron-beta" />
+		<antcall target="usair-build-cron-prod1" />
+		<antcall target="usair-build-cron-prod2" />
+		<antcall target="usair-build-cron-prod3" />
+	</target>
+
+	<target name="usair-build-cron-dev">
+		<property name="ant_project_name" value="usair" />
+		<property name="sub_path" value="dev/" />
+		<property name="jarprefix" value="dev-" />
+		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+
+	<target name="usair-build-cron-beta">
+		<property name="ant_project_name" value="usair" />
+		<property name="sub_path" value="beta/" />
+		<property name="jarprefix" value="beta-" />
+		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="usair-build-cron-prod1">
+		<property name="ant_project_name" value="usair" />
+		<property name="jarprefix" value="prod1-" />
+		<property name="sub_path" value="production/" />
+		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs1.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="usair-build-cron-prod2">
+		<property name="ant_project_name" value="usair"/>
+		<property name="jarprefix" value="prod2-"/>
+		<property name="sub_path" value="production/"/>
+		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs2.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="usair-build-cron-prod3">
+		<property name="ant_project_name" value="usair"/>
+		<property name="jarprefix" value="prod3-"/>
+		<property name="sub_path" value="production/"/>
+		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs3.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="airtran-build-cron">
+		<property name="ant_project_name" value="airtran"/>
+		<property name="jarprefix" value="airtran-"/>
+		<property name="sub_path" value=""/>
+		<property name="cron.job.config.file" value="companies/airtran/jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+	<target name="dev-build-cron">
+		<property name="ant_project_name" value="tracer"/>
+		<property name="sub_path" value="production/"/>
+		<property name="cron.job.config.file" value="companies/tracer/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
+	<target name="build-cron-service" depends="build-cron-jar">
+
+		<copy todir="${build.dir}/dist/cron/">
+			<fileset dir="${basedir}/companies/${ant_project_name}/environment/${sub_path}cron" />
+		</copy>
+		<copy todir="${build.dir}/dist/cron/lib">
+			<fileset refid="cronjar2" />
+			<fileset refid="cronjar3" />
+			<fileset dir="${lib.build-client.dir}">
+				<include name="dom4j*.jar" />
+				<include name="servlet-api.jar" />
+			</fileset>
+
+		</copy>
+		<copy todir="${build.dir}/dist/cron/lib">
+			<fileset dir="${artifact.dir}/${ant_project_name}">
+				<include name="${jarprefix}tracer-cron.jar" />
+			</fileset>
+			<fileset dir="${lib.build-cron.dir}">
+				<include name="wrapper.dll" />
+			</fileset>
+		</copy>
+		<zip destfile="${artifact.dir}/${ant_project_name}/zip/${jarprefix}cron-svc.zip">
+			<fileset dir="${build.dir}/dist/cron/" />
+		</zip>
+	</target>
+
+	<taskdef name="hibernatetool" classname="org.hibernate.tool.ant.HibernateToolTask" classpathref="project.classpath" />
+
+	<target name="generate.db.delta" depends="compile-core,hibernate_generate_core" description="Use the HBMs to update a database schema">
+		<hibernatetool destdir="${build.dir}/${ant_project_name}/ddl" templatepath="${template.dir}">
+			<classpath>
+				<path refid="project.classpath" />
+				<path location="${build.dir}/${ant_project_name}/classes" />
+			</classpath>
+			<annotationconfiguration configurationfile="companies/westjet/environment/test/hibernate_main.cfg.xml" />
+			<hbm2ddl export="false" update="true" outputfilename="nt-delta.sql" delimiter=";" format="true"/>
+		</hibernatetool>
+	</target>
+
+	<target name="mysqlSchema">
+		<property name="ant_project_name" value="tracer" />
+		<antcall target="schemaexport" />
+	</target>
+	<target name="sqlServerSchema">
+		<property name="ant_project_name" value="usair" />
+		<antcall target="schemaexport" />
+	</target>
+
+	<target name="schemaexport" depends="compile-core,hibernate_generate_core" description="Exports a generated schema to DB and file">
+		<hibernatetool destdir="${build.dir}/${ant_project_name}/ddl">
+			<classpath>
+				<path refid="project.classpath" />
+				<path location="${build.dir}/${ant_project_name}/classes" />
+			</classpath>
+			<annotationconfiguration configurationfile="companies/usair/dev/hibernate_main.cfg.xml" />
+			<hbm2ddl drop="true" create="true" export="false" outputfilename="nettracer-ddl.sql" delimiter=";" format="true" />
+		</hibernatetool>
+	</target>
+
+
+	<target name="simplifyAll">
+		<antcall target="simplifyResourceFiles">
+			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<param name="overrideResource" value="${basedir}/companies/airtran/ApplicationResources.properties" />
+			<param name="destinationResource" value="${basedir}/companies/airtran/NewAirtranApplicationResources.properties" />
+		</antcall>
+
+		<antcall target="simplifyResourceFiles">
+			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<param name="overrideResource" value="${basedir}/companies/xjet/ApplicationResources.properties" />
+			<param name="destinationResource" value="${basedir}/companies/xjet/NewXjetApplicationResources.properties" />
+		</antcall>
+
+		<antcall target="simplifyResourceFiles">
+			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<param name="overrideResource" value="${basedir}/companies/jetblue/ApplicationResources.properties" />
+			<param name="destinationResource" value="${basedir}/companies/jetblue/NewJetblueApplicationResources.properties" />
+		</antcall>
+
+		<antcall target="simplifyResourceFiles">
+			<param name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<param name="overrideResource" value="${basedir}/companies/spirit/ApplicationResources.properties" />
+			<param name="destinationResource" value="${basedir}/companies/spirit/NewSpiritApplicationResources.properties" />
+		</antcall>
+
+	</target>
+
+	<target name="airtran-libraries-create">
+		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-fl/navitaire_newskies.jar" />
+	</target>
+
+	<target name="airtran-libraries-cleanup">
+		<delete file="${basedir}/lib/jars/navitaire_newskies" />
+	</target>
+
+	<target name="usair-libraries-create">
+		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-us/us-shares.jar" />
+		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-us/us-scanhistory.jar" />
+	</target>
+
+	<target name="usair-libraries-cleanup">
+		<delete file="${basedir}/lib/jars/us-shares.jar" />
+		<delete file="${basedir}/lib/jars/us-scanhistory.jar" />
+	</target>
+
+	<target name="jetblue-libraries-create">
+		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-us/us-crmclient.jar" failonerror="false"/>
+		
+	</target>
+
+	<target name="jetblue-libraries-cleanup">
+		<delete file="${basedir}/lib/jars/JetBlueReservation.jar" failonerror="false"/>
+		<delete file="${basedir}/lib/jars/ReservationService_1_0-test-client.jar" failonerror="false"/>
+	</target>
+
+	
+	
+	
+
+	<target name="oc_completeRebuild">
+		<antcall target="oc_java2wsdl" />
+		<antcall target="oc_wsdl2java" />
+	</target>
+
+	<target name="oc_java2wsdl" depends="build-dev">
+		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
+
+		<Java2WSDLTask classPath="${build.dir}/${ant_project_name}_web/classes" className="com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsService" outputLocation="src/com/bagnet/nettracer/ws/onlineclaims" outputFileName="Claims.wsdl">
+		</Java2WSDLTask>
+
+	</target>
+
+	<target name="oc_wsdl2java">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
+			<arg value="-uri" />
+			<arg file="src/com/bagnet/nettracer/ws/onlineclaims/Claims.wsdl" />
+
+			<arg value="-o" />
+			<arg file="${build.dir}/webservices/onlineclaims" />
+
+			<arg value="-ss" />
+			<arg value="-sd" />
+			<arg value="-g" />
+
+			<arg value="-d" />
+			<arg value="xmlbeans" />
+
+		</java>
+
+		<!-- copy services.xml to web-inf -->
+		<copy todir="${basedir}/web/WEB-INF/services/OnlineClaims/META-INF" file="${build.dir}/webservices/onlineclaims/resources/services.xml" />
+
+		<!-- copy java files to src -->
+		<copy todir="${basedir}/src" overwrite="true">
+			<fileset dir="${build.dir}/webservices/onlineclaims/src">
+				<include name="**/**/*.java" />
+				<exclude name="**/org/**" />
+			</fileset>
+		</copy>
+
+
+		<!-- make jar file for schema -->
+
+		<mkdir dir="${build.dir}/webservices/onlineclaims/temp" />
+		<copy todir="${build.dir}/webservices/onlineclaims/temp">
+			<fileset dir="${build.dir}/webservices/onlineclaims/resources">
+				<include name="*schema*/**/*.class" />
+				<include name="*schema*/**/*.xsb" />
+			</fileset>
+		</copy>
+
+		<jar destfile="${build.dir}/webservices/onlineclaims/onlineclaims_schemas.jar" basedir="${build.dir}/webservices/onlineclaims/temp">
+		</jar>
+
+		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/onlineclaims/onlineclaims_schemas.jar" />
+
+		<replace file="${basedir}/web/WEB-INF/services/OnlineClaims/META-INF/services.xml">
+			<replacetoken><![CDATA[com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceSkeleton]]></replacetoken>
+			<replacevalue><![CDATA[com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceImplementation]]></replacevalue>
+		</replace>
+
+		<!-- clean up -->
+
+	</target>
+	
+	
+	
+</project>

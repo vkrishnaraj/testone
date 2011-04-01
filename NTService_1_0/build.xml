@@ -147,7 +147,7 @@
 				<include name="ejb-jar.xml"/>
 			</metainf>
 			<include name="${build.dir}/services-war/WEB-INF/classes/" />
-			<include name="**/**/Hello*.class" />
+			<include name="**/**/fraud/Claim*.class" />
 			<include name="**/**/PrivacyPermissions*.class" />
 			<include name="**/**/HibernateWrapper.class" />
 			<include name="**/**/PrivacyPermissionsBMO.class" />

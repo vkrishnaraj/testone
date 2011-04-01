@@ -33,6 +33,7 @@
 	<mapping class="aero.nettracer.serviceprovider.common.db.WorldTracerWebAccount" />
 	<mapping class="aero.nettracer.serviceprovider.common.db.WorldTracerISharesAccount" />
 
+<mapping class="aero.nettracer.serviceprovider.common.db.PrivacyPermissions"/>
 
 </session-factory>
 

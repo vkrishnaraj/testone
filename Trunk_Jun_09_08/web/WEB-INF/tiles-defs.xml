@@ -369,6 +369,10 @@
     	<put name="center" value="/pages/bagbuzz/bagbuzzsearch.jsp"/>
     </definition>
     
+    <definition name="view_privacypermissions" extends="user_menu">
+    	<put name="center" value="/pages/claims/privacypermissions.jsp"/>
+    </definition>
+    
     <definition name="view_worldtracerafviewraw" path="/pages/worldtracer/worldtracer_viewaf_rawinc.jsp">
     </definition>
     

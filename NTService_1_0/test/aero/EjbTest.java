@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.rmi.*;
 import java.util.Properties;
 
-import aero.nettracer.selfservice.fraud.HelloRemote;
+import aero.nettracer.selfservice.fraud.ClaimRemote;
 import aero.nettracer.selfservice.fraud.PrivacyPermissionsRemote;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions.AccessLevelType;
@@ -18,8 +18,8 @@ public class EjbTest {
 
 	  static String user     = null;
 	  static String password = null;
-	  static String url      = "jnp://192.168.2.145:4850";
-//	  static String url      = "jnp://localhost:1199";
+//	  static String url      = "jnp://127.0.0.1:4850";
+	  static String url      = "jnp://localhost:1199";
 
 	
 	  static public Context getInitialContext() throws Exception {
@@ -59,15 +59,37 @@ public class EjbTest {
 	  
 	  @Test
 	  public void hello(){
+			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");
+		    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer");
+		    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\keystore.jks");
+		    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer");
+		  
 		  try{
 			  Context ctx          = getInitialContext();
-//			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("NTServices_1_0/PrivacyPermissionsBean/remote");
-			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("permissionsSSL");
+			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("NTServices_1_0/PrivacyPermissionsBean/remote");
+//			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("permissionsSSL");
 //			  System.out.println(o.hello());
 			  PrivacyPermissions p = o.getPrivacyPermissions("WS", AccessLevelType.def);
 			  System.out.println(p.isName());
 			  p.setName(false);
 			  o.setPrivacyPermissions(p);
+		  } catch (Exception e){
+			  e.printStackTrace();
+		  }
+	  }
+	  
+	  @Test
+	  public void echo(){
+			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");
+		    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer");
+		    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\keystore.jks");
+		    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer");
+		  try{
+			  Context ctx          = getInitialContext();
+			  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
+//			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("permissionsSSL");
+//			  System.out.println(o.hello());
+			  System.out.println(o.echoTest("hello World"));
 		  } catch (Exception e){
 			  e.printStackTrace();
 		  }

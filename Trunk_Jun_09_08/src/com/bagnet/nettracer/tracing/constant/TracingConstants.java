@@ -253,6 +253,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_BAGBUZZ = "BagBuzz";
 	public static final String SYSTEM_COMPONENT_NAME_BAGBUZZ_ADMIN = "BagBuzzAdmin";
 	
+	public static final String SYSTEM_COMPONENT_NAME_PRIVACY_PERMISSIONS = "Fraud";
+	
 	public static final String SYSTEM_COMPONENT_NAME_MANAGE_TASK = "Manage Tasks";
 	public static final String SYSTEM_COMPONENT_NAME_MANAGE_TWO_DAY_CALL = "Manage Two Day Call";
 	public static final String SYSTEM_COMPONENT_NAME_MANAGE_THREE_DAY_CALL = "Manage Three Day Call";
@@ -563,7 +565,7 @@ public class TracingConstants {
 	public final static String VIEW_BAGBUZZ_SEARCH = "viewbagbuzzsearch";
 	public final static String VIEW_BAGBUZZ_VIEW = "viewbagbuzzview";
 
-
+    public final static String VIEW_PRIVACY_PERMISSIONS = "viewprivacypermissions";
 	
 	//success on inserting on hand
 	public final static String INSERT_ON_HAND_SUCCESS = "insertonhandsuccess";
