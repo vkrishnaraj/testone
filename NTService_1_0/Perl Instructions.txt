@@ -1,0 +1,9 @@
+
+
+1. Download and install perl 5.12.3.
+
+2. Move US.pm (found in the root of this project) into <Perl directory>/lib/Geo/StreetAddress/.
+
+3. Move getLoc.pl (found in the root of this project) into C:/geo_perl/.
+
+4. If you cannot put getLoc into the required location then code will have to be altered in aero.nettracer.fs.utilities.GeoCode
