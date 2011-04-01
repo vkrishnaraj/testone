@@ -14,7 +14,7 @@ public class GeoTest {
 	public void testOne() {
 		Session sess = null;
 		try {
-		/*	sess = FraudWrapper.getGeoSession().openSession();
+			sess = FraudWrapper.getGeoSession().openSession();
 			String address = "1402 Mechanic Street North";
 			String zip = "36703";
 			String results1, results2, results3, results4;
@@ -26,11 +26,11 @@ public class GeoTest {
 				results1 = "TEST INFO: 1402 Mechanic St North 36703\n" + loc.getLongitude() + " :: " + loc.getLatitude();
 			}
 			
-			String address2 = "7530 Circular Sequoia";
-			String zip2 = "92009";
-			loc = GeoCode.locate(address2, "Carlsbad", "AL", zip2, "", "US", sess);
+			String address2 = "4001 Southbrook Court";
+			String zip2 = "30152";
+			loc = GeoCode.locate(address2, "Kennesaw", "GA", zip2, "", "US", sess);
 			if (loc != null) {
-				results2 = "TEST INFO: 7530 Circular Sequoia 92009\n" + loc.getLongitude() + " :: " + loc.getLatitude();
+				results2 = "TEST INFO: 4001 Southbrook Court 30152\n" + loc.getLongitude() + " :: " + loc.getLatitude();
 			}
 			
 			String address3 = "401 Gilmore Street";
@@ -42,14 +42,14 @@ public class GeoTest {
 			
 			String address4 = "1115 Woodmere Creek Trail";
 			String zip4 = "35226";
-			loc = GeoCode.locate(address4, null, "AL", zip4, "", "US", sess);
+			loc = GeoCode.locate(address4, null, null, zip4, "", "US", sess);
 			if (loc != null) {
 				results4 = "TEST INFO: 1115 Woodmere Creek Trail 35226\n" + loc.getLongitude() + " :: " + loc.getLatitude();
 			}
 
 			System.out.println("TESTING DB FETCHING...\n\n");
 			System.out.println(results1 + "\n" + results2 + "\n" + results3 + "\n" + results4);
-			System.out.println(date2.getTime() - date.getTime()); */
+			System.out.println(date2.getTime() - date.getTime());
 			System.out.println("TEST GET DISTANCE0: 0LAT 70MILES :: " + GeoCode.getLongRadius(0D, 70D, 0));
 			System.out.println("TEST GET DISTANCE1: 10LAT 70MILES :: " + GeoCode.getLongRadius(10D, 70D, 1));
 			System.out.println("TEST GET DISTANCE2: 40LAT 70MILES :: " + GeoCode.getLongRadius(40D, 70D, 2));
