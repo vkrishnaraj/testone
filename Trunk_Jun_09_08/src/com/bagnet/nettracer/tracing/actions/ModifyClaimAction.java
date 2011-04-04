@@ -20,7 +20,6 @@ import org.apache.struts.action.ActionMessages;
 import aero.nettracer.fs.model.Claim;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
-import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
@@ -150,12 +149,14 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			// edit the existing claim
 			claim = cform.getClaim();
-			if (isNtUser) {
-				if (ntIncident != null && ntIncident.getClaim() != null) {
-					claim = ntIncident.getClaim();
+			if (isNtUser && ntIncident != null) {
+				claim = ntIncident.getClaim();
+				if (claim == null) {
+					claim = ClaimUtils.createClaim(user, ntIncident);
+					claim.setNtIncident(ntIncident);
+					ntIncident.setClaim(claim);
 				}
 			}
-			
 		}
 		
 		cform = ClaimUtils.createClaimForm(request);
@@ -261,7 +262,6 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 			
 		}
-		
 		
 		cform.setClaim(claim);
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));

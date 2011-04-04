@@ -216,11 +216,12 @@ public final class ClaimForm extends ActionForm {
 	private Phone getPhone(int type) {
 		Phone phone = new Phone();
 		
-		Person[] people = claim.getClaimants().toArray(new Person[0]);
-		ArrayList<Phone> phones = new ArrayList<Phone>(people[0].getPhones());
+//		Person[] people = claim.getClaimants().toArray(new Person[0]);
+		Person person = getClaimant();
+		ArrayList<Phone> phones = new ArrayList<Phone>(person.getPhones());
 
 		phone.setType(type);
-		phone.setPerson(people[0]);
+		phone.setPerson(person);
 		phone.setIncident(claim.getIncident());
 		
 		Phone candidate = null;
