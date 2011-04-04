@@ -31,13 +31,15 @@ import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 
+import aero.nettracer.fs.model.Claim;
+import aero.nettracer.fs.model.Person;
+
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
-import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
@@ -2038,9 +2040,15 @@ public class IncidentBMO {
 			inc.getExpenses().add(ep);
 			if (inc.getClaim() == null) {
 				Claim c = new Claim();
-				c.setIncident(inc);
-				c.setClaimcurrency_ID(inc.getAgent().getDefaultcurrency());
-				c.setCountryofissue(AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID());
+				c.setNtIncident(inc);
+				c.setAmountClaimedCurrency(inc.getAgent().getDefaultcurrency());
+				// mjs: begin NTFS modification
+//				c.setCountryofissue(AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID());
+				String countryOfIssue = AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID();
+				for (Person claimant: c.getClaimants()) {
+					claimant.setPassportIssuer(countryOfIssue);
+				}
+				// mjs: end NTFS modification
 				Status st = new Status();
 				st.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
 				c.setStatus(st);
@@ -2122,13 +2130,19 @@ public class IncidentBMO {
 		ac.setModify_time(TracerDateTime.getGMTDate());
 		ac.setModify_agent(user);
 		ac.setModify_reason(reasonForAudit);
-		ac.setClaim_ID(claim.getClaim_ID());
-		ac.setIncident(claim.getIncident());
+		ac.setClaim_ID(claim.getId());
+		// mjs: begin NTFS modification
+//		ac.setIncident(claim.getIncident());
+		ac.setIncident(claim.getNtIncident());
+		// mjs: end NTFS modification
 		Status st = new Status();
 		st.setStatus_ID(claim.getStatus().getStatus_ID());
 		ac.setStatus(st);
 
-		Incident inc = claim.getIncident();
+		// mjs: begin NTFS modification
+//		Incident inc = claim.getIncident();
+		Incident inc = claim.getNtIncident();
+		// mjs: end NTFS modification
 
 		for (ExpensePayout ep : inc.getExpenses()) {
 			Audit_ExpensePayout aep = new Audit_ExpensePayout();

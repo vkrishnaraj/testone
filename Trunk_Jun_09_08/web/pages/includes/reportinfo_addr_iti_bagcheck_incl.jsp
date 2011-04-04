@@ -245,7 +245,7 @@
               <html:text property="stationcreatedcode" size="4" styleClass="textfield" disabled="true" />
             </td>
             <logic:notEmpty name="incidentForm" property="status">
-              <logic:equal name="incidentForm" property="status.status_ID" value="<%= "" + TracingConstants.MBR_STATUS_CLOSED %>">
+              <logic:equal name="incidentForm" property="status.status_ID" value='<%= String.valueOf(TracingConstants.MBR_STATUS_CLOSED) %>'>
                 <td>
                   <bean:message key="colname.file_close_date" />
                   <br>
@@ -326,7 +326,7 @@
                 <br>
                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
                   
-                  	<logic:equal name="incidentForm" property="status_ID" value="<%= "" + TracingConstants.MBR_STATUS_CLOSED %>">
+                  	<logic:equal name="incidentForm" property="status_ID" value='<%= String.valueOf(TracingConstants.MBR_STATUS_CLOSED) %>'>
                   		<% if ((report_type == 1 &&  UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REOPEN_LOSTDELAY, a))
                   				 || (report_type == 0 &&  UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REOPEN_DAMAGED_BAG, a))
                   				|| (report_type == 2 &&  UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REOPEN_MISSING_ARTICLES, a)))
@@ -340,7 +340,7 @@
 	                  	<input type="text" class="textfield" size="10" value="<bean:message key="incidentForm.closed_status"/>" disabled="disabled">
 	                  <% } %>
 	                  </logic:equal>
-                  	<logic:notEqual name="incidentForm" property="status_ID" value="<%= "" + TracingConstants.MBR_STATUS_CLOSED %>">
+                  	<logic:notEqual name="incidentForm" property="status_ID" value='<%= String.valueOf(TracingConstants.MBR_STATUS_CLOSED) %>'>
                   	<div id="tohide1">
                   		<html:select property="status_ID" styleClass="dropdown">
 	                    <html:options collection="statuslist" property="status_ID" labelProperty="description" />

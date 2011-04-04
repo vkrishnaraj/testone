@@ -826,4 +826,13 @@
     <definition name="salvage_edit" extends="user_menu">
         <put name="center"   value="/pages/salvage/salvage_edit.jsp"/>
     </definition>
+
+    <definition name="create_claim" extends="user_menu">
+        <put name="center"   value="/pages/claims/create_claim.jsp"/>
+    </definition>
+
+    <definition name="fraud_results" extends="user_menu">
+        <put name="center"   value="/pages/claims/fraud_results.jsp"/>
+    </definition>
+
  </tiles-definitions>

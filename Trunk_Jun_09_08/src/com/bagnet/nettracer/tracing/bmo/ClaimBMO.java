@@ -5,18 +5,14 @@
  */
 package com.bagnet.nettracer.tracing.bmo;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import aero.nettracer.fs.model.Claim;
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
@@ -39,7 +35,7 @@ public class ClaimBMO {
 			
 			if(cDTO.getIncident() == null) {
 				Incident inc = (Incident) sess.get(Incident.class, incident_ID);
-				cDTO.setIncident(inc);
+				cDTO.setNtIncident(inc);
 				inc.setClaim(cDTO);
 				sess.update(inc);
 			}
@@ -51,7 +47,7 @@ public class ClaimBMO {
 			if (acDTO != null
 					&& acDTO.getModify_agent().getStation().getCompany().getVariable().getAudit_claims() == 1) {
 				if (acDTO != null) {
-					acDTO.setClaim_ID(cDTO.getClaim_ID());
+					acDTO.setClaim_ID(cDTO.getId());
 					t = sess.beginTransaction();
 					sess.save(acDTO);
 					t.commit();
@@ -75,7 +71,7 @@ public class ClaimBMO {
 	 * @return
 	 * @throws HibernateException
 	 */
-	public Claim findClaimByID(int claim_ID) throws HibernateException {
+	public Claim findClaimByID(long claim_ID) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			return (Claim) sess.get(Claim.class, claim_ID);

@@ -104,7 +104,7 @@ public abstract class BaseExpenseAction extends CheckedAction {
 				return (mapping.findForward(TracingConstants.NO_PERMISSION));
 			}
 		} else if ("Search".equals(mapping.getParameter())) {
-			if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_RESOLUTION, user)) {
+			if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, user)) {
 				return (mapping.findForward(TracingConstants.NO_PERMISSION));
 			}
 		}else {

@@ -287,7 +287,7 @@
                 <td colspan="2" width="50%">
                   <bean:message key="colname.hotel" />
                   <br>
-                  <html:text property="<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].hotel" %>" size="45" maxlength="50" styleClass="textfield" />
+                  <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].hotel" %>' size="45" maxlength="50" styleClass="textfield" />
                 </td>
                 
                 <logic:equal name="incidentForm" property="incident_ID" value="">

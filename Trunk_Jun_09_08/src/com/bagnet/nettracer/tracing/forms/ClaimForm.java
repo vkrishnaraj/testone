@@ -1,18 +1,17 @@
 package com.bagnet.nettracer.tracing.forms;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.LinkedHashSet;
 
 import org.apache.struts.action.ActionForm;
 
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.db.ClaimProrate;
-import com.bagnet.nettracer.tracing.db.ExpensePayout;
-import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.db.Status;
+import aero.nettracer.fs.model.Claim;
+import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Phone;
+
+import com.bagnet.nettracer.tracing.utils.CreditCardType;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 /**
  * @author Ankur Gupta
@@ -22,368 +21,237 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
  */
 public final class ClaimForm extends ActionForm {
 
-	// incident id
-	private String incident_ID;
-
-	// incident
-	private Incident incident;
-	// claim payout
-	private int claim_ID;
-	private double claimamount;
-	private String claimcurrency_ID;
-	private Status status;
-	private double total;
-
-	// ssn stuff
-	private String passengername;
-	private String ssn;
-	private String driverslicense;
-	private String dlstate;
-	private String commonnum;
-	private String countryofissue;
+	private Claim claim;
 	
-	private List<ExpensePayout> expenselist = new ArrayList<ExpensePayout>();
-	private int expensetype_ID;
-	private int expenselocation_ID;
-	private int expensestatus_ID;
-
-	// audit table fields
-	private String mod_claim_reason;
-	private String mod_exp_reason;
-	// claim prorate
-	private ClaimProrate claimprorate;
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
 	private java.util.TimeZone _TIMEZONE;
-
-	public void setExpenselist(List<ExpensePayout> expenselist) {
-		this.expenselist = expenselist;
-	}
-
-	public List<ExpensePayout> getExpenselist() {
-		return expenselist;
-	}
-
-	/**
-	 * @return Returns the claimprorate.
-	 */
-	public ClaimProrate getClaimprorate() {
-		return claimprorate;
-	}
-
-	/**
-	 * @param claimprorate
-	 *          The claimprorate to set.
-	 */
-	public void setClaimprorate(ClaimProrate claimprorate) {
-		this.claimprorate = claimprorate;
-	}
-
-
-	/**
-	 * @return Returns the incident_ID.
-	 */
-	public String getIncident_ID() {
-		return incident_ID;
-	}
-
-	/**
-	 * @param incident_ID
-	 *          The incident_ID to set.
-	 */
-	public void setIncident_ID(String incident_ID) {
-		this.incident_ID = incident_ID;
-	}
-
-	/**
-	 * @return Returns the claim_ID.
-	 */
-	public int getClaim_ID() {
-		return claim_ID;
-	}
-
-	/**
-	 * @param claim_ID
-	 *          The claim_ID to set.
-	 */
-	public void setClaim_ID(int claim_ID) {
-		this.claim_ID = claim_ID;
-	}
-
-	/**
-	 * @return Returns the claimamount.
-	 */
-	public double getClaimamount() {
-		return claimamount;
-	}
-
-	/**
-	 * @return Returns the claimcurrency_ID.
-	 */
-	public String getClaimcurrency_ID() {
-		return claimcurrency_ID;
-	}
-
-	/**
-	 * @param claimcurrency_ID
-	 *          The claimcurrency_ID to set.
-	 */
-	public void setClaimcurrency_ID(String claimcurrency_ID) {
-		this.claimcurrency_ID = claimcurrency_ID;
-	}
-
-	/**
-	 * @param claimamount
-	 *          The claimamount to set.
-	 */
-	public void setClaimamount(double claimamount) {
-		this.claimamount = claimamount;
-	}
-
-	public String getDisclaimamount() {
-		return TracingConstants.DECIMALFORMAT.format(getClaimamount());
-	}
-
-	public void setDisclaimamount(String s) {
-		setClaimamount(TracerUtils.convertToDouble(s));
-	}
-
-	/**
-	 * @return Returns the passengername.
-	 */
-	public String getPassengername() {
-		return passengername;
-	}
-
-	/**
-	 * @param passengername
-	 *          The passengername to set.
-	 */
-	public void setPassengername(String passengername) {
-		this.passengername = passengername;
-	}
-
-	/**
-	 * @return Returns the ssn.
-	 */
-	public String getSsn() {
-		return ssn;
-	}
-
-	/**
-	 * @param ssn
-	 *          The ssn to set.
-	 */
-	public void setSsn(String ssn) {
-		this.ssn = ssn;
-	}
-
 	
-	/**
-	 * @return Returns the dlstate.
-	 */
-	public String getDlstate() {
-		return dlstate;
-	}
-	/**
-	 * @param dlstate The dlstate to set.
-	 */
-	public void setDlstate(String dlstate) {
-		this.dlstate = dlstate;
+	private String mod_claim_reason;
+	private String mod_claim_reason2;
+	
+	private Person claimant = null;
+	
+	public Claim getClaim() {
+		return claim;
 	}
 
-	public String getDispdlstate() {
-		if (dlstate != null && dlstate.length() > 0) {
-			return TracerUtils.getState(dlstate).getState();
-		}
-		return "";
-	}
-	/**
-	 * @return Returns the driverslicense.
-	 */
-	public String getDriverslicense() {
-		return driverslicense;
-	}
-	/**
-	 * @param driverslicense The driverslicense to set.
-	 */
-	public void setDriverslicense(String driverslicense) {
-		this.driverslicense = driverslicense;
-	}
-
-	/**
-	 * @return Returns the commonnum.
-	 * 
-	 */
-	public String getCommonnum() {
-		return commonnum;
-	}
-
-	/**
-	 * @param commonnum
-	 *          The commonnum to set.
-	 */
-	public void setCommonnum(String commonnum) {
-		this.commonnum = commonnum;
-	}
-
-	/**
-	 * @return Returns the countryofissue.
-	 * 
-	 */
-	public String getCountryofissue() {
-		return countryofissue;
-	}
-
-	/**
-	 * @param countryofissue
-	 *          The countryofissue to set.
-	 */
-	public void setCountryofissue(String countryofissue) {
-		this.countryofissue = countryofissue;
+	public void setClaim(Claim claim) {
+		this.claim = claim;
 	}
 	
-	
-	/**
-	 * @return Returns the status.
-	 */
-	public Status getStatus() {
-		return status;
-	}
-
-	/**
-	 * @param status
-	 *          The status to set.
-	 */
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-
-	/**
-	 * @return Returns the status_ID.
-	 */
-	public int getStatus_ID() {
-		return getStatus().getStatus_ID();
-	}
-
-	/**
-	 * @param status_ID
-	 *          The status_ID to set.
-	 */
-	public void setStatus_ID(int status_ID) {
-		getStatus().setStatus_ID(status_ID);
-	}
-
-	/**
-	 * @return Returns the total.
-	 */
-	public double getTotal() {
-		return total;
-	}
-
-	/**
-	 * @param total
-	 *          The total to set.
-	 */
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
-	public String getDistotal() {
-		return TracingConstants.DECIMALFORMAT.format(getTotal());
-	}
-
-	public void setDistotal(String s) {
-		setTotal(TracerUtils.convertToDouble(s));
-	}
-
-	/**
-	 * @return Returns the incident.
-	 */
-	public Incident getIncident() {
-		return incident;
-	}
-
-	/**
-	 * @param incident
-	 *          The incident to set.
-	 */
-	public void setIncident(Incident incident) {
-		this.incident = incident;
-	}
-
-	/**
-	 * @return Returns the mod_claim_reason.
-	 */
-	public String getMod_claim_reason() {
-		return mod_claim_reason;
-	}
-
-	/**
-	 * @param mod_claim_reason
-	 *          The mod_claim_reason to set.
-	 */
-	public void setMod_claim_reason(String mod_claim_reason) {
-		this.mod_claim_reason = mod_claim_reason;
-	}
-
-	/**
-	 * @return Returns the mod_exp_reason.
-	 */
-	public String getMod_exp_reason() {
-		return mod_exp_reason;
-	}
-
-	/**
-	 * @param mod_exp_reason
-	 *          The mod_exp_reason to set.
-	 */
-	public void setMod_exp_reason(String mod_exp_reason) {
-		this.mod_exp_reason = mod_exp_reason;
-	}
-
-	/**
-	 * @return Returns the _DATEFORMAT.
-	 */
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
 	}
 
-	/**
-	 * @param _dateformat
-	 *          The _DATEFORMAT to set.
-	 */
-	public void set_DATEFORMAT(String _dateformat) {
-		_DATEFORMAT = _dateformat;
+	public void set_DATEFORMAT(String _DATEFORMAT) {
+		this._DATEFORMAT = _DATEFORMAT;
 	}
 
-	/**
-	 * @return Returns the _TIMEFORMAT.
-	 */
 	public String get_TIMEFORMAT() {
 		return _TIMEFORMAT;
 	}
 
-	/**
-	 * @param _timeformat
-	 *          The _TIMEFORMAT to set.
-	 */
-	public void set_TIMEFORMAT(String _timeformat) {
-		_TIMEFORMAT = _timeformat;
+	public void set_TIMEFORMAT(String _TIMEFORMAT) {
+		this._TIMEFORMAT = _TIMEFORMAT;
 	}
 
-	/**
-	 * @return Returns the _TIMEZONE.
-	 */
 	public java.util.TimeZone get_TIMEZONE() {
 		return _TIMEZONE;
 	}
 
-	/**
-	 * @param _timezone
-	 *          The _TIMEZONE to set.
-	 */
-	public void set_TIMEZONE(java.util.TimeZone _timezone) {
-		_TIMEZONE = _timezone;
+	public void set_TIMEZONE(java.util.TimeZone _TIMEZONE) {
+		this._TIMEZONE = _TIMEZONE;
 	}
+	
+	public CreditCardType[] getCreditCardTypes() {
+		return CreditCardType.values();
+	}
+	
+	public ArrayList<Integer> getCcMonths() {
+		return DateUtils.getCcMonths();
+	}
+	
+	public ArrayList<Integer> getCcYears() {
+		return DateUtils.getCcYears();
+	}
+
+	public String getMod_claim_reason() {
+		return mod_claim_reason;
+	}
+
+	public void setMod_claim_reason(String mod_claim_reason) {
+		this.mod_claim_reason = mod_claim_reason;
+	}
+
+	public String getMod_claim_reason2() {
+		return mod_claim_reason2;
+	}
+
+	public void setMod_claim_reason2(String mod_claim_reason2) {
+		this.mod_claim_reason2 = mod_claim_reason2;
+	}
+	
+	public String getHomePhone() {
+		return getPhoneNumber(Phone.HOME);
+	}
+	
+	public void setHomePhone(String homePhone) {
+		setPhoneNumber(Phone.HOME, homePhone);
+	}
+	
+	public String getWorkPhone() {
+		return getPhoneNumber(Phone.WORK);
+	}
+	
+	public void setWorkPhone(String workPhone) {
+		setPhoneNumber(Phone.WORK, workPhone);
+	}
+	public String getMobilePhone() {
+		return getPhoneNumber(Phone.MOBILE);
+	}
+	
+	public void setMobilePhone(String mobilePhone) {
+		setPhoneNumber(Phone.MOBILE, mobilePhone);
+	}
+	
+	public String getPagerPhone() {
+		return getPhoneNumber(Phone.PAGER);
+	}
+	
+	public void setPagerPhone(String pagerPhone) {
+		setPhoneNumber(Phone.PAGER, pagerPhone);
+	}
+	
+	public String getAlternatePhone() {
+		return getPhoneNumber(Phone.ALTERNATE);
+	}
+	
+	public void setAlternatePhone(String alternatePhone) {
+		setPhoneNumber(Phone.ALTERNATE, alternatePhone);
+	}
+
+	public Person getClaimant() {
+		if (claimant == null) {
+			return claim.getClaimants().toArray(new Person[0])[0];
+		}
+		return claimant;
+	}
+	
+	public void setClaimant(Person claimant) {
+		this.claimant = claimant;
+		LinkedHashSet<Person> claimants = new LinkedHashSet<Person>();
+		claimants.add(claimant);
+		claim.setClaimants(claimants);
+	}
+	
+	public String getAddress1() {
+		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getAddress1();
+	}
+	
+	public void setAddress1(String address1) {
+		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setAddress1(address1);
+	}
+
+	public String getAddress2() {
+		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getAddress2();
+	}
+	
+	public void setAddress2(String address2) {
+		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setAddress2(address2);
+	}
+
+	public String getCity() {
+		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getCity();
+	}
+	
+	public void setCity(String city) {
+		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setCity(city);
+	}
+
+	public String getState() {
+		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getState();
+	}
+	
+	public void setState(String state) {
+		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setState(state);
+	}
+
+	public String getProvince() {
+		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getProvince();
+	}
+	
+	public void setProvince(String province) {
+		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setProvince(province);
+	}
+	
+	public String getZip() {
+		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getZip();
+	}
+	
+	public void setZip(String zip) {
+		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setZip(zip);
+	}
+
+	public String getCountry() {
+		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getCountry();
+	}
+	
+	public void setCountry(String country) {
+		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setCountry(country);
+	}
+	
+	private String getPhoneNumber(int type) {
+		return getPhone(type).getPhoneNumber();
+	}
+
+	private void setPhoneNumber(int type, String phoneNumber) {
+		if (phoneNumber != null && !phoneNumber.isEmpty()) {
+			Phone phone = getPhone(type);
+			phone.setPhoneNumber(phoneNumber);
+			setPhone(phone);
+		}
+	}
+	
+	private Phone getPhone(int type) {
+		Phone phone = new Phone();
+		
+		Person[] people = claim.getClaimants().toArray(new Person[0]);
+		ArrayList<Phone> phones = new ArrayList<Phone>(people[0].getPhones());
+
+		phone.setType(type);
+		phone.setPerson(people[0]);
+		phone.setIncident(claim.getIncident());
+		
+		Phone candidate = null;
+		for (int i = 0; i < phones.size(); ++i) {
+			candidate = phones.get(i);
+			if (candidate == null) {
+				break;
+			} else {
+				if (candidate.getType() == type) {
+					phone = candidate;
+					break;
+				}
+			}
+		}
+		return phone;
+	}
+	
+	private void setPhone(Phone phone) {
+		Person[] people = claim.getClaimants().toArray(new Person[0]);
+		people[0].getPhones().add(phone);		
+	}
+	
+	public FsAddress getClaimantAddress(int i) {
+		Person claimant = getClaimant();
+		if (claimant != null) {
+			ArrayList<FsAddress> addresses = new ArrayList<FsAddress>(claimant.getAddresses());
+			if (addresses != null && i < addresses.size()) {
+				return addresses.get(i);
+			}
+		}
+		return null;
+	}
+	
 }

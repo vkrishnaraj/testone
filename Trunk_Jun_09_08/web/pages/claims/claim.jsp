@@ -10,8 +10,12 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+
+  boolean ntUser = PropertyBMO.isTrue("nt.user");
+
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -36,55 +40,6 @@
 
   </SCRIPT>
   
-  <logic:present name="noincident" scope="request">
-    <html:form action="claim_resolution.do" method="post" focus="incident_ID" onsubmit="fillzero(this.incident_ID, 13);">
-    	<html:javascript formName="claimForm" />
-    
-    <tr>
-      <td colspan="3" id="pageheadercell">
-        <div id="pageheaderleft">
-          <h1>
-            <bean:message key="header.claim_reportnum" />
-          </h1>
-        </div>
-        <div id="pageheaderright">
-          <table id="pageheaderright">
-            <tr>
-              <jsp:include page="/pages/includes/mail_incl.jsp" />
-              <td>
-                <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
-              </td>
-            </tr>
-          </table>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td id="middlecolumn">
-        <div id="maincontent">
-          <font color=red>
-            <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-          </font>
-          <br />
-          <table class="form2" cellspacing="0" cellpadding="0">
-            <tr>
-              <td align=center>
-                <bean:message key="colname.mbr_report_num" />
-                <br />
-                <html:text property="incident_ID" size="13" maxlength="13" styleClass="textfield" value="" onblur="fillzero(this,13);" />
-              </td>
-              <tr>
-                <td align="center" valign="top" colspan="12">
-                  <html:submit property="getclaim" styleId="button">
-                    <bean:message key="button.search" />
-                  </html:submit>
-                </td>
-              </tr>
-            </table>
-          </html:form>
-        </logic:present>
-        
-        <logic:notPresent name="noincident" scope="request">
           <html:form action="claim_resolution.do" method="post" onsubmit="return validateClaimForm(this);">
             <html:javascript formName="claimForm" />
             <tr>
@@ -93,17 +48,11 @@
                   <logic:present name="editinterim" scope="request">
                     <h1>
                       <bean:message key="header.interim_expense_request" />
-                      (
-                      <bean:write name="incident" scope="request" />
-                      )
                     </h1>
                   </logic:present>
                   <logic:notPresent name="editinterim" scope="request">
                     <h1>
                       <bean:message key="header.claim_payout" />
-                      (
-                      <bean:write name="incident" scope="request" />
-                      )
                     </h1>
                   </logic:notPresent>
                 </div>
@@ -111,11 +60,13 @@
                   <table id="pageheaderright">
                     <tr>
                       <logic:notPresent name="editinterim" scope="request">
+        				<logic:notPresent name="noincident" scope="request">
                         <td>
                           <a href="#" onclick="openReportWindow('reporting?print=<bean:write name="CLAIM_PAYOUT_RPT" scope="request"/>&outputtype=0','ExpensePayout',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"></a>
                         </td>
                         <td>
                           <a href="#" onclick="openReportWindow('reporting?print=<bean:write name="CLAIM_PAYOUT_RPT" scope="request"/>&outputtype=0','ExpensePayout',800,600);return false;"><bean:message key="link.claim_payout" /></a>
+                		</logic:notPresent>
                         </td>
                       </logic:notPresent>
                       <jsp:include page="/pages/includes/mail_incl.jsp" />
@@ -133,8 +84,15 @@
               <td colspan="3" id="navmenucell">
                 <div class="menu">
                   <dl>
+                  <% if (ntUser) { %>
                     <dd>
-                      <a href='searchIncident.do?incident=<bean:write name="incident" scope="request"/>'><span class="aa">&nbsp;
+                    	<logic:notEmpty name="claimForm" property="claim.ntIncident" >
+                      		<a href='searchIncident.do?incident=<bean:write name="claimForm" property="claim.ntIncident.incident_ID" />'>
+                        </logic:notEmpty>
+                        <logic:empty name="claimForm" property="claim.ntIncident" >
+                      		<a href='searchIncident.do'>
+                        </logic:empty>
+                      <span class="aa">&nbsp;
                           <br />
                           &nbsp;</span>
                         <span class="bb"><bean:message key="menu.incident_info" /></span>
@@ -142,6 +100,7 @@
                           <br />
                           &nbsp;</span></a>
                     </dd>
+                   <% } %>
                     <logic:present name="editinterim" scope="request">
                       <dd>
                         <a href="#"><span class="aab">&nbsp;
@@ -217,8 +176,33 @@
                             <br />
                             &nbsp;</span></a>
                       </dd>
-<%
-                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a)) {
+                      <dd>
+                      <% if (ntUser) { %>
+                      <logic:notEmpty name="incident">
+                   	<a href='fraud_results.do?incident=<bean:write name="incident" scope="request" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
+                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                      </logic:notEmpty>
+                      <logic:empty name="incident">
+                   	<a href='fraud_results.do' ><span class="aa">&nbsp;<br />&nbsp;</span>
+                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                      </logic:empty>
+                   </dd>
+                   <% } else { %>
+                   <a href='fraud_results.do'><span class="aa">&nbsp;<br />&nbsp;</span>
+                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                   </dd>
+                   <% } 
+                      
+                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a) && ntUser) {
 %>
                         <dd>
                           <a href="claim_prorate.do"><span class="aa">&nbsp;
@@ -257,37 +241,55 @@
                     <table class="form2" cellspacing="0" cellpadding="0">
                       <tr>
                         <td>
-                          <bean:message key="colname.claim_amount" />
-                          <br />
-                          <html:text property="disclaimamount" size="13" maxlength="13" styleClass="textfield" />
+                        	<bean:message key="colname.claim.id" />
+                        	<br />
+                        	<html:text name="claimForm" property="claim.id" size="5" styleClass="textfield" disabled="true" />
                         </td>
+                      	<td>
+                      		<bean:message key="header.claim_type"/>
+                      		<br />
+                      		<html:select name="claimForm" property="claim.claimType" styleClass="dropdown" >
+			                  <html:option value="">
+			                  </html:option>
+			                  <html:option value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>">
+			                    <bean:message key="claim.type.lostdelay" />
+			                  </html:option>
+			                  <html:option value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>">
+			                    <bean:message key="claim.type.missing" />
+			                  </html:option>
+			                  <html:option value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>">
+			                    <bean:message key="claim.type.damaged" />
+			                  </html:option>
+			                </html:select>
+                      	</td>
+                        
                         <td>
-                          <bean:message key="colname.currency" />
-                          <br />
-                          <html:select property="claimcurrency_ID" styleClass="dropdown">
-                            <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
-                          </html:select>
-                        </td>
-                        <td colspan="2">
                           <bean:message key="colname.claim_status" />
                           <br />
                           <div id="tohide1">
-                          <html:select property="status_ID" styleClass="dropdown">
+                          <html:select property="claim.status.status_ID" styleClass="dropdown">
                             <html:options collection="claimstatuslist" property="status_ID" labelProperty="description" />
                           </html:select>
                           </div>
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="2">
-                          <bean:message key="colname.pass_name" />
+                      	<td>
+                          <bean:message key="colname.claim_amount" />
                           <br />
-                          <html:text property="passengername" size="40" maxlength="9" styleClass="textfield" disabled="true" />
+                          <html:text property="claim.amountClaimed" size="13" maxlength="13" styleClass="textfield" />
                         </td>
-              <jsp:include page="/pages/claims/claim_sensitive_incl.jsp" />
+                        <td colspan="2">
+                          <bean:message key="colname.currency" />
+                          <br />
+                          <html:select property="claim.amountClaimedCurrency" styleClass="dropdown">
+                            <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
+                          </html:select>
+                        </td>
                       </tr>
+              <jsp:include page="/pages/claims/claim_sensitive_incl.jsp" />
                       <tr>
-                        <td colspan=4>
+                        <td colspan="3">
                           <bean:message key="colname.reason" />
                           &nbsp;(
                           <bean:message key="colname.for_audit" />
@@ -297,24 +299,25 @@
                           <input name='mod_claim_reason2' type="text" id='mod_claim_reason2' value="255" size="4" maxlength="4" disabled />
                         </td>
                       </tr>
-                      <tr>
-                        <td align="center" colspan=4>
-                          <html:submit property="saveclaim" styleId="button">
-                            <bean:message key="button.save" />
-                          </html:submit>
-                        </td>
-                      </tr>
+                      
                     </table>
                     <br />
                     <br />
-                    <a name="expense"></a>
-                    <h1 class="green">
-                      <bean:message key="header.payout_summary" />
-                      <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
-                    </h1>
-                    <jsp:include page="/pages/includes/incident_expense_incl.jsp" >
-      	<jsp:param name="formCss" value="form2" />
-      </jsp:include>
+                    <jsp:include page="/pages/includes/claim_contactinfo_incl.jsp" />
+                    <% if (ntUser) { %>
+                    	<logic:notEmpty name="incident">
+	                    <br />
+	                    <br />
+	  	                <a name="expense"></a>
+	                    <h1 class="green">
+	                      <bean:message key="header.payout_summary" />
+	                      <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+	                    </h1>
+	                    <jsp:include page="/pages/includes/incident_expense_incl.jsp" >
+					    	<jsp:param name="formCss" value="form2" />
+					    </jsp:include>
+                    	</logic:notEmpty>
+                    <% }; %>
                     </logic:notPresent>
                     <logic:present name="edit" scope="request">
                       <br />
@@ -403,7 +406,7 @@
                             </html:select>
                           </td>
 		  </tr>
-              <jsp:include page="/pages/includes/payment_types_incl.jsp" />
+              
                         <tr>
                           <td colspan=3>
                             <bean:message key="colname.comments" />
@@ -454,6 +457,7 @@
                           </td>
                         </tr>
                       </table>
+                      
                       <script language=javascript>
                         
 	<logic:empty name="index" scope="request">
@@ -466,5 +470,174 @@
 
                       </script>
                     </logic:present>
+                    <br />
+                    <br />
+                    
+                    <% if (ntUser) { %>
+                    <!-- Incident Summary -->
+                    <h1 class="green">
+                   		<bean:message key="header.incident_summary" />
+						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                    </h1>
+                    <logic:empty name="claimForm" property="claim.ntIncident" >
+	                   <table class="form2" cellspacing="0" cellpadding="0">
+		                   	<tr>
+		                   		<td align=center >
+		                   			<!--html:text name="claimForm" property="incidentId" size="20" maxlength="20" styleClass="textfield" /-->&nbsp;&nbsp;
+		                   			<input name="incidentId" size="20" maxlength="20" class="textfield" />
+		                   			<html:submit styleId="button">
+		                   				<bean:message key="button.loadincident" />
+		                   			</html:submit>
+		                   		</td>
+		                   	</tr>
+                   		</table>
+                    </logic:empty>
+                    <logic:notEmpty name="claimForm" property="claim.ntIncident" >
+	                   <table class="form2" cellspacing="0" cellpadding="0">
+		                   	<tr>
+		                   		<td>
+		                   			<bean:message key="claim.incident.number" />
+		                   			<br/>
+		                   			<input name="claimForm" value="<bean:write name="claimForm" property="claim.ntIncident.incident_ID" />" size="20" maxlength="20" type="text" />
+		                   		</td>
+		                   		<td>
+		                   			<bean:message key="claim.incident.type" />
+		                   			<br/>
+		                   			
+		                   			<html:select name="claimForm" property="claim.ntIncident.itemtype_ID" styleClass="dropdown" >
+			                            <html:option value="">
+			                              <bean:message key="select.please_select" />
+			                            </html:option>
+			                            <html:option value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>">
+			                            	<bean:message key="claim.type.lostdelay" />
+			                            </html:option>
+			                            <html:option value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>">
+			                            	<bean:message key="claim.type.missing" />
+			                            </html:option>
+			                            <html:option value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>">
+			                            	<bean:message key="claim.type.damaged" />
+			                            </html:option>
+			                        </html:select>
+		                   		</td>
+		                   		<td colspan="2">
+		                   			<bean:message key="claim.incident.date" />
+		                   			<br/>
+		                   			<html:text name="claimForm" property="claim.ntIncident.displaydate" size="10" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="itcalendar" name="itcalendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, 'theitinerary.disdepartdate','itcalendar','<%= a.getDateformat().getFormat() %>'); return false;">
+		                   		</td>
+		                   		
+		                   	</tr>
+		                   	
+                   		</table>
+                    </logic:notEmpty> 
+                    <br />
+                    <br/>
+                    <% } %>
+                    <!-- Reservation Info -->
+                    <h1 class="green">
+                   		<bean:message key="header.reservation_summary" />
+						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                    </h1>
+					<table class="form2" cellpadding="0" cellspacing="0">
+					<tr>
+						<td colspan="5">
+	                   		<bean:message key="header.reservation.payment.info" />
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<bean:message key="colname.last_name.req" />
+							<br/>
+							<html:text name="claimForm" property="claim.incident.reservation.ccLName" size="20" maxlength="20" />
+						</td>
+						<td >
+							<bean:message key="colname.first_name.req" />
+							<br/>
+							<html:text name="claimForm" property="claim.incident.reservation.ccFName" size="20" maxlength="20" />
+						</td>
+						<td colspan="2">
+			              <bean:message key="colname.mid_initial" />
+			              <br>
+			              <html:text name="claimForm" property="claim.incident.reservation.ccMName" size="1" maxlength="1" styleClass="textfield" />
+			            </td>
+					</tr>
+					<tr>
+						<td>
+                          <bean:message key="claim.colname.cash.amount.paid" />
+                          <br />
+                          <html:text property="claim.incident.reservation.cashAmount" size="13" maxlength="13" styleClass="textfield" />
+                        </td>
+						<td>
+                          <bean:message key="claim.colname.check.amount.paid" />
+                          <br />
+                          <html:text property="claim.incident.reservation.checkAmount" size="13" maxlength="13" styleClass="textfield" />
+                        </td>
+						<td>
+                          <bean:message key="claim.colname.cc.amount.paid" />
+                          <br />
+                          <html:text property="claim.incident.reservation.ccAmount" size="13" maxlength="13" styleClass="textfield" />
+                        </td>
+                        <td>
+                          <bean:message key="colname.currency" />
+                          <br />
+                          <html:select property="claim.amountClaimedCurrency" styleClass="dropdown">
+                            <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
+                          </html:select>
+                        </td>
+					</tr>
+					<tr>
+						<td>
+							<bean:message key="claim.colname.cc_type" />
+							<br/>
+							<html:select name="claimForm" property="claim.incident.reservation.ccType" >
+								<html:option value="">
+									<bean:message key="claim.cc.please.select" />
+								</html:option>
+								<html:options property="creditCardTypes"  />
+							</html:select>
+						</td>
+						<td>
+							<bean:message key="claim.colname.cc_num" />
+							<br/>
+							<html:text name="claimForm" property="claim.incident.reservation.ccNumber" size="20" maxlength="16" />
+						</td>
+						<td colspan="2">
+							<bean:message key="claim.colname.cc_expdate" />
+							<br/>
+							<html:select name="claimForm" property="claim.incident.reservation.ccExpMonth">
+								<html:option value="">
+									<bean:message key="claim.cc.month" />
+								</html:option>
+								<html:options property="ccMonths" />
+							</html:select>
+							&nbsp;
+							<html:select name="claimForm" property="claim.incident.reservation.ccExpYear">
+								<html:option value="">
+									<bean:message key="claim.cc.year" />
+								</html:option>
+								<html:options property="ccYears"/>
+							</html:select>
+							
+						</td>
+					</tr>
+					<tr><td colspan="4"><br/></td></tr>
+					<tr>
+						<td colspan="4">
+							<bean:message key="header.reservation.info" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4">
+							<html:textarea name="claimForm" property="claim.incident.reservation.pnrData.pnrData" cols="80" rows="10" /> 
+						</td>
+					</tr>
+					</table>
+                    <center>
+                    <html:submit property="save" styleId="button">
+                      <bean:message key="button.save" />
+                    </html:submit>
+                    &nbsp;&nbsp;
+                    <html:submit property="submit" styleId="button">
+                      <bean:message key="button.submit" />
+                    </html:submit>
+                    </center>
                   </html:form>
-                </logic:notPresent>

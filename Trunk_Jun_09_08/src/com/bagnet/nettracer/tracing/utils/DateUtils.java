@@ -8,6 +8,7 @@ package com.bagnet.nettracer.tracing.utils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -26,7 +27,9 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
  */
 public class DateUtils {
 	private static Logger logger = Logger.getLogger(DateUtils.class);
-
+	
+	public static ArrayList<Integer> ccMonths = null;
+	private static ArrayList<Integer> ccYears = null;
 	/**
 	 * if timezone is not null, date in is in gmt date, need to be converted to
 	 * current timezone
@@ -249,4 +252,32 @@ public class DateUtils {
 	{
 	    d.setTime( d.getTime() + days*1000*60*60*24 );
 	}
+	
+	public static ArrayList<Integer> getCcMonths() {
+		if (ccMonths == null) {
+			ccMonths = new ArrayList<Integer>();
+			for (int i = 1; i <= 12; i++) {
+				ccMonths.add(i);
+			}
+		}
+		return ccMonths;
+	}
+	
+	/**
+	 * 
+	 * @return - an ArrayList of years starting with the current year
+	 * and including the next 20 years.
+	 */
+	public static ArrayList<Integer> getCcYears() {
+		if (ccYears == null) {
+			ccYears = new ArrayList<Integer>();
+			int year = Calendar.getInstance().get(Calendar.YEAR);
+			for (int i = 0; i < 20; i++) {
+				ccYears.add(year);
+				year++;
+			}
+		}
+		return ccYears;
+	}
+	
 }

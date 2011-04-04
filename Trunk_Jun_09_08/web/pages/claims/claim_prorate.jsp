@@ -8,8 +8,10 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+	boolean ntUser = PropertyBMO.isTrue("nt.user");
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -19,6 +21,7 @@
   <SCRIPT LANGUAGE="JavaScript">
     
 	var cal1xx = new CalendarPopup();	
+
 
 
   </SCRIPT>
@@ -68,7 +71,7 @@
                   &nbsp;</span></a>
             </dd>
 <%
-            if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_RESOLUTION, a)) {
+            if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, a)) {
 %>
               <dd>
                 <a href="claim_resolution.do"><span class="aa">&nbsp;
@@ -80,8 +83,25 @@
                     &nbsp;</span></a>
               </dd>
 <%
-            }
-%>
+            } if (ntUser) { %>
+					<dd>
+                   	<a href='fraud_results.do?incident=<bean:write name="incident" scope="request" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
+                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                   </dd>
+
+
+			<% } else { %>
+					<dd>
+                   	<a href='fraud_results.do'><span class="aa">&nbsp;<br />&nbsp;</span>
+                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                   </dd>
+            <% } %>
             <dd>
               <a href="#"><span class="aab">&nbsp;
                   <br />

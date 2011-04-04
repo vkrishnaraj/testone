@@ -31,6 +31,8 @@ import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Session;
 
+import aero.nettracer.fs.model.Claim;
+
 import com.bagnet.nettracer.cronjob.tracing.PassiveTracing;
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -52,7 +54,6 @@ import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.Billing;
-import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ControlLog;
@@ -1938,10 +1939,12 @@ public class BagService {
 
 			acDTO.setModify_time(TracerDateTime.getGMTDate());
 			acDTO.setModify_agent(user);
-			acDTO.setModify_reason(cform.getMod_claim_reason());
+			// TODO: FIX THE LINE BELOW TO RESTORE AUDIT_CLAIM FUNCTIONALITY
+//			acDTO.setModify_reason(cform.getMod_claim_reason());
 
 			boolean result = cBMO.insertClaim(cDTO, acDTO, incident_ID);
-			cform.setClaim_ID(cDTO.getClaim_ID());
+			cform.setClaim(cDTO);
+//			cform.setClaim_ID(cDTO.getId());
 			if(!result)
 				return false;
 			else
@@ -1954,7 +1957,7 @@ public class BagService {
 		}
 	}
 
-	public boolean findClaimByID(int claim_ID, ClaimForm cform, IncidentForm theform) {
+	public boolean findClaimByID(long claim_ID, ClaimForm cform, IncidentForm theform) {
 		try {
 			ClaimBMO cBMO = new ClaimBMO();
 			Claim cDTO = cBMO.findClaimByID(claim_ID);

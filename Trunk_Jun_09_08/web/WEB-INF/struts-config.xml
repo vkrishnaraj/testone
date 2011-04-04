@@ -254,6 +254,8 @@
 		<form-bean name="salvageSearchForm" type="com.bagnet.nettracer.tracing.forms.salvage.SalvageSearchForm" />
 		<form-bean name="salvageEditForm" type="com.bagnet.nettracer.tracing.forms.salvage.SalvageEditForm" />
 		<form-bean name="generaltaskForm" type="com.bagnet.nettracer.tracing.forms.GeneralTaskForm" />
+		
+		<form-bean name="fraudResultsForm" type="com.bagnet.nettracer.tracing.forms.FraudResultsForm" />
 		<form-bean name="privacyPermissionsForm" type="com.bagnet.nettracer.tracing.forms.PrivacyPermissionsForm"/>
 		
 		
@@ -499,6 +501,9 @@
 		<forward name="salvage_search" path="salvage_search" />
 		<forward name="salvage_edit" path="salvage_edit" />
 		
+		<forward name="create_claim" path="create_claim" />
+		<forward name="fraud_results" path="fraud_results" />
+		
 	</global-forwards>
 
 	<!-- ========== Action Mapping Definitions ============================== -->
@@ -545,7 +550,7 @@
 		<!-- claims -->
 		<action path="/claims" type="com.bagnet.nettracer.tracing.actions.ClaimsTask" name="claimToBeProcessedForm" scope="session" validate="false"></action>
 
-		<action path="/claim_resolution" type="com.bagnet.nettracer.tracing.actions.ClaimAction" name="claimForm" scope="session" validate="false"></action>
+		<action path="/claim_resolution" type="com.bagnet.nettracer.tracing.actions.ModifyClaimAction" name="claimForm" scope="session" validate="false"></action>
 
 		<action path="/claim_prorate" type="com.bagnet.nettracer.tracing.actions.ClaimProrateAction" name="claimProrateForm" scope="session" validate="false"></action>
 		
@@ -554,6 +559,10 @@
 		<action path="/forwardNotices" type="com.bagnet.nettracer.tracing.actions.taskmanager.SearchForwardNoticeAction" name="searchForwardNoticeForm" scope="request" validate="false" ></action>
 		
 		<action path="/pcn" type="com.bagnet.nettracer.tracing.actions.taskmanager.PcnAction" name="pcnSearchForm" scope="request" validate="false" ></action>
+
+		<action path="/create_claim" type="com.bagnet.nettracer.tracing.actions.CreateClaimAction" scope="request" validate="false" ></action>
+
+		<action path="/fraud_results" type="com.bagnet.nettracer.tracing.actions.FraudResultsAction" name="fraudResultsForm" scope="request" validate="false" ></action>
 		
 		<!-- Expense Actions -->
 		<action path="/*Expense" parameter="{1}" type="com.bagnet.nettracer.tracing.actions.expense.{1}ExpenseAction" name="expensePayoutForm" scope="request" validate="true" >

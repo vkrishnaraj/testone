@@ -10,17 +10,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.fs.model.Claim;
+
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -76,7 +77,9 @@ public class ClaimProrateAction extends CheckedAction {
 			// came here from claim menu, need to show form to enter incident id
 			session.setAttribute("prorate", "1");
 			request.setAttribute("noincident", "1");
-			return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
+			return (mapping.findForward(TracingConstants.CLAIM_CREATE_NEW));
+//			response.sendRedirect("create_claim.do");
+//			return null;
 		} else {
 			request.setAttribute("incident", theform.getIncident_ID());
 		}

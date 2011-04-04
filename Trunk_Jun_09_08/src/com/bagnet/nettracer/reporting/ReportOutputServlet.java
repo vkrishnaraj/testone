@@ -130,7 +130,7 @@ public class ReportOutputServlet extends HttpServlet {
 					switch (type) {
 						case ReportingConstants.CLAIM_PAYOUT_RPT:
 							ClaimForm cform = (ClaimForm) session.getAttribute("claimForm");
-							iFile = getFile(ClaimPayoutRpt.createReport(cform.getClaim_ID(), sc, request), sc);
+							iFile = getFile(ClaimPayoutRpt.createReport(cform.getClaim().getId(), sc, request), sc);
 							break;
 						case ReportingConstants.CLAIM_PRORATE_RPT:
 							ClaimProrateForm cpform = (ClaimProrateForm) session.getAttribute("claimProrateForm");

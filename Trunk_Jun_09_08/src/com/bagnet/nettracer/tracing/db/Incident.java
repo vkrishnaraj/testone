@@ -34,8 +34,9 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Proxy;
+
+import aero.nettracer.fs.model.Claim;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -95,7 +96,7 @@ public class Incident implements Serializable {
 	private Set<Remark> remarks;
 	private Set<Itinerary> itinerary;
 	private long oc_claim_id;
-	private Claim claim = new Claim();
+	private Claim claim;
 
 	private Set<Incident_Claimcheck> claimchecks;
 
@@ -863,7 +864,7 @@ public class Incident implements Serializable {
 	 * 
 	 *  
 	 */
-	@OneToOne(mappedBy = "incident")
+	@OneToOne(targetEntity = aero.nettracer.fs.model.Claim.class)
 	public Claim getClaim() {
 		return claim;
 	}

@@ -16,10 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import aero.nettracer.fs.model.Claim;
+
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.db.Claim;
 
 /**
  * @author Matt
@@ -38,14 +39,14 @@ public class ClaimPayoutRpt {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static String createReport(int claim_ID, ServletContext sc, HttpServletRequest request) {
+	public static String createReport(long claim_ID, ServletContext sc, HttpServletRequest request) {
 		try {
 			ClaimBMO cBMO = new ClaimBMO();
 			Claim claim = cBMO.findClaimByID(claim_ID);
-			if (claim == null || claim.getIncident() == null || claim.getIncident().getExpenses() == null) {
+			if (claim == null || claim.getIncident() == null || claim.getNtIncident().getExpenses() == null) {
 				return null;
 			}
-			List expenselist = new ArrayList(claim.getIncident().getExpenses());
+			List expenselist = new ArrayList(claim.getNtIncident().getExpenses());
 
 			Map parameters = new HashMap();
 			parameters.put("title", ReportingConstants.CLAIM_PAYOUT_TITLE);

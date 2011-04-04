@@ -9,7 +9,7 @@ import javax.naming.NamingException;
 public class ConnectionUtil {
 	  static String user     = null;
 	  static String password = null;
-	  static String url      = "jnp://localhost:1199";
+	  static String url      = "jnp://192.168.2.145:1199";
 
 	
 	  static public Context getInitialContext() throws NamingException {

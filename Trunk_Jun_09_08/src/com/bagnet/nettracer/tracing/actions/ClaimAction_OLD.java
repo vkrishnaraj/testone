@@ -11,26 +11,25 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.fs.model.Claim;
+
 import com.bagnet.nettracer.reporting.ReportingConstants;
-import com.bagnet.nettracer.tracing.bmo.StatusBMO;
+import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
-import com.bagnet.nettracer.tracing.db.ExpenseType;
-import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -40,9 +39,9 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * TODO To change the template for this generated type comment go to Window -
  * Preferences - Java - Code Style - Code Templates
  */
-public class ClaimAction extends CheckedAction {
+public class ClaimAction_OLD extends CheckedAction {
 	
-	private static final Logger logger = Logger.getLogger(ClaimAction.class);
+	private static final Logger logger = Logger.getLogger(ModifyClaimAction.class);
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
@@ -58,7 +57,7 @@ public class ClaimAction extends CheckedAction {
 			return null;
 		}
 
-		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_RESOLUTION, user))
+		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
 		if(!manageToken(request)) {
@@ -103,7 +102,7 @@ public class ClaimAction extends CheckedAction {
 		if (request.getParameter("getclaim") != null || request.getParameter("getclaimfa") != null || session.getAttribute("getclaimfa") != null) {
 
 			if (request.getParameter("getclaim") != null)
-				incident_id = cform.getIncident_ID();
+				incident_id = cform.getClaim().getNtIncident().getIncident_ID();
 			if (request.getParameter("getclaimfa") != null)
 				incident_id = request.getParameter("incidentid");
 			if (request.getSession().getAttribute("getclaimfa") != null) {
@@ -167,8 +166,9 @@ public class ClaimAction extends CheckedAction {
 				request.setAttribute("incident", theform.getIncident_ID());
 				session.setAttribute("incidentForm", theform);
 			}
-			cform = TracerUtils.populateClaim(cform, theform, request);
-
+//			cform = TracerUtils.populateClaim(cform, theform, request);
+//			cform = ClaimUtils.createClaimForm(incident_id, request);
+			
 			int index = -1;
 
 			if (index == -1) {
@@ -187,8 +187,9 @@ public class ClaimAction extends CheckedAction {
 				ep.setStatus(StatusBMO.getStatus(st.getStatus_ID()));
 			*/
 
-			cform.setMod_claim_reason("");
-			cform.setMod_exp_reason("");
+			// TODO: FIX THE LINE BELOW TO RESTORE AUDIT_CLAIM FUNCTIONALITY
+//			cform.setMod_claim_reason("");
+//			cform.setMod_exp_reason("");
 			request.setAttribute("edit", "1");
 			if (index >= 0) {
 				request.setAttribute("index", Integer.toString(index));
@@ -219,11 +220,12 @@ public class ClaimAction extends CheckedAction {
 
 			if (bs.insertClaim(cDTO, cform, session, false, theform.getIncident_ID())) {
 				theform.setClaim(cDTO);
-				cform.setClaim_ID(cDTO.getClaim_ID());
+//				cform.setClaim_ID(cDTO.getId());
 				request.setAttribute("success", "1");
-				cform.setMod_claim_reason("");
+//				cform.setMod_claim_reason("");
 			} else {
-				TracerUtils.populateClaim(cform, theform, request);
+//				TracerUtils.populateClaim(cform, theform, request);
+//				cform = ClaimUtils.createClaimForm(incident_id, request);
 				request.setAttribute("fail", "1");
 			}
 			return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
@@ -238,8 +240,9 @@ public class ClaimAction extends CheckedAction {
 
 			
 			if (savedclaim) {
-				bs.findClaimByID(cform.getClaim_ID(), cform, theform);
-				cform = TracerUtils.populateClaim(cform, theform, request);
+				bs.findClaimByID(cform.getClaim().getId(), cform, theform);
+//				cform = TracerUtils.populateClaim(cform, theform, request);
+//				cform = ClaimUtils.createClaimForm(incident_id, request);
 				request.setAttribute("success", "1");
 			} else {
 				request.setAttribute("fail", "1");
@@ -255,7 +258,7 @@ public class ClaimAction extends CheckedAction {
 				savedclaim = true;
 
 			if (savedclaim) {
-				bs.findClaimByID(cDTO.getClaim_ID(), cform, theform);
+				bs.findClaimByID(cDTO.getId(), cform, theform);
 				response.sendRedirect("searchIncident.do?incident=" + theform.getIncident_ID());
 				return null;
 			} else {
@@ -268,7 +271,8 @@ public class ClaimAction extends CheckedAction {
 		/**
 		 * retrieve to modify claim payout
 		 */
-		cform = TracerUtils.populateClaim(cform, theform, request);
+//		cform = TracerUtils.populateClaim(cform, theform, request);
+//		cform = ClaimUtils.createClaimForm(incident_id, request);
 		request.setAttribute("incident", theform.getIncident_ID());
 
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));

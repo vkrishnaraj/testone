@@ -86,7 +86,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_CUSTOM_QUERY = "Custom Query";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIMS_TO_BE_PROCESSED = "Claims to be Processed";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIMS = "Claims";
-	public final static String SYSTEM_COMPONENT_NAME_CLAIM_RESOLUTION = "Claim Resolution";
+	public final static String SYSTEM_COMPONENT_NAME_CREATE_CLAIM = "Create Claim";
+	public final static String SYSTEM_COMPONENT_NAME_MODIFY_CLAIM = "Modify Claim";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_PRORATE = "Claim Prorate";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_SETTLEMENT = "Claim Settlement";
 	public final static String SYSTEM_COMPONENT_NAME_PCN = "PCN";
@@ -865,6 +866,9 @@ public class TracingConstants {
 	public static final String JSP_DELETE_SALVAGE_BOX = "delSalvageBox";
 	public static final String JSP_DELETE_SALVAGE_ITEM = "delSalvageItem";
 	public static final String JSP_DELETE_SALVAGE_OHD= "delSalvageOhd";
+	
+	public final static String CLAIM_CREATE_NEW = "create_claim";
+	public final static String CLAIM_FRAUD_RESULTS = "fraud_results";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

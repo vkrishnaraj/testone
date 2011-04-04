@@ -159,6 +159,7 @@
                     <p>
                     </td>
                   </tr>
+                  <logic:notEmpty name="incidentForm.readonly" >
                   <logic:notEqual name="incidentForm" property="readonly" value="1">
                     <tr>
                       <td align="center" valign="top" colspan="12">
@@ -169,4 +170,5 @@
                       </td>
                     </tr>
                   </logic:notEqual>
+                  </logic:notEmpty>
                 </table>

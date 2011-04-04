@@ -34,6 +34,14 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
+import aero.nettracer.fs.model.Claim;
+import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.FsIncident;
+import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Phone;
+import aero.nettracer.fs.model.PnrData;
+import aero.nettracer.fs.model.Reservation;
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -42,7 +50,6 @@ import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
-import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
@@ -508,7 +515,6 @@ public class TracerUtils {
 			IncidentForm theform, HttpServletRequest request) {
 		try {
 			Claim claim = null;
-
 			HttpSession session = request.getSession();
 
 			cform = new ClaimForm();
@@ -520,34 +526,56 @@ public class TracerUtils {
 					.getAttribute("claimstatuslist") != null ? session
 					.getAttribute("claimstatuslist") : getStatusList(TracingConstants.TABLE_CLAIM, user.getCurrentlocale()));
 
+			IncidentBMO iBmo = new IncidentBMO();
+			Incident incident = iBmo.findIncidentByID(theform.getIncident_ID());
+			
 			if ((claim = theform.getClaim()) != null) {
-				BeanUtils.copyProperties(cform, claim);
+				cform.setClaim(claim);
+//				BeanUtils.copyProperties(cform, claim);
+				if (cform.getClaim().getStatus() == null) {
+					Status status = new Status();
+					status.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
+					status.setLocale(user);
+					cform.getClaim().setStatus(status);
+				}
+				
+				if (cform.getClaim().getIncident() == null) {
+					FsIncident fsIncident = new FsIncident();
+					Reservation reservation = new Reservation();
+					reservation.setPnrData(new PnrData());
+					fsIncident.setReservation(reservation);
+					
+					cform.getClaim().setIncident(fsIncident);
+				}
+				if (cform.getClaim().getAmountClaimedCurrency() == null)
+					cform.getClaim().setAmountClaimedCurrency(user.getDefaultcurrency());
+				
+				Person person = new Person();
+				FsAddress address = new FsAddress();
+				Phone phone = new Phone();
+				person.getAddresses().add(address);
+				person.getPhones().add(phone);
+				claim.getClaimants().add(person);
+			} else {
+				cform.setClaim(ClaimUtils.createClaim(user));
 			}
+			
+			claim.setNtIncident(incident);
 
-			Passenger pa = (Passenger) theform.getPassenger(0);
-			String passengername = pa.getFirstname() + " " + pa.getLastname();
-			cform.setPassengername(passengername);
+			// TODO: VERIFY THAT THIS IS NO LONGER NEEDED
+//			Passenger pa = (Passenger) theform.getPassenger(0);
+//			String passengername = pa.getFirstname() + " " + pa.getLastname();
+//			cform.getClaim().setPassengername(passengername);
 
 			if (theform.getExpenselist() != null)
-				cform.setExpenselist(theform.getExpenselist());
+				cform.getClaim().getNtIncident().setExpenselist(theform.getExpenselist());
 
 			cform.set_DATEFORMAT(user.getDateformat().getFormat());
 			cform.set_TIMEFORMAT(user.getTimeformat().getFormat());
 			cform.set_TIMEZONE(TimeZone
 					.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 
-			if (cform.getClaimcurrency_ID() == null)
-				cform.setClaimcurrency_ID(user.getDefaultcurrency());
-
 			session.setAttribute("claimForm", cform);
-
-
-			if (cform.getStatus() == null) {
-				Status status = new Status();
-				status.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
-				status.setLocale(user);
-				cform.setStatus(status);
-			}
 
 			return cform;
 
@@ -572,7 +600,7 @@ public class TracerUtils {
 				if (cp == null) { // no previous prorate
 					cpform = new ClaimProrateForm();
 					// create new itinerary list
-					List<Itinerary>	claimItinList = claim.getIncident().getItinerary_list();
+					List<Itinerary>	claimItinList = claim.getNtIncident().getItinerary_list();
 					ArrayList al = new ArrayList();					
 					Prorate_Itinerary pi = null;
 					if (claimItinList != null) {

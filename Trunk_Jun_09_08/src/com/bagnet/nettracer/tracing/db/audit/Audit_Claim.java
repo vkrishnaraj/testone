@@ -26,7 +26,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  */
 public class Audit_Claim implements Serializable {
 	private int audit_claim_id;
-	private int Claim_ID;
+	private long Claim_ID;
 	private double claimamount;
 	private String claimcurrency_ID;
 	private String ssn;
@@ -300,7 +300,7 @@ public class Audit_Claim implements Serializable {
 	 * 
 	 * @hibernate.property type="integer"
 	 */
-	public int getClaim_ID() {
+	public long getClaim_ID() {
 		return Claim_ID;
 	}
 
@@ -308,7 +308,7 @@ public class Audit_Claim implements Serializable {
 	 * @param claim_ID
 	 *          The claim_ID to set.
 	 */
-	public void setClaim_ID(int claim_ID) {
+	public void setClaim_ID(long claim_ID) {
 		Claim_ID = claim_ID;
 	}
 

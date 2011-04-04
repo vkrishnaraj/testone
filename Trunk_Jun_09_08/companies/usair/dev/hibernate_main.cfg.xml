@@ -117,7 +117,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Assoc.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Range.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Range.hbm.xml"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.Claim"/>
+		<!--mapping class="com.bagnet.nettracer.tracing.db.Claim"/-->
 		<mapping class="com.bagnet.nettracer.tracing.db.ExpensePayout"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/ExpenseType.hbm.xml"/>
 
@@ -276,7 +276,21 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.Precoder"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.OnlineIncidentAuthorization"/>
 
-		
+		<!-- Fraud Services -->
+		<mapping class="aero.nettracer.fs.model.detection.Blacklist"/>
+		<mapping class="aero.nettracer.fs.model.detection.InternalSummary"/>
+		<mapping class="aero.nettracer.fs.model.detection.MatchHistory"/>
+		<mapping class="aero.nettracer.fs.model.detection.MatchDetail"/>
+		<mapping class="aero.nettracer.fs.model.detection.Whitelist"/>
+		<mapping class="aero.nettracer.fs.model.FsAddress"/>
+		<mapping class="aero.nettracer.fs.model.Bag"/>
+		<mapping class="aero.nettracer.fs.model.Claim"/>
+		<mapping class="aero.nettracer.fs.model.FsIncident"/>
+		<mapping class="aero.nettracer.fs.model.Person"/>
+		<mapping class="aero.nettracer.fs.model.Phone"/>
+		<mapping class="aero.nettracer.fs.model.PnrData"/>
+		<mapping class="aero.nettracer.fs.model.Reservation"/>
+		<mapping class="aero.nettracer.fs.model.Segment"/>
 		
 		
     </session-factory>
