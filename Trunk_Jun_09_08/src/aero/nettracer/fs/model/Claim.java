@@ -8,8 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -17,9 +20,15 @@ import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.detection.Blacklist;
 
+import com.bagnet.nettracer.tracing.db.ClaimProrate;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Status;
+
 @Entity
+@Table(name = "FS_Claim")
 @Proxy(lazy = false)
 public class Claim {
+	
 	@Id
 	@GeneratedValue
 	private long id;
@@ -36,7 +45,8 @@ public class Claim {
 	private String privateReasonForDenial;
 	private String publicReasonForDenial;
 
-	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
 	private Set<Person> claimants;
@@ -49,15 +59,42 @@ public class Claim {
 	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Blacklist.class)
 	private Blacklist blacklist;
 
-	@OneToOne(targetEntity = aero.nettracer.fs.model.Incident.class, cascade = CascadeType.ALL)
-	private Incident incident;
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL)
+	private aero.nettracer.fs.model.FsIncident incident;
+	
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Incident.class, mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Incident ntIncident; 
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "Claimprorate_ID")
+	private ClaimProrate claimprorate;
 
-	public Incident getIncident() {
+	@ManyToOne
+	@JoinColumn(name = "Status_ID", nullable = false)
+	private Status status;
+
+	public ClaimProrate getClaimprorate() {
+		return claimprorate;
+	}
+
+	public void setClaimprorate(ClaimProrate claimprorate) {
+		this.claimprorate = claimprorate;
+	}
+	
+	public aero.nettracer.fs.model.FsIncident getIncident() {
 		return incident;
 	}
 
-	public void setIncident(Incident incident) {
+	public void setIncident(aero.nettracer.fs.model.FsIncident incident) {
 		this.incident = incident;
+	}
+	
+	public Incident getNtIncident() {
+		return ntIncident;
+	}
+	
+	public void setNtIncident(Incident ntIncident) {
+		this.ntIncident = ntIncident;
 	}
 
 	public long getId() {
@@ -181,11 +218,19 @@ public class Claim {
 	}
 
 	public String getAmountClaimedCurrency() {
-  	return amountClaimedCurrency;
-  }
+	  	return amountClaimedCurrency;
+	}
 
 	public void setAmountClaimedCurrency(String amountClaimedCurrency) {
-  	this.amountClaimedCurrency = amountClaimedCurrency;
-  }
+		this.amountClaimedCurrency = amountClaimedCurrency;
+	}
+	
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 
 }

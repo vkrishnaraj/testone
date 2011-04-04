@@ -22,8 +22,8 @@ public class Phone {
 	private long id;
 
 	// @OneToOne(targetEntity = aero.nettracer.fs.model.Incident.class)
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.Incident.class)
-	private Incident incident;
+	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
+	private FsIncident incident;
 
 	private boolean whiteListed;
 
@@ -68,11 +68,11 @@ public class Phone {
 	}
 
 
-	public Incident getIncident() {
+	public FsIncident getIncident() {
 		return incident;
 	}
 
-	public void setIncident(Incident incident) {
+	public void setIncident(FsIncident incident) {
 		this.incident = incident;
 	}
 

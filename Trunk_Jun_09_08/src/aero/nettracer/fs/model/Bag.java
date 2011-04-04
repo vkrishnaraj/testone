@@ -14,8 +14,8 @@ public class Bag {
 	@GeneratedValue
 	private long id;
 
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.Incident.class)
-	private Incident incident;
+	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
+	private FsIncident incident;
 	private String bagType;
 	private String bagColor;
 	private String manufacturer;
@@ -53,11 +53,11 @@ public class Bag {
 		this.id = id;
 	}
 
-	public Incident getIncident() {
+	public FsIncident getIncident() {
 		return incident;
 	}
 
-	public void setIncident(Incident incident) {
+	public void setIncident(FsIncident incident) {
 		this.incident = incident;
 	}
 

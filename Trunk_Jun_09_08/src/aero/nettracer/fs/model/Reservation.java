@@ -25,16 +25,20 @@ public class Reservation {
 	@GeneratedValue
 	private long id;
 
-	@OneToOne(targetEntity = aero.nettracer.fs.model.Incident.class)
-	private Incident incident;
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
+	private FsIncident incident;
 	private String airline;
 	private String recordLocator;
 	private Date travelDate;
 	private String formOfPayment;
 	private String ccType;
 	private String ccNumber;
+	private String ccLName;
+	private String ccFName;
+	private String ccMName;
+	private int ccExpMonth;
+	private int ccExpYear;
 
-	private String expirationDate;
 	private Double totalFare;
 
 	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -45,7 +49,9 @@ public class Reservation {
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Whitelist.class, cascade = CascadeType.ALL)
 	private Whitelist ccWhitelist;
-	private double ticketAmount;
+	private double cashAmount;
+	private double checkAmount;
+	private double ccAmount;
 	private int itinComplexity;
 	private int tripLength;
 	@OneToOne(targetEntity = aero.nettracer.fs.model.PnrData.class, cascade = CascadeType.ALL)
@@ -71,11 +77,11 @@ public class Reservation {
 		this.id = id;
 	}
 
-	public Incident getIncident() {
+	public FsIncident getIncident() {
 		return incident;
 	}
 
-	public void setIncident(Incident incident) {
+	public void setIncident(FsIncident incident) {
 		this.incident = incident;
 	}
 
@@ -119,20 +125,27 @@ public class Reservation {
 		this.ccNumber = ccNumber;
 	}
 
-	public String getExpirationDate() {
-		return expirationDate;
+	public double getCashAmount() {
+		return cashAmount;
+	}
+	
+	public void setCashAmount(double cashAmount) {
+		this.cashAmount = cashAmount;
 	}
 
-	public void setExpirationDate(String expirationDate) {
-		this.expirationDate = expirationDate;
+	public double getCheckAmount() {
+		return checkAmount;
+	}
+	
+	public void setCheckAmount(double checkAmount) {
+		this.checkAmount = checkAmount;
+	}
+	public double getCcAmount() {
+		return ccAmount;
 	}
 
-	public double getTicketAmount() {
-		return ticketAmount;
-	}
-
-	public void setTicketAmount(double ticketAmount) {
-		this.ticketAmount = ticketAmount;
+	public void setCcAmount(double ccAmount) {
+		this.ccAmount = ccAmount;
 	}
 
 	public int getItinComplexity() {
@@ -205,6 +218,46 @@ public class Reservation {
 
 	public void setTotalFare(Double totalFare) {
 		this.totalFare = totalFare;
+	}
+
+	public String getCcLName() {
+		return ccLName;
+	}
+
+	public void setCcLName(String ccLName) {
+		this.ccLName = ccLName;
+	}
+
+	public String getCcFName() {
+		return ccFName;
+	}
+
+	public void setCcFName(String ccFName) {
+		this.ccFName = ccFName;
+	}
+
+	public String getCcMName() {
+		return ccMName;
+	}
+
+	public void setCcMName(String ccMName) {
+		this.ccMName = ccMName;
+	}
+
+	public int getCcExpMonth() {
+		return ccExpMonth;
+	}
+
+	public void setCcExpMonth(int ccExpMonth) {
+		this.ccExpMonth = ccExpMonth;
+	}
+
+	public int getCcExpYear() {
+		return ccExpYear;
+	}
+
+	public void setCcExpYear(int ccExpYear) {
+		this.ccExpYear = ccExpYear;
 	}
 
 }

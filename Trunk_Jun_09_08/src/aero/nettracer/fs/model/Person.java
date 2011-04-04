@@ -27,8 +27,8 @@ public class Person {
 	private Claim claim;
 
 	// @OneToOne(targetEntity = aero.nettracer.fs.model.Incident.class)
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.Incident.class)
-	private Incident incident;
+	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
+	private FsIncident incident;
 
 	// @OneToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
@@ -60,7 +60,7 @@ public class Person {
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
-	private Set<Address> addresses;
+	private Set<FsAddress> addresses;
 
 	public String getFirstName() {
 		return firstName;
@@ -142,11 +142,11 @@ public class Person {
 		this.phones = phones;
 	}
 
-	public Set<Address> getAddresses() {
+	public Set<FsAddress> getAddresses() {
 		return addresses;
 	}
 
-	public void setAddresses(Set<Address> addresses) {
+	public void setAddresses(Set<FsAddress> addresses) {
 		this.addresses = addresses;
 	}
 
@@ -166,11 +166,11 @@ public class Person {
 		this.claim = claim;
 	}
 
-	public Incident getIncident() {
+	public FsIncident getIncident() {
 		return incident;
 	}
 
-	public void setIncident(Incident incident) {
+	public void setIncident(FsIncident incident) {
 		this.incident = incident;
 	}
 

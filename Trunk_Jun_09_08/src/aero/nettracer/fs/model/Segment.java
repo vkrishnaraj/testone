@@ -22,8 +22,8 @@ public class Segment {
 	private String flight;
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
 	private Reservation reservation;
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.Incident.class)
-	private Incident incident;
+	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
+	private FsIncident incident;
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Claim.class)
 	private Claim claim;
 
@@ -75,11 +75,11 @@ public class Segment {
 		this.reservation = reservation;
 	}
 
-	public Incident getIncident() {
+	public FsIncident getIncident() {
 		return incident;
 	}
 
-	public void setIncident(Incident incident) {
+	public void setIncident(FsIncident incident) {
 		this.incident = incident;
 	}
 
