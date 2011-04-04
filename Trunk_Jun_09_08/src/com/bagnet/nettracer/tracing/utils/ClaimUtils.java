@@ -36,6 +36,7 @@ public class ClaimUtils {
 
 		// create the claim
 		Claim claim = new Claim();
+		claim.setAirline(user.getCompanycode_ID());
 
 		// create the person
 		Person person = new Person();
