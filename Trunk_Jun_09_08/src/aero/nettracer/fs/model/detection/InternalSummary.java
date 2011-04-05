@@ -7,7 +7,7 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Proxy;
 
-import aero.nettracer.fs.model.Claim;
+import aero.nettracer.fs.model.FsClaim;
 
 @Entity
 @Proxy(lazy = false)
@@ -16,8 +16,8 @@ public class InternalSummary {
 	@GeneratedValue
 	private long id;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.Claim.class)
-	private Claim claim;
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
+	private FsClaim claim;
 	private String description;
 
 	public long getId() {
@@ -36,11 +36,11 @@ public class InternalSummary {
 		this.description = description;
 	}
 
-	public Claim getClaim() {
+	public FsClaim getClaim() {
 		return claim;
 	}
 
-	public void setClaim(Claim claim) {
+	public void setClaim(FsClaim claim) {
 		this.claim = claim;
 	}
 }

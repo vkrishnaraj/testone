@@ -7,8 +7,6 @@ import java.util.TimeZone;
 
 import org.apache.struts.validator.ValidatorForm;
 
-import aero.nettracer.fs.model.Claim;
-
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -16,6 +14,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
+import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.CrmFile;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;

@@ -248,7 +248,7 @@
 		<mapping class="aero.nettracer.fs.model.detection.Whitelist"/>
 		<mapping class="aero.nettracer.fs.model.FsAddress"/>
 		<mapping class="aero.nettracer.fs.model.Bag"/>
-		<mapping class="aero.nettracer.fs.model.Claim"/>
+		<mapping class="aero.nettracer.fs.model.FsClaim"/>
 		<mapping class="aero.nettracer.fs.model.FsIncident"/>
 		<mapping class="aero.nettracer.fs.model.Person"/>
 		<mapping class="aero.nettracer.fs.model.Phone"/>

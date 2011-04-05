@@ -24,8 +24,8 @@ public class Segment {
 	private Reservation reservation;
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
 	private FsIncident incident;
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.Claim.class)
-	private Claim claim;
+	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
+	private FsClaim claim;
 
 	public long getId() {
 		return id;
@@ -83,11 +83,11 @@ public class Segment {
 		this.incident = incident;
 	}
 
-	public Claim getClaim() {
+	public FsClaim getClaim() {
 		return claim;
 	}
 
-	public void setClaim(Claim claim) {
+	public void setClaim(FsClaim claim) {
 		this.claim = claim;
 	}
 

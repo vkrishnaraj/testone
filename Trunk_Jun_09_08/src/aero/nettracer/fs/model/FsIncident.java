@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -37,8 +35,8 @@ public class FsIncident {
 	@Fetch(FetchMode.SELECT)
 	private Set<Segment> segments;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.Claim.class, cascade = CascadeType.ALL)
-	private Claim claim;
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class, cascade = CascadeType.ALL) 
+	private FsClaim claim;
 	private int numberOfBdos;
 	private int numberDaysOpen;
 	private Date timestampOpen;
@@ -93,11 +91,11 @@ public class FsIncident {
 		this.incidentType = incidentType;
 	}
 
-	public Claim getClaim() {
+	public FsClaim getClaim() {
 		return claim;
 	}
 
-	public void setClaim(Claim claim) {
+	public void setClaim(FsClaim claim) {
 		this.claim = claim;
 	}
 

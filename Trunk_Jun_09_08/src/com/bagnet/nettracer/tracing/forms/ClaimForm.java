@@ -5,11 +5,11 @@ import java.util.LinkedHashSet;
 
 import org.apache.struts.action.ActionForm;
 
-import aero.nettracer.fs.model.Claim;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 
+import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.utils.CreditCardType;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import aero.nettracer.fs.model.Claim;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.Person;
@@ -17,9 +16,9 @@ import aero.nettracer.fs.model.PnrData;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
 
-import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;

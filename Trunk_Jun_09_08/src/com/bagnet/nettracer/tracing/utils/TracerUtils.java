@@ -34,7 +34,6 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
-import aero.nettracer.fs.model.Claim;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.Person;
@@ -50,6 +49,7 @@ import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;

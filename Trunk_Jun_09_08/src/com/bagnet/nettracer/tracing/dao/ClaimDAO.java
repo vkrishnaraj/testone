@@ -4,10 +4,8 @@ import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
 
-import aero.nettracer.fs.model.Claim;
-
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.db.salvage.Salvage;
+import com.bagnet.nettracer.tracing.db.Claim;
 
 public class ClaimDAO {
 	

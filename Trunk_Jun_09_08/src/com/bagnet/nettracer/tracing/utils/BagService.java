@@ -31,7 +31,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Session;
 
-import aero.nettracer.fs.model.Claim;
+import aero.nettracer.fs.model.FsClaim;
 
 import com.bagnet.nettracer.cronjob.tracing.PassiveTracing;
 import com.bagnet.nettracer.email.HtmlEmail;
@@ -54,6 +54,7 @@ import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.Billing;
+import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ControlLog;

@@ -31,7 +31,6 @@ import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 
-import aero.nettracer.fs.model.Claim;
 import aero.nettracer.fs.model.Person;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
@@ -40,6 +39,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;

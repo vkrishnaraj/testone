@@ -119,7 +119,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Assoc.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Range.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Range.hbm.xml"/>
-		<!--mapping class="com.bagnet.nettracer.tracing.db.Claim"/-->
+		<mapping class="com.bagnet.nettracer.tracing.db.Claim"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.ExpensePayout"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/ExpenseType.hbm.xml"/>
 
@@ -286,7 +286,7 @@
 		<mapping class="aero.nettracer.fs.model.detection.Whitelist"/>
 		<mapping class="aero.nettracer.fs.model.FsAddress"/>
 		<mapping class="aero.nettracer.fs.model.Bag"/>
-		<mapping class="aero.nettracer.fs.model.Claim"/>
+		<mapping class="aero.nettracer.fs.model.FsClaim"/>
 		<mapping class="aero.nettracer.fs.model.FsIncident"/>
 		<mapping class="aero.nettracer.fs.model.Person"/>
 		<mapping class="aero.nettracer.fs.model.Phone"/>

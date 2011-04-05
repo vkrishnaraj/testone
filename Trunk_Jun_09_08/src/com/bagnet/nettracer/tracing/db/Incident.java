@@ -36,8 +36,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
-import aero.nettracer.fs.model.Claim;
-
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.dr.Dispute;
@@ -864,7 +862,7 @@ public class Incident implements Serializable {
 	 * 
 	 *  
 	 */
-	@OneToOne(targetEntity = aero.nettracer.fs.model.Claim.class)
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Claim.class)
 	public Claim getClaim() {
 		return claim;
 	}

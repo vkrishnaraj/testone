@@ -135,7 +135,10 @@
             				<bean:message key="colname.fraudresults.select" />
             			</td>
             			<td>
-            				<bean:message key="colname.claim.id" />
+            				<bean:message key="colname.reference.id" />
+            			</td>
+            			<td>
+            				<bean:message key="colname.reference.type" />
             			</td>
             			<td>
             				<bean:message key="colname.fraudresults.company" />
@@ -157,7 +160,10 @@
             				<bean:message key="colname.fraudresults.select" />
             			</td>
             			<td>
-            				<bean:message key="colname.claim.id" />
+            				<bean:message key="colname.reference.id" />
+            			</td>
+            			<td>
+            				<bean:message key="colname.reference.type" />
             			</td>
             			<td>
             				<bean:message key="colname.fraudresults.company" />

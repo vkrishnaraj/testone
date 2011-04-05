@@ -23,8 +23,8 @@ public class Person {
 	private long id;
 
 	// @OneToOne(targetEntity = aero.nettracer.fs.model.Claim.class)
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.Claim.class)
-	private Claim claim;
+	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
+	private FsClaim claim;
 
 	// @OneToOne(targetEntity = aero.nettracer.fs.model.Incident.class)
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
@@ -158,11 +158,11 @@ public class Person {
 		this.id = id;
 	}
 
-	public Claim getClaim() {
+	public FsClaim getClaim() {
 		return claim;
 	}
 
-	public void setClaim(Claim claim) {
+	public void setClaim(FsClaim claim) {
 		this.claim = claim;
 	}
 

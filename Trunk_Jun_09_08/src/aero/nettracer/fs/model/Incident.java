@@ -33,8 +33,8 @@ public class Incident {
 	@Fetch(FetchMode.SELECT)
 	private Set<Segment> segments;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.Claim.class)
-	private Claim claim;
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
+	private FsClaim claim;
 	private int numberOfBdos;
 	private int numberDaysOpen;
 	private Date timestampOpen;
@@ -88,11 +88,11 @@ public class Incident {
 		this.incidentType = incidentType;
 	}
 
-	public Claim getClaim() {
+	public FsClaim getClaim() {
 		return claim;
 	}
 
-	public void setClaim(Claim claim) {
+	public void setClaim(FsClaim claim) {
 		this.claim = claim;
 	}
 

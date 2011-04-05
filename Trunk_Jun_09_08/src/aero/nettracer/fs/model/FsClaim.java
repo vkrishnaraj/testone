@@ -4,15 +4,16 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -20,30 +21,30 @@ import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.detection.Blacklist;
 
-import com.bagnet.nettracer.tracing.db.ClaimProrate;
-import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.db.Status;
-
 @Entity
-@Table(name = "FS_Claim")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="subclass_type", discriminatorType = DiscriminatorType.STRING, length=16)
 @Proxy(lazy = false)
-public class Claim {
+public class FsClaim {
 	
 	@Id
 	@GeneratedValue
-	private long id;
-	private String airlineClaimId;
-	private String airline;
-	private int claimType;
-	private Date claimDate;
-	private Date travelDate;
-	private double amountClaimed;
-	private String amountClaimedCurrency;
-	private double amountPaid;
-	private int fraudStatus; // 0=unknown, 1 = believed fraud, 2=known fraud
-	private boolean denied;
-	private String privateReasonForDenial;
-	private String publicReasonForDenial;
+	protected long id;
+	protected String airlineClaimId;
+	protected String airline;
+	protected int claimType;
+	protected Date claimDate;
+	protected Date travelDate;
+	protected double amountClaimed;
+	protected String amountClaimedCurrency;
+	protected double amountPaid;
+	protected int fraudStatus; // 0=unknown, 1 = believed fraud, 2=known fraud
+	protected boolean denied;
+	protected String privateReasonForDenial;
+	protected String publicReasonForDenial;
+	protected String ntIncidentId;
+	protected int claimProrateId;
+	protected int statusId;
 
 //	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -62,24 +63,7 @@ public class Claim {
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL)
 	private aero.nettracer.fs.model.FsIncident incident;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Incident.class, mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Incident ntIncident; 
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "Claimprorate_ID")
-	private ClaimProrate claimprorate;
-
-	@ManyToOne
-	@JoinColumn(name = "Status_ID", nullable = false)
-	private Status status;
-
-	public ClaimProrate getClaimprorate() {
-		return claimprorate;
-	}
-
-	public void setClaimprorate(ClaimProrate claimprorate) {
-		this.claimprorate = claimprorate;
-	}
 	
 	public aero.nettracer.fs.model.FsIncident getIncident() {
 		return incident;
@@ -89,13 +73,7 @@ public class Claim {
 		this.incident = incident;
 	}
 	
-	public Incident getNtIncident() {
-		return ntIncident;
-	}
 	
-	public void setNtIncident(Incident ntIncident) {
-		this.ntIncident = ntIncident;
-	}
 
 	public long getId() {
 		return id;
@@ -224,13 +202,29 @@ public class Claim {
 	public void setAmountClaimedCurrency(String amountClaimedCurrency) {
 		this.amountClaimedCurrency = amountClaimedCurrency;
 	}
+
+	public String getNtIncidentId() {
+		return ntIncidentId;
+	}
+
+	public void setNtIncidentId(String ntIncidentId) {
+		this.ntIncidentId = ntIncidentId;
+	}
+
+	public int getClaimProrateId() {
+		return claimProrateId;
+	}
+
+	public void setClaimProrateId(int claimProrateId) {
+		this.claimProrateId = claimProrateId;
+	}
+
+	public int getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId(int statusId) {
+		this.statusId = statusId;
+	}
 	
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-
 }
