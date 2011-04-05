@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
@@ -26,7 +27,7 @@ public class GeoCode {
 			if (nullSession) {
 				sess = HibernateWrapper.getGeoSession().openSession();
 			}
-		if (country.equalsIgnoreCase("US")) {
+		if (country == null || country.trim().length() == 0 || country.equalsIgnoreCase("US")) {
 			GeoParsedAddress parsed = parse(address, city, state, zip);
 			if (parsed != null) {
 				GeoLocation toReturn = null;
@@ -68,15 +69,15 @@ public class GeoCode {
 				+ "FROM geotest_zip_to_state WHERE " + "zip = '" + zip + "'");
 		List<Object> list = query.list();
 		if (list != null && list.size() > 0) {
-			System.out.println("NOT AT ALL EMPTY!!! " + list.size());
+			//System.out.println("NOT AT ALL EMPTY!!! " + list.size());
 			for (int i = 0, j = list.size(); i < j; i++) {
 				returnMe = list.get(i) + "";
-				System.out.println("COUNTY RESULTS: " + list.get(i) + "\n");
+				//System.out.println("COUNTY RESULTS: " + list.get(i) + "\n");
 			}
 			loadFips();
 			return fips_to_states.get(returnMe);
 		} else {
-			System.out.println("EMPTY!!!");
+			//System.out.println("EMPTY!!!");
 			return null;
 		}
 	}
@@ -91,14 +92,14 @@ public class GeoCode {
 				+ states_to_fips.get(state.toUpperCase()) + "'");
 		List<Object> list = query.list();
 		if (list != null && list.size() > 0) {
-			System.out.println("NOT AT ALL EMPTY!!! " + list.size());
+			//System.out.println("NOT AT ALL EMPTY!!! " + list.size());
 			for (int i = 0, j = list.size(); i < j; i++) {
 				returnMe = list.get(i) + "";
-				System.out.println("COUNTY RESULTS: " + list.get(i) + "\n");
+				//System.out.println("COUNTY RESULTS: " + list.get(i) + "\n");
 			}
 			return returnMe;
 		} else {
-			System.out.println("EMPTY!!!");
+			//System.out.println("EMPTY!!!");
 			return null;
 		}
 	}
@@ -146,18 +147,19 @@ public class GeoCode {
 				+ " and lfromadd >= "
 				+ parsed.getNum()
 				+ ")))");
-		List<Object> list = query.list();
+		query.addScalar("longitude", Hibernate.DOUBLE);
+		query.addScalar("latitude", Hibernate.DOUBLE);
+		List<Object[]> list = query.list();
 		if (list != null && list.size() > 0) {
-			System.out.println("NOT AT ALL EMPTY!!! " + list.size());
+			//System.out.println("NOT AT ALL EMPTY!!! " + list.size());
 			for (int i = 0, j = list.size(); i < j; i++) {
-				Object[] theResult = (Object[]) list.get(i);
-				returnMe = new GeoLocation(theResult[0] + "", theResult[1] + "");
-				System.out.println("RESULTS: " + theResult[0] + " :: "
-						+ theResult[1] + "\n");
+				Object[] theResult = list.get(i);
+				returnMe = new GeoLocation(((Double) theResult[0]).doubleValue(), ((Double) theResult[1]).doubleValue());
+				//System.out.println("RESULTS: " + theResult[0] + " :: " + theResult[1] + "\n");
 			}
 			return returnMe;
 		} else {
-			System.out.println("EMPTY!!!");
+			//System.out.println("EMPTY!!!");
 			if (usePrefix) {
 				return lookupLoc(parsed, zip, state, useFIPs, false, sess);
 			} else {
@@ -186,7 +188,7 @@ public class GeoCode {
 			BufferedReader input = new BufferedReader(new InputStreamReader(
 					p.getInputStream()));
 			while ((line = input.readLine()) != null) {
-				System.out.println("SYSTEM: " + line);
+				//System.out.println("SYSTEM: " + line);
 				if (toReturn == null) {
 					toReturn = new GeoParsedAddress();
 				}
@@ -196,7 +198,7 @@ public class GeoCode {
 		} catch (Exception err) {
 			err.printStackTrace();
 		}
-		System.out.println("DONE!!!");
+		//System.out.println("DONE!!!");
 		return toReturn;
 	}
 
@@ -222,10 +224,10 @@ public class GeoCode {
 
 	public static double distanceBetweenPoints(GeoLocation point1,
 			GeoLocation point2) {
-		double lat1 = Double.parseDouble(point1.getLatitude());
-		double lon1 = Double.parseDouble(point1.getLongitude());
-		double lat2 = Double.parseDouble(point2.getLatitude());
-		double lon2 = Double.parseDouble(point2.getLongitude());
+		double lat1 = point1.getLatitude();
+		double lon1 = point1.getLongitude();
+		double lat2 = point2.getLatitude();
+		double lon2 = point2.getLongitude();
 
 		return distanceBetweenPoints(lat1, lon1, lat2, lon2);
 	}

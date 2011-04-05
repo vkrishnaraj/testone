@@ -1,27 +1,27 @@
 package aero.nettracer.fs.utilities;
 
 public class GeoLocation {
-	String latitude;
-	String longitude;
+	double latitude;
+	double longitude;
 
-	public GeoLocation(String longitude, String latitude) {
+	public GeoLocation(double longitude, double latitude) {
 		this.longitude = longitude;
 		this.latitude = latitude;
 	}
 	
-	public String getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(String latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 
-	public String getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(String longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
