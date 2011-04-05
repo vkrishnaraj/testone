@@ -20,7 +20,7 @@ public class GeoCode {
 	private static Logger logger = Logger.getLogger(GeoCode.class);
 
 	public static GeoLocation locate(String address, String city, String state,
-			String zip, String province, String country, Session sess) {
+			String zip, String province, String country, Session sess) throws InternationalException {
 		boolean nullSession = (sess == null);
 		
 		try {
