@@ -28,6 +28,7 @@ public class GeoCode {
 				sess = HibernateWrapper.getGeoSession().openSession();
 			}
 		if (country == null || country.trim().length() == 0 || country.equalsIgnoreCase("US")) {
+
 			GeoParsedAddress parsed = parse(address, city, state, zip);
 			if (parsed != null) {
 				GeoLocation toReturn = null;
@@ -111,7 +112,17 @@ public class GeoCode {
 		if (state == null || state.trim().equals("") || state.length() != 2) {
 			return returnMe;
 		}
-		String address = parsed.getName() + " " + parsed.getType();
+
+		
+		String address = null;
+		
+		if (parsed.getType() != null) {
+			address = parsed.getName() + " " + parsed.getType();
+		} else {
+			address = parsed.getName();
+		}
+		
+
 		if (usePrefix) {
 			if (parsed.getPrefix() != null
 					&& !parsed.getPrefix().trim().equals("")) {
@@ -122,6 +133,12 @@ public class GeoCode {
 				address = address + " " + parsed.getSuffix();
 			}
 		}
+		
+		//TODO: PERHAPS CHANGE FOR CITY/ZIP CHECKS
+		if (address == null) {
+			return null;
+		}
+		
 		SQLQuery query = sess.createSQLQuery("select longitude, latitude "
 				+ "from geotest_"
 				+ state.toLowerCase()
@@ -160,7 +177,10 @@ public class GeoCode {
 			return returnMe;
 		} else {
 			//System.out.println("EMPTY!!!");
-			if (usePrefix) {
+
+			//TODO: CHECK SUFFIX AS WELL
+			if (usePrefix && parsed.getPrefix() != null
+					&& !parsed.getPrefix().trim().equals("")) {
 				return lookupLoc(parsed, zip, state, useFIPs, false, sess);
 			} else {
 				return null;
@@ -183,8 +203,14 @@ public class GeoCode {
 			if (zip != null) {
 				fullAdd += " " + zip;
 			}
+			
+			fullAdd = fullAdd.replaceAll("['\\*\\-\\/]+", " ");
+			
+			String totalAddress = "perl C:\\geo_perl\\getLoc.pl \"" + fullAdd + "\"";
+			
 			Process p = Runtime.getRuntime().exec(
-					"perl C:\\geo_perl\\getLoc.pl \"" + fullAdd + "\"");
+					totalAddress);
+
 			BufferedReader input = new BufferedReader(new InputStreamReader(
 					p.getInputStream()));
 			while ((line = input.readLine()) != null) {
