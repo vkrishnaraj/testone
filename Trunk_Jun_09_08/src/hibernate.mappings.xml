@@ -244,6 +244,7 @@
 		<!-- Fraud Services -->
 		<mapping class="aero.nettracer.fs.model.detection.Blacklist"/>
 		<mapping class="aero.nettracer.fs.model.detection.InternalSummary"/>
+		<mapping class="aero.nettracer.fs.model.detection.MatchDetail"/>
 		<mapping class="aero.nettracer.fs.model.detection.MatchHistory"/>
 		<mapping class="aero.nettracer.fs.model.detection.Whitelist"/>
 		<mapping class="aero.nettracer.fs.model.FsAddress"/>
