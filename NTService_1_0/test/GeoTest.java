@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.GeoLocation;
+import aero.nettracer.fs.utilities.InternationalException;
 
 public class GeoTest {
 
@@ -50,14 +51,16 @@ public class GeoTest {
 			System.out.println("TESTING DB FETCHING...\n\n");
 			System.out.println(results1 + "\n" + results2 + "\n" + results3 + "\n" + results4);
 			System.out.println(date2.getTime() - date.getTime());
-			System.out.println("TEST GET DISTANCE0: 0LAT 70MILES :: " + GeoCode.getLongRadius(0D, 70D, 0));
-			System.out.println("TEST GET DISTANCE1: 10LAT 70MILES :: " + GeoCode.getLongRadius(10D, 70D, 1));
-			System.out.println("TEST GET DISTANCE2: 40LAT 70MILES :: " + GeoCode.getLongRadius(40D, 70D, 2));
-			System.out.println("TEST GET DISTANCE3: 80LAT 70MILES :: " + GeoCode.getLongRadius(80D, 70D, 3));
-			System.out.println("TEST GET DISTANCE4: -10LAT 70MILES :: " + GeoCode.getLongRadius(-10D, 70D, 4));
-			System.out.println("TEST GET DISTANCE5: -30LAT 70MILES :: " + GeoCode.getLongRadius(-30D, 70D, 5));
-			System.out.println("TEST GET DISTANCE6: -50LAT 70MILES :: " + GeoCode.getLongRadius(-50D, 70D, 6));
-			System.out.println("TEST GET DISTANCE7: -90LAT 70MILES :: " + GeoCode.getLongRadius(-90D, 70D, 7));
+			System.out.println("TEST GET DISTANCE0: 0LAT 70MILES :: " + GeoCode.getLongRadius(0D, 70D));
+			System.out.println("TEST GET DISTANCE1: 10LAT 70MILES :: " + GeoCode.getLongRadius(10D, 70D));
+			System.out.println("TEST GET DISTANCE2: 40LAT 70MILES :: " + GeoCode.getLongRadius(40D, 70D));
+			System.out.println("TEST GET DISTANCE3: 80LAT 70MILES :: " + GeoCode.getLongRadius(80D, 70D));
+			System.out.println("TEST GET DISTANCE4: -10LAT 70MILES :: " + GeoCode.getLongRadius(-10D, 70D));
+			System.out.println("TEST GET DISTANCE5: -30LAT 70MILES :: " + GeoCode.getLongRadius(-30D, 70D));
+			System.out.println("TEST GET DISTANCE6: -50LAT 70MILES :: " + GeoCode.getLongRadius(-50D, 70D));
+			System.out.println("TEST GET DISTANCE7: -90LAT 70MILES :: " + GeoCode.getLongRadius(-90D, 70D));
+		} catch (InternationalException ex) {
+			ex.printStackTrace();
 		} finally {
 			if (sess != null) {
 				sess.close();

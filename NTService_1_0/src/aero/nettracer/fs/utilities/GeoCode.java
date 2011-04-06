@@ -14,44 +14,48 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class GeoCode {
 
+	public static final int ACCURACY_HIGH = 1; // Street level
+	public static final int ACCURACY_MED = 2; // Zip level
+	public static final int ACCURACY_LOW = 3; // City level
+
+	public static final int STREET_SEARCH_LEVEL_HIGH = 1; // Search with
+															// prefixes,
+															// suffixes, number,
+															// and name
+	public static final int STREET_SEARCH_LEVEL_MED = 2; // Search with number
+															// and name only
+	public static final int STREET_SEARCH_LEVEL_LOW = 3; // Search with name
+															// only
+
 	public static final double MILES_PER_LATITUDE = 69;
 	public static HashMap<String, String> fips_to_states;
 	public static HashMap<String, String> states_to_fips;
 	private static Logger logger = Logger.getLogger(GeoCode.class);
 
-	//TODO: HANDLE INTERNATIONAL ADDRESSES
-	public static GeoLocation locate(String address, String city, String state, String zip, String province, String country, Session sess) throws InternationalException {
+	// TODO: HANDLE INTERNATIONAL ADDRESSES
+	public static GeoLocation locate(String address, String city, String state,
+			String zip, String province, String country, Session sess)
+			throws InternationalException {
 		boolean nullSession = (sess == null);
 
 		try {
 			if (nullSession) {
 				sess = HibernateWrapper.getGeoSession().openSession();
 			}
-			if (country == null || country.trim().length() == 0 || country.equalsIgnoreCase("US")) {
+			if (country == null || country.trim().length() == 0
+					|| country.equalsIgnoreCase("US")) {
 
 				GeoParsedAddress parsed = parse(address, city, state, zip);
 				if (parsed != null) {
-					GeoLocation toReturn = null;
-					if (zip != null && !zip.trim().equals("")) {
-						if (state == null || state.trim().equals("") || state.length() != 2) {
-							state = lookupState(zip, sess);
-						}
-						toReturn = lookupLoc(parsed, zip, state, false, true, sess);
-					} else {
-						String county = lookupCounty(city, state, sess);
-						if (county != null) {
-							toReturn = lookupLoc(parsed, county, state, true, true, sess);
-						}
-					}
-					return toReturn;
+					return lookupLoc(parsed, city, state, zip, sess);
 				}
 			} else {
-				throw new InternationalException ();
+				throw new InternationalException();
 			}
 		} catch (InternationalException e) {
 			throw e;
 		} catch (Exception e) {
-		
+
 			logger.error("Unable to geocode address: " + e);
 			e.printStackTrace();
 			return null;
@@ -67,21 +71,54 @@ public class GeoCode {
 		return null;
 	}
 
+	private static GeoLocation lookupLoc(GeoParsedAddress parsed, String city,
+			String state, String zip, Session sess) {
+		GeoLocation returnMe = null;
+		boolean haveZip = (zip != null && !zip.trim().equals(""));
+		if (haveZip) {
+			if (state == null || state.trim().equals("") || state.length() != 2) {
+				state = lookupState(zip, sess);
+			}
+			if (state != null) {
+				returnMe = lookupStreet(parsed, zip, state, false,
+						STREET_SEARCH_LEVEL_HIGH, sess);
+			}
+		}
+		
+		if (returnMe == null) { // No Loc for zip search, lets try county
+			String county = lookupCounty(city, state, sess);
+			if (county != null) {
+				returnMe = lookupStreet(parsed, county, state, true,
+						STREET_SEARCH_LEVEL_HIGH, sess);
+			}
+		}
+
+		if (returnMe == null) { // Street name didn't pan out, its zip time
+			if (haveZip && state != null) {
+				returnMe = lookupZip(zip, state, sess);
+			}
+		}
+
+		if (returnMe == null) { // No Loc for zip either, guess we try city.
+			returnMe = lookupCity(city, state, sess);
+		}
+
+		return returnMe;
+	}
+
 	@SuppressWarnings("unchecked")
 	private static String lookupState(String zip, Session sess) {
 		String returnMe = null;
-		SQLQuery query = sess.createSQLQuery("SELECT statefp " + "FROM geotest_zip_to_state WHERE " + "zip = '" + zip + "'");
+		SQLQuery query = sess.createSQLQuery("SELECT statefp "
+				+ "FROM geotest_zip_to_state WHERE " + "zip = '" + zip + "'");
 		List<Object> list = query.list();
 		if (list != null && list.size() > 0) {
-			// System.out.println("NOT AT ALL EMPTY!!! " + list.size());
 			for (int i = 0, j = list.size(); i < j; i++) {
 				returnMe = list.get(i) + "";
-				// System.out.println("COUNTY RESULTS: " + list.get(i) + "\n");
 			}
 			loadFips();
 			return fips_to_states.get(returnMe);
 		} else {
-			// System.out.println("EMPTY!!!");
 			return null;
 		}
 	}
@@ -90,79 +127,163 @@ public class GeoCode {
 	private static String lookupCounty(String city, String state, Session sess) {
 		String returnMe = null;
 		loadStates();
-		SQLQuery query = sess.createSQLQuery("SELECT countyfp10 " + "FROM coutest WHERE name10 = '" + city + "' AND statefp10 = '" + states_to_fips.get(state.toUpperCase()) + "'");
+		SQLQuery query = sess.createSQLQuery("SELECT countyfp10 "
+				+ "FROM coutest WHERE name10 = '" + city
+				+ "' AND statefp10 = '"
+				+ states_to_fips.get(state.toUpperCase()) + "'");
 		List<Object> list = query.list();
 		if (list != null && list.size() > 0) {
-			// System.out.println("NOT AT ALL EMPTY!!! " + list.size());
+			returnMe = "('";
 			for (int i = 0, j = list.size(); i < j; i++) {
-				returnMe = list.get(i) + "";
-				// System.out.println("COUNTY RESULTS: " + list.get(i) + "\n");
+				if (i != 0) {
+					returnMe += ", '";
+				}
+				returnMe += list.get(i) + "'";
 			}
-			return returnMe;
+			return returnMe + ")";
 		} else {
-			// System.out.println("EMPTY!!!");
 			return null;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private static GeoLocation lookupLoc(GeoParsedAddress parsed, String zip, String state, boolean useFIPs, boolean usePrefix, Session sess) {
+	private static GeoLocation lookupStreet(GeoParsedAddress parsed,
+			String zip, String state, boolean useFIPs, int searchLevel,
+			Session sess) {
 		GeoLocation returnMe = null;
-		if (state == null || state.trim().equals("") || state.length() != 2) {
-			return returnMe;
-		}
+		try {
+			boolean usePrefix = (searchLevel == STREET_SEARCH_LEVEL_HIGH);
+			boolean useNumber = (searchLevel <= STREET_SEARCH_LEVEL_MED);
+			boolean prefixExists = false;
+			boolean suffixExists = false;
 
-		String address = null;
+			String address = null;
 
-		if (parsed.getType() != null) {
-			address = parsed.getName() + " " + parsed.getType();
-		} else {
-			address = parsed.getName();
-		}
-
-		if (usePrefix) {
-			if (parsed.getPrefix() != null && !parsed.getPrefix().trim().equals("")) {
-				address = parsed.getPrefix() + " " + address;
-			}
-			if (parsed.getSuffix() != null && !parsed.getSuffix().trim().equals("")) {
-				address = address + " " + parsed.getSuffix();
-			}
-		}
-
-		// TODO: PERHAPS CHANGE FOR CITY/ZIP CHECKS
-		if (address == null) {
-			return null;
-		}
-
-		SQLQuery query = sess.createSQLQuery("select longitude, latitude " + "from geotest_" + state.toLowerCase() + "_min where fullname like '%" + address + "%' and "
-		    + (useFIPs ? "countyfp = '" + zip + "' " : "(zipl = '" + zip + "' or zipr = '" + zip + "') ") + "and (((rfromadd <= " + parsed.getNum() + " and rtoadd >= " + parsed.getNum()
-		    + ") or (lfromadd <= " + parsed.getNum() + " and ltoadd >= " + parsed.getNum() + ")) or ((rtoadd <= " + parsed.getNum() + " and rfromadd >= " + parsed.getNum() + ") or (ltoadd <= "
-		    + parsed.getNum() + " and lfromadd >= " + parsed.getNum() + ")))");
-		query.addScalar("longitude", Hibernate.DOUBLE);
-		query.addScalar("latitude", Hibernate.DOUBLE);
-		List<Object[]> list = query.list();
-		if (list != null && list.size() > 0) {
-			// System.out.println("NOT AT ALL EMPTY!!! " + list.size());
-			for (int i = 0, j = list.size(); i < j; i++) {
-				Object[] theResult = list.get(i);
-				returnMe = new GeoLocation(((Double) theResult[0]).doubleValue(), ((Double) theResult[1]).doubleValue());
-				// System.out.println("RESULTS: " + theResult[0] + " :: " + theResult[1]
-				// + "\n");
-			}
-			return returnMe;
-		} else {
-			// System.out.println("EMPTY!!!");
-
-			// TODO: CHECK SUFFIX AS WELL
-			if (usePrefix && parsed.getPrefix() != null && !parsed.getPrefix().trim().equals("")) {
-				return lookupLoc(parsed, zip, state, useFIPs, false, sess);
+			if (parsed.getType() != null) {
+				address = parsed.getName() + " " + parsed.getType();
 			} else {
+				address = parsed.getName();
+			}
+
+			if (usePrefix) {
+				if (parsed.getPrefix() != null
+						&& !parsed.getPrefix().trim().equals("")) {
+					prefixExists = true;
+					address = parsed.getPrefix() + " " + address;
+				}
+				if (parsed.getSuffix() != null
+						&& !parsed.getSuffix().trim().equals("")) {
+					suffixExists = true;
+					address = address + " " + parsed.getSuffix();
+				}
+			}
+
+			if (address == null) {
 				return null;
 			}
+
+			SQLQuery query = sess.createSQLQuery("select longitude, latitude "
+					+ "from geotest_"
+					+ state.toLowerCase()
+					+ "_min where fullname like '%"
+					+ address
+					+ "%' and "
+					+ (useFIPs ? "countyfp in " + zip + " " : "(zipl = '"
+							+ zip + "' or zipr = '" + zip + "') ")
+					+ (useNumber ? "and (((rfromadd <= " + parsed.getNum()
+							+ " and rtoadd >= " + parsed.getNum()
+							+ ") or (lfromadd <= " + parsed.getNum()
+							+ " and ltoadd >= " + parsed.getNum()
+							+ ")) or ((rtoadd <= " + parsed.getNum()
+							+ " and rfromadd >= " + parsed.getNum()
+							+ ") or (ltoadd <= " + parsed.getNum()
+							+ " and lfromadd >= " + parsed.getNum() + ")))"
+							: ""));
+			query.addScalar("longitude", Hibernate.DOUBLE);
+			query.addScalar("latitude", Hibernate.DOUBLE);
+			List<Object[]> list = query.list();
+			if (list != null && list.size() > 0) {
+				for (int i = 0, j = list.size(); i < j; i++) {
+					Object[] theResult = list.get(i);
+					returnMe = new GeoLocation(
+							((Double) theResult[0]).doubleValue(),
+							((Double) theResult[1]).doubleValue());
+				}
+				return returnMe;
+			} else {
+				if (usePrefix && (prefixExists || suffixExists)) {
+					return lookupStreet(parsed, zip, state, useFIPs,
+							STREET_SEARCH_LEVEL_MED, sess);
+				} else {
+					if (useNumber) {
+						return lookupStreet(parsed, zip, state, useFIPs,
+								STREET_SEARCH_LEVEL_LOW, sess);
+					} else {
+						return null;
+					}
+				}
+			}
+		} catch (Exception ex) {
+			return null;
 		}
 	}
 
-	private static GeoParsedAddress parse(String address, String city, String state, String zip) {
+	@SuppressWarnings("unchecked")
+	private static GeoLocation lookupZip(String zip, String state, Session sess) {
+		GeoLocation returnMe = null;
+		try {
+			SQLQuery query = sess
+					.createSQLQuery("select (min(longitude) + max(longitude)) / 2 as longitude, "
+							+ "(min(latitude) + max(latitude)) /2 as latitude from "
+							+ "geotest_"
+							+ state.toLowerCase()
+							+ "_min where "
+							+ "zipl = " + zip + " or zipr = " + zip);
+			query.addScalar("longitude", Hibernate.DOUBLE);
+			query.addScalar("latitude", Hibernate.DOUBLE);
+			List<Object[]> list = query.list();
+			if (list != null && list.size() > 0) {
+				for (int i = 0, j = list.size(); i < j; i++) {
+					Object[] theResult = list.get(i);
+					returnMe = new GeoLocation(
+							((Double) theResult[0]).doubleValue(),
+							((Double) theResult[1]).doubleValue());
+				}
+				return returnMe;
+			} else {
+				return null;
+			}
+		} catch (Exception ex) {
+			return null;
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private static GeoLocation lookupCity(String city, String state,
+			Session sess) {
+		GeoLocation returnMe = null;
+		loadStates();
+		SQLQuery query = sess.createSQLQuery("SELECT (min(intptlon10) + max(intptlon10)) / 2 as longitude, "
+							+ "(min(intptlat10) + max(intptlat10)) /2 as latitude "
+							+ "FROM coutest WHERE name10 = '" + city
+							+ "' AND statefp10 = '"
+							+ states_to_fips.get(state.toUpperCase()) + "'");
+		List<Object[]> list = query.list();
+		if (list != null && list.size() > 0) {
+			for (int i = 0, j = list.size(); i < j; i++) {
+				Object[] theResult = list.get(i);
+				returnMe = new GeoLocation(
+						Double.parseDouble((String) theResult[0]),
+						Double.parseDouble((String) theResult[1]));
+			}
+			return returnMe;
+		} else {
+			return null;
+		}
+	}
+
+	private static GeoParsedAddress parse(String address, String city,
+			String state, String zip) {
 		if ((city == null || state == null) && zip == null) {
 			return null;
 		}
@@ -179,11 +300,13 @@ public class GeoCode {
 
 			fullAdd = fullAdd.replaceAll("['\\*\\-\\/]+", " ");
 
-			String totalAddress = "perl C:\\geo_perl\\getLoc.pl \"" + fullAdd + "\"";
+			String totalAddress = "perl C:\\geo_perl\\getLoc.pl \"" + fullAdd
+					+ "\"";
 
 			Process p = Runtime.getRuntime().exec(totalAddress);
 
-			BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+			BufferedReader input = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
 			while ((line = input.readLine()) != null) {
 				// System.out.println("SYSTEM: " + line);
 				if (toReturn == null) {
@@ -199,7 +322,8 @@ public class GeoCode {
 		return toReturn;
 	}
 
-	private static GeoParsedAddress parseLine(String line, GeoParsedAddress parsed) {
+	private static GeoParsedAddress parseLine(String line,
+			GeoParsedAddress parsed) {
 		if (line.startsWith("NUM:")) {
 			parsed.setNum(line.substring(4));
 		} else if (line.startsWith("PRE:")) {
@@ -218,7 +342,8 @@ public class GeoCode {
 		return null;
 	}
 
-	public static double distanceBetweenPoints(GeoLocation point1, GeoLocation point2) {
+	public static double distanceBetweenPoints(GeoLocation point1,
+			GeoLocation point2) {
 		double lat1 = point1.getLatitude();
 		double lon1 = point1.getLongitude();
 		double lat2 = point2.getLatitude();
@@ -227,23 +352,30 @@ public class GeoCode {
 		return distanceBetweenPoints(lat1, lon1, lat2, lon2);
 	}
 
-	public static double distanceBetweenPoints(double lat1, double lon1, double lat2, double lon2) {
+	public static double distanceBetweenPoints(double lat1, double lon1,
+			double lat2, double lon2) {
 		int radiusEarth = 3959; // mi 6371; // km
 		double dLat = Math.toRadians(lat2 - lat1);
 		double dLon = Math.toRadians(lon2 - lon1);
-		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+				+ Math.cos(Math.toRadians(lat1))
+				* Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+				* Math.sin(dLon / 2);
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 		double d = radiusEarth * c;
 		return d;
 	}
 
-	public static double getLongRadius(double latitude, double distance, int test) {
+	public static double getLongRadius(double latitude, double distance) {
 		int radiusEarth = 3959; // mi 6371; // km
 		double drRadians = (distance / radiusEarth);
 		double brng = Math.toRadians(90D);
 		double lat1 = Math.toRadians(latitude);
-		double lat2 = Math.asin(Math.sin(lat1) * Math.cos(drRadians) + Math.cos(lat1) * Math.sin(drRadians) * Math.cos(brng));
-		double lon2 = Math.atan2(Math.sin(brng) * Math.sin(drRadians) * Math.cos(lat1), Math.cos(drRadians) - Math.sin(lat1) * Math.sin(lat2));
+		double lat2 = Math.asin(Math.sin(lat1) * Math.cos(drRadians)
+				+ Math.cos(lat1) * Math.sin(drRadians) * Math.cos(brng));
+		double lon2 = Math.atan2(
+				Math.sin(brng) * Math.sin(drRadians) * Math.cos(lat1),
+				Math.cos(drRadians) - Math.sin(lat1) * Math.sin(lat2));
 		return Math.toDegrees(lon2);
 	}
 
