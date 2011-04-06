@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import javax.naming.Context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,6 +17,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+
+import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -31,6 +35,7 @@ import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 /**
  * @author Matt
@@ -181,6 +186,15 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 			
 			// 2. save the claim on central services
+			  try{
+				  Context ctx          = ConnectionUtil.getInitialContext();
+				  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
+				  System.out.println(o.echoTest("hello World"));
+				  System.out.println(o.insertClaim(ClaimUtils.createFsClaim()));
+			  } catch (Exception e){
+				  e.printStackTrace();
+			  }
+			
 			
 			// 3. submit the claim for tracing
 			
