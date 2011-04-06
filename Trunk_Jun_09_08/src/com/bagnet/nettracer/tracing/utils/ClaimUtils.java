@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
@@ -32,9 +33,78 @@ public class ClaimUtils {
 	}
 	
 	public static Claim createClaim(Agent user, Incident ntIncident) {
-
+		
 		// create the claim
 		Claim claim = new Claim();
+		claim.setAirline(user.getCompanycode_ID());
+		
+		// create the person
+		Person person = new Person();
+		
+		// create the claim status
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
+		status.setLocale(user);
+		
+		// create the claim currency
+		String currency = user.getDefaultcurrency();
+		
+		// create the address
+		FsAddress address = new FsAddress();
+		address.setPerson(person);
+		LinkedHashSet<FsAddress> addresses = new LinkedHashSet<FsAddress>();
+		addresses.add(address);
+		
+		// create the phones
+		LinkedHashSet<Phone> phones = new LinkedHashSet<Phone>();
+		
+		// create the person
+		person.setAddresses(addresses);
+		person.setPhones(phones);
+		person.setClaim(claim);
+		LinkedHashSet<Person> claimants = new LinkedHashSet<Person>();
+		claimants.add(person);
+		
+		// create the pnr data
+		PnrData pnrData = new PnrData();
+		
+		// create the reservation
+		Reservation reservation = new Reservation();
+		reservation.setPassengers(new LinkedHashSet<Person>());
+		reservation.setPhones(new LinkedHashSet<Phone>());
+		reservation.setPnrData(pnrData);
+		reservation.setSegments(new LinkedHashSet<Segment>());
+		pnrData.setReservation(reservation);
+		
+		// set the fraud incident
+		FsIncident fsIncident = new FsIncident();
+		fsIncident.setReservation(reservation);
+		reservation.setIncident(fsIncident);
+		person.setIncident(fsIncident);
+		fsIncident.setClaim(claim);
+		fsIncident.setPassengers(claimants);
+		
+		// create the claim
+		claim.setStatus(status);
+		claim.setAmountClaimedCurrency(currency);
+		claim.setClaimants(claimants);
+		claim.setIncident(fsIncident);
+		
+		// set the tracing incident if we have one
+		if (ntIncident != null) {
+			claim.setClaimType(ntIncident.getItemtype_ID());
+			claim.setNtIncident(ntIncident);
+			ntIncident.setClaim(claim);
+		}
+		
+		return claim;
+		
+	}
+	
+	public static FsClaim createFsClaim(Agent user) {
+
+		// create the claim
+		FsClaim claim = new FsClaim();
 		claim.setAirline(user.getCompanycode_ID());
 
 		// create the person
@@ -84,17 +154,9 @@ public class ClaimUtils {
 		fsIncident.setPassengers(claimants);
 		
 		// create the claim
-		claim.setStatus(status);
 		claim.setAmountClaimedCurrency(currency);
 		claim.setClaimants(claimants);
 		claim.setIncident(fsIncident);
-		
-		// set the tracing incident if we have one
-		if (ntIncident != null) {
-			claim.setClaimType(ntIncident.getItemtype_ID());
-			claim.setNtIncident(ntIncident);
-			ntIncident.setClaim(claim);
-		}
 		
 		return claim;
 		
