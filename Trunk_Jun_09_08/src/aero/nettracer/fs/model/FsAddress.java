@@ -9,7 +9,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@Table(name="FS_Address")
 @Proxy(lazy = false)
 public class FsAddress {
 	@Id

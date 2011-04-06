@@ -18,7 +18,6 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@Table(name="FS_Incident")
 @Proxy(lazy = false)
 public class FsIncident {
 	@Id
