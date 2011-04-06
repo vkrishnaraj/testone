@@ -33,7 +33,8 @@ public class Reservation implements Serializable {
 	private String airline;
 	private String recordLocator;
 	private Date travelDate;
-	private String formOfPayment;
+//	private String formOfPayment;
+	private int fop;
 	private String ccType;
 	private String ccNumber;
 	private String ccLName;
@@ -52,12 +53,10 @@ public class Reservation implements Serializable {
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Whitelist.class, cascade = CascadeType.ALL)
 	private Whitelist ccWhitelist;
-	private double cashAmount;
-	private double checkAmount;
-	private double ccAmount;
+	private double ticketAmount;
 	private int itinComplexity;
 	private int tripLength;
-	@OneToOne(targetEntity = aero.nettracer.fs.model.PnrData.class, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = aero.nettracer.fs.model.PnrData.class, cascade = CascadeType.ALL, mappedBy = "reservation")
 	private PnrData pnrData;
 
 	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -112,13 +111,13 @@ public class Reservation implements Serializable {
 		this.travelDate = travelDate;
 	}
 
-	public String getFormOfPayment() {
-		return formOfPayment;
-	}
-
-	public void setFormOfPayment(String formOfPayment) {
-		this.formOfPayment = formOfPayment;
-	}
+//	public String getFormOfPayment() {
+//		return formOfPayment;
+//	}
+//
+//	public void setFormOfPayment(String formOfPayment) {
+//		this.formOfPayment = formOfPayment;
+//	}
 
 	public String getCcNumber() {
 		return ccNumber;
@@ -126,29 +125,6 @@ public class Reservation implements Serializable {
 
 	public void setCcNumber(String ccNumber) {
 		this.ccNumber = ccNumber;
-	}
-
-	public double getCashAmount() {
-		return cashAmount;
-	}
-	
-	public void setCashAmount(double cashAmount) {
-		this.cashAmount = cashAmount;
-	}
-
-	public double getCheckAmount() {
-		return checkAmount;
-	}
-	
-	public void setCheckAmount(double checkAmount) {
-		this.checkAmount = checkAmount;
-	}
-	public double getCcAmount() {
-		return ccAmount;
-	}
-
-	public void setCcAmount(double ccAmount) {
-		this.ccAmount = ccAmount;
 	}
 
 	public int getItinComplexity() {
@@ -262,5 +238,21 @@ public class Reservation implements Serializable {
 	public void setCcExpYear(int ccExpYear) {
 		this.ccExpYear = ccExpYear;
 	}
+
+	public double getTicketAmount() {
+		return ticketAmount;
+	}
+
+	public void setTicketAmount(double ticketAmount) {
+		this.ticketAmount = ticketAmount;
+	}
+
+	public int getFop() {
+  	return fop;
+  }
+
+	public void setFop(int fop) {
+  	this.fop = fop;
+  }
 
 }
