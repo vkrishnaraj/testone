@@ -298,7 +298,6 @@
 		<jar destfile="${build.dir}/claim_model.jar">
 			<fileset dir="${build.dir}/westjet_web/classes/" >
 				<include name="**/**/aero/nettracer/fs/**/*.*"/>
-				<include name="**/**/com/bagnet/nettracer/tracing/db/Status.class"/>
 			</fileset>
 		</jar>
 	</target>
@@ -1675,7 +1674,7 @@
 				<path refid="project.classpath" />
 				<path location="${build.dir}/${ant_project_name}/classes" />
 			</classpath>
-			<annotationconfiguration configurationfile="companies/usair/dev/hibernate_main.cfg.xml" />
+			<annotationconfiguration configurationfile="companies/westjet/environment/local/hibernate_main.cfg.xml" />
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="nettracer-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>
