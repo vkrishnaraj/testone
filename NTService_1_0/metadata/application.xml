@@ -13,6 +13,10 @@
 <application>
   <display-name>Central Services</display-name>
 
+   <module>
+      <java>claim_model.jar</java>
+   </module>
+
   <module>
     <web>
       <web-uri>NTServices_1_0.war</web-uri>
@@ -25,4 +29,5 @@
       <module>
       <java>nt_fs.jar</java>
    </module>
+
 </application>
