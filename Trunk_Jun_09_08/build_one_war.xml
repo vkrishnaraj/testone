@@ -293,6 +293,15 @@
 			<fileset dir="${build.dir}/tracer_web/classes" />
 		</jar>
 	</target>
+	
+	<target name="jar-ntfs-model">
+		<jar destfile="${build.dir}/claim_model.jar">
+			<fileset dir="${build.dir}/westjet_web/classes/" >
+				<include name="**/**/aero/nettracer/fs/**/*.*"/>
+				<include name="**/**/com/bagnet/nettracer/tracing/db/Status.class"/>
+			</fileset>
+		</jar>
+	</target>
 
 	<target name="compile-gensrc" depends="init,gen-src">
 		<javac srcdir="${build.gen-src.dir}/${ant_project_name}_app" fork="true" destdir="${build.dir}/${ant_project_name}_app/classes" debug="on" sourcepath="${basedir}/ejbsrc:${basedir}/src">
