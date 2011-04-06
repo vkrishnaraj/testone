@@ -19,9 +19,6 @@ import org.hibernate.annotations.Proxy;
 @Proxy(lazy = false)
 public class Person implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id

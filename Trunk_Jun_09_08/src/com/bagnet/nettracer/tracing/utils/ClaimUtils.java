@@ -101,23 +101,14 @@ public class ClaimUtils {
 		
 	}
 	
-	public static FsClaim createFsClaim(Agent user) {
+	public static FsClaim createFsClaim() {
 
 		// create the claim
 		FsClaim claim = new FsClaim();
-		claim.setAirline(user.getCompanycode_ID());
 
 		// create the person
 		Person person = new Person();
 
-		// create the claim status
-		Status status = new Status();
-		status.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
-		status.setLocale(user);
-
-		// create the claim currency
-		String currency = user.getDefaultcurrency();
-		
 		// create the address
 		FsAddress address = new FsAddress();
 		address.setPerson(person);
@@ -154,7 +145,6 @@ public class ClaimUtils {
 		fsIncident.setPassengers(claimants);
 		
 		// create the claim
-		claim.setAmountClaimedCurrency(currency);
 		claim.setClaimants(claimants);
 		claim.setIncident(fsIncident);
 		

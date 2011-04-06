@@ -25,7 +25,7 @@ public class Claim extends FsClaim {
 	private ClaimProrate claimprorate;
 
 	@ManyToOne
-	@JoinColumn(name = "Status_ID", nullable = false)
+	@JoinColumn(name = "Status_ID")
 	private Status status;
 	
 	public Incident getNtIncident() {

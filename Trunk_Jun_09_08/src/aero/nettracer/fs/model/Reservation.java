@@ -22,9 +22,6 @@ import aero.nettracer.fs.model.detection.Whitelist;
 @Entity
 @Proxy(lazy = false)
 public class Reservation implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id

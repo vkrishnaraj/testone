@@ -12,9 +12,6 @@ import org.hibernate.annotations.Proxy;
 @Entity
 @Proxy(lazy = false)
 public class Bag implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id

@@ -12,10 +12,8 @@ import org.hibernate.annotations.Proxy;
 @Entity
 @Proxy(lazy = false)
 public class PnrData implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private long id;

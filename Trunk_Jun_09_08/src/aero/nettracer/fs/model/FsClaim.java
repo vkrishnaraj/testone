@@ -27,11 +27,8 @@ import aero.nettracer.fs.model.detection.Blacklist;
 @DiscriminatorColumn(name="subclass_type", discriminatorType = DiscriminatorType.STRING, length=16)
 @Proxy(lazy = false)
 public class FsClaim implements Serializable {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	protected long id;
