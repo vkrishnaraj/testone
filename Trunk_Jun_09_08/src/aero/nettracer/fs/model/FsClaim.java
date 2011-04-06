@@ -1,5 +1,6 @@
 package aero.nettracer.fs.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -25,8 +26,12 @@ import aero.nettracer.fs.model.detection.Blacklist;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="subclass_type", discriminatorType = DiscriminatorType.STRING, length=16)
 @Proxy(lazy = false)
-public class FsClaim {
+public class FsClaim implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
 	protected long id;

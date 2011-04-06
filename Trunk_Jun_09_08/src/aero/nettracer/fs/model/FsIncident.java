@@ -1,5 +1,6 @@
 package aero.nettracer.fs.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -11,7 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -19,7 +19,12 @@ import org.hibernate.annotations.Proxy;
 
 @Entity
 @Proxy(lazy = false)
-public class FsIncident {
+public class FsIncident implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private long id;

@@ -1,5 +1,7 @@
 package aero.nettracer.fs.model.detection;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -8,7 +10,10 @@ import org.hibernate.annotations.Proxy;
 
 @Entity
 @Proxy(lazy = false)
-public class Blacklist {
+public class Blacklist implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
 	@Id
 	@GeneratedValue
 	private long id;

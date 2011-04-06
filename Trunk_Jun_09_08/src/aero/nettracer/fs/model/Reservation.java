@@ -1,5 +1,6 @@
 package aero.nettracer.fs.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -20,7 +21,12 @@ import aero.nettracer.fs.model.detection.Whitelist;
 
 @Entity
 @Proxy(lazy = false)
-public class Reservation {
+public class Reservation implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private long id;

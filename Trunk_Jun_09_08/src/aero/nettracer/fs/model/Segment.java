@@ -1,5 +1,6 @@
 package aero.nettracer.fs.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -11,7 +12,11 @@ import org.hibernate.annotations.Proxy;
 
 @Entity
 @Proxy(lazy = false)
-public class Segment {
+public class Segment implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
 	private long id;
