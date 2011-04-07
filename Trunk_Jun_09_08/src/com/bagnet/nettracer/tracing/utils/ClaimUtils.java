@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
@@ -101,55 +103,99 @@ public class ClaimUtils {
 		
 	}
 	
-	public static FsClaim createFsClaim() {
-
-		// create the claim
-		FsClaim claim = new FsClaim();
-
-		// create the person
-		Person person = new Person();
-
-		// create the address
-		FsAddress address = new FsAddress();
-		address.setPerson(person);
-		LinkedHashSet<FsAddress> addresses = new LinkedHashSet<FsAddress>();
-		addresses.add(address);
+	public static FsClaim createFsClaim(Claim claim) {
+		FsClaim fsClaim = new FsClaim();
 		
-		// create the phones
-		LinkedHashSet<Phone> phones = new LinkedHashSet<Phone>();
+		fsClaim.setId(claim.getId());
+		fsClaim.setAirline(claim.getAirline());
+		fsClaim.setClaimType(claim.getClaimType());
+		fsClaim.setClaimDate(claim.getClaimDate());
+		fsClaim.setTravelDate(claim.getTravelDate());
+		fsClaim.setAmountClaimed(claim.getAmountClaimed());
+		fsClaim.setAmountClaimedCurrency(claim.getAmountClaimedCurrency());
+		fsClaim.setAmountPaid(claim.getAmountPaid());
+		fsClaim.setFraudStatus(claim.getFraudStatus());
+		fsClaim.setDenied(claim.isDenied());
+		fsClaim.setPrivateReasonForDenial(claim.getPrivateReasonForDenial());
+		fsClaim.setPublicReasonForDenial(claim.getPublicReasonForDenial());
+		fsClaim.setNtIncidentId(claim.getNtIncidentId());
+		fsClaim.setClaimProrateId(claim.getClaimProrateId());
+		fsClaim.setStatusId(claim.getStatusId());
+		fsClaim.setBlacklist(claim.getBlacklist());
+		
+		FsIncident incident = cloneFsIncident(claim);
+		incident.setClaim(fsClaim);
+		fsClaim.setIncident(incident);
 
-		// create the person
-		person.setAddresses(addresses);
-		person.setPhones(phones);
-		person.setClaim(claim);
 		LinkedHashSet<Person> claimants = new LinkedHashSet<Person>();
-		claimants.add(person);
+		if (claim.getClaimants() != null) {
+			claimants.addAll(claim.getClaimants());
+			for (Person p: claimants) {
+				p.setClaim(fsClaim);
+			}
+		}
+		fsClaim.setClaimants(claimants);		
 		
-		// create the pnr data
-		PnrData pnrData = new PnrData();
+		LinkedHashSet<Segment> segments = new LinkedHashSet<Segment>();
+		if (claim.getSegments() != null) {
+			segments.addAll(claim.getSegments());
+			for (Segment s: segments) {
+				s.setClaim(fsClaim);
+			}
+		}
+		fsClaim.setSegments(segments);
 		
-		// create the reservation
-		Reservation reservation = new Reservation();
-		reservation.setPassengers(new LinkedHashSet<Person>());
-		reservation.setPhones(new LinkedHashSet<Phone>());
-		reservation.setPnrData(pnrData);
-		reservation.setSegments(new LinkedHashSet<Segment>());
-		pnrData.setReservation(reservation);
-		
-		// set the fraud incident
+		return fsClaim;
+	}
+	
+	private static FsIncident cloneFsIncident(FsClaim claim) {
 		FsIncident fsIncident = new FsIncident();
-		fsIncident.setReservation(reservation);
-		reservation.setIncident(fsIncident);
-		person.setIncident(fsIncident);
-		fsIncident.setClaim(claim);
-		fsIncident.setPassengers(claimants);
+		FsIncident oldIncident = claim.getIncident();
 		
-		// create the claim
-		claim.setClaimants(claimants);
-		claim.setIncident(fsIncident);
+		fsIncident.setId(oldIncident.getId());
+		fsIncident.setAirlineIncidentId(oldIncident.getAirlineIncidentId());
+		fsIncident.setIncidentCreated(oldIncident.getIncidentCreated());
+		fsIncident.setIncidentType(oldIncident.getIncidentType());
+		fsIncident.setNumberOfBdos(oldIncident.getNumberOfBdos());
+		fsIncident.setNumberDaysOpen(oldIncident.getNumberDaysOpen());
+		fsIncident.setTimestampOpen(oldIncident.getTimestampOpen());
+		fsIncident.setTimestampClosed(oldIncident.getTimestampClosed());
+		fsIncident.setItinComplexity(oldIncident.getItinComplexity());
+		fsIncident.setIncidentDescription(oldIncident.getIncidentDescription());
+		fsIncident.setRemarks(oldIncident.getRemarks());
+
+		// bag
+		Set<Bag> bags = new LinkedHashSet<Bag>();
+		if (oldIncident.getBags() != null) {
+			bags.addAll(oldIncident.getBags());
+		}
+		fsIncident.setBags(bags);
 		
-		return claim;
+		// reservation
+//		fsIncident.setReservation(oldIncident.getReservation());
+//		fsIncident.getReservation().setIncident(fsIncident);
 		
+		// segments
+		LinkedHashSet<Segment> segments = new LinkedHashSet<Segment>();
+		if (oldIncident.getSegments() != null) {
+			segments.addAll(oldIncident.getSegments());
+			for (Segment s: segments) {
+				s.setIncident(fsIncident);
+			}
+		}
+		fsIncident.setSegments(segments);
+		
+		// passengers
+		LinkedHashSet<Person> passengers = new LinkedHashSet<Person>();
+		if (oldIncident.getPassengers() != null) {
+			passengers.addAll(oldIncident.getPassengers());
+			for (Person p: passengers) {
+				p.setIncident(fsIncident);
+			}
+		}
+		fsIncident.setPassengers(passengers);
+		
+		return fsIncident;
 	}
 	
 //	public static ClaimForm createClaimForm(String incidentId, Claim claim, HttpServletRequest request) {

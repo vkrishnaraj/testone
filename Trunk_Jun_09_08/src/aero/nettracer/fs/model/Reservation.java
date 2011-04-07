@@ -33,8 +33,7 @@ public class Reservation implements Serializable {
 	private String airline;
 	private String recordLocator;
 	private Date travelDate;
-//	private String formOfPayment;
-	private int fop;
+	private String formOfPayment;
 	private String ccType;
 	private String ccNumber;
 	private String ccLName;
@@ -111,13 +110,13 @@ public class Reservation implements Serializable {
 		this.travelDate = travelDate;
 	}
 
-//	public String getFormOfPayment() {
-//		return formOfPayment;
-//	}
-//
-//	public void setFormOfPayment(String formOfPayment) {
-//		this.formOfPayment = formOfPayment;
-//	}
+	public String getFormOfPayment() {
+		return formOfPayment;
+	}
+
+	public void setFormOfPayment(String formOfPayment) {
+		this.formOfPayment = formOfPayment;
+	}
 
 	public String getCcNumber() {
 		return ccNumber;
@@ -125,6 +124,14 @@ public class Reservation implements Serializable {
 
 	public void setCcNumber(String ccNumber) {
 		this.ccNumber = ccNumber;
+	}
+
+	public double getTicketAmount() {
+		return ticketAmount;
+	}
+	
+	public void setTicketAmount(double ticketAmount) {
+		this.ticketAmount = ticketAmount;
 	}
 
 	public int getItinComplexity() {
@@ -238,21 +245,5 @@ public class Reservation implements Serializable {
 	public void setCcExpYear(int ccExpYear) {
 		this.ccExpYear = ccExpYear;
 	}
-
-	public double getTicketAmount() {
-		return ticketAmount;
-	}
-
-	public void setTicketAmount(double ticketAmount) {
-		this.ticketAmount = ticketAmount;
-	}
-
-	public int getFop() {
-  	return fop;
-  }
-
-	public void setFop(int fop) {
-  	this.fop = fop;
-  }
 
 }

@@ -6,7 +6,6 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
-import javax.naming.Context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -186,17 +185,14 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 			
 			// 2. save the claim on central services
-			  try{
-				  Context ctx          = ConnectionUtil.getInitialContext();
-				  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
-				  System.out.println(o.echoTest("hello World"));
-				  System.out.println(o.insertClaim(ClaimUtils.createFsClaim()));
-			  } catch (Exception e){
-				  e.printStackTrace();
-			  }
-			
+			ClaimRemote remote = ConnectionUtil.getClaimRemote();
+			if (remote != null) {
+				FsClaim newClaim = ClaimUtils.createFsClaim(claim);
+				logger.info("Claim saved to central services: " + remote.insertClaim(newClaim));
+			}
 			
 			// 3. submit the claim for tracing
+			
 			
 		} else if (request.getParameter("submit") != null) {
 			// 1. submit the claim for tracing

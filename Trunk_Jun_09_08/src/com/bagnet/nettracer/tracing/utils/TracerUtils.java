@@ -482,7 +482,8 @@ public class TracerUtils {
 		session.setAttribute("nonRevenueCodesList",
 				session.getAttribute("nonRevenueCodesList") != null ? 
 						session.getAttribute("nonRevenueCodesList") :
-						getNonRevenueCodesList());
+							getNonRevenueCodesList());
+
 	}
 
 	private static List<LabelValueBean> getPaymentList(String locale) {

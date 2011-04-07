@@ -64,9 +64,7 @@ public class FsClaim implements Serializable {
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL)
 	private aero.nettracer.fs.model.FsIncident incident;
-	
-	
-	
+		
 	public aero.nettracer.fs.model.FsIncident getIncident() {
 		return incident;
 	}

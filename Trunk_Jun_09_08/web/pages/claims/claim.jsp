@@ -562,19 +562,19 @@
 					</tr>
 					<tr>
 						<td>
-                          <bean:message key="claim.colname.cash.amount.paid" />
-                          <br />
-                          <html:text property="claim.incident.reservation.cashAmount" size="13" maxlength="13" styleClass="textfield" />
+							<bean:message key="claim.colname.payment.type" />
+							<br />
+							<html:select property="claim.incident.reservation.formOfPayment" styleClass="dropdown">
+								<html:option value=""><bean:message key="payment.type.please.select" /></html:option>
+								<html:option value="0"><bean:message key="payment.type.cash" /></html:option>
+								<html:option value="1"><bean:message key="payment.type.check" /></html:option>
+								<html:option value="2"><bean:message key="payment.type.cc" /></html:option>
+							</html:select>
                         </td>
 						<td>
-                          <bean:message key="claim.colname.check.amount.paid" />
+                          <bean:message key="claim.colname.amount.paid" />
                           <br />
-                          <html:text property="claim.incident.reservation.checkAmount" size="13" maxlength="13" styleClass="textfield" />
-                        </td>
-						<td>
-                          <bean:message key="claim.colname.cc.amount.paid" />
-                          <br />
-                          <html:text property="claim.incident.reservation.ccAmount" size="13" maxlength="13" styleClass="textfield" />
+                          <html:text property="claim.incident.reservation.ticketAmount" size="13" maxlength="13" styleClass="textfield" />
                         </td>
                         <td>
                           <bean:message key="colname.currency" />
@@ -600,7 +600,7 @@
 							<br/>
 							<html:text name="claimForm" property="claim.incident.reservation.ccNumber" size="20" maxlength="16" />
 						</td>
-						<td colspan="2">
+						<td>
 							<bean:message key="claim.colname.cc_expdate" />
 							<br/>
 							<html:select name="claimForm" property="claim.incident.reservation.ccExpMonth">
