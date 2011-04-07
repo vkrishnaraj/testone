@@ -155,6 +155,8 @@
 			<include name="**/common/pojo/*.class" />
 			<include name="**/**/*.xml" />
 		</jar>
+		
+		<copy file="${root.dir}/lib/claim_model.jar" todir="${dist.dir}"/>
 
 		<ear destfile="${dist.dir}/NTServices_1_0.ear" appxml="${src.dir}/../metadata/application.xml">
 			<fileset dir="${dist.dir}" includes="*.jar,*.war"/>
