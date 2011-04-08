@@ -32,6 +32,7 @@ public class FsClaim implements Serializable {
 	@Id
 	@GeneratedValue
 	protected long id;
+	protected long swapId;
 	protected String airlineClaimId;
 	protected String airline;
 	protected int claimType;
@@ -81,6 +82,14 @@ public class FsClaim implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public long getSwapId() {
+		return swapId;
+	}
+
+	public void setSwapId(long swapId) {
+		this.swapId = swapId;
 	}
 
 	public String getAirlineClaimId() {
