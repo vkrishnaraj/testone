@@ -1,5 +1,7 @@
 package aero.nettracer.fs.model.detection;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,7 +11,7 @@ import org.hibernate.annotations.Proxy;
 
 @Entity
 @Proxy(lazy = false)
-public class MatchDetail {
+public class MatchDetail implements Serializable {
 	@Id
 	@GeneratedValue
 	private long id;

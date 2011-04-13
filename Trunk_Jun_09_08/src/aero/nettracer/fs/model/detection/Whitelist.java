@@ -1,5 +1,7 @@
 package aero.nettracer.fs.model.detection;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,7 +19,7 @@ import org.hibernate.annotations.Proxy;
  * We do not want to display matches to hotel phone
  * numbers if possible.
  */
-public class Whitelist {
+public class Whitelist implements Serializable {
 	@Id
 	@GeneratedValue
 	private long id;

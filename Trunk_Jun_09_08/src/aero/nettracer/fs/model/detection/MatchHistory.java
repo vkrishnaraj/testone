@@ -1,5 +1,6 @@
 package aero.nettracer.fs.model.detection;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -9,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -18,7 +20,9 @@ import aero.nettracer.fs.model.FsClaim;
 
 @Entity
 @Proxy(lazy = false)
-public class MatchHistory {
+public class MatchHistory implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue
 	private long id;
@@ -33,6 +37,9 @@ public class MatchHistory {
 	
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
 	private FsClaim claim2;
+	
+	@Transient
+	private boolean selected;
 
 	public long getId() {
 		return id;
@@ -65,4 +72,23 @@ public class MatchHistory {
 	public void setClaim2(FsClaim claim2) {
 		this.claim2 = claim2;
 	}
+	
+	public boolean isSelected() {
+		return selected;
+	}
+	
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+	
+	public String getMatchSummary() {
+		String summary = "";
+		
+		for (MatchDetail m: getDetails()) {
+			summary += m.getDescription() + ",";
+		}
+		summary = summary.substring(0, summary.lastIndexOf(","));
+		return summary;
+	}
+	
 }
