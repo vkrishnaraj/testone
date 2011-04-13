@@ -244,4 +244,18 @@ public class FsClaim implements Serializable {
 		return DateUtils.formatDate(getClaimDate(), dateFormat, "", null);
 	}
 	
+	@Override
+	public boolean equals(Object o){
+		if(this.getId() == ((FsClaim)o).getId()){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	@Override
+	public int hashCode(){
+		return (int) this.getId();
+	}
+	
 }

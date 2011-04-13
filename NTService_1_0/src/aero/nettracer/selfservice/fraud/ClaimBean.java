@@ -1,5 +1,6 @@
 package aero.nettracer.selfservice.fraud;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.ejb.Stateless;
@@ -17,8 +18,12 @@ import aero.nettracer.fs.model.PnrData;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.Blacklist;
+import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.Whitelist;
+import aero.nettracer.fs.utilities.tracing.Producer;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
+
+import org.apache.commons.codec.language.Soundex;
 
 
 
@@ -31,15 +36,19 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 		return "echo: " + s;
 	}
 	
-	public Object submitClaim(FsClaim claim){
+	public Set<MatchHistory> traceClaim(long claimId){
+		return Producer.matchClaim(claimId);
+	}
+	
+	public Set<MatchHistory> traceIncident(FsIncident incident){
 		return null;
 	}
 	
-	public Object submitIncident(FsIncident incident){
-		return null;
+	public long insertIncident(FsIncident incident){
+		return -1;
 	}
 	
-	public boolean insertClaim(FsClaim claim){
+	public long insertClaim(FsClaim claim){
 		FsClaim toSubmit = resetId(claim);
 		Transaction t = null;
 		Session sess = null;
@@ -48,7 +57,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 			t = sess.beginTransaction();
 			sess.saveOrUpdate(toSubmit);
 			t.commit();
-			return true;
+			return toSubmit.getId();
 		} catch (Exception e) {
 //			logger.error("Error Saving: ", e);
 			e.printStackTrace();
@@ -59,7 +68,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 //					logger.error("Error Saving: ", ex);
 				}
 			}
-			return false;
+			return -1;
 		} finally {
 			
 			if (sess != null) {
@@ -72,10 +81,13 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 		}
 	}	
 
+	
 	public static FsClaim resetId(FsClaim claim){
 		if(claim != null){
 			//swap claim id
-			claim.setAirlineClaimId((new Long(claim.getId())).toString());
+//			long temp = claim.getSwapId();
+			claim.setSwapId(claim.getId());
+//			claim.setId(temp);
 			claim.setId(0);
 
 			claim.setIncident(resetIncident(claim.getIncident()));
@@ -182,5 +194,68 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 		}
 		return addresses;
 	}
+	
+	  public static FsClaim createFsClaim() {
+
+			// create the claim
+			FsClaim claim = new FsClaim();
+			claim.setAirline("WS");
+
+			// create the person
+			Person person = new Person();
+
+
+			// create the claim currency
+			String currency = "USD";
+			
+			// create the address
+			FsAddress address = new FsAddress();
+			address.setPerson(person);
+			LinkedHashSet<FsAddress> addresses = new LinkedHashSet<FsAddress>();
+			addresses.add(address);
+			
+			// create the phones
+			LinkedHashSet<Phone> phones = new LinkedHashSet<Phone>();
+
+			// create the person
+			person.setAddresses(addresses);
+			person.setPhones(phones);
+			person.setClaim(claim);
+			LinkedHashSet<Person> claimants = new LinkedHashSet<Person>();
+			claimants.add(person);
+			
+			// create the pnr data
+			PnrData pnrData = new PnrData();
+			
+			// create the reservation
+			Reservation reservation = new Reservation();
+			reservation.setPassengers(new LinkedHashSet<Person>());
+			reservation.setPhones(new LinkedHashSet<Phone>());
+			reservation.setPnrData(pnrData);
+			reservation.setSegments(new LinkedHashSet<Segment>());
+			pnrData.setReservation(reservation);
+			
+			// set the fraud incident
+			FsIncident fsIncident = new FsIncident();
+			fsIncident.setReservation(reservation);
+			reservation.setIncident(fsIncident);
+			person.setIncident(fsIncident);
+			fsIncident.setClaim(claim);
+			fsIncident.setPassengers(claimants);
+			
+			// create the claim
+			claim.setAmountClaimedCurrency(currency);
+			claim.setClaimants(claimants);
+			claim.setIncident(fsIncident);
+			
+			return claim;
+			
+		}
+
+	@Override
+	public Set<MatchHistory> getClaimMatches(long claimId) {
+		return Producer.getMatchHistoryResult(claimId);
+	}
+	
 	
 }

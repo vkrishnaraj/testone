@@ -1,10 +1,13 @@
 package aero.nettracer.selfservice.fraud;
 
+import java.util.Set;
+
 import javax.ejb.Remote;
 
 import org.jboss.ejb3.annotation.RemoteBinding;
 
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.detection.MatchHistory;
 
 
 
@@ -12,5 +15,7 @@ import aero.nettracer.fs.model.FsClaim;
 @Remote
 public interface ClaimRemote {
 	public String echoTest(String s);
-	public boolean insertClaim(FsClaim claim);
+	public long insertClaim(FsClaim claim);
+	public Set<MatchHistory> traceClaim(long claimId);
+	public Set<MatchHistory> getClaimMatches(long claimId);
 }
