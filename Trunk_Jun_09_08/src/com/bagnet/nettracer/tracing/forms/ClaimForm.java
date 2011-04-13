@@ -1,14 +1,20 @@
 package com.bagnet.nettracer.tracing.forms;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 
+import com.bagnet.nettracer.tracing.actions.ModifyClaimAction;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.utils.CreditCardType;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -21,6 +27,8 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  */
 public final class ClaimForm extends ActionForm {
 
+	private static final long serialVersionUID = 1L;
+
 	private Claim claim;
 	
 	private String _DATEFORMAT;
@@ -31,6 +39,7 @@ public final class ClaimForm extends ActionForm {
 	private String mod_claim_reason2;
 	
 	private Person claimant = null;
+//	private FsAddress reservationAddress = null;
 	
 	public Claim getClaim() {
 		return claim;
@@ -200,6 +209,21 @@ public final class ClaimForm extends ActionForm {
 	public void setCountry(String country) {
 		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setCountry(country);
 	}
+	
+	public String getSsNumber() {
+		return getClaimant().getSocialSecurity();
+	}
+	
+	public void setSsNumber(String ssNumber) {
+		getClaimant().setSocialSecurity(ssNumber);
+	}
+	
+//	private FsAddress getReservationAddress() {
+//		if (reservationAddress == null) {
+//			reservationAddress = claim.getIncident().getReservation().getPassengers().toArray(new Person[0])[0].getAddresses().toArray(new FsAddress[0])[0];
+//		}
+//		return reservationAddress;
+//	}
 	
 	private String getPhoneNumber(int type) {
 		return getPhone(type).getPhoneNumber();

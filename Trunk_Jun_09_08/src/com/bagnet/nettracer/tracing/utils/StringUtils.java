@@ -6,10 +6,18 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
+
+import org.apache.log4j.Logger;
+
+import aero.nettracer.fs.model.Person;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
@@ -19,6 +27,8 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
  * create date - Dec 9, 2004
  */
 public class StringUtils {
+	
+	private static final Logger logger = Logger.getLogger(StringUtils.class);
 
 	public static String removePronouns(String s) {
 		if (s == null) return "";
@@ -360,4 +370,30 @@ public class StringUtils {
 		}
 		return str;
 	}
+  
+  public static String getMd5Hash(String original) {
+	  String toReturn = "";
+	  try {
+		  MessageDigest md = MessageDigest.getInstance("MD5");
+		  byte[] hash = md.digest(original.getBytes(Charset.forName("UTF-8")));
+		  toReturn = getHex(hash);
+	  } catch (NoSuchAlgorithmException nsae) {
+		  logger.error(nsae);
+	  }
+	  return toReturn;
+  }
+  
+  private static String getHex( byte [] raw ) {
+	  String HEXES = "0123456789ABCDEF";
+	  if ( raw == null ) {
+		  return null;
+	  }
+	  final StringBuilder hex = new StringBuilder( 2 * raw.length );
+	  for ( final byte b : raw ) {
+		  hex.append(HEXES.charAt((b & 0xF0) >> 4))
+		  .append(HEXES.charAt((b & 0x0F)));
+	  }
+	  return hex.toString();
+  }
+  
 }

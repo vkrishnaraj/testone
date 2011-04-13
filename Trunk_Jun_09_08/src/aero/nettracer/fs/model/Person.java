@@ -1,6 +1,10 @@
 package aero.nettracer.fs.model;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,9 +15,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.apache.log4j.Logger;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
+
+import com.bagnet.nettracer.tracing.actions.ModifyClaimAction;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 
 import org.apache.commons.codec.language.Soundex;
 import org.apache.commons.codec.language.DoubleMetaphone;
@@ -23,6 +31,7 @@ import org.apache.commons.codec.language.DoubleMetaphone;
 public class Person implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(Person.class);
 
 	@Id
 	@GeneratedValue
@@ -89,11 +98,17 @@ public class Person implements Serializable {
 	}
 
 	public String getSocialSecurity() {
-		return socialSecurity;
+		String toReturn = "";
+		if (socialSecurity != null && !socialSecurity.isEmpty()) {
+			toReturn = "*********";
+		}
+		return toReturn;
 	}
 
 	public void setSocialSecurity(String socialSecurity) {
-		this.socialSecurity = socialSecurity;
+		if (socialSecurity.matches("[0-9]{9}")) {
+			this.socialSecurity = StringUtils.getMd5Hash(socialSecurity);
+		}
 	}
 
 	public String getEmailAddress() {
@@ -217,11 +232,15 @@ public class Person implements Serializable {
 	}
 
 	public String getDriversLicenseNumber() {
-		return driversLicenseNumber;
+		String toReturn = "";
+		if (driversLicenseNumber != null && !driversLicenseNumber.isEmpty()) {
+			toReturn = "*********";
+		}
+		return toReturn;
 	}
 
 	public void setDriversLicenseNumber(String driversLicenseNumber) {
-		this.driversLicenseNumber = driversLicenseNumber;
+		this.driversLicenseNumber = StringUtils.getMd5Hash(driversLicenseNumber);
 	}
 
 	public String getPassportIssuer() {
@@ -233,11 +252,17 @@ public class Person implements Serializable {
 	}
 
 	public String getPassportNumber() {
-		return passportNumber;
+		String toReturn = "";
+		if (passportNumber != null && !passportNumber.isEmpty()) {
+			toReturn = "***************";
+		}
+		return toReturn;
 	}
 
 	public void setPassportNumber(String passportNumber) {
-		this.passportNumber = passportNumber;
+		if (passportNumber.matches("[0-9]{8,15}?")) {
+			this.passportNumber = StringUtils.getMd5Hash(passportNumber);
+		}
 	}
 
 	public String getFfAirline() {

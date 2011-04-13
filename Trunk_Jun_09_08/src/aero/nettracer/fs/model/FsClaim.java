@@ -15,12 +15,15 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.detection.Blacklist;
+
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -234,6 +237,11 @@ public class FsClaim implements Serializable {
 
 	public void setStatusId(int statusId) {
 		this.statusId = statusId;
+	}
+	
+	@Transient
+	public String getDisClaimDate(String dateFormat) {
+		return DateUtils.formatDate(getClaimDate(), dateFormat, "", null);
 	}
 	
 }

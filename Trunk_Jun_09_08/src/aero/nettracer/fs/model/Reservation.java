@@ -17,6 +17,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
+import com.bagnet.nettracer.tracing.utils.StringUtils;
+
 import aero.nettracer.fs.model.detection.Whitelist;
 
 @Entity
@@ -36,11 +38,14 @@ public class Reservation implements Serializable {
 	private String formOfPayment;
 	private String ccType;
 	private String ccNumber;
+	private String ccNumLastFour;
 	private String ccLName;
 	private String ccFName;
 	private String ccMName;
 	private int ccExpMonth;
 	private int ccExpYear;
+	
+
 
 	private Double totalFare;
 
@@ -119,11 +124,18 @@ public class Reservation implements Serializable {
 	}
 
 	public String getCcNumber() {
-		return ccNumber;
+		String toReturn = "";
+		if (ccNumber != null && !ccNumber.isEmpty()) {
+			toReturn += "************" + getCcNumLastFour();
+		}
+		return toReturn;
 	}
 
 	public void setCcNumber(String ccNumber) {
-		this.ccNumber = ccNumber;
+		if (ccNumber.length() == 4 || ccNumber.length() == 16) {
+			this.ccNumber = StringUtils.getMd5Hash(ccNumber);
+			this.setCcNumLastFour(ccNumber.substring(ccNumber.length() - 4));
+		}
 	}
 
 	public double getTicketAmount() {
@@ -245,5 +257,12 @@ public class Reservation implements Serializable {
 	public void setCcExpYear(int ccExpYear) {
 		this.ccExpYear = ccExpYear;
 	}
-
+	
+	public String getCcNumLastFour() {
+		return ccNumLastFour;
+	}
+	
+	public void setCcNumLastFour(String ccNumLastFour) {
+		this.ccNumLastFour = ccNumLastFour;
+	}
 }

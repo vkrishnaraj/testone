@@ -178,20 +178,20 @@
                       </dd>
                       <dd>
                       <% if (ntUser) { %>
-                      <logic:notEmpty name="incident">
-                   	<a href='fraud_results.do?incident=<bean:write name="incident" scope="request" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
+                      <logic:notEqual name="claimForm" property="claim.id" value="0">
+                   	<a href='fraud_results.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
                    	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
                         <span class="cc">&nbsp;
                           <br />
                           &nbsp;</span></a>
-                      </logic:notEmpty>
-                      <logic:empty name="incident">
-                   	<a href='fraud_results.do' ><span class="aa">&nbsp;<br />&nbsp;</span>
+                      </logic:notEqual>
+                      <logic:equal name="claimForm" property="claim.id" value="0">
+                   <a href='fraud_results.do'><span class="aa">&nbsp;<br />&nbsp;</span>
                    	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
                         <span class="cc">&nbsp;
                           <br />
                           &nbsp;</span></a>
-                      </logic:empty>
+                          </logic:equal>
                    </dd>
                    <% } else { %>
                    <a href='fraud_results.do'><span class="aa">&nbsp;<br />&nbsp;</span>
@@ -560,6 +560,13 @@
 			              <html:text name="claimForm" property="claim.incident.reservation.ccMName" size="1" maxlength="1" styleClass="textfield" />
 			            </td>
 					</tr>
+					<!-- START RESERVATION ADDRESS INFO -->
+					<tr>
+						<td colspan="3">
+							address goes here
+						</td>
+					</tr>
+					<!-- END RESERVATION ADDRESS INFO -->
 					<tr>
 						<td>
 							<bean:message key="claim.colname.payment.type" />

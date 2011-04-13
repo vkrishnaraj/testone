@@ -7,12 +7,12 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+  String company = a.getCompanycode_ID();
 
   boolean ntUser = PropertyBMO.isTrue("nt.user");
 
@@ -20,27 +20,8 @@
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-  <SCRIPT LANGUAGE="JavaScript">
-    
-	var cal1xx = new CalendarPopup();	
-	
-    function changebutton() {
-        document.claimForm.saveclaim.disabled = true;
-        document.claimForm.saveclaim.value = "<bean:message key="ajax.please_wait" />";
-        document.claimForm.save.disabled = false;
-      }
-      
-      function undoChangebutton() {
-        document.claimForm.saveclaim.disabled = false;
-        document.claimForm.saveclaim.value = "<bean:message key="button.claim.resolution.save" />";
-        document.claimForm.save.disabled = true;
-      }
-
-  </SCRIPT>
   
-    <html:form action="fraud_results.do" method="post" onsubmit="fillzero(this.incident_ID, 13);">
+    <html:form action="fraud_results.do" method="post" >
     
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -69,6 +50,16 @@
           <dl>
           <% if (ntUser) { %>
             <dd>
+            	<logic:empty name="incident" scope="request" >
+              <a href='searchIncident.do' ><span class="aa">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bb"><bean:message key="menu.incident_info" /></span>
+                <span class="cc">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+                  </logic:empty>
+            	<logic:notEmpty name="incident" scope="request" >
               <a href='searchIncident.do?incident=<bean:write name="incident" scope="request"/>'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
@@ -76,6 +67,7 @@
                 <span class="cc">&nbsp;
                   <br />
                   &nbsp;</span></a>
+                  </logic:notEmpty>
             </dd>
 <%			}
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, a)) {
@@ -93,7 +85,7 @@
             } if (ntUser) {
 %>
 					<dd>
-                   	<a href='fraud_results.do?incident=<bean:write name="incident" scope="request" />' ><span class="aab">&nbsp;<br />&nbsp;</span>
+                   	<a href='fraud_results.do?claimId=<bean:write name="claimForm" property="claim.swapId" />' ><span class="aab">&nbsp;<br />&nbsp;</span>
                    	<span class="bbb"><bean:message key="menu.fraud.checks" /></span>
                         <span class="ccb">&nbsp;
                           <br />
@@ -146,8 +138,40 @@
             			<td>
             				<bean:message key="colname.fraudresults.claim_date" />
             			</td>
+            			<td>
+            				<bean:message key="colname.fraudresults.match_summary" />
+            			</td>
+            			<td>
+            				<bean:message key="colname.fraudresults.details" />
+            			</td>
             		</tr>
-            		<!-- ITERATE THROUGH THE LIST OF PRIMARY RESULTS -->
+            		<logic:notEmpty name="fraudResultsForm" property="primaryResults" >
+	 	           		<logic:iterate id="pResult" name="fraudResultsForm" property="primaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
+	            			<tr>
+	            				<td><html:checkbox name="pResult" property="selected" disabled="<%= pResult.getClaim2().getAirline().equals(company) %>" /></td>
+	            				<td><bean:write name="pResult" property="claim2.swapId" /></td>
+	            				<td>
+	            					<logic:equal name="pResult" property="claim2.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+	            						<bean:message key="claim.type.lostdelay" />
+	            					</logic:equal>
+	            					<logic:equal name="pResult" property="claim2.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+	            						<bean:message key="claim.type.missing" />
+	            					</logic:equal>
+	            					<logic:equal name="pResult" property="claim2.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+	            						<bean:message key="claim.type.damaged" />
+	            					</logic:equal>
+            					</td>
+	            				<td><bean:write name="pResult" property="claim2.airline" /></td>
+	            				<td><%=pResult.getClaim2().getDisClaimDate(a.getDateformat().getFormat()) %></td>
+	            				<td><bean:write name="pResult" property="matchSummary" /></td>
+	            				<td>
+	            					<a href="fraud_results.do?matchId=<%=pResult.getId() %>">
+	            						<bean:message key="claim.match.details" />
+	            					</a>
+	            				</td>
+	            			</tr>
+	            		</logic:iterate>
+            		</logic:notEmpty>
             	</table>
             	<br />
             	<br />
@@ -171,14 +195,46 @@
             			<td>
             				<bean:message key="colname.fraudresults.claim_date" />
             			</td>
+            			<td>
+            				<bean:message key="colname.fraudresults.match_summary" />
+            			</td>
+            			<td>
+            				<bean:message key="colname.fraudresults.details" />
+            			</td>
             		</tr>
-            		<!-- ITERATE THROUGH THE LIST OF SECONDARY RESULTS -->
+            		<logic:notEmpty name="fraudResultsForm" property="secondaryResults" >
+	            		<logic:iterate id="sResult" name="fraudResultsForm" property="secondaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
+	            			<tr>
+	            				<td><html:checkbox name="sResult" property="selected" disabled="<%= sResult.getClaim1().getAirline().equals(company) %>" /></td>
+	            				<td><bean:write name="sResult" property="claim1.swapId" /></td>
+	            				<td>
+	            					<logic:equal name="sResult" property="claim1.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+	            						<bean:message key="claim.type.lostdelay" />
+	            					</logic:equal>
+	            					<logic:equal name="sResult" property="claim1.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+	            						<bean:message key="claim.type.missing" />
+	            					</logic:equal>
+	            					<logic:equal name="sResult" property="claim1.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+	            						<bean:message key="claim.type.damaged" />
+	            					</logic:equal>
+            					</td>
+	            				<td><bean:write name="sResult" property="claim1.airline" /></td>
+	            				<td><%=sResult.getClaim2().getDisClaimDate(a.getDateformat().getFormat()) %></td>
+	            				<td><bean:write name="sResult" property="matchSummary" /></td>
+	            				<td>
+	            					<a href="fraud_results.do?matchId=<%=sResult.getId() %>">
+	            						<bean:message key="claim.match.details" />
+									</a>
+								</td>
+	            			</tr>
+	            		</logic:iterate>
+            		</logic:notEmpty>
             	</table>
             	<br />
-            	<br />
             	<center>
-				<html:submit property="requestInfo" styleId="button">
+					<html:submit property="requestInfo" styleId="button">
                       <bean:message key="button.request_info" />
                     </html:submit>
-                    </center>        	
+                </center>        	
+                <br />
             </html:form>

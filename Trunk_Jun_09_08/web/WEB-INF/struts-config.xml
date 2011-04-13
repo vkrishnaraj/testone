@@ -503,6 +503,7 @@
 		
 		<forward name="create_claim" path="create_claim" />
 		<forward name="fraud_results" path="fraud_results" />
+		<forward name="match_details" path="match_details" />
 		
 	</global-forwards>
 
@@ -562,7 +563,7 @@
 
 		<action path="/create_claim" type="com.bagnet.nettracer.tracing.actions.CreateClaimAction" scope="request" validate="false" ></action>
 
-		<action path="/fraud_results" type="com.bagnet.nettracer.tracing.actions.FraudResultsAction" name="fraudResultsForm" scope="request" validate="false" ></action>
+		<action path="/fraud_results" type="com.bagnet.nettracer.tracing.actions.FraudResultsAction" name="fraudResultsForm" scope="session" validate="false" ></action>
 		
 		<!-- Expense Actions -->
 		<action path="/*Expense" parameter="{1}" type="com.bagnet.nettracer.tracing.actions.expense.{1}ExpenseAction" name="expensePayoutForm" scope="request" validate="true" >

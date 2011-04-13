@@ -186,16 +186,25 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			// 2. save the claim on central services
 			ClaimRemote remote = ConnectionUtil.getClaimRemote();
+			long remoteClaimId = 0;
 			if (remote != null) {
 				FsClaim newClaim = ClaimUtils.createFsClaim(claim);
-				logger.info("Claim saved to central services: " + remote.insertClaim(newClaim));
+				remoteClaimId = remote.insertClaim(newClaim);
+				claim.setSwapId(remoteClaimId);
+				ClaimDAO.saveClaim(claim);
+				logger.info("Claim saved to central services: " + remoteClaimId);
+
+				// 3. submit the claim for tracing
+				submitClaim(remoteClaimId);
+				
 			}
 			
-			// 3. submit the claim for tracing
-			
-			
 		} else if (request.getParameter("submit") != null) {
+			
 			// 1. submit the claim for tracing
+			if (claim.getSwapId() > 0) {
+				submitClaim(claim.getSwapId());
+			}
 			
 		} else if (request.getParameter("error") != null) {
 			if (request.getParameter("error").equals("print")) {
@@ -275,4 +284,15 @@ public class ModifyClaimAction extends CheckedAction {
 		cform.setClaim(claim);
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
 	}
+	
+	private void submitClaim(long fsClaimId) {
+		if (fsClaimId <= 0) {
+			return;
+		}
+		ClaimRemote remote = ConnectionUtil.getClaimRemote();
+		if (remote != null) {
+			remote.traceClaim(fsClaimId);
+		}
+	}
+	
 }
