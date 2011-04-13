@@ -15,6 +15,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
+import org.apache.commons.codec.language.Soundex;
+
 @Entity
 @Proxy(lazy = false)
 public class Person implements Serializable {
@@ -71,6 +73,7 @@ public class Person implements Serializable {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+		this.setFirstNameSoundex((new Soundex()).encode(firstName));
 	}
 
 	public String getLastName() {
@@ -79,6 +82,7 @@ public class Person implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+		this.setLastNameSoundex((new Soundex()).encode(lastName));
 	}
 
 	public String getSocialSecurity() {
