@@ -63,7 +63,7 @@ public class FsClaim implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private Set<Segment> segments;
 
-	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Blacklist.class)
+	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Blacklist.class, cascade = CascadeType.ALL)
 	private Blacklist blacklist;
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL)

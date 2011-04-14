@@ -47,7 +47,7 @@ public class Reservation implements Serializable {
 	private int ccExpYear;
 	
 	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+//	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
 	private Set<Segment> segments;
@@ -66,13 +66,13 @@ public class Reservation implements Serializable {
 	private PnrData pnrData;
 
 	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+//	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
 	private Set<Person> passengers;
 
 	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+//	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
 	private Set<Phone> phones;
