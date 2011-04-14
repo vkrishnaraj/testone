@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -17,9 +18,9 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
-import com.bagnet.nettracer.tracing.utils.StringUtils;
-
 import aero.nettracer.fs.model.detection.Whitelist;
+
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 
 @Entity
 @Proxy(lazy = false)
@@ -39,9 +40,9 @@ public class Reservation implements Serializable {
 	private String ccType;
 	private String ccNumber;
 	private String ccNumLastFour;
-	private String ccLName;
-	private String ccFName;
-	private String ccMName;
+//	private String ccLName;
+//	private String ccFName;
+//	private String ccMName;
 	private int ccExpMonth;
 	private int ccExpYear;
 	
@@ -53,6 +54,11 @@ public class Reservation implements Serializable {
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Whitelist.class, cascade = CascadeType.ALL)
 	private Whitelist ccWhitelist;
+	
+	@OneToOne(targetEntity = aero.nettracer.fs.model.Person.class, cascade = CascadeType.ALL)
+	@JoinColumn(name="purchaser_id")
+	private Person purchaser;
+	
 	private double ticketAmount;
 	private int itinComplexity;
 	private int tripLength;
@@ -214,29 +220,29 @@ public class Reservation implements Serializable {
 		this.ccType = ccType;
 	}
 
-	public String getCcLName() {
-		return ccLName;
-	}
-
-	public void setCcLName(String ccLName) {
-		this.ccLName = ccLName;
-	}
-
-	public String getCcFName() {
-		return ccFName;
-	}
-
-	public void setCcFName(String ccFName) {
-		this.ccFName = ccFName;
-	}
-
-	public String getCcMName() {
-		return ccMName;
-	}
-
-	public void setCcMName(String ccMName) {
-		this.ccMName = ccMName;
-	}
+//	public String getCcLName() {
+//		return ccLName;
+//	}
+//
+//	public void setCcLName(String ccLName) {
+//		this.ccLName = ccLName;
+//	}
+//
+//	public String getCcFName() {
+//		return ccFName;
+//	}
+//
+//	public void setCcFName(String ccFName) {
+//		this.ccFName = ccFName;
+//	}
+//
+//	public String getCcMName() {
+//		return ccMName;
+//	}
+//
+//	public void setCcMName(String ccMName) {
+//		this.ccMName = ccMName;
+//	}
 
 	public int getCcExpMonth() {
 		return ccExpMonth;
@@ -260,5 +266,13 @@ public class Reservation implements Serializable {
 	
 	public void setCcNumLastFour(String ccNumLastFour) {
 		this.ccNumLastFour = ccNumLastFour;
+	}
+	
+	public Person getPurchaser() {
+		return purchaser;
+	}
+	
+	public void setPurchaser(Person purchaser) {
+		this.purchaser = purchaser;
 	}
 }
