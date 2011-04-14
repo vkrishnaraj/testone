@@ -97,12 +97,20 @@ public class Person implements Serializable {
 		this.setLastNameDmp((new DoubleMetaphone()).encode(lastName));
 	}
 
-	public String getSocialSecurity() {
+	public String getRedactedSocialSecurity() {
 		String toReturn = "";
 		if (socialSecurity != null && !socialSecurity.isEmpty()) {
 			toReturn = "*********";
 		}
 		return toReturn;
+	}
+	
+	public String getSocialSecurity() {
+		return this.socialSecurity;
+	}
+	
+	public void setRedactedSocialSecurity(String socialSecurity) {
+		this.setSocialSecurity(socialSecurity);
 	}
 
 	public void setSocialSecurity(String socialSecurity) {
@@ -231,16 +239,26 @@ public class Person implements Serializable {
 		this.driversLicenseIssuer = driversLicenseIssuer;
 	}
 
-	public String getDriversLicenseNumber() {
+	public String getRedactedDriversLicenseNumber() {
 		String toReturn = "";
 		if (driversLicenseNumber != null && !driversLicenseNumber.isEmpty()) {
 			toReturn = "*********";
 		}
 		return toReturn;
 	}
+	
+	public String getDriversLicenseNumber() {
+		return this.driversLicenseNumber;
+	}
+	
+	public void setRedactedDriversLicenseNumber(String driversLicenseNumber) {
+		setDriversLicenseNumber(driversLicenseNumber);
+	}
 
 	public void setDriversLicenseNumber(String driversLicenseNumber) {
-		this.driversLicenseNumber = StringUtils.getMd5Hash(driversLicenseNumber);
+		if (driversLicenseNumber != null && driversLicenseNumber.matches("[A-Za-z0-9]{5,15}")) {		
+			this.driversLicenseNumber = StringUtils.getMd5Hash(driversLicenseNumber);
+		}
 	}
 
 	public String getPassportIssuer() {
@@ -251,16 +269,24 @@ public class Person implements Serializable {
 		this.passportIssuer = passportIssuer;
 	}
 
-	public String getPassportNumber() {
+	public String getRedactedPassportNumber() {
 		String toReturn = "";
 		if (passportNumber != null && !passportNumber.isEmpty()) {
 			toReturn = "***************";
 		}
 		return toReturn;
 	}
+	
+	public String getPassportNumber() {
+		return this.passportNumber;
+	}
+	
+	public void setRedactedPassportNumber(String passportNumber) {
+		setPassportNumber(passportNumber);
+	}
 
 	public void setPassportNumber(String passportNumber) {
-		if (passportNumber.matches("[0-9]{8,15}?")) {
+		if (passportNumber.matches("[A-Za-z0-9]{5,15}")) {
 			this.passportNumber = StringUtils.getMd5Hash(passportNumber);
 		}
 	}

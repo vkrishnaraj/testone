@@ -45,10 +45,6 @@ public class Reservation implements Serializable {
 	private int ccExpMonth;
 	private int ccExpYear;
 	
-
-
-	private Double totalFare;
-
 	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Cascade(org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	@org.hibernate.annotations.OrderBy(clause = "id")
@@ -123,16 +119,24 @@ public class Reservation implements Serializable {
 		this.formOfPayment = formOfPayment;
 	}
 
-	public String getCcNumber() {
+	public String getRedactedCcNumber() {
 		String toReturn = "";
 		if (ccNumber != null && !ccNumber.isEmpty()) {
 			toReturn += "************" + getCcNumLastFour();
 		}
 		return toReturn;
 	}
+	
+	public String getCcNumber() {
+		return this.ccNumber;
+	}
 
+	public void setRedactedCcNumber(String ccNumber) {
+		setCcNumber(ccNumber);
+	}
+	
 	public void setCcNumber(String ccNumber) {
-		if (ccNumber.length() == 4 || ccNumber.length() == 16) {
+		if (ccNumber.matches("[0-9]{4}+") || ccNumber.matches("[0-9]{16}+")) {
 			this.ccNumber = StringUtils.getMd5Hash(ccNumber);
 			this.setCcNumLastFour(ccNumber.substring(ccNumber.length() - 4));
 		}
@@ -208,14 +212,6 @@ public class Reservation implements Serializable {
 
 	public void setCcType(String ccType) {
 		this.ccType = ccType;
-	}
-
-	public Double getTotalFare() {
-		return totalFare;
-	}
-
-	public void setTotalFare(Double totalFare) {
-		this.totalFare = totalFare;
 	}
 
 	public String getCcLName() {

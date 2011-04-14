@@ -210,13 +210,15 @@ public final class ClaimForm extends ActionForm {
 		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setCountry(country);
 	}
 	
-	public String getSsNumber() {
-		return getClaimant().getSocialSecurity();
-	}
-	
-	public void setSsNumber(String ssNumber) {
-		getClaimant().setSocialSecurity(ssNumber);
-	}
+//	public String getSsNumber() {
+//		String toReturn = "";
+//		if ()
+//		return getClaimant().getSocialSecurity();
+//	}
+//	
+//	public void setSsNumber(String ssNumber) {
+//		getClaimant().setSocialSecurity(ssNumber);
+//	}
 	
 //	private FsAddress getReservationAddress() {
 //		if (reservationAddress == null) {

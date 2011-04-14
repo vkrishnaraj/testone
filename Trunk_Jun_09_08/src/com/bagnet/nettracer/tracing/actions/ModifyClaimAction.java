@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -188,7 +189,9 @@ public class ModifyClaimAction extends CheckedAction {
 			ClaimRemote remote = ConnectionUtil.getClaimRemote();
 			long remoteClaimId = 0;
 			if (remote != null) {
-				FsClaim newClaim = ClaimUtils.createFsClaim(claim);
+//				FsClaim newClaim = ClaimUtils.createFsClaim(claim);
+				FsClaim newClaim = new FsClaim();
+				BeanUtils.copyProperties(newClaim, claim);
 				remoteClaimId = remote.insertClaim(newClaim);
 				claim.setSwapId(remoteClaimId);
 				ClaimDAO.saveClaim(claim);

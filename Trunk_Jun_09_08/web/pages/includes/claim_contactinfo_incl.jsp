@@ -199,12 +199,12 @@
                  <td colspan=2 >
 	            	<bean:message key="oc.label.ssn" />
 	            	<br />
-	            	<html:text name="claimForm" property="claimant.socialSecurity" size="20" maxlength="9" styleClass="textfield" />
+	            	<html:text name="claimForm" property="claimant.redactedSocialSecurity" size="20" maxlength="9" styleClass="textfield" />
 	            </td>
 	            <td colspan=2 >
 	            	<bean:message key="colname.common_num" />
 	            	<br />
-	            	<html:text name="claimForm" property="claimant.passportNumber" size="20" maxlength="20" styleClass="textfield" />
+	            	<html:text name="claimForm" property="claimant.redactedPassportNumber" size="20" maxlength="20" styleClass="textfield" />
 	            </td>
 	            <td>
 	            	<bean:message key="colname.country_of_issue" />
@@ -221,7 +221,7 @@
                <td>
 	            	<bean:message key="colname.drivers" />
 	            	<br />
-	            	<html:text name="claimForm" property="claimant.driversLicenseNumber" size="20" maxlength="20" styleClass="textfield" />
+	            	<html:text name="claimForm" property="claimant.redactedDriversLicenseNumber" size="20" maxlength="20" styleClass="textfield" />
 	            </td>
 	            <td>
                   <bean:message key="colname.state.req" />

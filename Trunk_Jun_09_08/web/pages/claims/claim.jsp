@@ -605,7 +605,7 @@
 						<td>
 							<bean:message key="claim.colname.cc_num" />
 							<br/>
-							<html:text name="claimForm" property="claim.incident.reservation.ccNumber" size="20" maxlength="16" />
+							<html:text name="claimForm" property="claim.incident.reservation.redactedCcNumber" size="20" maxlength="16" />
 						</td>
 						<td>
 							<bean:message key="claim.colname.cc_expdate" />
