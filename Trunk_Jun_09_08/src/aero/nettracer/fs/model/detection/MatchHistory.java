@@ -1,7 +1,9 @@
 package aero.nettracer.fs.model.detection;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.FsIncident;
 
 @Entity
 @Proxy(lazy = false)
@@ -38,8 +41,19 @@ public class MatchHistory implements Serializable {
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
 	private FsClaim claim2;
 	
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
+	private FsIncident incident1;
+	
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
+	private FsIncident incident2;
+	
 	@Transient
 	private boolean selected;
+	
+	@Transient
+	private Vector traceCount;
+	
+	private Date createdate;
 
 	public long getId() {
 		return id;
@@ -89,6 +103,38 @@ public class MatchHistory implements Serializable {
 		}
 		summary = summary.substring(0, summary.lastIndexOf(","));
 		return summary;
+	}
+
+	public void setTraceCount(Vector traceCount) {
+		this.traceCount = traceCount;
+	}
+
+	public Vector getTraceCount() {
+		return traceCount;
+	}
+
+	public void setIncident1(FsIncident incident1) {
+		this.incident1 = incident1;
+	}
+
+	public FsIncident getIncident1() {
+		return incident1;
+	}
+
+	public void setIncident2(FsIncident incident2) {
+		this.incident2 = incident2;
+	}
+
+	public FsIncident getIncident2() {
+		return incident2;
+	}
+
+	public void setCreatedate(Date createdate) {
+		this.createdate = createdate;
+	}
+
+	public Date getCreatedate() {
+		return createdate;
 	}
 	
 }
