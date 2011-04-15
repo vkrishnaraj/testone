@@ -60,6 +60,14 @@ public class FsIncident implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private Set<Person> passengers;
 
+	public FsIncident(long id){
+		this.id = id;
+	}
+	
+	public FsIncident() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getRemarks() {
 		return remarks;
 	}
