@@ -1,9 +1,11 @@
 package aero.nettracer.fs.utilities.tracing;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -25,6 +27,37 @@ public class Consumer implements Runnable{
 	private ArrayBlockingQueue<FsClaim> claimQueue;
 	private ArrayBlockingQueue<FsIncident> incidentQueue;
 	private ArrayBlockingQueue<MatchHistory> matchQueue;
+	
+	
+	public static FsClaim loadClaim(long claimId){
+		String sql = "from aero.nettracer.fs.model.FsClaim c where c.id = :id";
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		q.setParameter("id", claimId);
+		List<FsClaim> result = q.list();
+		sess.close();
+		if(result != null && result.size() > 0){
+			return result.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	public static FsIncident loadIncident(long incidentId){
+		String sql = "from aero.nettracer.fs.model.FsIncident i where i.id = :id";
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		q.setParameter("id", incidentId);
+		List<FsIncident> result = q.list();
+		sess.close();
+		if(result != null && result.size() > 0){
+			return result.get(0);
+		} else {
+			return null;
+		}
+	}
 	
 	public Consumer(ArrayBlockingQueue queue, int type, int threadnumber) throws Exception{
 		if(type == CLAIM){
@@ -53,7 +86,7 @@ public class Consumer implements Runnable{
 					System.out.println("INCIDENT " + threadnumber + ":" + incident.getId());
 				} else if (this.threadtype == MATCH){
 					MatchHistory match = matchQueue.take();
-					System.out.println("consumer " + threadnumber + ":" + match.getClaim2().getId());
+					System.out.println("consumer " + threadnumber);
 					processMatch(match);
 				}
 			}catch (Exception e){
@@ -63,36 +96,75 @@ public class Consumer implements Runnable{
 	}
 
 	private static void processMatch(MatchHistory match){
-		//process match
-		processName(match);
-		
-		
-		//save match
-		Transaction t = null;
-		Session sess = null;
 		try{
-			sess = HibernateWrapper.getSession().openSession();
-			t = sess.beginTransaction();
-			sess.saveOrUpdate(match);
-			t.commit();
-		} catch (Exception e) {
+			//process match
+			if(match.getClaim2() != null){
+				System.out.println("consumer claim: " + match.getClaim2().getId());
+				match.setClaim2(loadClaim(match.getClaim2().getId()));
+				processName(match);
+			}
+			if(match.getIncident2() != null){
+				System.out.println("consume incident: " + match.getIncident2().getId());
+				match.setIncident2(loadIncident(match.getIncident2().getId()));
+				processName(match);
+			}
+
+
+			if(match.getDetails() == null || match.getDetails().size() == 0){
+				//no match details so don't save
+				//can expand to include not saving match if min match percent below certain threshold
+				return;
+			}
+			//save match
+			Transaction t = null;
+			Session sess = null;
+			try{
+				sess = HibernateWrapper.getSession().openSession();
+				t = sess.beginTransaction();
+				sess.saveOrUpdate(match);
+				t.commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (t != null) {
+					try {
+						t.rollback();
+					} catch (Exception ex) {
+					}
+				}
+			} finally {
+
+				if (sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}catch (Exception e){
 			e.printStackTrace();
-			if (t != null) {
-				try {
-					t.rollback();
-				} catch (Exception ex) {
-				}
-			}
-		} finally {
-			
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+		}finally{
+			match.getTraceCount().add(null);
+			System.out.println("consumer consumed count: " + match.getTraceCount().size());
 		}
+	}
+	
+	public static Set<Person> getPersons(FsIncident incident){
+		HashSet<Person> ret = new HashSet<Person>();
+			if(incident != null){
+				if(incident.getPassengers() != null){
+					for(Person p:incident.getPassengers()){
+						ret.add(p);
+					}
+				}
+				if(incident.getReservation() != null
+						&& incident.getReservation().getPassengers() != null){
+					for(Person p:incident.getReservation().getPassengers()){
+						ret.add(p);
+					}
+				}
+			}
+		return ret;
 	}
 	
 	public static Set<Person> getPersons(FsClaim claim){
@@ -125,7 +197,12 @@ public class Consumer implements Runnable{
 	
 	private static void processName(MatchHistory match){
 		Set<Person> plist1 = getPersons(match.getClaim1());
-		Set<Person> plist2 = getPersons(match.getClaim2());
+		Set<Person> plist2 = null;
+		if(match.getClaim2() != null){
+		plist2 = getPersons(match.getClaim2());
+		} else if (match.getIncident2() !=null){
+			plist2 = getPersons(match.getIncident2());
+		}
 		
 		Set <MatchDetail> details = match.getDetails();
 
