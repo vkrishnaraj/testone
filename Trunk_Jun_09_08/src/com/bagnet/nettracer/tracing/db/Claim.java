@@ -17,6 +17,15 @@ import aero.nettracer.fs.model.FsClaim;
 @Proxy(lazy = true)
 public class Claim extends FsClaim {
 	
+	public Claim(){
+		super();
+	}
+	
+	public Claim(long id) {
+		super(id);
+		// TODO Auto-generated constructor stub
+	}
+
 	private static final long serialVersionUID = 1L;
 
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Incident.class, mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
