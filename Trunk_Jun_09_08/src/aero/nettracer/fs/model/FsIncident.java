@@ -12,10 +12,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
+
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Proxy(lazy = false)
@@ -25,6 +28,7 @@ public class FsIncident implements Serializable {
 	@Id
 	@GeneratedValue
 	private long id;
+	private long swapId;
 	
 	@Column(unique=true)
 	private String airlineIncidentId;
@@ -44,6 +48,7 @@ public class FsIncident implements Serializable {
 	private Date timestampClosed;
 	private int itinComplexity;
 	private String incidentDescription;
+	private String airline;
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.Reservation.class, cascade = CascadeType.ALL, mappedBy = "incident")
 	private Reservation reservation;
@@ -196,4 +201,29 @@ public class FsIncident implements Serializable {
   	this.segments = segments;
   }
 
+	public String getAirline() {
+		return airline;
+	}
+
+	public void setAirline(String airline) {
+		this.airline = airline;
+	}
+
+	public long getSwapId() {
+		return swapId;
+	}
+
+	public void setSwapId(long swapId) {
+		this.swapId = swapId;
+	}
+	
+	@Transient
+	public String getDisOpenDate(String dateFormat) {
+		return getDisDate(timestampOpen, dateFormat);
+	}
+	
+	private String getDisDate(Date date, String dateFormat) {
+		return DateUtils.formatDate(date, dateFormat, "", null);
+	}
+	
 }

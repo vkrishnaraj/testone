@@ -55,7 +55,7 @@ public class Reservation implements Serializable {
 	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Whitelist.class, cascade = CascadeType.ALL)
 	private Whitelist ccWhitelist;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.Person.class, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = aero.nettracer.fs.model.Person.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name="purchaser_id")
 	private Person purchaser;
 	
@@ -274,5 +274,14 @@ public class Reservation implements Serializable {
 	
 	public void setPurchaser(Person purchaser) {
 		this.purchaser = purchaser;
+	}
+	
+	public FsAddress getBillingAddress() {
+		return purchaser.getAddresses().toArray(new FsAddress[0])[0];
+	}
+	
+	public void setBillingAddress(FsAddress billingAddress) {
+		purchaser.getAddresses().clear();
+		purchaser.getAddresses().add(billingAddress);
 	}
 }
