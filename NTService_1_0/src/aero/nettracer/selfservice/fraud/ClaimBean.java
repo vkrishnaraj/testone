@@ -1,12 +1,17 @@
 package aero.nettracer.selfservice.fraud;
 
+import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.ejb.Stateless;
 
+import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.beans.BeanUtils;
+
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.FsAddress;
@@ -23,7 +28,6 @@ import aero.nettracer.fs.model.detection.Whitelist;
 import aero.nettracer.fs.utilities.tracing.Producer;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
-import org.apache.commons.codec.language.Soundex;
 
 
 
@@ -48,15 +52,63 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 		return -1;
 	}
 	
-	public long insertClaim(FsClaim claim){
+	public synchronized long insertClaim(FsClaim claim){
 		FsClaim toSubmit = resetId(claim);
+		
 		Transaction t = null;
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
+			if(toSubmit.getId() > 0){		
+				System.out.println("delete and save");
+				FsClaim toDelete = (FsClaim)sess.load(FsClaim.class,toSubmit.getId());
+//				sess.lock(toDelete, LockMode.NONE);
+				if(toSubmit.getIncident() != null){
+					if(toDelete.getIncident() != null){
+						toSubmit.getIncident().setId(toDelete.getIncident().getId());
+////						sess.delete(toDelete.getIncident());
+////						toDelete.setIncident(null);
+////						sess.save(toSubmit.getIncident());
+					}
+				}
+				
+
+				sess.delete(toDelete);
+				// t.commit();
+				// t = sess.beginTransaction();
+				BeanUtils.copyProperties(toSubmit, toDelete);
+
+				// 2. save the claim on central services
+				if (toDelete.getClaimants() != null)
+					for (Person p : toDelete.getClaimants()) {
+						p.setClaim(toDelete);
+					}
+
+				if (toDelete.getSegments() != null)
+					for (Segment s : toDelete.getSegments()) {
+						s.setClaim(toDelete);
+					}
+
+				if (toDelete.getIncident() != null)
+					toDelete.getIncident().setClaim(toDelete);
+
+				sess.saveOrUpdate(toDelete);
+				// sess.merge(toSubmit);
+				// t.commit();
+//				sess.evict(toDelete);
+//				sess.flush();
+				t.commit();
+				t = sess.beginTransaction();
+//				sess.close();
+//				sess = HibernateWrapper.getSession().openSession();
+			} else {
+			System.out.println("saving:" + toSubmit.getId());
 			sess.saveOrUpdate(toSubmit);
+
+
 			t.commit();
+			}
 			return toSubmit.getId();
 		} catch (Exception e) {
 //			logger.error("Error Saving: ", e);
@@ -66,6 +118,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 					t.rollback();
 				} catch (Exception ex) {
 //					logger.error("Error Saving: ", ex);
+					ex.printStackTrace();
 				}
 			}
 			return -1;
@@ -84,11 +137,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 	
 	public static FsClaim resetId(FsClaim claim){
 		if(claim != null){
-			//swap claim id
-//			long temp = claim.getSwapId();
+			long temp = claim.getSwapId();
 			claim.setSwapId(claim.getId());
-//			claim.setId(temp);
-			claim.setId(0);
+			claim.setId(temp);
 
 			claim.setIncident(resetIncident(claim.getIncident()));
 			claim.setClaimants(resetPersonId(claim.getClaimants()));
@@ -102,9 +153,11 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 
 	public static FsIncident resetIncident(FsIncident inc){
 		if(inc != null){
-			inc.setAirlineIncidentId((new Long(inc.getId())).toString());
+			long temp = inc.getSwapId();
+//			inc.setSwapId(inc.getId());
+//			inc.setId(temp);
 			inc.setId(0);
-
+			
 			inc.setReservation(resetReservation(inc.getReservation()));
 			inc.setSegments(resetSegmentId(inc.getSegments()));
 			inc.setBags(resetBagId(inc.getBags()));
@@ -181,6 +234,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 		if(phones != null){
 			for(Phone phone:phones){
 				phone.setId(0);
+				phone.setPhoneNumber(aero.nettracer.fs.utilities.Util.removeNonNumeric(phone.getPhoneNumber()));
 			}
 		}
 		return phones;

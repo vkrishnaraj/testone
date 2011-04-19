@@ -5,9 +5,22 @@ import javax.naming.*;
 
 import org.junit.Test;
 
+
+
 import java.rmi.*;
+import java.util.LinkedHashSet;
 import java.util.Properties;
 
+import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.FsIncident;
+import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Phone;
+import aero.nettracer.fs.model.PnrData;
+import aero.nettracer.fs.model.Reservation;
+import aero.nettracer.fs.model.Segment;
+import aero.nettracer.fs.model.detection.Blacklist;
+import aero.nettracer.selfservice.fraud.ClaimBean;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 import aero.nettracer.selfservice.fraud.PrivacyPermissionsRemote;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
@@ -18,8 +31,8 @@ public class EjbTest {
 
 	  static String user     = null;
 	  static String password = null;
-//	  static String url      = "jnp://127.0.0.1:4850";
-	  static String url      = "jnp://localhost:1199";
+//	  static String url      = "jnp://127.0.0.1:1199";
+	  static String url      = "jnp://192.168.2.145:1199";
 
 	
 	  static public Context getInitialContext() throws Exception {
@@ -57,7 +70,7 @@ public class EjbTest {
 //
 //	  }
 	  
-	  @Test
+//	  @Test
 	  public void hello(){
 			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");
 		    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer");
@@ -78,7 +91,7 @@ public class EjbTest {
 		  }
 	  }
 	  
-	  @Test
+//	  @Test
 	  public void echo(){
 			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");
 		    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer");
@@ -90,9 +103,95 @@ public class EjbTest {
 //			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("permissionsSSL");
 //			  System.out.println(o.hello());
 			  System.out.println(o.echoTest("hello World"));
+			  FsClaim claim = createFsClaim();
+			  long id = o.insertClaim(createFsClaim());
+			  claim.setSwapId(id);
+			  System.out.println(id);
+			  System.out.println(o.insertClaim(claim));
 		  } catch (Exception e){
 			  e.printStackTrace();
 		  }
 	  }
+	  
+	  @Test
+	  public void updateTest(){
+		  try{
+			  ClaimBean bean = new ClaimBean();
+			  FsClaim claim = createFsClaim();
+			  long id = bean.insertClaim(createFsClaim());
+			  claim.setSwapId(id);
+			  claim.getIncident().setSwapId(claim.getIncident().getId());
+			  System.out.println("claim:"+id);
+			  System.out.println("incident:"+claim.getIncident().getId());
+			  System.out.println(bean.insertClaim(claim));
+		  } catch (Exception e){
+			  e.printStackTrace();
+		  }
+	  }
+	  
+//	  @Test
+	  public void objectReset(){
+		  FsClaim c = new FsClaim();
+		  c.setAirline("WS");
+		  c.setIncident(new FsIncident());
+		  ClaimBean.resetId(c);	  
+	  }
+	  
+	  public static FsClaim createFsClaim() {
+
+			// create the claim
+			FsClaim claim = new FsClaim();
+			claim.setAirline("WS");
+
+			// create the person
+			Person person = new Person();
+
+
+			// create the claim currency
+			String currency = "USD";
+			
+			// create the address
+			FsAddress address = new FsAddress();
+			address.setPerson(person);
+			LinkedHashSet<FsAddress> addresses = new LinkedHashSet<FsAddress>();
+			addresses.add(address);
+			
+			// create the phones
+			LinkedHashSet<Phone> phones = new LinkedHashSet<Phone>();
+
+			// create the person
+			person.setAddresses(addresses);
+			person.setPhones(phones);
+			person.setClaim(claim);
+			LinkedHashSet<Person> claimants = new LinkedHashSet<Person>();
+			claimants.add(person);
+			
+			// create the pnr data
+			PnrData pnrData = new PnrData();
+			
+			// create the reservation
+			Reservation reservation = new Reservation();
+			reservation.setPassengers(new LinkedHashSet<Person>());
+			reservation.setPhones(new LinkedHashSet<Phone>());
+			reservation.setPnrData(pnrData);
+			reservation.setSegments(new LinkedHashSet<Segment>());
+			pnrData.setReservation(reservation);
+			
+			// set the fraud incident
+			FsIncident fsIncident = new FsIncident();
+			fsIncident.setReservation(reservation);
+			reservation.setIncident(fsIncident);
+			person.setIncident(fsIncident);
+			fsIncident.setClaim(claim);
+			fsIncident.setPassengers(claimants);
+			
+			// create the claim
+			claim.setAmountClaimedCurrency(currency);
+			claim.setClaimants(claimants);
+			claim.setIncident(fsIncident);
+			
+			return claim;
+			
+		}
 	  
 }

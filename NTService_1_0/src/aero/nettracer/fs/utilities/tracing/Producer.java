@@ -1,11 +1,14 @@
 package aero.nettracer.fs.utilities.tracing;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -14,28 +17,39 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
+import com.bagnet.nettracer.tracing.utils.DateUtils;
+
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class Producer {
 
+	
 	private static final int MAX_WAIT = 100;
 	
 	public static Set<MatchHistory> matchClaim(long claimId){
-		String sql = "from aero.nettracer.fs.model.FsClaim c where c.id = :id";
-		Query q = null;
-		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setParameter("id", claimId);
-		List<FsClaim> result = q.list();
-		sess.close();
-		if(result != null && result.size() > 0){
-			return matchClaim(result.get(0));
+//		String sql = "from aero.nettracer.fs.model.FsClaim c where c.id = :id";
+//		Query q = null;
+//		Session sess = HibernateWrapper.getSession().openSession();
+//		q = sess.createQuery(sql.toString());
+//		q.setParameter("id", claimId);
+//		List<FsClaim> result = q.list();
+//		sess.close();
+//		if(result != null && result.size() > 0){
+//			return matchClaim(result.get(0));
+//		} else {
+//			return null;
+//		}
+		
+		FsClaim claim = TraceWrapper.loadClaimFromCache(claimId);
+		if(claim != null){
+			return matchClaim(claim);
 		} else {
 			return null;
 		}
@@ -61,9 +75,10 @@ public class Producer {
 			match.setClaim1(claim);
 			match.setClaim2(new FsClaim(id));
 			match.setTraceCount(v);
+			match.setCreatedate(DateUtils.convertToGMTDate(new Date()));
 			try{
 				TraceWrapper.getMatchQueue().put(match);
-				System.out.println("Producer add claim: " + id);
+				//System.out.println("Producer add claim: " + id);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -77,9 +92,10 @@ public class Producer {
 			match.setClaim1(claim);
 			match.setIncident2(new FsIncident(id));
 			match.setTraceCount(v);
+			match.setCreatedate(DateUtils.convertToGMTDate(new Date()));
 			try{
 				TraceWrapper.getMatchQueue().put(match);
-				System.out.println("Producer add incident: " + id);
+				//System.out.println("Producer add incident: " + id);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -112,9 +128,8 @@ public class Producer {
             + "left outer join reservation r3 on p.reservation_id = r3.id "
             + "left outer join fsincident i3 on r3.incident_id = i3.id "
             + "left outer join fsclaim c3 on i3.claim_id = c3.id "
-            + "where 1=0 ";
             
-//		sql += "or emailAddress = 'KRISTIN418@YAHOO.COM'";
+            + "where 1=0 ";
 
 		Set<Person> persons = Consumer.getPersons(claim);
 		
@@ -136,17 +151,79 @@ public class Producer {
 				sql += " or socialSecurity = \'" + person.getSocialSecurity() + "\' ";
 			}
 			
-//			if(person.getAddresses() != null){
-//				for(FsAddress address:person.getAddresses()){
-//					if(address.getZip() != null && address.getZip().length()>0){
-//						addressSql += " or zip = \'" + address.getZip() + "\'";
-//					}
+			if(person.getEmailAddress() != null && person.getEmailAddress().length() > 0){
+				sql += " or emailAddress = \'" + person.getEmailAddress() + "\' ";
+			}
+			
+			if(person.getFfNumber() != null && person.getFfNumber().length() > 0){
+				sql += " or ffNumber = \'" + person.getFfNumber() + "\' ";
+			}
+			
+			if(person.getDriversLicenseNumber() != null && person.getDriversLicenseNumber().length() > 0){
+				sql += " or driversLicenseNumber = \'" + person.getDriversLicenseNumber() + "\' ";
+			}
+		}
+		
+		Set<Phone> phones = Consumer.getPhones(claim);
+		Set<String> phoneNumbers = new HashSet<String>();
+		//we might have duplicate Phone objects with the same phone number, we want unique phone numbers
+		for(Phone phone:phones){
+			if(phone.getPhoneNumber() != null && phone.getPhoneNumber().length()>0){
+				phoneNumbers.add(phone.getPhoneNumber());
+			}
+		}
+		if(phoneNumbers.size() > 0){
+
+			sql += " union ";
+			sql += "select c1.id as c1_id, " +
+					"c2.id as c2_id, " +
+					"i2.id as i2_id, " +
+					"c3.id as c3_id, " +
+					"i3.id as i3_id, " +
+					"c4.id as c4_id, " +
+					"i4.id as i4_id, " +
+					"'phone' as type ";
+			sql += "from phone ph "
+				+  " left outer join person p on ph.person_id = p.id "
+				+ " left outer join fsclaim c1 on p.claim_id = c1.id "
+				+ "  left outer join fsincident i2 on p.incident_id = i2.id "
+				+ " left outer join fsclaim c2 on i2.claim_id = c2.id "
+				+ "   left outer join reservation r3 on p.reservation_id = r3.id "
+				+ "     left outer join fsincident i3 on r3.incident_id = i3.id "
+				+ "     left outer join fsclaim c3 on i3.claim_id = c3.id "
+				+ "  left outer join reservation r4 on ph.reservation_id =	r4.id "
+				+ "     left outer join fsincident i4 on r4.incident_id = i4.id "
+				+ "    left outer join fsclaim c4 on i4.claim_id = c4.id "                   
+				+ " where 1=0 ";
+
+//			for(Phone phone:phones){
+//				if(phone.getPhoneNumber() != null && phone.getPhoneNumber().length() > 0){
+//					sql += " or ph.phoneNumber = \'" + phone.getPhoneNumber() + "\' ";
 //				}
 //			}
+			for(String phoneNumber:phoneNumbers){
+				sql += " or ph.phoneNumber = \'" + phoneNumber + "\' ";
+			}
+		}
+		
+		if(claim.getIncident() != null && claim.getIncident().getReservation() != null
+				&& claim.getIncident().getReservation().getCcNumLastFour() != null
+				&& claim.getIncident().getReservation().getCcNumLastFour().length() > 0){
+			sql += " union select null as c1_id, " +
+					"c2.id as c2_id, " +
+					"i2.id as i2_id, " +
+					"null as c3_id, " +
+					"null as i3_id, " +
+					"null as c4_id, " +
+					"null as i4_id, " +
+					"'cc' as type " +
+					"from reservation res " +
+					"left outer join fsincident i2 on res.incident_id = i2.id " +
+					"left outer join fsclaim c2 on i2.claim_id = c2.id " +
+					"where ccNumber = \'" + claim.getIncident().getReservation().getCcNumLastFour() +"\' ";
 		}
 
-		System.out.println(sql);
-		List<Person> presult = new ArrayList<Person>();
+		//System.out.println(sql);
 		
 		SQLQuery pq = null;
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -192,12 +269,14 @@ public class Producer {
 		
 		Date endtime = new Date();
 		claimQueue.remove(new Long(claim.getId()));//removing dup from queue to get accurate count
-		System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
+		//System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
 		
+		
+		System.out.println((claimQueue.size() + incidentQueue.size()));
 		try {
 			for(int i = 0; v.size() < (claimQueue.size() + incidentQueue.size()) && i < MAX_WAIT; i++){
 				System.out.println("waiting: " + i + ":" + v.size() + "/" + (claimQueue.size() + incidentQueue.size()) );
-				Thread.sleep(100);
+				Thread.sleep(40);
 			}
 
 		} catch (InterruptedException e) {
@@ -217,7 +296,7 @@ public class Producer {
 		List <MatchHistory>result = q.list();
 		sess.close();
 		for(MatchHistory match:result){
-			System.out.println(match);
+			//System.out.println("Match: " + match.getId() + "  " + match.getMatchPercentage());
 		}
 		return new LinkedHashSet<MatchHistory>(result);
 	}
