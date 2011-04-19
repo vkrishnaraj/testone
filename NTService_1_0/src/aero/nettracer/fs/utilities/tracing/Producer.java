@@ -1,16 +1,11 @@
 package aero.nettracer.fs.utilities.tracing;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TimeZone;
 import java.util.Vector;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -19,7 +14,6 @@ import org.hibernate.Session;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.Person;
@@ -34,19 +28,6 @@ public class Producer {
 	private static final int MAX_WAIT = 100;
 	
 	public static Set<MatchHistory> matchClaim(long claimId){
-//		String sql = "from aero.nettracer.fs.model.FsClaim c where c.id = :id";
-//		Query q = null;
-//		Session sess = HibernateWrapper.getSession().openSession();
-//		q = sess.createQuery(sql.toString());
-//		q.setParameter("id", claimId);
-//		List<FsClaim> result = q.list();
-//		sess.close();
-//		if(result != null && result.size() > 0){
-//			return matchClaim(result.get(0));
-//		} else {
-//			return null;
-//		}
-		
 		FsClaim claim = TraceWrapper.loadClaimFromCache(claimId);
 		if(claim != null){
 			return matchClaim(claim);

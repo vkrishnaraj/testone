@@ -20,8 +20,6 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class Consumer implements Runnable{
 
-	public static final int INCIDENT = 1;
-	public static final int CLAIM = 2;
 	public static final int MATCH = 3;
 	
 	public static final double MIN_MATCH_PERCENTAGE = 50;
@@ -44,16 +42,10 @@ public class Consumer implements Runnable{
 	
 	private int threadnumber;
 	private int threadtype;
-	private ArrayBlockingQueue<FsClaim> claimQueue;
-	private ArrayBlockingQueue<FsIncident> incidentQueue;
 	private ArrayBlockingQueue<MatchHistory> matchQueue;
 	
 	public Consumer(ArrayBlockingQueue queue, int type, int threadnumber) throws Exception{
-		if(type == CLAIM){
-			claimQueue = queue;
-		} else if (type == INCIDENT){
-			incidentQueue = queue;
-		} else if (type == MATCH){
+		if (type == MATCH){
 			matchQueue = queue;
 		} else {
 			throw new Exception("unable to create consumer");
@@ -67,14 +59,7 @@ public class Consumer implements Runnable{
 	public void run() {
 		while(true){
 			try{
-				if(this.threadtype == CLAIM){
-					FsClaim claim = claimQueue.take();
-					
-					//System.out.println("CLAIM " + threadnumber + ":" + claim.getId());
-				} else if (this.threadtype == INCIDENT){
-					FsIncident incident = incidentQueue.take();
-					//System.out.println("INCIDENT " + threadnumber + ":" + incident.getId());
-				} else if (this.threadtype == MATCH){
+				if (this.threadtype == MATCH){
 					MatchHistory match = matchQueue.take();
 //					System.out.println(matchQueue.size());
 					//System.out.println("consumer " + threadnumber);

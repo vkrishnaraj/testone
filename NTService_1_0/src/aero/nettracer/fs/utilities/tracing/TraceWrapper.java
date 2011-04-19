@@ -14,8 +14,6 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 
 public class TraceWrapper {
-	private static ArrayBlockingQueue<FsIncident> incidentQueue;
-	private static ArrayBlockingQueue<FsClaim> claimQueue;
 	private static ArrayBlockingQueue<MatchHistory> matchQueue;
 	static int maxThreads = 10;
 	
@@ -79,6 +77,38 @@ public class TraceWrapper {
 			return claim;
 		}
 	}
+	
+	public static void saveIncidentToCache(FsIncident inc){
+		if(LOAD_FROM_CACHE){
+			incidentCache.put(inc.getId(), inc);
+		}
+	}
+	
+	public static void saveClaimToCache(FsClaim claim){
+		if(LOAD_FROM_CACHE){
+			claimCache.put(claim.getId(), claim);
+		}
+	}
+	
+	public static void evictIncidentFromCache(long id){
+		if(LOAD_FROM_CACHE){
+			incidentCache.remove(id);
+		}
+	}
+	
+	public static void evictClaimFromCache(long id){
+		if(LOAD_FROM_CACHE){
+			claimCache.remove(id);
+		}
+	}
+	
+	public static void resetIncidentCache(){
+		
+	}
+	
+	public static void resetClaimCache(){
+		
+	}
 
 	public static int getIncidentCacheSize(){
 		return incidentCache.size();
@@ -88,35 +118,6 @@ public class TraceWrapper {
 		return claimCache.size();
 	}
 	
-	public static ArrayBlockingQueue<FsClaim> getClaimQueue(){
-		if(claimQueue == null){
-			claimQueue = new ArrayBlockingQueue<FsClaim>(100000);
-			for (int i=0; i<maxThreads; ++i) {
-				try{
-					Consumer consumer = new Consumer(claimQueue, Consumer.CLAIM, i);
-					new Thread(consumer).start();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-		return claimQueue;
-	}
-
-	public static ArrayBlockingQueue<FsIncident> getIncidentQueue(){
-		if(incidentQueue == null){
-			incidentQueue = new ArrayBlockingQueue<FsIncident>(1000);
-			for (int i=0; i<maxThreads; ++i) {
-				try{
-					Consumer consumer = new Consumer(incidentQueue, Consumer.INCIDENT, i);
-					new Thread(consumer).start();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		}
-		return incidentQueue;
-	}
 
 	public static ArrayBlockingQueue<MatchHistory> getMatchQueue(){
 		if(matchQueue == null){
