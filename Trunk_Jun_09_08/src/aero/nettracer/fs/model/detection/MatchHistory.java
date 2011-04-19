@@ -138,4 +138,15 @@ public class MatchHistory implements Serializable {
 		return createdate;
 	}
 	
+	@Transient
+	public double getMatchPercentage(){
+		double ret = 0;
+		if(this.details != null){
+			for(MatchDetail detail:details){
+				ret += detail.getPercent();
+			}
+		}
+		return ret;
+	}
+	
 }

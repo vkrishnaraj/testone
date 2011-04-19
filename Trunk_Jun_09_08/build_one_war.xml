@@ -298,6 +298,8 @@
 		<jar destfile="${build.dir}/claim_model.jar">
 			<fileset dir="${build.dir}/westjet_web/classes/" >
 				<include name="**/**/aero/nettracer/fs/**/*.*"/>
+				<include name="**/**/com/bagnet/nettracer/tracing/utils/DateUtils.class"/>
+				<include name="**/**/com/bagnet/nettracer/tracing/constant/TracingConstants.class"/>
 			</fileset>
 		</jar>
 	</target>
