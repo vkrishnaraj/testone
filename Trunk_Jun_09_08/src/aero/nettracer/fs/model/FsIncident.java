@@ -28,6 +28,7 @@ public class FsIncident implements Serializable {
 	@Id
 	@GeneratedValue
 	private long id;
+	
 	private long swapId;
 	
 	@Column(unique=true)

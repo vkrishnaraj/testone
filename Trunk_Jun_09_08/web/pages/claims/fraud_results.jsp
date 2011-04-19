@@ -73,7 +73,7 @@
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, a)) {
 %>
               <dd>
-                <a href="claim_resolution.do"><span class="aa">&nbsp;
+                <a href='claim_resolution.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aa">&nbsp;
                     <br />
                     &nbsp;</span>
                   <span class="bb"><bean:message key="menu.claim_payout" /></span>
@@ -121,55 +121,82 @@
                 <h1>
                 	<bean:message key="claim.fraud.primary_results" />
                 </h1>
-            	<table class="form2">
+            	<table class="form2" cellspacing="0" cellpadding="0" >
             		<tr>
             			<td>
-            				<bean:message key="colname.fraudresults.select" />
+            				<b><bean:message key="colname.fraudresults.select" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.reference.id" />
+            				<b><bean:message key="colname.reference.id" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.reference.type" />
+            				<b><bean:message key="colname.reference.type" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.fraudresults.company" />
+            				<b><bean:message key="colname.fraudresults.company" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.fraudresults.claim_date" />
+            				<b><bean:message key="colname.fraudresults.claim_date" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.fraudresults.match_summary" />
+            				<b><bean:message key="colname.fraudresults.match_summary" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.fraudresults.details" />
+            				<b><bean:message key="colname.fraudresults.details" /></b>
             			</td>
             		</tr>
             		<logic:notEmpty name="fraudResultsForm" property="primaryResults" >
 	 	           		<logic:iterate id="pResult" name="fraudResultsForm" property="primaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
-	            			<tr>
-	            				<td><html:checkbox name="pResult" property="selected" disabled="<%= pResult.getClaim2().getAirline().equals(company) %>" /></td>
-	            				<td><bean:write name="pResult" property="claim2.swapId" /></td>
-	            				<td>
-	            					<logic:equal name="pResult" property="claim2.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
-	            						<bean:message key="claim.type.lostdelay" />
-	            					</logic:equal>
-	            					<logic:equal name="pResult" property="claim2.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
-	            						<bean:message key="claim.type.missing" />
-	            					</logic:equal>
-	            					<logic:equal name="pResult" property="claim2.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
-	            						<bean:message key="claim.type.damaged" />
-	            					</logic:equal>
-            					</td>
-	            				<td><bean:write name="pResult" property="claim2.airline" /></td>
-	            				<td><%=pResult.getClaim2().getDisClaimDate(a.getDateformat().getFormat()) %></td>
-	            				<td><bean:write name="pResult" property="matchSummary" /></td>
-	            				<td>
-	            					<a href="fraud_results.do?matchId=<%=pResult.getId() %>">
-	            						<bean:message key="claim.match.details" />
-	            					</a>
-	            				</td>
-	            			</tr>
+	            			<logic:notEmpty name="pResult" property="claim2" >
+		            			<tr>
+		            				<td><html:checkbox name="pResult" property="selected" disabled="<%= pResult.getClaim2().getAirline().equals(company) %>" /></td>
+		            				<td><bean:write name="pResult" property="claim2.swapId" /></td>
+		            				<td>
+		            					<logic:equal name="pResult" property="claim2.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+		            					</logic:equal>
+		            					<logic:equal name="pResult" property="claim2.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.missing" />
+		            					</logic:equal>
+		            					<logic:equal name="pResult" property="claim2.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.damaged" />
+		            					</logic:equal>
+	            					</td>
+		            				<td><bean:write name="pResult" property="claim2.airline" /></td>
+		            				<td><%=pResult.getClaim2().getDisClaimDate(a.getDateformat().getFormat()) %></td>
+		            				<td><bean:write name="pResult" property="matchSummary" /></td>
+		            				<td>
+		            					<a href="fraud_results.do?matchId=<%=pResult.getId() %>">
+		            						<bean:message key="claim.match.details" />
+		            					</a>
+		            				</td>
+		            			</tr>
+	            			</logic:notEmpty>
+	            			<logic:notEmpty name="pResult" property="incident2" >
+		            			<tr>
+		            				<td><html:checkbox name="pResult" property="selected" disabled="<%= pResult.getIncident2().getAirline().equals(company) %>" /></td>
+		            				<td><bean:write name="pResult" property="incident2.swapId" /></td>
+		            				<td>
+		            					<logic:equal name="pResult" property="incident2.incidentType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+		            					</logic:equal>
+		            					<logic:equal name="pResult" property="incident2.incidentType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.missing" />
+		            					</logic:equal>
+		            					<logic:equal name="pResult" property="incident2.incidentType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.damaged" />
+		            					</logic:equal>
+	            					</td>
+		            				<td><bean:write name="pResult" property="incident2.airline" /></td>
+		            				<td><%=pResult.getIncident2().getDisOpenDate(a.getDateformat().getFormat()) %></td>
+		            				<td><bean:write name="pResult" property="matchSummary" /></td>
+		            				<td>
+		            					<a href="fraud_results.do?matchId=<%=pResult.getId() %>">
+		            						<bean:message key="claim.match.details" />
+		            					</a>
+		            				</td>
+		            			</tr>
+	            			</logic:notEmpty>
 	            		</logic:iterate>
             		</logic:notEmpty>
             	</table>
@@ -178,55 +205,82 @@
             	<h1>
             		<bean:message key="claim.fraud.secondary_results" />
             	</h1>
-            	<table class="form2">
+            	<table class="form2" cellspacing="0" cellpadding="0" >
             		<tr>
             			<td>
-            				<bean:message key="colname.fraudresults.select" />
+            				<b><bean:message key="colname.fraudresults.select" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.reference.id" />
+            				<b><bean:message key="colname.reference.id" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.reference.type" />
+            				<b><bean:message key="colname.reference.type" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.fraudresults.company" />
+            				<b><bean:message key="colname.fraudresults.company" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.fraudresults.claim_date" />
+            				<b><bean:message key="colname.fraudresults.claim_date" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.fraudresults.match_summary" />
+            				<b><bean:message key="colname.fraudresults.match_summary" /></b>
             			</td>
             			<td>
-            				<bean:message key="colname.fraudresults.details" />
+            				<b><bean:message key="colname.fraudresults.details" /></b>
             			</td>
             		</tr>
             		<logic:notEmpty name="fraudResultsForm" property="secondaryResults" >
 	            		<logic:iterate id="sResult" name="fraudResultsForm" property="secondaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
-	            			<tr>
-	            				<td><html:checkbox name="sResult" property="selected" disabled="<%= sResult.getClaim1().getAirline().equals(company) %>" /></td>
-	            				<td><bean:write name="sResult" property="claim1.swapId" /></td>
-	            				<td>
-	            					<logic:equal name="sResult" property="claim1.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
-	            						<bean:message key="claim.type.lostdelay" />
-	            					</logic:equal>
-	            					<logic:equal name="sResult" property="claim1.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
-	            						<bean:message key="claim.type.missing" />
-	            					</logic:equal>
-	            					<logic:equal name="sResult" property="claim1.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
-	            						<bean:message key="claim.type.damaged" />
-	            					</logic:equal>
-            					</td>
-	            				<td><bean:write name="sResult" property="claim1.airline" /></td>
-	            				<td><%=sResult.getClaim2().getDisClaimDate(a.getDateformat().getFormat()) %></td>
-	            				<td><bean:write name="sResult" property="matchSummary" /></td>
-	            				<td>
-	            					<a href="fraud_results.do?matchId=<%=sResult.getId() %>">
-	            						<bean:message key="claim.match.details" />
-									</a>
-								</td>
-	            			</tr>
+	            			<logic:notEmpty name="sResult" property="claim1" >
+		            			<tr>
+		            				<td><html:checkbox name="sResult" property="selected" disabled="<%= sResult.getClaim1().getAirline().equals(company) %>" /></td>
+		            				<td><bean:write name="sResult" property="claim1.swapId" /></td>
+		            				<td>
+		            					<logic:equal name="sResult" property="claim1.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+		            					</logic:equal>
+		            					<logic:equal name="sResult" property="claim1.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.missing" />
+		            					</logic:equal>
+		            					<logic:equal name="sResult" property="claim1.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.damaged" />
+		            					</logic:equal>
+	            					</td>
+		            				<td><bean:write name="sResult" property="claim1.airline" /></td>
+		            				<td><%=sResult.getClaim2().getDisClaimDate(a.getDateformat().getFormat()) %></td>
+		            				<td><bean:write name="sResult" property="matchSummary" /></td>
+		            				<td>
+		            					<a href="fraud_results.do?matchId=<%=sResult.getId() %>">
+		            						<bean:message key="claim.match.details" />
+										</a>
+									</td>
+		            			</tr>
+	            			</logic:notEmpty>
+	            			<logic:notEmpty name="sResult" property="incident1" >
+		            			<tr>
+		            				<td><html:checkbox name="sResult" property="selected" disabled="<%= sResult.getIncident1().getAirline().equals(company) %>" /></td>
+		            				<td><bean:write name="sResult" property="incident1.swapId" /></td>
+		            				<td>
+		            					<logic:equal name="sResult" property="incident1.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+		            					</logic:equal>
+		            					<logic:equal name="sResult" property="incident.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.missing" />
+		            					</logic:equal>
+		            					<logic:equal name="sResult" property="incident1.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.damaged" />
+		            					</logic:equal>
+	            					</td>
+		            				<td><bean:write name="sResult" property="incident1.airline" /></td>
+		            				<td><%=sResult.getIncident2().getDisOpenDate(a.getDateformat().getFormat()) %></td>
+		            				<td><bean:write name="sResult" property="matchSummary" /></td>
+		            				<td>
+		            					<a href="fraud_results.do?matchId=<%=sResult.getId() %>">
+		            						<bean:message key="claim.match.details" />
+										</a>
+									</td>
+		            			</tr>
+	            			</logic:notEmpty>
 	            		</logic:iterate>
             		</logic:notEmpty>
             	</table>

@@ -6,6 +6,9 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,6 +22,9 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Segment;
+import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
@@ -189,24 +195,51 @@ public class ModifyClaimAction extends CheckedAction {
 			ClaimRemote remote = ConnectionUtil.getClaimRemote();
 			long remoteClaimId = 0;
 			if (remote != null) {
-//				FsClaim newClaim = ClaimUtils.createFsClaim(claim);
 				FsClaim newClaim = new FsClaim();
 				BeanUtils.copyProperties(newClaim, claim);
+				LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
+				newClaim.setSegments(segs);
+				
+				LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
+				newClaim.setClaimants(pers);
+				
+				newClaim.getIncident().setClaim(newClaim);
+				for (Person p: claim.getClaimants()) {
+					p.setClaim(newClaim);
+					pers.add(p);
+				}
+				
+				for (Segment s: claim.getSegments()) {
+					s.setClaim(newClaim);
+					segs.add(s);
+				}
+				
 				remoteClaimId = remote.insertClaim(newClaim);
+				
+				claim = ClaimDAO.loadClaim(claim.getId());
 				claim.setSwapId(remoteClaimId);
 				ClaimDAO.saveClaim(claim);
 				logger.info("Claim saved to central services: " + remoteClaimId);
 
 				// 3. submit the claim for tracing
-				submitClaim(remoteClaimId);
-				
+				Set<MatchHistory> results = submitClaim(remoteClaimId);
+				if (results != null) {
+					session.setAttribute("results", results);
+					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
+					return null;
+				}
 			}
 			
 		} else if (request.getParameter("submit") != null) {
 			
 			// 1. submit the claim for tracing
 			if (claim.getSwapId() > 0) {
-				submitClaim(claim.getSwapId());
+				Set<MatchHistory> results = submitClaim(claim.getSwapId());
+				if (results != null) {
+					session.setAttribute("results", results);
+					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
+					return null;
+				}
 			}
 			
 		} else if (request.getParameter("error") != null) {
@@ -288,14 +321,17 @@ public class ModifyClaimAction extends CheckedAction {
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
 	}
 	
-	private void submitClaim(long fsClaimId) {
+	private Set<MatchHistory> submitClaim(long fsClaimId) {
 		if (fsClaimId <= 0) {
-			return;
+			return null;
 		}
 		ClaimRemote remote = ConnectionUtil.getClaimRemote();
+		Set<MatchHistory> results = null;
 		if (remote != null) {
-			remote.traceClaim(fsClaimId);
+			results = remote.traceClaim(fsClaimId);
+			
 		}
+		return results;
 	}
 	
 }

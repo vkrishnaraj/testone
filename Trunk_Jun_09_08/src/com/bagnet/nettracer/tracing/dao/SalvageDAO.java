@@ -81,7 +81,7 @@ public class SalvageDAO {
 		return success;
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static Set getSalvagesFromSearchForm(SalvageSearchForm form, Agent agent) {
 		LinkedHashSet results = null;
 		Session session = null;
@@ -124,8 +124,8 @@ public class SalvageDAO {
 	}
 
 	private static Criteria getSalvageDateCriteria(SalvageSearchForm form, Agent agent, Criteria criteria) {
-		Date startDate = DateUtils.convertToDate(form.getS_createtime(), "", agent.getCurrentlocale());
-		Date endDate = DateUtils.convertToDate(form.getE_createtime(), "", agent.getCurrentlocale());
+		Date startDate = DateUtils.convertToDate(form.getS_createtime(), agent.getDateformat().getFormat(), agent.getCurrentlocale());
+		Date endDate = DateUtils.convertToDate(form.getE_createtime(), agent.getDateformat().getFormat(), agent.getCurrentlocale());
 		
 		if (startDate != null && endDate != null) {
 			criteria.add(Expression.between("salvageDate", startDate, endDate));

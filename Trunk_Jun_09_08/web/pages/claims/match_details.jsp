@@ -46,7 +46,7 @@
                 <h1>
                 	<bean:message key="colname.claim.id" />:&nbsp;<bean:write name="claimId" scope="request" />
                 </h1>
-            	<table class="form2">
+            	<table class="form2" cellspacing="0" cellpadding="0" > 
             		<tr>
             			<td>
             				<b><bean:message key="claim.match.detail.item" /></b>

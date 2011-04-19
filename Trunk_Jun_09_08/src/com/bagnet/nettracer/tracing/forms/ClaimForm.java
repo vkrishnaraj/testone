@@ -39,7 +39,6 @@ public final class ClaimForm extends ActionForm {
 	private String mod_claim_reason2;
 	
 	private Person claimant = null;
-//	private FsAddress reservationAddress = null;
 	
 	public Claim getClaim() {
 		return claim;
@@ -101,6 +100,10 @@ public final class ClaimForm extends ActionForm {
 		this.mod_claim_reason2 = mod_claim_reason2;
 	}
 	
+	public String getDispCreateTime() {
+		return DateUtils.formatDate(claim.getClaimDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+	}
+	
 	public String getHomePhone() {
 		return getPhoneNumber(Phone.HOME);
 	}
@@ -155,77 +158,68 @@ public final class ClaimForm extends ActionForm {
 	}
 	
 	public String getAddress1() {
-		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getAddress1();
+		return getClaimantAddress().getAddress1();
 	}
 	
 	public void setAddress1(String address1) {
-		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setAddress1(address1);
+		getClaimantAddress().setAddress1(address1);
 	}
 
 	public String getAddress2() {
-		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getAddress2();
+		return getClaimantAddress().getAddress2();
 	}
 	
 	public void setAddress2(String address2) {
-		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setAddress2(address2);
+		getClaimantAddress().setAddress2(address2);
 	}
 
 	public String getCity() {
-		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getCity();
+		return getClaimantAddress().getCity();
 	}
 	
 	public void setCity(String city) {
-		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setCity(city);
+		getClaimantAddress().setCity(city);
 	}
 
 	public String getState() {
-		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getState();
+		return getClaimantAddress().getState();
 	}
 	
 	public void setState(String state) {
-		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setState(state);
+		getClaimantAddress().setState(state);
 	}
 
 	public String getProvince() {
-		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getProvince();
+		return getClaimantAddress().getProvince();
 	}
 	
 	public void setProvince(String province) {
-		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setProvince(province);
+		getClaimantAddress().setProvince(province);
 	}
 	
 	public String getZip() {
-		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getZip();
+		return getClaimantAddress().getZip();
 	}
 	
 	public void setZip(String zip) {
-		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setZip(zip);
+		getClaimantAddress().setZip(zip);
 	}
 
 	public String getCountry() {
-		return getClaimant().getAddresses().toArray(new FsAddress[0])[0].getCountry();
+		return getClaimantAddress().getCountry();
 	}
 	
 	public void setCountry(String country) {
-		getClaimant().getAddresses().toArray(new FsAddress[0])[0].setCountry(country);
+		getClaimantAddress().setCountry(country);
 	}
 	
-//	public String getSsNumber() {
-//		String toReturn = "";
-//		if ()
-//		return getClaimant().getSocialSecurity();
-//	}
-//	
-//	public void setSsNumber(String ssNumber) {
-//		getClaimant().setSocialSecurity(ssNumber);
-//	}
+	public String getDispClaimDate() {
+		return claim.getDisClaimDate(_DATEFORMAT);
+	}
 	
-//	private FsAddress getReservationAddress() {
-//		if (reservationAddress == null) {
-//			reservationAddress = claim.getIncident().getReservation().getPassengers().toArray(new Person[0])[0].getAddresses().toArray(new FsAddress[0])[0];
-//		}
-//		return reservationAddress;
-//	}
+	private FsAddress getClaimantAddress() {
+		return getClaimant().getAddresses().toArray(new FsAddress[0])[0];
+	}
 	
 	private String getPhoneNumber(int type) {
 		return getPhone(type).getPhoneNumber();
@@ -240,12 +234,17 @@ public final class ClaimForm extends ActionForm {
 	}
 	
 	private Phone getPhone(int type) {
-		Phone phone = new Phone();
 		
-//		Person[] people = claim.getClaimants().toArray(new Person[0]);
 		Person person = getClaimant();
 		ArrayList<Phone> phones = new ArrayList<Phone>(person.getPhones());
 
+		Phone phone = new Phone();
+		for (Phone p: phones) {
+			if (p.getType() == 0) {
+				phone = p;
+				break;
+			}
+		}
 		phone.setType(type);
 		phone.setPerson(person);
 		phone.setIncident(claim.getIncident());

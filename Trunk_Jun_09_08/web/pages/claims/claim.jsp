@@ -1,3 +1,4 @@
+<%@page import="com.bagnet.nettracer.tracing.forms.ClaimForm"%>
 <%@ page language="java" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.ExpensePayout" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
@@ -245,6 +246,11 @@
                         	<br />
                         	<html:text name="claimForm" property="claim.id" size="5" styleClass="textfield" disabled="true" />
                         </td>
+                        <td>
+                        	<bean:message key="colname.claim.date" />
+                        	<br />
+                        	<html:text property="dispCreateTime" styleClass="textfield" disabled="true" />
+                        </td>
                       	<td>
                       		<bean:message key="header.claim_type"/>
                       		<br />
@@ -274,7 +280,7 @@
                         </td>
                       </tr>
                       <tr>
-                      	<td>
+                      	<td colspan="2">
                           <bean:message key="colname.claim_amount" />
                           <br />
                           <html:text property="claim.amountClaimed" size="13" maxlength="13" styleClass="textfield" />
@@ -289,7 +295,7 @@
                       </tr>
               <jsp:include page="/pages/claims/claim_sensitive_incl.jsp" />
                       <tr>
-                        <td colspan="3">
+                        <td colspan="4">
                           <bean:message key="colname.reason" />
                           &nbsp;(
                           <bean:message key="colname.for_audit" />
@@ -539,36 +545,112 @@
                     </h1>
 					<table class="form2" cellpadding="0" cellspacing="0">
 					<tr>
-						<td colspan="5">
-	                   		<bean:message key="header.reservation.payment.info" />
-						</td>
-					</tr>
-					<tr>
-						<td>
+						<td colspan=2>
 							<bean:message key="colname.last_name.req" />
 							<br/>
-							<html:text name="claimForm" property="claim.incident.reservation.ccLName" size="20" maxlength="20" />
+							<html:text name="claimForm" property="claim.incident.reservation.purchaser.lastName" size="20" maxlength="20" styleClass="textfield" />
 						</td>
-						<td >
+						<td colspan=2>
 							<bean:message key="colname.first_name.req" />
 							<br/>
-							<html:text name="claimForm" property="claim.incident.reservation.ccFName" size="20" maxlength="20" />
+							<html:text name="claimForm" property="claim.incident.reservation.purchaser.firstName" size="20" maxlength="20" styleClass="textfield" />
 						</td>
-						<td colspan="2">
+						<td>
 			              <bean:message key="colname.mid_initial" />
 			              <br>
-			              <html:text name="claimForm" property="claim.incident.reservation.ccMName" size="1" maxlength="1" styleClass="textfield" />
+			              <html:text name="claimForm" property="claim.incident.reservation.purchaser.middleName" size="1" maxlength="1" styleClass="textfield" />
 			            </td>
 					</tr>
 					<!-- START RESERVATION ADDRESS INFO -->
 					<tr>
-						<td colspan="3">
-							address goes here
-						</td>
-					</tr>
+                <td colspan=2>
+                  <bean:message key="colname.street_addr1.req" />
+                  <br>
+                  <html:text name="claimForm" property="claim.incident.reservation.billingAddress.address1" size="40" maxlength="50" styleClass="textfield" />
+                </td>
+                <td colspan=3>
+                  <bean:message key="colname.street_addr2" />
+                  <br>
+                  <html:text name="claimForm" property="claim.incident.reservation.billingAddress.address2" size="35" maxlength="50" styleClass="textfield" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <bean:message key="colname.city.req" />
+                  <br>
+                  <html:text name="claimForm" property="claim.incident.reservation.billingAddress.city" size="15" maxlength="50" styleClass="textfield" />
+                </td>
+                <td>
+                  <bean:message key="colname.state.req" />
+                  <br />
+                  <logic:equal name="claimForm" property="claim.incident.reservation.billingAddress.country" value="US">
+                    <html:select name="claimForm" property="claim.incident.reservation.billingAddress.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
+                      <html:option value="">
+                        <bean:message key="select.none" />
+                      </html:option>
+                      <html:options collection="statelist" property="value" labelProperty="label" />
+                    </html:select>
+                  </logic:equal>
+                  <logic:equal name="claimForm" property="claim.incident.reservation.billingAddress.country" value="">
+                    <html:select name="claimForm" property="claim.incident.reservation.billingAddress.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
+                      <html:option value="">
+                        <bean:message key="select.none" />
+                      </html:option>
+                      <html:options collection="statelist" property="value" labelProperty="label" />
+                    </html:select>
+                  </logic:equal>
+                  <logic:notEqual name="claimForm" property="claim.incident.reservation.billingAddress.country" value="">
+                    <logic:notEqual name="claimForm" property="claim.incident.reservation.billingAddress.country" value="US">
+                      <html:select name="claimForm" property="claim.incident.reservation.billingAddress.state" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
+                        <html:option value="">
+                          <bean:message key="select.none" />
+                        </html:option>
+                        <html:options collection="statelist" property="value" labelProperty="label" />
+                      </html:select>
+                    </logic:notEqual>
+                  </logic:notEqual>
+                </td>
+                <td>
+                  <bean:message key="colname.province" />
+                  <br />
+                      <logic:equal name="claimForm" property="claim.incident.reservation.billingAddress.country" value="US">
+                  		<html:text name="claimForm" property="claim.incident.reservation.billingAddress.province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
+                      </logic:equal>
+                      <logic:equal name="claimForm" property="claim.incident.reservation.billingAddress.country" value="">
+                  <html:text name="claimForm" property="claim.incident.reservation.billingAddress.province" size="15" maxlength="100" styleClass="textfield" />
+                      </logic:equal>
+                      <logic:notEqual name="claimForm" property="claim.incident.reservation.billingAddress.country" value="">
+                        <logic:notEqual name="claimForm" property="claim.incident.reservation.billingAddress.country" value="US">
+                  <html:text name="claimForm" property="claim.incident.reservation.billingAddress.province" size="15" maxlength="100" styleClass="textfield" />
+                         </logic:notEqual>
+                      </logic:notEqual>
+                </td>
+                <td>
+                  <bean:message key="colname.zip.req" />
+                  <br>
+                  <html:text name="claimForm" property="claim.incident.reservation.billingAddress.zip" size="15" maxlength="11" styleClass="textfield" />
+                </td>
+                <td>
+                  <bean:message key="colname.country" />
+                  <br>
+                  <html:select name="claimForm" property="claim.incident.reservation.billingAddress.country" styleClass="dropdown" onchange="checkstate(this,this.form,'state', 'province');">
+                    <html:option value="">
+                      <bean:message key="select.none" />
+                    </html:option>
+                    <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
+                  </html:select>
+                </td>
+              </tr>
+             <tr>
+             	<td colspan="5">
+             		<bean:message key="colname.email" />
+             		<br />
+             		<html:text name="claimForm" property="claim.incident.reservation.purchaser.emailAddress" size="35" maxlength="100" styleClass="textfield" />
+             	</td>
+             </tr>
 					<!-- END RESERVATION ADDRESS INFO -->
 					<tr>
-						<td>
+						<td colspan=2>
 							<bean:message key="claim.colname.payment.type" />
 							<br />
 							<html:select property="claim.incident.reservation.formOfPayment" styleClass="dropdown">
@@ -578,7 +660,7 @@
 								<html:option value="2"><bean:message key="payment.type.cc" /></html:option>
 							</html:select>
                         </td>
-						<td>
+						<td colspan=2>
                           <bean:message key="claim.colname.amount.paid" />
                           <br />
                           <html:text property="claim.incident.reservation.ticketAmount" size="13" maxlength="13" styleClass="textfield" />
@@ -592,7 +674,7 @@
                         </td>
 					</tr>
 					<tr>
-						<td>
+						<td colspan=2>
 							<bean:message key="claim.colname.cc_type" />
 							<br/>
 							<html:select name="claimForm" property="claim.incident.reservation.ccType" >
@@ -602,10 +684,10 @@
 								<html:options property="creditCardTypes"  />
 							</html:select>
 						</td>
-						<td>
+						<td colspan=2>
 							<bean:message key="claim.colname.cc_num" />
 							<br/>
-							<html:text name="claimForm" property="claim.incident.reservation.redactedCcNumber" size="20" maxlength="16" />
+							<html:text name="claimForm" property="claim.incident.reservation.redactedCcNumber" size="20" maxlength="16" styleClass="textfield" />
 						</td>
 						<td>
 							<bean:message key="claim.colname.cc_expdate" />
@@ -626,14 +708,13 @@
 							
 						</td>
 					</tr>
-					<tr><td colspan="4"><br/></td></tr>
 					<tr>
-						<td colspan="4">
+						<td colspan="5">
 							<bean:message key="header.reservation.info" />
 						</td>
 					</tr>
 					<tr>
-						<td colspan="4">
+						<td colspan="5">
 							<html:textarea name="claimForm" property="claim.incident.reservation.pnrData.pnrData" cols="80" rows="10" /> 
 						</td>
 					</tr>
@@ -642,9 +723,11 @@
                     <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />
                     </html:submit>
-                    &nbsp;&nbsp;
-                    <html:submit property="submit" styleId="button">
-                      <bean:message key="button.submit" />
-                    </html:submit>
+                    <logic:greaterThan name="claimForm" property="claim.swapId" value="0">
+	                    &nbsp;&nbsp;
+	                    <html:submit property="submit" styleId="button">
+	                      <bean:message key="button.submit" />
+	                    </html:submit>
+                    </logic:greaterThan>
                     </center>
                   </html:form>

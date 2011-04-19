@@ -839,4 +839,8 @@
         <put name="center"   value="/pages/claims/match_details.jsp"/>
     </definition>
 
+    <definition name="search_claim" extends="user_menu">
+        <put name="center"   value="/pages/claims/search_claim.jsp"/>
+    </definition>
+
  </tiles-definitions>

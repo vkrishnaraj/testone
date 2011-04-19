@@ -870,6 +870,7 @@ public class TracingConstants {
 	public final static String CLAIM_CREATE_NEW = "create_claim";
 	public final static String CLAIM_FRAUD_RESULTS = "fraud_results";
 	public final static String CLAIM_MATCH_DETAILS = "match_details";
+	public final static String CLAIM_SEARCH = "search_claim";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

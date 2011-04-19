@@ -68,6 +68,9 @@ public class FsClaim implements Serializable {
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL)
 	private aero.nettracer.fs.model.FsIncident incident;
+	
+	@Transient
+	protected Person claimant = null;
 		
 	public FsClaim(long id){
 		this.id = id;
@@ -250,6 +253,24 @@ public class FsClaim implements Serializable {
 	@Transient
 	public String getDisClaimDate(String dateFormat) {
 		return DateUtils.formatDate(getClaimDate(), dateFormat, "", null);
+	}
+	
+	@Transient
+	public String getDisClaimantName() {
+		String toReturn = "";
+		toReturn += getClaimant().getLastName() + ", " + getClaimant().getFirstName();
+		if (getClaimant().getMiddleName() != null && !getClaimant().getMiddleName().isEmpty()) {
+			toReturn += ", " + getClaimant().getMiddleName();
+		}
+		return toReturn;
+	}
+	
+	@Transient
+	public Person getClaimant() {
+		if (claimant == null) {
+			claimant = claimants.toArray(new Person[0])[0];
+		}
+		return claimant;
 	}
 	
 }
