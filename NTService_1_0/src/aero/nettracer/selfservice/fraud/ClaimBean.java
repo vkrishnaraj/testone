@@ -25,6 +25,10 @@ import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.Blacklist;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.Whitelist;
+import aero.nettracer.fs.utilities.GeoCode;
+import aero.nettracer.fs.utilities.GeoLocation;
+import aero.nettracer.fs.utilities.InternationalException;
+import aero.nettracer.fs.utilities.tracing.Consumer;
 import aero.nettracer.fs.utilities.tracing.Producer;
 import aero.nettracer.fs.utilities.tracing.TraceWrapper;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
@@ -56,7 +60,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 	}
 	
 	public synchronized long insertClaim(FsClaim claim){
-		FsClaim toSubmit = resetId(claim);
+		FsClaim toSubmit = resetIdAndgeocode(claim);
 		
 		Transaction t = null;
 		Session sess = null;
@@ -138,7 +142,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 	}	
 
 	
-	public static FsClaim resetId(FsClaim claim){
+	public static FsClaim resetIdAndgeocode(FsClaim claim){
 		if(claim != null){
 			long temp = claim.getSwapId();
 			claim.setSwapId(claim.getId());
@@ -205,7 +209,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 		if(persons != null){
 			for(Person person:persons){
 				person.setId(0);
-				person.setAddresses(resetAddressId(person.getAddresses()));
+				person.setAddresses(resetAddressIdAndGeocode(person.getAddresses()));
 				person.setPhones(resetPhoneId(person.getPhones()));
 			}
 		}
@@ -243,10 +247,29 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 		return phones;
 	}
 	
-	public static Set<FsAddress> resetAddressId(Set<FsAddress> addresses){
+	public static Set<FsAddress> resetAddressIdAndGeocode(Set<FsAddress> addresses){
 		if(addresses != null){
 			for(FsAddress address:addresses){
+				
 				address.setId(0);
+				// GEOCODING ALL ADDRESSES POSSIBLE ON SAVE
+				// Note: Because this is not persisted to the client, 
+				// it must happen every time.
+				try {					
+					GeoLocation loc = GeoCode.locate(address.getAddress1(), address.getCity(), address.getState(), address.getZip(), address.getProvince(), address.getCountry(), null);
+					
+					if (loc != null) {
+						address.setLattitude(loc.getLatitude());
+						address.setLongitude(loc.getLongitude());
+					}
+				} catch (InternationalException e) {
+					// Ignore; not pertinent at this time.
+				} catch (Exception e) {
+					// Log error only
+					e.printStackTrace();
+				}
+
+				
 			}
 		}
 		return addresses;

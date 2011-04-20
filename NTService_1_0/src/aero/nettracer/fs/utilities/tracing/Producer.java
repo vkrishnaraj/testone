@@ -12,20 +12,25 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
-import com.bagnet.nettracer.tracing.utils.DateUtils;
-
+import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.utilities.GeoCode;
+import aero.nettracer.fs.utilities.GeoLocation;
+import aero.nettracer.fs.utilities.InternationalException;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
+
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class Producer {
 
 	private static boolean debug = false;
 	private static final int MAX_WAIT = 100;
+	public static final double MILE_SEARCH_RADIUS = 5;
 	
 	public static Set<MatchHistory> matchClaim(long claimId){
 		FsClaim claim = TraceWrapper.loadClaimFromCache(claimId);
@@ -37,6 +42,7 @@ public class Producer {
 	}
 
 	//for now we are not to remove any match histories
+	@Deprecated
 	private static void removeMatchHistory(long claimId){
 		String personSql = "delete from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
 		"and (m.claim1.id = :id or m.claim2.id = :id)";
@@ -204,6 +210,55 @@ public class Producer {
 					"where ccNumber = \'" + claim.getIncident().getReservation().getCcNumLastFour() +"\' ";
 		}
 
+		Set<FsAddress> addresses = Consumer.getAddresses(claim);
+		if (addresses != null && addresses.size() > 0) {
+			sql += " union select null as c1_id, " +
+			"c2.id as c2_id, " +
+			"i2.id as i2_id, " +
+			"c3.id as c3_id, " +
+			"i3.id as i3_id, " +
+			"null as c4_id, " +
+			"null as i4_id, " +
+			"'geo' as type " +
+			"from address ad " + 
+      "left outer join person p on ad.person_id = p.id " +
+            "left outer join claim c1 on p.claim_id = c1.id " +
+            "left outer join incident i2 on p.incident_id = i2.id " +
+                  "left outer join claim c2 on i2.claim_id = c2.id " +
+            "left outer join reservation r3 on p.reservation_id = r3.id " +
+                  "left outer join incident i3 on r3.incident_id = i3.id " +
+                  "left outer join claim c3 on i3.claim_id = c3.id " +
+                  "where 1=0 ";
+
+			for (FsAddress a: addresses) {
+				
+				// If it was geocoded, compare against other geocoded items.
+				if (a.getLattitude() != 0) {
+					// If the address has been geocoded we will calculate
+					// the area (min/max latitude and longitude) in which to
+					// search.
+					double latRadius = GeoCode.getLatRadius(MILE_SEARCH_RADIUS);
+					double longRadius = GeoCode.getLongRadius(a.getLongitude(), MILE_SEARCH_RADIUS);
+					double y1 = a.getLattitude() - latRadius;
+					double y2 = a.getLattitude() + latRadius;
+					double x1 = a.getLongitude() - longRadius;
+					double x2 = a.getLongitude() + longRadius;
+
+					// If there is a latitude or longitude.
+					sql += "or (lattitude >= " + y1 + " and lattitude <= " + y2 + " and longitude <= " + x2+ " and longitude >= " + x1 + ") ";
+
+					// Compare against non-geocoded items.
+					// Country / City
+					if (a.getCity() != null && a.getCountry() != null) {
+						sql += "or (lattitude = 0 and longitude = 0 and ad.country = \'" + a.getCountry() + "\' and ad.city = \'" + a.getCity() + "\' ) ";
+					}
+				} else {
+					// This else is if the address wasn't geocoded.
+					sql += "or (ad.country = \'" + a.getCountry() + "\' and ad.city = \'" + a.getCity() + "\' ) ";
+				}
+			}		
+		}
+		
 		if(debug)System.out.println(sql);
 		
 		SQLQuery pq = null;
