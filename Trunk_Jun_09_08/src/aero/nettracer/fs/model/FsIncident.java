@@ -50,6 +50,9 @@ public class FsIncident implements Serializable {
 	private int itinComplexity;
 	private String incidentDescription;
 	private String airline;
+	
+	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class, cascade = CascadeType.ALL) 
+	private File file;
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.Reservation.class, cascade = CascadeType.ALL, mappedBy = "incident")
 	private Reservation reservation;
@@ -225,6 +228,14 @@ public class FsIncident implements Serializable {
 	
 	private String getDisDate(Date date, String dateFormat) {
 		return DateUtils.formatDate(date, dateFormat, "", null);
+	}
+
+	public void setFile(File file) {
+		this.file = file;
+	}
+
+	public File getFile() {
+		return file;
 	}
 	
 }

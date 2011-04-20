@@ -51,8 +51,11 @@ public class FsClaim implements Serializable {
 	protected String ntIncidentId;
 	protected int claimProrateId;
 	protected int statusId;
+	
+	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class, cascade = CascadeType.ALL) 
+	protected File file;
 
-//	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	//	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
@@ -248,6 +251,14 @@ public class FsClaim implements Serializable {
 
 	public void setStatusId(int statusId) {
 		this.statusId = statusId;
+	}
+	
+	public File getFile() {
+		return file;
+	}
+
+	public void setFile(File file) {
+		this.file = file;
 	}
 	
 	@Transient

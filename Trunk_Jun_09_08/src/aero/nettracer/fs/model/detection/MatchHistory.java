@@ -18,6 +18,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
+import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
 
@@ -35,17 +36,11 @@ public class MatchHistory implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private Set<MatchDetail> details;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
-	private FsClaim claim1;
+	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class)
+	private File file1;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
-	private FsClaim claim2;
-	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
-	private FsIncident incident1;
-	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
-	private FsIncident incident2;
+	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class)
+	private File file2;
 	
 	@Transient
 	private boolean selected;
@@ -71,22 +66,6 @@ public class MatchHistory implements Serializable {
 
 	public void setDetails(Set<MatchDetail> details) {
 		this.details = details;
-	}
-
-	public FsClaim getClaim1() {
-		return claim1;
-	}
-
-	public void setClaim1(FsClaim claim1) {
-		this.claim1 = claim1;
-	}
-
-	public FsClaim getClaim2() {
-		return claim2;
-	}
-
-	public void setClaim2(FsClaim claim2) {
-		this.claim2 = claim2;
 	}
 	
 	public boolean isSelected() {
@@ -114,22 +93,6 @@ public class MatchHistory implements Serializable {
 
 	public Vector getTraceCount() {
 		return traceCount;
-	}
-
-	public void setIncident1(FsIncident incident1) {
-		this.incident1 = incident1;
-	}
-
-	public FsIncident getIncident1() {
-		return incident1;
-	}
-
-	public void setIncident2(FsIncident incident2) {
-		this.incident2 = incident2;
-	}
-
-	public FsIncident getIncident2() {
-		return incident2;
 	}
 
 	public void setCreatedate(Date createdate) {
@@ -163,5 +126,21 @@ public class MatchHistory implements Serializable {
 	public void setOverallScore(double overallScore) {
   	this.overallScore = overallScore;
   }
+
+	public void setFile1(File file1) {
+		this.file1 = file1;
+	}
+
+	public File getFile1() {
+		return file1;
+	}
+
+	public void setFile2(File file2) {
+		this.file2 = file2;
+	}
+
+	public File getFile2() {
+		return file2;
+	}
 	
 }
