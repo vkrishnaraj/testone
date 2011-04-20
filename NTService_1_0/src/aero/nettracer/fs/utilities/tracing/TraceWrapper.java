@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.detection.MatchHistory;
@@ -19,9 +20,39 @@ public class TraceWrapper {
 	
 	private static ConcurrentHashMap<Long, FsIncident> incidentCache = new ConcurrentHashMap<Long, FsIncident>(3000);
 	private static ConcurrentHashMap<Long, FsClaim> claimCache = new ConcurrentHashMap<Long, FsClaim>(3000);
+	private static ConcurrentHashMap<Long, File> fileCache = new ConcurrentHashMap<Long, File>(3000);
 	
 	private static boolean LOAD_FROM_CACHE = false;
 	private static int MAX_CACHE_SIZE = 1000000;
+	
+	public static File loadFile(long fileId){
+		String sql = "from aero.nettracer.fs.model.File f where f.id = :id";
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		q.setParameter("id", fileId);
+		List<File> result = q.list();
+		sess.close();
+		if(result != null && result.size() > 0){
+			return result.get(0);
+		} else {
+			return null;
+		}
+	}
+	
+	public static File loadFileFromCache(Long id){
+		if(LOAD_FROM_CACHE && fileCache.containsKey(id)){
+//			System.out.println("i cache");
+			return fileCache.get(id);
+		} else {
+			 File file = loadFile(id);
+			if(LOAD_FROM_CACHE && fileCache.size() < MAX_CACHE_SIZE){
+				fileCache.put(id, file);
+			}
+			return file;
+		}
+	}
+	
 	
 	public static FsClaim loadClaim(long claimId){
 		String sql = "from aero.nettracer.fs.model.FsClaim c where c.id = :id";

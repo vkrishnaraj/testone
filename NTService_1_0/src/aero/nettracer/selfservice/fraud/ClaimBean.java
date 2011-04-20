@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 import aero.nettracer.fs.model.Bag;
+import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
@@ -47,74 +48,78 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 		return "echo: " + s;
 	}
 	
-	public Set<MatchHistory> traceClaim(long claimId){
-		return Producer.matchClaim(claimId);
+	public Set<MatchHistory> traceFile(long fileId){
+		return Producer.matchFile(fileId);
 	}
 	
-	public Set<MatchHistory> traceIncident(FsIncident incident){
-		return null;
-	}
-	
-	public long insertIncident(FsIncident incident){
-		return -1;
-	}
-	
-	public synchronized long insertClaim(FsClaim claim){
-		FsClaim toSubmit = resetIdAndgeocode(claim);
-		
+	public long insertFile(File file){
 		Transaction t = null;
 		Session sess = null;
 		try{
+			File toSubmit = resetIdAndgeocode(file);
+			
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			if(toSubmit.getId() > 0){		
 				if(debug)System.out.println("delete and save");
-				FsClaim toDelete = (FsClaim)sess.load(FsClaim.class,toSubmit.getId());
-//				sess.lock(toDelete, LockMode.NONE);
-				if(toSubmit.getIncident() != null){
+				File toDelete = (File)sess.load(File.class,toSubmit.getId());
+				if(toDelete.getClaim() != null){
+					FsClaim claim = toDelete.getClaim();
+					claim.setFile(null);
+					if(claim.getIncident() != null){
+						FsIncident inc = toDelete.getClaim().getIncident();
+						claim.getIncident().setFile(null);
+					}
+					sess.delete(claim);
+					toDelete.setClaim(toSubmit.getClaim());
+					if(toDelete.getClaim() != null){
+					toDelete.getClaim().setFile(toDelete);
+					}
+					toDelete.setIncident(toSubmit.getIncident());
 					if(toDelete.getIncident() != null){
-						toSubmit.getIncident().setId(toDelete.getIncident().getId());
-////						sess.delete(toDelete.getIncident());
-////						toDelete.setIncident(null);
-////						sess.save(toSubmit.getIncident());
+					toDelete.getIncident().setFile(toDelete);
+					}
+					
+					
+				} else if (toDelete.getIncident() != null){
+					FsIncident inc = toDelete.getIncident();
+					inc.setFile(null);
+					sess.delete(inc);
+					toDelete.setIncident(toSubmit.getIncident());
+					if(toDelete.getIncident() != null){
+					toDelete.getIncident().setFile(toDelete);
 					}
 				}
 				
-
-				sess.delete(toDelete);
-				// t.commit();
-				// t = sess.beginTransaction();
-				BeanUtils.copyProperties(toSubmit, toDelete);
-
-				// 2. save the claim on central services
-				if (toDelete.getClaimants() != null)
-					for (Person p : toDelete.getClaimants()) {
-						p.setClaim(toDelete);
-					}
-
-				if (toDelete.getSegments() != null)
-					for (Segment s : toDelete.getSegments()) {
-						s.setClaim(toDelete);
-					}
-
-				if (toDelete.getIncident() != null)
-					toDelete.getIncident().setClaim(toDelete);
-
-				sess.saveOrUpdate(toDelete);
-				// sess.merge(toSubmit);
-				// t.commit();
+//				toDelete.setClaim(null);
+//				toDelete.setIncident(null);
+//				sess.saveOrUpdate(toDelete);
+//				t.commit();
 //				sess.evict(toDelete);
-//				sess.flush();
-				t.commit();
-				t = sess.beginTransaction();
 //				sess.close();
 //				sess = HibernateWrapper.getSession().openSession();
+//				t = sess.beginTransaction();
+				
+				
+//				File toAdd = (File)sess.load(File.class,toSubmit.getId());
+//				toAdd.setClaim(toSubmit.getClaim());
+//				if(toAdd.getClaim() != null){
+//				toAdd.getClaim().setFile(toAdd);
+//				}
+//				toAdd.setIncident(toSubmit.getIncident());
+//				if(toAdd.getIncident() != null){
+//				toAdd.getIncident().setFile(toAdd);
+//				}
+//				sess.saveOrUpdate(toAdd);
+//				t.commit();
+				
+				sess.saveOrUpdate(toDelete);
+				t.commit();
+				
 			} else {
-			if(debug)System.out.println("saving:" + toSubmit.getId());
-			sess.saveOrUpdate(toSubmit);
-
-
-			t.commit();
+				if(debug)System.out.println("saving:" + toSubmit.getId());
+				sess.saveOrUpdate(toSubmit);
+				t.commit();
 			}
 			return toSubmit.getId();
 		} catch (Exception e) {
@@ -142,27 +147,41 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 	}	
 
 	
-	public static FsClaim resetIdAndgeocode(FsClaim claim){
-		if(claim != null){
-			long temp = claim.getSwapId();
-			claim.setSwapId(claim.getId());
-			claim.setId(temp);
+	public static File resetIdAndgeocode(File file) throws Exception{
+		if(file != null){
+			long temp = file.getSwapId();
+			file.setSwapId(file.getId());
+			file.setId(temp);
 
+			if(file.getClaim() != null && file.getIncident() != null && file.getClaim().getIncident().equals(file.getIncident()) == false){
+				throw new Exception("file incident does not match claim incident");
+			}
+			
+			if(file.getClaim() != null){
+				file.setClaim(resetClaim(file.getClaim()));
+			} else if(file.getIncident() != null){
+				file.setIncident(resetIncident(file.getIncident()));
+			}
+
+			if(debug)System.out.println(file.toString());
+		}
+		return file;
+	}
+	
+	public static FsClaim resetClaim(FsClaim claim){
+		if(claim != null){
+			claim.setId(0);
+			
 			claim.setIncident(resetIncident(claim.getIncident()));
 			claim.setClaimants(resetPersonId(claim.getClaimants()));
 			claim.setSegments(resetSegmentId(claim.getSegments()));
 			claim.setBlacklist(resetBlackListId(claim.getBlacklist()));
-
-			if(debug)System.out.println(claim.toString());
 		}
 		return claim;
 	}
 
 	public static FsIncident resetIncident(FsIncident inc){
 		if(inc != null){
-			long temp = inc.getSwapId();
-//			inc.setSwapId(inc.getId());
-//			inc.setId(temp);
 			inc.setId(0);
 			
 			inc.setReservation(resetReservation(inc.getReservation()));
@@ -333,8 +352,8 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 		}
 
 	@Override
-	public Set<MatchHistory> getClaimMatches(long claimId) {
-		return Producer.getMatchHistoryResult(claimId);
+	public Set<MatchHistory> getFileMatches(long fileId) {
+		return Producer.getMatchHistoryResult(fileId);
 	}
 	
 	public int getIncidentCacheSize(){

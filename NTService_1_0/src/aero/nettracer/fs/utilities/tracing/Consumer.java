@@ -10,6 +10,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
@@ -27,7 +28,7 @@ public class Consumer implements Runnable{
 	
 	public static final int MATCH = 3;
 	
-	public static final double MIN_MATCH_PERCENTAGE = 20;
+	public static final double MIN_MATCH_SCORE = 0;
 	public static final double P_SOUNDEX = 5;
 	public static final double P_METAPHONE = 5;
 	public static final double P_NAME = 5;
@@ -87,19 +88,18 @@ public class Consumer implements Runnable{
 	private static void processMatch(MatchHistory match){
 		try{
 			//process match
-			if(match.getClaim2() != null){
-				if(debug)System.out.println("consumer claim: " + match.getClaim2().getId());
-				match.setClaim2(TraceWrapper.loadClaimFromCache(match.getClaim2().getId()));
+			if(match.getFile2() != null){
+				if(debug)System.out.println("consumer claim: " + match.getFile2().getId());
+				match.setFile2(TraceWrapper.loadFileFromCache(match.getFile2().getId()));
+			} else {
+				throw new Exception("file2 is null");
 			}
-			if(match.getIncident2() != null){
-				if(debug)System.out.println("consume incident: " + match.getIncident2().getId());
-				match.setIncident2(TraceWrapper.loadIncidentFromCache(match.getIncident2().getId()));
-			}
+			
 			processPerson(match);
 			processAddress(match);
 			processReservation(match);
 
-			if(match.getDetails() == null || match.getMatchPercentage() < MIN_MATCH_PERCENTAGE){
+			if(match.getDetails() == null || match.getOverallScore() < MIN_MATCH_SCORE){
 				//no match details so don't save
 				//can expand to include not saving match if min match percent below certain threshold
 				return;
@@ -135,6 +135,16 @@ public class Consumer implements Runnable{
 		}finally{
 			match.getTraceCount().add(null);
 			if(debug)System.out.println("consumer consumed count: " + match.getTraceCount().size());
+		}
+	}
+	
+	public static Set<Person> getPersons(File file){
+		if(file.getClaim() != null){
+			return getPersons(file.getClaim());
+		} else if (file.getIncident() != null){
+			return getPersons(file.getIncident());
+		} else {
+			return null;
 		}
 	}
 	
@@ -196,6 +206,17 @@ public class Consumer implements Runnable{
 		return ret;
 	}
 
+	
+	public static Set<FsAddress> getAddresses(File file){
+		if(file.getClaim() != null){
+			return getAddresses(file.getClaim());
+		} else if (file.getIncident() != null){
+			return getAddresses(file.getIncident());
+		} else {
+			return null;
+		}
+	}
+	
 	// TODO: Opportunity to optimize primary claim's data sets.  We will re-run this over and over.
 	// Note: now referenced in producer as well for geocoding.
 	public static Set<FsAddress> getAddresses(FsClaim claim){
@@ -268,6 +289,43 @@ public class Consumer implements Runnable{
 	}
 
 	
+	public static Set<Phone> getPhones(File file){
+		if(file.getClaim() != null){
+			return getPhones(file.getClaim());
+		} else if (file.getIncident() != null){
+			return getPhones(file.getIncident());
+		} else {
+			return null;
+		}
+	}
+
+	private static Set<Phone> getPhones(FsIncident incident) {
+		HashSet<Phone> ret = new HashSet<Phone>();
+		if(incident != null){
+			if(incident.getPassengers() != null){
+				for(Person p:incident.getPassengers()){
+					if(p.getPhones() != null){
+						for(Phone phone:p.getPhones()){
+							ret.add(phone);
+						}
+					}
+				}
+			}
+			if(incident.getReservation() != null
+					&& incident.getReservation().getPassengers() != null){
+				for(Person p:incident.getReservation().getPassengers()){
+					if(p.getPhones() != null){
+						for(Phone phone:p.getPhones()){
+							ret.add(phone);
+						}
+					}
+				}
+			}
+		}
+		return ret;
+	}
+
+
 	public static Set<Phone> getPhones(FsClaim claim){
 		HashSet<Phone> ret = new HashSet<Phone>();
 		if(claim != null){
@@ -307,18 +365,14 @@ public class Consumer implements Runnable{
 	
 	private static void processAddress(MatchHistory match){
 		Set<FsAddress> plist1 = null;
-		if(match.getClaim1() != null){
-			plist1 = getAddresses(match.getClaim1());
-		} else if (match.getIncident2() !=null){
-			plist1 = getAddresses(match.getIncident1());
-		}
+		if(match.getFile1() != null){
+			plist1 = getAddresses(match.getFile1());
+		} 
 		
 		Set<FsAddress> plist2 = null;
-		if(match.getClaim2() != null){
-			plist2 = getAddresses(match.getClaim2());
-		} else if (match.getIncident2() !=null){
-			plist2 = getAddresses(match.getIncident2());
-		}
+		if(match.getFile2() != null){
+			plist2 = getAddresses(match.getFile2());
+		} 
 		
 		Set <MatchDetail> details = match.getDetails();
 
@@ -419,17 +473,13 @@ public class Consumer implements Runnable{
 		Reservation r2 = null;
 		
 		// TODO: Matt to review: I modified code to not assume a claim as the initial element.
-		if(match.getClaim1() != null && match.getClaim1().getIncident() != null){
-			r1 = match.getClaim1().getIncident().getReservation();
-		} else if (match.getIncident1() != null && match.getIncident1() != null) {
-			r1 = match.getIncident1().getReservation();
-		}
+		if(match.getFile1() != null && match.getFile1().getIncident() != null){
+			r1 = match.getFile1().getIncident().getReservation();
+		} 
 		
-		if(match.getClaim2() != null && match.getClaim2().getIncident() != null){
-			r2 = match.getClaim2().getIncident().getReservation();
-		} else if(match.getIncident2() != null){
-			r2 = match.getIncident2().getReservation();
-		}
+		if(match.getFile2() != null && match.getFile2().getIncident() != null){
+			r2 = match.getFile2().getIncident().getReservation();
+		} 
 		
 		if(r1 != null && r2 != null){
 			boolean num4 = (r1.getCcNumLastFour() != null && r1.getCcNumLastFour().trim().length() > 0 && r1.getCcNumLastFour().equals(r2.getCcNumLastFour())) ? true:false;
@@ -489,18 +539,13 @@ public class Consumer implements Runnable{
 
 		// TODO: Matt to review: I modified code to not assume a claim as the initial element.
 		Set<Person> plist1 = null;
-		if(match.getClaim1() != null){
-			plist1 = getPersons(match.getClaim1());
-		} else if (match.getIncident2() !=null){
-			plist1 = getPersons(match.getIncident1());
-		}
-		
+		if(match.getFile1() != null){
+			plist1 = getPersons(match.getFile1());
+		}	
 		Set<Person> plist2 = null;
-		if(match.getClaim2() != null){
-			plist2 = getPersons(match.getClaim2());
-		} else if (match.getIncident2() !=null){
-			plist2 = getPersons(match.getIncident2());
-		}
+		if(match.getFile2() != null){
+			plist2 = getPersons(match.getFile2());
+		} 
 		
 		Set <MatchDetail> details = match.getDetails();
 

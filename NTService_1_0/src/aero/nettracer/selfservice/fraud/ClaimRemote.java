@@ -6,6 +6,7 @@ import javax.ejb.Remote;
 
 import org.jboss.ejb3.annotation.RemoteBinding;
 
+import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.detection.MatchHistory;
 
@@ -15,9 +16,9 @@ import aero.nettracer.fs.model.detection.MatchHistory;
 @Remote
 public interface ClaimRemote {
 	public String echoTest(String s);
-	public long insertClaim(FsClaim claim);
-	public Set<MatchHistory> traceClaim(long claimId);
-	public Set<MatchHistory> getClaimMatches(long claimId);
+	public long insertFile(File File);
+	public Set<MatchHistory> traceFile(long fileId);
+	public Set<MatchHistory> getFileMatches(long fileId);
 	public int getIncidentCacheSize();
 	public int getClaimCacheSize();
 }
