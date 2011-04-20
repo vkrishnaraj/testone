@@ -29,6 +29,12 @@ public class File implements Serializable {
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL)
 	private FsIncident incident;
 	
+	public File(){
+	}
+	
+	public File(long id){
+		this.id = id;
+	}
 	
 	public long getId() {
 		return id;
