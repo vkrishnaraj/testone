@@ -79,7 +79,7 @@ public class FraudResultsAction extends CheckedAction {
 			if (claim != null) {
 				try {
 				ClaimRemote remote = ConnectionUtil.getClaimRemote();
-				results = remote.getClaimMatches(claim.getSwapId());
+				results = remote.getFileMatches(claim.getFile().getSwapId());
 				} catch (Exception e) {
 					logger.error(e);
 				}
@@ -127,7 +127,7 @@ public class FraudResultsAction extends CheckedAction {
 			if (results != null && !results.isEmpty()) {
 			
 				for (MatchHistory match: results) {
-					if (match.getClaim1().getSwapId() == claimId) {
+					if (match.getFile1().getClaim().getSwapId() == claimId) {
 						primaryResults.add(match);
 					} else {
 						secondaryResults.add(match);
@@ -153,10 +153,10 @@ public class FraudResultsAction extends CheckedAction {
 		for (MatchHistory m: matches) {
 			if (m.isSelected()) {
 				logger.info("Info requested for match: " + m.getId());
-				if (m.getClaim1().getId() == originalId) {
-					toReturn.add(m.getClaim2());
+				if (m.getFile1().getClaim().getId() == originalId) {
+					toReturn.add(m.getFile2().getClaim());
 				} else {
-					toReturn.add(m.getClaim1());
+					toReturn.add(m.getFile1().getClaim());
 				}
 			}
 		}

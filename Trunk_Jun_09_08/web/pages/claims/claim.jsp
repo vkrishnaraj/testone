@@ -540,18 +540,18 @@
                     <% } %>
                     <!-- Reservation Info -->
                     <h1 class="green">
-                   		<bean:message key="header.reservation_summary" />
+                   		<bean:message key="header.claimant.details" />
 						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                     </h1>
 					<table class="form2" cellpadding="0" cellspacing="0">
 					<tr>
 						<td colspan=2>
-							<bean:message key="colname.last_name.req" />
+							<bean:message key="colname.last_name" />
 							<br/>
 							<html:text name="claimForm" property="claim.incident.reservation.purchaser.lastName" size="20" maxlength="20" styleClass="textfield" />
 						</td>
 						<td colspan=2>
-							<bean:message key="colname.first_name.req" />
+							<bean:message key="colname.first_name" />
 							<br/>
 							<html:text name="claimForm" property="claim.incident.reservation.purchaser.firstName" size="20" maxlength="20" styleClass="textfield" />
 						</td>
@@ -564,7 +564,7 @@
 					<!-- START RESERVATION ADDRESS INFO -->
 					<tr>
                 <td colspan=2>
-                  <bean:message key="colname.street_addr1.req" />
+                  <bean:message key="colname.street_addr1" />
                   <br>
                   <html:text name="claimForm" property="claim.incident.reservation.billingAddress.address1" size="40" maxlength="50" styleClass="textfield" />
                 </td>
@@ -576,7 +576,7 @@
               </tr>
               <tr>
                 <td>
-                  <bean:message key="colname.city.req" />
+                  <bean:message key="colname.city" />
                   <br>
                   <html:text name="claimForm" property="claim.incident.reservation.billingAddress.city" size="15" maxlength="50" styleClass="textfield" />
                 </td>

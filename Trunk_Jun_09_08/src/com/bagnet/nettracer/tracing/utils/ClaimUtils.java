@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.utils;
 
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
@@ -138,20 +140,6 @@ public class ClaimUtils {
 					.getAttribute("claimstatuslist") != null ? session
 					.getAttribute("claimstatuslist") : TracerUtils.getStatusList(TracingConstants.TABLE_CLAIM, user.getCurrentlocale()));
 
-//			if (claim != null) {
-//				cform.setClaim(claim);
-//			} else {
-//				cform.setClaim(ClaimUtils.createClaim(user, incident));
-//			}
-
-			// TODO: VERIFY THAT THIS IS NO LONGER NEEDED
-//			Passenger pa = (Passenger) theform.getPassenger(0);
-//			String passengername = pa.getFirstname() + " " + pa.getLastname();
-//			cform.getClaim().setPassengername(passengername);
-
-//			if (theform.getExpenselist() != null)
-//				cform.getClaim().getNtIncident().setExpenselist(theform.getExpenselist());
-
 			cform.set_DATEFORMAT(user.getDateformat().getFormat());
 			cform.set_TIMEFORMAT(user.getTimeformat().getFormat());
 			cform.set_TIMEZONE(TimeZone
@@ -166,6 +154,23 @@ public class ClaimUtils {
 			e.printStackTrace();
 			return cform;
 		}
+	}
+	
+	public static Set<FsClaim> getPaginatedList(Set<FsClaim> list, int rowsperpage, int currpage) {
+		Set<FsClaim> paginatedList = new LinkedHashSet<FsClaim>();
+		int startIndex = currpage * rowsperpage;
+		int endIndex = startIndex + rowsperpage;
+		
+		if (endIndex > list.size()) {
+			endIndex = list.size();
+		}
+		
+		FsClaim[] temp = list.toArray(new FsClaim[0]);
+		for (int i = startIndex; i < endIndex; ++i) {
+			paginatedList.add(temp[i]);
+		}
+		
+		return paginatedList;
 	}
 	
 }

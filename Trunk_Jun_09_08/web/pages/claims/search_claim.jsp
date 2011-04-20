@@ -23,30 +23,30 @@
     
 	var cal1xx = new CalendarPopup();	
     
-function goprev() {
-  o = document.searchClaimForm;
-  o.prevpage.value = "1";
-  o.pagination.value="1";
-  o.submit();
-}
-
-function gonext() {
-  o = document.generaltaskForm;
-  o.nextpage.value="1";
-  o.pagination.value="1";
-  o.submit();
-}
-
-function gopage(i) {
-	  o = document.generaltaskForm;
-	  o.currpage.value = i;
+	function goprev() {
+	  o = document.searchClaimForm;
+	  o.prevpage.value = "1";
 	  o.pagination.value="1";
 	  o.submit();
-}
-function updatePagination() {
-    return true;
-}
-
+	}
+	
+	function gonext() {
+	  o = document.searchClaimForm;
+	  o.nextpage.value="1";
+	  o.pagination.value="1";
+	  o.submit();
+	}
+	
+	function gopage(i) {
+		  o = document.searchClaimForm;
+		  o.currpage.value = i;
+		  o.pagination.value="1";
+		  o.submit();
+	}
+	
+	function updatePagination() {
+	    return true;
+	}
 
   </script>
   
@@ -96,12 +96,12 @@ function updatePagination() {
               <table class="form2" cellspacing="0" cellpadding="0" >
 				<tr>
 					<td colspan=2>
-						<bean:message key="colname.last_name.req" />
+						<bean:message key="colname.last_name" />
 						<br/>
 						<html:text name="searchClaimForm" property="lastName" size="20" maxlength="20" styleClass="textfield" />
 					</td>
 					<td colspan=2>
-						<bean:message key="colname.first_name.req" />
+						<bean:message key="colname.first_name" />
 						<br/>
 						<html:text name="searchClaimForm" property="firstName" size="20" maxlength="20" styleClass="textfield" />
 					</td>
@@ -113,7 +113,7 @@ function updatePagination() {
 				</tr>
               <tr>
                 <td colspan=2>
-                  <bean:message key="colname.street_addr1.req" />
+                  <bean:message key="colname.street_addr1" />
                   <br>
                   <html:text name="searchClaimForm" property="address1" size="40" maxlength="50" styleClass="textfield" />
                 </td>
@@ -125,12 +125,12 @@ function updatePagination() {
               </tr>
               <tr>
                 <td>
-                  <bean:message key="colname.city.req" />
+                  <bean:message key="colname.city" />
                   <br>
                   <html:text name="searchClaimForm" property="city" size="15" maxlength="50" styleClass="textfield" />
                 </td>
                 <td>
-                  <bean:message key="colname.state.req" />
+                  <bean:message key="colname.state" />
                   <br />
                   <logic:equal name="searchClaimForm" property="country" value="US">
                     <html:select name="searchClaimForm" property="state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
@@ -196,10 +196,16 @@ function updatePagination() {
              		<br />
              		<html:text name="searchClaimForm" property="phone" size="15" maxlength="25" styleClass="textfield" />
              	</td>
-             	<td colspan="3">
+             	<td colspan="2">
              		<bean:message key="colname.email" />
              		<br />
              		<html:text name="searchClaimForm" property="emailAddress" size="35" maxlength="100" styleClass="textfield" />
+             	</td>
+             	<td>
+             		<bean:message key="colname.dob" />
+             		(<%= a.getDateformat().getFormat() %>)
+             		<br />
+             		<html:text property="dateOfBirth" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3" name="calendar3" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchClaimForm.dateOfBirth,'calendar3','<%= a.getDateformat().getFormat() %>'); return false;">
              	</td>
              </tr>
               <tr>
@@ -217,7 +223,6 @@ function updatePagination() {
               	</tr>
               </table>
               <br />
-              <logic:present name="resultList" scope="request">
               <h1 class="green">
                 <bean:message key="header.search_result" />
                 <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
@@ -270,13 +275,12 @@ function updatePagination() {
                 		</td>
                 	</tr>
                 </logic:iterate>
-               	<!--tr>
+               	<tr>
                 	<td colspan="11">
-                  		<!-- jsp:include page="/pages/includes/pagination_incl.jsp" /-->
-                	<!--/td>
-              	</tr-->
+                  		<jsp:include page="/pages/includes/pagination_incl.jsp" />
+                	</td>
+              	</tr>
               </table>
-              </logic:present>
               <script language=javascript>
                 
   document.location.href="#result";

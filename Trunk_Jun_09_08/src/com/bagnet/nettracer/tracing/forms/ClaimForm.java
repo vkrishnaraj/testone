@@ -280,4 +280,12 @@ public final class ClaimForm extends ActionForm {
 		return null;
 	}
 	
+	public String getClaimantDateOfBirth() {
+		return getClaimant().getDisDateOfBirth(_DATEFORMAT);
+	}
+	
+	public void setClaimantDateOfBirth(String dateOfBirth) {
+		getClaimant().setDisDateOfBirth(dateOfBirth, _DATEFORMAT);
+	}
+	
 }

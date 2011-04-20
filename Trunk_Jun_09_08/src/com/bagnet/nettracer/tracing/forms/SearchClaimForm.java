@@ -1,7 +1,5 @@
 package com.bagnet.nettracer.tracing.forms;
 
-import java.util.Date;
-
 import org.apache.struts.action.ActionForm;
 
 public final class SearchClaimForm extends ActionForm {
@@ -11,6 +9,7 @@ public final class SearchClaimForm extends ActionForm {
 	private String currpage;
 	private String nextpage;
 	private String prevpage;
+	private String pagination;
 	
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
@@ -32,6 +31,7 @@ public final class SearchClaimForm extends ActionForm {
 	private String country;
 	private String emailAddress;
 	private String phone;
+	private String dateOfBirth;
 	
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
@@ -207,6 +207,22 @@ public final class SearchClaimForm extends ActionForm {
 
 	public void setPrevpage(String prevpage) {
 		this.prevpage = prevpage;
+	}
+
+	public String getPagination() {
+		return pagination;
+	}
+
+	public void setPagination(String pagination) {
+		this.pagination = pagination;
+	}
+
+	public String getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(String dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
 	}
 	
 }

@@ -17,10 +17,6 @@
   
 	var cal1xx = new CalendarPopup();	
 
-	
-
-	
-
 </SCRIPT>
 
 
@@ -43,7 +39,7 @@
 %>
   <a name="contact"></a>
   <h1 class="green">
-    <bean:message key="header.passenger_info" />
+    <bean:message key="header.claimant.details" />
 <%
     if (report_type == 0) {
 %>
@@ -189,10 +185,17 @@
               	</td>
              </tr>
              <tr>
-             	<td colspan="5">
+             	<td colspan="2">
              		<bean:message key="colname.email" />
              		<br />
              		<html:text name="claimForm" property="claimant.emailAddress" size="35" maxlength="100" styleClass="textfield" />
+             	</td>
+             	<td colspan="3">
+             		<bean:message key="colname.dob" />
+             		(<%= a.getDateformat().getFormat() %>)
+             		<br />
+             		<html:text name="claimForm" property="claimantDateOfBirth" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.claimForm.claimantDateOfBirth,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+             		
              	</td>
              </tr>
               <tr>        

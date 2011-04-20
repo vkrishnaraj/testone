@@ -7,7 +7,6 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +24,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.SearchClaimForm;
+import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -51,64 +51,53 @@ public class SearchClaimAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
 		}
 		
+		/***************** begin pagination *****************/
+		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
+		int currpage = 0;
+
 		SearchClaimForm theForm = (SearchClaimForm) form;
-		Set<FsClaim> resultSet = new LinkedHashSet<FsClaim>();
-		if (request.getParameter("search") != null) {
-			resultSet = ClaimDAO.getClaimsFromSearchForm((SearchClaimForm) form, user);
-	
-			if (resultSet != null) {
-				if (resultSet.size() == 1) {
-					long claimId = resultSet.toArray(new FsClaim[0])[0].getId();
-					response.sendRedirect("claim_resolution.do?claimId=" + claimId);
-					return null;
-				} else {
-					request.setAttribute("resultList", resultSet);
-				}
-			} 
+		Set<FsClaim> resultSet = ClaimDAO.getClaimsFromSearchForm((SearchClaimForm) form, user);
+		
+		if (resultSet.size() == 1) {
+			long claimId = resultSet.toArray(new FsClaim[0])[0].getId();
+			response.sendRedirect("claim_resolution.do?claimId=" + claimId);
+			return null;
+		}
+
+		currpage = theForm.getCurrpage() != null ? Integer.parseInt(theForm.getCurrpage()) : 0;
+		if (theForm.getNextpage() != null && theForm.getNextpage().equals("1"))
+			currpage++;
+		if (theForm.getPrevpage() != null && theForm.getPrevpage().equals("1"))
+			currpage--;
+		
+		long rowcount = resultSet != null ? resultSet.size() : 0;
+		
+		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
+		
+		if (totalpages > 1) {
+			resultSet = ClaimUtils.getPaginatedList(resultSet, rowsperpage, currpage);
+		}
+
+		if (totalpages <= currpage) {
+			currpage = 0;
+			request.setAttribute("currpage", "0");
+		}
+
+		if (currpage + 1 == totalpages)
+			request.setAttribute("end", "1");
+		if (totalpages > 1) {
+			ArrayList<String> al = new ArrayList<String>();
+			for (int j = 0; j < totalpages; j++) {
+				al.add(Integer.toString(j));
+			}
+			request.setAttribute("pages", al);
 		}
 		
-		/***************** begin pagination *****************/
-//		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
-//		int currpage = 1;
-//		int end = 10;
-//		int pages = 13;
-//
-//		currpage = theForm.getCurrpage() != null ? Integer.parseInt(theForm.getCurrpage()) : 0;
-//		if (theForm.getNextpage() != null && theForm.getNextpage().equals("1"))
-//			currpage++;
-//		if (theForm.getPrevpage() != null && theForm.getPrevpage().equals("1"))
-//			currpage--;
-//		
-////		List<Incident> incidentList = MorningDutiesUtil.getPaginatedList(user, day, rowsperpage, currpage);
-////		if(incidentList != null && incidentList.size() > 0){
-////			request.setAttribute("resultlist", incidentList);
-////		}
-//		
-//		
-////		long rowcount = MorningDutiesUtil.getCount(user, day);
-//		long rowcount = resultSet.size();
-//		
-//		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
-//
-//		if (totalpages <= currpage) {
-//			currpage = 0;
-//			request.setAttribute("currpage", "0");
-//		}
-//
-//		if (currpage + 1 == totalpages)
-//			request.setAttribute("end", "1");
-//		if (totalpages > 1) {
-//			ArrayList al = new ArrayList();
-//			for (int j = 0; j < totalpages; j++) {
-//				al.add(Integer.toString(j));
-//			}
-//			request.setAttribute("pages", al);
-//		}
-//		
-//		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
-//		request.setAttribute("currpage", Integer.toString(currpage));		
+		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
+		request.setAttribute("currpage", Integer.toString(currpage));		
 		/***************** end pagination *****************/
 		
+		request.setAttribute("resultList", resultSet);
 		return mapping.findForward(TracingConstants.CLAIM_SEARCH);
 	}
 	

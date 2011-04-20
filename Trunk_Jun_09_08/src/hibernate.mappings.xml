@@ -256,4 +256,5 @@
 		<mapping class="aero.nettracer.fs.model.PnrData"/>
 		<mapping class="aero.nettracer.fs.model.Reservation"/>
 		<mapping class="aero.nettracer.fs.model.Segment"/>
+		<mapping class="aero.nettracer.fs.model.File"/>
 		

@@ -1,10 +1,7 @@
 package aero.nettracer.fs.model;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,16 +12,15 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.apache.commons.codec.language.DoubleMetaphone;
+import org.apache.commons.codec.language.Soundex;
 import org.apache.log4j.Logger;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
-import com.bagnet.nettracer.tracing.actions.ModifyClaimAction;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
-
-import org.apache.commons.codec.language.Soundex;
-import org.apache.commons.codec.language.DoubleMetaphone;
 
 @Entity
 @Proxy(lazy = false)
@@ -53,6 +49,7 @@ public class Person implements Serializable {
 	private String firstName;
 	private String middleName;
 	private String lastName;
+	private Date dateOfBirth;
 	private String firstNameSoundex;
 	private String lastNameSoundex;
 	private String firstNameDmp;
@@ -308,10 +305,27 @@ public class Person implements Serializable {
 	}
 
 	public boolean isCcContact() {
-  	return ccContact;
-  }
+		return ccContact;
+	}
 
 	public void setCcContact(boolean ccContact) {
-  	this.ccContact = ccContact;
-  }
+		this.ccContact = ccContact;
+	}
+
+	public Date getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(Date dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+	
+	public String getDisDateOfBirth(String dateFormat) {
+		return DateUtils.formatDate(dateOfBirth, dateFormat, "", null);
+	}
+	
+	public void setDisDateOfBirth(String dateOfBirth, String _DATEFORMAT) {
+		setDateOfBirth(DateUtils.convertToDate(dateOfBirth, _DATEFORMAT, null));
+	}
+	
 }

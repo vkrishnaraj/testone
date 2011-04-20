@@ -9,6 +9,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
 import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import aero.nettracer.fs.model.FsClaim;
@@ -83,9 +84,6 @@ public class ClaimDAO {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = getCriteriaFromForm(session, form, user);
 			results = new LinkedHashSet(criteria.list());
-			if (results.isEmpty()) {
-				results = null;
-			}
 		} catch (Exception e) {
 			logger.error(EXCEPTION_MESSAGE, e);
 		} finally {
@@ -102,7 +100,8 @@ public class ClaimDAO {
 		criteria = getIdCriteria(form, criteria);		
 		criteria = getNtIncidentIdCriteria(form, criteria); 
 		criteria = getClaimDateCriteria(form, user, criteria);
-		criteria = getClaimantCriteria(form, criteria);
+		criteria = getClaimantCriteria(form, user, criteria);
+		criteria = criteria.addOrder(Order.desc("claimDate"));
 		return criteria;
 	}
 	
@@ -137,7 +136,7 @@ public class ClaimDAO {
 		
 	}
 	
-	private static Criteria getClaimantCriteria(SearchClaimForm form, Criteria criteria) {
+	private static Criteria getClaimantCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
 		Criteria claimantCriteria = criteria.createCriteria("claimants");
 
 		String value = form.getLastName();
@@ -160,6 +159,12 @@ public class ClaimDAO {
 			claimantCriteria.add(Restrictions.like("emailAddress", value));
 		}
 		
+		value = form.getDateOfBirth();
+		if (value != null && !value.isEmpty()) {
+			Date dateOfBirth = DateUtils.convertToDate(form.getDateOfBirth(), agent.getDateformat().getFormat(), agent.getCurrentlocale());
+			claimantCriteria.add(Restrictions.like("dateOfBirth", dateOfBirth));
+		}
+				
 		claimantCriteria = getClaimantAddressCriteria(form, claimantCriteria);
 		claimantCriteria = getClaimantPhoneCriteria(form, claimantCriteria);
 		

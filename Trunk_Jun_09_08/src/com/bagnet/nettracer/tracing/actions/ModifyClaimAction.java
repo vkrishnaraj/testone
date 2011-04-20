@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Segment;
@@ -193,7 +194,7 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			// 2. save the claim on central services
 			ClaimRemote remote = ConnectionUtil.getClaimRemote();
-			long remoteClaimId = 0;
+			long remoteFileId = 0;
 			if (remote != null) {
 				FsClaim newClaim = new FsClaim();
 				BeanUtils.copyProperties(newClaim, claim);
@@ -214,15 +215,20 @@ public class ModifyClaimAction extends CheckedAction {
 					segs.add(s);
 				}
 				
-				remoteClaimId = remote.insertClaim(newClaim);
+				File file = new File();
+				file.setClaim(newClaim);
+				newClaim.setFile(file);
+				
+				remoteFileId = remote.insertFile(file);
 				
 				claim = ClaimDAO.loadClaim(claim.getId());
-				claim.setSwapId(remoteClaimId);
+				claim.setFile(file);
+				file.setSwapId(remoteFileId);
 				ClaimDAO.saveClaim(claim);
-				logger.info("Claim saved to central services: " + remoteClaimId);
+				logger.info("Claim saved to central services: " + remoteFileId);
 
 				// 3. submit the claim for tracing
-				Set<MatchHistory> results = submitClaim(remoteClaimId);
+				Set<MatchHistory> results = submitClaim(remoteFileId);
 				if (results != null) {
 					session.setAttribute("results", results);
 					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
@@ -233,7 +239,7 @@ public class ModifyClaimAction extends CheckedAction {
 		} else if (request.getParameter("submit") != null) {
 			
 			// 1. submit the claim for tracing
-			if (claim.getSwapId() > 0) {
+			if (claim.getFile().getSwapId() > 0) {
 				Set<MatchHistory> results = submitClaim(claim.getSwapId());
 				if (results != null) {
 					session.setAttribute("results", results);
@@ -321,14 +327,14 @@ public class ModifyClaimAction extends CheckedAction {
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
 	}
 	
-	private Set<MatchHistory> submitClaim(long fsClaimId) {
-		if (fsClaimId <= 0) {
+	private Set<MatchHistory> submitClaim(long fileId) {
+		if (fileId <= 0) {
 			return null;
 		}
 		ClaimRemote remote = ConnectionUtil.getClaimRemote();
 		Set<MatchHistory> results = null;
 		if (remote != null) {
-			results = remote.traceClaim(fsClaimId);
+			results = remote.traceFile(fileId);
 			
 		}
 		return results;
