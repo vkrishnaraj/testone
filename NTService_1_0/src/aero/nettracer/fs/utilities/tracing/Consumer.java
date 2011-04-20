@@ -20,9 +20,11 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class Consumer implements Runnable{
 
+	public static boolean debug = false;
+	
 	public static final int MATCH = 3;
 	
-	public static final double MIN_MATCH_PERCENTAGE = 50;
+	public static final double MIN_MATCH_PERCENTAGE = 20;
 	public static final double P_SOUNDEX = 5;
 	public static final double P_METAPHONE = 5;
 	public static final double P_NAME = 5;
@@ -62,7 +64,7 @@ public class Consumer implements Runnable{
 				if (this.threadtype == MATCH){
 					MatchHistory match = matchQueue.take();
 //					System.out.println(matchQueue.size());
-					//System.out.println("consumer " + threadnumber);
+					if(debug)System.out.println("consumer " + threadnumber);
 					processMatch(match);
 				}
 			}catch (Exception e){
@@ -75,11 +77,11 @@ public class Consumer implements Runnable{
 		try{
 			//process match
 			if(match.getClaim2() != null){
-				//System.out.println("consumer claim: " + match.getClaim2().getId());
+				if(debug)System.out.println("consumer claim: " + match.getClaim2().getId());
 				match.setClaim2(TraceWrapper.loadClaimFromCache(match.getClaim2().getId()));
 			}
 			if(match.getIncident2() != null){
-				//System.out.println("consume incident: " + match.getIncident2().getId());
+				if(debug)System.out.println("consume incident: " + match.getIncident2().getId());
 				match.setIncident2(TraceWrapper.loadIncidentFromCache(match.getIncident2().getId()));
 			}
 			processPerson(match);
@@ -121,7 +123,7 @@ public class Consumer implements Runnable{
 			e.printStackTrace();
 		}finally{
 			match.getTraceCount().add(null);
-			//System.out.println("consumer consumed count: " + match.getTraceCount().size());
+			if(debug)System.out.println("consumer consumed count: " + match.getTraceCount().size());
 		}
 	}
 	
@@ -224,11 +226,11 @@ public class Consumer implements Runnable{
 		}
 		
 		if(r1 != null && r2 != null){
-			boolean num4 = (r1.getCcNumLastFour() != null && r1.getCcNumLastFour().length() > 0 && r1.getCcNumLastFour().equals(r2.getCcNumLastFour())) ? true:false;
-			boolean num16 = (r1.getCcNumber() != null && r1.getCcNumber().length() > 0 && r1.getCcNumber().equals(r2.getCcNumber())) ? true:false;
-			boolean type = (r1.getCcType() != null && r1.getCcType().length() > 0 && r1.getCcType().equals(r2.getCcType())) ? true:false;
+			boolean num4 = (r1.getCcNumLastFour() != null && r1.getCcNumLastFour().trim().length() > 0 && r1.getCcNumLastFour().equals(r2.getCcNumLastFour())) ? true:false;
+			boolean num16 = (r1.getCcNumber() != null && r1.getCcNumber().trim().length() > 0 && r1.getCcNumber().equals(r2.getCcNumber())) ? true:false;
+			boolean type = (r1.getCcType() != null && r1.getCcType().trim().length() > 0 && r1.getCcType().equals(r2.getCcType())) ? true:false;
 			boolean exp = (r1.getCcExpMonth() != 0 && r1.getCcExpMonth() == r2.getCcExpMonth() && r1.getCcExpYear() == r2.getCcExpYear() ) ? true:false;
-			boolean typeEmpty = (r1.getCcType() != null && r1.getCcType().length() > 0) ? false:true;
+			boolean typeEmpty = (r1.getCcType() != null && r1.getCcType().trim().length() > 0) ? false:true;
 			boolean expEmpty = (r1.getCcExpMonth() != 0) ? false:true;
 			
 			if(num16){						
@@ -290,8 +292,8 @@ public class Consumer implements Runnable{
 
 		for(Person p1:plist1){
 			for(Person p2:plist2){
-				if(p1.getFirstName() != null && p1.getFirstName().length() > 0 
-						&& p1.getLastName() != null && p1.getLastName().length() > 0){
+				if(p1.getFirstName() != null && p1.getFirstName().trim().length() > 0 
+						&& p1.getLastName() != null && p1.getLastName().trim().length() > 0){
 					if(p1.getFirstName().equals(p2.getFirstName()) && p1.getLastName().equals(p2.getLastName())){
 						MatchDetail detail = new MatchDetail();
 						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
@@ -321,8 +323,8 @@ public class Consumer implements Runnable{
 						}
 					}
 				}//end name
-				if(p1.getDriversLicenseNumber() != null && p1.getDriversLicenseNumber().length() > 0
-						&& p1.getDriversLicenseIssuer() != null && p1.getDriversLicenseIssuer().length() > 0){
+				if(p1.getDriversLicenseNumber() != null && p1.getDriversLicenseNumber().trim().length() > 0
+						&& p1.getDriversLicenseIssuer() != null && p1.getDriversLicenseIssuer().trim().length() > 0){
 					if(p1.getDriversLicenseNumber().equals(p2.getDriversLicenseNumber())
 							&& p1.getDriversLicenseIssuer().equals(p2.getDriversLicenseIssuer())){
 						MatchDetail detail = new MatchDetail();
@@ -334,7 +336,7 @@ public class Consumer implements Runnable{
 						details.add(detail);
 					}
 				}//end drivers
-				if(p1.getEmailAddress() != null && p1.getEmailAddress().length() > 0){
+				if(p1.getEmailAddress() != null && p1.getEmailAddress().trim().length() > 0){
 					if(p1.getEmailAddress().equals(p2.getEmailAddress())){
 						MatchDetail detail = new MatchDetail();
 						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
@@ -345,7 +347,7 @@ public class Consumer implements Runnable{
 						details.add(detail);
 					}
 				}//end email
-				if(p1.getFfNumber() != null && p1.getFfNumber().length() > 0){
+				if(p1.getFfNumber() != null && p1.getFfNumber().trim().length() > 0){
 					if(p1.getFfNumber().equals(p2.getFfNumber())){
 						MatchDetail detail = new MatchDetail();
 						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
@@ -356,7 +358,7 @@ public class Consumer implements Runnable{
 						details.add(detail);
 					}
 				}//end FFN
-				if(p1.getPassportNumber() != null && p1.getPassportNumber().length() > 0){
+				if(p1.getPassportNumber() != null && p1.getPassportNumber().trim().length() > 0){
 					if(p1.getPassportNumber().equals(p2.getPassportNumber())){
 						MatchDetail detail = new MatchDetail();
 						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
@@ -367,7 +369,7 @@ public class Consumer implements Runnable{
 						details.add(detail);
 					}
 				}//end passport
-				if(p1.getSocialSecurity() != null && p1.getSocialSecurity().length() > 0){
+				if(p1.getSocialSecurity() != null && p1.getSocialSecurity().trim().length() > 0){
 					if(p1.getSocialSecurity().equals(p2.getSocialSecurity())){
 						MatchDetail detail = new MatchDetail();
 						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());

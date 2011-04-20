@@ -20,7 +20,8 @@ public class TraceWrapper {
 	private static ConcurrentHashMap<Long, FsIncident> incidentCache = new ConcurrentHashMap<Long, FsIncident>(3000);
 	private static ConcurrentHashMap<Long, FsClaim> claimCache = new ConcurrentHashMap<Long, FsClaim>(3000);
 	
-	private static boolean LOAD_FROM_CACHE = true;
+	private static boolean LOAD_FROM_CACHE = false;
+	private static int MAX_CACHE_SIZE = 1000000;
 	
 	public static FsClaim loadClaim(long claimId){
 		String sql = "from aero.nettracer.fs.model.FsClaim c where c.id = :id";
@@ -58,7 +59,7 @@ public class TraceWrapper {
 			return incidentCache.get(id);
 		} else {
 			FsIncident incident = loadIncident(id);
-			if(LOAD_FROM_CACHE){
+			if(LOAD_FROM_CACHE && incidentCache.size() < MAX_CACHE_SIZE){
 				incidentCache.put(id, incident);
 			}
 			return incident;
@@ -71,7 +72,7 @@ public class TraceWrapper {
 			return claimCache.get(id);
 		} else {
 			FsClaim claim = loadClaim(id);
-			if(LOAD_FROM_CACHE){
+			if(LOAD_FROM_CACHE  && claimCache.size() < MAX_CACHE_SIZE){
 				claimCache.put(id, claim);
 			}
 			return claim;
@@ -103,11 +104,11 @@ public class TraceWrapper {
 	}
 	
 	public static void resetIncidentCache(){
-		
+		incidentCache = new ConcurrentHashMap<Long, FsIncident>(3000);
 	}
 	
 	public static void resetClaimCache(){
-		
+		claimCache = new ConcurrentHashMap<Long, FsClaim>(3000);
 	}
 
 	public static int getIncidentCacheSize(){

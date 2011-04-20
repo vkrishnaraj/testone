@@ -18,4 +18,6 @@ public interface ClaimRemote {
 	public long insertClaim(FsClaim claim);
 	public Set<MatchHistory> traceClaim(long claimId);
 	public Set<MatchHistory> getClaimMatches(long claimId);
+	public int getIncidentCacheSize();
+	public int getClaimCacheSize();
 }

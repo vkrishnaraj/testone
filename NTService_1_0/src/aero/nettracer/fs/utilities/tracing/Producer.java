@@ -24,7 +24,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class Producer {
 
-	
+	private static boolean debug = false;
 	private static final int MAX_WAIT = 100;
 	
 	public static Set<MatchHistory> matchClaim(long claimId){
@@ -59,7 +59,7 @@ public class Producer {
 			match.setCreatedate(DateUtils.convertToGMTDate(new Date()));
 			try{
 				TraceWrapper.getMatchQueue().put(match);
-				//System.out.println("Producer add claim: " + id);
+				if(debug)System.out.println("Producer add claim: " + id);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -76,7 +76,7 @@ public class Producer {
 			match.setCreatedate(DateUtils.convertToGMTDate(new Date()));
 			try{
 				TraceWrapper.getMatchQueue().put(match);
-				//System.out.println("Producer add incident: " + id);
+				if(debug)System.out.println("Producer add incident: " + id);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -116,7 +116,7 @@ public class Producer {
 		
 		for (Person person : persons) {
 			
-			if(person.getFirstName() != null && person.getFirstName().length() > 0 && person.getLastName() != null && person.getLastName().length()>0){
+			if(person.getFirstName() != null && person.getFirstName().trim().length() > 0 && person.getLastName() != null && person.getLastName().trim().length()>0){
 			sql += " or (lastNameSoundex = \'"+ person.getLastNameSoundex() + "\'"
 				+ " and firstNameSoundex = \'" + person.getFirstNameSoundex() + "\')";
 			
@@ -124,23 +124,23 @@ public class Producer {
 			+ " and firstNameDmp = \'" + person.getFirstNameDmp() + "\')";
 			}
 			
-			if(person.getPassportNumber() != null && person.getPassportNumber().length() > 0){
+			if(person.getPassportNumber() != null && person.getPassportNumber().trim().length() > 0){
 				sql += " or passportNumber = \'" + person.getPassportNumber() + "\' ";
 			}
 			
-			if(person.getSocialSecurity() != null && person.getSocialSecurity().length() > 0){
+			if(person.getSocialSecurity() != null && person.getSocialSecurity().trim().length() > 0){
 				sql += " or socialSecurity = \'" + person.getSocialSecurity() + "\' ";
 			}
 			
-			if(person.getEmailAddress() != null && person.getEmailAddress().length() > 0){
+			if(person.getEmailAddress() != null && person.getEmailAddress().trim().length() > 0){
 				sql += " or emailAddress = \'" + person.getEmailAddress() + "\' ";
 			}
 			
-			if(person.getFfNumber() != null && person.getFfNumber().length() > 0){
+			if(person.getFfNumber() != null && person.getFfNumber().trim().length() > 0){
 				sql += " or ffNumber = \'" + person.getFfNumber() + "\' ";
 			}
 			
-			if(person.getDriversLicenseNumber() != null && person.getDriversLicenseNumber().length() > 0){
+			if(person.getDriversLicenseNumber() != null && person.getDriversLicenseNumber().trim().length() > 0){
 				sql += " or driversLicenseNumber = \'" + person.getDriversLicenseNumber() + "\' ";
 			}
 		}
@@ -149,7 +149,7 @@ public class Producer {
 		Set<String> phoneNumbers = new HashSet<String>();
 		//we might have duplicate Phone objects with the same phone number, we want unique phone numbers
 		for(Phone phone:phones){
-			if(phone.getPhoneNumber() != null && phone.getPhoneNumber().length()>0){
+			if(phone.getPhoneNumber() != null && phone.getPhoneNumber().trim().length()>0){
 				phoneNumbers.add(phone.getPhoneNumber());
 			}
 		}
@@ -178,7 +178,7 @@ public class Producer {
 				+ " where 1=0 ";
 
 //			for(Phone phone:phones){
-//				if(phone.getPhoneNumber() != null && phone.getPhoneNumber().length() > 0){
+//				if(phone.getPhoneNumber() != null && phone.getPhoneNumber().trim().length() > 0){
 //					sql += " or ph.phoneNumber = \'" + phone.getPhoneNumber() + "\' ";
 //				}
 //			}
@@ -189,7 +189,7 @@ public class Producer {
 		
 		if(claim.getIncident() != null && claim.getIncident().getReservation() != null
 				&& claim.getIncident().getReservation().getCcNumLastFour() != null
-				&& claim.getIncident().getReservation().getCcNumLastFour().length() > 0){
+				&& claim.getIncident().getReservation().getCcNumLastFour().trim().length() > 0){
 			sql += " union select null as c1_id, " +
 					"c2.id as c2_id, " +
 					"i2.id as i2_id, " +
@@ -204,7 +204,7 @@ public class Producer {
 					"where ccNumber = \'" + claim.getIncident().getReservation().getCcNumLastFour() +"\' ";
 		}
 
-		//System.out.println(sql);
+		if(debug)System.out.println(sql);
 		
 		SQLQuery pq = null;
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -250,13 +250,13 @@ public class Producer {
 		
 		Date endtime = new Date();
 		claimQueue.remove(new Long(claim.getId()));//removing dup from queue to get accurate count
-		//System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
+		if(debug)System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
 		
 		
-		System.out.println((claimQueue.size() + incidentQueue.size()));
+//		System.out.println((claimQueue.size() + incidentQueue.size()));
 		try {
 			for(int i = 0; v.size() < (claimQueue.size() + incidentQueue.size()) && i < MAX_WAIT; i++){
-				System.out.println("waiting: " + i + ":" + v.size() + "/" + (claimQueue.size() + incidentQueue.size()) );
+//				System.out.println("waiting: " + i + ":" + v.size() + "/" + (claimQueue.size() + incidentQueue.size()) );
 				Thread.sleep(40);
 			}
 
@@ -277,7 +277,7 @@ public class Producer {
 		List <MatchHistory>result = q.list();
 		sess.close();
 		for(MatchHistory match:result){
-			//System.out.println("Match: " + match.getId() + "  " + match.getMatchPercentage());
+			if(debug)System.out.println("Match: " + match.getId() + "  " + match.getMatchPercentage());
 		}
 		return new LinkedHashSet<MatchHistory>(result);
 	}

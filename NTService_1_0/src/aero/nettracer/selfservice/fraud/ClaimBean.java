@@ -26,6 +26,7 @@ import aero.nettracer.fs.model.detection.Blacklist;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.Whitelist;
 import aero.nettracer.fs.utilities.tracing.Producer;
+import aero.nettracer.fs.utilities.tracing.TraceWrapper;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 
@@ -36,6 +37,8 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 @Stateless
 public class ClaimBean implements ClaimRemote, ClaimHome{
 
+	public static boolean debug = false;
+	
 	public String echoTest(String s){
 		return "echo: " + s;
 	}
@@ -61,7 +64,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			if(toSubmit.getId() > 0){		
-				System.out.println("delete and save");
+				if(debug)System.out.println("delete and save");
 				FsClaim toDelete = (FsClaim)sess.load(FsClaim.class,toSubmit.getId());
 //				sess.lock(toDelete, LockMode.NONE);
 				if(toSubmit.getIncident() != null){
@@ -103,7 +106,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 //				sess.close();
 //				sess = HibernateWrapper.getSession().openSession();
 			} else {
-			System.out.println("saving:" + toSubmit.getId());
+			if(debug)System.out.println("saving:" + toSubmit.getId());
 			sess.saveOrUpdate(toSubmit);
 
 
@@ -146,7 +149,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 			claim.setSegments(resetSegmentId(claim.getSegments()));
 			claim.setBlacklist(resetBlackListId(claim.getBlacklist()));
 
-			System.out.println(claim.toString());
+			if(debug)System.out.println(claim.toString());
 		}
 		return claim;
 	}
@@ -311,5 +314,12 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 		return Producer.getMatchHistoryResult(claimId);
 	}
 	
+	public int getIncidentCacheSize(){
+		return TraceWrapper.getIncidentCacheSize();
+	}
+	
+	public int getClaimCacheSize(){
+		return TraceWrapper.getClaimCacheSize();
+	}
 	
 }
