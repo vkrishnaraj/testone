@@ -47,6 +47,8 @@ public class Consumer implements Runnable{
 	private static final double ADDRESS_CLOSE_PROXIMITY = 30;
 
 	private static final double ADDRESS_CLOSE_PROXIMITY_LIMIT = .15;
+
+	private static final double ADDRESS_SIMILAR = 40;
 	
 	
 	
@@ -94,7 +96,7 @@ public class Consumer implements Runnable{
 				match.setIncident2(TraceWrapper.loadIncidentFromCache(match.getIncident2().getId()));
 			}
 			processPerson(match);
-//			processAddress(match);
+			processAddress(match);
 			processReservation(match);
 
 			if(match.getDetails() == null || match.getMatchPercentage() < MIN_MATCH_PERCENTAGE){
@@ -322,6 +324,7 @@ public class Consumer implements Runnable{
 
 		for(FsAddress a1:plist1){
 			for(FsAddress a2:plist2){
+				// If geocoded => US based location
 				if (a1.getLattitude() != 0 && a2.getLattitude() != 0) {
 					double distance = GeoCode.distanceBetweenPoints(a1.getLattitude(), a1.getLongitude(), a2.getLattitude(), a2.getLongitude());
 
@@ -338,54 +341,79 @@ public class Consumer implements Runnable{
 							MatchDetail detail = new MatchDetail();
 							detail.setContent1(a1.getAddress1() + ", " + a1.getState() + " " + a1.getZip());
 							detail.setContent2(a2.getAddress1() + ", " + a2.getState() + " " + a2.getZip());
-							detail.setDescription("Proximity Match: " + distance + " miles.");
+							detail.setDescription("Close Proximity Match: " + distance + " miles.");
 							detail.setMatch(match);
 							detail.setPercent(ADDRESS_CLOSE_PROXIMITY);
 							details.add(detail);
+							
 						}
-					}
-				}
-				
-				// TODO: INternational
-				if (a1.getCountry() == null || a2.getCountry() == null || a1.getCountry().equalsIgnoreCase(a2.getCountry())) {
 
-					// Attempting to determine if we should compare the addresses
-					if (a1.getState() != null && a2.getState() != null) {
-						// TODO: Calculate distance
-						// TODO: Calculate string compare difference
-					} else if (a1.getProvince() != null && a2.getProvince() != null){
+						String str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2());
+						String str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2());
+						
+						String description = "Similar Address";
+						double percent = ADDRESS_SIMILAR;
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 50);
+					}
+				} else {
+					// If country available
+					if (a1.getCountry() != null && a2.getCountry() != null && a1.getCountry().equalsIgnoreCase(a2.getCountry()) && a1.getCountry().trim().length() > 0) { 
+						String str1 = null;
+						String str2 = null;
+						if (a1.getProvince() != null && a1.getProvince().trim().length() > 0 && a2.getProvince() != null && a2.getProvince().trim().length() > 0 ) {
+							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState()) + " " + replaceNull(a1.getProvince());
+							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState()) + " " + replaceNull(a2.getProvince());	
+						} else {
+							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState());
+							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState());
+						}
+						
+						String description = "Similar Address";
+						double percent = ADDRESS_SIMILAR;
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 50);
 						
 					} else {
-						
+						// Country not available
+						String str1 = null;
+						String str2 = null;
+						if (a1.getProvince() != null && a1.getProvince().trim().length() > 0 && a2.getProvince() != null && a2.getProvince().trim().length() > 0 ) {
+							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState()) + " " + replaceNull(a1.getProvince());
+							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState()) + " " + replaceNull(a2.getProvince());	
+						} else {
+							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState());
+							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState());
+						}
+
+						String description = "Similar Address";
+						double percent = ADDRESS_SIMILAR;
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 50);
+
 					}
-//					TODO: FIX
-//					if (score > 0) {
-//					}
-//					if(a1.getFirstName().equalsIgnoreCase(p2.getFirstName()) && p1.getLastName().equalsIgnoreCase(p2.getLastName())){
-//						MatchDetail detail = new MatchDetail();
-//						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-//						detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-//						detail.setDescription("Direct Name Match");
-//						detail.setMatch(match);
-//						detail.setPercent(P_NAME);
-//						details.add(detail);
-//					}  
 				}
 			}
 		}
-//				if(a1.getFirstName() != null && p1.getFirstName().length() > 0 
-//						&& p1.getLastName() != null && p1.getLastName().length() > 0){
-//					if(p1.getFirstName().equals(p2.getFirstName()) && p1.getLastName().equals(p2.getLastName())){
-//						MatchDetail detail = new MatchDetail();
-//						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-//						detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-//						detail.setDescription("Direct Name Match");
-//						detail.setMatch(match);
-//						detail.setPercent(P_NAME);
-//						details.add(detail);
-		
 	}
+
+
+	private static void generateStringCompareDetail(MatchHistory match, Set<MatchDetail> details, String str1, String str2, String description, double percent, double minimumScore) {
+	  double score = StringCompare.compareStrings(str1, str2);
+	  if (score > minimumScore) {
+	  	MatchDetail detail = new MatchDetail();
+	  	detail.setContent1(str1);
+	  	detail.setContent2(str2);
+	  	detail.setDescription(description);
+	  	detail.setMatch(match);
+	  	detail.setPercent(score);
+	  	details.add(detail);
+	  }
+  }
 	
+	private static String replaceNull(String string) {
+	  if (string == null) return "";
+	  return string.trim();
+  }
+
+
 	private static void processReservation(MatchHistory match){
 		Reservation r1 = null;
 		Reservation r2 = null;

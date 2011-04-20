@@ -54,6 +54,8 @@ public class MatchHistory implements Serializable {
 	private Vector traceCount;
 	
 	private Date createdate;
+	
+	private double overallScore;
 
 	public long getId() {
 		return id;
@@ -139,14 +141,27 @@ public class MatchHistory implements Serializable {
 	}
 	
 	@Transient
-	public double getMatchPercentage(){
+	public double calculatePercentage(){
 		double ret = 0;
 		if(this.details != null){
 			for(MatchDetail detail:details){
 				ret += detail.getPercent();
 			}
 		}
+		this.overallScore = ret;
 		return ret;
 	}
+
+	public double getOverallScore() {
+  	if (overallScore == 0) {
+  		return calculatePercentage();
+  	} else {
+  		return overallScore;
+  	}
+  }
+
+	public void setOverallScore(double overallScore) {
+  	this.overallScore = overallScore;
+  }
 	
 }

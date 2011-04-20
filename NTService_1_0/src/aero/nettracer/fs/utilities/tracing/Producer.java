@@ -323,7 +323,7 @@ public class Producer {
 	
 	public static Set<MatchHistory> getMatchHistoryResult(long claimId){
 		String personSql = "from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
-				"and (m.claim1.id = :id or m.claim2.id = :id)";
+				"and (m.claim1.id = :id or m.claim2.id = :id) order by m.overallScore desc";
 
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
