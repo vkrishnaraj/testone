@@ -540,7 +540,7 @@
                     <% } %>
                     <!-- Reservation Info -->
                     <h1 class="green">
-                   		<bean:message key="header.claimant.details" />
+                   		<bean:message key="header.reservation.details" />
 						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                     </h1>
 					<table class="form2" cellpadding="0" cellspacing="0">
@@ -681,7 +681,11 @@
 								<html:option value="">
 									<bean:message key="claim.cc.please.select" />
 								</html:option>
-								<html:options property="creditCardTypes"  />
+								<html:option value="VI">Visa</html:option>	
+								<html:option value="CA">Mastercard</html:option>	
+								<html:option value="DS">Discover</html:option>
+								<html:option value="AX">American Express</html:option>	
+								<html:option value="DC">Diners Club</html:option>
 							</html:select>
 						</td>
 						<td colspan=2>
@@ -711,10 +715,7 @@
 					<tr>
 						<td colspan="5">
 							<bean:message key="header.reservation.info" />
-						</td>
-					</tr>
-					<tr>
-						<td colspan="5">
+							<br />
 							<html:textarea name="claimForm" property="claim.incident.reservation.pnrData.pnrData" cols="80" rows="10" /> 
 						</td>
 					</tr>
@@ -723,11 +724,5 @@
                     <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />
                     </html:submit>
-                    <logic:greaterThan name="claimForm" property="claim.swapId" value="0">
-	                    &nbsp;&nbsp;
-	                    <html:submit property="submit" styleId="button">
-	                      <bean:message key="button.submit" />
-	                    </html:submit>
-                    </logic:greaterThan>
                     </center>
                   </html:form>

@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
@@ -127,7 +126,7 @@ public class Reservation implements Serializable {
 
 	public String getRedactedCcNumber() {
 		String toReturn = "";
-		if (ccNumber != null && !ccNumber.isEmpty()) {
+		if ((ccNumber != null && !ccNumber.isEmpty()) || (getCcNumLastFour() != null && !getCcNumLastFour().isEmpty())) {
 			toReturn += "************" + getCcNumLastFour();
 		}
 		return toReturn;
@@ -143,7 +142,9 @@ public class Reservation implements Serializable {
 	
 	public void setCcNumber(String ccNumber) {
 		if (ccNumber.matches("[0-9]{4}+") || ccNumber.matches("[0-9]{16}+")) {
-			this.ccNumber = StringUtils.getMd5Hash(ccNumber);
+			if (ccNumber.length() == 16) {
+				this.ccNumber = StringUtils.sha1(ccNumber);
+			}
 			this.setCcNumLastFour(ccNumber.substring(ccNumber.length() - 4));
 		}
 	}
@@ -253,11 +254,11 @@ public class Reservation implements Serializable {
 	}
 
 	public int getCcExpYear() {
-		return ccExpYear;
+		return ccExpYear + 2000;
 	}
 
 	public void setCcExpYear(int ccExpYear) {
-		this.ccExpYear = ccExpYear;
+		this.ccExpYear = ccExpYear - 2000;
 	}
 	
 	public String getCcNumLastFour() {

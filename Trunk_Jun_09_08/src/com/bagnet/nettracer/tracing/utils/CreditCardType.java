@@ -2,10 +2,10 @@ package com.bagnet.nettracer.tracing.utils;
 
 public enum CreditCardType {
 	
-	VISA("Visa"),	
-	MC("Mastercard"),	
-	DISCOVER("Discover"),
-	AMEX("American Express"),	
+	VI("Visa"),	
+	CA("Mastercard"),	
+	DS("Discover"),
+	AX("American Express"),	
 	DC("Diners Club");
 	
 	private final String name;

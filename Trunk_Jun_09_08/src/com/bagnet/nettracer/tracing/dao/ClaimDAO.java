@@ -99,7 +99,7 @@ public class ClaimDAO {
 		Criteria criteria = session.createCriteria(FsClaim.class);
 		criteria = getIdCriteria(form, criteria);		
 		criteria = getNtIncidentIdCriteria(form, criteria); 
-		criteria = getClaimDateCriteria(form, user, criteria);
+		criteria = getDateCriteria("claimDate", form.getS_createtime(), form.getE_createtime(), user, criteria);
 		criteria = getClaimantCriteria(form, user, criteria);
 		criteria = criteria.addOrder(Order.desc("claimDate"));
 		return criteria;
@@ -120,16 +120,16 @@ public class ClaimDAO {
 		return criteria;
 	}
 	
-	private static Criteria getClaimDateCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
-		Date startDate = DateUtils.convertToDate(form.getS_createtime(), agent.getDateformat().getFormat(), agent.getCurrentlocale());
-		Date endDate = DateUtils.convertToDate(form.getE_createtime(), agent.getDateformat().getFormat(), agent.getCurrentlocale());
+	private static Criteria getDateCriteria(String targetField, String start, String end, Agent agent, Criteria criteria) {
+		Date startDate = DateUtils.convertToDate(start, agent.getDateformat().getFormat(), agent.getCurrentlocale());
+		Date endDate = DateUtils.convertToDate(end, agent.getDateformat().getFormat(), agent.getCurrentlocale());
 		
 		if (startDate != null && endDate != null) {
-			criteria.add(Expression.between("claimDate", startDate, endDate));
+			criteria.add(Expression.between(targetField, startDate, endDate));
 		} else if (startDate != null && endDate == null) {
-			criteria.add(Expression.ge("claimDate", startDate));
+			criteria.add(Expression.ge(targetField, startDate));
 		} else if (startDate == null && endDate != null) {
-			criteria.add(Expression.le("claimDate", endDate));
+			criteria.add(Expression.le(targetField, endDate));
 		}
 		
 		return criteria;
@@ -159,12 +159,7 @@ public class ClaimDAO {
 			claimantCriteria.add(Restrictions.like("emailAddress", value));
 		}
 		
-		value = form.getDateOfBirth();
-		if (value != null && !value.isEmpty()) {
-			Date dateOfBirth = DateUtils.convertToDate(form.getDateOfBirth(), agent.getDateformat().getFormat(), agent.getCurrentlocale());
-			claimantCriteria.add(Restrictions.like("dateOfBirth", dateOfBirth));
-		}
-				
+		claimantCriteria = getDateCriteria("dateOfBirth", form.getStartDateOfBirth(), form.getEndDateOfBirth(), agent, claimantCriteria);		
 		claimantCriteria = getClaimantAddressCriteria(form, claimantCriteria);
 		claimantCriteria = getClaimantPhoneCriteria(form, claimantCriteria);
 		

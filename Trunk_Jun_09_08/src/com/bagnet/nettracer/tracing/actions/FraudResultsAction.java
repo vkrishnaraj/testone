@@ -60,9 +60,9 @@ public class FraudResultsAction extends CheckedAction {
 		FsClaim claim = null;
 		if (claimIdString != null) {
 			claim = ClaimDAO.loadClaim(Long.parseLong(claimIdString));
-			resultsForm.setClaim(claim);
+			resultsForm.setClaimId(claim.getId());
 		} else {
-			claim = resultsForm.getClaim();
+			claim = ClaimDAO.loadClaim(resultsForm.getClaimId());
 		}
 		
 		if (request.getParameter("requestInfo") != null) {
@@ -92,7 +92,7 @@ public class FraudResultsAction extends CheckedAction {
 			long matchId = Long.parseLong(request.getParameter("matchId"));
 			MatchHistory match = getMatchHistory(matchId, resultsForm);
 			request.setAttribute("match", match);
-			request.setAttribute("claimId", resultsForm.getClaim().getId());
+			request.setAttribute("claimId", resultsForm.getClaimId());
 			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
 		}
 		
@@ -121,13 +121,13 @@ public class FraudResultsAction extends CheckedAction {
 		LinkedHashSet<MatchHistory> primaryResults = new LinkedHashSet<MatchHistory>();
 		LinkedHashSet<MatchHistory> secondaryResults = new LinkedHashSet<MatchHistory>();
 
-		if (form.getClaim() != null) {
+		if (form.getClaimId() > 0) {
 
-			long claimId = form.getClaim().getId();
+			long fileId = ClaimDAO.loadClaim(form.getClaimId()).getFile().getSwapId();
 			if (results != null && !results.isEmpty()) {
 			
 				for (MatchHistory match: results) {
-					if (match.getFile1().getClaim().getSwapId() == claimId) {
+					if (match.getFile1().getId() == fileId) {
 						primaryResults.add(match);
 					} else {
 						secondaryResults.add(match);
@@ -148,7 +148,7 @@ public class FraudResultsAction extends CheckedAction {
 		matches.addAll(form.getPrimaryResults());
 		matches.addAll(form.getSecondaryResults());
 		ArrayList<FsClaim> toReturn = new ArrayList<FsClaim>();
-		long originalId = form.getClaim().getId();
+		long originalId = form.getClaimId();
 		
 		for (MatchHistory m: matches) {
 			if (m.isSelected()) {

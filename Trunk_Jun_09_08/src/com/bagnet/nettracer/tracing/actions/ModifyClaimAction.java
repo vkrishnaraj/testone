@@ -215,15 +215,26 @@ public class ModifyClaimAction extends CheckedAction {
 					segs.add(s);
 				}
 				
-				File file = new File();
+				File file = claim.getFile();
+				if (file == null) {
+					file = new File();
+				}
 				file.setClaim(newClaim);
 				newClaim.setFile(file);
+				file.setIncident(newClaim.getIncident());
+				newClaim.getIncident().setFile(file);
 				
 				remoteFileId = remote.insertFile(file);
+				if (remoteFileId > 0) {
+					file.setSwapId(remoteFileId);
+				}
 				
 				claim = ClaimDAO.loadClaim(claim.getId());
 				claim.setFile(file);
-				file.setSwapId(remoteFileId);
+				file.setClaim(claim);
+				file.setIncident(claim.getIncident());
+				claim.getIncident().setFile(file);
+				
 				ClaimDAO.saveClaim(claim);
 				logger.info("Claim saved to central services: " + remoteFileId);
 
@@ -236,7 +247,7 @@ public class ModifyClaimAction extends CheckedAction {
 				}
 			}
 			
-		} else if (request.getParameter("submit") != null) {
+		} /* else if (request.getParameter("submit") != null) {
 			
 			// 1. submit the claim for tracing
 			if (claim.getFile().getSwapId() > 0) {
@@ -248,7 +259,7 @@ public class ModifyClaimAction extends CheckedAction {
 				}
 			}
 			
-		} else if (request.getParameter("error") != null) {
+		}*/ else if (request.getParameter("error") != null) {
 			if (request.getParameter("error").equals("print")) {
 				// printing error
 				ActionMessage error = new ActionMessage("error.print");

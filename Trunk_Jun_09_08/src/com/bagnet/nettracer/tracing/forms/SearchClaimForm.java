@@ -31,7 +31,8 @@ public final class SearchClaimForm extends ActionForm {
 	private String country;
 	private String emailAddress;
 	private String phone;
-	private String dateOfBirth;
+	private String startDateOfBirth;
+	private String endDateOfBirth;
 	
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
@@ -217,12 +218,20 @@ public final class SearchClaimForm extends ActionForm {
 		this.pagination = pagination;
 	}
 
-	public String getDateOfBirth() {
-		return dateOfBirth;
+	public String getStartDateOfBirth() {
+		return startDateOfBirth;
 	}
 
-	public void setDateOfBirth(String dateOfBirth) {
-		this.dateOfBirth = dateOfBirth;
+	public void setStartDateOfBirth(String startDateOfBirth) {
+		this.startDateOfBirth = startDateOfBirth;
+	}
+
+	public String getEndDateOfBirth() {
+		return endDateOfBirth;
+	}
+
+	public void setEndDateOfBirth(String endDateOfBirth) {
+		this.endDateOfBirth = endDateOfBirth;
 	}
 	
 }

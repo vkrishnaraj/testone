@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,7 +57,10 @@ public class SearchClaimAction extends CheckedAction {
 		int currpage = 0;
 
 		SearchClaimForm theForm = (SearchClaimForm) form;
-		Set<FsClaim> resultSet = ClaimDAO.getClaimsFromSearchForm((SearchClaimForm) form, user);
+		Set<FsClaim> resultSet = new LinkedHashSet<FsClaim>();
+		if (request.getParameter("clear") == null) {
+			resultSet = ClaimDAO.getClaimsFromSearchForm((SearchClaimForm) form, user);
+		}
 		
 		if (resultSet.size() == 1) {
 			long claimId = resultSet.toArray(new FsClaim[0])[0].getId();

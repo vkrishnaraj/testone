@@ -61,7 +61,7 @@
         
         <div id="maincontent">
           <h1 class="green">
-            <bean:message key="header.search_criteria" />
+            <bean:message key="header.claim.details" />
             <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
@@ -191,7 +191,7 @@
                 </td>
               </tr>
              <tr>
-             	<td colspan="2">
+             	<td>
              		<bean:message key="colname.phone" />
              		<br />
              		<html:text name="searchClaimForm" property="phone" size="15" maxlength="25" styleClass="textfield" />
@@ -201,11 +201,12 @@
              		<br />
              		<html:text name="searchClaimForm" property="emailAddress" size="35" maxlength="100" styleClass="textfield" />
              	</td>
-             	<td>
+             	<td colspan="2">
              		<bean:message key="colname.dob" />
              		(<%= a.getDateformat().getFormat() %>)
              		<br />
-             		<html:text property="dateOfBirth" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3" name="calendar3" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchClaimForm.dateOfBirth,'calendar3','<%= a.getDateformat().getFormat() %>'); return false;">
+             		<html:text property="startDateOfBirth" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3" name="calendar3" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchClaimForm.startDateOfBirth,'calendar3','<%= a.getDateformat().getFormat() %>'); return false;">&nbsp;-
+             		<html:text property="endDateOfBirth" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar4" name="calendar4" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchClaimForm.endDateOfBirth,'calendar4','<%= a.getDateformat().getFormat() %>'); return false;">
              	</td>
              </tr>
               <tr>

@@ -375,18 +375,6 @@ public class StringUtils {
 		return str;
 	}
   
-  public static String getMd5Hash(String original) {
-	  String toReturn = "";
-	  try {
-		  MessageDigest md = MessageDigest.getInstance("MD5");
-		  byte[] hash = md.digest(original.getBytes(Charset.forName("UTF-8")));
-		  toReturn = getHex(hash);
-	  } catch (NoSuchAlgorithmException nsae) {
-		  logger.error(nsae);
-	  }
-	  return toReturn;
-  }
-  
   private static String getHex( byte [] raw ) {
 	  String HEXES = "0123456789ABCDEF";
 	  if ( raw == null ) {

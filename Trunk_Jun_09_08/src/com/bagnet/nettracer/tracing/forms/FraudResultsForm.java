@@ -11,19 +11,19 @@ public final class FraudResultsForm extends ActionForm {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private FsClaim claim;
+	private long claimId;
 
 	private Set<MatchHistory> primaryResults;
 	private Set<MatchHistory> secondaryResults;
 
-	public FsClaim getClaim() {
-		return claim;
+	public long getClaimId() {
+		return claimId;
 	}
-	
-	public void setClaim(FsClaim claim) {
-		this.claim = claim;
+
+	public void setClaimId(long claimId) {
+		this.claimId = claimId;
 	}
-	
+
 	public Set<MatchHistory> getPrimaryResults() {
 		return primaryResults;
 	}
