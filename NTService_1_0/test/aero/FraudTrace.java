@@ -18,20 +18,20 @@ public class FraudTrace {
 	@Test
 	public void run() {
 		Date start = new Date();
-		Producer.matchClaim(14537);
+//		Producer.matchClaim(3879);
 		Date end = new Date();
 		System.out.println("run1 " + (end.getTime() - start.getTime()));
-		start = new Date();
-		Producer.matchClaim(14537);
-		end = new Date();
-		System.out.println("run1 " + (end.getTime() - start.getTime()));
+//		start = new Date();
+//		Producer.matchClaim(14537);
+//		end = new Date();
+//		System.out.println("run1 " + (end.getTime() - start.getTime()));
 	}
 	
 	//3870
 	
 //	@Test
 	public void letsSeeWhatWeGet(){
-		String sql = "select id from fsclaim";
+		String sql = "select id from fsclaim where id > 3500";
 		SQLQuery pq = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		pq = sess.createSQLQuery(sql.toString());
@@ -43,6 +43,7 @@ public class FraudTrace {
 		int i = 0;
 		for (Long strs : result) {
 			i++;
+			System.out.println("claim: " + strs);
 			if(i%20 == 0){
 				tick = new Date();
 				double percentDone = i/result.size();
@@ -54,7 +55,7 @@ public class FraudTrace {
 			
 			Long c1 = (Long) strs;
 			if(c1 != null){
-				Producer.matchClaim(c1);
+//				Producer.matchClaim(c1);
 			}
 		}
 		

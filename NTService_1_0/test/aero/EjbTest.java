@@ -3,14 +3,20 @@ package aero;
 import javax.ejb.*;
 import javax.naming.*;
 
+import org.hibernate.Hibernate;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
 import org.junit.Test;
 
 
 
 import java.rmi.*;
+import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Properties;
 
+import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
@@ -20,11 +26,14 @@ import aero.nettracer.fs.model.PnrData;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.Blacklist;
+import aero.nettracer.fs.utilities.tracing.Producer;
+import aero.nettracer.fs.utilities.tracing.TraceWrapper;
 import aero.nettracer.selfservice.fraud.ClaimBean;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 import aero.nettracer.selfservice.fraud.PrivacyPermissionsRemote;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions.AccessLevelType;
+import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 
 public class EjbTest {
@@ -92,55 +101,106 @@ public class EjbTest {
 	  }
 	  
 //	  @Test
-	  public void echo(){
-			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");
-		    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer");
-		    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\keystore.jks");
-		    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer");
-		  try{
-			  Context ctx          = getInitialContext();
-			  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
-//			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("permissionsSSL");
-//			  System.out.println(o.hello());
-			  System.out.println(o.echoTest("hello World"));
-			  FsClaim claim = createFsClaim();
-			  long id = o.insertClaim(createFsClaim());
-			  claim.setSwapId(id);
-			  System.out.println(id);
-			  System.out.println(o.insertClaim(claim));
-		  } catch (Exception e){
-			  e.printStackTrace();
-		  }
-	  }
+//	  public void echo(){
+//			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");
+//		    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer");
+//		    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\keystore.jks");
+//		    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer");
+//		  try{
+//			  Context ctx          = getInitialContext();
+//			  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
+////			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("permissionsSSL");
+////			  System.out.println(o.hello());
+//			  System.out.println(o.echoTest("hello World"));
+//			  FsClaim claim = createFsClaim();
+//			  long id = o.insertClaim(createFsClaim());
+//			  claim.setSwapId(id);
+//			  System.out.println(id);
+//			  System.out.println(o.insertClaim(claim));
+//		  } catch (Exception e){
+//			  e.printStackTrace();
+//		  }
+//	  }
 	  
 	  @Test
 	  public void updateTest(){
 		  try{
 			  ClaimBean bean = new ClaimBean();
-			  FsClaim claim = createFsClaim();
-			  long id = bean.insertClaim(createFsClaim());
-			  claim.setSwapId(id);
-			  claim.getIncident().setSwapId(claim.getIncident().getId());
-			  System.out.println("claim:"+id);
-			  System.out.println("incident:"+claim.getIncident().getId());
-			  System.out.println(bean.insertClaim(claim));
+			  File file = createFile();
+			  file.getIncident().setAirline("B6");
+			  long id = bean.insertFile(createFile());
+			  bean.traceFile(id);
+			  
+//			  file.setSwapId(id);
+//			  System.out.println("file:"+id);
+//			  System.out.println(bean.insertFile(file));
 		  } catch (Exception e){
 			  e.printStackTrace();
 		  }
 	  }
 	  
 //	  @Test
-	  public void objectReset(){
-		  FsClaim c = new FsClaim();
-		  c.setAirline("WS");
-		  c.setIncident(new FsIncident());
-		  ClaimBean.resetId(c);	  
-	  }
+//		public void letsSeeWhatWeGet(){
+//			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");
+//		    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer");
+//		    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\keystore.jks");
+//		    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer");
+//		  try{
+//			  Context ctx          = getInitialContext();
+//			  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
+//			  
+//		  
+//			String sql = "select id from fsclaim";
+//			SQLQuery pq = null;
+//			Session sess = HibernateWrapper.getSession().openSession();
+//			pq = sess.createSQLQuery(sql.toString());
+//			pq.addScalar("id", Hibernate.LONG);
+//			List<Long> result = pq.list();
+//			sess.close();
+//			Date start = new Date();
+//			Date tick = new Date();
+//			int i = 0;
+//			for (Long strs : result) {
+//				i++;
+////				System.out.println("claim: " + strs);
+//				if(i%20 == 0){
+//					tick = new Date();
+//					double percentDone = i/result.size();
+//					long tpc = (long) ((tick.getTime() - start.getTime())/i);
+//					long timeLeft = tpc * (result.size() - i);
+//					System.out.println("" + (timeLeft/60000) + "   " + i + "/" + result.size());
+//					System.out.println(o.getIncidentCacheSize() + "   " + o.getClaimCacheSize());
+//				}
+//				
+//				Long c1 = (Long) strs;
+//				if(c1 != null){
+////					Producer.matchClaim(c1);
+//					o.traceClaim(c1);
+//				}
+//			}
+//		  }catch (Exception e){
+//			  e.printStackTrace();
+//		  }
+//			
+//		}
 	  
-	  public static FsClaim createFsClaim() {
+//	  @Test
+//	  public void objectReset(){
+//		  FsClaim c = new FsClaim();
+//		  c.setAirline("WS");
+//		  c.setIncident(new FsIncident());
+//		  ClaimBean.resetIdAndgeocode(c);	  
+//	  }
+	  
+	  public static File createFile() {
 
+		  	File file = new File();
+		  
 			// create the claim
 			FsClaim claim = new FsClaim();
+			file.setClaim(claim);
+			claim.setFile(file);
+			
 			claim.setAirline("WS");
 
 			// create the person
@@ -153,6 +213,10 @@ public class EjbTest {
 			// create the address
 			FsAddress address = new FsAddress();
 			address.setPerson(person);
+			address.setAddress1("2675 Paces Ferry");
+			address.setCity("Atlanta");
+			address.setState("GA");
+			address.setZip("30339");
 			LinkedHashSet<FsAddress> addresses = new LinkedHashSet<FsAddress>();
 			addresses.add(address);
 			
@@ -163,6 +227,8 @@ public class EjbTest {
 			person.setAddresses(addresses);
 			person.setPhones(phones);
 			person.setClaim(claim);
+			person.setFirstName("John");
+			person.setLastName("Smith");
 			LinkedHashSet<Person> claimants = new LinkedHashSet<Person>();
 			claimants.add(person);
 			
@@ -179,6 +245,11 @@ public class EjbTest {
 			
 			// set the fraud incident
 			FsIncident fsIncident = new FsIncident();
+			file.setIncident(fsIncident);
+			fsIncident.setFile(file);
+			
+			fsIncident.setAirline("WS");
+			
 			fsIncident.setReservation(reservation);
 			reservation.setIncident(fsIncident);
 			person.setIncident(fsIncident);
@@ -190,7 +261,7 @@ public class EjbTest {
 			claim.setClaimants(claimants);
 			claim.setIncident(fsIncident);
 			
-			return claim;
+			return file;
 			
 		}
 	  
