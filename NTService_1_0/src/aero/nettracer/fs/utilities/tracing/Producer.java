@@ -153,25 +153,32 @@ public class Producer {
 		if(phoneNumbers.size() > 0){
 
 			sql += " union ";
-			sql += "select c1.id as c1_id, " +
-					"c2.id as c2_id, " +
-					"i2.id as i2_id, " +
-					"c3.id as c3_id, " +
-					"i3.id as i3_id, " +
-					"c4.id as c4_id, " +
-					"i4.id as i4_id, " +
+			sql += "select f1.id as f1_id, " +
+					"f2.id as f2_id, " +
+					"f3.id as f3_id, " +
+					"f4.id as f4_id, " +
+					"f5.id as f5_id, " +
+					"f6.id as f6_id, " +
+					"f7.id as f7_id, " +
 					"'phone' as type ";
 			sql += "from phone ph "
 				+  " left outer join person p on ph.person_id = p.id "
 				+ " left outer join fsclaim c1 on p.claim_id = c1.id "
+				+ " left outer join file f1 on f1.id = c1.file_id "
 				+ "  left outer join fsincident i2 on p.incident_id = i2.id "
 				+ " left outer join fsclaim c2 on i2.claim_id = c2.id "
+				+ " left outer join file f2 on f2.id = c2.file_id "
+				+ " left outer join file f3 on f3.id = i2.file_id "
 				+ "   left outer join reservation r3 on p.reservation_id = r3.id "
 				+ "     left outer join fsincident i3 on r3.incident_id = i3.id "
 				+ "     left outer join fsclaim c3 on i3.claim_id = c3.id "
+				+ " left outer join file f4 on f4.id = c3.file_id "
+				+ " left outer join file f5 on f5.id = i3.file_id "
 				+ "  left outer join reservation r4 on ph.reservation_id =	r4.id "
 				+ "     left outer join fsincident i4 on r4.incident_id = i4.id "
-				+ "    left outer join fsclaim c4 on i4.claim_id = c4.id "                   
+				+ "    left outer join fsclaim c4 on i4.claim_id = c4.id "
+				+ " left outer join file f6 on f6.id = c4.file_id "
+				+ " left outer join file f7 on f7.id = i4.file_id "
 				+ " where 1=0 ";
 
 //			for(Phone phone:phones){
