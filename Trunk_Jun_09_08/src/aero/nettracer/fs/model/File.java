@@ -1,12 +1,14 @@
 package aero.nettracer.fs.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Proxy;
 
@@ -17,16 +19,26 @@ public class File implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
+	@Transient
+	Set<Person> personCache = null;
+	@Transient
+	Set<FsAddress> addressCache = null;
+	@Transient
+	Set<Phone> phoneCache = null;
+
+
+	
+
 	@Id
 	@GeneratedValue
 	private long id;
 	
 	private long swapId;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class, cascade = CascadeType.ALL, mappedBy="file")
 	private FsClaim claim;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL, mappedBy="file")
 	private FsIncident incident;
 	
 	public File(){
@@ -59,5 +71,35 @@ public class File implements Serializable {
 	}
 	public long getSwapId() {
 		return swapId;
+	}
+
+	public Set<Person> getPersonCache() {
+  	return personCache;
+  }
+
+	public void setPersonCache(Set<Person> personCache) {
+  	this.personCache = personCache;
+  }
+
+	public Set<FsAddress> getAddressCache() {
+  	return addressCache;
+  }
+
+	public void setAddressCache(Set<FsAddress> addressCache) {
+  	this.addressCache = addressCache;
+  }
+
+	public Set<Phone> getPhoneCache() {
+  	return phoneCache;
+  }
+
+	public void setPhoneCache(Set<Phone> phoneCache) {
+  	this.phoneCache = phoneCache;
+  }
+	
+	public void resetCache() {
+		this.addressCache = null;
+		this.phoneCache = null;
+		this.personCache = null;
 	}
 }

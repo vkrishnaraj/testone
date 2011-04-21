@@ -30,8 +30,9 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 public class Producer {
 
 	private static boolean debug = false;
-	private static final int MAX_WAIT = 100;
+	private static final int MAX_WAIT = 200;
 	public static final double MILE_SEARCH_RADIUS = 5;
+	private static final long WAIT_TIME = 50;
 	
 	public static Set<MatchHistory> matchFile(long fileId){
 		File file = TraceWrapper.loadFileFromCache(fileId);
@@ -107,7 +108,7 @@ public class Producer {
             + "where 1=0 ";
 
 		Set<Person> persons = Consumer.getPersons(file);
-		
+		file.setPersonCache(persons);
 		for (Person person : persons) {
 			
 			if(person.getFirstName() != null && person.getFirstName().trim().length() > 0 && person.getLastName() != null && person.getLastName().trim().length()>0){
@@ -140,6 +141,7 @@ public class Producer {
 		}
 		
 		Set<Phone> phones = Consumer.getPhones(file);
+		file.setPhoneCache(phones);
 		Set<String> phoneNumbers = new HashSet<String>();
 		//we might have duplicate Phone objects with the same phone number, we want unique phone numbers
 		for(Phone phone:phones){
@@ -195,12 +197,13 @@ public class Producer {
 					"from reservation res " +
 					"left outer join fsincident i2 on res.incident_id = i2.id " +
 					"left outer join fsclaim c2 on i2.claim_id = c2.id " +
-					"left otuer join file f2 on f2.id = c2.file_id " +
+					"left outer join file f2 on f2.id = c2.file_id " +
 					"left outer join file f3 on f3.id = i2.file_id " +
 					"where ccNumber = \'" + file.getIncident().getReservation().getCcNumLastFour() +"\' ";
 		}
 
 		Set<FsAddress> addresses = Consumer.getAddresses(file);
+		file.setAddressCache(addresses);
 		if (addresses != null && addresses.size() > 0) {
 			sql += " union select f1.id as f1_id, " +
 			"f2.id as f2_id, " +
@@ -257,6 +260,9 @@ public class Producer {
 			}		
 		}
 		
+		
+		
+		
 		if(debug)System.out.println(sql);
 		
 		SQLQuery pq = null;
@@ -273,6 +279,7 @@ public class Producer {
 		List<Object[]> result = pq.list();
 
 		sess.close();
+		
 
 		for (Object[] strs : result) {
 			Long f1 = (Long) strs[0];
@@ -308,17 +315,29 @@ public class Producer {
 		
 //		System.out.println((claimQueue.size() + incidentQueue.size()));
 		try {
-			for(int i = 0; v.size() < fileQueue.size() && i < MAX_WAIT; i++){
+			int i = 0;
+			for(i= 0; v.size() < fileQueue.size() && i < MAX_WAIT; i++){
 //				System.out.println("waiting: " + i + ":" + v.size() + "/" + (claimQueue.size() + incidentQueue.size()) );
-				Thread.sleep(40);
+				Thread.sleep(WAIT_TIME);
+			}
+			if (i >= MAX_WAIT) {
+				System.out.println("***WARNING: Maximum Search Time Exceeded: " + (WAIT_TIME * MAX_WAIT) + "ms");
+			} else {
+				file.setPersonCache(null);
+				file.setAddressCache(null);
+				file.setPhoneCache(null);
 			}
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		
+		
 		return getMatchHistoryResult(file.getId());
 	}
 	
+
 	public static Set<MatchHistory> getMatchHistoryResult(long fileId){
 		String personSql = "from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
 				"and (m.file1.id = :id or m.file2.id = :id) order by m.overallScore desc";

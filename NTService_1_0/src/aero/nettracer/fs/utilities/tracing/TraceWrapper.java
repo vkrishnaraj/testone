@@ -1,5 +1,6 @@
 package aero.nettracer.fs.utilities.tracing;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,7 +24,7 @@ public class TraceWrapper {
 	private static ConcurrentHashMap<Long, File> fileCache = new ConcurrentHashMap<Long, File>(3000);
 	
 	private static boolean LOAD_FROM_CACHE = false;
-	private static int MAX_CACHE_SIZE = 1000000;
+	private static int MAX_CACHE_SIZE = 15000;
 	
 	public static File loadFile(long fileId){
 		String sql = "from aero.nettracer.fs.model.File f where f.id = :id";
@@ -41,6 +42,7 @@ public class TraceWrapper {
 	}
 	
 	public static File loadFileFromCache(Long id){
+		
 		if(LOAD_FROM_CACHE && fileCache.containsKey(id)){
 //			System.out.println("i cache");
 			return fileCache.get(id);

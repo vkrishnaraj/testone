@@ -69,7 +69,7 @@ public class FsClaim implements Serializable {
 	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Blacklist.class, cascade = CascadeType.ALL)
 	private Blacklist blacklist;
 
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL, mappedBy="fsClaim")
 	private aero.nettracer.fs.model.FsIncident incident;
 	
 	@Transient

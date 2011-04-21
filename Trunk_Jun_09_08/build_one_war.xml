@@ -1,4 +1,4 @@
-<project name="1.75" default="build-jetblue-dev" basedir=".">
+<project name="3.0" default="aa-build-ws-ear" basedir=".">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
@@ -294,7 +294,7 @@
 		</jar>
 	</target>
 	
-	<target name="jar-ntfs-model">
+	<target name="aa-jar-ntfs-model">
 		<jar destfile="${build.dir}/claim_model.jar">
 			<fileset dir="${build.dir}/westjet_web/classes/" >
 				<include name="**/**/aero/nettracer/fs/**/*.*"/>
@@ -302,6 +302,7 @@
 				<include name="**/**/com/bagnet/nettracer/tracing/constant/TracingConstants.class"/>
 			</fileset>
 		</jar>
+		<copy todir="${svc.dir}" file="${build.dir}/claim_model.jar" />
 	</target>
 
 	<target name="compile-gensrc" depends="init,gen-src">
@@ -415,7 +416,7 @@
 		</copy>
 	</target>
 	
-	<target name="build-ws-ear">
+	<target name="aa-build-ws-ear">
 		<antcall target="build-westjet-local"/>
 		
 		<copy todir="${build.dir}/dist/web/lib" >

@@ -45,11 +45,13 @@ public class Consumer implements Runnable{
 	public static final double P_EMAIL = 20;
 
 	private static final double ADDRESS_FAR_PROXIMITY = 5;
-	private static final double ADDRESS_CLOSE_PROXIMITY = 30;
+	private static final double ADDRESS_CLOSE_PROXIMITY = 20;
 
 	private static final double ADDRESS_CLOSE_PROXIMITY_LIMIT = .15;
 
 	private static final double ADDRESS_SIMILAR = 40;
+
+	private static final double PHONE_MATCH = 30;
 	
 	
 	
@@ -98,7 +100,8 @@ public class Consumer implements Runnable{
 			processPerson(match);
 			processAddress(match);
 			processReservation(match);
-
+			processPhone(match);
+			
 			if(match.getDetails() == null || match.getOverallScore() < MIN_MATCH_SCORE){
 				//no match details so don't save
 				//can expand to include not saving match if min match percent below certain threshold
@@ -109,6 +112,7 @@ public class Consumer implements Runnable{
 			Session sess = null;
 			try{
 				sess = HibernateWrapper.getSession().openSession();
+				// TODO: Check to see if match already exists???
 				t = sess.beginTransaction();
 				sess.saveOrUpdate(match);
 				t.commit();
@@ -138,6 +142,45 @@ public class Consumer implements Runnable{
 		}
 	}
 	
+	private static void processPhone(MatchHistory match) {
+
+		Set<Phone> plist1 = match.getFile1().getPhoneCache();
+		if(plist1 == null){
+			plist1 = getPhones(match.getFile1());
+		}	
+
+		HashSet<String> phoneNumberMatches = new HashSet<String>();
+		Set <MatchDetail> details = match.getDetails();
+		
+		Set<Phone> plist2 = null;
+		if(match.getFile2() != null){
+			plist2 = getPhones(match.getFile2());
+		} 
+		
+		for (Phone p1: plist1) {
+			for (Phone p2: plist2) {
+				if (p1.getPhoneNumber() != null && p2.getPhoneNumber() != null &&
+						p1.getPhoneNumber().trim().length() > 0 && p2.getPhoneNumber().trim().length() > 0 
+						&& p1.getPhoneNumber().equals(p2.getPhoneNumber())) {
+					phoneNumberMatches.add(p1.getPhoneNumber());
+				}
+			}
+		}
+		
+		for (String s: phoneNumberMatches) {
+			MatchDetail detail = new MatchDetail();
+			detail.setContent1(s);
+			detail.setContent2(s);
+			detail.setDescription("Phone Number Match");
+			detail.setMatch(match);
+			detail.setPercent(PHONE_MATCH);
+			details.add(detail);			
+		}
+
+	  
+  }
+
+
 	public static Set<Person> getPersons(File file){
 		if(file.getClaim() != null){
 			return getPersons(file.getClaim());
@@ -364,10 +407,11 @@ public class Consumer implements Runnable{
 	}
 	
 	private static void processAddress(MatchHistory match){
-		Set<FsAddress> plist1 = null;
-		if(match.getFile1() != null){
+		Set<FsAddress> plist1 = match.getFile1().getAddressCache();
+		if(plist1 == null){
 			plist1 = getAddresses(match.getFile1());
-		} 
+		}	
+
 		
 		Set<FsAddress> plist2 = null;
 		if(match.getFile2() != null){
@@ -538,8 +582,8 @@ public class Consumer implements Runnable{
 	private static void processPerson(MatchHistory match){
 
 		// TODO: Matt to review: I modified code to not assume a claim as the initial element.
-		Set<Person> plist1 = null;
-		if(match.getFile1() != null){
+		Set<Person> plist1 = match.getFile1().getPersonCache();
+		if(plist1 == null){
 			plist1 = getPersons(match.getFile1());
 		}	
 		Set<Person> plist2 = null;

@@ -2,6 +2,7 @@ package aero.nettracer.fs.model.detection;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.Vector;
 
@@ -19,14 +20,13 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.File;
-import aero.nettracer.fs.model.FsClaim;
-import aero.nettracer.fs.model.FsIncident;
+import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.Person;
 
 @Entity
 @Proxy(lazy = false)
 public class MatchHistory implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue
 	private long id;
