@@ -10,9 +10,13 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 
 import org.apache.log4j.Logger;
@@ -394,6 +398,35 @@ public class StringUtils {
 		  .append(HEXES.charAt((b & 0x0F)));
 	  }
 	  return hex.toString();
+  }
+  
+  public static String sha1(String pass){
+	  try{
+		  MessageDigest md = MessageDigest.getInstance("SHA-1");
+		  byte [] h = md.digest(pass.getBytes());
+		  return getHex(h);
+	  } catch (Exception e){
+			e.printStackTrace();
+	  }
+	  return null;
+  }
+
+  public static String keyGen(){  
+	  Date d = new Date();
+	  SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
+	  df.setTimeZone(TimeZone.getTimeZone("GMT"));
+	  Random ran = new Random();
+	  int i = ran.nextInt(Integer.MAX_VALUE);
+	  return df.format(d) + String.format("%8s", Integer.toHexString(i)).replace(' ', '0').toUpperCase();
+  }
+  
+  public static String hmacHash(String key, String pass){
+	  try{
+		  return sha1(key + sha1(pass));
+	  } catch (Exception e){
+			e.printStackTrace();
+	  }
+	  return null;
   }
   
 }
