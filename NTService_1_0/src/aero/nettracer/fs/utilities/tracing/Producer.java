@@ -31,7 +31,8 @@ public class Producer {
 
 	private static boolean debug = true;
 	private static final int MAX_WAIT = 200;
-	public static final double MILE_SEARCH_RADIUS = 5;
+	//TODO review mile radius
+	public static final double MILE_SEARCH_RADIUS = 2;
 	private static final long WAIT_TIME = 50;
 	
 	public static Set<MatchHistory> matchFile(long fileId){
@@ -46,12 +47,12 @@ public class Producer {
 	//for now we are not to remove any match histories
 	@Deprecated
 	private static void removeMatchHistory(long fileId){
-		String personSql = "delete from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
-		"and (m.file1.id = :id or m.file2.id = :id)";
+		String personSql = "delete from MatchHistory m where 1=1 " +
+		"and (m.file1_id = :id)";
 
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(personSql.toString());
+		q = sess.createSQLQuery(personSql.toString());
 		q.setParameter("id", fileId);
 		q.executeUpdate();
 		sess.close();
@@ -68,7 +69,7 @@ public class Producer {
 			match.setCreatedate(DateUtils.convertToGMTDate(new Date()));
 			try{
 				TraceWrapper.getMatchQueue().put(match);
-				if(debug)System.out.println("Producer add file: " + id);
+//				if(debug)System.out.println("Producer add file: " + id);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -84,7 +85,7 @@ public class Producer {
 		Vector v = new Vector();
 		
 //		so we are to keep old match histories
-//		removeMatchHistory(claim.getId());
+//		removeMatchHistory(file.getId());
 		
 		String sql = "select f1.id as f1_id, " // IS there a claim associated ot this person 
 			+ "f2.id as f2_id, " // # Does the icident have claim
@@ -323,19 +324,19 @@ public class Producer {
 		if(debug)System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
 		
 		
-//		System.out.println((claimQueue.size() + incidentQueue.size()));
+		System.out.println(fileQueue.size());
 		try {
 			int i = 0;
 			for(i= 0; v.size() < fileQueue.size() && i < MAX_WAIT; i++){
-//				System.out.println("waiting: " + i + ":" + v.size() + "/" + (claimQueue.size() + incidentQueue.size()) );
+				System.out.println("waiting: " + i + ":" + v.size() + "/" + (fileQueue.size()) );
 				Thread.sleep(WAIT_TIME);
 			}
 			if (i >= MAX_WAIT) {
 				System.out.println("***WARNING: Maximum Search Time Exceeded: " + (WAIT_TIME * MAX_WAIT) + "ms");
 			} else {
-				file.setPersonCache(null);
-				file.setAddressCache(null);
-				file.setPhoneCache(null);
+//				file.setPersonCache(null);
+//				file.setAddressCache(null);
+//				file.setPhoneCache(null);
 			}
 
 		} catch (InterruptedException e) {

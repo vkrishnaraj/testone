@@ -170,6 +170,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 	
 	public static FsClaim resetClaim(FsClaim claim){
 		if(claim != null){
+			claim.setSwapId(claim.getId());
 			claim.setId(0);
 			
 			claim.setIncident(resetIncident(claim.getIncident()));

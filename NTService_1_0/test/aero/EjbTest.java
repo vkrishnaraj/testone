@@ -41,8 +41,8 @@ public class EjbTest {
 	  static String user     = null;
 	  static String password = null;
 //	  static String url      = "jnp://127.0.0.1:1199";
-	  static String url      = "jnp://192.168.2.145:1199";
-
+//	  static String url      = "jnp://192.168.2.145:1199";
+	  static String url      = "jnp://184.172.41.2:1199";
 	
 	  static public Context getInitialContext() throws Exception {
 		    Properties p = new Properties();
@@ -79,7 +79,7 @@ public class EjbTest {
 //
 //	  }
 	  
-//	  @Test
+	  @Test
 	  public void hello(){
 			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");
 		    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer");
@@ -88,13 +88,14 @@ public class EjbTest {
 		  
 		  try{
 			  Context ctx          = getInitialContext();
-			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("NTServices_1_0/PrivacyPermissionsBean/remote");
+			  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
 //			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("permissionsSSL");
 //			  System.out.println(o.hello());
-			  PrivacyPermissions p = o.getPrivacyPermissions("WS", AccessLevelType.def);
-			  System.out.println(p.isName());
-			  p.setName(false);
-			  o.setPrivacyPermissions(p);
+//			  PrivacyPermissions p = o.getPrivacyPermissions("WS", AccessLevelType.def);
+//			  System.out.println(p.isName());
+//			  p.setName(false);
+//			  o.setPrivacyPermissions(p);
+			  System.out.println(o.echoTest("hello world"));
 		  } catch (Exception e){
 			  e.printStackTrace();
 		  }
@@ -122,7 +123,7 @@ public class EjbTest {
 //		  }
 //	  }
 	  
-	  @Test
+//	  @Test
 	  public void updateTest(){
 		  try{
 			  ClaimBean bean = new ClaimBean();

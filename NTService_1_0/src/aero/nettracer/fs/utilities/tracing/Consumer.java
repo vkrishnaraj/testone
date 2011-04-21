@@ -24,11 +24,11 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class Consumer implements Runnable{
 
-	public static boolean debug = false;
+	public static boolean debug = true;
 	
 	public static final int MATCH = 3;
 	
-	public static final double MIN_MATCH_SCORE = 0;
+	public static final double MIN_MATCH_SCORE = 10;
 	public static final double P_SOUNDEX = 5;
 	public static final double P_METAPHONE = 5;
 	public static final double P_NAME = 5;
@@ -146,6 +146,7 @@ public class Consumer implements Runnable{
 
 		Set<Phone> plist1 = match.getFile1().getPhoneCache();
 		if(plist1 == null){
+			System.out.println("phone cache is null");
 			plist1 = getPhones(match.getFile1());
 		}	
 
@@ -159,8 +160,7 @@ public class Consumer implements Runnable{
 		
 		for (Phone p1: plist1) {
 			for (Phone p2: plist2) {
-				if (p1.getPhoneNumber() != null && p2.getPhoneNumber() != null &&
-						p1.getPhoneNumber().trim().length() > 0 && p2.getPhoneNumber().trim().length() > 0 
+				if (validPhone(p1.getPhoneNumber()) && validPhone(p2.getPhoneNumber()) 
 						&& p1.getPhoneNumber().equals(p2.getPhoneNumber())) {
 					phoneNumberMatches.add(p1.getPhoneNumber());
 				}
@@ -180,7 +180,27 @@ public class Consumer implements Runnable{
 	  
   }
 
+	private static boolean validPhone(String p){
+		//TODO what is the min valid phone length
+		if(p == null || p.trim().length() > 5){
+			return false;
+		}
+		
+		boolean valid = true;
+		
+		char t = p.charAt(0);
+		for(char c:p.toCharArray()){
+			if(t != c){
+				valid = false;
+			}
+		}
+		return valid;
+		
+	}
+	
 
+
+	
 	public static Set<Person> getPersons(File file){
 		if(file.getClaim() != null){
 			return getPersons(file.getClaim());
@@ -533,41 +553,65 @@ public class Consumer implements Runnable{
 			boolean typeEmpty = (r1.getCcType() != null && r1.getCcType().trim().length() > 0) ? false:true;
 			boolean expEmpty = (r1.getCcExpMonth() != 0) ? false:true;
 			
+			
+			System.out.print("1CC4:" + (r1.getCcNumLastFour() == null ? "null":r1.getCcNumLastFour()) + " ");
+			System.out.print("2CC4:" + (r2.getCcNumLastFour() == null ? "null":r2.getCcNumLastFour()) + " ");
+			System.out.print("1type:" + (r1.getCcType() == null ? "null":r1.getCcType()) + " ");
+			System.out.print("2type:" + (r2.getCcType() == null ? "null":r2.getCcType()) + " ");
+			System.out.print("1CC16:" + (r1.getCcNumber() == null ? "null":r1.getCcNumber()) + " ");
+			System.out.print("2CC16:" + (r2.getCcNumber() == null ? "null":r2.getCcNumber()) + " ");
+			System.out.print("1CCMon:" + (r1.getCcExpMonth() == 0 ? "null":r1.getCcExpMonth()) + " ");
+			System.out.print("2CCMon:" + (r2.getCcExpMonth() == 0 ? "null":r2.getCcExpMonth()) + " ");
+			System.out.print("1CCY:" + (r1.getCcExpYear() == 0 ? "null":r1.getCcExpYear()) + " ");
+			System.out.print("2CCY:" + (r2.getCcExpYear() == 0 ? "null":r2.getCcExpYear()) + " ");
+			
 			if(num16){						
 				MatchDetail detail = new MatchDetail();
-				detail.setContent1(""); // TODO: Code review - should this be empty?
-				detail.setContent2("");
 				detail.setMatch(match);
 				match.getDetails().add(detail);
 				if(type && exp){
+					detail.setContent1(r1.getCcType() + "**************** exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
+					detail.setContent2(r2.getCcType() + "**************** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card Full Match");
 					detail.setPercent(P_CC_16 + P_CC_EXP + P_CC_TYPE);
 				} else if(type && expEmpty) {
+					detail.setContent1(r1.getCcType() + "****************");
+					detail.setContent2(r2.getCcType() + "****************");
 					detail.setDescription("Credit Card Number and Type Match");
 					detail.setPercent(P_CC_16 + P_CC_TYPE);
 				} else if(exp && typeEmpty){
+					detail.setContent1("**************** exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
+					detail.setContent2("**************** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card Number and Expiration Match");
 					detail.setPercent(P_CC_16 + P_CC_EXP);
 				} else if(expEmpty && typeEmpty){
+					detail.setContent1("**************** exp:");
+					detail.setContent2("**************** exp:");
 					detail.setDescription("Credit Card Number Match");
 					detail.setPercent(P_CC_16);
 				}
 			} else if (num4){
 				MatchDetail detail = new MatchDetail();
-				detail.setContent1("");
-				detail.setContent2("");
 				detail.setMatch(match);
 				match.getDetails().add(detail);
 				if(type && exp){
+					detail.setContent1(r1.getCcType() + r1.getCcNumLastFour() + " exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
+					detail.setContent2(r2.getCcType() + r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card 4 digit, type and expiration Match");
 					detail.setPercent(P_CC_4_TYPE_EXP);
 				} else if(type && expEmpty) {
+					detail.setContent1(r1.getCcType() + r1.getCcNumLastFour());
+					detail.setContent2(r2.getCcType() + r2.getCcNumLastFour());
 					detail.setDescription("Credit Card 4 digit and Type Match");
 					detail.setPercent(P_CC_4 + P_CC_TYPE);
 				} else if(exp && typeEmpty){
+					detail.setContent1(r1.getCcNumLastFour() + " exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
+					detail.setContent2(r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card 4 digit and Expiration Match");
 					detail.setPercent(P_CC_4 + P_CC_EXP);
 				} else if(expEmpty && typeEmpty){
+					detail.setContent1(r1.getCcNumLastFour());
+					detail.setContent2(r2.getCcNumLastFour());
 					detail.setDescription("Credit Card 4 digit Match");
 					detail.setPercent(P_CC_4);
 				}
@@ -631,24 +675,50 @@ public class Consumer implements Runnable{
 				}//end name
 				// TODO: Update contents appropriately
 				// TODO: Need to split up license number from issuer (they should build).
-				if(p1.getDriversLicenseNumber() != null && p1.getDriversLicenseNumber().trim().length() > 0
-						&& p1.getDriversLicenseIssuer() != null && p1.getDriversLicenseIssuer().trim().length() > 0){
-					if(p1.getDriversLicenseNumber().equalsIgnoreCase(p2.getDriversLicenseNumber())
-							&& p1.getDriversLicenseIssuer().equalsIgnoreCase(p2.getDriversLicenseIssuer())){
-						MatchDetail detail = new MatchDetail();
-						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-						detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-						detail.setDescription("Driver's License Match");
-						detail.setMatch(match);
-						detail.setPercent(P_DRIVERS);
-						details.add(detail);
-					}
-				}//end drivers
+				
+				boolean driverNumberNull = p1.getDriversLicenseNumber() == null || p1.getDriversLicenseNumber().trim().length() > 0 
+										|| p2.getDriversLicenseNumber() == null || p2.getDriversLicenseNumber().trim().length() > 0 ? true:false;
+				boolean driverNumber = !driverNumberNull && p1.getDriversLicenseNumber().equalsIgnoreCase(p2.getDriversLicenseNumber()) ? true:false;
+				boolean driverIssueNull = p1.getDriversLicenseIssuer() == null || p1.getDriversLicenseIssuer().trim().length() > 0 
+											|| p2.getDriversLicenseIssuer() == null || p2.getDriversLicenseIssuer().trim().length() > 0 ? true:false;
+				boolean driverIssue = !driverIssueNull && p1.getDriversLicenseIssuer().equalsIgnoreCase(p2.getDriversLicenseIssuer()) ? true:false;
+				
+				if(driverNumber && driverIssue){
+					MatchDetail detail = new MatchDetail();
+					detail.setContent1(p1.getDriversLicenseIssuer() + "********");
+					detail.setContent2(p2.getDriversLicenseIssuer() + "********");
+					detail.setDescription("Driver's License Match");
+					detail.setMatch(match);
+					detail.setPercent(P_DRIVERS);
+					details.add(detail);
+				} else if (driverNumber && driverIssueNull){
+					MatchDetail detail = new MatchDetail();
+					detail.setContent1("********");
+					detail.setContent2("********");
+					detail.setDescription("Driver's License Match");
+					detail.setMatch(match);
+					detail.setPercent(P_DRIVERS);
+					details.add(detail);
+				}
+				
+//				if(p1.getDriversLicenseNumber() != null && p1.getDriversLicenseNumber().trim().length() > 0
+//						&& p1.getDriversLicenseIssuer() != null && p1.getDriversLicenseIssuer().trim().length() > 0){
+//					if(p1.getDriversLicenseNumber().equalsIgnoreCase(p2.getDriversLicenseNumber())
+//							&& p1.getDriversLicenseIssuer().equalsIgnoreCase(p2.getDriversLicenseIssuer())){
+//						MatchDetail detail = new MatchDetail();
+//						detail.setContent1("********");
+//						detail.setContent2("********");
+//						detail.setDescription("Driver's License Match");
+//						detail.setMatch(match);
+//						detail.setPercent(P_DRIVERS);
+//						details.add(detail);
+//					}
+//				}//end drivers
 				if(p1.getEmailAddress() != null && p1.getEmailAddress().trim().length() > 0){
 					if(p1.getEmailAddress().equals(p2.getEmailAddress())){
 						MatchDetail detail = new MatchDetail();
-						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-						detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+						detail.setContent1(p1.getEmailAddress());
+						detail.setContent2(p2.getEmailAddress());
 						detail.setDescription("Email Address Match");
 						detail.setMatch(match);
 						detail.setPercent(P_EMAIL);
@@ -658,8 +728,8 @@ public class Consumer implements Runnable{
 				if(p1.getFfNumber() != null && p1.getFfNumber().trim().length() > 0){
 					if(p1.getFfNumber().equalsIgnoreCase(p2.getFfNumber())){
 						MatchDetail detail = new MatchDetail();
-						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-						detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+						detail.setContent1(p1.getFfNumber());
+						detail.setContent2(p2.getFfNumber());
 						detail.setDescription("Frequent Flyer Number Match");
 						detail.setMatch(match);
 						detail.setPercent(P_FFN);
@@ -670,8 +740,8 @@ public class Consumer implements Runnable{
 					if(p1.getPassportNumber().equalsIgnoreCase(p2.getPassportNumber())){
 						// TODO: Update contents appropriately
 						MatchDetail detail = new MatchDetail();
-						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-						detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+						detail.setContent1("*********");
+						detail.setContent2("*********");
 						detail.setDescription("Passport Match");
 						detail.setMatch(match);
 						detail.setPercent(P_PASSPORT);
@@ -682,8 +752,8 @@ public class Consumer implements Runnable{
 				if(p1.getSocialSecurity() != null && p1.getSocialSecurity().trim().length() > 0){
 					if(p1.getSocialSecurity().equalsIgnoreCase(p2.getSocialSecurity())){
 						MatchDetail detail = new MatchDetail();
-						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-						detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+						detail.setContent1("*********");
+						detail.setContent2("*********");
 						detail.setDescription("SSN Match");
 						detail.setMatch(match);
 						detail.setPercent(P_SSN);

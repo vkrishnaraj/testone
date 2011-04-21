@@ -23,7 +23,7 @@ public class TraceWrapper {
 	private static ConcurrentHashMap<Long, FsClaim> claimCache = new ConcurrentHashMap<Long, FsClaim>(3000);
 	private static ConcurrentHashMap<Long, File> fileCache = new ConcurrentHashMap<Long, File>(3000);
 	
-	private static boolean LOAD_FROM_CACHE = true;
+	private static boolean LOAD_FROM_CACHE = false;
 	private static int MAX_CACHE_SIZE = 15000;
 	
 	public static File loadFile(long fileId){
@@ -155,11 +155,13 @@ public class TraceWrapper {
 
 	public static ArrayBlockingQueue<MatchHistory> getMatchQueue(){
 		if(matchQueue == null){
-			matchQueue = new ArrayBlockingQueue<MatchHistory>(1000);
+			matchQueue = new ArrayBlockingQueue<MatchHistory>(10000);
 			for (int i=0; i<maxThreads; ++i) {
 				try{
 					Consumer consumer = new Consumer(matchQueue, Consumer.MATCH, i);
-					new Thread(consumer).start();
+					Thread t = new Thread(consumer, "CosumerThread " + i);
+					t.setPriority(Thread.MIN_PRIORITY);
+					t.start();
 				}catch(Exception e){
 					e.printStackTrace();
 				}

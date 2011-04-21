@@ -61,7 +61,8 @@ public class HibernateWrapper {
 			// Obtain the correct session factory.
 
 			if (geoSessionFactory == null) {
-				geoSessionFactory = geoConfig.configure(new File(hibernate_geo_path)).buildSessionFactory();
+//				geoSessionFactory = geoConfig.configure(new File(hibernate_geo_path)).buildSessionFactory();
+				return geoConfig.configure(HibernateWrapper.class.getResource("/hibernate_geo.cfg.xml")).buildSessionFactory();
 			}
 			return geoSessionFactory;
 		} catch (Exception e) {
