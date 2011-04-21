@@ -16,7 +16,7 @@
 	<h:form id="appForm">
 	<div>
 		<div id="step">
-			<t:outputText value="Step 3 of 6" />
+			<t:outputText value="Step 5 of 8" />
 		</div>
 		
 		<div id="langSelect">
@@ -36,6 +36,7 @@
 		</div>
 	
 	</div>
+	<h:panelGroup rendered="#{passengerController.bagDetailsLabel.bagDescriptiveText.hidden}" >
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
@@ -50,7 +51,7 @@
 						<!-- Start body content -->
 						
 						<h:panelGrid  width="95%">
-							<t:outputText value="#{passengerController.bagDetailsLabel.bagDescriptiveText}" styleClass="bodycopy"/>
+							<t:outputText value="#{passengerController.bagDetailsLabel.bagDescriptiveText.label}" styleClass="bodycopy"/>
 						</h:panelGrid>
 							
 					  	<!-- End body content -->
@@ -64,6 +65,7 @@
 					<div class="clear"></div>
 				</div>
 			</div><!-- ends container -->
+			</h:panelGroup>
 			
 		
 	<div class="container containerfull">
@@ -84,7 +86,7 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagRequiredFieldMessage}"  
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagRequiredFieldMessage.label}"  
 							styleClass="requiredField"/>	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
@@ -105,7 +107,7 @@
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody">
-							<h:outputText value="#{passengerController.bagDetailsLabel.bagHelp}"  styleClass="bodycopy"/>
+							<h:outputText value="#{passengerController.bagDetailsLabel.bagHelp.label}"  styleClass="bodycopy"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
@@ -138,20 +140,20 @@
 			
 				<rich:spacer width="290px"/>
 			
-				<h:commandButton id="savePassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
+				<h:commandButton id="savePassInfo" value="#{passengerController.passengerInfoLabel.save.label}"
 						  action="#{passengerController.saveBagInfo}"
 				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
 						styleClass="button140pxred button140pxred2" />
 				
 				<rich:spacer width="20px"/>
 			
-				<h:commandButton id="prevFlightInfo" value="#{passengerController.flightLabel.flightPrevious}"
+				<h:commandButton id="prevFlightInfo" value="#{passengerController.flightLabel.previous.label}"
 				 	 immediate="true"  action="#{passengerController.goBackToFlightDetails}"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
-				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoForward}"
+				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.forward.label}"
 				 	action="#{passengerController.gotoFileUpload}"
 					styleClass="button140pxred button140pxred2" />
 				

@@ -16,7 +16,7 @@
 	<a4j:form id="appForm">
 	<div>
 		<div id="step">
-			<t:outputText value="Step 1 of 6" />
+			<t:outputText value="Step 3 of 8" />
 		</div>
 		
 		<div id="langSelect">
@@ -36,6 +36,7 @@
 		</div>
 	
 	</div>
+	<h:panelGroup rendered="#{passengerController.passengerInfoLabel.descriptiveText.hidden}" >
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
@@ -49,7 +50,7 @@
 						
 						<!-- Start body content -->
 						
-						<t:outputText value="#{passengerController.passengerInfoLabel.passengerInfoDescriptiveText}" 
+						<t:outputText value="#{passengerController.passengerInfoLabel.descriptiveText.label}" 
 							styleClass="bodycopy"/>
 							
 					  	<!-- End body content -->
@@ -63,6 +64,7 @@
 					<div class="clear"></div>
 				</div>
 			</div><!-- ends container -->
+			</h:panelGroup>
 			
 		
 	<div class="container containerfull">
@@ -83,7 +85,7 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.requiredFieldMessage}" styleClass="bodycopy"/>	
+					<t:outputText value="#{passengerController.passengerInfoLabel.requiredFieldMessage.label}" styleClass="bodycopy"/>	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
@@ -104,7 +106,7 @@
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody">
-							<h:outputText value="#{passengerController.passengerInfoLabel.passengerInfoHelp}" styleClass="bodycopy"/>
+							<h:outputText value="#{passengerController.passengerInfoLabel.help.label}" styleClass="bodycopy"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
@@ -146,19 +148,19 @@
 			
 				<rich:spacer width="290px"/>
 			
-				<h:commandButton id="savePassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
+				<h:commandButton id="savePassInfo" value="#{passengerController.passengerInfoLabel.save.label}"
 				 		tabindex="25" action="#{passengerController.savePassengerInfo}"
 						styleClass="button140pxred button140pxred2" />
 				
 				<rich:spacer width="20px"/>
 			
-				<h:commandButton id="cancelPassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoCancel}"
-				 	tabindex="26" immediate="true" action="#{passengerController.cancel}"
+				<h:commandButton id="cancelPassInfo" value="#{passengerController.flightLabel.previous.label}"
+				 	tabindex="26" immediate="true" action="#{passengerController.goBackToLiability}"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
-				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.passengerInfoForward}"
+				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.forward.label}"
 				 	tabindex="27" action="#{passengerController.gotoFlightDetails}"
 					styleClass="button140pxred button140pxred2" />
 				

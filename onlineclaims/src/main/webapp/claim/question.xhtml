@@ -10,7 +10,7 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.fraudQuestionLabel.tsaInfo}:"  styleClass="subHeader"/>	
+					<t:outputText value="#{passengerController.fraudQuestionLabel.tsaInfo.label}:"  styleClass="subHeader"/>	
 				</div>
 				
 				<div>
@@ -20,17 +20,17 @@
 				<div>
 				<h:panelGrid columns="3" width="65%">
 					<h:panelGroup>	
-					<t:outputText value="#{passengerController.fraudQuestionLabel.tsaInspect}:" styleClass="formLabel"/>	
+					<t:outputText value="#{passengerController.fraudQuestionLabel.tsaInspect.label}:" styleClass="formLabel"/>	
 					<h:outputText value="&#160;" />
 							<h:graphicImage value="../_images/reqbullet.gif"  
-									rendered="#{passengerController.fraudQuestionLabel.tsaInspectState eq 2}"/>
+									rendered="#{passengerController.fraudQuestionLabel.tsaInspect.required}"/>
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>
 					<h:selectOneRadio   value="#{passengerBean.tsaInspect}"  label="Tsa Inspected" 
 						disabled="#{passengerController.readOnlyOnSubmitted}"
-						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.fraudQuestionLabel.tsaInspect}'" 
-						required="#{passengerController.fraudQuestionLabel.tsaInspectState eq 2}">
+						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'#{passengerController.fraudQuestionLabel.tsaInspect.label}'" 
+						required="#{passengerController.fraudQuestionLabel.tsaInspect.required}">
 										<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
 										<f:selectItem itemLabel="No" itemValue="false"/>
 					</h:selectOneRadio>
@@ -40,20 +40,20 @@
 					<rich:spacer  height="10" title=""/>
 					
 					<h:panelGroup>
-					<t:outputText value="#{passengerController.fraudQuestionLabel.bagConfirmNote}:" styleClass="formLabel"/>
+					<t:outputText value="#{passengerController.fraudQuestionLabel.bagConfirmNote.label}:" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 							<h:graphicImage value="../_images/reqbullet.gif"  
-									rendered="#{passengerController.fraudQuestionLabel.bagConfirmNoteState eq 2}"/>
+									rendered="#{passengerController.fraudQuestionLabel.bagConfirmNote.required}"/>
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>	
 					
 					<h:selectOneRadio   value="#{passengerBean.bagConfirmNote}"	label="Bag Confirm Note"
 						layout="lineDirection"
 						disabled="#{passengerController.readOnlyOnSubmitted}"
-						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.fraudQuestionLabel.bagConfirmNote}'" 
-						readonly="#{passengerController.fraudQuestionLabel.bagConfirmNoteState eq 3}"
-						required="#{passengerController.fraudQuestionLabel.bagConfirmNoteState eq 2}">
+						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'#{passengerController.fraudQuestionLabel.bagConfirmNote.label}'" 
+						readonly="#{passengerController.fraudQuestionLabel.bagConfirmNote.hidden}"
+						required="#{passengerController.fraudQuestionLabel.bagConfirmNote.required}">
 						<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
 						<f:selectItem itemLabel="No" itemValue="false"/>
 					</h:selectOneRadio>
@@ -68,27 +68,27 @@
 				
 				<div>
 					<h:panelGroup>	
-					<t:outputText value="#{passengerController.fraudQuestionLabel.inspectionPlace}:" styleClass="formLabel"/>
+					<t:outputText value="#{passengerController.fraudQuestionLabel.inspectionPlace.label}:" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 							<h:graphicImage value="../_images/reqbullet.gif"  
-									rendered="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 2}"/>
+									rendered="#{passengerController.fraudQuestionLabel.inspectionPlace.required}"/>
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>
 					<t:inputText value="#{passengerBean.inspectionPlace}" label="Place Of Inspection" tabindex="3"
-						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.fraudQuestionLabel.inspectionPlace}'" 
-						readonly="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 3
+						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'#{passengerController.fraudQuestionLabel.inspectionPlace.label}'" 
+						readonly="#{passengerController.fraudQuestionLabel.inspectionPlace.hidden
 							|| passengerController.readOnlyOnSubmitted}"
-						validatorMessage="#{passengerController.fraudQuestionLabel.inspectionPlace} :
-									#{passengerController.passengerInfoLabel.fieldLength} 20"
-						size="60" required="#{passengerController.fraudQuestionLabel.inspectionPlaceState eq 2}">
+						validatorMessage="#{passengerController.fraudQuestionLabel.inspectionPlace.label} :
+									#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+						size="60" required="#{passengerController.fraudQuestionLabel.inspectionPlace.required}">
 						<f:validateLength maximum="20"/>
 					</t:inputText>
 					<rich:spacer width="100%" height="20" title=""/>
 				</div>
 				
 				<div>
-					<t:outputText value="#{passengerController.fraudQuestionLabel.moreClaim}" styleClass="subHeader"/>	
+					<t:outputText value="#{passengerController.fraudQuestionLabel.moreClaim.label}" styleClass="subHeader"/>	
 				</div>
 				<div>
 					<rich:spacer width="100%" height="10" title=""/>
@@ -97,10 +97,10 @@
 				<h:panelGrid columns="3" width="88%"  columnClasses="width1,width2,width3">
 					<h:panelGrid columns="1" width="100%" >
 						<h:panelGroup>
-							<t:outputText value="#{passengerController.fraudQuestionLabel.anotherClaim}" styleClass="formLabel"/>
+							<t:outputText value="#{passengerController.fraudQuestionLabel.anotherClaim.label}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
 							<h:graphicImage value="../_images/reqbullet.gif"  
-								rendered="#{passengerController.fraudQuestionLabel.anotherClaimState eq 2}"/>
+								rendered="#{passengerController.fraudQuestionLabel.anotherClaim.required}"/>
 						</h:panelGroup>	
 					</h:panelGrid>
 					<rich:spacer width="20px"/>
@@ -108,9 +108,9 @@
 					<h:selectOneRadio   value="#{passengerBean.anotherClaim}" label="Another Claim"
 							valueChangeListener="#{passengerController.selectAnotherClaim}"
 							disabled="#{passengerController.readOnlyOnSubmitted}"
-							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.fraudQuestionLabel.anotherClaim}'" 
-							required="#{passengerController.fraudQuestionLabel.anotherClaimState eq 2}">
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'#{passengerController.fraudQuestionLabel.anotherClaim.label}'" 
+							required="#{passengerController.fraudQuestionLabel.anotherClaim.required}">
 										<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
 										<f:selectItem itemLabel="No" itemValue="false"/>
 							<a4j:support event="onchange" 
@@ -122,7 +122,7 @@
 				</div>
 				<rich:spacer width="100%" height="10" title=""/>
 				<div>
-					<h:outputText value="#{passengerController.fraudQuestionLabel.yesAbove}:" styleClass="formLabel"/>	
+					<h:outputText value="#{passengerController.fraudQuestionLabel.yesAbove.label}:" styleClass="formLabel"/>	
 				</div>
 				<div>
 					<h:panelGrid columns="4">
@@ -134,22 +134,22 @@
 					
 						<rich:spacer width="60px"/>
 						<h:panelGroup>
-							<t:outputText value="#{passengerController.fraudQuestionLabel.whichAirline}:" styleClass="formLabel"/>
+							<t:outputText value="#{passengerController.fraudQuestionLabel.whichAirline.label}:" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
 							<a4j:outputPanel id="which" ajaxRendered="true">
 							<h:graphicImage value="../_images/reqbullet.gif"  
-								rendered="#{passengerController.fraudQuestionLabel.whichAirlineState eq 2}"/>
+								rendered="#{passengerController.fraudQuestionLabel.whichAirline.required}"/>
 							</a4j:outputPanel>
 						</h:panelGroup>	
 						<rich:spacer width="20px"/>
 						<a4j:outputPanel id="whichInput" ajaxRendered="true">
 						<t:inputText value="#{passengerBean.whichAirline}" label="Which Airline" tabindex="1"
 							readonly="#{passengerController.readOnlyOnSubmitted}"
-							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.fraudQuestionLabel.whichAirline}'" 
-								validatorMessage="#{passengerController.fraudQuestionLabel.whichAirline} :
-								#{passengerController.passengerInfoLabel.fieldLength} 20"
-								required="#{passengerController.fraudQuestionLabel.whichAirlineState eq 2}">
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'#{passengerController.fraudQuestionLabel.whichAirline.label}'" 
+								validatorMessage="#{passengerController.fraudQuestionLabel.whichAirline.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+								required="#{passengerController.fraudQuestionLabel.whichAirline.required}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
 						</a4j:outputPanel>
@@ -161,21 +161,21 @@
 						
 						<rich:spacer width="60px"/>
 						<h:panelGroup>
-						<t:outputText value="#{passengerController.fraudQuestionLabel.dateOfClaim}:" styleClass="formLabel"/>
+						<t:outputText value="#{passengerController.fraudQuestionLabel.dateOfClaim.label}:" styleClass="formLabel"/>
 						<h:outputText value="&#160;" />
 						
 						<a4j:outputPanel id="dateOfClaim" ajaxRendered="true">
 							<h:graphicImage value="../_images/reqbullet.gif"  
-									rendered="#{passengerController.fraudQuestionLabel.dateOfClaimState eq 2}"/>
+									rendered="#{passengerController.fraudQuestionLabel.dateOfClaim.required}"/>
 						</a4j:outputPanel>
 						</h:panelGroup>	
 						<rich:spacer width="20px"/>
 						<a4j:outputPanel id="dateOfClaimInput" ajaxRendered="true">
 						<rich:calendar value="#{passengerBean.dateOfClaim}"  label="Date of Claim"
-							datePattern="MMM/dd/yyyy" required="#{passengerController.fraudQuestionLabel.dateOfClaimState eq 2}"
+							datePattern="MMM/dd/yyyy" required="#{passengerController.fraudQuestionLabel.dateOfClaim.required}"
 							jointPoint="top-right" showWeeksBar="false" mode="client"  inputSize="11"
-							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.fraudQuestionLabel.dateOfClaim}'" tabindex="2"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'#{passengerController.fraudQuestionLabel.dateOfClaim.label}'" tabindex="2"
 							disabled="#{passengerController.readOnlyOnSubmitted}"
 							popup="true" enableManualInput="false" >
 							<f:converter  converterId="DateConverter" />
@@ -189,36 +189,41 @@
 					
 						<rich:spacer width="60px"/>
 						<h:panelGroup>	
-						<t:outputText value="#{passengerController.fraudQuestionLabel.claimantName}:" styleClass="formLabel"/>
+						<t:outputText value="#{passengerController.fraudQuestionLabel.claimantName.label}:" styleClass="formLabel"/>
 						<h:outputText value="&#160;" />
 						<a4j:outputPanel id="claimantName" ajaxRendered="true">
 							<h:graphicImage value="../_images/reqbullet.gif"  
-									rendered="#{passengerController.fraudQuestionLabel.claimantNameState eq 2}"/>
+									rendered="#{passengerController.fraudQuestionLabel.claimantName.required}"/>
 						</a4j:outputPanel>
 						</h:panelGroup>	
 						<rich:spacer width="20px"/>
 						<a4j:outputPanel id="claimantNameInput" ajaxRendered="true">
 						<t:inputText value="#{passengerBean.claimantName}" label="Claimant Name" tabindex="3"
-								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.fraudQuestionLabel.claimantName}'" 
+								requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'#{passengerController.fraudQuestionLabel.claimantName.label}'" 
 								readonly="#{passengerController.readOnlyOnSubmitted}"
-								validatorMessage="#{passengerController.fraudQuestionLabel.claimantName} :
-									#{passengerController.passengerInfoLabel.fieldLength} 20"
-								required="#{passengerController.fraudQuestionLabel.claimantNameState eq 2}">
+								validatorMessage="#{passengerController.fraudQuestionLabel.claimantName.label} :
+									#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+								required="#{passengerController.fraudQuestionLabel.claimantName.required}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
 						</a4j:outputPanel>
 					</h:panelGrid>
+					<rich:spacer width="100%" height="20" title=""/>
+				<div>
+					<h:outputText value="If you have filed claims with more than 1 airline in the last 3 years, please enter 
+	additional information in comment section below." styleClass="formLabel"/>	
+				</div>
 					<rich:spacer width="100%" height="20" title=""/>
 				</div>
 				
 				
 				<div>
 					<h:panelGroup>	
-					<t:outputText value="#{passengerController.fraudQuestionLabel.additionalComments}:"  styleClass="subHeader"/>
+					<t:outputText value="#{passengerController.fraudQuestionLabel.additionalComments.label}:"  styleClass="subHeader"/>
 					<h:outputText value="&#160;" />
 							<h:graphicImage value="../_images/reqbullet.gif"  
-									rendered="#{passengerController.fraudQuestionLabel.additionalCommentsState eq 2}"/>
+									rendered="#{passengerController.fraudQuestionLabel.additionalComments.required}"/>
 					</h:panelGroup>		
 				</div>
 				
@@ -228,13 +233,13 @@
 				
 				<div>
 					<h:inputTextarea value="#{passengerBean.additionalComments}" tabindex="4" cols="120" rows="6"
-						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-								'#{passengerController.fraudQuestionLabel.additionalComments}'" 
-						validatorMessage="#{passengerController.fraudQuestionLabel.additionalComments} :
-									#{passengerController.passengerInfoLabel.fieldLength} 1500"
-						readonly="#{passengerController.fraudQuestionLabel.additionalCommentsState eq 3}"	
+						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'#{passengerController.fraudQuestionLabel.additionalComments.label}'" 
+						validatorMessage="#{passengerController.fraudQuestionLabel.additionalComments.label} :
+									#{passengerController.passengerInfoLabel.valueNoGreater.label} 1500"
+						readonly="#{passengerController.fraudQuestionLabel.additionalComments.hidden}"	
 						disabled="#{passengerController.readOnlyOnSubmitted}"	
-						required="#{passengerController.fraudQuestionLabel.additionalCommentsState eq 2}">
+						required="#{passengerController.fraudQuestionLabel.additionalComments.required}">
 						<f:validateLength maximum="1500"/>
 					</h:inputTextarea>
 					<rich:spacer width="100%" height="10" title=""/>

@@ -35,6 +35,7 @@
 		</div>
 	
 	</div>
+	<h:panelGroup rendered="#{passengerController.fraudQuestionLabel.descriptiveText.hidden}" >
 	<div class="container containerfull">
 				<div class="containerTL"></div>
 				<div class="containerheader headerfull">
@@ -48,7 +49,7 @@
 						
 						<!-- Start body content -->
 						
-						<t:outputText value="#{passengerController.fraudQuestionLabel.fraudQuestionDescriptiveText}" 
+						<t:outputText value="#{passengerController.fraudQuestionLabel.descriptiveText.label}" 
 						styleClass="bodycopy"/>
 							
 					  	<!-- End body content -->
@@ -62,6 +63,7 @@
 					<div class="clear"></div>
 				</div>
 			</div><!-- ends container -->
+			</h:panelGroup>
 			
 		
 	<div class="container containerfull">
@@ -82,7 +84,7 @@
 						<!-- Start body content -->
 						
 						<div>
-					<t:outputText value="#{passengerController.fraudQuestionLabel.fraudQuestionRequiredFieldMessage}" styleClass="bodycopy"/>	
+					<t:outputText value="#{passengerController.fraudQuestionLabel.requiredFieldMessage.label}" styleClass="bodycopy"/>	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
@@ -104,7 +106,7 @@
 						</f:facet>
 						<div id="verticalScroller">
 						<h:panelGrid styleClass="modalPanelBody" width="100%">
-							<t:outputText value="#{passengerController.fraudQuestionLabel.fraudQuestionHelp}" styleClass="bodycopy"/>
+							<t:outputText value="#{passengerController.fraudQuestionLabel.help.label}" styleClass="bodycopy"/>
 						</h:panelGrid>
 						</div>
 					</rich:modalPanel>
@@ -139,7 +141,7 @@
 			
 				<rich:spacer width="290px"/>
 			
-				<h:commandButton id="saveSubmitClaim" value="#{passengerController.passengerInfoLabel.passengerInfoSave}"
+				<h:commandButton id="saveSubmitClaim" value="#{passengerController.passengerInfoLabel.save.label}"
 				 		tabindex="4" 
 				 		 action="#{passengerController.saveFraudQuestion}"
 				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
@@ -147,13 +149,13 @@
 				
 				<rich:spacer width="20px"/>
 			
-				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.flightPrevious}"
+				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.previous.label}"
 				 	tabindex="5" immediate="true" action="#{passengerController.goBackToFileUpload}"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
-				<h:commandButton id="forwardSubmit" value="#{passengerController.passengerInfoLabel.passengerInfoForward}"
+				<h:commandButton id="forwardSubmit" value="#{passengerController.passengerInfoLabel.forward.label}"
 				 	tabindex="6" action="#{passengerController.gotoSubmitClaim}"
 					styleClass="button140pxred button140pxred2" />
 				

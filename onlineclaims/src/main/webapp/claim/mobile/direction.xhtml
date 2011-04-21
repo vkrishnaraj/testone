@@ -11,157 +11,126 @@
 	<ui:define name="pageTitle">US Airways | Bag Tracking Summary</ui:define>
 
 	<ui:define name="mainContent">
-		<script type="text/javascript" src="../_js/passengerFont.js"></script>
 		<h:form id="directionForm">
-
-			<div class="container containerfull">
-			<div class="containerheader headerfull">
-			<h1 class="dkblue">Bag tracking summary</h1>
+			
+			<div class="sectionTitle">
+				<b>Bag tracking summary</b>
 			</div>
-			<div class="containercontent gradientsmall">
-			<div class="contentbodyspacing"></div>
-			<div class="contentbody" align="left"><!-- Start body content -->
+			<div class="wrappercontentbody">
 
+			<div class="clear htxlg">&#160;</div>
 
-			<div class="clear htxlg"></div>
+			<h:outputText id="dirpass" styleClass="bodycopy" value="#{passengerDirectionList[0].displayText}" /> 
 
-<h:outputText id="dirpass" styleClass="bodycopy" value="#{passengerDirectionList[0].displayText}" /> 
-
-			<div class="clear htxlg"></div>
+			<div class="clear htxlg">&#160;</div>
 			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
 			<p>File number:</p>
-			<span><h:outputText
+			<h:outputText
 				value="#{passengerBean.passengerData.incidentID}"
-				styleClass="formLabel" /></span>
+				styleClass="formLabel" />
 
 			<p>Date file opened:</p>
-			<span><h:outputText
+			<h:outputText
 				value="#{passengerBean.passengerData.dispcreatetime}"
-				styleClass="formLabel" /></span>
+				styleClass="formLabel" />
 
 			<p>File status:</p>
-			<span><h:outputText
+			<h:outputText
 				value="#{passengerBean.passengerData.incidentStatus}"
-				styleClass="formLabel" /></span>
+				styleClass="formLabel" />
+						
+			<h:outputText value="&#160;" />
+			<h:outputText value="&#160;" />
+			
 			</h:panelGrid>
-			<div class="clear htxlg"></div>
 			<a4j:repeat value="#{passengerBean.passengerData.passengersArray}"
 				var="passenger" rowKeyVar="rowIndex">
-				<h3><h:outputText value="#{passenger.firstname} "
-					styleClass="formLabel" />&nbsp;&nbsp;<h:outputText
+				<h3><h:outputText value="Passenger #{roxIndex + 1}:&#160;&#160;#{passenger.firstname} "
+					styleClass="formLabel" />&#160;<h:outputText
 					value=" #{passenger.lastname}" styleClass="formLabel" /></h3>
 
 
-				<div class="clear htxsm"></div>
+				<div class="clear htxsm">&#160;</div>
 				
 				<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
 				<p>Home phone:</p>
-				<span><h:outputText value="#{passenger.homephone}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{passenger.homephone}"
+					styleClass="formLabel" />
 
 				<p>Business phone:</p>
-				<span><h:outputText value="#{passenger.workphone}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{passenger.workphone}"
+					styleClass="formLabel" />
 
 				<p>Mobile phone:</p>
-				<span><h:outputText value="#{passenger.mobile}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{passenger.mobile}"
+					styleClass="formLabel" />
 
 				<p>Hotel:</p>
-				<span><h:outputText value="#{passenger.hotel}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{passenger.hotel}"
+					styleClass="formLabel" />
 
 				<p>Email:</p>
-				<span><h:outputText value="#{passenger.email}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{passenger.email}"
+					styleClass="formLabel" />
+						
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
 					
 				</h:panelGrid>
-				<div class="clear"></div>
 			</a4j:repeat>
-
-
-			<div class="clear htxlg"></div>
 
 			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
 				 <p>Comments:</p>
 
-<span><h:outputText
+<h:outputText
 				value="#{passengerBean.passengerData.comments}"
-				styleClass="formLabel" /></span>
+				styleClass="formLabel" />
                  			
 			</h:panelGrid>
-			<div class="clear htmd"></div>
-
-			<div class="clear"></div>
-			<!-- End body content --></div>
-
-
-			<!-- ends contentbody --></div>
-			<!-- ends containercontent -->
-			<div id="divFooter">
-			<div class="containerfootergradient footerfull"></div>
-			<div class="clear"></div>
+			<div class="clear htmd">&#160;</div>
 			</div>
+
+
+
+			
+			<div class="sectionTitle">
+				<b>Baggage information</b>
 			</div>
-			<!-- ends container -->
+			<div class="wrappercontentbody">
 
-
-
-
-			<div class="container containerfull">
-			<div class="containerheader headerfull">
-			<h1 class="dkblue">Baggage information</h1>
-			</div>
-			<div class="containercontent gradientsmall">
-			<div class="contentbodyspacing"></div>
-			<div class="contentbody" align="left"><!-- Start body content --> 
+			<div class="clear htxlg">&#160;</div>
 				
 				<a4j:repeat value="#{passengerBean.passengerData.itemsArray}"
 				var="item" rowKeyVar="rowIndex">
 			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
 				<p>Bag Tag:</p>
-				<span><h:outputText value="#{item.claimchecknum}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{item.claimchecknum}"
+					styleClass="formLabel" />
 				<p>Status:</p>
-				<span><h:outputText value="#{item.bagstatus}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{item.bagstatus}"
+					styleClass="formLabel" />
 			</h:panelGrid>
-			<div class="clear htxlg"></div>
+			<div class="clear htxlg">&#160;</div>
 			</a4j:repeat>
-				
-				
-				<!-- End body content -->
-			</div>
-
-			
-
-
-			<!-- ends contentbody --></div>
-			<!-- ends containercontent -->
-			<div id="divFooter">
-			<div class="containerfootergradient footerfull"></div>
-			<div class="clear"></div>
-			</div>
 			</div>
 			<!-- ends container -->
 
 
 			
 			<h:panelGroup rendered="#{passengerBean.scansAvailable}">
-			<div class="container containerfull">
-			<div class="containerheader headerfull">
-			<h1 class="dkblue">Claim Checks</h1>
+			<div class="sectionTitle">
+				<b>Claim Checks</b>
 			</div>
-			<div class="containercontent gradientsmall">
-			<div class="contentbodyspacing"></div>
-			<div class="contentbody" align="left"><!-- Start body content --> 
+			<div class="wrappercontentbody">
+
+			<div class="clear htxlg">&#160;</div>
 				
 				<a4j:repeat value="#{passengerBean.passengerData.claimChecksArray}"
 				var="check" rowKeyVar="checkIndex">
 			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
 				<p>Claim Check ID:</p>
-				<span><h:outputText value="#{check.tag}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{check.tag}"
+					styleClass="formLabel" />
 			</h:panelGrid><br/>
 			<table width="100%">
 			<tr><th>Location:</th><th>Type:</th><th>Date:</th></tr>
@@ -170,43 +139,35 @@
 				var="scans" rowKeyVar="scanIndex">
 			<tr>
 			<td><div class="listitem">
-				<span><h:outputText value="#{scans.location}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{scans.location}"
+					styleClass="formLabel" />
 			</div></td>
 			<td><div class="listitem">
-				<span><h:outputText value="#{scans.type}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{scans.type}"
+					styleClass="formLabel" />
 			</div></td>
 			<td><div class="listitem">
-				<span><h:outputText value="#{scans.timestamp}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{scans.timestamp}"
+					styleClass="formLabel" />
 			</div></td>
 			</tr>
 			</a4j:repeat>
 			</table>
 			<div class="clear htxlg"></div>
 			</a4j:repeat>
-				
-				
-				<!-- End body content -->
-			</div>
-
-			
-
-
-			<!-- ends contentbody --></div>
-			<!-- ends containercontent -->
-			<div id="divFooter">
-			<div class="containerfootergradient footerfull"></div>
-			<div class="clear"></div>
-			</div>
 			</div>
 			<!-- ends container -->
 			</h:panelGroup>
-
-
-			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
-			</div>
+			
+		<h:form>
+		<div style="text-align:center;">
+						<h:commandButton id="logoutButton"
+							value="Log Out"
+							action="#{passengerController.passengerLogout}"
+							tabindex="4" styleClass="button140pxred loginbutton140pxred" height="30px"/>
+		</div>
+		</h:form>
+		<div class="clear">&#160;</div>
 
 		</h:form>
 	</ui:define>

@@ -1,39 +1,53 @@
+fieldset, img {
+    border: 0 none;
+}
+
+h1, .title { font-size:14pt; font-weight:normal }
+
+a:link, a:visited {
+    outline: medium none;
+    text-decoration: none;
+}
+
+.white, .navmain {
+    color: #FFFFFF;
+}
+
+.dkblue, a.dkblue, a.dkblue:visited, a.dkblue:hover, a.dkblue:focus, .header, .navsecondary, .formnavmain, .formnavsecondary, .dkblue a:link, .dkblue a:visited, .dkblue a:hover, .dkblue a:focus {
+	color: #24427c }
+
 * {
 	margin: 0;
 	padding: 0;
 }
 
+.imageBorderBlk {
+	border: 0.2em solid black;	
+}
+
+.imageBorderGry {
+	border: 0.2em solid grey;	
+}
+
 .breadcrumb {
-	font-size: 1.3em;
+	font-size: 12pt;
 	padding: 1em 0 0;
 }
 
 .breadcrumb b {
-	font-size: 1.5em;
+	font-size: 14pt;
 }
 
 .pagewrapper {
-	width: 100%;
-}
-
-.header,.wrappercontent,.footer {
-	width: 100%;
+	width:100%;
+	min-height:480px;
+	-webkit-text-size-adjust:none; 
+	font-family: Helvetica;
+	line-height:1.4em;
 }
 
 .wrappercontentbody {
-	padding: 0 1.8em 2em;
-}
-
-.containerfull {
-	width: 100%
-}
-
-.headerfull {
-	width: 100%
-}
-
-.footerfull {
-	width: 100%;
+	padding: 0 0 20px 10px;
 }
 
 .contentbody {
@@ -54,12 +68,6 @@
     margin-top: 2em;
 }
 
-.containerTL, .containerTR {
-    height: 3.4em;
-    width: 3%;
-    background: none no-repeat scroll 0 0 transparent;
-}
-
 .containerheader {
     height: 3.4em;
     border-left: 0.1em solid #B5BDC6;
@@ -77,14 +85,26 @@
     margin-top: 0.3em;
 }
 
-.containercontent {
-    border-left: 0.1em solid #B5BDC6;
-    border-right: 0.1em solid #B5BDC6;
-    width:100%;
-}
-
 .contentbodyspacing {
     height: 2em;
+}
+
+#stepThreeInputTable td {
+	padding-left: 0.5em;
+}
+
+.formLabel {
+    font-size: 12pt;
+}
+
+input, textarea {
+    border: 0.1em solid #708090;
+    padding: 0.2em 0 0.2em 0.2em;
+    background-image: none;
+}
+
+.inputWidth {
+	width: 95%;	
 }
 
 .colMin {
@@ -95,14 +115,12 @@
     width: 60%;
 }
 
-.formLabel {
-    font-size: 1.21em;
+.colMid {
+	width: 33%;	
 }
 
-input, textarea {
-    border: 0.1em solid #708090;
-    padding: 0.2em 0 0.2em 0.2em;
-    background-image: none;
+.colHalf {
+	width: 50%;
 }
 
 .captchaerrormsg {
@@ -110,20 +128,20 @@ input, textarea {
 }
 
 .button140pxred, .button140pxredl {
-    font-size: 1.1em;
-    height: 2em;
+    font-size: 12pt;
+    height: 30px;
+    width: 150px;
     padding: 0 0 0.1em;
-    width: 14em;
     background-image: none;
     background-color: #BB0000;
     border-radius: 2em;
     -moz-border-radius: 2em;
-}
-
-.containerBLgradient, .containerBRgradient {
-    height: 1.2em;
-    width: 2%;
-    background: none no-repeat scroll 0 0 transparent;
+	color: #FFFFFF;
+	float: none;
+	background-repeat: no-repeat;
+    border-width: 0;
+    font-family: Arial,Helvetica,sans-serif;
+    font-weight: bold;
 }
 
 .containerfootergradient {
@@ -158,17 +176,14 @@ input, textarea {
     color: #FFFFFF;
 }
 
-.inputWidth {
-	width: 100%;	
-}
-
 .captchaSize {
-	width: 100%;
-	height: 7em;	
+	height: 50px;	
 }
 
-body,html {
+body  {
 	background: #FFFFFF no-repeat;
+	font-family:Arial, Helvetica, Verdana, Sans-serif;
+	color:#333;
 }
 
 .header .logo {
@@ -186,7 +201,7 @@ body,html {
 
 .passlogoutnav {
     background: none no-repeat scroll left center #2F5296;
-    font-size: 1.3em;
+    font-size: 12pt;
     margin-right: 1.2em;
     margin-top: 1em;
     padding: 0.5em 3em 0.6em 1em;
@@ -199,70 +214,77 @@ body,html {
 .passlogoutlink {
     color: #FFFFFF;
     font-family: Arial,Regular;
-    font-size: 1.3em;
+    font-size: 12pt;
     text-decoration: none;
 }
 
-.listitem p {
-    width: auto;
-}
-
 p, .bodycopy {
-    font-size: 1.1em;
-    line-height: 1.2em;
+    font-size: 12pt;
+    line-height: 12pt;
 }
 
 .listitem span {
-    line-height: 1.1em;
+    line-height: 12pt;
 }
 
 .loginerrormsg {
     margin-top: 0.2em;
-    width: 100%;
 }
     
 /* BELOW HERE MAY NEED SPECIAL SETTINGS FOR PARTICULAR MOBILE BROWSERS */
 
-body,html {
-	font-size:130%;  /*130 */
+body  {
+	font-size:12pt;  /*130 */
+	width:auto;
 }
 
 .reqbullet {
-	height: 30px;	  /*30 */
+	height: 10px;	  /*30 */
 }
 
 .header .logo {
-    height:160px;  /*160 */
+    height:77px;  /*160 */
 }
 
 .header {
-    height: 175px;  /*175 */
+    -moz-border-radius-bottomleft: 12px !important;
+    -moz-border-radius-bottomright: 12px !important;
+    background: url("/pax-view/_images/header_gradient_mobile.gif") repeat scroll 0 0 #FFFFFF;
+    height: 77px;  /*175 */
+}
+
+.sectionTitle{
+    background: none repeat scroll 0 0 #2F5296;
+    color: #FFFFFF;
+    padding-bottom: 3px;
+    text-align: center;
 }
 
 .passlogoutimg {
-    height: 40px;  /*40 */
+    height: 15px;  /*40 */
 }
 
 @MEDIA only screen and (max-device-width: 480px) {
 	
-	body,html {
-		font-size: 100%;
+	body {
+		font-size: 12pt;
+		width:auto;
 	}
 
 	.reqbullet {
-		height: 20px;	
+		height: 10px;	
 	}
 
 	.header .logo {
-    	height:130px;
+    	height:70px;
 	}
 
 	.header {
-    	height: 140px;
+    	height: 80px;
 	}
 
 	.passlogoutimg {
-    	height: 30px;
+    	height: 15px;
 	}
 }
 

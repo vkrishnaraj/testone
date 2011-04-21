@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -14,8 +13,6 @@ import javax.faces.component.html.HtmlInputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,19 +26,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Incident;
-import com.nettracer.claims.admin.bootstrap.PassengerBootstrap;
 import com.nettracer.claims.core.exception.SimplePersistenceException;
 import com.nettracer.claims.core.model.IncidentBean;
 import com.nettracer.claims.core.model.Languages;
-import com.nettracer.claims.core.model.Localetext;
-import com.nettracer.claims.core.model.MultilingualLabel;
-import com.nettracer.claims.core.model.PassengerBean;
-import com.nettracer.claims.core.service.AdminService;
-import com.nettracer.claims.core.service.PassengerService;
+import com.nettracer.claims.core.service.PaxViewService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
 import com.nettracer.claims.incident.LoginBean;
-import com.nettracer.claims.passenger.SessionPassengerBean;
+import com.nettracer.claims.utils.ClaimsProperties;
 import com.nettracer.claims.webservices.client.OnlineClaimsWS;
 
 /**
@@ -60,19 +52,13 @@ public class IncidentLoginController {
 
 	CaptchaBean captchaBean = new CaptchaBean();
 	LoginBean loginBean = new LoginBean();
-	// private List<Map<String, List<Localetext>>> pageMapsList ;
-	private Map<String, List<Localetext>> pageMaps;
-	private List<Localetext> loginPageList;
 	private String selectedLanguage = "English-US"; // holds the dropdown value
 	// for language selection
 	private Set<SelectItem> languageDropDown = new LinkedHashSet<SelectItem>();
-	private List<Localetext> passengerDirectionList;
-	private Long baggageState;
 	private IncidentBean incidentBean;
-	private MultilingualLabel loginLabel;
 
 	@Autowired
-	PassengerService passengerService;
+	PaxViewService passengerService;
 
 	@Autowired
 	OnlineClaimsWS onlineClaimsWS;
@@ -83,7 +69,7 @@ public class IncidentLoginController {
 	}
 
 	@Autowired
-	public IncidentLoginController(AdminService adminService) {
+	public IncidentLoginController(PaxViewService adminService) {
 		logger.info("IncidentController constructor-2");
 		List<Languages> languagesList;
 		try {
@@ -95,12 +81,6 @@ public class IncidentLoginController {
 							.getDescription()));
 				}
 			}
-			loginPageList = PassengerBootstrap.getLoginPageList();
-			logger.info("Size of loginPageList inside PassengerController constructor= "
-					+ loginPageList.size());
-			if (loginPageList != null && loginPageList.size() > 0) {
-				setLoginLabels();
-			}
 		} catch (SimplePersistenceException e) {
 			e.printStackTrace();
 		}
@@ -109,7 +89,7 @@ public class IncidentLoginController {
 	public boolean isMobile() {
 		HttpServletRequest req = (HttpServletRequest) FacesContext
 				.getCurrentInstance().getExternalContext().getRequest();
-		return req.getRequestURI().contains("/mobile/login");
+		return req.getRequestURI().contains("/mobile/");
 	}
 
 	@PostConstruct
@@ -148,7 +128,7 @@ public class IncidentLoginController {
 											+ "wmlb|wonu|x700|xda(\\-|2|g)|yas\\-|your|zeto|zte\\-")) {
 				logger.info("YOU FOUND ME!!!");
 				try {
-					res.sendRedirect("http://192.168.2.120:8180/pax-view/incident/mobile/login.do");
+					res.sendRedirect(ClaimsProperties.get(ClaimsProperties.MOBILE_LOCATION) + "incident/mobile/login.do");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -156,37 +136,6 @@ public class IncidentLoginController {
 			}
 		}
 
-	}
-
-	/*
-	 * @PostConstruct public void populateLanguageDropDown() { // populates the
-	 * populateLanguageDropDown upon initialization... }
-	 */
-
-	/**
-	 * Set the labels for login page
-	 * 
-	 */
-	private void setLoginLabels() {
-		loginLabel = new MultilingualLabel();
-		for (Localetext localetext : loginPageList) {
-			if (localetext.getLabel().getLabel().contains("Claim Number")) {
-				loginLabel.setClaimNumber(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel().contains("Last Name")) {
-				loginLabel.setLastName(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel()
-					.contains("Try a different image")) {
-				loginLabel.setTryDiffImage(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel()
-					.contains("Type the code shown")) {
-				loginLabel.setCaptchaText(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel().contains("Continue")) {
-				loginLabel.setContinueButton(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel()
-					.contains("Value Can't be greater than")) {
-				loginLabel.setValidateLength(localetext.getDisplayText());
-			}
-		}
 	}
 
 	public void languageSelectionListener(ValueChangeEvent valueChangeEvent) {
@@ -197,15 +146,6 @@ public class IncidentLoginController {
 			HttpSession session = (HttpSession) context.getExternalContext()
 					.getSession(false);
 			session.setAttribute("selectedLanguage", selectedLanguage);
-			/*
-			 * HttpSession session = (HttpSession) FacesUtil.getFacesContext()
-			 * .getExternalContext().getSession(false);
-			 */
-			loginPageList = passengerService
-					.getPassengerLoginContents(selectedLanguage);
-			if (loginPageList != null && loginPageList.size() > 0) {
-				setLoginLabels();
-			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -225,32 +165,34 @@ public class IncidentLoginController {
 		HttpSession session = (HttpSession) context.getExternalContext()
 				.getSession(false);
 		if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
-
 			try {
 				Incident incident = onlineClaimsWS.getIncident(loginBean.getConfNumber(), loginBean.getLastName(), loginBean.getFirstName());
 
-				if (incident.getAuthStatus() > 0) {
+				if (incident.getAuthStatus() == 3) { // AUTH_SUCCESS = 3
 
-					//SessionPassengerBean sessionPassengerBean = (SessionPassengerBean) session
-					//		.getAttribute("sessionPassengerBean");
-					//sessionPassengerBean.setLogoutRenderer(true);
-					//session.setAttribute("sessionPassengerBean",
-					//		sessionPassengerBean);
 					session.setAttribute("loggedPassenger", "loggedPassenger");
 
 					incidentBean = onlineClaimsWS.getIncidentData(incident);
 
-					DataModel airportCodeList = new ListDataModel(
-							passengerService.getAirportList());
-
 					session.setAttribute("incident", incident);
 					session.setAttribute("incidentBean", incidentBean);
 					session.setAttribute("selectedLanguage", selectedLanguage);
-					session.setAttribute("airportCodeList", airportCodeList);
 
-					return "gotoStepOnePage";
+					return (isMobile() ? "gotoStepOnePageMobile" : "gotoStepOnePage");
 
-				} else {
+				} else if (incident.getAuthStatus() == 2) { // AUTH_EXPIRED = 2
+					FacesUtil.addError("The time period for submitting your incident report to this system has expired. " +
+							"Please go to the service desk or call the airline.");
+					logger.error("Online incident for AuthID " + incident.getAuthID() + " has expired.");
+					clearInputCache();
+					return null;
+				} else if (incident.getAuthStatus() == 1) { // AUTH_COMPLETE = 1
+					incidentBean = new IncidentBean();
+					incidentBean.setIncidentID(incident.getPnr());
+					incidentBean.setLastName(incident.getLastName());
+					session.setAttribute("incidentBean", incidentBean);
+					return (isMobile() ? "gotoCompletePageMobile" : "gotoCompletePage");
+				} else { // AUTH_FAILURE = 0
 					FacesUtil.addError("Incorrect Conformation Code and Name combination. Please try again.");
 					logger.error("PNR, Last Name, and First Name are incorrect for admin for the IP Adress: "
 							+ ((HttpServletRequest) FacesUtil.getFacesContext()
@@ -265,9 +207,6 @@ public class IncidentLoginController {
 				return null;
 			} catch (RemoteException e) {
 				logger.error("Error:RemoteException");
-				e.printStackTrace();
-				return null;
-			} catch (SimplePersistenceException e) {
 				e.printStackTrace();
 				return null;
 			}
@@ -348,22 +287,6 @@ public class IncidentLoginController {
 		this.loginBean = loginBean;
 	}
 
-	public Map<String, List<Localetext>> getPageMaps() {
-		return pageMaps;
-	}
-
-	public void setPageMaps(Map<String, List<Localetext>> pageMaps) {
-		this.pageMaps = pageMaps;
-	}
-
-	public List<Localetext> getLoginPageList() {
-		return loginPageList;
-	}
-
-	public void setLoginPageList(List<Localetext> loginPageList) {
-		this.loginPageList = loginPageList;
-	}
-
 	public String getSelectedLanguage() {
 		return selectedLanguage;
 	}
@@ -378,26 +301,6 @@ public class IncidentLoginController {
 
 	public void setLanguageDropDown(Set<SelectItem> languageDropDown) {
 		this.languageDropDown = languageDropDown;
-	}
-
-	public List<Localetext> getPassengerDirectionList() {
-		return passengerDirectionList;
-	}
-
-	public Long getBaggageState() {
-		return baggageState;
-	}
-
-	public void setBaggageState(Long baggageState) {
-		this.baggageState = baggageState;
-	}
-
-	public MultilingualLabel getLoginLabel() {
-		return loginLabel;
-	}
-
-	public void setLoginLabel(MultilingualLabel loginLabel) {
-		this.loginLabel = loginLabel;
 	}
 
 	public IncidentBean getIncidentBean() {

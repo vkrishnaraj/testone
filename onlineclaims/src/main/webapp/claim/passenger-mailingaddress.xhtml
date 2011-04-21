@@ -8,27 +8,27 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddress}" styleClass="subHeader"/>	
+					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddress.label}" styleClass="subHeader"/>	
 				</div>
 				<div><rich:spacer width="100%" height="15" title="" /></div>
 				<table cellpadding="5" style="width:90%">
 				<tr>
 				<td>
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine1}" styleClass="formLabel"/>
+					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine1.label}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
-						 	rendered="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}"/>
+						 	rendered="#{passengerController.passengerInfoLabel.mailingAddressLine1.required}"/>
 							</div>
 						</td><td colspan="7" style="padding-bottom: 5px;">
 					<t:inputText id="pi14" value="#{passengerBean.address[1].addressLine1 }"   style="width:100%;" 
-							required="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 2}" tabindex="13"
-							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine1State eq 3}"
-							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-										'#{passengerController.passengerInfoLabel.mailingAddressLine1}'" 
-							validatorMessage="#{passengerController.passengerInfoLabel.mailingAddressLine1} :
-								#{passengerController.passengerInfoLabel.fieldLength} 50"
-							label="#{passengerController.passengerInfoLabel.mailingAddressLine1}">
+							required="#{passengerController.passengerInfoLabel.mailingAddressLine1.required}" tabindex="13"
+							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine1.hidden}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+										'#{passengerController.passengerInfoLabel.mailingAddressLine1.label}'" 
+							validatorMessage="#{passengerController.passengerInfoLabel.mailingAddressLine1.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"
+							label="#{passengerController.passengerInfoLabel.mailingAddressLine1.label}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
 						</td>
@@ -36,20 +36,20 @@
 					</tr><tr>
 					<td>
 					<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine2}" styleClass="formLabel"/>
+					<t:outputText value="#{passengerController.passengerInfoLabel.mailingAddressLine2.label}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
-						 	rendered="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}"/>
+						 	rendered="#{passengerController.passengerInfoLabel.mailingAddressLine2.required}"/>
 							</div>
 						</td><td colspan="7" style="padding: 5px 0px;">
 					<t:inputText id="pi15" value="#{passengerBean.address[1].addressLine2 }"  style="width:100%;" 
-							required="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 2}" tabindex="14"
-							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine2State eq 3}"
-							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-										'#{passengerController.passengerInfoLabel.mailingAddressLine2}'" 
-							validatorMessage="#{passengerController.passengerInfoLabel.mailingAddressLine2} :
-								#{passengerController.passengerInfoLabel.fieldLength} 50"
-							label="#{passengerController.passengerInfoLabel.mailingAddressLine2}" >
+							required="#{passengerController.passengerInfoLabel.mailingAddressLine2.required}" tabindex="14"
+							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine2.hidden}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+										'#{passengerController.passengerInfoLabel.mailingAddressLine2.label}'" 
+							validatorMessage="#{passengerController.passengerInfoLabel.mailingAddressLine2.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"
+							label="#{passengerController.passengerInfoLabel.mailingAddressLine2.label}" >
 							<f:validateLength maximum="50"/>
 						</t:inputText>
 						</td>
@@ -57,75 +57,75 @@
 					</tr><tr>
 					<td style="width:17%;">
 						<h:panelGroup>
-							<t:outputText value="#{passengerController.passengerInfoLabel.mailingCity}" styleClass="formLabel"/>
+							<t:outputText value="#{passengerController.passengerInfoLabel.mailingCity.label}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
-						 	rendered="#{passengerController.passengerInfoLabel.mailingCityState eq 2}"/>
+						 	rendered="#{passengerController.passengerInfoLabel.mailingCity.required}"/>
 						</h:panelGroup>
 						</td><td style="width:15%; padding-top: 5px;">
 						<t:inputText id="pi16" value="#{passengerBean.address[1].city }"  size="8" style="width:90%;" 
-							required="#{passengerController.passengerInfoLabel.mailingCityState eq 2}" tabindex="15"
-							readonly="#{passengerController.passengerInfoLabel.mailingCityState eq 3}"
-							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-										'#{passengerController.passengerInfoLabel.mailingCity}'"
-							validatorMessage="#{passengerController.passengerInfoLabel.mailingCity} :
-								#{passengerController.passengerInfoLabel.fieldLength} 50" 
-							label="#{passengerController.passengerInfoLabel.mailingCity}">
+							required="#{passengerController.passengerInfoLabel.mailingCity.required}" tabindex="15"
+							readonly="#{passengerController.passengerInfoLabel.mailingCity.hidden}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+										'#{passengerController.passengerInfoLabel.mailingCity.label}'"
+							validatorMessage="#{passengerController.passengerInfoLabel.mailingCity.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50" 
+							label="#{passengerController.passengerInfoLabel.mailingCity.label}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
 						</td><td style="width:9%;">
 						
 						<h:panelGroup>
-							<t:outputText value="#{passengerController.passengerInfoLabel.mailingStateRegion}" styleClass="formLabel"/>
+							<t:outputText value="#{passengerController.passengerInfoLabel.mailingStateRegion.label}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
-						 	rendered="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}"/>
+						 	rendered="#{passengerController.passengerInfoLabel.mailingStateRegion.required}"/>
 						</h:panelGroup>
 						</td><td style="width:10%;">
 						<t:inputText id="pi17" value="#{passengerBean.address[1].stateRegion }"  size="8" style="width:52%;" 
-							required="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 2}" tabindex="16"
-							readonly="#{passengerController.passengerInfoLabel.mailingStateRegionState eq 3}"
-							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-										'#{passengerController.passengerInfoLabel.mailingStateRegion}'" 
-							validatorMessage="#{passengerController.passengerInfoLabel.mailingStateRegion} :
-								#{passengerController.passengerInfoLabel.fieldLength} 50"
-							label="#{passengerController.passengerInfoLabel.mailingStateRegion}">
+							required="#{passengerController.passengerInfoLabel.mailingStateRegion.required}" tabindex="16"
+							readonly="#{passengerController.passengerInfoLabel.mailingStateRegion.hidden}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+										'#{passengerController.passengerInfoLabel.mailingStateRegion.label}'" 
+							validatorMessage="#{passengerController.passengerInfoLabel.mailingStateRegion.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"
+							label="#{passengerController.passengerInfoLabel.mailingStateRegion.label}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
 						</td><td style="width:12%;">
 						
 						<h:panelGroup>
-							<t:outputText value="#{passengerController.passengerInfoLabel.mailingPostalCode}" styleClass="formLabel"/>
+							<t:outputText value="#{passengerController.passengerInfoLabel.mailingPostalCode.label}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
-						 	rendered="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}"/>
+						 	rendered="#{passengerController.passengerInfoLabel.mailingPostalCode.required}"/>
 						</h:panelGroup>
 						</td><td style="width:10%;">
 						<t:inputText id="pi18" value="#{passengerBean.address[1].postalCode }"   size="8" style="width:90%;" 
-							required="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 2}" tabindex="17"
-							readonly="#{passengerController.passengerInfoLabel.mailingPostalCodeState eq 3}"
-							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.passengerInfoLabel.mailingPostalCode}'" 
-							validatorMessage="#{passengerController.passengerInfoLabel.mailingPostalCode} :
-								#{passengerController.passengerInfoLabel.fieldLength} 20"
-							label="#{passengerController.passengerInfoLabel.mailingPostalCode}">
+							required="#{passengerController.passengerInfoLabel.mailingPostalCode.required}" tabindex="17"
+							readonly="#{passengerController.passengerInfoLabel.mailingPostalCode.hidden}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.passengerInfoLabel.mailingPostalCode.label}'" 
+							validatorMessage="#{passengerController.passengerInfoLabel.mailingPostalCode.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+							label="#{passengerController.passengerInfoLabel.mailingPostalCode.label}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
 						</td><td style="width:12%;">
 						
 						<h:panelGroup>
-							<t:outputText value="#{passengerController.passengerInfoLabel.mailingCountry}" styleClass="formLabel"/>
+							<t:outputText value="#{passengerController.passengerInfoLabel.mailingCountry.label}" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
-						 	rendered="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"/>
+						 	rendered="#{passengerController.passengerInfoLabel.mailingCountry.required}"/>
 						</h:panelGroup>
 						</td><td style="width:15%;">
 						<h:selectOneMenu value="#{passengerBean.address[1].country }" tabindex="18" onchange="submit()" style="width:100%;" 
-								required="#{passengerController.passengerInfoLabel.mailingCountryState eq 2}"
-								readonly="#{passengerController.passengerInfoLabel.mailingCountryState eq 3}"
-								requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.passengerInfoLabel.mailingCountry}'" 
-						   		label="#{passengerController.passengerInfoLabel.mailingCountry}">
+								required="#{passengerController.passengerInfoLabel.mailingCountry.required}"
+								readonly="#{passengerController.passengerInfoLabel.mailingCountry.hidden}"
+								requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.passengerInfoLabel.mailingCountry.label}'" 
+						   		label="#{passengerController.passengerInfoLabel.mailingCountry.label}">
 							<f:selectItem itemLabel="United States" itemValue="US"/>
 							<f:selectItems value="#{passengerController.selectItems}"/>
 						</h:selectOneMenu>

@@ -37,16 +37,22 @@ import com.nettracer.claims.core.model.CountryCode;
 import com.nettracer.claims.core.model.Currency;
 import com.nettracer.claims.core.model.Itinerary;
 import com.nettracer.claims.core.model.Localetext;
-import com.nettracer.claims.core.model.MultilingualLabel;
 import com.nettracer.claims.core.model.PassengerBean;
-import com.nettracer.claims.core.service.PassengerService;
+import com.nettracer.claims.core.model.labels.LabelText;
+import com.nettracer.claims.core.model.labels.LabelsAdditionalInfoPage;
+import com.nettracer.claims.core.model.labels.LabelsBagDetailsPage;
+import com.nettracer.claims.core.model.labels.LabelsFileUploadPage;
+import com.nettracer.claims.core.model.labels.LabelsFlightInfoPage;
+import com.nettracer.claims.core.model.labels.LabelsPassengerInfoPage;
+import com.nettracer.claims.core.model.labels.LabelsSubmitClaimPage;
+import com.nettracer.claims.core.model.labels.LabelsSubmitSuccessPage;
+import com.nettracer.claims.core.service.PaxViewService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
 import com.nettracer.claims.faces.util.File;
 import com.nettracer.claims.faces.util.FileHelper;
 import com.nettracer.claims.faces.util.FileUploadBean;
 import com.nettracer.claims.passenger.LoginBean;
-import com.nettracer.claims.utils.ClaimsProperties;
 import com.nettracer.claims.webservices.client.OnlineClaimsWS;
 
 /**
@@ -69,14 +75,13 @@ public class PassengerController {
 	private Map<String, List<Localetext>> pageMaps;
 	private List<Localetext> loginPageList;
 	private Set<SelectItem> languageDropDown = new LinkedHashSet<SelectItem>();
-	private List<Localetext> passengerDirectionList;
-	private MultilingualLabel passengerInfoLabel;
-	private MultilingualLabel flightLabel;
-	private MultilingualLabel bagDetailsLabel;
-	private MultilingualLabel fileUploadLabel;
-	private MultilingualLabel fraudQuestionLabel;
-	private MultilingualLabel submitClaimLabel;
-	private MultilingualLabel savedScreenLabel;
+	private LabelsPassengerInfoPage passengerInfoLabel;
+	private LabelsFlightInfoPage flightLabel;
+	private LabelsBagDetailsPage bagDetailsLabel;
+	private LabelsFileUploadPage fileUploadLabel;
+	private LabelsAdditionalInfoPage fraudQuestionLabel;
+	private LabelsSubmitClaimPage submitClaimLabel;
+	private LabelsSubmitSuccessPage savedScreenLabel;
 	private List<SelectItem> selectItems = new ArrayList<SelectItem>();
 	private Set<SelectItem> lostBagItems = new LinkedHashSet<SelectItem>();
 	private DataModel airportCodeList;
@@ -99,7 +104,7 @@ public class PassengerController {
 	private boolean readOnlyOnSubmitted;
 	
 	@Autowired
-	PassengerService passengerService;
+	PaxViewService passengerService;
 
 	@Autowired
 	OnlineClaimsWS onlineClaimsWS;
@@ -121,7 +126,7 @@ public class PassengerController {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
-				passengerInfoLabel = passengerService.getPassengerInfo(selectedLanguage, baggageState);
+				passengerInfoLabel = passengerService.getPassengerInfoPage(selectedLanguage, baggageState);
 				this.passengerBean = (PassengerBean) session.getAttribute("passengerBean");
 				List<CountryCode> countries = passengerService.getCountries();
 				for (CountryCode countryCode : countries) {
@@ -164,6 +169,52 @@ public class PassengerController {
 
 	public String gotoPPFInstruction() {
 		logger.debug("gotoPPFInstruction method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			try {
+				baggageState = (Long) session.getAttribute("baggageState");
+				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
+				flightLabel = passengerService.getFlightInfoPage(selectedLanguage, baggageState);
+				passengerInfoLabel = passengerService.getPassengerInfoPage(selectedLanguage, baggageState);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			return "gotoPPFInstruction";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+
+	/**
+	 * This is the 1st step for a passenger to fill up his claims form
+	 * 
+	 * @return String
+	 */
+
+	public String goBackToLiability() {
+		logger.debug("goBackToLiability method is called");
+
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+				.getExternalContext().getSession(false);
+		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			return "gotoLiability";
+		} else {
+			FacesUtil.addError("Your session has been expired. Please log in again");
+			return "passengerLogout";
+		}
+	}
+
+	/**
+	 * This is the 1st step for a passenger to fill up his claims form
+	 * 
+	 * @return String
+	 */
+
+	public String goBackToPPFInstruction() {
+		logger.debug("goBackToPPFInstruction method is called");
 
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
@@ -478,29 +529,29 @@ public class PassengerController {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
-				flightLabel = passengerService.getFlightLabels(	selectedLanguage, baggageState);
+				flightLabel = passengerService.getFlightInfoPage(selectedLanguage, baggageState);
 				airportCodeList = (DataModel) session.getAttribute("airportCodeList");
 				if(null == itineraryList){
 					this.itineraryList = new ListDataModel(passengerBean.getItineraryList());
 				}
 				if (null != passengerBean.getDeclarePayExcessValue()&& passengerBean.getDeclarePayExcessValue()) {
-					flightLabel.setDeclaredValueState(2L);
+					flightLabel.getDeclaredValue().setState(LabelText.STATUS_REQUIRED);
 				} else {
-					flightLabel.setDeclaredValueState(1L);
+					flightLabel.getDeclaredValue().setState(LabelText.STATUS_NORMAL);
 				}
 
 				if (null != passengerBean.getClearCustomBag()
 						&& passengerBean.getClearCustomBag()) {
-					flightLabel.setBagWeightState(2L);
+					flightLabel.getBagWeight().setState(LabelText.STATUS_REQUIRED);
 				} else {
-					flightLabel.setBagWeightState(1L);
+					flightLabel.getBagWeight().setState(LabelText.STATUS_NORMAL);
 				}
 
 				if (null != passengerBean.getRerouteBag()
 						&& passengerBean.getRerouteBag()) {
-					flightLabel.setReroutedCityAirlineState(2L);
+					flightLabel.getReroutedCityAirline().setState(LabelText.STATUS_REQUIRED);
 				} else {
-					flightLabel.setReroutedCityAirlineState(1L);
+					flightLabel.getReroutedCityAirline().setState(LabelText.STATUS_NORMAL);
 				}
 				
 				//webservice integration code
@@ -574,9 +625,9 @@ public class PassengerController {
 		logger.info("ValueChangeListener called: excessValueListener");
 		Boolean valueDeclared = (Boolean) valueChangeEvent.getNewValue();
 		if (null != valueDeclared && valueDeclared) {
-			flightLabel.setDeclaredValueState(2L);
+			flightLabel.getDeclaredValue().setState(LabelText.STATUS_REQUIRED);
 		} else {
-			flightLabel.setDeclaredValueState(1L);
+			flightLabel.getDeclaredValue().setState(LabelText.STATUS_NORMAL);
 		}
 	}
 
@@ -590,9 +641,9 @@ public class PassengerController {
 		logger.info("ValueChangeListener called: clearCustomListener");
 		Boolean clearCustom = (Boolean) valueChangeEvent.getNewValue();
 		if (null != clearCustom && clearCustom) {
-			flightLabel.setBagWeightState(2L);
+			flightLabel.getBagWeight().setState(LabelText.STATUS_REQUIRED);
 		} else {
-			flightLabel.setBagWeightState(1L);
+			flightLabel.getBagWeight().setState(LabelText.STATUS_NORMAL);
 		}
 	}
 
@@ -606,9 +657,9 @@ public class PassengerController {
 		logger.info("ValueChangeListener called: differentClaimCheckListener");
 		Boolean differentClaim = (Boolean) valueChangeEvent.getNewValue();
 		if (null != differentClaim && differentClaim) {
-			flightLabel.setReroutedCityAirlineState(2L);
+			flightLabel.getReroutedCityAirline().setState(LabelText.STATUS_REQUIRED);
 		} else {
-			flightLabel.setReroutedCityAirlineState(1L);
+			flightLabel.getReroutedCityAirline().setState(LabelText.STATUS_NORMAL);
 		}
 	}
 
@@ -790,7 +841,7 @@ public class PassengerController {
 
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
-				bagDetailsLabel = passengerService.getBagDetailsLabel(selectedLanguage, baggageState);
+				bagDetailsLabel = passengerService.getBagDetailsPage(selectedLanguage, baggageState);
 				//session.setAttribute("passengerBean", passengerBean);
 
 			} catch (Exception e) {
@@ -850,7 +901,7 @@ public class PassengerController {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState"); //claimtype in webservice
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
-				fileUploadLabel = passengerService.getFileUploadLabel(selectedLanguage, baggageState);
+				fileUploadLabel = passengerService.getFileUploadPage(selectedLanguage, baggageState);
 				if(null != passengerBean.getFiles() && passengerBean.getFiles().size() >0){
 					fileDataModelList=new ListDataModel(passengerBean.getFiles());
 				}
@@ -995,16 +1046,16 @@ public class PassengerController {
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session
 						.getAttribute("selectedLanguage");
-				fraudQuestionLabel = passengerService.getFraudQuestionLabel(
+				fraudQuestionLabel = passengerService.getFraudQuestionPage(
 						selectedLanguage, baggageState);
 				if (null != passengerBean.getAnotherClaim() && passengerBean.getAnotherClaim()) {
-					fraudQuestionLabel.setWhichAirlineState(2L);
-					fraudQuestionLabel.setDateOfClaimState(2L);
-					fraudQuestionLabel.setClaimantNameState(2L);
+					fraudQuestionLabel.getWhichAirline().setState(LabelText.STATUS_REQUIRED);
+					fraudQuestionLabel.getDateOfClaim().setState(LabelText.STATUS_REQUIRED);
+					fraudQuestionLabel.getClaimantName().setState(LabelText.STATUS_REQUIRED);
 				} else {
-					fraudQuestionLabel.setWhichAirlineState(1L);
-					fraudQuestionLabel.setDateOfClaimState(1L);
-					fraudQuestionLabel.setClaimantNameState(1L);
+					fraudQuestionLabel.getWhichAirline().setState(LabelText.STATUS_NORMAL);
+					fraudQuestionLabel.getDateOfClaim().setState(LabelText.STATUS_NORMAL);
+					fraudQuestionLabel.getClaimantName().setState(LabelText.STATUS_NORMAL);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -1027,13 +1078,13 @@ public class PassengerController {
 		logger.info("Listener: selectAnotherClaim called");
 		Boolean anotherClaim = (Boolean) valueChangeEvent.getNewValue();
 		if (anotherClaim) {
-			fraudQuestionLabel.setWhichAirlineState(2L);
-			fraudQuestionLabel.setDateOfClaimState(2L);
-			fraudQuestionLabel.setClaimantNameState(2L);
+			fraudQuestionLabel.getWhichAirline().setState(LabelText.STATUS_REQUIRED);
+			fraudQuestionLabel.getDateOfClaim().setState(LabelText.STATUS_REQUIRED);
+			fraudQuestionLabel.getClaimantName().setState(LabelText.STATUS_REQUIRED);
 		} else {
-			fraudQuestionLabel.setWhichAirlineState(1L);
-			fraudQuestionLabel.setDateOfClaimState(1L);
-			fraudQuestionLabel.setClaimantNameState(1L);
+			fraudQuestionLabel.getWhichAirline().setState(LabelText.STATUS_NORMAL);
+			fraudQuestionLabel.getDateOfClaim().setState(LabelText.STATUS_NORMAL);
+			fraudQuestionLabel.getClaimantName().setState(LabelText.STATUS_NORMAL);
 		}
 	}
 
@@ -1051,7 +1102,7 @@ public class PassengerController {
 			try {
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session.getAttribute("selectedLanguage");
-				submitClaimLabel = passengerService.getSubmitClaimLabel(selectedLanguage, baggageState);
+				submitClaimLabel = passengerService.getSubmitClaimPage(selectedLanguage, baggageState);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1084,7 +1135,7 @@ public class PassengerController {
 				baggageState = (Long) session.getAttribute("baggageState");
 				String selectedLanguage = (String) session
 						.getAttribute("selectedLanguage");
-				savedScreenLabel = passengerService.getSavedScreenLabel(selectedLanguage, baggageState);
+				savedScreenLabel = passengerService.getSavedScreenPage(selectedLanguage, baggageState);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -1299,19 +1350,15 @@ public class PassengerController {
 		this.languageDropDown = languageDropDown;
 	}
 
-	public List<Localetext> getPassengerDirectionList() {
-		return passengerDirectionList;
-	}
-
-	public MultilingualLabel getPassengerInfoLabel() {
+	public LabelsPassengerInfoPage getPassengerInfoLabel() {
 		return passengerInfoLabel;
 	}
 
-	public MultilingualLabel getFlightLabel() {
+	public LabelsFlightInfoPage getFlightLabel() {
 		return flightLabel;
 	}
 
-	public void setFlightLabel(MultilingualLabel flightLabel) {
+	public void setFlightLabel(LabelsFlightInfoPage flightLabel) {
 		this.flightLabel = flightLabel;
 	}
 
@@ -1367,23 +1414,23 @@ public class PassengerController {
 		this.itineraryTableIndex = itineraryTableIndex;
 	}
 
-	public MultilingualLabel getSubmitClaimLabel() {
+	public LabelsSubmitClaimPage getSubmitClaimLabel() {
 		return submitClaimLabel;
 	}
 
-	public MultilingualLabel getSavedScreenLabel() {
+	public LabelsSubmitSuccessPage getSavedScreenLabel() {
 		return savedScreenLabel;
 	}
 
-	public void setSavedScreenLabel(MultilingualLabel savedScreenLabel) {
+	public void setSavedScreenLabel(LabelsSubmitSuccessPage savedScreenLabel) {
 		this.savedScreenLabel = savedScreenLabel;
 	}
 
-	public MultilingualLabel getFraudQuestionLabel() {
+	public LabelsAdditionalInfoPage getFraudQuestionLabel() {
 		return fraudQuestionLabel;
 	}
 
-	public MultilingualLabel getFileUploadLabel() {
+	public LabelsFileUploadPage getFileUploadLabel() {
 		return fileUploadLabel;
 	}
 
@@ -1436,11 +1483,11 @@ public class PassengerController {
 		this.fileDataModelList = fileDataModelList;
 	}
 
-	public MultilingualLabel getBagDetailsLabel() {
+	public LabelsBagDetailsPage getBagDetailsLabel() {
 		return bagDetailsLabel;
 	}
 
-	public void setBagDetailsLabel(MultilingualLabel bagDetailsLabel) {
+	public void setBagDetailsLabel(LabelsBagDetailsPage bagDetailsLabel) {
 		this.bagDetailsLabel = bagDetailsLabel;
 	}
 

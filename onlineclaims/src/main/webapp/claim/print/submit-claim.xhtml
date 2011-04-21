@@ -16,7 +16,7 @@
 						<!-- Start body content -->
 				
 				<div>
-					<t:outputText value="#{passengerController.submitClaimLabel.submitClaimRequiredFieldMessage}" styleClass="font1-1em"/>	
+					<t:outputText value="#{passengerController.submitClaimLabel.requiredFieldMessage.label}" styleClass="font1-1em"/>	
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
@@ -37,7 +37,7 @@
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody">
-							<t:outputText value="#{passengerController.submitClaimLabel.submitClaimHelp}" styleClass="font1-1em"/>
+							<t:outputText value="#{passengerController.submitClaimLabel.help.label}" styleClass="font1-1em"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
@@ -45,11 +45,11 @@
 				<div>
 					<rich:panel>
 						<h:panelGrid >
-							<t:outputText value="#{passengerController.submitClaimLabel.useOfInformation}:"/>
+							<t:outputText value="#{passengerController.submitClaimLabel.useOfInformation.label}:"/>
 							<rich:spacer width="100%" height="10" title=""/>
-							<t:outputText value="#{passengerController.submitClaimLabel.reservedRights}"/>
+							<t:outputText value="#{passengerController.submitClaimLabel.reservedRights.label}"/>
 							<rich:spacer width="100%" height="10" title=""/>
-							<t:outputText value="#{passengerController.submitClaimLabel.agreement}"/>
+							<t:outputText value="#{passengerController.submitClaimLabel.agreement.label}"/>
 						</h:panelGrid>
 					</rich:panel>
 					<rich:spacer width="100%" height="10" title=""/>
@@ -58,7 +58,7 @@
 				<div>
 					<t:inputHidden id="accept" value="ACCEPT" />
 					<h:panelGrid columns="2" width="100%">
-						<t:outputText value="#{passengerController.submitClaimLabel.typeAccept}*" 
+						<t:outputText value="#{passengerController.submitClaimLabel.typeAccept.label}*" 
 								styleClass="typeAccept" />
 						<t:inputText value="#{passengerBean.typeAccept}" id="typeAccept"
 							readonly="true" 
@@ -70,14 +70,14 @@
 				
 				<div>
 					<rich:panel>
-						<t:outputText value="#{passengerController.submitClaimLabel.confirmation}"/>
+						<t:outputText value="#{passengerController.submitClaimLabel.confirmation.label}"/>
 					</rich:panel>
 					<rich:spacer width="100%" height="10" title=""/>
 				</div>
 				
 				<div>
 					<h:panelGrid columns="2" width="62%">
-						<t:outputText value="#{passengerController.submitClaimLabel.luggageLostDate}"/>
+						<t:outputText value="#{passengerController.submitClaimLabel.luggageLostDate.label}"/>
 						<t:outputLabel value="________________________________________________"/>
 					</h:panelGrid>
 					<rich:spacer width="100%" height="10" title=""/>
@@ -85,9 +85,9 @@
 				
 				<div>
 					<h:panelGrid columns="4" width="100%">
-						<t:outputText value="#{passengerController.submitClaimLabel.signature}"/>
+						<t:outputText value="#{passengerController.submitClaimLabel.signature.label}"/>
 						<t:outputLabel value="________________________________________________" styleClass="signature"/>
-						<t:outputText value="#{passengerController.submitClaimLabel.signedDate}"/>
+						<t:outputText value="#{passengerController.submitClaimLabel.signedDate.label}"/>
 						<t:outputLabel value="__________________"/>
 					</h:panelGrid>
 					<rich:spacer width="100%" height="10" title=""/>

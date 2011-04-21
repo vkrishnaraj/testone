@@ -8,141 +8,141 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.permanentAddress}" styleClass="subHeader"/>	
+					<t:outputText value="#{passengerController.passengerInfoLabel.permanentAddress.label}" styleClass="subHeader"/>	
 				</div>
 				<div><rich:spacer width="100%" height="15" title="" /></div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.passengerInfolastName}" />
+					<t:outputText value="#{passengerController.passengerInfoLabel.lastName.label}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.lastNameState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.lastName.required}"/>
 					
 					<t:inputText id="pi2" value="#{passengerBean.passengers[0].lastName}"  styleClass="passInout"
-							required="#{passengerController.passengerInfoLabel.lastNameState eq 2}" tabindex="1"
+							required="#{passengerController.passengerInfoLabel.lastName.required}" tabindex="1"
 							readonly="true"
-							label="#{passengerController.passengerInfoLabel.passengerInfolastName}">
+							label="#{passengerController.passengerInfoLabel.lastName.label}">
 						<f:validateLength maximum="20"/>
 					</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.firstName}" />
+					<t:outputText value="#{passengerController.passengerInfoLabel.firstName.label}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-						 	rendered="#{passengerController.passengerInfoLabel.firstNameState eq 2}"/>
+						 	rendered="#{passengerController.passengerInfoLabel.firstName.required}"/>
 					
 					<t:inputText id="pi3" value="#{passengerBean.passengers[0].firstName}" styleClass="passInout"
-							required="#{passengerController.passengerInfoLabel.firstNameState eq 2}" tabindex="2"
+							required="#{passengerController.passengerInfoLabel.firstName.required}" tabindex="2"
 							readonly="true"
-							label="#{passengerController.passengerInfoLabel.firstName}">
+							label="#{passengerController.passengerInfoLabel.firstName.label}">
 						<f:validateLength maximum="20"/>
 					</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.middleInitial}" />
+					<t:outputText value="#{passengerController.passengerInfoLabel.middleInitial.label}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.middleInitialState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.middleInitial.required}"/>
 					
 					<t:inputText id="pi4" value="#{passengerBean.middleInitial}" style="width:25px" 
-							required="#{passengerController.passengerInfoLabel.middleInitialState eq 2}" tabindex="3"
+							required="#{passengerController.passengerInfoLabel.middleInitial.required}" tabindex="3"
 							readonly="true"
-							label="#{passengerController.passengerInfoLabel.middleInitial}">
+							label="#{passengerController.passengerInfoLabel.middleInitial.label}">
 						<f:validateLength maximum="1"/>
 					</t:inputText>
 					
 					<div><h:outputText value="&#160;" /></div>
 					
 					<div>		
-						<t:outputText value="#{passengerController.passengerInfoLabel.addressLine1}" />
+						<t:outputText value="#{passengerController.passengerInfoLabel.addressLine1.label}" />
 						<h:outputText value="&#160;" />
 						<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.passengerInfoLabel.addressLine1State eq 2}"/>
+								rendered="#{passengerController.passengerInfoLabel.addressLine1.required}"/>
 						
 						<t:inputText id="pi5" value="#{passengerBean.address[0].addressLine1}" style="width:77%" 
-								required="#{passengerController.passengerInfoLabel.addressLine1State eq 2}" tabindex="4"
+								required="#{passengerController.passengerInfoLabel.addressLine1.required}" tabindex="4"
 								readonly="true"
-								label="#{passengerController.passengerInfoLabel.addressLine1}">
+								label="#{passengerController.passengerInfoLabel.addressLine1.label}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
 					</div>
 					
 					<div><h:outputText value="&#160;" /></div>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.addressLine2}" />
+					<t:outputText value="#{passengerController.passengerInfoLabel.addressLine2.label}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.addressLine2State eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.addressLine2.required}"/>
 					
 					<t:inputText id="pi6" value="#{passengerBean.address[0].addressLine2}" style="width:77%" 
-							required="#{passengerController.passengerInfoLabel.addressLine2State eq 2}" tabindex="5"
+							required="#{passengerController.passengerInfoLabel.addressLine2.required}" tabindex="5"
 							readonly="true"
-							label="#{passengerController.passengerInfoLabel.addressLine2}">
+							label="#{passengerController.passengerInfoLabel.addressLine2.label}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
 					
 					<div><h:outputText value="&#160;" /></div>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.city}" />
+					<t:outputText value="#{passengerController.passengerInfoLabel.city.label}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.cityState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.city.required}"/>
 					
 					<t:inputText id="pi7" value="#{passengerBean.address[0].city}" style="width:12%" 
-							required="#{passengerController.passengerInfoLabel.cityState eq 2}" tabindex="6"
+							required="#{passengerController.passengerInfoLabel.city.required}" tabindex="6"
 							readonly="true"
-							label="#{passengerController.passengerInfoLabel.city}">
+							label="#{passengerController.passengerInfoLabel.city.label}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.stateRegion}" />
+					<t:outputText value="#{passengerController.passengerInfoLabel.stateRegion.label}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.stateRegionState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.stateRegion.required}"/>
 					
 					<t:inputText id="pi8" value="#{passengerBean.address[0].stateRegion}" style="width:12%" 
-							required="#{passengerController.passengerInfoLabel.stateRegionState eq 2}" tabindex="7"
+							required="#{passengerController.passengerInfoLabel.stateRegion.required}" tabindex="7"
 							readonly="true"
-							label="#{passengerController.passengerInfoLabel.stateRegion}">
+							label="#{passengerController.passengerInfoLabel.stateRegion.label}">
 							<f:validateLength maximum="50"/>
 						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.postalCode}" />
+					<t:outputText value="#{passengerController.passengerInfoLabel.postalCode.label}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.postalCodeState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.postalCode.required}"/>
 					
 					<t:inputText id="pi9" value="#{passengerBean.address[0].postalCode}" style="width:12%" 
-							required="#{passengerController.passengerInfoLabel.postalCodeState eq 2}" tabindex="8"
+							required="#{passengerController.passengerInfoLabel.postalCode.required}" tabindex="8"
 							readonly="true"
-							label="#{passengerController.passengerInfoLabel.postalCode}">
+							label="#{passengerController.passengerInfoLabel.postalCode.label}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.country}" />
+					<t:outputText value="#{passengerController.passengerInfoLabel.country.label}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.countryState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.country.required}"/>
 					
 					<t:selectOneMenu value="#{passengerBean.address[0].country}" tabindex="9" styleClass="passselectOneMenu"
 						readonly="true"
-						label="#{passengerController.passengerInfoLabel.country}">
+						label="#{passengerController.passengerInfoLabel.country.label}">
 						<f:selectItem itemLabel="--" itemValue=""/>
 						<f:selectItems value="#{passengerController.selectItems}"/>
 					</t:selectOneMenu>
 					
 					<div><h:outputText value="&#160;" /></div>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.emailAddress}" />
+					<t:outputText value="#{passengerController.passengerInfoLabel.emailAddress.label}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.emailAddressState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.emailAddress.required}"/>
 					
 					<t:inputText id="pi11" value="#{passengerBean.address[0].emailAddress}" styleClass="passselectOneMenu30"
-							required="#{passengerController.passengerInfoLabel.emailAddressState eq 2}" tabindex="10"
+							required="#{passengerController.passengerInfoLabel.emailAddress.required}" tabindex="10"
 							readonly="true"
-							label="#{passengerController.passengerInfoLabel.emailAddress}">
+							label="#{passengerController.passengerInfoLabel.emailAddress.label}">
 							<f:validateLength maximum="50"/>
 							<t:validateEmail summaryMessage="Invalid Email Address"/>
 						</t:inputText>
@@ -150,29 +150,29 @@
 					
 					<rich:spacer width="15px"/>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.occupation}" />
+					<t:outputText value="#{passengerController.passengerInfoLabel.occupation.label}" />
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.occupationState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.occupation.required}"/>
 					
 					<t:inputText id="pi12" value="#{passengerBean.occupation}" styleClass="passselectOneMenu30" 
-							required="#{passengerController.passengerInfoLabel.occupationState eq 2}" tabindex="11"
+							required="#{passengerController.passengerInfoLabel.occupation.required}" tabindex="11"
 							readonly="true"
-							label="#{passengerController.passengerInfoLabel.occupation}">
+							label="#{passengerController.passengerInfoLabel.occupation.label}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
 					<div><h:outputText value="&#160;" /></div>
 					
 					<div>
-						<t:outputText value="#{passengerController.passengerInfoLabel.businessName}" />
+						<t:outputText value="#{passengerController.passengerInfoLabel.businessName.label}" />
 						<h:outputText value="&#160;" />
 						<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.passengerInfoLabel.businessNameState eq 2}"/>
+								rendered="#{passengerController.passengerInfoLabel.businessName.required}"/>
 						
 						<t:inputText id="pi13" value="#{passengerBean.businessName}" styleClass="passselectOneMenu30" 
-								required="#{passengerController.passengerInfoLabel.businessNameState eq 2}" tabindex="12"
+								required="#{passengerController.passengerInfoLabel.businessName.required}" tabindex="12"
 								readonly="true"
-								label="#{passengerController.passengerInfoLabel.businessName}">
+								label="#{passengerController.passengerInfoLabel.businessName.label}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
 					</div>

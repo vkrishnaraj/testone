@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+
+	<ui:define name="mainContent">
+		<t:dataTable id="savDtbl"
+			value="#{((contentsAndLanguageController.languageMap[lang])[index])['Saved']}"
+			var="saved" rowIndexVar="row">
+			<h:column>
+				<h:outputText value="Field #{row+1}:" />
+				<div>
+					<h:outputText value="&#160;" />
+				</div>
+			</h:column>
+
+			<h:column>
+				<h:outputText value="#{saved.label.label}" />
+				<h:outputText value="&#160;" />
+				<h:outputText value="&#160;" />
+				<div>
+					<h:outputText value="&#160;" />
+				</div>
+			</h:column>
+			
+			<h:column>
+				<h:inputTextarea id="savedText" value="#{saved.displayText}" styleClass="directionTextArea"
+					 label="Saved Fields"/>
+				<div>
+					<t:message for="savedText"  replaceIdWithLabel="true" errorClass="contentlanguageerrormsg"/>
+				</div>
+				<div>
+					<h:outputText value="&#160;" />
+				</div>
+			</h:column>
+		</t:dataTable>
+	</ui:define>
+
+
+
+</ui:composition>

@@ -60,7 +60,6 @@ public class FacesUtil {
 			.getExternalContext().getSession(false);
 		if (session != null) {
 			session.removeAttribute("logged");
-			session.invalidate();
 			SessionScopeBean sessionBean=(SessionScopeBean)session.getAttribute("sessionBean");
 			sessionBean.setLogoutRenderer(false);
 			sessionBean.setLandingRenderer(false);
@@ -84,9 +83,12 @@ public class FacesUtil {
 			//session.removeAttribute("passengerLogout");//
 			session.removeAttribute("loggedPassenger");
 			SessionPassengerBean sessionPassengerBean=(SessionPassengerBean)session.getAttribute("sessionPassengerBean");
+			if (sessionPassengerBean == null) {
+				sessionPassengerBean = new SessionPassengerBean();
+			}
 			sessionPassengerBean.setLogoutRenderer(false);
 			session.setAttribute("sessionPassengerBean", sessionPassengerBean);
-			session.invalidate();
+			//session.invalidate();
 			addError("You have been successfully signed out.");
 			logger.info("User has signed out");
 		}

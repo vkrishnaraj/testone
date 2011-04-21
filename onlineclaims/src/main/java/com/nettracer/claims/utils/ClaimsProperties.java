@@ -55,22 +55,6 @@ public class ClaimsProperties {
 		}
 	}
 	
-	public static String getInstanceLabel() {
-		String instanceRef = System.getProperty("instance.ref");
-		if (instanceRef != null) {
-			return instanceRef;
-		}
-		return "";
-	}
-	
-	public static boolean isFrontend() {
-		String instanceRef = System.getProperty("instance.ref");
-		if (instanceRef != null) {
-			return instanceRef.startsWith("I");
-		}
-		return false;
-	}
-	
 	public static void reloadProperties() {
 		try {
 		lock.writeLock().lock();

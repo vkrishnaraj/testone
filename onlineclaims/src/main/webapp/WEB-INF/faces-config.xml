@@ -118,21 +118,72 @@
    <to-view-id>/claim/mobile/direction.do</to-view-id>
    <redirect/>
   </navigation-case>
-  <!-- Self Serve Incident Navigation -->
   
+  <!-- Self Serve Incident Navigation -->
+  <navigation-case>
+   <from-outcome>gotoIncidentLogin</from-outcome>
+   <to-view-id>/incident/login.do</to-view-id>
+   <redirect/>
+  </navigation-case>
   <navigation-case>
    <from-outcome>gotoStepOnePage</from-outcome>
-   <to-view-id>/incident/mobile/stepone.do</to-view-id>
+   <to-view-id>/incident/stepone.do</to-view-id>
    <redirect/>
   </navigation-case>
   <navigation-case>
    <from-outcome>gotoStepTwoPage</from-outcome>
+   <to-view-id>/incident/steptwo.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoStepThreePage</from-outcome>
+   <to-view-id>/incident/stepthree.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoStepFourPage</from-outcome>
+   <to-view-id>/incident/stepfour.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoCompletePage</from-outcome>
+   <to-view-id>/incident/complete.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  
+  <!--  Mobile Version -->
+  <navigation-case>
+   <from-outcome>gotoIncidentLoginMobile</from-outcome>
+   <to-view-id>/incident/mobile/login.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoStepOnePageMobile</from-outcome>
+   <to-view-id>/incident/mobile/stepone.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoStepTwoPageMobile</from-outcome>
    <to-view-id>/incident/mobile/steptwo.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoStepThreePageMobile</from-outcome>
+   <to-view-id>/incident/mobile/stepthree.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoStepFourPageMobile</from-outcome>
+   <to-view-id>/incident/mobile/stepfour.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoCompletePageMobile</from-outcome>
+   <to-view-id>/incident/mobile/complete.do</to-view-id>
    <redirect/>
   </navigation-case>
  </navigation-rule>
  <application>
-  <view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
   <variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
  </application>
 </faces-config>

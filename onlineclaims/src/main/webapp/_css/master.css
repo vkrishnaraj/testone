@@ -1341,3 +1341,29 @@ td.dottedhr {
 	line-height: 16pt;
 	color: #277db2 /*light blue*/
 }
+
+.imageBorderBlk {
+	border: 2px solid black;	
+}
+
+.imageBorderGry {
+	border: 2px solid grey;	
+}
+
+.breadcrumb {
+	font-size: 200%;
+	padding: 10px 0 0;
+	text-align: center;
+}
+
+.breadcrumb b {
+	font-size: 150%;
+}
+
+.inputWidth {
+	width: 98%;	
+}
+
+#stepThreeInputTable td {
+	padding-left: 5px;
+}

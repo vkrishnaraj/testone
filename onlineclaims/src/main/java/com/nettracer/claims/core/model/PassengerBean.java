@@ -70,6 +70,8 @@ public class PassengerBean {
 	private String aboutYourItenerary;
 	private List<Itinerary> itineraryList= new ArrayList<Itinerary>();
 	private Long claimId;
+	private String claimAmount;
+	private String claimDate;
 	
 	//For About Your Flight Page
 	//private List<Bag> bagList;
@@ -96,6 +98,18 @@ public class PassengerBean {
 	private String status;
 	private WSPVAdvancedIncident passengerData;
 	
+	public String getClaimAmount() {
+		return claimAmount;
+	}
+	public void setClaimAmount(String claimAmount) {
+		this.claimAmount = claimAmount;
+	}
+	public String getClaimDate() {
+		return claimDate;
+	}
+	public void setClaimDate(String claimDate) {
+		this.claimDate = claimDate;
+	}
 	public String getPassengerInfoDescriptiveText() {
 		return passengerInfoDescriptiveText;
 	}

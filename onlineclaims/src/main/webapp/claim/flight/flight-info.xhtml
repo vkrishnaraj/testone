@@ -8,7 +8,7 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 	<div>
-		<t:outputText value="#{passengerController.flightLabel.aboutYourFlight}" styleClass="subHeader" />
+		<t:outputText value="#{passengerController.flightLabel.aboutYourFlight.label}" styleClass="subHeader" />
 	</div>
 
 	<h:panelGrid columns="5" width="100%"
@@ -22,21 +22,21 @@
 		
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.totalTravelBag}" styleClass="formLabel"/>
+				value="#{passengerController.flightLabel.totalTravelBag.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.totalTravelBagState eq 2}" />
+				rendered="#{passengerController.flightLabel.totalTravelBag.required}" />
 			
 		</h:panelGroup>
 
 		<h:selectOneMenu value="#{passengerBean.bagsTravelWith}" tabindex="1" 
-				required="#{passengerController.flightLabel.totalTravelBagState eq 2}"
+				required="#{passengerController.flightLabel.totalTravelBag.required}"
 				disabled="#{passengerController.readOnlyOnSubmitted}"
 				valueChangeListener="#{passengerController.bagSelectListener}" id="bagsTravelWith"
-				requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.flightLabel.totalTravelBag}'"
+				requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.flightLabel.totalTravelBag.label}'"
 				label="BagsTravelWith" style="margin:5px;">
-			<f:selectItem itemLabel="--" itemValue="" />
+			<f:selectItem itemLabel="--" itemValue="0" />
 			<f:selectItem itemLabel="1" itemValue="1" />
 			<f:selectItem itemLabel="2" itemValue="2" />
 			<f:selectItem itemLabel="3" itemValue="3" />
@@ -47,19 +47,19 @@
 		<rich:spacer width="14" height="10" title="" />
 
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.noOfLostBag}" styleClass="formLabel"/>
+			<t:outputText value="#{passengerController.flightLabel.noOfLostBag.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.noOfLostBagState eq 2}" />
+				rendered="#{passengerController.flightLabel.noOfLostBag.required}" />
 			
 		</h:panelGroup>
 		<a4j:outputPanel id="lostBag" ajaxRendered="true">
 			<h:selectOneMenu id="lostBagMenu" value="#{passengerBean.lostBag}" tabindex="2"
-				required="#{passengerController.flightLabel.noOfLostBagState eq 2}"
-				readonly="#{passengerController.flightLabel.noOfLostBagState eq 3}"
+				required="#{passengerController.flightLabel.noOfLostBag.required}"
+				readonly="#{passengerController.flightLabel.noOfLostBag.hidden}"
 				disabled="#{passengerController.readOnlyOnSubmitted}"
-				requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.flightLabel.noOfLostBag}'"
+				requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.flightLabel.noOfLostBag.label}'"
 				label="No. of Bags Lost">
 				<f:selectItem itemLabel="0" itemValue="0" />
 				<f:selectItems value="#{passengerController.lostBagItems}" />
@@ -74,18 +74,18 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.bagCheckedLocation}" styleClass="formLabel"/>
+				value="#{passengerController.flightLabel.bagCheckedLocation.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.bagCheckedLocationState eq 2}" />
+				rendered="#{passengerController.flightLabel.bagCheckedLocation.required}" />
 			
 		</h:panelGroup>
 		<h:selectOneMenu value="#{passengerBean.bagCheckLocation}" style="margin:5px;"
-			required="#{passengerController.flightLabel.bagCheckedLocationState eq 2}"
-			readonly="#{passengerController.flightLabel.bagCheckedLocationState eq 3}"
+			required="#{passengerController.flightLabel.bagCheckedLocation.required}"
+			readonly="#{passengerController.flightLabel.bagCheckedLocation.hidden}"
 			disabled="#{passengerController.readOnlyOnSubmitted}"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.flightLabel.bagCheckedLocation}'"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.flightLabel.bagCheckedLocation.label}'"
 			tabindex="3" id="bagCheckLocation" label="Bag Check Location">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Ticket Counter" itemValue="Ticket Counter" />
@@ -98,18 +98,18 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.noOfPassenger}" styleClass="formLabel"/>
+				value="#{passengerController.flightLabel.noOfPassenger.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.noOfPassengerState eq 2}" />
+				rendered="#{passengerController.flightLabel.noOfPassenger.required}" />
 			
 		</h:panelGroup>
 		<h:selectOneMenu id="noOfPassenger" value="#{passengerBean.noOfPassenger}" tabindex="4"
-				required="#{passengerController.flightLabel.noOfPassengerState eq 2}"
+				required="#{passengerController.flightLabel.noOfPassenger.required}"
 				disabled="#{passengerController.readOnlyOnSubmitted}"
-				requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.flightLabel.noOfPassenger}'"
-				readonly="#{passengerController.flightLabel.noOfPassengerState eq 3}"
+				requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.flightLabel.noOfPassenger.label}'"
+				readonly="#{passengerController.flightLabel.noOfPassenger.hidden}"
 				label="No Of Passenger">
 			<f:selectItem itemLabel="0" itemValue="0" />
 			<f:selectItem itemLabel="1" itemValue="1" />
@@ -132,14 +132,15 @@
 								<rich:column>
 									<f:facet name="header">
 										<h:panelGroup >
-											<t:outputText value="#{passengerController.flightLabel.bagTagNumbers}"  styleClass="formLabel"/>
+											<t:outputText value="#{passengerController.flightLabel.bagTagNumbers.label}"  styleClass="formLabel"/>
 											<h:graphicImage value="../_images/reqbullet.gif"  
-												rendered="true"/>
+												rendered="#{passengerController.flightLabel.bagTagNumbers.required}"/>
 										</h:panelGroup>
 									</f:facet>
-									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout" required="true" 
-											requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-											'#{passengerController.flightLabel.bagTagNumbers}'"
+									<t:inputText value="#{item.bagTagNumber}" styleClass="passInout"
+											required="#{passengerController.flightLabel.bagTagNumbers.required}" 
+											requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+											'#{passengerController.flightLabel.bagTagNumbers.label}'"
 											readonly="#{passengerController.readOnlyOnSubmitted}"
 											label="Bag Tag Number Row#{rowIndex+1}">
 										<f:validateLength maximum="10"/>
@@ -149,16 +150,17 @@
 								<rich:column>
 									<f:facet name="header">
 										<h:panelGroup >
-											<t:outputText value="#{passengerController.flightLabel.bagArrival}"  styleClass="formLabel"/>
+											<t:outputText value="#{passengerController.flightLabel.bagArrival.label}"  styleClass="formLabel"/>
 											<h:graphicImage value="../_images/reqbullet.gif"  
-												rendered="true"/>
+												rendered="#{passengerController.flightLabel.bagArrival.required}"/>
 										</h:panelGroup>
 									</f:facet>
-									<h:selectOneRadio   value="#{item.bagArrivalStatus}" required="true"
-										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-											'#{passengerController.flightLabel.bagArrival}'"
+									<h:selectOneRadio   value="#{item.bagArrivalStatus}"
+											required="#{passengerController.flightLabel.bagArrival.required}"
+											requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+											'#{passengerController.flightLabel.bagArrival.label}'"
 											disabled="#{passengerController.readOnlyOnSubmitted}"
-										label="Bag Arrival Status Row#{rowIndex+1}">
+											label="Bag Arrival Status Row#{rowIndex+1}">
 										<f:selectItem itemLabel="Yes&#160;" itemValue="true" />
 										<f:selectItem itemLabel="No" itemValue="false" />
 									</h:selectOneRadio>
@@ -172,73 +174,75 @@
 
 	<h:panelGrid columns="3" width="75%">
 	
-		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.recheckBag}" styleClass="formLabel"/>
+		<h:panelGroup rendered="#{!passengerController.flightLabel.recheckBag.hidden}">
+			<t:outputText value="#{passengerController.flightLabel.recheckBag.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.recheckBagState eq 2}" />
+				rendered="#{passengerController.flightLabel.recheckBag.required}" />
 			
 		</h:panelGroup>
 
-		<rich:spacer width="18" title="" />
+		<rich:spacer width="18" title="" rendered="#{!passengerController.flightLabel.recheckBag.hidden}" />
 
 		<h:selectOneMenu id="recheckBag" value="#{passengerBean.recheckBag}" tabindex="5"
-				required="#{passengerController.flightLabel.recheckBagState eq 2}"
-				readonly="#{passengerController.flightLabel.recheckBagState eq 3}"
+				required="#{passengerController.flightLabel.recheckBag.required}"
+				readonly="#{passengerController.flightLabel.recheckBag.hidden}"
 				disabled="#{passengerController.readOnlyOnSubmitted}"
-				requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.flightLabel.recheckBag}'"
-				label="Baggage Rerouted">
+				requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.flightLabel.recheckBag.label}'"
+				label="Baggage Rerouted" rendered="#{!passengerController.flightLabel.recheckBag.hidden}">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
 		</h:selectOneMenu>
 
-		<rich:spacer width="100%" height="15" title="" />
-		<rich:spacer width="100%" height="15" title="" />
-		<rich:spacer width="100%" height="15" title="" />
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.recheckBag.hidden}" />
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.recheckBag.hidden}" />
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.recheckBag.hidden}" />
 
-		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.inspectbag}" styleClass="formLabel"/>
+		<h:panelGroup rendered="#{!passengerController.flightLabel.inspectbag.hidden}">
+			<t:outputText value="#{passengerController.flightLabel.inspectbag.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.inspectbagState eq 2}" />
+				rendered="#{passengerController.flightLabel.inspectbag.required}" />
 			
 		</h:panelGroup>
 
-		<rich:spacer width="18" title="" />
+		<rich:spacer width="18" title="" rendered="#{!passengerController.flightLabel.inspectbag.hidden}"/>
 
 		<h:selectOneMenu value="#{passengerBean.inspectbag}" tabindex="6" id="inspectbag"
-				required="#{passengerController.flightLabel.inspectbagState eq 2}"
-				readonly="#{passengerController.flightLabel.inspectbagState eq 3}"
+				required="#{passengerController.flightLabel.inspectbag.required}"
+				readonly="#{passengerController.flightLabel.inspectbag.hidden}"
 				disabled="#{passengerController.readOnlyOnSubmitted}"
-				requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.inspectbag}'"
-				label="Bag Inspection">
+				requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.inspectbag.label}'"
+				label="Bag Inspection" rendered="#{!passengerController.flightLabel.inspectbag.hidden}">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
 		</h:selectOneMenu>
 
-		<rich:spacer width="100%" height="15" title="" />
-		<rich:spacer width="100%" height="15" title="" />
-		<rich:spacer width="100%" height="15" title="" />
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.inspectbag.hidden}" />
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.inspectbag.hidden}" />
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.inspectbag.hidden}" />
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.chargeExcessBaggage}" styleClass="formLabel"/>
+				value="#{passengerController.flightLabel.chargeExcessBaggage.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:graphicImage value="../_images/reqbullet.gif"  rendered="true" />
+			<h:graphicImage value="../_images/reqbullet.gif"
+					rendered="#{passengerController.flightLabel.chargeExcessBaggage.required}" />
 			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
 
 		<h:selectOneMenu value="#{passengerBean.chargeExcessBaggage}" label="Charge Excess Baggage"
-		disabled="#{passengerController.readOnlyOnSubmitted}"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.chargeExcessBaggage}'"
-			tabindex="7" required="true" id="chargeExcessBaggage">
+			disabled="#{passengerController.readOnlyOnSubmitted}"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.chargeExcessBaggage.label}'"
+			tabindex="7" required="#{passengerController.flightLabel.chargeExcessBaggage.required}"
+			id="chargeExcessBaggage">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -248,96 +252,102 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		<rich:spacer width="100%" height="15" title=""/>
 
-		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.bagNumber}" styleClass="formLabel"/>
+		<h:panelGroup rendered="#{!passengerController.flightLabel.bagNumber.hidden}">
+			<t:outputText value="#{passengerController.flightLabel.bagNumber.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:graphicImage value="../_images/reqbullet.gif"  rendered="true" />
+			<h:graphicImage value="../_images/reqbullet.gif"
+					rendered="#{passengerController.flightLabel.bagNumber.required}" />
 			
 		</h:panelGroup>
 
-		<rich:spacer width="18" title="" />
+		<rich:spacer width="18" title="" rendered="#{!passengerController.flightLabel.bagNumber.hidden}"/>
 
 		<t:inputText value="#{passengerBean.noOfCheckedBag}" id="noOfCheckedBag"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.bagNumber}'"
-			validatorMessage="#{passengerController.flightLabel.bagNumberg} :
-								#{passengerController.passengerInfoLabel.fieldLength} 20"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.bagNumber.label}'"
+			validatorMessage="#{passengerController.flightLabel.bagNumber.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
 			readonly="#{passengerController.readOnlyOnSubmitted}"
-			styleClass="passInout" required="true" tabindex="8"  label="No Of Checked Bag">
+			styleClass="passInout" required="#{passengerController.flightLabel.bagNumber.required}"
+			tabindex="8"  label="No Of Checked Bag" rendered="#{!passengerController.flightLabel.bagNumber.hidden}">
 				<f:validateLongRange maximum="20"/>
 		</t:inputText>
 
-		<rich:spacer width="100%" height="15" title=""/>
-		<rich:spacer width="100%" height="15" title=""/>
-		<rich:spacer width="100%" height="15" title=""/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.bagNumber.hidden}"/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.bagNumber.hidden}"/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.bagNumber.hidden}"/>
 		
-		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.missingBag}" styleClass="formLabel"/>
+		<h:panelGroup rendered="#{!passengerController.flightLabel.missingBag.hidden}">
+			<t:outputText value="#{passengerController.flightLabel.missingBag.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:graphicImage value="../_images/reqbullet.gif"  rendered="true" />
+			<h:graphicImage value="../_images/reqbullet.gif"
+					rendered="#{passengerController.flightLabel.missingBag.required}" />
 			
 		</h:panelGroup>
 
-		<rich:spacer width="18" title="" />
+		<rich:spacer width="18" title="" rendered="#{!passengerController.flightLabel.missingBag.hidden}" />
 
 		<t:inputText value="#{passengerBean.noOfmissingBag}" id="noOfmissingBag"
-			required="#{passengerController.flightLabel.missingBagState eq 2}"
-			readonly="#{passengerController.flightLabel.missingBagState eq 3 
+			required="#{passengerController.flightLabel.missingBag.required}"
+			readonly="#{passengerController.flightLabel.missingBag.hidden 
 							|| passengerController.readOnlyOnSubmitted}"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.flightLabel.missingBag}'"
-			validatorMessage="#{passengerController.flightLabel.missingBag} :
-								#{passengerController.passengerInfoLabel.fieldLength} 20"
-			styleClass="passInout"  tabindex="9" label="No Of Missing Bag">
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.flightLabel.missingBag.label}'"
+			validatorMessage="#{passengerController.flightLabel.missingBag.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+			styleClass="passInout"  tabindex="9" label="No Of Missing Bag" 
+			rendered="#{!passengerController.flightLabel.missingBag.hidden}">
 				<f:validateLongRange maximum="20"/>
 		</t:inputText>
 
-		<rich:spacer width="100%" height="15" title=""/>
-		<rich:spacer width="100%" height="15" title=""/>
-		<rich:spacer width="100%" height="15" title=""/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.missingBag.hidden}"/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.missingBag.hidden}"/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.missingBag.hidden}"/>
 		
-		<h:panelGroup>
+		<h:panelGroup rendered="#{!passengerController.flightLabel.bagClaimCheck.hidden}">
 			<t:outputText
-				value="#{passengerController.flightLabel.bagClaimCheck}" styleClass="formLabel"/>
+				value="#{passengerController.flightLabel.bagClaimCheck.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.bagClaimCheckState eq 2}" />
+				rendered="#{passengerController.flightLabel.bagClaimCheck.required}" />
 			
 		</h:panelGroup>
 
-		<rich:spacer width="18" title="" />
+		<rich:spacer width="18" title="" rendered="#{!passengerController.flightLabel.bagClaimCheck.hidden}"/>
 
 		<t:inputText value="#{passengerBean.bagClaimCheck}"
 			styleClass="passInout" id="bagClaimCheck"  label="Bag Claim Check"
-			required="#{passengerController.flightLabel.bagClaimCheckState eq 2}"
-			readonly="#{passengerController.flightLabel.bagClaimCheckState eq 3 
+			required="#{passengerController.flightLabel.bagClaimCheck.required}"
+			readonly="#{passengerController.flightLabel.bagClaimCheck.hidden 
 							|| passengerController.readOnlyOnSubmitted}"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.flightLabel.bagClaimCheck}'"
-			validatorMessage="#{passengerController.flightLabel.bagClaimCheck} :
-								#{passengerController.passengerInfoLabel.fieldLength} 50"						
-			tabindex="10" >
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.flightLabel.bagClaimCheck.label}'"
+			validatorMessage="#{passengerController.flightLabel.bagClaimCheck.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"						
+			tabindex="10" rendered="#{!passengerController.flightLabel.bagClaimCheck.hidden}">
 			<f:validateLength maximum="50"/>
 		</t:inputText>
 			
-		<rich:spacer width="100%" height="15" title=""/>
-		<rich:spacer width="100%" height="15" title=""/>
-		<rich:spacer width="100%" height="15" title=""/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.bagClaimCheck.hidden}"/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.bagClaimCheck.hidden}"/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.bagClaimCheck.hidden}"/>
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.declarePayExcessValue}" styleClass="formLabel"/>
+				value="#{passengerController.flightLabel.declarePayExcessValue.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
-			<h:graphicImage value="../_images/reqbullet.gif"  rendered="true" />
+			<h:graphicImage value="../_images/reqbullet.gif"
+					rendered="#{passengerController.flightLabel.declarePayExcessValue.required}" />
 			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
 
-		<h:selectOneMenu value="#{passengerBean.declarePayExcessValue}"	tabindex="11" required="true"
+		<h:selectOneMenu value="#{passengerBean.declarePayExcessValue}"	tabindex="11"
+			required="#{passengerController.flightLabel.declarePayExcessValue.required}"
 			id="declarePayExcessValue" label="Declared Pay Excess Value"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.declarePayExcessValue}'" immediate="true"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.declarePayExcessValue.label}'" immediate="true"
 			disabled="#{passengerController.readOnlyOnSubmitted}"
 			valueChangeListener="#{passengerController.excessValueListener}" >
 			<f:selectItem itemLabel="--" itemValue="" />
@@ -351,11 +361,11 @@
 		<rich:spacer width="100%" height="15" title=""/>
 
 		<h:panelGroup>
-			<t:outputText value="&nbsp;&nbsp;&nbsp;#{passengerController.flightLabel.declaredValue}" styleClass="formLabel"/>
+			<t:outputText value="&nbsp;&nbsp;&nbsp;#{passengerController.flightLabel.declaredValue.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<a4j:outputPanel id="declVal" ajaxRendered="true">
 			<h:graphicImage value="../_images/reqbullet.gif"  
-				rendered="#{passengerController.flightLabel.declaredValueState  eq 2}" />
+				rendered="#{passengerController.flightLabel.declaredValue.required}" />
 			</a4j:outputPanel>
 			
 		</h:panelGroup>
@@ -364,14 +374,14 @@
 		
 		<a4j:outputPanel id="declValText" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.declaredValue}" id="declaredValue"
-			styleClass="passInout" disabled="#{passengerController.flightLabel.declaredValueState  ne 2}"
-			required="#{passengerController.flightLabel.declaredValueState  eq 2}"
-			readonly="#{passengerController.flightLabel.declaredValueState eq 3
+			styleClass="passInout" disabled="#{!passengerController.flightLabel.declaredValue.required}"
+			required="#{passengerController.flightLabel.declaredValue.required}"
+			readonly="#{passengerController.flightLabel.declaredValue.hidden
 						|| passengerController.readOnlyOnSubmitted}"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.declaredValue}'"
-			validatorMessage="#{passengerController.flightLabel.declaredValue} :
-								#{passengerController.passengerInfoLabel.fieldValue} 3300"	
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.declaredValue.label}'"
+			validatorMessage="#{passengerController.flightLabel.declaredValue.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 3300"	
 			tabindex="12"  label="Declared Value">
 				<f:validateDoubleRange maximum="3300"/>
 		</t:inputText>
@@ -383,20 +393,20 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.clearCustomBag}" styleClass="formLabel"/>
+				value="#{passengerController.flightLabel.clearCustomBag.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="true and #{passengerController.readOnlyOnSubmitted}" />
+				rendered="#{passengerController.flightLabel.clearCustomBag.required}" />
 			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
 
 		<h:selectOneMenu value="#{passengerBean.clearCustomBag}" tabindex="13"
-			required="true and #{passengerController.readOnlyOnSubmitted}" label="Clear Custom Bag"
+			required="#{passengerController.flightLabel.clearCustomBag.required}" label="Clear Custom Bag"
 			disabled="#{passengerController.readOnlyOnSubmitted}"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.clearCustomBag}'"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.clearCustomBag.label}'"
 			valueChangeListener="#{passengerController.clearCustomListener}"  id="clearCustomBag">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
@@ -409,11 +419,11 @@
 		<rich:spacer width="100%" height="15" title=""/>
 
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.bagWeight}" styleClass="formLabel"/>
+			<t:outputText value="#{passengerController.flightLabel.bagWeight.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<a4j:outputPanel id="weight" ajaxRendered="true">
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.bagWeightState  eq 2}" />
+				rendered="#{passengerController.flightLabel.bagWeight.required}" />
 			</a4j:outputPanel>
 			
 		</h:panelGroup>
@@ -422,11 +432,11 @@
 
 		<a4j:outputPanel id="weightInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.bagWeight}" styleClass="passInout" label="Bag Weight"
-			disabled="#{passengerController.flightLabel.bagWeightState  ne 2
+			disabled="#{!passengerController.flightLabel.bagWeight.required
 						|| passengerController.readOnlyOnSubmitted}" id="bagWeight"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.bagWeight}'"
-			required="#{passengerController.flightLabel.bagWeightState  eq 2}"	tabindex="14" />
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.bagWeight.label}'"
+			required="#{passengerController.flightLabel.bagWeight.required}"	tabindex="14" />
 		</a4j:outputPanel>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -434,20 +444,20 @@
 		<rich:spacer width="100%" height="15" title=""/>
 
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.rerouteBag}" styleClass="formLabel"/>
+			<t:outputText value="#{passengerController.flightLabel.rerouteBag.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif"  
-				rendered="true and #{passengerController.readOnlyOnSubmitted}" />
+				rendered="#{passengerController.flightLabel.rerouteBag.required}" />
 			
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
 
 		<h:selectOneMenu value="#{passengerBean.rerouteBag}" tabindex="15"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.rerouteBag}'"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.rerouteBag.label}'"
 			disabled="#{passengerController.readOnlyOnSubmitted}"		
-			required="true and #{passengerController.readOnlyOnSubmitted}" id="rerouteBag" label="Baggage rerouted">
+			required="#{passengerController.flightLabel.rerouteBag.required}" id="rerouteBag" label="Baggage rerouted">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -459,10 +469,10 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="&#160;&#160;&#160;#{passengerController.flightLabel.differentClaimCheck}" styleClass="formLabel"/>
+				value="&#160;&#160;&#160;#{passengerController.flightLabel.differentClaimCheck.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.differentClaimCheckState  eq 2}" />
+				rendered="#{passengerController.flightLabel.differentClaimCheck.required}" />
 			
 		</h:panelGroup>
 
@@ -470,11 +480,11 @@
 
 			<h:selectOneMenu value="#{passengerBean.differentClaimCheck}" tabindex="16" immediate="true"
 				 id="differentClaimCheck"
-				 required="#{passengerController.flightLabel.differentClaimCheckState  eq 2}"
-				 readonly="#{passengerController.flightLabel.differentClaimCheckState  eq 3}"
+				 required="#{passengerController.flightLabel.differentClaimCheck.required}"
+				 readonly="#{passengerController.flightLabel.differentClaimCheck.hidden}"
 				 disabled="#{passengerController.readOnlyOnSubmitted}"
-				 requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.differentClaimCheck}'"
+				 requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.differentClaimCheck.label}'"
 				valueChangeListener="#{passengerController.differentClaimCheckListener}">
 				<f:selectItem itemLabel="--" itemValue="" />
 				<f:selectItem itemLabel="Yes" itemValue="true" />
@@ -487,11 +497,11 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="&#160;&#160;&#160;#{passengerController.flightLabel.reroutedCityAirline}" styleClass="formLabel"/> 
+			<t:outputText value="&#160;&#160;&#160;#{passengerController.flightLabel.reroutedCityAirline.label}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
 			<a4j:outputPanel id="rerouteCity" ajaxRendered="true">
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.reroutedCityAirlineState  eq 2}" />
+				rendered="#{passengerController.flightLabel.reroutedCityAirline.required}" />
 			</a4j:outputPanel>
 			 
 		</h:panelGroup>
@@ -501,15 +511,14 @@
 		<a4j:outputPanel id="rerouteCityInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.reroutedCityAirline}" styleClass="passInout"
 			tabindex="17" id="reroutedCityAirline" label="Airline rerouted by"
-			 required="#{passengerController.flightLabel.reroutedCityAirlineState  eq 2 
-			 		and passengerController.readOnlyOnSubmitted}"
-			 readonly="#{passengerController.flightLabel.reroutedCityAirlineState  eq 3
+			 required="#{passengerController.flightLabel.reroutedCityAirline.required}"
+			 readonly="#{passengerController.flightLabel.reroutedCityAirline.hidden
 			 		|| passengerController.readOnlyOnSubmitted}"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.reroutedCityAirline}'"
-			validatorMessage="#{passengerController.flightLabel.reroutedCityAirlineState} :
-								#{passengerController.passengerInfoLabel.fieldLength} 50"
-			disabled="#{passengerController.flightLabel.reroutedCityAirlineState  ne 2}"  >
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.reroutedCityAirline.label}'"
+			validatorMessage="#{passengerController.flightLabel.reroutedCityAirline.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"
+			disabled="#{!passengerController.flightLabel.reroutedCityAirline.required}"  >
 			<f:validateLength maximum="50"/>
 			</t:inputText>
 		</a4j:outputPanel>
@@ -519,10 +528,10 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="&#160;&#160;&#160;#{passengerController.flightLabel.reason}" styleClass="formLabel"/> 
+			<t:outputText value="&#160;&#160;&#160;#{passengerController.flightLabel.reason.label}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.reasonState  eq 2}" /> 
+				rendered="#{passengerController.flightLabel.reason.required}" /> 
 			
 		</h:panelGroup>
 		
@@ -530,6 +539,7 @@
 		
 		<t:inputText value="#{passengerBean.reason}" label="Reason"
 			readonly="#{passengerController.readOnlyOnSubmitted}"
+			required="#{passengerController.flightLabel.reason.required}"
 			styleClass="passInout"	 tabindex="18"  id="reason"/>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -537,10 +547,10 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.immediateClaimAttempt}" styleClass="formLabel"/> 
+			<t:outputText value="#{passengerController.flightLabel.immediateClaimAttempt.label}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
-			<h:graphicImage value="../_images/reqbullet.gif" 	rendered="true and 
-				passengerController.readOnlyOnSubmitted" /> 
+			<h:graphicImage value="../_images/reqbullet.gif"
+				rendered="#{passengerController.flightLabel.immediateClaimAttempt.required}" /> 
 			 
 		</h:panelGroup>
 		
@@ -548,11 +558,12 @@
 		
 		<h:selectOneMenu value="#{passengerBean.immediateClaimAttempt}" id="immediateClaimAttempt" 
 			disabled="#{passengerController.readOnlyOnSubmitted}"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.immediateClaimAttempt}'"
-			validatorMessage="#{passengerController.flightLabel.immediateClaimAttempt} :
-								#{passengerController.passengerInfoLabel.fieldLength} 50"
-			  	tabindex="19" required="true" label="Immediate Claim Attempt">
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.immediateClaimAttempt.label}'"
+			validatorMessage="#{passengerController.flightLabel.immediateClaimAttempt.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"
+			  	tabindex="19" label="Immediate Claim Attempt"
+			  	required="#{passengerController.flightLabel.immediateClaimAttempt.required}" >
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
@@ -563,10 +574,10 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.whenBagSeen}" styleClass="formLabel"/> 
+			<t:outputText value="#{passengerController.flightLabel.whenBagSeen.label}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
-			<h:graphicImage value="../_images/reqbullet.gif" 	rendered="true
-				and passengerController.readOnlyOnSubmitted" /> 
+			<h:graphicImage value="../_images/reqbullet.gif"
+				rendered="#{passengerController.flightLabel.whenBagSeen.required}" /> 
 			
 		</h:panelGroup>
 		
@@ -574,12 +585,12 @@
 		
 		<t:inputText value="#{passengerBean.whenBagSeen}" styleClass="passInout"
 			label="When Bag Seen"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.whenBagSeen}'"
-			validatorMessage="#{passengerController.flightLabel.whenBagSeen} :
-								#{passengerController.passengerInfoLabel.fieldLength} 50"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.whenBagSeen.label}'"
+			validatorMessage="#{passengerController.flightLabel.whenBagSeen.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"
 			readonly="#{passengerController.readOnlyOnSubmitted}"
-			required="true and passengerController.readOnlyOnSubmitted" tabindex="20"  id="whenBagSeen">
+			required="#{passengerController.flightLabel.whenBagSeen.required}" tabindex="20"  id="whenBagSeen">
 			<f:validateLength maximum="50"/>
 		</t:inputText>
 			
@@ -588,23 +599,23 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.fileReportCity}" styleClass="formLabel"/> 
+			<t:outputText value="#{passengerController.flightLabel.fileReportCity.label}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.fileReportCityState  eq 2}" />
+				rendered="#{passengerController.flightLabel.fileReportCity.required}" />
 			
 		</h:panelGroup>
 		
 		<rich:spacer width="18" title="" />
 		
 		<t:inputText value="#{passengerBean.fileReportCity}" styleClass="passInout"  id="fileReportCity"
-			required="#{passengerController.flightLabel.fileReportCityState  eq 2}" tabindex="21" 
-			readonly="#{passengerController.flightLabel.fileReportCityState eq 3}"
+			required="#{passengerController.flightLabel.fileReportCity.required}" tabindex="21" 
+			readonly="#{passengerController.flightLabel.fileReportCity.hidden}"
 			disabled="#{passengerController.readOnlyOnSubmitted}"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.fileReportCity}'"
-			validatorMessage="#{passengerController.flightLabel.fileReportCity} :
-								#{passengerController.passengerInfoLabel.fieldLength} 50"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.fileReportCity.label}'"
+			validatorMessage="#{passengerController.flightLabel.fileReportCity.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"
 			label="File Report City">
 			<f:validateLength maximum="50"/>
 		</t:inputText>
@@ -614,10 +625,10 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.reportAnotherAirline}" styleClass="formLabel"/> 
+			<t:outputText value="#{passengerController.flightLabel.reportAnotherAirline.label}" styleClass="formLabel"/> 
 			<h:outputText value="&#160;" /> 
 			<h:graphicImage value="../_images/reqbullet.gif" 
-				rendered="#{passengerController.flightLabel.reportAnotherAirlineState  eq 2}" />
+				rendered="#{passengerController.flightLabel.reportAnotherAirline.required}" />
 			
 		</h:panelGroup>
 		
@@ -625,11 +636,11 @@
 		
 		<h:selectOneMenu value="#{passengerBean.reportAnotherAirline}" tabindex="22"  id="reportAnotherAirline"
 			label="Report Another Airline"
-			readonly="#{passengerController.flightLabel.reportAnotherAirlineState eq 3}"
+			readonly="#{passengerController.flightLabel.reportAnotherAirline.hidden}"
 			disabled="#{passengerController.readOnlyOnSubmitted}"
-			requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-					'#{passengerController.flightLabel.reportAnotherAirline}'"
-			required="#{passengerController.flightLabel.reportAnotherAirlineState  eq 2}">
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'#{passengerController.flightLabel.reportAnotherAirline.label}'"
+			required="#{passengerController.flightLabel.reportAnotherAirline.required}">
 				<f:selectItem itemLabel="--" itemValue="" />
 				<f:selectItem itemLabel="Yes" itemValue="true" />
 				<f:selectItem itemLabel="No" itemValue="false" />

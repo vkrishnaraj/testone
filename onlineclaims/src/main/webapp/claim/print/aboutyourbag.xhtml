@@ -8,14 +8,14 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 	<div>
-		<t:outputText value="#{passengerController.bagDetailsLabel.aboutYourBag}" styleClass="subHeader" />
+		<t:outputText value="#{passengerController.bagDetailsLabel.aboutYourBag.label}" styleClass="subHeader" />
 	</div>
 	<rich:spacer width="100%" height="20" title="" />
 	
 	<rich:panel id="aboutbagpanel" style="border:0px">
 	<a4j:repeat value="#{passengerController.bags}" var="bagItem" rowKeyVar="rowIndex" >
 	<div>
-		<t:outputText value="#{passengerController.bagDetailsLabel.bagNumberLabel}:"	styleClass="subHeader" /> 
+		<t:outputText value="#{passengerController.bagDetailsLabel.bagNumberLabel.label}:"	styleClass="subHeader" /> 
 		<t:outputText value="#{rowIndex+1}" styleClass="subHeader"/>
 	</div>
 	<rich:spacer width="100%" height="20" title="" />
@@ -24,17 +24,17 @@
 		<h:panelGroup >
 			<h:panelGrid columns="2">
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagTagNumber}"  styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagTagNumber.label}"  styleClass="ticketInfo"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.bagTagNumberState eq 2}"/>
+								rendered="#{passengerController.bagDetailsLabel.bagTagNumber.required}"/>
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.bagTagNumber}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.bagTagNumberState eq 2}" tabindex="1"
+								required="#{passengerController.bagDetailsLabel.bagTagNumber.required}" tabindex="1"
 								readonly="true"
-								label="#{passengerController.bagDetailsLabel.bagTagNumber} Page:#{rowIndex+1}">
+								label="#{passengerController.bagDetailsLabel.bagTagNumber.label} Page:#{rowIndex+1}">
 					<f:validateLength  maximum="20"/>
 				</t:inputText>
 				
@@ -42,17 +42,17 @@
 				<rich:spacer  height="10" title="" />
 				
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.nameonBag}" styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.nameonBag.label}" styleClass="ticketInfo"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.nameonBagState eq 2}"/>
+								rendered="#{passengerController.bagDetailsLabel.nameonBag.required}"/>
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.nameonBag}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.nameonBagState eq 2}" tabindex="2"
+								required="#{passengerController.bagDetailsLabel.nameonBag.required}" tabindex="2"
 								readonly="true"
-								label="#{passengerController.bagDetailsLabel.nameonBag} Page:#{rowIndex+1}">
+								label="#{passengerController.bagDetailsLabel.nameonBag.label} Page:#{rowIndex+1}">
 					<f:validateLength maximum="20"/>
 				</t:inputText>
 				
@@ -60,17 +60,17 @@
 				<rich:spacer  height="10" title="" />
 				
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.externalMarkings}" styleClass="wrapText"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.externalMarkings.label}" styleClass="wrapText"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.externalMarkingsState eq 2}"/>
+								rendered="#{passengerController.bagDetailsLabel.externalMarkings.required}"/>
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.externalMarkings}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.externalMarkingsState eq 2}" tabindex="4"
+								required="#{passengerController.bagDetailsLabel.externalMarkings.required}" tabindex="4"
 								readonly="true"
-								label="#{passengerController.bagDetailsLabel.externalMarkings} Page:#{rowIndex+1}">
+								label="#{passengerController.bagDetailsLabel.externalMarkings.label} Page:#{rowIndex+1}">
 					<f:validateLength maximum="50"/>
 				</t:inputText>
 				
@@ -78,17 +78,17 @@
 				<rich:spacer  height="10" title="" />
 			
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagColor}" styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagColor.label}" styleClass="ticketInfo"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.bagColorState eq 2}"/>
+								rendered="#{passengerController.bagDetailsLabel.bagColor.required}"/>
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:selectOneMenu immediate="true" value="#{bagItem.bagColor}"  id="colorPicker"
-					required="#{passengerController.bagDetailsLabel.bagColorState eq 2}" 
+					required="#{passengerController.bagDetailsLabel.bagColor.required}" 
 					readonly="true"
-					label="#{passengerController.bagDetailsLabel.bagColor} Page:#{rowIndex+1}">
+					label="#{passengerController.bagDetailsLabel.bagColor.label} Page:#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
 						<f:selectItem itemValue="BE" itemLabel="Beige"/>
 						<f:selectItem itemValue="BK" itemLabel="Black"/>
@@ -113,17 +113,17 @@
 				<rich:spacer width="100%" height="20"/>
 				<rich:spacer width="100%" height="20"/>
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.brandOftheBag}" styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.brandOftheBag.label}" styleClass="ticketInfo"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.brandOftheBagState eq 2}"/>
+								rendered="#{passengerController.bagDetailsLabel.brandOftheBag.required}"/>
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.brandOftheBag}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.brandOftheBagState eq 2}" tabindex="3"
+								required="#{passengerController.bagDetailsLabel.brandOftheBag.required}" tabindex="3"
 								readonly="true"
-								label="#{passengerController.bagDetailsLabel.brandOftheBag} Page:#{rowIndex+1}">
+								label="#{passengerController.bagDetailsLabel.brandOftheBag.label} Page:#{rowIndex+1}">
 					<f:validateLength maximum="20"/>
 				</t:inputText>
 				
@@ -131,18 +131,18 @@
 				<rich:spacer  height="10" title="" />
 				
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagPurchaseDate}" styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagPurchaseDate.label}" styleClass="ticketInfo"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.bagPurchaseDateState eq 2}"/>
+								rendered="#{passengerController.bagDetailsLabel.bagPurchaseDate.required}"/>
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<rich:calendar value="#{bagItem.bagPurchaseDate}" 
-						required="#{passengerController.bagDetailsLabel.bagPurchaseDateState eq 2}"
+						required="#{passengerController.bagDetailsLabel.bagPurchaseDate.required}"
 						readonly="true"
 						enableManualInput="false" datePattern="MMM/dd/yyyy"  inputSize="11"
-						label="#{passengerController.bagDetailsLabel.bagPurchaseDate} Page:#{rowIndex+1}"
+						label="#{passengerController.bagDetailsLabel.bagPurchaseDate.label} Page:#{rowIndex+1}"
 						disabled="true"
 						jointPoint="top-right" showWeeksBar="false" mode="client"
 					popup="true"  immediate="true" >
@@ -154,7 +154,7 @@
 				
 				<rich:spacer width="60%" />
 				<h:panelGroup >
-				<a4j:commandLink value="#{passengerController.bagDetailsLabel.bagChart}" styleClass="ticketInfo"
+				<a4j:commandLink value="#{passengerController.bagDetailsLabel.bagChart.label}" styleClass="ticketInfo"
 					rendered="#{!passengerController.readOnlyOnSubmitted}"
 					id="bagChart" immediate="true" disabled="true">
 						
@@ -166,19 +166,19 @@
 				<rich:spacer  height="10" title="" />
 				
 				<h:panelGroup >
-					<t:outputText value="#{passengerController.bagDetailsLabel.bagType}" styleClass="ticketInfo"/>
+					<t:outputText value="#{passengerController.bagDetailsLabel.bagType.label}" styleClass="ticketInfo"/>
 					<h:outputText value="&#160;" />
 					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.bagTypeState eq 2}"/>
+								rendered="#{passengerController.bagDetailsLabel.bagType.required}"/>
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<a4j:outputPanel id="bagChartPanel" ajaxRendered="true">
 				<t:inputText  value="#{bagItem.bagType}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.bagTypeState eq 2}" tabindex="7"
+								required="#{passengerController.bagDetailsLabel.bagType.required}" tabindex="7"
 								disabled="true"
 								displayValueOnly="true"
-								label="#{passengerController.bagDetailsLabel.bagType} Page:#{rowIndex+1}" />
+								label="#{passengerController.bagDetailsLabel.bagType.label} Page:#{rowIndex+1}" />
 				</a4j:outputPanel>
 			</h:panelGrid>
 		</h:panelGroup>
@@ -186,89 +186,89 @@
 	
 	<rich:spacer width="100%" height="25"/>
 	<div>
-		<t:outputText value="#{passengerController.bagDetailsLabel.selectAppropriate}" styleClass="subHeader" />
+		<t:outputText value="#{passengerController.bagDetailsLabel.selectAppropriate.label}" styleClass="subHeader" />
 	</div>
 	<rich:spacer width="100%" height="10" title="" />
 	
 	<h:panelGrid columns="16">
 		<t:selectBooleanCheckbox value="#{bagItem.hardSided}" 
 			 readonly="true"
-			label="#{passengerController.bagDetailsLabel.hardSided} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.hardSided.label} Page:#{rowIndex+1}"/>
 		<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.hardSided}"  styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.hardSided.label}"  styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.wheelsRollers}" 
 		readonly="true"
-			label="#{passengerController.bagDetailsLabel.wheelsRollers} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.wheelsRollers.label} Page:#{rowIndex+1}"/>
 		<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.wheelsRollers}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.wheelsRollers.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.feet}" readonly="true"
-			label="#{passengerController.bagDetailsLabel.feet} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.feet.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.feet}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.feet.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.trim}" readonly="true"
-			label="#{passengerController.bagDetailsLabel.trim} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.trim.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.trim}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.trim.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.softSided}" readonly="true"
-			label="#{passengerController.bagDetailsLabel.softSided} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.softSided.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.softSided}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.softSided.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.zippers}" readonly="true"
-			label="#{passengerController.bagDetailsLabel.zippers} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.zippers.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.zippers}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.zippers.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.retractableHandel}" readonly="true"
-			label="#{passengerController.bagDetailsLabel.retractableHandel} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.retractableHandel.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.retractableHandel}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.retractableHandel.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.pockets}" readonly="true"
-			label="#{passengerController.bagDetailsLabel.pockets} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.pockets.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.pockets}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.pockets.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.locks}" readonly="true"
-			label="#{passengerController.bagDetailsLabel.locks} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.locks.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.locks}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.locks.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.pullStrap}" readonly="true"
-			label="#{passengerController.bagDetailsLabel.pullStrap} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.pullStrap.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.pullStrap}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.pullStrap.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.nameTag}" readonly="true"
-			label="#{passengerController.bagDetailsLabel.nameTag} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.nameTag.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.nameTag}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.nameTag.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.ribbonsPersonalMarkings}" readonly="true"
-			label="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
-		<t:outputText value="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings}" styleClass="requiredField"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings.label}" styleClass="requiredField"/>
 		<rich:spacer width="30"/>
 	</h:panelGrid>
 	
 	<rich:spacer width="100%" height="25"/>
 	<div>
-		<t:outputText value="#{passengerController.bagDetailsLabel.descriptionOfContents}" styleClass="subHeader" />
+		<t:outputText value="#{passengerController.bagDetailsLabel.descriptionOfContents.label}" styleClass="subHeader" />
 	</div>
 	<rich:spacer width="100%" height="10" title="" />
 	<a4j:region renderRegionOnly="true">
@@ -280,31 +280,31 @@
 				<f:facet name="header">
 					<rich:columnGroup>
 						<rich:column>
-							<h:outputText  value="#{passengerController.bagDetailsLabel.gender}" styleClass="font1-1em"/>
+							<h:outputText  value="#{passengerController.bagDetailsLabel.gender.label}" styleClass="font1-1em"/>
 						</rich:column>
 						<rich:column>
-							<h:outputText 	value="#{passengerController.bagDetailsLabel.article}" styleClass="font1-1em"/>
+							<h:outputText 	value="#{passengerController.bagDetailsLabel.article.label}" styleClass="font1-1em"/>
 						</rich:column>
 							<rich:column>
-							<h:outputText  value="#{passengerController.bagDetailsLabel.color}" styleClass="font1-1em"/>
+							<h:outputText  value="#{passengerController.bagDetailsLabel.color.label}" styleClass="font1-1em"/>
 						</rich:column>
 						<rich:column>
-							<h:outputText 	value="#{passengerController.bagDetailsLabel.size}" styleClass="font1-1em"/>
+							<h:outputText 	value="#{passengerController.bagDetailsLabel.size.label}" styleClass="font1-1em"/>
 						</rich:column>
 							<rich:column>
-							<h:outputText  value="#{passengerController.bagDetailsLabel.brandOrDescription}" styleClass="font1-1em"/>
+							<h:outputText  value="#{passengerController.bagDetailsLabel.brandOrDescription.label}" styleClass="font1-1em"/>
 						</rich:column>
 						<rich:column>
-							<h:outputText 	value="#{passengerController.bagDetailsLabel.storePurchased}" styleClass="font1-1em"/>
+							<h:outputText 	value="#{passengerController.bagDetailsLabel.storePurchased.label}" styleClass="font1-1em"/>
 						</rich:column>
 							<rich:column>
-							<h:outputText  value="#{passengerController.bagDetailsLabel.purchasedDate}" styleClass="font1-1em"/>
+							<h:outputText  value="#{passengerController.bagDetailsLabel.purchasedDate.label}" styleClass="font1-1em"/>
 						</rich:column>
 						<rich:column>
-							<h:outputText 	value="#{passengerController.bagDetailsLabel.price}" styleClass="font1-1em"/>
+							<h:outputText 	value="#{passengerController.bagDetailsLabel.price.label}" styleClass="font1-1em"/>
 						</rich:column>
 							<rich:column>
-							<h:outputText  value="#{passengerController.bagDetailsLabel.currency}" styleClass="font1-1em"/>
+							<h:outputText  value="#{passengerController.bagDetailsLabel.currency.label}" styleClass="font1-1em"/>
 						</rich:column>
 					</rich:columnGroup>
 				</f:facet>

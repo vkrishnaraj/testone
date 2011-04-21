@@ -11,82 +11,44 @@
 	<ui:define name="pageTitle">US Airways | Bag Tracking Summary</ui:define>
 
 	<ui:define name="mainContent">
-		<script type="text/javascript" src="../../_js/passengerFont.js"></script>
 		<h:form id="directionForm">
 
-			<div class="breadcrumb">
+			<div class="sectionTitle">
 				<h:outputText value="#{msg.stepone_title_breadcrumb}" escape="false" />
 			</div>
+			<div class="wrappercontentbody">
 
-			<div class="container containerfull">
-			<div class="containerheader headerfull">
+			<div class="clear htxlg">&#160;</div>
+
 			<h1 class="dkblue"><h:outputText value="#{msg.stepone_title_stepone}" /></h1>
-			</div>
-			<div class="containercontent gradientsmall">
-			<div class="contentbodyspacing"></div>
-			<div class="contentbody" align="left"><!-- Start body content -->
 
-
-			<div class="clear htxlg"></div>
-					<div class="submsg"><h:outputText value="#{msg.stepone_text_directions}" /></div>
-
-			<div class="clear htxlg"></div>
+			<div class="clear htxlg">&#160;</div>
 			
-<!-- BEGIN NEED TO GET RID OF -->			
-			
-			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
-			<p>First Name:</p>
-			<span><h:outputText
-				value="#{incidentBean.firstName}"
-				styleClass="formLabel" /></span>
-
-			<p>Last Name:</p>
-			<span><h:outputText
-				value="#{incidentBean.lastName}"
-				styleClass="formLabel" /></span>
-
-			<p>Conformation Code:</p>
-			<span><h:outputText
-				value="#{incidentBean.pnr}"
-				styleClass="formLabel" /></span>
-			</h:panelGrid>
-			<div class="clear htxlg"></div>
-			
-<!-- END NEED TO GET RID OF -->			
+			<div class="submsg"><h:outputText value="#{msg.stepone_text_directions}" /></div>
 			
 			<a4j:repeat value="#{incidentBean.claimCheck}"
 				var="check" rowKeyVar="rowIndex">
+
+				<div class="clear htxlg">&#160;</div>	
+				
 				<h:outputText value="#{msg.stepone_label_bagtag}"
 				escape="false" styleClass="formLabel"/><h:outputText value="#{rowIndex + 1}"
 				styleClass="formLabel" />&#160;&#160;<h:outputText
 				value="#{check}" styleClass="formLabel" />
-					
-				<div class="clear"></div>
+				
 			</a4j:repeat>
 
-			<div class="clear htxlg"></div>
-
-			<div class="clear htxlg"></div>
-					<div class="submsg"><h:outputText value="#{msg.stepone_text_bottom}" /></div>
-					
-			<div class="clear htxlg"></div>
+			<div class="clear htxlg">&#160;</div>
 			
-						<div style="text-align: center; width: 100%;"><h:commandButton
+			<div class="submsg"><h:outputText value="#{msg.stepone_text_bottom}" /></div>
+					
+			<div class="clear htxlg">&#160;</div>
+			
+						<div style="text-align: center;"><h:commandButton
 							id="passLoginContinue" value="#{msg.ui_button_continue}"
 							action="#{incidentController.gotoStepTwo}" tabindex="4"
-							styleClass="button140pxred loginbutton140pxred" height="3em"
-							width="14em" /></div>
-			
-			<div class="clear htxlg"></div>
-			<!-- End body content -->
-			</div> <!-- ends contentbody -->
-			</div> <!-- ends containercontent -->
-			
-			
-			<div id="divFooter">
-			<div class="containerfootergradient footerfull"></div>
-			<div class="clear"></div>
-			</div>
+							styleClass="button140pxred loginbutton140pxred" /></div>
+							
 			</div> <!-- ends container -->
 
 

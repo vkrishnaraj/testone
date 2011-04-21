@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	template="/layout/incidenttemplate.xhtml">
+
+
+	<ui:define name="pageTitle">US Airways | Bag Tracking Summary</ui:define>
+
+	<ui:define name="mainContent">
+		<script type="text/javascript" src="../../_js/passengerFont.js"></script>
+		<h:form id="directionForm">
+
+			<div class="breadcrumb">
+				<h:outputText value="#{msg.stepthree_title_breadcrumb}" escape="false" />
+			</div>
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue"><h:outputText value="#{msg.stepthree_title_stepthree}" /></h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody" align="left"><!-- Start body content -->
+
+
+			<div class="clear htxlg"></div>
+			
+					<table id="stepThreeInputTable" width="100%" cellpadding="5px" >
+						<tr class="vertTop"><td>
+								<h:outputText value="#{msg.stepthree_label_address1}"
+									styleClass="formLabel" />
+								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+							</td><td colspan="7">
+								<h:inputText id="address1" styleClass="inputWidth"
+									value="#{incidentBean.deliveryAddress.address1}">
+								</h:inputText>
+						</td></tr><tr class="vertTop"><td>
+								<h:outputText value="&#160;" />
+						</td></tr><tr class="vertTop"><td>
+						
+								<h:outputText value="#{msg.stepthree_label_address2}"
+									styleClass="formLabel" />
+								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+							</td><td colspan="7">
+								<h:inputText id="address2" styleClass="inputWidth"
+									value="#{incidentBean.deliveryAddress.address2}">
+								</h:inputText>
+						</td></tr><tr class="vertTop"><td>
+								<h:outputText value="&#160;" />
+						</td></tr><tr class="vertTop"><td>
+						
+								<h:outputText value="#{msg.stepthree_label_city}"
+									styleClass="formLabel" />
+								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+							</td><td>
+								<h:inputText id="city" styleClass="inputWidth"
+									value="#{incidentBean.deliveryAddress.city}">
+								</h:inputText>
+							</td><td>
+						
+								<h:outputText value="#{msg.stepthree_label_province}"
+									styleClass="formLabel" escape="false"/>
+								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+							</td><td>
+								<h:inputText id="province" styleClass="inputWidth"
+									value="#{incidentBean.deliveryAddress.province}">
+								</h:inputText>
+							</td><td>
+						
+								<h:outputText value="#{msg.stepthree_label_state}"
+									styleClass="formLabel" />
+								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+							</td><td>
+								<h:selectOneMenu value="#{incidentBean.deliveryAddress.state}" styleClass="inputWidth">
+									<f:selectItems value="#{incidentController.stateItems}"/>
+								</h:selectOneMenu>
+							</td><td>
+								<h:outputText value="#{msg.stepthree_label_postal}"
+									styleClass="formLabel" />
+								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+							</td><td>
+								<h:inputText id="postalCode" styleClass="inputWidth"
+									value="#{incidentBean.deliveryAddress.postalCode}">
+								</h:inputText>	
+						</td></tr><tr class="vertTop"><td>				
+								<h:outputText value="&#160;" />
+						</td></tr><tr class="vertTop"><td>
+						
+								<h:outputText value="#{msg.stepthree_label_country}"
+									styleClass="formLabel" />
+								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+							</td><td colspan="3">
+								<h:selectOneMenu value="#{incidentBean.deliveryAddress.country}" styleClass="inputWidth">
+									<f:selectItem itemLabel="United States" itemValue="US"/>
+									<f:selectItems value="#{incidentController.selectItems}"/>
+								</h:selectOneMenu>
+							</td><td>
+							
+								<h:outputText value="#{msg.stepthree_label_email}"
+									styleClass="formLabel" />
+								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+							</td><td colspan="3">
+								<h:inputText id="email" styleClass="inputWidth"
+									value="#{incidentBean.email}">
+								</h:inputText>
+						</td></tr>
+					
+					<a4j:repeat value="#{incidentBean.phone}"
+						var="phone" rowKeyVar="rowIndex">
+						
+							<tr class="vertTop"><td>				
+								<h:outputText value="&#160;" />
+						</td></tr><tr class="vertTop"><td>
+									<h:outputText value="#{msg.stepthree_label_phone}#{rowIndex + 1}"
+									escape="false" styleClass="formLabel"/>
+							</td><td>
+									<h:inputText styleClass="inputWidth"
+										value="#{incidentBean.phone[rowIndex].number}">
+									</h:inputText>
+							</td><td>
+									
+									<h:outputText value="#{msg.stepthree_label_phonetype}"
+									escape="false" styleClass="formLabel"/>
+							</td><td>
+									<h:selectOneRadio value="#{incidentBean.phone[rowIndex].type}" layout="pageDirection">
+										<f:selectItem itemValue="0" itemLabel="#{msg.stepthree_radio_phtype_0}" />
+										<f:selectItem itemValue="1" itemLabel="#{msg.stepthree_radio_phtype_1}" />
+										<f:selectItem itemValue="2" itemLabel="#{msg.stepthree_radio_phtype_2}" />
+										<f:selectItem itemValue="3" itemLabel="#{msg.stepthree_radio_phtype_3}" />
+									</h:selectOneRadio>
+							</td><td>
+									
+									<h:outputText value="#{msg.stepthree_label_phoneother}"
+									escape="false" styleClass="formLabel"/>
+							</td><td colspan="3">
+									<h:inputText styleClass="inputWidth"
+										value="#{incidentBean.phone[rowIndex].other}">
+									</h:inputText>
+						</td></tr>
+					</a4j:repeat>
+					<tr class="vertTop"><td>				
+								<h:outputText value="&#160;" />
+						</td></tr>
+					<tr class="vertTop"><td colspan="8">
+					<div style="text-align: center; width: 100%;">
+						<h:commandButton
+							id="addPhone" value="#{msg.stepthree_button_addphone}"
+							action="#{incidentBean.addPhone}" tabindex="3"
+							styleClass="button140pxred loginbutton140pxred" height="3em"
+							width="14em" /></div>
+					</td></tr><tr class="vertTop"><td>				
+								<h:outputText value="&#160;" />
+						</td></tr><tr class="vertTop"><td>
+						
+							<h:outputText value="#{msg.stepthree_label_delivery_options}"
+								styleClass="formLabel" />
+							<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
+						</td><td colspan="7">
+							<h:selectOneRadio value="#{incidentBean.deliveryType}">
+								<f:selectItem itemValue="0" itemLabel="#{msg.stepthree_radio_deltype_0}" />
+								<f:selectItem itemValue="1" itemLabel="#{msg.stepthree_radio_deltype_1}" />
+								<f:selectItem itemValue="2" itemLabel="#{msg.stepthree_radio_deltype_2}" />
+							</h:selectOneRadio>
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr><tr class="vertTop"><td colspan="8">
+						
+							<h:selectBooleanCheckbox value="#{incidentBean.deliverWithoutSignature}" >
+							</h:selectBooleanCheckbox>&#160;&#160;&#160;&#160;
+							<h:outputText value="#{msg.stepthree_check_nosignature}" styleClass="formLabel" />
+					</td></tr>
+					</table>
+					
+					<div class="clear htxlg"></div>
+			
+						<div style="text-align: center; width: 100%;">
+						<h:panelGrid columns="2" width="100%">
+						<h:commandButton
+							id="passLoginBack" value="#{msg.ui_button_back}"
+							action="#{incidentController.gobackStepTwo}" tabindex="4"
+							styleClass="button140pxred loginbutton140pxred" height="3em"
+							width="14em" />
+						<h:commandButton
+							id="passLoginContinue" value="#{msg.ui_button_continue}"
+							action="#{incidentController.gotoStepFour}" tabindex="3"
+							styleClass="button140pxred loginbutton140pxred" height="3em"
+							width="14em" />
+							</h:panelGrid></div>
+			
+			<div class="clear htxlg"></div>
+			<!-- End body content -->
+			</div> <!-- ends contentbody -->
+			</div> <!-- ends containercontent -->
+			
+			
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div> <!-- ends container -->
+
+
+
+			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

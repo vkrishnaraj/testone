@@ -35,10 +35,9 @@ import com.nettracer.claims.admin.bootstrap.PassengerBootstrap;
 import com.nettracer.claims.core.exception.SimplePersistenceException;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
-import com.nettracer.claims.core.model.MultilingualLabel;
 import com.nettracer.claims.core.model.PassengerBean;
-import com.nettracer.claims.core.service.AdminService;
-import com.nettracer.claims.core.service.PassengerService;
+import com.nettracer.claims.core.model.labels.LabelsLoginPage;
+import com.nettracer.claims.core.service.PaxViewService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
 import com.nettracer.claims.passenger.LoginBean;
@@ -71,11 +70,11 @@ public class PassengerLoginController {
 	private List<Localetext> passengerDirectionList;
 	private Long baggageState;
 	private PassengerBean passengerBean;
-	private MultilingualLabel loginLabel;
+	private LabelsLoginPage loginLabel;
 	
 
 	@Autowired
-	PassengerService passengerService;
+	PaxViewService passengerService;
 
 	@Autowired
 	OnlineClaimsWS onlineClaimsWS;
@@ -86,8 +85,10 @@ public class PassengerLoginController {
 	}
 	
 	@Autowired
-	public PassengerLoginController(AdminService adminService) {
+	public PassengerLoginController(PaxViewService adminService) {
 		logger.info("PassengerController constructor-2");
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
 		List<Languages> languagesList;
 		try {
 			languagesList = adminService.getLanguages();
@@ -97,12 +98,18 @@ public class PassengerLoginController {
 				languageDropDown.add(new SelectItem(language.getDescription()));
 			}
 		}
-		loginPageList = PassengerBootstrap.getLoginPageList();
-		logger.info("Size of loginPageList inside PassengerController constructor= "
-						+ loginPageList.size());
-		if (loginPageList != null && loginPageList.size() > 0) {
-			setLoginLabels();
+		if (session != null) {
+			//session.removeAttribute("passengerLogout");//
+			session.removeAttribute("loggedPassenger");
+			SessionPassengerBean sessionPassengerBean=(SessionPassengerBean)session.getAttribute("sessionPassengerBean");
+			if (sessionPassengerBean == null) {
+				sessionPassengerBean = new SessionPassengerBean();
+			}
+			sessionPassengerBean.setLogoutRenderer(false);
+			session.setAttribute("sessionPassengerBean", sessionPassengerBean);
 		}
+		
+		loginLabel = adminService.getLoginPage("English-US", 1L);
 		} catch (SimplePersistenceException e) {
 			e.printStackTrace();
 		}
@@ -143,7 +150,7 @@ public class PassengerLoginController {
 						"wmlb|wonu|x700|xda(\\-|2|g)|yas\\-|your|zeto|zte\\-")) {
 			logger.info("YOU FOUND ME!!!");
 			try {
-				res.sendRedirect(ClaimsProperties.get(ClaimsProperties.MOBILE_LOCATION));
+				res.sendRedirect(ClaimsProperties.get(ClaimsProperties.MOBILE_LOCATION) + "claim/mobile/login.do");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -151,36 +158,6 @@ public class PassengerLoginController {
 		}
 		}
 		
-	}
-	
-	
-	/*@PostConstruct
-	public void populateLanguageDropDown() {
-        // populates the populateLanguageDropDown upon initialization...
-    }*/
-
-
-	/**
-	 * Set the labels for login page
-	 * 
-	 */
-	private void setLoginLabels() {
-		loginLabel = new MultilingualLabel();
-		for (Localetext localetext : loginPageList) {
-			if (localetext.getLabel().getLabel().contains("Claim Number")) {
-				loginLabel.setClaimNumber(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel().contains("Last Name")) {
-				loginLabel.setLastName(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel().contains("Try a different image")) {
-				loginLabel.setTryDiffImage(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel().contains("Type the code shown")) {
-				loginLabel.setCaptchaText(localetext.getDisplayText());
-			} else if (localetext.getLabel().getLabel().contains("Continue")) {
-				loginLabel.setContinueButton(localetext.getDisplayText());
-			}else if (localetext.getLabel().getLabel().contains("Value Can't be greater than")) {
-				loginLabel.setValidateLength(localetext.getDisplayText());
-			}
-		}
 	}
 
 	public void languageSelectionListener(ValueChangeEvent valueChangeEvent) {
@@ -195,10 +172,7 @@ public class PassengerLoginController {
 			 * HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 			 * .getExternalContext().getSession(false);
 			 */
-			loginPageList = passengerService.getPassengerLoginContents(selectedLanguage);
-			if (loginPageList != null && loginPageList.size() > 0) {
-				setLoginLabels();
-			}
+			loginLabel = passengerService.getLoginPage(selectedLanguage, 1L);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -223,14 +197,16 @@ public class PassengerLoginController {
 			if (passengerView.getAuthenticationSuccess()) {
 				if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
 
-					SessionPassengerBean sessionPassengerBean = (SessionPassengerBean) session
-							.getAttribute("sessionPassengerBean");
-					sessionPassengerBean.setLogoutRenderer(true);
-					session.setAttribute("sessionPassengerBean",sessionPassengerBean);
+					if (!isMobile()) {
+						SessionPassengerBean sessionPassengerBean = (SessionPassengerBean) session
+								.getAttribute("sessionPassengerBean");
+						sessionPassengerBean.setLogoutRenderer(true);
+						session.setAttribute("sessionPassengerBean",sessionPassengerBean);
+					}
 					session.setAttribute("loggedPassenger", "loggedPassenger");
 
 					baggageState = passengerView.getClaimId();
-					passengerDirectionList = passengerService.getPassengerDirection(selectedLanguage);
+					passengerDirectionList = passengerService.getDirectionContents(selectedLanguage);
 					session.setAttribute("passengerDirectionList",passengerDirectionList);
 
 					WSPVAdvancedIncident passengerData = passengerView.getData();
@@ -269,68 +245,7 @@ public class PassengerLoginController {
 		} catch (AxisFault e) {
 			logger.error("AxisFault Error");
 			FacesUtil.addError("There is a problem communicating with our bag service.  Please try again later.");
-			// Codes for testing :hardcoded data.
-			/*if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
-
-				SessionPassengerBean sessionPassengerBean = (SessionPassengerBean) session
-						.getAttribute("sessionPassengerBean");
-				sessionPassengerBean.setLogoutRenderer(true);
-				session.setAttribute("sessionPassengerBean",
-						sessionPassengerBean);
-				session.setAttribute("loggedPassenger", "loggedPassenger");
-				try {
-					passengerDirectionList = passengerService
-							.getPassengerDirection(selectedLanguage);
-					session.setAttribute("passengerDirectionList",
-							passengerDirectionList);
-
-					passengerBean = new PassengerBean();
-					passengerBean.setIncidentID("CBSB600057287");
-					List<Address> addresses = new ArrayList<Address>();
-					List<Passenger> passengers = new ArrayList<Passenger>();
-					for (int i = 0; i < 2; i++) {
-						Address address = new Address();
-						address.setEmailAddress("utpal@test.com");
-						address.setPhoneHome("123456789");
-						address.setPhoneMobile("987654352");
-						address.setPhoneBusiness("000111222");
-						address.setHotel("Hotel1");
-						addresses.add(address);
-					}
-
-					Passenger passenger = new Passenger();
-					passenger.setFirstName("Byron");
-					passenger.setLastName("Smith");
-					passenger.setMiddleInitial("K");
-					passengers.add(passenger);
-
-					if (passengerBean.getItineraryList().size() == 0) {
-						for (int i = 0; i < 5; i++) {
-							passengerBean.getItineraryList().add(
-									new Itinerary());
-						}
-					}
-					passengerBean.setAddress(addresses);
-					passengerBean.setPassengers(passengers);
-
-					DataModel airportCodeList = new ListDataModel(
-							passengerService.getAirportList());
-					session.setAttribute("airportCodeList", airportCodeList);
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-				session.setAttribute("passengerBean", passengerBean);
-				session.setAttribute("baggageState", 1L);
-				session.setAttribute("selectedLanguage", selectedLanguage);
-
-				return "gotoDirectionPage";
-			} else {
-				clearCaptchaCache();
-				return null;
-			}*/
-
-			// e.printStackTrace();
-			 return null;
+			return null;
 		} catch (RemoteException e) {
 			logger.error("Error:RemoteException");
 			e.printStackTrace();
@@ -457,11 +372,11 @@ public class PassengerLoginController {
 		this.passengerBean = passengerBean;
 	}
 
-	public MultilingualLabel getLoginLabel() {
+	public LabelsLoginPage getLoginLabel() {
 		return loginLabel;
 	}
 
-	public void setLoginLabel(MultilingualLabel loginLabel) {
+	public void setLoginLabel(LabelsLoginPage loginLabel) {
 		this.loginLabel = loginLabel;
 	}
 

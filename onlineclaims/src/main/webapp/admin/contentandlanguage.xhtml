@@ -88,7 +88,7 @@
 					<t:panelTabbedPane id="panelTabbedPane"   styleClass="panelTabbedPane" 
 						rendered="#{contentsAndLanguageController.renderTabPanel}">
 						
-						<t:panelTab id="passLoginTab" label="Passenger Login" >
+						<t:panelTab id="passLoginTab" label="Login" >
 							<ui:include src="passengerlogintab.xhtml" />
 						</t:panelTab>
 						<t:panelTab id="dirTab" label="Directions">
@@ -97,17 +97,23 @@
 						<t:panelTab id="passInfoTab" label="Passenger Info">
 							<ui:include src="passengertab.xhtml" />
 						</t:panelTab>
-						<t:panelTab id="flightTab" label="About Your Flight">
+						<t:panelTab id="flightTab" label="Flight Info">
 							<ui:include src="flighttab.xhtml" />
 						</t:panelTab>
-						<t:panelTab id="baggageTab" label="About Your Bags">
+						<t:panelTab id="baggageTab" label="Bag Info">
 							<ui:include src="baggagetab.xhtml" />
+						</t:panelTab>
+						<t:panelTab id="uploadTab" label="File Upload">
+							<ui:include src="uploadtab.xhtml" />
 						</t:panelTab>
 						<t:panelTab id="fraudTab" label="Fraud Questions">
 							<ui:include src="fraudquestiontab.xhtml" />
 						</t:panelTab>
 						<t:panelTab id="submitTab" label="Submit">
 							<ui:include src="submittab.xhtml" />
+						</t:panelTab>
+						<t:panelTab id="savedTab" label="Saved">
+							<ui:include src="savedtab.xhtml" />
 						</t:panelTab>
 						<t:panelTab id="generalTab" label="General">
 							<ui:include src="generaltab.xhtml" />

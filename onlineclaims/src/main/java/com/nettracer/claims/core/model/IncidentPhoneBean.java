@@ -1,5 +1,7 @@
 package com.nettracer.claims.core.model;
 
+import com.nettracer.claims.utils.IncidentProperties;
+
 public class IncidentPhoneBean {
 	private String number;
 	private int type;
@@ -27,6 +29,10 @@ public class IncidentPhoneBean {
 
 	public void setOther(String other) {
 		this.other = other;
+	}
+	
+	public String getTypeLabel() {
+		return IncidentProperties.get("stepthree_radio_phtype_" + getType());
 	}
 
 }

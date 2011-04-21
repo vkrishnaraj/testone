@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	template="/layout/incidenttemplate.xhtml">
+
+
+	<ui:define name="pageTitle">US Airways | Bag Tracking Summary</ui:define>
+
+	<ui:define name="mainContent">
+		<script type="text/javascript" src="../../_js/passengerFont.js"></script>
+		<h:form id="directionForm">
+
+			<div class="breadcrumb">
+				<h:outputText value="#{msg.steptwo_title_breadcrumb}" escape="false" />
+			</div>
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue"><h:outputText value="#{msg.steptwo_title_steptwo}" /></h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody" align="left"><!-- Start body content -->
+
+			<div class="clear htxlg"></div>
+			<script type="text/javascript">
+			<!--
+					function selectBag(bagType, rowIndex) {
+						var intro = "directionForm:j_id11:" + rowIndex + ":";
+						hidden = document.getElementById(intro + "hidden_type");
+						label = document.getElementById(intro + "bag_type");
+						images = document.getElementById(intro + "type_grid").getElementsByTagName('img');
+						for(i = 0; i < images.length; i++) {
+							images[i].style.borderColor = "black";
+						}
+						if (hidden != null) {
+							hidden.value = bagType;
+						}
+						if (label != null) {
+							var typeChosen = "Other";
+							image = document.getElementById(intro + "other");
+							if (bagType == 22) {
+								typeChosen = "Roll-Around";
+								image = document.getElementById(intro + "roll");
+							} else if (bagType == 25) {
+								typeChosen = "Duffel";
+								image = document.getElementById(intro + "duff");
+							} else if (bagType == 5) {
+								typeChosen = "Suitcase";
+								image = document.getElementById(intro + "suit");
+							} else if (bagType == 69) {
+								typeChosen = "Sporting Equipment";
+								image = document.getElementById(intro + "sport");
+							} else if (bagType == 94) {
+								typeChosen = "Assistive Device";
+								image = document.getElementById(intro + "assist");
+							}
+							image.style.borderColor = "red";
+							label.innerHTML = typeChosen;
+						}
+						return false;
+					}
+				
+
+					function selectColor(bagColor, rowIndex) {
+						var intro = "directionForm:j_id11:" + rowIndex + ":";
+						hidden = document.getElementById(intro + "hidden_color");
+						label = document.getElementById(intro + "bag_color");
+						images = document.getElementById(intro + "color_grid").getElementsByTagName('img');
+						for(i = 0; i < images.length; i++) {
+							images[i].style.borderColor = "black";
+						}
+						blackImg = document.getElementById(intro + "blk");
+						blackImg.style.borderColor = "grey";
+						if (hidden != null) {
+							hidden.value = bagColor;
+						}
+						if (label != null) {
+							var colorChosen = "Other";
+							image = document.getElementById(intro + "wht");
+							if (bagColor == "WT") {
+								colorChosen = "White/Clear";
+							} else if (bagColor == "BK") {
+								colorChosen = "Black";
+								image = document.getElementById(intro + "blk");
+							} else if (bagColor == "GY") {
+								colorChosen = "Grey";
+								image = document.getElementById(intro + "gry");
+							} else if (bagColor == "BU") {
+								colorChosen = "Blue";
+								image = document.getElementById(intro + "blu");
+							} else if (bagColor == "PU") {
+								colorChosen = "Purple";
+								image = document.getElementById(intro + "pur");
+							} else if (bagColor == "RD") {
+								colorChosen = "Red";
+								image = document.getElementById(intro + "red");
+							} else if (bagColor == "YW") {
+								colorChosen = "Yellow";
+								image = document.getElementById(intro + "ylw");
+							} else if (bagColor == "BE") {
+								colorChosen = "Beige";
+								image = document.getElementById(intro + "bge");
+							} else if (bagColor == "BN") {
+								colorChosen = "Brown";
+								image = document.getElementById(intro + "brn");
+							} else if (bagColor == "GN") {
+								colorChosen = "Green";
+								image = document.getElementById(intro + "grn");
+							} else if (bagColor == "MC") {
+								colorChosen = "Multi-Colored";
+								image = document.getElementById(intro + "mul");
+							} else if (bagColor == "PR") {
+								colorChosen = "Pattern";
+								image = document.getElementById(intro + "pat");
+							}
+							image.style.borderColor = "red";
+							label.innerHTML = colorChosen;
+						}
+						return false;
+					}
+					//-->
+			</script>
+			
+			<a4j:repeat value="#{incidentBean.bag}"
+				var="theBag" rowKeyVar="rowIndex">
+				<h:outputText value="#{msg.steptwo_label_bag}"
+				escape="false" styleClass="subHeader"/><h:outputText value="#{rowIndex + 1}"
+				 styleClass="subHeader"/>
+				<div class="clear htxlg"></div>
+				<h:outputText value="#{msg.steptwo_label_type}" styleClass="formLabel" /><h:outputText 
+					value="#{incidentBean.bag[rowIndex].typeLabel}" styleClass="formLabel"  id="bag_type"/>
+				<h:inputHidden id="hidden_type" value="#{incidentBean.bag[rowIndex].type}" required="true" />
+				<br/><br/>
+				<h:outputText value="#{msg.steptwo_label_color}" styleClass="formLabel" /><h:outputText 
+					value="#{incidentBean.bag[rowIndex].colorLabel}" styleClass="formLabel"  id="bag_color"/>
+				<h:inputHidden id="hidden_color" value="#{incidentBean.bag[rowIndex].color}" required="true" />
+				<div class="clear htxlg"></div>
+				<h:panelGroup id="type_grid" > 
+				<h:outputText value="#{msg.steptwo_text_select_image}" styleClass="formLabel" />
+				<br/><br/>
+				<h:panelGrid columns="6" >
+					<h:graphicImage value="/_images/icons/rollaround.jpg" onclick="selectBag(22, #{rowIndex})"
+						id="roll" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/suitcase.jpg" onclick="selectBag(5, #{rowIndex})"
+						id="suit" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/duffel.jpg" onclick="selectBag(25, #{rowIndex})"
+						id="duff" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/sport.jpg" onclick="selectBag(69, #{rowIndex})"
+						id="sport" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/assist.jpg" onclick="selectBag(94, #{rowIndex})"
+						id="assist" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/other.jpg" onclick="selectBag(99, #{rowIndex})"
+						id="other" width="95%" styleClass="imageBorderBlk"/>
+					<h:outputText value="Roll-Around" styleClass="formLabel"/>
+					<h:outputText value="Suitcase" styleClass="formLabel"/>
+					<h:outputText value="Duffel" styleClass="formLabel"/>
+					<h:outputText value="Sporting" styleClass="formLabel"/>
+					<h:outputText value="Assistive" styleClass="formLabel"/>
+					<h:outputText value="Other" styleClass="formLabel"/>
+				</h:panelGrid>
+				</h:panelGroup>
+				
+				<div class="clear htxlg"></div>
+				<h:panelGroup  id="color_grid">
+				<h:outputText value="#{msg.steptwo_text_select_color}" styleClass="formLabel" />
+				<br/><br/>
+				<h:panelGrid columns="6" >
+					<h:graphicImage value="/_images/icons/black.jpg" onclick="selectColor('BK', #{rowIndex})"
+						id="blk" width="95%" styleClass="imageBorderGry"/>
+					<h:graphicImage value="/_images/icons/grey.jpg" onclick="selectColor('GY', #{rowIndex})"
+						id="gry" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/white.jpg" onclick="selectColor('WT', #{rowIndex})"
+						id="wht" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/blue.jpg" onclick="selectColor('BU', #{rowIndex})"
+						id="blu" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/purple.jpg" onclick="selectColor('PU', #{rowIndex})"
+						id="pur" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/red.jpg" onclick="selectColor('RD', #{rowIndex})"
+						id="red" width="95%" styleClass="imageBorderBlk"/>
+					<h:outputText value="Black" styleClass="formLabel"/>
+					<h:outputText value="Grey" styleClass="formLabel"/>
+					<h:outputText value="White/Clear" styleClass="formLabel"/>
+					<h:outputText value="Blue" styleClass="formLabel"/>
+					<h:outputText value="Purple" styleClass="formLabel"/>
+					<h:outputText value="Red" styleClass="formLabel"/>
+					<h:outputText value="&#160;"/>
+					<h:outputText value="&#160;"/>
+					<h:outputText value="&#160;"/>
+					<h:outputText value="&#160;"/>
+					<h:outputText value="&#160;"/>
+					<h:outputText value="&#160;"/>
+					<h:graphicImage value="/_images/icons/yellow.jpg" onclick="selectColor('YW', #{rowIndex})"
+						id="ylw" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/beige.jpg" onclick="selectColor('BE', #{rowIndex})"
+						id="bge" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/brown.jpg" onclick="selectColor('BN', #{rowIndex})"
+						id="brn" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/green.jpg" onclick="selectColor('GN', #{rowIndex})"
+						id="grn" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/multi.jpg" onclick="selectColor('MC', #{rowIndex})"
+						id="mul" width="95%" styleClass="imageBorderBlk"/>
+					<h:graphicImage value="/_images/icons/pattern.jpg" onclick="selectColor('PR', #{rowIndex})"
+						id="pat" width="95%" styleClass="imageBorderBlk"/>
+					<h:outputText value="Yellow" styleClass="formLabel"/>
+					<h:outputText value="Beige" styleClass="formLabel"/>
+					<h:outputText value="Brown" styleClass="formLabel"/>
+					<h:outputText value="Green" styleClass="formLabel"/>
+					<h:outputText value="Multi-Color" styleClass="formLabel"/>
+					<h:outputText value="Pattern" styleClass="formLabel"/>
+				</h:panelGrid>
+				</h:panelGroup>
+					
+				<div class="clear htxlg"></div>
+			</a4j:repeat>
+
+			<div class="clear htxlg"></div>
+					
+			<div class="clear htxlg"></div>
+			
+						<div style="text-align: center; width: 100%;">
+						<h:panelGrid columns="2" width="100%">
+						<h:commandButton
+							id="passLoginBack" value="#{msg.ui_button_back}"
+							action="#{incidentController.gobackStepOne}" tabindex="4"
+							styleClass="button140pxred loginbutton140pxred" height="3em"
+							width="14em" />
+						<h:commandButton
+							id="passLoginContinue" value="#{msg.ui_button_continue}"
+							action="#{incidentController.gotoStepThree}" tabindex="3"
+							styleClass="button140pxred loginbutton140pxred" height="3em"
+							width="14em" />
+							</h:panelGrid></div>
+			
+			<div class="clear htxlg"></div>
+			<!-- End body content -->
+			</div> <!-- ends contentbody -->
+			</div> <!-- ends containercontent -->
+			
+			
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div> <!-- ends container -->
+
+
+
+			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

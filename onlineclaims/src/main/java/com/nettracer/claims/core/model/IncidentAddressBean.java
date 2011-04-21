@@ -92,4 +92,7 @@ public class IncidentAddressBean {
 		this.description = description;
 	}
 
+	public boolean isForeign() {
+		return !getCountry().toUpperCase().trim().equals("US");
+	}
 }

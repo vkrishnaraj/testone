@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import com.nettracer.claims.admin.SessionScopeBean;
 import com.nettracer.claims.core.model.DropDown;
 import com.nettracer.claims.core.model.Label;
-import com.nettracer.claims.core.service.AdminService;
+import com.nettracer.claims.core.service.PaxViewService;
 import com.nettracer.claims.faces.util.FacesUtil;
 
 /**
@@ -33,7 +33,7 @@ public class RequiredFieldsController {
 	private static Logger logger = Logger
 			.getLogger(RequiredFieldsController.class);
 	@Autowired
-	AdminService adminService;
+	PaxViewService adminService;
 
 	List<List<Label>> allRequiredFields;
 
@@ -115,7 +115,7 @@ public class RequiredFieldsController {
 		logger.error("User session has been expired. Needs relogin");
 	}
 
-	public void setRequiredFieldsService(AdminService requiredFieldsService) {
+	public void setRequiredFieldsService(PaxViewService requiredFieldsService) {
 		this.adminService = requiredFieldsService;
 	}
 

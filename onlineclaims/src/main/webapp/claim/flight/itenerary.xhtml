@@ -10,7 +10,7 @@
 
 
 	<div><t:outputText
-		value="#{passengerController.flightLabel.aboutYourItenerary}"
+		value="#{passengerController.flightLabel.aboutYourItenerary.label}"
 		styleClass="subHeader" /></div>
 	<div><h:outputText value="&#160;" /></div>
 	<a4j:region  renderRegionOnly="true" selfRendered="true">	
@@ -66,7 +66,7 @@
 				<a4j:region  renderRegionOnly="true" >	
 					<h:inputText value="#{item.arrvCityFormText}" size="20" id="arrival#{rowIndex+1}"
 						label="ArrivalCity Row#{rowIndex+1}" maxlength="25" 
-						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 											'ArrivalCity Row#{rowIndex+1}'" 
 						disabled="#{passengerController.readOnlyOnSubmitted}"
 						required="#{!empty item.departureCity ? true : false}"/>
@@ -95,7 +95,7 @@
 					<t:selectOneMenu immediate="true" value="#{item.airline}"  id="airline#{rowIndex+1}"
 					required="#{!empty item.departureCity ? true : false}"
 					disabled="#{passengerController.readOnlyOnSubmitted}"
-					requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+					requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 											'Airline Row#{rowIndex+1}'"
 					label="Airline Row#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
@@ -147,7 +147,7 @@
 				<t:inputText value="#{item.flightNum}"  size="5" id="flightNum#{rowIndex+1}"
 						required="#{!empty item.departureCity ? true : false}"
 						readonly="#{passengerController.readOnlyOnSubmitted}"
-						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 											'FlightNumber Row#{rowIndex+1}'"
 						label="FlightNumber Row#{rowIndex+1}">
 					<f:validateLength maximum="5"/>
@@ -161,7 +161,7 @@
 						enableManualInput="false" datePattern="MMM/dd/yyyy" 
 						label="Date of Journey Row#{rowIndex+1}"  inputSize="20"
 						jointPoint="top-right" showWeeksBar="false" mode="client"
-						requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
+						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 											'Date of Journey Row#{rowIndex+1}'"
 						disabled="#{passengerController.readOnlyOnSubmitted}"
 						popup="true" >
@@ -175,7 +175,7 @@
 	
 	<rich:spacer width="100%" height="20" title="" />
 	<div id="addItem">
-		<a4j:commandButton value="#{passengerController.flightLabel.addNewSegment}"  rendered="#{!passengerController.readOnlyOnSubmitted}"
+		<a4j:commandButton value="#{passengerController.flightLabel.addNewSegment.label}"  rendered="#{!passengerController.readOnlyOnSubmitted}"
 			 action="#{passengerController.addNewSegment}" reRender="iteneraryTicketTableItenerary" limitToList="true"
 			 styleClass="button140pxred button140pxred2">
 		</a4j:commandButton>

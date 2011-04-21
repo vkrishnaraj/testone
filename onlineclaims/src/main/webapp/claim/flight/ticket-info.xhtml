@@ -8,24 +8,24 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 				<div>
-					<t:outputText value="#{passengerController.flightLabel.aboutYourTicket}" styleClass="subHeader"/>	
+					<t:outputText value="#{passengerController.flightLabel.aboutYourTicket.label}" styleClass="subHeader"/>	
 				</div>
 					
 					<h:panelGrid columns="2" width="100%">
 					<!-- 	<h:panelGroup > 
 							<h:panelGrid columns="2" cellspacing="3px"> -->
 								<h:panelGroup > 
-									<t:outputText value="#{passengerController.flightLabel.differentAirlineTicket}" styleClass="formLabel"/>
+									<t:outputText value="#{passengerController.flightLabel.differentAirlineTicket.label}" styleClass="formLabel"/>
 									<h:graphicImage value="../_images/reqbullet.gif"  
-										rendered="#{passengerController.flightLabel.differentAirlineTicketState eq 2}"/>
+										rendered="#{passengerController.flightLabel.differentAirlineTicket.required}"/>
 								</h:panelGroup>
 								
 								<h:selectOneMenu value="#{passengerController.passengerBean.differentAirlineTicket}" style="margin:5px;" 
-										required="#{passengerController.flightLabel.differentAirlineTicketState eq 2}"
-										readonly="#{passengerController.flightLabel.differentAirlineTicketState eq 3}"
+										required="#{passengerController.flightLabel.differentAirlineTicket.required}"
+										readonly="#{passengerController.flightLabel.differentAirlineTicket.hidden}"
 										disabled="#{passengerController.readOnlyOnSubmitted}"
-										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-											'#{passengerController.flightLabel.differentAirlineTicket}'"
+										requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+											'#{passengerController.flightLabel.differentAirlineTicket.label}'"
 										id="differentAirlineTicket" tabindex="23" label="Different Airline Ticket">
 									<f:selectItem itemLabel="--" itemValue=""/>
 									<f:selectItem itemLabel="Yes" itemValue="true"/>
@@ -36,20 +36,20 @@
 								<rich:spacer  height="15" title="" />
 		
 								<h:panelGroup > 
-									<t:outputText value="#{passengerController.flightLabel.ticketNumber}"  styleClass="formLabel"/>
+									<t:outputText value="#{passengerController.flightLabel.ticketNumber.label}"  styleClass="formLabel"/>
 									<h:graphicImage value="../_images/reqbullet.gif"  
-										rendered="#{passengerController.flightLabel.ticketNumberState eq 2}"/>
+										rendered="#{passengerController.flightLabel.ticketNumber.required}"/>
 								</h:panelGroup>
 								
 								<t:inputText value="#{passengerController.passengerBean.ticketNumber}"
 										styleClass="passInout" tabindex="24" id="ticketNumber"
 										label="Ticket Number" style="margin:5px;"
-										readonly="#{passengerController.flightLabel.ticketNumberState eq 3 
+										readonly="#{passengerController.flightLabel.ticketNumber.hidden 
 											|| passengerController.readOnlyOnSubmitted}"
-										requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-											'#{passengerController.flightLabel.ticketNumber}'"
-										required="#{passengerController.flightLabel.ticketNumberState eq 2}"  >
-									<f:validateLength maximum="6"/>
+										requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+											'#{passengerController.flightLabel.ticketNumber.label}'"
+										required="#{passengerController.flightLabel.ticketNumber.required}"  >
+									<f:validateLength maximum="11"/>
 								</t:inputText>
 			
 					<!--  		</h:panelGrid>

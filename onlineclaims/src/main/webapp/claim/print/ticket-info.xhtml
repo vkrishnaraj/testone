@@ -8,21 +8,21 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 				<div>
-					<t:outputText value="#{passengerController.flightLabel.aboutYourTicket}" styleClass="subHeader"/>	
+					<t:outputText value="#{passengerController.flightLabel.aboutYourTicket.label}" styleClass="subHeader"/>	
 				</div>
 					
 					<h:panelGrid columns="2" width="100%">
 						<h:panelGroup > 
 							<h:panelGrid columns="2">
 								<h:panelGroup > 
-									<t:outputText value="#{passengerController.flightLabel.differentAirlineTicket}" styleClass="ticketInfo"/>
+									<t:outputText value="#{passengerController.flightLabel.differentAirlineTicket.label}" styleClass="ticketInfo"/>
 									<h:outputLabel value="*" styleClass="requiredField" 
-										rendered="#{passengerController.flightLabel.differentAirlineTicketState eq 2}"/>
+										rendered="#{passengerController.flightLabel.differentAirlineTicket.required}"/>
 								</h:panelGroup>
 								
 								<t:selectOneMenu value="#{passengerController.passengerBean.differentAirlineTicket}"  
-										required="#{passengerController.flightLabel.differentAirlineTicketState eq 2}"
-										readonly="#{passengerController.flightLabel.differentAirlineTicketState eq 3}"
+										required="#{passengerController.flightLabel.differentAirlineTicket.required}"
+										readonly="#{passengerController.flightLabel.differentAirlineTicket.hidden}"
 										displayValueOnly="true"
 										id="differentAirlineTicket" tabindex="24" label="Different Airline Ticket">
 									<f:selectItem itemLabel="--" itemValue=""/>
@@ -34,15 +34,15 @@
 								<rich:spacer  height="15" title="" />
 		
 								<h:panelGroup > 
-									<t:outputText value="#{passengerController.flightLabel.ticketNumber}"  styleClass="ticketInfo"/>
+									<t:outputText value="#{passengerController.flightLabel.ticketNumber.label}"  styleClass="ticketInfo"/>
 									<h:outputLabel value="*" styleClass="requiredField" 
-										rendered="#{passengerController.flightLabel.ticketNumberState eq 2}"/>
+										rendered="#{passengerController.flightLabel.ticketNumber.required}"/>
 								</h:panelGroup>
 								
 								<t:inputText value="#{passengerController.passengerBean.ticketNumber}"
 										styleClass="passInout" tabindex="25" id="ticketNumber"
 										label="Ticket Number" readonly="true"
-										required="#{passengerController.flightLabel.ticketNumberState eq 2}"  >
+										required="#{passengerController.flightLabel.ticketNumber.required}"  >
 									<f:validateLength maximum="6"/>
 								</t:inputText>
 			
@@ -57,7 +57,7 @@
 								<rich:column>
 									<f:facet name="header">
 										<h:panelGroup >
-											<t:outputText value="#{passengerController.flightLabel.bagTagNumbers}"  styleClass="ticketInfo"/>
+											<t:outputText value="#{passengerController.flightLabel.bagTagNumbers.label}"  styleClass="ticketInfo"/>
 											<h:outputLabel value="*" styleClass="requiredField" 
 												rendered="true"/>
 										</h:panelGroup>
@@ -71,7 +71,7 @@
 								<rich:column>
 									<f:facet name="header">
 										<h:panelGroup >
-											<t:outputText value="#{passengerController.flightLabel.bagArrival}"  styleClass="ticketInfo"/>
+											<t:outputText value="#{passengerController.flightLabel.bagArrival.label}"  styleClass="ticketInfo"/>
 											<h:outputLabel value="*" styleClass="requiredField" 
 												rendered="true"/>
 										</h:panelGroup>

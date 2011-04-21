@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.axis2.AxisFault;
 import org.springframework.stereotype.Service;
 
@@ -32,14 +35,19 @@ import com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Contents;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Incident;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentAddress;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentBag;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Phone;
 import com.nettracer.claims.core.model.Address;
 import com.nettracer.claims.core.model.Bag;
 import com.nettracer.claims.core.model.Content;
+import com.nettracer.claims.core.model.IncidentAddressBean;
 import com.nettracer.claims.core.model.IncidentBagBean;
 import com.nettracer.claims.core.model.IncidentBean;
+import com.nettracer.claims.core.model.IncidentPhoneBean;
 import com.nettracer.claims.core.model.Itinerary;
 import com.nettracer.claims.core.model.Passenger;
 import com.nettracer.claims.core.model.PassengerBean;
@@ -585,6 +593,10 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
 
 		 claim.setAccept(passengerBean.getTypeAccept());
+		 claim.setPaxClaimAmount(passengerBean.getClaimAmount());
+		 claim.setPaxClaimDate(passengerBean.getClaimDate());
+		 claim.setPaxIpAddress(((HttpServletRequest) FacesContext.getCurrentInstance()
+				 .getExternalContext().getRequest()).getRemoteAddr());
         
 		subDoc1.setClaim(claim);
 		if(null != subDoc1.getAuth()){
@@ -1023,7 +1035,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          subDoc1.setPnr(incident.getPnr());
          subDoc1.setLastName(incident.getLastName());
          subDoc1.setFirstName(incident.getFirstName());
-         extractInputFromIncidentBean(bean, incident);
+         incident = extractInputFromIncidentBean(bean, incident);
          subDoc1.setIncident(incident);
          // Set System Username & PW
          NtAuth subDoc2 = subDoc1.addNewAuth();
@@ -1036,15 +1048,56 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		
 	}
 	
-	private void extractInputFromIncidentBean(IncidentBean bean, Incident incident) {
-        /**
-         *  PUT A WHOLE BUNCH OF CODE THAT CONVERTS IncidentBean to an Incident HERE!!!!
-         */
+	private Incident extractInputFromIncidentBean(IncidentBean bean, Incident incident) {
+		// Step 1: Claimchecks (Nothing can change)
+		
+		// Step 2: Bag Info
+		for (IncidentBagBean bagBean : bean.getBag()) {
+			IncidentBag bag = incident.addNewBag();
+			bag.setType(Integer.parseInt(bagBean.getType()));
+			bag.setColor(bagBean.getColor());
+		}
+		
+		// Step 3: Personal Info
+		IncidentAddress wsAddr = incident.getDeliveryAddress();
+		if (wsAddr == null) {
+			wsAddr = incident.addNewDeliveryAddress();
+		}
+		IncidentAddressBean addr = bean.getDeliveryAddress();
+		wsAddr.setAddress1(addr.getAddress1());
+		wsAddr.setAddress2(addr.getAddress2());
+		wsAddr.setCity(addr.getCity());
+		wsAddr.setState(addr.getState());
+		wsAddr.setProvince(addr.getProvince());
+		wsAddr.setPostalCode(addr.getPostalCode());
+		wsAddr.setCountry(addr.getCountry());
+		incident.setDeliveryAddress(wsAddr);
+		incident.setEmail(bean.getEmail());
+		incident.setPhoneArray(null);
+		for (IncidentPhoneBean phBean : bean.getPhone()) {
+			IncidentPhone phone = incident.addNewPhone();
+			phone.setNumber(phBean.getNumber());
+			phone.setType(phBean.getType());
+			phone.setOther(phBean.getOther());
+		}
+		incident.setDeliverWithoutSignature(bean.isDeliverWithoutSignature());
+		incident.setDeliveryType(bean.getDeliveryType());
+		
+		// Step 4: Verification (Nothing can change)		
+		
+		return incident;
 	}
 	
 	@Override
 	public IncidentBean getIncidentData(Incident incident) {
 		IncidentBean toReturn = new IncidentBean();
+		
+		// Initial Information
+		toReturn.setFirstName(incident.getFirstName());
+		toReturn.setLastName(incident.getLastName());
+		toReturn.setPnr(incident.getPnr());
+		
+		// Claims and bags
 		List<String> claims = new ArrayList<String>();
 		List<IncidentBagBean> bags = new ArrayList<IncidentBagBean>();
 		for (String claim : incident.getClaimCheckArray()) {
@@ -1053,9 +1106,35 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		}
 		toReturn.setClaimCheck(claims);
 		toReturn.setBag(bags);
-		toReturn.setFirstName(incident.getFirstName());
-		toReturn.setLastName(incident.getLastName());
-		toReturn.setPnr(incident.getPnr());
+		
+		//Address Information
+		IncidentAddressBean addrBean = new IncidentAddressBean();
+		IncidentAddress wsAddr = incident.getDeliveryAddress();
+		if (wsAddr != null) {
+			addrBean.setAddress1(wsAddr.getAddress1());
+			addrBean.setAddress2(wsAddr.getAddress2());
+			addrBean.setCity(wsAddr.getCity());
+			addrBean.setState(wsAddr.getState());
+			addrBean.setProvince(wsAddr.getProvince());
+			addrBean.setPostalCode(wsAddr.getPostalCode());
+			addrBean.setCountry(wsAddr.getCountry());
+		}
+		toReturn.setDeliveryAddress(addrBean);
+		toReturn.setEmail(incident.getEmail());
+		List<IncidentPhoneBean> phBeans = new ArrayList<IncidentPhoneBean>();
+		if (incident.getPhoneArray() == null) {
+			phBeans.add(new IncidentPhoneBean());
+		} else {
+			for (IncidentPhone phone : incident.getPhoneArray()) {
+				IncidentPhoneBean phBean = new IncidentPhoneBean();
+				phBean.setNumber(phone.getNumber());
+				phBean.setType(phone.getType());
+				phBean.setOther(phone.getOther());
+				phBeans.add(phBean);
+			}
+		}
+		toReturn.setPhone(phBeans);
+		
 		return toReturn;
 	}
 

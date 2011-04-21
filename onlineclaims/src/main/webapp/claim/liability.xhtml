@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
 	template="/layout/passengertemplate.xhtml">
 
@@ -13,6 +14,10 @@
 	<ui:define name="mainContent">
 		<script type="text/javascript" src="../_js/passengerFont.js"></script>
 		<h:form id="directionForm">
+		<div>
+			<div id="step">
+				<t:outputText value="Step 2 of 8" />
+			</div>
 			<div id="langSelect"><h:outputText value="FontSize" /> <h:outputText
 				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
 				value="&#160;" /> <a id="font1" style="font-size: 8pt;"
@@ -24,6 +29,7 @@
 				value="&#160;" /> <a id="font3" style="font-size: 12pt;"
 				href="javascript:increaseFontSize();">A</a></div>
 
+		</div>
 
 
 
@@ -81,8 +87,8 @@ additional charges are paid. Exchange rates are available at www.IMF.com.
 			<div class="contentbody"><!-- Start body content -->
 
 			<p>
-			For tracing purposes, please list all items regardless of liability. As detailed in our Terms of
-Transportation, US Airways is not liable for loss, damage to, or delay of perishable property; nor
+			For tracing purposes, please list all items regardless of liability. As detailed in our Contract
+of Carriage, US Airways is not liable for loss, damage to, or delay of perishable property; nor
 liable for damage caused by fragile articles, liquids, or perishables.
 			</p>
 			<br/>
@@ -153,9 +159,19 @@ Lifesaving Medication
 			</div>
 			<h:outputText value="&#160;" styleClass="passfontstyle" />
 			<h:outputText value="&#160;" styleClass="passfontstyle" />
-			<div><h:commandButton id="dirforward" value="CONTINUE" tabindex="0"
+			<div>
+			
+				<rich:spacer width="450px"/>
+			
+				<h:commandButton id="cancelPassInfo" value="#{passengerController.flightLabel.previous.label}"
+				 	tabindex="26" immediate="true" action="#{passengerController.goBackToPPFInstruction}"
+					styleClass="button140pxred button140pxred2" />
+					
+				<rich:spacer width="20px"/>
+				
+				<h:commandButton id="dirforward" value="#{passengerController.passengerInfoLabel.forward.label}" tabindex="0"
 				action="#{passengerController.gotoPassengerInfo}"
-				styleClass="button140pxredextended fright" />
+				styleClass="button140pxred button140pxred2" />
 				
 				</div>
 

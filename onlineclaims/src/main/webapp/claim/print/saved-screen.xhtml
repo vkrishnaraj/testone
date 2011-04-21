@@ -24,14 +24,14 @@
 								</h:panelGroup>
 						</f:facet>
 						<h:panelGrid styleClass="modalPanelBody">
-							<h:outputText value="#{passengerController.savedScreenLabel.savedScreenHelp}"/>
+							<h:outputText value="#{passengerController.savedScreenLabel.help.label}"/>
 						</h:panelGrid>
 					</rich:modalPanel>
 				</div>
 		
 		<rich:panel styleClass="savedScreenPanel">
 			<div id="savedDiv">
-				<h:outputText value="#{passengerController.savedScreenLabel.savedMessage}" 
+				<h:outputText value="#{passengerController.savedScreenLabel.savedMessage.label}" 
 				styleClass="saveMsg"/>
 			</div>
 		</rich:panel>
@@ -39,7 +39,7 @@
 		<rich:spacer width="100%" height="20" title=""/>
 			<h:panelGrid  columns="1" styleClass="savedScreenPanleGrid" width="100%">
 				
-				<h:commandLink id="returnLink" value="#{passengerController.savedScreenLabel.returnLink}" 
+				<h:commandLink id="returnLink" value="#{passengerController.savedScreenLabel.returnLink.label}" 
 						action="#{passengerController.gotoPassengerInfo}"
 						 tabindex="1" style="text-decoration: underline;"/>
 			</h:panelGrid>

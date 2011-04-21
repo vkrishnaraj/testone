@@ -25,7 +25,7 @@ import com.nettracer.claims.admin.SessionScopeBean;
 import com.nettracer.claims.core.exception.SimplePersistenceException;
 import com.nettracer.claims.core.model.Languages;
 import com.nettracer.claims.core.model.Localetext;
-import com.nettracer.claims.core.service.AdminService;
+import com.nettracer.claims.core.service.PaxViewService;
 import com.nettracer.claims.faces.util.FacesUtil;
 
 /**
@@ -51,7 +51,7 @@ public class ContentsAndLanguageController {
 	private static final String SAVED_SREEN = "Saved";
 
 	@Autowired
-	AdminService adminService;
+	PaxViewService adminService;
 
 	private List<String> activeLanguages = new ArrayList<String>();
 	private List<SelectItem> selectCheckBoxeslist;
@@ -338,7 +338,7 @@ public class ContentsAndLanguageController {
 		}
 	}
 	
-	public void setAdminService(AdminService adminService) {
+	public void setAdminService(PaxViewService adminService) {
 		this.adminService = adminService;
 	}
 	public List<String> getActiveLanguages() {

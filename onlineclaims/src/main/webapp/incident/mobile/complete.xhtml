@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	template="/layout/incidenttemplate_mobile.xhtml">
+
+
+	<ui:define name="pageTitle">US Airways | Bag Tracking Summary</ui:define>
+
+	<ui:define name="mainContent">
+		<h:form id="directionForm">
+
+			<div class="sectionTitle">
+				<b><h:outputText value="#{msg.complete_title}" /></b>
+			</div>
+			<div class="wrappercontentbody">
+
+			<div class="clear htxlg">&#160;</div>
+				
+				<h:outputText value="Your incident ID is #{incidentBean.incidentID}." styleClass="subHeader" />
+
+			<div class="clear htxlg">&#160;</div>
+				
+				<h:outputText value="Your baggage incident has been filed with US Airways and will be processed ASAP. If you would like to contact 
+				us to discuss your incident in more detail please call 123-321-1234." styleClass="subHeader" />
+
+			<div class="clear htxlg">&#160;</div>
+				
+				<h:outputText value="&#60; Insert Liabilities Here &#62;" styleClass="subHeader" />
+
+			<div class="clear htxlg">&#160;</div>
+
+				<div align="center">
+				<h:outputText value="To view the status of your file " styleClass="formLabel"/><h:commandLink action="#{incidentController.gotoDirectionPage}" ><h:outputText 
+					value="CLICK HERE!" /></h:commandLink></div>
+
+			<div class="clear htxlg">&#160;</div>
+			
+			</div> <!-- ends container -->
+
+		</h:form>
+	</ui:define>
+</ui:composition>

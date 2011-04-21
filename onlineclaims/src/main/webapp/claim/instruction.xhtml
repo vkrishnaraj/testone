@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
 	template="/layout/passengertemplate.xhtml">
 
@@ -13,6 +14,10 @@
 	<ui:define name="mainContent">
 		<script type="text/javascript" src="../_js/passengerFont.js"></script>
 		<h:form id="directionForm">
+		<div>
+			<div id="step">
+				<t:outputText value="Step 1 of 8" />
+			</div>
 			<div id="langSelect"><h:outputText value="FontSize" /> <h:outputText
 				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
 				value="&#160;" /> <a id="font1" style="font-size: 8pt;"
@@ -23,6 +28,8 @@
 				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
 				value="&#160;" /> <a id="font3" style="font-size: 12pt;"
 				href="javascript:increaseFontSize();">A</a></div>
+
+		</div>
 
 
 
@@ -64,8 +71,6 @@ Baggage claim checks
 Excess value receipt, if excess value was declared
 			</li><li>
 Receipts are required for all interim reimbursement
-			</li><li>
-For European customers only, complete bank information on next page	
 			</li>
 			</ul>
 			</p>
@@ -118,9 +123,19 @@ For European customers only, complete bank information on next page
 			</div>
 			<h:outputText value="&#160;" styleClass="passfontstyle" />
 			<h:outputText value="&#160;" styleClass="passfontstyle" />
-			<div><h:commandButton id="dirforward" value="CONTINUE" tabindex="0"
+			<div>
+			
+				<rich:spacer width="450px"/>
+			
+				<h:commandButton id="cancelPassInfo" value="#{passengerController.passengerInfoLabel.cancel.label}"
+				 	tabindex="26" immediate="true" action="#{passengerController.cancel}"
+					styleClass="button140pxred button140pxred2" />
+					
+				<rich:spacer width="20px"/>
+				
+				<h:commandButton id="dirforward" value="#{passengerController.passengerInfoLabel.forward.label}" tabindex="0"
 				action="#{passengerController.gotoLiability}"
-				styleClass="button140pxredextended fright" />
+				styleClass="button140pxred button140pxred2" />
 				
 				</div>
 

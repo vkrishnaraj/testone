@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 import com.nettracer.claims.admin.LoginBean;
 import com.nettracer.claims.admin.SessionScopeBean;
 import com.nettracer.claims.core.model.Company;
-import com.nettracer.claims.core.service.AdminService;
+import com.nettracer.claims.core.service.PaxViewService;
 import com.nettracer.claims.faces.util.CaptchaBean;
 import com.nettracer.claims.faces.util.FacesUtil;
 import com.nettracer.claims.webservices.client.OnlineClaimsWS;
@@ -44,7 +44,7 @@ public class AdminController {
 
 	LoginBean loginBean = new LoginBean();
 	@Autowired
-	AdminService adminService;
+	PaxViewService adminService;
 	
 	@Autowired
 	OnlineClaimsWS onlineClaimsWS;
@@ -221,11 +221,11 @@ public class AdminController {
 		this.loginBean = loginBean;
 	}
 
-	public AdminService getRequiredFieldsService() {
+	public PaxViewService getRequiredFieldsService() {
 		return adminService;
 	}
 
-	public void setRequiredFieldsService(AdminService requiredFieldsService) {
+	public void setRequiredFieldsService(PaxViewService requiredFieldsService) {
 		this.adminService = requiredFieldsService;
 	}
 

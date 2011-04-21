@@ -8,48 +8,56 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.personalInformation}" styleClass="subHeader"/>	
+					<t:outputText value="#{passengerController.passengerInfoLabel.personalInformation.label}" styleClass="subHeader"/>	
 				</div>
 					<div><rich:spacer width="100%" height="15" title="" /></div>
 				<table cellpadding="5" style="width:90%">
 				<tr>
 				<td style="width:17%;">
 				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.frequentFlyerNumber}" styleClass="formLabel"/>
+					<h:panelGroup rendered="#{!passengerController.passengerInfoLabel.frequentFlyerNumber.hidden}">
+					<t:outputText value="#{passengerController.passengerInfoLabel.frequentFlyerNumber.label}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
-							rendered="#{passengerController.passengerInfoLabel.frequentFlyerNumberState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.frequentFlyerNumber.required}"/>
+					</h:panelGroup>
 					</div>
 					</td><td style="width:34%;">
+					<h:panelGroup rendered="#{!passengerController.passengerInfoLabel.frequentFlyerNumber.hidden}">
 					<t:inputText id="pi24" value="#{passengerBean.frequentFlyerNumber}"  style="width:90%;"
-							required="#{passengerController.passengerInfoLabel.frequentFlyerNumberState eq 2}" tabindex="23"
-							readonly="#{passengerController.passengerInfoLabel.frequentFlyerNumberState eq 3}"
-							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.passengerInfoLabel.frequentFlyerNumber}'"
-							validatorMessage="#{passengerController.passengerInfoLabel.frequentFlyerNumber} :
-								#{passengerController.passengerInfoLabel.fieldLength} 20"
-							label="#{passengerController.passengerInfoLabel.frequentFlyerNumber}">
+							required="#{passengerController.passengerInfoLabel.frequentFlyerNumber.required}" tabindex="23"
+							readonly="#{passengerController.passengerInfoLabel.frequentFlyerNumber.hidden}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.passengerInfoLabel.frequentFlyerNumber.label}'"
+							validatorMessage="#{passengerController.passengerInfoLabel.frequentFlyerNumber.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+							label="#{passengerController.passengerInfoLabel.frequentFlyerNumber.label}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
+					</h:panelGroup>
 						</td><td style="width:12%;">
 					<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.socialSecurityNumber}" styleClass="formLabel"/>
+					<h:panelGroup rendered="#{!passengerController.passengerInfoLabel.socialSecurityNumber.hidden}">
+					<t:outputText value="#{passengerController.passengerInfoLabel.socialSecurityNumber.label}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif"  
-							rendered="#{passengerController.passengerInfoLabel.socialSecurityNumberState eq 2}"/>
+							rendered="#{passengerController.passengerInfoLabel.socialSecurityNumber.required}"/>
+					</h:panelGroup>
 							</div>
 							</td><td style="width:37%;">
 					
+					<h:panelGroup rendered="#{!passengerController.passengerInfoLabel.socialSecurityNumber.hidden}">
 					<t:inputText id="pi25" value="#{passengerBean.socialSecurityNumber}"  style="width:100%;"
-							required="#{passengerController.passengerInfoLabel.socialSecurityNumberState eq 2}" tabindex="24"
-							readonly="#{passengerController.passengerInfoLabel.socialSecurityNumberState eq 3}"
-							requiredMessage="#{passengerController.passengerInfoLabel.passengerRequiredValueField}:  
-									'#{passengerController.passengerInfoLabel.socialSecurityNumber}'"
-							validatorMessage="#{passengerController.passengerInfoLabel.socialSecurityNumber} :
-								#{passengerController.passengerInfoLabel.fieldLength} 20"
-							label="#{passengerController.passengerInfoLabel.socialSecurityNumber}">
+							required="#{passengerController.passengerInfoLabel.socialSecurityNumber.required}" tabindex="24"
+							readonly="#{passengerController.passengerInfoLabel.socialSecurityNumber.hidden}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'#{passengerController.passengerInfoLabel.socialSecurityNumber.label}'"
+							validatorMessage="#{passengerController.passengerInfoLabel.socialSecurityNumber.label} :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+							label="#{passengerController.passengerInfoLabel.socialSecurityNumber.label}">
 							<f:validateLength maximum="20"/>
 						</t:inputText>
+					</h:panelGroup>
 						</td>
 						</tr>
 						</table>

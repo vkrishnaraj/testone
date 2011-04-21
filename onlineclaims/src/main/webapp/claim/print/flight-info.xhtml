@@ -8,7 +8,7 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 	<div>
-		<t:outputText value="#{passengerController.flightLabel.aboutYourFlight}" styleClass="subHeader" />
+		<t:outputText value="#{passengerController.flightLabel.aboutYourFlight.label}" styleClass="subHeader" />
 	</div>
 
 	<h:panelGrid columns="5" width="100%" 
@@ -22,15 +22,15 @@
 		
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.totalTravelBag}" />
+				value="#{passengerController.flightLabel.totalTravelBag.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.totalTravelBagState eq 2}" />
+				rendered="#{passengerController.flightLabel.totalTravelBag.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
 
 		<t:selectOneMenu value="#{passengerBean.bagsTravelWith}" tabindex="1" 
-				required="#{passengerController.flightLabel.totalTravelBagState eq 2}"
+				required="#{passengerController.flightLabel.totalTravelBag.required}"
 				readonly="true"
 				valueChangeListener="#{passengerController.bagSelectListener}" id="bagsTravelWith"
 				label="BagsTravelWith">
@@ -45,15 +45,15 @@
 		<rich:spacer width="14" height="10" title="" />
 
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.noOfLostBag}" />
+			<t:outputText value="#{passengerController.flightLabel.noOfLostBag.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.noOfLostBagState eq 2}" />
+				rendered="#{passengerController.flightLabel.noOfLostBag.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
 		<a4j:outputPanel id="lostBag" ajaxRendered="true">
 			<t:selectOneMenu id="lostBagMenu" value="#{passengerBean.lostBag}" tabindex="2"
-				required="#{passengerController.flightLabel.noOfLostBagState eq 2}"
+				required="#{passengerController.flightLabel.noOfLostBag.required}"
 				readonly="true"
 				label="No. of Bags Lost">
 				<f:selectItem itemLabel="--" itemValue="" />
@@ -69,14 +69,14 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.bagCheckedLocation}" />
+				value="#{passengerController.flightLabel.bagCheckedLocation.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.bagCheckedLocationState eq 2}" />
+				rendered="#{passengerController.flightLabel.bagCheckedLocation.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
 		<t:selectOneMenu value="#{passengerBean.bagCheckLocation}"
-			required="#{passengerController.flightLabel.bagCheckedLocationState eq 2}"
+			required="#{passengerController.flightLabel.bagCheckedLocation.required}"
 			readonly="true"
 			tabindex="3" id="bagCheckLocation" label="Bag Check Location">
 			<f:selectItem itemLabel="--" itemValue="" />
@@ -90,14 +90,14 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.noOfPassenger}" />
+				value="#{passengerController.flightLabel.noOfPassenger.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.noOfPassengerState eq 2}" />
+				rendered="#{passengerController.flightLabel.noOfPassenger.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
 		<t:selectOneMenu id="noOfPassenger" value="#{passengerBean.noOfPassenger}" tabindex="4"
-				required="#{passengerController.flightLabel.noOfPassengerState eq 2}"
+				required="#{passengerController.flightLabel.noOfPassenger.required}"
 				readonly="true"
 				label="No Of Passenger">
 			<f:selectItem itemLabel="--" itemValue="" />
@@ -114,17 +114,17 @@
 	<h:panelGrid columns="3" width="75%">
 	
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.recheckBag}" />
+			<t:outputText value="#{passengerController.flightLabel.recheckBag.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.recheckBagState eq 2}" />
+				rendered="#{passengerController.flightLabel.recheckBag.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
 
 		<t:selectOneMenu id="recheckBag" value="#{passengerBean.recheckBag}" tabindex="5"
-				required="#{passengerController.flightLabel.recheckBagState eq 2}"
+				required="#{passengerController.flightLabel.recheckBag.required}"
 				readonly="true"
 				label="Baggage Rerouted">
 			<f:selectItem itemLabel="--" itemValue="" />
@@ -137,17 +137,17 @@
 		<rich:spacer width="100%" height="15" title="" />
 
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.inspectbag}" />
+			<t:outputText value="#{passengerController.flightLabel.inspectbag.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.inspectbagState eq 2}" />
+				rendered="#{passengerController.flightLabel.inspectbag.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
 
 		<rich:spacer width="18" title="" />
 
 		<t:selectOneMenu value="#{passengerBean.inspectbag}" tabindex="6" id="inspectbag"
-				required="#{passengerController.flightLabel.inspectbagState eq 2}"
+				required="#{passengerController.flightLabel.inspectbag.required}"
 				readonly="true"
 				label="Bag Inspection">
 			<f:selectItem itemLabel="--" itemValue="" />
@@ -161,7 +161,7 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.chargeExcessBaggage}" />
+				value="#{passengerController.flightLabel.chargeExcessBaggage.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField" rendered="true" />
 			<t:outputText value=":" />
@@ -182,7 +182,7 @@
 		<rich:spacer width="100%" height="15" title=""/>
 
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.bagNumber}" />
+			<t:outputText value="#{passengerController.flightLabel.bagNumber.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField" rendered="true" />
 			<t:outputText value=":" />
@@ -201,7 +201,7 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.missingBag}" />
+			<t:outputText value="#{passengerController.flightLabel.missingBag.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField" rendered="true" />
 			<t:outputText value=":" />
@@ -221,10 +221,10 @@
 		
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.bagClaimCheck}" />
+				value="#{passengerController.flightLabel.bagClaimCheck.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.bagClaimCheckState eq 2}" />
+				rendered="#{passengerController.flightLabel.bagClaimCheck.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
 
@@ -232,7 +232,7 @@
 
 		<t:inputText value="#{passengerBean.bagClaimCheck}"
 			styleClass="passInout" id="bagClaimCheck"  label="Bag Claim Check"
-			required="#{passengerController.flightLabel.bagClaimCheckState eq 2}"
+			required="#{passengerController.flightLabel.bagClaimCheck.required}"
 			readonly="true"
 			tabindex="10" />
 			
@@ -242,7 +242,7 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.declarePayExcessValue}" />
+				value="#{passengerController.flightLabel.declarePayExcessValue.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField" rendered="true" />
 			<t:outputText value=":" />
@@ -265,11 +265,11 @@
 		<rich:spacer width="100%" height="15" title=""/>
 
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.declaredValue}" />
+			<t:outputText value="#{passengerController.flightLabel.declaredValue.label}" />
 			<h:outputText value="&#160;" />
 			<a4j:outputPanel id="declVal" ajaxRendered="true">
 			<h:outputLabel value="*" styleClass="requiredField" 
-				rendered="#{passengerController.flightLabel.declaredValueState  eq 2}" />
+				rendered="#{passengerController.flightLabel.declaredValue.required}" />
 			</a4j:outputPanel>
 			<t:outputText value=":" />
 		</h:panelGroup>
@@ -278,7 +278,7 @@
 		
 		<a4j:outputPanel id="declValText" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.declaredValue}" id="declaredValue"
-			styleClass="passInout" disabled="#{passengerController.flightLabel.declaredValueState  ne 2}"
+			styleClass="passInout" disabled="#{!passengerController.flightLabel.declaredValue.required}"
 			readonly="true"
 			tabindex="12"  label="Declared Value">
 				<f:validateDoubleRange maximum="3300"/>
@@ -291,7 +291,7 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.clearCustomBag}" />
+				value="#{passengerController.flightLabel.clearCustomBag.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
 				rendered="true" />
@@ -315,11 +315,11 @@
 		<rich:spacer width="100%" height="15" title=""/>
 
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.bagWeight}" />
+			<t:outputText value="#{passengerController.flightLabel.bagWeight.label}" />
 			<h:outputText value="&#160;" />
 			<a4j:outputPanel id="weight" ajaxRendered="true">
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.bagWeightState  eq 2}" />
+				rendered="#{passengerController.flightLabel.bagWeight.required}" />
 			</a4j:outputPanel>
 			<t:outputText value=":" />
 		</h:panelGroup>
@@ -328,9 +328,9 @@
 
 		<a4j:outputPanel id="weightInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.bagWeight}" styleClass="passInout" label="Bag Weight"
-			disabled="#{passengerController.flightLabel.bagWeightState  ne 2}" id="bagWeight"
+			disabled="#{!passengerController.flightLabel.bagWeight.required}" id="bagWeight"
 			readonly="true"
-			required="#{passengerController.flightLabel.bagWeightState  eq 2}"	tabindex="15" />
+			required="#{passengerController.flightLabel.bagWeight.required}"	tabindex="15" />
 		</a4j:outputPanel>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -338,7 +338,7 @@
 		<rich:spacer width="100%" height="15" title=""/>
 
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.rerouteBag}" />
+			<t:outputText value="#{passengerController.flightLabel.rerouteBag.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField" rendered="true" />
 			<t:outputText value=":" />
@@ -360,10 +360,10 @@
 
 		<h:panelGroup>
 			<t:outputText
-				value="#{passengerController.flightLabel.differentClaimCheck}" />
+				value="#{passengerController.flightLabel.differentClaimCheck.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.differentClaimCheckState  eq 2}" />
+				rendered="#{passengerController.flightLabel.differentClaimCheck.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
 
@@ -384,11 +384,11 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.reroutedCityAirline}" /> 
+			<t:outputText value="#{passengerController.flightLabel.reroutedCityAirline.label}" /> 
 			<h:outputText value="&#160;" /> 
 			<a4j:outputPanel id="rerouteCity" ajaxRendered="true">
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.reroutedCityAirlineState  eq 2}" />
+				rendered="#{passengerController.flightLabel.reroutedCityAirline.required}" />
 			</a4j:outputPanel>
 			<t:outputText value=":" /> 
 		</h:panelGroup>
@@ -399,7 +399,7 @@
 		<t:inputText value="#{passengerBean.reroutedCityAirline}" styleClass="passInout"
 			readonly="true"
 			tabindex="18" id="reroutedCityAirline" label="Airline rerouted by"
-			disabled="#{passengerController.flightLabel.reroutedCityAirlineState  ne 2}"  />
+			disabled="#{!passengerController.flightLabel.reroutedCityAirline.required}"  />
 		</a4j:outputPanel>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -407,10 +407,10 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.reason}" /> 
+			<t:outputText value="#{passengerController.flightLabel.reason.label}" /> 
 			<h:outputText value="&#160;" /> 
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.reasonState  eq 2}" /> 
+				rendered="#{passengerController.flightLabel.reason.required}" /> 
 			<t:outputText value=":" />
 		</h:panelGroup>
 		
@@ -425,7 +425,7 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.immediateClaimAttempt}" /> 
+			<t:outputText value="#{passengerController.flightLabel.immediateClaimAttempt.label}" /> 
 			<h:outputText value="&#160;" /> 
 			<h:outputLabel value="*" styleClass="requiredField"	rendered="true" /> 
 			<t:outputText value=":" /> 
@@ -446,7 +446,7 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.whenBagSeen}" /> 
+			<t:outputText value="#{passengerController.flightLabel.whenBagSeen.label}" /> 
 			<h:outputText value="&#160;" /> 
 			<h:outputLabel value="*" styleClass="requiredField"	rendered="true" /> 
 			<t:outputText value=":" />
@@ -463,17 +463,17 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.fileReportCity}" /> 
+			<t:outputText value="#{passengerController.flightLabel.fileReportCity.label}" /> 
 			<h:outputText value="&#160;" /> 
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.fileReportCityState  eq 2}" />
+				rendered="#{passengerController.flightLabel.fileReportCity.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
 		
 		<rich:spacer width="18" title="" />
 		
 		<t:inputText value="#{passengerBean.fileReportCity}" styleClass="passInout"  id="fileReportCity"
-			required="#{passengerController.flightLabel.fileReportCityState  eq 2}" tabindex="22" 
+			required="#{passengerController.flightLabel.fileReportCity.required}" tabindex="22" 
 			readonly="true"
 			label="File Report City"/>
 			
@@ -482,10 +482,10 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		
 		<h:panelGroup>
-			<t:outputText value="#{passengerController.flightLabel.reportAnotherAirline}" /> 
+			<t:outputText value="#{passengerController.flightLabel.reportAnotherAirline.label}" /> 
 			<h:outputText value="&#160;" /> 
 			<h:outputLabel value="*" styleClass="requiredField"
-				rendered="#{passengerController.flightLabel.reportAnotherAirlineState  eq 2}" />
+				rendered="#{passengerController.flightLabel.reportAnotherAirline.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
 		
@@ -493,7 +493,7 @@
 		
 		<t:selectOneMenu value="#{passengerBean.reportAnotherAirline}" tabindex="23"  id="reportAnotherAirline"
 			label="Report Another Airline" readonly="true"
-			required="#{passengerController.flightLabel.reportAnotherAirlineState  eq 2}">
+			required="#{passengerController.flightLabel.reportAnotherAirline.required}">
 				<f:selectItem itemLabel="--" itemValue="" />
 				<f:selectItem itemLabel="Yes" itemValue="true" />
 				<f:selectItem itemLabel="No" itemValue="false" />

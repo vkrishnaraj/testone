@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	template="/layout/incidenttemplate.xhtml">
+
+
+	<ui:define name="pageTitle">US Airways | Bag Tracking Summary</ui:define>
+
+	<ui:define name="mainContent">
+		<script type="text/javascript" src="../../_js/passengerFont.js"></script>
+		<h:form id="directionForm">
+
+			<div class="breadcrumb">
+				<h:outputText value="#{msg.stepfour_title_breadcrumb}" escape="false" />
+			</div>
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue"><h:outputText value="#{msg.stepfour_title_stepfour}" /></h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody" align="left"><!-- Start body content -->
+
+
+			<div class="clear htxlg"></div>
+			
+					<table width="100%" >
+					<tr class="vertTop"><td colspan="6">
+						<h:outputText value="LOGIN INFO" styleClass="subHeader"/>
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="NAME: " />
+					</td><td>
+						<h:outputText value="#{incidentBean.firstName} #{incidentBean.lastName}" styleClass="formLabel" />
+					</td><td>
+						<h:outputText value="CONFORMATION CODE: " />
+					</td><td>
+						<h:outputText value="#{incidentBean.pnr}" styleClass="formLabel" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr><tr class="vertTop"><td colspan="6">
+						<h:outputText value="#{msg.stepone_title_stepone}" styleClass="subHeader"/>
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr>
+			
+						<a4j:repeat value="#{incidentBean.claimCheck}"
+							var="check" rowKeyVar="rowIndex">
+					<tr class="vertTop"><td>
+							<h:outputText value="#{msg.stepone_label_bagtag}"
+							escape="false" styleClass="formLabel"/><h:outputText value="#{rowIndex + 1}"
+							styleClass="formLabel" />
+					</td><td>
+							<h:outputText value="#{check}" styleClass="formLabel" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr>
+						</a4j:repeat>
+								
+					<tr class="vertTop"><td colspan="6">
+						<h:outputText value="#{msg.steptwo_title_steptwo}" styleClass="subHeader"/>
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr>			
+												
+						<a4j:repeat value="#{incidentBean.bag}"
+							var="theBag" rowKeyVar="rowIndex">
+					<tr class="vertTop"><td colspan="6">
+							<h:outputText value="#{msg.steptwo_label_bag}"
+							escape="false" styleClass="subHeader"/><h:outputText value="#{rowIndex + 1}"
+							styleClass="subHeader"/>
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr><tr class="vertTop"><td>
+							<h:outputText value="#{msg.steptwo_label_type}" styleClass="formLabel" />
+					</td><td>
+							<h:outputText value="#{incidentBean.bag[rowIndex].typeLabel}" styleClass="formLabel"/>
+					</td><td>
+							<h:outputText value="#{msg.steptwo_label_color}" styleClass="formLabel" />
+					</td><td>
+							<h:outputText value="#{incidentBean.bag[rowIndex].colorLabel}" styleClass="formLabel"/>
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr>
+						</a4j:repeat>
+						
+					<tr class="vertTop"><td colspan="6">
+						<h:outputText value="#{msg.stepthree_title_stepthree}" styleClass="subHeader"/>
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="ADDRESS1: " />
+					</td><td colspan="5">
+						<h:outputText value="#{incidentBean.deliveryAddress.address1}" styleClass="formLabel" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="ADDRESS2: " />
+					</td><td colspan="5">
+						<h:outputText value="#{incidentBean.deliveryAddress.address2}" styleClass="formLabel" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr><tr class="vertTop"><td style="width: 19%;">
+						<h:outputText value="CITY: " />
+					</td><td style="width: 20%;">
+						<h:outputText value="#{incidentBean.deliveryAddress.city}" styleClass="formLabel" />
+					</td><td style="width: 19%;">
+						<h:outputText value="STATE/PROVINCE: " />
+					</td><td style="width: 20%;">
+						<h:outputText value="#{incidentBean.deliveryAddress.state}" styleClass="formLabel" rendered="#{!incidentBean.deliveryAddress.foreign}"/>
+						<h:outputText value="#{incidentBean.deliveryAddress.province}" styleClass="formLabel" rendered="#{incidentBean.deliveryAddress.foreign}"/>
+					</td><td style="width: 12%;">
+						<h:outputText value="POSTAL CODE: " />
+					</td><td style="width: 10%;">
+						<h:outputText value="#{incidentBean.deliveryAddress.postalCode}" styleClass="formLabel" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="COUNTRY: " />
+					</td><td>
+						<h:outputText value="#{incidentBean.deliveryAddress.country}" styleClass="formLabel" />
+					</td><td>
+						<h:outputText value="EMAIL: " />
+					</td><td colspan="3">
+						<h:outputText value="#{incidentBean.email}" styleClass="formLabel" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr>
+						
+						<a4j:repeat value="#{incidentBean.phone}"
+							var="phone" rowKeyVar="rowIndex">
+							<tr class="vertTop"><td>
+								<h:outputText value="#{msg.stepthree_label_phone}#{rowIndex + 1}"
+								escape="false" styleClass="formLabel"/>
+					</td><td>
+								<h:outputText styleClass="formLabel"
+									value="#{incidentBean.phone[rowIndex].number}" />
+					</td><td>
+								<h:outputText value="#{msg.stepthree_label_phonetype}"
+								escape="false" styleClass="formLabel"/>
+					</td><td>
+								<h:outputText styleClass="formLabel"
+									value="#{incidentBean.phone[rowIndex].typeLabel}" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr><tr class="vertTop"><td>
+								
+								<h:outputText value="#{msg.stepthree_label_phoneother}"
+								escape="false" styleClass="formLabel"/>
+					</td><td>
+								<h:outputText styleClass="formLabel"
+									value="#{incidentBean.phone[rowIndex].other}" />
+					</td></tr><tr class="vertTop"><td>
+						<h:outputText value="&#160;" />
+					</td></tr>
+						</a4j:repeat>
+					<tr class="vertTop"><td>
+						<h:outputText value="DELIVERY TYPE: " />
+					</td><td>
+						<h:outputText value="#{incidentBean.deliveryTypeLabel}" styleClass="formLabel" />
+					</td><td>
+						<h:outputText value="DELIVER W/O SIGNATURE: " />
+					</td><td>
+						<h:outputText value="#{incidentBean.deliverWithoutSignatureLabel}" styleClass="formLabel" />
+					</td></tr></table>
+					
+			<div class="clear htxlg"></div>
+			
+						<div style="text-align: center; width: 100%;">
+						<h:panelGrid columns="2" width="100%">
+						<h:commandButton
+							id="passLoginBack" value="#{msg.ui_button_back}"
+							action="#{incidentController.gobackStepThree}" tabindex="4"
+							styleClass="button140pxred loginbutton140pxred" height="3em"
+							width="14em" />
+						<h:commandButton
+							id="passLoginContinue" value="#{msg.ui_button_submit}"
+							action="#{incidentController.gotoComplete}" tabindex="3"
+							styleClass="button140pxred loginbutton140pxred" height="3em"
+							width="14em" />
+							</h:panelGrid></div>
+			
+			<div class="clear htxlg"></div>
+			<!-- End body content -->
+			</div> <!-- ends contentbody -->
+			</div> <!-- ends containercontent -->
+			
+			
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div> <!-- ends container -->
+
+
+
+			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

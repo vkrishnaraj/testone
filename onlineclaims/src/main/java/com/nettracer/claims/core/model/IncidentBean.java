@@ -3,6 +3,8 @@ package com.nettracer.claims.core.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nettracer.claims.utils.IncidentProperties;
+
 public class IncidentBean {
 	private String firstName;
 	private String lastName;
@@ -14,7 +16,16 @@ public class IncidentBean {
 	private int deliveryType;
 	private boolean deliverWithoutSignature;
 	private IncidentAddressBean deliveryAddress;
+	private String incidentID;
 	
+	public String getIncidentID() {
+		return incidentID;
+	}
+
+	public void setIncidentID(String incidentID) {
+		this.incidentID = incidentID;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -93,6 +104,22 @@ public class IncidentBean {
 
 	public void setPhone(List<IncidentPhoneBean> phone) {
 		this.phone = phone;
+	}
+	
+	public String addPhone() {
+		if (phone == null) {
+			phone = new ArrayList<IncidentPhoneBean>();
+		}
+		phone.add(new IncidentPhoneBean());
+		return null;
+	}
+	
+	public String getDeliverWithoutSignatureLabel() {
+		return (isDeliverWithoutSignature() ? "Yes" : "No");
+	}
+	
+	public String getDeliveryTypeLabel() {
+		return IncidentProperties.get("stepthree_radio_deltype_" + getDeliveryType());
 	}
 
 }
