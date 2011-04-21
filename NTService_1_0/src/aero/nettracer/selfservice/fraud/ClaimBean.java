@@ -195,6 +195,11 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 	public static Reservation resetReservation(Reservation res){
 		if(res != null){
 			res.setId(0);
+			if(res.getPurchaser() != null){
+				res.getPurchaser().setId(0);
+				res.getPurchaser().setAddresses(resetAddressIdAndGeocode(res.getPurchaser().getAddresses()));
+				res.getPurchaser().setPhones(resetPhoneId(res.getPurchaser().getPhones()));
+			}
 
 			res.setSegments(resetSegmentId(res.getSegments()));
 			res.setCcWhitelist(resetWhiteListId(res.getCcWhitelist()));
@@ -274,8 +279,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome{
 				// GEOCODING ALL ADDRESSES POSSIBLE ON SAVE
 				// Note: Because this is not persisted to the client, 
 				// it must happen every time.
-				try {					
-					GeoLocation loc = GeoCode.locate(address.getAddress1(), address.getCity(), address.getState(), address.getZip(), address.getProvince(), address.getCountry(), null);
+				try {	
+					GeoLocation loc = null;
+					loc = GeoCode.locate(address.getAddress1(), address.getCity(), address.getState(), address.getZip(), address.getProvince(), address.getCountry(), null);
 					
 					if (loc != null) {
 						address.setLattitude(loc.getLatitude());
