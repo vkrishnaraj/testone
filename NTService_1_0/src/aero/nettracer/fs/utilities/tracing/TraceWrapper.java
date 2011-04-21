@@ -23,7 +23,7 @@ public class TraceWrapper {
 	private static ConcurrentHashMap<Long, FsClaim> claimCache = new ConcurrentHashMap<Long, FsClaim>(3000);
 	private static ConcurrentHashMap<Long, File> fileCache = new ConcurrentHashMap<Long, File>(3000);
 	
-	private static boolean LOAD_FROM_CACHE = false;
+	private static boolean LOAD_FROM_CACHE = true;
 	private static int MAX_CACHE_SIZE = 15000;
 	
 	public static File loadFile(long fileId){

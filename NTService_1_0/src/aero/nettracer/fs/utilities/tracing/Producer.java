@@ -29,7 +29,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class Producer {
 
-	private static boolean debug = false;
+	private static boolean debug = true;
 	private static final int MAX_WAIT = 200;
 	public static final double MILE_SEARCH_RADIUS = 5;
 	private static final long WAIT_TIME = 50;
@@ -94,6 +94,7 @@ public class Producer {
 			+ "null as f6_id, "
 			+ "null as f7_id, "
 			+ "\'person\' as type "
+			+ "from person p "
 			+ "left outer join fsclaim c1 on p.claim_id = c1.id "
 			+ "left outer join file f1 on f1.id = c1.file_id "
 			+ "left outer join fsincident i2 on p.incident_id = i2.id "
@@ -213,19 +214,19 @@ public class Producer {
 			"null as f6_id, " +
 			"null as f7_id, " +
 			"'geo' as type " +
-			"from address ad " + 
+			"from fsaddress ad " + 
       "left outer join person p on ad.person_id = p.id " +
-            "left outer join claim c1 on p.claim_id = c1.id " +
+            "left outer join fsclaim c1 on p.claim_id = c1.id " +
             "left outer join file f1 on f1.id = c1.file_id " +
             
-            "left outer join incident i2 on p.incident_id = i2.id " +
-                  "left outer join claim c2 on i2.claim_id = c2.id " +
+            "left outer join fsincident i2 on p.incident_id = i2.id " +
+                  "left outer join fsclaim c2 on i2.claim_id = c2.id " +
                   "left outer join file f2 on f2.id = c2.file_id " +
                   "left outer join file f3 on f3.id = i2.file_id " +
                   
             "left outer join reservation r3 on p.reservation_id = r3.id " +
-                  "left outer join incident i3 on r3.incident_id = i3.id " +
-                  "left outer join claim c3 on i3.claim_id = c3.id " +
+                  "left outer join fsincident i3 on r3.incident_id = i3.id " +
+                  "left outer join fsclaim c3 on i3.claim_id = c3.id " +
                   "left outer join file f4 on f4.id = c3.file_id " +
                   "left outer join file f5 on f5.id = i3.file_id " +
                   
@@ -250,12 +251,14 @@ public class Producer {
 
 					// Compare against non-geocoded items.
 					// Country / City
-					if (a.getCity() != null && a.getCountry() != null) {
+					if (a.getCity() != null && a.getCity().trim().length() > 0 && a.getCountry() != null && a.getCountry().trim().length() > 0) {
 						sql += "or (lattitude = 0 and longitude = 0 and ad.country = \'" + a.getCountry() + "\' and ad.city = \'" + a.getCity() + "\' ) ";
 					}
 				} else {
 					// This else is if the address wasn't geocoded.
+					if (a.getCity() != null && a.getCity().trim().length() > 0 && a.getCountry() != null && a.getCountry().trim().length() > 0) {
 					sql += "or (ad.country = \'" + a.getCountry() + "\' and ad.city = \'" + a.getCity() + "\' ) ";
+					}
 				}
 			}		
 		}
