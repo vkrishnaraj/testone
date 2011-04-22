@@ -1,6 +1,10 @@
 package aero.nettracer.selfservice.fraud;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Stateless;
 
@@ -15,7 +19,31 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 @Stateless
 public class PrivacyPermissionsBean implements PrivacyPermissionsRemote, PrivacyPermissionsHome{
 	
+	private static Date permissionCacheTimeout = (new GregorianCalendar()).getTime();
+	private static List<PrivacyPermissions> permissionsList = null;
+	
 	public static  List<PrivacyPermissions> getPrivacyPermissions(){
+		if(permissionsList != null || permissionCacheTimeout.after(new Date())){
+			return permissionsList;
+		}
+		GregorianCalendar c = new GregorianCalendar();
+		c.add(GregorianCalendar.MINUTE, 5);
+		permissionCacheTimeout = c.getTime();
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		
+		String sql = "from aero.nettracer.serviceprovider.common.db.PrivacyPermissions p";
+		
+		Query q = sess.createQuery(sql.toString());
+		try{
+			List<PrivacyPermissions> plist =(List<PrivacyPermissions>) q.list();
+			permissionsList = plist;
+			return plist;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			sess.close();
+		}
 		return null;
 	}
 	

@@ -102,6 +102,8 @@ public class Consumer implements Runnable{
 			processReservation(match);
 			processPhone(match);
 			
+			
+			
 			if(match.getDetails() == null || match.getOverallScore() < MIN_MATCH_SCORE){
 				//no match details so don't save
 				//can expand to include not saving match if min match percent below certain threshold
@@ -566,50 +568,68 @@ public class Consumer implements Runnable{
 			System.out.print("2CCY:" + (r2.getCcExpYear() == 0 ? "null":r2.getCcExpYear()) + " ");
 			
 			if(num16){						
-				MatchDetail detail = new MatchDetail();
-				detail.setMatch(match);
-				match.getDetails().add(detail);
 				if(type && exp){
+					MatchDetail detail = new MatchDetail();
+					detail.setMatch(match);
+					match.getDetails().add(detail);
 					detail.setContent1(r1.getCcType() + "**************** exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
 					detail.setContent2(r2.getCcType() + "**************** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card Full Match");
 					detail.setPercent(P_CC_16 + P_CC_EXP + P_CC_TYPE);
 				} else if(type && expEmpty) {
+					MatchDetail detail = new MatchDetail();
+					detail.setMatch(match);
+					match.getDetails().add(detail);
 					detail.setContent1(r1.getCcType() + "****************");
 					detail.setContent2(r2.getCcType() + "****************");
 					detail.setDescription("Credit Card Number and Type Match");
 					detail.setPercent(P_CC_16 + P_CC_TYPE);
 				} else if(exp && typeEmpty){
+					MatchDetail detail = new MatchDetail();
+					detail.setMatch(match);
+					match.getDetails().add(detail);
 					detail.setContent1("**************** exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
 					detail.setContent2("**************** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card Number and Expiration Match");
 					detail.setPercent(P_CC_16 + P_CC_EXP);
 				} else if(expEmpty && typeEmpty){
+					MatchDetail detail = new MatchDetail();
+					detail.setMatch(match);
+					match.getDetails().add(detail);
 					detail.setContent1("**************** exp:");
 					detail.setContent2("**************** exp:");
 					detail.setDescription("Credit Card Number Match");
 					detail.setPercent(P_CC_16);
 				}
 			} else if (num4){
-				MatchDetail detail = new MatchDetail();
-				detail.setMatch(match);
-				match.getDetails().add(detail);
 				if(type && exp){
+					MatchDetail detail = new MatchDetail();
+					detail.setMatch(match);
+					match.getDetails().add(detail);
 					detail.setContent1(r1.getCcType() + r1.getCcNumLastFour() + " exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
 					detail.setContent2(r2.getCcType() + r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card 4 digit, type and expiration Match");
 					detail.setPercent(P_CC_4_TYPE_EXP);
 				} else if(type && expEmpty) {
+					MatchDetail detail = new MatchDetail();
+					detail.setMatch(match);
+					match.getDetails().add(detail);
 					detail.setContent1(r1.getCcType() + r1.getCcNumLastFour());
 					detail.setContent2(r2.getCcType() + r2.getCcNumLastFour());
 					detail.setDescription("Credit Card 4 digit and Type Match");
 					detail.setPercent(P_CC_4 + P_CC_TYPE);
 				} else if(exp && typeEmpty){
+					MatchDetail detail = new MatchDetail();
+					detail.setMatch(match);
+					match.getDetails().add(detail);
 					detail.setContent1(r1.getCcNumLastFour() + " exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
 					detail.setContent2(r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card 4 digit and Expiration Match");
 					detail.setPercent(P_CC_4 + P_CC_EXP);
 				} else if(expEmpty && typeEmpty){
+					MatchDetail detail = new MatchDetail();
+					detail.setMatch(match);
+					match.getDetails().add(detail);
 					detail.setContent1(r1.getCcNumLastFour());
 					detail.setContent2(r2.getCcNumLastFour());
 					detail.setDescription("Credit Card 4 digit Match");

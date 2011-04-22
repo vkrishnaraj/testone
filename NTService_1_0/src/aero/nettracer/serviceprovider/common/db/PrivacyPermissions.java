@@ -48,6 +48,98 @@ public class PrivacyPermissions implements Serializable{
 	boolean denied;
 	boolean denialreason;
 	
+	boolean cc;
+	boolean drivers;
+	boolean ffn;
+	boolean ssn;
+	boolean passport;
+	boolean pnrloc;
+	boolean pnrdata;
+	boolean dob;
+	boolean itin;
+	boolean ticketamount;
+	
+	public boolean isTicketamount() {
+		return ticketamount;
+	}
+
+	public void setTicketamount(boolean ticketamount) {
+		this.ticketamount = ticketamount;
+	}
+
+	public boolean isCc() {
+		return cc;
+	}
+
+	public void setCc(boolean cc) {
+		this.cc = cc;
+	}
+
+	public boolean isDrivers() {
+		return drivers;
+	}
+
+	public void setDrivers(boolean drivers) {
+		this.drivers = drivers;
+	}
+
+	public boolean isFfn() {
+		return ffn;
+	}
+
+	public void setFfn(boolean ffn) {
+		this.ffn = ffn;
+	}
+
+	public boolean isSsn() {
+		return ssn;
+	}
+
+	public void setSsn(boolean ssn) {
+		this.ssn = ssn;
+	}
+
+	public boolean isPassport() {
+		return passport;
+	}
+
+	public void setPassport(boolean passport) {
+		this.passport = passport;
+	}
+
+	public boolean isPnrloc() {
+		return pnrloc;
+	}
+
+	public void setPnrloc(boolean pnrloc) {
+		this.pnrloc = pnrloc;
+	}
+
+	public boolean isPnrdata() {
+		return pnrdata;
+	}
+
+	public void setPnrdata(boolean pnrdata) {
+		this.pnrdata = pnrdata;
+	}
+
+	public boolean isDob() {
+		return dob;
+	}
+
+	public void setDob(boolean dob) {
+		this.dob = dob;
+	}
+
+	public boolean isItin() {
+		return itin;
+	}
+
+	public void setItin(boolean itin) {
+		this.itin = itin;
+	}
+	
+	
 	public boolean isClaimtype() {
 		return claimtype;
 	}

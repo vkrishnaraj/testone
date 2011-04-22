@@ -208,7 +208,7 @@ public class Producer {
 					"left outer join fsclaim c2 on i2.claim_id = c2.id " +
 					"left outer join file f2 on f2.id = c2.file_id " +
 					"left outer join file f3 on f3.id = i2.file_id " +
-					"where ccNumber = \'" + file.getIncident().getReservation().getCcNumLastFour() +"\' ";
+					"where ccNumLastFour = \'" + file.getIncident().getReservation().getCcNumLastFour() +"\' ";
 		}
 
 		Set<FsAddress> addresses = Consumer.getAddresses(file);
