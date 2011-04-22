@@ -14,20 +14,14 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class GeoCode {
 
-	public static final int ACCURACY_HIGH = 1; // Street level
-	public static final int ACCURACY_MED = 2; // Zip level
-	public static final int ACCURACY_LOW = 3; // City level
-
+	public static final int ACCURACY_STREET = 1; // Street level
+	public static final int ACCURACY_ZIP = 2; // Zip level
+	public static final int ACCURACY_CITY = 3; // City level
 	public static final int STREET_SEARCH_LEVEL_HIGH = 1; // Search with
-															// prefixes,
-															// suffixes, number,
-															// and name
 	public static final int STREET_SEARCH_LEVEL_MED = 2; // Search with number
-															// and name only
 	public static final int STREET_SEARCH_LEVEL_LOW = 3; // Search with name
-															// only
-
 	public static final double MILES_PER_LATITUDE = 69;
+
 	public static HashMap<String, String> fips_to_states;
 	public static HashMap<String, String> states_to_fips;
 	private static Logger logger = Logger.getLogger(GeoCode.class);
@@ -84,7 +78,7 @@ public class GeoCode {
 						STREET_SEARCH_LEVEL_HIGH, sess);
 			}
 		}
-		
+
 		if (returnMe == null) { // No Loc for zip search, lets try county
 			String county = lookupCounty(city, state, sess);
 			if (county != null) {
@@ -188,8 +182,8 @@ public class GeoCode {
 					+ "_min where fullname like '%"
 					+ address
 					+ "%' and "
-					+ (useFIPs ? "countyfp in " + zip + " " : "(zipl = '"
-							+ zip + "' or zipr = '" + zip + "') ")
+					+ (useFIPs ? "countyfp in " + zip + " " : "(zipl = '" + zip
+							+ "' or zipr = '" + zip + "') ")
 					+ (useNumber ? "and (((rfromadd <= " + parsed.getNum()
 							+ " and rtoadd >= " + parsed.getNum()
 							+ ") or (lfromadd <= " + parsed.getNum()
@@ -208,7 +202,7 @@ public class GeoCode {
 					returnMe = new GeoLocation(
 							((Double) theResult[0]).doubleValue(),
 							((Double) theResult[1]).doubleValue(),
-							ACCURACY_HIGH);
+							ACCURACY_STREET);
 				}
 				return returnMe;
 			} else {
@@ -248,8 +242,7 @@ public class GeoCode {
 					Object[] theResult = list.get(i);
 					returnMe = new GeoLocation(
 							((Double) theResult[0]).doubleValue(),
-							((Double) theResult[1]).doubleValue(),
-							ACCURACY_MED);
+							((Double) theResult[1]).doubleValue(), ACCURACY_ZIP);
 				}
 				return returnMe;
 			} else {
@@ -265,11 +258,13 @@ public class GeoCode {
 			Session sess) {
 		GeoLocation returnMe = null;
 		loadStates();
-		SQLQuery query = sess.createSQLQuery("SELECT (min(intptlon10) + max(intptlon10)) / 2 as longitude, "
-							+ "(min(intptlat10) + max(intptlat10)) /2 as latitude "
-							+ "FROM coutest WHERE name10 = '" + city
-							+ "' AND statefp10 = '"
-							+ states_to_fips.get(state.toUpperCase()) + "'");
+		SQLQuery query = sess
+				.createSQLQuery("SELECT (min(intptlon10) + max(intptlon10)) / 2 as longitude, "
+						+ "(min(intptlat10) + max(intptlat10)) /2 as latitude "
+						+ "FROM coutest WHERE name10 = '"
+						+ city
+						+ "' AND statefp10 = '"
+						+ states_to_fips.get(state.toUpperCase()) + "'");
 		List<Object[]> list = query.list();
 		if (list != null && list.size() > 0) {
 			for (int i = 0, j = list.size(); i < j; i++) {
@@ -277,7 +272,7 @@ public class GeoCode {
 				returnMe = new GeoLocation(
 						Double.parseDouble((String) theResult[0]),
 						Double.parseDouble((String) theResult[1]),
-						ACCURACY_LOW);
+						ACCURACY_CITY);
 			}
 			return returnMe;
 		} else {

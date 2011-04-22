@@ -31,6 +31,8 @@ public class Producer {
 	//TODO review mile radius
 	public static final double MILE_SEARCH_RADIUS = 2;
 	private static final long WAIT_TIME = 100;
+	private static final double MILE_SEARCH_ZIP = 4;
+	private static final double MILE_SEARCH_CITY = 10;
 	
 	public static Set<MatchHistory> matchFile(long fileId){
 		File file = TraceWrapper.loadFileFromCache(fileId);
@@ -249,8 +251,18 @@ public class Producer {
 					// If the address has been geocoded we will calculate
 					// the area (min/max latitude and longitude) in which to
 					// search.
-					double latRadius = GeoCode.getLatRadius(MILE_SEARCH_RADIUS);
-					double longRadius = GeoCode.getLongRadius(a.getLongitude(), MILE_SEARCH_RADIUS);
+					double mileSearch = MILE_SEARCH_RADIUS;
+					if (a.getGeocodeType() == GeoCode.ACCURACY_STREET) {
+						a.setGeocodeType(GeoCode.ACCURACY_STREET);
+					} else if (a.getGeocodeType() == GeoCode.ACCURACY_CITY) {
+						a.setGeocodeType(GeoCode.ACCURACY_CITY);
+						mileSearch = MILE_SEARCH_CITY;
+					} else if (a.getGeocodeType() == GeoCode.ACCURACY_ZIP) {
+						a.setGeocodeType(GeoCode.ACCURACY_ZIP);
+						mileSearch = MILE_SEARCH_ZIP;
+					}
+					double latRadius = GeoCode.getLatRadius(mileSearch);
+					double longRadius = GeoCode.getLongRadius(a.getLongitude(), mileSearch);
 					double y1 = a.getLattitude() - latRadius;
 					double y2 = a.getLattitude() + latRadius;
 					double x1 = a.getLongitude() - longRadius;

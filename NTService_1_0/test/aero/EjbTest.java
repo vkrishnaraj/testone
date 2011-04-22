@@ -1,20 +1,12 @@
 package aero;
 
-import javax.ejb.*;
-import javax.naming.*;
-
-import org.hibernate.Hibernate;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.junit.Test;
-
-
-
-import java.rmi.*;
-import java.util.Date;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Properties;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
+import org.junit.Test;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
@@ -25,15 +17,8 @@ import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.PnrData;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
-import aero.nettracer.fs.model.detection.Blacklist;
-import aero.nettracer.fs.utilities.tracing.Producer;
-import aero.nettracer.fs.utilities.tracing.TraceWrapper;
 import aero.nettracer.selfservice.fraud.ClaimBean;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
-import aero.nettracer.selfservice.fraud.PrivacyPermissionsRemote;
-import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
-import aero.nettracer.serviceprovider.common.db.PrivacyPermissions.AccessLevelType;
-import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 
 public class EjbTest {
@@ -42,7 +27,7 @@ public class EjbTest {
 	  static String password = null;
 //	  static String url      = "jnp://127.0.0.1:1199";
 //	  static String url      = "jnp://192.168.2.145:1199";
-	  static String url      = "jnp://184.172.41.2:1199";
+	  static String url      = "jnp://localhost:1199";
 	
 	  static public Context getInitialContext() throws Exception {
 		    Properties p = new Properties();
@@ -81,25 +66,35 @@ public class EjbTest {
 	  
 	  @Test
 	  public void hello(){
-			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");
-		    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer");
-		    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\keystore.jks");
-		    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer");
-		  
+//			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");
+//		    System.setProperty("javax.net.ssl.trustStorePassword", "nettracer");
+//		    System.setProperty("javax.net.ssl.keyStore", "c:\\secure\\keystore.jks");
+//		    System.setProperty("javax.net.ssl.keyStorePassword", "nettracer");
+//		  
 		  try{
+			  
 			  Context ctx          = getInitialContext();
 			  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
-//			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("permissionsSSL");
-//			  System.out.println(o.hello());
-//			  PrivacyPermissions p = o.getPrivacyPermissions("WS", AccessLevelType.def);
-//			  System.out.println(p.isName());
-//			  p.setName(false);
-//			  o.setPrivacyPermissions(p);
-			  System.out.println(o.echoTest("hello world"));
+//			  System.out.println(o.echoTest("hello world"));
+//			  
+//			  for (long i=0; i<312989; ++i) {
+//				  if (i%100 == 0) {
+//					  System.out.println(i);
+//				  }
+//				  try {
+				  o.traceFile(19286);
+//				  o.traceFile(56786);
+//				  o.traceFile(167063);
+//				  } catch (Exception e) {
+//					  // Ignore
+//				  }
+//			  }
+			  
 		  } catch (Exception e){
 			  e.printStackTrace();
 		  }
 	  }
+	  
 	  
 //	  @Test
 //	  public void echo(){
@@ -122,7 +117,7 @@ public class EjbTest {
 //			  e.printStackTrace();
 //		  }
 //	  }
-	  
+	  /*
 //	  @Test
 	  public void updateTest(){
 		  try{
@@ -139,7 +134,7 @@ public class EjbTest {
 			  e.printStackTrace();
 		  }
 	  }
-	  
+	  */
 //	  @Test
 //		public void letsSeeWhatWeGet(){
 //			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\keystore.jks");

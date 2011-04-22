@@ -115,7 +115,7 @@ public class Consumer implements Runnable{
 			if (match.getFile1().getMatchingFiles() != null) {
 				
 				HashMap<Long, Double>matchingMap = match.getFile1().getMatchingFiles();
-				System.out.println("Data exists in matches...");
+//				System.out.println("Data exists in matches...");
 				Double existingScore = matchingMap.get(new Long(match.getFile2().getId()));
 				
 				
@@ -473,26 +473,43 @@ public class Consumer implements Runnable{
 			for(FsAddress a2:plist2){
 				// If geocoded => US based location
 				if (a1.getLattitude() != 0 && a2.getLattitude() != 0) {
-					double distance = GeoCode.distanceBetweenPoints(a1.getLattitude(), a1.getLongitude(), a2.getLattitude(), a2.getLongitude());
+					
+					double distance = 100;
+					
+					
+						
+					
+					distance = GeoCode.distanceBetweenPoints(a1.getLattitude(), a1.getLongitude(), a2.getLattitude(), a2.getLongitude());
 
+					
 					if (distance < Producer.MILE_SEARCH_RADIUS ) {
-						if (distance > ADDRESS_CLOSE_PROXIMITY_LIMIT) {
-							MatchDetail detail = new MatchDetail();
-							detail.setContent1(a1.getAddress1() + ", " + a1.getState() + " " + a1.getZip());
-							detail.setContent2(a2.getAddress1() + ", " + a2.getState() + " " + a2.getZip());
-							detail.setDescription("Proximity Match: " + distance + " miles.");
-							detail.setMatch(match);
-							detail.setPercent(ADDRESS_FAR_PROXIMITY);
-							details.add(detail);
-						} else {
-							MatchDetail detail = new MatchDetail();
-							detail.setContent1(a1.getAddress1() + ", " + a1.getState() + " " + a1.getZip());
-							detail.setContent2(a2.getAddress1() + ", " + a2.getState() + " " + a2.getZip());
-							detail.setDescription("Close Proximity Match: " + distance + " miles.");
-							detail.setMatch(match);
-							detail.setPercent(ADDRESS_CLOSE_PROXIMITY);
-							details.add(detail);
-							
+						if (a1.getGeocodeType() == GeoCode.ACCURACY_STREET
+								&& a2.getGeocodeType() == GeoCode.ACCURACY_STREET) {
+							if (distance > ADDRESS_CLOSE_PROXIMITY_LIMIT) {
+
+								String distanceStr = Double.toString(distance);
+								distanceStr = distanceStr.substring(0, Math.min(5, distanceStr.length()));
+
+								MatchDetail detail = new MatchDetail();
+								detail.setContent1(a1.getAddress1() + ", " + a1.getState() + " " + a1.getZip());
+								detail.setContent2(a2.getAddress1() + ", " + a2.getState() + " " + a2.getZip());
+								detail.setDescription("Proximity Match: " + distanceStr + " miles.");
+								detail.setMatch(match);
+								detail.setPercent(ADDRESS_FAR_PROXIMITY);
+								details.add(detail);
+							} else {
+								String distanceStr = Double.toString(distance);
+								distanceStr = distanceStr.substring(0, Math.min(5, distanceStr.length()));
+
+								MatchDetail detail = new MatchDetail();
+								detail.setContent1(a1.getAddress1() + ", " + a1.getState() + " " + a1.getZip());
+								detail.setContent2(a2.getAddress1() + ", " + a2.getState() + " " + a2.getZip());
+								detail.setDescription("Close Proximity Match: " + distanceStr + " miles.");
+								detail.setMatch(match);
+								detail.setPercent(ADDRESS_CLOSE_PROXIMITY);
+								details.add(detail);
+
+							}
 						}
 
 						String str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2());

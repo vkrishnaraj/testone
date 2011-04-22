@@ -18,7 +18,16 @@ public class FraudTrace {
 	@Test
 	public void run() {
 		Date start = new Date();
-//		Producer.matchClaim(3879);
+//						  o.traceFile(19286);
+		Producer.matchFile(19286);
+		Producer.matchFile(56786);
+		Producer.matchFile(167063);
+		System.out.println("Run 2");
+		Producer.matchFile(19286);
+		Producer.matchFile(56786);
+		Producer.matchFile(167063);
+//		  o.traceFile(56786);
+//		  o.traceFile(167063);
 		Date end = new Date();
 		System.out.println("run1 " + (end.getTime() - start.getTime()));
 //		start = new Date();

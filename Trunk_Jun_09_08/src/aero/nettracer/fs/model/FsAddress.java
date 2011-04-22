@@ -17,10 +17,10 @@ public class FsAddress implements Serializable {
 	@Id
 	@GeneratedValue
 	private long id;
-	
+
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Person.class)
 	private Person person;
-	
+
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
 	private Reservation reservation;
 	private String address1;
@@ -32,6 +32,15 @@ public class FsAddress implements Serializable {
 	private String country;
 	private double lattitude;
 	private double longitude;
+	private int geocodeType;
+
+	public int getGeocodeType() {
+		return geocodeType;
+	}
+
+	public void setGeocodeType(int geocodeType) {
+		this.geocodeType = geocodeType;
+	}
 
 	public long getId() {
 		return id;
@@ -128,5 +137,5 @@ public class FsAddress implements Serializable {
 	public void setProvince(String province) {
 		this.province = province;
 	}
-	
+
 }
