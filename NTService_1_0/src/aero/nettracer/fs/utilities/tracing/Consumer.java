@@ -605,16 +605,16 @@ public class Consumer implements Runnable{
 			boolean expEmpty = (r1.getCcExpMonth() != 0) ? false:true;
 			
 			
-			System.out.print("1CC4:" + (r1.getCcNumLastFour() == null ? "null":r1.getCcNumLastFour()) + " ");
-			System.out.print("2CC4:" + (r2.getCcNumLastFour() == null ? "null":r2.getCcNumLastFour()) + " ");
-			System.out.print("1type:" + (r1.getCcType() == null ? "null":r1.getCcType()) + " ");
-			System.out.print("2type:" + (r2.getCcType() == null ? "null":r2.getCcType()) + " ");
-			System.out.print("1CC16:" + (r1.getCcNumber() == null ? "null":r1.getCcNumber()) + " ");
-			System.out.print("2CC16:" + (r2.getCcNumber() == null ? "null":r2.getCcNumber()) + " ");
-			System.out.print("1CCMon:" + (r1.getCcExpMonth() == 0 ? "null":r1.getCcExpMonth()) + " ");
-			System.out.print("2CCMon:" + (r2.getCcExpMonth() == 0 ? "null":r2.getCcExpMonth()) + " ");
-			System.out.print("1CCY:" + (r1.getCcExpYear() == 0 ? "null":r1.getCcExpYear()) + " ");
-			System.out.print("2CCY:" + (r2.getCcExpYear() == 0 ? "null":r2.getCcExpYear()) + " ");
+//			System.out.print("1CC4:" + (r1.getCcNumLastFour() == null ? "null":r1.getCcNumLastFour()) + " ");
+//			System.out.print("2CC4:" + (r2.getCcNumLastFour() == null ? "null":r2.getCcNumLastFour()) + " ");
+//			System.out.print("1type:" + (r1.getCcType() == null ? "null":r1.getCcType()) + " ");
+//			System.out.print("2type:" + (r2.getCcType() == null ? "null":r2.getCcType()) + " ");
+//			System.out.print("1CC16:" + (r1.getCcNumber() == null ? "null":r1.getCcNumber()) + " ");
+//			System.out.print("2CC16:" + (r2.getCcNumber() == null ? "null":r2.getCcNumber()) + " ");
+//			System.out.print("1CCMon:" + (r1.getCcExpMonth() == 0 ? "null":r1.getCcExpMonth()) + " ");
+//			System.out.print("2CCMon:" + (r2.getCcExpMonth() == 0 ? "null":r2.getCcExpMonth()) + " ");
+//			System.out.print("1CCY:" + (r1.getCcExpYear() == 0 ? "null":r1.getCcExpYear()) + " ");
+//			System.out.print("2CCY:" + (r2.getCcExpYear() == 0 ? "null":r2.getCcExpYear()) + " ");
 			
 			if(num16){						
 				if(type && exp){
@@ -724,6 +724,8 @@ public class Consumer implements Runnable{
 				// TODO: Trim names prior to compare
 				if(p1.getFirstName() != null && p1.getFirstName().trim().length() > 0 
 						&& p1.getLastName() != null && p1.getLastName().trim().length() > 0){
+//						System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
+//						System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
 					String content1 = p1.getFirstName().trim() + " " + p1.getLastName().trim();
 					String content2 = p2.getFirstName().trim() + " " + p2.getLastName().trim();
 					String comparator = content1 + "/" + content2;

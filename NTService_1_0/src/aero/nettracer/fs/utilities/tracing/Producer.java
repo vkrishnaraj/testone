@@ -31,7 +31,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class Producer {
 
-	private static boolean debug = false;
+	private static boolean debug = true;
 	private static final int MAX_WAIT = 2000;
 	//TODO review mile radius
 	public static final double MILE_SEARCH_RADIUS = 2;

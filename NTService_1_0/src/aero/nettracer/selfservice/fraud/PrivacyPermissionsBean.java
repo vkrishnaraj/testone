@@ -23,11 +23,11 @@ public class PrivacyPermissionsBean implements PrivacyPermissionsRemote, Privacy
 	private static List<PrivacyPermissions> permissionsList = null;
 	
 	public static  List<PrivacyPermissions> getPrivacyPermissions(){
-		if(permissionsList != null || permissionCacheTimeout.after(new Date())){
+		if(permissionsList != null && permissionCacheTimeout.after((new GregorianCalendar()).getTime())){
 			return permissionsList;
 		}
 		GregorianCalendar c = new GregorianCalendar();
-		c.add(GregorianCalendar.MINUTE, 5);
+		c.add(GregorianCalendar.MINUTE, 1);
 		permissionCacheTimeout = c.getTime();
 		
 		Session sess = HibernateWrapper.getSession().openSession();
