@@ -198,6 +198,23 @@
              		
              	</td>
              </tr>
+             <tr>
+             	<td colspan="2">
+             		<bean:message key="colname.airline_membership" />
+             		<br />
+             		<html:select name="claimForm" property="claimant.ffAirline" styleClass="dropdown">
+                		<html:option value="">
+                  			<bean:message key="select.none" />
+                		</html:option>
+               			<html:options collection="companylistByName" property="companyCode_ID" labelProperty="companydesc" />
+              		</html:select>
+             	</td>
+             	<td colspan="3">
+             		<bean:message key="colname.membership_number" />
+              		<br>
+             		<html:text name="claimForm" property="claimant.ffNumber" size="30" maxlength="20" styleClass="textfield" />
+             	</td>
+             </tr>
               <tr>        
                  <td colspan=2 >
 	            	<bean:message key="oc.label.ssn" />

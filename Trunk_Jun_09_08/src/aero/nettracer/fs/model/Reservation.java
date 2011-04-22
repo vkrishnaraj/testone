@@ -254,11 +254,11 @@ public class Reservation implements Serializable {
 	}
 
 	public int getCcExpYear() {
-		return ccExpYear + 2000;
+		return ccExpYear;
 	}
 
 	public void setCcExpYear(int ccExpYear) {
-		this.ccExpYear = ccExpYear - 2000;
+		this.ccExpYear = ccExpYear;
 	}
 	
 	public String getCcNumLastFour() {

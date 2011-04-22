@@ -271,7 +271,7 @@ public class DateUtils {
 	public static ArrayList<Integer> getCcYears() {
 		if (ccYears == null) {
 			ccYears = new ArrayList<Integer>();
-			int year = Calendar.getInstance().get(Calendar.YEAR);
+			int year = Calendar.getInstance().get(Calendar.YEAR) - 2003;
 			for (int i = 0; i < 20; i++) {
 				ccYears.add(year);
 				year++;

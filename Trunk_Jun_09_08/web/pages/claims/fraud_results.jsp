@@ -72,6 +72,7 @@
 <%			}
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, a)) {
 %>
+			  <logic:greaterThan name="claimForm" property="claim.id" value="0" >
               <dd>
                 <a href='claim_resolution.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aa">&nbsp;
                     <br />
@@ -81,16 +82,39 @@
                     <br />
                     &nbsp;</span></a>
               </dd>
-<%
-            } if (ntUser) {
-%>
-					<dd>
+              </logic:greaterThan>
+              <logic:match name="claimForm" property="claim.id" value="0" >
+              <dd>
+                <a href='claim_resolution.do' ><span class="aa">&nbsp;
+                    <br />
+                    &nbsp;</span>
+                  <span class="bb"><bean:message key="menu.claim_payout" /></span>
+                  <span class="cc">&nbsp;
+                    <br />
+                    &nbsp;</span></a>
+              </dd>
+              </logic:match>
+            		<logic:greaterThan name="claimForm" property="claim.id" value="0" >
+                   	<dd>
                    	<a href='fraud_results.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aab">&nbsp;<br />&nbsp;</span>
                    	<span class="bbb"><bean:message key="menu.fraud.checks" /></span>
                         <span class="ccb">&nbsp;
                           <br />
                           &nbsp;</span></a>
                    </dd>
+                   </logic:greaterThan>
+                   <logic:match name="claimForm" property="claim.id" value="0" >
+					<dd>
+                   	<a href='fraud_results.do'><span class="aab">&nbsp;<br />&nbsp;</span>
+                   	<span class="bbb"><bean:message key="menu.fraud.checks" /></span>
+                        <span class="ccb">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                   </dd>
+                   </logic:match>
+<%
+            } if (ntUser) {
+%>
 		            <dd>
 		              <a href='claim_prorate.do'><span class="aa">&nbsp;
 		                  <br />
@@ -100,16 +124,8 @@
 		                  <br />
 		                  &nbsp;</span></a>
 		            </dd>
-            <% } else { %>
-					<dd>
-                   	<a href='fraud_results.do'><span class="aab">&nbsp;<br />&nbsp;</span>
-                   	<span class="bbb"><bean:message key="menu.fraud.checks" /></span>
-                        <span class="ccb">&nbsp;
-                          <br />
-                          &nbsp;</span></a>
-                   </dd>
-            
             <% } %>
+            
           </dl>
         </div>
       </td>

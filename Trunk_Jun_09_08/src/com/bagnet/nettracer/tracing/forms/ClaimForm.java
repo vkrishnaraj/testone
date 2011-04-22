@@ -1,26 +1,19 @@
 package com.bagnet.nettracer.tracing.forms;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 
-import com.bagnet.nettracer.tracing.actions.ModifyClaimAction;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.utils.CreditCardType;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-/**
- * @author Ankur Gupta
+/** * @author Ankur Gupta
  * 
  * This class represents the claim form that is used for accessing claim
  * functionality

@@ -75,6 +75,12 @@ public class FraudResultsAction extends CheckedAction {
 		if (request.getParameter("results") != null) {
 			results = (Set<MatchHistory>) session.getAttribute("results");
 			session.removeAttribute("results");
+		} else if (request.getParameter("matchId") != null) {
+			long matchId = Long.parseLong(request.getParameter("matchId"));
+			MatchHistory match = getMatchHistory(matchId, resultsForm);
+			request.setAttribute("match", match);
+			request.setAttribute("claimId", resultsForm.getClaimId());
+			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
 		} else {
 			if (claim != null) {
 				try {
@@ -88,13 +94,6 @@ public class FraudResultsAction extends CheckedAction {
 		
 		resultsForm = separateResults(results, resultsForm);
 		
-		if (request.getParameter("matchId") != null) {
-			long matchId = Long.parseLong(request.getParameter("matchId"));
-			MatchHistory match = getMatchHistory(matchId, resultsForm);
-			request.setAttribute("match", match);
-			request.setAttribute("claimId", resultsForm.getClaimId());
-			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
-		}
 		
 		
 		

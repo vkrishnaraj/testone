@@ -52,9 +52,6 @@
             				<b><bean:message key="claim.match.detail.item" /></b>
             			</td>
             			<td>
-            				<b><bean:message key="claim.match.detail.percentage" /></b>
-            			</td>
-            			<td>
             				<b><bean:message key="claim.match.detail.original" /></b>
             			</td>
             			<td>
@@ -64,7 +61,6 @@
             		<logic:iterate id="detail" name="match" property="details" scope="request" type="aero.nettracer.fs.model.detection.MatchDetail" >
             			<tr>
             				<td><bean:write name="detail" property="description" /></td>
-            				<td><bean:write name="detail" property="percent" /></td>
             				<td><bean:write name="detail" property="content1" /></td>
             				<td><bean:write name="detail" property="content2" /></td>
             			</tr>

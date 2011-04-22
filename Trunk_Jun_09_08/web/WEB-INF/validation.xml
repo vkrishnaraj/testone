@@ -324,10 +324,33 @@
 		</form>
 
 
+		<!-- form name="claimForm">
+			<field property="disclaimamount" depends="float">
+        		<arg key="colname.claim_amount"/>
+	   		</field>  	
+	  	</form-->
 		<form name="claimForm">
 			<field property="disclaimamount" depends="float">
         		<arg key="colname.claim_amount"/>
 	   		</field>  	
+			<field property="claimant.lastName" depends="required">
+        		<arg key="claimant.last.name"/>
+	   		</field>  	
+			<field property="claimant.firstName" depends="required">
+        		<arg key="claimant.first.name"/>
+	   		</field>  	
+			<field property="address1" depends="required">
+        		<arg key="claimant.street.address"/>
+	   		</field>  	
+			<field property="city" depends="required">
+        		<arg key="claimant.city"/>
+	   		</field>
+	   		<field property="country" depends="required" >
+	   			<arg key="claimant.country" />
+	   		</field>
+	   		<field property="claimant.emailAddress" depends="email" >
+	   			<arg key="claimant.email.address" />
+	   		</field>
 	  	</form>
   	
   	  	<form name="billingForm">
