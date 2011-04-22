@@ -207,7 +207,8 @@ public class GeoCode {
 					Object[] theResult = list.get(i);
 					returnMe = new GeoLocation(
 							((Double) theResult[0]).doubleValue(),
-							((Double) theResult[1]).doubleValue());
+							((Double) theResult[1]).doubleValue(),
+							ACCURACY_HIGH);
 				}
 				return returnMe;
 			} else {
@@ -247,7 +248,8 @@ public class GeoCode {
 					Object[] theResult = list.get(i);
 					returnMe = new GeoLocation(
 							((Double) theResult[0]).doubleValue(),
-							((Double) theResult[1]).doubleValue());
+							((Double) theResult[1]).doubleValue(),
+							ACCURACY_MED);
 				}
 				return returnMe;
 			} else {
@@ -274,7 +276,8 @@ public class GeoCode {
 				Object[] theResult = list.get(i);
 				returnMe = new GeoLocation(
 						Double.parseDouble((String) theResult[0]),
-						Double.parseDouble((String) theResult[1]));
+						Double.parseDouble((String) theResult[1]),
+						ACCURACY_LOW);
 			}
 			return returnMe;
 		} else {
