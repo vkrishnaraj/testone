@@ -2,6 +2,7 @@ package aero.nettracer.fs.utilities.tracing;
 
 // TODO: MASS TRIMMING
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -24,7 +25,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class Consumer implements Runnable{
 
-	public static boolean debug = true;
+	public static boolean debug = false;
 	
 	public static final int MATCH = 3;
 	
@@ -109,6 +110,31 @@ public class Consumer implements Runnable{
 				//can expand to include not saving match if min match percent below certain threshold
 				return;
 			}
+			
+			// Filter Existing Matches
+			if (match.getFile1().getMatchingFiles() != null) {
+				
+				HashMap<Long, Double>matchingMap = match.getFile1().getMatchingFiles();
+				System.out.println("Data exists in matches...");
+				Double existingScore = matchingMap.get(new Long(match.getFile2().getId()));
+				
+				
+				
+				if (existingScore != null) {
+
+					String score1 = existingScore.toString();
+					score1 = score1.substring(0, Math.min(5, score1.length()));
+					
+					String score2 = match.getOverallScore() + "";
+					score2 = score2.substring(0, Math.min(5, score2.length()));
+
+					
+					if (score1.equals(score2)) { 
+						System.out.println("Returning because match exists...");
+						return;
+					}
+				}
+			}
 			//save match
 			Transaction t = null;
 			Session sess = null;
@@ -117,6 +143,7 @@ public class Consumer implements Runnable{
 				// TODO: Check to see if match already exists???
 				t = sess.beginTransaction();
 				sess.saveOrUpdate(match);
+				System.out.println("Saving match... " + match.getId());
 				t.commit();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -473,7 +500,7 @@ public class Consumer implements Runnable{
 						
 						String description = "Similar Address";
 						double percent = ADDRESS_SIMILAR;
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 50);
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 60, .10);
 					}
 				} else {
 					// If country available
@@ -490,7 +517,7 @@ public class Consumer implements Runnable{
 						
 						String description = "Similar Address";
 						double percent = ADDRESS_SIMILAR;
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 50);
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15);
 						
 					} else {
 						// Country not available
@@ -506,7 +533,7 @@ public class Consumer implements Runnable{
 
 						String description = "Similar Address";
 						double percent = ADDRESS_SIMILAR;
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 50);
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15);
 
 					}
 				}
@@ -515,7 +542,7 @@ public class Consumer implements Runnable{
 	}
 
 
-	private static void generateStringCompareDetail(MatchHistory match, Set<MatchDetail> details, String str1, String str2, String description, double percent, double minimumScore) {
+	private static void generateStringCompareDetail(MatchHistory match, Set<MatchDetail> details, String str1, String str2, String description, double percent, double minimumScore, double multiplier) {
 	  double score = StringCompare.compareStrings(str1, str2);
 	  if (score > minimumScore) {
 	  	MatchDetail detail = new MatchDetail();
@@ -523,7 +550,7 @@ public class Consumer implements Runnable{
 	  	detail.setContent2(str2);
 	  	detail.setDescription(description);
 	  	detail.setMatch(match);
-	  	detail.setPercent(score);
+	  	detail.setPercent(score*multiplier);
 	  	details.add(detail);
 	  }
   }
@@ -673,7 +700,11 @@ public class Consumer implements Runnable{
 						// TODO: StringCompare Names
 						// TODO: Nickname Matches
 					} else {
-						if(p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex()) && p1.getLastNameSoundex().equals(p2.getLastNameSoundex())){
+						
+						System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
+						System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
+
+						if(p1.getFirstNameSoundex() != null && p2.getFirstNameSoundex() != null && p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex()) && p1.getLastNameSoundex().equals(p2.getLastNameSoundex())){
 							MatchDetail detail = new MatchDetail();
 							detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
 							detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
@@ -682,7 +713,7 @@ public class Consumer implements Runnable{
 							detail.setPercent(P_SOUNDEX);
 							details.add(detail);
 						}
-						if(p1.getFirstNameDmp().equals(p2.getFirstNameDmp()) && p1.getLastNameDmp().equals(p2.getLastNameDmp())){
+						if(p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null && p1.getFirstNameDmp().equals(p2.getFirstNameDmp()) && p1.getLastNameDmp().equals(p2.getLastNameDmp())){
 							MatchDetail detail = new MatchDetail();
 							detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
 							detail.setContent2(p2.getFirstName() + " " + p2.getLastName());

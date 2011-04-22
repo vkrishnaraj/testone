@@ -1,6 +1,7 @@
 package aero.nettracer.fs.utilities.tracing;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -14,26 +15,22 @@ import org.hibernate.Session;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
-import aero.nettracer.fs.model.FsClaim;
-import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.utilities.GeoCode;
-import aero.nettracer.fs.utilities.GeoLocation;
-import aero.nettracer.fs.utilities.InternationalException;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class Producer {
 
-	private static boolean debug = true;
-	private static final int MAX_WAIT = 200;
+	private static boolean debug = false;
+	private static final int MAX_WAIT = 2000;
 	//TODO review mile radius
 	public static final double MILE_SEARCH_RADIUS = 2;
-	private static final long WAIT_TIME = 50;
+	private static final long WAIT_TIME = 100;
 	
 	public static Set<MatchHistory> matchFile(long fileId){
 		File file = TraceWrapper.loadFileFromCache(fileId);
@@ -44,19 +41,6 @@ public class Producer {
 		}
 	}
 
-	//for now we are not to remove any match histories
-	@Deprecated
-	private static void removeMatchHistory(long fileId){
-		String personSql = "delete from MatchHistory m where 1=1 " +
-		"and (m.file1_id = :id)";
-
-		Query q = null;
-		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createSQLQuery(personSql.toString());
-		q.setParameter("id", fileId);
-		q.executeUpdate();
-		sess.close();
-	}
 	
 	
 	private static void queueFile(Long id, HashSet<Long> queue, File file, Vector v){
@@ -84,8 +68,26 @@ public class Producer {
 
 		Vector v = new Vector();
 		
-//		so we are to keep old match histories
-//		removeMatchHistory(file.getId());
+		// so we are to keep old match histories
+
+		if (file.getId() != 0) {
+			String ms = "select file2_id, overallScore from matchhistory where file1_id = " + file.getId();
+			SQLQuery pq = null;
+			Session sess = HibernateWrapper.getSession().openSession();
+			pq = sess.createSQLQuery(ms.toString());
+			pq.addScalar("file2_id", Hibernate.LONG);
+			pq.addScalar("overallScore", Hibernate.DOUBLE);
+			List<Object[]> listMatchingFiles = pq.list();
+			
+			HashMap<Long, Double> matchingMap = new HashMap<Long, Double>();
+			for (Object[] strs : listMatchingFiles) {
+				Long f1 = (Long) strs[0];
+				Double f2 = (Double) strs[1];
+				matchingMap.put(f1, f2);
+			}
+			file.setMatchingFiles(matchingMap);
+		}
+
 		
 		String sql = "select f1.id as f1_id, " // IS there a claim associated ot this person 
 			+ "f2.id as f2_id, " // # Does the icident have claim
@@ -328,7 +330,7 @@ public class Producer {
 		try {
 			int i = 0;
 			for(i= 0; v.size() < fileQueue.size() && i < MAX_WAIT; i++){
-				System.out.println("waiting: " + i + ":" + v.size() + "/" + (fileQueue.size()) );
+//				System.out.println("waiting: " + i + ":" + v.size() + "/" + (fileQueue.size()) );
 				Thread.sleep(WAIT_TIME);
 			}
 			if (i >= MAX_WAIT) {
