@@ -19,6 +19,7 @@ import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.detection.MatchDetail;
+import aero.nettracer.fs.model.detection.MatchDetail.MatchType;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
@@ -53,8 +54,6 @@ public class Consumer implements Runnable{
 	private static final double ADDRESS_SIMILAR = 40;
 
 	private static final double PHONE_MATCH = 30;
-
-	private static final double P_DOB = 6;
 	
 	
 	
@@ -205,6 +204,7 @@ public class Consumer implements Runnable{
 			detail.setDescription("Phone Number Match");
 			detail.setMatch(match);
 			detail.setPercent(PHONE_MATCH);
+			detail.setMatchtype(MatchType.phone);
 			details.add(detail);			
 		}
 
@@ -490,7 +490,7 @@ public class Consumer implements Runnable{
 							if (distance > ADDRESS_CLOSE_PROXIMITY_LIMIT) {
 
 								String distanceStr = Double.toString(distance);
-								distanceStr = distanceStr.substring(0, Math.min(5, distanceStr.length()));
+								distanceStr = distanceStr.substring(0, Math.min(5, distanceStr.length()));	
 
 								MatchDetail detail = new MatchDetail();
 								detail.setContent1(a1.getAddress1() + ", " + a1.getState() + " " + a1.getZip());
@@ -498,6 +498,7 @@ public class Consumer implements Runnable{
 								detail.setDescription("Proximity Match: " + distanceStr + " miles.");
 								detail.setMatch(match);
 								detail.setPercent(ADDRESS_FAR_PROXIMITY);
+								detail.setMatchtype(MatchType.address);
 								details.add(detail);
 							} else {
 								String distanceStr = Double.toString(distance);
@@ -509,17 +510,18 @@ public class Consumer implements Runnable{
 								detail.setDescription("Close Proximity Match: " + distanceStr + " miles.");
 								detail.setMatch(match);
 								detail.setPercent(ADDRESS_CLOSE_PROXIMITY);
+								detail.setMatchtype(MatchType.address);
 								details.add(detail);
 
 							}
 						}
-
+						
 						String str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2());
 						String str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2());
 						
 						String description = "Similar Address";
 						double percent = ADDRESS_SIMILAR;
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 60, .10);
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 60, .10, MatchType.address);
 					}
 				} else {
 					// If country available
@@ -536,7 +538,7 @@ public class Consumer implements Runnable{
 						
 						String description = "Similar Address";
 						double percent = ADDRESS_SIMILAR;
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15);
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15, MatchType.address);
 						
 					} else {
 						// Country not available
@@ -552,7 +554,7 @@ public class Consumer implements Runnable{
 
 						String description = "Similar Address";
 						double percent = ADDRESS_SIMILAR;
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15);
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15, MatchType.address);
 
 					}
 				}
@@ -561,7 +563,7 @@ public class Consumer implements Runnable{
 	}
 
 
-	private static void generateStringCompareDetail(MatchHistory match, Set<MatchDetail> details, String str1, String str2, String description, double percent, double minimumScore, double multiplier) {
+	private static void generateStringCompareDetail(MatchHistory match, Set<MatchDetail> details, String str1, String str2, String description, double percent, double minimumScore, double multiplier, MatchType type) {
 	  double score = StringCompare.compareStrings(str1, str2);
 	  if (score > minimumScore) {
 	  	MatchDetail detail = new MatchDetail();
@@ -570,6 +572,7 @@ public class Consumer implements Runnable{
 	  	detail.setDescription(description);
 	  	detail.setMatch(match);
 	  	detail.setPercent(score*multiplier);
+	  	detail.setMatchtype(type);
 	  	details.add(detail);
 	  }
   }
@@ -622,6 +625,7 @@ public class Consumer implements Runnable{
 					detail.setContent2(r2.getCcType() + "**************** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card Full Match");
 					detail.setPercent(P_CC_16 + P_CC_EXP + P_CC_TYPE);
+					detail.setMatchtype(MatchType.cc);
 				} else if(type && expEmpty) {
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
@@ -630,6 +634,7 @@ public class Consumer implements Runnable{
 					detail.setContent2(r2.getCcType() + "****************");
 					detail.setDescription("Credit Card Number and Type Match");
 					detail.setPercent(P_CC_16 + P_CC_TYPE);
+					detail.setMatchtype(MatchType.cc);
 				} else if(exp && typeEmpty){
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
@@ -638,6 +643,7 @@ public class Consumer implements Runnable{
 					detail.setContent2("**************** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card Number and Expiration Match");
 					detail.setPercent(P_CC_16 + P_CC_EXP);
+					detail.setMatchtype(MatchType.cc);
 				} else if(expEmpty && typeEmpty){
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
@@ -646,6 +652,7 @@ public class Consumer implements Runnable{
 					detail.setContent2("**************** exp:");
 					detail.setDescription("Credit Card Number Match");
 					detail.setPercent(P_CC_16);
+					detail.setMatchtype(MatchType.cc);
 				}
 			} else if (num4){
 				if(type && exp){
@@ -656,6 +663,7 @@ public class Consumer implements Runnable{
 					detail.setContent2(r2.getCcType() + r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card 4 digit, type and expiration Match");
 					detail.setPercent(P_CC_4_TYPE_EXP);
+					detail.setMatchtype(MatchType.cc);
 				} else if(type && expEmpty) {
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
@@ -664,6 +672,7 @@ public class Consumer implements Runnable{
 					detail.setContent2(r2.getCcType() + r2.getCcNumLastFour());
 					detail.setDescription("Credit Card 4 digit and Type Match");
 					detail.setPercent(P_CC_4 + P_CC_TYPE);
+					detail.setMatchtype(MatchType.cc);
 				} else if(exp && typeEmpty){
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
@@ -672,6 +681,7 @@ public class Consumer implements Runnable{
 					detail.setContent2(r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card 4 digit and Expiration Match");
 					detail.setPercent(P_CC_4 + P_CC_EXP);
+					detail.setMatchtype(MatchType.cc);
 				} else if(expEmpty && typeEmpty){
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
@@ -680,6 +690,7 @@ public class Consumer implements Runnable{
 					detail.setContent2(r2.getCcNumLastFour());
 					detail.setDescription("Credit Card 4 digit Match");
 					detail.setPercent(P_CC_4);
+					detail.setMatchtype(MatchType.cc);
 				}
 			}
 			
@@ -715,6 +726,7 @@ public class Consumer implements Runnable{
 						detail.setDescription("Direct Name Match");
 						detail.setMatch(match);
 						detail.setPercent(P_NAME);
+						detail.setMatchtype(MatchType.name);
 						details.add(detail);
 						// TODO: StringCompare Names
 						// TODO: Nickname Matches
@@ -722,38 +734,26 @@ public class Consumer implements Runnable{
 						
 						System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
 						System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
-						boolean matchedName = false;
+
 						if(p1.getFirstNameSoundex() != null && p2.getFirstNameSoundex() != null && p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex()) && p1.getLastNameSoundex().equals(p2.getLastNameSoundex())){
-							matchedName = true;
 							MatchDetail detail = new MatchDetail();
 							detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
 							detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
 							detail.setDescription("Soundex Match");
 							detail.setMatch(match);
 							detail.setPercent(P_SOUNDEX);
+							detail.setMatchtype(MatchType.name);
 							details.add(detail);
 						}
 						if(p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null && p1.getFirstNameDmp().equals(p2.getFirstNameDmp()) && p1.getLastNameDmp().equals(p2.getLastNameDmp())){
-							matchedName = true;
 							MatchDetail detail = new MatchDetail();
 							detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
 							detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
 							detail.setDescription("Double Metaphone Match");
 							detail.setMatch(match);
 							detail.setPercent(P_METAPHONE);
+							detail.setMatchtype(MatchType.name);
 							details.add(detail);
-						}
-						if (!matchedName) {
-							  double score = StringCompare.compareStrings(p1.getFirstName() + " " + p1.getLastName(), p2.getFirstName() + " " + p2.getLastName());
-							  if (score >= 90) {
-							  	MatchDetail detail = new MatchDetail();
-							  	detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-							  	detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-							  	detail.setDescription("Similar Name");
-							  	detail.setMatch(match);
-							  	detail.setPercent(score*.1);
-							  	details.add(detail);
-							  }
 						}
 					}
 				}//end name
@@ -774,6 +774,7 @@ public class Consumer implements Runnable{
 					detail.setDescription("Driver's License Match");
 					detail.setMatch(match);
 					detail.setPercent(P_DRIVERS);
+					detail.setMatchtype(MatchType.drivers);
 					details.add(detail);
 				} else if (driverNumber && driverIssueNull){
 					MatchDetail detail = new MatchDetail();
@@ -782,6 +783,7 @@ public class Consumer implements Runnable{
 					detail.setDescription("Driver's License Match");
 					detail.setMatch(match);
 					detail.setPercent(P_DRIVERS);
+					detail.setMatchtype(MatchType.drivers);
 					details.add(detail);
 				}
 				
@@ -795,6 +797,7 @@ public class Consumer implements Runnable{
 //						detail.setDescription("Driver's License Match");
 //						detail.setMatch(match);
 //						detail.setPercent(P_DRIVERS);
+//				detail.setMatchtype(MatchType.drivers);
 //						details.add(detail);
 //					}
 //				}//end drivers
@@ -806,6 +809,7 @@ public class Consumer implements Runnable{
 						detail.setDescription("Email Address Match");
 						detail.setMatch(match);
 						detail.setPercent(P_EMAIL);
+						detail.setMatchtype(MatchType.email);
 						details.add(detail);
 					}
 				}//end email
@@ -817,6 +821,7 @@ public class Consumer implements Runnable{
 						detail.setDescription("Frequent Flyer Number Match");
 						detail.setMatch(match);
 						detail.setPercent(P_FFN);
+						detail.setMatchtype(MatchType.ffn);
 						details.add(detail);
 					}
 				}//end FFN
@@ -829,6 +834,7 @@ public class Consumer implements Runnable{
 						detail.setDescription("Passport Match");
 						detail.setMatch(match);
 						detail.setPercent(P_PASSPORT);
+						detail.setMatchtype(MatchType.passport);
 						details.add(detail);
 					}
 				}//end passport
@@ -841,19 +847,7 @@ public class Consumer implements Runnable{
 						detail.setDescription("SSN Match");
 						detail.setMatch(match);
 						detail.setPercent(P_SSN);
-						details.add(detail);
-					}
-				}
-				
-				
-				if(p1.getDateOfBirth() != null){
-					if(p1.getDateOfBirth().equals(p2.getDateOfBirth())){
-						MatchDetail detail = new MatchDetail();
-						detail.setContent1("*********");
-						detail.setContent2("*********");
-						detail.setDescription("Date of Birth Match");
-						detail.setMatch(match);
-						detail.setPercent(P_DOB);
+						detail.setMatchtype(MatchType.ssn);
 						details.add(detail);
 					}
 				}
