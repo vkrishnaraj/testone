@@ -22,7 +22,25 @@ public class MatchDetail implements Serializable {
 	private static final long serialVersionUID = 3866214757924255851L;
 
 	public static enum MatchType {
-		name, address, phone, email, ssn, ffn, passport, drivers, cc, pnrloc, pnrdata, traveldate, ticketamount, dob, itin};
+		name("name"), address("address"), 
+		phone("phone"), email("email"), 
+		ssn("ssn"), ffn("ffn"), 
+		passport("passport"), drivers("drivers"), 
+		cc("cc"), pnrloc("pnrloc"), 
+		pnrdata("pnrdata"), traveldate("traveldate"), 
+		ticketamount("ticketamount"), dob("dob"), 
+		itin("itin");
+	
+		private String label;
+		
+		private MatchType(String label) {
+			this.label = label;
+		}
+		
+		public String getLabel(){
+			return this.label;
+		}
+	}
 
 	
 	@Id
@@ -34,7 +52,7 @@ public class MatchDetail implements Serializable {
 	private String content1;
 	private String content2;
 	private String description;
-	private MatchType type;
+	private MatchType matchtype;
 	private double percent;
 
 	public long getId() {
@@ -85,15 +103,13 @@ public class MatchDetail implements Serializable {
 		this.percent = percent;
 	}
 
-	public void setType(MatchType type) {
-		this.type = type;
-	}
-
 	
-	//TODO the annotation is not generating the db field as a varchar
+	public void setMatchtype(MatchType matchtype) {
+		this.matchtype = matchtype;
+	}
 	@Enumerated(EnumType.STRING)
-	@Column(length = 128)
-	public MatchType getType() {
-		return type;
+	@Column(nullable=false, length = 20, name="matchtype" )
+	public MatchType getMatchtype() {
+		return matchtype;
 	}
 }

@@ -32,6 +32,17 @@ public class PrivacyPermissions implements Serializable{
 		this.key = key;
 	}
 
+	boolean allEnabled = false;
+	
+	@Transient
+	public boolean isAllEnabled() {
+		return allEnabled;
+	}
+
+	public void setAllEnabled(boolean allEnabled) {
+		this.allEnabled = allEnabled;
+	}
+
 	boolean autosend;
 	
 	boolean name;

@@ -17,9 +17,14 @@ import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
+import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.model.detection.MatchDetail.MatchType;
 import aero.nettracer.fs.utilities.GeoCode;
+import aero.nettracer.selfservice.fraud.PrivacyPermissionsBean;
+import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
+import aero.nettracer.serviceprovider.common.db.PrivacyPermissions.AccessLevelType;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -269,7 +274,7 @@ public class Producer {
 					double x2 = a.getLongitude() + longRadius;
 
 					// If there is a latitude or longitude.
-					sql += "or (lattitude >= " + y1 + " and lattitude <= " + y2 + " and longitude <= " + x2+ " and longitude >= " + x1 + ") ";
+					sql += "or (lattitude >= " + y1 + " and lattitude <= " + y2 + " and longitude >= " + x2+ " and longitude <= " + x1 + ") ";
 
 					// Compare against non-geocoded items.
 					// Country / City
@@ -359,7 +364,8 @@ public class Producer {
 		
 		
 		
-		return getMatchHistoryResult(file.getId());
+//		return getMatchHistoryResult(file.getId());
+		return getCensoredFileMatches(file.getId());
 	}
 	
 
@@ -378,4 +384,203 @@ public class Producer {
 		}
 		return new LinkedHashSet<MatchHistory>(result);
 	}
+	
+	public static Set<MatchHistory> getCensoredFileMatches(long fileId) {
+		File f = TraceWrapper.loadFileFromCache(fileId);
+		String company = null;
+		if(f.getClaim() != null && f.getClaim().getAirline() != null){
+			company = f.getClaim().getAirline();
+		} else if (f.getIncident() != null && f.getIncident().getAirline() != null){
+			company = f.getIncident().getAirline();
+		}
+		Set<MatchHistory> histories = Producer.getMatchHistoryResult(fileId);
+		
+		for(MatchHistory history:histories){
+			censor(history, AccessLevelType.def, company);
+		}
+		
+		return histories;
+	}
+	
+	public static void censor(MatchHistory match, AccessLevelType level, String userCompany){
+		String s = "Not for your eyes";
+		PrivacyPermissions p1 = new PrivacyPermissions();
+		PrivacyPermissions p2 = new PrivacyPermissions();
+		String company1 = null;
+		String company2 = null;
+		
+		if(match.getFile1() != null){
+			if(match.getFile1().getClaim() != null && match.getFile1().getClaim().getAirline() != null){
+				company1 = match.getFile1().getClaim().getAirline();
+			} else if (match.getFile1().getIncident() != null && match.getFile1().getIncident().getAirline() != null){
+				company1 = match.getFile1().getIncident().getAirline();
+			}
+		}
+		if(match.getFile2() != null){
+			if(match.getFile2().getClaim() != null && match.getFile2().getClaim().getAirline() != null){
+				company2 = match.getFile2().getClaim().getAirline();
+			} else if (match.getFile2().getIncident() != null && match.getFile2().getIncident().getAirline() != null){
+				company2 = match.getFile2().getIncident().getAirline();
+			}
+		}
+		
+		for(PrivacyPermissions p: PrivacyPermissionsBean.getPrivacyPermissions()){
+			if(p.getKey().getCompanycode().equals(company1) && p.getKey().getLevel().equals(level)){
+				p1 = p;
+			}
+			if(p.getKey().getCompanycode().equals(company2) && p.getKey().getLevel().equals(level)){
+				p2 = p;
+			}
+		}
+		
+		if(company1 == null || company1.trim().length() == 0 || !company1.equals(userCompany)){
+			censorFile(match.getFile1(), p1);
+		} else {
+			p1.setAllEnabled(true);
+		}
+		if(company2 == null || company2.trim().length() == 0 || !company2.equals(userCompany)){
+			censorFile(match.getFile2(), p2);
+		} else {
+			p2.setAllEnabled(true);
+		}
+		
+		for(MatchDetail d:match.getDetails()){
+			if(d.getMatchtype() == null){
+				System.out.println("ERROR:" + d.getDescription() + ":" + d.getContent1() + ":" + d.getContent2());
+			}
+			if(d.getMatchtype().equals(MatchType.name)){
+				if(!p1.isAllEnabled() && !p1.isName())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isName())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.address)){
+				if(!p1.isAllEnabled() && !p1.isAddress())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isAddress())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.phone)){
+				if(!p1.isAllEnabled() && !p1.isPhonenumber())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isPhonenumber())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.email)){
+				if(!p1.isAllEnabled() && !p1.isEmail())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isEmail())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.cc)){
+				if(!p1.isAllEnabled() && !p1.isCc())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isCc())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.drivers)){
+				if(!p1.isAllEnabled() && !p1.isDrivers())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isDrivers())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.ffn)){
+				if(!p1.isAllEnabled() && !p1.isFfn())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isFfn())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.ssn)){
+				if(!p1.isAllEnabled() && !p1.isSsn())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isSsn())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.passport)){
+				if(!p1.isAllEnabled() && !p1.isPassport())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isPassport())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.pnrloc)){
+				if(!p1.isAllEnabled() && !p1.isPnrloc())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isPnrloc())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.pnrdata)){
+				if(!p1.isAllEnabled() && !p1.isPnrdata())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isPnrdata())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.traveldate)){
+				if(!p1.isAllEnabled() && !p1.isTraveldate())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isTraveldate())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.ticketamount)){
+				if(!p1.isAllEnabled() && !p1.isTicketamount())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isTicketamount())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.dob)){
+				if(!p1.isAllEnabled() && !p1.isDob())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isDob())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.itin)){
+				if(!p1.isAllEnabled() && !p1.isItin())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isItin())d.setContent2(s);
+			}
+			
+			
+		}
+	}
+	
+	public void censorFile(File f, AccessLevelType level){
+		
+	}
+	
+	public static void censorFile(File f, PrivacyPermissions p){
+		String s = "!!!CENSOR!!!";
+		Set<Person> persons = Consumer.getPersons(f);
+		for(Person person:persons){
+			if(!p.isName()){
+				person.setFirstName(s);
+				person.setMiddleName(s);
+				person.setLastName(s);
+			}
+			if(!p.isEmail()){
+				person.setEmailAddress(s);
+			}
+			if(!p.isDrivers()){
+				person.setDriversLicenseIssuer(s);
+				person.setDriversLicenseNumber(s);
+			}
+			if(!p.isFfn()){
+				person.setFfAirline(s);
+				person.setFfNumber(s);
+			}
+			if(!p.isPassport()){
+				person.setPassportIssuer(s);
+				person.setPassportNumber(s);
+			}
+			if(!p.isSsn()){
+				person.setSocialSecurity(s);
+			}
+			if(!p.isDob()){
+				person.setDateOfBirth(null);
+			}
+		}
+		
+		Set<FsAddress> addresses = Consumer.getAddresses(f);
+		for(FsAddress address:addresses){
+			if(!p.isAddress()){
+				address.setAddress1(s);
+				address.setAddress2(s);
+				address.setCity(s);
+				address.setCountry(s);
+				address.setLattitude(0);
+				address.setLongitude(0);
+				address.setState(s);
+				address.setZip(s);
+				address.setProvince(s);
+			}
+		}
+		
+		Set<Phone> phones = Consumer.getPhones(f);
+		for(Phone phone:phones){
+			if(!p.isPhonenumber()){
+				phone.setPhoneNumber(s);
+			}
+		}
+		
+		if(f.getClaim() != null){
+			if(!p.isAmountclaimed()){
+				f.getClaim().setAmountClaimed(0);
+			}
+			if(!p.isAmountpaid()){
+				f.getClaim().setAmountPaid(0);
+			}
+			if(!p.isDenied()){
+//				f.getClaim().setDenied(null);
+			}
+		}
+		
+		
+		//incident
+		
+		//pnrdata
+		
+		//itin
+		
+		//bag
+		
+		Reservation reservation = f.getIncident().getReservation();
+		
+		
+	}
+	
 }
