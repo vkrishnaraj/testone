@@ -53,6 +53,8 @@ public class Consumer implements Runnable{
 	private static final double ADDRESS_SIMILAR = 40;
 
 	private static final double PHONE_MATCH = 30;
+
+	private static final double P_DOB = 6;
 	
 	
 	
@@ -720,8 +722,9 @@ public class Consumer implements Runnable{
 						
 						System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
 						System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
-
+						boolean matchedName = false;
 						if(p1.getFirstNameSoundex() != null && p2.getFirstNameSoundex() != null && p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex()) && p1.getLastNameSoundex().equals(p2.getLastNameSoundex())){
+							matchedName = true;
 							MatchDetail detail = new MatchDetail();
 							detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
 							detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
@@ -731,6 +734,7 @@ public class Consumer implements Runnable{
 							details.add(detail);
 						}
 						if(p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null && p1.getFirstNameDmp().equals(p2.getFirstNameDmp()) && p1.getLastNameDmp().equals(p2.getLastNameDmp())){
+							matchedName = true;
 							MatchDetail detail = new MatchDetail();
 							detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
 							detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
@@ -738,6 +742,18 @@ public class Consumer implements Runnable{
 							detail.setMatch(match);
 							detail.setPercent(P_METAPHONE);
 							details.add(detail);
+						}
+						if (!matchedName) {
+							  double score = StringCompare.compareStrings(p1.getFirstName() + " " + p1.getLastName(), p2.getFirstName() + " " + p2.getLastName());
+							  if (score >= 90) {
+							  	MatchDetail detail = new MatchDetail();
+							  	detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
+							  	detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+							  	detail.setDescription("Similar Name");
+							  	detail.setMatch(match);
+							  	detail.setPercent(score*.1);
+							  	details.add(detail);
+							  }
 						}
 					}
 				}//end name
@@ -825,6 +841,19 @@ public class Consumer implements Runnable{
 						detail.setDescription("SSN Match");
 						detail.setMatch(match);
 						detail.setPercent(P_SSN);
+						details.add(detail);
+					}
+				}
+				
+				
+				if(p1.getDateOfBirth() != null){
+					if(p1.getDateOfBirth().equals(p2.getDateOfBirth())){
+						MatchDetail detail = new MatchDetail();
+						detail.setContent1("*********");
+						detail.setContent2("*********");
+						detail.setDescription("Date of Birth Match");
+						detail.setMatch(match);
+						detail.setPercent(P_DOB);
 						details.add(detail);
 					}
 				}
