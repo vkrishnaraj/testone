@@ -29,7 +29,7 @@ public class Consumer implements Runnable{
 	public static boolean debug = false;
 	
 	public static final int MATCH = 3;
-	
+	public static final Integer integerZero = new Integer(0);
 	public static final double MIN_MATCH_SCORE = 10;
 	public static final double P_SOUNDEX = 5;
 	public static final double P_METAPHONE = 5;
@@ -713,47 +713,79 @@ public class Consumer implements Runnable{
 		} 
 		
 		Set <MatchDetail> details = match.getDetails();
-
+		HashMap<String, Integer> nameHashMap = new HashMap<String,Integer>();
+		HashMap<String, Integer> emailHashMap = new HashMap<String,Integer>();
+		HashMap<String, Integer> ffHashMap = new HashMap<String,Integer>();
+		
+		
+		
 		for(Person p1:plist1){
 			for(Person p2:plist2){
 				// TODO: Trim names prior to compare
 				if(p1.getFirstName() != null && p1.getFirstName().trim().length() > 0 
 						&& p1.getLastName() != null && p1.getLastName().trim().length() > 0){
-					if(p1.getFirstName().equalsIgnoreCase(p2.getFirstName()) && p1.getLastName().equalsIgnoreCase(p2.getLastName())){
-						MatchDetail detail = new MatchDetail();
-						detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-						detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-						detail.setDescription("Direct Name Match");
-						detail.setMatch(match);
-						detail.setPercent(P_NAME);
-						detail.setMatchtype(MatchType.name);
-						details.add(detail);
-						// TODO: StringCompare Names
-						// TODO: Nickname Matches
-					} else {
-						
-						System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
-						System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
+					String content1 = p1.getFirstName().trim() + " " + p1.getLastName().trim();
+					String content2 = p2.getFirstName().trim() + " " + p2.getLastName().trim();
+					String comparator = content1 + "/" + content2;
+					comparator = comparator.toUpperCase();
+					if (!nameHashMap.containsKey(comparator)) {
+						if (p1.getFirstName().equalsIgnoreCase(p2.getFirstName())
+								&& p1.getLastName().equalsIgnoreCase(p2.getLastName())) {
 
-						if(p1.getFirstNameSoundex() != null && p2.getFirstNameSoundex() != null && p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex()) && p1.getLastNameSoundex().equals(p2.getLastNameSoundex())){
 							MatchDetail detail = new MatchDetail();
-							detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-							detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-							detail.setDescription("Soundex Match");
+							detail.setContent1(content1);
+							detail.setContent2(content2);
+							detail.setDescription("Direct Name Match");
 							detail.setMatch(match);
-							detail.setPercent(P_SOUNDEX);
+							detail.setPercent(P_NAME);
 							detail.setMatchtype(MatchType.name);
 							details.add(detail);
-						}
-						if(p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null && p1.getFirstNameDmp().equals(p2.getFirstNameDmp()) && p1.getLastNameDmp().equals(p2.getLastNameDmp())){
-							MatchDetail detail = new MatchDetail();
-							detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-							detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-							detail.setDescription("Double Metaphone Match");
-							detail.setMatch(match);
-							detail.setPercent(P_METAPHONE);
-							detail.setMatchtype(MatchType.name);
-							details.add(detail);
+
+							nameHashMap.put(comparator, integerZero);
+
+							// TODO: Nickname Matches
+						} else {
+
+							System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
+							System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
+							boolean matchedName = false;
+							if (p1.getFirstNameSoundex() != null && p2.getFirstNameSoundex() != null
+									&& p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex())
+									&& p1.getLastNameSoundex().equals(p2.getLastNameSoundex())) {
+								matchedName = true;
+								MatchDetail detail = new MatchDetail();
+								detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
+								detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+								detail.setDescription("Soundex Match");
+								detail.setMatch(match);
+								detail.setPercent(P_SOUNDEX);
+								details.add(detail);
+							}
+							if (p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null
+									&& p1.getFirstNameDmp().equals(p2.getFirstNameDmp())
+									&& p1.getLastNameDmp().equals(p2.getLastNameDmp())) {
+								matchedName = true;
+								MatchDetail detail = new MatchDetail();
+								detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
+								detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+								detail.setDescription("Double Metaphone Match");
+								detail.setMatch(match);
+								detail.setPercent(P_METAPHONE);
+								details.add(detail);
+							}
+							if (!matchedName) {
+								double score = StringCompare.compareStrings(p1.getFirstName() + " " + p1.getLastName(),
+										p2.getFirstName() + " " + p2.getLastName());
+								if (score >= 90) {
+									MatchDetail detail = new MatchDetail();
+									detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
+									detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+									detail.setDescription("Similar Name");
+									detail.setMatch(match);
+									detail.setPercent(score * .1);
+									details.add(detail);
+								}
+							}
 						}
 					}
 				}//end name
@@ -801,30 +833,54 @@ public class Consumer implements Runnable{
 //						details.add(detail);
 //					}
 //				}//end drivers
-				if(p1.getEmailAddress() != null && p1.getEmailAddress().trim().length() > 0){
-					if(p1.getEmailAddress().equals(p2.getEmailAddress())){
-						MatchDetail detail = new MatchDetail();
-						detail.setContent1(p1.getEmailAddress());
-						detail.setContent2(p2.getEmailAddress());
-						detail.setDescription("Email Address Match");
-						detail.setMatch(match);
-						detail.setPercent(P_EMAIL);
-						detail.setMatchtype(MatchType.email);
-						details.add(detail);
+				
+
+				
+				if (p1.getEmailAddress() != null && p1.getEmailAddress().trim().length() > 0) {
+					if (p2.getEmailAddress() != null && p2.getEmailAddress().trim().length() > 0) {
+					
+						String content1 = p1.getEmailAddress().trim();
+						String content2 = p2.getEmailAddress().trim();
+						String comparator = content1 + "/" + content2;
+						comparator = comparator.toUpperCase();
+						if (!emailHashMap.containsKey(comparator)) {
+	
+							if (p1.getEmailAddress().equals(p2.getEmailAddress())) {
+								MatchDetail detail = new MatchDetail();
+								detail.setContent1(content1);
+								detail.setContent2(content2);
+								detail.setDescription("Email Address Match");
+								detail.setMatch(match);
+								detail.setPercent(P_EMAIL);
+								detail.setMatchtype(MatchType.email);
+								details.add(detail);
+								emailHashMap.put(comparator, integerZero);
+							}
+						}
 					}
 				}//end email
-				if(p1.getFfNumber() != null && p1.getFfNumber().trim().length() > 0){
-					if(p1.getFfNumber().equalsIgnoreCase(p2.getFfNumber())){
-						MatchDetail detail = new MatchDetail();
-						detail.setContent1(p1.getFfNumber());
-						detail.setContent2(p2.getFfNumber());
-						detail.setDescription("Frequent Flyer Number Match");
-						detail.setMatch(match);
-						detail.setPercent(P_FFN);
-						detail.setMatchtype(MatchType.ffn);
-						details.add(detail);
+				if (p1.getFfNumber() != null && p1.getFfNumber().trim().length() > 0) {
+					if (p2.getFfNumber() != null) {
+
+						String content1 = p1.getFfNumber().trim();
+						String content2 = p2.getFfNumber().trim();
+						String comparator = content1 + "/" + content2;
+						comparator = comparator.toUpperCase();
+						if (!emailHashMap.containsKey(comparator)) {
+
+							if (p1.getFfNumber().trim().equalsIgnoreCase(p2.getFfNumber().trim())) {
+								MatchDetail detail = new MatchDetail();
+								detail.setContent1(content1);
+								detail.setContent2(content2);
+								detail.setDescription("Frequent Flyer Number Match");
+								detail.setMatch(match);
+								detail.setPercent(P_FFN);
+								detail.setMatchtype(MatchType.ffn);
+								details.add(detail);
+							}
+						}
 					}
-				}//end FFN
+				}// end FFN
 				if(p1.getPassportNumber() != null && p1.getPassportNumber().trim().length() > 0){
 					if(p1.getPassportNumber().equalsIgnoreCase(p2.getPassportNumber())){
 						// TODO: Update contents appropriately
