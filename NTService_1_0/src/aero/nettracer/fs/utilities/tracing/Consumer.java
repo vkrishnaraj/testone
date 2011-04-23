@@ -761,6 +761,7 @@ public class Consumer implements Runnable{
 								detail.setDescription("Soundex Match");
 								detail.setMatch(match);
 								detail.setPercent(P_SOUNDEX);
+								detail.setMatchtype(MatchType.name);
 								details.add(detail);
 							}
 							if (p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null
@@ -773,6 +774,7 @@ public class Consumer implements Runnable{
 								detail.setDescription("Double Metaphone Match");
 								detail.setMatch(match);
 								detail.setPercent(P_METAPHONE);
+								detail.setMatchtype(MatchType.name);
 								details.add(detail);
 							}
 							if (!matchedName) {
@@ -785,6 +787,7 @@ public class Consumer implements Runnable{
 									detail.setDescription("Similar Name");
 									detail.setMatch(match);
 									detail.setPercent(score * .1);
+									detail.setMatchtype(MatchType.name);
 									details.add(detail);
 								}
 							}

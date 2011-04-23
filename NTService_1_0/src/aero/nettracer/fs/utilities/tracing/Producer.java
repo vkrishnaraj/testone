@@ -394,15 +394,15 @@ public class Producer {
 			company = f.getIncident().getAirline();
 		}
 		Set<MatchHistory> histories = Producer.getMatchHistoryResult(fileId);
-		
+		List<PrivacyPermissions> p = PrivacyPermissionsBean.getPrivacyPermissions();
 		for(MatchHistory history:histories){
-			censor(history, AccessLevelType.def, company);
+			censor(history, AccessLevelType.def, company, p);
 		}
 		
 		return histories;
 	}
 	
-	public static void censor(MatchHistory match, AccessLevelType level, String userCompany){
+	public static void censor(MatchHistory match, AccessLevelType level, String userCompany, List<PrivacyPermissions> plist){
 		String s = "Not for your eyes";
 		PrivacyPermissions p1 = new PrivacyPermissions();
 		PrivacyPermissions p2 = new PrivacyPermissions();
@@ -424,7 +424,7 @@ public class Producer {
 			}
 		}
 		
-		for(PrivacyPermissions p: PrivacyPermissionsBean.getPrivacyPermissions()){
+		for(PrivacyPermissions p: plist){
 			if(p.getKey().getCompanycode().equals(company1) && p.getKey().getLevel().equals(level)){
 				p1 = p;
 			}
@@ -494,7 +494,9 @@ public class Producer {
 				if(!p1.isAllEnabled() && !p1.isItin())d.setContent1(s);
 				if(!p2.isAllEnabled() && !p2.isItin())d.setContent2(s);
 			}
-			
+			String c1=p1.getKey()!= null ? p1.getKey().getCompanycode():"NA";
+			String c2=p2.getKey()!= null ? p2.getKey().getCompanycode():"NA";
+			System.out.println(c1+c2+":"+d.getContent1()+":"+d.getContent2());
 			
 		}
 	}
