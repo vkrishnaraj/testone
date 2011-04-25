@@ -35,7 +35,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 public class Producer {
 
 	private static final String ACCESS_NOT_GRANTED = "*** Access not Granted ***";
-	private static boolean debug = false;
+	private static boolean debug = true;
 	private static final int MAX_WAIT = 40;
 	public static final double MILE_SEARCH_RADIUS = 2;
 	private static final long WAIT_TIME = 250;
