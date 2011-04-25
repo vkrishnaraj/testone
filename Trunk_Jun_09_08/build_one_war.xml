@@ -392,9 +392,57 @@
 		</copy>
 	</target>
 	
-	<target name="build-all-ear">
+	<target name="delete-wars">
+		<delete>
+			<fileset dir="${build.dir}/dist/web">
+	    		<include name="*.war"/>
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="build-all-ear" depends="delete-wars">
 		<antcall target="build-westjet-local"/>
 		<antcall target="build-jetblue-local"/>
+
+		<property name="app.xml.location" value="metadata" />
+		
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="aa-build-ws-ear" depends="delete-wars">
+		<antcall target="build-westjet-local"/>
+
+		<property name="app.xml.location" value="metadata/westjet" />
+		
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="aa-build-fraud-ear" depends="delete-wars">
+		<antcall target="build-fraud-demo"/>
+
+		<property name="app.xml.location" value="metadata/fraud" />
+		
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="aa-build-jetblue-ear" depends="delete-wars">
+		<antcall target="build-jetblue-fraud"/>
+
+		<property name="app.xml.location" value="metadata/jetblue" />
+		
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="aa-build-fraud-and-jetblue-ear" depends="delete-wars">
+		<antcall target="build-fraud-demo"/>
+		<antcall target="build-jetblue-fraud"/>
+
+		<property name="app.xml.location" value="metadata/fraud_jetblue" />
+		
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="donotrun-build-ear">
 		
 		<copy todir="${build.dir}/dist/web/lib" >
 			<fileset dir="${lib.jar.dir}"
@@ -404,7 +452,7 @@
 			/>
 		</copy> 
 		
-		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/metadata/application.xml">
+		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/${app.xml.location}/application.xml">
 			<fileset dir="${build.dir}/dist/web" includes="tplib.jar,*.war"/>
 
 		</ear>
@@ -415,28 +463,45 @@
 			</fileset>
 		</copy>
 	</target>
-	
-	<target name="aa-build-ws-ear">
-		<antcall target="build-westjet-local"/>
-		
-		<copy todir="${build.dir}/dist/web/lib" >
-			<fileset dir="${lib.jar.dir}"
-			includes="*.jar"
-			excludes="mysql-connector-java*.jar,
-					  netty.jar"
-			/>
-		</copy> 
-		
-		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/metadata/application.xml">
-			<fileset dir="${build.dir}/dist/web" includes="tplib.jar,*.war"/>
 
-		</ear>
-		
-		<copy todir="${app.deploy.dir.jb5}">
-			<fileset dir="${build.dir}">
-				<include name="tracer.ear" />
-			</fileset>
-		</copy>
+	<target name="build-fraud-demo" depends="delete">
+		<property name="ant_project_name" value="fraud" />
+		<property name="ant_war_name" value="fraud" />
+		<property name="fraud.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-fraud" />
+	</target>
+
+	<target name="donotrun-build-fraud" if="fraud.init.complete">
+		<property name="include.ws" value="1" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/fraud/environment/${environment.name}/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/pages/login" file="companies/fraud/environment/${environment.name}/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/report_email_fr.html" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/LostDelayReceipt_fr.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/DamageReceipt_fr.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/MissingReceipt_fr.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/fraud/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/fraud/pax_comm_email.html" />
+		<copy todir="${basedir}/src" file="companies/fraud/pax_comm_email_fr.html" />
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/fraud/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/fraud/ApplicationResources_fr.properties" />
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+		<delete file="${basedir}/src/report_email_fr.html" />
 	</target>
 
 	<target name="build-dev" depends="delete">
@@ -761,6 +826,14 @@
 		<property name="ant_project_name" value="jetblue" />
 		<property name="ant_war_name" value="b6prod" />
 		<property name="environment.name" value="prod"/>
+		<property name="jetblue.init.complete" value="true" />
+		<antcall target="donotrun-build-jetblue" />
+	</target>
+
+	<target name="build-jetblue-fraud" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="ant_war_name" value="b6fraud" />
+		<property name="environment.name" value="fraud"/>
 		<property name="jetblue.init.complete" value="true" />
 		<antcall target="donotrun-build-jetblue" />
 	</target>

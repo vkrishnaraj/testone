@@ -15,7 +15,7 @@ public class WS_PVItem {
 	private String state_ID;
 	private String zip;
 	private Calendar lastDeliveryUpdate;
-	private Status deliveryStatus;
+	private String deliveryStatus;
 	
 	public Calendar getLastDeliveryUpdate() {
   	return lastDeliveryUpdate;
@@ -23,10 +23,10 @@ public class WS_PVItem {
 	public void setLastDeliveryUpdate(Calendar lastDeliveryUpdate) {
   	this.lastDeliveryUpdate = lastDeliveryUpdate;
   }
-	public Status getDeliveryStatus() {
+	public String getDeliveryStatus() {
   	return deliveryStatus;
   }
-	public void setDeliveryStatus(Status deliveryStatus) {
+	public void setDeliveryStatus(String deliveryStatus) {
   	this.deliveryStatus = deliveryStatus;
   }
 	/**

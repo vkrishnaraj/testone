@@ -661,6 +661,46 @@
 		<delete file="${basedir}/src/report_email_es.html" />
 	</target>
 
+	<target name="build-fraud-demo" depends="delete">
+		<property name="ant_project_name" value="fraud" />
+		<property name="ant_war_name" value="fraud" />
+		<property name="fraud.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-fraud" />
+	</target>
+
+	<target name="donotrun-build-fraud" if="fraud.init.complete">
+		<property name="include.ws" value="1" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/fraud/environment/${environment.name}/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/pages/login" file="companies/fraud/environment/${environment.name}/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/report_email_fr.html" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/LostDelayReceipt_fr.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/DamageReceipt_fr.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/MissingReceipt_fr.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/fraud/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/fraud/pax_comm_email.html" />
+		<copy todir="${basedir}/src" file="companies/fraud/pax_comm_email_fr.html" />
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/fraud/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/fraud/ApplicationResources_fr.properties" />
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+		<delete file="${basedir}/src/report_email_fr.html" />
+	</target>
+
 	<target name="build-westjet-all">
 		<antcall target="build-westjet-test" />
 		<antcall target="build-westjet-qa" />
@@ -1043,9 +1083,85 @@
 	</target>
 
 
+	<target name="ntpassengerview_completeRebuild">
+		<antcall target="ntpassengerview_java2wsdl" />
+		<antcall target="ntpassengerview_wsdl2java" />
+	</target>
+
+	<!-- NTPassengerView java to wsdl -->
+	<target name="ntpassengerview_java2wsdl" depends="build-dev">
+		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
+	
+		<Java2WSDLTask classPath="${build.dir}/${ant_project_name}_web/classes" className="com.bagnet.nettracer.ws.passengerview.NTPassengerViewService" outputLocation="src/com/bagnet/nettracer/ws/passengerview" outputFileName="NTPassengerViewService.wsdl">
+		</Java2WSDLTask>
+	</target>
+
+	<!-- NTPassengerView wsdl to java -->
+	<target name="ntpassengerview_wsdl2java">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
+			<arg value="-uri" />
+			<arg file="src/com/bagnet/nettracer/ws/passengerview/NTPassengerViewService.wsdl" />
+
+			<arg value="-o" />
+			<arg file="${build.dir}/webservices/passengerview" />
+
+			<arg value="-ss" />
+			<arg value="-sd" />
+			<arg value="-g" />
+
+			<arg value="-d" />
+			<arg value="xmlbeans" />
+
+		</java>
+
+		<!-- copy services.xml to web-inf -->
+		<!--
+		<copy todir="${basedir}/web/WEB-INF/services/PaxView/META-INF" file="${build.dir}/webservices/passengerview/resources/services.xml" />
+		-->
+		<!-- copy java files to src 
+		
+		<copy todir="${basedir}/src">
+			<fileset dir="${build.dir}/webservices/passengerview/src">
+				<include name="**/**/*.java" />
+				<exclude name="**/org/**" />
+			</fileset>
+		</copy>
+		-->
+
+		<!-- make jar file for schema -->
+		<!--
+		<mkdir dir="${build.dir}/webservices/passengerview/temp" />
+		<move todir="${build.dir}/webservices/passengerview/temp">
+			<fileset dir="${build.dir}/webservices/passengerview/resources">
+				<include name="*schema*/**/*.class" />
+				<include name="*schema*/**/*.xsb" />
+			</fileset>
+		</move>
+
+		
+		<jar destfile="${build.dir}/webservices/passengerview/paxview_1_1_schemas.jar" basedir="${build.dir}/webservices/passengerview/temp">
+		</jar>
+
+		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/passengerview/paxview_1_1_schemas.jar" />
+		
+		<replace file="${basedir}/web/WEB-INF/services/NTPassengerViewService/META-INF/services.xml">
+			<replacetoken><![CDATA[com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceSkeleton]]></replacetoken>
+			<replacevalue><![CDATA[com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceImplementation]]></replacevalue>
+		</replace>
+		-->
+
+		<!-- clean up -->
+		<!--
+		<delete dir="${build.dir}/webservices/passengerview/temp" />
+		<delete dir="${build.dir}/webservices/passengerview/resources" />
+		<delete dir="${build.dir}/webservices/passengerview/src" />
+		-->
+	</target>
+
+
 
 	<!-- passenger view ws 1.1-->
-	<target name="passengerview_java2wsdl" depends="build-dev">
+	<target name="paxview_java2wsdl" depends="build-dev">
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
 
 		<Java2WSDLTask classPath="${build.dir}/${ant_project_name}_web/classes" 
@@ -1140,7 +1256,7 @@
 	
 	
 	
-	<target name="passengerview_wsdl2java">
+	<target name="paxview_wsdl2java">
 		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
 			<arg value="-uri" />
 			<arg file="src/com/bagnet/nettracer/ws/v1_1/PaxView.wsdl" />
@@ -1396,6 +1512,14 @@
 		<antcall target="build-cron-service" />
 	</target>
 
+	<target name="spirit-build-cron-prod">
+		<property name="ant_project_name" value="spirit" />
+		<property name="sub_path" value="production/" />
+		<property name="jarprefix" value="spiritprod-" />
+		<property name="cron.job.config.file" value="companies/spirit/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+
 
 	<target name="usair-build-cron">
 		<property name="ant_project_name" value="usair" />
@@ -1529,7 +1653,7 @@
 				<path refid="project.classpath" />
 				<path location="${build.dir}/${ant_project_name}/classes" />
 			</classpath>
-			<annotationconfiguration configurationfile="companies/usair/dev/hibernate_main.cfg.xml" />
+			<annotationconfiguration configurationfile="companies/westjet/environment/local/hibernate_main.cfg.xml" />
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="nettracer-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>
