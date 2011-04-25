@@ -6,12 +6,14 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 public class ConnectionUtil {
 	  static String user     = null;
 	  static String password = null;
-	  static String url      = "jnp://192.168.2.145:1199";
+	  static String url      = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVER_LOCATION);
 
 	
 	  static public Context getInitialContext() throws NamingException {
