@@ -247,6 +247,14 @@
 			</lib>
 		</war>
 	</target>
+	
+	<target name="package-web-env-spec" if="fraud.build" >
+		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
+			<fileset dir="${basedir}/companies/${ant_project_name}/environment/${environment.name}/web">
+				<exclude name="**/*/jboss-web.xml"/>
+			</fileset>
+		</copy>
+	</target>
 
 	<target name="package-web2" depends="resources2">
 		<!-- time stamp for a build -->
@@ -255,7 +263,9 @@
 		</tstamp>
 
 		<delete dir="${build.dir}/${ant_project_name}/webWorking" failonerror="false" includeemptydirs="true" />
-			
+
+		<antcall target="package-web-env-spec" />
+		
 		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
 			<fileset dir="${basedir}/companies/${ant_project_name}/web">
 				<exclude name="**/*/jboss-web.xml"/>
@@ -836,13 +846,13 @@
 		<property name="ant_war_name" value="b6fraud" />
 		<property name="environment.name" value="fraud"/>
 		<property name="jetblue.init.complete" value="true" />
-		<copy todir="${basedir}/web/deployment/main/css" file="companies/jetblue/environment/fraud/formstyles.css" />
-		<copy todir="${basedir}/web/deployment/main/css" file="companies/jetblue/environment/fraud/nettracerstyles1.css" />
-		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/jetblue/environment/fraud/header_bg_noconf.gif" />
-		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/jetblue/environment/fraud/header_bg.gif" />
+		<property name="fraud.build" value="true" />
 		<antcall target="donotrun-build-jetblue" />
 	</target>
-
+	
+	<target name="custom-ui-env-spec" if="fraud.build" >
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/custom_ui.properties" />
+	</target>
 
 	<target name="donotrun-build-jetblue" if="jetblue.init.complete">
 		<property name="include.b6" value="1" />
@@ -853,6 +863,7 @@
 		<copy todir="${basedir}/src" file="companies/jetblue/report_email.html" />
 		<copy todir="${basedir}/src" file="companies/jetblue/report_email_es.html" />
 		<copy todir="${basedir}/src" file="companies/jetblue/custom_ui.properties" />
+		<antcall target="custom-ui-env-spec" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/MissingReceipt.jrxml" />

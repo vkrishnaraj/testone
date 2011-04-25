@@ -16,7 +16,7 @@ body {
 	background-color: #ffffff;
 	background-image:url(../images/nettracer/bodybg.jpg);
 	background-repeat:repeat-x;
-	
+	width: 500px;
 	height: 100%;
 	margin: 0px;
 	padding: 0px;
