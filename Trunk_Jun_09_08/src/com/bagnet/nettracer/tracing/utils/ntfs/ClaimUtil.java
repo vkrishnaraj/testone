@@ -41,8 +41,6 @@ import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Passenger;
 
-import fs.ParsedData;
-
 public class ClaimUtil {
 
 	private static Soundex sndx = new Soundex();
