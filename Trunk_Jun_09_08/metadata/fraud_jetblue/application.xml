@@ -15,7 +15,7 @@
  <module>
      <web>
          <web-uri>b6fraud.war</web-uri>
-         <context-root>jetblue</context-root>
+         <context-root>tracer</context-root>
      </web>
   </module>
   
