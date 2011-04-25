@@ -97,30 +97,26 @@ function updatePagination() {
 
           <br>
           <table class="form2" cellspacing="0" cellpadding="0">
+
             <tr>
-              <td colspan="11" align="center">
-                &nbsp;
-              </td>
-            </tr>                  
-            <tr>
-            		<tr>
-            			<td>
+            		<tr >
+            			<td class="header">
             				<b><bean:message key="colname.reference.id" /></b>
             			</td>
-            			<td>
+            			<td class="header">
             				<b><bean:message key="colname.reference.type" /></b>
             			</td>
-            			<td>
+            			<td class="header">
             				<b><bean:message key="colname.fraudresults.company" /></b>
             			</td>
-            			<td>
+            			<td class="header">
             				<b><bean:message key="colname.fraudresults.claim_date" /></b>
             			</td>
-            			<td>
+            			<td class="header">
             				<b><bean:message key="colname.fraudresults.match_summary" /></b>
             			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.details" /></b>
+            			<td class="header">
+            				<b><bean:message key="colname.fraudresults.action" /></b>
             			</td>
             		</tr>
             </tr>
@@ -128,22 +124,38 @@ function updatePagination() {
               <logic:iterate id="requested" name="requestList" type="aero.nettracer.fs.model.detection.AccessRequest">
                 <tr>
             			<td>
+            				<bean:write name="requested" property="file.fileId" />
+            			</td>
+            			<td>
+            					         <logic:match name="requested" property="file.incident.incidentType" value="0" >
+		            						<bean:message key="colname.na" />
+		            					</logic:match>
+		            					<logic:equal name="requested" property="file.incident.incidentType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+		            					</logic:equal>
+		            					<logic:equal name="requested" property="file.incident.incidentType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.missing" />
+		            					</logic:equal>
+		            					<logic:equal name="requested" property="file.incident.incidentType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.damaged" />
+		            					</logic:equal>
+            			</td>
+            			<td>
+            				<bean:write name="requested" property="file.incident.airlineIncidentId" />
+            			</td>
+            			<td>
             				<bean:write name="requested" property="requestedDate" />
             			</td>
             			<td>
-            				<b><bean:message key="colname.reference.type" /></b>
+            				<bean:write name="requested" property="matchHistory.matchSummary" filter="false" />
             			</td>
             			<td>
-            				<b><bean:message key="colname.fraudresults.company" /></b>
-            			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.claim_date" /></b>
-            			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.match_summary" /></b>
-            			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.details" /></b>
+            				<a href="fraudRequests.do?approveId=<%=requested.getId() %>">
+		            						<bean:message key="claim.match.approve" />
+		            					</a><br /><br/>
+            				<a href="fraudRequests.do?denyId=<%=requested.getId() %>">
+		            						<bean:message key="claim.match.deny" />
+		            					</a>
             			</td>
 
                 </tr>
