@@ -836,6 +836,10 @@
 		<property name="ant_war_name" value="b6fraud" />
 		<property name="environment.name" value="fraud"/>
 		<property name="jetblue.init.complete" value="true" />
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/jetblue/environment/fraud/formstyles.css" />
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/jetblue/environment/fraud/nettracerstyles1.css" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/jetblue/environment/fraud/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/jetblue/environment/fraud/header_bg.gif" />
 		<antcall target="donotrun-build-jetblue" />
 	</target>
 

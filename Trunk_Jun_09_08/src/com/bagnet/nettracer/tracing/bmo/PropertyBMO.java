@@ -89,6 +89,8 @@ public class PropertyBMO {
 	public static final String CENTRAL_FRAUD_CHECK_TIMEOUT = "fraud.check.timeout";
 
 	public static final String CENTRAL_FRAUD_DAM_MISSING_TIMEOUT = "fraud.check.timeout.dam.mis";
+	
+	public static final String CENTRAL_FRAUD_SERVER_LOCATION = "fraud.server.location";
 
 	/**
 	 * Retrieves the value of the property from the database.
