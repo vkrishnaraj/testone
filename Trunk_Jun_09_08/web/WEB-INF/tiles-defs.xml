@@ -847,4 +847,8 @@
         <put name="center"   value="/pages/claims/search_claim.jsp"/>
     </definition>
 
+    <definition name="request_info" extends="user_menu">
+        <put name="center"   value="/pages/claims/request_info.jsp"/>
+    </definition>
+
  </tiles-definitions>

@@ -161,18 +161,18 @@
             				<b><bean:message key="colname.fraudresults.details" /></b>
             			</td>
             		</tr>
-	 	           		<logic:iterate id="pResult" name="fraudResultsForm" property="primaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
+	 	           		<logic:iterate id="pResult" indexId="i" name="fraudResultsForm" property="primaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
 	            			<% if (pResult.getFile2().getClaim() != null) { %>
 		            			<tr>
 		            				<% if (pResult.getFile2().getClaim().getAirline().equals(company)) { %>
-		            				<td><html:checkbox name="pResult" property="selected" disabled="true" /></td>
+		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" disabled /></td>
 		            				<td>
 		            					<a href="claim_resolution.do?claimId=<%=pResult.getFile2().getClaim().getSwapId() %>">
 		            						<bean:write name="pResult" property="file2.claim.swapId" />
 		            					</a>
 		            				</td>
 		            				<% } else { %>
-		            				<td><html:checkbox name="pResult" property="selected" /></td>
+		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" /></td>
 		            				<td><bean:write name="pResult" property="file2.claim.id" /></td>
 		            				<% } %>
 		            				<td>
@@ -201,14 +201,14 @@
 	            			<% } else { %>
 		            			<tr>
 		            				<% if (pResult.getFile2().getIncident().getAirline().equals(company)) { %>
-		            				<td><html:checkbox name="pResult" property="selected" disabled="true" /></td>
+		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" disabled /></td>
 		            				<td>
 		            					<a href="searchIncident.do?incident=<%=pResult.getFile2().getIncident().getAirlineIncidentId() %>">
 		            						<bean:write name="pResult" property="file2.incident.airlineIncidentId" />
 		            					</a>
 		            				</td>
 		            				<% } else { %>
-		            				<td><html:checkbox name="pResult" property="selected" /></td>
+		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" /></td>
 		            				<td><bean:write name="pResult" property="file2.incident.airlineIncidentId" /></td>
 		            				<% } %>
 		            				<td>
@@ -266,18 +266,18 @@
             				<b><bean:message key="colname.fraudresults.details" /></b>
             			</td>
             		</tr>
-	            		<logic:iterate id="sResult" name="fraudResultsForm" property="secondaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
+	            		<logic:iterate id="sResult" indexId="i" name="fraudResultsForm" property="secondaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
 	            			<% if (sResult.getFile1().getClaim() != null) { %>
 		            			<tr>
 		            				<% if (sResult.getFile1().getClaim().getAirline().equals(company)) { %>
-		            				<td><html:checkbox name="sResult" property="selected" disabled="true" /></td>
+		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" disabled /></td>
 		            				<td>
 		            					<a href="claim_resolution.do?claimId=<%=sResult.getFile1().getClaim().getSwapId() %>">
 		            						<bean:write name="sResult" property="file1.claim.swapId" />
 		            					</a>
 		            				</td>
 		            				<% } else { %>
-		            				<td><html:checkbox name="sResult" property="selected" /></td>
+		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" /></td>
 		            				<td><bean:write name="sResult" property="file1.claim.id" /></td>
 		            				<% } %>
 		            				<td>
@@ -306,14 +306,14 @@
 	            			<% } else { %>
 		            			<tr>
 		            				<% if (sResult.getFile1().getIncident().getAirline().equals(company)) { %>
-		            				<td><html:checkbox name="sResult" property="selected" disabled="true" /></td>
+		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" disabled /></td>
 		            				<td>
 		            					<a href="searchIncident.do?incident=<%=sResult.getFile1().getIncident().getAirlineIncidentId() %>">
 		            						<bean:write name="sResult" property="file1.incident.airlineIncidentId" />
 		            					</a>
 		            				</td>
 		            				<% } else { %>
-		            				<td><html:checkbox name="sResult" property="selected" /></td>
+		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" /></td>
 		            				<td><bean:write name="sResult" property="file1.incident.airlineIncidentId" /></td>
 		            				<% } %>
 		            				<td>

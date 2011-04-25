@@ -258,6 +258,7 @@
 		
 		<form-bean name="fraudResultsForm" type="com.bagnet.nettracer.tracing.forms.FraudResultsForm" />
 		<form-bean name="searchClaimForm" type="com.bagnet.nettracer.tracing.forms.SearchClaimForm" />
+		<form-bean name="requestInfoForm" type="com.bagnet.nettracer.tracing.forms.RequestInfoForm" />
 		<form-bean name="privacyPermissionsForm" type="com.bagnet.nettracer.tracing.forms.PrivacyPermissionsForm"/>
 		
 		
@@ -508,6 +509,7 @@
 		<forward name="fraud_results" path="fraud_results" />
 		<forward name="match_details" path="match_details" />
 		<forward name="search_claim" path="search_claim" />
+		<forward name="request_info" path="request_info" />
 		
 	</global-forwards>
 
@@ -572,6 +574,8 @@
 		<action path="/fraud_results" type="com.bagnet.nettracer.tracing.actions.FraudResultsAction" name="fraudResultsForm" scope="session" validate="false" ></action>
 
 		<action path="/search_claim" type="com.bagnet.nettracer.tracing.actions.SearchClaimAction" name="searchClaimForm" scope="request" validate="false" ></action>
+
+		<action path="/request_info" type="com.bagnet.nettracer.tracing.actions.RequestInfoAction" name="requestInfoForm" scope="session" validate="false" ></action>
 		
 		<!-- Expense Actions -->
 		<action path="/*Expense" parameter="{1}" type="com.bagnet.nettracer.tracing.actions.expense.{1}ExpenseAction" name="expensePayoutForm" scope="request" validate="true" >

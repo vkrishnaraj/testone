@@ -871,6 +871,7 @@ public class TracingConstants {
 	public final static String CLAIM_FRAUD_RESULTS = "fraud_results";
 	public final static String CLAIM_MATCH_DETAILS = "match_details";
 	public final static String CLAIM_SEARCH = "search_claim";
+	public final static String CLAIM_REQUEST_INFO = "request_info";
 	public static final String SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS = "Fraud Requests";
 	
 	public static String getDBDateFormat(Properties properties) {

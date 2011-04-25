@@ -1,10 +1,10 @@
 package com.bagnet.nettracer.tracing.forms;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
 
-import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.detection.MatchHistory;
 
 public final class FraudResultsForm extends ActionForm {
@@ -13,8 +13,8 @@ public final class FraudResultsForm extends ActionForm {
 	
 	private long claimId;
 
-	private Set<MatchHistory> primaryResults;
-	private Set<MatchHistory> secondaryResults;
+	private ArrayList<MatchHistory> primaryResults;
+	private ArrayList<MatchHistory> secondaryResults;
 
 	public long getClaimId() {
 		return claimId;
@@ -24,20 +24,21 @@ public final class FraudResultsForm extends ActionForm {
 		this.claimId = claimId;
 	}
 
-	public Set<MatchHistory> getPrimaryResults() {
+	public ArrayList<MatchHistory> getPrimaryResults() {
 		return primaryResults;
 	}
 
-	public void setPrimaryResults(Set<MatchHistory> primaryResults) {
+	public void setPrimaryResults(ArrayList<MatchHistory> primaryResults) {
 		this.primaryResults = primaryResults;
 	}
 
-	public Set<MatchHistory> getSecondaryResults() {
+	public ArrayList<MatchHistory> getSecondaryResults() {
 		return secondaryResults;
 	}
 
-	public void setSecondaryResults(Set<MatchHistory> secondaryResults) {
+	public void setSecondaryResults(ArrayList<MatchHistory> secondaryResults) {
 		this.secondaryResults = secondaryResults;
 	}
+
 	
 }

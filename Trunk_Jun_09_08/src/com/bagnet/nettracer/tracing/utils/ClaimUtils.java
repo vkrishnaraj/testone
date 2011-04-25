@@ -86,6 +86,7 @@ public class ClaimUtils {
 		// create the reservation
 		Reservation reservation = new Reservation();
 		reservation.setPurchaser(purchaser);
+		purchaser.setReservation(reservation);
 		reservation.setPassengers(new LinkedHashSet<Person>());
 		reservation.setPhones(new LinkedHashSet<Phone>());
 		reservation.setPnrData(pnrData);
