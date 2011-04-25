@@ -50,8 +50,8 @@ public class GeoCode {
 			throw e;
 		} catch (Exception e) {
 
-			logger.error("Unable to geocode address: " + e);
-			e.printStackTrace();
+//			logger.error("Unable to geocode address: " + e);
+//			e.printStackTrace();
 			return null;
 		} finally {
 			if (sess != null && nullSession) {

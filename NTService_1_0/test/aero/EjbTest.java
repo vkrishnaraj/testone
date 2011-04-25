@@ -82,7 +82,7 @@ public class EjbTest {
 //					  System.out.println(i);
 //				  }
 //				  try {
-				  o.traceFile(19286);
+//				  o.traceFile(19286);
 //				  o.traceFile(56786);
 //				  o.traceFile(167063);
 //				  } catch (Exception e) {

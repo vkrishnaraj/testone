@@ -1,10 +1,7 @@
 package com.bagnet.nettracer.tracing.forms;
 
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 

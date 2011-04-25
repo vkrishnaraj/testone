@@ -21,8 +21,9 @@ import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.MatchDetail;
-import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.MatchDetail.MatchType;
+import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.selfservice.fraud.PrivacyPermissionsBean;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
@@ -33,18 +34,18 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class Producer {
 
-	private static boolean debug = true;
-	private static final int MAX_WAIT = 2000;
-	//TODO review mile radius
+	private static final String ACCESS_NOT_GRANTED = "*** Access not Granted ***";
+	private static boolean debug = false;
+	private static final int MAX_WAIT = 40;
 	public static final double MILE_SEARCH_RADIUS = 2;
-	private static final long WAIT_TIME = 100;
+	private static final long WAIT_TIME = 250;
 	private static final double MILE_SEARCH_ZIP = 4;
 	private static final double MILE_SEARCH_CITY = 10;
 	
-	public static Set<MatchHistory> matchFile(long fileId){
+	public static TraceResponse matchFile(long fileId, int maxDelay, boolean persistData){
 		File file = TraceWrapper.loadFileFromCache(fileId);
 		if(file != null){
-			return matchFile(file);
+			return matchFile(file, maxDelay, persistData);
 		} else {
 			return null;
 		}
@@ -69,7 +70,7 @@ public class Producer {
 		}
 	}
 	
-	public static Set<MatchHistory> matchFile(File file) {
+	public static TraceResponse matchFile(File file, int maxDelay, boolean persistData) {
 		Date starttime = new Date();
 		
 		HashSet<Long> fileQueue = new HashSet<Long>();
@@ -344,30 +345,46 @@ public class Producer {
 		fileQueue.remove(new Long(file.getId()));//removing dup from queue to get accurate count
 		if(debug)System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
 		
-		
-		System.out.println(fileQueue.size());
+		boolean isFinished = true;
+		System.out.println("  Potential results: " + fileQueue.size());
 		try {
 			int i = 0;
-			for(i= 0; v.size() < fileQueue.size() && i < MAX_WAIT; i++){
-//				System.out.println("waiting: " + i + ":" + v.size() + "/" + (fileQueue.size()) );
+			for(i= 0; v.size() < fileQueue.size() && (i < (maxDelay * 1000)/WAIT_TIME || maxDelay == -1); i++){
 				Thread.sleep(WAIT_TIME);
 			}
-			if (i >= MAX_WAIT) {
+			endtime = new Date();
+			if (maxDelay == -1) {
+				System.out.println("  Complete Trace Elapsed Time: "  + (endtime.getTime() - starttime.getTime()));
+				file.setPersonCache(null);
+				file.setAddressCache(null);
+				file.setPhoneCache(null);
+			} else if (i >= MAX_WAIT) {
 				System.out.println("***WARNING: Maximum Search Time Exceeded: " + (WAIT_TIME * MAX_WAIT) + "ms");
-			} else {
-//				file.setPersonCache(null);
-//				file.setAddressCache(null);
-//				file.setPhoneCache(null);
+				isFinished = false;
 			}
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		
-		
-//		return getMatchHistoryResult(file.getId());
-		return getCensoredFileMatches(file.getId());
+		Set<MatchHistory> mh = getCensoredFileMatches(file.getId());
+		TraceResponse tr = new TraceResponse();
+		tr.setMatchHistory(mh);
+		tr.setTraceComplete(isFinished);
+		if (!isFinished) {
+			Date nowTime = new Date();
+			double i = v.size();
+			double totalSize = fileQueue.size();
+			double percComplete = ((double) i / (double) totalSize * 100);
+			long timeElapsed = (nowTime.getTime() - starttime.getTime()) / 1000;
+			double percentRemaining = 100 - percComplete;
+			double secondsToComplete = (double) timeElapsed / percComplete * percentRemaining;
+			System.out.println("Percent complete: " + (i / totalSize * 100) + " (" + i + "/" + totalSize
+					+ ")  Minutes remaining: " + secondsToComplete / 60);
+
+			tr.setSecondsUntilReload((int)(secondsToComplete*1.1));
+		}
+		return tr; 
 	}
 	
 
@@ -405,7 +422,7 @@ public class Producer {
 	}
 	
 	public static void censor(MatchHistory match, AccessLevelType level, String userCompany, List<PrivacyPermissions> plist){
-		String s = "Not for your eyes";
+		String s = ACCESS_NOT_GRANTED;
 		PrivacyPermissions p1 = new PrivacyPermissions();
 		PrivacyPermissions p2 = new PrivacyPermissions();
 		String company1 = null;
@@ -503,12 +520,12 @@ public class Producer {
 		}
 	}
 	
-	public void censorFile(File f, AccessLevelType level){
-		
-	}
+//	public void censorFile(File f, AccessLevelType level){
+//		
+//	}
 	
 	public static void censorFile(File f, PrivacyPermissions p){
-		String s = "!!!CENSOR!!!";
+		String s = ACCESS_NOT_GRANTED;
 		Set<Person> persons = Consumer.getPersons(f);
 		for(Person person:persons){
 			if(!p.isName()){

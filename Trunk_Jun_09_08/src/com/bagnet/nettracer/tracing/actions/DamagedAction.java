@@ -29,13 +29,13 @@ import javax.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
+
 
 import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
@@ -46,15 +46,11 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
-import com.bagnet.nettracer.tracing.db.Match;
-import com.bagnet.nettracer.tracing.db.Match_Detail;
 import com.bagnet.nettracer.tracing.db.Message;
-import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Task;
@@ -72,6 +68,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.ntfs.ClaimUtil;
 
 /**
  * @author Matt
@@ -392,6 +389,10 @@ public class DamagedAction extends CheckedAction {
 			}
 			
 			ActionMessage error = null;
+			boolean isNew = false;
+			if (theform.getIncident_ID() == null || theform.getIncident_ID().trim().length() == 0) {
+				isNew = true;
+			}
 			if (request.getParameter("close") != null && request.getParameter("close").equals("1")) {
 				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, realpath, user);
 			} else {
@@ -399,6 +400,9 @@ public class DamagedAction extends CheckedAction {
 			}
 			
 			if (error == null) {
+				
+				ClaimUtil.saveAndTraceForFraud(session, iDTO, isNew);
+				
 				theform.setRemarkEnteredWhenNotifiedOfRequirements(false);
 				theform.setNotifiedOfRequirements(false);
 				request.setAttribute("damaged", "1");

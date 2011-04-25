@@ -54,7 +54,7 @@ public class Consumer implements Runnable{
 	private static final double ADDRESS_SIMILAR = 40;
 
 	private static final double PHONE_MATCH = 30;
-	
+	private static final double P_DOB = 6;	
 	
 	
 	
@@ -212,21 +212,10 @@ public class Consumer implements Runnable{
   }
 
 	private static boolean validPhone(String p){
-		//TODO what is the min valid phone length
-		if(p == null || p.trim().length() > 5){
+		if(p == null || p.trim().length() < 5){
 			return false;
 		}
-		
-		boolean valid = true;
-		
-		char t = p.charAt(0);
-		for(char c:p.toCharArray()){
-			if(t != c){
-				valid = false;
-			}
-		}
-		return valid;
-		
+		return true;		
 	}
 	
 
@@ -493,8 +482,8 @@ public class Consumer implements Runnable{
 								distanceStr = distanceStr.substring(0, Math.min(5, distanceStr.length()));	
 
 								MatchDetail detail = new MatchDetail();
-								detail.setContent1(a1.getAddress1() + ", " + a1.getState() + " " + a1.getZip());
-								detail.setContent2(a2.getAddress1() + ", " + a2.getState() + " " + a2.getZip());
+								detail.setContent1(a1.getAddress1() + ", " + a1.getCity() + ", " + a1.getState() + " " + a1.getZip());
+								detail.setContent2(a2.getAddress1() + ", " + a2.getCity() + ", " + a2.getState() + " " + a2.getZip());
 								detail.setDescription("Proximity Match: " + distanceStr + " miles.");
 								detail.setMatch(match);
 								detail.setPercent(ADDRESS_FAR_PROXIMITY);
@@ -505,8 +494,8 @@ public class Consumer implements Runnable{
 								distanceStr = distanceStr.substring(0, Math.min(5, distanceStr.length()));
 
 								MatchDetail detail = new MatchDetail();
-								detail.setContent1(a1.getAddress1() + ", " + a1.getState() + " " + a1.getZip());
-								detail.setContent2(a2.getAddress1() + ", " + a2.getState() + " " + a2.getZip());
+								detail.setContent1(a1.getAddress1() + ", " + a1.getCity() + ", " + a1.getState() + " " + a1.getZip());
+								detail.setContent2(a2.getAddress1() + ", " + a2.getCity() + ", " + a2.getState() + " " + a2.getZip());
 								detail.setDescription("Close Proximity Match: " + distanceStr + " miles.");
 								detail.setMatch(match);
 								detail.setPercent(ADDRESS_CLOSE_PROXIMITY);
@@ -521,7 +510,7 @@ public class Consumer implements Runnable{
 						
 						String description = "Similar Address";
 						double percent = ADDRESS_SIMILAR;
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 60, .10, MatchType.address);
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .10, MatchType.address);
 					}
 				} else {
 					// If country available
@@ -748,8 +737,8 @@ public class Consumer implements Runnable{
 							// TODO: Nickname Matches
 						} else {
 
-							System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
-							System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
+//							System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
+//							System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
 							boolean matchedName = false;
 							if (p1.getFirstNameSoundex() != null && p2.getFirstNameSoundex() != null
 									&& p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex())
@@ -909,6 +898,19 @@ public class Consumer implements Runnable{
 						detail.setMatch(match);
 						detail.setPercent(P_SSN);
 						detail.setMatchtype(MatchType.ssn);
+						details.add(detail);
+					}
+				}
+				
+				if(p1.getDateOfBirth() != null){
+					if(p1.getDateOfBirth().equals(p2.getDateOfBirth())){
+						MatchDetail detail = new MatchDetail();
+						detail.setContent1("*********");
+						detail.setContent2("*********");
+						detail.setDescription("Date of Birth Match");
+						detail.setMatch(match);
+						detail.setPercent(P_DOB);
+						detail.setMatchtype(MatchType.dob);
 						details.add(detail);
 					}
 				}

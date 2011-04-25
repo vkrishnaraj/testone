@@ -1,14 +1,14 @@
 package aero.nettracer.selfservice.fraud;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Remote;
 
-import org.jboss.ejb3.annotation.RemoteBinding;
-
 import aero.nettracer.fs.model.File;
-import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.model.detection.TraceResponse;
 
 
 
@@ -17,8 +17,14 @@ import aero.nettracer.fs.model.detection.MatchHistory;
 public interface ClaimRemote {
 	public String echoTest(String s);
 	public long insertFile(File File);
-	public Set<MatchHistory> traceFile(long fileId);
+	public TraceResponse traceFile(long fileId, int maxDelay);
+	public TraceResponse traceFile(File file, int maxDelay, boolean persistResults);
 	public Set<MatchHistory> getFileMatches(long fileId);
 	public int getIncidentCacheSize();
 	public int getClaimCacheSize();
+	public void requestAccess(long fileId, long matchId, String agent, String requestingAirline, String message);
+	public List<AccessRequest> getOutstandingRequests(String airlineId, int begin, int perPage);
+	public void approveRequest(long requestId, String message, String agent);
+	public void denyRequest(long requestId, String message, String agent);
+	public File getFile(long fileId, String airline);
 }

@@ -15,32 +15,12 @@ import aero.nettracer.fs.utilities.tracing.TraceWrapper;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class FraudTrace {
+	
+	
 	@Test
-	public void run() {
-		Date start = new Date();
-//						  o.traceFile(19286);
-		Producer.matchFile(19286);
-		Producer.matchFile(56786);
-		Producer.matchFile(167063);
-		System.out.println("Run 2");
-		Producer.matchFile(19286);
-		Producer.matchFile(56786);
-		Producer.matchFile(167063);
-//		  o.traceFile(56786);
-//		  o.traceFile(167063);
-		Date end = new Date();
-		System.out.println("run1 " + (end.getTime() - start.getTime()));
-//		start = new Date();
-//		Producer.matchClaim(14537);
-//		end = new Date();
-//		System.out.println("run1 " + (end.getTime() - start.getTime()));
-	}
-	
-	//3870
-	
-//	@Test
 	public void letsSeeWhatWeGet(){
-		String sql = "select id from fsclaim where id > 3500";
+//		String sql = "select id from file where id >= 351613";
+		String sql = "select id from file where id >= 351647";
 		SQLQuery pq = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		pq = sess.createSQLQuery(sql.toString());
@@ -52,10 +32,10 @@ public class FraudTrace {
 		int i = 0;
 		for (Long strs : result) {
 			i++;
-			System.out.println("claim: " + strs);
+			System.out.println("File: " + strs);
 			if(i%20 == 0){
 				tick = new Date();
-				double percentDone = i/result.size();
+				double percentDone = (double)i/(double)result.size();
 				long tpc = (long) ((tick.getTime() - start.getTime())/i);
 				long timeLeft = tpc * (result.size() - i);
 				System.out.println("" + (timeLeft/60000) + "   " + i + "/" + result.size());
@@ -64,7 +44,11 @@ public class FraudTrace {
 			
 			Long c1 = (Long) strs;
 			if(c1 != null){
-//				Producer.matchClaim(c1);
+				try {
+				Producer.matchFile(c1.longValue(), -1, true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		

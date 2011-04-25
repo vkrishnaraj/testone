@@ -2,7 +2,6 @@ package aero.nettracer.fs.model.detection;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.Vector;
 
@@ -20,8 +19,6 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.File;
-import aero.nettracer.fs.model.FsAddress;
-import aero.nettracer.fs.model.Person;
 
 @Entity
 @Proxy(lazy = false)
@@ -30,26 +27,39 @@ public class MatchHistory implements Serializable {
 	@Id
 	@GeneratedValue
 	private long id;
-	
-	@OneToMany(mappedBy = "match", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+
+	@OneToMany(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
 	private Set<MatchDetail> details;
-	
+
+	@Transient
+	private boolean dataObscured;
+
+	public boolean isDataObscured() {
+		return dataObscured;
+	}
+
+	public void setDataObscured(boolean dataObscured) {
+		this.dataObscured = dataObscured;
+	}
+
+	private boolean deleted;
+
 	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class)
 	private File file1;
-	
+
 	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class)
 	private File file2;
-	
+
 	@Transient
 	private boolean selected;
-	
+
 	@Transient
 	private Vector traceCount;
-	
+
 	private Date createdate;
-	
+
 	private double overallScore;
 
 	public long getId() {
@@ -67,19 +77,19 @@ public class MatchHistory implements Serializable {
 	public void setDetails(Set<MatchDetail> details) {
 		this.details = details;
 	}
-	
+
 	public boolean isSelected() {
 		return selected;
 	}
-	
+
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
-	
+
 	public String getMatchSummary() {
 		String summary = "";
 		if (details != null) {
-			for (MatchDetail m: getDetails()) {
+			for (MatchDetail m : getDetails()) {
 				summary += m.getDescription() + "<br>";
 			}
 			summary = summary.substring(0, summary.lastIndexOf("<br>"));
@@ -102,12 +112,12 @@ public class MatchHistory implements Serializable {
 	public Date getCreatedate() {
 		return createdate;
 	}
-	
+
 	@Transient
-	public double calculatePercentage(){
+	public double calculatePercentage() {
 		double ret = 0;
-		if(this.details != null){
-			for(MatchDetail detail:details){
+		if (this.details != null) {
+			for (MatchDetail detail : details) {
 				ret += detail.getPercent();
 			}
 		}
@@ -116,16 +126,16 @@ public class MatchHistory implements Serializable {
 	}
 
 	public double getOverallScore() {
-  	if (overallScore == 0) {
-  		return calculatePercentage();
-  	} else {
-  		return overallScore;
-  	}
-  }
+		if (overallScore == 0) {
+			return calculatePercentage();
+		} else {
+			return overallScore;
+		}
+	}
 
 	public void setOverallScore(double overallScore) {
-  	this.overallScore = overallScore;
-  }
+		this.overallScore = overallScore;
+	}
 
 	public void setFile1(File file1) {
 		this.file1 = file1;
@@ -142,5 +152,13 @@ public class MatchHistory implements Serializable {
 	public File getFile2() {
 		return file2;
 	}
-	
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
 }

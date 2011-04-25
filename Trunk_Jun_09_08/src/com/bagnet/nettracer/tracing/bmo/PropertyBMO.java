@@ -85,6 +85,11 @@ public class PropertyBMO {
 	public static final String PROPERTY_DEFAULT_DAM_CODE = "default.dam.code";
 	public static final String PROPERTY_DEFAULT_PIL_CODE = "default.pil.code";
 
+	public static final String CENTRAL_FRAUD_CHECK_ENABLED = "fraud.check.enabled";
+	public static final String CENTRAL_FRAUD_CHECK_TIMEOUT = "fraud.check.timeout";
+
+	public static final String CENTRAL_FRAUD_DAM_MISSING_TIMEOUT = "fraud.check.timeout.dam.mis";
+
 	/**
 	 * Retrieves the value of the property from the database.
 	 * 

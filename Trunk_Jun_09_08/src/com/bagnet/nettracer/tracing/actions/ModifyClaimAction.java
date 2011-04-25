@@ -26,6 +26,7 @@ import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
@@ -239,9 +240,11 @@ public class ModifyClaimAction extends CheckedAction {
 				logger.info("Claim saved to central services: " + remoteFileId);
 
 				// 3. submit the claim for tracing
-				Set<MatchHistory> results = submitClaim(remoteFileId);
+				TraceResponse results = submitClaim(remoteFileId);
 				if (results != null) {
-					session.setAttribute("results", results);
+					
+					// TODO: SET RELOAD TIME HERE
+					session.setAttribute("results", results.getMatchHistory());
 					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
 					return null;
 				}
@@ -338,14 +341,20 @@ public class ModifyClaimAction extends CheckedAction {
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
 	}
 	
-	private Set<MatchHistory> submitClaim(long fileId) {
+	private TraceResponse submitClaim(long fileId) {
 		if (fileId <= 0) {
 			return null;
 		}
 		ClaimRemote remote = ConnectionUtil.getClaimRemote();
-		Set<MatchHistory> results = null;
+		TraceResponse results = null;
 		if (remote != null) {
-			results = remote.traceFile(fileId);
+			int wait = 6;
+			try {
+				wait = PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_CHECK_TIMEOUT);
+			} catch (Exception e) {
+				//
+			}
+			results = remote.traceFile(fileId, wait);
 			
 		}
 		return results;

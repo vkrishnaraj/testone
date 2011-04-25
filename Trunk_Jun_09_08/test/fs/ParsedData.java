@@ -8,7 +8,7 @@ public class ParsedData {
 	public String cardType;
 	public String last4;
 	public String expiration;
-	public ArrayList<Name> names = new ArrayList<Name>();
+	public ArrayList<com.bagnet.nettracer.tracing.utils.ntfs.Name> names = new ArrayList<com.bagnet.nettracer.tracing.utils.ntfs.Name>();
 //	public String add1;
 	public String add2;
 	public String city;
@@ -22,7 +22,7 @@ public class ParsedData {
 //		System.out.println("  " + add1);
 		System.out.println("  " + add2);
 		System.out.println("  " + city + " " + state + " " + zip);
-		for (Name name : names) {
+		for (com.bagnet.nettracer.tracing.utils.ntfs.Name name : names) {
 			System.out.println("      " + name.firstName + " " + name.lastName + "     " + name.cc);
 		}
 		
