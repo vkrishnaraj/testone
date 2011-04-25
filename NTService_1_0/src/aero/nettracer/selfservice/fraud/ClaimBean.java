@@ -520,4 +520,18 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		}
 	}
 
+	@Override
+	public int getOutstandingRequetsCount(String airlineId) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		String sql = "select count(ar.id) ct from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status = :status and ar.file.incident.airline = :airline";
+
+		Query q = sess.createQuery(sql);
+
+		q.setParameter("status", AccessRequest.RequestStatus.Created);
+		q.setParameter("airline", airlineId);
+
+		List list = q.list();
+		return ((Long) list.get(0)).intValue();
+	}
+
 }
