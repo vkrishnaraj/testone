@@ -462,6 +462,7 @@
 				<include name="tracer.ear" />
 			</fileset>
 		</copy>
+		<antcall target="aa-jar-ntfs-model"></antcall>
 	</target>
 
 	<target name="build-fraud-demo" depends="delete">

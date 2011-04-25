@@ -258,3 +258,5 @@
 		<mapping class="aero.nettracer.fs.model.Segment"/>
 		<mapping class="aero.nettracer.fs.model.File"/>
 		
+		<mapping class="aero.nettracer.fs.model.detection.AccessRequest"/>
+		<mapping class="aero.nettracer.fs.model.messaging.Message"/>
