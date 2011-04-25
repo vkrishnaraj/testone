@@ -851,7 +851,7 @@
 	</target>
 	
 	<target name="custom-ui-env-spec" if="fraud.build" >
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/custom_ui.properties" overwrite="true"/>
 	</target>
 
 	<target name="donotrun-build-jetblue" if="jetblue.init.complete">

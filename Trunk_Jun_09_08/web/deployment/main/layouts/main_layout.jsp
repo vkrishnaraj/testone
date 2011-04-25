@@ -172,8 +172,9 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
         
 <p>&nbsp;</p>
-<img src="<%=request.getContextPath()%>/deployment/main/images/nettracer/poweredby_net_tracer.jpg"  alt="Powered by Net Tracer" class="imgAlignBottom">
-
+<!-- <img src="<%=request.getContextPath()%>/deployment/main/images/nettracer/poweredby_net_tracer.jpg"  alt="Powered by Net Tracer" class="imgAlignBottom">
+ -->
+ <div class="imgAlignBottom">&#160;</div>
 
 
 </logic:notPresent>
