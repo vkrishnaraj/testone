@@ -48,6 +48,7 @@
 		<form-bean name="viewRequestForm" type="com.bagnet.nettracer.tracing.forms.ViewRequestForm" />
 		<form-bean name="viewCreatedRequestForm" type="com.bagnet.nettracer.tracing.forms.ViewCreatedRequestForm" />
 		<form-bean name="viewIncomingRequestForm" type="com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm" />
+		<form-bean name="viewFraudRequestForm" type="com.bagnet.nettracer.tracing.forms.ViewFraudRequestForm" />
 		<form-bean name="viewOHDLZedForm" type="com.bagnet.nettracer.tracing.forms.ViewOHDLZedForm" />
 		<form-bean name="claimForm" type="com.bagnet.nettracer.tracing.forms.ClaimForm" />
 		<form-bean name="expensePayoutForm" type="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm" />
@@ -340,6 +341,7 @@
 		<forward name="viewrequests" path="view_requests" />
 		<forward name="viewcreatedrequests" path="view_created_requests" />
 		<forward name="viewincomingbags" path="view_incoming_bags" />
+		<forward name="viewfraudrequests" path="view_fraud_requests" />
 		<forward name="viewincomingincidents" path="view_incoming_incidents" />
 		<forward name="viewmorningduties" path="view_morning_duties" />
 		<forward name="morningdutiesupdated" path="morning_duties_updated" />
@@ -566,6 +568,8 @@
 		<action path="/create_claim" type="com.bagnet.nettracer.tracing.actions.CreateClaimAction" scope="request" validate="false" ></action>
 
 		<action path="/fraud_results" type="com.bagnet.nettracer.tracing.actions.FraudResultsAction" name="fraudResultsForm" scope="session" validate="false" ></action>
+		
+		<action path="/fraud_results" type="com.bagnet.nettracer.tracing.actions.FraudResultsAction" name="fraudResultsForm" scope="session" validate="false" ></action>
 
 		<action path="/search_claim" type="com.bagnet.nettracer.tracing.actions.SearchClaimAction" name="searchClaimForm" scope="request" validate="false" ></action>
 		
@@ -638,6 +642,8 @@
 
 		<!-- View Incoming Bags -->
 		<action path="/incomingBags" type="com.bagnet.nettracer.tracing.actions.ViewIncomingBags" name="viewIncomingRequestForm" scope="request" validate="false"></action>
+		
+		<action path="/fraudRequests" type="com.bagnet.nettracer.tracing.actions.ViewFraudRequests" name="viewFraudRequestForm" scope="request" validate="false"></action>
 
 		<!-- View Incoming Incidents -->
 		<action path="/incomingReports" type="com.bagnet.nettracer.tracing.actions.ViewIncomingIncidents" name="searchIncidentForm" scope="request" validate="false"></action>

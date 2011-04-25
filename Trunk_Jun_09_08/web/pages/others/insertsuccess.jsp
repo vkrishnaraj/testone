@@ -1,3 +1,6 @@
+<%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@page import="com.bagnet.nettracer.hibernate.HibernateWrapper"%>
 <%@ page language="java" %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
@@ -9,6 +12,9 @@
 <%
 	int reportType = -1;
 	String receiptType = "";
+	  Agent a = (Agent)session.getAttribute("user");
+	  String company = a.getCompanycode_ID();
+
 %>
 
 <tr>
@@ -65,4 +71,110 @@
           			</a>&nbsp;
       			</td>
               </tr>
+              <% if (reportType==ReportingConstants.DAMAGE_RECEPIT_RPT) {
+              	
+              %>
+        		<div id="maincontent">
+                <h1>
+                	<bean:message key="claim.fraud.primary_results" />
+                </h1>
+            	<table class="form2" cellspacing="0" cellpadding="0" >
+            		<tr>
+            			<td>
+            				<b><bean:message key="colname.reference.id" /></b>
+            			</td>
+            			<td>
+            				<b><bean:message key="colname.reference.type" /></b>
+            			</td>
+            			<td>
+            				<b><bean:message key="colname.fraudresults.company" /></b>
+            			</td>
+            			<td>
+            				<b><bean:message key="colname.fraudresults.claim_date" /></b>
+            			</td>
+            			<td>
+            				<b><bean:message key="colname.fraudresults.match_summary" /></b>
+            			</td>
+            			<td>
+            				<b><bean:message key="colname.fraudresults.details" /></b>
+            			</td>
+            		</tr>
+	 	           		<logic:iterate id="pResult" name="fraudResults" type="aero.nettracer.fs.model.detection.MatchHistory" scope="session">
+	            			<% if (pResult.getFile2().getClaim() != null) { %>
+		            			<tr>
+		            				<% if (pResult.getFile2().getClaim().getAirline().equals(company)) { %>
+		            				<td>
+		            					<a href="claim_resolution.do?claimId=<%=pResult.getFile2().getClaim().getSwapId() %>">
+		            						<bean:write name="pResult" property="file2.claim.swapId" />
+		            					</a>
+		            				</td>
+		            				<% } else { %>
+		            				<td><bean:write name="pResult" property="file2.claim.id" /></td>
+		            				<% } %>
+		            				<td>
+		            					<logic:match name="pResult" property="file2.claim.claimType" value="0" >
+		            						<bean:message key="colname.na" />
+		            					</logic:match>
+		            					<logic:equal name="pResult" property="file2.claim.claimType" value="<%= String.valueOf(com.bagnet.nettracer.tracing.constant.TracingConstants.LOST_DELAY) %>" >
+		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+		            					</logic:equal>
+		            					<logic:equal name="pResult" property="file2.claim.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.missing" />
+		            					</logic:equal>
+		            					<logic:equal name="pResult" property="file2.claim.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.damaged" />
+		            					</logic:equal>
+	            					</td>
+		            				<td><bean:write name="pResult" property="file2.claim.airline" /></td>
+		            				<td><%=pResult.getFile2().getClaim().getDisClaimDate(a.getDateformat().getFormat()) %></td>
+		            				<td><bean:write name="pResult" property="matchSummary" filter="false" /></td>
+		            				<td>
+		            					<a href="fraud_results.do?matchId=<%=pResult.getId() %>">
+		            						<bean:message key="claim.match.details" />
+		            					</a>
+		            				</td>
+		            			</tr>
+	            			<% } else { %>
+		            			<tr>
+		            				<% if (pResult.getFile2().getIncident().getAirline().equals(company)) { %>
+		            				<td><html:checkbox name="pResult" property="selected" disabled="true" /></td>
+		            				<td>
+		            					<a href="searchIncident.do?incident=<%=pResult.getFile2().getIncident().getAirlineIncidentId() %>">
+		            						<bean:write name="pResult" property="file2.incident.airlineIncidentId" />
+		            					</a>
+		            				</td>
+		            				<% } else { %>
+		            				<td><html:checkbox name="pResult" property="selected" /></td>
+		            				<td><bean:write name="pResult" property="file2.incident.airlineIncidentId" /></td>
+		            				<% } %>
+		            				<td>
+		            					<logic:match name="pResult" property="file2.incident.incidentType" value="0" >
+		            						<bean:message key="colname.na" />
+		            					</logic:match>
+		            					<logic:equal name="pResult" property="file2.incident.incidentType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+		            					</logic:equal>
+		            					<logic:equal name="pResult" property="file2.incident.incidentType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.missing" />
+		            					</logic:equal>
+		            					<logic:equal name="pResult" property="file2.incident.incidentType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.damaged" />
+		            					</logic:equal>
+	            					</td>
+		            				<td><bean:write name="pResult" property="file2.incident.airline" /></td>
+		            				<td><%=pResult.getFile2().getIncident().getDisOpenDate(a.getDateformat().getFormat()) %></td>
+		            				<td><bean:write name="pResult" property="matchSummary" filter="false" /></td>
+		            				<td>
+		            					<a href="fraud_results.do?matchId=<%=pResult.getId() %>">
+		            						<bean:message key="claim.match.details" />
+		            					</a>
+		            				</td>
+		            			</tr>
+	            			<% } %>
+	            		</logic:iterate>
+            	</table>
+	          </div>
+              <% } %>
+              
+              
             </table>

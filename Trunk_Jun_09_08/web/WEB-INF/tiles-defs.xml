@@ -325,6 +325,10 @@
     <definition name="view_incoming_bags" extends="user_menu">
     	<put name="center" value="/pages/taskmanager/view_incoming_bags.jsp"/>
     </definition>
+
+    <definition name="view_fraud_requests" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_fraud_requests.jsp"/>
+    </definition>
     
     <definition name="view_incoming_incidents" extends="user_menu">
     	<put name="center" value="/pages/taskmanager/view_incoming_incidents.jsp"/>

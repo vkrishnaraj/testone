@@ -21,6 +21,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.selfservice.fraud.ClaimRemote;
+
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.PaxCommunicationBMO;
@@ -63,6 +65,7 @@ import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
 public class LogonAction extends Action {
@@ -305,6 +308,11 @@ public class LogonAction extends Action {
 					} else {
 						if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_INCOMING_BAGS)) {
 							int x = OHDUtils.getIncomingBagsCount(s.getStation_ID(), new ViewIncomingRequestForm(), true);
+							if (x != -1)
+								entries = x;
+						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS)) {
+							ClaimRemote remote = ConnectionUtil.getClaimRemote();
+							int x = remote.getOutstandingRequetsCount(agent.getCompanycode_ID());
 							if (x != -1)
 								entries = x;
 						} else {

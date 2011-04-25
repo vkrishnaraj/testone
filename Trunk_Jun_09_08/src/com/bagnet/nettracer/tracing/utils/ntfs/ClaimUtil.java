@@ -582,7 +582,7 @@ public class ClaimUtil {
 			sess.save(file);
 			sess.close();
 			TraceResponse results = remote.traceFile(file.getSwapId(), PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_DAM_MISSING_TIMEOUT));
-			session.setAttribute("results", results.getMatchHistory());
+			session.setAttribute("fraudResults", results.getMatchHistory());
 		}
 	}
 
