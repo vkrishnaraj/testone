@@ -1,5 +1,6 @@
 package aero.nettracer.fs.model.messaging;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -15,8 +16,9 @@ import org.hibernate.annotations.Proxy;
 @Entity
 @Proxy(lazy = false)
 @Table(name="central_message")
-public class Message {
-
+public class Message implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	public static enum MessageContext {
 		FraudScreening
 	}

@@ -1,5 +1,6 @@
 package aero.nettracer.fs.model.detection;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -22,7 +23,7 @@ import aero.nettracer.fs.model.messaging.Message;
 
 @Entity
 @Proxy(lazy = false)
-public class AccessRequest {
+public class AccessRequest implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public static enum RequestStatus {
