@@ -13,11 +13,13 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
+import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Reservation;
+import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.MatchDetail.MatchType;
@@ -513,6 +515,10 @@ public class Producer {
 				person.setFirstName(s);
 				person.setMiddleName(s);
 				person.setLastName(s);
+				person.setFirstNameSoundex(s);
+				person.setFirstNameDmp(s);
+				person.setLastNameSoundex(s);
+				person.setLastNameDmp(s);
 			}
 			if(!p.isEmail()){
 				person.setEmailAddress(s);
@@ -569,20 +575,71 @@ public class Producer {
 			if(!p.isDenied()){
 //				f.getClaim().setDenied(null);
 			}
+			if(!p.isTraveldate()){
+				f.getClaim().setTravelDate(null);
+			}
 		}
 		
 		
 		//incident
+		if(f.getIncident() != null){
+			//TODO model change for new permissions
+			f.getIncident().setNumberDaysOpen(-1);
+			f.getIncident().setNumberOfBdos(-1);
+			f.getIncident().setRemarks(s);
+			
+			if(f.getIncident().getBags() != null){
+				//TODO model change for new bag permissions
+				for(Bag bag:f.getIncident().getBags()){
+					bag.setBagColor(s);
+					bag.setBagType(s);
+					bag.setDescription(s);
+					bag.setManufacturer(s);
+				}
+			}
+		}
 		
-		//pnrdata
-		
-		//itin
-		
-		//bag
-		
-		Reservation reservation = f.getIncident().getReservation();
-		
-		
+		if(f.getIncident() != null && f.getIncident().getReservation() != null){
+			Reservation reservation = f.getIncident().getReservation();
+			if(!p.isCc()){
+				reservation.setCcExpMonth(-1);
+				reservation.setCcExpYear(-1);
+				reservation.setCcNumLastFour(s);
+				reservation.setCcType(s);
+			}
+			if(!p.isPnrloc()){
+				reservation.setRecordLocator(s);
+			}
+			if(!p.isTicketamount()){
+				reservation.setTicketAmount(-1);
+			}
+			if(!p.isTraveldate()){
+				reservation.setTravelDate(null);
+			}
+			//TODO need model change for triplength
+			reservation.setTripLength(-1);	
+			
+			if(reservation.getPnrData() != null){
+				if(!p.isPnrdata()){
+					reservation.getPnrData().setPnrData(s);
+				}
+				if(!p.isPnrloc()){
+					reservation.getPnrData().setRecordLocator(s);
+				}
+			}
+			
+			if(reservation.getSegments() != null){
+				for(Segment segment:reservation.getSegments()){
+					if(!p.isItin()){
+						segment.setArrival(s);
+						segment.setDeparture(s);
+						segment.setFlight(s);
+						segment.setDate(null);
+					}
+				}
+			}
+		}
+
 	}
 	
 }
