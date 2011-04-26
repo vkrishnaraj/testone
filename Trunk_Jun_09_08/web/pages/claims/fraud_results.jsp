@@ -83,7 +83,7 @@
                     &nbsp;</span></a>
               </dd>
               </logic:greaterThan>
-              <logic:match name="claimForm" property="claim.id" value="0" >
+              <logic:equal name="claimForm" property="claim.id" value="0" >
               <dd>
                 <a href='claim_resolution.do' ><span class="aa">&nbsp;
                     <br />
@@ -93,7 +93,7 @@
                     <br />
                     &nbsp;</span></a>
               </dd>
-              </logic:match>
+              </logic:equal>
             		<logic:greaterThan name="claimForm" property="claim.id" value="0" >
                    	<dd>
                    	<a href='fraud_results.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aab">&nbsp;<br />&nbsp;</span>
@@ -103,7 +103,7 @@
                           &nbsp;</span></a>
                    </dd>
                    </logic:greaterThan>
-                   <logic:match name="claimForm" property="claim.id" value="0" >
+                   <logic:equal name="claimForm" property="claim.id" value="0" >
 					<dd>
                    	<a href='fraud_results.do'><span class="aab">&nbsp;<br />&nbsp;</span>
                    	<span class="bbb"><bean:message key="menu.fraud.checks" /></span>
@@ -111,7 +111,7 @@
                           <br />
                           &nbsp;</span></a>
                    </dd>
-                   </logic:match>
+                   </logic:equal>
 <%
             } if (ntUser) {
 %>
