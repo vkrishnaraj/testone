@@ -452,6 +452,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
+	<target name="aa-build-test-fraud-and-jetblue-ear" depends="delete-wars">
+		<antcall target="build-fraud-demo"/>
+		<antcall target="build-jetblue-fraud"/>
+
+		<property name="app.xml.location" value="metadata/fraud_jetblue_test" />
+		
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
 	<target name="donotrun-build-ear">
 		
 		<copy todir="${build.dir}/dist/web/lib" >
