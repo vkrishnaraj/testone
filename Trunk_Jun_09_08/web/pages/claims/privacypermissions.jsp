@@ -31,7 +31,7 @@
           <bean:message key="privacypermissions.header" />
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
         </h1>
-        	<table class="form2_dam">
+        	<table class="form2">
         		<logic:present name="success" scope="request">
         			<logic:equal name="success" scope="request" value="1">
         			<center>Update Successful</center>

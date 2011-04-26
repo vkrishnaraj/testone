@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.naming.Context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -65,8 +66,10 @@ public class FraudResultsAction extends CheckedAction {
 		} else {
 			if (claim != null) {
 				try {
-					ClaimRemote remote = ConnectionUtil.getClaimRemote();
+					Context ctx = ConnectionUtil.getInitialContext();
+					ClaimRemote remote = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
 					results = remote.getFileMatches(claim.getFile().getSwapId());
+					ctx.close();
 				} catch (Exception e) {
 					logger.error(e);
 				}

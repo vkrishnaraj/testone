@@ -106,7 +106,7 @@ public class Consumer implements Runnable{
 			
 			
 			
-			if(match.getDetails() == null || match.getOverallScore() < MIN_MATCH_SCORE){
+			if(match.getDetails() == null || match.getOverallScore() <= MIN_MATCH_SCORE){
 				//no match details so don't save
 				//can expand to include not saving match if min match percent below certain threshold
 				return;
@@ -710,11 +710,8 @@ public class Consumer implements Runnable{
 		
 		for(Person p1:plist1){
 			for(Person p2:plist2){
-				// TODO: Trim names prior to compare
 				if(p1.getFirstName() != null && p1.getFirstName().trim().length() > 0 
-						&& p1.getLastName() != null && p1.getLastName().trim().length() > 0){
-//						System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
-//						System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
+						&& p1.getLastName() != null && p1.getLastName().trim().length() > 0 && p2.getFirstName() != null && p2.getLastName() != null){
 					String content1 = p1.getFirstName().trim() + " " + p1.getLastName().trim();
 					String content2 = p2.getFirstName().trim() + " " + p2.getLastName().trim();
 					String comparator = content1 + "/" + content2;

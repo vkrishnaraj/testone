@@ -32,14 +32,15 @@ public class ConnectionUtil {
 	    return new InitialContext(p);
 	  }
 	  
-	  public static ClaimRemote getClaimRemote() {
-		  try {
-			  Context ctx = ConnectionUtil.getInitialContext();
-			  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
-			  return o;
-		  } catch (NamingException ne) {
-			  ne.printStackTrace();
-			  return null;
-		  }
-	  }
+	  // DO NOT USE - NEED TO CLOSE CONTEXT
+//	  public static ClaimRemote getClaimRemote() {
+//		  try {
+//			  Context ctx = ConnectionUtil.getInitialContext();
+//			  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
+//			  return o;
+//		  } catch (NamingException ne) {
+//			  ne.printStackTrace();
+//			  return null;
+//		  }
+//	  }
 }

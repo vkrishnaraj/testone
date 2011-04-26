@@ -9,6 +9,8 @@ package com.bagnet.nettracer.tracing.actions;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.naming.Context;
+import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -194,7 +196,9 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 			
 			// 2. save the claim on central services
-			ClaimRemote remote = ConnectionUtil.getClaimRemote();
+			Context ctx = ConnectionUtil.getInitialContext();
+			ClaimRemote remote = (ClaimRemote) ctx
+					.lookup("NTServices_1_0/ClaimBean/remote");
 			long remoteFileId = 0;
 			if (remote != null) {
 				FsClaim newClaim = new FsClaim();
@@ -248,6 +252,7 @@ public class ModifyClaimAction extends CheckedAction {
 					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
 					return null;
 				}
+				ctx.close();
 			}
 			
 		} /* else if (request.getParameter("submit") != null) {
@@ -345,17 +350,25 @@ public class ModifyClaimAction extends CheckedAction {
 		if (fileId <= 0) {
 			return null;
 		}
-		ClaimRemote remote = ConnectionUtil.getClaimRemote();
 		TraceResponse results = null;
-		if (remote != null) {
-			int wait = 6;
-			try {
-				wait = PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_CHECK_TIMEOUT);
-			} catch (Exception e) {
-				//
-			}
-			results = remote.traceFile(fileId, wait);
+		try {
+			Context ctx = ConnectionUtil.getInitialContext();
+			ClaimRemote remote = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
 			
+			
+			if (remote != null) {
+				int wait = 6;
+				try {
+					wait = PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_CHECK_TIMEOUT);
+				} catch (Exception e) {
+					//
+				}
+				results = remote.traceFile(fileId, wait);
+				
+			}
+			ctx.close();
+		} catch (NamingException e) {
+			e.printStackTrace();
 		}
 		return results;
 	}

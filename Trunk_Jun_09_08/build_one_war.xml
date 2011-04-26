@@ -306,7 +306,7 @@
 	
 	<target name="aa-jar-ntfs-model">
 		<jar destfile="${build.dir}/claim_model.jar">
-			<fileset dir="${build.dir}/westjet_web/classes/" >
+			<fileset dir="${build.dir}/fraud_web/classes/" >
 				<include name="**/**/aero/nettracer/fs/**/*.*"/>
 				<include name="**/**/com/bagnet/nettracer/tracing/utils/DateUtils.class"/>
 				<include name="**/**/com/bagnet/nettracer/tracing/constant/TracingConstants.class"/>
@@ -403,7 +403,7 @@
 	</target>
 	
 	<target name="delete-wars">
-		<delete>
+		<delete failonerror="false">
 			<fileset dir="${build.dir}/dist/web">
 	    		<include name="*.war"/>
 			</fileset>

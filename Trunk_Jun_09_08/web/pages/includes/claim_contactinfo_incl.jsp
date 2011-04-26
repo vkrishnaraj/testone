@@ -25,17 +25,9 @@
   String cssFormClass;
  
   int report_type = 0;
-  cssFormClass = "form2_dam";
+  cssFormClass = "form2";
 
-  if (request.getAttribute("lostdelay") != null) {
-    report_type = 1;
-    cssFormClass = "form2_ld";
-  } else {
-    if (request.getAttribute("missing") != null) {
-      report_type = 2;
-      cssFormClass = "form2_pil";
-    }
-  }
+  
 %>
   <a name="contact"></a>
   <h1 class="green">

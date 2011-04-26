@@ -227,7 +227,11 @@ public class FsIncident implements Serializable {
 	}
 	
 	private String getDisDate(Date date, String dateFormat) {
-		return DateUtils.formatDate(date, dateFormat, "", null);
+		if (date != null) {
+			return DateUtils.formatDate(date, dateFormat, "", null);
+		} else {
+			return "";
+		}
 	}
 
 	public void setFile(File file) {

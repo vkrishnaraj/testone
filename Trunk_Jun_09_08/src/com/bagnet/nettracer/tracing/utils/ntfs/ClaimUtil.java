@@ -98,13 +98,14 @@ public class ClaimUtil {
 			File file = new File();
 			
 			FsIncident i = new FsIncident();
+			i.setAirline(inc.getAgent().getCompanycode_ID());
 			i.setFile(file);
 			file.setIncident(i);
 			FsClaim c = null;
 			Reservation r = null;
 
 			i.setAirlineIncidentId(inc.getIncident_ID());
-			Date createDate = new Date(inc.getCreatedate().getTime() + inc.getCreatetime().getTime());
+			Date createDate = new Date(inc.getCreatetime().getTime());
 			i.setIncidentCreated(createDate);
 
 			i.setIncidentDescription(null);
@@ -572,17 +573,31 @@ public class ClaimUtil {
 	}
 
 	public static void saveAndTraceForFraud(HttpSession session, Incident iDTO, boolean isNew) throws Exception {
-		if (isNew && PropertyBMO.isTrue(PropertyBMO.CENTRAL_FRAUD_CHECK_ENABLED)) {
-			
-			File file = createFsIncident(iDTO);
-			ClaimRemote remote = ConnectionUtil.getClaimRemote();
-			long remoteFileId = remote.insertFile(file);
-			file.setSwapId(remoteFileId);
-			Session sess = HibernateWrapper.getSession().openSession();
-			sess.save(file);
-			sess.close();
-			TraceResponse results = remote.traceFile(file.getSwapId(), PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_DAM_MISSING_TIMEOUT));
-			session.setAttribute("fraudResults", results.getMatchHistory());
+		if (isNew
+				&& PropertyBMO.isTrue(PropertyBMO.CENTRAL_FRAUD_CHECK_ENABLED)) {
+			try {
+				
+				File file = createFsIncident(iDTO);
+				Session sess = HibernateWrapper.getSession().openSession();
+				sess.save(file);
+				
+				
+				Context ctx = ConnectionUtil.getInitialContext();
+				ClaimRemote remote = (ClaimRemote) ctx
+						.lookup("NTServices_1_0/ClaimBean/remote");
+				long remoteFileId = remote.insertFile(file);
+				ctx.close();
+				file.setSwapId(remoteFileId);
+				sess.close();
+				TraceResponse results = remote
+						.traceFile(
+								file.getSwapId(),
+								PropertyBMO
+										.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_DAM_MISSING_TIMEOUT));
+				session.setAttribute("fraudResults", results.getMatchHistory());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

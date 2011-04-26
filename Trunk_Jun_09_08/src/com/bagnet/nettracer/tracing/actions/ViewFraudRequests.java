@@ -9,6 +9,7 @@ package com.bagnet.nettracer.tracing.actions;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.Context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -59,7 +60,9 @@ public class ViewFraudRequests extends CheckedAction {
 
 		String approveId = (String) request.getAttribute("approveId");
 		String denyId = (String) request.getAttribute("denyId");
-		ClaimRemote remote = ConnectionUtil.getClaimRemote();
+		Context ctx = ConnectionUtil.getInitialContext();
+		ClaimRemote remote = (ClaimRemote) ctx
+				.lookup("NTServices_1_0/ClaimBean/remote");
 
 		if (approveId != null) {
 			remote.approveRequest(Long.parseLong(approveId), null, user.getFirstname() + " " + user.getLastname());
@@ -69,7 +72,7 @@ public class ViewFraudRequests extends CheckedAction {
 		else if (denyId != null) {
 			remote.approveRequest(Long.parseLong(denyId), null, user.getFirstname() + " " + user.getLastname());
 		}
-
+		ctx.close();
 		// menu highlite
 		request.setAttribute("highlite", TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS);
 

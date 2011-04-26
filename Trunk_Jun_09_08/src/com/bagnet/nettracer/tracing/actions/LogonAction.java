@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
+import javax.naming.Context;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -311,8 +312,16 @@ public class LogonAction extends Action {
 							if (x != -1)
 								entries = x;
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS)) {
-							ClaimRemote remote = ConnectionUtil.getClaimRemote();
-							int x = remote.getOutstandingRequetsCount(agent.getCompanycode_ID());
+							int x = 0;
+							try {
+							Context ctx = ConnectionUtil.getInitialContext();
+							ClaimRemote remote = (ClaimRemote) ctx
+									.lookup("NTServices_1_0/ClaimBean/remote");
+							x = remote.getOutstandingRequetsCount(agent.getCompanycode_ID());
+							ctx.close();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 							if (x != -1)
 								entries = x;
 						} else {

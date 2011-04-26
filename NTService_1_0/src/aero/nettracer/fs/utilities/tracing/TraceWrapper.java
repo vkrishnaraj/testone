@@ -17,7 +17,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class TraceWrapper {
 	private static ArrayBlockingQueue<MatchHistory> matchQueue;
-	static int maxThreads = 10;
+	static int maxThreads = 20;
 	
 	private static ConcurrentHashMap<Long, FsIncident> incidentCache = new ConcurrentHashMap<Long, FsIncident>(3000);
 	private static ConcurrentHashMap<Long, FsClaim> claimCache = new ConcurrentHashMap<Long, FsClaim>(3000);

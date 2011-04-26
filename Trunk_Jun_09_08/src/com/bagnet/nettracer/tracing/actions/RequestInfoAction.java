@@ -2,6 +2,8 @@ package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
 
+import javax.naming.Context;
+import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -11,7 +13,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
@@ -57,12 +58,19 @@ public class RequestInfoAction extends CheckedAction {
 	}
 	
 	private static void sendRequests(RequestInfoForm form, Agent user) {
-		ClaimRemote remote = ConnectionUtil.getClaimRemote();
-		String message = form.getMessage();
-		if (remote != null) {
-			for (MatchHistory m: form.getRequestedMatches()) {
-				remote.requestAccess(m.getFile2().getId(), m.getId(), user.getFirstname() + " " + user.getLastname(), user.getCompanycode_ID(), message);
+		try {
+			Context ctx = ConnectionUtil.getInitialContext();
+			ClaimRemote remote = (ClaimRemote) ctx
+					.lookup("NTServices_1_0/ClaimBean/remote");
+			String message = form.getMessage();
+			if (remote != null) {
+				for (MatchHistory m: form.getRequestedMatches()) {
+					remote.requestAccess(m.getFile2().getId(), m.getId(), user.getFirstname() + " " + user.getLastname(), user.getCompanycode_ID(), message);
+				}
 			}
+			ctx.close();
+		} catch (NamingException e) {
+			e.printStackTrace();
 		}
 	}
 }

@@ -71,9 +71,13 @@
           			</a>&nbsp;
       			</td>
               </tr>
+              
+              
+            </table>
               <% if (reportType==ReportingConstants.DAMAGE_RECEPIT_RPT) {
-              	
+
               %>
+              	<logic:notEmpty scope="session" name="fraudResults">
         		<div id="maincontent">
                 <h1>
                 	<bean:message key="claim.fraud.primary_results" />
@@ -174,7 +178,6 @@
 	            		</logic:iterate>
             	</table>
 	          </div>
+	          </logic:notEmpty>
               <% } %>
-              
-              
-            </table>
+            
