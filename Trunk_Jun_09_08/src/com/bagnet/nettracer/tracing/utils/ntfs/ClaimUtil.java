@@ -32,6 +32,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
@@ -91,14 +92,20 @@ public class ClaimUtil {
 	// }
 	// }
 
-	public static File createFsIncident(Incident inc) throws Exception {
+	public static File createFsIncident(Incident inc, Agent user) throws Exception {
 		try {
 
 			// Get Incident as inc
 			File file = new File();
-			
+			String airline = "B6";
+			if (user!= null && user.getCompanycode_ID() != null) {
+				airline = user.getCompanycode_ID();
+			} else if (inc.getAgent().getCompanycode_ID() != null) {
+				airline = inc.getAgent().getCompanycode_ID();
+			}
 			FsIncident i = new FsIncident();
-			i.setAirline(inc.getAgent().getCompanycode_ID());
+			i.setAirline(airline);
+			
 			i.setFile(file);
 			file.setIncident(i);
 			FsClaim c = null;
@@ -572,12 +579,12 @@ public class ClaimUtil {
 		return pd;
 	}
 
-	public static void saveAndTraceForFraud(HttpSession session, Incident iDTO, boolean isNew) throws Exception {
+	public static void saveAndTraceForFraud(HttpSession session, Incident iDTO, boolean isNew, Agent user) throws Exception {
 		if (isNew
 				&& PropertyBMO.isTrue(PropertyBMO.CENTRAL_FRAUD_CHECK_ENABLED)) {
 			try {
 				
-				File file = createFsIncident(iDTO);
+				File file = createFsIncident(iDTO, user);
 				Session sess = HibernateWrapper.getSession().openSession();
 				sess.save(file);
 				

@@ -48,7 +48,7 @@
       </h1>
       <span class="reqfield">*</span>
       <bean:message key="Required" />
-        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+        <table class="form2" cellspacing="0" cellpadding="0">
           <tr>
             <td nowrap colspan="2" >
               <bean:message key="colname.last_name.req" />

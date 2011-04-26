@@ -20,6 +20,7 @@
 <tr>
   
   <td id="middlecolumn">
+          		<div id="maincontent">
     <table class="form2" cellspacing="0" cellpadding="0">
       <tr>
         <td>
@@ -78,28 +79,29 @@
 
               %>
               	<logic:notEmpty scope="session" name="fraudResults">
-        		<div id="maincontent">
+				<p>&nbsp;</p>
                 <h1>
-                	<bean:message key="claim.fraud.primary_results" />
+                	<bean:message key="claim.fraud.damage.fraud.search" />
                 </h1>
+                <bean:message key="claim.fraud.damage.fraud.search.warning" />
             	<table class="form2" cellspacing="0" cellpadding="0" >
             		<tr>
-            			<td>
+            			<td class="header">
             				<b><bean:message key="colname.reference.id" /></b>
             			</td>
-            			<td>
+            			<td class="header">
             				<b><bean:message key="colname.reference.type" /></b>
             			</td>
-            			<td>
+            			<td class="header">
             				<b><bean:message key="colname.fraudresults.company" /></b>
             			</td>
-            			<td>
+            			<td class="header">
             				<b><bean:message key="colname.fraudresults.claim_date" /></b>
             			</td>
-            			<td>
+            			<td class="header">
             				<b><bean:message key="colname.fraudresults.match_summary" /></b>
             			</td>
-            			<td>
+            			<td class="header">
             				<b><bean:message key="colname.fraudresults.details" /></b>
             			</td>
             		</tr>
@@ -141,7 +143,6 @@
 	            			<% } else { %>
 		            			<tr>
 		            				<% if (pResult.getFile2().getIncident().getAirline().equals(company)) { %>
-		            				<td><html:checkbox name="pResult" property="selected" disabled="true" /></td>
 		            				<td>
 		            					<a href="searchIncident.do?incident=<%=pResult.getFile2().getIncident().getAirlineIncidentId() %>">
 		            						<bean:write name="pResult" property="file2.incident.airlineIncidentId" />
@@ -177,7 +178,7 @@
 	            			<% } %>
 	            		</logic:iterate>
             	</table>
-	          </div>
+	        
 	          </logic:notEmpty>
               <% } %>
-            
+              </div>

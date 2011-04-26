@@ -313,6 +313,7 @@ public class LogonAction extends Action {
 								entries = x;
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS)) {
 							int x = 0;
+							
 							try {
 							Context ctx = ConnectionUtil.getInitialContext();
 							ClaimRemote remote = (ClaimRemote) ctx

@@ -401,7 +401,7 @@ public class DamagedAction extends CheckedAction {
 			
 			if (error == null) {
 				
-				ClaimUtil.saveAndTraceForFraud(session, iDTO, isNew);
+				ClaimUtil.saveAndTraceForFraud(session, iDTO, isNew, user);
 				
 				theform.setRemarkEnteredWhenNotifiedOfRequirements(false);
 				theform.setNotifiedOfRequirements(false);
