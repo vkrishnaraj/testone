@@ -43,8 +43,8 @@
 		<p>&nbsp;</p>
 		<p>&nbsp;</p>
 		
-		
-						<%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
+				<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
+				<%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 				<%@ page import="org.hibernate.Session"%>
 				<%@ page import="com.bagnet.nettracer.hibernate.HibernateWrapper"%>
 				<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
@@ -54,6 +54,7 @@
 				
 
 				<%
+				boolean ntUser = PropertyBMO.isTrue("nt.user");
 				Agent a = (Agent) session.getAttribute("user");
 				ResourceBundle bundle = ResourceBundle.getBundle(
 						"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
@@ -116,7 +117,7 @@
 		
         <table class="form2" cellspacing="0" cellpadding="0">
           <logic:present name="activityList" scope="session">
-             
+             <% if (ntUser) { %>
             <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
               <logic:equal name="activityDTO" property="group" value="-1">
               		<logic:equal name="activityDTO" property="entries" value="0">
@@ -222,11 +223,11 @@
                 </tr>
               </logic:equal>
             </logic:iterate>
-
+			<% } %>
 			<tr>
 			  <td colspan="2" class="white">&nbsp;</td>
 			</tr>
-
+		
             <tr>
               <td class="header">
                 <b><bean:message key="tasks.claims" /></b>
@@ -251,7 +252,7 @@
 			<tr>
 			  <td colspan="2" class="white">&nbsp;</td>
 			</tr>
-
+			<% if (ntUser) { %>
             <tr>
               <td class="header">
                 <b><bean:message key="tasks.other" /></b>
@@ -277,7 +278,7 @@
                 </tr>
               </logic:equal>
             </logic:iterate>
-
+			<% } %>
           </logic:present>
         </table>
       </html:form>
