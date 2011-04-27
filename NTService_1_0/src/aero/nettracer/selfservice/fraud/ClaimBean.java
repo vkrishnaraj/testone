@@ -48,8 +48,8 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return "echo: " + s;
 	}
 
-	public TraceResponse traceFile(long fileId, int maxDelay) {
-		return Producer.matchFile(fileId, maxDelay, true);
+	public TraceResponse traceFile(long fileId, int maxDelay, boolean isPrimary) {
+		return Producer.matchFile(fileId, maxDelay, true, isPrimary);
 	}
 
 	public long insertFile(File file) {
@@ -487,7 +487,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	}
 
 	@Override
-	public TraceResponse traceFile(File file, int maxDelay, boolean persistResults) {
+	public TraceResponse traceFile(File file, int maxDelay, boolean persistResults, boolean isPrimary) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -534,4 +534,19 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return ((Long) list.get(0)).intValue();
 	}
 
+	@Override
+	public boolean deleteMatch(long matchId) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		try{
+
+			MatchHistory mh = (MatchHistory)sess.load(MatchHistory.class, matchId);
+			mh.setDeleted(true);
+			sess.saveOrUpdate(mh);
+			return true;
+		} catch (Exception e){
+			e.printStackTrace();
+			sess.close();
+			return false;
+		}
+	}
 }

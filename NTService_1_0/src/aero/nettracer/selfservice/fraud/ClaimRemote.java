@@ -17,8 +17,8 @@ import aero.nettracer.fs.model.detection.TraceResponse;
 public interface ClaimRemote {
 	public String echoTest(String s);
 	public long insertFile(File File);
-	public TraceResponse traceFile(long fileId, int maxDelay);
-	public TraceResponse traceFile(File file, int maxDelay, boolean persistResults);
+	public TraceResponse traceFile(long fileId, int maxDelay, boolean isPrimary);
+	public TraceResponse traceFile(File file, int maxDelay, boolean persistResults, boolean isPrimary);
 	public Set<MatchHistory> getFileMatches(long fileId);
 	public int getIncidentCacheSize();
 	public int getClaimCacheSize();
@@ -28,4 +28,5 @@ public interface ClaimRemote {
 	public void approveRequest(long requestId, String message, String agent);
 	public void denyRequest(long requestId, String message, String agent);
 	public File getFile(long fileId, String airline);
+	public boolean deleteMatch(long matchId);
 }

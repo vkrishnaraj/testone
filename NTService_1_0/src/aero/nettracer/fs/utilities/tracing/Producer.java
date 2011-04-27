@@ -46,10 +46,10 @@ public class Producer {
 		return s;
 	}
 	
-	public static TraceResponse matchFile(long fileId, int maxDelay, boolean persistData){
+	public static TraceResponse matchFile(long fileId, int maxDelay, boolean persistData, boolean isPrimary){
 		File file = TraceWrapper.loadFileFromCache(fileId);
 		if(file != null){
-			return matchFile(file, maxDelay, persistData);
+			return matchFile(file, maxDelay, persistData, isPrimary);
 		} else {
 			return null;
 		}
@@ -57,14 +57,15 @@ public class Producer {
 
 	
 	
-	private static void queueFile(Long id, HashSet<Long> queue, File file, Vector v){
+	private static void queueFile(Long id, HashSet<Long> queue, File file, Vector v, Date createDate, boolean isPrimary){
 		if(queue.add(new Long(id))){
 			MatchHistory match = new MatchHistory();
 			match.setDetails(new LinkedHashSet<MatchDetail>());
 			match.setFile1(file);
 			match.setFile2(new File(id));
 			match.setTraceCount(v);
-			match.setCreatedate(DateUtils.convertToGMTDate(new Date()));
+			match.setCreatedate(createDate);
+			match.setPrimarymatch(isPrimary);
 			try{
 				TraceWrapper.getMatchQueue().put(match);
 //				if(debug)System.out.println("Producer add file: " + id);
@@ -74,7 +75,7 @@ public class Producer {
 		}
 	}
 	
-	public static TraceResponse matchFile(File file, int maxDelay, boolean persistData) {
+	public static TraceResponse matchFile(File file, int maxDelay, boolean persistData, boolean isPrimary) {
 		Date starttime = new Date();
 		
 		HashSet<Long> fileQueue = new HashSet<Long>();
@@ -317,7 +318,8 @@ public class Producer {
 
 		sess.close();
 		
-
+		Date createDate = DateUtils.convertToGMTDate(new Date());
+		
 		for (Object[] strs : result) {
 			Long f1 = (Long) strs[0];
 			Long f2 = (Long) strs[1];
@@ -329,19 +331,19 @@ public class Producer {
 			String type = (String) strs[7];
 			
 			if(f1 != null){
-				queueFile(f1, fileQueue, file, v);
+				queueFile(f1, fileQueue, file, v, createDate, isPrimary);
 			} else if (f2 != null){
-				queueFile(f2, fileQueue, file, v);
+				queueFile(f2, fileQueue, file, v, createDate, isPrimary);
 			} else if (f3 != null){
-				queueFile(f3, fileQueue, file, v);
+				queueFile(f3, fileQueue, file, v, createDate, isPrimary);
 			} else if (f4 != null){
-				queueFile(f4, fileQueue, file, v);
+				queueFile(f4, fileQueue, file, v, createDate, isPrimary);
 			} else if (f5 != null){
-				queueFile(f5, fileQueue, file, v);
+				queueFile(f5, fileQueue, file, v, createDate, isPrimary);
 			} else if (f6 != null){
-				queueFile(f6, fileQueue, file, v);
+				queueFile(f6, fileQueue, file, v, createDate, isPrimary);
 			} else if (f7 != null){
-				queueFile(f7, fileQueue, file, v);
+				queueFile(f7, fileQueue, file, v, createDate, isPrimary);
 			}
 		}		
 		
@@ -351,6 +353,7 @@ public class Producer {
 		
 		boolean isFinished = true;
 		System.out.println("  Potential results: " + fileQueue.size());
+		System.out.println("  MaxDelay: " + maxDelay);
 		try {
 			int i = 0;
 			for(i= 0; v.size() < fileQueue.size() && (i < (maxDelay * 1000)/WAIT_TIME || maxDelay == -1); i++){
@@ -393,9 +396,13 @@ public class Producer {
 	
 
 	public static Set<MatchHistory> getMatchHistoryResult(long fileId){
-		String personSql = "from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
-				"and (m.file1.id = :id or m.file2.id = :id) order by m.overallScore desc";
+//		String personSql = "from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
+//				"and (m.file1.id = :id or m.file2.id = :id) order by m.primarymatch desc, m.createdate desc, m.overallScore desc";
 
+		//matching on file1 only because Mike is whining
+		String personSql = "from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
+		"and (m.file1.id = :id) and m.deleted = 0 order by m.primarymatch desc, m.createdate desc, m.overallScore desc";
+		
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(personSql.toString());
