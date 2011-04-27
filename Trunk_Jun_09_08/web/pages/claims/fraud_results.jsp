@@ -176,9 +176,9 @@
 		            				<td><bean:write name="pResult" property="file2.claim.id" /></td>
 		            				<% } %>
 		            				<td>
-		            					<logic:match name="pResult" property="file2.claim.claimType" value="0" >
-		            						<bean:message key="colname.na" />
-		            					</logic:match>
+		            					<logic:equal name="pResult" property="file2.claim.claimType" value="0" >
+		            						<bean:message key="match.type.claim" />
+		            					</logic:equal>
 		            					<logic:equal name="pResult" property="file2.claim.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
 		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.lostdelay" />
 		            					</logic:equal>
@@ -191,8 +191,7 @@
 	            					</td>
 		            				<td><bean:write name="pResult" property="file2.claim.airline" /></td>
 		            				<td><%=pResult.getFile2().getClaim().getDisClaimDate(a.getDateformat().getFormat()) %></td>
-		            				<td>
-		            					<%=pResult.getFile2().getDisStatus() %>
+		            				<td><%=pResult.getFile2().getDisStatus() %>
 		            					<bean:write name="pResult" property="matchSummary" filter="false" />
 	            					</td>
 		            				<td>
@@ -215,9 +214,9 @@
 		            				<td><bean:write name="pResult" property="file2.incident.airlineIncidentId" /></td>
 		            				<% } %>
 		            				<td>
-		            					<logic:match name="pResult" property="file2.incident.incidentType" value="0" >
-		            						<bean:message key="colname.na" />
-		            					</logic:match>
+		            					<logic:equal name="pResult" property="file2.incident.incidentType" value="0" >
+		            						<bean:message key="match.type.incident" />
+		            					</logic:equal>
 		            					<logic:equal name="pResult" property="file2.incident.incidentType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
 		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.lostdelay" />
 		            					</logic:equal>
@@ -230,8 +229,7 @@
 	            					</td>
 		            				<td><bean:write name="pResult" property="file2.incident.airline" /></td>
 		            				<td><%=pResult.getFile2().getIncident().getDisOpenDate(a.getDateformat().getFormat()) %></td>
-		            				<td>
-		            					<%=pResult.getFile2().getDisStatus() %>
+		            				<td><%=pResult.getFile2().getDisStatus() %>
 		            					<bean:write name="pResult" property="matchSummary" filter="false" />
 	            					</td>
 		            				<td>
@@ -287,9 +285,9 @@
 		            				<td><bean:write name="sResult" property="file1.claim.id" /></td>
 		            				<% } %>
 		            				<td>
-		            					<logic:match name="sResult" property="file1.claim.claimType" value="0" >
-		            						<bean:message key="colname.na" />
-		            					</logic:match>
+		            					<logic:equal name="sResult" property="file1.claim.claimType" value="0" >
+		            						<bean:message key="match.type.claim" />
+		            					</logic:equal>
 		            					<logic:equal name="sResult" property="file1.claim.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
 		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.lostdelay" />
 		            					</logic:equal>
@@ -302,8 +300,7 @@
 	            					</td>
 		            				<td><bean:write name="sResult" property="file1.claim.airline" /></td>
 		            				<td><%=sResult.getFile1().getClaim().getDisClaimDate(a.getDateformat().getFormat()) %></td>
-		            				<td>
-		            					<%=sResult.getFile1().getDisStatus() %>
+		            				<td><%=sResult.getFile1().getDisStatus() %>
 		            					<bean:write name="sResult" property="matchSummary" filter="false" />
 	            					</td>
 		            				<td>
@@ -326,9 +323,9 @@
 		            				<td><bean:write name="sResult" property="file1.incident.airlineIncidentId" /></td>
 		            				<% } %>
 		            				<td>
-		            					<logic:match name="sResult" property="file1.incident.incidentType" value="0" >
-		            						<bean:message key="colname.na" />
-		            					</logic:match>
+		            					<logic:equal name="sResult" property="file1.incident.incidentType" value="0" >
+		            						<bean:message key="match.type.incident" />
+		            					</logic:equal>
 		            					<logic:equal name="sResult" property="file1.incident.incidentType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
 		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.lostdelay" />
 		            					</logic:equal>
@@ -341,8 +338,7 @@
 	            					</td>
 		            				<td><bean:write name="sResult" property="file1.incident.airline" /></td>
 		            				<td><%=sResult.getFile1().getIncident().getDisOpenDate(a.getDateformat().getFormat()) %></td>
-		            				<td>
-		            					<%=sResult.getFile1().getDisStatus() %>
+		            				<td><%=sResult.getFile1().getDisStatus() %>
 		            					<bean:write name="sResult" property="matchSummary" filter="false" />
 	            					</td>
 		            				<td>

@@ -92,7 +92,9 @@ public class MatchHistory implements Serializable {
 		String summary = "";
 		if (details != null) {
 			for (MatchDetail m : getDetails()) {
-				summary += m.getDescription() + "<br>";
+				if (m.getDescription() != null && !m.getDescription().isEmpty()) {
+					summary += m.getDescription() + "<br>";
+				}
 			}
 			summary = summary.substring(0, summary.lastIndexOf("<br>"));
 		}

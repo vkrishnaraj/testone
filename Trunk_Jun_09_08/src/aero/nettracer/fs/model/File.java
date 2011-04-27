@@ -133,9 +133,9 @@ public class File implements Serializable {
 	public String getDisStatus() {
 		String toReturn;
 		if (statusId == TracingConstants.STATUS_SUSPECTED_FRAUD) {
-			toReturn = "<p class='suspectedFraud'>Suspected Fraud</p><br><br>";
+			toReturn = "<p style=\"padding:0px;margin:0px;color:#fbff00;font-weight:bold;\">Suspected Fraud</p>";
 		} else if (statusId == TracingConstants.STATUS_KNOWN_FRAUD) {
-			toReturn = "<p class='knownFraud'>Known Fraud</p><br><br>";
+			toReturn = "<p style=\"padding:0px;margin:0px;color:#ff0000;font-weight:bold;\">Known Fraud</p>";
 		} else {
 			toReturn = "";
 		}

@@ -600,7 +600,7 @@ public class ClaimUtil {
 						.traceFile(
 								file.getSwapId(),
 								PropertyBMO
-										.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_DAM_MISSING_TIMEOUT));
+										.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_DAM_MISSING_TIMEOUT),false);
 				session.setAttribute("fraudResults", results.getMatchHistory());
 			} catch (Exception e) {
 				e.printStackTrace();

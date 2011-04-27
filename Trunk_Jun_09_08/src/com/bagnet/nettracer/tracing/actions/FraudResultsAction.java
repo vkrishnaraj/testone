@@ -102,11 +102,10 @@ public class FraudResultsAction extends CheckedAction {
 
 		if (form.getClaimId() > 0) {
 
-			long fileId = ClaimDAO.loadClaim(form.getClaimId()).getFile().getSwapId();
 			if (results != null && !results.isEmpty()) {
 			
 				for (MatchHistory match: results) {
-					if (match.getFile1().getId() == fileId) {
+					if (match.isPrimarymatch()) {
 						primaryResults.add(match);
 					} else {
 						secondaryResults.add(match);

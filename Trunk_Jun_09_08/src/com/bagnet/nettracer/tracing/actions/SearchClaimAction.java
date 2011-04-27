@@ -59,6 +59,7 @@ public class SearchClaimAction extends CheckedAction {
 		SearchClaimForm theForm = (SearchClaimForm) form;
 		Set<FsClaim> resultSet = new LinkedHashSet<FsClaim>();
 		if (request.getParameter("clear") == null) {
+//			ClaimDAO.getClaimCount(theForm, user);
 			resultSet = ClaimDAO.getClaimsFromSearchForm((SearchClaimForm) form, user);
 		}
 		

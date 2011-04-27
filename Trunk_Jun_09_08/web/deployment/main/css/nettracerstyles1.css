@@ -34,6 +34,16 @@ p.warning {
 	text-align: center;	
 }
 
+p.knownFraud {
+	color: #ff0000;
+	font-weight: bold;	
+}
+
+p.suspectedFraud {
+	color: #fbffoo;
+	font-weight: bold;
+}
+
 h1 {
 	font-size: 1.5em;
 	color:#000;

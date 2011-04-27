@@ -244,7 +244,7 @@ public class ModifyClaimAction extends CheckedAction {
 				logger.info("Claim saved to central services: " + remoteFileId);
 
 				// 3. submit the claim for tracing
-				TraceResponse results = submitClaim(remoteFileId);
+				TraceResponse results = submitClaim(remoteFileId, true);
 				if (results != null) {
 					
 					// TODO: SET RELOAD TIME HERE
@@ -255,19 +255,19 @@ public class ModifyClaimAction extends CheckedAction {
 				ctx.close();
 			}
 			
-		} /* else if (request.getParameter("submit") != null) {
+		} else if (request.getParameter("submit") != null) {
 			
 			// 1. submit the claim for tracing
 			if (claim.getFile().getSwapId() > 0) {
-				Set<MatchHistory> results = submitClaim(claim.getSwapId());
+				TraceResponse results = submitClaim(claim.getSwapId(), false);
 				if (results != null) {
-					session.setAttribute("results", results);
+					session.setAttribute("results", results.getMatchHistory());
 					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
 					return null;
 				}
 			}
 			
-		}*/ else if (request.getParameter("error") != null) {
+		} else if (request.getParameter("error") != null) {
 			if (request.getParameter("error").equals("print")) {
 				// printing error
 				ActionMessage error = new ActionMessage("error.print");
@@ -346,7 +346,7 @@ public class ModifyClaimAction extends CheckedAction {
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
 	}
 	
-	private TraceResponse submitClaim(long fileId) {
+	private TraceResponse submitClaim(long fileId, boolean primary) {
 		if (fileId <= 0) {
 			return null;
 		}
@@ -363,7 +363,7 @@ public class ModifyClaimAction extends CheckedAction {
 				} catch (Exception e) {
 					//
 				}
-				results = remote.traceFile(fileId, wait);
+				results = remote.traceFile(fileId, wait, primary);
 				
 			}
 			ctx.close();
