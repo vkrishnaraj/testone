@@ -42,6 +42,10 @@ public class Producer {
 	private static final double MILE_SEARCH_ZIP = 4;
 	private static final double MILE_SEARCH_CITY = 10;
 	
+	public static String format(String s){
+		return s;
+	}
+	
 	public static TraceResponse matchFile(long fileId, int maxDelay, boolean persistData){
 		File file = TraceWrapper.loadFileFromCache(fileId);
 		if(file != null){
@@ -600,13 +604,16 @@ public class Producer {
 		
 		//incident
 		if(f.getIncident() != null){
-			//TODO model change for new permissions
-			f.getIncident().setNumberDaysOpen(-1);
-			f.getIncident().setNumberOfBdos(-1);
-			f.getIncident().setRemarks(s);
-			
-			if(f.getIncident().getBags() != null){
-				//TODO model change for new bag permissions
+			if(!p.isIncdate()){
+				f.getIncident().setNumberDaysOpen(-1);
+			}
+			if(!p.isBdo()){
+				f.getIncident().setNumberOfBdos(-1);
+			}
+			if(!p.isIncremarks()){
+				f.getIncident().setRemarks(s);
+			}
+			if(!p.isBag() && f.getIncident().getBags() != null){
 				for(Bag bag:f.getIncident().getBags()){
 					bag.setBagColor(s);
 					bag.setBagType(s);
@@ -633,8 +640,9 @@ public class Producer {
 			if(!p.isTraveldate()){
 				reservation.setTravelDate(null);
 			}
-			//TODO need model change for triplength
-			reservation.setTripLength(-1);	
+			if(!p.isItin()){
+				reservation.setTripLength(-1);
+			}
 			
 			if(reservation.getPnrData() != null){
 				if(!p.isPnrdata()){

@@ -69,7 +69,15 @@ public class PrivacyPermissions implements Serializable{
 	boolean dob;
 	boolean itin;
 	boolean ticketamount;
+
+
+	boolean bag;
+    boolean bdo;
+	boolean incdate;
+	boolean incremarks;
 	
+
+
 	public boolean isTicketamount() {
 		return ticketamount;
 	}
@@ -270,5 +278,37 @@ public class PrivacyPermissions implements Serializable{
 		this.phonenumber = phonenumber;
 	}
 	
+	
+	public boolean isBag() {
+		return bag;
+	}
+
+	public void setBag(boolean bag) {
+		this.bag = bag;
+	}
+
+	public boolean isBdo() {
+		return bdo;
+	}
+
+	public void setBdo(boolean bdo) {
+		this.bdo = bdo;
+	}
+
+	public boolean isIncdate() {
+		return incdate;
+	}
+
+	public void setIncdate(boolean incdate) {
+		this.incdate = incdate;
+	}
+	
+	public boolean isIncremarks() {
+		return incremarks;
+	}
+
+	public void setIncremarks(boolean incremarks) {
+		this.incremarks = incremarks;
+	}
 	
 }

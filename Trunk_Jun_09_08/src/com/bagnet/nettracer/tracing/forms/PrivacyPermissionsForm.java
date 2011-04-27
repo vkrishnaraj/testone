@@ -16,8 +16,9 @@ public class PrivacyPermissionsForm extends ValidatorForm {
 	private static final long serialVersionUID = -3676047698635316893L;
 	String[] componentList = {"autosend","name","address","phonenumber","email","traveldate","claimtype",
 			"claimdate","amountclaimed","amountpaid","fraudstatus","denied","denialreason",
-			"cc","drivers","ffn","ssn","passport","pnrloc","pnrdata","dob","itin","ticketamount"};
-
+			"cc","drivers","ffn","ssn","passport","pnrloc","pnrdata","dob","itin","ticketamount",
+			"bag","bdo","incdate","incremarks"};
+	
 
 	public String[] getComponentList() {
 		return componentList;
