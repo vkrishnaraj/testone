@@ -271,36 +271,36 @@
             			</td>
             		</tr>
 	            		<logic:iterate id="sResult" indexId="i" name="fraudResultsForm" property="secondaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
-	            			<% if (sResult.getFile1().getClaim() != null) { %>
+	            			<% if (sResult.getFile2().getClaim() != null) { %>
 		            			<tr>
-		            				<% if (sResult.getFile1().getClaim().getAirline().equals(company)) { %>
-		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" disabled /></td>
+		            				<% if (sResult.getFile2().getClaim().getAirline().equals(company)) { %>
+		            				<td><input type="checkbox" name="secondaryResults[<%=i%>].selected" disabled /></td>
 		            				<td>
-		            					<a href="claim_resolution.do?claimId=<%=sResult.getFile1().getClaim().getSwapId() %>">
-		            						<bean:write name="sResult" property="file1.claim.swapId" />
+		            					<a href="claim_resolution.do?claimId=<%=sResult.getFile2().getClaim().getSwapId() %>">
+		            						<bean:write name="sResult" property="file2.claim.swapId" />
 		            					</a>
 		            				</td>
 		            				<% } else { %>
-		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" /></td>
-		            				<td><bean:write name="sResult" property="file1.claim.id" /></td>
+		            				<td><input type="checkbox" name="secondaryResults[<%=i%>].selected" /></td>
+		            				<td><bean:write name="sResult" property="file2.claim.id" /></td>
 		            				<% } %>
 		            				<td>
-		            					<logic:equal name="sResult" property="file1.claim.claimType" value="0" >
+		            					<logic:equal name="sResult" property="file2.claim.claimType" value="0" >
 		            						<bean:message key="match.type.claim" />
 		            					</logic:equal>
-		            					<logic:equal name="sResult" property="file1.claim.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+		            					<logic:equal name="sResult" property="file2.claim.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
 		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.lostdelay" />
 		            					</logic:equal>
-		            					<logic:equal name="sResult" property="file1.claim.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+		            					<logic:equal name="sResult" property="file2.claim.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
 		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.missing" />
 		            					</logic:equal>
-		            					<logic:equal name="sResult" property="file1.claim.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+		            					<logic:equal name="sResult" property="file2.claim.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
 		            						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.damaged" />
 		            					</logic:equal>
 	            					</td>
-		            				<td><bean:write name="sResult" property="file1.claim.airline" /></td>
-		            				<td><%=sResult.getFile1().getClaim().getDisClaimDate(a.getDateformat().getFormat()) %></td>
-		            				<td><%=sResult.getFile1().getDisStatus() %>
+		            				<td><bean:write name="sResult" property="file2.claim.airline" /></td>
+		            				<td><%=sResult.getFile2().getClaim().getDisClaimDate(a.getDateformat().getFormat()) %></td>
+		            				<td><%=sResult.getFile2().getDisStatus() %>
 		            					<bean:write name="sResult" property="matchSummary" filter="false" />
 	            					</td>
 		            				<td>
@@ -311,34 +311,34 @@
 		            			</tr>
 	            			<% } else { %>
 		            			<tr>
-		            				<% if (sResult.getFile1().getIncident().getAirline().equals(company)) { %>
-		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" disabled /></td>
+		            				<% if (sResult.getFile2().getIncident().getAirline().equals(company)) { %>
+		            				<td><input type="checkbox" name="secondaryResults[<%=i%>].selected" disabled /></td>
 		            				<td>
-		            					<a href="searchIncident.do?incident=<%=sResult.getFile1().getIncident().getAirlineIncidentId() %>">
-		            						<bean:write name="sResult" property="file1.incident.airlineIncidentId" />
+		            					<a href="searchIncident.do?incident=<%=sResult.getFile2().getIncident().getAirlineIncidentId() %>">
+		            						<bean:write name="sResult" property="file2.incident.airlineIncidentId" />
 		            					</a>
 		            				</td>
 		            				<% } else { %>
-		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" /></td>
-		            				<td><bean:write name="sResult" property="file1.incident.airlineIncidentId" /></td>
+		            				<td><input type="checkbox" name="secondaryResults[<%=i%>].selected" /></td>
+		            				<td><bean:write name="sResult" property="file2.incident.airlineIncidentId" /></td>
 		            				<% } %>
 		            				<td>
-		            					<logic:equal name="sResult" property="file1.incident.incidentType" value="0" >
+		            					<logic:equal name="sResult" property="file2.incident.incidentType" value="0" >
 		            						<bean:message key="match.type.incident" />
 		            					</logic:equal>
-		            					<logic:equal name="sResult" property="file1.incident.incidentType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+		            					<logic:equal name="sResult" property="file2.incident.incidentType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
 		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.lostdelay" />
 		            					</logic:equal>
-		            					<logic:equal name="sResult" property="file1.incident.incidentType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+		            					<logic:equal name="sResult" property="file2.incident.incidentType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
 		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.missing" />
 		            					</logic:equal>
-		            					<logic:equal name="sResult" property="file1.incident.incidentType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+		            					<logic:equal name="sResult" property="file2.incident.incidentType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
 		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.damaged" />
 		            					</logic:equal>
 	            					</td>
-		            				<td><bean:write name="sResult" property="file1.incident.airline" /></td>
-		            				<td><%=sResult.getFile1().getIncident().getDisOpenDate(a.getDateformat().getFormat()) %></td>
-		            				<td><%=sResult.getFile1().getDisStatus() %>
+		            				<td><bean:write name="sResult" property="file2.incident.airline" /></td>
+		            				<td><%=sResult.getFile2().getIncident().getDisOpenDate(a.getDateformat().getFormat()) %></td>
+		            				<td><%=sResult.getFile2().getDisStatus() %>
 		            					<bean:write name="sResult" property="matchSummary" filter="false" />
 	            					</td>
 		            				<td>

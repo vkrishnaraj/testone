@@ -182,6 +182,7 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			// 1. save the claim locally
 			claim = cform.getClaim();
+			boolean firstSave = claim.getId() == 0;
 			boolean claimSaved = ClaimDAO.saveClaim(claim);
 			
 			// maintain existing nt functionality
@@ -244,7 +245,7 @@ public class ModifyClaimAction extends CheckedAction {
 				logger.info("Claim saved to central services: " + remoteFileId);
 
 				// 3. submit the claim for tracing
-				TraceResponse results = submitClaim(remoteFileId, true);
+				TraceResponse results = submitClaim(remoteFileId, firstSave);
 				if (results != null) {
 					
 					// TODO: SET RELOAD TIME HERE
@@ -259,7 +260,7 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			// 1. submit the claim for tracing
 			if (claim.getFile().getSwapId() > 0) {
-				TraceResponse results = submitClaim(claim.getSwapId(), false);
+				TraceResponse results = submitClaim(claim.getFile().getSwapId(), false);
 				if (results != null) {
 					session.setAttribute("results", results.getMatchHistory());
 					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
