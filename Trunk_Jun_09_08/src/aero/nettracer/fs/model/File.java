@@ -13,6 +13,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Proxy;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+
 @Entity
 @Proxy(lazy = false)
 public class File implements Serializable {
@@ -30,6 +32,8 @@ public class File implements Serializable {
 		this.matchingFiles = matchingFiles;
 	}
 
+	private int statusId;
+	
 	@Transient
 	Set<Person> personCache = null;
 	@Transient
@@ -117,4 +121,25 @@ public class File implements Serializable {
 		this.phoneCache = null;
 		this.personCache = null;
 	}
+
+	public int getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId(int statusId) {
+		this.statusId = statusId;
+	}
+	
+	public String getDisStatus() {
+		String toReturn;
+		if (statusId == TracingConstants.STATUS_SUSPECTED_FRAUD) {
+			toReturn = "<p class='suspectedFraud'>Suspected Fraud</p><br><br>";
+		} else if (statusId == TracingConstants.STATUS_KNOWN_FRAUD) {
+			toReturn = "<p class='knownFraud'>Known Fraud</p><br><br>";
+		} else {
+			toReturn = "";
+		}
+		return toReturn;		
+	}
+	
 }

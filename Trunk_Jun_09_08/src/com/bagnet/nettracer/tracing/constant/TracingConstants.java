@@ -417,6 +417,9 @@ public class TracingConstants {
 	public final static String COMPANY_PAGESTATE_WORLDTRACER = "6";
 	public final static String COMPANY_PAGESTATE_MOVETOLZ = "7";
 	
+	public final static int STATUS_SUSPECTED_FRAUD = 37;
+	public final static int STATUS_KNOWN_FRAUD = 38;
+	
 	/** ********* forwards *********** */
 	// no permission
 	public final static String NO_PERMISSION = "nopermission";
