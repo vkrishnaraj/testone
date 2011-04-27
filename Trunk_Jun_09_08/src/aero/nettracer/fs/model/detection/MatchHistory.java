@@ -45,6 +45,8 @@ public class MatchHistory implements Serializable {
 	}
 
 	private boolean deleted;
+	
+	private boolean primarymatch;
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class)
 	private File file1;
@@ -159,6 +161,14 @@ public class MatchHistory implements Serializable {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+	public void setPrimarymatch(boolean primarymatch) {
+		this.primarymatch = primarymatch;
+	}
+
+	public boolean isPrimarymatch() {
+		return primarymatch;
 	}
 
 }
