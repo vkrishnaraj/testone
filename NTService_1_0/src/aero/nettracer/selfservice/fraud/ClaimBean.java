@@ -277,6 +277,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		if (addresses != null) {
 			for (FsAddress address : addresses) {
 
+				if(address.getId() != 0 || address.getGeocodeType() == 0){
 				address.setId(0);
 				// GEOCODING ALL ADDRESSES POSSIBLE ON SAVE
 				// Note: Because this is not persisted to the client,
@@ -299,7 +300,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 					// Log error only
 					e.printStackTrace();
 				}
-
+				}
 			}
 		}
 		return addresses;
@@ -534,6 +535,26 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return ((Long) list.get(0)).intValue();
 	}
 
+	public boolean deleteMatch(Set<Long>matchIds){
+		Session sess = HibernateWrapper.getSession().openSession();
+		try{
+			Transaction t = sess.getTransaction();
+			t.begin();
+			for(Long id:matchIds){
+				MatchHistory mh = (MatchHistory)sess.load(MatchHistory.class, id);
+				mh.setDeleted(true);
+				sess.saveOrUpdate(mh);
+			}
+			t.commit();
+			sess.close();
+			return true;
+		} catch (Exception e){
+			e.printStackTrace();
+			sess.close();
+			return false;
+		}
+	}
+	
 	@Override
 	public boolean deleteMatch(long matchId) {
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -542,6 +563,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			MatchHistory mh = (MatchHistory)sess.load(MatchHistory.class, matchId);
 			mh.setDeleted(true);
 			sess.saveOrUpdate(mh);
+			sess.close();
 			return true;
 		} catch (Exception e){
 			e.printStackTrace();

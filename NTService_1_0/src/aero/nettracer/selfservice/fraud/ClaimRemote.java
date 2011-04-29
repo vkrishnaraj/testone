@@ -29,4 +29,5 @@ public interface ClaimRemote {
 	public void denyRequest(long requestId, String message, String agent);
 	public File getFile(long fileId, String airline);
 	public boolean deleteMatch(long matchId);
+	public boolean deleteMatch(Set<Long>matchIds);
 }

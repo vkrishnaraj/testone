@@ -2,6 +2,7 @@ package aero.nettracer.fs.utilities.tracing;
 
 // TODO: MASS TRIMMING
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -61,33 +62,41 @@ public class Consumer implements Runnable{
 	private int threadnumber;
 	private int threadtype;
 	private ArrayBlockingQueue<MatchHistory> matchQueue;
+	private ThreadContainer tc;
 	
-	public Consumer(ArrayBlockingQueue queue, int type, int threadnumber) throws Exception{
+	public Consumer(ArrayBlockingQueue queue, int type, ThreadContainer tc) throws Exception{
 		if (type == MATCH){
 			matchQueue = queue;
 		} else {
 			throw new Exception("unable to create consumer");
 		}
-		this.threadnumber = threadnumber;
+		this.threadnumber = tc.getId();
 		this.threadtype = type;
+		this.tc = tc;
 	}
 	
 	
 	@Override
 	public void run() {
 		while(true){
+			tc.setWaiting(true);
 			try{
 				if (this.threadtype == MATCH){
 					MatchHistory match = matchQueue.take();
+					tc.setStartTime(new Date());
+					tc.setWaiting(false);
 //					System.out.println(matchQueue.size());
 					if(debug)System.out.println("consumer " + threadnumber);
 					processMatch(match);
 				}
 			}catch (Exception e){
 				e.printStackTrace();
+			}finally{
+
 			}
 		}
 	}
+	
 
 	private static void processMatch(MatchHistory match){
 		try{
@@ -131,7 +140,7 @@ public class Consumer implements Runnable{
 
 					
 					if (score1.equals(score2)) { 
-						System.out.println("Returning because match exists...");
+						if(debug)System.out.println("Returning because match exists...");
 						return;
 					}
 				}
@@ -144,7 +153,7 @@ public class Consumer implements Runnable{
 				// TODO: Check to see if match already exists???
 				t = sess.beginTransaction();
 				sess.saveOrUpdate(match);
-				System.out.println("Saving match... " + match.getId());
+				if(debug)System.out.println("Saving match... " + match.getId());
 				t.commit();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -168,7 +177,9 @@ public class Consumer implements Runnable{
 			e.printStackTrace();
 		}finally{
 			match.getTraceCount().add(null);
-			if(debug)System.out.println("consumer consumed count: " + match.getTraceCount().size());
+//			if(debug)System.out.println("consumer consumed count: " + match.getTraceCount().size());
+			System.out.println("consumer consumed count: " + match.getTraceCount().size());
+
 		}
 	}
 	
@@ -176,7 +187,7 @@ public class Consumer implements Runnable{
 
 		Set<Phone> plist1 = match.getFile1().getPhoneCache();
 		if(plist1 == null){
-			System.out.println("phone cache is null");
+			if(debug)System.out.println("phone cache is null");
 			plist1 = getPhones(match.getFile1());
 		}	
 

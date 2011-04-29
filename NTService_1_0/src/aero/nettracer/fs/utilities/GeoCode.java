@@ -10,6 +10,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
+import aero.nettracer.fs.utilities.tracing.TimerThread;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class GeoCode {
@@ -301,8 +302,11 @@ public class GeoCode {
 			String totalAddress = "perl C:\\geo_perl\\getLoc.pl \"" + fullAdd
 					+ "\"";
 
+			Thread timer = new Thread(new TimerThread(Thread.currentThread(), 5000));
+			timer.start();
+			
 			Process p = Runtime.getRuntime().exec(totalAddress);
-
+			
 			BufferedReader input = new BufferedReader(new InputStreamReader(
 					p.getInputStream()));
 			while ((line = input.readLine()) != null) {
@@ -312,7 +316,14 @@ public class GeoCode {
 				}
 				toReturn = parseLine(line, toReturn);
 			}
+//			Thread.sleep(1000);
 			input.close();
+			timer.interrupt();
+//		} catch (java.lang.InterruptedException e){
+//			System.out.println("Timed out reading from perl test");
+		} catch (java.io.InterruptedIOException e ){
+			System.out.println("Timed out reading from perl");
+			e.printStackTrace();
 		} catch (Exception err) {
 			err.printStackTrace();
 		}

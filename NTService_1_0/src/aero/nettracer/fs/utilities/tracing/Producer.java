@@ -35,15 +35,16 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 public class Producer {
 
 	private static final String ACCESS_NOT_GRANTED = "*** Access not Granted ***";
-	private static boolean debug = true;
+	private static boolean debug = false;
 	private static final int MAX_WAIT = 40;
 	public static final double MILE_SEARCH_RADIUS = 2;
 	private static final long WAIT_TIME = 250;
 	private static final double MILE_SEARCH_ZIP = 4;
 	private static final double MILE_SEARCH_CITY = 10;
+	public static final String invalidChars = "[\'%\"]";
 	
 	public static String format(String s){
-		return s;
+		return s.trim().toUpperCase().replaceAll(invalidChars, "");
 	}
 	
 	public static TraceResponse matchFile(long fileId, int maxDelay, boolean persistData, boolean isPrimary){
@@ -89,6 +90,7 @@ public class Producer {
 			String ms = "select file2_id, overallScore from matchhistory where file1_id = " + file.getId();
 			SQLQuery pq = null;
 			Session sess = HibernateWrapper.getSession().openSession();
+			try{
 			pq = sess.createSQLQuery(ms.toString());
 			pq.addScalar("file2_id", Hibernate.LONG);
 			pq.addScalar("overallScore", Hibernate.DOUBLE);
@@ -101,6 +103,11 @@ public class Producer {
 				matchingMap.put(f1, f2);
 			}
 			file.setMatchingFiles(matchingMap);
+			} catch (Exception e){
+				e.printStackTrace();
+			} finally {
+				sess.close();
+			}
 		}
 
 		
@@ -139,23 +146,23 @@ public class Producer {
 			}
 			
 			if(person.getPassportNumber() != null && person.getPassportNumber().trim().length() > 0){
-				sql += " or passportNumber = \'" + person.getPassportNumber() + "\' ";
+				sql += " or passportNumber = \'" + format(person.getPassportNumber()) + "\' ";
 			}
 			
 			if(person.getSocialSecurity() != null && person.getSocialSecurity().trim().length() > 0){
-				sql += " or socialSecurity = \'" + person.getSocialSecurity() + "\' ";
+				sql += " or socialSecurity = \'" + format(person.getSocialSecurity()) + "\' ";
 			}
 			
 			if(person.getEmailAddress() != null && person.getEmailAddress().trim().length() > 0){
-				sql += " or emailAddress = \'" + person.getEmailAddress() + "\' ";
+				sql += " or emailAddress = \'" + format(person.getEmailAddress()) + "\' ";
 			}
 			
 			if(person.getFfNumber() != null && person.getFfNumber().trim().length() > 0){
-				sql += " or ffNumber = \'" + person.getFfNumber() + "\' ";
+				sql += " or ffNumber = \'" + format(person.getFfNumber()) + "\' ";
 			}
 			
 			if(person.getDriversLicenseNumber() != null && person.getDriversLicenseNumber().trim().length() > 0){
-				sql += " or driversLicenseNumber = \'" + person.getDriversLicenseNumber() + "\' ";
+				sql += " or driversLicenseNumber = \'" + format(person.getDriversLicenseNumber()) + "\' ";
 			}
 		}
 		
@@ -205,7 +212,7 @@ public class Producer {
 //				}
 //			}
 			for(String phoneNumber:phoneNumbers){
-				sql += " or ph.phoneNumber = \'" + phoneNumber + "\' ";
+				sql += " or ph.phoneNumber = \'" + format(phoneNumber) + "\' ";
 			}
 		}
 		
@@ -225,7 +232,7 @@ public class Producer {
 					"left outer join fsclaim c2 on i2.claim_id = c2.id " +
 					"left outer join file f2 on f2.id = c2.file_id " +
 					"left outer join file f3 on f3.id = i2.file_id " +
-					"where ccNumLastFour = \'" + file.getIncident().getReservation().getCcNumLastFour() +"\' ";
+					"where ccNumLastFour = \'" + format(file.getIncident().getReservation().getCcNumLastFour()) +"\' ";
 		}
 
 		Set<FsAddress> addresses = Consumer.getAddresses(file);
@@ -287,12 +294,12 @@ public class Producer {
 					// Compare against non-geocoded items.
 					// Country / City
 					if (a.getCity() != null && a.getCity().trim().length() > 0 && a.getCountry() != null && a.getCountry().trim().length() > 0) {
-						sql += "or (lattitude = 0 and longitude = 0 and ad.country = \'" + a.getCountry() + "\' and ad.city = \'" + a.getCity() + "\' ) ";
+						sql += "or (lattitude = 0 and longitude = 0 and ad.country = \'" + format(a.getCountry()) + "\' and ad.city = \'" + format(a.getCity()) + "\' ) ";
 					}
 				} else {
 					// This else is if the address wasn't geocoded.
 					if (a.getCity() != null && a.getCity().trim().length() > 0 && a.getCountry() != null && a.getCountry().trim().length() > 0) {
-					sql += "or (ad.country = \'" + a.getCountry() + "\' and ad.city = \'" + a.getCity() + "\' ) ";
+					sql += "or (ad.country = \'" + format(a.getCountry()) + "\' and ad.city = \'" + format(a.getCity()) + "\' ) ";
 					}
 				}
 			}		
@@ -349,8 +356,8 @@ public class Producer {
 		
 		Date endtime = new Date();
 		fileQueue.remove(new Long(file.getId()));//removing dup from queue to get accurate count
-		if(debug)System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
-		
+		System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
+		System.out.println("Consumer BEGIN: " + (new Date()));
 		boolean isFinished = true;
 		System.out.println("  Potential results: " + fileQueue.size());
 		System.out.println("  MaxDelay: " + maxDelay);
@@ -361,20 +368,22 @@ public class Producer {
 			}
 			endtime = new Date();
 			if (maxDelay == -1) {
-				System.out.println("  Complete Trace Elapsed Time: "  + (endtime.getTime() - starttime.getTime()));
+				if(debug)System.out.println("  Complete Trace Elapsed Time: "  + (endtime.getTime() - starttime.getTime()));
 				file.setPersonCache(null);
 				file.setAddressCache(null);
 				file.setPhoneCache(null);
 			} else if (i >= MAX_WAIT) {
-				System.out.println("***WARNING: Maximum Search Time Exceeded: " + (WAIT_TIME * MAX_WAIT) + "ms");
+				if(debug)System.out.println("***WARNING: Maximum Search Time Exceeded: " + (WAIT_TIME * MAX_WAIT) + "ms");
 				isFinished = false;
 			}
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Consumer END: " + (new Date()));
 		
 		Set<MatchHistory> mh = getCensoredFileMatches(file.getId());
+		System.out.println("Returning RESULTS: " + mh.size());
 		TraceResponse tr = new TraceResponse();
 		tr.setMatchHistory(mh);
 		tr.setTraceComplete(isFinished);
@@ -386,7 +395,7 @@ public class Producer {
 			long timeElapsed = (nowTime.getTime() - starttime.getTime()) / 1000;
 			double percentRemaining = 100 - percComplete;
 			double secondsToComplete = (double) timeElapsed / percComplete * percentRemaining;
-			System.out.println("Percent complete: " + (i / totalSize * 100) + " (" + i + "/" + totalSize
+			if(debug)System.out.println("Percent complete: " + (i / totalSize * 100) + " (" + i + "/" + totalSize
 					+ ")  Minutes remaining: " + secondsToComplete / 60);
 
 			tr.setSecondsUntilReload((int)(secondsToComplete*1.1));
@@ -526,7 +535,7 @@ public class Producer {
 			}
 			String c1=p1.getKey()!= null ? p1.getKey().getCompanycode():"NA";
 			String c2=p2.getKey()!= null ? p2.getKey().getCompanycode():"NA";
-			System.out.println(c1+c2+":"+d.getContent1()+":"+d.getContent2());
+			if(debug)System.out.println(c1+c2+":"+d.getContent1()+":"+d.getContent2());
 			
 		}
 	}

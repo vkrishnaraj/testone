@@ -1,7 +1,9 @@
 package aero.nettracer.fs.utilities.tracing;
 
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -154,20 +156,29 @@ public class TraceWrapper {
 		return claimCache.size();
 	}
 	
-
+	
 	public static ArrayBlockingQueue<MatchHistory> getMatchQueue(){
+		Vector <ThreadContainer>v = new Vector<ThreadContainer>();
 		if(matchQueue == null){
 			matchQueue = new ArrayBlockingQueue<MatchHistory>(10000);
 			for (int i=0; i<maxThreads; ++i) {
 				try{
-					Consumer consumer = new Consumer(matchQueue, Consumer.MATCH, i);
+					ThreadContainer tc =  new ThreadContainer();
+					tc.setStartTime(new Date());
+					Consumer consumer = new Consumer(matchQueue, Consumer.MATCH, tc);
 					Thread t = new Thread(consumer, "CosumerThread " + i);
+					tc.setConsumer(t);
+					tc.setId(i);
+					v.add(tc);
 					t.setPriority(Thread.MIN_PRIORITY);
 					t.start();
 				}catch(Exception e){
 					e.printStackTrace();
 				}
 			}
+			ThreadMonitor tm = new ThreadMonitor(v);
+			Thread t = new Thread(tm, "TraceWrapperMonitorThread");
+			t.start();
 		}
 		return matchQueue;
 	}
