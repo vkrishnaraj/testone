@@ -139,31 +139,31 @@
                 </h1>
             	<table class="form2" cellspacing="0" cellpadding="0" >
             		<tr>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.select" /></b>
+            			<td class="header">
+            				<bean:message key="colname.fraudresults.select" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.reference.id" /></b>
+            			<td class="header">
+            				<bean:message key="colname.reference.id" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.reference.type" /></b>
+            			<td class="header">
+            				<bean:message key="colname.reference.type" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.company" /></b>
+            			<td class="header">
+            				<bean:message key="colname.fraudresults.company" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.claim_date" /></b>
+            			<td class="header">
+            				<bean:message key="colname.fraudresults.claim_date" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.match_summary" /></b>
+            			<td class="header">
+            				<bean:message key="colname.fraudresults.match_summary" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.details" /></b>
+            			<td class="header">
+            				<bean:message key="colname.fraudresults.details" />
             			</td>
             		</tr>
 	 	           		<logic:iterate id="pResult" indexId="i" name="fraudResultsForm" property="primaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
 	            			<% if (pResult.getFile2().getClaim() != null) { %>
-		            			<tr>
+		            			<tr <%=pResult.getFile2().getDisStatus() %>>
 		            				<% if (pResult.getFile2().getClaim().getAirline().equals(company)) { %>
 		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" disabled /></td>
 		            				<td>
@@ -191,7 +191,8 @@
 	            					</td>
 		            				<td><bean:write name="pResult" property="file2.claim.airline" /></td>
 		            				<td><%=pResult.getFile2().getClaim().getDisClaimDate(a.getDateformat().getFormat()) %></td>
-		            				<td><%=pResult.getFile2().getDisStatus() %>
+		            				<td>
+		            					<%=pResult.getFile2().getDisStatusText() %>
 		            					<bean:write name="pResult" property="matchSummary" filter="false" />
 	            					</td>
 		            				<td>
@@ -201,7 +202,7 @@
 		            				</td>
 		            			</tr>
 	            			<% } else { %>
-		            			<tr>
+		            			<tr <%=pResult.getFile2().getDisStatus() %>>
 		            				<% if (pResult.getFile2().getIncident().getAirline().equals(company)) { %>
 		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" disabled /></td>
 		            				<td>
@@ -229,7 +230,8 @@
 	            					</td>
 		            				<td><bean:write name="pResult" property="file2.incident.airline" /></td>
 		            				<td><%=pResult.getFile2().getIncident().getDisOpenDate(a.getDateformat().getFormat()) %></td>
-		            				<td><%=pResult.getFile2().getDisStatus() %>
+		            				<td>
+		            					<%=pResult.getFile2().getDisStatusText() %>
 		            					<bean:write name="pResult" property="matchSummary" filter="false" />
 	            					</td>
 		            				<td>
@@ -248,31 +250,31 @@
             	</h1>
             	<table class="form2" cellspacing="0" cellpadding="0" >
             		<tr>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.select" /></b>
+            			<td class="header">
+            				<bean:message key="colname.fraudresults.select" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.reference.id" /></b>
+            			<td class="header">
+            				<bean:message key="colname.reference.id" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.reference.type" /></b>
+            			<td class="header">
+            				<bean:message key="colname.reference.type" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.company" /></b>
+            			<td class="header">
+            				<bean:message key="colname.fraudresults.company" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.claim_date" /></b>
+            			<td class="header">
+            				<bean:message key="colname.fraudresults.claim_date" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.match_summary" /></b>
+            			<td class="header">
+            				<bean:message key="colname.fraudresults.match_summary" />
             			</td>
-            			<td>
-            				<b><bean:message key="colname.fraudresults.details" /></b>
+            			<td class="header">
+            				<bean:message key="colname.fraudresults.details" />
             			</td>
             		</tr>
 	            		<logic:iterate id="sResult" indexId="i" name="fraudResultsForm" property="secondaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
 	            			<% if (sResult.getFile2().getClaim() != null) { %>
-		            			<tr>
+		            			<tr <%=sResult.getFile2().getDisStatus() %>>
 		            				<% if (sResult.getFile2().getClaim().getAirline().equals(company)) { %>
 		            				<td><input type="checkbox" name="secondaryResults[<%=i%>].selected" disabled /></td>
 		            				<td>
@@ -300,7 +302,8 @@
 	            					</td>
 		            				<td><bean:write name="sResult" property="file2.claim.airline" /></td>
 		            				<td><%=sResult.getFile2().getClaim().getDisClaimDate(a.getDateformat().getFormat()) %></td>
-		            				<td><%=sResult.getFile2().getDisStatus() %>
+		            				<td>
+		            					<%=sResult.getFile2().getDisStatusText() %>
 		            					<bean:write name="sResult" property="matchSummary" filter="false" />
 	            					</td>
 		            				<td>
@@ -310,7 +313,7 @@
 									</td>
 		            			</tr>
 	            			<% } else { %>
-		            			<tr>
+		            			<tr <%=sResult.getFile2().getDisStatus() %>>
 		            				<% if (sResult.getFile2().getIncident().getAirline().equals(company)) { %>
 		            				<td><input type="checkbox" name="secondaryResults[<%=i%>].selected" disabled /></td>
 		            				<td>
@@ -338,7 +341,8 @@
 	            					</td>
 		            				<td><bean:write name="sResult" property="file2.incident.airline" /></td>
 		            				<td><%=sResult.getFile2().getIncident().getDisOpenDate(a.getDateformat().getFormat()) %></td>
-		            				<td><%=sResult.getFile2().getDisStatus() %>
+		            				<td>
+		            					<%=sResult.getFile2().getDisStatusText() %>
 		            					<bean:write name="sResult" property="matchSummary" filter="false" />
 	            					</td>
 		            				<td>

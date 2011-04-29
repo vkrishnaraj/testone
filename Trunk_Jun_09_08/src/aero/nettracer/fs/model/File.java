@@ -130,12 +130,25 @@ public class File implements Serializable {
 		this.statusId = statusId;
 	}
 	
+	public String getDisStatusText() {
+		String toReturn;
+		if (statusId == TracingConstants.STATUS_SUSPECTED_FRAUD) {
+			toReturn = "<p style=\"padding:0px;margin:0px;font-weight:bold;\">Suspected Fraud</p><br/>";
+		} else if (statusId == TracingConstants.STATUS_KNOWN_FRAUD) {
+			toReturn = "<p style=\"padding:0px;margin:0px;font-weight:bold;\">Known Fraud</p><br/>";
+		} else {
+			toReturn = "";
+		}
+		return toReturn;		
+	}
+
 	public String getDisStatus() {
 		String toReturn;
 		if (statusId == TracingConstants.STATUS_SUSPECTED_FRAUD) {
-			toReturn = "<p style=\"padding:0px;margin:0px;color:#fbff00;font-weight:bold;\">Suspected Fraud</p>";
+			toReturn = "class=\"suspected_fraud\"";
 		} else if (statusId == TracingConstants.STATUS_KNOWN_FRAUD) {
-			toReturn = "<p style=\"padding:0px;margin:0px;color:#ff0000;font-weight:bold;\">Known Fraud</p>";
+//			toReturn = "style=\"background-color:#CC1B0B;\"";
+			toReturn = "class=\"known_fraud\"";
 		} else {
 			toReturn = "";
 		}

@@ -78,6 +78,7 @@ public class ModifyClaimAction extends CheckedAction {
 		
 
 		boolean isNtUser = PropertyBMO.isTrue("nt.user");
+		boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 		
 		// for existing nt functionality
 		ActionMessages errors = new ActionMessages();
@@ -196,64 +197,66 @@ public class ModifyClaimAction extends CheckedAction {
 				}
 			}
 			
-			// 2. save the claim on central services
-			Context ctx = ConnectionUtil.getInitialContext();
-			ClaimRemote remote = (ClaimRemote) ctx
-					.lookup("NTServices_1_0/ClaimBean/remote");
-			long remoteFileId = 0;
-			if (remote != null) {
-				FsClaim newClaim = new FsClaim();
-				BeanUtils.copyProperties(newClaim, claim);
-				LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
-				newClaim.setSegments(segs);
-				
-				LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
-				newClaim.setClaimants(pers);
-				
-				newClaim.getIncident().setClaim(newClaim);
-				for (Person p: claim.getClaimants()) {
-					p.setClaim(newClaim);
-					pers.add(p);
-				}
-				
-				for (Segment s: claim.getSegments()) {
-					s.setClaim(newClaim);
-					segs.add(s);
-				}
-				
-				File file = claim.getFile();
-				if (file == null) {
-					file = new File();
-				}
-				file.setClaim(newClaim);
-				newClaim.setFile(file);
-				file.setIncident(newClaim.getIncident());
-				newClaim.getIncident().setFile(file);
-				
-				remoteFileId = remote.insertFile(file);
-				if (remoteFileId > 0) {
-					file.setSwapId(remoteFileId);
-				}
-				
-				claim = ClaimDAO.loadClaim(claim.getId());
-				claim.setFile(file);
-				file.setClaim(claim);
-				file.setIncident(claim.getIncident());
-				claim.getIncident().setFile(file);
-				
-				ClaimDAO.saveClaim(claim);
-				logger.info("Claim saved to central services: " + remoteFileId);
-
-				// 3. submit the claim for tracing
-				TraceResponse results = submitClaim(remoteFileId, firstSave);
-				if (results != null) {
+			if (ntfsUser) {
+				// 2. save the claim on central services
+				Context ctx = ConnectionUtil.getInitialContext();
+				ClaimRemote remote = (ClaimRemote) ctx
+						.lookup("NTServices_1_0/ClaimBean/remote");
+				long remoteFileId = 0;
+				if (remote != null) {
+					FsClaim newClaim = new FsClaim();
+					BeanUtils.copyProperties(newClaim, claim);
+					LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
+					newClaim.setSegments(segs);
 					
-					// TODO: SET RELOAD TIME HERE
-					session.setAttribute("results", results.getMatchHistory());
-					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
-					return null;
+					LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
+					newClaim.setClaimants(pers);
+					
+					newClaim.getIncident().setClaim(newClaim);
+					for (Person p: claim.getClaimants()) {
+						p.setClaim(newClaim);
+						pers.add(p);
+					}
+					
+					for (Segment s: claim.getSegments()) {
+						s.setClaim(newClaim);
+						segs.add(s);
+					}
+					
+					File file = claim.getFile();
+					if (file == null) {
+						file = new File();
+					}
+					file.setClaim(newClaim);
+					newClaim.setFile(file);
+					file.setIncident(newClaim.getIncident());
+					newClaim.getIncident().setFile(file);
+					
+					remoteFileId = remote.insertFile(file);
+					if (remoteFileId > 0) {
+						file.setSwapId(remoteFileId);
+					}
+					
+					claim = ClaimDAO.loadClaim(claim.getId());
+					claim.setFile(file);
+					file.setClaim(claim);
+					file.setIncident(claim.getIncident());
+					claim.getIncident().setFile(file);
+					
+					ClaimDAO.saveClaim(claim);
+					logger.info("Claim saved to central services: " + remoteFileId);
+	
+					// 3. submit the claim for tracing
+					TraceResponse results = submitClaim(remoteFileId, firstSave);
+					if (results != null) {
+						
+						// TODO: SET RELOAD TIME HERE
+						session.setAttribute("results", results.getMatchHistory());
+						response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
+						return null;
+					}
+					ctx.close();
 				}
-				ctx.close();
 			}
 			
 		} else if (request.getParameter("submit") != null) {

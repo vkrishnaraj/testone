@@ -46,16 +46,34 @@
                 <h1>
                 	<bean:message key="colname.claim.id" />:&nbsp;<bean:write name="claimId" scope="request" />
                 </h1>
+                <logic:notEmpty name="status" scope="request" >
+                	<table class="form2" cellpadding="0" cellspacing="0" >
+	                <logic:equal name="status" scope="request" value="<%=String.valueOf(TracingConstants.STATUS_SUSPECTED_FRAUD) %>" >
+                		<tr class="suspected_fraud">
+                			<td>
+                				<center><b><bean:message key="match.status.message" /><bean:message key="suspected.fraud" /></b></center>
+                			</td>
+	                	</tr>
+	                </logic:equal>
+	                <logic:equal name="status" scope="request" value="<%=String.valueOf(TracingConstants.STATUS_KNOWN_FRAUD) %>" >
+                		<tr class="known_fraud">
+                			<td>
+                				<center><b><bean:message key="match.status.message" /><bean:message key="known.fraud" /></b></center>
+                			</td>
+	                	</tr>
+	                </logic:equal>
+	                </table>
+                </logic:notEmpty>
             	<table class="form2" cellspacing="0" cellpadding="0" > 
             		<tr>
-            			<td>
-            				<b><bean:message key="claim.match.detail.item" /></b>
+            			<td class="header">
+            				<bean:message key="claim.match.detail.item" />
             			</td>
-            			<td>
-            				<b><bean:message key="claim.match.detail.original" /></b>
+            			<td class="header">
+            				<bean:message key="claim.match.detail.original" />
             			</td>
-            			<td>
-            				<b><bean:message key="claim.match.detail.match" /></b>
+            			<td class="header">
+            				<bean:message key="claim.match.detail.match" />
             			</td>
             		</tr>
             		<logic:iterate id="detail" name="match" property="details" scope="request" type="aero.nettracer.fs.model.detection.MatchDetail" >

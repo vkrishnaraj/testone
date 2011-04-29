@@ -10,8 +10,9 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
-  Agent a = (Agent)session.getAttribute("user");
+ 	Agent a = (Agent)session.getAttribute("user");
 	boolean ntUser = PropertyBMO.isTrue("nt.user");
+	boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -83,7 +84,7 @@
                     &nbsp;</span></a>
               </dd>
 <%
-            } if (ntUser) { %>
+            } if (ntUser && ntfsUser) { %>
 					<dd>
                    	<a href='fraud_results.do?incident=<bean:write name="incident" scope="request" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
                    	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
@@ -93,7 +94,8 @@
                    </dd>
 
 
-			<% } else { %>
+			<% } else { 
+					if (ntfsUser) { %>
 					<dd>
                    	<a href='fraud_results.do'><span class="aa">&nbsp;<br />&nbsp;</span>
                    	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
@@ -101,7 +103,8 @@
                           <br />
                           &nbsp;</span></a>
                    </dd>
-            <% } %>
+            <% 		}
+			   } %>
             <dd>
               <a href="#"><span class="aab">&nbsp;
                   <br />

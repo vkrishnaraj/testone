@@ -16,6 +16,7 @@
   Agent a = (Agent)session.getAttribute("user");
 
   boolean ntUser = PropertyBMO.isTrue("nt.user");
+  boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 
 %>
   
@@ -178,7 +179,7 @@
                             &nbsp;</span></a>
                       </dd>
                       <dd>
-                      <% if (ntUser) { %>
+                      <% if (ntUser && ntfsUser) { %>
                       <logic:notEqual name="claimForm" property="claim.id" value="0">
                    	<a href='fraud_results.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
                    	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
@@ -194,14 +195,16 @@
                           &nbsp;</span></a>
                           </logic:equal>
                    </dd>
-                   <% } else { %>
+                   <% } else { 
+                   		if (ntfsUser) { %>
                    <a href='fraud_results.do'><span class="aa">&nbsp;<br />&nbsp;</span>
                    	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
                         <span class="cc">&nbsp;
                           <br />
                           &nbsp;</span></a>
                    </dd>
-                   <% } 
+                   <% 	}
+                   	  }
                       
                       if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a) && ntUser) {
 %>

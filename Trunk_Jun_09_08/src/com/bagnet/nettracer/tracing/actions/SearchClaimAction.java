@@ -59,48 +59,50 @@ public class SearchClaimAction extends CheckedAction {
 		SearchClaimForm theForm = (SearchClaimForm) form;
 		Set<FsClaim> resultSet = new LinkedHashSet<FsClaim>();
 		if (request.getParameter("clear") == null) {
-//			ClaimDAO.getClaimCount(theForm, user);
-			resultSet = ClaimDAO.getClaimsFromSearchForm((SearchClaimForm) form, user);
-		}
-		
-		if (resultSet.size() == 1) {
-			long claimId = resultSet.toArray(new FsClaim[0])[0].getId();
-			response.sendRedirect("claim_resolution.do?claimId=" + claimId);
-			return null;
-		}
-
-		currpage = theForm.getCurrpage() != null ? Integer.parseInt(theForm.getCurrpage()) : 0;
-		if (theForm.getNextpage() != null && theForm.getNextpage().equals("1"))
-			currpage++;
-		if (theForm.getPrevpage() != null && theForm.getPrevpage().equals("1"))
-			currpage--;
-		
-		long rowcount = resultSet != null ? resultSet.size() : 0;
-		
-		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
-		
-		if (totalpages > 1) {
-			resultSet = ClaimUtils.getPaginatedList(resultSet, rowsperpage, currpage);
-		}
-
-		if (totalpages <= currpage) {
-			currpage = 0;
-			request.setAttribute("currpage", "0");
-		}
-
-		if (currpage + 1 == totalpages)
-			request.setAttribute("end", "1");
-		if (totalpages > 1) {
-			ArrayList<String> al = new ArrayList<String>();
-			for (int j = 0; j < totalpages; j++) {
-				al.add(Integer.toString(j));
+			long rowcount = ClaimDAO.getClaimCountFromSearchForm((SearchClaimForm) form, user);
+	
+			currpage = theForm.getCurrpage() != null ? Integer.parseInt(theForm.getCurrpage()) : 0;
+			if (theForm.getNextpage() != null && theForm.getNextpage().equals("1"))
+				currpage++;
+			if (theForm.getPrevpage() != null && theForm.getPrevpage().equals("1"))
+				currpage--;
+			
+			
+			int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
+			
+			if (totalpages > 1) {
+				resultSet = ClaimUtils.getPaginatedList(resultSet, rowsperpage, currpage);
 			}
-			request.setAttribute("pages", al);
+	
+			if (totalpages <= currpage) {
+				currpage = 0;
+				request.setAttribute("currpage", "0");
+			}
+			
+			boolean end = currpage + 1 == totalpages && totalpages > 1;
+			if (end)
+				request.setAttribute("end", "1");
+			if (totalpages > 1) {
+				ArrayList<String> al = new ArrayList<String>();
+				for (int j = 0; j < totalpages; j++) {
+					al.add(Integer.toString(j));
+				}
+				request.setAttribute("pages", al);
+			}
+			
+			/***************** end pagination *****************/
+
+			resultSet = ClaimDAO.getClaimsFromSearchForm((SearchClaimForm) form, user, rowsperpage, currpage);
+			
+			if (!end && resultSet.size() == 1) {
+				long claimId = resultSet.toArray(new FsClaim[0])[0].getId();
+				response.sendRedirect("claim_resolution.do?claimId=" + claimId);
+				return null;
+			}
+
 		}
-		
 		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 		request.setAttribute("currpage", Integer.toString(currpage));		
-		/***************** end pagination *****************/
 		
 		request.setAttribute("resultList", resultSet);
 		return mapping.findForward(TracingConstants.CLAIM_SEARCH);

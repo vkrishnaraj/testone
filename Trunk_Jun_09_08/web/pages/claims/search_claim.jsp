@@ -70,7 +70,12 @@
             		<td>
             			<bean:message key="colname.claim.id" />
             			<br />
-            			<html:text name="searchClaimForm" property="claimId" value="" size="5" styleClass="textfield" styleId="sId" onblur="fillzero(this.claimId,13);" />
+            			<logic:equal name="searchClaimForm" property="claimId" value="0" >
+            				<html:text name="searchClaimForm" property="claimId" value="" size="5" styleClass="textfield" styleId="sId" onblur="fillzero(this.claimId,13);" />
+            			</logic:equal>
+            			<logic:greaterThan name="searchClaimForm" property="claimId" value="0" >
+            				<html:text name="searchClaimForm" property="claimId" size="5" styleClass="textfield" styleId="sId" onblur="fillzero(this.claimId,13);" />
+            			</logic:greaterThan>
             		</td>
             		<% if (ntUser) { %>
             		<td>
@@ -230,25 +235,19 @@
               </h1>
               <table class="form2" cellpadding="0" cellspacing="0" >
               	<tr>
-                  <td>
-                    <b>
-                      <bean:message key="colname.claim.id" />
-                    </b>
+                  <td class="header">
+                    <bean:message key="colname.claim.id" />
                   </td>
                   <% if (ntUser) { %>
-                  <td>
-                    <b><bean:message key="colname.incident.id" /></b>
+                  <td class="header">
+                    <bean:message key="colname.incident.id" />
                   </td>
                   <% } %>
-                  <td>
-                    <b>
+                  <td class="header">
                       <bean:message key="colname.claim.date.created" />
-                    </b>
                   </td>
-                  <td>
-                    <b>
+                  <td class="header">
                       <bean:message key="colname.claimant.name" />
-                    </b>
                   </td>
                 </tr>
                 <logic:iterate id="results" name="resultList" type="aero.nettracer.fs.model.FsClaim">

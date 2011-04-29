@@ -80,6 +80,10 @@ public class FraudResultsAction extends CheckedAction {
 			long matchId = Long.parseLong(request.getParameter("matchId"));
 			MatchHistory match = getMatchHistory(matchId, resultsForm);
 			request.setAttribute("match", match);
+			int status = match.getFile2().getStatusId();
+			if (status == TracingConstants.STATUS_SUSPECTED_FRAUD || status == TracingConstants.STATUS_KNOWN_FRAUD) {
+				request.setAttribute("status", status);
+			}
 			request.setAttribute("claimId", resultsForm.getClaimId());
 			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
 		} else if (request.getParameter("requestInfo") != null) {

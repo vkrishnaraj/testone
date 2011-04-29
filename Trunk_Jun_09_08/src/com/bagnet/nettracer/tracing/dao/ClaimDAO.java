@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.dao;
 
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import aero.nettracer.fs.model.FsClaim;
@@ -75,14 +77,41 @@ public class ClaimDAO {
 		return success;
 	}
 	
+	public static long getClaimCountFromSearchForm(SearchClaimForm form, Agent user) {
+		long count = -1;
+		Session session = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = getCriteriaFromForm(session, form, user);
+			count = (Integer) criteria.setProjection(Projections.rowCount()).uniqueResult();
+		} catch (Exception e) {
+			logger.error(EXCEPTION_MESSAGE, e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return count;
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Set getClaimsFromSearchForm(SearchClaimForm form, Agent user) {
+	public static Set getClaimsFromSearchForm(SearchClaimForm form, Agent user, int rowsperpage, int currpage) {
 		Set results = null;
 		Session session = null;
 		
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = getCriteriaFromForm(session, form, user);
+//			int count = (Integer) criteria.setProjection(Projections.rowCount()).uniqueResult();
+			if (rowsperpage > 0) {
+				int startnum = currpage * rowsperpage;
+				criteria.setFirstResult(startnum);
+				criteria.setMaxResults(rowsperpage);
+			}
+			
+//			count = (Integer) criteria.setProjection(Projections.rowCount()).uniqueResult();
+			List rs = criteria.list();
 			results = new LinkedHashSet(criteria.list());
 		} catch (Exception e) {
 			logger.error(EXCEPTION_MESSAGE, e);
@@ -100,7 +129,7 @@ public class ClaimDAO {
 		criteria = getIdCriteria(form, criteria);		
 		criteria = getNtIncidentIdCriteria(form, criteria); 
 		criteria = getDateCriteria("claimDate", form.getS_createtime(), form.getE_createtime(), user, criteria);
-		criteria = getClaimantCriteria(form, user, criteria);
+		criteria = getClaimantAndPurchaserCriteria(form, user, criteria);
 		criteria = criteria.addOrder(Order.desc("claimDate"));
 		return criteria;
 	}
@@ -136,32 +165,52 @@ public class ClaimDAO {
 		
 	}
 	
+	private static Criteria getClaimantAndPurchaserCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
+		getClaimantCriteria(form, agent, criteria);
+//		getPurchaserCriteria(form, agent, criteria);
+//		LogicalExpression orExp = Restrictions.or(claimant, purchaser);
+		return criteria;
+	}
+	
 	private static Criteria getClaimantCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
 		Criteria claimantCriteria = criteria.createCriteria("claimants");
+		claimantCriteria = getPersonCriteria(form, agent, claimantCriteria);
+		return criteria;
+	}
+	
+	private static Criteria getPurchaserCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
+		// TODO: build criteria for purchaser
+		Criteria purchaserCriteria = criteria.createCriteria("incident.reservation.purchaser");
+		// TODO: get person criteria using purchaser criteria
+		purchaserCriteria = getPersonCriteria(form, agent, purchaserCriteria);
+		return criteria;
+	}
+	
+	private static Criteria getPersonCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
 
 		String value = form.getLastName();
 		if (value != null && !value.isEmpty()) {
-			claimantCriteria.add(Restrictions.like("lastName", form.getLastName()));
+			criteria.add(Restrictions.like("lastName", form.getLastName()));
 		}
 
 		value = form.getFirstName();
 		if (value != null && !value.isEmpty()) {
-			claimantCriteria.add(Restrictions.like("firstName", form.getFirstName()));
+			criteria.add(Restrictions.like("firstName", form.getFirstName()));
 		}
 		
 		value = form.getMiddleName();
 		if (value != null && !value.isEmpty()) {
-			claimantCriteria.add(Restrictions.like("middleName", form.getMiddleName()));
+			criteria.add(Restrictions.like("middleName", form.getMiddleName()));
 		}
 		
 		value = form.getEmailAddress();
 		if (value != null && !value.isEmpty()) {
-			claimantCriteria.add(Restrictions.like("emailAddress", value));
+			criteria.add(Restrictions.like("emailAddress", value));
 		}
 		
-		claimantCriteria = getDateCriteria("dateOfBirth", form.getStartDateOfBirth(), form.getEndDateOfBirth(), agent, claimantCriteria);		
-		claimantCriteria = getClaimantAddressCriteria(form, claimantCriteria);
-		claimantCriteria = getClaimantPhoneCriteria(form, claimantCriteria);
+		criteria = getDateCriteria("dateOfBirth", form.getStartDateOfBirth(), form.getEndDateOfBirth(), agent, criteria);		
+		criteria = getClaimantAddressCriteria(form, criteria);
+		criteria = getClaimantPhoneCriteria(form, criteria);
 		
 		return criteria;
 	}
