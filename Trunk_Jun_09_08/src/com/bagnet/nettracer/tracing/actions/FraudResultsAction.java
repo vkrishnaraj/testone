@@ -87,17 +87,52 @@ public class FraudResultsAction extends CheckedAction {
 			request.setAttribute("claimId", resultsForm.getClaimId());
 			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
 		} else if (request.getParameter("requestInfo") != null) {
-			List<MatchHistory> requestList = getRequestedMatches(resultsForm);
+			List<MatchHistory> requestList = getSelectedMatches(resultsForm);
+			
+			String myCompany = user.getCompanycode_ID();
+			ArrayList<MatchHistory> toRemove = new ArrayList<MatchHistory>();
+			for (MatchHistory m: requestList) {
+				String matchedAirline = m.getFile2().getMatchedAirline();
+				if (matchedAirline.equals(myCompany)) {
+					toRemove.add(m);
+				}
+			}
+			requestList.removeAll(toRemove);
 			if (requestList.size() != 0) {
 				session.setAttribute("requestList", requestList);
 				response.sendRedirect("request_info.do?claimId=" + claim.getId());
 				return null;
 			}
-		} 
+		} else if (request.getParameter("delete") != null) {
+			List<MatchHistory> requestedList = getSelectedMatches(resultsForm);
+			if (requestedList.size() > 0) {
+				LinkedHashSet<Long> ids = new LinkedHashSet<Long>();
+				for (MatchHistory m: requestedList) {
+					results = removeMatchHistory(results, m.getId());
+					ids.add(m.getId());
+				}
+				
+				Context ctx = ConnectionUtil.getInitialContext();
+				ClaimRemote remote = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
+				if (remote != null) {
+					remote.deleteMatch(ids);
+				}
+			}
+		}
 
 		resultsForm = separateResults(results, resultsForm);
 		
 		return (mapping.findForward(TracingConstants.CLAIM_FRAUD_RESULTS));
+	}
+	
+	private static Set<MatchHistory> removeMatchHistory(Set<MatchHistory> results, long id) {
+		for (MatchHistory m: results) {
+			if (m.getId() == id) {
+				results.remove(m);
+				break;
+			}
+		}
+		return results;
 	}
 	
 	private FraudResultsForm separateResults(Set<MatchHistory> results, FraudResultsForm form) {
@@ -105,9 +140,7 @@ public class FraudResultsAction extends CheckedAction {
 		ArrayList<MatchHistory> secondaryResults = new ArrayList<MatchHistory>();
 
 		if (form.getClaimId() > 0) {
-
 			if (results != null && !results.isEmpty()) {
-			
 				for (MatchHistory match: results) {
 					if (match.isPrimarymatch()) {
 						primaryResults.add(match);
@@ -115,17 +148,15 @@ public class FraudResultsAction extends CheckedAction {
 						secondaryResults.add(match);
 					}
 				}
-				
 			}
-			
 		}
-		
+	
 		form.setPrimaryResults(primaryResults);
 		form.setSecondaryResults(secondaryResults);
 		return form;
 	}
 
-	private List<MatchHistory> getRequestedMatches(FraudResultsForm form) {
+	private List<MatchHistory> getSelectedMatches(FraudResultsForm form) {
 		ArrayList<MatchHistory> matches = new ArrayList<MatchHistory>();
 		matches.addAll(form.getPrimaryResults());
 		matches.addAll(form.getSecondaryResults());
@@ -134,7 +165,6 @@ public class FraudResultsAction extends CheckedAction {
 		
 		for (MatchHistory m: matches) {
 			if (m.isSelected()) {
-				logger.info("Info requested for match: " + m.getId());
 				if (m.getFile1().getClaim().getId() == originalId) {
 					toReturn.add(m);
 				} else {

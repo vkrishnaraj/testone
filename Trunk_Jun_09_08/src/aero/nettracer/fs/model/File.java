@@ -147,12 +147,18 @@ public class File implements Serializable {
 		if (statusId == TracingConstants.STATUS_SUSPECTED_FRAUD) {
 			toReturn = "class=\"suspected_fraud\"";
 		} else if (statusId == TracingConstants.STATUS_KNOWN_FRAUD) {
-//			toReturn = "style=\"background-color:#CC1B0B;\"";
 			toReturn = "class=\"known_fraud\"";
 		} else {
 			toReturn = "";
 		}
 		return toReturn;		
+	}
+	
+	public String getMatchedAirline() {
+		if (incident != null) {
+			return incident.getAirline();
+		}
+		return claim.getAirline();
 	}
 	
 }

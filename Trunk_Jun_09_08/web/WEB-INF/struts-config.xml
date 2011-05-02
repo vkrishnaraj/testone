@@ -570,8 +570,6 @@
 		<action path="/create_claim" type="com.bagnet.nettracer.tracing.actions.CreateClaimAction" scope="request" validate="false" ></action>
 
 		<action path="/fraud_results" type="com.bagnet.nettracer.tracing.actions.FraudResultsAction" name="fraudResultsForm" scope="session" validate="false" ></action>
-		
-		<action path="/fraud_results" type="com.bagnet.nettracer.tracing.actions.FraudResultsAction" name="fraudResultsForm" scope="session" validate="false" ></action>
 
 		<action path="/search_claim" type="com.bagnet.nettracer.tracing.actions.SearchClaimAction" name="searchClaimForm" scope="request" validate="false" ></action>
 
