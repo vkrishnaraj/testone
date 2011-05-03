@@ -27,7 +27,7 @@ import aero.nettracer.fs.model.detection.Blacklist;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.model.detection.Whitelist;
-import aero.nettracer.fs.model.messaging.Message;
+import aero.nettracer.fs.model.messaging.FsMessage;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.GeoLocation;
 import aero.nettracer.fs.utilities.InternationalException;
@@ -388,8 +388,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		request.setRequestedAgent(agent);
 		request.setRequestedDate(DateUtils.convertToGMTDate(new Date()));
 		request.setRequestedAirline(requestingAirline);
+		request.setStatus(RequestStatus.Created);
 		if (message != null && message.trim().length() > 0) {
-			Message m = new Message();
+			FsMessage m = new FsMessage();
 			m.setSenderName(agent);
 			m.setMessage(message);
 			m.setTimestamp(DateUtils.convertToGMTDate(new Date()));
@@ -501,7 +502,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		request.setResponseDate(DateUtils.convertToGMTDate(new Date()));
 
 		if (message != null && message.trim().length() > 0) {
-			Message m = new Message();
+			FsMessage m = new FsMessage();
 			m.setSenderName(agent);
 			m.setMessage(message);
 			m.setTimestamp(DateUtils.convertToGMTDate(new Date()));

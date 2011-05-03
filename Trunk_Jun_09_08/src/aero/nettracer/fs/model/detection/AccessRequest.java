@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.File;
-import aero.nettracer.fs.model.messaging.Message;
+import aero.nettracer.fs.model.messaging.FsMessage;
 
 @Entity
 @Proxy(lazy = false)
@@ -53,7 +53,7 @@ public class AccessRequest implements Serializable {
 	private RequestStatus status;
 
 	@OneToOne(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
-	private Message message;
+	private FsMessage message;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date requestedDate;
@@ -93,11 +93,11 @@ public class AccessRequest implements Serializable {
 		this.status = status;
 	}
 
-	public Message getMessage() {
+	public FsMessage getMessage() {
 		return message;
 	}
 
-	public void setMessage(Message message) {
+	public void setMessage(FsMessage message) {
 		this.message = message;
 	}
 

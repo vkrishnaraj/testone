@@ -16,7 +16,7 @@ import org.hibernate.annotations.Proxy;
 @Entity
 @Proxy(lazy = false)
 @Table(name="central_message")
-public class Message implements Serializable{
+public class FsMessage implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	public static enum MessageContext {
