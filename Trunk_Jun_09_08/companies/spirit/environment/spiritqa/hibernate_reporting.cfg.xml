@@ -10,6 +10,7 @@
     <session-factory>	
     	
     	<property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
+    	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 		<property name="connection.url">jdbc:mysql://10.5.30.78/nettracer_spirit_qa</property>
 		<property name="connection.username">nettracer</property>
 		<property name="connection.password">nettracer</property>

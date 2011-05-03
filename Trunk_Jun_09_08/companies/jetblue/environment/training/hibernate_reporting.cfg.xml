@@ -11,6 +11,7 @@
     <session-factory>	
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
+    	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 		<property name="hibernate.connection.url">jdbc:mysql://10.8.185.134:3306/jetblue_training</property>
 		<property name="hibernate.connection.username">jetbluereporting</property>
 		<property name="hibernate.connection.password">hu8w6cRe</property>
