@@ -55,7 +55,7 @@
             		<logic:iterate id="match" name="requestInfoForm" property="requestedMatches" type="aero.nettracer.fs.model.detection.MatchHistory" >
 	            		<tr>
 	            			<% if (match.getFile2().getClaim() != null) { %>
-		            			<td><bean:write name="match" property="file2.claim.id" /></td>
+		            			<td><bean:write name="match" property="file2.claim.swapId" /></td>
 		            			<td><bean:write name="match" property="file2.claim.airline" /></td>
 		            			<td><%=match.getFile2().getClaim().getDisClaimDate(a.getDateformat().getFormat()) %></td>
 		            		<% } else { %>

@@ -467,3 +467,16 @@ div#notablelines table td {
 	padding:0px;
 	vertical-align:top;
 }
+
+.suspected_fraud {
+	margin:	0px;
+	padding: 0px;
+	background-color: #FEFF82;
+}
+
+.known_fraud {
+	margin:	0px;
+	padding: 0px;
+	background-color: #FE6060;
+}
+

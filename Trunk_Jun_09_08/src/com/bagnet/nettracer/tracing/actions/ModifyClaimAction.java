@@ -228,6 +228,7 @@ public class ModifyClaimAction extends CheckedAction {
 						file = new File();
 					}
 					file.setClaim(newClaim);
+					file.setStatusId(claim.getStatus().getStatus_ID());
 					newClaim.setFile(file);
 					file.setIncident(newClaim.getIncident());
 					newClaim.getIncident().setFile(file);

@@ -15,8 +15,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Proxy;
+
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.messaging.FsMessage;
@@ -139,5 +142,10 @@ public class AccessRequest implements Serializable {
 
 	private Date responseDate;
 	private String responseAgent;
+	
+	@Transient
+	public String getDisRequestedDate(String dateFormat) {
+		return DateUtils.formatDate(requestedDate, dateFormat, "", null);
+	}
 
 }

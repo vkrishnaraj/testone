@@ -27,7 +27,6 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 /**
@@ -57,9 +56,9 @@ public class ViewFraudRequests extends CheckedAction {
 
 //		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user))
 //			return (mapping.findForward(TracingConstants.NO_PERMISSION));
-
-		String approveId = (String) request.getAttribute("approveId");
-		String denyId = (String) request.getAttribute("denyId");
+		
+		String approveId = (String) request.getParameter("approveId");
+		String denyId = (String) request.getParameter("denyId");
 		Context ctx = ConnectionUtil.getInitialContext();
 		ClaimRemote remote = (ClaimRemote) ctx
 				.lookup("NTServices_1_0/ClaimBean/remote");

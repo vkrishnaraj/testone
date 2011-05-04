@@ -9,6 +9,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.CompanyBMO" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
@@ -113,6 +114,9 @@ function updatePagination() {
             				<b><bean:message key="colname.fraudresults.claim_date" /></b>
             			</td>
             			<td class="header">
+            				<b><bean:message key="colname.fraudresults.message" /></b>
+            			</td>
+            			<td class="header">
             				<b><bean:message key="colname.fraudresults.match_summary" /></b>
             			</td>
             			<td class="header">
@@ -122,37 +126,63 @@ function updatePagination() {
             </tr>
             <logic:present name="requestList" scope="request">
               <logic:iterate id="requested" name="requestList" type="aero.nettracer.fs.model.detection.AccessRequest">
-                <tr>
+                <tr <%=requested.getFile().getDisStatus() %>>
+                	<% if (requested.getFile().getClaim() != null) { %>
             			<td>
-            				<bean:write name="requested" property="file.fileId" />
+            				<bean:write name="requested" property="file.claim.swapId" />
             			</td>
             			<td>
-            					         <logic:match name="requested" property="file.incident.incidentType" value="0" >
-		            						<bean:message key="colname.na" />
-		            					</logic:match>
-		            					<logic:equal name="requested" property="file.incident.incidentType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
-		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.lostdelay" />
-		            					</logic:equal>
-		            					<logic:equal name="requested" property="file.incident.incidentType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
-		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.missing" />
-		            					</logic:equal>
-		            					<logic:equal name="requested" property="file.incident.incidentType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
-		            						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.damaged" />
-		            					</logic:equal>
+   					        <logic:equal name="requested" property="file.claim.claimType" value="0" >
+           						<bean:message key="match.type.claim" />
+           					</logic:equal>
+           					<logic:equal name="requested" property="file.claim.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+           						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+           					</logic:equal>
+           					<logic:equal name="requested" property="file.claim.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+           						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.missing" />
+           					</logic:equal>
+           					<logic:equal name="requested" property="file.claim.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+           						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.damaged" />
+           					</logic:equal>
             			</td>
+            		<% } else { %>
             			<td>
             				<bean:write name="requested" property="file.incident.airlineIncidentId" />
             			</td>
             			<td>
-            				<bean:write name="requested" property="requestedDate" />
+   					        <logic:equal name="requested" property="file.incident.incidentType" value="0" >
+           						<bean:message key="match.type.incident" />
+           					</logic:equal>
+           					<logic:equal name="requested" property="file.incident.incidentType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
+           						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+           					</logic:equal>
+           					<logic:equal name="requested" property="file.incident.incidentType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
+           						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.missing" />
+           					</logic:equal>
+           					<logic:equal name="requested" property="file.incident.incidentType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
+           						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.damaged" />
+           					</logic:equal>
+            			</td>
+            		<% } %>
+            			<td>
+            				<bean:write name="requested" property="requestedAirline" />
             			</td>
             			<td>
+            				<%=requested.getDisRequestedDate(a.getDateformat().getFormat()) %>
+            			</td>
+            			<td>
+            				<div style="width:200px;word-wrap:break-word;">
+            				<bean:write name="requested" property="message.message" />
+            				</div>
+            			</td>
+            			<td>
+            				<%=requested.getFile().getDisStatusText() %>
             				<bean:write name="requested" property="matchHistory.matchSummary" filter="false" />
             			</td>
             			<td>
             				<a href="fraudRequests.do?approveId=<%=requested.getId() %>">
-		            						<bean:message key="claim.match.approve" />
-		            					</a><br /><br/>
+	            						<bean:message key="claim.match.approve" />
+	            					</a><br /><br/>
             				<a href="fraudRequests.do?denyId=<%=requested.getId() %>">
 		            						<bean:message key="claim.match.deny" />
 		            					</a>

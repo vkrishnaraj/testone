@@ -103,15 +103,12 @@ public class ClaimDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = getCriteriaFromForm(session, form, user);
-//			int count = (Integer) criteria.setProjection(Projections.rowCount()).uniqueResult();
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
 				criteria.setFirstResult(startnum);
 				criteria.setMaxResults(rowsperpage);
 			}
 			
-//			count = (Integer) criteria.setProjection(Projections.rowCount()).uniqueResult();
-			List rs = criteria.list();
 			results = new LinkedHashSet(criteria.list());
 		} catch (Exception e) {
 			logger.error(EXCEPTION_MESSAGE, e);

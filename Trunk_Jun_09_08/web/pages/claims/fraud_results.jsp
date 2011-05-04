@@ -172,7 +172,7 @@
 		            					</a>
 		            				</td>
 		            				<% } else { %>
-		            				<td><bean:write name="pResult" property="file2.claim.id" /></td>
+		            				<td><bean:write name="pResult" property="file2.claim.swapId" /></td>
 		            				<% } %>
 		            				<td>
 		            					<logic:equal name="pResult" property="file2.claim.claimType" value="0" >
