@@ -288,7 +288,7 @@ public class GeoCode {
 		}
 		GeoParsedAddress toReturn = null;
 		try {
-			String line;
+			String line = null;
 			String fullAdd = address + ",";
 			if (city != null && state != null) {
 				fullAdd += " " + city + ", " + state;
@@ -302,25 +302,50 @@ public class GeoCode {
 			String totalAddress = "perl C:\\geo_perl\\getLoc.pl \"" + fullAdd
 					+ "\"";
 
-			Thread timer = new Thread(new TimerThread(Thread.currentThread(), 5000));
-			timer.start();
-			
+
+//			System.out.println(totalAddress);
 			Process p = Runtime.getRuntime().exec(totalAddress);
-			
+
 			BufferedReader input = new BufferedReader(new InputStreamReader(
 					p.getInputStream()));
-			while ((line = input.readLine()) != null) {
-				// System.out.println("SYSTEM: " + line);
-				if (toReturn == null) {
-					toReturn = new GeoParsedAddress();
+			Boolean interrupted = new Boolean(false);
+			Thread timer = new Thread(new TimerThread(Thread.currentThread(), 2000));
+			timer.start();
+//			Thread.sleep(5000);
+//			System.out.println(p.exitValue());
+			
+			
+			do{
+				while(!input.ready() && !Thread.interrupted()){
+					Thread.sleep(40);
 				}
-				toReturn = parseLine(line, toReturn);
-			}
+
+				if(!Thread.interrupted()){
+					line = input.readLine();
+					//				System.out.println("SYSTEM: " + line);
+					if (toReturn == null) {
+						toReturn = new GeoParsedAddress();
+					}
+					toReturn = parseLine(line, toReturn);
+					if(line.contains("{END}")){
+						line = null;
+					}
+				}
+			}while(!Thread.interrupted() && line != null);
+			
+//			while (input.ready() && (line = input.readLine()) != null) {
+//				 System.out.println("SYSTEM: " + line);
+//				if (toReturn == null) {
+//					toReturn = new GeoParsedAddress();
+//				}
+//				toReturn = parseLine(line, toReturn);
+//			}
+//			System.out.println("done");
 //			Thread.sleep(1000);
 			input.close();
 			timer.interrupt();
-//		} catch (java.lang.InterruptedException e){
-//			System.out.println("Timed out reading from perl test");
+		} catch (java.lang.InterruptedException e){
+			System.out.println("Timed out reading from perl");
 		} catch (java.io.InterruptedIOException e ){
 			System.out.println("Timed out reading from perl");
 			e.printStackTrace();

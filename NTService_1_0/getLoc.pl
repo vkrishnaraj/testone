@@ -12,6 +12,7 @@ sub geocode {
     
     my $part = $Parser->parse_location($addr);
 
+	print "{END}" unless $part;
     return unless $part;
 
     print "OUTPUT ADDRESS: \n";
@@ -23,4 +24,5 @@ sub geocode {
     print "CIT:" . $part->{city} . "\n" if $part->{city};
     print "STA:" . $part->{state} . "\n" if $part->{state};
     print "ZIP:" . $part->{zip} . "\n" if $part->{zip};
+    print "{END}";
 }

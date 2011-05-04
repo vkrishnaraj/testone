@@ -45,7 +45,7 @@ public class FsMessage implements Serializable{
 		this.timestamp = timestamp;
 	}
 
-	@Column(length=30)
+	@Column(length=100)
 	private String senderName;
 	
 	@Column(length=2500)
