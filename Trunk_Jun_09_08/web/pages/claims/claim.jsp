@@ -727,5 +727,9 @@
                     <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />
                     </html:submit>
+                    <logic:notEmpty name="back" scope="request" >
+                    	&nbsp;&nbsp;
+	            		<input id="button" type="button" value='<bean:message key="claim.button.back" />' onClick="history.back()">
+                    </logic:notEmpty>
                     </center>
                   </html:form>

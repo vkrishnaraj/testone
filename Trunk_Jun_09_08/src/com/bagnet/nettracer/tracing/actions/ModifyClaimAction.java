@@ -80,6 +80,10 @@ public class ModifyClaimAction extends CheckedAction {
 		boolean isNtUser = PropertyBMO.isTrue("nt.user");
 		boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 		
+		if (request.getParameter("back") != null) {
+			request.setAttribute("back", "1");
+		}
+		
 		// for existing nt functionality
 		ActionMessages errors = new ActionMessages();
 		BagService bs = new BagService();

@@ -129,7 +129,9 @@ function updatePagination() {
                 <tr <%=requested.getFile().getDisStatus() %>>
                 	<% if (requested.getFile().getClaim() != null) { %>
             			<td>
-            				<bean:write name="requested" property="file.claim.swapId" />
+            				<a href='claim_resolution.do?claimId=<bean:write name="requested" property="file.claim.swapId" />&back=1'>
+            					<bean:write name="requested" property="file.claim.swapId" />
+            				</a>
             			</td>
             			<td>
    					        <logic:equal name="requested" property="file.claim.claimType" value="0" >
@@ -147,7 +149,9 @@ function updatePagination() {
             			</td>
             		<% } else { %>
             			<td>
-            				<bean:write name="requested" property="file.incident.airlineIncidentId" />
+            				<a href='searchIncident.do?incident=<bean:write name="requested" property="file.incident.airlineIncidentId" />&back=1' >
+            					<bean:write name="requested" property="file.incident.airlineIncidentId" />
+            				</a>
             			</td>
             			<td>
    					        <logic:equal name="requested" property="file.incident.incidentType" value="0" >
@@ -180,12 +184,15 @@ function updatePagination() {
             				<bean:write name="requested" property="matchHistory.matchSummary" filter="false" />
             			</td>
             			<td>
+            				<a href="fraudRequests.do?matchId=<%=requested.getMatchHistory().getId() %>">
+           						<bean:message key="claim.match.details" />
+           					</a><br /><br/>
             				<a href="fraudRequests.do?approveId=<%=requested.getId() %>">
-	            						<bean:message key="claim.match.approve" />
-	            					</a><br /><br/>
+           						<bean:message key="claim.match.approve" />
+           					</a><br /><br/>
             				<a href="fraudRequests.do?denyId=<%=requested.getId() %>">
-		            						<bean:message key="claim.match.deny" />
-		            					</a>
+           						<bean:message key="claim.match.deny" />
+           					</a>
             			</td>
 
                 </tr>

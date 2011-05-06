@@ -63,6 +63,9 @@ public class FraudResultsAction extends CheckedAction {
 		if (request.getParameter("results") != null) {
 			results = (Set<MatchHistory>) session.getAttribute("results");
 			session.removeAttribute("results");
+		} else if ((resultsForm.getPrimaryResults() != null && !resultsForm.getPrimaryResults().isEmpty()) 
+				|| (resultsForm.getSecondaryResults() != null && !resultsForm.getSecondaryResults().isEmpty())) { 
+			results = getResultsFromForm(resultsForm);
 		} else {
 			if (claim != null) {
 				try {
@@ -194,6 +197,13 @@ public class FraudResultsAction extends CheckedAction {
 			}
 		}
 		return null;
+	}
+	
+	private Set<MatchHistory> getResultsFromForm(FraudResultsForm form) {
+		LinkedHashSet<MatchHistory> results = new LinkedHashSet<MatchHistory>();
+		results.addAll(form.getPrimaryResults());
+		results.addAll(form.getSecondaryResults());
+		return results;
 	}
 	
 }

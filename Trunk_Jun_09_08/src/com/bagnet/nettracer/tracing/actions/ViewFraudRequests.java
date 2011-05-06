@@ -21,6 +21,8 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
+import aero.nettracer.fs.model.detection.AccessRequest;
+import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -77,6 +79,7 @@ public class ViewFraudRequests extends CheckedAction {
 
 		int requestListCount = remote.getOutstandingRequetsCount(user.getCompanycode_ID());
 		List<OHD_Log> bagsList = null;
+		List requestList = null;
 		if (requestListCount > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
@@ -106,7 +109,7 @@ public class ViewFraudRequests extends CheckedAction {
 			}
 
 			// TODO - Get list
-			List requestList = remote.getOutstandingRequests(user.getCompanycode_ID(), rowsperpage * currpage,
+			requestList = remote.getOutstandingRequests(user.getCompanycode_ID(), rowsperpage * currpage,
 					rowsperpage);
 
 			if (currpage + 1 == totalpages)
@@ -130,15 +133,47 @@ public class ViewFraudRequests extends CheckedAction {
 					.parseInt(request.getParameter("currpage")) : 0;
 			request.setAttribute("currpage", Integer.toString(currpage));
 		}
-
-		ActionMessages errors = new ActionMessages();
-		if (false) {
-			ActionMessage error = new ActionMessage("message.send.teletype.info");
-			saveMessages(request, errors);
-			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+		
+		if (request.getParameter("matchId") != null) {
+			long matchId = Long.parseLong(request.getParameter("matchId"));
+			MatchHistory match = getMatchHistoryFromResults(matchId, requestList);
+			request.setAttribute("match", match);
+			int status = match.getFile2().getStatusId();
+			if (status == TracingConstants.STATUS_SUSPECTED_FRAUD || status == TracingConstants.STATUS_KNOWN_FRAUD) {
+				request.setAttribute("status", status);
+			}
+			
+			if (match.getFile2().getClaim() != null) {
+				request.setAttribute("claimId", match.getFile2().getClaim().getSwapId());
+			} else {
+				request.setAttribute("claimId", match.getFile2().getIncident().getAirlineIncidentId());
+			}
+			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
 		}
 
+//		ActionMessages errors = new ActionMessages();
+//		if (false) {
+//			ActionMessage error = new ActionMessage("message.send.teletype.info");
+//			saveMessages(request, errors);
+//			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+//		}
+
 		return mapping.findForward("viewfraudrequests");
+	}
+	
+	private static MatchHistory getMatchHistoryFromResults(long matchId, List<AccessRequest> requestList) {
+		if (requestList == null || requestList.isEmpty()) {
+			return null;
+		}
+		
+		MatchHistory toReturn = null;
+		for (AccessRequest ar: requestList) {
+			if (matchId == ar.getMatchHistory().getId()) {
+				toReturn = ar.getMatchHistory();
+				break;
+			}
+		}
+		return toReturn;
 	}
 
 	private static String format(String input) {
