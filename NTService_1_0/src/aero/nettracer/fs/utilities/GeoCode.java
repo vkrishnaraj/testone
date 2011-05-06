@@ -314,13 +314,16 @@ public class GeoCode {
 //			Thread.sleep(5000);
 //			System.out.println(p.exitValue());
 			
-			
+			boolean finished =false;
 			do{
-				while(!input.ready() && !Thread.interrupted()){
+				while(!input.ready() && !finished){
 					Thread.sleep(40);
+					if(Thread.interrupted()){
+						finished = true;
+					}
 				}
 
-				if(!Thread.interrupted()){
+				if(!finished){
 					line = input.readLine();
 					//				System.out.println("SYSTEM: " + line);
 					if (toReturn == null) {
@@ -331,7 +334,7 @@ public class GeoCode {
 						line = null;
 					}
 				}
-			}while(!Thread.interrupted() && line != null);
+			}while(!finished && line != null);
 			
 //			while (input.ready() && (line = input.readLine()) != null) {
 //				 System.out.println("SYSTEM: " + line);

@@ -20,6 +20,7 @@ import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
+import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchDetail.MatchType;
 import aero.nettracer.fs.model.detection.MatchHistory;
@@ -435,10 +436,45 @@ public class Producer {
 		Set<MatchHistory> histories = Producer.getMatchHistoryResult(fileId);
 		List<PrivacyPermissions> p = PrivacyPermissionsBean.getPrivacyPermissions();
 		for(MatchHistory history:histories){
-			censor(history, AccessLevelType.def, company, p);
+			//TODO change level based on access request
+			String requestedCompany;
+			long requestedId;
+			if(history.getFile1().getMatchedAirline().equals(company)){
+				requestedCompany = history.getFile2().getMatchedAirline();
+				requestedId = history.getFile2().getId();
+			} else{
+				requestedCompany = history.getFile1().getMatchedAirline();
+				requestedId = history.getFile1().getId();
+			}
+			
+			if(isApproved(requestedId, company)){
+				censor(history, AccessLevelType.req, company, p);
+			} else {
+				censor(history, AccessLevelType.def, company, p);
+			}
 		}
 		
 		return histories;
+	}
+	
+	public static boolean isApproved(long fileId, String requestedCompany){
+		String sql = "select status from accessrequest where file_id = :id and requestedAirline = :airline order by requestedDate desc";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createSQLQuery(sql);
+		
+		q.setParameter("id", fileId);
+		q.setParameter("airline", requestedCompany);
+
+		q.addScalar("status", Hibernate.STRING);
+		q.setMaxResults(1);
+		
+		String level = (String)q.uniqueResult();
+		if(level != null){
+			return level.equals(AccessRequest.RequestStatus.Approved.toString());
+		}
+
+		return false;
 	}
 	
 	public static void censor(MatchHistory match, AccessLevelType level, String userCompany, List<PrivacyPermissions> plist){

@@ -374,10 +374,29 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public Set<MatchHistory> getFileMatches(long fileId) {
 		return Producer.getCensoredFileMatches(fileId);
 	}
+	
+	public static boolean hasRequest(long fileId, String requestingAirline){
+		Session sess = HibernateWrapper.getSession().openSession();
+		String sql = "from aero.nettracer.fs.model.detection.AccessRequest where file.id = :id and requestedAirline =:airline";
+		Query q = sess.createQuery(sql);
+		q.setParameter("id", fileId);
+		q.setParameter("airline", requestingAirline);
+		List results = q.list();
+		if(results != null && results.size() > 0){
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
 
 	@Override
 	public void requestAccess(long fileId, long matchHistory, String agent, String requestingAirline, String message) {
-
+		//TODO do we need to check for dup request?
+//		if(hasRequest(fileId, requestingAirline)){
+//			return;
+//		}
 		Session sess = HibernateWrapper.getSession().openSession();
 
 		AccessRequest request = new AccessRequest();
