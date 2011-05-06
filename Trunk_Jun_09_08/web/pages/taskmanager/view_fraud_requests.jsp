@@ -176,7 +176,9 @@ function updatePagination() {
             			</td>
             			<td>
             				<div style="width:200px;word-wrap:break-word;">
+            				<% if (requested.getMessage() != null) { %>
             				<bean:write name="requested" property="message.message" />
+            				<% } %>
             				</div>
             			</td>
             			<td>
