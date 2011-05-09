@@ -7,6 +7,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Proxy;
 
@@ -64,6 +65,16 @@ public class Claim extends FsClaim {
 	public void setStatus(Status status) {
 		super.setStatusId(status.getStatus_ID());
 		this.status = status;
+	}
+	
+	@Transient
+	public int getStatusId() {
+		return status.getStatus_ID();
+	}
+	
+	public void setStatusId(int statusId) {
+		super.setStatusId(statusId);
+		status.setStatus_ID(statusId);
 	}
 	
 }

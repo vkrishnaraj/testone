@@ -179,7 +179,7 @@
                             &nbsp;</span></a>
                       </dd>
                       <dd>
-                      <% if (ntUser && ntfsUser) { %>
+                      <% if ((ntUser && ntfsUser) || ntfsUser) { %>
                       <logic:notEqual name="claimForm" property="claim.id" value="0">
                    	<a href='fraud_results.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
                    	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
@@ -195,16 +195,7 @@
                           &nbsp;</span></a>
                           </logic:equal>
                    </dd>
-                   <% } else { 
-                   		if (ntfsUser) { %>
-                   <a href='fraud_results.do'><span class="aa">&nbsp;<br />&nbsp;</span>
-                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
-                        <span class="cc">&nbsp;
-                          <br />
-                          &nbsp;</span></a>
-                   </dd>
-                   <% 	}
-                   	  }
+                   <% } 
                       
                       if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a) && ntUser) {
 %>
@@ -276,7 +267,7 @@
                           <bean:message key="colname.claim_status" />
                           <br />
                           <div id="tohide1">
-                          <html:select property="claim.status.status_ID" styleClass="dropdown">
+                          <html:select property="claim.statusId" styleClass="dropdown">
                             <html:options collection="claimstatuslist" property="status_ID" labelProperty="description" />
                           </html:select>
                           </div>
