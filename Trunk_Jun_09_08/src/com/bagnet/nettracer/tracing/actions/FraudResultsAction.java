@@ -63,8 +63,9 @@ public class FraudResultsAction extends CheckedAction {
 		if (request.getParameter("results") != null) {
 			results = (Set<MatchHistory>) session.getAttribute("results");
 			session.removeAttribute("results");
-		} else if ((resultsForm.getPrimaryResults() != null && !resultsForm.getPrimaryResults().isEmpty()) 
-				|| (resultsForm.getSecondaryResults() != null && !resultsForm.getSecondaryResults().isEmpty())) { 
+		} else if (request.getParameter("matchId") != null 
+					|| request.getParameter("requestInfo") != null
+						|| request.getParameter("delete") != null) { 
 			results = getResultsFromForm(resultsForm);
 		} else {
 			if (claim != null) {
