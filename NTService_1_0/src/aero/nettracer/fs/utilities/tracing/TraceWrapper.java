@@ -25,23 +25,21 @@ public class TraceWrapper {
 	private static ConcurrentHashMap<Long, FsClaim> claimCache = new ConcurrentHashMap<Long, FsClaim>(3000);
 	private static ConcurrentHashMap<Long, File> fileCache = new ConcurrentHashMap<Long, File>(3000);
 	
-	private static boolean LOAD_FROM_CACHE = true;
+	private static boolean LOAD_FROM_CACHE = false;
 	private static int MAX_CACHE_SIZE = 5000;
 	
 	public static File loadFile(long fileId){
-//		String sql = "from aero.nettracer.fs.model.File f where f.id = :id";
-//		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		File f = (File) sess.load(File.class, fileId);
-//		q = sess.createQuery(sql.toString());
-//		q.setParameter("id", fileId);
-//		List<File> result = q.list();
-		sess.close();
-//		if(result != null && result.size() > 0){
-//			return result.get(0);
-//		} else {
-//			return null;
-//		}
+		File f = null;
+		try{
+			f = (File) sess.load(File.class, fileId);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
 		return f;
 	}
 	
