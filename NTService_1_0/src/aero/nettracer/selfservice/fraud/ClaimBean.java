@@ -91,26 +91,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 					}
 				}
 
-				// toDelete.setClaim(null);
-				// toDelete.setIncident(null);
-				// sess.saveOrUpdate(toDelete);
-				// t.commit();
-				// sess.evict(toDelete);
-				// sess.close();
-				// sess = HibernateWrapper.getSession().openSession();
-				// t = sess.beginTransaction();
-
-				// File toAdd = (File)sess.load(File.class,toSubmit.getId());
-				// toAdd.setClaim(toSubmit.getClaim());
-				// if(toAdd.getClaim() != null){
-				// toAdd.getClaim().setFile(toAdd);
-				// }
-				// toAdd.setIncident(toSubmit.getIncident());
-				// if(toAdd.getIncident() != null){
-				// toAdd.getIncident().setFile(toAdd);
-				// }
-				// sess.saveOrUpdate(toAdd);
-				// t.commit();
+				toDelete.setStatusId(toSubmit.getStatusId());
 
 				sess.saveOrUpdate(toDelete);
 				t.commit();
