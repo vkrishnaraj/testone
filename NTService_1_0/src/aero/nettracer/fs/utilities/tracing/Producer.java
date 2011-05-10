@@ -21,6 +21,7 @@ import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.AccessRequest;
+import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
 import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchDetail.MatchType;
 import aero.nettracer.fs.model.detection.MatchHistory;
@@ -437,17 +438,19 @@ public class Producer {
 		List<PrivacyPermissions> p = PrivacyPermissionsBean.getPrivacyPermissions();
 		for(MatchHistory history:histories){
 			//TODO change level based on access request
-			String requestedCompany;
+			RequestStatus rs;
 			long requestedId;
 			if(history.getFile1().getMatchedAirline().equals(company)){
-				requestedCompany = history.getFile2().getMatchedAirline();
 				requestedId = history.getFile2().getId();
+				rs = getRequestStatus(requestedId, company);
+				history.getFile2().setRequestStatus(rs);
 			} else{
-				requestedCompany = history.getFile1().getMatchedAirline();
 				requestedId = history.getFile1().getId();
+				rs = getRequestStatus(requestedId, company);
+				history.getFile1().setRequestStatus(rs);
 			}
 			
-			if(isApproved(requestedId, company)){
+			if(rs != null && rs.equals(RequestStatus.Approved)){
 				censor(history, AccessLevelType.req, company, p);
 			} else {
 				censor(history, AccessLevelType.def, company, p);
@@ -455,6 +458,27 @@ public class Producer {
 		}
 		
 		return histories;
+	}
+	
+	public static RequestStatus getRequestStatus(long fileId, String requestedCompany){
+		String sql = "select status from accessrequest where file_id = :id and requestedAirline = :airline order by requestedDate desc";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createSQLQuery(sql);
+		
+		q.setParameter("id", fileId);
+		q.setParameter("airline", requestedCompany);
+
+		q.addScalar("status", Hibernate.STRING);
+		q.setMaxResults(1);
+		
+		String level = (String)q.uniqueResult();
+		sess.close();
+		if(level != null){
+			return RequestStatus.valueOf(level);
+		}
+
+		return null;
 	}
 	
 	public static boolean isApproved(long fileId, String requestedCompany){
@@ -470,6 +494,7 @@ public class Producer {
 		q.setMaxResults(1);
 		
 		String level = (String)q.uniqueResult();
+		sess.close();
 		if(level != null){
 			return level.equals(AccessRequest.RequestStatus.Approved.toString());
 		}
