@@ -10,6 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
+<%@ page import="aero.nettracer.fs.model.detection.AccessRequest" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
   String company = a.getCompanycode_ID();
@@ -162,10 +163,13 @@
             			</td>
             		</tr>
 	 	           		<logic:iterate id="pResult" indexId="i" name="fraudResultsForm" property="primaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
-	            			<% if (pResult.getFile2().getClaim() != null) { %>
+	            			<% 
+	            				AccessRequest.RequestStatus status = pResult.getFile2().getRequestStatus();
+	            				boolean sameCompany = pResult.getFile2().getClaim().getAirline().equals(company);
+	            				if (pResult.getFile2().getClaim() != null) { %>
 		            			<tr <%=pResult.getFile2().getDisStatus() %>>
 		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" /></td>
-		            				<% if (pResult.getFile2().getClaim().getAirline().equals(company)) { %>
+		            				<% if (sameCompany) { %>
 		            				<td>
 		            					<a href="claim_resolution.do?claimId=<%=pResult.getFile2().getClaim().getSwapId() %>">
 		            						<bean:write name="pResult" property="file2.claim.swapId" />
@@ -198,6 +202,10 @@
 		            					<a href="fraud_results.do?matchId=<%=pResult.getId() %>">
 		            						<bean:message key="claim.match.details" />
 		            					</a>
+		            					<% if (!sameCompany) { %>
+											<br/><br/>
+											<b><%=status == null ? "" : status %></b>
+										<% } %>
 		            				</td>
 		            			</tr>
 	            			<% } else { %>
@@ -236,6 +244,10 @@
 		            					<a href="fraud_results.do?matchId=<%=pResult.getId() %>">
 		            						<bean:message key="claim.match.details" />
 		            					</a>
+		            					<% if (!sameCompany) { %>
+											<br/><br/>
+											<b><%=status == null ? "" : status %></b>
+										<% } %>
 		            				</td>
 		            			</tr>
 	            			<% } %>
@@ -271,10 +283,13 @@
             			</td>
             		</tr>
 	            		<logic:iterate id="sResult" indexId="i" name="fraudResultsForm" property="secondaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
-	            			<% if (sResult.getFile2().getClaim() != null) { %>
+	            			<% 
+	            				AccessRequest.RequestStatus status = sResult.getFile2().getRequestStatus();
+	            				boolean sameCompany = sResult.getFile2().getClaim().getAirline().equals(company);
+	            				if (sResult.getFile2().getClaim() != null) { %>
 		            			<tr <%=sResult.getFile2().getDisStatus() %>>
 		            				<td><input type="checkbox" name="secondaryResults[<%=i%>].selected" /></td>
-		            				<% if (sResult.getFile2().getClaim().getAirline().equals(company)) { %>
+		            				<% if (sameCompany) { %>
 		            				<td>
 		            					<a href="claim_resolution.do?claimId=<%=sResult.getFile2().getClaim().getSwapId() %>">
 		            						<bean:write name="sResult" property="file2.claim.swapId" />
@@ -307,6 +322,10 @@
 		            					<a href="fraud_results.do?matchId=<%=sResult.getId() %>">
 		            						<bean:message key="claim.match.details" />
 										</a>
+										<% if (!sameCompany) { %>
+											<br/><br/>
+											<b><%=status == null ? "" : status %></b>
+										<% } %>
 									</td>
 		            			</tr>
 	            			<% } else { %>
@@ -345,6 +364,10 @@
 		            					<a href="fraud_results.do?matchId=<%=sResult.getId() %>">
 		            						<bean:message key="claim.match.details" />
 										</a>
+										<% if (!sameCompany) { %>
+											<br/><br/>
+											<b><%=status == null ? "" : status %></b>
+										<% } %>
 									</td>
 		            			</tr>
 	            			<% } %>

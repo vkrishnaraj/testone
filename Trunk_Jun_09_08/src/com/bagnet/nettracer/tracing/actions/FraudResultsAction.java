@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
@@ -97,7 +98,8 @@ public class FraudResultsAction extends CheckedAction {
 			ArrayList<MatchHistory> toRemove = new ArrayList<MatchHistory>();
 			for (MatchHistory m: requestList) {
 				String matchedAirline = m.getFile2().getMatchedAirline();
-				if (matchedAirline.equals(myCompany)) {
+				RequestStatus requestStatus = m.getFile2().getRequestStatus();
+				if (matchedAirline.equals(myCompany) || requestStatus != null) {
 					toRemove.add(m);
 				}
 			}

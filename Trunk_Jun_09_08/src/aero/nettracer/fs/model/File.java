@@ -13,6 +13,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Proxy;
 
+import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
+
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 @Entity
@@ -40,6 +42,9 @@ public class File implements Serializable {
 	Set<FsAddress> addressCache = null;
 	@Transient
 	Set<Phone> phoneCache = null;
+	
+	@Transient
+	private RequestStatus requestStatus;
 
 	@Id
 	@GeneratedValue
@@ -160,5 +165,15 @@ public class File implements Serializable {
 		}
 		return claim.getAirline();
 	}
+
+	public RequestStatus getRequestStatus() {
+		return requestStatus;
+	}
+
+	public void setRequestStatus(RequestStatus requestStatus) {
+		this.requestStatus = requestStatus;
+	}
+	
+	
 	
 }
