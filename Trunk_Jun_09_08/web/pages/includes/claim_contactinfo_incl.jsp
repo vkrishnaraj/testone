@@ -247,7 +247,7 @@
                     </html:select>
                   </logic:equal>
                   <logic:equal name="claimForm" property="country" value="">
-                    <html:select name="claimForm" property="state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
+                    <html:select name="claimForm" property="claimant.driversLicenseIssuer" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
                       <html:option value="">
                         <bean:message key="select.none" />
                       </html:option>
@@ -256,7 +256,7 @@
                   </logic:equal>
                   <logic:notEqual name="claimForm" property="country" value="">
                     <logic:notEqual name="claimForm" property="country" value="US">
-                      <html:select name="claimForm" property="state" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
+                      <html:select name="claimForm" property="claimant.driversLicenseIssuer" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
                         <html:option value="">
                           <bean:message key="select.none" />
                         </html:option>
@@ -269,14 +269,14 @@
                   <bean:message key="colname.province" />
                   <br />
                       <logic:equal name="claimForm" property="country" value="US">
-                  <html:text name="claimForm" property="province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
+                  <html:text name="claimForm" property="claimant.driversLicenseIssuer" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
                       </logic:equal>
                       <logic:equal name="claimForm" property="country" value="">
-                  <html:text name="claimForm" property="province" size="15" maxlength="100" styleClass="textfield" />
+                  <html:text name="claimForm" property="claimant.driversLicenseIssuer" size="15" maxlength="100" styleClass="textfield" />
                       </logic:equal>
                       <logic:notEqual name="claimForm" property="country" value="">
                         <logic:notEqual name="claimForm" property="country" value="US">
-                  <html:text name="claimForm" property="province" size="15" maxlength="100" styleClass="textfield" />
+                  <html:text name="claimForm" property="claimant.driversLicenseIssuer" size="15" maxlength="100" styleClass="textfield" />
                          </logic:notEqual>
                       </logic:notEqual>
                 </td>

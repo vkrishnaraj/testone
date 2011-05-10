@@ -323,13 +323,12 @@
 	         </field>
 		</form>
 
-
-		<!-- form name="claimForm">
+		<form name="claimForm">
 			<field property="disclaimamount" depends="float">
         		<arg key="colname.claim_amount"/>
 	   		</field>  	
-	  	</form-->
-		<form name="claimForm">
+	  	</form>
+		<!-- form name="claimForm">
 			<field property="disclaimamount" depends="float">
         		<arg key="colname.claim_amount"/>
 	   		</field>  	
@@ -351,7 +350,7 @@
 	   		<field property="claimant.emailAddress" depends="email" >
 	   			<arg key="claimant.email.address" />
 	   		</field>
-	  	</form>
+	  	</form-->
   	
   	  	<form name="billingForm">
 			<field property="tran_value" depends="required,float">

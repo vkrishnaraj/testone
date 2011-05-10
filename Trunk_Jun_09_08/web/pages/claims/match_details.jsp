@@ -44,7 +44,7 @@
     	<td id="middlecolumn">
         	<div id="maincontent">
                 <h1>
-                	<bean:message key="colname.claim.id" />:&nbsp;<bean:write name="claimId" scope="request" />
+                	<bean:message key="colname.reference.id" />:&nbsp;<bean:write name="claimId" scope="request" />
                 </h1>
                 <logic:notEmpty name="status" scope="request" >
                 	<table class="form2" cellpadding="0" cellspacing="0" >

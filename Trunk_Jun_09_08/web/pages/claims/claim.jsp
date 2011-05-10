@@ -42,7 +42,7 @@
 
   </SCRIPT>
   
-          <html:form action="claim_resolution.do" method="post" onsubmit="return validateClaimForm(this);">
+          <html:form action="claim_resolution.do" method="post" onsubmit="return validateFsClaimForm(this);">
             <html:javascript formName="claimForm" />
             <tr>
               <td colspan="3" id="pageheadercell">
