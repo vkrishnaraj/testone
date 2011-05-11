@@ -25,64 +25,65 @@
 <jsp:include page="/pages/includes/required_fields_incl.jsp" />
 
 	function validateFsClaimForm(form) {
-	
-		for (var i = 0; i < form.length; ++i) {
-		
-			currentElement = form.elements[i];
-			elementName = currentElement.name;
+		if (getFieldByName("incidentId", form).value.length == 0) {
+			for (var i = 0; i < form.length; ++i) {
 			
-			if (elementName == "claimant.lastName") {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.last_name") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} else if (elementName == "claimant.firstName") {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.first_name") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} else if (elementName == "address1") {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.street_addr1") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} else if (elementName == "city") {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.city") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} else if (elementName == "country") {
-				country = currentElement.value;
+				currentElement = form.elements[i];
+				elementName = currentElement.name;
 				
-				if (country == "US") {
-					element = getFieldByName("state", form);
-					if (element.value.length == 0) {
-						alert("<%= (String)bundle.getString("colname.state") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-				        element.focus();
+				if (elementName == "claimant.lastName") {
+					if (currentElement.value.length == 0) {
+						alert("<%= (String)bundle.getString("colname.last_name") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+				        currentElement.focus();
 				        return false;
 					}
+				} else if (elementName == "claimant.firstName") {
+					if (currentElement.value.length == 0) {
+						alert("<%= (String)bundle.getString("colname.first_name") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+				        currentElement.focus();
+				        return false;
+					}
+				} else if (elementName == "address1") {
+					if (currentElement.value.length == 0) {
+						alert("<%= (String)bundle.getString("colname.street_addr1") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+				        currentElement.focus();
+				        return false;
+					}
+				} else if (elementName == "city") {
+					if (currentElement.value.length == 0) {
+						alert("<%= (String)bundle.getString("colname.city") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+				        currentElement.focus();
+				        return false;
+					}
+				} else if (elementName == "country") {
+					country = currentElement.value;
 					
-					element = getFieldByName("zip", form);
-					if (element.value.length == 0) {
-						alert("<%= (String)bundle.getString("colname.zip") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-				        element.focus();
-				        return false;
+					if (country == "US") {
+						element = getFieldByName("state", form);
+						if (element.value.length == 0) {
+							alert("<%= (String)bundle.getString("colname.state") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+					        element.focus();
+					        return false;
+						}
+						
+						element = getFieldByName("zip", form);
+						if (element.value.length == 0) {
+							alert("<%= (String)bundle.getString("colname.zip") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+					        element.focus();
+					        return false;
+						}
+					} else {
+						element = getFieldByName("province", form);
+						if (element.value.length == 0) {
+							alert("<%= (String)bundle.getString("colname.province") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+					        element.focus();
+					        return false;
+						}
 					}
-				} else {
-					element = getFieldByName("province", form);
-					if (element.value.length == 0) {
-						alert("<%= (String)bundle.getString("colname.province") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-				        element.focus();
-				        return false;
-					}
+				
 				}
 			
 			}
-		
 		}
         return true;
 	

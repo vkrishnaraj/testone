@@ -305,7 +305,7 @@
                     <br />
                     <jsp:include page="/pages/includes/claim_contactinfo_incl.jsp" />
                     <% if (ntUser) { %>
-                    	<logic:notEmpty name="incident">
+                    	<logic:notEmpty name="claimForm" property="claim.ntIncident">
 	                    <br />
 	                    <br />
 	  	                <a name="expense"></a>

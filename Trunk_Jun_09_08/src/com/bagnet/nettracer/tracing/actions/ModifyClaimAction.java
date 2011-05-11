@@ -121,7 +121,14 @@ public class ModifyClaimAction extends CheckedAction {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
 					request.setAttribute("noincident", "1");
-					return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
+					if (request.getParameter("populate") != null) {
+						return (mapping.findForward(TracingConstants.CLAIM_CREATE_NEW));
+					} else {
+						if (cform.getClaim() == null) {
+							cform.setClaim(new Claim());
+						}
+						return mapping.findForward(TracingConstants.CLAIM_PAY_MAIN);
+					}
 				} else {
 
 					// if not the same company, then don't show claims
