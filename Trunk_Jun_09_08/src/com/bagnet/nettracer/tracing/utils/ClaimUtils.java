@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.commons.codec.language.Soundex;
 import org.apache.log4j.Logger;
+import org.dozer.DozerBeanMapper;
+import org.dozer.DozerBeanMapperSingletonWrapper;
 
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.FsAddress;
@@ -24,6 +26,7 @@ import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.PnrData;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
+import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -185,6 +188,7 @@ public class ClaimUtils {
 
 					if (name.cc == true) {
 						reservation.setPurchaser(p1);
+						p1.setReservation(reservation);
 						p1.setCcContact(true);
 						Set<FsAddress> ccaddresses = new LinkedHashSet<FsAddress>();
 						p1.setAddresses(ccaddresses);
@@ -248,137 +252,88 @@ public class ClaimUtils {
 			Set<Passenger> paxSet = ntIncident.getPassengers();
 	
 			if (paxSet != null) {
+				boolean firstPax = true;
 				for (Passenger pax : paxSet) {
-					Person p = new Person();
-					p.setIncident(fsIncident);
+					Person p = getPersonFromPax(pax);
 					passengers.add(p);
-	
-					Set<FsAddress> paxAddresses = new LinkedHashSet<FsAddress>();
-					Set<Phone> paxPhones = new LinkedHashSet<Phone>();
-	
-					if (pax.getAddresses() != null) {
-						FsAddress a = new FsAddress();
-						a.setPerson(p);
-						paxAddresses.add(a);
-	
-						com.bagnet.nettracer.tracing.db.Address add = pax.getAddress(0);
-						a.setAddress1(add.getAddress1());
-						a.setAddress2(add.getAddress2());
-						a.setCity(add.getCity());
-						a.setCountry(add.getCountrycode_ID());
-	
-						a.setReservation(null);
-						a.setState(add.getState_ID());
-						a.setZip(add.getZip());
-						p.setEmailAddress(add.getEmail());
-	
-						processAndAddPhone(p, paxPhones, add.getHomephone(), Phone.HOME);
-						processAndAddPhone(p, paxPhones, add.getMobile(), Phone.MOBILE);
-						processAndAddPhone(p, paxPhones, add.getWorkphone(), Phone.WORK);
-						processAndAddPhone(p, paxPhones, add.getPager(), Phone.PAGER);
-						processAndAddPhone(p, paxPhones, add.getAltphone(), Phone.ALTERNATE);
-	
+					p.setIncident(fsIncident);
+					
+					if (firstPax) {
+						claimants.clear();
+						person = getPersonFromPax(pax);
+						person.setClaim(claim);
+						claimants.add(person);
+						firstPax = false;
 					}
-	
-					p.setPhones(phones);
-					p.setAddresses(addresses);
-	
-					p.setDescription(null);
-					String fn = pax.getFirstname();
-					if (fn != null) {
-						p.setFirstName(fn);
-						try {
-							p.setFirstNameDmp(dmp.encode(fn));
-							p.setFirstNameSoundex(sndx.encode(fn));
-						} catch (Exception e) {
-	
-						}
-					}
-					p.setMiddleName(pax.getMiddlename());
-	
-					String ln = pax.getLastname();
-					if (ln != null) {
-	
-						p.setLastName(ln);
-						try {
-							p.setLastNameDmp(dmp.encode(ln));
-							p.setLastNameSoundex(sndx.encode(ln));
-						} catch (Exception e) {
-	
-						}
-					}
-	
-					if (pax.getMembership() != null) {
-						AirlineMembership m = pax.getMembership();
-						p.setFfAirline(m.getCompanycode_ID());
-						p.setFfNumber(m.getMembershipnum());
-					}
+			
 				}
 			}
 		}
 		
 		fsIncident.setPassengers(passengers);
-		fsIncident.setAirlineIncidentId(ntIncident.getIncident_ID());
-		fsIncident.setTimestampClosed(ntIncident.getClosedate());
-		Date createDate = new Date(ntIncident.getCreatedate().getTime() + ntIncident.getCreatetime().getTime());
-		fsIncident.setTimestampOpen(createDate);
-		
-		Set<Bag> bags = new LinkedHashSet<Bag>();
-
-		int numberOfBdos = 0;
-		if (ntIncident.getItemlist() != null && ntIncident.getItemlist().size() > 0) {
-			for (Item it : ntIncident.getItemlist()) {
-				if (it != null) {
-					Bag bag = new Bag();
-					bag.setBagType(it.getBagtype());
-					bag.setBagColor(it.getColor());
-
-					String manu = null;
-					if (it.getManufacturer_ID() > 0) {
-						manu = it.getManufacturer();
-					}
-					bag.setManufacturer(manu);
-					bag.setDescription(it.getDamage());
-					bag.setIncident(fsIncident);
-
-					if (it.getBdo() != null) {
-						numberOfBdos += 1;
-					}
-					bags.add(bag);
-				}
-			}
-		}
-
-		fsIncident.setBags(bags);
-		fsIncident.setNumberOfBdos(numberOfBdos);
+		if (ntIncident != null) {
+			fsIncident.setAirlineIncidentId(ntIncident.getIncident_ID());
+			fsIncident.setTimestampClosed(ntIncident.getClosedate());
+			Date createDate = new Date(ntIncident.getCreatedate().getTime() + ntIncident.getCreatetime().getTime());
+			fsIncident.setTimestampOpen(createDate);
+			Set<Bag> bags = new LinkedHashSet<Bag>();
 	
-		// create the claim
-		claim.setStatus(status);
-		
-		// collect amount from incident payouts (interim or temporary)
-		double amount = 0;
-		double amountPaid = 0;
-		if (ntIncident.getExpenselist() != null) {
-			for (ExpensePayout ep : ntIncident.getExpenselist()) {
-				if (ep != null && !ep.getPaycode().equals("DEL")) {
-					if (ep.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED) {
-						amountPaid += ep.getCheckamt();
-						amountPaid += ep.getVoucheramt();
-						amountPaid += ep.getCreditCardRefund();
+			int numberOfBdos = 0;
+			if (ntIncident.getItemlist() != null && ntIncident.getItemlist().size() > 0) {
+				for (Item it : ntIncident.getItemlist()) {
+					if (it != null) {
+						Bag bag = new Bag();
+						bag.setBagType(it.getBagtype());
+						bag.setBagColor(it.getColor());
+	
+						String manu = null;
+						manu = it.getManufacturer();
+						bag.setManufacturer(manu);
+						bag.setDescription(it.getDamage());
+						bag.setIncident(fsIncident);
+	
+						if (it.getBdo() != null) {
+							numberOfBdos += 1;
+						}
+						bags.add(bag);
 					}
-					amount += ep.getCheckamt();
-					amount += ep.getVoucheramt();
-					amount += ep.getCreditCardRefund();
-					currency = ep.getCurrency_ID();
 				}
 			}
-		}
+	
+			fsIncident.setBags(bags);
+			fsIncident.setNumberOfBdos(numberOfBdos);
 		
-		claim.setAmountPaid(amountPaid);
-		claim.setAmountClaimed(amount);
+			
+			// collect amount from incident payouts (interim or temporary)
+			double amount = 0;
+			double amountPaid = 0;
+			if (ntIncident.getExpenselist() != null) {
+				for (ExpensePayout ep : ntIncident.getExpenselist()) {
+					if (ep != null && !ep.getPaycode().equals("DEL")) {
+						if (ep.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED) {
+							amountPaid += ep.getCheckamt();
+							amountPaid += ep.getVoucheramt();
+							amountPaid += ep.getCreditCardRefund();
+						}
+						amount += ep.getCheckamt();
+						amount += ep.getVoucheramt();
+						amount += ep.getCreditCardRefund();
+						currency = ep.getCurrency_ID();
+					}
+				}
+			}
+			
+			claim.setAmountPaid(amountPaid);
+			claim.setAmountClaimed(amount);
+			claim.setClaimType(ntIncident.getItemtype_ID());
+			claim.setNtIncident(ntIncident);
+			ntIncident.setClaim(claim);
+		}
 		claim.setAmountClaimedCurrency(currency);
 		claim.setClaimants(claimants);
 		claim.setIncident(fsIncident);
+		// create the claim
+		claim.setStatus(status);
 		
 		Segment s = new Segment();
 		s.setClaim(claim);
@@ -386,15 +341,74 @@ public class ClaimUtils {
 		segments.add(s);
 		claim.setSegments(segments);
 		
-		// set the tracing incident if we have one
-		if (ntIncident != null) {
-			claim.setClaimType(ntIncident.getItemtype_ID());
-			claim.setNtIncident(ntIncident);
-			ntIncident.setClaim(claim);
-		}
-		
 		return claim;
 		
+	}
+
+	private static Person getPersonFromPax(Passenger pax) {
+		Person p = new Person();
+		Set<FsAddress> paxAddresses = new LinkedHashSet<FsAddress>();
+		Set<Phone> paxPhones = new LinkedHashSet<Phone>();
+		
+		if (pax.getAddresses() != null) {
+			FsAddress a = new FsAddress();
+			a.setPerson(p);
+			paxAddresses.add(a);
+
+			com.bagnet.nettracer.tracing.db.Address add = pax.getAddress(0);
+			a.setAddress1(add.getAddress1());
+			a.setAddress2(add.getAddress2());
+			a.setCity(add.getCity());
+			a.setCountry(add.getCountrycode_ID());
+
+			a.setReservation(null);
+			a.setState(add.getState_ID());
+			a.setZip(add.getZip());
+			p.setEmailAddress(add.getEmail());
+
+			processAndAddPhone(p, paxPhones, add.getHomephone(), Phone.HOME);
+			processAndAddPhone(p, paxPhones, add.getMobile(), Phone.MOBILE);
+			processAndAddPhone(p, paxPhones, add.getWorkphone(), Phone.WORK);
+			processAndAddPhone(p, paxPhones, add.getPager(), Phone.PAGER);
+			processAndAddPhone(p, paxPhones, add.getAltphone(), Phone.ALTERNATE);
+
+		}
+
+		p.setPhones(paxPhones);
+		p.setAddresses(paxAddresses);
+
+		p.setDescription(null);
+		String fn = pax.getFirstname();
+		if (fn != null) {
+			p.setFirstName(fn);
+			try {
+				p.setFirstNameDmp(dmp.encode(fn));
+				p.setFirstNameSoundex(sndx.encode(fn));
+			} catch (Exception e) {
+
+			}
+		}
+		p.setMiddleName(pax.getMiddlename());
+
+		String ln = pax.getLastname();
+		if (ln != null) {
+
+			p.setLastName(ln);
+			try {
+				p.setLastNameDmp(dmp.encode(ln));
+				p.setLastNameSoundex(sndx.encode(ln));
+			} catch (Exception e) {
+
+			}
+		}
+
+		if (pax.getMembership() != null) {
+			AirlineMembership m = pax.getMembership();
+			p.setFfAirline(m.getCompanycode_ID());
+			p.setFfNumber(m.getMembershipnum());
+		}
+		
+		return p;
 	}
 	
 	public static ClaimForm createClaimForm(HttpServletRequest request) {

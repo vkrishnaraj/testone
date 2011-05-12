@@ -165,7 +165,13 @@
 	 	           		<logic:iterate id="pResult" indexId="i" name="fraudResultsForm" property="primaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
 	            			<% 
 	            				AccessRequest.RequestStatus status = pResult.getFile2().getRequestStatus();
-	            				boolean sameCompany = pResult.getFile2().getClaim().getAirline().equals(company);
+	            				boolean sameCompany;
+	            				if (pResult.getFile2().getClaim() != null) {
+	            					sameCompany = pResult.getFile2().getClaim().getAirline().equals(company);
+	            				} else {
+	            					sameCompany = pResult.getFile2().getIncident().getAirline().equals(company);
+	            				}
+	            				
 	            				if (pResult.getFile2().getClaim() != null) { %>
 		            			<tr <%=pResult.getFile2().getDisStatus() %>>
 		            				<td><input type="checkbox" name="primaryResults[<%=i%>].selected" /></td>
@@ -285,7 +291,13 @@
 	            		<logic:iterate id="sResult" indexId="i" name="fraudResultsForm" property="secondaryResults" type="aero.nettracer.fs.model.detection.MatchHistory" >
 	            			<% 
 	            				AccessRequest.RequestStatus status = sResult.getFile2().getRequestStatus();
-	            				boolean sameCompany = sResult.getFile2().getClaim().getAirline().equals(company);
+	            				boolean sameCompany;
+		            			if (sResult.getFile2().getClaim() != null) {
+	            					sameCompany = sResult.getFile2().getClaim().getAirline().equals(company);
+	            				} else {
+	            					sameCompany = sResult.getFile2().getIncident().getAirline().equals(company);
+	            				}
+		            			
 	            				if (sResult.getFile2().getClaim() != null) { %>
 		            			<tr <%=sResult.getFile2().getDisStatus() %>>
 		            				<td><input type="checkbox" name="secondaryResults[<%=i%>].selected" /></td>

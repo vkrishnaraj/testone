@@ -2,6 +2,7 @@ package aero.nettracer.fs.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,6 +22,7 @@ public class PnrData implements Serializable {
 	private Reservation reservation;
 	private String recordLocator;
 	private String airline;
+	@Column(columnDefinition = "TEXT")
 	private String pnrData;
 
 	public long getId() {
