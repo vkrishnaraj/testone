@@ -158,7 +158,10 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			// create a new claim
 			if (isNtUser && request.getParameter("populate") != null) {
-				claim = ClaimUtils.createClaim(user, ntIncident);
+				claim = ntIncident.getClaim();
+				if (claim == null) {
+					claim = ClaimUtils.createClaim(user, ntIncident);
+				}
 			} else {
 				claim = ClaimUtils.createClaim(user);
 			}

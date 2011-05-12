@@ -58,7 +58,7 @@ public class ClaimUtils {
 	private static String cc1 = "\\d\\.ADDR1\\*([A-Z]+)\\s([A-Z]+)";
 	private static String cc2 = "\\d\\.ADDR2\\*([0-9A-Z\\s]+)";
 	private static String cc3 = "\\d\\.ADDR3\\*([A-Z\\s]+)\\s([A-Z]{2})\\s([0-9]{5})";
-	private static String ch = "\\d\\.CARDHOLDER:\\s([0-9A-Z\\s]+)";
+	private static String ch = "\\d\\.CARDHOLDER:\\s([0-9A-Z\\s\\*]+)";
 
 	private static Pattern p = Pattern.compile(tktRegEx);
 	private static Pattern p2 = Pattern.compile(fop);
@@ -510,7 +510,7 @@ public class ClaimUtils {
 							Name n = new Name();
 							pd.names.add(n);
 							n.cc = true;
-							String[] names = chm.group(1).split(" ");
+							String[] names = chm.group(1).split("[\\s\\*]+");
 							try {
 								n.firstName = names[0];
 								n.lastName = names[names.length - 1];

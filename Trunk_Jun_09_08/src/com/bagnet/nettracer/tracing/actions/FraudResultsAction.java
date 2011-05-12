@@ -56,6 +56,9 @@ public class FraudResultsAction extends CheckedAction {
 		if (claimIdString != null) {
 			claim = ClaimDAO.loadClaim(Long.parseLong(claimIdString));
 			resultsForm.setClaimId(claim.getId());
+			if (claim.getNtIncidentId() != null) {
+				request.setAttribute("incident", claim.getNtIncidentId());
+			}
 		} else {
 			claim = ClaimDAO.loadClaim(resultsForm.getClaimId());
 		}

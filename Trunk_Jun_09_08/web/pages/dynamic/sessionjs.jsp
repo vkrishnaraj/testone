@@ -25,7 +25,12 @@
 <jsp:include page="/pages/includes/required_fields_incl.jsp" />
 
 	function validateFsClaimForm(form) {
-		if (getFieldByName("incidentId", form).value.length == 0) {
+		var checkFields = true;
+		if (getFieldByName("incidentId", form) != null && getFieldByName("incidentId", form).value.length > 0) {
+			checkFields = false;
+		}
+	
+		if (checkFields) {
 			for (var i = 0; i < form.length; ++i) {
 			
 				currentElement = form.elements[i];
