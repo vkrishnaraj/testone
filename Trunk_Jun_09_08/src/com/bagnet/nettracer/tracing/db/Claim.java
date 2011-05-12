@@ -29,7 +29,7 @@ public class Claim extends FsClaim {
 
 	private static final long serialVersionUID = 1L;
 
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Incident.class, mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Incident.class, fetch = FetchType.EAGER)
 	private Incident ntIncident; 
 	
 	@ManyToOne(cascade = CascadeType.ALL)

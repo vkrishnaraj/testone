@@ -862,7 +862,7 @@ public class Incident implements Serializable {
 	 * 
 	 *  
 	 */
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Claim.class)
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Claim.class, mappedBy = "ntIncident")
 	public Claim getClaim() {
 		return claim;
 	}

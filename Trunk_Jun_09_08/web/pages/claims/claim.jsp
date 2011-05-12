@@ -120,8 +120,19 @@
                       <%
                       if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_SETTLEMENT, a)) {
                         if (request.getAttribute("claimSettlementExists")==null) {
-%>
-               
+                        	String incident = (String) request.getAttribute("incident");
+                        	if (incident == null) { %>
+                        		<logic:notEmpty name="claimForm" property="claim.ntIncident" >
+                        			<dd>
+			                          <a href='claim_settlement.do?incident_ID=<bean:write name="claimForm" property="claim.ntIncident.incident_ID" />'>
+			                          	<span class="aa">&nbsp;<br />&nbsp;</span>
+				                        <span class="bb"><bean:message key="menu.claim_settlement" /></span>
+				                        <span class="cc">&nbsp;<br />&nbsp;</span>
+				                      </a>
+			                        </dd>
+                        		</logic:notEmpty>
+                        	<% } else { %>
+             
                         <dd>
                           <a href='claim_settlement.do?incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
                               <br />
@@ -131,10 +142,9 @@
                               <br />
                               &nbsp;</span></a>
                         </dd>
-<%
-                      } else {
+							<% } 
+                        	} else {
 %>
-
 
                     <dd>
                        <a href='claim_settlement.do?screen=1&incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;

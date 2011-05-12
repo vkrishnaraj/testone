@@ -33,6 +33,7 @@ import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -88,6 +89,12 @@ public class ModifyClaimAction extends CheckedAction {
 		ActionMessages errors = new ActionMessages();
 		BagService bs = new BagService();
 		IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
+		if (theform != null) {
+			request.setAttribute("incident", theform.getIncident_ID());
+			if (ClaimSettlementBMO.getClaimSettlement(theform.getIncident_ID(), null) != null) {
+				request.setAttribute("claimSettlementExists", "1");
+			}
+		}
 		Incident ntIncident = null;
 		request.setAttribute("CLAIM_PAYOUT_RPT", Integer.toString(ReportingConstants.CLAIM_PAYOUT_RPT));
 
