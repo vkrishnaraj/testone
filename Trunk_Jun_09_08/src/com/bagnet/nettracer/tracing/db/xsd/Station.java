@@ -16,7 +16,7 @@ package com.bagnet.nettracer.tracing.db.xsd;
 public interface Station extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Station.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s3120780053B2C9C6ED89C37135AF9582").resolveHandle("station5e45type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Station.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s44D040BCFE05AB6C78726EB309E96766").resolveHandle("station5e45type");
     
     /**
      * Gets the "active" element
@@ -502,6 +502,36 @@ public interface Station extends org.apache.xmlbeans.XmlObject
      * Unsets the "phone" element
      */
     void unsetPhone();
+    
+    /**
+     * Gets the "priority" element
+     */
+    int getPriority();
+    
+    /**
+     * Gets (as xml) the "priority" element
+     */
+    org.apache.xmlbeans.XmlInt xgetPriority();
+    
+    /**
+     * True if has "priority" element
+     */
+    boolean isSetPriority();
+    
+    /**
+     * Sets the "priority" element
+     */
+    void setPriority(int priority);
+    
+    /**
+     * Sets (as xml) the "priority" element
+     */
+    void xsetPriority(org.apache.xmlbeans.XmlInt priority);
+    
+    /**
+     * Unsets the "priority" element
+     */
+    void unsetPriority();
     
     /**
      * Gets the "state_ID" element

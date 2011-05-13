@@ -1698,5 +1698,15 @@ public class TracerUtils {
 		}
 		return 1;
 	}
+	
+	public static String normalizePhoneNumber(String phone) {
+		if (phone != null) {
+			phone = phone.replaceAll("[^0-9]", "");
+			if (phone.matches("^[0-9]*$")) {
+				return phone;
+			}
+		}
+		return null;
+	}
 
 }

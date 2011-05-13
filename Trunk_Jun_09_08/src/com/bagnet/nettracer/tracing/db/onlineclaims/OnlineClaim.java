@@ -196,6 +196,40 @@ public class OnlineClaim {
 
 	@Column(length = 13)
 	private String ticketNumber;
+	
+	@Basic
+	private String paxClaimDate;
+	
+	@Basic
+	private String paxClaimAmount;
+	
+	@Basic
+	private String paxIpAddress;
+
+	
+	public String getPaxClaimDate() {
+		return paxClaimDate;
+	}
+
+	public void setPaxClaimDate(String paxClaimDate) {
+		this.paxClaimDate = paxClaimDate;
+	}
+
+	public String getPaxClaimAmount() {
+		return paxClaimAmount;
+	}
+
+	public void setPaxClaimAmount(String paxClaimAmount) {
+		this.paxClaimAmount = paxClaimAmount;
+	}
+
+	public String getPaxIpAddress() {
+		return paxIpAddress;
+	}
+
+	public void setPaxIpAddress(String paxIpAddress) {
+		this.paxIpAddress = paxIpAddress;
+	}
 
 	
 	public long getClaimId() {

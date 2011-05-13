@@ -130,7 +130,7 @@ function sortAgents(sortOrder) {
                 :
               </td>
               <td>
-                <html:select property="message_status" styleClass="dropdown">
+                <html:select property="message_status" styleClass="dropdown" styleId="mess_stat">
                   <html:option value="-1">
                     All
                   </html:option>
@@ -145,8 +145,8 @@ function sortAgents(sortOrder) {
                 <%= a.getDateformat().getFormat() %>):
               </td>
               <td nowrap>
-                <html:text styleClass="textfield" property="s_time" size="11" maxlength="10" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.composeForm.s_time,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">-
-                <html:text styleClass="textfield" property="e_time" size="11" maxlength="10" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.composeForm.e_time,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+                <html:text styleClass="textfield" property="s_time" size="11" maxlength="10" styleId="s_time" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.composeForm.s_time,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">-
+                <html:text styleClass="textfield" property="e_time" size="11" maxlength="10" styleId="e_time" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.composeForm.e_time,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
             </tr>
             <tr>
               <td>
@@ -154,7 +154,7 @@ function sortAgents(sortOrder) {
                 :
               </td>
               <td>
-                <html:text styleClass="textfield" property="search_sub" size="20" maxlength="40" />
+                <html:text styleClass="textfield" property="search_sub" size="20" maxlength="40" styleId="srch_subj" />
               </td>
             </tr>
             <tr>
@@ -163,7 +163,7 @@ function sortAgents(sortOrder) {
                 :
               </td>
               <td>
-                <html:text styleClass="textfield" property="search_file_ref" size="14" maxlength="13" onblur="fillzero(this,13);" />
+                <html:text styleClass="textfield" property="search_file_ref" size="14" maxlength="13" onblur="fillzero(this,13);" styleId="srch_file" />
               </td>
             </tr>
             <tr>
@@ -173,12 +173,22 @@ function sortAgents(sortOrder) {
                   <bean:message key="button.search" />
                 </html:submit>
                 &nbsp;
-                <html:reset styleId="button">
+                <html:button styleId="button" property="" onclick="eraseForm(this.form);">
                   <bean:message key="button.reset" />
-                </html:reset>
+                </html:button>
               </td>
             </tr>
           </table>
+          <SCRIPT TYPE="text/javascript">
+				function eraseForm(searchForm) {
+					searchForm.message_status.value = -1;
+					searchForm.s_time.value = '';
+					searchForm.e_time.value = '';
+					searchForm.search_sub.value = '';
+					searchForm.search_file_ref.value = '';
+				}
+		</SCRIPT>
+          
           <br>
           <h1 class="green">
             <bean:message key="header.inbox" />

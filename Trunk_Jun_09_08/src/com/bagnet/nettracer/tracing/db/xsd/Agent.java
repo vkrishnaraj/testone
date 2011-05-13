@@ -16,7 +16,7 @@ package com.bagnet.nettracer.tracing.db.xsd;
 public interface Agent extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Agent.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s3120780053B2C9C6ED89C37135AF9582").resolveHandle("agent8214type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Agent.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s44D040BCFE05AB6C78726EB309E96766").resolveHandle("agent8214type");
     
     /**
      * Gets the "account_locked" element

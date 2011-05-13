@@ -53,6 +53,8 @@ public class MatchDetail implements Serializable {
 	private String content2;
 	private String description;
 	private MatchType matchtype;
+	
+	@Column(name="percentMatch")
 	private double percent;
 
 	public long getId() {

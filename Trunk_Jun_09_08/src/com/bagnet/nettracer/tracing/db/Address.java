@@ -42,6 +42,11 @@ public class Address implements Serializable {
 	private String state_ID;
 	private String countrycode_ID;
 	private String province;
+	private String homephone_norm;
+	private String workphone_norm;
+	private String mobile_norm;
+	private String pager_norm;
+	private String altphone_norm;
 
 	private Date valid_bdate;
 	private Date valid_edate;
@@ -418,6 +423,71 @@ public class Address implements Serializable {
 
 	public String getDispvalid_edate() {
 		return DateUtils.formatDate(getValid_edate(), get_DATEFORMAT(), null, null);
+	}
+
+	/**
+	 * @return Returns the homephone_norm.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getHomephone_norm() {
+		return homephone_norm;
+	}
+
+	public void setHomephone_norm(String homephone_norm) {
+		this.homephone_norm = homephone_norm;
+	}
+
+	/**
+	 * @return Returns the workphone_norm.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getWorkphone_norm() {
+		return workphone_norm;
+	}
+
+	public void setWorkphone_norm(String workphone_norm) {
+		this.workphone_norm = workphone_norm;
+	}
+
+	/**
+	 * @return Returns the mobile_norm.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getMobile_norm() {
+		return mobile_norm;
+	}
+
+	public void setMobile_norm(String mobile_norm) {
+		this.mobile_norm = mobile_norm;
+	}
+
+	/**
+	 * @return Returns the pager_norm.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getPager_norm() {
+		return pager_norm;
+	}
+
+	public void setPager_norm(String pager_norm) {
+		this.pager_norm = pager_norm;
+	}
+
+	/**
+	 * @return Returns the altphone_norm.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getAltphone_norm() {
+		return altphone_norm;
+	}
+
+	public void setAltphone_norm(String altphone_norm) {
+		this.altphone_norm = altphone_norm;
 	}
 
 	/**

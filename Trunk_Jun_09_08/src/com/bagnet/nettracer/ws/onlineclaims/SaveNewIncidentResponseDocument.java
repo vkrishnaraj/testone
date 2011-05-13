@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface SaveNewIncidentResponseDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(SaveNewIncidentResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s3120780053B2C9C6ED89C37135AF9582").resolveHandle("savenewincidentresponsea009doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(SaveNewIncidentResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("savenewincidentresponsea009doctype");
     
     /**
      * Gets the "saveNewIncidentResponse" element
@@ -42,7 +42,7 @@ public interface SaveNewIncidentResponseDocument extends org.apache.xmlbeans.Xml
     public interface SaveNewIncidentResponse extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(SaveNewIncidentResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s3120780053B2C9C6ED89C37135AF9582").resolveHandle("savenewincidentresponse672belemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(SaveNewIncidentResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("savenewincidentresponse672belemtype");
         
         /**
          * Gets the "return" element

@@ -33,6 +33,7 @@ import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.IATA_irregularity_code;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.NTDateFormat;
 import com.bagnet.nettracer.tracing.db.NTTimeFormat;
@@ -1113,13 +1114,16 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Agent.class).add(Expression.eq("username", username));
-			cri.createCriteria("station").createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
-			List ret = cri.list();
+			Query q = sess
+			.createQuery("select agent from com.bagnet.nettracer.tracing.db.Agent agent"
+					+ " where agent.username = :user and agent.station.company.companyCode_ID = :code");
+			q.setString("user", username);
+			q.setString("code", companyCode.toUpperCase());
+			List<Agent> ret = q.list();
 			if (ret == null || ret.size() == 0)
 				return null;
 			else
-				return (Agent) ret.get(0);
+				return ret.get(0);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;

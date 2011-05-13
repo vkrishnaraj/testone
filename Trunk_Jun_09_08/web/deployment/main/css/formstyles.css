@@ -8,7 +8,7 @@ width:65px;
 */
 div#maincontent input.textfield,
 div#maincontent input.disabledtextfield {
-	height:16px;
+	height:15px;
 	border:1px solid #569ECD;
 	margin:2px 0px 1px 0px;
 	padding: 0px;
@@ -124,6 +124,21 @@ div#buttons input {
 }
 
 #button {
+	background-color: #1F43AE;
+	border: 0px none;
+	height: 20px;
+	margin: 0px;
+	display: inline;
+
+	font-size:11px;
+	font-weight:bold;
+	color: #FFFFFF;
+	cursor: hand;
+	cursor: pointer;
+}
+
+
+#wtbutton {
 	background-color: #1F43AE;
 	border: 0px none;
 	height: 20px;

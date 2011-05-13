@@ -52,6 +52,8 @@ public class QuickSearchAction extends Action {
 	private static final String PATTERN_PNR = "^[A-Z0-9]{6}$";
 	private static final String PATTERN_NT_ID = "^[A-Z]{3}[0-9A-Z]{2}%{0,1}\\d{0,7}%{0,1}\\d{0,7}$";
 	private static final String PATTERN_BDO_ID = "^BDO%{0,1}\\d{0,10}%{0,1}\\d{0,9}$";
+	private static final String PATTERN_PHONE = "^P:%{0,1}\\d{0,10}%{0,1}\\d{0,9}$";
+	private static final String PATTERN_PHONE_DASH = "^%{0,1}\\d{0,3}-%{0,1}\\d{0,3}-%{0,1}\\d{0,4}$";
 //	private static final String PATTERN_EXPERT_FUNCTION = "^[A-Z]{1,3}:";
 //	private static final String EXPERT_INCIDENT = "I:";
 //	private static final String EXPERT_OHD = "O:";
@@ -91,6 +93,8 @@ public class QuickSearchAction extends Action {
 		Pattern twoCharPattern = Pattern.compile(LookupAirlineCodes.PATTERN_8_CHAR_BAG_TAG);
 		Pattern pnrPattern = Pattern.compile(PATTERN_PNR);
 		Pattern ntIdPattern1 = Pattern.compile(PATTERN_NT_ID);
+		Pattern phonePattern = Pattern.compile(PATTERN_PHONE);
+		Pattern phoneDashPattern = Pattern.compile(PATTERN_PHONE_DASH);
 //		Pattern bdoPattern = Pattern.compile(PATTERN_BDO_ID);
 
 		boolean scanResults = false;
@@ -137,8 +141,16 @@ public class QuickSearchAction extends Action {
 //			logger.info("BDO ID... 5");
 //			
 //			dto.setRedirect(REDIRECT_BDO_SEARCH);
+		} else if (phonePattern.matcher(s).find()) {
+			logger.info("Phone... 5");
+			phoneNumberSearch(user, s, dto);
+			dto.setRedirect(REDIRECT_NT_ID_SEARCH);
+		} else if (phoneDashPattern.matcher(s).find()) {
+			logger.info("Phone Dashes... 6");
+			phoneNumberSearch(user, s, dto);
+			dto.setRedirect(REDIRECT_NT_ID_SEARCH);
 		} else if (ntIdPattern1.matcher(s).find()) {
-			logger.info("NT ID... 6");
+			logger.info("NT ID... 7");
 			netTracerIdSearch(user, s, dto);
 			dto.setRedirect(REDIRECT_NT_ID_SEARCH);
 		} else {
@@ -282,6 +294,16 @@ public class QuickSearchAction extends Action {
 		queryOhds(user, dto, oBMO, oDTO);
 	}
 
+	private void phoneNumberSearch(Agent user, String s, QuickSearchDTO dto) {
+		IncidentBMO iBMO = new IncidentBMO();
+		SearchIncidentForm siDTO = new SearchIncidentForm();
+
+		siDTO.setPhone(s.replaceAll("[^0-9]", ""));
+
+		// Search Incidents for ID or WT ID
+		customQueryIncidents(user, dto, iBMO, siDTO);
+	}
+
 	private void queryOhds(Agent user, QuickSearchDTO dto, OhdBMO oBMO, SearchIncidentForm oDTO) {
 		logger.info("  Query OHD: Start");
 		dto.setDisplayOhdList(true);
@@ -326,5 +348,28 @@ public class QuickSearchAction extends Action {
 			}
 		}
 		logger.info("  Query Incident: Stop");
+	}
+
+	private void customQueryIncidents(Agent user, QuickSearchDTO dto, IncidentBMO iBMO, SearchIncidentForm siDTO) {
+		logger.info("  Query Incident: Start");
+		dto.setDisplayIncList(true);
+
+		List resultlist = iBMO.customQuery(siDTO, user, MAX_RESULTS + 1, 0, false, "4", true);
+		if (resultlist != null) {
+			if (resultlist.size() > MAX_RESULTS) {
+				dto.setIMore(true);
+				resultlist.remove(MAX_RESULTS);
+			}
+			dto.setIList(resultlist);
+
+			Incident ic = null;
+			for (int i = 0; i < resultlist.size(); i++) {
+				ic = (Incident) resultlist.get(i);
+				ic.set_DATEFORMAT(user.getDateformat().getFormat());
+				ic.set_TIMEFORMAT(user.getTimeformat().getFormat());
+				ic.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+			}
+		}
+		logger.info("  Custom Query Incident: Stop");
 	}
 }

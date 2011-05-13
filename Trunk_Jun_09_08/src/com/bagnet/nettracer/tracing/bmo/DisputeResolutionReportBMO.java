@@ -412,17 +412,17 @@ public class DisputeResolutionReportBMO {
 		
 		AbstractColumn columnIncidentDate = ColumnBuilder.getNew()
 				.setColumnProperty("reportIncidentDateCreate", String.class.getName()).setTitle(
-				reportHeadingIncidentDate).setWidth(new Integer(40))	
+				reportHeadingIncidentDate).setWidth(new Integer(43))	
 				.setStyle(detailStyle).setHeaderStyle(headerStyle).build(); //30
 		
 		AbstractColumn columnDisputeDate = ColumnBuilder.getNew()
 				.setColumnProperty("reportDateCreated", String.class.getName()).setTitle(
-				reportHeadingDisputeDate).setWidth(new Integer(40))	
+				reportHeadingDisputeDate).setWidth(new Integer(43))	
 				.setStyle(detailStyle).setHeaderStyle(headerStyle).build(); //30
 		
 		AbstractColumn columnResolvedDate = ColumnBuilder.getNew()
 				.setColumnProperty("reportDateResolved", String.class.getName()).setTitle(
-				reportHeadingResolutionDate).setWidth(new Integer(40))	
+				reportHeadingResolutionDate).setWidth(new Integer(43))	
 				.setStyle(detailStyle).setHeaderStyle(headerStyle).build(); //30
 
 		AbstractColumn columnReportNumber = ColumnBuilder.getNew()

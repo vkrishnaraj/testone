@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
 public interface WSPVItem extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVItem.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s3120780053B2C9C6ED89C37135AF9582").resolveHandle("wspvitem0b6etype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVItem.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("wspvitem0b6etype");
     
     /**
      * Gets the "address1" element
@@ -221,7 +221,12 @@ public interface WSPVItem extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "deliveryStatus" element
      */
-    com.bagnet.nettracer.tracing.db.xsd.Status getDeliveryStatus();
+    java.lang.String getDeliveryStatus();
+    
+    /**
+     * Gets (as xml) the "deliveryStatus" element
+     */
+    org.apache.xmlbeans.XmlString xgetDeliveryStatus();
     
     /**
      * Tests for nil "deliveryStatus" element
@@ -236,12 +241,12 @@ public interface WSPVItem extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "deliveryStatus" element
      */
-    void setDeliveryStatus(com.bagnet.nettracer.tracing.db.xsd.Status deliveryStatus);
+    void setDeliveryStatus(java.lang.String deliveryStatus);
     
     /**
-     * Appends and returns a new empty "deliveryStatus" element
+     * Sets (as xml) the "deliveryStatus" element
      */
-    com.bagnet.nettracer.tracing.db.xsd.Status addNewDeliveryStatus();
+    void xsetDeliveryStatus(org.apache.xmlbeans.XmlString deliveryStatus);
     
     /**
      * Nils the "deliveryStatus" element

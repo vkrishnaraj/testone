@@ -667,17 +667,31 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     /**
      * Gets the "deliveryStatus" element
      */
-    public com.bagnet.nettracer.tracing.db.xsd.Status getDeliveryStatus()
+    public java.lang.String getDeliveryStatus()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.tracing.db.xsd.Status target = null;
-            target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().find_element_user(DELIVERYSTATUS$10, 0);
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DELIVERYSTATUS$10, 0);
             if (target == null)
             {
                 return null;
             }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "deliveryStatus" element
+     */
+    public org.apache.xmlbeans.XmlString xgetDeliveryStatus()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DELIVERYSTATUS$10, 0);
             return target;
         }
     }
@@ -690,8 +704,8 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.tracing.db.xsd.Status target = null;
-            target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().find_element_user(DELIVERYSTATUS$10, 0);
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DELIVERYSTATUS$10, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -712,32 +726,36 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     /**
      * Sets the "deliveryStatus" element
      */
-    public void setDeliveryStatus(com.bagnet.nettracer.tracing.db.xsd.Status deliveryStatus)
+    public void setDeliveryStatus(java.lang.String deliveryStatus)
     {
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.tracing.db.xsd.Status target = null;
-            target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().find_element_user(DELIVERYSTATUS$10, 0);
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DELIVERYSTATUS$10, 0);
             if (target == null)
             {
-                target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().add_element_user(DELIVERYSTATUS$10);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(DELIVERYSTATUS$10);
             }
-            target.set(deliveryStatus);
+            target.setStringValue(deliveryStatus);
         }
     }
     
     /**
-     * Appends and returns a new empty "deliveryStatus" element
+     * Sets (as xml) the "deliveryStatus" element
      */
-    public com.bagnet.nettracer.tracing.db.xsd.Status addNewDeliveryStatus()
+    public void xsetDeliveryStatus(org.apache.xmlbeans.XmlString deliveryStatus)
     {
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.tracing.db.xsd.Status target = null;
-            target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().add_element_user(DELIVERYSTATUS$10);
-            return target;
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DELIVERYSTATUS$10, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(DELIVERYSTATUS$10);
+            }
+            target.set(deliveryStatus);
         }
     }
     
@@ -749,11 +767,11 @@ public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            com.bagnet.nettracer.tracing.db.xsd.Status target = null;
-            target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().find_element_user(DELIVERYSTATUS$10, 0);
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(DELIVERYSTATUS$10, 0);
             if (target == null)
             {
-                target = (com.bagnet.nettracer.tracing.db.xsd.Status)get_store().add_element_user(DELIVERYSTATUS$10);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(DELIVERYSTATUS$10);
             }
             target.setNil();
         }

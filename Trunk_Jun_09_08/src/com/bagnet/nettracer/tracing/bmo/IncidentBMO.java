@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
+import javax.persistence.UniqueConstraint;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
@@ -131,7 +133,7 @@ public class IncidentBMO {
 			if (iDTO.getIncident_ID() != null) {
 				
 				IncidentControl myIncidentControl;
-				
+				normalizePhoneNumbers(iDTO);
 				iDTO.setLastupdated(TracerDateTime.getGMTDate());
 				if (isnew) {
 					sess.save(iDTO);
@@ -182,6 +184,7 @@ public class IncidentBMO {
 					
 					// delete first then insert
 					sess.delete(oldinc);
+
 					iDTO = clearIncidentIds(iDTO);
 					sess.save(iDTO);
 				}
@@ -310,7 +313,8 @@ public class IncidentBMO {
 				iDTO.setLastupdated(TracerDateTime.getGMTDate());
 		
 				IncidentControl myIncidentControl;
-				
+
+				normalizePhoneNumbers(iDTO);
 				if (isnew) {
 					sess.save(iDTO);
 					
@@ -459,6 +463,7 @@ public class IncidentBMO {
 		try {
 			t = sess.beginTransaction();
 
+			normalizePhoneNumbers(iDTO);
 			sess.saveOrUpdate(iDTO);
 			t.commit();
 
@@ -812,6 +817,151 @@ public class IncidentBMO {
 			Incident iDTO = (Incident) list.get(0);
 
 			return iDTO;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+
+	/**
+	 * find incidents matching freq flyer number
+	 * 
+	 * @param freq_flyer
+	 * @return @throws HibernateException
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Incident> findIncidentForPVOFreqFlyer(String freq_flyer) throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+
+		try {
+
+			Query q = sess
+					.createQuery("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident join incident.passengers passenger"
+							+ " join passenger.membership membership where membership.membershipnum = :freqFlyer");
+			q.setString("freqFlyer", freq_flyer);
+			List<Incident> list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find incident with freq flyer num: " + freq_flyer);
+				return null;
+			}
+
+			return list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+
+	/**
+	 * find incidents matching record locator
+	 * 
+	 * @param record_locator
+	 * @return @throws HibernateException
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Incident> findIncidentForPVORecordLocator(String record_locator) throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+
+		try {
+
+			Calendar c = new GregorianCalendar();
+			c.setTime(TracerDateTime.getGMTDate());
+			c.add(Calendar.DATE, -30);
+			Date incCutoff = c.getTime();
+			Query q = sess
+					.createQuery("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident"
+							+ " where incident.recordlocator = :record and incident.createdate > :cutoff");
+			q.setString("record", record_locator);
+			q.setDate("cutoff", incCutoff);
+			List<Incident> list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find incident with record locator: " + record_locator);
+				return null;
+			}
+
+			return list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+
+	/**
+	 * find incidents matching phone numbers
+	 * 
+	 * @param phone_number
+	 * @return @throws HibernateException
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Incident> findIncidentForPVOPhoneNumber(String phone_number) throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+
+		try {
+
+			Query q = sess
+					.createQuery("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident"
+							+ " join incident.passengers passenger join passenger.addresses address"
+							+ " where address.homephone_norm like :searchnum or "
+							+		 "address.workphone_norm like :searchnum or "
+							+		 "address.mobile_norm like :searchnum or "
+							+		 "address.pager_norm like :searchnum or "
+							+		 "address.altphone_norm like :searchnum");
+			q.setString("searchnum", phone_number);
+			List<Incident> list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find incident with phone number: " + phone_number);
+				return null;
+			}
+
+			return list;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+
+	/**
+	 * find address objects for active incidents
+	 * 
+	 * @return @throws HibernateException
+	 */
+	@SuppressWarnings("unchecked")
+	public List<Object[]> findActiveIncidentsPhones() throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+
+		try {
+			SQLQuery q = sess
+					.createSQLQuery("select a.homephone_norm h, a.workphone_norm w, a.mobile_norm m, a.pager_norm pg, a.altphone_norm ap" +
+							" from incident i, address a, passenger p where status_id = 12 and " +
+							"p.incident_ID = i.Incident_ID and a.passenger_ID = p.Passenger_ID");
+			q.addScalar("h", Hibernate.STRING);
+			q.addScalar("w", Hibernate.STRING);
+			q.addScalar("m", Hibernate.STRING);
+			q.addScalar("pg", Hibernate.STRING);
+			q.addScalar("ap", Hibernate.STRING);
+			List<Object[]> list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to retrieve active numbers!");
+				return null;
+			}
+
+			return list;
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);
 			e.printStackTrace();
@@ -1642,9 +1792,11 @@ public class IncidentBMO {
 			if (siDTO.getZip().length() > 0)
 				s.append(" and address.zip like :zip");
 			if (siDTO.getPhone().length() > 0)
-				s
-						.append(" and (address.homephone like :phone or address.workphone like :phone "
-								+ " or address.mobile like :phone or address.pager like :phone or address.altphone like :phone)");
+				s.append(" and (address.homephone like :phone or address.workphone like :phone "
+						+ " or address.mobile like :phone or address.pager like :phone or address.altphone like :phone"
+						+ " or address.homephone_norm like :phone or address.workphone_norm like :phone or"
+						+ " address.mobile_norm like :phone or address.pager_norm like :phone or"
+						+ " address.altphone_norm like :phone)");
 			if (siDTO.getEmail().length() > 0)
 				s.append(" and address.email like :email");
 
@@ -2158,5 +2310,22 @@ public class IncidentBMO {
 			aep.setAudit_claim(ac);
 		}
 		sess.save(ac);
+	}
+	
+	private Incident normalizePhoneNumbers(Incident iDTO) {
+		if (iDTO.getPassengers() != null) {
+			for (Passenger pass : iDTO.getPassengers()) {
+				if (pass.getAddresses() != null) {
+					for (Address addr : (Set<Address>) pass.getAddresses()) {
+						addr.setHomephone_norm(TracerUtils.normalizePhoneNumber(addr.getHomephone()));
+						addr.setWorkphone_norm(TracerUtils.normalizePhoneNumber(addr.getWorkphone()));
+						addr.setMobile_norm(TracerUtils.normalizePhoneNumber(addr.getMobile()));
+						addr.setPager_norm(TracerUtils.normalizePhoneNumber(addr.getPager()));
+						addr.setAltphone_norm(TracerUtils.normalizePhoneNumber(addr.getAltphone()));
+					}
+				}
+			}
+		}
+		return iDTO;
 	}
 }

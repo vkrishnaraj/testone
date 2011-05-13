@@ -52,6 +52,33 @@ public class Claim {
 	private String tsaInspectionLocation;
 	private String comments;
 	private String ticketNumber;
+	private String paxClaimDate;
+	private String paxClaimAmount;
+	private String paxIpAddress;
+
+	public String getPaxClaimDate() {
+		return paxClaimDate;
+	}
+
+	public void setPaxClaimDate(String paxClaimDate) {
+		this.paxClaimDate = paxClaimDate;
+	}
+
+	public String getPaxClaimAmount() {
+		return paxClaimAmount;
+	}
+
+	public void setPaxClaimAmount(String paxClaimAmount) {
+		this.paxClaimAmount = paxClaimAmount;
+	}
+
+	public String getPaxIpAddress() {
+		return paxIpAddress;
+	}
+
+	public void setPaxIpAddress(String paxIpAddress) {
+		this.paxIpAddress = paxIpAddress;
+	}
 
 	public long getClaimId() {
 		return claimId;

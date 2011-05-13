@@ -1115,21 +1115,17 @@
 		</java>
 
 		<!-- copy services.xml to web-inf -->
-		<!--
-		<copy todir="${basedir}/web/WEB-INF/services/PaxView/META-INF" file="${build.dir}/webservices/passengerview/resources/services.xml" />
-		-->
-		<!-- copy java files to src 
+		<copy todir="${basedir}/web/WEB-INF/services/NTPassengerViewService/META-INF" file="${build.dir}/webservices/passengerview/resources/services.xml" />
 		
-		<copy todir="${basedir}/src">
+		<!-- copy java files to src -->
+		<copy todir="${basedir}/src" overwrite="true">
 			<fileset dir="${build.dir}/webservices/passengerview/src">
 				<include name="**/**/*.java" />
 				<exclude name="**/org/**" />
 			</fileset>
 		</copy>
-		-->
 
 		<!-- make jar file for schema -->
-		<!--
 		<mkdir dir="${build.dir}/webservices/passengerview/temp" />
 		<move todir="${build.dir}/webservices/passengerview/temp">
 			<fileset dir="${build.dir}/webservices/passengerview/resources">
@@ -1139,18 +1135,16 @@
 		</move>
 
 		
-		<jar destfile="${build.dir}/webservices/passengerview/paxview_1_1_schemas.jar" basedir="${build.dir}/webservices/passengerview/temp">
+		<jar destfile="${build.dir}/webservices/passengerview/ntpassengerview_schemas.jar" basedir="${build.dir}/webservices/passengerview/temp">
 		</jar>
 
-		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/passengerview/paxview_1_1_schemas.jar" />
+		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/passengerview/ntpassengerview_schemas.jar" />
 		
 		<replace file="${basedir}/web/WEB-INF/services/NTPassengerViewService/META-INF/services.xml">
 			<replacetoken><![CDATA[com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceSkeleton]]></replacetoken>
 			<replacevalue><![CDATA[com.bagnet.nettracer.ws.passengerview.NTPassengerViewServiceImplementation]]></replacevalue>
 		</replace>
-		-->
 
-		<!-- clean up -->
 		<!--
 		<delete dir="${build.dir}/webservices/passengerview/temp" />
 		<delete dir="${build.dir}/webservices/passengerview/resources" />

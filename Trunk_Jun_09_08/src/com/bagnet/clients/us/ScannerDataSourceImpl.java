@@ -54,7 +54,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 	private static final Logger logger = Logger.getLogger(ScannerDataSourceImpl.class);
 
 	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber) {
-		return getScannerData(startDate, endDate, bagTagNumber, 2);
+		return getScannerData(startDate, endDate, bagTagNumber, 120);
 	}
 	
 	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber, int timeout) {
@@ -69,8 +69,8 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 			e.printStackTrace();
 		}
 		stub._getServiceClient().getOptions().setProperty(HTTPConstants.CHUNKED, Boolean.FALSE);
-		stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(timeout*60*1000));
-		stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(timeout*60*1000));
+		stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(timeout*1000));
+		stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(timeout*1000));
 		
 		ScannerDTO newDto = new ScannerDTO();
 		ArrayList<ScannerDataDTO> list = new ArrayList<ScannerDataDTO>();

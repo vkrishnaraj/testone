@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -19,6 +20,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 @Entity
 @Proxy(lazy = false)
+@Table(name="FsFile")
 public class File implements Serializable {
 
 	private static final long serialVersionUID = 1L;

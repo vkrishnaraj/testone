@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Claim extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s3120780053B2C9C6ED89C37135AF9582").resolveHandle("claimd979type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("claimd979type");
     
     /**
      * Gets the "accept" element
@@ -1222,6 +1222,126 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "passengersTravelingWithYou" element
      */
     void unsetPassengersTravelingWithYou();
+    
+    /**
+     * Gets the "paxClaimAmount" element
+     */
+    java.lang.String getPaxClaimAmount();
+    
+    /**
+     * Gets (as xml) the "paxClaimAmount" element
+     */
+    org.apache.xmlbeans.XmlString xgetPaxClaimAmount();
+    
+    /**
+     * Tests for nil "paxClaimAmount" element
+     */
+    boolean isNilPaxClaimAmount();
+    
+    /**
+     * True if has "paxClaimAmount" element
+     */
+    boolean isSetPaxClaimAmount();
+    
+    /**
+     * Sets the "paxClaimAmount" element
+     */
+    void setPaxClaimAmount(java.lang.String paxClaimAmount);
+    
+    /**
+     * Sets (as xml) the "paxClaimAmount" element
+     */
+    void xsetPaxClaimAmount(org.apache.xmlbeans.XmlString paxClaimAmount);
+    
+    /**
+     * Nils the "paxClaimAmount" element
+     */
+    void setNilPaxClaimAmount();
+    
+    /**
+     * Unsets the "paxClaimAmount" element
+     */
+    void unsetPaxClaimAmount();
+    
+    /**
+     * Gets the "paxClaimDate" element
+     */
+    java.lang.String getPaxClaimDate();
+    
+    /**
+     * Gets (as xml) the "paxClaimDate" element
+     */
+    org.apache.xmlbeans.XmlString xgetPaxClaimDate();
+    
+    /**
+     * Tests for nil "paxClaimDate" element
+     */
+    boolean isNilPaxClaimDate();
+    
+    /**
+     * True if has "paxClaimDate" element
+     */
+    boolean isSetPaxClaimDate();
+    
+    /**
+     * Sets the "paxClaimDate" element
+     */
+    void setPaxClaimDate(java.lang.String paxClaimDate);
+    
+    /**
+     * Sets (as xml) the "paxClaimDate" element
+     */
+    void xsetPaxClaimDate(org.apache.xmlbeans.XmlString paxClaimDate);
+    
+    /**
+     * Nils the "paxClaimDate" element
+     */
+    void setNilPaxClaimDate();
+    
+    /**
+     * Unsets the "paxClaimDate" element
+     */
+    void unsetPaxClaimDate();
+    
+    /**
+     * Gets the "paxIpAddress" element
+     */
+    java.lang.String getPaxIpAddress();
+    
+    /**
+     * Gets (as xml) the "paxIpAddress" element
+     */
+    org.apache.xmlbeans.XmlString xgetPaxIpAddress();
+    
+    /**
+     * Tests for nil "paxIpAddress" element
+     */
+    boolean isNilPaxIpAddress();
+    
+    /**
+     * True if has "paxIpAddress" element
+     */
+    boolean isSetPaxIpAddress();
+    
+    /**
+     * Sets the "paxIpAddress" element
+     */
+    void setPaxIpAddress(java.lang.String paxIpAddress);
+    
+    /**
+     * Sets (as xml) the "paxIpAddress" element
+     */
+    void xsetPaxIpAddress(org.apache.xmlbeans.XmlString paxIpAddress);
+    
+    /**
+     * Nils the "paxIpAddress" element
+     */
+    void setNilPaxIpAddress();
+    
+    /**
+     * Unsets the "paxIpAddress" element
+     */
+    void unsetPaxIpAddress();
     
     /**
      * Gets the "permanentAddress" element

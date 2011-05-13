@@ -45,23 +45,25 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "operation_hours");
     private static final javax.xml.namespace.QName PHONE$24 = 
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "phone");
-    private static final javax.xml.namespace.QName STATEID$26 = 
+    private static final javax.xml.namespace.QName PRIORITY$26 = 
+        new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "priority");
+    private static final javax.xml.namespace.QName STATEID$28 = 
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "state_ID");
-    private static final javax.xml.namespace.QName STATIONID$28 = 
+    private static final javax.xml.namespace.QName STATIONID$30 = 
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "station_ID");
-    private static final javax.xml.namespace.QName STATIONREGION$30 = 
+    private static final javax.xml.namespace.QName STATIONREGION$32 = 
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "station_region");
-    private static final javax.xml.namespace.QName STATIONREGIONMGR$32 = 
+    private static final javax.xml.namespace.QName STATIONREGIONMGR$34 = 
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "station_region_mgr");
-    private static final javax.xml.namespace.QName STATIONCODE$34 = 
+    private static final javax.xml.namespace.QName STATIONCODE$36 = 
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "stationcode");
-    private static final javax.xml.namespace.QName STATIONDESC$36 = 
+    private static final javax.xml.namespace.QName STATIONDESC$38 = 
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "stationdesc");
-    private static final javax.xml.namespace.QName THISOHDLZ$38 = 
+    private static final javax.xml.namespace.QName THISOHDLZ$40 = 
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "thisOhdLz");
-    private static final javax.xml.namespace.QName WTSTATIONCODE$40 = 
+    private static final javax.xml.namespace.QName WTSTATIONCODE$42 = 
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "wt_stationcode");
-    private static final javax.xml.namespace.QName ZIP$42 = 
+    private static final javax.xml.namespace.QName ZIP$44 = 
         new javax.xml.namespace.QName("http://db.tracing.nettracer.bagnet.com/xsd", "zip");
     
     
@@ -1574,6 +1576,98 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
     }
     
     /**
+     * Gets the "priority" element
+     */
+    public int getPriority()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PRIORITY$26, 0);
+            if (target == null)
+            {
+                return 0;
+            }
+            return target.getIntValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "priority" element
+     */
+    public org.apache.xmlbeans.XmlInt xgetPriority()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(PRIORITY$26, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "priority" element
+     */
+    public boolean isSetPriority()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(PRIORITY$26) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "priority" element
+     */
+    public void setPriority(int priority)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PRIORITY$26, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PRIORITY$26);
+            }
+            target.setIntValue(priority);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "priority" element
+     */
+    public void xsetPriority(org.apache.xmlbeans.XmlInt priority)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(PRIORITY$26, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(PRIORITY$26);
+            }
+            target.set(priority);
+        }
+    }
+    
+    /**
+     * Unsets the "priority" element
+     */
+    public void unsetPriority()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(PRIORITY$26, 0);
+        }
+    }
+    
+    /**
      * Gets the "state_ID" element
      */
     public java.lang.String getStateID()
@@ -1582,7 +1676,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATEID$26, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATEID$28, 0);
             if (target == null)
             {
                 return null;
@@ -1600,7 +1694,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$26, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$28, 0);
             return target;
         }
     }
@@ -1614,7 +1708,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$26, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$28, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -1628,7 +1722,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(STATEID$26) != 0;
+            return get_store().count_elements(STATEID$28) != 0;
         }
     }
     
@@ -1641,10 +1735,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATEID$26, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATEID$28, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATEID$26);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATEID$28);
             }
             target.setStringValue(stateID);
         }
@@ -1659,10 +1753,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$26, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$28, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATEID$26);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATEID$28);
             }
             target.set(stateID);
         }
@@ -1677,10 +1771,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$26, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATEID$28, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATEID$26);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATEID$28);
             }
             target.setNil();
         }
@@ -1694,7 +1788,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(STATEID$26, 0);
+            get_store().remove_element(STATEID$28, 0);
         }
     }
     
@@ -1707,7 +1801,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONID$28, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONID$30, 0);
             if (target == null)
             {
                 return 0;
@@ -1725,7 +1819,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlInt target = null;
-            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(STATIONID$28, 0);
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(STATIONID$30, 0);
             return target;
         }
     }
@@ -1738,7 +1832,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(STATIONID$28) != 0;
+            return get_store().count_elements(STATIONID$30) != 0;
         }
     }
     
@@ -1751,10 +1845,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONID$28, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONID$30, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATIONID$28);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATIONID$30);
             }
             target.setIntValue(stationID);
         }
@@ -1769,10 +1863,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlInt target = null;
-            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(STATIONID$28, 0);
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(STATIONID$30, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(STATIONID$28);
+                target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(STATIONID$30);
             }
             target.set(stationID);
         }
@@ -1786,7 +1880,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(STATIONID$28, 0);
+            get_store().remove_element(STATIONID$30, 0);
         }
     }
     
@@ -1799,7 +1893,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONREGION$30, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONREGION$32, 0);
             if (target == null)
             {
                 return null;
@@ -1817,7 +1911,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGION$30, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGION$32, 0);
             return target;
         }
     }
@@ -1831,7 +1925,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGION$30, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGION$32, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -1845,7 +1939,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(STATIONREGION$30) != 0;
+            return get_store().count_elements(STATIONREGION$32) != 0;
         }
     }
     
@@ -1858,10 +1952,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONREGION$30, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONREGION$32, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATIONREGION$30);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATIONREGION$32);
             }
             target.setStringValue(stationRegion);
         }
@@ -1876,10 +1970,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGION$30, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGION$32, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONREGION$30);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONREGION$32);
             }
             target.set(stationRegion);
         }
@@ -1894,10 +1988,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGION$30, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGION$32, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONREGION$30);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONREGION$32);
             }
             target.setNil();
         }
@@ -1911,7 +2005,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(STATIONREGION$30, 0);
+            get_store().remove_element(STATIONREGION$32, 0);
         }
     }
     
@@ -1924,7 +2018,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONREGIONMGR$32, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONREGIONMGR$34, 0);
             if (target == null)
             {
                 return null;
@@ -1942,7 +2036,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGIONMGR$32, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGIONMGR$34, 0);
             return target;
         }
     }
@@ -1956,7 +2050,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGIONMGR$32, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGIONMGR$34, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -1970,7 +2064,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(STATIONREGIONMGR$32) != 0;
+            return get_store().count_elements(STATIONREGIONMGR$34) != 0;
         }
     }
     
@@ -1983,10 +2077,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONREGIONMGR$32, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONREGIONMGR$34, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATIONREGIONMGR$32);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATIONREGIONMGR$34);
             }
             target.setStringValue(stationRegionMgr);
         }
@@ -2001,10 +2095,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGIONMGR$32, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGIONMGR$34, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONREGIONMGR$32);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONREGIONMGR$34);
             }
             target.set(stationRegionMgr);
         }
@@ -2019,10 +2113,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGIONMGR$32, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONREGIONMGR$34, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONREGIONMGR$32);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONREGIONMGR$34);
             }
             target.setNil();
         }
@@ -2036,7 +2130,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(STATIONREGIONMGR$32, 0);
+            get_store().remove_element(STATIONREGIONMGR$34, 0);
         }
     }
     
@@ -2049,7 +2143,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONCODE$34, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONCODE$36, 0);
             if (target == null)
             {
                 return null;
@@ -2067,7 +2161,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONCODE$34, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONCODE$36, 0);
             return target;
         }
     }
@@ -2081,7 +2175,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONCODE$34, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONCODE$36, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -2095,7 +2189,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(STATIONCODE$34) != 0;
+            return get_store().count_elements(STATIONCODE$36) != 0;
         }
     }
     
@@ -2108,10 +2202,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONCODE$34, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONCODE$36, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATIONCODE$34);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATIONCODE$36);
             }
             target.setStringValue(stationcode);
         }
@@ -2126,10 +2220,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONCODE$34, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONCODE$36, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONCODE$34);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONCODE$36);
             }
             target.set(stationcode);
         }
@@ -2144,10 +2238,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONCODE$34, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONCODE$36, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONCODE$34);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONCODE$36);
             }
             target.setNil();
         }
@@ -2161,7 +2255,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(STATIONCODE$34, 0);
+            get_store().remove_element(STATIONCODE$36, 0);
         }
     }
     
@@ -2174,7 +2268,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONDESC$36, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONDESC$38, 0);
             if (target == null)
             {
                 return null;
@@ -2192,7 +2286,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONDESC$36, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONDESC$38, 0);
             return target;
         }
     }
@@ -2206,7 +2300,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONDESC$36, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONDESC$38, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -2220,7 +2314,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(STATIONDESC$36) != 0;
+            return get_store().count_elements(STATIONDESC$38) != 0;
         }
     }
     
@@ -2233,10 +2327,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONDESC$36, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATIONDESC$38, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATIONDESC$36);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATIONDESC$38);
             }
             target.setStringValue(stationdesc);
         }
@@ -2251,10 +2345,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONDESC$36, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONDESC$38, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONDESC$36);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONDESC$38);
             }
             target.set(stationdesc);
         }
@@ -2269,10 +2363,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONDESC$36, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(STATIONDESC$38, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONDESC$36);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(STATIONDESC$38);
             }
             target.setNil();
         }
@@ -2286,7 +2380,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(STATIONDESC$36, 0);
+            get_store().remove_element(STATIONDESC$38, 0);
         }
     }
     
@@ -2299,7 +2393,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(THISOHDLZ$38, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(THISOHDLZ$40, 0);
             if (target == null)
             {
                 return false;
@@ -2317,7 +2411,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(THISOHDLZ$38, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(THISOHDLZ$40, 0);
             return target;
         }
     }
@@ -2330,7 +2424,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(THISOHDLZ$38) != 0;
+            return get_store().count_elements(THISOHDLZ$40) != 0;
         }
     }
     
@@ -2343,10 +2437,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(THISOHDLZ$38, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(THISOHDLZ$40, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(THISOHDLZ$38);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(THISOHDLZ$40);
             }
             target.setBooleanValue(thisOhdLz);
         }
@@ -2361,10 +2455,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(THISOHDLZ$38, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(THISOHDLZ$40, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(THISOHDLZ$38);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(THISOHDLZ$40);
             }
             target.set(thisOhdLz);
         }
@@ -2378,7 +2472,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(THISOHDLZ$38, 0);
+            get_store().remove_element(THISOHDLZ$40, 0);
         }
     }
     
@@ -2391,7 +2485,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WTSTATIONCODE$40, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WTSTATIONCODE$42, 0);
             if (target == null)
             {
                 return null;
@@ -2409,7 +2503,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WTSTATIONCODE$40, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WTSTATIONCODE$42, 0);
             return target;
         }
     }
@@ -2423,7 +2517,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WTSTATIONCODE$40, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WTSTATIONCODE$42, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -2437,7 +2531,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(WTSTATIONCODE$40) != 0;
+            return get_store().count_elements(WTSTATIONCODE$42) != 0;
         }
     }
     
@@ -2450,10 +2544,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WTSTATIONCODE$40, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WTSTATIONCODE$42, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WTSTATIONCODE$40);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WTSTATIONCODE$42);
             }
             target.setStringValue(wtStationcode);
         }
@@ -2468,10 +2562,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WTSTATIONCODE$40, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WTSTATIONCODE$42, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WTSTATIONCODE$40);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WTSTATIONCODE$42);
             }
             target.set(wtStationcode);
         }
@@ -2486,10 +2580,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WTSTATIONCODE$40, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(WTSTATIONCODE$42, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WTSTATIONCODE$40);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(WTSTATIONCODE$42);
             }
             target.setNil();
         }
@@ -2503,7 +2597,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(WTSTATIONCODE$40, 0);
+            get_store().remove_element(WTSTATIONCODE$42, 0);
         }
     }
     
@@ -2516,7 +2610,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIP$42, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIP$44, 0);
             if (target == null)
             {
                 return null;
@@ -2534,7 +2628,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$42, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$44, 0);
             return target;
         }
     }
@@ -2548,7 +2642,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$42, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$44, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -2562,7 +2656,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(ZIP$42) != 0;
+            return get_store().count_elements(ZIP$44) != 0;
         }
     }
     
@@ -2575,10 +2669,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIP$42, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIP$44, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ZIP$42);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ZIP$44);
             }
             target.setStringValue(zip);
         }
@@ -2593,10 +2687,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$42, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$44, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ZIP$42);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ZIP$44);
             }
             target.set(zip);
         }
@@ -2611,10 +2705,10 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$42, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(ZIP$44, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ZIP$42);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(ZIP$44);
             }
             target.setNil();
         }
@@ -2628,7 +2722,7 @@ public class StationImpl extends org.apache.xmlbeans.impl.values.XmlComplexConte
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(ZIP$42, 0);
+            get_store().remove_element(ZIP$44, 0);
         }
     }
 }

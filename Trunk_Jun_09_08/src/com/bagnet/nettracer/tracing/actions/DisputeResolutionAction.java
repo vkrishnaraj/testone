@@ -113,10 +113,10 @@ public class DisputeResolutionAction extends CheckedAction {
 				if(myButton.equalsIgnoreCase(myAcceptDisputeBtn)) {
 					whichButton += myAcceptDisputeBtn;
 					//do accept dispute action here
-					success = acceptDispute(incident, user);
+					success = acceptDispute(incident, user, theform.getResolutionRemarks());
 				} else if (myButton.equalsIgnoreCase(myDenyDisputeBtn)) {
 					whichButton += myDenyDisputeBtn;
-					success = denyDispute(incident, user);
+					success = denyDispute(incident, user, theform.getResolutionRemarks());
 				} else if (myButton.equalsIgnoreCase(myManuallyModifyDisputeBtn)) {
 					whichButton += myManuallyModifyDisputeBtn;
 					success = manuallyModifyDispute(incident, theform, user);
@@ -263,7 +263,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		return TracingConstants.MANAGE_DISPUTE;
 	}
 	
-	private boolean acceptDispute(String incidentId, Agent user) {
+	private boolean acceptDispute(String incidentId, Agent user, String remarks) {
 		Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incidentId);
 		
 		myDispute.setResolution_timestamp(DateUtils.convertToGMTDate(new Date()));
@@ -278,11 +278,13 @@ public class DisputeResolutionAction extends CheckedAction {
 		
 		myDispute.setDeterminedLossCode(myDispute.getSuggestedLossCode());
 		
+		myDispute.setResolutionRemarks(remarks);
+		
 //		DisputeUtils.saveDispute(myDispute);
 		return DisputeUtils.saveDisputeAndUpdateIncident(myDispute, incidentId, user);
 	}
 	
-	private boolean denyDispute(String incidentId, Agent user) {
+	private boolean denyDispute(String incidentId, Agent user, String remarks) {
 		Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incidentId);
 		
 		myDispute.setResolution_timestamp(DateUtils.convertToGMTDate(new Date()));
@@ -296,6 +298,8 @@ public class DisputeResolutionAction extends CheckedAction {
 		myDispute.setDeterminedFaultStation(determinedFaultStation);
 		
 		myDispute.setDeterminedLossCode(myDispute.getBeforeDisputeLossCode());
+		
+		myDispute.setResolutionRemarks(remarks);
 		
 		return DisputeUtils.saveDispute(myDispute);
 	}
