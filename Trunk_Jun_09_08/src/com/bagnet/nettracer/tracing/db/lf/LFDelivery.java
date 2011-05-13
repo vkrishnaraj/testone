@@ -1,0 +1,48 @@
+package com.bagnet.nettracer.tracing.db.lf;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
+import org.hibernate.annotations.Proxy;
+
+@Entity
+@Proxy(lazy = false)
+public class LFDelivery {
+
+	@Id
+	@GeneratedValue
+	private long id;
+	
+	private String trackingNumber;
+	
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFLost.class, cascade = CascadeType.ALL)
+	private LFLost lost;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public String getTrackingNumber() {
+		return trackingNumber;
+	}
+
+	public void setTrackingNumber(String trackingNumber) {
+		this.trackingNumber = trackingNumber;
+	}
+
+	public LFLost getLost() {
+		return lost;
+	}
+
+	public void setLost(LFLost lost) {
+		this.lost = lost;
+	}
+	
+}
