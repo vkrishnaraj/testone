@@ -123,16 +123,16 @@ public class Producer {
 			+ "\'person\' as type "
 			+ "from person p "
 			+ "left outer join fsclaim c1 on p.claim_id = c1.id "
-			+ "left outer join file f1 on f1.id = c1.file_id "
+			+ "left outer join FsFile f1 on f1.id = c1.file_id "
 			+ "left outer join fsincident i2 on p.incident_id = i2.id "
 			+ "left outer join fsclaim c2 on i2.claim_id = c2.id "
-			+ "left outer join file f2 on f2.id = c2.file_id "
-			+ "left outer join file f3 on f3.id = i2.file_id "
+			+ "left outer join FsFile f2 on f2.id = c2.file_id "
+			+ "left outer join FsFile f3 on f3.id = i2.file_id "
 			+ "left outer join reservation r3 on p.reservation_id = r3.id "
 			+ "left outer join fsincident i3 on r3.incident_id = i3.id "
 			+ "left outer join fsclaim c3 on i3.claim_id = c3.id "
-			+ "left outer join file f4 on f4.id = c3.file_id "
-			+ "left outer join file f5 on f5.id = i3.file_id "
+			+ "left outer join FsFile f4 on f4.id = c3.file_id "
+			+ "left outer join FsFile f5 on f5.id = i3.file_id "
             + "where 1=0 ";
 
 		Set<Person> persons = Consumer.getPersons(file);
@@ -191,21 +191,21 @@ public class Producer {
 			sql += "from phone ph "
 				+  " left outer join person p on ph.person_id = p.id "
 				+ " left outer join fsclaim c1 on p.claim_id = c1.id "
-				+ " left outer join file f1 on f1.id = c1.file_id "
+				+ " left outer join FsFile f1 on f1.id = c1.file_id "
 				+ "  left outer join fsincident i2 on p.incident_id = i2.id "
 				+ " left outer join fsclaim c2 on i2.claim_id = c2.id "
-				+ " left outer join file f2 on f2.id = c2.file_id "
-				+ " left outer join file f3 on f3.id = i2.file_id "
+				+ " left outer join FsFile f2 on f2.id = c2.file_id "
+				+ " left outer join FsFile f3 on f3.id = i2.file_id "
 				+ "   left outer join reservation r3 on p.reservation_id = r3.id "
 				+ "     left outer join fsincident i3 on r3.incident_id = i3.id "
 				+ "     left outer join fsclaim c3 on i3.claim_id = c3.id "
-				+ " left outer join file f4 on f4.id = c3.file_id "
-				+ " left outer join file f5 on f5.id = i3.file_id "
+				+ " left outer join FsFile f4 on f4.id = c3.file_id "
+				+ " left outer join FsFile f5 on f5.id = i3.file_id "
 				+ "  left outer join reservation r4 on ph.reservation_id =	r4.id "
 				+ "     left outer join fsincident i4 on r4.incident_id = i4.id "
 				+ "    left outer join fsclaim c4 on i4.claim_id = c4.id "
-				+ " left outer join file f6 on f6.id = c4.file_id "
-				+ " left outer join file f7 on f7.id = i4.file_id "
+				+ " left outer join FsFile f6 on f6.id = c4.file_id "
+				+ " left outer join FsFile f7 on f7.id = i4.file_id "
 				+ " where 1=0 ";
 
 //			for(Phone phone:phones){
@@ -232,8 +232,8 @@ public class Producer {
 					"from reservation res " +
 					"left outer join fsincident i2 on res.incident_id = i2.id " +
 					"left outer join fsclaim c2 on i2.claim_id = c2.id " +
-					"left outer join file f2 on f2.id = c2.file_id " +
-					"left outer join file f3 on f3.id = i2.file_id " +
+					"left outer join FsFile f2 on f2.id = c2.file_id " +
+					"left outer join FsFile f3 on f3.id = i2.file_id " +
 					"where ccNumLastFour = \'" + format(file.getIncident().getReservation().getCcNumLastFour()) +"\' ";
 		}
 
@@ -251,18 +251,18 @@ public class Producer {
 			"from fsaddress ad " + 
       "left outer join person p on ad.person_id = p.id " +
             "left outer join fsclaim c1 on p.claim_id = c1.id " +
-            "left outer join file f1 on f1.id = c1.file_id " +
+            "left outer join FsFile f1 on f1.id = c1.file_id " +
             
             "left outer join fsincident i2 on p.incident_id = i2.id " +
                   "left outer join fsclaim c2 on i2.claim_id = c2.id " +
-                  "left outer join file f2 on f2.id = c2.file_id " +
-                  "left outer join file f3 on f3.id = i2.file_id " +
+                  "left outer join FsFile f2 on f2.id = c2.file_id " +
+                  "left outer join FsFile f3 on f3.id = i2.file_id " +
                   
             "left outer join reservation r3 on p.reservation_id = r3.id " +
                   "left outer join fsincident i3 on r3.incident_id = i3.id " +
                   "left outer join fsclaim c3 on i3.claim_id = c3.id " +
-                  "left outer join file f4 on f4.id = c3.file_id " +
-                  "left outer join file f5 on f5.id = i3.file_id " +
+                  "left outer join FsFile f4 on f4.id = c3.file_id " +
+                  "left outer join FsFile f5 on f5.id = i3.file_id " +
                   
                   "where 1=0 ";
 

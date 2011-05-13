@@ -25,6 +25,9 @@ import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Consumer implements Runnable{
 
 	public static boolean debug = false;
@@ -56,6 +59,8 @@ public class Consumer implements Runnable{
 
 	private static final double PHONE_MATCH = 30;
 	private static final double P_DOB = 6;	
+	
+	private static final Pattern invalidPhone = Pattern.compile("^(0+|1+|3+|4+|5+|6+|7+|8+|9+)$");
 	
 	
 	
@@ -226,7 +231,8 @@ public class Consumer implements Runnable{
 		if(p == null || p.trim().length() < 5){
 			return false;
 		}
-		return true;		
+		Matcher m = invalidPhone.matcher(p.trim());
+		return !m.matches();		
 	}
 	
 
