@@ -148,13 +148,15 @@
 			<div class="contentbodyspacing"></div>
 			<div class="contentbody"><!-- Start body content --> 
 				
-				<a4j:repeat value="#{passengerBean.passengerData.itemsArray}"
+				<a4j:repeat value="#{passengerBean.pvItems}"
 				var="item" rowKeyVar="rowIndex">
+				<b><h:outputText value="Bag \##{rowIndex + 1}" styleClass="formLabel" /></b><br/>
+				<h:panelGroup rendered="#{item.claimchecknumavail}">
 			<div class="listitem">
 				<p>Bag Tag:</p>
 				<span><h:outputText value="#{item.claimchecknum}"
 					styleClass="formLabel" /></span>
-			</div>
+			</div></h:panelGroup>
 			
 			
 			<div class="listitem">
@@ -264,7 +266,7 @@ it will be necessary to complete a Passenger Property Form." styleClass="passfon
 				action="forward to URL 'http://www.usairways.com/en-US/Resources/_downloads/traveltools/baggage_claim_form.pdf'"
 				styleClass="button140pxredextended fright" />   -->
 				
-			 <h:outputLink value="http://www.usairways.com/en-US/Resources/_downloads/traveltools/baggage_claim_form.pdf" target="_blank" rendered="#{!passengerBean.onlineAvailable}">
+			 <h:outputLink value="http://www.usairways.com/en-US/Resources/_downloads/traveltools/baggage_claim_form.pdf" target="_blank" rendered="#{passengerBean.claimsAvailable}">
 				<h:outputText value="Passenger Property Form" style="text-align:center; line-height: 20px;" styleClass="button140pxredextended fright"/></h:outputLink>
 				
 				</div>

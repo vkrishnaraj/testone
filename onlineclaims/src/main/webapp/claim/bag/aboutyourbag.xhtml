@@ -26,9 +26,8 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagTagNumber.label}"   styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.bagTagNumber.required}"/>
-					<t:outputText value=":" styleClass="formLabel"/>
+					<h:graphicImage value="../_images/reqbullet.gif" 
+						rendered="#{passengerController.bagDetailsLabel.bagTagNumber.required}" />
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<t:inputText  value="#{bagItem.bagTagNumber}" style="width:77%" tabindex="0"
@@ -49,8 +48,8 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.nameonBag.label}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.nameonBag.required}"/>
+					<h:graphicImage value="../_images/reqbullet.gif" 
+						rendered="#{passengerController.bagDetailsLabel.nameonBag.required}" />
 					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
@@ -72,8 +71,8 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.externalMarkings.label}" styleClass="wrapText"/>
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.externalMarkings.required}"/>
+					<h:graphicImage value="../_images/reqbullet.gif" 
+						rendered="#{passengerController.bagDetailsLabel.externalMarkings.required}" />
 					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
@@ -95,8 +94,8 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagColor.label}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.bagColor.required}"/>
+					<h:graphicImage value="../_images/reqbullet.gif" 
+						rendered="#{passengerController.bagDetailsLabel.bagColor.required}" />
 					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
@@ -133,8 +132,8 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.brandOftheBag.label}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.brandOftheBag.required}"/>
+					<h:graphicImage value="../_images/reqbullet.gif" 
+						rendered="#{passengerController.bagDetailsLabel.brandOftheBag.required}" />
 					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
@@ -156,8 +155,8 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagPurchaseDate.label}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.bagPurchaseDate.required}"/>
+					<h:graphicImage value="../_images/reqbullet.gif" 
+						rendered="#{passengerController.bagDetailsLabel.bagPurchaseDate.required}" />
 					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
@@ -198,8 +197,8 @@
 				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.bagType.label}" styleClass="formLabel"/>
 					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.bagDetailsLabel.bagType.required}"/>
+					<h:graphicImage value="../_images/reqbullet.gif" 
+						rendered="#{passengerController.bagDetailsLabel.bagType.required}" />
 					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
@@ -390,7 +389,7 @@
 				<rich:column>
 					<h:selectOneMenu value="#{contentItem.currency}"  
 						disabled="#{passengerController.readOnlyOnSubmitted}">
-						<f:selectItem itemValue="" itemLabel="--" />
+						<f:selectItem itemValue="USD" itemLabel="US Dollar" />
 						<f:selectItems value="#{passengerController.currencyList}" />
 					</h:selectOneMenu>
 				</rich:column>

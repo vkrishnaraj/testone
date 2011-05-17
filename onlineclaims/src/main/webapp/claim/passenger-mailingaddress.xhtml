@@ -21,7 +21,7 @@
 						 	rendered="#{passengerController.passengerInfoLabel.mailingAddressLine1.required}"/>
 							</div>
 						</td><td colspan="7" style="padding-bottom: 5px;">
-					<t:inputText id="pi14" value="#{passengerBean.address[1].addressLine1 }"   style="width:100%;" 
+					<t:inputText id="pi14" value="#{passengerBean.address[1].addressLine1 }"   style="width:99%;" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine1.required}" tabindex="13"
 							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine1.hidden}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
@@ -42,7 +42,7 @@
 						 	rendered="#{passengerController.passengerInfoLabel.mailingAddressLine2.required}"/>
 							</div>
 						</td><td colspan="7" style="padding: 5px 0px;">
-					<t:inputText id="pi15" value="#{passengerBean.address[1].addressLine2 }"  style="width:100%;" 
+					<t:inputText id="pi15" value="#{passengerBean.address[1].addressLine2 }"  style="width:99%;" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine2.required}" tabindex="14"
 							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine2.hidden}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
@@ -119,7 +119,7 @@
 					<h:graphicImage value="../_images/reqbullet.gif"  
 						 	rendered="#{passengerController.passengerInfoLabel.mailingCountry.required}"/>
 						</h:panelGroup>
-						</td><td style="width:15%;">
+						</td><td style="width:14%;">
 						<h:selectOneMenu value="#{passengerBean.address[1].country }" tabindex="18" onchange="submit()" style="width:100%;" 
 								required="#{passengerController.passengerInfoLabel.mailingCountry.required}"
 								readonly="#{passengerController.passengerInfoLabel.mailingCountry.hidden}"

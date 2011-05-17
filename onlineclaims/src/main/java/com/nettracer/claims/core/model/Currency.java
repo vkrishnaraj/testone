@@ -17,6 +17,12 @@ public class Currency{
 	public static List<SelectItem> currencyList=new ArrayList<SelectItem>();
 
 	public static List<SelectItem> getCurrencies() {
+//		currencyList.add(new SelectItem("USD","US Dollar"));
+		currencyList.add(new SelectItem("EUR","Euro"));
+		currencyList.add(new SelectItem("GBP","British Pound"));
+		currencyList.add(new SelectItem("JPY","Japanese Yen"));
+		currencyList.add(new SelectItem("ILS","Israeli New Shekel"));
+		currencyList.add(new SelectItem("MXP","Mexican Peso"));
 		currencyList.add(new SelectItem("ADP","Andorran Peseta"));
 		currencyList.add(new SelectItem("AED","Utd. Arab Emir. Dirh"));
 		currencyList.add(new SelectItem("AFA","Afghanistan Afghani"));
@@ -62,12 +68,10 @@ public class Currency{
 		currencyList.add(new SelectItem("EGP","Egyptian Pound"));
 		currencyList.add(new SelectItem("ESP","Spanish Peseta"));
 		currencyList.add(new SelectItem("ETB","Ethiopian Birr"));
-		currencyList.add(new SelectItem("EUR","Euro"));
 		currencyList.add(new SelectItem("FIM","Finnish Markka"));
 		currencyList.add(new SelectItem("FJD","Fiji Dollar"));
 		currencyList.add(new SelectItem("FKP","Falkland Islands Pou"));
 		currencyList.add(new SelectItem("FRF","French Franc"));
-		currencyList.add(new SelectItem("GBP","British Pound"));
 		currencyList.add(new SelectItem("GHC","Ghanaian Cedi"));
 		currencyList.add(new SelectItem("GIP","Gibraltar Pound"));
 		currencyList.add(new SelectItem("GMD","Gambian Dalasi"));
@@ -82,7 +86,6 @@ public class Currency{
 		currencyList.add(new SelectItem("HUF","Hungarian Forint"));
 		currencyList.add(new SelectItem("IDR","Indonesian Rupiah"));	
 		currencyList.add(new SelectItem("IEP","Irish Punt"));
-		currencyList.add(new SelectItem("ILS","Israeli New Shekel"));
 		currencyList.add(new SelectItem("INR","Indian Rupee"));
 		currencyList.add(new SelectItem("IQD","Iraqi Dinar"));
 		currencyList.add(new SelectItem("IRR","Iranian Rial"));
@@ -90,7 +93,6 @@ public class Currency{
 		currencyList.add(new SelectItem("ITL","Italian Lira"));
 		currencyList.add(new SelectItem("JMD","Jamaican Dollar"));
 		currencyList.add(new SelectItem("JOD","Jordanian Dinar"));
-		currencyList.add(new SelectItem("JPY","Japanese Yen"));
 		currencyList.add(new SelectItem("KES","Kenyan Shilling"));
 		currencyList.add(new SelectItem("KHR","Cambodian Riel"));
 		currencyList.add(new SelectItem("KMF","Comoros Franc"));
@@ -118,7 +120,6 @@ public class Currency{
 		currencyList.add(new SelectItem("MUR","Mauritius Rupee"));
 		currencyList.add(new SelectItem("MVR","Maldive Rufiyaa"));
 		currencyList.add(new SelectItem("MWK","Malawi Kwacha"));
-		currencyList.add(new SelectItem("MXP","Mexican Peso"));
 		currencyList.add(new SelectItem("MYR","Malaysian Ringgit"));
 		currencyList.add(new SelectItem("MZM","Mozambique Metical"));
 		currencyList.add(new SelectItem("NAD","Namibia Dollar"));
@@ -166,7 +167,6 @@ public class Currency{
 		currencyList.add(new SelectItem("TZS","Tanzanian Shilling"));
 		currencyList.add(new SelectItem("UAH","Ukraine Hryvnia"));
 		currencyList.add(new SelectItem("UGS","Uganda Shilling"));
-		currencyList.add(new SelectItem("USD","US Dollar"));
 		currencyList.add(new SelectItem("UYP","Uruguayan Peso"));	
 		currencyList.add(new SelectItem("VEB","Venezuelan Bolivar"));	
 		currencyList.add(new SelectItem("VND","Vietnamese Dong"));

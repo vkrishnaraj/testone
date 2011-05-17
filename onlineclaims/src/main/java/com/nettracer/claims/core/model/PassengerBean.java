@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import com.bagnet.nettracer.tracing.db.xsd.Status;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
+import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem;
 import com.nettracer.claims.faces.util.File;
 import com.nettracer.claims.utils.ClaimsProperties;
 
@@ -97,6 +99,7 @@ public class PassengerBean {
 	private String typeAccept;
 	private String status;
 	private WSPVAdvancedIncident passengerData;
+	private PaxViewItem[] pvItems;
 	
 	public String getClaimAmount() {
 		return claimAmount;
@@ -471,15 +474,17 @@ public class PassengerBean {
 		return passengerData;
 	}	
 	public boolean isOnlineAvailable() {
-		Calendar fortyFiveDays = Calendar.getInstance();
-		fortyFiveDays.add(Calendar.DATE, -45);
-		if (!passengerData.getCreatedate().before(fortyFiveDays)) {
-			if (passengerData.getItemType() == 1) {
-				return true;
-			} else if (passengerData.getItemType() != 1
-					&& passengerData.getIncidentStatus().equalsIgnoreCase(
-							"open")) {
-				return true;
+		if (isClaimsAvailableProperty()) {
+			Calendar fortyFiveDays = Calendar.getInstance();
+			fortyFiveDays.add(Calendar.DATE, -45);
+			if (!passengerData.getCreatedate().before(fortyFiveDays)) {
+				if (passengerData.getItemType() == 1) {
+					return true;
+				} else if (passengerData.getItemType() != 1
+						&& passengerData.getIncidentStatus().equalsIgnoreCase(
+								"open")) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -488,4 +493,44 @@ public class PassengerBean {
 	public boolean isScansAvailable() {
 		return ClaimsProperties.isTrue(ClaimsProperties.SCANS_AVAILABLE);
 	}
+	
+	public boolean isClaimsAvailable() {
+		if (isOnlineAvailable()) {
+			return false;
+		} else {
+			return isClaimsAvailableProperty();
+		}
+	}
+	
+	private boolean isClaimsAvailableProperty() {
+		return ClaimsProperties.isTrue(ClaimsProperties.CLAIMS_AVAILABLE);
+	}
+	
+	public PaxViewItem[] getPvItems() {
+		if (pvItems == null && passengerData != null && passengerData.getItemsArray() != null) {
+			WSPVItem[] items = passengerData.getItemsArray();
+			pvItems = new PaxViewItem[items.length];
+			for (int i = 0; i < items.length; i++) {
+				PaxViewItem pvItem = new PaxViewItem();
+				pvItem.setAddress1(items[i].getAddress1());
+				pvItem.setAddress2(items[i].getAddress2());
+				pvItem.setBagstatus(items[i].getBagstatus());
+				pvItem.setCity(items[i].getCity());
+				pvItem.setClaimchecknum(items[i].getClaimchecknum());
+				pvItem.setDeliveryStatus(items[i].getDeliveryStatus());
+				pvItem.setLastDeliveryUpdate(items[i].getLastDeliveryUpdate());
+				pvItem.setStateID(items[i].getStateID());
+				pvItem.setZip(items[i].getZip());
+				pvItem.setIncidentStatus(passengerData.getIncidentStatus());
+				pvItems[i] = pvItem;
+			}
+		}
+		return pvItems;
+	}
+	
+	public void setPvItems(PaxViewItem[] pvItems) {
+		this.pvItems = pvItems;
+	}
+	
+	
 }

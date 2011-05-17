@@ -21,6 +21,7 @@ public class LabelsSubmitClaimPage {
 	public static final String SUB_PRINT = "print";
 	public static final String SUB_AGREE = "agreement";
 	public static final String SUB_SUBMIT = "claimSubmit";
+	public static final String SUB_LOSSOCC = "lossOccured";
 
 	// For Claim Submission -step 6
 	private LabelText descriptiveText;
@@ -36,6 +37,7 @@ public class LabelsSubmitClaimPage {
 	private LabelText print;
 	private LabelText agreement;
 	private LabelText claimSubmit;
+	private LabelText lossOccured;
 
 	public LabelText getDescriptiveText() {
 		return descriptiveText;
@@ -141,6 +143,14 @@ public class LabelsSubmitClaimPage {
 		this.claimSubmit = claimSubmit;
 	}
 	
+	public LabelText getLossOccured() {
+		return lossOccured;
+	}
+
+	public void setLossOccured(LabelText lossOccured) {
+		this.lossOccured = lossOccured;
+	}
+
 	public LabelsSubmitClaimPage(List<Localetext> localetextList, Long baggageState) {
 
 		for (Localetext localetext : localetextList) {
@@ -177,6 +187,8 @@ public class LabelsSubmitClaimPage {
 				setClaimSubmit(new LabelText(localetext.getDisplayText(), requiredFieldStatus));
 			} else if (currentLabel.getLabel().equals(SUB_USEINFO)) {
 				setUseOfInformation(new LabelText(localetext.getDisplayText(), requiredFieldStatus));
+			} else if (currentLabel.getLabel().equals(SUB_LOSSOCC)) {
+				setLossOccured(new LabelText(localetext.getDisplayText(), requiredFieldStatus));
 			}
 			
 		}
