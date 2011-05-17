@@ -3,7 +3,6 @@ package com.bagnet.nettracer.tracing.db;
 import java.io.Serializable;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 /**
  * @author Administrator
