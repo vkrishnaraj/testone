@@ -334,8 +334,7 @@
 //
 //	}*/
 //
-//	public static void importIncident(String incidentId, Session sess, Session writeSess) throws Exception {
-////		System.out.println("Importing: " + incidentId);
+//	public FsIncident importIncident(String incidentId, Session sess, Session writeSess) throws Exception {
 //		try {
 //			
 //			com.bagnet.nettracer.tracing.db.Incident inc = (com.bagnet.nettracer.tracing.db.Incident) sess.load(com.bagnet.nettracer.tracing.db.Incident.class, incidentId);
