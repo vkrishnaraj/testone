@@ -172,6 +172,10 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_PUSH_DAM = "Push Damaged to CRM";
 	public final static String SYSTEM_COMPONENT_NAME_PUSH_PIL = "Push Pilferage to CRM";
 	
+	public static final String SYSTEM_COMPONENT_NAME_CREATE_LOST_REPORT = "Create Lost Report";
+	public static final String SYSTEM_COMPONENT_NAME_CREATE_FOUND_ITEM = "Create Found Item";
+	public static final String SYSTEM_COMPONENT_NAME_SEARCH_LOST_FOUND = "Search Lost/Found";
+	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
 	public final static int AJAX_STATUS_OHD = 2;
@@ -876,6 +880,12 @@ public class TracingConstants {
 	public final static String CLAIM_SEARCH = "search_claim";
 	public final static String CLAIM_REQUEST_INFO = "request_info";
 	public static final String SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS = "Fraud Requests";
+	public static final String JSP_DELETE_ASSOCIATED_NAME = "delName";
+	public static final String JSP_DELETE_ASSOCIATED_RECEIPT = "delReceipt";
+	
+	public static final String LF_CREATE_LOST_REPORT = "create_lost_report";
+	public static final String LF_CREATE_FOUND_ITEM = "create_found_item";
+	public static final String LF_SEARCH_LOST_FOUND = "search_lost_found";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

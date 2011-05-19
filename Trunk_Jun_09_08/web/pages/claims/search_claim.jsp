@@ -258,7 +258,7 @@
                 		<% if (ntUser) { %>
                 		<td>
                 			<logic:notEmpty name="results" property="ntIncidentId" >
-                				<a href='searchIncident.do?incident=<% results.getNtIncidentId(); %>' >
+                				<a href='searchIncident.do?incident=<bean:write name="results" property="ntIncidentId" />' >
                 					<bean:write name="results" property="ntIncidentId" />
                 				</a>
                 			</logic:notEmpty>

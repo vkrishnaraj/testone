@@ -165,7 +165,6 @@ public class ClaimDAO {
 	private static Criteria getClaimantAndPurchaserCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
 		getClaimantCriteria(form, agent, criteria);
 //		getPurchaserCriteria(form, agent, criteria);
-//		LogicalExpression orExp = Restrictions.or(claimant, purchaser);
 		return criteria;
 	}
 	
@@ -178,6 +177,7 @@ public class ClaimDAO {
 	private static Criteria getPurchaserCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
 		// TODO: build criteria for purchaser
 		Criteria purchaserCriteria = criteria.createCriteria("incident.reservation.purchaser");
+		
 		// TODO: get person criteria using purchaser criteria
 		purchaserCriteria = getPersonCriteria(form, agent, purchaserCriteria);
 		return criteria;
@@ -186,6 +186,7 @@ public class ClaimDAO {
 	private static Criteria getPersonCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
 
 		String value = form.getLastName();
+		
 		if (value != null && !value.isEmpty()) {
 			criteria.add(Restrictions.like("lastName", form.getLastName()));
 		}

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Proxy;
 
@@ -23,6 +24,10 @@ public class FsAddress implements Serializable {
 
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
 	private Reservation reservation;
+
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsReceipt.class)
+	private FsReceipt receipt;
+	
 	private String address1;
 	private String address2;
 	private String city;
@@ -136,6 +141,14 @@ public class FsAddress implements Serializable {
 
 	public void setProvince(String province) {
 		this.province = province;
+	}
+
+	public FsReceipt getReceipt() {
+		return receipt;
+	}
+
+	public void setReceipt(FsReceipt receipt) {
+		this.receipt = receipt;
 	}
 
 }

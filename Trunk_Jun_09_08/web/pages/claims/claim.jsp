@@ -12,6 +12,10 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
+<%@ page import="aero.nettracer.fs.model.Person" %>
+<%@ page import="aero.nettracer.fs.model.FsReceipt" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.DateUtils" %>
+<%@ page import="java.util.ArrayList" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
 
@@ -40,9 +44,18 @@
         document.claimForm.save.disabled = true;
       }
 
+      function showDiv(name) {
+    	  jQuery(name).show();
+      }
+      
+      function hideDiv(name) {
+    	  jQuery(name).hide();
+      }
+      
   </SCRIPT>
-  
+ 
           <html:form action="claim_resolution.do" method="post" onsubmit="return validateFsClaimForm(this);">
+          <input type="hidden" name="delete_these_elements" value="" />
             <html:javascript formName="claimForm" />
             <tr>
               <td colspan="3" id="pageheadercell">
@@ -482,6 +495,240 @@
                     </logic:present>
                     <br />
                     <br />
+                    <div style="width:100%;" >
+                    <a name="an" ></a>
+                    <span style="float:left;">
+					<h1 class="green" >
+						<bean:message key="header.associated.names" />
+						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					</h1>
+					</span>
+					<span style="float:right;" >
+						<a href="#an" onClick="showDiv('#names')"><bean:message key="link.show" /></a>
+						<a href="#an" onClick="hideDiv('#names')"><bean:message key="link.hide" /></a>
+					</span>
+					</div>
+					<logic:notEmpty name="addNames" scope="request" >
+						<div id="names" >
+					</logic:notEmpty>
+					<logic:empty name="addNames" scope="request" >
+						<div id="names" style="display:none;">
+					</logic:empty>
+					<table class="form2" cellspacing="0" cellpadding="0" >
+						<logic:iterate indexId="i" id="person" name="claimForm" property="claim.claimants" type="aero.nettracer.fs.model.Person" >
+						<% if (i > 0) { %> 
+				          <tr id="<%= TracingConstants.JSP_DELETE_ASSOCIATED_NAME %>_<%=i%>">
+				            <td><br /><center>
+				            	<input type="button" value="<bean:message key="button.delete.name" />"
+				            		onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_ASSOCIATED_NAME %>_<%=i %>', 
+				                '<bean:message key="header.associated.names" />', 0)"
+				            	id="button" ></center>
+				           	</td>
+				           	<td>
+				           		<bean:message key="colname.last_name" /><br />
+				           		<input type="text" name="person[<%=i %>].lastName" maxlength="20" size="20" value="<%=((Person) person).getLastName() == null ? "" : ((Person) person).getLastName() %>" class="textfield">
+				           	</td>
+				           	<td>
+				           		<bean:message key="colname.first_name" /><br />
+				           		<input type="text" name="person[<%=i %>].firstName" maxlength="20" size="20" value="<%=((Person) person).getFirstName() == null ? "" : ((Person) person).getFirstName() %>" class="textfield">
+				           	</td>
+				           	<td>
+				           		<bean:message key="colname.mid_initial" /><br />
+				           		<input type="text" name="person[<%=i %>].middleName" maxlength="1" size="1" value="<%=((Person) person).getMiddleName() == null ? "" : ((Person) person).getMiddleName() %>" class="textfield">
+				           	</td>
+				           	
+				          </tr>
+				          <% } %>
+				          </logic:iterate>
+				          <tr>
+				          <td colspan="4">&nbsp;</td>
+				          </tr>          
+				          <tr>
+				          <td colspan="4" align="center">
+					          <select name="addNameNum">
+						          <option value="1">1</option>
+						          <option value="2">2</option>
+						          <option value="3">3</option>
+						          <option value="4">4</option>
+						          <option value="5">5</option>
+						        </select>
+					
+							    <input type="submit" name="addNames" value='<bean:message key="button.add.name" />' id="button" />
+				          </td>
+				          </tr>
+					</table>
+					</div>
+					<br />
+                    <br />
+                    <div style="width:100%;">
+                    <a name="rs" ></a>
+                    <span style="float:left;">
+					<h1 class="green" >
+						<bean:message key="header.associated.receipts" />
+						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					</h1>
+					</span>
+					<span style="float:right;" >
+						<a href="#rs" onClick="showDiv('#receipts')"><bean:message key="link.show" /></a>
+						<a href="#rs" onClick="hideDiv('#receipts')"><bean:message key="link.hide" /></a>
+					</span>
+					</div>
+					<logic:notEmpty name="addReceipts" scope="request" >
+						<div id="receipts" >
+					</logic:notEmpty>
+					<logic:empty name="addReceipts" scope="request" >
+						<div id="receipts" style="display:none;" >
+					</logic:empty>
+					<table class="form2" cellspacing="0" cellpadding="0" >
+						<logic:iterate indexId="i" id="receipt" name="claimForm" property="claim.receipts" type="aero.nettracer.fs.model.FsReceipt" >
+				          <tr id="<%= TracingConstants.JSP_DELETE_ASSOCIATED_RECEIPT %>_<%=i%>" >
+				            <td style="padding:0px;" >
+				            	<table class="form2" cellspacing="0" cellpadding="0" style="padding:0px;margin:0px;" >
+								  <tr>
+								  	<td colspan="5">
+								  		<bean:message key="colname.company.name" />
+								  		<br />
+								  		<input type="text" name="receipt[<%=i %>].company" maxlength="35" size="35" value="<%=((FsReceipt) receipt).getCompany() == null ? "" : ((FsReceipt) receipt).getCompany() %>" class="textfield">
+								  	</td>
+								  </tr>
+								  <tr>
+					                <td colspan=2>
+					                  <bean:message key="colname.street_addr1" />
+					                  <br>
+					                  <html:text name="receipt" property="address.address1" size="40" maxlength="50" styleClass="textfield" />
+					                </td>
+					                <td colspan=3>
+					                  <bean:message key="colname.street_addr2" />
+					                  <br>
+					                  <html:text name="receipt" property="address.address2" size="35" maxlength="50" styleClass="textfield" />
+					                </td>
+					              </tr>
+					              <tr>
+					                <td>
+					                  <bean:message key="colname.city" />
+					                  <br>
+					                  <html:text name="receipt" property="address.city" size="15" maxlength="50" styleClass="textfield" />
+					                </td>
+					                <td>
+					                  <bean:message key="colname.state.req" />
+					                  <br />
+					                  <logic:equal name="receipt" property="address.country" value="US">
+					                    <html:select name="receipt" property="address.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
+					                      <html:option value="">
+					                        <bean:message key="select.none" />
+					                      </html:option>
+					                      <html:options collection="statelist" property="value" labelProperty="label" />
+					                    </html:select>
+					                  </logic:equal>
+					                  <logic:equal name="receipt" property="address.country" value="">
+					                    <html:select name="receipt" property="address.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
+					                      <html:option value="">
+					                        <bean:message key="select.none" />
+					                      </html:option>
+					                      <html:options collection="statelist" property="value" labelProperty="label" />
+					                    </html:select>
+					                  </logic:equal>
+					                  <logic:notEqual name="receipt" property="address.country" value="">
+					                    <logic:notEqual name="receipt" property="address.country" value="US">
+					                      <html:select name="receipt" property="address.state" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
+					                        <html:option value="">
+					                          <bean:message key="select.none" />
+					                        </html:option>
+					                        <html:options collection="statelist" property="value" labelProperty="label" />
+					                      </html:select>
+					                    </logic:notEqual>
+					                  </logic:notEqual>
+					                </td>
+					                <td>
+					                  <bean:message key="colname.province" />
+					                  <br />
+					                      <logic:equal name="receipt" property="address.country" value="US">
+					                  		<html:text name="receipt" property="address.province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
+					                      </logic:equal>
+					                      <logic:equal name="receipt" property="address.country" value="">
+					                  <html:text name="receipt" property="address.province" size="15" maxlength="100" styleClass="textfield" />
+					                      </logic:equal>
+					                      <logic:notEqual name="receipt" property="address.country" value="">
+					                        <logic:notEqual name="receipt" property="address.country" value="US">
+					                  <html:text name="receipt" property="address.province" size="15" maxlength="100" styleClass="textfield" />
+					                         </logic:notEqual>
+					                      </logic:notEqual>
+					                </td>
+					                <td>
+					                  <bean:message key="colname.zip.req" />
+					                  <br>
+					                  <html:text name="receipt" property="address.zip" size="15" maxlength="11" styleClass="textfield" />
+					                </td>
+					                <td>
+					                  <bean:message key="colname.country" />
+					                  <br>
+					                  <html:select name="receipt" property="address.country" styleClass="dropdown" onchange="checkstate(this,this.form,'state', 'province');">
+					                    <html:option value="">
+					                      <bean:message key="select.none" />
+					                    </html:option>
+					                    <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
+					                  </html:select>
+					                </td>
+					              </tr>
+					              <tr>
+              						<td colspan="2">
+								  		<bean:message key="colname.company.phone" />
+								  		<br />
+								  		<input type="text" name="receipt[<%=i %>].phone.phoneNumber" maxlength="20" size="20" value="<%=((FsReceipt) receipt).getPhone().getPhoneNumber() == null ? "" : ((FsReceipt) receipt).getPhone().getPhoneNumber() %>" class="textfield">
+								  	</td>
+								  	<td >
+										<bean:message key="claim.colname.cc_num.last.four" />
+										<br/>
+								  		<input type="text" name="receipt[<%=i %>].ccLastFour" maxlength="4" size="4" value="<%=((FsReceipt) receipt).getCcLastFour() == null ? "" : ((FsReceipt) receipt).getCcLastFour() %>" class="textfield">
+									</td>
+									<td colspan="2">
+										<bean:message key="claim.colname.cc_expdate" />
+										<br/>
+								  		<select name="receipt[<%=i %>].ccExpMonth" >
+								  			<% 
+								  				ArrayList<Integer> months = DateUtils.getCcMonths();
+								  				for (int j = 0; j < months.size(); ++j) { %>
+								  					<option value="<%=j%>" <% if (receipt.getCcExpMonth() == j) { %>selected<% };%>><%=months.get(j)%></option>								  					
+								  			<%	} %>
+								  		</select>
+										&nbsp;/&nbsp;
+								  		<select name="receipt[<%=i %>].ccExpYear">
+								  			<% 
+								  				ArrayList<Integer> years = DateUtils.getCcYears();
+								  				for (int j = 0; j < years.size(); ++j) { %>
+								  					<option value="<%=j%>" <% if (receipt.getCcExpYear() == j) { %>selected<% };%>><%=years.get(j)%></option>								  					
+								  			<%	} %>
+								  		</select>
+									</td>
+              					</tr>
+								  <tr>
+						            <td colspan="5">
+						            	<input type="button" value="<bean:message key="button.delete.receipt" />"
+						            		onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_ASSOCIATED_RECEIPT %>_<%=i %>', 
+						                '<bean:message key="header.associated.receipts" />', 0)"
+						            	id="button" >
+						           	</td>
+								  </tr>
+				            	</table>
+				            </td>
+				          </tr>
+				          </logic:iterate>
+				          <tr>
+				          <td align="center">
+					          <select name="addReceiptNum">
+						          <option value="1">1</option>
+						          <option value="2">2</option>
+						          <option value="3">3</option>
+						          <option value="4">4</option>
+						          <option value="5">5</option>
+						        </select>
+							    <input type="submit" name="addReceipts" value='<bean:message key="button.add.receipt" />' id="button" />
+				          </td>
+				          </tr>
+					</table>
+					</div>
+                    <br />
+                    <br />
                     
                     <% if (ntUser) { %>
                     <!-- Incident Summary -->
@@ -734,3 +981,4 @@
                     </logic:notEmpty>
                     </center>
                   </html:form>
+					

@@ -14,19 +14,17 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.commons.codec.language.Soundex;
 import org.apache.log4j.Logger;
-import org.dozer.DozerBeanMapper;
-import org.dozer.DozerBeanMapperSingletonWrapper;
 
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
+import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.PnrData;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
-import aero.nettracer.serviceprovider.wt_1_0.common.Ohd;
 
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -134,7 +132,13 @@ public class ClaimUtils {
 		reservation.setPhones(new LinkedHashSet<Phone>());
 		reservation.setPnrData(pnrData);
 		
+		// create associated receipts
+		LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
+		claim.setReceipts(receipts);
+		
 		if (ntIncident != null) {
+			claim.setNtIncident(ntIncident);
+			ntIncident.setClaim(claim);
 			OtherSystemInformation osi = OtherSystemInformationBMO.getOsi(ntIncident.getIncident_ID(), null);
 			if (osi != null && osi.getInfo().length() > 0) {
 				pnrData.setPnrData(osi.getInfo());
@@ -246,9 +250,7 @@ public class ClaimUtils {
 		
 		Set<Person> passengers = new LinkedHashSet<Person>();
 
-		if (ntIncident == null) {
-			
-		} else {		
+		if (ntIncident != null) {		
 			Set<Passenger> paxSet = ntIncident.getPassengers();
 	
 			if (paxSet != null) {
@@ -326,8 +328,8 @@ public class ClaimUtils {
 			claim.setAmountPaid(amountPaid);
 			claim.setAmountClaimed(amount);
 			claim.setClaimType(ntIncident.getItemtype_ID());
-			claim.setNtIncident(ntIncident);
 			ntIncident.setClaim(claim);
+			claim.setNtIncident(ntIncident);
 		}
 		claim.setAmountClaimedCurrency(currency);
 		claim.setClaimants(claimants);

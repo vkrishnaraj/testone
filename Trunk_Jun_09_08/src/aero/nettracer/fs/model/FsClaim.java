@@ -17,13 +17,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.detection.Blacklist;
 
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
@@ -58,8 +59,9 @@ public class FsClaim implements Serializable {
 
 	//	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@org.hibernate.annotations.OrderBy(clause = "id")
+	@OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<Person> claimants;
 
 	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -67,6 +69,12 @@ public class FsClaim implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private Set<Segment> segments;
 
+	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private Set<FsReceipt> receipts;
+	
 	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Blacklist.class, cascade = CascadeType.ALL)
 	private Blacklist blacklist;
 
@@ -262,6 +270,14 @@ public class FsClaim implements Serializable {
 		this.file = file;
 	}
 	
+	public Set<FsReceipt> getReceipts() {
+		return receipts;
+	}
+
+	public void setReceipts(Set<FsReceipt> receipts) {
+		this.receipts = receipts;
+	}
+
 	@Transient
 	public String getDisClaimDate(String dateFormat) {
 		return DateUtils.formatDate(getClaimDate(), dateFormat, "", null);

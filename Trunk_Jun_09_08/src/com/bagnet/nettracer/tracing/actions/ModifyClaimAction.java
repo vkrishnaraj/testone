@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -24,14 +25,17 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.fs.model.File;
+import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Segment;
-import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -195,8 +199,31 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 		}
 		
-		cform = ClaimUtils.createClaimForm(request);
+		if (claim.getNtIncident() != null && theform == null) {
+			IncidentBMO iBMO = new IncidentBMO();
+			Incident iDTO = iBMO.findIncidentByID(ntIncident.getIncident_ID());
+			if(iDTO == null) {
+				bs.populateIncidentFormFromIncidentObj(ntIncident.getIncident_ID(), theform, user, ntIncident.getItemtype_ID(), iBMO, iDTO, false);
+			}
+		}
+		request.setAttribute("incidentForm", theform);
+
+		// delete associated items
+		deleteAssociatedItems(claim, request);
 		
+		// add new items
+		addAssociatedItems(claim, request);
+		
+		if (request.getParameter("addNames") == null) {
+			request.removeAttribute("addNames");
+		}
+		
+		if (request.getParameter("addReceipts") == null) {
+			request.removeAttribute("addReceipts");
+		}
+		
+		cform = ClaimUtils.createClaimForm(request);
+
 		/* HANDLE REQUESTS */
 		
 		// save the claim
@@ -204,8 +231,11 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			// 1. save the claim locally
 			claim = cform.getClaim();
+			deleteEmptyNames(claim);
+
 			boolean firstSave = claim.getId() == 0;
 			boolean claimSaved = ClaimDAO.saveClaim(claim);
+			
 			
 			// maintain existing nt functionality
 			if (isNtUser) {
@@ -220,9 +250,16 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			if (ntfsUser) {
 				// 2. save the claim on central services
-				Context ctx = ConnectionUtil.getInitialContext();
-				ClaimRemote remote = (ClaimRemote) ctx
-						.lookup("NTServices_1_0/ClaimBean/remote");
+				Context ctx = null;
+				ClaimRemote remote = null;
+				try {
+					ctx = ConnectionUtil.getInitialContext();
+					remote = (ClaimRemote) ctx
+							.lookup("NTServices_1_0/ClaimBean/remote");
+				} catch (Exception e) {
+					logger.error(e);
+				}
+				
 				long remoteFileId = 0;
 				if (remote != null) {
 					FsClaim newClaim = new FsClaim();
@@ -277,7 +314,10 @@ public class ModifyClaimAction extends CheckedAction {
 						response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
 						return null;
 					}
-					ctx.close();
+					
+					if (ctx != null) {
+						ctx.close();
+					}
 				}
 			}
 			
@@ -397,6 +437,92 @@ public class ModifyClaimAction extends CheckedAction {
 			e.printStackTrace();
 		}
 		return results;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private void deleteAssociatedItems(FsClaim claim, HttpServletRequest request) {
+		deleteAssociatedElements(new ArrayList(claim.getClaimants()), claim.getClaimants(), TracingConstants.JSP_DELETE_ASSOCIATED_NAME, request);
+		deleteAssociatedElements(new ArrayList(claim.getReceipts()), claim.getReceipts(), TracingConstants.JSP_DELETE_ASSOCIATED_RECEIPT, request);	
+	}
+	
+	private void addAssociatedItems(FsClaim claim, HttpServletRequest request) {
+		addAssociatedNames(claim, request);
+		addAssociatedReceipts(claim, request);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private void deleteAssociatedElements(ArrayList source, Set destination, String key, HttpServletRequest request) {
+		if (source == null || destination == null) {
+			return;
+		}
+		
+		String toDelete = request.getParameter("delete_these_elements");
+		if (toDelete != null && !toDelete.isEmpty()) {
+			String[] tokens = toDelete.split(",");
+			for (int i = 0; i < tokens.length; ++i) {
+				if (tokens[i].contains(key)) {
+					int index = Integer.parseInt(tokens[i].split("_")[1]);
+					destination.remove(source.get(index));
+				}
+			}
+		}
+	}
+	
+	private void addAssociatedNames(FsClaim claim, HttpServletRequest request) {
+		if (request.getParameter("addNames") != null) {
+			try {
+				int numToAdd = Integer.parseInt(request.getParameter("addNameNum"));
+				for (int i = 0; i < numToAdd; ++i) {
+					Person p = new Person();
+					p.setClaim(claim);
+					claim.getClaimants().add(p);
+				}
+				request.setAttribute("addNames", "1");
+			} catch (NumberFormatException nfe) {
+				logger.error(nfe);
+			}
+		}
+	}
+	
+	private void addAssociatedReceipts(FsClaim claim, HttpServletRequest request) {
+		if (request.getParameter("addReceipts") != null) {
+			try {
+				int numToAdd = Integer.parseInt(request.getParameter("addReceiptNum"));
+				for (int i = 0; i < numToAdd; ++i) {
+					claim.getReceipts().add(createReceipts(claim));
+				}
+				request.setAttribute("addReceipts", "1");
+			} catch (NumberFormatException nfe) {
+				logger.error(nfe);
+			}
+		}
+	}
+	
+	private void deleteEmptyNames(FsClaim claim) {
+		ArrayList<Person> people = new ArrayList<Person>(claim.getClaimants());
+		for (Person p: people) {
+			String last = p.getLastName();
+			String first = p.getFirstName();
+			if ((last == null || last.isEmpty()) && (first == null || first.isEmpty())) {
+				claim.getClaimants().remove(p);
+			}
+		}
+	}
+	
+	private FsReceipt createReceipts(FsClaim claim) {
+		FsReceipt receipt = new FsReceipt();
+		receipt.setClaim(claim);
+		
+		FsAddress address = new FsAddress();
+		address.setReceipt(receipt);
+		receipt.setAddress(address);
+		
+		Phone phone = new Phone();
+		phone.setType(Phone.WORK);
+		phone.setReceipt(receipt);
+		receipt.setPhone(phone);
+		
+		return receipt;
 	}
 	
 }

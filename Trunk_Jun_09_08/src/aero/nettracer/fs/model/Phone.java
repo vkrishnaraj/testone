@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Proxy;
 
@@ -35,6 +36,10 @@ public class Phone implements Serializable {
 
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Person.class)
 	private Person person;
+	
+	@OneToOne(targetEntity = aero.nettracer.fs.model.FsReceipt.class)
+	private FsReceipt receipt;
+	
 	private String phoneNumber;
 	private int type;
 
@@ -88,11 +93,19 @@ public class Phone implements Serializable {
 	}
 
 	public String getPhoneNumber() {
-  	return phoneNumber;
-  }
+		return phoneNumber;
+	}
 
 	public void setPhoneNumber(String phoneNumber) {
-  	this.phoneNumber = phoneNumber;
-  }
+		this.phoneNumber = phoneNumber;
+	}
 
+	public FsReceipt getReceipt() {
+		return receipt;
+	}
+
+	public void setReceipt(FsReceipt receipt) {
+		this.receipt = receipt;
+	}
+	
 }

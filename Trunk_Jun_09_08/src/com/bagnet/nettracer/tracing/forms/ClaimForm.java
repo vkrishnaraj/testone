@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import org.apache.struts.action.ActionForm;
 
 import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 
@@ -279,6 +280,20 @@ public final class ClaimForm extends ActionForm {
 	
 	public void setClaimantDateOfBirth(String dateOfBirth) {
 		getClaimant().setDisDateOfBirth(dateOfBirth, _DATEFORMAT);
+	}
+	
+	public Person getPerson(int index) {
+		if (claim.getClaimants() != null && index < claim.getClaimants().size()) {
+			return new ArrayList<Person>(claim.getClaimants()).get(index);
+		}
+		return null;
+	}
+	
+	public FsReceipt getReceipt(int index) {
+		if (claim.getReceipts() != null && index < claim.getReceipts().size()) {
+			return new ArrayList<FsReceipt>(claim.getReceipts()).get(index);
+		}
+		return null;
 	}
 	
 }
