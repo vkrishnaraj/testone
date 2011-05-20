@@ -201,6 +201,7 @@ public class ModifyClaimAction extends CheckedAction {
 		}
 		
 		if (claim.getNtIncident() != null && theform == null) {
+			theform.setIncident_ID(claim.getNtIncidentId());
 			IncidentBMO iBMO = new IncidentBMO();
 			Incident iDTO = iBMO.findIncidentByID(ntIncident.getIncident_ID());
 			if(iDTO == null) {

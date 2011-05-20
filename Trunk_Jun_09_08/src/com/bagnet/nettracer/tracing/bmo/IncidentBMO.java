@@ -18,8 +18,6 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.regex.Pattern;
 
-import javax.persistence.UniqueConstraint;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
@@ -37,6 +35,7 @@ import aero.nettracer.fs.model.Person;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -2210,7 +2209,8 @@ public class IncidentBMO {
 			sess.save(ep);
 			sess.update(inc);
 			tx.commit();
-			if (SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()
+			ReservationIntegration ri = SpringUtils.getReservationIntegration(); 
+			if (ri != null && ri.isWriteCommentToPnrOn()
 					&& SpringUtils.getReservationIntegration().isWriteExpensesToPnrOn()) {
 				String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(),
 						TracingConstants.DB_DATETIMEFORMAT, null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(

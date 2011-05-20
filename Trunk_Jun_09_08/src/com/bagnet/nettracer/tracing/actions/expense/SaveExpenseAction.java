@@ -87,7 +87,8 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		ibmo.saveExpense(ep, incidentId, user);
 
 		request.getSession().setAttribute("getclaimfa", "1");
-		request.getSession().setAttribute("incidentid", ep.getIncident().getIncident_ID());
+//		request.getSession().setAttribute("incidentid", ep.getIncident().getIncident_ID());
+		request.getSession().setAttribute("incidentid", incidentId);
 		return mapping.findForward(SAVE_SUCCESS);
 
 	}
