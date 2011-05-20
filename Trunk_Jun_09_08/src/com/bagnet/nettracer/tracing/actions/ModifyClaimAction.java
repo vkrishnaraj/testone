@@ -151,6 +151,7 @@ public class ModifyClaimAction extends CheckedAction {
 					} else {
 
 						request.setAttribute("incident", theform.getIncident_ID());
+						theform.setIncident_ID(ntIncidentId);
 						session.setAttribute("incidentForm", theform);
 						session.removeAttribute("payout");
 						if (session.getAttribute("prorate") != null) {
@@ -206,7 +207,8 @@ public class ModifyClaimAction extends CheckedAction {
 				bs.populateIncidentFormFromIncidentObj(ntIncident.getIncident_ID(), theform, user, ntIncident.getItemtype_ID(), iBMO, iDTO, false);
 			}
 		}
-		request.setAttribute("incidentForm", theform);
+		
+		session.setAttribute("incidentForm", theform);
 
 		// delete associated items
 		deleteAssociatedItems(claim, request);
@@ -279,6 +281,13 @@ public class ModifyClaimAction extends CheckedAction {
 					for (Segment s: claim.getSegments()) {
 						s.setClaim(newClaim);
 						segs.add(s);
+					}
+					
+					LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
+					newClaim.setReceipts(receipts);
+					for (FsReceipt r: claim.getReceipts()) {
+						r.setClaim(newClaim);
+						receipts.add(r);
 					}
 					
 					File file = claim.getFile();

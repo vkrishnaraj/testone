@@ -44,12 +44,19 @@
         document.claimForm.save.disabled = true;
       }
 
-      function showDiv(name) {
+      function show(name,link1,link2) {
     	  jQuery(name).show();
+    	  toggleLinks(link1,link2);
       }
       
-      function hideDiv(name) {
+      function hide(name,link1,link2) {
     	  jQuery(name).hide();
+    	  toggleLinks(link1,link2);
+      }
+      
+      function toggleLinks(link1,link2) {
+    	  jQuery(link1).toggle();
+    	  jQuery(link2).toggle();
       }
       
   </SCRIPT>
@@ -327,20 +334,7 @@
                     <br />
                     <br />
                     <jsp:include page="/pages/includes/claim_contactinfo_incl.jsp" />
-                    <% if (ntUser) { %>
-                    	<logic:notEmpty name="claimForm" property="claim.ntIncident">
-	                    <br />
-	                    <br />
-	  	                <a name="expense"></a>
-	                    <h1 class="green">
-	                      <bean:message key="header.payout_summary" />
-	                      <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
-	                    </h1>
-	                    <jsp:include page="/pages/includes/incident_expense_incl.jsp" >
-					    	<jsp:param name="formCss" value="form2" />
-					    </jsp:include>
-                    	</logic:notEmpty>
-                    <% }; %>
+                    
                     </logic:notPresent>
                     <logic:present name="edit" scope="request">
                       <br />
@@ -504,16 +498,12 @@
 					</h1>
 					</span>
 					<span style="float:right;" >
-						<a href="#an" onClick="showDiv('#names')"><bean:message key="link.show" /></a>
-						<a href="#an" onClick="hideDiv('#names')"><bean:message key="link.hide" /></a>
+						<a id="anshow" href="#an" onClick="show('#names','#anshow','#anhide')"><bean:message key="link.show" /></a>
+						<a id="anhide" href="#an" onClick="hide('#names','#anshow','#anhide')" style="display:none;"><bean:message key="link.hide" /></a>
 					</span>
 					</div>
-					<logic:notEmpty name="addNames" scope="request" >
-						<div id="names" >
-					</logic:notEmpty>
-					<logic:empty name="addNames" scope="request" >
+					
 						<div id="names" style="display:none;">
-					</logic:empty>
 					<table class="form2" cellspacing="0" cellpadding="0" >
 						<logic:iterate indexId="i" id="person" name="claimForm" property="claim.claimants" type="aero.nettracer.fs.model.Person" >
 						<% if (i > 0) { %> 
@@ -558,6 +548,11 @@
 				          </tr>
 					</table>
 					</div>
+					<logic:notEmpty name="addNames" scope="request" >
+						<script>
+							show('#names','#anshow','#anhide');
+						</script>
+					</logic:notEmpty>
 					<br />
                     <br />
                     <div style="width:100%;">
@@ -569,16 +564,11 @@
 					</h1>
 					</span>
 					<span style="float:right;" >
-						<a href="#rs" onClick="showDiv('#receipts')"><bean:message key="link.show" /></a>
-						<a href="#rs" onClick="hideDiv('#receipts')"><bean:message key="link.hide" /></a>
+						<a id="rsshow" href="#rs" onClick="show('#receipts','#rsshow','#rshide')"><bean:message key="link.show" /></a>
+						<a id="rshide" href="#rs" onClick="hide('#receipts','#rsshow','#rshide')" style="display:none;"><bean:message key="link.hide" /></a>
 					</span>
 					</div>
-					<logic:notEmpty name="addReceipts" scope="request" >
-						<div id="receipts" >
-					</logic:notEmpty>
-					<logic:empty name="addReceipts" scope="request" >
-						<div id="receipts" style="display:none;" >
-					</logic:empty>
+					<div id="receipts" style="display:none;" >
 					<table class="form2" cellspacing="0" cellpadding="0" >
 						<logic:iterate indexId="i" id="receipt" name="claimForm" property="claim.receipts" type="aero.nettracer.fs.model.FsReceipt" >
 				          <tr id="<%= TracingConstants.JSP_DELETE_ASSOCIATED_RECEIPT %>_<%=i%>" >
@@ -727,6 +717,11 @@
 				          </tr>
 					</table>
 					</div>
+					<logic:notEmpty name="addReceipts" scope="request" >
+						<script>
+							show('#receipts','#rsshow','#rshide');
+						</script>
+					</logic:notEmpty>
                     <br />
                     <br />
                     
@@ -785,10 +780,22 @@
 		                   	</tr>
 		                   	
                    		</table>
-                    </logic:notEmpty> 
+	                    </logic:notEmpty> 
+	                    	<logic:notEmpty name="claimForm" property="claim.ntIncident">
+		                    <br />
+		                    <br />
+		  	                <a name="expense"></a>
+		                    <h1 class="green">
+		                      <bean:message key="header.payout_summary" />
+		                      <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+		                    </h1>
+		                    <jsp:include page="/pages/includes/incident_expense_incl.jsp" >
+						    	<jsp:param name="formCss" value="form2" />
+						    </jsp:include>
+	                    	</logic:notEmpty>
+                    <% } %>
                     <br />
                     <br/>
-                    <% } %>
                     <!-- Reservation Info -->
                     <h1 class="green">
                    		<bean:message key="header.reservation.details" />
