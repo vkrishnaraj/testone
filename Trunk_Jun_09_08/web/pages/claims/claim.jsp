@@ -55,9 +55,14 @@
       }
       
       function toggleLinks(link1,link2) {
-    	  jQuery(link1).toggle();
-    	  jQuery(link2).toggle();
-      }
+	  	  if (jQuery(link1).is(':visible')) {
+	  		  jQuery(link1).hide();
+	  		  jQuery(link2).show();
+	  	  } else {
+	  		  jQuery(link1).show();
+	  		  jQuery(link2).hide();
+	  	  }
+  	  }
       
   </SCRIPT>
  
@@ -666,12 +671,24 @@
 								  		<br />
 								  		<input type="text" name="receipt[<%=i %>].phone.phoneNumber" maxlength="20" size="20" value="<%=((FsReceipt) receipt).getPhone().getPhoneNumber() == null ? "" : ((FsReceipt) receipt).getPhone().getPhoneNumber() %>" class="textfield">
 								  	</td>
+								  	<td>
+								  		<bean:message key="claim.colname.cc_type" />
+								  		<br />
+										<select name="receipt[<%=i %>].ccType" >
+											<option><bean:message key="claim.cc.please.select" /></option>
+											<option value="VI" <% if (receipt.getCcType().equals("VI")) { %>selected<% };%>>Visa</option>	
+											<option value="CA" <% if (receipt.getCcType().equals("CA")) { %>selected<% };%>>Mastercard</option>	
+											<option value="DS" <% if (receipt.getCcType().equals("DS")) { %>selected<% };%>>Discover</option>
+											<option value="AX" <% if (receipt.getCcType().equals("AX")) { %>selected<% };%>>American Express</option>	
+											<option value="DC" <% if (receipt.getCcType().equals("DC")) { %>selected<% };%>>Diners Club</option> 
+										</select>
+								  	</td>
 								  	<td >
 										<bean:message key="claim.colname.cc_num.last.four" />
 										<br/>
 								  		<input type="text" name="receipt[<%=i %>].ccLastFour" maxlength="4" size="4" value="<%=((FsReceipt) receipt).getCcLastFour() == null ? "" : ((FsReceipt) receipt).getCcLastFour() %>" class="textfield">
 									</td>
-									<td colspan="2">
+									<td >
 										<bean:message key="claim.colname.cc_expdate" />
 										<br/>
 								  		<select name="receipt[<%=i %>].ccExpMonth" >

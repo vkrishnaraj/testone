@@ -184,6 +184,10 @@ public class ModifyClaimAction extends CheckedAction {
 			long id = Long.parseLong(request.getParameter("claimId"));
 			if (id > 0) {
 				claim = ClaimDAO.loadClaim(id);
+				if (claim.getNtIncident() != null) {
+					ntIncident = claim.getNtIncident();
+					bs.populateIncidentFormFromIncidentObj(ntIncident.getIncident_ID(), theform, user, ntIncident.getItemtype_ID(), new IncidentBMO(), ntIncident, false);
+				}
 			}
 			
 		} else {
@@ -200,16 +204,7 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 		}
 		
-		if (claim.getNtIncident() != null && theform == null) {
-			theform.setIncident_ID(claim.getNtIncidentId());
-			IncidentBMO iBMO = new IncidentBMO();
-			Incident iDTO = iBMO.findIncidentByID(ntIncident.getIncident_ID());
-			if(iDTO == null) {
-				bs.populateIncidentFormFromIncidentObj(ntIncident.getIncident_ID(), theform, user, ntIncident.getItemtype_ID(), iBMO, iDTO, false);
-			}
-		}
-		
-		session.setAttribute("incidentForm", theform);
+		theform.setIncident_ID(claim.getNtIncidentId());
 
 		// delete associated items
 		deleteAssociatedItems(claim, request);
@@ -419,6 +414,7 @@ public class ModifyClaimAction extends CheckedAction {
 		}
 		
 		cform.setClaim(claim);
+		session.setAttribute("incidentForm", theform);
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
 	}
 	

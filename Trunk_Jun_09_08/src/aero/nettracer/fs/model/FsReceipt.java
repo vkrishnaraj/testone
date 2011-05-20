@@ -3,6 +3,7 @@ package aero.nettracer.fs.model;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,8 +24,13 @@ public class FsReceipt implements Serializable {
 	@GeneratedValue
 	private long id;
 	private String company;
+	@Column(length = 2)
+	private String ccType;
+	@Column(length = 4)
 	private String ccLastFour;
+	@Column(length = 2)
 	private int ccExpMonth;
+	@Column(length = 2)
 	private int ccExpYear;
 	
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
@@ -52,6 +58,14 @@ public class FsReceipt implements Serializable {
 
 	public void setCompany(String company) {
 		this.company = company;
+	}
+	
+	public String getCcType() {
+		return ccType;
+	}
+
+	public void setCcType(String ccType) {
+		this.ccType = ccType;
 	}
 
 	public String getCcLastFour() {
