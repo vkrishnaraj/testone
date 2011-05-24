@@ -135,9 +135,9 @@ public class Producer {
 			+ "left outer join FsFile f5 on f5.id = i3.file_id "
             + "where 1=0 ";
 
-		Set<Person> persons = Consumer.getPersons(file);
+		Set<Person> persons = Consumer.getPersons(file, true);
 		file.setPersonCache(persons);
-		for (Person person : persons) {
+		if(persons!=null)for (Person person : persons) {
 			
 			if(person.getFirstName() != null && person.getFirstName().trim().length() > 0 && person.getLastName() != null && person.getLastName().trim().length()>0){
 			sql += " or (lastNameSoundex = \'"+ person.getLastNameSoundex() + "\'"

@@ -290,9 +290,11 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 					// it must happen every time.
 					try {
 						GeoLocation loc = null;
-						loc = GeoCode.locate(address.getAddress1().replaceAll("[\\.#\"><%!@$%^&*()_+-/]", " "),
-								address.getCity(), address.getState(), address.getZip(), address.getProvince(),
-								address.getCountry(), null);
+						if(address.getAddress1() != null){
+							loc = GeoCode.locate(address.getAddress1().replaceAll("[\\.#\"><%!@$%^&*()_+-/]", " "),
+									address.getCity(), address.getState(), address.getZip(), address.getProvince(),
+									address.getCountry(), null);
+						}
 
 						if (loc != null) {
 

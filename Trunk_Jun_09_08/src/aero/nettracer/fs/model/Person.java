@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.commons.codec.language.Soundex;
@@ -63,6 +64,9 @@ public class Person implements Serializable {
 	private String description;
 	private String ffAirline;
 	private String ffNumber;
+	
+	@Transient
+	private Person parent;
 
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
@@ -326,6 +330,14 @@ public class Person implements Serializable {
 	
 	public void setDisDateOfBirth(String dateOfBirth, String _DATEFORMAT) {
 		setDateOfBirth(DateUtils.convertToDate(dateOfBirth, _DATEFORMAT, null));
+	}
+
+	public void setParent(Person parent) {
+		this.parent = parent;
+	}
+
+	public Person getParent() {
+		return parent;
 	}
 	
 }

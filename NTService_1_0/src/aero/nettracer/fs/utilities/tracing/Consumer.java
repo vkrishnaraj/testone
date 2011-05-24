@@ -7,17 +7,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import aero.nettracer.fs.bmo.FsNameAliasBMO;
 import aero.nettracer.fs.model.CreditCard;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
+import aero.nettracer.fs.model.FsNameAlias;
 import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
@@ -52,6 +55,8 @@ public class Consumer implements Runnable{
 	public static final double P_FFN = 10;
 	public static final double P_PASSPORT = 30;
 	public static final double P_EMAIL = 20;
+	
+	public static final double P_NICK_NAME_MULTIPLIER = 0.5;
 
 	private static final double ADDRESS_FAR_PROXIMITY = 5;
 	private static final double ADDRESS_CLOSE_PROXIMITY = 20;
@@ -305,20 +310,44 @@ public class Consumer implements Runnable{
 	}
 	
 
-
-	
-	public static Set<Person> getPersons(File file){
+	public static Set<Person> getPersons(File file, boolean alias){
+		LinkedHashSet<Person> ret = new LinkedHashSet<Person>();
+		Set<Person> persons =  null;
 		if(file.getClaim() != null){
-			return getPersons(file.getClaim());
+			persons = getPersons(file.getClaim());
+			if(persons != null){
+				ret.addAll(persons);
+			}
 		} else if (file.getIncident() != null){
-			return getPersons(file.getIncident());
+			persons = getPersons(file.getIncident());
+			if(persons != null){
+				ret.addAll(persons);
+			}
 		} else {
 			return null;
 		}
+		if(alias && persons != null){
+			for(Person person:persons){
+				List<FsNameAlias> names = FsNameAliasBMO.getAlias(person.getFirstName());
+				if(names!=null)for(FsNameAlias name:names){
+					Person toAdd = new Person();
+					toAdd.setFirstName(name.getAlias());
+					toAdd.setLastName(person.getLastName());
+					toAdd.setParent(person);
+					ret.add(toAdd);
+				}
+			}
+		}
+		
+		return ret;
+	}
+	
+	public static Set<Person> getPersons(File file){
+		return getPersons(file, false);
 	}
 	
 	public static Set<Person> getPersons(FsIncident incident) {
-		HashSet<Person> ret = new HashSet<Person>();
+		LinkedHashSet<Person> ret = new LinkedHashSet<Person>();
 		if (incident != null) {
 			if (incident.getPassengers() != null) {
 				for (Person p : incident.getPassengers()) {
@@ -342,7 +371,7 @@ public class Consumer implements Runnable{
 	}
 	
 	public static Set<Person> getPersons(FsClaim claim){
-		HashSet<Person> ret = new HashSet<Person>();
+		LinkedHashSet<Person> ret = new LinkedHashSet<Person>();
 		
 		if(claim != null){
 			if(claim.getClaimants() != null){
@@ -825,10 +854,9 @@ public class Consumer implements Runnable{
 	
 	private static void processPerson(MatchHistory match){
 
-		// TODO: Matt to review: I modified code to not assume a claim as the initial element.
 		Set<Person> plist1 = match.getFile1().getPersonCache();
 		if(plist1 == null){
-			plist1 = getPersons(match.getFile1());
+			plist1 = getPersons(match.getFile1(), true);
 		}	
 		Set<Person> plist2 = null;
 		if(match.getFile2() != null){
@@ -839,31 +867,45 @@ public class Consumer implements Runnable{
 		HashMap<String, Integer> nameHashMap = new HashMap<String,Integer>();
 		HashMap<String, Integer> emailHashMap = new HashMap<String,Integer>();
 		HashMap<String, Integer> ffHashMap = new HashMap<String,Integer>();
-		
+		HashSet<Person> parentPerson = new HashSet<Person>();
 		
 		
 		for(Person p1:plist1){
 			for(Person p2:plist2){
 				if(p1.getFirstName() != null && p1.getFirstName().trim().length() > 0 
 						&& p1.getLastName() != null && p1.getLastName().trim().length() > 0 && p2.getFirstName() != null && p2.getLastName() != null){
-					String content1 = p1.getFirstName().trim() + " " + p1.getLastName().trim();
+					
+					String content1 = "";
+					if(p1.getParent() != null){
+						content1 = p1.getParent().getFirstName().trim() + " " + p1.getParent().getLastName().trim();
+					} else {
+						content1 = p1.getFirstName().trim() + " " + p1.getLastName().trim();
+					}
 					String content2 = p2.getFirstName().trim() + " " + p2.getLastName().trim();
-					String comparator = content1 + "/" + content2;
+					String comparator = p1.getFirstName().trim() + " " + p1.getLastName().trim() + "/" + content2;
 					comparator = comparator.toUpperCase();
-					if (!nameHashMap.containsKey(comparator)) {
+					if (!nameHashMap.containsKey(comparator) && !parentPerson.contains(p1) && !parentPerson.contains(p1.getParent())) {
+						nameHashMap.put(comparator, integerZero);
 						if (p1.getFirstName().equalsIgnoreCase(p2.getFirstName())
 								&& p1.getLastName().equalsIgnoreCase(p2.getLastName())) {
-
+							
 							MatchDetail detail = new MatchDetail();
 							detail.setContent1(content1);
 							detail.setContent2(content2);
-							detail.setDescription("Direct Name Match");
+							if(p1.getParent() != null){
+								detail.setDescription("Direct Nick Name Match");
+								detail.setPercent(P_NAME * P_NICK_NAME_MULTIPLIER);
+								parentPerson.add(p1.getParent());
+							} else {
+								detail.setDescription("Direct Name Match");
+								detail.setPercent(P_NAME);
+								parentPerson.add(p1);
+							}
 							detail.setMatch(match);
-							detail.setPercent(P_NAME);
 							detail.setMatchtype(MatchType.name);
 							details.add(detail);
 
-							nameHashMap.put(comparator, integerZero);
+
 
 							// TODO: Nickname Matches
 						} else {
@@ -878,10 +920,17 @@ public class Consumer implements Runnable{
 								MatchDetail detail = new MatchDetail();
 								detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
 								detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-								detail.setDescription("Soundex Match");
 								detail.setMatch(match);
-								detail.setPercent(P_SOUNDEX);
 								detail.setMatchtype(MatchType.name);
+								if(p1.getParent() != null){
+									detail.setDescription("Soundex Nick Name Match");
+									detail.setPercent(P_SOUNDEX * P_NICK_NAME_MULTIPLIER);
+									parentPerson.add(p1.getParent());
+								} else {
+									detail.setDescription("Soundex Match");
+									detail.setPercent(P_SOUNDEX);
+									parentPerson.add(p1);
+								}
 								details.add(detail);
 							}
 							if (p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null
@@ -891,10 +940,17 @@ public class Consumer implements Runnable{
 								MatchDetail detail = new MatchDetail();
 								detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
 								detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-								detail.setDescription("Double Metaphone Match");
 								detail.setMatch(match);
-								detail.setPercent(P_METAPHONE);
 								detail.setMatchtype(MatchType.name);
+								if(p1.getParent() != null){
+									detail.setDescription("Double Metaphone Nick Name Match");
+									detail.setPercent(P_METAPHONE * P_NICK_NAME_MULTIPLIER);
+									parentPerson.add(p1.getParent());
+								} else {
+									detail.setDescription("Double Metaphone Match");
+									detail.setPercent(P_METAPHONE);
+									parentPerson.add(p1);
+								}
 								details.add(detail);
 							}
 							if (!matchedName) {
@@ -908,6 +964,15 @@ public class Consumer implements Runnable{
 									detail.setMatch(match);
 									detail.setPercent(score * .1);
 									detail.setMatchtype(MatchType.name);
+									if(p1.getParent() != null){
+										detail.setDescription("Similar Nick Name Match");
+										detail.setPercent(score * .1 * P_NICK_NAME_MULTIPLIER);
+										parentPerson.add(p1.getParent());
+									} else {
+										detail.setDescription("Similar Name");
+										detail.setPercent(score * .1);
+										parentPerson.add(p1);
+									}
 									details.add(detail);
 								}
 							}
