@@ -43,9 +43,6 @@ public class SpringUtils {
 	}
 	
 	public static Object getBean(String beanName) {
-		if (ctx == null) {
-			return null;
-		}
 		return ctx.getBean(beanName);
 	}
 	

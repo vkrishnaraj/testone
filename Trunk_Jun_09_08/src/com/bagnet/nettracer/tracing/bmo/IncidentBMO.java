@@ -70,6 +70,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
@@ -2209,8 +2210,7 @@ public class IncidentBMO {
 			sess.save(ep);
 			sess.update(inc);
 			tx.commit();
-			ReservationIntegration ri = SpringUtils.getReservationIntegration(); 
-			if (ri != null && ri.isWriteCommentToPnrOn()
+			if (SpringUtils.getReservationIntegration().isWriteCommentToPnrOn()
 					&& SpringUtils.getReservationIntegration().isWriteExpensesToPnrOn()) {
 				String formateddatetime = DateUtils.formatDate(TracerDateTime.getGMTDate(),
 						TracingConstants.DB_DATETIMEFORMAT, null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(

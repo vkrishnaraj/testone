@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
 import aero.nettracer.fs.model.detection.MatchHistory;
@@ -28,6 +29,7 @@ import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
+import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.FraudResultsForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -52,10 +54,17 @@ public class FraudResultsAction extends CheckedAction {
 
 		FraudResultsForm resultsForm = (FraudResultsForm) form;
 		String claimIdString = request.getParameter("claimId");
+		String incidentIdString = request.getParameter("incident");
+		File file = null;
 		FsClaim claim = null;
-		if (claimIdString != null) {
+		if (incidentIdString != null) {
+			file = FileDAO.loadFile(incidentIdString);
+			request.setAttribute("claimId", claimIdString);
+			request.setAttribute("incident", incidentIdString);
+		} else if (claimIdString != null) {
 			claim = ClaimDAO.loadClaim(Long.parseLong(claimIdString));
 			resultsForm.setClaimId(claim.getId());
+			request.setAttribute("claimId", claimIdString);
 			if (claim.getNtIncidentId() != null) {
 				request.setAttribute("incident", claim.getNtIncidentId());
 			}
@@ -72,11 +81,18 @@ public class FraudResultsAction extends CheckedAction {
 						|| request.getParameter("delete") != null) { 
 			results = getResultsFromForm(resultsForm);
 		} else {
-			if (claim != null) {
+			long id = 0;
+			if (file != null) {
+				id = file.getSwapId();
+			} else if (claim != null) {
+				id = claim.getFile().getSwapId();
+			}
+			
+			if (id > 0) {
 				try {
 					Context ctx = ConnectionUtil.getInitialContext();
 					ClaimRemote remote = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
-					results = remote.getFileMatches(claim.getFile().getSwapId());
+					results = remote.getFileMatches(id);
 					ctx.close();
 				} catch (Exception e) {
 					logger.error(e);
@@ -148,7 +164,7 @@ public class FraudResultsAction extends CheckedAction {
 		ArrayList<MatchHistory> primaryResults = new ArrayList<MatchHistory>();
 		ArrayList<MatchHistory> secondaryResults = new ArrayList<MatchHistory>();
 
-		if (form.getClaimId() > 0) {
+//		if (form.getClaimId() > 0) {
 			if (results != null && !results.isEmpty()) {
 				for (MatchHistory match: results) {
 					if (match.isPrimarymatch()) {
@@ -158,7 +174,7 @@ public class FraudResultsAction extends CheckedAction {
 					}
 				}
 			}
-		}
+//		}
 	
 		form.setPrimaryResults(primaryResults);
 		form.setSecondaryResults(secondaryResults);

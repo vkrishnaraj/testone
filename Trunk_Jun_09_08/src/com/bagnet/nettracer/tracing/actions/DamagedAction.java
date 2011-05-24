@@ -36,6 +36,10 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
+import aero.nettracer.fs.model.File;
+import aero.nettracer.fs.model.FsIncident;
+import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.model.detection.TraceResponse;
 
 import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
@@ -43,6 +47,7 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -59,6 +64,7 @@ import com.bagnet.nettracer.tracing.db.dr.DisputeUtils;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
@@ -68,7 +74,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.tracing.utils.ntfs.ClaimUtil;
+import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 /**
  * @author Matt
@@ -401,7 +407,35 @@ public class DamagedAction extends CheckedAction {
 			
 			if (error == null) {
 				
-				ClaimUtil.saveAndTraceForFraud(session, iDTO, isNew, user);
+				if (PropertyBMO.isTrue("ntfs.user")) {
+					File file = FileDAO.loadFile(iDTO.getIncident_ID());
+					if (file == null) {
+						file = new File();
+						FsIncident fsIncident = ClaimUtils.getFsIncident(iDTO, user);
+						fsIncident.setFile(file);
+						file.setIncident(fsIncident);
+						FileDAO.saveFile(file);
+					}
+					long remoteFileId = ConnectionUtil.insertFile(file);
+					file.setSwapId(remoteFileId);
+					FileDAO.saveFile(file);
+					if (remoteFileId > 0) {
+						TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, isNew);
+						if (results != null) {
+							session.setAttribute("results", results.getMatchHistory());
+							String status = "no_fraud";
+							for (MatchHistory m: results.getMatchHistory()) {
+								if (m.getFile2().getStatusId() == TracingConstants.STATUS_SUSPECTED_FRAUD) {
+									status = "suspected_fraud";
+								} else if (m.getFile2().getStatusId() == TracingConstants.STATUS_KNOWN_FRAUD) {
+									status = "known_fraud";
+									break;
+								}
+							}
+							request.setAttribute("fraudStatus", status);
+						}
+					}
+				}
 				
 				theform.setRemarkEnteredWhenNotifiedOfRequirements(false);
 				theform.setNotifiedOfRequirements(false);

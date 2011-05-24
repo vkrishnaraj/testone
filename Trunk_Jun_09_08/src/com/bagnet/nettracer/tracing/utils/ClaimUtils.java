@@ -89,9 +89,6 @@ public class ClaimUtils {
 		status.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
 		status.setLocale(user);
 		
-		// create the claim currency
-		String currency = user.getDefaultcurrency();
-		
 		// create the address
 		FsAddress address = new FsAddress();
 		address.setPerson(person);
@@ -111,6 +108,50 @@ public class ClaimUtils {
 		person.setClaim(claim);
 		LinkedHashSet<Person> claimants = new LinkedHashSet<Person>();
 		claimants.add(person);
+		claim.setClaimants(claimants);
+		
+		// create associated receipts
+		LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
+		claim.setReceipts(receipts);
+		
+		FsIncident fsIncident = getFsIncident(ntIncident, user);
+		claim.setIncident(fsIncident);
+		fsIncident.setClaim(claim);
+
+		if (ntIncident != null) {
+			claim.setNtIncident(ntIncident);
+			ntIncident.setClaim(claim);
+			claimants.clear();
+			person = claim.getIncident().getPassengers().toArray(new Person[0])[0];
+			person.setClaim(claim);
+			claimants.add(person);
+			getExpensePayoutData(ntIncident, claim, user);
+			claim.setClaimType(ntIncident.getItemtype_ID());
+		}
+		
+		claim.setStatus(status);
+		
+		Segment s = new Segment();
+		s.setClaim(claim);
+		LinkedHashSet<Segment> segments = new LinkedHashSet<Segment>();
+		segments.add(s);
+		claim.setSegments(segments);
+		
+		return claim;
+		
+	}
+	
+	public static FsIncident getFsIncident(Incident incident, Agent user) {
+		if (incident == null) {
+			return createFsIncident(user);
+		} else {
+			return createFsIncident(incident, user);
+		}
+	}
+	
+	private static FsIncident createFsIncident(Agent user) {
+		FsIncident fsIncident = new FsIncident();
+		fsIncident.setAirline(user.getCompanycode_ID());
 		
 		// create the purchaser
 		Person purchaser = new Person();
@@ -130,221 +171,160 @@ public class ClaimUtils {
 		LinkedHashSet<Person> persons = new LinkedHashSet<Person>();
 		reservation.setPassengers(persons);
 		reservation.setPhones(new LinkedHashSet<Phone>());
+		reservation.setSegments(new LinkedHashSet<Segment>());
 		reservation.setPnrData(pnrData);
-		
-		// create associated receipts
-		LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
-		claim.setReceipts(receipts);
-		
-		if (ntIncident != null) {
-			claim.setNtIncident(ntIncident);
-			ntIncident.setClaim(claim);
-			OtherSystemInformation osi = OtherSystemInformationBMO.getOsi(ntIncident.getIncident_ID(), null);
-			if (osi != null && osi.getInfo().length() > 0) {
-				pnrData.setPnrData(osi.getInfo());
-				ParsedData pd = parseInterestingData(osi.getInfo());
+		pnrData.setReservation(reservation);
 
-				reservation.setCcNumber(pd.last4);
-				reservation.setTicketAmount(pd.ticketPrice);
-				reservation.setFormOfPayment(pd.fop);
-				reservation.setCcType(pd.cardType);
+		reservation.setIncident(fsIncident);
+		fsIncident.setReservation(reservation);
+		
+		return fsIncident;
+	}
+	
+	private static FsIncident createFsIncident(Incident incident, Agent user) {
+		FsIncident fsIncident = createFsIncident(user);
+		fsIncident.setAirlineIncidentId(incident.getIncident_ID());
+		
+		OtherSystemInformation osi = OtherSystemInformationBMO.getOsi(incident.getIncident_ID(), null);
+		Reservation reservation = fsIncident.getReservation();
+		PnrData pnrData = fsIncident.getReservation().getPnrData();
+		if (osi != null && osi.getInfo().length() > 0) {
+			
+			pnrData.setPnrData(osi.getInfo());
+			ParsedData pd = parseInterestingData(osi.getInfo());
+
+			reservation.setCcNumber(pd.last4);
+			reservation.setTicketAmount(pd.ticketPrice);
+			reservation.setFormOfPayment(pd.fop);
+			reservation.setCcType(pd.cardType);
+			
+			try {
+				reservation.setCcExpMonth(Integer.parseInt(pd.expiration.substring(0, 2)));
+				reservation.setCcExpYear(Integer.parseInt(pd.expiration.substring(2)));
+			} catch (Exception e ) {
+				// Ignore
+			}
+			
+			Set<Person> persons = reservation.getPassengers();
+			for (Name name : pd.names) {
+				Person p1 = new Person();
+				p1.setReservation(reservation);
+				persons.add(p1);
+
+
+				p1.setFirstName(name.firstName);
+				p1.setLastName(name.lastName);
 				
-				try {
-					reservation.setCcExpMonth(Integer.parseInt(pd.expiration.substring(0, 2)));
-					reservation.setCcExpYear(Integer.parseInt(pd.expiration.substring(2)));
-				} catch (Exception e ) {
-					// Ignore
+				String fn = p1.getFirstName();
+				if (fn != null) {
+					p1.setFirstName(fn);
+					try {
+						p1.setFirstNameDmp(dmp.encode(fn));
+						p1.setFirstNameSoundex(sndx.encode(fn));
+					} catch (Exception e) {
+
+					}
 				}
 				
-				for (Name name : pd.names) {
-					Person p1 = new Person();
+
+				String ln = p1.getLastName();
+				if (ln != null) {
+
+					p1.setLastName(ln);
+					try {
+						p1.setLastNameDmp(dmp.encode(ln));
+						p1.setLastNameSoundex(sndx.encode(ln));
+					} catch (Exception e) {
+
+					}
+				}
+
+
+				if (name.cc == true) {
+					reservation.setPurchaser(p1);
+					p1.setReservation(reservation);
+					p1.setCcContact(true);
+					Set<FsAddress> ccaddresses = new LinkedHashSet<FsAddress>();
+					p1.setAddresses(ccaddresses);
+
+					FsAddress a = new FsAddress();
+					a.setPerson(p1);
+					ccaddresses.add(a);
+
+					a.setAddress1(pd.add2);
+					a.setCity(pd.city);
+					a.setZip(pd.zip);
+					a.setState(pd.state);
+
+
+				}
+			}
+
+			for (int j = 0; j < pd.emails.size(); ++j) {
+				String email = pd.emails.get(j);
+				Person p1 = null;
+				if (persons.size() >= 1 + j) {
+					int current = 0;
+					for (Person pp : persons) {
+						if (current == j) {
+							p1 = pp;
+							break;
+						}
+						++current;
+					}
+				} else {
+					p1 = new Person();
 					p1.setReservation(reservation);
 					persons.add(p1);
-
-
-					p1.setFirstName(name.firstName);
-					p1.setLastName(name.lastName);
-					
-					String fn = p1.getFirstName();
-					if (fn != null) {
-						p1.setFirstName(fn);
-						try {
-							p1.setFirstNameDmp(dmp.encode(fn));
-							p1.setFirstNameSoundex(sndx.encode(fn));
-						} catch (Exception e) {
-	
-						}
-					}
-					
-	
-					String ln = p1.getLastName();
-					if (ln != null) {
-	
-						p1.setLastName(ln);
-						try {
-							p1.setLastNameDmp(dmp.encode(ln));
-							p1.setLastNameSoundex(sndx.encode(ln));
-						} catch (Exception e) {
-	
-						}
-					}
-
-
-					if (name.cc == true) {
-						reservation.setPurchaser(p1);
-						p1.setReservation(reservation);
-						p1.setCcContact(true);
-						Set<FsAddress> ccaddresses = new LinkedHashSet<FsAddress>();
-						p1.setAddresses(ccaddresses);
-
-						FsAddress a = new FsAddress();
-						a.setPerson(p1);
-						ccaddresses.add(a);
-
-						a.setAddress1(pd.add2);
-						a.setCity(pd.city);
-						a.setZip(pd.zip);
-						a.setState(pd.state);
-
-
-					}
 				}
-
-				for (int j = 0; j < pd.emails.size(); ++j) {
-					String email = pd.emails.get(j);
-					Person p1 = null;
-					if (persons.size() >= 1 + j) {
-						int current = 0;
-						for (Person pp : persons) {
-							if (current == j) {
-								p1 = pp;
-								break;
-							}
-							++current;
-						}
-					} else {
-						p1 = new Person();
-						p1.setReservation(reservation);
-						persons.add(p1);
-					}
-					p1.setEmailAddress(email);
-				}
-
-
-			}	
+				p1.setEmailAddress(email);
+			}
 		}
-		
-
-		
-		
-		reservation.setSegments(new LinkedHashSet<Segment>());
-		pnrData.setReservation(reservation);
-		
-		// set the fraud incident
-		FsIncident fsIncident = new FsIncident();
-		fsIncident.setAirline(user.getCompanycode_ID());
-		fsIncident.setReservation(reservation);
-		reservation.setIncident(fsIncident);
-		person.setIncident(fsIncident);
-		fsIncident.setClaim(claim);
 		
 		Set<Person> passengers = new LinkedHashSet<Person>();
 
-		if (ntIncident != null) {		
-			Set<Passenger> paxSet = ntIncident.getPassengers();
-	
-			if (paxSet != null) {
-				boolean firstPax = true;
-				for (Passenger pax : paxSet) {
-					Person p = getPersonFromPax(pax);
-					passengers.add(p);
-					p.setIncident(fsIncident);
-					
-					if (firstPax) {
-						claimants.clear();
-						person = getPersonFromPax(pax);
-						person.setClaim(claim);
-						claimants.add(person);
-						firstPax = false;
-					}
-			
-				}
+		Set<Passenger> paxSet = incident.getPassengers();
+
+		if (paxSet != null) {
+			for (Passenger pax : paxSet) {
+				Person p = getPersonFromPax(pax);
+				passengers.add(p);
+				p.setIncident(fsIncident);
 			}
 		}
-		
 		fsIncident.setPassengers(passengers);
-		if (ntIncident != null) {
-			fsIncident.setAirlineIncidentId(ntIncident.getIncident_ID());
-			fsIncident.setTimestampClosed(ntIncident.getClosedate());
-			Date createDate = new Date(ntIncident.getCreatedate().getTime() + ntIncident.getCreatetime().getTime());
-			fsIncident.setTimestampOpen(createDate);
-			Set<Bag> bags = new LinkedHashSet<Bag>();
-	
-			int numberOfBdos = 0;
-			if (ntIncident.getItemlist() != null && ntIncident.getItemlist().size() > 0) {
-				for (Item it : ntIncident.getItemlist()) {
-					if (it != null) {
-						Bag bag = new Bag();
-						bag.setBagType(it.getBagtype());
-						bag.setBagColor(it.getColor());
-	
-						String manu = null;
-						manu = it.getManufacturer();
-						bag.setManufacturer(manu);
-						bag.setDescription(it.getDamage());
-						bag.setIncident(fsIncident);
-	
-						if (it.getBdo() != null) {
-							numberOfBdos += 1;
-						}
-						bags.add(bag);
-					}
-				}
-			}
-	
-			fsIncident.setBags(bags);
-			fsIncident.setNumberOfBdos(numberOfBdos);
 		
-			
-			// collect amount from incident payouts (interim or temporary)
-			double amount = 0;
-			double amountPaid = 0;
-			if (ntIncident.getExpenselist() != null) {
-				for (ExpensePayout ep : ntIncident.getExpenselist()) {
-					if (ep != null && !ep.getPaycode().equals("DEL")) {
-						if (ep.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED) {
-							amountPaid += ep.getCheckamt();
-							amountPaid += ep.getVoucheramt();
-							amountPaid += ep.getCreditCardRefund();
-						}
-						amount += ep.getCheckamt();
-						amount += ep.getVoucheramt();
-						amount += ep.getCreditCardRefund();
-						currency = ep.getCurrency_ID();
+		fsIncident.setTimestampClosed(incident.getClosedate());
+		Date createDate = new Date(incident.getCreatedate().getTime() + incident.getCreatetime().getTime());
+		fsIncident.setTimestampOpen(createDate);
+		Set<Bag> bags = new LinkedHashSet<Bag>();
+
+		int numberOfBdos = 0;
+		if (incident.getItemlist() != null && incident.getItemlist().size() > 0) {
+			for (Item it : incident.getItemlist()) {
+				if (it != null) {
+					Bag bag = new Bag();
+					bag.setBagType(it.getBagtype());
+					bag.setBagColor(it.getColor());
+
+					String manu = null;
+					manu = it.getManufacturer();
+					bag.setManufacturer(manu);
+					bag.setDescription(it.getDamage());
+					bag.setIncident(fsIncident);
+
+					if (it.getBdo() != null) {
+						numberOfBdos += 1;
 					}
+					bags.add(bag);
 				}
 			}
-			
-			claim.setAmountPaid(amountPaid);
-			claim.setAmountClaimed(amount);
-			claim.setClaimType(ntIncident.getItemtype_ID());
-			ntIncident.setClaim(claim);
-			claim.setNtIncident(ntIncident);
 		}
-		claim.setAmountClaimedCurrency(currency);
-		claim.setClaimants(claimants);
-		claim.setIncident(fsIncident);
-		// create the claim
-		claim.setStatus(status);
+
+		fsIncident.setBags(bags);
+		fsIncident.setNumberOfBdos(numberOfBdos);
 		
-		Segment s = new Segment();
-		s.setClaim(claim);
-		LinkedHashSet<Segment> segments = new LinkedHashSet<Segment>();
-		segments.add(s);
-		claim.setSegments(segments);
-		
-		return claim;
-		
+		return fsIncident;
 	}
 
 	private static Person getPersonFromPax(Passenger pax) {
@@ -411,6 +391,32 @@ public class ClaimUtils {
 		}
 		
 		return p;
+	}
+	
+	private static void getExpensePayoutData(Incident incident, FsClaim claim, Agent user) {
+		double amount = 0;
+		double amountPaid = 0;
+		String currency = user.getDefaultcurrency();
+		if (incident.getExpenselist() != null) {
+			for (ExpensePayout ep : incident.getExpenselist()) {
+				if (ep != null && !ep.getPaycode().equals("DEL")) {
+					if (ep.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED) {
+						amountPaid += ep.getCheckamt();
+						amountPaid += ep.getVoucheramt();
+						amountPaid += ep.getCreditCardRefund();
+					}
+					amount += ep.getCheckamt();
+					amount += ep.getVoucheramt();
+					amount += ep.getCreditCardRefund();
+					currency = ep.getCurrency_ID();
+				}
+			}
+		}
+		
+		claim.setAmountPaid(amountPaid);
+		claim.setAmountClaimed(amount);
+		claim.setAmountClaimedCurrency(currency);
+	
 	}
 	
 	public static ClaimForm createClaimForm(HttpServletRequest request) {

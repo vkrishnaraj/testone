@@ -428,6 +428,12 @@ div#maincontent li.loginlinks {
 	font-weight: bold;
 }
 
+.no_fraud {
+	margin: 0px;
+	padding: 0px;
+	background-color: #4ba047;
+}
+
 .suspected_fraud {
 	margin:	0px;
 	padding: 0px;

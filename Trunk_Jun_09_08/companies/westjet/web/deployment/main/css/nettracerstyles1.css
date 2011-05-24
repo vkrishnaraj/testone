@@ -480,6 +480,12 @@ div#notablelines table td {
 	vertical-align:top;
 }
 
+.no_fraud {
+	margin: 0px;
+	padding: 0px;
+	background-color: #4ba047;
+}
+
 .suspected_fraud {
 	margin:	0px;
 	padding: 0px;

@@ -311,7 +311,7 @@ public class ModifyClaimAction extends CheckedAction {
 					logger.info("Claim saved to central services: " + remoteFileId);
 	
 					// 3. submit the claim for tracing
-					TraceResponse results = submitClaim(remoteFileId, firstSave);
+					TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave);
 					if (results != null) {
 						
 						// TODO: SET RELOAD TIME HERE
@@ -330,7 +330,7 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			// 1. submit the claim for tracing
 			if (claim.getFile().getSwapId() > 0) {
-				TraceResponse results = submitClaim(claim.getFile().getSwapId(), false);
+				TraceResponse results = ConnectionUtil.submitClaim(claim.getFile().getSwapId(), false);
 				if (results != null) {
 					session.setAttribute("results", results.getMatchHistory());
 					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
@@ -418,32 +418,32 @@ public class ModifyClaimAction extends CheckedAction {
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
 	}
 	
-	private TraceResponse submitClaim(long fileId, boolean primary) {
-		if (fileId <= 0) {
-			return null;
-		}
-		TraceResponse results = null;
-		try {
-			Context ctx = ConnectionUtil.getInitialContext();
-			ClaimRemote remote = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
-			
-			
-			if (remote != null) {
-				int wait = 6;
-				try {
-					wait = PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_CHECK_TIMEOUT);
-				} catch (Exception e) {
-					//
-				}
-				results = remote.traceFile(fileId, wait, primary);
-				
-			}
-			ctx.close();
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-		return results;
-	}
+//	private TraceResponse submitClaim(long fileId, boolean primary) {
+//		if (fileId <= 0) {
+//			return null;
+//		}
+//		TraceResponse results = null;
+//		try {
+//			Context ctx = ConnectionUtil.getInitialContext();
+//			ClaimRemote remote = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
+//			
+//			
+//			if (remote != null) {
+//				int wait = 6;
+//				try {
+//					wait = PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_CHECK_TIMEOUT);
+//				} catch (Exception e) {
+//					//
+//				}
+//				results = remote.traceFile(fileId, wait, primary);
+//				
+//			}
+//			ctx.close();
+//		} catch (NamingException e) {
+//			e.printStackTrace();
+//		}
+//		return results;
+//	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void deleteAssociatedItems(FsClaim claim, HttpServletRequest request) {
@@ -495,7 +495,9 @@ public class ModifyClaimAction extends CheckedAction {
 			try {
 				int numToAdd = Integer.parseInt(request.getParameter("addReceiptNum"));
 				for (int i = 0; i < numToAdd; ++i) {
-					claim.getReceipts().add(createReceipts(claim));
+					FsReceipt r = createReceipt();
+					r.setClaim(claim);
+					claim.getReceipts().add(r);
 				}
 				request.setAttribute("addReceipts", "1");
 			} catch (NumberFormatException nfe) {
@@ -515,9 +517,9 @@ public class ModifyClaimAction extends CheckedAction {
 		}
 	}
 	
-	private FsReceipt createReceipts(FsClaim claim) {
+	private FsReceipt createReceipt() {
 		FsReceipt receipt = new FsReceipt();
-		receipt.setClaim(claim);
+		receipt.setCcType("");
 		
 		FsAddress address = new FsAddress();
 		address.setReceipt(receipt);
