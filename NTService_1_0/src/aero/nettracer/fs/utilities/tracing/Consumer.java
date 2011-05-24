@@ -2,6 +2,7 @@ package aero.nettracer.fs.utilities.tracing;
 
 // TODO: MASS TRIMMING
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,10 +13,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import aero.nettracer.fs.model.CreditCard;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
+import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Reservation;
@@ -58,6 +61,7 @@ public class Consumer implements Runnable{
 	private static final double ADDRESS_SIMILAR = 40;
 
 	private static final double PHONE_MATCH = 30;
+	private static final double WHITELIST_MATCH = 0;
 	private static final double P_DOB = 6;	
 	
 	private static final Pattern invalidPhone = Pattern.compile("^(0+|1+|3+|4+|5+|6+|7+|8+|9+)$");
@@ -102,21 +106,48 @@ public class Consumer implements Runnable{
 		}
 	}
 	
-
 	private static void processMatch(MatchHistory match){
 		try{
+			long timeout = 1000;
+			Date sdate = new Date();
+			Date edate;
 			//process match
 			if(match.getFile2() != null){
 				if(debug)System.out.println("consumer claim: " + match.getFile2().getId());
 				match.setFile2(TraceWrapper.loadFileFromCache(match.getFile2().getId()));
+				edate = new Date();
+				if(edate.getTime() - sdate.getTime()>timeout){
+					System.out.println("load file " + match.getFile2().getId() + ": " + (edate.getTime() - sdate.getTime()));
+				}
+				sdate = edate;
 			} else {
 				throw new Exception("file2 is null");
 			}
-			
+
 			processPerson(match);
+			edate = new Date();
+			if(edate.getTime() - sdate.getTime()>timeout)System.out.println("person: " + (edate.getTime() - sdate.getTime()));
+			sdate = edate;
 			processAddress(match);
+			edate = new Date();
+			if(edate.getTime() - sdate.getTime()>timeout)System.out.println("address: " + (edate.getTime() - sdate.getTime()));
+			sdate = edate;
 			processReservation(match);
+			edate = new Date();
+			if(edate.getTime() - sdate.getTime()>timeout)System.out.println("reservation: " + (edate.getTime() - sdate.getTime()));
+			sdate = edate;
 			processPhone(match);
+			edate = new Date();
+			if(edate.getTime() - sdate.getTime()>timeout)System.out.println("phone: " + (edate.getTime() - sdate.getTime()));
+			sdate = edate;
+			processReceipts(match);
+			edate = new Date();
+			if(edate.getTime() - sdate.getTime()>timeout)System.out.println("phone: " + (edate.getTime() - sdate.getTime()));
+			sdate = edate;
+			proccessCreditCards(match);
+			edate = new Date();
+			if(edate.getTime() - sdate.getTime()>timeout)System.out.println("phone: " + (edate.getTime() - sdate.getTime()));
+			sdate = edate;
 			
 			
 			
@@ -188,6 +219,37 @@ public class Consumer implements Runnable{
 		}
 	}
 	
+	private static Set<CreditCard> getCreditCards(File file){
+		Set<CreditCard> ret = new HashSet<CreditCard>();
+		if(file != null && file.getIncident() != null && file.getIncident().getReservation() != null){
+			Reservation r1 = file.getIncident().getReservation();
+			CreditCard c1 = new CreditCard();
+			c1.setCcExpMonth(r1.getCcExpMonth());
+			c1.setCcExpYear(r1.getCcExpYear());
+			c1.setCcNumber(r1.getCcNumber());
+			c1.setCcNumLastFour(r1.getCcNumLastFour());
+			c1.setCcType(r1.getCcType());
+			ret.add(c1);
+		} 
+		if(file != null && file.getClaim() != null && file.getClaim().getReceipts() != null){
+			for(FsReceipt receipt:file.getClaim().getReceipts()){
+				CreditCard c1 = new CreditCard();
+				c1.setCcExpMonth(receipt.getCcExpMonth());
+				c1.setCcExpYear(receipt.getCcExpYear());
+				c1.setCcNumber(null);
+				c1.setCcNumLastFour(receipt.getCcLastFour());
+				c1.setCcType(receipt.getCcType());
+				ret.add(c1);
+			}
+		}
+		return ret;
+	}
+	
+	private static void processReceipts(MatchHistory match) {
+		//Created new processCreditCard method
+	}
+
+
 	private static void processPhone(MatchHistory match) {
 
 		Set<Phone> plist1 = match.getFile1().getPhoneCache();
@@ -197,6 +259,7 @@ public class Consumer implements Runnable{
 		}	
 
 		HashSet<String> phoneNumberMatches = new HashSet<String>();
+		ArrayList<Phone> phoneList = new ArrayList<Phone>();
 		Set <MatchDetail> details = match.getDetails();
 		
 		Set<Phone> plist2 = null;
@@ -208,18 +271,24 @@ public class Consumer implements Runnable{
 			for (Phone p2: plist2) {
 				if (validPhone(p1.getPhoneNumber()) && validPhone(p2.getPhoneNumber()) 
 						&& p1.getPhoneNumber().equals(p2.getPhoneNumber())) {
-					phoneNumberMatches.add(p1.getPhoneNumber());
+					if(phoneNumberMatches.add(p1.getPhoneNumber())){
+						phoneList.add(p1);
+					}
 				}
 			}
 		}
 		
-		for (String s: phoneNumberMatches) {
+		for (Phone s: phoneList) {
 			MatchDetail detail = new MatchDetail();
-			detail.setContent1(s);
-			detail.setContent2(s);
+			detail.setContent1(s.getPhoneNumber());
+			detail.setContent2(s.getPhoneNumber());
 			detail.setDescription("Phone Number Match");
 			detail.setMatch(match);
-			detail.setPercent(PHONE_MATCH);
+			if(s.isWhiteListed()){
+				detail.setPercent(WHITELIST_MATCH);
+			}else{
+				detail.setPercent(PHONE_MATCH);
+			}
 			detail.setMatchtype(MatchType.phone);
 			details.add(detail);			
 		}
@@ -327,6 +396,13 @@ public class Consumer implements Runnable{
 				for(Person p:claim.getClaimants()){
 					for (FsAddress a: p.getAddresses())
 						ret.add(a);
+				}
+			}
+			if(claim.getReceipts() != null){
+				for(FsReceipt receipt:claim.getReceipts()){
+					if(receipt.getAddress() != null){
+						ret.add(receipt.getAddress());
+					}
 				}
 			}
 			if(claim.getIncident() != null){
@@ -438,6 +514,13 @@ public class Consumer implements Runnable{
 					}
 				}
 			}
+			if(claim.getReceipts() != null){
+				for(FsReceipt receipt:claim.getReceipts()){
+					if(receipt.getPhone() != null){
+						ret.add(receipt.getPhone());
+					}
+				}
+			}
 			if(claim.getIncident() != null){
 				if(claim.getIncident().getPassengers() != null){
 					for(Person p:claim.getIncident().getPassengers()){
@@ -503,7 +586,11 @@ public class Consumer implements Runnable{
 								detail.setContent2(a2.getAddress1() + ", " + a2.getCity() + ", " + a2.getState() + " " + a2.getZip());
 								detail.setDescription("Proximity Match: " + distanceStr + " miles.");
 								detail.setMatch(match);
-								detail.setPercent(ADDRESS_FAR_PROXIMITY);
+								if(a1.isWhiteListed() || a2.isWhiteListed()){
+									detail.setPercent(WHITELIST_MATCH);
+								} else {
+									detail.setPercent(ADDRESS_FAR_PROXIMITY);
+								}
 								detail.setMatchtype(MatchType.address);
 								details.add(detail);
 							} else {
@@ -515,7 +602,11 @@ public class Consumer implements Runnable{
 								detail.setContent2(a2.getAddress1() + ", " + a2.getCity() + ", " + a2.getState() + " " + a2.getZip());
 								detail.setDescription("Close Proximity Match: " + distanceStr + " miles.");
 								detail.setMatch(match);
-								detail.setPercent(ADDRESS_CLOSE_PROXIMITY);
+								if(a1.isWhiteListed() || a2.isWhiteListed()){
+									detail.setPercent(WHITELIST_MATCH);
+								} else {
+									detail.setPercent(ADDRESS_CLOSE_PROXIMITY);
+								}
 								detail.setMatchtype(MatchType.address);
 								details.add(detail);
 
@@ -526,8 +617,15 @@ public class Consumer implements Runnable{
 						String str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2());
 						
 						String description = "Similar Address";
-						double percent = ADDRESS_SIMILAR;
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .10, MatchType.address);
+						double percent = 0;
+						boolean isWhitelisted =  false;
+						if(a1.isWhiteListed() || a2.isWhiteListed()){
+							percent = WHITELIST_MATCH;
+							isWhitelisted = true;
+						} else {
+							percent = ADDRESS_SIMILAR;
+						}
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .10, MatchType.address, isWhitelisted);
 					}
 				} else {
 					// If country available
@@ -543,8 +641,15 @@ public class Consumer implements Runnable{
 						}
 						
 						String description = "Similar Address";
-						double percent = ADDRESS_SIMILAR;
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15, MatchType.address);
+						double percent = 0;
+						boolean isWhitelisted =  false;
+						if(a1.isWhiteListed() || a2.isWhiteListed()){
+							percent = WHITELIST_MATCH;
+							isWhitelisted = true;
+						} else {
+							percent = ADDRESS_SIMILAR;
+						}
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15, MatchType.address, isWhitelisted);
 						
 					} else {
 						// Country not available
@@ -559,8 +664,15 @@ public class Consumer implements Runnable{
 						}
 
 						String description = "Similar Address";
-						double percent = ADDRESS_SIMILAR;
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15, MatchType.address);
+						double percent = 0;
+						boolean isWhitelisted =  false;
+						if(a1.isWhiteListed() || a2.isWhiteListed()){
+							percent = WHITELIST_MATCH;
+							isWhitelisted = true;
+						} else {
+							percent = ADDRESS_SIMILAR;
+						}
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15, MatchType.address, isWhitelisted);
 
 					}
 				}
@@ -569,7 +681,7 @@ public class Consumer implements Runnable{
 	}
 
 
-	private static void generateStringCompareDetail(MatchHistory match, Set<MatchDetail> details, String str1, String str2, String description, double percent, double minimumScore, double multiplier, MatchType type) {
+	private static void generateStringCompareDetail(MatchHistory match, Set<MatchDetail> details, String str1, String str2, String description, double percent, double minimumScore, double multiplier, MatchType type, boolean isWhitelisted) {
 	  double score = StringCompare.compareStrings(str1, str2);
 	  if (score > minimumScore) {
 	  	MatchDetail detail = new MatchDetail();
@@ -577,7 +689,11 @@ public class Consumer implements Runnable{
 	  	detail.setContent2(str2);
 	  	detail.setDescription(description);
 	  	detail.setMatch(match);
-	  	detail.setPercent(score*multiplier);
+	  	if(isWhitelisted){
+	  		detail.setPercent(WHITELIST_MATCH);
+	  	} else {
+	  		detail.setPercent(score*multiplier);
+	  	}
 	  	detail.setMatchtype(type);
 	  	details.add(detail);
 	  }
@@ -588,20 +704,17 @@ public class Consumer implements Runnable{
 	  return string.trim();
   }
 
+	private static void proccessCreditCards(MatchHistory match){
+		Set<CreditCard> ccs1 = getCreditCards(match.getFile1());
+		Set<CreditCard> ccs2 = getCreditCards(match.getFile2());
+		for(CreditCard c1: ccs1){
+			for(CreditCard c2: ccs2){
+				proccessCreditCard(c1, c2, match);
+			}
+		}
+	}
 
-	private static void processReservation(MatchHistory match){
-		Reservation r1 = null;
-		Reservation r2 = null;
-		
-		// TODO: Matt to review: I modified code to not assume a claim as the initial element.
-		if(match.getFile1() != null && match.getFile1().getIncident() != null){
-			r1 = match.getFile1().getIncident().getReservation();
-		} 
-		
-		if(match.getFile2() != null && match.getFile2().getIncident() != null){
-			r2 = match.getFile2().getIncident().getReservation();
-		} 
-		
+	private static void proccessCreditCard(CreditCard r1, CreditCard r2, MatchHistory match){
 		if(r1 != null && r2 != null){
 			boolean num4 = (r1.getCcNumLastFour() != null && r1.getCcNumLastFour().trim().length() > 0 && r1.getCcNumLastFour().equals(r2.getCcNumLastFour())) ? true:false;
 			boolean num16 = (r1.getCcNumber() != null && r1.getCcNumber().trim().length() > 0 && r1.getCcNumber().equals(r2.getCcNumber())) ? true:false;
@@ -701,6 +814,10 @@ public class Consumer implements Runnable{
 			}
 			
 		}
+	}
+	
+	private static void processReservation(MatchHistory match){
+		//previously all we processed was credit cards of which there is a new processCreditCard method
 	}
 	
 	

@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -19,6 +21,7 @@ public class PnrData implements Serializable {
 	@GeneratedValue
 	private long id;
 	@OneToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
+	@Fetch(FetchMode.SELECT)
 	private Reservation reservation;
 	private String recordLocator;
 	private String airline;

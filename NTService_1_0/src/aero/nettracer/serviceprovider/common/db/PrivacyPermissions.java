@@ -76,7 +76,16 @@ public class PrivacyPermissions implements Serializable{
 	boolean incdate;
 	boolean incremarks;
 	
+	int retention;
 
+
+	public int getRetention() {
+		return retention;
+	}
+
+	public void setRetention(int retention) {
+		this.retention = retention;
+	}
 
 	public boolean isTicketamount() {
 		return ticketamount;

@@ -3,11 +3,14 @@ package aero.nettracer.fs.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -27,17 +30,21 @@ public class Phone implements Serializable {
 
 	// @OneToOne(targetEntity = aero.nettracer.fs.model.Incident.class)
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
+	@Fetch(FetchMode.SELECT)
 	private FsIncident incident;
 
 	private boolean whiteListed;
 
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
+	@Fetch(FetchMode.SELECT)
 	private Reservation reservation;
 
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Person.class)
+	@Fetch(FetchMode.SELECT)
 	private Person person;
 	
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsReceipt.class)
+	@Fetch(FetchMode.SELECT)
 	private FsReceipt receipt;
 	
 	private String phoneNumber;

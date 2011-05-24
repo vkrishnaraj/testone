@@ -4,6 +4,8 @@ public class GeoLocation {
 	double latitude;
 	double longitude;
 	int type;
+	GeoParsedAddress address;
+
 
 	public GeoLocation(double longitude, double latitude, int type) {
 		this.longitude = longitude;
@@ -34,5 +36,14 @@ public class GeoLocation {
 	public void setType(int type) {
 		this.type = type;
 	}
+	
+	public GeoParsedAddress getAddress() {
+		return address;
+	}
+
+	public void setAddress(GeoParsedAddress address) {
+		this.address = address;
+	}
+
 
 }

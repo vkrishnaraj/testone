@@ -44,6 +44,7 @@ public class PrivacyPermissionsAction extends Action{
 			request.setAttribute("components", Arrays.asList(theForm.getComponentList()));
 			PrivacyPermissions def = null;
 			PrivacyPermissions req = null;
+			int retention = 0;
 			try{
 				def = PrivacyPermissionsUtil.getPrivacyPermissions(user.getCompanycode_ID(), PrivacyPermissions.AccessLevelType.def);
 			    req = PrivacyPermissionsUtil.getPrivacyPermissions(user.getCompanycode_ID(), PrivacyPermissions.AccessLevelType.req);
@@ -58,6 +59,8 @@ public class PrivacyPermissionsAction extends Action{
 				System.out.println("def is null");
 				def = new PrivacyPermissions();
 				def.setKey(new PrivacyPermissionsKey(user.getCompanycode_ID(), PrivacyPermissions.AccessLevelType.def));
+			} else {
+				retention = def.getRetention();
 			}
 			if(req == null){
 				System.out.println("req is null");
@@ -67,6 +70,7 @@ public class PrivacyPermissionsAction extends Action{
 			
 			theForm.setDef(def);
 			theForm.setReq(req);
+			theForm.setRetention(retention);
 			request.setAttribute("privacyPermissionsForm", theForm);
 			return mapping.findForward(TracingConstants.VIEW_PRIVACY_PERMISSIONS);
 		}
@@ -74,8 +78,41 @@ public class PrivacyPermissionsAction extends Action{
 		if(request.getParameter("save") != null){
 			boolean success = true;
 			if(theForm.getDef()!=null && theForm.getReq() != null){
-				PrivacyPermissionsUtil.setPrivacyPermissions(theForm.getDef());
-				PrivacyPermissionsUtil.setPrivacyPermissions(theForm.getReq());
+				//Def permission is automatically applied to Req
+				PrivacyPermissions def = theForm.getDef();
+				PrivacyPermissions req = theForm.getReq();
+				if(def.isAddress())req.setAddress(true);
+				if(def.isAmountclaimed())req.setAmountclaimed(true);
+				if(def.isAmountpaid())req.setAmountpaid(true);
+				if(def.isBag())req.setBag(true);
+				if(def.isBdo())req.setBdo(true);
+				if(def.isCc())req.setCc(true);
+				if(def.isClaimdate())req.setClaimdate(true);
+				if(def.isClaimtype())req.setClaimtype(true);
+				if(def.isDenialreason())req.setDenialreason(true);
+				if(def.isDenied())req.setDenied(true);
+				if(def.isDob())req.setDob(true);
+				if(def.isDrivers())req.setDrivers(true);
+				if(def.isEmail())req.setEmail(true);
+				if(def.isFfn())req.setFfn(true);
+				if(def.isFraudstatus())req.setFraudstatus(true);
+				if(def.isIncdate())req.setIncdate(true);
+				if(def.isIncremarks())req.setIncremarks(true);
+				if(def.isItin())req.setItin(true);
+				if(def.isName())req.setName(true);
+				if(def.isPassport())req.setPassport(true);
+				if(def.isPhonenumber())req.setPhonenumber(true);
+				if(def.isPnrdata())req.setPnrdata(true);
+				if(def.isPnrloc())req.setPnrloc(true);
+				if(def.isSsn())req.setSsn(true);
+				if(def.isTicketamount())req.setTicketamount(true);
+				if(def.isTraveldate())req.setTraveldate(true);
+				
+				def.setRetention(theForm.getRetention());
+				req.setRetention(theForm.getRetention());
+				
+				PrivacyPermissionsUtil.setPrivacyPermissions(def);
+				PrivacyPermissionsUtil.setPrivacyPermissions(req);
 			} else {
 				success = false;
 			}

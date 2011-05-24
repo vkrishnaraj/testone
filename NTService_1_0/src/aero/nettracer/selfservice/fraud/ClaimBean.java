@@ -16,6 +16,7 @@ import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
+import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.PnrData;
@@ -31,6 +32,7 @@ import aero.nettracer.fs.model.messaging.FsMessage;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.GeoLocation;
 import aero.nettracer.fs.utilities.InternationalException;
+import aero.nettracer.fs.utilities.WhiteListUtil;
 import aero.nettracer.fs.utilities.tracing.Producer;
 import aero.nettracer.fs.utilities.tracing.TraceWrapper;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
@@ -159,8 +161,18 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			claim.setClaimants(resetPersonId(claim.getClaimants()));
 			claim.setSegments(resetSegmentId(claim.getSegments()));
 			claim.setBlacklist(resetBlackListId(claim.getBlacklist()));
+			claim.setReceipts(resetReceiptId(claim.getReceipts()));
 		}
 		return claim;
+	}
+
+	private static Set<FsReceipt> resetReceiptId(Set<FsReceipt> receipts) {
+		if(receipts != null){
+			for(FsReceipt receipt:receipts){
+				receipt.setId(0);
+			}
+		}
+		return receipts;
 	}
 
 	public static FsIncident resetIncident(FsIncident inc) {
@@ -248,7 +260,14 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		if (phones != null) {
 			for (Phone phone : phones) {
 				phone.setId(0);
+				if(phone.getReceipt() != null){
+					phone.getReceipt().setId(0);
+				}
+				
 				phone.setPhoneNumber(aero.nettracer.fs.utilities.Util.removeNonNumeric(phone.getPhoneNumber()));
+				if(WhiteListUtil.isPhoneWhiteListed(phone.getPhoneNumber())){
+					phone.setWhiteListed(true);
+				}
 			}
 		}
 		return phones;
@@ -257,30 +276,36 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public static Set<FsAddress> resetAddressIdAndGeocode(Set<FsAddress> addresses) {
 		if (addresses != null) {
 			for (FsAddress address : addresses) {
-
-				if(address.getId() != 0 || address.getGeocodeType() == 0){
-				address.setId(0);
-				// GEOCODING ALL ADDRESSES POSSIBLE ON SAVE
-				// Note: Because this is not persisted to the client,
-				// it must happen every time.
-				try {
-					GeoLocation loc = null;
-					loc = GeoCode.locate(address.getAddress1().replaceAll("[\\.#\"><%!@$%^&*()_+-/]", " "),
-							address.getCity(), address.getState(), address.getZip(), address.getProvince(),
-							address.getCountry(), null);
-
-					if (loc != null) {
-
-						address.setGeocodeType(loc.getType());
-						address.setLattitude(loc.getLatitude());
-						address.setLongitude(loc.getLongitude());
-					}
-				} catch (InternationalException e) {
-					// Ignore; not pertinent at this time.
-				} catch (Exception e) {
-					// Log error only
-					e.printStackTrace();
+				if(address.getReceipt() != null){
+					address.getReceipt().setId(0);
 				}
+				if(address.getId() != 0 || address.getGeocodeType() == 0){
+					address.setId(0);
+					if(WhiteListUtil.isAddressWhiteListed(address)){
+						address.setWhiteListed(true);
+					}
+
+					// GEOCODING ALL ADDRESSES POSSIBLE ON SAVE
+					// Note: Because this is not persisted to the client,
+					// it must happen every time.
+					try {
+						GeoLocation loc = null;
+						loc = GeoCode.locate(address.getAddress1().replaceAll("[\\.#\"><%!@$%^&*()_+-/]", " "),
+								address.getCity(), address.getState(), address.getZip(), address.getProvince(),
+								address.getCountry(), null);
+
+						if (loc != null) {
+
+							address.setGeocodeType(loc.getType());
+							address.setLattitude(loc.getLatitude());
+							address.setLongitude(loc.getLongitude());
+						}
+					} catch (InternationalException e) {
+						// Ignore; not pertinent at this time.
+					} catch (Exception e) {
+						// Log error only
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -378,17 +403,32 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 //		if(hasRequest(fileId, requestingAirline)){
 //			return;
 //		}
+		
 		Session sess = HibernateWrapper.getSession().openSession();
 
 		AccessRequest request = new AccessRequest();
 		File file = (File) sess.load(File.class, fileId);
 		MatchHistory mh = (MatchHistory) sess.load(MatchHistory.class, matchHistory);
+		
+		boolean autosend = false;
+		if(file.getMatchedAirline() != null){
+			PrivacyPermissionsBean bean = new PrivacyPermissionsBean();
+			PrivacyPermissions permissions = bean.getPrivacyPermissions(file.getMatchedAirline(), AccessLevelType.req);
+			if(permissions.isAutosend()){
+				autosend = true;
+			}
+		}
+		
 		request.setFile(file);
 		request.setMatchHistory(mh);
 		request.setRequestedAgent(agent);
 		request.setRequestedDate(DateUtils.convertToGMTDate(new Date()));
 		request.setRequestedAirline(requestingAirline);
-		request.setStatus(RequestStatus.Created);
+		if(autosend){
+			request.setStatus(RequestStatus.Approved);
+		} else {
+			request.setStatus(RequestStatus.Created);
+		}
 		if (message != null && message.trim().length() > 0) {
 			FsMessage m = new FsMessage();
 			m.setSenderName(agent);

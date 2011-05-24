@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -34,14 +36,17 @@ public class FsReceipt implements Serializable {
 	private int ccExpYear;
 	
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
+	@Fetch(FetchMode.SELECT)
 	private FsClaim claim;
 	
 	@OneToOne(mappedBy = "receipt", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@Fetch(FetchMode.SELECT)
 	private FsAddress address;
 	
 	@OneToOne(mappedBy = "receipt", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@Fetch(FetchMode.SELECT)
 	private Phone phone;
 
 	public long getId() {

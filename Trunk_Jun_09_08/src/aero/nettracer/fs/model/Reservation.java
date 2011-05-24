@@ -61,7 +61,7 @@ public class Reservation implements Serializable {
 	private double ticketAmount;
 	private int itinComplexity;
 	private int tripLength;
-	@OneToOne(targetEntity = aero.nettracer.fs.model.PnrData.class, cascade = CascadeType.ALL, mappedBy = "reservation")
+	@OneToOne(targetEntity = aero.nettracer.fs.model.PnrData.class, cascade = CascadeType.ALL, mappedBy = "reservation", fetch = FetchType.EAGER)
 	private PnrData pnrData;
 
 	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

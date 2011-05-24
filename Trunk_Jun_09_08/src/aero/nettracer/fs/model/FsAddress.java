@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -20,12 +22,15 @@ public class FsAddress implements Serializable {
 	private long id;
 
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Person.class)
+	@Fetch(FetchMode.SELECT)
 	private Person person;
 
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
+	@Fetch(FetchMode.SELECT)
 	private Reservation reservation;
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsReceipt.class)
+	@Fetch(FetchMode.SELECT)
 	private FsReceipt receipt;
 	
 	private String address1;
@@ -38,6 +43,8 @@ public class FsAddress implements Serializable {
 	private double lattitude;
 	private double longitude;
 	private int geocodeType;
+	private boolean whiteListed;
+	private String normAddress;
 
 	public int getGeocodeType() {
 		return geocodeType;
@@ -149,6 +156,22 @@ public class FsAddress implements Serializable {
 
 	public void setReceipt(FsReceipt receipt) {
 		this.receipt = receipt;
+	}
+
+	public void setWhiteListed(boolean whiteListed) {
+		this.whiteListed = whiteListed;
+	}
+
+	public boolean isWhiteListed() {
+		return whiteListed;
+	}
+
+	public void setNormAddress(String normAddress) {
+		this.normAddress = normAddress;
+	}
+
+	public String getNormAddress() {
+		return normAddress;
 	}
 
 }

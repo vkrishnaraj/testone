@@ -19,19 +19,48 @@
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-    
   
-  <html:form action="privacypermissions.do?save=1">
+  <script type="text/javascript">
+  function validate(){
+	  alert(document.forms[0].retention);
+	  alert(retention);
+	  
+		if(document.forms[0].retention.value > 0){
+			return true;
+		} else {
+			alert("Title is required");
+			return false;
+		}
+	}
+  </script>
+    
+  <!-- onsumbit="if(retention<1){alert('Retention must be at least one(1) year')};" -->
+  
+  <html:form action="privacypermissions.do?save=1" >
   
    <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       <td id="middlecolumn">
         <div id="maincontent">
+       <!-- 
+       <h1>
+    		Retention Policy
+       </h1>
+       <table class="form2">
+       	<tr>
+       	<td>
+       		Data retention length (years):
+       	</td>
+       	<td>
+       	</td>
+       	</tr>
+       </table>
+       -->
         <h1 class="green">
           <bean:message key="privacypermissions.header" />
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
         </h1>
-        	<table class="form2">
+
         		<logic:present name="success" scope="request">
         			<logic:equal name="success" scope="request" value="1">
         			<center>Update Successful</center>
@@ -40,6 +69,17 @@
         			<center>Update Failed</center>
         			</logic:equal>
         		</logic:present>
+
+		<table class="form2">
+			<tr>
+				<td>Data retention length (years):
+				<html:text name="privacyPermissionsForm" property="retention"
+					size="2" maxlength="2" styleClass="textfield" styleId="retention" /></td>
+			</tr>
+		</table>
+
+		<table class="form2">
+
         	
         		<tr>
         			<td>
@@ -59,16 +99,20 @@
         			String defProperty = "def." + label;
         			String reqProperty = "req." + label;
         			String messageKey = "privacypermission.label." + label;
+        			String defId = "def" + label;
+        			String reqId = "req" + label;
+        			String checkReq = reqId + ".checked = true;";
+        			
         		%>
         		<tr>
         			<td>
         				<bean:message key="<%=messageKey%>"/>
         			</td>
         			<td>
-        			<html:checkbox  styleId='<%=defProperty %>' name='privacyPermissionsForm' property="<%=defProperty %>" />
+        			<html:checkbox  styleId='<%=defId %>' name='privacyPermissionsForm' property="<%=defProperty %>" onclick='<%=checkReq %>'/>
         			</td>
         			<td>
-        			<html:checkbox  styleId='<%=reqProperty %>' name='privacyPermissionsForm' property="<%=reqProperty %>" />
+        			<html:checkbox  styleId='<%=reqId %>' name='privacyPermissionsForm' property="<%=reqProperty %>" />
         			</td>
         		</tr>
         		<%}%>
@@ -77,7 +121,7 @@
             <td colspan="3" align="center">
               <INPUT Id="button" type="button" value="Back" onClick="history.back()">
               &nbsp;
-              <html:submit property="save" styleId="button">
+              <html:submit property="save" styleId="button" onclick="if(retention.value <= 0)alert('Retention must be at least one(1) year');">
                 <bean:message key="button.save" />
               </html:submit>
             </td>

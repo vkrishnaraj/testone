@@ -52,4 +52,13 @@ public class PrivacyPermissionsForm extends ValidatorForm {
 
 	PrivacyPermissions def;
 	PrivacyPermissions req;
+	int retention;
+
+
+	public int getRetention() {
+		return retention;
+	}
+	public void setRetention(int retention) {
+		this.retention = retention;
+	}
 }

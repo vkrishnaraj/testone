@@ -97,7 +97,7 @@ public class GeoCode {
 		if (returnMe == null) { // No Loc for zip either, guess we try city.
 			returnMe = lookupCity(city, state, sess);
 		}
-
+		returnMe.setAddress(parsed);
 		return returnMe;
 	}
 
@@ -281,7 +281,7 @@ public class GeoCode {
 		}
 	}
 
-	private static GeoParsedAddress parse(String address, String city,
+	public static GeoParsedAddress parse(String address, String city,
 			String state, String zip) {
 		if ((city == null || state == null) && zip == null) {
 			return null;
