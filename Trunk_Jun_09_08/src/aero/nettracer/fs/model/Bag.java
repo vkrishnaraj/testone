@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -19,6 +21,7 @@ public class Bag implements Serializable {
 	private long id;
 
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
+	@Fetch(FetchMode.SELECT)
 	private FsIncident incident;
 	private String bagType;
 	private String bagColor;
