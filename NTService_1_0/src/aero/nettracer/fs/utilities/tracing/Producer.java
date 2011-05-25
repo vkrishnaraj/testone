@@ -40,7 +40,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 public class Producer {
 
 	private static final String ACCESS_NOT_GRANTED = "*** Access not Granted ***";
-	private static boolean debug = false;
+	private static boolean debug = true;
 	private static final int MAX_WAIT = 40;
 	public static final double MILE_SEARCH_RADIUS = 2;
 	private static final long WAIT_TIME = 250;
@@ -550,6 +550,8 @@ public class Producer {
 		q = sess.createQuery(personSql.toString());
 		q.setParameter("id", fileId);
 		List <MatchHistory>result = q.list();
+		if(debug)System.out.println(personSql);
+		if(debug)System.out.println("MatchResult for fileId: " + fileId);
 		sess.close();
 		for(MatchHistory match:result){
 			if(debug)System.out.println("Match: " + match.getId() + "  " + match.getOverallScore());
