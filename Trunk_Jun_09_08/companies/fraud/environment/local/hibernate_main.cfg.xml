@@ -252,6 +252,7 @@
 		
 		<mapping class="com.bagnet.nettracer.tracing.db.Incident"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.OnlineIncidentAuthorization"/>
+		<mapping class="aero.nettracer.fs.model.FsReceipt"/>
     </session-factory>
 
 </hibernate-configuration>

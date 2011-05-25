@@ -142,10 +142,14 @@ public class Producer {
 		file.setPersonCache(persons);
 		if(persons != null) for (Person person : persons) {
 			
-			if(person.getFirstName() != null && person.getFirstName().trim().length() > 0 && person.getLastName() != null && person.getLastName().trim().length()>0){
+			if(person.getFirstNameSoundex() != null && person.getLastNameSoundex() != null
+					&& person.getFirstNameSoundex().length() > 0  && person.getLastNameSoundex().length() > 0){
 			sql += " or (lastNameSoundex = \'"+ person.getLastNameSoundex() + "\'"
 				+ " and firstNameSoundex = \'" + person.getFirstNameSoundex() + "\')";
+			}
 			
+			if(person.getFirstNameDmp() != null && person.getLastNameDmp() != null
+					&& person.getFirstNameDmp().length() > 0 && person.getLastNameDmp().length() > 0){
 			sql += " or (lastNameDmp = \'"+ person.getLastNameDmp() + "\'"
 			+ " and firstNameDmp = \'" + person.getFirstNameDmp() + "\')";
 			}

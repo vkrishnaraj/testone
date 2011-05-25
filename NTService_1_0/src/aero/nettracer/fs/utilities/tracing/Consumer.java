@@ -593,11 +593,12 @@ public class Consumer implements Runnable{
 			String tas1 = getStringVersionOfAddress(a1);
 			for(FsAddress a2:plist2){
 				String tas2 = tas1 + "/" + getStringVersionOfAddress(a2);
-				if (addressHashSet.contains(tas2)) {
+				if (addressHashSet.contains(tas2) || a1.getAddress1() == null) {
 					continue;
 				} else {
 					addressHashSet.add(tas2);
 				}
+				
 				
 				
 				
@@ -890,15 +891,18 @@ public class Consumer implements Runnable{
 						&& p1.getLastName() != null && p1.getLastName().trim().length() > 0 && p2.getFirstName() != null && p2.getLastName() != null){
 					
 					String content1 = "";
+					Person parent = null;
 					if(p1.getParent() != null){
 						content1 = p1.getParent().getFirstName().trim() + " " + p1.getParent().getLastName().trim();
+						parent = p1.getParent();
 					} else {
 						content1 = p1.getFirstName().trim() + " " + p1.getLastName().trim();
+						parent = p1;
 					}
 					String content2 = p2.getFirstName().trim() + " " + p2.getLastName().trim();
 					String comparator = p1.getFirstName().trim() + " " + p1.getLastName().trim() + "/" + content2;
 					comparator = comparator.toUpperCase();
-					if (!nameHashSet.contains(comparator)) {
+					if (!nameHashSet.contains(comparator) && !parentPerson.contains(parent)) {
 						nameHashSet.add(comparator);
 
 						if (p1.getFirstName().equalsIgnoreCase(p2.getFirstName())
@@ -927,7 +931,9 @@ public class Consumer implements Runnable{
 //							System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
 							boolean matchedName = false;
 							if (p1.getFirstNameSoundex() != null && p2.getFirstNameSoundex() != null
+									&& p1.getFirstNameSoundex().length() > 0 
 									&& p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex())
+									&& p1.getLastNameSoundex().length() > 0 
 									&& p1.getLastNameSoundex().equals(p2.getLastNameSoundex())) {
 								matchedName = true;
 								MatchDetail detail = new MatchDetail();
@@ -947,6 +953,7 @@ public class Consumer implements Runnable{
 								details.add(detail);
 							}
 							if (p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null
+									&& p1.getFirstNameDmp().length() > 0 && p1.getLastNameDmp().length() > 0
 									&& p1.getFirstNameDmp().equals(p2.getFirstNameDmp())
 									&& p1.getLastNameDmp().equals(p2.getLastNameDmp())) {
 								matchedName = true;
