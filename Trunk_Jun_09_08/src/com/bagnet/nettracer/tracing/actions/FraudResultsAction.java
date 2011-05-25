@@ -192,7 +192,6 @@ public class FraudResultsAction extends CheckedAction {
 		matches.addAll(form.getPrimaryResults());
 		matches.addAll(form.getSecondaryResults());
 		ArrayList<MatchHistory> toReturn = new ArrayList<MatchHistory>();
-		long originalId = form.getClaimId();
 		
 		for (MatchHistory m: matches) {
 			if (m.isSelected()) {
