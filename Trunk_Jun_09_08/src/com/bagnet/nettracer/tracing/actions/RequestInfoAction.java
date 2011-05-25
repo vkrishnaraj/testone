@@ -42,11 +42,17 @@ public class RequestInfoAction extends CheckedAction {
 
 		if (request.getParameter("send") != null) {
 			sendRequests(requestForm, user);
+			
 			String claimId = (String) request.getAttribute("claimId");
 			if (claimId == null) {
 				claimId = requestForm.getOriginalClaimId();
 			}
-			response.sendRedirect("claim_resolution.do?claimId=" + claimId);
+			String incidentId = (String) request.getParameter("incident");
+			if (claimId != null) {
+				response.sendRedirect("claim_resolution.do?claimId=" + claimId);
+			} else if (incidentId != null){
+				response.sendRedirect("claim_resolution.do?incident=" + incidentId);				
+			}
 			return null;
 		}
 		

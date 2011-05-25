@@ -130,7 +130,11 @@ public class FraudResultsAction extends CheckedAction {
 			requestList.removeAll(toRemove);
 			if (requestList.size() != 0) {
 				session.setAttribute("requestList", requestList);
+				if(claim != null){
 				response.sendRedirect("request_info.do?claimId=" + claim.getId());
+				} else if(incidentIdString != null){
+					response.sendRedirect("request_info.do?incident=" + incidentIdString);
+				}
 				return null;
 			}
 		} else if (request.getParameter("delete") != null) {
