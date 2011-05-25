@@ -56,7 +56,8 @@
                 </h1></td>
               </tr>
               <tr>
-                <td id="printreceipt">&nbsp;<br>
+                <td id="printreceipt">
+                	<br>
 	                <a href='#'
 		              	onclick="openReportWindow('searchIncident.do?receipt=1&toprint=<%= reportType %>&incident=<bean:write name="Incident_ID" scope="request" />&new=1','<%= receiptType %>',800,600);return false;">
 		              		<img src="deployment/main/images/nettracer/icon_printrecpt.gif" width="12" height="12">
@@ -64,15 +65,17 @@
            			<a href='#'
           				onclick="openReportWindow('searchIncident.do?receipt=1&toprint=<%= reportType %>&incident=<bean:write name="Incident_ID" scope="request" />&new=1','<%= receiptType %>',800,600);return false;">
           				Print Receipt
-          			</a>&nbsp;
+          			</a>
+          			<br>
+          			<br>
       			</td>
               </tr>
               <% if (ntfsUser) { %>
               <tr class="<%=request.getAttribute("fraudStatus") %>">
               	<td>
-              		<br>
-              	  <a href='fraud_results.do?incident=<bean:write name="Incident_ID" scope="request"/>'><bean:message key="insert.success.match.results"/>:&nbsp;<bean:write name="Incident_ID" scope="request"/></a>
-              	  <br>
+              		<h2 id="fraudlink">
+           	  		<a href='fraud_results.do?incident=<bean:write name="Incident_ID" scope="request"/>'><bean:message key="insert.success.match.results"/></a>
+              		</h2>
               	</td>
               </tr>
               <% } %>
