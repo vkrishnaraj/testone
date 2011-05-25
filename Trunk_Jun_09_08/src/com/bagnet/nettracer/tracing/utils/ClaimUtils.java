@@ -546,8 +546,8 @@ public class ClaimUtils {
 							try {
 								pd.add2 = adds[0];
 								pd.city = adds[1];
-								pd.state = adds[3];
-								pd.zip = adds[4];
+								pd.state = adds[2];
+								pd.zip = adds[3];
 							} catch (Exception ex) {
 
 							}
