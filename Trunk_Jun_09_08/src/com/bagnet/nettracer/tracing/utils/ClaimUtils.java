@@ -26,11 +26,13 @@ import aero.nettracer.fs.model.PnrData;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
 
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Claim;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -76,13 +78,17 @@ public class ClaimUtils {
 	
 	public static Claim createClaim(Agent user, Incident ntIncident) {
 		
+		Company company = CompanyBMO.getCompany(user.getCompanycode_ID());
+		
 		// create the claim
 		Claim claim = new Claim();
 		claim.setClaimDate(new Date());
 		claim.setAirline(user.getCompanycode_ID());
+		claim.setAmountClaimedCurrency(user.getDefaultcurrency());
 		
 		// create the person
 		Person person = new Person();
+		person.setPassportIssuer(company.getCountrycode_ID());
 		
 		// create the claim status
 		Status status = new Status();
@@ -92,6 +98,7 @@ public class ClaimUtils {
 		// create the address
 		FsAddress address = new FsAddress();
 		address.setPerson(person);
+		address.setCountry(company.getCountrycode_ID());
 		LinkedHashSet<FsAddress> addresses = new LinkedHashSet<FsAddress>();
 		addresses.add(address);
 		
@@ -123,6 +130,9 @@ public class ClaimUtils {
 			ntIncident.setClaim(claim);
 			claimants.clear();
 			person = claim.getIncident().getPassengers().toArray(new Person[0])[0];
+			if (person.getPassportIssuer() == null || person.getPassportIssuer().isEmpty()) {
+				person.setPassportIssuer(company.getCountrycode_ID());
+			}
 			person.setClaim(claim);
 			claimants.add(person);
 			getExpensePayoutData(ntIncident, claim, user);
@@ -150,12 +160,14 @@ public class ClaimUtils {
 	}
 	
 	private static FsIncident createFsIncident(Agent user) {
+		Company company = CompanyBMO.getCompany(user.getCompanycode_ID());
 		FsIncident fsIncident = new FsIncident();
 		fsIncident.setAirline(user.getCompanycode_ID());
 		
 		// create the purchaser
 		Person purchaser = new Person();
 		FsAddress pAddress = new FsAddress();
+		pAddress.setCountry(company.getCountrycode_ID());
 		pAddress.setPerson(purchaser);
 		LinkedHashSet<FsAddress> pAddresses = new LinkedHashSet<FsAddress>();
 		pAddresses.add(pAddress);
@@ -397,6 +409,9 @@ public class ClaimUtils {
 		double amount = 0;
 		double amountPaid = 0;
 		String currency = user.getDefaultcurrency();
+		if (currency == null || currency.isEmpty()) {
+			currency = user.getDefaultcurrency();
+		}
 		if (incident.getExpenselist() != null) {
 			for (ExpensePayout ep : incident.getExpenselist()) {
 				if (ep != null && !ep.getPaycode().equals("DEL")) {

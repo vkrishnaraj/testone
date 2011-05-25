@@ -11,7 +11,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.naming.Context;
-import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -35,6 +34,7 @@ import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
@@ -42,6 +42,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
@@ -210,7 +211,7 @@ public class ModifyClaimAction extends CheckedAction {
 		deleteAssociatedItems(claim, request);
 		
 		// add new items
-		addAssociatedItems(claim, request);
+		addAssociatedItems(claim, request, user);
 		
 		if (request.getParameter("addNames") == null) {
 			request.removeAttribute("addNames");
@@ -452,9 +453,9 @@ public class ModifyClaimAction extends CheckedAction {
 		deleteAssociatedElements(new ArrayList(claim.getReceipts()), claim.getReceipts(), TracingConstants.JSP_DELETE_ASSOCIATED_RECEIPT, request);	
 	}
 	
-	private void addAssociatedItems(FsClaim claim, HttpServletRequest request) {
+	private void addAssociatedItems(FsClaim claim, HttpServletRequest request, Agent user) {
 		addAssociatedNames(claim, request);
-		addAssociatedReceipts(claim, request);
+		addAssociatedReceipts(claim, request, user);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -491,12 +492,13 @@ public class ModifyClaimAction extends CheckedAction {
 		}
 	}
 	
-	private void addAssociatedReceipts(FsClaim claim, HttpServletRequest request) {
+	private void addAssociatedReceipts(FsClaim claim, HttpServletRequest request, Agent user) {
 		if (request.getParameter("addReceipts") != null) {
 			try {
+				String country = CompanyBMO.getCompany(user.getCompanycode_ID()).getCountrycode_ID();
 				int numToAdd = Integer.parseInt(request.getParameter("addReceiptNum"));
 				for (int i = 0; i < numToAdd; ++i) {
-					FsReceipt r = createReceipt();
+					FsReceipt r = createReceipt(country);
 					r.setClaim(claim);
 					claim.getReceipts().add(r);
 				}
@@ -518,11 +520,12 @@ public class ModifyClaimAction extends CheckedAction {
 		}
 	}
 	
-	private FsReceipt createReceipt() {
+	private FsReceipt createReceipt(String country) {
 		FsReceipt receipt = new FsReceipt();
 		receipt.setCcType("");
 		
 		FsAddress address = new FsAddress();
+		address.setCountry(country);
 		address.setReceipt(receipt);
 		receipt.setAddress(address);
 		

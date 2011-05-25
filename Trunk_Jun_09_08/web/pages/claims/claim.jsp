@@ -602,7 +602,7 @@
 					                  <html:text name="receipt" property="address.city" size="15" maxlength="50" styleClass="textfield" />
 					                </td>
 					                <td>
-					                  <bean:message key="colname.state.req" />
+					                  <bean:message key="colname.state" />
 					                  <br />
 					                  <logic:equal name="receipt" property="address.country" value="US">
 					                    <html:select name="receipt" property="address.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
@@ -647,7 +647,7 @@
 					                      </logic:notEqual>
 					                </td>
 					                <td>
-					                  <bean:message key="colname.zip.req" />
+					                  <bean:message key="colname.zip" />
 					                  <br>
 					                  <html:text name="receipt" property="address.zip" size="15" maxlength="11" styleClass="textfield" />
 					                </td>
@@ -671,7 +671,7 @@
 								  	<td>
 								  		<bean:message key="claim.colname.cc_type" />
 								  		<br />
-										<select name="receipt[<%=i %>].ccType" >
+										<select name="receipt[<%=i %>].ccType" class="dropdown" >
 											<option><bean:message key="claim.cc.please.select" /></option>
 											<option value="VI" <% if (receipt.getCcType().equals("VI")) { %>selected<% };%>>Visa</option>	
 											<option value="CA" <% if (receipt.getCcType().equals("CA")) { %>selected<% };%>>Mastercard</option>	
@@ -688,7 +688,7 @@
 									<td >
 										<bean:message key="claim.colname.cc_expdate" />
 										<br/>
-								  		<select name="receipt[<%=i %>].ccExpMonth" >
+								  		<select name="receipt[<%=i %>].ccExpMonth" class="dropdown" >
 								  			<% 
 								  				ArrayList<Integer> months = DateUtils.getCcMonths();
 								  				for (int j = 0; j < months.size(); ++j) { %>
@@ -696,7 +696,7 @@
 								  			<%	} %>
 								  		</select>
 										&nbsp;/&nbsp;
-								  		<select name="receipt[<%=i %>].ccExpYear">
+								  		<select name="receipt[<%=i %>].ccExpYear" class="dropdown" >
 								  			<% 
 								  				ArrayList<Integer> years = DateUtils.getCcYears();
 								  				for (int j = 0; j < years.size(); ++j) { %>
@@ -900,7 +900,7 @@
                       </logic:notEqual>
                 </td>
                 <td>
-                  <bean:message key="colname.zip.req" />
+                  <bean:message key="colname.zip" />
                   <br>
                   <html:text name="claimForm" property="claim.incident.reservation.billingAddress.zip" size="15" maxlength="11" styleClass="textfield" />
                 </td>
@@ -927,7 +927,7 @@
 						<td colspan=2>
 							<bean:message key="claim.colname.payment.type" />
 							<br />
-							<html:select property="claim.incident.reservation.formOfPayment" styleClass="dropdown">
+							<html:select property="claim.incident.reservation.formOfPayment" styleClass="dropdown" >
 								<html:option value=""><bean:message key="payment.type.please.select" /></html:option>
 								<html:option value="0"><bean:message key="payment.type.cash" /></html:option>
 								<html:option value="1"><bean:message key="payment.type.check" /></html:option>
@@ -951,7 +951,7 @@
 						<td colspan=2>
 							<bean:message key="claim.colname.cc_type" />
 							<br/>
-							<html:select name="claimForm" property="claim.incident.reservation.ccType" >
+							<html:select name="claimForm" property="claim.incident.reservation.ccType" styleClass="dropdown" >
 								<html:option value="">
 									<bean:message key="claim.cc.please.select" />
 								</html:option>
