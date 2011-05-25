@@ -214,26 +214,31 @@
                             &nbsp;</span></a>
                       </dd>
                       <dd>
-                      <% if ((ntUser && ntfsUser) || ntfsUser) { %>
-                      <logic:notEqual name="claimForm" property="claim.id" value="0">
-                   	<a href='fraud_results.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
-                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
-                        <span class="cc">&nbsp;
-                          <br />
-                          &nbsp;</span></a>
-                      </logic:notEqual>
-                      <logic:equal name="claimForm" property="claim.id" value="0">
-                   <a href='fraud_results.do'><span class="aa">&nbsp;<br />&nbsp;</span>
-                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
-                        <span class="cc">&nbsp;
-                          <br />
-                          &nbsp;</span></a>
-                          </logic:equal>
-                   </dd>
-                   <% } 
-                      
-                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a) && ntUser) {
-%>
+                      <% if ((ntUser && ntfsUser) || ntfsUser) { 
+                      		if (((ClaimForm)session.getAttribute("claimForm")).getClaim().getId() == 0) {
+	                      		if (((ClaimForm)session.getAttribute("claimForm")).getClaim().getNtIncident() != null) { %>
+	                      
+			                   <a href='fraud_results.do?incident=<bean:write name="claimForm" property="claim.ntIncident.incident_ID" />'><span class="aa">&nbsp;<br />&nbsp;</span>
+			                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
+			                        <span class="cc">&nbsp;
+			                          <br />
+			                          &nbsp;</span></a>
+	                      		<% } else { %>
+		                   <a href='fraud_results.do'><span class="aa">&nbsp;<br />&nbsp;</span>
+		                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
+		                        <span class="cc">&nbsp;
+		                          <br />
+		                          &nbsp;</span></a>
+	                   	  		<% } 
+                      		} else { %>
+		                   	<a href='fraud_results.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
+		                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
+	                        <span class="cc">&nbsp;<br />&nbsp;</span></a>
+                      	
+                      		<% } %>
+	                   </dd>
+                      <% }
+                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a) && ntUser) { %>
                         <dd>
                           <a href="claim_prorate.do"><span class="aa">&nbsp;
                               <br />
