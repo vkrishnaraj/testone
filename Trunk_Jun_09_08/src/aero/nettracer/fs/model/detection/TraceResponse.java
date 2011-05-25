@@ -3,6 +3,8 @@ package aero.nettracer.fs.model.detection;
 import java.io.Serializable;
 import java.util.Set;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+
 public class TraceResponse implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private Set<MatchHistory> matchHistory;
@@ -14,6 +16,24 @@ public class TraceResponse implements Serializable {
 	public static final int THREAT_LEVEL_ORANGE = 2;
 	public static final int THREAT_LEVEL_RED = 2;
 
+	public String getDisplayClass() {
+		String toReturn;
+		if (threatLevel == THREAT_LEVEL_GREEN) {
+//			toReturn = "class=\"\"";
+			toReturn = "";
+		} else if (threatLevel == THREAT_LEVEL_YELLOW) {
+			toReturn = "class=\"suspected_fraud\"";
+		} else if (threatLevel == THREAT_LEVEL_ORANGE) {
+			toReturn = "class=\"suspected_fraud\"";
+		} else if (threatLevel == THREAT_LEVEL_RED) {
+			toReturn = "class=\"known_fraud\"";
+		
+		} else {
+			toReturn = "";
+		}
+		return toReturn;	
+	}
+	
 	public Set<MetaWarning> getMetaWarning() {
 		return metaWarning;
 	}

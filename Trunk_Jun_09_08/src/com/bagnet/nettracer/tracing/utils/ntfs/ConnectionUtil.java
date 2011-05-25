@@ -92,6 +92,7 @@ public class ConnectionUtil {
 				TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, true);
 				if (results != null) {
 					request.getSession().setAttribute("results", results.getMatchHistory());
+					request.getSession().setAttribute("traceResponse", results);
 					String status = "no_fraud";
 					for (MatchHistory m: results.getMatchHistory()) {
 						if (m.getFile2().getStatusId() == TracingConstants.STATUS_SUSPECTED_FRAUD) {
