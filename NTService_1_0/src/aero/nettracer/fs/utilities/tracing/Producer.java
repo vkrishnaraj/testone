@@ -418,17 +418,22 @@ public class Producer {
 	
 
 	public static void analyzeFile(File file, TraceResponse tr, Set<FsAddress> addresses) {
-		HashSet<MetaWarning> metaWarnings = new HashSet<MetaWarning>();
+		LinkedHashSet<MetaWarning> metaWarnings = new LinkedHashSet<MetaWarning>();
 		tr.setMetaWarning(metaWarnings);
 		
 		int threatLevel = 0;
+
 		
-		int response = analyzeForGreyListMatch(tr, addresses, metaWarnings);
-		if (threatLevel < response) {
-			threatLevel = response;
+		if (tr.getMatchHistory().size() > 0) {
+			MetaWarning warn = new MetaWarning();
+			metaWarnings.add(warn);
+			warn.setDescription("Total Match Results: " + tr.getMatchHistory().size());
+			warn.setThreatLevel(TraceResponse.THREAT_LEVEL_UNKNOWN);
+			warn.setPercentageMatch(0);
 		}
-		
-		response = analyzeForKnownOrSuspectedFraud(tr, file);
+
+
+		int response = analyzeForKnownOrSuspectedFraud(tr, file);
 		if (threatLevel == 1) {
 			if (threatLevel < response) {
 				threatLevel += response;
@@ -439,13 +444,19 @@ public class Producer {
 			}
 		}
 		
-		tr.setThreatLevel(Math.max(threatLevel, 3));
+		response = analyzeForGreyListMatch(tr, addresses, metaWarnings);
+		if (threatLevel < response) {
+			threatLevel += response;
+		}
+		
+		tr.setThreatLevel(Math.min(threatLevel, 3));
 		
 	}
 
 	private static int analyzeForKnownOrSuspectedFraud(TraceResponse tr, File file) {
 		int returnValue = 0; 
-		
+		int knownFraudCount = 0 ;
+		int suspectedFraudCount = 0;
 		int count = 0;
 		Set<MatchHistory> mhs = tr.getMatchHistory();
 		for (MatchHistory mh: mhs) {
@@ -457,7 +468,18 @@ public class Producer {
 				// Compare against first file.
 				file2 = mh.getFile1();				
 			}
-			int responseValue = isKnownOrSuspectedFraudMatch(returnValue, file2);
+			
+			
+			int responseValue = 0;
+			if (file2.getStatusId() == 37) { // Suspected Fraud
+				responseValue = 2;
+				++suspectedFraudCount;
+			} else if (file2.getStatusId() == 38) { // Known Fraud
+				responseValue = 3;
+				++knownFraudCount;
+			}
+
+			// END TOOD
 			if (responseValue > 0) {
 				++count;
 			}
@@ -465,18 +487,25 @@ public class Producer {
 				returnValue = responseValue;
 			}
 		}
+		if (knownFraudCount > 0) {
+			MetaWarning warn = new MetaWarning();
+			tr.getMetaWarning().add(warn);
+			warn.setDescription("Total Known Fraud Results: " + knownFraudCount);
+			warn.setThreatLevel(TraceResponse.THREAT_LEVEL_YELLOW);
+			warn.setPercentageMatch(0);
+		}
+		if (suspectedFraudCount > 0){
+			MetaWarning warn = new MetaWarning();
+			tr.getMetaWarning().add(warn);
+			warn.setDescription("Total Suspected Fraud Results: " + suspectedFraudCount);
+			warn.setThreatLevel(TraceResponse.THREAT_LEVEL_RED);
+			warn.setPercentageMatch(0);
+		}
+
 		return returnValue;
 		
 	}
 
-	private static int isKnownOrSuspectedFraudMatch(int returnValue, File file2) {
-		if (file2.getStatusId() == 37) { // Suspected Fraud
-			returnValue = 2;
-		} else if (file2.getStatusId() == 38) { // Known Fraud
-			returnValue = 3;
-		}
-		return returnValue;
-	}
 
 	private static int analyzeForGreyListMatch(TraceResponse tr,
 			Set<FsAddress> addresses, HashSet<MetaWarning> metaWarnings) {
@@ -484,7 +513,7 @@ public class Producer {
 		HashMap<String, GreyListAddress> greyListMap = Util.getGreyListAddressMap();
 		for (FsAddress a: addresses) {
 			String key = a.getLattitude() + "/" + a.getLongitude();
-			if (greyListMap.containsKey(key)) {
+			if (greyListMap.containsKey(key) && a.getGeocodeType() == 1) {
 				GreyListAddress gla = greyListMap.get(key);
 				MetaWarning warn = new MetaWarning();
 				metaWarnings.add(warn);

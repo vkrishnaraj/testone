@@ -14,17 +14,17 @@ public class TraceResponse implements Serializable {
 	public static final int THREAT_LEVEL_UNKNOWN = 0;
 	public static final int THREAT_LEVEL_YELLOW = 1;
 	public static final int THREAT_LEVEL_ORANGE = 2;
-	public static final int THREAT_LEVEL_RED = 2;
+	public static final int THREAT_LEVEL_RED = 3;
 
 	public String getDisplayClass() {
 		String toReturn;
 		if (threatLevel == THREAT_LEVEL_GREEN) {
 //			toReturn = "class=\"\"";
-			toReturn = "";
+			toReturn = "class=\"no_fraud\"";
 		} else if (threatLevel == THREAT_LEVEL_YELLOW) {
 			toReturn = "class=\"suspected_fraud\"";
 		} else if (threatLevel == THREAT_LEVEL_ORANGE) {
-			toReturn = "class=\"suspected_fraud\"";
+			toReturn = "class=\"likely_fraud\"";
 		} else if (threatLevel == THREAT_LEVEL_RED) {
 			toReturn = "class=\"known_fraud\"";
 		

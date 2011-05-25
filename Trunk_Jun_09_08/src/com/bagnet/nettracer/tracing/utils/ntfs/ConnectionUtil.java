@@ -79,36 +79,50 @@ public class ConnectionUtil {
 		}
 	  
 	  public static void createAndSubmitForTracing(Incident iDTO, Agent user, HttpServletRequest request) {
-		  File file = new File();
-		  FsIncident fsIncident = ClaimUtils.getFsIncident(iDTO, user);
-		  fsIncident.setFile(file);
-		  file.setIncident(fsIncident);
-		  FileDAO.saveFile(file);
 		  try {
-			long remoteFileId = ConnectionUtil.insertFile(file);
-			file.setSwapId(remoteFileId);
-			FileDAO.saveFile(file);
-			if (remoteFileId > 0) {
-				TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, true);
-				if (results != null) {
-					request.getSession().setAttribute("results", results.getMatchHistory());
-					request.getSession().setAttribute("traceResponse", results);
-					String status = "no_fraud";
-					for (MatchHistory m: results.getMatchHistory()) {
-						if (m.getFile2().getStatusId() == TracingConstants.STATUS_SUSPECTED_FRAUD) {
-							status = "suspected_fraud";
-						} else if (m.getFile2().getStatusId() == TracingConstants.STATUS_KNOWN_FRAUD) {
-							status = "known_fraud";
-							break;
+			  File file = new File();
+			  FsIncident fsIncident = ClaimUtils.getFsIncident(iDTO, user);
+			  fsIncident.setFile(file);
+			  file.setIncident(fsIncident);
+			  FileDAO.saveFile(file);
+			  try {
+				long remoteFileId = ConnectionUtil.insertFile(file);
+				file.setSwapId(remoteFileId);
+				FileDAO.saveFile(file);
+				if (remoteFileId > 0) {
+					TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, true);
+					if (results != null) {
+						request.getSession().setAttribute("results", results.getMatchHistory());
+						request.getSession().setAttribute("traceResponse", results);
+						String status = "no_fraud";
+						/*
+						String status = "no_fraud";
+						for (MatchHistory m: results.getMatchHistory()) {
+							if (m.getFile2().getStatusId() == TracingConstants.STATUS_SUSPECTED_FRAUD) {
+								status = "suspected_fraud";
+							} else if (m.getFile2().getStatusId() == TracingConstants.STATUS_KNOWN_FRAUD) {
+								status = "known_fraud";
+								break;
+							}
 						}
+						*/
+						if (results.getThreatLevel() == TraceResponse.THREAT_LEVEL_RED) {
+							status = "known_fraud";
+						} else if (results.getThreatLevel() == TraceResponse.THREAT_LEVEL_YELLOW) {
+							status = "suspected_fraud";
+						} else if (results.getThreatLevel() == TraceResponse.THREAT_LEVEL_ORANGE) {
+							status = "suspected_fraud";
+						}
+						request.setAttribute("fraudStatus", status);
 					}
-					request.setAttribute("fraudStatus", status);
-				}
-			} 
-	
-		} catch (NamingException ne) {
-			
-		}
+				} 
+		
+			} catch (NamingException ne) {
+				
+			}
+		  } catch (Exception e) {
+			  e.printStackTrace();
+		  }
 		
 	  }
 	  

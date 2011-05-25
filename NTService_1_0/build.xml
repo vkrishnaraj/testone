@@ -165,8 +165,10 @@
 			<include name="**/**/*.xml" />
 		</jar>
 		
+		<copy file="${dist.dir}/nt_fs.jar" todir="c:/workspace/Trunk/lib/jars"/>
 		
 		<copy file="${root.dir}/lib/claim_model.jar" todir="${dist.dir}"/>
+		
 
 		<ear destfile="${dist.dir}/NTServices_1_0.ear" appxml="${src.dir}/../metadata/application.xml">
 			<fileset dir="${dist.dir}" includes="*.jar,*.war"/>

@@ -6,8 +6,7 @@ import javax.persistence.Id;
 
 import org.hibernate.annotations.Proxy;
 
-@Entity
-@Proxy(lazy = false)
+
 public class CreditCard {
 
 	public String getCcType() {
@@ -56,8 +55,6 @@ public class CreditCard {
 	int ccExpMonth;
 	int ccExpYear;
 
-	@Id
-	@GeneratedValue
 	private long id;
 
 	public long getId() {

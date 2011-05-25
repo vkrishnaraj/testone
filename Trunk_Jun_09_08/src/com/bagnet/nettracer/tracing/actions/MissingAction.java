@@ -56,6 +56,7 @@ import com.bagnet.nettracer.tracing.db.Match;
 import com.bagnet.nettracer.tracing.db.Match_Detail;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
+import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Task;
@@ -65,6 +66,7 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
+import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
@@ -393,6 +395,15 @@ public class MissingAction extends CheckedAction {
 			}
 
 			if (error == null) {
+				
+				if (theform.getOtherSystemInformation() != null && theform.getOtherSystemInformation().trim().length() >0) {
+					// Assumes this is new and that we are saving OSI for first time.
+					OtherSystemInformation osi = new OtherSystemInformation();
+					osi.setIncident(iDTO);
+					osi.setInfo(theform.getOtherSystemInformation());
+					HibernateUtils.save(osi);
+					
+				} 
 				boolean isNew = theform.getIncident_ID() == null || theform.getIncident_ID().trim().length() == 0;
 				if (isNew && PropertyBMO.isTrue("ntfs.user")) {
 					ConnectionUtil.createAndSubmitForTracing(iDTO, user, request);

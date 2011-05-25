@@ -377,3 +377,39 @@ td#printreceipt a:active {
 a img.printreceipt {
 	text-decoration:none;
 }
+
+.no_fraud {
+	margin: 0px;
+	padding: 0px;
+	background-color: #4ba047;
+}
+
+.suspected_fraud {
+	margin:	0px;
+	padding: 0px;
+	background-color: #FEFF82;
+}
+
+.likely_fraud {
+	margin:	0px;
+	padding: 0px;
+	background-color: #e79d63;
+}
+
+
+.known_fraud {
+	margin:	0px;
+	padding: 0px;
+	background-color: #FE8080;
+}
+
+td#printreceipt {
+	margin:10px;
+	padding:0px;	
+}
+
+h2#fraudlink {
+	margin: 10px;
+	padding: 0px;
+	font-size: 1.2em;	
+}

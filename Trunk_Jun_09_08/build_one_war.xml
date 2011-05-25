@@ -480,9 +480,9 @@
 	
 	<target name="aa-build-fraud-and-jetblue-ear" depends="delete-wars">
 		
-		<!--
+		
 		<antcall target="build-fraud-demo"/>
-		-->
+		
 		<antcall target="build-jetblue-fraud"/>
 
 		<property name="app.xml.location" value="metadata/fraud_jetblue" />
@@ -895,6 +895,7 @@
 
 	<target name="donotrun-build-jetblue" if="jetblue.init.complete">
 		<property name="include.b6" value="1" />
+		<property name="include.demo" value="1" />
 		<copy todir="${basedir}/web/pages/login" file="companies/jetblue/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_dirty.cfg.xml" />

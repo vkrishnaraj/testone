@@ -166,7 +166,7 @@
 							<logic:notEmpty name="fraudResultsForm" property="traceResponse.metaWarning">
 								<ul>
 									<logic:iterate id="warning" name="fraudResultsForm" property="traceResponse.metaWarning" type="aero.nettracer.fs.model.detection.MetaWarning">
-										<li><bean:write name="warning" property="description"/></li>
+										<li><bean:write name="warning" property="description" filter="false"/></li>
 									</logic:iterate>
 								</ul>
 							</logic:notEmpty>

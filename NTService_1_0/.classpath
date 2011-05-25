@@ -112,9 +112,9 @@
 	<classpathentry kind="lib" path="providedJars/netty.jar"/>
 	<classpathentry kind="lib" path="providedJars/xercesImpl-2.6.2.jar"/>
 	<classpathentry kind="lib" path="providedJars/xml-apis-1.3.02.jar"/>
-	<classpathentry kind="lib" path="C:/jboss-5.1.0.GA/common/lib/jboss-ejb3-ext-api.jar"/>
 	<classpathentry kind="lib" path="lib/BaggageDeliveryStatusTrackerService.jar"/>
-	<classpathentry kind="lib" path="C:/jboss-5.1.0.GA/client/jbossall-client.jar"/>
 	<classpathentry kind="lib" path="lib/claim_model.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-5.1.0.GA/client/jbossall-client.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-5.1.0.GA/common/lib/jboss-ejb3-ext-api.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
