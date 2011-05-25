@@ -407,7 +407,7 @@ public class DamagedAction extends CheckedAction {
 			
 			if (error == null) {
 				
-				if (PropertyBMO.isTrue("ntfs.user")) {
+				if (isNew && PropertyBMO.isTrue("ntfs.user")) {
 					ConnectionUtil.createAndSubmitForTracing(iDTO, user, request);
 				}
 				

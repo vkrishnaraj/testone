@@ -566,8 +566,8 @@ public class LostDelayAction extends CheckedAction {
 			}
 
 			if(error == null) {
-				
-				if (PropertyBMO.isTrue("ntfs.user")) {
+				boolean isNew = theform.getIncident_ID() == null || theform.getIncident_ID().trim().length() == 0;
+				if (isNew && PropertyBMO.isTrue("ntfs.user")) {
 					ConnectionUtil.createAndSubmitForTracing(iDTO, user, request);
 				}
 				
