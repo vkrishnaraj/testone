@@ -196,11 +196,7 @@ public class FraudResultsAction extends CheckedAction {
 		
 		for (MatchHistory m: matches) {
 			if (m.isSelected()) {
-				if (m.getFile1().getClaim().getId() == originalId) {
-					toReturn.add(m);
-				} else {
-					toReturn.add(m);
-				}
+				toReturn.add(m);
 			}
 		}
 		
