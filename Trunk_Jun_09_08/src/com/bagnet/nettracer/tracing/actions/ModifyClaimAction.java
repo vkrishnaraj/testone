@@ -205,7 +205,9 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 		}
 		
-		theform.setIncident_ID(claim.getNtIncidentId());
+		if (isNtUser) {
+			theform.setIncident_ID(claim.getNtIncidentId());
+		}
 
 		// delete associated items
 		deleteAssociatedItems(claim, request);
