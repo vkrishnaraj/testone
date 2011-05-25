@@ -155,6 +155,8 @@
 			<include name="**/**/fraud/Claim*.class" />
 			<include name="**/**/nettracer/fs/utilities/tracing/*.class" />
 			<include name="**/**/nettracer/fs/utilities/*.class" />
+			<include name="**/**/nettracer/fs/model/*.class" />
+			<include name="**/**/nettracer/fs/bmo/*.class" />
 			<include name="**/**/PrivacyPermissions*.class" />
 			<include name="**/**/HibernateWrapper.class" />
 			<include name="**/**/PrivacyPermissionsBMO.class" />
