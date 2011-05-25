@@ -73,6 +73,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 /**
  * 
@@ -392,6 +393,11 @@ public class MissingAction extends CheckedAction {
 			}
 
 			if (error == null) {
+				
+				if (PropertyBMO.isTrue("ntfs.user")) {
+					ConnectionUtil.createAndSubmitForTracing(iDTO, user, request);
+				}
+				
 				theform.setRemarkEnteredWhenNotifiedOfRequirements(false);
 				theform.setNotifiedOfRequirements(false);
 				request.setAttribute("missingarticles", "1");

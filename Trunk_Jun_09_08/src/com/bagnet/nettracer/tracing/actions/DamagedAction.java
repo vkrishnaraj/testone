@@ -408,33 +408,7 @@ public class DamagedAction extends CheckedAction {
 			if (error == null) {
 				
 				if (PropertyBMO.isTrue("ntfs.user")) {
-					File file = FileDAO.loadFile(iDTO.getIncident_ID());
-					if (file == null) {
-						file = new File();
-						FsIncident fsIncident = ClaimUtils.getFsIncident(iDTO, user);
-						fsIncident.setFile(file);
-						file.setIncident(fsIncident);
-						FileDAO.saveFile(file);
-					}
-					long remoteFileId = ConnectionUtil.insertFile(file);
-					file.setSwapId(remoteFileId);
-					FileDAO.saveFile(file);
-					if (remoteFileId > 0) {
-						TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, isNew);
-						if (results != null) {
-							session.setAttribute("results", results.getMatchHistory());
-							String status = "no_fraud";
-							for (MatchHistory m: results.getMatchHistory()) {
-								if (m.getFile2().getStatusId() == TracingConstants.STATUS_SUSPECTED_FRAUD) {
-									status = "suspected_fraud";
-								} else if (m.getFile2().getStatusId() == TracingConstants.STATUS_KNOWN_FRAUD) {
-									status = "known_fraud";
-									break;
-								}
-							}
-							request.setAttribute("fraudStatus", status);
-						}
-					}
+					ConnectionUtil.createAndSubmitForTracing(iDTO, user, request);
 				}
 				
 				theform.setRemarkEnteredWhenNotifiedOfRequirements(false);

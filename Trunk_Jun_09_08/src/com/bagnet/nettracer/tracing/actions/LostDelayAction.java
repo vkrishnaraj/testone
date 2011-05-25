@@ -92,6 +92,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
@@ -565,6 +566,11 @@ public class LostDelayAction extends CheckedAction {
 			}
 
 			if(error == null) {
+				
+				if (PropertyBMO.isTrue("ntfs.user")) {
+					ConnectionUtil.createAndSubmitForTracing(iDTO, user, request);
+				}
+				
 				request.setAttribute("lostdelay", "1");
 				request.setAttribute("Incident_ID", iDTO.getIncident_ID());
 				
