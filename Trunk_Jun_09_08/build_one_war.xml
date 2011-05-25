@@ -1,4 +1,4 @@
-<project name="3.0" default="aa-build-ws-ear" basedir=".">
+<project name="3.0" default="aa-build-fraud-and-jetblue-ear" basedir=".">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
@@ -286,6 +286,7 @@
 		-->
 		
 		<war destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
+			<!--  EDITING HERE -->
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" />
 			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
 			<lib dir="${lib.jar.dir}">
@@ -293,6 +294,36 @@
 				<exclude name="servlet.jar" />
 				<exclude name="netty.jar" />
 				<exclude name="mysql-connector-java*.jar" />
+				<exclude name="c3p0*.jar" />
+				<exclude name="hibernate*.jar" />
+				<exclude name="ReservationService*.jar" />
+				<exclude name="axis2*.jar" />
+				<exclude name="commons*.jar" />
+				<exclude name="dsi.jar" />
+				<exclude name="delivery*.jar" />
+				<exclude name="cglib*.*" />
+				<exclude name="asm*.*" />
+				<exclude name="jasper*.*" />
+				<exclude name="jfree*.*" />
+				<exclude name="poi*.*" />
+				<exclude name="JetBlue*.*" />
+				<exclude name="sqljdbc*.*" />
+				<exclude name="struts*.*" />
+				<exclude name="PaxView*.*" />
+				<exclude name="ehcache*.*" />
+				<exclude name="us-crm*.*" />
+				<exclude name="Dynamic*.*" />
+				<exclude name="hornetq*.*" />
+				<exclude name="axiom*.*" />
+				<exclude name="libphone*.*" />
+				<exclude name="geronimo*.*" />
+				<exclude name="xmlbeans*.*" />
+				<exclude name="xmlschema*.*" />
+				<exclude name="neethi*.*" />
+				<exclude name="httpcore*.*" />
+				<exclude name="htmlparser*.*" />
+				<exclude name="woden*.*" />
+									
 			</lib>
 		</war>
 	</target>
@@ -305,14 +336,18 @@
 	</target>
 	
 	<target name="aa-jar-ntfs-model">
+		<delete file="${build.dir}/claim_model.jar" failonerror="false"/>
 		<jar destfile="${build.dir}/claim_model.jar">
+			<!--  MAY NEED TO EDIT THE FRAUD_WEB BELOW TO POINT TO WHAT BUILDS THE CLASSES -->
 			<fileset dir="${build.dir}/fraud_web/classes/" >
 				<include name="**/**/aero/nettracer/fs/**/*.*"/>
+				<include name="**/**/aero/nettracer/fs/**/**/*.*"/>
 				<include name="**/**/com/bagnet/nettracer/tracing/utils/DateUtils.class"/>
 				<include name="**/**/com/bagnet/nettracer/tracing/constant/TracingConstants.class"/>
 			</fileset>
 		</jar>
-		<copy todir="${svc.dir}" file="${build.dir}/claim_model.jar" />
+		<delete file="${svc.dir}/claim_model.jar" failonerror="false"/>
+		<copy todir="${svc.dir}" file="${build.dir}/claim_model.jar" verbose="true"/>
 	</target>
 
 	<target name="compile-gensrc" depends="init,gen-src">
@@ -444,7 +479,10 @@
 	</target>
 	
 	<target name="aa-build-fraud-and-jetblue-ear" depends="delete-wars">
+		
+		<!--
 		<antcall target="build-fraud-demo"/>
+		-->
 		<antcall target="build-jetblue-fraud"/>
 
 		<property name="app.xml.location" value="metadata/fraud_jetblue" />
@@ -452,15 +490,7 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
-	<target name="aa-build-test-fraud-and-jetblue-ear" depends="delete-wars">
-		<antcall target="build-fraud-demo"/>
-		<antcall target="build-jetblue-fraud"/>
 
-		<property name="app.xml.location" value="metadata/fraud_jetblue_test" />
-		
-		<antcall target="donotrun-build-ear" />
-	</target>
-	
 	<target name="donotrun-build-ear">
 		
 		<copy todir="${build.dir}/dist/web/lib" >

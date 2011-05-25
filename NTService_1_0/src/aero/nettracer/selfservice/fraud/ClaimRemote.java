@@ -19,7 +19,7 @@ public interface ClaimRemote {
 	public long insertFile(File File);
 	public TraceResponse traceFile(long fileId, int maxDelay, boolean isPrimary);
 	public TraceResponse traceFile(File file, int maxDelay, boolean persistResults, boolean isPrimary);
-	public Set<MatchHistory> getFileMatches(long fileId);
+	public TraceResponse getFileMatches(long fileId);
 	public int getIncidentCacheSize();
 	public int getClaimCacheSize();
 	public void requestAccess(long fileId, long matchId, String agent, String requestingAirline, String message);

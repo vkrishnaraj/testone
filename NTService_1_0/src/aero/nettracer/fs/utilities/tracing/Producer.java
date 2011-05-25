@@ -16,6 +16,7 @@ import org.hibernate.Session;
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.GreyListAddress;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Reservation;
@@ -25,8 +26,10 @@ import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
 import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchDetail.MatchType;
 import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.model.detection.MetaWarning;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.utilities.GeoCode;
+import aero.nettracer.fs.utilities.Util;
 import aero.nettracer.selfservice.fraud.PrivacyPermissionsBean;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions.AccessLevelType;
@@ -137,7 +140,7 @@ public class Producer {
 
 		Set<Person> persons = Consumer.getPersons(file, true);
 		file.setPersonCache(persons);
-		if(persons!=null)for (Person person : persons) {
+		if(persons != null) for (Person person : persons) {
 			
 			if(person.getFirstName() != null && person.getFirstName().trim().length() > 0 && person.getLastName() != null && person.getLastName().trim().length()>0){
 			sql += " or (lastNameSoundex = \'"+ person.getLastNameSoundex() + "\'"
@@ -387,8 +390,12 @@ public class Producer {
 		Set<MatchHistory> mh = getCensoredFileMatches(file.getId());
 		System.out.println("Returning RESULTS: " + mh.size());
 		TraceResponse tr = new TraceResponse();
+		
 		tr.setMatchHistory(mh);
 		tr.setTraceComplete(isFinished);
+		analyzeFile(file, tr, addresses);
+		
+		
 		if (!isFinished) {
 			Date nowTime = new Date();
 			double i = v.size();
@@ -406,13 +413,104 @@ public class Producer {
 	}
 	
 
+	public static void analyzeFile(File file, TraceResponse tr, Set<FsAddress> addresses) {
+		HashSet<MetaWarning> metaWarnings = new HashSet<MetaWarning>();
+		tr.setMetaWarning(metaWarnings);
+		
+		int threatLevel = 0;
+		
+		int response = analyzeForGreyListMatch(tr, addresses, metaWarnings);
+		if (threatLevel < response) {
+			threatLevel = response;
+		}
+		
+		response = analyzeForKnownOrSuspectedFraud(tr, file);
+		if (threatLevel == 1) {
+			if (threatLevel < response) {
+				threatLevel += response;
+			}
+		} else {
+			if (threatLevel < response) {
+				threatLevel = response;
+			}
+		}
+		
+		tr.setThreatLevel(Math.max(threatLevel, 3));
+		
+	}
+
+	private static int analyzeForKnownOrSuspectedFraud(TraceResponse tr, File file) {
+		int returnValue = 0; 
+		
+		int count = 0;
+		Set<MatchHistory> mhs = tr.getMatchHistory();
+		for (MatchHistory mh: mhs) {
+			File file2 = null;
+			if (mh.getFile1().getId() == file.getId()) {
+				// Match against second file.
+				file2 = mh.getFile2();
+			} else {
+				// Compare against first file.
+				file2 = mh.getFile1();				
+			}
+			int responseValue = isKnownOrSuspectedFraudMatch(returnValue, file2);
+			if (responseValue > 0) {
+				++count;
+			}
+			if (responseValue > returnValue) {
+				returnValue = responseValue;
+			}
+		}
+		return returnValue;
+		
+	}
+
+	private static int isKnownOrSuspectedFraudMatch(int returnValue, File file2) {
+		if (file2.getStatusId() == 37) { // Suspected Fraud
+			returnValue = 2;
+		} else if (file2.getStatusId() == 38) { // Known Fraud
+			returnValue = 3;
+		}
+		return returnValue;
+	}
+
+	private static int analyzeForGreyListMatch(TraceResponse tr,
+			Set<FsAddress> addresses, HashSet<MetaWarning> metaWarnings) {
+		int threatLevel = 0;
+		HashMap<String, GreyListAddress> greyListMap = Util.getGreyListAddressMap();
+		for (FsAddress a: addresses) {
+			String key = a.getLattitude() + "/" + a.getLongitude();
+			if (greyListMap.containsKey(key)) {
+				GreyListAddress gla = greyListMap.get(key);
+				MetaWarning warn = new MetaWarning();
+				metaWarnings.add(warn);
+				warn.setDescription("The following address may belong to a mailbox provider: <ul>" 
+						+ "<li>" + gla.getDescription() + " at: " + gla.getAddress() + " " + gla.getCity() + " " + gla.getState() + "  " + gla.getZip()
+						+ "</li>"
+						+ "<li>Address matching: "
+						+ a.getAddress1()
+						+ ", "
+						+ a.getCity()
+						+ " "
+						+ a.getState()
+						+ "  "
+						+ a.getZip()
+						+ "</li></ul>");
+				warn.setThreatLevel(TraceResponse.THREAT_LEVEL_YELLOW);
+				warn.setPercentageMatch(0);
+				threatLevel = TraceResponse.THREAT_LEVEL_YELLOW;
+			}
+		}
+		return threatLevel;
+	}
+
 	public static Set<MatchHistory> getMatchHistoryResult(long fileId){
 //		String personSql = "from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
 //				"and (m.file1.id = :id or m.file2.id = :id) order by m.primarymatch desc, m.createdate desc, m.overallScore desc";
 
 		//matching on file1 only because Mike is whining
 		String personSql = "from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
-		"and (m.file1.id = :id) and m.deleted = 0 order by m.primarymatch desc, m.createdate desc, m.overallScore desc";
+		"and (m.file1.id = :id) and m.deleted = 0 order by m.primarymatch desc, m.file2.statusId desc, m.createdate desc, m.overallScore desc";
 		
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();

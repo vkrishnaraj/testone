@@ -25,6 +25,7 @@ import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
 import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -73,9 +74,12 @@ public class FraudResultsAction extends CheckedAction {
 		}
 		
 		Set<MatchHistory> results = null;
+		TraceResponse traceResponse = null;
 		if (request.getParameter("results") != null) {
 			results = (Set<MatchHistory>) session.getAttribute("results");
+			traceResponse = (TraceResponse) session.getAttribute("traceResults");
 			session.removeAttribute("results");
+			session.removeAttribute("traceResults");
 		} else if (request.getParameter("matchId") != null 
 					|| request.getParameter("requestInfo") != null
 						|| request.getParameter("delete") != null) { 
@@ -92,7 +96,8 @@ public class FraudResultsAction extends CheckedAction {
 				try {
 					Context ctx = ConnectionUtil.getInitialContext();
 					ClaimRemote remote = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
-					results = remote.getFileMatches(id);
+					traceResponse = remote.getFileMatches(id); 
+					results = traceResponse.getMatchHistory();
 					ctx.close();
 				} catch (Exception e) {
 					logger.error(e);
@@ -146,6 +151,7 @@ public class FraudResultsAction extends CheckedAction {
 		}
 
 		resultsForm = separateResults(results, resultsForm);
+		resultsForm.setTraceResponse(traceResponse);
 		
 		return (mapping.findForward(TracingConstants.CLAIM_FRAUD_RESULTS));
 	}

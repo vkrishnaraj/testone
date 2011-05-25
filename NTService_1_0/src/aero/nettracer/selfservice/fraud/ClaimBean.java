@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Stateless;
+import javax.jws.WebService;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -32,6 +33,7 @@ import aero.nettracer.fs.model.messaging.FsMessage;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.GeoLocation;
 import aero.nettracer.fs.utilities.InternationalException;
+import aero.nettracer.fs.utilities.tracing.Consumer;
 import aero.nettracer.fs.utilities.WhiteListUtil;
 import aero.nettracer.fs.utilities.tracing.Producer;
 import aero.nettracer.fs.utilities.tracing.TraceWrapper;
@@ -42,6 +44,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Stateless
+//@WebService
 public class ClaimBean implements ClaimRemote, ClaimHome {
 
 	public static boolean debug = false;
@@ -379,8 +382,15 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	}
 
 	@Override
-	public Set<MatchHistory> getFileMatches(long fileId) {
-		return Producer.getCensoredFileMatches(fileId);
+	public TraceResponse getFileMatches(long fileId) {
+		TraceResponse tr = new TraceResponse();
+		File file = TraceWrapper.loadFileFromCache(fileId);
+		Set<MatchHistory> mh = Producer.getCensoredFileMatches(fileId);
+		tr.setMatchHistory(mh);
+		tr.setTraceComplete(true);
+		Set<FsAddress> addresses = Consumer.getAddresses(file);
+		Producer.analyzeFile(file, tr, addresses);
+		return tr;
 	}
 	
 	public static boolean hasRequest(long fileId, String requestingAirline){

@@ -315,6 +315,7 @@ public class ModifyClaimAction extends CheckedAction {
 					if (results != null) {
 						
 						// TODO: SET RELOAD TIME HERE
+						session.setAttribute("traceResponse", results);
 						session.setAttribute("results", results.getMatchHistory());
 						response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
 						return null;

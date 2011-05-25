@@ -97,7 +97,9 @@ public class ClaimUtil {
 
 			// Get Incident as inc
 			File file = new File();
-			String airline = "B6";
+			
+			
+			String airline = "";
 			if (user!= null && user.getCompanycode_ID() != null) {
 				airline = user.getCompanycode_ID();
 			} else if (inc.getAgent().getCompanycode_ID() != null) {

@@ -6,13 +6,14 @@ import java.util.Set;
 import org.apache.struts.action.ActionForm;
 
 import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.model.detection.TraceResponse;
 
 public final class FraudResultsForm extends ActionForm {
-	
-	private static final long serialVersionUID = 1L;
-	
-	private long claimId;
 
+	private static final long serialVersionUID = 1L;
+
+	private long claimId;
+	private TraceResponse traceResponse;
 	private ArrayList<MatchHistory> primaryResults;
 	private ArrayList<MatchHistory> secondaryResults;
 
@@ -40,5 +41,12 @@ public final class FraudResultsForm extends ActionForm {
 		this.secondaryResults = secondaryResults;
 	}
 
-	
+	public TraceResponse getTraceResponse() {
+		return traceResponse;
+	}
+
+	public void setTraceResponse(TraceResponse traceResponse) {
+		this.traceResponse = traceResponse;
+	}
+
 }

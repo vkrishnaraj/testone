@@ -6,12 +6,14 @@
 	      version="5">
 
  <display-name>TracerEAR</display-name>
+ <!-- 
  <module>
      <web>
          <web-uri>fraud.war</web-uri>
          <context-root>fraud</context-root>
      </web>
   </module>
+  -->
  <module>
      <web>
          <web-uri>b6fraud.war</web-uri>

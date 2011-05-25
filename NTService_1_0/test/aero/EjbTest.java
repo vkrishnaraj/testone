@@ -75,7 +75,7 @@ public class EjbTest {
 			  
 			  Context ctx          = getInitialContext();
 			  ClaimRemote o = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
-//			  System.out.println(o.echoTest("hello world"));
+			  System.out.println(o.echoTest("hello world"));
 //			  
 //			  for (long i=0; i<312989; ++i) {
 //				  if (i%100 == 0) {

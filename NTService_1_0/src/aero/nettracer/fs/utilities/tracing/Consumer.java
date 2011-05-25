@@ -10,6 +10,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -30,9 +32,6 @@ import aero.nettracer.fs.model.detection.MatchDetail.MatchType;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Consumer implements Runnable{
 
@@ -588,16 +587,26 @@ public class Consumer implements Runnable{
 		} 
 		
 		Set <MatchDetail> details = match.getDetails();
-
+		HashSet<String> addressHashSet = new HashSet<String>();
+		
 		for(FsAddress a1:plist1){
+			String tas1 = getStringVersionOfAddress(a1);
 			for(FsAddress a2:plist2){
+				String tas2 = tas1 + "/" + getStringVersionOfAddress(a2);
+				if (addressHashSet.contains(tas2)) {
+					continue;
+				} else {
+					addressHashSet.add(tas2);
+				}
+				
+				
+				
+				
+				
 				// If geocoded => US based location
 				if (a1.getLattitude() != 0 && a2.getLattitude() != 0) {
 					
 					double distance = 100;
-					
-					
-						
 					
 					distance = GeoCode.distanceBetweenPoints(a1.getLattitude(), a1.getLongitude(), a2.getLattitude(), a2.getLongitude());
 
@@ -707,6 +716,12 @@ public class Consumer implements Runnable{
 				}
 			}
 		}
+	}
+
+
+	private static String getStringVersionOfAddress(FsAddress a) {
+		String tas = a.getAddress1() + " " + a.getAddress2() + " " + a.getCity() + " " + a.getState()+ " " + a.getZip();
+		return tas.toUpperCase();
 	}
 
 
@@ -864,11 +879,10 @@ public class Consumer implements Runnable{
 		} 
 		
 		Set <MatchDetail> details = match.getDetails();
-		HashMap<String, Integer> nameHashMap = new HashMap<String,Integer>();
-		HashMap<String, Integer> emailHashMap = new HashMap<String,Integer>();
-		HashMap<String, Integer> ffHashMap = new HashMap<String,Integer>();
+		HashSet<String> nameHashSet = new HashSet<String>();
+		HashSet<String> emailHashSet = new HashSet<String>();
+		HashSet<String> ffHashSet = new HashSet<String>();
 		HashSet<Person> parentPerson = new HashSet<Person>();
-		
 		
 		for(Person p1:plist1){
 			for(Person p2:plist2){
@@ -884,8 +898,9 @@ public class Consumer implements Runnable{
 					String content2 = p2.getFirstName().trim() + " " + p2.getLastName().trim();
 					String comparator = p1.getFirstName().trim() + " " + p1.getLastName().trim() + "/" + content2;
 					comparator = comparator.toUpperCase();
-					if (!nameHashMap.containsKey(comparator) && !parentPerson.contains(p1) && !parentPerson.contains(p1.getParent())) {
-						nameHashMap.put(comparator, integerZero);
+					if (!nameHashSet.contains(comparator)) {
+						nameHashSet.add(comparator);
+
 						if (p1.getFirstName().equalsIgnoreCase(p2.getFirstName())
 								&& p1.getLastName().equalsIgnoreCase(p2.getLastName())) {
 							
@@ -906,8 +921,6 @@ public class Consumer implements Runnable{
 							details.add(detail);
 
 
-
-							// TODO: Nickname Matches
 						} else {
 
 //							System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
@@ -1033,7 +1046,7 @@ public class Consumer implements Runnable{
 						String content2 = p2.getEmailAddress().trim();
 						String comparator = content1 + "/" + content2;
 						comparator = comparator.toUpperCase();
-						if (!emailHashMap.containsKey(comparator)) {
+						if (!emailHashSet.contains(comparator)) {
 	
 							if (p1.getEmailAddress().equals(p2.getEmailAddress())) {
 								MatchDetail detail = new MatchDetail();
@@ -1044,7 +1057,7 @@ public class Consumer implements Runnable{
 								detail.setPercent(P_EMAIL);
 								detail.setMatchtype(MatchType.email);
 								details.add(detail);
-								emailHashMap.put(comparator, integerZero);
+								emailHashSet.add(comparator);
 							}
 						}
 					}
@@ -1056,7 +1069,7 @@ public class Consumer implements Runnable{
 						String content2 = p2.getFfNumber().trim();
 						String comparator = content1 + "/" + content2;
 						comparator = comparator.toUpperCase();
-						if (!emailHashMap.containsKey(comparator)) {
+						if (!emailHashSet.contains(comparator)) {
 
 							if (p1.getFfNumber().trim().equalsIgnoreCase(p2.getFfNumber().trim())) {
 								MatchDetail detail = new MatchDetail();

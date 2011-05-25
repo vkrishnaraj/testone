@@ -204,7 +204,7 @@
 		<java classname="CombineResources" classpath="${basedir}/utils">
 			<arg line="${tmpResource} ${tertiaryResource} ${destinationResource}" />
 		</java>
-		<delete file="${tmpResource}" />
+		<delete file="${tmpResource}" failonerror="false"/>
 	</target>
 
 	
