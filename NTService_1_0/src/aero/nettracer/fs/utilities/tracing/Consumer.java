@@ -286,11 +286,13 @@ public class Consumer implements Runnable{
 			MatchDetail detail = new MatchDetail();
 			detail.setContent1(s.getPhoneNumber());
 			detail.setContent2(s.getPhoneNumber());
-			detail.setDescription("Phone Number Match");
+			
 			detail.setMatch(match);
 			if(s.isWhiteListed()){
+				detail.setDescription("Phone Number Match (Whitelisted)");
 				detail.setPercent(WHITELIST_MATCH);
 			}else{
+				detail.setDescription("Phone Number Match");
 				detail.setPercent(PHONE_MATCH);
 			}
 			detail.setMatchtype(MatchType.phone);
@@ -661,6 +663,7 @@ public class Consumer implements Runnable{
 						if(a1.isWhiteListed() || a2.isWhiteListed()){
 							percent = WHITELIST_MATCH;
 							isWhitelisted = true;
+							description = "Similar Address (Whitelisted)";
 						} else {
 							percent = ADDRESS_SIMILAR;
 						}
@@ -685,6 +688,7 @@ public class Consumer implements Runnable{
 						if(a1.isWhiteListed() || a2.isWhiteListed()){
 							percent = WHITELIST_MATCH;
 							isWhitelisted = true;
+							description = "Similar Address (Whitelisted)";
 						} else {
 							percent = ADDRESS_SIMILAR;
 						}
@@ -707,6 +711,7 @@ public class Consumer implements Runnable{
 						boolean isWhitelisted =  false;
 						if(a1.isWhiteListed() || a2.isWhiteListed()){
 							percent = WHITELIST_MATCH;
+							description = "Similar Address (Whitelisted)";
 							isWhitelisted = true;
 						} else {
 							percent = ADDRESS_SIMILAR;
@@ -736,6 +741,7 @@ public class Consumer implements Runnable{
 	  	detail.setMatch(match);
 	  	if(isWhitelisted){
 	  		detail.setPercent(WHITELIST_MATCH);
+	  		
 	  	} else {
 	  		detail.setPercent(score*multiplier);
 	  	}
@@ -912,7 +918,7 @@ public class Consumer implements Runnable{
 							detail.setContent1(content1);
 							detail.setContent2(content2);
 							if(p1.getParent() != null){
-								detail.setDescription("Direct Nick Name Match");
+								detail.setDescription("Direct Nickname Match");
 								detail.setPercent(P_NAME * P_NICK_NAME_MULTIPLIER);
 								parentPerson.add(p1.getParent());
 							} else {
@@ -942,7 +948,7 @@ public class Consumer implements Runnable{
 								detail.setMatch(match);
 								detail.setMatchtype(MatchType.name);
 								if(p1.getParent() != null){
-									detail.setDescription("Soundex Nick Name Match");
+									detail.setDescription("Soundex Nickname Match");
 									detail.setPercent(P_SOUNDEX * P_NICK_NAME_MULTIPLIER);
 									parentPerson.add(p1.getParent());
 								} else {
@@ -963,7 +969,7 @@ public class Consumer implements Runnable{
 								detail.setMatch(match);
 								detail.setMatchtype(MatchType.name);
 								if(p1.getParent() != null){
-									detail.setDescription("Double Metaphone Nick Name Match");
+									detail.setDescription("Double Metaphone Nickname Match");
 									detail.setPercent(P_METAPHONE * P_NICK_NAME_MULTIPLIER);
 									parentPerson.add(p1.getParent());
 								} else {
@@ -985,7 +991,7 @@ public class Consumer implements Runnable{
 									detail.setPercent(score * .1);
 									detail.setMatchtype(MatchType.name);
 									if(p1.getParent() != null){
-										detail.setDescription("Similar Nick Name Match");
+										detail.setDescription("Similar Nickname Match");
 										detail.setPercent(score * .1 * P_NICK_NAME_MULTIPLIER);
 										parentPerson.add(p1.getParent());
 									} else {

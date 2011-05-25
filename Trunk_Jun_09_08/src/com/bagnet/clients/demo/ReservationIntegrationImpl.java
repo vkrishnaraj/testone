@@ -47,13 +47,13 @@ public class ReservationIntegrationImpl extends
 		// Populate objects
 		claim1.setClaimchecknum("US000001");
 		
-		form.setRecordlocator("MEDLEN");
+		form.setRecordlocator("DUNLAF");
 		form.setNumpassengers(1);
 		form.setNumbagchecked(2);
 		form.setNumbagreceived(1);
 		form.setTicketnumber("0001234567890");
 		
-		form.setOtherSystemInformation("DUNLAF\n1.1BROWN/JOSEPH\n1 DA 726A 31DEC T DFWFLL HK2   130P  410P\nTKT/TIME LIMIT\n1.T-TL/X/1200/06MAR/MOW016\nAA FACTS\n1.OSI AA TKTL TL/X/1200/06MAR/MOW016\n2.OSI CLAIMED FROM SU PNR LOC MGDOLE\nPHONES\n1.H-555-555-5555\nREMARKS\n1.H-PAX CALLED TO CONF RES AUG10\n");
+		form.setOtherSystemInformation("PNR Content\nECQ8Y6\n1. 1SANDERS/MICHAEL\n1 B61270T 09MAY MO LASPHX HK1   610A  833A 32A*\nFONE-\n1.WEB7260332*DAYOFDEPFON/EH781\n2.WEB*JETBLUE.COM BOOKING/N000\n3.WEB*EMAIL-MSANDERS*NETTRACER.AERO/N000\nTKT-T/FQR/XXXXXXXXXXXX6355/24301196232/0001//50.00\nGEN FAX-  *TKN/SSR FOR TKT NBRS\n1.SSRDOCSUSHK1/////28JUN65/M//SANDERS/MICHAEL/D-MICHAEL/S\n  SSRDOCSUS///TEPHEND\n2.OSI US CTCH 781-726-0332\nFOP-$DSXXXXXXXXXXX3333/0112\nRMKS-\n1.CARDHOLDER: MICHAEL SANDERS\n2.CARDHOLDER: 5010 EDGECLIFF*WICHITA FALLS*TX*76302*USA\n3.CLIENT IP: 255.255.255.255\n");
 		
 		currentPax.setFirstname("Joseph");
 		currentPax.setLastname("Brown");
@@ -64,15 +64,15 @@ public class ReservationIntegrationImpl extends
 		am.setMembershipstatus("Gold");
 		currentPax.setMembership(am);
 		
-		address.setAddress1("2675 Paces Ferry Rd.");
-		address.setCity("Atlanta");
-		address.setState_ID("GA");
-		address.setZip("30339");
+		address.setAddress1("5010 Edgecliff");
+		address.setCity("Wichita Falls");
+		address.setState_ID("TX");
+		address.setZip("76302");
 		address.setPermanent(true);
-		address.setHomephone("555-555-5555");
+		address.setHomephone("409-886-5941");
 		
 		ia.setAirline("US");
-		ia.setLegfrom("DFW");
+		ia.setLegfrom("IAH");
 		ia.setLegto("ATL");
 		ia.setFlightnum("1111");
 		ia.setDepartdate(new Date());
@@ -86,7 +86,7 @@ public class ReservationIntegrationImpl extends
 		ib.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
 		
 		ic.setAirline("US");
-		ic.setLegfrom("DFW");
+		ic.setLegfrom("IAH");
 		ic.setLegto("ATL");
 		ic.setFlightnum("1111");
 		ic.setDepartdate(new Date());
