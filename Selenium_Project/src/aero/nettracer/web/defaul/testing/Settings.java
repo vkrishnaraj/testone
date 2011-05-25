@@ -22,7 +22,7 @@ public class Settings {
 	public static final String BROWSER_IEHTA = "*iehta";
 	public static final String BROWSER_CUSTOM = "*custom";
 	
-	public static final boolean ECLIPSE_RUNS_SERVER = false;
+	public static final boolean ECLIPSE_RUNS_SERVER = true;
 	
 	//URL ROOT FOR WEB APP BEING TESTED
 	public static final String APP_URL_LOCAL8080 = "http://localhost:8080/";
@@ -34,7 +34,7 @@ public class Settings {
 	
 	//LOGIN CREDENTIALS
 	public static final String USERNAME = "ntadmin";
-	public static final String PASSWORD = "Rhood5@rr";
+	public static final String PASSWORD = "Nettracer1";
 	
 	//VARIABLE SETTINGS / GLOBALS
 	public static String PAWOB = "";
