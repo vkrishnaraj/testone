@@ -259,15 +259,5 @@
 		<mapping class="aero.nettracer.fs.model.File"/>
 		<mapping class="aero.nettracer.fs.model.FsReceipt"/>
 		
-		<!-- Lost and Found -->
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFAddress"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFDelivery"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFFound"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFItem"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFLost"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFPerson"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFPhone"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFReservation"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail"/>
+
 		
