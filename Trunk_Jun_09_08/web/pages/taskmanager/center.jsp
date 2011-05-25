@@ -223,7 +223,7 @@
                 </tr>
               </logic:equal>
             </logic:iterate>
-			<% } %>
+			
 			<tr>
 			  <td colspan="2" class="white">&nbsp;</td>
 			</tr>
@@ -252,7 +252,7 @@
 			<tr>
 			  <td colspan="2" class="white">&nbsp;</td>
 			</tr>
-			<% if (ntUser) { %>
+			
             <tr>
               <td class="header">
                 <b><bean:message key="tasks.other" /></b>

@@ -536,9 +536,6 @@
 				          <% } %>
 				          </logic:iterate>
 				          <tr>
-				          <td colspan="4">&nbsp;</td>
-				          </tr>          
-				          <tr>
 				          <td colspan="4" align="center">
 					          <select name="addNameNum">
 						          <option value="1">1</option>
@@ -669,7 +666,7 @@
               						<td colspan="2">
 								  		<bean:message key="colname.company.phone" />
 								  		<br />
-								  		<input type="text" name="receipt[<%=i %>].phone.phoneNumber" maxlength="20" size="20" value="<%=((FsReceipt) receipt).getPhone().getPhoneNumber() == null ? "" : ((FsReceipt) receipt).getPhone().getPhoneNumber() %>" class="textfield">
+								  		<input type="text" name="receipt[<%=i %>].phone.phoneNumber" maxlength="20" size="20" value="<%=receipt.getPhone().getPhoneNumber() == null ? "" : ((FsReceipt) receipt).getPhone().getPhoneNumber() %>" class="textfield">
 								  	</td>
 								  	<td>
 								  		<bean:message key="claim.colname.cc_type" />
@@ -799,6 +796,7 @@
                    		</table>
 	                    </logic:notEmpty> 
 	                    	<logic:notEmpty name="claimForm" property="claim.ntIncident">
+	                    	<logic:notEqual name="claimForm" property="claim.id" value="0" >
 		                    <br />
 		                    <br />
 		  	                <a name="expense"></a>
@@ -809,6 +807,7 @@
 		                    <jsp:include page="/pages/includes/incident_expense_incl.jsp" >
 						    	<jsp:param name="formCss" value="form2" />
 						    </jsp:include>
+						    </logic:notEqual>
 	                    	</logic:notEmpty>
                     <% } %>
                     <br />

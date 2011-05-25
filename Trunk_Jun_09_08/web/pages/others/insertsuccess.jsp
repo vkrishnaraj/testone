@@ -6,9 +6,11 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.reporting.ReportingConstants" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
 	int reportType = -1;
 	String receiptType = "";
+	boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 %>
 
 <tr>
@@ -65,4 +67,13 @@
           			</a>&nbsp;
       			</td>
               </tr>
+              <% if (ntfsUser) { %>
+              <tr class="<%=request.getAttribute("fraudStatus") %>">
+              	<td>
+              		<br>
+              	  <a href='fraud_results.do?incident=<bean:write name="Incident_ID" scope="request"/>'><bean:message key="insert.success.match.results"/>:&nbsp;<bean:write name="Incident_ID" scope="request"/></a>
+              	  <br>
+              	</td>
+              </tr>
+              <% } %>
             </table>
