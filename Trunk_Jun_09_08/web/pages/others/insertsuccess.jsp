@@ -70,7 +70,7 @@
           			<br>
       			</td>
               </tr>
-              <% if (ntfsUser) { %>
+              <% if (ntfsUser && request.getAttribute("fraudStatus") != null) { %>
               <tr class="<%=request.getAttribute("fraudStatus") %>">
               	<td>
               		<h2 id="fraudlink">
@@ -78,5 +78,6 @@
               		</h2>
               	</td>
               </tr>
+              
               <% } %>
             </table>
