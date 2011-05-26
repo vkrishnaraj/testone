@@ -428,8 +428,10 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		if(file.getMatchedAirline() != null){
 			PrivacyPermissionsBean bean = new PrivacyPermissionsBean();
 			PrivacyPermissions permissions = bean.getPrivacyPermissions(file.getMatchedAirline(), AccessLevelType.req);
-			if(permissions.isAutosend()){
-				autosend = true;
+			if (permissions != null) {
+				if(permissions.isAutosend()){
+					autosend = true;
+				}
 			}
 		}
 		
