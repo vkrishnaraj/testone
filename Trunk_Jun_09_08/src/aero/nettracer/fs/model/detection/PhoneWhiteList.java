@@ -15,8 +15,14 @@ public class PhoneWhiteList {
 	@GeneratedValue
 	int id;
 	String phoneNumber;
-	
+	private String description;
 
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 	public int getId() {
 		return id;
 	}
@@ -30,6 +36,8 @@ public class PhoneWhiteList {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+	
+	
 	
 	
 }

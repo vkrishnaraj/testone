@@ -918,11 +918,11 @@ public class Consumer implements Runnable{
 							detail.setContent1(content1);
 							detail.setContent2(content2);
 							if(p1.getParent() != null){
-								detail.setDescription("Direct Nickname Match");
+								detail.setDescription("Exact Nickname Match");
 								detail.setPercent(P_NAME * P_NICK_NAME_MULTIPLIER);
 								parentPerson.add(p1.getParent());
 							} else {
-								detail.setDescription("Direct Name Match");
+								detail.setDescription("Exact Name Match");
 								detail.setPercent(P_NAME);
 								parentPerson.add(p1);
 							}

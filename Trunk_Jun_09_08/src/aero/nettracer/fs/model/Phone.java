@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -23,6 +24,9 @@ public class Phone implements Serializable {
 	public static final int WORK = 3;
 	public static final int ALTERNATE = 4;
 	public static final int PAGER = 5;
+	
+	@Transient
+	private String whiteListDescription;
 	
 	@Id
 	@GeneratedValue
@@ -113,6 +117,14 @@ public class Phone implements Serializable {
 
 	public void setReceipt(FsReceipt receipt) {
 		this.receipt = receipt;
+	}
+
+	public void setWhiteListDescription(String whiteListDescription) {
+		this.whiteListDescription = whiteListDescription;
+	}
+
+	public String getWhiteListDescription() {
+		return whiteListDescription;
 	}
 	
 }
