@@ -271,7 +271,8 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				String phoneWhiteListDescription = WhiteListUtil.isPhoneWhiteListed(phone.getPhoneNumber());
 				if(phoneWhiteListDescription != null){
 					phone.setWhiteListed(true);
-					phone.setWhiteListDescription(phoneWhiteListDescription);
+					
+					phone.setWhiteListDescription(WhiteListUtil.isPhoneWhiteListed(phone.getPhoneNumber()));
 				}
 			}
 		}

@@ -51,14 +51,14 @@
 	                <logic:equal name="status" scope="request" value="<%=String.valueOf(TracingConstants.STATUS_SUSPECTED_FRAUD) %>" >
                 		<tr class="suspected_fraud">
                 			<td>
-                				<center><b><bean:message key="match.status.message" /><bean:message key="suspected.fraud" /></b></center>
+                				<center><b><bean:message key="match.status.message" /> <bean:message key="suspected.fraud"/></b></center>
                 			</td>
 	                	</tr>
 	                </logic:equal>
 	                <logic:equal name="status" scope="request" value="<%=String.valueOf(TracingConstants.STATUS_KNOWN_FRAUD) %>" >
                 		<tr class="known_fraud">
                 			<td>
-                				<center><b><bean:message key="match.status.message" /><bean:message key="known.fraud" /></b></center>
+                				<center><b><bean:message key="match.status.message" /> <bean:message key="known.fraud" /></b></center>
                 			</td>
 	                	</tr>
 	                </logic:equal>
