@@ -300,7 +300,7 @@ public class Consumer implements Runnable{
 			
 			detail.setMatch(match);
 			if(s.isWhiteListed()){
-				detail.setDescription("Phone Number Match (Whitelisted - " + s.getWhiteListDescription() +" )");
+				detail.setDescription("Phone Number Match (Whitelisted)");
 				detail.setPercent(WHITELIST_MATCH);
 			}else{
 				detail.setDescription("Phone Number Match");
