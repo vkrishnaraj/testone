@@ -256,6 +256,9 @@
 		            					</a>
 		            					<% if (!sameCompany) { %>
 											<br/><br/>
+											<% if (status != null) { %>
+												<b>Request: <%=status %></b>
+											<% } %>
 											<b><%=status == null ? "" : status %></b>
 										<% } %>
 		            				</td>
