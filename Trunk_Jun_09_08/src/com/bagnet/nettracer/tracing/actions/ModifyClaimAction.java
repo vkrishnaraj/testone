@@ -40,6 +40,7 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
+import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -173,7 +174,12 @@ public class ModifyClaimAction extends CheckedAction {
 			if (isNtUser && request.getParameter("populate") != null) {
 				claim = ntIncident.getClaim();
 				if (claim == null) {
+					File existingFile = FileDAO.loadFile(claim.getIncident().getAirlineIncidentId());
 					claim = ClaimUtils.createClaim(user, ntIncident);
+					if (existingFile != null) {
+						existingFile.setClaim(claim);
+						claim.setFile(existingFile);
+					}
 				}
 			} else {
 				claim = ClaimUtils.createClaim(user);
