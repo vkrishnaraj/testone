@@ -13,8 +13,7 @@ import aero.nettracer.fs.model.detection.TraceResponse;
 public class ClaimWebService{
 
 	public String echoTest(String username, String password, String s) {
-		// TODO Auto-generated method stub
-		return null;
+		return s;
 	}
 
 	public long insertFile(String username, String password, File File) {

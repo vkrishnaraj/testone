@@ -268,8 +268,10 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				}
 				
 				phone.setPhoneNumber(aero.nettracer.fs.utilities.Util.removeNonNumeric(phone.getPhoneNumber()));
-				if(WhiteListUtil.isPhoneWhiteListed(phone.getPhoneNumber())){
+				String phoneWhiteListDescription = WhiteListUtil.isPhoneWhiteListed(phone.getPhoneNumber());
+				if(phoneWhiteListDescription != null){
 					phone.setWhiteListed(true);
+					phone.setWhiteListDescription(phoneWhiteListDescription);
 				}
 			}
 		}
