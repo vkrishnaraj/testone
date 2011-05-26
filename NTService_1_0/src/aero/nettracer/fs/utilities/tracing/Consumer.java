@@ -35,6 +35,17 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class Consumer implements Runnable{
 
+	
+	private static final String SIMILAR_NAME = "Name Match (Similar)";
+	private static final String DOUBLE_METAPHONE_MATCH = "Name Match (Double Metaphone)";
+	private static final String EXACT_NAME_MATCH = "Name Match (Exact)";
+	private static final String SOUNDEX_MATCH = "Name Match (Soundex)";
+	
+	private static final String DOUBLE_METAPHONE_NICKNAME_MATCH = "Nickname Match (Double Metaphone)";
+	private static final String SIMILAR_NICKNAME_MATCH = "Nickname Match (Similar)";
+	private static final String EXACT_NICKNAME_MATCH = "Nickname Match (Exact)";
+	private static final String SOUNDEX_NICKNAME_MATCH = "Nickname Match (Soundex)";
+
 	public static boolean debug = false;
 	
 	public static final int MATCH = 3;
@@ -918,11 +929,11 @@ public class Consumer implements Runnable{
 							detail.setContent1(content1);
 							detail.setContent2(content2);
 							if(p1.getParent() != null){
-								detail.setDescription("Exact Nickname Match");
+								detail.setDescription(EXACT_NICKNAME_MATCH);
 								detail.setPercent(P_NAME * P_NICK_NAME_MULTIPLIER);
 								parentPerson.add(p1.getParent());
 							} else {
-								detail.setDescription("Exact Name Match");
+								detail.setDescription(EXACT_NAME_MATCH);
 								detail.setPercent(P_NAME);
 								parentPerson.add(p1);
 							}
@@ -948,11 +959,11 @@ public class Consumer implements Runnable{
 								detail.setMatch(match);
 								detail.setMatchtype(MatchType.name);
 								if(p1.getParent() != null){
-									detail.setDescription("Soundex Nickname Match");
+									detail.setDescription(SOUNDEX_NICKNAME_MATCH);
 									detail.setPercent(P_SOUNDEX * P_NICK_NAME_MULTIPLIER);
 									parentPerson.add(p1.getParent());
 								} else {
-									detail.setDescription("Soundex Match");
+									detail.setDescription(SOUNDEX_MATCH);
 									detail.setPercent(P_SOUNDEX);
 									parentPerson.add(p1);
 								}
@@ -969,11 +980,11 @@ public class Consumer implements Runnable{
 								detail.setMatch(match);
 								detail.setMatchtype(MatchType.name);
 								if(p1.getParent() != null){
-									detail.setDescription("Double Metaphone Nickname Match");
+									detail.setDescription(DOUBLE_METAPHONE_NICKNAME_MATCH);
 									detail.setPercent(P_METAPHONE * P_NICK_NAME_MULTIPLIER);
 									parentPerson.add(p1.getParent());
 								} else {
-									detail.setDescription("Double Metaphone Match");
+									detail.setDescription(DOUBLE_METAPHONE_MATCH);
 									detail.setPercent(P_METAPHONE);
 									parentPerson.add(p1);
 								}
@@ -986,16 +997,16 @@ public class Consumer implements Runnable{
 									MatchDetail detail = new MatchDetail();
 									detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
 									detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-									detail.setDescription("Similar Name");
+									detail.setDescription(SIMILAR_NAME);
 									detail.setMatch(match);
 									detail.setPercent(score * .1);
 									detail.setMatchtype(MatchType.name);
 									if(p1.getParent() != null){
-										detail.setDescription("Similar Nickname Match");
+										detail.setDescription(SIMILAR_NICKNAME_MATCH);
 										detail.setPercent(score * .1 * P_NICK_NAME_MULTIPLIER);
 										parentPerson.add(p1.getParent());
 									} else {
-										detail.setDescription("Similar Name");
+										detail.setDescription(SIMILAR_NAME);
 										detail.setPercent(score * .1);
 										parentPerson.add(p1);
 									}
