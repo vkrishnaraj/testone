@@ -18,6 +18,12 @@
   FraudResultsForm myform = (FraudResultsForm) session.getAttribute("fraudResultsForm");
   boolean ntUser = PropertyBMO.isTrue("nt.user");
 
+  String incident = "";
+  incident = request.getParameter(incident);
+  if(incident != null && incident.length() > 0){
+	  request.setAttribute("incident", incident);
+  }
+  
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -317,10 +323,14 @@
 					    	<jsp:param name="beanName" value="fraudResultsForm" />
 					    	<jsp:param name="beanProperty" value="secondaryResults" />
 					    	<jsp:param name="company" value="<%=company %>" />
+
 				    </jsp:include>
             	</table>
             	<br />
             	<center>
+            	            	<%if(request.getParameter("incident")!=null){ %>
+            		<input type="hidden" id="incident" name="incident" value="<%=request.getParameter("incident") %>" />
+            		<%} %>
 					<html:submit property="requestInfo" styleId="button">
                       <bean:message key="button.request_info" />
                     </html:submit>

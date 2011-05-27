@@ -13,6 +13,9 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
   String company = a.getCompanycode_ID();
+  
+  String claimId = request.getParameter("claim");
+  String incidentId = request.getParameter("incident");
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -24,7 +27,7 @@
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">
           <h1>
-            <bean:message key="header.request.information" />
+               <bean:message key="header.request.information" />
           </h1>
         </div>
         <div id="pageheaderright">
@@ -44,13 +47,22 @@
     	<td id="middlecolumn">
         	<div id="maincontent">
                 <h1>
-                	<bean:message key="header.claim_payout" />
+                <%if(incidentId != null){ %>
+            		<bean:message key="header.incident_payout" />
+            	<%}else{ %>
+                    <bean:message key="header.claim_payout" />
+            	<%} %>
+                	
                 </h1>
             	<table class="form2" cellspacing="0" cellpadding="0" >
             		<tr>
             			<td><b><bean:message key="colname.reference.id" /></b></td>
             			<td><b><bean:message key="colname.airline" /></b></td>
+            			<%if(incidentId != null){ %>
+            			<td><b><bean:message key="colname.incident.date" /></b></td>
+            			<%}else{ %>
             			<td><b><bean:message key="colname.claim.date" /></b></td>
+            			<%} %>
             		</tr>
             		<logic:iterate id="match" name="requestInfoForm" property="requestedMatches" type="aero.nettracer.fs.model.detection.MatchHistory" >
 	            		<tr>
@@ -75,6 +87,9 @@
             	</table>
             	<br />
             	<center>
+            	<%if(request.getParameter("incident")!=null){ %>
+            	<input type="hidden" id="incident" name="incident" value="<%=request.getParameter("incident") %>" />
+            	<%} %>
 					<html:submit property="send" styleId="button">
                       <bean:message key="send_message" />
                     </html:submit>
