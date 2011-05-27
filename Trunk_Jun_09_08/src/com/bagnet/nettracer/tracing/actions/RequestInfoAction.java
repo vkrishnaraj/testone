@@ -48,6 +48,11 @@ public class RequestInfoAction extends CheckedAction {
 				claimId = requestForm.getOriginalClaimId();
 			}
 			String incidentId = (String) request.getAttribute("incident");
+			if(incidentId == null){
+				incidentId = (String) request.getParameter("incident");
+			}
+			
+			
 			if (claimId != null) {
 				response.sendRedirect("claim_resolution.do?claimId=" + claimId);
 			} else if (incidentId != null){
