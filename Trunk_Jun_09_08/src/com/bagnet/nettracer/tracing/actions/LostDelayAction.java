@@ -37,6 +37,8 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
+import aero.nettracer.fs.model.File;
+
 import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -567,9 +569,12 @@ public class LostDelayAction extends CheckedAction {
 
 			if(error == null) {
 				boolean isNew = theform.getIncident_ID() == null || theform.getIncident_ID().trim().length() == 0;
-//				if (isNew && PropertyBMO.isTrue("ntfs.user")) {
-//					ConnectionUtil.createAndSubmitForTracing(iDTO, user, request);
-//				}
+				if (isNew && PropertyBMO.isTrue("ntfs.submit.lostdelay")) {
+					File file = ConnectionUtil.createAndSubmitForTracing(iDTO, user, request);
+					if (file != null) {
+						session.setAttribute("file", file);
+					}
+				}
 				
 				request.setAttribute("lostdelay", "1");
 				request.setAttribute("Incident_ID", iDTO.getIncident_ID());

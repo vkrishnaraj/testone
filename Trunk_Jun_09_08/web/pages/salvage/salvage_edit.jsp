@@ -22,7 +22,6 @@
     
 	var cal1xx = new CalendarPopup();	
 
-
   </SCRIPT>
   
   
@@ -164,7 +163,7 @@
 		  	</td>
            	<td>
            		<bean:message key="colname.quantity" /><br />
-           		           		<input type="text" name="salvageBox[<%=i %>].salvageItem[<%=j %>].quantity" maxlength="255" size="4" value="<%=((SalvageItem)salvageItem).getQuantity()%>" class="textfield">
+          		<input type="text" name="salvageBox[<%=i %>].salvageItem[<%=j %>].quantity" maxlength="255" size="4" value="<%=((SalvageItem)salvageItem).getQuantity()%>" class="textfield">
 		  		
            	</td>
           </tr>
@@ -174,18 +173,18 @@
           </tr>          
           <tr>
           <td colspan="4" align="middle">
-          <select name="addItemNum[<%=i %>]">
-	          <option value="1">1</option>
-	          <option value="2">2</option>
-	          <option value="3">3</option>
-	          <option value="4">4</option>
-	          <option value="5">5</option>
-	        </select>
-
-		    <input type="submit" name="addItems[<%=i%>]" value='<bean:message key="button.add_salvage_item" />' id="button" />
-		 	&nbsp;&nbsp;&nbsp;&nbsp;
-            <input type="text" size="13" value="" name="addLostFoundId[<%=i %>]">&nbsp;
-		 	<input type="submit" name="addLostFoundButton[<%=i %>]" value='<bean:message key="button.add_lost_found_item" />' id="button"/>
+	          <select name="addItemNum[<%=i %>]">
+		          <option value="1">1</option>
+		          <option value="2">2</option>
+		          <option value="3">3</option>
+		          <option value="4">4</option>
+		          <option value="5">5</option>
+		        </select>
+	
+			    <input type="submit" name="addItems[<%=i%>]" value='<bean:message key="button.add_salvage_item" />' id="button" />
+			 	&nbsp;&nbsp;&nbsp;&nbsp;
+	            <input type="text" size="13" value="" name="addLostFoundId[<%=i %>]">&nbsp;
+			 	<input type="submit" name="addLostFoundButton[<%=i %>]" value='<bean:message key="button.add_lost_found_item" />' id="button"/>
           </td>
           </tr>
       </table><br />

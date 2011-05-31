@@ -54,7 +54,7 @@ public class FsClaim implements Serializable {
 	protected int claimProrateId;
 	protected int statusId;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class, cascade = CascadeType.ALL) 
+	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class) 
 	protected File file;
 
 	//	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

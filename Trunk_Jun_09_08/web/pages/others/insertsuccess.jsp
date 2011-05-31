@@ -11,6 +11,9 @@
 	int reportType = -1;
 	String receiptType = "";
 	boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
+	
+	String fraudStatus = (String) request.getAttribute("fraudStatus");
+	boolean displayFraudLink = false;
 %>
 
 <tr>
@@ -29,6 +32,7 @@
                 <%
                 	reportType = ReportingConstants.LOST_RECEIPT_RPT;
                 	receiptType = "LostReceipt";
+                	displayFraudLink = PropertyBMO.isTrue("ntfs.submit.lostdelay");
                 %>
               </logic:present>
               <logic:present name="missingarticles" scope="request">
@@ -40,6 +44,7 @@
                 <%
                 	reportType = ReportingConstants.MISSING_RECEPIT_RPT;
                 	receiptType = "MissingRecepit";
+                	displayFraudLink = PropertyBMO.isTrue("ntfs.submit.missing");
                	%>
                 </logic:present>
                 <logic:present name="damaged" scope="request">
@@ -51,6 +56,7 @@
                 <%
                 	reportType = ReportingConstants.DAMAGE_RECEPIT_RPT;
                 	receiptType = "DamagedReceipt";
+                	displayFraudLink = PropertyBMO.isTrue("ntfs.submit.damaged");
                	%>
                   </logic:present>
                 </h1></td>
@@ -70,14 +76,15 @@
           			<br>
       			</td>
               </tr>
-              <% if (ntfsUser && request.getAttribute("fraudStatus") != null) { %>
-              <tr class="<%=request.getAttribute("fraudStatus") %>">
+              <% if (ntfsUser && displayFraudLink) { %>
+              <tr <% if (fraudStatus != null) { %>class="<%=fraudStatus %>"<% } %>>
               	<td>
+              		<div id="fraudcell">
               		<h2 id="fraudlink">
-           	  		<a href='fraud_results.do?incident=<bean:write name="Incident_ID" scope="request"/>'><bean:message key="insert.success.match.results"/></a>
+           	  			<a href='fraud_results.do?incident=<bean:write name="Incident_ID" scope="request"/>'><bean:message key="insert.success.match.results"/></a>
               		</h2>
+              		</div>
               	</td>
               </tr>
-              
               <% } %>
             </table>

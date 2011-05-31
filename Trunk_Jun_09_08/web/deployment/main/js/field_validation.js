@@ -191,3 +191,4 @@ function isWhitespace (s)
 			myform.elements[country].value = 'US';
 		}
 	}
+	

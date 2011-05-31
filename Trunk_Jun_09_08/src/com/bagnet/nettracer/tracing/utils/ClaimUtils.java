@@ -14,8 +14,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.commons.codec.language.Soundex;
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.classic.Session;
+import org.hibernate.criterion.Expression;
 
 import aero.nettracer.fs.model.Bag;
+import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
@@ -26,6 +30,7 @@ import aero.nettracer.fs.model.PnrData;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -194,7 +199,12 @@ public class ClaimUtils {
 	}
 	
 	private static FsIncident createFsIncident(Incident incident, Agent user) {
-		FsIncident fsIncident = createFsIncident(user);
+		FsIncident fsIncident = loadIncident(incident.getIncident_ID());
+		if (fsIncident != null) {
+			return fsIncident;
+		}
+		
+		fsIncident = createFsIncident(user);
 		fsIncident.setAirlineIncidentId(incident.getIncident_ID());
 		
 		OtherSystemInformation osi = OtherSystemInformationBMO.getOsi(incident.getIncident_ID(), null);
@@ -357,6 +367,7 @@ public class ClaimUtils {
 
 			a.setReservation(null);
 			a.setState(add.getState_ID());
+			a.setProvince(add.getProvince());
 			a.setZip(add.getZip());
 			p.setEmailAddress(add.getEmail());
 
@@ -676,6 +687,28 @@ public class ClaimUtils {
 		}
 
 		return pd;
+	}
+	
+	private static FsIncident loadIncident(String incidentId) {
+		if (incidentId == null) {
+			return null;
+		}
+		Session session = null;
+		FsIncident fsIncident = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(FsIncident.class);
+			criteria.add(Expression.eq("airlineIncidentId", incidentId));
+			fsIncident = (FsIncident) criteria.uniqueResult();
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return fsIncident;
 	}
 
 }

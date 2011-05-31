@@ -91,7 +91,7 @@
                   *:
                 </td>
                 <td>
-                  <html:text styleClass="textfield" name="stationForm" property="stationCode" size="10" maxlength="10" />
+                  <html:text styleClass="textfield" name="stationForm" property="stationCode" size="12" maxlength="12" />
                 </td>
               </tr>
               <tr>

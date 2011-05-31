@@ -47,11 +47,13 @@
       function show(name,link1,link2) {
     	  jQuery(name).show();
     	  toggleLinks(link1,link2);
+    	  document.getElementById(name).value = "true";
       }
       
       function hide(name,link1,link2) {
     	  jQuery(name).hide();
     	  toggleLinks(link1,link2);
+    	  document.getElementById(name).value = "false";
       }
       
       function toggleLinks(link1,link2) {
@@ -327,7 +329,7 @@
                           </html:select>
                         </td>
                       </tr>
-              <jsp:include page="/pages/claims/claim_sensitive_incl.jsp" />
+              		<jsp:include page="/pages/claims/claim_sensitive_incl.jsp" />
                       <tr>
                         <td colspan="4">
                           <bean:message key="colname.reason" />
@@ -509,7 +511,7 @@
 					</span>
 					<span style="float:right;" >
 						<a id="anshow" href="#an" onClick="show('#names','#anshow','#anhide')"><bean:message key="link.show" /></a>
-						<a id="anhide" href="#an" onClick="hide('#names','#anshow','#anhide')" style="display:none;"><bean:message key="link.hide" /></a>
+						<a id="anhide" href="#an" onClick="hide('#names','#anshow','#anhide')" style="display:none;" ><bean:message key="link.hide" /></a>
 					</span>
 					</div>
 					
@@ -555,11 +557,14 @@
 				          </tr>
 					</table>
 					</div>
-					<logic:notEmpty name="addNames" scope="request" >
+					<% 	String showNames = (String) request.getAttribute("showNames");
+						if (showNames != null && showNames.equals("true")) { %>
 						<script>
-							show('#names','#anshow','#anhide');
-						</script>
-					</logic:notEmpty>
+				   			jQuery('#names').show();
+				   			jQuery('#anshow').hide();
+				   			jQuery('#anhide').show();
+				   		</script>
+					<% } %>
 					<br />
                     <br />
                     <div style="width:100%;">
@@ -736,11 +741,14 @@
 				          </tr>
 					</table>
 					</div>
-					<logic:notEmpty name="addReceipts" scope="request" >
+					<% 	String showReceipts = (String) request.getAttribute("showReceipts");
+						if (showReceipts != null && showReceipts.equals("true")) { %>
 						<script>
-							show('#receipts','#rsshow','#rshide');
-						</script>
-					</logic:notEmpty>
+				   			jQuery('#receipts').show();
+				   			jQuery('#rsshow').hide();
+				   			jQuery('#rshide').show();
+				   		</script>
+					<% } %>
                     <br />
                     <br />
                     
@@ -1008,5 +1016,7 @@
 	            		<input id="button" type="button" value='<bean:message key="claim.button.back" />' onClick="history.back()">
                     </logic:notEmpty>
                     </center>
+                    <input type="hidden" name="showNames" id="#names" value="<%=request.getAttribute("showNames") %>" />
+                    <input type="hidden" name="showReceipts" id="#receipts" value="<%=request.getAttribute("showReceipts") %>" />
                   </html:form>
 					

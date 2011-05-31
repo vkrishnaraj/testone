@@ -16,6 +16,28 @@
 <SCRIPT LANGUAGE="JavaScript">
   
 	var cal1xx = new CalendarPopup();	
+	
+	function updateStateAndProvince(state, province) {
+		var dlState = document.getElementById(state);
+		var dlProvince = document.getElementById(province);
+		
+		if (dlState.value == "" && dlProvince.value == "") {
+			dlState.disabled = false;
+			dlProvince.disabled = false;
+			dlProvince.className = "textbox";
+		} else if (dlState.value != "") {
+			dlState.disabled = false;
+			dlProvince.disabled = true;
+			dlProvince.value = "";
+			dlProvince.className = "disabledtextbox";
+		} else if (dlProvince.value != "") {
+			dlState.disabled = true;
+			dlState.value = "";
+			dlProvince.disabled = false;
+			dlProvince.className = "textbox";
+		}
+		
+	}
 
 </SCRIPT>
 
@@ -236,51 +258,24 @@
 	            	<html:text name="claimForm" property="claimant.redactedDriversLicenseNumber" size="20" maxlength="20" styleClass="textfield" />
 	            </td>
 	            <td>
-                  <bean:message key="colname.state.req" />
+                  <bean:message key="colname.state" />
                   <br />
-                  <logic:equal name="claimForm" property="country" value="US">
-                    <html:select name="claimForm" property="claimant.driversLicenseIssuer" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
+                    <html:select name="claimForm" property="claimant.driversLicenseIssuer" styleClass="dropdown" styleId="dlState" onchange="updateStateAndProvince('dlState','dlProvince');" >
                       <html:option value="">
                         <bean:message key="select.none" />
                       </html:option>
                       <html:options collection="statelist" property="value" labelProperty="label" />
                     </html:select>
-                  </logic:equal>
-                  <logic:equal name="claimForm" property="country" value="">
-                    <html:select name="claimForm" property="claimant.driversLicenseIssuer" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
-                      <html:option value="">
-                        <bean:message key="select.none" />
-                      </html:option>
-                      <html:options collection="statelist" property="value" labelProperty="label" />
-                    </html:select>
-                  </logic:equal>
-                  <logic:notEqual name="claimForm" property="country" value="">
-                    <logic:notEqual name="claimForm" property="country" value="US">
-                      <html:select name="claimForm" property="claimant.driversLicenseIssuer" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
-                        <html:option value="">
-                          <bean:message key="select.none" />
-                        </html:option>
-                        <html:options collection="statelist" property="value" labelProperty="label" />
-                      </html:select>
-                    </logic:notEqual>
-                  </logic:notEqual>
                 </td>
                 <td colspan=3 >
                   <bean:message key="colname.province" />
                   <br />
-                      <logic:equal name="claimForm" property="country" value="US">
-                  <html:text name="claimForm" property="claimant.driversLicenseIssuer" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
-                      </logic:equal>
-                      <logic:equal name="claimForm" property="country" value="">
-                  <html:text name="claimForm" property="claimant.driversLicenseIssuer" size="15" maxlength="100" styleClass="textfield" />
-                      </logic:equal>
-                      <logic:notEqual name="claimForm" property="country" value="">
-                        <logic:notEqual name="claimForm" property="country" value="US">
-                  <html:text name="claimForm" property="claimant.driversLicenseIssuer" size="15" maxlength="100" styleClass="textfield" />
-                         </logic:notEqual>
-                      </logic:notEqual>
+                  <html:text name="claimForm" property="claimant.driversLicenseIssuer" size="15" maxlength="100" styleClass="textfield" styleId="dlProvince" onchange="updateStateAndProvince('dlState','dlProvince');" />
                 </td>
               </tr>
+              <script>
+					updateStateAndProvince('dlState','dlProvince');		              		
+              </script>
             <!--/logic:iterate-->
            	 
           <!--/logic:present-->

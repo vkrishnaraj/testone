@@ -42,7 +42,6 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
-import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
@@ -105,6 +104,7 @@ public class ModifyClaimAction extends CheckedAction {
 
 		ClaimForm cform = (ClaimForm) form;
 		Claim claim = null;
+		File file = null;
 		
 		// only do this if the customer is an NT user
 		if (isNtUser) {
@@ -178,7 +178,7 @@ public class ModifyClaimAction extends CheckedAction {
 			} else {
 				claim = ClaimUtils.createClaim(user);
 			}
-		
+			
 		} else if (request.getParameter("claimId") != null) {
 			
 			// load an existing claim
@@ -215,14 +215,16 @@ public class ModifyClaimAction extends CheckedAction {
 		// add new items
 		addAssociatedItems(claim, request, user);
 		
-		if (request.getParameter("addNames") == null) {
-			request.removeAttribute("addNames");
+		String showNames = request.getParameter("showNames");
+		if (showNames != null) {
+			request.setAttribute("showNames", showNames);
 		}
-		
-		if (request.getParameter("addReceipts") == null) {
-			request.removeAttribute("addReceipts");
+
+		String showReceipts = request.getParameter("showReceipts");
+		if (showReceipts != null) {
+			request.setAttribute("showReceipts", showReceipts);
 		}
-		
+
 		cform = ClaimUtils.createClaimForm(request);
 
 		/* HANDLE REQUESTS */
@@ -235,8 +237,17 @@ public class ModifyClaimAction extends CheckedAction {
 			deleteEmptyNames(claim);
 
 			boolean firstSave = claim.getId() == 0;
+			if (isNtUser) {
+				if (firstSave) {
+					file = (File) session.getAttribute("file");
+					session.removeAttribute("file");
+					if (file != null) {
+						file.setClaim(claim);
+						claim.setFile(file);
+					}
+				}
+			}
 			boolean claimSaved = ClaimDAO.saveClaim(claim);
-			
 			
 			// maintain existing nt functionality
 			if (isNtUser) {
@@ -289,10 +300,15 @@ public class ModifyClaimAction extends CheckedAction {
 						receipts.add(r);
 					}
 					
-					File file = claim.getFile();
+					// couldn't get it from the incident
 					if (file == null) {
-						file = new File();
+						file = claim.getFile();
+						// couldn't get it from the claim
+						if (file == null) {
+							file = new File();
+						}
 					}
+					
 					file.setClaim(newClaim);
 					file.setStatusId(claim.getStatus().getStatus_ID());
 					newClaim.setFile(file);
@@ -488,7 +504,6 @@ public class ModifyClaimAction extends CheckedAction {
 					p.setClaim(claim);
 					claim.getClaimants().add(p);
 				}
-				request.setAttribute("addNames", "1");
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
 			}
@@ -505,7 +520,6 @@ public class ModifyClaimAction extends CheckedAction {
 					r.setClaim(claim);
 					claim.getReceipts().add(r);
 				}
-				request.setAttribute("addReceipts", "1");
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
 			}

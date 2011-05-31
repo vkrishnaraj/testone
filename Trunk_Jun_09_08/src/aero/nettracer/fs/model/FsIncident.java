@@ -51,7 +51,7 @@ public class FsIncident implements Serializable {
 	private String incidentDescription;
 	private String airline;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class, cascade = CascadeType.ALL) 
+	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class) 
 	private File file;
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.Reservation.class, cascade = CascadeType.ALL, mappedBy = "incident")

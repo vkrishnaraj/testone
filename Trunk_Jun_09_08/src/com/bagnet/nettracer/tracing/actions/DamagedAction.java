@@ -417,8 +417,11 @@ public class DamagedAction extends CheckedAction {
 					
 				} 
 				
-				if (isNew && PropertyBMO.isTrue("ntfs.user")) {
-					ConnectionUtil.createAndSubmitForTracing(iDTO, user, request);
+				if (isNew && PropertyBMO.isTrue("ntfs.submit.damaged")) {
+					File file = ConnectionUtil.createAndSubmitForTracing(iDTO, user, request);
+					if (file != null) {
+						session.setAttribute("file", file);
+					}
 				}
 				
 				theform.setRemarkEnteredWhenNotifiedOfRequirements(false);
