@@ -461,6 +461,12 @@ div#maincontent li.loginlinks {
 	font-weight: bold;
 }
 
+.no_fraud {
+	margin: 0px;
+	padding: 0px;
+	background-color: #4ba047;
+}
+
 .suspected_fraud {
 	margin:	0px;
 	padding: 0px;
@@ -470,5 +476,24 @@ div#maincontent li.loginlinks {
 .known_fraud {
 	margin:	0px;
 	padding: 0px;
-	background-color: #FE6060;
+	background-color: #FE8080;
+}
+
+td#printreceipt {
+	margin:10px;
+	padding:0px;	
+}
+
+#fraudcell {
+	margin:0px;
+	padding:0px;
+	border-width:2px;
+	border-color:black;
+	border-style:solid;
+}
+
+h2#fraudlink {
+	margin: 10px;
+	padding: 0px;
+	font-size: 1.2em;	
 }
