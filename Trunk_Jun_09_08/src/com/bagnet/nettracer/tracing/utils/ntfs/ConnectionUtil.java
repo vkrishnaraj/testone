@@ -7,12 +7,15 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
+import com.bagnet.nettracer.tracing.actions.RequestInfoAction;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
@@ -21,6 +24,9 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 
 public class ConnectionUtil {
+	
+	  private static final Logger logger = Logger.getLogger(ConnectionUtil.class);
+	
 	  static String user     = null;
 	  static String password = null;
 	  static String url      = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVER_LOCATION);
@@ -73,7 +79,7 @@ public class ConnectionUtil {
 				}
 				ctx.close();
 			} catch (NamingException e) {
-				e.printStackTrace();
+				logger.error(e);	
 			}
 			return results;
 		}
@@ -106,10 +112,8 @@ public class ConnectionUtil {
 				}
 			}
 
-		} catch (NamingException ne) {
-			ne.printStackTrace();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return file;
 

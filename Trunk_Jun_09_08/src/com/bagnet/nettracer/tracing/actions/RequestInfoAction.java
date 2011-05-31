@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
@@ -41,7 +43,15 @@ public class RequestInfoAction extends CheckedAction {
 		RequestInfoForm requestForm = (RequestInfoForm) form;
 
 		if (request.getParameter("send") != null) {
-			sendRequests(requestForm, user);
+			boolean success = sendRequests(requestForm, user);
+			ActionMessages messages = new ActionMessages();
+			if (!success) {
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.request.info"));
+				saveErrors(session, messages);
+			} else {
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("message.sent"));
+				saveMessages(session, messages);
+			}
 			
 			String claimId = (String) request.getAttribute("claimId");
 			if (claimId == null) {
@@ -52,11 +62,10 @@ public class RequestInfoAction extends CheckedAction {
 				incidentId = (String) request.getParameter("incident");
 			}
 			
-			
 			if (claimId != null) {
-				response.sendRedirect("claim_resolution.do?claimId=" + claimId);
+				response.sendRedirect("fraud_results.do?claimId=" + claimId);
 			} else if (incidentId != null){
-				response.sendRedirect("claim_resolution.do?incident=" + incidentId);				
+				response.sendRedirect("fraud_results.do?incident=" + incidentId);				
 			}
 			return null;
 		}
@@ -68,7 +77,8 @@ public class RequestInfoAction extends CheckedAction {
 		
 	}
 	
-	private static void sendRequests(RequestInfoForm form, Agent user) {
+	private static boolean sendRequests(RequestInfoForm form, Agent user) {
+		boolean success = true;
 		try {
 			Context ctx = ConnectionUtil.getInitialContext();
 			ClaimRemote remote = (ClaimRemote) ctx
@@ -81,7 +91,9 @@ public class RequestInfoAction extends CheckedAction {
 			}
 			ctx.close();
 		} catch (NamingException e) {
-			e.printStackTrace();
+			logger.error(e);
+			success = false;
 		}
+		return success;
 	}
 }

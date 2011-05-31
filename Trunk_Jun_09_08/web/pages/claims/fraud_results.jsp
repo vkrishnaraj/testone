@@ -165,6 +165,7 @@
                 		<h1>
                 	<bean:message key="claim.meta.summary" />
                 </h1>
+                <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><center><bean:write name="msg"/></center><br/></html:messages></logic:messagesPresent>
        		<table class="form2" cellspacing="0" cellpadding="0">
 				<tr>
 						<td <%=myform.getTraceResponse().getDisplayClass() %>>
