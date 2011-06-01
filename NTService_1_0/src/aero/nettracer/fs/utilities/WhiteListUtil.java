@@ -44,12 +44,12 @@ public class WhiteListUtil {
 //		return ret;
 	}
 	
-	public static boolean isAddressWhiteListed(FsAddress address){
+	public static AddressWhiteList isAddressWhiteListed(FsAddress address){
 		Session sess = null;
 		String nAddress = normalizeAddress(address);
 		address.setNormAddress(nAddress);
 		if(nAddress == null){
-			return false;
+			return null;
 		}
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -58,7 +58,7 @@ public class WhiteListUtil {
 			q.setParameter("address", nAddress);
 			List result = q.list();
 			if(result != null && result.size() > 0){
-				return true;
+				return (AddressWhiteList)result.get(0);
 			}
 			
 		} catch (Exception e){
@@ -68,7 +68,7 @@ public class WhiteListUtil {
 				sess.close();
 			}
 		}
-		return false;
+		return null;
 	}
 	
 	public static boolean isAddressWhiteListed(GeoParsedAddress parsedAddress, FsAddress address){
@@ -178,7 +178,7 @@ public class WhiteListUtil {
 	}
 	
 	
-	public static String isPhoneWhiteListed(String phone){
+	public static PhoneWhiteList isPhoneWhiteListed(String phone){
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -187,7 +187,7 @@ public class WhiteListUtil {
 			q.setParameter("phone", phone.trim());
 			List<PhoneWhiteList> result = q.list();
 			if(result != null && result.size() > 0){
-				return result.get(0).getDescription();
+				return (PhoneWhiteList)result.get(0);
 			}
 			
 		} catch (Exception e){

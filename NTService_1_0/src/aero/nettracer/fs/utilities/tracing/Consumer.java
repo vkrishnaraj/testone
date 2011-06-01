@@ -299,8 +299,8 @@ public class Consumer implements Runnable{
 			detail.setContent2(s.getPhoneNumber());
 			
 			detail.setMatch(match);
-			if(s.isWhiteListed()){
-				detail.setDescription("Phone Number Match (Whitelisted - " + s.getWhiteListDescription() +" )");
+			if(s.getWhitelist() != null){
+				detail.setDescription("Phone Number Match (Whitelisted - " + s.getWhitelist().getDescription() +" )");
 				detail.setPercent(WHITELIST_MATCH);
 			}else{
 				detail.setDescription("Phone Number Match");
@@ -638,8 +638,9 @@ public class Consumer implements Runnable{
 								detail.setContent2(a2.getAddress1() + ", " + a2.getCity() + ", " + a2.getState() + " " + a2.getZip());
 								detail.setDescription("Proximity Match: " + distanceStr + " miles.");
 								detail.setMatch(match);
-								if(a1.isWhiteListed() || a2.isWhiteListed()){
+								if(a1.getWhitelist() != null || a2.getWhitelist() != null){
 									detail.setPercent(WHITELIST_MATCH);
+									detail.setDescription(detail.getDescription() + " (Whitelisted - " + (a1.getWhitelist()!=null?a1.getWhitelist().getDescription():a2.getWhitelist().getDescription()) + ")");
 								} else {
 									detail.setPercent(ADDRESS_FAR_PROXIMITY);
 								}
@@ -654,8 +655,9 @@ public class Consumer implements Runnable{
 								detail.setContent2(a2.getAddress1() + ", " + a2.getCity() + ", " + a2.getState() + " " + a2.getZip());
 								detail.setDescription("Close Proximity Match: " + distanceStr + " miles.");
 								detail.setMatch(match);
-								if(a1.isWhiteListed() || a2.isWhiteListed()){
+								if(a1.getWhitelist() != null  || a2.getWhitelist() != null ){
 									detail.setPercent(WHITELIST_MATCH);
+									detail.setDescription(detail.getDescription() + " (Whitelisted - " + (a1.getWhitelist()!=null?a1.getWhitelist().getDescription():a2.getWhitelist().getDescription()) + ")");
 								} else {
 									detail.setPercent(ADDRESS_CLOSE_PROXIMITY);
 								}
@@ -671,10 +673,10 @@ public class Consumer implements Runnable{
 						String description = "Similar Address";
 						double percent = 0;
 						boolean isWhitelisted =  false;
-						if(a1.isWhiteListed() || a2.isWhiteListed()){
+						if(a1.getWhitelist() != null  || a2.getWhitelist() != null ){
 							percent = WHITELIST_MATCH;
 							isWhitelisted = true;
-							description = "Similar Address (Whitelisted)";
+							description = "Similar Address (Whitelisted - " + (a1.getWhitelist()!=null?a1.getWhitelist().getDescription():a2.getWhitelist().getDescription()) + ")";
 						} else {
 							percent = ADDRESS_SIMILAR;
 						}
@@ -696,10 +698,10 @@ public class Consumer implements Runnable{
 						String description = "Similar Address";
 						double percent = 0;
 						boolean isWhitelisted =  false;
-						if(a1.isWhiteListed() || a2.isWhiteListed()){
+						if(a1.getWhitelist() != null  || a2.getWhitelist() != null ){
 							percent = WHITELIST_MATCH;
 							isWhitelisted = true;
-							description = "Similar Address (Whitelisted)";
+							description = "Similar Address (Whitelisted - " + (a1.getWhitelist()!=null?a1.getWhitelist().getDescription():a2.getWhitelist().getDescription()) + ")";
 						} else {
 							percent = ADDRESS_SIMILAR;
 						}
@@ -720,9 +722,9 @@ public class Consumer implements Runnable{
 						String description = "Similar Address";
 						double percent = 0;
 						boolean isWhitelisted =  false;
-						if(a1.isWhiteListed() || a2.isWhiteListed()){
+						if(a1.getWhitelist() != null  || a2.getWhitelist() != null ){
 							percent = WHITELIST_MATCH;
-							description = "Similar Address (Whitelisted)";
+							description = "Similar Address (Whitelisted - " + (a1.getWhitelist()!=null?a1.getWhitelist().getDescription():a2.getWhitelist().getDescription()) + ")";
 							isWhitelisted = true;
 						} else {
 							percent = ADDRESS_SIMILAR;

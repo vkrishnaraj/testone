@@ -5,8 +5,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+
 import javax.ejb.Stateless;
-import javax.jws.WebService;
+
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -268,12 +269,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				}
 				
 				phone.setPhoneNumber(aero.nettracer.fs.utilities.Util.removeNonNumeric(phone.getPhoneNumber()));
-				String phoneWhiteListDescription = WhiteListUtil.isPhoneWhiteListed(phone.getPhoneNumber());
-				if(phoneWhiteListDescription != null){
-					phone.setWhiteListed(true);
-					
-					phone.setWhiteListDescription(WhiteListUtil.isPhoneWhiteListed(phone.getPhoneNumber()));
-				}
+				phone.setWhitelist(WhiteListUtil.isPhoneWhiteListed(phone.getPhoneNumber()));
 			}
 		}
 		return phones;
@@ -287,9 +283,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				}
 				if(address.getId() != 0 || address.getGeocodeType() == 0){
 					address.setId(0);
-					if(WhiteListUtil.isAddressWhiteListed(address)){
-						address.setWhiteListed(true);
-					}
+					address.setWhitelist(WhiteListUtil.isAddressWhiteListed(address));
 
 					// GEOCODING ALL ADDRESSES POSSIBLE ON SAVE
 					// Note: Because this is not persisted to the client,
