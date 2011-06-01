@@ -12,6 +12,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
+import aero.nettracer.fs.model.detection.AddressWhiteList;
+
 @Entity
 @Proxy(lazy = false)
 public class FsAddress implements Serializable {
@@ -43,7 +45,11 @@ public class FsAddress implements Serializable {
 	private double lattitude;
 	private double longitude;
 	private int geocodeType;
-	private boolean whiteListed;
+
+	@ManyToOne(targetEntity = aero.nettracer.fs.model.detection.AddressWhiteList.class)
+	@Fetch(FetchMode.SELECT)
+	private AddressWhiteList whitelist;
+	
 	private String normAddress;
 
 	public int getGeocodeType() {
@@ -158,20 +164,20 @@ public class FsAddress implements Serializable {
 		this.receipt = receipt;
 	}
 
-	public void setWhiteListed(boolean whiteListed) {
-		this.whiteListed = whiteListed;
-	}
-
-	public boolean isWhiteListed() {
-		return whiteListed;
-	}
-
 	public void setNormAddress(String normAddress) {
 		this.normAddress = normAddress;
 	}
 
 	public String getNormAddress() {
 		return normAddress;
+	}
+
+	public void setWhitelist(AddressWhiteList whitelist) {
+		this.whitelist = whitelist;
+	}
+
+	public AddressWhiteList getWhitelist() {
+		return whitelist;
 	}
 
 }

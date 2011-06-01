@@ -2,6 +2,7 @@ package aero.nettracer.fs.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -14,6 +15,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
+import aero.nettracer.fs.model.detection.PhoneWhiteList;
+
 @Entity
 @Proxy(lazy = false)
 public class Phone implements Serializable {
@@ -25,8 +28,6 @@ public class Phone implements Serializable {
 	public static final int ALTERNATE = 4;
 	public static final int PAGER = 5;
 	
-	@Transient
-	private String whiteListDescription;
 	
 	@Id
 	@GeneratedValue
@@ -37,7 +38,9 @@ public class Phone implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private FsIncident incident;
 
-	private boolean whiteListed;
+	@ManyToOne(targetEntity = aero.nettracer.fs.model.detection.PhoneWhiteList.class)
+	@Fetch(FetchMode.SELECT)
+	private PhoneWhiteList whitelist;
 
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
 	@Fetch(FetchMode.SELECT)
@@ -95,14 +98,6 @@ public class Phone implements Serializable {
 		this.incident = incident;
 	}
 
-	public boolean isWhiteListed() {
-		return whiteListed;
-	}
-
-	public void setWhiteListed(boolean whiteListed) {
-		this.whiteListed = whiteListed;
-	}
-
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -119,12 +114,14 @@ public class Phone implements Serializable {
 		this.receipt = receipt;
 	}
 
-	public void setWhiteListDescription(String whiteListDescription) {
-		this.whiteListDescription = whiteListDescription;
+	public void setWhitelist(PhoneWhiteList whitelist) {
+		this.whitelist = whitelist;
 	}
 
-	public String getWhiteListDescription() {
-		return whiteListDescription;
+	public PhoneWhiteList getWhitelist() {
+		return whitelist;
 	}
+
+
 	
 }
