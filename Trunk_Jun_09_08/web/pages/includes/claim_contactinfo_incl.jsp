@@ -17,26 +17,58 @@
   
 	var cal1xx = new CalendarPopup();	
 	
-	function updateStateAndProvince(state, province) {
-		var dlState = document.getElementById(state);
-		var dlProvince = document.getElementById(province);
-		
-		if (dlState.value == "" && dlProvince.value == "") {
+	function dlFieldChanged(field) {
+		var dlState = document.getElementById('dlState');
+		var dlProvince = document.getElementById('dlProvince');
+		var dlCountry = document.getElementById('dlCountry');
+	
+		if (field == "dlState") {
+			stateChanged(dlState, dlProvince, dlCountry);
+		} else if (field == "dlProvince") {
+			provinceChanged(dlState, dlProvince, dlCountry);
+		} else if (field == "dlCountry") {
+			countryChanged(dlState, dlProvince, dlCountry);
+		}
+	}
+	
+	function stateChanged(dlState, dlProvince, dlCountry) {
+		if (dlState.value == "") {
+			dlProvince.disabled = false;	
+			dlProvince.className = "textbox";
+			dlCountry.value = "";
+		} else {
+			dlProvince.value = "";
+			dlProvince.disabled = true;
+			dlProvince.className = "disabledtextbox";
+			dlCountry.value = "US";
+		}
+	}
+	
+	function provinceChanged(dlState, dlProvince, dlCountry) {
+		if (dlProvince.value == "") {
+			dlState.disabled = false;
+		} else {
+			dlState.value = "";
+			dlState.disabled = true;
+		}
+	}
+	
+	function countryChanged(dlState, dlProvince, dlCountry) {
+		if (dlCountry.value == "") {
 			dlState.disabled = false;
 			dlProvince.disabled = false;
 			dlProvince.className = "textbox";
-		} else if (dlState.value != "") {
+		} else if (dlCountry.value == "US") {
 			dlState.disabled = false;
-			dlProvince.disabled = true;
 			dlProvince.value = "";
+			dlProvince.disabled = true;
 			dlProvince.className = "disabledtextbox";
-		} else if (dlProvince.value != "") {
-			dlState.disabled = true;
+		} else {
 			dlState.value = "";
+			dlState.disabled = true;
 			dlProvince.disabled = false;
 			dlProvince.className = "textbox";
 		}
-		
 	}
 
 </SCRIPT>
@@ -243,7 +275,7 @@
 	            <td>
 	            	<bean:message key="colname.country_of_issue" />
 	            	<br />
-	            	<html:select name="claimForm" property="claimant.passportIssuer" styleClass="dropdown" onchange="checkstate(this,this.form,'state', 'province');">
+	            	<html:select name="claimForm" property="claimant.passportIssuer" styleClass="dropdown" >
                     <html:option value="">
                       <bean:message key="select.none" />
                     </html:option>
@@ -260,21 +292,31 @@
 	            <td>
                   <bean:message key="colname.state" />
                   <br />
-                    <html:select name="claimForm" property="claimant.driversLicenseIssuer" styleClass="dropdown" styleId="dlState" onchange="updateStateAndProvince('dlState','dlProvince');" >
+                    <html:select name="claimForm" property="claimant.driversLicenseIssuer" styleClass="dropdown" styleId="dlState" onchange="dlFieldChanged('dlState');" >
                       <html:option value="">
                         <bean:message key="select.none" />
                       </html:option>
                       <html:options collection="statelist" property="value" labelProperty="label" />
                     </html:select>
                 </td>
-                <td colspan=3 >
+                <td colspan=2 >
                   <bean:message key="colname.province" />
                   <br />
-                  <html:text name="claimForm" property="claimant.driversLicenseIssuer" size="15" maxlength="100" styleClass="textfield" styleId="dlProvince" onchange="updateStateAndProvince('dlState','dlProvince');" />
+                  <html:text name="claimForm" property="claimant.driversLicenseIssuer" size="15" maxlength="100" styleClass="textfield" styleId="dlProvince" onchange="dlFieldChanged('dlProvince');" />
+                </td>
+                <td colspan=2 >
+                	<bean:message key="colname.country_of_issue" />
+                	<br>
+                	<html:select name="claimForm" property="claimant.driversLicenseCountry" styleId="dlCountry" styleClass="dropdown" onchange="dlFieldChanged('dlCountry');">
+                		<html:option value="">
+	                        <bean:message key="select.none" />
+	                    </html:option>
+	                    <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
+                	</html:select>
                 </td>
               </tr>
               <script>
-					updateStateAndProvince('dlState','dlProvince');		              		
+					dlFieldChanged('dlCountry');		              		
               </script>
             <!--/logic:iterate-->
            	 

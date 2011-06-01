@@ -58,6 +58,7 @@ public class Person implements Serializable {
 	private String socialSecurity;
 	private String driversLicenseIssuer;
 	private String driversLicenseNumber;
+	private String driversLicenseCountry;
 	private String passportIssuer;
 	private String passportNumber;
 	private String emailAddress;
@@ -338,6 +339,14 @@ public class Person implements Serializable {
 
 	public Person getParent() {
 		return parent;
+	}
+
+	public String getDriversLicenseCountry() {
+		return driversLicenseCountry;
+	}
+
+	public void setDriversLicenseCountry(String driversLicenseCountry) {
+		this.driversLicenseCountry = driversLicenseCountry;
 	}
 	
 }
