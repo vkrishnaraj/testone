@@ -358,4 +358,14 @@ public class Person implements Serializable {
 		this.driversLicenseCountry = driversLicenseCountry;
 	}
 	
+	public String getDriversLicenseIssuer(){
+		if(this.driversLicenseState != null && this.driversLicenseState.length() > 0){
+			return this.driversLicenseState;
+		} else if (this.driversLicenseProvince != null && this.driversLicenseProvince.length() > 0){
+			return this.driversLicenseProvince;
+		} else {
+			return null;
+		}
+	}
+	
 }
