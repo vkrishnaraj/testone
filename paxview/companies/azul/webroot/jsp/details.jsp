@@ -132,10 +132,12 @@
 			<p /><table width="350" class="formtable">
 		
 		<c:forEach items="${incident.items}" var="item" varStatus="status" >
+			    <c:if test="${!empty item.claimchecknum}">
 		    <tr>
 					<td width="125px"  class="label"><span><spring:message code="pv18" />:</span></td>
 					<td width="225px"  class="field"><c:out value="${item.claimchecknum}" ><spring:message code="unknown"/></c:out></td>
 				</tr>
+			    </c:if>
 		
 				<tr>
 					<td class="label"><span class="label"><spring:message code="pv19" />:</span></td>
