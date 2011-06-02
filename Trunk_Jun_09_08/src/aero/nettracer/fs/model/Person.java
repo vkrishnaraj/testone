@@ -56,8 +56,9 @@ public class Person implements Serializable {
 	private String firstNameDmp;
 	private String lastNameDmp;
 	private String socialSecurity;
-	private String driversLicenseIssuer;
 	private String driversLicenseNumber;
+	private String driversLicenseState;
+	private String driversLicenseProvince;
 	private String driversLicenseCountry;
 	private String passportIssuer;
 	private String passportNumber;
@@ -233,12 +234,12 @@ public class Person implements Serializable {
 		this.middleName = middleName;
 	}
 
-	public String getDriversLicenseIssuer() {
-		return driversLicenseIssuer;
+	public String getDriversLicenseState() {
+		return driversLicenseState;
 	}
 
-	public void setDriversLicenseIssuer(String driversLicenseIssuer) {
-		this.driversLicenseIssuer = driversLicenseIssuer;
+	public void setDriversLicenseState(String driversLicenseState) {
+		this.driversLicenseState = driversLicenseState;
 	}
 
 	public String getRedactedDriversLicenseNumber() {
@@ -249,6 +250,14 @@ public class Person implements Serializable {
 		return toReturn;
 	}
 	
+	public String getDriversLicenseProvince() {
+		return driversLicenseProvince;
+	}
+
+	public void setDriversLicenseProvince(String driversLicenseProvince) {
+		this.driversLicenseProvince = driversLicenseProvince;
+	}
+
 	public String getDriversLicenseNumber() {
 		return this.driversLicenseNumber;
 	}

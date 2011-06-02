@@ -91,7 +91,7 @@ public class FraudResultsAction extends CheckedAction {
 			long id = 0;
 			if (file != null) {
 				id = file.getSwapId();
-			} else if (claim != null) {
+			} else if (claim != null && claim.getFile() != null) {
 				id = claim.getFile().getSwapId();
 			}
 			

@@ -35,7 +35,6 @@
 		if (dlState.value == "") {
 			dlProvince.disabled = false;	
 			dlProvince.className = "textbox";
-			dlCountry.value = "";
 		} else {
 			dlProvince.value = "";
 			dlProvince.disabled = true;
@@ -292,7 +291,7 @@
 	            <td>
                   <bean:message key="colname.state" />
                   <br />
-                    <html:select name="claimForm" property="claimant.driversLicenseIssuer" styleClass="dropdown" styleId="dlState" onchange="dlFieldChanged('dlState');" >
+                    <html:select name="claimForm" property="claimant.driversLicenseState" styleClass="dropdown" styleId="dlState" onchange="dlFieldChanged('dlState');" >
                       <html:option value="">
                         <bean:message key="select.none" />
                       </html:option>
@@ -302,7 +301,7 @@
                 <td colspan=2 >
                   <bean:message key="colname.province" />
                   <br />
-                  <html:text name="claimForm" property="claimant.driversLicenseIssuer" size="15" maxlength="100" styleClass="textfield" styleId="dlProvince" onchange="dlFieldChanged('dlProvince');" />
+                  <html:text name="claimForm" property="claimant.driversLicenseProvince" size="15" maxlength="100" styleClass="textfield" styleId="dlProvince" onchange="dlFieldChanged('dlProvince');" />
                 </td>
                 <td colspan=2 >
                 	<bean:message key="colname.country_of_issue" />
@@ -316,6 +315,7 @@
                 </td>
               </tr>
               <script>
+					dlFieldChanged('dlState');
 					dlFieldChanged('dlCountry');		              		
               </script>
             <!--/logic:iterate-->
