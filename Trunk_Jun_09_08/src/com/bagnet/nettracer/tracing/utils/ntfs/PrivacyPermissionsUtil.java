@@ -12,26 +12,35 @@ import aero.nettracer.serviceprovider.common.db.PrivacyPermissions.AccessLevelTy
 
 public class PrivacyPermissionsUtil {
 	  
-	  public static PrivacyPermissions getPrivacyPermissions(String companycode,  AccessLevelType level) throws NamingException{
+	  public static PrivacyPermissions getPrivacyPermissions(String companycode,  AccessLevelType level) throws Exception{
 		  try{
 			  Context ctx          = ConnectionUtil.getInitialContext();
-			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("NTServices_1_0/PrivacyPermissionsBean/remote");
+			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ConnectionUtil.getRemoteEjb(ctx,"NTServices_1_0/PrivacyPermissionsBean/remote");
+			  if(o != null){
 			  return o.getPrivacyPermissions(companycode, level);
+			  } else {
+				  throw new 
+				  Exception("Remote EJB connection failed");
+			  }
 		  } catch (NamingException e){
 			  e.printStackTrace();
 			  throw e;
 		  }
 	  }
 	  
-	  public static void setPrivacyPermissions(PrivacyPermissions p) throws NamingException{
+	  public static boolean setPrivacyPermissions(PrivacyPermissions p) throws NamingException{
 		  try{
 			  Context ctx          = ConnectionUtil.getInitialContext();
-			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote) ctx.lookup("NTServices_1_0/PrivacyPermissionsBean/remote");
-			  o.setPrivacyPermissions(p);
+			  PrivacyPermissionsRemote o = (PrivacyPermissionsRemote)ConnectionUtil.getRemoteEjb(ctx,"NTServices_1_0/PrivacyPermissionsBean/remote");
+			  if(o != null){
+				  o.setPrivacyPermissions(p);
+				  return true;
+			  }
 		  } catch (NamingException e){
 			  e.printStackTrace();
 			  throw e;
 		  }
+		  return false;
 	  }
 	  
 }

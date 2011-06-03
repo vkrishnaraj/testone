@@ -316,9 +316,10 @@ public class LogonAction extends Action {
 							
 							try {
 							Context ctx = ConnectionUtil.getInitialContext();
-							ClaimRemote remote = (ClaimRemote) ctx
-									.lookup("NTServices_1_0/ClaimBean/remote");
-							x = remote.getOutstandingRequetsCount(agent.getCompanycode_ID());
+							ClaimRemote remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx,"NTServices_1_0/ClaimBean/remote");
+							if(remote != null){
+								x = remote.getOutstandingRequetsCount(agent.getCompanycode_ID());
+							}
 							ctx.close();
 							} catch (Exception e) {
 								e.printStackTrace();

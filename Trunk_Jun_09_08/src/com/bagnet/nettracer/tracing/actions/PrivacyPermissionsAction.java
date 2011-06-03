@@ -48,7 +48,7 @@ public class PrivacyPermissionsAction extends Action{
 			try{
 				def = PrivacyPermissionsUtil.getPrivacyPermissions(user.getCompanycode_ID(), PrivacyPermissions.AccessLevelType.def);
 			    req = PrivacyPermissionsUtil.getPrivacyPermissions(user.getCompanycode_ID(), PrivacyPermissions.AccessLevelType.req);
-			} catch (NamingException e){
+			} catch (Exception e){
 				ActionMessages errors = new ActionMessages();
 				ActionMessage error = new ActionMessage("error.database.connection");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -110,9 +110,13 @@ public class PrivacyPermissionsAction extends Action{
 				
 				def.setRetention(theForm.getRetention());
 				req.setRetention(theForm.getRetention());
-				
-				PrivacyPermissionsUtil.setPrivacyPermissions(def);
-				PrivacyPermissionsUtil.setPrivacyPermissions(req);
+
+				if(PrivacyPermissionsUtil.setPrivacyPermissions(def) 
+						&& PrivacyPermissionsUtil.setPrivacyPermissions(req)){
+					success = true;
+				} else {
+					success = false;
+				}
 			} else {
 				success = false;
 			}
