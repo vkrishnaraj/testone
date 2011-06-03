@@ -303,6 +303,9 @@ public class NTReservationIntegrationImpl extends
 							.getTime()) / 3600000;
 					Long nowtime = ((new Date()).getTime()) / 3600000;
 					Long timeDifference = nowtime - checkedTime;
+					// if you are looking here for a missing itinerary, please
+					// double-check the dates that were returned from the 
+					// SABRE response
 					if (timeDifference <= HOURS_BACK_ITINERARY
 							&& timeDifference >= -HOURS_FORWARD_ITINERARY) {
 						com.bagnet.nettracer.tracing.db.Itinerary fitin = form.getItinerary(form.getItinerarylist().size(), routingType);
