@@ -305,7 +305,8 @@ public class NTReservationIntegrationImpl extends
 					Long timeDifference = nowtime - checkedTime;
 					// if you are looking here for a missing itinerary, please
 					// double-check the dates that were returned from the 
-					// SABRE response
+					// SABRE response. The departure date may be a year in the
+					// future.
 					if (timeDifference <= HOURS_BACK_ITINERARY
 							&& timeDifference >= -HOURS_FORWARD_ITINERARY) {
 						com.bagnet.nettracer.tracing.db.Itinerary fitin = form.getItinerary(form.getItinerarylist().size(), routingType);
