@@ -117,7 +117,7 @@ public class Person implements Serializable {
 	}
 
 	public void setSocialSecurity(String socialSecurity) {
-		if (socialSecurity.matches("[0-9]{9}")) {
+		if (socialSecurity != null && socialSecurity.matches("[0-9]{9}")) {
 			this.socialSecurity = StringUtils.sha1(socialSecurity);
 		}
 	}
@@ -297,7 +297,7 @@ public class Person implements Serializable {
 	}
 
 	public void setPassportNumber(String passportNumber) {
-		if (passportNumber.matches("[A-Za-z0-9]{5,15}")) {
+		if (passportNumber != null && passportNumber.matches("[A-Za-z0-9]{5,15}")) {
 			this.passportNumber = StringUtils.sha1(passportNumber);
 		}
 	}

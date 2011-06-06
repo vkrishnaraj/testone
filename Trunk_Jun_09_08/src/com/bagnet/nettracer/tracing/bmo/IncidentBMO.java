@@ -708,7 +708,7 @@ public class IncidentBMO {
 //			return iDTO;
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);
-			e.printStackTrace();
+//			e.printStackTrace();
 			return null;
 		} finally {
 			if (sess != null && sessionNull) {

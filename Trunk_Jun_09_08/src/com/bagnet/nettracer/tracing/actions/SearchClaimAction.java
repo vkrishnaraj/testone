@@ -59,7 +59,8 @@ public class SearchClaimAction extends CheckedAction {
 		SearchClaimForm theForm = (SearchClaimForm) form;
 		Set<FsClaim> resultSet = new LinkedHashSet<FsClaim>();
 		if (request.getParameter("clear") == null) {
-			long rowcount = ClaimDAO.getClaimCountFromSearchForm((SearchClaimForm) form, user);
+			ClaimDAO cdao = new ClaimDAO();
+			long rowcount = cdao.getClaimCountFromSearchForm((SearchClaimForm) form, user);
 	
 			currpage = theForm.getCurrpage() != null ? Integer.parseInt(theForm.getCurrpage()) : 0;
 			if (theForm.getNextpage() != null && theForm.getNextpage().equals("1"))
@@ -92,10 +93,10 @@ public class SearchClaimAction extends CheckedAction {
 			
 			/***************** end pagination *****************/
 
-			resultSet = ClaimDAO.getClaimsFromSearchForm((SearchClaimForm) form, user, rowsperpage, currpage);
+			resultSet = cdao.getClaimsFromSearchForm((SearchClaimForm) form, user, rowsperpage, currpage);
 			
 			if (!end && resultSet.size() == 1) {
-				long claimId = resultSet.toArray(new FsClaim[0])[0].getId();
+				long claimId = resultSet.iterator().next().getId();
 				response.sendRedirect("claim_resolution.do?claimId=" + claimId);
 				return null;
 			}

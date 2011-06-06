@@ -1,20 +1,12 @@
 package com.bagnet.nettracer.tracing.dao;
 
-import java.util.Date;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
-import org.hibernate.criterion.Expression;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-
-import aero.nettracer.fs.model.FsClaim;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -25,9 +17,13 @@ import com.bagnet.nettracer.tracing.utils.StringUtils;
 
 public class ClaimDAO {
 	
+	private static Logger logger = Logger.getLogger(ClaimDAO.class);
 	private static final String EXCEPTION_MESSAGE = "Exception in ClaimDAO";
 	
-	private static Logger logger = Logger.getLogger(ClaimDAO.class);
+	private static final String CLAIM_DATE = "claim_date";
+	private static final String DOB = "dob";
+	
+	private String sqlFromForm = null;
 	
 	public static Claim loadClaim(long id) {
 		Session session = null;
@@ -77,14 +73,18 @@ public class ClaimDAO {
 		return success;
 	}
 	
-	public static long getClaimCountFromSearchForm(SearchClaimForm form, Agent user) {
+	public long getClaimCountFromSearchForm(SearchClaimForm form, Agent user) {
 		long count = -1;
 		Session session = null;
 		
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			Criteria criteria = getCriteriaFromForm(session, form, user);
-			count = (Integer) criteria.setProjection(Projections.rowCount()).uniqueResult();
+			String sql = "select count(distinct c) from aero.nettracer.fs.model.FsClaim c ";
+			sqlFromForm = getSqlFromForm(form, user);
+			sql += sqlFromForm;
+			Query query = session.createQuery(sql);
+			setQueryParameters(form, user, query);
+			count = (Long) query.uniqueResult();
 		} catch (Exception e) {
 			logger.error(EXCEPTION_MESSAGE, e);
 		} finally {
@@ -96,20 +96,23 @@ public class ClaimDAO {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Set getClaimsFromSearchForm(SearchClaimForm form, Agent user, int rowsperpage, int currpage) {
+	public Set getClaimsFromSearchForm(SearchClaimForm form, Agent user, int rowsperpage, int currpage) {
 		Set results = null;
 		Session session = null;
 		
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			Criteria criteria = getCriteriaFromForm(session, form, user);
+			String sql = "select distinct c from aero.nettracer.fs.model.FsClaim c ";
+			sql += sqlFromForm;
+			Query query = session.createQuery(sql);
+			setQueryParameters(form, user, query);
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
-				criteria.setFirstResult(startnum);
-				criteria.setMaxResults(rowsperpage);
+				query.setFirstResult(startnum);
+				query.setMaxResults(rowsperpage);
 			}
 			
-			results = new LinkedHashSet(criteria.list());
+			results = new LinkedHashSet(query.list());
 		} catch (Exception e) {
 			logger.error(EXCEPTION_MESSAGE, e);
 		} finally {
@@ -121,149 +124,254 @@ public class ClaimDAO {
 		return results;
 	}
 	
-	private static Criteria getCriteriaFromForm(Session session, SearchClaimForm form, Agent user) {
-		Criteria criteria = session.createCriteria(FsClaim.class);
-		criteria = getIdCriteria(form, criteria);		
-		criteria = getNtIncidentIdCriteria(form, criteria); 
-		criteria = getDateCriteria("claimDate", form.getS_createtime(), form.getE_createtime(), user, criteria);
-		criteria = getClaimantAndPurchaserCriteria(form, user, criteria);
-		criteria = criteria.addOrder(Order.desc("claimDate"));
-		return criteria;
-	}
-	
-	private static Criteria getIdCriteria(SearchClaimForm form, Criteria criteria) {
+	private static void setQueryParameters(SearchClaimForm form, Agent user, Query query) {
+		
 		if (form.getClaimId() > 0) {
-			criteria.add(Expression.eq("id", form.getClaimId()));
-		}
-		return criteria;
-	}
-	
-	private static Criteria getNtIncidentIdCriteria(SearchClaimForm form, Criteria criteria) {
-		String ntIncidentId = form.getIncidentId();
-		if (ntIncidentId != null && !ntIncidentId.isEmpty()) {
-			criteria.add(Expression.like("ntIncidentId", ntIncidentId));
-		}
-		return criteria;
-	}
-	
-	private static Criteria getDateCriteria(String targetField, String start, String end, Agent agent, Criteria criteria) {
-		Date startDate = DateUtils.convertToDate(start, agent.getDateformat().getFormat(), agent.getCurrentlocale());
-		Date endDate = DateUtils.convertToDate(end, agent.getDateformat().getFormat(), agent.getCurrentlocale());
-		
-		if (startDate != null && endDate != null) {
-			criteria.add(Expression.between(targetField, startDate, endDate));
-		} else if (startDate != null && endDate == null) {
-			criteria.add(Expression.ge(targetField, startDate));
-		} else if (startDate == null && endDate != null) {
-			criteria.add(Expression.le(targetField, endDate));
+			query.setLong("claimId", form.getClaimId());
 		}
 		
-		return criteria;
-		
-	}
-	
-	private static Criteria getClaimantAndPurchaserCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
-		getClaimantCriteria(form, agent, criteria);
-//		getPurchaserCriteria(form, agent, criteria);
-		return criteria;
-	}
-	
-	private static Criteria getClaimantCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
-		Criteria claimantCriteria = criteria.createCriteria("claimants");
-		claimantCriteria = getPersonCriteria(form, agent, claimantCriteria);
-		return criteria;
-	}
-	
-	private static Criteria getPurchaserCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
-		// TODO: build criteria for purchaser
-		Criteria purchaserCriteria = criteria.createCriteria("incident.reservation.purchaser");
-		
-		// TODO: get person criteria using purchaser criteria
-		purchaserCriteria = getPersonCriteria(form, agent, purchaserCriteria);
-		return criteria;
-	}
-	
-	private static Criteria getPersonCriteria(SearchClaimForm form, Agent agent, Criteria criteria) {
-
-		String value = form.getLastName();
-		
+		String value = form.getIncidentId();
 		if (value != null && !value.isEmpty()) {
-			criteria.add(Restrictions.like("lastName", form.getLastName()));
+			query.setString("ntIncidentId", value);
+		}
+		
+		value = form.getS_createtime();
+		if (value != null && !value.isEmpty()) {
+			query.setDate(CLAIM_DATE+"_start", DateUtils.convertToDate(form.getS_createtime(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+		}
+		
+		value = form.getE_createtime();
+		if (value != null && !value.isEmpty()) {
+			query.setDate(CLAIM_DATE+"_end", DateUtils.convertToDate(form.getE_createtime(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+		}
+
+		value = form.getLastName();
+		if (value != null && !value.isEmpty()) {
+			query.setString("lastName", form.getLastName());
 		}
 
 		value = form.getFirstName();
 		if (value != null && !value.isEmpty()) {
-			criteria.add(Restrictions.like("firstName", form.getFirstName()));
+			query.setString("firstName", form.getFirstName());
 		}
-		
+
 		value = form.getMiddleName();
 		if (value != null && !value.isEmpty()) {
-			criteria.add(Restrictions.like("middleName", form.getMiddleName()));
+			query.setString("middleName", form.getFirstName());
 		}
-		
+
 		value = form.getEmailAddress();
 		if (value != null && !value.isEmpty()) {
-			criteria.add(Restrictions.like("emailAddress", value));
+			query.setString("emailAddress", form.getEmailAddress());
 		}
-		
-		criteria = getDateCriteria("dateOfBirth", form.getStartDateOfBirth(), form.getEndDateOfBirth(), agent, criteria);		
-		criteria = getClaimantAddressCriteria(form, criteria);
-		criteria = getClaimantPhoneCriteria(form, criteria);
-		
-		return criteria;
-	}
-	
-	private static Criteria getClaimantAddressCriteria(SearchClaimForm form, Criteria claimantCriteria) {
-		Criteria addressCriteria = claimantCriteria.createCriteria("addresses");
-		
-		String value = form.getAddress1();
+
+		value = form.getAddress1();
 		if (value != null && !value.isEmpty()) {
-			addressCriteria.add(Restrictions.like("address1", value));
+			query.setString("address1", value);
 		}
-		
+
 		value = form.getAddress2();
 		if (value != null && !value.isEmpty()) {
-			addressCriteria.add(Restrictions.like("address2", value));
+			query.setString("address2", value);
 		}
-
+		
 		value = form.getCity();
 		if (value != null && !value.isEmpty()) {
-			addressCriteria.add(Restrictions.like("city", value));
+			query.setString("city", value);
 		}
-
+		
 		value = form.getState();
 		if (value != null && !value.isEmpty()) {
-			addressCriteria.add(Restrictions.like("state", value));
-		} 			
-
+			query.setString("state", value);
+		}
+		
 		value = form.getProvince();
 		if (value != null && !value.isEmpty()) {
-			addressCriteria.add(Restrictions.like("province", value));
-		} 			
+			query.setString("province", value);
+		}
 
 		value = form.getCountry();
 		if (value != null && !value.isEmpty()) {
-			addressCriteria.add(Restrictions.like("country", value));
+			query.setString("country", value);
 		}
 		
 		value = form.getZip();
 		if (value != null && !value.isEmpty()) {
-			addressCriteria.add(Restrictions.like("zip", value));
+			query.setString("zip", value);
+		}
+
+		value = form.getPhone();
+		if (value != null && !value.isEmpty()) {
+			value = StringUtils.removeNonNumeric(value);
+			query.setString("phoneNumber", value);
 		}
 		
-		return claimantCriteria;
+		value = form.getStartDateOfBirth();
+		if (value != null && !value.isEmpty()) {
+			query.setDate(DOB+"_start", DateUtils.convertToDate(form.getS_createtime(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+		}
+
+		value = form.getEndDateOfBirth();
+		if (value != null && !value.isEmpty()) {
+			query.setDate(DOB+"_end", DateUtils.convertToDate(form.getE_createtime(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+		}
+		
 	}
 	
-	private static Criteria getClaimantPhoneCriteria(SearchClaimForm form, Criteria claimantCriteria) {
-		Criteria phoneCriteria = claimantCriteria.createCriteria("phones");
+	private String getSqlFromForm(SearchClaimForm form, Agent user) {
+		StringBuilder fromSql = new StringBuilder();		
+		StringBuilder whereSql = new StringBuilder("where 1 = 1 ");
+		
+		// add claim id sql
+		whereSql.append(getIdSql(form));
+		
+		// add incident id sql
+		whereSql.append(getNtIncidentIdSql(form));
+
+		// add claim date sql
+		whereSql.append(getDateSql("c.claimDate", CLAIM_DATE, form.getS_createtime(), form.getE_createtime(), user));
+
+		// add claimant sql
+		getPersonSql(form, user, fromSql, whereSql);
+		
+		return fromSql.toString() + whereSql.toString() + "order by c.claimDate desc";
+	}
+	
+	private String getIdSql(SearchClaimForm form) {
+		String toReturn = "";
+		if (form.getClaimId() > 0) {
+			toReturn = "and c.id = :claimId ";
+		}
+		return toReturn;
+	}
+	
+	private String getNtIncidentIdSql(SearchClaimForm form) {
+		String toReturn = "";
+		String ntIncidentId = form.getIncidentId();
+		if (ntIncidentId != null && !ntIncidentId.isEmpty()) {
+			toReturn = "and c.ntIncidentId = :ntIncidentId ";
+		}
+		return toReturn;
+	}
+	
+	private String getDateSql(String targetField, String fieldName, String startDate, String endDate, Agent agent) {
+		String toReturn = "";
+		boolean startDateValid = startDate != null && !startDate.isEmpty();
+		boolean endDateValid = endDate != null && !endDate.isEmpty();
+		if (startDateValid && endDateValid) {
+			toReturn = "and " + targetField + " between :" + fieldName + "_start and :" + fieldName + "_end ";
+		} else if (startDateValid) {
+			toReturn = "and " + targetField + " >= :" + fieldName + "_start ";
+		} else if (endDateValid) {
+			toReturn = "and " + targetField + " <= :" + fieldName + "_end ";
+		}
+		
+		return toReturn;
+	}
+	
+	private String getPersonSql(SearchClaimForm form, Agent agent, StringBuilder fromSql, StringBuilder whereSql) {
+		StringBuilder toReturn = new StringBuilder();
+		
+		String value = form.getLastName();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and p.lastName = :lastName ");
+		}
+		
+		value = form.getFirstName();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and p.firstName = :firstName ");
+		}
+		
+		value = form.getMiddleName();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and p.middleName = :middleName ");
+		}
+		
+		value = form.getEmailAddress();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and p.emailAddress = :emailAddress ");
+		}
+		
+		toReturn.append(getDateSql("p.dateOfBirth", DOB, form.getStartDateOfBirth(), form.getEndDateOfBirth(), agent));
+		
+		String personSql = toReturn.toString();		
+		if (!personSql.isEmpty()) {
+			whereSql.append(toReturn.toString());
+		}
+		
+		String addressSql = getAddressSql(form);
+		if (!addressSql.isEmpty()) {
+			whereSql.append(addressSql);
+		}
+		
+		String phoneSql = getPhoneSql(form);
+		if (!phoneSql.isEmpty()) {
+			whereSql.append(phoneSql);
+		}
+		
+		if (!personSql.isEmpty() || !addressSql.isEmpty() || !phoneSql.isEmpty()) {
+			fromSql.append("left outer join c.claimants as p ");
+			if (!addressSql.isEmpty()) {
+				fromSql.append("left outer join p.addresses as a ");
+			}
+			
+			if (!phoneSql.isEmpty()) {
+				fromSql.append("left outer join p.phones as ph ");
+			}
+		}
+		
+		return toReturn.toString();
+	}
+
+	private String getAddressSql(SearchClaimForm form) {
+		StringBuilder toReturn = new StringBuilder();
+		
+		String value = form.getAddress1();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and a.address1 = :address1 ");
+		}
+		
+		value = form.getAddress2();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and a.address2 = :address2 ");
+		}
+
+		value = form.getCity();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and a.city = :city ");
+		}
+
+		value = form.getState();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and a.state = :state ");
+		} 			
+
+		value = form.getProvince();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and a.province = :province ");
+		} 			
+
+		value = form.getCountry();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and a.country = :country ");
+		}
+		
+		value = form.getZip();
+		if (value != null && !value.isEmpty()) {
+			toReturn.append("and a.zip = :zip ");
+		}
+		
+		return toReturn.toString();
+	}
+	
+	private String getPhoneSql(SearchClaimForm form) {
+		StringBuilder toReturn = new StringBuilder();
 		
 		String value = form.getPhone();
 		if (value != null && !value.isEmpty()) {
-			value = StringUtils.removeNonNumeric(value);
-			phoneCriteria.add(Restrictions.like("phoneNumber", value));
+			toReturn.append("and ph.phoneNumber = :phoneNumber ");
 		}
-		
-		return claimantCriteria;
+		return toReturn.toString();
 	}
-
+	
 }
