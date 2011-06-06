@@ -274,22 +274,22 @@ public class ClaimDAO {
 		
 		String value = form.getLastName();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and p.lastName = :lastName ");
+			toReturn.append("and (p.lastName = :lastName or c.incident.reservation.purchaser.lastName = :lastName) ");
 		}
 		
 		value = form.getFirstName();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and p.firstName = :firstName ");
+			toReturn.append("and (p.firstName = :firstName or c.incident.reservation.purchaser.firstName = :firstName) ");
 		}
 		
 		value = form.getMiddleName();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and p.middleName = :middleName ");
+			toReturn.append("and (p.middleName = :middleName or c.incident.reservation.purchaser.middleName = :middleName) ");
 		}
 		
 		value = form.getEmailAddress();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and p.emailAddress = :emailAddress ");
+			toReturn.append("and p.emailAddress = :emailAddress or c.incident.reservation.purchaser.emailAddresss = :emailAddress) ");
 		}
 		
 		toReturn.append(getDateSql("p.dateOfBirth", DOB, form.getStartDateOfBirth(), form.getEndDateOfBirth(), agent));
@@ -313,10 +313,12 @@ public class ClaimDAO {
 			fromSql.append("left outer join c.claimants as p ");
 			if (!addressSql.isEmpty()) {
 				fromSql.append("left outer join p.addresses as a ");
+				fromSql.append("left outer join c.incident.reservation.purchaser.addresses as pa ");
 			}
 			
 			if (!phoneSql.isEmpty()) {
 				fromSql.append("left outer join p.phones as ph ");
+				fromSql.append("left outer join c.incident.reservation.purchaser.phones as pph ");
 			}
 		}
 		
@@ -328,37 +330,37 @@ public class ClaimDAO {
 		
 		String value = form.getAddress1();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and a.address1 = :address1 ");
+			toReturn.append("and (a.address1 = :address1 or pa.address1 = :address1) ");
 		}
 		
 		value = form.getAddress2();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and a.address2 = :address2 ");
+			toReturn.append("and (a.address2 = :address2 or pa.address2 = :address2) ");
 		}
 
 		value = form.getCity();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and a.city = :city ");
+			toReturn.append("and (a.city = :city or pa.city = :city) ");
 		}
 
 		value = form.getState();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and a.state = :state ");
+			toReturn.append("and (a.state = :state or pa.state = :state) ");
 		} 			
 
 		value = form.getProvince();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and a.province = :province ");
+			toReturn.append("and (a.province = :province or pa.province = :province) ");
 		} 			
 
 		value = form.getCountry();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and a.country = :country ");
+			toReturn.append("and (a.country = :country or pa.country = :country) ");
 		}
 		
 		value = form.getZip();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and a.zip = :zip ");
+			toReturn.append("and (a.zip = :zip or pa.zip = :zip) ");
 		}
 		
 		return toReturn.toString();
@@ -369,7 +371,7 @@ public class ClaimDAO {
 		
 		String value = form.getPhone();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and ph.phoneNumber = :phoneNumber ");
+			toReturn.append("and (ph.phoneNumber = :phoneNumber or pph.phoneNumber = :phoneNumber) ");
 		}
 		return toReturn.toString();
 	}
