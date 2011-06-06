@@ -755,7 +755,9 @@ public class Producer {
 				person.setEmailAddress(s);
 			}
 			if(!p.isDrivers()){
-				person.setDriversLicenseIssuer(s);
+				person.setDriversLicenseState(s);
+				person.setDriversLicenseProvince(s);
+				person.setDriversLicenseCountry(s);
 				person.setDriversLicenseNumber(s);
 			}
 			if(!p.isFfn()){
