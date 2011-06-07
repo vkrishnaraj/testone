@@ -250,19 +250,36 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@Override
 	public long saveOrUpdateFoundItem(LFFound foundItem) {
 		Session sess = null;
+		Transaction t = null;
+		long reportId = -1;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
 			sess.saveOrUpdate(foundItem);
-			sess.close();
-			return foundItem.getId();
-		}catch(Exception e){
+			t.commit();
+			reportId = foundItem.getId();
+		}catch (Exception e) {
 			e.printStackTrace();
-		}finally{
-			if(sess != null && sess.isOpen()){
-				sess.close();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		return -1;
+		if(reportId > 0){
+			return reportId;
+		} else {
+			return -1;
+		}
 	}
 
 	@Override

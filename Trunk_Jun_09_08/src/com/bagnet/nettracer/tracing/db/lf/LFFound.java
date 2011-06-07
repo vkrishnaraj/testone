@@ -40,7 +40,8 @@ public class LFFound {
 	@JoinColumn(name = "status_ID", nullable = false)
 	private Status status;
 
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Status.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "disposition_status_ID", nullable = true)
 	private Status disposition;
 	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFItem.class, cascade = CascadeType.ALL)

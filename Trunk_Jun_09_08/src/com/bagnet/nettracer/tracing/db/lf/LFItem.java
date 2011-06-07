@@ -1,12 +1,10 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -38,11 +36,12 @@ public class LFItem {
 	@JoinColumn(name = "status_ID", nullable = false)
 	private Status status;
 
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Status.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "disposition_status_ID", nullable = true)
 	private Status disposition;
 	
 	@ManyToOne
-	@JoinColumn(name = "lost_id", nullable = false)
+	@JoinColumn(name = "lost_id", nullable = true)
 	@Fetch(FetchMode.SELECT)
 	private LFLost lost;
 
