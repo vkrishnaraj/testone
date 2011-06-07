@@ -1,4 +1,4 @@
-<project name="3.0" default="aa-build-fraud-and-jetblue-ear" basedir=".">
+<project name="3.0" default="build-ab-ear" basedir=".">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
@@ -293,6 +293,7 @@
 				<exclude name="log4j*.*" />
 				<exclude name="servlet.jar" />
 				<exclude name="netty.jar" />
+				<exclude name="c3p0-0.9.1.2.jar" />
 				<exclude name="mysql-connector-java*.jar" />
 				<exclude name="c3p0*.jar" />
 				<exclude name="hibernate*.jar" />
@@ -339,7 +340,7 @@
 		<delete file="${build.dir}/claim_model.jar" failonerror="false"/>
 		<jar destfile="${build.dir}/claim_model.jar">
 			<!--  MAY NEED TO EDIT THE FRAUD_WEB BELOW TO POINT TO WHAT BUILDS THE CLASSES -->
-			<fileset dir="${build.dir}/fraud_web/classes/" >
+			<fileset dir="${build.dir}/jetblue_web/classes/" >
 				<include name="**/**/aero/nettracer/fs/**/*.*"/>
 				<include name="**/**/aero/nettracer/fs/**/**/*.*"/>
 				<include name="**/**/com/bagnet/nettracer/tracing/utils/DateUtils.class"/>
@@ -430,7 +431,7 @@
 
 		</ear>
 		
-		<copy todir="${app.deploy.dir.jb5}">
+		<copy todir="${app.deploy.dir.jb5}" overwrite="true">
 			<fileset dir="${build.dir}">
 				<include name="tracer.ear" />
 			</fileset>
@@ -451,6 +452,12 @@
 
 		<property name="app.xml.location" value="metadata" />
 		
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="build-ab-ear" depends="delete-wars">
+		<antcall target="build-ab-local"/>
+		<property name="app.xml.location" value="metadata/ab" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
@@ -941,6 +948,14 @@
 		<antcall target="build-westjet-prod" />
 	</target>
 
+	<target name="build-ab-local" depends="delete">
+		<property name="ant_project_name" value="ab" />
+		<property name="ant_war_name" value="ab" />
+		<property name="ab.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-ab" />
+	</target>
+
 	<target name="build-westjet-local" depends="delete">
 		<property name="ant_project_name" value="westjet" />
 		<property name="ant_war_name" value="wjtest" />
@@ -974,6 +989,41 @@
 	</target>
 
 
+	<target name="donotrun-build-ab" if="ab.init.complete">
+		<property name="include.ab" value="1" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/ab/environment/${environment.name}/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/pages/login" file="companies/ab/environment/${environment.name}/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/report_email.html" />
+		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/report_email_fr.html" />
+		<copy todir="${basedir}/web/reports" file="companies/ab/environment/${environment.name}/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/ab/environment/${environment.name}/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/ab/environment/${environment.name}/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/ab/environment/${environment.name}/LostDelayReceipt_fr.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/ab/environment/${environment.name}/DamageReceipt_fr.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/ab/environment/${environment.name}/MissingReceipt_fr.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/ab/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/ab/pax_comm_email.html" />
+		<copy todir="${basedir}/src" file="companies/ab/pax_comm_email_fr.html" />
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/ab/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/ab/ApplicationResources_fr.properties" />
+		<!--
+		<antcall target="build-war" />
+		-->
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+		<delete file="${basedir}/src/report_email_fr.html" />
+	</target>
+	
 	<target name="donotrun-build-westjet" if="westjet.init.complete">
 		<property name="include.ws" value="1" />
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/westjet/environment/${environment.name}/header_bg_noconf.gif" />

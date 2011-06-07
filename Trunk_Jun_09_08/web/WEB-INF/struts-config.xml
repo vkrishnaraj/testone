@@ -261,8 +261,9 @@
 		<form-bean name="requestInfoForm" type="com.bagnet.nettracer.tracing.forms.RequestInfoForm" />
 		<form-bean name="privacyPermissionsForm" type="com.bagnet.nettracer.tracing.forms.PrivacyPermissionsForm"/>
 		
-		
-		
+		<form-bean name="lostReportForm" type="com.bagnet.nettracer.tracing.forms.lf.LostReportForm" />	
+		<form-bean name="foundItemForm" type="com.bagnet.nettracer.tracing.forms.lf.FoundItemForm" />	
+		<form-bean name="searchLostFoundForm" type="com.bagnet.nettracer.tracing.forms.lf.SearchLostFoundForm" />	
 
 	</form-beans>
 	<!-- global exception -->
@@ -510,6 +511,10 @@
 		<forward name="match_details" path="match_details" />
 		<forward name="search_claim" path="search_claim" />
 		<forward name="request_info" path="request_info" />
+		
+		<forward name="create_lost_report" path="create_lost_report" />
+		<forward name="create_found_item" path="create_found_item" />
+		<forward name="search_lost_found" path="search_lost_found" />
 		
 	</global-forwards>
 
@@ -832,7 +837,11 @@
 		
 		<!-- salvage -->
 		<action path="/salvageSearch" type="com.bagnet.nettracer.tracing.actions.salvage.SalvageSearchAction" name="salvageSearchForm" scope="request" validate="false"></action>
-		<action path="/salvageEdit" type="com.bagnet.nettracer.tracing.actions.salvage.SalvageEditAction" name="salvageEditForm" scope="session" validate="false"></action>		
+		<action path="/salvageEdit" type="com.bagnet.nettracer.tracing.actions.salvage.SalvageEditAction" name="salvageEditForm" scope="session" validate="false"></action>
+		
+		<action path="/create_lost_report" type="com.bagnet.nettracer.tracing.actions.lf.LostReportAction" name="lostReportForm" scope="session" validate="false"></action>		
+		<action path="/create_found_item" type="com.bagnet.nettracer.tracing.actions.lf.FoundItemAction" name="foundItemForm" scope="session" validate="false"></action>		
+		<action path="/search_lost_found" type="com.bagnet.nettracer.tracing.actions.lf.SearchLostFoundAction" name="searchLostFoundForm" scope="request" validate="false"></action>		
 
 	</action-mappings>
 

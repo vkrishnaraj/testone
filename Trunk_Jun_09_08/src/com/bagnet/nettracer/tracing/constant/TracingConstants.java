@@ -191,6 +191,8 @@ public class TracingConstants {
 	public final static int TABLE_TASK = 4;
 	public final static int TABLE_TASK_MANAGER = 13;
 	public final static int TABLE_BAGBUZZ = 14;
+	public final static int TABLE_LF_STATUS = 16;
+	public final static int TABLE_LF_DISPOSITION = 17;
 	
 	public final static int PRIORITY_LOW = 1;
 	public final static int PRIORITY_MEDIUM = 2;
@@ -423,6 +425,13 @@ public class TracingConstants {
 	
 	public final static int STATUS_SUSPECTED_FRAUD = 37;
 	public final static int STATUS_KNOWN_FRAUD = 38;
+	
+	public final static int LF_STATUS_OPEN = 600;
+	public final static int LF_STATUS_TO_BE_DELIVERED = 601;
+	public final static int LF_STATUS_CLOSED = 602;
+	public final static int LF_DISPOSITION_PICKED_UP = 603;
+	public final static int LF_DISPOSITION_DELIVERED = 603;
+	public final static int LF_DISPOSITION_SALVAGED = 603;
 	
 	/** ********* forwards *********** */
 	// no permission

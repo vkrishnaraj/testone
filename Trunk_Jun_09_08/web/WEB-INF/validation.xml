@@ -180,7 +180,7 @@
                	</var>
               	<var>
                 	<var-name>maxlength</var-name>
-                   	<var-value>3</var-value>
+                   	<var-value>12</var-value>
               	</var>
 	       	</field>
 			<field property="stationDesc" depends="required">

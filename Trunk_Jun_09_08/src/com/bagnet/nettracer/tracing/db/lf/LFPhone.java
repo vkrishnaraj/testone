@@ -17,6 +17,11 @@ public class LFPhone {
 	public static final int PRIMARY = 1;
 	public static final int SECONDARY = 2;
 	
+	public static final int HOME = 3;
+	public static final int MOBILE = 4;
+	public static final int WORK = 5;
+	public static final int ALTERNATE = 6;
+	
 	@Id
 	@GeneratedValue
 	private long id;
@@ -25,7 +30,9 @@ public class LFPhone {
 	
 	private String extension;
 	
-	private int type;
+	private int numberType;
+	
+	private int phoneType;
 	
 	@ManyToOne
 	@JoinColumn(name = "person_id", nullable = false)
@@ -48,12 +55,20 @@ public class LFPhone {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public int getType() {
-		return type;
+	public int getNumberType() {
+		return numberType;
 	}
 
-	public void setType(int type) {
-		this.type = type;
+	public void setNumberType(int numberType) {
+		this.numberType = numberType;
+	}
+	
+	public int getPhoneType() {
+		return phoneType;
+	}
+
+	public void setPhoneType(int phoneType) {
+		this.phoneType = phoneType;
 	}
 
 	public LFPerson getPerson() {

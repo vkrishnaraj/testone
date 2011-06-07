@@ -36,6 +36,9 @@ public class LFItem {
 	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Status.class, cascade = CascadeType.ALL)
 	private Status status;
+
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Status.class, cascade = CascadeType.ALL)
+	private Status disposition;
 	
 	@ManyToOne
 	@JoinColumn(name = "lost_id", nullable = false)
@@ -88,6 +91,14 @@ public class LFItem {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	
+	public Status getDisposition() {
+		return disposition;
+	}
+
+	public void setDisposition(Status disposition) {
+		this.disposition = disposition;
 	}
 
 	public LFLost getLost() {

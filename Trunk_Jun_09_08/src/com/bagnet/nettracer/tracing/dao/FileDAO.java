@@ -10,7 +10,6 @@ import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsIncident;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.db.Incident;
 
 public class FileDAO {
 

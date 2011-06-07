@@ -16,6 +16,7 @@ import org.hibernate.annotations.Proxy;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Proxy(lazy = true)
@@ -137,6 +138,10 @@ public class LFLost {
 
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
+	}
+	
+	public String getDisOpenDate(String dateFormat) {
+		return DateUtils.formatDate(openDate, dateFormat, "", null);
 	}
 	
 }
