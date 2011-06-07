@@ -34,7 +34,8 @@ public class LFItem {
 	
 	private String color;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Status.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "status_ID", nullable = false)
 	private Status status;
 
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Status.class, cascade = CascadeType.ALL)

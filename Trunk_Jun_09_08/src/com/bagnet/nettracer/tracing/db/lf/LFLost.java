@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -19,20 +21,23 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
-@Proxy(lazy = true)
+@Proxy(lazy = false)
 public class LFLost {
 	
 	@Id
 	@GeneratedValue
 	private long id;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Agent.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "agent_ID", nullable = false)
 	private Agent agent;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Station.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "station_ID", nullable = false)
 	private Station location;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Status.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "status_ID", nullable = false)
 	private Status status;
 	
 	private Date openDate;

@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -114,7 +115,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			if(sess != null){
+			if(sess != null && sess.isOpen()){
 				sess.close();
 			}
 		}
@@ -141,7 +142,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			if(sess != null){
+			if(sess != null && sess.isOpen()){
 				sess.close();
 			}
 		}
@@ -151,19 +152,36 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@Override
 	public long saveOrUpdateLostReport(LFLost lostReport) {
 		Session sess = null;
+		Transaction t = null;
+		long reportId = -1;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
 			sess.saveOrUpdate(lostReport);
-			sess.close();
-			return lostReport.getId();
-		}catch(Exception e){
+			t.commit();
+			reportId = lostReport.getId();
+		}catch (Exception e) {
 			e.printStackTrace();
-		}finally{
-			if(sess != null){
-				sess.close();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		return -1;
+		if(reportId > 0){
+			return reportId;
+		} else {
+			return -1;
+		}
 	}
 
 	@Override
@@ -195,7 +213,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			if(sess != null){
+			if(sess != null && sess.isOpen()){
 				sess.close();
 			}
 		}
@@ -222,7 +240,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			if(sess != null){
+			if(sess != null && sess.isOpen()){
 				sess.close();
 			}
 		}
@@ -240,7 +258,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
-			if(sess != null){
+			if(sess != null && sess.isOpen()){
 				sess.close();
 			}
 		}

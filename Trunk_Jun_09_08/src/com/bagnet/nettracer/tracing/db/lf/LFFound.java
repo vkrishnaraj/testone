@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Proxy;
@@ -15,7 +17,7 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 
 @Entity
-@Proxy(lazy = true)
+@Proxy(lazy = false)
 public class LFFound {
 
 	@Id
@@ -26,13 +28,16 @@ public class LFFound {
 	
 	private Date foundDate;
 
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Station.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "station_ID", nullable = false)
 	private Station location;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Agent.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "agent_ID", nullable = false)
 	private Agent agent;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Status.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "status_ID", nullable = false)
 	private Status status;
 
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Status.class, cascade = CascadeType.ALL)
