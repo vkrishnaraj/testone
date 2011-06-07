@@ -1,19 +1,19 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
+
 
 @Entity
 @Proxy(lazy = false)
-public class LFCategory {
+public class LFSubCategory {
 	public long getId() {
 		return id;
 	}
@@ -26,17 +26,18 @@ public class LFCategory {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Set<LFSubCategory> getSubcategories() {
-		return subcategories;
+	public LFCategory getParent() {
+		return parent;
 	}
-	public void setSubcategories(Set<LFSubCategory> subcategories) {
-		this.subcategories = subcategories;
+	public void setParent(LFCategory parent) {
+		this.parent = parent;
 	}
-	
 	@Id
 	@GeneratedValue
 	private long id;
-	String description;
-	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	Set<LFSubCategory> subcategories;
+	private String description;
+	@ManyToOne
+	@JoinColumn(name = "parent_id", nullable = false)
+	@Fetch(FetchMode.SELECT)
+	private LFCategory parent;
 }

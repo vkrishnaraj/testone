@@ -2,13 +2,18 @@ package aero.nettracer.lf.services;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.Stateless;
 
 import org.apache.struts.util.LabelValueBean;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
+
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFDelivery;
@@ -16,11 +21,10 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 @Stateless
 public class LFServiceBean implements LFServiceRemote, LFServiceHome{
-
+	
 	@Override
 	public String echo(String s) {
 		return "echo: " + s;
@@ -28,68 +32,269 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	@Override
 	public LFLost getLostReport(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		LFLost f = null;
+		try{
+			f = (LFLost) sess.load(LFLost.class, id);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return f;
 	}
 
 	@Override
 	public LFLost getLostReport(long id, String lastname) {
-		// TODO Auto-generated method stub
+		LFLost lost = getLostReport(id);
+		if(lastname != null && lost != null && lost.getClient() != null 
+				&& lost.getClient().getLastName() != null
+				&& lost.getClient().getLastName().trim().toUpperCase().equals(lastname.trim().toUpperCase())){
+			return lost;
+		}
 		return null;
 	}
 
+	private static String getSearchFoundQuery(LFSearchDTO dto){
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f where 1=1";
+		if(dto.getAgent() != null){
+			//TODO
+		}
+		if(dto.getStation() != null){
+			//TODO
+		}
+		if(dto.getStatus() != null){
+			//TODO
+		}
+		return sql;
+	}
+	
+	private static String getSearchLostQuery(LFSearchDTO dto){
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l where 1=1";
+		
+		if(dto.getId() > 0){
+			sql += " and l.id = " + dto.getId();
+		}
+		if(dto.getLastName() != null){
+			sql += " and l.client.lastName = \'" + dto.getLastName().toUpperCase() + "\'";
+		}
+		if(dto.getFirstName() != null){
+			sql += " and l.client.firstName = \'" + dto.getFirstName().toUpperCase() + "\'";
+		}
+		if(dto.getOpenDate() != null){
+			//TODO
+		}
+		if(dto.getCloseDate() != null){
+			//TODO
+		}
+		if(dto.getAgent() != null){
+			//TODO
+		}
+		if(dto.getStation() != null){
+			//TODO
+		}
+		if(dto.getStatus() != null){
+			//TODO
+		}
+		return sql;
+	}
+	
 	@Override
 	public int searchLostCount(LFSearchDTO dto) {
-		// TODO Auto-generated method stub
+		String sql = "select count(l.id) " + getSearchLostQuery(dto);
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			List result = q.list();
+			sess.close();
+			return ((Long) result.get(0)).intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null){
+				sess.close();
+			}
+		}
 		return 0;
 	}
 
 	@Override
 	public List<LFLost> searchLost(LFSearchDTO dto, int start, int end) {
-		// TODO Auto-generated method stub
+		String sql = getSearchLostQuery(dto) + " order by l.createDate asc";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			
+			if (start > -1 && end > start ) {
+				q.setFirstResult(start);
+				q.setMaxResults(end - start);
+			}
+			
+			List<LFLost> results = q.list();
+			sess.close();
+			return results;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null){
+				sess.close();
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public long saveOrUpdateLostReport(LFLost lostReport) {
-		// TODO Auto-generated method stub
-		return 0;
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			sess.saveOrUpdate(lostReport);
+			sess.close();
+			return lostReport.getId();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null){
+				sess.close();
+			}
+		}
+		return -1;
 	}
 
 	@Override
 	public LFFound getFoundItem(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		LFFound f = null;
+		try{
+			f = (LFFound) sess.load(LFFound.class, id);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return f;
 	}
 
 	@Override
 	public int searchFoundCount(LFSearchDTO dto) {
-		// TODO Auto-generated method stub
+		String sql = "select count(f.id) " + getSearchFoundQuery(dto);
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			List result = q.list();
+			sess.close();
+			return ((Long) result.get(0)).intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null){
+				sess.close();
+			}
+		}
 		return 0;
 	}
 
 	@Override
 	public List<LFFound> searchFound(LFSearchDTO dto, int start, int end) {
-		// TODO Auto-generated method stub
+		String sql = getSearchFoundQuery(dto) + " order by f.createDate asc";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			
+			if (start > -1 && end > start ) {
+				q.setFirstResult(start);
+				q.setMaxResults(end - start);
+			}
+			
+			List<LFFound> results = q.list();
+			sess.close();
+			return results;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null){
+				sess.close();
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public long saveOrUpdateFoundItem(LFFound foundItem) {
-		// TODO Auto-generated method stub
-		return 0;
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			sess.saveOrUpdate(foundItem);
+			sess.close();
+			return foundItem.getId();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null){
+				sess.close();
+			}
+		}
+		return -1;
 	}
+	
+//	al.add(new KeyValueBean("COLOR_KEY_WT", "WT", user));
+//	al.add(new KeyValueBean("COLOR_KEY_BK", "BK", user));
+//	al.add(new KeyValueBean("COLOR_KEY_GY", "GY", user));
+//	al.add(new KeyValueBean("COLOR_KEY_BU", "BU", user));
+//	al.add(new KeyValueBean("COLOR_KEY_BE", "BE", user));
+//	al.add(new KeyValueBean("COLOR_KEY_RD", "RD", user));
+//	al.add(new KeyValueBean("COLOR_KEY_YW", "YW", user));
+//	al.add(new KeyValueBean("COLOR_KEY_BN", "BN", user));
+//	al.add(new KeyValueBean("COLOR_KEY_GN", "GN", user));
+//	al.add(new KeyValueBean("COLOR_KEY_PU", "PU", user));
+//	al.add(new KeyValueBean("COLOR_KEY_MC", "MC", user));
+////	al.add(new KeyValueBean("COLOR_KEY_TD", "TD", user));
+//	al.add(new KeyValueBean("COLOR_KEY_PR", "PR", user));
 
 	@Override
 	public ArrayList<LabelValueBean> getColors() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList <LabelValueBean> colors = new ArrayList<LabelValueBean>();
+		colors.add(new LabelValueBean("White", "White"));
+		colors.add(new LabelValueBean("Black", "Black"));
+		colors.add(new LabelValueBean("Grey", "Grey"));
+		colors.add(new LabelValueBean("Blue", "Blue"));
+		colors.add(new LabelValueBean("Beige", "Beige"));
+		colors.add(new LabelValueBean("Red", "Red"));
+		colors.add(new LabelValueBean("Yellow", "Yellow"));
+		colors.add(new LabelValueBean("Brown", "Brown"));
+		colors.add(new LabelValueBean("Green", "Green"));
+		colors.add(new LabelValueBean("Purple", "Purple"));
+		colors.add(new LabelValueBean("Beige", "Beige"));
+		colors.add(new LabelValueBean("Multiple Colors", "Multiple Colors"));
+		return colors;
 	}
 
 	@Override
 	public List<LFCategory> getCategories() {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFCategory";
+		Session sess = HibernateWrapper.getSession().openSession();
+		Query q = sess.createQuery(sql);
+		List<LFCategory> categoryList = null;
+		
+		try{
+			categoryList = (List<LFCategory>)q.list();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return categoryList;
 	}
 
 	@Override
