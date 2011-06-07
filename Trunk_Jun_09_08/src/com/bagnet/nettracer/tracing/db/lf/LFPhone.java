@@ -30,8 +30,10 @@ public class LFPhone {
 	
 	private String extension;
 	
+	/* Primary/Secondary */
 	private int numberType;
 	
+	/* Home/Mobile/Work/Alternate */
 	private int phoneType;
 	
 	@ManyToOne
