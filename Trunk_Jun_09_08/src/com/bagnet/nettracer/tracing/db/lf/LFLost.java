@@ -13,6 +13,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -48,6 +52,8 @@ public class LFLost {
 	
 	private String remarks;
 	
+	
+	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPerson.class, cascade = CascadeType.ALL)
 	private LFPerson client;
 	
@@ -55,6 +61,9 @@ public class LFLost {
 	private LFReservation reservation;
 	
 	@OneToMany(mappedBy = "lost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<LFItem> items;
 
 	public long getId() {

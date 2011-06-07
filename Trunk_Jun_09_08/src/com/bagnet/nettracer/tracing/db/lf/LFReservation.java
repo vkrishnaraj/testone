@@ -4,7 +4,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Proxy;
 
@@ -22,10 +23,12 @@ public class LFReservation {
 	
 	private String mvaNumber;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Station.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "pickuplocation_station_ID", nullable = false)
 	private Station pickupLocation;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Station.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "dropofflocation_station_ID", nullable = false)
 	private Station dropoffLocation;
 
 	public long getId() {

@@ -10,6 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -32,6 +36,9 @@ public class LFPerson {
 	private LFAddress address;
 	
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<LFPhone> phones;
 
 	public long getId() {
