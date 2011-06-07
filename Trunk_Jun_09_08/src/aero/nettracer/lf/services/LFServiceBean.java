@@ -246,36 +246,21 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return -1;
 	}
-	
-//	al.add(new KeyValueBean("COLOR_KEY_WT", "WT", user));
-//	al.add(new KeyValueBean("COLOR_KEY_BK", "BK", user));
-//	al.add(new KeyValueBean("COLOR_KEY_GY", "GY", user));
-//	al.add(new KeyValueBean("COLOR_KEY_BU", "BU", user));
-//	al.add(new KeyValueBean("COLOR_KEY_BE", "BE", user));
-//	al.add(new KeyValueBean("COLOR_KEY_RD", "RD", user));
-//	al.add(new KeyValueBean("COLOR_KEY_YW", "YW", user));
-//	al.add(new KeyValueBean("COLOR_KEY_BN", "BN", user));
-//	al.add(new KeyValueBean("COLOR_KEY_GN", "GN", user));
-//	al.add(new KeyValueBean("COLOR_KEY_PU", "PU", user));
-//	al.add(new KeyValueBean("COLOR_KEY_MC", "MC", user));
-////	al.add(new KeyValueBean("COLOR_KEY_TD", "TD", user));
-//	al.add(new KeyValueBean("COLOR_KEY_PR", "PR", user));
 
 	@Override
 	public ArrayList<LabelValueBean> getColors() {
 		ArrayList <LabelValueBean> colors = new ArrayList<LabelValueBean>();
-		colors.add(new LabelValueBean("White", "White"));
-		colors.add(new LabelValueBean("Black", "Black"));
-		colors.add(new LabelValueBean("Grey", "Grey"));
-		colors.add(new LabelValueBean("Blue", "Blue"));
-		colors.add(new LabelValueBean("Beige", "Beige"));
-		colors.add(new LabelValueBean("Red", "Red"));
-		colors.add(new LabelValueBean("Yellow", "Yellow"));
-		colors.add(new LabelValueBean("Brown", "Brown"));
-		colors.add(new LabelValueBean("Green", "Green"));
-		colors.add(new LabelValueBean("Purple", "Purple"));
-		colors.add(new LabelValueBean("Beige", "Beige"));
-		colors.add(new LabelValueBean("Multiple Colors", "Multiple Colors"));
+		colors.add(new LabelValueBean("White", "WT"));
+		colors.add(new LabelValueBean("Black", "BK"));
+		colors.add(new LabelValueBean("Grey", "GY"));
+		colors.add(new LabelValueBean("Blue", "BU"));
+		colors.add(new LabelValueBean("Beige", "BE"));
+		colors.add(new LabelValueBean("Red", "RD"));
+		colors.add(new LabelValueBean("Yellow", "YW"));
+		colors.add(new LabelValueBean("Brown", "BN"));
+		colors.add(new LabelValueBean("Green", "GN"));
+		colors.add(new LabelValueBean("Purple", "PU"));
+		colors.add(new LabelValueBean("Multiple Colors", "MC"));
 		return colors;
 	}
 
