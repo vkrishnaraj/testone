@@ -93,6 +93,7 @@
                 <div id="pageheaderright">
                   <table id="pageheaderright">
                     <tr>
+	                  <% if (ntUser) { %>
                       <logic:notPresent name="editinterim" scope="request">
         				<logic:notPresent name="noincident" scope="request">
                         <td>
@@ -103,6 +104,7 @@
                 		</logic:notPresent>
                         </td>
                       </logic:notPresent>
+	                  <% } %>
                       <jsp:include page="/pages/includes/mail_incl.jsp" />
                       <td>
                         <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
