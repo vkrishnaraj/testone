@@ -145,6 +145,7 @@ public class ConnectionUtil {
 			FsIncident fsIncident = ClaimUtils.getFsIncident(iDTO, user);
 			fsIncident.setFile(file);
 			file.setIncident(fsIncident);
+			FileDAO.saveFile(file);
 			long remoteFileId = ConnectionUtil.insertFile(file);
 			file.setSwapId(remoteFileId);
 			FileDAO.saveFile(file);
