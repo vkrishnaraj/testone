@@ -66,6 +66,11 @@
 	  	  }
   	  }
       
+      function setField(fieldId) {
+    	  var field = document.getElementById(fieldId);
+    	  field.value = "1";
+      }
+      
   </SCRIPT>
  
           <html:form action="claim_resolution.do" method="post" onsubmit="return validateFsClaimForm(this);">
@@ -552,7 +557,7 @@
 						          <option value="5">5</option>
 						        </select>
 					
-							    <input type="submit" name="addNames" value='<bean:message key="button.add.name" />' id="button" />
+							    <input type="submit" name="addNames" value='<bean:message key="button.add.name" />' id="button" onclick="setField('addednames');" />
 				          </td>
 				          </tr>
 					</table>
@@ -736,7 +741,7 @@
 						          <option value="4">4</option>
 						          <option value="5">5</option>
 						        </select>
-							    <input type="submit" name="addReceipts" value='<bean:message key="button.add.receipt" />' id="button" />
+							    <input type="submit" name="addReceipts" value='<bean:message key="button.add.receipt" />' id="button" onclick="setField('addedreceipts');" />
 				          </td>
 				          </tr>
 					</table>
@@ -983,14 +988,14 @@
 						<td>
 							<bean:message key="claim.colname.cc_expdate" />
 							<br/>
-							<html:select name="claimForm" property="claim.incident.reservation.ccExpMonth">
+							<html:select name="claimForm" property="claim.incident.reservation.ccExpMonth" styleClass="dropdown" >
 								<html:option value="">
 									<bean:message key="claim.cc.month" />
 								</html:option>
 								<html:options property="ccMonths" />
 							</html:select>
 							&nbsp;
-							<html:select name="claimForm" property="claim.incident.reservation.ccExpYear">
+							<html:select name="claimForm" property="claim.incident.reservation.ccExpYear" styleClass="dropdown" >
 								<html:option value="">
 									<bean:message key="claim.cc.year" />
 								</html:option>
@@ -1018,5 +1023,7 @@
                     </center>
                     <input type="hidden" name="showNames" id="#names" value="<%=request.getAttribute("showNames") %>" />
                     <input type="hidden" name="showReceipts" id="#receipts" value="<%=request.getAttribute("showReceipts") %>" />
+                    <input type="hidden" id="addednames" value="0" />
+                    <input type="hidden" id="addedreceipts" value="0" />
                   </html:form>
 					
