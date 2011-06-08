@@ -14,8 +14,10 @@ import org.hibernate.Transaction;
 
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFDelivery;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
@@ -319,7 +321,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public boolean closeLostReport(long id) {
-		// TODO Auto-generated method stub
+		LFLost lost = getLostReport(id);
+		if(lost != null){
+			Status status = new Status();
+			status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
+			lost.setStatus(status);
+			if(saveOrUpdateLostReport(lost) > -1){
+				return true;
+			}
+		}
 		return false;
 	}
 

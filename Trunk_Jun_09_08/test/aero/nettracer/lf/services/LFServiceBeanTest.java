@@ -2,9 +2,12 @@ package aero.nettracer.lf.services;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
+import org.apache.struts.util.LabelValueBean;
 import org.junit.Test;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -12,12 +15,14 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
+import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFReservation;
+import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 
 public class LFServiceBeanTest {
 
@@ -48,6 +53,43 @@ public class LFServiceBeanTest {
 		assertTrue(loaded != null && loaded.getId() == foundId);
 	}
 	
+	@Test
+	public void getColorsTest(){
+		LFServiceBean bean = new LFServiceBean();
+		ArrayList<LabelValueBean> b = bean.getColors();
+		for(LabelValueBean color: b){
+			if(color.getLabel().equals("White")){
+				assertTrue(color.getValue().equals("WT"));
+			}
+		}
+	}
+	
+	@Test
+	public void getCategoriesTest(){
+		LFServiceBean bean = new LFServiceBean();
+		List<LFCategory> b = bean.getCategories();
+		boolean hasAnIphone = false;
+		for(LFCategory cat:b){
+			if(cat.getDescription().equals("Phone")){
+				for(LFSubCategory sub:cat.getSubcategories()){
+					if(sub.getDescription().equals("iPhone")){
+						hasAnIphone = true;
+					}
+				}
+			}
+		}
+		assertTrue(hasAnIphone);
+	}
+	
+	@Test
+	public void closeLostReportTest(){
+		LFServiceBean bean = new LFServiceBean();
+		LFLost lost = createLostTestCase();
+		long lostId = bean.saveOrUpdateLostReport(lost);
+		assertTrue(lostId != -1);
+		
+		assertTrue(bean.closeLostReport(lostId));
+	}
 	
 	public LFLost createLostTestCase(){
 		LFLost lost = new LFLost();
