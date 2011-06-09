@@ -1,6 +1,7 @@
 package aero.nettracer.selfservice.fraud;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -174,6 +175,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		if(receipts != null){
 			for(FsReceipt receipt:receipts){
 				receipt.setId(0);
+				HashSet<FsAddress> addresses = new HashSet<FsAddress>();
+				addresses.add(receipt.getAddress());
+				resetAddressIdAndGeocode(addresses);
 			}
 		}
 		return receipts;
