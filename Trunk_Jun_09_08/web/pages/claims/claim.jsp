@@ -927,7 +927,7 @@
                 <td>
                   <bean:message key="colname.country" />
                   <br>
-                  <html:select name="claimForm" property="claim.incident.reservation.billingAddress.country" styleClass="dropdown" onchange="checkstate(this,this.form,'state', 'province');">
+                  <html:select name="claimForm" property="claim.incident.reservation.billingAddress.country" styleClass="dropdown" onchange="checkstate(this,this.form,'claim.incident.reservation.billingAddress.state', 'claim.incident.reservation.billingAddress.province');">
                     <html:option value="">
                       <bean:message key="select.none" />
                     </html:option>
