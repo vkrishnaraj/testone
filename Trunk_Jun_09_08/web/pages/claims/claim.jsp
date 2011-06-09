@@ -689,7 +689,7 @@
 								  		<bean:message key="claim.colname.cc_type" />
 								  		<br />
 										<select name="receipt[<%=i %>].ccType" class="dropdown" >
-											<option><bean:message key="claim.cc.please.select" /></option>
+											<option value=""><bean:message key="claim.cc.please.select" /></option>
 											<option value="VI" <% if (receipt.getCcType().equals("VI")) { %>selected<% };%>>Visa</option>	
 											<option value="CA" <% if (receipt.getCcType().equals("CA")) { %>selected<% };%>>Mastercard</option>	
 											<option value="DS" <% if (receipt.getCcType().equals("DS")) { %>selected<% };%>>Discover</option>
