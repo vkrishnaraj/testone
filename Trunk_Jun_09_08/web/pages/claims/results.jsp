@@ -33,7 +33,8 @@
 		<bean:message key="colname.fraudresults.details" />
 	</td>
 </tr>
-<logic:iterate id="result" indexId="i" name='<%=request.getParameter("beanName") %>' property='<%=request.getParameter("beanProperty") %>' type="aero.nettracer.fs.model.detection.MatchHistory" >
+<% String results = request.getParameter("beanProperty"); %>
+<logic:iterate id="result" indexId="i" name='<%=request.getParameter("beanName") %>' property='<%=results %>' type="aero.nettracer.fs.model.detection.MatchHistory" >
 <% 
 	Agent a = (Agent)session.getAttribute("user");
 	AccessRequest.RequestStatus status = result.getFile2().getRequestStatus();
@@ -47,7 +48,7 @@
 	
 	if (result.getFile2().getClaim() != null) { %>
 	<tr <%=result.getFile2().getDisStatus() %>>
-		<td><input type="checkbox" name="primaryResults[<%=i%>].selected" /></td>
+		<td><input type="checkbox" name="<%=results%>[<%=i%>].selected" /></td>
 		<% if (sameCompany) { %>
 		<td>
 			<a href="claim_resolution.do?claimId=<%=result.getFile2().getClaim().getSwapId() %>">
@@ -81,17 +82,15 @@
 			<a href="fraud_results.do?matchId=<%=result.getId() %>">
 				<bean:message key="claim.match.details" />
 			</a>
-		            					<% if (!sameCompany) { %>
-											<br/><br/>
-											<% if (status != null) { %>
-												<b>Request: <%=status %></b>
-											<% } %>
-										<% } %>
+			<% if (!sameCompany) { %>
+			<br/><br/>
+			<b><%=status == null ? "" : status %></b>
+			<% } %>
 					</td>
 				</tr>
 			<% } else { %>
 				<tr <%=result.getFile2().getDisStatus() %>>
-					<td><input type="checkbox" name="primaryResults[<%=i%>].selected" /></td>
+					<td><input type="checkbox" name="<%=results%>[<%=i%>].selected" /></td>
 					<% if (result.getFile2().getIncident().getAirline().equals(company)) { %>
 					<td>
 						<a href="searchIncident.do?incident=<%=result.getFile2().getIncident().getAirlineIncidentId() %>">
@@ -125,12 +124,10 @@
 			<a href="fraud_results.do?matchId=<%=result.getId() %>">
 				<bean:message key="claim.match.details" />
 			</a>
-		            					<% if (!sameCompany) { %>
-											<br/><br/>
-											<% if (status != null) { %>
-												<b>Request: <%=status %></b>
-											<% } %>
-										<% } %>
+			<% if (!sameCompany) { %>
+			<br/><br/>
+			<b><%=status == null ? "" : status %></b>
+			<% } %>
 					</td>
 				</tr>
 			<% } %>
