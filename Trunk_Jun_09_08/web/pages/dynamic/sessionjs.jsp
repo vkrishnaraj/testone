@@ -7,6 +7,7 @@
 <%@page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@page import="java.util.ResourceBundle" %>
 <%@page import="java.util.Locale" %>
+
 <% 
 	Agent a = (Agent)session.getAttribute("user");
 	LinkedHashMap menu_links = (LinkedHashMap)session.getAttribute("menu_links");
@@ -93,106 +94,6 @@
 			
 			}
 		}
-        return true;
-	
-	}
-	
-	function validateLfReportForm(form) {
-		for (var i = 0; i < form.length; ++i) {
-		
-			currentElement = form.elements[i];
-			elementName = currentElement.name;
-			
-			if (elementName == "lost.client.lastName") {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.last_name") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} else if (elementName == "lost.client.firstName") {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.first_name") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} else if (elementName == "lost.client.address.address1") {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.street_addr1") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} else if (elementName == "lost.client.address.city") {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.city") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} else if (elementName == "lost.client.address.country") {
-				country = currentElement.value;
-				
-				if (country == "US") {
-					element = getFieldByName("lost.client.address.state", form);
-					if (element.value.length == 0) {
-						alert("<%= (String)bundle.getString("colname.state") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-				        element.focus();
-				        return false;
-					}
-					
-					element = getFieldByName("lost.client.address.zip", form);
-					if (element.value.length == 0) {
-						alert("<%= (String)bundle.getString("colname.zip") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-				        element.focus();
-				        return false;
-					}
-				} else {
-					element = getFieldByName("lost.client.address.province", form);
-					if (element.value.length == 0) {
-						alert("<%= (String)bundle.getString("colname.province") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-				        element.focus();
-				        return false;
-					}
-				}
-			
-			} 
-			
-			if (elementName == "lost.client.email") {
-				if (currentElement.value != getFieldByName("lost.client.confirmEmail", form).value) {
-					alert("<%= (String)bundle.getString("colname.lf.email") %>" + " <%= (String)bundle.getString("error.validation.cannot.confirm.email") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} 
-			
-			if (elementName.indexOf("statusId") != -1) {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.lf.status") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} else if (elementName == "lost.reservation.pickupLocationId") {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.lf.rental.location") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			} else if (elementName == "lost.reservation.dropoffLocationId") {
-				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.lf.dropoff.location") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			        currentElement.focus();
-			        return false;
-				}
-			}
-
-		}
-		
-		var primaryPhone = getFieldByName("primaryPhoneNumber", form).value;
-		var secondaryPhone = getFieldByName("secondaryPhoneNumber", form).value;
-		var email = getFieldByName("lost.client.email", form).value;
-		if (primaryPhone.length == 0 && secondaryPhone.length == 0 && email.length == 0) {
-			alert("<%= (String)bundle.getString("colname.lf.phone.or.email") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-			return false;
-		}
-		
         return true;
 	
 	}
