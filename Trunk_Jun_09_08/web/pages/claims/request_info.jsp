@@ -81,7 +81,7 @@
 	            	<tr><td colspan="3"><bean:message key="colname.message" /></td></tr>
 	            	<tr>
 	            		<td colspan="3">
-	            			<html:textarea property="message" cols="80" rows="10" />
+	            			<html:textarea property="message" cols="70" rows="10" />
 	            		</td>
             		</tr>
             	</table>
