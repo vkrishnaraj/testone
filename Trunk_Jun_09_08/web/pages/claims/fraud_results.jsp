@@ -307,7 +307,9 @@
 		            					</a>
 		            					<% if (!sameCompany) { %>
 											<br/><br/>
-											<b><%=status == null ? "" : status %></b>
+											<% if (status != null) { %>
+												<b>Request: <%=status %></b>
+											<% } %>
 										<% } %>
 		            				</td>
 		            			</tr>

@@ -81,10 +81,12 @@
 			<a href="fraud_results.do?matchId=<%=result.getId() %>">
 				<bean:message key="claim.match.details" />
 			</a>
-			<% if (!sameCompany) { %>
-			<br/><br/>
-			<b><%=status == null ? "" : status %></b>
-			<% } %>
+		            					<% if (!sameCompany) { %>
+											<br/><br/>
+											<% if (status != null) { %>
+												<b>Request: <%=status %></b>
+											<% } %>
+										<% } %>
 					</td>
 				</tr>
 			<% } else { %>
@@ -123,10 +125,12 @@
 			<a href="fraud_results.do?matchId=<%=result.getId() %>">
 				<bean:message key="claim.match.details" />
 			</a>
-			<% if (!sameCompany) { %>
-			<br/><br/>
-			<b><%=status == null ? "" : status %></b>
-			<% } %>
+		            					<% if (!sameCompany) { %>
+											<br/><br/>
+											<% if (status != null) { %>
+												<b>Request: <%=status %></b>
+											<% } %>
+										<% } %>
 					</td>
 				</tr>
 			<% } %>

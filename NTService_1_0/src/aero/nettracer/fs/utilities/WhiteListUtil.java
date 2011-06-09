@@ -179,22 +179,24 @@ public class WhiteListUtil {
 	
 	
 	public static PhoneWhiteList isPhoneWhiteListed(String phone){
-		Session sess = null;
-		try{
-			sess = HibernateWrapper.getSession().openSession();
-			String sql = "from aero.nettracer.fs.model.detection.PhoneWhiteList p where p.phoneNumber = :phone";
-			Query q = sess.createQuery(sql);
-			q.setParameter("phone", phone.trim());
-			List<PhoneWhiteList> result = q.list();
-			if(result != null && result.size() > 0){
-				return (PhoneWhiteList)result.get(0);
-			}
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		} finally {
-			if(sess!=null){
-				sess.close();
+		if (phone != null) {
+			Session sess = null;
+			try {
+				sess = HibernateWrapper.getSession().openSession();
+				String sql = "from aero.nettracer.fs.model.detection.PhoneWhiteList p where p.phoneNumber = :phone";
+				Query q = sess.createQuery(sql);
+				q.setParameter("phone", phone.trim());
+				List<PhoneWhiteList> result = q.list();
+				if (result != null && result.size() > 0) {
+					return (PhoneWhiteList) result.get(0);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (sess != null) {
+					sess.close();
+				}
 			}
 		}
 			
