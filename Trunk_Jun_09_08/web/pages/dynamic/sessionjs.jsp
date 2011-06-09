@@ -7,7 +7,6 @@
 <%@page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@page import="java.util.ResourceBundle" %>
 <%@page import="java.util.Locale" %>
-
 <% 
 	Agent a = (Agent)session.getAttribute("user");
 	LinkedHashMap menu_links = (LinkedHashMap)session.getAttribute("menu_links");
