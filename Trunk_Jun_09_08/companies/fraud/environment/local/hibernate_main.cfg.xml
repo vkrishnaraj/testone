@@ -239,6 +239,8 @@
 		<mapping class="aero.nettracer.fs.model.detection.MatchDetail"/>
 		<mapping class="aero.nettracer.fs.model.detection.MatchHistory"/>
 		<mapping class="aero.nettracer.fs.model.detection.Whitelist"/>
+		<mapping class="aero.nettracer.fs.model.detection.PhoneWhiteList"/>
+		<mapping class="aero.nettracer.fs.model.detection.AddressWhiteList"/>
 		<mapping class="aero.nettracer.fs.model.FsAddress"/>
 		<mapping class="aero.nettracer.fs.model.Bag"/>
 		<mapping class="aero.nettracer.fs.model.FsClaim"/>

@@ -27,7 +27,8 @@ public class EjbTest {
 	  static String password = null;
 //	  static String url      = "jnp://127.0.0.1:1199";
 //	  static String url      = "jnp://192.168.2.145:1199";
-	  static String url      = "jnp://localhost:1199";
+//	  static String url      = "jnp://localhost:1199";
+	  static String url      = "jnp://10.8.185.136:1599";
 	
 	  static public Context getInitialContext() throws Exception {
 		    Properties p = new Properties();

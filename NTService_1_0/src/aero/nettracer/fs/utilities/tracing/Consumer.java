@@ -229,7 +229,7 @@ public class Consumer implements Runnable{
 		}finally{
 			match.getTraceCount().add(null);
 //			if(debug)System.out.println("consumer consumed count: " + match.getTraceCount().size());
-			System.out.println("consumer consumed count: " + match.getTraceCount().size());
+//			System.out.println("consumer consumed count: " + match.getTraceCount().size());
 
 		}
 	}

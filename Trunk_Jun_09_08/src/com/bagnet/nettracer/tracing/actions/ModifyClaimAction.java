@@ -40,6 +40,7 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
+import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -326,7 +327,7 @@ public class ModifyClaimAction extends CheckedAction {
 					file.setIncident(claim.getIncident());
 					claim.getIncident().setFile(file);
 					
-					ClaimDAO.saveClaim(claim);
+					FileDAO.saveFile(file);
 					logger.info("Claim saved to central services: " + remoteFileId);
 	
 					// 3. submit the claim for tracing
