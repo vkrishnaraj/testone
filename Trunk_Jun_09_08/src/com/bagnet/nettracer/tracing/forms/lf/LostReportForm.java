@@ -3,9 +3,7 @@ package com.bagnet.nettracer.tracing.forms.lf;
 import java.util.ArrayList;
 
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.util.LabelValueBean;
 
-import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
@@ -16,8 +14,7 @@ public final class LostReportForm extends ActionForm {
 	
 	private String dateFormat;
 	private LFLost lost;
-	private ArrayList<LabelValueBean> colors;
-	private ArrayList<LFCategory> categories;
+	
 	
 	public String getDateFormat() {
 		return dateFormat;
@@ -100,6 +97,7 @@ public final class LostReportForm extends ActionForm {
 				break;
 			}
 		}
+		phone.setPerson(lost.getClient());
 		lost.getClient().getPhones().add(phone);
 	}
 	
@@ -110,20 +108,4 @@ public final class LostReportForm extends ActionForm {
 		return null;
 	}
 
-	public ArrayList<LabelValueBean> getColors() {
-		return colors;
-	}
-
-	public void setColors(ArrayList<LabelValueBean> colors) {
-		this.colors = colors;
-	}
-
-	public ArrayList<LFCategory> getCategories() {
-		return categories;
-	}
-
-	public void setCategories(ArrayList<LFCategory> categories) {
-		this.categories = categories;
-	}
-	
 }

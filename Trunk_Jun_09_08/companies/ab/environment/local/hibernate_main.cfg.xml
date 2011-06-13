@@ -309,6 +309,8 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFReservation"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFCategory"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFSubCategory"/>
 		
 
     </session-factory>

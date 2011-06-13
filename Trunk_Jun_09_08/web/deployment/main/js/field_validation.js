@@ -185,7 +185,7 @@ function isWhitespace (s)
 			else addr = var1.name.substring(0,pos+1);
 			country = addr + countryField;
 			province = addr + provinceField;
-		
+			
 			myform.elements[province].disabled = true;
 			myform.elements[province].className = 'disabledtextfield';
 			myform.elements[country].value = 'US';

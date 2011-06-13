@@ -1,6 +1,5 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -69,6 +68,22 @@ public class LFReservation {
 
 	public void setMvaNumber(String mvaNumber) {
 		this.mvaNumber = mvaNumber;
+	}
+	
+	public int getPickupLocationId() {
+		return getPickupLocation().getStation_ID();
+	}
+	
+	public void setPickupLocationId(int pickupLocationId) {
+		getPickupLocation().setStation_ID(pickupLocationId);
+	}
+	
+	public int getDropoffLocationId() {
+		return getDropoffLocation().getStation_ID();
+	}
+	
+	public void setDropoffLocationId(int dropoffLocationId) {
+		getDropoffLocation().setStation_ID(dropoffLocationId);
 	}
 	
 }

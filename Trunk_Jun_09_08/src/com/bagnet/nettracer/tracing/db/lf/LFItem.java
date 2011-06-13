@@ -125,4 +125,22 @@ public class LFItem {
 		this.color = color;
 	}
 	
+	public int getStatusId() {
+		return getStatus().getStatus_ID();
+	}
+	
+	public void setStatusId(int statusId) {
+		getStatus().setStatus_ID(statusId);
+	}
+	
+	public int getDispositionId() {
+		return getDisposition().getStatus_ID();
+	}
+	
+	public void setDispositionId(int dispositionId) {
+		if (disposition != null) {
+			getDisposition().setStatus_ID(dispositionId);
+		}
+	}
+	
 }

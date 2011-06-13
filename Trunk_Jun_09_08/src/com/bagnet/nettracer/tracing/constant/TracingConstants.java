@@ -212,7 +212,7 @@ public class TracingConstants {
 	//Lost/Found status
 	public final static int LOST_FOUND_OPEN = 40;
 	public final static int LOST_FOUND_CLOSED = 41;
-
+	
 	public final static int LOST_REPORT = 1;
 	public final static int FOUND_REPORT = 0;
 	
@@ -430,8 +430,11 @@ public class TracingConstants {
 	public final static int LF_STATUS_TO_BE_DELIVERED = 601;
 	public final static int LF_STATUS_CLOSED = 602;
 	public final static int LF_DISPOSITION_PICKED_UP = 603;
-	public final static int LF_DISPOSITION_DELIVERED = 603;
-	public final static int LF_DISPOSITION_SALVAGED = 603;
+	public final static int LF_DISPOSITION_DELIVERED = 604;
+	public final static int LF_DISPOSITION_SALVAGED = 605;
+	
+	public final static int LF_TYPE_LOST = 0;
+	public final static int LF_TYPE_FOUND = 1;
 	
 	/** ********* forwards *********** */
 	// no permission

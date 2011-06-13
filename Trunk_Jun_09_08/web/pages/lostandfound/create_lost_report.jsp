@@ -9,10 +9,16 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.DateUtils" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Status" %>
+<%@ page import="org.apache.struts.util.LabelValueBean" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.lf.LFCategory" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.lf.LFSubCategory" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Iterator" %>
 <%
 	Agent a = (Agent)session.getAttribute("user");
  	String cssFormClass = "form2_dam";
+ 	
+ 	ArrayList categoryList = (ArrayList) request.getSession().getAttribute("lfcategorylist");
 %>
 
 
@@ -22,11 +28,102 @@
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
     
-	var cal1xx = new CalendarPopup();	
+	var cal1xx = new CalendarPopup();
+	
+	function getCategories() {
+		var categories;
+		<% 
+			LFCategory currCategory;
+			LFSubCategory subCategory;
+			String categoryListJson = "{";
+			for (int i = 0; i < categoryList.size(); ++i) {
+				currCategory = (LFCategory) categoryList.get(i);
+				categoryListJson += "\"" + currCategory.getDescription() + "\": [";
+				Iterator iterator = currCategory.getSubcategories().iterator();
+				while (iterator.hasNext()) {
+					subCategory = (LFSubCategory) iterator.next();
+					categoryListJson += "\"" + subCategory.getDescription() + "\"";
+					if (iterator.hasNext()) {
+						categoryListJson += ",";
+					}
+				}
+				categoryListJson += "],";				
+		   	}
+			categoryListJson = categoryListJson.substring(0,categoryListJson.length() - 1) + "}";
+	   	%>
+	   	categories = <%=categoryListJson %>;
+	   	alert(categories.Phone[0]);
+	   	
+	    
+	   	var subCategoryArray = new Array(<%=categoryList.size()%>);
+	   	<%
+	   	   for (int i = 0; i < categoryList.size(); ++i) {
+	   		   currCategory = (LFCategory) categoryList.get(i); %>
+	   		   subCategoryArray[i] = new Array(<%=currCategory.getSubcategories().size() %>);
+	   		   	   	   	
+	   	<% } %>
+	}
+	
+	function fieldChanged(field) {
+		var state = document.getElementById('state');
+		var province = document.getElementById('province');
+		var country = document.getElementById('country');
+	
+		if (field == "state") {
+			stateChanged(state, province, country);
+		} else if (field == "province") {
+			provinceChanged(state, province, country);
+		} else if (field == "country") {
+			countryChanged(state, province, country);
+		}
+	}
+	
+	function stateChanged(state, province, country) {
+		if (state.value == "") {
+			province.disabled = false;	
+			province.className = "textfield";
+		} else {
+			province.value = "";
+			province.disabled = true;
+			province.className = "disabledtextfield";
+			country.value = "US";
+		}
+	}
+	
+	function provinceChanged(state, province, country) {
+		if (province.value == "") {
+			state.disabled = false;
+		} else {
+			state.value = "";
+			state.disabled = true;
+		}
+	}
+	
+	function countryChanged(state, province, country) {
+		if (country.value == "") {
+			state.disabled = false;
+			province.disabled = false;
+			province.className = "textfield";
+		} else if (country.value == "US") {
+			state.disabled = false;
+			province.value = "";
+			province.disabled = true;
+			province.className = "disabledtextfield";
+		} else {
+			state.value = "";
+			state.disabled = true;
+			province.disabled = false;
+			province.className = "textfield";
+		}
+	}
+	
+	function updateSubCategories() {
+		
+	}
 
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form focus="lost.id" action="create_lost_report.do" method="post" onsubmit="return validateSearch(this);">
+<html:form focus="lost.id" action="create_lost_report.do" method="post" onsubmit="return validateLfReportForm(this);">
 <input type="hidden" name="delete_these_elements" value="" />
 	<tr>
         <td colspan="3" id="pageheadercell">
@@ -63,17 +160,17 @@
 						<td>
 							<bean:message key="colname.lf.report.id" />
 							<br/>
-							<html:text name="lostReportForm" property="lost.id" disabled="true" styleClass="disabledtextbox" />
+							<html:text name="lostReportForm" property="lost.id" disabled="true" styleClass="disabledtextfield" />
 						</td>
 						<td>
 							<bean:message key="colname.lf.created.date" />
 							<br/>
-							<html:text name="lostReportForm" property="disOpenDate" disabled="true" styleClass="disabledtextbox" />
+							<html:text name="lostReportForm" property="disOpenDate" disabled="true" styleClass="disabledtextfield" />
 						</td>
 						<td>
 							<bean:message key="colname.lf.created.agent" />
 							<br/>
-							<input type="text" value="<%=a.getUsername() %>" disabled="true" class="disabledtextbox" />
+							<input type="text" value="<%=a.getUsername() %>" disabled class="disabledtextfield" />
 						</td>
 					</tr>
 				</table>
@@ -85,13 +182,18 @@
    				<bean:message key="message.required" /> 
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
          			<tr>
-			            <td nowrap colspan="2" >
-			              <bean:message key="colname.last_name.req" />
+         				<td>
+         					<bean:message key="colname.lf.vantive.number" />
+         					<br>
+         					<html:text name="lostReportForm" property="lost.client.vantiveNumber" size="10" styleClass="textfield" />
+         				</td>
+			            <td>
+			              <bean:message key="colname.last_name.req" />&nbsp;<span class="reqfield">*</span>
 			              <br>
 			              <html:text name="lostReportForm" property="lost.client.lastName" size="20" maxlength="20" styleClass="textfield" />
 			            </td>
 			            <td nowrap colspan="2">
-			              <bean:message key="colname.first_name.req" />
+			              <bean:message key="colname.first_name.req" />&nbsp;<span class="reqfield">*</span>
 			              <br>
 			              <html:text name="lostReportForm" property="lost.client.firstName" size="20" maxlength="20" styleClass="textfield" />
 			            </td>
@@ -103,7 +205,7 @@
 			        </tr>
 	            	<tr>
 		                <td colspan=2>
-		                  <bean:message key="colname.street_addr1.req" />
+		                  <bean:message key="colname.street_addr1.req" />&nbsp;<span class="reqfield">*</span>
 		                  <br>
 		                  <html:text name="lostReportForm" property="lost.client.address.address1" size="45" maxlength="50" styleClass="textfield" />
 		                </td>
@@ -115,14 +217,14 @@
 		              </tr>
 		              <tr>
 		                <td>
-		                  <bean:message key="colname.city.req" />
+		                  <bean:message key="colname.city.req" />&nbsp;<span class="reqfield">*</span>
 		                  <br>
 		                  <html:text name="lostReportForm" property="lost.client.address.city" size="10" maxlength="50" styleClass="textfield" />
 		                </td>
 		                <td>
 		                  <bean:message key="colname.state" />
 		                  <br />
-		                  <html:select name="lostReportForm" property="lost.client.address.state" styleClass="dropdown" onchange="" >
+		                  <html:select name="lostReportForm" property="lost.client.address.state" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" >
 		                  	<html:option value="">
 			                    <bean:message key="select.none" />
 		                    </html:option>
@@ -132,7 +234,7 @@
 		                <td>
 		                  <bean:message key="colname.province" />
 		                  <br />
-		                  <html:text name="lostReportForm" property="lost.client.address.province" size="10" maxlength="100" styleClass="textfield" />
+		                  <html:text name="lostReportForm" property="lost.client.address.province" size="10" maxlength="100" styleId="province" styleClass="textfield" onchange="fieldChanged('province');" />
 		                </td>
 		                <td>
 		                  <bean:message key="colname.zip.req" />
@@ -140,9 +242,9 @@
 		                  <html:text name="lostReportForm" property="lost.client.address.zip" size="11" maxlength="11" styleClass="textfield" />
 		                </td>
 		                <td>
-		                  <bean:message key="colname.country" />
+		                  <bean:message key="colname.country" />&nbsp;<span class="reqfield">*</span>
 		                  <br>
-		                  <html:select name="lostReportForm" property="lost.client.address.country" styleClass="dropdown" onchange="checkstate(this,this.form,'state', 'province');">
+		                  <html:select name="lostReportForm" property="lost.client.address.country" styleId="country" styleClass="dropdown" onchange="fieldChanged('country');">
 		                    <html:option value="">
 		                      <bean:message key="select.none" />
 		                    </html:option>
@@ -185,7 +287,7 @@
 		              	<td colspan="3" >
 		              		<bean:message key="colname.lf.confirm.email" />
 		              		<br />
-		              		<html:text name="lostReportForm" property="lost.client.email" size="35" maxlength="100" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="lost.client.confirmEmail" size="35" maxlength="100" styleClass="textfield" />
 		              	</td>
 		              </tr>
 				</table>
@@ -209,9 +311,9 @@
 	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" />
 	         				</td>
 	         				<td>
-	         					<bean:message key="colname.lf.status" />
+	         					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
 	         					<br>
-	         					<select name="item[<%=i %>].status" class="dropdown" >
+	         					<select name="item[<%=i %>].statusId" class="dropdown" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList statusList = (ArrayList) request.getSession().getAttribute("lfstatuslist");
@@ -219,7 +321,7 @@
 	         							for (int j = 0; j < statusList.size(); ++j) {
 	         								status = (Status) statusList.get(j);
 	         						%>
-	         								<option value="<%=status.getStatus_ID() %>"><%=status.getDescription() %></option>
+	         								<option value="<%=status.getStatus_ID() %>" <% if (item.getStatus().getStatus_ID() == status.getStatus_ID()) { %>selected<% } %> ><%=status.getDescription() %></option>
 	         						<%	
 	         							}
          							%>
@@ -228,15 +330,20 @@
 	         				<td>
 	         					<bean:message key="colname.lf.disposition" />
 	         					<br>
-	         					<select name="item[<%=i %>].status" class="dropdown" >
+	         					<select name="item[<%=i %>].dispositionId" class="dropdown" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList dispositionList = (ArrayList) request.getSession().getAttribute("lfdispositionlist");
 	         							Status disposition;
+	         							int dispositionId = -1;
+	         							if (item.getDisposition() != null) {
+	         								dispositionId = item.getDisposition().getStatus_ID();
+	         							}
+	         							
 	         							for (int j = 0; j < dispositionList.size(); ++j) {
 	         								disposition = (Status) dispositionList.get(j);
 	         						%>
-	         								<option value="<%=disposition.getStatus_ID() %>"><%=disposition.getDescription() %></option>
+	         								<option value="<%=disposition.getStatus_ID() %>" <% if (dispositionId == disposition.getStatus_ID()) { %>selected<% } %> ><%=disposition.getDescription() %></option>
 	         						<%	
 	         							}
          							%>
@@ -247,22 +354,44 @@
 	         				<td>
 	         					<bean:message key="colname.lf.category" />
 	         					<br>
-	         					<select name="item[<%=i %>].category" class="dropdown" >
+	         					<input type="hidden" name="changesubcategories">
+	         					<select name="item[<%=i %>].category" class="dropdown" onchange="updateSubCategories();" id="categories" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
+	         						<%
+	         							LFCategory category;
+	         							for (int j = 0; j < categoryList.size(); ++j) {
+	         								category = (LFCategory) categoryList.get(j);
+	         						%>
+	         								<option value="<%=category.getId() %>" ><%=category.getDescription() %></option>
+	         						<%	
+	         							}
+         							%>
 	         					</select>
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.subcategory" />
 	         					<br>
-	         					<select name="item[<%=i %>].subCategory" class="dropdown" >
-	         						<option value=""><bean:message key="option.lf.please.select" /></option>
-	         					</select>
+	         					<div id="subcategoriesdiv" >
+		         					<select name="item[<%=i %>].subCategory" class="dropdown" disabled id="subcategories" >
+		         						<option value=""><bean:message key="option.lf.please.select" /></option>
+		         					</select>
+	         					</div>
 	         				</td>
 	         				<td colspan=2>
 	         					<bean:message key="colname.lf.color" />
 	         					<br>
-	         					<select name="item[<%=i %>].lost.color" class="dropdown" >
+	         					<select name="item[<%=i %>].color" class="dropdown" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
+	         						<%
+	         							ArrayList colorList = (ArrayList) request.getSession().getAttribute("lfcolorlist");
+	         							LabelValueBean color;
+	         							for (int j = 0; j < colorList.size(); ++j) {
+	         								color = (LabelValueBean) colorList.get(j);
+	         						%>
+	         								<option value="<%=color.getValue() %>" <% if (item.getColor() == color.getValue()) { %>selected<% } %> ><%=color.getLabel() %></option>
+	         						<%	
+	         							}
+         							%>
 	         					</select>
 	         				</td>
 	         			</tr>
@@ -282,6 +411,41 @@
 				<span class="reqfield">*</span>
 				<bean:message key="message.required" /> 
 				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+					<tr>
+						<td>
+							<bean:message key="colname.lf.agreement.number" />
+							<br>
+							<html:text name="lostReportForm" property="lost.reservation.agreementNumber" size="10" styleClass="textfield" />
+						</td>
+						<td>
+							<bean:message key="colname.lf.mva.number" />
+							<br>
+							<html:text name="lostReportForm" property="lost.reservation.mvaNumber" size="10" styleClass="textfield" />
+						</td>
+						<td>
+							<bean:message key="colname.lf.rental.location" />&nbsp;<span class="reqfield">*</span>
+							<br>
+		            		<html:select name="lostReportForm" property="lost.reservation.pickupLocationId" styleClass="dropdown" >
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+		            		</html:select>
+						</td>
+						<td>
+							<bean:message key="colname.lf.dropoff.location" />&nbsp;<span class="reqfield">*</span>
+							<br>
+		            		<html:select name="lostReportForm" property="lost.reservation.dropoffLocationId" styleClass="dropdown" >
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+		            		</html:select>
+						</td>
+					</tr>
+					<tr>
+						<td colspan=4>
+							<bean:message key="colname.lf.where.did.you.leave.it" />
+							<br>
+							<html:text name="lostReportForm" property="lost.remarks" size="80" styleClass="textfield" />
+						</td>
+					</tr>
 				</table>
 				<br/>
 				<center>
@@ -289,6 +453,11 @@
 						<bean:message key="button.save" />
 					</html:submit>
 				</center>
+				<script>
+					fieldChanged('state');
+					fieldChanged('country');
+					getCategories();
+             	</script>
    			</div>
    		</td>
    	</tr>
