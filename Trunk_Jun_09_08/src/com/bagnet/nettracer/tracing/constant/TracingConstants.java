@@ -432,6 +432,7 @@ public class TracingConstants {
 	public final static int LF_DISPOSITION_PICKED_UP = 603;
 	public final static int LF_DISPOSITION_DELIVERED = 604;
 	public final static int LF_DISPOSITION_SALVAGED = 605;
+	public final static int LF_DISPOSITION_OTHER = 606;
 	public final static int LF_TRACING_NEW = 607;
 	public final static int LF_TRACING_CONFIRMED = 608;
 	public final static int LF_TRACING_REJECTED = 609;

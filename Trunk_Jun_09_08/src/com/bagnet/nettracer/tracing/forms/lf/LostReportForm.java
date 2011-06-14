@@ -23,7 +23,7 @@ public final class LostReportForm extends ActionForm {
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
 	}
-
+	
 	public LFLost getLost() {
 		return lost;
 	}

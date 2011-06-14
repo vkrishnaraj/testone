@@ -1,6 +1,8 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -9,12 +11,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Proxy(lazy = false)
@@ -46,6 +50,9 @@ public class LFFound {
 	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFItem.class, cascade = CascadeType.ALL)
 	private LFItem item;
+	
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPerson.class, cascade = CascadeType.ALL)
+	private LFPerson client;
 
 	public long getId() {
 		return id;
@@ -109,6 +116,33 @@ public class LFFound {
 
 	public void setItem(LFItem item) {
 		this.item = item;
+	}
+
+	public LFPerson getClient() {
+		return client;
+	}
+
+	public void setClient(LFPerson client) {
+		this.client = client;
+	}
+	
+	public String getDisFoundDate(String dateFormat) {
+		return DateUtils.formatDate(foundDate, dateFormat, "", null);
+	}
+	
+	@Transient
+	public Set<LFItem> getItems() {
+		LinkedHashSet<LFItem> items = new LinkedHashSet<LFItem>();
+		items.add(item);
+		return items;
+	}
+	
+	public int getLocationId() {
+		return getLocation().getStation_ID();
+	}
+	
+	public void setLocationId(int locationId) {
+		getLocation().setStation_ID(locationId);
 	}
 	
 }

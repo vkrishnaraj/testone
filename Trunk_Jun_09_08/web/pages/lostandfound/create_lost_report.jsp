@@ -19,6 +19,7 @@
  	String cssFormClass = "form2_dam";
  	
  	ArrayList categoryList = (ArrayList) request.getSession().getAttribute("lfcategorylist");
+ 	
 %>
 
 
@@ -30,37 +31,35 @@
     
 	var cal1xx = new CalendarPopup();
 	
-	function getCategories() {
-		var categories;
-		<% 
-			LFCategory currCategory;
-			LFSubCategory subCategory;
-			String categoryListJson = "{";
-			for (int i = 0; i < categoryList.size(); ++i) {
-				currCategory = (LFCategory) categoryList.get(i);
-				categoryListJson += "\"" + currCategory.getDescription() + "\": [";
-				Iterator iterator = currCategory.getSubcategories().iterator();
-				while (iterator.hasNext()) {
-					subCategory = (LFSubCategory) iterator.next();
-					categoryListJson += "\"" + subCategory.getDescription() + "\"";
-					if (iterator.hasNext()) {
-						categoryListJson += ",";
-					}
-				}
-				categoryListJson += "],";				
-		   	}
-			categoryListJson = categoryListJson.substring(0,categoryListJson.length() - 1) + "}";
-	   	%>
-	   	categories = <%=categoryListJson %>;
-	   	alert(categories.Phone[0]);
-	   	
-	    
-	   	var subCategoryArray = new Array(<%=categoryList.size()%>);
+	var subCategoryArray = null;
+	
+	function getSubCategories() {
+		if (subCategoryArray != null) {
+			return;
+		}
+		var i;
+	   	var j;
+	   	subCategoryArray = new Array(<%=categoryList.size()%>);
 	   	<%
+	   	   LFCategory currCategory;
+	   	   LFSubCategory subCategory;
 	   	   for (int i = 0; i < categoryList.size(); ++i) {
-	   		   currCategory = (LFCategory) categoryList.get(i); %>
+	   		   currCategory = (LFCategory) categoryList.get(i);
+  		%>
+  			   i = <%=i %>;
 	   		   subCategoryArray[i] = new Array(<%=currCategory.getSubcategories().size() %>);
-	   		   	   	   	
+	   		   j = 0;
+	   		   <%
+	   		       Iterator iterator = currCategory.getSubcategories().iterator();
+	   		       while (iterator.hasNext()) {
+	   		           subCategory = (LFSubCategory) iterator.next();
+	   		   %>
+	   		           subCategoryArray[i][j] = <%="{\"value\": \""+subCategory.getId()+"\", \"label\": \""+subCategory.getDescription()+"\"}" %>;
+	   		           
+	   		           ++j;
+	   		   <%
+	   		       }
+	   		   %>
 	   	<% } %>
 	}
 	
@@ -117,8 +116,49 @@
 		}
 	}
 	
-	function updateSubCategories() {
+	function updateSubCategories(categoryId, itemIndex) {
+		getSubCategories();
+		var categories = document.getElementById(categoryId);
+		var selectedIdx = categories.selectedIndex;
 		
+		var subCategories = document.getElementById('subcategories_' + itemIndex);
+		subCategories.options[0].selected = true;
+		if (selectedIdx == 0) {
+			subCategories.disabled = true;
+			return;
+		} else {
+			subCategories.disabled = false;
+		}
+
+		if (selectedIdx > 0) {
+			selectedIdx = selectedIdx - 1;
+		}
+		var newSubCategories = subCategoryArray[selectedIdx];
+		
+		for (var i = subCategories.length; i > 0; --i) {
+			subCategories.remove(i);	
+		}
+
+		for (var i = 0; i < newSubCategories.length; ++i) {
+			subCategories.add(new Option(newSubCategories[i].label, newSubCategories[i].value), subCategories.length);
+		}
+	}
+	
+	function setSelectedSubCategory(categoryIdx, subCategoryIdx, elementId) {
+		if (categoryIdx > 0) {
+			document.getElementById(elementId).disabled = false;
+		} else {
+			return;
+		}
+		getSubCategories();
+		var subCategories = subCategoryArray[categoryIdx - 1];
+		var subCategoryElement = document.getElementById(elementId);
+		for (var i = 0; i < subCategories.length; ++i) {
+			if (subCategories[i].value == subCategoryIdx) {
+				subCategoryElement.options.selectedIndex = i+1;
+				break;
+			}
+		}
 	}
 
 </SCRIPT>
@@ -303,12 +343,12 @@
 	         				<td>
 	         					<bean:message key="colname.lf.brand" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].brand" class="textfield" />
+	         					<input type="text" name="item[<%=i %>].brand" class="textfield" value="<%=item.getBrand() == null ? "" : item.getBrand() %>" />
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.serial" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" />
+	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" value="<%=item.getSerialNumber() == null ? "" : item.getSerialNumber() %>" />
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
@@ -354,15 +394,14 @@
 	         				<td>
 	         					<bean:message key="colname.lf.category" />
 	         					<br>
-	         					<input type="hidden" name="changesubcategories">
-	         					<select name="item[<%=i %>].category" class="dropdown" onchange="updateSubCategories();" id="categories" >
+	         					<select name="item[<%=i %>].category" class="dropdown" onchange="updateSubCategories('category_<%=i %>', <%=i %>);" id="category_<%=i %>" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							LFCategory category;
 	         							for (int j = 0; j < categoryList.size(); ++j) {
 	         								category = (LFCategory) categoryList.get(j);
 	         						%>
-	         								<option value="<%=category.getId() %>" ><%=category.getDescription() %></option>
+	         								<option value="<%=category.getId() %>" <% if (category.getId() == item.getCategory()) { %>selected<% } %>><%=category.getDescription() %></option>
 	         						<%	
 	         							}
          							%>
@@ -371,11 +410,29 @@
 	         				<td>
 	         					<bean:message key="colname.lf.subcategory" />
 	         					<br>
-	         					<div id="subcategoriesdiv" >
-		         					<select name="item[<%=i %>].subCategory" class="dropdown" disabled id="subcategories" >
-		         						<option value=""><bean:message key="option.lf.please.select" /></option>
-		         					</select>
-	         					</div>
+	         					<select name="item[<%=i %>].subCategory" class="dropdown" disabled id="subcategories_<%=i %>" onchange="" >
+	         						<option value=""><bean:message key="option.lf.please.select" /></option>
+	         						<%
+	         							ArrayList subCategories = new ArrayList();
+	         							for (int j = 0; j < categoryList.size(); ++j) {
+	         								category = (LFCategory) categoryList.get(j);
+	         								if (category.getId() == item.getCategory()) {
+	         									subCategories = new ArrayList(category.getSubcategories());
+	         									break;
+	         								}
+	         							}
+
+	         							for (int j = 0; j < subCategories.size(); ++j) {
+	         								subCategory = (LFSubCategory) subCategories.get(j);
+	         						%>
+	         								<option value="<%=subCategory.getId() %>" <% if (subCategory.getId() == item.getSubCategory()) { %>selected<% } %>><%=subCategory.getDescription() %></option>
+	         						<%
+	         							}
+	         						%>
+	         					</select>
+	         					<script>
+	         						setSelectedSubCategory(<%=item.getCategory()%>, <%=item.getSubCategory()%>, 'subcategories_<%=i %>');
+	         					</script>
 	         				</td>
 	         				<td colspan=2>
 	         					<bean:message key="colname.lf.color" />
@@ -384,11 +441,11 @@
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList colorList = (ArrayList) request.getSession().getAttribute("lfcolorlist");
-	         							LabelValueBean color;
+	         							LabelValueBean color = new LabelValueBean();
 	         							for (int j = 0; j < colorList.size(); ++j) {
 	         								color = (LabelValueBean) colorList.get(j);
 	         						%>
-	         								<option value="<%=color.getValue() %>" <% if (item.getColor() == color.getValue()) { %>selected<% } %> ><%=color.getLabel() %></option>
+	         								<option value="<%=color.getValue() %>" <% if (item.getColor() != null && item.getColor().equals(color.getValue())) { %>selected<% } %> ><%=color.getLabel() %></option>
 	         						<%	
 	         							}
          							%>
@@ -399,7 +456,7 @@
 	         				<td colspan=4>
 	         					<bean:message key="colname.lf.description" />
 	         					<br>
-	         					<textarea name="item[<%=i %>].description" cols="80" rows="3" class="textfield" ></textarea>
+	         					<textarea name="item[<%=i %>].description" cols="80" rows="3" class="textfield" ><%=item.getDescription() == null ? "" : item.getDescription() %></textarea>
 	         				</td>
 	         			</tr>
          			</logic:iterate>
@@ -456,7 +513,6 @@
 				<script>
 					fieldChanged('state');
 					fieldChanged('country');
-					getCategories();
              	</script>
    			</div>
    		</td>

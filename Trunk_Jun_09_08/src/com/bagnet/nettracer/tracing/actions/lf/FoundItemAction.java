@@ -9,9 +9,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import aero.nettracer.lf.services.LFServiceWrapper;
+import aero.nettracer.lf.services.LFUtils;
+
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.lf.LFFound;
+import com.bagnet.nettracer.tracing.forms.lf.FoundItemForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -34,6 +39,23 @@ public class FoundItemAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
 		
+		LFUtils.getLists(user, session);
+		
+		FoundItemForm fiForm = (FoundItemForm) form;
+		fiForm.setDateFormat(user.getDateformat().getFormat());
+		
+		LFFound found = null;
+		if (request.getParameter("foundId") != null) {
+			long id = Long.parseLong(request.getParameter("foundId"));
+			found = LFServiceWrapper.getInstance().getFoundItem(id);
+		} else if (request.getParameter("save") != null) {
+			found = fiForm.getFound();
+			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found);
+		} else {
+			found = LFUtils.createLFFound(user);
+		}
+
+		fiForm.setFound(found);
 		return mapping.findForward(TracingConstants.LF_CREATE_FOUND_ITEM);
 		
 	}
