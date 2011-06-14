@@ -7,9 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.Status;
@@ -17,7 +21,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 
 @Entity
-@Proxy(lazy = true)
+@Proxy(lazy = false)
 public class LFMatchHistory {
 
 	@Id
@@ -25,15 +29,19 @@ public class LFMatchHistory {
 	private long id;
 	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFLost.class, cascade = CascadeType.ALL)
+	@Fetch(FetchMode.SELECT)
 	private LFLost lost;
 	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFFound.class, cascade = CascadeType.ALL)
+	@Fetch(FetchMode.SELECT)
 	private LFFound found;
 	
 	@OneToMany(mappedBy = "matchHistory", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
 	private Set<LFMatchDetail> details;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Status.class, cascade = CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name = "status_Status_ID", nullable = false)
 	private Status status;
 
 	public long getId() {

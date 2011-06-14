@@ -27,39 +27,37 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 @Entity
 @Proxy(lazy = false)
 public class LFLost {
-	
+
 	@Id
 	@GeneratedValue
 	private long id;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "agent_ID", nullable = false)
 	private Agent agent;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "station_ID", nullable = false)
 	private Station location;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "status_ID", nullable = false)
 	private Status status;
-	
+
 	private Date openDate;
-	
+
 	private Date closeDate;
-	
+
 	private Date emailSentDate;
-	
+
 	private String remarks;
-	
-	
-	
+
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPerson.class, cascade = CascadeType.ALL)
 	private LFPerson client;
-	
+
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFReservation.class, cascade = CascadeType.ALL)
 	private LFReservation reservation;
-	
+
 	@OneToMany(mappedBy = "lost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
@@ -153,9 +151,9 @@ public class LFLost {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
-	
+
 	public String getDisOpenDate(String dateFormat) {
 		return DateUtils.formatDate(openDate, dateFormat, "", null);
 	}
-	
+
 }
