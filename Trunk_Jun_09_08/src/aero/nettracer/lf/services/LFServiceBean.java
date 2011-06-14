@@ -93,9 +93,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(dto.getOpenDate() != null){
 			//TODO
 		}
-		if(dto.getCloseDate() != null){
-			//TODO
-		}
 		if(dto.getAgent() != null){
 			//TODO
 		}
@@ -190,6 +187,57 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		} else {
 			return -1;
 		}
+	}
+	
+	@Override
+	public long saveOrUpdateDelivery(LFDelivery delivery){
+		Session sess = null;
+		Transaction t = null;
+		long reportId = -1;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(delivery);
+			t.commit();
+			reportId = delivery.getId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if(reportId > 0){
+			return reportId;
+		} else {
+			return -1;
+		}
+	}
+	
+	@Override
+	public LFDelivery getDelivery(long id) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		LFDelivery d = null;
+		try{
+			d = (LFDelivery) sess.load(LFDelivery.class, id);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return d;
 	}
 
 	@Override
@@ -348,18 +396,23 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	private String getLostQuery(Station station){
+		//TODO what status
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
-				"where l.location.station_ID = " + station.getStation_ID();
+				"where l.location.station_ID = " + station.getStation_ID()
+				+ " and l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
 		return sql;
 	}
 	
 	private String getFoundQuery(Station station){
+		//TODO what status
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
-				"where f.location.station_ID = " + station.getStation_ID();
+				"where f.location.station_ID = " + station.getStation_ID()
+				+ " and f.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
 		return sql;
 	}
 	
 	String getLostReportToCloseQuery(Station station){
+		//TODO what status
 		int daysTillClose = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_CLOSE_DAYS);
 		GregorianCalendar today = new GregorianCalendar();
 		today.add(Calendar.DATE, -daysTillClose);
@@ -367,11 +420,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
 		"where l.location.station_ID = " + station.getStation_ID() +
-		" and l.openDate < \'" + cutoff + "\'";
+		" and l.openDate < \'" + cutoff + "\'"
+		+ " and l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
 		return sql;
 	}
 	
 	private String getItemsToSalvageQuery(Station station){
+		//TODO what status
 		int daysTillSalvage = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS);
 		GregorianCalendar today = new GregorianCalendar();
 		today.add(Calendar.DATE, -daysTillSalvage);
@@ -379,7 +434,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
 		"where f.location.station_ID = " + station.getStation_ID() +
-		" and f.openDate < \'" + cutoff + "\'";
+		" and f.foundDate < \'" + cutoff + "\'"
+		+ " and f.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
 		return sql;
 	}
 	
@@ -554,9 +610,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	private String getTraceResultsQuery(Station station){
-		//TODO
+		//TODO location criteria
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh " +
-				"where ";
+				"where mh.status.status_id = " + TracingConstants.LF_TRACING_NEW
+				+ " and (mh.lost.location = " + station.getStation_ID() + " or " +
+						"mh.found.location = " + station.getStation_ID() + ")";
 		return sql;
 	}
 	
@@ -616,9 +674,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	private String getDeliveryPendingQuery(Station station){
-		//TODO
+		//TODO assuption is that any pending deliveries will have a LFDelivery object
+		//second assumption is that if at least one item in the lost is pending, then the whole lost is pending
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFDelivery d " +
-				"where ";
+				"left outer join com.bagnet.nettracer.tracing.db.lf.LFLost l on d.lost.id = l.id " +
+				"left outer join com.bagnet.nettracer.tracing.db.lf.LFItem i on l.id = i.lost.id " +
+				"where i.disposition.status_ID = " + TracingConstants.LF_STATUS_TO_BE_DELIVERED;
 		return sql;
 	}
 	

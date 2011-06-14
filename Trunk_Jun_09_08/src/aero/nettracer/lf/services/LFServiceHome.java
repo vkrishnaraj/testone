@@ -66,8 +66,7 @@ public interface LFServiceHome {
 	public boolean rejectMatch(long id);
 	public boolean undoMatch(long id);
 
+	long saveOrUpdateDelivery(LFDelivery delivery);
 
-	
-
-
+	LFDelivery getDelivery(long id);
 }
