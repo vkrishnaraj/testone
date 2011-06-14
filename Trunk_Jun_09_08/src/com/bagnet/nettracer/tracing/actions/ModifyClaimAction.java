@@ -94,6 +94,8 @@ public class ModifyClaimAction extends CheckedAction {
 		ActionMessages errors = new ActionMessages();
 		BagService bs = new BagService();
 		IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
+		
+		// TODO: THIS BLOCK IS PROBLEMATIC IF WE AREN'T COMING FROM THE INCIDENT PAGES ITSELF.
 		if (theform != null) {
 			request.setAttribute("incident", theform.getIncident_ID());
 			if (ClaimSettlementBMO.getClaimSettlement(theform.getIncident_ID(), null) != null) {
@@ -151,7 +153,7 @@ public class ModifyClaimAction extends CheckedAction {
 						saveMessages(request, errors);
 						request.setAttribute("noincident", "1");
 					} else {
-
+						// TODO: THESE LINES ARE QUESTIONABLE - WE ALREADY DID THIS
 						request.setAttribute("incident", theform.getIncident_ID());
 						theform.setIncident_ID(ntIncidentId);
 						session.setAttribute("incidentForm", theform);
@@ -240,6 +242,7 @@ public class ModifyClaimAction extends CheckedAction {
 			boolean firstSave = claim.getId() == 0;
 			if (isNtUser) {
 				if (firstSave) {
+					//TODO: VERY PROBLEMATIC
 					file = (File) session.getAttribute("file");
 					session.removeAttribute("file");
 					if (file != null) {
