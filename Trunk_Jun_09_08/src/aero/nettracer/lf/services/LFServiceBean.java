@@ -24,6 +24,7 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFDelivery;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
+import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
@@ -673,22 +674,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 
-	private String getDeliveryPendingQuery(Station station){
-		//TODO assuption is that any pending deliveries will have a LFDelivery object
-		//second assumption is that if at least one item in the lost is pending, then the whole lost is pending
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFDelivery d " +
-				"left outer join com.bagnet.nettracer.tracing.db.lf.LFLost l on d.lost.id = l.id " +
-				"left outer join com.bagnet.nettracer.tracing.db.lf.LFItem i on l.id = i.lost.id " +
-				"where i.disposition.status_ID = " + TracingConstants.LF_STATUS_TO_BE_DELIVERED;
-		return sql;
-	}
 	
 	@Override
 	public int getDeliveryPendingCount(Station station) {
 		if(station == null){
 			return 0;
 		}
-		String query = "select count(d.id) " + getDeliveryPendingQuery(station);
+		String query = "select count (i.id) from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
+				"where i.found.location.station_ID = " + station.getStation_ID() +
+				" and i.disposition.status_ID = " + TracingConstants.LF_STATUS_TO_BE_DELIVERED;
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -707,11 +701,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public List<LFDelivery> getDeliveryPendingPaginatedList(Station station, int start, int offset) {
+	public List<LFItem> getDeliveryPendingPaginatedList(Station station, int start, int offset) {
 		if(station == null){
 			return null;
 		}
-		String query = getDeliveryPendingQuery(station) + " order by d.createDate asc";
+		
+		String query = "from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
+		"where i.found.location.station_ID = " + station.getStation_ID() +
+		" and i.disposition.status_ID = " + TracingConstants.LF_STATUS_TO_BE_DELIVERED 
+		+ " order by i.found.foundDate asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -724,7 +722,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				throw new Exception("Invalided pagination bounds");
 			}
 			
-			List<LFDelivery> results = q.list();
+			List<LFItem> results = q.list();
 			sess.close();
 			return results;
 			
@@ -754,14 +752,97 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public List<LFMatchHistory> getTraceResultsForLost(long id) {
-		// TODO Auto-generated method stub
+		String sql = "com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
+		"where m.lost.id = " + id;
+
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			List result = q.list();
+			sess.close();
+			return  (List<LFMatchHistory>)result;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<LFMatchHistory> getTraceResultsForFound(long id) {
-		// TODO Auto-generated method stub
+		String sql = "com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
+				"where m.found.id = " + id;
+		
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			List result = q.list();
+			sess.close();
+			return  (List<LFMatchHistory>)result;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
 		return null;
+	}
+	
+	@Override
+	public LFMatchHistory getTraceResult(long id){
+		Session sess = HibernateWrapper.getSession().openSession();
+		LFMatchHistory f = null;
+		try{
+			f = (LFMatchHistory) sess.load(LFMatchHistory.class, id);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return f;
+	}
+	
+	@Override
+	public long saveOrUpdateTraceResult(LFMatchHistory match){
+		Session sess = null;
+		Transaction t = null;
+		long id = -1;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(match);
+			t.commit();
+			id = match.getId();
+		}catch (Exception e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if(id > 0){
+			return id;
+		} else {
+			return -1;
+		}
 	}
 
 	@Override
@@ -778,19 +859,59 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public boolean confirmMatch(long id) {
-		// TODO Auto-generated method stub
+		LFMatchHistory match = getTraceResult(id);
+		if(match != null){
+			Status status = new Status();
+			status.setStatus_ID(TracingConstants.LF_TRACING_CONFIRMED);
+			match.setStatus(status);
+			
+			if(match.getFound() != null && match.getFound().getItem() != null){
+				Status deliveryStatus = new Status();
+				deliveryStatus.setStatus_ID(TracingConstants.LF_STATUS_TO_BE_DELIVERED);
+				match.getFound().getItem().setDisposition(deliveryStatus);
+			}
+			
+			if(saveOrUpdateTraceResult(match) > -1){
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean rejectMatch(long id) {
-		// TODO Auto-generated method stub
+		LFMatchHistory match = getTraceResult(id);
+		if(match != null){
+			Status status = new Status();
+			status.setStatus_ID(TracingConstants.LF_TRACING_REJECTED);
+			match.setStatus(status);
+			
+			if(saveOrUpdateTraceResult(match) > -1){
+				return true;
+			}
+		}
 		return false;
 	}
 
 	@Override
 	public boolean undoMatch(long id) {
 		// TODO Auto-generated method stub
+		LFMatchHistory match = getTraceResult(id);
+		if(match != null){
+			Status status = new Status();
+			status.setStatus_ID(TracingConstants.LF_TRACING_NEW);
+			match.setStatus(status);
+			
+			if(match.getFound() != null && match.getFound().getItem() != null){
+				Status deliveryStatus = new Status();
+				deliveryStatus.setStatus_ID(TracingConstants.LF_STATUS_TO_BE_DELIVERED);
+				match.getFound().getItem().setDisposition(deliveryStatus);
+			}
+			
+			if(saveOrUpdateTraceResult(match) > -1){
+				return true;
+			}
+		}
 		return false;
 	}
 
