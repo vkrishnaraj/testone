@@ -613,7 +613,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	private String getTraceResultsQuery(Station station){
 		//TODO location criteria
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh " +
-				"where mh.status.status_id = " + TracingConstants.LF_TRACING_NEW
+				"where mh.status.status_ID = " + TracingConstants.LF_TRACING_NEW
 				+ " and (mh.lost.location = " + station.getStation_ID() + " or " +
 						"mh.found.location = " + station.getStation_ID() + ")";
 		return sql;
@@ -647,7 +647,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(station == null){
 			return null;
 		}
-		String query = getTraceResultsQuery(station) + " order by mh.createDate asc";
+		String query = getTraceResultsQuery(station) + " order by mh.lost.openDate asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -752,7 +752,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public List<LFMatchHistory> getTraceResultsForLost(long id) {
-		String sql = "com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
 		"where m.lost.id = " + id;
 
 		Session sess = null;
@@ -774,7 +774,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public List<LFMatchHistory> getTraceResultsForFound(long id) {
-		String sql = "com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
 				"where m.found.id = " + id;
 		
 		Session sess = null;
@@ -895,7 +895,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public boolean undoMatch(long id) {
-		// TODO Auto-generated method stub
 		LFMatchHistory match = getTraceResult(id);
 		if(match != null){
 			Status status = new Status();
@@ -904,7 +903,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			if(match.getFound() != null && match.getFound().getItem() != null){
 				Status deliveryStatus = new Status();
-				deliveryStatus.setStatus_ID(TracingConstants.LF_STATUS_TO_BE_DELIVERED);
+				deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
 				match.getFound().getItem().setDisposition(deliveryStatus);
 			}
 			
