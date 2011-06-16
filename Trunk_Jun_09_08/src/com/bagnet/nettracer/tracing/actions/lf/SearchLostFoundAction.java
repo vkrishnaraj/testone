@@ -48,6 +48,7 @@ public class SearchLostFoundAction extends CheckedAction {
 		int currpage = 0;
 
 		LFSearchDTO searchDto = (LFSearchDTO) form;
+		searchDto.setAgent(user);
 		int type = searchDto.getType();
 		List resultSet = new ArrayList();
 		if (request.getParameter("clear") == null) {
@@ -68,13 +69,11 @@ public class SearchLostFoundAction extends CheckedAction {
 			
 			int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 			
-//			if (totalpages > 1) {
-				if (type == TracingConstants.LF_TYPE_LOST) {
-					resultSet = serviceBean.getLostPaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage);
-				} else {
-					resultSet = serviceBean.getFoundPaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage);
-				}
-//			}
+			if (type == TracingConstants.LF_TYPE_LOST) {
+				resultSet = serviceBean.getLostPaginatedList(searchDto.getStation(), (currpage * rowsperpage), rowsperpage);
+			} else {
+				resultSet = serviceBean.getFoundPaginatedList(searchDto.getStation(), (currpage * rowsperpage), rowsperpage);
+			}
 	
 			if (totalpages <= currpage) {
 				currpage = 0;

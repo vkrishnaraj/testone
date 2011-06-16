@@ -23,21 +23,21 @@
 	var cal1xx = new CalendarPopup();	
     
 	function goprev() {
-	  o = document.searchClaimForm;
+	  o = document.searchLostFoundForm;
 	  o.prevpage.value = "1";
 	  o.pagination.value="1";
 	  o.submit();
 	}
 	
 	function gonext() {
-	  o = document.searchClaimForm;
+	  o = document.searchLostFoundForm;
 	  o.nextpage.value="1";
 	  o.pagination.value="1";
 	  o.submit();
 	}
 	
 	function gopage(i) {
-		  o = document.searchClaimForm;
+		  o = document.searchLostFoundForm;
 		  o.currpage.value = i;
 		  o.pagination.value="1";
 		  o.submit();
@@ -196,7 +196,29 @@
               				<bean:message key="colname.lf.client.name" />
               			</td>
               		</tr>
-              		<logic:iterate id="results" name="resultList" type="com.bagnet.nettracer.tracing.db.lf.LFObject">
+              		<logic:iterate id="result" name="resultList" type="com.bagnet.nettracer.tracing.db.lf.LFObject">
+              			<tr>
+              				<td>
+              					<logic:equal name="searchLostFoundForm" property="type" value="<%=String.valueOf(TracingConstants.LF_TYPE_LOST) %>" >
+              						<a href="create_lost_report.do?lostId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
+              					</logic:equal>
+              					<logic:equal name="searchLostFoundForm" property="type" value="<%=String.valueOf(TracingConstants.LF_TYPE_FOUND) %>" >
+              						<a href="create_found_item.do?foundId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
+              					</logic:equal>
+              				</td>
+              				<td>
+              					<bean:write name="result" property="statusDescription" />
+              				</td>
+              				<td>
+              					<bean:write name="result" property="disStation" />
+              				</td>
+              				<td>
+              					<%=result.getDisplayDate(a.getDateformat().getFormat()) %>
+              				</td>
+              				<td>
+              					<bean:write name="result" property="clientName" />
+              				</td>
+              			</tr>
               		</logic:iterate>
 				   	<tr>
 						   <td colspan="11">
