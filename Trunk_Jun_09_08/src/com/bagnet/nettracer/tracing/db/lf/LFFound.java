@@ -53,6 +53,9 @@ public class LFFound implements LFObject {
 	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPerson.class, cascade = CascadeType.ALL)
 	private LFPerson client;
+	
+	@Transient
+	private boolean selected;
 
 	public long getId() {
 		return id;
@@ -172,6 +175,14 @@ public class LFFound implements LFObject {
 			clientName += " " + middleName + ".";
 		}
 		return clientName;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 	
 }

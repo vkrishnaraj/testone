@@ -176,6 +176,12 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_CREATE_FOUND_ITEM = "Create Found Item";
 	public static final String SYSTEM_COMPONENT_NAME_SEARCH_LOST_FOUND = "Search Lost/Found";
 	
+	public static final String SYSTEM_COMPONENT_NAME_LF_TRACE_RESULTS = "Trace Results";
+	public static final String SYSTEM_COMPONENT_NAME_LF_OPEN_LOST_REPORTS = "Open Lost Reports";
+	public static final String SYSTEM_COMPONENT_NAME_LF_OPEN_FOUND_ITEMS = "Open Found Items";
+	public static final String SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_SALVAGE = "Items to Salvage";
+	public static final String SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_DELIVER = "Items to Deliver";
+	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
 	public final static int AJAX_STATUS_OHD = 2;
@@ -439,6 +445,12 @@ public class TracingConstants {
 	
 	public final static int LF_TYPE_LOST = 0;
 	public final static int LF_TYPE_FOUND = 1;
+	
+	public final static String LF_VIEW_TRACE_RESULTS = "view_trace_results";
+	public final static String LF_VIEW_OPEN_LOST = "view_open_lost";
+	public final static String LF_VIEW_OPEN_FOUND = "view_open_found";
+	public final static String LF_VIEW_ITEMS_TO_SALVAGE = "view_items_salvage";
+	public final static String LF_VIEW_ITEMS_TO_DELIVER = "view_items_deliver";
 	
 	/** ********* forwards *********** */
 	// no permission

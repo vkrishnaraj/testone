@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
@@ -35,13 +36,10 @@ import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ForwardNotice;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
-import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
-import com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask;
 import com.bagnet.nettracer.tracing.dto.ActivityDTO;
 import com.bagnet.nettracer.tracing.dto.PcnSearchDTO;
 import com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm;
@@ -502,7 +500,32 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					}
-																				}																			
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_TRACE_RESULTS)) {
+																					int x = new LFServiceBean().getTraceResultsCount(agent.getStation());
+																					if (x != -1) {
+																						entries = x;
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_OPEN_LOST_REPORTS)) {
+																					int x = new LFServiceBean().getLostCount(agent.getStation());
+																					if (x != -1) {
+																						entries = x;
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_OPEN_FOUND_ITEMS)) {
+																					int x = new LFServiceBean().getFoundCount(agent.getStation());
+																					if (x != -1) {
+																						entries = x;
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_SALVAGE)) {
+																					int x = new LFServiceBean().getItemsToSalvageCount(agent.getStation());
+																					if (x != -1) {
+																						entries = x;
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_DELIVER)) {
+																					int x = new LFServiceBean().getDeliveryPendingCount(agent.getStation());
+																					if (x != -1) {
+																						entries = x;
+																					}
+																				}
 																			}
 																		}
 																	}

@@ -854,11 +854,33 @@
     <definition name="create_lost_report" extends="user_menu">
         <put name="center"   value="/pages/lostandfound/create_lost_report.jsp"/>
     </definition>
+
     <definition name="create_found_item" extends="user_menu">
         <put name="center"   value="/pages/lostandfound/create_found_item.jsp"/>
     </definition>
+
     <definition name="search_lost_found" extends="user_menu">
         <put name="center"   value="/pages/lostandfound/search_lost_found.jsp"/>
+    </definition>
+
+    <definition name="view_trace_results" extends="user_menu">
+        <put name="center"   value="/pages/lostandfound/view_trace_results.jsp"/>
+    </definition>
+
+    <definition name="view_open_lost" extends="user_menu">
+        <put name="center"   value="/pages/lostandfound/open_lost_found.jsp"/>
+    </definition>
+
+    <definition name="view_open_found" extends="user_menu">
+        <put name="center"   value="/pages/lostandfound/open_lost_found.jsp"/>
+    </definition>
+
+    <definition name="view_items_salvage" extends="user_menu">
+        <put name="center"   value="/pages/lostandfound/view_items_salvage.jsp"/>
+    </definition>
+
+    <definition name="view_items_deliver" extends="user_menu">
+        <put name="center"   value="/pages/lostandfound/view_items_deliver.jsp"/>
     </definition>
 
  </tiles-definitions>

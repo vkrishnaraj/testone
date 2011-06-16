@@ -55,6 +55,9 @@
 
 				<%
 				boolean ntUser = PropertyBMO.isTrue("nt.user");
+				boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
+				boolean lfUser = PropertyBMO.isTrue("lf.user");
+				
 				Agent a = (Agent) session.getAttribute("user");
 				ResourceBundle bundle = ResourceBundle.getBundle(
 						"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
@@ -224,10 +227,10 @@
               </logic:equal>
             </logic:iterate>
 			<% } %>
+			<% if (ntUser || ntfsUser) { %>
 			<tr>
 			  <td colspan="2" class="white">&nbsp;</td>
 			</tr>
-		
             <tr>
               <td class="header">
                 <b><bean:message key="tasks.claims" /></b>
@@ -248,11 +251,42 @@
                 </tr>
               </logic:equal>
             </logic:iterate>
-
+			<% } %>
+			<% if (lfUser) { %>
 			<tr>
 			  <td colspan="2" class="white">&nbsp;</td>
 			</tr>
+            <tr>
+              <td class="header">
+                <b><bean:message key="tasks.lost.found" /></b>
+              </td>
+              <td class="header" width="120">
+                <b>
+                	<bean:message key="entries" />
+                </b>
+              </td>
+            </tr>
+            <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
+              <logic:equal name="activityDTO" property="group" value="5">
+                <tr>
+                  <td>
+                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
+                  </td>
+                  <td>
+                    <span style="float:left" ><bean:write name="activityDTO" property="entries" /></span>
+                    <logic:equal name="activityDTO" property="highPriority" value="true">
+		    			<span style="float:right" ><font color="red"><i><b><bean:message key="status.urgent" /> (<bean:write name="activityDTO" property="highPriorityNumber" />)</b></i></font>&nbsp;&nbsp;&nbsp;</span>
+		    		</logic:equal>
+                  </td>
+                </tr>
+              </logic:equal>
+            </logic:iterate>
+			<% } %>
+			
 			<% if (ntUser) { %>
+			<tr>
+			  <td colspan="2" class="white">&nbsp;</td>
+			</tr>
             <tr>
               <td class="header">
                 <b><bean:message key="tasks.other" /></b>
