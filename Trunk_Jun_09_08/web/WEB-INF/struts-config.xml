@@ -263,7 +263,7 @@
 		
 		<form-bean name="lostReportForm" type="com.bagnet.nettracer.tracing.forms.lf.LostReportForm" />	
 		<form-bean name="foundItemForm" type="com.bagnet.nettracer.tracing.forms.lf.FoundItemForm" />	
-		<form-bean name="searchLostFoundForm" type="com.bagnet.nettracer.tracing.forms.lf.SearchLostFoundForm" />	
+		<form-bean name="searchLostFoundForm" type="com.bagnet.nettracer.tracing.dto.LFSearchDTO" />	
 
 	</form-beans>
 	<!-- global exception -->
@@ -841,7 +841,7 @@
 		
 		<action path="/create_lost_report" type="com.bagnet.nettracer.tracing.actions.lf.LostReportAction" name="lostReportForm" scope="session" validate="false"></action>		
 		<action path="/create_found_item" type="com.bagnet.nettracer.tracing.actions.lf.FoundItemAction" name="foundItemForm" scope="session" validate="false"></action>		
-		<action path="/search_lost_found" type="com.bagnet.nettracer.tracing.actions.lf.SearchLostFoundAction" name="searchLostFoundForm" scope="request" validate="false"></action>		
+		<action path="/search_lost_found" type="com.bagnet.nettracer.tracing.actions.lf.SearchLostFoundAction" name="searchLostFoundForm" scope="session" validate="false"></action>		
 
 	</action-mappings>
 

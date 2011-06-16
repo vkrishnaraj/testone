@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.LostAndFoundIncident;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.SearchLostFoundForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -120,6 +121,7 @@ public class SearchLostFoundAction extends Action {
 			}
 			request.setAttribute("lostfoundlist", searchList);
 		}
+		
 		return (mapping.findForward(TracingConstants.SEARCH_LOST_FOUND));
 	}
 }

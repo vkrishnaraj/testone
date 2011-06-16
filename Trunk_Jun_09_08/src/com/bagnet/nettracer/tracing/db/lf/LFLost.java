@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
@@ -26,7 +27,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Proxy(lazy = false)
-public class LFLost {
+public class LFLost implements LFObject {
 
 	@Id
 	@GeneratedValue
@@ -156,4 +157,34 @@ public class LFLost {
 		return DateUtils.formatDate(openDate, dateFormat, "", null);
 	}
 
+	@Override
+	@Transient
+	public String getDisStation() {
+		return getReservation().getDropoffLocation().getStationcode();
+	}
+
+	@Override
+	@Transient
+	public String getStatusDescription() {
+		return status.getDescription();
+	}
+
+	@Override
+	@Transient
+	public String getDisplayDate(String dateFormat) {
+		return getDisOpenDate(dateFormat);
+	}
+
+	@Override
+	@Transient
+	public String getClientName() {
+		String clientName = client.getLastName() + ", " + client.getFirstName();
+		String middleName = client.getMiddleName();
+		if (middleName != null && !middleName.isEmpty()) {
+			clientName += " " + middleName + ".";
+		}
+		return clientName;
+	}
+
 }
+

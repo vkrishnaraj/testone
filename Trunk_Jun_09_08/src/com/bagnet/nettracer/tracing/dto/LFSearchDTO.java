@@ -2,23 +2,34 @@ package com.bagnet.nettracer.tracing.dto;
 
 import java.util.Date;
 
+import org.apache.struts.action.ActionForm;
+
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 
-public class LFSearchDTO {
+public class LFSearchDTO extends ActionForm  {
+	
+	private static final long serialVersionUID = 8462929881743509456L;
+
+	private String currpage;
+	private String nextpage;
+	private String prevpage;
+	private String pagination;
+	
 	private String firstName;
 	private String lastName;
-	private long id;
-	private Date openDate;
-	private Station station;
-	private Agent agent;
-	private Status status;
-	private String agreementNumber;
-	private String mvaNumber;
+	private long id; // done
+	private String startDate; // done
+	private String endDate; // done
+	private Station station; // done
+	private Agent agent; // na
+	private Status status; // done
+	private String agreementNumber; // done
+	private String mvaNumber; // done
 	private String phoneNumber;
 	private String email;
-	private int type; // 40 - Lost, 41 - Found
+	private int type; // done
 
 	public String getFirstName() {
 		return firstName;
@@ -43,15 +54,23 @@ public class LFSearchDTO {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
-	public Date getOpenDate() {
-		return openDate;
+
+	public String getStartDate() {
+		return startDate;
 	}
-	
-	public void setOpenDate(Date openDate) {
-		this.openDate = openDate;
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
 	}
-	
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
 	public void setStation(Station station) {
 		this.station = station;
 	}
@@ -115,5 +134,53 @@ public class LFSearchDTO {
 	public void setType(int type) {
 		this.type = type;
 	}
+
+	public String getCurrpage() {
+		return currpage;
+	}
+
+	public void setCurrpage(String currpage) {
+		this.currpage = currpage;
+	}
+
+	public String getNextpage() {
+		return nextpage;
+	}
+
+	public void setNextpage(String nextpage) {
+		this.nextpage = nextpage;
+	}
+
+	public String getPrevpage() {
+		return prevpage;
+	}
+
+	public void setPrevpage(String prevpage) {
+		this.prevpage = prevpage;
+	}
+
+	public String getPagination() {
+		return pagination;
+	}
+
+	public void setPagination(String pagination) {
+		this.pagination = pagination;
+	}
 	
+	public int getStatusId() {
+		return status.getStatus_ID();
+	}
+	
+	public void setStatusId(int statusId) {
+		status.setStatus_ID(statusId);
+	}
+	
+	public int getStationId() {
+		return station.getStation_ID();
+	}
+	
+	public void setStationId(int stationId) {
+		station.setStation_ID(stationId);
+	}
+		
 }

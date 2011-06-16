@@ -22,7 +22,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Proxy(lazy = false)
-public class LFFound {
+public class LFFound implements LFObject {
 
 	@Id
 	@GeneratedValue
@@ -143,6 +143,35 @@ public class LFFound {
 	
 	public void setLocationId(int locationId) {
 		getLocation().setStation_ID(locationId);
+	}
+
+	@Override
+	@Transient
+	public String getDisStation() {
+		return location.getStationcode();
+	}
+
+	@Override
+	@Transient
+	public String getStatusDescription() {
+		return status.getDescription();
+	}
+
+	@Override
+	@Transient
+	public String getDisplayDate(String dateFormat) {
+		return getDisFoundDate(dateFormat);
+	}
+
+	@Override
+	@Transient
+	public String getClientName() {
+		String clientName = client.getLastName() + ", " + client.getFirstName();
+		String middleName = client.getMiddleName();
+		if (middleName != null && !middleName.isEmpty()) {
+			clientName += " " + middleName + ".";
+		}
+		return clientName;
 	}
 	
 }
