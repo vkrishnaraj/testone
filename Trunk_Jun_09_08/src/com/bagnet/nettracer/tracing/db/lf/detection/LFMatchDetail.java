@@ -20,6 +20,8 @@ public class LFMatchDetail {
 	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory.class)
 	private LFMatchHistory matchHistory;
 
+	private double score;
+	
 	public long getId() {
 		return id;
 	}
@@ -42,6 +44,14 @@ public class LFMatchDetail {
 
 	public void setMatchHistory(LFMatchHistory matchHistory) {
 		this.matchHistory = matchHistory;
+	}
+
+	public void setScore(double score) {
+		this.score = score;
+	}
+
+	public double getScore() {
+		return score;
 	}
 	
 }

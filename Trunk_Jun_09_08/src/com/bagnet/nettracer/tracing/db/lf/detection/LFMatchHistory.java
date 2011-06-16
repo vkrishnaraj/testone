@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -82,6 +83,18 @@ public class LFMatchHistory {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+	
+	@Transient
+	public double getTotalScore(){
+		if(details == null){
+			return 0;
+		}
+		double score = 0;
+		for(LFMatchDetail detail:details){
+			score += detail.getScore();
+		}
+		return score;
 	}
 	
 }

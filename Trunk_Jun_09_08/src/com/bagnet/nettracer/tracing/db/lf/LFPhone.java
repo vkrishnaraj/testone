@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -29,6 +30,9 @@ public class LFPhone {
 	private String phoneNumber;
 	
 	private String extension;
+	
+	@Transient
+	private String normalizeNumber;
 	
 	/* Primary/Secondary */
 	private int numberType;
@@ -55,6 +59,7 @@ public class LFPhone {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+		
 	}
 
 	public int getNumberType() {
@@ -87,6 +92,27 @@ public class LFPhone {
 
 	public void setExtension(String extension) {
 		this.extension = extension;
+	}
+	
+	private String normalizePhone(){
+		if (this.phoneNumber == null) return null;
+		StringBuffer sb = new StringBuffer(100);
+		for (int i = 0; i < this.phoneNumber.length(); i++) {
+			char c = this.phoneNumber.charAt(i);
+			if (Character.isDigit(c)) {
+				sb.append(c);
+			}
+		}
+		return sb.toString();
+	}
+
+	public String getNormalizeNumber() {
+		if(this.normalizeNumber != null){
+			return this.normalizeNumber;
+		} else {
+			this.normalizeNumber = normalizePhone();
+			return this.normalizeNumber;
+		}
 	}
 	
 }

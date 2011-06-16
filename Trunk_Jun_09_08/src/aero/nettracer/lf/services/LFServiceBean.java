@@ -421,7 +421,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	private String getLostQuery(Station station){
-		//TODO what status
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
 				"where l.location.station_ID = " + station.getStation_ID()
 				+ " and l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
@@ -429,7 +428,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	private String getFoundQuery(Station station){
-		//TODO what status
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
 				"where f.location.station_ID = " + station.getStation_ID()
 				+ " and f.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
@@ -437,7 +435,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	String getLostReportToCloseQuery(Station station){
-		//TODO what status
+		//TODO what status - universal maybe able to remove station
 		int daysTillClose = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_CLOSE_DAYS);
 		GregorianCalendar today = new GregorianCalendar();
 		today.add(Calendar.DATE, -daysTillClose);
@@ -451,7 +449,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	private String getItemsToSalvageQuery(Station station){
-		//TODO what status
+		//TODO what status - check to be delivered
 		int daysTillSalvage = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS);
 		GregorianCalendar today = new GregorianCalendar();
 		today.add(Calendar.DATE, -daysTillSalvage);
