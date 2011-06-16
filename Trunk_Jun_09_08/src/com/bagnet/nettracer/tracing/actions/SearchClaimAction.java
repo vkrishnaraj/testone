@@ -71,10 +71,6 @@ public class SearchClaimAction extends CheckedAction {
 			
 			int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 			
-			if (totalpages > 1) {
-				resultSet = ClaimUtils.getPaginatedList(resultSet, rowsperpage, currpage);
-			}
-	
 			if (totalpages <= currpage) {
 				currpage = 0;
 				request.setAttribute("currpage", "0");

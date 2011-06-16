@@ -298,7 +298,7 @@ public class FsClaim implements Serializable {
 	@Transient
 	public Person getClaimant() {
 		if (claimant == null) {
-			claimant = claimants.toArray(new Person[0])[0];
+			claimant = claimants.iterator().next();
 		}
 		return claimant;
 	}

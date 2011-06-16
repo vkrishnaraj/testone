@@ -477,23 +477,6 @@ public class ClaimUtils {
 		}
 	}
 	
-	public static Set<FsClaim> getPaginatedList(Set<FsClaim> list, int rowsperpage, int currpage) {
-		Set<FsClaim> paginatedList = new LinkedHashSet<FsClaim>();
-		int startIndex = currpage * rowsperpage;
-		int endIndex = startIndex + rowsperpage;
-		
-		if (endIndex > list.size()) {
-			endIndex = list.size();
-		}
-		
-		FsClaim[] temp = list.toArray(new FsClaim[0]);
-		for (int i = startIndex; i < endIndex; ++i) {
-			paginatedList.add(temp[i]);
-		}
-		
-		return paginatedList;
-	}
-
 	private static void processAndAddPhone(Person p, Set<Phone> phones,
 			String phone, int type) {
 		if (phone != null && phone.length() > 0) {
