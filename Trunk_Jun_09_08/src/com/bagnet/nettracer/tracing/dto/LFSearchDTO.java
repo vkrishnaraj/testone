@@ -1,12 +1,14 @@
 package com.bagnet.nettracer.tracing.dto;
 
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.struts.action.ActionForm;
 
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class LFSearchDTO extends ActionForm  {
 	
@@ -59,6 +61,10 @@ public class LFSearchDTO extends ActionForm  {
 		return startDate;
 	}
 
+	public Date getStartDateAsDate(){
+		return DateUtils.convertToDate(this.startDate, this.agent.getDateformat().getFormat(), this.agent.getDefaultlocale());
+	}
+	
 	public void setStartDate(String startDate) {
 		this.startDate = startDate;
 	}
@@ -67,6 +73,10 @@ public class LFSearchDTO extends ActionForm  {
 		return endDate;
 	}
 
+	public Date getEndDateAsDate(){
+		return DateUtils.convertToDate(this.endDate, this.agent.getDateformat().getFormat(), this.agent.getDefaultlocale());
+	}
+	
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}

@@ -90,9 +90,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(dto.getFirstName() != null){
 			sql += " and o.client.firstName = \'" + dto.getFirstName().toUpperCase() + "\'";
 		}
-		if(dto.getAgent() != null){
-			sql += " and o.agent.agent_ID = " + dto.getAgent().getAgent_ID();
-		}
 		if(dto.getStation() != null){
 			sql += " and o.location.station_ID = " + dto.getStation().getStation_ID();
 		}
@@ -106,12 +103,20 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				sql += " and o.mvaNumber = \'" + dto.getMvaNumber() + "\'";
 			}
 		}
-		if(dto.getOpenDate() != null){
-			String date = DateUtils.formatDate(dto.getOpenDate(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
+		if(dto.getStartDate() != null){
+			String date = DateUtils.formatDate(dto.getStartDateAsDate(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-				sql += " and o.openDate = \'" + date + "\'";
+				sql += " and o.openDate >= \'" + date + "\'";
 			} else {
-				sql += " and o.foundDate = \'" + date + "\'";
+				sql += " and o.foundDate >= \'" + date + "\'";
+			}
+		}
+		if(dto.getEndDate() != null){
+			String date = DateUtils.formatDate(dto.getEndDateAsDate(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
+			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
+				sql += " and o.openDate <= \'" + date + "\'";
+			} else {
+				sql += " and o.foundDate <= \'" + date + "\'";
 			}
 		}
 		if(dto.getAgreementNumber() != null){
