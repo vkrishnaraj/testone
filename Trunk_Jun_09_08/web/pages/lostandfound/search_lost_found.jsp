@@ -10,7 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%
 	Agent a = (Agent)session.getAttribute("user");
- 	String cssFormClass = "form2_dam";
+ 	String cssFormClass = "form2";
 %>
 
 
@@ -103,7 +103,7 @@
                				<bean:message key="colname.lf.status" />
                				<br>
                				<html:select name="searchLostFoundForm" property="statusId" styleClass="dropdown" >
-               					<html:option value="-1"><bean:message key="option.lf.all" /></html:option>
+               					<html:option value="-1"><bean:message key="search.option.all" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_OPEN) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_STATUS_OPEN) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_TO_BE_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_STATUS_TO_BE_DELIVERED) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_CLOSED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_STATUS_CLOSED) %>" /></html:option>

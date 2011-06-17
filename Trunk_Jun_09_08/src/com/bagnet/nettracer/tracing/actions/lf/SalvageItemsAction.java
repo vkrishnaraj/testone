@@ -19,7 +19,8 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
-import com.bagnet.nettracer.tracing.forms.lf.SalvageItemsForm;
+import com.bagnet.nettracer.tracing.db.lf.LFItem;
+import com.bagnet.nettracer.tracing.forms.lf.HandleItemsForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class SalvageItemsAction extends CheckedAction {
@@ -38,24 +39,24 @@ public class SalvageItemsAction extends CheckedAction {
 		}
 
 		LFServiceBean serviceBean = new LFServiceBean();
-		SalvageItemsForm siForm = (SalvageItemsForm) form;
+		HandleItemsForm hiForm = (HandleItemsForm) form;
 		if (request.getParameter("salvageItems") != null) {
-			salvageItems(siForm.getFoundItems(), serviceBean);
+			salvageItems(hiForm.getFoundItems(), serviceBean);
 		}
 		
 		long rowcount = 0;
 		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 		int currpage = 0;
-		List<LFFound> resultSet = new ArrayList<LFFound>();
+		List<LFItem> resultSet = new ArrayList<LFItem>();
 		
 		rowcount = serviceBean.getItemsToSalvageCount(user.getStation());
 		
-		currpage = siForm.getCurrpage() != null ? Integer.parseInt(siForm.getCurrpage()) : 0;
-		if (siForm.getNextpage() != null && siForm.getNextpage().equals("1")) {
+		currpage = hiForm.getCurrpage() != null ? Integer.parseInt(hiForm.getCurrpage()) : 0;
+		if (hiForm.getNextpage() != null && hiForm.getNextpage().equals("1")) {
 			currpage++;
 		}
 
-		if (siForm.getPrevpage() != null && siForm.getPrevpage().equals("1")) {
+		if (hiForm.getPrevpage() != null && hiForm.getPrevpage().equals("1")) {
 			currpage--;
 		}
 		
@@ -81,7 +82,7 @@ public class SalvageItemsAction extends CheckedAction {
 		
 		/***************** end pagination *****************/
 		
-		siForm.setFoundItems(new ArrayList<LFFound>(resultSet));
+		hiForm.setFoundItems(new ArrayList<LFItem>(resultSet));
 		
 		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 		request.setAttribute("currpage", Integer.toString(currpage));		
@@ -91,17 +92,17 @@ public class SalvageItemsAction extends CheckedAction {
 		
 	}
 	
-	private void salvageItems(ArrayList<LFFound> foundItems, LFServiceBean serviceBean) {
+	private void salvageItems(ArrayList<LFItem> foundItems, LFServiceBean serviceBean) {
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
 		Status disposition = new Status();
 		disposition.setStatus_ID(TracingConstants.LF_STATUS_SALVAGED);
 		if (foundItems != null) {
-			for (LFFound found: foundItems) {
-				if (found.isSelected()) {
-					found.setStatus(status);
-					found.getItem().setDisposition(disposition);
-					serviceBean.saveOrUpdateFoundItem(found);
+			for (LFItem item: foundItems) {
+				if (item.isSelected()) {
+					item.getFound().setStatus(status);
+					item.setDisposition(disposition);
+					serviceBean.saveOrUpdateFoundItem(item.getFound());
 				}
 			}
 		}

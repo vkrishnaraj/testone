@@ -7,6 +7,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -49,6 +50,9 @@ public class LFItem {
 
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFFound.class, cascade = CascadeType.ALL)
 	private LFFound found;
+	
+	@Transient
+	private boolean selected;
 	
 	public long getId() {
 		return id;
@@ -155,5 +159,15 @@ public class LFItem {
 	public LFFound getFound() {
 		return found;
 	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+	
+	
 	
 }

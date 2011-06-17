@@ -2,7 +2,7 @@
 /*	GENERAL HTML TAGS							  */
 /**************************************************/
 a {
-	color:#002b61;
+	color:#369;
 }	
 a:hover, 
 a:active {
@@ -27,29 +27,12 @@ img {
 p, h1, h2, div 
 {
 }
-
-p.warning {
-	color: #ff0000;
-	text-align: center;	
-}
-
-p.knownFraud {
-	color: #ff0000;
-	font-weight: bold;	
-}
-
-p.suspectedFraud {
-	color: #fbffoo;
-	font-weight: bold;
-}
-
 h1 {
 	font-size: 1.5em;
 	color:#000;
 	font-weight:bold;
 	margin: 0px 0px 0px 0px;
 }
-
 h6 {
 	font-size: 1.0em;
 	color:#2758af;
@@ -86,7 +69,7 @@ form {
 	background-color:#FFFFFF;
 	border-left:1px solid #000000;
 	border-right:1px solid #000000;
-
+	
 	height: 100%;
 	text-align:left;
 	margin-right: auto;
@@ -100,13 +83,14 @@ form {
 	background-color:#E0EDFB;
 }
 #bodytable #bottomcell {
-	background-color:#00948D;
+	background-color:#1F6390;
 	vertical-align:bottom;
 	border-top:1px solid #000000;
 }
 /***** TOP LAYOUT *****/
 #toplayouttable {
 	border: 0px none;
+	
 }
 
 /***** HEADER AND MENU *****/
@@ -121,40 +105,40 @@ div.headerright {
 
 td#header {
 	height: 78px;
+	background-color: #FFF;
 }
 td#header.cssstandardthreecolumn { 
-	background-image:url(../images/nettracer/header_bg.gif);
+	background-image:url(../images/nettracer/header_bg_noconf.gif);
 	background-repeat:no-repeat;
-	background-color:#00948D;
+	background-color: rgb(0, 25, 52);
 }
 div#headercontent {
 	float:right;
 	margin:3px;
 }
 table#headercontent td{
-	color:#fff;
+	color:#FFFFFF;
 	text-align:right;
 }
 table#headercontent a{
-	color:#fff;
+	color:#FFFFFF;
 	text-decoration:none;
 }
 table#headercontent a:hover{
-	color:#fff;
+	color:#FFFFFF;
 	text-decoration:underline;
 }
 
 /* horizontal text links menu */
 td#headermenucell {
-	background-color:#00948D;
+	background-color:#1F6390;
 	vertical-align:middle;
 	height: 24px;
-	width: 800px;
 	text-align:left;
 }
 table#headermenu td{
+	color:#ffffff;
 	white-space:nowrap;
-	color: #ffffff;
 }
 
 table#headermenu a {
@@ -172,8 +156,8 @@ a#nav
 	text-align:center;
 	padding:2px 2px;
 	text-decoration:none;
-	background-color:#00948D;
-	color:#fff;
+	background-color:#ffffff;
+	color:#306790;
 }
 table#headermenu a:hover, 
 table#headermenu a:active {
@@ -189,9 +173,11 @@ td#pageheadercell {
 	vertical-align:middle;
 	height: 33px;
 }
+
 div#pageheaderleft {
 	float:left;
 	margin-left:5px;
+	width:725px;
 }
 div#pageheaderright {
 	float:right;
@@ -316,7 +302,7 @@ td#middlecolumn {
 	padding: 13px;
 	padding-left:20px;
 	padding-right:20px;
-	background-color:#d2eceb;
+	background-color:#E0EDFB;
 }
 
 /* main content  */
@@ -345,40 +331,42 @@ div#maincontent table td{
 div#maincontent table.form{
 	background-color:#E0E0A3;
 }
+
 div#maincontent table.form2{
-	background-color:#d2eceb;
+	background-color:#E0EDFB;
 }
 
+
 td.white{
-	background-color:#FFFFFF;
+	background-color:#fff;
 	height:10px;
 }
 
 td.header{
-	background-color:#00306e;
-	color:#FFFFFF;
+	background-color:#1F6390;
+	color:#fff;
 }
 
 div#maincontent table.form2_inc{
-	background-color:#d2eceb;
+	background-color:#D1E4F1;
 }
 
 div#maincontent table.form2_ld{
-	background-color:#d2eceb;
+	background-color:#D1E4F1;
 }
 
 div#maincontent table.form2_dam{
-	background-color:#d2eceb;
+	background-color:#5B8CE5;
 }
 div#maincontent table.form2_pil{
-	background-color:#d2eceb;
+	background-color:#D1E4F1;
 }
 
 div#maincontent table.form2_lf{
-	background-color:#d2eceb;
+	background-color:#D1E4F1;
 }
 div#maincontent table.form2_ohd{
-	background-color:#d2eceb;
+	background-color:#D1E4F1;
 }
 
 div#maincontent h1.blue{
@@ -389,7 +377,7 @@ div#maincontent td.login{
 	padding: 15px;
 }
 div#maincontent table.blue{
-	background-color:#d2eceb;
+	background-color:#D1E4F1;
 }
 
 /* buttons area - content */
@@ -418,17 +406,17 @@ div#copyright a {
 	color:#fff;
 }
 span.reqfield {
-	color:#B51717;
+	color:#306790;
 }
 div.helplink {
 	float:right;
 }
 div.helplink a{
-	color:#B51717;
+	color:#306790;
 	text-decoration:none;
 }
 div.helplink a:hover,a:active{
-	color:#B51717;
+	color:#306790;
 	text-decoration:underline;
 }
 

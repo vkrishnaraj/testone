@@ -10,7 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%
 	Agent a = (Agent)session.getAttribute("user");
- 	String cssFormClass = "form2_dam";
+ 	String cssFormClass = "form2";
  	
  	String type = (String) request.getAttribute("type");
  	request.removeAttribute("type");
@@ -26,21 +26,21 @@
 	var cal1xx = new CalendarPopup();	
     
 	function goprev() {
-	  o = document.lostFoundManagerForm;
+	  o = document.handleItemsForm;
 	  o.prevpage.value = "1";
 	  o.pagination.value="1";
 	  o.submit();
 	}
 	
 	function gonext() {
-	  o = document.lostFoundManagerForm;
+	  o = document.handleItemsForm;
 	  o.nextpage.value="1";
 	  o.pagination.value="1";
 	  o.submit();
 	}
 	
 	function gopage(i) {
-		  o = document.lostFoundManagerForm;
+		  o = document.handleItemsForm;
 		  o.currpage.value = i;
 		  o.pagination.value="1";
 		  o.submit();
@@ -52,7 +52,7 @@
 
 </script>
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form action="lost_found_manager.do" method="post" onsubmit="return validateSearch(this);">
+<html:form action="view_items_deliver.do" method="post" onsubmit="return validateSearch(this);">
 	<tr>
         <td colspan="3" id="pageheadercell">
           <div id="pageheaderleft">
@@ -75,9 +75,51 @@
    		<td id="middlecolumn">        
      		<div id="maincontent">
 				<h1 class="green">
+					<bean:message key="header.deliver.items" />
 		        </h1>
          		<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+         			<tr>
+         				<td class="header">
+         					<bean:message key="colname.lf.id" />
+         				</td>
+         				<td class="header">
+         					<bean:message key="colname.lf.status" />
+         				</td>
+         				<td class="header">
+         					<bean:message key="colname.lf.date" />
+         				</td>
+         				<td class="header">
+         					<bean:message key="colname.lf.item.description" />
+         				</td>
+         				<td class="header">
+         					<bean:message key="colname.lf.action" />
+         				</td>
+         			</tr>
+         			<logic:iterate indexId="i" id="item" name="handleItemsForm" property="foundItems" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
+         				<tr>
+         					<td>
+         						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getId() %></a>
+         					</td>
+         					<td>
+         						<%=item.getStatus().getDescription() %>
+         					</td>
+         					<td>
+         						<%=item.getFound().getDisplayDate(a.getDateformat().getFormat()) %>
+         					</td>
+         					<td>
+         						<%=item.getDescription() == null || item.getDescription().isEmpty() ? "&nbsp;" : item.getDescription() %>
+         					</td>
+         					<td>
+         						<a href='<%=item.getFound().getId() %>'><bean:message key="lf.create.delivery" /></a>
+         					</td>
+         				</tr>
+         			</logic:iterate>
+         			<tr>
+					   <td colspan="11">
+					   	<jsp:include page="/pages/includes/pagination_incl.jsp" />
+					   </td>
+				    </tr>
 			    </table>
 			    <script language=javascript>
 					document.location.href="#result";

@@ -31,8 +31,7 @@
          	<html:hidden property="companyCode" value="AB" />
           <tr>
             <td align=right valign=middle>
-              <bean:message key="prompt.username" />
-              :
+              <bean:message key="prompt.username" />:
             </td>
             <td>
               <html:text property="username" size="16" maxlength="18" styleClass="textfield" />
@@ -40,8 +39,7 @@
           </tr>
           <tr>
             <td align=right valign=middle>
-              <bean:message key="prompt.password" />
-              :
+              <bean:message key="prompt.password" />:
             </td>
             <td>
               <html:password property="password" size="16" maxlength="18" redisplay="false" styleClass="textfield" />

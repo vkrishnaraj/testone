@@ -16,7 +16,7 @@
 <%@ page import="java.util.Iterator" %>
 <%
 	Agent a = (Agent)session.getAttribute("user");
- 	String cssFormClass = "form2_dam";
+ 	String cssFormClass = "form2";
  	
  	ArrayList categoryList = (ArrayList) request.getSession().getAttribute("lfcategorylist");
  	

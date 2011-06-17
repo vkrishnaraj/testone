@@ -10,7 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%
 	Agent a = (Agent)session.getAttribute("user");
- 	String cssFormClass = "form2_dam";
+ 	String cssFormClass = "form2";
  	
  	String type = (String) request.getAttribute("type");
  	request.removeAttribute("type");
@@ -26,21 +26,21 @@
 	var cal1xx = new CalendarPopup();	
     
 	function goprev() {
-	  o = document.salvageItemsForm;
+	  o = document.handleItemsForm;
 	  o.prevpage.value = "1";
 	  o.pagination.value="1";
 	  o.submit();
 	}
 	
 	function gonext() {
-	  o = document.salvageItemsForm;
+	  o = document.handleItemsForm;
 	  o.nextpage.value="1";
 	  o.pagination.value="1";
 	  o.submit();
 	}
 	
 	function gopage(i) {
-		  o = document.salvageItemsForm;
+		  o = document.handleItemsForm;
 		  o.currpage.value = i;
 		  o.pagination.value="1";
 		  o.submit();
@@ -96,22 +96,22 @@
          					<bean:message key="colname.lf.item.description" />
          				</td>
          			</tr>
-         			<logic:iterate indexId="i" id="item" name="salvageItemsForm" property="foundItems" type="com.bagnet.nettracer.tracing.db.lf.LFFound" >
+         			<logic:iterate indexId="i" id="item" name="handleItemsForm" property="foundItems" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
          				<tr>
          					<td>
          						<input type="checkbox" name="item[<%=i %>].selected" />
          					</td>
          					<td>
-         						<a href='create_found_item.do?foundId=<%=item.getId() %>'><%=item.getId() %></a>
+         						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getId() %></a>
          					</td>
          					<td>
-         						<%=item.getItem().getStatus().getDescription() %>
+         						<%=item.getStatus().getDescription() %>
          					</td>
          					<td>
-         						<%=item.getDisplayDate(a.getDateformat().getFormat()) %>
+         						<%=item.getFound().getDisplayDate(a.getDateformat().getFormat()) %>
          					</td>
          					<td>
-         						<%=item.getItem().getDescription() == null || item.getItem().getDescription().isEmpty() ? "&nbsp;" : item.getItem().getDescription() %>
+         						<%=item.getDescription() == null || item.getDescription().isEmpty() ? "&nbsp;" : item.getDescription() %>
          					</td>
          				</tr>
          			</logic:iterate>

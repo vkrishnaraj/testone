@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 import org.apache.struts.action.ActionForm;
 
-import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 
-public final class SalvageItemsForm extends ActionForm {
+public final class HandleItemsForm extends ActionForm {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -16,7 +15,7 @@ public final class SalvageItemsForm extends ActionForm {
 	private String prevpage;
 	private String pagination;
 	
-	ArrayList<LFFound> foundItems;
+	ArrayList<LFItem> foundItems;
 
 	public String getCurrpage() {
 		return currpage;
@@ -50,15 +49,15 @@ public final class SalvageItemsForm extends ActionForm {
 		this.pagination = pagination;
 	}
 
-	public ArrayList<LFFound> getFoundItems() {
+	public ArrayList<LFItem> getFoundItems() {
 		return foundItems;
 	}
 
-	public void setFoundItems(ArrayList<LFFound> foundItems) {
+	public void setFoundItems(ArrayList<LFItem> foundItems) {
 		this.foundItems = foundItems;
 	}
 
-	public LFFound getItem(int index) {
+	public LFItem getItem(int index) {
 		if (foundItems != null && index < foundItems.size()) {
 			return foundItems.get(index);
 		}

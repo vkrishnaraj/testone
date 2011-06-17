@@ -10,7 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%
 	Agent a = (Agent)session.getAttribute("user");
- 	String cssFormClass = "form2_dam";
+ 	String cssFormClass = "form2";
  	
  	String type = (String) request.getAttribute("type");
  	request.removeAttribute("type");

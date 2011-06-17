@@ -199,6 +199,7 @@ public class TracingConstants {
 	public final static int TABLE_BAGBUZZ = 14;
 	public final static int TABLE_LF_STATUS = 16;
 	public final static int TABLE_LF_DISPOSITION = 17;
+	public final static int TABLE_LF_TRACE_STATUS = 18;
 	
 	public final static int PRIORITY_LOW = 1;
 	public final static int PRIORITY_MEDIUM = 2;

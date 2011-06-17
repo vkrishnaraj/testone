@@ -265,8 +265,7 @@
 		<form-bean name="foundItemForm" type="com.bagnet.nettracer.tracing.forms.lf.FoundItemForm" />	
 		<form-bean name="searchLostFoundForm" type="com.bagnet.nettracer.tracing.dto.LFSearchDTO" />	
 		<form-bean name="lostFoundManagerForm" type="com.bagnet.nettracer.tracing.forms.lf.LostFoundManagerForm" />	
-		<form-bean name="salvageItemsForm" type="com.bagnet.nettracer.tracing.forms.lf.SalvageItemsForm" />	
-		<form-bean name="deliverItemsForm" type="com.bagnet.nettracer.tracing.forms.lf.DeliverItemsForm" />	
+		<form-bean name="handleItemsForm" type="com.bagnet.nettracer.tracing.forms.lf.HandleItemsForm" />	
 		<form-bean name="traceResultsForm" type="com.bagnet.nettracer.tracing.forms.lf.TraceResultsForm" />	
 
 	</form-beans>
@@ -855,8 +854,8 @@
 
 		<action path="/lost_found_manager" type="com.bagnet.nettracer.tracing.actions.lf.LostFoundManagerAction" name="lostFoundManagerForm" scope="request" validate="false"></action>
 		<action path="/view_trace_results" type="com.bagnet.nettracer.tracing.actions.lf.TraceResultsAction" name="traceResultsForm" scope="session" validate="false"></action>
-		<action path="/view_items_salvage" type="com.bagnet.nettracer.tracing.actions.lf.SalvageItemsAction" name="salvageItemsForm" scope="session" validate="false"></action>
-		<action path="/view_items_deliver" type="com.bagnet.nettracer.tracing.actions.lf.DeliverItemsAction" name="deliverItemsForm" scope="session" validate="false"></action>
+		<action path="/view_items_salvage" type="com.bagnet.nettracer.tracing.actions.lf.SalvageItemsAction" name="handleItemsForm" scope="session" validate="false"></action>
+		<action path="/view_items_deliver" type="com.bagnet.nettracer.tracing.actions.lf.DeliverItemsAction" name="handleItemsForm" scope="session" validate="false"></action>
 
 	</action-mappings>
 
