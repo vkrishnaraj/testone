@@ -48,7 +48,7 @@ public interface LFServiceHome {
 	public int getLostReportToCloseCount(Station station);
 	public List<LFLost> getLostReportToClosePaginatedList(Station station, int start, int offset);
 	public int getItemsToSalvageCount(Station station);
-	public List<LFFound> getItemsToSalvagePaginatedList(Station station, int start, int offset);
+	public List<LFItem> getItemsToSalvagePaginatedList(Station station, int start, int offset);
 	public int getTraceResultsCount(Station station);
 	public List<LFMatchHistory> getTraceResultsPaginated(Station station, int start, int offset);
 	public int getDeliveryPendingCount(Station station);

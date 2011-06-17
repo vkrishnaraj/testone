@@ -455,10 +455,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		today.add(Calendar.DATE, -daysTillSalvage);
 		String cutoff = DateUtils.formatDate(today.getTime(), TracingConstants.getDBDateTimeFormat(HibernateWrapper.getConfig().getProperties()), null, null);
 		
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
-		"where f.location.station_ID = " + station.getStation_ID() +
-		" and f.foundDate < \'" + cutoff + "\'"
-		+ " and f.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
+		"where i.found.location.station_ID = " + station.getStation_ID() +
+		" and i.found.foundDate < \'" + cutoff + "\'"
+		+ " and i.found.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED
+		+ " and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_OTHER;
 		return sql;
 	}
 	
@@ -568,6 +569,38 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 	
+	private List<LFItem> getItemPaginatedList(String sql, int start, int offset){
+		if(sql == null){
+			return null;
+		}
+		
+//		String query = sql + " order by i.foundDate asc";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			
+			if (start > -1 && offset > -1 ) {
+				q.setFirstResult(start);
+				q.setMaxResults(offset);
+			} else {
+				throw new Exception("Invalided pagination bounds");
+			}
+			
+			List<LFItem> results = q.list();
+			sess.close();
+			return results;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return null;
+	}
+	
 	@Override
 	public int getLostCount(Station station) {
 		if(station == null){
@@ -625,11 +658,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public List<LFFound> getItemsToSalvagePaginatedList(Station station, int start, int offset) {
+	public List<LFItem> getItemsToSalvagePaginatedList(Station station, int start, int offset) {
 		if(station == null){
 			return null;
 		}
-		return getFoundPaginatedList(getItemsToSalvageQuery(station), start, offset);
+		return getItemPaginatedList(getItemsToSalvageQuery(station), start, offset);
 	}
 
 	private String getTraceResultsQuery(Station station){

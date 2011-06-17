@@ -8,13 +8,18 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.struts.util.LabelValueBean;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.junit.Test;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.NTDateFormat;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
@@ -23,29 +28,51 @@ import com.bagnet.nettracer.tracing.db.lf.LFDelivery;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.LFObject;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFReservation;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
+import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 
 public class LFServiceBeanTest {
 	
 //	@Test
 	public void test(){
-		Station station = new Station();
-		station.setStation_ID(134);
-		LFServiceBean bean = new LFServiceBean();
-		System.out.println(bean.getLostReportToCloseQuery(station));
+		String sql = "select count(o.id) from com.bagnet.nettracer.tracing.db.lf.LFFound o  " ;
+			sql +=	"  left outer join o.client.phones p where 1=1 " ;
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			List result = q.list();
+			sess.close();
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
 	}
 	
 //	@Test
 	public void loadTest(){
+		LFObject o = createLostTestCase();
+		System.out.println(o);
 		LFServiceBean bean = new LFServiceBean();
-		LFLost lost = bean.getLostReport(4);
-		System.out.println(lost.getId());
+		
+		Station station = new Station();
+		station.setStation_ID(1);
+		
+//		List<LFObject> list = bean.getLostPaginatedList(station, 0, 15);
+
 	}
 
+	
+	
 	@Test
 	public void lostSaveLoadTest(){
 		try {
@@ -127,8 +154,37 @@ public class LFServiceBeanTest {
 	}
 	
 	@Test
-	public void searchFoundTest(){
+	public void searchLostFoundTest(){
 		//TODO
+		LFServiceBean bean = new LFServiceBean();
+		LFSearchDTO dto = new LFSearchDTO();
+		dto.setType(TracingConstants.LF_TYPE_LOST);
+//		dto.setPhoneNumber("");
+//		dto.setOpenDate(new Date());
+		dto.setStartDate("06/15/2011");
+		dto.setEndDate("06/16/2011");
+		Agent smith = new Agent();
+		smith.setAgent_ID(1);
+		NTDateFormat format = new NTDateFormat();
+		format.setFormat(TracingConstants.DISPLAY_DATEFORMAT);
+		smith.setDateformat(format);
+		smith.setDefaultlocale("US");
+		dto.setAgent(smith);
+//		dto.setEmail("");
+//		dto.setAgreementNumber("");
+//		dto.setFirstName("");
+//		dto.setId(0);
+//		dto.setLastName("");
+//		dto.setMvaNumber("");
+//		Station station = new Station();
+//		station.setStation_ID(1);
+//		dto.setStation(station);
+//		Status status = new Status();
+//		status.setStatus_ID(1);
+//		dto.setStatus(status);
+		
+		System.out.println(bean.searchLostCount(dto));
+		
 	}
 	
 	@Test
@@ -251,7 +307,6 @@ public class LFServiceBeanTest {
 	
 	@Test
 	public void tmSalvageList(){
-		//TODO
 		LFServiceBean bean = new LFServiceBean();
 		
 		GregorianCalendar gc = new GregorianCalendar();
@@ -277,13 +332,13 @@ public class LFServiceBeanTest {
 		int i = 0;
 		boolean correctStation = true;
 		boolean correctCloseDate = true;
-		for(LFFound found:bean.getItemsToSalvagePaginatedList(station, start, offset)){
-			System.out.println("Salvage list at station " + found.getLocation().getStation_ID() + ":" + found.getId());
+		for(LFItem item:bean.getItemsToSalvagePaginatedList(station, start, offset)){
+			System.out.println("Salvage list at station " + item.getFound().getLocation().getStation_ID() + ":" + item.getFound().getId());
 			i++;
-			if(found.getLocation().getStation_ID() != stationId){
+			if(item.getFound().getLocation().getStation_ID() != stationId){
 				correctStation = false;
 			}
-			long timeSinceOpened = (new Date()).getTime() - found.getFoundDate().getTime(); 
+			long timeSinceOpened = (new Date()).getTime() - item.getFound().getFoundDate().getTime(); 
 			if(timeSinceOpened < (PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS) * 1400 * 60 * 1000)){
 				correctCloseDate = false;
 			}
