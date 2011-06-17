@@ -537,6 +537,28 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return 0;
 	}
+
+	private int getItemCount(String sql){
+		if(sql == null){
+			return 0;
+		}
+		String query = "select count(i.id) " + sql;
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(query);
+			List result = q.list();
+			sess.close();
+			return ((Long) result.get(0)).intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return 0;
+	}
 	
 	private List<LFFound> getFoundPaginatedList(String sql, int start, int offset){
 		if(sql == null){
@@ -654,7 +676,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(station == null){
 			return 0;
 		}
-		return getFoundCount(getItemsToSalvageQuery(station));
+		return getItemCount(getItemsToSalvageQuery(station));
 	}
 
 	@Override
