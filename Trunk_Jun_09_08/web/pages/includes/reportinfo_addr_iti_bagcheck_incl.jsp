@@ -145,32 +145,47 @@
 			<c:out value="${incidentForm.wt_id}" /></a><br/>
 		<c:choose>
 			<c:when test="${!empty pendingWtAction}">
+				<% boolean action = false; %>
 				<br />
 				<c:choose>
 					<c:when test="${pendingWtAction == 'WT_PENDING_AMEND'}">
+					<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_INCIDENT, a)) { %>
 						<bean:message key="wt.pending.ahl.amend"/>
+						<% action = true;} %>
 					</c:when>
 					<c:when test="${pendingWtAction == 'WT_PENDING_SUSPEND'}">
+					<% if (UserPermissions.hasPermission("WorldTracer SUS/RIT", a)) { %>
 						<bean:message key="wt.pending.ahl.suspend"/>
+						<% action = true;} %>
 					</c:when>
 					<c:when test="${pendingWtAction == 'WT_PENDING_REINSTATE'}">
+					<% if (UserPermissions.hasPermission("WorldTracer SUS/RIT", a)) { %>
 					<bean:message key="wt.pending.ahl.reinstate"/>
+					<% action = true;} %>
 					</c:when>
 					<c:when test="${pendingWtAction == 'WT_PENDING_CLOSE'}">
+					<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_INCIDENT, a)) { %>
 						<bean:message key="wt.pending.ahl.close"/>
+						<% action = true;} %>
 					</c:when>
 				</c:choose>
+				<% if(action){ %>
 				&nbsp;<a href="javascript: document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="update"/></a>
 				&nbsp;<a href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="cancel"/></a>
+				<% } %>
 			</c:when>
 			<c:otherwise>
 				<br />
 				<c:choose>
 					<c:when test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
+				    <% if (UserPermissions.hasPermission("WorldTracer SUS/RIT", a)) { %>
 						<a href="javascript: document.forms[0].wtq_suspend.value = '1'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="wt.ahl.suspend"/></a>
+					<% } %>
 					</c:when>
 					<c:when test="${incidentForm.wtFile.wt_status == 'SUSPENDED'}">
+					<% if (UserPermissions.hasPermission("WorldTracer SUS/RIT", a)) { %>
 						<a href="javascript: document.forms[0].wtq_reinstate.value = '1'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="wt.ahl.reinstate"/></a>
+					<% } %>
 					</c:when>
 					<c:otherwise>
 						<bean:message key="wt.ahl.closed"/>
