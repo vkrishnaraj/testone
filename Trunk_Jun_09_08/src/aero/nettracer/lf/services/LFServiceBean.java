@@ -93,7 +93,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(dto.getStation() != null){
 			sql += " and o.location.station_ID = " + dto.getStation().getStation_ID();
 		}
-		if(dto.getStatus() != null){
+		if(dto.getStatus() != null && dto.getStatus().getStatus_ID() != -1){
 			sql += " and o.status.status_ID = " + dto.getStatus().getStatus_ID();
 		}
 		if(dto.getMvaNumber() != null){
