@@ -27,19 +27,29 @@ public class LFTracingUtil {
 	private static final double SCORE_COLOR = 5;
 	private static final double SCORE_SERIAL_NUMBER = 20;
 	private static final double SCORE_PHONE = 10;
+	private static final double SCORE_NAME = 10;
+	private static final double SCORE_DESCRIPTION = 10;
 	
-	public List<LFLost> getPotentialLost(){
+	public List<LFLost> getPotentialLost(LFFound found){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
 				" left outer join l.items i " +
 				" where l.status.status_ID = :status" +
 				" and i.disposition.status_ID = :disposition";
+		boolean hasLocation = false;
+		if(found != null && found.getLocation() != null){
+				sql += " and (l.reservation.pickupstation.station_ID = :foundstation " +
+				" or l.reservation.dropoff.station_ID = :foundstation)" ;
+				hasLocation = true;
+		}
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
 			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
-			
+			if(hasLocation){
+				q.setParameter("foundstation", found.getLocation().getStation_ID());
+			}
 			List<LFLost> results = q.list();
 			sess.close();
 			return results;
@@ -54,17 +64,29 @@ public class LFTracingUtil {
 		return null;
 	}
 	
-	public List<LFFound> getPotentialFound(){
+	public List<LFFound> getPotentialFound(LFLost lost){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
 				" where f.status.status_ID = :status" +
 				" and f.item.disposition.status_ID = :disposition";
+		
+				boolean hasReservation = false;
+				if(lost != null && lost.getReservation() != null 
+						&& lost.getReservation().getDropoffLocation() != null 
+						&& lost.getReservation().getPickupLocation() != null){
+					sql += " and (f.location = :pickup or f.location = :dropoff)";
+					hasReservation = true;
+				}
+				
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
 			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
-			
+			if(hasReservation){
+				q.setParameter("pickup", lost.getReservation().getPickupLocation().getStation_ID());
+				q.setParameter("dropoff", lost.getReservation().getDropoffLocation().getStation_ID());
+			}
 			List<LFFound> results = q.list();
 			sess.close();
 			return results;
@@ -90,7 +112,13 @@ public class LFTracingUtil {
 					&& fc.getLastName() != null && fc.getLastName().trim().length() > 0
 					&& lc.getFirstName() != null && lc.getFirstName().trim().length() > 0
 					&& fc.getFirstName() != null && fc.getFirstName().trim().length() > 0){
-				//TODO
+				if(lc.getLastName().equalsIgnoreCase(fc.getLastName()) && lc.getFirstName().equalsIgnoreCase(fc.getFirstName())){
+					LFMatchDetail detail = new LFMatchDetail();
+					detail.setDescription("Name Number Match");
+					detail.setMatchHistory(match);
+					detail.setScore(SCORE_NAME);
+					match.getDetails().add(detail);
+				}
 			}
 			
 			if(lc.getPhones() != null && fc.getPhones() != null){
@@ -111,7 +139,35 @@ public class LFTracingUtil {
 			}
 			
 			if(lc.getAddress() != null && fc.getAddress() != null){
-				//TODO
+				if(lc.getAddress().getAddress1() != null && lc.getAddress().getAddress1().trim().length() > 0
+						&& fc.getAddress().getAddress1() != null && fc.getAddress().getAddress1().trim().length() > 0
+						&& lc.getAddress().getCity() != null && lc.getAddress().getCity().trim().length() > 0
+						&& fc.getAddress().getCity() != null && fc.getAddress().getCity().trim().length() > 0){
+					if(lc.getAddress().getAddress1().equalsIgnoreCase(fc.getAddress().getAddress1())
+							&& lc.getAddress().getCity().equalsIgnoreCase(fc.getAddress().getCity())){
+						if(lc.getAddress().getState() != null && lc.getAddress().getState().trim().length() > 0
+								&& fc.getAddress().getState() != null && fc.getAddress().getState().trim().length() > 0){
+							if(lc.getAddress().getState().equalsIgnoreCase(fc.getAddress().getState())){
+								LFMatchDetail detail = new LFMatchDetail();
+								detail.setDescription("Address Match");
+								detail.setMatchHistory(match);
+								detail.setScore(SCORE_PHONE);
+								match.getDetails().add(detail);
+							}
+						} else if (lc.getAddress().getProvince() != null && lc.getAddress().getProvince().trim().length() > 0
+								&& fc.getAddress().getProvince() != null && fc.getAddress().getProvince().trim().length() > 0){
+							if(lc.getAddress().getProvince().equalsIgnoreCase(fc.getAddress().getProvince())){
+								LFMatchDetail detail = new LFMatchDetail();
+								detail.setDescription("Address Match");
+								detail.setMatchHistory(match);
+								detail.setScore(SCORE_PHONE);
+								match.getDetails().add(detail);
+							}
+						} else {
+							//TODO no state or province?
+						}
+					}
+				}
 			}
 			
 			if(lc.getVantiveNumber() != null && lc.getVantiveNumber().trim().length() > 0
@@ -132,7 +188,7 @@ public class LFTracingUtil {
 			for(LFItem litem:match.getLost().getItems()){
 				if(litem.getBrand() != null && litem.getBrand().trim().length() > 0
 						&& fitem.getBrand() != null && fitem.getBrand().trim().length() > 0){
-					//TODO
+					if(litem.getBrand().equalsIgnoreCase(fitem.getBrand()));
 				}
 				if(litem.getCategory() > 0 && fitem.getCategory() > 0){
 					if(litem.getSubCategory() > 0 && fitem.getSubCategory() > 0){
@@ -166,7 +222,13 @@ public class LFTracingUtil {
 				}
 				if(litem.getDescription() != null && litem.getDescription().trim().length() > 0
 						&& fitem.getDescription() != null && fitem.getDescription().trim().length() > 0){
-					//TODO
+					if(litem.getDescription().equalsIgnoreCase(fitem.getDescription())){
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("Description Match");
+						detail.setMatchHistory(match);
+						detail.setScore(SCORE_DESCRIPTION);
+						match.getDetails().add(detail);
+					}
 				}
 				if(litem.getSerialNumber() != null && litem.getSerialNumber().trim().length() > 0
 						&& fitem.getSerialNumber() != null && fitem.getSerialNumber().trim().length() > 0){
@@ -185,8 +247,8 @@ public class LFTracingUtil {
 	
 	public List<LFMatchHistory> traceLost(long id) throws Exception{
 		LFServiceBean bean = new LFServiceBean();
-		List<LFFound> foundList = getPotentialFound();
 		LFLost lost = bean.getLostReport(id);
+		List<LFFound> foundList = getPotentialFound(lost);
 		ArrayList<LFMatchHistory> matchList = new ArrayList<LFMatchHistory>();
 		
 		for(LFFound found:foundList){
@@ -211,8 +273,8 @@ public class LFTracingUtil {
 	
 	public List<LFMatchHistory> traceFound(long id) throws Exception{
 		LFServiceBean bean = new LFServiceBean();
-		List<LFLost> lostList = getPotentialLost();
 		LFFound found = bean.getFoundItem(id);
+		List<LFLost> lostList = getPotentialLost(found);
 		ArrayList<LFMatchHistory> matchList = new ArrayList<LFMatchHistory>();
 		
 		for(LFLost lost:lostList){
