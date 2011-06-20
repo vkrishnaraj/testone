@@ -61,8 +61,8 @@ public interface LFServiceHome {
 	//LF tracing
 	public List<LFMatchHistory> getTraceResultsForLost(long id);
 	public List<LFMatchHistory> getTraceResultsForFound(long id);
-	public void traceFoundItem(long id);
-	public void traceLostItem(long id);
+	public List<LFMatchHistory> traceFoundItem(long id);
+	public List<LFMatchHistory> traceLostItem(long id);
 	public boolean confirmMatch(long id);
 	public boolean rejectMatch(long id);
 	public boolean undoMatch(long id);

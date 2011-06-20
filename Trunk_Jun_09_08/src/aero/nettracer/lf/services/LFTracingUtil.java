@@ -20,7 +20,7 @@ import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 
 public class LFTracingUtil {
 	
-	public static final int CUTOFF = 0;
+	public static final int CUTOFF = 5;
 	public static final double SCORE_VANTIVE = 10;
 	public static final double SCORE_CATEGORY = 10;
 	public static final double SCORE_CATEGORY_PARTICLE = 10;
@@ -30,7 +30,7 @@ public class LFTracingUtil {
 	private static final double SCORE_NAME = 10;
 	private static final double SCORE_DESCRIPTION = 10;
 	
-	public List<LFLost> getPotentialLost(LFFound found){
+	public static List<LFLost> getPotentialLost(LFFound found){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
 				" left outer join l.items i " +
 				" where l.status.status_ID = :status" +
@@ -64,7 +64,7 @@ public class LFTracingUtil {
 		return null;
 	}
 	
-	public List<LFFound> getPotentialFound(LFLost lost){
+	public static List<LFFound> getPotentialFound(LFLost lost){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
 				" where f.status.status_ID = :status" +
 				" and f.item.disposition.status_ID = :disposition";
@@ -101,7 +101,7 @@ public class LFTracingUtil {
 		return null;
 	}
 	
-	public double processMatch(LFMatchHistory match){
+	public static double processMatch(LFMatchHistory match){
 		
 		//process person
 		if(match.getLost().getClient() != null && match.getFound().getClient() != null){
@@ -245,8 +245,17 @@ public class LFTracingUtil {
 		return match.getTotalScore();
 	}
 	
-	public List<LFMatchHistory> traceLost(long id) throws Exception{
+	public static List<LFMatchHistory> traceLost(long id) throws Exception{
 		LFServiceBean bean = new LFServiceBean();
+		return traceLost(id, bean);
+	}
+	
+	public static List<LFMatchHistory> traceFound(long id) throws Exception{
+		LFServiceBean bean = new LFServiceBean();
+		return traceFound(id, bean);
+	}
+	
+	public static List<LFMatchHistory> traceLost(long id, LFServiceBean bean) throws Exception{
 		LFLost lost = bean.getLostReport(id);
 		List<LFFound> foundList = getPotentialFound(lost);
 		ArrayList<LFMatchHistory> matchList = new ArrayList<LFMatchHistory>();
@@ -271,8 +280,7 @@ public class LFTracingUtil {
 		return matchList;
 	}
 	
-	public List<LFMatchHistory> traceFound(long id) throws Exception{
-		LFServiceBean bean = new LFServiceBean();
+	public static List<LFMatchHistory> traceFound(long id, LFServiceBean bean) throws Exception{
 		LFFound found = bean.getFoundItem(id);
 		List<LFLost> lostList = getPotentialLost(found);
 		ArrayList<LFMatchHistory> matchList = new ArrayList<LFMatchHistory>();

@@ -75,7 +75,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return null;
 		}
 		
-		if(dto.getPhoneNumber() != null){
+		if(dto.getPhoneNumber() != null && dto.getPhoneNumber().trim().length() > 0){
 			sql += " left outer join o.client.phones p where p.phoneNumber = \'" + dto.getPhoneNumber() + "\'";
 		} else {
 			sql += " where 1=1";
@@ -101,14 +101,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				sql += " and o.item.disposition.status_ID = " + dto.getDisposition().getStatus_ID();
 			}
 		}
-		if(dto.getMvaNumber() != null){
+		if(dto.getMvaNumber() != null && dto.getMvaNumber().trim().length() > 0){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " and o.reservation.mvaNumber = \'" + dto.getMvaNumber() + "\'";
 			} else {
 				sql += " and o.mvaNumber = \'" + dto.getMvaNumber() + "\'";
 			}
 		}
-		if(dto.getStartDate() != null){
+		if(dto.getStartDate() != null && dto.getStartDate().trim().length() > 0){
 			String date = DateUtils.formatDate(dto.getStartDateAsDate(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " and o.openDate >= \'" + date + "\'";
@@ -116,7 +116,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				sql += " and o.foundDate >= \'" + date + "\'";
 			}
 		}
-		if(dto.getEndDate() != null){
+		if(dto.getEndDate() != null && dto.getEndDate().trim().length() > 0){
 			String date = DateUtils.formatDate(dto.getEndDateAsDate(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " and o.openDate <= \'" + date + "\'";
@@ -124,12 +124,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				sql += " and o.foundDate <= \'" + date + "\'";
 			}
 		}
-		if(dto.getAgreementNumber() != null){
+		if(dto.getAgreementNumber() != null && dto.getAgreementNumber().trim().length() > 0){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " and o.reservation.agreementNumber = \'" + dto.getAgreementNumber() + "\'";
 			}
 		}
-		if(dto.getEmail() != null){
+		if(dto.getEmail() != null && dto.getEmail().trim().length() > 0){
 			sql += " and o.client.email = \'" + dto.getEmail() + "\'";
 		}
 		return sql;
@@ -313,6 +313,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
+			System.out.println(sql);
 			
 			if (start > -1 && offset > -1 ) {
 				q.setFirstResult(start);
@@ -454,7 +455,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	private String getItemsToSalvageQuery(Station station){
-		//TODO what status - check to be delivered
 		int daysTillSalvage = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS);
 		GregorianCalendar today = new GregorianCalendar();
 		today.add(Calendar.DATE, -daysTillSalvage);
@@ -928,15 +928,23 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public void traceFoundItem(long id) {
-		// TODO Auto-generated method stub
-		
+	public List<LFMatchHistory> traceFoundItem(long id) {
+		try {
+			return LFTracingUtil.traceFound(id, this);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
-	public void traceLostItem(long id) {
-		// TODO Auto-generated method stub
-		
+	public List<LFMatchHistory> traceLostItem(long id) {
+		try {
+			return LFTracingUtil.traceLost(id, this);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override
