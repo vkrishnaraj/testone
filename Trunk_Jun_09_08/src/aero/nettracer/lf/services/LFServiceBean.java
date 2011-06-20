@@ -84,10 +84,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(dto.getId() > 0){
 			sql += " and o.id = " + dto.getId();
 		}
-		if(dto.getLastName() != null){
+		if(dto.getLastName() != null && dto.getLastName().trim().length() > 0){
 			sql += " and o.client.lastName = \'" + dto.getLastName().toUpperCase() + "\'";
 		}
-		if(dto.getFirstName() != null){
+		if(dto.getFirstName() != null && dto.getFirstName().trim().length() > 0){
 			sql += " and o.client.firstName = \'" + dto.getFirstName().toUpperCase() + "\'";
 		}
 		if(dto.getStation() != null && dto.getStation().getStation_ID() != -1){
@@ -95,6 +95,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		if(dto.getStatus() != null && dto.getStatus().getStatus_ID() != -1){
 			sql += " and o.status.status_ID = " + dto.getStatus().getStatus_ID();
+		}
+		if(dto.getDisposition() != null && dto.getDisposition().getStatus_ID() != -1){
+			if(dto.getType() == TracingConstants.LF_TYPE_FOUND){
+				sql += " and o.item.disposition.status_ID = " + dto.getDisposition().getStatus_ID();
+			}
 		}
 		if(dto.getMvaNumber() != null){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
@@ -152,7 +157,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public List<LFLost> searchLost(LFSearchDTO dto, int start, int offset) {
-		String sql = getSearchLostFoundQuery(dto) + " order by l.createDate asc";
+		String sql = getSearchLostFoundQuery(dto) + " order by o.createDate asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -283,7 +288,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public int searchFoundCount(LFSearchDTO dto) {
-		String sql = "select count(f.id) " + getSearchLostFoundQuery(dto);
+		String sql = "select count(o.id) " + getSearchLostFoundQuery(dto);
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -303,7 +308,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public List<LFFound> searchFound(LFSearchDTO dto, int start, int offset) {
-		String sql = getSearchLostFoundQuery(dto) + " order by f.createDate asc";
+		String sql = getSearchLostFoundQuery(dto) + " order by o.foundDate asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
