@@ -455,7 +455,7 @@
 	         				</td>
 	         			</tr>
 	         			<tr>
-	         				<td colspan=4>
+	         				<td colspan=3>
 	         					<bean:message key="colname.lf.description" />
 	         					<br>
 	         					<textarea name="item[<%=i %>].description" cols="80" rows="3" class="textfield" ><%=item.getDescription() == null ? "" : item.getDescription() %></textarea>

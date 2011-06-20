@@ -51,8 +51,6 @@
 				<%@ page import="org.hibernate.SQLQuery"%>
 				<%@ page import="org.hibernate.Hibernate"%>
 				<%@ page import="java.util.List"%>
-				
-
 				<%
 				boolean ntUser = PropertyBMO.isTrue("nt.user");
 				boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");

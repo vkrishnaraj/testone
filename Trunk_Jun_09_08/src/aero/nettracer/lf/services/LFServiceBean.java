@@ -313,7 +313,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
-			System.out.println(sql);
 			
 			if (start > -1 && offset > -1 ) {
 				q.setFirstResult(start);
@@ -764,7 +763,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		String query = "select count (i.id) from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
 				"where i.found.location.station_ID = " + station.getStation_ID() +
-				" and i.disposition.status_ID = " + TracingConstants.LF_STATUS_TO_BE_DELIVERED;
+				" and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED;
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -790,7 +789,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		String query = "from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
 		"where i.found.location.station_ID = " + station.getStation_ID() +
-		" and i.disposition.status_ID = " + TracingConstants.LF_STATUS_TO_BE_DELIVERED 
+		" and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED 
 		+ " order by i.found.foundDate asc";
 		Session sess = null;
 		try{
@@ -957,7 +956,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			if(match.getFound() != null && match.getFound().getItem() != null){
 				Status deliveryStatus = new Status();
-				deliveryStatus.setStatus_ID(TracingConstants.LF_STATUS_TO_BE_DELIVERED);
+				deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 				match.getFound().getItem().setDisposition(deliveryStatus);
 			}
 			

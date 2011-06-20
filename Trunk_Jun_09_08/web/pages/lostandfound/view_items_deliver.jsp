@@ -84,7 +84,7 @@
          					<bean:message key="colname.lf.id" />
          				</td>
          				<td class="header">
-         					<bean:message key="colname.lf.status" />
+         					<bean:message key="colname.lf.disposition" />
          				</td>
          				<td class="header">
          					<bean:message key="colname.lf.date" />
@@ -102,7 +102,7 @@
          						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getId() %></a>
          					</td>
          					<td>
-         						<%=item.getStatus().getDescription() %>
+         						<%=item.getDisposition().getDescription() %>
          					</td>
          					<td>
          						<%=item.getFound().getDisplayDate(a.getDateformat().getFormat()) %>

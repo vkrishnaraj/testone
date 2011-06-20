@@ -70,9 +70,9 @@ public class SearchLostFoundAction extends CheckedAction {
 			int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 			
 			if (type == TracingConstants.LF_TYPE_LOST) {
-				resultSet = serviceBean.getLostPaginatedList(searchDto.getStation(), (currpage * rowsperpage), rowsperpage);
+				resultSet = serviceBean.searchLost(searchDto, (currpage * rowsperpage), rowsperpage);
 			} else {
-				resultSet = serviceBean.getFoundPaginatedList(searchDto.getStation(), (currpage * rowsperpage), rowsperpage);
+				resultSet = serviceBean.searchFound(searchDto, (currpage * rowsperpage), rowsperpage);
 			}
 	
 			if (totalpages <= currpage) {
@@ -111,9 +111,18 @@ public class SearchLostFoundAction extends CheckedAction {
 		
 		request.setAttribute("resultList", resultSet);
 		
-		Status lfStatus = new Status();
-		lfStatus.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
-		searchDto.setStatus(lfStatus);
+		if (searchDto.getStatus() == null) {
+			Status lfStatus = new Status();
+			lfStatus.setStatus_ID(TracingConstants.LF_STATUS_ALL);
+			searchDto.setStatus(lfStatus);
+		}
+	
+		if (searchDto.getDisposition() == null) {
+			Status lfDisposition = new Status();
+			lfDisposition.setStatus_ID(TracingConstants.LF_STATUS_ALL);
+			searchDto.setDisposition(lfDisposition);
+		}
+		
 		searchDto.setStation(user.getStation());
 		return mapping.findForward(TracingConstants.LF_SEARCH_LOST_FOUND);
 		

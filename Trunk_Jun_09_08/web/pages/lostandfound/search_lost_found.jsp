@@ -100,23 +100,34 @@
                				</html:select>                  
              			</td>
              			<td>
+           					<bean:message key="colname.station_number" />
+           					<br>
+           					<html:select name="searchLostFoundForm" property="stationId" styleClass="dropdown" >
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_ALL) %>"><bean:message key="search.option.all" /></html:option>
+								<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+           					</html:select>
+           				</td>
+             			<td>
                				<bean:message key="colname.lf.status" />
                				<br>
                				<html:select name="searchLostFoundForm" property="statusId" styleClass="dropdown" >
-               					<html:option value="-1"><bean:message key="search.option.all" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_ALL) %>"><bean:message key="search.option.all" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_OPEN) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_STATUS_OPEN) %>" /></html:option>
-               					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_TO_BE_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_STATUS_TO_BE_DELIVERED) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_CLOSED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_STATUS_CLOSED) %>" /></html:option>
                				</html:select>                  
              			</td>
              			<td>
-           					<bean:message key="colname.station_number" />
-           					<br>
-           					<html:select name="searchLostFoundForm" property="stationId" styleClass="dropdown" >
-               					<html:option value="-1"><bean:message key="search.option.all" /></html:option>
-								<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
-           					</html:select>
-           				</td>
+               				<bean:message key="colname.lf.disposition" />
+               				<br>
+               				<html:select name="searchLostFoundForm" property="dispositionId" styleClass="dropdown" >
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_ALL) %>"><bean:message key="search.option.all" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_SALVAGED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_SALVAGED) %>" /></html:option>
+               				</html:select>                  
+             			</td>
            			</tr>
            			<tr>           				
            				<td nowrap colspan=2>
@@ -126,10 +137,10 @@
 			                <html:text property="startDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.startDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">&nbsp;-
 			                <html:text property="endDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.endDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
 		                </td>
-		                <td>
+		                <td colspan=2>
 							<bean:message key="colname.lf.agreement.number" />
 							<br>
-							<html:text name="searchLostFoundForm" property="agreementNumber" size="10" styleClass="textfield" />
+							<html:text name="searchLostFoundForm" property="agreementNumber" size="15" styleClass="textfield" />
 						</td>
 		                <td>
 		                	<bean:message key="colname.lf.mva.number" />
@@ -153,14 +164,14 @@
 		              		<br/>
 		              		<html:text name="searchLostFoundForm" property="phoneNumber" size="15" maxlength="25" styleClass="textfield" />
 		              	</td>
-		              	<td>
+		              	<td colspan=2>
 		              		<bean:message key="colname.lf.email" />
 		              		<br />
 		              		<html:text name="searchLostFoundForm" property="email" size="35" maxlength="100" styleClass="textfield" />
 		              	</td>
            			</tr>
            			<tr>
-           				<td colspan=4>
+           				<td colspan=5>
            					<center>
 			              		<html:submit property="search" styleId="button" >
 			              			<bean:message key="button.retrieve" />

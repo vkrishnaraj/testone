@@ -183,7 +183,7 @@ public class LFSearchDTO extends ActionForm  {
 	}
 	
 	public void setStatusId(int statusId) {
-		status.setStatus_ID(statusId);
+		this.status.setStatus_ID(statusId);
 	}
 	
 	public int getStationId() {
@@ -191,7 +191,7 @@ public class LFSearchDTO extends ActionForm  {
 	}
 	
 	public void setStationId(int stationId) {
-		station.setStation_ID(stationId);
+		this.station.setStation_ID(stationId);
 	}
 
 	public void setDisposition(Status disposition) {
@@ -206,8 +206,8 @@ public class LFSearchDTO extends ActionForm  {
 		return disposition.getStatus_ID();
 	}
 	
-	public void setDispositionID(int id){
-		this.disposition.setStatus_ID(id);
+	public void setDispositionId(int dispositionId){
+		this.disposition.setStatus_ID(dispositionId);
 	}
 		
 }

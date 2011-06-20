@@ -433,11 +433,12 @@ public class TracingConstants {
 	public final static int STATUS_SUSPECTED_FRAUD = 37;
 	public final static int STATUS_KNOWN_FRAUD = 38;
 	
+	public final static int LF_STATUS_ALL = -1;
 	public final static int LF_STATUS_OPEN = 600;
-	public final static int LF_STATUS_TO_BE_DELIVERED = 601;
-	public final static int LF_STATUS_CLOSED = 602;
-	public final static int LF_DISPOSITION_PICKED_UP = 603;
-	public final static int LF_DISPOSITION_DELIVERED = 604;
+	public final static int LF_STATUS_CLOSED = 601;
+	public final static int LF_DISPOSITION_TO_BE_DELIVERED = 602;
+	public final static int LF_DISPOSITION_DELIVERED = 603;
+	public final static int LF_DISPOSITION_PICKED_UP = 604;
 	public final static int LF_DISPOSITION_SALVAGED = 605;
 	public final static int LF_DISPOSITION_OTHER = 606;
 	public final static int LF_TRACING_NEW = 607;
