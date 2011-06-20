@@ -27,6 +27,7 @@ public class LFSearchDTO extends ActionForm  {
 	private Station station; // done
 	private Agent agent; // na
 	private Status status; // done
+	private Status disposition;
 	private String agreementNumber; // done
 	private String mvaNumber; // done
 	private String phoneNumber;
@@ -191,6 +192,22 @@ public class LFSearchDTO extends ActionForm  {
 	
 	public void setStationId(int stationId) {
 		station.setStation_ID(stationId);
+	}
+
+	public void setDisposition(Status disposition) {
+		this.disposition = disposition;
+	}
+
+	public Status getDisposition() {
+		return disposition;
+	}
+	
+	public int getDispositionId(){
+		return disposition.getStatus_ID();
+	}
+	
+	public void setDispositionID(int id){
+		this.disposition.setStatus_ID(id);
 	}
 		
 }
