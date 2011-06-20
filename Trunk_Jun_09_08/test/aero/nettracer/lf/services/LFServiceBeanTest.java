@@ -325,11 +325,13 @@ public class LFServiceBeanTest {
 		found2.setLocation(station);
 		assertTrue(bean.saveOrUpdateFoundItem(found2) != -1);
 		
-		assertTrue(bean.getFoundCount(station) > 1);
+		assertTrue(bean.getItemsToSalvageCount(station) > 1);
 		
 		int start = 0;
 		int offset = 15;
 		int i = 0;
+		boolean hasFound1 = false;
+		boolean hasFound2 = false;
 		boolean correctStation = true;
 		boolean correctCloseDate = true;
 		for(LFItem item:bean.getItemsToSalvagePaginatedList(station, start, offset)){
@@ -342,6 +344,8 @@ public class LFServiceBeanTest {
 			if(timeSinceOpened < (PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS) * 1400 * 60 * 1000)){
 				correctCloseDate = false;
 			}
+			if(item.getFound().getId() == found1.getId())hasFound1 = true;
+			if(item.getFound().getId() == found2.getId())hasFound2 = true;
 		}
 		System.out.println("count: " + i);
 		assertTrue(i <= offset);
