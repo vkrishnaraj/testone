@@ -90,7 +90,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(dto.getFirstName() != null){
 			sql += " and o.client.firstName = \'" + dto.getFirstName().toUpperCase() + "\'";
 		}
-		if(dto.getStation() != null){
+		if(dto.getStation() != null && dto.getStation().getStation_ID() != -1){
 			sql += " and o.location.station_ID = " + dto.getStation().getStation_ID();
 		}
 		if(dto.getStatus() != null && dto.getStatus().getStatus_ID() != -1){
