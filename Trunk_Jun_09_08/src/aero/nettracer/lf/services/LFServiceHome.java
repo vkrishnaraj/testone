@@ -74,4 +74,6 @@ public interface LFServiceHome {
 	LFMatchHistory getTraceResult(long id);
 
 	long saveOrUpdateTraceResult(LFMatchHistory match);
+
+	LFItem getItem(long id);
 }

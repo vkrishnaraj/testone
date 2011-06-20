@@ -64,6 +64,22 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return null;
 	}
+	
+	@Override
+	public LFItem getItem(long id){
+		Session sess = HibernateWrapper.getSession().openSession();
+		LFItem f = null;
+		try{
+			f = (LFItem) sess.load(LFItem.class, id);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return f;
+	}
 
 	private static String getSearchLostFoundQuery(LFSearchDTO dto){
 		String sql = null;
