@@ -212,6 +212,14 @@
 							<br/>
 							<input type="text" value="<%=a.getUsername() %>" disabled class="disabledtextfield" />
 						</td>
+						<td>
+         					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
+         					<br>
+         					<html:select name="lostReportForm" property="lost.statusId" styleClass="dropdown" >
+         						<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+         						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
+         					</html:select>
+         				</td>
 					</tr>
 				</table>
 				<br/>
@@ -349,23 +357,6 @@
 	         					<bean:message key="colname.lf.serial" />
 	         					<br>
 	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" value="<%=item.getSerialNumber() == null ? "" : item.getSerialNumber() %>" />
-	         				</td>
-	         				<td>
-	         					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
-	         					<br>
-	         					<select name="item[<%=i %>].statusId" class="dropdown" >
-	         						<option value=""><bean:message key="option.lf.please.select" /></option>
-	         						<%
-	         							ArrayList statusList = (ArrayList) request.getSession().getAttribute("lfstatuslist");
-	         							Status status;
-	         							for (int j = 0; j < statusList.size(); ++j) {
-	         								status = (Status) statusList.get(j);
-	         						%>
-	         								<option value="<%=status.getStatus_ID() %>" <% if (item.getStatus().getStatus_ID() == status.getStatus_ID()) { %>selected<% } %> ><%=status.getDescription() %></option>
-	         						<%	
-	         							}
-         							%>
-	         					</select>
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.disposition" />

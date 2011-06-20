@@ -36,10 +36,6 @@ public class LFItem {
 	private String color;
 	
 	@ManyToOne
-	@JoinColumn(name = "status_ID", nullable = false)
-	private Status status;
-
-	@ManyToOne
 	@JoinColumn(name = "disposition_status_ID", nullable = true)
 	private Status disposition;
 	
@@ -94,14 +90,6 @@ public class LFItem {
 		this.subCategory = subCategory;
 	}
 
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-	
 	public Status getDisposition() {
 		return disposition;
 	}
@@ -132,14 +120,6 @@ public class LFItem {
 
 	public void setColor(String color) {
 		this.color = color;
-	}
-	
-	public int getStatusId() {
-		return getStatus().getStatus_ID();
-	}
-	
-	public void setStatusId(int statusId) {
-		getStatus().setStatus_ID(statusId);
 	}
 	
 	public int getDispositionId() {

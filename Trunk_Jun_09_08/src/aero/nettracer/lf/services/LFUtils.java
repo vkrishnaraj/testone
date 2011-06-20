@@ -35,10 +35,6 @@ public class LFUtils {
 		LFItem item = new LFItem();
 		item.setLost(lost);
 		
-		Status itemStatus = new Status();
-		itemStatus.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
-		item.setStatus(itemStatus);
-
 		Status disposition = new Status();
 		disposition.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
 		item.setDisposition(disposition);
@@ -75,10 +71,6 @@ public class LFUtils {
 		found.setStatus(foundStatus);
 		
 		LFItem item = new LFItem();
-		Status itemStatus = new Status();
-		itemStatus.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
-		item.setStatus(itemStatus);
-		
 		Status disposition = new Status();
 		disposition.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
 		item.setDisposition(disposition);

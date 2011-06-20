@@ -44,10 +44,6 @@ public class LFFound implements LFObject {
 	@JoinColumn(name = "status_ID", nullable = false)
 	private Status status;
 
-	@ManyToOne
-	@JoinColumn(name = "disposition_status_ID", nullable = true)
-	private Status disposition;
-	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFItem.class, cascade = CascadeType.ALL)
 	private LFItem item;
 	
@@ -104,14 +100,6 @@ public class LFFound implements LFObject {
 		this.status = status;
 	}
 	
-	public Status getDisposition() {
-		return disposition;
-	}
-
-	public void setDisposition(Status disposition) {
-		this.disposition = disposition;
-	}
-
 	public LFItem getItem() {
 		return item;
 	}
@@ -174,6 +162,15 @@ public class LFFound implements LFObject {
 			clientName += " " + middleName + ".";
 		}
 		return clientName;
+	}
+	
+	@Transient
+	public int getStatusId() {
+		return status.getStatus_ID();
+	}
+	
+	public void setStatusId(int statusId) {
+		status.setStatus_ID(statusId);
 	}
 
 }

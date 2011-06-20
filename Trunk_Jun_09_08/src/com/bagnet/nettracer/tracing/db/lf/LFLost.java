@@ -185,6 +185,15 @@ public class LFLost implements LFObject {
 		}
 		return clientName;
 	}
+	
+	@Transient
+	public int getStatusId() {
+		return status.getStatus_ID();
+	}
+	
+	public void setStatusId(int statusId) {
+		status.setStatus_ID(statusId);
+	}
 
 }
 

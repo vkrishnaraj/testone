@@ -220,14 +220,22 @@
 							<br>
 							<html:text name="foundItemForm" property="found.mvaNumber" size="10" styleClass="textfield" />
 						</td>
-						<td colspan=2>
-							<bean:message key="colname.lf.found.location" />&nbsp;<span class="reqfield">*</span>
+						<td>
+							<bean:message key="colname.lf.found.location" />
 							<br>
 		            		<html:select name="foundItemForm" property="found.locationId" styleClass="dropdown" >
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
 		            		</html:select>
 						</td>
+						<td>
+	         					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
+	         					<br>
+	         					<html:select name="foundItemForm" property="found.statusId" styleClass="dropdown" >
+	         						<html:option value="-1"><bean:message key="option.lf.please.select" /></html:option>
+	         						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
+	         					</html:select>
+	         				</td>
 					</tr>
 				</table>
 				<br/>
@@ -362,23 +370,6 @@
 	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" value="<%=item.getSerialNumber() == null ? "" : item.getSerialNumber() %>" />
 	         				</td>
 	         				<td>
-	         					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
-	         					<br>
-	         					<select name="item[<%=i %>].statusId" class="dropdown" >
-	         						<option value=""><bean:message key="option.lf.please.select" /></option>
-	         						<%
-	         							ArrayList statusList = (ArrayList) request.getSession().getAttribute("lfstatuslist");
-	         							Status status;
-	         							for (int j = 0; j < statusList.size(); ++j) {
-	         								status = (Status) statusList.get(j);
-	         						%>
-	         								<option value="<%=status.getStatus_ID() %>" <% if (item.getStatus().getStatus_ID() == status.getStatus_ID()) { %>selected<% } %> ><%=status.getDescription() %></option>
-	         						<%	
-	         							}
-         							%>
-	         					</select>
-	         				</td>
-	         				<td>
 	         					<bean:message key="colname.lf.disposition" />
 	         					<br>
 	         					<select name="item[<%=i %>].dispositionId" class="dropdown" >
@@ -445,7 +436,7 @@
 	         						setSelectedSubCategory(<%=item.getCategory()%>, <%=item.getSubCategory()%>, 'subcategories_<%=i %>');
 	         					</script>
 	         				</td>
-	         				<td colspan=2>
+	         				<td>
 	         					<bean:message key="colname.lf.color" />
 	         					<br>
 	         					<select name="item[<%=i %>].color" class="dropdown" >
