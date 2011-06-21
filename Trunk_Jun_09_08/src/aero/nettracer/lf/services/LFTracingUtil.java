@@ -29,6 +29,8 @@ public class LFTracingUtil {
 	private static final double SCORE_PHONE = 10;
 	private static final double SCORE_NAME = 10;
 	private static final double SCORE_DESCRIPTION = 10;
+	private static final double SCORE_CAT_SUBCAT = 10;
+	private static final double SCORE_CAT = 10;
 	
 	public static List<LFLost> getPotentialLost(LFFound found){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
@@ -238,6 +240,26 @@ public class LFTracingUtil {
 						detail.setMatchHistory(match);
 						detail.setScore(SCORE_SERIAL_NUMBER);
 						match.getDetails().add(detail);
+					}
+				}
+				if(litem.getCategory() > 0 && fitem.getCategory() > 0){
+					if(litem.getSubCategory() > 0 && fitem.getSubCategory() > 0){
+						if(litem.getCategory() == fitem.getCategory() &&
+								litem.getSubCategory() == fitem.getSubCategory()){
+							LFMatchDetail detail = new LFMatchDetail();
+							detail.setDescription("Category/Sub Category Number Match");
+							detail.setMatchHistory(match);
+							detail.setScore(SCORE_CAT_SUBCAT);
+							match.getDetails().add(detail);
+						}
+					} else {
+						if(litem.getCategory() == fitem.getCategory()){
+							LFMatchDetail detail = new LFMatchDetail();
+							detail.setDescription("Category Number Match");
+							detail.setMatchHistory(match);
+							detail.setScore(SCORE_CAT);
+							match.getDetails().add(detail);
+						}
 					}
 				}
 			}
