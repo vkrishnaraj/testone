@@ -35,6 +35,10 @@ public class LFItem {
 	
 	private String color;
 	
+	private String trackingNumber;
+	
+	private int type;
+	
 	@ManyToOne
 	@JoinColumn(name = "disposition_status_ID", nullable = true)
 	private Status disposition;
@@ -147,7 +151,21 @@ public class LFItem {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
-	
-	
+
+	public String getTrackingNumber() {
+		return trackingNumber;
+	}
+
+	public void setTrackingNumber(String trackingNumber) {
+		this.trackingNumber = trackingNumber;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 	
 }

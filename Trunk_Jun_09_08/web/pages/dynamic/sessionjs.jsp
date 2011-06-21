@@ -198,6 +198,15 @@
 	
 	}
 	
+	function validateDeliveryForm(form) {
+		var element = getFieldByName("delivery.trackingNumber", form);
+		if (element.value == null || element.value.length == 0) {
+			alert("<%= (String)bundle.getString("colname.lf.tracking.number") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			return false;
+		}
+		return true;
+	}
+	
 	function getFieldByName(elementName, form) {
 		for (var i = 0; i < form.length; ++i) {
 			if (form.elements[i].name == elementName) {

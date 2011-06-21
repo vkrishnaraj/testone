@@ -80,6 +80,31 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return f;
 	}
+	
+	public List<LFItem> getItemsByLostFoundId(long id, int type) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		List<LFItem> items = null;
+		try{
+			String sql;
+			if (type == TracingConstants.LF_TYPE_LOST) {
+				sql = "from com.bagnet.nettracer.tracing.db.lf.LFItem i where i.lost.id = ";
+			} else if (type == TracingConstants.LF_TYPE_FOUND) {
+				sql = "from com.bagnet.nettracer.tracing.db.lf.LFItem i where i.found.id = ";
+			} else {
+				throw new Exception("Invalid type for item");
+			}
+			
+			Query q = sess.createQuery(sql + id);
+			items = (List<LFItem>) q.list();
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return items;
+	}
 
 	private static String getSearchLostFoundQuery(LFSearchDTO dto){
 		String sql = null;
@@ -173,7 +198,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public List<LFLost> searchLost(LFSearchDTO dto, int start, int offset) {
-		String sql = getSearchLostFoundQuery(dto) + " order by o.createDate asc";
+		String sql = getSearchLostFoundQuery(dto) + " order by o.openDate asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -779,7 +804,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		String query = "select count (i.id) from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
 				"where i.found.location.station_ID = " + station.getStation_ID() +
-				" and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED;
+				" and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED +
+				" and i.type = " + TracingConstants.LF_TYPE_FOUND;
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();

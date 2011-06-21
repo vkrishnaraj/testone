@@ -4,8 +4,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 @Entity
@@ -18,7 +21,9 @@ public class LFDelivery {
 	
 	private String trackingNumber;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFLost.class, cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "lost_id", nullable = true)
+	@Fetch(FetchMode.SELECT)
 	private LFLost lost;
 
 	public long getId() {

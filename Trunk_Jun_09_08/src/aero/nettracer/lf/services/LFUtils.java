@@ -33,6 +33,7 @@ public class LFUtils {
 		
 		LinkedHashSet<LFItem> items = new LinkedHashSet<LFItem>();
 		LFItem item = new LFItem();
+		item.setType(TracingConstants.LF_TYPE_LOST);
 		item.setLost(lost);
 		
 		Status disposition = new Status();
@@ -71,6 +72,7 @@ public class LFUtils {
 		found.setStatus(foundStatus);
 		
 		LFItem item = new LFItem();
+		item.setType(TracingConstants.LF_TYPE_FOUND);
 		Status disposition = new Status();
 		disposition.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
 		item.setDisposition(disposition);

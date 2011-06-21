@@ -16,41 +16,8 @@
  	request.removeAttribute("type");
 %>
 
-
-<%@page import="com.bagnet.nettracer.tracing.db.salvage.SalvageItem"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-<SCRIPT LANGUAGE="JavaScript">
-    
-	var cal1xx = new CalendarPopup();	
-    
-	function goprev() {
-	  o = document.handleItemsForm;
-	  o.prevpage.value = "1";
-	  o.pagination.value="1";
-	  o.submit();
-	}
-	
-	function gonext() {
-	  o = document.handleItemsForm;
-	  o.nextpage.value="1";
-	  o.pagination.value="1";
-	  o.submit();
-	}
-	
-	function gopage(i) {
-		  o = document.handleItemsForm;
-		  o.currpage.value = i;
-		  o.pagination.value="1";
-		  o.submit();
-	}
-	
-	function updatePagination() {
-	    return true;
-	}
-
-</script>
 <jsp:include page="/pages/includes/validation_search.jsp" />
 <html:form action="view_items_deliver.do" method="post" onsubmit="return validateSearch(this);">
 	<tr>
@@ -97,6 +64,7 @@
          				</td>
          			</tr>
          			<logic:iterate indexId="i" id="item" name="handleItemsForm" property="foundItems" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
+         				<% if (item.getType() == TracingConstants.LF_TYPE_FOUND) { %>
          				<tr>
          					<td>
          						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getId() %></a>
@@ -111,9 +79,11 @@
          						<%=item.getDescription() == null || item.getDescription().isEmpty() ? "&nbsp;" : item.getDescription() %>
          					</td>
          					<td>
-         						<a href='<%=item.getFound().getId() %>'><bean:message key="lf.create.delivery" /></a>
+         						<a href='create_delivery.do?itemId=<%=item.getId() %>'><bean:message key="lf.create.delivery" /></a>,&nbsp;
+         						<a href='create_delivery.do?itemId=<%=item.getId() %>&pickedUp=1'><bean:message key="lf.picked.up" /></a>
          					</td>
          				</tr>
+         				<% } %>
          			</logic:iterate>
          			<tr>
 					   <td colspan="11">

@@ -883,4 +883,8 @@
         <put name="center"   value="/pages/lostandfound/view_items_deliver.jsp"/>
     </definition>
 
+    <definition name="create_delivery" extends="user_menu">
+        <put name="center"   value="/pages/lostandfound/create_delivery.jsp"/>
+    </definition>
+
  </tiles-definitions>

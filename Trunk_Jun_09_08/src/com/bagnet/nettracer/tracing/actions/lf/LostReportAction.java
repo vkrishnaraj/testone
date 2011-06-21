@@ -1,5 +1,8 @@
 package com.bagnet.nettracer.tracing.actions.lf;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,6 +18,7 @@ import aero.nettracer.lf.services.LFUtils;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.forms.lf.LostReportForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -51,6 +55,20 @@ public class LostReportAction extends CheckedAction {
 		} else if (request.getParameter("save") != null) {
 			lostReport = lrForm.getLost();
 			LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport);
+			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(lostReport.getItem().getFound());
+		} else if (request.getParameter("undo") != null) {
+			lostReport = lrForm.getLost();
+			long itemId = Long.valueOf((String) request.getParameter("itemId"));
+			LFItem item = getItemById(lrForm.getLost().getItems(), itemId);
+		
+			if (item != null) {
+				item.setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+				item.setTrackingNumber(null);
+				
+				item.getFound().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+				item.getFound().getItem().setTrackingNumber(null);
+			}
+			lostReport.setStatusId(TracingConstants.LF_STATUS_OPEN);
 		} else {
 			lostReport = LFUtils.createLFLost(user);
 		}
@@ -58,6 +76,15 @@ public class LostReportAction extends CheckedAction {
 		lrForm.setLost(lostReport);
 		return mapping.findForward(TracingConstants.LF_CREATE_LOST_REPORT);
 		
+	}
+	
+	private LFItem getItemById(Set<LFItem> items, long id) {
+		for (LFItem item: items) {
+			if (item.getId() == id) {
+				return item;
+			}
+		}
+		return null;
 	}
 	
 }

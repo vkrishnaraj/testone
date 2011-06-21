@@ -445,8 +445,8 @@ public class TracingConstants {
 	public final static int LF_TRACING_CONFIRMED = 608;
 	public final static int LF_TRACING_REJECTED = 609;
 	
-	public final static int LF_TYPE_LOST = 0;
-	public final static int LF_TYPE_FOUND = 1;
+	public final static int LF_TYPE_LOST = 1;
+	public final static int LF_TYPE_FOUND = 2;
 	
 	public final static String LF_VIEW_TRACE_RESULTS = "view_trace_results";
 	public final static String LF_VIEW_OPEN_LOST = "view_open_lost";
@@ -916,6 +916,7 @@ public class TracingConstants {
 	public static final String LF_CREATE_LOST_REPORT = "create_lost_report";
 	public static final String LF_CREATE_FOUND_ITEM = "create_found_item";
 	public static final String LF_SEARCH_LOST_FOUND = "search_lost_found";
+	public static final String LF_CREATE_DELIVERY = "create_delivery";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

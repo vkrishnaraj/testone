@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -65,6 +66,12 @@ public class LFLost implements LFObject {
 	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<LFItem> items;
 
+	@OneToMany(mappedBy = "lost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private Set<LFDelivery> deliveries;
+	
 	public long getId() {
 		return id;
 	}
@@ -156,6 +163,14 @@ public class LFLost implements LFObject {
 	public String getDisOpenDate(String dateFormat) {
 		return DateUtils.formatDate(openDate, dateFormat, "", null);
 	}
+	
+	public Set<LFDelivery> getDeliveries() {
+		return deliveries;
+	}
+
+	public void setDeliveries(Set<LFDelivery> deliveries) {
+		this.deliveries = deliveries;
+	}
 
 	@Override
 	@Transient
@@ -195,5 +210,19 @@ public class LFLost implements LFObject {
 		status.setStatus_ID(statusId);
 	}
 
+	@Transient
+	public LFItem getItem() {
+		LFItem item = null;
+		if (items != null && items.size() > 0) {
+			item = items.iterator().next();
+		}
+		return item;
+	}
+	
+	public void setItem(LFItem item) {
+		this.items = new LinkedHashSet<LFItem>();
+		items.add(item);
+	}
+	
 }
 

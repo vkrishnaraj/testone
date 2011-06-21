@@ -49,8 +49,6 @@ public class LFFound implements LFObject {
 	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPerson.class, cascade = CascadeType.ALL)
 	private LFPerson client;
-	
-	
 
 	public long getId() {
 		return id;
@@ -172,5 +170,5 @@ public class LFFound implements LFObject {
 	public void setStatusId(int statusId) {
 		status.setStatus_ID(statusId);
 	}
-
+	
 }

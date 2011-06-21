@@ -358,38 +358,33 @@
 				<bean:message key="message.required" /> 
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
          			<logic:iterate indexId="i" id="item" name="foundItemForm" property="found.items" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
+         			<% 
+       					if (item.getType() == TracingConstants.LF_TYPE_FOUND) {
+       						if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_DELIVERED) { %>
+	         				<tr>
+	         					<td class="header" colspan=3 >
+	         						<bean:message key="colname.lf.tracking.number" />:&nbsp;<html:text name="item" property="trackingNumber" size="20" styleClass="textfield" />&nbsp;
+	         						[<a style="color:#fff;" href='create_found_item.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
+	         					</td>
+	       					</tr>
+       						<% } else if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_PICKED_UP) { %>
+	         				<tr>
+	         					<td class="header" colspan=3 >
+	         						<bean:message key="lf.picked.up" />&nbsp;
+	         						[<a style="color:#fff;" href='create_found_item.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
+	         					</td>
+	       					</tr>
+       						<% } %>
          				<tr>
 	         				<td>
 	         					<bean:message key="colname.lf.brand" />
 	         					<br>
 	         					<input type="text" name="item[<%=i %>].brand" class="textfield" value="<%=item.getBrand() == null ? "" : item.getBrand() %>" />
 	         				</td>
-	         				<td>
+	         				<td colspan=2>
 	         					<bean:message key="colname.lf.serial" />
 	         					<br>
 	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" value="<%=item.getSerialNumber() == null ? "" : item.getSerialNumber() %>" />
-	         				</td>
-	         				<td>
-	         					<bean:message key="colname.lf.disposition" />
-	         					<br>
-	         					<select name="item[<%=i %>].dispositionId" class="dropdown" >
-	         						<option value=""><bean:message key="option.lf.please.select" /></option>
-	         						<%
-	         							ArrayList dispositionList = (ArrayList) request.getSession().getAttribute("lfdispositionlist");
-	         							Status disposition;
-	         							int dispositionId = -1;
-	         							if (item.getDisposition() != null) {
-	         								dispositionId = item.getDisposition().getStatus_ID();
-	         							}
-	         							
-	         							for (int j = 0; j < dispositionList.size(); ++j) {
-	         								disposition = (Status) dispositionList.get(j);
-	         						%>
-	         								<option value="<%=disposition.getStatus_ID() %>" <% if (dispositionId == disposition.getStatus_ID()) { %>selected<% } %> ><%=disposition.getDescription() %></option>
-	         						<%	
-	         							}
-         							%>
-	         					</select>
 	         				</td>
 	         			</tr>
 	         			<tr>
@@ -461,6 +456,7 @@
 	         					<textarea name="item[<%=i %>].description" cols="80" rows="3" class="textfield" ><%=item.getDescription() == null ? "" : item.getDescription() %></textarea>
 	         				</td>
 	         			</tr>
+	         		<% } %>
          			</logic:iterate>
          		</table>
          		<br/>
