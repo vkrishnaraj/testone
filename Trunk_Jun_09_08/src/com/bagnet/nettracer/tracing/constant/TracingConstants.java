@@ -441,18 +441,25 @@ public class TracingConstants {
 	public final static int LF_DISPOSITION_PICKED_UP = 604;
 	public final static int LF_DISPOSITION_SALVAGED = 605;
 	public final static int LF_DISPOSITION_OTHER = 606;
-	public final static int LF_TRACING_NEW = 607;
+	public final static int LF_TRACING_OPEN = 607;
 	public final static int LF_TRACING_CONFIRMED = 608;
 	public final static int LF_TRACING_REJECTED = 609;
+	public final static int LF_TRACING_CLOSED = 610;
 	
 	public final static int LF_TYPE_LOST = 1;
 	public final static int LF_TYPE_FOUND = 2;
 	
 	public final static String LF_VIEW_TRACE_RESULTS = "view_trace_results";
+	public final static String LF_VIEW_TRACE_DETAILS = "view_trace_details";
 	public final static String LF_VIEW_OPEN_LOST = "view_open_lost";
 	public final static String LF_VIEW_OPEN_FOUND = "view_open_found";
 	public final static String LF_VIEW_ITEMS_TO_SALVAGE = "view_items_salvage";
 	public final static String LF_VIEW_ITEMS_TO_DELIVER = "view_items_deliver";
+	
+	public final static int LF_PHONE_TYPE_HOME = 3;
+	public final static int LF_PHONE_TYPE_MOBILE = 4;
+	public final static int LF_PHONE_TYPE_WORK = 5;
+	public final static int LF_PHONE_TYPE_OTHER = 6;
 	
 	/** ********* forwards *********** */
 	// no permission
