@@ -158,7 +158,7 @@ public class LFServiceBeanTest {
 		//TODO
 		LFServiceBean bean = new LFServiceBean();
 		LFSearchDTO dto = new LFSearchDTO();
-		dto.setType(TracingConstants.LF_TYPE_LOST);
+		dto.setType(TracingConstants.LF_TYPE_FOUND);
 //		dto.setPhoneNumber("");
 //		dto.setOpenDate(new Date());
 		dto.setStartDate("06/15/2011");
@@ -182,8 +182,11 @@ public class LFServiceBeanTest {
 //		Status status = new Status();
 //		status.setStatus_ID(1);
 //		dto.setStatus(status);
+		Status disposition = new Status();
+		disposition.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
+		dto.setDisposition(disposition);
 		
-		System.out.println(bean.searchLostCount(dto));
+		System.out.println(bean.searchFoundCount(dto));
 		
 	}
 	
@@ -334,6 +337,7 @@ public class LFServiceBeanTest {
 		boolean hasFound2 = false;
 		boolean correctStation = true;
 		boolean correctCloseDate = true;
+
 		for(LFItem item:bean.getItemsToSalvagePaginatedList(station, start, offset)){
 			System.out.println("Salvage list at station " + item.getFound().getLocation().getStation_ID() + ":" + item.getFound().getId());
 			i++;
@@ -344,6 +348,7 @@ public class LFServiceBeanTest {
 			if(timeSinceOpened < (PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS) * 1400 * 60 * 1000)){
 				correctCloseDate = false;
 			}
+
 			if(item.getFound().getId() == found1.getId())hasFound1 = true;
 			if(item.getFound().getId() == found2.getId())hasFound2 = true;
 		}
@@ -351,6 +356,30 @@ public class LFServiceBeanTest {
 		assertTrue(i <= offset);
 		assertTrue(correctStation);
 		assertTrue(correctCloseDate);
+		
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.LF_DISPOSITION_SALVAGED);
+		found1.getItem().setDisposition(status);
+		assertTrue(bean.saveOrUpdateFoundItem(found1) > -1);
+		found2.getItem().setDisposition(status);
+		assertTrue(bean.saveOrUpdateFoundItem(found2) > -1);
+		
+		LFSearchDTO dto = new LFSearchDTO();
+		dto.setDisposition(status);
+		dto.setType(TracingConstants.LF_TYPE_FOUND);
+		boolean isSalvageStatus = true;
+		hasFound1 = false;
+		hasFound2 = false;
+		for(LFFound found:bean.searchFound(dto, 0, 1000000)){
+			if(found.getItem().getDisposition().getStatus_ID() != TracingConstants.LF_DISPOSITION_SALVAGED){
+				isSalvageStatus = false;
+			}
+			if(found.getId() == found1.getId())hasFound1 = true;
+			if(found.getId() == found2.getId())hasFound2 = true;
+		}
+		assertTrue(isSalvageStatus);
+		assertTrue(hasFound1);
+		assertTrue(hasFound2);
 	}
 	
 	@Test
@@ -368,7 +397,7 @@ public class LFServiceBeanTest {
 		bean.confirmMatch(id);
 		loaded = bean.getTraceResult(id);
 		assertTrue(loaded != null && loaded.getId() == id && loaded.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_CONFIRMED);	
-		assertTrue(loaded.getFound().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_STATUS_TO_BE_DELIVERED);
+		assertTrue(loaded.getFound().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 		
 		bean.undoMatch(id);
 		loaded = bean.getTraceResult(id);
@@ -507,7 +536,7 @@ public class LFServiceBeanTest {
 		Station station = new Station();
 		station.setStation_ID(2);
 		Status status = new Status();
-		status.setStatus_ID(TracingConstants.LF_STATUS_TO_BE_DELIVERED);
+		status.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 		found.getItem().setDisposition(status);
 		found.setLocation(station);
 		long id = bean.saveOrUpdateFoundItem(found);
@@ -561,6 +590,34 @@ public class LFServiceBeanTest {
 		assertTrue(loaded.getLost().getId() == lostId);
 	}
 	
+	@Test
+	public void traceLostTest(){
+		LFServiceBean bean = new LFServiceBean();
+		LFLost lost = createLostTestCase();
+		long lostId = bean.saveOrUpdateLostReport(lost);
+		assertTrue(lostId != -1);
+		
+		LFLost loaded = bean.getLostReport(lostId);
+		assertTrue(loaded != null && loaded.getId() == lostId);
+	
+		List<LFMatchHistory> results = bean.traceLostItem(lostId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+	}
+	
+	@Test
+	public void traceFoundTest(){
+		LFServiceBean bean = new LFServiceBean();
+		LFFound found = createFoundTestCase();
+		long foundId = bean.saveOrUpdateFoundItem(found);
+		assertTrue(foundId != -1);
+		
+		LFFound loaded = bean.getFoundItem(foundId);
+		assertTrue(loaded != null && loaded.getId() == foundId);
+	
+		List<LFMatchHistory> results = bean.traceLostItem(foundId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+	}
+	
 	public LFLost createLostTestCase(){
 		LFLost lost = new LFLost();
 		
@@ -599,11 +656,15 @@ public class LFServiceBeanTest {
 		
 		HashSet<LFItem> items = new HashSet<LFItem>();
 		LFItem item = new LFItem();
-		item.setBrand("SAMSUNG");
+		item.setCategory(1);
+		item.setSubCategory(1);
+		item.setBrand("iphone");
 		item.setColor("BK");
-		item.setDescription("Samsung phone");
+		item.setDescription("iphone");
 		item.setLost(lost);
-		item.setStatus(status);
+		Status deposition = new Status();
+		deposition.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
+		item.setDisposition(deposition);
 		items.add(item);
 		lost.setItems(items);
 		
@@ -627,16 +688,41 @@ public class LFServiceBeanTest {
 		location.setStation_ID(1);
 		found.setLocation(location);
 		
+		/* temp */
+		LFPerson client = new LFPerson();
+		client.setFirstName("Bob");
+		client.setLastName("wehadababyitsaboy");
+		client.setEmail("bob@aol.com");
+		LFAddress address = new LFAddress();
+		address.setAddress1("1505 Windy Ridge Ln");
+		address.setCity("Atlanta");
+		address.setState("GA");
+		address.setZip("30339");
+		client.setAddress(address);
+		
+		LFPhone phone = new LFPhone();
+		HashSet<LFPhone> phones = new HashSet<LFPhone>();
+		phone.setPerson(client);
+		phone.setPhoneNumber("4044140102");
+		phone.setNumberType(LFPhone.PRIMARY);
+		phone.setPhoneType(LFPhone.MOBILE);
+		phones.add(phone);
+		client.setPhones(phones);
+		found.setClient(client);
+		
+		/* end temp */
+		
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
 		found.setStatus(status);
 //		found.setDisposition(status);
 		
 		LFItem item = new LFItem();
-		item.setBrand("Blackberry");
+		item.setCategory(1);
+		item.setSubCategory(1);
+		item.setBrand("iphone");
 		item.setColor("BK");
-		item.setDescription("Blackberry phone");
-		item.setStatus(status);
+		item.setDescription("iphone");
 		Status status2 = new Status();
 		status2.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
 		item.setDisposition(status2);
@@ -650,7 +736,7 @@ public class LFServiceBeanTest {
 	public LFDelivery createPendingDeliveryCase(){
 		LFLost lost = createLostTestCase();
 		Status status = new Status();
-		status.setStatus_ID(TracingConstants.LF_STATUS_TO_BE_DELIVERED);
+		status.setStatus_ID(TracingConstants.LF_DISPOSITION_DELIVERED);
 //		((LFItem[])lost.getItems().toArray())[0].setDisposition(status);
 		for(LFItem item:lost.getItems()){
 			item.setDisposition(status);
@@ -670,5 +756,5 @@ public class LFServiceBeanTest {
 		match.setStatus(status);
 		return match;
 	}
-
+	
 }
