@@ -456,6 +456,8 @@ public class TracingConstants {
 	public final static String LF_VIEW_ITEMS_TO_SALVAGE = "view_items_salvage";
 	public final static String LF_VIEW_ITEMS_TO_DELIVER = "view_items_deliver";
 	
+	public final static int LF_PHONE_PRIMARY = 1;
+	public final static int LF_PHONE_SECONDARY = 2;
 	public final static int LF_PHONE_TYPE_HOME = 3;
 	public final static int LF_PHONE_TYPE_MOBILE = 4;
 	public final static int LF_PHONE_TYPE_WORK = 5;
