@@ -86,6 +86,6 @@
             	</table>
             	<br />
             	<center>
-            		<input id="button" type="button" value='<bean:message key="claim.button.back" />' onClick="history.back()">
+            		<input id="button" type="button" value='<bean:message key="button.back" />' onClick="history.back()">
                 </center>        	
                 <br />

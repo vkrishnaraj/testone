@@ -15,7 +15,6 @@ public final class LostReportForm extends ActionForm {
 	private String dateFormat;
 	private LFLost lost;
 	
-	
 	public String getDateFormat() {
 		return dateFormat;
 	}

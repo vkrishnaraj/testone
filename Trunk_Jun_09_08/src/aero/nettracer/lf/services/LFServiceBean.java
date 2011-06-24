@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -14,11 +13,9 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
@@ -28,6 +25,8 @@ import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
+import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
+import com.bagnet.nettracer.tracing.forms.lf.TraceResultsForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Stateless
@@ -735,9 +734,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	private String getTraceResultsQuery(Station station){
 		//TODO location criteria
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh " +
-				"where mh.status.status_ID = " + TracingConstants.LF_TRACING_OPEN
-				+ " and (mh.lost.location = " + station.getStation_ID() + " or " +
-						"mh.found.location = " + station.getStation_ID() + ")";
+		"where mh.status.status_ID = " + TracingConstants.LF_TRACING_OPEN
+		+ " and (mh.lost.location = " + station.getStation_ID() + " or " +
+				"mh.found.location = " + station.getStation_ID() + ")";
 		return sql;
 	}
 	
@@ -1044,8 +1043,90 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return false;
 	}
+	
+	public long getFilteredTraceResultsCount(TraceResultsFilter filter) {
+		String sql = "select count(distinct m) from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
+		sql += getSqlFromTraceResultsForm(filter);
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			List result = q.list();
+			sess.close();
+			return ((Long) result.get(0)).intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return 0;
+	}
+	
+	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(TraceResultsFilter filter, int start, int offset) {
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
+		sql += getSqlFromTraceResultsForm(filter);
+		List<LFMatchHistory> results = null;
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			
+			if (start > -1 && offset > -1 ) {
+				q.setFirstResult(start);
+				q.setMaxResults(offset);
+			} else {
+				throw new Exception("Invalided pagination bounds");
+			}
+			
+			results = q.list();
+			sess.close();
+			return results;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return results;
+	}
+	
+	private String getSqlFromTraceResultsForm(TraceResultsFilter filter) {
+		String sql = "";
+		if (filter.getLostId() > 0) {
+			sql += " and m.lost.id = " + filter.getLostId();
+		}
 
-
-
-
+		if (filter.getFoundId() > 0) {
+			sql += " and m.found.id = " + filter.getFoundId();
+		}
+		
+		boolean filterByStatus = filter.getOpen() || filter.getClosed() || filter.getConfirmed() || filter.getRejected(); 
+		if (filterByStatus) {
+			sql += " and m.status.status_ID in (";
+		
+			if (filter.getOpen()) {
+				sql += TracingConstants.LF_TRACING_OPEN + ",";
+			}
+			
+			if (filter.getClosed()) {
+				sql += TracingConstants.LF_TRACING_CLOSED + ",";
+			}
+	
+			if (filter.getConfirmed()) {
+				sql += TracingConstants.LF_TRACING_CONFIRMED + ",";
+			}
+			
+			if (filter.getRejected()) {
+				sql += TracingConstants.LF_TRACING_REJECTED + ",";
+			}
+			sql = sql.substring(0, sql.lastIndexOf(',')) + ")";
+		}
+		
+		return sql;
+	}
+	
 }

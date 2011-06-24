@@ -17,6 +17,9 @@ public class LFMatchDetail {
 	
 	private String description;
 	
+	private String lostValue;
+	private String foundValue;
+	
 	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory.class)
 	private LFMatchHistory matchHistory;
 
@@ -52,6 +55,22 @@ public class LFMatchDetail {
 
 	public double getScore() {
 		return score;
+	}
+
+	public String getLostValue() {
+		return lostValue;
+	}
+
+	public void setLostValue(String lostValue) {
+		this.lostValue = lostValue;
+	}
+
+	public String getFoundValue() {
+		return foundValue;
+	}
+
+	public void setFoundValue(String foundValue) {
+		this.foundValue = foundValue;
 	}
 	
 }

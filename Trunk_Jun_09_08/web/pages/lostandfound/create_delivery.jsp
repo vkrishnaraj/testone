@@ -52,6 +52,7 @@
            		</logic:present>
 				<h1 class="green">
 		        	<bean:message key="header.create.delivery" />
+		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 		        </h1>
     			<span class="reqfield">*</span>
    				<bean:message key="message.required" /> 

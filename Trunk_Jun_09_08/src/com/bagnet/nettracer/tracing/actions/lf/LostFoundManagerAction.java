@@ -17,6 +17,8 @@ import aero.nettracer.lf.services.LFServiceBean;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.lf.LFFound;
+import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.forms.lf.LostFoundManagerForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -43,10 +45,12 @@ public class LostFoundManagerAction extends CheckedAction {
 		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 		int currpage = 0;
 		List resultSet = new ArrayList();
-		
+		int type = 0;
 		if (request.getParameter("openLost") != null) {
+			type = TracingConstants.LF_TYPE_LOST;
 			rowcount = serviceBean.getLostCount(user.getStation());
 		} else {
+			type = TracingConstants.LF_TYPE_FOUND;
 			rowcount = serviceBean.getFoundCount(user.getStation());
 		}
 		
@@ -84,6 +88,17 @@ public class LostFoundManagerAction extends CheckedAction {
 		}
 		
 		/***************** end pagination *****************/
+		
+		if (!end && resultSet.size() == 1) {
+			if (type == TracingConstants.LF_TYPE_LOST) {
+				long id = ((LFLost) resultSet.iterator().next()).getId();
+				response.sendRedirect("create_lost_report.do?lostId=" + id);
+			} else {
+				long id = ((LFFound) resultSet.iterator().next()).getId();
+				response.sendRedirect("create_found_item.do?foundId=" + id);
+			}
+			return null;
+		}
 		
 		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 		request.setAttribute("currpage", Integer.toString(currpage));		

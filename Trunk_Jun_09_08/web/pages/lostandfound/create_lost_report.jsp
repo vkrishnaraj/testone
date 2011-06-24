@@ -23,10 +23,7 @@
 %>
 
 
-<%@page import="com.bagnet.nettracer.tracing.db.salvage.SalvageItem"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
     
 	var cal1xx = new CalendarPopup();
@@ -160,11 +157,22 @@
 			}
 		}
 	}
-
+	
+	function setFoundId(foundId, matchItem, itemId) {
+		document.getElementById('foundId').value = foundId;
+		document.getElementById('matchItem').value = matchItem;
+		document.getElementById('itemId').value = itemId;
+		
+		alert('foundId = ' + document.getElementById('foundId').value);
+	}
+	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
 <html:form focus="lost.id" action="create_lost_report.do" method="post" onsubmit="return validateLfReportForm(this);">
 <input type="hidden" name="delete_these_elements" value="" />
+<html:hidden property="matchItem" styleId="matchItem" value="" />
+<html:hidden property="itemId" styleId="itemId" value="" />
+<html:hidden property="foundId" styleId="foundId" value="" />
 	<tr>
         <td colspan="3" id="pageheadercell">
           <div id="pageheaderleft">
@@ -192,6 +200,7 @@
          		<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
 				<h1 class="green">
 					<bean:message key="header.report.information" />
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 				</h1>
 				<span class="reqfield">*</span>
 				<bean:message key="message.required" /> 
@@ -225,6 +234,7 @@
 				<br/>
 				<h1 class="green">
 		        	<bean:message key="header.contact.information" />
+		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 		        </h1>
     			<span class="reqfield">*</span>
    				<bean:message key="message.required" /> 
@@ -307,10 +317,10 @@
 		              		<html:text name="lostReportForm" property="primaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
 		              		<html:select name="lostReportForm" property="primaryNumberType" styleClass="dropdown" >
 		              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
-		              			<html:option value="3"><bean:message key="option.lf.home" /></html:option>
-		              			<html:option value="4"><bean:message key="option.lf.mobile" /></html:option>
-		              			<html:option value="5"><bean:message key="option.lf.work" /></html:option>
-		              			<html:option value="6"><bean:message key="option.lf.other" /></html:option>
+		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
+		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_MOBILE) %>"><bean:message key="option.lf.mobile" /></html:option>
+		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
+		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 		              		</html:select>
 		              	</td>
 		              	<td colspan="3">
@@ -319,10 +329,10 @@
 		              		<html:text name="lostReportForm" property="secondaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
 		              		<html:select name="lostReportForm" property="secondaryNumberType" styleClass="dropdown" >
 		              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
-		              			<html:option value="3"><bean:message key="option.lf.home" /></html:option>
-		              			<html:option value="4"><bean:message key="option.lf.mobile" /></html:option>
-		              			<html:option value="5"><bean:message key="option.lf.work" /></html:option>
-		              			<html:option value="6"><bean:message key="option.lf.other" /></html:option>
+		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
+		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_MOBILE) %>"><bean:message key="option.lf.mobile" /></html:option>
+		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
+		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 		              		</html:select>
 		              	</td>
 		              </tr>
@@ -342,28 +352,41 @@
 				<br/>
 				<h1 class="green">
 					<bean:message key="header.item.information" />
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 				</h1>
 				<span class="reqfield">*</span>
 				<bean:message key="message.required" /> 
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
          			<logic:iterate indexId="i" id="item" name="lostReportForm" property="lost.items" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
          				<% 
-         					if (item.getType() == TracingConstants.LF_TYPE_LOST) {
-         						if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_DELIVERED) { %>
-			         				<tr>
-			         					<td class="header" colspan=3 >
+         					if (item.getType() == TracingConstants.LF_TYPE_LOST) { %>
+	         				<tr>
+         					<%  int dispositionId = item.getDispositionId();
+         						if (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED || dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP) { %>
+			         					<td class="header" >
+	         						<% if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_DELIVERED) { %>
 			         						<bean:message key="colname.lf.tracking.number" />:&nbsp;<html:text name="item" property="trackingNumber" size="20" styleClass="textfield" />&nbsp;
-			         						[<a style="color:#fff;" href='create_lost_report.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
-			         					</td>
-			       					</tr>
-         						<% } else if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_PICKED_UP) { %>
-			         				<tr>
-			         					<td class="header" colspan=3 >
+	         						<% } else if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_PICKED_UP) { %>
 			         						<bean:message key="lf.picked.up" />&nbsp;
+	         						<% } %>
 			         						[<a style="color:#fff;" href='create_lost_report.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
 			         					</td>
-			       					</tr>
-         						<% } %>
+        					<%	} else { %>
+        							<td class="header" >&nbsp;</td>
+        					<%  } %>
+       							<td class="header" colspan=2>
+       								<% if (item.getFound() != null) { %>
+       									<bean:message key="lf.match.found" />:&nbsp;<a style="color:#fff;" href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getId() %></a>&nbsp;
+       									<% if (dispositionId == TracingConstants.LF_DISPOSITION_OTHER || dispositionId == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) { %>
+											[<a style="color:#fff;" href='create_lost_report.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
+										<% } %>
+       								<% } else { %>
+       									<bean:message key="lf.match.found" />:&nbsp;
+   										<input type="text" size="10" class="textfield" id="foundInput" onchange="setFoundId(this.value,1,<%=item.getId() %>)" />&nbsp;
+										[<a style="color:#fff;" href="javascript:document.lostReportForm.submit();" ><bean:message key="button.do_match" /></a>]
+       								<% } %>
+       							</td>
+    	   					</tr>
          				<tr>
 	         				<td>
 	         					<bean:message key="colname.lf.brand" />
@@ -451,6 +474,7 @@
          		<br/>
 				<h1 class="green">
 					<bean:message key="header.trip.information" />
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 				</h1>
 				<span class="reqfield">*</span>
 				<bean:message key="message.required" /> 

@@ -19,6 +19,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
+import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.forms.lf.FoundItemForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -48,19 +49,22 @@ public class FoundItemAction extends CheckedAction {
 		fiForm.setDateFormat(user.getDateformat().getFormat());
 		
 		LFFound found = null;
-		if (request.getParameter("foundId") != null) {
+		if (request.getParameter("createNew") != null) {
+			found = LFUtils.createLFFound(user);
+		} else if (request.getParameter("foundId") != null) {
 			long id = Long.parseLong(request.getParameter("foundId"));
 			found = LFServiceWrapper.getInstance().getFoundItem(id);
-		} else if (request.getParameter("save") != null) {
-			found = fiForm.getFound();
-			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found);
-			LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost());
 		} else {
-			found = LFUtils.createLFFound(user);
+			found = fiForm.getFound();
 		}
 		
-		if (request.getParameter("undo") != null) {
-			found = fiForm.getFound();
+		if (request.getParameter("save") != null) {
+			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found);
+			if (found.getItem().getLost() != null) {
+				LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost());
+			}
+			LFServiceWrapper.getInstance().traceFoundItem(found.getId());
+		} else if (request.getParameter("undo") != null) {
 			long itemId = Long.valueOf((String) request.getParameter("itemId"));
 			LFItem item = getItemById(fiForm.getFound().getItems(), itemId);
 		
@@ -72,6 +76,27 @@ public class FoundItemAction extends CheckedAction {
 				item.getLost().getItem().setTrackingNumber(null);
 			}
 			found.setStatusId(TracingConstants.LF_STATUS_OPEN);
+		} else if (request.getParameter("unmatchItem") != null) {
+			long itemId = Long.valueOf((String) request.getParameter("itemId"));
+			LFItem item = getItemById(fiForm.getFound().getItems(), itemId);
+			if (item != null) {
+				item.setLost(null);
+				item.setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
+			}
+		} else if (request.getParameter("matchItem") != null) {
+			long itemId = Long.valueOf((String) request.getParameter("itemId"));
+			LFItem item = getItemById(fiForm.getFound().getItems(), itemId);
+			if (item != null) {
+				try {
+					String foundId = (String) request.getParameter("foundId");
+					long id = Long.valueOf(foundId);
+					LFLost lost = LFServiceWrapper.getInstance().getLostReport(id);
+					item.setLost(lost);
+					item.setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+				} catch (NumberFormatException nfe) {
+					logger.error(nfe);
+				}
+			}
 		}
 
 		fiForm.setFound(found);

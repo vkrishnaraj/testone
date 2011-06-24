@@ -867,6 +867,10 @@
         <put name="center"   value="/pages/lostandfound/view_trace_results.jsp"/>
     </definition>
 
+    <definition name="view_trace_details" extends="user_menu">
+        <put name="center"   value="/pages/lostandfound/view_trace_details.jsp"/>
+    </definition>
+
     <definition name="view_open_lost" extends="user_menu">
         <put name="center"   value="/pages/lostandfound/open_lost_found.jsp"/>
     </definition>

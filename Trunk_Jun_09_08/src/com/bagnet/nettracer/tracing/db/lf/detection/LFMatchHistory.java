@@ -44,6 +44,9 @@ public class LFMatchHistory {
 	@ManyToOne
 	@JoinColumn(name = "status_Status_ID", nullable = false)
 	private Status status;
+	
+	@Transient
+	private boolean selected;
 
 	public long getId() {
 		return id;
@@ -86,6 +89,11 @@ public class LFMatchHistory {
 	}
 	
 	@Transient
+	public String getStatusDescription() {
+		return status.getDescription();
+	}
+	
+	@Transient
 	public double getTotalScore(){
 		if(details == null){
 			return 0;
@@ -95,6 +103,14 @@ public class LFMatchHistory {
 			score += detail.getScore();
 		}
 		return score;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 	
 }

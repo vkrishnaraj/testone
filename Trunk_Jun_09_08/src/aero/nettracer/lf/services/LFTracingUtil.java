@@ -75,7 +75,7 @@ public class LFTracingUtil {
 				if(lost != null && lost.getReservation() != null 
 						&& lost.getReservation().getDropoffLocation() != null 
 						&& lost.getReservation().getPickupLocation() != null){
-					sql += " and (f.location = :pickup or f.location = :dropoff)";
+					sql += " and (f.location.station_ID = :pickup or f.location.station_ID = :dropoff)";
 					hasReservation = true;
 				}
 				

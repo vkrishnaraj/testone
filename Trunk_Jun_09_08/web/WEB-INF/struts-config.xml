@@ -521,6 +521,7 @@
 		<forward name="search_lost_found" path="search_lost_found" />
 
 		<forward name="view_trace_results" path="view_trace_results" />
+		<forward name="view_trace_details" path="view_trace_details" />
 		<forward name="view_open_lost" path="view_open_lost" />
 		<forward name="view_open_found" path="view_open_found" />
 		<forward name="view_items_salvage" path="view_items_salvage" />
