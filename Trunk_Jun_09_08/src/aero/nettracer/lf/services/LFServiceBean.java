@@ -735,7 +735,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	private String getTraceResultsQuery(Station station){
 		//TODO location criteria
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh " +
-				"where mh.status.status_ID = " + TracingConstants.LF_TRACING_NEW
+				"where mh.status.status_ID = " + TracingConstants.LF_TRACING_OPEN
 				+ " and (mh.lost.location = " + station.getStation_ID() + " or " +
 						"mh.found.location = " + station.getStation_ID() + ")";
 		return sql;
@@ -1029,7 +1029,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		LFMatchHistory match = getTraceResult(id);
 		if(match != null){
 			Status status = new Status();
-			status.setStatus_ID(TracingConstants.LF_TRACING_NEW);
+			status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
 			match.setStatus(status);
 			
 			if(match.getFound() != null && match.getFound().getItem() != null){

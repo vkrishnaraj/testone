@@ -29,9 +29,9 @@ public class LFItem {
 	
 	private String description;
 	
-	private int category;
+	private long category;
 	
-	private int subCategory;
+	private long subCategory;
 	
 	private String color;
 	
@@ -78,19 +78,19 @@ public class LFItem {
 		this.description = description;
 	}
 
-	public int getCategory() {
+	public long getCategory() {
 		return category;
 	}
 
-	public void setCategory(int category) {
+	public void setCategory(long category) {
 		this.category = category;
 	}
 
-	public int getSubCategory() {
+	public long getSubCategory() {
 		return subCategory;
 	}
 
-	public void setSubCategory(int subCategory) {
+	public void setSubCategory(long subCategory) {
 		this.subCategory = subCategory;
 	}
 

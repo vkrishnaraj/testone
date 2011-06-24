@@ -287,7 +287,7 @@ public class LFTracingUtil {
 			match.setLost(lost);
 			match.setFound(found);
 			Status status = new Status();
-			status.setStatus_ID(TracingConstants.LF_TRACING_NEW);
+			status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
 			match.setStatus(status);
 			match.setDetails(new LinkedHashSet<LFMatchDetail>());
 			double score = processMatch(match);
@@ -312,7 +312,7 @@ public class LFTracingUtil {
 			match.setLost(lost);
 			match.setFound(found);
 			Status status = new Status();
-			status.setStatus_ID(TracingConstants.LF_TRACING_NEW);
+			status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
 			match.setStatus(status);
 			match.setDetails(new LinkedHashSet<LFMatchDetail>());
 			double score = processMatch(match);
