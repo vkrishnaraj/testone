@@ -543,7 +543,7 @@ public class LostDelayAction extends CheckedAction {
 						wtq = new WtqAmendAhl();
 					}
 					else if (
-							(request.getParameter("doclosewt") != null || request.getParameter("close") != null || request.getParameter("doclose") != null)
+							(request.getParameter("doclosewt") != null || (request.getParameter("close") != null && theform.getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) || request.getParameter("doclose") != null)
 							
 							&& (iDTO.getWtFile() != null && iDTO.getWtFile().getWt_status() != WTStatus.CLOSED)) {
 						wtq = new WtqCloseAhl();
