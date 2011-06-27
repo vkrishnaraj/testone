@@ -10,11 +10,13 @@ import org.hibernate.Session;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 
@@ -31,6 +33,43 @@ public class LFTracingUtil {
 	private static final double SCORE_DESCRIPTION = 10;
 	private static final double SCORE_CAT_SUBCAT = 10;
 	private static final double SCORE_CAT = 10;
+	private static final double SCORE_ADDRESS = 10;
+	
+	
+	private static String replaceNull(String string) {
+		  if (string == null) return "";
+		  return string.trim();
+	  }
+	
+	private static LFSubCategory getSubCategory(long id){
+		Session sess = HibernateWrapper.getSession().openSession();
+		LFSubCategory f = null;
+		try{
+			f = (LFSubCategory) sess.load(LFSubCategory.class, id);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return f;
+	}
+	
+	private static LFCategory getCategory(long id){
+		Session sess = HibernateWrapper.getSession().openSession();
+		LFCategory f = null;
+		try{
+			f = (LFCategory) sess.load(LFCategory.class, id);
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return f;
+	}
 	
 	public static List<LFLost> getPotentialLost(LFFound found){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
@@ -119,6 +158,8 @@ public class LFTracingUtil {
 					detail.setDescription("Name Number Match");
 					detail.setMatchHistory(match);
 					detail.setScore(SCORE_NAME);
+					detail.setFoundValue(fc.getFirstName() + " " + fc.getLastName());
+					detail.setLostValue(lc.getFirstName() + " " + lc.getLastName());
 					match.getDetails().add(detail);
 				}
 			}
@@ -133,6 +174,8 @@ public class LFTracingUtil {
 								detail.setDescription("Phone Number Match");
 								detail.setMatchHistory(match);
 								detail.setScore(SCORE_PHONE);
+								detail.setFoundValue(fphone.getPhoneNumber());
+								detail.setLostValue(lphone.getPhoneNumber());
 								match.getDetails().add(detail);
 							}
 						}
@@ -153,7 +196,9 @@ public class LFTracingUtil {
 								LFMatchDetail detail = new LFMatchDetail();
 								detail.setDescription("Address Match");
 								detail.setMatchHistory(match);
-								detail.setScore(SCORE_PHONE);
+								detail.setScore(SCORE_ADDRESS);
+								detail.setFoundValue(fc.getAddress().getAddress1() + " " + fc.getAddress().getCity() + " " + fc.getAddress().getState());
+								detail.setLostValue(lc.getAddress().getAddress1() + " " + lc.getAddress().getCity() + " " + lc.getAddress().getState());
 								match.getDetails().add(detail);
 							}
 						} else if (lc.getAddress().getProvince() != null && lc.getAddress().getProvince().trim().length() > 0
@@ -162,7 +207,9 @@ public class LFTracingUtil {
 								LFMatchDetail detail = new LFMatchDetail();
 								detail.setDescription("Address Match");
 								detail.setMatchHistory(match);
-								detail.setScore(SCORE_PHONE);
+								detail.setScore(SCORE_ADDRESS);
+								detail.setFoundValue(fc.getAddress().getAddress1() + " " + fc.getAddress().getCity() + " " + fc.getAddress().getProvince());
+								detail.setLostValue(lc.getAddress().getAddress1() + " " + lc.getAddress().getCity() + " " + lc.getAddress().getProvince());
 								match.getDetails().add(detail);
 							}
 						} else {
@@ -179,6 +226,8 @@ public class LFTracingUtil {
 					detail.setDescription("Vantive Number Match");
 					detail.setMatchHistory(match);
 					detail.setScore(SCORE_VANTIVE);
+					detail.setFoundValue(fc.getVantiveNumber());
+					detail.setLostValue(lc.getVantiveNumber());
 					match.getDetails().add(detail);
 				}
 			}
@@ -200,6 +249,11 @@ public class LFTracingUtil {
 							detail.setDescription("Category Match");
 							detail.setMatchHistory(match);
 							detail.setScore(SCORE_CATEGORY);
+							LFSubCategory sub = getSubCategory(litem.getSubCategory());
+							if(sub != null){
+								detail.setFoundValue(sub.getParent().getDescription() + "/" + sub.getDescription());
+								detail.setLostValue(sub.getParent().getDescription() + "/" + sub.getDescription());
+							}
 							match.getDetails().add(detail);
 						}
 					} else {
@@ -208,6 +262,11 @@ public class LFTracingUtil {
 							detail.setDescription("Particle Category Match");
 							detail.setMatchHistory(match);
 							detail.setScore(SCORE_CATEGORY_PARTICLE);
+							LFCategory cat = getCategory(litem.getCategory());
+							if(cat != null){
+								detail.setFoundValue(cat.getDescription());
+								detail.setLostValue(cat.getDescription());
+							}
 							match.getDetails().add(detail);
 						}
 					}
@@ -219,6 +278,8 @@ public class LFTracingUtil {
 						detail.setDescription("Color Match");
 						detail.setMatchHistory(match);
 						detail.setScore(SCORE_COLOR);
+						detail.setFoundValue(fitem.getColor());
+						detail.setLostValue(litem.getColor());
 						match.getDetails().add(detail);
 					}
 				}
@@ -229,6 +290,8 @@ public class LFTracingUtil {
 						detail.setDescription("Description Match");
 						detail.setMatchHistory(match);
 						detail.setScore(SCORE_DESCRIPTION);
+						detail.setFoundValue(fitem.getDescription());
+						detail.setLostValue(litem.getDescription());
 						match.getDetails().add(detail);
 					}
 				}
@@ -239,27 +302,9 @@ public class LFTracingUtil {
 						detail.setDescription("Serial Number Match");
 						detail.setMatchHistory(match);
 						detail.setScore(SCORE_SERIAL_NUMBER);
+						detail.setFoundValue(fitem.getSerialNumber());
+						detail.setLostValue(litem.getSerialNumber());
 						match.getDetails().add(detail);
-					}
-				}
-				if(litem.getCategory() > 0 && fitem.getCategory() > 0){
-					if(litem.getSubCategory() > 0 && fitem.getSubCategory() > 0){
-						if(litem.getCategory() == fitem.getCategory() &&
-								litem.getSubCategory() == fitem.getSubCategory()){
-							LFMatchDetail detail = new LFMatchDetail();
-							detail.setDescription("Category/Sub Category Number Match");
-							detail.setMatchHistory(match);
-							detail.setScore(SCORE_CAT_SUBCAT);
-							match.getDetails().add(detail);
-						}
-					} else {
-						if(litem.getCategory() == fitem.getCategory()){
-							LFMatchDetail detail = new LFMatchDetail();
-							detail.setDescription("Category Number Match");
-							detail.setMatchHistory(match);
-							detail.setScore(SCORE_CAT);
-							match.getDetails().add(detail);
-						}
 					}
 				}
 			}

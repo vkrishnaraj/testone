@@ -7,12 +7,16 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.mail.internet.InternetAddress;
 
 import org.apache.struts.util.LabelValueBean;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -26,7 +30,6 @@ import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
-import com.bagnet.nettracer.tracing.forms.lf.TraceResultsForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Stateless
@@ -229,6 +232,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		Session sess = null;
 		Transaction t = null;
 		long reportId = -1;
+		boolean isNew = (lostReport!=null&&lostReport.getId()==0)?true:false;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
@@ -253,6 +257,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 		}
 		if(reportId > 0){
+			if(isNew){
+				sendLostCreatedEmail(reportId);
+			}
 			return reportId;
 		} else {
 			return -1;
@@ -459,12 +466,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return false;
 	}
 
-	@Override
-	public void sendStillSearching(long id) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private String getLostQuery(Station station){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
 				"where l.location.station_ID = " + station.getStation_ID()
@@ -481,6 +482,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	String getLostReportToCloseQuery(Station station){
 		//TODO what status - universal maybe able to remove station
+		
+		//TODO maybe be redundant
 		int daysTillClose = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_CLOSE_DAYS);
 		GregorianCalendar today = new GregorianCalendar();
 		today.add(Calendar.DATE, -daysTillClose);
@@ -701,6 +704,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	@Override
 	public int getLostReportToCloseCount(Station station){
+		//TODO potentially not needed
 		if(station == null){
 			return 0;
 		}
@@ -709,6 +713,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	@Override
 	public List<LFLost> getLostReportToClosePaginatedList(Station station, int start, int offset) {
+		//TODO potentially not needed
 		if(station == null){
 			return null;
 		}
@@ -932,6 +937,39 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return f;
 	}
 	
+	public boolean updateTraceResults(List<LFMatchHistory> matchlist){
+		Session sess = null;
+		Transaction t = null;
+		boolean success = true;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			for(LFMatchHistory match:matchlist){
+				sess.saveOrUpdate(match);
+			}
+			t.commit();
+		}catch (Exception e) {
+			success = false;
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return success;
+	}
+	
+	
 	@Override
 	public long saveOrUpdateTraceResult(LFMatchHistory match){
 		Session sess = null;
@@ -999,10 +1037,29 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				Status deliveryStatus = new Status();
 				deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 				match.getFound().getItem().setDisposition(deliveryStatus);
+				match.getFound().getItem().setLost(match.getLost());
 			}
 			
-			if(saveOrUpdateTraceResult(match) > -1){
-				return true;
+			if(match.getLost() != null && match.getLost().getItem() != null){
+				Status deliveryStatus = new Status();
+				deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+				match.getLost().getItem().setDisposition(deliveryStatus);
+				match.getLost().getItem().setFound(match.getFound());
+			}
+			
+			List<LFMatchHistory> matchList = getAssociatedTraceResults(match);
+			ArrayList<LFMatchHistory> saveList = new ArrayList<LFMatchHistory>();
+			if(matchList != null){
+				Status closed = new Status();
+				closed.setStatus_ID(TracingConstants.LF_TRACING_CLOSED);
+				for(LFMatchHistory m:matchList){
+					if(m.getId() != match.getId() && m.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_OPEN){
+						m.setStatus(closed);
+						saveList.add(m);
+					}
+				}
+				saveList.add(match);
+				return updateTraceResults(saveList);
 			}
 		}
 		return false;
@@ -1035,10 +1092,29 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				Status deliveryStatus = new Status();
 				deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
 				match.getFound().getItem().setDisposition(deliveryStatus);
+				match.getFound().getItem().setLost(null);
 			}
 			
-			if(saveOrUpdateTraceResult(match) > -1){
-				return true;
+			if(match.getLost() != null && match.getLost().getItem() != null){
+				Status deliveryStatus = new Status();
+				deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
+				match.getLost().getItem().setDisposition(deliveryStatus);
+				match.getLost().getItem().setFound(null);
+			}
+			
+			List<LFMatchHistory> matchList = getAssociatedTraceResults(match);
+			ArrayList<LFMatchHistory> saveList = new ArrayList<LFMatchHistory>();
+			if(matchList != null){
+				Status open = new Status();
+				open.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
+				for(LFMatchHistory m:matchList){
+					if(m.getId() != match.getId() && m.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_CLOSED){
+						m.setStatus(open);
+						saveList.add(m);
+					}
+				}
+				saveList.add(match);
+				return updateTraceResults(saveList);
 			}
 		}
 		return false;
@@ -1062,6 +1138,34 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 		}
 		return 0;
+	}
+	
+	public List<LFMatchHistory> getAssociatedTraceResults(LFMatchHistory match){
+		if(match == null){
+			return null;
+		}
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
+				" where (m.lost.id = :lostid or m.found.id = :foundid)";
+		List<LFMatchHistory> results = null;
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("lostid", match.getLost().getId());
+			q.setParameter("foundid", match.getFound().getId());
+			results = q.list();
+			sess.close();
+			return results;
+		}catch(Exception e){
+			e.printStackTrace();
+			results = null;
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return results;
+		
 	}
 	
 	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(TraceResultsFilter filter, int start, int offset) {
@@ -1127,6 +1231,152 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		
 		return sql;
+	}
+	
+	
+	@Override
+	public void getStillSearchingList() {
+		String sql = "select l.id lostid from lflost l, station s " +
+		" where l.status_ID = " + TracingConstants.LF_STATUS_OPEN +
+		" and l.emailSentDate is null " +
+		" and l.station_ID = s.Station_ID " +
+		" and datediff(curdate(),l.openDate) > s.priority";
+
+		Session sess = null;
+		SQLQuery pq = null;
+		ArrayList<Long>lostIds = new ArrayList<Long>();
+		try{
+			pq = sess.createSQLQuery(sql.toString());
+			pq.addScalar("lostid", Hibernate.LONG);
+			List<Object[]> listMatchingFiles = pq.list();
+			for (Object[] strs : listMatchingFiles) {
+				lostIds.add((Long) strs[0]);
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(sess != null){
+				sess.close();
+			}
+		}
+		for(Long id:lostIds){
+			System.out.println(id);
+			sendStillSearching(id);
+		}
+	}
+	
+	@Override
+	public void sendStillSearching(long id) {
+		LFLost lost = getLostReport(id);
+		if(lost != null){
+			try {
+				HtmlEmail he = new HtmlEmail();
+				he.setHostName("74.86.4.179");
+				he.setSmtpPort(8625);
+
+				he.setFrom("mloupas@nettracer.aero");
+				ArrayList al = new ArrayList();
+				al.add(new InternetAddress("mloupas@nettracer.aero"));
+				he.setTo(al);
+				
+				he.setSubject("test subject");
+				
+				he.setHtmlMsg("still searching");
+				he.send();
+				
+				lost.setEmailSentDate(new Date());
+				saveOrUpdateLostReport(lost);
+				
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void closeLostAndEmail(long id){
+		LFLost lost = getLostReport(id);
+		if(lost != null){
+			try {
+				HtmlEmail he = new HtmlEmail();
+				he.setHostName("smtp.gmail.com");
+				he.setSmtpPort(587);
+
+				he.setFrom("mloupas@nettracer.aero");
+				ArrayList al = new ArrayList();
+				al.add(new InternetAddress("mloupas@nettracer.aero"));
+				he.setTo(al);
+				
+				he.setSubject("test subject");
+				
+				he.setHtmlMsg("didn't find your stuff");
+				he.send();
+				
+				lost.setCloseDate(new Date());
+				Status status = new Status();
+				status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
+				saveOrUpdateLostReport(lost);
+				
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void autoClose(){
+		int daysTillClose = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_CLOSE_DAYS);
+		GregorianCalendar today = new GregorianCalendar();
+		today.add(Calendar.DATE, -daysTillClose);
+		String cutoff = DateUtils.formatDate(today.getTime(), TracingConstants.getDBDateTimeFormat(HibernateWrapper.getConfig().getProperties()), null, null);
+		
+		String sql = "select l.id lostid from lflost l " +
+		" where l.status_ID != " + TracingConstants.LF_STATUS_CLOSED +
+		" and l.openDate < \'" + cutoff + "\'";
+		
+		Session sess = null;
+		SQLQuery pq = null;
+		ArrayList<Long>lostIds = new ArrayList<Long>();
+		try{
+			pq = sess.createSQLQuery(sql.toString());
+			pq.addScalar("lostid", Hibernate.LONG);
+			List<Object[]> listMatchingFiles = pq.list();
+			for (Object[] strs : listMatchingFiles) {
+				lostIds.add((Long) strs[0]);
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(sess != null){
+				sess.close();
+			}
+		}
+		for(Long id:lostIds){
+			System.out.println(id);
+			closeLostAndEmail(id);
+		}
+	}
+	
+	public void sendLostCreatedEmail(long id){
+		LFLost lost = getLostReport(id);
+		if(lost != null){
+			try {
+				HtmlEmail he = new HtmlEmail();
+				he.setHostName("smtp.gmail.com");
+				he.setSmtpPort(587);
+
+				he.setFrom("mloupas@nettracer.aero");
+				ArrayList al = new ArrayList();
+				al.add(new InternetAddress("mloupas@nettracer.aero"));
+				he.setTo(al);
+				
+				he.setSubject("test subject");
+				
+				he.setHtmlMsg("your lost has been created");
+				he.send();
+				
+			}catch (Exception e){
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }

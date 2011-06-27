@@ -21,6 +21,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -213,8 +214,12 @@ public class LFLost implements LFObject {
 	@Transient
 	public LFItem getItem() {
 		LFItem item = null;
-		if (items != null && items.size() > 0) {
-			item = items.iterator().next();
+		if (items != null) {
+			for(LFItem i:items){
+				if(i.getType() == TracingConstants.LF_TYPE_LOST){
+					item = i;
+				}
+			}
 		}
 		return item;
 	}

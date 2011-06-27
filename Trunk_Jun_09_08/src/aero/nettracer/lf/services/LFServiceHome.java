@@ -76,4 +76,6 @@ public interface LFServiceHome {
 	long saveOrUpdateTraceResult(LFMatchHistory match);
 
 	LFItem getItem(long id);
+
+	void getStillSearchingList();
 }

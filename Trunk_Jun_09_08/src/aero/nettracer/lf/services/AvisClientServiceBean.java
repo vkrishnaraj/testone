@@ -139,6 +139,8 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		//TODO normalize dates
 		host.setOpenDate(new Date());
 		
+		host.setRemarks(lostReport.getWhereLost());
+		
 		LFItem item = new LFItem();
 		item.setBrand(lostReport.getItemBrand());
 		item.setCategory(lostReport.getItemCategory());
