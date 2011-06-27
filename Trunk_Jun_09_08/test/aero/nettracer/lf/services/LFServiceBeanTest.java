@@ -391,23 +391,35 @@ public class LFServiceBeanTest {
 		assertTrue(id != -1);
 		
 		LFMatchHistory loaded = bean.getTraceResult(id);
-		assertTrue(loaded != null && loaded.getId() == id && loaded.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_NEW);	
+		assertTrue(loaded != null && loaded.getId() == id && loaded.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_OPEN);	
 		assertTrue(loaded.getFound().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_OTHER);
+		assertTrue(loaded.getLost().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_OTHER);
+		assertTrue(loaded.getFound().getItem().getLost() == null);
+		assertTrue(loaded.getLost().getItem().getFound() == null);
 		
-		bean.confirmMatch(id);
+		assertTrue(bean.confirmMatch(id));
 		loaded = bean.getTraceResult(id);
 		assertTrue(loaded != null && loaded.getId() == id && loaded.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_CONFIRMED);	
 		assertTrue(loaded.getFound().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+		assertTrue(loaded.getLost().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+		assertTrue(loaded.getFound().getItem().getLost().getId() == match.getLost().getId());
+		assertTrue(loaded.getLost().getItem().getFound().getId() == match.getFound().getId());
 		
-		bean.undoMatch(id);
+		assertTrue(bean.undoMatch(id));
 		loaded = bean.getTraceResult(id);
-		assertTrue(loaded != null && loaded.getId() == id && loaded.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_NEW);	
+		assertTrue(loaded != null && loaded.getId() == id && loaded.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_OPEN);	
 		assertTrue(loaded.getFound().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_OTHER);
+		assertTrue(loaded.getLost().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_OTHER);
+		assertTrue(loaded.getFound().getItem().getLost() == null);
+		assertTrue(loaded.getLost().getItem().getFound() == null);
 		
-		bean.rejectMatch(id);
+		assertTrue(bean.rejectMatch(id));
 		loaded = bean.getTraceResult(id);
 		assertTrue(loaded != null && loaded.getId() == id && loaded.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_REJECTED);	
 		assertTrue(loaded.getFound().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_OTHER);
+		assertTrue(loaded.getLost().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_OTHER);
+		assertTrue(loaded.getFound().getItem().getLost() == null);
+		assertTrue(loaded.getLost().getItem().getFound() == null);
 	}
 	
 	@Test
@@ -512,7 +524,7 @@ public class LFServiceBeanTest {
 					&& match.getFound().getLocation().getStation_ID() != station.getStation_ID()){
 				correctStation = false;
 			}
-			if(match.getStatus().getStatus_ID() != TracingConstants.LF_TRACING_NEW){
+			if(match.getStatus().getStatus_ID() != TracingConstants.LF_TRACING_OPEN){
 				onlyNew = false;
 			}
 			if(match.getId() == matchId1)hasMatch1=true;
@@ -605,6 +617,16 @@ public class LFServiceBeanTest {
 	}
 	
 	@Test
+	public void testEmail(){
+		LFServiceBean bean = new LFServiceBean();
+		LFLost lost = createLostTestCase();
+		long lostId = bean.saveOrUpdateLostReport(lost);
+		assertTrue(lostId != -1);
+		
+		bean.sendStillSearching(lostId);
+	}
+	
+	@Test
 	public void traceFoundTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFFound found = createFoundTestCase();
@@ -665,6 +687,7 @@ public class LFServiceBeanTest {
 		Status deposition = new Status();
 		deposition.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
 		item.setDisposition(deposition);
+		item.setType(TracingConstants.LF_TYPE_LOST);
 		items.add(item);
 		lost.setItems(items);
 		
@@ -726,6 +749,7 @@ public class LFServiceBeanTest {
 		Status status2 = new Status();
 		status2.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
 		item.setDisposition(status2);
+		item.setType(TracingConstants.LF_TYPE_FOUND);
 		found.setItem(item);
 		item.setFound(found);
 		
@@ -752,7 +776,7 @@ public class LFServiceBeanTest {
 		match.setLost(createLostTestCase());
 		match.setFound(createFoundTestCase());
 		Status status = new Status();
-		status.setStatus_ID(TracingConstants.LF_TRACING_NEW);
+		status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
 		match.setStatus(status);
 		return match;
 	}
