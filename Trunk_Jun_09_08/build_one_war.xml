@@ -299,6 +299,7 @@
 				<exclude name="hibernate*.jar" />
 				<exclude name="ReservationService*.jar" />
 				<exclude name="axis2*.jar" />
+				<exclude name="jxl*.jar" />
 				<exclude name="commons*.jar" />
 				<exclude name="dsi.jar" />
 				<exclude name="delivery*.jar" />
@@ -340,7 +341,7 @@
 		<delete file="${build.dir}/claim_model.jar" failonerror="false"/>
 		<jar destfile="${build.dir}/claim_model.jar">
 			<!--  MAY NEED TO EDIT THE FRAUD_WEB BELOW TO POINT TO WHAT BUILDS THE CLASSES -->
-			<fileset dir="${build.dir}/jetblue_web/classes/" >
+			<fileset dir="${build.dir}/ab_web/classes/" >
 				<include name="**/**/aero/nettracer/fs/**/*.*"/>
 				<include name="**/**/aero/nettracer/fs/**/**/*.*"/>
 				<include name="**/**/com/bagnet/nettracer/tracing/utils/DateUtils.class"/>

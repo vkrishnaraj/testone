@@ -25,6 +25,34 @@ public class StatReportDTO {
 	private String[] station_ID;
 	private int status_ID;
 	private Integer[] status_id_combo;
+	
+	private int dispositionId;
+	private int type;
+	private String dateFormat;
+	
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
+	public int getDispositionId() {
+		return dispositionId;
+	}
+
+	public void setDispositionId(int dispositionId) {
+		this.dispositionId = dispositionId;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
 
 	public Integer[] getStatus_id_combo() {
 		return status_id_combo;

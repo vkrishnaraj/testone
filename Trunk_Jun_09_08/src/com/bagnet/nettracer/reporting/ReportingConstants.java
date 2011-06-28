@@ -88,11 +88,13 @@ public class ReportingConstants {
 	public static final int RPT_20_CUSTOM_MAX_ALLOWED_ROWS = 20000;
 	
 	public static final String SALVAGE_REPORT_NAME = "salvage_report";
+	public static final String LOST_FOUND_REPORT_NAME = "lost_and_found_report";
 	
 	public static final String DATETIME_FORMAT = "MMddyyyyhhmmss";
 	
 	public static final String EXCEL_FILE_TYPE = ".xls";
 	
+	public static final int RPT_20_CUSTOM_78 = 78;
 
 
 }

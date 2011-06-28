@@ -20,6 +20,26 @@ public final class StatReportForm extends ValidatorForm {
 	private String cendtime; // close date for recovery report , or draft paid date for expense report
 	private String[] station_ID;
 	
+	private int dispositionId;
+	private int type;
+	
+	
+	public int getDispositionId() {
+		return dispositionId;
+	}
+
+	public void setDispositionId(int dispositionId) {
+		this.dispositionId = dispositionId;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
 	private int status_ID;
 	private Integer[] status_id_combo;
 
