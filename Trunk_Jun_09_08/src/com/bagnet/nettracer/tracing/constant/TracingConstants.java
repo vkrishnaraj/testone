@@ -463,6 +463,10 @@ public class TracingConstants {
 	public final static int LF_PHONE_TYPE_WORK = 5;
 	public final static int LF_PHONE_TYPE_OTHER = 6;
 	
+	public final static String LF_AVIS_COMPANY_ID = "AVS";
+	public final static String LF_BUDGET_COMPANY_ID = "BGT";
+	public final static String LF_ABG_COMPANY_ID = "ABG";
+	
 	/** ********* forwards *********** */
 	// no permission
 	public final static String NO_PERMISSION = "nopermission";
