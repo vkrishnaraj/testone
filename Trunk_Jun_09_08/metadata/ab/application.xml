@@ -13,11 +13,8 @@
      </web>
   </module>
   
-  <!-- <library-directory>APP-INF/lib</library-directory> -->
-  <!-- 
    <module>
-     <java>tplib.jar</java>
-  </module> 
--->
+      <java>avis-service.jar</java>
+   </module>
   
 </application> 

@@ -293,13 +293,11 @@
 				<exclude name="log4j*.*" />
 				<exclude name="servlet.jar" />
 				<exclude name="netty.jar" />
-				<exclude name="c3p0-0.9.1.2.jar" />
 				<exclude name="mysql-connector-java*.jar" />
 				<exclude name="c3p0*.jar" />
 				<exclude name="hibernate*.jar" />
 				<exclude name="ReservationService*.jar" />
 				<exclude name="axis2*.jar" />
-				<exclude name="jxl*.jar" />
 				<exclude name="commons*.jar" />
 				<exclude name="dsi.jar" />
 				<exclude name="delivery*.jar" />
@@ -458,6 +456,7 @@
 	
 	<target name="build-ab-ear" depends="delete-wars">
 		<antcall target="build-ab-local"/>
+		<antcall target="aa-build-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -499,6 +498,28 @@
 	</target>
 	
 
+	<target name="aa-build-avis-service">
+		<jar destfile="${build.dir}/dist/web/avis-client-model.jar" basedir="${build.dir}/ab_web/classes/">
+			<include name="**/**/aero/nettracer/avis/**/*.class" />
+		</jar>
+		
+		<jar destfile="${build.dir}/dist/web/avis-service-remote.jar" basedir="${build.dir}/ab_web/classes/">
+			<include name="**/**/aero/nettracer/lf/services/AvisClientServiceRemote.class" />
+			<include name="**/**/com/bagnet/nettracer/tracing/constant/TracingConstants.class" />
+		</jar>
+		
+		<jar destfile="${build.dir}/dist/web/avis-service.jar" basedir="${build.dir}/ab_web/classes/"
+			manifest="${src.dir}/../metadata/ab/services/MANIFEST.MF">
+			<metainf dir="${src.dir}/../metadata/ab/services">
+				<include name="ejb-jar.xml"/>
+			</metainf>
+			<include name="**/**/*.class" />
+			<include name="**/**/*.xml" />
+			<include name="**/**/*.properties" />
+			<exclude name="**/**/jndi.properties"/>
+		</jar>
+	</target>
+	
 	<target name="donotrun-build-ear">
 		
 		<copy todir="${build.dir}/dist/web/lib" >
@@ -510,7 +531,8 @@
 		</copy> 
 		
 		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/${app.xml.location}/application.xml">
-			<fileset dir="${build.dir}/dist/web" includes="tplib.jar,*.war"/>
+			<fileset dir="${build.dir}/dist/web" includes="lib/avis-client-model.jar,
+				lib/orchestra.jar,tplib.jar,*.war,avis-service.jar"/>
 
 		</ear>
 		
@@ -519,7 +541,8 @@
 				<include name="tracer.ear" />
 			</fileset>
 		</copy>
-		<antcall target="aa-jar-ntfs-model"></antcall>
+		<!--<antcall target="aa-jar-ntfs-model"></antcall>-->
+		
 	</target>
 
 	<target name="build-fraud-demo" depends="delete">
@@ -1011,6 +1034,10 @@
 		<copy todir="${basedir}/src" file="companies/ab/custom_ui.properties" />
 		<copy todir="${basedir}/src" file="companies/ab/pax_comm_email.html" />
 		<copy todir="${basedir}/src" file="companies/ab/pax_comm_email_fr.html" />
+		<copy todir="${basedir}/src" file="companies/ab/closed_report_email.html" />
+		<copy todir="${basedir}/src" file="companies/ab/create_report_email.html" />
+			<copy todir="${basedir}/src" file="companies/ab/found_report_email.html" />
+			<copy todir="${basedir}/src" file="companies/ab/update_report_email.html" />
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/ab/ApplicationResources.properties" />
