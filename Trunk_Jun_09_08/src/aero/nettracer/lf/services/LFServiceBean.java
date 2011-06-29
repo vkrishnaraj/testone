@@ -40,15 +40,6 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
 @Stateless
 public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
-	private String path;
-	
-	public LFServiceBean(){
-		super();
-	}
-	public LFServiceBean(String path){
-		this.path = path;
-	}
-	
 	@Override
 	public String echo(String s) {
 		return "echo: " + s;
@@ -1227,17 +1218,18 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		String sql = "select l.id lostid from lflost l, station s " +
 		" where l.status_ID = " + TracingConstants.LF_STATUS_OPEN +
 		" and l.station_ID = s.Station_ID " +
-		" and (datediff(curdate(),l.emailSentDate) > s.priority or l.emailSentDate is null)";
+		" and (datediff(curdate(),l.emailSentDate) >= s.priority or l.emailSentDate is null)";
 
 		Session sess = null;
 		SQLQuery pq = null;
 		ArrayList<Long>lostIds = new ArrayList<Long>();
 		try{
+			sess = HibernateWrapper.getSession().openSession();
 			pq = sess.createSQLQuery(sql.toString());
 			pq.addScalar("lostid", Hibernate.LONG);
-			List<Object[]> listMatchingFiles = pq.list();
-			for (Object[] strs : listMatchingFiles) {
-				lostIds.add((Long) strs[0]);
+			List<Long> listMatchingFiles = pq.list();
+			for (Long strs : listMatchingFiles) {
+				lostIds.add((Long) strs);
 			}
 		} catch (Exception e){
 			e.printStackTrace();
@@ -1258,9 +1250,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(lost != null){
 			try {
 
-				String root = new java.io.File(".").getCanonicalPath() + "/..";
-				String configpath = root + "/server/resources/avis/";
-				String imagepath = root + "/server/resources/avis/";
+				String root = TracerProperties.get("email.resources");
+				String configpath = root + "/";
+				String imagepath = root + "/";
 				boolean embedImage = true;
 				
 				HtmlEmail he = new HtmlEmail();
@@ -1311,9 +1303,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		LFLost lost = getLostReport(id);
 		if(lost != null){
 			try {
-				String root = new java.io.File(".").getCanonicalPath() + "/..";
-				String configpath = root + "/server/resources/avis/";
-				String imagepath = root + "/server/resources/avis/";
+				String root = TracerProperties.get("email.resources");
+				String configpath = root + "/";
+				String imagepath = root + "/";
 				boolean embedImage = true;
 				
 				HtmlEmail he = new HtmlEmail();
@@ -1351,16 +1343,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				}
 				he.setHtmlMsg(msg);
 				he.send();
-				
-				lost.setCloseDate(new Date());
-				lost.setEmailSentDate(new Date());
-				Status status = new Status();
-				status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
-				saveOrUpdateLostReport(lost);
-				
 			}catch (Exception e){
 				e.printStackTrace();
 			}
+			lost.setCloseDate(new Date());
+			lost.setEmailSentDate(new Date());
+			Status status = new Status();
+			status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
+			lost.setStatus(status);
+			saveOrUpdateLostReport(lost);
 		}
 	}
 	
@@ -1378,11 +1369,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		SQLQuery pq = null;
 		ArrayList<Long>lostIds = new ArrayList<Long>();
 		try{
+			sess = HibernateWrapper.getSession().openSession();
 			pq = sess.createSQLQuery(sql.toString());
 			pq.addScalar("lostid", Hibernate.LONG);
-			List<Object[]> listMatchingFiles = pq.list();
-			for (Object[] strs : listMatchingFiles) {
-				lostIds.add((Long) strs[0]);
+			List<Long> listMatchingFiles = pq.list();
+			for (Long strs : listMatchingFiles) {
+				lostIds.add((Long) strs);
 			}
 		} catch (Exception e){
 			e.printStackTrace();
@@ -1490,6 +1482,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public static void main(String [] args){
 		LFServiceBean bean = new LFServiceBean();
 		bean.testEmail();
+		bean.getStillSearchingList();
 	}
 	
 }

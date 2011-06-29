@@ -28,12 +28,8 @@
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="cronMoveToLzTrigger" />
-				<ref bean="cronNewPassiveTracerTrigger" />
-				<ref bean="cronDataFeedTrigger" />
-				<ref bean="cronWtQueueTrigger" />
-				<ref bean="cronOldPassiveTracerTrigger" />
-				<ref bean="cronMoveToWtTrigger" />
+				<ref bean="cronAvisStillSearching" />
+				<ref bean="cronAvisAutoClose" />
 			</list>
 		</property>
 	</bean>

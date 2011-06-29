@@ -162,13 +162,13 @@
 	
 	<bean id="avisStillSearching" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetBeanName" value="avis" />
-		<property name="targetMethod" value="testEmail" />
+		<property name="targetMethod" value="getStillSearchingList" />
 		<property name="concurrent" value="false" />
 	</bean>
 	
 	<bean id="avisAutoClose" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetBeanName" value="avis" />
-		<property name="targetMethod" value="testEmail" />
+		<property name="targetMethod" value="autoClose" />
 		<property name="concurrent" value="false" />
 	</bean>
 	

@@ -78,8 +78,8 @@ public class LFTracingUtil {
 				" and i.disposition.status_ID = :disposition";
 		boolean hasLocation = false;
 		if(found != null && found.getLocation() != null){
-				sql += " and (l.reservation.pickupstation.station_ID = :foundstation " +
-				" or l.reservation.dropoff.station_ID = :foundstation)" ;
+				sql += " and (l.reservation.pickupLocation.station_ID = :foundstation " +
+				" or l.dropoffLocation.station_ID = :foundstation)" ;
 				hasLocation = true;
 		}
 		Session sess = null;
