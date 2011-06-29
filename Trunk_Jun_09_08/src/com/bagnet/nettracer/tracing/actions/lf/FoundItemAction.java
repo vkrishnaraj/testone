@@ -77,20 +77,22 @@ public class FoundItemAction extends CheckedAction {
 			}
 			found.setStatusId(TracingConstants.LF_STATUS_OPEN);
 		} else if (request.getParameter("unmatchItem") != null) {
-			long itemId = Long.valueOf((String) request.getParameter("itemId"));
-			LFItem item = getItemById(fiForm.getFound().getItems(), itemId);
-			if (item != null) {
-				item.setLost(null);
-				item.setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
-			}
+			LFItem item = fiForm.getFound().getItem();
+			item.getLost().getItem().setFound(null);
+			LFServiceWrapper.getInstance().saveOrUpdateLostReport(item.getLost());
+			
+			item.setLost(null);
+			item.setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
+			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found);
 		} else if (request.getParameter("matchItem") != null) {
 			long itemId = Long.valueOf((String) request.getParameter("itemId"));
 			LFItem item = getItemById(fiForm.getFound().getItems(), itemId);
 			if (item != null) {
 				try {
-					String foundId = (String) request.getParameter("foundId");
+					String foundId = (String) request.getParameter("lostId");
 					long id = Long.valueOf(foundId);
 					LFLost lost = LFServiceWrapper.getInstance().getLostReport(id);
+					lost.getItem().setFound(found);
 					item.setLost(lost);
 					item.setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 				} catch (NumberFormatException nfe) {

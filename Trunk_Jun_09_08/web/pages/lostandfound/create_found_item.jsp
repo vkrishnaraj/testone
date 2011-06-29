@@ -159,11 +159,9 @@
 	}
 	
 	function setLostId(lostId, matchItem, itemId) {
-		document.getElementById('lostId').value = foundId;
+		document.getElementById('lostId').value = lostId;
 		document.getElementById('matchItem').value = matchItem;
 		document.getElementById('itemId').value = itemId;
-		
-		alert('foundId = ' + document.getElementById('foundId').value);
 	}
 
 </SCRIPT>
@@ -172,7 +170,7 @@
 <input type="hidden" name="delete_these_elements" value="" />
 <html:hidden property="matchItem" styleId="matchItem" value="" />
 <html:hidden property="itemId" styleId="itemId" value="" />
-<html:hidden property="matchId" styleId="foundId" value="" />
+<html:hidden property="lostId" styleId="lostId" value="" />
 	<tr>
         <td colspan="3" id="pageheadercell">
           <div id="pageheaderleft">

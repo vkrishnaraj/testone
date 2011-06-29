@@ -162,8 +162,6 @@
 		document.getElementById('foundId').value = foundId;
 		document.getElementById('matchItem').value = matchItem;
 		document.getElementById('itemId').value = itemId;
-		
-		alert('foundId = ' + document.getElementById('foundId').value);
 	}
 	
 </SCRIPT>

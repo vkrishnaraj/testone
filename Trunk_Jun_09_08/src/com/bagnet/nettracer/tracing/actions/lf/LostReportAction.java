@@ -80,8 +80,11 @@ public class LostReportAction extends CheckedAction {
 			long itemId = Long.valueOf((String) request.getParameter("itemId"));
 			LFItem item = getItemById(lrForm.getLost().getItems(), itemId);
 			if (item != null) {
+				item.getFound().getItem().setLost(null);
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(item.getFound());
 				item.setFound(null);
 				item.setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
+				LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport);
 			}
 		} else if (request.getParameter("matchItem") != null) {
 			long itemId = Long.valueOf((String) request.getParameter("itemId"));
@@ -93,6 +96,8 @@ public class LostReportAction extends CheckedAction {
 					LFFound found = LFServiceWrapper.getInstance().getFoundItem(id);
 					item.setFound(found);
 					item.setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+					
+					found.getItem().setLost(lostReport);
 				} catch (NumberFormatException nfe) {
 					logger.error(nfe);
 				}
