@@ -72,7 +72,7 @@ public class LFTracingUtil {
 	}
 	
 	public static List<LFLost> getPotentialLost(LFFound found){
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
+		String sql = "select l from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
 				" left outer join l.items i " +
 				" where l.status.status_ID = :status" +
 				" and i.disposition.status_ID = :disposition";
@@ -91,7 +91,7 @@ public class LFTracingUtil {
 			if(hasLocation){
 				q.setParameter("foundstation", found.getLocation().getStation_ID());
 			}
-			List<LFLost> results = q.list();
+			List<LFLost> results = (List<LFLost>)q.list();
 			sess.close();
 			return results;
 			
