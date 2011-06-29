@@ -12,7 +12,7 @@
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
     	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-		<property name="hibernate.connection.url">jdbc:mysql://10.60.98.66:3306/nettracer_westjet</property>
+		<property name="hibernate.connection.url">jdbc:mysql://10.60.98.66:3306/ab_production</property>
 		<property name="hibernate.connection.username">ab_user</property>
 		<property name="hibernate.connection.password">pREpra6a</property>
 		<property name="hibernate.show_sql">false</property>

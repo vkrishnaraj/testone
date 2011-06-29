@@ -298,6 +298,7 @@
 				<exclude name="hibernate*.jar" />
 				<exclude name="ReservationService*.jar" />
 				<exclude name="axis2*.jar" />
+				<exclude name="jxl*.jar" />
 				<exclude name="commons*.jar" />
 				<exclude name="dsi.jar" />
 				<exclude name="delivery*.jar" />
