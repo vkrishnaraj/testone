@@ -22,4 +22,6 @@ public interface AvisClientServiceRemote {
 	public List<KeyValueBean> getCountries();
 	public List<KeyValueBean> getStations(String companycode);
 	public List<KeyValueBean> getState();
+
+	public List<KeyValueBean> getStations(String companycode, String sub_company);
 }

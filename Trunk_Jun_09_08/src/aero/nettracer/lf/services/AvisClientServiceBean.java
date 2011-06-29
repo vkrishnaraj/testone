@@ -283,9 +283,14 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 	}
 
 	@Override
-	public List<KeyValueBean> getStations(String companycode) {
+	public List<KeyValueBean> getStations(String companycode, String sub_company) {
 		GeneralServiceBean bean = new GeneralServiceBean();
-		List<Station> stations = bean.getStations(companycode);
+		List<Station> stations = null;
+		if(sub_company != null){
+			stations = bean.getStations(companycode, sub_company);
+		} else {
+			stations = bean.getStations(companycode);
+		}
 		if(stations == null){
 			return null;
 		}
@@ -297,6 +302,11 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 			ret.add(toAdd);
 		}
 		return ret;
+	}
+	
+	@Override
+	public List<KeyValueBean> getStations(String companycode) {
+		return getStations(companycode, null);
 	}
 
 	@Override

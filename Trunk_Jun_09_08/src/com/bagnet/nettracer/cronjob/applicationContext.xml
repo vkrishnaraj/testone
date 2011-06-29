@@ -105,6 +105,9 @@
 		<constructor-arg value="${lz.move.type}" />
 	</bean>
 	
+	<bean id="avis" class="aero.nettracer.lf.services.LFServiceBean">
+	</bean>
+	
 	<bean id="CronUtils" class="com.bagnet.nettracer.cronjob.utilities.CronUtils" >
 		<constructor-arg value="${company.code}" />
 		<property name="errHandler" ref="cronUtilsErrhandler"/>
@@ -157,6 +160,18 @@
 		<property name="concurrent" value="false" />
 	</bean>
 	
+	<bean id="avisStillSearching" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="avis" />
+		<property name="targetMethod" value="testEmail" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="avisAutoClose" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="avis" />
+		<property name="targetMethod" value="testEmail" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
 	<bean id="moveToWtJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetBeanName" value="moveToWt" />
 		<property name="targetMethod" value="moveFiles" />
@@ -205,6 +220,15 @@
 		<property name="cronExpression" value="${lz.move.cron}" />
 	</bean>
 	
+	<bean id="cronAvisStillSearching" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="avisStillSearching" />
+		<property name="cronExpression" value="${avis.stillsearch.cron}" />
+	</bean>
+	
+	<bean id="cronAvisAutoClose" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="avisAutoClose" />
+		<property name="cronExpression" value="${avis.autoclose.cron}" />
+	</bean>
 		
 	<bean id="BillingTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="SendMonthlyBillingReportJob" />

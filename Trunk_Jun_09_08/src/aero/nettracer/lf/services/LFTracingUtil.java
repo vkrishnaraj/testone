@@ -336,11 +336,17 @@ public class LFTracingUtil {
 			match.setStatus(status);
 			match.setDetails(new LinkedHashSet<LFMatchDetail>());
 			double score = processMatch(match);
+			match.setScore(score);
 			if(score > CUTOFF){
-				if(bean.saveOrUpdateTraceResult(match) > -1){
-				matchList.add(match);
-				} else {
-					throw new Exception("failed to add trace result");
+				try{
+					long matchid = bean.saveOrUpdateTraceResult(match);
+					if(matchid > -1){
+						matchList.add(match);
+					} else {
+						throw new Exception("failed to add trace result");
+					}
+				} catch (org.hibernate.exception.ConstraintViolationException e){
+					//already traced this result, ignore
 				}
 			}
 		}

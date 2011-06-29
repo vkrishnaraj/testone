@@ -1,13 +1,16 @@
 package aero.nettracer.lf.services;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
+import javax.servlet.ServletContext;
 
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Hibernate;
@@ -31,9 +34,20 @@ import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.EmailParser;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 @Stateless
 public class LFServiceBean implements LFServiceRemote, LFServiceHome{
+	
+	private String path;
+	
+	public LFServiceBean(){
+		super();
+	}
+	public LFServiceBean(String path){
+		this.path = path;
+	}
 	
 	@Override
 	public String echo(String s) {
@@ -480,22 +494,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return sql;
 	}
 	
-	String getLostReportToCloseQuery(Station station){
-		//TODO what status - universal maybe able to remove station
-		
-		//TODO maybe be redundant
-		int daysTillClose = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_CLOSE_DAYS);
-		GregorianCalendar today = new GregorianCalendar();
-		today.add(Calendar.DATE, -daysTillClose);
-		String cutoff = DateUtils.formatDate(today.getTime(), TracingConstants.getDBDateTimeFormat(HibernateWrapper.getConfig().getProperties()), null, null);
-		
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
-		"where l.location.station_ID = " + station.getStation_ID() +
-		" and l.openDate < \'" + cutoff + "\'"
-		+ " and l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
-		return sql;
-	}
-	
 	private String getItemsToSalvageQuery(Station station){
 		int daysTillSalvage = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS);
 		GregorianCalendar today = new GregorianCalendar();
@@ -700,24 +698,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return null;
 		}
 		return getFoundPaginatedList(getFoundQuery(station), start, offset);
-	}
-	
-	@Override
-	public int getLostReportToCloseCount(Station station){
-		//TODO potentially not needed
-		if(station == null){
-			return 0;
-		}
-		return getLostCount(getLostReportToCloseQuery(station));
-	}
-	
-	@Override
-	public List<LFLost> getLostReportToClosePaginatedList(Station station, int start, int offset) {
-		//TODO potentially not needed
-		if(station == null){
-			return null;
-		}
-		return getLostPaginatedList(getLostReportToCloseQuery(station), start, offset);
 	}
 
 	@Override
@@ -971,7 +951,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	
 	@Override
-	public long saveOrUpdateTraceResult(LFMatchHistory match){
+	public long saveOrUpdateTraceResult(LFMatchHistory match) throws org.hibernate.exception.ConstraintViolationException{
 		Session sess = null;
 		Transaction t = null;
 		long id = -1;
@@ -981,7 +961,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess.saveOrUpdate(match);
 			t.commit();
 			id = match.getId();
-		}catch (Exception e) {
+		} catch (org.hibernate.exception.ConstraintViolationException e){
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+			throw e;
+		} catch (Exception e) {
 			e.printStackTrace();
 			try {
 				t.rollback();
@@ -1238,9 +1226,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public void getStillSearchingList() {
 		String sql = "select l.id lostid from lflost l, station s " +
 		" where l.status_ID = " + TracingConstants.LF_STATUS_OPEN +
-		" and l.emailSentDate is null " +
 		" and l.station_ID = s.Station_ID " +
-		" and datediff(curdate(),l.openDate) > s.priority";
+		" and (datediff(curdate(),l.emailSentDate) > s.priority or l.emailSentDate is null)";
 
 		Session sess = null;
 		SQLQuery pq = null;
@@ -1270,18 +1257,45 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		LFLost lost = getLostReport(id);
 		if(lost != null){
 			try {
-				HtmlEmail he = new HtmlEmail();
-				he.setHostName("74.86.4.179");
-				he.setSmtpPort(8625);
 
-				he.setFrom("mloupas@nettracer.aero");
+				String root = new java.io.File(".").getCanonicalPath() + "/..";
+				String configpath = root + "/server/resources/avis/";
+				String imagepath = root + "/server/resources/avis/";
+				boolean embedImage = true;
+				
+				HtmlEmail he = new HtmlEmail();
+				String currentLocale = lost.getAgent().getCurrentlocale();
+				
+				String from = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_from();
+				String host = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_host();
+				int port = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_port();
+				
+				he.setHostName(host);
+				he.setSmtpPort(port);
+
+				he.setFrom(from);
 				ArrayList al = new ArrayList();
-				al.add(new InternetAddress("mloupas@nettracer.aero"));
+				al.add(new InternetAddress(lost.getClient().getEmail()));
 				he.setTo(al);
 				
-				he.setSubject("test subject");
+				he.setSubject("Avis Budget Group - Notification");
 				
-				he.setHtmlMsg("still searching");
+				HashMap h = new HashMap();
+				String htmlFileName = "update_report_email.html";
+				
+				
+				h.put("LOSTID", (new Long(id)).toString());
+
+				// set embedded images
+				if (embedImage) {
+					String img1 = he.embed(new URL("file:" + imagepath + "avis_email_banner.jpg"),
+					"avis_email_banner.jpg");
+					h.put("BANNER_IMAGE", img1);
+				}
+					
+
+				String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
+				he.setHtmlMsg(msg);
 				he.send();
 				
 				lost.setEmailSentDate(new Date());
@@ -1297,21 +1311,49 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		LFLost lost = getLostReport(id);
 		if(lost != null){
 			try {
+				String root = new java.io.File(".").getCanonicalPath() + "/..";
+				String configpath = root + "/server/resources/avis/";
+				String imagepath = root + "/server/resources/avis/";
+				boolean embedImage = true;
+				
 				HtmlEmail he = new HtmlEmail();
-				he.setHostName("smtp.gmail.com");
-				he.setSmtpPort(587);
+				String currentLocale = lost.getAgent().getCurrentlocale();
+				
+				String from = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_from();
+				String host = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_host();
+				int port = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_port();
+				
+				he.setHostName(host);
+				he.setSmtpPort(port);
 
-				he.setFrom("mloupas@nettracer.aero");
+				he.setFrom(from);
 				ArrayList al = new ArrayList();
-				al.add(new InternetAddress("mloupas@nettracer.aero"));
+				al.add(new InternetAddress(lost.getClient().getEmail()));
 				he.setTo(al);
 				
-				he.setSubject("test subject");
+				he.setSubject("Avis Budget Group - Notification");
 				
-				he.setHtmlMsg("didn't find your stuff");
+				HashMap h = new HashMap();
+				String htmlFileName = "closed_report_email.html";
+				
+				h.put("LOSTID", (new Long(id)).toString());
+				h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
+				
+				if (embedImage) {
+					String img1 = he.embed(new URL("file:" + imagepath + "avis_email_banner.jpg"),
+					"avis_email_banner.jpg");
+					h.put("BANNER_IMAGE", img1);
+				}
+				
+				String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
+				if(msg == null){
+					System.out.println("email is null");
+				}
+				he.setHtmlMsg(msg);
 				he.send();
 				
 				lost.setCloseDate(new Date());
+				lost.setEmailSentDate(new Date());
 				Status status = new Status();
 				status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
 				saveOrUpdateLostReport(lost);
@@ -1359,24 +1401,95 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		LFLost lost = getLostReport(id);
 		if(lost != null){
 			try {
+				String root = TracerProperties.get("email.resources");
+				String configpath = root + "/";
+				String imagepath = root + "/";
+				boolean embedImage = true;
+				
+				System.out.println("path: " + root);
+				
 				HtmlEmail he = new HtmlEmail();
-				he.setHostName("smtp.gmail.com");
-				he.setSmtpPort(587);
+				String currentLocale = lost.getAgent().getCurrentlocale();
+				
+				String from = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_from();
+				String host = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_host();
+				int port = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_port();
+				
+				he.setHostName(host);
+				he.setSmtpPort(port);
 
-				he.setFrom("mloupas@nettracer.aero");
+				he.setFrom(from);
 				ArrayList al = new ArrayList();
-				al.add(new InternetAddress("mloupas@nettracer.aero"));
+				al.add(new InternetAddress(lost.getClient().getEmail()));
 				he.setTo(al);
 				
-				he.setSubject("test subject");
+				he.setSubject("Avis Budget Group - Notification");
 				
-				he.setHtmlMsg("your lost has been created");
+				HashMap h = new HashMap();
+				String htmlFileName = "create_report_email.html";
+				
+				
+				h.put("LOSTID", (new Long(id)).toString());
+				h.put("DAYS", (new Integer(lost.getReservation().getDropoffLocation().getPriority()).toString()));//TODO station driven
+
+				
+				// set embedded images
+				if (embedImage) {
+					try{
+					String img1 = he.embed(new URL("file:" + imagepath + "avis_email_banner.jpg"),
+							"avis_email_banner.jpg");
+					h.put("BANNER_IMAGE", img1);
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+				}
+					
+				
+				String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
+				if(msg == null){
+					System.out.println("email is null");
+				}
+				he.setHtmlMsg(msg);
 				he.send();
+				
+				lost.setEmailSentDate(new Date());
+				saveOrUpdateLostReport(lost);
 				
 			}catch (Exception e){
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void testEmail(){
+		try{
+			HtmlEmail he = new HtmlEmail();
+			
+			String from = "test@nettracer.aero";
+			String host = "74.86.4.179";
+			int port = 8625;
+			
+			he.setHostName(host);
+			he.setSmtpPort(port);
+
+			he.setFrom(from);
+			ArrayList al = new ArrayList();
+			al.add(new InternetAddress("mloupas@nettracer.aero"));
+			he.setTo(al);
+			
+			he.setSubject("Avis Budget Group - Test Email");
+			
+			he.setHtmlMsg("Test");
+			he.send();
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String [] args){
+		LFServiceBean bean = new LFServiceBean();
+		bean.testEmail();
 	}
 	
 }

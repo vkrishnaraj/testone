@@ -45,6 +45,8 @@ public class LFMatchHistory {
 	@JoinColumn(name = "status_Status_ID", nullable = false)
 	private Status status;
 	
+	private double score;
+	
 	@Transient
 	private boolean selected;
 
@@ -111,6 +113,14 @@ public class LFMatchHistory {
 
 	public void setSelected(boolean selected) {
 		this.selected = selected;
+	}
+
+	public void setScore(double score) {
+		this.score = score;
+	}
+
+	public double getScore() {
+		return score;
 	}
 	
 }

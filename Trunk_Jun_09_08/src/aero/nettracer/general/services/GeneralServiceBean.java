@@ -56,6 +56,26 @@ public class GeneralServiceBean implements GeneralServiceRemote{
 		}
 		return stationList;
 	}
+	
+	@Override
+	public List<Station> getStations(String companycode, String associated_airport) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		String sql = "from com.bagnet.nettracer.tracing.db.Station s where s.company.companyCode_ID = :companycode" +
+				" and s.associated_airport = :associated_airport";
+		Query q = sess.createQuery(sql);
+		q.setParameter("companycode", companycode);
+		q.setParameter("associated_airport", associated_airport);
+		List<Station> stationList = null;
+		try{
+			stationList = (List<Station>)q.list();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return stationList;
+	}
 
 	@Override
 	public List<State> getState() {
