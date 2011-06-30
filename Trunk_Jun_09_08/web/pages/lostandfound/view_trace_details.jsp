@@ -41,7 +41,7 @@
      		<div id="maincontent">
      			<h1 class="green">
 		        	<bean:message key="header.match_details" />
-		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 		        </h1>
      			<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
      				<tr>

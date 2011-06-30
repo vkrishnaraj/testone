@@ -198,7 +198,7 @@
          		<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
 				<h1 class="green">
 					<bean:message key="header.report.information" />
-					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 				</h1>
 				<span class="reqfield">*</span>
 				<bean:message key="message.required" /> 
@@ -232,7 +232,7 @@
 				<br/>
 				<h1 class="green">
 		        	<bean:message key="header.contact.information" />
-		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 		        </h1>
     			<span class="reqfield">*</span>
    				<bean:message key="message.required" /> 
@@ -350,7 +350,7 @@
 				<br/>
 				<h1 class="green">
 					<bean:message key="header.item.information" />
-					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 				</h1>
 				<span class="reqfield">*</span>
 				<bean:message key="message.required" /> 
@@ -472,7 +472,7 @@
          		<br/>
 				<h1 class="green">
 					<bean:message key="header.trip.information" />
-					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 				</h1>
 				<span class="reqfield">*</span>
 				<bean:message key="message.required" /> 

@@ -78,7 +78,7 @@ function updatePagination() {
             <span class="bold"><bean:message key="groupDescriptionText" />
               :</span>
             <bean:write name="groupForm" property="groupName" />
-            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#administration/maintain_groups.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <table class="form2" cellspacing="0" cellpadding="0">
             <font color=red>

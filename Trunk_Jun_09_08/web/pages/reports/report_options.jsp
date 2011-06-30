@@ -50,7 +50,7 @@
           <tr>
             <jsp:include page="/pages/includes/mail_incl.jsp" />
             <td>
-              <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#analytical_reports/analytical_reports_summary.htm');return false;"><bean:message key="Help" /></a>
+              <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
             </td>
           </tr>
         </table>
@@ -278,7 +278,7 @@
 	        	</c:otherwise>
         	</c:choose>
           </logic:equal>
-            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#analytical_reports/analytical_reports_summary.htm');return false;">
+            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;">
         	<img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0">
         	</a>
            </h1>

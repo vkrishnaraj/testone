@@ -102,7 +102,7 @@
       <div id="maincontent">
         <h1 class="green">
           <bean:message key="header.search_agents" />
-          <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#task_manager/view_created_requests.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+          <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
         </h1>
         <br>
         <strong>
@@ -155,7 +155,7 @@
         <br>
         <h1 class="green">
           <bean:message key="users" />
-          <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#administration/administration.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+          <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
         </h1>
         <table class="form2" cellspacing="0" cellpadding="0">
           <tr>

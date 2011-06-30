@@ -80,7 +80,7 @@
      		<div id="maincontent">
      			<h1 class="green">
 		        	<bean:message key="header.search_criteria" />
-		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 		        </h1>
      			<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
      				<tr>
@@ -127,7 +127,7 @@
      			<br/>
 				<h1 class="green">
 					<bean:message key="header.matches" />
-					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Retrieve.htm#Retrieve_Reports');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 		        </h1>
          		<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">

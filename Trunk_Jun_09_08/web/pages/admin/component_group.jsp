@@ -109,7 +109,7 @@
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="header.search_groups" />
-            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#task_manager/view_created_requests.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <br>
           <strong>
@@ -144,7 +144,7 @@
           <br>
           <h1 class="green">
             <bean:message key="groups" />
-            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#administration/maintain_groups.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <input type="hidden" name="delete1" value="" />
           <input type="hidden" name="groupID" value="" />

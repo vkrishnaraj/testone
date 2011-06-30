@@ -24,7 +24,7 @@
           	<div class="headerleft">
           		<h1 class="green">
 	            	<bean:message key="header.taskhome" />
-    	        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#task_manager/task_manager_home.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+    	        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
     	        </h1>
         	</div>
         	

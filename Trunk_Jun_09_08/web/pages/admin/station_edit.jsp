@@ -78,7 +78,7 @@
         <div id="maincontent">
           <h1 class="green">
             <bean:message key="station" />
-            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#administration/work_with_stations.htm#edit station');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <table class="form2" cellspacing="0" cellpadding="0">
             <font color=red>
@@ -317,7 +317,7 @@
             <logic:present name="stationForm" property="stationId">
               <h1 class="green">
                 <bean:message key="station_users" />
-                <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#Administration.htm#Maintain_Stations');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
               </h1>
               <table class="form2" cellspacing="0" cellpadding="0">
                 <logic:present name="agentList" scope="request">
