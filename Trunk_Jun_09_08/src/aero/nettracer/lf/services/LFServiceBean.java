@@ -1247,7 +1247,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@Override
 	public void sendStillSearching(long id) {
 		LFLost lost = getLostReport(id);
-		if(lost != null){
+		if(lost != null && lost.getClient() != null && lost.getClient().getEmail() != null && !lost.getClient().getEmail().isEmpty()){
 			try {
 
 				String root = TracerProperties.get("email.resources");
@@ -1301,7 +1301,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void closeLostAndEmail(long id){
 		LFLost lost = getLostReport(id);
-		if(lost != null){
+		if(lost != null && lost.getClient() != null && lost.getClient().getEmail() != null && !lost.getClient().getEmail().isEmpty()){
 			try {
 				String root = TracerProperties.get("email.resources");
 				String configpath = root + "/";
@@ -1391,7 +1391,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void sendLostCreatedEmail(long id){
 		LFLost lost = getLostReport(id);
-		if(lost != null){
+		if(lost != null && lost.getClient() != null && lost.getClient().getEmail() != null && !lost.getClient().getEmail().isEmpty()){
 			try {
 				String root = TracerProperties.get("email.resources");
 				String configpath = root + "/";

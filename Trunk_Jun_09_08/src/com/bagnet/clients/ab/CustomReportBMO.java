@@ -1,6 +1,7 @@
 package com.bagnet.clients.ab;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,6 +38,7 @@ import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 public class CustomReportBMO implements com.bagnet.nettracer.integrations.reports.CustomReportBMO {
@@ -59,7 +61,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private String createLostFoundReport(StatReportDTO srDTO, String resourceKey, String rootpath, HttpServletRequest request, Agent user) {
-		srDTO.setDateFormat(user.getDateformat().getFormat());
+		String dateFormat = user.getDateformat().getFormat();
+		srDTO.setDateFormat(dateFormat);
+		String runDate = DateUtils.formatDate(new Date(), dateFormat, user.getDefaultlocale(), null);
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		List lostFoundReportData = new LostFoundJasperReport().getReportData(srDTO, resources);
 		if (lostFoundReportData == null) {
@@ -75,36 +79,39 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		
 		String company = CompanyBMO.getCompany(user.getCompanycode_ID()).getCompanydesc();
 		FastReportBuilder drb = new FastReportBuilder();
-		drb.setTitle(resources.getString("report.lost.found.header") + ": " + company);
+		drb.setTitle(company + " " + resources.getString("report.lost.found.header") + " " + runDate);
 		drb.setSubtitle(getSubTitle(srDTO, resources));
 		try {
 			Style header = new Style();
 			header.setHorizontalAlign(HorizontalAlign.CENTER);
 			header.setVerticalAlign(VerticalAlign.MIDDLE);
-			header.setOverridesExistingStyle(true);
+//			header.setOverridesExistingStyle(true);
+			Style detailStyle = new Style();
 			
-			drb.addAutoText(AutoText.AUTOTEXT_CREATED_ON, AutoText.POSITION_HEADER, AutoText.ALIGMENT_LEFT);
-			drb.addColumn(resources.getString("report.lost.found.id"), "id", Long.class.getName(), 50, header, header);
-			drb.addColumn(resources.getString("report.lost.found.date"), "date", String.class.getName(), 60, header, header);
-			drb.addColumn(resources.getString("report.lost.found.station"), "station", String.class.getName(), 50, header, header);
-			drb.addColumn(resources.getString("report.lost.found.status"), "status", String.class.getName(), 50, header, header);			
-			drb.addColumn(resources.getString("report.lost.found.disposition"), "disposition", String.class.getName(), 125, header, header);			
-			drb.addColumn(resources.getString("report.lost.found.tracking.number"), "trackingNumber", String.class.getName(), 125, header, header);			
+			drb.addColumn(resources.getString("report.lost.found.id"), "id", Long.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lost.found.date"), "date", String.class.getName(), 60, detailStyle, header);
+			drb.addColumn(resources.getString("report.lost.found.station"), "station", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lost.found.status"), "status", String.class.getName(), 50, detailStyle, header);			
+			drb.addColumn(resources.getString("report.lost.found.disposition"), "disposition", String.class.getName(), 125, detailStyle, header);			
+			drb.addColumn(resources.getString("report.lost.found.tracking.number"), "trackingNumber", String.class.getName(), 125, detailStyle, header);			
 			
+			drb.setIgnorePagination(true);
+			drb.setUseFullPageWidth(true);
+
 			DynamicReport report = drb.build();
 			JRDataSource data = new JRBeanCollectionDataSource(lostFoundReportData);
 			
 			JasperPrint jp = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), data);
-			parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
-			parameters.put(JExcelApiExporterParameter.JASPER_PRINT,  jp);
+			parameters.put(JRParameter.IS_IGNORE_PAGINATION, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.JASPER_PRINT, jp);
 			parameters.put(JExcelApiExporterParameter.OUTPUT_FILE_NAME, outputpath);
-			parameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, false);
-			parameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
-			parameters.put(JExcelApiExporterParameter.IGNORE_PAGE_MARGINS, true);
-			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, false);
-			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, false);
-			parameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, true); 
-			parameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, true);
+			parameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+			parameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+			parameters.put(JExcelApiExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.TRUE);
 			
 			JExcelApiExporter exporter = new JExcelApiExporter();
 			exporter.setParameters(parameters);
@@ -166,341 +173,5 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 				return "";
 		}
 	}
-
-//	private String createDisputeResolutionReport(StatReportDTO srDTO, String resource_key, HttpServletRequest request, Agent user) {
-//		ReportBMO rbmo= new ReportBMO(request);
-//		rbmo.setUser(user);
-//		return rbmo.create_dispute_resolution_rpt(srDTO, 0, ReportingConstants.RPT_55_NAME, "Dispute Resolution Report");
-//	}
-//	
-//	private String createPPLCReport(StatReportDTO srDTO, String resource_key, HttpServletRequest request, Agent user,
-//			String rootpath) {
-//
-//		Map<String, Object> parameters = new HashMap<String, Object>();
-//		List<PPLC_DTO> dataList = new ArrayList<PPLC_DTO>();
-//		// TODO Auto-generated method stub
-//
-//		Session sess = HibernateWrapper.getDirtySession().openSession();
-//		try {
-//			ResourceBundle bundle = ResourceBundle.getBundle(
-//					"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
-//			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, bundle);
-//			parameters.put(JRParameter.REPORT_LOCALE, new Locale(user.getCurrentlocale()));
-//			parameters.put("dateFormat", user.getDateformat() != null ? new SimpleDateFormat(user.getDateformat()
-//					.getFormat()) : TracingConstants.DISPLAY_DATEFORMAT);
-//
-//			if (srDTO.getStarttime() == null || srDTO.getEndtime() == null || srDTO.getStarttime().trim().length() < 1
-//					|| srDTO.getEndtime().trim().length() < 1) {
-//				if (logger.isDebugEnabled()) {
-//					logger.debug("tried to do pplc report with no date parameters");
-//				}
-//				throw new MissingRequiredFieldsException();
-//			}
-//
-//			Date startDate = DateUtils.convertToDate(srDTO.getStarttime(), user.getDateformat().getFormat(), user
-//					.getCurrentlocale());
-//
-//			Date endDate = DateUtils.convertToDate(srDTO.getEndtime(), user.getDateformat().getFormat(), user
-//					.getCurrentlocale());
-//
-//			parameters.put("startDate", startDate);
-//			parameters.put("endDate", endDate);
-//
-//			String queryString = "from ClaimSettlement cs where cs.incident.status.status_ID != :closedStatus "
-//					+ " and cs.incident.createdate between :startDate and :endDate ";
-//
-//			List<Integer> stationList = null;
-//			if (srDTO.getStation_ID() != null) {
-//				for (String temp : srDTO.getStation_ID()) {
-//					Integer id = Integer.parseInt(temp);
-//					if (id == 0) {
-//						stationList = null;
-//						break;
-//					}
-//					if (stationList == null)
-//						stationList = new ArrayList<Integer>();
-//					stationList.add(id);
-//				}
-//			}
-//
-//			if (stationList != null) {
-//				queryString += " and cs.incident.stationassigned.station_ID in (:stationList) ";
-//			}
-//
-//			queryString += " order by cs.incident.stationassigned.stationcode, cs.pplcDue asc";
-//
-//			Query q = sess.createQuery(queryString);
-//			q.setDate("startDate", startDate);
-//			q.setDate("endDate", endDate);
-//			q.setInteger("closedStatus", TracingConstants.MBR_STATUS_CLOSED);
-//
-//			if (stationList != null) {
-//				q.setParameterList("stationList", stationList);
-//			}
-//
-//			List<ClaimSettlement> result = q.list();
-//
-//			if (result.size() == 0) {
-//				return null;
-//			}
-//
-//			for (ClaimSettlement cs : result) {
-//				PPLC_DTO pdto = new PPLC_DTO();
-//
-//				pdto.setDueDate(cs.getPplcDue());
-//				pdto.setFirstName(cs.getFirstName());
-//				pdto.setLastName(cs.getLastName());
-//				pdto.setIncidentId(cs.getIncident().getIncident_ID());
-//				pdto.setOfferDueDate(cs.getOfferDue());
-//				pdto.setRecordLocator(cs.getIncident().getRecordlocator());
-//				pdto.setSentDate(cs.getPplcSent());
-//				pdto.setStationAssigned(cs.getIncident().getStationcode());
-//
-//				dataList.add(pdto);
-// 			}
-//
-//			return ReportBMO.getReportFile(dataList, parameters, "b6_pplc_age", rootpath, srDTO.getOutputtype(),
-//					request);
-//
-//		} catch (Exception e) {
-//			logger.error("unable to create report " + e);
-//			return null;
-//		} finally {
-//			if (sess != null) {
-//				sess.close();
-//			}
-//		}
-//	}
-//	
-//	private String createPawobReport(
-//			StatReportDTO srDTO,
-//			String resource_key,
-//			HttpServletRequest request, 
-//			Agent user,
-//			String rootpath) {
-//		
-//		//Session sess = HibernateWrapper.getDirtySession().openSession();
-//		Session sess = HibernateWrapper.getReportingSession().openSession();
-//		try {
-//			Map<String, Object> parameters = new HashMap<String, Object>();
-//			ResourceBundle bundle = ResourceBundle.getBundle(
-//					"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
-//			parameters.put(JRParameter.REPORT_RESOURCE_BUNDLE, bundle);
-//			parameters.put(JRParameter.REPORT_LOCALE, new Locale(user.getCurrentlocale()));
-//			parameters.put("dateFormat", user.getDateformat() != null ? new SimpleDateFormat(user.getDateformat()
-//					.getFormat()) : TracingConstants.DISPLAY_DATEFORMAT);
-//
-//			if (srDTO.getStarttime() == null || srDTO.getEndtime() == null || srDTO.getStarttime().trim().length() < 1
-//					|| srDTO.getEndtime().trim().length() < 1) {
-//				if (logger.isDebugEnabled()) {
-//					logger.debug("tried to render pawob report with no beginning or ending date");
-//				}
-//				throw new MissingRequiredFieldsException();
-//			} 
-//
-//			Date startDate = DateUtils.convertToDate(srDTO.getStarttime(), user.getDateformat().getFormat(), user
-//					.getCurrentlocale());
-//
-//			Date endDate = DateUtils.convertToDate(srDTO.getEndtime(), user.getDateformat().getFormat(), user
-//					.getCurrentlocale());
-//			
-//			//done:deal with date range not to exceed 93 days rule here
-//			long PAWOB_REPORT_DATE_RANGE_MAX_NUMBER_OF_DAYS = 93L;
-//			boolean isDateRangeOutsideLimit = DateUtils.isDateRangeOutsideLimit(startDate, endDate, PAWOB_REPORT_DATE_RANGE_MAX_NUMBER_OF_DAYS);
-//			if (isDateRangeOutsideLimit) {
-//				throw new AmountOfDataOutOfRangeException();
-//			}
-//			
-//			parameters.put("startDate", startDate);
-//			parameters.put("endDate", endDate);
-//			
-//			//to deal with pax flight date range here
-//			boolean isPaxFlightDateRangeAvailable = true;
-//			if (srDTO.getPaxflightstarttime() == null 
-//					|| srDTO.getPaxflightendtime() == null 
-//					|| srDTO.getPaxflightstarttime().trim().length() < 1
-//					|| srDTO.getPaxflightendtime().trim().length() < 1) {
-//				if (logger.isDebugEnabled()) {
-//					logger.debug("tried to render pawob report with no passenger flight date range...");
-//				}
-//				isPaxFlightDateRangeAvailable = false;
-//			}
-//
-//			Date paxFlightStartDate = DateUtils.convertToDate(srDTO.getPaxflightstarttime(), user.getDateformat().getFormat(), user
-//					.getCurrentlocale());
-//
-//			Date paxFlightEndDate = DateUtils.convertToDate(srDTO.getPaxflightendtime(), user.getDateformat().getFormat(), user
-//					.getCurrentlocale());
-//
-//			parameters.put("paxFlightStartDate", paxFlightStartDate);
-//			parameters.put("paxFlightEndDate", paxFlightEndDate);
-//			
-//			List<PAWOBReportDTO> reportList = new ArrayList<PAWOBReportDTO>();
-//
-//			StringBuffer sql = new StringBuffer();
-//			
-//			sql.append("SELECT * FROM pawob_report" + newline);
-//			sql.append(" WHERE date_created >= :startDate");
-//			sql.append(" AND date_created < :endDate ");
-//			if (isPaxFlightDateRangeAvailable) {
-//				sql.append(" AND finalSegmentDateTime >= :paxFlightStartDate ");
-//				sql.append(" AND finalSegmentDateTime < :paxFlightEndDate ");
-//			}
-//
-//			//deal with create station here
-//			boolean isAllCreateStation = false;
-//			String[] myCreateStationId = srDTO.getCreatestation_ID();
-//			if (myCreateStationId != null) {
-//				List<String> myCreateStationIdList = Arrays.asList(myCreateStationId);
-//				String myCreateStationSql = "(";
-//				for (String item : myCreateStationIdList) {
-//					myCreateStationSql += "'" + item + "',";
-//					if (item.equalsIgnoreCase("0")) {
-//						isAllCreateStation = true;
-//					}
-//				}
-//				//replace last character with )
-//				if( !isAllCreateStation ) {
-//					int myLastIndex = myCreateStationSql.length() - 2;
-//					if (myLastIndex > 0) {
-//						myCreateStationSql = myCreateStationSql.substring(0, myLastIndex);
-//						myCreateStationSql += "')";
-//						sql.append(" AND created_station IN " + myCreateStationSql + " ");
-//					}
-//				}
-//			}
-//			
-//			//deal with charge station here
-//			boolean isAllChargeStation = false;
-//			String[] myChargeStationId = srDTO.getFaultstation_ID();
-//			if (myChargeStationId != null) {
-//				List<String> myChargeStationIdList = Arrays.asList(myChargeStationId);
-//				String myChargeStationSql = "(";
-//				for (String item : myChargeStationIdList) {
-//					myChargeStationSql += "'" + item + "',";
-//					if (item.equalsIgnoreCase("0")) {
-//						isAllChargeStation = true;
-//					}
-//				}
-//				//replace last character with )
-//				if( !isAllChargeStation ) {
-//					int myLastIndex = myChargeStationSql.length() - 2;
-//					if (myLastIndex > 0) {
-//						myChargeStationSql = myChargeStationSql.substring(0, myLastIndex);
-//						myChargeStationSql += "')";
-//						sql.append(" AND charge_city IN " + myChargeStationSql + " ");
-//					}
-//				}
-//			}
-//			
-//			//to deal with assigned station here
-//			boolean isAllAssignedStation = false;
-//			String[] myAssignedStationId = srDTO.getStation_ID();
-//			if (myAssignedStationId != null) {
-//				List<String> myAssignedStationIdList = Arrays.asList(myAssignedStationId);
-//				String myAssignedStationSql = "(";
-//				for (String item : myAssignedStationIdList) {
-//					myAssignedStationSql += "'" + item + "',";
-//					if (item.equalsIgnoreCase("0")) {
-//						isAllAssignedStation = true;
-//					}
-//				}
-//				//replace last character with )
-//				if( !isAllAssignedStation ) {
-//					int myLastIndex = myAssignedStationSql.length() - 2;
-//					if (myLastIndex > 0) {
-//						myAssignedStationSql = myAssignedStationSql.substring(0, myLastIndex);
-//						myAssignedStationSql += "')";
-//						sql.append(" AND Assigned_Station IN " + myAssignedStationSql + " ");
-//					}
-//				}
-//			}
-//			
-//			logger.error("entire query:" + sql.toString());
-//			
-//
-//			SQLQuery query = sess.createSQLQuery(sql.toString());
-//							
-//			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getCurrenttimezone()).getTimezone());
-//				
-//			Date sdate = DateUtils.convertToDate(srDTO.getStarttime() + " 0" + TracerDateTime.getHourDiff(tz) + ":00:00 AM", TracingConstants.DB_DATETIMEFORMAT_MSSQL, null);
-//			Date edate = DateUtils.convertToDate(srDTO.getEndtime() + " 0" + TracerDateTime.getHourDiff(tz) + ":00:00 AM", TracingConstants.DB_DATETIMEFORMAT_MSSQL, null);
-//			Date paxStartFlightDate = DateUtils.convertToDate(srDTO.getPaxflightstarttime() + " 0" + TracerDateTime.getHourDiff(tz) + ":00:00 AM", TracingConstants.DB_DATETIMEFORMAT_MSSQL, null);
-//			Date paxEndFlightDate = DateUtils.convertToDate(srDTO.getPaxflightendtime() + " 0" + TracerDateTime.getHourDiff(tz) + ":00:00 AM", TracingConstants.DB_DATETIMEFORMAT_MSSQL, null);
-//			
-//			// TODO: HERE
-//			query.setDate("startDate", sdate);
-//			query.setDate("endDate", edate);
-//			if (isPaxFlightDateRangeAvailable) {
-//
-//				query.setDate("paxFlightStartDate", paxStartFlightDate);
-//				query.setDate("paxFlightEndDate", paxEndFlightDate);
-//			}
-//			
-//			List<Object[]> results = query.list();
-//			
-//
-//			int myResultSize = results.size();
-//			if (myResultSize >= ReportingConstants.RPT_20_CUSTOM_MAX_ALLOWED_ROWS) {
-//				//logger.error("data volumn exceeds limit : " + reportList.size());
-//				throw new AmountOfDataOutOfRangeException("data volumn exceeds limit : " + myResultSize);
-//			}
-//			
-//			if (myResultSize <= 0) {
-//				throw new AmountOfDataOutOfRangeException("no data to report!");
-//			}
-//				
-//			for (Object[] obj: results) {
-//				PAWOBReportDTO dto = new PAWOBReportDTO();
-//				dto.setName((String) obj[0]);
-//				dto.setIncident_id((String) obj[1]);
-//				
-//				/// ###########
-//				//String date_created = DateUtils.formatDate((Date) obj[2], "mm/dd/yyyy hh:mm aa", null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
-//				//String timeCreated = date_created.split(" ")[1];
-//				//dto.setTime_created(timeCreated);
-//				/// ###########
-//				
-//				Date obj2 = (Date) obj[2];
-//				long difference = (tz != null ? tz.getOffset(obj2.getTime()) : 0);
-//				obj2 = new Date(obj2.getTime() + difference);
-//				
-//				dto.setDate_created(obj2);
-//				String strMyTime = DateFormat.getTimeInstance(DateFormat.SHORT).format(obj2);
-//				dto.setTime_created(strMyTime);
-//				
-//				dto.setFlights((String) obj[4]);
-//				dto.setDestination((String) obj[5]);
-//				dto.setOrigin((String) obj[6]);
-//				dto.setCreated_station((String) obj[7]);
-//				dto.setStatus((String) obj[8]);
-//				dto.setCharge_city((String) obj[9]);
-//				dto.setCharge_code((Integer) obj[10]);
-//				dto.setPnr((String) obj[11]);
-//				dto.setBag_tags((String) obj[12]);
-//				dto.setCheckin_location((String) obj[13]);
-//				dto.setBag_colors((String) obj[14]);
-//				dto.setBag_types((String) obj[15]);
-//				dto.setFinalSegmentDateTime((Date) obj[16]);
-//				dto.setAssigned_station((String) obj[17]);
-//				reportList.add(dto);
-//			}
-//						
-//			// Create report
-//			logger.info(reportList.size());
-//			
-//			return ReportBMO.getReportFile(reportList, parameters, "b6_pawob", rootpath, srDTO
-//					.getOutputtype(), request, 777);
-//		} catch (Exception e) {
-//			logger.error("unable to create pawob report: " + e.getMessage());
-//			e.printStackTrace();
-//			return null;
-//		} finally {
-//			if (sess != null) {
-//				sess.close();
-//			}
-//		}
-//	
-//	}
 
 }
