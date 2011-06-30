@@ -83,9 +83,8 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		drb.setSubtitle(getSubTitle(srDTO, resources));
 		try {
 			Style header = new Style();
-//			header.setHorizontalAlign(HorizontalAlign.CENTER);
+			header.setHorizontalAlign(HorizontalAlign.CENTER);
 			header.setVerticalAlign(VerticalAlign.MIDDLE);
-//			header.setOverridesExistingStyle(true);
 			Style detailStyle = new Style("detail");
 			
 			drb.addColumn(resources.getString("report.lost.found.id"), "id", Long.class.getName(), 50, detailStyle, header);
