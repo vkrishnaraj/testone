@@ -1215,9 +1215,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	@Override
 	public void getStillSearchingList() {
-		String sql = "select l.id lostid from lflost l, station s " +
+		String sql = "select l.id lostid from lflost l, station s, lfreservation r " +
 		" where l.status_ID = " + TracingConstants.LF_STATUS_OPEN +
-		" and l.station_ID = s.Station_ID " +
+		" and l.reservation_id = r.id " +
+		" r.dropofflocation_station_ID = s.Station_ID " +
 		" and (datediff(curdate(),l.emailSentDate) >= s.priority or l.emailSentDate is null)";
 
 		Session sess = null;
