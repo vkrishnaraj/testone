@@ -9,6 +9,7 @@ import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.State;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -68,6 +69,9 @@ public class GeneralServiceBean implements GeneralServiceRemote{
 		List<Station> stationList = null;
 		try{
 			stationList = (List<Station>)q.list();
+			if(stationList == null){
+				System.out.println("general.getStations : " + (companycode!=null?companycode:"null") + (associated_airport!=null?associated_airport:"null") );
+			}
 		}catch (Exception e){
 			e.printStackTrace();
 		}
@@ -93,5 +97,30 @@ public class GeneralServiceBean implements GeneralServiceRemote{
 			sess.close();
 		}
 		return stateList;
+	}
+	
+	public Agent getAgent(String username, String companycode_ID){
+		Session sess = HibernateWrapper.getSession().openSession();
+		String sql = "from com.bagnet.nettracer.tracing.db.Agent a " +
+				"where a.username = :username and a.companycode_ID = :companycode_ID";
+		Query q = sess.createQuery(sql);
+		q.setParameter("username", username);
+		q.setParameter("companycode_ID", companycode_ID);
+		
+		Agent agent = null;
+		try{
+			agent = (Agent)q.uniqueResult();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return agent;
+	}
+	
+	public static void main(String [] args){
+		GeneralServiceBean bean = new GeneralServiceBean();
+		System.out.println(bean.getAgent("ntadmin", "B6").getAgent_ID());
 	}
 }

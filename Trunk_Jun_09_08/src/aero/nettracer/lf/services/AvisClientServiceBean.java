@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 
 import org.apache.struts.util.LabelValueBean;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.CountryCode;
@@ -119,6 +120,11 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		return remote;
 	}
 
+	private Agent getWebAgent(){
+		GeneralServiceBean bean = new GeneralServiceBean();
+		return bean.getAgent("avisweb", "AB");
+	}
+	
 	@Override
 	public long saveOrUpdateLostReport(LostReportBean lostReport) {
 		if(lostReport == null){
@@ -126,13 +132,12 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		}
 		LFLost host = new LFLost();
 		
-		Agent agent = new Agent();
-		agent.setAgent_ID(1);
+		Agent agent = getWebAgent();
 		//TODO web agent
 		host.setAgent(agent);
 		
-		Station station = new Station();
-		station.setStation_ID(1);
+		
+		Station station = StationBMO.getStationByCode("WEB", "AB");
 		//TODO web location
 		host.setLocation(station);
 		
