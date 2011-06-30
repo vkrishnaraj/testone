@@ -1026,8 +1026,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				match.getLost().getItem().setFound(match.getFound());
 			}
 			
+			saveOrUpdateTraceResult(match);
+			
 			List<LFMatchHistory> matchList = getAssociatedTraceResults(match);
 			ArrayList<LFMatchHistory> saveList = new ArrayList<LFMatchHistory>();
+			saveOrUpdateTraceResult(match);
 			if(matchList != null){
 				Status closed = new Status();
 				closed.setStatus_ID(TracingConstants.LF_TRACING_CLOSED);
@@ -1037,7 +1040,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 						saveList.add(m);
 					}
 				}
-				saveList.add(match);
+//				saveList.add(match);
 				return updateTraceResults(saveList);
 			}
 		}
