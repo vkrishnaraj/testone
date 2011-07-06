@@ -85,8 +85,10 @@ public class TraceResultsAction extends CheckedAction {
 					return mapping.findForward(TracingConstants.LF_VIEW_TRACE_DETAILS);
 				} else if (request.getParameter("reject") != null) {
 					serviceBean.rejectMatch(matchId);
-				} else if (request.getParameter("unreject") != null || request.getParameter("unconfirm") != null) {
+				} else if (request.getParameter("unconfirm") != null) {
 					serviceBean.undoMatch(matchId);
+				} else if (request.getParameter("unreject") != null) {
+					serviceBean.unrejectMatch(matchId);
 				} else if (request.getParameter("confirm") != null) {
 					serviceBean.confirmMatch(matchId);
 				}
@@ -171,7 +173,7 @@ public class TraceResultsAction extends CheckedAction {
 				break;
 			case UNREJECT:
 				for (long id: matchIds) {
-					serviceBean.undoMatch(id);
+					serviceBean.unrejectMatch(id);
 				}
 				break;
 			default:

@@ -181,9 +181,11 @@
          							<a href='view_trace_results.do?unreject=1&matchId=<%=match.getId() %>'><bean:message key="button.unreject" /></a>
          						<% } else if (statusId == TracingConstants.LF_TRACING_CONFIRMED) { %>
          							<a href='view_trace_results.do?unconfirm=1&matchId=<%=match.getId() %>'><bean:message key="button.un_match" /></a>
-         						<% } else { %>
+         						<% } else if (statusId == TracingConstants.LF_TRACING_OPEN){ %>
          							<a href='view_trace_results.do?reject=1&matchId=<%=match.getId() %>'><bean:message key="button.reject" /></a>,&nbsp;
          							<a href='view_trace_results.do?confirm=1&matchId=<%=match.getId() %>'><bean:message key="button.do_match" /></a>
+         						<% } else if (statusId == TracingConstants.LF_TRACING_CLOSED) {%>
+         							<a href='view_trace_results.do?reject=1&matchId=<%=match.getId() %>'><bean:message key="button.reject" /></a>
          						<% } %>
          					</td>
          				</tr>

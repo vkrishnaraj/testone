@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.struts.util.LabelValueBean;
+import org.hibernate.NonUniqueResultException;
 
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
@@ -76,4 +77,11 @@ public interface LFServiceHome {
 	LFItem getItem(long id);
 
 	void getStillSearchingList();
+
+	public long createManualMatch(LFLost lost, LFFound found);
+
+	public long findConfirmedMatch(long lostId, long foundId)
+			throws NonUniqueResultException;
+
+	public boolean unrejectMatch(long id);
 }

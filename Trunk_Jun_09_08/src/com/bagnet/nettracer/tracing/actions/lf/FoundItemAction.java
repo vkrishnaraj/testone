@@ -78,26 +78,25 @@ public class FoundItemAction extends CheckedAction {
 			found.setStatusId(TracingConstants.LF_STATUS_OPEN);
 		} else if (request.getParameter("unmatchItem") != null) {
 			LFItem item = fiForm.getFound().getItem();
-			item.getLost().getItem().setFound(null);
-			LFServiceWrapper.getInstance().saveOrUpdateLostReport(item.getLost());
-			
-			item.setLost(null);
-			item.setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
-			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found);
+			long matchId = LFServiceWrapper.getInstance().findConfirmedMatch(item.getLost().getId(), item.getFound().getId());
+			if(LFServiceWrapper.getInstance().undoMatch(matchId)){
+				found = LFServiceWrapper.getInstance().getFoundItem(fiForm.getFound().getId());
+			} else {
+				//TODO handle the failed undo
+			}
 		} else if (request.getParameter("matchItem") != null) {
-			long itemId = Long.valueOf((String) request.getParameter("itemId"));
-			LFItem item = getItemById(fiForm.getFound().getItems(), itemId);
-			if (item != null) {
-				try {
-					String foundId = (String) request.getParameter("lostId");
-					long id = Long.valueOf(foundId);
-					LFLost lost = LFServiceWrapper.getInstance().getLostReport(id);
-					lost.getItem().setFound(found);
-					item.setLost(lost);
-					item.setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
-				} catch (NumberFormatException nfe) {
-					logger.error(nfe);
+			try {
+				String foundId = (String) request.getParameter("lostId");
+				long id = Long.valueOf(foundId);
+				LFLost lost = LFServiceWrapper.getInstance().getLostReport(id);
+				long matchId = LFServiceWrapper.getInstance().createManualMatch(lost, fiForm.getFound());
+				if(LFServiceWrapper.getInstance().confirmMatch(matchId)){
+					found = LFServiceWrapper.getInstance().getFoundItem(fiForm.getFound().getId());
+				} else {
+					//TODO fail to create manual match, do something....
 				}
+			} catch (NumberFormatException nfe) {
+				logger.error(nfe);
 			}
 		}
 

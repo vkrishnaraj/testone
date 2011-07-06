@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -30,6 +31,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFDelivery;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
@@ -985,6 +987,86 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
+	public long createManualMatch(LFLost lost, LFFound found){
+		LFMatchHistory match = new LFMatchHistory();
+		match.setFound(found);
+		match.setLost(lost);
+		match.setScore(-1);
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
+		match.setStatus(status);
+		LFMatchDetail detail = new LFMatchDetail();
+		detail.setDescription("Manually Matched");
+		detail.setScore(0.0);
+		detail.setMatchHistory(match);
+		HashSet<LFMatchDetail> s = new HashSet<LFMatchDetail>();
+		s.add(detail);
+		match.setDetails(s);
+		long matchId = -1;
+		try{
+			matchId = saveOrUpdateTraceResult(match);
+		} catch (org.hibernate.exception.ConstraintViolationException e){
+			try{
+				return findExistingManualMatch(lost.getId(), found.getId());
+			} catch (org.hibernate.NonUniqueResultException ne){
+				return -1;
+			}
+		}
+		return matchId;
+	}
+	
+	private long findExistingManualMatch(long lostId, long foundId){
+		String sql ="select m.id from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
+		" where m.lost.id = :lostId and m.found.id = :foundId and m.score = :score";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("lostId", lostId);
+			q.setParameter("foundId", foundId);
+			q.setParameter("score", 0.0);
+			Long result = (Long) q.uniqueResult();
+			sess.close();
+			return  result;
+		} catch (org.hibernate.NonUniqueResultException e){
+			throw e;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return -1;
+	}
+	
+	@Override
+	public long findConfirmedMatch(long lostId, long foundId) throws org.hibernate.NonUniqueResultException{
+		String sql ="select m.id from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
+				" where m.lost.id = :lostId and m.found.id = :foundId and m.status.status_ID = :status";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("lostId", lostId);
+			q.setParameter("foundId", foundId);
+			q.setParameter("status", TracingConstants.LF_TRACING_CONFIRMED);
+			Long result = (Long) q.uniqueResult();
+			sess.close();
+			return  result;
+		} catch (org.hibernate.NonUniqueResultException e){
+			throw e;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return -1;
+	}
+	
+	@Override
 	public List<LFMatchHistory> traceFoundItem(long id) {
 		try {
 			return LFTracingUtil.traceFound(id, this);
@@ -1007,7 +1089,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@Override
 	public boolean confirmMatch(long id) {
 		LFMatchHistory match = getTraceResult(id);
-		if(match != null){
+		if(match != null && !isAlreadyMatched(match)){
 			Status status = new Status();
 			status.setStatus_ID(TracingConstants.LF_TRACING_CONFIRMED);
 			match.setStatus(status);
@@ -1058,6 +1140,35 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			if(saveOrUpdateTraceResult(match) > -1){
 				return true;
 			}
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean unrejectMatch(long id){
+		LFMatchHistory match = getTraceResult(id);
+		if(match != null){
+			Status status = new Status();
+			if(isAlreadyMatched(match)){
+				status.setStatus_ID(TracingConstants.LF_TRACING_CLOSED);
+			} else {
+				status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
+			}
+			match.setStatus(status);
+			
+			if(saveOrUpdateTraceResult(match) > -1){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isAlreadyMatched(LFMatchHistory match){
+		if(match.getLost().getItem() != null && match.getLost().getItem().getFound() != null && match.getLost().getItem().getLost() != null){
+			return true;
+		}
+		if(match.getFound().getItem() != null && match.getFound().getItem().getLost() != null && match.getFound().getItem().getFound() != null){
+			return true;
 		}
 		return false;
 	}

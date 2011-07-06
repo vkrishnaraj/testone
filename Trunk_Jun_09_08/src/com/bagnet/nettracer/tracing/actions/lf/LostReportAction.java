@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions.lf;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +18,12 @@ import aero.nettracer.lf.services.LFUtils;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
+import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.forms.lf.LostReportForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -80,28 +84,29 @@ public class LostReportAction extends CheckedAction {
 			long itemId = Long.valueOf((String) request.getParameter("itemId"));
 			LFItem item = getItemById(lrForm.getLost().getItems(), itemId);
 			if (item != null) {
-				item.getFound().getItem().setLost(null);
-				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(item.getFound());
-				item.setFound(null);
-				item.setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
-				LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport);
-			}
-		} else if (request.getParameter("matchItem") != null) {
-			long itemId = Long.valueOf((String) request.getParameter("itemId"));
-			LFItem item = getItemById(lrForm.getLost().getItems(), itemId);
-			if (item != null) {
-				try {
-					String foundId = (String) request.getParameter("foundId");
-					long id = Long.valueOf(foundId);
-					LFFound found = LFServiceWrapper.getInstance().getFoundItem(id);
-					item.setFound(found);
-					item.setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
-					
-					found.getItem().setLost(lostReport);
-				} catch (NumberFormatException nfe) {
-					logger.error(nfe);
+				long matchId = LFServiceWrapper.getInstance().findConfirmedMatch(item.getLost().getId(), item.getFound().getId());
+				if(LFServiceWrapper.getInstance().undoMatch(matchId)){
+					lostReport = LFServiceWrapper.getInstance().getLostReport(lrForm.getLost().getId());
+				} else {
+					//TODO handle the failed undo
 				}
 			}
+		} else if (request.getParameter("matchItem") != null) {
+
+			try {
+				String foundId = (String) request.getParameter("foundId");
+				long id = Long.valueOf(foundId);
+				LFFound found = LFServiceWrapper.getInstance().getFoundItem(id);
+				long matchId = LFServiceWrapper.getInstance().createManualMatch(lrForm.getLost(), found);
+				if(LFServiceWrapper.getInstance().confirmMatch(matchId)){
+					lostReport = LFServiceWrapper.getInstance().getLostReport(lrForm.getLost().getId());
+				} else {
+					//TODO fail to create manual match, do something....
+				}
+			} catch (NumberFormatException nfe) {
+				logger.error(nfe);
+			}
+
 		}
 
 		lrForm.setLost(lostReport);
