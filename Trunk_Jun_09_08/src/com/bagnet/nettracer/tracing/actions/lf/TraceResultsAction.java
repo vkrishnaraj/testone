@@ -103,7 +103,7 @@ public class TraceResultsAction extends CheckedAction {
 		boolean resultsFiltered = trForm.getFilter().filterResults();
 		long rowcount = 0;
 		if (resultsFiltered) {
-			rowcount = serviceBean.getFilteredTraceResultsCount(trForm.getFilter());
+			rowcount = serviceBean.getFilteredTraceResultsCount(user.getStation(), trForm.getFilter());
 		} else {
 			rowcount = serviceBean.getTraceResultsCount(user.getStation());
 		}
@@ -117,7 +117,7 @@ public class TraceResultsAction extends CheckedAction {
 		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 
 		if (resultsFiltered) {
-			matches = serviceBean.getFilteredTraceResultsPaginatedList(trForm.getFilter(), (currpage * rowsperpage), rowsperpage);
+			matches = serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), trForm.getFilter(), (currpage * rowsperpage), rowsperpage);
 		} else {
 			matches = serviceBean.getTraceResultsPaginated(user.getStation(), (currpage * rowsperpage), rowsperpage);
 			trForm.getFilter().setOpen(true);

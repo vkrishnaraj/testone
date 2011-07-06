@@ -1102,9 +1102,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return false;
 	}
 	
-	public long getFilteredTraceResultsCount(TraceResultsFilter filter) {
+	public long getFilteredTraceResultsCount(Station station, TraceResultsFilter filter) {
 		String sql = "select count(distinct m) from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
 		sql += getSqlFromTraceResultsForm(filter);
+		 sql += " and (m.lost.location = " + station.getStation_ID() + " or " +
+			"m.found.location = " + station.getStation_ID() + ")";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1150,9 +1152,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 	}
 	
-	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(TraceResultsFilter filter, int start, int offset) {
+	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(Station station, TraceResultsFilter filter, int start, int offset) {
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
 		sql += getSqlFromTraceResultsForm(filter);
+		sql +=  " and (m.lost.location = " + station.getStation_ID() + " or " +
+			"m.found.location = " + station.getStation_ID() + ")";
 		List<LFMatchHistory> results = null;
 		Session sess = null;
 		try{
