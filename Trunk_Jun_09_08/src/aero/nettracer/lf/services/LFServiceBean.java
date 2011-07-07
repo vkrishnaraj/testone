@@ -475,7 +475,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	private String getLostQuery(Station station){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
-				"where l.location.station_ID = " + station.getStation_ID()
+				"where l.reservation.dropoffLocation.station_ID = " + station.getStation_ID()
 				+ " and l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
 		return sql;
 	}
@@ -713,7 +713,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		//TODO location criteria
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh " +
 		"where mh.status.status_ID = " + TracingConstants.LF_TRACING_OPEN
-		+ " and (mh.lost.location = " + station.getStation_ID() + " or " +
+		+ " and (mh.lost.reservation.dropoffLocation = " + station.getStation_ID() + " or " +
 				"mh.found.location = " + station.getStation_ID() + ")";
 		return sql;
 	}
@@ -1216,7 +1216,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public long getFilteredTraceResultsCount(Station station, TraceResultsFilter filter) {
 		String sql = "select count(distinct m) from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
 		sql += getSqlFromTraceResultsForm(filter);
-		 sql += " and (m.lost.location = " + station.getStation_ID() + " or " +
+		 sql += " and (m.lost.reservation.dropoffLocation = " + station.getStation_ID() + " or " +
 			"m.found.location = " + station.getStation_ID() + ")";
 		Session sess = null;
 		try{
@@ -1266,7 +1266,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(Station station, TraceResultsFilter filter, int start, int offset) {
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
 		sql += getSqlFromTraceResultsForm(filter);
-		sql +=  " and (m.lost.location = " + station.getStation_ID() + " or " +
+		sql +=  " and (m.lost.reservation.dropoffLocation = " + station.getStation_ID() + " or " +
 			"m.found.location = " + station.getStation_ID() + ")";
 		List<LFMatchHistory> results = null;
 		Session sess = null;
