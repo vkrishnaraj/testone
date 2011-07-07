@@ -14,6 +14,8 @@ package com.bagnet.nettracer.tracing.dto;
  */
 public class StatReportDTO {
 
+	private String stationCode;
+
 	private int reportnum;
 	private int customreportnum;
 	private int itemType_ID;
@@ -549,4 +551,13 @@ public class StatReportDTO {
 	public void setGroupby(int groupby) {
 		this.groupby = groupby;
 	}
+	
+	public String getStationCode() {
+		return stationCode;
+	}
+
+	public void setStationCode(String stationCode) {
+		this.stationCode = stationCode;
+	}
+
 }

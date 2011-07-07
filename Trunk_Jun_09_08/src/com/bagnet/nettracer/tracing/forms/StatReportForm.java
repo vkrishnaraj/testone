@@ -7,23 +7,35 @@ import org.apache.struts.validator.ValidatorForm;
 /**
  * @author Ankur Gupta
  * 
- * This class represents the form that is used for viewing statistical reports.
+ *         This class represents the form that is used for viewing statistical
+ *         reports.
  */
 public final class StatReportForm extends ValidatorForm {
+
+	private String stationCode;
+
+	public String getStationCode() {
+		return stationCode;
+	}
+
+	public void setStationCode(String stationCode) {
+		this.stationCode = stationCode;
+	}
 
 	private int itemType_ID;
 	private int reportnum;
 	private int customreportnum;
 	private String starttime;
 	private String endtime;
-	private String cstarttime; // close date for recovery report , or draft paid date for expense report
-	private String cendtime; // close date for recovery report , or draft paid date for expense report
+	private String cstarttime; // close date for recovery report , or draft paid
+								// date for expense report
+	private String cendtime; // close date for recovery report , or draft paid
+								// date for expense report
 	private String[] station_ID;
-	
+
 	private int dispositionId;
 	private int type;
-	
-	
+
 	public int getDispositionId() {
 		return dispositionId;
 	}
@@ -50,7 +62,7 @@ public final class StatReportForm extends ValidatorForm {
 	public void setStatus_id_combo(Integer[] status_id_combo) {
 		this.status_id_combo = status_id_combo;
 	}
-	
+
 	private int boarded;
 	private int perpassengers;
 	private int numtop;
@@ -64,7 +76,7 @@ public final class StatReportForm extends ValidatorForm {
 	public void setExpensetype_id_combo(Integer[] expensetype_id_combo) {
 		this.expensetype_id_combo = expensetype_id_combo;
 	}
-	
+
 	private String b_stationcode;
 	private String e_stationcode;
 	private String t_stationcode;
@@ -72,9 +84,9 @@ public final class StatReportForm extends ValidatorForm {
 	private String arrivaldate;
 
 	private String[] faultstation_ID;
-	
+
 	private String[] previousFaultStation_ID;
-	
+
 	public String[] getPreviousFaultStation_ID() {
 		return previousFaultStation_ID;
 	}
@@ -82,16 +94,15 @@ public final class StatReportForm extends ValidatorForm {
 	public void setPreviousFaultStation_ID(String[] previousFaultStation_ID) {
 		this.previousFaultStation_ID = previousFaultStation_ID;
 	}
-	
-	
+
 	private int loss_code;
-	
+
 	private Integer[] loss_code_combo;
-	
+
 	private String primary_sort_order;
-	
+
 	private String secondary_sort_order;
-	
+
 	public String getSecondary_sort_order() {
 		return secondary_sort_order;
 	}
@@ -99,7 +110,7 @@ public final class StatReportForm extends ValidatorForm {
 	public void setSecondary_sort_order(String secondary_sort_order) {
 		this.secondary_sort_order = secondary_sort_order;
 	}
-	
+
 	public String getPrimary_sort_order() {
 		return primary_sort_order;
 	}
@@ -107,7 +118,7 @@ public final class StatReportForm extends ValidatorForm {
 	public void setPrimary_sort_order(String primary_sort_order) {
 		this.primary_sort_order = primary_sort_order;
 	}
-	
+
 	public Integer[] getLoss_code_combo() {
 		return loss_code_combo;
 	}
@@ -115,9 +126,9 @@ public final class StatReportForm extends ValidatorForm {
 	public void setLoss_code_combo(Integer[] loss_code_combo) {
 		this.loss_code_combo = loss_code_combo;
 	}
-	
+
 	private String[] holdingstation_ID;
-	
+
 	private int groupby;
 	private int sumordet;
 
@@ -125,7 +136,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	private String agent;
 	private String lz_id;
-	
+
 	private String paxflightstarttime;
 	private String paxflightendtime;
 	private String[] createstation_ID;
@@ -137,10 +148,8 @@ public final class StatReportForm extends ValidatorForm {
 	public void setCreatestation_ID(String[] createstation_ID) {
 		this.createstation_ID = createstation_ID;
 	}
-	
+
 	private String[] company_ID;
-	
-	
 
 	public String[] getCompany_ID() {
 		return company_ID;
@@ -148,21 +157,21 @@ public final class StatReportForm extends ValidatorForm {
 
 	public void setCompany_ID(String[] company_ID) {
 		this.company_ID = company_ID;
-		
+
 	}
-	
-//	private List<String> company_ID;
-//	
-//
-//	
-//	
-//	public List<String> getCompany_ID() {
-//		return company_ID;
-//	}
-//
-//	public void setCompany_ID(List<String> company_ID) {
-//		this.company_ID = company_ID;
-//	}
+
+	// private List<String> company_ID;
+	//
+	//
+	//
+	//
+	// public List<String> getCompany_ID() {
+	// return company_ID;
+	// }
+	//
+	// public void setCompany_ID(List<String> company_ID) {
+	// this.company_ID = company_ID;
+	// }
 
 	/**
 	 * @return the lz_id
@@ -172,7 +181,8 @@ public final class StatReportForm extends ValidatorForm {
 	}
 
 	/**
-	 * @param lz_id the lz_id to set
+	 * @param lz_id
+	 *            the lz_id to set
 	 */
 	public void setLz_id(String lz_id) {
 		this.lz_id = lz_id;
@@ -233,7 +243,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param b_stationcode
-	 *          The b_stationcode to set.
+	 *            The b_stationcode to set.
 	 */
 	public void setB_stationcode(String b_stationcode) {
 		this.b_stationcode = b_stationcode;
@@ -248,7 +258,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param boarded
-	 *          The boarded to set.
+	 *            The boarded to set.
 	 */
 	public void setBoarded(int boarded) {
 		this.boarded = boarded;
@@ -263,7 +273,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param e_stationcode
-	 *          The e_stationcode to set.
+	 *            The e_stationcode to set.
 	 */
 	public void setE_stationcode(String e_stationcode) {
 		this.e_stationcode = e_stationcode;
@@ -278,7 +288,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param endtime
-	 *          The endtime to set.
+	 *            The endtime to set.
 	 */
 	public void setEndtime(String endtime) {
 		this.endtime = endtime;
@@ -293,7 +303,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param cendtime
-	 *          The cendtime to set.
+	 *            The cendtime to set.
 	 */
 	public void setCendtime(String cendtime) {
 		this.cendtime = cendtime;
@@ -308,7 +318,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param cstarttime
-	 *          The cstarttime to set.
+	 *            The cstarttime to set.
 	 */
 	public void setCstarttime(String cstarttime) {
 		this.cstarttime = cstarttime;
@@ -323,7 +333,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param expensetype_ID
-	 *          The expensetype_ID to set.
+	 *            The expensetype_ID to set.
 	 */
 	public void setExpensetype_ID(int expensetype_ID) {
 		this.expensetype_ID = expensetype_ID;
@@ -338,7 +348,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param itemType_ID
-	 *          The itemType_ID to set.
+	 *            The itemType_ID to set.
 	 */
 	public void setItemType_ID(int itemType_ID) {
 		this.itemType_ID = itemType_ID;
@@ -353,7 +363,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param numtop
-	 *          The numtop to set.
+	 *            The numtop to set.
 	 */
 	public void setNumtop(int numtop) {
 		this.numtop = numtop;
@@ -368,7 +378,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param perpassengers
-	 *          The perpassengers to set.
+	 *            The perpassengers to set.
 	 */
 	public void setPerpassengers(int perpassengers) {
 		this.perpassengers = perpassengers;
@@ -383,7 +393,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param reportnum
-	 *          The reportnum to set.
+	 *            The reportnum to set.
 	 */
 	public void setReportnum(int reportnum) {
 		this.reportnum = reportnum;
@@ -395,12 +405,15 @@ public final class StatReportForm extends ValidatorForm {
 	public int getCustomreportnum() {
 		return customreportnum;
 	}
+
 	/**
-	 * @param customreportnum The customreportnum to set.
+	 * @param customreportnum
+	 *            The customreportnum to set.
 	 */
 	public void setCustomreportnum(int customreportnum) {
 		this.customreportnum = customreportnum;
 	}
+
 	/**
 	 * @return Returns the starttime.
 	 */
@@ -410,7 +423,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param starttime
-	 *          The starttime to set.
+	 *            The starttime to set.
 	 */
 	public void setStarttime(String starttime) {
 		this.starttime = starttime;
@@ -425,7 +438,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param station_ID
-	 *          The station_ID to set.
+	 *            The station_ID to set.
 	 */
 	public void setStation_ID(String[] station_ID) {
 		this.station_ID = station_ID;
@@ -440,7 +453,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param status_ID
-	 *          The status_ID to set.
+	 *            The status_ID to set.
 	 */
 	public void setStatus_ID(int status_ID) {
 		this.status_ID = status_ID;
@@ -455,7 +468,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param sumordet
-	 *          The sumordet to set.
+	 *            The sumordet to set.
 	 */
 	public void setSumordet(int sumordet) {
 		this.sumordet = sumordet;
@@ -470,7 +483,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param t_stationcode
-	 *          The t_stationcode to set.
+	 *            The t_stationcode to set.
 	 */
 	public void setT_stationcode(String t_stationcode) {
 		this.t_stationcode = t_stationcode;
@@ -485,7 +498,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param arrivaldate
-	 *          The arrivaldate to set.
+	 *            The arrivaldate to set.
 	 */
 	public void setArrivaldate(String arrivaldate) {
 		this.arrivaldate = arrivaldate;
@@ -500,7 +513,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param departdate
-	 *          The departdate to set.
+	 *            The departdate to set.
 	 */
 	public void setDepartdate(String departdate) {
 		this.departdate = departdate;
@@ -515,12 +528,12 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param faultstation_ID
-	 *          The faultstation_ID to set.
+	 *            The faultstation_ID to set.
 	 */
 	public void setFaultstation_ID(String[] faultstation_ID) {
 		this.faultstation_ID = faultstation_ID;
 	}
-	
+
 	/**
 	 * @return the holdingstation_ID
 	 */
@@ -529,7 +542,8 @@ public final class StatReportForm extends ValidatorForm {
 	}
 
 	/**
-	 * @param holdingstation_ID the holdingstation_ID to set
+	 * @param holdingstation_ID
+	 *            the holdingstation_ID to set
 	 */
 	public void setHoldingstation_ID(String[] holdingstation_ID) {
 		this.holdingstation_ID = holdingstation_ID;
@@ -544,7 +558,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param loss_code
-	 *          The loss_code to set.
+	 *            The loss_code to set.
 	 */
 	public void setLoss_code(int loss_code) {
 		this.loss_code = loss_code;
@@ -559,7 +573,7 @@ public final class StatReportForm extends ValidatorForm {
 
 	/**
 	 * @param outputtype
-	 *          The outputtype to set.
+	 *            The outputtype to set.
 	 */
 	public void setOutputtype(int outputtype) {
 		this.outputtype = outputtype;
@@ -580,4 +594,5 @@ public final class StatReportForm extends ValidatorForm {
 	public void setGroupby(int groupby) {
 		this.groupby = groupby;
 	}
+
 }
