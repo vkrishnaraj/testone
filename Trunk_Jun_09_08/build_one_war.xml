@@ -447,6 +447,15 @@
 		</delete>
 	</target>
 	
+	<target name="build-testing-ear" depends="delete-wars">
+		<antcall target="build-westjet-test"/>
+		<antcall target="build-ab-prod"/>
+		<antcall target="aa-build-avis-service"/>
+		<property name="app.xml.location" value="metadata/testing" />
+		
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
 	<target name="build-all-ear" depends="delete-wars">
 		<antcall target="build-westjet-local"/>
 		<antcall target="build-jetblue-local"/>
@@ -1007,7 +1016,7 @@
 
 	<target name="build-westjet-test" depends="delete">
 		<property name="ant_project_name" value="westjet" />
-		<property name="ant_war_name" value="wjtest" />
+		<property name="ant_war_name" value="ws_testing" />
 		<property name="westjet.init.complete" value="true" />
 		<property name="environment.name" value="test" />
 		<antcall target="donotrun-build-westjet" />
