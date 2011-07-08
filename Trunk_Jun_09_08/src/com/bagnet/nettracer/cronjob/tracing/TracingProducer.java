@@ -20,6 +20,8 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.TraceIncident;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.db.TraceIncident;
+import com.bagnet.nettracer.tracing.db.TraceItinerary;
 
 public class TracingProducer implements Runnable {
 
@@ -84,10 +86,10 @@ public class TracingProducer implements Runnable {
 					// date and the first itinerary departure date.
 					Date searchFromDate = incident.getCreatedate();
 
-					Set<Itinerary> itinSet = ((Set<Itinerary>) incident.getItinerary());
+					Set<TraceItinerary> itinSet = ((Set<TraceItinerary>) incident.getItinerary());
 					if (itinSet != null && itinSet.size() > 0) {
 						Object[] itinArray = (itinSet.toArray());
-						Itinerary itin = (Itinerary) itinArray[0];
+						TraceItinerary itin = (TraceItinerary) itinArray[0];
 						if (itin.getDepartdate() != null
 								&& itin.getDepartdate().compareTo(searchFromDate) < 0) {
 							searchFromDate = itin.getDepartdate();
