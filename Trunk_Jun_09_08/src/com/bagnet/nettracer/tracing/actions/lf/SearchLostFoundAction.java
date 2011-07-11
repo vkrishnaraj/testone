@@ -17,10 +17,10 @@ import aero.nettracer.lf.services.LFServiceBean;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
-import com.bagnet.nettracer.tracing.db.lf.LFObject;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -123,7 +123,9 @@ public class SearchLostFoundAction extends CheckedAction {
 			searchDto.setDisposition(lfDisposition);
 		}
 		
-		searchDto.setStation(user.getStation());
+		Station station = new Station();
+		station.setStation_ID(user.getStation().getStation_ID());
+		searchDto.setStation(station);
 		return mapping.findForward(TracingConstants.LF_SEARCH_LOST_FOUND);
 		
 	}
