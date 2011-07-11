@@ -163,10 +163,10 @@
 		document.getElementById('matchItem').value = matchItem;
 		document.getElementById('itemId').value = itemId;
 	}
-
+	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form focus="found.id" action="create_found_item.do" method="post" onsubmit="return true;">
+<html:form focus="found.id" action="create_found_item.do" method="post" onsubmit="return validateFoundItemForm(this);">
 <input type="hidden" name="delete_these_elements" value="" />
 <html:hidden property="matchItem" styleId="matchItem" value="" />
 <html:hidden property="itemId" styleId="itemId" value="" />
@@ -215,7 +215,7 @@
 							<br/>
 							<html:text name="foundItemForm" property="disFoundDate" disabled="true" styleClass="disabledtextfield" />
 						</td>
-						<td>
+						<td colspan=2>
 							<bean:message key="colname.lf.created.agent" />
 							<br/>
 							<input type="text" value="<%=a.getUsername() %>" disabled class="disabledtextfield" />
@@ -236,13 +236,22 @@
 		            		</html:select>
 						</td>
 						<td>
-	         					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
-	         					<br>
-	         					<html:select name="foundItemForm" property="found.statusId" styleClass="dropdown" >
-	         						<html:option value="-1"><bean:message key="option.lf.please.select" /></html:option>
-	         						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
-	         					</html:select>
-	         				</td>
+							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
+							<br/>
+         					<html:select name="foundItemForm" property="found.companyId" styleClass="dropdown" >
+         						<html:option value="<%=TracingConstants.LF_ABG_COMPANY_ID %>"><bean:message key="option.lf.please.select" /></html:option>
+         						<html:option value="<%=TracingConstants.LF_AVIS_COMPANY_ID %>"><bean:message key="option.lf.avis" /></html:option>
+         						<html:option value="<%=TracingConstants.LF_BUDGET_COMPANY_ID %>"><bean:message key="option.lf.budget" /></html:option>
+         					</html:select>
+						</td>
+						<td>
+         					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
+         					<br>
+         					<html:select name="foundItemForm" property="found.statusId" styleClass="dropdown" >
+         						<html:option value="-1"><bean:message key="option.lf.please.select" /></html:option>
+         						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
+         					</html:select>
+         				</td>
 					</tr>
 				</table>
 				<br/>

@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -39,6 +40,9 @@ public class LFFound implements LFObject {
 	@ManyToOne
 	@JoinColumn(name = "agent_ID", nullable = false)
 	private Agent agent;
+	
+	@Column(length = 3)
+	private String companyId;
 	
 	@ManyToOne
 	@JoinColumn(name = "status_ID", nullable = false)
@@ -118,6 +122,14 @@ public class LFFound implements LFObject {
 		return DateUtils.formatDate(foundDate, dateFormat, "", null);
 	}
 	
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
+
 	@Transient
 	public Set<LFItem> getItems() {
 		LinkedHashSet<LFItem> items = new LinkedHashSet<LFItem>();

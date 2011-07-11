@@ -29,6 +29,11 @@ public class LFUtils {
 		Status lostStatus = new Status();
 		lostStatus.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
 		lost.setStatus(lostStatus);
+		if (agent.getStation().getAssociated_airport() == null || agent.getStation().getAssociated_airport().isEmpty()) {
+			lost.setCompanyId(TracingConstants.LF_ABG_COMPANY_ID);
+		} else {
+			lost.setCompanyId(agent.getStation().getAssociated_airport());
+		}
 		
 		
 		LinkedHashSet<LFItem> items = new LinkedHashSet<LFItem>();
@@ -70,6 +75,11 @@ public class LFUtils {
 		Status foundStatus = new Status();
 		foundStatus.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
 		found.setStatus(foundStatus);
+		if (agent.getStation().getAssociated_airport() == null || agent.getStation().getAssociated_airport().isEmpty()) {
+			found.setCompanyId(TracingConstants.LF_ABG_COMPANY_ID);
+		} else {
+			found.setCompanyId(agent.getStation().getAssociated_airport());
+		}
 		
 		LFItem item = new LFItem();
 		item.setType(TracingConstants.LF_TYPE_FOUND);

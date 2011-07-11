@@ -1,5 +1,6 @@
 <%@ page contentType="text/javascript" %> 
 
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@page import="java.util.TimeZone"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
@@ -104,7 +105,13 @@
 			currentElement = form.elements[i];
 			elementName = currentElement.name;
 			
-			if (elementName == "lost.client.lastName") {
+			if (elementName == "lost.companyId") {
+				if (currentElement.value == '<%=TracingConstants.LF_ABG_COMPANY_ID %>') {
+					alert("<%= (String)bundle.getString("colname.lf.company") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        currentElement.focus();
+			        return false;
+				}
+			} else if (elementName == "lost.client.lastName") {
 				if (currentElement.value.length == 0) {
 					alert("<%= (String)bundle.getString("colname.last_name") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
@@ -164,8 +171,8 @@
 				}
 			} 
 			
-			if (elementName.indexOf("statusId") != -1) {
-				if (currentElement.value.length == 0) {
+			if (elementName == "lost.statusId") {
+				if (currentElement.value == '-1') {
 					alert("<%= (String)bundle.getString("colname.lf.status") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
 			        return false;
@@ -196,6 +203,30 @@
 		
         return true;
 	
+	}
+	
+	function validateFoundItemForm(form) {
+		var currentElement;
+		for (var i = 0; i < form.length; ++i) {
+		
+			currentElement = form.elements[i];
+			elementName = currentElement.name;
+			
+			if (elementName == "found.companyId") {
+				if (currentElement.value == '<%=TracingConstants.LF_ABG_COMPANY_ID %>') {
+					alert("<%= (String)bundle.getString("colname.lf.company") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        currentElement.focus();
+			        return false;
+				}
+			} else if (elementName == "found.statusId") {
+				if (currentElement.value == '-1') {
+					alert("<%= (String)bundle.getString("colname.lf.status") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        currentElement.focus();
+			        return false;
+				}
+			}
+		}
+		return true;
 	}
 	
 	function validateDeliveryForm(form) {

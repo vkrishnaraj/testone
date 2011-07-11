@@ -220,10 +220,19 @@
 							<input type="text" value="<%=a.getUsername() %>" disabled class="disabledtextfield" />
 						</td>
 						<td>
+							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
+							<br/>
+         					<html:select name="lostReportForm" property="lost.companyId" styleClass="dropdown" >
+         						<html:option value="<%=TracingConstants.LF_ABG_COMPANY_ID %>"><bean:message key="option.lf.please.select" /></html:option>
+         						<html:option value="<%=TracingConstants.LF_AVIS_COMPANY_ID %>"><bean:message key="option.lf.avis" /></html:option>
+         						<html:option value="<%=TracingConstants.LF_BUDGET_COMPANY_ID %>"><bean:message key="option.lf.budget" /></html:option>
+         					</html:select>
+						</td>
+						<td>
          					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
          					<br>
          					<html:select name="lostReportForm" property="lost.statusId" styleClass="dropdown" >
-         						<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+         						<html:option value="-1"><bean:message key="option.lf.please.select" /></html:option>
          						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
          					</html:select>
          				</td>

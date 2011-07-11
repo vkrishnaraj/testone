@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -46,6 +47,9 @@ public class LFLost implements LFObject {
 	@ManyToOne
 	@JoinColumn(name = "status_ID", nullable = false)
 	private Status status;
+	
+	@Column(length = 3)
+	private String companyId;
 
 	private Date openDate;
 
@@ -171,6 +175,14 @@ public class LFLost implements LFObject {
 
 	public void setDeliveries(Set<LFDelivery> deliveries) {
 		this.deliveries = deliveries;
+	}
+
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
 	}
 
 	@Override
