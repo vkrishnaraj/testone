@@ -1,0 +1,36 @@
+<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">
+	<soap-env:Header>
+		<eb:MessageHeader xmlns:eb="http://www.ebxml.org/namespaces/messageHeader"
+			eb:version="1.0" soap-env:mustUnderstand="1">
+			<eb:From>
+				<eb:PartyId eb:type="URI">1</eb:PartyId>
+			</eb:From>
+			<eb:To>
+				<eb:PartyId eb:type="URI">1</eb:PartyId>
+			</eb:To>
+			<eb:ConversationId>NTSESSION6</eb:ConversationId>
+			<eb:Service />
+			<eb:Action>IgnoreTransactionLLSRS</eb:Action>
+			<eb:MessageData>
+				<eb:MessageId>29b7af16-c696-4479-97cb-b8eb7de062ea@140</eb:MessageId>
+				<eb:Timestamp>2011-06-01T13:32:40</eb:Timestamp>
+			</eb:MessageData>
+		</eb:MessageHeader>
+		<wsse:Security xmlns:wsse="http://schemas.xmlsoap.org/ws/2002/12/secext">
+			<wsse:BinarySecurityToken valueType="String"
+				EncodingType="wsse:Base64Binary">Shared/IDL:IceSess\/SessMgr:1\.0.IDL/Common/!ICESMS\/RESH!ICESMSLB\/RES.LB!-4045519538490056061!800591!0</wsse:BinarySecurityToken>
+		</wsse:Security>
+	</soap-env:Header>
+	<soap-env:Body>
+		<IgnoreTransactionRS xmlns="http://webservices.sabre.com/sabreXML/2003/07"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			EchoToken="String" TimeStamp="2011-06-01T13:32:40" Target="Production"
+			Version="2003A.TsabreXML1.0.1" SequenceNmbr="1" PrimaryLangID="en-us"
+			AltLangID="en-us">
+			<Success />
+			<TPA_Extensions>
+				<HostCommand>I</HostCommand>
+			</TPA_Extensions>
+		</IgnoreTransactionRS>
+	</soap-env:Body>
+</soap-env:Envelope>
