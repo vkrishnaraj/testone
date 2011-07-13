@@ -137,6 +137,8 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		host.setAgent(agent);
 		
 		
+		host.setCompanyId(lostReport.getCompany());
+		
 		Station station = StationBMO.getStationByCode("WEB", "AB");
 		//TODO web location
 		host.setLocation(station);
