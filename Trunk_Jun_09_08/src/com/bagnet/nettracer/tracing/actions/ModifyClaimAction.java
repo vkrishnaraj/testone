@@ -39,6 +39,7 @@ import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.AuditClaimDAO;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -188,6 +189,8 @@ public class ModifyClaimAction extends CheckedAction {
 			long id = Long.parseLong(request.getParameter("claimId"));
 			if (id > 0) {
 				claim = ClaimDAO.loadClaim(id);
+				// insert log entry here
+				ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, claim.getFile().getId(), TracingConstants.FS_ACTION_LOAD);
 				if (claim.getNtIncident() != null) {
 					ntIncident = claim.getNtIncident();
 					bs.populateIncidentFormFromIncidentObj(ntIncident.getIncident_ID(), theform, user, ntIncident.getItemtype_ID(), new IncidentBMO(), ntIncident, false);
@@ -252,6 +255,7 @@ public class ModifyClaimAction extends CheckedAction {
 				}
 			}
 			boolean claimSaved = ClaimDAO.saveClaim(claim);
+			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, claim.getFile().getId(), TracingConstants.FS_ACTION_SAVE);
 			
 			// maintain existing nt functionality
 			if (isNtUser) {
@@ -335,6 +339,7 @@ public class ModifyClaimAction extends CheckedAction {
 	
 					// 3. submit the claim for tracing
 					TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave);
+					ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, claim.getFile().getId(), TracingConstants.FS_ACTION_SUBMIT);
 					if (results != null) {
 						
 						// TODO: SET RELOAD TIME HERE

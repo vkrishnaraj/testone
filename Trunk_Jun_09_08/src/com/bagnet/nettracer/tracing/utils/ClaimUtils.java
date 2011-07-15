@@ -18,8 +18,8 @@ import org.hibernate.Criteria;
 import org.hibernate.classic.Session;
 import org.hibernate.criterion.Expression;
 
+import aero.nettracer.fs.model.AuditFsClaim;
 import aero.nettracer.fs.model.Bag;
-import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
@@ -34,6 +34,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.AuditClaimDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Claim;
@@ -162,6 +163,20 @@ public class ClaimUtils {
 		} else {
 			return createFsIncident(incident, user);
 		}
+	}
+	
+	public static void enterAuditClaimEntry(int agentId, int itemType, long itemId, int actionType) {
+		AuditClaimDAO.saveAuditClaim(getAuditClaim(agentId, itemType, itemId, actionType));
+	}
+	
+	private static AuditFsClaim getAuditClaim(int agentId, int itemType, long itemId, int actionType) {
+		AuditFsClaim auditClaim = new AuditFsClaim();
+		auditClaim.setAccessTime(new Date());
+		auditClaim.setAgentId(agentId);
+		auditClaim.setItemType(itemType);
+		auditClaim.setItemId(itemId);
+		auditClaim.setActionType(actionType);
+		return auditClaim;
 	}
 	
 	private static FsIncident createFsIncident(Agent user) {

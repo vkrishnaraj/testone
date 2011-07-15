@@ -931,6 +931,16 @@ public class TracingConstants {
 	public static final String LF_SEARCH_LOST_FOUND = "search_lost_found";
 	public static final String LF_CREATE_DELIVERY = "create_delivery";
 	
+	public static final int FS_AUDIT_ITEM_TYPE_FILE = 1;
+	public static final int FS_AUDIT_ITEM_TYPE_FRAUD_RESULTS = 2;
+	public static final int FS_AUDIT_ITEM_TYPE_MATCH_HISTORY = 3;
+	
+	public static final int FS_ACTION_LOAD = 1;
+	public static final int FS_ACTION_SAVE = 2;
+	public static final int FS_ACTION_SUBMIT = 3;
+	public static final int FS_ACTION_REQUEST_INFO = 4;
+	public static final int FS_ACTION_DELETE = 5;
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;

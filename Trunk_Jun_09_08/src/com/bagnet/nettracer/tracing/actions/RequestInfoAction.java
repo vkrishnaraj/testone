@@ -21,6 +21,7 @@ import aero.nettracer.selfservice.fraud.ClaimRemote;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.RequestInfoForm;
+import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
@@ -85,8 +86,12 @@ public class RequestInfoAction extends CheckedAction {
 					.lookup("NTServices_1_0/ClaimBean/remote");
 			String message = form.getMessage();
 			if (remote != null) {
+				int agentId = user.getAgent_ID();
+				long itemId;
 				for (MatchHistory m: form.getRequestedMatches()) {
-					remote.requestAccess(m.getFile2().getId(), m.getId(), user.getFirstname() + " " + user.getLastname(), user.getCompanycode_ID(), message);
+					itemId = m.getId();
+					ClaimUtils.enterAuditClaimEntry(agentId, TracingConstants.FS_AUDIT_ITEM_TYPE_MATCH_HISTORY, itemId, TracingConstants.FS_ACTION_REQUEST_INFO);
+					remote.requestAccess(m.getFile2().getId(), itemId, user.getFirstname() + " " + user.getLastname(), user.getCompanycode_ID(), message);
 				}
 			}
 			ctx.close();

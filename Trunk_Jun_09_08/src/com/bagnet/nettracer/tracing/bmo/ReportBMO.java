@@ -1217,7 +1217,7 @@ public class ReportBMO {
 					+ " exp.expensetype.expensetype_ID, exp.expenselocation.station_ID,exp.expenselocation.stationcode,exp.draftpaiddate,"
 					+ addspart
 					+ " fault.station_ID,fault.stationcode,exp.incident.loss_code,exp.agent.username,exp.incident.incident_ID,exp.agent.station.stationcode "
-					+ "from com.bagnet.nettracer.tracing.db.ExpensePayout exp left outer join exp.incident.faultstation fault where 1=1 "
+					+ "from com.bagnet.nettracer.tracing.db.ExpensePayout exp left outer join exp.incident.faultstation fault where 1=1  "
 					+ mbrtypeq
 					+ stationq
 					+ faultq
@@ -1227,7 +1227,7 @@ public class ReportBMO {
 					+ dateq
 					+ typeq
 					+ companylimit
-					+ " group by exp.expenselocation.stationcode, exp.expenselocation.station_ID, fault.station_ID,fault.stationcode, exp.expensetype.expensetype_ID,exp.draftpaiddate, "
+					+ " group by exp.expenselocation.stationcode, exp.expenselocation.station_ID, fault.station_ID,fault.stationcode, exp.incident.incident_ID, exp.expensetype.expensetype_ID,exp.draftpaiddate, "
 					+ addspart + " exp.currency, exp.incident.loss_code,exp.agent.username ";
 //  				+ " order by exp.expenselocation.stationcode,exp.expensetype.expensetype_ID";
 			
@@ -1331,8 +1331,10 @@ public class ReportBMO {
 			}			
 			
 			q.setString("companyCode_ID", user.getStation().getCompany().getCompanyCode_ID());
+			
 			List templist = q.list();
 			
+			@SuppressWarnings("rawtypes")
 			List list = new ArrayList();
 			if (templist.size() == 0) {
 				logger.debug("no data for report");
