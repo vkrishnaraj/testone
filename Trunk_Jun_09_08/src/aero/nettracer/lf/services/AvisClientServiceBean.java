@@ -293,8 +293,14 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 	public List<KeyValueBean> getStations(String companycode, String sub_company) {
 		GeneralServiceBean bean = new GeneralServiceBean();
 		List<Station> stations = null;
+		
 		if(sub_company != null){
-			stations = bean.getStations(companycode, sub_company);
+			List<String> companies = new ArrayList<String>();
+			if (!sub_company.equals(TracingConstants.LF_ABG_COMPANY_ID)) {
+				companies.add(TracingConstants.LF_ABG_COMPANY_ID);
+			}
+			companies.add(sub_company);
+			stations = bean.getStations(companycode, companies);
 		} else {
 			stations = bean.getStations(companycode);
 		}

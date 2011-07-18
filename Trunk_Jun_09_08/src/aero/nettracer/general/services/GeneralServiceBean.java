@@ -59,18 +59,26 @@ public class GeneralServiceBean implements GeneralServiceRemote{
 	}
 	
 	@Override
-	public List<Station> getStations(String companycode, String associated_airport) {
+	public List<Station> getStations(String companycode, List<String> associated_airports) {
 		Session sess = HibernateWrapper.getSession().openSession();
-		String sql = "from com.bagnet.nettracer.tracing.db.Station s where s.company.companyCode_ID = :companycode" +
-				" and s.associated_airport = :associated_airport";
+		
+		String sql = "from com.bagnet.nettracer.tracing.db.Station s where s.company.companyCode_ID = :companycode";
+		// s.associated_airport in (:associated_airports)";
+		if (associated_airports != null && !associated_airports.isEmpty()) {
+			sql += " and ";
+			for (String company: associated_airports) {
+				sql += "s.associated_airport = \'" + company + "\' or ";
+			}
+			sql = sql.substring(0, sql.lastIndexOf(" or "));
+		}
 		Query q = sess.createQuery(sql);
 		q.setParameter("companycode", companycode);
-		q.setParameter("associated_airport", associated_airport);
+//		q.setParameter("associated_airports", companies);
 		List<Station> stationList = null;
 		try{
 			stationList = (List<Station>)q.list();
 			if(stationList == null){
-				System.out.println("general.getStations : " + (companycode!=null?companycode:"null") + (associated_airport!=null?associated_airport:"null") );
+				System.out.println("general.getStations : " + (companycode!=null?companycode:"null") + (associated_airports != null?associated_airports:"empty") );
 			}
 		}catch (Exception e){
 			e.printStackTrace();
