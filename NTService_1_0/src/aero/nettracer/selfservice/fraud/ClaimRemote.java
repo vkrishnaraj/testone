@@ -17,8 +17,7 @@ import aero.nettracer.fs.model.detection.TraceResponse;
 public interface ClaimRemote {
 	public String echoTest(String s);
 	public long insertFile(File File);
-	public TraceResponse traceFile(long fileId, int maxDelay, boolean isPrimary);
-	public TraceResponse traceFile(File file, int maxDelay, boolean persistResults, boolean isPrimary);
+	public TraceResponse traceFile(long fileId, int maxDelay, boolean isPrimary, boolean returnResults);
 	public TraceResponse getFileMatches(long fileId);
 	public int getIncidentCacheSize();
 	public int getClaimCacheSize();

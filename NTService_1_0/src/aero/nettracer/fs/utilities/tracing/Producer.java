@@ -12,10 +12,12 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.junit.Test;
 
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.FsMatchHistoryAudit;
 import aero.nettracer.fs.model.GreyListAddress;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
@@ -28,6 +30,7 @@ import aero.nettracer.fs.model.detection.MatchDetail.MatchType;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.MetaWarning;
 import aero.nettracer.fs.model.detection.TraceResponse;
+import aero.nettracer.fs.utilities.AuditUtil;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.Util;
 import aero.nettracer.selfservice.fraud.PrivacyPermissionsBean;
@@ -39,6 +42,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class Producer {
 
+	
 	private static final String ACCESS_NOT_GRANTED = "*** Access not Granted ***";
 	private static boolean debug = false;
 	private static final int MAX_WAIT = 40;
@@ -52,10 +56,11 @@ public class Producer {
 		return s.trim().toUpperCase().replaceAll(invalidChars, "");
 	}
 	
-	public static TraceResponse matchFile(long fileId, int maxDelay, boolean persistData, boolean isPrimary){
+	public static TraceResponse matchFile(long fileId, int maxDelay, boolean persistData, boolean isPrimary, boolean returnResults){
 		File file = TraceWrapper.loadFileFromCache(fileId);
 		if(file != null){
-			return matchFile(file, maxDelay, persistData, isPrimary);
+			AuditUtil.saveActionAudit(AuditUtil.ACTION_TRACE_FILE, file.getId(), file.getMatchedAirline());
+			return matchFile(file, maxDelay, persistData, isPrimary, returnResults);
 		} else {
 			return null;
 		}
@@ -81,7 +86,8 @@ public class Producer {
 		}
 	}
 	
-	public static TraceResponse matchFile(File file, int maxDelay, boolean persistData, boolean isPrimary) {
+	public static TraceResponse matchFile(File file, int maxDelay, boolean persistData, boolean isPrimary, boolean returnResults) {
+		
 		Date starttime = new Date();
 		
 		HashSet<Long> fileQueue = new HashSet<Long>();
@@ -362,58 +368,62 @@ public class Producer {
 				queueFile(f7, fileQueue, file, v, createDate, isPrimary);
 			}
 		}		
-		
 		Date endtime = new Date();
 		fileQueue.remove(new Long(file.getId()));//removing dup from queue to get accurate count
-		System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
-		System.out.println("Consumer BEGIN: " + (new Date()));
-		boolean isFinished = true;
-		System.out.println("  Potential results: " + fileQueue.size());
-		System.out.println("  MaxDelay: " + maxDelay);
-		try {
-			int i = 0;
-			for(i= 0; v.size() < fileQueue.size() && (i < (maxDelay * 1000)/WAIT_TIME || maxDelay == -1); i++){
-				Thread.sleep(WAIT_TIME);
-			}
-			endtime = new Date();
-			if (maxDelay == -1) {
-				if(debug)System.out.println("  Complete Trace Elapsed Time: "  + (endtime.getTime() - starttime.getTime()));
-				file.setPersonCache(null);
-				file.setAddressCache(null);
-				file.setPhoneCache(null);
-			} else if (i >= MAX_WAIT) {
-				if(debug)System.out.println("***WARNING: Maximum Search Time Exceeded: " + (WAIT_TIME * MAX_WAIT) + "ms");
-				isFinished = false;
-			}
+		//		System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
+		//		System.out.println("Consumer BEGIN: " + (new Date()));
+		
+		if(returnResults){
+			boolean isFinished = true;
+			//		System.out.println("  Potential results: " + fileQueue.size());
+			//		System.out.println("  MaxDelay: " + maxDelay);
+			try {
+				int i = 0;
+				for(i= 0; v.size() < fileQueue.size() && (i < (maxDelay * 1000)/WAIT_TIME || maxDelay == -1); i++){
+					Thread.sleep(WAIT_TIME);
+				}
+				endtime = new Date();
+				if (maxDelay == -1) {
+					if(debug)System.out.println("  Complete Trace Elapsed Time: "  + (endtime.getTime() - starttime.getTime()));
+					file.setPersonCache(null);
+					file.setAddressCache(null);
+					file.setPhoneCache(null);
+				} else if (i >= MAX_WAIT) {
+					if(debug)System.out.println("***WARNING: Maximum Search Time Exceeded: " + (WAIT_TIME * MAX_WAIT) + "ms");
+					isFinished = false;
+				}
 
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.out.println("Consumer END: " + (new Date()));
-		
-		Set<MatchHistory> mh = getCensoredFileMatches(file.getId());
-		System.out.println("Returning RESULTS: " + mh.size());
-		TraceResponse tr = new TraceResponse();
-		
-		tr.setMatchHistory(mh);
-		tr.setTraceComplete(isFinished);
-		analyzeFile(file, tr, addresses);
-		
-		
-		if (!isFinished) {
-			Date nowTime = new Date();
-			double i = v.size();
-			double totalSize = fileQueue.size();
-			double percComplete = ((double) i / (double) totalSize * 100);
-			long timeElapsed = (nowTime.getTime() - starttime.getTime()) / 1000;
-			double percentRemaining = 100 - percComplete;
-			double secondsToComplete = (double) timeElapsed / percComplete * percentRemaining;
-			if(debug)System.out.println("Percent complete: " + (i / totalSize * 100) + " (" + i + "/" + totalSize
-					+ ")  Minutes remaining: " + secondsToComplete / 60);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			//		System.out.println("Consumer END: " + (new Date()));
 
-			tr.setSecondsUntilReload((int)(secondsToComplete*1.1));
+			Set<MatchHistory> mh = getCensoredFileMatches(file.getId());
+			//		System.out.println("Returning RESULTS: " + mh.size());
+			TraceResponse tr = new TraceResponse();
+
+			tr.setMatchHistory(mh);
+			tr.setTraceComplete(isFinished);
+			analyzeFile(file, tr, addresses);
+
+
+			if (!isFinished) {
+				Date nowTime = new Date();
+				double i = v.size();
+				double totalSize = fileQueue.size();
+				double percComplete = ((double) i / (double) totalSize * 100);
+				long timeElapsed = (nowTime.getTime() - starttime.getTime()) / 1000;
+				double percentRemaining = 100 - percComplete;
+				double secondsToComplete = (double) timeElapsed / percComplete * percentRemaining;
+				if(debug)System.out.println("Percent complete: " + (i / totalSize * 100) + " (" + i + "/" + totalSize
+						+ ")  Minutes remaining: " + secondsToComplete / 60);
+
+				tr.setSecondsUntilReload((int)(secondsToComplete*1.1));
+			}
+			return tr; 
+		} else {
+			return null;
 		}
-		return tr; 
 	}
 	
 
@@ -536,8 +546,19 @@ public class Producer {
 		}
 		return threatLevel;
 	}
-
-	public static Set<MatchHistory> getMatchHistoryResult(long fileId){
+	
+	public static List<String> getKillSwitchCompanies(){
+		String sql = "select companycode_id from killswitch";
+		SQLQuery pq = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		pq = sess.createSQLQuery(sql.toString());
+		pq.addScalar("companycode_id", Hibernate.STRING);
+		List<String> result = pq.list();
+		sess.close();
+		return result;
+	}
+	
+	private static Set<MatchHistory> getMatchHistoryResult(long fileId){
 //		String personSql = "from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
 //				"and (m.file1.id = :id or m.file2.id = :id) order by m.primarymatch desc, m.createdate desc, m.overallScore desc";
 
@@ -553,10 +574,28 @@ public class Producer {
 		if(debug)System.out.println(personSql);
 		if(debug)System.out.println("MatchResult for fileId: " + fileId);
 		sess.close();
+		LinkedHashSet<MatchHistory> ret = new LinkedHashSet<MatchHistory>();
+		List<String> klist = getKillSwitchCompanies();
 		for(MatchHistory match:result){
-			if(debug)System.out.println("Match: " + match.getId() + "  " + match.getOverallScore());
+			boolean add = true;
+			if(klist!=null){
+				for(String k:klist){
+					if((match.getFile1().getClaim() != null && match.getFile1().getClaim().getAirline() != null && match.getFile1().getClaim().getAirline().equalsIgnoreCase(k))
+							|| (match.getFile1().getIncident() != null && match.getFile1().getIncident().getAirline() != null && match.getFile1().getIncident().getAirline().equalsIgnoreCase(k))
+							|| (match.getFile2().getClaim() != null && match.getFile2().getClaim().getAirline() != null && match.getFile2().getClaim().getAirline().equalsIgnoreCase(k))
+							|| (match.getFile2().getIncident() != null && match.getFile2().getIncident().getAirline() != null && match.getFile2().getIncident().getAirline().equalsIgnoreCase(k))){
+						add = false;
+						if(debug)System.out.println("Match censored due to kill swith: " + match.getId());
+					}
+						
+				}
+			} 
+			if(add){
+				ret.add(match);
+				if(debug)System.out.println("Match: " + match.getId() + "  " + match.getOverallScore());
+			}
 		}
-		return new LinkedHashSet<MatchHistory>(result);
+		return ret;
 	}
 	
 	public static Set<MatchHistory> getCensoredFileMatches(long fileId) {
@@ -569,6 +608,7 @@ public class Producer {
 		}
 		Set<MatchHistory> histories = Producer.getMatchHistoryResult(fileId);
 		List<PrivacyPermissions> p = PrivacyPermissionsBean.getPrivacyPermissions();
+		Set<FsMatchHistoryAudit> matchAuditSet = new HashSet<FsMatchHistoryAudit>();
 		for(MatchHistory history:histories){
 			//TODO change level based on access request
 			RequestStatus rs;
@@ -585,11 +625,13 @@ public class Producer {
 			
 			if(rs != null && rs.equals(RequestStatus.Approved)){
 				censor(history, AccessLevelType.req, company, p);
+				matchAuditSet.add(new FsMatchHistoryAudit(history.getId(), "REQ"));
 			} else {
 				censor(history, AccessLevelType.def, company, p);
+				matchAuditSet.add(new FsMatchHistoryAudit(history.getId(), "DEF"));
 			}
 		}
-		
+		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_TRACE_RESULTS, fileId, f.getMatchedAirline(), matchAuditSet);
 		return histories;
 	}
 	

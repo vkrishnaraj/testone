@@ -19,6 +19,7 @@ import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
+import aero.nettracer.fs.model.FsMatchHistoryAudit;
 import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
@@ -32,6 +33,7 @@ import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.model.detection.Whitelist;
 import aero.nettracer.fs.model.messaging.FsMessage;
+import aero.nettracer.fs.utilities.AuditUtil;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.GeoLocation;
 import aero.nettracer.fs.utilities.InternationalException;
@@ -55,8 +57,8 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return "echo: " + s;
 	}
 
-	public TraceResponse traceFile(long fileId, int maxDelay, boolean isPrimary) {
-		return Producer.matchFile(fileId, maxDelay, true, isPrimary);
+	public TraceResponse traceFile(long fileId, int maxDelay, boolean isPrimary, boolean returnResults) {
+		return Producer.matchFile(fileId, maxDelay, true, isPrimary, returnResults);
 	}
 
 	public long insertFile(File file) {
@@ -102,12 +104,14 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 
 				sess.saveOrUpdate(toDelete);
 				t.commit();
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_UPDATE_FILE, file.getId(), file.getMatchedAirline());
 
 			} else {
 				if (debug)
 					System.out.println("saving:" + toSubmit.getId());
 				sess.saveOrUpdate(toSubmit);
 				t.commit();
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_CREATE_FILE, file.getId(), file.getMatchedAirline());
 			}
 			return toSubmit.getId();
 		} catch (Exception e) {
@@ -282,10 +286,10 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public static Set<FsAddress> resetAddressIdAndGeocode(Set<FsAddress> addresses) {
 		if (addresses != null) {
 			for (FsAddress address : addresses) {
-				if(address.getReceipt() != null){
+				if(address != null && address.getReceipt() != null){
 					address.getReceipt().setId(0);
 				}
-				if(address.getId() != 0 || address.getGeocodeType() == 0){
+				if(address != null && (address.getId() != 0 || address.getGeocodeType() == 0)){
 					address.setId(0);
 					address.setWhitelist(WhiteListUtil.isAddressWhiteListed(address));
 
@@ -416,6 +420,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 //		if(hasRequest(fileId, requestingAirline)){
 //			return;
 //		}
+		AuditUtil.saveActionAudit(AuditUtil.ACTION_REQUEST_ACCESS, fileId, requestingAirline);
 		
 		Session sess = HibernateWrapper.getSession().openSession();
 
@@ -468,6 +473,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 
 	@Override
 	public List<AccessRequest> getOutstandingRequests(String airlineId, int begin, int perPage) {
+		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_ACCESS_REQUESTS, -1, airlineId);
 		Session sess = HibernateWrapper.getSession().openSession();
 		String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status = :status and ar.file.incident.airline = :airline";
 
@@ -490,7 +496,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 
 	@Override
 	public void denyRequest(long requestId, String message, String agent) {
-		RequestStatus status = RequestStatus.Approved;
+		RequestStatus status = RequestStatus.Denied;
 		approveOrDenyRequest(requestId, message, agent, status);
 	}
 
@@ -502,6 +508,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		try {
 			File fullFile = (File) sess.load(File.class, fileId);
 			if (fullFile != null) {
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_FILE, file.getId(), airline);
 				String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.file.id = :fileId and ar.requestedAirline = :requestingAirline";
 
 				Query q = sess.createQuery(sql);
@@ -543,11 +550,6 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return file;
 	}
 
-	@Override
-	public TraceResponse traceFile(File file, int maxDelay, boolean persistResults, boolean isPrimary) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	private void approveOrDenyRequest(long requestId, String message, String agent, RequestStatus status) {
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -573,6 +575,11 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			if (t != null)
 				t.rollback();
 		} finally {
+			if(status.equals(RequestStatus.Approved)){
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_APPROVE_REQUEST, request.getFile().getId(), request.getFile().getMatchedAirline());
+			} else {
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_DENY_REQUEST, request.getFile().getId(), request.getFile().getMatchedAirline());
+			}
 			sess.close();
 		}
 	}
@@ -600,6 +607,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				MatchHistory mh = (MatchHistory)sess.load(MatchHistory.class, id);
 				mh.setDeleted(true);
 				sess.saveOrUpdate(mh);
+				Set<FsMatchHistoryAudit> s = new HashSet<FsMatchHistoryAudit>();
+				s.add(new FsMatchHistoryAudit(id, null));
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_DELETE_MATCH, mh.getFile1().getId(), mh.getFile1().getMatchedAirline(), s);
 			}
 			t.commit();
 			sess.close();
@@ -620,6 +630,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			mh.setDeleted(true);
 			sess.saveOrUpdate(mh);
 			sess.close();
+			Set<FsMatchHistoryAudit> s = new HashSet<FsMatchHistoryAudit>();
+			s.add(new FsMatchHistoryAudit(matchId, null));
+			AuditUtil.saveActionAudit(AuditUtil.ACTION_DELETE_MATCH, mh.getFile1().getId(), mh.getFile1().getMatchedAirline(), s);
 			return true;
 		} catch (Exception e){
 			e.printStackTrace();

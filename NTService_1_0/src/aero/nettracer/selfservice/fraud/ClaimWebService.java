@@ -23,13 +23,7 @@ public class ClaimWebService{
 
 	public TraceResponse traceFile(String username, String password, long fileId, int maxDelay, boolean isPrimary) {
 		ClaimRemote remote = new ClaimBean();
-		return remote.traceFile(fileId, maxDelay, isPrimary);
-	}
-
-	public TraceResponse traceFile(String username, String password, File file, int maxDelay,
-			boolean persistResults, boolean isPrimary) {
-		ClaimRemote remote = new ClaimBean();
-		return remote.traceFile(file, maxDelay, persistResults, isPrimary);
+		return remote.traceFile(fileId, maxDelay, isPrimary, true);
 	}
 
 	public TraceResponse getFileMatches(String username, String password, long fileId) {
