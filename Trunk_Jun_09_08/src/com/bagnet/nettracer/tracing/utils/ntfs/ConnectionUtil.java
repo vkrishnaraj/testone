@@ -112,7 +112,7 @@ public class ConnectionUtil {
 		  return id;
 	  }
 	  
-	  public static TraceResponse submitClaim(long fileId, boolean primary) {
+	  public static TraceResponse submitClaim(long fileId, boolean primary, boolean hasViewResultsPermission) {
 			if (fileId <= 0) {
 				return null;
 			}
@@ -128,16 +128,16 @@ public class ConnectionUtil {
 					} catch (Exception e) {
 						//
 					}
-					results = remote.traceFile(fileId, wait, primary);
+					results = remote.traceFile(fileId, wait, primary, hasViewResultsPermission);
 				}
 				ctx.close();
-			} catch (NamingException e) {
+			} catch (Exception e) {
 				logger.error(e);	
 			}
 			return results;
 		}
 	  
-	public static File createAndSubmitForTracing(Incident iDTO, Agent user, HttpServletRequest request) {
+	public static File createAndSubmitForTracing(Incident iDTO, Agent user, HttpServletRequest request, boolean hasViewResultsPermission) {
 		request.removeAttribute("fraudStatus");
 		File file = null;
 		try {
@@ -150,7 +150,7 @@ public class ConnectionUtil {
 			file.setSwapId(remoteFileId);
 			FileDAO.saveFile(file);
 			if (remoteFileId > 0) {
-				TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, true);
+				TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, true, hasViewResultsPermission);
 				if (results != null) {
 					request.getSession().setAttribute("results", results.getMatchHistory());
 					request.getSession().setAttribute("traceResponse", results);

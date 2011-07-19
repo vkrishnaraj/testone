@@ -84,7 +84,9 @@
                     &nbsp;</span></a>
               </dd>
 <%
-            } if (ntUser && ntfsUser) { %>
+            } 
+			if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) {	
+				if (ntUser && ntfsUser) { %>
 					<dd>
                    	<a href='fraud_results.do?incident=<bean:write name="incident" scope="request" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
                    	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
@@ -104,7 +106,8 @@
                           &nbsp;</span></a>
                    </dd>
             <% 		}
-			   } %>
+			   } 
+			}%>
             <dd>
               <a href="#"><span class="aab">&nbsp;
                   <br />

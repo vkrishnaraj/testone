@@ -205,7 +205,7 @@ public class TracingConstants {
 	public final static int PRIORITY_MEDIUM = 2;
 	public final static int PRIORITY_HIGH = 3;
 	
-
+	public final static String SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS = "View Fraud Results";
 
 
 	public final static String DEFAULT_AGENT_TIMEOUT = "30";

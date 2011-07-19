@@ -5,9 +5,13 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page import="com.bagnet.nettracer.reporting.ReportingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
+	Agent a = (Agent) session.getAttribute("user");
 	int reportType = -1;
 	String receiptType = "";
 	boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
@@ -76,7 +80,7 @@
           			<br>
       			</td>
               </tr>
-              <% if (ntfsUser && displayFraudLink) { %>
+              <% if (ntfsUser && displayFraudLink && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) { %>
               <tr <% if (fraudStatus != null) { %>class="<%=fraudStatus %>"<% } %>>
               	<td>
               		<div id="fraudcell">

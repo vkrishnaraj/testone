@@ -470,12 +470,13 @@
               &nbsp;</span> <span class="bb"><bean:message
                 key="menu.claims" /></span> <span class="cc">&nbsp; <br />
               &nbsp;</span></a></dd>
+              <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) { %>              
               <dd><a href="fraud_results.do?incident=<bean:write name="incidentForm" property="incident_ID" />"><span
                 class="aa">&nbsp; <br />
               &nbsp;</span> <span class="bb"><bean:message
                 key="menu.fraud.checks" /></span> <span class="cc">&nbsp; <br />
               &nbsp;</span></a></dd>
-              <%
+              <% }
               	} else if (UserPermissions.hasPermission(
               									TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a)) {
               %>

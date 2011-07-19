@@ -338,9 +338,10 @@ public class ModifyClaimAction extends CheckedAction {
 					logger.info("Claim saved to central services: " + remoteFileId);
 	
 					// 3. submit the claim for tracing
-					TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave);
+					boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
+					TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave, hasViewFraudResultsPermission);
 					ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, claim.getFile().getId(), TracingConstants.FS_ACTION_SUBMIT);
-					if (results != null) {
+					if (hasViewFraudResultsPermission && results != null) {
 						
 						// TODO: SET RELOAD TIME HERE
 						session.setAttribute("traceResults", results);
@@ -358,15 +359,15 @@ public class ModifyClaimAction extends CheckedAction {
 		} else if (request.getParameter("submit") != null) {
 			
 			// 1. submit the claim for tracing
-			if (claim.getFile().getSwapId() > 0) {
-				TraceResponse results = ConnectionUtil.submitClaim(claim.getFile().getSwapId(), false);
-				if (results != null) {
-					session.setAttribute("results", results.getMatchHistory());
-					session.setAttribute("traceResults", results);
-					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
-					return null;
-				}
-			}
+//			if (claim.getFile().getSwapId() > 0) {
+//				TraceResponse results = ConnectionUtil.submitClaim(claim.getFile().getSwapId(), false);
+//				if (results != null) {
+//					session.setAttribute("results", results.getMatchHistory());
+//					session.setAttribute("traceResults", results);
+//					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
+//					return null;
+//				}
+//			}
 			
 		} else if (request.getParameter("error") != null) {
 			if (request.getParameter("error").equals("print")) {

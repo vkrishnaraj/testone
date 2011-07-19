@@ -223,7 +223,9 @@
                             &nbsp;</span></a>
                       </dd>
                       <dd>
-                      <% if ((ntUser && ntfsUser) || ntfsUser) { 
+                      <%
+                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) {
+                      	if ((ntUser && ntfsUser) || ntfsUser) { 
                       		if (((ClaimForm)session.getAttribute("claimForm")).getClaim().getId() == 0) {
 	                      		if (((ClaimForm)session.getAttribute("claimForm")).getClaim().getNtIncident() != null) { %>
 	                      
@@ -247,6 +249,7 @@
                       		<% } %>
 	                   </dd>
                       <% }
+                      }
                       if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a) && ntUser) { %>
                         <dd>
                           <a href="claim_prorate.do"><span class="aa">&nbsp;
