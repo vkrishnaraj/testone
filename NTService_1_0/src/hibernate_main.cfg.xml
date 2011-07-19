@@ -61,8 +61,10 @@
 		<mapping class="aero.nettracer.fs.model.detection.AccessRequest"/>
 		<mapping class="aero.nettracer.fs.model.messaging.FsMessage"/>
 		<mapping class="aero.nettracer.fs.model.FsReceipt"/>
-		<mapping class="aero.nettracer.fs.model.GreyListAddress"/>
 		<mapping class="aero.nettracer.fs.model.FsNameAlias"/>
+		<mapping class="aero.nettracer.fs.model.GreyListAddress"/>
+		<mapping class="aero.nettracer.fs.model.FsActionAudit"/>
+		<mapping class="aero.nettracer.fs.model.FsMatchHistoryAudit"/>
 </session-factory>
 
 </hibernate-configuration>
