@@ -43,6 +43,16 @@ public class StatReport_ExpDTO {
 	
 	private String expenseType_description;
 	
+	private String expenseStatus;
+	
+	public String getExpenseStatus() {
+		return expenseStatus;
+	}
+
+	public void setExpenseStatus(String expenseStatus) {
+		this.expenseStatus = expenseStatus;
+	}
+
 	public String getExpenseType_description() {
 		ExpenseType myExpenseType = new ExpenseType();
 		myExpenseType.setExpensetype_ID(expenseType_ID);

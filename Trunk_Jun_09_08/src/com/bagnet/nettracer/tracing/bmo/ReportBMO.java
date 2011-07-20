@@ -1216,7 +1216,7 @@ public class ReportBMO {
 			String sql = "SELECT sum(exp.checkamt), exp.currency, sum(exp.voucheramt), sum(exp.mileageamt),"
 					+ " exp.expensetype.expensetype_ID, exp.expenselocation.station_ID,exp.expenselocation.stationcode,exp.draftpaiddate,"
 					+ addspart
-					+ " fault.station_ID,fault.stationcode,exp.incident.loss_code,exp.agent.username,exp.incident.incident_ID,exp.agent.station.stationcode "
+					+ " fault.station_ID,fault.stationcode,exp.incident.loss_code,exp.agent.username,exp.incident.incident_ID,exp.agent.station.stationcode,exp.status.status_ID "
 					+ "from com.bagnet.nettracer.tracing.db.ExpensePayout exp left outer join exp.incident.faultstation fault where 1=1  "
 					+ mbrtypeq
 					+ stationq
@@ -1227,7 +1227,7 @@ public class ReportBMO {
 					+ dateq
 					+ typeq
 					+ companylimit
-					+ " group by exp.expenselocation.stationcode, exp.expenselocation.station_ID, fault.station_ID,fault.stationcode, exp.incident.incident_ID, exp.expensetype.expensetype_ID,exp.draftpaiddate, "
+					+ " group by exp.expenselocation.stationcode, exp.expenselocation.station_ID, fault.station_ID,fault.stationcode, exp.incident.incident_ID, exp.expensetype.expensetype_ID,exp.draftpaiddate,exp.status.status_ID, "
 					+ addspart + " exp.currency, exp.incident.loss_code,exp.agent.username ";
 //  				+ " order by exp.expenselocation.stationcode,exp.expensetype.expensetype_ID";
 			
@@ -1386,6 +1386,9 @@ public class ReportBMO {
 				
 				// deal with expense type description here
 				//exp.setExpenseType_description((String) o[++j]);
+				int statusId = ((Integer) o[++j]).intValue();
+				String expenseStatus = myResources.getString("STATUS_KEY_" + statusId);
+				exp.setExpenseStatus(expenseStatus);
 				
 				list.add(exp);
 			}
@@ -3514,6 +3517,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		String reportHeadingAgentStation = "Agent Station";
 		String reportHeadingPaidDate = "Paid Date";
 		String reportHeadingPaymentType = "Payment Type";
+		String reportHeadingPaymentStatus = "Payment Status";
 		String reportHeadingCheckAmount = "Check Amount";
 		String reportHeadingVoucher = "Voucher";
 		String reportHeadingMileage = "Mileage";
@@ -3557,6 +3561,11 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		if (!( myPaymentType == null || myPaymentType.equalsIgnoreCase("") )) {
 			reportHeadingPaymentType = myPaymentType;
 		}
+
+		String myPaymentStatus = resourceBundle.getString("report.disbursement.heading.payment.status");
+		if (!( myPaymentStatus == null || myPaymentStatus.equalsIgnoreCase("") )) {
+			reportHeadingPaymentStatus = myPaymentStatus;
+		}
 		
 		String myCheckAmount = resourceBundle.getString("report.disbursement.heading.check.amount");
 		if (!( myCheckAmount == null || myCheckAmount.equalsIgnoreCase("") )) {
@@ -3584,6 +3593,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
         		drb = drb.addColumn(reportHeadingAgentStation,"agent_station_code",String.class.getName(),14);
         		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
         		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingPaymentStatus,"expenseStatus",String.class.getName(),18);
         		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
         		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
         		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
@@ -3598,6 +3608,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
         		drb = drb.addColumn(reportHeadingAgentStation,"agent_station_code",String.class.getName(),14);
         		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
         		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingPaymentStatus,"expenseStatus",String.class.getName(),18);
         		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
         		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
         		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
@@ -3612,6 +3623,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
         		drb = drb.addColumn(reportHeadingAgent,"agent_username",String.class.getName(),20);
         		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
         		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingPaymentStatus,"expenseStatus",String.class.getName(),18);
         		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
         		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
         		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
@@ -3626,6 +3638,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
         		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),10);
         		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
         		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingPaymentStatus,"expenseStatus",String.class.getName(),18);
         		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
         		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
         		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
@@ -3640,6 +3653,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
         		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),10);
         		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
         		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingPaymentStatus,"expenseStatus",String.class.getName(),18);
         		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
         		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
         		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
@@ -3654,6 +3668,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
         		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),10);
         		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
         		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+        		drb = drb.addColumn(reportHeadingPaymentStatus,"expenseStatus",String.class.getName(),18);
         		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
         		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
         		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
@@ -3668,6 +3683,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	    		drb = drb.addColumn(reportHeadingAgentStation,"agent_station_code",String.class.getName(),14);
 	    		drb = drb.addColumn(reportHeadingPaidDate,"draftpaiddate",Date.class.getName(),12);
 	    		drb = drb.addColumn(reportHeadingPaymentType,"expenseType_description",String.class.getName(),18);
+	    		drb = drb.addColumn(reportHeadingPaymentStatus,"expenseStatus",String.class.getName(),18);
 	    		drb = drb.addColumn(reportHeadingCheckAmount,"checkamt",Double.class.getName(),18, false, "$ ##,##0.00");
 	    		drb = drb.addColumn(" ", "currency_ID", String.class.getName(), 10);
 	    		drb = drb.addColumn(reportHeadingVoucher,"voucheramt",Double.class.getName(),18);
