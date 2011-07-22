@@ -255,7 +255,7 @@ public class ModifyClaimAction extends CheckedAction {
 				}
 			}
 			boolean claimSaved = ClaimDAO.saveClaim(claim);
-			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, claim.getFile().getId(), TracingConstants.FS_ACTION_SAVE);
+			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
 			
 			// maintain existing nt functionality
 			if (isNtUser) {
