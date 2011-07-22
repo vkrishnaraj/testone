@@ -190,7 +190,7 @@ public class ModifyClaimAction extends CheckedAction {
 			if (id > 0) {
 				claim = ClaimDAO.loadClaim(id);
 				// insert log entry here
-				ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, claim.getFile().getId(), TracingConstants.FS_ACTION_LOAD);
+				ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_LOAD);
 				if (claim.getNtIncident() != null) {
 					ntIncident = claim.getNtIncident();
 					bs.populateIncidentFormFromIncidentObj(ntIncident.getIncident_ID(), theform, user, ntIncident.getItemtype_ID(), new IncidentBMO(), ntIncident, false);
@@ -340,7 +340,7 @@ public class ModifyClaimAction extends CheckedAction {
 					// 3. submit the claim for tracing
 					boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
 					TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave, hasViewFraudResultsPermission);
-					ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, claim.getFile().getId(), TracingConstants.FS_ACTION_SUBMIT);
+					ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SUBMIT);
 					if (hasViewFraudResultsPermission && results != null) {
 						
 						// TODO: SET RELOAD TIME HERE
