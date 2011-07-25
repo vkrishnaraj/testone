@@ -86,7 +86,7 @@ public class CustomWestJetReports {
 				+ " group by groupcol"
 				+ " order by groupcol asc";
 
-		String sql2 = " select distinct iid from ("
+		String sql2 = " select distinct iid column1 from ("
 				+ " select i.incident_id iid"
 				+ "   from itinerary it join incident i on it.incident_id = i.incident_id"
 				+ "     join expensepayout ep on ep.incident_id = i.incident_id"
@@ -761,7 +761,9 @@ public class CustomWestJetReports {
 		String dateLimit = " i.createdate >= \'" + startDate
 				+ "\' and i.createdate <= \'" + endDate + "\' ";
 
-		String sql = " select s.stationcode column1, count(distinct i.incident_id) column2, closedPirs column3, hours24 column4, hours48 column5, days5 column6, days21 column7, daysOver21 column8, pirsBdos column9,  count(distinct i.incident_id)-pirsBdos column10 "
+		String sql = " select s.stationcode column1, count(distinct i.incident_id) column2, closedPirs column3, hours24 column4, hours48 column5, days5 column6, days21 column7, daysOver21 column8," +
+				" case when pirsBdos is null then 0 else pirsBdos end column9, " +
+				" count(distinct i.incident_id)-case when pirsBdos is null then 0 else pirsBdos end column10 "
 			+ "   from incident i join station s on s.station_id = i.stationcreated_ID"
 			+ "      left outer join "
 			+ "       ("
