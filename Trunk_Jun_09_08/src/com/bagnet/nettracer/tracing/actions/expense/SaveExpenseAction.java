@@ -89,7 +89,10 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		request.getSession().setAttribute("getclaimfa", "1");
 //		request.getSession().setAttribute("incidentid", ep.getIncident().getIncident_ID());
 		request.getSession().setAttribute("incidentid", incidentId);
-		return mapping.findForward(SAVE_SUCCESS);
+		request.getSession().setAttribute("expense_id", ep.getExpensepayout_ID());
+		response.sendRedirect("EditExpense.do");
+		return null;
+//		return mapping.findForward("edit_success");
 
 	}
 

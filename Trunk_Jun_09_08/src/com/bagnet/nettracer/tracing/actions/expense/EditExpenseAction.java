@@ -21,7 +21,13 @@ public class EditExpenseAction extends BaseExpenseAction {
 			return fwd;
 		}
 		
-		int epId = Integer.parseInt(request.getParameter("expense_id"));
+		int epId = 0;
+		String expenseId = request.getParameter("expense_id");
+		if(expenseId != null){
+			epId = Integer.parseInt(expenseId);
+		} else {
+			epId = (Integer)request.getSession().getAttribute("expense_id");
+		}
 		ExpensePayout ep = ExpensePayoutBMO.findExpensePayout(epId);
 		ExpensePayoutForm epform = (ExpensePayoutForm) form;
 		Agent user = (Agent)request.getSession().getAttribute("user");

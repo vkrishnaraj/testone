@@ -336,8 +336,7 @@ public class ClaimUtils {
 		fsIncident.setPassengers(passengers);
 		
 		fsIncident.setTimestampClosed(incident.getClosedate());
-		Date createDate = new Date(incident.getCreatedate().getTime() + incident.getCreatetime().getTime());
-		fsIncident.setTimestampOpen(createDate);
+		fsIncident.setTimestampOpen(incident.getCreatedate());
 		Set<Bag> bags = new LinkedHashSet<Bag>();
 
 		int numberOfBdos = 0;
