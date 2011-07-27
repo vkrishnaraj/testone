@@ -51,7 +51,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 //@WebService
 public class ClaimBean implements ClaimRemote, ClaimHome {
 
-	public static boolean debug = false;
+	public static boolean debug = true;
 
 	public String echoTest(String s) {
 		return "echo: " + s;
@@ -73,34 +73,38 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				if (debug)
 					System.out.println("delete and save");
 				File toDelete = (File) sess.load(File.class, toSubmit.getId());
-//				if (toDelete.getClaims() != null) {
-//					for(FsClaim claim: toDelete.getClaims()){
-//						claim.setFile(null);
-//						claim.setIncident(null);
-////						sess.delete(claim);
-//					} 
-//				}
-				toDelete.getClaims().clear();
-//				sess.delete(toDelete.getClaims());
+
+				if (toDelete.getClaims() != null) {
+					for(FsClaim claim: toDelete.getClaims()){
+						sess.delete(claim);
+						
+					} 
+					toDelete.getClaims().clear();
+				}
+
+				if (toDelete.getIncident() != null) {
+					FsIncident inc = toDelete.getIncident();
+					inc.setFile(null);
+					sess.delete(inc);
+				}
+
+				toDelete.setIncident(null);
+
+				
+				toDelete.setIncident(toSubmit.getIncident());
+				if(toDelete.getIncident() != null){
+					toDelete.getIncident().setFile(toDelete);
+				}
+				
 				if(toSubmit.getClaims() != null){
 					for(FsClaim claim:toSubmit.getClaims()){
 						claim.setFile(toDelete);
 						toDelete.getClaims().add(claim);
 					}
-//					toDelete.setClaims(toSubmit.getClaims());
 				}
-				if (toDelete.getIncident() != null) {
-					FsIncident inc = toDelete.getIncident();
-					inc.setFile(null);
-					sess.delete(inc);
-					toDelete.setIncident(toSubmit.getIncident());
-					if (toDelete.getIncident() != null) {
-						toDelete.getIncident().setFile(toDelete);
-					}
-				}
-
+				
 				toDelete.setStatusId(toSubmit.getStatusId());
-
+				
 				sess.saveOrUpdate(toDelete);
 				t.commit();
 				AuditUtil.saveActionAudit(AuditUtil.ACTION_UPDATE_FILE, file.getId(), file.getValidatingCompanycode());

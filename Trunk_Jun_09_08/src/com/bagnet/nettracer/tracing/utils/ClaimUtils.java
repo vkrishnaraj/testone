@@ -131,7 +131,7 @@ public class ClaimUtils {
 		claim.setIncident(fsIncident);
 		LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
 		fsClaims.add(claim);
-		fsIncident.setClaims(fsClaims);
+//		fsIncident.setClaims(fsClaims);
 
 		if (ntIncident != null) {
 			claim.setNtIncident(ntIncident);

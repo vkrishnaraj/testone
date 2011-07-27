@@ -274,7 +274,7 @@ public class ModifyClaimAction extends CheckedAction {
 					newClaim.setClaimants(pers);
 					
 					fsClaims.add(newClaim);
-					newClaim.getIncident().setClaims(fsClaims);
+//					newClaim.getIncident().setClaims(fsClaims);
 					for (Person p: claim.getClaimants()) {
 						p.setClaim(newClaim);
 						pers.add(p);

@@ -41,10 +41,10 @@ public class FsIncident implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private Set<Segment> segments;
 	
-	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@org.hibernate.annotations.OrderBy(clause = "claimdate")
-	@Fetch(FetchMode.SELECT)
-	private Set<FsClaim> claims;
+//	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+//	@org.hibernate.annotations.OrderBy(clause = "claimdate")
+//	@Fetch(FetchMode.SELECT)
+//	private Set<FsClaim> claims;
 	private int numberOfBdos;
 	private int numberDaysOpen;
 	private Date timestampOpen;
@@ -111,13 +111,13 @@ public class FsIncident implements Serializable {
 		this.incidentType = incidentType;
 	}
 
-	public Set<FsClaim> getClaims() {
-		return claims;
-	}
-
-	public void setClaims(Set<FsClaim> claims) {
-		this.claims = claims;
-	}
+//	public Set<FsClaim> getClaims() {
+//		return claims;
+//	}
+//
+//	public void setClaims(Set<FsClaim> claims) {
+//		this.claims = claims;
+//	}
 
 	public int getNumberOfBdos() {
 		return numberOfBdos;

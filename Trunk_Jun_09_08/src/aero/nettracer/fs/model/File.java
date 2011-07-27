@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
@@ -61,6 +62,7 @@ public class File implements Serializable {
 	@OneToMany(mappedBy = "file", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "claimdate")
 	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<FsClaim> claims;
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL, mappedBy = "file")
