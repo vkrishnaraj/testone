@@ -41,8 +41,10 @@ public class FsIncident implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private Set<Segment> segments;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class, cascade = CascadeType.ALL) 
-	private FsClaim claim;
+	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "claimdate")
+	@Fetch(FetchMode.SELECT)
+	private Set<FsClaim> claims;
 	private int numberOfBdos;
 	private int numberDaysOpen;
 	private Date timestampOpen;
@@ -109,12 +111,12 @@ public class FsIncident implements Serializable {
 		this.incidentType = incidentType;
 	}
 
-	public FsClaim getClaim() {
-		return claim;
+	public Set<FsClaim> getClaims() {
+		return claims;
 	}
 
-	public void setClaim(FsClaim claim) {
-		this.claim = claim;
+	public void setClaims(Set<FsClaim> claims) {
+		this.claims = claims;
 	}
 
 	public int getNumberOfBdos() {

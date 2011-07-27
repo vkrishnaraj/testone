@@ -8,11 +8,16 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="aero.nettracer.fs.model.detection.AccessRequest" %>
+<%@ page import="aero.nettracer.fs.model.FsClaim" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="java.util.LinkedHashSet" %>
 
 <tr>
 	<td class="header">
-		<bean:message key="colname.fraudresults.select" />
+		<bean:message key="colname.fraudresults.select.request" />
+	</td>
+	<td class="header">
+		<bean:message key="colname.fraudresults.select.delete" />
 	</td>
 	<td class="header">
 		<bean:message key="colname.reference.id" />
@@ -39,44 +44,55 @@
 	Agent a = (Agent)session.getAttribute("user");
 	AccessRequest.RequestStatus status = result.getFile2().getRequestStatus();
 	String company = request.getParameter("company");
-	boolean sameCompany;
-	if (result.getFile2().getClaim() != null) {
-		sameCompany = result.getFile2().getClaim().getAirline().equals(company);
-	} else {
-		sameCompany = result.getFile2().getIncident().getAirline().equals(company);
-	}
-	
-	if (result.getFile2().getClaim() != null) { %>
-	<tr <%=result.getFile2().getDisStatus() %>>
-		<td><input type="checkbox" name="<%=results%>[<%=i%>].selected" /></td>
+	String disStatus = result.getFile2().getDisStatus();
+	boolean sameCompany = result.getFile2().getValidatingCompanycode().equals(company);
+	LinkedHashSet<FsClaim> claims = new LinkedHashSet<FsClaim>(result.getFile2().getClaims());
+	if (claims != null && !claims.isEmpty()) { %>
+	<tr <%=disStatus %>>
+		<td><input type="checkbox" name="<%=results%>[<%=i%>].requestSelected" <% if (sameCompany) { %>disabled<% } %> /></td>
+		<td><input type="checkbox" name="<%=results%>[<%=i%>].deleteSelected" /></td>
+		<td><table class="form2" cellspacing="0" cellpadding="0" >
+		<% for (FsClaim c: claims) { %>
+			<tr>
+		<!-- HERE'S WHERE THE FUN BEGINS -->
 		<% if (sameCompany) { %>
-		<td>
-			<a href="claim_resolution.do?claimId=<%=result.getFile2().getClaim().getSwapId() %>">
-				<bean:write name="result" property="file2.claim.swapId" />
-			</a>
-		</td>
+			<td>
+				<a href="claim_resolution.do?claimId=<%=c.getSwapId() %>">
+					<%=c.getSwapId() %>
+				</a>
+			</td>
 		<% } else { %>
-		<td><bean:write name="result" property="file2.claim.swapId" /></td>
+			<td><%=c.getSwapId() %></td>
 		<% } %>
 		<td>
-			<logic:equal name="result" property="file2.claim.claimType" value="0" >
-				<bean:message key="match.type.claim" />
-			</logic:equal>
-			<logic:equal name="result" property="file2.claim.claimType" value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>" >
-				<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.lostdelay" />
-			</logic:equal>
-			<logic:equal name="result" property="file2.claim.claimType" value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>" >
-				<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.missing" />
-			</logic:equal>
-			<logic:equal name="result" property="file2.claim.claimType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
-				<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.damaged" />
-			</logic:equal>
+			<%
+				switch (c.getClaimType()) {
+					case 0: %>
+						<bean:message key="match.type.claim" />
+					<%	break;
+					case TracingConstants.LOST_DELAY: %>
+						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+					<%	break;
+					case TracingConstants.MISSING_ARTICLES: %>
+						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.missing" />
+					<%	break;
+					case TracingConstants.DAMAGED_BAG: %>
+						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.damaged" />
+					<%	break;
+					default:
+						break;
+				}
+			%>
 		</td>
-		<td><bean:write name="result" property="file2.claim.airline" /></td>
-		<td><%=result.getFile2().getClaim().getDisClaimDate(a.getDateformat().getFormat()) %></td>
+		<td><%=c.getAirline() %></td>
+		<td><%=c.getDisClaimDate(a.getDateformat().getFormat()) %></td>
 		<td>
 			<%=result.getFile2().getDisStatusText() %>
 			<bean:write name="result" property="matchSummary" filter="false" />
+		</td>
+		</tr>
+		<% } %>
+		</table>
 		</td>
 		<td>
 			<a href="fraud_results.do?matchId=<%=result.getId() %>">
@@ -86,10 +102,10 @@
 			<br/><br/>
 			<b><%=status == null ? "" : status %></b>
 			<% } %>
-					</td>
-				</tr>
+		</td>
+		</tr>
 			<% } else { %>
-				<tr <%=result.getFile2().getDisStatus() %>>
+				<tr <%=disStatus %>>
 					<td><input type="checkbox" name="<%=results%>[<%=i%>].selected" /></td>
 					<% if (result.getFile2().getIncident().getAirline().equals(company)) { %>
 					<td>
@@ -120,6 +136,8 @@
 			<%=result.getFile2().getDisStatusText() %>
 			<bean:write name="result" property="matchSummary" filter="false" />
 		</td>
+		<!-- FUN'S OVER!! -->
+		
 		<td>
 			<a href="fraud_results.do?matchId=<%=result.getId() %>">
 				<bean:message key="claim.match.details" />

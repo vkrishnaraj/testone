@@ -830,6 +830,10 @@
     <definition name="salvage_edit" extends="user_menu">
         <put name="center"   value="/pages/salvage/salvage_edit.jsp"/>
     </definition>
+    
+    <definition name="select_claim" extends="user_menu">
+        <put name="center"   value="/pages/claims/select_claim.jsp"/>
+    </definition>
 
     <definition name="create_claim" extends="user_menu">
         <put name="center"   value="/pages/claims/create_claim.jsp"/>

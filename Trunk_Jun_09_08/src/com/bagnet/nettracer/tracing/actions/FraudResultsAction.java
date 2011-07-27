@@ -39,6 +39,8 @@ import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 public class FraudResultsAction extends CheckedAction {
 	
+	private final int DELETE = 1;
+	private final int REQUEST = 2;
 	private static final Logger logger = Logger.getLogger(FraudResultsAction.class);
 	private Agent user;
 	
@@ -121,12 +123,12 @@ public class FraudResultsAction extends CheckedAction {
 			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_MATCH_HISTORY, matchId, TracingConstants.FS_ACTION_LOAD);
 			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
 		} else if (request.getParameter("requestInfo") != null) {
-			List<MatchHistory> requestList = getSelectedMatches(resultsForm);
+			List<MatchHistory> requestList = getSelectedMatches(resultsForm, REQUEST);
 			
 			String myCompany = user.getCompanycode_ID();
 			ArrayList<MatchHistory> toRemove = new ArrayList<MatchHistory>();
 			for (MatchHistory m: requestList) {
-				String matchedAirline = m.getFile2().getMatchedAirline();
+				String matchedAirline = m.getFile2().getValidatingCompanycode();
 				RequestStatus requestStatus = m.getFile2().getRequestStatus();
 				if (matchedAirline.equals(myCompany) || requestStatus != null) {
 					toRemove.add(m);
@@ -143,7 +145,7 @@ public class FraudResultsAction extends CheckedAction {
 				return null;
 			}
 		} else if (request.getParameter("delete") != null) {
-			List<MatchHistory> requestedList = getSelectedMatches(resultsForm);
+			List<MatchHistory> requestedList = getSelectedMatches(resultsForm, DELETE);
 			if (requestedList.size() > 0) {
 				LinkedHashSet<Long> ids = new LinkedHashSet<Long>();
 				int agentId = user.getAgent_ID();
@@ -200,15 +202,26 @@ public class FraudResultsAction extends CheckedAction {
 		return form;
 	}
 
-	private List<MatchHistory> getSelectedMatches(FraudResultsForm form) {
+	private List<MatchHistory> getSelectedMatches(FraudResultsForm form, int selectedType) {
 		ArrayList<MatchHistory> matches = new ArrayList<MatchHistory>();
 		matches.addAll(form.getPrimaryResults());
 		matches.addAll(form.getSecondaryResults());
 		ArrayList<MatchHistory> toReturn = new ArrayList<MatchHistory>();
 		
 		for (MatchHistory m: matches) {
-			if (m.isSelected()) {
-				toReturn.add(m);
+			switch(selectedType) {
+				case DELETE:
+					if (m.isDeleteSelected()) {
+						toReturn.add(m);
+					}
+					break;
+				case REQUEST:
+					if (m.isRequestSelected()) {
+						toReturn.add(m);
+					}
+					break;
+				default:
+					break;
 			}
 		}
 		

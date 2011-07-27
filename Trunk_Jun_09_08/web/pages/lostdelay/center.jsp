@@ -465,7 +465,7 @@
               									TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM,
               									a)) {
               %>
-              <dd><a href="claim_resolution.do?incidentId=<bean:write name="incidentForm" property="incident_ID" />"><span
+              <dd><a href="select_claim.do?incidentId=<bean:write name="incidentForm" property="incident_ID" />"><span
                 class="aa">&nbsp; <br />
               &nbsp;</span> <span class="bb"><bean:message
                 key="menu.claims" /></span> <span class="cc">&nbsp; <br />

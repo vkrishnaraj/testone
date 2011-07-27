@@ -2190,23 +2190,26 @@ public class IncidentBMO {
 
 			ep.setIncident(inc);
 			inc.getExpenses().add(ep);
-			if (inc.getClaim() == null) {
-				Claim c = new Claim();
-				c.setNtIncident(inc);
-				c.setAmountClaimedCurrency(inc.getAgent().getDefaultcurrency());
-				// mjs: begin NTFS modification
-//				c.setCountryofissue(AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID());
-				String countryOfIssue = AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID();
-				for (Person claimant: c.getClaimants()) {
-					claimant.setPassportIssuer(countryOfIssue);
-				}
-				// mjs: end NTFS modification
-				Status st = new Status();
-				st.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
-				c.setStatus(st);
-				inc.setClaim(c);
-				sess.save(c);
-			}
+//			if (inc.getClaims() == null) {
+//				Claim c = new Claim();
+//				c.setNtIncident(inc);
+//				c.setAmountClaimedCurrency(inc.getAgent().getDefaultcurrency());
+//				// mjs: begin NTFS modification
+////				c.setCountryofissue(AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID());
+//				String countryOfIssue = AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID();
+//				for (Person claimant: c.getClaimants()) {
+//					claimant.setPassportIssuer(countryOfIssue);
+//				}
+//				// mjs: end NTFS modification
+//				Status st = new Status();
+//				st.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
+//				c.setStatus(st);
+//				
+//				LinkedHashSet<Claim> claims = new LinkedHashSet<Claim>();
+//				claims.add(c);
+//				inc.setClaims(claims);
+//				sess.save(c);
+//			}
 			sess.save(ep);
 			sess.update(inc);
 			tx.commit();
@@ -2229,7 +2232,7 @@ public class IncidentBMO {
 			}
 			Transaction tx2 = sess.beginTransaction();
 			try {
-				auditClaim(inc.getClaim(), TracerUtils.getText("claim.created.with.expense", agent),
+				auditClaim(inc, TracerUtils.getText("claim.created.with.expense", agent),
 						agent, sess);
 				tx2.commit();
 			} catch (Exception e) {
@@ -2254,51 +2257,53 @@ public class IncidentBMO {
 		return null;
 	}
 
-	public static void auditClaim(Claim claim, String reasonForAudit, Agent user, Session sess) throws Exception {
-		Audit_Claim ac = new Audit_Claim();
-		ac.setExpenses(new HashSet());
+	public static void auditClaim(Incident inc, String reasonForAudit, Agent user, Session sess) throws Exception {
+//		Audit_Claim ac = new Audit_Claim();
+//		ac.setExpenses(new HashSet());
+//
+//		ClaimProrate cp = claim.getClaimprorate();
+//		if (cp != null) {
+//			Audit_ClaimProrate a_cp = new Audit_ClaimProrate();
+//			BeanUtils.copyProperties(a_cp, cp);
+//			Prorate_Itinerary pi = null;
+//			Audit_Prorate_Itinerary a_pi = null;
+//			ArrayList pilist = new ArrayList();
+//			if (cp.getProrate_itineraries() != null) {
+//				for (int i = 0; i < cp.getPi_list().size(); i++) {
+//					pi = (Prorate_Itinerary) cp.getPi_list().get(i);
+//					a_pi = new Audit_Prorate_Itinerary();
+//					BeanUtils.copyProperties(a_pi, pi);
+//					pi.setClaimprorate(cp);
+//					a_pi.setAudit_claimprorate(a_cp);
+//					pilist.add(a_pi);
+//				}
+//				a_cp.setProrate_itineraries(new LinkedHashSet(pilist));
+//			}
+//			ac.setAudit_claimprorate(a_cp);
+//		}
 
-		ClaimProrate cp = claim.getClaimprorate();
-		if (cp != null) {
-			Audit_ClaimProrate a_cp = new Audit_ClaimProrate();
-			BeanUtils.copyProperties(a_cp, cp);
-			Prorate_Itinerary pi = null;
-			Audit_Prorate_Itinerary a_pi = null;
-			ArrayList pilist = new ArrayList();
-			if (cp.getProrate_itineraries() != null) {
-				for (int i = 0; i < cp.getPi_list().size(); i++) {
-					pi = (Prorate_Itinerary) cp.getPi_list().get(i);
-					a_pi = new Audit_Prorate_Itinerary();
-					BeanUtils.copyProperties(a_pi, pi);
-					pi.setClaimprorate(cp);
-					a_pi.setAudit_claimprorate(a_cp);
-					pilist.add(a_pi);
-				}
-				a_cp.setProrate_itineraries(new LinkedHashSet(pilist));
-			}
-			ac.setAudit_claimprorate(a_cp);
-		}
+//		ac.setModify_time(TracerDateTime.getGMTDate());
+//		ac.setModify_agent(user);
+//		ac.setModify_reason(reasonForAudit);
+//		ac.setClaim_ID(claim.getId());
 
-		ac.setModify_time(TracerDateTime.getGMTDate());
-		ac.setModify_agent(user);
-		ac.setModify_reason(reasonForAudit);
-		ac.setClaim_ID(claim.getId());
-		// mjs: begin NTFS modification
-//		ac.setIncident(claim.getIncident());
-		ac.setIncident(claim.getNtIncident());
-		// mjs: end NTFS modification
-		Status st = new Status();
-		st.setStatus_ID(claim.getStatus().getStatus_ID());
-		ac.setStatus(st);
+//		ac.setIncident(claim.getNtIncident());
 
-		// mjs: begin NTFS modification
-//		Incident inc = claim.getIncident();
-		Incident inc = claim.getNtIncident();
-		// mjs: end NTFS modification
+//		Status st = new Status();
+//		st.setStatus_ID(claim.getStatus().getStatus_ID());
+//		ac.setStatus(st);
 
+//		Incident inc = claim.getNtIncident();
+		
+		Date modifyTime = TracerDateTime.getGMTDate();
+		
 		for (ExpensePayout ep : inc.getExpenses()) {
 			Audit_ExpensePayout aep = new Audit_ExpensePayout();
 			BeanUtils.copyProperties(aep, ep);
+			
+			aep.setAgent(user);
+			aep.setModify_time(modifyTime);
+			aep.setModify_reason(reasonForAudit);
 			String temp = "";
 			SimpleDateFormat sdf = new SimpleDateFormat(TracingConstants.DB_DATEFORMAT);
 			for (Comment comment : ep.getComments()) {
@@ -2306,10 +2311,11 @@ public class IncidentBMO {
 						.getCreateDate()), comment.getContent());
 			}
 			aep.setAuditComments(temp);
-			ac.getExpenses().add(aep);
-			aep.setAudit_claim(ac);
+//			ac.getExpenses().add(aep);
+//			aep.setAudit_claim(ac);
+			sess.save(aep);
 		}
-		sess.save(ac);
+//		sess.save(ac);
 	}
 	
 	private Incident normalizePhoneNumbers(Incident iDTO) {

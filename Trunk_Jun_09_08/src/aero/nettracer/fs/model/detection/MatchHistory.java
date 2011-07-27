@@ -55,7 +55,10 @@ public class MatchHistory implements Serializable {
 	private File file2;
 
 	@Transient
-	private boolean selected;
+	private boolean deleteSelected;
+
+	@Transient
+	private boolean requestSelected;
 
 	@Transient
 	private Vector traceCount;
@@ -80,12 +83,20 @@ public class MatchHistory implements Serializable {
 		this.details = details;
 	}
 
-	public boolean isSelected() {
-		return selected;
+	public boolean isDeleteSelected() {
+		return deleteSelected;
 	}
 
-	public void setSelected(boolean selected) {
-		this.selected = selected;
+	public void setDeleteSelected(boolean deleteSelected) {
+		this.deleteSelected = deleteSelected;
+	}
+
+	public boolean isRequestSelected() {
+		return requestSelected;
+	}
+
+	public void setRequestSelected(boolean requestSelected) {
+		this.requestSelected = requestSelected;
 	}
 
 	public String getMatchSummary() {

@@ -35,7 +35,7 @@ public class ClaimBMO {
 			if(cDTO.getIncident() == null) {
 				Incident inc = (Incident) sess.get(Incident.class, incident_ID);
 				cDTO.setNtIncident(inc);
-				inc.setClaim(cDTO);
+				inc.getClaims().add(cDTO);
 				sess.update(inc);
 			}
 			sess.saveOrUpdate(cDTO);

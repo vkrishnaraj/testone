@@ -1,42 +1,13 @@
 <%@ page language="java" %>
-<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
-<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
-<%
-  Agent a = (Agent)session.getAttribute("user");
-
-  boolean ntUser = PropertyBMO.isTrue("nt.user");
-
-%>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-  <SCRIPT LANGUAGE="JavaScript">
-    
-	var cal1xx = new CalendarPopup();	
-	
-    function changebutton() {
-        document.claimForm.saveclaim.disabled = true;
-        document.claimForm.saveclaim.value = "<bean:message key="ajax.please_wait" />";
-        document.claimForm.save.disabled = false;
-      }
-      
-      function undoChangebutton() {
-        document.claimForm.saveclaim.disabled = false;
-        document.claimForm.saveclaim.value = "<bean:message key="button.claim.resolution.save" />";
-        document.claimForm.save.disabled = true;
-      }
-
-  </SCRIPT>
-  
     <form action="create_claim.do" method="post" onsubmit="fillzero(this.incident_ID, 13);">
     
     <tr>

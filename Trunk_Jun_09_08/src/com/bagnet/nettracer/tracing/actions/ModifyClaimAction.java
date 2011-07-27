@@ -37,16 +37,13 @@ import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
-import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.dao.AuditClaimDAO;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
-import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
@@ -54,12 +51,6 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
-/**
- * @author Matt
- * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
- */
 public class ModifyClaimAction extends CheckedAction {
 	
 	private static final Logger logger = Logger.getLogger(ModifyClaimAction.class);
@@ -97,16 +88,17 @@ public class ModifyClaimAction extends CheckedAction {
 		IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
 		
 		// TODO: THIS BLOCK IS PROBLEMATIC IF WE AREN'T COMING FROM THE INCIDENT PAGES ITSELF.
-		if (theform != null) {
-			request.setAttribute("incident", theform.getIncident_ID());
-			if (ClaimSettlementBMO.getClaimSettlement(theform.getIncident_ID(), null) != null) {
-				request.setAttribute("claimSettlementExists", "1");
-			}
-		}
+//		if (theform != null) {
+//			request.setAttribute("incident", theform.getIncident_ID());
+//			if (ClaimSettlementBMO.getClaimSettlement(theform.getIncident_ID(), null) != null) {
+//				request.setAttribute("claimSettlementExists", "1");
+//			}
+//		}
 		Incident ntIncident = null;
 		request.setAttribute("CLAIM_PAYOUT_RPT", Integer.toString(ReportingConstants.CLAIM_PAYOUT_RPT));
 
 		ClaimForm cform = (ClaimForm) form;
+		Set<Claim> claims = null;
 		Claim claim = null;
 		File file = null;
 		
@@ -146,28 +138,19 @@ public class ModifyClaimAction extends CheckedAction {
 						return mapping.findForward(TracingConstants.CLAIM_PAY_MAIN);
 					}
 				} else {
-
 					// if not the same company, then don't show claims
 					if (!user.getStation().getCompany().getCompanyCode_ID().equals(theform.getStationassigned().getCompany().getCompanyCode_ID())) {
 						ActionMessage error = new ActionMessage("error.noincident");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);
 						request.setAttribute("noincident", "1");
-					} else {
-						// TODO: THESE LINES ARE QUESTIONABLE - WE ALREADY DID THIS
-						request.setAttribute("incident", theform.getIncident_ID());
-						theform.setIncident_ID(ntIncidentId);
-						session.setAttribute("incidentForm", theform);
-						session.removeAttribute("payout");
-						if (session.getAttribute("prorate") != null) {
-							session.removeAttribute("prorate");
-							ClaimProrateForm cpform = new ClaimProrateForm();
-							request.setAttribute("CLAIM_PRORATE_RPT", Integer.toString(ReportingConstants.CLAIM_PRORATE_RPT));
-							TracerUtils.populateClaimProrate(cpform, theform, request);
-							return (mapping.findForward(TracingConstants.CLAIM_PRORATE_MAIN));
-						}
-					}
+					} 
 				}
+				claims = ntIncident.getClaims();
+			}
+			
+			if (claims == null) {
+				claims = new LinkedHashSet<Claim>();
 			}
 		}
 		
@@ -175,10 +158,9 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			// create a new claim
 			if (isNtUser && request.getParameter("populate") != null) {
-				claim = ntIncident.getClaim();
-				if (claim == null) {
-					claim = ClaimUtils.createClaim(user, ntIncident);
-				}
+				claim = ClaimUtils.createClaim(user, ntIncident);
+				claims.add(claim);
+				ntIncident.setClaims(claims);
 			} else {
 				claim = ClaimUtils.createClaim(user);
 			}
@@ -198,15 +180,14 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 			
 		} else {
-			
 			// edit the existing claim
 			claim = cform.getClaim();
 			if (isNtUser && ntIncident != null) {
-				claim = ntIncident.getClaim();
 				if (claim == null) {
 					claim = ClaimUtils.createClaim(user, ntIncident);
 					claim.setNtIncident(ntIncident);
-					ntIncident.setClaim(claim);
+					claims.add(claim);
+					ntIncident.setClaims(claims);
 				}
 			}
 		}
@@ -237,6 +218,7 @@ public class ModifyClaimAction extends CheckedAction {
 		
 		// save the claim
 		if (request.getParameter("save") != null) {
+			LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
 			
 			// 1. save the claim locally
 			claim = cform.getClaim();
@@ -249,7 +231,8 @@ public class ModifyClaimAction extends CheckedAction {
 					file = (File) session.getAttribute("file");
 					session.removeAttribute("file");
 					if (file != null) {
-						file.setClaim(claim);
+						claims.add(claim);
+						file.setClaims(fsClaims);
 						claim.setFile(file);
 					}
 				}
@@ -290,7 +273,8 @@ public class ModifyClaimAction extends CheckedAction {
 					LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
 					newClaim.setClaimants(pers);
 					
-					newClaim.getIncident().setClaim(newClaim);
+					fsClaims.add(newClaim);
+					newClaim.getIncident().setClaims(fsClaims);
 					for (Person p: claim.getClaimants()) {
 						p.setClaim(newClaim);
 						pers.add(p);
@@ -317,7 +301,7 @@ public class ModifyClaimAction extends CheckedAction {
 						}
 					}
 					
-					file.setClaim(newClaim);
+					file.setClaims(fsClaims);
 					file.setStatusId(claim.getStatus().getStatus_ID());
 					newClaim.setFile(file);
 					file.setIncident(newClaim.getIncident());
@@ -330,7 +314,13 @@ public class ModifyClaimAction extends CheckedAction {
 					
 					claim = ClaimDAO.loadClaim(claim.getId());
 					claim.setFile(file);
-					file.setClaim(claim);
+					if (file.getClaims() != null && !file.getClaims().isEmpty()) {
+						file.getClaims().add(claim);
+					} else {
+						claims.clear();
+						claims.add(claim);
+						file.setClaims(fsClaims);
+					}
 					file.setIncident(claim.getIncident());
 					claim.getIncident().setFile(file);
 					
@@ -356,19 +346,6 @@ public class ModifyClaimAction extends CheckedAction {
 				}
 			}
 			
-		} else if (request.getParameter("submit") != null) {
-			
-			// 1. submit the claim for tracing
-//			if (claim.getFile().getSwapId() > 0) {
-//				TraceResponse results = ConnectionUtil.submitClaim(claim.getFile().getSwapId(), false);
-//				if (results != null) {
-//					session.setAttribute("results", results.getMatchHistory());
-//					session.setAttribute("traceResults", results);
-//					response.sendRedirect("fraud_results.do?results=1&claimId=" + claim.getId());
-//					return null;
-//				}
-//			}
-			
 		} else if (request.getParameter("error") != null) {
 			if (request.getParameter("error").equals("print")) {
 				// printing error
@@ -388,59 +365,6 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 		} else if (isNtUser) {
 			
-			/**
-			 * ***************** approve interim expense payout screen
-			 * ********************
-			 */
-	
-			if ((request.getParameter("approveinterim")) != null) {
-				theform = new IncidentForm();
-				if (ntIncident == null) {
-					ActionMessage error = new ActionMessage("error.noincident");
-					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-					saveMessages(request, errors);
-					request.setAttribute("noincident", "1");
-					return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
-				}
-				request.setAttribute("incident", theform.getIncident_ID());
-				session.setAttribute("incidentForm", theform);
-				cform = ClaimUtils.createClaimForm(request);
-				cform.setClaim(claim);
-				
-				request.setAttribute("edit", "1");
-				request.setAttribute("editinterim", "1");
-				request.setAttribute("approveinterim", "1");
-				return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
-	
-			}
-			
-			/** **************** eof approve interim expense ******************* */
-			if (theform == null || request.getParameter("clear") != null) {
-				// came here from claim menu, need to show form to enter incident id
-				session.setAttribute("payout", "1");
-				request.setAttribute("noincident", "1");
-				return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
-			}
-			
-			// modify payouts
-			if ((request.getParameter("modifyinterim")) != null) {
-				request.setAttribute("editinterim", "1");			
-			}
-			
-			// save interim
-			if (request.getParameter("saveinterim") != null) {
-				
-				boolean savedClaim = ClaimDAO.saveClaim(claim);
-				if (savedClaim) {
-					theform.setClaim(claim);
-					response.sendRedirect("searchIncident.do?incident=" + theform.getIncident_ID());
-					return null;
-				} else {
-					request.setAttribute("edit", "1");
-					request.setAttribute("editinterim", "1");
-					request.setAttribute("fail", "1");
-				}
-			}
 			
 		}
 		
@@ -448,33 +372,6 @@ public class ModifyClaimAction extends CheckedAction {
 		session.setAttribute("incidentForm", theform);
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
 	}
-	
-//	private TraceResponse submitClaim(long fileId, boolean primary) {
-//		if (fileId <= 0) {
-//			return null;
-//		}
-//		TraceResponse results = null;
-//		try {
-//			Context ctx = ConnectionUtil.getInitialContext();
-//			ClaimRemote remote = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
-//			
-//			
-//			if (remote != null) {
-//				int wait = 6;
-//				try {
-//					wait = PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_CHECK_TIMEOUT);
-//				} catch (Exception e) {
-//					//
-//				}
-//				results = remote.traceFile(fileId, wait, primary);
-//				
-//			}
-//			ctx.close();
-//		} catch (NamingException e) {
-//			e.printStackTrace();
-//		}
-//		return results;
-//	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void deleteAssociatedItems(FsClaim claim, HttpServletRequest request) {

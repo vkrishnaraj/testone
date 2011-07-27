@@ -94,7 +94,7 @@ public class Incident implements Serializable {
 	private Set<Remark> remarks;
 	private Set<Itinerary> itinerary;
 	private long oc_claim_id;
-	private Claim claim;
+	private Set<Claim> claims;
 
 	private Set<Incident_Claimcheck> claimchecks;
 
@@ -862,17 +862,19 @@ public class Incident implements Serializable {
 	 * 
 	 *  
 	 */
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.Claim.class, mappedBy = "ntIncident")
-	public Claim getClaim() {
-		return claim;
+	@OneToMany(mappedBy = "ntIncident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "claimdate")
+	@Fetch(FetchMode.SELECT)
+	public Set<Claim> getClaims() {
+		return claims;
 	}
 
 	/**
 	 * @param claims
 	 *          The claims to set.
 	 */
-	public void setClaim(Claim claim) {
-		this.claim = claim;
+	public void setClaims(Set<Claim> claims) {
+		this.claims = claims;
 	}
 	
 	

@@ -917,6 +917,7 @@ public class TracingConstants {
 	public static final String JSP_DELETE_SALVAGE_ITEM = "delSalvageItem";
 	public static final String JSP_DELETE_SALVAGE_OHD= "delSalvageOhd";
 	
+	public static final String CLAIM_SELECT_CLAIM = "select_claim";
 	public final static String CLAIM_CREATE_NEW = "create_claim";
 	public final static String CLAIM_FRAUD_RESULTS = "fraud_results";
 	public final static String CLAIM_MATCH_DETAILS = "match_details";

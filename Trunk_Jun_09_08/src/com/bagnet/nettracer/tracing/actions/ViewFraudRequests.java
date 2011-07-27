@@ -17,8 +17,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 
 import aero.nettracer.fs.model.detection.AccessRequest;
@@ -143,11 +141,11 @@ public class ViewFraudRequests extends CheckedAction {
 				request.setAttribute("status", status);
 			}
 			
-			if (match.getFile2().getClaim() != null) {
-				request.setAttribute("claimId", match.getFile2().getClaim().getSwapId());
-			} else {
-				request.setAttribute("claimId", match.getFile2().getIncident().getAirlineIncidentId());
-			}
+//			if (match.getFile2().getClaim() != null) {
+//				request.setAttribute("claimId", match.getFile2().getClaim().getSwapId());
+//			} else {
+//				request.setAttribute("claimId", match.getFile2().getIncident().getAirlineIncidentId());
+//			}
 			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
 		}
 
@@ -176,10 +174,4 @@ public class ViewFraudRequests extends CheckedAction {
 		return toReturn;
 	}
 
-	private static String format(String input) {
-		if (input == null || ("null").equals(input))
-			return "";
-		else
-			return input;
-	}
 }

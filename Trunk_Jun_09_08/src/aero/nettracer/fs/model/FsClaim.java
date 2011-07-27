@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
@@ -54,7 +56,8 @@ public class FsClaim implements Serializable {
 	protected int claimProrateId;
 	protected int statusId;
 	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.File.class) 
+	@ManyToOne
+	@JoinColumn(name = "file_id")
 	protected File file;
 
 	//	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -79,8 +82,8 @@ public class FsClaim implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private Blacklist blacklist;
 
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL, mappedBy="claim")
-	@Fetch(FetchMode.SELECT)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "incident_id")
 	private aero.nettracer.fs.model.FsIncident incident;
 	
 	@Transient

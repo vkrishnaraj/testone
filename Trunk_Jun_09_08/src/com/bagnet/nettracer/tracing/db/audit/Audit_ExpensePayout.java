@@ -44,6 +44,7 @@ public class Audit_ExpensePayout implements Serializable {
 	private double creditCardRefund;
 	private Date voucherExpirationDate;
 	
+	
 	private String approval_date;
 
 
@@ -55,8 +56,37 @@ public class Audit_ExpensePayout implements Serializable {
 	private TimeZone _TIMEZONE;
 	
 	private Audit_Claim audit_claim;
+	
+	private String modify_reason;
+	private Date modify_time;
+	
+	/**
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getModify_reason() {
+		return modify_reason;
+	}
+	public void setModify_reason(String modify_reason) {
+		this.modify_reason = modify_reason;
+	}
+	
+	/**
+	 * @return Returns the modify_time.
+	 * 
+	 * @hibernate.property type="timestamp"
+	 */
+	public Date getModify_time() {
+		return modify_time;
+	}
 
-
+	/**
+	 * @param modify_time
+	 *          The modify_time to set.
+	 */
+	public void setModify_time(Date modify_time) {
+		this.modify_time = modify_time;
+	}
 	
 	/**
 	 * @return Returns the audit_claim.

@@ -6,12 +6,16 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
@@ -54,11 +58,15 @@ public class File implements Serializable {
 
 	private long swapId;
 
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class, cascade = CascadeType.ALL, mappedBy = "file")
-	private FsClaim claim;
+	@OneToMany(mappedBy = "file", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "claimdate")
+	@Fetch(FetchMode.SELECT)
+	private Set<FsClaim> claims;
 
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class, cascade = CascadeType.ALL, mappedBy = "file")
 	private FsIncident incident;
+	
+	private String validatingCompanycode;
 
 	public File() {
 	}
@@ -75,12 +83,12 @@ public class File implements Serializable {
 		this.id = id;
 	}
 
-	public FsClaim getClaim() {
-		return claim;
+	public Set<FsClaim> getClaims() {
+		return claims;
 	}
 
-	public void setClaim(FsClaim claim) {
-		this.claim = claim;
+	public void setClaims(Set<FsClaim> claims) {
+		this.claims = claims;
 	}
 
 	public FsIncident getIncident() {
@@ -161,15 +169,25 @@ public class File implements Serializable {
 		return toReturn;		
 	}
 	
-	public String getMatchedAirline() {
-		if (incident != null) {
-			return incident.getAirline();
-		}
-		return claim.getAirline();
-	}
+	
+	
+//	public String getMatchedAirline() {
+//		if (incident != null) {
+//			return incident.getAirline();
+//		}
+//		return claim.getAirline();
+//	}
 
 	public RequestStatus getRequestStatus() {
 		return requestStatus;
+	}
+
+	public String getValidatingCompanycode() {
+		return validatingCompanycode;
+	}
+
+	public void setValidatingCompanycode(String validatingCompanycode) {
+		this.validatingCompanycode = validatingCompanycode;
 	}
 
 	public void setRequestStatus(RequestStatus requestStatus) {

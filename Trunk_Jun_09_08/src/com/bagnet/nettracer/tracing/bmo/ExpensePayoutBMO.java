@@ -1,14 +1,11 @@
 package com.bagnet.nettracer.tracing.bmo;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMessage;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -55,7 +52,7 @@ public class ExpensePayoutBMO {
 			tx.commit();
 			Transaction tx2 = sess.beginTransaction();
 			try {
-				IncidentBMO.auditClaim(ep.getIncident().getClaim(), TracerUtils.getText(
+				IncidentBMO.auditClaim(ep.getIncident(), TracerUtils.getText(
 						"updating.expense.audit", user), user, sess);
 				tx2.commit();
 			} catch (Exception e) {

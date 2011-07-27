@@ -3729,6 +3729,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			AbstractColumn columnaAgentStationCode = reportColumns.get("columnaAgentStationCode");
 			AbstractColumn columnaPaidDate = reportColumns.get("columnaPaidDate");
 			AbstractColumn columnaPayType = reportColumns.get("columnaPayType");
+			AbstractColumn columnaPayStatus = reportColumns.get("columnaPayStatus");
 			AbstractColumn columnCheckAmount = reportColumns.get("columnCheckAmount");
 			AbstractColumn columnCurrencyType = reportColumns.get("columnCurrencyType");
 			AbstractColumn columnVoucher = reportColumns.get("columnVoucher");
@@ -3749,6 +3750,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	    			drb.addColumn(columnaAgentStationCode);
 	    			drb.addColumn(columnaPaidDate);
 	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnaPayStatus);
 	    			drb.addColumn(columnCheckAmount);
 	    			drb.addColumn(columnCurrencyType);
 	    			drb.addColumn(columnVoucher);
@@ -3765,6 +3767,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	    			drb.addColumn(columnaAgentStationCode);
 	    			drb.addColumn(columnaPaidDate);
 	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnaPayStatus);
 	    			drb.addColumn(columnCheckAmount);
 	    			drb.addColumn(columnCurrencyType);
 	    			drb.addColumn(columnVoucher);
@@ -3781,6 +3784,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	    			drb.addColumn(columnAgentCode);
 	    			drb.addColumn(columnaPaidDate);
 	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnaPayStatus);
 	    			drb.addColumn(columnCheckAmount);
 	    			drb.addColumn(columnCurrencyType);
 	    			drb.addColumn(columnVoucher);
@@ -3797,6 +3801,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	    			drb.addColumn(columnaLossCode);
 	    			drb.addColumn(columnaPaidDate);
 	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnaPayStatus);
 	    			drb.addColumn(columnCheckAmount);
 	    			drb.addColumn(columnCurrencyType);
 	    			drb.addColumn(columnVoucher);
@@ -3813,6 +3818,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	    			drb.addColumn(columnaLossCode);
 	    			drb.addColumn(columnaPaidDate);
 	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnaPayStatus);
 	    			drb.addColumn(columnCheckAmount);
 	    			drb.addColumn(columnCurrencyType);
 	    			drb.addColumn(columnVoucher);
@@ -3829,6 +3835,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	    			drb.addColumn(columnaLossCode);
 	    			drb.addColumn(columnaPaidDate);
 	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnaPayStatus);
 	    			drb.addColumn(columnCheckAmount);
 	    			drb.addColumn(columnCurrencyType);
 	    			drb.addColumn(columnVoucher);
@@ -3845,6 +3852,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 	    			drb.addColumn(columnaAgentStationCode);
 	    			drb.addColumn(columnaPaidDate);
 	    			drb.addColumn(columnaPayType);
+	    			drb.addColumn(columnaPayStatus);
 	    			drb.addColumn(columnCheckAmount);
 	    			drb.addColumn(columnCurrencyType);
 	    			drb.addColumn(columnVoucher);
@@ -3895,6 +3903,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		String reportHeadingAgentStation = "Agent Station";
 		String reportHeadingPaidDate = "Paid Date";
 		String reportHeadingPaymentType = "Payment Type";
+		String reportHeadingPaymentStatus = "Payment Status";
 		String reportHeadingCheckAmount = "Check Amount";
 		String reportHeadingVoucher = "Voucher";
 		String reportHeadingMileage = "Mileage";
@@ -3937,6 +3946,11 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		String myPaymentType = resourceBundle.getString("report.disbursement.heading.payment.type");
 		if (!( myPaymentType == null || myPaymentType.equalsIgnoreCase("") )) {
 			reportHeadingPaymentType = myPaymentType;
+		}
+
+		String myPaymentStatus = resourceBundle.getString("report.disbursement.heading.payment.status");
+		if (!( myPaymentStatus == null || myPaymentStatus.equalsIgnoreCase("") )) {
+			reportHeadingPaymentStatus = myPaymentStatus;
 		}
 		
 		String myCheckAmount = resourceBundle.getString("report.disbursement.heading.check.amount");
@@ -4033,8 +4047,13 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 								detailStyle).setHeaderStyle(headerStyle).build();
 		
 		AbstractColumn columnaPayType = ColumnBuilder.getNew()
-				.setColumnProperty("expenseType_description", String.class.getName()).setTitle(
-						reportHeadingPaymentType).setWidth(new Integer(40)).setStyle(
+		.setColumnProperty("expenseType_description", String.class.getName()).setTitle(
+				reportHeadingPaymentType).setWidth(new Integer(40)).setStyle(
+						detailStyle).setHeaderStyle(headerStyle).build();
+
+		AbstractColumn columnaPayStatus = ColumnBuilder.getNew()
+				.setColumnProperty("expenseStatus", String.class.getName()).setTitle(
+						reportHeadingPaymentStatus).setWidth(new Integer(40)).setStyle(
 						detailStyle).setHeaderStyle(headerStyle).build();
 
 		AbstractColumn columnCheckAmount = ColumnBuilder.getNew()
@@ -4076,6 +4095,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 		reportColumns.put("columnaAgentStationCode", columnaAgentStationCode);
 		reportColumns.put("columnaPaidDate", columnaPaidDate);
 		reportColumns.put("columnaPayType", columnaPayType);
+		reportColumns.put("columnaPayStatus", columnaPayStatus);
 		reportColumns.put("columnCheckAmount", columnCheckAmount);
 		reportColumns.put("columnCurrencyType", columnCurrencyType);
 		reportColumns.put("columnVoucher", columnVoucher);

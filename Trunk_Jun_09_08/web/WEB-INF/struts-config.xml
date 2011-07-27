@@ -257,6 +257,7 @@
 		<form-bean name="generaltaskForm" type="com.bagnet.nettracer.tracing.forms.GeneralTaskForm" />
 		
 		<form-bean name="fraudResultsForm" type="com.bagnet.nettracer.tracing.forms.FraudResultsForm" />
+		<form-bean name="selectClaimForm" type="com.bagnet.nettracer.tracing.forms.SelectClaimForm" />
 		<form-bean name="searchClaimForm" type="com.bagnet.nettracer.tracing.forms.SearchClaimForm" />
 		<form-bean name="requestInfoForm" type="com.bagnet.nettracer.tracing.forms.RequestInfoForm" />
 		<form-bean name="privacyPermissionsForm" type="com.bagnet.nettracer.tracing.forms.PrivacyPermissionsForm"/>
@@ -527,6 +528,7 @@
 		<forward name="view_items_salvage" path="view_items_salvage" />
 		<forward name="view_items_deliver" path="view_items_deliver" />
 		<forward name="create_delivery" path="create_delivery" />
+		<forward name="select_claim" path="select_claim" />
 		
 	</global-forwards>
 
@@ -583,6 +585,8 @@
 		<action path="/forwardNotices" type="com.bagnet.nettracer.tracing.actions.taskmanager.SearchForwardNoticeAction" name="searchForwardNoticeForm" scope="request" validate="false" ></action>
 		
 		<action path="/pcn" type="com.bagnet.nettracer.tracing.actions.taskmanager.PcnAction" name="pcnSearchForm" scope="request" validate="false" ></action>
+
+		<action path="/select_claim" type="com.bagnet.nettracer.tracing.actions.SelectClaimAction" name="selectClaimForm" scope="session" validate="false" ></action>
 
 		<action path="/create_claim" type="com.bagnet.nettracer.tracing.actions.CreateClaimAction" scope="request" validate="false" ></action>
 

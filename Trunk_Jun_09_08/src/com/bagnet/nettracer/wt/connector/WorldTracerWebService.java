@@ -1737,7 +1737,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		ArrayList<Expenses> ale = new ArrayList<Expenses>();
 		String cs_fmt = "%02d %s/%s%1.2f";
 		int claimCount = 0;
-		if (i.getClaim() != null) {
+		if (i.getClaims() != null && !i.getClaims().isEmpty()) {
 			String cost;
 
 			if (i.getExpenses() != null) {
