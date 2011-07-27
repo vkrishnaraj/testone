@@ -57,7 +57,7 @@ public class TraceWrapper {
 		}
 	}
 	
-	
+	@Deprecated
 	public static FsClaim loadClaim(long claimId){
 		String sql = "from aero.nettracer.fs.model.FsClaim c where c.id = :id";
 		Query q = null;
@@ -73,6 +73,7 @@ public class TraceWrapper {
 		}
 	}
 	
+	@Deprecated
 	public static FsIncident loadIncident(long incidentId){
 		String sql = "from aero.nettracer.fs.model.FsIncident i where i.id = :id";
 		Query q = null;
@@ -88,6 +89,7 @@ public class TraceWrapper {
 		}
 	}
 	
+	@Deprecated
 	public static FsIncident loadIncidentFromCache(Long id){
 		if(LOAD_FROM_CACHE && incidentCache.containsKey(id)){
 //			System.out.println("i cache");
@@ -101,6 +103,7 @@ public class TraceWrapper {
 		}
 	}
 	
+	@Deprecated
 	public static FsClaim loadClaimFromCache(Long id){
 		if(LOAD_FROM_CACHE && claimCache.containsKey(id)){
 //			System.out.println("c cache");
@@ -174,7 +177,7 @@ public class TraceWrapper {
 					e.printStackTrace();
 				}
 			}
-			ThreadMonitor tm = new ThreadMonitor(v);
+			ThreadMonitor tm = new ThreadMonitor(v, matchQueue);
 			Thread t = new Thread(tm, "TraceWrapperMonitorThread");
 			t.start();
 		}

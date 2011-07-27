@@ -73,24 +73,23 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				if (debug)
 					System.out.println("delete and save");
 				File toDelete = (File) sess.load(File.class, toSubmit.getId());
-				if (toDelete.getClaim() != null) {
-					FsClaim claim = toDelete.getClaim();
-					claim.setFile(null);
-					if (claim.getIncident() != null) {
-						FsIncident inc = toDelete.getClaim().getIncident();
-						claim.getIncident().setFile(null);
+//				if (toDelete.getClaims() != null) {
+//					for(FsClaim claim: toDelete.getClaims()){
+//						claim.setFile(null);
+//						claim.setIncident(null);
+////						sess.delete(claim);
+//					} 
+//				}
+				toDelete.getClaims().clear();
+//				sess.delete(toDelete.getClaims());
+				if(toSubmit.getClaims() != null){
+					for(FsClaim claim:toSubmit.getClaims()){
+						claim.setFile(toDelete);
+						toDelete.getClaims().add(claim);
 					}
-					sess.delete(claim);
-					toDelete.setClaim(toSubmit.getClaim());
-					if (toDelete.getClaim() != null) {
-						toDelete.getClaim().setFile(toDelete);
-					}
-					toDelete.setIncident(toSubmit.getIncident());
-					if (toDelete.getIncident() != null) {
-						toDelete.getIncident().setFile(toDelete);
-					}
-
-				} else if (toDelete.getIncident() != null) {
+//					toDelete.setClaims(toSubmit.getClaims());
+				}
+				if (toDelete.getIncident() != null) {
 					FsIncident inc = toDelete.getIncident();
 					inc.setFile(null);
 					sess.delete(inc);
@@ -104,14 +103,14 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 
 				sess.saveOrUpdate(toDelete);
 				t.commit();
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_UPDATE_FILE, file.getId(), file.getMatchedAirline());
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_UPDATE_FILE, file.getId(), file.getValidatingCompanycode());
 
 			} else {
 				if (debug)
 					System.out.println("saving:" + toSubmit.getId());
 				sess.saveOrUpdate(toSubmit);
 				t.commit();
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_CREATE_FILE, file.getId(), file.getMatchedAirline());
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_CREATE_FILE, file.getId(), file.getValidatingCompanycode());
 			}
 			return toSubmit.getId();
 		} catch (Exception e) {
@@ -144,14 +143,19 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			file.setSwapId(file.getId());
 			file.setId(temp);
 
-			if (file.getClaim() != null && file.getIncident() != null
-					&& file.getClaim().getIncident().equals(file.getIncident()) == false) {
-				throw new Exception("file incident does not match claim incident");
-			}
+			//we might be breaking this associatation
+//			if (file.getClaim() != null && file.getIncident() != null
+//					&& file.getClaim().getIncident().equals(file.getIncident()) == false) {
+//				throw new Exception("file incident does not match claim incident");
+//			}
 
-			if (file.getClaim() != null) {
-				file.setClaim(resetClaim(file.getClaim()));
-			} else if (file.getIncident() != null) {
+			
+			if (file.getClaims() != null) {
+				for(FsClaim claim:file.getClaims()){
+					claim = (resetClaim(claim));//TODO this might be illegal
+				}	
+			} 
+			if (file.getIncident() != null) {
 				file.setIncident(resetIncident(file.getIncident()));
 			}
 
@@ -166,7 +170,6 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			claim.setSwapId(claim.getId());
 			claim.setId(0);
 
-			claim.setIncident(resetIncident(claim.getIncident()));
 			claim.setClaimants(resetPersonId(claim.getClaimants()));
 			claim.setSegments(resetSegmentId(claim.getSegments()));
 			claim.setBlacklist(resetBlackListId(claim.getBlacklist()));
@@ -322,6 +325,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return addresses;
 	}
 
+	//TODO delete this
 	public static FsClaim createFsClaim() {
 
 		// create the claim
@@ -366,7 +370,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		fsIncident.setReservation(reservation);
 		reservation.setIncident(fsIncident);
 		person.setIncident(fsIncident);
-		fsIncident.setClaim(claim);
+//		fsIncident.setClaim(claim);
 		fsIncident.setPassengers(claimants);
 
 		// create the claim
@@ -429,9 +433,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		MatchHistory mh = (MatchHistory) sess.load(MatchHistory.class, matchHistory);
 		
 		boolean autosend = false;
-		if(file.getMatchedAirline() != null){
+		if(file.getValidatingCompanycode() != null){
 			PrivacyPermissionsBean bean = new PrivacyPermissionsBean();
-			PrivacyPermissions permissions = bean.getPrivacyPermissions(file.getMatchedAirline(), AccessLevelType.req);
+			PrivacyPermissions permissions = bean.getPrivacyPermissions(file.getValidatingCompanycode(), AccessLevelType.req);
 			if (permissions != null) {
 				if(permissions.isAutosend()){
 					autosend = true;
@@ -475,7 +479,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public List<AccessRequest> getOutstandingRequests(String airlineId, int begin, int perPage) {
 		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_ACCESS_REQUESTS, -1, airlineId);
 		Session sess = HibernateWrapper.getSession().openSession();
-		String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status = :status and ar.file.incident.airline = :airline";
+		String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status = :status and ar.file.airline = :airline";
 
 		Query q = sess.createQuery(sql);
 
@@ -502,17 +506,20 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 
 	@Override
 	public File getFile(long fileId, String airline) {
+		//TODO need to incorporate killswitch
+		
 		Session sess = HibernateWrapper.getSession().openSession();
-		File file = null;
+		File fullFile = null;
 
 		try {
-			File fullFile = (File) sess.load(File.class, fileId);
+			fullFile = (File) sess.load(File.class, fileId);
 			if (fullFile != null) {
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_FILE, file.getId(), airline);
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_FILE, fullFile.getId(), airline);
 				String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.file.id = :fileId and ar.requestedAirline = :requestingAirline";
 
 				Query q = sess.createQuery(sql);
 				q.setParameter("requestingAirline", airline);
+				q.setParameter("fileId", fileId);
 
 				List<AccessRequest> requests = q.list();
 				RequestStatus highest = null;
@@ -547,7 +554,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		} finally {
 			sess.close();
 		}
-		return file;
+		return fullFile;
 	}
 
 
@@ -576,9 +583,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				t.rollback();
 		} finally {
 			if(status.equals(RequestStatus.Approved)){
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_APPROVE_REQUEST, request.getFile().getId(), request.getFile().getMatchedAirline());
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_APPROVE_REQUEST, request.getFile().getId(), request.getFile().getValidatingCompanycode());
 			} else {
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_DENY_REQUEST, request.getFile().getId(), request.getFile().getMatchedAirline());
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_DENY_REQUEST, request.getFile().getId(), request.getFile().getValidatingCompanycode());
 			}
 			sess.close();
 		}
@@ -609,7 +616,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				sess.saveOrUpdate(mh);
 				Set<FsMatchHistoryAudit> s = new HashSet<FsMatchHistoryAudit>();
 				s.add(new FsMatchHistoryAudit(id, null));
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_DELETE_MATCH, mh.getFile1().getId(), mh.getFile1().getMatchedAirline(), s);
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_DELETE_MATCH, mh.getFile1().getId(), mh.getFile1().getValidatingCompanycode(), s);
 			}
 			t.commit();
 			sess.close();
@@ -632,7 +639,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			sess.close();
 			Set<FsMatchHistoryAudit> s = new HashSet<FsMatchHistoryAudit>();
 			s.add(new FsMatchHistoryAudit(matchId, null));
-			AuditUtil.saveActionAudit(AuditUtil.ACTION_DELETE_MATCH, mh.getFile1().getId(), mh.getFile1().getMatchedAirline(), s);
+			AuditUtil.saveActionAudit(AuditUtil.ACTION_DELETE_MATCH, mh.getFile1().getId(), mh.getFile1().getValidatingCompanycode(), s);
 			return true;
 		} catch (Exception e){
 			e.printStackTrace();

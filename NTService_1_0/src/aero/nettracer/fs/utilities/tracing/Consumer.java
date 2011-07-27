@@ -246,15 +246,19 @@ public class Consumer implements Runnable{
 			c1.setCcType(r1.getCcType());
 			ret.add(c1);
 		} 
-		if(file != null && file.getClaim() != null && file.getClaim().getReceipts() != null){
-			for(FsReceipt receipt:file.getClaim().getReceipts()){
-				CreditCard c1 = new CreditCard();
-				c1.setCcExpMonth(receipt.getCcExpMonth());
-				c1.setCcExpYear(receipt.getCcExpYear());
-				c1.setCcNumber(null);
-				c1.setCcNumLastFour(receipt.getCcLastFour());
-				c1.setCcType(receipt.getCcType());
-				ret.add(c1);
+		if(file != null && file.getClaims() != null){
+			for(FsClaim claim:file.getClaims()){
+				if(claim.getReceipts() != null){
+					for(FsReceipt receipt:claim.getReceipts()){
+						CreditCard c1 = new CreditCard();
+						c1.setCcExpMonth(receipt.getCcExpMonth());
+						c1.setCcExpYear(receipt.getCcExpYear());
+						c1.setCcNumber(null);
+						c1.setCcNumLastFour(receipt.getCcLastFour());
+						c1.setCcType(receipt.getCcType());
+						ret.add(c1);
+					}
+				}
 			}
 		}
 		return ret;
@@ -324,20 +328,17 @@ public class Consumer implements Runnable{
 
 	public static Set<Person> getPersons(File file, boolean alias){
 		LinkedHashSet<Person> ret = new LinkedHashSet<Person>();
-		Set<Person> persons =  null;
-		if(file.getClaim() != null){
-			persons = getPersons(file.getClaim());
-			if(persons != null){
-				ret.addAll(persons);
+		Set<Person> persons =  new LinkedHashSet<Person>();
+		if(file.getClaims() != null){
+			for(FsClaim claim:file.getClaims()){
+				persons.addAll(getPersons(claim));
 			}
-		} else if (file.getIncident() != null){
-			persons = getPersons(file.getIncident());
-			if(persons != null){
-				ret.addAll(persons);
-			}
-		} else {
-			return null;
 		}
+		if (file.getIncident() != null){
+			persons.addAll(getPersons(file.getIncident()));
+		}
+		
+		ret.addAll(persons);
 		if(alias && persons != null){
 			for(Person person:persons){
 				List<FsNameAlias> names = FsNameAliasBMO.getAlias(person.getFirstName());
@@ -391,40 +392,22 @@ public class Consumer implements Runnable{
 					ret.add(p);
 				}
 			}
-			if(claim.getIncident() != null){
-				if(claim.getIncident().getPassengers() != null){
-					for(Person p:claim.getIncident().getPassengers()){
-						ret.add(p);
-					}
-				}
-				if(claim.getIncident().getReservation() != null) {
-					
-
-					if (claim.getIncident().getReservation().getPurchaser() != null) {
-						Person p = claim.getIncident().getReservation().getPurchaser();
-						ret.add(p);
-					}
-
-					if (claim.getIncident().getReservation().getPassengers() != null) {
-						for (Person p : claim.getIncident().getReservation().getPassengers()) {
-							ret.add(p);
-						}
-					}
-				}
-			}
 		}
 		return ret;
 	}
 
 	
 	public static Set<FsAddress> getAddresses(File file){
-		if(file.getClaim() != null){
-			return getAddresses(file.getClaim());
-		} else if (file.getIncident() != null){
-			return getAddresses(file.getIncident());
-		} else {
-			return null;
-		}
+		Set<FsAddress>addresses = new HashSet<FsAddress>();
+		if(file.getClaims() != null){
+			for(FsClaim claim:file.getClaims()){
+				addresses.addAll(getAddresses(claim));
+			}
+		} 
+		if (file.getIncident() != null){
+			addresses.addAll(getAddresses(file.getIncident()));
+		} 
+		return addresses;
 	}
 	
 	// TODO: Opportunity to optimize primary claim's data sets.  We will re-run this over and over.
@@ -443,30 +426,6 @@ public class Consumer implements Runnable{
 				for(FsReceipt receipt:claim.getReceipts()){
 					if(receipt.getAddress() != null){
 						ret.add(receipt.getAddress());
-					}
-				}
-			}
-			if(claim.getIncident() != null){
-				if(claim.getIncident().getPassengers() != null){
-					for(Person p:claim.getIncident().getPassengers()){
-						for (FsAddress a: p.getAddresses()) {
-							ret.add(a);
-						}
-					}
-				}
-				if (claim.getIncident().getReservation() != null) {
-					if (claim.getIncident().getReservation().getPurchaser() != null) {
-						Person p = claim.getIncident().getReservation().getPurchaser();
-						for (FsAddress a: p.getAddresses()) {
-							ret.add(a);
-						}
-					}
-					if (claim.getIncident().getReservation().getPassengers() != null) {
-						for (Person p : claim.getIncident().getReservation().getPassengers()) {
-							for (FsAddress a : p.getAddresses()) {
-								ret.add(a);
-							}
-						}
 					}
 				}
 			}
@@ -507,13 +466,16 @@ public class Consumer implements Runnable{
 
 	
 	public static Set<Phone> getPhones(File file){
-		if(file.getClaim() != null){
-			return getPhones(file.getClaim());
-		} else if (file.getIncident() != null){
-			return getPhones(file.getIncident());
-		} else {
-			return null;
+		Set<Phone> phones = new HashSet<Phone>();
+		if(file.getClaims() != null){
+			for(FsClaim claim:file.getClaims()){
+			phones.addAll(getPhones(claim));
+			}
+		} 
+		if (file.getIncident() != null){
+			phones.addAll(getPhones(file.getIncident()));
 		}
+		return phones;
 	}
 
 	private static Set<Phone> getPhones(FsIncident incident) {
@@ -559,27 +521,6 @@ public class Consumer implements Runnable{
 				for(FsReceipt receipt:claim.getReceipts()){
 					if(receipt.getPhone() != null){
 						ret.add(receipt.getPhone());
-					}
-				}
-			}
-			if(claim.getIncident() != null){
-				if(claim.getIncident().getPassengers() != null){
-					for(Person p:claim.getIncident().getPassengers()){
-						if(p.getPhones() != null){
-							for(Phone phone:p.getPhones()){
-								ret.add(phone);
-							}
-						}
-					}
-				}
-				if(claim.getIncident().getReservation() != null
-						&& claim.getIncident().getReservation().getPassengers() != null){
-					for(Person p:claim.getIncident().getReservation().getPassengers()){
-						if(p.getPhones() != null){
-							for(Phone phone:p.getPhones()){
-								ret.add(phone);
-							}
-						}
 					}
 				}
 			}

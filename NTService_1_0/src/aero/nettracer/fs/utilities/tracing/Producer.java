@@ -17,6 +17,7 @@ import org.junit.Test;
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsMatchHistoryAudit;
 import aero.nettracer.fs.model.GreyListAddress;
 import aero.nettracer.fs.model.Person;
@@ -59,7 +60,7 @@ public class Producer {
 	public static TraceResponse matchFile(long fileId, int maxDelay, boolean persistData, boolean isPrimary, boolean returnResults){
 		File file = TraceWrapper.loadFileFromCache(fileId);
 		if(file != null){
-			AuditUtil.saveActionAudit(AuditUtil.ACTION_TRACE_FILE, file.getId(), file.getMatchedAirline());
+			AuditUtil.saveActionAudit(AuditUtil.ACTION_TRACE_FILE, file.getId(), file.getValidatingCompanycode());
 			return matchFile(file, maxDelay, persistData, isPrimary, returnResults);
 		} else {
 			return null;
@@ -580,19 +581,31 @@ public class Producer {
 			boolean add = true;
 			if(klist!=null){
 				for(String k:klist){
-					if((match.getFile1().getClaim() != null && match.getFile1().getClaim().getAirline() != null && match.getFile1().getClaim().getAirline().equalsIgnoreCase(k))
-							|| (match.getFile1().getIncident() != null && match.getFile1().getIncident().getAirline() != null && match.getFile1().getIncident().getAirline().equalsIgnoreCase(k))
-							|| (match.getFile2().getClaim() != null && match.getFile2().getClaim().getAirline() != null && match.getFile2().getClaim().getAirline().equalsIgnoreCase(k))
-							|| (match.getFile2().getIncident() != null && match.getFile2().getIncident().getAirline() != null && match.getFile2().getIncident().getAirline().equalsIgnoreCase(k))){
-						add = false;
-						if(debug)System.out.println("Match censored due to kill swith: " + match.getId());
+					if(match.getFile1() != null){
+						if(match.getFile1() != null && match.getFile1().getValidatingCompanycode().equalsIgnoreCase(k))add=false;
+						if(match.getFile1().getClaims() != null){
+							for(FsClaim claim:match.getFile1().getClaims()){
+								if(claim.getAirline() != null && claim.getAirline().equalsIgnoreCase(k))add=false;
+							}
+						}
+						if(match.getFile1().getIncident() != null && match.getFile1().getIncident().getAirline() != null && match.getFile1().getIncident().getAirline().equalsIgnoreCase(k))add=false;
 					}
-						
+					if(match.getFile2() != null){
+						if(match.getFile2() != null && match.getFile2().getValidatingCompanycode().equalsIgnoreCase(k))add=false;
+						if(match.getFile2().getClaims() != null){
+							for(FsClaim claim:match.getFile2().getClaims()){
+								if(claim.getAirline() != null && claim.getAirline().equalsIgnoreCase(k))add=false;
+							}
+						}
+						if(match.getFile2().getIncident() != null && match.getFile2().getIncident().getAirline() != null && match.getFile2().getIncident().getAirline().equalsIgnoreCase(k))add=false;
+					}
 				}
 			} 
 			if(add){
 				ret.add(match);
 				if(debug)System.out.println("Match: " + match.getId() + "  " + match.getOverallScore());
+			}else{
+				if(debug)System.out.println("Match censored due to kill swith: " + match.getId());
 			}
 		}
 		return ret;
@@ -600,12 +613,7 @@ public class Producer {
 	
 	public static Set<MatchHistory> getCensoredFileMatches(long fileId) {
 		File f = TraceWrapper.loadFileFromCache(fileId);
-		String company = null;
-		if(f.getClaim() != null && f.getClaim().getAirline() != null){
-			company = f.getClaim().getAirline();
-		} else if (f.getIncident() != null && f.getIncident().getAirline() != null){
-			company = f.getIncident().getAirline();
-		}
+		String company = f.getValidatingCompanycode();
 		Set<MatchHistory> histories = Producer.getMatchHistoryResult(fileId);
 		List<PrivacyPermissions> p = PrivacyPermissionsBean.getPrivacyPermissions();
 		Set<FsMatchHistoryAudit> matchAuditSet = new HashSet<FsMatchHistoryAudit>();
@@ -613,7 +621,7 @@ public class Producer {
 			//TODO change level based on access request
 			RequestStatus rs;
 			long requestedId;
-			if(history.getFile1().getMatchedAirline().equals(company)){
+			if(history.getFile1().getValidatingCompanycode().equals(company)){
 				requestedId = history.getFile2().getId();
 				rs = getRequestStatus(requestedId, company);
 				history.getFile2().setRequestStatus(rs);
@@ -631,7 +639,7 @@ public class Producer {
 				matchAuditSet.add(new FsMatchHistoryAudit(history.getId(), "DEF"));
 			}
 		}
-		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_TRACE_RESULTS, fileId, f.getMatchedAirline(), matchAuditSet);
+		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_TRACE_RESULTS, fileId, f.getValidatingCompanycode(), matchAuditSet);
 		return histories;
 	}
 	
@@ -681,23 +689,8 @@ public class Producer {
 		String s = ACCESS_NOT_GRANTED;
 		PrivacyPermissions p1 = new PrivacyPermissions();
 		PrivacyPermissions p2 = new PrivacyPermissions();
-		String company1 = null;
-		String company2 = null;
-		
-		if(match.getFile1() != null){
-			if(match.getFile1().getClaim() != null && match.getFile1().getClaim().getAirline() != null){
-				company1 = match.getFile1().getClaim().getAirline();
-			} else if (match.getFile1().getIncident() != null && match.getFile1().getIncident().getAirline() != null){
-				company1 = match.getFile1().getIncident().getAirline();
-			}
-		}
-		if(match.getFile2() != null){
-			if(match.getFile2().getClaim() != null && match.getFile2().getClaim().getAirline() != null){
-				company2 = match.getFile2().getClaim().getAirline();
-			} else if (match.getFile2().getIncident() != null && match.getFile2().getIncident().getAirline() != null){
-				company2 = match.getFile2().getIncident().getAirline();
-			}
-		}
+		String company1 = (match.getFile1()!=null?match.getFile1().getValidatingCompanycode():null);
+		String company2 = (match.getFile2()!=null?match.getFile2().getValidatingCompanycode():null);
 		
 		for(PrivacyPermissions p: plist){
 			if(p.getKey().getCompanycode().equals(company1) && p.getKey().getLevel().equals(level)){
@@ -839,19 +832,21 @@ public class Producer {
 				phone.setPhoneNumber(s);
 			}
 		}
-		
-		if(f.getClaim() != null){
-			if(!p.isAmountclaimed()){
-				f.getClaim().setAmountClaimed(0);
-			}
-			if(!p.isAmountpaid()){
-				f.getClaim().setAmountPaid(0);
-			}
-			if(!p.isDenied()){
-//				f.getClaim().setDenied(null);
-			}
-			if(!p.isTraveldate()){
-				f.getClaim().setTravelDate(null);
+
+		if(f.getClaims() != null){
+			for(FsClaim claim: f.getClaims()){
+				if(!p.isAmountclaimed()){
+					claim.setAmountClaimed(0);
+				}
+				if(!p.isAmountpaid()){
+					claim.setAmountPaid(0);
+				}
+				if(!p.isDenied()){
+					//				f.getClaim().setDenied(null);
+				}
+				if(!p.isTraveldate()){
+					claim.setTravelDate(null);
+				}
 			}
 		}
 		
