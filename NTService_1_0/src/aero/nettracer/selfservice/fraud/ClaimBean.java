@@ -64,6 +64,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public long insertFile(File file) {
 		Transaction t = null;
 		Session sess = null;
+		if(file.getValidatingCompanycode() == null){
+			return -1;
+		}
 		try {
 			File toSubmit = resetIdAndgeocode(file);
 
