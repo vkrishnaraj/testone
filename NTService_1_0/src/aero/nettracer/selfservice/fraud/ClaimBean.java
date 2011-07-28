@@ -486,7 +486,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public List<AccessRequest> getOutstandingRequests(String airlineId, int begin, int perPage) {
 		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_ACCESS_REQUESTS, -1, airlineId);
 		Session sess = HibernateWrapper.getSession().openSession();
-		String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status = :status and ar.file.airline = :airline";
+		String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status = :status and ar.file.validatingCompanycode = :airline";
 
 		Query q = sess.createQuery(sql);
 
