@@ -7,9 +7,12 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import com.bagnet.nettracer.match.StringCompare;
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.lf.LFAddress;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
@@ -31,9 +34,8 @@ public class LFTracingUtil {
 	private static final double SCORE_PHONE = 10;
 	private static final double SCORE_NAME = 10;
 	private static final double SCORE_DESCRIPTION = 10;
-	private static final double SCORE_CAT_SUBCAT = 10;
-	private static final double SCORE_CAT = 10;
 	private static final double SCORE_ADDRESS = 10;
+	private static final double SCORE_BRAND = 10;
 	
 	
 	private static String replaceNull(String string) {
@@ -148,12 +150,11 @@ public class LFTracingUtil {
 		if(match.getLost().getClient() != null && match.getFound().getClient() != null){
 			LFPerson lc = match.getLost().getClient();
 			LFPerson fc = match.getFound().getClient();
-			
 			if(lc.getLastName() != null && lc.getLastName().trim().length() > 0
 					&& fc.getLastName() != null && fc.getLastName().trim().length() > 0
 					&& lc.getFirstName() != null && lc.getFirstName().trim().length() > 0
 					&& fc.getFirstName() != null && fc.getFirstName().trim().length() > 0){
-				if(lc.getLastName().equalsIgnoreCase(fc.getLastName()) && lc.getFirstName().equalsIgnoreCase(fc.getFirstName())){
+				if(StringCompare.compareStrings(lc.getFirstName()+lc.getLastName(), fc.getFirstName()+fc.getLastName()) > 80.0){
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("Name Number Match");
 					detail.setMatchHistory(match);
@@ -188,37 +189,38 @@ public class LFTracingUtil {
 						&& fc.getAddress().getAddress1() != null && fc.getAddress().getAddress1().trim().length() > 0
 						&& lc.getAddress().getCity() != null && lc.getAddress().getCity().trim().length() > 0
 						&& fc.getAddress().getCity() != null && fc.getAddress().getCity().trim().length() > 0){
-					if(lc.getAddress().getAddress1().equalsIgnoreCase(fc.getAddress().getAddress1())
-							&& lc.getAddress().getCity().equalsIgnoreCase(fc.getAddress().getCity())){
-						if(lc.getAddress().getState() != null && lc.getAddress().getState().trim().length() > 0
-								&& fc.getAddress().getState() != null && fc.getAddress().getState().trim().length() > 0){
-							if(lc.getAddress().getState().equalsIgnoreCase(fc.getAddress().getState())){
-								LFMatchDetail detail = new LFMatchDetail();
-								detail.setDescription("Address Match");
-								detail.setMatchHistory(match);
-								detail.setScore(SCORE_ADDRESS);
-								detail.setFoundValue(fc.getAddress().getAddress1() + " " + fc.getAddress().getCity() + " " + fc.getAddress().getState());
-								detail.setLostValue(lc.getAddress().getAddress1() + " " + lc.getAddress().getCity() + " " + lc.getAddress().getState());
-								match.getDetails().add(detail);
-							}
-						} else if (lc.getAddress().getProvince() != null && lc.getAddress().getProvince().trim().length() > 0
-								&& fc.getAddress().getProvince() != null && fc.getAddress().getProvince().trim().length() > 0){
-							if(lc.getAddress().getProvince().equalsIgnoreCase(fc.getAddress().getProvince())){
-								LFMatchDetail detail = new LFMatchDetail();
-								detail.setDescription("Address Match");
-								detail.setMatchHistory(match);
-								detail.setScore(SCORE_ADDRESS);
-								detail.setFoundValue(fc.getAddress().getAddress1() + " " + fc.getAddress().getCity() + " " + fc.getAddress().getProvince());
-								detail.setLostValue(lc.getAddress().getAddress1() + " " + lc.getAddress().getCity() + " " + lc.getAddress().getProvince());
-								match.getDetails().add(detail);
-							}
-						} else {
-							//TODO no state or province?
-						}
+					
+					LFAddress la = lc.getAddress();
+					LFAddress fa = fc.getAddress();
+					
+					String laddress = la.getAddress1()!=null?la.getAddress1():"" 
+							+ la.getAddress2()!=null?la.getAddress2():"" 
+							+ la.getCity()!=null?la.getCity():"" 
+							+ la.getState()!=null?la.getState():""
+							+ la.getProvince()!=null?la.getProvince():""
+							+ la.getZip()!=null?la.getZip():"";
+					String faddress = fa.getAddress1()!=null?fa.getAddress1():"" 
+							+ fa.getAddress2()!=null?fa.getAddress2():"" 
+							+ fa.getCity()!=null?fa.getCity():"" 
+							+ fa.getState()!=null?fa.getState():""
+							+ fa.getProvince()!=null?fa.getProvince():""
+							+ fa.getZip()!=null?fa.getZip():"";
+					
+
+					if(StringCompare.compareStrings(laddress, faddress) > 60.0){
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("Address Match");
+						detail.setMatchHistory(match);
+						detail.setScore(SCORE_ADDRESS);
+						String lostStateProvince = lc.getAddress().getState()!=null?lc.getAddress().getState():lc.getAddress().getProvince()!=null?lc.getAddress().getProvince():"";
+						String foundStateProvince = fc.getAddress().getState()!=null?fc.getAddress().getState():fc.getAddress().getProvince()!=null?fc.getAddress().getProvince():"";
+						detail.setFoundValue(fc.getAddress().getAddress1() + " " + fc.getAddress().getCity() + " " + foundStateProvince);
+						detail.setLostValue(lc.getAddress().getAddress1() + " " + lc.getAddress().getCity() + " " + lostStateProvince);
+						match.getDetails().add(detail);
 					}
-				}
+				} 
 			}
-			
+
 			if(lc.getVantiveNumber() != null && lc.getVantiveNumber().trim().length() > 0
 					&& fc.getVantiveNumber() != null && fc.getVantiveNumber().trim().length() > 0){
 				if(lc.getVantiveNumber().equalsIgnoreCase(fc.getVantiveNumber())){
@@ -239,7 +241,15 @@ public class LFTracingUtil {
 			for(LFItem litem:match.getLost().getItems()){
 				if(litem.getBrand() != null && litem.getBrand().trim().length() > 0
 						&& fitem.getBrand() != null && fitem.getBrand().trim().length() > 0){
-					if(litem.getBrand().equalsIgnoreCase(fitem.getBrand()));
+					if(StringCompare.compareStrings(litem.getBrand(), fitem.getBrand()) > 80.0){
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("Brand Match");
+						detail.setMatchHistory(match);
+						detail.setScore(SCORE_BRAND);
+						detail.setFoundValue(fitem.getBrand());
+						detail.setLostValue(litem.getBrand());
+						match.getDetails().add(detail);
+					}
 				}
 				if(litem.getCategory() > 0 && fitem.getCategory() > 0){
 					if(litem.getSubCategory() > 0 && fitem.getSubCategory() > 0){
@@ -285,7 +295,7 @@ public class LFTracingUtil {
 				}
 				if(litem.getDescription() != null && litem.getDescription().trim().length() > 0
 						&& fitem.getDescription() != null && fitem.getDescription().trim().length() > 0){
-					if(litem.getDescription().equalsIgnoreCase(fitem.getDescription())){
+					if(StringCompare.compareStrings(litem.getDescription(), fitem.getDescription()) > 60){
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Description Match");
 						detail.setMatchHistory(match);
