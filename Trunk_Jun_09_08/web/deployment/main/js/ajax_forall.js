@@ -77,7 +77,7 @@ function postUrl(url, data, async, stateChangeCallback)
         };
     xmlHttpReq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     xmlHttpReq.send(data);
-    alert ('url: ' + url + '\ndata: ' + data);
+    //alert ('url: ' + url + '\ndata: ' + data);
 }
 
 function urlEncodeDict(dict)
