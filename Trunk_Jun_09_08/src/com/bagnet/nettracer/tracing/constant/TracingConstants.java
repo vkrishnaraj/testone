@@ -941,6 +941,7 @@ public class TracingConstants {
 	public static final int FS_ACTION_SUBMIT = 3;
 	public static final int FS_ACTION_REQUEST_INFO = 4;
 	public static final int FS_ACTION_DELETE = 5;
+	public static final String SESSION_REDIRECT_URL = "SESSION_REDIRECT_URL";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

@@ -112,6 +112,7 @@ public class LostDelayAction extends CheckedAction {
 		ActionMessages errors = new ActionMessages();
 
 		if(session.getAttribute("user") == null || form == null) {
+			
 			response.sendRedirect("logoff.do");
 			return null;
 		}

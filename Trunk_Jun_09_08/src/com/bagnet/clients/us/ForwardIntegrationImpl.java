@@ -11,6 +11,7 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
+import javax.mail.internet.InternetAddress;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
@@ -21,6 +22,7 @@ import aero.nettracer.serviceprovider.wt_1_0.common.ForwardMessage;
 import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Itinerary;
 
+import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
@@ -137,6 +139,8 @@ public class ForwardIntegrationImpl {
 
 			// Step 2. Perfom a lookup on the queue
 			Queue queue = (Queue) initialContext.lookup("/queue/testQueue");
+			
+			
 
 			// Step 3. Perform a lookup on the Connection Factory
 			ConnectionFactory cf = (ConnectionFactory) initialContext.lookup("/ConnectionFactory");
@@ -161,6 +165,29 @@ public class ForwardIntegrationImpl {
 			Thread.sleep(10 * 1000);
 		} catch (Exception e) {
 			e.printStackTrace();
+			try{
+				HtmlEmail he = new HtmlEmail();
+				
+				String from = "donotreply@usairways.com";
+				String host = "relay.lcc.usairways.com";
+				int port = 25;
+				
+				he.setHostName(host);
+				he.setSmtpPort(port);
+
+				he.setFrom(from);
+				ArrayList al = new ArrayList();
+				al.add(new InternetAddress("support@nettracer.aero"));
+				he.setTo(al);
+				
+				he.setSubject("Alert: US Airways TestQueue not bound");
+				
+				he.setHtmlMsg("Test queue not bound - please restart ntservice.");
+				he.send();
+				
+			}catch(Exception ex2){
+				ex2.printStackTrace();
+			}
 		} finally {
 			try {
 				// Step 19. Be sure to close our JMS resources!

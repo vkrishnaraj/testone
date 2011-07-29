@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://service.fs.nettracer.aero" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax21="http://objects.service.fs.nettracer.aero/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://service.fs.nettracer.aero">
+    <wsdl:types>
+        <xs:schema xmlns:ntfs="http://objects.service.fs.nettracer.aero/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://service.fs.nettracer.aero">
+            <xs:import namespace="http://objects.service.fs.nettracer.aero/xsd"/>
+            <xs:element name="updateClaimStatus">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="1" maxOccurs="1" name="version" type="xs:int"/>
+                        <xs:element minOccurs="1" maxOccurs="1" name="authentication" nillable="true" type="ntfs:Authentication"/>
+                        <xs:element minOccurs="1" name="fileId" type="xs:long" maxOccurs="1"/>
+                        <xs:element minOccurs="0" name="amountPaid" type="xs:double"/>
+                        <xs:element minOccurs="0" name="amountPaidCurrency" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="1" name="resolutionStatus" type="xs:int" maxOccurs="1"/>
+                        <xs:element minOccurs="0" name="resolutionSubstatus" type="xs:int" maxOccurs="1"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateClaimStatusResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="1" name="return" nillable="true" type="ntfs:SimpleResponse" maxOccurs="1"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="submitClaim">
+                <xs:annotation>
+                	<xs:documentation>This operation allows you to submit a claim and claim related information.</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="1" maxOccurs="1" name="version" type="xs:int">
+                        	<xs:annotation>
+                        		<xs:documentation>The version of this web service should match the version that the client was developed against.  By default, please use 3</xs:documentation>
+                        	</xs:annotation></xs:element>
+                        <xs:element minOccurs="1" name="authentication" nillable="true" type="ntfs:Authentication" maxOccurs="1">
+                        	<xs:annotation>
+                        		<xs:documentation>This is the authentication object.  Please provide your 2 character airline code, the name of the system providing the data, and your airline password.</xs:documentation>
+                        	</xs:annotation></xs:element>
+                        <xs:element minOccurs="1" name="data" nillable="true" type="ntfs:File" maxOccurs="1">
+                        	<xs:annotation>
+                        		<xs:documentation>This element contains the claims, incident, and reservation information to be submitted to NetTracer FS.</xs:documentation>
+                        	</xs:annotation></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="submitClaimResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ntfs:SimpleResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://objects.service.fs.nettracer.aero/xsd">
+            <xs:complexType name="Authentication">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="airlineCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="1" name="systemName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="1" name="systemPassword" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="SimpleResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="directAccessUrl" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="1" name="fileId" type="xs:long"/>
+                    <xs:element minOccurs="1" name="searchSummary" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="1" name="warningColor" type="xs:string"/>
+                    <xs:element minOccurs="1" name="warningLevel" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="File">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="claim" nillable="true" type="ax21:Claim"/>
+                    <xs:element minOccurs="0" name="incident" nillable="true" type="ax21:Incident"/>
+                    <xs:element minOccurs="0" name="reservation" nillable="true" type="ax21:Reservation"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Claim">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="1" name="airlineClaimId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="amountClaimed" type="xs:double"/>
+                    <xs:element minOccurs="0" name="amountClaimedCurrency" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="1" name="claimDate" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="1" name="claimType" type="xs:int"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="1" name="claimants" nillable="true" type="ax21:Person"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="receipts" nillable="true" type="ax21:Receipt"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="segments" nillable="true" type="ax21:Segment"/>
+                    <xs:element minOccurs="0" name="travelDate" nillable="true" type="xs:date"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Person">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="addresses" nillable="true" type="ax21:Address"/>
+                    <xs:element minOccurs="0" name="dateOfBirth" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="driversLicenseCountry" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="driversLicenseNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="driversLicenseProvince" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="driversLicenseState" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="emailAddress" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ffAirline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ffNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lastName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middleName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="passportIssuer" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="passportNumber" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="phoneNumbers" nillable="true" type="ax21:Phone"/>
+                    <xs:element minOccurs="0" name="socialSecurity" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Address">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="country" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="province" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="state" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="zip" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Phone">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="phoneNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="type" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Receipt">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ccExpMonth" type="xs:int"/>
+                    <xs:element minOccurs="0" name="ccExpYear" type="xs:int"/>
+                    <xs:element minOccurs="0" name="ccLastFour" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ccNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ccType" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="company" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="phone" nillable="true" type="ax21:Phone"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Segment">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arrivalCityCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="date" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="departureCityCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="flightNumber" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Incident">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="1" name="airlineIncidentId" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax21:Person"/>
+                    <xs:element minOccurs="0" name="incidentClosed" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="incidentCreated" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="incidentDescription" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="incidentOpened" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="incidentType" type="xs:int"/>
+                    <xs:element minOccurs="0" name="numberDaysOpen" type="xs:int"/>
+                    <xs:element minOccurs="0" name="numberOfBdosCreated" type="xs:int"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="segments" nillable="true" type="ax21:Segment"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Reservation">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="ccExpMonth" type="xs:int"/>
+                    <xs:element minOccurs="0" name="ccExpYear" type="xs:int"/>
+                    <xs:element minOccurs="0" name="ccNumLastFour" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ccNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ccType" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax21:Person"/>
+                    <xs:element minOccurs="0" name="formOfPayment" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="recordLocator" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="segments" nillable="true" type="ax21:Segment"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="submitClaimRequest">
+        <wsdl:part name="parameters" element="ns:submitClaim"/>
+    </wsdl:message>
+    <wsdl:message name="submitClaimResponse">
+        <wsdl:part name="parameters" element="ns:submitClaimResponse"/>
+    </wsdl:message>
+    <wsdl:message name="updateClaimStatusRequest">
+        <wsdl:part name="parameters" element="ns:updateClaimStatus"/>
+    </wsdl:message>
+    <wsdl:message name="updateClaimStatusResponse">
+        <wsdl:part name="parameters" element="ns:updateClaimStatusResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="SimpleServicePortType">
+        <wsdl:operation name="submitClaim">
+            <wsdl:input message="ns:submitClaimRequest" wsaw:Action="urn:submitClaim"/>
+            <wsdl:output message="ns:submitClaimResponse" wsaw:Action="urn:submitClaimResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateClaimStatus">
+            <wsdl:input message="ns:updateClaimStatusRequest" wsaw:Action="urn:updateClaimStatus"/>
+            <wsdl:output message="ns:updateClaimStatusResponse" wsaw:Action="urn:updateClaimStatusResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="SimpleServiceSoap11Binding" type="ns:SimpleServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="submitClaim">
+            <soap:operation soapAction="urn:submitClaim" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="updateClaimStatus">
+            <soap:operation soapAction="urn:updateClaimStatus" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="SimpleServiceSoap12Binding" type="ns:SimpleServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="submitClaim">
+            <soap12:operation soapAction="urn:submitClaim" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="updateClaimStatus">
+            <soap12:operation soapAction="urn:updateClaimStatus" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="SimpleServiceHttpBinding" type="ns:SimpleServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="submitClaim">
+            <http:operation location="SimpleService/submitClaim"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="submitClaim"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="submitClaim"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="updateClaimStatus">
+            <http:operation location="SimpleService/updateClaimStatus"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="updateClaimStatus"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="updateClaimStatus"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="SimpleService">
+        <wsdl:port name="SimpleServiceHttpSoap11Endpoint" binding="ns:SimpleServiceSoap11Binding">
+            <soap:address location="https://fraud.nettracer.aero/airlineCode"/>
+        </wsdl:port>
+        <wsdl:port name="SimpleServiceHttpSoap12Endpoint" binding="ns:SimpleServiceSoap12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/SimpleService"/>
+        </wsdl:port>
+        <wsdl:port name="SimpleServiceHttpEndpoint" binding="ns:SimpleServiceHttpBinding">
+            <http:address location="https://fraud.nettracer.aero/airlineCode"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

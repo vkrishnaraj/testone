@@ -9,7 +9,7 @@
 
 	<property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
 	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-	<property name="hibernate.connection.url">jdbc:mysql://GEOSTORE:3306/geodb</property>
+	<property name="hibernate.connection.url">jdbc:mysql://geostore:3306/geodb</property>
 	<property name="hibernate.connection.username">geodb</property>
 	<property name="hibernate.connection.password">SJ873ll*ax</property>
 	<property name="show_sql">false</property>

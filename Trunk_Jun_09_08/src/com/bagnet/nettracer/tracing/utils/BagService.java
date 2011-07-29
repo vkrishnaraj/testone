@@ -139,6 +139,7 @@ public class BagService {
 				break;
 
 			OHD_Log log = new OHD_Log();
+			logs.add(log);
 			log.setOhd(ohd);
 			log.setForwarding_agent(user);
 			log.setExpeditenum(expeditenum);

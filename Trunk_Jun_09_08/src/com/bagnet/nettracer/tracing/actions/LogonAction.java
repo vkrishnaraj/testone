@@ -7,7 +7,9 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.naming.Context;
 import javax.servlet.ServletContext;
@@ -219,6 +221,12 @@ public class LogonAction extends Action {
 		}
 
 		// Forward control to the specified success URI
+		String redirectUrl =  (String) session.getAttribute(TracingConstants.SESSION_REDIRECT_URL);
+		if (redirectUrl != null) {
+			session.removeAttribute(TracingConstants.SESSION_REDIRECT_URL);
+			response.sendRedirect(redirectUrl);
+			return null;
+		}
 		return (mapping.findForward("success"));
 	}
 

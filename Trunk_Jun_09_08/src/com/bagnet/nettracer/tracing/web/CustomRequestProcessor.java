@@ -1,19 +1,16 @@
 package com.bagnet.nettracer.tracing.web;
 
-import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
-import javax.security.auth.login.AppConfigurationEntry;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.RequestProcessor;
-import org.apache.struts.config.ForwardConfig;
 import org.apache.struts.tiles.TilesRequestProcessor;
+import org.dozer.util.CollectionUtils;
 
-import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 public class CustomRequestProcessor extends TilesRequestProcessor {
 
@@ -33,9 +30,22 @@ public class CustomRequestProcessor extends TilesRequestProcessor {
         else{
             try{
                 //If no redirect user to login Page
+            	
+            	Map map = request.getParameterMap();
+            	boolean first = true;
+            	StringBuffer buffer = request.getRequestURL();
+    			for (String key: (Set<String>) map.keySet()) {
+    				if (first) {
+    					buffer.append("?");
+    					first = false;
+    				}
+    				buffer.append(key + "=" +((String[]) map.get(key))[0] + "&");
+    				int a = 0;
+    			}
+    			session.setAttribute(TracingConstants.SESSION_REDIRECT_URL, buffer.toString());
             	response.sendRedirect("logoff.do");
-                //request.getRequestDispatcher("/logoff.do").forward(request,response);
             }catch(Exception ex){
+            	ex.printStackTrace();
             }
         }
         return false;

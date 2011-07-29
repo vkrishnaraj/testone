@@ -60,8 +60,15 @@ public class LogoffAction extends Action {
 				log.debug("LogoffActon: User logged off in session " + session.getId());
 			}
 		}
-
+		String redirectUrl =  (String) session.getAttribute(TracingConstants.SESSION_REDIRECT_URL);
+		
 		session.invalidate();
+		session = request.getSession(true);
+		
+		if (redirectUrl != null && !redirectUrl.contains("logoff")) {
+			session.setAttribute(TracingConstants.SESSION_REDIRECT_URL, redirectUrl);
+		}
+		
 		// Forward control to the specified success URI
 		response.addHeader("Pragma", "No-cache");
 		response.addHeader("Cache-Control", "no-cache");
