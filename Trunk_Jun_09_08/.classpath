@@ -140,5 +140,6 @@
 	<classpathentry kind="lib" path="lib/jars/nt_fs.jar"/>
 	<classpathentry kind="lib" path="C:/jboss-5.1.0.GA-clean/client/jbossall-client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/avis-client-model.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

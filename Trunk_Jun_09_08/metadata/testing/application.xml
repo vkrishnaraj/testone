@@ -8,20 +8,60 @@
  <display-name>TracerEAR</display-name>
  <module>
      <web>
-         <web-uri>ab.war</web-uri>
+         <web-uri>avis_testing.war</web-uri>
          <context-root>avis</context-root>
      </web>
   </module>
   
    <module>
      <web>
-         <web-uri>ws_testing.war</web-uri>
+         <web-uri>westjet_testing.war</web-uri>
          <context-root>westjet</context-root>
      </web>
   </module>
   
+  
    <module>
-      <java>avis-service.jar</java>
-   </module>
+     <web>
+         <web-uri>jetblue_testing.war</web-uri>
+         <context-root>jetblue</context-root>
+     </web>
+  </module>
+  
+   <module>
+     <web>
+         <web-uri>spirit_testing.war</web-uri>
+         <context-root>spirit</context-root>
+     </web>
+  </module>
+  
+  
+   <module>
+     <web>
+         <web-uri>azul_testing.war</web-uri>
+         <context-root>azul</context-root>
+     </web>
+  </module>
+  
+     <module>
+     <web>
+         <web-uri>american_testing.war</web-uri>
+         <context-root>american</context-root>
+     </web>
+  </module>
+  
+     <module>
+     <web>
+         <web-uri>continental_testing.war</web-uri>
+         <context-root>continental</context-root>
+     </web>
+  </module>
+  
+   <module>
+     <web>
+         <web-uri>delta_testing.war</web-uri>
+         <context-root>delta</context-root>
+     </web>
+  </module>
   
 </application> 

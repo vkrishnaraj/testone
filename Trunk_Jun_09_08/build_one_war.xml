@@ -1,4 +1,4 @@
-<project name="3.0" default="build-ab-ear" basedir=".">
+<project name="3.0" default="build-testing-ear" basedir=".">
 
 	<property file="user.properties" />
 	<property file="common.properties" />
@@ -97,15 +97,17 @@
 		
 		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
 			<fileset dir="${basedir}/web">
+				<exclude name="pages/WebHelp/*.*" />
+				<exclude name="deployment/main/images/iconmenu/*.*" />
 				<exclude name="**/web.xml" />
 				<exclude name="WEB-INF/classes/**/*.*" />
 			</fileset>
 		</copy>
-		<!--
+		<echo>HERE</echo>
 		<replaceregexp match="\s+" replace=" " flags="g" byline="false">
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" includes="**/*.jsp" />
 		</replaceregexp>
-		-->
+		
 		
 		<war destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" />
@@ -275,6 +277,7 @@
 		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
 			<fileset dir="${basedir}/web">
 				<exclude name="**/web.xml" />
+				<exclude name="pages/WebHelp/**/**/*.*" />
 				<exclude name="WEB-INF/classes/**/*.*" />
 				<exclude name="**/*/jboss-web.xml"/>
 			</fileset>
@@ -448,14 +451,64 @@
 	</target>
 	
 	<target name="build-testing-ear" depends="delete-wars">
+		<antcall target="clean" />
+		<antcall target="hibernate_generate" />		
+		<antcall target="build-ab-test"/>
 		<antcall target="build-westjet-test"/>
-		<antcall target="build-ab-prod"/>
-		<antcall target="aa-build-avis-service"/>
-		<property name="app.xml.location" value="metadata/testing" />
+		<antcall target="build-jetblue-test"/>
+		<antcall target="build-spirit-test"/>
+		<antcall target="build-azul-test"/>
+		<!-- <antcall target="aa-build-avis-service"/>-->
 		
+		<property name="app.xml.location" value="metadata/testing" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
+
+	<target name="build-ab-test" depends="delete">
+		<property name="ant_project_name" value="ab" />
+		<property name="ant_war_name" value="avis_testing" />
+		<property name="ab.init.complete" value="true" />
+		<property name="environment.name" value="test" />
+		<antcall target="donotrun-build-ab" />
+	</target>
+	
+	
+	<target name="build-westjet-test" depends="delete">
+		<property name="ant_project_name" value="westjet" />
+		<property name="ant_war_name" value="westjet_testing" />
+		<property name="westjet.init.complete" value="true" />
+		<property name="environment.name" value="test" />
+		<antcall target="donotrun-build-westjet" />
+	</target>
+	
+	<target name="build-jetblue-test" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="ant_war_name" value="jetblue_testing" />
+		<property name="jetblue.init.complete" value="true" />
+		<property name="environment.name" value="test"/>
+		<antcall target="donotrun-build-jetblue" />
+	</target>
+	
+	
+	<target name="build-spirit-test" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit_testing" />
+		<property name="environment.name" value="test"/>
+		<property name="spirit.init.complete" value="true" />
+		<antcall target="donotrun-build-spirit" />
+	</target>
+	
+	
+	<target name="build-azul-test" depends="delete">
+		<property name="ant_project_name" value="azul" />
+		<property name="ant_war_name" value="azul_testing" />
+		<property name="environment.name" value="test"/>
+		<property name="spirit.init.complete" value="true" />
+		<antcall target="donotrun-build-azul" />
+	</target>
+	
+	<!-- 
 	<target name="build-all-ear" depends="delete-wars">
 		<antcall target="build-westjet-local"/>
 		<antcall target="build-jetblue-local"/>
@@ -464,7 +517,8 @@
 		
 		<antcall target="donotrun-build-ear" />
 	</target>
-	
+	 -->
+	 
 	<target name="build-ab-ear" depends="delete-wars">
 		<antcall target="build-ab-local"/>
 		<antcall target="aa-build-avis-service"/>
@@ -472,8 +526,8 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
-	<target name="build-abprod-ear" depends="delete-wars">
-		<antcall target="build-ab-prod"/>
+	<target name="build-abtest-ear" depends="delete-wars">
+		<antcall target="build-ab-test"/>
 		<antcall target="aa-build-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab" />
 		<antcall target="donotrun-build-ear" />
@@ -761,7 +815,7 @@
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/azul/ApplicationResources_pt.properties" />
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
 			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/azul/environment/${environment}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/azul/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
@@ -769,7 +823,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/azul/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/azul/MissingReceipt.jrxml" />
 
-		<ant target="jasper_compile" antfile="build-gen.xml"/>
+		<antcall target="jasper_compile" />
 
 		<copy todir="${basedir}/src" file="companies/azul/custom_ui.properties" />
 		<copy todir="${basedir}/src" file="companies/azul/report_email.html" />
@@ -782,8 +836,8 @@
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 
-		<ant target="fast_all" antfile="build-gen.xml"/>
-		<ant target="delete" antfile="build-gen.xml"/>
+		<antcall target="fast_all" />
+		<antcall target="delete" />
 	</target>
 
 	<target name="build-spirit-dev" depends="delete">
@@ -793,25 +847,9 @@
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/production/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/production/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/production/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_dirty.cfg.xml" />
-        <copy todir="${basedir}/src" file="companies/spirit/environment/dev/hibernate_reporting.cfg.xml" />
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
-	<target name="build-spirit-test" depends="delete">
-		<property name="ant_project_name" value="spirit" />
-		<property name="ant_war_name" value="spirit-test" />
-
-		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/spirittest/header_bg_noconf.gif" />
-		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/spirittest/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/tracer.properties" />
-		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/spirittest/hibernate_reporting.cfg.xml" />
-		<antcall target="donotrun-build-spirit" />
-	</target>
 
 	<target name="build-spirit-qa" depends="delete">
 		<property name="ant_project_name" value="spirit" />
@@ -820,10 +858,8 @@
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/spiritqa/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/spiritqa/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/tracer.properties" />
-		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/spiritqa/hibernate_reporting.cfg.xml" />
+		
+		
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
@@ -831,32 +867,30 @@
 		<property name="ant_project_name" value="spirit" />
 		<property name="ant_war_name" value="spirit-prod" />
 
-		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/production/header_bg_noconf.gif" />
-		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/production/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/production/tracer.properties" />
-		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/production/hibernate_reporting.cfg.xml" />
+
+		
 		<antcall target="donotrun-build-spirit" />
 	</target>
 
 	<target name="donotrun-build-spirit">
+		<property name="include.demo" value="1" />
+		<copy todir="${basedir}/web/WEB-INF" file="companies/spirit/context.xml" />
 		<copy todir="${basedir}/web/reports" file="companies/spirit/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/spirit/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/spirit/MissingReceipt.jrxml" />
-		<antcall target="jasper_compile" />
-
+		
+		<copy todir="${basedir}/src" file="companies/spirit/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/${environment.name}/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/pages/login" file="companies/spirit/environment/${environment.name}/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/spirit/environment/${environment.name}/tracer.properties" />
 
 		<!-- Image based on environment -->
 		<copy todir="${basedir}/src" file="companies/spirit/custom_ui.properties" />
 		<copy todir="${basedir}/src" file="companies/spirit/report_email.html" />
-
-		<!-- Login page based on environment -->
-
 		<copy todir="${basedir}/web/pages/login" file="companies/tracer/login/center.jsp" />
-
-		<!-- Hibernate main dependent on environment -->
 
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
@@ -871,9 +905,8 @@
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
-		<antcall target="fast_all">
-			<param name="ant_project_name" value="spirit" />
-		</antcall>
+		<antcall target="jasper_compile" />
+		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target>
 
@@ -897,13 +930,7 @@
 		<antcall target="donotrun-build-jetblue" />
 	</target>
 
-	<target name="build-jetblue-qa" depends="delete">
-		<property name="ant_project_name" value="jetblue" />
-		<property name="ant_war_name" value="b6qa" />
-		<property name="jetblue.init.complete" value="true" />
-		<property name="environment.name" value="qa"/>
-		<antcall target="donotrun-build-jetblue" />
-	</target>
+
 	
 	<target name="build-jetblue-qa-sabre" depends="delete">
 		<property name="ant_project_name" value="jetblue" />
@@ -998,29 +1025,15 @@
 		<antcall target="donotrun-build-ab" />
 	</target>
 	
-	<target name="build-ab-prod" depends="delete">
-		<property name="ant_project_name" value="ab" />
-		<property name="ant_war_name" value="ab" />
-		<property name="ab.init.complete" value="true" />
-		<property name="environment.name" value="prod" />
-		<antcall target="donotrun-build-ab" />
-	</target>
 
 	<target name="build-westjet-local" depends="delete">
 		<property name="ant_project_name" value="westjet" />
-		<property name="ant_war_name" value="wjtest" />
+		<property name="ant_war_name" value="westjet" />
 		<property name="westjet.init.complete" value="true" />
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-westjet" />
 	</target>
 
-	<target name="build-westjet-test" depends="delete">
-		<property name="ant_project_name" value="westjet" />
-		<property name="ant_war_name" value="ws_testing" />
-		<property name="westjet.init.complete" value="true" />
-		<property name="environment.name" value="test" />
-		<antcall target="donotrun-build-westjet" />
-	</target>
 
 	<target name="build-westjet-qa" depends="delete">
 		<property name="ant_project_name" value="westjet" />
@@ -2073,6 +2086,74 @@
 
 	</target>
 	
+	<target name="1a_fsService_java2wsdl" depends="build-dev">
+		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
+
+		<Java2WSDLTask classPath="${build.dir}/${ant_project_name}_web/classes" 
+			className="aero.nettracer.fs.service.SimpleService" 
+			outputLocation="src/aero/nettracer/fs/service" outputFileName="SimpleService.wsdl">
+		</Java2WSDLTask>
+
+	</target>
+	
+	<target name="1a_fsService_wsdl2java">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
+			<arg value="-uri" />
+			<arg file="src/aero/nettracer/fs/service/SimpleService.wsdl" />
+
+			<arg value="-o" />
+			<arg file="${build.dir}/webservices/fs" />
+
+			<arg value="-ss" />
+			<arg value="-sd" />
+			<arg value="-g" />
+
+			<arg value="-d" />
+			<arg value="xmlbeans" />
+
+		</java>
+
+		<!-- copy services.xml to web-inf -->
+		
+		<copy todir="${basedir}/web/WEB-INF/services/fs/META-INF" file="${build.dir}/webservices/fs/resources/services.xml" />
+		
+		<!-- copy java files to src 
+		<copy todir="${basedir}/src">
+			<fileset dir="${build.dir}/webservices/fs/src">
+				<include name="**/**/*.java" />
+				<exclude name="**/org/**" />
+			</fileset>
+		</copy>
+		-->
+
+		<!--
+
+		 make jar file for schema
+				-->
+		<mkdir dir="${build.dir}/webservices/fs/temp" />
+		<move todir="${build.dir}/webservices/fs/temp">
+			<fileset dir="${build.dir}/webservices/fs/resources">
+				<include name="*schema*/**/*.class" />
+				<include name="*schema*/**/*.xsb" />
+			</fileset>
+		</move>
+
+		<!-- 		
+		<jar destfile="${build.dir}/webservices/fs/onlineclaims_schemas.jar" basedir="${build.dir}/webservices/claims/temp">
+		</jar>
+
+		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/claims/onlineclaims_schemas.jar" />
+		
+		<replace file="${basedir}/web/WEB-INF/services/OnlineClaims/META-INF/services.xml">
+			<replacetoken><![CDATA[com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceSkeleton]]></replacetoken>
+			<replacevalue><![CDATA[com.bagnet.nettracer.ws.onlineclaims.OnlineClaimsServiceImplementation]]></replacevalue>
+		</replace>-->
+		
+
+		<!-- clean up -->
+		
+		<!--<delete dir="${build.dir}/webservices/claims" />-->
+	</target>
 	
 	
 </project>
