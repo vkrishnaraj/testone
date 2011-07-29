@@ -905,11 +905,21 @@ public class ReportBMO {
 			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0")) {
 				stationq2 = " and incident.stationassigned.station_ID in (:station_ID) ";
 			}
+			
+			Integer[] intc = null;
+			if (srDTO.getStation_ID() != null) {
+				intc = new Integer[srDTO.getStation_ID().length];
+
+				for (int i = 0; i < intc.length; i++) {
+					intc[i] = new Integer(srDTO.getStation_ID()[i]);
+				}
+			}
+			
 			String sql = "select distinct incident.stationassigned.station_ID from com.bagnet.nettracer.tracing.db.Incident incident "
 					+ " where incident.stationassigned.company.companyCode_ID = :companyCode_ID " + stationq2 + " order by incident.stationassigned.station_ID";
 			Query q = sess.createQuery(sql);
 			if (srDTO.getStation_ID() != null && !srDTO.getStation_ID()[0].equals("0"))
-				q.setParameterList("station_ID", srDTO.getStation_ID());
+				q.setParameterList("station_ID", intc);
 			q.setString("companyCode_ID", user.getStation().getCompany().getCompanyCode_ID());
 			
 			List stationlist = q.list();
