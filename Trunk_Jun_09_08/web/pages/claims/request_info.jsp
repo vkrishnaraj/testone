@@ -8,6 +8,7 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="aero.nettracer.fs.model.FsClaim" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
@@ -66,11 +67,15 @@
             		</tr>
             		<logic:iterate id="match" name="requestInfoForm" property="requestedMatches" type="aero.nettracer.fs.model.detection.MatchHistory" >
 	            		<tr>
-	            			<% if (match.getFile2().getClaim() != null) { %>
-		            			<td><bean:write name="match" property="file2.claim.swapId" /></td>
-		            			<td><bean:write name="match" property="file2.claim.airline" /></td>
-		            			<td><%=match.getFile2().getClaim().getDisClaimDate(a.getDateformat().getFormat()) %></td>
-		            		<% } else { %>
+	            			<% 
+	            			   if (match.getFile2().getClaims() != null && !match.getFile2().getClaims().isEmpty()) { 
+	            			   		FsClaim[] claims = match.getFile2().getClaims().toArray(new FsClaim[0]);
+	            			   		for (int i = 0; i < claims.length; ++i) { %>
+				            			<td><%=claims[i].getSwapId() %></td>
+				            			<td><%=claims[i].getAirline() %></td>
+				            			<td><%=claims[i].getDisClaimDate(a.getDateformat().getFormat()) %></td>
+		            		<%		}
+		            		   } else { %>
 		            			<td><bean:write name="match" property="file2.incident.airlineIncidentId" /></td>
 		            			<td><bean:write name="match" property="file2.incident.airline" /></td>
 		            			<td><%=match.getFile2().getIncident().getDisOpenDate(a.getDateformat().getFormat()) %></td>

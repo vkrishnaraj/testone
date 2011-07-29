@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.utils.ntfs;
 
+import java.util.LinkedHashSet;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -10,14 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 
 import aero.nettracer.fs.model.File;
+import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
-import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
-import com.bagnet.nettracer.tracing.actions.RequestInfoAction;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -142,6 +141,8 @@ public class ConnectionUtil {
 		File file = null;
 		try {
 			file = new File();
+//			file.setClaims(new LinkedHashSet<FsClaim>());
+			file.setValidatingCompanycode(user.getCompanycode_ID());
 			FsIncident fsIncident = ClaimUtils.getFsIncident(iDTO, user);
 			fsIncident.setFile(file);
 			file.setIncident(fsIncident);

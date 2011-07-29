@@ -161,9 +161,22 @@ public class ModifyClaimAction extends CheckedAction {
 				claim = ClaimUtils.createClaim(user, ntIncident);
 				claims.add(claim);
 				ntIncident.setClaims(claims);
+				file = FileDAO.loadFile(ntIncident.getIncident_ID());
 			} else {
 				claim = ClaimUtils.createClaim(user);
 			}
+			
+			if (file == null) {
+				file = new File();
+				file.setValidatingCompanycode(user.getCompanycode_ID());
+				file.setClaims(new LinkedHashSet<FsClaim>());
+			}
+			
+			file.getClaims().add(claim);
+			claim.setFile(file);
+			
+			file.setIncident(claim.getIncident());
+			claim.getIncident().setFile(file);
 			
 		} else if (request.getParameter("claimId") != null) {
 			
@@ -177,6 +190,7 @@ public class ModifyClaimAction extends CheckedAction {
 					ntIncident = claim.getNtIncident();
 					bs.populateIncidentFormFromIncidentObj(ntIncident.getIncident_ID(), theform, user, ntIncident.getItemtype_ID(), new IncidentBMO(), ntIncident, false);
 				}
+				file = claim.getFile();
 			}
 			
 		} else {
@@ -218,7 +232,7 @@ public class ModifyClaimAction extends CheckedAction {
 		
 		// save the claim
 		if (request.getParameter("save") != null) {
-			LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
+//			LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
 			
 			// 1. save the claim locally
 			claim = cform.getClaim();
@@ -231,13 +245,13 @@ public class ModifyClaimAction extends CheckedAction {
 					file = (File) session.getAttribute("file");
 					session.removeAttribute("file");
 					if (file != null) {
-						claims.add(claim);
-						file.setClaims(fsClaims);
+//						claims.add(claim);
+						file.getClaims().add(claim);
 						claim.setFile(file);
 					}
 				}
 			}
-			boolean claimSaved = ClaimDAO.saveClaim(claim);
+			boolean claimSaved = FileDAO.saveFile(claim.getFile());
 			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
 			
 			// maintain existing nt functionality
@@ -265,68 +279,77 @@ public class ModifyClaimAction extends CheckedAction {
 				
 				long remoteFileId = 0;
 				if (remote != null) {
-					FsClaim newClaim = new FsClaim();
-					BeanUtils.copyProperties(newClaim, claim);
-					LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
-					newClaim.setSegments(segs);
+					LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
 					
-					LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
-					newClaim.setClaimants(pers);
-					
-					fsClaims.add(newClaim);
-//					newClaim.getIncident().setClaims(fsClaims);
-					for (Person p: claim.getClaimants()) {
-						p.setClaim(newClaim);
-						pers.add(p);
-					}
-					
-					for (Segment s: claim.getSegments()) {
-						s.setClaim(newClaim);
-						segs.add(s);
-					}
-					
-					LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
-					newClaim.setReceipts(receipts);
-					for (FsReceipt r: claim.getReceipts()) {
-						r.setClaim(newClaim);
-						receipts.add(r);
-					}
-					
-					// couldn't get it from the incident
 					if (file == null) {
 						file = claim.getFile();
-						// couldn't get it from the claim
-						if (file == null) {
-							file = new File();
+					}
+					
+					for (Claim current: claims) {
+						FsClaim newClaim = new FsClaim();
+						BeanUtils.copyProperties(newClaim, current);
+						LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
+						newClaim.setSegments(segs);
+						
+						LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
+						newClaim.setClaimants(pers);
+						
+//						fsClaims.add(newClaim);
+//						newClaim.getIncident().setClaims(fsClaims);
+						for (Person p: current.getClaimants()) {
+							p.setClaim(newClaim);
+							pers.add(p);
 						}
+						
+						for (Segment s: current.getSegments()) {
+							s.setClaim(newClaim);
+							segs.add(s);
+						}
+						
+						LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
+						newClaim.setReceipts(receipts);
+						for (FsReceipt r: current.getReceipts()) {
+							r.setClaim(newClaim);
+							receipts.add(r);
+						}
+						
+						// couldn't get it from the incident
+//						if (file == null) {
+//							file = current.getFile();
+//							// couldn't get it from the claim
+//							if (file == null) {
+//								file = new File();
+//							}
+//						}
+						
+//						file.setClaims(fsClaims);
+						file.setStatusId(claim.getStatusId());
+						newClaim.setFile(file);
+						file.setIncident(newClaim.getIncident());
+						newClaim.getIncident().setFile(file);
+						fsClaims.add(newClaim);
 					}
 					
 					file.setClaims(fsClaims);
-					file.setStatusId(claim.getStatus().getStatus_ID());
-					newClaim.setFile(file);
-					file.setIncident(newClaim.getIncident());
-					newClaim.getIncident().setFile(file);
-					
 					remoteFileId = remote.insertFile(file);
-					if (remoteFileId > 0) {
-						file.setSwapId(remoteFileId);
-					}
-					
 					claim = ClaimDAO.loadClaim(claim.getId());
-					claim.setFile(file);
-					if (file.getClaims() != null && !file.getClaims().isEmpty()) {
-						file.getClaims().add(claim);
-					} else {
-						claims.clear();
-						claims.add(claim);
-						file.setClaims(fsClaims);
+					if (remoteFileId > 0) {
+						claim.getFile().setSwapId(remoteFileId);
+						FileDAO.saveFile(claim.getFile());
 					}
-					file.setIncident(claim.getIncident());
-					claim.getIncident().setFile(file);
-					
-					FileDAO.saveFile(file);
 					logger.info("Claim saved to central services: " + remoteFileId);
-	
+					
+//					claim.setFile(file);
+//					if (file.getClaims() != null && !file.getClaims().isEmpty()) {
+//						file.getClaims().add(claim);
+//					} else {
+//						claims.clear();
+//						claims.add(claim);
+//						file.setClaims(fsClaims);
+//					}
+//					file.setIncident(claim.getIncident());
+//					claim.getIncident().setFile(file);
+					
 					// 3. submit the claim for tracing
 					boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
 					TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave, hasViewFraudResultsPermission);

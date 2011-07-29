@@ -46,27 +46,25 @@
 	String company = request.getParameter("company");
 	String disStatus = result.getFile2().getDisStatus();
 	boolean sameCompany = result.getFile2().getValidatingCompanycode().equals(company);
-	LinkedHashSet<FsClaim> claims = new LinkedHashSet<FsClaim>(result.getFile2().getClaims());
-	if (claims != null && !claims.isEmpty()) { %>
+	FsClaim[] claims = result.getFile2().getClaims().toArray(new FsClaim[0]);
+	if (claims != null && claims.length > 0) { %>
 	<tr <%=disStatus %>>
-		<td><input type="checkbox" name="<%=results%>[<%=i%>].requestSelected" <% if (sameCompany) { %>disabled<% } %> /></td>
-		<td><input type="checkbox" name="<%=results%>[<%=i%>].deleteSelected" /></td>
-		<td><table class="form2" cellspacing="0" cellpadding="0" >
-		<% for (FsClaim c: claims) { %>
-			<tr>
-		<!-- HERE'S WHERE THE FUN BEGINS -->
-		<% if (sameCompany) { %>
+		<td rowspan=<%=claims.length %>><input type="checkbox" name="<%=results%>[<%=i%>].requestSelected" <% if (sameCompany) { %>disabled<% } %> /></td>
+		<td rowspan=<%=claims.length %>><input type="checkbox" name="<%=results%>[<%=i%>].deleteSelected" /></td>
+		<% 
+			int j = 0;
+			if (sameCompany) { %>
 			<td>
-				<a href="claim_resolution.do?claimId=<%=c.getSwapId() %>">
-					<%=c.getSwapId() %>
+				<a href="claim_resolution.do?claimId=<%=claims[j].getSwapId() %>">
+					<%=claims[j].getSwapId() %>
 				</a>
 			</td>
 		<% } else { %>
-			<td><%=c.getSwapId() %></td>
+			<td><%=claims[j].getSwapId() %></td>
 		<% } %>
 		<td>
 			<%
-				switch (c.getClaimType()) {
+				switch (claims[j].getClaimType()) {
 					case 0: %>
 						<bean:message key="match.type.claim" />
 					<%	break;
@@ -84,17 +82,13 @@
 				}
 			%>
 		</td>
-		<td><%=c.getAirline() %></td>
-		<td><%=c.getDisClaimDate(a.getDateformat().getFormat()) %></td>
-		<td>
+		<td><%=claims[j].getAirline() %></td>
+		<td><%=claims[j].getDisClaimDate(a.getDateformat().getFormat()) %></td>
+		<td rowspan=<%=claims.length %>>
 			<%=result.getFile2().getDisStatusText() %>
 			<bean:write name="result" property="matchSummary" filter="false" />
 		</td>
-		</tr>
-		<% } %>
-		</table>
-		</td>
-		<td>
+		<td rowspan=<%=claims.length %>>
 			<a href="fraud_results.do?matchId=<%=result.getId() %>">
 				<bean:message key="claim.match.details" />
 			</a>
@@ -103,10 +97,53 @@
 			<b><%=status == null ? "" : status %></b>
 			<% } %>
 		</td>
+	</tr>
+	<% if (claims.length > 1) {
+		   for (j = 1; j < claims.length; ++j) { %>
+			<tr>
+		<!-- HERE'S WHERE THE FUN BEGINS -->
+		<% if (sameCompany) { %>
+			<td>
+				<a href="claim_resolution.do?claimId=<%=claims[j].getSwapId() %>">
+					<%=claims[j].getSwapId() %>
+				</a>
+			</td>
+		<% } else { %>
+			<td><%=claims[j].getSwapId() %></td>
+		<% } %>
+		<td>
+			<%
+				switch (claims[j].getClaimType()) {
+					case 0: %>
+						<bean:message key="match.type.claim" />
+					<%	break;
+					case TracingConstants.LOST_DELAY: %>
+						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.lostdelay" />
+					<%	break;
+					case TracingConstants.MISSING_ARTICLES: %>
+						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.missing" />
+					<%	break;
+					case TracingConstants.DAMAGED_BAG: %>
+						<bean:message key="match.type.claim" />:&nbsp;<bean:message key="claim.type.damaged" />
+					<%	break;
+					default:
+						break;
+				}
+			%>
+		</td>
+		<td><%=claims[j].getAirline() %></td>
+		<td><%=claims[j].getDisClaimDate(a.getDateformat().getFormat()) %></td>
+		
 		</tr>
+		<% } 
+		} %>
+		
+		
+		
 			<% } else { %>
 				<tr <%=disStatus %>>
-					<td><input type="checkbox" name="<%=results%>[<%=i%>].selected" /></td>
+					<td><input type="checkbox" name="<%=results%>[<%=i%>].requestSelected" <% if (sameCompany) { %>disabled<% } %> /></td>
+					<td><input type="checkbox" name="<%=results%>[<%=i%>].deleteSelected" /></td>
 					<% if (result.getFile2().getIncident().getAirline().equals(company)) { %>
 					<td>
 						<a href="searchIncident.do?incident=<%=result.getFile2().getIncident().getAirlineIncidentId() %>">

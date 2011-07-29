@@ -129,15 +129,19 @@ public class ClaimUtils {
 		
 		FsIncident fsIncident = getFsIncident(ntIncident, user);
 		claim.setIncident(fsIncident);
-		LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
-		fsClaims.add(claim);
+//		LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
+//		fsClaims.add(claim);
 //		fsIncident.setClaims(fsClaims);
 
 		if (ntIncident != null) {
 			claim.setNtIncident(ntIncident);
-			LinkedHashSet<Claim> claims = new LinkedHashSet<Claim>();
-			claims.add(claim);
-			ntIncident.setClaims(claims);
+			if (ntIncident.getClaims() != null) {
+				ntIncident.getClaims().add(claim);
+			} else {
+				ntIncident.setClaims(new LinkedHashSet<Claim>());
+				ntIncident.getClaims().add(claim);
+			}
+			
 			claimants.clear();
 			person = claim.getIncident().getPassengers().toArray(new Person[0])[0];
 			if (person.getPassportIssuer() == null || person.getPassportIssuer().isEmpty()) {

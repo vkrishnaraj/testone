@@ -60,7 +60,7 @@ public class FraudResultsAction extends CheckedAction {
 		String claimIdString = request.getParameter("claimId");
 		String incidentIdString = request.getParameter("incident");
 		if(incidentIdString == null){
-			request.getAttribute("incident");
+			incidentIdString = (String) request.getAttribute("incident");
 		}
 		File file = null;
 		FsClaim claim = null;
