@@ -99,6 +99,8 @@
                   <br />
                   &nbsp;</span></a>
             </dd>
+            <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a) 
+            		|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ %>
             <logic:equal name="disputeProcess" scope="request" value="true">
             <dd>
               <a href='disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=<%=disputeActionType %>'><span class="aa">&nbsp;
@@ -109,7 +111,8 @@
                   <br />
                   &nbsp;</span></a>
             </dd>
-            </logic:equal>              
+            </logic:equal>
+            <% } %>              
           </dl>
         </div>
       </td>
