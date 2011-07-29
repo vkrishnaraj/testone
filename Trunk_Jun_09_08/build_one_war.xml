@@ -777,10 +777,7 @@
 		<property name="ant_war_name" value="azul-qa" />
 		<property name="environment" value="qa" />
 
-		<copy todir="${basedir}/src" file="companies/azul/environment/qa/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/azul/environment/qa/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/azul/environment/qa/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/azul/environment/qa/hibernate_reporting.cfg.xml" />
+
 		<property name="environment" value="training" />
 		<antcall target="donotrun-build-azul" />
 	</target>
@@ -813,6 +810,12 @@
 
 	<target name="donotrun-build-azul">
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/azul/ApplicationResources_pt.properties" />
+		
+		<copy todir="${basedir}/src" file="companies/azul/environment/${environment.name}/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/azul/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
 			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/azul/environment/${environment.name}/tracer.properties" />
