@@ -11,9 +11,9 @@
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
     	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost/nettracer_azul_training</property>
-		<property name="hibernate.connection.username">nettracer</property>
-		<property name="hibernate.connection.password">nettracer</property>
+<property name="hibernate.connection.url">jdbc:mysql://testingdbhost:3306/ad_testing</property>
+		<property name="hibernate.connection.username">ad_user</property>
+		<property name="hibernate.connection.password">kj2jo9vjss!</property>
 		<property name="hibernate.show_sql">false</property>
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
@@ -29,9 +29,14 @@
 		<property name="hibernate.c3p0.idle_test_period">100</property> <!-- seconds --> 
 		<property name="hibernate.c3p0.max_size">50</property> 
 		<property name="hibernate.c3p0.max_statements">0</property> 
-		<property name="hibernate.c3p0.min_size">10</property> 
+		<property name="hibernate.c3p0.min_size">0</property> 
 		<property name="hibernate.c3p0.timeout">5000</property> <!-- seconds --> 
 				
+				
+		<property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
+		<property name="hibernate.cache.provider_configuration_file_resource_path">/ehcache.xml</property> 
+		<property name="hibernate.cache.use_second_level_cache">false</property>
+		<property name="hibernate.cache.use_query_cache">false</property>
 	&mappings;
 
 
