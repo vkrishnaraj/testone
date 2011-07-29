@@ -62,6 +62,10 @@ public class FraudResultsAction extends CheckedAction {
 		if(incidentIdString == null){
 			incidentIdString = (String) request.getAttribute("incident");
 		}
+		
+		if (incidentIdString != null) {
+			request.setAttribute("incident", incidentIdString);
+		}
 		File file = null;
 		FsClaim claim = null;
 		if (incidentIdString != null) {

@@ -70,7 +70,13 @@ public class ClaimProrateAction extends CheckedAction {
 				return (mapping.findForward(TracingConstants.ERROR_MAIN));
 			}
 		}
-
+		
+		String incident = request.getParameter("incident");
+		if (incident == null) {
+			incident = (String) request.getAttribute("incident");
+		}
+		request.setAttribute("incident", incident);
+		
 		if (theform == null || request.getParameter("clear") != null) {
 			// came here from claim menu, need to show form to enter incident id
 			session.setAttribute("prorate", "1");

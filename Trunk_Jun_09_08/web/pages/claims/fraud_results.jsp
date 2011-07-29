@@ -85,7 +85,7 @@
 					if (incidentId != null) {%>
 					
               <dd>
-                <a href='claim_resolution.do?incidentId=<%=incidentId %>' ><span class="aa">&nbsp;
+                <a href='select_claim.do?incidentId=<%=incidentId %>' ><span class="aa">&nbsp;
                     <br />
                     &nbsp;</span>
                   <span class="bb"><bean:message key="menu.claim_payout" /></span>
@@ -141,7 +141,7 @@
             } if (ntUser) {
 %>
 		            <dd>
-		              <a href='claim_prorate.do'><span class="aa">&nbsp;
+		              <a href='claim_prorate.do?incident=<%=request.getParameter("incident") %>'><span class="aa">&nbsp;
 		                  <br />
 		                  &nbsp;</span>
 		                <span class="bb"><bean:message key="menu.claim_prorate" /></span>

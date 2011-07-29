@@ -141,13 +141,13 @@ public class ConnectionUtil {
 		File file = null;
 		try {
 			file = new File();
-//			file.setClaims(new LinkedHashSet<FsClaim>());
 			file.setValidatingCompanycode(user.getCompanycode_ID());
 			FsIncident fsIncident = ClaimUtils.getFsIncident(iDTO, user);
 			fsIncident.setFile(file);
 			file.setIncident(fsIncident);
 			FileDAO.saveFile(file);
 			long remoteFileId = ConnectionUtil.insertFile(file);
+			file = FileDAO.loadFile(file.getId());
 			file.setSwapId(remoteFileId);
 			FileDAO.saveFile(file);
 			if (remoteFileId > 0) {

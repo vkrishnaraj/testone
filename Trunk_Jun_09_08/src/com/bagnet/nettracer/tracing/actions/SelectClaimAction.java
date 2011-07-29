@@ -49,13 +49,13 @@ public class SelectClaimAction extends CheckedAction {
 		
 		// redirect if the airline doesn't support multiple claims
 		String incidentId = request.getParameter("incidentId");
-		if (!PropertyBMO.isTrue("ntfs.support.multiple.claims")) {
+		if (incidentId == null || !PropertyBMO.isTrue("ntfs.support.multiple.claims")) {
 			response.sendRedirect("claim_resolution.do?incidentId=" + incidentId);
 			return null;
 		}
 		
 		// redirect to the create claim action with the pre-population trigger set
-		if (request.getParameter("createNew") != null) {
+		if (request.getParameter("createNew") != null || scForm.getClaims() == null) {
 			response.sendRedirect("create_claim.do?incidentId=" + scForm.getIncidentId() + "&populate=1");
 			return null;
 		}
