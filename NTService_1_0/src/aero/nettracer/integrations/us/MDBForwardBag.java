@@ -51,7 +51,11 @@ public class MDBForwardBag implements MessageListener {
 				List<Forward> forwards = (List<Forward>) objectMessage.getObject();
 				
 				SendForward f = new SendForward();
-				f.sendForwards(forwards);
+				if (forwards.size() > 0) {
+					f.sendForwards(forwards);
+				} else {
+					logger.info("Empty forward list... no items being forwarded...");
+				}
 
 			}
 	

@@ -2,6 +2,9 @@ package aero.nettracer.integrations.us.scanners;
 
 import java.lang.reflect.InvocationTargetException;
 import java.rmi.RemoteException;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
@@ -25,19 +28,21 @@ import com.usairways.www.scans.wsdl.PostForwardsDocument.PostForwards;
 
 public class SendForward {
 	private static Logger logger = Logger.getLogger(SendForward.class);
+	private static Logger logger2 = Logger.getLogger("scanforwardinglog");
 	private static String endpoint = null;
 
 	public void sendForwards(List<Forward> forwards) {
 		try {
-			
+
 			if (endpoint == null) {
 				Session sess = HibernateWrapper.getSession().openSession();
-			
+
 				User user = UserDao.getByUsername(sess, "usairways");
 				sess.close();
-				endpoint = user.getProfile().getParameters().get(ParameterType.FWD_NOTIFICATION_ENDPOINT);
+				endpoint = user.getProfile().getParameters()
+						.get(ParameterType.FWD_NOTIFICATION_ENDPOINT);
 			}
-			
+
 			NTForwardsStub stub = new NTForwardsStub(endpoint);
 
 			PostForwardsDocument d = PostForwardsDocument.Factory.newInstance();
@@ -48,7 +53,7 @@ public class SendForward {
 				f.setComment(fw.getComment());
 				f.setOnHandId(fw.getOnHandId());
 				f.setTag(fw.getTagNumber());
-				
+
 				Segments g = f.addNewSegments();
 				f.setSegments(g);
 
@@ -56,6 +61,8 @@ public class SendForward {
 					SegmentType seg = g.addNewSegment();
 					BeanUtils.copyProperties(seg, s);
 				}
+
+				writeLogEntry(fw.getOnHandId(), fw.getTagNumber());
 			}
 
 			logger.info(d);
@@ -71,7 +78,14 @@ public class SendForward {
 			logger.error("Error: ", e);
 		} catch (InvocationTargetException e) {
 			logger.error("Error: ", e);
+		} catch (Exception e) {
+			logger.error("Error: ", e);
+			e.printStackTrace();
 		}
 
+	}
+
+	private void writeLogEntry(String onHandId, String tagNumber) {
+		logger2.info("Sent forward: OHD: " + onHandId + "  Tag Number: " + tagNumber);
 	}
 }
