@@ -42,7 +42,7 @@
          <context-root>azul</context-root>
      </web>
   </module>
-  
+  <!--
      <module>
      <web>
          <web-uri>american_testing.war</web-uri>
@@ -63,5 +63,5 @@
          <context-root>delta</context-root>
      </web>
   </module>
-  
+  -->
 </application> 
