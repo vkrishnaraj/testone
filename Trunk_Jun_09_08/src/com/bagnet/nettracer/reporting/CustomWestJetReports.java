@@ -488,7 +488,6 @@ public class CustomWestJetReports {
 				null);
 
 		String stationLimit1 = "";
-		String stationLimit2 = "";
 		
 		String stationCode = srDTO.getStationCode();
 		
@@ -505,8 +504,7 @@ public class CustomWestJetReports {
 			
 		
 		if (stationCode != null && !stationCode.equals("")) {
-			stationLimit1 = " and legfrom = \'" + stationCode + "\'";
-			stationLimit2 = " and legto = \'" + stationCode + "\'";
+			stationLimit1 = " and s.stationcode = \'" + stationCode + "\' ";
 		}
 
 		String sql = " select s.stationcode column1, count(distinct i.incident_id) column2, damagereplace column3, damagerepair column4"
@@ -546,6 +544,7 @@ public class CustomWestJetReports {
 			+ startDate
 			+ "\' and i.createdate <= \'"
 			+ endDate
+			+ stationLimit1
 			+ "\'"
 			+ "   and i.itemtype_id = 3"
 			+ "   group by s.stationcode";
