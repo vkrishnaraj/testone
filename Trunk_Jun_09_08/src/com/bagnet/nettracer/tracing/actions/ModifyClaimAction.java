@@ -98,7 +98,7 @@ public class ModifyClaimAction extends CheckedAction {
 		request.setAttribute("CLAIM_PAYOUT_RPT", Integer.toString(ReportingConstants.CLAIM_PAYOUT_RPT));
 
 		ClaimForm cform = (ClaimForm) form;
-		Set<Claim> claims = null;
+		Set<FsClaim> claims = null;
 		Claim claim = null;
 		File file = null;
 		
@@ -146,11 +146,11 @@ public class ModifyClaimAction extends CheckedAction {
 						request.setAttribute("noincident", "1");
 					} 
 				}
-				claims = ntIncident.getClaims();
+				claims = new LinkedHashSet<FsClaim>(ntIncident.getClaims());
 			}
 			
 			if (claims == null) {
-				claims = new LinkedHashSet<Claim>();
+				claims = new LinkedHashSet<FsClaim>();
 			}
 		}
 		
@@ -160,7 +160,7 @@ public class ModifyClaimAction extends CheckedAction {
 			if (isNtUser && request.getParameter("populate") != null) {
 				claim = ClaimUtils.createClaim(user, ntIncident);
 				claims.add(claim);
-				ntIncident.setClaims(claims);
+				ntIncident.setClaims(new LinkedHashSet<Claim>());
 				file = FileDAO.loadFile(ntIncident.getIncident_ID());
 			} else {
 				claim = ClaimUtils.createClaim(user);
@@ -200,8 +200,8 @@ public class ModifyClaimAction extends CheckedAction {
 				if (claim == null) {
 					claim = ClaimUtils.createClaim(user, ntIncident);
 					claim.setNtIncident(ntIncident);
-					claims.add(claim);
-					ntIncident.setClaims(claims);
+					ntIncident.getClaims().add(claim);
+//					ntIncident.setClaims(new LinkedHashSet<Claim>(claims));
 				}
 			}
 		}
@@ -285,7 +285,7 @@ public class ModifyClaimAction extends CheckedAction {
 						file = claim.getFile();
 					}
 					
-					for (Claim current: claims) {
+					for (FsClaim current: file.getClaims()) {
 						FsClaim newClaim = new FsClaim();
 						BeanUtils.copyProperties(newClaim, current);
 						LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
