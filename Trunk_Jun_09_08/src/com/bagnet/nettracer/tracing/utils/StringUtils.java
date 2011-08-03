@@ -34,6 +34,9 @@ public class StringUtils {
 	
 	private static final Logger logger = Logger.getLogger(StringUtils.class);
 
+	//DO NOT CHANGE SALT VALUE
+	private static final String salt = "qze5791K";
+	
 	public static String removePronouns(String s) {
 		if (s == null) return "";
 		ArrayList ar = new ArrayList();
@@ -388,8 +391,11 @@ public class StringUtils {
 	  return hex.toString();
   }
   
-  public static String sha1(String pass){
+  public static String sha1(String pass, boolean salt){
 	  try{
+		  if(salt){
+			  pass = salt + pass;
+		  }
 		  MessageDigest md = MessageDigest.getInstance("SHA-1");
 		  byte [] h = md.digest(pass.getBytes());
 		  return getHex(h);
@@ -397,6 +403,10 @@ public class StringUtils {
 			e.printStackTrace();
 	  }
 	  return null;
+  }
+  
+  public static String sha1(String pass){
+	  return sha1(pass, false);
   }
 
   public static String keyGen(){  
