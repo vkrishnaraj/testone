@@ -1,8 +1,9 @@
 package com.bagnet.nettracer.reporting;
 
-import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -76,9 +77,17 @@ public class LostFoundJasperReport {
 		sql = "select distinct lf.id,lf." + dateName + " as \'lfDate\',s.stationcode,st.description as \'desc\',st1.description as \'desc1\',i.trackingNumber from " + tableName + " lf " +
 			  "join station s on lf.station_ID = s.station_ID join status st on lf.status_ID = st.status_ID " +
 			  "join lfitem i on lf.id = i." + idName + " join status st1 on i.disposition_status_ID = st1.Status_ID where 1 = 1";
+		
+		Calendar calendarStart = new GregorianCalendar();
+		calendarStart.setTime(DateUtils.convertToDate(srDto.getStarttime(), srDto.getDateFormat(), null));
+		calendarStart.add(Calendar.DAY_OF_MONTH, -1);
 
-		String startDate = DateUtils.formatDate(srDto.getStarttime(), srDto.getDateFormat(), TracingConstants.DB_DATEFORMAT, null, null);
-		String endDate = DateUtils.formatDate(srDto.getEndtime(), srDto.getDateFormat(), TracingConstants.DB_DATEFORMAT, null, null);
+		Calendar calendarEnd = new GregorianCalendar();
+		calendarEnd.setTime(DateUtils.convertToDate(srDto.getStarttime(), srDto.getDateFormat(), null));
+		calendarEnd.add(Calendar.DAY_OF_MONTH, 1);
+		
+		String startDate = DateUtils.formatDate(calendarStart.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+		String endDate = DateUtils.formatDate(calendarEnd.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
 		
 		sql += " and lf." + dateName + " between \'" + startDate + "\' and \'" + endDate + "\'";
 		

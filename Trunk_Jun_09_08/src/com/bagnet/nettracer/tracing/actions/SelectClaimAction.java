@@ -56,7 +56,7 @@ public class SelectClaimAction extends CheckedAction {
 		
 		// redirect to the create claim action with the pre-population trigger set
 		if (request.getParameter("createNew") != null || scForm.getClaims() == null) {
-			response.sendRedirect("create_claim.do?incidentId=" + scForm.getIncidentId() + "&populate=1");
+			response.sendRedirect("create_claim.do?incidentId=" + scForm.getIncidentId() + "&createNew=1&populate=1");
 			return null;
 		}
 		
