@@ -217,7 +217,7 @@ public class ClaimUtils {
 
 		reservation.setIncident(fsIncident);
 		fsIncident.setReservation(reservation);
-		
+		fsIncident.setTimestampOpen(new Date());
 		return fsIncident;
 	}
 	
