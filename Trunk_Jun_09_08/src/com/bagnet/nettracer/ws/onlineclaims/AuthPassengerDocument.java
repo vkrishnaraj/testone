@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface AuthPassengerDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthPassengerDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("authpassenger3265doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthPassengerDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("authpassenger3265doctype");
     
     /**
      * Gets the "authPassenger" element
@@ -42,7 +42,7 @@ public interface AuthPassengerDocument extends org.apache.xmlbeans.XmlObject
     public interface AuthPassenger extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthPassenger.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("authpassenger33a3elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthPassenger.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("authpassenger33a3elemtype");
         
         /**
          * Gets the "passengerLastName" element
@@ -83,6 +83,46 @@ public interface AuthPassengerDocument extends org.apache.xmlbeans.XmlObject
          * Unsets the "passengerLastName" element
          */
         void unsetPassengerLastName();
+        
+        /**
+         * Gets the "passengerFirstName" element
+         */
+        java.lang.String getPassengerFirstName();
+        
+        /**
+         * Gets (as xml) the "passengerFirstName" element
+         */
+        org.apache.xmlbeans.XmlString xgetPassengerFirstName();
+        
+        /**
+         * Tests for nil "passengerFirstName" element
+         */
+        boolean isNilPassengerFirstName();
+        
+        /**
+         * True if has "passengerFirstName" element
+         */
+        boolean isSetPassengerFirstName();
+        
+        /**
+         * Sets the "passengerFirstName" element
+         */
+        void setPassengerFirstName(java.lang.String passengerFirstName);
+        
+        /**
+         * Sets (as xml) the "passengerFirstName" element
+         */
+        void xsetPassengerFirstName(org.apache.xmlbeans.XmlString passengerFirstName);
+        
+        /**
+         * Nils the "passengerFirstName" element
+         */
+        void setNilPassengerFirstName();
+        
+        /**
+         * Unsets the "passengerFirstName" element
+         */
+        void unsetPassengerFirstName();
         
         /**
          * Gets the "incidentId" element

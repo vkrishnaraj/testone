@@ -39,21 +39,9 @@ public class OnlineClaim {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date submitDate;
-	
-	@Column(length = 20)
-	private String accept;
 
 	@Column(length = 20)
 	private String status;
-
-	@Column(length = 20)
-	private String lastName;
-
-	@Column(length = 20)
-	private String firstName;
-
-	@Column(length = 1)
-	private String middleInitial;
 
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private OCAddress permanentAddress;
@@ -92,6 +80,12 @@ public class OnlineClaim {
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
 	private Set<OCFile> file;
+	
+	
+	@OneToMany(mappedBy = "claim", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	private Set<OCPassenger> passenger;
 	
 	// private Phone[] phone;
 	// private Itinerary[] itinerary;
@@ -205,8 +199,58 @@ public class OnlineClaim {
 	
 	@Basic
 	private String paxIpAddress;
-
 	
+	@Column(length = 20)
+	private String bagWeight;
+
+	@Column(length = 3)
+	private String paxClaimAmountCurrency;
+	
+	@Column(length = 20)
+	private String checkedLocationDescription;
+	
+	@Column(length = 2)
+	private String reportedAirline;
+	
+	@Column(length = 20)
+	private String reportedCity;
+	
+	@Column(length = 20)
+	private String reportedFileNumber;
+	
+	@Basic
+	private boolean privateInsurance;
+	
+	@Column(length = 20)
+	private String privateInsuranceName;
+	
+	@Column(length = 100)
+	private String privateInsuranceAddr;
+	
+	public String getBagWeight() {
+		return bagWeight;
+	}
+
+	public void setBagWeight(String bagWeight) {
+		this.bagWeight = bagWeight;
+	}
+
+	public String getPaxClaimAmountCurrency() {
+		return paxClaimAmountCurrency;
+	}
+
+	public void setPaxClaimAmountCurrency(String paxClaimAmountCurrency) {
+		this.paxClaimAmountCurrency = paxClaimAmountCurrency;
+	}
+
+	public String getCheckedLocationDescription() {
+		return checkedLocationDescription;
+	}
+
+	public void setCheckedLocationDescription(String checkedLocationDescription) {
+		this.checkedLocationDescription = checkedLocationDescription;
+	}
+
 	public String getPaxClaimDate() {
 		return paxClaimDate;
 	}
@@ -246,30 +290,6 @@ public class OnlineClaim {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getMiddleInitial() {
-		return middleInitial;
-	}
-
-	public void setMiddleInitial(String middleInitial) {
-		this.middleInitial = middleInitial;
 	}
 
 	public OCAddress getPermanentAddress() {
@@ -652,14 +672,6 @@ public class OnlineClaim {
 		NEW, PROCESSING, LOCKED
 	}
 
-	public String getAccept() {
-		return accept;
-	}
-
-	public void setAccept(String accept) {
-		this.accept = accept;
-	}
-
 	public String getTicketNumber() {
   	return ticketNumber;
   }
@@ -667,4 +679,61 @@ public class OnlineClaim {
 	public void setTicketNumber(String ticketNumber) {
   	this.ticketNumber = ticketNumber;
   }
+
+	public Set<OCPassenger> getPassenger() {
+		return passenger;
+	}
+
+	public void setPassenger(Set<OCPassenger> passenger) {
+		this.passenger = passenger;
+	}
+
+	public String getReportedAirline() {
+		return reportedAirline;
+	}
+
+	public void setReportedAirline(String reportedAirline) {
+		this.reportedAirline = reportedAirline;
+	}
+
+	public String getReportedCity() {
+		return reportedCity;
+	}
+
+	public void setReportedCity(String reportedCity) {
+		this.reportedCity = reportedCity;
+	}
+
+	public String getReportedFileNumber() {
+		return reportedFileNumber;
+	}
+
+	public void setReportedFileNumber(String reportedFileNumber) {
+		this.reportedFileNumber = reportedFileNumber;
+	}
+
+	public boolean isPrivateInsurance() {
+		return privateInsurance;
+	}
+
+	public void setPrivateInsurance(boolean privateInsurance) {
+		this.privateInsurance = privateInsurance;
+	}
+
+	public String getPrivateInsuranceName() {
+		return privateInsuranceName;
+	}
+
+	public void setPrivateInsuranceName(String privateInsuranceName) {
+		this.privateInsuranceName = privateInsuranceName;
+	}
+
+	public String getPrivateInsuranceAddr() {
+		return privateInsuranceAddr;
+	}
+
+	public void setPrivateInsuranceAddr(String privateInsuranceAddr) {
+		this.privateInsuranceAddr = privateInsuranceAddr;
+	}
+	
 }

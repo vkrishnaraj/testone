@@ -23,45 +23,57 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "bagArrive");
     private static final javax.xml.namespace.QName BAGCOLOR$2 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "bagColor");
-    private static final javax.xml.namespace.QName BAGTYPE$4 = 
+    private static final javax.xml.namespace.QName BAGCURRENCY$4 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "bagCurrency");
+    private static final javax.xml.namespace.QName BAGOWNER$6 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "bagOwner");
+    private static final javax.xml.namespace.QName BAGTYPE$8 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "bagType");
-    private static final javax.xml.namespace.QName BRAND$6 = 
+    private static final javax.xml.namespace.QName BAGVALUE$10 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "bagValue");
+    private static final javax.xml.namespace.QName BRAND$12 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "brand");
-    private static final javax.xml.namespace.QName CONTENTS$8 = 
+    private static final javax.xml.namespace.QName CONTENTS$14 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "contents");
-    private static final javax.xml.namespace.QName EXTERNALMARKINGS$10 = 
+    private static final javax.xml.namespace.QName EXTERNALMARKINGS$16 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "externalMarkings");
-    private static final javax.xml.namespace.QName FEET$12 = 
+    private static final javax.xml.namespace.QName FEET$18 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "feet");
-    private static final javax.xml.namespace.QName HARDSIDED$14 = 
+    private static final javax.xml.namespace.QName HARDSIDED$20 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "hardSided");
-    private static final javax.xml.namespace.QName ID$16 = 
+    private static final javax.xml.namespace.QName ID$22 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "id");
-    private static final javax.xml.namespace.QName LOCKS$18 = 
+    private static final javax.xml.namespace.QName LEATHER$24 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "leather");
+    private static final javax.xml.namespace.QName LOCKS$26 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "locks");
-    private static final javax.xml.namespace.QName NAMEONBAG$20 = 
+    private static final javax.xml.namespace.QName METAL$28 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "metal");
+    private static final javax.xml.namespace.QName NAMEONBAG$30 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "nameOnBag");
-    private static final javax.xml.namespace.QName NAMETAG$22 = 
+    private static final javax.xml.namespace.QName NAMETAG$32 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "nameTag");
-    private static final javax.xml.namespace.QName POCKETS$24 = 
+    private static final javax.xml.namespace.QName POCKETS$34 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "pockets");
-    private static final javax.xml.namespace.QName PULLSTRAP$26 = 
+    private static final javax.xml.namespace.QName PULLSTRAP$36 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "pullStrap");
-    private static final javax.xml.namespace.QName PURCHASEDATE$28 = 
+    private static final javax.xml.namespace.QName PURCHASEDATE$38 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "purchaseDate");
-    private static final javax.xml.namespace.QName RETRACTIBLEHANDLE$30 = 
+    private static final javax.xml.namespace.QName RETRACTIBLEHANDLE$40 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "retractibleHandle");
-    private static final javax.xml.namespace.QName RIBBONSORMARKINGS$32 = 
+    private static final javax.xml.namespace.QName RIBBONSORMARKINGS$42 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "ribbonsOrMarkings");
-    private static final javax.xml.namespace.QName SOFTSIDED$34 = 
+    private static final javax.xml.namespace.QName SOFTSIDED$44 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "softSided");
-    private static final javax.xml.namespace.QName TAG$36 = 
+    private static final javax.xml.namespace.QName TAG$46 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "tag");
-    private static final javax.xml.namespace.QName TRIM$38 = 
+    private static final javax.xml.namespace.QName TRIM$48 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "trim");
-    private static final javax.xml.namespace.QName WHEELS$40 = 
+    private static final javax.xml.namespace.QName TRIMDESCRIPTION$50 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "trimDescription");
+    private static final javax.xml.namespace.QName WHEELS$52 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "wheels");
-    private static final javax.xml.namespace.QName ZIPPERS$42 = 
+    private static final javax.xml.namespace.QName ZIPPERS$54 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "zippers");
     
     
@@ -283,6 +295,256 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
     }
     
     /**
+     * Gets the "bagCurrency" element
+     */
+    public java.lang.String getBagCurrency()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BAGCURRENCY$4, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "bagCurrency" element
+     */
+    public org.apache.xmlbeans.XmlString xgetBagCurrency()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGCURRENCY$4, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "bagCurrency" element
+     */
+    public boolean isNilBagCurrency()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGCURRENCY$4, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "bagCurrency" element
+     */
+    public boolean isSetBagCurrency()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(BAGCURRENCY$4) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "bagCurrency" element
+     */
+    public void setBagCurrency(java.lang.String bagCurrency)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BAGCURRENCY$4, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(BAGCURRENCY$4);
+            }
+            target.setStringValue(bagCurrency);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "bagCurrency" element
+     */
+    public void xsetBagCurrency(org.apache.xmlbeans.XmlString bagCurrency)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGCURRENCY$4, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BAGCURRENCY$4);
+            }
+            target.set(bagCurrency);
+        }
+    }
+    
+    /**
+     * Nils the "bagCurrency" element
+     */
+    public void setNilBagCurrency()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGCURRENCY$4, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BAGCURRENCY$4);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "bagCurrency" element
+     */
+    public void unsetBagCurrency()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(BAGCURRENCY$4, 0);
+        }
+    }
+    
+    /**
+     * Gets the "bagOwner" element
+     */
+    public java.lang.String getBagOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BAGOWNER$6, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "bagOwner" element
+     */
+    public org.apache.xmlbeans.XmlString xgetBagOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGOWNER$6, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "bagOwner" element
+     */
+    public boolean isNilBagOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGOWNER$6, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "bagOwner" element
+     */
+    public boolean isSetBagOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(BAGOWNER$6) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "bagOwner" element
+     */
+    public void setBagOwner(java.lang.String bagOwner)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BAGOWNER$6, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(BAGOWNER$6);
+            }
+            target.setStringValue(bagOwner);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "bagOwner" element
+     */
+    public void xsetBagOwner(org.apache.xmlbeans.XmlString bagOwner)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGOWNER$6, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BAGOWNER$6);
+            }
+            target.set(bagOwner);
+        }
+    }
+    
+    /**
+     * Nils the "bagOwner" element
+     */
+    public void setNilBagOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGOWNER$6, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BAGOWNER$6);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "bagOwner" element
+     */
+    public void unsetBagOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(BAGOWNER$6, 0);
+        }
+    }
+    
+    /**
      * Gets the "bagType" element
      */
     public java.lang.String getBagType()
@@ -291,7 +553,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BAGTYPE$4, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BAGTYPE$8, 0);
             if (target == null)
             {
                 return null;
@@ -309,7 +571,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGTYPE$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGTYPE$8, 0);
             return target;
         }
     }
@@ -323,7 +585,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGTYPE$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGTYPE$8, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -337,7 +599,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(BAGTYPE$4) != 0;
+            return get_store().count_elements(BAGTYPE$8) != 0;
         }
     }
     
@@ -350,10 +612,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BAGTYPE$4, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BAGTYPE$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(BAGTYPE$4);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(BAGTYPE$8);
             }
             target.setStringValue(bagType);
         }
@@ -368,10 +630,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGTYPE$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGTYPE$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BAGTYPE$4);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BAGTYPE$8);
             }
             target.set(bagType);
         }
@@ -386,10 +648,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGTYPE$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGTYPE$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BAGTYPE$4);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BAGTYPE$8);
             }
             target.setNil();
         }
@@ -403,7 +665,132 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(BAGTYPE$4, 0);
+            get_store().remove_element(BAGTYPE$8, 0);
+        }
+    }
+    
+    /**
+     * Gets the "bagValue" element
+     */
+    public java.lang.String getBagValue()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BAGVALUE$10, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "bagValue" element
+     */
+    public org.apache.xmlbeans.XmlString xgetBagValue()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGVALUE$10, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "bagValue" element
+     */
+    public boolean isNilBagValue()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGVALUE$10, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "bagValue" element
+     */
+    public boolean isSetBagValue()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(BAGVALUE$10) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "bagValue" element
+     */
+    public void setBagValue(java.lang.String bagValue)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BAGVALUE$10, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(BAGVALUE$10);
+            }
+            target.setStringValue(bagValue);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "bagValue" element
+     */
+    public void xsetBagValue(org.apache.xmlbeans.XmlString bagValue)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGVALUE$10, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BAGVALUE$10);
+            }
+            target.set(bagValue);
+        }
+    }
+    
+    /**
+     * Nils the "bagValue" element
+     */
+    public void setNilBagValue()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BAGVALUE$10, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BAGVALUE$10);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "bagValue" element
+     */
+    public void unsetBagValue()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(BAGVALUE$10, 0);
         }
     }
     
@@ -416,7 +803,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BRAND$6, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BRAND$12, 0);
             if (target == null)
             {
                 return null;
@@ -434,7 +821,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BRAND$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BRAND$12, 0);
             return target;
         }
     }
@@ -448,7 +835,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BRAND$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BRAND$12, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -462,7 +849,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(BRAND$6) != 0;
+            return get_store().count_elements(BRAND$12) != 0;
         }
     }
     
@@ -475,10 +862,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BRAND$6, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(BRAND$12, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(BRAND$6);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(BRAND$12);
             }
             target.setStringValue(brand);
         }
@@ -493,10 +880,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BRAND$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BRAND$12, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BRAND$6);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BRAND$12);
             }
             target.set(brand);
         }
@@ -511,10 +898,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BRAND$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(BRAND$12, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BRAND$6);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(BRAND$12);
             }
             target.setNil();
         }
@@ -528,7 +915,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(BRAND$6, 0);
+            get_store().remove_element(BRAND$12, 0);
         }
     }
     
@@ -541,7 +928,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             java.util.List targetList = new java.util.ArrayList();
-            get_store().find_all_element_users(CONTENTS$8, targetList);
+            get_store().find_all_element_users(CONTENTS$14, targetList);
             com.bagnet.nettracer.ws.onlineclaims.xsd.Contents[] result = new com.bagnet.nettracer.ws.onlineclaims.xsd.Contents[targetList.size()];
             targetList.toArray(result);
             return result;
@@ -557,7 +944,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.Contents target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().find_element_user(CONTENTS$8, i);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().find_element_user(CONTENTS$14, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -575,7 +962,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.Contents target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().find_element_user(CONTENTS$8, i);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().find_element_user(CONTENTS$14, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -592,7 +979,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(CONTENTS$8);
+            return get_store().count_elements(CONTENTS$14);
         }
     }
     
@@ -604,7 +991,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            arraySetterHelper(contentsArray, CONTENTS$8);
+            arraySetterHelper(contentsArray, CONTENTS$14);
         }
     }
     
@@ -617,7 +1004,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.Contents target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().find_element_user(CONTENTS$8, i);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().find_element_user(CONTENTS$14, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -635,7 +1022,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.Contents target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().find_element_user(CONTENTS$8, i);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().find_element_user(CONTENTS$14, i);
             if (target == null)
             {
                 throw new IndexOutOfBoundsException();
@@ -653,7 +1040,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.Contents target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().insert_element_user(CONTENTS$8, i);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().insert_element_user(CONTENTS$14, i);
             return target;
         }
     }
@@ -667,7 +1054,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             com.bagnet.nettracer.ws.onlineclaims.xsd.Contents target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().add_element_user(CONTENTS$8);
+            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Contents)get_store().add_element_user(CONTENTS$14);
             return target;
         }
     }
@@ -680,7 +1067,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(CONTENTS$8, i);
+            get_store().remove_element(CONTENTS$14, i);
         }
     }
     
@@ -693,7 +1080,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(EXTERNALMARKINGS$10, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(EXTERNALMARKINGS$16, 0);
             if (target == null)
             {
                 return null;
@@ -711,7 +1098,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(EXTERNALMARKINGS$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(EXTERNALMARKINGS$16, 0);
             return target;
         }
     }
@@ -725,7 +1112,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(EXTERNALMARKINGS$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(EXTERNALMARKINGS$16, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -739,7 +1126,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(EXTERNALMARKINGS$10) != 0;
+            return get_store().count_elements(EXTERNALMARKINGS$16) != 0;
         }
     }
     
@@ -752,10 +1139,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(EXTERNALMARKINGS$10, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(EXTERNALMARKINGS$16, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(EXTERNALMARKINGS$10);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(EXTERNALMARKINGS$16);
             }
             target.setStringValue(externalMarkings);
         }
@@ -770,10 +1157,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(EXTERNALMARKINGS$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(EXTERNALMARKINGS$16, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(EXTERNALMARKINGS$10);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(EXTERNALMARKINGS$16);
             }
             target.set(externalMarkings);
         }
@@ -788,10 +1175,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(EXTERNALMARKINGS$10, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(EXTERNALMARKINGS$16, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(EXTERNALMARKINGS$10);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(EXTERNALMARKINGS$16);
             }
             target.setNil();
         }
@@ -805,7 +1192,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(EXTERNALMARKINGS$10, 0);
+            get_store().remove_element(EXTERNALMARKINGS$16, 0);
         }
     }
     
@@ -818,7 +1205,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FEET$12, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FEET$18, 0);
             if (target == null)
             {
                 return false;
@@ -836,7 +1223,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(FEET$12, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(FEET$18, 0);
             return target;
         }
     }
@@ -849,7 +1236,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(FEET$12) != 0;
+            return get_store().count_elements(FEET$18) != 0;
         }
     }
     
@@ -862,10 +1249,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FEET$12, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FEET$18, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(FEET$12);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(FEET$18);
             }
             target.setBooleanValue(feet);
         }
@@ -880,10 +1267,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(FEET$12, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(FEET$18, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(FEET$12);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(FEET$18);
             }
             target.set(feet);
         }
@@ -897,7 +1284,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(FEET$12, 0);
+            get_store().remove_element(FEET$18, 0);
         }
     }
     
@@ -910,7 +1297,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(HARDSIDED$14, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(HARDSIDED$20, 0);
             if (target == null)
             {
                 return false;
@@ -928,7 +1315,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(HARDSIDED$14, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(HARDSIDED$20, 0);
             return target;
         }
     }
@@ -941,7 +1328,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(HARDSIDED$14) != 0;
+            return get_store().count_elements(HARDSIDED$20) != 0;
         }
     }
     
@@ -954,10 +1341,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(HARDSIDED$14, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(HARDSIDED$20, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(HARDSIDED$14);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(HARDSIDED$20);
             }
             target.setBooleanValue(hardSided);
         }
@@ -972,10 +1359,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(HARDSIDED$14, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(HARDSIDED$20, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(HARDSIDED$14);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(HARDSIDED$20);
             }
             target.set(hardSided);
         }
@@ -989,7 +1376,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(HARDSIDED$14, 0);
+            get_store().remove_element(HARDSIDED$20, 0);
         }
     }
     
@@ -1002,7 +1389,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ID$16, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ID$22, 0);
             if (target == null)
             {
                 return 0L;
@@ -1020,7 +1407,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlLong target = null;
-            target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(ID$16, 0);
+            target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(ID$22, 0);
             return target;
         }
     }
@@ -1033,7 +1420,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(ID$16) != 0;
+            return get_store().count_elements(ID$22) != 0;
         }
     }
     
@@ -1046,10 +1433,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ID$16, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ID$22, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ID$16);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ID$22);
             }
             target.setLongValue(id);
         }
@@ -1064,10 +1451,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlLong target = null;
-            target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(ID$16, 0);
+            target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(ID$22, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlLong)get_store().add_element_user(ID$16);
+                target = (org.apache.xmlbeans.XmlLong)get_store().add_element_user(ID$22);
             }
             target.set(id);
         }
@@ -1081,7 +1468,99 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(ID$16, 0);
+            get_store().remove_element(ID$22, 0);
+        }
+    }
+    
+    /**
+     * Gets the "leather" element
+     */
+    public boolean getLeather()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(LEATHER$24, 0);
+            if (target == null)
+            {
+                return false;
+            }
+            return target.getBooleanValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "leather" element
+     */
+    public org.apache.xmlbeans.XmlBoolean xgetLeather()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlBoolean target = null;
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(LEATHER$24, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "leather" element
+     */
+    public boolean isSetLeather()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(LEATHER$24) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "leather" element
+     */
+    public void setLeather(boolean leather)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(LEATHER$24, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(LEATHER$24);
+            }
+            target.setBooleanValue(leather);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "leather" element
+     */
+    public void xsetLeather(org.apache.xmlbeans.XmlBoolean leather)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlBoolean target = null;
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(LEATHER$24, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(LEATHER$24);
+            }
+            target.set(leather);
+        }
+    }
+    
+    /**
+     * Unsets the "leather" element
+     */
+    public void unsetLeather()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(LEATHER$24, 0);
         }
     }
     
@@ -1094,7 +1573,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(LOCKS$18, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(LOCKS$26, 0);
             if (target == null)
             {
                 return false;
@@ -1112,7 +1591,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(LOCKS$18, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(LOCKS$26, 0);
             return target;
         }
     }
@@ -1125,7 +1604,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(LOCKS$18) != 0;
+            return get_store().count_elements(LOCKS$26) != 0;
         }
     }
     
@@ -1138,10 +1617,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(LOCKS$18, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(LOCKS$26, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(LOCKS$18);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(LOCKS$26);
             }
             target.setBooleanValue(locks);
         }
@@ -1156,10 +1635,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(LOCKS$18, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(LOCKS$26, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(LOCKS$18);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(LOCKS$26);
             }
             target.set(locks);
         }
@@ -1173,7 +1652,99 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(LOCKS$18, 0);
+            get_store().remove_element(LOCKS$26, 0);
+        }
+    }
+    
+    /**
+     * Gets the "metal" element
+     */
+    public boolean getMetal()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(METAL$28, 0);
+            if (target == null)
+            {
+                return false;
+            }
+            return target.getBooleanValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "metal" element
+     */
+    public org.apache.xmlbeans.XmlBoolean xgetMetal()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlBoolean target = null;
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(METAL$28, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "metal" element
+     */
+    public boolean isSetMetal()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(METAL$28) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "metal" element
+     */
+    public void setMetal(boolean metal)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(METAL$28, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(METAL$28);
+            }
+            target.setBooleanValue(metal);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "metal" element
+     */
+    public void xsetMetal(org.apache.xmlbeans.XmlBoolean metal)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlBoolean target = null;
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(METAL$28, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(METAL$28);
+            }
+            target.set(metal);
+        }
+    }
+    
+    /**
+     * Unsets the "metal" element
+     */
+    public void unsetMetal()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(METAL$28, 0);
         }
     }
     
@@ -1186,7 +1757,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(NAMEONBAG$20, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(NAMEONBAG$30, 0);
             if (target == null)
             {
                 return null;
@@ -1204,7 +1775,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(NAMEONBAG$20, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(NAMEONBAG$30, 0);
             return target;
         }
     }
@@ -1218,7 +1789,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(NAMEONBAG$20, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(NAMEONBAG$30, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -1232,7 +1803,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(NAMEONBAG$20) != 0;
+            return get_store().count_elements(NAMEONBAG$30) != 0;
         }
     }
     
@@ -1245,10 +1816,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(NAMEONBAG$20, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(NAMEONBAG$30, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(NAMEONBAG$20);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(NAMEONBAG$30);
             }
             target.setStringValue(nameOnBag);
         }
@@ -1263,10 +1834,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(NAMEONBAG$20, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(NAMEONBAG$30, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(NAMEONBAG$20);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(NAMEONBAG$30);
             }
             target.set(nameOnBag);
         }
@@ -1281,10 +1852,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(NAMEONBAG$20, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(NAMEONBAG$30, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(NAMEONBAG$20);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(NAMEONBAG$30);
             }
             target.setNil();
         }
@@ -1298,7 +1869,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(NAMEONBAG$20, 0);
+            get_store().remove_element(NAMEONBAG$30, 0);
         }
     }
     
@@ -1311,7 +1882,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(NAMETAG$22, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(NAMETAG$32, 0);
             if (target == null)
             {
                 return false;
@@ -1329,7 +1900,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(NAMETAG$22, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(NAMETAG$32, 0);
             return target;
         }
     }
@@ -1342,7 +1913,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(NAMETAG$22) != 0;
+            return get_store().count_elements(NAMETAG$32) != 0;
         }
     }
     
@@ -1355,10 +1926,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(NAMETAG$22, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(NAMETAG$32, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(NAMETAG$22);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(NAMETAG$32);
             }
             target.setBooleanValue(nameTag);
         }
@@ -1373,10 +1944,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(NAMETAG$22, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(NAMETAG$32, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(NAMETAG$22);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(NAMETAG$32);
             }
             target.set(nameTag);
         }
@@ -1390,7 +1961,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(NAMETAG$22, 0);
+            get_store().remove_element(NAMETAG$32, 0);
         }
     }
     
@@ -1403,7 +1974,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(POCKETS$24, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(POCKETS$34, 0);
             if (target == null)
             {
                 return false;
@@ -1421,7 +1992,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(POCKETS$24, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(POCKETS$34, 0);
             return target;
         }
     }
@@ -1434,7 +2005,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(POCKETS$24) != 0;
+            return get_store().count_elements(POCKETS$34) != 0;
         }
     }
     
@@ -1447,10 +2018,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(POCKETS$24, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(POCKETS$34, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(POCKETS$24);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(POCKETS$34);
             }
             target.setBooleanValue(pockets);
         }
@@ -1465,10 +2036,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(POCKETS$24, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(POCKETS$34, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(POCKETS$24);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(POCKETS$34);
             }
             target.set(pockets);
         }
@@ -1482,7 +2053,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(POCKETS$24, 0);
+            get_store().remove_element(POCKETS$34, 0);
         }
     }
     
@@ -1495,7 +2066,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PULLSTRAP$26, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PULLSTRAP$36, 0);
             if (target == null)
             {
                 return false;
@@ -1513,7 +2084,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(PULLSTRAP$26, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(PULLSTRAP$36, 0);
             return target;
         }
     }
@@ -1526,7 +2097,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PULLSTRAP$26) != 0;
+            return get_store().count_elements(PULLSTRAP$36) != 0;
         }
     }
     
@@ -1539,10 +2110,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PULLSTRAP$26, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PULLSTRAP$36, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PULLSTRAP$26);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PULLSTRAP$36);
             }
             target.setBooleanValue(pullStrap);
         }
@@ -1557,10 +2128,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(PULLSTRAP$26, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(PULLSTRAP$36, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(PULLSTRAP$26);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(PULLSTRAP$36);
             }
             target.set(pullStrap);
         }
@@ -1574,7 +2145,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PULLSTRAP$26, 0);
+            get_store().remove_element(PULLSTRAP$36, 0);
         }
     }
     
@@ -1587,7 +2158,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDATE$28, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDATE$38, 0);
             if (target == null)
             {
                 return null;
@@ -1605,7 +2176,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlDate target = null;
-            target = (org.apache.xmlbeans.XmlDate)get_store().find_element_user(PURCHASEDATE$28, 0);
+            target = (org.apache.xmlbeans.XmlDate)get_store().find_element_user(PURCHASEDATE$38, 0);
             return target;
         }
     }
@@ -1619,7 +2190,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlDate target = null;
-            target = (org.apache.xmlbeans.XmlDate)get_store().find_element_user(PURCHASEDATE$28, 0);
+            target = (org.apache.xmlbeans.XmlDate)get_store().find_element_user(PURCHASEDATE$38, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -1633,7 +2204,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PURCHASEDATE$28) != 0;
+            return get_store().count_elements(PURCHASEDATE$38) != 0;
         }
     }
     
@@ -1646,10 +2217,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDATE$28, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDATE$38, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PURCHASEDATE$28);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PURCHASEDATE$38);
             }
             target.setCalendarValue(purchaseDate);
         }
@@ -1664,10 +2235,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlDate target = null;
-            target = (org.apache.xmlbeans.XmlDate)get_store().find_element_user(PURCHASEDATE$28, 0);
+            target = (org.apache.xmlbeans.XmlDate)get_store().find_element_user(PURCHASEDATE$38, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlDate)get_store().add_element_user(PURCHASEDATE$28);
+                target = (org.apache.xmlbeans.XmlDate)get_store().add_element_user(PURCHASEDATE$38);
             }
             target.set(purchaseDate);
         }
@@ -1682,10 +2253,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlDate target = null;
-            target = (org.apache.xmlbeans.XmlDate)get_store().find_element_user(PURCHASEDATE$28, 0);
+            target = (org.apache.xmlbeans.XmlDate)get_store().find_element_user(PURCHASEDATE$38, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlDate)get_store().add_element_user(PURCHASEDATE$28);
+                target = (org.apache.xmlbeans.XmlDate)get_store().add_element_user(PURCHASEDATE$38);
             }
             target.setNil();
         }
@@ -1699,7 +2270,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PURCHASEDATE$28, 0);
+            get_store().remove_element(PURCHASEDATE$38, 0);
         }
     }
     
@@ -1712,7 +2283,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(RETRACTIBLEHANDLE$30, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(RETRACTIBLEHANDLE$40, 0);
             if (target == null)
             {
                 return false;
@@ -1730,7 +2301,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(RETRACTIBLEHANDLE$30, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(RETRACTIBLEHANDLE$40, 0);
             return target;
         }
     }
@@ -1743,7 +2314,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(RETRACTIBLEHANDLE$30) != 0;
+            return get_store().count_elements(RETRACTIBLEHANDLE$40) != 0;
         }
     }
     
@@ -1756,10 +2327,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(RETRACTIBLEHANDLE$30, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(RETRACTIBLEHANDLE$40, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(RETRACTIBLEHANDLE$30);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(RETRACTIBLEHANDLE$40);
             }
             target.setBooleanValue(retractibleHandle);
         }
@@ -1774,10 +2345,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(RETRACTIBLEHANDLE$30, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(RETRACTIBLEHANDLE$40, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(RETRACTIBLEHANDLE$30);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(RETRACTIBLEHANDLE$40);
             }
             target.set(retractibleHandle);
         }
@@ -1791,7 +2362,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(RETRACTIBLEHANDLE$30, 0);
+            get_store().remove_element(RETRACTIBLEHANDLE$40, 0);
         }
     }
     
@@ -1804,7 +2375,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(RIBBONSORMARKINGS$32, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(RIBBONSORMARKINGS$42, 0);
             if (target == null)
             {
                 return false;
@@ -1822,7 +2393,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(RIBBONSORMARKINGS$32, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(RIBBONSORMARKINGS$42, 0);
             return target;
         }
     }
@@ -1835,7 +2406,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(RIBBONSORMARKINGS$32) != 0;
+            return get_store().count_elements(RIBBONSORMARKINGS$42) != 0;
         }
     }
     
@@ -1848,10 +2419,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(RIBBONSORMARKINGS$32, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(RIBBONSORMARKINGS$42, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(RIBBONSORMARKINGS$32);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(RIBBONSORMARKINGS$42);
             }
             target.setBooleanValue(ribbonsOrMarkings);
         }
@@ -1866,10 +2437,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(RIBBONSORMARKINGS$32, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(RIBBONSORMARKINGS$42, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(RIBBONSORMARKINGS$32);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(RIBBONSORMARKINGS$42);
             }
             target.set(ribbonsOrMarkings);
         }
@@ -1883,7 +2454,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(RIBBONSORMARKINGS$32, 0);
+            get_store().remove_element(RIBBONSORMARKINGS$42, 0);
         }
     }
     
@@ -1896,7 +2467,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(SOFTSIDED$34, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(SOFTSIDED$44, 0);
             if (target == null)
             {
                 return false;
@@ -1914,7 +2485,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(SOFTSIDED$34, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(SOFTSIDED$44, 0);
             return target;
         }
     }
@@ -1927,7 +2498,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(SOFTSIDED$34) != 0;
+            return get_store().count_elements(SOFTSIDED$44) != 0;
         }
     }
     
@@ -1940,10 +2511,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(SOFTSIDED$34, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(SOFTSIDED$44, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(SOFTSIDED$34);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(SOFTSIDED$44);
             }
             target.setBooleanValue(softSided);
         }
@@ -1958,10 +2529,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(SOFTSIDED$34, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(SOFTSIDED$44, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(SOFTSIDED$34);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(SOFTSIDED$44);
             }
             target.set(softSided);
         }
@@ -1975,7 +2546,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(SOFTSIDED$34, 0);
+            get_store().remove_element(SOFTSIDED$44, 0);
         }
     }
     
@@ -1988,7 +2559,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TAG$36, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TAG$46, 0);
             if (target == null)
             {
                 return null;
@@ -2006,7 +2577,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$36, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$46, 0);
             return target;
         }
     }
@@ -2020,7 +2591,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$36, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$46, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -2034,7 +2605,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(TAG$36) != 0;
+            return get_store().count_elements(TAG$46) != 0;
         }
     }
     
@@ -2047,10 +2618,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TAG$36, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TAG$46, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TAG$36);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TAG$46);
             }
             target.setStringValue(tag);
         }
@@ -2065,10 +2636,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$36, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$46, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TAG$36);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TAG$46);
             }
             target.set(tag);
         }
@@ -2083,10 +2654,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$36, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TAG$46, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TAG$36);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TAG$46);
             }
             target.setNil();
         }
@@ -2100,7 +2671,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(TAG$36, 0);
+            get_store().remove_element(TAG$46, 0);
         }
     }
     
@@ -2113,7 +2684,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TRIM$38, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TRIM$48, 0);
             if (target == null)
             {
                 return false;
@@ -2131,7 +2702,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TRIM$38, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TRIM$48, 0);
             return target;
         }
     }
@@ -2144,7 +2715,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(TRIM$38) != 0;
+            return get_store().count_elements(TRIM$48) != 0;
         }
     }
     
@@ -2157,10 +2728,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TRIM$38, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TRIM$48, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TRIM$38);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TRIM$48);
             }
             target.setBooleanValue(trim);
         }
@@ -2175,10 +2746,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TRIM$38, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(TRIM$48, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(TRIM$38);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(TRIM$48);
             }
             target.set(trim);
         }
@@ -2192,7 +2763,132 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(TRIM$38, 0);
+            get_store().remove_element(TRIM$48, 0);
+        }
+    }
+    
+    /**
+     * Gets the "trimDescription" element
+     */
+    public java.lang.String getTrimDescription()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TRIMDESCRIPTION$50, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "trimDescription" element
+     */
+    public org.apache.xmlbeans.XmlString xgetTrimDescription()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TRIMDESCRIPTION$50, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "trimDescription" element
+     */
+    public boolean isNilTrimDescription()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TRIMDESCRIPTION$50, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "trimDescription" element
+     */
+    public boolean isSetTrimDescription()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(TRIMDESCRIPTION$50) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "trimDescription" element
+     */
+    public void setTrimDescription(java.lang.String trimDescription)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(TRIMDESCRIPTION$50, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(TRIMDESCRIPTION$50);
+            }
+            target.setStringValue(trimDescription);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "trimDescription" element
+     */
+    public void xsetTrimDescription(org.apache.xmlbeans.XmlString trimDescription)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TRIMDESCRIPTION$50, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TRIMDESCRIPTION$50);
+            }
+            target.set(trimDescription);
+        }
+    }
+    
+    /**
+     * Nils the "trimDescription" element
+     */
+    public void setNilTrimDescription()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(TRIMDESCRIPTION$50, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(TRIMDESCRIPTION$50);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "trimDescription" element
+     */
+    public void unsetTrimDescription()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(TRIMDESCRIPTION$50, 0);
         }
     }
     
@@ -2205,7 +2901,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEELS$40, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEELS$52, 0);
             if (target == null)
             {
                 return false;
@@ -2223,7 +2919,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(WHEELS$40, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(WHEELS$52, 0);
             return target;
         }
     }
@@ -2236,7 +2932,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(WHEELS$40) != 0;
+            return get_store().count_elements(WHEELS$52) != 0;
         }
     }
     
@@ -2249,10 +2945,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEELS$40, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(WHEELS$52, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WHEELS$40);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(WHEELS$52);
             }
             target.setBooleanValue(wheels);
         }
@@ -2267,10 +2963,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(WHEELS$40, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(WHEELS$52, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(WHEELS$40);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(WHEELS$52);
             }
             target.set(wheels);
         }
@@ -2284,7 +2980,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(WHEELS$40, 0);
+            get_store().remove_element(WHEELS$52, 0);
         }
     }
     
@@ -2297,7 +2993,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIPPERS$42, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIPPERS$54, 0);
             if (target == null)
             {
                 return false;
@@ -2315,7 +3011,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(ZIPPERS$42, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(ZIPPERS$54, 0);
             return target;
         }
     }
@@ -2328,7 +3024,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(ZIPPERS$42) != 0;
+            return get_store().count_elements(ZIPPERS$54) != 0;
         }
     }
     
@@ -2341,10 +3037,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIPPERS$42, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ZIPPERS$54, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ZIPPERS$42);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ZIPPERS$54);
             }
             target.setBooleanValue(zippers);
         }
@@ -2359,10 +3055,10 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(ZIPPERS$42, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(ZIPPERS$54, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(ZIPPERS$42);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(ZIPPERS$54);
             }
             target.set(zippers);
         }
@@ -2376,7 +3072,7 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(ZIPPERS$42, 0);
+            get_store().remove_element(ZIPPERS$54, 0);
         }
     }
 }

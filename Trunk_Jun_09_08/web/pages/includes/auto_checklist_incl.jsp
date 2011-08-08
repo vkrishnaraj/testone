@@ -19,6 +19,7 @@
       boolean ldCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_LD, a);
       boolean damCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_DAM, a);
       boolean pilCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_PIL, a);
+      boolean ocIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CENTRAL_BAGGAGE_CLAIMS_FEATURES, a);
       
       if (bIncidentChecklist || bIncidentChecklistReadOnly || ldCrmIntegration || damCrmIntegration || pilCrmIntegration) {
 
@@ -97,7 +98,7 @@
 		   <% 			  
 		  }
 		  IncidentForm form = (IncidentForm)session.getAttribute("incidentForm"); 
-		  if (form.getOc_claim_id() != 0) {
+		  if (form.getOc_claim_id() != 0 && form.isClaimSubmitted() && ocIntegration) {
 		  	String url = "displayClaim.do?ajax=1&claimId=" + form.getOc_claim_id();
 		  %>
 		  	<input type="button" value="View Online Claim" onclick="loadSlideupContainer('<%=url %>')" id="button" />

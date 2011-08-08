@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Incident extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Incident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("incident1c81type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Incident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("incident1c81type");
     
     /**
      * Gets the "authID" element

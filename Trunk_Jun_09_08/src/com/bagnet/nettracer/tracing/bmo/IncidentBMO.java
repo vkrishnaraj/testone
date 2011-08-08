@@ -840,7 +840,7 @@ public class IncidentBMO {
 
 			Query q = sess
 					.createQuery("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident join incident.passengers passenger"
-							+ " join passenger.membership membership where membership.membershipnum = :freqFlyer");
+							+ " where passenger.membership.membershipnum = :freqFlyer");
 			q.setString("freqFlyer", freq_flyer);
 			List<Incident> list = q.list();
 
@@ -916,7 +916,9 @@ public class IncidentBMO {
 							+		 "address.workphone_norm like :searchnum or "
 							+		 "address.mobile_norm like :searchnum or "
 							+		 "address.pager_norm like :searchnum or "
-							+		 "address.altphone_norm like :searchnum");
+							+		 "address.altphone_norm like :searchnum "
+							+ " order by incident.createdate desc");
+			q.setMaxResults(5);
 			q.setString("searchnum", phone_number);
 			List<Incident> list = q.list();
 
@@ -945,10 +947,15 @@ public class IncidentBMO {
 		Session sess = HibernateWrapper.getSession().openSession();
 
 		try {
+			Calendar c = new GregorianCalendar();
+			c.setTime(TracerDateTime.getGMTDate());
+			c.add(Calendar.DATE, -30);
+			Date incCutoff = c.getTime();
 			SQLQuery q = sess
 					.createSQLQuery("select a.homephone_norm h, a.workphone_norm w, a.mobile_norm m, a.pager_norm pg, a.altphone_norm ap" +
-							" from incident i, address a, passenger p where status_id = 12 and " +
+							" from incident i, address a, passenger p where i.status_id = 12 and i.createdate > :cutoff and " +
 							"p.incident_ID = i.Incident_ID and a.passenger_ID = p.Passenger_ID");
+			q.setDate("cutoff", incCutoff);
 			q.addScalar("h", Hibernate.STRING);
 			q.addScalar("w", Hibernate.STRING);
 			q.addScalar("m", Hibernate.STRING);

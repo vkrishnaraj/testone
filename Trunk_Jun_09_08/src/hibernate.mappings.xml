@@ -200,6 +200,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCContents" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCPhone" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCItinerary" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCPassenger" />
 		
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCAddress" />

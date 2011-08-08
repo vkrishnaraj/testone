@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface AuthAdminUserDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthAdminUserDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("authadminuserd185doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthAdminUserDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("authadminuserd185doctype");
     
     /**
      * Gets the "authAdminUser" element
@@ -42,7 +42,7 @@ public interface AuthAdminUserDocument extends org.apache.xmlbeans.XmlObject
     public interface AuthAdminUser extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthAdminUser.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("authadminuser31e3elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthAdminUser.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("authadminuser31e3elemtype");
         
         /**
          * Gets the "username" element

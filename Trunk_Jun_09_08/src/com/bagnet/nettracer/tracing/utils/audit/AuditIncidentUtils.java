@@ -490,6 +490,7 @@ public class AuditIncidentUtils {
 				audit_inc.setRemarks(new HashSet(rlist));
 			}
 
+			audit_inc.setOc_claim_id(incident.getOc_claim_id());
 			return audit_inc;
 		} catch (Exception e) {
 			e.printStackTrace();

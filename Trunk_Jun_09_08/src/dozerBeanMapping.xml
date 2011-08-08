@@ -213,6 +213,10 @@
 			<a>file</a>
 			<b>fileArray</b>
 		</field>
+		<field >
+			<a>passenger</a>
+			<b>passengerArray</b>
+		</field>
 	</mapping>
 
 	<mapping map-null="false">
@@ -223,6 +227,17 @@
 		<field >
 			<a>contents</a>
 			<b>contentsArray</b>
+		</field>
+	</mapping>
+
+	<mapping map-null="false">
+		<class-a>com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim
+		</class-a>
+		<class-b>com.bagnet.nettracer.ws.onlineclaims.Claim
+		</class-b>
+		<field >
+			<a>itinerary</a>
+			<b>itinerary</b>
 		</field>
 	</mapping>
 

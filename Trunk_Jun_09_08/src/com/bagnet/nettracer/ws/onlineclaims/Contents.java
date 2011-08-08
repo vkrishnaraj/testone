@@ -2,7 +2,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 
 public class Contents {
 //	private long id;
-	private boolean male;
+	private int male;
 	private String article;
 	private String color;
 	private String size;
@@ -11,12 +11,13 @@ public class Contents {
 	private String purchasedDate;
 	private double price;
 	private String currency;
+	private String contentOwner;
 
-	public boolean isMale() {
+	public int getMale() {
 		return male;
 	}
 
-	public void setMale(boolean male) {
+	public void setMale(int male) {
 		this.male = male;
 	}
 
@@ -82,6 +83,14 @@ public class Contents {
 
 	public void setCurrency(String currency) {
 		this.currency = currency;
+	}
+
+	public String getContentOwner() {
+		return contentOwner;
+	}
+
+	public void setContentOwner(String contentOwner) {
+		this.contentOwner = contentOwner;
 	}
 
 //	public long getId() {

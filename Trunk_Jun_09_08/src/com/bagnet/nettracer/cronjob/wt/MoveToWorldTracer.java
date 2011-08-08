@@ -232,9 +232,30 @@ public class MoveToWorldTracer {
 
 		c.add(Calendar.HOUR, myHours - oalHours);
 		Date oalCutoff = c.getTime();
+		
+		boolean myCutoffOffset = true;
+		boolean oalCutoffOffset = true;
+		Date oalCOOffset = new Date();
+		Date myCOOffset = new Date();
+		
+		int cutoffOffset = PropertyBMO.getValueAsInt("wt_dont_move_offset_days");
+		if (cutoffOffset != 0) {
+			c.add(Calendar.DATE, (0 - cutoffOffset));
+			oalCOOffset = c.getTime();
+			
+			c.setTime(TracerDateTime.getGMTDate());
+			c.add(Calendar.HOUR, (0 - myHours));
+			c.add(Calendar.DATE, (0 - cutoffOffset));
+			myCOOffset = c.getTime();
+		}
 
 		for (Incident incident : temp) {
-			if ((isOther(incident, company) && oalHours > 0 && incident.getCreatedate().before(oalCutoff)) || (myHours > 0 && incident.getCreatedate().before(myCutoff))) {
+			if (cutoffOffset != 0) {
+				myCutoffOffset = incident.getCreatedate().after(myCOOffset);
+				oalCutoffOffset = incident.getCreatedate().after(oalCOOffset);
+			}
+			if ((isOther(incident, company) && oalHours > 0 && incident.getCreatedate().before(oalCutoff) && oalCutoffOffset)
+					|| (myHours > 0 && incident.getCreatedate().before(myCutoff) && myCutoffOffset)) {
 				result.add(incident);
 			}
 		}
@@ -305,10 +326,31 @@ public class MoveToWorldTracer {
 
 		c.add(Calendar.HOUR, myHours - oalHours);
 		Date oalCutoff = c.getTime();
+		
+		boolean myCutoffOffset = true;
+		boolean oalCutoffOffset = true;
+		Date oalCOOffset = new Date();
+		Date myCOOffset = new Date();
+		
+		int cutoffOffset = PropertyBMO.getValueAsInt("wt_dont_move_offset_days");
+		if (cutoffOffset != 0) {
+			c.add(Calendar.DATE, (0 - cutoffOffset));
+			oalCOOffset = c.getTime();
+			
+			c.setTime(TracerDateTime.getGMTDate());
+			c.add(Calendar.HOUR, (0 - myHours));
+			c.add(Calendar.DATE, (0 - cutoffOffset));
+			myCOOffset = c.getTime();
+		}
 
 		for (OHD ohd : temp) {
 			Date foundDate = ohd.getFullFoundDate();
-			if ((isOther(ohd, company) && oalHours > 0 && foundDate.before(oalCutoff)) || (myHours > 0 && foundDate.before(ohdCutoff))) {
+			if (cutoffOffset != 0) {
+				myCutoffOffset = foundDate.after(myCOOffset);
+				oalCutoffOffset = foundDate.after(oalCOOffset);
+			}
+			if ((isOther(ohd, company) && oalHours > 0 && foundDate.before(oalCutoff) && oalCutoffOffset)
+					|| (myHours > 0 && foundDate.before(ohdCutoff) && myCutoffOffset)) {
 				result.add(ohd);
 			}
 		}

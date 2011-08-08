@@ -67,6 +67,7 @@ public class Audit_Incident implements Serializable {
 	private Set articles;
 	private Set remarks;
 	private Set itinerary;
+	private long oc_claim_id;
 
 	private Set claimchecks;
 
@@ -904,5 +905,18 @@ public class Audit_Incident implements Serializable {
 	public ArrayList getArticle_list() {
 		return new ArrayList((articles != null ? articles : new HashSet()));
 	}
+
+	
+	/**
+	 * @return Returns the oc_claim_id.
+	 * 
+	 * @hibernate.property type="long"
+	 */
+	public long getOc_claim_id() {
+  	return oc_claim_id;
+  }
+	public void setOc_claim_id(long oc_claim_id) {
+  	this.oc_claim_id = oc_claim_id;
+  }
 
 }

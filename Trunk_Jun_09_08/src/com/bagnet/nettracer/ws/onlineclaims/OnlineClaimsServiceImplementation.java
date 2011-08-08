@@ -15,6 +15,7 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -49,6 +50,7 @@ import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCPassenger;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim.ClaimStatus;
 import com.bagnet.nettracer.tracing.db.salvage.Salvage;
@@ -312,10 +314,14 @@ public class OnlineClaimsServiceImplementation extends
 					oi.setLegto(wit.getArrivalCity());
 					
 					// arrive date
-					oi.setArrivedate(wit.getArrivalDate().getTime());
+					if (wit.getArrivalDate() != null) {
+						oi.setArrivedate(wit.getArrivalDate().getTime());
+					}
 					
 					// depart date
-					oi.setDepartdate(wit.getDepartureDate().getTime());
+					if (wit.getDepartureDate() != null) {
+						oi.setDepartdate(wit.getDepartureDate().getTime());
+					}
 					
 					// actual arrive time
 					//oi.setActarrivetime(thedate);
@@ -666,11 +672,12 @@ public class OnlineClaimsServiceImplementation extends
 
 		String incidentId = authPassenger.getAuthPassenger().getIncidentId();
 		String name = authPassenger.getAuthPassenger().getPassengerLastName();
+		String fName = authPassenger.getAuthPassenger().getPassengerFirstName();
 
 		PassengerViewUtil u = new PassengerViewUtil();
 
 		incidentId = StringUtils.fillzero(incidentId).toUpperCase().trim();
-		pvData = u.findAdvancedIncidentForPVO(incidentId, name, true);
+		pvData = u.findAdvancedIncidentForPVO(incidentId, name, fName, true);
 
 		if (pvData != null) {
 			authSuccess = true;
@@ -717,11 +724,12 @@ public class OnlineClaimsServiceImplementation extends
 		String incidentId = loadClaim.getLoadClaim().getIncidentId();
 		incidentId = StringUtils.fillzero(incidentId).toUpperCase().trim();
 		String name = loadClaim.getLoadClaim().getName();
+		String fName = loadClaim.getLoadClaim().getFName();
 
 		WSPVAdvancedIncident pvData = null;
 
 		PassengerViewUtil u = new PassengerViewUtil();
-		pvData = u.findAdvancedIncidentForPVO(incidentId, name, true);
+		pvData = u.findAdvancedIncidentForPVO(incidentId, name, fName, true);
 
 		if (pvData != null) {
 
@@ -737,16 +745,28 @@ public class OnlineClaimsServiceImplementation extends
 				OnlineClaimsDao dao = new OnlineClaimsDao();
 				OnlineClaim c = null;
 				c = dao.getOnlineClaim(incidentId);
+				boolean diffPax = false;
 
 				if (c == null) {
 					c = new OnlineClaim();
 					Incident i = IncidentBMO.getIncidentByID(incidentId, sess);
 					c.setIncident(i);
 					c.setStatus(ClaimStatus.NEW.toString());
+					Set<OCPassenger> paxes = new HashSet<OCPassenger>();
+					OCPassenger pass = new OCPassenger();
+					pass.setFirstName(fName);
+					pass.setLastName(name);
+					paxes.add(pass);
+					c.setPassenger(paxes);
 					dao.saveOnlineClaimWsUseOnly(c, incidentId, null, sess);
+				} else if (checkPrevSubmissionDiffPax(c, name, fName)){
+					diffPax = true;
 				}
 				Claim ret = dao.convertClaimDbToWs(c);
 				ret.setClaimType(inc.getItemtype().getItemType_ID());
+				if (diffPax) {
+					ret.setStatus("SECOND_CLAIM");
+				}
 				res2.setReturn(ret);
 
 			} catch (AuthorizationException e) {
@@ -758,6 +778,18 @@ public class OnlineClaimsServiceImplementation extends
 		logger.info("Response: \n" + res);
 		return res;
 
+	}
+	
+	private boolean checkPrevSubmissionDiffPax(OnlineClaim c, String lName, String fName) {
+		if (c.getPassenger() != null && c.getPassenger().size() > 0) {
+			for (OCPassenger pass : c.getPassenger()) {
+				if (pass != null && pass.getLastName() != null && pass.getFirstName() != null
+						&& pass.getLastName().equalsIgnoreCase(lName) && pass.getFirstName().equalsIgnoreCase(fName)) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/**

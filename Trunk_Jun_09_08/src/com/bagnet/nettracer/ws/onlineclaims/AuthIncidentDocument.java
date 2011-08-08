@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface AuthIncidentDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthIncidentDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("authincident74ffdoctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthIncidentDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("authincident74ffdoctype");
     
     /**
      * Gets the "authIncident" element
@@ -42,7 +42,7 @@ public interface AuthIncidentDocument extends org.apache.xmlbeans.XmlObject
     public interface AuthIncident extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthIncident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("authincident3809elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthIncident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("authincident3809elemtype");
         
         /**
          * Gets the "firstName" element

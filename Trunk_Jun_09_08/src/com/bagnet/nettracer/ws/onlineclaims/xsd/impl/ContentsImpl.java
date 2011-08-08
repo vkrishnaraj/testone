@@ -25,17 +25,19 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "brand");
     private static final javax.xml.namespace.QName COLOR$4 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "color");
-    private static final javax.xml.namespace.QName CURRENCY$6 = 
+    private static final javax.xml.namespace.QName CONTENTOWNER$6 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "contentOwner");
+    private static final javax.xml.namespace.QName CURRENCY$8 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "currency");
-    private static final javax.xml.namespace.QName MALE$8 = 
+    private static final javax.xml.namespace.QName MALE$10 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "male");
-    private static final javax.xml.namespace.QName PRICE$10 = 
+    private static final javax.xml.namespace.QName PRICE$12 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "price");
-    private static final javax.xml.namespace.QName PURCHASEDAT$12 = 
+    private static final javax.xml.namespace.QName PURCHASEDAT$14 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "purchasedAt");
-    private static final javax.xml.namespace.QName PURCHASEDDATE$14 = 
+    private static final javax.xml.namespace.QName PURCHASEDDATE$16 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "purchasedDate");
-    private static final javax.xml.namespace.QName SIZE$16 = 
+    private static final javax.xml.namespace.QName SIZE$18 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "size");
     
     
@@ -415,6 +417,131 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
+     * Gets the "contentOwner" element
+     */
+    public java.lang.String getContentOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CONTENTOWNER$6, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getStringValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "contentOwner" element
+     */
+    public org.apache.xmlbeans.XmlString xgetContentOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CONTENTOWNER$6, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "contentOwner" element
+     */
+    public boolean isNilContentOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CONTENTOWNER$6, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "contentOwner" element
+     */
+    public boolean isSetContentOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(CONTENTOWNER$6) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "contentOwner" element
+     */
+    public void setContentOwner(java.lang.String contentOwner)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CONTENTOWNER$6, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(CONTENTOWNER$6);
+            }
+            target.setStringValue(contentOwner);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "contentOwner" element
+     */
+    public void xsetContentOwner(org.apache.xmlbeans.XmlString contentOwner)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CONTENTOWNER$6, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(CONTENTOWNER$6);
+            }
+            target.set(contentOwner);
+        }
+    }
+    
+    /**
+     * Nils the "contentOwner" element
+     */
+    public void setNilContentOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CONTENTOWNER$6, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(CONTENTOWNER$6);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "contentOwner" element
+     */
+    public void unsetContentOwner()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(CONTENTOWNER$6, 0);
+        }
+    }
+    
+    /**
      * Gets the "currency" element
      */
     public java.lang.String getCurrency()
@@ -423,7 +550,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CURRENCY$6, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CURRENCY$8, 0);
             if (target == null)
             {
                 return null;
@@ -441,7 +568,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CURRENCY$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CURRENCY$8, 0);
             return target;
         }
     }
@@ -455,7 +582,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CURRENCY$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CURRENCY$8, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -469,7 +596,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(CURRENCY$6) != 0;
+            return get_store().count_elements(CURRENCY$8) != 0;
         }
     }
     
@@ -482,10 +609,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CURRENCY$6, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CURRENCY$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(CURRENCY$6);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(CURRENCY$8);
             }
             target.setStringValue(currency);
         }
@@ -500,10 +627,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CURRENCY$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CURRENCY$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(CURRENCY$6);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(CURRENCY$8);
             }
             target.set(currency);
         }
@@ -518,10 +645,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CURRENCY$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(CURRENCY$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(CURRENCY$6);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(CURRENCY$8);
             }
             target.setNil();
         }
@@ -535,38 +662,38 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(CURRENCY$6, 0);
+            get_store().remove_element(CURRENCY$8, 0);
         }
     }
     
     /**
      * Gets the "male" element
      */
-    public boolean getMale()
+    public int getMale()
     {
         synchronized (monitor())
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(MALE$8, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(MALE$10, 0);
             if (target == null)
             {
-                return false;
+                return 0;
             }
-            return target.getBooleanValue();
+            return target.getIntValue();
         }
     }
     
     /**
      * Gets (as xml) the "male" element
      */
-    public org.apache.xmlbeans.XmlBoolean xgetMale()
+    public org.apache.xmlbeans.XmlInt xgetMale()
     {
         synchronized (monitor())
         {
             check_orphaned();
-            org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(MALE$8, 0);
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(MALE$10, 0);
             return target;
         }
     }
@@ -579,41 +706,41 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(MALE$8) != 0;
+            return get_store().count_elements(MALE$10) != 0;
         }
     }
     
     /**
      * Sets the "male" element
      */
-    public void setMale(boolean male)
+    public void setMale(int male)
     {
         synchronized (monitor())
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(MALE$8, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(MALE$10, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(MALE$8);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(MALE$10);
             }
-            target.setBooleanValue(male);
+            target.setIntValue(male);
         }
     }
     
     /**
      * Sets (as xml) the "male" element
      */
-    public void xsetMale(org.apache.xmlbeans.XmlBoolean male)
+    public void xsetMale(org.apache.xmlbeans.XmlInt male)
     {
         synchronized (monitor())
         {
             check_orphaned();
-            org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(MALE$8, 0);
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(MALE$10, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(MALE$8);
+                target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(MALE$10);
             }
             target.set(male);
         }
@@ -627,7 +754,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(MALE$8, 0);
+            get_store().remove_element(MALE$10, 0);
         }
     }
     
@@ -640,7 +767,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PRICE$10, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PRICE$12, 0);
             if (target == null)
             {
                 return 0.0;
@@ -658,7 +785,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlDouble target = null;
-            target = (org.apache.xmlbeans.XmlDouble)get_store().find_element_user(PRICE$10, 0);
+            target = (org.apache.xmlbeans.XmlDouble)get_store().find_element_user(PRICE$12, 0);
             return target;
         }
     }
@@ -671,7 +798,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PRICE$10) != 0;
+            return get_store().count_elements(PRICE$12) != 0;
         }
     }
     
@@ -684,10 +811,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PRICE$10, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PRICE$12, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PRICE$10);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PRICE$12);
             }
             target.setDoubleValue(price);
         }
@@ -702,10 +829,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlDouble target = null;
-            target = (org.apache.xmlbeans.XmlDouble)get_store().find_element_user(PRICE$10, 0);
+            target = (org.apache.xmlbeans.XmlDouble)get_store().find_element_user(PRICE$12, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlDouble)get_store().add_element_user(PRICE$10);
+                target = (org.apache.xmlbeans.XmlDouble)get_store().add_element_user(PRICE$12);
             }
             target.set(price);
         }
@@ -719,7 +846,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PRICE$10, 0);
+            get_store().remove_element(PRICE$12, 0);
         }
     }
     
@@ -732,7 +859,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDAT$12, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDAT$14, 0);
             if (target == null)
             {
                 return null;
@@ -750,7 +877,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDAT$12, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDAT$14, 0);
             return target;
         }
     }
@@ -764,7 +891,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDAT$12, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDAT$14, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -778,7 +905,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PURCHASEDAT$12) != 0;
+            return get_store().count_elements(PURCHASEDAT$14) != 0;
         }
     }
     
@@ -791,10 +918,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDAT$12, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDAT$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PURCHASEDAT$12);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PURCHASEDAT$14);
             }
             target.setStringValue(purchasedAt);
         }
@@ -809,10 +936,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDAT$12, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDAT$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PURCHASEDAT$12);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PURCHASEDAT$14);
             }
             target.set(purchasedAt);
         }
@@ -827,10 +954,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDAT$12, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDAT$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PURCHASEDAT$12);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PURCHASEDAT$14);
             }
             target.setNil();
         }
@@ -844,7 +971,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PURCHASEDAT$12, 0);
+            get_store().remove_element(PURCHASEDAT$14, 0);
         }
     }
     
@@ -857,7 +984,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDDATE$14, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDDATE$16, 0);
             if (target == null)
             {
                 return null;
@@ -875,7 +1002,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDDATE$14, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDDATE$16, 0);
             return target;
         }
     }
@@ -889,7 +1016,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDDATE$14, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDDATE$16, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -903,7 +1030,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PURCHASEDDATE$14) != 0;
+            return get_store().count_elements(PURCHASEDDATE$16) != 0;
         }
     }
     
@@ -916,10 +1043,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDDATE$14, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PURCHASEDDATE$16, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PURCHASEDDATE$14);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PURCHASEDDATE$16);
             }
             target.setStringValue(purchasedDate);
         }
@@ -934,10 +1061,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDDATE$14, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDDATE$16, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PURCHASEDDATE$14);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PURCHASEDDATE$16);
             }
             target.set(purchasedDate);
         }
@@ -952,10 +1079,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDDATE$14, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PURCHASEDDATE$16, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PURCHASEDDATE$14);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PURCHASEDDATE$16);
             }
             target.setNil();
         }
@@ -969,7 +1096,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PURCHASEDDATE$14, 0);
+            get_store().remove_element(PURCHASEDDATE$16, 0);
         }
     }
     
@@ -982,7 +1109,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(SIZE$16, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(SIZE$18, 0);
             if (target == null)
             {
                 return null;
@@ -1000,7 +1127,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(SIZE$16, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(SIZE$18, 0);
             return target;
         }
     }
@@ -1014,7 +1141,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(SIZE$16, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(SIZE$18, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -1028,7 +1155,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(SIZE$16) != 0;
+            return get_store().count_elements(SIZE$18) != 0;
         }
     }
     
@@ -1041,10 +1168,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(SIZE$16, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(SIZE$18, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(SIZE$16);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(SIZE$18);
             }
             target.setStringValue(size);
         }
@@ -1059,10 +1186,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(SIZE$16, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(SIZE$18, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(SIZE$16);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(SIZE$18);
             }
             target.set(size);
         }
@@ -1077,10 +1204,10 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(SIZE$16, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(SIZE$18, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(SIZE$16);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(SIZE$18);
             }
             target.setNil();
         }
@@ -1094,7 +1221,7 @@ public class ContentsImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(SIZE$16, 0);
+            get_store().remove_element(SIZE$18, 0);
         }
     }
 }

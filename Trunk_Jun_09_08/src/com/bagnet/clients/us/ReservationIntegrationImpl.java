@@ -654,7 +654,6 @@ public class ReservationIntegrationImpl extends
 					if (itin[i].getSegments() != null) {
 						Segment[] segs = itin[i].getSegments().getSegmentArray();
 						for (int j=0; j<segs.length; ++j) {
-							IncidentItinerary iItin = incident.addNewItinerary();
 							Segment seg = segs[j];
 			
 							Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
@@ -664,6 +663,7 @@ public class ReservationIntegrationImpl extends
 							highestClassService = processService(seg.getServiceClass(), highestClassService);
 							
 							if (timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) {
+								IncidentItinerary iItin = incident.addNewItinerary();
 						
 								iItin.setAirline(seg.getCarrierCode());
 								iItin.setFlightNum(seg.getFlightNumber());

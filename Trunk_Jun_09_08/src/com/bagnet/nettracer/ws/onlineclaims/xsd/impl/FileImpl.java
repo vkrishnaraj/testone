@@ -23,7 +23,9 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "filename");
     private static final javax.xml.namespace.QName ID$2 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "id");
-    private static final javax.xml.namespace.QName PATH$4 = 
+    private static final javax.xml.namespace.QName INTERIM$4 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "interim");
+    private static final javax.xml.namespace.QName PATH$6 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "path");
     
     
@@ -245,6 +247,98 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
     }
     
     /**
+     * Gets the "interim" element
+     */
+    public boolean getInterim()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INTERIM$4, 0);
+            if (target == null)
+            {
+                return false;
+            }
+            return target.getBooleanValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "interim" element
+     */
+    public org.apache.xmlbeans.XmlBoolean xgetInterim()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlBoolean target = null;
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(INTERIM$4, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "interim" element
+     */
+    public boolean isSetInterim()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(INTERIM$4) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "interim" element
+     */
+    public void setInterim(boolean interim)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INTERIM$4, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INTERIM$4);
+            }
+            target.setBooleanValue(interim);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "interim" element
+     */
+    public void xsetInterim(org.apache.xmlbeans.XmlBoolean interim)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlBoolean target = null;
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(INTERIM$4, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(INTERIM$4);
+            }
+            target.set(interim);
+        }
+    }
+    
+    /**
+     * Unsets the "interim" element
+     */
+    public void unsetInterim()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(INTERIM$4, 0);
+        }
+    }
+    
+    /**
      * Gets the "path" element
      */
     public java.lang.String getPath()
@@ -253,7 +347,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PATH$4, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PATH$6, 0);
             if (target == null)
             {
                 return null;
@@ -271,7 +365,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$6, 0);
             return target;
         }
     }
@@ -285,7 +379,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$6, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -299,7 +393,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PATH$4) != 0;
+            return get_store().count_elements(PATH$6) != 0;
         }
     }
     
@@ -312,10 +406,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PATH$4, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PATH$6, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PATH$4);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PATH$6);
             }
             target.setStringValue(path);
         }
@@ -330,10 +424,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$6, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PATH$4);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PATH$6);
             }
             target.set(path);
         }
@@ -348,10 +442,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$4, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$6, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PATH$4);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PATH$6);
             }
             target.setNil();
         }
@@ -365,7 +459,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PATH$4, 0);
+            get_store().remove_element(PATH$6, 0);
         }
     }
 }

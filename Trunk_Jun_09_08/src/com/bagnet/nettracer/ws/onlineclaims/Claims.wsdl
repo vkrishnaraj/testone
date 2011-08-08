@@ -42,6 +42,7 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="fName" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="incidentId" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="claimId" type="xs:long"/>
                         <xs:element minOccurs="0" name="auth" nillable="true" type="ax22:NtAuth"/>
@@ -59,6 +60,7 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="passengerLastName" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="passengerFirstName" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="incidentId" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="auth" nillable="true" type="ax22:NtAuth"/>
                     </xs:sequence>
@@ -231,10 +233,10 @@
             </xs:complexType>
             <xs:complexType name="Claim">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="accept" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="attemptToClaimAtArrival" type="xs:boolean"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="bag" nillable="true" type="ax21:Bag"/>
                     <xs:element minOccurs="0" name="bagClearCustoms" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="bagWeight" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="baggageReroutedEnRoute" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="bagsDelayed" type="xs:int"/>
                     <xs:element minOccurs="0" name="bagsStillMissing" type="xs:int"/>
@@ -242,9 +244,11 @@
                     <xs:element minOccurs="0" name="businessName" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="chargedForExcessBaggage" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="checkedLocation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="checkedLocationDescription" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="claimId" type="xs:long"/>
                     <xs:element minOccurs="0" name="claimType" type="xs:int"/>
                     <xs:element minOccurs="0" name="comments" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="declaredCurrency" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="declaredExcessValue" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="declaredValue" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="differentClaimCheck" type="xs:boolean"/>
@@ -254,21 +258,26 @@
                     <xs:element minOccurs="0" name="filedPreviousClaim" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="filedPreviousClaimant" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="filedPrevoiusDate" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="firstName" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="frequentFlierNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="haveToRecheck" type="xs:boolean"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="itinerary" nillable="true" type="ax21:Itinerary"/>
-                    <xs:element minOccurs="0" name="lastName" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="lastSawBaggage" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="mailingAddress" nillable="true" type="ax21:Address"/>
-                    <xs:element minOccurs="0" name="middleInitial" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="occupation" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passenger" nillable="true" type="ax21:Passenger"/>
                     <xs:element minOccurs="0" name="passengersTravelingWithYou" type="xs:int"/>
                     <xs:element minOccurs="0" name="paxClaimAmount" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="paxClaimAmountCurrency" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="paxClaimDate" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="paxIpAddress" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="permanentAddress" nillable="true" type="ax21:Address"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="phone" nillable="true" type="ax21:Phone"/>
+                    <xs:element minOccurs="0" name="privateInsurance" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="privateInsuranceAddr" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="privateInsuranceName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="reportedAirline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="reportedCity" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="reportedFileNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="reportedToAnotherAirline" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="reroutedAirlineCity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="reroutedReason" nillable="true" type="xs:string"/>
@@ -288,14 +297,19 @@
                 <xs:sequence>
                     <xs:element minOccurs="0" name="bagArrive" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="bagColor" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagCurrency" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagOwner" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="bagType" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagValue" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="brand" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="contents" nillable="true" type="ax21:Contents"/>
                     <xs:element minOccurs="0" name="externalMarkings" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="feet" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="hardSided" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="id" type="xs:long"/>
+                    <xs:element minOccurs="0" name="leather" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="locks" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="metal" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="nameOnBag" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="nameTag" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="pockets" type="xs:boolean"/>
@@ -306,6 +320,7 @@
                     <xs:element minOccurs="0" name="softSided" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="tag" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="trim" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="trimDescription" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="wheels" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="zippers" type="xs:boolean"/>
                 </xs:sequence>
@@ -315,8 +330,9 @@
                     <xs:element minOccurs="0" name="article" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="brand" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="color" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="contentOwner" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="currency" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="male" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="male" type="xs:int"/>
                     <xs:element minOccurs="0" name="price" type="xs:double"/>
                     <xs:element minOccurs="0" name="purchasedAt" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="purchasedDate" nillable="true" type="xs:string"/>
@@ -327,6 +343,7 @@
                 <xs:sequence>
                     <xs:element minOccurs="0" name="filename" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="id" type="xs:long"/>
+                    <xs:element minOccurs="0" name="interim" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="path" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
@@ -347,6 +364,16 @@
                     <xs:element minOccurs="0" name="country" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="postalCode" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="stateProvince" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Passenger">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="accept" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="id" type="xs:long"/>
+                    <xs:element minOccurs="0" name="lastName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middleInitial" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="salutation" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Phone">

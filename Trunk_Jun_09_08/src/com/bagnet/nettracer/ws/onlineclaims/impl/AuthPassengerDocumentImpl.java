@@ -88,9 +88,11 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
         
         private static final javax.xml.namespace.QName PASSENGERLASTNAME$0 = 
             new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "passengerLastName");
-        private static final javax.xml.namespace.QName INCIDENTID$2 = 
+        private static final javax.xml.namespace.QName PASSENGERFIRSTNAME$2 = 
+            new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "passengerFirstName");
+        private static final javax.xml.namespace.QName INCIDENTID$4 = 
             new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "incidentId");
-        private static final javax.xml.namespace.QName AUTH$4 = 
+        private static final javax.xml.namespace.QName AUTH$6 = 
             new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "auth");
         
         
@@ -220,6 +222,131 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
         }
         
         /**
+         * Gets the "passengerFirstName" element
+         */
+        public java.lang.String getPassengerFirstName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PASSENGERFIRSTNAME$2, 0);
+                if (target == null)
+                {
+                    return null;
+                }
+                return target.getStringValue();
+            }
+        }
+        
+        /**
+         * Gets (as xml) the "passengerFirstName" element
+         */
+        public org.apache.xmlbeans.XmlString xgetPassengerFirstName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PASSENGERFIRSTNAME$2, 0);
+                return target;
+            }
+        }
+        
+        /**
+         * Tests for nil "passengerFirstName" element
+         */
+        public boolean isNilPassengerFirstName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PASSENGERFIRSTNAME$2, 0);
+                if (target == null) return false;
+                return target.isNil();
+            }
+        }
+        
+        /**
+         * True if has "passengerFirstName" element
+         */
+        public boolean isSetPassengerFirstName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                return get_store().count_elements(PASSENGERFIRSTNAME$2) != 0;
+            }
+        }
+        
+        /**
+         * Sets the "passengerFirstName" element
+         */
+        public void setPassengerFirstName(java.lang.String passengerFirstName)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PASSENGERFIRSTNAME$2, 0);
+                if (target == null)
+                {
+                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PASSENGERFIRSTNAME$2);
+                }
+                target.setStringValue(passengerFirstName);
+            }
+        }
+        
+        /**
+         * Sets (as xml) the "passengerFirstName" element
+         */
+        public void xsetPassengerFirstName(org.apache.xmlbeans.XmlString passengerFirstName)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PASSENGERFIRSTNAME$2, 0);
+                if (target == null)
+                {
+                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PASSENGERFIRSTNAME$2);
+                }
+                target.set(passengerFirstName);
+            }
+        }
+        
+        /**
+         * Nils the "passengerFirstName" element
+         */
+        public void setNilPassengerFirstName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PASSENGERFIRSTNAME$2, 0);
+                if (target == null)
+                {
+                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PASSENGERFIRSTNAME$2);
+                }
+                target.setNil();
+            }
+        }
+        
+        /**
+         * Unsets the "passengerFirstName" element
+         */
+        public void unsetPassengerFirstName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                get_store().remove_element(PASSENGERFIRSTNAME$2, 0);
+            }
+        }
+        
+        /**
          * Gets the "incidentId" element
          */
         public java.lang.String getIncidentId()
@@ -228,7 +355,7 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$4, 0);
                 if (target == null)
                 {
                     return null;
@@ -246,7 +373,7 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$4, 0);
                 return target;
             }
         }
@@ -260,7 +387,7 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$4, 0);
                 if (target == null) return false;
                 return target.isNil();
             }
@@ -274,7 +401,7 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             synchronized (monitor())
             {
                 check_orphaned();
-                return get_store().count_elements(INCIDENTID$2) != 0;
+                return get_store().count_elements(INCIDENTID$4) != 0;
             }
         }
         
@@ -287,10 +414,10 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$4, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INCIDENTID$2);
+                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INCIDENTID$4);
                 }
                 target.setStringValue(incidentId);
             }
@@ -305,10 +432,10 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$4, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$2);
+                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$4);
                 }
                 target.set(incidentId);
             }
@@ -323,10 +450,10 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$4, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$2);
+                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$4);
                 }
                 target.setNil();
             }
@@ -340,7 +467,7 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             synchronized (monitor())
             {
                 check_orphaned();
-                get_store().remove_element(INCIDENTID$2, 0);
+                get_store().remove_element(INCIDENTID$4, 0);
             }
         }
         
@@ -353,7 +480,7 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$4, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
                 if (target == null)
                 {
                     return null;
@@ -371,7 +498,7 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$4, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
                 if (target == null) return false;
                 return target.isNil();
             }
@@ -385,7 +512,7 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             synchronized (monitor())
             {
                 check_orphaned();
-                return get_store().count_elements(AUTH$4) != 0;
+                return get_store().count_elements(AUTH$6) != 0;
             }
         }
         
@@ -398,10 +525,10 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$4, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
                 if (target == null)
                 {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$4);
+                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$6);
                 }
                 target.set(auth);
             }
@@ -416,7 +543,7 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$4);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$6);
                 return target;
             }
         }
@@ -430,10 +557,10 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$4, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
                 if (target == null)
                 {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$4);
+                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$6);
                 }
                 target.setNil();
             }
@@ -447,7 +574,7 @@ public class AuthPassengerDocumentImpl extends org.apache.xmlbeans.impl.values.X
             synchronized (monitor())
             {
                 check_orphaned();
-                get_store().remove_element(AUTH$4, 0);
+                get_store().remove_element(AUTH$6, 0);
             }
         }
     }

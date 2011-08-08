@@ -5,6 +5,7 @@ public class File {
 	private long id;
 	private String filename;
 	private String path;
+	private boolean interim;
 	
 	public long getId() {
   	return id;
@@ -24,4 +25,11 @@ public class File {
 	public void setPath(String path) {
   	this.path = path;
   }
+	public boolean isInterim() {
+		return interim;
+	}
+	public void setInterim(boolean interim) {
+		this.interim = interim;
+	}
+	
 }

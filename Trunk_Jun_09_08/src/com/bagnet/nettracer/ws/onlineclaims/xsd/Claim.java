@@ -16,47 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Claim extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("claimd979type");
-    
-    /**
-     * Gets the "accept" element
-     */
-    java.lang.String getAccept();
-    
-    /**
-     * Gets (as xml) the "accept" element
-     */
-    org.apache.xmlbeans.XmlString xgetAccept();
-    
-    /**
-     * Tests for nil "accept" element
-     */
-    boolean isNilAccept();
-    
-    /**
-     * True if has "accept" element
-     */
-    boolean isSetAccept();
-    
-    /**
-     * Sets the "accept" element
-     */
-    void setAccept(java.lang.String accept);
-    
-    /**
-     * Sets (as xml) the "accept" element
-     */
-    void xsetAccept(org.apache.xmlbeans.XmlString accept);
-    
-    /**
-     * Nils the "accept" element
-     */
-    void setNilAccept();
-    
-    /**
-     * Unsets the "accept" element
-     */
-    void unsetAccept();
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("claimd979type");
     
     /**
      * Gets the "attemptToClaimAtArrival" element
@@ -167,6 +127,46 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "bagClearCustoms" element
      */
     void unsetBagClearCustoms();
+    
+    /**
+     * Gets the "bagWeight" element
+     */
+    java.lang.String getBagWeight();
+    
+    /**
+     * Gets (as xml) the "bagWeight" element
+     */
+    org.apache.xmlbeans.XmlString xgetBagWeight();
+    
+    /**
+     * Tests for nil "bagWeight" element
+     */
+    boolean isNilBagWeight();
+    
+    /**
+     * True if has "bagWeight" element
+     */
+    boolean isSetBagWeight();
+    
+    /**
+     * Sets the "bagWeight" element
+     */
+    void setBagWeight(java.lang.String bagWeight);
+    
+    /**
+     * Sets (as xml) the "bagWeight" element
+     */
+    void xsetBagWeight(org.apache.xmlbeans.XmlString bagWeight);
+    
+    /**
+     * Nils the "bagWeight" element
+     */
+    void setNilBagWeight();
+    
+    /**
+     * Unsets the "bagWeight" element
+     */
+    void unsetBagWeight();
     
     /**
      * Gets the "baggageReroutedEnRoute" element
@@ -399,6 +399,46 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     void unsetCheckedLocation();
     
     /**
+     * Gets the "checkedLocationDescription" element
+     */
+    java.lang.String getCheckedLocationDescription();
+    
+    /**
+     * Gets (as xml) the "checkedLocationDescription" element
+     */
+    org.apache.xmlbeans.XmlString xgetCheckedLocationDescription();
+    
+    /**
+     * Tests for nil "checkedLocationDescription" element
+     */
+    boolean isNilCheckedLocationDescription();
+    
+    /**
+     * True if has "checkedLocationDescription" element
+     */
+    boolean isSetCheckedLocationDescription();
+    
+    /**
+     * Sets the "checkedLocationDescription" element
+     */
+    void setCheckedLocationDescription(java.lang.String checkedLocationDescription);
+    
+    /**
+     * Sets (as xml) the "checkedLocationDescription" element
+     */
+    void xsetCheckedLocationDescription(org.apache.xmlbeans.XmlString checkedLocationDescription);
+    
+    /**
+     * Nils the "checkedLocationDescription" element
+     */
+    void setNilCheckedLocationDescription();
+    
+    /**
+     * Unsets the "checkedLocationDescription" element
+     */
+    void unsetCheckedLocationDescription();
+    
+    /**
      * Gets the "claimId" element
      */
     long getClaimId();
@@ -497,6 +537,46 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "comments" element
      */
     void unsetComments();
+    
+    /**
+     * Gets the "declaredCurrency" element
+     */
+    java.lang.String getDeclaredCurrency();
+    
+    /**
+     * Gets (as xml) the "declaredCurrency" element
+     */
+    org.apache.xmlbeans.XmlString xgetDeclaredCurrency();
+    
+    /**
+     * Tests for nil "declaredCurrency" element
+     */
+    boolean isNilDeclaredCurrency();
+    
+    /**
+     * True if has "declaredCurrency" element
+     */
+    boolean isSetDeclaredCurrency();
+    
+    /**
+     * Sets the "declaredCurrency" element
+     */
+    void setDeclaredCurrency(java.lang.String declaredCurrency);
+    
+    /**
+     * Sets (as xml) the "declaredCurrency" element
+     */
+    void xsetDeclaredCurrency(org.apache.xmlbeans.XmlString declaredCurrency);
+    
+    /**
+     * Nils the "declaredCurrency" element
+     */
+    void setNilDeclaredCurrency();
+    
+    /**
+     * Unsets the "declaredCurrency" element
+     */
+    void unsetDeclaredCurrency();
     
     /**
      * Gets the "declaredExcessValue" element
@@ -839,46 +919,6 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     void unsetFiledPrevoiusDate();
     
     /**
-     * Gets the "firstName" element
-     */
-    java.lang.String getFirstName();
-    
-    /**
-     * Gets (as xml) the "firstName" element
-     */
-    org.apache.xmlbeans.XmlString xgetFirstName();
-    
-    /**
-     * Tests for nil "firstName" element
-     */
-    boolean isNilFirstName();
-    
-    /**
-     * True if has "firstName" element
-     */
-    boolean isSetFirstName();
-    
-    /**
-     * Sets the "firstName" element
-     */
-    void setFirstName(java.lang.String firstName);
-    
-    /**
-     * Sets (as xml) the "firstName" element
-     */
-    void xsetFirstName(org.apache.xmlbeans.XmlString firstName);
-    
-    /**
-     * Nils the "firstName" element
-     */
-    void setNilFirstName();
-    
-    /**
-     * Unsets the "firstName" element
-     */
-    void unsetFirstName();
-    
-    /**
      * Gets the "frequentFlierNumber" element
      */
     java.lang.String getFrequentFlierNumber();
@@ -999,46 +1039,6 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     void removeItinerary(int i);
     
     /**
-     * Gets the "lastName" element
-     */
-    java.lang.String getLastName();
-    
-    /**
-     * Gets (as xml) the "lastName" element
-     */
-    org.apache.xmlbeans.XmlString xgetLastName();
-    
-    /**
-     * Tests for nil "lastName" element
-     */
-    boolean isNilLastName();
-    
-    /**
-     * True if has "lastName" element
-     */
-    boolean isSetLastName();
-    
-    /**
-     * Sets the "lastName" element
-     */
-    void setLastName(java.lang.String lastName);
-    
-    /**
-     * Sets (as xml) the "lastName" element
-     */
-    void xsetLastName(org.apache.xmlbeans.XmlString lastName);
-    
-    /**
-     * Nils the "lastName" element
-     */
-    void setNilLastName();
-    
-    /**
-     * Unsets the "lastName" element
-     */
-    void unsetLastName();
-    
-    /**
      * Gets the "lastSawBaggage" element
      */
     java.lang.String getLastSawBaggage();
@@ -1114,46 +1114,6 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     void unsetMailingAddress();
     
     /**
-     * Gets the "middleInitial" element
-     */
-    java.lang.String getMiddleInitial();
-    
-    /**
-     * Gets (as xml) the "middleInitial" element
-     */
-    org.apache.xmlbeans.XmlString xgetMiddleInitial();
-    
-    /**
-     * Tests for nil "middleInitial" element
-     */
-    boolean isNilMiddleInitial();
-    
-    /**
-     * True if has "middleInitial" element
-     */
-    boolean isSetMiddleInitial();
-    
-    /**
-     * Sets the "middleInitial" element
-     */
-    void setMiddleInitial(java.lang.String middleInitial);
-    
-    /**
-     * Sets (as xml) the "middleInitial" element
-     */
-    void xsetMiddleInitial(org.apache.xmlbeans.XmlString middleInitial);
-    
-    /**
-     * Nils the "middleInitial" element
-     */
-    void setNilMiddleInitial();
-    
-    /**
-     * Unsets the "middleInitial" element
-     */
-    void unsetMiddleInitial();
-    
-    /**
      * Gets the "occupation" element
      */
     java.lang.String getOccupation();
@@ -1192,6 +1152,56 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "occupation" element
      */
     void unsetOccupation();
+    
+    /**
+     * Gets array of all "passenger" elements
+     */
+    com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger[] getPassengerArray();
+    
+    /**
+     * Gets ith "passenger" element
+     */
+    com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger getPassengerArray(int i);
+    
+    /**
+     * Tests for nil ith "passenger" element
+     */
+    boolean isNilPassengerArray(int i);
+    
+    /**
+     * Returns number of "passenger" element
+     */
+    int sizeOfPassengerArray();
+    
+    /**
+     * Sets array of all "passenger" element
+     */
+    void setPassengerArray(com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger[] passengerArray);
+    
+    /**
+     * Sets ith "passenger" element
+     */
+    void setPassengerArray(int i, com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger passenger);
+    
+    /**
+     * Nils the ith "passenger" element
+     */
+    void setNilPassengerArray(int i);
+    
+    /**
+     * Inserts and returns a new empty value (as xml) as the ith "passenger" element
+     */
+    com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger insertNewPassenger(int i);
+    
+    /**
+     * Appends and returns a new empty value (as xml) as the last "passenger" element
+     */
+    com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger addNewPassenger();
+    
+    /**
+     * Removes the ith "passenger" element
+     */
+    void removePassenger(int i);
     
     /**
      * Gets the "passengersTravelingWithYou" element
@@ -1262,6 +1272,46 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "paxClaimAmount" element
      */
     void unsetPaxClaimAmount();
+    
+    /**
+     * Gets the "paxClaimAmountCurrency" element
+     */
+    java.lang.String getPaxClaimAmountCurrency();
+    
+    /**
+     * Gets (as xml) the "paxClaimAmountCurrency" element
+     */
+    org.apache.xmlbeans.XmlString xgetPaxClaimAmountCurrency();
+    
+    /**
+     * Tests for nil "paxClaimAmountCurrency" element
+     */
+    boolean isNilPaxClaimAmountCurrency();
+    
+    /**
+     * True if has "paxClaimAmountCurrency" element
+     */
+    boolean isSetPaxClaimAmountCurrency();
+    
+    /**
+     * Sets the "paxClaimAmountCurrency" element
+     */
+    void setPaxClaimAmountCurrency(java.lang.String paxClaimAmountCurrency);
+    
+    /**
+     * Sets (as xml) the "paxClaimAmountCurrency" element
+     */
+    void xsetPaxClaimAmountCurrency(org.apache.xmlbeans.XmlString paxClaimAmountCurrency);
+    
+    /**
+     * Nils the "paxClaimAmountCurrency" element
+     */
+    void setNilPaxClaimAmountCurrency();
+    
+    /**
+     * Unsets the "paxClaimAmountCurrency" element
+     */
+    void unsetPaxClaimAmountCurrency();
     
     /**
      * Gets the "paxClaimDate" element
@@ -1427,6 +1477,236 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Removes the ith "phone" element
      */
     void removePhone(int i);
+    
+    /**
+     * Gets the "privateInsurance" element
+     */
+    boolean getPrivateInsurance();
+    
+    /**
+     * Gets (as xml) the "privateInsurance" element
+     */
+    org.apache.xmlbeans.XmlBoolean xgetPrivateInsurance();
+    
+    /**
+     * True if has "privateInsurance" element
+     */
+    boolean isSetPrivateInsurance();
+    
+    /**
+     * Sets the "privateInsurance" element
+     */
+    void setPrivateInsurance(boolean privateInsurance);
+    
+    /**
+     * Sets (as xml) the "privateInsurance" element
+     */
+    void xsetPrivateInsurance(org.apache.xmlbeans.XmlBoolean privateInsurance);
+    
+    /**
+     * Unsets the "privateInsurance" element
+     */
+    void unsetPrivateInsurance();
+    
+    /**
+     * Gets the "privateInsuranceAddr" element
+     */
+    java.lang.String getPrivateInsuranceAddr();
+    
+    /**
+     * Gets (as xml) the "privateInsuranceAddr" element
+     */
+    org.apache.xmlbeans.XmlString xgetPrivateInsuranceAddr();
+    
+    /**
+     * Tests for nil "privateInsuranceAddr" element
+     */
+    boolean isNilPrivateInsuranceAddr();
+    
+    /**
+     * True if has "privateInsuranceAddr" element
+     */
+    boolean isSetPrivateInsuranceAddr();
+    
+    /**
+     * Sets the "privateInsuranceAddr" element
+     */
+    void setPrivateInsuranceAddr(java.lang.String privateInsuranceAddr);
+    
+    /**
+     * Sets (as xml) the "privateInsuranceAddr" element
+     */
+    void xsetPrivateInsuranceAddr(org.apache.xmlbeans.XmlString privateInsuranceAddr);
+    
+    /**
+     * Nils the "privateInsuranceAddr" element
+     */
+    void setNilPrivateInsuranceAddr();
+    
+    /**
+     * Unsets the "privateInsuranceAddr" element
+     */
+    void unsetPrivateInsuranceAddr();
+    
+    /**
+     * Gets the "privateInsuranceName" element
+     */
+    java.lang.String getPrivateInsuranceName();
+    
+    /**
+     * Gets (as xml) the "privateInsuranceName" element
+     */
+    org.apache.xmlbeans.XmlString xgetPrivateInsuranceName();
+    
+    /**
+     * Tests for nil "privateInsuranceName" element
+     */
+    boolean isNilPrivateInsuranceName();
+    
+    /**
+     * True if has "privateInsuranceName" element
+     */
+    boolean isSetPrivateInsuranceName();
+    
+    /**
+     * Sets the "privateInsuranceName" element
+     */
+    void setPrivateInsuranceName(java.lang.String privateInsuranceName);
+    
+    /**
+     * Sets (as xml) the "privateInsuranceName" element
+     */
+    void xsetPrivateInsuranceName(org.apache.xmlbeans.XmlString privateInsuranceName);
+    
+    /**
+     * Nils the "privateInsuranceName" element
+     */
+    void setNilPrivateInsuranceName();
+    
+    /**
+     * Unsets the "privateInsuranceName" element
+     */
+    void unsetPrivateInsuranceName();
+    
+    /**
+     * Gets the "reportedAirline" element
+     */
+    java.lang.String getReportedAirline();
+    
+    /**
+     * Gets (as xml) the "reportedAirline" element
+     */
+    org.apache.xmlbeans.XmlString xgetReportedAirline();
+    
+    /**
+     * Tests for nil "reportedAirline" element
+     */
+    boolean isNilReportedAirline();
+    
+    /**
+     * True if has "reportedAirline" element
+     */
+    boolean isSetReportedAirline();
+    
+    /**
+     * Sets the "reportedAirline" element
+     */
+    void setReportedAirline(java.lang.String reportedAirline);
+    
+    /**
+     * Sets (as xml) the "reportedAirline" element
+     */
+    void xsetReportedAirline(org.apache.xmlbeans.XmlString reportedAirline);
+    
+    /**
+     * Nils the "reportedAirline" element
+     */
+    void setNilReportedAirline();
+    
+    /**
+     * Unsets the "reportedAirline" element
+     */
+    void unsetReportedAirline();
+    
+    /**
+     * Gets the "reportedCity" element
+     */
+    java.lang.String getReportedCity();
+    
+    /**
+     * Gets (as xml) the "reportedCity" element
+     */
+    org.apache.xmlbeans.XmlString xgetReportedCity();
+    
+    /**
+     * Tests for nil "reportedCity" element
+     */
+    boolean isNilReportedCity();
+    
+    /**
+     * True if has "reportedCity" element
+     */
+    boolean isSetReportedCity();
+    
+    /**
+     * Sets the "reportedCity" element
+     */
+    void setReportedCity(java.lang.String reportedCity);
+    
+    /**
+     * Sets (as xml) the "reportedCity" element
+     */
+    void xsetReportedCity(org.apache.xmlbeans.XmlString reportedCity);
+    
+    /**
+     * Nils the "reportedCity" element
+     */
+    void setNilReportedCity();
+    
+    /**
+     * Unsets the "reportedCity" element
+     */
+    void unsetReportedCity();
+    
+    /**
+     * Gets the "reportedFileNumber" element
+     */
+    java.lang.String getReportedFileNumber();
+    
+    /**
+     * Gets (as xml) the "reportedFileNumber" element
+     */
+    org.apache.xmlbeans.XmlString xgetReportedFileNumber();
+    
+    /**
+     * Tests for nil "reportedFileNumber" element
+     */
+    boolean isNilReportedFileNumber();
+    
+    /**
+     * True if has "reportedFileNumber" element
+     */
+    boolean isSetReportedFileNumber();
+    
+    /**
+     * Sets the "reportedFileNumber" element
+     */
+    void setReportedFileNumber(java.lang.String reportedFileNumber);
+    
+    /**
+     * Sets (as xml) the "reportedFileNumber" element
+     */
+    void xsetReportedFileNumber(org.apache.xmlbeans.XmlString reportedFileNumber);
+    
+    /**
+     * Nils the "reportedFileNumber" element
+     */
+    void setNilReportedFileNumber();
+    
+    /**
+     * Unsets the "reportedFileNumber" element
+     */
+    void unsetReportedFileNumber();
     
     /**
      * Gets the "reportedToAnotherAirline" element

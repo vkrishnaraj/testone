@@ -6,11 +6,7 @@ public class Claim {
 
 	private long claimId;
 	private int claimType;
-	private String accept;
 	private String status;
-	private String lastName;
-	private String firstName;
-	private String middleInitial;
 	private Address permanentAddress;
 	private Address mailingAddress;
 	private String emailAddress;
@@ -32,6 +28,7 @@ public class Claim {
 	private boolean ticketWithAnotherAirline;
 	private boolean chargedForExcessBaggage;
 	private boolean declaredExcessValue;
+	private String declaredCurrency;
 	private String declaredValue;
 	private boolean bagClearCustoms;
 	private boolean baggageReroutedEnRoute;
@@ -55,6 +52,24 @@ public class Claim {
 	private String paxClaimDate;
 	private String paxClaimAmount;
 	private String paxIpAddress;
+	private Passenger[] passenger;
+	private String bagWeight;
+	private String paxClaimAmountCurrency;
+	private String checkedLocationDescription;
+	private String reportedAirline;
+	private String reportedCity;
+	private String reportedFileNumber;
+	private boolean privateInsurance;
+	private String privateInsuranceName;
+	private String privateInsuranceAddr;
+
+	public String getDeclaredCurrency() {
+		return declaredCurrency;
+	}
+
+	public void setDeclaredCurrency(String declaredCurrency) {
+		this.declaredCurrency = declaredCurrency;
+	}
 
 	public String getPaxClaimDate() {
 		return paxClaimDate;
@@ -94,30 +109,6 @@ public class Claim {
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getMiddleInitial() {
-		return middleInitial;
-	}
-
-	public void setMiddleInitial(String middleInitial) {
-		this.middleInitial = middleInitial;
 	}
 
 	public Address getPermanentAddress() {
@@ -440,14 +431,6 @@ public class Claim {
 		this.file = file;
 	}
 
-	public String getAccept() {
-		return accept;
-	}
-
-	public void setAccept(String accept) {
-		this.accept = accept;
-	}
-
 	public int getClaimType() {
 		return claimType;
 	}
@@ -462,6 +445,86 @@ public class Claim {
 
 	public void setTicketNumber(String ticketNumber) {
 		this.ticketNumber = ticketNumber;
+	}
+
+	public Passenger[] getPassenger() {
+		return passenger;
+	}
+
+	public void setPassenger(Passenger[] passenger) {
+		this.passenger = passenger;
+	}
+
+	public String getBagWeight() {
+		return bagWeight;
+	}
+
+	public void setBagWeight(String bagWeight) {
+		this.bagWeight = bagWeight;
+	}
+
+	public String getPaxClaimAmountCurrency() {
+		return paxClaimAmountCurrency;
+	}
+
+	public void setPaxClaimAmountCurrency(String paxClaimAmountCurrency) {
+		this.paxClaimAmountCurrency = paxClaimAmountCurrency;
+	}
+
+	public String getCheckedLocationDescription() {
+		return checkedLocationDescription;
+	}
+
+	public void setCheckedLocationDescription(String checkedLocationDescription) {
+		this.checkedLocationDescription = checkedLocationDescription;
+	}
+
+	public String getReportedAirline() {
+		return reportedAirline;
+	}
+
+	public void setReportedAirline(String reportedAirline) {
+		this.reportedAirline = reportedAirline;
+	}
+
+	public String getReportedCity() {
+		return reportedCity;
+	}
+
+	public void setReportedCity(String reportedCity) {
+		this.reportedCity = reportedCity;
+	}
+
+	public String getReportedFileNumber() {
+		return reportedFileNumber;
+	}
+
+	public void setReportedFileNumber(String reportedFileNumber) {
+		this.reportedFileNumber = reportedFileNumber;
+	}
+
+	public boolean isPrivateInsurance() {
+		return privateInsurance;
+	}
+
+	public void setPrivateInsurance(boolean privateInsurance) {
+		this.privateInsurance = privateInsurance;
+	}
+
+	public String getPrivateInsuranceName() {
+		return privateInsuranceName;
+	}
+
+	public void setPrivateInsuranceName(String privateInsuranceName) {
+		this.privateInsuranceName = privateInsuranceName;
+	}
+
+	public String getPrivateInsuranceAddr() {
+		return privateInsuranceAddr;
+	}
+
+	public void setPrivateInsuranceAddr(String privateInsuranceAddr) {
+		this.privateInsuranceAddr = privateInsuranceAddr;
 	}
 
 }

@@ -282,16 +282,23 @@ public class PassengerViewUtil {
 	}
  	
  	public com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident findAdvancedIncidentForPVO(String incident_ID, String name, boolean authorizeName) {
- 		return findAdvancedIncidentForPVO(incident_ID, name, authorizeName, null);
+ 		return findAdvancedIncidentForPVO(incident_ID, name, null, authorizeName, null);
  	}
  	
+ 	public com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident findAdvancedIncidentForPVO(String incident_ID, String name, String fName, boolean authorizeName) {
+ 		return findAdvancedIncidentForPVO(incident_ID, name, fName, authorizeName, null);
+ 	}
+ 	
+ 	public com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident findAdvancedIncidentForPVO(String incident_ID, String name, boolean authorizeName, String calling_agent) {
+ 		return findAdvancedIncidentForPVO(incident_ID, name, null, authorizeName, calling_agent);
+ 	}
   /**
    * 
    * @param incident_ID
    * @param name
    * @return
    */
- 	public com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident findAdvancedIncidentForPVO(String incident_ID, String name, boolean authorizeName, String calling_agent) {
+ 	public com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident findAdvancedIncidentForPVO(String incident_ID, String name, String fName, boolean authorizeName, String calling_agent) {
  		try {
  			if (authorizeName == true) {
 				if (name == null || name.length() == 0 || incident_ID == null
@@ -311,7 +318,7 @@ public class PassengerViewUtil {
 				addCallingAgentRemark(iDTO, calling_agent, iBMO, "findByIncidentID");
 			}
 			
-			return populateAdvancedIncident(iDTO, name, authorizeName);
+			return populateAdvancedIncident(iDTO, name, fName, authorizeName);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -408,10 +415,14 @@ public class PassengerViewUtil {
  	}
  	
  	private com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident populateAdvancedIncident(Incident iDTO) {
- 		return populateAdvancedIncident(iDTO, null, false);
+ 		return populateAdvancedIncident(iDTO, null, null, false);
  	}
  	
  	private com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident populateAdvancedIncident(Incident iDTO, String name, boolean authorizeName) {
+ 		return populateAdvancedIncident(iDTO, name, null, authorizeName);
+ 	}
+ 	
+ 	private com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident populateAdvancedIncident(Incident iDTO, String name, String fName, boolean authorizeName) {
 		if (iDTO == null) {
 			return null;
 		}
@@ -439,7 +450,7 @@ public class PassengerViewUtil {
 				break;
 			}
 			
-			if (!authorizeName || (authorizeName && isNameMatch(wsp.getLastname(), name))) {
+			if (!authorizeName || (authorizeName && isNameMatch(wsp.getLastname(), name, wsp.getFirstname(), fName))) {
 				si.addNewPassengers();
 				si.setPassengersArray(k, wsp);
 				++k;
@@ -459,33 +470,33 @@ public class PassengerViewUtil {
 		si.setItemType(iDTO.getItemtype_ID());
 		si.setIncidentStatus(iDTO.getStatus().getTextDescription(null));
 		
-		Calendar cal = new GregorianCalendar();
-		cal.setTime(iDTO.getCreatedate());
-		cal.add(Calendar.DAY_OF_MONTH, -4);
-		Date startDate = cal.getTime();
-		cal.setTime(iDTO.getCreatedate());
-		cal.add(Calendar.DAY_OF_MONTH, 2);
-		Date endDate = cal.getTime();
-		ScannerDataSource scannerDataSource =	(ScannerDataSource) SpringUtils.getBean(SpringUtils.SCANNER_DATA_SOURCE);
+//		Calendar cal = new GregorianCalendar();
+//		cal.setTime(iDTO.getCreatedate());
+//		cal.add(Calendar.DAY_OF_MONTH, -4);
+//		Date startDate = cal.getTime();
+//		cal.setTime(iDTO.getCreatedate());
+//		cal.add(Calendar.DAY_OF_MONTH, 2);
+//		Date endDate = cal.getTime();
+//		ScannerDataSource scannerDataSource =	(ScannerDataSource) SpringUtils.getBean(SpringUtils.SCANNER_DATA_SOURCE);
 		int index = 0;
 		for (Incident_Claimcheck claimCheck : iDTO.getClaimchecks()) {
 			com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck check = null;
 			check = si.addNewClaimChecks();
 			check.setTag(claimCheck.getClaimchecknum());
-			ScannerDTO dto = scannerDataSource.getScannerData(startDate, endDate, claimCheck.getClaimchecknum(), 5);
-			if (dto.getScannerDataDTOs() != null) {
-				int scanIndex = 0;
-				for (ScannerDataDTO sdd : dto.getScannerDataDTOs()) {
-					com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints scan = null;
-					scan = check.addNewScans();
-					scan.setLocation(sdd.getString2()); //USAirways implementation sets String2 to station
-					scan.setType(sdd.getString3());     //USAirways implementation sets String3 to type
-					scan.setTag(claimCheck.getClaimchecknum());
-					scan.setTimestamp(sdd.getString1());//USAirways implementation sets String1 to human readable timestamp
-					check.setScansArray(scanIndex, scan);
-					scanIndex++;
-				}
-			}
+//			ScannerDTO dto = scannerDataSource.getScannerData(startDate, endDate, claimCheck.getClaimchecknum(), 5);
+//			if (dto.getScannerDataDTOs() != null) {
+//				int scanIndex = 0;
+//				for (ScannerDataDTO sdd : dto.getScannerDataDTOs()) {
+//					com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints scan = null;
+//					scan = check.addNewScans();
+//					scan.setLocation(sdd.getString2()); //USAirways implementation sets String2 to station
+//					scan.setType(sdd.getString3());     //USAirways implementation sets String3 to type
+//					scan.setTag(claimCheck.getClaimchecknum());
+//					scan.setTimestamp(sdd.getString1());//USAirways implementation sets String1 to human readable timestamp
+//					check.setScansArray(scanIndex, scan);
+//					scanIndex++;
+//				}
+//			}
 			si.setClaimChecksArray(index, check);
 			index++;
 		}
@@ -528,13 +539,26 @@ public class PassengerViewUtil {
  		
  	}
 
-private boolean isNameMatch(String lastname, String name) {
+private boolean isNameMatch(String lastname, String name, String firstname, String fname) {
 	if(lastname == null || name == null) { 
 		return false;
 	}
+	boolean firstPass = true;
+	boolean checkFirst = (fname != null && fname.trim().length() > 0);
 	lastname = lastname.trim().replaceAll("\\s+", " ");
 	name = name.trim().replaceAll("\\s+", " ");
-	return lastname.equalsIgnoreCase(name); 
+	if (checkFirst) {
+		System.out.println("CHECKING FIRST NAME: " + fname + " :: " + firstname);
+		if (firstname == null) {
+			return false;
+		}
+		firstname = firstname.trim().replaceAll("\\s+", " ");
+		fname = fname.trim().replaceAll("\\s+", " ");
+		firstname = firstname.toUpperCase();
+		fname = fname.toUpperCase();
+		firstPass = firstname.contains(fname);
+	}
+	return (lastname.equalsIgnoreCase(name) && firstPass); 
 }
 
 private String[] findActiveNumbers() {

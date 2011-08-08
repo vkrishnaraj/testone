@@ -24,7 +24,7 @@ public class OCContents {
 	private OCBag bag;
 	
 	@Basic
-	private boolean male;
+	private int male;
 	
 	@Column(length = 50)
 	private String article;
@@ -50,11 +50,14 @@ public class OCContents {
 	@Column(length = 3)
 	private String currency;
 
-	public boolean isMale() {
+	@Column(length = 50)
+	private String contentOwner;
+
+	public int getMale() {
 		return male;
 	}
 
-	public void setMale(boolean male) {
+	public void setMale(int male) {
 		this.male = male;
 	}
 
@@ -136,6 +139,14 @@ public class OCContents {
 
 	public void setBag(OCBag bag) {
 		this.bag = bag;
+	}
+
+	public String getContentOwner() {
+		return contentOwner;
+	}
+
+	public void setContentOwner(String contentOwner) {
+		this.contentOwner = contentOwner;
 	}
 
 }

@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Bag extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Bag.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("bagbf05type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Bag.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("bagbf05type");
     
     /**
      * Gets the "bagArrive" element
@@ -89,6 +89,86 @@ public interface Bag extends org.apache.xmlbeans.XmlObject
     void unsetBagColor();
     
     /**
+     * Gets the "bagCurrency" element
+     */
+    java.lang.String getBagCurrency();
+    
+    /**
+     * Gets (as xml) the "bagCurrency" element
+     */
+    org.apache.xmlbeans.XmlString xgetBagCurrency();
+    
+    /**
+     * Tests for nil "bagCurrency" element
+     */
+    boolean isNilBagCurrency();
+    
+    /**
+     * True if has "bagCurrency" element
+     */
+    boolean isSetBagCurrency();
+    
+    /**
+     * Sets the "bagCurrency" element
+     */
+    void setBagCurrency(java.lang.String bagCurrency);
+    
+    /**
+     * Sets (as xml) the "bagCurrency" element
+     */
+    void xsetBagCurrency(org.apache.xmlbeans.XmlString bagCurrency);
+    
+    /**
+     * Nils the "bagCurrency" element
+     */
+    void setNilBagCurrency();
+    
+    /**
+     * Unsets the "bagCurrency" element
+     */
+    void unsetBagCurrency();
+    
+    /**
+     * Gets the "bagOwner" element
+     */
+    java.lang.String getBagOwner();
+    
+    /**
+     * Gets (as xml) the "bagOwner" element
+     */
+    org.apache.xmlbeans.XmlString xgetBagOwner();
+    
+    /**
+     * Tests for nil "bagOwner" element
+     */
+    boolean isNilBagOwner();
+    
+    /**
+     * True if has "bagOwner" element
+     */
+    boolean isSetBagOwner();
+    
+    /**
+     * Sets the "bagOwner" element
+     */
+    void setBagOwner(java.lang.String bagOwner);
+    
+    /**
+     * Sets (as xml) the "bagOwner" element
+     */
+    void xsetBagOwner(org.apache.xmlbeans.XmlString bagOwner);
+    
+    /**
+     * Nils the "bagOwner" element
+     */
+    void setNilBagOwner();
+    
+    /**
+     * Unsets the "bagOwner" element
+     */
+    void unsetBagOwner();
+    
+    /**
      * Gets the "bagType" element
      */
     java.lang.String getBagType();
@@ -127,6 +207,46 @@ public interface Bag extends org.apache.xmlbeans.XmlObject
      * Unsets the "bagType" element
      */
     void unsetBagType();
+    
+    /**
+     * Gets the "bagValue" element
+     */
+    java.lang.String getBagValue();
+    
+    /**
+     * Gets (as xml) the "bagValue" element
+     */
+    org.apache.xmlbeans.XmlString xgetBagValue();
+    
+    /**
+     * Tests for nil "bagValue" element
+     */
+    boolean isNilBagValue();
+    
+    /**
+     * True if has "bagValue" element
+     */
+    boolean isSetBagValue();
+    
+    /**
+     * Sets the "bagValue" element
+     */
+    void setBagValue(java.lang.String bagValue);
+    
+    /**
+     * Sets (as xml) the "bagValue" element
+     */
+    void xsetBagValue(org.apache.xmlbeans.XmlString bagValue);
+    
+    /**
+     * Nils the "bagValue" element
+     */
+    void setNilBagValue();
+    
+    /**
+     * Unsets the "bagValue" element
+     */
+    void unsetBagValue();
     
     /**
      * Gets the "brand" element
@@ -349,6 +469,36 @@ public interface Bag extends org.apache.xmlbeans.XmlObject
     void unsetId();
     
     /**
+     * Gets the "leather" element
+     */
+    boolean getLeather();
+    
+    /**
+     * Gets (as xml) the "leather" element
+     */
+    org.apache.xmlbeans.XmlBoolean xgetLeather();
+    
+    /**
+     * True if has "leather" element
+     */
+    boolean isSetLeather();
+    
+    /**
+     * Sets the "leather" element
+     */
+    void setLeather(boolean leather);
+    
+    /**
+     * Sets (as xml) the "leather" element
+     */
+    void xsetLeather(org.apache.xmlbeans.XmlBoolean leather);
+    
+    /**
+     * Unsets the "leather" element
+     */
+    void unsetLeather();
+    
+    /**
      * Gets the "locks" element
      */
     boolean getLocks();
@@ -377,6 +527,36 @@ public interface Bag extends org.apache.xmlbeans.XmlObject
      * Unsets the "locks" element
      */
     void unsetLocks();
+    
+    /**
+     * Gets the "metal" element
+     */
+    boolean getMetal();
+    
+    /**
+     * Gets (as xml) the "metal" element
+     */
+    org.apache.xmlbeans.XmlBoolean xgetMetal();
+    
+    /**
+     * True if has "metal" element
+     */
+    boolean isSetMetal();
+    
+    /**
+     * Sets the "metal" element
+     */
+    void setMetal(boolean metal);
+    
+    /**
+     * Sets (as xml) the "metal" element
+     */
+    void xsetMetal(org.apache.xmlbeans.XmlBoolean metal);
+    
+    /**
+     * Unsets the "metal" element
+     */
+    void unsetMetal();
     
     /**
      * Gets the "nameOnBag" element
@@ -707,6 +887,46 @@ public interface Bag extends org.apache.xmlbeans.XmlObject
      * Unsets the "trim" element
      */
     void unsetTrim();
+    
+    /**
+     * Gets the "trimDescription" element
+     */
+    java.lang.String getTrimDescription();
+    
+    /**
+     * Gets (as xml) the "trimDescription" element
+     */
+    org.apache.xmlbeans.XmlString xgetTrimDescription();
+    
+    /**
+     * Tests for nil "trimDescription" element
+     */
+    boolean isNilTrimDescription();
+    
+    /**
+     * True if has "trimDescription" element
+     */
+    boolean isSetTrimDescription();
+    
+    /**
+     * Sets the "trimDescription" element
+     */
+    void setTrimDescription(java.lang.String trimDescription);
+    
+    /**
+     * Sets (as xml) the "trimDescription" element
+     */
+    void xsetTrimDescription(org.apache.xmlbeans.XmlString trimDescription);
+    
+    /**
+     * Nils the "trimDescription" element
+     */
+    void setNilTrimDescription();
+    
+    /**
+     * Unsets the "trimDescription" element
+     */
+    void unsetTrimDescription();
     
     /**
      * Gets the "wheels" element

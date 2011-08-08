@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Contents extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Contents.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("contents82c9type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Contents.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("contents82c9type");
     
     /**
      * Gets the "article" element
@@ -139,6 +139,46 @@ public interface Contents extends org.apache.xmlbeans.XmlObject
     void unsetColor();
     
     /**
+     * Gets the "contentOwner" element
+     */
+    java.lang.String getContentOwner();
+    
+    /**
+     * Gets (as xml) the "contentOwner" element
+     */
+    org.apache.xmlbeans.XmlString xgetContentOwner();
+    
+    /**
+     * Tests for nil "contentOwner" element
+     */
+    boolean isNilContentOwner();
+    
+    /**
+     * True if has "contentOwner" element
+     */
+    boolean isSetContentOwner();
+    
+    /**
+     * Sets the "contentOwner" element
+     */
+    void setContentOwner(java.lang.String contentOwner);
+    
+    /**
+     * Sets (as xml) the "contentOwner" element
+     */
+    void xsetContentOwner(org.apache.xmlbeans.XmlString contentOwner);
+    
+    /**
+     * Nils the "contentOwner" element
+     */
+    void setNilContentOwner();
+    
+    /**
+     * Unsets the "contentOwner" element
+     */
+    void unsetContentOwner();
+    
+    /**
      * Gets the "currency" element
      */
     java.lang.String getCurrency();
@@ -181,12 +221,12 @@ public interface Contents extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "male" element
      */
-    boolean getMale();
+    int getMale();
     
     /**
      * Gets (as xml) the "male" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetMale();
+    org.apache.xmlbeans.XmlInt xgetMale();
     
     /**
      * True if has "male" element
@@ -196,12 +236,12 @@ public interface Contents extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "male" element
      */
-    void setMale(boolean male);
+    void setMale(int male);
     
     /**
      * Sets (as xml) the "male" element
      */
-    void xsetMale(org.apache.xmlbeans.XmlBoolean male);
+    void xsetMale(org.apache.xmlbeans.XmlInt male);
     
     /**
      * Unsets the "male" element

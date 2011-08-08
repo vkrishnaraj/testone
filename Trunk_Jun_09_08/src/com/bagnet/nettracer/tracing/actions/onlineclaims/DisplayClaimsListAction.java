@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions.onlineclaims;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -71,10 +72,20 @@ public class DisplayClaimsListAction extends Action {
 		rowcount = d.getClaimsListCount(status, startDate, endDate, rowsperpage, currpage, user.getStation().getLz_ID(), user.getStation().getLz_ID());
 		
 		totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
-
+		System.out.println("\n\n\n STATS FOR OC SEARCH: \n\n TOTAL PAGES: " + totalpages + "\n ROW COUNT: " + rowcount + "\n ROWS PER: "
+				+ rowsperpage + "\n\n\n");
 		if (totalpages <= currpage) {
 			currpage = 0;
 			request.setAttribute("currpage", "0");
+		}
+		
+		if (currpage + 1 == totalpages) request.setAttribute("end", "1");
+		if (totalpages > 1) {
+			ArrayList al = new ArrayList();
+			for (int i = 0; i < totalpages; i++) {
+				al.add(Integer.toString(i));
+			}
+			request.setAttribute("pages", al);
 		}
 
 		List<OnlineClaim> list = d.getClaimsList(status, startDate, endDate, rowsperpage, currpage, user.getStation().getLz_ID(), user.getStation().getLz_ID());

@@ -14,14 +14,14 @@ public class OnlineClaimsService {
 	/*
 	 * Authenticate Passenger
 	 */
-	public PassengerView authPassenger(String passengerLastName, String incidentId, NtAuth auth) {
+	public PassengerView authPassenger(String passengerLastName, String passengerFirstName, String incidentId, NtAuth auth) {
 		return null;
 	}
 	
 	/*
 	 * Load Claim
 	 */
-	public Claim loadClaim(String name, String incidentId, long claimId, NtAuth auth) {
+	public Claim loadClaim(String name, String fName, String incidentId, long claimId, NtAuth auth) {
 		return null;
 	}
 	

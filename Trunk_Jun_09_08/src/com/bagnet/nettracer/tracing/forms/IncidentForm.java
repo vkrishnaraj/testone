@@ -9,6 +9,7 @@ import org.apache.struts.validator.ValidatorForm;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
@@ -27,6 +28,7 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
@@ -1283,5 +1285,16 @@ public final class IncidentForm extends ValidatorForm {
 
 	public void setCrmFile(CrmFile crmFile) {
 		this.crmFile = crmFile;
+	}
+	
+	public boolean isClaimSubmitted(){
+		if (getOc_claim_id() > 0) {
+			OnlineClaimsDao dao = new OnlineClaimsDao();
+			OnlineClaim claim = dao.getOnlineClaim(getOc_claim_id());
+			if (claim != null && claim.getStatus() != null && !claim.getStatus().equals("NEW")) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

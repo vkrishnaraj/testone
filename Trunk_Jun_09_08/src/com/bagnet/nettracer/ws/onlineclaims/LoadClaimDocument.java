@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface LoadClaimDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LoadClaimDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("loadclaim9709doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LoadClaimDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("loadclaim9709doctype");
     
     /**
      * Gets the "loadClaim" element
@@ -42,7 +42,7 @@ public interface LoadClaimDocument extends org.apache.xmlbeans.XmlObject
     public interface LoadClaim extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LoadClaim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s00DD3DE4486A56371522D0C0325C64D0").resolveHandle("loadclaim3e6belemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(LoadClaim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("loadclaim3e6belemtype");
         
         /**
          * Gets the "name" element
@@ -83,6 +83,46 @@ public interface LoadClaimDocument extends org.apache.xmlbeans.XmlObject
          * Unsets the "name" element
          */
         void unsetName();
+        
+        /**
+         * Gets the "fName" element
+         */
+        java.lang.String getFName();
+        
+        /**
+         * Gets (as xml) the "fName" element
+         */
+        org.apache.xmlbeans.XmlString xgetFName();
+        
+        /**
+         * Tests for nil "fName" element
+         */
+        boolean isNilFName();
+        
+        /**
+         * True if has "fName" element
+         */
+        boolean isSetFName();
+        
+        /**
+         * Sets the "fName" element
+         */
+        void setFName(java.lang.String fName);
+        
+        /**
+         * Sets (as xml) the "fName" element
+         */
+        void xsetFName(org.apache.xmlbeans.XmlString fName);
+        
+        /**
+         * Nils the "fName" element
+         */
+        void setNilFName();
+        
+        /**
+         * Unsets the "fName" element
+         */
+        void unsetFName();
         
         /**
          * Gets the "incidentId" element

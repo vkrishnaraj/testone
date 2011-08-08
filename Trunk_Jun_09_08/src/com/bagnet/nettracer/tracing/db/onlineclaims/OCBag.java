@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -43,7 +44,7 @@ public class OCBag {
 	@Column(length = 40)
 	private String nameOnBag;
 	
-	@Column(length = 10)
+	@Column(length = 25)
 	private String brand;
 	
 	@Column(length = 50)
@@ -57,6 +58,15 @@ public class OCBag {
 	
 	@Column(length = 2)
 	private String bagType;
+
+	@Column(length = 20)
+	private String bagValue;
+
+	@Column(length = 3)
+	private String bagCurrency;
+
+	@Column(length = 50)
+	private String bagOwner;
 	
 	@Basic
 	private boolean hardSided;
@@ -93,6 +103,15 @@ public class OCBag {
 	
 	@Basic
 	private boolean ribbonsOrMarkings;
+	
+	@Basic
+	private boolean leather;
+	
+	@Basic
+	private boolean metal;
+	
+	@Column(length = 20)
+	private String trimDescription;
 	
 	@OneToMany(mappedBy = "bag", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
@@ -281,6 +300,76 @@ public class OCBag {
 
 	public void setBagId(long bagId) {
 		this.bagId = bagId;
+	}
+
+	public String getBagValue() {
+		return bagValue;
+	}
+
+	public void setBagValue(String bagValue) {
+		this.bagValue = bagValue;
+	}
+
+	public String getBagCurrency() {
+		return bagCurrency;
+	}
+
+	public void setBagCurrency(String bagCurrency) {
+		this.bagCurrency = bagCurrency;
+	}
+
+	public String getBagOwner() {
+		return bagOwner;
+	}
+
+	public void setBagOwner(String bagOwner) {
+		this.bagOwner = bagOwner;
+	}
+	
+	public boolean isLeather() {
+		return leather;
+	}
+
+	public void setLeather(boolean leather) {
+		this.leather = leather;
+	}
+
+	public boolean isMetal() {
+		return metal;
+	}
+
+	public void setMetal(boolean metal) {
+		this.metal = metal;
+	}
+
+	public String getTrimDescription() {
+		return trimDescription;
+	}
+
+	public void setTrimDescription(String trimDescription) {
+		this.trimDescription = trimDescription;
+	}
+
+	@Transient
+	public String getGrandTotal() {
+		if (getContents() != null) {
+			double total = 0D;
+			String currency = null;
+			for (OCContents cont : getContents()) {
+				if (currency == null) {
+					currency = cont.getCurrency();
+				} else if (!currency.equals(cont.getCurrency())) {
+					return "Multiple Currencies.";
+				}
+				total += cont.getPrice();
+			}
+			total = Math.round(total * 100)/100.0D;
+			return total + "";
+		}
+		return "0.00";
+	}
+	
+	public void setGrandTotal(String grandTotal) {
 	}
 
 }

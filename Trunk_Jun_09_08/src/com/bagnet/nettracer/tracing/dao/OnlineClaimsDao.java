@@ -1,7 +1,11 @@
 package com.bagnet.nettracer.tracing.dao;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TimeZone;
 
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
@@ -13,12 +17,15 @@ import org.hibernate.criterion.Expression;
 import org.springframework.beans.BeanUtils;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCBag;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCContents;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCItinerary;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCPassenger;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCPhone;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
 import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCBag;
@@ -26,7 +33,11 @@ import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCContents;
 import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCFile;
 import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCItinerary;
 import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCPhone;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Bag;
+import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
+
 import common.Logger;
 
 public class OnlineClaimsDao {
@@ -290,24 +301,12 @@ public class OnlineClaimsDao {
 
 				if (existingDbClaim.getClaimId() != claim.getClaimId() || !existingDbClaim.getIncident().getIncident_ID().equals(incidentId)) {
 					throw new AuthorizationException();
-				} else if (existingDbClaim.getAccept() != null && existingDbClaim.getAccept().equalsIgnoreCase("ACCEPT") || !existingDbClaim.getStatus().equalsIgnoreCase("NEW")) {
-					contactUpdateOnly = true;
-					contactOnlyUpdateMapping(claim, existingDbClaim);
 				} else {
+					for (OCPhone i : existingDbClaim.getPhone()) {
+						sess.delete(i);
+					}
 					
-					for (OCBag i : existingDbClaim.getBag()) {
-						for (Object j : i.getContents()) {
-							sess.delete(j);
-						}
-						sess.delete(i);
-					}
-					for (Object i : existingDbClaim.getPhone()) {
-						sess.delete(i);
-					}
-					for (Object i : existingDbClaim.getItinerary()) {
-						sess.delete(i);
-					}
-					for (Object i : existingDbClaim.getFile()) {
+					for (OCPassenger i : existingDbClaim.getPassenger()) {
 						sess.delete(i);
 					}
 					
@@ -319,19 +318,39 @@ public class OnlineClaimsDao {
 						sess.delete(existingDbClaim.getPermanentAddress());
 					}
 					
-					
-					BeanUtils.copyProperties(claim, existingDbClaim);
-					
-					existingDbClaim.setStatus(currentStatus);
-
-					if (existingDbClaim.getAccept() != null && existingDbClaim.getAccept().equalsIgnoreCase("ACCEPT") && existingDbClaim.getSubmitDate() == null) {
-						existingDbClaim.setStatus(STATUS_SUBMITTED);
-						existingDbClaim.setSubmitDate(TracerDateTime.getGMTDate());
+					if (!existingDbClaim.getStatus().equalsIgnoreCase("NEW")) {
+				
+						contactUpdateOnly = true;
+						contactOnlyUpdateMapping(claim, existingDbClaim);
+					} else {
+						for (OCBag i : existingDbClaim.getBag()) {
+							for (OCContents j : i.getContents()) {
+								sess.delete(j);
+							}
+							sess.delete(i);
+						}
+						
+						for (OCItinerary i : existingDbClaim.getItinerary()) {
+							sess.delete(i);
+						}
+						
+						for (OCFile i : existingDbClaim.getFile()) {
+							sess.delete(i);
+						}
+						
+						BeanUtils.copyProperties(claim, existingDbClaim);
+						
+						existingDbClaim.setStatus(currentStatus);
+	
+						if (checkSubmitCondition(existingDbClaim)) {
+							existingDbClaim.setStatus(STATUS_SUBMITTED);
+							existingDbClaim.setSubmitDate(TracerDateTime.getGMTDate());
+						}
 					}
 				}
 			}
 			
-
+			boolean saveIncident = false;
 			if (!isNew && !contactUpdateOnly) {
 
 				mapSubObjToParentObjects(existingDbClaim);
@@ -351,16 +370,23 @@ public class OnlineClaimsDao {
 				mapSubObjToParentObjects(claim);
 				claim.setStatus("NEW");
 				sess.save(claim);
-				long claimId = claim.getClaimId();
-				Incident i = claim.getIncident();
-				i.setOc_claim_id(claimId);
-				sess.saveOrUpdate(i);
+				saveIncident = true;
 				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
 				// TODO: SAVE AC
 				//				sess.save(ac);
 			}
 
 			t.commit();
+			if (saveIncident) {
+				Incident i = claim.getIncident();
+				OnlineClaimsDao dao = new OnlineClaimsDao();
+				claim = dao.getOnlineClaim(incidentId);
+				long claimId = claim.getClaimId();
+				i.setOc_claim_id(claimId);
+				IncidentBMO iBMO = new IncidentBMO();
+				agent = AdminUtils.getAgent(PropertyBMO.getValue(PropertyBMO.PROPERTY_OIA_AGENT));
+				iBMO.saveAndAuditIncident(i, agent, sess);
+			}
 			return claim;
 		} catch (Exception e) {
 			if (t != null)
@@ -372,6 +398,17 @@ public class OnlineClaimsDao {
 				sess.close();
 		}
 		return null;
+	}
+	
+	private boolean checkSubmitCondition(OnlineClaim claim) {
+		if (claim.getSubmitDate() == null) {
+			for (OCPassenger pass : claim.getPassenger()) {
+				if (pass == null || pass.getAccept() == null || !pass.getAccept().equalsIgnoreCase("ACCEPT")) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	private void mapSubObjToParentObjects(OnlineClaim claim) {
@@ -406,12 +443,17 @@ public class OnlineClaimsDao {
 					i.setClaim(claim);
 			}
 		}
+
+		if (claim.getPassenger() != null) {
+			for (OCPassenger i : claim.getPassenger()) {
+				if (i.getClaim() == null)
+					i.setClaim(claim);
+			}
+		}
 	}
 
 	private void contactOnlyUpdateMapping(OnlineClaim origin, OnlineClaim dest) {
-		dest.setLastName(origin.getLastName());
-		dest.setFirstName(origin.getFirstName());
-		dest.setMiddleInitial(origin.getMiddleInitial());
+		dest.setPassenger(origin.getPassenger());
 		dest.setPermanentAddress(origin.getPermanentAddress());
 		dest.setMailingAddress(origin.getMailingAddress());
 		dest.setOccupation(origin.getOccupation());
@@ -469,16 +511,180 @@ public class OnlineClaimsDao {
 	public com.bagnet.nettracer.ws.onlineclaims.xsd.Claim convertClaimDbToWs(OnlineClaim claim) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 		com.bagnet.nettracer.ws.onlineclaims.xsd.Claim retVal = mapper.map(claim, com.bagnet.nettracer.ws.onlineclaims.xsd.Claim.class);
+//		retVal = fixDates(retVal);
 		return retVal;
 	}
+	
+//	private com.bagnet.nettracer.ws.onlineclaims.xsd.Claim fixDates(com.bagnet.nettracer.ws.onlineclaims.xsd.Claim claim) {
+//        if(null != claim.getFiledPrevoiusDate()){
+//        	Calendar temp = Calendar.getInstance();
+//        	temp.setTime(claim.getFiledPrevoiusDate().getTime());
+//        	temp.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+//        	claim.setFiledPrevoiusDate(temp);
+//        }
+//        
+//		com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary[] wsItinerary =claim.getItineraryArray();
+//		if(null != wsItinerary && wsItinerary.length >0){
+//			for (int i = 0; i < wsItinerary.length; i++) {
+//				if(null != wsItinerary[i].getDate()){
+//		        	Calendar temp = Calendar.getInstance();
+//		        	temp.setTime(wsItinerary[i].getDate().getTime());
+//					temp.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+//					wsItinerary[i].setDate(temp);
+//				}
+//			}
+//		}
+//		claim.setItineraryArray(wsItinerary);
+//		
+//		com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBag=claim.getBagArray();
+//		if(null != wsBag && wsBag.length >0){
+//			for (int i = 0; i < wsBag.length; i++) {
+//				if(null != wsBag[i].getPurchaseDate()){
+//		        	Calendar temp = Calendar.getInstance();
+//		        	temp.setTime(wsBag[i].getPurchaseDate().getTime());
+//					temp.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+//					wsBag[i].setPurchaseDate(temp);
+//				}
+//			}
+//		}
+//		claim.setBagArray(wsBag);
+//		
+//		return claim;
+//	}
 
 	public OnlineClaim convertClaimWsToDb(com.bagnet.nettracer.ws.onlineclaims.xsd.Claim claim, String incidentId) {
+		logBefore(claim);
+		int timeDiff = getTimeDiff(claim);
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-		OnlineClaim retVal = mapper.map(claim, OnlineClaim.class);
-		Incident i = new Incident();
-		i.setIncident_ID(incidentId);
+		OnlineClaim retVal = new OnlineClaim();
+		retVal.setFile(new LinkedHashSet<OCFile>());
+		retVal.setItinerary(new LinkedHashSet<OCItinerary>());
+		retVal.setPassenger(new LinkedHashSet<OCPassenger>());
+		retVal.setPhone(new LinkedHashSet<OCPhone>());
+		mapper.map(claim, retVal);
+		
+		Set<OCBag> bagsRet = new LinkedHashSet<OCBag>();
+		for (Bag bag : claim.getBagArray()) {
+			OCBag bagRet = new OCBag();
+			bagRet.setContents(new LinkedHashSet<OCContents>());
+			mapper.map(bag, bagRet);
+			bagsRet.add(bagRet);
+		}
+		retVal.setBag(bagsRet);
+		Session sess = HibernateWrapper.getSession().openSession();
+		Incident i = IncidentBMO.getIncidentByID(incidentId, sess);
 		retVal.setIncident(i);
+		retVal = fixTime(retVal, timeDiff);
+		logAfter(retVal);
 		return retVal;
+	}
+	
+	private OnlineClaim fixTime(OnlineClaim retVal, int timeDiff) {
+        if(null != retVal.getFiledPrevoiusDate()){
+        	Calendar temp = Calendar.getInstance();
+        	temp.setTime(retVal.getFiledPrevoiusDate());
+        	temp.add(Calendar.HOUR_OF_DAY, timeDiff);
+        	retVal.setFiledPrevoiusDate(temp.getTime());
+        }
+        
+		Set<OCItinerary> itineraries = retVal.getItinerary();
+		if(null != itineraries && itineraries.size() >0){
+			for (OCItinerary itin : itineraries) {
+				if (null != itin && null != itin.getDate()) {
+			        Calendar temp = Calendar.getInstance();
+			        temp.setTime(itin.getDate());
+			        temp.add(Calendar.HOUR_OF_DAY, timeDiff);
+					itin.setDate(temp.getTime());
+				}
+			}
+		}
+		retVal.setItinerary(itineraries);
+		
+		Set<OCBag> bags=retVal.getBag();
+		if(null != bags && bags.size() >0){
+			for (OCBag bag : bags) {
+				if(null != bag && null != bag.getPurchaseDate()){
+		        	Calendar temp = Calendar.getInstance();
+		        	temp.setTime(bag.getPurchaseDate());
+			        temp.add(Calendar.HOUR_OF_DAY, timeDiff);
+					bag.setPurchaseDate(temp.getTime());
+				}
+			}
+		}
+		retVal.setBag(bags);
+		return retVal;
+	}
+	
+	private int getTimeDiff(com.bagnet.nettracer.ws.onlineclaims.xsd.Claim claim) {
+		if (claim != null) {
+			if (claim.getItineraryArray() != null) {
+				for (com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary itin : claim.getItineraryArray()) {
+					return figureTimeDifference(itin.getDate());
+				}
+			}
+		}
+		
+		return 0;
+	}
+	
+	private int figureTimeDifference(Calendar wsTime) {
+		int wsHourOfDay = wsTime.get(Calendar.HOUR_OF_DAY);  
+		int wsDayOfMonth = wsTime.get(Calendar.DAY_OF_MONTH);  
+		
+		Calendar server = Calendar.getInstance();
+		server.setTime(wsTime.getTime());
+		
+		int localHourOfDay = server.get(Calendar.HOUR_OF_DAY);  
+		int localDayOfMonth = server.get(Calendar.DAY_OF_MONTH);  
+	 
+		// Difference between Web Service Provided and Server  
+		int hourDifference = wsHourOfDay - localHourOfDay;  
+		int dayDifference = wsDayOfMonth - localDayOfMonth;  
+		if (dayDifference != 0) {  
+			hourDifference = hourDifference + 24;  
+		}  
+		logger.fatal("HOUR DIFFERENCE = " + hourDifference);  
+		return hourDifference;
+	}
+	
+	private void logBefore(com.bagnet.nettracer.ws.onlineclaims.xsd.Claim claim) {
+		if (claim.getFiledPrevoiusDate() != null) {
+			logger.fatal("BEFORE CONVERSION P: " + claim.getFiledPrevoiusDate().toString());
+		}
+		if (claim.getItineraryArray() != null) {
+			for (com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary itin : claim.getItineraryArray()) {
+				if (itin != null && itin.getDate() != null) {
+					logger.fatal("BEFORE CONVERSION I: " + itin.getDate().toString());
+				}
+			}
+		}
+		if (claim.getBagArray() != null) {
+			for (com.bagnet.nettracer.ws.onlineclaims.xsd.Bag bag : claim.getBagArray()) {
+				if (bag != null && bag.getPurchaseDate() != null) {
+					logger.fatal("BEFORE CONVERSION B: " + bag.getPurchaseDate().toString());
+				}
+			}
+		}
+	}
+	
+	private void logAfter(OnlineClaim retVal) {
+		if (retVal.getFiledPrevoiusDate() != null) {
+			logger.fatal("AFTER CONVERSION P: " + retVal.getFiledPrevoiusDate().toString());
+		}
+		if (retVal.getItinerary() != null) {
+			for (OCItinerary itin : retVal.getItinerary()) {
+				if (itin != null && itin.getDate() != null) {
+					logger.fatal("AFTER CONVERSION I: " + itin.getDate().toString());
+				}
+			}
+		}
+		if (retVal.getBag() != null) {
+			for (OCBag bag : retVal.getBag()) {
+				if (bag != null && bag.getPurchaseDate() != null) {
+					logger.fatal("AFTER CONVERSION B: " + bag.getPurchaseDate().toString());
+				}
+			}
+		}
 	}
 
 	private void completeMapping(OnlineClaim source, OnlineClaim destination) {

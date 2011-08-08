@@ -354,7 +354,7 @@ jQuery(document).ready(function () {
 <div id="slideUpContainer">
 	<div id="sliderInner">
 	<div style="float: right; margin-right: 10px;">
-		<a id="switchLink" href="#">Switch Location</a>&nbsp;&nbsp;
+	<!-- 	<a id="switchLink" href="#">Switch Location</a>&nbsp;&nbsp; -->
 		<a id="closeLink" href="#">Close</a>
 	</div><br/>
 	<div id="sliderContentFrame" style="float: none"></div>

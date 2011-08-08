@@ -12,6 +12,9 @@ public class Bag {
 	private Date purchaseDate;
 	private String bagColor;
 	private String bagType;
+	private String bagValue;
+	private String bagCurrency;
+	private String bagOwner;
 	private boolean hardSided;
 	private boolean softSided;
 	private boolean locks;
@@ -24,6 +27,9 @@ public class Bag {
 	private boolean trim;
 	private boolean pockets;
 	private boolean ribbonsOrMarkings;
+	private boolean leather;
+	private boolean metal;
+	private String trimDescription;
 	private Contents[] contents;
 
 	public String getTag() {
@@ -201,5 +207,53 @@ public class Bag {
 	public void setId(long id) {
   	this.id = id;
   }
+
+	public String getBagValue() {
+		return bagValue;
+	}
+
+	public void setBagValue(String bagValue) {
+		this.bagValue = bagValue;
+	}
+
+	public String getBagCurrency() {
+		return bagCurrency;
+	}
+
+	public void setBagCurrency(String bagCurrency) {
+		this.bagCurrency = bagCurrency;
+	}
+
+	public String getBagOwner() {
+		return bagOwner;
+	}
+
+	public void setBagOwner(String bagOwner) {
+		this.bagOwner = bagOwner;
+	}
+
+	public boolean isLeather() {
+		return leather;
+	}
+
+	public void setLeather(boolean leather) {
+		this.leather = leather;
+	}
+
+	public boolean isMetal() {
+		return metal;
+	}
+
+	public void setMetal(boolean metal) {
+		this.metal = metal;
+	}
+
+	public String getTrimDescription() {
+		return trimDescription;
+	}
+
+	public void setTrimDescription(String trimDescription) {
+		this.trimDescription = trimDescription;
+	}
 
 }

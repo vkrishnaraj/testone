@@ -88,11 +88,13 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
         
         private static final javax.xml.namespace.QName NAME$0 = 
             new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "name");
-        private static final javax.xml.namespace.QName INCIDENTID$2 = 
+        private static final javax.xml.namespace.QName FNAME$2 = 
+            new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "fName");
+        private static final javax.xml.namespace.QName INCIDENTID$4 = 
             new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "incidentId");
-        private static final javax.xml.namespace.QName CLAIMID$4 = 
+        private static final javax.xml.namespace.QName CLAIMID$6 = 
             new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "claimId");
-        private static final javax.xml.namespace.QName AUTH$6 = 
+        private static final javax.xml.namespace.QName AUTH$8 = 
             new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com", "auth");
         
         
@@ -222,6 +224,131 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
         }
         
         /**
+         * Gets the "fName" element
+         */
+        public java.lang.String getFName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FNAME$2, 0);
+                if (target == null)
+                {
+                    return null;
+                }
+                return target.getStringValue();
+            }
+        }
+        
+        /**
+         * Gets (as xml) the "fName" element
+         */
+        public org.apache.xmlbeans.XmlString xgetFName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FNAME$2, 0);
+                return target;
+            }
+        }
+        
+        /**
+         * Tests for nil "fName" element
+         */
+        public boolean isNilFName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FNAME$2, 0);
+                if (target == null) return false;
+                return target.isNil();
+            }
+        }
+        
+        /**
+         * True if has "fName" element
+         */
+        public boolean isSetFName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                return get_store().count_elements(FNAME$2) != 0;
+            }
+        }
+        
+        /**
+         * Sets the "fName" element
+         */
+        public void setFName(java.lang.String fName)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.SimpleValue target = null;
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FNAME$2, 0);
+                if (target == null)
+                {
+                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(FNAME$2);
+                }
+                target.setStringValue(fName);
+            }
+        }
+        
+        /**
+         * Sets (as xml) the "fName" element
+         */
+        public void xsetFName(org.apache.xmlbeans.XmlString fName)
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FNAME$2, 0);
+                if (target == null)
+                {
+                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FNAME$2);
+                }
+                target.set(fName);
+            }
+        }
+        
+        /**
+         * Nils the "fName" element
+         */
+        public void setNilFName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                org.apache.xmlbeans.XmlString target = null;
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FNAME$2, 0);
+                if (target == null)
+                {
+                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FNAME$2);
+                }
+                target.setNil();
+            }
+        }
+        
+        /**
+         * Unsets the "fName" element
+         */
+        public void unsetFName()
+        {
+            synchronized (monitor())
+            {
+                check_orphaned();
+                get_store().remove_element(FNAME$2, 0);
+            }
+        }
+        
+        /**
          * Gets the "incidentId" element
          */
         public java.lang.String getIncidentId()
@@ -230,7 +357,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$4, 0);
                 if (target == null)
                 {
                     return null;
@@ -248,7 +375,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$4, 0);
                 return target;
             }
         }
@@ -262,7 +389,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$4, 0);
                 if (target == null) return false;
                 return target.isNil();
             }
@@ -276,7 +403,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             synchronized (monitor())
             {
                 check_orphaned();
-                return get_store().count_elements(INCIDENTID$2) != 0;
+                return get_store().count_elements(INCIDENTID$4) != 0;
             }
         }
         
@@ -289,10 +416,10 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INCIDENTID$4, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INCIDENTID$2);
+                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INCIDENTID$4);
                 }
                 target.setStringValue(incidentId);
             }
@@ -307,10 +434,10 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$4, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$2);
+                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$4);
                 }
                 target.set(incidentId);
             }
@@ -325,10 +452,10 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlString target = null;
-                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$2, 0);
+                target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(INCIDENTID$4, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$2);
+                    target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(INCIDENTID$4);
                 }
                 target.setNil();
             }
@@ -342,7 +469,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             synchronized (monitor())
             {
                 check_orphaned();
-                get_store().remove_element(INCIDENTID$2, 0);
+                get_store().remove_element(INCIDENTID$4, 0);
             }
         }
         
@@ -355,7 +482,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CLAIMID$4, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CLAIMID$6, 0);
                 if (target == null)
                 {
                     return 0L;
@@ -373,7 +500,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlLong target = null;
-                target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(CLAIMID$4, 0);
+                target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(CLAIMID$6, 0);
                 return target;
             }
         }
@@ -386,7 +513,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             synchronized (monitor())
             {
                 check_orphaned();
-                return get_store().count_elements(CLAIMID$4) != 0;
+                return get_store().count_elements(CLAIMID$6) != 0;
             }
         }
         
@@ -399,10 +526,10 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 org.apache.xmlbeans.SimpleValue target = null;
-                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CLAIMID$4, 0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(CLAIMID$6, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(CLAIMID$4);
+                    target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(CLAIMID$6);
                 }
                 target.setLongValue(claimId);
             }
@@ -417,10 +544,10 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 org.apache.xmlbeans.XmlLong target = null;
-                target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(CLAIMID$4, 0);
+                target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(CLAIMID$6, 0);
                 if (target == null)
                 {
-                    target = (org.apache.xmlbeans.XmlLong)get_store().add_element_user(CLAIMID$4);
+                    target = (org.apache.xmlbeans.XmlLong)get_store().add_element_user(CLAIMID$6);
                 }
                 target.set(claimId);
             }
@@ -434,7 +561,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             synchronized (monitor())
             {
                 check_orphaned();
-                get_store().remove_element(CLAIMID$4, 0);
+                get_store().remove_element(CLAIMID$6, 0);
             }
         }
         
@@ -447,7 +574,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$8, 0);
                 if (target == null)
                 {
                     return null;
@@ -465,7 +592,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$8, 0);
                 if (target == null) return false;
                 return target.isNil();
             }
@@ -479,7 +606,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             synchronized (monitor())
             {
                 check_orphaned();
-                return get_store().count_elements(AUTH$6) != 0;
+                return get_store().count_elements(AUTH$8) != 0;
             }
         }
         
@@ -492,10 +619,10 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$8, 0);
                 if (target == null)
                 {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$6);
+                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$8);
                 }
                 target.set(auth);
             }
@@ -510,7 +637,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$6);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$8);
                 return target;
             }
         }
@@ -524,10 +651,10 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             {
                 check_orphaned();
                 com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
+                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$8, 0);
                 if (target == null)
                 {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$6);
+                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$8);
                 }
                 target.setNil();
             }
@@ -541,7 +668,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
             synchronized (monitor())
             {
                 check_orphaned();
-                get_store().remove_element(AUTH$6, 0);
+                get_store().remove_element(AUTH$8, 0);
             }
         }
     }
