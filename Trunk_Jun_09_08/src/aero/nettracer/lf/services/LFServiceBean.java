@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
-import javax.servlet.ServletContext;
 
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Hibernate;
@@ -167,11 +166,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 		}
 		if(dto.getEndDate() != null && dto.getEndDate().trim().length() > 0){
-			String date = DateUtils.formatDate(dto.getEndDateAsDate(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
+			GregorianCalendar cal = new GregorianCalendar();
+			cal.setTime(dto.getEndDateAsDate());
+			cal.add(Calendar.DATE, 1);
+			String date = DateUtils.formatDate(cal.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-				sql += " and o.openDate <= \'" + date + "\'";
+				sql += " and o.openDate < \'" + date + "\'";
 			} else {
-				sql += " and o.foundDate <= \'" + date + "\'";
+				sql += " and o.foundDate < \'" + date + "\'";
 			}
 		}
 		if(dto.getAgreementNumber() != null && dto.getAgreementNumber().trim().length() > 0){
@@ -263,6 +265,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				}
 			}
 		}
+		if(lostReport.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_CLOSED){
+			//close any open trace results
+			closeOpenTraceResults(lostReport.getId(), TracingConstants.LF_TYPE_LOST);
+		}
 		if(reportId > 0){
 			if(isNew){
 				sendLostCreatedEmail(reportId);
@@ -272,6 +278,42 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return -1;
 		}
 	}
+	
+	public void closeOpenTraceResults(long id, int type){
+		String sql = "update lfmatchhistory set status_Status_ID = " + TracingConstants.LF_TRACING_CLOSED + " where " +
+				" status_Status_ID = " + TracingConstants.LF_TRACING_OPEN;
+		if(type == TracingConstants.LF_TYPE_LOST){
+			sql += " and lost_id = " + id; 
+		} else {
+			sql += " and found_id = " + id;
+		}
+		Session sess = null;
+		Transaction t = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery q = sess.createSQLQuery(sql);
+			t = sess.beginTransaction();
+			q.executeUpdate();
+			t.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	
 	@Override
 	public long saveOrUpdateDelivery(LFDelivery delivery){
@@ -416,6 +458,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					e.printStackTrace();
 				}
 			}
+		}
+		if(foundItem.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_CLOSED){
+			closeOpenTraceResults(foundItem.getId(), TracingConstants.LF_TYPE_FOUND);
 		}
 		if(reportId > 0){
 			return reportId;

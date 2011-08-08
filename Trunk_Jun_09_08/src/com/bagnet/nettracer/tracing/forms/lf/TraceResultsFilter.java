@@ -1,7 +1,13 @@
 package com.bagnet.nettracer.tracing.forms.lf;
 
-public class TraceResultsFilter {
+import java.io.Serializable;
 
+public class TraceResultsFilter implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5206810436388053586L;
 	private int lostId;
 	private int foundId;
 	private boolean open;

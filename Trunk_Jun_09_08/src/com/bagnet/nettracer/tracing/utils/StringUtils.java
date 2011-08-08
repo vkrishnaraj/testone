@@ -391,9 +391,9 @@ public class StringUtils {
 	  return hex.toString();
   }
   
-  public static String sha1(String pass, boolean salt){
+  public static String sha1(String pass, boolean useSalt){
 	  try{
-		  if(salt){
+		  if(useSalt){
 			  pass = salt + pass;
 		  }
 		  MessageDigest md = MessageDigest.getInstance("SHA-1");
