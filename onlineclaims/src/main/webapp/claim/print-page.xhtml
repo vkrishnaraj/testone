@@ -63,6 +63,10 @@
 									<h:column>
 										<h:outputText value="#{file.name}" />
 									</h:column>
+									<h:column>
+										<h:outputText value="Interim Expense" rendered="#{file.interim}" styleClass="formLabel" style="padding:10px;"/>
+										<h:outputText value="Content Receipt" rendered="#{!file.interim}" styleClass="formLabel" style="padding:10px;"/>
+									</h:column>
 								</t:dataTable>
 							</div>
 							<div>

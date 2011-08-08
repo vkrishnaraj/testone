@@ -37,7 +37,7 @@
 									styleClass="formLabel" />
 								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
 							</td><td colspan="7">
-								<h:inputText id="address1" styleClass="inputWidth"
+								<h:inputText id="address1" style="width: 99%;"
 									value="#{incidentBean.deliveryAddress.address1}">
 								</h:inputText>
 						</td></tr><tr class="vertTop"><td>
@@ -48,44 +48,44 @@
 									styleClass="formLabel" />
 								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
 							</td><td colspan="7">
-								<h:inputText id="address2" styleClass="inputWidth"
+								<h:inputText id="address2" style="width: 99%;"
 									value="#{incidentBean.deliveryAddress.address2}">
 								</h:inputText>
 						</td></tr><tr class="vertTop"><td>
 								<h:outputText value="&#160;" />
-						</td></tr><tr class="vertTop"><td>
+						</td></tr><tr class="vertTop"><td style="width: 10%;">
 						
 								<h:outputText value="#{msg.stepthree_label_city}"
 									styleClass="formLabel" />
 								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
-							</td><td>
-								<h:inputText id="city" styleClass="inputWidth"
+							</td><td style="width: 15%;">
+								<h:inputText id="city" style="width: 95%;"
 									value="#{incidentBean.deliveryAddress.city}">
 								</h:inputText>
-							</td><td>
+							</td><td style="width: 10%;">
 						
 								<h:outputText value="#{msg.stepthree_label_province}"
 									styleClass="formLabel" escape="false"/>
 								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
-							</td><td>
-								<h:inputText id="province" styleClass="inputWidth"
+							</td><td style="width: 15%;">
+								<h:inputText id="province" style="width: 95%;"
 									value="#{incidentBean.deliveryAddress.province}">
 								</h:inputText>
-							</td><td>
+							</td><td style="width: 10%;">
 						
 								<h:outputText value="#{msg.stepthree_label_state}"
 									styleClass="formLabel" />
 								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
-							</td><td>
-								<h:selectOneMenu value="#{incidentBean.deliveryAddress.state}" styleClass="inputWidth">
+							</td><td style="width: 15%;">
+								<h:selectOneMenu value="#{incidentBean.deliveryAddress.state}" style="width: 95%;">
 									<f:selectItems value="#{incidentController.stateItems}"/>
 								</h:selectOneMenu>
-							</td><td>
+							</td><td style="width: 10%;">
 								<h:outputText value="#{msg.stepthree_label_postal}"
 									styleClass="formLabel" />
 								<img src="/pax-view/_images/reqbullet.gif" class="reqbullet" />
-							</td><td>
-								<h:inputText id="postalCode" styleClass="inputWidth"
+							</td><td style="width: 15%;">
+								<h:inputText id="postalCode" style="width: 95%;"
 									value="#{incidentBean.deliveryAddress.postalCode}">
 								</h:inputText>	
 						</td></tr><tr class="vertTop"><td>				
@@ -120,7 +120,7 @@
 									<h:outputText value="#{msg.stepthree_label_phone}#{rowIndex + 1}"
 									escape="false" styleClass="formLabel"/>
 							</td><td>
-									<h:inputText styleClass="inputWidth"
+									<h:inputText style="width: 95%;"
 										value="#{incidentBean.phone[rowIndex].number}">
 									</h:inputText>
 							</td><td>

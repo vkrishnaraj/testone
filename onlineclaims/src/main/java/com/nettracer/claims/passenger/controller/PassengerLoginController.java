@@ -2,10 +2,12 @@ package com.nettracer.claims.passenger.controller;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.annotation.PostConstruct;
 import javax.faces.component.UIViewRoot;
@@ -192,14 +194,14 @@ public class PassengerLoginController {
 		HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
 		try {
 			PassengerView passengerView = onlineClaimsWS.getPassengerView(
-					loginBean.getClaimNumber(), loginBean.getLastName());
+					loginBean.getClaimNumber(), loginBean.getLastName(), loginBean.getFirstName());
 
 			if (passengerView.getAuthenticationSuccess()) {
 				if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
-
+					session.invalidate();
+					session = (HttpSession) context.getExternalContext().getSession(true);
 					if (!isMobile()) {
-						SessionPassengerBean sessionPassengerBean = (SessionPassengerBean) session
-								.getAttribute("sessionPassengerBean");
+						SessionPassengerBean sessionPassengerBean = new SessionPassengerBean();
 						sessionPassengerBean.setLogoutRenderer(true);
 						session.setAttribute("sessionPassengerBean",sessionPassengerBean);
 					}
@@ -211,7 +213,7 @@ public class PassengerLoginController {
 
 					WSPVAdvancedIncident passengerData = passengerView.getData();
 					
-					Claim claim=onlineClaimsWS.getClaim(passengerData,loginBean.getLastName());
+					Claim claim=onlineClaimsWS.getClaim(passengerData,loginBean.getLastName(), loginBean.getFirstName());
 					passengerBean = onlineClaimsWS.getPassengerData(passengerData,claim);
 					passengerBean.setPassengerData(passengerData);
 					passengerBean.setIncidentID(passengerData.getIncidentID());
@@ -230,7 +232,7 @@ public class PassengerLoginController {
 				}
 
 			} else {
-				FacesUtil.addError("Incorrect Claim Number and Last Name combination. Please try again.");
+				FacesUtil.addError("Incorrect Claim Number and Name combination. Please try again.");
 				logger.error("Claim Number and Last Name are incorrect for admin for the IP Adress: "
 								+ ((HttpServletRequest) FacesUtil
 										.getFacesContext().getExternalContext()

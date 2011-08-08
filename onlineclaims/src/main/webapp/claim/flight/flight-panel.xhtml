@@ -8,12 +8,12 @@
 
 	<a4j:form id="flightModalPanelForm">
 	<rich:modalPanel id="flightModalPanel" autosized="true" 
-		zindex="10" minWidth="380" height="250" width="500" left="200"	top="20">
+		zindex="10" minWidth="380" height="250" width="500" left="auto"	top="auto">
 		
 		<f:facet name="controls">
 			<h:panelGroup>
 				<h:graphicImage value="../_images/close.png" styleClass="pointer"
-					id="linkToHidePanel3" />
+					id="linkToHidePanel3" style="padding-right: 10px; padding-bottom: 5px;"/>
 				<rich:componentControl for="flightModalPanel"
 					attachTo="linkToHidePanel3" operation="hide" event="onclick" />
 			</h:panelGroup>

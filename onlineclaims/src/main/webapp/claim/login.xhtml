@@ -48,8 +48,29 @@
 							styleClass="formLabel" /><img src="../_images/reqbullet.gif" /></h:column>
 						<h:inputText id="lastName"
 							value="#{passengerLoginController.loginBean.lastName}"
-							tabindex="1"
+							tabindex="1" requiredMessage="Field Required :  
+							'#{passengerLoginController.loginLabel.lastName.label}'"
+							required="true"
 							validatorMessage="#{passengerLoginController.loginLabel.lastName.label} :
+								#{passengerLoginController.loginLabel.validateLength.label} 20"
+							style="text-transform: uppercase;">
+							<f:validateLength maximum="20" />
+							<f:converter converterId="convertToUpper" />
+						</h:inputText>
+						<h:outputText value="&#160;" />
+						<h:outputText value="&#160;" />
+						
+						
+						<h:column>
+						<h:outputText
+							value="First Name"
+							styleClass="formLabel" /><img src="../_images/reqbullet.gif" /></h:column>
+						<h:inputText id="firstName"
+							value="#{passengerLoginController.loginBean.firstName}"
+							tabindex="1" requiredMessage="Field Required :  
+							'First Name'"
+							required="true"
+							validatorMessage="First Name :
 								#{passengerLoginController.loginLabel.validateLength.label} 20"
 							style="text-transform: uppercase;">
 							<f:validateLength maximum="20" />
@@ -63,7 +84,9 @@
 							value="#{passengerLoginController.loginLabel.claimNumber.label}"
 							styleClass="formLabel" /><img src="../_images/reqbullet.gif" /></h:column>
 						<h:column>
-						<h:inputText id="claimNumber"
+						<h:inputText id="claimNumber" requiredMessage="Field Required :  
+							'#{passengerLoginController.loginLabel.claimNumber.label}'"
+							required="true"
 							value="#{passengerLoginController.loginBean.claimNumber}"
 							validatorMessage="#{passengerLoginController.loginLabel.claimNumber.label} :
 								#{passengerLoginController.loginLabel.validateLength.label} 20"

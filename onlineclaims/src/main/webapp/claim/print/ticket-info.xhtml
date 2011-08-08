@@ -20,7 +20,7 @@
 										rendered="#{passengerController.flightLabel.differentAirlineTicket.required}"/>
 								</h:panelGroup>
 								
-								<t:selectOneMenu value="#{passengerController.passengerBean.differentAirlineTicket}"  
+								<t:selectOneMenu value="#{passengerBean.differentAirlineTicket}"  
 										required="#{passengerController.flightLabel.differentAirlineTicket.required}"
 										readonly="#{passengerController.flightLabel.differentAirlineTicket.hidden}"
 										displayValueOnly="true"
@@ -39,7 +39,7 @@
 										rendered="#{passengerController.flightLabel.ticketNumber.required}"/>
 								</h:panelGroup>
 								
-								<t:inputText value="#{passengerController.passengerBean.ticketNumber}"
+								<t:inputText value="#{passengerBean.ticketNumber}"
 										styleClass="passInout" tabindex="25" id="ticketNumber"
 										label="Ticket Number" readonly="true"
 										required="#{passengerController.flightLabel.ticketNumber.required}"  >

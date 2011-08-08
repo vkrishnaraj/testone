@@ -7,50 +7,70 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
+
+				
+				<rich:dataTable id="passengerNameTable" var="pass"
+					headerClass="TableHeader" columnsWidth="30%,25%,22%,23%" 
+					value="#{passengerBean.passengers}" border="0" width="95%"
+					rowKeyVar="rowIndex">
+
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column>
+								<h:outputText value="#{passengerController.passengerInfoLabel.lastName.label}"  styleClass="subheadColumn"/>
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{passengerController.passengerInfoLabel.firstName.label}"  styleClass="subheadColumn"/>
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{passengerController.passengerInfoLabel.middleInitial.label}"  styleClass="subheadColumn"/>
+							</rich:column>
+							<rich:column>
+								<h:outputText value="Salutation"  styleClass="subheadColumn"/>
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column>	
+					<t:inputText id="pi2" value="#{pass.lastName}" style="width:90%;"
+							required="#{passengerController.passengerInfoLabel.lastName.required}" tabindex="1"
+							readonly="true">
+					</t:inputText>
+					</rich:column>
+					
+					<rich:column>
+					<t:inputText id="pi3" value="#{pass.firstName}" style="width:90%;"
+							required="#{passengerController.passengerInfoLabel.firstName.required}" tabindex="2"
+							readonly="true">
+					</t:inputText>
+					</rich:column>
+					
+					<rich:column>
+					<h:inputText id="pi4" value="#{pass.middleInitial}" style="width:96%;"
+							required="#{passengerController.passengerInfoLabel.middleInitial.required}" tabindex="3"
+							readonly="true">
+					</h:inputText>
+					</rich:column>
+					
+					<rich:column>
+					<t:selectOneMenu value="#{pass.salutation}" tabindex="9" style="width:100%;"
+						readonly="true" 
+						label="Salutation">
+						<f:selectItem itemLabel="Mr." itemValue="MR"/>
+						<f:selectItem itemLabel="Mrs." itemValue="MRS"/>
+						<f:selectItem itemLabel="Ms." itemValue="MS"/>
+						<f:selectItem itemLabel="Miss" itemValue="MISS"/>
+						<f:selectItem itemLabel="Mstr." itemValue="MASTER"/>
+						<f:selectItem itemLabel="Dr." itemValue="DR"/>
+						<f:selectItem itemLabel="Other" itemValue="OTHER"/>
+					</t:selectOneMenu>
+					</rich:column>
+		
+				</rich:dataTable>
 				<div>
 					<t:outputText value="#{passengerController.passengerInfoLabel.permanentAddress.label}" styleClass="subHeader"/>	
 				</div>
 				<div><rich:spacer width="100%" height="15" title="" /></div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.lastName.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.lastName.required}"/>
-					
-					<t:inputText id="pi2" value="#{passengerBean.passengers[0].lastName}"  styleClass="passInout"
-							required="#{passengerController.passengerInfoLabel.lastName.required}" tabindex="1"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.lastName.label}">
-						<f:validateLength maximum="20"/>
-					</t:inputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
-					
-					<t:outputText value="#{passengerController.passengerInfoLabel.firstName.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-						 	rendered="#{passengerController.passengerInfoLabel.firstName.required}"/>
-					
-					<t:inputText id="pi3" value="#{passengerBean.passengers[0].firstName}" styleClass="passInout"
-							required="#{passengerController.passengerInfoLabel.firstName.required}" tabindex="2"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.firstName.label}">
-						<f:validateLength maximum="20"/>
-					</t:inputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
-					
-					<t:outputText value="#{passengerController.passengerInfoLabel.middleInitial.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.middleInitial.required}"/>
-					
-					<t:inputText id="pi4" value="#{passengerBean.middleInitial}" style="width:25px" 
-							required="#{passengerController.passengerInfoLabel.middleInitial.required}" tabindex="3"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.middleInitial.label}">
-						<f:validateLength maximum="1"/>
-					</t:inputText>
-					
-					<div><h:outputText value="&#160;" /></div>
-					
+										
 					<div>		
 						<t:outputText value="#{passengerController.passengerInfoLabel.addressLine1.label}" />
 						<h:outputText value="&#160;" />
@@ -139,7 +159,7 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.emailAddress.required}"/>
 					
-					<t:inputText id="pi11" value="#{passengerBean.address[0].emailAddress}" styleClass="passselectOneMenu30"
+					<t:inputText id="pi11" value="#{passengerBean.emailAddress}" styleClass="passselectOneMenu30"
 							required="#{passengerController.passengerInfoLabel.emailAddress.required}" tabindex="10"
 							readonly="true"
 							label="#{passengerController.passengerInfoLabel.emailAddress.label}">
@@ -159,7 +179,7 @@
 							required="#{passengerController.passengerInfoLabel.occupation.required}" tabindex="11"
 							readonly="true"
 							label="#{passengerController.passengerInfoLabel.occupation.label}">
-							<f:validateLength maximum="20"/>
+							<f:validateLength maximum="50"/>
 						</t:inputText>
 					<div><h:outputText value="&#160;" /></div>
 					
@@ -173,7 +193,7 @@
 								required="#{passengerController.passengerInfoLabel.businessName.required}" tabindex="12"
 								readonly="true"
 								label="#{passengerController.passengerInfoLabel.businessName.label}">
-							<f:validateLength maximum="20"/>
+							<f:validateLength maximum="50"/>
 						</t:inputText>
 					</div>
 					

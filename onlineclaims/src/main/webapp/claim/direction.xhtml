@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
 	template="/layout/passengertemplate.xhtml">
 
@@ -12,7 +13,7 @@
 
 	<ui:define name="mainContent">
 		<script type="text/javascript" src="../_js/passengerFont.js"></script>
-		<h:form id="directionForm">
+		<h:form id="appForm">
 			<div id="langSelect"><h:outputText value="FontSize" /> <h:outputText
 				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
 				value="&#160;" /> <a id="font1" style="font-size: 8pt;"
@@ -23,6 +24,7 @@
 				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
 				value="&#160;" /> <a id="font3" style="font-size: 12pt;"
 				href="javascript:increaseFontSize();">A</a></div>
+				<h:inputHidden id="appFontSize" value="#{passengerController.appFontSize}" />
 
 
 
@@ -107,9 +109,8 @@
 
 
 			<div class="bodycopy">
-				 Comments:<br/>
-
-<span><h:outputText
+				<p>Comments:</p>
+				<span><h:outputText
 				value="#{passengerBean.passengerData.comments}"
 				styleClass="formLabel" /></span>
                  
@@ -248,26 +249,39 @@
 			<!-- ends container -->
 			</h:panelGroup>
 
-
-			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
-			</div>
-			<div><h:outputText styleClass="passfontstyle" value="&#160;" />
+			<br/><br/>
+			<h:outputText styleClass="passfontstyle" value="&#160;" />
+			<h:outputText styleClass="passfontstyle" value="&#160;" />
+			<div><h:outputText value="In the unlikely event that your baggage is not returned to you within the first five (5) days,
+it will be necessary to complete a Passenger Property Form." styleClass="passfontstyle" rendered="#{passengerBean.showClaimMessage}"/>
+			<h:outputText value="This claim has already been submitted. You may view the claim pages again or print the claim for
+			your records using the buttons below." styleClass="passfontstyle" rendered="#{passengerBean.completeClaim}" />
+			<h:outputText value="A claim for this incident has already been submitted by another claimant. You may submit your 
+			own claim via the paper forms that can be found using the link below" styleClass="passfontstyle" 
+			rendered="#{passengerBean.secondClaim}" />
 			</div><br/><br/>
-			<h:outputText value="In the unlikely event that your baggage is not returned to you within the first five (5) days,
-it will be necessary to complete a Passenger Property Form." styleClass="passfontstyle" /><br/><br/>
 			<h:outputText value="&#160;" styleClass="passfontstyle" />
 			<h:outputText value="&#160;" styleClass="passfontstyle" />
 			<div><h:commandButton id="dirforward" rendered="#{passengerBean.onlineAvailable}"
 				value="#{passengerDirectionList[1].displayText}" tabindex="0"
 				action="#{passengerController.gotoPPFInstruction}"
 				styleClass="button140pxredextended fright" />
-			<!--	<h:commandButton id="formforward" rendered="#{!passengerBean.onlineAvailable}"
-				value="Baggage Information and Passenger Property Form" tabindex="0"
-				action="forward to URL 'http://www.usairways.com/en-US/Resources/_downloads/traveltools/baggage_claim_form.pdf'"
-				styleClass="button140pxredextended fright" />   -->
 				
 			 <h:outputLink value="http://www.usairways.com/en-US/Resources/_downloads/traveltools/baggage_claim_form.pdf" target="_blank" rendered="#{passengerBean.claimsAvailable}">
 				<h:outputText value="Passenger Property Form" style="text-align:center; line-height: 20px;" styleClass="button140pxredextended fright"/></h:outputLink>
+				
+				<rich:spacer width="450px" rendered="#{passengerBean.completeClaim}"/>
+			
+				<h:commandButton id="print" value="#{passengerController.submitClaimLabel.print.label}" rendered="#{passengerBean.completeClaim}"
+				 		tabindex="2" action="#" immediate="true" onclick="window.open('${facesContext.externalContext.requestContextPath}/claim/print-page.faces','P','width=750,height=600,toolbar=no,location=no,directories=no,status=no,menubar=no, scrollbars=yes,resizable=yes,copyhistory=no');"
+						styleClass="button140pxred button140pxred2" />
+					
+				<rich:spacer width="20px" rendered="#{passengerBean.completeClaim}"/>
+				
+				<h:commandButton id="dirforward2" value="#{passengerController.passengerInfoLabel.forward.label}" tabindex="0"
+				action="#{passengerController.gotoPPFInstruction}" rendered="#{passengerBean.completeClaim}"
+				styleClass="button140pxred button140pxred2" />
+				
 				
 				</div>
 

@@ -884,7 +884,8 @@ td.dottedhr {
 .infomsg {
 	color: green;
 	list-style: none;
-	font-size: 1.3em;
+	font-size: 10pt;
+	font-weight: bold;
 }
 
 .logoutnav { /*position:relative;*/
@@ -1347,7 +1348,7 @@ td.dottedhr {
 }
 
 .imageBorderGry {
-	border: 2px solid grey;	
+	border: 2px solid #747474;	
 }
 
 .breadcrumb {

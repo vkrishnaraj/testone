@@ -12,13 +12,11 @@
 				</div>
 					
 					<h:panelGrid columns="2" width="100%">
-					<!-- 	<h:panelGroup > 
-							<h:panelGrid columns="2" cellspacing="3px"> -->
-								<h:panelGroup > 
+								<h:column > 
 									<t:outputText value="#{passengerController.flightLabel.differentAirlineTicket.label}" styleClass="formLabel"/>
 									<h:graphicImage value="../_images/reqbullet.gif"  
 										rendered="#{passengerController.flightLabel.differentAirlineTicket.required}"/>
-								</h:panelGroup>
+								</h:column>
 								
 								<h:selectOneMenu value="#{passengerController.passengerBean.differentAirlineTicket}" style="margin:5px;" 
 										required="#{passengerController.flightLabel.differentAirlineTicket.required}"
@@ -35,11 +33,11 @@
 								<rich:spacer  height="15" title="" />
 								<rich:spacer  height="15" title="" />
 		
-								<h:panelGroup > 
+								<h:column> 
 									<t:outputText value="#{passengerController.flightLabel.ticketNumber.label}"  styleClass="formLabel"/>
 									<h:graphicImage value="../_images/reqbullet.gif"  
 										rendered="#{passengerController.flightLabel.ticketNumber.required}"/>
-								</h:panelGroup>
+								</h:column>
 								
 								<t:inputText value="#{passengerController.passengerBean.ticketNumber}"
 										styleClass="passInout" tabindex="24" id="ticketNumber"
@@ -49,12 +47,8 @@
 										requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 											'#{passengerController.flightLabel.ticketNumber.label}'"
 										required="#{passengerController.flightLabel.ticketNumber.required}"  >
-									<f:validateLength maximum="11"/>
-								</t:inputText>
-			
-					<!--  		</h:panelGrid>
-						</h:panelGroup> -->
-						
+									<f:validateLength maximum="13"/>
+								</t:inputText>						
 					</h:panelGrid>
 					
 					<div><h:outputText value="&#160;" /></div>

@@ -22,7 +22,7 @@ public interface OnlineClaimsWS {
 	public boolean authAdminUser(/*@WebParam(name="userName")*/String userName,/*@WebParam(name="password")*/ String password)
 	 	throws AxisFault,RemoteException;
 
-	PassengerView getPassengerView(String claimNumber, String lastName)
+	PassengerView getPassengerView(String claimNumber, String lastName, String firstName)
 			throws AxisFault, RemoteException;
 
 	Incident getIncident(String pnr, String lastName, String firstName)
@@ -33,7 +33,7 @@ public interface OnlineClaimsWS {
 	boolean savePassengerInfo(PassengerBean passengerBean, Claim claim)	throws AxisFault, RemoteException;
 
 	public Claim getClaim(WSPVAdvancedIncident passengerData,
-			String lastName) throws AxisFault, RemoteException;
+			String lastName, String firstName) throws AxisFault, RemoteException;
 
 	public PassengerBean getPassengerData(WSPVAdvancedIncident passengerData,
 			Claim claim) throws AxisFault, RemoteException;

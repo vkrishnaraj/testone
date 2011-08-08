@@ -29,6 +29,7 @@
 			<h:outputText value="&#160;" />
 			<a id="font3"  href="javascript:increaseFontSize();">A</a>
 		</div>
+				<h:inputHidden id="appFontSize" value="#{passengerController.appFontSize}" />
 		
 		
 	<div class="container containerfull">
@@ -100,12 +101,17 @@
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<div>
-				<rich:spacer width="250px"/>
+				<rich:spacer width="450px"/>
 			
+				<h:commandButton id="print" value="#{passengerController.submitClaimLabel.print.label}"
+				 		tabindex="2" action="#" immediate="true" onclick="window.open('${facesContext.externalContext.requestContextPath}/claim/print-page.faces','P','width=750,height=600,toolbar=no,location=no,directories=no,status=no,menubar=no, scrollbars=yes,resizable=yes,copyhistory=no');"
+						styleClass="button140pxred button140pxred2" />
+			
+				<rich:spacer width="20px"/>
 			
 				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.previous.label}"
 				 	tabindex="4" immediate="true" action="#{passengerController.goBackToSubmitClaim}"
-					styleClass="button140pxred button140pxred3" />
+					styleClass="button140pxred button140pxred2" />
 			
 			</div>
 		</h:form>

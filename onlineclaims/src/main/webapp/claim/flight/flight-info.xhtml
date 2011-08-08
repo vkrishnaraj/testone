@@ -41,6 +41,10 @@
 			<f:selectItem itemLabel="2" itemValue="2" />
 			<f:selectItem itemLabel="3" itemValue="3" />
 			<f:selectItem itemLabel="4" itemValue="4" />
+			<f:selectItem itemLabel="5" itemValue="5" />
+			<f:selectItem itemLabel="6" itemValue="6" />
+			<f:selectItem itemLabel="7" itemValue="7" />
+			<f:selectItem itemLabel="8" itemValue="8" />
 			<a4j:support event="onchange" reRender="lostBag,ticketTablePanel" limitToList="true"/>
 		</h:selectOneMenu>
 
@@ -80,6 +84,7 @@
 				rendered="#{passengerController.flightLabel.bagCheckedLocation.required}" />
 			
 		</h:panelGroup>
+		<h:panelGroup>
 		<h:selectOneMenu value="#{passengerBean.bagCheckLocation}" style="margin:5px;"
 			required="#{passengerController.flightLabel.bagCheckedLocation.required}"
 			readonly="#{passengerController.flightLabel.bagCheckedLocation.hidden}"
@@ -91,8 +96,18 @@
 			<f:selectItem itemLabel="Ticket Counter" itemValue="Ticket Counter" />
 			<f:selectItem itemLabel="Gate" itemValue="Gate" />
 			<f:selectItem itemLabel="Curbside" itemValue="Curbside" />
+			<f:selectItem itemLabel="Unchecked" itemValue="Unchecked" />
 			<f:selectItem itemLabel="Other" itemValue="Other" />
+			<a4j:support event="onchange" reRender="checkDesc" limitToList="true"/>
 		</h:selectOneMenu>
+		<a4j:outputPanel id="checkDesc" ajaxRendered="true">
+			<t:inputText value="#{passengerBean.bagCheckDescription}" styleClass="passInout"
+				readonly="#{passengerController.readOnlyOnSubmitted}"
+				label="Check Bag Description" rendered="#{passengerController.bcdRender}">
+				<f:validateLength maximum="20"/>
+			</t:inputText>
+		</a4j:outputPanel>
+		</h:panelGroup>
 
 		<rich:spacer width="14" height="10" title="" />
 
@@ -353,7 +368,7 @@
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
-			<a4j:support event="onchange" reRender="declVal,declValText" limitToList="true"/>
+			<a4j:support event="onchange" reRender="declVal,declValText,declValCurr,declValCurrText" limitToList="true"/>
 		</h:selectOneMenu>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -381,9 +396,9 @@
 			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 					'#{passengerController.flightLabel.declaredValue.label}'"
 			validatorMessage="#{passengerController.flightLabel.declaredValue.label} :
-								#{passengerController.passengerInfoLabel.valueNoGreater.label} 3300"	
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 5000"	
 			tabindex="12"  label="Declared Value">
-				<f:validateDoubleRange maximum="3300"/>
+				<f:validateDoubleRange maximum="5000"/>
 		</t:inputText>
 		</a4j:outputPanel>
 		
@@ -391,6 +406,31 @@
 		<rich:spacer width="100%" height="15" title=""/>
 		<rich:spacer width="100%" height="15" title=""/>
 
+		<h:panelGroup>
+			<t:outputText value="&nbsp;&nbsp;&nbsp;Value Declared Currency" styleClass="formLabel"/>
+			<h:outputText value="&#160;" />
+			<a4j:outputPanel id="declValCurr" ajaxRendered="true">
+			<h:graphicImage value="../_images/reqbullet.gif"  
+				rendered="false" />
+			</a4j:outputPanel>
+			
+		</h:panelGroup>
+
+		<rich:spacer width="18" title="" />
+		
+		<a4j:outputPanel id="declValCurrText" ajaxRendered="true">
+
+		<h:selectOneMenu value="#{passengerBean.declaredValueCurrency}" id="decValueCurrency"
+			disabled="#{passengerController.readOnlyOnSubmitted}">
+			<f:selectItem itemValue="USD" itemLabel="US Dollar" />
+			<f:selectItems value="#{passengerController.currencyList}" />
+		</h:selectOneMenu>
+		</a4j:outputPanel>
+		
+		<rich:spacer width="100%" height="15" title=""/>
+		<rich:spacer width="100%" height="15" title=""/>
+		<rich:spacer width="100%" height="15" title=""/>
+		
 		<h:panelGroup>
 			<t:outputText
 				value="#{passengerController.flightLabel.clearCustomBag.label}" styleClass="formLabel"/>
@@ -406,12 +446,10 @@
 			required="#{passengerController.flightLabel.clearCustomBag.required}" label="Clear Custom Bag"
 			disabled="#{passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-					'#{passengerController.flightLabel.clearCustomBag.label}'"
-			valueChangeListener="#{passengerController.clearCustomListener}"  id="clearCustomBag">
+					'#{passengerController.flightLabel.clearCustomBag.label}'" id="clearCustomBag">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
-			<a4j:support event="onchange" reRender="weight, weightInput" limitToList="true"/>
 		</h:selectOneMenu>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -432,8 +470,7 @@
 
 		<a4j:outputPanel id="weightInput" ajaxRendered="true">
 		<t:inputText value="#{passengerBean.bagWeight}" styleClass="passInout" label="Bag Weight"
-			disabled="#{!passengerController.flightLabel.bagWeight.required
-						|| passengerController.readOnlyOnSubmitted}" id="bagWeight"
+			disabled="#{passengerController.readOnlyOnSubmitted}" id="bagWeight"
 			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 					'#{passengerController.flightLabel.bagWeight.label}'"
 			required="#{passengerController.flightLabel.bagWeight.required}"	tabindex="14" />
@@ -457,10 +494,12 @@
 			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 					'#{passengerController.flightLabel.rerouteBag.label}'"
 			disabled="#{passengerController.readOnlyOnSubmitted}"		
-			required="#{passengerController.flightLabel.rerouteBag.required}" id="rerouteBag" label="Baggage rerouted">
+			required="#{passengerController.flightLabel.rerouteBag.required}" id="rerouteBag" label="Baggage rerouted"
+				valueChangeListener="#{passengerController.differentClaimCheckListener}">
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
+			<a4j:support event="onchange" reRender="rerouteCity,rerouteCityInput" limitToList="true"/>
 		</h:selectOneMenu>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -484,12 +523,10 @@
 				 readonly="#{passengerController.flightLabel.differentClaimCheck.hidden}"
 				 disabled="#{passengerController.readOnlyOnSubmitted}"
 				 requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-					'#{passengerController.flightLabel.differentClaimCheck.label}'"
-				valueChangeListener="#{passengerController.differentClaimCheckListener}">
+					'#{passengerController.flightLabel.differentClaimCheck.label}'">
 				<f:selectItem itemLabel="--" itemValue="" />
 				<f:selectItem itemLabel="Yes" itemValue="true" />
 				<f:selectItem itemLabel="No" itemValue="false" />
-				<a4j:support event="onchange" reRender="rerouteCity,rerouteCityInput" limitToList="true"/>
 			</h:selectOneMenu>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -649,6 +686,82 @@
 		<rich:spacer width="100%" height="15" title="" />
 		<rich:spacer width="100%" height="15" title="" />
 		<rich:spacer width="100%" height="15" title="" />
+		
+		<h:panelGroup>
+			<t:outputText value="Which airline was the mishandling reported to" styleClass="formLabel"/> 
+			<h:outputText value="&#160;" /> 
+			<h:graphicImage value="../_images/reqbullet.gif" 
+				rendered="false" />
+			
+		</h:panelGroup>
+		
+		<rich:spacer width="18" title="" />
+		
+		<h:selectOneMenu value="#{passengerBean.reportedAirline}" tabindex="22"  id="reportedAirline"
+			label="Airline Reported To"
+			disabled="#{passengerController.readOnlyOnSubmitted}"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'Airline Reported To'"
+			required="false">
+						<f:selectItem itemValue="" itemLabel="--"/>
+						<f:selectItems value="#{passengerController.airlines}" />
+		</h:selectOneMenu>
+	
+		<rich:spacer width="100%" height="15" title="" />
+		<rich:spacer width="100%" height="15" title="" />
+		<rich:spacer width="100%" height="15" title="" />
+		
+		<h:panelGroup>
+			<t:outputText value="Which city was the additional report filed" styleClass="formLabel"/> 
+			<h:outputText value="&#160;" /> 
+			<h:graphicImage value="../_images/reqbullet.gif" 
+				rendered="false" />
+			
+		</h:panelGroup>
+		
+		<rich:spacer width="18" title="" />
+		
+		<t:inputText value="#{passengerBean.reportedCity}" styleClass="passInout"  id="reportedCity"
+			required="false" tabindex="21" 
+			readonly="false"
+			disabled="#{passengerController.readOnlyOnSubmitted}"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'City Reported To'"
+			validatorMessage="City Reported To :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+			label="City Reported To">
+			<f:validateLength maximum="20"/>
+		</t:inputText>
+			
+		<rich:spacer width="100%" height="15" title=""/>
+		<rich:spacer width="100%" height="15" title=""/>
+		<rich:spacer width="100%" height="15" title=""/>
+		
+		<h:panelGroup>
+			<t:outputText value="What is the additional report file number" styleClass="formLabel"/> 
+			<h:outputText value="&#160;" /> 
+			<h:graphicImage value="../_images/reqbullet.gif" 
+				rendered="false" />
+			
+		</h:panelGroup>
+		
+		<rich:spacer width="18" title="" />
+		
+		<t:inputText value="#{passengerBean.reportedFileNumber}" styleClass="passInout"  id="reportedFileNumber"
+			required="false" tabindex="21" 
+			readonly="false"
+			disabled="#{passengerController.readOnlyOnSubmitted}"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'Additional File Number'"
+			validatorMessage="Additional File Number :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+			label="Additional File Number">
+			<f:validateLength maximum="20"/>
+		</t:inputText>
+			
+		<rich:spacer width="100%" height="15" title=""/>
+		<rich:spacer width="100%" height="15" title=""/>
+		<rich:spacer width="100%" height="15" title=""/>
 	</h:panelGrid>
 
 

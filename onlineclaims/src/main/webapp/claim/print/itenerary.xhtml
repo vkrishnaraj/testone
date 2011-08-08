@@ -17,7 +17,7 @@
 	<a4j:outputPanel ajaxRendered="true" id="flightCode">
 		<rich:dataTable id="iteneraryTicketTableItenerary" var="item"
 			headerClass="TableHeader" columnsWidth="7%,7%,7%,7%,13%"
-			value="#{passengerController.itineraryList}" border="0" width="90%"
+			value="#{passengerBean.itineraryList}" border="0" width="90%"
 			rowKeyVar="rowIndex">
 
 			<f:facet name="header">
@@ -56,11 +56,7 @@
 					required="#{item.departureCity ne null ? true : false}" readonly="true"
 					label="Airline Row#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
-						<f:selectItem itemValue="AA" itemLabel="American Airlines"/>
-						<f:selectItem itemValue="CO" itemLabel="Continental"/>
-						<f:selectItem itemValue="DL" itemLabel="Delta"/>
-						<f:selectItem itemValue="UA" itemLabel="United"/>
-						<f:selectItem itemValue="US" itemLabel="US Airways"/>
+						<f:selectItems value="#{passengerController.airlines}" />
 				</t:selectOneMenu>
 					<h:outputText value="/" />
 				</h:panelGrid>

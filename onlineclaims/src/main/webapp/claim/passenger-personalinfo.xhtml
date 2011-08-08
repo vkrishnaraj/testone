@@ -26,7 +26,7 @@
 					<h:panelGroup rendered="#{!passengerController.passengerInfoLabel.frequentFlyerNumber.hidden}">
 					<t:inputText id="pi24" value="#{passengerBean.frequentFlyerNumber}"  style="width:90%;"
 							required="#{passengerController.passengerInfoLabel.frequentFlyerNumber.required}" tabindex="23"
-							readonly="#{passengerController.passengerInfoLabel.frequentFlyerNumber.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 									'#{passengerController.passengerInfoLabel.frequentFlyerNumber.label}'"
 							validatorMessage="#{passengerController.passengerInfoLabel.frequentFlyerNumber.label} :
@@ -49,7 +49,7 @@
 					<h:panelGroup rendered="#{!passengerController.passengerInfoLabel.socialSecurityNumber.hidden}">
 					<t:inputText id="pi25" value="#{passengerBean.socialSecurityNumber}"  style="width:98%;"
 							required="#{passengerController.passengerInfoLabel.socialSecurityNumber.required}" tabindex="24"
-							readonly="#{passengerController.passengerInfoLabel.socialSecurityNumber.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 									'#{passengerController.passengerInfoLabel.socialSecurityNumber.label}'"
 							validatorMessage="#{passengerController.passengerInfoLabel.socialSecurityNumber.label} :

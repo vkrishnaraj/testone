@@ -6,22 +6,35 @@
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+	
+	<a4j:region renderRegionOnly="true"  >
+		<a4j:outputPanel id="contentPanel" >
+				<rich:dataTable id="passengerNameTable" var="pass"
+					headerClass="TableHeader" columnsWidth="30%,25%,22%,23%" 
+					value="#{passengerBean.passengers}" border="0" width="95%"
+					rowKeyVar="rowIndex">
 
-				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.permanentAddress.label}" styleClass="subHeader"/>	
-				</div>
-				<div><rich:spacer width="100%" height="15" title="" /></div>
-				<table cellpadding="5px" style="width:90%">
-				<tr>
-				<td>
-					<div style="width:100%">
-					<t:outputText value="#{passengerController.passengerInfoLabel.lastName.label}" 
-						styleClass="formLabel"/><h:graphicImage value="../_images/reqbullet.gif" rendered="#{passengerController.passengerInfoLabel.lastName.required}"/>
-						</div>
-				</td><td colspan="3" style="padding-bottom: 5px;">	
-					<t:inputText id="pi2" value="#{passengerBean.passengers[0].lastName}" style="width:90%;"
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column>
+								<h:outputText value="#{passengerController.passengerInfoLabel.lastName.label}"  styleClass="subheadColumn"/>
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{passengerController.passengerInfoLabel.firstName.label}"  styleClass="subheadColumn"/>
+							</rich:column>
+							<rich:column>
+								<h:outputText value="#{passengerController.passengerInfoLabel.middleInitial.label}"  styleClass="subheadColumn"/>
+							</rich:column>
+							<rich:column>
+								<h:outputText value="Salutation"  styleClass="subheadColumn"/>
+							</rich:column>
+						</rich:columnGroup>
+					</f:facet>
+					<rich:column>	
+					<t:inputText id="pi2" value="#{pass.lastName}" style="width:90%;"
 							required="#{passengerController.passengerInfoLabel.lastName.required}" tabindex="1"
-							readonly="#{passengerController.passengerInfoLabel.lastName.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								#{passengerController.passengerInfoLabel.lastName.label}" 
 							validatorMessage="#{passengerController.passengerInfoLabel.lastName.label} :
@@ -29,19 +42,12 @@
 							label="#{passengerController.passengerInfoLabel.lastName.label}">
 						<f:validateLength maximum="20"/>
 					</t:inputText>
-				</td><td>	
+					</rich:column>
 					
-					<div style="width:100%">
-					<t:outputText value="#{passengerController.passengerInfoLabel.firstName.label}" styleClass="formLabel"/>
-					<h:outputText value="&#160;" />
-					<h:graphicImage value="../_images/reqbullet.gif"  
-						 	rendered="#{passengerController.passengerInfoLabel.firstName.required}"/>
-						 	</div>
-					
-				</td><td>	
-					<t:inputText id="pi3" value="#{passengerBean.passengers[0].firstName}" style="width:90%;"
+					<rich:column>
+					<t:inputText id="pi3" value="#{pass.firstName}" style="width:90%;"
 							required="#{passengerController.passengerInfoLabel.firstName.required}" tabindex="2"
-							readonly="#{passengerController.passengerInfoLabel.firstName.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								#{passengerController.passengerInfoLabel.firstName.label}" 
 							validatorMessage="#{passengerController.passengerInfoLabel.firstName.label} :
@@ -49,19 +55,12 @@
 							label="#{passengerController.passengerInfoLabel.firstName.label}">
 						<f:validateLength maximum="20"/>
 					</t:inputText>
+					</rich:column>
 					
-				</td><td>	
-					<div style="width:100%">					
-					<t:outputText value="#{passengerController.passengerInfoLabel.middleInitial.label}" styleClass="formLabel"/>
-					<h:outputText value="&#160;" />
-					<h:graphicImage value="../_images/reqbullet.gif"  
-							rendered="#{passengerController.passengerInfoLabel.middleInitial.required}"/>
-							</div>
-				</td><td>	
-					
-					<h:inputText id="pi4" value="#{passengerBean.middleInitial}" style="width:96%;"
+					<rich:column>
+					<h:inputText id="pi4" value="#{pass.middleInitial}" style="width:96%;"
 							required="#{passengerController.passengerInfoLabel.middleInitial.required}" tabindex="3"
-							readonly="#{passengerController.passengerInfoLabel.middleInitial.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								#{passengerController.passengerInfoLabel.middleInitial.label}" 
 							validatorMessage="#{passengerController.passengerInfoLabel.middleInitial.label} :
@@ -69,10 +68,47 @@
 							label="#{passengerController.passengerInfoLabel.middleInitial.label}">
 						<f:validateLength maximum="1"/>
 					</h:inputText>
-				</td>
+					</rich:column>
 					
-					</tr><tr>
-						
+					<rich:column>
+					<t:selectOneMenu value="#{pass.salutation}" tabindex="9" style="width:100%;"
+						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'Salutation'" required="false"
+						readonly="false" disabled="#{passengerController.readOnlyOnSubmitted}"
+						label="Salutation">
+						<f:selectItem itemLabel="Mr." itemValue="MR"/>
+						<f:selectItem itemLabel="Mrs." itemValue="MRS"/>
+						<f:selectItem itemLabel="Ms." itemValue="MS"/>
+						<f:selectItem itemLabel="Miss" itemValue="MISS"/>
+						<f:selectItem itemLabel="Mstr." itemValue="MASTER"/>
+						<f:selectItem itemLabel="Dr." itemValue="DR"/>
+						<f:selectItem itemLabel="Other" itemValue="OTHER"/>
+					</t:selectOneMenu>
+					</rich:column>
+		
+				</rich:dataTable>
+				</a4j:outputPanel>
+				<rich:spacer width="100%" height="20" title="" />
+				<div id="addItem">
+					<a4j:commandButton value="Add New Passenger"  rendered="#{!passengerController.readOnlyOnSubmitted}"
+						 action="#{passengerController.addNewPass}" reRender="contentPanel" limitToList="true"
+						 styleClass="button140pxred button140pxred2">
+					</a4j:commandButton>&#160;&#160;&#160;
+					<a4j:commandButton value="Delete Last Passenger"  rendered="#{passengerController.renderDeleteSegment}"
+						 action="#{passengerController.deleteLastPass}" reRender="contentPanel" limitToList="true"
+						 styleClass="button140pxred button140pxred2">
+					</a4j:commandButton>
+				</div>
+				</a4j:region>
+
+				<div><rich:spacer width="100%" height="15" title="" /></div>
+				<div>
+					<t:outputText value="#{passengerController.passengerInfoLabel.permanentAddress.label}" styleClass="subHeader"/>	
+				</div>
+				<div><rich:spacer width="100%" height="15" title="" /></div>
+					
+				<table cellpadding="5px" style="width:90%">
+				<tr>	
 				<td>	
 					<div style="width:100%">
 						<t:outputText value="#{passengerController.passengerInfoLabel.addressLine1.label}" styleClass="formLabel"/>
@@ -84,7 +120,7 @@
 						
 						<t:inputText id="pi5" value="#{passengerBean.address[0].addressLine1}" style="width:99%;"
 								required="#{passengerController.passengerInfoLabel.addressLine1.required}" tabindex="4"
-								readonly="#{passengerController.passengerInfoLabel.addressLine1.hidden}"
+								readonly="#{passengerController.readOnlyOnSubmitted}"
 								requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.passengerInfoLabel.addressLine1.label}'" 
 								validatorMessage="#{passengerController.passengerInfoLabel.addressLine1.label} :
@@ -107,7 +143,7 @@
 					
 					<t:inputText id="pi6" value="#{passengerBean.address[0].addressLine2}" style="width:99%;"
 							required="#{passengerController.passengerInfoLabel.addressLine2.required}" tabindex="5"
-							readonly="#{passengerController.passengerInfoLabel.addressLine2.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.passengerInfoLabel.addressLine2.label}'" 
 							validatorMessage="#{passengerController.passengerInfoLabel.addressLine2.label} :
@@ -130,7 +166,7 @@
 					
 					<t:inputText id="pi7" value="#{passengerBean.address[0].city}" style="width:90%;"
 							required="#{passengerController.passengerInfoLabel.city.required}" tabindex="6"
-							readonly="#{passengerController.passengerInfoLabel.city.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.passengerInfoLabel.city.label}'" 
 							validatorMessage="#{passengerController.passengerInfoLabel.city.label} :
@@ -150,7 +186,7 @@
 					
 					<t:inputText id="pi8" value="#{passengerBean.address[0].stateRegion}" style="width:65%;"
 							required="#{passengerController.passengerInfoLabel.stateRegion.required}" tabindex="7"
-							readonly="#{passengerController.passengerInfoLabel.stateRegion.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.passengerInfoLabel.stateRegion.label}'" 
 							validatorMessage="#{passengerController.passengerInfoLabel.stateRegion.label} :
@@ -170,7 +206,7 @@
 					
 					<t:inputText id="pi9" value="#{passengerBean.address[0].postalCode}" style="width:90%;"
 							required="#{passengerController.passengerInfoLabel.postalCode.required}" tabindex="8"
-							readonly="#{passengerController.passengerInfoLabel.postalCode.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.passengerInfoLabel.postalCode.label}'" 
 							validatorMessage="#{passengerController.passengerInfoLabel.postalCode.label} :
@@ -192,6 +228,7 @@
 								'#{passengerController.passengerInfoLabel.country.label}'" 
 						required="#{passengerController.passengerInfoLabel.country.required}"
 						readonly="#{passengerController.passengerInfoLabel.country.hidden}" 
+						disabled="#{passengerController.readOnlyOnSubmitted}"
 						label="#{passengerController.passengerInfoLabel.country.label}">
 						<f:selectItem itemLabel="United States" itemValue="US"/>
 						<f:selectItems value="#{passengerController.selectItems}"/>
@@ -211,7 +248,7 @@
 					
 					<t:inputText id="pi11" value="#{passengerBean.emailAddress}" style="width:90%;"
 							required="#{passengerController.passengerInfoLabel.emailAddress.required}" tabindex="10"
-							readonly="#{passengerController.passengerInfoLabel.emailAddress.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.passengerInfoLabel.emailAddress.label}'" maxlength="50"
 							label="#{passengerController.passengerInfoLabel.emailAddress.label}">
@@ -229,13 +266,13 @@
 					
 					<t:inputText id="pi12" value="#{passengerBean.occupation}" style="width:98%;"
 							required="#{passengerController.passengerInfoLabel.occupation.required}" tabindex="11"
-							readonly="#{passengerController.passengerInfoLabel.occupation.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.passengerInfoLabel.occupation.label}'" 
 							validatorMessage="#{passengerController.passengerInfoLabel.occupation.label} :
-								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"
 							label="#{passengerController.passengerInfoLabel.occupation.label}">
-							<f:validateLength maximum="20"/>
+							<f:validateLength maximum="50"/>
 						</t:inputText>
 				</td>
 						
@@ -252,13 +289,13 @@
 						
 						<t:inputText id="pi13" value="#{passengerBean.businessName}" style="width:99%;"
 								required="#{passengerController.passengerInfoLabel.businessName.required}" tabindex="12"
-								readonly="#{passengerController.passengerInfoLabel.businessName.hidden}"
+								readonly="#{passengerController.readOnlyOnSubmitted}"
 									requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 										'#{passengerController.passengerInfoLabel.businessName.label}'" 
 								validatorMessage="#{passengerController.passengerInfoLabel.businessName.label} :
-								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+								Text cannot exceed character limit of 50"
 								label="#{passengerController.passengerInfoLabel.businessName.label}">
-							<f:validateLength maximum="20"/>
+							<f:validateLength maximum="50"/>
 						</t:inputText>
 				</td>
 					</tr>

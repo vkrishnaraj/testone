@@ -13,11 +13,14 @@
 		value="#{passengerController.flightLabel.aboutYourItenerary.label}"
 		styleClass="subHeader" /></div>
 	<div><h:outputText value="&#160;" /></div>
+	<t:outputText value="For the From/To Airports section please start typing your city name or airport code 
+	and then select the appropriate airport from the autocomplete list that appears." styleClass="formLabel"/>
+	<h:outputText value="&#160;" />
 	<a4j:region  renderRegionOnly="true" selfRendered="true">	
 	<a4j:outputPanel  id="flightCode" >
 		<rich:dataTable id="iteneraryTicketTableItenerary" var="item"
 			headerClass="TableHeader" columnsWidth="18%,18%,7%,5%,10%" 
-			value="#{passengerController.itineraryList}" border="0" width="95%"
+			value="#{passengerBean.itineraryList}" border="0" width="95%"
 			rowKeyVar="rowIndex">
 
 			<f:facet name="header">
@@ -39,10 +42,24 @@
 			<rich:column>
 				<h:panelGrid columns="2">
 				<a4j:region  renderRegionOnly="true" >	
-					<h:inputText value="#{item.deptCityFormText}" size="20" id="departure#{rowIndex+1}"
-						readonly="#{passengerController.readOnlyOnSubmitted}"
+					<h:inputText value="#{item.deptCityFormText}" size="20" id="departure"
+						disabled="#{passengerController.readOnlyOnSubmitted}"
 						label="DepartureCity Row#{rowIndex+1}" maxlength="25"/>
-					<h:panelGroup rendered="#{!passengerController.readOnlyOnSubmitted}">
+					<rich:suggestionbox for="departure" var="result"
+							suggestionAction="#{passengerController.autocomplete}"
+							fetchValue="#{result.airportCode} - #{result.airportDesc}"
+							minChars="2">
+						<f:facet name="nothingLabel">
+							<h:outputText value="No Airports Found" />
+						</f:facet>
+                		<f:facet name="header">
+                			<h:outputText value="Select Your Airport" />
+                		</f:facet>
+		                <h:column>
+		                	<h:outputText value="#{result.airportCode} - #{result.airportDesc}" />
+		                </h:column>
+                	</rich:suggestionbox>
+<!--				<h:panelGroup rendered="#{!passengerController.readOnlyOnSubmitted}">
 						<a4j:commandLink value="" immediate="true" id="flightImageLink">
 
 							<rich:componentControl for="flightModalPanel"
@@ -57,20 +74,34 @@
 								styleClass="cityButton" />
 
 						</a4j:commandLink>
-					</h:panelGroup>
+					</h:panelGroup>    -->
 					</a4j:region>
 				</h:panelGrid>
 			</rich:column>
 			<rich:column>
 				<h:panelGrid columns="2">
 				<a4j:region  renderRegionOnly="true" >	
-					<h:inputText value="#{item.arrvCityFormText}" size="20" id="arrival#{rowIndex+1}"
+					<h:inputText value="#{item.arrvCityFormText}" size="20" id="arrival"
 						label="ArrivalCity Row#{rowIndex+1}" maxlength="25" 
 						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 											'ArrivalCity Row#{rowIndex+1}'" 
 						disabled="#{passengerController.readOnlyOnSubmitted}"
-						required="#{!empty item.departureCity ? true : false}"/>
-					<h:panelGroup rendered="#{!passengerController.readOnlyOnSubmitted}">
+						required="#{!empty item.departureCity ? true : false}"></h:inputText>
+					<rich:suggestionbox for="arrival" var="result"
+							suggestionAction="#{passengerController.autocomplete}"
+							fetchValue="#{result.airportCode} - #{result.airportDesc}"
+							minChars="2">
+						<f:facet name="nothingLabel">
+							<h:outputText value="No Airports Found" />
+						</f:facet>
+                		<f:facet name="header">
+                			<h:outputText value="Select Your Airport" />
+                		</f:facet>
+		                <h:column>
+		                	<h:outputText value="#{result.airportCode} - #{result.airportDesc}" />
+		                </h:column>
+                	</rich:suggestionbox>
+<!-- 				<h:panelGroup rendered="#{!passengerController.readOnlyOnSubmitted}">
 						<a4j:commandLink value="" immediate="true" id="flightImageLink2">
 
 							<rich:componentControl for="#{passengerController.modalPanel}"
@@ -85,7 +116,7 @@
 								styleClass="cityButton" />
 
 						</a4j:commandLink>
-					</h:panelGroup>
+					</h:panelGroup>  -->
 				</a4j:region>
 				</h:panelGrid>
 			</rich:column>
@@ -99,45 +130,7 @@
 											'Airline Row#{rowIndex+1}'"
 					label="Airline Row#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
-						<f:selectItem itemValue="FL" itemLabel="AirTran Airways"/>
-						<f:selectItem itemValue="US" itemLabel="US Airways"/>
-						<f:selectItem itemValue="B6" itemLabel="JetBlue Airways"/>
-						<f:selectItem itemValue="CO" itemLabel="Continental"/>
-						<f:selectItem itemValue="UA" itemLabel="United"/>
-						<f:selectItem itemValue="DL" itemLabel="Delta"/>
-						<f:selectItem itemValue="AA" itemLabel="American Airlines"/>
-						<f:selectItem itemValue="WN" itemLabel="Southwest"/>
-						<f:selectItem itemValue="AS" itemLabel="Alaska"/>
-						<f:selectItem itemValue="9K" itemLabel="Cape Air"/>
-						<f:selectItem itemValue="HA" itemLabel="Hawaiian"/>
-						<f:selectItem itemValue="BA" itemLabel="British Airways"/>
-						<f:selectItem itemValue="AF" itemLabel="Air France"/>
-						<f:selectItem itemValue="AM" itemLabel="AeroMexico"/>
-						<f:selectItem itemValue="MX" itemLabel="Mexicana de Aviacion"/>
-						<f:selectItem itemValue="JP" itemLabel="Adria"/>
-						<f:selectItem itemValue="A3" itemLabel="Aegean"/>
-						<f:selectItem itemValue="AC" itemLabel="Air Canada"/>
-						<f:selectItem itemValue="CA" itemLabel="Air China"/>
-						<f:selectItem itemValue="NZ" itemLabel="Air New Zealand"/>
-						<f:selectItem itemValue="NH" itemLabel="All Nippon Airways"/>
-						<f:selectItem itemValue="OZ" itemLabel="Asiana Airlines"/>
-						<f:selectItem itemValue="OS" itemLabel="Austrian Airlines"/>
-						<f:selectItem itemValue="KF" itemLabel="Blue1"/>
-						<f:selectItem itemValue="BD" itemLabel="Bmi"/>
-						<f:selectItem itemValue="SN" itemLabel="Brussels Airlines"/>
-						<f:selectItem itemValue="OU" itemLabel="Croatia Airlines"/>
-						<f:selectItem itemValue="MS" itemLabel="EgyptAir"/>
-						<f:selectItem itemValue="LO" itemLabel="LOT Polish Airlines"/>
-						<f:selectItem itemValue="LH" itemLabel="Lufthansa"/>
-						<f:selectItem itemValue="SK" itemLabel="Scandinavian Airlines"/>
-						<f:selectItem itemValue="SQ" itemLabel="Singapore Airlines"/>
-						<f:selectItem itemValue="SA" itemLabel="South African Airways"/>
-						<f:selectItem itemValue="JK" itemLabel="Spanair"/>
-						<f:selectItem itemValue="LX" itemLabel="Swiss International"/>
-						<f:selectItem itemValue="JJ" itemLabel="TAM Brazilian Airlines"/>
-						<f:selectItem itemValue="TP" itemLabel="TAP Portugal"/>
-						<f:selectItem itemValue="TG" itemLabel="Thai Airways International"/>
-						<f:selectItem itemValue="TK" itemLabel="Turkish Airlines"/>
+						<f:selectItems value="#{passengerController.airlines}" />
 				</t:selectOneMenu>
 					<h:outputText value="&#160;/" escape="false"/>
 				</h:panelGrid>
@@ -177,6 +170,10 @@
 	<div id="addItem">
 		<a4j:commandButton value="#{passengerController.flightLabel.addNewSegment.label}"  rendered="#{!passengerController.readOnlyOnSubmitted}"
 			 action="#{passengerController.addNewSegment}" reRender="iteneraryTicketTableItenerary" limitToList="true"
+			 styleClass="button140pxred button140pxred2">
+		</a4j:commandButton>&#160;&#160;&#160;
+		<a4j:commandButton value="Delete Last Segment"  rendered="#{passengerController.renderDeleteSegment}"
+			 action="#{passengerController.deleteLastSegment}" reRender="iteneraryTicketTableItenerary" limitToList="true"
 			 styleClass="button140pxred button140pxred2">
 		</a4j:commandButton>
 	</div>

@@ -33,6 +33,7 @@
 			<h:outputText value="&#160;" />
 			<a id="font3" style="font-size: 12pt;" href="javascript:increaseFontSize();">A</a>
 		</div>
+				<h:inputHidden id="appFontSize" value="#{passengerController.appFontSize}" />
 	
 	</div>
 	<h:panelGroup rendered="#{passengerController.fraudQuestionLabel.descriptiveText.hidden}" >
@@ -88,7 +89,7 @@
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
-					<rich:messages id="submitClaimMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
+					<rich:messages id="submitClaimMsg"  errorClass="passerrormsg" infoClass="infomsg" layout="list"/>
 				</div>
 				<rich:spacer width="100%" height="10" title=""/>
 				

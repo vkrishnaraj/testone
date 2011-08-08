@@ -23,7 +23,7 @@
 						</td><td colspan="7" style="padding-bottom: 5px;">
 					<t:inputText id="pi14" value="#{passengerBean.address[1].addressLine1 }"   style="width:99%;" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine1.required}" tabindex="13"
-							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine1.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 										'#{passengerController.passengerInfoLabel.mailingAddressLine1.label}'" 
 							validatorMessage="#{passengerController.passengerInfoLabel.mailingAddressLine1.label} :
@@ -44,7 +44,7 @@
 						</td><td colspan="7" style="padding: 5px 0px;">
 					<t:inputText id="pi15" value="#{passengerBean.address[1].addressLine2 }"  style="width:99%;" 
 							required="#{passengerController.passengerInfoLabel.mailingAddressLine2.required}" tabindex="14"
-							readonly="#{passengerController.passengerInfoLabel.mailingAddressLine2.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 										'#{passengerController.passengerInfoLabel.mailingAddressLine2.label}'" 
 							validatorMessage="#{passengerController.passengerInfoLabel.mailingAddressLine2.label} :
@@ -65,7 +65,7 @@
 						</td><td style="width:15%; padding-top: 5px;">
 						<t:inputText id="pi16" value="#{passengerBean.address[1].city }"  size="8" style="width:90%;" 
 							required="#{passengerController.passengerInfoLabel.mailingCity.required}" tabindex="15"
-							readonly="#{passengerController.passengerInfoLabel.mailingCity.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 										'#{passengerController.passengerInfoLabel.mailingCity.label}'"
 							validatorMessage="#{passengerController.passengerInfoLabel.mailingCity.label} :
@@ -84,7 +84,7 @@
 						</td><td style="width:10%;">
 						<t:inputText id="pi17" value="#{passengerBean.address[1].stateRegion }"  size="8" style="width:52%;" 
 							required="#{passengerController.passengerInfoLabel.mailingStateRegion.required}" tabindex="16"
-							readonly="#{passengerController.passengerInfoLabel.mailingStateRegion.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 										'#{passengerController.passengerInfoLabel.mailingStateRegion.label}'" 
 							validatorMessage="#{passengerController.passengerInfoLabel.mailingStateRegion.label} :
@@ -103,7 +103,7 @@
 						</td><td style="width:10%;">
 						<t:inputText id="pi18" value="#{passengerBean.address[1].postalCode }"   size="8" style="width:90%;" 
 							required="#{passengerController.passengerInfoLabel.mailingPostalCode.required}" tabindex="17"
-							readonly="#{passengerController.passengerInfoLabel.mailingPostalCode.hidden}"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 									'#{passengerController.passengerInfoLabel.mailingPostalCode.label}'" 
 							validatorMessage="#{passengerController.passengerInfoLabel.mailingPostalCode.label} :
@@ -123,6 +123,7 @@
 						<h:selectOneMenu value="#{passengerBean.address[1].country }" tabindex="18" onchange="submit()" style="width:100%;" 
 								required="#{passengerController.passengerInfoLabel.mailingCountry.required}"
 								readonly="#{passengerController.passengerInfoLabel.mailingCountry.hidden}"
+								disabled="#{passengerController.readOnlyOnSubmitted}"
 								requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 									'#{passengerController.passengerInfoLabel.mailingCountry.label}'" 
 						   		label="#{passengerController.passengerInfoLabel.mailingCountry.label}">

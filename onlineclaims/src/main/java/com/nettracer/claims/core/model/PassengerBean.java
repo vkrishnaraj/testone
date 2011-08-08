@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import com.bagnet.nettracer.tracing.db.xsd.Status;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem;
 import com.nettracer.claims.faces.util.File;
@@ -29,8 +28,6 @@ public class PassengerBean {
 	private String requiredFieldMessage;
 	private String passengerInfoHelp;
 	private String permanentAddress;
-	private String passengerInfolastName;
-	private String 	middleInitial;
 	private String emailAddress;
 	private String occupation;
 	private String businessName;
@@ -57,7 +54,7 @@ public class PassengerBean {
 	private Double declaredValue;
 	private String placeBagChecked;
 	private Boolean clearCustomBag;
-	private Double bagWeight;
+	private String bagWeight;
 	private Boolean rerouteBag;
 	private Boolean differentClaimCheck;
 	private String reroutedCityAirline;
@@ -74,6 +71,15 @@ public class PassengerBean {
 	private Long claimId;
 	private String claimAmount;
 	private String claimDate;
+	private String declaredValueCurrency;
+	private String claimAmountCurrency;
+	private String bagCheckDescription;
+	private String reportedAirline;
+	private String reportedCity;
+	private String reportedFileNumber;
+	private boolean privateInsurance;
+	private String privateInsuranceName;
+	private String privateInsuranceAddr;
 	
 	//For About Your Flight Page
 	//private List<Bag> bagList;
@@ -96,10 +102,12 @@ public class PassengerBean {
 	private String additionalComments;
 	
 	//For Submit CLaim Page
-	private String typeAccept;
 	private String status;
 	private WSPVAdvancedIncident passengerData;
 	private PaxViewItem[] pvItems;
+	private Boolean onlineAvailable;
+	private Boolean claimsAvailable;
+	private Boolean completeClaim;
 	
 	public String getClaimAmount() {
 		return claimAmount;
@@ -136,12 +144,6 @@ public class PassengerBean {
 	}
 	public void setPermanentAddress(String permanentAddress) {
 		this.permanentAddress = permanentAddress;
-	}
-	public String getPassengerInfolastName() {
-		return passengerInfolastName;
-	}
-	public void setPassengerInfolastName(String passengerInfolastName) {
-		this.passengerInfolastName = passengerInfolastName;
 	}
 	public List<Address> getAddress() {
 		return address;
@@ -281,10 +283,10 @@ public class PassengerBean {
 	public void setClearCustomBag(Boolean clearCustomBag) {
 		this.clearCustomBag = clearCustomBag;
 	}
-	public Double getBagWeight() {
+	public String getBagWeight() {
 		return bagWeight;
 	}
-	public void setBagWeight(Double bagWeight) {
+	public void setBagWeight(String bagWeight) {
 		this.bagWeight = bagWeight;
 	}
 	public Boolean getRerouteBag() {
@@ -371,12 +373,6 @@ public class PassengerBean {
 	public void setTicketNumber(String ticketNumber) {
 		this.ticketNumber = ticketNumber;
 	}
-	public String getTypeAccept() {
-		return typeAccept;
-	}
-	public void setTypeAccept(String typeAccept) {
-		this.typeAccept = typeAccept;
-	}
 	public Boolean getAnotherClaim() {
 		return anotherClaim;
 	}
@@ -443,12 +439,6 @@ public class PassengerBean {
 	public void setClaimId(Long claimId) {
 		this.claimId = claimId;
 	}
-	public String getMiddleInitial() {
-		return middleInitial;
-	}
-	public void setMiddleInitial(String middleInitial) {
-		this.middleInitial = middleInitial;
-	}
 	public String getOccupation() {
 		return occupation;
 	}
@@ -466,6 +456,24 @@ public class PassengerBean {
 	}
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}	
+	public String getDeclaredValueCurrency() {
+		return declaredValueCurrency;
+	}
+	public void setDeclaredValueCurrency(String declaredValueCurrency) {
+		this.declaredValueCurrency = declaredValueCurrency;
+	}
+	public String getClaimAmountCurrency() {
+		return claimAmountCurrency;
+	}
+	public void setClaimAmountCurrency(String claimAmountCurrency) {
+		this.claimAmountCurrency = claimAmountCurrency;
+	}
+	public String getBagCheckDescription() {
+		return bagCheckDescription;
+	}
+	public void setBagCheckDescription(String bagCheckDescription) {
+		this.bagCheckDescription = bagCheckDescription;
 	}
 	public void setPassengerData(WSPVAdvancedIncident passengerData) {
 		this.passengerData = passengerData; 
@@ -474,20 +482,41 @@ public class PassengerBean {
 		return passengerData;
 	}	
 	public boolean isOnlineAvailable() {
-		if (isClaimsAvailableProperty()) {
-			Calendar fortyFiveDays = Calendar.getInstance();
-			fortyFiveDays.add(Calendar.DATE, -45);
-			if (!passengerData.getCreatedate().before(fortyFiveDays)) {
-				if (passengerData.getItemType() == 1) {
-					return true;
-				} else if (passengerData.getItemType() != 1
-						&& passengerData.getIncidentStatus().equalsIgnoreCase(
-								"open")) {
-					return true;
+		if (onlineAvailable == null) {
+			if (isClaimsAvailableProperty() && (getStatus() == null 
+					|| (!getStatus().equals("SUBMITTED") && !getStatus().equals("SECOND_CLAIM")))) {
+				Calendar fortyFiveDays = Calendar.getInstance();
+				fortyFiveDays.add(Calendar.DATE, -45);
+				if (!passengerData.getCreatedate().before(fortyFiveDays)) {
+					if (passengerData.getItemType() == 1) {
+						onlineAvailable = true;
+					} else if (passengerData.getItemType() != 1
+							&& passengerData.getIncidentStatus().equalsIgnoreCase(
+									"open")) {
+						onlineAvailable = true;
+					}
 				}
 			}
+			if (onlineAvailable == null) {
+				onlineAvailable = false;
+			}
 		}
-		return false;
+		return onlineAvailable;
+	}
+	
+	public boolean isCompleteClaim() {
+		if (completeClaim == null) {
+			if (isClaimsAvailableProperty() && getStatus() != null && getStatus().equals("SUBMITTED")) {
+				completeClaim = true;
+			} else {
+				completeClaim = false;
+			}
+		}
+		return completeClaim;
+	}
+	
+	public boolean isShowClaimMessage() {
+		return ((isOnlineAvailable() || isClaimsAvailable()) && !isSecondClaim());
 	}
 	
 	public boolean isScansAvailable() {
@@ -495,15 +524,25 @@ public class PassengerBean {
 	}
 	
 	public boolean isClaimsAvailable() {
-		if (isOnlineAvailable()) {
+		if (isOnlineAvailable() || isCompleteClaim()) {
 			return false;
 		} else {
 			return isClaimsAvailableProperty();
 		}
 	}
 	
+	public boolean isSecondClaim() {
+		if (isClaimsAvailableProperty() && getStatus() != null && getStatus().equals("SECOND_CLAIM")) {
+			return true;
+		}
+		return false;
+	}
+	
 	private boolean isClaimsAvailableProperty() {
-		return ClaimsProperties.isTrue(ClaimsProperties.CLAIMS_AVAILABLE);
+		if (claimsAvailable == null) {
+			claimsAvailable = ClaimsProperties.isTrue(ClaimsProperties.CLAIMS_AVAILABLE);
+		}
+		return claimsAvailable;
 	}
 	
 	public PaxViewItem[] getPvItems() {
@@ -530,6 +569,42 @@ public class PassengerBean {
 	
 	public void setPvItems(PaxViewItem[] pvItems) {
 		this.pvItems = pvItems;
+	}
+	public String getReportedAirline() {
+		return reportedAirline;
+	}
+	public void setReportedAirline(String reportedAirline) {
+		this.reportedAirline = reportedAirline;
+	}
+	public String getReportedCity() {
+		return reportedCity;
+	}
+	public void setReportedCity(String reportedCity) {
+		this.reportedCity = reportedCity;
+	}
+	public String getReportedFileNumber() {
+		return reportedFileNumber;
+	}
+	public void setReportedFileNumber(String reportedFileNumber) {
+		this.reportedFileNumber = reportedFileNumber;
+	}
+	public boolean isPrivateInsurance() {
+		return privateInsurance;
+	}
+	public void setPrivateInsurance(boolean privateInsurance) {
+		this.privateInsurance = privateInsurance;
+	}
+	public String getPrivateInsuranceName() {
+		return privateInsuranceName;
+	}
+	public void setPrivateInsuranceName(String privateInsuranceName) {
+		this.privateInsuranceName = privateInsuranceName;
+	}
+	public String getPrivateInsuranceAddr() {
+		return privateInsuranceAddr;
+	}
+	public void setPrivateInsuranceAddr(String privateInsuranceAddr) {
+		this.privateInsuranceAddr = privateInsuranceAddr;
 	}
 	
 	

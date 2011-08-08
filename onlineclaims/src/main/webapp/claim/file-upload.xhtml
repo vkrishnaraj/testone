@@ -33,6 +33,7 @@
 			<h:outputText value="&#160;" />
 			<a id="font3" style="font-size: 12pt;" href="javascript:increaseFontSize();">A</a>
 		</div>
+				<h:inputHidden id="appFontSize" value="#{passengerController.appFontSize}" />
 	
 	</div>
 	<h:panelGroup rendered="#{passengerController.fileUploadLabel.descriptiveText.hidden}" >
@@ -101,7 +102,7 @@ Receipts are required for all interim reimbursement
 				</div>	
 				--><div><h:outputText value="&#160;" /></div>
 				<div>
-					<rich:messages id="submitClaimMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
+					<rich:messages id="submitClaimMsg"  errorClass="passerrormsg" infoClass="infomsg" layout="list"/>
 				</div>
 				<rich:spacer width="100%" height="10" title=""/>
 				
@@ -140,7 +141,15 @@ Receipts are required for all interim reimbursement
 				<h:panelGrid columns="2" width="100%">
 					<t:outputText value="#{passengerController.fileUploadLabel.fileSelection.label}" styleClass="formLabel"/>
 					<t:inputFileUpload id="fileupload" value="#{passengerController.upFile}" size="60" 
-						disabled="#{passengerController.readOnlyOnSubmitted}"/><p/>
+						disabled="#{passengerController.readOnlyOnSubmitted}"/>
+					<p>&#160;</p>
+					<h:panelGroup>
+						<h:selectBooleanCheckbox value="#{passengerController.interimFile}" 
+							 disabled="#{passengerController.readOnlyOnSubmitted}"
+							label="Interim File"/>
+							<rich:spacer width="5"/>
+						<t:outputText value="Please check this box if this receipt is for an interim expense." styleClass="requiredField"/>
+					</h:panelGroup>
 				</h:panelGrid>
 				
 				<rich:spacer width="100%" height="20" title=""/>
@@ -178,6 +187,10 @@ Receipts are required for all interim reimbursement
 						
 						<h:column>
 							<h:outputText value="#{file.name}" styleClass="formLabel" style="padding:10px;"/>
+						</h:column>
+						<h:column>
+							<h:outputText value="Interim Expense" rendered="#{file.interim}" styleClass="formLabel" style="padding:10px;"/>
+							<h:outputText value="Content Receipt" rendered="#{!file.interim}" styleClass="formLabel" style="padding:10px;"/>
 						</h:column>
 						<h:column>
 							<rich:spacer width="50" title=""/>

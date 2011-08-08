@@ -2,8 +2,6 @@ package com.nettracer.claims.core.model;
 
 import java.util.Calendar;
 
-import com.bagnet.nettracer.tracing.db.xsd.Status;
-
 public class PaxViewItem {
 
 	private String address1;
@@ -14,7 +12,7 @@ public class PaxViewItem {
 	private String stateID;
 	private String zip;
 	private Calendar lastDeliveryUpdate;
-	private Status deliveryStatus;
+	private String deliveryStatus;
 	private String incidentStatus;
 	private boolean claimchecknumavail;
 
@@ -85,11 +83,11 @@ public class PaxViewItem {
 		this.lastDeliveryUpdate = lastDeliveryUpdate;
 	}
 
-	public Status getDeliveryStatus() {
+	public String getDeliveryStatus() {
 		return deliveryStatus;
 	}
 
-	public void setDeliveryStatus(Status deliveryStatus) {
+	public void setDeliveryStatus(String deliveryStatus) {
 		this.deliveryStatus = deliveryStatus;
 	}
 

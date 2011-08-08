@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.nettracer.claims.core.exception.SimplePersistenceException;
+import com.nettracer.claims.core.model.Airline;
 import com.nettracer.claims.core.model.Airport;
 import com.nettracer.claims.core.model.Company;
 import com.nettracer.claims.core.model.CountryCode;
@@ -60,6 +61,7 @@ public interface PaxViewService {
 	public List<StateCode> getStates() throws SimplePersistenceException;
 
 	public List<Airport> getAirportList() throws SimplePersistenceException;
+	public List<Airport> getAirportList(String compare) throws SimplePersistenceException;
 	// ******************************************************************************************
 
 	public List<Localetext> getPassengerLoginContents(String languageSelected) throws SimplePersistenceException;
@@ -89,4 +91,6 @@ public interface PaxViewService {
 	
 	public void saveContentLanguageMaps(
 			Map<String, List<Map<String, List<Localetext>>>> languageMap) throws SimplePersistenceException;
+	
+	public List<Airline> getAirlines() throws SimplePersistenceException;
 }

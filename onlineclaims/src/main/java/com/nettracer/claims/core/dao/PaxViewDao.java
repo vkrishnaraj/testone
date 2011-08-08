@@ -13,6 +13,7 @@ import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
 import com.nettracer.claims.core.exception.SimplePersistenceException;
+import com.nettracer.claims.core.model.Airline;
 import com.nettracer.claims.core.model.Airport;
 import com.nettracer.claims.core.model.Company;
 import com.nettracer.claims.core.model.CountryCode;
@@ -150,6 +151,25 @@ public class PaxViewDao extends HibernateDaoSupport {
 	}
 
 	@SuppressWarnings("unchecked")
+	public List<Airport> getAirportList(String compare) {
+		List<Airport> toReturn = new ArrayList<Airport>();
+		
+		toReturn.addAll((List<Airport>) getSession().createCriteria(Airport.class)
+				.add(Restrictions.like("airportCode", compare + "%")).list());
+
+		List<Airport> toAdd = new ArrayList<Airport>();
+		for (Airport port : ((List<Airport>) getSession().createCriteria(Airport.class)
+				.add(Restrictions.like("airportDesc", compare + "%")).list())) {
+			if (port != null && !toReturn.contains(port)) {
+				toAdd.add(port);
+			}
+		}
+		toReturn.addAll(toAdd);
+		
+		return toReturn;
+	}
+
+	@SuppressWarnings("unchecked")
 	public List<List<Label>> getAll() throws SimplePersistenceException {
 		logger.debug("getAll Method Call to fetch all the Label Data");
 
@@ -283,5 +303,19 @@ public class PaxViewDao extends HibernateDaoSupport {
 				}
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Airline> getAirlines() {
+		logger.error(">>>>> getting airlines with order by airline name ...");
+		List<Airline> toReturn = new ArrayList<Airline>();
+		List<Airline> important = getHibernateTemplate().findByCriteria(DetachedCriteria.forClass(Airline.class)
+				.add(Restrictions.lt("id", "16")));
+		List<Airline> ordered = getHibernateTemplate().findByCriteria(DetachedCriteria.forClass(Airline.class)
+				.add(Restrictions.gt("id", "15")).addOrder(Order.asc("airlineDesc")));
+		toReturn.addAll(important);
+		toReturn.addAll(ordered);
+		
+		return toReturn;//(List<Airline>) getAllOfItWithOrderBy(Airline.class, "id");
 	}
 }

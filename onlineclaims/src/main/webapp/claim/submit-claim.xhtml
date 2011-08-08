@@ -33,6 +33,7 @@
 			<h:outputText value="&#160;" />
 			<a id="font3" style="font-size: 12pt;" href="javascript:increaseFontSize();">A</a>
 		</div>
+				<h:inputHidden id="appFontSize" value="#{passengerController.appFontSize}" />
 	
 	</div>
 	<h:panelGroup rendered="#{passengerController.submitClaimLabel.descriptiveText.hidden}" >
@@ -87,7 +88,7 @@
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
-					<rich:messages id="submitClaimMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
+					<rich:messages id="submitClaimMsg"  errorClass="passerrormsg" infoClass="infomsg" layout="list"/>
 				</div>
 				<rich:spacer width="100%" height="10" title=""/>
 				
@@ -124,7 +125,12 @@
 							requiredMessage="Please enter a Claim Amount in the appropriate text box."
 							readonly="#{passengerController.readOnlyOnSubmitted}"
 							label="Claim Amount Field" tabindex="1">
-						</t:inputText>
+						</t:inputText>&#160;&#160;
+						<h:selectOneMenu value="#{passengerBean.claimAmountCurrency}"
+							disabled="#{passengerController.readOnlyOnSubmitted}">
+							<f:selectItem itemValue="USD" itemLabel="US Dollar" />
+							<f:selectItems value="#{passengerController.currencyList}" />
+						</h:selectOneMenu>
 							<t:outputText value="&#160;#{passengerController.submitClaimLabel.lossOccured.label}&#160;" styleClass="bodycopy"/>
 						<t:inputText value="#{passengerBean.claimDate}" id="lossDate" required="true"
 							requiredMessage="Please enter a Loss Date in the appropriate text box."
@@ -138,27 +144,35 @@
 				</div>
 				
 				<div>
-					<t:inputHidden id="accept" value="ACCEPT" />
-					<h:panelGrid columns="2" width="100%">
-						<h:column>
+						<h:panelGroup>
 							<t:outputText value="#{passengerController.submitClaimLabel.typeAccept.label}" 
 									styleClass="typeAccept" />
 							<h:outputText value="&#160;" />
 							<h:graphicImage value="../_images/reqbullet.gif" />
-						</h:column>
-						<t:inputText value="#{passengerBean.typeAccept}" id="typeAccept" required="true"
+						</h:panelGroup>
+						
+					<table width="100%">
+					<a4j:repeat value="#{passengerBean.passengers}"
+					var="pass" rowKeyVar="rowIndex">
+					    <tr><td>&#160;</td></tr>
+						<tr><td>
+						<t:outputText value="#{pass.lastName}, #{pass.firstName} #{pass.middleInitial}" 
+									styleClass="typeAccept" />
+						</td><td>
+						<t:inputText value="#{pass.accept}" id="typeAccept" required="true"
 							requiredMessage="Please Type the word- ACCEPT in Capital Letters"
 							readonly="#{passengerController.readOnlyOnSubmitted}"
 							label="Acception Field" tabindex="1" >
-							<t:validateEqual for="accept" summaryMessage="Please Type the word- ACCEPT in Capital Letters"/>
 						</t:inputText>
-					</h:panelGrid>
+						</td></tr>
+					</a4j:repeat>
+					</table>
 					<rich:spacer width="100%" height="10" title=""/>
 				</div>
 				
 				<div>
 					<rich:panel>
-						<t:outputText value="#{passengerController.submitClaimLabel.confirmation.label}. You must save your claim form before pressing Submit." styleClass="bodycopy"/>
+						<t:outputText value="#{passengerController.submitClaimLabel.confirmation.label}" styleClass="bodycopy"/>
 					</rich:panel>
 					<rich:spacer width="100%" height="10" title=""/>
 				</div>
@@ -185,30 +199,20 @@
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<div>
-				<rich:spacer width="129px"/>
+				<rich:spacer width="290px" rendered="#{!passengerController.readOnlyOnSubmitted}"/>
+				<rich:spacer width="450px" rendered="#{passengerController.readOnlyOnSubmitted}"/>
 			
-				<h:commandButton id="print" value="#{passengerController.submitClaimLabel.print.label}"
-				 		tabindex="2" action="#" immediate="true" onclick="window.open('${facesContext.externalContext.requestContextPath}/claim/print-page.faces','P','width=750,height=600,toolbar=no,location=no,directories=no,status=no,menubar=no, scrollbars=yes,resizable=yes,copyhistory=no');"
-						styleClass="button140pxred button140pxred2" />
-			
-				<rich:spacer width="20px"/>
-			
-				<h:commandButton id="saveSubmitClaim" value="#{passengerController.passengerInfoLabel.save.label}"
-				 		tabindex="3" action="#{passengerController.saveFinalCLaim}"
-				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
-						styleClass="button140pxred button140pxred2" />
-				
-				<rich:spacer width="20px"/>
+				<rich:spacer width="160px"/>
 			
 				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.previous.label}"
 				 	tabindex="4" immediate="true" action="#{passengerController.goBackToFraudQuestion}"
 					styleClass="button140pxred button140pxred2" />
 					
-				<rich:spacer width="20px"/>
+				<rich:spacer width="20px" rendered="#{!passengerController.readOnlyOnSubmitted}"/>
 				
 				<h:commandButton id="forwardSubmit" value="#{passengerController.submitClaimLabel.claimSubmit.label}"
 				 	tabindex="5" action="#{passengerController.submitPassengerInfo}"
-				 	disabled="#{passengerController.readOnlyOnSubmitted}"
+				 	rendered="#{!passengerController.readOnlyOnSubmitted}"
 					styleClass="button140pxred button140pxred2" />
 				
 			

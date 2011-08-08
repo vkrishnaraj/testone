@@ -13,7 +13,7 @@
 
 	<ui:define name="mainContent">
 		<script type="text/javascript" src="../_js/passengerFont.js"></script>
-		<h:form id="directionForm">
+		<h:form id="appForm">
 		<div>
 			<div id="step">
 				<t:outputText value="Step 1 of 8" />
@@ -28,6 +28,7 @@
 				value="&#160;" /> <h:outputText value="&#160;" /> <h:outputText
 				value="&#160;" /> <a id="font3" style="font-size: 12pt;"
 				href="javascript:increaseFontSize();">A</a></div>
+				<h:inputHidden id="appFontSize" value="#{passengerController.appFontSize}" />
 
 		</div>
 

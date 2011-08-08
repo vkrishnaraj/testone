@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.nettracer.claims.core.dao.PaxViewDao;
 import com.nettracer.claims.core.exception.SimplePersistenceException;
+import com.nettracer.claims.core.model.Airline;
 import com.nettracer.claims.core.model.Airport;
 import com.nettracer.claims.core.model.Company;
 import com.nettracer.claims.core.model.CountryCode;
@@ -274,6 +275,11 @@ public class PaxViewServiceImpl implements PaxViewService {
 	}
 
 	@Override
+	public List<Airport> getAirportList(String compare) throws SimplePersistenceException {
+		return passengerDao.getAirportList(compare);
+	}
+
+	@Override
 	public List<List<Label>> getAllRequiredFields() throws SimplePersistenceException {
 		return passengerDao.getAll();
 	}
@@ -312,7 +318,11 @@ public class PaxViewServiceImpl implements PaxViewService {
 	public void saveContentLanguageMaps(Map<String, List<Map<String, List<Localetext>>>> languageMap)
 				throws SimplePersistenceException {
 		passengerDao.saveContentLanguageMaps(languageMap);
-		
+	}
+
+	@Override
+	public List<Airline> getAirlines() throws SimplePersistenceException {
+		return passengerDao.getAirlines();
 	}
 
 }

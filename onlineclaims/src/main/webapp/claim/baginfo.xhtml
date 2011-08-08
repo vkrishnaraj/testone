@@ -34,6 +34,7 @@
 			<h:outputText value="&#160;" />
 			<a id="font3"  href="javascript:increaseFontSize();">A</a>
 		</div>
+				<h:inputHidden id="appFontSize" value="#{passengerController.appFontSize}" />
 	
 	</div>
 	<h:panelGroup rendered="#{passengerController.bagDetailsLabel.bagDescriptiveText.hidden}" >
@@ -91,7 +92,7 @@
 				</div>	
 				<div><h:outputText value="&#160;" /></div>
 				<div>
-					<rich:messages id="bagMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
+					<rich:messages id="bagMsg"  errorClass="passerrormsg" infoClass="infomsg" layout="list"/>
 					<rich:spacer width="100%" height="15" title="" />
 				</div>
 				

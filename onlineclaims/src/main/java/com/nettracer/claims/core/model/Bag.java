@@ -15,6 +15,9 @@ public class Bag {
 	private Date bagPurchaseDate;
 	private String bagColor;
 	private String bagType;
+	private String bagPrice;
+	private String bagCurrency;
+	private String bagOwner;
 	private Boolean hardSided;
 	private Boolean wheelsRollers;
 	private Boolean feet;
@@ -27,8 +30,36 @@ public class Bag {
 	private Boolean pullStrap;
 	private Boolean nameTag;
 	private Boolean ribbonsPersonalMarkings;
+	private boolean leather;
+	private boolean metal;
+	private String trimDescription;
+	private String grandTotal;
 	
 	private List<Content> contentList=new ArrayList<Content>();
+
+	public String getBagPrice() {
+		return bagPrice;
+	}
+
+	public void setBagPrice(String bagPrice) {
+		this.bagPrice = bagPrice;
+	}
+
+	public String getBagCurrency() {
+		return bagCurrency;
+	}
+
+	public void setBagCurrency(String bagCurrency) {
+		this.bagCurrency = bagCurrency;
+	}
+
+	public String getBagOwner() {
+		return bagOwner;
+	}
+
+	public void setBagOwner(String bagOwner) {
+		this.bagOwner = bagOwner;
+	}
 
 	public String getBagTagNumber() {
 		return bagTagNumber;
@@ -196,6 +227,53 @@ public class Bag {
 
 	public void setContentList(List<Content> contentList) {
 		this.contentList = contentList;
+	}
+	
+	public boolean isLeather() {
+		return leather;
+	}
+
+	public void setLeather(boolean leather) {
+		this.leather = leather;
+	}
+
+	public boolean isMetal() {
+		return metal;
+	}
+
+	public void setMetal(boolean metal) {
+		this.metal = metal;
+	}
+
+	public String getTrimDescription() {
+		return trimDescription;
+	}
+
+	public void setTrimDescription(String trimDescription) {
+		this.trimDescription = trimDescription;
+	}
+
+	public String getGrandTotal() {
+		double total = 0D;
+		if (getBagPrice() != null && getBagPrice().trim().length() > 0 && getBagPrice().matches("^[0-9]*\\.?[0-9]*$")) {
+			total = Double.parseDouble(getBagPrice());
+		}
+		String currency = getBagCurrency();
+		if (contentList != null) {
+			for (Content cont : contentList) {
+				if (currency == null) {
+					currency = cont.getCurrency();
+				} else if (!currency.equals(cont.getCurrency())) {
+					return "Multiple Currencies.";
+				}
+				total += (cont.getPrice() != null ? cont.getPrice() : 0D);
+			}
+		}
+		total = Math.round(total * 100)/100.0D;
+		return total + "";
+	}
+	
+	public void setGrandTotal(String grandTotal) {
 	}
 
 	

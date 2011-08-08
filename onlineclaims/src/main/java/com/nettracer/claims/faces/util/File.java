@@ -14,6 +14,7 @@ public class File {
 	private Long id;
 	private Long length;
 	private byte[] data;
+	private boolean interim;
 
 	public byte[] getData() {
 		return data;
@@ -72,6 +73,14 @@ public class File {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public boolean isInterim() {
+		return interim;
+	}
+
+	public void setInterim(boolean interim) {
+		this.interim = interim;
 	}
 	
 }

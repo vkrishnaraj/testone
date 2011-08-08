@@ -4,11 +4,13 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.axis2.AxisFault;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
@@ -52,10 +54,14 @@ import com.nettracer.claims.core.model.Itinerary;
 import com.nettracer.claims.core.model.Passenger;
 import com.nettracer.claims.core.model.PassengerBean;
 import com.nettracer.claims.faces.util.File;
+import com.nettracer.claims.passenger.controller.PassengerLoginController;
 
 
 @Service
 public class OnlineClaimsWSImpl implements OnlineClaimsWS {
+
+	private static Logger logger = Logger
+			.getLogger(OnlineClaimsWSImpl.class);
 
 	@Override
 	public boolean authAdminUser(String userName, String password)
@@ -79,7 +85,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 	}
 
 	@Override
-	public PassengerView getPassengerView(String claimNumber, String lastName)
+	public PassengerView getPassengerView(String claimNumber, String lastName, String firstName)
 			throws AxisFault, RemoteException {
 		 OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub(ENDPOINT);
          // Prepare XML documents for request 
@@ -87,6 +93,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          AuthPassenger subDoc1 = request.addNewAuthPassenger();
          subDoc1.setIncidentId(claimNumber);
          subDoc1.setPassengerLastName(lastName);
+         subDoc1.setPassengerFirstName(firstName);
          // Set System Username & PW
          NtAuth subDoc2 = subDoc1.addNewAuth();
          subDoc2.setUsername(SYSTEM_USERNAME);
@@ -99,7 +106,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 	
 
 	@Override
-	public Claim getClaim(WSPVAdvancedIncident passengerData,String lastName)
+	public Claim getClaim(WSPVAdvancedIncident passengerData,String lastName, String firstName)
 			throws AxisFault, RemoteException {
 		  OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub(ENDPOINT);
 	         // Prepare XML documents for request 
@@ -107,6 +114,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			LoadClaim  subDoc1 = request.addNewLoadClaim();
 			subDoc1.setIncidentId(passengerData.getIncidentID());
 			subDoc1.setName(lastName);
+			subDoc1.setFName(firstName);
 			// Set System Username & PW
 	        NtAuth subDoc2 = subDoc1.addNewAuth();
 	        subDoc2.setUsername(SYSTEM_USERNAME);
@@ -136,7 +144,6 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			passenger.setFirstName(passengerDatarray[i].getFirstname());
 			passenger.setLastName(passengerDatarray[i].getLastname());
 			passenger.setMiddleInitial(passengerDatarray[i].getMiddlename());
-			passengerBean.setPassengerInfolastName(passenger.getLastName());
 
 			addresses.add(address);
 			passengers.add(passenger);
@@ -158,16 +165,31 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		passengerBean.setAddress(addresses);
 		passengerBean.setPassengers(passengers);
 		
-		
 		return /*passengerBean;*/ getExistingClaimData(claim,passengerBean);
-	}
-	
+	}	
 	
 	private PassengerBean getExistingClaimData(Claim claim,PassengerBean passengerBean) 
 				throws AxisFault, RemoteException{
         
         passengerBean.setClaimId(claim.getClaimId()); //mandatory field for the web service
-        passengerBean.setMiddleInitial(claim.getMiddleInitial());
+        
+        com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger[] wsPassengers = claim.getPassengerArray();
+        List<Passenger> passengers = new ArrayList<Passenger>();
+        if (wsPassengers != null && wsPassengers.length > 0) {
+        	for (com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger wsPass : wsPassengers) {
+        		Passenger pass = new Passenger();
+        		pass.setAccept(wsPass.getAccept());
+        		pass.setFirstName(wsPass.getFirstName());
+        		pass.setMiddleInitial(wsPass.getMiddleInitial());
+        		pass.setLastName(wsPass.getLastName());
+        		pass.setSalutation(wsPass.getSalutation());
+        		passengers.add(pass);
+        	}
+        } else {
+        	passengers.add(new Passenger());
+        }
+        passengerBean.setPassengers(passengers);
+        
         passengerBean.setBusinessName(claim.getBusinessName());
     	passengerBean.setOccupation(claim.getOccupation());
     	passengerBean.setEmailAddress(claim.getEmailAddress());
@@ -234,7 +256,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         		&& ! claim.getDeclaredValue().equals("?")
         		? Double.parseDouble(claim.getDeclaredValue()) : 0D);
         passengerBean.setClearCustomBag(claim.getBagClearCustoms());
-        passengerBean.setBagWeight(0D);
+        passengerBean.setBagWeight(claim.getBagWeight());
         passengerBean.setRerouteBag(claim.getBaggageReroutedEnRoute());
         passengerBean.setDifferentClaimCheck(claim.getDifferentClaimCheck());
         passengerBean.setReroutedCityAirline(claim.getReroutedAirlineCity());
@@ -244,7 +266,10 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         passengerBean.setFileReportCity(claim.getWhereDidYouFileReport());
         passengerBean.setReportAnotherAirline(claim.getReportedToAnotherAirline());
         passengerBean.setDifferentAirlineTicket(claim.getTicketWithAnotherAirline());
-        passengerBean.setTicketNumber("");
+        passengerBean.setTicketNumber(claim.getTicketNumber());
+        passengerBean.setDeclaredValueCurrency(claim.getDeclaredCurrency());	
+        passengerBean.setClaimAmountCurrency(claim.getPaxClaimAmountCurrency());
+        passengerBean.setBagCheckDescription(claim.getCheckedLocationDescription());
         
                
         //itinerary
@@ -260,21 +285,31 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         passengerBean.setAnotherClaim(claim.getFiledPreviousClaim());
         passengerBean.setWhichAirline(claim.getFiledPreviousAirline());
         if(null != claim.getFiledPrevoiusDate()){
-        	passengerBean.setDateOfClaim(claim.getFiledPrevoiusDate().getTime());
+        	Calendar temp = claim.getFiledPrevoiusDate();
+        	int timeDiff = figureTimeDifference(temp);
+        	temp.add(Calendar.HOUR_OF_DAY, timeDiff);
+        	passengerBean.setDateOfClaim(temp.getTime());
         }
         passengerBean.setClaimantName(claim.getFiledPreviousClaimant());
         passengerBean.setTsaInspect(claim.getTsaInspected());
         passengerBean.setBagConfirmNote(claim.getTsaNotePresent());
         passengerBean.setInspectionPlace(claim.getTsaInspectionLocation());
         passengerBean.setAdditionalComments(claim.getComments());
-        passengerBean.setTypeAccept(claim.getAccept());
+        passengerBean.setClaimAmount(claim.getPaxClaimAmount());
+        passengerBean.setClaimDate(claim.getPaxClaimDate());
+        passengerBean.setPrivateInsurance(claim.getPrivateInsurance());
+        passengerBean.setPrivateInsuranceName(claim.getPrivateInsuranceName());
+        passengerBean.setPrivateInsuranceAddr(claim.getPrivateInsuranceAddr());
+        passengerBean.setReportedAirline(claim.getReportedAirline());
+        passengerBean.setReportedCity(claim.getReportedCity());
+        passengerBean.setReportedFileNumber(claim.getReportedFileNumber());
         
         passengerBean.setStatus(claim.getStatus());
+        
        
        return passengerBean;
 									
 	}
-
 
 	@Override
 	public boolean savePassengerInfo(PassengerBean passengerBean,Claim claim) throws AxisFault, RemoteException {
@@ -287,9 +322,15 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		 SaveClaimDocument request = SaveClaimDocument.Factory.newInstance();
 		 SaveClaim subDoc1 = request.addNewSaveClaim();
 		 //claim.setClaimId(passengerBean.getClaimId()); //mandatory field for save through web service
-		 claim.setLastName(passengerBean.getPassengers().get(0).getLastName());
-		 claim.setFirstName(passengerBean.getPassengers().get(0).getFirstName());
-		 claim.setMiddleInitial(passengerBean.getMiddleInitial());
+		 claim.setPassengerArray(null);
+		 for (Passenger pass : passengerBean.getPassengers()) {
+			 com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger claimPass = claim.addNewPassenger();
+			 claimPass.setFirstName(pass.getFirstName());
+			 claimPass.setMiddleInitial(pass.getMiddleInitial());
+			 claimPass.setLastName(pass.getLastName());
+			 claimPass.setSalutation(pass.getSalutation());
+			 claimPass.setAccept(pass.getAccept());
+		 }
 		 claim.setEmailAddress(passengerBean.getEmailAddress());
 		 claim.setOccupation(passengerBean.getOccupation());
 		 claim.setBusinessName(passengerBean.getBusinessName());
@@ -391,7 +432,6 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          //submit claim
          claim.setAccept(passengerBean.getTypeAccept());*/
          
-         
          subDoc1.setClaim(claim);
          // Set System Username & PW
          NtAuth subDoc2 = subDoc1.addNewAuth();
@@ -408,6 +448,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		 OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub(ENDPOINT);
 		 SaveClaim subDoc1 = null;
 		 NtAuth subDoc2 = null;
+		 
          // Prepare XML documents for request
 		 SaveClaimDocument request = SaveClaimDocument.Factory.newInstance();
 		 if(null != request.getSaveClaim()){
@@ -424,6 +465,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          claim.setBagsDelayed(passengerBean.getLostBag());
          claim.setCheckedLocation(null != passengerBean.getBagCheckLocation()
          		? passengerBean.getBagCheckLocation() :"");
+         claim.setCheckedLocationDescription(passengerBean.getBagCheckDescription());
          claim.setPassengersTravelingWithYou(passengerBean.getNoOfPassenger());
          claim.setHaveToRecheck(passengerBean.getRecheckBag());
          claim.setWasBagInspected(passengerBean.getInspectbag());
@@ -433,8 +475,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          //claim.setBagpassengerBeanCheck(""); //not DifferentpassengerBeanCheck
          claim.setDeclaredExcessValue(passengerBean.getDeclarePayExcessValue());
          claim.setDeclaredValue(passengerBean.getDeclaredValue()+"");
+         claim.setDeclaredCurrency(passengerBean.getDeclaredValueCurrency()); 
          claim.setBagClearCustoms(passengerBean.getClearCustomBag());
-         //claim.setBagWeight(0D);
+         claim.setBagWeight(passengerBean.getBagWeight());              
          claim.setBaggageReroutedEnRoute(passengerBean.getRerouteBag());
          claim.setDifferentClaimCheck(passengerBean.getDifferentClaimCheck());
          claim.setReroutedAirlineCity(passengerBean.getReroutedCityAirline());
@@ -444,14 +487,17 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          claim.setWhereDidYouFileReport(passengerBean.getFileReportCity());
          claim.setReportedToAnotherAirline(passengerBean.getReportAnotherAirline());
          claim.setTicketWithAnotherAirline(passengerBean.getDifferentAirlineTicket());
-         claim.setTicketNumber(passengerBean.getTicketNumber()); //To be implemented later
+         claim.setTicketNumber(passengerBean.getTicketNumber());
+         claim.setReportedAirline(passengerBean.getReportedAirline());
+         claim.setReportedCity(passengerBean.getReportedCity());
+         claim.setReportedFileNumber(passengerBean.getReportedFileNumber());
          
          //Bag Tags
          setBagTags(passengerBean.getBagTagList(),claim);
          
          //itinerary
          setWSItineraries(passengerBean.getItineraryList(),claim);
-         
+		 
          subDoc1.setClaim(claim);
          if(null != subDoc1.getAuth()){
         	 subDoc2 = subDoc1.getAuth();
@@ -472,6 +518,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		 OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub(ENDPOINT);
 		 SaveClaim subDoc1 = null;
 		 NtAuth subDoc2 = null;
+		 
          // Prepare XML documents for request
 		 SaveClaimDocument request = SaveClaimDocument.Factory.newInstance();
 		 if(null != request.getSaveClaim()){
@@ -483,6 +530,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		 subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
 		 
 		 setWSBags(passengerBean.getBagList(),claim);
+		 
 		 subDoc1.setClaim(claim);
          if(null != subDoc1.getAuth()){
         	 subDoc2 = subDoc1.getAuth();
@@ -503,6 +551,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub(ENDPOINT);
 		SaveClaim subDoc1 = null;
 		NtAuth subDoc2 = null;
+		 
 		// Prepare XML documents for request
 		SaveClaimDocument request = SaveClaimDocument.Factory.newInstance();
 		if(null != request.getSaveClaim()){
@@ -514,6 +563,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
 
 		setWSFiles(passengerBean.getFiles(), claim);
+		 
 		subDoc1.setClaim(claim);
 		if(null != subDoc1.getAuth()){
 			subDoc2 = subDoc1.getAuth();
@@ -537,6 +587,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		Calendar calendar=null;
 		SaveClaim subDoc1 = null;
 		NtAuth subDoc2 = null;
+		 
 		// Prepare XML documents for request
 		SaveClaimDocument request = SaveClaimDocument.Factory.newInstance();
 		if(null != request.getSaveClaim()){
@@ -552,6 +603,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         if(null != passengerBean.getDateOfClaim()){
        	 calendar=Calendar.getInstance();
        	 calendar.setTime(passengerBean.getDateOfClaim());
+       	 //calendar.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
        	 claim.setFiledPrevoiusDate(calendar);
        	 calendar=null; //GC
         }
@@ -560,7 +612,10 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         claim.setTsaNotePresent(passengerBean.getBagConfirmNote());
         claim.setTsaInspectionLocation(passengerBean.getInspectionPlace());
         claim.setComments(passengerBean.getAdditionalComments());
-        
+        claim.setPrivateInsurance(passengerBean.isPrivateInsurance());
+        claim.setPrivateInsuranceName(passengerBean.getPrivateInsuranceName());
+        claim.setPrivateInsuranceAddr(passengerBean.getPrivateInsuranceAddr());
+		 
 		subDoc1.setClaim(claim);
 		if(null != subDoc1.getAuth()){
 			subDoc2 = subDoc1.getAuth();
@@ -582,6 +637,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		OnlineClaimsServiceStub stub = new OnlineClaimsServiceStub(ENDPOINT);
 		SaveClaim subDoc1 = null;
 		NtAuth subDoc2 = null;
+		 
 		// Prepare XML documents for request
 		SaveClaimDocument request = SaveClaimDocument.Factory.newInstance();
 		if(null != request.getSaveClaim()){
@@ -592,12 +648,21 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		subDoc1.setIncidentId(passengerBean.getIncidentID()); //claim number is the incident Id
 		subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
 
-		 claim.setAccept(passengerBean.getTypeAccept());
+		 claim.setPassengerArray(null);
+		 for (Passenger pass : passengerBean.getPassengers()) {
+			 com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger claimPass = claim.addNewPassenger();
+			 claimPass.setFirstName(pass.getFirstName());
+			 claimPass.setMiddleInitial(pass.getMiddleInitial());
+			 claimPass.setLastName(pass.getLastName());
+			 claimPass.setSalutation(pass.getSalutation());
+			 claimPass.setAccept(pass.getAccept());
+		 }
 		 claim.setPaxClaimAmount(passengerBean.getClaimAmount());
+		 claim.setPaxClaimAmountCurrency(passengerBean.getClaimAmountCurrency());
 		 claim.setPaxClaimDate(passengerBean.getClaimDate());
 		 claim.setPaxIpAddress(((HttpServletRequest) FacesContext.getCurrentInstance()
 				 .getExternalContext().getRequest()).getRemoteAddr());
-        
+			
 		subDoc1.setClaim(claim);
 		if(null != subDoc1.getAuth()){
 			subDoc2 = subDoc1.getAuth();
@@ -622,25 +687,12 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 	 */
 
 	private void setBagTags(List<Bag> bagTagList, Claim claim) {
-		com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBagArray= null;
+		com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBagArrayTemp = claim.getBagArray();
 		com.bagnet.nettracer.ws.onlineclaims.xsd.Bag wsBag=null;
 		Bag bag=null;
 		if(null != bagTagList && bagTagList.size() >0){
-			if(null != claim.getBagArray() && claim.getBagArray().length >0){ // for esisting bags
-				wsBagArray = claim.getBagArray();
-				for (int i = 0; i < wsBagArray.length; i++) {
-					for (int j=0; j<bagTagList.size();j++) {
-						if(i==j){
-							wsBag=wsBagArray[i];
-							bag=bagTagList.get(j);
-							wsBag.setTag(bag.getBagTagNumber());
-							wsBag.setBagArrive(new Boolean (bag.getBagArrivalStatus()));
-							break;
-						}
-					}
-				}
-			}else{ // for new bag
-				wsBagArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[bagTagList.size()];
+			com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBagArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[bagTagList.size()];
+			if (wsBagArrayTemp == null || wsBagArrayTemp.length == 0) {
 				for (int i=0; i<bagTagList.size();i++) {
 					wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
 					bag=bagTagList.get(i);
@@ -648,9 +700,29 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					wsBag.setBagArrive(new Boolean (bag.getBagArrivalStatus()));
 					wsBagArray[i]=wsBag;
 				}
+			} else {
+				for (int i=0; i<bagTagList.size();i++) {
+					bag=bagTagList.get(i);
+					boolean bagArrStat = Boolean.parseBoolean(bag.getBagArrivalStatus());
+					boolean notAdded = true;
+					if (!bagArrStat) {
+						for (int j = 0; j < wsBagArrayTemp.length; j++) {
+							wsBag = wsBagArrayTemp[j];
+							if (wsBag != null && wsBag.getTag().equals(bag.getBagTagNumber())) {
+								notAdded = false;
+								break;
+							}
+						}
+					}
+					if (notAdded) {
+						wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
+					}
+					wsBag.setTag(bag.getBagTagNumber());
+					wsBag.setBagArrive(new Boolean (bag.getBagArrivalStatus()));
+					wsBagArray[i]=wsBag;
+				}
 			}
 			claim.setBagArray(wsBagArray);
-			
 		}
 
 	}
@@ -668,7 +740,10 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				itinerary.setAirline(wsItinerary[i].getAirline());
 				itinerary.setFlightNum(wsItinerary[i].getFlightNum());
 				if(null != wsItinerary[i].getDate()){
-					itinerary.setJourneyDate(wsItinerary[i].getDate().getTime());
+					Calendar temp = wsItinerary[i].getDate();
+		        	int timeDiff = figureTimeDifference(temp);
+		        	temp.add(Calendar.HOUR_OF_DAY, timeDiff);
+					itinerary.setJourneyDate(temp.getTime());
 				}
 				itineraryList.add(itinerary); //Garbage collection
 				itinerary=null;
@@ -699,7 +774,10 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				bag.setBrandOftheBag(wsBag[i].getBrand());
 				bag.setExternalMarkings(wsBag[i].getExternalMarkings());
 				if(null != wsBag[i].getPurchaseDate()){
-					bag.setBagPurchaseDate(wsBag[i].getPurchaseDate().getTime());
+					Calendar temp = wsBag[i].getPurchaseDate();
+		        	int timeDiff = figureTimeDifference(temp);
+		        	temp.add(Calendar.HOUR_OF_DAY, timeDiff);
+					bag.setBagPurchaseDate(temp.getTime());
 				}
 				bag.setBagColor(wsBag[i].getBagColor());
 				bag.setBagType(wsBag[i].getBagType());
@@ -715,6 +793,12 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				bag.setTrim(wsBag[i].getTrim());
 				bag.setPockets(wsBag[i].getPockets());
 				bag.setRibbonsPersonalMarkings(wsBag[i].getRibbonsOrMarkings());
+				bag.setBagPrice(wsBag[i].getBagValue());
+				bag.setBagCurrency(wsBag[i].getBagCurrency());
+				bag.setBagOwner(wsBag[i].getBagOwner());
+				bag.setLeather(wsBag[i].getLeather());
+				bag.setMetal(wsBag[i].getMetal());
+				bag.setTrimDescription(wsBag[i].getTrimDescription());
 				
 				//ticket section
 				bag.setBagArrivalStatus(wsBag[i].getBagArrive()+"");
@@ -732,7 +816,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 						content.setStorePurchased(wsContents[j].getPurchasedAt());
 						content.setPurchasedDate(wsContents[j].getPurchasedDate());
 						content.setPrice(wsContents[j].getPrice());
+						content.setPriceString(wsContents[j].getPrice() + "");
 						content.setCurrency(wsContents[j].getCurrency());
+						content.setContentOwner(wsContents[j].getContentOwner());
 						contentList.add(content);
 						content=null; //GC
 					}
@@ -761,6 +847,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				file.setId(wsFile[i].getId());
 				file.setName(wsFile[i].getFilename());
 				file.setPath(wsFile[i].getPath());
+				file.setInterim(wsFile[i].getInterim());
 				files.add(file);
 				file=null; //GC
 			}
@@ -775,55 +862,26 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary wsItinerary=null;
 		Calendar calendar=null;
 		if(null != itineraries && itineraries.size() >0){
-			if(null != claim.getItineraryArray() && claim.getItineraryArray().length >0){ //For existing webservice Itinerary data
-				wsItineraries = claim.getItineraryArray();
-				for (int i = 0; i < wsItineraries.length; i++) {
-					wsItinerary = wsItineraries[i];
-					for (int j=0; j<itineraries.size();j++) {
-						if(i==j){
-							Itinerary itinerary=itineraries.get(j);
-							if(null != itinerary){
-								wsItinerary.setDepartureCity(itinerary.getDepartureCity());
-								wsItinerary.setArrivalCity(itinerary.getArrivalCity());
-								wsItinerary.setAirline(itinerary.getAirline());
-								wsItinerary.setFlightNum(itinerary.getFlightNum());
-								if(null != itinerary.getJourneyDate()){
-									calendar=Calendar.getInstance();
-									calendar.setTime(itinerary.getJourneyDate() );
-									wsItinerary.setDate(calendar);
-									calendar=null;//GC
-								}
-								wsItineraries[i]=wsItinerary;
-								wsItinerary=null;//GC
-								break;
-							}
-							
-						}
+			wsItineraries=new com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary[itineraries.size()];
+			for (int i=0; i<itineraries.size();i++) {
+				wsItinerary = com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary.Factory.newInstance();
+				Itinerary itinerary=itineraries.get(i);
+				if(null != itinerary){
+					wsItinerary.setDepartureCity(itinerary.getDepartureCity());
+					wsItinerary.setArrivalCity(itinerary.getArrivalCity());
+					wsItinerary.setAirline(itinerary.getAirline());
+					wsItinerary.setFlightNum(itinerary.getFlightNum());
+					if(null != itinerary.getJourneyDate()){
+						calendar=Calendar.getInstance();
+						calendar.setTime(itinerary.getJourneyDate());
+						//calendar.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+						wsItinerary.setDate(calendar);
+						calendar=null;//GC
 					}
-				}
-			}else{ //For new Itinerary data that has to be persisted
-				wsItineraries=new com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary[itineraries.size()];
-				for (int i=0; i<itineraries.size();i++) {
-					wsItinerary = com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary.Factory.newInstance();
-					Itinerary itinerary=itineraries.get(i);
-					if(null != itinerary){
-						wsItinerary.setDepartureCity(itinerary.getDepartureCity());
-						wsItinerary.setArrivalCity(itinerary.getArrivalCity());
-						wsItinerary.setAirline(itinerary.getAirline());
-						wsItinerary.setFlightNum(itinerary.getFlightNum());
-						if(null != itinerary.getJourneyDate()){
-							calendar=Calendar.getInstance();
-							calendar.setTime(itinerary.getJourneyDate());
-							wsItinerary.setDate(calendar);
-							calendar=null;//GC
-						}
-						wsItineraries[i]=wsItinerary;
-						wsItinerary=null;//GC
-					}
+					wsItineraries[i]=wsItinerary;
+					wsItinerary=null;//GC
 				}
 			}
-			
-			
 			claim.setItineraryArray(wsItineraries);
 		}
 		
@@ -839,138 +897,82 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		Content content=null;
 		Calendar calendar=null;
 		if(null != bagList && bagList.size() >0){
-			if(null != claim.getBagArray() && claim.getBagArray().length >0){
-				wsBagArray = claim.getBagArray();
-				for (int i = 0; i < wsBagArray.length; i++) {
-					for (int j=0; j<bagList.size();j++) {
-						wsBag = wsBagArray[i];
-						bag=bagList.get(j);
-						if(wsBag.getTag().equalsIgnoreCase(bag.getBagTagNumber())){
-							if(null != bag){
-								wsBag.setTag(bag.getBagTagNumber());
-								wsBag.setNameOnBag(bag.getNameonBag());
-								wsBag.setBrand(bag.getBrandOftheBag());
-								wsBag.setExternalMarkings(bag.getExternalMarkings());
-								if(null !=bag.getBagPurchaseDate()){
-									calendar=Calendar.getInstance();
-									calendar.setTime(bag.getBagPurchaseDate());
-									wsBag.setPurchaseDate(calendar);
-									calendar=null;//GC
-								}
+			wsBagArray=claim.getBagArray();
+			for (int i=0; i<bagList.size();i++) {
+				wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
+				bag=bagList.get(i);
+				if(null != bag){
+					wsBag.setTag(bag.getBagTagNumber());
+					wsBag.setNameOnBag(bag.getNameonBag());
+					wsBag.setBrand(bag.getBrandOftheBag());
+					wsBag.setExternalMarkings(bag.getExternalMarkings());
+					if(null !=bag.getBagPurchaseDate()){
+						calendar=Calendar.getInstance();
+						calendar.setTime(bag.getBagPurchaseDate());
+						//calendar.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+						wsBag.setPurchaseDate(calendar);
+						calendar=null;//GC
+					}
 
-								wsBag.setBagColor(bag.getBagColor());
-								wsBag.setBagType(bag.getBagType());
-								wsBag.setHardSided(bag.getHardSided());
-								wsBag.setSoftSided(bag.getSoftSided());
-								wsBag.setLocks(bag.getLocks());
-								wsBag.setWheels(bag.getWheelsRollers());
-								wsBag.setZippers(bag.getZippers());
-								wsBag.setPullStrap(bag.getPullStrap());
-								wsBag.setFeet(bag.getFeet());
-								wsBag.setRetractibleHandle(bag.getRetractableHandel());
-								wsBag.setNameTag(bag.getNameTag());
-								wsBag.setTrim(bag.getTrim());
-								wsBag.setPockets(bag.getPockets());
-								wsBag.setRibbonsOrMarkings(bag.getRibbonsPersonalMarkings());
-								//ticket section
-								wsBag.setBagArrive(new Boolean(bag.getBagArrivalStatus()));
+					wsBag.setBagColor(bag.getBagColor());
+					wsBag.setBagType(bag.getBagType());
+					wsBag.setHardSided(bag.getHardSided());
+					wsBag.setSoftSided(bag.getSoftSided());
+					wsBag.setLocks(bag.getLocks());
+					wsBag.setWheels(bag.getWheelsRollers());
+					wsBag.setZippers(bag.getZippers());
+					wsBag.setPullStrap(bag.getPullStrap());
+					wsBag.setFeet(bag.getFeet());
+					wsBag.setRetractibleHandle(bag.getRetractableHandel());
+					wsBag.setNameTag(bag.getNameTag());
+					wsBag.setTrim(bag.getTrim());
+					wsBag.setPockets(bag.getPockets());
+					wsBag.setRibbonsOrMarkings(bag.getRibbonsPersonalMarkings());
+					wsBag.setBagValue(bag.getBagPrice());
+					wsBag.setBagCurrency(bag.getBagCurrency());
+					wsBag.setBagOwner(bag.getBagOwner());
+					wsBag.setLeather(bag.isLeather());
+					wsBag.setMetal(bag.isMetal());
+					wsBag.setTrimDescription(bag.getTrimDescription());
+					//ticket section
+					wsBag.setBagArrive(new Boolean(bag.getBagArrivalStatus()));
 
-								List<Content> contents =bag.getContentList();
-								if(null !=contents && contents.size() >0){
-									wsContentArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Contents[contents.size()];
-									for (int k = 0; k < contents.size(); k++) {
-										wsContent = com.bagnet.nettracer.ws.onlineclaims.xsd.Contents.Factory.newInstance();
-										content=contents.get(k);
-										if(null != content){
-											wsContent.setMale(content.getMale());
-											wsContent.setArticle(content.getArticle());
-											wsContent.setColor(content.getColor());
-											wsContent.setSize(content.getSize());
-											wsContent.setBrand(content.getBrandOrDescription());
-											wsContent.setPurchasedAt(content.getStorePurchased());
-											wsContent.setPurchasedDate(content.getPurchasedDate());
-											wsContent.setPrice(content.getPrice());
-											wsContent.setCurrency(content.getCurrency());
-											wsContentArray[k]=wsContent;
-											wsContent=null; //GC
-											content=null;
-										}
-									}
-									wsBag.setContentsArray(wsContentArray);
-									wsContentArray=null; //GC
-								}
-								wsBagArray[i]=wsBag;
-								wsBag=null;//GC
-								bag=null;
+					List<Content> contents =bag.getContentList();
+					if(null !=contents && contents.size() >0){
+						wsContentArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Contents[contents.size()];
+						for (int j = 0; j < contents.size(); j++) {
+							wsContent = com.bagnet.nettracer.ws.onlineclaims.xsd.Contents.Factory.newInstance();
+							content=contents.get(j);
+							if(null != content){
+								wsContent.setMale(content.getMale());
+								wsContent.setArticle(content.getArticle());
+								wsContent.setColor(content.getColor());
+								wsContent.setSize(content.getSize());
+								wsContent.setBrand(content.getBrandOrDescription());
+								wsContent.setPurchasedAt(content.getStorePurchased());
+								wsContent.setPurchasedDate(content.getPurchasedDate());
+								wsContent.setPrice(content.getPrice());
+								wsContent.setCurrency(content.getCurrency());
+								wsContent.setContentOwner(content.getContentOwner());
+								wsContentArray[j]=wsContent;
+								wsContent=null; //GC
+								content=null;
 							}
+						}
+						wsBag.setContentsArray(wsContentArray);
+						wsContentArray=null; //GC
+					}
+					for (int j = 0; j < wsBagArray.length; j++) {
+						if (wsBagArray[j] != null && wsBagArray[j].getTag().equals(wsBag.getTag())) {
+							wsBagArray[j]=wsBag;
 							break;
 						}
 					}
-				}
-			}else{
-				wsBagArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[bagList.size()];
-				for (int i=0; i<bagList.size();i++) {
-					wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
-					bag=bagList.get(i);
-					if(null != bag){
-						wsBag.setTag(bag.getBagTagNumber());
-						wsBag.setNameOnBag(bag.getNameonBag());
-						wsBag.setBrand(bag.getBrandOftheBag());
-						wsBag.setExternalMarkings(bag.getExternalMarkings());
-						if(null !=bag.getBagPurchaseDate()){
-							calendar=Calendar.getInstance();
-							calendar.setTime(bag.getBagPurchaseDate());
-							wsBag.setPurchaseDate(calendar);
-							calendar=null;//GC
-						}
-
-						wsBag.setBagColor(bag.getBagColor());
-						wsBag.setBagType(bag.getBagType());
-						wsBag.setHardSided(bag.getHardSided());
-						wsBag.setSoftSided(bag.getSoftSided());
-						wsBag.setLocks(bag.getLocks());
-						wsBag.setWheels(bag.getWheelsRollers());
-						wsBag.setZippers(bag.getZippers());
-						wsBag.setPullStrap(bag.getPullStrap());
-						wsBag.setFeet(bag.getFeet());
-						wsBag.setRetractibleHandle(bag.getRetractableHandel());
-						wsBag.setNameTag(bag.getNameTag());
-						wsBag.setTrim(bag.getTrim());
-						wsBag.setPockets(bag.getPockets());
-						wsBag.setRibbonsOrMarkings(bag.getRibbonsPersonalMarkings());
-						//ticket section
-						wsBag.setBagArrive(new Boolean(bag.getBagArrivalStatus()));
-
-						List<Content> contents =bag.getContentList();
-						if(null !=contents && contents.size() >0){
-							wsContentArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Contents[contents.size()];
-							for (int j = 0; j < contents.size(); j++) {
-								wsContent = com.bagnet.nettracer.ws.onlineclaims.xsd.Contents.Factory.newInstance();
-								content=contents.get(j);
-								if(null != content){
-									wsContent.setMale(content.getMale());
-									wsContent.setArticle(content.getArticle());
-									wsContent.setColor(content.getColor());
-									wsContent.setSize(content.getSize());
-									wsContent.setBrand(content.getBrandOrDescription());
-									wsContent.setPurchasedAt(content.getStorePurchased());
-									wsContent.setPurchasedDate(content.getPurchasedDate());
-									wsContent.setPrice(content.getPrice());
-									wsContent.setCurrency(content.getCurrency());
-									wsContentArray[j]=wsContent;
-									wsContent=null; //GC
-									content=null;
-								}
-							}
-							wsBag.setContentsArray(wsContentArray);
-							wsContentArray=null; //GC
-						}
-						wsBagArray[i]=wsBag;
-						wsBag=null;//GC
-						bag=null;
-					}
+					wsBag=null;//GC
+					bag=null;
 				}
 			}
+			
 			claim.setBagArray(wsBagArray);
 		}
 		
@@ -995,6 +997,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				//wsFile.setId(file.getId());
 				wsFile.setFilename(file.getName());
 				wsFile.setPath(file.getPath());
+				wsFile.setInterim(file.isInterim());
 				wsFileArray[i]=wsFile;
 				wsFile=null; //GC
 				file=null;
@@ -1138,5 +1141,24 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		return toReturn;
 	}
 
+	private int figureTimeDifference(Calendar wsTime) {
+		int wsHourOfDay = wsTime.get(Calendar.HOUR_OF_DAY);  
+		int wsDayOfMonth = wsTime.get(Calendar.DAY_OF_MONTH);  
+		
+		Calendar server = Calendar.getInstance();
+		server.setTime(wsTime.getTime());
+		
+		int localHourOfDay = server.get(Calendar.HOUR_OF_DAY);  
+		int localDayOfMonth = server.get(Calendar.DAY_OF_MONTH);  
+	 
+		// Difference between Web Service Provided and Server  
+		int hourDifference = wsHourOfDay - localHourOfDay;  
+		int dayDifference = wsDayOfMonth - localDayOfMonth;  
+		if (dayDifference != 0) {  
+			hourDifference = hourDifference + 24;  
+		}  
+		logger.fatal("HOUR DIFFERENCE = " + hourDifference);  
+		return hourDifference;
+	}
 
 }

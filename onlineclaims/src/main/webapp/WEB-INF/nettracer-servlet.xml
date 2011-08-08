@@ -50,7 +50,7 @@
 </bean>
 <bean id="driverInstance" class="java.lang.Class" factory-method="newInstance" factory-bean="driverClass" depends-on="driverClass" />
 
-<!-- Create the c3p0 unpooled ds --> <!-- PRODUCTION DB = 10.5.30.78 :: DEV DB = 192.168.2.105 -->
+<!-- Create the c3p0 unpooled ds --> <!-- PRODUCTION DB = 10.5.30.78 :: DEV DB = localhost -->
 <bean id="unpooledDataSource" class="com.mchange.v2.c3p0.DataSources" factory-method="unpooledDataSource" depends-on="driverInstance" >
 <constructor-arg index="0"><value>jdbc:mysql://10.5.30.78:3306/onlineclaims</value></constructor-arg>
 <constructor-arg index="1"><value>nettracer</value></constructor-arg>

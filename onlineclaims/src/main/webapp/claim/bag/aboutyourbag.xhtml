@@ -13,7 +13,7 @@
 	<rich:spacer width="100%" height="20" title="" />
 	
 	<rich:panel id="aboutbagpanel" style="border:0px">
-	<a4j:repeat value="#{passengerController.bags}" var="bagItem" rowKeyVar="rowIndex" >
+	<a4j:repeat id="bagList" value="#{passengerBean.bagList}" var="bagItem" rowKeyVar="rowIndex" >
 	<div>
 		<t:outputText value="#{passengerController.bagDetailsLabel.bagNumberLabel.label}:"	styleClass="subHeader" /> 
 		<t:outputText value="#{rowIndex+1}" styleClass="subHeader"/>
@@ -69,6 +69,34 @@
 				<rich:spacer  height="10" title="" />
 				
 				<h:panelGroup >
+					<t:outputText value="Cost of Bag" styleClass="formLabel"/>
+					<h:outputText value="&#160;" />
+					<h:graphicImage value="../_images/reqbullet.gif" 
+						rendered="false" />
+					<t:outputText value=":" styleClass="formLabel"/>
+					<rich:spacer  width="10" title="" />
+				</h:panelGroup>
+				<h:panelGroup>
+					<t:inputText  value="#{bagItem.bagPrice}" style="width:50px;" 
+									required="false" id="bagPrice" onchange="calculateTotal(#{rowIndex})"
+									readonly="#passengerController.readOnlyOnSubmitted}"
+									validatorMessage="#{passengerController.bagDetailsLabel.nameonBag.label} :
+									#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+									label="Bag Price">
+						<f:validateLength maximum="20"/>
+					</t:inputText>&#160;&#160;
+					<h:selectOneMenu value="#{bagItem.bagCurrency}"
+						onchange="calculateTotal(#{rowIndex})" id="bagCurrency"
+						disabled="#{passengerController.readOnlyOnSubmitted}">
+						<f:selectItem itemValue="USD" itemLabel="US Dollar" />
+						<f:selectItems value="#{passengerController.currencyList}" />
+					</h:selectOneMenu>
+				</h:panelGroup>
+				
+				<rich:spacer  height="10" title="" />
+				<rich:spacer  height="10" title="" />
+				
+				<h:panelGroup >
 					<t:outputText value="#{passengerController.bagDetailsLabel.externalMarkings.label}" styleClass="wrapText"/>
 					<h:outputText value="&#160;" />
 					<h:graphicImage value="../_images/reqbullet.gif" 
@@ -105,6 +133,7 @@
 					disabled="#{passengerController.readOnlyOnSubmitted}"
 					requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.bagDetailsLabel.bagColor.label} Page:#{rowIndex+1}'"
+					onchange="displayMCMessage(this.value, #{rowIndex})"
 					label="#{passengerController.bagDetailsLabel.bagColor.label} Page:#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
 						<f:selectItem itemValue="BE" itemLabel="Beige"/>
@@ -118,6 +147,7 @@
 						<f:selectItem itemValue="RD" itemLabel="Red"/>
 						<f:selectItem itemValue="WT" itemLabel="White"/>
 						<f:selectItem itemValue="YW" itemLabel="Yellow"/>
+						<f:selectItem itemValue="PR" itemLabel="Pattern"/>
 				</t:selectOneMenu>
 				
 				
@@ -144,9 +174,9 @@
 								requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.bagDetailsLabel.brandOftheBag.label} Page:#{rowIndex+1}'" 
 								validatorMessage="#{passengerController.bagDetailsLabel.brandOftheBag.label} :
-								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20" 
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 25" 
 								label="#{passengerController.bagDetailsLabel.brandOftheBag.label} Page:#{rowIndex+1}">
-					<f:validateLength maximum="20"/>
+					<f:validateLength maximum="25"/>
 				</t:inputText>
 				
 				<rich:spacer  height="10" title="" />
@@ -210,9 +240,30 @@
 								'#{passengerController.bagDetailsLabel.bagType.label} Page:#{rowIndex+1}'" 
 								label="#{passengerController.bagDetailsLabel.bagType.label} Page:#{rowIndex+1}" />
 				</a4j:outputPanel>
+				
+				<rich:spacer  height="10" title="" />
+				<rich:spacer  height="10" title="" />
+				
+				<h:panelGroup >
+					<t:outputText value="Bag Owner" styleClass="formLabel"/>
+					<h:outputText value="&#160;" />
+					<h:graphicImage value="../_images/reqbullet.gif" 
+						rendered="false" />
+					<t:outputText value=":" styleClass="formLabel"/>
+					<rich:spacer  width="10" title="" />
+				</h:panelGroup>
+				<t:selectOneMenu immediate="true" value="#{bagItem.bagOwner}"  id="bagOwner"
+					required="false" disabled="#{passengerController.readOnlyOnSubmitted}"
+					label="Bag Owner" style="width:77%">
+						<f:selectItems value="#{passengerController.ownerList}" />
+						<f:selectItem itemValue="!X!" itemLabel="No One"/>
+				</t:selectOneMenu>
+				
 			</h:panelGrid>
 		</h:panelGroup>
 	</h:panelGrid>
+			<h:outputText value="Please indicate which colors are visible on your bag in the Describe External Markings field above."
+			style="display:none; color: red;" id="mcMessage"/>
 	
 	<rich:spacer width="100%" height="25"/>
 	<div>
@@ -220,89 +271,108 @@
 	</div>
 	<rich:spacer width="100%" height="10" title="" />
 	
-	<h:panelGrid columns="16">
+	<h:panelGrid columns="20">
 		<h:selectBooleanCheckbox value="#{bagItem.hardSided}" disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.hardSided.label} Page:#{rowIndex+1}"/>
 		<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.hardSided.label}"  styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.wheelsRollers}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.wheelsRollers.label} Page:#{rowIndex+1}"/>
 		<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.wheelsRollers.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.feet}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.feet.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.feet.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.trim}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.trim.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.trim.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="20"/>
+		
+		<t:outputText value="Describe Trim:" styleClass="requiredField"/>
+		<rich:spacer width="5"/>
+		<t:inputText  value="#{bagItem.trimDescription}" readonly="#{passengerController.readOnlyOnSubmitted}"/>
+		<rich:spacer width="5"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.softSided}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.softSided.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.softSided.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.zippers}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.zippers.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.zippers.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.retractableHandel}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.retractableHandel.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.retractableHandel.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.pockets}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.pockets.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.pockets.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="20"/>
 		
-		<h:selectBooleanCheckbox value="#{bagItem.locks}" 
+		<h:selectBooleanCheckbox value="#{bagItem.locks}"
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.locks.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.locks.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="5"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.pullStrap}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.pullStrap.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.pullStrap.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.nameTag}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
 			label="#{passengerController.bagDetailsLabel.nameTag.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.nameTag.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="20"/>
 		
-		<h:selectBooleanCheckbox value="#{bagItem.ribbonsPersonalMarkings}" 
+		<h:selectBooleanCheckbox value="#{bagItem.leather}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings.label} Page:#{rowIndex+1}"/>
+			label="Leather Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
+		<t:outputText value="Leather" styleClass="requiredField"/>
+		<rich:spacer width="20"/>
+		
+		<h:selectBooleanCheckbox value="#{bagItem.metal}" 
+			 disabled="#{passengerController.readOnlyOnSubmitted}"
+			label="Metal Page:#{rowIndex+1}"/>
+			<rich:spacer width="5"/>
+		<t:outputText value="Metal" styleClass="requiredField"/>
+		<rich:spacer width="20"/>
+		
+			<h:selectBooleanCheckbox value="#{bagItem.ribbonsPersonalMarkings}" 
+			 	disabled="#{passengerController.readOnlyOnSubmitted}"
+				label="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings.label} Page:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings.label}" styleClass="requiredField"/>
-		<rich:spacer width="30"/>
+		<rich:spacer width="5"/>
 	</h:panelGrid>
 	
 	<rich:spacer width="100%" height="25"/>
@@ -324,7 +394,7 @@
 							<rich:column>
 							<h:outputLabel  value="#{passengerController.bagDetailsLabel.color.label}" styleClass="subheadColumn"/>
 						</rich:column>
-						<rich:column>
+							<rich:column>
 							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.size.label}" styleClass="subheadColumn"/>
 						</rich:column>
 							<rich:column>
@@ -343,21 +413,21 @@
 							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.price.label}" styleClass="subheadColumn"/>
 						</rich:column>
 							<rich:column>
-							<h:outputLabel  value="#{passengerController.bagDetailsLabel.currency.label}" styleClass="subheadColumn"/>
+							<h:outputLabel  value="Owner" styleClass="subheadColumn"/>
 						</rich:column>
 					</rich:columnGroup>
 				</f:facet>
 				
 				<rich:column>
-					<h:inputText value="#{contentItem.article}" size="6" 
+					<h:inputText value="#{contentItem.article}" size="4" 
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.color}"  size="6"
+					<h:inputText value="#{contentItem.color}"  size="3"
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.size}"  size="6"
+					<h:inputText value="#{contentItem.size}"  size="3"
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
 				</rich:column>
 				<rich:column>
@@ -365,13 +435,14 @@
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
 				</rich:column>
 				<rich:column>
-					<h:selectOneMenu value="#{contentItem.male}" disabled="#{passengerController.readOnlyOnSubmitted}">
-						<f:selectItem itemValue="" itemLabel="--" />
-						<f:selectItem itemValue="true" itemLabel="Male" />
-						<f:selectItem itemValue="false" itemLabel="Female" />
-						<f:selectItem itemValue="false" itemLabel="Child" />
-						<f:selectItem itemValue="false" itemLabel="Infant" />
-						<f:selectItem itemValue="false" itemLabel="N/A" />
+					<h:selectOneMenu value="#{contentItem.male}" disabled="#{passengerController.readOnlyOnSubmitted}"
+					style="width:70px;">
+						<f:selectItem itemValue="0" itemLabel="N/A" />
+						<f:selectItem itemValue="1" itemLabel="Male" />
+						<f:selectItem itemValue="2" itemLabel="Female" />
+						<f:selectItem itemValue="3" itemLabel="Male Child" />
+						<f:selectItem itemValue="5" itemLabel="Female Child" />
+						<f:selectItem itemValue="4" itemLabel="Infant" />
 					</h:selectOneMenu>
 				</rich:column>
 				<rich:column>
@@ -383,14 +454,21 @@
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.price}"  size="6"
-						readonly="#{passengerController.readOnlyOnSubmitted}"/>
-				</rich:column>
-				<rich:column>
-					<h:selectOneMenu value="#{contentItem.currency}"  
+					<h:inputText value="#{contentItem.priceString}"  size="7" id="thePrice"
+						onchange="calculateTotal(#{rowIndex})"
+						readonly="#{passengerController.readOnlyOnSubmitted}"/><br/>
+					<h:selectOneMenu value="#{contentItem.currency}" style="width:130px;"
+						onchange="calculateTotal(#{rowIndex})"
 						disabled="#{passengerController.readOnlyOnSubmitted}">
 						<f:selectItem itemValue="USD" itemLabel="US Dollar" />
 						<f:selectItems value="#{passengerController.currencyList}" />
+					</h:selectOneMenu>
+				</rich:column>
+				<rich:column>
+					<h:selectOneMenu value="#{contentItem.contentOwner}"  style="width:105px;"
+						disabled="#{passengerController.readOnlyOnSubmitted}">
+						<f:selectItems value="#{passengerController.ownerList}" />
+						<f:selectItem itemValue="!X!" itemLabel="No One"/>
 					</h:selectOneMenu>
 				</rich:column>
 				</rich:dataTable>
@@ -401,16 +479,78 @@
 		<a4j:commandButton value="#{passengerController.bagDetailsLabel.addMoreItems.label}"  
 			  action="#{passengerController.addMoreItems}" limitToList="true"
 			 rendered="#{!passengerController.readOnlyOnSubmitted}"
-			reRender="contentTable" styleClass="ticketInfo">
+			reRender="contentTable" styleClass="button140pxred button140pxred2">
 			
-			<a4j:actionparam name="contentIndex" 
-								assignTo="#{passengerController.bagIndex}"
-								value="#{rowIndex}" />
+			<a4j:actionparam name="contentIndex" assignTo="#{passengerController.bagIndex}" value="#{rowIndex}" />
+			
+		</a4j:commandButton>&#160;&#160;&#160;
+		<a4j:commandButton value="Delete Last Item"  
+			  action="#{passengerController.deleteLastItem}" limitToList="true"
+			 rendered="#{!passengerController.readOnlyOnSubmitted}"
+			reRender="contentTable" styleClass="button140pxred button140pxred2">
+			
+			<a4j:actionparam name="contentIndex" assignTo="#{passengerController.bagIndex}" value="#{rowIndex}" />
 			
 		</a4j:commandButton>
+	</div>
+	<div style="text-align: right;">
+	<h:outputText id="totalLabel" value="Total Price:"/>&#160;<h:outputText value="#{bagItem.grandTotal}" id="totalPrice" />
 	</div>
 	</a4j:region>
 	<rich:spacer width="100%" height="60" title="" />
 	</a4j:repeat>
 	</rich:panel>
+	<script type="text/javascript">
+	<!--
+			function calculateTotal(bagRow) {
+				theRows = document.getElementById("appForm:bagList:" + bagRow + ":contentTable").getElementsByTagName("tr");
+				var theTotal = document.getElementById("appForm:bagList:" + bagRow + ":bagPrice").value;
+				theCurrSel = document.getElementById("appForm:bagList:" + bagRow + ":bagCurrency");
+				var theCurr = theCurrSel.options[theCurrSel.selectedIndex].value;
+				theTotal = parseFloat(theTotal);
+				if (isNaN(theTotal)) {
+					theTotal = 0;
+				}
+				var singleCurr = 1;
+				for (i = 1; i < theRows.length; i++) {
+					if (singleCurr) {
+						theSel = theRows[i].getElementsByTagName("td")[7].getElementsByTagName("select")[0];
+						if (theCurr != theSel.options[theSel.selectedIndex].value) {
+							singleCurr = null;
+						}
+						var addOn = theRows[i].getElementsByTagName("td")[7].getElementsByTagName("input")[0].value;
+						theTotal = theTotal + parseFloat(addOn);
+					}
+				}
+				totalElem = document.getElementById("appForm:bagList:" + bagRow + ":totalPrice");
+				theTotal = toFixed(theTotal, 2);
+				if (singleCurr) {
+					totalElem.innerHTML = theTotal;
+				} else {
+					totalElem.innerHTML = "Multiple Currencies.";
+				}
+			}
+	
+			function displayMCMessage(selection, bagRow) {
+				theDisplay = "none";
+				if (selection == "MC" || selection == "PR") {
+					theDisplay = "block";
+				}
+				document.getElementById("appForm:bagList:" + bagRow + ":mcMessage").style.display = theDisplay;
+			}
+			
+			function toFixed(value, precision) {
+			    var precision = precision || 0,
+			    neg = value < 0,
+			    power = Math.pow(10, precision),
+			    value = Math.round(value * power),
+			    integral = String((neg ? Math.ceil : Math.floor)(value / power)),
+			    fraction = String((neg ? -value : value) % power),
+			    padding = new Array(Math.max(precision - fraction.length, 0) + 1).join('0');
+
+			    return precision ? integral + '.' +  padding + fraction : integral;
+			}
+
+	//-->
+	</script>
 </ui:composition>

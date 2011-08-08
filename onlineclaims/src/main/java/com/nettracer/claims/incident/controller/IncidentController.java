@@ -147,8 +147,8 @@ public class IncidentController {
 		HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
 		try {
 			PassengerView passengerView = onlineClaimsWS.getPassengerView(
-					incidentBean.getPnr(), incidentBean.getLastName());   // PNR is used to store IncidentID on completed incidents
-
+					incidentBean.getIncidentID(), incidentBean.getLastName(), incidentBean.getFirstName());  
+			
 			if (passengerView.getAuthenticationSuccess()) {
 
 					if (!isMobile()) {
@@ -164,7 +164,7 @@ public class IncidentController {
 
 					WSPVAdvancedIncident passengerData = passengerView.getData();
 					
-					Claim claim=onlineClaimsWS.getClaim(passengerData,incidentBean.getLastName());
+					Claim claim=onlineClaimsWS.getClaim(passengerData,incidentBean.getLastName(), incidentBean.getFirstName());
 					PassengerBean passengerBean = onlineClaimsWS.getPassengerData(passengerData,claim);
 					passengerBean.setPassengerData(passengerData);
 					passengerBean.setIncidentID(passengerData.getIncidentID());

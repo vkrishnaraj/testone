@@ -80,9 +80,9 @@
 						readonly="#{passengerController.fraudQuestionLabel.inspectionPlace.hidden
 							|| passengerController.readOnlyOnSubmitted}"
 						validatorMessage="#{passengerController.fraudQuestionLabel.inspectionPlace.label} :
-									#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+									#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"
 						size="60" required="#{passengerController.fraudQuestionLabel.inspectionPlace.required}">
-						<f:validateLength maximum="20"/>
+						<f:validateLength maximum="50"/>
 					</t:inputText>
 					<rich:spacer width="100%" height="20" title=""/>
 				</div>
@@ -92,6 +92,85 @@
 				</div>
 				<div>
 					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				<div>
+				<h:panelGrid columns="3" width="88%"  columnClasses="width1,width2,width3">
+					<h:panelGrid columns="1" width="100%" >
+						<h:panelGroup>
+							<t:outputText value="Do you have private insurance or credit card coverage for this loss?" styleClass="formLabel"/>
+							<h:outputText value="&#160;" />
+							<h:graphicImage value="../_images/reqbullet.gif"  
+								rendered="false"/>
+						</h:panelGroup>	
+					</h:panelGrid>
+					<rich:spacer width="20px"/>
+					<h:panelGrid columns="1" width="60%" >
+					<h:selectOneRadio   value="#{passengerBean.privateInsurance}" label="Private Insurance"
+							disabled="#{passengerController.readOnlyOnSubmitted}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'Private Insurance'" 
+							required="false">
+										<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
+										<f:selectItem itemLabel="No" itemValue="false"/>
+					</h:selectOneRadio>
+					</h:panelGrid>
+				</h:panelGrid>
+				</div>
+				<rich:spacer width="100%" height="10" title=""/>
+				<div>
+					<h:outputText value="#{passengerController.fraudQuestionLabel.yesAbove.label}:" styleClass="formLabel"/>	
+				</div>
+				<div>
+					<h:panelGrid columns="4">
+					
+						<rich:spacer  height="10" title=""/>
+						<rich:spacer  height="10" title=""/>
+						<rich:spacer  height="10" title=""/>
+						<rich:spacer  height="10" title=""/>
+					
+						<rich:spacer width="60px"/>
+						<h:panelGroup>
+							<t:outputText value="Private Insurance or Credit Card Coverage Name:" styleClass="formLabel"/>
+							<h:outputText value="&#160;" />
+							<h:graphicImage value="../_images/reqbullet.gif"  
+								rendered="false"/>
+						</h:panelGroup>	
+						<rich:spacer width="20px"/>
+						<t:inputText value="#{passengerBean.privateInsuranceName}" label="Insurance Name" tabindex="1"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'Insurance Name'" 
+								validatorMessage="Insurance Name :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+								required="false">
+							<f:validateLength maximum="20"/>
+						</t:inputText>
+						
+						<rich:spacer  height="10" title=""/>
+						<rich:spacer  height="10" title=""/>
+						<rich:spacer  height="10" title=""/>
+						<rich:spacer  height="10" title=""/>
+						
+						<rich:spacer width="60px"/>
+						<h:panelGroup>
+						<t:outputText value="Private Insurance or Credit Card Coverage Address:" styleClass="formLabel"/>
+						<h:outputText value="&#160;" />
+						
+							<h:graphicImage value="../_images/reqbullet.gif"  
+									rendered="false"/>
+						</h:panelGroup>	
+						<rich:spacer width="20px"/>
+						<t:inputText value="#{passengerBean.privateInsuranceAddr}" label="Insurance Address" tabindex="1"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'Insurance Address'" 
+								validatorMessage="Insurance Address :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 100"
+								required="false">
+							<f:validateLength maximum="100"/>
+						</t:inputText>
+					</h:panelGrid>
+					<rich:spacer width="100%" height="20" title=""/>
 				</div>
 				<div>
 				<h:panelGrid columns="3" width="88%"  columnClasses="width1,width2,width3">
