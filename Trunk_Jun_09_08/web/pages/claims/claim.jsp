@@ -339,7 +339,6 @@
                           </html:select>
                         </td>
                       </tr>
-              		<jsp:include page="/pages/claims/claim_sensitive_incl.jsp" />
                       <tr>
                         <td colspan="4">
                           <bean:message key="colname.reason" />
