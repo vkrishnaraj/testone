@@ -507,7 +507,7 @@ public class CustomWestJetReports {
 			stationLimit1 = " and s.stationcode = \'" + stationCode + "\' ";
 		}
 
-		String sql = " select s.stationcode column1, count(distinct i.incident_id) column2, damagereplace column3, damagerepair column4"
+		String sql = " select s.stationcode column1, count(distinct i.incident_id) column2, damagerepair column3, damagereplace column4"
 			+ "   from incident i join station s on s.station_id = i.stationcreated_ID"
 			+ "      left outer join "
 			+ "       ("
