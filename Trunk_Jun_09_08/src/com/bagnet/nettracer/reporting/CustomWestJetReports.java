@@ -762,7 +762,7 @@ public class CustomWestJetReports {
 
 		String sql = " select s.stationcode column1, count(distinct i.incident_id) column2, closedPirs column3, hours24 column4, hours48 column5, days5 column6, days21 column7, daysOver21 column8," +
 				" case when pirsBdos is null then 0 else pirsBdos end column9, " +
-				" count(distinct i.incident_id)-case when pirsBdos is null then 0 else pirsBdos end column10 "
+				" closedPirs-case when pirsBdos is null then 0 else pirsBdos end column10 "
 			+ "   from incident i join station s on s.station_id = i.stationcreated_ID"
 			+ "      left outer join "
 			+ "       ("
