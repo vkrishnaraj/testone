@@ -502,7 +502,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		if (airlineCode == null || airlineCode.length() == 0) {
 
 			String subtitle = resources.getString("custom.report.subtitle.84.totalPir") + " = " + custom.getLossReportTotalPirs(srDTO) + ", "
-			+ resources.getString("custom.report.subtitle.84.totalPir") + " = " + custom.getTotalOALPirs(srDTO) + " "
+			+ resources.getString("custom.report.subtitle.84.totalOalPirs") + " = " + custom.getTotalOALPirs(srDTO) + " "
 			+ resources.getString("custom.report.subtitle.84.basedOnTag");
 			drb.setSubtitle(subtitle);
 		}
