@@ -108,6 +108,9 @@
 	<bean id="avis" class="aero.nettracer.lf.services.LFServiceBean">
 	</bean>
 	
+	<bean id="fsDataRetentionBean" class="aero.nettracer.fs.utilities.DataRetentionUtil">
+	</bean>
+	
 	<bean id="CronUtils" class="com.bagnet.nettracer.cronjob.utilities.CronUtils" >
 		<constructor-arg value="${company.code}" />
 		<property name="errHandler" ref="cronUtilsErrhandler"/>
@@ -172,6 +175,12 @@
 		<property name="concurrent" value="false" />
 	</bean>
 	
+	<bean id="fsDataRetention" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="fsDataRetentionBean"/>
+		<property name="targetMethod" value="deleteOldFiles"/>
+		<property name="concurrent" value="false" />
+	</bean>
+	
 	<bean id="moveToWtJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetBeanName" value="moveToWt" />
 		<property name="targetMethod" value="moveFiles" />
@@ -228,6 +237,11 @@
 	<bean id="cronAvisAutoClose" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="avisAutoClose" />
 		<property name="cronExpression" value="${avis.autoclose.cron}" />
+	</bean>
+		
+	<bean id="cronFsDataRetention" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="fsDataRetention" />
+		<property name="cronExpression" value="${fs.dataretention.cron}" />
 	</bean>
 		
 	<bean id="BillingTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">

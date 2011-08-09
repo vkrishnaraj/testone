@@ -935,12 +935,14 @@ public class TracingConstants {
 	public static final int FS_AUDIT_ITEM_TYPE_FILE = 1;
 	public static final int FS_AUDIT_ITEM_TYPE_FRAUD_RESULTS = 2;
 	public static final int FS_AUDIT_ITEM_TYPE_MATCH_HISTORY = 3;
+	public static final int FS_AUDIT_ITEM_TYPE_PROCESS = 4;
 	
 	public static final int FS_ACTION_LOAD = 1;
 	public static final int FS_ACTION_SAVE = 2;
 	public static final int FS_ACTION_SUBMIT = 3;
 	public static final int FS_ACTION_REQUEST_INFO = 4;
 	public static final int FS_ACTION_DELETE = 5;
+	public static final int FS_ACTION_DATA_RETENTION_SCAN = 6;
 	public static final String SESSION_REDIRECT_URL = "SESSION_REDIRECT_URL";
 	
 	public static String getDBDateFormat(Properties properties) {

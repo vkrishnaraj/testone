@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -7,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 
@@ -94,7 +96,41 @@ public class PropertyBMO {
 	
 	public static final String LF_AUTO_CLOSE_DAYS = "lf.auto.close";
 	public static final String LF_AUTO_SALVAGE_DAYS = "lf.auto.salvage";
-
+	
+	public static final String FS_RETENTION_YEARS = "fs.retention.years";
+	
+	public static boolean updateProperty(String key, String value){
+		boolean success = true;
+		if(key != null && value != null){
+			//We need to explicitly define which properties the application can change
+			if(key.equals(FS_RETENTION_YEARS)){
+				String sql = "update properties set valueStr = :value where keyStr = :key";
+				Session sess = HibernateWrapper.getSession().openSession();
+				
+				try {
+					Transaction t = sess.getTransaction();
+					t.begin();
+					Query q = sess.createSQLQuery(sql);
+					
+					q.setString("key", key);
+					q.setString("value", value);
+					q.executeUpdate();
+					t.commit();
+					ArrayList<String> list = new ArrayList<String>();
+					list.add(value);
+					propCache.put(key, list);
+				} catch (Exception e) {
+					logger.error("Error updating property " + key, e);
+					success = false;
+				} finally {
+					sess.close();
+				}
+			}
+		}
+		return success;
+	}
+	
+	
 	/**
 	 * Retrieves the value of the property from the database.
 	 * 

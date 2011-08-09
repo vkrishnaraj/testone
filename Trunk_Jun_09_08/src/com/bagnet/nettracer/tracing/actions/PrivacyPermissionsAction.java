@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMessages;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissionsKey;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.PrivacyPermissionsForm;
@@ -76,6 +77,8 @@ public class PrivacyPermissionsAction extends Action{
 		}
 		
 		if(request.getParameter("save") != null){
+			
+			
 			boolean success = true;
 			if(theForm.getDef()!=null && theForm.getReq() != null){
 				//Def permission is automatically applied to Req
@@ -110,11 +113,11 @@ public class PrivacyPermissionsAction extends Action{
 				
 				def.setRetention(theForm.getRetention());
 				req.setRetention(theForm.getRetention());
-
-				if(PrivacyPermissionsUtil.setPrivacyPermissions(def) 
-						&& PrivacyPermissionsUtil.setPrivacyPermissions(req)){
-					success = true;
-				} else {
+				if(!PropertyBMO.updateProperty(PropertyBMO.FS_RETENTION_YEARS, new Integer(theForm.getRetention()).toString())){
+					success = false;
+				}
+				if(!PrivacyPermissionsUtil.setPrivacyPermissions(def) 
+						|| !PrivacyPermissionsUtil.setPrivacyPermissions(req)){
 					success = false;
 				}
 			} else {
