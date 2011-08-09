@@ -1,6 +1,8 @@
 package aero.nettracer.selfservice.fraud;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -34,6 +36,7 @@ import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.model.detection.Whitelist;
 import aero.nettracer.fs.model.messaging.FsMessage;
 import aero.nettracer.fs.utilities.AuditUtil;
+import aero.nettracer.fs.utilities.DataRetentionThread;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.GeoLocation;
 import aero.nettracer.fs.utilities.InternationalException;
@@ -51,8 +54,18 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 //@WebService
 public class ClaimBean implements ClaimRemote, ClaimHome {
 
+	private static Thread DATA_RETENTION_THREAD;
+	
 	public static boolean debug = true;
 
+	public ClaimBean(){
+		if(DATA_RETENTION_THREAD == null){
+			DataRetentionThread drt = new DataRetentionThread();
+			DATA_RETENTION_THREAD = new Thread(drt, "DataRetentionThread");
+			DATA_RETENTION_THREAD.start();
+		}
+	}
+	
 	public String echoTest(String s) {
 		return "echo: " + s;
 	}
@@ -654,4 +667,95 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			return false;
 		}
 	}
+	
+	
+	public void deleteOldFiles(){
+		String sql = "select distinct(key.companycode) from aero.nettracer.serviceprovider.common.db.PrivacyPermissions";
+		Session sess = HibernateWrapper.getSession().openSession();
+		try{
+			Query q = sess.createQuery(sql);
+
+			List<String> list = (List<String>)q.list();
+			
+			for(String companycode:list){
+				System.out.println("companycode: " + companycode);
+				deleteOldFiles(companycode);
+			}
+			
+		}catch (Exception e){
+			e.printStackTrace();
+			sess.close();
+		}
+	}
+	
+	private Date getDeleteDate(String companycode) throws Exception{
+		PrivacyPermissionsBean bean = new PrivacyPermissionsBean();
+		PrivacyPermissions p = bean.getPrivacyPermissions(companycode, PrivacyPermissions.AccessLevelType.def);
+		if(p != null && p.getRetention() > 0){
+			GregorianCalendar cal = new GregorianCalendar();
+			cal.add(Calendar.YEAR, -p.getRetention());
+			System.out.println(cal.getTime());
+			return cal.getTime();
+		} else {
+			throw new Exception("unable to determine retention policy for " + companycode);
+		}
+	}
+	
+	public void deleteOldFiles(String companycode){
+		String sql = "select f.id from aero.nettracer.fs.model.File f left outer join f.incident i left outer join f.claims c" +
+				" where f.validatingCompanycode = :companycode and (i.timestampOpen < :date or c.claimDate < :date) ";
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		try{
+			Query q = sess.createQuery(sql);
+
+			q.setParameter("date", getDeleteDate(companycode));
+			q.setParameter("companycode", companycode);
+
+			List<Long> list = (List<Long>)q.list();
+			
+			for(Long id:list){
+				System.out.println("deleting: " + id);
+				if(!deleteFile(id)){
+					throw new Exception("failed to delete file:" + id);
+				}
+			}
+			AuditUtil.saveActionAudit(AuditUtil.ACTION_DATARETENTION, -1, companycode);
+			
+		}catch (Exception e){
+			e.printStackTrace();
+			sess.close();
+		}
+	}
+	
+	
+	public boolean deleteFile(long id){
+		Session sess = HibernateWrapper.getSession().openSession();
+		try{
+			File file = (File)sess.load(File.class, id);
+			if(file != null){
+				try{
+					Transaction t = sess.getTransaction();
+					t.begin();
+					sess.delete(file);
+					t.commit();
+					sess.close();
+					AuditUtil.saveActionAudit(AuditUtil.ACTION_DELETE_FILE, id, (file!=null?file.getValidatingCompanycode():null));
+					return true;
+				} catch (Exception e){
+					e.printStackTrace();
+					sess.close();
+					return false;
+				}
+			} else {
+				return true;
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+			sess.close();
+			return false;
+		}
+	}
+	
+	
 }

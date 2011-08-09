@@ -24,6 +24,8 @@ public class AuditUtil {
 	public static final String ACTION_APPROVE_REQUEST = "approve_access_request";
 	public static final String ACTION_DENY_REQUEST = "deny_access_request";
 	public static final String ACTION_DELETE_MATCH = "delete_match";
+	public static final String ACTION_DATARETENTION = "data_retention";
+	public static final String ACTION_DELETE_FILE = "delete_file";
 	
 	public static long saveActionAudit(String action, long file_id, String companycode_id, Set<FsMatchHistoryAudit> matches){
 		FsActionAudit toSave = new FsActionAudit();
