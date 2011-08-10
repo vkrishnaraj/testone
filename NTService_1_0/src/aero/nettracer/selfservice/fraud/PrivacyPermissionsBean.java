@@ -38,7 +38,7 @@ public class PrivacyPermissionsBean implements PrivacyPermissionsRemote, Privacy
 		try{
 			List<PrivacyPermissions> plist =(List<PrivacyPermissions>) q.list();
 			for(PrivacyPermissions p:plist){
-				System.out.println("load permissions: " + p.getKey().getCompanycode() + p.isName());
+//				System.out.println("load permissions: " + p.getKey().getCompanycode() + p.isName());
 			}
 //			permissionsList = plist;
 			return plist;
