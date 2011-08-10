@@ -797,7 +797,7 @@ public class IncidentBMO {
 	 * @return @throws HibernateException
 	 */
 	public Incident findIncidentForPVO(String incident_ID, String name) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 
 		try {
 			if (name == null || name.length() == 0)
@@ -834,7 +834,7 @@ public class IncidentBMO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Incident> findIncidentForPVOFreqFlyer(String freq_flyer) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 
 		try {
 
@@ -867,7 +867,7 @@ public class IncidentBMO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Incident> findIncidentForPVORecordLocator(String record_locator) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 
 		try {
 
@@ -905,7 +905,7 @@ public class IncidentBMO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Incident> findIncidentForPVOPhoneNumber(String phone_number) throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 
 		try {
 
@@ -944,7 +944,7 @@ public class IncidentBMO {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Object[]> findActiveIncidentsPhones() throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = HibernateWrapper.getDirtySession().openSession();
 
 		try {
 			Calendar c = new GregorianCalendar();

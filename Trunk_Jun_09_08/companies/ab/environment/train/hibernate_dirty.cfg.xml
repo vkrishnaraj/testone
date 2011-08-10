@@ -12,7 +12,7 @@
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
     	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-		<property name="hibernate.connection.url">jdbc:mysql://10.60.98.66:3306/ab_testing</property>
+		<property name="hibernate.connection.url">jdbc:mysql://10.60.98.66:3306/ab_training</property>
 		<property name="hibernate.connection.username">ab_user</property>
 		<property name="hibernate.connection.password">pREpra6a</property>
 		<property name="hibernate.show_sql">false</property>
@@ -33,8 +33,8 @@
 
 		<property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
 		<property name="hibernate.cache.provider_configuration_file_resource_path">/ehcache.xml</property>
-		<property name="hibernate.cache.use_second_level_cache">false</property>
-		<property name="hibernate.cache.use_query_cache">false</property>
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.use_query_cache">false</property>		
 		&mappings;
     </session-factory>
 
