@@ -206,6 +206,21 @@ public class ModifyClaimAction extends CheckedAction {
 					claim.setNtIncident(ntIncident);
 					ntIncident.getClaims().add(claim);
 //					ntIncident.setClaims(new LinkedHashSet<Claim>(claims));
+				} else {
+					if (PropertyBMO.isTrue("ntfs.support.multiple.claims")) {
+						claim.setNtIncident(ntIncident);
+						ntIncident.getClaims().add(claim);
+					} else {
+						// allow single claim only
+						if (ntIncident.getClaims().isEmpty()) {
+							claim.setNtIncident(ntIncident);
+							ntIncident.getClaims().add(claim);
+						} else {
+							ActionMessage error = new ActionMessage("error.claim.exists");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+						}
+					}
 				}
 			}
 		}
