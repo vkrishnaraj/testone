@@ -87,13 +87,6 @@ public class ModifyClaimAction extends CheckedAction {
 		BagService bs = new BagService();
 		IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
 		
-		// TODO: THIS BLOCK IS PROBLEMATIC IF WE AREN'T COMING FROM THE INCIDENT PAGES ITSELF.
-//		if (theform != null) {
-//			request.setAttribute("incident", theform.getIncident_ID());
-//			if (ClaimSettlementBMO.getClaimSettlement(theform.getIncident_ID(), null) != null) {
-//				request.setAttribute("claimSettlementExists", "1");
-//			}
-//		}
 		Incident ntIncident = null;
 		request.setAttribute("CLAIM_PAYOUT_RPT", Integer.toString(ReportingConstants.CLAIM_PAYOUT_RPT));
 
@@ -205,21 +198,16 @@ public class ModifyClaimAction extends CheckedAction {
 					claim = ClaimUtils.createClaim(user, ntIncident);
 					claim.setNtIncident(ntIncident);
 					ntIncident.getClaims().add(claim);
-//					ntIncident.setClaims(new LinkedHashSet<Claim>(claims));
 				} else {
-					if (PropertyBMO.isTrue("ntfs.support.multiple.claims")) {
+					// here we should have a claim and ntIncident
+					if (PropertyBMO.isTrue("ntfs.support.multiple.claims") || ntIncident.getClaims().isEmpty()) {
 						claim.setNtIncident(ntIncident);
 						ntIncident.getClaims().add(claim);
 					} else {
 						// allow single claim only
-						if (ntIncident.getClaims().isEmpty()) {
-							claim.setNtIncident(ntIncident);
-							ntIncident.getClaims().add(claim);
-						} else {
-							ActionMessage error = new ActionMessage("error.claim.exists");
-							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-							saveMessages(request, errors);
-						}
+						ActionMessage error = new ActionMessage("error.claim.exists");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
 					}
 				}
 			}
@@ -251,29 +239,14 @@ public class ModifyClaimAction extends CheckedAction {
 		
 		// save the claim
 		if (request.getParameter("save") != null) {
-//			LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
 			
 			// 1. save the claim locally
 			claim = cform.getClaim();
 			deleteEmptyNames(claim);
 
 			boolean firstSave = claim.getId() == 0;
-//			if (isNtUser) {
-//				if (firstSave) {
-//					//TODO: VERY PROBLEMATIC
-//					file = (File) session.getAttribute("file");
-//					session.removeAttribute("file");
-//					if (file != null) {
-////						claims.add(claim);
-//						file.getClaims().add(claim);
-//						claim.setFile(file);
-//					}
-//				}
-//			}
-			
 			boolean claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);	
 			
-//			long claimId = claim.getId();
 			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
 			
 			// maintain existing nt functionality
@@ -316,8 +289,6 @@ public class ModifyClaimAction extends CheckedAction {
 						LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
 						newClaim.setClaimants(pers);
 						
-//						fsClaims.add(newClaim);
-//						newClaim.getIncident().setClaims(fsClaims);
 						for (Person p: current.getClaimants()) {
 							p.setClaim(newClaim);
 							pers.add(p);
@@ -335,16 +306,6 @@ public class ModifyClaimAction extends CheckedAction {
 							receipts.add(r);
 						}
 						
-						// couldn't get it from the incident
-//						if (file == null) {
-//							file = current.getFile();
-//							// couldn't get it from the claim
-//							if (file == null) {
-//								file = new File();
-//							}
-//						}
-						
-//						file.setClaims(fsClaims);
 						file.setStatusId(claim.getStatusId());
 						newClaim.setFile(file);
 						file.setIncident(newClaim.getIncident());
@@ -360,17 +321,6 @@ public class ModifyClaimAction extends CheckedAction {
 						FileDAO.saveFile(claim.getFile(), false);
 					}
 					logger.info("Claim saved to central services: " + remoteFileId);
-					
-//					claim.setFile(file);
-//					if (file.getClaims() != null && !file.getClaims().isEmpty()) {
-//						file.getClaims().add(claim);
-//					} else {
-//						claims.clear();
-//						claims.add(claim);
-//						file.setClaims(fsClaims);
-//					}
-//					file.setIncident(claim.getIncident());
-//					claim.getIncident().setFile(file);
 					
 					// 3. submit the claim for tracing
 					boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
