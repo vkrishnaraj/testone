@@ -105,17 +105,17 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{missing.receipt.paragraph_4}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-7" mode="Opaque" x="42" y="222" width="469" height="24" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-7" mode="Opaque" x="42" y="300" width="469" height="24" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
+					<font fontName="Times New Roman" size="11" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.first_bullet_text.1} + " " + $P{airline} + "'s " + $R{lostdelay.receipt.first_bullet_text.2}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.first_bullet_text.1}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="1" y="701" width="549" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -129,34 +129,9 @@
 					<pen lineWidth="2.0"/>
 				</graphicElement>
 			</line>
+
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-17" mode="Opaque" x="8" y="137" width="534" height="29" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
-					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{missing.receipt.paragraph_1}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-34" mode="Opaque" x="42" y="291" width="469" height="49" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Times New Roman" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA["PLEASE NOTE: " + $P{airline} + " " + $R{lostdelay.receipt.second_bullet_text.1}]]></textFieldExpression>
-			</textField>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-38" mode="Opaque" x="8" y="179" width="534" height="17" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-38" mode="Opaque" x="8" y="267" width="534" height="17" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -212,7 +187,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-42" mode="Opaque" x="147" y="418" width="159" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-42" mode="Opaque" x="121" y="418" width="159" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -225,7 +200,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="(###)###-####" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-43" mode="Opaque" x="147" y="438" width="159" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-43" mode="Opaque" x="121" y="438" width="159" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -238,7 +213,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{phone}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-44" mode="Opaque" x="185" y="501" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-44" mode="Opaque" x="250" y="501" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -251,7 +226,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-45" mode="Opaque" x="185" y="483" width="333" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-45" mode="Opaque" x="250" y="483" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -264,7 +239,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{email_address}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-46" mode="Opaque" x="185" y="519" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-46" mode="Opaque" x="250" y="519" width="233" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -277,7 +252,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{city_st_zip}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-47" mode="Opaque" x="185" y="564" width="188" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-47" mode="Opaque" x="250" y="564" width="188" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -358,7 +333,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.reportnumber}+":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-52" mode="Opaque" x="25" y="418" width="122" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-52" mode="Opaque" x="25" y="418" width="90" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -371,7 +346,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.customername}+":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-53" mode="Opaque" x="25" y="438" width="122" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-53" mode="Opaque" x="25" y="438" width="90" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -397,7 +372,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.address1}+":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-55" mode="Opaque" x="25" y="519" width="154" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-55" mode="Opaque" x="25" y="519" width="216" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -462,7 +437,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{creditfile_exp}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-60" mode="Opaque" x="184" y="589" width="71" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-60" mode="Opaque" x="250" y="589" width="71" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -527,7 +502,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.pnr.locator}+":"]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-47" mode="Opaque" x="185" y="542" width="188" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-47" mode="Opaque" x="250" y="542" width="188" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineColor="#000000"/>
@@ -539,19 +514,13 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pnr_locator}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-7" mode="Opaque" x="42" y="255" width="469" height="24" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
-				<box>
-					<topPen lineWidth="0.0" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineColor="#000000"/>
-				</box>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
-					<font fontName="Times New Roman" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+			<staticText>
+				<reportElement x="42" y="272" width="469" height="50"/>
+				<textElement>
+					<font fontName="Times New Roman" size="11" pdfFontName="Times-Roman"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.liability.document.link}]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>

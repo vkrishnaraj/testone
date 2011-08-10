@@ -35,6 +35,7 @@
 				<ref bean="cronOldPassiveTracerTrigger" />
 				<!-- <ref bean="cronMoveToWtTrigger" /> -->
 				<ref bean="BillingTrigger" />
+				<ref bean="cronFsDataRetention" />
 			</list>
 		</property>
 	</bean>
