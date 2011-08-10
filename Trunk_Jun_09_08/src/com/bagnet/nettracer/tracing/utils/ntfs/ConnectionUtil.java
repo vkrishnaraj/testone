@@ -145,11 +145,11 @@ public class ConnectionUtil {
 			FsIncident fsIncident = ClaimUtils.getFsIncident(iDTO, user);
 			fsIncident.setFile(file);
 			file.setIncident(fsIncident);
-			FileDAO.saveFile(file);
+			FileDAO.saveFile(file, true);
 			long remoteFileId = ConnectionUtil.insertFile(file);
 			file = FileDAO.loadFile(file.getId());
 			file.setSwapId(remoteFileId);
-			FileDAO.saveFile(file);
+			FileDAO.saveFile(file, false);
 			if (remoteFileId > 0) {
 				TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, true, hasViewResultsPermission);
 				if (results != null) {

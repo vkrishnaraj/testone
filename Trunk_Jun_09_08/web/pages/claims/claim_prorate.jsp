@@ -63,7 +63,7 @@
         <div class="menu">
           <dl>
             <dd>
-              <a href='searchIncident.do?incident=<%=request.getParameter("incident") %>'><span class="aa">&nbsp;
+              <a href='searchIncident.do?incident=<%=request.getAttribute("incident") %>'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
                 <span class="bb"><bean:message key="menu.incident_info" /></span>
@@ -75,7 +75,7 @@
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, a)) {
 %>
               <dd>
-                <a href='select_claim.do?incidentId=<%=request.getParameter("incident") %>'><span class="aa">&nbsp;
+                <a href='select_claim.do?incidentId=<%=request.getAttribute("incident") %>'><span class="aa">&nbsp;
                     <br />
                     &nbsp;</span>
                   <span class="bb"><bean:message key="menu.claim_payout" /></span>
@@ -88,7 +88,7 @@
 			if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) {	
 				if (ntUser && ntfsUser) { %>
 					<dd>
-                   	<a href='fraud_results.do?incident=<%=request.getParameter("incident") %>' ><span class="aa">&nbsp;<br />&nbsp;</span>
+                   	<a href='fraud_results.do?incident=<%=request.getAttribute("incident") %>' ><span class="aa">&nbsp;<br />&nbsp;</span>
                    	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
                         <span class="cc">&nbsp;
                           <br />

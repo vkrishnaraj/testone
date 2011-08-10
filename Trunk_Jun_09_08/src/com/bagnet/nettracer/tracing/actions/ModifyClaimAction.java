@@ -158,9 +158,13 @@ public class ModifyClaimAction extends CheckedAction {
 			
 			// create a new claim
 			if (isNtUser && request.getParameter("populate") != null) {
-				claim = ClaimUtils.createClaim(user, ntIncident);
-				claims.add(claim);
-				ntIncident.setClaims(new LinkedHashSet<Claim>());
+				if (claims.isEmpty() || PropertyBMO.isTrue("ntfs.support.multiple.claims")) {
+					claim = ClaimUtils.createClaim(user, ntIncident);
+					claims.add(claim);
+					ntIncident.setClaims(new LinkedHashSet<Claim>());
+				} else {
+					claim = ntIncident.getClaims().iterator().next();
+				}
 				file = FileDAO.loadFile(ntIncident.getIncident_ID());
 			} else {
 				claim = ClaimUtils.createClaim(user);
@@ -239,19 +243,22 @@ public class ModifyClaimAction extends CheckedAction {
 			deleteEmptyNames(claim);
 
 			boolean firstSave = claim.getId() == 0;
-			if (isNtUser) {
-				if (firstSave) {
-					//TODO: VERY PROBLEMATIC
-					file = (File) session.getAttribute("file");
-					session.removeAttribute("file");
-					if (file != null) {
-//						claims.add(claim);
-						file.getClaims().add(claim);
-						claim.setFile(file);
-					}
-				}
-			}
-			boolean claimSaved = FileDAO.saveFile(claim.getFile());
+//			if (isNtUser) {
+//				if (firstSave) {
+//					//TODO: VERY PROBLEMATIC
+//					file = (File) session.getAttribute("file");
+//					session.removeAttribute("file");
+//					if (file != null) {
+////						claims.add(claim);
+//						file.getClaims().add(claim);
+//						claim.setFile(file);
+//					}
+//				}
+//			}
+			
+			boolean claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);	
+			
+//			long claimId = claim.getId();
 			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
 			
 			// maintain existing nt functionality
@@ -335,7 +342,7 @@ public class ModifyClaimAction extends CheckedAction {
 					claim = ClaimDAO.loadClaim(claim.getId());
 					if (remoteFileId > 0) {
 						claim.getFile().setSwapId(remoteFileId);
-						FileDAO.saveFile(claim.getFile());
+						FileDAO.saveFile(claim.getFile(), false);
 					}
 					logger.info("Claim saved to central services: " + remoteFileId);
 					

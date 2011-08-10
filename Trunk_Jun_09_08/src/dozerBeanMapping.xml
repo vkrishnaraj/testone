@@ -3,6 +3,26 @@
 	xsi:schemaLocation="http://dozer.sourceforge.net
           http://dozer.sourceforge.net/schema/beanmapping.xsd">
 
+	<mapping map-null="false">
+		<class-a>
+			aero.nettracer.fs.model.Person
+		</class-a>
+		<class-b>
+			aero.nettracer.fs.model.Person
+		</class-b>
+		<field-exclude> 
+  			<a>claim</a> 
+  			<b>claim</b> 
+		</field-exclude>     
+		<field-exclude> 
+  			<a>incident</a> 
+  			<b>incident</b> 
+		</field-exclude>     
+		<field-exclude> 
+  			<a>reservation</a> 
+  			<b>reservattion</b> 
+		</field-exclude>     
+	</mapping>	
 
 	<mapping map-null="false">
 		<class-a>

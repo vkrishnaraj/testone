@@ -408,10 +408,11 @@ public class MissingAction extends CheckedAction {
 				} 
 				boolean isNew = theform.getIncident_ID() == null || theform.getIncident_ID().trim().length() == 0;
 				if (isNew && PropertyBMO.isTrue("ntfs.submit.missing")) {
-					File file = ConnectionUtil.createAndSubmitForTracing(iDTO, user, request, UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user));
-					if (file != null) {
-						session.setAttribute("file", file);
-					}
+					ConnectionUtil.createAndSubmitForTracing(iDTO, user, request, UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user));
+//					File file = ConnectionUtil.createAndSubmitForTracing(iDTO, user, request, UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user));
+//					if (file != null) {
+//						session.setAttribute("file", file);
+//					}
 				}
 				
 				theform.setRemarkEnteredWhenNotifiedOfRequirements(false);

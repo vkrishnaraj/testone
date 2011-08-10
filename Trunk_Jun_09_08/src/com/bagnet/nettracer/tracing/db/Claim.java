@@ -55,7 +55,9 @@ public class Claim extends FsClaim {
 	}
 
 	public void setClaimprorate(ClaimProrate claimprorate) {
-		super.setClaimProrateId(claimprorate.getClaimprorate_ID());
+		if (claimprorate != null) {
+			super.setClaimProrateId(claimprorate.getClaimprorate_ID());
+		}
 		this.claimprorate = claimprorate;
 	}
 	

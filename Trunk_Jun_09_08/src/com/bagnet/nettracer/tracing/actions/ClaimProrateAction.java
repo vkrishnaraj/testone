@@ -17,9 +17,11 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -90,7 +92,8 @@ public class ClaimProrateAction extends CheckedAction {
 
 		// save claim prorate notice
 		if (request.getParameter("save") != null) {
-			Claim cDTO = new Claim();
+//			Claim cDTO = new Claim();
+			Claim cDTO = theform.getClaim();
 			if (bs.insertClaimProrate(cDTO, cpform, session, theform.getIncident_ID())) {
 				theform.setClaim(cDTO);
 				request.setAttribute("success", "1");
@@ -99,7 +102,14 @@ public class ClaimProrateAction extends CheckedAction {
 				request.setAttribute("fail", "1");
 			}
 			return (mapping.findForward(TracingConstants.CLAIM_PRORATE_MAIN));
+		} else {
+			Incident i = new IncidentBMO().findIncidentByID(incident);
+			if (i.getClaims() != null && !i.getClaims().isEmpty()) {
+				Claim c = i.getClaims().iterator().next();
+				theform.setClaim(c);
+			}
 		}
+		request.setAttribute("incident", theform.getIncident_ID());
 		/**
 		 * retrieve to modify claim payout
 		 */

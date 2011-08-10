@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.fs.model.FsClaim;
 
@@ -47,30 +49,40 @@ public class SelectClaimAction extends CheckedAction {
 
 		SelectClaimForm scForm = (SelectClaimForm) form;
 		
-		// redirect if the airline doesn't support multiple claims
 		String incidentId = request.getParameter("incidentId");
-		if (incidentId == null || !PropertyBMO.isTrue("ntfs.support.multiple.claims")) {
-			response.sendRedirect("claim_resolution.do?incidentId=" + incidentId);
+		if (incidentId == null || incidentId.isEmpty()) {
+			response.sendRedirect("claim_resolution.do?createNew=1");
 			return null;
 		}
 		
-		// redirect to the create claim action with the pre-population trigger set
-		if (request.getParameter("createNew") != null || scForm.getClaims() == null) {
-			response.sendRedirect("create_claim.do?incidentId=" + scForm.getIncidentId() + "&createNew=1&populate=1");
-			return null;
-		}
-		
-		// otherwise load the incident and display the claims
 		Incident incident = new IncidentBMO().findIncidentByID(incidentId);
-		if (incident.getClaims() == null || incident.getClaims().isEmpty()) {
-			response.sendRedirect("claim_resolution.do?incidentId=" + incidentId);
+		
+		if (incident == null) {
+			ActionMessages errors = new ActionMessages();
+			ActionMessage error = new ActionMessage("error.noincident");
+			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			saveMessages(request, errors);
+			return mapping.findForward(TracingConstants.CLAIM_CREATE_NEW);
+		} else if (incident.getClaims() == null || incident.getClaims().isEmpty()) {
+			// shouldn't be here without a valid incident
+		
+			// there aren't any claims, so we have to create one in any case
+			response.sendRedirect("claim_resolution.do?createNew=1&populate=1&incidentId=" + incident.getIncident_ID());
 			return null;
 		} else {
-			scForm.setIncidentId(incidentId);
-			scForm.setClaims(new LinkedHashSet<FsClaim>(incident.getClaims()));
+			
+			// now we know that we have an incident with at least one claim
+			if (PropertyBMO.isTrue("ntfs.support.multiple.claims")) {
+				scForm.setIncidentId(incidentId);
+				scForm.setClaims(new LinkedHashSet<FsClaim>(incident.getClaims()));
+				return mapping.findForward(TracingConstants.CLAIM_SELECT_CLAIM);
+			} else {
+				long claimId = incident.getClaims().iterator().next().getId();
+				response.sendRedirect("claim_resolution.do?claimId=" + claimId);
+				return null;
+			}
+			
 		}
 		
-		return mapping.findForward(TracingConstants.CLAIM_SELECT_CLAIM);
-
 	}
 }

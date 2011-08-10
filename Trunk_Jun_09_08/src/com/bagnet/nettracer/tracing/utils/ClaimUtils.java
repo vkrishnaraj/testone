@@ -14,9 +14,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.commons.codec.language.Soundex;
 import org.apache.log4j.Logger;
+import org.dozer.DozerBeanMapperSingletonWrapper;
+import org.dozer.Mapper;
 import org.hibernate.Criteria;
 import org.hibernate.classic.Session;
 import org.hibernate.criterion.Expression;
+import org.springframework.transaction.annotation.Transactional;
 
 import aero.nettracer.fs.model.AuditFsClaim;
 import aero.nettracer.fs.model.Bag;
@@ -82,6 +85,7 @@ public class ClaimUtils {
 		return createClaim(user, null);
 	}
 	
+	@Transactional
 	public static Claim createClaim(Agent user, Incident ntIncident) {
 		
 		Company company = CompanyBMO.getCompany(user.getCompanycode_ID());
@@ -144,6 +148,39 @@ public class ClaimUtils {
 			
 			claimants.clear();
 			person = claim.getIncident().getPassengers().toArray(new Person[0])[0];
+			
+//			if (person.getId() > 0) {
+//				try {
+//					Person newPerson = new Person();
+//					BeanUtils.copyProperties(newPerson, person);
+					
+					Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+					Person newPerson = mapper.map(person, aero.nettracer.fs.model.Person.class);
+					newPerson.setId(0);
+					person = newPerson;
+					
+					for (FsAddress a: person.getAddresses()) {
+						a.setId(0);
+						a.setReservation(null);
+						a.setPerson(person);
+					}
+					
+					for (Phone p: person.getPhones()) {
+						p.setId(0);
+						p.setIncident(null);
+						p.setReservation(null);
+						p.setPerson(person);
+					}
+//					
+//				} catch (IllegalAccessException iae) {
+//					logger.error(iae.getMessage());
+//				} catch (InvocationTargetException ite) {
+//					logger.error(ite.getMessage());
+//				}
+				
+				
+//			}
+			
 			if (person.getPassportIssuer() == null || person.getPassportIssuer().isEmpty()) {
 				person.setPassportIssuer(company.getCountrycode_ID());
 			}

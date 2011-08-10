@@ -252,7 +252,12 @@
                       }
                       if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a) && ntUser) { %>
                         <dd>
-                          <a href="claim_prorate.do"><span class="aa">&nbsp;
+                      <logic:notEmpty name="claimForm" property="claim.ntIncident" >
+                          <a href='claim_prorate.do?incident=<bean:write name="claimForm" property="claim.ntIncident.incident_ID" />'><span class="aa">&nbsp;
+                      </logic:notEmpty>
+                      <logic:empty name="claimForm" property="claim.ntIncident" >
+                          <a href='claim_prorate.do'><span class="aa">&nbsp;
+                      </logic:empty>
                               <br />
                               &nbsp;</span>
                             <span class="bb"><bean:message key="menu.claim_prorate" /></span>

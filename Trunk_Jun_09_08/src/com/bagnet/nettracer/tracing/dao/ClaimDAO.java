@@ -1,5 +1,8 @@
 package com.bagnet.nettracer.tracing.dao;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -8,9 +11,8 @@ import org.hibernate.Query;
 import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
 
-import aero.nettracer.fs.model.AuditFsClaim;
-
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.forms.SearchClaimForm;
@@ -132,19 +134,25 @@ public class ClaimDAO {
 			query.setLong("claimId", form.getClaimId());
 		}
 		
-		String value = form.getIncidentId();
+		String value = form.getIncidentId().trim();
 		if (value != null && !value.isEmpty()) {
 			query.setString("ntIncidentId", value);
 		}
 		
 		value = form.getS_createtime();
 		if (value != null && !value.isEmpty()) {
-			query.setDate(CLAIM_DATE+"_start", DateUtils.convertToDate(form.getS_createtime(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+			String startDate = DateUtils.formatDate(form.getS_createtime(), user.getDateformat().getFormat(), TracingConstants.DB_DATEFORMAT, user.getDefaultlocale(), null);
+			query.setString(CLAIM_DATE+"_start", startDate);
 		}
 		
 		value = form.getE_createtime();
 		if (value != null && !value.isEmpty()) {
-			query.setDate(CLAIM_DATE+"_end", DateUtils.convertToDate(form.getE_createtime(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+			Date end = DateUtils.convertToDate(form.getE_createtime(), user.getDateformat().getFormat(), user.getDefaultlocale());
+			Calendar c = new GregorianCalendar();
+			c.setTime(end);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+			String endDate = DateUtils.formatDate(c.getTime(), TracingConstants.DB_DATEFORMAT, user.getDefaultlocale(), null);
+			query.setString(CLAIM_DATE+"_end", endDate);
 		}
 
 		value = form.getLastName();
@@ -231,7 +239,7 @@ public class ClaimDAO {
 		whereSql.append(getNtIncidentIdSql(form));
 
 		// add claim date sql
-		whereSql.append(getDateSql("c.claimDate", CLAIM_DATE, form.getS_createtime(), form.getE_createtime(), user));
+		whereSql.append(getDateSql("c.claimDate", CLAIM_DATE, form.getS_createtime(), form.getE_createtime()));
 
 		// add claimant sql
 		getPersonSql(form, user, fromSql, whereSql);
@@ -256,16 +264,17 @@ public class ClaimDAO {
 		return toReturn;
 	}
 	
-	private String getDateSql(String targetField, String fieldName, String startDate, String endDate, Agent agent) {
+	private String getDateSql(String targetField, String fieldName, String startDate, String endDate) {
 		String toReturn = "";
 		boolean startDateValid = startDate != null && !startDate.isEmpty();
 		boolean endDateValid = endDate != null && !endDate.isEmpty();
-		if (startDateValid && endDateValid) {
-			toReturn = "and " + targetField + " between :" + fieldName + "_start and :" + fieldName + "_end ";
-		} else if (startDateValid) {
-			toReturn = "and " + targetField + " >= :" + fieldName + "_start ";
-		} else if (endDateValid) {
-			toReturn = "and " + targetField + " <= :" + fieldName + "_end ";
+
+		if (startDateValid) {
+			toReturn += "and " + targetField + " >= :" + fieldName + "_start ";
+		} 
+		
+		if (endDateValid) {
+			toReturn += "and " + targetField + " < :" + fieldName + "_end ";
 		}
 		
 		return toReturn;
@@ -274,27 +283,27 @@ public class ClaimDAO {
 	private String getPersonSql(SearchClaimForm form, Agent agent, StringBuilder fromSql, StringBuilder whereSql) {
 		StringBuilder toReturn = new StringBuilder();
 		
-		String value = form.getLastName();
+		String value = form.getLastName().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (p.lastName = :lastName or c.incident.reservation.purchaser.lastName = :lastName) ");
 		}
 		
-		value = form.getFirstName();
+		value = form.getFirstName().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (p.firstName = :firstName or c.incident.reservation.purchaser.firstName = :firstName) ");
 		}
 		
-		value = form.getMiddleName();
+		value = form.getMiddleName().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (p.middleName = :middleName or c.incident.reservation.purchaser.middleName = :middleName) ");
 		}
 		
-		value = form.getEmailAddress();
+		value = form.getEmailAddress().trim();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and p.emailAddress = :emailAddress or c.incident.reservation.purchaser.emailAddresss = :emailAddress) ");
+			toReturn.append("and p.emailAddress = :emailAddress or c.incident.reservation.purchaser.emailAddress = :emailAddress) ");
 		}
 		
-		toReturn.append(getDateSql("p.dateOfBirth", DOB, form.getStartDateOfBirth(), form.getEndDateOfBirth(), agent));
+		toReturn.append(getDateSql("p.dateOfBirth", DOB, form.getStartDateOfBirth(), form.getEndDateOfBirth()));
 		
 		String personSql = toReturn.toString();		
 		if (!personSql.isEmpty()) {
@@ -330,37 +339,37 @@ public class ClaimDAO {
 	private String getAddressSql(SearchClaimForm form) {
 		StringBuilder toReturn = new StringBuilder();
 		
-		String value = form.getAddress1();
+		String value = form.getAddress1().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (a.address1 = :address1 or pa.address1 = :address1) ");
 		}
 		
-		value = form.getAddress2();
+		value = form.getAddress2().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (a.address2 = :address2 or pa.address2 = :address2) ");
 		}
 
-		value = form.getCity();
+		value = form.getCity().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (a.city = :city or pa.city = :city) ");
 		}
 
-		value = form.getState();
+		value = form.getState().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (a.state = :state or pa.state = :state) ");
 		} 			
 
-		value = form.getProvince();
+		value = form.getProvince().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (a.province = :province or pa.province = :province) ");
 		} 			
 
-		value = form.getCountry();
+		value = form.getCountry().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (a.country = :country or pa.country = :country) ");
 		}
 		
-		value = form.getZip();
+		value = form.getZip().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (a.zip = :zip or pa.zip = :zip) ");
 		}
@@ -371,7 +380,7 @@ public class ClaimDAO {
 	private String getPhoneSql(SearchClaimForm form) {
 		StringBuilder toReturn = new StringBuilder();
 		
-		String value = form.getPhone();
+		String value = form.getPhone().trim();
 		if (value != null && !value.isEmpty()) {
 			toReturn.append("and (ph.phoneNumber = :phoneNumber or pph.phoneNumber = :phoneNumber) ");
 		}

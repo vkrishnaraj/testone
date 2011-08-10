@@ -47,6 +47,8 @@ import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.ClaimDAO;
+import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
@@ -1988,38 +1990,43 @@ public class BagService {
 				BeanUtils.copyProperties(cDTO, tempC);
 			}
 			cDTO.setClaimprorate(cp);
-
+			
+			
+			// TODO: re-enable the claim audit functionality here!! 
 			// AUDIT: copy into audit claim bean
-			Audit_Claim acDTO = new Audit_Claim();
-			BeanUtils.copyProperties(acDTO, cDTO);
+			
+//			Audit_Claim acDTO = new Audit_Claim();
+//			BeanUtils.copyProperties(acDTO, cDTO);
 
-			Audit_ClaimProrate a_cp = new Audit_ClaimProrate();
-			BeanUtils.copyProperties(a_cp, cp);
+//			Audit_ClaimProrate a_cp = new Audit_ClaimProrate();
+//			BeanUtils.copyProperties(a_cp, cp);
 			Prorate_Itinerary pi = null;
-			Audit_Prorate_Itinerary a_pi = null;
+//			Audit_Prorate_Itinerary a_pi = null;
 			ArrayList pilist = new ArrayList();
 			if(cp.getProrate_itineraries() != null) {
 				for(int i = 0; i < cp.getPi_list().size(); i++) {
 					pi = (Prorate_Itinerary) cp.getPi_list().get(i);
 					pi.setClaimprorate(cp);
-					a_pi = new Audit_Prorate_Itinerary();
-					BeanUtils.copyProperties(a_pi, pi);
-					a_pi.setAudit_claimprorate(a_cp);
-					pilist.add(a_pi);
+//					a_pi = new Audit_Prorate_Itinerary();
+//					BeanUtils.copyProperties(a_pi, pi);
+//					a_pi.setAudit_claimprorate(a_cp);
+//					pilist.add(a_pi);
 				}
-				a_cp.setProrate_itineraries(new LinkedHashSet(pilist));
+//				a_cp.setProrate_itineraries(new LinkedHashSet(pilist));
 			}
 
-			acDTO.setAudit_claimprorate(a_cp);
+//			acDTO.setAudit_claimprorate(a_cp);
+//
+//			acDTO.setModify_time(TracerDateTime.getGMTDate());
+//			acDTO.setModify_agent(user);
 
-			acDTO.setModify_time(TracerDateTime.getGMTDate());
-			acDTO.setModify_agent(user);
-
-			boolean result = cBMO.insertClaim(cDTO, acDTO, incident_ID);
-			if(!result)
-				return false;
-			else
-				return true;
+//			boolean result = cBMO.insertClaim(cDTO, acDTO, incident_ID);
+//			if(!result)
+//				return false;
+//			else
+//				return true;
+//				
+			return FileDAO.saveFile(cDTO.getFile(), false);
 		}
 		catch (Exception e) {
 			logger.error("unable to insert claimprorate due to bean copyproperties error: " + e);

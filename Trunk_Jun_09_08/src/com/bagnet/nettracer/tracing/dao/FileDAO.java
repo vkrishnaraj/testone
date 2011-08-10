@@ -34,7 +34,7 @@ private static final String EXCEPTION_MESSAGE = "Exception in FileDAO";
 		return file;
 	}
 	
-	public static boolean saveFile(File file) {
+	public static boolean saveFile(File file, boolean firstSave) {
 		boolean success = false;
 		if (file == null) {
 			return success;
@@ -45,7 +45,10 @@ private static final String EXCEPTION_MESSAGE = "Exception in FileDAO";
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			transaction = session.beginTransaction();
-			if(file.getId() > 0) {
+			if (firstSave) {
+				// this was added due to claims not saving with merge on the first save
+				session.saveOrUpdate(file);
+			} else if(file.getId() > 0) {
 				session.merge(file);
 			} else {
 				session.save(file);
@@ -64,6 +67,38 @@ private static final String EXCEPTION_MESSAGE = "Exception in FileDAO";
 		}
 		return success;
 	}
+	
+//	public static boolean saveOrUpdateFile(File file) {
+//		boolean success = false;
+//		if (file == null) {
+//			return success;
+//		}
+//		Session session = null;
+//		Transaction transaction = null;
+//		
+//		try {
+//			session = HibernateWrapper.getSession().openSession();
+//			transaction = session.beginTransaction();
+//			if(file.getId() > 0) {
+//				session.saveOrUpdate(file);
+//				session.saveOrUpdate(file);
+//			} else {
+//				session.save(file);
+//			}
+//			transaction.commit();
+//			success = true;
+//		} catch (Exception e) {
+//			logger.error(EXCEPTION_MESSAGE, e);
+//			if (transaction != null) {
+//				transaction.rollback();
+//			}
+//		} finally {
+//			if (session != null) {
+//				session.close();
+//			}
+//		}
+//		return success;
+//	}
 	
 	public static File loadFile(String incidentId) {
 		if (incidentId == null) {
