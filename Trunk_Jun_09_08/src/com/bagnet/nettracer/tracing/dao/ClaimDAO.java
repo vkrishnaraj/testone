@@ -283,24 +283,33 @@ public class ClaimDAO {
 	private String getPersonSql(SearchClaimForm form, Agent agent, StringBuilder fromSql, StringBuilder whereSql) {
 		StringBuilder toReturn = new StringBuilder();
 		
+		if ((form.getLastName() != null && !form.getLastName().isEmpty())
+				|| (form.getFirstName() != null && !form.getFirstName().isEmpty())
+				|| (form.getMiddleName() != null && !form.getMiddleName().isEmpty())
+				|| (form.getEmailAddress() != null && !form.getEmailAddress().isEmpty())) {
+			fromSql.append("left outer join c.incident inc ");
+			fromSql.append("left outer join inc.reservation res ");
+			fromSql.append("left outer join res.purchaser pur ");
+		}
+		
 		String value = form.getLastName().trim();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and (p.lastName = :lastName or c.incident.reservation.purchaser.lastName = :lastName) ");
+			toReturn.append("and (p.lastName like :lastName or pur.lastName like :lastName) ");
 		}
 		
 		value = form.getFirstName().trim();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and (p.firstName = :firstName or c.incident.reservation.purchaser.firstName = :firstName) ");
+			toReturn.append("and (p.firstName like :firstName or pur.firstName like :firstName) ");
 		}
 		
 		value = form.getMiddleName().trim();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and (p.middleName = :middleName or c.incident.reservation.purchaser.middleName = :middleName) ");
+			toReturn.append("and (p.middleName like :middleName or pur.middleName like :middleName) ");
 		}
 		
 		value = form.getEmailAddress().trim();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and p.emailAddress = :emailAddress or c.incident.reservation.purchaser.emailAddress = :emailAddress) ");
+			toReturn.append("and p.emailAddress like :emailAddress or pur.emailAddress like :emailAddress) ");
 		}
 		
 		toReturn.append(getDateSql("p.dateOfBirth", DOB, form.getStartDateOfBirth(), form.getEndDateOfBirth()));
