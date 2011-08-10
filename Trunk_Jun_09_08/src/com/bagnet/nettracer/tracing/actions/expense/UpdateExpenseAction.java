@@ -36,6 +36,8 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 		ExpensePayoutForm expenseForm = (ExpensePayoutForm) form;
 		Agent user = (Agent) request.getSession().getAttribute("user");
 		ExpensePayout ep = getUpdatedPayout(expenseForm, user);
+		
+		request.getSession().setAttribute("expense_id", ep.getExpensepayout_ID());
 
 		// set status to pending or approved
 		Status st = new Status();

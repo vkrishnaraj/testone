@@ -600,8 +600,8 @@
 		<action path="/*Expense" parameter="{1}" type="com.bagnet.nettracer.tracing.actions.expense.{1}ExpenseAction" name="expensePayoutForm" scope="request" validate="true" >
 			<forward name="create_success" path="create_expense"></forward>
 			<forward name="edit_success" path="edit_expense"></forward>
-			<forward name="update_success" path="claim_resolution.do" redirect="true" ></forward>
-			<forward name="save_success" path="claim_resolution.do" redirect="true"></forward>
+			<forward name="update_success" path="EditExpense.do" redirect="true" ></forward>
+			<forward name="save_success" path="EditExpense.do" redirect="true"></forward>
 		</action>
 		
 		<action path="/displayClaimsList" type="com.bagnet.nettracer.tracing.actions.onlineclaims.DisplayClaimsListAction"
