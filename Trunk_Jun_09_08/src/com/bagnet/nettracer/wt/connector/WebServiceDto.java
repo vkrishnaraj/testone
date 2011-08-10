@@ -1,7 +1,14 @@
 package com.bagnet.nettracer.wt.connector;
 
-public class WebServiceDto {
+import java.io.Serializable;
 
+public class WebServiceDto implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private String connectionReference;
 	private byte[] captcha;
 	private String captchaTimestamp;
