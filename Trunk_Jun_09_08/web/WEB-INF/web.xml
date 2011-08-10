@@ -224,6 +224,6 @@
    <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
   </taglib>
  </jsp-config>
- <distributable/>
+ 
  
 </web-app>
