@@ -519,6 +519,7 @@ public class CustomWestJetReports {
 			+ "\' and i.createdate <= \'"
 			+ endDate
 			+ "\'"
+			+ stationLimit1
 			+ "             and expensetype_id = 1"
 			+ "           group by s.stationcode"
 			+ "         "
@@ -544,8 +545,8 @@ public class CustomWestJetReports {
 			+ startDate
 			+ "\' and i.createdate <= \'"
 			+ endDate
-			+ stationLimit1
 			+ "\'"
+			+ stationLimit1
 			+ "   and i.itemtype_id = 3"
 			+ "   group by s.stationcode";
 			
