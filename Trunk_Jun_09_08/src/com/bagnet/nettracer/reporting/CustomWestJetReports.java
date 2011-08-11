@@ -48,8 +48,8 @@ public class CustomWestJetReports {
 			stationLimit2 = " and legto = \'" + stationCode + "\'";
 		}
 
-		String sql = "select groupcol column1, sum(sumcol) column2 from"
-				+ " (select legfrom groupcol, count(distinct i.incident_id) sumcol"
+		String sql = "select groupcol column1, count(distinct sumcol) column2 from"
+				+ " (select distinct i.incident_id sumcol, legfrom groupcol"
 				+ "   from itinerary it join incident i on it.incident_id = i.incident_id"
 				+ "     join expensepayout ep on ep.incident_id = i.incident_id"
 				+ "   where " + "   i.createdate >= \'"
@@ -63,10 +63,10 @@ public class CustomWestJetReports {
 				+ "   and i.itemtype_id = 1"
 				+ "   and expensetype_id = 5"
 				+ stationLimit1
-				+ "   group by legfrom"
+				+ "   "
 				+ "   "
 				+ "   union "
-				+ " select legto groupcol, count(distinct i.incident_id) sumcol"
+				+ " select distinct i.incident_id sumcol, legto groupcol"
 				+ "   from itinerary it join incident i on it.incident_id = i.incident_id"
 				+ "     join expensepayout ep on ep.incident_id = i.incident_id"
 				+ "   where "
@@ -81,7 +81,7 @@ public class CustomWestJetReports {
 				+ "   and i.itemtype_id = 1"
 				+ stationLimit2
 				+ "   and expensetype_id = 5"
-				+ "   group by legto"
+				+ "   "
 				+ " ) as tmptable"
 				+ " group by groupcol"
 				+ " order by groupcol asc";
@@ -373,8 +373,8 @@ public class CustomWestJetReports {
 			stationLimit2 = " and legto = \'" + stationCode + "\'";
 		}
 
-		String sql = " select groupcol column1, sum(sumcol) column2 from"
-			+ " (select legfrom groupcol, count(distinct i.incident_id) sumcol"
+		String sql = " select groupcol column1, count(distinct sumcol) column2 from"
+			+ " (select  distinct i.incident_id sumcol, legfrom groupcol"
 			+ "   from itinerary it join incident i on it.incident_id = i.incident_id"
 			+ "   where " + "   i.createdate >= \'"
 			+ startDate
@@ -386,10 +386,10 @@ public class CustomWestJetReports {
 			+ "   and legfrom != ''"
 			+ stationLimit1
 			+ "   and i.itemtype_id = 2"
-			+ "   group by legfrom"
+			+ "   "
 			+ "   "
 			+ "   union "
-			+ " select legto groupcol, count(distinct i.incident_id) sumcol"
+			+ " select distinct i.incident_id sumcol, legto groupcol"
 			+ "   from itinerary it join incident i on it.incident_id = i.incident_id"
 			+ "   where " + "   i.createdate >= \'"
 			+ startDate
@@ -401,7 +401,7 @@ public class CustomWestJetReports {
 			+ "   and legto != ''"
 			+ stationLimit2
 			+ "   and i.itemtype_id = 2"
-			+ "   group by legto"
+			+ "   "
 			+ " ) as tmptable"
 			+ " group by groupcol"
 			+ " order by groupcol asc ";
