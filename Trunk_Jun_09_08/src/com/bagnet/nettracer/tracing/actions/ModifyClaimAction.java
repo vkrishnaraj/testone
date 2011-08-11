@@ -203,7 +203,7 @@ public class ModifyClaimAction extends CheckedAction {
 					if (PropertyBMO.isTrue("ntfs.support.multiple.claims") || ntIncident.getClaims().isEmpty()) {
 						claim.setNtIncident(ntIncident);
 						ntIncident.getClaims().add(claim);
-					} else {
+					} else if (request.getParameter("save") == null) {
 						// allow single claim only
 						ActionMessage error = new ActionMessage("error.claim.exists");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
