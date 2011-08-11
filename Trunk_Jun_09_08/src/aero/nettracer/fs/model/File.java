@@ -1,6 +1,7 @@
 package aero.nettracer.fs.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -69,12 +70,22 @@ public class File implements Serializable {
 	private FsIncident incident;
 	
 	private String validatingCompanycode;
+	
+	private Date createDate;
 
 	public File() {
 	}
 
 	public File(long id) {
 		this.id = id;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
 	public long getId() {
