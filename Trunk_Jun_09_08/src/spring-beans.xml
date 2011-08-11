@@ -98,7 +98,7 @@
 		lazy-init="false">
 		<property name="beans">
 			<map>
-				<entry key="NetTracer:name=ntManagementBean" value-ref="ntManagementBean" />
+				<entry key="NetTracer:name=ntManagementBean${wt.company.code}" value-ref="ntManagementBean" />
 			</map>
 		</property>
 	</bean>
