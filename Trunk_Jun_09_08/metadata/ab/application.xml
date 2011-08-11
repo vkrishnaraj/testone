@@ -8,7 +8,7 @@
  <display-name>TracerEAR</display-name>
  <module>
      <web>
-         <web-uri>ab.war</web-uri>
+         <web-uri>avis_testing.war</web-uri>
          <context-root>abtracer</context-root>
      </web>
   </module>
