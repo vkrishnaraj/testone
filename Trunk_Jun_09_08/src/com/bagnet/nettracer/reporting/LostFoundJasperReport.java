@@ -83,7 +83,7 @@ public class LostFoundJasperReport {
 		calendarStart.add(Calendar.DAY_OF_MONTH, -1);
 
 		Calendar calendarEnd = new GregorianCalendar();
-		calendarEnd.setTime(DateUtils.convertToDate(srDto.getStarttime(), srDto.getDateFormat(), null));
+		calendarEnd.setTime(DateUtils.convertToDate(srDto.getEndtime(), srDto.getDateFormat(), null));
 		calendarEnd.add(Calendar.DAY_OF_MONTH, 1);
 		
 		String startDate = DateUtils.formatDate(calendarStart.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
