@@ -16,6 +16,7 @@
 				<ref bean="cronOldPassiveTracerTrigger" />
 				<ref bean="cronMoveToWtTrigger" />
 				<ref bean="LockCleanupTrigger" />
+				<ref bean="cronFsDataRetention" />
 			</list>
 		</property>
 	</bean>

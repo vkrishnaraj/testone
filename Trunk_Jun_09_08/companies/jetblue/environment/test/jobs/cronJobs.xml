@@ -13,6 +13,7 @@
 				<ref bean="cronNewPassiveTracerTrigger" />
 				<ref bean="cronWtQueueTrigger" />
 				<ref bean="cronOldPassiveTracerTrigger" />
+				<ref bean="cronFsDataRetention" />
 			</list>
 		</property>
 	</bean>
