@@ -5,14 +5,23 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 
+import org.jboss.ejb3.annotation.RemoteBinding;
+import org.jboss.ejb3.annotation.RemoteBindings;
+
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
 
 
-
-//@RemoteBinding(clientBindUrl="sslsocket://127.0.0.1:4850")
+@RemoteBindings({
+	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3843", jndiBinding="services/ClaimBean/testingRemoteSSL"),
+	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3844", jndiBinding="services/ClaimBean/trainingRemoteSSL"),
+	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3845", jndiBinding="services/ClaimBean/productionRemoteSSL"),
+	@RemoteBinding(jndiBinding="NTServices_1_0/ClaimBean/remote")
+})
+//@RemoteBinding(jndiBinding="custom/remote/MySession")
+//@RemoteBinding(jndiBinding="StatelessSSL")
 @Remote
 public interface ClaimRemote {
 	public String echoTest(String s);
