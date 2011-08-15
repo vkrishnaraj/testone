@@ -60,7 +60,7 @@ public class ConnectionUtil {
 		 try {
 			ctx = getInitialContext();
 		  if (ctx != null) {
-			  ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx, "NTServices_1_0/ClaimBean/remote");
+			  ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx, service);
 			  if(remote != null){
 				  ret = remote.echoTest(echo);
 			  }
@@ -105,7 +105,7 @@ public class ConnectionUtil {
 		  Context ctx = getInitialContext();
 		  long id = -1;
 		  if (ctx != null) {
-			  ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx, "NTServices_1_0/ClaimBean/remote");
+			  ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx, service);
 			  if(remote != null){
 			  id = remote.insertFile(file);
 			  }
@@ -121,7 +121,7 @@ public class ConnectionUtil {
 			TraceResponse results = null;
 			try {
 				Context ctx = ConnectionUtil.getInitialContext();
-				ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx,"NTServices_1_0/ClaimBean/remote");
+				ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx,service);
 				
 				if (remote != null) {
 					int wait = 6;
