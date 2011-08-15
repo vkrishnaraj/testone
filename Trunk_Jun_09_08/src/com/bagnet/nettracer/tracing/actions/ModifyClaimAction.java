@@ -266,8 +266,7 @@ public class ModifyClaimAction extends CheckedAction {
 				ClaimRemote remote = null;
 				try {
 					ctx = ConnectionUtil.getInitialContext();
-					remote = (ClaimRemote) ctx
-							.lookup("NTServices_1_0/ClaimBean/remote");
+					remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, ConnectionUtil.service);
 				} catch (Exception e) {
 					logger.error(e);
 				}

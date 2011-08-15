@@ -30,9 +30,9 @@ public class ConnectionUtil {
 	  
 	  static String user     = null;
 	  static String password = null;
-	  static String url      = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVER_LOCATION);
-	  static String service  = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME);
-	  static String permissions_service = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_PERMISSION_SERVICE_NAME);
+	  public static String url      = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVER_LOCATION);
+	  public static String service  = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME);
+	  public static String permissions_service = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_PERMISSION_SERVICE_NAME);
 
 	
 	  static public Context getInitialContext() throws NamingException {
