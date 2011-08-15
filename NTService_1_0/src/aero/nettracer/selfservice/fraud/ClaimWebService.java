@@ -9,7 +9,7 @@ import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.TraceResponse;
 
-@WebService
+//@WebService
 public class ClaimWebService{
 
 	public String echoTest(String username, String password, String s) {
