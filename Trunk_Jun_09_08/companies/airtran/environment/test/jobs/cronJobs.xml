@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	
+	<!--  The bean that manages all the scheduled jobs and their threads -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="cronMoveToLzTrigger" />
+				<ref bean="cronNewPassiveTracerTrigger" />
+				<ref bean="cronOldPassiveTracerTrigger" />
+				<ref bean="RemoveMassOhdTrigger" />
+				<ref bean="BillingTrigger" />
+				<ref bean="cronFsDataRetention" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="RemoveMassOhdJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="closeAirTranOldMassOhdsInSQLServer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="RemoveMassOhdTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="RemoveMassOhdJob" />
+		<property name="cronExpression" value="${removemassohd.cron}" />
+	</bean>
+
+</beans>

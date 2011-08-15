@@ -769,12 +769,29 @@
 		</antcall>
 		<antcall target="delete" />
 	</target>
+	
+	<target name="build-airtran-test-ear" depends="delete-wars">
+		<antcall target="hibernate_generate" />		
+		<antcall target="build-airtran-test"/>
+		<property name="app.xml.location" value="metadata/testing/airtran" />
+		<antcall target="donotrun-build-ear" />
+	</target>
 
-
-
-	<target name="build-airtran" depends="delete">
+	<target name="build-airtran-test" depends="delete">
 		<property name="ant_project_name" value="airtran" />
-		<property name="ant_war_name" value="airtran" />
+		<property name="ant_war_name" value="airtran-test" />
+		<property name="environment.name" value="test" />
+		<antcall target="donotrun-build-airtran" />
+	</target>
+
+	<target name="build-airtran-prod" depends="delete">
+		<property name="ant_project_name" value="airtran" />
+		<property name="ant_war_name" value="airtran-prod" />
+		<property name="environment.name" value="prod" />
+		<antcall target="donotrun-build-airtran" />
+	</target>
+
+	<target name="donotrun-build-airtran" depends="delete">
 		<property name="include.fl" value="1" />
 		<property name="include.demo" value="1" />
 		<antcall target="airtran-libraries-create" />
@@ -787,9 +804,9 @@
 		<copy todir="${basedir}/src" file="companies/airtran/report_email.html" />
 		<copy todir="${basedir}/web/pages/login" file="companies/airtran/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/airtran/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/airtran/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/airtran/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/airtran/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/airtran/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/airtran/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/airtran/environment/${environment.name}/hibernate_reporting.cfg.xml" />
 
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
 
@@ -2006,13 +2023,22 @@
 		<antcall target="build-cron-service" />
 	</target>
 
-	<target name="airtran-build-cron">
+	<target name="airtran-build-test-cron">
 		<property name="ant_project_name" value="airtran"/>
-		<property name="jarprefix" value="airtran-"/>
-		<property name="sub_path" value=""/>
-		<property name="cron.job.config.file" value="companies/airtran/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="airtran-test-"/>
+		<property name="sub_path" value="test/"/>
+		<property name="cron.job.config.file" value="companies/airtran/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="build-cron-service" />
 	</target>
+
+	<target name="airtran-build-prod-cron">
+		<property name="ant_project_name" value="airtran"/>
+		<property name="jarprefix" value="airtran-prod-"/>
+		<property name="sub_path" value="prod/"/>
+		<property name="cron.job.config.file" value="companies/airtran/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="build-cron-service" />
+	</target>
+	
 	<target name="dev-build-cron">
 		<property name="ant_project_name" value="tracer"/>
 		<property name="sub_path" value="production/"/>
