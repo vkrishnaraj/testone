@@ -12,9 +12,9 @@ import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 //	, jndiBinding="permissionsSSL")
 
 @RemoteBindings({
-	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3843", jndiBinding="services/PrivacyPermissionsBean/testingRemoteSSL"),
-	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3844", jndiBinding="services/PrivacyPermissionsBean/trainingRemoteSSL"),
-	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3845", jndiBinding="services/PrivacyPermissionsBean/productionRemoteSSL"),
+	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3843", jndiBinding="NTServices_1_0/PrivacyPermissionsBean/testingRemoteSSL"),
+	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3844", jndiBinding="NTServices_1_0/PrivacyPermissionsBean/trainingRemoteSSL"),
+	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3845", jndiBinding="NTServices_1_0/PrivacyPermissionsBean/productionRemoteSSL"),
 	@RemoteBinding(jndiBinding="NTServices_1_0/PrivacyPermissionsBean/remote")
 })
 @Remote
