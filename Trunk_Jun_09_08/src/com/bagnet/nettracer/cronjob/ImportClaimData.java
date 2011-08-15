@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.cronjob;
 
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.struts.action.ActionMessages;
@@ -127,12 +128,18 @@ public class ImportClaimData {
 						(String) row[COUNTRYOFISSUE]);
 
 				// create the file
-				file = new File();
+				file = FileDAO.loadFile(incident.getIncident_ID());
+				if (file == null) {
+					file = new File();
+					file.setClaims(new LinkedHashSet<FsClaim>());
+				}
 				file.getClaims().add(claim);
 				claim.setFile(file);
 
 				file.setIncident(claim.getIncident());
 				claim.getIncident().setFile(file);
+				
+				file.setValidatingCompanycode(agent.getCompanycode_ID());
 
 				// save the file - should also save the new claim
 				if (!FileDAO.saveFile(file, true)) {
@@ -140,7 +147,7 @@ public class ImportClaimData {
 					break;
 				}
 
-				if (ibmo.saveAndAuditIncident(incident, agent, session) <= 0) {
+				if (ibmo.saveAndAuditIncident(incident, agent, null) <= 0) {
 					System.err.println("\tError saving incident: "
 							+ incident.getIncident_ID());
 					break;
