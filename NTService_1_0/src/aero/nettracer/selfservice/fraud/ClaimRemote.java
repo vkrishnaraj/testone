@@ -10,14 +10,13 @@ import org.jboss.ejb3.annotation.RemoteBindings;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.detection.AccessRequest;
-import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
 
 
 @RemoteBindings({
-	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3843", jndiBinding="services/ClaimBean/testingRemoteSSL"),
-	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3844", jndiBinding="services/ClaimBean/trainingRemoteSSL"),
-	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3845", jndiBinding="services/ClaimBean/productionRemoteSSL"),
+	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3843", jndiBinding="NTServices_1_0/ClaimBean/testingRemoteSSL"),
+	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3844", jndiBinding="NTServices_1_0/ClaimBean/trainingRemoteSSL"),
+	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3845", jndiBinding="NTServices_1_0/ClaimBean/productionRemoteSSL"),
 	@RemoteBinding(jndiBinding="NTServices_1_0/ClaimBean/remote")
 })
 //@RemoteBinding(jndiBinding="custom/remote/MySession")
