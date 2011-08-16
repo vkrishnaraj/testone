@@ -25,7 +25,7 @@ public class GeneralServiceBean implements GeneralServiceRemote{
 	public List<CountryCode> getCountries() {
 		
 		Session sess = HibernateWrapper.getSession().openSession();
-		String sql = "from com.bagnet.nettracer.tracing.db.CountryCode";
+		String sql = "from com.bagnet.nettracer.tracing.db.CountryCode c order by c.country asc";
 		Query q = sess.createQuery(sql);
 		List<CountryCode> countryList = null;
 		
