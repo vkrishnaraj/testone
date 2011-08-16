@@ -406,7 +406,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			stationCode = stationCode.trim();
 		}
 		
-		if (stationCode == null || stationCode.length() > 0) {
+		if (stationCode == null || stationCode.trim().length() == 0) {
 
 			String subtitle = resources.getString("custom.report.subtitle.totalPilferage") + " = " + custom.getTotalPilferage(srDTO);
 			drb.setSubtitle(subtitle);
@@ -450,6 +450,18 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		
 		FastReportBuilder drb = new FastReportBuilder();
 		drb.setTitle(resources.getString("header.customreportnum.83") + "(" + srDTO.getStarttime() + " - " + srDTO.getEndtime() + ")");
+		
+		
+		String stationCode = srDTO.getStationCode();
+		if (stationCode !=null) {
+			stationCode = stationCode.trim();
+		}
+		
+		if (stationCode == null || stationCode.trim().length() == 0) {
+
+			String subtitle = resources.getString("custom.report.subtitle.totalDamage") + " = " + custom.getTotalDamage(srDTO);
+			drb.setSubtitle(subtitle);
+		}
 		
 		try {
 			Style header = setupHeader(drb);

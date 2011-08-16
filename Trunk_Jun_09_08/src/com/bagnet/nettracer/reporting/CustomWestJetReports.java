@@ -341,8 +341,35 @@ public class CustomWestJetReports {
 		return 0;
 	}
 
-	
-	// TODO: HERE
+	public int getTotalDamage(StatReportDTO srDTO) {
+		String startDate = DateUtils.formatDate(srDTO.getStarttime(),
+				srDTO.getDateFormat(), TracingConstants.DB_DATEFORMAT, null,
+				null);
+		String endDate = DateUtils.formatDate(srDTO.getEndtime(),
+				srDTO.getDateFormat(), TracingConstants.DB_DATEFORMAT, null,
+				null);
+
+		String sql = "select count(i.incident_id) total from incident i where"
+				+ " i.itemtype_id = 3" + " and i.createdate >= \'" + startDate
+				+ "\' and i.createdate <= \'" + endDate + "\'";
+
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			SQLQuery query = session.createSQLQuery(sql);
+			query.addScalar("total", Hibernate.LONG);
+			List results = query.list();
+			return ((Long) results.get(0)).intValue();
+
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return 0;
+	}
 	
 	@SuppressWarnings("rawtypes")
 	public List getPilferageReportData(StatReportDTO srDTO, ResourceBundle resources) {
