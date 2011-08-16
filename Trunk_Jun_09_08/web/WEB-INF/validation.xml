@@ -242,7 +242,7 @@
 				<arg key="header.agentUsername"/>
 				<var>
 	            	<var-name>mask</var-name>
-    	          	<var-value>^[a-zA-Z0-9]*$</var-value>
+    	          	<var-value>^[a-zA-Z0-9-]*$</var-value>
        			 </var>
 		 	  	<arg name="minlength" key="${var:minlength}" resource="false"/>
 	 	    		<var>
