@@ -12,12 +12,22 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 
 %>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
-<script language="javascript">
+
+  <jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
   
   function validatereq(form)
   {
     return true;
   }
+  
+function validateWTCompanyForward(form) {
+	return true;
+}
+
+function validatereqOHDFields(form) {
+	return true;
+}
+
   
   function validatereqFields(form, formType)
   {
@@ -447,4 +457,3 @@ ResourceBundle bundle = ResourceBundle.getBundle(
   }
 
   function checkDeleteCount(bagNum, report_type){ return true; }
-</script>
