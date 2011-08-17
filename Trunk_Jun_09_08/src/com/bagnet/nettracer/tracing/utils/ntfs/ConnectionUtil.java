@@ -26,22 +26,18 @@ public class ConnectionUtil {
 	
 	  private static final Logger logger = Logger.getLogger(ConnectionUtil.class);
 	
-	private final static long DEFAULT_TIMEOUT = 1000;
+	  private final static long DEFAULT_TIMEOUT = 1000;
 	  
 	  static String user     = null;
 	  static String password = null;
-	  public static String url      = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVER_LOCATION);
-	  public static String service  = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME);
-	  public static String permissions_service = PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_PERMISSION_SERVICE_NAME);
-
-	
+	  
 	  static public Context getInitialContext() throws NamingException {
 		  
 	    Properties p = new Properties();
 	    p.put(Context.INITIAL_CONTEXT_FACTORY,
 	          "org.jnp.interfaces.NamingContextFactory");
 	    p.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces"); 
-	    p.put(Context.PROVIDER_URL, url);
+	    p.put(Context.PROVIDER_URL, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVER_LOCATION));
 	    p.put("jnp.socketFactory", "org.jnp.interfaces.TimedSocketFactory");
 	    
 	    if (user != null) {
@@ -60,7 +56,7 @@ public class ConnectionUtil {
 		 try {
 			ctx = getInitialContext();
 		  if (ctx != null) {
-			  ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx, service);
+			  ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 			  if(remote != null){
 				  ret = remote.echoTest(echo);
 			  }
@@ -75,7 +71,8 @@ public class ConnectionUtil {
 	  }
 	  
 	  public static Object getRemoteEjb(Context ctx, String remote){
-		  return getRemoteEjb(ctx, remote, DEFAULT_TIMEOUT);
+		  long timeout = PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_TIMEOUT);
+		  return getRemoteEjb(ctx, remote, timeout!=0?timeout:DEFAULT_TIMEOUT);
 	  }
 	  
 	  public static Object getRemoteEjb(Context ctx, String remote, long timeout){
@@ -105,7 +102,7 @@ public class ConnectionUtil {
 		  Context ctx = getInitialContext();
 		  long id = -1;
 		  if (ctx != null) {
-			  ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx, service);
+			  ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 			  if(remote != null){
 			  id = remote.insertFile(file);
 			  }
@@ -121,7 +118,7 @@ public class ConnectionUtil {
 			TraceResponse results = null;
 			try {
 				Context ctx = ConnectionUtil.getInitialContext();
-				ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx,service);
+				ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx,PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 				
 				if (remote != null) {
 					int wait = 6;

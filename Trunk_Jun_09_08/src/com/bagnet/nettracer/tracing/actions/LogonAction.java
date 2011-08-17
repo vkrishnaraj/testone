@@ -31,6 +31,7 @@ import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.PaxCommunicationBMO;
 import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.SpecialFlagBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -317,12 +318,12 @@ public class LogonAction extends Action {
 							int x = OHDUtils.getIncomingBagsCount(s.getStation_ID(), new ViewIncomingRequestForm(), true);
 							if (x != -1)
 								entries = x;
-						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS)) {
+						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS) && PropertyBMO.isTrue("ntfs.user")) {
 							int x = 0;
 							
 							try {
 							Context ctx = ConnectionUtil.getInitialContext();
-							ClaimRemote remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx,"NTServices_1_0/ClaimBean/remote");
+							ClaimRemote remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx,PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 							if(remote != null){
 								x = remote.getOutstandingRequetsCount(agent.getCompanycode_ID());
 							}

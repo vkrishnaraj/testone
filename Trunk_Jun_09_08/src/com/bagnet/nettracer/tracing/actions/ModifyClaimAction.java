@@ -266,7 +266,7 @@ public class ModifyClaimAction extends CheckedAction {
 				ClaimRemote remote = null;
 				try {
 					ctx = ConnectionUtil.getInitialContext();
-					remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, ConnectionUtil.service);
+					remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 				} catch (Exception e) {
 					logger.error(e);
 				}
