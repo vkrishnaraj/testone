@@ -47,7 +47,7 @@
 	function updatePagination() {
 	    return true;
 	}
-
+	
   </script>
   
   <jsp:include page="/pages/includes/validation_search.jsp" />

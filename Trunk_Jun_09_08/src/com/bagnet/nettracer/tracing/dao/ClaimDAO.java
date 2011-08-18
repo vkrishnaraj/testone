@@ -83,7 +83,7 @@ public class ClaimDAO {
 		
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			String sql = "select count(distinct c) from aero.nettracer.fs.model.FsClaim c ";
+			String sql = "select count(distinct c.id) from aero.nettracer.fs.model.FsClaim c ";
 			sqlFromForm = getSqlFromForm(form, user);
 			sql += sqlFromForm;
 			Query query = session.createQuery(sql);
@@ -107,7 +107,7 @@ public class ClaimDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			String sql = "select distinct c from aero.nettracer.fs.model.FsClaim c ";
-			sql += sqlFromForm;
+			sql += sqlFromForm  + "order by c.claimDate desc";
 			Query query = session.createQuery(sql);
 			setQueryParameters(form, user, query);
 			if (rowsperpage > 0) {
@@ -244,7 +244,7 @@ public class ClaimDAO {
 		// add claimant sql
 		getPersonSql(form, user, fromSql, whereSql);
 		
-		return fromSql.toString() + whereSql.toString() + "order by c.claimDate desc";
+		return fromSql.toString() + whereSql.toString();
 	}
 	
 	private String getIdSql(SearchClaimForm form) {
