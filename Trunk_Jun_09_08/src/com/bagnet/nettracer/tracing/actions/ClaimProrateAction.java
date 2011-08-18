@@ -104,7 +104,7 @@ public class ClaimProrateAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.CLAIM_PRORATE_MAIN));
 		} else {
 			Incident i = new IncidentBMO().findIncidentByID(incident);
-			if (i.getClaims() != null && !i.getClaims().isEmpty()) {
+			if (i != null && i.getClaims() != null && !i.getClaims().isEmpty()) {
 				Claim c = i.getClaims().iterator().next();
 				theform.setClaim(c);
 			}

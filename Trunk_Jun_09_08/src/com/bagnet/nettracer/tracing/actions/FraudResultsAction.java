@@ -63,9 +63,6 @@ public class FraudResultsAction extends CheckedAction {
 			incidentIdString = (String) request.getAttribute("incident");
 		}
 		
-		if (incidentIdString != null) {
-			request.setAttribute("incident", incidentIdString);
-		}
 		File file = null;
 		FsClaim claim = null;
 		if (incidentIdString != null) {
@@ -80,12 +77,12 @@ public class FraudResultsAction extends CheckedAction {
 				request.setAttribute("incident", claim.getNtIncidentId());
 			}
 		} else {
-			claim = ClaimDAO.loadClaim(resultsForm.getClaimId());
+//			claim = ClaimDAO.loadClaim(resultsForm.getClaimId());
 		}
 		
 		Set<MatchHistory> results = null;
 		TraceResponse traceResponse = null;
-		if (request.getParameter("results") != null) {
+		if (session.getAttribute("results") != null) {
 			results = (Set<MatchHistory>) session.getAttribute("results");
 			traceResponse = (TraceResponse) session.getAttribute("traceResults");
 			session.removeAttribute("results");
@@ -93,8 +90,11 @@ public class FraudResultsAction extends CheckedAction {
 		} else if (request.getParameter("matchId") != null 
 					|| request.getParameter("requestInfo") != null
 						|| request.getParameter("delete") != null) { 
+			claim = ClaimDAO.loadClaim(resultsForm.getClaimId());
 			results = getResultsFromForm(resultsForm);
-		} else {
+		} 
+
+		if (results == null){
 			long id = 0;
 			if (file != null) {
 				id = file.getSwapId();
@@ -123,7 +123,7 @@ public class FraudResultsAction extends CheckedAction {
 			if (status == TracingConstants.STATUS_SUSPECTED_FRAUD || status == TracingConstants.STATUS_KNOWN_FRAUD) {
 				request.setAttribute("status", status);
 			}
-			request.setAttribute("claimId", resultsForm.getClaimId());
+//			request.setAttribute("claimId", resultsForm.getClaimId());
 			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_MATCH_HISTORY, matchId, TracingConstants.FS_ACTION_LOAD);
 			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
 		} else if (request.getParameter("requestInfo") != null) {

@@ -33,9 +33,11 @@
         <div id="pageheaderleft">
           <h1>
             <bean:message key="header.claim_prorate" />
+            <logic:match name="claimProrateForm" property="hasClaim" value="true">
             (
             <bean:write name="incident" scope="request" />
             )
+            </logic:match>
           </h1>
         </div>
         <div id="pageheaderright">

@@ -69,7 +69,7 @@ public class ViewFraudRequests extends CheckedAction {
 		}
 
 		else if (denyId != null) {
-			remote.approveRequest(Long.parseLong(denyId), null, user.getFirstname() + " " + user.getLastname());
+			remote.denyRequest(Long.parseLong(denyId), null, user.getFirstname() + " " + user.getLastname());
 		}
 		ctx.close();
 		// menu highlite
