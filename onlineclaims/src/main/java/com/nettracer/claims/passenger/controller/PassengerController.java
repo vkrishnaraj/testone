@@ -656,14 +656,14 @@ public class PassengerController {
 					}
 					for (Airport air : airs) {
 						if (!departDone
-								&& itin.getDepartureCity().equals(
+								&& itin.getDepartureCity().equalsIgnoreCase(
 										air.getAirportCode())) {
 							itin.setDeptCityFormText(air.getAirportCode()
 									+ " - " + air.getAirportDesc());
 							departDone = true;
 						}
 						if (!arriveDone
-								&& itin.getArrivalCity().equals(
+								&& itin.getArrivalCity().equalsIgnoreCase(
 										air.getAirportCode())) {
 							itin.setArrvCityFormText(air.getAirportCode()
 									+ " - " + air.getAirportDesc());
@@ -945,7 +945,7 @@ public class PassengerController {
 					String arrvCity = itin.getArrvCityFormText();
 					if (deptCity != null && deptCity.length() > 2
 							&& checkValidAirport(deptCity.substring(0, 3))) {
-						itin.setDepartureCity(deptCity.substring(0, 3));
+						itin.setDepartureCity(deptCity.substring(0, 3).toUpperCase());
 						isBlank = false;
 					} else if (deptCity == null || deptCity.trim().length() == 0) {
 						continue;
@@ -959,7 +959,7 @@ public class PassengerController {
 					}
 					if (arrvCity != null && arrvCity.length() > 2
 							&& checkValidAirport(arrvCity.substring(0, 3))) {
-						itin.setArrivalCity(arrvCity.substring(0, 3));
+						itin.setArrivalCity(arrvCity.substring(0, 3).toUpperCase());
 					} else {
 						if (noErrors) {
 							FacesUtil.addError("When filling out the \"From/To Airports\" section please select your airport" +

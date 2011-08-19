@@ -150,6 +150,7 @@
 			
 				<h:commandButton id="prevFlightInfo" value="#{passengerController.flightLabel.previous.label}"
 				 	 immediate="true"  action="#{passengerController.goBackToFlightDetails}"
+				 	 onclick="if (!window.confirm('Are you sure? Clicking OK will result in the loss of unsaved data.')) { return false; }"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>

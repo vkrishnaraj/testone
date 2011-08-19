@@ -51,22 +51,13 @@
 							<rich:spacer width="100%" height="10" title=""/>
 						<h:column>
 							<t:outputText value="#{passengerController.submitClaimLabel.agreement.label}" styleClass="bodycopy"/>
-						<t:inputText value="#{passengerBean.claimAmount}" id="claimAmount" required="true"
-							requiredMessage="Please enter a Claim Amount in the appropriate text box."
-							readonly="true"
-							label="Claim Amount Field" tabindex="1">
-						</t:inputText>&#160;&#160;
-						<h:selectOneMenu value="#{passengerBean.claimAmountCurrency}"
-							disabled="true">
-							<f:selectItem itemValue="USD" itemLabel="US Dollar" />
-							<f:selectItems value="#{passengerController.currencyList}" />
-						</h:selectOneMenu>
+						<h:outputText value="#{passengerBean.claimAmount}" >
+						</h:outputText>&#160;&#160;
+						<h:outputText value="#{passengerBean.claimAmountCurrency}" >
+						</h:outputText>
 							<t:outputText value="&#160;#{passengerController.submitClaimLabel.lossOccured.label}&#160;" styleClass="bodycopy"/>
-						<t:inputText value="#{passengerBean.claimDate}" id="lossDate" required="true"
-							requiredMessage="Please enter a Loss Date in the appropriate text box."
-							readonly="true"
-							label="Loss Date Field" tabindex="1">
-						</t:inputText>
+						<h:outputText value="#{passengerBean.claimDate}" >
+						</h:outputText>
 						</h:column>
 						</h:panelGrid>
 					</rich:panel>
@@ -89,11 +80,8 @@
 						<t:outputText value="#{pass.lastName}, #{pass.firstName} #{pass.middleInitial}" 
 									styleClass="typeAccept" />
 						</td><td>
-						<t:inputText value="#{pass.accept}" id="typeAccept" required="true"
-							requiredMessage="Please Type the word- ACCEPT in Capital Letters"
-							readonly="true"
-							label="Acception Field" tabindex="1" >
-						</t:inputText>
+						<h:outputText value="#{pass.accept}" >
+						</h:outputText>
 						</td></tr>
 					</a4j:repeat>
 					</table>

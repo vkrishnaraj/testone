@@ -31,12 +31,8 @@
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<t:inputText  value="#{bagItem.bagTagNumber}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.bagTagNumber.required}" tabindex="1"
-								readonly="true"
-								label="#{passengerController.bagDetailsLabel.bagTagNumber.label} Page:#{rowIndex+1}">
-					<f:validateLength  maximum="20"/>
-				</t:inputText>
+				<h:outputText  value="#{bagItem.bagTagNumber}" >
+				</h:outputText>
 				
 				<rich:spacer  height="10" title="" />
 				<rich:spacer  height="10" title="" />
@@ -49,12 +45,8 @@
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<t:inputText  value="#{bagItem.nameonBag}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.nameonBag.required}" tabindex="2"
-								readonly="true"
-								label="#{passengerController.bagDetailsLabel.nameonBag.label} Page:#{rowIndex+1}">
-					<f:validateLength maximum="20"/>
-				</t:inputText>
+				<h:outputText  value="#{bagItem.nameonBag}" >
+				</h:outputText>
 				
 				<rich:spacer  height="10" title="" />
 				<rich:spacer  height="10" title="" />
@@ -68,15 +60,10 @@
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
 				<h:panelGroup>
-					<t:inputText  value="#{bagItem.bagPrice}" style="width:25%" 
-									required="false" 
-									readonly="true">
-					</t:inputText>&#160;&#160;
-					<h:selectOneMenu value="#{bagItem.bagCurrency}" style="width:50%"
-						disabled="true">
-						<f:selectItem itemValue="USD" itemLabel="US Dollar" />
-						<f:selectItems value="#{passengerController.currencyList}" />
-					</h:selectOneMenu>
+					<h:outputText  value="#{bagItem.bagPrice}" >
+					</h:outputText>&#160;&#160;
+					<h:outputText value="#{bagItem.bagCurrency}" >
+					</h:outputText>
 				</h:panelGroup>
 				
 				<rich:spacer  height="10" title="" />
@@ -90,12 +77,8 @@
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<t:inputText  value="#{bagItem.externalMarkings}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.externalMarkings.required}" tabindex="4"
-								readonly="true"
-								label="#{passengerController.bagDetailsLabel.externalMarkings.label} Page:#{rowIndex+1}">
-					<f:validateLength maximum="50"/>
-				</t:inputText>
+				<h:outputText  value="#{bagItem.externalMarkings}" >
+				</h:outputText>
 				
 				<rich:spacer  height="10" title="" />
 				<rich:spacer  height="10" title="" />
@@ -108,23 +91,8 @@
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<t:selectOneMenu immediate="true" value="#{bagItem.bagColor}"  id="colorPicker"
-					required="#{passengerController.bagDetailsLabel.bagColor.required}" 
-					readonly="true"
-					label="#{passengerController.bagDetailsLabel.bagColor.label} Page:#{rowIndex+1}">
-						<f:selectItem itemValue="" itemLabel="--"/>
-						<f:selectItem itemValue="BE" itemLabel="Beige"/>
-						<f:selectItem itemValue="BK" itemLabel="Black"/>
-						<f:selectItem itemValue="BU" itemLabel="Blue"/>
-						<f:selectItem itemValue="BN" itemLabel="Brown"/>
-						<f:selectItem itemValue="GY" itemLabel="Gray"/>
-						<f:selectItem itemValue="GN" itemLabel="Green"/>
-						<f:selectItem itemValue="PU" itemLabel="Purple"/>
-						<f:selectItem itemValue="MC" itemLabel="Multi-colored"/>
-						<f:selectItem itemValue="RD" itemLabel="Red"/>
-						<f:selectItem itemValue="WT" itemLabel="White"/>
-						<f:selectItem itemValue="YW" itemLabel="Yellow"/>
-				</t:selectOneMenu>
+				<h:outputText value="#{bagItem.bagColor}" >
+				</h:outputText>
 				
 				
 			
@@ -143,12 +111,8 @@
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<t:inputText  value="#{bagItem.brandOftheBag}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.brandOftheBag.required}" tabindex="3"
-								readonly="true"
-								label="#{passengerController.bagDetailsLabel.brandOftheBag.label} Page:#{rowIndex+1}">
-					<f:validateLength maximum="20"/>
-				</t:inputText>
+				<h:outputText  value="#{bagItem.brandOftheBag}" >
+				</h:outputText>
 				
 				<rich:spacer  height="10" title="" />
 				<rich:spacer  height="10" title="" />
@@ -161,16 +125,8 @@
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<rich:calendar value="#{bagItem.bagPurchaseDate}" 
-						required="#{passengerController.bagDetailsLabel.bagPurchaseDate.required}"
-						readonly="true"
-						enableManualInput="false" datePattern="MMM/dd/yyyy"  inputSize="11"
-						label="#{passengerController.bagDetailsLabel.bagPurchaseDate.label} Page:#{rowIndex+1}"
-						disabled="true"
-						jointPoint="top-right" showWeeksBar="false" mode="client"
-					popup="true"  immediate="true" >
-					<f:converter  converterId="DateConverter" />
-				</rich:calendar>
+				<h:outputText value="#{bagItem.bagPurchaseDate}" >
+				</h:outputText>
 					
 				<rich:spacer  height="10" title="" />
 				<rich:spacer  height="10" title="" />
@@ -196,13 +152,7 @@
 					
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<a4j:outputPanel id="bagChartPanel" ajaxRendered="true">
-				<t:inputText  value="#{bagItem.bagType}" style="width:77%" 
-								required="#{passengerController.bagDetailsLabel.bagType.required}" tabindex="7"
-								disabled="true"
-								displayValueOnly="true"
-								label="#{passengerController.bagDetailsLabel.bagType.label} Page:#{rowIndex+1}" />
-				</a4j:outputPanel>
+				<h:outputText  value="#{bagItem.bagType}" />
 				
 				<rich:spacer  height="10" title="" />
 				<rich:spacer  height="10" title="" />
@@ -215,12 +165,8 @@
 					<t:outputText value=":" styleClass="formLabel"/>
 					<rich:spacer  width="10" title="" />
 				</h:panelGroup>
-				<t:selectOneMenu immediate="true" value="#{bagItem.bagOwner}"  id="bagOwner"
-					required="false" disabled="true"
-					label="Bag Owner" style="width:77%">
-						<f:selectItems value="#{passengerController.ownerList}" />
-						<f:selectItem itemValue="!X!" itemLabel="No One"/>
-				</t:selectOneMenu>
+				<h:outputText value="#{bagItem.bagOwner}" >
+				</h:outputText>
 			</h:panelGrid>
 		</h:panelGroup>
 	</h:panelGrid>
@@ -378,37 +324,31 @@
 					</t:selectOneMenu>
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.article}" size="4" readonly="true"/>
+					<h:outputText value="#{contentItem.article}" />
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.color}"  size="3" readonly="true"/>
+					<h:outputText value="#{contentItem.color}" />
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.size}"  size="3" readonly="true"/>
+					<h:outputText value="#{contentItem.size}" />
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.brandOrDescription}"  size="6" readonly="true"/>
+					<h:outputText value="#{contentItem.brandOrDescription}" />
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.storePurchased}"  size="6" readonly="true"/>
+					<h:outputText value="#{contentItem.storePurchased}" />
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.purchasedDate}"  size="6" readonly="true"/>
+					<h:outputText value="#{contentItem.purchasedDate}" />
 				</rich:column>
 				<rich:column>
-					<t:inputText value="#{contentItem.price}"  size="7" readonly="true"/><br/>
-					<h:selectOneMenu value="#{contentItem.currency}"  style="width:130px;"
-						disabled="true">
-						<f:selectItem itemValue="USD" itemLabel="US Dollar" />
-						<f:selectItems value="#{passengerController.currencyList}" readonly="true"/>
-					</h:selectOneMenu>
+					<h:outputText value="#{contentItem.price}" />&#160;&#160;
+					<h:outputText value="#{contentItem.currency}" >
+					</h:outputText>
 				</rich:column>
 				<rich:column>
-					<h:selectOneMenu value="#{contentItem.contentOwner}"  style="width:105px;"
-						disabled="true">
-						<f:selectItems value="#{passengerController.ownerList}" />
-						<f:selectItem itemValue="!X!" itemLabel="No One"/>
-					</h:selectOneMenu>
+					<h:outputText value="#{contentItem.contentOwner}" >
+					</h:outputText>
 				</rich:column>
 				</rich:dataTable>
 		</a4j:outputPanel>

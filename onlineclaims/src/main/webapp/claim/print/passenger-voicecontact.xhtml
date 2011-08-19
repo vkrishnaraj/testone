@@ -17,12 +17,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.phoneHome.required}"/>
 					
-					<t:inputText id="pi20" value="#{passengerBean.address[0].phoneHome}"  style="77%"
-							required="#{passengerController.passengerInfoLabel.phoneHome.required}" tabindex="14"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.phoneHome.label}">
-						<f:validateLength maximum="50"/>
-					</t:inputText>
+					<h:outputText id="pi20" value="#{passengerBean.address[0].phoneHome}" >
+					</h:outputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.phoneMobile.label}" />
@@ -30,12 +26,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.phoneMobile.required}"/>
 					
-					<t:inputText id="pi21" value="#{passengerBean.address[0].phoneMobile}"  style="77%"
-							required="#{passengerController.passengerInfoLabel.phoneMobile.required}" tabindex="15"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.phoneMobile.label}">
-						<f:validateLength maximum="50"/>
-					</t:inputText>
+					<h:outputText id="pi21" value="#{passengerBean.address[0].phoneMobile}" >
+					</h:outputText>
 					<div><h:outputText value="&#160;" /></div>
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.phoneFax.label}" />
@@ -43,12 +35,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.phoneFax.required}"/>
 					
-					<t:inputText id="pi22" value="#{passengerBean.address[0].phoneFax}"  style="77%"
-							required="#{passengerController.passengerInfoLabel.phoneFax.required}" tabindex="16"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.phoneFax.label}">
-							<f:validateLength maximum="50"/>
-						</t:inputText>
+					<h:outputText id="pi22" value="#{passengerBean.address[0].phoneFax}" >
+						</h:outputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					
@@ -57,12 +45,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.phoneBusiness.required}"/>
 					
-					<t:inputText id="pi23" value="#{passengerBean.address[0].phoneBusiness}"  style="77%"
-							required="#{passengerController.passengerInfoLabel.phoneBusiness.required}" tabindex="17"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.phoneBusiness.label}">
-							<f:validateLength maximum="50"/>
-						</t:inputText>
+					<h:outputText id="pi23" value="#{passengerBean.address[0].phoneBusiness}" >
+						</h:outputText>
 					
 					<div><rich:spacer width="100%" height="15" title="" /></div>
 					

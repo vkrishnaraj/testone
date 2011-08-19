@@ -31,38 +31,23 @@
 						</rich:columnGroup>
 					</f:facet>
 					<rich:column>	
-					<t:inputText id="pi2" value="#{pass.lastName}" style="width:90%;"
-							required="#{passengerController.passengerInfoLabel.lastName.required}" tabindex="1"
-							readonly="true">
-					</t:inputText>
+					<h:outputText id="pi2" value="#{pass.lastName}">
+					</h:outputText>
 					</rich:column>
 					
 					<rich:column>
-					<t:inputText id="pi3" value="#{pass.firstName}" style="width:90%;"
-							required="#{passengerController.passengerInfoLabel.firstName.required}" tabindex="2"
-							readonly="true">
-					</t:inputText>
+					<h:outputText id="pi3" value="#{pass.firstName}">
+					</h:outputText>
 					</rich:column>
 					
 					<rich:column>
-					<h:inputText id="pi4" value="#{pass.middleInitial}" style="width:96%;"
-							required="#{passengerController.passengerInfoLabel.middleInitial.required}" tabindex="3"
-							readonly="true">
-					</h:inputText>
+					<h:outputText id="pi4" value="#{pass.middleInitial}" >
+					</h:outputText>
 					</rich:column>
 					
 					<rich:column>
-					<t:selectOneMenu value="#{pass.salutation}" tabindex="9" style="width:100%;"
-						readonly="true" 
-						label="Salutation">
-						<f:selectItem itemLabel="Mr." itemValue="MR"/>
-						<f:selectItem itemLabel="Mrs." itemValue="MRS"/>
-						<f:selectItem itemLabel="Ms." itemValue="MS"/>
-						<f:selectItem itemLabel="Miss" itemValue="MISS"/>
-						<f:selectItem itemLabel="Mstr." itemValue="MASTER"/>
-						<f:selectItem itemLabel="Dr." itemValue="DR"/>
-						<f:selectItem itemLabel="Other" itemValue="OTHER"/>
-					</t:selectOneMenu>
+					<h:outputText value="#{pass.salutation}" >
+					</h:outputText>
 					</rich:column>
 		
 				</rich:dataTable>
@@ -77,12 +62,8 @@
 						<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.passengerInfoLabel.addressLine1.required}"/>
 						
-						<t:inputText id="pi5" value="#{passengerBean.address[0].addressLine1}" style="width:77%" 
-								required="#{passengerController.passengerInfoLabel.addressLine1.required}" tabindex="4"
-								readonly="true"
-								label="#{passengerController.passengerInfoLabel.addressLine1.label}">
-							<f:validateLength maximum="50"/>
-						</t:inputText>
+						<h:outputText id="pi5" value="#{passengerBean.address[0].addressLine1}">
+						</h:outputText>
 					</div>
 					
 					<div><h:outputText value="&#160;" /></div>
@@ -92,12 +73,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.addressLine2.required}"/>
 					
-					<t:inputText id="pi6" value="#{passengerBean.address[0].addressLine2}" style="width:77%" 
-							required="#{passengerController.passengerInfoLabel.addressLine2.required}" tabindex="5"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.addressLine2.label}">
-							<f:validateLength maximum="50"/>
-						</t:inputText>
+					<h:outputText id="pi6" value="#{passengerBean.address[0].addressLine2}">
+						</h:outputText>
 					
 					<div><h:outputText value="&#160;" /></div>
 					
@@ -106,12 +83,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.city.required}"/>
 					
-					<t:inputText id="pi7" value="#{passengerBean.address[0].city}" style="width:12%" 
-							required="#{passengerController.passengerInfoLabel.city.required}" tabindex="6"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.city.label}">
-							<f:validateLength maximum="50"/>
-						</t:inputText>
+					<h:outputText id="pi7" value="#{passengerBean.address[0].city}">
+						</h:outputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.stateRegion.label}" />
@@ -119,12 +92,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.stateRegion.required}"/>
 					
-					<t:inputText id="pi8" value="#{passengerBean.address[0].stateRegion}" style="width:12%" 
-							required="#{passengerController.passengerInfoLabel.stateRegion.required}" tabindex="7"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.stateRegion.label}">
-							<f:validateLength maximum="50"/>
-						</t:inputText>
+					<h:outputText id="pi8" value="#{passengerBean.address[0].stateRegion}" >
+						</h:outputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.postalCode.label}" />
@@ -132,12 +101,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.postalCode.required}"/>
 					
-					<t:inputText id="pi9" value="#{passengerBean.address[0].postalCode}" style="width:12%" 
-							required="#{passengerController.passengerInfoLabel.postalCode.required}" tabindex="8"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.postalCode.label}">
-							<f:validateLength maximum="20"/>
-						</t:inputText>
+					<h:outputText id="pi9" value="#{passengerBean.address[0].postalCode}" >
+						</h:outputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.country.label}" />
@@ -145,12 +110,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.country.required}"/>
 					
-					<t:selectOneMenu value="#{passengerBean.address[0].country}" tabindex="9" styleClass="passselectOneMenu"
-						readonly="true"
-						label="#{passengerController.passengerInfoLabel.country.label}">
-						<f:selectItem itemLabel="--" itemValue=""/>
-						<f:selectItems value="#{passengerController.selectItems}"/>
-					</t:selectOneMenu>
+					<h:outputText value="#{passengerBean.address[0].country}" >
+					</h:outputText>
 					
 					<div><h:outputText value="&#160;" /></div>
 					
@@ -159,13 +120,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.emailAddress.required}"/>
 					
-					<t:inputText id="pi11" value="#{passengerBean.emailAddress}" styleClass="passselectOneMenu30"
-							required="#{passengerController.passengerInfoLabel.emailAddress.required}" tabindex="10"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.emailAddress.label}">
-							<f:validateLength maximum="50"/>
-							<t:validateEmail summaryMessage="Invalid Email Address"/>
-						</t:inputText>
+					<h:outputText id="pi11" value="#{passengerBean.emailAddress}" >
+						</h:outputText>
 					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
 					
 					<rich:spacer width="15px"/>
@@ -175,12 +131,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.occupation.required}"/>
 					
-					<t:inputText id="pi12" value="#{passengerBean.occupation}" styleClass="passselectOneMenu30" 
-							required="#{passengerController.passengerInfoLabel.occupation.required}" tabindex="11"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.occupation.label}">
-							<f:validateLength maximum="50"/>
-						</t:inputText>
+					<h:outputText id="pi12" value="#{passengerBean.occupation}" >
+						</h:outputText>
 					<div><h:outputText value="&#160;" /></div>
 					
 					<div>
@@ -189,12 +141,8 @@
 						<h:outputLabel value="*" styleClass="requiredField" 
 								rendered="#{passengerController.passengerInfoLabel.businessName.required}"/>
 						
-						<t:inputText id="pi13" value="#{passengerBean.businessName}" styleClass="passselectOneMenu30" 
-								required="#{passengerController.passengerInfoLabel.businessName.required}" tabindex="12"
-								readonly="true"
-								label="#{passengerController.passengerInfoLabel.businessName.label}">
-							<f:validateLength maximum="50"/>
-						</t:inputText>
+						<h:outputText id="pi13" value="#{passengerBean.businessName}" >
+						</h:outputText>
 					</div>
 					
 					<div><rich:spacer width="100%" height="15" title="" /></div>

@@ -78,7 +78,7 @@
 				</h:panelGroup>
 				<h:panelGroup>
 					<t:inputText  value="#{bagItem.bagPrice}" style="width:50px;" 
-									required="false" id="bagPrice" onchange="calculateTotal(#{rowIndex})"
+									required="false" id="bagPrice" onchange="calculateTotal(#{rowIndex}, true)"
 									readonly="#passengerController.readOnlyOnSubmitted}"
 									validatorMessage="#{passengerController.bagDetailsLabel.nameonBag.label} :
 									#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
@@ -86,7 +86,7 @@
 						<f:validateLength maximum="20"/>
 					</t:inputText>&#160;&#160;
 					<h:selectOneMenu value="#{bagItem.bagCurrency}"
-						onchange="calculateTotal(#{rowIndex})" id="bagCurrency"
+						onchange="calculateTotal(#{rowIndex}, true)" id="bagCurrency"
 						disabled="#{passengerController.readOnlyOnSubmitted}">
 						<f:selectItem itemValue="USD" itemLabel="US Dollar" />
 						<f:selectItems value="#{passengerController.currencyList}" />
@@ -194,7 +194,7 @@
 						required="#{passengerController.bagDetailsLabel.bagPurchaseDate.required}"
 						readonly="#{passengerController.bagDetailsLabel.bagPurchaseDate.hidden}"
 						disabled="#{passengerController.readOnlyOnSubmitted}"
-						enableManualInput="false" datePattern="MMM/dd/yyyy"  inputSize="11"
+						enableManualInput="false" datePattern="MMM/dd/yyyy"  inputSize="15"
 						label="#{passengerController.bagDetailsLabel.bagPurchaseDate.label} Page:#{rowIndex+1}"
 						jointPoint="top-right" showWeeksBar="false" mode="client"
 						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
@@ -455,10 +455,10 @@
 				</rich:column>
 				<rich:column>
 					<h:inputText value="#{contentItem.priceString}"  size="7" id="thePrice"
-						onchange="calculateTotal(#{rowIndex})"
+						onchange="calculateTotal(#{rowIndex}, true)"
 						readonly="#{passengerController.readOnlyOnSubmitted}"/><br/>
 					<h:selectOneMenu value="#{contentItem.currency}" style="width:130px;"
-						onchange="calculateTotal(#{rowIndex})"
+						onchange="calculateTotal(#{rowIndex}, true)"
 						disabled="#{passengerController.readOnlyOnSubmitted}">
 						<f:selectItem itemValue="USD" itemLabel="US Dollar" />
 						<f:selectItems value="#{passengerController.currencyList}" />
@@ -478,7 +478,7 @@
 	<div id="addItem">
 		<a4j:commandButton value="#{passengerController.bagDetailsLabel.addMoreItems.label}"  
 			  action="#{passengerController.addMoreItems}" limitToList="true"
-			 rendered="#{!passengerController.readOnlyOnSubmitted}"
+			 rendered="#{!passengerController.readOnlyOnSubmitted}" onclick="contentPopup(#{rowIndex})"
 			reRender="contentTable" styleClass="button140pxred button140pxred2">
 			
 			<a4j:actionparam name="contentIndex" assignTo="#{passengerController.bagIndex}" value="#{rowIndex}" />
@@ -486,7 +486,7 @@
 		</a4j:commandButton>&#160;&#160;&#160;
 		<a4j:commandButton value="Delete Last Item"  
 			  action="#{passengerController.deleteLastItem}" limitToList="true"
-			 rendered="#{!passengerController.readOnlyOnSubmitted}"
+			 rendered="#{!passengerController.readOnlyOnSubmitted}" onclick="calculateTotal(#{rowIndex}, false)"
 			reRender="contentTable" styleClass="button140pxred button140pxred2">
 			
 			<a4j:actionparam name="contentIndex" assignTo="#{passengerController.bagIndex}" value="#{rowIndex}" />
@@ -502,7 +502,7 @@
 	</rich:panel>
 	<script type="text/javascript">
 	<!--
-			function calculateTotal(bagRow) {
+			function calculateTotal(bagRow, lastRow) {
 				theRows = document.getElementById("appForm:bagList:" + bagRow + ":contentTable").getElementsByTagName("tr");
 				var theTotal = document.getElementById("appForm:bagList:" + bagRow + ":bagPrice").value;
 				theCurrSel = document.getElementById("appForm:bagList:" + bagRow + ":bagCurrency");
@@ -512,7 +512,11 @@
 					theTotal = 0;
 				}
 				var singleCurr = 1;
-				for (i = 1; i < theRows.length; i++) {
+				var l = theRows.length;
+				if (!lastRow) {
+					l = theRows.length - 1;
+				}
+				for (i = 1; i < l; i++) {
 					if (singleCurr) {
 						theSel = theRows[i].getElementsByTagName("td")[7].getElementsByTagName("select")[0];
 						if (theCurr != theSel.options[theSel.selectedIndex].value) {
@@ -549,6 +553,18 @@
 			    padding = new Array(Math.max(precision - fraction.length, 0) + 1).join('0');
 
 			    return precision ? integral + '.' +  padding + fraction : integral;
+			}
+			
+			function contentPopup(bagRow) {
+				theRows = document.getElementById("appForm:bagList:" + bagRow + ":contentTable").getElementsByTagName("tr");
+				var numConts = theRows.length;
+				if (numConts == 20) {
+					window.alert("You have created " + numConts + " contents for bag #" + (bagRow + 1) + ". We suggest that you complete this page " +
+							"and click \"Save\" before adding additional contents.");
+				} else if (numConts % 20 == 0) {
+					window.alert("You have created " + numConts + " for bag #" + (bagRow + 1) + ". We suggest that you click \"Save\" " +
+							"before adding additional contents.");
+				}
 			}
 
 	//-->

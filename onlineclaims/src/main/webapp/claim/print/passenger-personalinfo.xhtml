@@ -16,12 +16,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.frequentFlyerNumber.required}"/>
 					
-					<t:inputText id="pi24" value="#{passengerBean.frequentFlyerNumber}"  style="77%"
-							required="#{passengerController.passengerInfoLabel.frequentFlyerNumber.required}" tabindex="16"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.frequentFlyerNumber.label}">
-							<f:validateLength maximum="20"/>
-						</t:inputText>
+					<h:outputText id="pi24" value="#{passengerBean.frequentFlyerNumber}">
+						</h:outputText>
 					<h:outputText value="&#160;" />
 					
 					<t:outputText value="#{passengerController.passengerInfoLabel.socialSecurityNumber.label}" />
@@ -29,12 +25,8 @@
 					<h:outputLabel value="*" styleClass="requiredField" 
 							rendered="#{passengerController.passengerInfoLabel.socialSecurityNumber.required}"/>
 					
-					<t:inputText id="pi25" value="#{passengerBean.socialSecurityNumber}"  style="77%"
-							required="#{passengerController.passengerInfoLabel.socialSecurityNumber.required}" tabindex="17"
-							readonly="true"
-							label="#{passengerController.passengerInfoLabel.socialSecurityNumber.label}">
-							<f:validateLength maximum="20"/>
-						</t:inputText>
+					<h:outputText id="pi25" value="*********" >
+						</h:outputText>
 					
 					<div><rich:spacer width="100%" height="15" title="" /></div>
 					

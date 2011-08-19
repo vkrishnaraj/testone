@@ -47,7 +47,7 @@
 							</td><td style="width:36%;">
 					
 					<h:panelGroup rendered="#{!passengerController.passengerInfoLabel.socialSecurityNumber.hidden}">
-					<t:inputText id="pi25" value="#{passengerBean.socialSecurityNumber}"  style="width:98%;"
+					<t:inputSecret id="pi25" value="#{passengerBean.socialSecurityNumber}"  style="width:98%;"
 							required="#{passengerController.passengerInfoLabel.socialSecurityNumber.required}" tabindex="24"
 							readonly="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
@@ -56,7 +56,7 @@
 								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
 							label="#{passengerController.passengerInfoLabel.socialSecurityNumber.label}">
 							<f:validateLength maximum="20"/>
-						</t:inputText>
+						</t:inputSecret>
 					</h:panelGroup>
 						</td>
 						</tr>

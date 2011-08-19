@@ -37,51 +37,30 @@
 
 
 			<rich:column>
-					<t:inputText value="#{item.departureCity}" size="7" id="departure#{rowIndex+1}"
-						readonly="true"
-						label="DepartureCity Row#{rowIndex+1}"/>
+					<h:outputText value="#{item.departureCity}" />
 			</rich:column>
 
 
 			<rich:column>
-					<t:inputText value="#{item.arrivalCity}" size="7" id="arrival#{rowIndex+1}"
-						label="ArrivalCity Row#{rowIndex+1}" 
-						readonly="true"
-						required="#{item.departureCity ne null ? true : false}"/>
+					<h:outputText value="#{item.arrivalCity}" />
 			</rich:column>
 
 			<rich:column>
 				<h:panelGrid columns="2">
-					<t:selectOneMenu immediate="true" value="#{item.airline}"  id="airline#{rowIndex+1}"
-					required="#{item.departureCity ne null ? true : false}" readonly="true"
-					label="Airline Row#{rowIndex+1}">
-						<f:selectItem itemValue="" itemLabel="--"/>
-						<f:selectItems value="#{passengerController.airlines}" />
-				</t:selectOneMenu>
+					<h:outputText value="#{item.airline}"  >
+				</h:outputText>
 					<h:outputText value="/" />
 				</h:panelGrid>
 			</rich:column>
 
 			<rich:column>
-				<t:inputText value="#{item.flightNum}"  size="7" id="flightNum#{rowIndex+1}"
-						required="#{item.departureCity ne null ? true : false}"
-						readonly="true"
-						label="FlightNumber Row#{rowIndex+1}">
-					<f:validateLength maximum="5"/>
-				</t:inputText>
+				<h:outputText value="#{item.flightNum}" >
+				</h:outputText>
 			</rich:column>
 
 			<rich:column width="20">
-			<a4j:outputPanel id="calendar" layout="block">
-				<rich:calendar value="#{item.journeyDate}"  id="journeyDate#{rowIndex+1}"
-						required="#{item.departureCity ne null ? true : false}"
-						enableManualInput="false" datePattern="MMM/dd/yyyy" 
-						label="Date of Journey Row#{rowIndex+1}"  inputSize="11" readonly="true"
-						jointPoint="top-right" showWeeksBar="false" mode="client" disabled="true"
-						popup="true" immediate="true">
-					<f:converter  converterId="DateConverter" />
-				</rich:calendar>
-				</a4j:outputPanel>
+				<h:outputText value="#{item.journeyDate}"  >
+				</h:outputText>
 			</rich:column>
 
 		</rich:dataTable>
