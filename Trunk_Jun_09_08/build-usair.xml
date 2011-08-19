@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="USAir-NT 1.75.0.6" default="build-usair-dev">
+
+	<property file="user.properties" />
+	<property file="common.properties" />
+	<property environment="env" />
+	<property name="lib" value="lib/jars" />
+	<property name="buildlib" value="lib/build-client" />
+	<property name="artifact.dir" value="${build.dir}/artifacts/" />
+	<property name="ant.regexp.matcherimpl" value="org.apache.tools.ant.util.regexp.JakartaOroRegexp" />
+	<property name="main-class" value="com.bagnet.nettracer.cronjob.NettracerCron" />
+	<taskdef name="hibernatedoclet" classname="org.xdoclet.ant.XDocletTask">
+		<classpath refid="project.classpath" />
+	</taskdef>
 	
 	<target name="build-usair-all">
 		<antcall target="build-usair-dev" />
@@ -23,6 +35,14 @@
 		<antcall target="build-usair-common" />
 	</target>
 	
+	<target name="build-usair-dev-ear" depends="delete-wars">
+		<property name="ant_project_name" value="usair" />
+		<antcall target="hibernate_generate" />		
+		<antcall target="build-usair-dev"/>
+		<property name="app.xml.location" value="metadata/usair/test" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
 	<target name="build-usair-dev">
 		<ant antfile="build-gen.xml" target="delete" />
 		<property name="ant_project_name" value="usair" />
@@ -33,6 +53,14 @@
 		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_reporting.cfg.xml" />
 		<antcall target="build-usair-common" />
+	</target>
+	
+	<target name="build-usair-beta-ear" depends="delete-wars">
+		<property name="ant_project_name" value="usair" />
+		<antcall target="hibernate_generate" />		
+		<antcall target="build-usair-beta"/>
+		<property name="app.xml.location" value="metadata/usair/train" />
+		<antcall target="donotrun-build-ear" />
 	</target>
 	
 	<target name="build-usair-beta">
@@ -250,6 +278,124 @@
 			Lib folder
 			Ant
 		-->
+	</target>
+	
+	<target name="delete-wars">
+		<delete failonerror="false">
+			<fileset dir="${build.dir}/dist/web">
+	    		<include name="*.war"/>
+			</fileset>
+		</delete>
+	</target>
+	
+	<target name="donotrun-build-ear">
+		
+		<copy todir="${build.dir}/dist/web/lib" >
+			<fileset dir="${lib.jar.dir}"
+			includes="*.jar"
+			excludes="mysql-connector-java*.jar,
+					  netty.jar"
+			/>
+		</copy> 
+		
+		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/${app.xml.location}/application.xml">
+			<fileset dir="${build.dir}/dist/web" includes="*.war"/>
+
+		</ear>
+		
+		<copy todir="${app.deploy.dir.jb5}">
+			<fileset dir="${build.dir}">
+				<include name="tracer.ear" />
+			</fileset>
+		</copy>
+		<!--<antcall target="aa-jar-ntfs-model"></antcall>-->
+		
+	</target>
+	
+	<target name="hibernate_generate" description="Generates Hibernate class descriptor files." depends="compile-web">
+		<hibernatedoclet>
+			<fileset dir="src">
+				<include name="com/bagnet/nettracer/tracing/db/*.java" />
+				<include name="com/bagnet/nettracer/tracing/db/audit/*.java" />
+				<exclude name="com/bagnet/nettracer/tracing/db/Incident.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/ExpensePayout.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/Claim.java"/>
+				<exclude name="com/bagnet/nettracer/tracing/db/CrmFile.java"/>
+			</fileset>
+			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="src/" version="3.0" />
+		</hibernatedoclet>
+
+		<replace dir="src" value="&lt;hibernate-mapping default-lazy=&quot;false&quot;&gt;">
+			<include name="com/bagnet/nettracer/tracing/db/*.hbm.xml" />
+			<include name="com/bagnet/nettracer/tracing/db/audit/*.hbm.xml" />
+			<replacetoken><![CDATA[<hibernate-mapping>]]></replacetoken>
+		</replace>
+
+	</target>
+	
+	<target name="compile-web" depends="init">
+		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}_web/classes" debug="on"
+			
+			memoryinitialsize="256m"       memorymaximumsize="256m"
+			>
+			<classpath refid="project.classpath" />
+			<exclude name="com/bagnet/nettracer/cronjob/**" />
+			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl" />
+			<exclude name="com/bagnet/clients/us/**" unless="include.us" />
+			<exclude name="com/bagnet/clients/demo/**" unless="include.demo" />
+			<exclude name="com/bagnet/clients/ws/**" unless="include.ws" />
+			<exclude name="com/bagnet/clients/b6/**" unless="include.b6" />
+		</javac>
+	</target>
+	
+	<target name="init" unless="flag">
+		<patternset id="java.files">
+			<include name="**/**/*.java" />
+		</patternset>
+		<patternset id="class.files">
+			<include name="**/**/*.class" />
+		</patternset>
+		<patternset id="jar.files">
+			<include name="**/*.jar" />
+			<include name="**/*.zip" />
+		</patternset>
+		<patternset id="xml.files">
+			<include name="**/**/*.xml" />
+		</patternset>
+		<patternset id="hbm.xml.files">
+			<include name="**/**/*.hbm.xml" />
+		</patternset>
+		<!-- Create a flag property to ensure 'init' runs only once-->
+		<property name="flag" value="true" />
+		<!-- Standard echo to indentify current build phase -->
+		<!-- Create the time stamp -->
+		<tstamp />
+		<mkdir dir="${build.dir}/${ant_project_name}_web/classes" />
+		<mkdir dir="${build.dir}/dist/web" />
+		<mkdir dir="${build.dir}/${ant_project_name}_app/classes" />
+		<mkdir dir="${build.dir}/dist/app" />
+		<mkdir dir="${build.dir}/dist/cron" />
+		<mkdir dir="${build.dir}/${ant_project_name}/classes" />
+		<mkdir dir="${build.dir}/${ant_project_name}/ddl" />
+		<mkdir dir="${artifact.dir}/${ant_project_name}" />
+		<mkdir dir="${artifact.dir}/${ant_project_name}/zip" />
+
+		<mkdir dir="${build.dir}/webservices/passengerview" />
+
+		<path id="project.classpath">
+			<fileset dir="${lib.build-client.dir}">
+				<patternset refid="jar.files" />
+			</fileset>
+			<fileset dir="${lib.jar.dir}">
+				<patternset refid="jar.files" />
+			</fileset>
+			<fileset dir="${basedir}/lib/provided">
+				<patternset refid="jar.files" />
+			</fileset>
+			<fileset dir="${basedir}/lib/client-us">
+				<patternset refid="jar.files" />
+			</fileset>
+		</path>
 	</target>
 
 	

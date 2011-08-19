@@ -254,6 +254,39 @@
 			<lib dir="${lib.jar.dir}">
 				<exclude name="log4j*.*" />
 				<exclude name="servlet.jar" />
+				<exclude name="netty.jar" />
+				<exclude name="mysql-connector-java*.jar" />
+				<exclude name="c3p0*.jar" />
+				<exclude name="hibernate*.jar" />
+				<exclude name="ReservationService*.jar" />
+				<exclude name="axis2*.jar" />
+				<exclude name="jxl*.jar" />
+				<exclude name="iText*.jar" />
+				<exclude name="commons*.jar" />
+				<exclude name="dsi.jar" />
+				<exclude name="delivery*.jar" />
+				<exclude name="cglib*.*" />
+				<exclude name="asm*.*" />
+				<exclude name="jasper*.*" />
+				<exclude name="jfree*.*" />
+				<exclude name="poi*.*" />
+				<exclude name="JetBlue*.*" />
+				<exclude name="sqljdbc*.*" />
+				<exclude name="struts*.*" />
+				<exclude name="PaxView*.*" />
+				<exclude name="ehcache*.*" />
+				<exclude name="us-crm*.*" />
+				<exclude name="Dynamic*.*" />
+				<exclude name="hornetq*.*" />
+				<exclude name="axiom*.*" />
+				<exclude name="libphone*.*" />
+				<exclude name="geronimo*.*" />
+				<exclude name="xmlbeans*.*" />
+				<exclude name="xmlschema*.*" />
+				<exclude name="neethi*.*" />
+				<exclude name="httpcore*.*" />
+				<exclude name="htmlparser*.*" />
+				<exclude name="woden*.*" />
 			</lib>
 		</war>
 	</target>

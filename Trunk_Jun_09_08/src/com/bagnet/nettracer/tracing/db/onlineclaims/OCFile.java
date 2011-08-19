@@ -28,10 +28,10 @@ public class OCFile {
 	@JoinColumn(name = "claimId", nullable = false)
 	private OnlineClaim claim;
 
-	@Column(length = 50)
+	@Column(length = 100)
 	private String filename;
 
-	@Column(length = 100)
+	@Column(length = 1000)
 	private String path;
 
 	@Temporal(TemporalType.TIMESTAMP)
