@@ -217,7 +217,7 @@
 						<td>
 							<bean:message key="colname.lf.created.agent" />
 							<br/>
-							<input type="text" value="<%=a.getUsername() %>" disabled class="disabledtextfield" />
+							<html:text name="lostReportForm" property="lost.agent.username" disabled="true" styleClass="disabledtextfield" />
 						</td>
 						<td>
 							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>

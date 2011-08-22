@@ -19,6 +19,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+import com.bagnet.nettracer.tracing.db.lf.LFReservation;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
@@ -36,6 +37,7 @@ public class LFTracingUtil {
 	private static final double SCORE_DESCRIPTION = 10;
 	private static final double SCORE_ADDRESS = 10;
 	private static final double SCORE_BRAND = 10;
+	private static final double SCORE_MVA = 15;
 	
 	
 	private static String replaceNull(String string) {
@@ -156,7 +158,7 @@ public class LFTracingUtil {
 					&& fc.getFirstName() != null && fc.getFirstName().trim().length() > 0){
 				if(StringCompare.compareStrings(lc.getFirstName()+lc.getLastName(), fc.getFirstName()+fc.getLastName()) > 80.0){
 					LFMatchDetail detail = new LFMatchDetail();
-					detail.setDescription("Name Number Match");
+					detail.setDescription("Name Match");
 					detail.setMatchHistory(match);
 					detail.setScore(SCORE_NAME);
 					detail.setFoundValue(fc.getFirstName() + " " + fc.getLastName());
@@ -230,6 +232,24 @@ public class LFTracingUtil {
 					detail.setScore(SCORE_VANTIVE);
 					detail.setFoundValue(fc.getVantiveNumber());
 					detail.setLostValue(lc.getVantiveNumber());
+					match.getDetails().add(detail);
+				}
+			}
+		}
+		
+		//process reservation
+		if(match.getLost() != null && match.getLost().getReservation() != null){
+			LFReservation lr = match.getLost().getReservation();
+			if(lr.getMvaNumber() != null && lr.getMvaNumber().trim().length() > 0
+					&& match.getFound() != null && match.getFound().getMvaNumber() != null 
+					&& match.getFound().getMvaNumber().trim().length() > 0){
+				if(lr.getMvaNumber().equalsIgnoreCase(match.getFound().getMvaNumber())){
+					LFMatchDetail detail = new LFMatchDetail();
+					detail.setDescription("MVA Number Match");
+					detail.setMatchHistory(match);
+					detail.setScore(SCORE_MVA);
+					detail.setFoundValue(match.getFound().getMvaNumber());
+					detail.setLostValue(lr.getMvaNumber());
 					match.getDetails().add(detail);
 				}
 			}

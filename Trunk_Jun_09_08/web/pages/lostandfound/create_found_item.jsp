@@ -218,7 +218,7 @@
 						<td colspan=2>
 							<bean:message key="colname.lf.created.agent" />
 							<br/>
-							<input type="text" value="<%=a.getUsername() %>" disabled class="disabledtextfield" />
+							<html:text name="foundItemForm" property="found.agent.username" disabled="true" styleClass="disabledtextfield" />
 						</td>
 					</tr>
 					<tr>

@@ -140,7 +140,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sql += " and o.client.firstName = \'" + dto.getFirstName().toUpperCase() + "\'";
 		}
 		if(dto.getStation() != null && dto.getStation().getStation_ID() != -1){
-			sql += " and o.location.station_ID = " + dto.getStation().getStation_ID();
+			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
+				sql += " and o.reservation.dropoffLocation.station_ID = " + dto.getStation().getStation_ID();
+			} else {
+				sql += " and o.location.station_ID = " + dto.getStation().getStation_ID();
+			}
 		}
 		if(dto.getStatus() != null && dto.getStatus().getStatus_ID() != -1){
 			sql += " and o.status.status_ID = " + dto.getStatus().getStatus_ID();
