@@ -463,7 +463,6 @@
 		<property name="app.xml.location" value="metadata/testing" />
 		<antcall target="donotrun-build-ear" />
 	</target>
-	
 
 	<target name="build-ab-test" depends="delete">
 		<property name="ant_project_name" value="ab" />
@@ -504,6 +503,63 @@
 		<property name="ant_project_name" value="azul" />
 		<property name="ant_war_name" value="azul_testing" />
 		<property name="environment.name" value="test"/>
+		<property name="spirit.init.complete" value="true" />
+		<antcall target="donotrun-build-azul" />
+	</target>
+	
+	<target name="build-production-ear" depends="delete-wars">
+		<!--<antcall target="clean" />-->
+		<antcall target="hibernate_generate" />		
+		<!--antcall target="build-ab-test"/-->
+		<antcall target="build-westjet-production"/>
+		<!--<antcall target="build-jetblue-test"/-->
+		<!--<antcall target="build-spirit-test"/-->
+		<!--<antcall target="build-azul-test"/-->
+		<!-- <antcall target="aa-build-avis-service"/>-->
+		
+		<property name="app.xml.location" value="metadata/production" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="build-ab-production" depends="delete">
+		<property name="ant_project_name" value="ab" />
+		<property name="ant_war_name" value="avis_production" />
+		<property name="ab.init.complete" value="true" />
+		<property name="environment.name" value="prod" />
+		<antcall target="donotrun-build-ab" />
+	</target>
+	
+	
+	<target name="build-westjet-production" depends="delete">
+		<property name="ant_project_name" value="westjet" />
+		<property name="ant_war_name" value="westjet_production" />
+		<property name="westjet.init.complete" value="true" />
+		<property name="environment.name" value="prod" />
+		<antcall target="donotrun-build-westjet" />
+	</target>
+	
+	<target name="build-jetblue-production" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="ant_war_name" value="jetblue_production" />
+		<property name="jetblue.init.complete" value="true" />
+		<property name="environment.name" value="prod"/>
+		<antcall target="donotrun-build-jetblue" />
+	</target>
+	
+	
+	<target name="build-spirit-production" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit_production" />
+		<property name="environment.name" value="prod"/>
+		<property name="spirit.init.complete" value="true" />
+		<antcall target="donotrun-build-spirit" />
+	</target>
+	
+	
+	<target name="build-azul-production" depends="delete">
+		<property name="ant_project_name" value="azul" />
+		<property name="ant_war_name" value="azul_production" />
+		<property name="environment.name" value="prod"/>
 		<property name="spirit.init.complete" value="true" />
 		<antcall target="donotrun-build-azul" />
 	</target>
