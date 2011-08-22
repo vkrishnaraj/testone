@@ -453,6 +453,11 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		
 		
 		String stationCode = srDTO.getStationCode();
+		
+		if (stationCode.equals("0")) {
+			stationCode = null;
+		}
+		
 		if (stationCode !=null) {
 			stationCode = stationCode.trim();
 		}
