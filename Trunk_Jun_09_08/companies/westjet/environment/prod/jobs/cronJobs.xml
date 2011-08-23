@@ -28,14 +28,15 @@
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="cronMoveToLzTrigger" />
-				<ref bean="cronNewPassiveTracerTrigger" />
-				<!-- <ref bean="cronDataFeedTrigger" /> -->
-				<!-- <ref bean="cronWtQueueTrigger" /> -->
-				<ref bean="cronOldPassiveTracerTrigger" />
-				<!-- <ref bean="cronMoveToWtTrigger" /> -->
-				<ref bean="BillingTrigger" />
-				<ref bean="cronFsDataRetention" />
+				<ref bean="cronMoveToLzTrigger" /> 
+				  <ref bean="cronNewPassiveTracerTrigger" /> 
+				  <ref bean="LockCleanupTrigger" /> 
+				  <!--  <ref bean="cronDataFeedTrigger" />--> 
+				  <ref bean="cronWtQueueTrigger" /> 
+				  <ref bean="cronOldPassiveTracerTrigger" /> 
+				  <ref bean="cronMoveToWtTrigger" /> 
+				  <ref bean="BillingTrigger" />
+				  <ref bean="cronFsDataRetention" />
 			</list>
 		</property>
 	</bean>
