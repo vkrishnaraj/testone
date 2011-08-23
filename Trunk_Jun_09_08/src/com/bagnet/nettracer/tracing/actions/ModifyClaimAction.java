@@ -331,7 +331,6 @@ public class ModifyClaimAction extends CheckedAction {
 						session.setAttribute("traceResults", results);
 						session.setAttribute("results", results.getMatchHistory());
 						response.sendRedirect("fraud_results.do?claimId=" + claim.getId());
-						response.sendRedirect("fraud_results.do?claimId=" + claim.getId());
 						return null;
 					}
 					
