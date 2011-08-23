@@ -18,6 +18,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class ImportClaimData {
 
@@ -43,7 +44,7 @@ public class ImportClaimData {
 	public static void importClaims() {
 		failedIncidents = new LinkedHashMap<String, String>();
 
-		Agent agent = SecurityUtils.authUser("ntadmin", "Ladendead51!", "FL",
+		Agent agent = SecurityUtils.authUser("ntadmin", "Ladendead51!", TracerProperties.get("wt.company.code"),
 				0, new ActionMessages());
 		if (agent == null) {
 			return;
