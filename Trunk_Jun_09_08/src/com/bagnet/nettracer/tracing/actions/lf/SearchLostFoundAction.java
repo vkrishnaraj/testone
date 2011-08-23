@@ -123,9 +123,12 @@ public class SearchLostFoundAction extends CheckedAction {
 			searchDto.setDisposition(lfDisposition);
 		}
 		
-		Station station = new Station();
-		station.setStation_ID(user.getStation().getStation_ID());
-		searchDto.setStation(station);
+		if (searchDto.getStation() == null){
+			Station station = new Station();
+			station.setStation_ID(-1);
+			searchDto.setStation(station);
+		}
+		
 		return mapping.findForward(TracingConstants.LF_SEARCH_LOST_FOUND);
 		
 	}
