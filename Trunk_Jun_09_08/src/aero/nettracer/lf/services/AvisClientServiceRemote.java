@@ -1,6 +1,7 @@
 package aero.nettracer.lf.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -24,4 +25,7 @@ public interface AvisClientServiceRemote {
 	public List<KeyValueBean> getState();
 
 	public List<KeyValueBean> getStations(String companycode, String sub_company);
+
+	public HashMap<String, ArrayList<KeyValueBean>> getStationsByState(
+			String companycode, String sub_company);
 }

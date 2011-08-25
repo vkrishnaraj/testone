@@ -2,6 +2,7 @@ package aero.nettracer.lf.services;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -289,6 +290,41 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		return ret;
 	}
 
+	@Override
+	public HashMap<String,ArrayList<KeyValueBean>> getStationsByState(String companycode, String sub_company){
+		GeneralServiceBean bean = new GeneralServiceBean();
+		List<Station> stations = null;
+		
+		//get stations
+		if(sub_company != null){
+			List<String> companies = new ArrayList<String>();
+			if (!sub_company.equals(TracingConstants.LF_ABG_COMPANY_ID)) {
+				companies.add(TracingConstants.LF_ABG_COMPANY_ID);
+			}
+			companies.add(sub_company);
+			stations = bean.getStations(companycode, companies);
+		} else {
+			stations = bean.getStations(companycode);
+		}
+		if(stations == null){
+			return null;
+		}
+		HashMap<String, ArrayList<KeyValueBean>> map = new HashMap<String, ArrayList<KeyValueBean>>();
+		
+		//populate station map by state
+		for(Station station:stations){
+			KeyValueBean toAdd = new KeyValueBean();
+			toAdd.setKey("" + station.getStation_ID());
+			toAdd.setValue(station.getStationdesc());
+			String key = station.getState_ID()!=null&&station.getState_ID().trim().length()>0?station.getState_ID():"XX";
+			if(!map.containsKey(key)){
+				map.put(key, new ArrayList<KeyValueBean>());
+			}
+			map.get(key).add(toAdd);
+		}
+		return map;
+	}
+	
 	@Override
 	public List<KeyValueBean> getStations(String companycode, String sub_company) {
 		GeneralServiceBean bean = new GeneralServiceBean();
