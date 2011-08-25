@@ -506,26 +506,31 @@ public class PassengerViewUtil {
 			com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem siarr = null;
 			BDO bdo = null;
 			BDO_Passenger bdo_p = null;
+			int siarrIndex = 0;
 			for (int i = 0; i < iDTO.getItemlist().size(); i++) {
 				bdo = null;
 				bdo_p = null;
 				siarr = si.addNewItems();
 				item = (Item) iDTO.getItemlist().get(i);// Obtain the appropriate scannerDataSource
-				siarr.setBagstatus(item.getStatus().getTextDescription(null));
-				if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0)
-					siarr.setClaimchecknum(item.getClaimchecknum());
-
-				bdo = item.getBdo();
-				if (bdo != null)
-					bdo_p = bdo.getPassenger(0);
-				if (bdo_p != null) {
-					siarr.setAddress1(bdo_p.getAddress1());
-					siarr.setAddress2(bdo_p.getAddress2());
-					siarr.setCity(bdo_p.getCity());
-					siarr.setStateID(bdo_p.getState_ID());
-					siarr.setZip(bdo_p.getZip());
+				if (item != null) {
+					siarr.setBagstatus(item.getStatus().getTextDescription(null));
+					if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
+						siarr.setClaimchecknum(item.getClaimchecknum());
+					}
+					bdo = item.getBdo();
+					if (bdo != null) {
+						bdo_p = bdo.getPassenger(0);
+					}
+					if (bdo_p != null) {
+						siarr.setAddress1(bdo_p.getAddress1());
+						siarr.setAddress2(bdo_p.getAddress2());
+						siarr.setCity(bdo_p.getCity());
+						siarr.setStateID(bdo_p.getState_ID());
+						siarr.setZip(bdo_p.getZip());
+					}
+					si.setItemsArray(siarrIndex, siarr);
+					siarrIndex++;
 				}
-				si.setItemsArray(i, siarr);
 			}
 
 		}
