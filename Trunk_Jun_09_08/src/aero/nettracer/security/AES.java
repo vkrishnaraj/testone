@@ -3,8 +3,6 @@ package aero.nettracer.security;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.Provider;
-import java.security.Security;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 
@@ -15,21 +13,17 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.ShortBufferException;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import java.util.Arrays;
-import java.util.Date;
 
 public class AES {
 	
-	//DO NOT CHANGE THE PASSPHRASE, SALT, KEYSIZE OR IVBYTES VALUES
+	//DO NOT CHANGE THE PASSPHRASE, SALT, KEYSIZE
 	private static String passphrase = "8K74gb1dV5Vb";
 	private static String salt = "AbfYANREq73p";
 	private static int keySize = 256;
-	private static byte[] ivBytes = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09,
-	        0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f };
     
 	public static String encrypt(String value) throws InvalidKeyException, ShortBufferException, 
 	IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, 
@@ -65,14 +59,9 @@ public class AES {
 	public static byte[] encrypt(byte [] value, byte [] key) throws ShortBufferException, IllegalBlockSizeException, 
 	BadPaddingException, InvalidKeyException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException{
 		
-//		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());   
-		
 		SecretKeySpec skey = new SecretKeySpec(key, "AES");
-//	    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 	    Cipher cipher = Cipher.getInstance("AES");
-	    IvParameterSpec iv = new IvParameterSpec(ivBytes);
 	    cipher.init(Cipher.ENCRYPT_MODE, skey);
-//	    cipher.init(Cipher.ENCRYPT_MODE, skey, iv);
 
 	    byte[] cipherText = new byte[cipher.getOutputSize(value.length)];
 	    int ctLength = cipher.update(value, 0, value.length, cipherText, 0);
@@ -88,15 +77,10 @@ public class AES {
 	
 	public static byte[] decrypt (byte [] value, byte [] key) throws NoSuchAlgorithmException, NoSuchPaddingException, 
 	InvalidKeyException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException{
-		
-//		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());   
-		
-//	    Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
 	    Cipher cipher = Cipher.getInstance("AES");
-	    IvParameterSpec iv = new IvParameterSpec(ivBytes);
 	    SecretKeySpec skey = new SecretKeySpec(key, "AES");
 	    cipher.init(Cipher.DECRYPT_MODE,skey);
-//	    cipher.init(Cipher.DECRYPT_MODE,skey,iv);
 	    byte [] ret = new byte[cipher.getOutputSize(value.length)];
 	    int ctLength = cipher.update(value, 0, value.length, ret, 0);
 	    ctLength += cipher.doFinal(ret, ctLength);
@@ -135,61 +119,5 @@ public class AES {
 			  ret[i/2] = (byte) ((byte)(HEXES.indexOf((b[i])) << 4) + HEXES.indexOf(b[i+1]));
 		  }
 		  return ret;
-	}
-	
-	
-	
-	public static void main(String [] args){
-		try{
-			
-//			for(Provider p:Security.getProviders()){
-//				System.out.println(p.getName());
-//			}
-//			
-//			for(String s:Security.getAlgorithms("Cipher")){
-//				System.out.println(s);
-//			}
-			
-//			byte[] b = AES.encrypt("hello world".getBytes(), "passwordpassword".getBytes());
-//			System.out.println(new String(b));
-//			byte[] b2 = AES.decrypt(b, "passwordpassword".getBytes());
-//			System.out.println(new String(b2));
-//			
-//			byte[]b3 = AES.encrypt("hello world".getBytes(), AES.genKeyWithPadding("password".toCharArray(), 256).getEncoded());
-//			System.out.println(new String(b3));
-//			byte[]b4 = AES.decrypt(b3, AES.genKeyWithPadding("password".toCharArray(), 256).getEncoded());
-//			System.out.println(new String(b4));
-			
-//			for(Provider p:Security.getProviders()){
-//				System.out.println(p.getName());
-//			}
-//			
-//			for(String s:Security.getAlgorithms("Cipher")){
-//				System.out.println(s);
-//			}
-			
-//			System.out.println(AES.encrypt("Hello world"));
-			
-//			String hex = AES.getHex("Hello world".getBytes());
-//			System.out.println(hex);
-//			System.out.println("Hello world".getBytes());
-//			System.out.println(AES.getRaw(hex));
-//			System.out.println(new String(AES.getRaw(hex)));
-			
-			String hex1 = AES.encrypt("start");
-			Date start = new Date();
-			String hex = AES.encrypt("123 NetTracer");
-			System.out.println(hex);
-			Date middle = new Date();
-			System.out.println(middle.getTime() - start.getTime());
-			System.out.println(AES.decrypt(hex));
-			Date end = new Date();
-			System.out.println(end.getTime() - middle.getTime());
-			System.out.println(end.getTime() - start.getTime());
-			
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		}
 	}
 }
