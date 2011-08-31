@@ -19,6 +19,8 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import aero.nettracer.security.AES;
+
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -30,6 +32,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFDelivery;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
@@ -117,15 +120,22 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	private static String getSearchLostFoundQuery(LFSearchDTO dto){
 		String sql = null;
 		if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-			sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost o ";
+			sql = " from com.bagnet.nettracer.tracing.db.lf.LFLost o ";
 		} else if (dto.getType() == TracingConstants.LF_TYPE_FOUND){
-			sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound o ";
+			sql = " from com.bagnet.nettracer.tracing.db.lf.LFFound o ";
 		} else {
 			return null;
 		}
 		
 		if(dto.getPhoneNumber() != null && dto.getPhoneNumber().trim().length() > 0){
-			sql += " left outer join o.client.phones p where p.phoneNumber = \'" + dto.getPhoneNumber() + "\'";
+			try{
+				String s = AES.encrypt(LFPhone.normalizePhone(dto.getPhoneNumber()));
+				if(s != null){
+					sql += " left outer join o.client.phones p where p.phoneNumber = \'" + s + "\'";
+				}
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 		} else {
 			sql += " where 1=1";
 		}
@@ -186,7 +196,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 		}
 		if(dto.getEmail() != null && dto.getEmail().trim().length() > 0){
-			sql += " and o.client.email = \'" + dto.getEmail() + "\'";
+			try {
+				String s = AES.encrypt(dto.getEmail().toLowerCase());
+				if(s != null){
+					sql += " and o.client.email = \'" + s + "\'";
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return sql;
 	}
@@ -213,7 +230,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public List<LFLost> searchLost(LFSearchDTO dto, int start, int offset) {
-		String sql = getSearchLostFoundQuery(dto) + " order by o.openDate asc";
+		String sql = "select o " + getSearchLostFoundQuery(dto) + " order by o.openDate asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -408,7 +425,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public List<LFFound> searchFound(LFSearchDTO dto, int start, int offset) {
-		String sql = getSearchLostFoundQuery(dto) + " order by o.foundDate asc";
+		String sql = "select o " + getSearchLostFoundQuery(dto) + " order by o.foundDate asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1415,7 +1432,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@Override
 	public void sendStillSearching(long id) {
 		LFLost lost = getLostReport(id);
-		if(lost != null && lost.getClient() != null && lost.getClient().getEmail() != null && !lost.getClient().getEmail().isEmpty()){
+		if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
 			try {
 
 				String root = TracerProperties.get("email.resources");
@@ -1435,7 +1452,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 				he.setFrom(from);
 				ArrayList al = new ArrayList();
-				al.add(new InternetAddress(lost.getClient().getEmail()));
+				al.add(new InternetAddress(lost.getClient().getDecryptedEmail()));
 				he.setTo(al);
 				
 				he.setSubject("Avis Budget Group - Notification");
@@ -1469,7 +1486,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void closeLostAndEmail(long id){
 		LFLost lost = getLostReport(id);
-		if(lost != null && lost.getClient() != null && lost.getClient().getEmail() != null && !lost.getClient().getEmail().isEmpty()){
+		if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
 			try {
 				String root = TracerProperties.get("email.resources");
 				String configpath = root + "/";
@@ -1488,7 +1505,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 				he.setFrom(from);
 				ArrayList al = new ArrayList();
-				al.add(new InternetAddress(lost.getClient().getEmail()));
+				al.add(new InternetAddress(lost.getClient().getDecryptedEmail()));
 				he.setTo(al);
 				
 				he.setSubject("Avis Budget Group - Notification");
@@ -1559,7 +1576,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void sendLostCreatedEmail(long id){
 		LFLost lost = getLostReport(id);
-		if(lost != null && lost.getClient() != null && lost.getClient().getEmail() != null && !lost.getClient().getEmail().isEmpty()){
+		if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
 			try {
 				String root = TracerProperties.get("email.resources");
 				String configpath = root + "/";
@@ -1580,7 +1597,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 				he.setFrom(from);
 				ArrayList al = new ArrayList();
-				al.add(new InternetAddress(lost.getClient().getEmail()));
+				al.add(new InternetAddress(lost.getClient().getDecryptedEmail()));
 				he.setTo(al);
 				
 				he.setSubject("Avis Budget Group - Notification");

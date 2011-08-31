@@ -17,6 +17,8 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
 
+import aero.nettracer.security.AES;
+
 @Entity
 @Proxy(lazy = false)
 public class LFPerson {
@@ -32,6 +34,9 @@ public class LFPerson {
 	private String middleName;
 	
 	private String email;
+	
+	@Transient
+	private String decryptedEmail;
 	
 	@Transient
 	private String confirmEmail;
@@ -95,11 +100,16 @@ public class LFPerson {
 		this.phones = phones;
 	}
 
+	@Deprecated
+	/**For use by hibernate only, use getDecryptedEmail instead*/
 	public String getEmail() {
 		return email;
 	}
 
+	@Deprecated
+	/**For use by hibernate only, use setDecryptedEmail instead*/
 	public void setEmail(String email) {
+		this.decryptedEmail = null;
 		this.email = email;
 	}
 
@@ -113,13 +123,37 @@ public class LFPerson {
 
 	public String getConfirmEmail() {
 		if (confirmEmail == null) {
-			confirmEmail = email;
+			confirmEmail = getDecryptedEmail();
 		}
 		return confirmEmail;
 	}
 
 	public void setConfirmEmail(String confirmEmail) {
+		if(confirmEmail != null){
+			confirmEmail = confirmEmail.toLowerCase();
+		}
 		this.confirmEmail = confirmEmail;
+	}
+
+	public void setDecryptedEmail(String email) {
+		this.decryptedEmail = null;
+		try {
+			this.email = AES.encrypt(email!=null?email.trim().toLowerCase():null);
+		} catch (Exception e){
+			e.printStackTrace();
+			this.email = null;
+		}
+	}
+
+	public String getDecryptedEmail() {
+		if(this.decryptedEmail == null){
+			try{
+				this.decryptedEmail = AES.decrypt(this.email);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		return this.decryptedEmail;
 	}
 	
 }

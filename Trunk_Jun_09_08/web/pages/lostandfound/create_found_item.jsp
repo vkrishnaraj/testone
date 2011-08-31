@@ -283,24 +283,24 @@
 		                <td colspan=2>
 		                  <bean:message key="colname.street_addr1.req" />
 		                  <br>
-		                  <html:text name="foundItemForm" property="found.client.address.address1" size="45" maxlength="50" styleClass="textfield" />
+		                  <html:text name="foundItemForm" property="found.client.address.decryptedAddress1" size="45" maxlength="50" styleClass="textfield" />
 		                </td>
 		                <td colspan=3>
 		                  <bean:message key="colname.street_addr2" />
 		                  <br>
-		                  <html:text name="foundItemForm" property="found.client.address.address2" size="35" maxlength="50" styleClass="textfield" />
+		                  <html:text name="foundItemForm" property="found.client.address.decryptedAddress2" size="35" maxlength="50" styleClass="textfield" />
 		                </td>
 		              </tr>
 		              <tr>
 		                <td>
 		                  <bean:message key="colname.city.req" />
 		                  <br>
-		                  <html:text name="foundItemForm" property="found.client.address.city" size="10" maxlength="50" styleClass="textfield" />
+		                  <html:text name="foundItemForm" property="found.client.address.decryptedCity" size="10" maxlength="50" styleClass="textfield" />
 		                </td>
 		                <td>
 		                  <bean:message key="colname.state" />
 		                  <br />
-		                  <html:select name="foundItemForm" property="found.client.address.state" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" >
+		                  <html:select name="foundItemForm" property="found.client.address.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" >
 		                  	<html:option value="">
 			                    <bean:message key="select.none" />
 		                    </html:option>
@@ -310,12 +310,12 @@
 		                <td>
 		                  <bean:message key="colname.province" />
 		                  <br />
-		                  <html:text name="foundItemForm" property="found.client.address.province" size="10" maxlength="100" styleId="province" styleClass="textfield" onchange="fieldChanged('province');" />
+		                  <html:text name="foundItemForm" property="found.client.address.decryptedProvince" size="10" maxlength="100" styleId="province" styleClass="textfield" onchange="fieldChanged('province');" />
 		                </td>
 		                <td>
 		                  <bean:message key="colname.zip.req" />
 		                  <br>
-		                  <html:text name="foundItemForm" property="found.client.address.zip" size="11" maxlength="11" styleClass="textfield" />
+		                  <html:text name="foundItemForm" property="found.client.address.decryptedZip" size="11" maxlength="11" styleClass="textfield" />
 		                </td>
 		                <td>
 		                  <bean:message key="colname.country" />
@@ -358,7 +358,7 @@
 		              	<td colspan="2" >
 		              		<bean:message key="colname.lf.email" />
 		              		<br />
-		              		<html:text name="foundItemForm" property="found.client.email" size="35" maxlength="100" styleClass="textfield" />
+		              		<html:text name="foundItemForm" property="found.client.decryptedEmail" size="35" maxlength="100" styleClass="textfield" />
 		              	</td>
 		              	<td colspan="3" >
 		              		<bean:message key="colname.lf.confirm.email" />

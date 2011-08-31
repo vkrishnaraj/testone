@@ -92,10 +92,10 @@
      							<bean:write name="detail" property="score" />
      						</td>
      						<td>
-     							<%=detail.getLostValue() == null ? "&nbsp;" : detail.getLostValue() %>
+     							<%=detail.getDecryptedLostValue() == null ? "&nbsp;" : detail.getDecryptedLostValue() %>
      						</td>
      						<td>
-     							<%=detail.getFoundValue() == null ? "&nbsp;" : detail.getFoundValue() %>
+     							<%=detail.getDecryptedFoundValue() == null ? "&nbsp;" : detail.getDecryptedFoundValue() %>
      						</td>
      					</tr>
      				</logic:iterate>

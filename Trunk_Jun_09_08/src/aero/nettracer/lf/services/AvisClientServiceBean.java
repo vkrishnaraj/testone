@@ -83,7 +83,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		if(host.getClient() != null){
 			ContactBean contact = new ContactBean();
 			contact.setConfirmEmail(host.getClient().getConfirmEmail());
-			contact.setEmailAddress(host.getClient().getEmail());
+			contact.setEmailAddress(host.getClient().getDecryptedEmail());
 			contact.setFirstName(host.getClient().getFirstName());
 			contact.setLastName(host.getClient().getLastName());
 			contact.setMiddleInitial(host.getClient().getMiddleName());
@@ -92,20 +92,20 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 
 			if(host.getClient().getAddress() != null){
 				AddressBean address = new AddressBean();
-				address.setAddress1(host.getClient().getAddress().getAddress1());
-				address.setAddress2(host.getClient().getAddress().getAddress2());
-				address.setCity(host.getClient().getAddress().getCity());
+				address.setAddress1(host.getClient().getAddress().getDecryptedAddress1());
+				address.setAddress2(host.getClient().getAddress().getDecryptedAddress2());
+				address.setCity(host.getClient().getAddress().getDecryptedCity());
 				address.setCountry(host.getClient().getAddress().getCountry());
-				address.setPostal(host.getClient().getAddress().getZip());
-				address.setProvince(host.getClient().getAddress().getProvince());
-				address.setState(host.getClient().getAddress().getState());
+				address.setPostal(host.getClient().getAddress().getDecryptedZip());
+				address.setProvince(host.getClient().getAddress().getDecryptedProvince());
+				address.setState(host.getClient().getAddress().getDecryptedState());
 				contact.setAddress(address);
 			}
 
 			if(host.getClient().getPhones() != null){
 				for(LFPhone phone: host.getClient().getPhones()){
 					PhoneBean toAdd = new PhoneBean();
-					toAdd.setNumber(phone.getPhoneNumber());
+					toAdd.setNumber(phone.getDecryptedPhoneNumber());
 					toAdd.setType(phone.getNumberType());
 					if(phone.getPhoneType() == TracingConstants.LF_PHONE_PRIMARY){
 						contact.setPrimaryPhone(toAdd);
@@ -178,7 +178,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 			LFPerson client = new LFPerson();
 			
 			client.setConfirmEmail(lostReport.getContact().getConfirmEmail());
-			client.setEmail(lostReport.getContact().getEmailAddress());
+			client.setDecryptedEmail(lostReport.getContact().getEmailAddress());
 			client.setFirstName(lostReport.getContact().getFirstName());
 			client.setLastName(lostReport.getContact().getLastName());
 			client.setMiddleName(lostReport.getContact().getMiddleInitial());
@@ -190,7 +190,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 				toAdd.setPhoneType(TracingConstants.LF_PHONE_PRIMARY);
 				toAdd.setNumberType(lostReport.getContact().getPrimaryPhone().getType());
 				toAdd.setPerson(client);
-				toAdd.setPhoneNumber(lostReport.getContact().getPrimaryPhone().getNumber());
+				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getPrimaryPhone().getNumber());
 				phones.add(toAdd);
 			}
 			if(lostReport.getContact().getSecondaryPhone() != null){
@@ -198,7 +198,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 				toAdd.setPhoneType(TracingConstants.LF_PHONE_SECONDARY);
 				toAdd.setNumberType(lostReport.getContact().getSecondaryPhone().getType());
 				toAdd.setPerson(client);
-				toAdd.setPhoneNumber(lostReport.getContact().getSecondaryPhone().getNumber());
+				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getSecondaryPhone().getNumber());
 				phones.add(toAdd);
 			}
 			if(phones.size() > 0){
@@ -207,13 +207,13 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 
 			if(lostReport.getContact().getAddress() != null){
 				LFAddress address = new LFAddress();
-				address.setAddress1(lostReport.getContact().getAddress().getAddress1());
-				address.setAddress2(lostReport.getContact().getAddress().getAddress2());
-				address.setCity(lostReport.getContact().getAddress().getCity());
+				address.setDecryptedAddress1(lostReport.getContact().getAddress().getAddress1());
+				address.setDecryptedAddress2(lostReport.getContact().getAddress().getAddress2());
+				address.setDecryptedCity(lostReport.getContact().getAddress().getCity());
 				address.setCountry(lostReport.getContact().getAddress().getCountry());
-				address.setProvince(lostReport.getContact().getAddress().getProvince());
-				address.setState(lostReport.getContact().getAddress().getState());
-				address.setZip(lostReport.getContact().getAddress().getPostal());
+				address.setDecryptedProvince(lostReport.getContact().getAddress().getProvince());
+				address.setDecryptedState(lostReport.getContact().getAddress().getState());
+				address.setDecryptedZip(lostReport.getContact().getAddress().getPostal());
 				client.setAddress(address);
 			}
 			

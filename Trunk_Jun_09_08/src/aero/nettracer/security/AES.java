@@ -1,5 +1,6 @@
 package aero.nettracer.security;
 
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -27,32 +28,37 @@ public class AES {
     
 	public static String encrypt(String value) throws InvalidKeyException, ShortBufferException, 
 	IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, 
-	NoSuchPaddingException, InvalidKeySpecException{
+	NoSuchPaddingException, InvalidKeySpecException, UnsupportedEncodingException{
 		return encrypt(value, passphrase);
 	}
 	
 	public static String encrypt(String value, String passphrase) throws InvalidKeyException, ShortBufferException, 
 	IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, 
-	NoSuchPaddingException, InvalidKeySpecException{
-		
-		byte[]b = AES.encrypt(value.getBytes(), AES.genKeyWithPadding(passphrase.toCharArray(), keySize).getEncoded());
+	NoSuchPaddingException, InvalidKeySpecException, UnsupportedEncodingException{
+		if(value == null || passphrase == null){
+			return null;
+		}
+		byte[]b = AES.encrypt(value.getBytes("UTF-8"), AES.genKeyWithPadding(passphrase.toCharArray(), keySize).getEncoded());
 		return getHex(b);
 	}
 
 	
 	public static String decrypt(String value) throws InvalidKeyException, NoSuchAlgorithmException,
-	NoSuchPaddingException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException{
+	NoSuchPaddingException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, UnsupportedEncodingException{
 		return decrypt(value, passphrase);
 	}
 	
 	public static String decrypt(String value, String passphrase) throws InvalidKeyException, NoSuchAlgorithmException, 
-	NoSuchPaddingException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException{
+	NoSuchPaddingException, InvalidAlgorithmParameterException, ShortBufferException, IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, UnsupportedEncodingException{
+		if(value == null || passphrase == null){
+			return null;
+		}
 		return new String(AES.decrypt(AES.getRaw(value), AES.genKeyWithPadding(passphrase.toCharArray(), keySize).getEncoded()));
 	}
 	
 	public byte[] encrypt(byte [] value) throws InvalidKeyException, ShortBufferException, 
 	IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, 
-	NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException{
+	NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeySpecException, UnsupportedEncodingException{
 		return encrypt(value, AES.genKeyWithPadding(passphrase.toCharArray(), keySize).getEncoded());
 	}
 	
@@ -71,7 +77,7 @@ public class AES {
 	
 	public static byte[] decrypt (byte [] value) throws InvalidKeyException, NoSuchAlgorithmException,
 	NoSuchPaddingException, InvalidAlgorithmParameterException, ShortBufferException, 
-	IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException{
+	IllegalBlockSizeException, BadPaddingException, InvalidKeySpecException, UnsupportedEncodingException{
 		return decrypt(value, AES.genKeyWithPadding(passphrase.toCharArray(), keySize).getEncoded());
 	}
 	
@@ -87,9 +93,9 @@ public class AES {
 	    return Arrays.copyOf(ret, ctLength);
 	}
 	
-	public static SecretKey genKeyWithPadding(char[] key, int keylen) throws InvalidKeySpecException, NoSuchAlgorithmException{
+	public static SecretKey genKeyWithPadding(char[] key, int keylen) throws InvalidKeySpecException, NoSuchAlgorithmException, UnsupportedEncodingException{
 		SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-		KeySpec spec = new PBEKeySpec(key, salt.getBytes(), 1024, keylen);
+		KeySpec spec = new PBEKeySpec(key, salt.getBytes("UTF-8"), 1024, keylen);
 		SecretKey tmp = factory.generateSecret(spec);
 		SecretKey secret = new SecretKeySpec(tmp.getEncoded(), "AES");
 		return secret;
@@ -108,13 +114,14 @@ public class AES {
 		  return hex.toString();
 	}
 	
-	public static byte[] getRaw(String s){
+	public static byte[] getRaw(String s) throws UnsupportedEncodingException{
 		  String HEXES = "0123456789ABCDEF";
 		  if ( s == null ) {
 			  return null;
 		  }
 		  byte [] ret = new byte [s.length()/2];
-		  byte [] b = s.getBytes();
+
+		  byte[] b = s.getBytes("UTF-8");
 		  for(int i = 0; i < b.length; i+=2){
 			  ret[i/2] = (byte) ((byte)(HEXES.indexOf((b[i])) << 4) + HEXES.indexOf(b[i+1]));
 		  }

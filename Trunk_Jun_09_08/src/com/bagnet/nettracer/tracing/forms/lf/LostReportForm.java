@@ -36,22 +36,22 @@ public final class LostReportForm extends ActionForm {
 	}
 	
 	public String getPrimaryPhoneNumber() {
-		return getPhone(LFPhone.PRIMARY).getPhoneNumber();
+		return getPhone(LFPhone.PRIMARY).getDecryptedPhoneNumber();
 	}
 	
 	public void setPrimaryPhoneNumber(String primaryPhoneNumber) {
 		LFPhone phone = getPhone(LFPhone.PRIMARY);
-		phone.setPhoneNumber(primaryPhoneNumber);
+		phone.setDecryptedPhoneNumber(primaryPhoneNumber);
 		setPhone(phone);
 	}
 	
 	public String getSecondaryPhoneNumber() {
-		return getPhone(LFPhone.SECONDARY).getPhoneNumber();
+		return getPhone(LFPhone.SECONDARY).getDecryptedPhoneNumber();
 	}
 	
 	public void setSecondaryPhoneNumber(String secondaryPhoneNumber) {
 		LFPhone phone = getPhone(LFPhone.SECONDARY);
-		phone.setPhoneNumber(secondaryPhoneNumber);
+		phone.setDecryptedPhoneNumber(secondaryPhoneNumber);
 		setPhone(phone);
 	}
 	

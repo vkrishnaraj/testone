@@ -161,8 +161,8 @@ public class LFTracingUtil {
 					detail.setDescription("Name Match");
 					detail.setMatchHistory(match);
 					detail.setScore(SCORE_NAME);
-					detail.setFoundValue(fc.getFirstName() + " " + fc.getLastName());
-					detail.setLostValue(lc.getFirstName() + " " + lc.getLastName());
+					detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
+					detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
 					match.getDetails().add(detail);
 				}
 			}
@@ -170,15 +170,15 @@ public class LFTracingUtil {
 			if(lc.getPhones() != null && fc.getPhones() != null){
 				for(LFPhone lphone:lc.getPhones()){
 					for(LFPhone fphone:fc.getPhones()){
-						if(lphone.getNormalizeNumber() != null && lphone.getNormalizeNumber().trim().length() > 0
-								&& fphone.getNormalizeNumber() != null && fphone.getNormalizeNumber().trim().length() > 0){
-							if(lphone.getNormalizeNumber().equalsIgnoreCase(fphone.getNormalizeNumber())){
+						if(lphone.getDecryptedPhoneNumber() != null && lphone.getDecryptedPhoneNumber().trim().length() > 0
+								&& fphone.getDecryptedPhoneNumber() != null && fphone.getDecryptedPhoneNumber().trim().length() > 0){
+							if(lphone.getDecryptedPhoneNumber().equalsIgnoreCase(fphone.getDecryptedPhoneNumber())){
 								LFMatchDetail detail = new LFMatchDetail();
 								detail.setDescription("Phone Number Match");
 								detail.setMatchHistory(match);
 								detail.setScore(SCORE_PHONE);
-								detail.setFoundValue(fphone.getPhoneNumber());
-								detail.setLostValue(lphone.getPhoneNumber());
+								detail.setDecryptedFoundValue(fphone.getDecryptedPhoneNumber());
+								detail.setDecryptedLostValue(lphone.getDecryptedPhoneNumber());
 								match.getDetails().add(detail);
 							}
 						}
@@ -187,26 +187,26 @@ public class LFTracingUtil {
 			}
 			
 			if(lc.getAddress() != null && fc.getAddress() != null){
-				if(lc.getAddress().getAddress1() != null && lc.getAddress().getAddress1().trim().length() > 0
-						&& fc.getAddress().getAddress1() != null && fc.getAddress().getAddress1().trim().length() > 0
-						&& lc.getAddress().getCity() != null && lc.getAddress().getCity().trim().length() > 0
-						&& fc.getAddress().getCity() != null && fc.getAddress().getCity().trim().length() > 0){
+				if(lc.getAddress().getDecryptedAddress1() != null && lc.getAddress().getDecryptedAddress1().trim().length() > 0
+						&& fc.getAddress().getDecryptedAddress1() != null && fc.getAddress().getDecryptedAddress1().trim().length() > 0
+						&& lc.getAddress().getDecryptedCity() != null && lc.getAddress().getDecryptedCity().trim().length() > 0
+						&& fc.getAddress().getDecryptedCity() != null && fc.getAddress().getDecryptedCity().trim().length() > 0){
 					
 					LFAddress la = lc.getAddress();
 					LFAddress fa = fc.getAddress();
 					
-					String laddress = la.getAddress1()!=null?la.getAddress1():"" 
-							+ la.getAddress2()!=null?la.getAddress2():"" 
-							+ la.getCity()!=null?la.getCity():"" 
-							+ la.getState()!=null?la.getState():""
-							+ la.getProvince()!=null?la.getProvince():""
-							+ la.getZip()!=null?la.getZip():"";
-					String faddress = fa.getAddress1()!=null?fa.getAddress1():"" 
-							+ fa.getAddress2()!=null?fa.getAddress2():"" 
-							+ fa.getCity()!=null?fa.getCity():"" 
-							+ fa.getState()!=null?fa.getState():""
-							+ fa.getProvince()!=null?fa.getProvince():""
-							+ fa.getZip()!=null?fa.getZip():"";
+					String laddress = la.getDecryptedAddress1()!=null?la.getDecryptedAddress1():"" 
+							+ la.getDecryptedAddress2()!=null?la.getDecryptedAddress2():"" 
+							+ la.getDecryptedCity()!=null?la.getDecryptedCity():"" 
+							+ la.getDecryptedState()!=null?la.getDecryptedState():""
+							+ la.getDecryptedProvince()!=null?la.getDecryptedProvince():""
+							+ la.getDecryptedZip()!=null?la.getDecryptedZip():"";
+					String faddress = fa.getDecryptedAddress1()!=null?fa.getDecryptedAddress1():"" 
+							+ fa.getDecryptedAddress2()!=null?fa.getDecryptedAddress2():"" 
+							+ fa.getDecryptedCity()!=null?fa.getDecryptedCity():"" 
+							+ fa.getDecryptedState()!=null?fa.getDecryptedState():""
+							+ fa.getDecryptedProvince()!=null?fa.getDecryptedProvince():""
+							+ fa.getDecryptedZip()!=null?fa.getDecryptedZip():"";
 					
 
 					if(StringCompare.compareStrings(laddress, faddress) > 60.0){
@@ -214,10 +214,10 @@ public class LFTracingUtil {
 						detail.setDescription("Address Match");
 						detail.setMatchHistory(match);
 						detail.setScore(SCORE_ADDRESS);
-						String lostStateProvince = lc.getAddress().getState()!=null?lc.getAddress().getState():lc.getAddress().getProvince()!=null?lc.getAddress().getProvince():"";
-						String foundStateProvince = fc.getAddress().getState()!=null?fc.getAddress().getState():fc.getAddress().getProvince()!=null?fc.getAddress().getProvince():"";
-						detail.setFoundValue(fc.getAddress().getAddress1() + " " + fc.getAddress().getCity() + " " + foundStateProvince);
-						detail.setLostValue(lc.getAddress().getAddress1() + " " + lc.getAddress().getCity() + " " + lostStateProvince);
+						String lostStateProvince = lc.getAddress().getDecryptedState()!=null?lc.getAddress().getDecryptedState():lc.getAddress().getDecryptedProvince()!=null?lc.getAddress().getDecryptedProvince():"";
+						String foundStateProvince = fc.getAddress().getDecryptedState()!=null?fc.getAddress().getDecryptedState():fc.getAddress().getDecryptedProvince()!=null?fc.getAddress().getDecryptedProvince():"";
+						detail.setDecryptedFoundValue(fc.getAddress().getDecryptedAddress1() + " " + fc.getAddress().getDecryptedCity() + " " + foundStateProvince);
+						detail.setDecryptedLostValue(lc.getAddress().getDecryptedAddress1() + " " + lc.getAddress().getDecryptedCity() + " " + lostStateProvince);
 						match.getDetails().add(detail);
 					}
 				} 
@@ -230,8 +230,8 @@ public class LFTracingUtil {
 					detail.setDescription("Vantive Number Match");
 					detail.setMatchHistory(match);
 					detail.setScore(SCORE_VANTIVE);
-					detail.setFoundValue(fc.getVantiveNumber());
-					detail.setLostValue(lc.getVantiveNumber());
+					detail.setDecryptedFoundValue(fc.getVantiveNumber());
+					detail.setDecryptedLostValue(lc.getVantiveNumber());
 					match.getDetails().add(detail);
 				}
 			}
@@ -248,8 +248,8 @@ public class LFTracingUtil {
 					detail.setDescription("MVA Number Match");
 					detail.setMatchHistory(match);
 					detail.setScore(SCORE_MVA);
-					detail.setFoundValue(match.getFound().getMvaNumber());
-					detail.setLostValue(lr.getMvaNumber());
+					detail.setDecryptedFoundValue(match.getFound().getMvaNumber());
+					detail.setDecryptedLostValue(lr.getMvaNumber());
 					match.getDetails().add(detail);
 				}
 			}
@@ -266,8 +266,8 @@ public class LFTracingUtil {
 						detail.setDescription("Brand Match");
 						detail.setMatchHistory(match);
 						detail.setScore(SCORE_BRAND);
-						detail.setFoundValue(fitem.getBrand());
-						detail.setLostValue(litem.getBrand());
+						detail.setDecryptedFoundValue(fitem.getBrand());
+						detail.setDecryptedLostValue(litem.getBrand());
 						match.getDetails().add(detail);
 					}
 				}
@@ -281,8 +281,8 @@ public class LFTracingUtil {
 							detail.setScore(SCORE_CATEGORY);
 							LFSubCategory sub = getSubCategory(litem.getSubCategory());
 							if(sub != null){
-								detail.setFoundValue(sub.getParent().getDescription() + "/" + sub.getDescription());
-								detail.setLostValue(sub.getParent().getDescription() + "/" + sub.getDescription());
+								detail.setDecryptedFoundValue(sub.getParent().getDescription() + "/" + sub.getDescription());
+								detail.setDecryptedLostValue(sub.getParent().getDescription() + "/" + sub.getDescription());
 							}
 							match.getDetails().add(detail);
 						}
@@ -294,8 +294,8 @@ public class LFTracingUtil {
 							detail.setScore(SCORE_CATEGORY_PARTICLE);
 							LFCategory cat = getCategory(litem.getCategory());
 							if(cat != null){
-								detail.setFoundValue(cat.getDescription());
-								detail.setLostValue(cat.getDescription());
+								detail.setDecryptedFoundValue(cat.getDescription());
+								detail.setDecryptedLostValue(cat.getDescription());
 							}
 							match.getDetails().add(detail);
 						}
@@ -308,8 +308,8 @@ public class LFTracingUtil {
 						detail.setDescription("Color Match");
 						detail.setMatchHistory(match);
 						detail.setScore(SCORE_COLOR);
-						detail.setFoundValue(fitem.getColor());
-						detail.setLostValue(litem.getColor());
+						detail.setDecryptedFoundValue(fitem.getColor());
+						detail.setDecryptedLostValue(litem.getColor());
 						match.getDetails().add(detail);
 					}
 				}
@@ -320,8 +320,8 @@ public class LFTracingUtil {
 						detail.setDescription("Description Match");
 						detail.setMatchHistory(match);
 						detail.setScore(SCORE_DESCRIPTION);
-						detail.setFoundValue(fitem.getDescription());
-						detail.setLostValue(litem.getDescription());
+						detail.setDecryptedFoundValue(fitem.getDescription());
+						detail.setDecryptedLostValue(litem.getDescription());
 						match.getDetails().add(detail);
 					}
 				}
@@ -332,8 +332,8 @@ public class LFTracingUtil {
 						detail.setDescription("Serial Number Match");
 						detail.setMatchHistory(match);
 						detail.setScore(SCORE_SERIAL_NUMBER);
-						detail.setFoundValue(fitem.getSerialNumber());
-						detail.setLostValue(litem.getSerialNumber());
+						detail.setDecryptedFoundValue(fitem.getSerialNumber());
+						detail.setDecryptedLostValue(litem.getSerialNumber());
 						match.getDetails().add(detail);
 					}
 				}

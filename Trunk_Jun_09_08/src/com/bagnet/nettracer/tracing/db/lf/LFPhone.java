@@ -11,6 +11,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
+import aero.nettracer.security.AES;
+
 @Entity
 @Proxy(lazy = false)
 public class LFPhone {
@@ -32,7 +34,7 @@ public class LFPhone {
 	private String extension;
 	
 	@Transient
-	private String normalizeNumber;
+	private String decryptedNumber;
 	
 	/* Primary/Secondary */
 	private int numberType;
@@ -53,13 +55,38 @@ public class LFPhone {
 		this.id = id;
 	}
 
+	@Deprecated
+	/**For use by hibernate only, use getDecryptedPhoneNumber instead*/
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
+	@Deprecated
+	/**For use by hibernate only, use setDecryptedPhoneNumber instead*/
 	public void setPhoneNumber(String phoneNumber) {
+		this.decryptedNumber = null;
 		this.phoneNumber = phoneNumber;
-		
+	}
+	
+	public String getDecryptedPhoneNumber(){
+		if(this.decryptedNumber == null){
+			try {
+				this.decryptedNumber = AES.decrypt(this.phoneNumber);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		return this.decryptedNumber;
+	}
+	
+	public void setDecryptedPhoneNumber(String phoneNumber){
+		this.decryptedNumber = null; 
+		try {
+			this.phoneNumber = AES.encrypt(normalizePhone(phoneNumber));
+		} catch (Exception e){
+			e.printStackTrace();
+			this.phoneNumber = null;
+		}
 	}
 
 	public int getNumberType() {
@@ -94,25 +121,16 @@ public class LFPhone {
 		this.extension = extension;
 	}
 	
-	private String normalizePhone(){
-		if (this.phoneNumber == null) return null;
+	public static String normalizePhone(String phone){
+		if (phone == null) return null;
 		StringBuffer sb = new StringBuffer(100);
-		for (int i = 0; i < this.phoneNumber.length(); i++) {
-			char c = this.phoneNumber.charAt(i);
+		for (int i = 0; i < phone.length(); i++) {
+			char c = phone.charAt(i);
 			if (Character.isDigit(c)) {
 				sb.append(c);
 			}
 		}
 		return sb.toString();
-	}
-
-	public String getNormalizeNumber() {
-		if(this.normalizeNumber != null){
-			return this.normalizeNumber;
-		} else {
-			this.normalizeNumber = normalizePhone();
-			return this.normalizeNumber;
-		}
 	}
 	
 }

@@ -191,17 +191,17 @@ public class LFServiceBeanTest {
 		LFServiceBean bean = new LFServiceBean();
 		LFSearchDTO dto = new LFSearchDTO();
 		dto.setType(TracingConstants.LF_TYPE_FOUND);
-//		dto.setPhoneNumber("");
+		dto.setPhoneNumber("555-555-5555");
 //		dto.setOpenDate(new Date());
-		dto.setStartDate("06/15/2011");
-		dto.setEndDate("06/16/2011");
-		Agent smith = new Agent();
-		smith.setAgent_ID(1);
-		NTDateFormat format = new NTDateFormat();
-		format.setFormat(TracingConstants.DISPLAY_DATEFORMAT);
-		smith.setDateformat(format);
-		smith.setDefaultlocale("US");
-		dto.setAgent(smith);
+//		dto.setStartDate("06/15/2011");
+//		dto.setEndDate("06/16/2011");
+//		Agent smith = new Agent();
+//		smith.setAgent_ID(1);
+//		NTDateFormat format = new NTDateFormat();
+//		format.setFormat(TracingConstants.DISPLAY_DATEFORMAT);
+//		smith.setDateformat(format);
+//		smith.setDefaultlocale("US");
+//		dto.setAgent(smith);
 //		dto.setEmail("");
 //		dto.setAgreementNumber("");
 //		dto.setFirstName("");
@@ -214,12 +214,14 @@ public class LFServiceBeanTest {
 //		Status status = new Status();
 //		status.setStatus_ID(1);
 //		dto.setStatus(status);
-		Status disposition = new Status();
-		disposition.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
-		dto.setDisposition(disposition);
+//		Status disposition = new Status();
+//		disposition.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
+//		dto.setDisposition(disposition);
 		
 		System.out.println(bean.searchFoundCount(dto));
-		
+		for(LFFound lost:bean.searchFound(dto, 0, 100)){
+			System.out.println(lost.getId());
+		}
 	}
 	
 	@Test
@@ -664,18 +666,18 @@ public class LFServiceBeanTest {
 		LFPerson client = new LFPerson();
 		client.setFirstName("Bob");
 		client.setLastName("wehadababyitsaboy");
-		client.setEmail("bob@aol.com");
+		client.setDecryptedEmail("bob@aol.com");
 		LFAddress address = new LFAddress();
-		address.setAddress1("1505 Windy Ridge Ln");
-		address.setCity("Atlanta");
-		address.setState("GA");
-		address.setZip("30339");
+		address.setDecryptedAddress1("1505 Windy Ridge Ln");
+		address.setDecryptedCity("Atlanta");
+		address.setDecryptedState("GA");
+		address.setDecryptedZip("30339");
 		client.setAddress(address);
 		
 		LFPhone phone = new LFPhone();
 		HashSet<LFPhone> phones = new HashSet<LFPhone>();
 		phone.setPerson(client);
-		phone.setPhoneNumber("4044140102");
+		phone.setDecryptedPhoneNumber("4044140102");
 		phone.setNumberType(LFPhone.PRIMARY);
 		phone.setPhoneType(LFPhone.MOBILE);
 		phones.add(phone);
@@ -739,18 +741,18 @@ public class LFServiceBeanTest {
 		LFPerson client = new LFPerson();
 		client.setFirstName("Bob");
 		client.setLastName("wehadababyitsaboy");
-		client.setEmail("bob@aol.com");
+		client.setDecryptedEmail("bob@aol.com");
 		LFAddress address = new LFAddress();
-		address.setAddress1("1505 Windy Ridge Ln");
-		address.setCity("Atlanta");
-		address.setState("GA");
-		address.setZip("30339");
+		address.setDecryptedAddress1("1505 Windy Ridge Ln");
+		address.setDecryptedCity("Atlanta");
+		address.setDecryptedState("GA");
+		address.setDecryptedZip("30339");
 		client.setAddress(address);
 		
 		LFPhone phone = new LFPhone();
 		HashSet<LFPhone> phones = new HashSet<LFPhone>();
 		phone.setPerson(client);
-		phone.setPhoneNumber("4044140102");
+		phone.setDecryptedPhoneNumber("4044140102");
 		phone.setNumberType(LFPhone.PRIMARY);
 		phone.setPhoneType(LFPhone.MOBILE);
 		phones.add(phone);
