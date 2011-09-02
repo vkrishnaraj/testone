@@ -173,6 +173,10 @@ public class LFLost implements LFObject {
 		return DateUtils.formatDate(openDate, dateFormat, "", null);
 	}
 	
+	public String getDisClosedDate(String dateFormat) {
+		return DateUtils.formatDate(closeDate, dateFormat, "", null);
+	}
+	
 	public Set<LFDelivery> getDeliveries() {
 		return deliveries;
 	}

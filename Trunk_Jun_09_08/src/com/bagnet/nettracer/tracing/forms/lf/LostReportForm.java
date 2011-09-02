@@ -35,6 +35,10 @@ public final class LostReportForm extends ActionForm {
 		return lost.getDisOpenDate(dateFormat);
 	}
 	
+	public String getDisClosedDate() {
+		return lost.getDisClosedDate(dateFormat);
+	}
+	
 	public String getPrimaryPhoneNumber() {
 		return getPhone(LFPhone.PRIMARY).getDecryptedPhoneNumber();
 	}
@@ -105,6 +109,14 @@ public final class LostReportForm extends ActionForm {
 			return new ArrayList<LFItem>(lost.getItems()).get(index);
 		}
 		return null;
+	}
+	
+	public String getClosedAgentUsername(){
+		if(lost != null && lost.getCloseAgent() != null){
+			return lost.getCloseAgent().getUsername();
+		} else {
+			return "";
+		}
 	}
 
 }

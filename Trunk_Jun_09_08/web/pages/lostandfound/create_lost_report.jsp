@@ -207,18 +207,30 @@
 						<td>
 							<bean:message key="colname.lf.report.id" />
 							<br/>
-							<html:text name="lostReportForm" property="lost.id" disabled="true" styleClass="disabledtextfield" />
+							<html:text name="lostReportForm" property="lost.id" disabled="true" styleClass="disabledtextfield" size="15"/>
 						</td>
 						<td>
 							<bean:message key="colname.lf.created.date" />
 							<br/>
-							<html:text name="lostReportForm" property="disOpenDate" disabled="true" styleClass="disabledtextfield" />
+							<html:text name="lostReportForm" property="disOpenDate" disabled="true" styleClass="disabledtextfield" size="15"/>
 						</td>
 						<td>
 							<bean:message key="colname.lf.created.agent" />
 							<br/>
-							<html:text name="lostReportForm" property="lost.agent.username" disabled="true" styleClass="disabledtextfield" />
+							<html:text name="lostReportForm" property="lost.agent.username" disabled="true" styleClass="disabledtextfield" size="15"/>
 						</td>
+						<td>
+							<bean:message key="colname.lf.closed.date" />
+							<br/>
+							<html:text name="lostReportForm" property="disClosedDate" disabled="true" styleClass="disabledtextfield" size="15"/>
+						</td>
+						<td>
+							<bean:message key="colname.lf.closed.agent" />
+							<br/>
+							<html:text name="lostReportForm" property="closedAgentUsername" disabled="true" styleClass="disabledtextfield" size="15"/>
+						</td>
+					</tr>
+					<tr>
 						<td>
 							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
 							<br/>
@@ -235,6 +247,9 @@
          						<html:option value="-1"><bean:message key="option.lf.please.select" /></html:option>
          						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
          					</html:select>
+         				</td>
+         				<td colspan="3">
+         					&nbsp;
          				</td>
 					</tr>
 				</table>

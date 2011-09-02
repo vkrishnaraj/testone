@@ -160,6 +160,12 @@ public class LFServiceBeanTest {
 	}
 	
 	@Test
+	public void autoCloseTest(){
+		LFServiceBean bean = new LFServiceBean();
+		bean.closeLostAndEmail(240, bean.getAutoAgent());
+	}
+	
+	@Test
 	public void closeLostReportTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFLost lost = createLostTestCase();

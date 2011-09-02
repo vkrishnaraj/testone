@@ -1575,53 +1575,55 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void closeLostAndEmail(long id, Agent agent){
 		LFLost lost = getLostReport(id);
-		if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
-			try {
-				String root = TracerProperties.get("email.resources");
-				String configpath = root + "/";
-				String imagepath = root + "/";
-				boolean embedImage = true;
-				
-				HtmlEmail he = new HtmlEmail();
-				String currentLocale = lost.getAgent().getCurrentlocale();
-				
-				String from = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_from();
-				String host = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_host();
-				int port = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_port();
-				
-				he.setHostName(host);
-				he.setSmtpPort(port);
+		if(lost!=null){
+			if(lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
+				try {
+					String root = TracerProperties.get("email.resources");
+					String configpath = root + "/";
+					String imagepath = root + "/";
+					boolean embedImage = true;
 
-				he.setFrom(from);
-				ArrayList al = new ArrayList();
-				al.add(new InternetAddress(lost.getClient().getDecryptedEmail()));
-				he.setTo(al);
-				
-				he.setSubject("Avis Budget Group - Notification");
-				
-				HashMap h = new HashMap();
-				String htmlFileName = "closed_report_email.html";
-				
-				h.put("LOSTID", (new Long(id)).toString());
-				h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
-				
-				if (embedImage) {
-					String img1 = he.embed(new URL("file:" + imagepath + "avis_email_banner.jpg"),
-					"avis_email_banner.jpg");
-					h.put("BANNER_IMAGE", img1);
+					HtmlEmail he = new HtmlEmail();
+					String currentLocale = lost.getAgent().getCurrentlocale();
+
+					String from = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_from();
+					String host = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_host();
+					int port = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_port();
+
+					he.setHostName(host);
+					he.setSmtpPort(port);
+
+					he.setFrom(from);
+					ArrayList al = new ArrayList();
+					al.add(new InternetAddress(lost.getClient().getDecryptedEmail()));
+					he.setTo(al);
+
+					he.setSubject("Avis Budget Group - Notification");
+
+					HashMap h = new HashMap();
+					String htmlFileName = "closed_report_email.html";
+
+					h.put("LOSTID", (new Long(id)).toString());
+					h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
+
+					if (embedImage) {
+						String img1 = he.embed(new URL("file:" + imagepath + "avis_email_banner.jpg"),
+						"avis_email_banner.jpg");
+						h.put("BANNER_IMAGE", img1);
+					}
+
+					String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
+					if(msg == null){
+						System.out.println("email is null");
+					}
+					he.setHtmlMsg(msg);
+					he.send();
+					lost.setEmailSentDate(new Date());
+				}catch (Exception e){
+					e.printStackTrace();
 				}
-				
-				String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
-				if(msg == null){
-					System.out.println("email is null");
-				}
-				he.setHtmlMsg(msg);
-				he.send();
-			}catch (Exception e){
-				e.printStackTrace();
 			}
 			lost.setCloseDate(new Date());
-			lost.setEmailSentDate(new Date());
 			Status status = new Status();
 			status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
 			lost.setStatus(status);
@@ -1657,9 +1659,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				sess.close();
 			}
 		}
+		Agent agent = getAutoAgent();
 		for(Long id:lostIds){
-			System.out.println(id);
-			closeLostAndEmail(id, getAutoAgent());
+			System.out.println(id + " " + agent!=null?agent.getUsername():"null");
+			closeLostAndEmail(id, agent);
 		}
 	}
 	
