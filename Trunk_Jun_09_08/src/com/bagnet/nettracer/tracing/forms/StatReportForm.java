@@ -594,5 +594,15 @@ public final class StatReportForm extends ValidatorForm {
 	public void setGroupby(int groupby) {
 		this.groupby = groupby;
 	}
+	
+	private String event;
+		
+	public String getEvent() {
+		return event;
+	}
+
+	public void setEvent(String event) {
+		this.event = event;
+	}
 
 }

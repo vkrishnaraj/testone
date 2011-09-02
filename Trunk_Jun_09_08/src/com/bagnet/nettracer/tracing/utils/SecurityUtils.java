@@ -25,7 +25,10 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.lf.services.LFLogUtil;
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Agent_Logger;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
@@ -206,6 +209,9 @@ public class SecurityUtils {
 				} else {
 					agent.setFailed_logins(0);
 					HibernateUtils.save(agent);
+					if (PropertyBMO.isTrue(PropertyBMO.LF_USER)) {
+						LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_LOGIN, 0, 0);
+					}
 				}
 			}
 

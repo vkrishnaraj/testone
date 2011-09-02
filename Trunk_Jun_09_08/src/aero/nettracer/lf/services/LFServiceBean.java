@@ -291,6 +291,31 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return false;
 		}
 	}
+
+	private boolean isNewlyClosed(LFFound toSave) {
+		if(toSave == null){
+			return false;
+		}
+		if(toSave.getStatus().getStatus_ID() != TracingConstants.LF_STATUS_CLOSED){
+			return false;
+		}
+		if(toSave.getId() == 0){
+			return true;//we have a new Found to save and it is closed
+		}
+		
+		LFFound current = this.getFoundItem(toSave.getId());
+		if(current == null){
+			//assume newly closed
+			return true;
+		}
+		
+		if(current.getStatus().getStatus_ID() != TracingConstants.LF_STATUS_CLOSED){
+			//this is a newly closed file
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	@Override
 	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent) {
@@ -340,6 +365,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(reportId > 0){
 			if(isNew){
 				sendLostCreatedEmail(reportId);
+				if (agent != null) {
+					LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CREATE, (int) reportId, 0);
+				}
+			} else if (isNewlyClosed && agent != null) {
+				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CLOSE, (int) reportId, 0);
+			} else if (agent != null) {
+				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_MODIFY, (int) reportId, 0);
 			}
 			return reportId;
 		} else {
@@ -500,10 +532,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public long saveOrUpdateFoundItem(LFFound foundItem) {
+	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent) {
 		Session sess = null;
 		Transaction t = null;
 		long reportId = -1;
+		boolean isNew = (foundItem!=null&&foundItem.getId()==0)?true:false;
+		
+		boolean isNewlyClosed = this.isNewlyClosed(foundItem);
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
@@ -531,6 +566,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			closeOpenTraceResults(foundItem.getId(), TracingConstants.LF_TYPE_FOUND);
 		}
 		if(reportId > 0){
+			if(isNew && agent != null){
+				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CREATE, 0, (int) reportId);
+			} else if (isNewlyClosed && agent != null) {
+				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CLOSE, 0, (int) reportId);
+			} else if (agent != null) {
+				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_MODIFY, 0, (int) reportId);
+			}
 			return reportId;
 		} else {
 			return -1;

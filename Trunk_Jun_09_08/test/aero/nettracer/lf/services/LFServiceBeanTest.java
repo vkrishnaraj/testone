@@ -124,7 +124,7 @@ public class LFServiceBeanTest {
 	public void foundSaveLoadTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFFound found = createFoundTestCase();
-		long foundId = bean.saveOrUpdateFoundItem(found);
+		long foundId = bean.saveOrUpdateFoundItem(found, null);
 		assertTrue(foundId != -1);
 		
 		LFFound loaded = bean.getFoundItem(foundId);
@@ -297,11 +297,11 @@ public class LFServiceBeanTest {
 		LFFound found1 = createFoundTestCase();
 		found1.setFoundDate(gc.getTime());
 		found1.setLocation(station);
-		assertTrue(bean.saveOrUpdateFoundItem(found1) != -1);
+		assertTrue(bean.saveOrUpdateFoundItem(found1, null) != -1);
 		LFFound found2 = createFoundTestCase();
 		found2.setFoundDate(gc.getTime());
 		found2.setLocation(station);
-		assertTrue(bean.saveOrUpdateFoundItem(found2) != -1);
+		assertTrue(bean.saveOrUpdateFoundItem(found2, null) != -1);
 		
 		assertTrue(bean.getFoundCount(station) > 1);
 		
@@ -335,11 +335,11 @@ public class LFServiceBeanTest {
 		LFFound found1 = createFoundTestCase();
 		found1.setFoundDate(gc.getTime());
 		found1.setLocation(station);
-		assertTrue(bean.saveOrUpdateFoundItem(found1) != -1);
+		assertTrue(bean.saveOrUpdateFoundItem(found1, null) != -1);
 		LFFound found2 = createFoundTestCase();
 		found2.setFoundDate(gc.getTime());
 		found2.setLocation(station);
-		assertTrue(bean.saveOrUpdateFoundItem(found2) != -1);
+		assertTrue(bean.saveOrUpdateFoundItem(found2, null) != -1);
 		
 		assertTrue(bean.getItemsToSalvageCount(station) > 1);
 		
@@ -373,9 +373,9 @@ public class LFServiceBeanTest {
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_DISPOSITION_SALVAGED);
 		found1.getItem().setDisposition(status);
-		assertTrue(bean.saveOrUpdateFoundItem(found1) > -1);
+		assertTrue(bean.saveOrUpdateFoundItem(found1, null) > -1);
 		found2.getItem().setDisposition(status);
-		assertTrue(bean.saveOrUpdateFoundItem(found2) > -1);
+		assertTrue(bean.saveOrUpdateFoundItem(found2, null) > -1);
 		
 		LFSearchDTO dto = new LFSearchDTO();
 		dto.setDisposition(status);
@@ -588,7 +588,7 @@ public class LFServiceBeanTest {
 		status.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 		found.getItem().setDisposition(status);
 		found.setLocation(station);
-		long id = bean.saveOrUpdateFoundItem(found);
+		long id = bean.saveOrUpdateFoundItem(found, null);
 		assertTrue(id > -1);
 		
 		assertTrue(bean.getDeliveryPendingCount(station) > 0);
@@ -665,7 +665,7 @@ public class LFServiceBeanTest {
 	public void traceFoundTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFFound found = createFoundTestCase();
-		long foundId = bean.saveOrUpdateFoundItem(found);
+		long foundId = bean.saveOrUpdateFoundItem(found, null);
 		assertTrue(foundId != -1);
 		
 		LFFound loaded = bean.getFoundItem(foundId);

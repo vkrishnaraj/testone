@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.export.JExcelApiExporterParameter;
 
 import org.apache.log4j.Logger;
 
+import aero.nettracer.lf.services.LFLogUtil;
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
 import ar.com.fdvs.dj.domain.AutoText;
@@ -51,6 +52,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		switch (srDTO.getCustomreportnum()) {
 		case ReportingConstants.RPT_20_CUSTOM_78:
 			creportdata = createLostFoundReport(srDTO, ReportBMO.getCustomReport(78).getResource_key(), rootpath, request, user);
+			break;
+		case ReportingConstants.RPT_20_CUSTOM_86:
+			creportdata = createLostFoundLogReport(srDTO, ReportBMO.getCustomReport(86).getResource_key(), rootpath, request, user);
 			break;
 		default:
 			break;
@@ -93,6 +97,72 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.addColumn(resources.getString("report.lost.found.status"), "status", String.class.getName(), 50, detailStyle, header);			
 			drb.addColumn(resources.getString("report.lost.found.disposition"), "disposition", String.class.getName(), 125, detailStyle, header);			
 			drb.addColumn(resources.getString("report.lost.found.tracking.number"), "trackingNumber", String.class.getName(), 125, detailStyle, header);			
+			
+			drb.setIgnorePagination(true);
+			drb.setUseFullPageWidth(true);
+
+			DynamicReport report = drb.build();
+			JRDataSource data = new JRBeanCollectionDataSource(lostFoundReportData);
+			
+			JasperPrint jp = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), data);
+			parameters.put(JRParameter.IS_IGNORE_PAGINATION, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.JASPER_PRINT, jp);
+			parameters.put(JExcelApiExporterParameter.OUTPUT_FILE_NAME, outputpath);
+			parameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+			parameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+			parameters.put(JExcelApiExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.TRUE);
+			
+			JExcelApiExporter exporter = new JExcelApiExporter();
+			exporter.setParameters(parameters);
+			exporter.exportReport();
+			
+		} catch (JRException jre) {
+			jre.printStackTrace();
+		} catch (ColumnBuilderException cbe) {
+			cbe.printStackTrace();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} 
+		virtualizer.cleanup();
+		return fileName;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private String createLostFoundLogReport(StatReportDTO srDTO, String resourceKey, String rootpath, HttpServletRequest request, Agent user) {
+		String dateFormat = user.getDateformat().getFormat();
+		srDTO.setDateFormat(dateFormat);
+		String runDate = DateUtils.formatDate(new Date(), dateFormat, user.getDefaultlocale(), null);
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+		List lostFoundReportData = LFLogUtil.searchLog(srDTO);
+		if (lostFoundReportData == null) {
+			return null;
+		}
+		
+		Map parameters = new HashMap();
+		
+		String fileName = ReportingConstants.RPT_20_CUSTOM_86_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
+		virtualizer.setReadOnly(false);
+		
+		String company = CompanyBMO.getCompany(user.getCompanycode_ID()).getCompanydesc();
+		FastReportBuilder drb = new FastReportBuilder();
+		drb.setTitle(company + " " + resources.getString("header.customreportnum.86") + " " + runDate);
+		try {
+			Style header = new Style();
+			header.setHorizontalAlign(HorizontalAlign.CENTER);
+			header.setVerticalAlign(VerticalAlign.MIDDLE);
+			Style detailStyle = new Style("detail");
+			
+			drb.addColumn(resources.getString("custom.report.column.86.1"), "stamp", Date.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("custom.report.column.86.2"), "agent", String.class.getName(), 60, detailStyle, header);
+			drb.addColumn(resources.getString("custom.report.column.86.3"), "event", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("custom.report.column.86.4"), "lflost_id", String.class.getName(), 50, detailStyle, header);			
+			drb.addColumn(resources.getString("custom.report.column.86.5"), "lffound_id", String.class.getName(), 125, detailStyle, header);		
 			
 			drb.setIgnorePagination(true);
 			drb.setUseFullPageWidth(true);

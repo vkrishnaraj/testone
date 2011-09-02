@@ -100,7 +100,7 @@ public class EncryptData {
 					}
 				}
 			}
-			if(bean.saveOrUpdateFoundItem(found) == -1){
+			if(bean.saveOrUpdateFoundItem(found, null) == -1){
 				return false;
 			} else {
 				return true;

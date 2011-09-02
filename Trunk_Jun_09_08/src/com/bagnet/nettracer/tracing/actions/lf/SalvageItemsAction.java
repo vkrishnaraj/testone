@@ -41,7 +41,7 @@ public class SalvageItemsAction extends CheckedAction {
 		LFServiceBean serviceBean = new LFServiceBean();
 		HandleItemsForm hiForm = (HandleItemsForm) form;
 		if (request.getParameter("salvageItems") != null) {
-			salvageItems(hiForm.getFoundItems(), serviceBean);
+			salvageItems(hiForm.getFoundItems(), serviceBean, user);
 		}
 		
 		long rowcount = 0;
@@ -92,7 +92,7 @@ public class SalvageItemsAction extends CheckedAction {
 		
 	}
 	
-	private void salvageItems(ArrayList<LFItem> foundItems, LFServiceBean serviceBean) {
+	private void salvageItems(ArrayList<LFItem> foundItems, LFServiceBean serviceBean, Agent agent) {
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
 		Status disposition = new Status();
@@ -102,7 +102,7 @@ public class SalvageItemsAction extends CheckedAction {
 				if (item.isSelected()) {
 					item.getFound().setStatus(status);
 					item.setDisposition(disposition);
-					serviceBean.saveOrUpdateFoundItem(item.getFound());
+					serviceBean.saveOrUpdateFoundItem(item.getFound(), agent);
 				}
 			}
 		}

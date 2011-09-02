@@ -275,6 +275,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFCategory" />
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFSubCategory" />
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFLog" />
 		
 
 		

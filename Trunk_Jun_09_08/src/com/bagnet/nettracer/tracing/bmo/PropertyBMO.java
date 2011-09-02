@@ -99,6 +99,7 @@ public class PropertyBMO {
 	
 	public static final String LF_AUTO_CLOSE_DAYS = "lf.auto.close";
 	public static final String LF_AUTO_SALVAGE_DAYS = "lf.auto.salvage";
+	public static final String LF_USER = "lf.user";
 	
 	public static final String FS_RETENTION_YEARS = "fs.retention.years";
 	

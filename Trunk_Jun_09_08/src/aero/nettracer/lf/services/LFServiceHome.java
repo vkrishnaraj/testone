@@ -32,7 +32,7 @@ public interface LFServiceHome {
 	public LFFound getFoundItem(long id);
 	public int searchFoundCount(LFSearchDTO dto);
 	public List<LFFound> searchFound(LFSearchDTO dto, int start, int offset);
-	public long saveOrUpdateFoundItem(LFFound foundItem);
+	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent);
 	
 	public
 	ArrayList<LabelValueBean> getColors();

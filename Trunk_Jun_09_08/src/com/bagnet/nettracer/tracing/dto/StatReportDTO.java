@@ -31,7 +31,16 @@ public class StatReportDTO {
 	private int dispositionId;
 	private int type;
 	private String dateFormat;
-	
+	private String event;
+		
+	public String getEvent() {
+		return event;
+	}
+
+	public void setEvent(String event) {
+		this.event = event;
+	}
+
 	public String getDateFormat() {
 		return dateFormat;
 	}

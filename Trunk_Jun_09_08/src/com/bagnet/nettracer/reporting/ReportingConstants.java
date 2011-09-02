@@ -108,6 +108,8 @@ public class ReportingConstants {
 	public static final String EXCEL_FILE_TYPE = ".xls";
 	
 	public static final int RPT_20_CUSTOM_78 = 78;
+	public static final int RPT_20_CUSTOM_86 = 86;
+	public static final String RPT_20_CUSTOM_86_NAME = "lost_and_found_log_report";
 
 
 }
