@@ -61,7 +61,7 @@ public class FoundItemAction extends CheckedAction {
 		if (request.getParameter("save") != null) {
 			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found);
 			if (found.getItem().getLost() != null) {
-				LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost());
+				LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
 			}
 			if (found.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
 				LFServiceWrapper.getInstance().traceFoundItem(found.getId());

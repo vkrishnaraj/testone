@@ -19,12 +19,14 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import aero.nettracer.general.services.GeneralServiceBean;
 import aero.nettracer.security.AES;
 
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
@@ -43,6 +45,14 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 @Stateless
 public class LFServiceBean implements LFServiceRemote, LFServiceHome{
+	
+	private static String autoagent = "autoagent";
+	
+	public Agent getAutoAgent(){
+		GeneralServiceBean bean = new GeneralServiceBean();
+		return bean.getAgent(autoagent, TracerProperties.get("wt.company.code"));
+	}
+	
 	
 	@Override
 	public String echo(String s) {
@@ -257,12 +267,49 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 
+	private boolean isNewlyClosed(LFLost toSave) {
+		if(toSave == null){
+			return false;
+		}
+		if(toSave.getStatus().getStatus_ID() != TracingConstants.LF_STATUS_CLOSED){
+			return false;
+		}
+		if(toSave.getId() == 0){
+			return true;//we have a new Lost to save and it is closed
+		}
+		
+		LFLost current = this.getLostReport(toSave.getId());
+		if(current == null){
+			//assume newly closed
+			return true;
+		}
+		
+		if(current.getStatus().getStatus_ID() != TracingConstants.LF_STATUS_CLOSED){
+			//this is a newly closed file
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	@Override
-	public long saveOrUpdateLostReport(LFLost lostReport) {
+	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent) {
 		Session sess = null;
 		Transaction t = null;
 		long reportId = -1;
 		boolean isNew = (lostReport!=null&&lostReport.getId()==0)?true:false;
+		
+		boolean isNewlyClosed = this.isNewlyClosed(lostReport);
+		
+		if(isNewlyClosed){
+			lostReport.setCloseDate(new Date());
+			lostReport.setCloseAgent(agent);
+		}
+		if(lostReport.getStatus().getStatus_ID() != TracingConstants.LF_STATUS_CLOSED){
+			lostReport.setCloseDate(null);
+			lostReport.setCloseAgent(null);
+		}
+		
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
@@ -526,13 +573,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public boolean closeLostReport(long id) {
+	public boolean closeLostReport(long id, Agent agent) {
 		LFLost lost = getLostReport(id);
 		if(lost != null){
 			Status status = new Status();
 			status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
 			lost.setStatus(status);
-			if(saveOrUpdateLostReport(lost) > -1){
+			if(saveOrUpdateLostReport(lost, agent) > -1){
 				return true;
 			}
 		}
@@ -1476,7 +1523,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				he.send();
 				
 				lost.setEmailSentDate(new Date());
-				saveOrUpdateLostReport(lost);
+				saveOrUpdateLostReport(lost, getAutoAgent());
 				
 			}catch (Exception e){
 				e.printStackTrace();
@@ -1484,7 +1531,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	public void closeLostAndEmail(long id){
+	public void closeLostAndEmail(long id, Agent agent){
 		LFLost lost = getLostReport(id);
 		if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
 			try {
@@ -1536,7 +1583,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			Status status = new Status();
 			status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
 			lost.setStatus(status);
-			saveOrUpdateLostReport(lost);
+			saveOrUpdateLostReport(lost, agent);
 		}
 	}
 	
@@ -1570,7 +1617,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		for(Long id:lostIds){
 			System.out.println(id);
-			closeLostAndEmail(id);
+			closeLostAndEmail(id, getAutoAgent());
 		}
 	}
 	
@@ -1630,7 +1677,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				he.send();
 				
 				lost.setEmailSentDate(new Date());
-				saveOrUpdateLostReport(lost);
+				saveOrUpdateLostReport(lost,getAutoAgent());
 				
 			}catch (Exception e){
 				e.printStackTrace();

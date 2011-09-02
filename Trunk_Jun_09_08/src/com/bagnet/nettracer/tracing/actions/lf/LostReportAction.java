@@ -63,7 +63,7 @@ public class LostReportAction extends CheckedAction {
 		}
 		
 		if (request.getParameter("save") != null) {
-			LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport);
+			LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport, user);
 			if (lostReport.getItem().getFound() != null) {
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(lostReport.getItem().getFound());
 			}

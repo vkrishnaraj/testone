@@ -8,6 +8,7 @@ import java.util.Set;
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.NonUniqueResultException;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFDelivery;
@@ -16,7 +17,6 @@ import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public interface LFServiceHome {
 
@@ -27,7 +27,7 @@ public interface LFServiceHome {
 	public LFLost getLostReport(long id, String lastname);
 	public int searchLostCount(LFSearchDTO dto);
 	public List<LFLost> searchLost(LFSearchDTO dto, int start, int offset);
-	public long saveOrUpdateLostReport(LFLost lostReport);
+	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent);
 	
 	public LFFound getFoundItem(long id);
 	public int searchFoundCount(LFSearchDTO dto);
@@ -38,7 +38,7 @@ public interface LFServiceHome {
 	ArrayList<LabelValueBean> getColors();
 	public List<LFCategory> getCategories();
 
-	public boolean closeLostReport(long id);
+	public boolean closeLostReport(long id, Agent agent);
 	public void sendStillSearching(long id);
 	
 	//LF TaskManager services

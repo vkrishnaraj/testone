@@ -82,7 +82,7 @@ public class LFServiceBeanTest {
 		try {
 			LFServiceBean bean = new LFServiceBean();
 			LFLost lost = createLostTestCase();
-			long lostId = bean.saveOrUpdateLostReport(lost);
+			long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
 			assertTrue(lostId != -1);
 			
 			LFLost loaded = bean.getLostReport(lostId);
@@ -163,10 +163,31 @@ public class LFServiceBeanTest {
 	public void closeLostReportTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFLost lost = createLostTestCase();
-		long lostId = bean.saveOrUpdateLostReport(lost);
+		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
 		assertTrue(lostId != -1);
 		
-		assertTrue(bean.closeLostReport(lostId));
+		assertTrue(bean.closeLostReport(lostId, bean.getAutoAgent()));
+		LFLost load = bean.getLostReport(lostId);
+		Agent agent = bean.getAutoAgent();
+		assertTrue(agent.getUsername().equals("autoagent"));
+		assertTrue(load.getCloseAgent().getAgent_ID() == agent.getAgent_ID());
+		assertTrue(load.getCloseDate() != null);
+		
+		long closedate = load.getCloseDate().getTime();
+		
+		assertTrue(bean.saveOrUpdateLostReport(load, agent) > -1);
+		LFLost load2 = bean.getLostReport(lostId);
+		assertTrue(closedate == load2.getCloseDate().getTime());
+		
+		//reopen
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
+		load2.setStatus(status);
+		assertTrue(bean.saveOrUpdateLostReport(load2, agent) > -1);
+		LFLost load3 = bean.getLostReport(lostId);
+		assertTrue(load3.getCloseAgent() == null);
+		assertTrue(load3.getCloseDate() == null);
+		
 	}
 	
 	@Test
@@ -178,10 +199,10 @@ public class LFServiceBeanTest {
 		
 		LFLost lost1 = createLostTestCase();
 		lost1.setOpenDate(gc.getTime());
-		assertTrue(bean.saveOrUpdateLostReport(lost1) != -1);
+		assertTrue(bean.saveOrUpdateLostReport(lost1, bean.getAutoAgent()) != -1);
 		LFLost lost2 = createLostTestCase();
 		lost2.setOpenDate(gc.getTime());
-		assertTrue(bean.saveOrUpdateLostReport(lost2) != -1);
+		assertTrue(bean.saveOrUpdateLostReport(lost2, bean.getAutoAgent()) != -1);
 //		assertTrue(bean.searchLostCount(dto) == 2);
 	}
 	
@@ -238,12 +259,12 @@ public class LFServiceBeanTest {
 		lost1.setOpenDate(gc.getTime());
 		lost1.setLocation(station);
 		lost1.getReservation().setDropoffLocation(station);
-		assertTrue(bean.saveOrUpdateLostReport(lost1) != -1);
+		assertTrue(bean.saveOrUpdateLostReport(lost1, bean.getAutoAgent()) != -1);
 		LFLost lost2 = createLostTestCase();
 		lost2.setOpenDate(gc.getTime());
 		lost2.setLocation(station);
 		lost2.getReservation().setDropoffLocation(station);
-		assertTrue(bean.saveOrUpdateLostReport(lost2) != -1);
+		assertTrue(bean.saveOrUpdateLostReport(lost2, bean.getAutoAgent()) != -1);
 		
 		assertTrue(bean.getLostCount(station) > 1);
 		
@@ -604,7 +625,7 @@ public class LFServiceBeanTest {
 		assertTrue(loaded != null && loaded.getId() == id);
 		
 		LFLost lost = createLostTestCase();
-		long lostId = bean.saveOrUpdateLostReport(lost);
+		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
 		assertTrue(lostId != -1);
 		
 		LFDelivery delivery = new LFDelivery();
@@ -622,7 +643,7 @@ public class LFServiceBeanTest {
 	public void traceLostTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFLost lost = createLostTestCase();
-		long lostId = bean.saveOrUpdateLostReport(lost);
+		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
 		assertTrue(lostId != -1);
 		
 		LFLost loaded = bean.getLostReport(lostId);
@@ -636,7 +657,7 @@ public class LFServiceBeanTest {
 	public void testEmail(){
 		LFServiceBean bean = new LFServiceBean();
 		LFLost lost = createLostTestCase();
-		long lostId = bean.saveOrUpdateLostReport(lost);
+		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
 		assertTrue(lostId != -1);
 	}
 	

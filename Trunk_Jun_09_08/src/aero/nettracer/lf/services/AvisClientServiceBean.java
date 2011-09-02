@@ -226,7 +226,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		host.setStatus(status);
 		
 		LFServiceBean bean = new LFServiceBean();
-		return bean.saveOrUpdateLostReport(host);
+		return bean.saveOrUpdateLostReport(host, getWebAgent());
 	}
 
 	@Override

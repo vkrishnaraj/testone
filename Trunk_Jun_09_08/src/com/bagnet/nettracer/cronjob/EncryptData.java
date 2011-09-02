@@ -65,7 +65,8 @@ public class EncryptData {
 				}
 			}
 //			System.out.println(lost.getId());
-			if(bean.saveOrUpdateLostReport(lost) == -1){
+			
+			if(bean.saveOrUpdateLostReport(lost,null) == -1){
 				return false;
 			} else {
 				return true;

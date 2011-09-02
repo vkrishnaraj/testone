@@ -41,6 +41,10 @@ public class LFLost implements LFObject {
 	private Agent agent;
 
 	@ManyToOne
+	@JoinColumn(name = "closeagent_ID", nullable = true)
+	private Agent closeAgent;
+	
+	@ManyToOne
 	@JoinColumn(name = "station_ID", nullable = false)
 	private Station location;
 
@@ -239,6 +243,14 @@ public class LFLost implements LFObject {
 	public void setItem(LFItem item) {
 		this.items = new LinkedHashSet<LFItem>();
 		items.add(item);
+	}
+
+	public void setCloseAgent(Agent closeAgent) {
+		this.closeAgent = closeAgent;
+	}
+
+	public Agent getCloseAgent() {
+		return closeAgent;
 	}
 	
 }

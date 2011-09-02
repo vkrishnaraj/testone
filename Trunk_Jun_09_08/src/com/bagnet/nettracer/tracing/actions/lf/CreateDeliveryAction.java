@@ -50,7 +50,7 @@ public class CreateDeliveryAction extends CheckedAction {
 					i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
 					i.getFound().setStatusId(TracingConstants.LF_STATUS_CLOSED);
 					
-					serviceBean.saveOrUpdateLostReport(i.getLost());
+					serviceBean.saveOrUpdateLostReport(i.getLost(), user);
 					serviceBean.saveOrUpdateFoundItem(i.getFound());
 				}
 				
@@ -67,7 +67,7 @@ public class CreateDeliveryAction extends CheckedAction {
 				i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
 				i.getFound().setStatusId(TracingConstants.LF_STATUS_CLOSED);
 
-				serviceBean.saveOrUpdateLostReport(i.getLost());
+				serviceBean.saveOrUpdateLostReport(i.getLost(), user);
 				serviceBean.saveOrUpdateFoundItem(i.getFound());
 			}
 			response.sendRedirect("view_items_deliver.do");
