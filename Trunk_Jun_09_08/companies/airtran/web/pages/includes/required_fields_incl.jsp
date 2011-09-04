@@ -453,6 +453,13 @@ function validatereqOHDFields(form) {
   }
   
   function validateReqBDO(form) {
+	returnValue = true;
+    
+    returnValue = validateBDO(form);
+    if (returnValue == false) {
+    	return returnValue;
+    }
+
     return true;
   }
 
