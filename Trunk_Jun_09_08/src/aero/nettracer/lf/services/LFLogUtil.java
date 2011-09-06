@@ -29,7 +29,7 @@ public class LFLogUtil {
 	
 	public static void writeLog(String agent, String station, String event, int lost_id, int found_id) {
 		LFLog log = new LFLog();
-		log.setStamp(TracerDateTime.getGMTDate());
+		log.setStamp(new Date()); //(TracerDateTime.getGMTDate());
 		log.setAgent(agent);
 		log.setStationcode(station);
 		log.setEvent(event);
