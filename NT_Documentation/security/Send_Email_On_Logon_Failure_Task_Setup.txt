@@ -1,0 +1,64 @@
+1.	Create a new folder named: C:\security
+
+2.	Create a new file named 4625.bat in the security folder and add the following command:
+		wevtutil qe security /rd:true /f:text /c:1 /q:"*[System[(EventID=4625)]]" > c:\security\4625.txt
+		
+3.	Run the bat file and ensure that c:\security\4625.txt is created.
+
+4.	In the task manager, click on Diagnostics > Event Viewer > Windows Logs > Security
+
+5.	In the right pane, click in the "Filter Current Log..." option.
+
+6.	In the dialog, replace <All Event IDs> with 4625 and click ok
+
+7.	Right click on any of the events with Event ID 4625 and select the "Add Task To This Event..." option.
+
+8.	In the description field, type in "Failed logon attempt" and click next.
+
+9.	Click next.
+
+10.	Make sure that the "Start a program" option is selected and click next.
+
+11.	Click on the "Browse" button, select c:\security\4625.bat" and click "Open".
+
+12.	Click next.
+
+13.	Check the "Open the Properties dialog for this task when I click Finish" box and click "Finish".
+
+14.	In the dialog, click on the "Change User or Group..." button.
+
+15.	Type "security" into the name text box and click on "Check Names".
+
+16.	Click OK.
+
+17.	Select "Run whether the user is logged on or not".
+
+18.	Check the "Run with highest privileges" button.
+
+19.	Change the "Configure for:" drop-down box to "Windows 7, Windows Server 2008 R2".
+
+20.	Click on the "Actions" tab.
+
+21.	Click the "New..." button.
+
+22.	Select "Send an e-mail" in the "Action" drop-down.
+
+23.	Enter the email attributes as listed below and replace <serverName> with the name of the server on which the task is being configured:
+	1. From: security@<serverName>
+	2. To: security@nettracer.aero
+	3. Subject: <serverName>: Logon failed
+	4. Text: A user attempted to logon with a bad username or password. See the attached file for additional details.
+	5. Attachment: C:\security\4625.txt
+	6. SMTP server: 10.8.185.132
+
+24.	Click on the "Conditions" tab.
+
+25.	Uncheck the box next to "Start the task only if the computer is on AC power".
+
+26.	Click on the "Settings" tab.
+
+27.	In the drop-down next to "Stop the task if it runs longer than:", change the selection to "1 hour".
+
+28.	Click on OK.
+
+29.	Try logging on to the server with an invalid username and/or password and verify that a message is sent to security@nettracer.aero with the details file attached.
