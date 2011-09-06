@@ -112,7 +112,9 @@ public class LFLogUtil {
 				q.setString("event", event);
 			}
 			List<LFLog> toReturn = q.list();
-			return toReturn;
+			if (!toReturn.isEmpty() && toReturn.get(0) != null) {
+				return toReturn;
+			}
 		} catch (Exception e) {
 			logger.error("search of LFLog failed.");
 			e.printStackTrace();
