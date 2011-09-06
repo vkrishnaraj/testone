@@ -1,5 +1,6 @@
 package aero.nettracer.lf.services;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -95,6 +96,10 @@ public class LFLogUtil {
 			}
 			if (q_edate.length() > 0) {
 				Date e_dateDate = DateUtils.convertToDate(e_date, user.getDateformat().getFormat(), null);
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(e_dateDate);
+				cal.add(Calendar.DATE, 1);
+				e_dateDate = cal.getTime();
 				q.setDate("edate", e_dateDate);
 			}
 			if (q_agent.length() > 0) {
