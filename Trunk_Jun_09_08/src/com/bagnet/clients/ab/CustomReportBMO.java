@@ -137,7 +137,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		srDTO.setDateFormat(dateFormat);
 		String runDate = DateUtils.formatDate(new Date(), dateFormat, user.getDefaultlocale(), null);
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
-		List lostFoundReportData = LFLogUtil.searchLog(srDTO);
+		List lostFoundReportData = LFLogUtil.searchLog(srDTO, user);
 		if (lostFoundReportData == null) {
 			return null;
 		}
@@ -161,8 +161,8 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.addColumn(resources.getString("custom.report.column.86.1"), "stamp", Date.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("custom.report.column.86.2"), "agent", String.class.getName(), 60, detailStyle, header);
 			drb.addColumn(resources.getString("custom.report.column.86.3"), "event", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("custom.report.column.86.4"), "lflost_id", String.class.getName(), 50, detailStyle, header);			
-			drb.addColumn(resources.getString("custom.report.column.86.5"), "lffound_id", String.class.getName(), 125, detailStyle, header);		
+			drb.addColumn(resources.getString("custom.report.column.86.4"), "lflost_id", Integer.class.getName(), 50, detailStyle, header);			
+			drb.addColumn(resources.getString("custom.report.column.86.5"), "lffound_id", Integer.class.getName(), 125, detailStyle, header);		
 			
 			drb.setIgnorePagination(true);
 			drb.setUseFullPageWidth(true);

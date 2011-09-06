@@ -1,4 +1,3 @@
-<%@page import="aero.nettracer.lf.services.LFLogUtil"%>
 <%@ page language="java"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
@@ -46,7 +45,7 @@
   	</td>
   	<td>
     <html:select property="stationCode" styleClass="dropdown" >
-      <html:option value="0">
+      <html:option value="">
         <bean:message key="select.all" />
       </html:option>
       <html:options collection="airlineallstationlist" property="stationcode" labelProperty="stationcode" />
@@ -58,8 +57,8 @@
 		<bean:message key="colname.lf.event" />:
 	</td>
 	<td>
-		<html:select property="status_ID" styleClass="dropdown" >
-			<html:option value="<%=String.valueOf(LFLogUtil.EVENT_ALL) %>"><bean:message key="search.option.all" /></html:option>
+		<html:select property="event" styleClass="dropdown" >
+			<html:option value="<%=LFLogUtil.EVENT_ALL %>"><bean:message key="search.option.all" /></html:option>
 			<html:option value="<%=LFLogUtil.EVENT_LOGIN %>"><bean:message key="<%="STATUS_KEY_" + LFLogUtil.EVENT_LOGIN %>" /></html:option>
 			<html:option value="<%=LFLogUtil.EVENT_CREATE %>"><bean:message key="<%="STATUS_KEY_" + LFLogUtil.EVENT_CREATE %>" /></html:option>
 			<html:option value="<%=LFLogUtil.EVENT_MODIFY %>"><bean:message key="<%="STATUS_KEY_" + LFLogUtil.EVENT_MODIFY %>" /></html:option>

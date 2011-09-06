@@ -9,8 +9,12 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFLog;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class LFLogUtil {
 	
@@ -24,7 +28,7 @@ public class LFLogUtil {
 	
 	public static void writeLog(String agent, String station, String event, int lost_id, int found_id) {
 		LFLog log = new LFLog();
-		log.setStamp(new Date());
+		log.setStamp(TracerDateTime.getGMTDate());
 		log.setAgent(agent);
 		log.setStationcode(station);
 		log.setEvent(event);
@@ -48,16 +52,17 @@ public class LFLogUtil {
 		}
 	}
 	
-	public static List<LFLog> searchLog(StatReportDTO srDTO) {
+	public static List<LFLog> searchLog(StatReportDTO srDTO, Agent user) {
 		String s_date = srDTO.getStarttime();
 		String e_date = srDTO.getEndtime();
 		String agent = srDTO.getAgent();
 		String station = srDTO.getStationCode();
 		String event = srDTO.getEvent();
-		return searchLog(s_date, e_date, agent, station, event);
+		return searchLog(s_date, e_date, agent, station, event, user);
 	}
 	
-	public static List<LFLog> searchLog(String s_date, String e_date, String agent, String station, String event) {
+	@SuppressWarnings("unchecked")
+	public static List<LFLog> searchLog(String s_date, String e_date, String agent, String station, String event, Agent user) {
 		String q_sdate = "";
 		String q_edate = "";
 		String q_agent = "";
@@ -85,10 +90,12 @@ public class LFLogUtil {
 			.createQuery("select log from com.bagnet.nettracer.tracing.db.lf.LFLog log"
 					+ " where 1=1 " + q_sdate + q_edate + q_agent + q_station + q_event);
 			if (q_sdate.length() > 0) {
-				q.setString("sdate", s_date);
+				Date s_dateDate = DateUtils.convertToDate(s_date, user.getDateformat().getFormat(), null);
+				q.setDate("sdate", s_dateDate);
 			}
 			if (q_edate.length() > 0) {
-				q.setString("edate", e_date);
+				Date e_dateDate = DateUtils.convertToDate(e_date, user.getDateformat().getFormat(), null);
+				q.setDate("edate", e_dateDate);
 			}
 			if (q_agent.length() > 0) {
 				q.setString("agent", agent);
