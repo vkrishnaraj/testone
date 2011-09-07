@@ -325,7 +325,7 @@ public class ModifyClaimAction extends CheckedAction {
 					boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
 					TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave, hasViewFraudResultsPermission);
 					ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SUBMIT);
-					if (hasViewFraudResultsPermission) {
+					if (hasViewFraudResultsPermission && results != null) {
 						
 						// TODO: SET RELOAD TIME HERE
 						session.setAttribute("traceResults", results);
