@@ -206,7 +206,7 @@
 		
 		<t:outputText value="Describe Trim:" styleClass="requiredField"/>
 		<rich:spacer width="5"/>
-		<t:inputText  value="#{bagItem.trimDescription}" readonly="true"/>
+		<t:outputText  value="#{bagItem.trimDescription}"/>
 		<rich:spacer width="5"/>
 		
 		<t:selectBooleanCheckbox value="#{bagItem.softSided}" readonly="true"
@@ -278,50 +278,41 @@
 	<a4j:region renderRegionOnly="true">
 		<a4j:outputPanel id="contentPanel" ajaxRendered="true">
 			<rich:dataTable align="center"  id="contentTable" 
-					value="#{bagItem.contentList}" var="contentItem" 
-					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
-					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
+					value="#{bagItem.contentList}" var="contentItem" >
 				<f:facet name="header">
 					<rich:columnGroup>
 						<rich:column>
-							<h:outputText  value="#{passengerController.bagDetailsLabel.gender.label}" styleClass="font1-1em"/>
+							<h:outputText  value="#{passengerController.bagDetailsLabel.gender.label}"/>
 						</rich:column>
 						<rich:column>
-							<h:outputText 	value="#{passengerController.bagDetailsLabel.article.label}" styleClass="font1-1em"/>
+							<h:outputText 	value="#{passengerController.bagDetailsLabel.article.label}"/>
 						</rich:column>
 							<rich:column>
-							<h:outputText  value="#{passengerController.bagDetailsLabel.color.label}" styleClass="font1-1em"/>
+							<h:outputText  value="#{passengerController.bagDetailsLabel.color.label}"/>
 						</rich:column>
 						<rich:column>
-							<h:outputText 	value="#{passengerController.bagDetailsLabel.size.label}" styleClass="font1-1em"/>
+							<h:outputText 	value="#{passengerController.bagDetailsLabel.size.label}"/>
 						</rich:column>
 							<rich:column>
-							<h:outputText  value="#{passengerController.bagDetailsLabel.brandOrDescription.label}" styleClass="font1-1em"/>
+							<h:outputText  value="#{passengerController.bagDetailsLabel.brandOrDescription.label}"/>
 						</rich:column>
 						<rich:column>
-							<h:outputText 	value="#{passengerController.bagDetailsLabel.storePurchased.label}" styleClass="font1-1em"/>
+							<h:outputText 	value="#{passengerController.bagDetailsLabel.storePurchased.label}" />
 						</rich:column>
 							<rich:column>
-							<h:outputText  value="#{passengerController.bagDetailsLabel.purchasedDate.label}" styleClass="font1-1em"/>
+							<h:outputText  value="#{passengerController.bagDetailsLabel.purchasedDate.label}" />
 						</rich:column>
 						<rich:column>
-							<h:outputText 	value="#{passengerController.bagDetailsLabel.price.label}" styleClass="font1-1em"/>
+							<h:outputText 	value="#{passengerController.bagDetailsLabel.price.label}" />
 						</rich:column>
 							<rich:column>
-							<h:outputLabel  value="Owner" styleClass="subheadColumn"/>
+							<h:outputLabel  value="Owner" />
 						</rich:column>
 					</rich:columnGroup>
 				</f:facet>
 				
 				<rich:column>
-					<t:selectOneMenu value="#{contentItem.male}" readonly="true" style="width:70px;">
-						<f:selectItem itemValue="0" itemLabel="N/A" />
-						<f:selectItem itemValue="1" itemLabel="Male" />
-						<f:selectItem itemValue="2" itemLabel="Female" />
-						<f:selectItem itemValue="3" itemLabel="Male Child" />
-						<f:selectItem itemValue="5" itemLabel="Female Child" />
-						<f:selectItem itemValue="4" itemLabel="Infant" />
-					</t:selectOneMenu>
+					<h:outputText value="#{contentItem.maleDisp}" />
 				</rich:column>
 				<rich:column>
 					<h:outputText value="#{contentItem.article}" />

@@ -49,6 +49,7 @@ import com.nettracer.claims.core.model.labels.LabelsAdditionalInfoPage;
 import com.nettracer.claims.core.model.labels.LabelsBagDetailsPage;
 import com.nettracer.claims.core.model.labels.LabelsFileUploadPage;
 import com.nettracer.claims.core.model.labels.LabelsFlightInfoPage;
+import com.nettracer.claims.core.model.labels.LabelsGeneralApplication;
 import com.nettracer.claims.core.model.labels.LabelsPassengerInfoPage;
 import com.nettracer.claims.core.model.labels.LabelsSubmitClaimPage;
 import com.nettracer.claims.core.model.labels.LabelsSubmitSuccessPage;
@@ -88,6 +89,7 @@ public class PassengerController {
 	private LabelsAdditionalInfoPage fraudQuestionLabel;
 	private LabelsSubmitClaimPage submitClaimLabel;
 	private LabelsSubmitSuccessPage savedScreenLabel;
+	private LabelsGeneralApplication generalLabel;
 	private List<SelectItem> selectItems = new ArrayList<SelectItem>();
 	private Set<SelectItem> lostBagItems = new LinkedHashSet<SelectItem>();
 	private DataModel airportCodeList;
@@ -140,6 +142,8 @@ public class PassengerController {
 			submitClaimLabel = passengerService.getSubmitClaimPage(
 					selectedLanguage, baggageState);
 			savedScreenLabel = passengerService.getSavedScreenPage(
+					selectedLanguage, baggageState);
+			generalLabel = passengerService.getGeneralPage(
 					selectedLanguage, baggageState);
 			List<CountryCode> countries = passengerService.getCountries();
 			for (CountryCode countryCode : countries) {
@@ -892,6 +896,9 @@ public class PassengerController {
 		Date start = new Date();
 		String pref = (String) suggest;
 		pref = pref.toLowerCase();
+		if (pref.length() > 6) {
+			pref = pref.substring(0, 6);
+		}
 		
 		List<Airport> airports = null;
 		try {
@@ -968,6 +975,15 @@ public class PassengerController {
 						FacesUtil.addError("The Arrival City for Segment #" + itinCount + " is not valid.");
 						noErrors = false;
 					}
+					if (itin.getAirline() == null || itin.getAirline().trim().length() == 0) {
+						FacesUtil.addError("The Airline for Segment #" + itinCount + " is required.");
+					}
+					if (itin.getFlightNum() == null || itin.getFlightNum().trim().length() == 0) {
+						FacesUtil.addError("The Flight Number for Segment #" + itinCount + " is required.");
+					}
+					if (itin.getJourneyDate() == null) {
+						FacesUtil.addError("The Journey Date for Segment #" + itinCount + " is required.");
+					}
 				} else {
 					FacesUtil.addError("Segment #" + itinCount + " is invalid.");
 					noErrors = false;
@@ -1008,7 +1024,7 @@ public class PassengerController {
 	public String gotoBagDetails() {
 		logger.info("gotoBagDetails method is called");
 		if (populateItineraryCities()) {
-			saveFlightInfo();
+			actuallySaveFlightInfo();
 			HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 					.getExternalContext().getSession(false);
 			if (null != session && null != session.getAttribute("loggedPassenger")) {
@@ -1034,13 +1050,16 @@ public class PassengerController {
 								|| passengerBean.getBagList().size() == 0) {
 							compiledList = lostBagList;
 						} else {
+							List<Bag> oldBagList = passengerBean.getBagList();
 							for (Bag l : lostBagList) {
 								boolean notAdded = true;
-								for (Bag b : passengerBean.getBagList()) {
-									if (b.getBagTagNumber().equals(
+								for (int i = 0; i < oldBagList.size(); i++) {
+									Bag b = oldBagList.get(i);
+									if (b != null && b.getBagTagNumber().equals(
 											l.getBagTagNumber())) {
 										notAdded = false;
 										compiledList.add(b);
+										oldBagList.remove(i);
 										break;
 									}
 								}
@@ -1690,6 +1709,10 @@ public class PassengerController {
 
 	public LabelsPassengerInfoPage getPassengerInfoLabel() {
 		return passengerInfoLabel;
+	}
+
+	public LabelsGeneralApplication getGeneralLabel() {
+		return generalLabel;
 	}
 
 	public LabelsFlightInfoPage getFlightLabel() {

@@ -10,7 +10,7 @@
 
 				
 				<rich:dataTable id="passengerNameTable" var="pass"
-					headerClass="TableHeader" columnsWidth="30%,25%,22%,23%" 
+					columnsWidth="30%,25%,22%,23%" 
 					value="#{passengerBean.passengers}" border="0" width="95%"
 					rowKeyVar="rowIndex">
 
@@ -50,101 +50,49 @@
 					</h:outputText>
 					</rich:column>
 		
-				</rich:dataTable>
-				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.permanentAddress.label}" styleClass="subHeader"/>	
-				</div>
-				<div><rich:spacer width="100%" height="15" title="" /></div>
+				</rich:dataTable>	
+					
+					<table><tr>
+				
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.permanentAddress.label}" styleClass="subHeader"/></td>	
+					
+					</tr><tr>
 										
-					<div>		
-						<t:outputText value="#{passengerController.passengerInfoLabel.addressLine1.label}" />
-						<h:outputText value="&#160;" />
-						<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.passengerInfoLabel.addressLine1.required}"/>
-						
-						<h:outputText id="pi5" value="#{passengerBean.address[0].addressLine1}">
-						</h:outputText>
-					</div>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.addressLine1.label}:" /></td>
+					<td><h:outputText id="pi5" value="#{passengerBean.address[0].addressLine1}" /></td>
 					
-					<div><h:outputText value="&#160;" /></div>
+					</tr><tr>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.addressLine2.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.addressLine2.required}"/>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.addressLine2.label}:" /></td>					
+					<td><h:outputText id="pi6" value="#{passengerBean.address[0].addressLine2}"/></td>
 					
-					<h:outputText id="pi6" value="#{passengerBean.address[0].addressLine2}">
-						</h:outputText>
+					</tr><tr>
 					
-					<div><h:outputText value="&#160;" /></div>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.city.label}:" /></td>
+					<td><h:outputText id="pi7" value="#{passengerBean.address[0].city}"/></td>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.city.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.city.required}"/>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.stateRegion.label}:" /></td>
+					<td><h:outputText id="pi8" value="#{passengerBean.address[0].stateRegion}" /></td>
 					
-					<h:outputText id="pi7" value="#{passengerBean.address[0].city}">
-						</h:outputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.postalCode.label}:" /></td>
+					<td><h:outputText id="pi9" value="#{passengerBean.address[0].postalCode}" /></td>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.stateRegion.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.stateRegion.required}"/>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.country.label}:" /></td>
+					<td><h:outputText value="#{passengerBean.address[0].country}" /></td>
 					
-					<h:outputText id="pi8" value="#{passengerBean.address[0].stateRegion}" >
-						</h:outputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					</tr><tr>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.postalCode.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.postalCode.required}"/>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.emailAddress.label}:" /></td>
+					<td><h:outputText id="pi11" value="#{passengerBean.emailAddress}" /></td>
 					
-					<h:outputText id="pi9" value="#{passengerBean.address[0].postalCode}" >
-						</h:outputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.occupation.label}:" /></td>
+					<td><h:outputText id="pi12" value="#{passengerBean.occupation}" /></td>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.country.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.country.required}"/>
+					</tr><tr>
 					
-					<h:outputText value="#{passengerBean.address[0].country}" >
-					</h:outputText>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.businessName.label}:" /></td>
+					<td><h:outputText id="pi13" value="#{passengerBean.businessName}" /></td>
 					
-					<div><h:outputText value="&#160;" /></div>
-					
-					<t:outputText value="#{passengerController.passengerInfoLabel.emailAddress.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.emailAddress.required}"/>
-					
-					<h:outputText id="pi11" value="#{passengerBean.emailAddress}" >
-						</h:outputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" />
-					
-					<rich:spacer width="15px"/>
-					
-					<t:outputText value="#{passengerController.passengerInfoLabel.occupation.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.occupation.required}"/>
-					
-					<h:outputText id="pi12" value="#{passengerBean.occupation}" >
-						</h:outputText>
-					<div><h:outputText value="&#160;" /></div>
-					
-					<div>
-						<t:outputText value="#{passengerController.passengerInfoLabel.businessName.label}" />
-						<h:outputText value="&#160;" />
-						<h:outputLabel value="*" styleClass="requiredField" 
-								rendered="#{passengerController.passengerInfoLabel.businessName.required}"/>
-						
-						<h:outputText id="pi13" value="#{passengerBean.businessName}" >
-						</h:outputText>
-					</div>
-					
-					<div><rich:spacer width="100%" height="15" title="" /></div>
+					</tr></table>
 				
 </ui:composition>

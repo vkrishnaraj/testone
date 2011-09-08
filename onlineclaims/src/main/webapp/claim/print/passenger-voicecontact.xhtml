@@ -7,48 +7,28 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
-				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.voiceContact.label}" styleClass="subHeader"/>	
-				</div>
-					<div><rich:spacer width="100%" height="15" title="" /></div>
+
+					<table><tr>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.phoneHome.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.phoneHome.required}"/>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.voiceContact.label}" styleClass="subHeader"/></td>	
 					
-					<h:outputText id="pi20" value="#{passengerBean.address[0].phoneHome}" >
-					</h:outputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					</tr><tr>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.phoneMobile.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.phoneMobile.required}"/>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.phoneHome.label}:" /></td>
+					<td><h:outputText id="pi20" value="#{passengerBean.address[0].phoneHome}" /></td>
 					
-					<h:outputText id="pi21" value="#{passengerBean.address[0].phoneMobile}" >
-					</h:outputText>
-					<div><h:outputText value="&#160;" /></div>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.phoneMobile.label}:" /></td>
+					<td><h:outputText id="pi21" value="#{passengerBean.address[0].phoneMobile}" /></td>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.phoneFax.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.phoneFax.required}"/>
+					</tr><tr>
 					
-					<h:outputText id="pi22" value="#{passengerBean.address[0].phoneFax}" >
-						</h:outputText>
-					<h:outputText value="&#160;" /><h:outputText value="&#160;" /><h:outputText value="&#160;" />
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.phoneFax.label}:" /></td>
+					<td><h:outputText id="pi22" value="#{passengerBean.address[0].phoneFax}" /></td>					
 					
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.phoneBusiness.label}:" /></td>
+					<td><h:outputText id="pi23" value="#{passengerBean.address[0].phoneBusiness}" /></td>
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.phoneBusiness.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.phoneBusiness.required}"/>
-					
-					<h:outputText id="pi23" value="#{passengerBean.address[0].phoneBusiness}" >
-						</h:outputText>
-					
-					<div><rich:spacer width="100%" height="15" title="" /></div>
+					</tr></table>
 					
 				
 </ui:composition>

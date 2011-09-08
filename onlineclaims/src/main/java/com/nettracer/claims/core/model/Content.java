@@ -102,4 +102,21 @@ public class Content {
 		this.currency = currency;
 	}
 
+	public String getMaleDisp() {
+		switch(male) {
+			case 1:
+				return "Male";
+			case 2:
+				return "Female";
+			case 3:
+				return "Male Child";
+			case 4:
+				return "Infant";
+			case 5:
+				return "Female Child";
+			default:
+				return "N/A";
+		}
+	}
+
 }

@@ -606,6 +606,87 @@ public class PassengerBean {
 	public void setPrivateInsuranceAddr(String privateInsuranceAddr) {
 		this.privateInsuranceAddr = privateInsuranceAddr;
 	}
-	
-	
+
+	public String getRecheckBagDisp() {
+		if (recheckBag != null) {
+			return (recheckBag ? "Yes" : "No");
+		}
+		return "No";
+	}
+
+	public String getInspectbagDisp() {
+		if (inspectbag != null) {
+			return (inspectbag ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getChargeExcessBaggageDisp() {
+		if (chargeExcessBaggage != null) {
+			return (chargeExcessBaggage ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getDeclarePayExcessValueDisp() {
+		if (declarePayExcessValue != null) {
+			return (declarePayExcessValue ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getClearCustomBagDisp() {
+		if (clearCustomBag != null) {
+			return (clearCustomBag ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getRerouteBagDisp() {
+		if (rerouteBag != null) {
+			return (rerouteBag ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getDifferentClaimCheckDisp() {
+		if (differentClaimCheck != null) {
+			return (differentClaimCheck ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getImmediateClaimAttemptDisp() {
+		if (immediateClaimAttempt != null) {
+			return (immediateClaimAttempt ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getReportAnotherAirlineDisp() {
+		if (reportAnotherAirline != null) {
+			return (reportAnotherAirline ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getDifferentAirlineTicketDisp() {
+		if (differentAirlineTicket != null) {
+			return (differentAirlineTicket ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getAnotherClaimDisp() {
+		if (anotherClaim != null) {
+			return (anotherClaim ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getTsaInspectDisp() {
+		if (tsaInspect != null) {
+			return (tsaInspect ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getBagConfirmNoteDisp() {
+		if (bagConfirmNote != null) {
+			return (bagConfirmNote ? "Yes" : "No");
+		}
+		return "No";
+	}
+	public String getPrivateInsuranceDisp() {
+		return (privateInsurance ? "Yes" : "No");
+	}
 }

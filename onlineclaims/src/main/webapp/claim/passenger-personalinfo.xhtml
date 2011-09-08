@@ -49,7 +49,7 @@
 					<h:panelGroup rendered="#{!passengerController.passengerInfoLabel.socialSecurityNumber.hidden}">
 					<t:inputSecret id="pi25" value="#{passengerBean.socialSecurityNumber}"  style="width:98%;"
 							required="#{passengerController.passengerInfoLabel.socialSecurityNumber.required}" tabindex="24"
-							readonly="#{passengerController.readOnlyOnSubmitted}"
+							readonly="#{passengerController.readOnlyOnSubmitted}" redisplay="true"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 									'#{passengerController.passengerInfoLabel.socialSecurityNumber.label}'"
 							validatorMessage="#{passengerController.passengerInfoLabel.socialSecurityNumber.label} :

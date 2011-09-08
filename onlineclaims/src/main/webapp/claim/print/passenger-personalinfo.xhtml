@@ -7,28 +7,20 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
-				<div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.personalInformation.label}" styleClass="subHeader"/>	
-				</div>
-					<div><rich:spacer width="100%" height="15" title="" /></div>
-					<t:outputText value="#{passengerController.passengerInfoLabel.frequentFlyerNumber.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.frequentFlyerNumber.required}"/>
+
+					<table><tr>
 					
-					<h:outputText id="pi24" value="#{passengerBean.frequentFlyerNumber}">
-						</h:outputText>
-					<h:outputText value="&#160;" />
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.personalInformation.label}" styleClass="subHeader"/></td>	
 					
-					<t:outputText value="#{passengerController.passengerInfoLabel.socialSecurityNumber.label}" />
-					<h:outputText value="&#160;" />
-					<h:outputLabel value="*" styleClass="requiredField" 
-							rendered="#{passengerController.passengerInfoLabel.socialSecurityNumber.required}"/>
+					</tr><tr>
 					
-					<h:outputText id="pi25" value="*********" >
-						</h:outputText>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.frequentFlyerNumber.label}:" /></td>
+					<td><h:outputText id="pi24" value="#{passengerBean.frequentFlyerNumber}" /></td>
 					
-					<div><rich:spacer width="100%" height="15" title="" /></div>
+					<td><h:outputText value="#{passengerController.passengerInfoLabel.socialSecurityNumber.label}:" /></td>
+					<td><h:outputText id="pi25" value="*********" /></td>
+					
+					</tr></table>
 					
 					
 					

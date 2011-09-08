@@ -78,6 +78,12 @@ function setInitialFontSize() {
 	} else if (fontSize == "large") {
 		increaseFontSize()
 	}
+	testElem = document.getElementById("appForm:bagList:0:contentTable");
+	if (testElem) {
+		for (i = 0; i < 8; i++) {
+			calculateTotal(i, true);
+		}
+	}
 }
 
 

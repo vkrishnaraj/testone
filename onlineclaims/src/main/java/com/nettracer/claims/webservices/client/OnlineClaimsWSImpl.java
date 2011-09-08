@@ -708,11 +708,12 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					if (!bagArrStat) {
 						for (int j = 0; j < wsBagArrayTemp.length; j++) {
 							wsBag = wsBagArrayTemp[j];
-							if (wsBag != null && wsBag.getTag().equals(bag.getBagTagNumber())) {
+							if (wsBag != null && !wsBag.getBagArrive() && wsBag.getTag().equals(bag.getBagTagNumber())) {
 								notAdded = false;
+								wsBagArrayTemp[j] = null;
 								break;
 							}
-						}
+						}					
 					}
 					if (notAdded) {
 						wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
@@ -831,7 +832,11 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				bag=null; //GC
 			}
 			passengerBean.setBagList(bagList);
-			passengerBean.setBagTagList(bagList); //For ticket-info
+			List<Bag> bagTagList = new ArrayList<Bag>();
+			for (Bag b : bagList) {
+				bagTagList.add(b);
+			}
+			passengerBean.setBagTagList(bagTagList); //For ticket-info
 		}
 
 	}
@@ -898,6 +903,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		Calendar calendar=null;
 		if(null != bagList && bagList.size() >0){
 			wsBagArray=claim.getBagArray();
+			com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] newWsBagArray =
+					new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[wsBagArray.length];
+			int bagIndex = 0;
 			for (int i=0; i<bagList.size();i++) {
 				wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
 				bag=bagList.get(i);
@@ -964,7 +972,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					}
 					for (int j = 0; j < wsBagArray.length; j++) {
 						if (wsBagArray[j] != null && wsBagArray[j].getTag().equals(wsBag.getTag())) {
-							wsBagArray[j]=wsBag;
+							newWsBagArray[bagIndex]=wsBag;
+							bagIndex++;
+							wsBagArray[j] = null;
 							break;
 						}
 					}
@@ -972,8 +982,13 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					bag=null;
 				}
 			}
-			
-			claim.setBagArray(wsBagArray);
+			for (int i = 0; i < wsBagArray.length; i++) {
+				if (wsBagArray[i] != null) {
+					newWsBagArray[bagIndex]=wsBagArray[i];
+					bagIndex++;
+				}
+			}
+			claim.setBagArray(newWsBagArray);
 		}
 		
 	}

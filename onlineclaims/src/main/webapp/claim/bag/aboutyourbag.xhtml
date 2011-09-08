@@ -35,10 +35,10 @@
 								readonly="#{passengerController.bagDetailsLabel.bagTagNumber.hidden
 									|| passengerController.readOnlyOnSubmitted}"
 								requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-								'#{passengerController.bagDetailsLabel.bagTagNumber.label} Page:#{rowIndex+1}'" 
+								'#{passengerController.bagDetailsLabel.bagTagNumber.label} Bag:#{rowIndex+1}'" 
 								validatorMessage="#{passengerController.bagDetailsLabel.bagTagNumber.label} :
 								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
-								label="#{passengerController.bagDetailsLabel.bagTagNumber.label} Page:#{rowIndex+1}">
+								label="#{passengerController.bagDetailsLabel.bagTagNumber.label} Bag:#{rowIndex+1}">
 					<f:validateLength  maximum="20"/>
 				</t:inputText>
 				
@@ -58,10 +58,10 @@
 								readonly="#{passengerController.bagDetailsLabel.nameonBag.hidden
 									|| passengerController.readOnlyOnSubmitted}"
 								requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-								'#{passengerController.bagDetailsLabel.nameonBag.label} Page:#{rowIndex+1}'" 
+								'#{passengerController.bagDetailsLabel.nameonBag.label} Bag:#{rowIndex+1}'" 
 								validatorMessage="#{passengerController.bagDetailsLabel.nameonBag.label} :
 								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
-								label="#{passengerController.bagDetailsLabel.nameonBag.label} Page:#{rowIndex+1}">
+								label="#{passengerController.bagDetailsLabel.nameonBag.label} Bag:#{rowIndex+1}">
 					<f:validateLength maximum="20"/>
 				</t:inputText>
 				
@@ -109,10 +109,10 @@
 								readonly="#{passengerController.bagDetailsLabel.externalMarkings.hidden
 									|| passengerController.readOnlyOnSubmitted}"
 								requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-								'#{passengerController.bagDetailsLabel.externalMarkings.label} Page:#{rowIndex+1}'" 
+								'#{passengerController.bagDetailsLabel.externalMarkings.label} Bag:#{rowIndex+1}'" 
 								validatorMessage="#{passengerController.bagDetailsLabel.externalMarkings.label} :
 								#{passengerController.passengerInfoLabel.valueNoGreater.label} 50"
-								label="#{passengerController.bagDetailsLabel.externalMarkings.label} Page:#{rowIndex+1}">
+								label="#{passengerController.bagDetailsLabel.externalMarkings.label} Bag:#{rowIndex+1}">
 					<f:validateLength maximum="50"/>
 				</t:inputText>
 				
@@ -132,9 +132,9 @@
 					readonly="#{passengerController.bagDetailsLabel.bagColor.hidden}"
 					disabled="#{passengerController.readOnlyOnSubmitted}"
 					requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-								'#{passengerController.bagDetailsLabel.bagColor.label} Page:#{rowIndex+1}'"
+								'#{passengerController.bagDetailsLabel.bagColor.label} Bag:#{rowIndex+1}'"
 					onchange="displayMCMessage(this.value, #{rowIndex})"
-					label="#{passengerController.bagDetailsLabel.bagColor.label} Page:#{rowIndex+1}">
+					label="#{passengerController.bagDetailsLabel.bagColor.label} Bag:#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
 						<f:selectItem itemValue="BE" itemLabel="Beige"/>
 						<f:selectItem itemValue="BK" itemLabel="Black"/>
@@ -172,10 +172,10 @@
 								readonly="#{passengerController.bagDetailsLabel.brandOftheBag.hidden
 										|| passengerController.readOnlyOnSubmitted}"
 								requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-								'#{passengerController.bagDetailsLabel.brandOftheBag.label} Page:#{rowIndex+1}'" 
+								'#{passengerController.bagDetailsLabel.brandOftheBag.label} Bag:#{rowIndex+1}'" 
 								validatorMessage="#{passengerController.bagDetailsLabel.brandOftheBag.label} :
 								#{passengerController.passengerInfoLabel.valueNoGreater.label} 25" 
-								label="#{passengerController.bagDetailsLabel.brandOftheBag.label} Page:#{rowIndex+1}">
+								label="#{passengerController.bagDetailsLabel.brandOftheBag.label} Bag:#{rowIndex+1}">
 					<f:validateLength maximum="25"/>
 				</t:inputText>
 				
@@ -195,10 +195,10 @@
 						readonly="#{passengerController.bagDetailsLabel.bagPurchaseDate.hidden}"
 						disabled="#{passengerController.readOnlyOnSubmitted}"
 						enableManualInput="false" datePattern="MMM/dd/yyyy"  inputSize="15"
-						label="#{passengerController.bagDetailsLabel.bagPurchaseDate.label} Page:#{rowIndex+1}"
+						label="#{passengerController.bagDetailsLabel.bagPurchaseDate.label} Bag:#{rowIndex+1}"
 						jointPoint="top-right" showWeeksBar="false" mode="client"
 						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-								'#{passengerController.bagDetailsLabel.bagPurchaseDate.label} Page:#{rowIndex+1}'" 
+								'#{passengerController.bagDetailsLabel.bagPurchaseDate.label} Bag:#{rowIndex+1}'" 
 					popup="true"  immediate="true" >
 					<f:converter  converterId="DateConverter" />
 				</rich:calendar>
@@ -237,8 +237,8 @@
 								required="#{passengerController.bagDetailsLabel.bagType.required}" 
 								disabledOnClientSide="true"
 								requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-								'#{passengerController.bagDetailsLabel.bagType.label} Page:#{rowIndex+1}'" 
-								label="#{passengerController.bagDetailsLabel.bagType.label} Page:#{rowIndex+1}" />
+								'#{passengerController.bagDetailsLabel.bagType.label} Bag:#{rowIndex+1}'" 
+								label="#{passengerController.bagDetailsLabel.bagType.label} Bag:#{rowIndex+1}" />
 				</a4j:outputPanel>
 				
 				<rich:spacer  height="10" title="" />
@@ -273,28 +273,28 @@
 	
 	<h:panelGrid columns="20">
 		<h:selectBooleanCheckbox value="#{bagItem.hardSided}" disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.hardSided.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.hardSided.label} Bag:#{rowIndex+1}"/>
 		<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.hardSided.label}"  styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.wheelsRollers}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.wheelsRollers.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.wheelsRollers.label} Bag:#{rowIndex+1}"/>
 		<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.wheelsRollers.label}" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.feet}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.feet.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.feet.label} Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.feet.label}" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.trim}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.trim.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.trim.label} Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.trim.label}" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
@@ -306,70 +306,70 @@
 		
 		<h:selectBooleanCheckbox value="#{bagItem.softSided}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.softSided.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.softSided.label} Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.softSided.label}" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.zippers}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.zippers.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.zippers.label} Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.zippers.label}" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.retractableHandel}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.retractableHandel.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.retractableHandel.label} Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.retractableHandel.label}" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.pockets}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.pockets.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.pockets.label} Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.pockets.label}" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.locks}"
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.locks.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.locks.label} Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.locks.label}" styleClass="requiredField"/>
 		<rich:spacer width="5"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.pullStrap}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.pullStrap.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.pullStrap.label} Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.pullStrap.label}" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.nameTag}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="#{passengerController.bagDetailsLabel.nameTag.label} Page:#{rowIndex+1}"/>
+			label="#{passengerController.bagDetailsLabel.nameTag.label} Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.nameTag.label}" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.leather}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="Leather Page:#{rowIndex+1}"/>
+			label="Leather Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="Leather" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.metal}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"
-			label="Metal Page:#{rowIndex+1}"/>
+			label="Metal Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="Metal" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 			<h:selectBooleanCheckbox value="#{bagItem.ribbonsPersonalMarkings}" 
 			 	disabled="#{passengerController.readOnlyOnSubmitted}"
-				label="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings.label} Page:#{rowIndex+1}"/>
+				label="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings.label} Bag:#{rowIndex+1}"/>
 			<rich:spacer width="5"/>
 		<t:outputText value="#{passengerController.bagDetailsLabel.ribbonsPersonalMarkings.label}" styleClass="requiredField"/>
 		<rich:spacer width="5"/>
@@ -472,27 +472,27 @@
 					</h:selectOneMenu>
 				</rich:column>
 				</rich:dataTable>
-		</a4j:outputPanel>
 	
 	<rich:spacer width="100%" height="10" title="" />
 	<div id="addItem">
 		<a4j:commandButton value="#{passengerController.bagDetailsLabel.addMoreItems.label}"  
 			  action="#{passengerController.addMoreItems}" limitToList="true"
-			 rendered="#{!passengerController.readOnlyOnSubmitted}" onclick="contentPopup(#{rowIndex})"
-			reRender="contentTable" styleClass="button140pxred button140pxred2">
+			 rendered="#{!passengerController.readOnlyOnSubmitted}" onclick="contentPopup(#{rowIndex}); this.disabled=true;"
+			reRender="contentPanel" styleClass="button140pxred button140pxred2">
 			
 			<a4j:actionparam name="contentIndex" assignTo="#{passengerController.bagIndex}" value="#{rowIndex}" />
 			
 		</a4j:commandButton>&#160;&#160;&#160;
 		<a4j:commandButton value="Delete Last Item"  
 			  action="#{passengerController.deleteLastItem}" limitToList="true"
-			 rendered="#{!passengerController.readOnlyOnSubmitted}" onclick="calculateTotal(#{rowIndex}, false)"
-			reRender="contentTable" styleClass="button140pxred button140pxred2">
+			 rendered="#{!passengerController.readOnlyOnSubmitted}" onclick="calculateTotal(#{rowIndex}, false); this.disabled=true;"
+			reRender="contentPanel" styleClass="button140pxred button140pxred2">
 			
 			<a4j:actionparam name="contentIndex" assignTo="#{passengerController.bagIndex}" value="#{rowIndex}" />
 			
 		</a4j:commandButton>
 	</div>
+		</a4j:outputPanel>
 	<div style="text-align: right;">
 	<h:outputText id="totalLabel" value="Total Price:"/>&#160;<h:outputText value="#{bagItem.grandTotal}" id="totalPrice" />
 	</div>
@@ -503,35 +503,39 @@
 	<script type="text/javascript">
 	<!--
 			function calculateTotal(bagRow, lastRow) {
-				theRows = document.getElementById("appForm:bagList:" + bagRow + ":contentTable").getElementsByTagName("tr");
-				var theTotal = document.getElementById("appForm:bagList:" + bagRow + ":bagPrice").value;
-				theCurrSel = document.getElementById("appForm:bagList:" + bagRow + ":bagCurrency");
-				var theCurr = theCurrSel.options[theCurrSel.selectedIndex].value;
-				theTotal = parseFloat(theTotal);
-				if (isNaN(theTotal)) {
-					theTotal = 0;
-				}
-				var singleCurr = 1;
-				var l = theRows.length;
-				if (!lastRow) {
-					l = theRows.length - 1;
-				}
-				for (i = 1; i < l; i++) {
-					if (singleCurr) {
-						theSel = theRows[i].getElementsByTagName("td")[7].getElementsByTagName("select")[0];
-						if (theCurr != theSel.options[theSel.selectedIndex].value) {
-							singleCurr = null;
-						}
-						var addOn = theRows[i].getElementsByTagName("td")[7].getElementsByTagName("input")[0].value;
-						theTotal = theTotal + parseFloat(addOn);
+				theBag = document.getElementById("appForm:bagList:" + bagRow + ":contentTable");
+				if (theBag) {
+					theRows = theBag.getElementsByTagName("tr");
+					var theTotal = document.getElementById("appForm:bagList:" + bagRow + ":bagPrice").value;
+					theCurrSel = document.getElementById("appForm:bagList:" + bagRow + ":bagCurrency");
+					var theCurr = theCurrSel.options[theCurrSel.selectedIndex].value;
+					theTotal = parseFloat(theTotal);
+					if (isNaN(theTotal)) {
+						theTotal = 0;
 					}
-				}
-				totalElem = document.getElementById("appForm:bagList:" + bagRow + ":totalPrice");
-				theTotal = toFixed(theTotal, 2);
-				if (singleCurr) {
-					totalElem.innerHTML = theTotal;
-				} else {
-					totalElem.innerHTML = "Multiple Currencies.";
+					var singleCurr = 1;
+					var l = theRows.length;
+					if (!lastRow) {
+						l = theRows.length - 1;
+					}
+					for (i = 1; i < l; i++) {
+						if (singleCurr) {
+							theSel = theRows[i].getElementsByTagName("td")[7].getElementsByTagName("select")[0];
+							if (theCurr != theSel.options[theSel.selectedIndex].value) {
+								singleCurr = null;
+							}
+							var addOn = theRows[i].getElementsByTagName("td")[7].getElementsByTagName("input")[0].value;
+							addOn = addOn.replace(",","");
+							theTotal = theTotal + parseFloat(addOn);
+						}
+					}
+					totalElem = document.getElementById("appForm:bagList:" + bagRow + ":totalPrice");
+					theTotal = toFixed(theTotal, 2);
+					if (singleCurr) {
+						totalElem.innerHTML = theTotal;
+					} else {
+						totalElem.innerHTML = "Multiple Currencies.";
+					}
 				}
 			}
 	
@@ -566,7 +570,6 @@
 							"before adding additional contents.");
 				}
 			}
-
 	//-->
 	</script>
 </ui:composition>

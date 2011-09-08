@@ -20,7 +20,7 @@
 										rendered="#{passengerController.flightLabel.differentAirlineTicket.required}"/>
 								</h:panelGroup>
 								
-								<h:outputText value="#{passengerBean.differentAirlineTicket}" >
+								<h:outputText value="#{passengerBean.differentAirlineTicketDisp}" >
 								</h:outputText>
 								
 								<rich:spacer  height="15" title="" />
@@ -41,7 +41,7 @@
 						<h:panelGroup >
 						<a4j:region renderRegionOnly="true" >
 						<a4j:outputPanel id="ticketTablePanel" ajaxRendered="true" >
-							<rich:dataTable id="ticketTable"   headerClass="TableHeader" rowKeyVar="rowIndex"
+							<rich:dataTable id="ticketTable"  rowKeyVar="rowIndex"
 										value="#{passengerBean.bagTagList}" border="0" var="item">
 								<rich:column>
 									<f:facet name="header">
@@ -63,7 +63,7 @@
 												rendered="true"/>
 										</h:panelGroup>
 									</f:facet>
-									<h:outputText   value="#{item.bagArrivalStatus}" >
+									<h:outputText   value="#{item.bagArrivalStatusDisp}" >
 									</h:outputText>
 								</rich:column>
 							</rich:dataTable>

@@ -276,9 +276,8 @@ public class Bag {
 	public void setGrandTotal(String grandTotal) {
 	}
 
-	
-	
-
-	
+	public String getBagArrivalStatusDisp() {
+		return ( bagArrivalStatus != null && bagArrivalStatus.equals("true") ? "Yes" : "No");
+	}
 	
 } 

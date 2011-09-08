@@ -27,12 +27,18 @@
 				<rich:columnGroup>
 					<rich:column colspan="2">
 						<h:outputText value="From/ To Airports"  styleClass="subheadColumn"/>
+						<h:outputText value="&#160;" />
+						<h:graphicImage value="../_images/reqbullet.gif" />
 					</rich:column>
 					<rich:column colspan="2">
 						<h:outputText value="Airline/ Flight Number"  styleClass="subheadColumn"/>
+						<h:outputText value="&#160;" />
+						<h:graphicImage value="../_images/reqbullet.gif" />
 					</rich:column>
 					<rich:column>
 						<h:outputText value="Date"  styleClass="subheadColumn"/>
+						<h:outputText value="&#160;" />
+						<h:graphicImage value="../_images/reqbullet.gif" />
 					</rich:column>
 
 				</rich:columnGroup>
@@ -124,10 +130,9 @@
 			<rich:column>
 				<h:panelGrid columns="2">
 					<t:selectOneMenu immediate="true" value="#{item.airline}"  id="airline#{rowIndex+1}"
-					required="#{!empty item.departureCity ? true : false}"
 					disabled="#{passengerController.readOnlyOnSubmitted}"
 					requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-											'Airline Row#{rowIndex+1}'"
+											'Airline - Itinerary Segment #{rowIndex+1}'"
 					label="Airline Row#{rowIndex+1}">
 						<f:selectItem itemValue="" itemLabel="--"/>
 						<f:selectItems value="#{passengerController.airlines}" />
@@ -139,10 +144,9 @@
 
 			<rich:column>
 				<t:inputText value="#{item.flightNum}"  size="5" id="flightNum#{rowIndex+1}"
-						required="#{!empty item.departureCity ? true : false}"
 						readonly="#{passengerController.readOnlyOnSubmitted}"
 						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-											'FlightNumber Row#{rowIndex+1}'"
+											'Flight Number - Itinerary Segment #{rowIndex+1}'"
 						label="FlightNumber Row#{rowIndex+1}">
 					<f:validateLength maximum="5"/>
 				</t:inputText>
@@ -151,12 +155,11 @@
 			<rich:column width="20">
 			<a4j:outputPanel id="calendar" layout="block">
 				<rich:calendar value="#{item.journeyDate}"  id="journeyDate#{rowIndex+1}"
-						required="#{!empty item.departureCity ? true : false}"
 						enableManualInput="false" datePattern="MMM/dd/yyyy" 
 						label="Date of Journey Row#{rowIndex+1}"  inputSize="20"
 						jointPoint="top-right" showWeeksBar="false" mode="client"
 						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
-											'Date of Journey Row#{rowIndex+1}'"
+											'Date of Journey - Itinerary Segment #{rowIndex+1}'"
 						disabled="#{passengerController.readOnlyOnSubmitted}"
 						popup="true" >
 					<f:converter  converterId="DateConverter" />

@@ -16,7 +16,7 @@
 	<a4j:region  renderRegionOnly="true">	
 	<a4j:outputPanel ajaxRendered="true" id="flightCode">
 		<rich:dataTable id="iteneraryTicketTableItenerary" var="item"
-			headerClass="TableHeader" columnsWidth="7%,7%,7%,7%,13%"
+			columnsWidth="7%,7%,7%,7%,13%"
 			value="#{passengerBean.itineraryList}" border="0" width="90%"
 			rowKeyVar="rowIndex">
 
@@ -58,7 +58,7 @@
 				</h:outputText>
 			</rich:column>
 
-			<rich:column width="20">
+			<rich:column>
 				<h:outputText value="#{item.journeyDate}"  >
 				</h:outputText>
 			</rich:column>
