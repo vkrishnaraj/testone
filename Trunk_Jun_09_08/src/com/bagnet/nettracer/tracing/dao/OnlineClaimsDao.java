@@ -619,7 +619,19 @@ public class OnlineClaimsDao {
 		if (claim != null) {
 			if (claim.getItineraryArray() != null) {
 				for (com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary itin : claim.getItineraryArray()) {
-					return figureTimeDifference(itin.getDate());
+					if (itin.getDate() != null) {
+						return figureTimeDifference(itin.getDate());
+					}
+				}
+			}
+			if (claim.getFiledPrevoiusDate() != null) {
+				return figureTimeDifference(claim.getFiledPrevoiusDate());
+			}
+			if (claim.getBagArray() != null) {
+				for (com.bagnet.nettracer.ws.onlineclaims.xsd.Bag bag : claim.getBagArray()) {
+					if (bag.getPurchaseDate() != null) {
+						return figureTimeDifference(bag.getPurchaseDate());
+					}
 				}
 			}
 		}
