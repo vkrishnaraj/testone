@@ -123,7 +123,8 @@
 			        currentElement.focus();
 			        return false;
 				}
-			} else if (elementName == "lost.client.address.address1") {
+/* BEGIN ADDRESS VALIDATION */
+/*			} else if (elementName == "lost.client.address.address1") {
 				if (currentElement.value.length == 0) {
 					alert("<%= (String)bundle.getString("colname.street_addr1") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
@@ -159,10 +160,10 @@
 				        element.focus();
 				        return false;
 					}
-				}
+				} */
+/* END ADDRESS VALIDATION */			
 			
-			} 
-			
+			}
 			if (elementName == "lost.client.email") {
 				if (currentElement.value != getFieldByName("lost.client.confirmEmail", form).value) {
 					alert("<%= (String)bundle.getString("colname.lf.email") %>" + " <%= (String)bundle.getString("error.validation.cannot.confirm.email") %>");
