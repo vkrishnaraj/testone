@@ -566,7 +566,9 @@
 						          <option value="5">5</option>
 						        </select>
 					
-							    <input type="submit" name="addNames" value='<bean:message key="button.add.name" />' id="button" onclick="setField('addednames');" />
+							    <html:submit styleId="button" property="addNames" onclick="setField('addednames');" >
+						        	<bean:message key="button.add.name" />
+						        </html:submit>
 				          </td>
 				          </tr>
 					</table>
@@ -1020,5 +1022,14 @@
                     <input type="hidden" name="showReceipts" id="#receipts" value="<%=request.getAttribute("showReceipts") %>" />
                     <input type="hidden" id="addednames" value="0" />
                     <input type="hidden" id="addedreceipts" value="0" />
+                    <script language="javascript">
+						<logic:present name="an" scope="request">
+							document.location.href="#an";
+						</logic:present>
+						
+						<logic:present name="rs" scope="request">
+							document.location.href="#rs";
+						</logic:present>
+				    </script>
                   </html:form>
 					

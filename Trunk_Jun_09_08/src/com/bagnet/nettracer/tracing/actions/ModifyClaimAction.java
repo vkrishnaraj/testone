@@ -360,10 +360,7 @@ public class ModifyClaimAction extends CheckedAction {
 				request.setAttribute("closebtn", "1");
 				return (mapping.findForward(TracingConstants.ERROR_MAIN));
 			}
-		} else if (isNtUser) {
-			
-			
-		}
+		} 
 		
 		cform.setClaim(claim);
 		session.setAttribute("incidentForm", theform);
@@ -408,6 +405,7 @@ public class ModifyClaimAction extends CheckedAction {
 					p.setClaim(claim);
 					claim.getClaimants().add(p);
 				}
+				request.setAttribute("an", 1);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
 			}
@@ -424,6 +422,7 @@ public class ModifyClaimAction extends CheckedAction {
 					r.setClaim(claim);
 					claim.getReceipts().add(r);
 				}
+				request.setAttribute("rs", 1);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
 			}
