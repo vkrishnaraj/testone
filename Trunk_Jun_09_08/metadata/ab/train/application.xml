@@ -8,15 +8,13 @@
  <display-name>TracerEAR</display-name>
  <module>
      <web>
-         <web-uri>avis_production.war</web-uri>
+         <web-uri>avis_training.war</web-uri>
          <context-root>abtracer</context-root>
      </web>
   </module>
   
-  <!--  
    <module>
       <java>avis-service.jar</java>
    </module>
-  -->
   
 </application> 

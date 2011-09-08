@@ -653,10 +653,19 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
-	<target name="build-abprod-ear" depends="delete-wars">
+	<target name="build-abtrain-ear" depends="delete-wars">
 		<property name="avis.service.includes" value="*.war,lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />
-		<antcall target="build-ab-production"/>
+		<antcall target="build-ab-train"/>
 		<antcall target="aa-build-avis-service"/>
+		<property name="app.xml.location" value="metadata/ab/train" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="build-abprod-ear" depends="delete-wars">
+		<property name="avis.service.includes" value="*.war"/>
+		<!--,lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />-->
+		<antcall target="build-ab-production"/>
+		<!--<antcall target="aa-build-avis-service"/>-->
 		<property name="app.xml.location" value="metadata/ab/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -672,6 +681,14 @@
 	<target name="build-abtest-service-ear" depends="delete-wars">
 		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />
 		<antcall target="build-ab-test"/>
+		<antcall target="aa-build-avis-service"/>
+		<property name="app.xml.location" value="metadata/ab/service" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="build-abtrain-service-ear" depends="delete-wars">
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />
+		<antcall target="build-ab-train"/>
 		<antcall target="aa-build-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
 		<antcall target="donotrun-build-ear" />
