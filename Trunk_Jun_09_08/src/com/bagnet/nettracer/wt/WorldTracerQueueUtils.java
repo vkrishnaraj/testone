@@ -105,6 +105,16 @@ public class WorldTracerQueueUtils {
 				return false;
 			}
 			
+			// is add ahl and we already have an AHL id or pending add
+			if(entry instanceof WtqCreateAhl && alreadyAnyIncQueuedOrHasWtFile((WtqCreateAhl)entry, sess)){
+				return false;
+			}
+			
+			// is add ohd and we already have an OHD id or pending add
+			if(entry instanceof WtqCreateOhd && alreadyAnyOhdQueuedOrHasWtFile((WtqCreateOhd)entry, sess)){
+				return false;
+			}
+			
 			t = sess.beginTransaction();
 			if(oldEntries != null && oldEntries.size() > 0) {
 				for (WorldTracerQueue oldEntry: oldEntries) {
@@ -270,7 +280,7 @@ public class WorldTracerQueueUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 
-			if(alreadyAnyOhdQueued(entry, sess)) {
+			if(alreadyAnyOhdQueuedOrHasWtFile(entry, sess)) {
 				return false;
 			}
 			else {
@@ -330,7 +340,7 @@ public class WorldTracerQueueUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 
-			if(alreadyAnyIncQueued(entry, sess)) {
+			if(alreadyAnyIncQueuedOrHasWtFile(entry, sess)) {
 				return false;
 			}
 			else {
@@ -350,9 +360,9 @@ public class WorldTracerQueueUtils {
 		
 	}
 
-	private static boolean alreadyAnyIncQueued(WtqCreateAhl entry, Session sess) {
-		String queryString = "select wtq.wt_queue_id from WtqCreateAhl wtq where wtq.incident.incident_ID = :incident_ID "
-				+ " and ((wtq.status = :qStatus) or (wtq.createdate > :lastUpdated))";
+	private static boolean alreadyAnyIncQueuedOrHasWtFile(WtqCreateAhl entry, Session sess) {
+		String queryString = "select wtq from WtqCreateAhl wtq where wtq.incident.incident_ID = :incident_ID "
+				+ " and ((wtq.status = :qStatus) or (wtq.createdate > :lastUpdated) or wtq.incident.wtFile is not null) ";
 		Query q = sess.createQuery(queryString);
 
 		q.setString("incident_ID", entry.getIncident().getIncident_ID());
@@ -368,9 +378,9 @@ public class WorldTracerQueueUtils {
 		}
 	}
 
-	private static boolean alreadyAnyOhdQueued(WtqCreateOhd entry, Session sess) {
+	private static boolean alreadyAnyOhdQueuedOrHasWtFile(WtqCreateOhd entry, Session sess) {
 		String queryString = "select wtq.wt_queue_id from WtqCreateOhd wtq where wtq.ohd.OHD_ID = :OHD_ID " + 
-							" and ((wtq.status = :qStatus) or (wtq.createdate > :lastUpdated)) "; 
+							" and ((wtq.status = :qStatus) or (wtq.createdate > :lastUpdated) or wtq.ohd.wtFile is not null) "; 
 		Query q = sess.createQuery(queryString);
 		
 		q.setString("OHD_ID", entry.getOhd().getOHD_ID());
@@ -385,7 +395,6 @@ public class WorldTracerQueueUtils {
 			return false;
 		}
 	}
-
 
 
 }
