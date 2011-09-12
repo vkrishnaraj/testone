@@ -34,7 +34,7 @@
 					<rich:column>	
 					<t:inputText id="pi2" value="#{pass.lastName}" style="width:90%;"
 							required="#{passengerController.passengerInfoLabel.lastName.required}" tabindex="1"
-							readonly="#{passengerController.readOnlyOnSubmitted}"
+							readonly="#{passengerController.readOnlyOnSubmitted || rowIndex == 0}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								#{passengerController.passengerInfoLabel.lastName.label}" 
 							validatorMessage="#{passengerController.passengerInfoLabel.lastName.label} :
@@ -47,7 +47,7 @@
 					<rich:column>
 					<t:inputText id="pi3" value="#{pass.firstName}" style="width:90%;"
 							required="#{passengerController.passengerInfoLabel.firstName.required}" tabindex="2"
-							readonly="#{passengerController.readOnlyOnSubmitted}"
+							readonly="#{passengerController.readOnlyOnSubmitted || rowIndex == 0}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								#{passengerController.passengerInfoLabel.firstName.label}" 
 							validatorMessage="#{passengerController.passengerInfoLabel.firstName.label} :
@@ -92,11 +92,11 @@
 				<div id="addItem">
 					<a4j:commandButton value="Add New Passenger"  rendered="#{!passengerController.readOnlyOnSubmitted}"
 						 action="#{passengerController.addNewPass}" reRender="contentPanel" limitToList="true"
-						 styleClass="button140pxred button140pxred2">
+						 styleClass="button140pxred button140pxred2" immediate="true" >
 					</a4j:commandButton>&#160;&#160;&#160;
 					<a4j:commandButton value="Delete Last Passenger"  rendered="#{passengerController.renderDeleteSegment}"
 						 action="#{passengerController.deleteLastPass}" reRender="contentPanel" limitToList="true"
-						 styleClass="button140pxred button140pxred2">
+						 styleClass="button140pxred button140pxred2" immediate="true" >
 					</a4j:commandButton>
 				</div>
 				</a4j:region>
