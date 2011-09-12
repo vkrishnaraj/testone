@@ -23,8 +23,12 @@
 	<repositories>
 	<!-- Ajax4Jsf Repository -->
 		<repository>
-			<id>maven2.jboss.org</id>
-			<url>http://repository.jboss.org/maven2</url>
+			<id>repository.maven.com</id>
+			<url>http://repo1.maven.org/maven2/</url>
+		</repository>
+		<repository>
+			<id>repository.jboss.com</id>
+			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 	
@@ -170,24 +174,24 @@
 			<artifactId>OnlineClaimsService-client</artifactId>
 			<version>1.0</version>
 		</dependency>
-		<!--<dependency>
+ <!-- 		<dependency>
    			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-parent</artifactId>
 			<version>1.5.1</version>
 		</dependency>
 		<dependency>
-   			<groupId>org.apache.axis2</groupId>
-			<artifactId>distribution</artifactId>
+   			<groupId>org.apache.axis2.distribution</groupId>
+			<artifactId>axis2</artifactId>
 			<version>1.5.1</version>
 		</dependency>
-		
-		--><!-- Web Service Integration-->
-		<!--<dependency>
+		  -->
+		<!-- Web Service Integration-->
+ <!-- 		<dependency>
 			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2</artifactId>
 			<version>1.5.1</version>
 		</dependency>
-		-->
+		  -->
 		<dependency>
 			<groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>

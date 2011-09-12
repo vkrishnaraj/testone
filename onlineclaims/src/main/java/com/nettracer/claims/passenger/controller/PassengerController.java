@@ -977,12 +977,15 @@ public class PassengerController {
 					}
 					if (itin.getAirline() == null || itin.getAirline().trim().length() == 0) {
 						FacesUtil.addError("The Airline for Segment #" + itinCount + " is required.");
+						noErrors = false;
 					}
 					if (itin.getFlightNum() == null || itin.getFlightNum().trim().length() == 0) {
 						FacesUtil.addError("The Flight Number for Segment #" + itinCount + " is required.");
+						noErrors = false;
 					}
 					if (itin.getJourneyDate() == null) {
 						FacesUtil.addError("The Journey Date for Segment #" + itinCount + " is required.");
+						noErrors = false;
 					}
 				} else {
 					FacesUtil.addError("Segment #" + itinCount + " is invalid.");
