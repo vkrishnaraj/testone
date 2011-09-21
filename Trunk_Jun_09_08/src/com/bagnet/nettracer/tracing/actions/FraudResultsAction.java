@@ -20,6 +20,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
@@ -28,6 +30,7 @@ import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
@@ -49,6 +52,7 @@ public class FraudResultsAction extends CheckedAction {
 
 		// check session
 		TracerUtils.checkSession(session);
+		ActionMessages errors = new ActionMessages();
 
 		user = (Agent) session.getAttribute("user");
 		if (user == null || form == null) {
@@ -103,14 +107,25 @@ public class FraudResultsAction extends CheckedAction {
 			}
 			
 			if (id > 0) {
+				Context ctx = null;
+				ClaimRemote remote = null;
 				try {
-					Context ctx = ConnectionUtil.getInitialContext();
-					ClaimRemote remote = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
-					traceResponse = remote.getFileMatches(id); 
-					results = traceResponse.getMatchHistory();
-					ctx.close();
+					ctx = ConnectionUtil.getInitialContext();
+					remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+					if (remote == null) {
+						ActionMessage error = new ActionMessage("error.fs.could.not.communicate");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					} else {
+						traceResponse = remote.getFileMatches(id); 
+						results = traceResponse.getMatchHistory();
+					}
 				} catch (Exception e) {
 					logger.error(e);
+				} finally {
+					if (ctx != null) {
+						ctx.close();
+					}
 				}
 			}
 		}

@@ -165,7 +165,9 @@
                 		<h1>
                 	<bean:message key="claim.meta.summary" />
                 </h1>
-                <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><center><bean:write name="msg"/></center><br/></html:messages></logic:messagesPresent>
+                <font color=red>
+                  <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+                </font>
        		<table class="form2" cellspacing="0" cellpadding="0">
 				<tr>
 						<td <%=myform.getTraceResponse().getDisplayClass() %>>
@@ -190,6 +192,9 @@
                 <h1>
                 	<bean:message key="claim.fraud.primary_results" />
                 </h1>
+                <font color=red>
+                  <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+                </font>
             	<table class="form2" cellspacing="0" cellpadding="0" >
             		<jsp:include page="/pages/claims/results.jsp" >
 					    	<jsp:param name="beanName" value="fraudResultsForm" />

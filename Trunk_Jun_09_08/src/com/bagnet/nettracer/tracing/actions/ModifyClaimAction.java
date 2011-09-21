@@ -275,7 +275,11 @@ public class ModifyClaimAction extends CheckedAction {
 				}
 				
 				long remoteFileId = 0;
-				if (remote != null) {
+				if (remote == null) {
+					ActionMessage error = new ActionMessage("error.fs.could.not.communicate");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+				} else {
 					LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
 					
 					if (file == null) {
