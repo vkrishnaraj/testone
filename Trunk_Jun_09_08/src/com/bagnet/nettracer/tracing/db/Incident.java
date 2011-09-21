@@ -862,7 +862,7 @@ public class Incident implements Serializable {
 	 * 
 	 *  
 	 */
-	@OneToMany(mappedBy = "ntIncident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "ntIncident", fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "claimdate")
 	@Fetch(FetchMode.SELECT)
 	public Set<Claim> getClaims() {

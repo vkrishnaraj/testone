@@ -1,10 +1,12 @@
 package com.bagnet.nettracer.cronjob;
 
+import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-import org.apache.struts.action.ActionMessages;
+import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
@@ -17,48 +19,57 @@ import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
-import com.bagnet.nettracer.tracing.utils.SecurityUtils;
-import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
-public class ImportClaimData {
+public abstract class ImportClaimData {
 
-	private static final int CLAIM_ID = 0;
-	private static final int INCIDENT_ID = 1;
-	private static final int CLAIMAMOUNT = 2;
-	private static final int CURRENCY_ID = 3;
-	private static final int STATUS_ID = 4;
-	private static final int CLAIMPRORATE_ID = 5;
-	private static final int TOTAL = 6;
-	private static final int SSN = 7;
-	private static final int DRIVERSLICENSE = 8;
-	private static final int DLSTATE = 9;
-	private static final int COMMONNUM = 10;
-	private static final int COUNTRYOFISSUE = 11;
+	protected boolean ntUser;
+	protected Agent agent;
+	protected DecimalFormat df = new DecimalFormat("0.00");
 
+	private final int CLAIM_ID = 0;
+	private final int INCIDENT_ID = 1;
+	private final int CLAIMAMOUNT = 2;
+	private final int CURRENCY_ID = 3;
+	private final int STATUS_ID = 4;
+	private final int CLAIMPRORATE_ID = 5;
+	// private final int TOTAL = 6;
+	private final int SSN = 7;
+	private final int DRIVERSLICENSE = 8;
+	private final int DLSTATE = 9;
+	private final int COMMONNUM = 10;
+	private final int COUNTRYOFISSUE = 11;
+
+	private static Logger logger = Logger.getLogger(ImportClaimData.class);
 	private static LinkedHashMap<String, String> failedIncidents;
 
-	public static void main(String[] args) {
-		importClaims();
-	}
-	
-	public static void importClaims() {
-		failedIncidents = new LinkedHashMap<String, String>();
-
-		Agent agent = SecurityUtils.authUser("ntadmin", "Ladendead51!", TracerProperties.get("wt.company.code"),
-				0, new ActionMessages());
+	public void importClaims() {
+		agent = loadAgent();
 		if (agent == null) {
 			return;
 		}
 
+		// import existing nettracer claims
+		if (ntUser) {
+			 importNtClaims();
+		}
+		
+		importThirdPartyClaims();
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void importNtClaims() {
+		
+		failedIncidents = new LinkedHashMap<String, String>();
+
 		IncidentBMO ibmo = new IncidentBMO();
 
 		Session session = null;
-		System.out.println("Begin processing...");
+		System.out.println("Processing NetTracer claims...");
 		try {
 			session = HibernateWrapper.getSession().openSession();
 
 			System.out.println("Fetching claims...\n");
-			String sql = "select * from claim;";
+			String sql = "select * from claim where incident_ID not in (select ntIncidentId from fsclaim where ntIncidentId is not null);";
 			SQLQuery query = session.createSQLQuery(sql);
 			List claims = query.list();
 
@@ -76,6 +87,7 @@ public class ImportClaimData {
 						+ (Integer) row[CLAIM_ID] + " for incident: "
 						+ (String) row[INCIDENT_ID]);
 
+				long startClaim = Calendar.getInstance().getTimeInMillis();
 				// load the incident
 				incident = ibmo.findIncidentByID((String) row[INCIDENT_ID]);
 				if (incident == null) {
@@ -139,7 +151,7 @@ public class ImportClaimData {
 
 				file.setIncident(claim.getIncident());
 				claim.getIncident().setFile(file);
-				
+
 				file.setValidatingCompanycode(agent.getCompanycode_ID());
 
 				// save the file - should also save the new claim
@@ -153,9 +165,10 @@ public class ImportClaimData {
 							+ incident.getIncident_ID());
 					break;
 				} else {
-					System.out
-							.print("\tSuccessfully processed incident: "
-									+ (String) row[INCIDENT_ID] + "\n");
+					long endClaim = Calendar.getInstance().getTimeInMillis();
+					double durationClaim = (endClaim - startClaim) / 1000;
+					System.out.println("\tSuccessfully processed incident: "
+							+ (String) row[INCIDENT_ID] + " in " + df.format(durationClaim) + " seconds.\n");
 				}
 
 				if (claimsProcessed == 500) {
@@ -167,8 +180,8 @@ public class ImportClaimData {
 			}
 
 			long end = System.currentTimeMillis();
-			System.out.println("Processed " + i + " claims in " + (end - start)
-					/ 1000 + " seconds.\n");
+			double duration = (end - start) / 1000;
+			System.out.println("Processed " + i + " claims in " + df.format(duration) + " seconds.\n");
 			printErrorSummary();
 
 		} catch (Exception e) {
@@ -181,22 +194,18 @@ public class ImportClaimData {
 
 	}
 
-	private static void printErrorSummary() {
+	protected abstract Agent loadAgent();
+
+	protected abstract void importThirdPartyClaims();
+
+	private void printErrorSummary() {
 		int size = failedIncidents.keySet().size();
 		String[] keys = failedIncidents.keySet().toArray(new String[size]);
 		System.err.println("The following incidents could not be processed:");
 		for (int i = 0; i < size; ++i) {
-			System.err.println((i+1) + ":\t" + keys[i] + " : " + failedIncidents.get(keys[i]));
+			logger.error((i + 1) + ":\t" + keys[i] + " : "
+					+ failedIncidents.get(keys[i]));
 		}
 	}
-	
-//	@Test
-//	public void testPrintErrorSummary() {
-//		failedIncidents = new LinkedHashMap<String, String>();
-//		failedIncidents.put("FLLWS00011122", "Failed to load");
-//		failedIncidents.put("FLLWS00011123", "Failed to create claim.");
-//		failedIncidents.put("FLLWS00011124", "Failed to create claim.");
-//		printErrorSummary();
-//	}
 
 }
