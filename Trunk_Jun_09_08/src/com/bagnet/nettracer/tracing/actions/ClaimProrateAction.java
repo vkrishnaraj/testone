@@ -6,6 +6,8 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -93,9 +95,9 @@ public class ClaimProrateAction extends CheckedAction {
 		// save claim prorate notice
 		if (request.getParameter("save") != null) {
 //			Claim cDTO = new Claim();
-			Claim cDTO = theform.getClaim();
+			Set<Claim> cDTO = theform.getClaims();
 			if (bs.insertClaimProrate(cDTO, cpform, session, theform.getIncident_ID())) {
-				theform.setClaim(cDTO);
+				theform.setClaims(cDTO);
 				request.setAttribute("success", "1");
 			} else {
 				//TracerUtils.populateClaimProrate(cpform, theform, session);
@@ -105,8 +107,8 @@ public class ClaimProrateAction extends CheckedAction {
 		} else {
 			Incident i = new IncidentBMO().findIncidentByID(incident);
 			if (i != null && i.getClaims() != null && !i.getClaims().isEmpty()) {
-				Claim c = i.getClaims().iterator().next();
-				theform.setClaim(c);
+				Set<Claim> c = i.getClaims();
+				theform.setClaims(c);
 			}
 		}
 		request.setAttribute("incident", theform.getIncident_ID());

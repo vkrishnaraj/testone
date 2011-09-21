@@ -1961,22 +1961,23 @@ public class BagService {
 		}
 	}
 
-	public boolean findClaimByID(long claim_ID, ClaimForm cform, IncidentForm theform) {
-		try {
-			ClaimBMO cBMO = new ClaimBMO();
-			Claim cDTO = cBMO.findClaimByID(claim_ID);
-			if(cDTO == null)
-				return false;
-			theform.setClaim(cDTO);
-			return true;
-		}
-		catch (Exception e) {
-			logger.error("unable to find claim due to bean copyproperties error: " + e);
-			return false;
-		}
-	}
+//	public boolean findClaimByID(long claim_ID, ClaimForm cform, IncidentForm theform) {
+//		try {
+//			
+//			ClaimBMO cBMO = new ClaimBMO();
+//			Claim cDTO = cBMO.findClaimByID(claim_ID);
+//			if(cDTO == null)
+//				return false;
+//			theform.setClaim(cDTO);
+//			return true;
+//		}
+//		catch (Exception e) {
+//			logger.error("unable to find claim due to bean copyproperties error: " + e);
+//			return false;
+//		}
+//	}
 
-	public boolean insertClaimProrate(Claim cDTO, ClaimProrateForm cpform, HttpSession session, String incident_ID) {
+	public boolean insertClaimProrate(Set<Claim> cDTO, ClaimProrateForm cpform, HttpSession session, String incident_ID) {
 		try {
 			Agent user = (Agent) session.getAttribute("user");
 			ClaimBMO cBMO = new ClaimBMO(); // init claim pojo or ejb
@@ -1984,13 +1985,17 @@ public class BagService {
 			ClaimProrate cp = new ClaimProrate();
 			BeanUtils.copyProperties(cp, cpform);
 			cp.setProrate_itineraries(new LinkedHashSet(cpform.getItinerarylist()));
-			if(theform.getClaim() != null) {
-				// has claim object already, attach prorate to it
-				Claim tempC = (Claim) theform.getClaim();
-				BeanUtils.copyProperties(cDTO, tempC);
-			}
-			cDTO.setClaimprorate(cp);
+//			if(theform.getClaims() != null) {
+//				// has claim object already, attach prorate to it
+//				Claim tempC = (Claim) theform.getClaim();
+//				BeanUtils.copyProperties(cDTO, tempC);
+//			}
 			
+			if (cDTO != null) {
+				for (Claim c: cDTO) {
+					c.setClaimprorate(cp);
+				}
+			}
 			
 			// TODO: re-enable the claim audit functionality here!! 
 			// AUDIT: copy into audit claim bean
@@ -2026,7 +2031,8 @@ public class BagService {
 //			else
 //				return true;
 //				
-			return FileDAO.saveFile(cDTO.getFile(), false);
+			
+			return FileDAO.saveFile(cDTO.iterator().next().getFile(), false);
 		}
 		catch (Exception e) {
 			logger.error("unable to insert claimprorate due to bean copyproperties error: " + e);

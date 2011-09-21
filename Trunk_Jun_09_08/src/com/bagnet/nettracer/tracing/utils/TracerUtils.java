@@ -512,80 +512,80 @@ public class TracerUtils {
 				.get(COMPANY_LIST_BY_ID_INDEX));
 	}
 
-	public static ClaimForm populateClaim(ClaimForm cform,
-			IncidentForm theform, HttpServletRequest request) {
-		try {
-			Claim claim = null;
-			HttpSession session = request.getSession();
-
-			cform = new ClaimForm();
-			session.setAttribute("claimForm", cform);
-
-			Agent user = (Agent) session.getAttribute("user");
-
-			session.setAttribute("claimstatuslist", session
-					.getAttribute("claimstatuslist") != null ? session
-					.getAttribute("claimstatuslist") : getStatusList(TracingConstants.TABLE_CLAIM, user.getCurrentlocale()));
-
-			IncidentBMO iBmo = new IncidentBMO();
-			Incident incident = iBmo.findIncidentByID(theform.getIncident_ID());
-			
-			if ((claim = theform.getClaim()) != null) {
-				cform.setClaim(claim);
-//				BeanUtils.copyProperties(cform, claim);
-				if (cform.getClaim().getStatus() == null) {
-					Status status = new Status();
-					status.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
-					status.setLocale(user);
-					cform.getClaim().setStatus(status);
-				}
-				
-				if (cform.getClaim().getIncident() == null) {
-					FsIncident fsIncident = new FsIncident();
-					Reservation reservation = new Reservation();
-					reservation.setPnrData(new PnrData());
-					fsIncident.setReservation(reservation);
-					
-					cform.getClaim().setIncident(fsIncident);
-				}
-				if (cform.getClaim().getAmountClaimedCurrency() == null)
-					cform.getClaim().setAmountClaimedCurrency(user.getDefaultcurrency());
-				
-				Person person = new Person();
-				FsAddress address = new FsAddress();
-				Phone phone = new Phone();
-				person.getAddresses().add(address);
-				person.getPhones().add(phone);
-				claim.getClaimants().add(person);
-			} else {
-				cform.setClaim(ClaimUtils.createClaim(user));
-			}
-			
-			claim.setNtIncident(incident);
-
-			// TODO: VERIFY THAT THIS IS NO LONGER NEEDED
-//			Passenger pa = (Passenger) theform.getPassenger(0);
-//			String passengername = pa.getFirstname() + " " + pa.getLastname();
-//			cform.getClaim().setPassengername(passengername);
-
-			if (theform.getExpenselist() != null)
-				cform.getClaim().getNtIncident().setExpenselist(theform.getExpenselist());
-
-			cform.set_DATEFORMAT(user.getDateformat().getFormat());
-			cform.set_TIMEFORMAT(user.getTimeformat().getFormat());
-			cform.set_TIMEZONE(TimeZone
-					.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
-
-			session.setAttribute("claimForm", cform);
-
-			return cform;
-
-		} catch (Exception e) {
-			logger.error("bean copy claim form error on populateClaim: " + e);
-			e.printStackTrace();
-			return cform;
-		}
-	}
+//	public static ClaimForm populateClaim(ClaimForm cform,
+//			IncidentForm theform, HttpServletRequest request) {
+//		try {
+//			Claim claim = null;
+//			HttpSession session = request.getSession();
+//
+//			cform = new ClaimForm();
+//			session.setAttribute("claimForm", cform);
+//
+//			Agent user = (Agent) session.getAttribute("user");
+//
+//			session.setAttribute("claimstatuslist", session
+//					.getAttribute("claimstatuslist") != null ? session
+//					.getAttribute("claimstatuslist") : getStatusList(TracingConstants.TABLE_CLAIM, user.getCurrentlocale()));
+//
+//			IncidentBMO iBmo = new IncidentBMO();
+//			Incident incident = iBmo.findIncidentByID(theform.getIncident_ID());
+//			
+//			if ((claim = theform.getClaim()) != null) {
+//				cform.setClaim(claim);
+////				BeanUtils.copyProperties(cform, claim);
+//				if (cform.getClaim().getStatus() == null) {
+//					Status status = new Status();
+//					status.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
+//					status.setLocale(user);
+//					cform.getClaim().setStatus(status);
+//				}
+//				
+//				if (cform.getClaim().getIncident() == null) {
+//					FsIncident fsIncident = new FsIncident();
+//					Reservation reservation = new Reservation();
+//					reservation.setPnrData(new PnrData());
+//					fsIncident.setReservation(reservation);
+//					
+//					cform.getClaim().setIncident(fsIncident);
+//				}
+//				if (cform.getClaim().getAmountClaimedCurrency() == null)
+//					cform.getClaim().setAmountClaimedCurrency(user.getDefaultcurrency());
+//				
+//				Person person = new Person();
+//				FsAddress address = new FsAddress();
+//				Phone phone = new Phone();
+//				person.getAddresses().add(address);
+//				person.getPhones().add(phone);
+//				claim.getClaimants().add(person);
+//			} else {
+//				cform.setClaim(ClaimUtils.createClaim(user));
+//			}
+//			
+//			claim.setNtIncident(incident);
+//
+//			// TODO: VERIFY THAT THIS IS NO LONGER NEEDED
+////			Passenger pa = (Passenger) theform.getPassenger(0);
+////			String passengername = pa.getFirstname() + " " + pa.getLastname();
+////			cform.getClaim().setPassengername(passengername);
+//
+//			if (theform.getExpenselist() != null)
+//				cform.getClaim().getNtIncident().setExpenselist(theform.getExpenselist());
+//
+//			cform.set_DATEFORMAT(user.getDateformat().getFormat());
+//			cform.set_TIMEFORMAT(user.getTimeformat().getFormat());
+//			cform.set_TIMEZONE(TimeZone
+//					.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+//
+//			session.setAttribute("claimForm", cform);
+//
+//			return cform;
+//
+//		} catch (Exception e) {
+//			logger.error("bean copy claim form error on populateClaim: " + e);
+//			e.printStackTrace();
+//			return cform;
+//		}
+//	}
 
 	public static void populateClaimProrate(ClaimProrateForm cpform,
 			IncidentForm theform, HttpServletRequest request) {
@@ -596,7 +596,7 @@ public class TracerUtils {
 			// cpform = new ClaimProrateForm();
 			// session.setAttribute("claimForm", cpform);
 			boolean createnewprorate = false;
-			if ((claim = theform.getClaim()) != null) {
+			if ((claim = theform.getClaims().iterator().next()) != null) {
 				ClaimProrate cp = claim.getClaimprorate();
 				if (cp == null) { // no previous prorate
 					cpform = new ClaimProrateForm();

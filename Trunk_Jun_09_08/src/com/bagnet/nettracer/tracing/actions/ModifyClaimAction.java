@@ -252,7 +252,10 @@ public class ModifyClaimAction extends CheckedAction {
 			// maintain existing nt functionality
 			if (isNtUser) {
 				if (claimSaved) {
-					theform.setClaim(claim);
+					if (theform.getClaims() != null && theform.getClaims().contains(claim)) {
+						theform.getClaims().remove(claim);
+					}
+					theform.getClaims().add(claim);
 					request.setAttribute("success", "1");
 					cform.setMod_claim_reason("");
 				} else {

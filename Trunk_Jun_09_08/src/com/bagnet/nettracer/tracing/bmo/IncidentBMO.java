@@ -10,9 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -31,17 +29,19 @@ import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 
+import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Phone;
+import aero.nettracer.fs.model.Reservation;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.Claim;
-import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -56,21 +56,16 @@ import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Passenger;
-import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.TraceIncident;
-import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
-import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
-import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
@@ -364,7 +359,7 @@ public class IncidentBMO {
 					// delete first then insert
 					sess.delete(oldinc);
 					iDTO = clearIncidentIds(iDTO);
-					sess.save(iDTO);
+					sess.merge(iDTO);
 				}
 				t.commit();
 			} else {
@@ -2093,10 +2088,10 @@ public class IncidentBMO {
 				ep.setExpensepayout_ID(0);
 			}
 		}
-
+		
 		return inc;
 	}
-
+	
 	public void incrementPrintedReceipt(String incident_id) {
 		Incident inc = this.findIncidentByID(incident_id);
 		if (inc.getPrintedreceipt() == null) {

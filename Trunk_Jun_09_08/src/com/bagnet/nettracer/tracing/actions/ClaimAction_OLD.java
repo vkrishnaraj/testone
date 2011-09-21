@@ -218,7 +218,7 @@ public class ClaimAction_OLD extends CheckedAction {
 			Claim cDTO = new Claim();
 
 			if (bs.insertClaim(cDTO, cform, session, false, theform.getIncident_ID())) {
-				theform.setClaim(cDTO);
+//				theform.setClaim(cDTO);
 //				cform.setClaim_ID(cDTO.getId());
 				request.setAttribute("success", "1");
 //				cform.setMod_claim_reason("");
@@ -239,7 +239,7 @@ public class ClaimAction_OLD extends CheckedAction {
 
 			
 			if (savedclaim) {
-				bs.findClaimByID(cform.getClaim().getId(), cform, theform);
+//				bs.findClaimByID(cform.getClaim().getId(), cform, theform);
 //				cform = TracerUtils.populateClaim(cform, theform, request);
 //				cform = ClaimUtils.createClaimForm(incident_id, request);
 				request.setAttribute("success", "1");
@@ -257,7 +257,7 @@ public class ClaimAction_OLD extends CheckedAction {
 				savedclaim = true;
 
 			if (savedclaim) {
-				bs.findClaimByID(cDTO.getId(), cform, theform);
+//				bs.findClaimByID(cDTO.getId(), cform, theform);
 				response.sendRedirect("searchIncident.do?incident=" + theform.getIncident_ID());
 				return null;
 			} else {

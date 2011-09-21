@@ -3,6 +3,7 @@ package com.bagnet.nettracer.tracing.forms;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.struts.validator.ValidatorForm;
@@ -213,7 +214,7 @@ public final class IncidentForm extends ValidatorForm {
 
 	private List<Incident_Claimcheck> claimchecklist = new ArrayList<Incident_Claimcheck>();
 
-	private Claim claim;
+	private Set<Claim> claims;
 	private List<ExpensePayout> expenselist = new ArrayList<ExpensePayout>();
 	
 	private List<BDO_Passenger> bdo_passengerlist = new ArrayList<BDO_Passenger>();
@@ -1132,16 +1133,16 @@ public final class IncidentForm extends ValidatorForm {
 	/**
 	 * @return Returns the claims.
 	 */
-	public Claim getClaim() {
-		return claim;
+	public Set<Claim> getClaims() {
+		return claims;
 	}
 
 	/**
 	 * @param claims
 	 *          The claims to set.
 	 */
-	public void setClaim(Claim claim) {
-		this.claim = claim;
+	public void setClaims(Set<Claim> claims) {
+		this.claims = claims;
 	}
 
 	public void setExpenselist(List<ExpensePayout> expenselist) {

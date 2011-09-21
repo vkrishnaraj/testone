@@ -664,7 +664,7 @@ public class MBRActionUtils {
 			theform.setRemarklist(al);
 
 			// clear claim information
-			theform.setClaim(null);
+			theform.setClaims(null);
 
 			// create new article
 			theform.setArticlelist(new ArrayList());
