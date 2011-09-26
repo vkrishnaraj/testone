@@ -182,7 +182,7 @@
 	
 	<target name="usair-libraries-create">
 		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-us/us-shares.jar" />
-		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-us/us-scanhistory.jar" />
+		<copy todir="${basedir}/lib/jars" file="${basedir}/lib/client-us/us-scanpointsclient.jar" />
 	</target>
 	
 	<target name="usair-libraries-cleanup">
