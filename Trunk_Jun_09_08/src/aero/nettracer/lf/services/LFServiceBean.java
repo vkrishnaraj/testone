@@ -1557,6 +1557,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				
 				
 				h.put("LOSTID", (new Long(id)).toString());
+				h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
 
 				// set embedded images
 				if (embedImage) {
@@ -1706,6 +1707,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				
 				h.put("LOSTID", (new Long(id)).toString());
 				h.put("DAYS", (new Integer(lost.getReservation().getDropoffLocation().getPriority()).toString()));//TODO station driven
+				h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
 
 				
 				// set embedded images
