@@ -27,13 +27,16 @@ import com.usairways.www.cbro.baggage_scanner.wsdl.ForwardLegType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.ForwardScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.GetScanPointsDocument;
 import com.usairways.www.cbro.baggage_scanner.wsdl.GetScanPointsResponseDocument;
+import com.usairways.www.cbro.baggage_scanner.wsdl.GetScanPointsResponseDocument.GetScanPointsResponse.Out;
 import com.usairways.www.cbro.baggage_scanner.wsdl.LoadBagScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.LoadScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.LoadULDScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.NetTracerScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.QohScanType;
-//import com.usairways.www.cbro.baggage_scanner.wsdl.ScanPointsStub;
-import com.usairways.cbro.baggage.scanning.spi.bean.ScanPoints1ServiceBeanServiceStub;
+import com.usairways.www.cbro.baggage_scanner.wsdl.RerouteClearScanType;
+import com.usairways.www.cbro.baggage_scanner.wsdl.RerouteForwardScanType;
+import com.usairways.www.cbro.baggage_scanner.wsdl.RerouteScanType;
+import com.usairways.www.cbro.baggage_scanner.wsdl.ScanPointsStub;
 import com.usairways.www.cbro.baggage_scanner.wsdl.ScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TagType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TaskType;
@@ -44,27 +47,28 @@ import com.usairways.www.cbro.baggage_scanner.wsdl.UldTaskType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.UldTransferType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.UnloadScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.UnloadULDScanType;
-import com.usairways.www.cbro.baggage_scanner.wsdl.GetScanPointsResponseDocument.GetScanPointsResponse.Out;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
 public class ScannerDataSourceImpl implements ScannerDataSource {
-	
-	private static final String PROPERTY_SCAN_HISTORY_ENDPOINT = "scan.history.endpoint";
-	private static final Logger logger = Logger.getLogger(ScannerDataSourceImpl.class);
 
-	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber) {
+	private static final String PROPERTY_SCAN_HISTORY_ENDPOINT = "scan.history.endpoint";
+	private static final Logger logger = Logger
+			.getLogger(ScannerDataSourceImpl.class);
+
+	public ScannerDTO getScannerData(Date startDate, Date endDate,
+			String bagTagNumber) {
 		return getScannerData(startDate, endDate, bagTagNumber, 120);
 	}
-	
+
 	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber, int timeout) {
 		String endpoint = PropertyBMO.getValue(PROPERTY_SCAN_HISTORY_ENDPOINT);
 		
-		ScanPoints1ServiceBeanServiceStub stub = null;
+		ScanPointsStub stub = null;
 		//ScanPointsStub stub = null;
 		try {
 			//stub = new ScanPointsStub(endpoint);
-			stub = new ScanPoints1ServiceBeanServiceStub(endpoint);
+			stub = new ScanPointsStub(endpoint);
 		} catch (AxisFault e) {
 			e.printStackTrace();
 		}
@@ -89,8 +93,8 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 		sp.setStartTime(startCal);
 		sp.setEndTime(endCal);
 		TagType tag = sp.addNewTag();
-		//tag.setType(TagType.Type.B);
-		tag.setType("B");
+
+		tag.setType(TagType.Type.B);
 		tag.setStringValue(bagTagNumber.trim().toUpperCase());
 
 		GetScanPointsResponseDocument responseDoc = null;
@@ -114,7 +118,8 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 		logger.debug("Scanner response: " + responseDoc);
 		
 		for (int i = 0; i < 18; ++i) {
-			//logger.info("Iteration: " + i);
+
+			String superDesc = null;
 			Object[] arr = null;
 			switch (i) {
 				case 0: if (out.getBulkUnloadArray() != null) arr = out.getBulkUnloadArray(); break;
@@ -134,12 +139,18 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 				case 15: if (out.getUnloadULDArray() != null ) arr = out.getUnloadULDArray(); break;
 				case 16: if (out.getLoadBagArray() != null ) arr = out.getLoadBagArray(); break;
 				case 17: if (out.getUldLoadBagArray() != null ) arr = out.getUldLoadBagArray(); break;
+				case 18: if (out.getRerouteAcceptArray() != null ) superDesc = "Reroute Accept"; arr = out.getRerouteAcceptArray(); break;
+				case 19: if (out.getRerouteCancelArray() != null ) superDesc = "Reroute Cancel"; arr = out.getRerouteCancelArray(); break;
+				case 20: if (out.getRerouteClearArray() != null ) superDesc = "Reroute Clear"; arr = out.getRerouteClearArray(); break;
+				case 21: if (out.getRerouteForwardArray() != null ) superDesc = "Reroute Forward"; arr = out.getRerouteForwardArray(); break;
+				case 22: if (out.getRerouteHoldArray() != null ) superDesc = "Reroute Hold"; arr = out.getRerouteHoldArray(); break;
+				case 23: if (out.getRerouteInventoryArray() != null ) superDesc = "Reroute Inventory"; arr = out.getRerouteInventoryArray(); break;
+				
 			}
 			
 			
 			if (arr != null && arr.length > 0) {
 
-				//logger.info(arr);
 				for (int j = 0; j < arr.length; ++j) {
 					Object obj = arr[j];
 						
@@ -275,10 +286,46 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							UnloadULDScanType o = (UnloadULDScanType) obj;
 							comment.append("ULD: " + o.getUld() + "<br />");
 						}
+				
+						if (obj instanceof RerouteScanType) {
+							RerouteScanType o = (RerouteScanType) obj;
+							comment.append("Location: " + o.getLocation() + "<br />");
+							comment.append("PNR: " + o.getPnr() + "<br />");
+						}
+						
+						if (obj instanceof RerouteClearScanType) {
+							RerouteClearScanType o = (RerouteClearScanType) obj;
+							comment.append("Reason: " + o.getReason() + "<br />");
+						}
+						
+						if (obj instanceof RerouteForwardScanType) {
+							
+							// NetTracer Scan Type
+							RerouteForwardScanType o = (RerouteForwardScanType) obj;
+							comment.append("Bulk: " + o.getBulk() + "<br />");
+							comment.append("Fault Reason: " + o.getFaultReasonId() + " - " + o.getFaultReason() + "<br />");
+							comment.append("Fault Station: " + o.getFaultStation() + "<br />");
+							
+							ohdId = o.getNetTracerId();
+							
+							ForwardLegType[] legs= o.getLegs().getLegArray();
+							if (legs.length > 0) {
+								comment.append("Forward Itinerary: <br />");
+							}
+							
+							for (ForwardLegType leg: legs) {
+								comment.append("&nbsp;&nbsp;" + leg.getCarrier() + " " + leg.getFlightDate() + " " + leg.getFlightNumber() + " to " + leg.getDestination() + "<br />");
+							}
+						}
 						
 						DateFormat sdf = new SimpleDateFormat(TracingConstants.DISPLAY_DATETIMEFORMAT, Locale.US);
 						Date newdate = DateUtils.convertSystemCalendarToGMTDate(time); 
 						String dateString = sdf.format(newdate);
+						
+						if (superDesc != null) {
+							type = superDesc;
+						}
+						
 						ScannerDataDTO dtoItem = new ScannerDataDTO(tag1, dateString, city, type, comment.toString(), ohdId, time);
 						list.add(dtoItem);
 				}
@@ -295,7 +342,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 	private void ifNotNull(StringBuffer comment, String string1,
 			String string2, String string3) {
 		if (string2 != null) {
-			comment.append(string1 + " " + string2 + " " + string3 );
+			comment.append(string1 + " " + string2 + " " + string3);
 		}
 	}
 }
