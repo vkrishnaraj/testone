@@ -285,7 +285,7 @@
 			        </tr>
 	            	<tr>
 		                <td colspan=2>
-		                  <bean:message key="colname.street_addr1.req" />&nbsp;<span class="reqfield">*</span>
+		                  <bean:message key="colname.street_addr1" />&nbsp;<span class="reqfield"></span>
 		                  <br>
 		                  <html:text name="lostReportForm" property="lost.client.address.decryptedAddress1" size="45" maxlength="50" styleClass="textfield" />
 		                </td>
@@ -297,7 +297,7 @@
 		              </tr>
 		              <tr>
 		                <td>
-		                  <bean:message key="colname.city.req" />&nbsp;<span class="reqfield">*</span>
+		                  <bean:message key="colname.city" />&nbsp;<span class="reqfield"></span>
 		                  <br>
 		                  <html:text name="lostReportForm" property="lost.client.address.decryptedCity" size="10" maxlength="50" styleClass="textfield" />
 		                </td>
@@ -317,12 +317,12 @@
 		                  <html:text name="lostReportForm" property="lost.client.address.decryptedProvince" size="10" maxlength="100" styleId="province" styleClass="textfield" onchange="fieldChanged('province');" />
 		                </td>
 		                <td>
-		                  <bean:message key="colname.zip.req" />
+		                  <bean:message key="colname.zip" />
 		                  <br>
 		                  <html:text name="lostReportForm" property="lost.client.address.decryptedZip" size="11" maxlength="11" styleClass="textfield" />
 		                </td>
 		                <td>
-		                  <bean:message key="colname.country" />&nbsp;<span class="reqfield">*</span>
+		                  <bean:message key="colname.country" />&nbsp;<span class="reqfield"></span>
 		                  <br>
 		                  <html:select name="lostReportForm" property="lost.client.address.country" styleId="country" styleClass="dropdown" onchange="fieldChanged('country');">
 		                    <html:option value="">
