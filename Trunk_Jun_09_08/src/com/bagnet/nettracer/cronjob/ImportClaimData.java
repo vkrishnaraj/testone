@@ -1,7 +1,6 @@
 package com.bagnet.nettracer.cronjob;
 
 import java.text.DecimalFormat;
-import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -24,7 +23,7 @@ public abstract class ImportClaimData {
 
 	protected boolean ntUser;
 	protected Agent agent;
-	protected DecimalFormat df = new DecimalFormat("0.00");
+	protected DecimalFormat df = new DecimalFormat("#0.00");
 
 	private final int CLAIM_ID = 0;
 	private final int INCIDENT_ID = 1;
@@ -45,6 +44,7 @@ public abstract class ImportClaimData {
 	public void importClaims() {
 		agent = loadAgent();
 		if (agent == null) {
+			System.err.println("Failed to login to the database with ntadmin!");
 			return;
 		}
 
@@ -87,7 +87,7 @@ public abstract class ImportClaimData {
 						+ (Integer) row[CLAIM_ID] + " for incident: "
 						+ (String) row[INCIDENT_ID]);
 
-				long startClaim = Calendar.getInstance().getTimeInMillis();
+				long startClaim = System.currentTimeMillis();
 				// load the incident
 				incident = ibmo.findIncidentByID((String) row[INCIDENT_ID]);
 				if (incident == null) {
@@ -165,7 +165,7 @@ public abstract class ImportClaimData {
 							+ incident.getIncident_ID());
 					break;
 				} else {
-					long endClaim = Calendar.getInstance().getTimeInMillis();
+					long endClaim = System.currentTimeMillis();
 					double durationClaim = (endClaim - startClaim) / 1000;
 					System.out.println("\tSuccessfully processed incident: "
 							+ (String) row[INCIDENT_ID] + " in " + df.format(durationClaim) + " seconds.\n");
