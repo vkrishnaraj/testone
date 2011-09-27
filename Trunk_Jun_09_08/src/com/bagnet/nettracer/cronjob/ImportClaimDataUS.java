@@ -268,6 +268,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 		System.out.println("\nCreating claims...");
 		for (String key: importedClaims.keySet()) {
 			if (!processedClaims.contains(key)) {
+				// CODEREVIEW: CAPTURE AND OUTPUT EXCEPTIONS
 				System.out.println("Processing claim: " + key);
 				double start = System.currentTimeMillis();
 
@@ -285,6 +286,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 	
 	private void loadProcessedClaimsFromFile() {
 		processedClaims = new Vector<String>();
+		// CODEREVIEW: Can we run out of a jar.
 		InputStream in = ImportClaimDataUS.class.getResourceAsStream("..\\..\\clients\\us\\crm\\processed_claims.txt");
 		if (in != null) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
@@ -299,6 +301,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 				processedClaims.add(line);
 			} while (line != null);
 		}
+		// CODEREVIEW: CLOSE input stream
 	}
 	
 	private void openProcessedClaimsFile() throws IOException {
