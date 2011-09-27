@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
@@ -118,6 +119,7 @@ public class ReportOutputServlet extends HttpServlet {
 			String file = null;
 			File iFile = null;
 			
+			ClaimForm cform = (ClaimForm) session.getAttribute("claimForm");
 
 			if ((file = request.getParameter("reportfile")) != null) {
 				iFile = getFile(file, sc);
@@ -129,8 +131,12 @@ public class ReportOutputServlet extends HttpServlet {
 					int type = Integer.parseInt(request.getParameter("print"));
 					switch (type) {
 						case ReportingConstants.CLAIM_PAYOUT_RPT:
-							ClaimForm cform = (ClaimForm) session.getAttribute("claimForm");
-							iFile = getFile(ClaimPayoutRpt.createReport(cform.getClaim().getId(), sc, request), sc);
+							Claim claim = cform.getClaim();
+							if (claim.getNtIncident() == null || claim.getNtIncident().getExpenselist() == null || claim.getNtIncident().getExpenselist().isEmpty()) {
+								iFile = null;
+							} else {
+								iFile = getFile(ClaimPayoutRpt.createReport(cform.getClaim().getId(), sc, request), sc);
+							}
 							break;
 						case ReportingConstants.CLAIM_PRORATE_RPT:
 							ClaimProrateForm cpform = (ClaimProrateForm) session.getAttribute("claimProrateForm");
@@ -172,7 +178,7 @@ public class ReportOutputServlet extends HttpServlet {
 			}
 
 			if (iFile == null || iFile.length() == 0) {
-				response.sendRedirect("claim_resolution.do?error=nodata");
+				response.sendRedirect("claim_resolution.do?claimId=" + cform.getClaim().getId() + "&error=nodata");
 				return;
 			}
 			
