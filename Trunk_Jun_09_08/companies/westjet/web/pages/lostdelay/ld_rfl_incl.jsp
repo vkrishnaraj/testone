@@ -1,4 +1,4 @@
-<%@ page language="java"%>
+<!-- <%@ page language="java"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
 <%@ taglib uri="/tags/struts-logic" prefix="logic"%>
@@ -59,4 +59,4 @@
 &nbsp;&nbsp;&uarr;
 <a href="#"><bean:message key="link.to_top" /></a>
 <br>
-<br>
+<br> -->
