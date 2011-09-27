@@ -49,6 +49,9 @@
 				<include name="error*.properties"/>
 			</fileset>
 		</copy>
+		<copy todir="${build.dir}/${company.name}-war/WEB-INF" overwrite="true">
+			<fileset file="${companies.dir}/${company.name}/jboss-web.xml" />
+		</copy>
 		<war destfile="${dist.dir}/${company.name}-pv-${environment.name}.war" duplicate="preserve" compress="true">
 			<fileset dir="${build.dir}/${company.name}-war"/>
 		</war>
@@ -126,6 +129,34 @@
 	<target name="build-azul-prod">
 		<property name="company.name" value="azul" />
 		<property name="environment.name" value="prod" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-azul-test">
+		<property name="company.name" value="azul" />
+		<property name="environment.name" value="test" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-spirit-training">
+		<property name="company.name" value="spirit" />
+		<property name="environment.name" value="qa" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-spirit-prod">
+		<property name="company.name" value="spirit" />
+		<property name="environment.name" value="prod" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-spirit-test">
+		<property name="company.name" value="spirit" />
+		<property name="environment.name" value="test" />
 		<antcall target="war" >
 		</antcall> 	
 	</target>
