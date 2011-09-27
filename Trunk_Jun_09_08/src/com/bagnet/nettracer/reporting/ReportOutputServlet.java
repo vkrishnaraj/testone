@@ -178,7 +178,11 @@ public class ReportOutputServlet extends HttpServlet {
 			}
 
 			if (iFile == null || iFile.length() == 0) {
-				response.sendRedirect("claim_resolution.do?claimId=" + cform.getClaim().getId() + "&error=nodata");
+				if (cform.getClaim().getId() > 0) {
+					response.sendRedirect("claim_resolution.do?claimId=" + cform.getClaim().getId() + "&error=nodata");
+				} else {
+					response.sendRedirect("claim_resolution.do?error=nodata");
+				}
 				return;
 			}
 			
