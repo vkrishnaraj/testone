@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -34,7 +35,7 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class ImportClaimDataUS extends ImportClaimData {
 	
-//	private static Logger logger = Logger.getLogger(ImportClaimDataUS.class);
+	private static Logger logger = Logger.getLogger(ImportClaimDataUS.class);
 	
 	private final int KEY = 0;
 	private final int VALUE = 1;
@@ -44,9 +45,9 @@ public class ImportClaimDataUS extends ImportClaimData {
 	private final int CLAIM_INCIDENT_TYPE = 3;
 	private final int CLAIM_INCIDENT_ID = 4;
 	private final int CLAIM_DATE_OF_OCCURRENCE = 5;
-	private final int CLAIM_STATION = 6;
+//	private final int CLAIM_STATION = 6;
 	private final int CLAIM_STATUS = 7;
-	private final int CLAIM_ITEM_TYPE = 9;
+//	private final int CLAIM_ITEM_TYPE = 9;
 	private final int CLAIM_CRM_ID = 10;
 	private final int CLAIM_LAST_NAME = 11;
 	private final int CLAIM_FIRST_NAME = 12;
@@ -64,7 +65,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 	private final int CLAIM_FAX_PHONE = 30;
 	private final int CLAIM_PAGER_PHONE = 31;
 	
-	private final int RELATED_CREATED_ON = 2;
+//	private final int RELATED_CREATED_ON = 2;
 	private final int RELATED_CRM_ID = 3;
 	private final int RELATED_LAST_NAME = 4;
 	private final int RELATED_FIRST_NAME = 5;
@@ -77,7 +78,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 	private final int RELATED_ZIP = 12;
 	private final int RELATED_COUNTRY = 13;
 	private final int RELATED_MEMBERSHIP_NUMBER = 14;
-	private final int RELATED_MEMBERSHIP_LEVEL = 15;
+//	private final int RELATED_MEMBERSHIP_LEVEL = 15;
 	private final int RELATED_EMAIL = 16;
 	private final int RELATED_BUS_PHONE = 20;
 	private final int RELATED_HOME_PHONE = 21;
@@ -96,7 +97,8 @@ public class ImportClaimDataUS extends ImportClaimData {
 	private BufferedWriter processedClaimsFile;
 	
 	public ImportClaimDataUS() {
-		// TODO: change ntUser to true before deploying and running
+		// TODO: un-comment the line below and remove the "ntUser = false" line
+//		ntUser = PropertyBMO.isTrue("nt.user");
 		ntUser = false;
 		importedClaims = new LinkedHashMap<String, ArrayList<String[]>>();
 		relatedPassengers = new LinkedHashMap<String, ArrayList<String[]>>();
@@ -113,17 +115,18 @@ public class ImportClaimDataUS extends ImportClaimData {
 		loadCountryList();
 		loadStatusList();
 		
-		System.out.print("Loading CRM table data...");
+		outputFile.print("Loading CRM table data...");
 		loadCrmIncidentIds();
-		System.out.println("\tdone!\t" + crmIncidentIds.size() + " rows loaded.");
+		outputFile.println("\t\tdone!\t" + crmIncidentIds.size() + " rows loaded.");
 		try {
 			loadProcessedClaimsFromFile();
 			readThirdPartyDataFiles();
 			openProcessedClaimsFile();
 			createClaimsFromCrmData();
-			closeProcessedClaimsFile();
 		} catch (IOException ioe) {
-			ioe.printStackTrace();
+			logger.error(ioe);
+		} finally {
+			closeProcessedClaimsFile();
 		}
 	}
 	
@@ -147,7 +150,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 				countryList.put(country, countryCodeId);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -175,7 +178,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 				statusList.put(description, status_ID);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -203,7 +206,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 				crmIncidentIds.put(crmKey, incidentId);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -216,13 +219,13 @@ public class ImportClaimDataUS extends ImportClaimData {
 	}
 
 	private void readThirdPartyDataFiles() throws IOException {
-		System.out.print("Reading CRM data file...");
-		readDataFromFile("..\\..\\clients\\us\\crm\\crm_claims.csv", importedClaims, CLAIM_CRM_ID);
-		System.out.println("\tdone!\t" + importedClaims.size() + " claims read.");
+		outputFile.print("Reading CRM data file...");
+		readDataFromFile(relativePath + "/crm_claims.csv", importedClaims, CLAIM_CRM_ID);
+		outputFile.println("\t\tdone!\t" + importedClaims.size() + " claims read.");
 		
-		System.out.print("Reading CRM passengers file...");
-		readDataFromFile("..\\..\\clients\\us\\crm\\crm_related_passengers.csv", relatedPassengers, RELATED_CRM_ID);
-		System.out.println("\tdone!\t" + relatedPassengers.size() + " CRM passengers read.");
+		outputFile.print("Reading CRM passenger file...");
+		readDataFromFile(relativePath + "/crm_related_passengers.csv", relatedPassengers, RELATED_CRM_ID);
+		outputFile.println("\tdone!\t" + relatedPassengers.size() + " CRM passengers read.");
 	}
 	
 	private void readDataFromFile(String fileName, LinkedHashMap<String, ArrayList<String[]>> map, int keyIndex) throws IOException {
@@ -262,24 +265,28 @@ public class ImportClaimDataUS extends ImportClaimData {
 
 	}
 	
-	private void createClaimsFromCrmData() throws IOException {
+	private void createClaimsFromCrmData() {
 		FsClaim claim;
 		
-		System.out.println("\nCreating claims...");
+		outputFile.println("\nCreating claims...");
 		for (String key: importedClaims.keySet()) {
-			if (!processedClaims.contains(key)) {
-				// CODEREVIEW: CAPTURE AND OUTPUT EXCEPTIONS
-				System.out.println("Processing claim: " + key);
-				double start = System.currentTimeMillis();
-
-				claim = createClaimFromCrmData(crmIncidentIds.get(key), importedClaims.get(key));
-				claim = createRelatedPassengerData(claim, relatedPassengers.get(key));
-//				FileDAO.saveFile(claim.getFile(), true);
-				
-				writeToProcessedClaimsFile(key);
-				double end = System.currentTimeMillis();
-				double duration = (end - start) / 1000;
-				System.out.println("Done! Claim processed in: " + df.format(duration) + " seconds.\n");
+			try {
+				if (!processedClaims.contains(key)) {
+					outputFile.println("Processing claim: " + key);
+					double start = System.currentTimeMillis();
+	
+					claim = createClaimFromCrmData(crmIncidentIds.get(key), importedClaims.get(key));
+					claim = createRelatedPassengerData(claim, relatedPassengers.get(key));
+	//				FileDAO.saveFile(claim.getFile(), true);
+					
+					writeToProcessedClaimsFile(key);
+					double end = System.currentTimeMillis();
+					double duration = (end - start) / 1000;
+					outputFile.println("Done! Claim processed in: " + df.format(duration) + " seconds.\n");
+				}
+			} catch (Exception e) {
+				logger.error(e);
+				continue;
 			}
 		}
 	}
@@ -287,7 +294,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 	private void loadProcessedClaimsFromFile() {
 		processedClaims = new Vector<String>();
 		// CODEREVIEW: Can we run out of a jar.
-		InputStream in = ImportClaimDataUS.class.getResourceAsStream("..\\..\\clients\\us\\crm\\processed_claims.txt");
+		InputStream in = ImportClaimDataUS.class.getResourceAsStream(relativePath + "/processed_claims.txt");
 		if (in != null) {
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String line = null;
@@ -295,22 +302,31 @@ public class ImportClaimDataUS extends ImportClaimData {
 				try {
 					line = br.readLine();
 				} catch (IOException ioe) {
-					ioe.printStackTrace();
+					logger.error(ioe);
 					break;
 				}
 				processedClaims.add(line);
 			} while (line != null);
 		}
-		// CODEREVIEW: CLOSE input stream
+		
+		try {
+			in.close();
+		} catch (IOException ioe) {
+			logger.error(ioe);
+		}
 	}
 	
 	private void openProcessedClaimsFile() throws IOException {
-		String outputFilePath = ImportClaimDataUS.class.getResource("../../clients/us/crm/processed_claims.txt").getPath().substring(1);
+		String outputFilePath = ImportClaimDataUS.class.getResource(relativePath + "/processed_claims.txt").getPath().substring(1);
 		processedClaimsFile = new BufferedWriter(new FileWriter(outputFilePath, true));
 	}
 	
-	private void closeProcessedClaimsFile() throws IOException {
-		processedClaimsFile.close();
+	private void closeProcessedClaimsFile() {
+		try {
+			processedClaimsFile.close();
+		} catch (IOException ioe) {
+			logger.error(ioe);
+		}
 	}
 	
 	private void writeToProcessedClaimsFile(String line) throws IOException {
@@ -693,7 +709,12 @@ public class ImportClaimDataUS extends ImportClaimData {
 	}
 	
 	public static void main(String[] args) {
-		new ImportClaimDataUS().importClaims();
+		ImportClaimDataUS importer = new ImportClaimDataUS();
+		if (args.length > 0) {
+			importer.setRelativePath(args[0]);
+		}
+		importer.importClaims();
+		importer.closeOutputFile();
 	}
 
 }

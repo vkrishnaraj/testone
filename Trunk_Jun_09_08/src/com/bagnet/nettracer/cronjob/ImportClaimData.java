@@ -1,5 +1,9 @@
 package com.bagnet.nettracer.cronjob;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -24,6 +28,7 @@ public abstract class ImportClaimData {
 	protected boolean ntUser;
 	protected Agent agent;
 	protected DecimalFormat df = new DecimalFormat("#0.00");
+	protected String relativePath = "../../clients/us/crm";
 
 	private final int CLAIM_ID = 0;
 	private final int INCIDENT_ID = 1;
@@ -40,14 +45,24 @@ public abstract class ImportClaimData {
 
 	private static Logger logger = Logger.getLogger(ImportClaimData.class);
 	private static LinkedHashMap<String, String> failedIncidents;
+	
+	protected PrintWriter outputFile;
 
 	public void importClaims() {
-		agent = loadAgent();
-		if (agent == null) {
-			System.err.println("Failed to login to the database with ntadmin!");
+		try {
+			String outputFilePath = ImportClaimData.class.getResource(relativePath + "/process_output.txt").getPath().substring(1);
+			outputFile = new PrintWriter(new BufferedWriter(new FileWriter(outputFilePath)), true);
+		} catch (IOException ioe) {
+			logger.error(ioe.getMessage(), ioe);
 			return;
 		}
 
+		agent = loadAgent();
+		if (agent == null) {
+			logger.error("Failed to login to the database with ntadmin!");
+			return;
+		}
+		
 		// import existing nettracer claims
 		if (ntUser) {
 			 importNtClaims();
@@ -64,11 +79,11 @@ public abstract class ImportClaimData {
 		IncidentBMO ibmo = new IncidentBMO();
 
 		Session session = null;
-		System.out.println("Processing NetTracer claims...");
+		outputFile.println("Processing NetTracer claims...");
 		try {
 			session = HibernateWrapper.getSession().openSession();
 
-			System.out.println("Fetching claims...\n");
+			outputFile.println("Fetching claims...\n");
 			String sql = "select * from claim where incident_ID not in (select ntIncidentId from fsclaim where ntIncidentId is not null);";
 			SQLQuery query = session.createSQLQuery(sql);
 			List claims = query.list();
@@ -83,7 +98,7 @@ public abstract class ImportClaimData {
 			for (; i < claims.size(); ++i) {
 				claimsProcessed++;
 				row = (Object[]) claims.get(i);
-				System.out.println(i + ":\tProcessing claim "
+				outputFile.println(i + ":\tProcessing claim "
 						+ (Integer) row[CLAIM_ID] + " for incident: "
 						+ (String) row[INCIDENT_ID]);
 
@@ -102,6 +117,7 @@ public abstract class ImportClaimData {
 				} catch (Exception e) {
 					failedIncidents.put((String) row[INCIDENT_ID],
 							"Failed to create claim due to: " + e.getMessage());
+					logger.error(e);
 					continue;
 				}
 
@@ -156,18 +172,18 @@ public abstract class ImportClaimData {
 
 				// save the file - should also save the new claim
 				if (!FileDAO.saveFile(file, true)) {
-					System.err.println("\tError saving file: " + file.getId());
+					logger.error("\tError saving file: " + file.getId());
 					break;
 				}
 
 				if (ibmo.saveAndAuditIncident(incident, agent, null) <= 0) {
-					System.err.println("\tError saving incident: "
+					logger.error("\tError saving incident: "
 							+ incident.getIncident_ID());
 					break;
 				} else {
 					long endClaim = System.currentTimeMillis();
 					double durationClaim = (endClaim - startClaim) / 1000;
-					System.out.println("\tSuccessfully processed incident: "
+					outputFile.println("\tSuccessfully processed incident: "
 							+ (String) row[INCIDENT_ID] + " in " + df.format(durationClaim) + " seconds.\n");
 				}
 
@@ -181,11 +197,11 @@ public abstract class ImportClaimData {
 
 			long end = System.currentTimeMillis();
 			double duration = (end - start) / 1000;
-			System.out.println("Processed " + i + " claims in " + df.format(duration) + " seconds.\n");
+			outputFile.println("Processed " + i + " claims in " + df.format(duration) + " seconds.\n");
 			printErrorSummary();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -193,15 +209,25 @@ public abstract class ImportClaimData {
 		}
 
 	}
+	
+	public void closeOutputFile() {
+		if (outputFile != null) {
+			outputFile.close();
+		}
+	}
 
+	public void setRelativePath(String relativePath) {
+		this.relativePath = relativePath;
+	}
+	
 	protected abstract Agent loadAgent();
 
 	protected abstract void importThirdPartyClaims();
-
+	
 	private void printErrorSummary() {
 		int size = failedIncidents.keySet().size();
 		String[] keys = failedIncidents.keySet().toArray(new String[size]);
-		System.err.println("The following incidents could not be processed:");
+		logger.error("The following incidents could not be processed:");
 		for (int i = 0; i < size; ++i) {
 			logger.error((i + 1) + ":\t" + keys[i] + " : "
 					+ failedIncidents.get(keys[i]));
