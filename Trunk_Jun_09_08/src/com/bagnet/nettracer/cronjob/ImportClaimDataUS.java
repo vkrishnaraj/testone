@@ -287,11 +287,11 @@ public class ImportClaimDataUS extends ImportClaimData {
 		}
 	}
 	
-	private void loadProcessedClaimsFromFile() {
+	private void loadProcessedClaimsFromFile() throws IOException {
 		processedClaims = new Vector<String>();
-		// CODEREVIEW: Can we run out of a jar.
+		BufferedReader br = null;
 		try {
-			BufferedReader br = new BufferedReader(new FileReader(new File(filePath + "/processed_claims.txt")));
+			br = new BufferedReader(new FileReader(new File(filePath + "/processed_claims.txt")));
 			String line = null;
 			do {
 				try {
@@ -304,6 +304,10 @@ public class ImportClaimDataUS extends ImportClaimData {
 			} while (line != null);
 		} catch (Exception e) {
 			logger.error(e);
+		} finally {
+			if (br != null) {
+				br.close();
+			}
 		}
 		
 	}
