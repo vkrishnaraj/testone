@@ -2,6 +2,9 @@ package com.bagnet.nettracer.cronjob;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -220,48 +223,41 @@ public class ImportClaimDataUS extends ImportClaimData {
 
 	private void readThirdPartyDataFiles() throws IOException {
 		outputFile.print("Reading CRM data file...");
-		readDataFromFile(relativePath + "/crm_claims.csv", importedClaims, CLAIM_CRM_ID);
+		readDataFromFile(filePath + "/crm_claims.csv", importedClaims, CLAIM_CRM_ID);
 		outputFile.println("\t\tdone!\t" + importedClaims.size() + " claims read.");
 		
 		outputFile.print("Reading CRM passenger file...");
-		readDataFromFile(relativePath + "/crm_related_passengers.csv", relatedPassengers, RELATED_CRM_ID);
+		readDataFromFile(filePath + "/crm_related_passengers.csv", relatedPassengers, RELATED_CRM_ID);
 		outputFile.println("\tdone!\t" + relatedPassengers.size() + " CRM passengers read.");
 	}
 	
 	private void readDataFromFile(String fileName, LinkedHashMap<String, ArrayList<String[]>> map, int keyIndex) throws IOException {
-		BufferedReader br = null;
-		InputStream in = ImportClaimDataUS.class.getResourceAsStream(fileName);
-		if (in != null) {
-			
-			br = new BufferedReader(new InputStreamReader(in));
+		BufferedReader br = new BufferedReader(new FileReader(new File(fileName)));
 
-			String line = br.readLine();
-			String[] array = null;
-			String key;
-			while ((line = br.readLine()) != null) {
-				array = line.split(",");
-				key = array[keyIndex];
-				
-				if (key != null && !key.isEmpty() && !key.contains("~")) {
-				
-					if (map.containsKey(key)) {
-						map.get(key).add(array);
-					} else {
-						ArrayList<String[]> list = new ArrayList<String[]>();
-						list.add(array);
-						map.put(key, list);
-					}
-					
+		String line = br.readLine();
+		String[] array = null;
+		String key;
+		while ((line = br.readLine()) != null) {
+			array = line.split(",");
+			key = array[keyIndex];
+			
+			if (key != null && !key.isEmpty() && !key.contains("~")) {
+			
+				if (map.containsKey(key)) {
+					map.get(key).add(array);
+				} else {
+					ArrayList<String[]> list = new ArrayList<String[]>();
+					list.add(array);
+					map.put(key, list);
 				}
 				
 			}
 			
-		}	
-		
+		}
+			
 		if (br != null) {
 			br.close();
 		}
-		in.close();
 
 	}
 	
@@ -294,9 +290,8 @@ public class ImportClaimDataUS extends ImportClaimData {
 	private void loadProcessedClaimsFromFile() {
 		processedClaims = new Vector<String>();
 		// CODEREVIEW: Can we run out of a jar.
-		InputStream in = ImportClaimDataUS.class.getResourceAsStream(relativePath + "/processed_claims.txt");
-		if (in != null) {
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(new File(filePath + "/processed_claims.txt")));
 			String line = null;
 			do {
 				try {
@@ -307,23 +302,21 @@ public class ImportClaimDataUS extends ImportClaimData {
 				}
 				processedClaims.add(line);
 			} while (line != null);
+		} catch (Exception e) {
+			logger.error(e);
 		}
 		
-		try {
-			in.close();
-		} catch (IOException ioe) {
-			logger.error(ioe);
-		}
 	}
 	
 	private void openProcessedClaimsFile() throws IOException {
-		String outputFilePath = ImportClaimDataUS.class.getResource(relativePath + "/processed_claims.txt").getPath().substring(1);
-		processedClaimsFile = new BufferedWriter(new FileWriter(outputFilePath, true));
+		processedClaimsFile = new BufferedWriter(new FileWriter(filePath + "/processed_claims.txt", true));
 	}
 	
 	private void closeProcessedClaimsFile() {
 		try {
-			processedClaimsFile.close();
+			if (processedClaimsFile != null) {
+				processedClaimsFile.close();
+			}
 		} catch (IOException ioe) {
 			logger.error(ioe);
 		}
@@ -710,9 +703,10 @@ public class ImportClaimDataUS extends ImportClaimData {
 	
 	public static void main(String[] args) {
 		ImportClaimDataUS importer = new ImportClaimDataUS();
-		if (args.length > 0) {
-			importer.setRelativePath(args[0]);
+		if (args.length != 1) {
+			return;
 		}
+		importer.setFilePath(args[0]);
 		importer.importClaims();
 		importer.closeOutputFile();
 	}

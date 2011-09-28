@@ -28,7 +28,7 @@ public abstract class ImportClaimData {
 	protected boolean ntUser;
 	protected Agent agent;
 	protected DecimalFormat df = new DecimalFormat("#0.00");
-	protected String relativePath = "../../clients/us/crm";
+	protected String filePath;
 
 	private final int CLAIM_ID = 0;
 	private final int INCIDENT_ID = 1;
@@ -50,8 +50,7 @@ public abstract class ImportClaimData {
 
 	public void importClaims() {
 		try {
-			String outputFilePath = ImportClaimData.class.getResource(relativePath + "/process_output.txt").getPath().substring(1);
-			outputFile = new PrintWriter(new BufferedWriter(new FileWriter(outputFilePath)), true);
+			outputFile = new PrintWriter(new BufferedWriter(new FileWriter(filePath + "/process_output.txt")), true);
 		} catch (IOException ioe) {
 			logger.error(ioe.getMessage(), ioe);
 			return;
@@ -216,8 +215,8 @@ public abstract class ImportClaimData {
 		}
 	}
 
-	public void setRelativePath(String relativePath) {
-		this.relativePath = relativePath;
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 	
 	protected abstract Agent loadAgent();
