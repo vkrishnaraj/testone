@@ -160,6 +160,27 @@
 		<antcall target="war" >
 		</antcall> 	
 	</target>
+	
+	<target name="build-test">
+		<antcall target="build-azul-test" /> 	
+		<antcall target="build-jetblue-qa" /> 
+		<antcall target="build-spirit-test" /> 
+		<antcall target="build-westjet-test" /> 
+	</target>
+	
+	<target name="build-train">
+		<antcall target="build-azul-training" /> 	
+		<antcall target="build-jetblue-training" /> 
+		<antcall target="build-spirit-training" /> 
+		<antcall target="build-westjet-qa" /> 
+	</target>
+	
+	<target name="build-prod">
+		<antcall target="build-azul-prod" /> 	
+		<antcall target="build-jetblue-prod" /> 
+		<antcall target="build-spirit-prod" /> 
+		<antcall target="build-westjet-prod" /> 
+	</target>
 			
 	
 	<target name="clean" depends="init">
