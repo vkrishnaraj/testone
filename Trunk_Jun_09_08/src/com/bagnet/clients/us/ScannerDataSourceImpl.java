@@ -117,7 +117,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 		
 		logger.debug("Scanner response: " + responseDoc);
 		
-		for (int i = 0; i < 18; ++i) {
+		for (int i = 0; i < 24; ++i) {
 
 			String superDesc = null;
 			Object[] arr = null;
