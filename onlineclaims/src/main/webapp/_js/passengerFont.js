@@ -80,7 +80,7 @@ function setInitialFontSize() {
 	}
 	testElem = document.getElementById("appForm:bagList:0:contentTable");
 	if (testElem) {
-		for (i = 0; i < 8; i++) {
+		for (var i = 0; i < 8; i++) {
 			calculateTotal(i, true);
 		}
 	}

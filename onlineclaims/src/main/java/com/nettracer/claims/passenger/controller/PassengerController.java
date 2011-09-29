@@ -281,6 +281,18 @@ public class PassengerController {
 	 */
 
 	public String savePassengerInfo() {
+		if (checkNameValidation()) {
+			return actuallySavePassengerInfo();
+		}
+		return null;
+	}
+
+	/**
+	 * Save the Passenger Data on Passenger Contact Info page
+	 * 
+	 */
+
+	public String actuallySavePassengerInfo() {
 		logger.debug("savePassengerInfo method is called");
 
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
@@ -313,6 +325,32 @@ public class PassengerController {
 					.addError("Your session has been expired. Please log in again");
 			return "passengerLogout";
 		}
+	}
+	
+	private boolean checkNameValidation() {
+		boolean lastReq = passengerInfoLabel.getLastName().isRequired();
+		boolean firstReq = passengerInfoLabel.getFirstName().isRequired();
+		boolean midReq = passengerInfoLabel.getMiddleInitial().isRequired();
+		boolean toReturn = true;
+		if (passengerBean != null && passengerBean.getPassengers() != null) {
+			int passNum = 1;
+			for (Passenger pass : passengerBean.getPassengers()) {
+				if (lastReq && (pass.getLastName() == null || pass.getLastName().trim().length() == 0)) {
+					toReturn = false;
+					FacesUtil.addError("Passenger " + passNum + ": Last Name is Required.");
+				}
+				if (firstReq && (pass.getFirstName() == null || pass.getFirstName().trim().length() == 0)) {
+					toReturn = false;
+					FacesUtil.addError("Passenger " + passNum + ": First Name is Required.");
+				}
+				if (midReq && (pass.getMiddleInitial() == null || pass.getMiddleInitial().trim().length() == 0)) {
+					toReturn = false;
+					FacesUtil.addError("Passenger " + passNum + ": Middle Initial is Required.");
+				}
+				passNum++;
+			}
+		}
+		return toReturn;
 	}
 
 	/**
@@ -574,69 +612,72 @@ public class PassengerController {
 	 */
 	public String gotoFlightDetails() {
 		logger.debug("gotoFlightDetails method is called");
-		savePassengerInfo();
+		if (checkNameValidation()) {
+			savePassengerInfo();
 
-		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
-				.getExternalContext().getSession(false);
-		if (null != session && null != session.getAttribute("loggedPassenger")) {
-			try {
-				airportCodeList = (DataModel) session
-						.getAttribute("airportCodeList");
-				populateItenarary();
-				if (null != passengerBean.getDeclarePayExcessValue()
-						&& passengerBean.getDeclarePayExcessValue()) {
-					flightLabel.getDeclaredValue().setState(
-							LabelText.STATUS_REQUIRED);
-				} else {
-					flightLabel.getDeclaredValue().setState(
-							LabelText.STATUS_NORMAL);
-				}
-
-				if (null != passengerBean.getClearCustomBag()
-						&& passengerBean.getClearCustomBag()) {
-					flightLabel.getBagWeight().setState(
-							LabelText.STATUS_REQUIRED);
-				} else {
-					flightLabel.getBagWeight()
-							.setState(LabelText.STATUS_NORMAL);
-				}
-
-				if (null != passengerBean.getRerouteBag()
-						&& passengerBean.getRerouteBag()) {
-					flightLabel.getReroutedCityAirline().setState(
-							LabelText.STATUS_REQUIRED);
-				} else {
-					flightLabel.getReroutedCityAirline().setState(
-							LabelText.STATUS_NORMAL);
-				}
-
-				// webservice integration code
-
-				Integer noOfBags = passengerBean.getBagsTravelWith();
-				if (null != noOfBags && noOfBags > 0) {
-					if (null != lostBagItems) {
-						lostBagItems.clear();
+			HttpSession session = (HttpSession) FacesUtil.getFacesContext()
+					.getExternalContext().getSession(false);
+			if (null != session && null != session.getAttribute("loggedPassenger")) {
+				try {
+					airportCodeList = (DataModel) session
+							.getAttribute("airportCodeList");
+					populateItenarary();
+					if (null != passengerBean.getDeclarePayExcessValue()
+							&& passengerBean.getDeclarePayExcessValue()) {
+						flightLabel.getDeclaredValue().setState(
+								LabelText.STATUS_REQUIRED);
+					} else {
+						flightLabel.getDeclaredValue().setState(
+								LabelText.STATUS_NORMAL);
 					}
-					for (int i = 1; i <= noOfBags; i++) {
-						lostBagItems.add(new SelectItem(new Integer(i)));
+	
+					if (null != passengerBean.getClearCustomBag()
+							&& passengerBean.getClearCustomBag()) {
+						flightLabel.getBagWeight().setState(
+								LabelText.STATUS_REQUIRED);
+					} else {
+						flightLabel.getBagWeight()
+								.setState(LabelText.STATUS_NORMAL);
 					}
+	
+					if (null != passengerBean.getRerouteBag()
+							&& passengerBean.getRerouteBag()) {
+						flightLabel.getReroutedCityAirline().setState(
+								LabelText.STATUS_REQUIRED);
+					} else {
+						flightLabel.getReroutedCityAirline().setState(
+								LabelText.STATUS_NORMAL);
+					}
+	
+					// webservice integration code
+	
+					Integer noOfBags = passengerBean.getBagsTravelWith();
+					if (null != noOfBags && noOfBags > 0) {
+						if (null != lostBagItems) {
+							lostBagItems.clear();
+						}
+						for (int i = 1; i <= noOfBags; i++) {
+							lostBagItems.add(new SelectItem(new Integer(i)));
+						}
+					}
+					
+					if (airportList == null) {
+						airportList = passengerService.getAirportList();
+					}
+	
+					// end of webservice integration
+	
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				
-				if (airportList == null) {
-					airportList = passengerService.getAirportList();
-				}
-
-				// end of webservice integration
-
-			} catch (Exception e) {
-				e.printStackTrace();
+				return "gotoFlightDetails";
+			} else {
+				FacesUtil
+						.addError("Your session has been expired. Please login again");
+				return "passengerLogout";
 			}
-			return "gotoFlightDetails";
-		} else {
-			FacesUtil
-					.addError("Your session has been expired. Please login again");
-			return "passengerLogout";
 		}
+		return null;
 	}
 
 	private void populateItenarary() {
@@ -1653,7 +1694,8 @@ public class PassengerController {
 			for (Passenger pass : passengerBean.getPassengers()) {
 				if (pass != null) {
 					String selValue = pass.getLastName() + "::" + pass.getFirstName() + (pass.getMiddleInitial() != null ? "::" + pass.getMiddleInitial() : "");
-					String selLabel = pass.getLastName() + ", " + pass.getFirstName() + (pass.getMiddleInitial() != null ? " " + pass.getMiddleInitial() : "");
+					String selLabel = (pass.getLastName().length() > 4 ? pass.getLastName().substring(0, 4) + ".." : pass.getLastName())
+							+ ", " + pass.getFirstName() + (pass.getMiddleInitial() != null ? " " + pass.getMiddleInitial() : "");
 					toReturn.add(new SelectItem(selValue, selLabel));
 				}
 			}
