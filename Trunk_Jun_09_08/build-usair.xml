@@ -47,7 +47,7 @@
 		<property name="ant_project_name" value="usair" />
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-usair-fraud-dev"/>
-		<property name="app.xml.location" value="metadata/usair/test" />
+		<property name="app.xml.location" value="metadata/usair/fraud-dev" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
