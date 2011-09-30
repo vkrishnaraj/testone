@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	
+	<!--  The bean that manages all the scheduled jobs and their threads -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!-- ref bean="cronMoveToWtTrigger" />
+				<ref bean="cronWtQueueTrigger" />
+				<ref bean="cronMoveToLzTrigger" />
+				<ref bean="cronNewPassiveTracerTrigger" />
+				<ref bean="cronOldPassiveTracerTrigger" />
+				<ref bean="RemoveMassOhdTrigger" />
+				<ref bean="LockCleanupTrigger" />
+				<ref bean="TwentyForHourEmailTrigger" />
+				<ref bean="CrmTrigger" />
+				<ref bean="cronFsDataRetention" /-->
+			</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="CrmJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="sendUSFilesToCRM" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="CrmTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="CrmJob" />
+		<property name="cronExpression" value="${crmjob.cron}" />
+	</bean>
+	
+	<bean id="TwentyForHourEmailJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="process24HoursEmails" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="TwentyForHourEmailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="TwentyForHourEmailJob" />
+		<property name="cronExpression" value="${twentyFourHourEmail.cron}" />
+	</bean>
+
+	
+	
+	<bean id="RemoveMassOhdJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="closeUSAirOldMassOhdsInSQLServer" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="RemoveMassOhdTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="RemoveMassOhdJob" />
+		<property name="cronExpression" value="${removemassohd.cron}" />
+	</bean>
+
+
+</beans>

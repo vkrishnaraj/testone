@@ -3,12 +3,9 @@ package com.bagnet.nettracer.cronjob;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -29,7 +26,9 @@ import aero.nettracer.fs.model.Phone;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -100,9 +99,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 	private BufferedWriter processedClaimsFile;
 	
 	public ImportClaimDataUS() {
-		// TODO: un-comment the line below and remove the "ntUser = false" line
-//		ntUser = PropertyBMO.isTrue("nt.user");
-		ntUser = false;
+		ntUser = PropertyBMO.isTrue("nt.user");
 		importedClaims = new LinkedHashMap<String, ArrayList<String[]>>();
 		relatedPassengers = new LinkedHashMap<String, ArrayList<String[]>>();
 	}
@@ -273,7 +270,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 	
 					claim = createClaimFromCrmData(crmIncidentIds.get(key), importedClaims.get(key));
 					claim = createRelatedPassengerData(claim, relatedPassengers.get(key));
-	//				FileDAO.saveFile(claim.getFile(), true);
+					FileDAO.saveFile(claim.getFile(), true);
 					
 					writeToProcessedClaimsFile(key);
 					double end = System.currentTimeMillis();
