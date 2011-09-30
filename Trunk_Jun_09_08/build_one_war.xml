@@ -1190,7 +1190,7 @@
 
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
-			<property name="overrideResource" value="${basedir}/companies/empty.txt" />
+			<property name="overrideResource" value="${basedir}/companies/jetblue/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 
