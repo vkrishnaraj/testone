@@ -93,7 +93,7 @@ public abstract class ImportClaimData {
 			Incident incident;
 			FsClaim claim;
 			File file;
-			long start = System.currentTimeMillis();
+			double start = System.currentTimeMillis();
 			for (; i < claims.size(); ++i) {
 				claimsProcessed++;
 				row = (Object[]) claims.get(i);
@@ -101,7 +101,7 @@ public abstract class ImportClaimData {
 						+ (Integer) row[CLAIM_ID] + " for incident: "
 						+ (String) row[INCIDENT_ID]);
 
-				long startClaim = System.currentTimeMillis();
+				double startClaim = System.currentTimeMillis();
 				// load the incident
 				incident = ibmo.findIncidentByID((String) row[INCIDENT_ID]);
 				if (incident == null) {
@@ -180,7 +180,7 @@ public abstract class ImportClaimData {
 							+ incident.getIncident_ID());
 					break;
 				} else {
-					long endClaim = System.currentTimeMillis();
+					double endClaim = System.currentTimeMillis();
 					double durationClaim = (endClaim - startClaim) / 1000;
 					outputFile.println("\tSuccessfully processed incident: "
 							+ (String) row[INCIDENT_ID] + " in " + df.format(durationClaim) + " seconds.\n");
@@ -194,7 +194,7 @@ public abstract class ImportClaimData {
 
 			}
 
-			long end = System.currentTimeMillis();
+			double end = System.currentTimeMillis();
 			double duration = (end - start) / 1000;
 			outputFile.println("Processed " + i + " claims in " + df.format(duration) + " seconds.\n");
 			printErrorSummary();

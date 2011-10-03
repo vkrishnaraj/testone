@@ -270,6 +270,15 @@ public class ImportClaimDataUS extends ImportClaimData {
 	
 					claim = createClaimFromCrmData(crmIncidentIds.get(key), importedClaims.get(key));
 					claim = createRelatedPassengerData(claim, relatedPassengers.get(key));
+					if (claim.getFile() == null) {
+						aero.nettracer.fs.model.File file = new aero.nettracer.fs.model.File();
+						claim.setFile(file);
+						LinkedHashSet<FsClaim> claims = new LinkedHashSet<FsClaim>();
+						claims.add(claim);
+						file.setClaims(claims);
+						file.setIncident(claim.getIncident());
+						file.setValidatingCompanycode(agent.getCompanycode_ID());
+					}
 					FileDAO.saveFile(claim.getFile(), true);
 					
 					writeToProcessedClaimsFile(key);
