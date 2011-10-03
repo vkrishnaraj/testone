@@ -12,7 +12,7 @@
     	
     	<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
     	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-		<property name="hibernate.connection.url">jdbc:sqlserver://172.19.2.178:1433;databaseName=NetTracer;sendStringParametersAsUnicode=false</property>
+		<property name="hibernate.connection.url">jdbc:sqlserver://10.30.4.47:1433;databaseName=NetTracer;sendStringParametersAsUnicode=false</property>
 		<property name="connection.username">nettracer</property>
 		<property name="connection.password">N3tTr4c3r</property>
 		<property name="show_sql">false</property>
