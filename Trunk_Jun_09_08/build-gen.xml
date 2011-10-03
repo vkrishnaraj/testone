@@ -403,6 +403,7 @@
 		<javac srcdir="src" destdir="${build.dir}/${ant_project_name}/classes" debug="on">
 			<classpath refid="cron-class-path" />
 			<include name="com/bagnet/nettracer/cronjob/**/*.*" />
+			<include name="com/bagnet/nettracer/ws/**/*.*"/>
 		</javac>
 	</target>
 
