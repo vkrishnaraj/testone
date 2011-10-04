@@ -16,6 +16,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
@@ -261,11 +262,12 @@ public class ImportClaimDataUS extends ImportClaimData {
 	private void createClaimsFromCrmData() {
 		FsClaim claim;
 		
-		outputFile.println("\nCreating claims...");
+		outputFile.println("\nCreating claims...\n");
+		int i = 1;
 		for (String key: importedClaims.keySet()) {
 			try {
 				if (!processedClaims.contains(key)) {
-					outputFile.println("Processing claim: " + key);
+					outputFile.println(i + ":\tProcessing claim: " + key);
 					double start = System.currentTimeMillis();
 	
 					claim = createClaimFromCrmData(crmIncidentIds.get(key), importedClaims.get(key));
@@ -273,6 +275,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 					if (claim.getFile() == null) {
 						aero.nettracer.fs.model.File file = new aero.nettracer.fs.model.File();
 						claim.setFile(file);
+						claim.getIncident().setFile(file);
 						LinkedHashSet<FsClaim> claims = new LinkedHashSet<FsClaim>();
 						claims.add(claim);
 						file.setClaims(claims);
@@ -281,16 +284,22 @@ public class ImportClaimDataUS extends ImportClaimData {
 					}
 					FileDAO.saveFile(claim.getFile(), true);
 					
+					// add the file to the queue to be submitted to fraud services
+					queue.put(claim.getFile());
+					
 					writeToProcessedClaimsFile(key);
 					double end = System.currentTimeMillis();
 					double duration = (end - start) / 1000;
-					outputFile.println("Done! Claim processed in: " + df.format(duration) + " seconds.\n");
+					outputFile.println("\tDone! Claim processed in: " + df.format(duration) + " seconds.\n");
+					++i;
 				}
 			} catch (Exception e) {
 				logger.error(e);
 				continue;
 			}
 		}
+		// TODO remove before deploying to production
+		submitFilesToFraudServices();
 	}
 	
 	private void loadProcessedClaimsFromFile() throws IOException {
@@ -709,6 +718,43 @@ public class ImportClaimDataUS extends ImportClaimData {
 		
 		toReturn = left + right;		
 		return toReturn;
+	}
+	
+	// TODO remove this method before deploying into production.
+	public void submitFilesToFraudServices() {
+		LinkedHashSet<Long> map = new LinkedHashSet<Long>();		
+		Session session = null;
+		boolean haveFiles = false;
+		try {
+			while (true) {
+				session = HibernateWrapper.getSession().openSession();
+	
+				String sql = "from aero.nettracer.fs.model.File as file where file.swapId = 0";
+				Query query = session.createQuery(sql);
+				query.setMaxResults(QUEUE_SIZE);
+				List<aero.nettracer.fs.model.File> files = query.list();
+
+				haveFiles = false;
+				for (aero.nettracer.fs.model.File f: files) {
+					if (map.add(f.getId())) {
+						queue.put(f);
+						haveFiles = true;
+					}
+				}
+
+				if (files.isEmpty() || !haveFiles) {
+					break;
+				}
+				
+				session.close();
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
 	}
 	
 	public static void main(String[] args) {

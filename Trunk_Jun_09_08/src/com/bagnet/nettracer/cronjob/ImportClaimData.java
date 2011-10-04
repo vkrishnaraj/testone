@@ -4,31 +4,41 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
 
+import javax.naming.Context;
+
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.FsReceipt;
+import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Segment;
+import aero.nettracer.selfservice.fraud.ClaimRemote;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
+import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 public abstract class ImportClaimData {
 
-	protected boolean ntUser;
-	protected Agent agent;
-	protected DecimalFormat df = new DecimalFormat("#0.00");
-	protected String filePath;
+	protected final int QUEUE_SIZE = 500;
+	protected final int SUBMISSION_THREAD_COUNT = 3;
+	protected final int SLEEP_DELAY = 5000;
 
 	private final int CLAIM_ID = 0;
 	private final int INCIDENT_ID = 1;
@@ -43,10 +53,16 @@ public abstract class ImportClaimData {
 	private final int COMMONNUM = 10;
 	private final int COUNTRYOFISSUE = 11;
 
-	private static Logger logger = Logger.getLogger(ImportClaimData.class);
-	private static LinkedHashMap<String, String> failedIncidents;
+	protected boolean ntUser;
+	protected Agent agent;
+	protected DecimalFormat df = new DecimalFormat("#0.00");
+	protected String filePath;
 	
 	protected PrintWriter outputFile;
+	protected ArrayBlockingQueue<aero.nettracer.fs.model.File> queue;
+
+	private static Logger logger = Logger.getLogger(ImportClaimData.class);
+	private static LinkedHashMap<String, String> failedIncidents;
 
 	public void importClaims() {
 		try {
@@ -62,12 +78,41 @@ public abstract class ImportClaimData {
 			return;
 		}
 		
+		queue = new ArrayBlockingQueue<aero.nettracer.fs.model.File>(QUEUE_SIZE);
+		for (int i = 1; i <= SUBMISSION_THREAD_COUNT; ++i) {
+			new Thread(new SubmissionThread(queue)).start();
+			outputFile.println("Created SubmissionThread: " + i);
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// do nothing
+			}
+		}
+		
 		// import existing nettracer claims
 		if (ntUser) {
 			 importNtClaims();
 		}
 		
 		importThirdPartyClaims();
+		
+		while (queue.size() > 0) {
+			outputFile.println("Still submitting files. Sleeping for " + SLEEP_DELAY / 1000 + " more seconds...");
+			try {
+				Thread.sleep(SLEEP_DELAY);
+			} catch (InterruptedException e) {
+				// do nothing
+			}
+		}
+
+		try {
+			outputFile.println("Sleeping for " + (SLEEP_DELAY * 2) / 1000 + " more seconds to allow the submission threads to finish.");
+			Thread.sleep(SLEEP_DELAY * 2);
+		} catch (InterruptedException e) {
+			// do nothing
+		}
+		
+		
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -86,16 +131,15 @@ public abstract class ImportClaimData {
 			String sql = "select * from claim where incident_ID not in (select ntIncidentId from fsclaim where ntIncidentId is not null);";
 			SQLQuery query = session.createSQLQuery(sql);
 			List claims = query.list();
+			session.close();
 
 			int i = 0;
-			int claimsProcessed = 0;
 			Object[] row;
 			Incident incident;
 			FsClaim claim;
 			File file;
 			double start = System.currentTimeMillis();
 			for (; i < claims.size(); ++i) {
-				claimsProcessed++;
 				row = (Object[]) claims.get(i);
 				outputFile.println(i + ":\tProcessing claim "
 						+ (Integer) row[CLAIM_ID] + " for incident: "
@@ -174,6 +218,9 @@ public abstract class ImportClaimData {
 					logger.error("\tError saving file: " + file.getId());
 					break;
 				}
+				
+				// add the file to the queue to be submitted to fraud services
+				queue.put(file);
 
 				if (ibmo.saveAndAuditIncident(incident, agent, null) <= 0) {
 					logger.error("\tError saving incident: "
@@ -186,12 +233,6 @@ public abstract class ImportClaimData {
 							+ (String) row[INCIDENT_ID] + " in " + df.format(durationClaim) + " seconds.\n");
 				}
 
-				if (claimsProcessed == 500) {
-					session.close();
-					session = HibernateWrapper.getSession().openSession();
-					claimsProcessed = 0;
-				}
-
 			}
 
 			double end = System.currentTimeMillis();
@@ -202,7 +243,7 @@ public abstract class ImportClaimData {
 		} catch (Exception e) {
 			logger.error(e);
 		} finally {
-			if (session != null) {
+			if (session != null && session.isOpen()) {
 				session.close();
 			}
 		}
@@ -219,6 +260,79 @@ public abstract class ImportClaimData {
 		this.filePath = filePath;
 	}
 	
+	private void submitToFraudAndSave(aero.nettracer.fs.model.File file) {
+		Context ctx = null;
+		ClaimRemote remote = null;
+		long originalFileId;
+		try {
+			ctx = ConnectionUtil.getInitialContext();
+			remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		
+		long remoteFileId = 0;
+		if (remote == null || file == null) {
+			return;
+		} else {
+			originalFileId = file.getId();
+			LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
+			
+			for (FsClaim current: file.getClaims()) {
+				FsClaim newClaim = new FsClaim();
+				try {
+					BeanUtils.copyProperties(newClaim, current);
+				} catch (IllegalAccessException e) {
+					logger.error(e);
+					continue;
+				} catch (InvocationTargetException e) {
+					logger.error(e);
+					continue;
+				} 
+				
+				LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
+				newClaim.setSegments(segs);
+				
+				LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
+				newClaim.setClaimants(pers);
+				
+				for (Person p: current.getClaimants()) {
+					p.setClaim(newClaim);
+					pers.add(p);
+				}
+				
+				for (Segment s: current.getSegments()) {
+					s.setClaim(newClaim);
+					segs.add(s);
+				}
+				
+				LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
+				newClaim.setReceipts(receipts);
+				for (FsReceipt r: current.getReceipts()) {
+					r.setClaim(newClaim);
+					receipts.add(r);
+				}
+				
+				file.setStatusId(current.getStatusId());
+				newClaim.setFile(file);
+				file.setIncident(newClaim.getIncident());
+				newClaim.getIncident().setFile(file);
+				fsClaims.add(newClaim);
+			}
+			
+			file.setClaims(fsClaims);
+			remoteFileId = remote.insertFile(file);
+			if (remoteFileId > 0) {
+				file = FileDAO.loadFile(originalFileId);
+				file.setSwapId(remoteFileId);
+				FileDAO.saveFile(file, false);
+				logger.info("File: " + file.getId() + " saved to central services with remote id: " + remoteFileId);
+			} else {
+				logger.info("Failed to save file: " + file.getId() + " to fraud services.");
+			}
+		}
+	}
+	
 	protected abstract Agent loadAgent();
 
 	protected abstract void importThirdPartyClaims();
@@ -231,6 +345,29 @@ public abstract class ImportClaimData {
 			logger.error((i + 1) + ":\t" + keys[i] + " : "
 					+ failedIncidents.get(keys[i]));
 		}
+	}
+	
+	public class SubmissionThread implements Runnable {
+
+		private ArrayBlockingQueue<aero.nettracer.fs.model.File> queue;
+		
+		public SubmissionThread(ArrayBlockingQueue<aero.nettracer.fs.model.File> queue) {
+			this.queue = queue;
+		}
+		
+		@Override
+		public void run() {
+			while(true){
+				try{
+					File file = queue.take();
+					submitToFraudAndSave(file);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
 	}
 
 }
