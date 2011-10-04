@@ -604,7 +604,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public List<LFCategory> getCategories() {
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFCategory";
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFCategory cat order by cat.description";
 		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery(sql);
 		List<LFCategory> categoryList = null;

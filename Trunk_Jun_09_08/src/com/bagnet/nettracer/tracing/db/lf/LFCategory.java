@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import org.hibernate.annotations.Proxy;
 
@@ -38,5 +39,6 @@ public class LFCategory {
 	private long id;
 	String description;
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy("id")
 	Set<LFSubCategory> subcategories;
 }
