@@ -69,11 +69,11 @@ public class PrecoderImpl implements Precoder{
 		}	
 		//Case 1:Another airline in the itinerary
 		if(hasAnotherAirline){
-			return getFaultInfo(inc, 54, "CBS");
+			return getFaultInfo(inc, 58, "CBS");
 		}
 		//Case 2:pax itin differs from bag itin
 		if(!hasSameItin(paxItin, bagItin)){
-			return getFaultInfo(inc, 22, "CLAIM");
+			return getFaultInfo(inc, 22, paxItin.get(paxItin.size()-1).getLegfrom());
 		}
 		//Case 3:pax itin has multiple segments
 		if(paxItin.size() > 1){
