@@ -5,8 +5,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%
 	Agent a = (Agent) session.getAttribute("user");
+    boolean createDelayed = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG, a);
+    boolean createDamaged = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_DAMAGED_BAG, a);
+    boolean createMissing = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISSING_ARTICLES, a);
+    boolean createOnHand = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_ON_HAND_BAG, a);
 %>
 
 
@@ -22,6 +27,7 @@
 </div>
 <br />
 <c:if test="${quickSearchForm.dto.prepop == true}">
+<% if (createOnHand || createMissing || createDelayed || createDamaged) { %>
 	<div
 		style="text-align: center; padding: 5 5 5 5; border-bottom: 2px blue solid;">
 
@@ -30,29 +36,36 @@
 	was identified as a potentially valid tag number or record locator. If
 	you would like to pre-populate a form, please select the appropriate
 	options below: <br />
-	<br />
-
-	<center><select id="qPrepopulateType">
+	<br /><center>
+	<% if (createMissing || createDelayed || createDamaged) { %>
+	<select id="qPrepopulateType">
+	<%   if (createDelayed) { %>
 		<option value="1">Delayed</option>
+	<%   }
+	     if (createDamaged) { %>
 		<option value="3">Damaged</option>
+	<%   }
+	     if (createMissing) { %>
 		<option value="2">Pilfered</option>
+	<%   } %>
 	</select>
 	<button type="button" id="button"
 		onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  qPrepopulateIncident(document.getElementById('qPrepopulateType').value, '<%=request.getParameter("search")%>', <c:out  value="${quickSearchForm.dto.prepopType}"/>);">Create
 	Incident</button>
-	&nbsp; &nbsp; <%
- 	if (TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_OHD_ON)) {
- %>
+	&nbsp; &nbsp; 
+	<%   if (TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_OHD_ON)) { %>
 	or &nbsp; &nbsp;
+	<%   }
+	   } 
+	   if (TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_OHD_ON) && createOnHand) { %>
 	<button type="button" id="button"
 		onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  qPrepopulateIncident(4, '<%=request.getParameter("search")%>', <c:out  value="${quickSearchForm.dto.prepopType}" />);">Create
 	On-Hand</button>
-	<%
-		}
-	%>
+	<% } %>
 	</center>
 	</div>
 	<br />
+<% } %>
 </c:if>
 
 
