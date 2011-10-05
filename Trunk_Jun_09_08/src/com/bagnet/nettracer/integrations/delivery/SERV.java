@@ -125,7 +125,7 @@ public class SERV implements BDOIntegration {
 			ArrayOfItemData array = ws.addNewItemsData();
 
 			logger.info("POINT 7\n\n");
-			if (bdo.getItems() != null) {
+			if (bdo.getItems() != null && bdo.getIncident() != null) {
 				for (Item item: (Set<Item>)bdo.getItems()) {
 					ItemData id = array.addNewItemData();
 					id.setColor(item.getColor());
