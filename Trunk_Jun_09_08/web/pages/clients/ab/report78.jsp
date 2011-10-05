@@ -54,6 +54,20 @@
   	</td>
 </tr>
 <tr>
+  	<td>
+    <bean:message key="colname.lf.report.dropoff" />
+    :
+  	</td>
+  	<td>
+    <html:select property="stationCode" styleClass="dropdown" >
+      <html:option value="0">
+        <bean:message key="select.all" />
+      </html:option>
+      <html:options collection="airlineallstationlist" property="stationcode" labelProperty="stationcode" />
+    </html:select>
+  	</td>
+</tr>
+<tr>
 	<td>
 		<bean:message key="colname.lf.status" />:
 	</td>

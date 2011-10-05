@@ -27,6 +27,7 @@ public class LostFoundJasperReport {
 	private final int STATUS = 3;
 	private final int DISPOSITION = 4;
 	private final int TRACKING_NUMBER = 5;
+	private final int DROPOFF = 6;
 	
 	@SuppressWarnings("rawtypes")
 	public List getReportData(StatReportDTO srDto, ResourceBundle resources) {
@@ -34,6 +35,7 @@ public class LostFoundJasperReport {
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
+			boolean isLost = srDto.getType() == TracingConstants.LF_TYPE_LOST;
 			SQLQuery query = session.createSQLQuery(getSqlFromDto(srDto));
 			query.addScalar("id", Hibernate.LONG);
 			query.addScalar("lfDate", Hibernate.TIMESTAMP);
@@ -41,12 +43,15 @@ public class LostFoundJasperReport {
 			query.addScalar("desc", Hibernate.STRING);
 			query.addScalar("desc1", Hibernate.STRING);
 			query.addScalar("trackingNumber", Hibernate.STRING);
+			if (isLost) {
+				query.addScalar("dropoff", Hibernate.STRING);
+			}
 			List results = query.list();
 			if (results.isEmpty()) {
 				return toReturn;
 			}
 			
-			toReturn = getRowsFromResultList(results, srDto.getDateFormat());
+			toReturn = getRowsFromResultList(results, srDto.getDateFormat(), isLost);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		} finally {
@@ -63,6 +68,7 @@ public class LostFoundJasperReport {
 		String dateName = "";
 		String tableName = "";
 		String idName = "";
+		boolean isLost = true;
 		if (srDto.getType() == TracingConstants.LF_TYPE_LOST) {
 			dateName = "openDate";
 			tableName = "lflost";
@@ -71,11 +77,14 @@ public class LostFoundJasperReport {
 			dateName = "foundDate";
 			tableName = "lffound";
 			idName = "found_id";
+			isLost = false;
 		} else {
 			return "";
 		}
-		sql = "select distinct lf.id,lf." + dateName + " as \'lfDate\',s.stationcode,st.description as \'desc\',st1.description as \'desc1\',i.trackingNumber from " + tableName + " lf " +
+		sql = "select distinct lf.id,lf." + dateName + " as \'lfDate\',s.stationcode,st.description as \'desc\',st1.description as \'desc1\',i.trackingNumber" +
+		      (isLost ? ",ds.stationcode as \'dropoff\'" : "") + " from " + tableName + " lf " +
 			  "join station s on lf.station_ID = s.station_ID join status st on lf.status_ID = st.status_ID " +
+			  (isLost ? "join lfreservation r on lf.reservation_id = r.id join station ds on r.dropofflocation_station_ID = ds.station_ID " : "") +
 			  "join lfitem i on lf.id = i." + idName + " join status st1 on i.disposition_status_ID = st1.Status_ID where 1 = 1";
 		
 		Calendar calendarStart = new GregorianCalendar();
@@ -96,6 +105,13 @@ public class LostFoundJasperReport {
 			sql += " and s.stationcode = \'" + stationId + "\'";
 		}
 		
+		if (isLost) {
+			String dropOffStation = srDto.getStationCode();
+			if (dropOffStation != null && !dropOffStation.equals("0")) {
+				sql += " and ds.stationcode = \'" + dropOffStation + "\'";
+			}
+		}
+		
 		if (srDto.getStatus_ID() > 0) {
 			sql += " and st.status_ID = " + srDto.getStatus_ID();
 		}
@@ -110,7 +126,7 @@ public class LostFoundJasperReport {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private ArrayList getRowsFromResultList(List results, String dateFormat) {
+	private ArrayList getRowsFromResultList(List results, String dateFormat, boolean isLost) {
 		ArrayList toReturn = new ArrayList();
 		LostFoundJasperReportRow lfRow;
 		Object[] row;
@@ -124,6 +140,9 @@ public class LostFoundJasperReport {
 			lfRow.setStatus((String) row[STATUS]);
 			lfRow.setDisposition((String) row[DISPOSITION]);
 			lfRow.setTrackingNumber((String) row[TRACKING_NUMBER]);
+			if (isLost) {
+				lfRow.setDropoff((String) row[DROPOFF]);
+			}
 			
 			toReturn.add(lfRow);
 		}

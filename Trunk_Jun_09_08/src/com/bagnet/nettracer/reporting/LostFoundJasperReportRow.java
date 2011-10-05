@@ -8,6 +8,7 @@ public class LostFoundJasperReportRow {
 	private String status;
 	private String disposition;
 	private String trackingNumber;
+	private String dropoff;
 	
 	public long getId() {
 		return id;
@@ -55,6 +56,14 @@ public class LostFoundJasperReportRow {
 
 	public void setTrackingNumber(String trackingNumber) {
 		this.trackingNumber = trackingNumber;
+	}
+	
+	public String getDropoff() {
+		return dropoff;
+	}
+
+	public void setDropoff(String dropoff) {
+		this.dropoff = dropoff;
 	}
 	
 }

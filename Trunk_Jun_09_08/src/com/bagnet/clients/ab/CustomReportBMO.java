@@ -94,6 +94,10 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.addColumn(resources.getString("report.lost.found.id"), "id", Long.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.lost.found.date"), "date", String.class.getName(), 60, detailStyle, header);
 			drb.addColumn(resources.getString("report.lost.found.station"), "station", String.class.getName(), 50, detailStyle, header);
+			if (srDTO.getType() == TracingConstants.LF_TYPE_LOST) {
+				// MAKE NAME FOR DROP OFF STATION
+				drb.addColumn(resources.getString("report.lost.found.dropoff"), "dropoff", String.class.getName(), 50, detailStyle, header);
+			}
 			drb.addColumn(resources.getString("report.lost.found.status"), "status", String.class.getName(), 50, detailStyle, header);			
 			drb.addColumn(resources.getString("report.lost.found.disposition"), "disposition", String.class.getName(), 125, detailStyle, header);			
 			drb.addColumn(resources.getString("report.lost.found.tracking.number"), "trackingNumber", String.class.getName(), 125, detailStyle, header);			
