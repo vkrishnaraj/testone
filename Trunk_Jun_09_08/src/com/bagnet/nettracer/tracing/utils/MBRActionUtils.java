@@ -924,7 +924,12 @@ public class MBRActionUtils {
 
 				// call unmatch to clear out match history
 				MatchUtils.unmatchTheOHD(ohd, user);
-
+				
+				if (ohd_obj != null) {
+					ohd_obj.setMatched_incident(null);
+					oBMO.insertOHD(ohd_obj, theform.getAgent());
+				}
+				
 				bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user);
 
 				request.setAttribute("item", Integer.toString(i));
