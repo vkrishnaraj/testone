@@ -354,6 +354,8 @@ public class RecoveryReportBMO {
 		
 		if (parameters.get("sdate") != null && parameters.get("edate") != null) {
 			mySubtitle += "   Create Date: " + parameters.get("sdate") + " - " + parameters.get("edate");
+		} else if (parameters.get("sdate") != null){
+			mySubtitle += "   Create Date: " + parameters.get("sdate");
 		}
 
 		mySubtitle += "\\r";
@@ -542,6 +544,8 @@ public class RecoveryReportBMO {
 		
 		if (parameters.get("sdate") != null && parameters.get("edate") != null) {
 			mySubtitle += "   Create Date: " + parameters.get("sdate") + " - " + parameters.get("edate");
+		} else if (parameters.get("sdate") != null){
+			mySubtitle += "   Create Date: " + parameters.get("sdate");
 		}
 
 		mySubtitle += "\\r";
