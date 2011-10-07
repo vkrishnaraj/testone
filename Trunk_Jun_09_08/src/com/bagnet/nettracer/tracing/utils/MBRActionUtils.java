@@ -865,7 +865,7 @@ public class MBRActionUtils {
 				}
 				if (ohd_obj != null) {
 					ohd_obj.setMatched_incident(null);
-					oBMO.insertOHD(ohd_obj, theform.getAgent());
+					oBMO.insertOHD(ohd_obj, user);
 				}
 				//empty out claim ohd
 				ic.setOHD_ID("");
@@ -927,7 +927,7 @@ public class MBRActionUtils {
 				
 				if (ohd_obj != null) {
 					ohd_obj.setMatched_incident(null);
-					oBMO.insertOHD(ohd_obj, theform.getAgent());
+					oBMO.insertOHD(ohd_obj, user);
 				}
 				
 				bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user);
