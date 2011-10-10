@@ -38,6 +38,7 @@ public class LFTracingUtil {
 	private static final double SCORE_ADDRESS = 10;
 	private static final double SCORE_BRAND = 10;
 	private static final double SCORE_MVA = 15;
+	private static final double SCORE_EMAIL = 10;
 	
 	
 	private static String replaceNull(String string) {
@@ -183,6 +184,20 @@ public class LFTracingUtil {
 							}
 						}
 					}
+				}
+			}
+			
+			//process email
+			if(lc.getDecryptedEmail() != null && lc.getDecryptedEmail().trim().length() > 0 && 
+					fc.getDecryptedEmail() != null && fc.getDecryptedEmail().trim().length() > 0) {
+				if (lc.getDecryptedEmail().equalsIgnoreCase(fc.getDecryptedEmail())) {
+					LFMatchDetail detail = new LFMatchDetail();
+					detail.setDescription("Email Match");
+					detail.setMatchHistory(match);
+					detail.setScore(SCORE_EMAIL);
+					detail.setDecryptedFoundValue(fc.getDecryptedEmail());
+					detail.setDecryptedLostValue(lc.getDecryptedEmail());
+					match.getDetails().add(detail);
 				}
 			}
 			
@@ -397,6 +412,7 @@ public class LFTracingUtil {
 			match.setStatus(status);
 			match.setDetails(new LinkedHashSet<LFMatchDetail>());
 			double score = processMatch(match);
+			match.setScore(score);
 			if(score > CUTOFF){
 				if(bean.saveOrUpdateTraceResult(match) > -1){
 				matchList.add(match);

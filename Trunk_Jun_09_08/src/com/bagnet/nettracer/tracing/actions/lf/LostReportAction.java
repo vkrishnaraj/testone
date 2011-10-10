@@ -80,8 +80,10 @@ public class LostReportAction extends CheckedAction {
 				
 				item.getFound().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 				item.getFound().getItem().setTrackingNumber(null);
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(item.getFound(), user);
 			}
 			lostReport.setStatusId(TracingConstants.LF_STATUS_OPEN);
+			LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport, user);
 		} else if (request.getParameter("unmatchItem") != null) {
 			long itemId = Long.valueOf((String) request.getParameter("itemId"));
 			LFItem item = getItemById(lrForm.getLost().getItems(), itemId);

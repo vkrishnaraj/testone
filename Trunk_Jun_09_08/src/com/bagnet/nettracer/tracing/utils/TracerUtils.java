@@ -1653,7 +1653,7 @@ public class TracerUtils {
 		int rowsperpage = 0;
 		if(rowsString != null) {
 			rowsperpage = Integer.parseInt(rowsString);
-			if(rowsperpage > 0) {
+			if(rowsperpage > 4) {
 				TracerUtils.updateRowsPerPage(rowKey, rowsperpage, session);
 			}
 			else {

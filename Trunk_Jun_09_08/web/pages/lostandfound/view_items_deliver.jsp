@@ -18,6 +18,34 @@
 
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript">
+    
+	function goprev() {
+	  o = document.handleItemsForm;
+	  o.prevpage.value = "1";
+	  o.pagination.value="1";
+	  o.submit();
+	}
+	
+	function gonext() {
+	  o = document.handleItemsForm;
+	  o.nextpage.value="1";
+	  o.pagination.value="1";
+	  o.submit();
+	}
+	
+	function gopage(i) {
+		  o = document.handleItemsForm;
+		  o.currpage.value = i;
+		  o.pagination.value="1";
+		  o.submit();
+	}
+	
+	function updatePagination() {
+	    return true;
+	}
+
+</script>
 <jsp:include page="/pages/includes/validation_search.jsp" />
 <html:form action="view_items_deliver.do" method="post" onsubmit="return validateSearch(this);">
 	<tr>

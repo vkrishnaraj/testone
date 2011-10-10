@@ -40,7 +40,8 @@ if ((curp <= (i.intValue() + 15)) && (curp >=(i.intValue() - 15))) {
   <br>
 </logic:present>
 
-<input type="text" name="rowsperpage" value='<bean:write name="rowsperpage" scope="request"/>' size=3 maxlength=2 class="textfield">
+<input type="text" name="rowsperpage" value='<bean:write name="rowsperpage" scope="request"/>' size=3 maxlength=2 class="textfield"
+onchange="verifyPaginationLimit(this);">
 &nbsp;
 <bean:message key="RowsPerPage" />
 &nbsp;&nbsp;

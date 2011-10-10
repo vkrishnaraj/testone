@@ -1675,3 +1675,11 @@ document.onkeydown = function(){
 	}
 }
 
+function verifyPaginationLimit(field) {
+	if (field.value < 5) {
+		window.alert("This value must be 5 or greater.");
+		field.value = 5;
+		field.form.submit();
+	}
+}
+

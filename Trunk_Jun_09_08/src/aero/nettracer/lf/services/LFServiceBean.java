@@ -969,8 +969,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		String query = "from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
 		"where i.found.location.station_ID = " + station.getStation_ID() +
-		" and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED 
-		+ " order by i.found.foundDate asc";
+		" and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED + 
+		" and i.type = " + TracingConstants.LF_TYPE_FOUND + 
+		" order by i.found.foundDate asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1152,28 +1153,31 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		LFMatchHistory match = new LFMatchHistory();
 		match.setFound(found);
 		match.setLost(lost);
-		match.setScore(-1);
-		Status status = new Status();
-		status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
-		match.setStatus(status);
-		LFMatchDetail detail = new LFMatchDetail();
-		detail.setDescription("Manually Matched");
-		detail.setScore(0.0);
-		detail.setMatchHistory(match);
-		HashSet<LFMatchDetail> s = new HashSet<LFMatchDetail>();
-		s.add(detail);
-		match.setDetails(s);
-		long matchId = -1;
-		try{
-			matchId = saveOrUpdateTraceResult(match);
-		} catch (org.hibernate.exception.ConstraintViolationException e){
+		if(found != null && lost != null && !isAlreadyMatched(match)) {
+			match.setScore(-1);
+			Status status = new Status();
+			status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
+			match.setStatus(status);
+			LFMatchDetail detail = new LFMatchDetail();
+			detail.setDescription("Manually Matched");
+			detail.setScore(0.0);
+			detail.setMatchHistory(match);
+			HashSet<LFMatchDetail> s = new HashSet<LFMatchDetail>();
+			s.add(detail);
+			match.setDetails(s);
+			long matchId = -1;
 			try{
-				return findExistingManualMatch(lost.getId(), found.getId());
-			} catch (org.hibernate.NonUniqueResultException ne){
-				return -1;
+				matchId = saveOrUpdateTraceResult(match);
+			} catch (org.hibernate.exception.ConstraintViolationException e){
+				try{
+					return findExistingManualMatch(lost.getId(), found.getId());
+				} catch (org.hibernate.NonUniqueResultException ne){
+					return -1;
+				}
 			}
+			return matchId;
 		}
-		return matchId;
+		return -1;
 	}
 	
 	private long findExistingManualMatch(long lostId, long foundId){
@@ -1249,42 +1253,44 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public boolean confirmMatch(long id) {
-		LFMatchHistory match = getTraceResult(id);
-		if(match != null && !isAlreadyMatched(match)){
-			Status status = new Status();
-			status.setStatus_ID(TracingConstants.LF_TRACING_CONFIRMED);
-			match.setStatus(status);
-			
-			if(match.getFound() != null && match.getFound().getItem() != null){
-				Status deliveryStatus = new Status();
-				deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
-				match.getFound().getItem().setDisposition(deliveryStatus);
-				match.getFound().getItem().setLost(match.getLost());
-			}
-			
-			if(match.getLost() != null && match.getLost().getItem() != null){
-				Status deliveryStatus = new Status();
-				deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
-				match.getLost().getItem().setDisposition(deliveryStatus);
-				match.getLost().getItem().setFound(match.getFound());
-			}
-			
-			saveOrUpdateTraceResult(match);
-			
-			List<LFMatchHistory> matchList = getAssociatedTraceResults(match);
-			ArrayList<LFMatchHistory> saveList = new ArrayList<LFMatchHistory>();
-			saveOrUpdateTraceResult(match);
-			if(matchList != null){
-				for(LFMatchHistory m:matchList){
-					if(m.getId() != match.getId() && m.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_OPEN){
-						Status closed = new Status();
-						closed.setStatus_ID(TracingConstants.LF_TRACING_CLOSED);
-						m.setStatus(closed);
-						saveList.add(m);
-					}
+		if (id != -1) {
+			LFMatchHistory match = getTraceResult(id);
+			if(match != null && !isAlreadyMatched(match)){
+				Status status = new Status();
+				status.setStatus_ID(TracingConstants.LF_TRACING_CONFIRMED);
+				match.setStatus(status);
+				
+				if(match.getFound() != null && match.getFound().getItem() != null){
+					Status deliveryStatus = new Status();
+					deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+					match.getFound().getItem().setDisposition(deliveryStatus);
+					match.getFound().getItem().setLost(match.getLost());
 				}
-//				saveList.add(match);
-				return updateTraceResults(saveList);
+				
+				if(match.getLost() != null && match.getLost().getItem() != null){
+					Status deliveryStatus = new Status();
+					deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+					match.getLost().getItem().setDisposition(deliveryStatus);
+					match.getLost().getItem().setFound(match.getFound());
+				}
+				
+				saveOrUpdateTraceResult(match);
+				
+				List<LFMatchHistory> matchList = getAssociatedTraceResults(match);
+				ArrayList<LFMatchHistory> saveList = new ArrayList<LFMatchHistory>();
+				saveOrUpdateTraceResult(match);
+				if(matchList != null){
+					for(LFMatchHistory m:matchList){
+						if(m.getId() != match.getId() && m.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_OPEN){
+							Status closed = new Status();
+							closed.setStatus_ID(TracingConstants.LF_TRACING_CLOSED);
+							m.setStatus(closed);
+							saveList.add(m);
+						}
+					}
+	//				saveList.add(match);
+					return updateTraceResults(saveList);
+				}
 			}
 		}
 		return false;
