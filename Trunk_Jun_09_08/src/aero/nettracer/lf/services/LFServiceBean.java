@@ -102,6 +102,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return f;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<LFItem> getItemsByLostFoundId(long id, int type) {
 		Session sess = HibernateWrapper.getSession().openSession();
 		List<LFItem> items = null;
@@ -225,7 +226,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
-			List result = q.list();
+			@SuppressWarnings("unchecked")
+			List<Long> result = q.list();
 			sess.close();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
@@ -253,6 +255,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				throw new Exception("Invalided pagination bounds");
 			}
 			
+			@SuppressWarnings("unchecked")
 			List<LFLost> results = q.list();
 			sess.close();
 			return results;
@@ -489,7 +492,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
-			List result = q.list();
+			@SuppressWarnings("unchecked")
+			List <Long >result = q.list();
 			sess.close();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
@@ -517,6 +521,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				throw new Exception("Invalided pagination bounds");
 			}
 			
+			@SuppressWarnings("unchecked")
 			List<LFFound> results = q.list();
 			sess.close();
 			return results;
@@ -602,6 +607,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return colors;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<LFCategory> getCategories() {
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFCategory cat order by cat.description";
@@ -671,7 +677,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
-			List result = q.list();
+			@SuppressWarnings("unchecked")
+			List<Long> result = q.list();
 			sess.close();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
@@ -701,6 +708,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				throw new Exception("Invalided pagination bounds");
 			}
 			
+			@SuppressWarnings("unchecked")
 			List<LFLost> results = q.list();
 			sess.close();
 			return results;
