@@ -53,7 +53,7 @@
 					
 					<rich:column>
 					<h:inputText id="pi4" value="#{pass.middleInitial}" style="width:96%;" tabindex="3"
-							readonly="#{passengerController.readOnlyOnSubmitted}"
+							readonly="#{passengerController.readOnlyOnSubmitted}" maxlength="1"
 							validatorMessage="#{passengerController.passengerInfoLabel.middleInitial.label} :
 								#{passengerController.passengerInfoLabel.valueNoGreater.label}  1"
 							label="#{passengerController.passengerInfoLabel.middleInitial.label}">
