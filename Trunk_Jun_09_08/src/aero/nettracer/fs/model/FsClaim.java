@@ -64,19 +64,19 @@ public class FsClaim implements Serializable {
 	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
-//	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<Person> claimants;
 
 	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
-//	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<Segment> segments;
 
 	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
-//	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<FsReceipt> receipts;
 	
 	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Blacklist.class, cascade = CascadeType.ALL)
