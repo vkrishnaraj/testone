@@ -203,7 +203,7 @@ public class ModifyClaimAction extends CheckedAction {
 					if (PropertyBMO.isTrue("ntfs.support.multiple.claims") || ntIncident.getClaims().isEmpty()) {
 						claim.setNtIncident(ntIncident);
 						ntIncident.getClaims().add(claim);
-					} else if (request.getParameter("save") == null) {
+					} else if (request.getParameter("save") == null && request.getParameter("addNames") == null && request.getParameter("addReceipts") == null) {
 						// allow single claim only
 						ActionMessage error = new ActionMessage("error.claim.exists");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -223,6 +223,14 @@ public class ModifyClaimAction extends CheckedAction {
 		// add new items
 		addAssociatedItems(claim, request, user);
 		
+		if (claim.getClaimants().size() > 1) {
+			request.setAttribute("showNames", "true");
+		}
+		
+		if (claim.getReceipts().size() > 0) {
+			request.setAttribute("showReceipts", "true");
+		}
+
 		String showNames = request.getParameter("showNames");
 		if (showNames != null) {
 			request.setAttribute("showNames", showNames);
@@ -232,6 +240,7 @@ public class ModifyClaimAction extends CheckedAction {
 		if (showReceipts != null) {
 			request.setAttribute("showReceipts", showReceipts);
 		}
+		
 
 		cform = ClaimUtils.createClaimForm(request);
 
@@ -245,14 +254,21 @@ public class ModifyClaimAction extends CheckedAction {
 			deleteEmptyNames(claim);
 
 			boolean firstSave = claim.getId() == 0;
-			boolean claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);	
+			boolean claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);
+			if (claimSaved) {
+				claim = ClaimDAO.loadClaim(claim.getId());
+			}
 			
-			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
+			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!= null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
 			
 			// maintain existing nt functionality
 			if (isNtUser) {
 				if (claimSaved) {
-					if (theform.getClaims() != null && theform.getClaims().contains(claim)) {
+					if (theform.getClaims() == null) {
+						theform.setClaims(new LinkedHashSet<Claim>());
+					}
+					
+					if (theform.getClaims().contains(claim)) {
 						theform.getClaims().remove(claim);
 					}
 					theform.getClaims().add(claim);
@@ -381,7 +397,7 @@ public class ModifyClaimAction extends CheckedAction {
 	}
 	
 	private void addAssociatedItems(FsClaim claim, HttpServletRequest request, Agent user) {
-		addAssociatedNames(claim, request);
+		addAssociatedNames(claim, request, user);
 		addAssociatedReceipts(claim, request, user);
 	}
 	
@@ -403,13 +419,23 @@ public class ModifyClaimAction extends CheckedAction {
 		}
 	}
 	
-	private void addAssociatedNames(FsClaim claim, HttpServletRequest request) {
+	private void addAssociatedNames(FsClaim claim, HttpServletRequest request, Agent user) {
 		if (request.getParameter("addNames") != null) {
 			try {
 				int numToAdd = Integer.parseInt(request.getParameter("addNameNum"));
 				for (int i = 0; i < numToAdd; ++i) {
 					Person p = new Person();
 					p.setClaim(claim);
+					
+					FsAddress address = new FsAddress();
+					address.setPerson(p);
+					LinkedHashSet<FsAddress> addresses = new LinkedHashSet<FsAddress>();
+					addresses.add(address);
+					p.setAddresses(addresses);
+					
+					p.setPhones(new LinkedHashSet<Phone>());
+					p.setDateFormat(user.getDateformat().getFormat());
+					
 					claim.getClaimants().add(p);
 				}
 				request.setAttribute("an", 1);
@@ -435,13 +461,11 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 		}
 	}
-	
+
 	private void deleteEmptyNames(FsClaim claim) {
 		ArrayList<Person> people = new ArrayList<Person>(claim.getClaimants());
 		for (Person p: people) {
-			String last = p.getLastName();
-			String first = p.getFirstName();
-			if ((last == null || last.isEmpty()) && (first == null || first.isEmpty())) {
+			if (p.isEmpty()) {
 				claim.getClaimants().remove(p);
 			}
 		}

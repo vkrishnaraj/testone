@@ -15,6 +15,7 @@ import javax.naming.Context;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
@@ -36,8 +37,6 @@ import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 public abstract class ImportClaimData {
 
-	protected final int QUEUE_SIZE = 500;
-	protected final int SUBMISSION_THREAD_COUNT = 3;
 	protected final int SLEEP_DELAY = 5000;
 
 	private final int CLAIM_ID = 0;
@@ -57,61 +56,38 @@ public abstract class ImportClaimData {
 	protected Agent agent;
 	protected DecimalFormat df = new DecimalFormat("#0.00");
 	protected String filePath;
+	protected int queueSize;
+	protected int submissionThreadCount;
 	
 	protected PrintWriter outputFile;
 	protected ArrayBlockingQueue<aero.nettracer.fs.model.File> queue;
 
 	private static Logger logger = Logger.getLogger(ImportClaimData.class);
 	private static LinkedHashMap<String, String> failedIncidents;
-
+	private Thread[] threads;
+	
 	public void importClaims() {
-		try {
-			outputFile = new PrintWriter(new BufferedWriter(new FileWriter(filePath + "/process_output.txt")), true);
-		} catch (IOException ioe) {
-			logger.error(ioe.getMessage(), ioe);
-			return;
-		}
-
-		agent = loadAgent();
-		if (agent == null) {
-			logger.error("Failed to login to the database with ntadmin!");
+		
+		if (!init()) {
+			logger.error("Failed to init.");
 			return;
 		}
 		
-		queue = new ArrayBlockingQueue<aero.nettracer.fs.model.File>(QUEUE_SIZE);
-		for (int i = 1; i <= SUBMISSION_THREAD_COUNT; ++i) {
-			new Thread(new SubmissionThread(queue)).start();
-			outputFile.println("Created SubmissionThread: " + i);
-			try {
-				Thread.sleep(5000);
-			} catch (InterruptedException e) {
-				// do nothing
-			}
-		}
+		// TODO UNCOMMENT THIS SECTION!!!
+//		// import existing nettracer claims
+//		if (ntUser) {
+//			 importNtClaims();
+//		}
+//		
+//		importThirdPartyClaims();
+//		
+//		sleepForABit();
 		
-		// import existing nettracer claims
-		if (ntUser) {
-			 importNtClaims();
-		}
+		// submit any files to fraud services that have not been submitted yet
+		submitFilesToFraudServices();		
+		sleepForABit();
 		
-		importThirdPartyClaims();
-		
-		while (queue.size() > 0) {
-			outputFile.println("Still submitting files. Sleeping for " + SLEEP_DELAY / 1000 + " more seconds...");
-			try {
-				Thread.sleep(SLEEP_DELAY);
-			} catch (InterruptedException e) {
-				// do nothing
-			}
-		}
-
-		try {
-			outputFile.println("Sleeping for " + (SLEEP_DELAY * 2) / 1000 + " more seconds to allow the submission threads to finish.");
-			Thread.sleep(SLEEP_DELAY * 2);
-		} catch (InterruptedException e) {
-			// do nothing
-		}
-		
+		closeOutputFile();
 		
 	}
 
@@ -250,14 +226,107 @@ public abstract class ImportClaimData {
 
 	}
 	
-	public void closeOutputFile() {
+	private void closeOutputFile() {
 		if (outputFile != null) {
 			outputFile.close();
 		}
 	}
 
-	public void setFilePath(String filePath) {
-		this.filePath = filePath;
+	public boolean setVariablesFromArgs(String[] args) {
+		boolean success = true;
+		if (args.length != 3) {
+			success = false;
+		} else {
+			try {
+				this.filePath = args[0];
+				this.submissionThreadCount = Integer.valueOf(args[1]);
+				this.queueSize = Integer.valueOf(args[2]);
+			} catch (NumberFormatException nfe) {
+				logger.error(nfe);
+				success = false;
+			}
+		}
+		return success;
+	}
+	
+	private boolean init() {
+		boolean success = true;
+		if (!contactCentralServices()) {
+			logger.error("Failed to connect to central services.");
+			return false;
+		}
+		
+		if (!initOutputFile()) {
+			logger.error("Failed to open the output file.");
+			return false;
+		}
+		
+		if (!initAgent()) {
+			logger.error("Failed to load the agent from the database.");
+			return false;
+		}
+		
+		initSubmissionThreads();	
+		return success;
+	}
+	
+	private boolean contactCentralServices() {
+		boolean success = true;
+		String test = "test";
+		Context ctx = null;
+		ClaimRemote remote = null;
+		try {
+			ctx = ConnectionUtil.getInitialContext();
+			remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+			if (remote == null) {
+				success = false;
+			} else {
+				String response = remote.echoTest(test);
+				if (response == null) {
+					success = false;
+				}
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+			success = false;
+		}
+		
+		return success;
+	}
+	
+	private boolean initOutputFile() {
+		boolean success = true;
+		try {
+			outputFile = new PrintWriter(new BufferedWriter(new FileWriter(filePath + "/process_output.txt")), true);
+		} catch (IOException ioe) {
+			logger.error(ioe.getMessage(), ioe);
+			success = false;
+		}
+		return success;
+	}
+	
+	private boolean initAgent() {
+		boolean success = true;
+		agent = loadAgent();
+		if (agent == null) {
+			success = false;
+		}
+		return success;
+	}
+	
+	private void initSubmissionThreads() {
+		queue = new ArrayBlockingQueue<aero.nettracer.fs.model.File>(queueSize);
+		threads = new Thread[submissionThreadCount];
+		for (int i = 0; i < submissionThreadCount; ++i) {
+			threads[i] = new Thread(new SubmissionThread(queue));
+			threads[i].start(); 
+			outputFile.println("Created SubmissionThread: " + (i + 1));
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// do nothing
+			}
+		}
 	}
 	
 	private void submitToFraudAndSave(aero.nettracer.fs.model.File file) {
@@ -268,7 +337,7 @@ public abstract class ImportClaimData {
 			ctx = ConnectionUtil.getInitialContext();
 			remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e, e);
 		}
 		
 		long remoteFileId = 0;
@@ -283,10 +352,10 @@ public abstract class ImportClaimData {
 				try {
 					BeanUtils.copyProperties(newClaim, current);
 				} catch (IllegalAccessException e) {
-					logger.error(e);
+					logger.error(e, e);
 					continue;
 				} catch (InvocationTargetException e) {
-					logger.error(e);
+					logger.error(e, e);
 					continue;
 				} 
 				
@@ -321,14 +390,72 @@ public abstract class ImportClaimData {
 			}
 			
 			file.setClaims(fsClaims);
+			logger.info("Submitting file: " + originalFileId + " to central services...");
+			double start = System.currentTimeMillis();
 			remoteFileId = remote.insertFile(file);
 			if (remoteFileId > 0) {
 				file = FileDAO.loadFile(originalFileId);
 				file.setSwapId(remoteFileId);
 				FileDAO.saveFile(file, false);
+				remote.traceFile(remoteFileId, 6, true, false);
 				logger.info("File: " + file.getId() + " saved to central services with remote id: " + remoteFileId);
 			} else {
 				logger.info("Failed to save file: " + file.getId() + " to fraud services.");
+			}
+			double end = System.currentTimeMillis();
+			double duration = (end - start) / 1000;
+			logger.info("Submitted file: " + originalFileId + " to central services in: " + df.format(duration) + " seconds.");			
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void submitFilesToFraudServices() {
+		LinkedHashSet<Long> map = new LinkedHashSet<Long>();		
+		Session session = null;
+		boolean haveFiles = false;
+		try {
+			while (true) {
+				session = HibernateWrapper.getSession().openSession();
+	
+				String sql = "from aero.nettracer.fs.model.File as file where file.swapId = 0";
+				Query query = session.createQuery(sql);
+				query.setMaxResults(15);
+				List<aero.nettracer.fs.model.File> files = query.list();
+				session.close();
+				
+				if (files.size() == 0) {
+					outputFile.println("The query returned no files. Exiting loop...");
+					break;
+				} else {
+					outputFile.println("Query returned: " + files.size() + " files.");
+				}
+
+				haveFiles = false;
+				for (aero.nettracer.fs.model.File f: files) {
+					if (map.add(f.getId())) {
+						queue.put(f);
+						haveFiles = true;
+					}
+				}
+
+				if (!haveFiles) {
+					outputFile.println("No more files to process. Exiting loop...");
+					break;
+				}
+				
+				while (queue.size() > 5) {
+					try {
+						outputFile.println("Waiting for threads to work the queue...");
+						Thread.sleep(5000);
+					} catch (InterruptedException e) { }
+				}
+				
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
 			}
 		}
 	}
@@ -336,6 +463,24 @@ public abstract class ImportClaimData {
 	protected abstract Agent loadAgent();
 
 	protected abstract void importThirdPartyClaims();
+	
+	private void sleepForABit() {
+		while (queue.size() > 0) {
+			outputFile.println("Still submitting files. Sleeping for " + SLEEP_DELAY / 1000 + " more seconds...");
+			try {
+				Thread.sleep(SLEEP_DELAY);
+			} catch (InterruptedException e) {
+				// do nothing
+			}
+		}
+
+		try {
+			outputFile.println("Sleeping for " + (SLEEP_DELAY * 2) / 1000 + " seconds to allow the submission threads to finish.");
+			Thread.sleep(SLEEP_DELAY * 2);
+		} catch (InterruptedException e) {
+			// do nothing
+		}
+	}
 	
 	private void printErrorSummary() {
 		int size = failedIncidents.keySet().size();

@@ -81,7 +81,6 @@ private static final String EXCEPTION_MESSAGE = "Exception in FileDAO";
 //			transaction = session.beginTransaction();
 //			if(file.getId() > 0) {
 //				session.saveOrUpdate(file);
-//				session.saveOrUpdate(file);
 //			} else {
 //				session.save(file);
 //			}

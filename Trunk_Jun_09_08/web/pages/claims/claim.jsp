@@ -15,10 +15,15 @@
 <%@ page import="aero.nettracer.fs.model.Person" %>
 <%@ page import="aero.nettracer.fs.model.FsReceipt" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.DateUtils" %>
+<%@ page import="org.apache.struts.util.LabelValueBean" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Company" %>
 <%@ page import="java.util.ArrayList" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
-
+  ArrayList<LabelValueBean> stateList = (ArrayList<LabelValueBean>) session.getAttribute("statelist");
+  ArrayList<Company> companyList = (ArrayList<Company>) session.getAttribute("companylistByName");
+  ArrayList<LabelValueBean> countryList = (ArrayList<LabelValueBean>) session.getAttribute("countrylist");
+	
   boolean ntUser = PropertyBMO.isTrue("nt.user");
   boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 
@@ -70,6 +75,64 @@
     	  var field = document.getElementById(fieldId);
     	  field.value = "1";
       }
+      
+      function fieldChanged(fieldId) {
+    	  if (fieldId.indexOf("state") != -1) {
+    		  var state = document.getElementById(fieldId);
+    		  var province = document.getElementById(fieldId.replace("state", "province"));
+    		  var country = document.getElementById(fieldId.replace("state", "country"));
+    		  stateChanged(state, province, country);
+    	  } else if (fieldId.indexOf("province") != -1) {
+    		  var state = document.getElementById(fieldId.replace("province", "state"));
+    		  var province = document.getElementById(fieldId);
+    		  var country = document.getElementById(fieldId.replace("province", "country"));
+    		  provinceChanged(state, province, country);
+    	  } else if (fieldId.indexOf("country") != -1) {
+    		  var state = document.getElementById(fieldId.replace("country", "state"));
+    		  var province = document.getElementById(fieldId.replace("country", "province"));
+    		  var country = document.getElementById(fieldId);
+    		  countryChanged(state, province, country);
+    	  }
+      }
+      
+      function stateChanged(state, province, country) {
+  		if (state.value == "") {
+  			province.disabled = false;	
+  			province.className = "textfield";
+  		} else {
+  			province.value = "";
+  			province.disabled = true;
+  			province.className = "disabledtextfield";
+  			country.value = "US";
+  		}
+  	}
+  	
+  	function provinceChanged(state, province, country) {
+  		if (province.value == "") {
+  			state.disabled = false;
+  		} else {
+  			state.value = "";
+  			state.disabled = true;
+  		}
+  	}
+  	
+  	function countryChanged(state, province, country) {
+  		if (country.value == "") {
+  			state.disabled = false;
+  			province.disabled = false;
+  			province.className = "textfield";
+  		} else if (country.value == "US") {
+  			state.disabled = false;
+  			province.value = "";
+  			province.disabled = true;
+  			province.className = "disabledtextfield";
+  		} else {
+  			state.value = "";
+  			state.disabled = true;
+  			province.disabled = false;
+  			province.className = "textfield";
+  		}
+  	}
       
   </SCRIPT>
  
@@ -529,35 +592,246 @@
 					</span>
 					</div>
 					
-						<div id="names" style="display:none;">
+						<div id="names" style="margin:0;padding:0;display:none;">
 					<table class="form2" cellspacing="0" cellpadding="0" >
-						<logic:iterate indexId="i" id="person" name="claimForm" property="claim.claimants" type="aero.nettracer.fs.model.Person" >
-						<% if (i > 0) { %> 
+						<logic:iterate indexId="i" id="p" name="claimForm" property="claim.claimants" type="aero.nettracer.fs.model.Person" >
+						<% if (i > 0) { 
+								Person person = (Person) p;
+						%> 
 				          <tr id="<%= TracingConstants.JSP_DELETE_ASSOCIATED_NAME %>_<%=i%>">
-				            <td><br /><center>
-				            	<input type="button" value="<bean:message key="button.delete.name" />"
-				            		onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_ASSOCIATED_NAME %>_<%=i %>', 
-				                '<bean:message key="header.associated.names" />', 0)"
-				            	id="button" ></center>
-				           	</td>
-				           	<td>
+				          <td style="margin:0;padding:0;">
+				          	<table class="form2" cellspacing="0" cellpadding="0" style="margin:0;">
+				          	<tr>
+				           	<td colspan=2>
 				           		<bean:message key="colname.last_name" /><br />
-				           		<input type="text" name="person[<%=i %>].lastName" maxlength="20" size="20" value="<%=((Person) person).getLastName() == null ? "" : ((Person) person).getLastName() %>" class="textfield">
+				           		<input type="text" name="person[<%=i %>].lastName" maxlength="20" size="20" value="<%=person.getLastName() == null ? "" : person.getLastName() %>" class="textfield">
 				           	</td>
-				           	<td>
+				           	<td colspan=2>
 				           		<bean:message key="colname.first_name" /><br />
-				           		<input type="text" name="person[<%=i %>].firstName" maxlength="20" size="20" value="<%=((Person) person).getFirstName() == null ? "" : ((Person) person).getFirstName() %>" class="textfield">
+				           		<input type="text" name="person[<%=i %>].firstName" maxlength="20" size="20" value="<%=person.getFirstName() == null ? "" : person.getFirstName() %>" class="textfield">
 				           	</td>
 				           	<td>
 				           		<bean:message key="colname.mid_initial" /><br />
-				           		<input type="text" name="person[<%=i %>].middleName" maxlength="1" size="1" value="<%=((Person) person).getMiddleName() == null ? "" : ((Person) person).getMiddleName() %>" class="textfield">
+				           		<input type="text" name="person[<%=i %>].middleName" maxlength="1" size="1" value="<%=person.getMiddleName() == null ? "" : person.getMiddleName() %>" class="textfield">
 				           	</td>
 				           	
 				          </tr>
+				          <!-- MJS START MODIFICATION HERE -->
+				          <tr>
+				                <td colspan=2>
+				                  <bean:message key="colname.street_addr1" />
+				                  <br>
+				                  <input type="text" name="person[<%=i %>].address.address1" size="45" maxlength="50" value="<%=person.getAddress().getAddress1() == null ? "" : person.getAddress().getAddress1() %>" class="textfield" />
+				                </td>
+				                <td colspan=3>
+				                  <bean:message key="colname.street_addr2" />
+				                  <br>
+				                  <input type="text" name="person[<%=i %>].address.address1" size="35" maxlength="50" value="<%=person.getAddress().getAddress2() == null ? "" : person.getAddress().getAddress2() %>" class="textfield" />
+				                </td>
+				              </tr>
+				              <tr>
+				                <td>
+				                  <bean:message key="colname.city" />
+				                  <br>
+				                  <input type="text" name="person[<%=i %>].address.city" size="15" maxlength="50" value="<%=person.getAddress().getCity() == null ? "" : person.getAddress().getCity() %>" class="textfield" />
+				                </td>
+				                <td>
+				                  <bean:message key="colname.state" />
+				                  <br />
+				                  <select name="person[<%=i %>].address.state" id="state_<%=i %>" class="dropdown" onchange="fieldChanged('state_<%=i %>');">
+				                  		<option value=""><bean:message key="select.none"/></option>
+				                  <% 
+				                  		String state = person.getAddress().getState();
+				                  		for (LabelValueBean bean: stateList) {
+				                  %>
+				                  			<option value="<%=bean.getValue() %>" <% if (bean.getValue().equals(state)) { %>selected<% } %>><%=bean.getLabel() %></option>
+				                  <% 
+				                  		}
+				                  %>
+				                  </select>
+			                  	</td>
+			                  	<td>
+				                  <bean:message key="colname.province" />
+				                  <br />
+				                  <input type="text" name="person[<%=i %>].address.province" id="province_<%=i %>" size="10" maxlength="100" value="<%=person.getAddress().getProvince() == null ? "" : person.getAddress().getProvince() %>" class="textfield" onchange="fieldChanged('province_<%=i %>');" />
+				                </td>
+				                <td>
+				                  <bean:message key="colname.zip" />
+				                  <br>
+				                  <input type="text" name="person[<%=i %>].address.zip" size="11" maxlength="11" value="<%=person.getAddress().getZip() == null ? "" : person.getAddress().getZip() %>" class="textfield" />
+				                </td>
+				                <td>
+				                  <bean:message key="colname.country" />
+				                  <br />
+				                  <select name="person[<%=i %>].address.country" class="dropdown" id="country_<%=i %>" onchange="fieldChanged('country_<%=i %>');">
+				                  		<option value=""><bean:message key="select.none"/></option>
+				                  <% 
+				                  		String country = person.getAddress().getCountry();
+				                  		for (LabelValueBean bean: countryList) {
+				                  %>
+				                  			<option value="<%=bean.getValue() %>" <% if (bean.getValue().equals(country)) { %>selected<% } %>><%=bean.getLabel() %></option>
+				                  <% 
+				                  		}
+				                  %>
+				                  </select>
+			                  	</td>
+			               </tr>
+				           <tr>
+				           		<td>
+					            	<bean:message key="colname.home_ph" />
+					            	<br/>
+				                  	<input type="text" name="person[<%=i %>].homePhone" size="15" maxlength="25" value="<%=person.getHomePhone() == null ? "" : person.getHomePhone() %>" class="textfield" />
+				              	</td>
+				              	<td>
+					            	<bean:message key="colname.business_ph" />
+					            	<br/>
+				                  	<input type="text" name="person[<%=i %>].workPhone" size="15" maxlength="25" value="<%=person.getWorkPhone() == null ? "" : person.getWorkPhone() %>" class="textfield" />
+				              	</td>
+				              	<td>
+					            	<bean:message key="colname.mobile_ph" />
+					            	<br/>
+				                  	<input type="text" name="person[<%=i %>].mobilePhone" size="15" maxlength="25" value="<%=person.getMobilePhone() == null ? "" : person.getMobilePhone() %>" class="textfield" />
+				              	</td>
+				              	<td>
+					            	<bean:message key="colname.pager_ph" />
+					            	<br/>
+				                  	<input type="text" name="person[<%=i %>].pagerPhone" size="15" maxlength="25" value="<%=person.getPagerPhone() == null ? "" : person.getPagerPhone() %>" class="textfield" />
+				              	</td>
+				              	<td>
+					            	<bean:message key="colname.alt_ph" />
+					            	<br/>
+				                  	<input type="text" name="person[<%=i %>].alternatePhone" size="15" maxlength="25" value="<%=person.getAlternatePhone() == null ? "" : person.getAlternatePhone() %>" class="textfield" />
+				              	</td>
+				           </tr>
+				           <tr>
+								<td colspan="2">
+				             		<bean:message key="colname.email" />
+				             		<br />
+				                  	<input type="text" name="person[<%=i %>].emailAddress" size="35" maxlength="100" value="<%=person.getEmailAddress() == null ? "" : person.getEmailAddress() %>" class="textfield" />
+				             	</td>
+				             	<td colspan="3">
+				             		<bean:message key="colname.dob" />
+				             		(<%= a.getDateformat().getFormat() %>)
+				             		<br />
+				                  	<input type="text" name="person[<%=i %>].disDateOfBirth" size="12" maxlength="11" value="<%=person.getDisDateOfBirth() == null ? "" : person.getDisDateOfBirth() %>" class="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar_<%=i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.claimForm,'person[<%=i %>].disDateOfBirth','calendar_<%=i %>','<%= a.getDateformat().getFormat() %>'); return false;">
+				             	</td>
+				           </tr>
+				           <tr>
+				           		<td colspan="2">
+				             		<bean:message key="colname.airline_membership" />
+				             		<br />
+									<select name="person[<%=i %>].ffAirline" class="dropdown">
+				                  		<option value=""><bean:message key="select.none"/></option>
+				             		<%
+				             			String company = person.getFfAirline();
+				             			for (Company c: companyList) {
+				             		%>
+				                  			<option value="<%=c.getCompanyCode_ID() %>" <% if (c.getCompanyCode_ID().equals(company)) { %>selected<% } %>><%=c.getCompanydesc() %></option>
+				             		<%
+				             			}
+				             		%>
+				             		</select>
+				             	</td>
+				             	<td colspan="3">
+				             		<bean:message key="colname.membership_number" />
+				              		<br>
+				                  	<input type="text" name="person[<%=i %>].ffNumber" size="30" maxlength="20" value="<%=person.getFfAirline() == null ? "" : person.getFfNumber() %>" class="textfield" />
+				             	</td>
+				           </tr>
+				           <tr>
+				           		<td colspan=2 >
+					            	<bean:message key="oc.label.ssn" />
+					            	<br />
+				                  	<input type="text" name="person[<%=i %>].redactedSocialSecurity" size="20" maxlength="9" value="<%=person.getRedactedSocialSecurity() == null ? "" : person.getRedactedSocialSecurity() %>" class="textfield" />
+					            </td>
+					            <td colspan=2 >
+					            	<bean:message key="colname.common_num" />
+					            	<br />
+				                  	<input type="text" name="person[<%=i %>].redactedPassportNumber" size="20" maxlength="20" value="<%=person.getRedactedPassportNumber() == null ? "" : person.getRedactedPassportNumber() %>" class="textfield" />
+					            </td>
+					            <td>
+					            	<bean:message key="colname.country_of_issue" />
+					            	<br />
+					            	<select name="person[<%=i %>].passportIssuer" class="dropdown" >
+				                  		<option value=""><bean:message key="select.none"/></option>
+					                  <% 
+					                  		country = person.getPassportIssuer();
+					                  		for (LabelValueBean bean: countryList) {
+					                  %>
+					                  			<option value="<%=bean.getValue() %>" <% if (bean.getValue().equals(country)) { %>selected<% } %>><%=bean.getLabel() %></option>
+					                  <% 
+					                  		}
+					                  %>
+					                  </select>
+					            </td>
+				           </tr>
+				           <tr>
+				           		<td>
+					            	<bean:message key="colname.drivers" />
+					            	<br />
+				                  	<input type="text" name="person[<%=i %>].redactedDriversLicenseNumber" size="20" maxlength="20" value="<%=((Person) person).getRedactedDriversLicenseNumber() == null ? "" : ((Person) person).getRedactedDriversLicenseNumber() %>" class="textfield" />
+					            </td>
+					            <td>
+				                  <bean:message key="colname.state" />
+				                  <br />
+				                    <select name="person[<%=i %>].driversLicenseState" id="dlstate_<%=i %>" class="dropdown" onchange="fieldChanged('dlstate_<%=i %>');">
+				                  		<option value=""><bean:message key="select.none"/></option>
+					                  <% 
+					                  		state = person.getDriversLicenseState();
+					                  		for (LabelValueBean bean: stateList) {
+					                  %>
+					                  			<option value="<%=bean.getValue() %>" <% if (bean.getValue().equals(state)) { %>selected<% } %>><%=bean.getLabel() %></option>
+					                  <% 
+					                  		}
+					                  %>
+				                  </select>
+				                </td>
+				                <td colspan=2 >
+				                  <bean:message key="colname.province" />
+				                  <br />
+				                  	<input type="text" name="person[<%=i %>].driversLicenseProvince" id="dlprovince_<%=i %>" size="15" maxlength="100" value="<%=person.getDriversLicenseProvince() == null ? "" : person.getDriversLicenseProvince() %>" class="textfield" onchange="fieldChanged('dlprovince_<%=i %>');"/>
+				                </td>
+				                <td colspan=2 >
+				                	<bean:message key="colname.country_of_issue" />
+				                	<br>
+				                	<select name="person[<%=i %>].driversLicenseCountry" id="dlcountry_<%=i %>" class="dropdown" onchange="fieldChanged('dlcountry_<%=i %>');">
+				                  		<option value=""><bean:message key="select.none"/></option>
+					                  <% 
+					                  		country = ((Person) person).getDriversLicenseCountry();
+					                  		for (LabelValueBean bean: countryList) {
+					                  %>
+					                  			<option value="<%=bean.getValue() %>" <% if (bean.getValue().equals(country)) { %>selected<% } %>><%=bean.getLabel() %></option>
+					                  <% 
+					                  		}
+					                  %>
+					                  </select>
+				                </td>
+				           </tr>
+				          <tr>
+				            <td colspan=5>
+				            	<input type="button" value="<bean:message key="button.delete.name" />"
+				            		onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_ASSOCIATED_NAME %>_<%=i %>', 
+				                '<bean:message key="header.associated.names" />', 0)"
+				            	id="button" >
+				           	</td>
+				          </tr>
+				          <tr>
+				          	<td colspan=5>&nbsp;</td>
+				          </tr>
+				           </table>
+				           </td>
+				           </tr>
+				          <!-- MJS END MODIFICATION HERE -->
 				          <% } %>
+				          <script>
+						  	fieldChanged('state_<%=i %>');
+							fieldChanged('country_<%=i %>');
+							fieldChanged('dlstate_<%=i %>');
+							fieldChanged('dlcountry_<%=i %>');
+			              </script>
 				          </logic:iterate>
 				          <tr>
-				          <td colspan="4" align="center">
+				          <td colspan="5" align="center">
 					          <select name="addNameNum">
 						          <option value="1">1</option>
 						          <option value="2">2</option>
@@ -598,7 +872,10 @@
 					</div>
 					<div id="receipts" style="display:none;" >
 					<table class="form2" cellspacing="0" cellpadding="0" >
-						<logic:iterate indexId="i" id="receipt" name="claimForm" property="claim.receipts" type="aero.nettracer.fs.model.FsReceipt" >
+						<logic:iterate indexId="i" id="r" name="claimForm" property="claim.receipts" type="aero.nettracer.fs.model.FsReceipt" >
+						  <%
+						  	FsReceipt receipt = (FsReceipt) r;
+						  %>
 				          <tr id="<%= TracingConstants.JSP_DELETE_ASSOCIATED_RECEIPT %>_<%=i%>" >
 				            <td style="padding:0px;" >
 				            	<table class="form2" cellspacing="0" cellpadding="0" style="padding:0px;margin:0px;" >
@@ -606,93 +883,73 @@
 								  	<td colspan="5">
 								  		<bean:message key="colname.company.name" />
 								  		<br />
-								  		<input type="text" name="receipt[<%=i %>].company" maxlength="35" size="35" value="<%=((FsReceipt) receipt).getCompany() == null ? "" : ((FsReceipt) receipt).getCompany() %>" class="textfield">
+								  		<input type="text" name="receipt[<%=i %>].company" maxlength="35" size="35" value="<%=receipt.getCompany() == null ? "" : receipt.getCompany() %>" class="textfield">
 								  	</td>
 								  </tr>
 								  <tr>
 					                <td colspan=2>
 					                  <bean:message key="colname.street_addr1" />
 					                  <br>
-					                  <html:text name="receipt" property="address.address1" size="40" maxlength="50" styleClass="textfield" />
+					                  <input type="text" name="receipt[<%=i %>].address.address1" size="40" maxlength="50" value="<%=receipt.getAddress().getAddress1() == null ? "" : receipt.getAddress().getAddress1() %>" class="textfield" />
 					                </td>
 					                <td colspan=3>
 					                  <bean:message key="colname.street_addr2" />
 					                  <br>
-					                  <html:text name="receipt" property="address.address2" size="35" maxlength="50" styleClass="textfield" />
+					                  <input type="text" name="receipt[<%=i %>].address.address2" size="35" maxlength="50" value="<%=receipt.getAddress().getAddress2() == null ? "" : receipt.getAddress().getAddress2() %>" class="textfield" />
 					                </td>
 					              </tr>
 					              <tr>
 					                <td>
 					                  <bean:message key="colname.city" />
 					                  <br>
-					                  <html:text name="receipt" property="address.city" size="15" maxlength="50" styleClass="textfield" />
+					                  <input type="text" name="receipt[<%=i %>].address.city" size="15" maxlength="50" value="<%=receipt.getAddress().getCity() == null ? "" : receipt.getAddress().getCity() %>" class="textfield" />
 					                </td>
 					                <td>
-					                  <bean:message key="colname.state" />
-					                  <br />
-					                  <logic:equal name="receipt" property="address.country" value="US">
-					                    <html:select name="receipt" property="address.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
-					                      <html:option value="">
-					                        <bean:message key="select.none" />
-					                      </html:option>
-					                      <html:options collection="statelist" property="value" labelProperty="label" />
-					                    </html:select>
-					                  </logic:equal>
-					                  <logic:equal name="receipt" property="address.country" value="">
-					                    <html:select name="receipt" property="address.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
-					                      <html:option value="">
-					                        <bean:message key="select.none" />
-					                      </html:option>
-					                      <html:options collection="statelist" property="value" labelProperty="label" />
-					                    </html:select>
-					                  </logic:equal>
-					                  <logic:notEqual name="receipt" property="address.country" value="">
-					                    <logic:notEqual name="receipt" property="address.country" value="US">
-					                      <html:select name="receipt" property="address.state" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'country', 'province');" >
-					                        <html:option value="">
-					                          <bean:message key="select.none" />
-					                        </html:option>
-					                        <html:options collection="statelist" property="value" labelProperty="label" />
-					                      </html:select>
-					                    </logic:notEqual>
-					                  </logic:notEqual>
-					                </td>
-					                <td>
-					                  <bean:message key="colname.province" />
-					                  <br />
-					                      <logic:equal name="receipt" property="address.country" value="US">
-					                  		<html:text name="receipt" property="address.province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
-					                      </logic:equal>
-					                      <logic:equal name="receipt" property="address.country" value="">
-					                  <html:text name="receipt" property="address.province" size="15" maxlength="100" styleClass="textfield" />
-					                      </logic:equal>
-					                      <logic:notEqual name="receipt" property="address.country" value="">
-					                        <logic:notEqual name="receipt" property="address.country" value="US">
-					                  <html:text name="receipt" property="address.province" size="15" maxlength="100" styleClass="textfield" />
-					                         </logic:notEqual>
-					                      </logic:notEqual>
-					                </td>
-					                <td>
-					                  <bean:message key="colname.zip" />
-					                  <br>
-					                  <html:text name="receipt" property="address.zip" size="15" maxlength="11" styleClass="textfield" />
-					                </td>
-					                <td>
-					                  <bean:message key="colname.country" />
-					                  <br>
-					                  <html:select name="receipt" property="address.country" styleClass="dropdown" onchange="checkstate(this,this.form,'state', 'province');">
-					                    <html:option value="">
-					                      <bean:message key="select.none" />
-					                    </html:option>
-					                    <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
-					                  </html:select>
-					                </td>
+				                  <bean:message key="colname.state" />
+				                  <br />
+				                  <select name="receipt[<%=i %>].address.state" id="arstate_<%=i %>" class="dropdown" onchange="fieldChanged('arstate_<%=i %>');">
+				                  		<option value=""><bean:message key="select.none"/></option>
+				                  <% 
+				                  		String state = receipt.getAddress().getState();
+				                  		for (LabelValueBean bean: stateList) {
+				                  %>
+				                  			<option value="<%=bean.getValue() %>" <% if (bean.getValue().equals(state)) { %>selected<% } %>><%=bean.getLabel() %></option>
+				                  <% 
+				                  		}
+				                  %>
+				                  </select>
+			                  	</td>
+			                  	<td>
+				                  <bean:message key="colname.province" />
+				                  <br />
+				                  <input type="text" name="receipt[<%=i %>].address.province" id="arprovince_<%=i %>" size="10" maxlength="100" value="<%=receipt.getAddress().getProvince() == null ? "" : receipt.getAddress().getProvince() %>" class="textfield" onchange="fieldChanged('arprovince_<%=i %>')" />
+				                </td>
+				                <td>
+				                  <bean:message key="colname.zip" />
+				                  <br>
+				                  <input type="text" name="receipt[<%=i %>].address.zip" size="11" maxlength="11" value="<%=receipt.getAddress().getZip() == null ? "" : receipt.getAddress().getZip() %>" class="textfield" />
+				                </td>
+				                <td>
+				                  <bean:message key="colname.country" />
+				                  <br />
+				                  <select name="receipt[<%=i %>].address.country" class="dropdown" id="arcountry_<%=i %>" onchange="fieldChanged('arcountry_<%=i %>');">
+				                  		<option value=""><bean:message key="select.none"/></option>
+				                  <% 
+				                  		String country = receipt.getAddress().getCountry();
+				                  		for (LabelValueBean bean: countryList) {
+				                  %>
+				                  			<option value="<%=bean.getValue() %>" <% if (bean.getValue().equals(country)) { %>selected<% } %>><%=bean.getLabel() %></option>
+				                  <% 
+				                  		}
+				                  %>
+				                  </select>
+			                  	</td>
 					              </tr>
 					              <tr>
               						<td colspan="2">
 								  		<bean:message key="colname.company.phone" />
 								  		<br />
-								  		<input type="text" name="receipt[<%=i %>].phone.phoneNumber" maxlength="20" size="20" value="<%=receipt.getPhone().getPhoneNumber() == null ? "" : ((FsReceipt) receipt).getPhone().getPhoneNumber() %>" class="textfield">
+								  		<input type="text" name="receipt[<%=i %>].phone.phoneNumber" maxlength="20" size="20" value="<%=receipt.getPhone().getPhoneNumber() == null ? "" : receipt.getPhone().getPhoneNumber() %>" class="textfield">
 								  	</td>
 								  	<td>
 								  		<bean:message key="claim.colname.cc_type" />
@@ -715,18 +972,20 @@
 										<bean:message key="claim.colname.cc_expdate" />
 										<br/>
 								  		<select name="receipt[<%=i %>].ccExpMonth" class="dropdown" >
+								  			<option value="0" <% if (receipt.getCcExpMonth() == 0) { %>selected<% };%>><bean:message key="claim.cc.month" /></option>
 								  			<% 
 								  				ArrayList<Integer> months = DateUtils.getCcMonths();
 								  				for (int j = 0; j < months.size(); ++j) { %>
-								  					<option value="<%=j%>" <% if (receipt.getCcExpMonth() == j) { %>selected<% };%>><%=months.get(j)%></option>								  					
+								  					<option value="<%=months.get(j) %>" <% if (receipt.getCcExpMonth() == months.get(j)) { %>selected<% };%>><%=months.get(j)%></option>								  					
 								  			<%	} %>
 								  		</select>
 										&nbsp;/&nbsp;
 								  		<select name="receipt[<%=i %>].ccExpYear" class="dropdown" >
+								  			<option value="0" <% if (receipt.getCcExpYear() == 0) { %>selected<% };%>><bean:message key="claim.cc.year" /></option>
 								  			<% 
 								  				ArrayList<Integer> years = DateUtils.getCcYears();
 								  				for (int j = 0; j < years.size(); ++j) { %>
-								  					<option value="<%=j%>" <% if (receipt.getCcExpYear() == j) { %>selected<% };%>><%=years.get(j)%></option>								  					
+								  					<option value="<%=years.get(j)%>" <% if (receipt.getCcExpYear() == years.get(j)) { %>selected<% };%>><%=years.get(j)%></option>								  					
 								  			<%	} %>
 								  		</select>
 									</td>
@@ -742,6 +1001,10 @@
 				            	</table>
 				            </td>
 				          </tr>
+				          <script>
+							fieldChanged('arstate_<%=i %>');
+							fieldChanged('arcountry_<%=i %>');
+			              </script>
 				          </logic:iterate>
 				          <tr>
 				          <td align="center">

@@ -122,6 +122,8 @@ public class Phone implements Serializable {
 		return whitelist;
 	}
 
-
+	public boolean isEmpty() {
+		return phoneNumber != null && !phoneNumber.isEmpty();
+	}
 	
 }

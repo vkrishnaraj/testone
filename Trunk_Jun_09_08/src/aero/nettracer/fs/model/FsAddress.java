@@ -34,7 +34,7 @@ public class FsAddress implements Serializable {
 	@OneToOne(targetEntity = aero.nettracer.fs.model.FsReceipt.class)
 	@Fetch(FetchMode.SELECT)
 	private FsReceipt receipt;
-	
+
 	private String address1;
 	private String address2;
 	private String city;
@@ -49,7 +49,7 @@ public class FsAddress implements Serializable {
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.detection.AddressWhiteList.class)
 	@Fetch(FetchMode.SELECT)
 	private AddressWhiteList whitelist;
-	
+
 	private String normAddress;
 
 	public int getGeocodeType() {
@@ -178,6 +178,20 @@ public class FsAddress implements Serializable {
 
 	public AddressWhiteList getWhitelist() {
 		return whitelist;
+	}
+
+	public boolean isEmpty() {
+		boolean empty = true;
+		if ((address1 != null && !address1.isEmpty())
+				|| (address2 != null && !address2.isEmpty())
+				|| (city != null && !city.isEmpty())
+				|| (state != null && !state.isEmpty())
+				|| (province != null && !province.isEmpty())
+				|| (zip != null && !zip.isEmpty())) {
+			empty = false;
+		}
+
+		return empty;
 	}
 
 }

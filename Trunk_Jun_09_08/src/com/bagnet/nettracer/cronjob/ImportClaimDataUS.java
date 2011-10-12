@@ -16,7 +16,6 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
-import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
@@ -125,7 +124,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 			openProcessedClaimsFile();
 			createClaimsFromCrmData();
 		} catch (IOException ioe) {
-			logger.error(ioe);
+			logger.error(ioe, ioe);
 		} finally {
 			closeProcessedClaimsFile();
 		}
@@ -151,7 +150,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 				countryList.put(country, countryCodeId);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e, e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -179,7 +178,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 				statusList.put(description, status_ID);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e, e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -207,7 +206,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 				crmIncidentIds.put(crmKey, incidentId);
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e, e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -261,13 +260,13 @@ public class ImportClaimDataUS extends ImportClaimData {
 	
 	private void createClaimsFromCrmData() {
 		FsClaim claim;
-		
+		int numClaims = importedClaims.size();
 		outputFile.println("\nCreating claims...\n");
 		int i = 1;
 		for (String key: importedClaims.keySet()) {
 			try {
 				if (!processedClaims.contains(key)) {
-					outputFile.println(i + ":\tProcessing claim: " + key);
+					outputFile.println(i + " of " + numClaims + ":\tProcessing claim: " + key);
 					double start = System.currentTimeMillis();
 	
 					claim = createClaimFromCrmData(crmIncidentIds.get(key), importedClaims.get(key));
@@ -290,16 +289,15 @@ public class ImportClaimDataUS extends ImportClaimData {
 					writeToProcessedClaimsFile(key);
 					double end = System.currentTimeMillis();
 					double duration = (end - start) / 1000;
-					outputFile.println("\tDone! Claim processed in: " + df.format(duration) + " seconds.\n");
-					++i;
+					outputFile.println("\t\tDone! Claim processed in: " + df.format(duration) + " seconds.\n");
 				}
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(e, e);
+				outputFile.println("\t\tFailed to save claim for: " + key + "\n");
 				continue;
 			}
+			++i;
 		}
-		// TODO remove before deploying to production
-		submitFilesToFraudServices();
 	}
 	
 	private void loadProcessedClaimsFromFile() throws IOException {
@@ -312,13 +310,13 @@ public class ImportClaimDataUS extends ImportClaimData {
 				try {
 					line = br.readLine();
 				} catch (IOException ioe) {
-					logger.error(ioe);
+					logger.error(ioe, ioe);
 					break;
 				}
 				processedClaims.add(line);
 			} while (line != null);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(e, e);
 		} finally {
 			if (br != null) {
 				br.close();
@@ -337,7 +335,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 				processedClaimsFile.close();
 			}
 		} catch (IOException ioe) {
-			logger.error(ioe);
+			logger.error(ioe, ioe);
 		}
 	}
 	
@@ -720,51 +718,15 @@ public class ImportClaimDataUS extends ImportClaimData {
 		return toReturn;
 	}
 	
-	// TODO remove this method before deploying into production.
-	public void submitFilesToFraudServices() {
-		LinkedHashSet<Long> map = new LinkedHashSet<Long>();		
-		Session session = null;
-		boolean haveFiles = false;
-		try {
-			while (true) {
-				session = HibernateWrapper.getSession().openSession();
-	
-				String sql = "from aero.nettracer.fs.model.File as file where file.swapId = 0";
-				Query query = session.createQuery(sql);
-				query.setMaxResults(QUEUE_SIZE);
-				List<aero.nettracer.fs.model.File> files = query.list();
-
-				haveFiles = false;
-				for (aero.nettracer.fs.model.File f: files) {
-					if (map.add(f.getId())) {
-						queue.put(f);
-						haveFiles = true;
-					}
-				}
-
-				if (files.isEmpty() || !haveFiles) {
-					break;
-				}
-				
-				session.close();
-			}
-		} catch (Exception e) {
-			logger.error(e);
-		} finally {
-			if (session != null && session.isOpen()) {
-				session.close();
-			}
-		}
-	}
-	
 	public static void main(String[] args) {
 		ImportClaimDataUS importer = new ImportClaimDataUS();
-		if (args.length != 1) {
-			return;
+		if (!importer.setVariablesFromArgs(args)) {
+			System.err.println("Usage:\t" + ImportClaimDataUS.class.getSimpleName() + " [crm file path] [thread count] [queue size]");
+			System.err.println("Example:\t" + ImportClaimDataUS.class.getSimpleName() + " C:\\crm 3 500");
+		} else {		
+			importer.importClaims();
 		}
-		importer.setFilePath(args[0]);
-		importer.importClaims();
-		importer.closeOutputFile();
+		System.exit(0);
 	}
 
 }

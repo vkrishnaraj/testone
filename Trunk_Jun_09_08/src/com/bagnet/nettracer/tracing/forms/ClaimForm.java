@@ -98,45 +98,6 @@ public final class ClaimForm extends ActionForm {
 		return DateUtils.formatDate(claim.getClaimDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 	}
 	
-	public String getHomePhone() {
-		return getPhoneNumber(Phone.HOME);
-	}
-	
-	public void setHomePhone(String homePhone) {
-		setPhoneNumber(Phone.HOME, homePhone);
-	}
-	
-	public String getWorkPhone() {
-		return getPhoneNumber(Phone.WORK);
-	}
-	
-	public void setWorkPhone(String workPhone) {
-		setPhoneNumber(Phone.WORK, workPhone);
-	}
-	public String getMobilePhone() {
-		return getPhoneNumber(Phone.MOBILE);
-	}
-	
-	public void setMobilePhone(String mobilePhone) {
-		setPhoneNumber(Phone.MOBILE, mobilePhone);
-	}
-	
-	public String getPagerPhone() {
-		return getPhoneNumber(Phone.PAGER);
-	}
-	
-	public void setPagerPhone(String pagerPhone) {
-		setPhoneNumber(Phone.PAGER, pagerPhone);
-	}
-	
-	public String getAlternatePhone() {
-		return getPhoneNumber(Phone.ALTERNATE);
-	}
-	
-	public void setAlternatePhone(String alternatePhone) {
-		setPhoneNumber(Phone.ALTERNATE, alternatePhone);
-	}
-
 	public Person getClaimant() {
 		if (claimant == null) {
 			return claim.getClaimants().toArray(new Person[0])[0];
@@ -215,53 +176,7 @@ public final class ClaimForm extends ActionForm {
 		return getClaimant().getAddresses().toArray(new FsAddress[0])[0];
 	}
 	
-	private String getPhoneNumber(int type) {
-		return getPhone(type).getPhoneNumber();
-	}
 
-	private void setPhoneNumber(int type, String phoneNumber) {
-		if (phoneNumber != null && !phoneNumber.isEmpty()) {
-			Phone phone = getPhone(type);
-			phone.setPhoneNumber(phoneNumber);
-			setPhone(phone);
-		}
-	}
-	
-	private Phone getPhone(int type) {
-		
-		Person person = getClaimant();
-		ArrayList<Phone> phones = new ArrayList<Phone>(person.getPhones());
-
-		Phone phone = new Phone();
-		for (Phone p: phones) {
-			if (p.getType() == 0) {
-				phone = p;
-				break;
-			}
-		}
-		phone.setType(type);
-		phone.setPerson(person);
-		phone.setIncident(claim.getIncident());
-		
-		Phone candidate = null;
-		for (int i = 0; i < phones.size(); ++i) {
-			candidate = phones.get(i);
-			if (candidate == null) {
-				break;
-			} else {
-				if (candidate.getType() == type) {
-					phone = candidate;
-					break;
-				}
-			}
-		}
-		return phone;
-	}
-	
-	private void setPhone(Phone phone) {
-		Person[] people = claim.getClaimants().toArray(new Person[0]);
-		people[0].getPhones().add(phone);		
-	}
 	
 	public FsAddress getClaimantAddress(int i) {
 		Person claimant = getClaimant();

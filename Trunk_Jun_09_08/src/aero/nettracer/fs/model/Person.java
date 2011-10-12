@@ -2,6 +2,8 @@ package aero.nettracer.fs.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -66,9 +68,12 @@ public class Person implements Serializable {
 	private String description;
 	private String ffAirline;
 	private String ffNumber;
-	
+
 	@Transient
 	private Person parent;
+
+	@Transient
+	private String dateFormat;
 
 	@OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
@@ -107,18 +112,18 @@ public class Person implements Serializable {
 		}
 		return toReturn;
 	}
-	
+
 	public String getSocialSecurity() {
 		return this.socialSecurity;
 	}
-	
+
 	public void setRedactedSocialSecurity(String socialSecurity) {
 		this.setSocialSecurity(socialSecurity);
 	}
 
 	public void setSocialSecurity(String socialSecurity) {
 		if (socialSecurity != null && socialSecurity.matches("[0-9]{9}")) {
-			this.socialSecurity = StringUtils.sha1(socialSecurity,true);
+			this.socialSecurity = StringUtils.sha1(socialSecurity, true);
 		}
 	}
 
@@ -249,7 +254,7 @@ public class Person implements Serializable {
 		}
 		return toReturn;
 	}
-	
+
 	public String getDriversLicenseProvince() {
 		return driversLicenseProvince;
 	}
@@ -261,14 +266,16 @@ public class Person implements Serializable {
 	public String getDriversLicenseNumber() {
 		return this.driversLicenseNumber;
 	}
-	
+
 	public void setRedactedDriversLicenseNumber(String driversLicenseNumber) {
 		setDriversLicenseNumber(driversLicenseNumber);
 	}
 
 	public void setDriversLicenseNumber(String driversLicenseNumber) {
-		if (driversLicenseNumber != null && driversLicenseNumber.matches("[A-Za-z0-9]{5,15}")) {		
-			this.driversLicenseNumber = StringUtils.sha1(driversLicenseNumber, true);
+		if (driversLicenseNumber != null
+				&& driversLicenseNumber.matches("[A-Za-z0-9]{5,15}")) {
+			this.driversLicenseNumber = StringUtils.sha1(driversLicenseNumber,
+					true);
 		}
 	}
 
@@ -287,18 +294,19 @@ public class Person implements Serializable {
 		}
 		return toReturn;
 	}
-	
+
 	public String getPassportNumber() {
 		return this.passportNumber;
 	}
-	
+
 	public void setRedactedPassportNumber(String passportNumber) {
 		setPassportNumber(passportNumber);
 	}
 
 	public void setPassportNumber(String passportNumber) {
-		if (passportNumber != null && passportNumber.matches("[A-Za-z0-9]{5,15}")) {
-			this.passportNumber = StringUtils.sha1(passportNumber,true);
+		if (passportNumber != null
+				&& passportNumber.matches("[A-Za-z0-9]{5,15}")) {
+			this.passportNumber = StringUtils.sha1(passportNumber, true);
 		}
 	}
 
@@ -333,11 +341,19 @@ public class Person implements Serializable {
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	
-	public String getDisDateOfBirth(String dateFormat) {
+
+	public String getDisDateOfBirth() {
 		return DateUtils.formatDate(dateOfBirth, dateFormat, "", null);
 	}
-	
+
+	public String getDisDateOfBirth(String _DATEFORMAT) {
+		return DateUtils.formatDate(dateOfBirth, _DATEFORMAT, "", null);
+	}
+
+	public void setDisDateOfBirth(String dateOfBirth) {
+		setDateOfBirth(DateUtils.convertToDate(dateOfBirth, dateFormat, null));
+	}
+
 	public void setDisDateOfBirth(String dateOfBirth, String _DATEFORMAT) {
 		setDateOfBirth(DateUtils.convertToDate(dateOfBirth, _DATEFORMAT, null));
 	}
@@ -357,15 +373,185 @@ public class Person implements Serializable {
 	public void setDriversLicenseCountry(String driversLicenseCountry) {
 		this.driversLicenseCountry = driversLicenseCountry;
 	}
-	
-	public String getDriversLicenseIssuer(){
-		if(this.driversLicenseState != null && this.driversLicenseState.length() > 0){
+
+	public String getDriversLicenseIssuer() {
+		if (this.driversLicenseState != null
+				&& this.driversLicenseState.length() > 0) {
 			return this.driversLicenseState;
-		} else if (this.driversLicenseProvince != null && this.driversLicenseProvince.length() > 0){
+		} else if (this.driversLicenseProvince != null
+				&& this.driversLicenseProvince.length() > 0) {
 			return this.driversLicenseProvince;
 		} else {
 			return null;
 		}
 	}
+
+	@Transient
+	public FsAddress getAddress() {
+		Set<FsAddress> adds = this.getAddresses();
+		if (adds != null && !adds.isEmpty()) {
+			return this.getAddresses().toArray(new FsAddress[0])[0];
+		}
+		return null;
+	}
+
+	public void setAddress(FsAddress address) {
+		if (addresses == null) {
+			addresses = new LinkedHashSet<FsAddress>();
+		}
+		
+		if (address == null) {
+			return;
+		} else if (addresses.isEmpty()) {
+			addresses.add(address);
+		} else {
+			for (FsAddress a : addresses) {
+				if (a.getId() == address.getId()) {
+					addresses.remove(a);
+					addresses.add(address);
+					break;
+				}
+			}
+		}
+	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
+	}
+
+	// START PHONE STUFF HERE!!
+	@Transient
+	public String getHomePhone() {
+		return getPhoneNumber(Phone.HOME);
+	}
+
+	public void setHomePhone(String homePhone) {
+		setPhoneNumber(Phone.HOME, homePhone);
+	}
+
+	@Transient
+	public String getWorkPhone() {
+		return getPhoneNumber(Phone.WORK);
+	}
+
+	public void setWorkPhone(String workPhone) {
+		setPhoneNumber(Phone.WORK, workPhone);
+	}
+
+	@Transient
+	public String getMobilePhone() {
+		return getPhoneNumber(Phone.MOBILE);
+	}
+
+	public void setMobilePhone(String mobilePhone) {
+		setPhoneNumber(Phone.MOBILE, mobilePhone);
+	}
+
+	@Transient
+	public String getPagerPhone() {
+		return getPhoneNumber(Phone.PAGER);
+	}
+
+	public void setPagerPhone(String pagerPhone) {
+		setPhoneNumber(Phone.PAGER, pagerPhone);
+	}
+
+	@Transient
+	public String getAlternatePhone() {
+		return getPhoneNumber(Phone.ALTERNATE);
+	}
+
+	public void setAlternatePhone(String alternatePhone) {
+		setPhoneNumber(Phone.ALTERNATE, alternatePhone);
+	}
+
+	private String getPhoneNumber(int type) {
+		return getPhone(type).getPhoneNumber();
+	}
+
+	private void setPhoneNumber(int type, String phoneNumber) {
+		if (phoneNumber != null && !phoneNumber.isEmpty()) {
+			Phone phone = getPhone(type);
+			phone.setPhoneNumber(phoneNumber);
+			
+			boolean addPhone = true;
+			Iterator<Phone> i = getPhones().iterator();
+			while (i.hasNext()) {
+				if (i.next().getType() == type) {
+					addPhone = false;
+					break;
+				}
+			}
+			
+			if (addPhone) {
+				phones.add(phone);
+			}
+		}
+	}
 	
+	private Phone getPhone(int type) {
+
+		Phone phone = null;
+		Phone candidate = null;
+		Iterator<Phone> i = getPhones().iterator();
+		while (i.hasNext()) {
+			candidate = i.next();
+			if (candidate.getType() == type) {
+				phone = candidate;
+				break;
+			}
+		}
+		
+		if (phone == null) {
+			phone = new Phone();
+			phone.setPerson(this);
+			if (claim != null) {
+				phone.setIncident(claim.getIncident());
+			}
+			phone.setType(type);
+		}
+
+		return phone;
+	}
+
+	public boolean isEmpty() {
+		boolean empty = true;
+
+		if ((firstName != null && !firstName.isEmpty())
+				|| (lastName != null && !lastName.isEmpty())
+				|| (middleName != null && !middleName.isEmpty())
+				|| (socialSecurity != null && !socialSecurity.isEmpty())
+				|| (driversLicenseNumber != null && !driversLicenseNumber.isEmpty())
+				|| (driversLicenseState != null && !driversLicenseState.isEmpty())
+				|| (driversLicenseProvince != null && !driversLicenseProvince.isEmpty())
+				|| (passportNumber != null && !passportNumber.isEmpty())
+				|| (passportIssuer != null && !passportIssuer.isEmpty())) {
+			empty = false;
+		}
+		
+		if (empty) {
+			for (FsAddress a: addresses) {
+				empty = a.isEmpty();
+				if (!empty) {
+					break;
+				}
+			}
+		}
+		
+		if (empty) {
+			for (Phone p: phones) {
+				empty = p.isEmpty();
+				if (!empty) {
+					break;
+				}
+			}
+		}
+		
+		return empty;
+	}
+
 }

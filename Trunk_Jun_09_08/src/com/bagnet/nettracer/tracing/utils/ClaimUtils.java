@@ -147,6 +147,7 @@ public class ClaimUtils {
 			}
 			
 			claimants.clear();
+			// TODO FIX THIS
 			person = claim.getIncident().getPassengers().toArray(new Person[0])[0];
 			
 //			if (person.getId() > 0) {

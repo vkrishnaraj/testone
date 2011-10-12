@@ -206,27 +206,27 @@
               	<td>
 	            	<bean:message key="colname.home_ph" />
 	            	<br/>
-		            <html:text name="claimForm" property="homePhone" size="15" maxlength="25" styleClass="textfield" />
+		            <html:text name="claimForm" property="claimant.homePhone" size="15" maxlength="25" styleClass="textfield" />
               	</td>
               	<td>
 	            	<bean:message key="colname.business_ph" />
 	            	<br/>
-		            <html:text name="claimForm" property="workPhone" size="15" maxlength="25" styleClass="textfield" />
+		            <html:text name="claimForm" property="claimant.workPhone" size="15" maxlength="25" styleClass="textfield" />
               	</td>
               	<td>
 	            	<bean:message key="colname.mobile_ph" />
 	            	<br/>
-		            <html:text name="claimForm" property="mobilePhone" size="15" maxlength="25" styleClass="textfield" />
+		            <html:text name="claimForm" property="claimant.mobilePhone" size="15" maxlength="25" styleClass="textfield" />
               	</td>
               	<td>
 	            	<bean:message key="colname.pager_ph" />
 	            	<br/>
-		            <html:text name="claimForm" property="pagerPhone" size="15" maxlength="25" styleClass="textfield" />
+		            <html:text name="claimForm" property="claimant.pagerPhone" size="15" maxlength="25" styleClass="textfield" />
               	</td>
               	<td>
 	            	<bean:message key="colname.alt_ph" />
 	            	<br/>
-		            <html:text name="claimForm" property="alternatePhone" size="15" maxlength="25" styleClass="textfield" />
+		            <html:text name="claimForm" property="claimant.alternatePhone" size="15" maxlength="25" styleClass="textfield" />
               	</td>
              </tr>
              <tr>
