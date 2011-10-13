@@ -1,58 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://core.ws.nettracer.bagnet.com" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax23="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:ax21="http://xsd.pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://core.ws.nettracer.bagnet.com">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns2="http://core.ws.nettracer.bagnet.com" xmlns:ns1="http://xsd.pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns0="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://core.ws.nettracer.bagnet.com">
     <wsdl:types>
-        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.core.ws.nettracer.bagnet.com/xsd">
-            <xs:complexType name="WS_QueryResponse">
+        <xs:schema xmlns:ax21="http://pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.core.ws.nettracer.bagnet.com/xsd">
+            <xs:complexType name="BdoStatusUpdate">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="errorResponse" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="result" nillable="true" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="WS_QOHD">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="bagTagNumber" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="comment" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="foundAtStation" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:date"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="WS_OhdResponse">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="errorResponse" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="ohdId" nillable="true" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="WS_OHD">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="OHD_ID" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="agent" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="bagarrivedate" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="bagtagnum" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="close_date" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="color" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="disposal_status" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="foundAtStation" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="holdingStation" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="inventories" nillable="true" type="ax23:WS_Inventory"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="itineraries" nillable="true" type="ax23:WS_Itinerary"/>
-                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="lossCode" type="xs:int"/>
-                    <xs:element minOccurs="0" name="manufacturer" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="membership" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax23:WS_Passenger"/>
-                    <xs:element minOccurs="0" name="record_locator" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bdo" type="xs:int"/>
+                    <xs:element minOccurs="0" name="remarks" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="storage_location" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="xdescelement1" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="xdescelement2" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="xdescelement3" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="statusDateTime" nillable="true" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_Incident">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="agent" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="agentassigned" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="articles" nillable="true" type="ax21:WS_Article"/>
+                    <xs:element minOccurs="0" name="checkedlocation" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="claimchecks" nillable="true" type="ax21:WS_IncidentClaimCheck"/>
+                    <xs:element minOccurs="0" name="closedate" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="companycode_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="courtesyreport" type="xs:int"/>
+                    <xs:element minOccurs="0" name="createDate" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="customcleared" type="xs:int"/>
+                    <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="faultairline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="faultstation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="incident_ID" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="ax21:WS_Item"/>
+                    <xs:element minOccurs="0" name="itemtype" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="itineraries" nillable="true" type="ax21:WS_Itinerary"/>
+                    <xs:element minOccurs="0" name="loss_code" type="xs:int"/>
+                    <xs:element minOccurs="0" name="nonrevenue" type="xs:int"/>
+                    <xs:element minOccurs="0" name="numbagchecked" type="xs:int"/>
+                    <xs:element minOccurs="0" name="numbagreceived" type="xs:int"/>
+                    <xs:element minOccurs="0" name="numpassengers" type="xs:int"/>
+                    <xs:element minOccurs="0" name="osi" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax21:WS_Passenger"/>
+                    <xs:element minOccurs="0" name="recordlocator" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="reportmethod" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="stationassigned" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="stationcreated" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ticketnumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tsachecked" type="xs:int"/>
+                    <xs:element minOccurs="0" name="voluntaryseparation" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_Article">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="article" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="cost" type="xs:double"/>
+                    <xs:element minOccurs="0" name="currency_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="description" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="purchasedate" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_IncidentClaimCheck">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="claimchecknum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="matched_ohd" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_Item">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="arrivedonairline_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arrivedondate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arrivedonflightnum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagnumber" type="xs:int"/>
+                    <xs:element minOccurs="0" name="bagstatus" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagtype" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="claimchecknum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="color" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="cost" type="xs:double"/>
+                    <xs:element minOccurs="0" name="currency_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="damage" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="drafts" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="fnameonbag" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="inventories" nillable="true" type="ax21:WS_Inventory"/>
+                    <xs:element minOccurs="0" name="itemtype" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lnameonbag" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lvlofdamage" type="xs:int"/>
+                    <xs:element minOccurs="0" name="manufacturer" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="matched_ohd" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="mnameonbag" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="resolutiondesc" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="resolutionstatus" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="xdescelement_1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="xdescelement_2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="xdescelement_3" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="WS_Inventory">
@@ -114,122 +149,87 @@
                     <xs:element minOccurs="0" name="zip" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="WS_Incident">
+            <xs:complexType name="WS_OHD">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="agent" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="agentassigned" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="articles" nillable="true" type="ax23:WS_Article"/>
-                    <xs:element minOccurs="0" name="checkedlocation" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="claimchecks" nillable="true" type="ax23:WS_IncidentClaimCheck"/>
-                    <xs:element minOccurs="0" name="closedate" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="companycode_ID" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="courtesyreport" type="xs:int"/>
-                    <xs:element minOccurs="0" name="createDate" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="customcleared" type="xs:int"/>
-                    <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="faultairline" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="faultstation" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="incident_ID" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="items" nillable="true" type="ax23:WS_Item"/>
-                    <xs:element minOccurs="0" name="itemtype" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="itineraries" nillable="true" type="ax23:WS_Itinerary"/>
-                    <xs:element minOccurs="0" name="loss_code" type="xs:int"/>
-                    <xs:element minOccurs="0" name="nonrevenue" type="xs:int"/>
-                    <xs:element minOccurs="0" name="numbagchecked" type="xs:int"/>
-                    <xs:element minOccurs="0" name="numbagreceived" type="xs:int"/>
-                    <xs:element minOccurs="0" name="numpassengers" type="xs:int"/>
-                    <xs:element minOccurs="0" name="osi" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax23:WS_Passenger"/>
-                    <xs:element minOccurs="0" name="recordlocator" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="reportmethod" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="stationassigned" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="stationcreated" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="ticketnumber" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="tsachecked" type="xs:int"/>
-                    <xs:element minOccurs="0" name="voluntaryseparation" type="xs:int"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="WS_Article">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="article" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="cost" type="xs:double"/>
-                    <xs:element minOccurs="0" name="currency_ID" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="description" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="purchasedate" nillable="true" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="WS_IncidentClaimCheck">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="claimchecknum" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="matched_ohd" nillable="true" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="WS_Item">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="arrivedonairline_ID" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="arrivedondate" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="arrivedonflightnum" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="bagnumber" type="xs:int"/>
-                    <xs:element minOccurs="0" name="bagstatus" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="bagtype" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="claimchecknum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagarrivedate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagtagnum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="close_date" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="color" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="cost" type="xs:double"/>
-                    <xs:element minOccurs="0" name="currency_ID" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="damage" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="drafts" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="fnameonbag" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="inventories" nillable="true" type="ax23:WS_Inventory"/>
-                    <xs:element minOccurs="0" name="itemtype" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="lnameonbag" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="lvlofdamage" type="xs:int"/>
+                    <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="disposal_status" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="foundAtStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="holdingStation" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="inventories" nillable="true" type="ax21:WS_Inventory"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="itineraries" nillable="true" type="ax21:WS_Itinerary"/>
+                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lossCode" type="xs:int"/>
                     <xs:element minOccurs="0" name="manufacturer" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="matched_ohd" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="mnameonbag" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="resolutiondesc" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="resolutionstatus" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="xdescelement_1" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="xdescelement_2" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="xdescelement_3" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="membership" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="oHD_ID" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax21:WS_Passenger"/>
+                    <xs:element minOccurs="0" name="record_locator" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="storage_location" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="xdescelement1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="xdescelement2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="xdescelement3" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="WS_BEORN">
                 <xs:sequence>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="baggageItinerary" nillable="true" type="ax23:WS_ForwardItinerary"/>
-                    <xs:element minOccurs="0" name="claimCheckNumber" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="destinationStation" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="baggageItinerary" nillable="true" type="ax21:WS_ForwardItinerary"/>
                     <xs:element minOccurs="0" name="expediteNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="forwardItinerary" nillable="true" type="ax23:WS_ForwardItinerary"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="forwardItinerary" nillable="true" type="ax21:WS_ForwardItinerary"/>
                     <xs:element minOccurs="0" name="foundAtStation" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="lossCode" nillable="true" type="xs:int"/>
                     <xs:element minOccurs="0" name="message" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="specialInstructions" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="tagOff" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="claimCheckNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="destinationStation" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="WS_ForwardItinerary">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="arrivedate" nillable="true" type="xs:date"/>
-                    <xs:element minOccurs="0" name="departdate" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="arrivedate" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="departdate" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="flightnum" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="legfrom" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="legto" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="BdoStatusUpdate">
+            <xs:complexType name="WS_OhdResponse">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="bdo" type="xs:int"/>
-                    <xs:element minOccurs="0" name="remarks" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="statusDateTime" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="errorResponse" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ohdId" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_QOHD">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="bagTagNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="comment" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="foundAtStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_QueryResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="errorResponse" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="result" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>
-        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://xsd.pojo.core.ws.nettracer.bagnet.com/xsd">
+        <xs:schema xmlns:ax22="http://xsd.pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://xsd.pojo.core.ws.nettracer.bagnet.com/xsd">
             <xs:complexType name="UpdateIncidentResponse">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="errorResponse" nillable="true" type="xs:string"/>
@@ -237,43 +237,21 @@
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>
-        <xs:schema xmlns:ax24="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:ax22="http://xsd.pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://core.ws.nettracer.bagnet.com">
-            <xs:import namespace="http://xsd.pojo.core.ws.nettracer.bagnet.com/xsd"/>
-            <xs:import namespace="http://pojo.core.ws.nettracer.bagnet.com/xsd"/>
-            <xs:element name="updateIncidentFaultCodes">
+        <xs:schema xmlns:ns="http://core.ws.nettracer.bagnet.com" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://core.ws.nettracer.bagnet.com">
+            <xs:element name="UpdateBdoDelivery">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="incidentId" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="companyCode" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="faultCode" type="xs:int"/>
-                        <xs:element minOccurs="0" name="comment" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="companycode" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="updates" nillable="true" type="ns0:BdoStatusUpdate"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="updateIncidentFaultCodesResponse">
+            <xs:element name="UpdateBdoDeliveryResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="ax22:UpdateIncidentResponse"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="queryForFaultCode">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="companyCode" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="faultCode" type="xs:int"/>
-                        <xs:element minOccurs="0" name="IncidentType" nillable="true" type="xs:string"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="queryForFaultCodeResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WS_QueryResponse"/>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -291,48 +269,19 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="insertQuickOHD">
+            <xs:element name="getIncident">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="si" nillable="true" type="ax24:WS_QOHD"/>
+                        <xs:element minOccurs="0" name="incident_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="inc_type" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="insertQuickOHDResponse">
+            <xs:element name="getIncidentResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WS_OhdResponse"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="insertOHD">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="si" nillable="true" type="ax24:WS_OHD"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="insertOHDResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WS_OhdResponse"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="insertIncident">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="si" nillable="true" type="ax24:WS_Incident"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="insertIncidentResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WS_Incident"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -347,23 +296,7 @@
             <xs:element name="getOHDResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WS_OHD"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="getIncident">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="incident_id" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="inc_type" nillable="true" type="xs:string"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="getIncidentResponse">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WS_Incident"/>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WS_OHD"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -371,14 +304,81 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="si" nillable="true" type="ax24:WS_BEORN"/>
+                        <xs:element minOccurs="0" name="si" nillable="true" type="ns0:WS_BEORN"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="beornOHDResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:WS_OhdResponse"/>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WS_OhdResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="insertOHD">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="si" nillable="true" type="ns0:WS_OHD"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="insertOHDResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WS_OhdResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="insertQuickOHD">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="si" nillable="true" type="ns0:WS_QOHD"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="insertQuickOHDResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WS_OhdResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="queryForFaultCode">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="companyCode" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="faultCode" type="xs:int"/>
+                        <xs:element minOccurs="0" name="IncidentType" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="queryForFaultCodeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns0:WS_QueryResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateIncidentFaultCodes">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="incidentId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="companyCode" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="faultCode" type="xs:int"/>
+                        <xs:element minOccurs="0" name="comment" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateIncidentFaultCodesResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns1:UpdateIncidentResponse"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -398,213 +398,139 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="UpdateBdoDelivery">
+            <xs:element name="insertIncident">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="companycode" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="updates" nillable="true" type="ax24:BdoStatusUpdate"/>
+                        <xs:element minOccurs="0" name="session_id" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="si" nillable="true" type="ns0:WS_Incident"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
-            <xs:element name="UpdateBdoDeliveryResponse">
+            <xs:element name="insertIncidentResponse">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="authenticateRequest">
-        <wsdl:part name="parameters" element="ns:authenticate"/>
+        <wsdl:part name="parameters" element="ns2:authenticate"/>
     </wsdl:message>
     <wsdl:message name="authenticateResponse">
-        <wsdl:part name="parameters" element="ns:authenticateResponse"/>
-    </wsdl:message>
-    <wsdl:message name="insertOHDRequest">
-        <wsdl:part name="parameters" element="ns:insertOHD"/>
-    </wsdl:message>
-    <wsdl:message name="insertOHDResponse">
-        <wsdl:part name="parameters" element="ns:insertOHDResponse"/>
-    </wsdl:message>
-    <wsdl:message name="logoffRequest">
-        <wsdl:part name="parameters" element="ns:logoff"/>
-    </wsdl:message>
-    <wsdl:message name="logoffResponse">
-        <wsdl:part name="parameters" element="ns:logoffResponse"/>
-    </wsdl:message>
-    <wsdl:message name="getIncidentRequest">
-        <wsdl:part name="parameters" element="ns:getIncident"/>
-    </wsdl:message>
-    <wsdl:message name="getIncidentResponse">
-        <wsdl:part name="parameters" element="ns:getIncidentResponse"/>
-    </wsdl:message>
-    <wsdl:message name="UpdateBdoDeliveryRequest">
-        <wsdl:part name="parameters" element="ns:UpdateBdoDelivery"/>
-    </wsdl:message>
-    <wsdl:message name="UpdateBdoDeliveryResponse">
-        <wsdl:part name="parameters" element="ns:UpdateBdoDeliveryResponse"/>
-    </wsdl:message>
-    <wsdl:message name="beornOHDRequest">
-        <wsdl:part name="parameters" element="ns:beornOHD"/>
-    </wsdl:message>
-    <wsdl:message name="beornOHDResponse">
-        <wsdl:part name="parameters" element="ns:beornOHDResponse"/>
-    </wsdl:message>
-    <wsdl:message name="insertIncidentRequest">
-        <wsdl:part name="parameters" element="ns:insertIncident"/>
-    </wsdl:message>
-    <wsdl:message name="insertIncidentResponse">
-        <wsdl:part name="parameters" element="ns:insertIncidentResponse"/>
-    </wsdl:message>
-    <wsdl:message name="getOHDRequest">
-        <wsdl:part name="parameters" element="ns:getOHD"/>
-    </wsdl:message>
-    <wsdl:message name="getOHDResponse">
-        <wsdl:part name="parameters" element="ns:getOHDResponse"/>
-    </wsdl:message>
-    <wsdl:message name="queryForFaultCodeRequest">
-        <wsdl:part name="parameters" element="ns:queryForFaultCode"/>
-    </wsdl:message>
-    <wsdl:message name="queryForFaultCodeResponse">
-        <wsdl:part name="parameters" element="ns:queryForFaultCodeResponse"/>
+        <wsdl:part name="parameters" element="ns2:authenticateResponse"/>
     </wsdl:message>
     <wsdl:message name="updateIncidentFaultCodesRequest">
-        <wsdl:part name="parameters" element="ns:updateIncidentFaultCodes"/>
+        <wsdl:part name="parameters" element="ns2:updateIncidentFaultCodes"/>
     </wsdl:message>
     <wsdl:message name="updateIncidentFaultCodesResponse">
-        <wsdl:part name="parameters" element="ns:updateIncidentFaultCodesResponse"/>
+        <wsdl:part name="parameters" element="ns2:updateIncidentFaultCodesResponse"/>
     </wsdl:message>
     <wsdl:message name="insertQuickOHDRequest">
-        <wsdl:part name="parameters" element="ns:insertQuickOHD"/>
+        <wsdl:part name="parameters" element="ns2:insertQuickOHD"/>
     </wsdl:message>
     <wsdl:message name="insertQuickOHDResponse">
-        <wsdl:part name="parameters" element="ns:insertQuickOHDResponse"/>
+        <wsdl:part name="parameters" element="ns2:insertQuickOHDResponse"/>
+    </wsdl:message>
+    <wsdl:message name="beornOHDRequest">
+        <wsdl:part name="parameters" element="ns2:beornOHD"/>
+    </wsdl:message>
+    <wsdl:message name="beornOHDResponse">
+        <wsdl:part name="parameters" element="ns2:beornOHDResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getOHDRequest">
+        <wsdl:part name="parameters" element="ns2:getOHD"/>
+    </wsdl:message>
+    <wsdl:message name="getOHDResponse">
+        <wsdl:part name="parameters" element="ns2:getOHDResponse"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateBdoDeliveryRequest">
+        <wsdl:part name="parameters" element="ns2:UpdateBdoDelivery"/>
+    </wsdl:message>
+    <wsdl:message name="UpdateBdoDeliveryResponse">
+        <wsdl:part name="parameters" element="ns2:UpdateBdoDeliveryResponse"/>
+    </wsdl:message>
+    <wsdl:message name="insertOHDRequest">
+        <wsdl:part name="parameters" element="ns2:insertOHD"/>
+    </wsdl:message>
+    <wsdl:message name="insertOHDResponse">
+        <wsdl:part name="parameters" element="ns2:insertOHDResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getIncidentRequest">
+        <wsdl:part name="parameters" element="ns2:getIncident"/>
+    </wsdl:message>
+    <wsdl:message name="getIncidentResponse">
+        <wsdl:part name="parameters" element="ns2:getIncidentResponse"/>
+    </wsdl:message>
+    <wsdl:message name="logoffRequest">
+        <wsdl:part name="parameters" element="ns2:logoff"/>
+    </wsdl:message>
+    <wsdl:message name="logoffResponse">
+        <wsdl:part name="parameters" element="ns2:logoffResponse"/>
+    </wsdl:message>
+    <wsdl:message name="insertIncidentRequest">
+        <wsdl:part name="parameters" element="ns2:insertIncident"/>
+    </wsdl:message>
+    <wsdl:message name="insertIncidentResponse">
+        <wsdl:part name="parameters" element="ns2:insertIncidentResponse"/>
+    </wsdl:message>
+    <wsdl:message name="queryForFaultCodeRequest">
+        <wsdl:part name="parameters" element="ns2:queryForFaultCode"/>
+    </wsdl:message>
+    <wsdl:message name="queryForFaultCodeResponse">
+        <wsdl:part name="parameters" element="ns2:queryForFaultCodeResponse"/>
     </wsdl:message>
     <wsdl:portType name="NTCoreServicePortType">
         <wsdl:operation name="authenticate">
-            <wsdl:input message="ns:authenticateRequest" wsaw:Action="urn:authenticate"/>
-            <wsdl:output message="ns:authenticateResponse" wsaw:Action="urn:authenticateResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="insertOHD">
-            <wsdl:input message="ns:insertOHDRequest" wsaw:Action="urn:insertOHD"/>
-            <wsdl:output message="ns:insertOHDResponse" wsaw:Action="urn:insertOHDResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="logoff">
-            <wsdl:input message="ns:logoffRequest" wsaw:Action="urn:logoff"/>
-            <wsdl:output message="ns:logoffResponse" wsaw:Action="urn:logoffResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="getIncident">
-            <wsdl:input message="ns:getIncidentRequest" wsaw:Action="urn:getIncident"/>
-            <wsdl:output message="ns:getIncidentResponse" wsaw:Action="urn:getIncidentResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="UpdateBdoDelivery">
-            <wsdl:input message="ns:UpdateBdoDeliveryRequest" wsaw:Action="urn:UpdateBdoDelivery"/>
-            <wsdl:output message="ns:UpdateBdoDeliveryResponse" wsaw:Action="urn:UpdateBdoDeliveryResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="beornOHD">
-            <wsdl:input message="ns:beornOHDRequest" wsaw:Action="urn:beornOHD"/>
-            <wsdl:output message="ns:beornOHDResponse" wsaw:Action="urn:beornOHDResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="insertIncident">
-            <wsdl:input message="ns:insertIncidentRequest" wsaw:Action="urn:insertIncident"/>
-            <wsdl:output message="ns:insertIncidentResponse" wsaw:Action="urn:insertIncidentResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="getOHD">
-            <wsdl:input message="ns:getOHDRequest" wsaw:Action="urn:getOHD"/>
-            <wsdl:output message="ns:getOHDResponse" wsaw:Action="urn:getOHDResponse"/>
-        </wsdl:operation>
-        <wsdl:operation name="queryForFaultCode">
-            <wsdl:input message="ns:queryForFaultCodeRequest" wsaw:Action="urn:queryForFaultCode"/>
-            <wsdl:output message="ns:queryForFaultCodeResponse" wsaw:Action="urn:queryForFaultCodeResponse"/>
+            <wsdl:input message="ns2:authenticateRequest" wsaw:Action="urn:authenticate"/>
+            <wsdl:output message="ns2:authenticateResponse" wsaw:Action="urn:authenticateResponse"/>
         </wsdl:operation>
         <wsdl:operation name="updateIncidentFaultCodes">
-            <wsdl:input message="ns:updateIncidentFaultCodesRequest" wsaw:Action="urn:updateIncidentFaultCodes"/>
-            <wsdl:output message="ns:updateIncidentFaultCodesResponse" wsaw:Action="urn:updateIncidentFaultCodesResponse"/>
+            <wsdl:input message="ns2:updateIncidentFaultCodesRequest" wsaw:Action="urn:updateIncidentFaultCodes"/>
+            <wsdl:output message="ns2:updateIncidentFaultCodesResponse" wsaw:Action="urn:updateIncidentFaultCodesResponse"/>
         </wsdl:operation>
         <wsdl:operation name="insertQuickOHD">
-            <wsdl:input message="ns:insertQuickOHDRequest" wsaw:Action="urn:insertQuickOHD"/>
-            <wsdl:output message="ns:insertQuickOHDResponse" wsaw:Action="urn:insertQuickOHDResponse"/>
+            <wsdl:input message="ns2:insertQuickOHDRequest" wsaw:Action="urn:insertQuickOHD"/>
+            <wsdl:output message="ns2:insertQuickOHDResponse" wsaw:Action="urn:insertQuickOHDResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="beornOHD">
+            <wsdl:input message="ns2:beornOHDRequest" wsaw:Action="urn:beornOHD"/>
+            <wsdl:output message="ns2:beornOHDResponse" wsaw:Action="urn:beornOHDResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getOHD">
+            <wsdl:input message="ns2:getOHDRequest" wsaw:Action="urn:getOHD"/>
+            <wsdl:output message="ns2:getOHDResponse" wsaw:Action="urn:getOHDResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateBdoDelivery">
+            <wsdl:input message="ns2:UpdateBdoDeliveryRequest" wsaw:Action="urn:UpdateBdoDelivery"/>
+            <wsdl:output message="ns2:UpdateBdoDeliveryResponse" wsaw:Action="urn:UpdateBdoDeliveryResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="insertOHD">
+            <wsdl:input message="ns2:insertOHDRequest" wsaw:Action="urn:insertOHD"/>
+            <wsdl:output message="ns2:insertOHDResponse" wsaw:Action="urn:insertOHDResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getIncident">
+            <wsdl:input message="ns2:getIncidentRequest" wsaw:Action="urn:getIncident"/>
+            <wsdl:output message="ns2:getIncidentResponse" wsaw:Action="urn:getIncidentResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="logoff">
+            <wsdl:input message="ns2:logoffRequest" wsaw:Action="urn:logoff"/>
+            <wsdl:output message="ns2:logoffResponse" wsaw:Action="urn:logoffResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="insertIncident">
+            <wsdl:input message="ns2:insertIncidentRequest" wsaw:Action="urn:insertIncident"/>
+            <wsdl:output message="ns2:insertIncidentResponse" wsaw:Action="urn:insertIncidentResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="queryForFaultCode">
+            <wsdl:input message="ns2:queryForFaultCodeRequest" wsaw:Action="urn:queryForFaultCode"/>
+            <wsdl:output message="ns2:queryForFaultCodeResponse" wsaw:Action="urn:queryForFaultCodeResponse"/>
         </wsdl:operation>
     </wsdl:portType>
-    <wsdl:binding name="NTCoreServiceSoap11Binding" type="ns:NTCoreServicePortType">
+    <wsdl:binding name="NTCoreServiceSOAP11Binding" type="ns2:NTCoreServicePortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="authenticate">
             <soap:operation soapAction="urn:authenticate" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="logoff">
-            <soap:operation soapAction="urn:logoff" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="insertOHD">
-            <soap:operation soapAction="urn:insertOHD" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="getIncident">
-            <soap:operation soapAction="urn:getIncident" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="UpdateBdoDelivery">
-            <soap:operation soapAction="urn:UpdateBdoDelivery" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="beornOHD">
-            <soap:operation soapAction="urn:beornOHD" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="insertIncident">
-            <soap:operation soapAction="urn:insertIncident" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="getOHD">
-            <soap:operation soapAction="urn:getOHD" style="document"/>
-            <wsdl:input>
-                <soap:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="queryForFaultCode">
-            <soap:operation soapAction="urn:queryForFaultCode" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -630,83 +556,83 @@
                 <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
-    </wsdl:binding>
-    <wsdl:binding name="NTCoreServiceSoap12Binding" type="ns:NTCoreServicePortType">
-        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
-        <wsdl:operation name="authenticate">
-            <soap12:operation soapAction="urn:authenticate" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="logoff">
-            <soap12:operation soapAction="urn:logoff" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="insertOHD">
-            <soap12:operation soapAction="urn:insertOHD" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="getIncident">
-            <soap12:operation soapAction="urn:getIncident" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="UpdateBdoDelivery">
-            <soap12:operation soapAction="urn:UpdateBdoDelivery" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
         <wsdl:operation name="beornOHD">
-            <soap12:operation soapAction="urn:beornOHD" style="document"/>
+            <soap:operation soapAction="urn:beornOHD" style="document"/>
             <wsdl:input>
-                <soap12:body use="literal"/>
+                <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output>
-                <soap12:body use="literal"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="insertIncident">
-            <soap12:operation soapAction="urn:insertIncident" style="document"/>
-            <wsdl:input>
-                <soap12:body use="literal"/>
-            </wsdl:input>
-            <wsdl:output>
-                <soap12:body use="literal"/>
+                <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="getOHD">
-            <soap12:operation soapAction="urn:getOHD" style="document"/>
+            <soap:operation soapAction="urn:getOHD" style="document"/>
             <wsdl:input>
-                <soap12:body use="literal"/>
+                <soap:body use="literal"/>
             </wsdl:input>
             <wsdl:output>
-                <soap12:body use="literal"/>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateBdoDelivery">
+            <soap:operation soapAction="urn:UpdateBdoDelivery" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="insertOHD">
+            <soap:operation soapAction="urn:insertOHD" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getIncident">
+            <soap:operation soapAction="urn:getIncident" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="logoff">
+            <soap:operation soapAction="urn:logoff" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="insertIncident">
+            <soap:operation soapAction="urn:insertIncident" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="queryForFaultCode">
-            <soap12:operation soapAction="urn:queryForFaultCode" style="document"/>
+            <soap:operation soapAction="urn:queryForFaultCode" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="NTCoreServiceSOAP12Binding" type="ns2:NTCoreServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="authenticate">
+            <soap12:operation soapAction="urn:authenticate" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -732,8 +658,80 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="beornOHD">
+            <soap12:operation soapAction="urn:beornOHD" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOHD">
+            <soap12:operation soapAction="urn:getOHD" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateBdoDelivery">
+            <soap12:operation soapAction="urn:UpdateBdoDelivery" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="insertOHD">
+            <soap12:operation soapAction="urn:insertOHD" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getIncident">
+            <soap12:operation soapAction="urn:getIncident" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="logoff">
+            <soap12:operation soapAction="urn:logoff" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="insertIncident">
+            <soap12:operation soapAction="urn:insertIncident" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="queryForFaultCode">
+            <soap12:operation soapAction="urn:queryForFaultCode" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
     </wsdl:binding>
-    <wsdl:binding name="NTCoreServiceHttpBinding" type="ns:NTCoreServicePortType">
+    <wsdl:binding name="NTCoreServiceHttpBinding" type="ns2:NTCoreServicePortType">
         <http:binding verb="POST"/>
         <wsdl:operation name="authenticate">
             <http:operation location="NTCoreService/authenticate"/>
@@ -742,78 +740,6 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="authenticate"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="logoff">
-            <http:operation location="NTCoreService/logoff"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="logoff"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="logoff"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="insertOHD">
-            <http:operation location="NTCoreService/insertOHD"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="insertOHD"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="insertOHD"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="getIncident">
-            <http:operation location="NTCoreService/getIncident"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="getIncident"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="getIncident"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="UpdateBdoDelivery">
-            <http:operation location="NTCoreService/UpdateBdoDelivery"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="UpdateBdoDelivery"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="UpdateBdoDelivery"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="beornOHD">
-            <http:operation location="NTCoreService/beornOHD"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="beornOHD"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="beornOHD"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="insertIncident">
-            <http:operation location="NTCoreService/insertIncident"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="insertIncident"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="insertIncident"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="getOHD">
-            <http:operation location="NTCoreService/getOHD"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="getOHD"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="getOHD"/>
-            </wsdl:output>
-        </wsdl:operation>
-        <wsdl:operation name="queryForFaultCode">
-            <http:operation location="NTCoreService/queryForFaultCode"/>
-            <wsdl:input>
-                <mime:content type="text/xml" part="queryForFaultCode"/>
-            </wsdl:input>
-            <wsdl:output>
-                <mime:content type="text/xml" part="queryForFaultCode"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="updateIncidentFaultCodes">
@@ -834,15 +760,87 @@
                 <mime:content type="text/xml" part="insertQuickOHD"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="beornOHD">
+            <http:operation location="NTCoreService/beornOHD"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="beornOHD"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="beornOHD"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOHD">
+            <http:operation location="NTCoreService/getOHD"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getOHD"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getOHD"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="UpdateBdoDelivery">
+            <http:operation location="NTCoreService/UpdateBdoDelivery"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="UpdateBdoDelivery"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="UpdateBdoDelivery"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="insertOHD">
+            <http:operation location="NTCoreService/insertOHD"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="insertOHD"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="insertOHD"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getIncident">
+            <http:operation location="NTCoreService/getIncident"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getIncident"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getIncident"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="logoff">
+            <http:operation location="NTCoreService/logoff"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="logoff"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="logoff"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="insertIncident">
+            <http:operation location="NTCoreService/insertIncident"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="insertIncident"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="insertIncident"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="queryForFaultCode">
+            <http:operation location="NTCoreService/queryForFaultCode"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="queryForFaultCode"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="queryForFaultCode"/>
+            </wsdl:output>
+        </wsdl:operation>
     </wsdl:binding>
     <wsdl:service name="NTCoreService">
-        <wsdl:port name="NTCoreServiceHttpSoap11Endpoint" binding="ns:NTCoreServiceSoap11Binding">
+        <wsdl:port name="NTCoreServiceSOAP11port_http" binding="ns2:NTCoreServiceSOAP11Binding">
             <soap:address location="http://localhost:8080/axis2/services/NTCoreService"/>
         </wsdl:port>
-        <wsdl:port name="NTCoreServiceHttpSoap12Endpoint" binding="ns:NTCoreServiceSoap12Binding">
+        <wsdl:port name="NTCoreServiceSOAP12port_http" binding="ns2:NTCoreServiceSOAP12Binding">
             <soap12:address location="http://localhost:8080/axis2/services/NTCoreService"/>
         </wsdl:port>
-        <wsdl:port name="NTCoreServiceHttpEndpoint" binding="ns:NTCoreServiceHttpBinding">
+        <wsdl:port name="NTCoreServiceHttpport" binding="ns2:NTCoreServiceHttpBinding">
             <http:address location="http://localhost:8080/axis2/services/NTCoreService"/>
         </wsdl:port>
     </wsdl:service>
