@@ -205,6 +205,10 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				HashSet<FsAddress> addresses = new HashSet<FsAddress>();
 				addresses.add(receipt.getAddress());
 				resetAddressIdAndGeocode(addresses);
+				
+				HashSet<Phone> phones = new HashSet<Phone>();
+				phones.add(receipt.getPhone());
+				resetPhoneId(phones);
 			}
 		}
 		return receipts;
@@ -294,13 +298,15 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public static Set<Phone> resetPhoneId(Set<Phone> phones) {
 		if (phones != null) {
 			for (Phone phone : phones) {
-				phone.setId(0);
-				if(phone.getReceipt() != null){
-					phone.getReceipt().setId(0);
+				if(phone != null){
+					phone.setId(0);
+					if(phone.getReceipt() != null){
+						phone.getReceipt().setId(0);
+					}
+
+					phone.setPhoneNumber(aero.nettracer.fs.utilities.Util.removeNonNumeric(phone.getPhoneNumber()));
+					phone.setWhitelist(WhiteListUtil.isPhoneWhiteListed(phone.getPhoneNumber()));
 				}
-				
-				phone.setPhoneNumber(aero.nettracer.fs.utilities.Util.removeNonNumeric(phone.getPhoneNumber()));
-				phone.setWhitelist(WhiteListUtil.isPhoneWhiteListed(phone.getPhoneNumber()));
 			}
 		}
 		return phones;

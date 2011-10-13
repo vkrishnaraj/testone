@@ -12,9 +12,14 @@ public class DataRetentionThread implements Runnable{
 			try{	
 				ClaimBean bean = new ClaimBean();
 				bean.deleteOldFiles();
-				Thread.sleep(INTERVAL);
 			} catch (Exception e){
 				e.printStackTrace();
+			} finally {
+				try {
+					Thread.sleep(INTERVAL);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
