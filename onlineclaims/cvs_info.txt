@@ -1,0 +1,5 @@
+Connection: pserver
+User: olivetech
+Password: 754KK4b
+Host: ftp.nettracer.aero
+Repository path: /NetTracer_OnlineClaims
