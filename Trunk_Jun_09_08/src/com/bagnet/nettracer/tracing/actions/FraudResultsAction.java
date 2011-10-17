@@ -73,10 +73,12 @@ public class FraudResultsAction extends CheckedAction {
 			file = FileDAO.loadFile(incidentIdString);
 			request.setAttribute("claimId", claimIdString);
 			request.setAttribute("incident", incidentIdString);
+			request.setAttribute("displayId", "Incident: " + incidentIdString);
 		} else if (claimIdString != null) {
 			claim = ClaimDAO.loadClaim(Long.parseLong(claimIdString));
 			resultsForm.setClaimId(claim.getId());
 			request.setAttribute("claimId", claimIdString);
+			request.setAttribute("displayId", "Claim: " + claimIdString);
 			if (claim.getNtIncidentId() != null) {
 				request.setAttribute("incident", claim.getNtIncidentId());
 			}

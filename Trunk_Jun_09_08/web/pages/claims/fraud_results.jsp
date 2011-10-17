@@ -160,14 +160,17 @@
     	<td id="middlecolumn">
         	<div id="maincontent">
                 
-					<logic:notEmpty name="fraudResultsForm" property="traceResponse">
 
                 		<h1>
-                	<bean:message key="claim.meta.summary" />
+                	<bean:message key="claim.meta.summary" />&nbsp;<bean:write name="displayId" scope="request"/>
                 </h1>
                 <font color=red>
                   <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
                 </font>
+                <logic:empty name="fraudResultsForm" property="traceResponse" >
+                	<br />
+                </logic:empty>
+					<logic:notEmpty name="fraudResultsForm" property="traceResponse">
        		<table class="form2" cellspacing="0" cellpadding="0">
 				<tr>
 						<td <%=myform.getTraceResponse().getDisplayClass() %>>
