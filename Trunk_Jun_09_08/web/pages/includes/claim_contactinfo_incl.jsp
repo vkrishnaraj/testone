@@ -31,44 +31,7 @@
 		}
 	}
 	
-	function stateChanged(dlState, dlProvince, dlCountry) {
-		if (dlState.value == "") {
-			dlProvince.disabled = false;	
-			dlProvince.className = "textfield";
-		} else {
-			dlProvince.value = "";
-			dlProvince.disabled = true;
-			dlProvince.className = "disabledtextfield";
-			dlCountry.value = "US";
-		}
-	}
 	
-	function provinceChanged(dlState, dlProvince, dlCountry) {
-		if (dlProvince.value == "") {
-			dlState.disabled = false;
-		} else {
-			dlState.value = "";
-			dlState.disabled = true;
-		}
-	}
-	
-	function countryChanged(dlState, dlProvince, dlCountry) {
-		if (dlCountry.value == "") {
-			dlState.disabled = false;
-			dlProvince.disabled = false;
-			dlProvince.className = "textfield";
-		} else if (dlCountry.value == "US") {
-			dlState.disabled = false;
-			dlProvince.value = "";
-			dlProvince.disabled = true;
-			dlProvince.className = "disabledtextfield";
-		} else {
-			dlState.value = "";
-			dlState.disabled = true;
-			dlProvince.disabled = false;
-			dlProvince.className = "textfield";
-		}
-	}
 
 </SCRIPT>
 
