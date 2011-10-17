@@ -783,10 +783,14 @@ public class OnlineClaimsServiceImplementation extends
 	private boolean checkPrevSubmissionDiffPax(OnlineClaim c, String lName, String fName) {
 		if (c.getPassenger() != null && c.getPassenger().size() > 0) {
 			for (OCPassenger pass : c.getPassenger()) {
-				if (pass != null && pass.getLastName() != null && pass.getFirstName() != null) {
-					fName = fName.toUpperCase();
-					String fNameCheck = pass.getFirstName().toUpperCase();
-					if (pass.getLastName().equalsIgnoreCase(lName) && fNameCheck.contains(fName)) {
+				if (pass != null && pass.getLastName() != null && lName != null) {
+					boolean fNameCheck = true;
+					if (fName != null && pass.getFirstName() != null) {
+						fName = fName.toUpperCase();
+						String fNamePass = pass.getFirstName().toUpperCase();
+						fNameCheck = fNamePass.contains(fName);
+					}
+					if (pass.getLastName().equalsIgnoreCase(lName) && fNameCheck) {
 						return false;
 					}
 				}
