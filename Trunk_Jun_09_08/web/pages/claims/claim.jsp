@@ -1136,7 +1136,7 @@
                   <bean:message key="colname.state.req" />
                   <br />
                   <logic:equal name="claimForm" property="claim.file.incident.reservation.billingAddress.country" value="US">
-                    <html:select name="claimForm" property="claim.file.incident.reservation.billingAddress.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'claim.incident.reservation.billingAddress.province');" >
+                    <html:select name="claimForm" property="claim.file.incident.reservation.billingAddress.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'file.incident.reservation.billingAddress.country', 'file.incident.reservation.billingAddress.province');" >
                       <html:option value="">
                         <bean:message key="select.none" />
                       </html:option>
@@ -1144,7 +1144,7 @@
                     </html:select>
                   </logic:equal>
                   <logic:equal name="claimForm" property="claim.file.incident.reservation.billingAddress.country" value="">
-                    <html:select name="claimForm" property="claim.file.incident.reservation.billingAddress.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'country', 'claim.incident.reservation.billingAddress.province');" >
+                    <html:select name="claimForm" property="claim.file.incident.reservation.billingAddress.state" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'file.incident.reservation.billingAddress.country', 'file.incident.reservation.billingAddress.province');" >
                       <html:option value="">
                         <bean:message key="select.none" />
                       </html:option>
@@ -1153,7 +1153,7 @@
                   </logic:equal>
                   <logic:notEqual name="claimForm" property="claim.file.incident.reservation.billingAddress.country" value="">
                     <logic:notEqual name="claimForm" property="claim.file.incident.reservation.billingAddress.country" value="US">
-                      <html:select name="claimForm" property="claim.file.incident.reservation.billingAddress.state" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'country', 'claim.incident.reservation.billingAddress.province');" >
+                      <html:select name="claimForm" property="claim.file.incident.reservation.billingAddress.state" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'file.incident.reservation.billingAddress.country', 'file.incident.reservation.billingAddress.province');" >
                         <html:option value="">
                           <bean:message key="select.none" />
                         </html:option>
@@ -1185,7 +1185,7 @@
                 <td>
                   <bean:message key="colname.country" />
                   <br>
-                  <html:select name="claimForm" property="claim.file.incident.reservation.billingAddress.country" styleClass="dropdown" onchange="checkstate(this,this.form,'claim.incident.reservation.billingAddress.state', 'claim.incident.reservation.billingAddress.province');">
+                  <html:select name="claimForm" property="claim.file.incident.reservation.billingAddress.country" styleClass="dropdown" onchange="checkstate(this,this.form,'file.incident.reservation.billingAddress.state', 'file.incident.reservation.billingAddress.province');">
                     <html:option value="">
                       <bean:message key="select.none" />
                     </html:option>
