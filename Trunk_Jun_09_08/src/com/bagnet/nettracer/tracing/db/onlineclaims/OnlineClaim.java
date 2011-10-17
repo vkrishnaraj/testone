@@ -221,7 +221,7 @@ public class OnlineClaim {
 	@Basic
 	private boolean privateInsurance;
 	
-	@Column(length = 20)
+	@Column(length = 50)
 	private String privateInsuranceName;
 	
 	@Column(length = 100)

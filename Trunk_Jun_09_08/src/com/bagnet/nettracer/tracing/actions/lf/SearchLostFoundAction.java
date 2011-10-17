@@ -55,9 +55,9 @@ public class SearchLostFoundAction extends CheckedAction {
 			LFServiceBean serviceBean = new LFServiceBean();
 			long rowcount;
 			if (type == TracingConstants.LF_TYPE_LOST) {
-				rowcount = serviceBean.getLostCount(user.getStation());
+				rowcount = serviceBean.searchLostCount(searchDto);
 			} else {
-				rowcount = serviceBean.getFoundCount(user.getStation());
+				rowcount = serviceBean.searchFoundCount(searchDto);
 			}
 	
 			currpage = searchDto.getCurrpage() != null ? Integer.parseInt(searchDto.getCurrpage()) : 0;
