@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
@@ -40,6 +41,7 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -508,6 +510,13 @@ public class MBRActionUtils {
 			}
 			if (type == 0)
 				return null;
+
+			// MJS: populate the OSI if we have it
+			OtherSystemInformation osi = OtherSystemInformationBMO.getOsi(theform.getIncident_ID(), null);
+			if (osi != null) {
+				theform.setOtherSystemInformation(osi.getInfo());
+			}
+			
 			// initialize vars
 			request.setAttribute("newform", "1");
 			theform.setIncident_ID("");
@@ -678,7 +687,9 @@ public class MBRActionUtils {
 			al = new ArrayList();
 			al.add(new Incident_Claimcheck());
 			theform.setClaimchecklist(al);
-
+			
+			
+			
 		}
 		return loc;
 	}

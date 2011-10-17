@@ -1673,7 +1673,7 @@ document.onkeydown = function(){
 	if(window.event && window.event.keyCode == 505) { 
 		return false; 
 	}
-}
+};
 
 function verifyPaginationLimit(field) {
 	if (field.value < 5) {
