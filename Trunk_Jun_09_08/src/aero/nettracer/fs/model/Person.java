@@ -176,6 +176,9 @@ public class Person implements Serializable {
 	}
 
 	public Set<Phone> getPhones() {
+		if (phones == null) {
+			phones = new LinkedHashSet<Phone>();
+		}
 		return phones;
 	}
 
