@@ -286,34 +286,33 @@ public class LFTracingUtil {
 						match.getDetails().add(detail);
 					}
 				}
-				if(litem.getCategory() > 0 && fitem.getCategory() > 0){
-					if(litem.getSubCategory() > 0 && fitem.getSubCategory() > 0){
-						if(litem.getSubCategory() == fitem.getSubCategory()
-								&& litem.getCategory() == fitem.getCategory()){
-							LFMatchDetail detail = new LFMatchDetail();
-							detail.setDescription("Category Match");
-							detail.setMatchHistory(match);
-							LFSubCategory sub = getSubCategory(litem.getSubCategory());
+				if(litem.getCategory() > 0 && fitem.getCategory() > 0
+					&& litem.getCategory() == fitem.getCategory()){
+					if(litem.getSubCategory() > 0 && fitem.getSubCategory() > 0
+						&& litem.getSubCategory() == fitem.getSubCategory()){
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("Category Match");
+						detail.setMatchHistory(match);
+						detail.setScore(SCORE_CATEGORY_PARTICLE);
+						LFSubCategory sub = getSubCategory(litem.getSubCategory());
+						if(sub != null){
 							detail.setScore(sub.getScore());
-							if(sub != null){
-								detail.setDecryptedFoundValue(sub.getParent().getDescription() + "/" + sub.getDescription());
-								detail.setDecryptedLostValue(sub.getParent().getDescription() + "/" + sub.getDescription());
-							}
-							match.getDetails().add(detail);
+							detail.setDecryptedFoundValue(sub.getParent().getDescription() + "/" + sub.getDescription());
+							detail.setDecryptedLostValue(sub.getParent().getDescription() + "/" + sub.getDescription());
 						}
+						match.getDetails().add(detail);
 					} else {
-						if(litem.getCategory() == fitem.getCategory()){
-							LFMatchDetail detail = new LFMatchDetail();
-							detail.setDescription("Partial Category Match");
-							detail.setMatchHistory(match);
-							LFCategory cat = getCategory(litem.getCategory());
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("Partial Category Match");
+						detail.setMatchHistory(match);
+						detail.setScore(SCORE_CATEGORY);
+						LFCategory cat = getCategory(litem.getCategory());
+						if(cat != null){
 							detail.setScore(cat.getScore());
-							if(cat != null){
-								detail.setDecryptedFoundValue(cat.getDescription());
-								detail.setDecryptedLostValue(cat.getDescription());
-							}
-							match.getDetails().add(detail);
+							detail.setDecryptedFoundValue(cat.getDescription());
+							detail.setDecryptedLostValue(cat.getDescription());
 						}
+						match.getDetails().add(detail);
 					}
 				}
 				if(litem.getColor() != null && litem.getColor().trim().length() > 0
