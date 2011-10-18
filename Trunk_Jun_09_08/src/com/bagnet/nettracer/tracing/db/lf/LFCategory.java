@@ -32,6 +32,12 @@ public class LFCategory {
 	public void setSubcategories(Set<LFSubCategory> subcategories) {
 		this.subcategories = subcategories;
 	}
+	public long getScore() {
+		return score;
+	}
+	public void setScore(long score) {
+		this.score = score;
+	}
 	
 	@Id
 	@GeneratedValue
@@ -40,4 +46,5 @@ public class LFCategory {
 	@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	Set<LFSubCategory> subcategories;
+	private long score;
 }

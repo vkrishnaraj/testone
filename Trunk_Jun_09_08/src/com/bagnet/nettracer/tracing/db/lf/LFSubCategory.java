@@ -32,6 +32,12 @@ public class LFSubCategory {
 	public void setParent(LFCategory parent) {
 		this.parent = parent;
 	}
+	public long getScore() {
+		return score;
+	}
+	public void setScore(long score) {
+		this.score = score;
+	}
 	@Id
 	@GeneratedValue
 	private long id;
@@ -40,4 +46,5 @@ public class LFSubCategory {
 	@JoinColumn(name = "parent_id", nullable = false)
 	@Fetch(FetchMode.SELECT)
 	private LFCategory parent;
+	private long score;
 }

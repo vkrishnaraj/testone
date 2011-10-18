@@ -293,8 +293,8 @@ public class LFTracingUtil {
 							LFMatchDetail detail = new LFMatchDetail();
 							detail.setDescription("Category Match");
 							detail.setMatchHistory(match);
-							detail.setScore(SCORE_CATEGORY);
 							LFSubCategory sub = getSubCategory(litem.getSubCategory());
+							detail.setScore(sub.getScore());
 							if(sub != null){
 								detail.setDecryptedFoundValue(sub.getParent().getDescription() + "/" + sub.getDescription());
 								detail.setDecryptedLostValue(sub.getParent().getDescription() + "/" + sub.getDescription());
@@ -304,10 +304,10 @@ public class LFTracingUtil {
 					} else {
 						if(litem.getCategory() == fitem.getCategory()){
 							LFMatchDetail detail = new LFMatchDetail();
-							detail.setDescription("Particle Category Match");
+							detail.setDescription("Partial Category Match");
 							detail.setMatchHistory(match);
-							detail.setScore(SCORE_CATEGORY_PARTICLE);
 							LFCategory cat = getCategory(litem.getCategory());
+							detail.setScore(cat.getScore());
 							if(cat != null){
 								detail.setDecryptedFoundValue(cat.getDescription());
 								detail.setDecryptedLostValue(cat.getDescription());
