@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import aero.nettracer.lf.services.LFServiceBean;
+import aero.nettracer.lf.services.LFUtils;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -44,10 +45,16 @@ public class SearchLostFoundAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
 		
+		LFSearchDTO searchDto = (LFSearchDTO) form;
+		LFUtils.getLists(user, session);
+		if (LFUtils.actionChangeSubCategory(searchDto, request)) {
+			request.setAttribute("formName", "searchLostFoundForm");
+			return mapping.findForward(TracingConstants.AJAX_SUBCATEGORY);
+		}
+		
 		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 		int currpage = 0;
 
-		LFSearchDTO searchDto = (LFSearchDTO) form;
 		searchDto.setAgent(user);
 		int type = searchDto.getType();
 		List resultSet = new ArrayList();

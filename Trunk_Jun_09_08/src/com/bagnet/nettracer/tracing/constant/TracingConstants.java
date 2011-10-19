@@ -467,6 +467,8 @@ public class TracingConstants {
 	public final static String LF_BUDGET_COMPANY_ID = "BGT";
 	public final static String LF_ABG_COMPANY_ID = "ABG";
 	
+	public final static String AJAX_SUBCATEGORY = "subcategory";
+	
 	/** ********* forwards *********** */
 	// no permission
 	public final static String NO_PERMISSION = "nopermission";

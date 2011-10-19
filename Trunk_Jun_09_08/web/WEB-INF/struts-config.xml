@@ -530,6 +530,8 @@
 		<forward name="create_delivery" path="create_delivery" />
 		<forward name="select_claim" path="select_claim" />
 		
+		<forward name="subcategory" path="ajax_subcategory" />
+		
 	</global-forwards>
 
 	<!-- ========== Action Mapping Definitions ============================== -->

@@ -35,6 +35,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
@@ -138,17 +139,52 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return null;
 		}
 		
+		long category = dto.getCategory();
+		long subCategory = dto.getSubCategory();
+		boolean haveBrand = dto.getBrand() != null && !dto.getBrand().isEmpty();
+		boolean haveDesc = dto.getItemDescription() != null && !dto.getItemDescription().isEmpty();
+		
+		if (category > 0 || haveBrand || haveDesc) {
+			sql += " left outer join o.items i";
+		}
+		
+
+		String phone = null;
 		if(dto.getPhoneNumber() != null && dto.getPhoneNumber().trim().length() > 0){
 			try{
-				String s = AES.encrypt(LFPhone.normalizePhone(dto.getPhoneNumber()));
-				if(s != null){
-					sql += " left outer join o.client.phones p where p.phoneNumber = \'" + s + "\'";
+				phone = AES.encrypt(LFPhone.normalizePhone(dto.getPhoneNumber()));
+				if(phone != null){
+					sql += " left outer join o.client.phones p";
 				}
 			} catch (Exception e){
 				e.printStackTrace();
 			}
-		} else {
-			sql += " where 1=1";
+		} 
+		
+		sql += " where 1=1";
+
+		if (category > 0 || haveBrand || haveDesc) {
+			String itemSql = " and i.type = " + dto.getType();
+			if (category > 0) {
+				itemSql += " and i.category = " + category;
+				if (subCategory > 0 ) {
+					itemSql += " and i.subCategory = " + subCategory;
+				}
+			}
+			
+			if (haveBrand) {
+				itemSql += " and i.brand like \'" + dto.getBrand() + "\'";
+			}
+			
+			if (haveDesc) {
+				itemSql += " and i.description like \'" + dto.getItemDescription() + "\'";
+			}
+			
+			sql += itemSql;
+		}
+		
+		if (phone != null) {
+			sql += " and p.phoneNumber = \'" + phone + "\'";
 		}
 		
 		if(dto.getId() > 0){
@@ -216,6 +252,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				e.printStackTrace();
 			}
 		}
+		
 		return sql;
 	}
 	
@@ -1775,6 +1812,30 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 		}catch(Exception e){
 			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<LFSubCategory> getSubCategories(long categoryId) {
+		Session sess = null;
+		if (categoryId == 0)
+			return new ArrayList<LFSubCategory>();
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			String sql = " from com.bagnet.nettracer.tracing.db.lf.LFSubCategory c where c.parent.id = " + categoryId;
+			Query query = sess.createQuery(sql);
+			return query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	

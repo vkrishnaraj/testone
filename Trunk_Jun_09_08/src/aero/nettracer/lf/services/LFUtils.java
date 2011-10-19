@@ -1,8 +1,11 @@
 package aero.nettracer.lf.services;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -16,6 +19,8 @@ import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFReservation;
+import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
+import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class LFUtils {
@@ -115,6 +120,10 @@ public class LFUtils {
 			session.setAttribute("lfcategorylist", new LFServiceBean().getCategories());
 		}
 		
+		if (session.getAttribute("lfsubcategorylist") == null) {
+			session.setAttribute("lfsubcategorylist", new LFServiceBean().getSubCategories(0));
+		}
+		
 		session.setAttribute("lfstatuslist", session
 				.getAttribute("lfstatuslist") != null ? session
 						.getAttribute("lfstatuslist") : TracerUtils.getStatusList(TracingConstants.TABLE_LF_STATUS, user.getCurrentlocale()));
@@ -123,5 +132,17 @@ public class LFUtils {
 				.getAttribute("lfdispositionlist") != null ? session
 				.getAttribute("lfdispositionlist") : TracerUtils.getStatusList(TracingConstants.TABLE_LF_DISPOSITION, user.getCurrentlocale()));
 	}
+	
+	public static boolean actionChangeSubCategory(LFSearchDTO sDto, HttpServletRequest request) {
+		boolean success = false;
+		if (request.getParameter("changesubcategory") != null && request.getParameter("changesubcategory").equals("1")) {
+			List<LFSubCategory> categories = new LFServiceBean().getSubCategories(sDto.getCategory());
+			request.getSession().setAttribute("lfsubcategorylist", categories);
+			success = true;
+		}
+		return success;
+	}
+	
+	
 
 }

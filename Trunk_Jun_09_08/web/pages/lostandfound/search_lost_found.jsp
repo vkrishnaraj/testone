@@ -15,9 +15,21 @@
 
 
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
     
-	var cal1xx = new CalendarPopup();	
+	var cal1xx = new CalendarPopup();
+	
+	function getSubCategory() {
+		o = document.searchLostFoundForm;
+		o.changesubcategory.value = "1";
+		document.getElementById("subcategorydiv").innerHTML = "<bean:message key="ajax.please_wait" />";
+		postForm("searchLostFoundForm", true, function (req) { 
+			o.changesubcategory.value = "0";
+			document.getElementById("subcategorydiv").innerHTML = req.responseText; 
+
+		});
+	}
     
 	function goprev() {
 	  o = document.searchLostFoundForm;
@@ -134,12 +146,12 @@
 			                <html:text property="startDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.startDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">&nbsp;-
 			                <html:text property="endDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.endDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
 		                </td>
-		                <td colspan=2>
+		                <td >
 							<bean:message key="colname.lf.agreement.number" />
 							<br>
 							<html:text name="searchLostFoundForm" property="agreementNumber" size="15" styleClass="textfield" />
 						</td>
-		                <td>
+		                <td colspan=2>
 		                	<bean:message key="colname.lf.mva.number" />
 							<br>
 							<html:text name="searchLostFoundForm" property="mvaNumber" size="10" styleClass="textfield" />
@@ -164,8 +176,39 @@
 		              	<td colspan=2>
 		              		<bean:message key="colname.lf.email" />
 		              		<br />
-		              		<html:text name="searchLostFoundForm" property="email" size="35" maxlength="100" styleClass="textfield" />
+		              		<html:text name="searchLostFoundForm" property="email" size="30" maxlength="100" styleClass="textfield" />
 		              	</td>
+           			</tr>
+           			<tr>
+           				<td>
+           					<bean:message key="colname.lf.category" />
+           					<br/>
+           					<input type="hidden" name="changesubcategory">
+           					<html:select name="searchLostFoundForm" property="category" styleClass="dropdown" onchange="getSubCategory();" >
+           						<html:option value="0"><bean:message key="option.lf.please.select" /></html:option>
+           						<html:options collection="lfcategorylist" property="id" labelProperty="description" />
+           					</html:select>
+           				</td>
+           				<td>
+           					<div id="subcategorydiv">
+           					<bean:message key="colname.lf.subcategory" />
+           					<br/>
+           					<html:select name="searchLostFoundForm" property="subCategory" styleClass="dropdown" >
+           						<option value="0"><bean:message key="option.lf.please.select" /></option>
+      							<html:options collection="lfsubcategorylist" property="id" labelProperty="description" />
+           					</html:select>
+           					</div>
+           				</td>
+           				<td>
+           					<bean:message key="colname.lf.brand" />
+           					<br>
+           					<html:text name="searchLostFoundForm" property="brand" size="15" maxlength="30" styleClass="textfield" />
+           				</td>
+           				<td colspan=2>
+           					<bean:message key="colname.lf.description" />
+         					<br>
+		              		<html:text name="searchLostFoundForm" property="itemDescription" size="25" maxlength="100" styleClass="textfield" />
+           				</td>
            			</tr>
            			<tr>
            				<td colspan=5>

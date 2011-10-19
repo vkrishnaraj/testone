@@ -21,18 +21,22 @@ public class LFSearchDTO extends ActionForm  {
 	
 	private String firstName;
 	private String lastName;
-	private long id; // done
-	private String startDate; // done
-	private String endDate; // done
-	private Station station; // done
+	private long id; 
+	private String startDate;
+	private String endDate; 
+	private Station station;
 	private Agent agent; // na
-	private Status status; // done
+	private Status status; 
 	private Status disposition;
-	private String agreementNumber; // done
-	private String mvaNumber; // done
+	private String agreementNumber;
+	private String mvaNumber; 
 	private String phoneNumber;
 	private String email;
-	private int type; // done
+	private int type; 
+	private long category;
+	private long subCategory;
+	private String brand;
+	private String itemDescription;
 
 	public String getFirstName() {
 		return firstName;
@@ -208,6 +212,38 @@ public class LFSearchDTO extends ActionForm  {
 	
 	public void setDispositionId(int dispositionId){
 		this.disposition.setStatus_ID(dispositionId);
+	}
+
+	public long getCategory() {
+		return category;
+	}
+
+	public void setCategory(long category) {
+		this.category = category;
+	}
+
+	public long getSubCategory() {
+		return subCategory;
+	}
+
+	public void setSubCategory(long subCategory) {
+		this.subCategory = subCategory;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public String getItemDescription() {
+		return itemDescription;
+	}
+
+	public void setItemDescription(String itemDescription) {
+		this.itemDescription = itemDescription;
 	}
 		
 }
