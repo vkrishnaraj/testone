@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.forms;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -1134,6 +1135,9 @@ public final class IncidentForm extends ValidatorForm {
 	 * @return Returns the claims.
 	 */
 	public Set<Claim> getClaims() {
+		if (claims == null) {
+			claims = new LinkedHashSet<Claim>();
+		}
 		return claims;
 	}
 
