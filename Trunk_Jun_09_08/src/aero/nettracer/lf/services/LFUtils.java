@@ -13,6 +13,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
+import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
@@ -121,7 +122,7 @@ public class LFUtils {
 		}
 		
 		if (session.getAttribute("lfsubcategorylist") == null) {
-			session.setAttribute("lfsubcategorylist", new LFServiceBean().getSubCategories(0));
+			session.setAttribute("lfsubcategorylist", new ArrayList<LFSubCategory>());
 		}
 		
 		session.setAttribute("lfstatuslist", session
@@ -133,12 +134,24 @@ public class LFUtils {
 				.getAttribute("lfdispositionlist") : TracerUtils.getStatusList(TracingConstants.TABLE_LF_DISPOSITION, user.getCurrentlocale()));
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static boolean actionChangeSubCategory(LFSearchDTO sDto, HttpServletRequest request) {
 		boolean success = false;
 		if (request.getParameter("changesubcategory") != null && request.getParameter("changesubcategory").equals("1")) {
-			List<LFSubCategory> categories = new LFServiceBean().getSubCategories(sDto.getCategory());
-			request.getSession().setAttribute("lfsubcategorylist", categories);
-			success = true;
+			long catId = sDto.getCategory();
+			if (catId <= 0) {
+				request.getSession().setAttribute("lfsubcategorylist", new ArrayList<LFSubCategory>());
+				success = true;
+			} else {
+				List<LFCategory> categories = (List) request.getSession().getAttribute("lfcategorylist");
+				for (LFCategory c: categories) {
+					if (c.getId() == catId) {
+						request.getSession().setAttribute("lfsubcategorylist", c.getSubcategories());
+						success = true;
+						break;
+					}
+				}
+			}
 		}
 		return success;
 	}

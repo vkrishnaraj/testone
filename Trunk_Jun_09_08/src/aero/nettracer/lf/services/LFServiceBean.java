@@ -1815,30 +1815,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<LFSubCategory> getSubCategories(long categoryId) {
-		Session sess = null;
-		if (categoryId == 0)
-			return new ArrayList<LFSubCategory>();
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			String sql = " from com.bagnet.nettracer.tracing.db.lf.LFSubCategory c where c.parent.id = " + categoryId;
-			Query query = sess.createQuery(sql);
-			return query.list();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
 	public static void main(String [] args){
 		LFServiceBean bean = new LFServiceBean();
 		bean.testEmail();

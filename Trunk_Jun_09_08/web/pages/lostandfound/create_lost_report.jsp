@@ -121,10 +121,10 @@
 		var subCategories = document.getElementById('subcategories_' + itemIndex);
 		subCategories.options[0].selected = true;
 		if (selectedIdx == 0) {
-			subCategories.disabled = true;
+			for (var i = subCategories.length; i > 0; --i) {
+				subCategories.remove(i);
+			}
 			return;
-		} else {
-			subCategories.disabled = false;
 		}
 
 		if (selectedIdx > 0) {
@@ -441,7 +441,7 @@
 	         				<td>
 	         					<bean:message key="colname.lf.subcategory" />
 	         					<br>
-	         					<select name="item[<%=i %>].subCategory" class="dropdown" disabled id="subcategories_<%=i %>" onchange="" >
+	         					<select name="item[<%=i %>].subCategory" class="dropdown" id="subcategories_<%=i %>" onchange="" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList subCategories = new ArrayList();
