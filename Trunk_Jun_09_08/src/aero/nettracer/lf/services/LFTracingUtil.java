@@ -1,6 +1,7 @@
 package aero.nettracer.lf.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.hibernate.Session;
 import com.bagnet.nettracer.match.StringCompare;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
@@ -113,7 +115,8 @@ public class LFTracingUtil {
 	public static List<LFFound> getPotentialFound(LFLost lost){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
 				" where f.status.status_ID = :status" +
-				" and f.item.disposition.status_ID = :disposition";
+				" and f.item.disposition.status_ID = :disposition" +
+				" and f.foundDate > :founddate";
 		
 				boolean hasReservation = false;
 				if(lost != null && lost.getReservation() != null 
@@ -129,6 +132,9 @@ public class LFTracingUtil {
 			Query q = sess.createQuery(sql);
 			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
 			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DATE, -1 * PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS));
+			q.setDate("founddate", cal.getTime()); //DATE
 			if(hasReservation){
 				q.setParameter("pickup", lost.getReservation().getPickupLocation().getStation_ID());
 				q.setParameter("dropoff", lost.getReservation().getDropoffLocation().getStation_ID());
