@@ -173,57 +173,10 @@ public class Consumer implements Runnable{
 			}
 			
 			// Filter Existing Matches
-			if (match.getFile1().getMatchingFiles() != null) {
-				
-				HashMap<Long, Double>matchingMap = match.getFile1().getMatchingFiles();
-//				System.out.println("Data exists in matches...");
-				Double existingScore = matchingMap.get(new Long(match.getFile2().getId()));
-				
-				
-				
-				if (existingScore != null) {
-
-					String score1 = existingScore.toString();
-					score1 = score1.substring(0, Math.min(5, score1.length()));
-					
-					String score2 = match.getOverallScore() + "";
-					score2 = score2.substring(0, Math.min(5, score2.length()));
-
-					
-					if (score1.equals(score2)) { 
-						if(debug)System.out.println("Returning because match exists...");
-						return;
-					}
-				}
-			}
-			//save match
-			Transaction t = null;
-			Session sess = null;
-			try{
-				sess = HibernateWrapper.getSession().openSession();
-				// TODO: Check to see if match already exists???
-				t = sess.beginTransaction();
-				sess.saveOrUpdate(match);
-				if(debug)System.out.println("Saving match... " + match.getId());
-				t.commit();
-			} catch (Exception e) {
-				e.printStackTrace();
-				if (t != null) {
-					try {
-						t.rollback();
-					} catch (Exception ex) {
-					}
-				}
-			} finally {
-
-				if (sess != null) {
-					try {
-						sess.close();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
+			filterAndSaveMatch(match);
+			MatchHistory mirror = createMirroredMatch(match);
+			filterAndSaveMatch(mirror);
+			
 		}catch (Exception e){
 			e.printStackTrace();
 		}finally{
@@ -231,6 +184,88 @@ public class Consumer implements Runnable{
 //			if(debug)System.out.println("consumer consumed count: " + match.getTraceCount().size());
 //			System.out.println("consumer consumed count: " + match.getTraceCount().size());
 
+		}
+	}
+	
+	private static MatchHistory createMirroredMatch(MatchHistory match) {
+		MatchHistory toReturn = new MatchHistory();
+		Set<MatchDetail> newDetails = new LinkedHashSet<MatchDetail>();
+		if (match.getDetails() != null) {
+			for (MatchDetail detail : match.getDetails()) {
+				MatchDetail temp = new MatchDetail();
+				temp.setDescription(detail.getDescription());
+				temp.setMatchtype(detail.getMatchtype());
+				temp.setPercent(detail.getPercent());
+				temp.setMatch(toReturn);
+				temp.setContent1(detail.getContent2());
+				temp.setContent2(detail.getContent1());
+				newDetails.add(temp);
+			}
+		}
+		toReturn.setCreatedate(match.getCreatedate());
+		toReturn.setDeleted(false);
+		toReturn.setPrimarymatch(false);
+		toReturn.setOverallScore(match.getOverallScore());
+		toReturn.setDetails(newDetails);
+		toReturn.setFile1(match.getFile2());
+		toReturn.setFile2(match.getFile1());
+		return toReturn;
+	}
+	
+	private static void filterAndSaveMatch(MatchHistory match) {
+		if (match == null) {
+			return;
+		}
+		if (match.getFile1().getMatchingFiles() != null) {
+			
+			HashMap<Long, Double>matchingMap = match.getFile1().getMatchingFiles();
+//			System.out.println("Data exists in matches...");
+			Double existingScore = matchingMap.get(new Long(match.getFile2().getId()));
+			
+			
+			
+			if (existingScore != null) {
+
+				String score1 = existingScore.toString();
+				score1 = score1.substring(0, Math.min(5, score1.length()));
+				
+				String score2 = match.getOverallScore() + "";
+				score2 = score2.substring(0, Math.min(5, score2.length()));
+
+				
+				if (score1.equals(score2)) { 
+					if(debug)System.out.println("Returning because match exists...");
+					return;
+				}
+			}
+		}
+		//save match
+		Transaction t = null;
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			// TODO: Check to see if match already exists???
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(match);
+			if(debug)System.out.println("Saving match... " + match.getId());
+			t.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+				}
+			}
+		} finally {
+
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
