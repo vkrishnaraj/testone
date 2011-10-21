@@ -82,13 +82,6 @@
 					        element.focus();
 					        return false;
 						}
-					} else {
-						element = getFieldByName("province", form);
-						if (element.value.length == 0) {
-							alert("<%= (String)bundle.getString("colname.province") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-					        element.focus();
-					        return false;
-						}
 					}
 				
 				}
@@ -150,13 +143,6 @@
 					element = getFieldByName("lost.client.address.zip", form);
 					if (element.value.length == 0) {
 						alert("<%= (String)bundle.getString("colname.zip") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
-				        element.focus();
-				        return false;
-					}
-				} else {
-					element = getFieldByName("lost.client.address.province", form);
-					if (element.value.length == 0) {
-						alert("<%= (String)bundle.getString("colname.province") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 				        element.focus();
 				        return false;
 					}
