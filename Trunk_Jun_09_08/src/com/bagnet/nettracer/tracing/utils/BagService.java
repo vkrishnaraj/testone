@@ -31,8 +31,6 @@ import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Session;
 
-import aero.nettracer.fs.model.FsClaim;
-
 import com.bagnet.nettracer.cronjob.tracing.PassiveTracing;
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -47,7 +45,6 @@ import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -308,14 +305,11 @@ public class BagService {
 
 		// create an on-hand entry
 		OHD oDTO = new OHD();
-		
-		// Fields for Special Instructions Implementation
-		BeornDTO bdto = new BeornDTO();
+
 		String finalFlightNumber = "";
 		String finalFlightAirline = "";
 		Date finalFlightDate = new Date();
 		String faultStationName = "";
-		
 		
 		oDTO.setAgent(user);
 		Status s = new Status();
@@ -389,24 +383,31 @@ public class BagService {
 		HibernateUtils.save(log);
 		
 		ForwardNoticeBMO.createForwardNotice(log, notifyList, user);
-		
-		bdto.setSpecialInstructions(form.getSpecialInstructions());
-		bdto.setExpediteNumber(form.getExpediteNumber());
-		bdto.setFinalFlightNumber(finalFlightNumber);
-		bdto.setFaultStation(faultStationName);
-		bdto.setFinalDestination(StationBMO.getStation(form.getDestStation()).getStationcode());
-		bdto.setFinalFlightDepartureDate(finalFlightDate);
-		bdto.setFinalFlightAirline(finalFlightAirline);
-		bdto.setReasonForLoss(Integer.toString(LossCodeBMO.getCode(form.getLossCode()).getLoss_code()));
-		bdto.setTagNumber(form.getBag_tag());
-		bdto.setOnhand(oDTO.getOHD_ID());
-		bdto.setLog(log);
-		
-		try {
-			SpringUtils.getClientEventHandler().doEventOnBeornWS(bdto);
-		} catch (Exception e) {
-			logger.error("Error performing client-specific BEORN Action...");
-			e.printStackTrace();
+		if (form.getSpecialInstructions() != null && form.getSpecialInstructions().length() > 0) {			
+			// Fields for Special Instructions Implementation
+			BeornDTO bdto = new BeornDTO();
+			bdto.setSpecialInstructions(form.getSpecialInstructions());
+			bdto.setExpediteNumber(form.getExpediteNumber());
+			bdto.setFinalFlightNumber(finalFlightNumber);
+			bdto.setFaultStation(faultStationName);
+			bdto.setFinalDestination(StationBMO.getStation(form.getDestStation()).getStationcode());
+			bdto.setFinalFlightDepartureDate(finalFlightDate);
+			bdto.setFinalFlightAirline(finalFlightAirline);
+			if (!form.getLossCode().equals("0")) {
+				bdto.setReasonForLoss(Integer.toString(LossCodeBMO.getCode(form.getLossCode()).getLoss_code()));
+			} else {
+				bdto.setReasonForLoss("Not Provided");
+			}
+			bdto.setTagNumber(form.getBag_tag());
+			bdto.setOnhand(oDTO.getOHD_ID());
+			bdto.setLog(log);
+			
+			try {
+				SpringUtils.getClientEventHandler().doEventOnBeornWS(bdto);
+			} catch (Exception e) {
+				logger.error("Error performing client-specific BEORN Action...");
+				e.printStackTrace();
+			}
 		}
 
 		try {
