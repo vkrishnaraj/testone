@@ -16,6 +16,11 @@
 	<property name="lib" value="web/WEB-INF/lib" />
 	<property name="lib.build-client.dir" value="${root.dir}\\web/WEB-INF/lib" />
 
+	<!-- time stamp for a build -->
+	<tstamp>
+		<format property="VERSION" pattern="yyyyMMdd-HHmm" locale="en" />
+	</tstamp>
+	
 	<patternset id="jar.files">
 		<include name="**/*.jar" />
 		<include name="**/*.zip" />
@@ -126,8 +131,154 @@
 		</hibernatetool>
 	</target>
 
+	
+	<target name="build-fs-internal-local">
+		<property name="client.name" value="internal" />
+		<property name="environment.name" value="local" />
+		<property name="ear.name" value="ntfs_internal_local.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
+	<target name="build-fs-all-test">
+		<antcall target="build-fs-internal-test"></antcall>
+		<antcall target="build-fs-private-ssl-test"></antcall>
+		<antcall target="build-fs-public-ssl-test"></antcall>
+	</target>
+	
+	<target name="build-fs-all-train">
+		<antcall target="build-fs-internal-train"></antcall>
+		<antcall target="build-fs-private-ssl-train"></antcall>
+		<antcall target="build-fs-public-ssl-train"></antcall>
+	</target>
+		
+	<target name="build-fs-all-prod">
+		<antcall target="build-fs-internal-prod"></antcall>
+		<antcall target="build-fs-private-ssl-prod"></antcall>
+		<antcall target="build-fs-public-ssl-prod"></antcall>
+	</target>
+	
+	<target name="build-fs-internal-test">
+		<property name="client.name" value="internal" />
+		<property name="environment.name" value="test" />
+		<property name="ear.name" value="ntfs_internal_test.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
+	<target name="build-fs-internal-train">
+		<property name="client.name" value="internal" />
+		<property name="environment.name" value="train" />
+		<property name="ear.name" value="ntfs_internal_train.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
+	<target name="build-fs-internal-prod">
+		<property name="client.name" value="internal" />
+		<property name="environment.name" value="prod" />
+		<property name="ear.name" value="ntfs_internal_prod.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
+	<target name="build-fs-private-ssl-test">
+		<property name="client.name" value="private-ssl" />
+		<property name="environment.name" value="test" />
+		<property name="ear.name" value="ntfs_private_ssl_test.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
+	<target name="build-fs-private-ssl-train">
+		<property name="client.name" value="private-ssl" />
+		<property name="environment.name" value="train" />
+		<property name="ear.name" value="ntfs_private_ssl_train.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
+	<target name="build-fs-private-ssl-prod">
+		<property name="client.name" value="private-ssl" />
+		<property name="environment.name" value="prod" />
+		<property name="ear.name" value="ntfs_private_ssl_prod.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
+	<target name="build-fs-public-ssl-test">
+		<property name="client.name" value="public-ssl" />
+		<property name="environment.name" value="test" />
+		<property name="ear.name" value="ntfs_public_ssl_test.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
+	<target name="build-fs-public-ssl-train">
+		<property name="client.name" value="public-ssl" />
+		<property name="environment.name" value="train" />
+		<property name="ear.name" value="ntfs_public_ssl_train.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
+	<target name="build-fs-public-ssl-prod">
+		<property name="client.name" value="public-ssl" />
+		<property name="environment.name" value="prod" />
+		<property name="ear.name" value="ntfs_public_ssl_prod.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
+	<target name="build-fs-donotrun">
+		
+		<ant target="build-war">
+		</ant>
+		
+		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_main.cfg.xml" overwrite="true" />
+		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_geo.cfg.xml" overwrite="true" />
+		
+		<jar destfile="${dist.dir}/nt_fs.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">
+			<metainf dir="${src.dir}/../metadata/fs">
+				<include name="ejb-jar.xml"/>
+			</metainf>
+			<include name="${build.dir}/services-war/WEB-INF/classes/" />
+			<include name="**/**/fraud/Claim*.class" />
+			<include name="**/**/nettracer/fs/utilities/tracing/*.class" />
+			<include name="**/**/nettracer/fs/utilities/*.class" />
+			<include name="**/**/nettracer/fs/model/*.class" />
+			<include name="**/**/nettracer/fs/bmo/*.class" />
+			<include name="**/**/PrivacyPermissions*.class" />
+			<include name="**/**/HibernateWrapper.class" />
+			<include name="**/**/PrivacyPermissionsBMO.class" />
+			<include name="**/**/**/common/db/*.class" />
+			<include name="**/common/pojo/*.class" />
+			<include name="**/**/*.xml" />
+		</jar>
+		
+		<!--
+		<copy file="${dist.dir}/nt_fs.jar" todir="c:/workspace/Trunk/lib/jars"/>
+		-->
+		
+		<copy file="${root.dir}/lib/claim_model.jar" todir="${dist.dir}"/>
+		
 
-
+		<ear destfile="${dist.dir}/${ear.name}" appxml="${src.dir}/../metadata/fs/application.xml">
+			<fileset dir="${dist.dir}" includes="*.jar" />
+		</ear>
+		
+		<mkdir dir="${stagging}/${VERSION}"/>
+		<copy todir="${staging.dir}/${VERSION}" verbose="true">
+			<fileset file="${dist.dir}/${ear.name}">
+			</fileset>
+		</copy>
+		
+		<!--
+		<copy todir="${app.deploy.dir}" verbose="true">
+			<fileset file="${dist.dir}/ntfs_internal_test.ear">
+			</fileset>
+		</copy>
+		-->
+		
+		<!--
+		<copy todir="c:/upload" verbose="true">
+			<fileset file="${dist.dir}/ntfs_internal_test.ear">
+			</fileset>
+		</copy>
+		-->
+	</target>
+	
+	
 	<target name="build-ear" id="build" description="Build WAR file">
 		<delete file="${build.dir}/myapp.zip" failonerror="false">
 		</delete>
