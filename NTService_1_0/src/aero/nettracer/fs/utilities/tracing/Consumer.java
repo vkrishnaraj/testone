@@ -76,6 +76,7 @@ public class Consumer implements Runnable{
 	private static final double ADDRESS_SIMILAR = 40;
 
 	private static final double PHONE_MATCH = 30;
+	private static final double PARTIAL_PHONE_MATCH = 15;
 	private static final double WHITELIST_MATCH = 0;
 	private static final double P_DOB = 6;	
 	
@@ -313,7 +314,6 @@ public class Consumer implements Runnable{
 		}	
 
 		HashSet<String> phoneNumberMatches = new HashSet<String>();
-		ArrayList<Phone> phoneList = new ArrayList<Phone>();
 		Set <MatchDetail> details = match.getDetails();
 		
 		Set<Phone> plist2 = null;
@@ -321,36 +321,87 @@ public class Consumer implements Runnable{
 			plist2 = getPhones(match.getFile2());
 		} 
 		
+		String hashKey; 
 		for (Phone p1: plist1) {
 			for (Phone p2: plist2) {
-				if (validPhone(p1.getPhoneNumber()) && validPhone(p2.getPhoneNumber()) 
-						&& p1.getPhoneNumber().equals(p2.getPhoneNumber())) {
-					if(phoneNumberMatches.add(p1.getPhoneNumber())){
-						phoneList.add(p1);
+				hashKey = p1.getPhoneNumber() + p2.getPhoneNumber();
+				if (validPhone(p1.getPhoneNumber()) && validPhone(p2.getPhoneNumber()) && phoneNumberMatches.add(hashKey)) {
+					boolean fullMatch = isFullPhoneMatch(p1, p2);
+					boolean partialMatch = false;
+					if (!fullMatch) {
+						partialMatch = isPartialPhoneMatch(p1, p2); 
+					}
+					
+					if (fullMatch || partialMatch) {
+						
+						MatchDetail detail = getMatchDetail(match, MatchType.phone);
+						detail.setContent1(p1.getPhoneNumber());
+						detail.setContent2(p2.getPhoneNumber());
+						
+						if (p1.getWhitelist() != null || p2.getWhitelist() != null) {
+							String description = null;
+							/*
+							 * MJS: the white-listed phone number was left off due to the fact that 
+							 * the airline must give explicit permission to show the phone number.
+							 * Even if the number is white-listed, if the airline's policy is to 
+							 * not display phone numbers, then we can't display the white-listed 
+							 * number along with the description.
+							 */
+							if (p1.getWhitelist() != null) {
+								description = p1.getWhitelist().getDescription();
+							} else {
+								description = p2.getWhitelist().getDescription();
+							}
+							detail.setDescription("Phone Number Match (Whitelisted - " + description +" )");
+							detail.setPercent(WHITELIST_MATCH);								
+						} else if (fullMatch) {
+							detail.setDescription("Phone Number Match");
+							detail.setPercent(PHONE_MATCH);
+						} else {
+							detail.setDescription("Partial Phone Number Match");
+							detail.setPercent(PARTIAL_PHONE_MATCH);
+						}
+						
+						details.add(detail);
 					}
 				}
 			}
 		}
-		
-		for (Phone s: phoneList) {
-			MatchDetail detail = new MatchDetail();
-			detail.setContent1(s.getPhoneNumber());
-			detail.setContent2(s.getPhoneNumber());
-			
-			detail.setMatch(match);
-			if(s.getWhitelist() != null){
-				detail.setDescription("Phone Number Match (Whitelisted - " + s.getWhitelist().getDescription() +" )");
-				detail.setPercent(WHITELIST_MATCH);
-			}else{
-				detail.setDescription("Phone Number Match");
-				detail.setPercent(PHONE_MATCH);
-			}
-			detail.setMatchtype(MatchType.phone);
-			details.add(detail);			
+	}
+	
+	private static MatchDetail getMatchDetail(MatchHistory match, MatchType type) {
+		MatchDetail detail = new MatchDetail();
+		detail.setMatch(match);
+		detail.setMatchtype(type);
+		return detail;
+	}
+	
+	private static boolean isFullPhoneMatch(Phone p1, Phone p2) {
+		if (p1.getPhoneNumber() == null || p2.getPhoneNumber() == null) {
+			return false;
 		}
-
-	  
-  }
+		return p1.getPhoneNumber().equals(p2.getPhoneNumber());
+	}
+	
+	private static boolean isPartialPhoneMatch(Phone p1, Phone p2) {
+		String pn1 = p1.getPhoneNumber();
+		String pn2 = p2.getPhoneNumber();
+		if (pn1 == null || pn2 == null) {
+			return false;
+		}
+		
+		boolean partialMatch = false;
+		partialMatch |= pn1.contains(pn2);
+		partialMatch |= pn2.contains(pn1);
+		
+		if (!partialMatch && pn1.length() > 7 && pn2.length() > 7) {
+			String partialPn1 = pn1.substring(pn1.length() - 7);
+			String partialPn2 = pn2.substring(pn2.length() - 7);
+			partialMatch |= partialPn1.equals(partialPn2);
+		}
+		
+		return partialMatch;
+	}
 
 	private static boolean validPhone(String p){
 		if(p == null || p.trim().length() < 5){

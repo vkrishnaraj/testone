@@ -228,6 +228,7 @@ public class Producer {
 //				}
 //			}
 			for(String phoneNumber:phoneNumbers){
+				// TODO this may need to change for partial phone matches
 				sql += " or ph.phoneNumber = \'" + format(phoneNumber) + "\' ";
 			}
 		}
