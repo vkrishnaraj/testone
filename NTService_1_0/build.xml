@@ -257,7 +257,7 @@
 			<fileset dir="${dist.dir}" includes="*.jar" />
 		</ear>
 		
-		<mkdir dir="${stagging}/${VERSION}"/>
+		<mkdir dir="${staging.dir}/${VERSION}"/>
 		<copy todir="${staging.dir}/${VERSION}" verbose="true">
 			<fileset file="${dist.dir}/${ear.name}">
 			</fileset>
