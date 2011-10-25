@@ -281,7 +281,7 @@ function disableButton(aButton) {
                 key="menu.claims" /></span> <span class="cc">&nbsp; <br />
               &nbsp;</span></a></dd>
               <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) { %>
-              <dd><a href="fraud_results.do?incident=<bean:write name="incidentForm" property="incident_ID" />"><span
+              <dd><a href="select_claim.do?incidentId=<bean:write name="incidentForm" property="incident_ID" />&fraud_results=1"><span
                 class="aa">&nbsp; <br />
               &nbsp;</span> <span class="bb"><bean:message
                 key="menu.fraud.checks" /></span> <span class="cc">&nbsp; <br />

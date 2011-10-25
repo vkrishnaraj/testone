@@ -56,18 +56,8 @@
       <td colspan="3" id="navmenucell">
         <div class="menu">
           <dl>
-          <% if (ntUser) { %>
+          <% if (ntUser && request.getAttribute("incident") != null) { %>
             <dd>
-            	<logic:empty name="incident" scope="request" >
-              <a href='searchIncident.do' ><span class="aa">&nbsp;
-                  <br />
-                  &nbsp;</span>
-                <span class="bb"><bean:message key="menu.incident_info" /></span>
-                <span class="cc">&nbsp;
-                  <br />
-                  &nbsp;</span></a>
-                  </logic:empty>
-            	<logic:notEmpty name="incident" scope="request" >
               <a href='searchIncident.do?incident=<bean:write name="incident" scope="request"/>'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
@@ -75,7 +65,6 @@
                 <span class="cc">&nbsp;
                   <br />
                   &nbsp;</span></a>
-                  </logic:notEmpty>
             </dd>
 <%			}
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, a)) {
@@ -129,7 +118,7 @@
                     &nbsp;</span></a>
               </dd>
                    	<dd>
-                   	<a href='fraud_results.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aab">&nbsp;<br />&nbsp;</span>
+                   	<a href='fraud_results.do?claimId=<bean:write name="claimId" scope="request" />' ><span class="aab">&nbsp;<br />&nbsp;</span>
                    	<span class="bbb"><bean:message key="menu.fraud.checks" /></span>
                         <span class="ccb">&nbsp;
                           <br />
@@ -138,10 +127,10 @@
                    <% } %>
                    
 <%
-            } if (ntUser) {
+            } if (ntUser && request.getAttribute("incident") != null) {
 %>
 		            <dd>
-		              <a href='claim_prorate.do?incident=<%=request.getParameter("incident") %>'><span class="aa">&nbsp;
+		              <a href='claim_prorate.do?incident=<%=request.getAttribute("incident") %>'><span class="aa">&nbsp;
 		                  <br />
 		                  &nbsp;</span>
 		                <span class="bb"><bean:message key="menu.claim_prorate" /></span>
@@ -221,9 +210,6 @@
             	</table>
             	<br />
             	<center>
-            	            	<%if(request.getParameter("incident")!=null){ %>
-            		<input type="hidden" id="incident" name="incident" value="<%=request.getParameter("incident") %>" />
-            		<%} %>
 					<html:submit property="requestInfo" styleId="button">
                       <bean:message key="button.request_info" />
                     </html:submit>
@@ -233,4 +219,7 @@
                     </html:submit>
                 </center>        	
                 <br />
+                <html:hidden property="incident" value="<%=(String) request.getAttribute("incident") %>" />
+                <html:hidden property="claimId" value="<%=(String) request.getAttribute("claimId") %>" />
+                <html:hidden property="displayId" value="<%=(String) request.getAttribute("displayId") %>" />
             </html:form>

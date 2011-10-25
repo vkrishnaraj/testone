@@ -48,6 +48,7 @@ public class SelectClaimAction extends CheckedAction {
 		}
 
 		SelectClaimForm scForm = (SelectClaimForm) form;
+		scForm.setType(TracingConstants.LINK_TYPE_CLAIM_PAGE);
 		
 		String incidentId = request.getParameter("incidentId");
 		if (incidentId == null || incidentId.isEmpty()) {
@@ -67,7 +68,11 @@ public class SelectClaimAction extends CheckedAction {
 			// shouldn't be here without a valid incident
 		
 			// there aren't any claims, so we have to create one in any case
-			response.sendRedirect("claim_resolution.do?createNew=1&populate=1&incidentId=" + incident.getIncident_ID());
+			if (request.getParameter("fraud_results") != null) {
+				response.sendRedirect("fraud_results.do?incident=" + incident.getIncident_ID());
+			} else {
+				response.sendRedirect("claim_resolution.do?createNew=1&populate=1&incidentId=" + incident.getIncident_ID());
+			}
 			return null;
 		} else {
 			
@@ -75,10 +80,17 @@ public class SelectClaimAction extends CheckedAction {
 			if (PropertyBMO.isTrue("ntfs.support.multiple.claims")) {
 				scForm.setIncidentId(incidentId);
 				scForm.setClaims(new LinkedHashSet<FsClaim>(incident.getClaims()));
+				if (request.getParameter("fraud_results") != null) {
+					scForm.setType(TracingConstants.LINK_TYPE_FRAUD_RESULTS_PAGE);
+				}
 				return mapping.findForward(TracingConstants.CLAIM_SELECT_CLAIM);
 			} else {
 				long claimId = incident.getClaims().iterator().next().getId();
-				response.sendRedirect("claim_resolution.do?claimId=" + claimId);
+				if (request.getParameter("fraud_results") != null) {
+					response.sendRedirect("fraud_results.do?claimId=" + claimId);
+				} else {
+					response.sendRedirect("claim_resolution.do?claimId=" + claimId);
+				}
 				return null;
 			}
 			

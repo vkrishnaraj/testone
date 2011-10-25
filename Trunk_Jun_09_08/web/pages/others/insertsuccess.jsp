@@ -85,7 +85,7 @@
               	<td>
               		<div id="fraudcell">
               		<h2 id="fraudlink">
-           	  			<a href='fraud_results.do?incident=<bean:write name="Incident_ID" scope="request"/>'><bean:message key="insert.success.match.results"/></a>
+           	  			<a href='select_claim.do?incidentId=<bean:write name="Incident_ID" scope="request"/>&fraud_results=1'><bean:message key="insert.success.match.results"/></a>
               		</h2>
               		</div>
               	</td>

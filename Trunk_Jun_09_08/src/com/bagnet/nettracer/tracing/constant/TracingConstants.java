@@ -469,6 +469,9 @@ public class TracingConstants {
 	
 	public final static String AJAX_SUBCATEGORY = "subcategory";
 	
+	public final static int LINK_TYPE_CLAIM_PAGE = 1;
+	public final static int LINK_TYPE_FRAUD_RESULTS_PAGE = 2;
+	
 	/** ********* forwards *********** */
 	// no permission
 	public final static String NO_PERMISSION = "nopermission";
@@ -928,6 +931,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS = "Fraud Requests";
 	public static final String JSP_DELETE_ASSOCIATED_NAME = "delName";
 	public static final String JSP_DELETE_ASSOCIATED_RECEIPT = "delReceipt";
+	public static final String CLAIM_CREATE_CLAIM_PRORATE = "create_claim_prorate";
 	
 	public static final String LF_CREATE_LOST_REPORT = "create_lost_report";
 	public static final String LF_CREATE_FOUND_ITEM = "create_found_item";

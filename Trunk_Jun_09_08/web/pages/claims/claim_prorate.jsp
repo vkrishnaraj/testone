@@ -65,7 +65,7 @@
         <div class="menu">
           <dl>
             <dd>
-              <a href='searchIncident.do?incident=<%=request.getAttribute("incident") %>'><span class="aa">&nbsp;
+              <a href='searchIncident.do?incident=<%=(String) request.getAttribute("incident") %>'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
                 <span class="bb"><bean:message key="menu.incident_info" /></span>
@@ -90,7 +90,7 @@
 			if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) {	
 				if (ntUser && ntfsUser) { %>
 					<dd>
-                   	<a href='fraud_results.do?incident=<%=request.getAttribute("incident") %>' ><span class="aa">&nbsp;<br />&nbsp;</span>
+                   	<a href='select_claim.do?incidentId=<%=request.getAttribute("incident") %>&fraud_results=1' ><span class="aa">&nbsp;<br />&nbsp;</span>
                    	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
                         <span class="cc">&nbsp;
                           <br />

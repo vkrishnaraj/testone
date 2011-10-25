@@ -596,6 +596,7 @@ public class TracerUtils {
 			// cpform = new ClaimProrateForm();
 			// session.setAttribute("claimForm", cpform);
 			boolean createnewprorate = false;
+			cpform.setHasClaim(false);
 			Iterator<Claim> iter = theform.getClaims().iterator();
 			if (iter.hasNext() && ((claim = iter.next()) != null)) {
 				ClaimProrate cp = claim.getClaimprorate();
@@ -643,7 +644,7 @@ public class TracerUtils {
 					}
 					cpform.setItinerarylist(al);
 				}
-				cpform.setHasClaim(true);
+				cpform.setHasClaim(claim.getId() > 0);
 			} else {
 				createnewprorate = true;
 			}

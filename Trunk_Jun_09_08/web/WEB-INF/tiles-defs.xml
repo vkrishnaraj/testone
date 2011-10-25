@@ -839,6 +839,10 @@
         <put name="center"   value="/pages/claims/create_claim.jsp"/>
     </definition>
 
+    <definition name="create_claim_prorate" extends="user_menu">
+        <put name="center"   value="/pages/claims/create_claim_prorate.jsp"/>
+    </definition>
+
     <definition name="fraud_results" extends="user_menu">
         <put name="center"   value="/pages/claims/fraud_results.jsp"/>
     </definition>

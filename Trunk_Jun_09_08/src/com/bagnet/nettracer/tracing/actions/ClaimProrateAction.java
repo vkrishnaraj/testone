@@ -79,22 +79,38 @@ public class ClaimProrateAction extends CheckedAction {
 		if (incident == null) {
 			incident = (String) request.getAttribute("incident");
 		}
-		request.setAttribute("incident", incident);
 		
-		if (theform == null || request.getParameter("clear") != null) {
+		if (incident != null) {
+			theform = new IncidentForm();
+			IncidentBMO iBMO = new IncidentBMO();
+			Incident inc = iBMO.findIncidentByID(incident);
+			if (inc == null) {
+				ActionMessages errors = new ActionMessages();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.noincident"));
+				saveMessages(request, errors);
+				request.setAttribute("noincident", "1");
+				return (mapping.findForward(TracingConstants.CLAIM_CREATE_CLAIM_PRORATE));
+			}
+			bs.populateIncidentFormFromIncidentObj(inc.getIncident_ID(), theform, user, inc.getItemtype_ID(), iBMO, inc, true);
+		} else if (request.getParameter("clear") != null) {
 			// came here from claim menu, need to show form to enter incident id
 			session.setAttribute("prorate", "1");
 			request.setAttribute("noincident", "1");
-			return (mapping.findForward(TracingConstants.CLAIM_CREATE_NEW));
-//			response.sendRedirect("create_claim.do");
-//			return null;
-		} else {
-			request.setAttribute("incident", theform.getIncident_ID());
+			return (mapping.findForward(TracingConstants.CLAIM_CREATE_CLAIM_PRORATE));
 		}
 
 		// save claim prorate notice
 		if (request.getParameter("save") != null) {
-//			Claim cDTO = new Claim();
+			if (theform == null) {
+				if (incident == null) {
+					incident = cpform.getFile_reference();
+				}
+				theform = new IncidentForm();
+				IncidentBMO iBMO = new IncidentBMO();
+				Incident inc = iBMO.findIncidentByID(incident);
+				bs.populateIncidentFormFromIncidentObj(incident, theform, user, inc.getItemtype_ID(), iBMO, inc, false);
+			}			
+			
 			Set<Claim> cDTO = theform.getClaims();
 			if (bs.insertClaimProrate(cDTO, cpform, session, theform.getIncident_ID())) {
 				theform.setClaims(cDTO);
@@ -103,7 +119,7 @@ public class ClaimProrateAction extends CheckedAction {
 				//TracerUtils.populateClaimProrate(cpform, theform, session);
 				request.setAttribute("fail", "1");
 			}
-			return (mapping.findForward(TracingConstants.CLAIM_PRORATE_MAIN));
+//			return (mapping.findForward(TracingConstants.CLAIM_PRORATE_MAIN));
 		} else {
 			Incident i = new IncidentBMO().findIncidentByID(incident);
 			if (i != null && i.getClaims() != null && !i.getClaims().isEmpty()) {
@@ -111,7 +127,12 @@ public class ClaimProrateAction extends CheckedAction {
 				theform.setClaims(c);
 			}
 		}
-		request.setAttribute("incident", theform.getIncident_ID());
+		
+		if (incident == null) {
+			request.setAttribute("incident", theform.getIncident_ID());
+		} else {
+			request.setAttribute("incident", incident);
+		}
 		/**
 		 * retrieve to modify claim payout
 		 */

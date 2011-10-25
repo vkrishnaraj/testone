@@ -5,6 +5,7 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
@@ -57,7 +58,12 @@
             <logic:iterate id="claim" name="selectClaimForm" property="claims" type="aero.nettracer.fs.model.FsClaim">
             	<tr>
             		<td>
-            			<a href="claim_resolution.do?claimId=<%=claim.getId() %>"><bean:write name="claim" property="id" /></a>
+            			<logic:equal name="selectClaimForm" property="type" value="<%=String.valueOf(TracingConstants.LINK_TYPE_FRAUD_RESULTS_PAGE) %>" >
+            				<a href="fraud_results.do?claimId=<%=claim.getId() %>"><bean:write name="claim" property="id" /></a>
+            			</logic:equal>
+            			<logic:equal name="selectClaimForm" property="type" value="<%=String.valueOf(TracingConstants.LINK_TYPE_CLAIM_PAGE) %>" >
+            				<a href="claim_resolution.do?claimId=<%=claim.getId() %>"><bean:write name="claim" property="id" /></a>
+            			</logic:equal>
             		</td>
             		<td>
             			<%= claim.getDisClaimDate(a.getDateformat().getFormat()) %>

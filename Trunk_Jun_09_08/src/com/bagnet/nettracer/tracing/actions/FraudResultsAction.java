@@ -60,6 +60,7 @@ public class FraudResultsAction extends CheckedAction {
 			return null;
 		}
 
+
 		FraudResultsForm resultsForm = (FraudResultsForm) form;
 		String claimIdString = request.getParameter("claimId");
 		String incidentIdString = request.getParameter("incident");
@@ -73,19 +74,28 @@ public class FraudResultsAction extends CheckedAction {
 			file = FileDAO.loadFile(incidentIdString);
 			request.setAttribute("claimId", claimIdString);
 			request.setAttribute("incident", incidentIdString);
-			request.setAttribute("displayId", "Incident: " + incidentIdString);
 		} else if (claimIdString != null) {
 			claim = ClaimDAO.loadClaim(Long.parseLong(claimIdString));
 			resultsForm.setClaimId(claim.getId());
 			request.setAttribute("claimId", claimIdString);
-			request.setAttribute("displayId", "Claim: " + claimIdString);
+			
 			if (claim.getNtIncidentId() != null) {
 				request.setAttribute("incident", claim.getNtIncidentId());
 			}
-		} else {
-//			claim = ClaimDAO.loadClaim(resultsForm.getClaimId());
 		}
 		
+		String displayId = (String) request.getParameter("displayId");
+		if (displayId == null) {
+			if (claim == null) {
+				displayId = "Incident: " + file.getIncident().getAirlineIncidentId();
+			} else if (claim.getNtIncidentId() != null) {
+				displayId = "Incident: " + claim.getNtIncidentId() + " Claim: " + claim.getId();
+			} else {
+				displayId = "Claim: " + claim.getId();
+			}
+		}
+		request.setAttribute("displayId", displayId);
+
 		Set<MatchHistory> results = null;
 		TraceResponse traceResponse = null;
 		if (session.getAttribute("results") != null) {
@@ -159,7 +169,7 @@ public class FraudResultsAction extends CheckedAction {
 			if (requestList.size() != 0) {
 				session.setAttribute("requestList", requestList);
 				if(claim != null){
-				response.sendRedirect("request_info.do?claimId=" + claim.getId());
+					response.sendRedirect("request_info.do?claimId=" + claim.getId());
 				} else if(incidentIdString != null){
 					response.sendRedirect("request_info.do?incident=" + incidentIdString);
 				}
@@ -188,7 +198,6 @@ public class FraudResultsAction extends CheckedAction {
 
 		resultsForm = separateResults(results, resultsForm);
 		resultsForm.setTraceResponse(traceResponse);
-		
 		return (mapping.findForward(TracingConstants.CLAIM_FRAUD_RESULTS));
 	}
 	
@@ -220,6 +229,7 @@ public class FraudResultsAction extends CheckedAction {
 	
 		form.setPrimaryResults(primaryResults);
 		form.setSecondaryResults(secondaryResults);
+		
 		return form;
 	}
 
