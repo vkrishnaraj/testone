@@ -58,7 +58,7 @@
           <dl>
           <% if (ntUser && request.getAttribute("incident") != null) { %>
             <dd>
-              <a href='searchIncident.do?incident=<bean:write name="incident" scope="request"/>'><span class="aa">&nbsp;
+              <a href='searchIncident.do?incident=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
                 <span class="bb"><bean:message key="menu.incident_info" /></span>
@@ -219,7 +219,7 @@
                     </html:submit>
                 </center>        	
                 <br />
-                <html:hidden property="incident" value="<%=(String) request.getAttribute("incident") %>" />
-                <html:hidden property="claimId" value="<%=(String) request.getAttribute("claimId") %>" />
-                <html:hidden property="displayId" value="<%=(String) request.getAttribute("displayId") %>" />
+                <input type="hidden" name="incident" value="<%=(String) request.getAttribute("incident") %>" />
+                <input type="hidden" name="claimId" value="<%=(String) request.getAttribute("claimId") %>" />
+                <input type="hidden" name="displayId" value="<%=(String) request.getAttribute("displayId") %>" />
             </html:form>
