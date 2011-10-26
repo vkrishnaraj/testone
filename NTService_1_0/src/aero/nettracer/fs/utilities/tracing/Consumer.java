@@ -632,17 +632,15 @@ public class Consumer implements Runnable{
 		for(FsAddress a1:plist1){
 			String tas1 = getStringVersionOfAddress(a1);
 			for(FsAddress a2:plist2){
-				String tas2 = tas1 + "/" + getStringVersionOfAddress(a2);
-				if (addressHashSet.contains(tas2) || a1.getAddress1() == null) {
+				String tas2 = getStringVersionOfAddress(a2);
+				String hKey1 = tas1 + "/" + tas2;
+				String hKey2 = tas2 + "/" + tas1;
+				if (addressHashSet.contains(hKey1) || addressHashSet.contains(hKey2) || a1.getAddress1() == null) {
 					continue;
 				} else {
-					addressHashSet.add(tas2);
+					addressHashSet.add(hKey1);
+					addressHashSet.add(hKey2);
 				}
-				
-				
-				
-				
-				
 				
 				// If geocoded => US based location
 				if (a1.getLattitude() != 0 && a2.getLattitude() != 0) {
@@ -661,8 +659,8 @@ public class Consumer implements Runnable{
 								distanceStr = distanceStr.substring(0, Math.min(5, distanceStr.length()));	
 
 								MatchDetail detail = new MatchDetail();
-								detail.setContent1(a1.getAddress1() + ", " + a1.getCity() + ", " + a1.getState() + " " + a1.getZip());
-								detail.setContent2(a2.getAddress1() + ", " + a2.getCity() + ", " + a2.getState() + " " + a2.getZip());
+								detail.setContent1(a1.getAddress1() + (a1.getAddress2() == null || a1.getAddress2().isEmpty() ? "" : ", " + a1.getAddress2()) + ", " + a1.getCity() + ", " + a1.getState() + " " + a1.getZip());
+								detail.setContent2(a2.getAddress1() + (a2.getAddress2() == null || a2.getAddress2().isEmpty() ? "" : ", " + a2.getAddress2()) + ", " + a2.getCity() + ", " + a2.getState() + " " + a2.getZip());
 								detail.setDescription("Proximity Match: " + distanceStr + " miles.");
 								detail.setMatch(match);
 								if(a1.getWhitelist() != null || a2.getWhitelist() != null){
@@ -678,8 +676,8 @@ public class Consumer implements Runnable{
 								distanceStr = distanceStr.substring(0, Math.min(5, distanceStr.length()));
 
 								MatchDetail detail = new MatchDetail();
-								detail.setContent1(a1.getAddress1() + ", " + a1.getCity() + ", " + a1.getState() + " " + a1.getZip());
-								detail.setContent2(a2.getAddress1() + ", " + a2.getCity() + ", " + a2.getState() + " " + a2.getZip());
+								detail.setContent1(a1.getAddress1() + (a1.getAddress2() == null || a1.getAddress2().isEmpty() ? "" : ", " + a1.getAddress2()) + ", " + a1.getCity() + ", " + a1.getState() + " " + a1.getZip());
+								detail.setContent2(a2.getAddress1() + (a2.getAddress2() == null || a2.getAddress2().isEmpty() ? "" : ", " + a2.getAddress2()) + ", " + a2.getCity() + ", " + a2.getState() + " " + a2.getZip());
 								detail.setDescription("Close Proximity Match: " + distanceStr + " miles.");
 								detail.setMatch(match);
 								if(a1.getWhitelist() != null  || a2.getWhitelist() != null ){
@@ -766,8 +764,21 @@ public class Consumer implements Runnable{
 
 
 	private static String getStringVersionOfAddress(FsAddress a) {
-		String tas = a.getAddress1() + " " + a.getAddress2() + " " + a.getCity() + " " + a.getState()+ " " + a.getZip();
-		return tas.toUpperCase();
+		String address = "";
+		address += (a.getAddress1() == null || a.getAddress1().isEmpty() ? "" : a.getAddress1() + " ");
+		address += (a.getAddress2() == null || a.getAddress2().isEmpty() ? "" : a.getAddress2() + " ");
+		address += (a.getCity() == null || a.getCity().isEmpty() ? "" : a.getCity() + " ");
+		
+		if (a.getState() != null && !a.getState().isEmpty()) {
+			address += (a.getState() == null || a.getState().isEmpty() ? "" : a.getState() + " ");
+		} else {
+			address += (a.getProvince() == null || a.getProvince().isEmpty() ? "" : a.getProvince() + " ");
+		}
+		
+		address += (a.getZip() == null || a.getZip().isEmpty() ? "" : a.getZip() + " ");
+		address = address.trim().toUpperCase();
+		
+		return address;
 	}
 
 
