@@ -264,7 +264,7 @@ public class LFTracingUtil {
 			if(lr.getMvaNumber() != null && lr.getMvaNumber().trim().length() > 0
 					&& match.getFound() != null && match.getFound().getMvaNumber() != null 
 					&& match.getFound().getMvaNumber().trim().length() > 0){
-				if(lr.getMvaNumber().equalsIgnoreCase(match.getFound().getMvaNumber())){
+				if(lr.getMvaNumber().trim().equalsIgnoreCase(match.getFound().getMvaNumber().trim())){
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("MVA Number Match");
 					detail.setMatchHistory(match);
