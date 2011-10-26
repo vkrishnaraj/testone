@@ -12,7 +12,6 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.junit.Test;
 
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
