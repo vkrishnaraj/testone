@@ -179,7 +179,7 @@
 		              		<html:text name="searchLostFoundForm" property="email" size="30" maxlength="100" styleClass="textfield" />
 		              	</td>
            			</tr>
-           			<tr>
+           			<!-- tr>
            				<td>
            					<bean:message key="colname.lf.category" />
            					<br/>
@@ -209,7 +209,7 @@
          					<br>
 		              		<html:text name="searchLostFoundForm" property="itemDescription" size="25" maxlength="100" styleClass="textfield" />
            				</td>
-           			</tr>
+           			</tr-->
            			<tr>
            				<td colspan=5>
            					<center>
