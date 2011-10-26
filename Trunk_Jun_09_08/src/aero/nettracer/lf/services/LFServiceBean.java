@@ -173,11 +173,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 			
 			if (haveBrand) {
-				itemSql += " and i.brand like \'" + dto.getBrand() + "\'";
+				itemSql += " and i.brand like \'%" + dto.getBrand().trim() + "%\'";
 			}
 			
 			if (haveDesc) {
-				itemSql += " and i.description like \'" + dto.getItemDescription() + "\'";
+				itemSql += " and i.description like \'%" + dto.getItemDescription().trim() + "%\'";
 			}
 			
 			sql += itemSql;
