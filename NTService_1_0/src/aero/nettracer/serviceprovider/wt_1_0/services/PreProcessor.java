@@ -462,7 +462,7 @@ public class PreProcessor {
 			addr1Pieces.add(address.getAddress2().trim());
 		if (address.getCity() != null)
 			addr1Pieces.add(address.getCity().trim());
-		if(address.getState() != null && address.getState().trim().length() > 0 && "US".equals(address.getCountryCode())) {
+		if(address.getState() != null && address.getState().trim().length() > 0 && ("US".equals(address.getCountryCode()) || "United States".equalsIgnoreCase(address.getCountryCode()))) {
 			addr1Pieces.add(address.getState().trim());
 			if (addressField.equals(WorldTracerField.PA)) {
 				addIncidentFieldEntry(WorldTracerField.STATE, address.getState(), result);

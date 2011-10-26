@@ -103,6 +103,9 @@ public class PropertyBMO {
 	
 	public static final String FS_RETENTION_YEARS = "fs.retention.years";
 	
+	public static final String PROPERTY_WT_USE_STATE_NAME = "wt.state.name";
+	public static final String PROPERTY_WT_USE_COUNTRY_NAME = "wt.country.name";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

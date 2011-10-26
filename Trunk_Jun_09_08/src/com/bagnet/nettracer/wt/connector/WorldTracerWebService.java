@@ -170,6 +170,9 @@ public class WorldTracerWebService implements WorldTracerConnector {
 	public static final String CRON_USER = "CRON_USER";
 	public static final String REFERENCED_OBJECT_CLOSED = "REFERENCED OBJECT ALREADY CLOSED";
 	
+	public static final int MAX_COUNTRY_LENGTH = 64;
+	public static final int MAX_STATEPROV_LENGTH = 64;
+	
 	private static final Logger logger = Logger.getLogger(WorldTracerWebService.class);
 
 	private static Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
@@ -1627,13 +1630,29 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		add.setAddress2(ad.getAddress2());
 		add.setAltPhone(ad.getAltphone());
 		add.setCity(ad.getCity());
-		add.setCountryCode(ad.getCountrycode_ID());
+		if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_WT_USE_COUNTRY_NAME)){
+			String country = ad.getCountry();
+			if(country.length() >  MAX_COUNTRY_LENGTH){
+				country = country.substring(0, MAX_COUNTRY_LENGTH);
+			}
+			add.setCountryCode(country);
+		} else {
+			add.setCountryCode(ad.getCountrycode_ID());
+		}
 		add.setEmailAddress(ad.getEmail());
 		add.setHomePhone(ad.getHomephone());
 		add.setMobilePhone(ad.getMobile());
 		add.setPagerNumber(ad.getPager());
 		add.setProvince(ad.getProvince());
-		add.setState(ad.getState_ID());
+		if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_WT_USE_STATE_NAME)){
+			String state = ad.getState();
+			if(state.length() >  MAX_STATEPROV_LENGTH){
+				state = state.substring(0, MAX_STATEPROV_LENGTH);
+			}
+			add.setState(state);
+		} else {
+			add.setState(ad.getState_ID());
+		}
 		add.setTemporaryAddress(!ad.isPermanent());
 		add.setWorkPhone(ad.getWorkphone());
 		add.setZip(ad.getZip());
@@ -1654,13 +1673,29 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		add.setAddress2(ad.getAddress2());
 		add.setAltPhone(ad.getAltphone());
 		add.setCity(ad.getCity());
-		add.setCountryCode(ad.getCountrycode_ID());
+		if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_WT_USE_COUNTRY_NAME)){
+			String country = ad.getCountry();
+			if(country.length() >  MAX_COUNTRY_LENGTH){
+				country = country.substring(0, MAX_COUNTRY_LENGTH);
+			}
+			add.setCountryCode(country);
+		} else {
+			add.setCountryCode(ad.getCountrycode_ID());
+		}
 		add.setEmailAddress(ad.getEmail());
 		add.setHomePhone(ad.getHomephone());
 		add.setMobilePhone(ad.getMobile());
 		add.setPagerNumber(ad.getPager());
 		add.setProvince(ad.getProvince());
-		add.setState(ad.getState_ID());
+		if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_WT_USE_STATE_NAME)){
+			String state = ad.getState();
+			if(state.length() >  MAX_STATEPROV_LENGTH){
+				state = state.substring(0, MAX_STATEPROV_LENGTH);
+			}
+			add.setState(state);
+		} else {
+			add.setState(ad.getState_ID());
+		}
 		add.setWorkPhone(ad.getWorkphone());
 		add.setZip(ad.getZip());
 		return pax;
