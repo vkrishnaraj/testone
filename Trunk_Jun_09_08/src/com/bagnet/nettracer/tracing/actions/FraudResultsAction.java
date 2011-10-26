@@ -68,22 +68,24 @@ public class FraudResultsAction extends CheckedAction {
 			incidentIdString = (String) request.getAttribute("incident");
 		}
 		
-		request.setAttribute("claimId", claimIdString);
-		request.setAttribute("incident", incidentIdString);
 
 		File file = null;
 		FsClaim claim = null;
 		if (incidentIdString != null) {
 			file = FileDAO.loadFile(incidentIdString);
+			request.setAttribute("claimId", claimIdString);
+			request.setAttribute("incident", incidentIdString);
 		} else if (claimIdString != null) {
 			claim = ClaimDAO.loadClaim(Long.parseLong(claimIdString));
 			resultsForm.setClaimId(claim.getId());
+			request.setAttribute("claimId", String.valueOf(claim.getId()));
+		} else {
+			claim = ClaimDAO.loadClaim(resultsForm.getClaimId());
 		}
 		
 		if (claim != null && claim.getNtIncidentId() != null) {
 			request.setAttribute("incident", claim.getNtIncidentId());
 		}
-		
 		
 		String displayId = (String) request.getParameter("displayId");
 		if (displayId == null) {
@@ -134,7 +136,7 @@ public class FraudResultsAction extends CheckedAction {
 						results = traceResponse.getMatchHistory();
 					}
 				} catch (Exception e) {
-					logger.error(e);
+					logger.error(e, e);
 				} finally {
 					if (ctx != null) {
 						ctx.close();

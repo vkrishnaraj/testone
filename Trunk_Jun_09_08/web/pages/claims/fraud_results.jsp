@@ -69,7 +69,7 @@
 <%			}
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, a)) {
             	String claimIdString = request.getParameter("claimId");
-            	if (claimIdString == null || Integer.parseInt(claimIdString) <= 0) {
+            	if (claimIdString == null || claimIdString.equals("null") || Integer.parseInt(claimIdString) <= 0) {
             		String incidentId = request.getParameter("incident");
 					if (incidentId != null) {%>
 					
@@ -184,9 +184,6 @@
                 <h1>
                 	<bean:message key="claim.fraud.primary_results" />
                 </h1>
-                <font color=red>
-                  <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-                </font>
             	<table class="form2" cellspacing="0" cellpadding="0" >
             		<jsp:include page="/pages/claims/results.jsp" >
 					    	<jsp:param name="beanName" value="fraudResultsForm" />

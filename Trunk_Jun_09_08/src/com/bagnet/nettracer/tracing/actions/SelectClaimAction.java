@@ -52,6 +52,11 @@ public class SelectClaimAction extends CheckedAction {
 		
 		String incidentId = request.getParameter("incidentId");
 		if (incidentId == null || incidentId.isEmpty()) {
+			incidentId = scForm.getIncidentId();
+		}
+		
+		// we couldn't get the incident id from the form or the request
+		if (incidentId == null || incidentId.isEmpty()) {
 			response.sendRedirect("claim_resolution.do?createNew=1");
 			return null;
 		}
@@ -78,12 +83,17 @@ public class SelectClaimAction extends CheckedAction {
 			
 			// now we know that we have an incident with at least one claim
 			if (PropertyBMO.isTrue("ntfs.support.multiple.claims")) {
-				scForm.setIncidentId(incidentId);
-				scForm.setClaims(new LinkedHashSet<FsClaim>(incident.getClaims()));
-				if (request.getParameter("fraud_results") != null) {
-					scForm.setType(TracingConstants.LINK_TYPE_FRAUD_RESULTS_PAGE);
+				if (request.getParameter("createNew") != null) {
+					response.sendRedirect("claim_resolution.do?createNew=1&populate=1&incidentId=" + incident.getIncident_ID());
+					return null;
+				} else {
+					scForm.setIncidentId(incidentId);
+					scForm.setClaims(new LinkedHashSet<FsClaim>(incident.getClaims()));
+					if (request.getParameter("fraud_results") != null) {
+						scForm.setType(TracingConstants.LINK_TYPE_FRAUD_RESULTS_PAGE);
+					}
+					return mapping.findForward(TracingConstants.CLAIM_SELECT_CLAIM);
 				}
-				return mapping.findForward(TracingConstants.CLAIM_SELECT_CLAIM);
 			} else {
 				long claimId = incident.getClaims().iterator().next().getId();
 				if (request.getParameter("fraud_results") != null) {

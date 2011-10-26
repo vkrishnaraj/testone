@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.utils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -11,6 +12,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.commons.codec.language.Soundex;
 import org.apache.log4j.Logger;
@@ -148,7 +150,9 @@ public class ClaimUtils {
 			
 			claimants.clear();
 			// TODO FIX THIS
-			person = claim.getIncident().getPassengers().toArray(new Person[0])[0];
+			if (claim.getIncident().getPassengers() != null && !claim.getIncident().getPassengers().isEmpty()) {
+				person = claim.getIncident().getPassengers().toArray(new Person[0])[0];
+			}
 			
 //			if (person.getId() > 0) {
 //				try {
@@ -172,14 +176,14 @@ public class ClaimUtils {
 						p.setReservation(null);
 						p.setPerson(person);
 					}
-//					
+					
 //				} catch (IllegalAccessException iae) {
 //					logger.error(iae.getMessage());
 //				} catch (InvocationTargetException ite) {
 //					logger.error(ite.getMessage());
 //				}
-				
-				
+//				
+//				
 //			}
 			
 			if (person.getPassportIssuer() == null || person.getPassportIssuer().isEmpty()) {
