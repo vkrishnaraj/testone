@@ -28,7 +28,7 @@ import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 
 public class LFTracingUtil {
 	
-	public static final int CUTOFF = 5;
+	public static final int CUTOFF = 9;
 	public static final double SCORE_VANTIVE = 10;
 	public static final double SCORE_CATEGORY = 10;
 	public static final double SCORE_CATEGORY_PARTICLE = 10;
