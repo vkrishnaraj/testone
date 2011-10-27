@@ -278,6 +278,83 @@
 		-->
 	</target>
 	
+	<target name="build-central-local">
+		<property name="client.name" value="central" />
+		<property name="environment.name" value="local" />
+		<property name="ear.name" value="NTServices_1_0.ear" />
+		<antcall target="build-central-donotrun" />
+	</target>
+	
+	<target name="build-central-prod">
+		<property name="client.name" value="central" />
+		<property name="environment.name" value="prod" />
+		<property name="ear.name" value="NTServices_1_0.ear" />
+		<antcall target="build-central-donotrun" />
+	</target>
+	
+	<target name="build-central-donotrun" id="build" description="Build WAR file">
+		<delete file="${build.dir}/myapp.zip" failonerror="false">
+		</delete>
+		
+		<delete dir="${build.dir}/services-war" />
+		<mkdir dir="${build.dir}/services-war/WEB-INF/classes"/>
+
+		
+		<!-- TODO
+		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on"
+					
+					memoryinitialsize="256m"       memorymaximumsize="256m"
+					>
+					<classpath refid="project.classpath" />
+				</javac>
+	-->
+		<copy todir="${build.dir}/services-war" overwrite="true">
+			<fileset dir="${webroot.dir}" >
+				<include name="WEB-INF/**/*"/>
+				<include name="META-INF/**/*"/>
+			</fileset>
+		</copy>
+		
+
+		<copy todir="${build.dir}/services-war/WEB-INF/classes" overwrite="true">
+			<fileset dir="${build.classes.dir}" />
+		</copy>
+		
+		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_main.cfg.xml" overwrite="true" />
+		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_geo.cfg.xml" overwrite="true" />
+		
+		<delete dir="${dist.dir}" failonerror="false" />
+		<mkdir dir="${dist.dir}"/>
+		<war destfile="${dist.dir}/${war.name}.war" duplicate="preserve" compress="true" webxml="web/WEB-INF/web.xml">
+			<fileset dir="${build.dir}/services-war"/>
+		</war>
+			
+		<jar destfile="${dist.dir}/nt_mdb.jar" basedir="${build.dir}/services-war/WEB-INF/classes/" includes="**/MDB*.class">
+			<include name="${build.dir}/services-war/WEB-INF/classes/" />
+			<include name="**/**/SendForward.class" />
+			<include name="**/**/Forward.class" />
+			<include name="**/**/Segment.class" />
+			<include name="**/**/HibernateWrapper.class" />
+			<include name="**/**/UserDao.class" />
+			<include name="**/common/db/*.class" />
+			<include name="**/common/pojo/*.class" />
+			<include name="**/**/*.xml" />
+		</jar>
+		
+		<copy file="${root.dir}/lib/claim_model.jar" todir="${dist.dir}"/>
+		
+
+		<ear destfile="${dist.dir}/${ear.name}" appxml="${src.dir}/../metadata/central/application.xml">
+			<fileset dir="${dist.dir}" includes="*.jar,*.war" />
+		</ear>
+		
+		<mkdir dir="${staging.dir}/${VERSION}"/>
+		<copy todir="${staging.dir}/${VERSION}" verbose="true">
+			<fileset file="${dist.dir}/${ear.name}">
+			</fileset>
+		</copy>
+		
+	</target>
 	
 	<target name="build-ear" id="build" description="Build WAR file">
 		<delete file="${build.dir}/myapp.zip" failonerror="false">
@@ -298,6 +375,7 @@
 			<include name="**/**/*.xml" />
 		</jar>
 		
+		<!--
 		<jar destfile="${dist.dir}/nt_fs.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">
 			<metainf dir="${src.dir}/../metadata">
 				<include name="ejb-jar.xml"/>
@@ -315,9 +393,10 @@
 			<include name="**/common/pojo/*.class" />
 			<include name="**/**/*.xml" />
 		</jar>
+
 		
 		<copy file="${dist.dir}/nt_fs.jar" todir="c:/workspace/Trunk/lib/jars"/>
-		
+				-->
 		<copy file="${root.dir}/lib/claim_model.jar" todir="${dist.dir}"/>
 		
 
