@@ -507,6 +507,7 @@
 				if (theBag) {
 					theRows = theBag.getElementsByTagName("tr");
 					var theTotal = document.getElementById("appForm:bagList:" + bagRow + ":bagPrice").value;
+					theTotal = theTotal.replace(",","");
 					theCurrSel = document.getElementById("appForm:bagList:" + bagRow + ":bagCurrency");
 					var theCurr = theCurrSel.options[theCurrSel.selectedIndex].value;
 					theTotal = parseFloat(theTotal);
