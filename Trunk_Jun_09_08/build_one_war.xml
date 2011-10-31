@@ -650,7 +650,7 @@
 	
 	<!-- PRODUCTION WAR TARGETS -->
 	
-	<target name="build-production-avis" depends="delete">
+	<target name="build-war-production-avis" depends="delete">
 		<property name="ant_project_name" value="ab" />
 		<property name="ant_war_name" value="avis_production" />
 		<property name="ab.init.complete" value="true" />
