@@ -285,6 +285,13 @@
 		<antcall target="build-central-donotrun" />
 	</target>
 	
+	<target name="build-central-test">
+		<property name="client.name" value="central" />
+		<property name="environment.name" value="test" />
+		<property name="ear.name" value="NTServices_1_0.ear" />
+		<antcall target="build-central-donotrun" />
+	</target>
+	
 	<target name="build-central-prod">
 		<property name="client.name" value="central" />
 		<property name="environment.name" value="prod" />
@@ -300,14 +307,21 @@
 		<mkdir dir="${build.dir}/services-war/WEB-INF/classes"/>
 
 		
-		<!-- TODO
+		
 		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on"
 					
 					memoryinitialsize="256m"       memorymaximumsize="256m"
 					>
 					<classpath refid="project.classpath" />
 				</javac>
-	-->
+
+		<copy todir="${build.dir}/services-war/WEB-INF/classes" overwrite="true">
+			<fileset dir="${src.dir}" >
+				<include name="**/*.properties"/>
+				<include name="**/*.xml"/>
+			</fileset>
+		</copy>
+		
 		<copy todir="${build.dir}/services-war" overwrite="true">
 			<fileset dir="${webroot.dir}" >
 				<include name="WEB-INF/**/*"/>
@@ -315,13 +329,22 @@
 			</fileset>
 		</copy>
 		
-
+<!--
 		<copy todir="${build.dir}/services-war/WEB-INF/classes" overwrite="true">
 			<fileset dir="${build.classes.dir}" />
 		</copy>
+
 		
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_main.cfg.xml" overwrite="true" />
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_geo.cfg.xml" overwrite="true" />
+			-->
+		<copy todir="${build.dir}/services-war/WEB-INF/classes/" overwrite="true">
+			<fileset dir="${root.dir}/environments/${client.name}/${environment.name}" >
+				<include name="**/hibernate_main.cfg.xml"/>
+				<include name="**/hibernate_geo.cfg.xml"/>
+				<include name="**/*_policy.xml"/>
+			</fileset>
+		</copy>
 		
 		<delete dir="${dist.dir}" failonerror="false" />
 		<mkdir dir="${dist.dir}"/>
@@ -418,7 +441,18 @@
 	</target>
 
 
-	<target name="build-war" id="build" description="Build WAR file">
+	<target name="compile-all">
+		<delete dir="${build.dir}/classes"/>
+		<mkdir dir="${build.dir}/classes"/>
+		<javac srcdir="./src" fork="true" destdir="${build.dir}/classes" debug="on"
+			
+			memoryinitialsize="256m"       memorymaximumsize="256m"
+			>
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+	
+	<target name="build-war" id="build" description="Build WAR file" depends="compile-all">
 
 		<!--<delete file="${app.deploy.dir}/${war.name}.war" failonerror="false" />-->
 		<delete dir="${build.dir}/services-war" />
