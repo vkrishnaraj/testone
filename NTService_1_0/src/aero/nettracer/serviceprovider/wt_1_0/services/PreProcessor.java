@@ -35,6 +35,7 @@ import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.BasicRule;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.ContentRule;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format;
 
 public class PreProcessor {
@@ -250,6 +251,70 @@ public class PreProcessor {
 		return "";
 	}
 
+	private static String formatAddress(String a, WorldTracerRule<String> rule){
+		if(a != null){
+			try {
+				if(rule != null){
+					return rule.formatEntry(a.replaceAll("[" + FIELD_SEP + ENTRY_SEP + "]", " "));
+				} else {
+					return a.trim().replaceAll("[" + FIELD_SEP + ENTRY_SEP + "]", " ");
+				}
+			} catch (WorldTracerException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	
+	private static Address getAddress(Passenger[]pax, boolean perm){
+		Address a = null;
+		if(pax != null){
+			for(int j = 0; j < pax.length;j++){
+				if(pax[j].getAddress() != null && pax[j].getAddress().isTemporaryAddress() != perm){
+					a = pax[j].getAddress();
+					break;
+				}
+			}
+			if(a != null){
+				BasicRule br = new BasicRule(1, 57, 1, aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format.FREE_FLOW);
+				a.setAddress1(formatAddress(a.getAddress1(), br));
+				a.setAddress2(formatAddress(a.getAddress2(), br));
+				a.setCity(formatAddress(a.getCity(), br));
+				a.setState(formatAddress(a.getState(), br));
+				a.setProvince(formatAddress(a.getProvince(), br));
+				a.setZip(formatAddress(a.getZip(), br));
+				a.setCountryCode(formatAddress(a.getCountryCode(), br));
+			}
+		}
+		return a;
+	}
+	
+	/**
+	 * Returns first permanent/temp address from the passenger list
+	 * @param data
+	 * @param perm
+	 * @return
+	 */
+	public static Address getAhlAddress(Ahl data, boolean perm){
+		if (data != null && data.getPax() != null){
+			return getAddress(data.getPax(),perm);
+		}
+		return null;
+	}
+	
+	/**
+	 * Returns first permanent/temp address from the passenger list
+	 * @param data
+	 * @param perm
+	 * @return
+	 */
+	public static Address getOhdAddress(Ohd data, boolean perm){
+		if (data != null && data.getPax() != null){
+			return getAddress(data.getPax(),perm);
+		}
+		return null;
+	}
 
 	public static Map<WorldTracerField, List<String>> createAhlFieldMap(Ahl data) throws WorldTracerException {
 
@@ -462,7 +527,7 @@ public class PreProcessor {
 			addr1Pieces.add(address.getAddress2().trim());
 		if (address.getCity() != null)
 			addr1Pieces.add(address.getCity().trim());
-		if(address.getState() != null && address.getState().trim().length() > 0 && ("US".equals(address.getCountryCode()) || "United States".equalsIgnoreCase(address.getCountryCode()))) {
+		if(address.getState() != null && address.getState().trim().length() > 0 && "US".equals(address.getCountryCode())) {
 			addr1Pieces.add(address.getState().trim());
 			if (addressField.equals(WorldTracerField.PA)) {
 				addIncidentFieldEntry(WorldTracerField.STATE, address.getState(), result);
