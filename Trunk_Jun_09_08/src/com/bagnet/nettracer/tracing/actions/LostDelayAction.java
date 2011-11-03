@@ -314,11 +314,11 @@ public class LostDelayAction extends CheckedAction {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}
-			return (mapping.findForward(TracingConstants.LD_MAIN));
+			return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
 		}
 
 		if(MBRActionUtils.actionUnMatching(theform, request, user, realpath)) {
-			return (mapping.findForward(TracingConstants.LD_MAIN));
+			return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
 		}
 
 		// if got here and one of the claimchecks has tempOHD entered, then

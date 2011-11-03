@@ -977,7 +977,7 @@ public class MBRActionUtils {
 		for (int i = 0; i < theform.getItemlist().size(); i++) {
 			item = (Item) theform.getItem(i, 0);
 			String ohd = item.getTempOHD_ID();
-			if (ohd != null && ohd.length() > 0 && (ic.getOHD_ID() == null || ic.getOHD_ID().length() == 0)) {
+			if (ohd != null && ohd.length() > 0 && ic != null && (ic.getOHD_ID() == null || ic.getOHD_ID().length() == 0)) {
 				error = new ActionMessage("error.match_needtoconfirm");
 				return error;
 			}
