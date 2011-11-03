@@ -41,6 +41,7 @@ import com.usairways.www.cbro.baggage_scanner.wsdl.ScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TagType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TaskType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TrackingScanType;
+import com.usairways.www.cbro.baggage_scanner.wsdl.TrackingTaskType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.UldLoadBagScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.UldScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.UldTaskType;
@@ -144,7 +145,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 				case 20: if (out.getRerouteClearArray() != null ) superDesc = "Reroute Clear"; arr = out.getRerouteClearArray(); break;
 				case 21: if (out.getRerouteForwardArray() != null ) superDesc = "Reroute Forward"; arr = out.getRerouteForwardArray(); break;
 				case 22: if (out.getRerouteHoldArray() != null ) superDesc = "Reroute Hold"; arr = out.getRerouteHoldArray(); break;
-				case 23: if (out.getRerouteInventoryArray() != null ) superDesc = "Reroute Inventory"; arr = out.getRerouteInventoryArray(); break;
+				case 23: if (out.getInventoryClearArray() != null ) superDesc = "Inventory Clear"; arr = out.getInventoryClearArray(); break;
 				
 			}
 			
@@ -200,7 +201,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							comment.append("Fault Reason: " + o.getFaultReason() + "<br />");
 							comment.append("Fault Station: " + o.getFaultStation() + "<br />");
 							
-							ForwardLegType[] legs= o.getLegs().getLegArray();
+							ForwardLegType[] legs= o.getLegArray();
 							if (legs.length > 0) {
 								comment.append("Forward Itinerary: <br />");
 							}
@@ -213,7 +214,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						if (obj instanceof TrackingScanType) {
 							type = "Tracking";
 							TrackingScanType o = (TrackingScanType) obj;
-							comment.append("Location: " + o.getLocation() + "<br />");
+							ifNotNull(comment, "Location: ", o.getLocation(), "<br />");
 						} 
 
 						if (obj instanceof FlightScanType) {
@@ -289,8 +290,13 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 				
 						if (obj instanceof RerouteScanType) {
 							RerouteScanType o = (RerouteScanType) obj;
-							comment.append("Location: " + o.getLocation() + "<br />");
-							comment.append("PNR: " + o.getPnr() + "<br />");
+							ifNotNull(comment, "Location: ", o.getLocation(), "<br />");
+							ifNotNull(comment, "PNR: ", o.getPnr(), "<br />");
+						}
+						
+						if (obj instanceof TrackingTaskType) {
+							TrackingTaskType o = (TrackingTaskType) obj;
+							ifNotNull(comment, "Location: ", o.getLocation(), "<br />");
 						}
 						
 						if (obj instanceof RerouteClearScanType) {
@@ -308,7 +314,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							
 							ohdId = o.getNetTracerId();
 							
-							ForwardLegType[] legs= o.getLegs().getLegArray();
+							ForwardLegType[] legs= o.getLegArray();
 							if (legs.length > 0) {
 								comment.append("Forward Itinerary: <br />");
 							}
