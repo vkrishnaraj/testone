@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://www.usairways.com/cbro/baggage-scanner/wsdl"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	name="ScanPoints2"
+	targetNamespace="http://www.usairways.com/cbro/baggage-scanner/wsdl">
+  <wsdl:types>
+    <xsd:schema
+		targetNamespace="http://www.usairways.com/cbro/baggage-scanner/wsdl"
+		version="1.0"
+		xmlns:tns="http://www.usairways.com/cbro/baggage-scanner/wsdl"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	  <xsd:complexType name="tagType">
+		<xsd:simpleContent>
+		  <xsd:extension base="xsd:string">
+			<xsd:attribute name="type" default="B">
+			  <xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+				  <xsd:annotation>
+					<xsd:documentation>B=bag C=cargo S=stores G=ground service</xsd:documentation>
+				  </xsd:annotation>
+				  <xsd:enumeration value="B"/>
+				  <xsd:enumeration value="C"/>
+				  <xsd:enumeration value="S"/>
+				  <xsd:enumeration value="G"/>
+				</xsd:restriction>
+			  </xsd:simpleType>
+			</xsd:attribute>
+		  </xsd:extension>
+		</xsd:simpleContent>
+	  </xsd:complexType>
+	  <xsd:simpleType name="uldType">
+		<xsd:restriction base="xsd:string">
+		  <xsd:pattern value="[A-Z]{3}[0-9]{4,5}[A-Z]{2}"/>
+		</xsd:restriction>
+	  </xsd:simpleType>
+      <xsd:simpleType name="deviceType">
+      	<xsd:restriction base="xsd:string">
+      		<xsd:pattern value="[A-Z]{2}[0-9]{5}|[0-9]{11}"/>
+      	</xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="cityType">
+      	<xsd:restriction base="xsd:string">
+      		<xsd:pattern value="[0-9A-Z]{3}"/>
+      	</xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="carrierType">
+      	<xsd:restriction base="xsd:string">
+      		<xsd:pattern value="[0-9A-Z]{2,3}"/>
+      	</xsd:restriction>
+      </xsd:simpleType>
+      <xsd:simpleType name="flightNumberType">
+      	<xsd:restriction base="xsd:integer">
+			<xsd:minInclusive value="1"/>
+			<xsd:totalDigits value="4"/>
+      	</xsd:restriction>
+      </xsd:simpleType>
+	  <xsd:simpleType name="binType">
+		<xsd:restriction base="xsd:string">
+			<xsd:enumeration value="AC"/>
+			<xsd:enumeration value="AB"/>
+			<xsd:enumeration value="FC"/>
+			<xsd:enumeration value="F1"/>
+			<xsd:enumeration value="F2"/>
+			<xsd:enumeration value="RF"/>
+			<xsd:enumeration value="R1"/>
+			<xsd:enumeration value="R2"/>
+			<xsd:enumeration value="1L"/>
+			<xsd:enumeration value="2L"/>
+			<xsd:enumeration value="3L"/>
+			<xsd:enumeration value="4L"/>
+			<xsd:enumeration value="5L"/>
+			<xsd:enumeration value="6L"/>
+			<xsd:enumeration value="7L"/>
+			<xsd:enumeration value="8L"/>
+			<xsd:enumeration value="9L"/>
+			<xsd:enumeration value="1R"/>
+			<xsd:enumeration value="2R"/>
+			<xsd:enumeration value="3R"/>
+			<xsd:enumeration value="4R"/>
+			<xsd:enumeration value="5R"/>
+			<xsd:enumeration value="6R"/>
+			<xsd:enumeration value="7R"/>
+			<xsd:enumeration value="8R"/>
+			<xsd:enumeration value="9R"/>
+			<xsd:enumeration value="1D"/>
+			<xsd:enumeration value="2D"/>
+			<xsd:enumeration value="3D"/>
+			<xsd:enumeration value="4D"/>
+			<xsd:enumeration value="5D"/>
+			<xsd:enumeration value="6D"/>
+			<xsd:enumeration value="AD"/>
+			<xsd:enumeration value="BD"/>
+			<xsd:enumeration value="CD"/>
+			<xsd:enumeration value="DD"/>
+			<xsd:enumeration value="ED"/>
+			<xsd:enumeration value="AL"/>
+			<xsd:enumeration value="BL"/>
+			<xsd:enumeration value="CL"/>
+			<xsd:enumeration value="DL"/>
+			<xsd:enumeration value="EL"/>
+			<xsd:enumeration value="FL"/>
+			<xsd:enumeration value="GL"/>
+			<xsd:enumeration value="AR"/>
+			<xsd:enumeration value="BR"/>
+			<xsd:enumeration value="CR"/>
+			<xsd:enumeration value="DR"/>
+			<xsd:enumeration value="ER"/>
+			<xsd:enumeration value="FR"/>
+			<xsd:enumeration value="GR"/>
+			<xsd:enumeration value="AB-BULK"/>
+		</xsd:restriction>
+	  </xsd:simpleType>
+	  <xsd:simpleType name="warrantType">
+	  	<xsd:restriction base="xsd:string">
+	  		<xsd:enumeration value="SH"/>
+	  		<xsd:enumeration value="GV"/>
+	  		<xsd:enumeration value="GC"/>
+	  		<xsd:enumeration value="FW"/>
+	  		<xsd:enumeration value="OA"/>
+	  		<xsd:enumeration value="BB"/>
+	  		<xsd:enumeration value="NO"/>
+			<xsd:enumeration value="NS"/>
+			<xsd:enumeration value="RD"/>
+			<xsd:enumeration value="NC"/>
+	  	</xsd:restriction>
+	  </xsd:simpleType>
+	  <xsd:complexType name="taskType">
+      	<xsd:attribute name="instant" type="xsd:dateTime" use="required"/>
+      	<xsd:attribute name="city" type="tns:cityType" use="required"/>
+		<xsd:attribute name="device" type="tns:deviceType"/>
+		<xsd:attribute name="tag" type="xsd:string"/>
+	  </xsd:complexType>
+	  <xsd:complexType name="flightTaskType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:taskType">
+			<xsd:attribute name="flightNumber" type="tns:flightNumberType" use="required"/>
+			<xsd:attribute name="flightDate" type="xsd:date" use="required"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+      <xsd:complexType name="scanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:taskType">
+			<xsd:attribute name="undo" type="xsd:boolean" use="required"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+      </xsd:complexType>
+	  <xsd:complexType name="flightScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:scanType">
+			<xsd:attribute name="flightNumber" type="tns:flightNumberType" use="required"/>
+			<xsd:attribute name="flightDate" type="xsd:date" use="required"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="loadScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:flightScanType">
+			<xsd:attribute name="bin" type="tns:binType"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="unloadScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:loadScanType">
+			<xsd:sequence>
+			  <xsd:element name="unloadReason" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="loadBagScanType">
+	  	<xsd:complexContent>
+	  		<xsd:extension base="tns:loadScanType">
+	  			<xsd:attribute name="warrant" type="tns:warrantType"/>
+	  			<xsd:attribute name="heavy" type="xsd:boolean"/>
+	  			<xsd:attribute name="forwardDestination" type="tns:cityType"/>
+	  			<xsd:attribute name="netTracerId" type="xsd:string"/>
+                <xsd:attribute name="pnr" type="xsd:string"/>
+	  		</xsd:extension>
+	  	</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="loadULDScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:loadScanType">
+			<xsd:attribute name="uld" type="tns:uldType" use="required"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="unloadULDScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:unloadScanType">
+			<xsd:attribute name="uld" type="tns:uldType" use="required"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="netTracerScanType">
+		<xsd:complexContent>
+			<xsd:extension base="tns:scanType">
+				<xsd:attribute name="netTracerId" type="xsd:string"/>
+                <xsd:attribute name="pnr" type="xsd:string"/>
+			</xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="qohScanType">
+		<xsd:complexContent>
+			<xsd:extension base="tns:netTracerScanType">
+				<xsd:sequence>
+					<xsd:element name="comment" type="xsd:string" minOccurs="0"/>
+				</xsd:sequence>
+			</xsd:extension>
+	  	</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="forwardLegType">
+		<xsd:attribute name="carrier" type="tns:carrierType" use="required"/>
+		<xsd:attribute name="destination" type="tns:cityType" use="required"/>
+		<xsd:attribute name="flightNumber" type="tns:flightNumberType" use="required"/>
+		<xsd:attribute name="flightDate" type="xsd:date" use="required"/>
+	  </xsd:complexType>
+      <xsd:complexType name="forwardScanType">
+      	<xsd:complexContent>
+      		<xsd:extension base="tns:netTracerScanType">
+      			<xsd:sequence>
+      				<xsd:element name="agent" type="xsd:string"/>
+      				<xsd:element name="faultReason" type="xsd:string"/>
+					<xsd:element name="comment" type="xsd:string" minOccurs="0"/>
+					<xsd:element name="leg" type="tns:forwardLegType" maxOccurs="unbounded"/>
+      			</xsd:sequence>
+      			<xsd:attribute name="tagStatus" use="required">
+      				<xsd:simpleType>
+      					<xsd:restriction base="xsd:string">
+      						<xsd:enumeration value="original"/>
+      						<xsd:enumeration value="expedited"/>
+      					</xsd:restriction>
+      				</xsd:simpleType>
+    			</xsd:attribute>
+     			<xsd:attribute name="faultStation" type="tns:cityType"/>
+				<xsd:attribute name="faultReasonId" type="xsd:integer" use="required"/>
+      		</xsd:extension>
+      	</xsd:complexContent>
+      </xsd:complexType>
+	  <xsd:complexType name="uldTaskType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:flightTaskType">
+			<xsd:attribute name="uld" type="tns:uldType" use="required"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="uldScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:flightScanType">
+			<xsd:attribute name="uld" type="tns:uldType" use="required"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="uldLoadBagScanType">
+	  	<xsd:complexContent>
+	  		<xsd:extension base="tns:uldScanType">
+	  			<xsd:attribute name="warrant" type="tns:warrantType"/>
+	  			<xsd:attribute name="heavy" type="xsd:boolean"/>
+	  			<xsd:attribute name="forwardDestination" type="tns:cityType"/>
+	  			<xsd:attribute name="netTracerId" type="xsd:string"/>
+                <xsd:attribute name="pnr" type="xsd:string"/>
+	  		</xsd:extension>
+	  	</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="bulkUnloadType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:flightTaskType">
+			<xsd:sequence>
+			  <xsd:element name="unloadReason" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="uldTransferType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:flightTaskType">
+			<xsd:attribute name="uldFrom" type="tns:uldType" use="required"/>
+			<xsd:attribute name="uldTo" type="tns:uldType" use="required"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="trackingScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:scanType">
+			<xsd:sequence>
+			  <xsd:element name="location" type="xsd:string"/>
+			</xsd:sequence>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="trackingTaskType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:taskType">
+			<xsd:sequence>
+			  <xsd:element name="location" type="xsd:string"/>
+			</xsd:sequence>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="rerouteScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:scanType">
+			<xsd:sequence>
+			  <xsd:element name="location" type="xsd:string" minOccurs="0"/>
+			</xsd:sequence>
+            <xsd:attribute name="pnr" type="xsd:string"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="rerouteClearScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:rerouteScanType">
+			<xsd:sequence>
+			  <xsd:element name="reason" type="xsd:string"/>
+			</xsd:sequence>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="rerouteRouteScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:rerouteScanType">
+			<xsd:sequence>
+			  <xsd:element name="leg" type="tns:forwardLegType" minOccurs="0" maxOccurs="unbounded"/>
+			</xsd:sequence>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+	  <xsd:complexType name="rerouteForwardScanType">
+		<xsd:complexContent>
+		  <xsd:extension base="tns:rerouteScanType">
+			<xsd:sequence>
+			  <xsd:element name="faultReason" type="xsd:string"/>
+			  <xsd:element name="leg" type="tns:forwardLegType" maxOccurs="unbounded"/>
+			</xsd:sequence>
+			<xsd:attribute name="netTracerId" type="xsd:string"/>
+			<xsd:attribute name="bulk" type="xsd:boolean" use="required"/>
+			<xsd:attribute name="faultStation" type="tns:cityType"/>
+			<xsd:attribute name="faultReasonId" type="xsd:integer" use="required"/>
+		  </xsd:extension>
+		</xsd:complexContent>
+	  </xsd:complexType>
+      <xsd:element name="getScanPoints">
+      	<xsd:complexType>
+			<xsd:sequence>
+        			<xsd:element name="tag" type="tns:tagType" />
+            		<xsd:element name="startTime" type="xsd:dateTime" />
+        			<xsd:element name="endTime" type="xsd:dateTime" minOccurs="0" />
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+      <xsd:element name="getScanPointsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="out">
+            	<xsd:complexType>
+            		<xsd:sequence>
+      					<xsd:choice minOccurs="0" maxOccurs="unbounded">
+						  <xsd:element name="bulkUnload" type="tns:bulkUnloadType"/>
+						  <xsd:element name="cancelFlight" type="tns:flightTaskType"/>
+						  <xsd:element name="uldAssignToBulk" type="tns:uldTaskType"/>
+						  <xsd:element name="uldTransfer" type="tns:uldTransferType"/>
+						  <xsd:element name="inventoryCount" type="tns:trackingScanType"/>
+						  <xsd:element name="inventoryIn" type="tns:trackingScanType"/>
+						  <xsd:element name="inventoryOut" type="tns:trackingScanType"/>
+						  <xsd:element name="inventoryClear" type="tns:trackingTaskType"/>
+						  <xsd:element name="tracking" type="tns:trackingScanType"/>
+						  <xsd:element name="forward" type="tns:forwardScanType"/>
+						  <xsd:element name="qoh" type="tns:qohScanType"/>
+						  <xsd:element name="load" type="tns:loadScanType"/>
+						  <xsd:element name="loadBag" type="tns:loadBagScanType"/>
+						  <xsd:element name="unload" type="tns:unloadScanType"/>
+						  <xsd:element name="loadULD" type="tns:loadULDScanType"/>
+						  <xsd:element name="unloadULD" type="tns:unloadULDScanType"/>
+						  <xsd:element name="uldLoad" type="tns:uldScanType"/>
+						  <xsd:element name="uldLoadBag" type="tns:uldLoadBagScanType"/>
+						  <xsd:element name="uldUnload" type="tns:uldScanType"/>
+						  <xsd:element name="rerouteAccept" type="tns:rerouteRouteScanType"/>
+						  <xsd:element name="rerouteCancel" type="tns:rerouteScanType"/>
+						  <xsd:element name="rerouteClear" type="tns:rerouteClearScanType"/>
+						  <xsd:element name="rerouteForward" type="tns:rerouteForwardScanType"/>
+						  <xsd:element name="rerouteHold" type="tns:rerouteScanType"/>
+				      	</xsd:choice>
+            		</xsd:sequence>
+            	</xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="getScanPointsRequest">
+    <wsdl:part element="tns:getScanPoints" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="getScanPointsResponse">
+    <wsdl:part element="tns:getScanPointsResponse" name="parameters"/>
+  </wsdl:message>
+
+  <wsdl:portType name="ScanPoints">
+    <wsdl:operation name="getScanPoints">
+      <wsdl:input message="tns:getScanPointsRequest"/>
+      <wsdl:output message="tns:getScanPointsResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="ScanPointsSOAP" type="tns:ScanPoints">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getScanPoints">
+      <soap:operation soapAction="" />
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="ScanPoints">
+    <wsdl:port binding="tns:ScanPointsSOAP" name="ScanPointsSOAP">
+      <soap:address location="http://www.example.org/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
