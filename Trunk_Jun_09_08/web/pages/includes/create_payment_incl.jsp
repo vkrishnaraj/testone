@@ -1,6 +1,6 @@
 <%@ page language="java" %>
-<%@ taglib uri="http://jakarta.apache.org/struts/tags-html" prefix="html"%>
-<%@ taglib uri="http://jakarta.apache.org/struts/tags-bean" prefix="bean"%>
+<%@ taglib uri="/tags/struts-html" prefix="html"%>
+<%@ taglib uri="/tags/struts-bean" prefix="bean"%>
 <script type="text/javascript">
 
 function updatePaymentFields(newType) {

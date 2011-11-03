@@ -159,7 +159,7 @@
                     <p>
                     </td>
                   </tr>
-                  <logic:notEmpty name="incidentForm.readonly" >
+                  <logic:notEmpty name="incidentForm" property="readonly" >
                   <logic:notEqual name="incidentForm" property="readonly" value="1">
                     <tr>
                       <td align="center" valign="top" colspan="12">
