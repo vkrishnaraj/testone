@@ -23,14 +23,16 @@ import aero.nettracer.serviceprovider.wt_1_0.common.ForwardOhd;
 import aero.nettracer.serviceprovider.wt_1_0.common.Itinerary;
 
 import com.bagnet.nettracer.email.HtmlEmail;
+import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
 
 public class ForwardIntegrationImpl {
 	private static Logger logger = Logger.getLogger(ForwardIntegrationImpl.class);
 
-	
+	// This is for single and/or bulk onhand forwards.
 	public void sendMessage(List<OHD_Log> logs) {
 		if (!PropertyBMO.isTrue(PropertyBMO.SEND_FORWARD_NOTIFICATIONS)) {
 			return;
@@ -47,7 +49,16 @@ public class ForwardIntegrationImpl {
 					f.setComment(log.getMessage().trim());
 
 				f.setOnHandId(log.getOhd().getOHD_ID());
-				f.setTagNumber(log.getExpeditenum());
+				
+				// New rule per US Airways: send expedite if exists.  If not, send bag tag.
+				if (log.getExpeditenum() != null && log.getExpeditenum().trim().length() > 0) {
+					f.setTagNumber(log.getExpeditenum().trim());
+				} else if (log.getOhd().getClaimnum() != null && log.getOhd().getClaimnum().length() > 0) {
+					f.setTagNumber(log.getOhd().getClaimnum().trim());
+				} else {
+					logger.info("No expedite or bag tag exists - aborting sendMessage(List<OHD_Log>)");
+					return;
+				}
 
 				ArrayList<Segment> s = new ArrayList<Segment>();
 				f.setSegments(s);
@@ -83,6 +94,7 @@ public class ForwardIntegrationImpl {
 
 	}
 	
+	// This is for BEORN.
 	public void sendMessage(ForwardMessage fw) {
 		if (!PropertyBMO.isTrue(PropertyBMO.SEND_FORWARD_NOTIFICATIONS)) {
 			return;
@@ -94,7 +106,16 @@ public class ForwardIntegrationImpl {
 		Forward f = new Forward();
 		payload.add(f);
 		f.setComment(fw.getSuplementaryInfo());
-		f.setTagNumber(fw.getExpediteTag());
+				
+		// New rule per US Airways: send expedite if exists.  If not, send bag tag.
+		if (fw.getExpediteTag() != null && fw.getExpediteTag().trim().length() > 0) {
+			f.setTagNumber(fw.getExpediteTag().trim());
+		} else if (fw.getTagNum() != null && fw.getTagNum().trim().length() > 0) {
+			f.setTagNumber(fw.getTagNum().trim());
+		} else {
+			logger.info("No expedite or bag tag exists - aborting sendMessage(ForwardMessage fw>)");
+			return;
+		}
 		
 		ArrayList<Segment> s = new ArrayList<Segment>();
 		f.setSegments(s);
@@ -203,6 +224,7 @@ public class ForwardIntegrationImpl {
 		}
 	}
 
+	// WorldTracer forward
 	public void sendMessage(ForwardOhd fw) {
 		if (!PropertyBMO.isTrue(PropertyBMO.SEND_FORWARD_NOTIFICATIONS)) {
 			return;
@@ -213,7 +235,26 @@ public class ForwardIntegrationImpl {
 		Forward f = new Forward();
 		payload.add(f);
 		f.setComment(fw.getSupplementaryInfo());
-		f.setTagNumber(fw.getExpediteNumber());
+		
+		OhdBMO obmo = new OhdBMO();
+		OHD ohd = null;
+		
+		try {
+			ohd = obmo.findOHDByID(fw.getOhdId());
+		} catch (Exception e) {
+			// Ignore - OHD does not exist.
+		}
+		
+		
+		// New rule per US Airways: send expedite if exists.  If not, send bag tag.
+		if (fw.getExpediteNumber() != null && fw.getExpediteNumber().trim().length() > 0) {
+			f.setTagNumber(fw.getExpediteNumber().trim());
+		} else if (ohd != null && ohd.getClaimnum() != null && ohd.getClaimnum().trim().length() > 0) {
+			f.setTagNumber(ohd.getClaimnum().trim());
+		} else {
+			logger.info("No expedite or bag tag exists - aborting sendMessage(ForwardOhd fw)");
+			return;
+		}
 		
 		ArrayList<Segment> s = new ArrayList<Segment>();
 		f.setSegments(s);
