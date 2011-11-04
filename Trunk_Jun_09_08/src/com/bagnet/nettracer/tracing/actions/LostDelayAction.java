@@ -314,10 +314,14 @@ public class LostDelayAction extends CheckedAction {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}
+			request.setAttribute("lostdelay", "1");
+			request.setAttribute("Incident_ID", theform.getIncident_ID());
 			return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
 		}
 
 		if(MBRActionUtils.actionUnMatching(theform, request, user, realpath)) {
+			request.setAttribute("lostdelay", "1");
+			request.setAttribute("Incident_ID", theform.getIncident_ID());
 			return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
 		}
 
