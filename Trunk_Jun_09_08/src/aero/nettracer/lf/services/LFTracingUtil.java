@@ -40,6 +40,7 @@ public class LFTracingUtil {
 	private static final double SCORE_ADDRESS = 10;
 	private static final double SCORE_BRAND = 10;
 	private static final double SCORE_MVA = 15;
+	private static final double SCORE_AGREEMENT_NUMBER = 15;
 	private static final double SCORE_EMAIL = 10;
 	
 	
@@ -274,6 +275,21 @@ public class LFTracingUtil {
 					match.getDetails().add(detail);
 				}
 			}
+
+			if(lr.getAgreementNumber() != null && lr.getAgreementNumber().trim().length() > 0
+					&& match.getFound() != null && match.getFound().getAgreementNumber() != null 
+					&& match.getFound().getAgreementNumber().trim().length() > 0){
+				if(lr.getAgreementNumber().trim().equalsIgnoreCase(match.getFound().getAgreementNumber().trim())){
+					LFMatchDetail detail = new LFMatchDetail();
+					detail.setDescription("Rental Agreement Number Match");
+					detail.setMatchHistory(match);
+					detail.setScore(SCORE_AGREEMENT_NUMBER);
+					detail.setDecryptedFoundValue(match.getFound().getAgreementNumber());
+					detail.setDecryptedLostValue(lr.getAgreementNumber());
+					match.getDetails().add(detail);
+				}
+			}
+			
 		}
 		
 		//process item

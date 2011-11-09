@@ -29,6 +29,7 @@ public class LFFound implements LFObject {
 	@GeneratedValue
 	private long id;
 	
+	private String agreementNumber;
 	private String mvaNumber;
 	
 	private Date foundDate;
@@ -60,6 +61,14 @@ public class LFFound implements LFObject {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	public String getAgreementNumber() {
+		return agreementNumber;
+	}
+
+	public void setAgreementNumber(String agreementNumber) {
+		this.agreementNumber = agreementNumber;
 	}
 
 	public String getMvaNumber() {

@@ -56,7 +56,9 @@
       <td colspan="3" id="navmenucell">
         <div class="menu">
           <dl>
-          <% if (ntUser && request.getAttribute("incident") != null) { %>
+          <% 
+          String incidentId = (String) request.getAttribute("incident");
+          if (ntUser && incidentId != null && !incidentId.equals("null")) { %>
             <dd>
               <a href='searchIncident.do?incident=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
                   <br />
@@ -70,11 +72,11 @@
             if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, a)) {
             	String claimIdString = request.getParameter("claimId");
             	if (claimIdString == null || claimIdString.equals("null") || Integer.parseInt(claimIdString) <= 0) {
-            		String incidentId = request.getParameter("incident");
-					if (incidentId != null) {%>
+            		String incId = request.getParameter("incident");
+					if (incId != null && !incId.equals("null")) {%>
 					
               <dd>
-                <a href='select_claim.do?incidentId=<%=incidentId %>' ><span class="aa">&nbsp;
+                <a href='select_claim.do?incidentId=<%=incId %>' ><span class="aa">&nbsp;
                     <br />
                     &nbsp;</span>
                   <span class="bb"><bean:message key="menu.claim_payout" /></span>
@@ -83,7 +85,7 @@
                     &nbsp;</span></a>
               </dd>
 					<dd>
-                   	<a href='fraud_results.do?incidentId=<%=incidentId %>'><span class="aab">&nbsp;<br />&nbsp;</span>
+                   	<a href='fraud_results.do?incidentId=<%=incId %>'><span class="aab">&nbsp;<br />&nbsp;</span>
                    	<span class="bbb"><bean:message key="menu.fraud.checks" /></span>
                         <span class="ccb">&nbsp;
                           <br />
@@ -127,7 +129,8 @@
                    <% } %>
                    
 <%
-            } if (ntUser && request.getAttribute("incident") != null) {
+            } 
+            if (ntUser && incidentId != null && !incidentId.equals("null")) {
 %>
 		            <dd>
 		              <a href='claim_prorate.do?incident=<%=request.getAttribute("incident") %>'><span class="aa">&nbsp;

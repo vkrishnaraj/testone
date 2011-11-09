@@ -239,7 +239,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		if(dto.getAgreementNumber() != null && dto.getAgreementNumber().trim().length() > 0){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-				sql += " and o.reservation.agreementNumber = \'" + dto.getAgreementNumber() + "\'";
+				sql += " and o.reservation.agreementNumber = \'" + dto.getAgreementNumber().trim() + "\'";
+			} else {
+				sql += " and o.agreementNumber = \'" + dto.getAgreementNumber().trim() + "\'";
 			}
 		}
 		if(dto.getEmail() != null && dto.getEmail().trim().length() > 0){

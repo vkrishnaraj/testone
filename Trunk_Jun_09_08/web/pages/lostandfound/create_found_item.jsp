@@ -215,13 +215,27 @@
 							<br/>
 							<html:text name="foundItemForm" property="disFoundDate" disabled="true" styleClass="disabledtextfield" />
 						</td>
-						<td colspan=2>
+						<td>
 							<bean:message key="colname.lf.created.agent" />
 							<br/>
 							<html:text name="foundItemForm" property="found.agent.username" disabled="true" styleClass="disabledtextfield" />
 						</td>
+						<td>
+							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
+							<br/>
+         					<html:select name="foundItemForm" property="found.companyId" styleClass="dropdown" >
+         						<html:option value="<%=TracingConstants.LF_ABG_COMPANY_ID %>"><bean:message key="option.lf.please.select" /></html:option>
+         						<html:option value="<%=TracingConstants.LF_AVIS_COMPANY_ID %>"><bean:message key="option.lf.avis" /></html:option>
+         						<html:option value="<%=TracingConstants.LF_BUDGET_COMPANY_ID %>"><bean:message key="option.lf.budget" /></html:option>
+         					</html:select>
+						</td>
 					</tr>
 					<tr>
+						<td>
+							<bean:message key="colname.lf.agreement.number" />
+							<br>
+							<html:text name="foundItemForm" property="found.agreementNumber" size="10" styleClass="textfield" />
+						</td>
 						<td>
 							<bean:message key="colname.lf.mva.number" />
 							<br>
@@ -234,15 +248,6 @@
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
 		            		</html:select>
-						</td>
-						<td>
-							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
-							<br/>
-         					<html:select name="foundItemForm" property="found.companyId" styleClass="dropdown" >
-         						<html:option value="<%=TracingConstants.LF_ABG_COMPANY_ID %>"><bean:message key="option.lf.please.select" /></html:option>
-         						<html:option value="<%=TracingConstants.LF_AVIS_COMPANY_ID %>"><bean:message key="option.lf.avis" /></html:option>
-         						<html:option value="<%=TracingConstants.LF_BUDGET_COMPANY_ID %>"><bean:message key="option.lf.budget" /></html:option>
-         					</html:select>
 						</td>
 						<td>
          					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>

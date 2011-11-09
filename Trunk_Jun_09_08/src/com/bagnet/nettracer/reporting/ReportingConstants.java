@@ -110,6 +110,10 @@ public class ReportingConstants {
 	public static final int RPT_20_CUSTOM_78 = 78;
 	public static final int RPT_20_CUSTOM_86 = 86;
 	public static final String RPT_20_CUSTOM_86_NAME = "lost_and_found_log_report";
+	
+	public static final int RPT_20_CUSTOM_87 = 87;
+	public static final String RPT_20_CUSTOM_87_LOST_NAME = "lost_item_recovery_report";
+	public static final String RPT_20_CUSTOM_87_FOUND_NAME = "found_item_recovery_report";
 
 
 }
