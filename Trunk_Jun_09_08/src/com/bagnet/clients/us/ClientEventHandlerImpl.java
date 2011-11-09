@@ -39,7 +39,6 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 
 	private static final String NEWLINE_INDICATOR = "*";
 	private static Logger logger = Logger.getLogger(ClientEventHandlerImpl.class);
-	private String newline = NEWLINE_INDICATOR;
 	
 	@Override
 	public void doEventOnForward(ForwardOhd fw) {
@@ -94,7 +93,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 		if (stringExists(dto.getSpecialInstructions())) {
 			StringBuffer str = new StringBuffer(256);
 			
-			str.append("Baggage Forward Message+");
+			str.append("Baggage Forward Message" + NEWLINE_INDICATOR);
 			
 			str.append("OHD                  " + dto.getOnhand() + NEWLINE_INDICATOR);
 			if (stringExists(dto.getTagNumber())) {
@@ -337,7 +336,6 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 				
 				logger.error("Exception encountered loading & saving PCN " + refId, e);
 
-				// TODO: Remove this next line
 				e.printStackTrace();
 						
 				if (t != null) {
@@ -397,7 +395,6 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 			}
 		} catch (Exception e) {
 			logger.error("Error retrieving list of PCNs: ", e);
-			// TODO: Remove.
 			e.printStackTrace();
 		}
 		return null;
@@ -441,11 +438,11 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 			}
 
 			StringBuilder message = new StringBuilder();
-			message.append("DELAYED BAGGAGE INFORMATION" + newline + newline);
-			message.append("CUSTOMER NAME:      " + pcn.getName() + newline);
-			message.append("CUSTOMER FLIGHT #:  " + pcn.getMissedFlightAirline() + " " + pcn.getMissedFlightNumber() + " to " + pcn.getMissedFlightDestination() + newline);
+			message.append("DELAYED BAGGAGE INFORMATION" + NEWLINE_INDICATOR + NEWLINE_INDICATOR);
+			message.append("CUSTOMER NAME:      " + pcn.getName() + NEWLINE_INDICATOR);
+			message.append("CUSTOMER FLIGHT #:  " + pcn.getMissedFlightAirline() + " " + pcn.getMissedFlightNumber() + " to " + pcn.getMissedFlightDestination() + NEWLINE_INDICATOR);
 			message.append("BAG TAG #:          ");
-			message.append(StringUtils.join(tags, ", ") + newline);
+			message.append(StringUtils.join(tags, ", ") + NEWLINE_INDICATOR);
 			
 			finalSegment.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
 			finalSegment.set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_C);
@@ -461,19 +458,19 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 				}
 				
 				if (finalSegment.getFlightnum() != null) {
-					message.append("NEW FLIGHT #:       " + newFlight + newline);
+					message.append("NEW FLIGHT #:       " + newFlight + NEWLINE_INDICATOR);
 				  if (finalSegment.getScharrivetime() != null && finalSegment.getArrivedate() != null) {
 				  	message.append("ESTIMATED ARRIVAL: " + finalSegment.getDisscharrivetime() 
-				  			+ " " + finalSegment.getDisarrivedate() + newline);
+				  			+ " " + finalSegment.getDisarrivedate() + NEWLINE_INDICATOR);
 				  } else {
-				  	message.append(newline);
+				  	message.append(NEWLINE_INDICATOR);
 				  }
 				}
 			}
 
-			message.append("PLEASE ACCEPT OUR APOLOGY FOR THE DELAY OF YOUR BAG.  PLEASE PROCEED+" +
-					           "DIRECTLY TO THE BAGGAGE SERVICE OFFICE ON THE BAGGAGE ARRIVAL LEVEL+" +
-					           "TO PROCESS YOUR REPORT." + newline + newline + newline);
+			message.append("PLEASE ACCEPT OUR APOLOGY FOR THE DELAY OF YOUR BAG.  PLEASE PROCEED" + NEWLINE_INDICATOR +
+					           "DIRECTLY TO THE BAGGAGE SERVICE OFFICE ON THE BAGGAGE ARRIVAL LEVEL " + NEWLINE_INDICATOR+
+					           "TO PROCESS YOUR REPORT." + NEWLINE_INDICATOR + NEWLINE_INDICATOR + NEWLINE_INDICATOR);
 			message.append("-------------------");
 			
 			iw.sendTelex(message.toString(), address);
