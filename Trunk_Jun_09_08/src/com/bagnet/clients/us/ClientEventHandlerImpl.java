@@ -37,8 +37,9 @@ import com.usairways.lcc.aat_sharesws.services_asmx.Segment;
 
 public class ClientEventHandlerImpl implements ClientEventHandler {
 
+	private static final String NEWLINE_INDICATOR = "*";
 	private static Logger logger = Logger.getLogger(ClientEventHandlerImpl.class);
-	private String newline = "+";
+	private String newline = NEWLINE_INDICATOR;
 	
 	@Override
 	public void doEventOnForward(ForwardOhd fw) {
@@ -95,11 +96,11 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 			
 			str.append("Baggage Forward Message+");
 			
-			str.append("OHD                  " + dto.getOnhand() + "+");
+			str.append("OHD                  " + dto.getOnhand() + NEWLINE_INDICATOR);
 			if (stringExists(dto.getTagNumber())) {
-				str.append("Tag Number           " + dto.getTagNumber() + "+");
+				str.append("Tag Number           " + dto.getTagNumber() + NEWLINE_INDICATOR);
 			} else if (stringExists(dto.getExpediteNumber())) {
-				str.append("Expedite Number      " + dto.getExpediteNumber() +"+");
+				str.append("Expedite Number      " + dto.getExpediteNumber() +NEWLINE_INDICATOR);
 			}
 
 			int day = 0;
@@ -131,14 +132,14 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 
 						
 			
-			str.append("Final Flight         " + dto.getFinalFlightAirline() + dto.getFinalFlightNumber() + finalFlightDate + "+");
+			str.append("Final Flight         " + dto.getFinalFlightAirline() + dto.getFinalFlightNumber() + finalFlightDate + NEWLINE_INDICATOR);
 			
 			
 			
-			str.append("Final Destination    " + dto.getFinalDestination() +"+");
-			str.append("Reason for Loss      " + dto.getReasonForLoss() +"+");
-			str.append("Mishandling Station  " + dto.getFaultStation() +"+");
-			str.append("Telex Address        " + dto.getSpecialInstructions() +"+");
+			str.append("Final Destination    " + dto.getFinalDestination() +NEWLINE_INDICATOR);
+			str.append("Reason for Loss      " + dto.getReasonForLoss() +NEWLINE_INDICATOR);
+			str.append("Mishandling Station  " + dto.getFaultStation() +NEWLINE_INDICATOR);
+			str.append("Telex Address        " + dto.getSpecialInstructions() +NEWLINE_INDICATOR);
 			
 			// Call USAir Web Service to send message
 			SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
