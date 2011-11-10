@@ -273,6 +273,8 @@ public class LFTracingUtil {
 					detail.setDecryptedFoundValue(match.getFound().getMvaNumber());
 					detail.setDecryptedLostValue(lr.getMvaNumber());
 					match.getDetails().add(detail);
+				} else { // For MVA number: If A and B both contain an MVA number and they do not match. Do not return a result.
+					return 0;
 				}
 			}
 
@@ -287,6 +289,8 @@ public class LFTracingUtil {
 					detail.setDecryptedFoundValue(match.getFound().getAgreementNumber());
 					detail.setDecryptedLostValue(lr.getAgreementNumber());
 					match.getDetails().add(detail);
+				} else { // For RA number: If A and B both contain a RA number and they do not match. Do not return a result.
+					return 0;
 				}
 			}
 			
