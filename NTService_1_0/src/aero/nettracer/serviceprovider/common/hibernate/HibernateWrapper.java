@@ -31,7 +31,7 @@ public class HibernateWrapper {
 	static {
 		try {
 			sf_prod = cfg_prod.configure(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml")).buildSessionFactory();
-			geoSessionFactory = geoConfig.configure(HibernateWrapper.class.getResource("/hibernate_geo.cfg.xml")).buildSessionFactory();
+			//geoSessionFactory = geoConfig.configure(HibernateWrapper.class.getResource("/hibernate_geo.cfg.xml")).buildSessionFactory();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
