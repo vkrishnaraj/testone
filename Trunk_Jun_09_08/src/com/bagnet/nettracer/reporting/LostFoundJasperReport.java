@@ -39,6 +39,25 @@ public class LostFoundJasperReport {
 	private final int IR_MATCHED_COUNT = 2;
 	private final int IR_TO_BE_SALVAGED_COUNT = 2;
 	
+	private final int MS_STATION = 0;
+	private final int MS_LOST_COUNT = 1;
+	private final int MS_FOUND_COUNT = 2;
+	private final int MS_MATCHED_COUNT = 3;
+	private final int MS_SALVAGED_COUNT = 4;
+	private final int MS_NOT_MATCHED_COUNT = 5;
+	
+	private final int ITEMIZ_ID = 0;
+	private final int ITEMIZ_STATION = 1;
+	private final int ITEMIZ_DATE = 2;
+	private final int ITEMIZ_STATUS = 3;
+	private final int ITEMIZ_DISPOSITION = 4;
+	private final int ITEMIZ_CATEGORY = 5;
+	private final int ITEMIZ_SUB_CATEGORY = 6;
+	private final int ITEMIZ_BRAND = 7;
+	private final int ITEMIZ_DESCRIPTION = 8;
+	
+	
+	
 	@SuppressWarnings("rawtypes")
 	public List getReportData(StatReportDTO srDto) {
 		ArrayList toReturn = null;
@@ -446,6 +465,247 @@ public class LostFoundJasperReport {
 		}
 
 		return lfRow;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public List getManagementSummaryData(StatReportDTO srDto) {
+		ArrayList toReturn = null;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+
+			SQLQuery query = session.createSQLQuery(getManagementSummarySqlFromDto(srDto));
+			query.addScalar("stationcode", Hibernate.STRING);
+			query.addScalar("lost_count", Hibernate.INTEGER);
+			query.addScalar("found_count", Hibernate.INTEGER);
+			query.addScalar("matched_count", Hibernate.INTEGER);
+			query.addScalar("salvaged_count", Hibernate.INTEGER);
+			query.addScalar("not_matched_count", Hibernate.INTEGER);
+			
+			List results = query.list();
+			if (results.isEmpty()) {
+				return toReturn;
+			}
+			
+			toReturn = getManagementSummaryRowsFromResults(results);
+		} catch (Exception e) {
+			logger.error(e, e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+
+		return toReturn;
+	}
+	
+	private String getManagementSummarySqlFromDto(StatReportDTO srDto) {
+		
+		Calendar calendarStart = new GregorianCalendar();
+		calendarStart.setTime(DateUtils.convertToDate(srDto.getStarttime(), srDto.getDateFormat(), null));
+		calendarStart.add(Calendar.DAY_OF_MONTH, -1);
+		
+		String endDateString = srDto.getEndtime();
+		if (endDateString == null || endDateString.isEmpty()) {
+			endDateString = srDto.getStarttime();
+		}
+		
+		Calendar calendarEnd = new GregorianCalendar();
+		calendarEnd.setTime(DateUtils.convertToDate(endDateString, srDto.getDateFormat(), null));
+		calendarEnd.add(Calendar.DAY_OF_MONTH, 1);
+		
+		String startDate = DateUtils.formatDate(calendarStart.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+		String endDate = DateUtils.formatDate(calendarEnd.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+
+		String stationSql = "";
+		String stationId = srDto.getStation_ID()[0];
+		if (stationId != null && !stationId.equals("0")) {
+			stationSql += "and s.stationcode = \'" + stationId + "\' ";
+		}
+		
+		
+		String sql = "select s.stationcode,ifnull(lost.count, 0) as 'lost_count',ifnull(found.count, 0) as 'found_count',ifnull(matched.count, 0) as 'matched_count',ifnull(salvaged.count, 0) as 'salvaged_count',ifnull(notmatched.count, 0) as 'not_matched_count' from station s " +
+					 "left outer join (select s.station_id,count(i1.id) as 'count' from station s " +
+					 				  "left outer join lfreservation r on s.station_id = r.dropoffLocation_station_id " +
+					 				  "left outer join lflost lf on r.id = lf.reservation_id " +
+					 				  "left outer join lfitem i1 on lf.id = i1.lost_id and i1.type = " + TracingConstants.LF_TYPE_LOST + " " +
+					 				  "where 1 = 1 and lf.openDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
+					 				  "group by s.station_id) lost on s.station_id = lost.station_id " +
+					 "left outer join (select s.station_id,count(i1.id) as 'count' from station s " +
+					 				  "left outer join lffound lf on s.station_id = lf.station_id " +
+					 				  "left outer join lfitem i1 on lf.id = i1.found_id and i1.type = " + TracingConstants.LF_TYPE_FOUND + " " +
+					 				  "where 1 = 1 and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
+					 				  "group by s.station_id) found on s.station_id = found.station_id " +
+					 "left outer join (select s.station_id,count(distinct mh1.id) as 'count' from station s " +
+					 				  "left outer join lffound lf on lf.station_id = s.station_id " +
+					 				  "left outer join lfmatchhistory mh1 on (lf.id = mh1.found_id) join lfmatchhistory mh2 on (mh1.lost_id = mh2.lost_id and mh1.found_id = mh2.found_id) " +
+					 				  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
+					 				  "where mh1.status_status_id = 608 and mh2.score > 0 " +
+					 				  "and i.disposition_status_id in (603,604) " + 
+					 				  "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
+					 				  "group by s.station_id) matched on s.station_id = matched.station_id " +
+					 "left outer join (select s.station_id,count(i.id) as 'count' from station s " +
+					 				  "left outer join lffound lf on s.station_id = lf.station_id " +
+					 				  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
+					 				  "where lf.status_id = 601 and i.disposition_status_id = 605 " + 
+					 				  "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
+					 				  "group by s.station_id) salvaged on s.station_id = salvaged.station_id " +
+		             "left outer join (select s.station_id,count(i.id) as 'count' from station s " +
+		             	 			  "left outer join lffound lf on s.station_id = lf.station_id " +
+		             	 			  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
+		             	 			  "where 1 = 1 and i.disposition_status_id in (603,604) " + 
+		             	 			  "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
+		             	 			  "and not exists (select 'x' from lfmatchhistory m where m.found_id = i.found_id) " +
+		             	 			  "group by s.station_id) notmatched on s.station_id = notmatched.station_id " +
+		             "where s.associated_airport in ('ABG','AVS','BGT');";
+		
+		return sql;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private ArrayList<LFManagementSummaryRow> getManagementSummaryRowsFromResults(List results) {
+		ArrayList<LFManagementSummaryRow> toReturn = new ArrayList<LFManagementSummaryRow>();
+		Object[] row;
+		LFManagementSummaryRow lfmsr;
+		LFManagementSummaryRow total = new LFManagementSummaryRow();
+		total.setStation("Total");
+		for (int i = 0; i < results.size(); ++i) {
+			row = (Object[]) results.get(i);
+			lfmsr = new LFManagementSummaryRow();
+			lfmsr.setStation((String) row[MS_STATION]);
+			
+			lfmsr.setReportedLost((Integer) row[MS_LOST_COUNT]);
+			total.addReportedLost((Integer) row[MS_LOST_COUNT]);
+			
+			lfmsr.setFoundItems((Integer) row[MS_FOUND_COUNT]);
+			total.addFoundItems((Integer) row[MS_FOUND_COUNT]);
+			
+			lfmsr.setMatchedAndReturned((Integer) row[MS_MATCHED_COUNT]);
+			total.addMatchedAndReturned((Integer) row[MS_MATCHED_COUNT]);
+			
+			lfmsr.setSalvaged((Integer) row[MS_SALVAGED_COUNT]);
+			total.addSalvaged((Integer) row[MS_SALVAGED_COUNT]);
+			
+			lfmsr.setNotMatchedReturned((Integer) row[MS_NOT_MATCHED_COUNT]);
+			total.addNotMatchedReturned((Integer) row[MS_NOT_MATCHED_COUNT]);
+			
+			toReturn.add(lfmsr);
+		}
+		toReturn.add(total);
+		return toReturn;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public List getLfItemizationData(StatReportDTO srDto) {
+		ArrayList toReturn = null;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+
+			SQLQuery query = session.createSQLQuery(getItemizationSqlFromDto(srDto));
+			query.addScalar("id", Hibernate.LONG);
+			query.addScalar("stationcode", Hibernate.STRING);
+			query.addScalar("date_reported", Hibernate.STRING);
+			query.addScalar("status_id", Hibernate.LONG);
+			query.addScalar("disposition_status_id", Hibernate.LONG);
+			query.addScalar("category", Hibernate.STRING);
+			query.addScalar("subcategory", Hibernate.STRING);
+			query.addScalar("brand", Hibernate.STRING);
+			query.addScalar("description", Hibernate.STRING);
+			
+			List results = query.list();
+			if (results.isEmpty()) {
+				return toReturn;
+			}
+			
+			toReturn = getItemizationRowsFromResults(results);
+		} catch (Exception e) {
+			logger.error(e, e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+
+		return toReturn;
+	}
+	
+	private String getItemizationSqlFromDto(StatReportDTO srDto) {
+		boolean isLost = srDto.getType() == TracingConstants.LF_TYPE_LOST; 
+		String sql = "";
+		String idName = "";
+		String dateName = "";
+		String joinSql = "";
+		int type;
+		if (isLost) {
+			idName = "lost_id";
+			dateName = "openDate";
+			joinSql = "left outer join lfreservation r on s.station_id = r.dropoffLocation_station_id " +
+					  "left outer join lflost lf on r.id = lf.reservation_id ";
+			type = TracingConstants.LF_TYPE_LOST;
+		} else {
+			idName = "found_id";
+			dateName = "foundDate";
+			joinSql = "left outer join lffound lf on s.station_id = lf.station_id ";
+			type = TracingConstants.LF_TYPE_FOUND;
+		}
+		
+		Calendar calendarStart = new GregorianCalendar();
+		calendarStart.setTime(DateUtils.convertToDate(srDto.getStarttime(), srDto.getDateFormat(), null));
+		calendarStart.add(Calendar.DAY_OF_MONTH, -1);
+		
+		String endDateString = srDto.getEndtime();
+		if (endDateString == null || endDateString.isEmpty()) {
+			endDateString = srDto.getStarttime();
+		}
+		
+		Calendar calendarEnd = new GregorianCalendar();
+		calendarEnd.setTime(DateUtils.convertToDate(endDateString, srDto.getDateFormat(), null));
+		calendarEnd.add(Calendar.DAY_OF_MONTH, 1);
+		
+		String startDate = DateUtils.formatDate(calendarStart.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+		String endDate = DateUtils.formatDate(calendarEnd.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+		
+		String stationSql = "";
+		String stationId = srDto.getStation_ID()[0];
+		if (stationId != null && !stationId.equals("0")) {
+			stationSql += "and s.stationcode = \'" + stationId + "\' ";
+		}
+		
+		sql += "select lf.id,s.stationcode,lf." + dateName + " as 'date_reported',lf.status_id,i.disposition_status_id,c.description as 'category',ifnull(sc.description, '') as 'subcategory',i.brand,i.description " +
+			   "from station s " + joinSql +
+			   "left outer join lfitem i on lf.id = i." + idName + " and i.type = " + type + " " +
+			   "left outer join lfcategory c on i.category = c.id " +
+			   "left outer join lfsubcategory sc on i.subcategory = sc.id " +
+			   "where s.associated_airport in ('ABG','AVS','BGT') " +
+			   "and c.id in (5,6,7,10,14,18,19,24) " +
+			   "and lf." + dateName + " between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
+			   "order by s.stationcode,lf." + dateName + ";";
+		
+		return sql;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private ArrayList<LFItemizationRow> getItemizationRowsFromResults(List results) {
+		ArrayList<LFItemizationRow> toReturn = new ArrayList<LFItemizationRow>();
+		Object[] row;
+		LFItemizationRow lfir;
+		for (int i = 0; i < results.size(); ++i) {
+			row = (Object[]) results.get(i);
+			lfir = new LFItemizationRow();
+			lfir.setId((Long) row[ITEMIZ_ID]);
+			lfir.setStation((String) row[ITEMIZ_STATION]);
+			lfir.setDate((String) row[ITEMIZ_DATE]);
+			lfir.setStatus((Long) row[ITEMIZ_STATUS]);
+			lfir.setDisposition((Long) row[ITEMIZ_DISPOSITION]);
+			lfir.setCategory((String) row[ITEMIZ_CATEGORY]);
+			lfir.setSubCategory((String) row[ITEMIZ_SUB_CATEGORY]);
+			lfir.setBrand((String) row[ITEMIZ_BRAND]);
+			lfir.setDescription((String) row[ITEMIZ_DESCRIPTION]);
+			
+			toReturn.add(lfir);
+		}
+		return toReturn;
 	}
 	
 }

@@ -184,10 +184,10 @@ public class LostFoundItemRecoveryRow {
 			Double pubc = new Double(pickedUpByCustomer);
 			Double clsd = new Double(closed);
 			
-			String retRate = df.format(((del + pubc) / clsd) * 100);
+			String retRate = df.format(((del + pubc) / clsd) * 100) + "%";
 			setReturnRate(retRate);
 		} else {
-			setReturnRate("0.00");
+			setReturnRate("0.00%");
 		}
 	}
 
@@ -197,10 +197,10 @@ public class LostFoundItemRecoveryRow {
 			Double slvgd = new Double(salvaged);
 			Double clsd = new Double(closed);
 
-			String slvgdRate = df.format((slvgd / clsd) * 100);
+			String slvgdRate = df.format((slvgd / clsd) * 100) + "%";
 			setSalvagedRate(slvgdRate);
 		} else {
-			setSalvagedRate("0.00");
+			setSalvagedRate("0.00%");
 		}
 	}
 	
