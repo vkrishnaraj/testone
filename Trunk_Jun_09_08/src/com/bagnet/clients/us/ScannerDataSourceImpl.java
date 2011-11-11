@@ -271,7 +271,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							UldLoadBagScanType o = (UldLoadBagScanType) obj;
 							ifNotNull(comment, "Destination: ", o.getForwardDestination(), "<br />");
 							ohdId = o.getNetTracerId();
-							if (o.getWarrant().equals(WarrantType.BB)) {
+							if (o.getWarrant().equals(WarrantType.NO)) {
 								comment.append("Bag Not Loaded <br />");
 							}
 							comment.append("ULD: " + o.getUld() + "<br />");
