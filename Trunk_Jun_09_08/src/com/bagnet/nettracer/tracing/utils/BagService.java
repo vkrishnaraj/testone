@@ -382,32 +382,30 @@ public class BagService {
 
 		HibernateUtils.save(log);
 		
-		ForwardNoticeBMO.createForwardNotice(log, notifyList, user);
-		if (form.getSpecialInstructions() != null && form.getSpecialInstructions().length() > 0) {			
+		ForwardNoticeBMO.createForwardNotice(log, notifyList, user);	
 			// Fields for Special Instructions Implementation
-			BeornDTO bdto = new BeornDTO();
-			bdto.setSpecialInstructions(form.getSpecialInstructions());
-			bdto.setExpediteNumber(form.getExpediteNumber());
-			bdto.setFinalFlightNumber(finalFlightNumber);
-			bdto.setFaultStation(faultStationName);
-			bdto.setFinalDestination(StationBMO.getStation(form.getDestStation()).getStationcode());
-			bdto.setFinalFlightDepartureDate(finalFlightDate);
-			bdto.setFinalFlightAirline(finalFlightAirline);
-			if (!form.getLossCode().equals("0")) {
-				bdto.setReasonForLoss(Integer.toString(LossCodeBMO.getCode(form.getLossCode()).getLoss_code()));
-			} else {
-				bdto.setReasonForLoss("Not Provided");
-			}
-			bdto.setTagNumber(form.getBag_tag());
-			bdto.setOnhand(oDTO.getOHD_ID());
-			bdto.setLog(log);
-			
-			try {
-				SpringUtils.getClientEventHandler().doEventOnBeornWS(bdto);
-			} catch (Exception e) {
-				logger.error("Error performing client-specific BEORN Action...");
-				e.printStackTrace();
-			}
+		BeornDTO bdto = new BeornDTO();
+		bdto.setSpecialInstructions(form.getSpecialInstructions());
+		bdto.setExpediteNumber(form.getExpediteNumber());
+		bdto.setFinalFlightNumber(finalFlightNumber);
+		bdto.setFaultStation(faultStationName);
+		bdto.setFinalDestination(StationBMO.getStation(form.getDestStation()).getStationcode());
+		bdto.setFinalFlightDepartureDate(finalFlightDate);
+		bdto.setFinalFlightAirline(finalFlightAirline);
+		if (!form.getLossCode().equals("0")) {
+			bdto.setReasonForLoss(Integer.toString(LossCodeBMO.getCode(form.getLossCode()).getLoss_code()));
+		} else {
+			bdto.setReasonForLoss("Not Provided");
+		}
+		bdto.setTagNumber(form.getBag_tag());
+		bdto.setOnhand(oDTO.getOHD_ID());
+		bdto.setLog(log);
+		
+		try {
+			SpringUtils.getClientEventHandler().doEventOnBeornWS(bdto);
+		} catch (Exception e) {
+			logger.error("Error performing client-specific BEORN Action...");
+			e.printStackTrace();
 		}
 
 		try {
