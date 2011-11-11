@@ -234,7 +234,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							type = "Load Bag Scan";
 							LoadBagScanType o = (LoadBagScanType) obj;
 							ohdId = o.getNetTracerId();
-							if (o.getWarrant().equals(WarrantType.BB)) {
+							if (o.getWarrant().equals(WarrantType.NO)) {
 								comment.append("NOT LOADED<br />");
 							}
 							ifNotNull(comment, "Destination: ", o.getForwardDestination(), "<br />");				
