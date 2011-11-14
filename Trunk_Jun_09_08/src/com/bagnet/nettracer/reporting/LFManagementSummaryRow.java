@@ -5,7 +5,6 @@ import java.text.DecimalFormat;
 public class LFManagementSummaryRow {
 	
 	private String station;
-	private String company;
 	private int reportedLost;
 	private int foundItems;
 	private int matchedAndReturned;
@@ -20,14 +19,6 @@ public class LFManagementSummaryRow {
 		this.station = station;
 	}
 	
-	public String getCompany() {
-		return company;
-	}
-
-	public void setCompany(String company) {
-		this.company = company;
-	}
-
 	public int getReportedLost() {
 		return reportedLost;
 	}

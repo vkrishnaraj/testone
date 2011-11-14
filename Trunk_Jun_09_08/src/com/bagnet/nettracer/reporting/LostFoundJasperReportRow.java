@@ -3,6 +3,7 @@ package com.bagnet.nettracer.reporting;
 public class LostFoundJasperReportRow {
 	
 	private long id;
+	private String vantiveNumber;
 	private String date;
 	private String station;
 	private String status;
@@ -18,6 +19,14 @@ public class LostFoundJasperReportRow {
 		this.id = id;
 	}
 	
+	public String getVantiveNumber() {
+		return vantiveNumber;
+	}
+
+	public void setVantiveNumber(String vantiveNumber) {
+		this.vantiveNumber = vantiveNumber;
+	}
+
 	public String getDate() {
 		return date;
 	}

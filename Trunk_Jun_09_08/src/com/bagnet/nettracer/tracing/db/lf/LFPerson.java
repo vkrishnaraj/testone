@@ -41,8 +41,6 @@ public class LFPerson {
 	@Transient
 	private String confirmEmail;
 	
-	private String vantiveNumber;
-	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFAddress.class, cascade = CascadeType.ALL)
 	private LFAddress address;
 	
@@ -111,14 +109,6 @@ public class LFPerson {
 	public void setEmail(String email) {
 		this.decryptedEmail = null;
 		this.email = email;
-	}
-
-	public String getVantiveNumber() {
-		return vantiveNumber;
-	}
-
-	public void setVantiveNumber(String vantiveNumber) {
-		this.vantiveNumber = vantiveNumber;
 	}
 
 	public String getConfirmEmail() {

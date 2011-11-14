@@ -248,7 +248,12 @@
          						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
          					</html:select>
          				</td>
-         				<td colspan="3">
+         				<td>
+         					<bean:message key="colname.lf.vantive.number" />
+         					<br>
+         					<html:text name="lostReportForm" property="lost.vantiveNumber" size="10" styleClass="textfield" />
+         				</td>
+         				<td colspan="2">
          					&nbsp;
          				</td>
 					</tr>
@@ -262,12 +267,7 @@
    				<bean:message key="message.required" /> 
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
          			<tr>
-         				<td>
-         					<bean:message key="colname.lf.vantive.number" />
-         					<br>
-         					<html:text name="lostReportForm" property="lost.client.vantiveNumber" size="10" styleClass="textfield" />
-         				</td>
-			            <td>
+			            <td colspan=2>
 			              <bean:message key="colname.last_name.req" />&nbsp;<span class="reqfield">*</span>
 			              <br>
 			              <html:text name="lostReportForm" property="lost.client.lastName" size="20" maxlength="20" styleClass="textfield" />

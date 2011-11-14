@@ -62,6 +62,8 @@ public class LFLost implements LFObject {
 	private Date emailSentDate;
 
 	private String remarks;
+	
+	private String vantiveNumber;
 
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPerson.class, cascade = CascadeType.ALL)
 	private LFPerson client;
@@ -255,6 +257,14 @@ public class LFLost implements LFObject {
 
 	public Agent getCloseAgent() {
 		return closeAgent;
+	}
+
+	public String getVantiveNumber() {
+		return vantiveNumber;
+	}
+
+	public void setVantiveNumber(String vantiveNumber) {
+		this.vantiveNumber = vantiveNumber;
 	}
 	
 }

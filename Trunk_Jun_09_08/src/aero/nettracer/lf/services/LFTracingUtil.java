@@ -245,18 +245,6 @@ public class LFTracingUtil {
 				} 
 			}
 
-			if(lc.getVantiveNumber() != null && lc.getVantiveNumber().trim().length() > 0
-					&& fc.getVantiveNumber() != null && fc.getVantiveNumber().trim().length() > 0){
-				if(lc.getVantiveNumber().equalsIgnoreCase(fc.getVantiveNumber())){
-					LFMatchDetail detail = new LFMatchDetail();
-					detail.setDescription("Vantive Number Match");
-					detail.setMatchHistory(match);
-					detail.setScore(SCORE_VANTIVE);
-					detail.setDecryptedFoundValue(fc.getVantiveNumber());
-					detail.setDecryptedLostValue(lc.getVantiveNumber());
-					match.getDetails().add(detail);
-				}
-			}
 		}
 		
 		//process reservation
