@@ -41,11 +41,12 @@ public class LostFoundJasperReport {
 	private final int IR_TO_BE_SALVAGED_COUNT = 2;
 	
 	private final int MS_STATION = 0;
-	private final int MS_LOST_COUNT = 1;
-	private final int MS_FOUND_COUNT = 2;
-	private final int MS_MATCHED_COUNT = 3;
-	private final int MS_SALVAGED_COUNT = 4;
-	private final int MS_NOT_MATCHED_COUNT = 5;
+	private final int MS_COMPANY = 1;		
+	private final int MS_LOST_COUNT = 2;
+	private final int MS_FOUND_COUNT = 3;
+	private final int MS_MATCHED_COUNT = 4;
+	private final int MS_SALVAGED_COUNT = 5;
+	private final int MS_NOT_MATCHED_COUNT = 6;
 	
 	private final int ITEMIZ_ID = 0;
 	private final int ITEMIZ_STATION = 1;
@@ -476,6 +477,7 @@ public class LostFoundJasperReport {
 
 			SQLQuery query = session.createSQLQuery(getManagementSummarySqlFromDto(srDto));
 			query.addScalar("stationcode", Hibernate.STRING);
+			query.addScalar("associated_airport", Hibernate.STRING);
 			query.addScalar("lost_count", Hibernate.INTEGER);
 			query.addScalar("found_count", Hibernate.INTEGER);
 			query.addScalar("matched_count", Hibernate.INTEGER);
@@ -524,7 +526,7 @@ public class LostFoundJasperReport {
 		}
 		
 		
-		String sql = "select s.stationcode,ifnull(lost.count, 0) as 'lost_count',ifnull(found.count, 0) as 'found_count',ifnull(matched.count, 0) as 'matched_count',ifnull(salvaged.count, 0) as 'salvaged_count',ifnull(notmatched.count, 0) as 'not_matched_count' from station s " +
+		String sql = "select s.stationcode,s.associated_airport,ifnull(lost.count, 0) as 'lost_count',ifnull(found.count, 0) as 'found_count',ifnull(matched.count, 0) as 'matched_count',ifnull(salvaged.count, 0) as 'salvaged_count',ifnull(notmatched.count, 0) as 'not_matched_count' from station s " +
 					 "left outer join (select s.station_id,count(i1.id) as 'count' from station s " +
 					 				  "left outer join lfreservation r on s.station_id = r.dropoffLocation_station_id " +
 					 				  "left outer join lflost lf on r.id = lf.reservation_id " +
@@ -573,6 +575,17 @@ public class LostFoundJasperReport {
 			row = (Object[]) results.get(i);
 			lfmsr = new LFManagementSummaryRow();
 			lfmsr.setStation((String) row[MS_STATION]);
+			
+			String companyId = (String) row[MS_COMPANY];
+			String companyName;
+			if (companyId.equals("AVS")) {
+				companyName = "Avis";
+			} else if (companyId.equals("BGT")) {
+				companyName = "Budget";
+			} else {
+				companyName = "Avis Budget Group";
+			}
+			lfmsr.setCompany(companyName);
 			
 			lfmsr.setReportedLost((Integer) row[MS_LOST_COUNT]);
 			total.addReportedLost((Integer) row[MS_LOST_COUNT]);

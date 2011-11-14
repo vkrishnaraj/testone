@@ -461,6 +461,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			detailStyle.setVerticalAlign(VerticalAlign.MIDDLE);
 			
 			drb.addColumn(resources.getString("lf.ms.report.station"), "station", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("lf.ms.report.company"), "company", String.class.getName(), 75, detailStyle, header);
 			drb.addColumn(resources.getString("lf.ms.report.total.lost"), "reportedLost", Integer.class.getName(), 60, detailStyle, header);
 			drb.addColumn(resources.getString("lf.ms.report.total.found"), "foundItems", Integer.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("lf.ms.report.total.matched.returned"), "matchedAndReturned", Integer.class.getName(), 50, detailStyle, header);			
