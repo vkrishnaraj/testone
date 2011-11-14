@@ -350,7 +350,7 @@ public class LostFoundJasperReport {
 		String endDate = DateUtils.formatDate(calendarEnd.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
 
 		if (srDto.getType() == TracingConstants.LF_TYPE_LOST) {
-			sql += "and ((lf.openDate between \'" + startDate + "\' and \'" + endDate + "\') or (lf.closeDate between \'" + startDate + "\' and \'" + endDate + "\')) ";
+			sql += "and (lf.openDate between \'" + startDate + "\' and \'" + endDate + "\') ";
 		} else {
 			sql += "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' ";
 		}
