@@ -267,9 +267,10 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			return null;
 		}
 		
+		boolean isLostReport = srDTO.getType() == TracingConstants.LF_TYPE_LOST;
 		Map parameters = new HashMap();
 		String reportName;
-		if (srDTO.getType() == TracingConstants.LF_TYPE_LOST) {
+		if (isLostReport) {
 			reportName = ReportingConstants.RPT_20_CUSTOM_87_LOST_NAME;
 		} else {
 			reportName = ReportingConstants.RPT_20_CUSTOM_87_FOUND_NAME;
@@ -280,16 +281,13 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		virtualizer.setReadOnly(false);
 		
 		FastReportBuilder drb = new FastReportBuilder();
-		boolean isLostReport = srDTO.getType() == TracingConstants.LF_TYPE_LOST;
 		if (isLostReport) {
 			drb.setTitle(resources.getString("header.customreportnum.87.lost"));
+			drb.setPrintBackgroundOnOddRows(true);
 		} else {
 			drb.setTitle(resources.getString("header.customreportnum.87.found"));
 		}
 
-		if (isLostReport) {
-			drb.setPrintBackgroundOnOddRows(true);
-		}
 		drb.setSubtitle(getItemRecoverySubTitle(srDTO, user, resources));
 		drb.setPageSizeAndOrientation(Page.Page_Legal_Landscape());
 		try {
@@ -301,7 +299,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			detailStyle.setVerticalAlign(VerticalAlign.MIDDLE);
 			
 			drb.addColumn(resources.getString("lf.ir.report.station"), "station", String.class.getName(), 75, detailStyle, header);
-			drb.addColumn(resources.getString("lf.ir.report.company"), "company", String.class.getName(), 75, detailStyle, header);
+			drb.addColumn(resources.getString("lf.ir.report.company"), "company", String.class.getName(), 125, detailStyle, header);
 			if (isLostReport) {
 				drb.addColumn(resources.getString("lf.ir.report.total.lost.reported"), "itemsReported", Integer.class.getName(), 150, detailStyle, header);
 			} else {

@@ -206,7 +206,7 @@ public class LostFoundJasperReport {
 
 			SQLQuery query = session.createSQLQuery(getItemRecoverySqlFromDto(srDto));
 			query.addScalar("stationcode", Hibernate.STRING);
-			query.addScalar("companyId", Hibernate.STRING);
+			query.addScalar("associated_airport", Hibernate.STRING);
 			query.addScalar("status_id", Hibernate.LONG);
 			query.addScalar("disposition_status_id", Hibernate.LONG);
 			query.addScalar("item_count", Hibernate.INTEGER);
@@ -218,7 +218,7 @@ public class LostFoundJasperReport {
 			
 			query = session.createSQLQuery(getMatchedByNtSql(srDto));
 			query.addScalar("stationcode", Hibernate.STRING);
-			query.addScalar("companyId", Hibernate.STRING);
+			query.addScalar("associated_airport", Hibernate.STRING);
 			query.addScalar("matchedCount", Hibernate.INTEGER);
 		
 			List results1 = query.list();
@@ -230,7 +230,7 @@ public class LostFoundJasperReport {
 			if (!isLost) {
 				query = session.createSQLQuery(getItemsToBeSalvagedSql(srDto));
 				query.addScalar("stationcode", Hibernate.STRING);
-				query.addScalar("companyId", Hibernate.STRING);
+				query.addScalar("associated_airport", Hibernate.STRING);
 				query.addScalar("toBeSalvagedCount", Hibernate.INTEGER);
 				
 				toBeSalvaged = query.list();
@@ -253,7 +253,7 @@ public class LostFoundJasperReport {
 		String typeId;
 		boolean isLost = srDto.getType() == TracingConstants.LF_TYPE_LOST;
 
-		String sql = "select s.stationcode,lf.companyId,lf.status_id,i.disposition_status_id,count(lf.id) as 'item_count' from station s ";
+		String sql = "select s.stationcode,s.associated_airport,lf.status_id,i.disposition_status_id,count(lf.id) as 'item_count' from station s ";
 		
 		if (isLost) {
 			itemType = TracingConstants.LF_TYPE_LOST;
@@ -276,8 +276,8 @@ public class LostFoundJasperReport {
 			sql += "and s.stationcode = \'" + stationId + "\' ";
 		}
 		
-		sql += "group by s.stationcode,lf.companyId,lf.status_id,i.disposition_status_id " +
-				"order by s.stationcode,lf.companyId,lf.status_id,i.disposition_status_id;";
+		sql += "group by s.stationcode,lf.status_id,i.disposition_status_id " +
+				"order by s.stationcode,s.associated_airport,lf.status_id,i.disposition_status_id;";
 		
 		return sql;
 	}
@@ -291,7 +291,7 @@ public class LostFoundJasperReport {
 			idName = "found_id";
 		}
 		
-		String sql = "select s.stationcode,lf.companyId, count(distinct mh1.id) as \'matchedCount\' from station s ";
+		String sql = "select s.stationcode,s.associated_airport, count(distinct mh1.id) as \'matchedCount\' from station s ";
 		if (isLost) {
 			sql += "left outer join lfreservation r on r.dropofflocation_station_id = s.station_id " +
 				   "left outer join lflost lf on lf.reservation_id = r.id ";
@@ -310,7 +310,7 @@ public class LostFoundJasperReport {
 	}
 	
 	private String getItemsToBeSalvagedSql(StatReportDTO srDto) {
-		String sql = "select s.stationcode,lf.companyId,count(lf.id) as \'toBeSalvagedCount\' from station s " +
+		String sql = "select s.stationcode,s.associated_airport,count(lf.id) as \'toBeSalvagedCount\' from station s " +
 					 "left outer join lffound lf on s.station_id = lf.station_id " +
 					 "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					 "where s.associated_airport in ('ABG','AVS','BGT') " +
@@ -325,7 +325,7 @@ public class LostFoundJasperReport {
 		}
 		
 		sql += getDateSql(srDto);
-		sql += "group by s.stationcode,lf.companyId;";
+		sql += "group by s.stationcode;";
 		
 		return sql;
 	}
