@@ -13,6 +13,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.classic.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -314,8 +315,8 @@ public class LostFoundJasperReport {
 					 "left outer join lffound lf on s.station_id = lf.station_id " +
 					 "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					 "where s.associated_airport in ('ABG','AVS','BGT') " +
-					 "and lf.status_id = 600 and i.disposition_status_id = " + TracingConstants.LF_DISPOSITION_SALVAGED + " " +
-					 "and datediff(now(), lf.foundDate) > 30 ";
+					 "and lf.status_id = 600 " +
+					 "and datediff(now(), lf.foundDate) > " + PropertyBMO.getValue("lf.auto.salvage") + " ";
 		
 		sql += getDateSql(srDto);
 		
@@ -324,7 +325,6 @@ public class LostFoundJasperReport {
 			sql += "and s.stationcode = \'" + stationId + "\' ";
 		}
 		
-		sql += getDateSql(srDto);
 		sql += "group by s.stationcode;";
 		
 		return sql;
