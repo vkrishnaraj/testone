@@ -268,7 +268,7 @@
    				<bean:message key="message.required" /> 
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
          			<tr>
-			            <td>
+			            <td colspan=2>
 			              <bean:message key="colname.last_name.req" />
 			              <br>
 			              <html:text name="foundItemForm" property="found.client.lastName" size="20" maxlength="20" styleClass="textfield" />
