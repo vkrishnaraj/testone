@@ -88,7 +88,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 			contact.setLastName(host.getClient().getLastName());
 			contact.setMiddleInitial(host.getClient().getMiddleName());
 
-			contact.setVantiveNumber(host.getClient().getVantiveNumber());
+//			contact.setVantiveNumber(host.getClient().getVantiveNumber());
 
 			if(host.getClient().getAddress() != null){
 				AddressBean address = new AddressBean();
@@ -137,7 +137,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		//TODO web agent
 		host.setAgent(agent);
 		
-		
+		host.setVantiveNumber(lostReport.getVantiveNumber());
 		host.setCompanyId(lostReport.getCompany());
 		
 		Station station = StationBMO.getStationByCode("WEB", "AB");
@@ -182,7 +182,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 			client.setFirstName(lostReport.getContact().getFirstName());
 			client.setLastName(lostReport.getContact().getLastName());
 			client.setMiddleName(lostReport.getContact().getMiddleInitial());
-			client.setVantiveNumber(lostReport.getContact().getVantiveNumber());
+//			client.setVantiveNumber(lostReport.getContact().getVantiveNumber());
 			
 			HashSet<LFPhone> phones = new HashSet<LFPhone>();
 			if(lostReport.getContact().getPrimaryPhone() != null){
@@ -220,6 +220,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 			
 			host.setClient(client);
 		}	
+		
 		
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
