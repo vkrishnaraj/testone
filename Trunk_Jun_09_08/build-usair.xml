@@ -126,69 +126,69 @@
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
-		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_es.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_es.jrxml" overwrite="true"/>
 
-		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_he.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_he.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_he.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_he.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_he.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_he.jrxml" overwrite="true" />
 		
-		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_nl.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_nl.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_nl.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_nl.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_nl.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_nl.jrxml" overwrite="true" />
 		
-		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_it.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_it.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_it.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_it.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_it.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_it.jrxml" overwrite="true" />
 		
-		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_pt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_pt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_pt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt_pt.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt_pt.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt_pt.jrxml" overwrite="true" />
 			
-		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt.jrxml" overwrite="true" />
 		<ant target="jasper_compile" antfile="build-gen.xml"/>
 		
-		<copy todir="${basedir}/src" file="companies/usair/custom_ui.properties" />
-		<copy todir="${basedir}/src" file="companies/usair/report_email_ld.html" />
-		<copy todir="${basedir}/src" file="companies/usair/report_email_dam.html" />
-		<copy todir="${basedir}/src" file="companies/usair/report_email_pil.html" />
-		<copy todir="${basedir}/src" file="companies/usair/pax_comm_email.html" />
+		<copy todir="${basedir}/src" file="companies/usair/custom_ui.properties" overwrite="true" />
+		<copy todir="${basedir}/src" file="companies/usair/report_email_ld.html" overwrite="true" />
+		<copy todir="${basedir}/src" file="companies/usair/report_email_dam.html" overwrite="true" />
+		<copy todir="${basedir}/src" file="companies/usair/report_email_pil.html" overwrite="true" />
+		<copy todir="${basedir}/src" file="companies/usair/pax_comm_email.html" overwrite="true" />
 		
 		
-		<copy tofile="${basedir}/src/report_email_ld_fr.html" file="companies/usair/report_email_ld.html" />
-		<copy tofile="${basedir}/src/report_email_dam_fr.html" file="companies/usair/report_email_dam.html" />
-		<copy tofile="${basedir}/src/report_email_pil_fr.html" file="companies/usair/report_email_pil.html" />
+		<copy tofile="${basedir}/src/report_email_ld_fr.html" file="companies/usair/report_email_ld.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_dam_fr.html" file="companies/usair/report_email_dam.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_pil_fr.html" file="companies/usair/report_email_pil.html" overwrite="true" />
 		
-		<copy tofile="${basedir}/src/report_email_ld_de.html" file="companies/usair/report_email_ld.html" />
-		<copy tofile="${basedir}/src/report_email_dam_de.html" file="companies/usair/report_email_dam.html" />
-		<copy tofile="${basedir}/src/report_email_pil_de.html" file="companies/usair/report_email_pil.html" />
+		<copy tofile="${basedir}/src/report_email_ld_de.html" file="companies/usair/report_email_ld.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_dam_de.html" file="companies/usair/report_email_dam.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_pil_de.html" file="companies/usair/report_email_pil.html" overwrite="true" />
 		
-		<copy tofile="${basedir}/src/report_email_ld_es.html" file="companies/usair/report_email_ld.html" />
-		<copy tofile="${basedir}/src/report_email_dam_es.html" file="companies/usair/report_email_dam.html" />
-		<copy tofile="${basedir}/src/report_email_pil_es.html" file="companies/usair/report_email_pil.html" /> 
+		<copy tofile="${basedir}/src/report_email_ld_es.html" file="companies/usair/report_email_ld.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_dam_es.html" file="companies/usair/report_email_dam.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_pil_es.html" file="companies/usair/report_email_pil.html" overwrite="true" /> 
 		
-		<copy tofile="${basedir}/src/report_email_ld_he.html" file="companies/usair/report_email_ld_he.html" />
-		<copy tofile="${basedir}/src/report_email_dam_he.html" file="companies/usair/report_email_dam_he.html" />
-		<copy tofile="${basedir}/src/report_email_pil_he.html" file="companies/usair/report_email_pil_he.html" /> 
+		<copy tofile="${basedir}/src/report_email_ld_he.html" file="companies/usair/report_email_ld_he.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_dam_he.html" file="companies/usair/report_email_dam_he.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_pil_he.html" file="companies/usair/report_email_pil_he.html" overwrite="true" /> 
 		
-		<copy tofile="${basedir}/src/report_email_ld_nl.html" file="companies/usair/report_email_ld_nl.html" />
-		<copy tofile="${basedir}/src/report_email_dam_nl.html" file="companies/usair/report_email_dam_nl.html" />
-		<copy tofile="${basedir}/src/report_email_pil_nl.html" file="companies/usair/report_email_pil_nl.html" /> 
+		<copy tofile="${basedir}/src/report_email_ld_nl.html" file="companies/usair/report_email_ld_nl.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_dam_nl.html" file="companies/usair/report_email_dam_nl.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_pil_nl.html" file="companies/usair/report_email_pil_nl.html" overwrite="true" /> 
 		
-		<copy tofile="${basedir}/src/report_email_ld_pt.html" file="companies/usair/report_email_ld_pt.html" />
-		<copy tofile="${basedir}/src/report_email_dam_pt.html" file="companies/usair/report_email_dam_pt.html" />
-		<copy tofile="${basedir}/src/report_email_pil_pt.html" file="companies/usair/report_email_pil_pt.html" /> 
+		<copy tofile="${basedir}/src/report_email_ld_pt.html" file="companies/usair/report_email_ld_pt.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_dam_pt.html" file="companies/usair/report_email_dam_pt.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_pil_pt.html" file="companies/usair/report_email_pil_pt.html" overwrite="true" /> 
 				
-		<copy tofile="${basedir}/src/report_email_ld_it.html" file="companies/usair/report_email_ld_it.html" />
-		<copy tofile="${basedir}/src/report_email_dam_it.html" file="companies/usair/report_email_dam_it.html" />
-		<copy tofile="${basedir}/src/report_email_pil_it.html" file="companies/usair/report_email_pil_it.html" /> 
+		<copy tofile="${basedir}/src/report_email_ld_it.html" file="companies/usair/report_email_ld_it.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_dam_it.html" file="companies/usair/report_email_dam_it.html" overwrite="true" />
+		<copy tofile="${basedir}/src/report_email_pil_it.html" file="companies/usair/report_email_pil_it.html" overwrite="true" /> 
 		
 		
-		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" />
-		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_de.properties" />
-		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_es.properties" />
-		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_fr.properties" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources.properties" overwrite="true" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_de.properties" overwrite="true" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_es.properties" overwrite="true" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_fr.properties" overwrite="true" />
 		
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
@@ -214,7 +214,7 @@
 	</target>
 	
 	<target name="usair-libraries-cleanup">
-		<delete file="${basedir}/lib/jars/us-shares.jar" />
+		<!--delete file="${basedir}/lib/jars/us-shares.jar" /-->
 		<delete file="${basedir}/lib/jars/us-scanhistory.jar" />
 	</target>
 	
