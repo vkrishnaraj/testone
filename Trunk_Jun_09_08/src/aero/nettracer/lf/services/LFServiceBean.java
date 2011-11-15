@@ -145,7 +145,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		boolean haveDesc = dto.getItemDescription() != null && !dto.getItemDescription().isEmpty();
 		
 		if (category > 0 || haveBrand || haveDesc) {
-			sql += " left outer join o.items i";
+			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
+				sql += " left outer join o.items i";
+			} else {
+				sql += " left outer join o.item i";
+			}
 		}
 		
 
