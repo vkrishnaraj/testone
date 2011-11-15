@@ -384,7 +384,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
 
 		try {
-			JRXlsExporter exporter = new JRXlsExporter();
+			JExcelApiExporter exporter = new JExcelApiExporter();
 			String[] sheetNames = { resources.getString("lf.ms.report.mgt.sum.tab"), 
 									resources.getString("lf.ms.report.lost.itemization.tab"), 
 									resources.getString("lf.ms.report.found.itemization.tab") };
