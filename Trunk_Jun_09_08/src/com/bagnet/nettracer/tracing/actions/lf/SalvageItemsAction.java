@@ -96,7 +96,7 @@ public class SalvageItemsAction extends CheckedAction {
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
 		Status disposition = new Status();
-		disposition.setStatus_ID(TracingConstants.LF_STATUS_SALVAGED);
+		disposition.setStatus_ID(TracingConstants.LF_DISPOSITION_SALVAGED);
 		if (foundItems != null) {
 			for (LFItem item: foundItems) {
 				if (item.isSelected()) {
