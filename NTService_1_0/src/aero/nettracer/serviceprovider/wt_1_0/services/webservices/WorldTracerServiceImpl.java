@@ -3534,7 +3534,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			fieldList = fieldMap.get(field);
 
 			if (fieldList != null && fieldList.size() > 0) {
-				ct.addNewEmails().addNewEmail().setStringValue(fieldList.get(0));
+				StringLength0To58AmendType em1 = ct.addNewEmails().addNewEmail();
+				em1.setSeq(1);
+				em1.setStringValue(fieldList.get(0));
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PN);
