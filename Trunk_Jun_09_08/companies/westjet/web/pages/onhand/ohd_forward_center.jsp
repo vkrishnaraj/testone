@@ -45,7 +45,6 @@
   var cal1xx = new CalendarPopup();
   
   </SCRIPT>
-  
   <jsp:include page="validateForwardOhd.jsp" />
 
 
@@ -75,6 +74,9 @@
                     <a href="addOnHandBag.do?ohd_ID=<bean:write name="ohd" property="label" />"><bean:write name="ohd" property="label" /></a>
                     &nbsp;
                       <bean:message key="colname.expedite_number" />
+                      <font color=red>
+                    *
+                  </font>
                       :
                       <input type="text" name="ohdList[<%=i %>].value" class="textfield" value="<%=ohd.getValue() %>"/>
                       <br />
@@ -136,6 +138,9 @@
                       <td valign="top">
                         <strong>
                           <bean:message key="colname.foh.fromto" />
+                          <font color=red>
+                    *
+                  </font>
                         </strong>
                       </td>
                       <%
@@ -152,6 +157,9 @@
                       <td valign="top">
                         <strong>
                           <bean:message key="colname.foh.flightnum" />
+                          <font color=red>
+                    *
+                  </font>
                         </strong>
                       </td>
                       <td nowrap>
