@@ -1290,6 +1290,7 @@
 		<copy todir="${basedir}/src" file="companies/delta-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/delta-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/delta-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/web/pages/login" file="companies/delta-fs/environment/${environment.name}/login/center.jsp" />
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
 			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
