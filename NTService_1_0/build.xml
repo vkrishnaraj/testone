@@ -292,6 +292,13 @@
 		<antcall target="build-central-donotrun" />
 	</target>
 	
+	<target name="build-central-train">
+		<property name="client.name" value="central" />
+		<property name="environment.name" value="train" />
+		<property name="ear.name" value="NTServices_1_0.ear" />
+		<antcall target="build-central-donotrun" />
+	</target>
+	
 	<target name="build-central-prod">
 		<property name="client.name" value="central" />
 		<property name="environment.name" value="prod" />
