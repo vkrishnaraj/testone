@@ -2226,9 +2226,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					t.setPostalCode(zip);
 				}
 				if(ntta.getCountryCode() != null && ntta.getCountryCode().length() > 0){
-//					aero.sita.www.bag.wtr._2009._01.WTRAddressType.Country country = t.addNewCountry();
-//					country.setStringValue(ntta.getCountryCode());
-//					t.setCountry(country);
+					aero.sita.www.bag.wtr._2009._01.WTRAddressType.Country country = t.addNewCountry();
+					country.setStringValue(ntta.getCountryCode());
+					t.setCountry(country);
 				}
 			}
 			
