@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+<session-factory>
+
+	<property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
+
+	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+	<property name="hibernate.cache.use_second_level_cache">false</property>
+		
+	
+	<property name="hibernate.connection.url">jdbc:mysql://testingdbhost:3306/central_training</property>
+	<property name="hibernate.connection.username">central_user</property>
+	<property name="hibernate.connection.password">WhG26274</property>
+	<property name="show_sql">false</property>
+	<property name="jdbc.fetch_size">50</property>
+	<property name="jdbc.batch_size">25</property>
+	<property name="jdbc.use_scrollable_resultset">false</property>
+	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+	<property name="hibernate.connection.autoReconnect">true</property>
+	<property name="hibernate.connection.autoReconnectForPools">true</property>
+	<property name="hibernate.connection.is-connection-validation-required">true</property>
+	
+	<!-- c3p0 -->
+	<property name="hibernate.c3p0.acquire_increment">1</property>
+	<property name="hibernate.c3p0.idle_test_period">100</property>
+	<!-- seconds -->
+	<property name="hibernate.c3p0.max_size">10</property>
+	<property name="hibernate.c3p0.max_statements">0</property>
+	<property name="hibernate.c3p0.min_size">1</property>
+	<property name="hibernate.c3p0.timeout">5000</property>
+
+	<!-- Java5 Annotated Classes -->
+	<mapping class="aero.nettracer.serviceprovider.common.db.User" />
+	<mapping class="aero.nettracer.serviceprovider.common.db.Profile" />
+	<mapping class="aero.nettracer.serviceprovider.common.db.SabreConnection" />
+	<mapping class="aero.nettracer.serviceprovider.common.db.WorldTracerWebAccount" />
+	<mapping class="aero.nettracer.serviceprovider.common.db.WorldTracerISharesAccount" />
+
+		<mapping class="aero.nettracer.serviceprovider.common.db.PrivacyPermissions"/>
+		<mapping class="aero.nettracer.fs.model.detection.Blacklist"/>
+		<mapping class="aero.nettracer.fs.model.detection.InternalSummary"/>
+		<mapping class="aero.nettracer.fs.model.detection.MatchHistory"/>
+		<mapping class="aero.nettracer.fs.model.detection.MatchDetail"/>
+		<mapping class="aero.nettracer.fs.model.detection.Whitelist"/>
+		<mapping class="aero.nettracer.fs.model.detection.PhoneWhiteList"/>
+		<mapping class="aero.nettracer.fs.model.detection.AddressWhiteList"/>
+		<mapping class="aero.nettracer.fs.model.FsAddress"/>
+		<mapping class="aero.nettracer.fs.model.Bag"/>
+		<mapping class="aero.nettracer.fs.model.FsClaim"/>
+		<mapping class="aero.nettracer.fs.model.FsIncident"/>
+		<mapping class="aero.nettracer.fs.model.Person"/>
+		<mapping class="aero.nettracer.fs.model.Phone"/>
+		<mapping class="aero.nettracer.fs.model.PnrData"/>
+		<mapping class="aero.nettracer.fs.model.Reservation"/>
+		<mapping class="aero.nettracer.fs.model.Segment"/>
+		<mapping class="aero.nettracer.fs.model.File"/>
+		<mapping class="aero.nettracer.fs.model.detection.AccessRequest"/>
+		<mapping class="aero.nettracer.fs.model.messaging.FsMessage"/>
+		<mapping class="aero.nettracer.fs.model.FsReceipt"/>
+		<mapping class="aero.nettracer.fs.model.FsNameAlias"/>
+		<mapping class="aero.nettracer.fs.model.GreyListAddress"/>
+		<mapping class="aero.nettracer.fs.model.FsActionAudit"/>
+		<mapping class="aero.nettracer.fs.model.FsMatchHistoryAudit"/>
+</session-factory>
+
+</hibernate-configuration>
