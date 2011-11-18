@@ -100,12 +100,18 @@
 
 			<div class="clear htxlg">&#160;</div>
 				
-				<a4j:repeat value="#{passengerBean.passengerData.itemsArray}"
+				<a4j:repeat value="#{passengerBean.pvItems}"
 				var="item" rowKeyVar="rowIndex">
-			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax">
+				<b><h:outputText value="Bag \##{rowIndex + 1}" styleClass="formLabel" /></b><br/>
+			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax" rendered="#{item.claimchecknumavail}">
 				<p>Bag Tag:</p>
 				<h:outputText value="#{item.claimchecknum}"
 					styleClass="formLabel" />
+				<p>Status:</p>
+				<h:outputText value="#{item.bagstatus}"
+					styleClass="formLabel" />
+			</h:panelGrid>
+			<h:panelGrid columns="2" width="100%" columnClasses="colMin,colMax" rendered="#{!item.claimchecknumavail}">
 				<p>Status:</p>
 				<h:outputText value="#{item.bagstatus}"
 					styleClass="formLabel" />
@@ -161,10 +167,9 @@
 			
 		<h:form>
 		<div style="text-align:center;">
-						<h:commandButton id="logoutButton"
-							value="Log Out"
-							action="#{passengerController.passengerLogout}"
-							tabindex="4" styleClass="button140pxred loginbutton140pxred" height="30px"/>
+			<a href="/pax-view/claim/mobile/login.do" >
+				<span class="button140pxred loginbutton140pxred" style="padding: 0.4em 3em;">Log Out</span>
+			</a>
 		</div>
 		</h:form>
 		<div class="clear">&#160;</div>
