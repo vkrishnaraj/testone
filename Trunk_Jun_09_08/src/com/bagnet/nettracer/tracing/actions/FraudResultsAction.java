@@ -30,14 +30,17 @@ import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
 
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.FraudResultsForm;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 public class FraudResultsAction extends CheckedAction {
@@ -47,6 +50,7 @@ public class FraudResultsAction extends CheckedAction {
 	private static final Logger logger = Logger.getLogger(FraudResultsAction.class);
 	private Agent user;
 	
+	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 
@@ -60,7 +64,7 @@ public class FraudResultsAction extends CheckedAction {
 			return null;
 		}
 
-
+		boolean ntUser = PropertyBMO.isTrue("nt.user");
 		FraudResultsForm resultsForm = (FraudResultsForm) form;
 		String claimIdString = request.getParameter("claimId");
 		String incidentIdString = request.getParameter("incident");
@@ -71,8 +75,12 @@ public class FraudResultsAction extends CheckedAction {
 
 		File file = null;
 		FsClaim claim = null;
-		if (incidentIdString != null) {
+		if (ntUser && incidentIdString != null) {
 			file = FileDAO.loadFile(incidentIdString);
+			if (file == null) {
+				Incident iDto = new IncidentBMO().findIncidentByID(incidentIdString);
+				file = ConnectionUtil.createAndSubmitForTracing(iDto, user, request, UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user));
+			}
 			request.setAttribute("claimId", claimIdString);
 			request.setAttribute("incident", incidentIdString);
 		} else if (claimIdString != null) {

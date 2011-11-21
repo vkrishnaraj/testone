@@ -14,12 +14,14 @@
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 
 <%
 	Agent a = (Agent) session.getAttribute("user");
 	String cssFormClass = "form2_ld";
 	IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
 	Station stationAss = StationBMO.getStation(myform.getStationassigned_ID());
+	boolean submitOnSave = PropertyBMO.isTrue("ntfs.submit.lostdelay");
 %>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
@@ -470,7 +472,7 @@
               &nbsp;</span> <span class="bb"><bean:message
                 key="menu.claims" /></span> <span class="cc">&nbsp; <br />
               &nbsp;</span></a></dd>
-              <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) { %>              
+              <% if (submitOnSave && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) { %>              
               <dd><a href="select_claim.do?incidentId=<bean:write name="incidentForm" property="incident_ID" />&fraud_results=1"><span
                 class="aa">&nbsp; <br />
               &nbsp;</span> <span class="bb"><bean:message

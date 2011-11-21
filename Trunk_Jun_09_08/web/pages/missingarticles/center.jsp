@@ -10,10 +10,12 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 
 <%
 	Agent a = (Agent) session.getAttribute("user");
 	String cssFormClass = "form2_pil";
+	boolean submitOnSave = PropertyBMO.isTrue("ntfs.submit.missing");
 %>
 
 
@@ -280,7 +282,7 @@ function disableButton(aButton) {
               &nbsp;</span> <span class="bb"><bean:message
                 key="menu.claims" /></span> <span class="cc">&nbsp; <br />
               &nbsp;</span></a></dd>
-              <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) { %>
+              <% if (submitOnSave && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) { %>
               <dd><a href="select_claim.do?incidentId=<bean:write name="incidentForm" property="incident_ID" />&fraud_results=1"><span
                 class="aa">&nbsp; <br />
               &nbsp;</span> <span class="bb"><bean:message
