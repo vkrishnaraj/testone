@@ -134,8 +134,9 @@ public class ClaimDAO {
 			query.setLong("claimId", form.getClaimId());
 		}
 		
-		String value = form.getIncidentId().trim();
+		String value = form.getIncidentId();
 		if (value != null && !value.isEmpty()) {
+			value = value.trim();
 			query.setString("ntIncidentId", value);
 		}
 		
