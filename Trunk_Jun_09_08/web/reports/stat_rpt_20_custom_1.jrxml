@@ -24,7 +24,7 @@
 	<parameter name="goalyear" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[select station.stationcode,count(incident.incident_ID) as total,loss_code as boarded,loss_code as ratio, loss_code as goal
-,station_region,station_region_mgr
+,station_region,station_region_mgr, region_goal,
 ,loss_code as loss10,loss_code as loss12,loss_code as loss15
 ,loss_code as loss18,loss_code as loss23,loss_code as loss24
 ,loss_code as loss25,loss_code as loss26,loss_code as loss30
@@ -43,6 +43,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 	<field name="goal" class="java.lang.Double"/>
 	<field name="station_region" class="java.lang.String"/>
 	<field name="station_region_mgr" class="java.lang.String"/>
+	<field name="region_goal" class="java.lang.Double"/>
 	<field name="loss10" class="java.lang.Integer"/>
 	<field name="loss12" class="java.lang.Integer"/>
 	<field name="loss15" class="java.lang.Integer"/>
@@ -814,7 +815,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" size="7" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					</textElement>
-					<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{comptotallosssum}.doubleValue() - $V{comptotalloss81}.intValue()) / ($V{compsubboardedtotal}.doubleValue()))]]></textFieldExpression>
+					<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{comptotallosssum}.doubleValue() - $V{comptotalloss81}.intValue()) / ($V{compsubboardedtotal}.doubleValue()/1000))]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -1242,7 +1243,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" size="7" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					</textElement>
-					<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{sublosstotal}.doubleValue() - $V{subloss81}.intValue()) / ($V{subboardedtotal}.doubleValue()))]]></textFieldExpression>
+					<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{sublosstotal}.doubleValue() - $V{subloss81}.intValue()) / ($V{subboardedtotal}.doubleValue()/1000))]]></textFieldExpression>
 				</textField>
 				<textField evaluationTime="Auto" pattern="#,##0.00" isBlankWhenNull="false" hyperlinkType="None">
 					<reportElement key="textField-146" mode="Opaque" x="725" y="8" width="34" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -1255,7 +1256,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" size="7" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					</textElement>
-					<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{subgoal_times_boardedtotal}.doubleValue()) / ($V{subboardedtotal}.doubleValue()))]]></textFieldExpression>
+					<textFieldExpression class="java.lang.Double"><![CDATA[$F{region_goal}]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -1644,7 +1645,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="8" isBold="false" isItalic="true" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[TOTAL   (1000)]]></text>
+				<text><![CDATA[TOTAL BOARD]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="staticText-32" mode="Opaque" x="688" y="2" width="27" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -2664,7 +2665,7 @@ TOTAL]]></text>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="7" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{totallosstotal}.doubleValue() - $V{totalloss81}.intValue()) / ($V{totalboardedtotal}.doubleValue()))]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{totallosstotal}.doubleValue()) / ($V{totalboardedtotal}.doubleValue()/1000))]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
