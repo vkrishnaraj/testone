@@ -1112,7 +1112,7 @@ public class Consumer implements Runnable{
 						comparator = comparator.toUpperCase();
 						if (!emailHashSet.contains(comparator)) {
 	
-							if (p1.getEmailAddress().equals(p2.getEmailAddress())) {
+							if (content1.equalsIgnoreCase(content2)) {
 								MatchDetail detail = new MatchDetail();
 								detail.setContent1(content1);
 								detail.setContent2(content2);
