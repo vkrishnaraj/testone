@@ -52,9 +52,20 @@
 		<copy todir="${build.dir}/${company.name}-war/WEB-INF" overwrite="true">
 			<fileset file="${companies.dir}/${company.name}/jboss-web.xml" />
 		</copy>
+		<antcall target="delete-jboss-web" />
 		<war destfile="${dist.dir}/${company.name}-pv-${environment.name}.war" duplicate="preserve" compress="true">
 			<fileset dir="${build.dir}/${company.name}-war"/>
 		</war>
+	</target>
+	
+	<target name="delete-jboss-web" if="ear.build">
+		<delete file="${build.dir}/${company.name}-war/WEB-INF/jboss-web.xml"/>
+	</target>
+	
+	<target name="ear">
+		<ear destfile="${build.dir}/paxview.ear" appxml="${basedir}/${app.xml.location}/application.xml">
+			<fileset dir="${dist.dir}" includes="*.war"/>
+		</ear>
 	</target>
 
 	<target name="build-tracer-alpha">
@@ -180,6 +191,13 @@
 		<antcall target="build-jetblue-prod" /> 
 		<antcall target="build-spirit-prod" /> 
 		<antcall target="build-westjet-prod" /> 
+	</target>
+	
+	<target name="build-ear-test">
+		<property name="app.xml.location" value="metadata/test" />
+		<property name="ear.build" value="true" />
+		<antcall target="build-test" />
+		<antcall target="ear" /> 
 	</target>
 			
 	
