@@ -39,6 +39,12 @@ public class Station implements Serializable {
 	private String emailLanguage;
 	
 	private int priority;
+	
+	private Region region;
+	
+	private long currentRegionId;
+	
+	private double currentGoal;
 
 	/**
 	 * @hibernate.property type="string"
@@ -424,6 +430,35 @@ public class Station implements Serializable {
 
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+
+	public void setRegion(Region region) {
+		this.region = region;
+	}
+
+	/**
+	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Region"
+	 *                        column="region_id"  fetch="select"
+	 * @return Returns the region
+	 */
+	public Region getRegion() {
+		return region;
+	}
+
+	public void setCurrentRegionId(long currentRegionId) {
+		this.currentRegionId = currentRegionId;
+	}
+
+	public long getCurrentRegionId() {
+		return currentRegionId;
+	}
+
+	public void setCurrentGoal(double currentGoal) {
+		this.currentGoal = currentGoal;
+	}
+
+	public double getCurrentGoal() {
+		return currentGoal;
 	}
 	
 }

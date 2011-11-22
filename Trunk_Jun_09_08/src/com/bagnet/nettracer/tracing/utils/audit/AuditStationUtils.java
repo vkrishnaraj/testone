@@ -230,8 +230,9 @@ public class AuditStationUtils {
 		audit_station.setStationcode(station.getStationcode());
 		audit_station.setStationdesc(station.getStationdesc());
 		audit_station.setZip(station.getZip());
-		audit_station.setStation_region(station.getStation_region());
-		audit_station.setStation_region_mgr(station.getStation_region_mgr());
+		audit_station.setStation_region(station.getRegion()!=null?station.getRegion().getName():null);
+		audit_station.setStation_region_mgr(station.getRegion()!=null?station.getRegion().getDirector():null);
+		audit_station.setRegion_goal(station.getRegion()!=null?station.getRegion().getTarget():0.0);
 		audit_station.setGoal(station.getGoal());
 		audit_station.setTime_modified(TracerDateTime.getGMTDate());
 		audit_station.setModifying_agent(mod_agent);

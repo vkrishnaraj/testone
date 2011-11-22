@@ -243,34 +243,6 @@
                 </td>
               </tr>
               <tr>
-                <td>
-                  <bean:message key="colname.station_region" />
-                  :
-                </td>
-                <td>
-                  <jsp:include page="/pages/admin/station_regions.jsp" />
-
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <bean:message key="colname.station_region_mgr" />
-                  :
-                </td>
-                <td>
-                  <html:text styleClass="textfield" name="stationForm" property="station_region_mgr" size="50" maxlength="100" />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <bean:message key="colname.goal" />
-                  :
-                </td>
-                <td>
-                  <html:text styleClass="textfield" name="stationForm" property="goal" size="10" maxlength="10" />
-                </td>
-              </tr>
-              <tr>
 	            <td>
 	              <bean:message key="active" />
 	              <font color=red>

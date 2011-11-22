@@ -350,6 +350,39 @@ function updatePagination() {
                 </td>
               </logic:iterate>
             </tr>
+            <tr>
+              <td>
+              	<bean:message key="colname.region" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="station_region" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+                       <tr>
+              <td>
+              	<bean:message key="colname.region.director" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="station_region_mgr" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+                       <tr>
+              <td>
+              	<bean:message key="colname.region.goal" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="region_goal" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
           </table>
           <br>
           <center><INPUT type="button" Id="button" value="Back" onClick="history.back()"></center>

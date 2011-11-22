@@ -36,6 +36,7 @@ public class Audit_Station implements Serializable {
 	private String station_region;
 	private String station_region_mgr;
 	private double goal;
+	private double region_goal;
 
 	private boolean active;
 	
@@ -472,6 +473,19 @@ public class Audit_Station implements Serializable {
 	 */
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public void setRegion_goal(double region_goal) {
+		this.region_goal = region_goal;
+	}
+	
+	/**
+	 * @return Returns the goal.
+	 * 
+	 * @hibernate.property type="double"
+	 */
+	public double getRegion_goal() {
+		return region_goal;
 	}
 
 

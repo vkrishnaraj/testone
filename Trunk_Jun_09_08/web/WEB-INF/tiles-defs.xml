@@ -373,6 +373,18 @@
     	<put name="center" value="/pages/bagbuzz/bagbuzzsearch.jsp"/>
     </definition>
     
+    <definition name="view_region" extends="user_menu">
+    	<put name="center" value="/pages/admin/region.jsp"/>
+    </definition>
+    
+    <definition name="edit_region" extends="user_menu">
+    	<put name="center" value="/pages/admin/region_edit.jsp"/>
+    </definition>
+    
+    <definition name="edit_region_success" extends="user_menu">
+    	<put name="center" value="/pages/admin/region_success.jsp"/>
+    </definition>
+    
     <definition name="view_privacypermissions" extends="user_menu">
     	<put name="center" value="/pages/claims/privacypermissions.jsp"/>
     </definition>

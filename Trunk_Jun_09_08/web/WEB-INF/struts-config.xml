@@ -269,6 +269,8 @@
 		<form-bean name="handleItemsForm" type="com.bagnet.nettracer.tracing.forms.lf.HandleItemsForm" />	
 		<form-bean name="traceResultsForm" type="com.bagnet.nettracer.tracing.forms.lf.TraceResultsForm" />	
 		<form-bean name="createDeliveryForm" type="com.bagnet.nettracer.tracing.forms.lf.CreateDeliveryForm" />	
+		
+		<form-bean name="regionForm" type="com.bagnet.nettracer.tracing.forms.RegionForm" />	
 
 	</form-beans>
 	<!-- global exception -->
@@ -372,6 +374,11 @@
 		
 		<forward name="viewprivacypermissions" path="view_privacypermissions"/>
 
+		<forward name="viewregion" path="view_region"/>
+		
+		<forward name="editregion" path="edit_region"/>
+		
+		<forward name="editregionsuccess" path="edit_region_success"/>
 
 		<forward name="viewworldtracersusrit" path="view_worldtracer_sus_rit" />
 
@@ -680,6 +687,8 @@
 		<action path="/worldtracersearch" type="com.bagnet.nettracer.tracing.actions.WorldTracerSearchAction" name="worldtracerafForm" scope="request" validate="false"></action>
 
 		<action path="/bagbuzzeditor" type="com.bagnet.nettracer.tracing.actions.BagBuzzEditorAction" name="bagbuzzeditorForm" scope="request" validate="false"></action>"
+		
+		<action path="/region" type="com.bagnet.nettracer.tracing.actions.admin.RegionAction" name="regionForm" scope="session" validate="false"></action>"
 		
 		<action path="/privacypermissions" type="com.bagnet.nettracer.tracing.actions.PrivacyPermissionsAction" name="privacyPermissionsForm" scope="session" validate="false"></action>"
 		

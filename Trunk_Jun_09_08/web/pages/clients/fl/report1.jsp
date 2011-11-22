@@ -42,18 +42,6 @@
                     
                     <tr>
                       <td>
-                        <bean:message key="reports.faultCompany" />
-                        :
-                      </td>
-                      <td>
-                        <html:select property="company_ID" styleClass="dropdown" multiple="true">
-                          <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
-                        </html:select>
-                      </td>
-                    </tr>
-                    
-                    <tr>
-                      <td>
                         <bean:message key="colname.faultstation" /> 
                         : <BR>(Only valid for <%=agent.getCompanycode_ID() %> exclusive searches)
                       </td>

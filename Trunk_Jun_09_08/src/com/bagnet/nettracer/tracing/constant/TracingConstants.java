@@ -269,6 +269,8 @@ public class TracingConstants {
 	
 	public static final String SYSTEM_COMPONENT_NAME_PRIVACY_PERMISSIONS = "Fraud";
 	
+	public static final String SYSTEM_COMPONENT_NAME_REGION = "Region";
+	
 	public static final String SYSTEM_COMPONENT_NAME_MANAGE_TASK = "Manage Tasks";
 	public static final String SYSTEM_COMPONENT_NAME_MANAGE_TWO_DAY_CALL = "Manage Two Day Call";
 	public static final String SYSTEM_COMPONENT_NAME_MANAGE_THREE_DAY_CALL = "Manage Three Day Call";

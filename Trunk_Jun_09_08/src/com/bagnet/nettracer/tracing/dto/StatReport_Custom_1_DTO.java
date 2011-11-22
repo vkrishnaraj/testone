@@ -23,8 +23,10 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 public class StatReport_Custom_1_DTO {
 	private String companycode;
 	private String stationcode;
+	private long regionid;
 	private String station_region;
 	private String station_region_mgr;
+	private double region_goal;
 	private int loss10;
 	private int loss12;
 	private int loss15;
@@ -409,15 +411,28 @@ public class StatReport_Custom_1_DTO {
 	}
 	/**
 	 * @return Returns the ratio.
-	 * (total claim - passenger convenience) / boarded (1000)
+	 * (total claim - passenger convenience) / boarded
 	 */
 	public double getRatio() {
 		if (boarded > 0) {
-			return Double.parseDouble(TracerUtils.format((getTotal() - getLoss81()) / boarded,"%"));
+			return Double.parseDouble(TracerUtils.format((getTotal() - getLoss81()) * 1000 / boarded,"%"));
 		} else {
 			return 0;
 		}
 	}
+	
+	/**
+	 * For dept of transportation passenger convenience (81) must be included in the ratio
+	 * @return (total claim - passenger convenience) / boarded
+	 */
+	public double getDOTRatio(){
+		if(boarded > 0){
+		return Double.parseDouble(TracerUtils.format(getTotal() * 1000 / boarded,"%"));
+		} else {
+			return 0;
+		}
+	}
+	
 	/**
 	 * @param ratio The ratio to set.
 	 */
@@ -482,6 +497,18 @@ public class StatReport_Custom_1_DTO {
 	}
 	public void setCompanycode(String companycode) {
 		this.companycode = companycode;
+	}
+	public void setRegionid(long station) {
+		this.regionid = station;
+	}
+	public long getRegionid() {
+		return regionid;
+	}
+	public void setRegion_goal(double region_goal) {
+		this.region_goal = region_goal;
+	}
+	public double getRegion_goal() {
+		return region_goal;
 	}
 	
 	
