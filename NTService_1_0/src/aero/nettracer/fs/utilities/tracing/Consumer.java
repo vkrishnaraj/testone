@@ -705,7 +705,7 @@ public class Consumer implements Runnable{
 						} else {
 							percent = ADDRESS_SIMILAR;
 						}
-						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .10, MatchType.address, isWhitelisted);
+						generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15, MatchType.address, isWhitelisted);
 					}
 				} else {
 					// If country available
