@@ -75,7 +75,7 @@
 				</tr>
 				<tr>
 				  <td nowrap>Suggested Fault Station: <bean:write name="station" property="stationcode" /></td>
-				  <td nowrap>Suggested Irregularity Code: <bean:write name="dispute" property="suggestedLossCode" scope="request" /></td>
+				  <td nowrap>Suggested Reason for Loss: <bean:write name="dispute" property="suggestedLossCode" scope="request" /></td>
 				</tr> 
 				<tr>
 					<td colspan="2">&nbsp;</td>
@@ -96,7 +96,7 @@
 				</tr>
 				<tr>
 				  <td nowrap>Determined Fault Station: <bean:write name="determinedFaultStation" property="stationcode" /></td>
-				  <td nowrap>Determined Irregularity Code: <bean:write name="dispute" property="determinedLossCode" scope="request" /></td>
+				  <td nowrap>Determined Reason for Loss: <bean:write name="dispute" property="determinedLossCode" scope="request" /></td>
 				</tr> 
 				<tr>
 					<td colspan="2">&nbsp;</td>
