@@ -47,7 +47,7 @@ public class CustomReportBMO implements
 	private Agent user;
 
 
-	public String create_custom_report_1(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle, HttpServletRequest request){
+	public String create_custom_report_501(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle, HttpServletRequest request){
 		Session sess = HibernateWrapper.getSession().openSession();
 		try{
 			Map parameters = new HashMap();
@@ -171,7 +171,6 @@ public class CustomReportBMO implements
 			
 			List<Object[]> stationList = stationQuery.list();
 			Map<Long, StatReport_Custom_1_DTO> stationMap = new LinkedHashMap<Long, StatReport_Custom_1_DTO>();
-			Map<Long, StatReport_Custom_1_DTO> regionMap = new LinkedHashMap<Long, StatReport_Custom_1_DTO>();
 			
 			NewSkiesIntegrationWrapper eiw = new NewSkiesIntegrationWrapper();
 			ArrayList alparam = null;
@@ -203,22 +202,7 @@ public class CustomReportBMO implements
 				} else {
 					addStation.setBoarded(callresult);
 				}
-				
-				if(!regionMap.containsKey(addStation.getRegionid())){
-					StatReport_Custom_1_DTO addRegion = new StatReport_Custom_1_DTO();
-					addRegion.setStationcode("Region Total");
-					addRegion.setRegionid(addStation.getRegionid());
-					addRegion.setStation_region((String)station[2]);
-					addRegion.setStation_region_mgr((String)station[3]);
-					addRegion.setGoal(station[7]!=null?(Double)station[7]:0.0);
-					addRegion.setCompanycode((String)station[5]);
-					regionMap.put(addRegion.getRegionid(), addRegion);
-				}
 			}
-			
-			StatReport_Custom_1_DTO companyTotal = new StatReport_Custom_1_DTO();
-			companyTotal.setStationcode("Grand Total");
-			companyTotal.setStation_region("Total");
 			
 			
 			lossQuery.addScalar("station_id", Hibernate.LONG);
@@ -234,145 +218,67 @@ public class CustomReportBMO implements
 					continue;
 				}
 				StatReport_Custom_1_DTO station = stationMap.get((Long)loss[0]);
-				StatReport_Custom_1_DTO region = regionMap.get(station.getRegionid());
-				
-				region.setBoarded(region.getBoarded() + station.getBoarded());
-				companyTotal.setBoarded(companyTotal.getBoarded() + station.getBoarded());
 				
 				Integer incidents = (Integer)loss[2];
 				if (((Integer) loss[1]).intValue() == 10){
 					station.setLoss10(incidents);
-					region.setLoss10(region.getLoss10() + incidents);
-					companyTotal.setLoss10(companyTotal.getLoss10() + incidents);
 				} else if (((Integer) loss[1]).intValue() == 12){
 					station.setLoss12(incidents);
-					region.setLoss12(region.getLoss12() + incidents);
-					companyTotal.setLoss12(companyTotal.getLoss12() + incidents);
 				} else if (((Integer) loss[1]).intValue() == 15){
 					station.setLoss15(incidents);
-					region.setLoss15(region.getLoss15() + incidents);
-					companyTotal.setLoss15(companyTotal.getLoss15() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 18){
 					station.setLoss18(incidents);
-					region.setLoss18(region.getLoss18() + incidents);
-					companyTotal.setLoss18(companyTotal.getLoss18() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 23){
 					station.setLoss23(incidents);
-					region.setLoss23(region.getLoss23() + incidents);
-					companyTotal.setLoss23(companyTotal.getLoss23() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 24){
 					station.setLoss24(incidents);
-					region.setLoss24(region.getLoss24() + incidents);
-					companyTotal.setLoss24(companyTotal.getLoss24() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 25){
 					station.setLoss25(incidents);
-					region.setLoss25(region.getLoss25() + incidents);
-					companyTotal.setLoss25(companyTotal.getLoss25() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 26){
 					station.setLoss26(incidents);
-					region.setLoss26(region.getLoss26() + incidents);
-					companyTotal.setLoss26(companyTotal.getLoss26() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 30){
 					station.setLoss30(incidents);
-					region.setLoss30(region.getLoss30() + incidents);
-					companyTotal.setLoss30(companyTotal.getLoss30() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 32){
 					station.setLoss32(incidents);
-					region.setLoss32(region.getLoss32() + incidents);
-					companyTotal.setLoss32(companyTotal.getLoss32() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 33){
 					station.setLoss33(incidents);
-					region.setLoss33(region.getLoss33() + incidents);
-					companyTotal.setLoss33(companyTotal.getLoss33() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 35){
 					station.setLoss35(incidents);
-					region.setLoss35(region.getLoss35() + incidents);
-					companyTotal.setLoss35(companyTotal.getLoss35() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 42){
 					station.setLoss42(incidents);
-					region.setLoss42(region.getLoss42() + incidents);
-					companyTotal.setLoss42(companyTotal.getLoss42() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 51){
 					station.setLoss51(incidents);
-					region.setLoss51(region.getLoss51() + incidents);
-					companyTotal.setLoss51(companyTotal.getLoss51() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 54){
 					station.setLoss54(incidents);
-					region.setLoss54(region.getLoss54() + incidents);
-					companyTotal.setLoss54(companyTotal.getLoss54() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 56){
 					station.setLoss56(incidents);
-					region.setLoss56(region.getLoss56() + incidents);
-					companyTotal.setLoss56(companyTotal.getLoss56() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 63){
 					station.setLoss63(incidents);
-					region.setLoss63(region.getLoss63() + incidents);
-					companyTotal.setLoss63(companyTotal.getLoss63() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 64){
 					station.setLoss64(incidents);
-					region.setLoss64(region.getLoss64() + incidents);
-					companyTotal.setLoss64(companyTotal.getLoss64() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 73){
 					station.setLoss73(incidents);
-					region.setLoss73(region.getLoss73() + incidents);
-					companyTotal.setLoss73(companyTotal.getLoss73() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 74){
 					station.setLoss74(incidents);
-					region.setLoss74(region.getLoss74() + incidents);
-					companyTotal.setLoss74(companyTotal.getLoss74() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 76){
 					station.setLoss76(incidents);
-					region.setLoss76(region.getLoss76() + incidents);
-					companyTotal.setLoss76(companyTotal.getLoss76() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 78){
 					station.setLoss78(incidents);
-					region.setLoss78(region.getLoss78() + incidents);
-					companyTotal.setLoss78(companyTotal.getLoss78() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 80){
 					station.setLoss80(incidents);
-					region.setLoss80(region.getLoss80() + incidents);
-					companyTotal.setLoss80(companyTotal.getLoss80() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 81){
 					station.setLoss81(incidents);
-					region.setLoss81(region.getLoss81() + incidents);
-					companyTotal.setLoss81(companyTotal.getLoss81() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 82){
 					station.setLoss82(incidents);
-					region.setLoss82(region.getLoss82() + incidents);
-					companyTotal.setLoss82(companyTotal.getLoss82() + incidents);
 			    } else if (((Integer) loss[1]).intValue() == 90){
 					station.setLoss90(incidents);
-					region.setLoss90(region.getLoss90() + incidents);
-					companyTotal.setLoss90(companyTotal.getLoss90() + incidents);
 			    }
 				
 			}
 			
-//			ArrayList<StatReportElement> submitList = new ArrayList<StatReportElement>();
-//			for(StatReport_Custom_1_DTO region:regionMap.values()){
-//				for(StatReport_Custom_1_DTO station:stationMap.values()){
-//					if(station.getRegionid() == region.getRegionid()){
-//						submitList.add(createStatReportElement(station, false));
-//					}
-//				}
-////				submitList.add(createStatReportElement(region, false));
-//			}
-//			for(StatReport_Custom_1_DTO stat:stationMap.values()){
-//				submitList.add(createStatReportElement(stat, false));
-//			}
-//			for(StatReport_Custom_1_DTO stat:regionMap.values()){
-//				submitList.add(createStatReportElement(stat, false));
-//			}
-//			submitList.add(createStatReportElement(companyTotal, false));
-//			companyTotal.setStationcode("DOT Total");
-//			submitList.add(createStatReportElement(companyTotal, true));
-			
-			
 			return ReportBMO.getReportFile(new ArrayList(stationMap.values()), parameters, reportname, rootpath, srDTO
 					.getOutputtype(), request);
-//			return ReportBMO.createTestReport(rootpath, 0, user, submitList);
-			
-			
+	
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
 			e.printStackTrace();
@@ -380,47 +286,6 @@ public class CustomReportBMO implements
 		} finally {
 			sess.close();
 		}
-	}
-	
-	private StatReportElement createStatReportElement(StatReport_Custom_1_DTO stat, boolean dot){
-		StatReportElement toAdd = new StatReportElement();
-		toAdd.setE1(stat.getStationcode());
-		toAdd.setE2(new Integer(stat.getLoss10()).toString());
-		toAdd.setE3(new Integer(stat.getLoss12()).toString());
-		toAdd.setE4(new Integer(stat.getLoss15()).toString());
-		toAdd.setE5(new Integer(stat.getLoss18()).toString());
-		toAdd.setE6(new Integer(stat.getLoss23()).toString());
-		toAdd.setE7(new Integer(stat.getLoss24()).toString());
-		toAdd.setE8(new Integer(stat.getLoss25()).toString());
-		toAdd.setE9(new Integer(stat.getLoss26()).toString());
-		toAdd.setE10(new Integer(stat.getLoss30()).toString());
-		toAdd.setE11(new Integer(stat.getLoss32()).toString());
-		toAdd.setE12(new Integer(stat.getLoss33()).toString());
-		toAdd.setE13(new Integer(stat.getLoss35()).toString());
-		toAdd.setE14(new Integer(stat.getLoss42()).toString());
-		toAdd.setE15(new Integer(stat.getLoss51()).toString());
-		toAdd.setE16(new Integer(stat.getLoss54()).toString());
-		toAdd.setE17(new Integer(stat.getLoss56()).toString());
-		toAdd.setE18(new Integer(stat.getLoss63()).toString());
-		toAdd.setE19(new Integer(stat.getLoss64()).toString());
-		toAdd.setE20(new Integer(stat.getLoss73()).toString());
-		toAdd.setE21(new Integer(stat.getLoss74()).toString());
-		toAdd.setE22(new Integer(stat.getLoss76()).toString());
-		toAdd.setE23(new Integer(stat.getLoss78()).toString());
-		toAdd.setE24(new Integer(stat.getLoss80()).toString());
-		toAdd.setE25(new Integer(stat.getLoss81()).toString());
-		toAdd.setE26(new Integer(stat.getLoss82()).toString());
-		toAdd.setE27(new Integer(stat.getLoss90()).toString());
-		toAdd.setE28(new Long(stat.getTotal()).toString());
-		toAdd.setE29(new Double(stat.getBoarded()).toString());
-		if(dot){
-			toAdd.setE30(new Double(stat.getDOTRatio()).toString());
-		} else {
-			toAdd.setE30(new Double(stat.getRatio()).toString());
-		}
-		toAdd.setE31(new Double(stat.getGoal()).toString());
-		toAdd.setE32(stat.getStation_region());
-		return toAdd;
 	}
 	
 	
@@ -436,7 +301,7 @@ public class CustomReportBMO implements
 	 * @return
 	 * @throws HibernateException
 	 */
-	public String create_custom_report_11(StatReportDTO srDTO, int reportnum,
+	public String create_custom_report_1(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle, HttpServletRequest request) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -1127,6 +992,19 @@ public class CustomReportBMO implements
 					return creportdata;
 				}
 
+			case ReportingConstants.RPT_20_CUSTOM_501:
+				creportdata = create_custom_report_501(srDTO,
+						ReportingConstants.RPT_20_CUSTOM_501,
+						
+	//					ReportingConstants.RPT_20_CUSTOM_1_NAME, messages.getMessage(
+						ReportingConstants.RPT_20_CUSTOM_501_NAME, messages.getMessage(
+								new Locale(user.getCurrentlocale()), "header.reportnum.501"), request);
+				if (creportdata == null) {
+					return null;
+				} else {
+					return creportdata;
+				}
+				
 			case ReportingConstants.RPT_20_CUSTOM_55:
 				creportdata = createDisputeResolutionReport(srDTO, ReportBMO.getCustomReport(55).getResource_key(), request, user);
 				return creportdata;
