@@ -142,13 +142,15 @@ public class ClaimDAO {
 		
 		value = form.getS_createtime();
 		if (value != null && !value.isEmpty()) {
-			String startDate = DateUtils.formatDate(form.getS_createtime(), user.getDateformat().getFormat(), TracingConstants.DB_DATEFORMAT, user.getDefaultlocale(), null);
+			value = value.trim();
+			String startDate = DateUtils.formatDate(value, user.getDateformat().getFormat(), TracingConstants.DB_DATEFORMAT, user.getDefaultlocale(), null);
 			query.setString(CLAIM_DATE+"_start", startDate);
 		}
 		
 		value = form.getE_createtime();
 		if (value != null && !value.isEmpty()) {
-			Date end = DateUtils.convertToDate(form.getE_createtime(), user.getDateformat().getFormat(), user.getDefaultlocale());
+			value = value.trim();
+			Date end = DateUtils.convertToDate(value, user.getDateformat().getFormat(), user.getDefaultlocale());
 			Calendar c = new GregorianCalendar();
 			c.setTime(end);
 			c.add(Calendar.DAY_OF_MONTH, 1);
@@ -159,25 +161,25 @@ public class ClaimDAO {
 		value = form.getLastName();
 		if (value != null && !value.isEmpty()) {
 			value = value.trim();
-			query.setString("lastName", form.getLastName());
+			query.setString("lastName", value);
 		}
 
 		value = form.getFirstName();
 		if (value != null && !value.isEmpty()) {
 			value = value.trim();
-			query.setString("firstName", form.getFirstName());
+			query.setString("firstName", value);
 		}
 
 		value = form.getMiddleName();
 		if (value != null && !value.isEmpty()) {
 			value = value.trim();
-			query.setString("middleName", form.getFirstName());
+			query.setString("middleName", value);
 		}
 
 		value = form.getEmailAddress();
 		if (value != null && !value.isEmpty()) {
 			value = value.trim();
-			query.setString("emailAddress", form.getEmailAddress());
+			query.setString("emailAddress", value);
 		}
 
 		value = form.getAddress1();
@@ -231,13 +233,13 @@ public class ClaimDAO {
 		value = form.getStartDateOfBirth();
 		if (value != null && !value.isEmpty()) {
 			value = value.trim();
-			query.setDate(DOB+"_start", DateUtils.convertToDate(form.getS_createtime(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+			query.setDate(DOB+"_start", DateUtils.convertToDate(value, user.getDateformat().getFormat(), user.getCurrentlocale()));
 		}
 
 		value = form.getEndDateOfBirth();
 		if (value != null && !value.isEmpty()) {
 			value = value.trim();
-			query.setDate(DOB+"_end", DateUtils.convertToDate(form.getE_createtime(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+			query.setDate(DOB+"_end", DateUtils.convertToDate(value, user.getDateformat().getFormat(), user.getCurrentlocale()));
 		}
 		
 	}
@@ -323,7 +325,7 @@ public class ClaimDAO {
 		
 		value = form.getEmailAddress();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and p.emailAddress like :emailAddress or pur.emailAddress like :emailAddress) ");
+			toReturn.append("and (p.emailAddress like :emailAddress or pur.emailAddress like :emailAddress) ");
 		}
 		
 		toReturn.append(getDateSql("p.dateOfBirth", DOB, form.getStartDateOfBirth(), form.getEndDateOfBirth()));
