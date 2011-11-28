@@ -7,4 +7,3 @@ call c:\ant\bin\ant.bat
 cd build
 cd lib
 rename DelayedBagService-test-client.jar WorldTracerServiceClient.jar
-copy WorldTracerServiceClient.jar c:\workspace\NTService_1_0\web\WEB-INF\lib
