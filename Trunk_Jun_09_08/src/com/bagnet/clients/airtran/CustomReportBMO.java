@@ -5,6 +5,8 @@
  */
 package com.bagnet.clients.airtran;
 
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -13,9 +15,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JExcelApiExporter;
+import net.sf.jasperreports.engine.export.JExcelApiExporterParameter;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
@@ -25,15 +36,25 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
+import ar.com.fdvs.dj.core.DynamicJasperHelper;
+import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
+import ar.com.fdvs.dj.domain.DynamicReport;
+import ar.com.fdvs.dj.domain.Style;
+import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
+import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.other.JRGovernedFileVirtualizer;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.dto.StatReportElement;
 import com.bagnet.nettracer.tracing.dto.StatReport_Custom_1_DTO;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 /**
  * @author Administrator
@@ -53,90 +74,288 @@ public class CustomReportBMO implements
 			Map parameters = new HashMap();
 			parameters.put("title", reporttitle);
 			
-			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
-					user.getDefaulttimezone()).getTimezone());
-			
 			String goal = DateUtils.formatDate(new Date(), "yyyy", null, null);
 			parameters.put("goalyear", goal);
 			parameters.put("companyname", user.getStation().getCompany()
 					.getCompanydesc().toUpperCase());
 			
-			String mbrtypeq = "";
-			if (srDTO.getItemType_ID() >= 1) {
-				mbrtypeq = " and i.itemType_ID = " + srDTO.getItemType_ID() + " ";
-			}
 
-			String stationq = "";
-			if (srDTO.getStation_ID() != null
-					&& !srDTO.getStation_ID()[0].equals("0")) {
-				stationq = " and s.station_ID in (:station_ID) ";
-			}
-
-			String statusq = "";
-			if (srDTO.getStatus_ID() >= 1) {
-				statusq = " and i.status_ID = " + srDTO.getStatus_ID() + " ";
-			}
-			
-			Date sdate = null, edate = null;
-			Date sdate1 = null, edate1 = null; // add one for timezone
-			Date stime = null; // time to compare (04:00 if eastern, for example)
-			String dateq = "";
-
-			ArrayList dateal = null;
-			if ((dateal = ReportBMO.calculateDateDiff(srDTO, tz, user)) == null) {
+			List<Object[]> stationList = get501StationList(srDTO);
+			List<Object[]> lossList = get501LossList(srDTO, parameters);
+			if(stationList == null || lossList == null){
+				logger.error("unable to create report: result list is null");
 				return null;
 			}
-			sdate = (Date) dateal.get(0);
-			sdate1 = (Date) dateal.get(1);
-			edate = (Date) dateal.get(2);
-			edate1 = (Date) dateal.get(3);
-			stime = (Date) dateal.get(4);
-
-			parameters.put("sdate", "All Dates");
-			if (sdate != null && edate != null) {
-				parameters.put("sdate", srDTO.getStarttime());
-				if (sdate.equals(edate)) {
-					// need to add the timezone diff here
-					dateq = " and ((i.createdate= :startdate and i.createtime >= :starttime) "
-							+ " or (i.createdate= :startdate1 and i.createtime <= :starttime))";
-
-					edate = null;
-				} else {
-
-					// first get the beginning and end dates using date and time, then get
-					// dates in between
-					dateq = " and ((i.createdate= :startdate and i.createtime >= :starttime) "
-							+ " or (i.createdate= :enddate1 and i.createtime <= :starttime)"
-							+ " or (i.createdate > :startdate and i.createdate <= :enddate))";
-
-					parameters.put("edate", srDTO.getEndtime());
-				}
-			} else if (sdate != null) {
-				parameters.put("sdate", srDTO.getStarttime());
-				dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
-						+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))";
-				edate = null;
+			
+			
+			Map<Long, StatReport_Custom_1_DTO> stationMap = new LinkedHashMap<Long, StatReport_Custom_1_DTO>();
+			Map<Long, StatReport_Custom_1_DTO> regionMap = new LinkedHashMap<Long, StatReport_Custom_1_DTO>();
+			
+			NewSkiesIntegrationWrapper eiw = new NewSkiesIntegrationWrapper();
+			boolean b1 = eiw.readEnplaneProps("enplane.endpoint", "enplane.calltype");
+			if (!b1) {
+				logger.error(eiw.getErrormsg());
+				return null;
 			}
 			
+			for(Object[] station:stationList){
+				StatReport_Custom_1_DTO addStation = new StatReport_Custom_1_DTO();
+				addStation.setStationcode((String)station[0]);
+				addStation.setRegionid(station[1]!=null?(Long)station[1]:0);
+				addStation.setStation_region(station[2]!=null?(String)station[2]:"NO REGION");
+				addStation.setStation_region_mgr(station[3]!=null?(String)station[3]:null);
+				addStation.setGoal((Double)station[4]);
+				addStation.setCompanycode(station[5]!=null?(String)station[5]:null);
+				addStation.setRegion_goal(station[7]!=null?(Double)station[7]:0.0);
+				stationMap.put((Long)station[6], addStation);
+					
+				double callresult = eiw.getEnplanement(srDTO.getStarttime(), (srDTO
+						.getEndtime() == null ? srDTO.getStarttime() : srDTO.getEndtime()),
+						addStation.getStationcode());
+
+				if (callresult < 0) {
+					addStation.setBoarded(0.00);
+
+				} else {
+					addStation.setBoarded(callresult);
+				}
+				
+				if(!regionMap.containsKey(addStation.getRegionid())){
+					StatReport_Custom_1_DTO addRegion = new StatReport_Custom_1_DTO();
+					addRegion.setStationcode("Region Total");
+					addRegion.setRegionid(addStation.getRegionid());
+					addRegion.setStation_region(station[2]!=null?(String)station[2]:"NO REGION");
+					addRegion.setStation_region_mgr((String)station[3]);
+					addRegion.setGoal(station[7]!=null?(Double)station[7]:0.0);
+					addRegion.setCompanycode((String)station[5]);
+					regionMap.put(addRegion.getRegionid(), addRegion);
+				}
+			}
 			
-			String stationSQL = "select s.stationcode as stationcode, r.id as region_id, r.name as region_name" +
-					", r.director as region_director, s.goal as station_goal, s.companycode_id as companycode, s.station_ID as station_id, r.target as region_target " +
-					"from station s left outer join region r on s.region_id = r.id " +
-					"where s.active = 1 and s.companycode_ID = :companycode_ID " +
-					stationq +
-					"order by r.name asc, s.stationcode asc";
+			StatReport_Custom_1_DTO companyTotal = new StatReport_Custom_1_DTO();
+			companyTotal.setStationcode("System Total");
+			companyTotal.setStation_region("Total");
 			
+
 			
-			String lossSQL = "select i.faultstation_ID as station_id, i.loss_code as loss_code, count(i.loss_code) as count " +
-					"from incident i " +
-					"where i.loss_code != 0 " + dateq + mbrtypeq + statusq +
-					" group by i.loss_code, i.faultstation_ID order by i.loss_code, i.faultstation_ID";
+			for(Object[] loss:lossList){
+				if(!stationMap.containsKey((Long)loss[0])){
+					//Loss station is not part of the filtered station list
+					continue;
+				}
+				StatReport_Custom_1_DTO station = stationMap.get((Long)loss[0]);
+				StatReport_Custom_1_DTO region = regionMap.get(station.getRegionid());
+				
+				Integer incidents = (Integer)loss[2];
+				if (((Integer) loss[1]).intValue() == 10){
+					station.setLoss10(incidents);
+					region.setLoss10(region.getLoss10() + incidents);
+					companyTotal.setLoss10(companyTotal.getLoss10() + incidents);
+				} else if (((Integer) loss[1]).intValue() == 12){
+					station.setLoss12(incidents);
+					region.setLoss12(region.getLoss12() + incidents);
+					companyTotal.setLoss12(companyTotal.getLoss12() + incidents);
+				} else if (((Integer) loss[1]).intValue() == 15){
+					station.setLoss15(incidents);
+					region.setLoss15(region.getLoss15() + incidents);
+					companyTotal.setLoss15(companyTotal.getLoss15() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 18){
+					station.setLoss18(incidents);
+					region.setLoss18(region.getLoss18() + incidents);
+					companyTotal.setLoss18(companyTotal.getLoss18() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 23){
+					station.setLoss23(incidents);
+					region.setLoss23(region.getLoss23() + incidents);
+					companyTotal.setLoss23(companyTotal.getLoss23() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 24){
+					station.setLoss24(incidents);
+					region.setLoss24(region.getLoss24() + incidents);
+					companyTotal.setLoss24(companyTotal.getLoss24() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 25){
+					station.setLoss25(incidents);
+					region.setLoss25(region.getLoss25() + incidents);
+					companyTotal.setLoss25(companyTotal.getLoss25() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 26){
+					station.setLoss26(incidents);
+					region.setLoss26(region.getLoss26() + incidents);
+					companyTotal.setLoss26(companyTotal.getLoss26() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 30){
+					station.setLoss30(incidents);
+					region.setLoss30(region.getLoss30() + incidents);
+					companyTotal.setLoss30(companyTotal.getLoss30() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 32){
+					station.setLoss32(incidents);
+					region.setLoss32(region.getLoss32() + incidents);
+					companyTotal.setLoss32(companyTotal.getLoss32() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 33){
+					station.setLoss33(incidents);
+					region.setLoss33(region.getLoss33() + incidents);
+					companyTotal.setLoss33(companyTotal.getLoss33() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 35){
+					station.setLoss35(incidents);
+					region.setLoss35(region.getLoss35() + incidents);
+					companyTotal.setLoss35(companyTotal.getLoss35() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 42){
+					station.setLoss42(incidents);
+					region.setLoss42(region.getLoss42() + incidents);
+					companyTotal.setLoss42(companyTotal.getLoss42() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 51){
+					station.setLoss51(incidents);
+					region.setLoss51(region.getLoss51() + incidents);
+					companyTotal.setLoss51(companyTotal.getLoss51() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 54){
+					station.setLoss54(incidents);
+					region.setLoss54(region.getLoss54() + incidents);
+					companyTotal.setLoss54(companyTotal.getLoss54() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 56){
+					station.setLoss56(incidents);
+					region.setLoss56(region.getLoss56() + incidents);
+					companyTotal.setLoss56(companyTotal.getLoss56() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 63){
+					station.setLoss63(incidents);
+					region.setLoss63(region.getLoss63() + incidents);
+					companyTotal.setLoss63(companyTotal.getLoss63() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 64){
+					station.setLoss64(incidents);
+					region.setLoss64(region.getLoss64() + incidents);
+					companyTotal.setLoss64(companyTotal.getLoss64() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 73){
+					station.setLoss73(incidents);
+					region.setLoss73(region.getLoss73() + incidents);
+					companyTotal.setLoss73(companyTotal.getLoss73() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 74){
+					station.setLoss74(incidents);
+					region.setLoss74(region.getLoss74() + incidents);
+					companyTotal.setLoss74(companyTotal.getLoss74() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 76){
+					station.setLoss76(incidents);
+					region.setLoss76(region.getLoss76() + incidents);
+					companyTotal.setLoss76(companyTotal.getLoss76() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 78){
+					station.setLoss78(incidents);
+					region.setLoss78(region.getLoss78() + incidents);
+					companyTotal.setLoss78(companyTotal.getLoss78() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 80){
+					station.setLoss80(incidents);
+					region.setLoss80(region.getLoss80() + incidents);
+					companyTotal.setLoss80(companyTotal.getLoss80() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 81){
+					station.setLoss81(incidents);
+					region.setLoss81(region.getLoss81() + incidents);
+					companyTotal.setLoss81(companyTotal.getLoss81() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 82){
+					station.setLoss82(incidents);
+					region.setLoss82(region.getLoss82() + incidents);
+					companyTotal.setLoss82(companyTotal.getLoss82() + incidents);
+			    } else if (((Integer) loss[1]).intValue() == 90){
+					station.setLoss90(incidents);
+					region.setLoss90(region.getLoss90() + incidents);
+					companyTotal.setLoss90(companyTotal.getLoss90() + incidents);
+			    }
+				
+			}
 			
+			ArrayList<StatReportElement> submitList = new ArrayList<StatReportElement>();
+			double companyBoarded = 0;
+
+			for(StatReport_Custom_1_DTO station:stationMap.values()){
+				submitList.add(createStatReportElement(station, false));
+				StatReport_Custom_1_DTO r = regionMap.get(station.getRegionid());
+				r.setBoarded(r.getBoarded() + station.getBoarded());
+				companyBoarded += station.getBoarded();
+			}
 			
+			for(StatReport_Custom_1_DTO region:regionMap.values()){
+				submitList.add(createStatReportElement(region, false));
+			}
 			
+			companyTotal.setBoarded(companyBoarded);
+			submitList.add(createStatReportElement(companyTotal, false));
+			companyTotal.setStationcode("Domestic/DOT Total");
+			submitList.add(createStatReportElement(companyTotal, true));
 			
-			SQLQuery stationQuery = sess.createSQLQuery(stationSQL);
+			if(srDTO.getOutputtype() == TracingConstants.REPORT_OUTPUT_XLS){
+				return create501ExcelReport(rootpath, 0, user, submitList, parameters);
+			} else {
+				return ReportBMO.getReportFile(new ArrayList(stationMap.values()), parameters, reportname, rootpath, srDTO
+						.getOutputtype(), request);
+			}
+			
+		} catch (Exception e) {
+			logger.error("unable to create report " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+	
+	private List<Object[]> get501LossList(StatReportDTO srDTO, Map parameters){
+		TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
+				user.getDefaulttimezone()).getTimezone());
+		
+		Date sdate = null, edate = null;
+		Date sdate1 = null, edate1 = null; // add one for timezone
+		Date stime = null; // time to compare (04:00 if eastern, for example)
+		String dateq = "";
+
+		ArrayList dateal = null;
+		if ((dateal = ReportBMO.calculateDateDiff(srDTO, tz, user)) == null) {
+			logger.error("unable to create report: unable to calculate date range");
+			return null;
+		}
+		sdate = (Date) dateal.get(0);
+		sdate1 = (Date) dateal.get(1);
+		edate = (Date) dateal.get(2);
+		edate1 = (Date) dateal.get(3);
+		stime = (Date) dateal.get(4);
+
+		parameters.put("sdate", "All Dates");
+		if (sdate != null && edate != null) {
+			parameters.put("sdate", srDTO.getStarttime());
+			if (sdate.equals(edate)) {
+				// need to add the timezone diff here
+				dateq = " and ((i.createdate= :startdate and i.createtime >= :starttime) "
+						+ " or (i.createdate= :startdate1 and i.createtime <= :starttime))";
+
+				edate = null;
+			} else {
+
+				// first get the beginning and end dates using date and time, then get
+				// dates in between
+				dateq = " and ((i.createdate= :startdate and i.createtime >= :starttime) "
+						+ " or (i.createdate= :enddate1 and i.createtime <= :starttime)"
+						+ " or (i.createdate > :startdate and i.createdate <= :enddate))";
+
+				parameters.put("edate", srDTO.getEndtime());
+			}
+		} else if (sdate != null) {
+			parameters.put("sdate", srDTO.getStarttime());
+			parameters.put("edate", srDTO.getStarttime());
+			dateq = " and ((incident.createdate= :startdate and incident.createtime >= :starttime) "
+					+ " or (incident.createdate= :startdate1 and incident.createtime <= :starttime))";
+			edate = null;
+		}
+		
+		String mbrtypeq = "";
+		if (srDTO.getItemType_ID() >= 1) {
+			mbrtypeq = " and i.itemType_ID = " + srDTO.getItemType_ID() + " ";
+		}
+
+		String statusq = "";
+		if (srDTO.getStatus_ID() >= 1) {
+			statusq = " and i.status_ID = " + srDTO.getStatus_ID() + " ";
+		}
+		
+		String lossSQL = "select i.faultstation_ID as station_id, i.loss_code as loss_code, count(i.loss_code) as count " +
+		"from incident i " +
+		"where i.loss_code != 0 " + dateq + mbrtypeq + statusq +
+		" group by i.loss_code, i.faultstation_ID order by i.loss_code, i.faultstation_ID";
+
+		Session sess = HibernateWrapper.getSession().openSession();
+		try{
 			SQLQuery lossQuery = sess.createSQLQuery(lossSQL);
+
 			if (sdate != null) {
 				lossQuery.setDate("startdate", sdate);
 				if (edate == null)
@@ -148,6 +367,36 @@ public class CustomReportBMO implements
 				lossQuery.setDate("enddate", edate);
 			}
 			
+			lossQuery.addScalar("station_id", Hibernate.LONG);
+			lossQuery.addScalar("loss_code", Hibernate.INTEGER);
+			lossQuery.addScalar("count", Hibernate.INTEGER);
+			
+			List<Object[]> lossList = lossQuery.list();
+			return lossList;
+		} catch (Exception e) {
+			logger.error("unable to create report " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+	
+	private List<Object[]> get501StationList(StatReportDTO srDTO){
+		String stationq = "";
+		if (srDTO.getStation_ID() != null
+				&& !srDTO.getStation_ID()[0].equals("0")) {
+			stationq = " and s.station_ID in (:station_ID) ";
+		}
+		String stationSQL = "select s.stationcode as stationcode, r.id as region_id, r.name as region_name" +
+		", r.director as region_director, s.goal as station_goal, s.companycode_id as companycode, s.station_ID as station_id, r.target as region_target " +
+		"from station s left outer join region r on s.region_id = r.id " +
+		"where s.active = 1 and s.companycode_ID = :companycode_ID " +
+		stationq +
+		"order by r.name asc, s.stationcode asc";
+		Session sess = HibernateWrapper.getSession().openSession();
+		try{
+			SQLQuery stationQuery = sess.createSQLQuery(stationSQL);
 			stationQuery.setParameter("companycode_ID", user.getCompanycode_ID());
 			
 			if (srDTO.getStation_ID() != null
@@ -170,115 +419,8 @@ public class CustomReportBMO implements
 			stationQuery.addScalar("region_target", Hibernate.DOUBLE);
 			
 			List<Object[]> stationList = stationQuery.list();
-			Map<Long, StatReport_Custom_1_DTO> stationMap = new LinkedHashMap<Long, StatReport_Custom_1_DTO>();
-			
-			NewSkiesIntegrationWrapper eiw = new NewSkiesIntegrationWrapper();
-			ArrayList alparam = null;
-			boolean b1 = eiw.readEnplaneProps("enplane.endpoint", "enplane.calltype");
-			if (!b1) {
-				logger.error(eiw.getErrormsg());
-				return null;
-			}
-			
-			for(Object[] station:stationList){
-				StatReport_Custom_1_DTO addStation = new StatReport_Custom_1_DTO();
-				addStation.setStationcode((String)station[0]);
-				System.out.println(addStation.getStationcode());
-				addStation.setRegionid(station[1]!=null?(Long)station[1]:0);
-				addStation.setStation_region(station[2]!=null?(String)station[2]:null);
-				addStation.setStation_region_mgr(station[3]!=null?(String)station[3]:null);
-				addStation.setGoal((Double)station[4]);
-				addStation.setCompanycode(station[5]!=null?(String)station[5]:null);
-				addStation.setRegion_goal(station[7]!=null?(Double)station[7]:0.0);
-				stationMap.put((Long)station[6], addStation);
-					
-				double callresult = eiw.getEnplanement(srDTO.getStarttime(), (srDTO
-						.getEndtime() == null ? srDTO.getStarttime() : srDTO.getEndtime()),
-						addStation.getStationcode());
-
-				if (callresult < 0) {
-					addStation.setBoarded(0.00);
-
-				} else {
-					addStation.setBoarded(callresult);
-				}
-			}
-			
-			
-			lossQuery.addScalar("station_id", Hibernate.LONG);
-			lossQuery.addScalar("loss_code", Hibernate.INTEGER);
-			lossQuery.addScalar("count", Hibernate.INTEGER);
-			
-			List<Object[]> lossList = lossQuery.list();
-			
-			for(Object[] loss:lossList){
-				if(!stationMap.containsKey((Long)loss[0])){
-					//TODO handle error
-					System.out.println("station missing: " + loss[0]);
-					continue;
-				}
-				StatReport_Custom_1_DTO station = stationMap.get((Long)loss[0]);
-				
-				Integer incidents = (Integer)loss[2];
-				if (((Integer) loss[1]).intValue() == 10){
-					station.setLoss10(incidents);
-				} else if (((Integer) loss[1]).intValue() == 12){
-					station.setLoss12(incidents);
-				} else if (((Integer) loss[1]).intValue() == 15){
-					station.setLoss15(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 18){
-					station.setLoss18(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 23){
-					station.setLoss23(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 24){
-					station.setLoss24(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 25){
-					station.setLoss25(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 26){
-					station.setLoss26(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 30){
-					station.setLoss30(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 32){
-					station.setLoss32(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 33){
-					station.setLoss33(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 35){
-					station.setLoss35(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 42){
-					station.setLoss42(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 51){
-					station.setLoss51(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 54){
-					station.setLoss54(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 56){
-					station.setLoss56(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 63){
-					station.setLoss63(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 64){
-					station.setLoss64(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 73){
-					station.setLoss73(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 74){
-					station.setLoss74(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 76){
-					station.setLoss76(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 78){
-					station.setLoss78(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 80){
-					station.setLoss80(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 81){
-					station.setLoss81(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 82){
-					station.setLoss82(incidents);
-			    } else if (((Integer) loss[1]).intValue() == 90){
-					station.setLoss90(incidents);
-			    }
-				
-			}
-			
-			return ReportBMO.getReportFile(new ArrayList(stationMap.values()), parameters, reportname, rootpath, srDTO
-					.getOutputtype(), request);
-	
+			return stationList;
+		
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
 			e.printStackTrace();
@@ -286,6 +428,51 @@ public class CustomReportBMO implements
 		} finally {
 			sess.close();
 		}
+	}
+	
+	private StatReportElement createStatReportElement(StatReport_Custom_1_DTO stat, boolean dot){
+		DecimalFormat df = new DecimalFormat("#.##");
+		DecimalFormat dfBoarded = new DecimalFormat("#");
+		
+		StatReportElement toAdd = new StatReportElement();
+		toAdd.setE1(stat.getStationcode());
+		toAdd.setE2(stat.getLoss10());
+		toAdd.setE3(stat.getLoss12());
+		toAdd.setE4(stat.getLoss15());
+		toAdd.setE5(stat.getLoss18());
+		toAdd.setE6(stat.getLoss23());
+		toAdd.setE7(stat.getLoss24());
+		toAdd.setE8(stat.getLoss25());
+		toAdd.setE9(stat.getLoss26());
+		toAdd.setE10(stat.getLoss30());
+		toAdd.setE11(stat.getLoss32());
+		toAdd.setE12(stat.getLoss33());
+		toAdd.setE13(stat.getLoss35());
+		toAdd.setE14(stat.getLoss42());
+		toAdd.setE15(stat.getLoss51());
+		toAdd.setE16(stat.getLoss54());
+		toAdd.setE17(stat.getLoss56());
+		toAdd.setE18(stat.getLoss63());
+		toAdd.setE19(stat.getLoss64());
+		toAdd.setE20(stat.getLoss73());
+		toAdd.setE21(stat.getLoss74());
+		toAdd.setE22(stat.getLoss76());
+		toAdd.setE23(stat.getLoss78());
+		toAdd.setE24(stat.getLoss80());
+		toAdd.setE25(stat.getLoss81());
+		toAdd.setE26(stat.getLoss82());
+		toAdd.setE27(stat.getLoss90());
+		toAdd.setE28(new Long(stat.getTotal()).toString());
+		toAdd.setE29(dfBoarded.format(stat.getBoarded()));
+		if(dot){
+			toAdd.setE30(df.format(stat.getDOTRatio()));
+		} else {
+			toAdd.setE30(df.format(stat.getRatio501()));
+		}
+		toAdd.setE31(df.format(stat.getGoal()));
+		toAdd.setE32(stat.getStation_region());
+		toAdd.setE33(df.format(stat.getRegion_goal()));
+		return toAdd;
 	}
 	
 	
@@ -1361,4 +1548,89 @@ public class CustomReportBMO implements
 		}
 	}*/
 
+	public String create501ExcelReport(String root, int salvageId, Agent user, List dlist, Map parameters) {
+
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+		String fileName = ReportingConstants.RPT_20_CUSTOM_501_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String outputpath = root + ReportingConstants.REPORT_TMP_PATH + fileName;
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
+		virtualizer.setReadOnly(false);
+		
+		FastReportBuilder drb = new FastReportBuilder();
+		drb.setTitle("AIRTRAN AIRWAYS " + (String)parameters.get("title"));
+		drb.setSubtitle((String)parameters.get("sdate") + " TO " + (String)parameters.get("edate"));
+		
+		try {
+			Style header = new Style();
+			header.setBackgroundColor(java.awt.Color.GRAY);
+			header.setOverridesExistingStyle(true);
+			Style column = new Style();
+			column.setBackgroundColor(java.awt.Color.WHITE);
+			column.setOverridesExistingStyle(true);
+			drb.setIgnorePagination(true);
+			drb.addColumn("REGION", "e32", String.class.getName(), 200, column, header);
+			drb.addColumn("LOCN", "e1", String.class.getName(), 50, column, header);
+			drb.addColumn("10", "e2", Integer.class.getName(), 50, column, header);
+			drb.addColumn("12", "e3", Integer.class.getName(), 50, column, header);
+			drb.addColumn("15", "e4", Integer.class.getName(), 50, column, header);
+			drb.addColumn("18", "e5", Integer.class.getName(), 50, column, header);
+			drb.addColumn("23", "e6", Integer.class.getName(), 50, column, header);
+			drb.addColumn("24", "e7", Integer.class.getName(), 50, column, header);
+			drb.addColumn("25", "e8", Integer.class.getName(), 50, column, header);
+			drb.addColumn("26", "e9", Integer.class.getName(), 50, column, header);
+			drb.addColumn("30", "e10", Integer.class.getName(), 50, column, header);
+			drb.addColumn("32", "e11", Integer.class.getName(), 50, column, header);
+			drb.addColumn("33", "e12", Integer.class.getName(), 50, column, header);
+			drb.addColumn("35", "e13", Integer.class.getName(), 50, column, header);
+			drb.addColumn("42", "e14", Integer.class.getName(), 50, column, header);
+			drb.addColumn("51", "e15", Integer.class.getName(), 50, column, header);
+			drb.addColumn("54", "e16", Integer.class.getName(), 50, column, header);
+			drb.addColumn("56", "e17", Integer.class.getName(), 50, column, header);
+			drb.addColumn("63", "e18", Integer.class.getName(), 50, column, header);
+			drb.addColumn("64", "e19", Integer.class.getName(), 50, column, header);
+			drb.addColumn("73", "e20", Integer.class.getName(), 50, column, header);
+			drb.addColumn("74", "e21", Integer.class.getName(), 50, column, header);
+			drb.addColumn("76", "e22", Integer.class.getName(), 50, column, header);
+			drb.addColumn("78", "e23", Integer.class.getName(), 50, column, header);
+			drb.addColumn("80", "e24", Integer.class.getName(), 50, column, header);
+			drb.addColumn("81", "e25", Integer.class.getName(), 50, column, header);
+			drb.addColumn("82", "e26", Integer.class.getName(), 50, column, header);
+			drb.addColumn("90", "e27", Integer.class.getName(), 50, column, header);
+			drb.addColumn("TOTAL", "e28", String.class.getName(), 50, column, header);
+			drb.addColumn("BOARD", "e29", String.class.getName(), 50, column, header);
+			drb.addColumn("RATIO", "e30", String.class.getName(), 50, column, header);
+			drb.addColumn("GOALS", "e31", String.class.getName(), 50, column, header);
+			drb.addColumn("REGION GOALS", "e33", String.class.getName(), 50, column, header);
+			
+			DynamicReport report = drb.build();
+						
+			JRDataSource data = new JRBeanCollectionDataSource(dlist);
+			
+			JasperPrint jp = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), data);
+			parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
+			parameters.put(JExcelApiExporterParameter.JASPER_PRINT,  jp);
+			parameters.put(JExcelApiExporterParameter.OUTPUT_FILE_NAME, outputpath);
+			parameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, false);
+			parameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
+			parameters.put(JExcelApiExporterParameter.IGNORE_PAGE_MARGINS, true);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, true);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true);
+			parameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, true); 
+			parameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, true);
+			
+			
+			JExcelApiExporter exporter = new JExcelApiExporter();
+			exporter.setParameters(parameters);
+			exporter.exportReport();
+		} catch (ColumnBuilderException cbe) {
+			cbe.printStackTrace();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} catch (JRException jre) {
+			jre.printStackTrace();
+		} 
+		virtualizer.cleanup();
+		return fileName;
+	}
+	
 }

@@ -23,7 +23,7 @@
 	</parameter>
 	<parameter name="goalyear" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
-		<![CDATA[select station.stationcode,count(incident.incident_ID) as total,loss_code as boarded,loss_code as ratio, loss_code as goal
+		<![CDATA[select station.stationcode,count(incident.incident_ID) as total,loss_code as boarded,loss_code as ratio501, loss_code as goal
 ,station_region,station_region_mgr, region_goal,
 ,loss_code as loss10,loss_code as loss12,loss_code as loss15
 ,loss_code as loss18,loss_code as loss23,loss_code as loss24
@@ -39,7 +39,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 	<field name="stationcode" class="java.lang.String"/>
 	<field name="total" class="java.lang.Long"/>
 	<field name="boarded" class="java.lang.Double"/>
-	<field name="ratio" class="java.lang.Double"/>
+	<field name="ratio501" class="java.lang.Double"/>
 	<field name="goal" class="java.lang.Double"/>
 	<field name="station_region" class="java.lang.String"/>
 	<field name="station_region_mgr" class="java.lang.String"/>
@@ -297,11 +297,11 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 		<initialValueExpression><![CDATA[new java.lang.Double(0)]]></initialValueExpression>
 	</variable>
 	<variable name="subratiototal" class="java.lang.Double" resetType="Group" resetGroup="Region" calculation="Average">
-		<variableExpression><![CDATA[$F{ratio}]]></variableExpression>
+		<variableExpression><![CDATA[$F{ratio501}]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Double(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalratiototal" class="java.lang.Double" calculation="Average">
-		<variableExpression><![CDATA[$F{ratio}]]></variableExpression>
+		<variableExpression><![CDATA[$F{ratio501}]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Double(0)]]></initialValueExpression>
 	</variable>
 	<variable name="subgoal_times_boardedtotal" class="java.lang.Double" resetType="Group" resetGroup="Region" calculation="Sum">
@@ -2185,7 +2185,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ratio}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ratio501}]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-143" mode="Opaque" x="729" y="4" width="30" height="12" forecolor="#000000" backcolor="#FFFFFF"/>

@@ -59,10 +59,12 @@ public class ReportingConstants {
 	// Custom reports for airtran
 	public final static int RPT_20 = 20;
 	public final static String RPT_20_CUSTOM_1_NAME = "stat_rpt_20_custom_1";
+	public final static String RPT_20_CUSTOM_501_NAME = "stat_rpt_20_custom_501";
 	public final static String RPT_20_CUSTOM_11_NAME = "stat_rpt_20_custom_11";
 	public final static int RPT_20_CUSTOM_1 = 1; // AirTran, mishandled bags summary by location
 	
 	public final static int RPT_20_CUSTOM_2 = 2;
+	public final static int RPT_20_CUSTOM_501 = 501;
 	
 	//custom reports for in-bound expedite baggage list
 	public final static int RPT_INBOUND_EXPEDITE_BAGS = 30;

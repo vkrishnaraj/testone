@@ -58,6 +58,7 @@ public class StatReport_Custom_1_DTO {
 	private double ratio;
 	private double goal;
 	private double goal_times_boarded;
+	private double ratio501;
 	
 	/**
 	 * @return Returns the station_region.
@@ -411,11 +412,11 @@ public class StatReport_Custom_1_DTO {
 	}
 	/**
 	 * @return Returns the ratio.
-	 * (total claim - passenger convenience) / boarded
+	 * (total claim - passenger convenience) / boarded (1000)
 	 */
 	public double getRatio() {
 		if (boarded > 0) {
-			return Double.parseDouble(TracerUtils.format((getTotal() - getLoss81()) * 1000 / boarded,"%"));
+			return Double.parseDouble(TracerUtils.format((getTotal() - getLoss81()) / boarded,"%"));
 		} else {
 			return 0;
 		}
@@ -428,6 +429,17 @@ public class StatReport_Custom_1_DTO {
 	public double getDOTRatio(){
 		if(boarded > 0){
 		return Double.parseDouble(TracerUtils.format(getTotal() * 1000 / boarded,"%"));
+		} else {
+			return 0;
+		}
+	}
+	/**
+	 * @return Returns the ratio.
+	 * (total claim - passenger convenience) / boarded
+	 */
+	public double getRatio501() {
+		if (boarded > 0) {
+			return Double.parseDouble(TracerUtils.format((getTotal() - getLoss81()) * 1000 / boarded,"%"));
 		} else {
 			return 0;
 		}
@@ -510,6 +522,10 @@ public class StatReport_Custom_1_DTO {
 	public double getRegion_goal() {
 		return region_goal;
 	}
+	public void setRatio501(double ratio501) {
+		this.ratio501 = ratio501;
+	}
+
 	
 	
 }

@@ -42,18 +42,6 @@
                     
                     <tr>
                       <td>
-                        <bean:message key="reports.faultCompany" />
-                        :
-                      </td>
-                      <td>
-                        <html:select property="company_ID" styleClass="dropdown" multiple="true">
-                          <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
-                        </html:select>
-                      </td>
-                    </tr>
-                    
-                    <tr>
-                      <td>
                         <bean:message key="colname.faultstation" /> 
                         : <BR>(Only valid for <%=agent.getCompanycode_ID() %> exclusive searches)
                       </td>
@@ -93,10 +81,6 @@
     			                  <bean:message key="radio.html" />
     			                  <html:radio property="outputtype" value="2" />
     			                  <bean:message key="radio.xls" />
-    			                  <html:radio property="outputtype" value="3" />
-    			                  <bean:message key="radio.csv" />
-    			                  <html:radio property="outputtype" value="4" />
-    			                  <bean:message key="radio.xml" />
                             <% } else {%>
     			                  <html:radio property="outputtype" value="1" />
     			                  <bean:message key="radio.html" />
