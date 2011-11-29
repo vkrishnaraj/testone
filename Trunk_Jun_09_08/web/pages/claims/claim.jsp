@@ -96,6 +96,10 @@
       }
       
       function stateChanged(state, province, country) {
+    	 if (!state || !province || !country) {
+    		 return;
+    	 }
+    	 
   		if (state.value == "") {
   			province.disabled = false;	
   			province.className = "textfield";
@@ -108,6 +112,9 @@
   	}
   	
   	function provinceChanged(state, province, country) {
+    	 if (!state || !province) {
+    		 return;
+    	 }
   		if (province.value == "") {
   			state.disabled = false;
   		} else {
@@ -117,6 +124,9 @@
   	}
   	
   	function countryChanged(state, province, country) {
+    	 if (!state || !province || !country) {
+    		 return;
+    	 }
   		if (country.value == "") {
   			state.disabled = false;
   			province.disabled = false;

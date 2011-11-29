@@ -47,7 +47,8 @@ public class LostFoundJasperReport {
 	private final int MS_MATCHED_COUNT = 3;
 	private final int MS_SALVAGED_COUNT = 4;
 	private final int MS_NOT_MATCHED_COUNT = 5;
-	
+	private final int MS_MATCHED_BY_OTHER_COUNT = 6;
+		
 	private final int ITEMIZ_ID = 0;
 	private final int ITEMIZ_STATION = 1;
 	private final int ITEMIZ_DATE = 2;
@@ -487,6 +488,7 @@ public class LostFoundJasperReport {
 			query.addScalar("matched_count", Hibernate.INTEGER);
 			query.addScalar("salvaged_count", Hibernate.INTEGER);
 			query.addScalar("not_matched_count", Hibernate.INTEGER);
+			query.addScalar("matched_by_other_count", Hibernate.INTEGER);
 			
 			List results = query.list();
 			if (results.isEmpty()) {
@@ -530,7 +532,9 @@ public class LostFoundJasperReport {
 		}
 		
 		
-		String sql = "select s.stationcode,ifnull(lost.count, 0) as 'lost_count',ifnull(found.count, 0) as 'found_count',ifnull(matched.count, 0) as 'matched_count',ifnull(salvaged.count, 0) as 'salvaged_count',ifnull(notmatched.count, 0) as 'not_matched_count' from station s " +
+		String sql = "select s.stationcode,ifnull(lost.count,0) as 'lost_count',ifnull(found.count,0) as 'found_count', " +
+					 "ifnull(matched.count,0) as 'matched_count',ifnull(salvaged.count,0) as 'salvaged_count', " +
+					 "ifnull(notmatched.count,0) as 'not_matched_count', ifnull(matchedbyother.count,0) as 'matched_by_other_count' from station s " +
 					 "left outer join (select s.station_id,count(i1.id) as 'count' from station s " +
 					 				  "left outer join lfreservation r on s.station_id = r.dropoffLocation_station_id " +
 					 				  "left outer join lflost lf on r.id = lf.reservation_id " +
@@ -546,23 +550,31 @@ public class LostFoundJasperReport {
 					 				  "left outer join lffound lf on lf.station_id = s.station_id " +
 					 				  "left outer join lfmatchhistory mh1 on (lf.id = mh1.found_id) join lfmatchhistory mh2 on (mh1.lost_id = mh2.lost_id and mh1.found_id = mh2.found_id) " +
 					 				  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
-					 				  "where mh1.status_status_id = 608 and mh2.score > 0 " +
-					 				  "and i.disposition_status_id in (603,604) " + 
+					 				  "where mh1.status_status_id = " + TracingConstants.LF_TRACING_CONFIRMED + " and mh2.score > 0 " +
+					 				  "and i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") " + 
 					 				  "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
 					 				  "group by s.station_id) matched on s.station_id = matched.station_id " +
 					 "left outer join (select s.station_id,count(i.id) as 'count' from station s " +
 					 				  "left outer join lffound lf on s.station_id = lf.station_id " +
 					 				  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
-					 				  "where lf.status_id = 601 and i.disposition_status_id = 605 " + 
+					 				  "where lf.status_id = " + TracingConstants.LF_STATUS_CLOSED + " and i.disposition_status_id = " + TracingConstants.LF_DISPOSITION_SALVAGED + " " + 
 					 				  "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
 					 				  "group by s.station_id) salvaged on s.station_id = salvaged.station_id " +
 		             "left outer join (select s.station_id,count(i.id) as 'count' from station s " +
 		             	 			  "left outer join lffound lf on s.station_id = lf.station_id " +
 		             	 			  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
-		             	 			  "where 1 = 1 and i.disposition_status_id in (603,604) " + 
+		             	 			  "where 1 = 1 and i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") " + 
 		             	 			  "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
-		             	 			  "and not exists (select 'x' from lfmatchhistory m where m.found_id = i.found_id) " +
+		             	 			  "and not exists (select 'x' from lfmatchhistory m where m.found_id = i.found_id and m.status_Status_ID = " + TracingConstants.LF_TRACING_CONFIRMED + ") " +
 		             	 			  "group by s.station_id) notmatched on s.station_id = notmatched.station_id " +
+     	 			 "left outer join (select s.station_id,count(distinct mh1.id) as 'count' from station s " +
+					 				  "left outer join lffound lf on lf.station_id = s.station_id " +
+					 				  "left outer join lfmatchhistory mh1 on (lf.id = mh1.found_id) join lfmatchhistory mh2 on (mh1.lost_id = mh2.lost_id and mh1.found_id = mh2.found_id) " +
+					 				  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
+					 				  "where mh1.status_status_id = " + TracingConstants.LF_TRACING_CONFIRMED + " and mh2.score = 0 " +
+					 				  "and i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") " + 
+					 				  "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
+					 				  "group by s.station_id) matchedbyother on s.station_id = matchedbyother.station_id " +
 		             "where s.associated_airport in ('ABG','AVS','BGT');";
 		
 		return sql;
@@ -594,6 +606,9 @@ public class LostFoundJasperReport {
 			
 			lfmsr.setNotMatchedReturned((Integer) row[MS_NOT_MATCHED_COUNT]);
 			total.addNotMatchedReturned((Integer) row[MS_NOT_MATCHED_COUNT]);
+			
+			lfmsr.setMatchedByOther((Integer) row[MS_MATCHED_BY_OTHER_COUNT]);
+			total.addMatchedByOther((Integer) row[MS_MATCHED_BY_OTHER_COUNT]);
 			
 			toReturn.add(lfmsr);
 		}

@@ -469,7 +469,8 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.addColumn(resources.getString("lf.ms.report.total.matched.returned"), "matchedAndReturned", Integer.class.getName(), 50, detailStyle, header);			
 			drb.addColumn(resources.getString("lf.ms.report.percent.matched.returned"), "percentMatchedAndReturned", String.class.getName(), 75, detailStyle, header);		
 			drb.addColumn(resources.getString("lf.ms.report.items.salvaged"), "salvaged", Integer.class.getName(), 50, detailStyle, header);			
-			drb.addColumn(resources.getString("lf.ms.report.total.not.matched.returned"), "notMatchedReturned", Integer.class.getName(), 75, detailStyle, header);			
+			drb.addColumn(resources.getString("lf.ms.report.total.not.matched.returned"), "notMatchedReturned", Integer.class.getName(), 75, detailStyle, header);
+			drb.addColumn(resources.getString("lf.ms.report.total.matched.by.other"), "matchedByOther", Integer.class.getName(), 75, detailStyle, header);
 			drb.addColumn(resources.getString("lf.ms.report.item.return.rate"), "itemReturnRate", String.class.getName(), 75, detailStyle, header);		
 			
 			drb.setIgnorePagination(true);
@@ -523,7 +524,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.addColumn(resources.getString("lf.itemization.id"), "id", Long.class.getName(), 20, detailStyle, header);
 			drb.addColumn(resources.getString("lf.itemization.station"), "station", String.class.getName(), 25, detailStyle, header);
 			drb.addColumn(resources.getString("lf.itemization.date.reported"), "date", String.class.getName(), 75, detailStyle, header);
-			drb.addColumn(resources.getString("lf.itemization.status"), "disStatus", String.class.getName(), 20, detailStyle, header);
+			drb.addColumn(resources.getString("lf.itemization.status"), "disStatus", String.class.getName(), 25, detailStyle, header);
 			drb.addColumn(resources.getString("lf.itemization.item.returned"), "itemReturned", String.class.getName(), 40, detailStyle, header);			
 			drb.addColumn(resources.getString("lf.itemization.category"), "category", String.class.getName(), 75, detailStyle, header);		
 			drb.addColumn(resources.getString("lf.itemization.subcategory"), "subCategory", String.class.getName(), 40, detailStyle, header);			

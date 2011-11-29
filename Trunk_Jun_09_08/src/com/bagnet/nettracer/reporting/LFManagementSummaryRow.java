@@ -10,6 +10,7 @@ public class LFManagementSummaryRow {
 	private int matchedAndReturned;
 	private int salvaged;
 	private int notMatchedReturned;
+	private int matchedByOther;
 	
 	public String getStation() {
 		return station;
@@ -79,6 +80,18 @@ public class LFManagementSummaryRow {
 		this.notMatchedReturned += nmr;
 	}
 	
+	public int getMatchedByOther() {
+		return matchedByOther;
+	}
+
+	public void setMatchedByOther(int matchedByOther) {
+		this.matchedByOther = matchedByOther;
+	}
+	
+	public void addMatchedByOther(int matchedByOther) {
+		this.matchedByOther += matchedByOther;
+	}
+
 	public String getPercentMatchedAndReturned() {
 		if (foundItems > 0) {
 			DecimalFormat df = new DecimalFormat("#0.00");
@@ -95,9 +108,10 @@ public class LFManagementSummaryRow {
 			DecimalFormat df = new DecimalFormat("#0.00");
 			Double mar = new Double(getMatchedAndReturned());
 			Double nmr = new Double(getNotMatchedReturned());
+			Double mbo = new Double(getMatchedByOther());
 			Double fi = new Double(getFoundItems());
 
-			return df.format(((mar + nmr) / fi) * 100) + "%";
+			return df.format(((mar + nmr + mbo) / fi) * 100) + "%";
 		} 
 		return "0.00%";
 	}
