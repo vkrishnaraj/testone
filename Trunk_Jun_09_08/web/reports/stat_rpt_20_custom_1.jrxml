@@ -24,7 +24,7 @@
 	<parameter name="goalyear" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[select station.stationcode,count(incident.incident_ID) as total,loss_code as boarded,loss_code as ratio, loss_code as goal
-,station_region,station_region_mgr, region_goal,
+,station_region,station_region_mgr
 ,loss_code as loss10,loss_code as loss12,loss_code as loss15
 ,loss_code as loss18,loss_code as loss23,loss_code as loss24
 ,loss_code as loss25,loss_code as loss26,loss_code as loss30
@@ -43,7 +43,6 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 	<field name="goal" class="java.lang.Double"/>
 	<field name="station_region" class="java.lang.String"/>
 	<field name="station_region_mgr" class="java.lang.String"/>
-	<field name="region_goal" class="java.lang.Double"/>
 	<field name="loss10" class="java.lang.Integer"/>
 	<field name="loss12" class="java.lang.Integer"/>
 	<field name="loss15" class="java.lang.Integer"/>
@@ -438,7 +437,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" size="6" isBold="false" isItalic="true" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					</textElement>
-					<text><![CDATA[SYSTEM  TOTAL]]></text>
+					<text><![CDATA[COMPANY  TOTAL]]></text>
 				</staticText>
 				<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
 					<reportElement key="textField-C74" mode="Opaque" x="56" y="8" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -791,7 +790,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					</textElement>
 					<textFieldExpression class="java.lang.Long"><![CDATA[$V{comptotallosssum}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,###,##0" isBlankWhenNull="false" hyperlinkType="None">
+				<textField pattern="###0.000" isBlankWhenNull="false" hyperlinkType="None">
 					<reportElement key="textField-C138" mode="Opaque" x="650" y="8" width="38" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -804,7 +803,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					</textElement>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$V{compsubboardedtotal}]]></textFieldExpression>
 				</textField>
-				<textField evaluationTime="Auto" pattern="###0.00" isBlankWhenNull="false" hyperlinkType="None">
+				<textField evaluationTime="Auto" pattern="#,##0.00" isBlankWhenNull="false" hyperlinkType="None">
 					<reportElement key="textField-C141" mode="Opaque" x="691" y="8" width="23" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -815,7 +814,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" size="7" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					</textElement>
-					<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{comptotallosssum}.doubleValue() - $V{comptotalloss81}.intValue()) / ($V{compsubboardedtotal}.doubleValue()/1000))]]></textFieldExpression>
+					<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{comptotallosssum}.doubleValue() - $V{comptotalloss81}.intValue()) / ($V{compsubboardedtotal}.doubleValue()))]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -1219,7 +1218,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					</textElement>
 					<textFieldExpression class="java.lang.Integer"><![CDATA[$V{subloss90}]]></textFieldExpression>
 				</textField>
-				<textField pattern="#,###,##0" isBlankWhenNull="false" hyperlinkType="None">
+				<textField pattern="###0.000" isBlankWhenNull="false" hyperlinkType="None">
 					<reportElement key="textField-138" mode="Opaque" x="650" y="8" width="38" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1232,7 +1231,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					</textElement>
 					<textFieldExpression class="java.lang.Double"><![CDATA[$V{subboardedtotal}]]></textFieldExpression>
 				</textField>
-				<textField evaluationTime="Auto" pattern="###0.00" isBlankWhenNull="false" hyperlinkType="None">
+				<textField evaluationTime="Auto" pattern="#,##0.00" isBlankWhenNull="false" hyperlinkType="None">
 					<reportElement key="textField-141" mode="Opaque" x="690" y="8" width="23" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1243,9 +1242,9 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" size="7" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					</textElement>
-					<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{sublosstotal}.doubleValue() - $V{subloss81}.intValue()) / ($V{subboardedtotal}.doubleValue()/1000))]]></textFieldExpression>
+					<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{sublosstotal}.doubleValue() - $V{subloss81}.intValue()) / ($V{subboardedtotal}.doubleValue()))]]></textFieldExpression>
 				</textField>
-				<textField evaluationTime="Auto" pattern="###0.00" isBlankWhenNull="false" hyperlinkType="None">
+				<textField evaluationTime="Auto" pattern="#,##0.00" isBlankWhenNull="false" hyperlinkType="None">
 					<reportElement key="textField-146" mode="Opaque" x="725" y="8" width="34" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 					<box>
 						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1256,7 +1255,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 						<font fontName="Arial" size="7" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					</textElement>
-					<textFieldExpression class="java.lang.Double"><![CDATA[$F{region_goal}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{subgoal_times_boardedtotal}.doubleValue()) / ($V{subboardedtotal}.doubleValue()))]]></textFieldExpression>
 				</textField>
 			</band>
 		</groupFooter>
@@ -1645,7 +1644,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="8" isBold="false" isItalic="true" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[TOTAL  BOARD]]></text>
+				<text><![CDATA[TOTAL   (1000)]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="staticText-32" mode="Opaque" x="688" y="2" width="27" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -1789,6 +1788,19 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					<font fontName="Arial" size="8" isBold="false" isItalic="true" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[90]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-13" mode="Opaque" x="0" y="2" width="26" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Arial" size="8" isBold="false" isItalic="true" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[COMP]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
@@ -2161,7 +2173,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{loss90}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,###,##0" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="###0.000" isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-137" mode="Opaque" x="650" y="4" width="38" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2174,7 +2186,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{boarded}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="#,##0.00" isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-140" mode="Opaque" x="691" y="4" width="22" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2187,7 +2199,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{ratio}]]></textFieldExpression>
 			</textField>
-			<textField pattern="###0.00" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="#,##0.00" isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-143" mode="Opaque" x="729" y="4" width="30" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2212,6 +2224,19 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 					<font fontName="Arial" size="3" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{goal_times_boarded}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+				<reportElement key="textField-137" mode="Opaque" x="1" y="4" width="23" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Arial" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{companycode}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -2251,7 +2276,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 	<summary>
 		<band height="35">
 			<staticText>
-				<reportElement key="staticText-34" mode="Opaque" x="0" y="6" width="40" height="17" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="staticText-34" mode="Opaque" x="0" y="6" width="33" height="17" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2261,8 +2286,8 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="7" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[DOMESTIC/
-DOT TOTAL]]></text>
+				<text><![CDATA[GRAND
+TOTAL]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-92" mode="Opaque" x="56" y="6" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -2615,7 +2640,7 @@ DOT TOTAL]]></text>
 				</textElement>
 				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{totalloss90}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,###,##0" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="###0.000" isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-139" mode="Opaque" x="649" y="6" width="37" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2628,7 +2653,7 @@ DOT TOTAL]]></text>
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$V{totalboardedtotal}]]></textFieldExpression>
 			</textField>
-			<textField evaluationTime="Report" pattern="###0.00" isBlankWhenNull="false" hyperlinkType="None">
+			<textField evaluationTime="Report" pattern="#,##0.00" isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-144" mode="Opaque" x="690" y="6" width="23" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -2639,7 +2664,7 @@ DOT TOTAL]]></text>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="7" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{totallosstotal}.doubleValue()) / ($V{totalboardedtotal}.doubleValue()/1000))]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Double"><![CDATA[new Double(($V{totallosstotal}.doubleValue() - $V{totalloss81}.intValue()) / ($V{totalboardedtotal}.doubleValue()))]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
