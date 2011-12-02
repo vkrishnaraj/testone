@@ -484,7 +484,7 @@ public class PassengerBean {
 	public boolean isOnlineAvailable() {
 		if (onlineAvailable == null) {
 			if (isClaimsAvailableProperty() && (getStatus() == null 
-					|| (!getStatus().equals("SUBMITTED") && !getStatus().equals("SECOND_CLAIM")))) {
+					|| (!isStatusComplete(getStatus()) && !getStatus().equals("SECOND_CLAIM")))) {
 				Calendar fortyFiveDays = Calendar.getInstance();
 				fortyFiveDays.add(Calendar.DATE, -45);
 				if (!passengerData.getCreatedate().before(fortyFiveDays)) {
@@ -504,9 +504,13 @@ public class PassengerBean {
 		return onlineAvailable;
 	}
 	
+	private boolean isStatusComplete(String status) {
+		return (status.equals("SUBMITTED") || status.equals("REVIEW") || status.equals("ONRECORD"));
+	}
+	
 	public boolean isCompleteClaim() {
 		if (completeClaim == null) {
-			if (isClaimsAvailableProperty() && getStatus() != null && getStatus().equals("SUBMITTED")) {
+			if (isClaimsAvailableProperty() && getStatus() != null && isStatusComplete(getStatus())) {
 				completeClaim = true;
 			} else {
 				completeClaim = false;
