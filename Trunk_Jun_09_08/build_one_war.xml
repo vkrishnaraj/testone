@@ -13,6 +13,20 @@
 	<property name="axis2.classpath" value="base.libraries" />
 	
 	<!-- END GLOBAL PROPERTIES -->
+	<path id="project.classpath">
+		<fileset dir="${lib.build-client.dir}">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${lib.jar.dir}">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${basedir}/lib/provided">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${basedir}/lib/client-us">
+			<patternset refid="jar.files" />
+		</fileset>
+	</path>	
 
 	<!-- GLOBAL TASKDEFS -->
 	
@@ -29,20 +43,6 @@
 	<!-- END GLOBAL TASKDEFS -->
 	
 	<!-- GLOBAL PATHS -->
-	<path id="project.classpath">
-		<fileset dir="${lib.build-client.dir}">
-			<patternset refid="jar.files" />
-		</fileset>
-		<fileset dir="${lib.jar.dir}">
-			<patternset refid="jar.files" />
-		</fileset>
-		<fileset dir="${basedir}/lib/provided">
-			<patternset refid="jar.files" />
-		</fileset>
-		<fileset dir="${basedir}/lib/client-us">
-			<patternset refid="jar.files" />
-		</fileset>
-	</path>	
 
 	<!-- jameleon stuff -->
 	<path id="classpath">
