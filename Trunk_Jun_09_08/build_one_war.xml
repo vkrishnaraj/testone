@@ -29,6 +29,20 @@
 	<!-- END GLOBAL TASKDEFS -->
 	
 	<!-- GLOBAL PATHS -->
+	<path id="project.classpath">
+		<fileset dir="${lib.build-client.dir}">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${lib.jar.dir}">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${basedir}/lib/provided">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${basedir}/lib/client-us">
+			<patternset refid="jar.files" />
+		</fileset>
+	</path>	
 
 	<!-- jameleon stuff -->
 	<path id="classpath">
@@ -119,21 +133,7 @@
 		<mkdir dir="${artifact.dir}/${ant_project_name}/zip" />
 
 		<mkdir dir="${build.dir}/webservices/passengerview" />
-
-		<path id="project.classpath">
-			<fileset dir="${lib.build-client.dir}">
-				<patternset refid="jar.files" />
-			</fileset>
-			<fileset dir="${lib.jar.dir}">
-				<patternset refid="jar.files" />
-			</fileset>
-			<fileset dir="${basedir}/lib/provided">
-				<patternset refid="jar.files" />
-			</fileset>
-			<fileset dir="${basedir}/lib/client-us">
-				<patternset refid="jar.files" />
-			</fileset>
-		</path>
+		
 	</target>
 
 	<target name="delete">
@@ -1761,7 +1761,22 @@
 			</fileset>
 		</copy>
 
+<<<<<<< build_one_war.xml
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_main.cfg.xml" overwrite="true" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_dirty.cfg.xml" overwrite="true"/>
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_reporting.cfg.xml" overwrite="true"/>
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/dozerBeanMapping.xml" />
+		
+		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
+		<copy tofile="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob/cronJobs.xml" file="${cron.job.config.file}" overwrite="true" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/cron/config/log4j.properties" />
+		<jar destfile="${artifact.dir}/${ant_project_name}/${jarprefix}tracer-cron.jar"
+			basedir="${build.dir}/${ant_project_name}/classes"
+			includes="**/*.class,**/*.xml,**/*.properties">
+=======
 		<jar destfile="${build.dir}/webservices/onlineclaims/onlineclaims_schemas.jar" basedir="${build.dir}/webservices/onlineclaims/temp">
+>>>>>>> 1.43
 		</jar>
 
 		<move todir="${basedir}/lib/jars" file="${build.dir}/webservices/onlineclaims/onlineclaims_schemas.jar" />
@@ -1976,11 +1991,16 @@
 			<format property="VERSION" pattern="yyyyMMdd-HHmm " locale="en" />
 		</tstamp>
 
+<<<<<<< build_one_war.xml
+		<copy todir="${build.dir}/dist/cron/">
+			<fileset dir="${basedir}/companies/${ant_project_name}/${sub_path}cron" />
+=======
 		<delete dir="${build.dir}/${ant_project_name}/webWorking" failonerror="false" includeemptydirs="true" />
 			
 		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
 			<fileset dir="${basedir}/companies/${ant_project_name}/web">
 			</fileset>
+>>>>>>> 1.43
 		</copy>
 		
 		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
