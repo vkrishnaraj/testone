@@ -8,6 +8,23 @@
 	<property name="buildlib" value="lib/build-client" />
 	<property name="artifact.dir" value="${build.dir}/artifacts/"/>
 	
+	<patternset id="java.files">
+		<include name="**/**/*.java" />
+	</patternset>
+	<patternset id="class.files">
+		<include name="**/**/*.class" />
+	</patternset>
+	<patternset id="jar.files">
+		<include name="**/*.jar" />
+		<include name="**/*.zip" />
+	</patternset>
+	<patternset id="xml.files">
+		<include name="**/**/*.xml" />
+	</patternset>
+	<patternset id="hbm.xml.files">
+		<include name="**/**/*.hbm.xml" />
+	</patternset>
+	
 	<path id="project.classpath">
 		<fileset dir="${lib.build-client.dir}">
 			<patternset refid="jar.files" />
@@ -164,7 +181,20 @@
 
 		<mkdir dir="${build.dir}/webservices/passengerview" />
 
-		
+		<path id="project.classpath">
+			<fileset dir="${lib.build-client.dir}">
+				<patternset refid="jar.files" />
+			</fileset>
+			<fileset dir="${lib.jar.dir}">
+				<patternset refid="jar.files" />
+			</fileset>
+			<fileset dir="${basedir}/lib/client-us">
+				<patternset refid="jar.files" />
+			</fileset>
+			<fileset dir="${basedir}/lib/provided">
+				<patternset refid="jar.files" />
+			</fileset>
+		</path>
 	</target>
 
 	<target name="clean">
