@@ -1,0 +1,33 @@
+<project default="test">
+	<property name="srcdir" location="src/aero/nettracer/web/defaul/testing" />
+	<property name="builddir" location="build" />
+
+	<mkdir dir="${builddir}"/>
+		
+	<patternset id="jar.files">
+		<include name="*.jar" />
+	</patternset>
+	
+	<path id="classpath.test">
+		<pathelement location="${builddir}" />
+		<fileset dir="lib">
+			<patternset refid="jar.files" />
+		</fileset>
+	</path>	
+			
+
+  	<target name="compile-test" >
+    	<javac srcdir="${srcdir}" destdir="${builddir}" >
+      		<classpath refid="classpath.test"/>
+    	</javac>
+  	</target>
+    	
+  	<target name="test" depends="compile-test">
+    	<junit>
+      		<classpath refid="classpath.test" />
+      		<formatter type="brief" usefile="false" />
+      		<test name="aero.nettracer.web.defaul.testing.TestResetPassword" />
+    	</junit>
+  </target>
+
+</project>
