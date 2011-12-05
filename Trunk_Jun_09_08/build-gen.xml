@@ -7,6 +7,21 @@
 	<property name="lib" value="lib/jars" />
 	<property name="buildlib" value="lib/build-client" />
 	<property name="artifact.dir" value="${build.dir}/artifacts/"/>
+	
+	<path id="project.classpath">
+		<fileset dir="${lib.build-client.dir}">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${lib.jar.dir}">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${basedir}/lib/client-us">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${basedir}/lib/provided">
+			<patternset refid="jar.files" />
+		</fileset>
+	</path>
 
 	<target name="hibernate_generate" description="Generates Hibernate class descriptor files." depends="compile-web">
 		<hibernatedoclet>
@@ -149,20 +164,7 @@
 
 		<mkdir dir="${build.dir}/webservices/passengerview" />
 
-		<path id="project.classpath">
-			<fileset dir="${lib.build-client.dir}">
-				<patternset refid="jar.files" />
-			</fileset>
-			<fileset dir="${lib.jar.dir}">
-				<patternset refid="jar.files" />
-			</fileset>
-			<fileset dir="${basedir}/lib/client-us">
-				<patternset refid="jar.files" />
-			</fileset>
-			<fileset dir="${basedir}/lib/provided">
-				<patternset refid="jar.files" />
-			</fileset>
-		</path>
+		
 	</target>
 
 	<target name="clean">
