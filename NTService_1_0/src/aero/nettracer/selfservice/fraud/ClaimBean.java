@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.ejb.Stateless;
 
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -53,10 +54,9 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 @Stateless
 //@WebService
 public class ClaimBean implements ClaimRemote, ClaimHome {
-
+	private static final Logger logger = Logger.getLogger(ClaimBean.class);
 	private static Thread DATA_RETENTION_THREAD;
 	
-	public static boolean debug = true;
 
 	public ClaimBean(){
 		if(DATA_RETENTION_THREAD == null){
@@ -86,8 +86,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			if (toSubmit.getId() > 0) {
-				if (debug)
-					System.out.println("delete and save");
+				logger.debug("delete and save");
 				File toDelete = (File) sess.load(File.class, toSubmit.getId());
 
 				if (toDelete.getClaims() != null) {
@@ -126,8 +125,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				AuditUtil.saveActionAudit(AuditUtil.ACTION_UPDATE_FILE, file.getId(), file.getValidatingCompanycode());
 
 			} else {
-				if (debug)
-					System.out.println("saving:" + toSubmit.getId());
+				logger.debug("saving:" + toSubmit.getId());
 				sess.saveOrUpdate(toSubmit);
 				t.commit();
 				AuditUtil.saveActionAudit(AuditUtil.ACTION_CREATE_FILE, file.getId(), file.getValidatingCompanycode());
@@ -179,8 +177,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				file.setIncident(resetIncident(file.getIncident()));
 			}
 
-			if (debug)
-				System.out.println(file.toString());
+			logger.debug(file.toString());
 		}
 		return file;
 	}

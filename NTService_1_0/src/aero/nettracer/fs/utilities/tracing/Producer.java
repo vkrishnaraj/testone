@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -37,14 +38,14 @@ import aero.nettracer.selfservice.fraud.PrivacyPermissionsBean;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions.AccessLevelType;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
+import aero.nettracer.serviceprovider.wt_1_0.services.webservices.WorldTracerServiceImpl;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class Producer {
 
-	
+	private static final Logger logger = Logger.getLogger(Producer.class);
 	private static final String ACCESS_NOT_GRANTED = "*** Access not Granted ***";
-	private static boolean debug = true;
 	private static final int MAX_WAIT = 40;
 	public static final double MILE_SEARCH_RADIUS = 2;
 	private static final long WAIT_TIME = 250;
@@ -281,7 +282,6 @@ public class Producer {
                   "where 1=0 ";
 
 			for (FsAddress a: addresses) {
-				if(debug){System.out.println("hey john Producer1: " + a.getAddress1());}
 				// If it was geocoded, compare against other geocoded items.
 				if (a.getLattitude() != 0) {
 					// If the address has been geocoded we will calculate
@@ -305,28 +305,23 @@ public class Producer {
 					double x2 = a.getLongitude() + longRadius;
 
 					// If there is a latitude or longitude.
-					sql += "or (lattitude >= " + y1 + " and lattitude <= " + y2 + " and longitude >= " + x2+ " and longitude <= " + x1 + ") ";
+					sql += "or (lattitude >= " + y1 + " and lattitude <= " + y2 + " and longitude >= " + x1+ " and longitude <= " + x2 + ") ";
 
 					// Compare against non-geocoded items.
 					// Country / City
 					if (a.getCity() != null && a.getCity().trim().length() > 0 && a.getCountry() != null && a.getCountry().trim().length() > 0) {
-						if(debug){System.out.println("hey john Producer2: " + a.getAddress1());}
 						sql += "or (lattitude = 0 and longitude = 0 and ad.country = \'" + format(a.getCountry()) + "\' and ad.city = \'" + format(a.getCity()) + "\' ) ";
 					}
 				} else {
 					// This else is if the address wasn't geocoded.
 					if (a.getCity() != null && a.getCity().trim().length() > 0 && a.getCountry() != null && a.getCountry().trim().length() > 0) {
-						if(debug){System.out.println("hey john Producer3: " + a.getAddress1());}
 					sql += "or (ad.country = \'" + format(a.getCountry()) + "\' and ad.city = \'" + format(a.getCity()) + "\' ) ";
 					}
 				}
 			}		
 		}
 		
-		
-		
-		if(debug){System.out.println("hey john Producer Query: ");}
-		if(debug)System.out.println(sql);
+		logger.debug("Producer query: " + sql);
 		
 		SQLQuery pq = null;
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -387,12 +382,12 @@ public class Producer {
 				}
 				endtime = new Date();
 				if (maxDelay == -1) {
-					if(debug)System.out.println("  Complete Trace Elapsed Time: "  + (endtime.getTime() - starttime.getTime()));
+					logger.debug("  Complete Trace Elapsed Time: "  + (endtime.getTime() - starttime.getTime()));
 					file.setPersonCache(null);
 					file.setAddressCache(null);
 					file.setPhoneCache(null);
 				} else if (i >= MAX_WAIT) {
-					if(debug)System.out.println("***WARNING: Maximum Search Time Exceeded: " + (WAIT_TIME * MAX_WAIT) + "ms");
+					logger.debug("***WARNING: Maximum Search Time Exceeded: " + (WAIT_TIME * MAX_WAIT) + "ms");
 					isFinished = false;
 				}
 
@@ -418,7 +413,7 @@ public class Producer {
 				long timeElapsed = (nowTime.getTime() - starttime.getTime()) / 1000;
 				double percentRemaining = 100 - percComplete;
 				double secondsToComplete = (double) timeElapsed / percComplete * percentRemaining;
-				if(debug)System.out.println("Percent complete: " + (i / totalSize * 100) + " (" + i + "/" + totalSize
+				logger.debug("Percent complete: " + (i / totalSize * 100) + " (" + i + "/" + totalSize
 						+ ")  Minutes remaining: " + secondsToComplete / 60);
 
 				tr.setSecondsUntilReload((int)(secondsToComplete*1.1));
@@ -574,8 +569,8 @@ public class Producer {
 		q = sess.createQuery(personSql.toString());
 		q.setParameter("id", fileId);
 		List <MatchHistory>result = q.list();
-		if(debug)System.out.println(personSql);
-		if(debug)System.out.println("MatchResult for fileId: " + fileId);
+		logger.debug(personSql);
+		logger.debug("MatchResult for fileId: " + fileId);
 		sess.close();
 		LinkedHashSet<MatchHistory> ret = new LinkedHashSet<MatchHistory>();
 		List<String> klist = getKillSwitchCompanies();
@@ -605,9 +600,9 @@ public class Producer {
 			} 
 			if(add){
 				ret.add(match);
-				if(debug)System.out.println("Match: " + match.getId() + "  " + match.getOverallScore());
+				logger.debug("Match: " + match.getId() + "  " + match.getOverallScore());
 			}else{
-				if(debug)System.out.println("Match censored due to kill swith: " + match.getId());
+				logger.debug("Match censored due to kill swith: " + match.getId());
 			}
 		}
 		return ret;
@@ -766,7 +761,7 @@ public class Producer {
 			}
 			String c1=p1.getKey()!= null ? p1.getKey().getCompanycode():"NA";
 			String c2=p2.getKey()!= null ? p2.getKey().getCompanycode():"NA";
-			if(debug)System.out.println(c1+c2+":"+d.getContent1()+":"+d.getContent2());
+			logger.debug(c1+c2+":"+d.getContent1()+":"+d.getContent2());
 			
 		}
 	}
