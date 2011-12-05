@@ -46,7 +46,7 @@ public class Consumer implements Runnable{
 	private static final String EXACT_NICKNAME_MATCH = "Nickname Match (Exact)";
 	private static final String SOUNDEX_NICKNAME_MATCH = "Nickname Match (Soundex)";
 
-	public static boolean debug = false;
+	public static boolean debug = true;
 	
 	public static final int MATCH = 3;
 	public static final Integer integerZero = new Integer(0);
@@ -783,7 +783,9 @@ public class Consumer implements Runnable{
 
 
 	private static void generateStringCompareDetail(MatchHistory match, Set<MatchDetail> details, String str1, String str2, String description, double percent, double minimumScore, double multiplier, MatchType type, boolean isWhitelisted) {
-	  double score = StringCompare.compareStrings(str1, str2);
+	 
+	double score = StringCompare.compareStrings(str1, str2);
+	if(debug){System.out.println("hey john StringCompare address: " + str1 + ":" + str2 + ":" + score);} 
 	  if (score > minimumScore) {
 	  	MatchDetail detail = new MatchDetail();
 	  	detail.setContent1(str1);

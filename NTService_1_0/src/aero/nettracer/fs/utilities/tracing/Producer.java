@@ -44,7 +44,7 @@ public class Producer {
 
 	
 	private static final String ACCESS_NOT_GRANTED = "*** Access not Granted ***";
-	private static boolean debug = false;
+	private static boolean debug = true;
 	private static final int MAX_WAIT = 40;
 	public static final double MILE_SEARCH_RADIUS = 2;
 	private static final long WAIT_TIME = 250;
@@ -281,7 +281,7 @@ public class Producer {
                   "where 1=0 ";
 
 			for (FsAddress a: addresses) {
-				
+				if(debug){System.out.println("hey john Producer1: " + a.getAddress1());}
 				// If it was geocoded, compare against other geocoded items.
 				if (a.getLattitude() != 0) {
 					// If the address has been geocoded we will calculate
@@ -310,11 +310,13 @@ public class Producer {
 					// Compare against non-geocoded items.
 					// Country / City
 					if (a.getCity() != null && a.getCity().trim().length() > 0 && a.getCountry() != null && a.getCountry().trim().length() > 0) {
+						if(debug){System.out.println("hey john Producer2: " + a.getAddress1());}
 						sql += "or (lattitude = 0 and longitude = 0 and ad.country = \'" + format(a.getCountry()) + "\' and ad.city = \'" + format(a.getCity()) + "\' ) ";
 					}
 				} else {
 					// This else is if the address wasn't geocoded.
 					if (a.getCity() != null && a.getCity().trim().length() > 0 && a.getCountry() != null && a.getCountry().trim().length() > 0) {
+						if(debug){System.out.println("hey john Producer3: " + a.getAddress1());}
 					sql += "or (ad.country = \'" + format(a.getCountry()) + "\' and ad.city = \'" + format(a.getCity()) + "\' ) ";
 					}
 				}
@@ -323,7 +325,7 @@ public class Producer {
 		
 		
 		
-		
+		if(debug){System.out.println("hey john Producer Query: ");}
 		if(debug)System.out.println(sql);
 		
 		SQLQuery pq = null;
