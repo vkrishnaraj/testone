@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+
+	    <application xmlns="http://java.sun.com/xml/ns/javaee"
+	      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	      xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/application_5.xsd"
+	      version="5">
+
+ <display-name>TracerEAR</display-name>
+ <module>
+     <web>
+         <web-uri>avis_hudson.war</web-uri>
+         <context-root>avis</context-root>
+     </web>
+  </module>
+  
+   <module>
+     <web>
+         <web-uri>westjet_hudson.war</web-uri>
+         <context-root>westjet</context-root>
+     </web>
+  </module>
+  
+  
+   <module>
+     <web>
+         <web-uri>jetblue_hudson.war</web-uri>
+         <context-root>jetblue</context-root>
+     </web>
+  </module>
+  
+   <module>
+     <web>
+         <web-uri>spirit_hudson.war</web-uri>
+         <context-root>spirit</context-root>
+     </web>
+  </module>
+  
+  
+   <module>
+     <web>
+         <web-uri>azul_hudson.war</web-uri>
+         <context-root>azul</context-root>
+     </web>
+  </module>
+  
+  
+   <module>
+     <web>
+         <web-uri>delta_hudson.war</web-uri>
+         <context-root>delta</context-root>
+     </web>
+  </module>
+  
+  <!--
+     <module>
+     <web>
+         <web-uri>american_hudson.war</web-uri>
+         <context-root>american</context-root>
+     </web>
+  </module>
+  
+     <module>
+     <web>
+         <web-uri>continental_hudson.war</web-uri>
+         <context-root>continental</context-root>
+     </web>
+  </module>
+  -->
+</application> 

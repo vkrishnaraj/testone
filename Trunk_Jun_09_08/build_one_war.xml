@@ -503,6 +503,19 @@
 		<property name="app.xml.location" value="metadata/testing" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+
+	<target name="build-ear-hudson" depends="delete-wars">
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="hibernate_generate" />		
+		<antcall target="build-war-hudson-avis"/>
+		<antcall target="build-war-hudson-westjet"/>
+		<antcall target="build-war-hudson-jetblue"/>
+		<antcall target="build-war-hudson-spirit"/>
+		<antcall target="build-war-hudson-azul"/>
+		<antcall target="build-war-hudson-delta"/>
+		<property name="app.xml.location" value="metadata/hudson" />
+		<antcall target="donotrun-build-ear" />
+	</target>
 	
 	<target name="build-ear-testing-avis" depends="delete-wars">
 		<property name="avis.service.includes" value="*.war,lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />
@@ -663,6 +676,65 @@
 	</target>
 	
 	<!-- END TESTING WAR TARGETS -->
+	
+	<!-- HUDSON WAR TARGETS -->
+
+	<target name="build-war-hudson-avis" depends="delete">
+		<property name="ant_project_name" value="ab" />
+		<property name="ant_war_name" value="avis_hudson" />
+		<property name="ab.init.complete" value="true" />
+		<property name="environment.name" value="hudson" />
+		<antcall target="donotrun-build-ab" />
+	</target>
+		
+	<target name="build-war-hudson-westjet" depends="delete">
+		<property name="ant_project_name" value="westjet" />
+		<property name="ant_war_name" value="westjet_hudson" />
+		<property name="westjet.init.complete" value="true" />
+		<property name="environment.name" value="hudson" />
+		<antcall target="donotrun-build-westjet" />
+	</target>
+	
+	<target name="build-war-hudson-jetblue" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="ant_war_name" value="jetblue_hudson" />
+		<property name="jetblue.init.complete" value="true" />
+		<property name="environment.name" value="hudson"/>
+		<antcall target="donotrun-build-jetblue" />
+	</target>
+		
+	<target name="build-war-hudson-spirit" depends="delete">
+		<property name="ant_project_name" value="spirit" />
+		<property name="ant_war_name" value="spirit_hudson" />
+		<property name="environment.name" value="hudson"/>
+		<property name="spirit.init.complete" value="true" />
+		<antcall target="donotrun-build-spirit" />
+	</target>
+		
+	<target name="build-war-hudson-azul" depends="delete">
+		<property name="ant_project_name" value="azul" />
+		<property name="ant_war_name" value="azul_hudson" />
+		<property name="environment.name" value="hudson"/>
+		<property name="azul.init.complete" value="true" />
+		<antcall target="donotrun-build-azul" />
+	</target>
+	
+	<target name="build-war-hudson-delta" depends="delete">
+		<property name="ant_project_name" value="delta-fs" />
+		<property name="ant_war_name" value="delta_hudson" />
+		<property name="environment.name" value="hudson"/>
+		<property name="delta.init.complete" value="true" />
+		<antcall target="donotrun-build-delta" />
+	</target>
+
+	<target name="build-war-hudson-airtran" depends="delete">
+		<property name="ant_project_name" value="airtran" />
+		<property name="ant_war_name" value="airtran-hudson" />
+		<property name="environment.name" value="hudson" />
+		<antcall target="donotrun-build-airtran" />
+	</target>
+	
+	<!-- END HUDSON WAR TARGETS -->
 	
 	<!-- PRODUCTION WAR TARGETS -->
 	
