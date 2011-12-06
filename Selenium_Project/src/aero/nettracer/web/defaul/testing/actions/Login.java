@@ -14,7 +14,7 @@ public class Login extends DefaultSeleneseTestCase {
 		selenium.type("username", Settings.USERNAME);
 		selenium.type("password", Settings.PASSWORD);
 		selenium.click("button");
-		selenium.waitForPageToLoad("30000");
+		selenium.waitForPageToLoad("120000");
 	}
 	
 }
