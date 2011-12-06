@@ -26,7 +26,7 @@ public class SeleniumTestBrowserDefault extends Settings {
 
 	public synchronized static void stopBrowser() {
 		browser.stop();
-		if (ECLIPSE_RUNS_SERVER) {
+		if (SPAWN_NEW_SERVER) {
 			server.stop();
 		}
 	}
@@ -34,7 +34,7 @@ public class SeleniumTestBrowserDefault extends Settings {
 	public synchronized static void initBrowser() {
 
 		if (browser == null) {
-			if (ECLIPSE_RUNS_SERVER) {
+			if (SPAWN_NEW_SERVER) {
 				RemoteControlConfiguration config = new RemoteControlConfiguration();
 				config.setPort(6789);
 				try {
@@ -45,7 +45,7 @@ public class SeleniumTestBrowserDefault extends Settings {
 				}
 			}
 			browser = new DefaultSelenium("localhost", 6789, BROWSER_IEXPLORE,
-					APP_URL_LOCAL8080);
+					APP_URL_LOCAL);
 			browser.start();
 			browser.setSpeed(EXECUTION_SPEED_FAST);
 		}
