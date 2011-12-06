@@ -34,7 +34,7 @@
   			<fileset dir="${reportdir}" >
   				<include name="*.xml" />
   			</fileset>
-  			<report todir="${report}" />
+  			<report todir="${reportdir}" />
   		</junitreport>
   </target>
 
