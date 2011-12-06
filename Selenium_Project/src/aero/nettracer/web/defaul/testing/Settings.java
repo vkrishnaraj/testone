@@ -25,7 +25,7 @@ public class Settings {
 	public static final boolean SPAWN_NEW_SERVER = true;
 	
 	//URL ROOT FOR WEB APP BEING TESTED
-	public static final String APP_URL_LOCAL = "http://10.41.103.66:8180";
+	public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
 	
 	//DELAY IN MS BETWEEN ACTIONS
 	public static final String EXECUTION_SPEED_FAST = "2";
