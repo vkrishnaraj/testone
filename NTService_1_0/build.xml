@@ -306,6 +306,20 @@
 		<antcall target="build-central-donotrun" />
 	</target>
 	
+	<target name="build-central-ustest">
+		<property name="client.name" value="central" />
+		<property name="environment.name" value="ustest" />
+		<property name="ear.name" value="NTServices_1_0.ear" />
+		<antcall target="build-central-donotrun" />
+	</target>
+			
+	<target name="build-central-usprod">
+		<property name="client.name" value="central" />
+		<property name="environment.name" value="usprod" />
+		<property name="ear.name" value="NTServices_1_0.ear" />
+		<antcall target="build-central-donotrun" />
+	</target>			
+	
 	<target name="build-central-donotrun" id="build" description="Build WAR file">
 		<delete file="${build.dir}/myapp.zip" failonerror="false">
 		</delete>
