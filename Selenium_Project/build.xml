@@ -1,7 +1,6 @@
 <project default="test">
 	<property name="srcdir" location="src/aero/nettracer/web/defaul/testing" />
 	<property name="builddir" location="build" />
-	<property name="reportdir" location="reports" />
 
 	<mkdir dir="${builddir}"/>
 		
@@ -10,7 +9,6 @@
 	</patternset>
 	
 	<path id="classpath.test">
-		<pathelement location="${reportdir}" />
 		<pathelement location="${builddir}" />
 		<fileset dir="lib">
 			<patternset refid="jar.files" />
@@ -25,17 +23,11 @@
   	</target>
     	
   	<target name="test" depends="compile-test">
-    	<junit fork="yes" printsummary="no" haltonfailure="no" >
-  			<test name="aero.nettracer.web.defaul.testing.TestResetPassword" />
+    	<junit>
       		<classpath refid="classpath.test" />
-      		<formatter type="xml" />
+      		<formatter type="brief" usefile="false" />
+      		<test name="aero.nettracer.web.defaul.testing.TestResetPassword" />
     	</junit>
-  		<junitreport todir="${reportdir}" >
-  			<fileset dir="${reportdir}" >
-  				<include name="*.xml" />
-  			</fileset>
-  			<report todir="${reportdir}" />
-  		</junitreport>
   </target>
 
 </project>
