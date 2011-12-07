@@ -451,6 +451,7 @@
 				<include name="tracer.ear" />
 			</fileset>
 		</copy>
+		<copy todir="${staging.dir}/${VERSION}" file="${build.dir}/tracer.ear"/>
 	</target>
 
 	<!-- END EAR BUILD TARGETS -->
@@ -475,6 +476,7 @@
 	</target>
 	
 	<target name="build-ear-local-westjet" depends="delete-wars">
+		
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="build-war-local-westjet"/>
 		<property name="app.xml.location" value="metadata/westjet" />		
