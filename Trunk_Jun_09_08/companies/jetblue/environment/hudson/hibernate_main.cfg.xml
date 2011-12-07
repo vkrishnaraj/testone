@@ -11,6 +11,7 @@
     <session-factory>	
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
+		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/b6_training</property>
 		<property name="hibernate.connection.username">hudson</property>
 		<property name="hibernate.connection.password">nettracer</property>
