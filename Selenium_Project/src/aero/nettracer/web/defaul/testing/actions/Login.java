@@ -9,6 +9,7 @@ public class Login extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testLogin() throws Exception {
+		assertTrue(false);
 		selenium.open("westjet");
 		System.out.println("Logging In Using " + Settings.USERNAME + " " + Settings.PASSWORD);
 		selenium.type("username", Settings.USERNAME);
