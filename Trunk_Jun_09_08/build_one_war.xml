@@ -458,6 +458,37 @@
 	
 	<!-- END UTILITY TARGETS -->
 	
+	<target name="build-all">
+		<antcall target="build-testing"/>
+		<antcall target="build-training"/>
+		<antcall target="build-production"/>
+	</target>
+	
+	<target name="build-testing">
+		<antcall target="build-ear-testing"/>
+		<antcall target="build-ear-testing-avis"/>
+		<antcall target="build-ear-testing-avis-service"/>
+		<antcall target="build-ear-testing-airtran"/>
+		<antcall target="build-ear-testing-delta"/>
+		<antcall target="build-ear-testing-demo-and-jetblue"/>
+		<antcall target="build-cron-testing-all"/>
+	</target>
+	
+	<target name="build-training">
+		<antcall target="build-ear-training"/>
+		<antcall target="build-ear-training-avis"/>
+		<antcall target="build-ear-training-avis-service"/>
+		<antcall target="build-cron-training-all"/>
+	</target>
+	
+	<target name="build-production">
+		<antcall target="build-ear-production"/>
+		<antcall target="build-ear-production-avis"/>
+		<antcall target="build-ear-production-avis-service"/>
+		<antcall target="build-ear-production-airtran"/>
+		<antcall target="build-cron-production-all"/>
+	</target>
+	
 	<!-- ENVIRONMENT SPECIFIC EAR TARGETS -->
 	 
 	<target name="build-ear-local-avis" depends="delete-wars">
