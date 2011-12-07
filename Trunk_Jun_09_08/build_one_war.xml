@@ -1019,6 +1019,13 @@
 		<antcall target="build-cron-production-azul"/>
 		<antcall target="build-cron-production-spirit"/>
 	</target>
+	<target name="build-cron-hudson-all">
+		<antcall target="build-cron-hudson-avis"/>
+		<antcall target="build-cron-hudson-azul"/>
+		<antcall target="build-cron-hudson-jetblue"/>
+		<antcall target="build-cron-hudson-spirit"/>
+		<antcall target="build-cron-hudson-westjet"/>
+	</target>
 	
 	<!-- AVIS CRON TARGETS -->
 
@@ -1051,7 +1058,7 @@
 		<property name="jarprefix" value="abtrain-" />
 		<antcall target="cron-service" />
 	</target>
-			
+
 	<target name="build-cron-production-avis">
 		<property name="staging.project" value="cron" />
 		<property name="staging.env" value="production" />
@@ -1061,6 +1068,16 @@
 		<property name="jarprefix" value="abprod-" />
 		<antcall target="cron-service" />
 	</target>		
+
+	<target name="build-cron-hudson-avis">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="hudson" />
+		<property name="ant_project_name" value="ab" />
+		<property name="sub_path" value="hudson/" />
+		<property name="cron.job.config.file" value="companies/ab/environment/hudson/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="abhudson-" />
+		<antcall target="cron-service" />
+	</target>
 	
 	<!-- END AVIS CRON TARGETS -->
 	
@@ -1095,6 +1112,16 @@
 		<property name="cron.job.config.file" value="companies/westjet/environment/prod/jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
 	</target>
+
+	<target name="build-cron-hudson-westjet">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="hudson" />
+		<property name="ant_project_name" value="westjet" />
+		<property name="sub_path" value="hudson/" />
+		<property name="jarprefix" value="wshudson-" />
+		<property name="cron.job.config.file" value="companies/westjet/environment/hudson/jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
 	
 	<!-- END WESTJET CRON TARGETS -->
 	
@@ -1126,6 +1153,16 @@
 		<property name="ant_project_name" value="jetblue" />
 		<property name="sub_path" value="prod/" />
 		<property name="jarprefix" value="b6prod-" />
+		<property name="cron.job.config.file" value="companies/jetblue/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
+
+	<target name="build-cron-hudson-jetblue">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="hudson" />
+		<property name="ant_project_name" value="jetblue" />
+		<property name="sub_path" value="hudson/" />
+		<property name="jarprefix" value="b6hudson-" />
 		<property name="cron.job.config.file" value="companies/jetblue/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
 	</target>
@@ -1164,6 +1201,16 @@
 		<antcall target="cron-service" />
 	</target>
 	
+	<target name="build-cron-hudson-azul">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="hudson" />
+		<property name="ant_project_name" value="azul" />
+		<property name="sub_path" value="hudson/" />
+		<property name="jarprefix" value="adhudson-" />
+		<property name="cron.job.config.file" value="companies/azul/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
+	
 	<!-- END AZUL CRON TARGETS -->
 	
 	<!-- SPIRIT CRON TARGETS -->
@@ -1194,6 +1241,16 @@
 		<property name="ant_project_name" value="spirit" />
 		<property name="sub_path" value="prod/" />
 		<property name="jarprefix" value="nkprod-" />
+		<property name="cron.job.config.file" value="companies/spirit/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
+	
+	<target name="build-cron-hudson-spirit">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="hudson" />
+		<property name="ant_project_name" value="spirit" />
+		<property name="sub_path" value="hudson/" />
+		<property name="jarprefix" value="nkhudson-" />
 		<property name="cron.job.config.file" value="companies/spirit/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
 	</target>
