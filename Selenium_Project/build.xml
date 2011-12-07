@@ -17,13 +17,13 @@
 			
 
   	<target name="compile-test" >
-    	<javac srcdir="${srcdir}" destdir="${builddir}" >
+    	<javac srcdir="${srcdir}" destdir="${builddir}" includeantruntime="yes" >
       		<classpath refid="classpath.test"/>
     	</javac>
   	</target>
     	
   	<target name="test" depends="compile-test">
-    	<junit printsummary="yes" includeantruntime="yes" >
+    	<junit printsummary="yes" >
       		<classpath refid="classpath.test" />
       		<formatter type="xml" usefile="true" />
       		<test name="aero.nettracer.web.defaul.testing.TestResetPassword" />
