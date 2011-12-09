@@ -26,7 +26,7 @@
     	<junit printsummary="yes" >
       		<classpath refid="classpath.test" />
       		<formatter type="xml" usefile="true" />
-      		<test name="aero.nettracer.web.defaul.testing.TestResetPassword" />
+      		<test name="aero.nettracer.web.defaul.testing.TestEverything" />
     	</junit>
   </target>
 
