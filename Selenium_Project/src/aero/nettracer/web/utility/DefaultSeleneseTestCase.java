@@ -19,7 +19,7 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	public void checkCopyrightAndQuestionMarks() {
-		verifyTrue(selenium.isTextPresent("Copyright © NetTracer, Inc.\r\n2003-2011"));
+		verifyTrue(selenium.isTextPresent("NetTracer, Inc.\r\n2003-201"));
 		verifyFalse(selenium.isTextPresent("???"));
 	}
 
