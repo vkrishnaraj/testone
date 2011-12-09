@@ -34,11 +34,11 @@ public class Settings {
 	public static final String EXECUTION_SPEED_SLOW = "1000";
 	
 	//LOGIN CREDENTIALS
-	public static final String USERNAME_ADMIN = "ntadminauto";
+	public static final String USERNAME_ADMIN = "ntauto";
 	public static final String USERNAME_TEST = "nttestauto";
-	public static final String PASSWORD_ADMIN = "ntadmin@hudson1";
-	public static final String PASSWORD_TEST = "nttest@hudson1";
-	public static final String PASSWORD_CHANGE = "nttest@hudson2";
+	public static final String PASSWORD_ADMIN = "ntauto@hudson";
+	public static final String PASSWORD_TEST = "nttest@hudson";
+	public static final String PASSWORD_CHANGE = "nttest@hudson1";
 	
 	//START URLS
 	public static final String START_URL = "tracer/logoff.do";
