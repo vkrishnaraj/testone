@@ -2,7 +2,7 @@ package aero.nettracer.web.defaul.testing.actions;
 
 import org.junit.Test;
 
-import aero.nettracer.web.defaul.testing.DefaultSeleneseTestCase;
+import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 
 public class IntoFirstPAWOB extends DefaultSeleneseTestCase {
 	

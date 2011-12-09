@@ -2,8 +2,8 @@ package aero.nettracer.web.defaul.testing.actions;
 
 import org.junit.Test;
 
-import aero.nettracer.web.defaul.testing.DefaultSeleneseTestCase;
-import aero.nettracer.web.defaul.testing.Settings;
+import aero.nettracer.web.utility.DefaultSeleneseTestCase;
+import aero.nettracer.web.utility.Settings;
 
 public class CreateNewLD extends DefaultSeleneseTestCase {
 
@@ -12,9 +12,9 @@ public class CreateNewLD extends DefaultSeleneseTestCase {
 		selenium.click("menucol_1.1");
 		selenium.waitForPageToLoad("30000");
 		selenium.type("recordlocator", "D6KUDT");
-		selenium.click("skip_prepopulate");
-		selenium.waitForPageToLoad("30000");
-		selenium.type("recordlocator", "ATEST1");
+		//selenium.click("skip_prepopulate");
+		//selenium.waitForPageToLoad("30000");
+		//selenium.type("recordlocator", "ATEST1");
 		selenium.type("passenger[0].lastname", "Test");
 		selenium.type("passenger[0].firstname", "Test");
 		selenium.type("addresses[0].address1", "123 Test St");

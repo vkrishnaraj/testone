@@ -7,10 +7,12 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import aero.nettracer.web.defaul.testing.actions.CreateNewLD;
-import aero.nettracer.web.defaul.testing.actions.Login;
+import aero.nettracer.web.defaul.testing.actions.Def_Login;
+import aero.nettracer.web.defaul.testing.actions.SearchSpecificPAWOB;
+import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
 
 @RunWith(Suite.class)
-@SuiteClasses({Login.class, CreateNewLD.class})
+@SuiteClasses({Def_Login.class, CreateNewLD.class, SearchSpecificPAWOB.class})
 public class TestCreateNewIncident {
 
 	@BeforeClass

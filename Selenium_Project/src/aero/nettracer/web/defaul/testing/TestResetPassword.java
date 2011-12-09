@@ -7,12 +7,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import aero.nettracer.web.defaul.testing.actions.Logout;
+import aero.nettracer.web.defaul.testing.actions.Def_Login;
 import aero.nettracer.web.defaul.testing.actions.PasswordReset4nttest;
-import aero.nettracer.web.defaul.testing.actions.Login;
+import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
 
 @RunWith(Suite.class)
-@SuiteClasses({Login.class, PasswordReset4nttest.class /* Add more test cases here */})
+@SuiteClasses({Def_Login.class, PasswordReset4nttest.class /* Add more test cases here */})
 public class TestResetPassword { 
 	
 	@BeforeClass

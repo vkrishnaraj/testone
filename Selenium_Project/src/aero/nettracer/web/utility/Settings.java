@@ -1,4 +1,4 @@
-package aero.nettracer.web.defaul.testing;
+package aero.nettracer.web.utility;
 
 public class Settings {
 	
@@ -21,8 +21,9 @@ public class Settings {
 	public static final String BROWSER_OPERA = "*opera";
 	public static final String BROWSER_IEHTA = "*iehta";
 	public static final String BROWSER_CUSTOM = "*custom";
+	public static final String BROWSER_FIREFOXCUSTOM = "*firefox C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
 	
-	public static final boolean SPAWN_NEW_SERVER = true;
+	public static final boolean ECLIPSE_RUNS_SERVER = true;
 	
 	//URL ROOT FOR WEB APP BEING TESTED
 	public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
@@ -33,8 +34,18 @@ public class Settings {
 	public static final String EXECUTION_SPEED_SLOW = "1000";
 	
 	//LOGIN CREDENTIALS
-	public static final String USERNAME = "ntadmin";
-	public static final String PASSWORD = "Ladendead51!";
+	public static final String USERNAME_ADMIN = "ntadminauto";
+	public static final String USERNAME_TEST = "nttestauto";
+	public static final String PASSWORD_ADMIN = "ntadmin@hudson1";
+	public static final String PASSWORD_TEST = "nttest@hudson1";
+	public static final String PASSWORD_CHANGE = "nttest@hudson2";
+	
+	//START URLS
+	public static final String START_URL = "/tracer/logoff.do";
+	public static final String START_URL_B6 = "/jetblue/logoff.do";
+	public static final String START_URL_WS = "/westjet/logoff.do";
+	public static final String START_URL_AD = "/azul/logoff.do";
+	public static final String START_URL_NK = "/spirit/logoff.do";
 	
 	//VARIABLE SETTINGS / GLOBALS
 	public static String PAWOB = "";
@@ -43,5 +54,6 @@ public class Settings {
 	public static int SEARCH_DAM = 2;
 	public static int SEARCH_PILF = 3;
 	public static int SEARCH_CURRENT = SEARCH_ALL;
+	public static boolean LOGGED_IN = false;
 	
 }
