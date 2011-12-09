@@ -36,9 +36,9 @@ public class Settings {
 	//LOGIN CREDENTIALS
 	public static final String USERNAME_ADMIN = "ntauto";
 	public static final String USERNAME_TEST = "nttestauto";
-	public static final String PASSWORD_ADMIN = "ntauto@hudson";
-	public static final String PASSWORD_TEST = "nttest@hudson";
-	public static final String PASSWORD_CHANGE = "nttest@hudson1";
+	public static final String PASSWORD_ADMIN = "ntauto@Hud1";
+	public static final String PASSWORD_TEST = "nttest@Hud1";
+	public static final String PASSWORD_CHANGE = "nttest@Hud2";
 	
 	//START URLS
 	public static final String START_URL = "tracer/logoff.do";
