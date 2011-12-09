@@ -37,7 +37,7 @@
 		<fileset dir="${root.dir}\\lib">
 			<patternset refid="jar.files" />
 		</fileset>
-		<fileset dir="c:\\jboss-5.1.0.GA\\client">
+		<fileset dir="${client.dir}">
 			<patternset refid="jar.files" />
 		</fileset>
 
@@ -124,7 +124,7 @@
 			<classpath>
 				<path refid="project.classpath" />
 				<path location="${classes.dir}" />
-				<path location="${slf4j.dir}\slf4j-api.jar" />
+				<path location="${client.dir}\slf4j-api.jar" />
 			</classpath>
 			<annotationconfiguration configurationfile="${classes.dir}/hibernate_main.cfg.xml" />
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="central-svc-ddl.sql" delimiter=";" format="true" />
