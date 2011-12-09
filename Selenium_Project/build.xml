@@ -1,5 +1,5 @@
 <project default="test">
-	<property name="srcdir" location="src/aero/nettracer/web/defaul/testing" />
+	<property name="srcdir" location="src" />
 	<property name="builddir" location="build" />
 
 	<mkdir dir="${builddir}"/>
