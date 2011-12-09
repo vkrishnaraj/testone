@@ -11,7 +11,6 @@ public class NK_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 	@Test
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
-		checkCopyrightAndQuestionMarks();
 
 		verifyTrue(selenium.isTextPresent("Incident Tasks")); //SECTION HEADER
 		verifyTrue(selenium.isTextPresent("Trace Results"));
@@ -42,6 +41,7 @@ public class NK_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Interim Expense Requests"));
 		verifyTrue(selenium.isTextPresent("Bag Buzz"));
 		verifyTrue(selenium.isTextPresent("Manage Fault Dispute"));
+		checkCopyrightAndQuestionMarks();
 	}
 	
 }

@@ -11,7 +11,6 @@ public class AD_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 	@Test
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
-		checkCopyrightAndQuestionMarks();
 
 		verifyTrue(selenium.isTextPresent("Incident Tasks")); //SECTION HEADER
 		verifyTrue(selenium.isTextPresent("Trace Results"));
@@ -34,6 +33,7 @@ public class AD_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Other Tasks")); //SECTION HEADER
 		verifyTrue(selenium.isTextPresent("Inbox"));
 		verifyTrue(selenium.isTextPresent("Other Tasks"));
+		checkCopyrightAndQuestionMarks();
 	}
 	
 }

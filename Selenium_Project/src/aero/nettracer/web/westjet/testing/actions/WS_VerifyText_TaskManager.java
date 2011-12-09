@@ -11,7 +11,6 @@ public class WS_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 	@Test
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
-		checkCopyrightAndQuestionMarks();
 
 		verifyTrue(selenium.isTextPresent("PIR/DPR Tasks")); //SECTION HEADER
 		verifyTrue(selenium.isTextPresent("Trace Results"));
@@ -45,6 +44,7 @@ public class WS_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Local Guest Messages"));
 		verifyTrue(selenium.isTextPresent("Bag Buzz"));
 		verifyTrue(selenium.isTextPresent("Manage Fault Dispute"));
+		checkCopyrightAndQuestionMarks();
 	}
 	
 }

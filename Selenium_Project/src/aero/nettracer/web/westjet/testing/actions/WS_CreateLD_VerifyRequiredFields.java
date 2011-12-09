@@ -13,7 +13,6 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		goToTaskManager();
 		selenium.click("//a[contains(@href, 'lostDelay.do')]");
 		selenium.waitForPageToLoad("30000");
-		checkCopyrightAndQuestionMarks();
 		selenium.click("//input[@id='button' and @value='Submit For Tracing']");
 		assertEquals("Last Name is required.", selenium.getAlert());
 		selenium.type("name=passenger[0].lastname", "Test");
@@ -65,6 +64,7 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		selenium.click("//input[@id='button' and @value='Submit For Tracing']");
 		assertEquals("Phone is required.", selenium.getAlert());
 		selenium.type("name=addresses[0].mobile", "(555) 555-4444");
+		checkCopyrightAndQuestionMarks();
 		selenium.click("//input[@id='button' and @value='Submit For Tracing']");
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent("Delayed PIR has been submitted."));
