@@ -22,6 +22,7 @@ import aero.nettracer.web.spirit.testing.actions.NK_LoginFailure;
 import aero.nettracer.web.spirit.testing.actions.NK_LoginTest;
 import aero.nettracer.web.spirit.testing.actions.NK_VerifyText_TaskManager;
 import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
+import aero.nettracer.web.westjet.testing.actions.WS_CreateLD_VerifyRequiredFields;
 import aero.nettracer.web.westjet.testing.actions.WS_Login;
 import aero.nettracer.web.westjet.testing.actions.WS_LoginFailure;
 import aero.nettracer.web.westjet.testing.actions.WS_LoginTest;
@@ -36,7 +37,8 @@ import aero.nettracer.web.westjet.testing.actions.WS_VerifyText_TaskManager;
 	NK_Login.class, Def_Logout.class, NK_LoginFailure.class, NK_LoginTest.class, 
 	Def_PasswordResetNTTest.class, Def_Logout.class, NK_Login.class, NK_VerifyText_TaskManager.class,
 	WS_Login.class, Def_Logout.class, WS_LoginFailure.class, WS_LoginTest.class, 
-	Def_PasswordResetNTTest.class, Def_Logout.class, WS_Login.class, WS_VerifyText_TaskManager.class
+	Def_PasswordResetNTTest.class, Def_Logout.class, WS_Login.class, WS_VerifyText_TaskManager.class,
+	WS_CreateLD_VerifyRequiredFields.class
 	})
 public class TestEverything { 
 	
