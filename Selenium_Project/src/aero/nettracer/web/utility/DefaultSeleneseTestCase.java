@@ -21,7 +21,7 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	public void checkCopyrightAndQuestionMarks() {
 		verifyTrue(selenium.isTextPresent("NetTracer, Inc."));
 		verifyTrue(selenium.isTextPresent("2003-201"));
-		verifyFalse(selenium.isTextPresent("?{3}"));
+		verifyFalse(selenium.isTextPresent("\\?\\?\\?"));
 	}
 
 }
