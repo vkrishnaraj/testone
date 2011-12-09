@@ -131,14 +131,30 @@
 		</hibernatetool>
 	</target>
 
-	
-	<target name="build-fs-internal-local">
-		<property name="client.name" value="internal" />
-		<property name="environment.name" value="local" />
-		<property name="ear.name" value="ntfs_internal_local.ear" />
-		<antcall target="build-fs-donotrun" />
+<!--	BUILD ALL TARGETS -->
+	<target name="build-all">
+		<antcall target="build-testing"></antcall>
+		<antcall target="build-traing"></antcall>
+		<antcall target="build-production"></antcall>
 	</target>
 	
+	<target name="build-testing">
+		<antcall target="build-fs-all-test"></antcall>
+		<antcall target="build-central-all-test"></antcall>
+	</target>
+	
+	<target name="build-traing">
+		<antcall target="build-fs-all-train"></antcall>
+		<antcall target="build-central-all-train"></antcall>
+	</target>
+		
+	<target name="build-production">
+		<antcall target="build-fs-all-prod"></antcall>
+		<antcall target="build-central-all-prod"></antcall>
+	</target>
+	
+	
+	<!--	BUILD NTFS TARGETS -->
 	<target name="build-fs-all-test">
 		<antcall target="build-fs-internal-test"></antcall>
 		<antcall target="build-fs-private-ssl-test"></antcall>
@@ -157,7 +173,18 @@
 		<antcall target="build-fs-public-ssl-prod"></antcall>
 	</target>
 	
+	<target name="build-fs-internal-local">
+		<property name="staging.project" value="fsservice" />
+		<property name="staging.env" value="local" />
+		<property name="client.name" value="internal" />
+		<property name="environment.name" value="local" />
+		<property name="ear.name" value="ntfs_internal_local.ear" />
+		<antcall target="build-fs-donotrun" />
+	</target>
+	
 	<target name="build-fs-internal-test">
+		<property name="staging.project" value="fsservice" />
+		<property name="staging.env" value="testing" />
 		<property name="client.name" value="internal" />
 		<property name="environment.name" value="test" />
 		<property name="ear.name" value="ntfs_internal_test.ear" />
@@ -165,6 +192,8 @@
 	</target>
 	
 	<target name="build-fs-internal-train">
+		<property name="staging.project" value="fsservice" />
+		<property name="staging.env" value="training" />
 		<property name="client.name" value="internal" />
 		<property name="environment.name" value="train" />
 		<property name="ear.name" value="ntfs_internal_train.ear" />
@@ -172,6 +201,8 @@
 	</target>
 	
 	<target name="build-fs-internal-prod">
+		<property name="staging.project" value="fsservice" />
+		<property name="staging.env" value="production" />
 		<property name="client.name" value="internal" />
 		<property name="environment.name" value="prod" />
 		<property name="ear.name" value="ntfs_internal_prod.ear" />
@@ -179,6 +210,8 @@
 	</target>
 	
 	<target name="build-fs-private-ssl-test">
+		<property name="staging.project" value="fsservice" />
+		<property name="staging.env" value="testing" />
 		<property name="client.name" value="private-ssl" />
 		<property name="environment.name" value="test" />
 		<property name="ear.name" value="ntfs_private_ssl_test.ear" />
@@ -186,6 +219,8 @@
 	</target>
 	
 	<target name="build-fs-private-ssl-train">
+		<property name="staging.project" value="fsservice" />
+		<property name="staging.env" value="training" />
 		<property name="client.name" value="private-ssl" />
 		<property name="environment.name" value="train" />
 		<property name="ear.name" value="ntfs_private_ssl_train.ear" />
@@ -193,6 +228,8 @@
 	</target>
 	
 	<target name="build-fs-private-ssl-prod">
+		<property name="staging.project" value="fsservice" />
+		<property name="staging.env" value="production" />
 		<property name="client.name" value="private-ssl" />
 		<property name="environment.name" value="prod" />
 		<property name="ear.name" value="ntfs_private_ssl_prod.ear" />
@@ -200,6 +237,8 @@
 	</target>
 	
 	<target name="build-fs-public-ssl-test">
+		<property name="staging.project" value="fsservice" />
+		<property name="staging.env" value="testing" />
 		<property name="client.name" value="public-ssl" />
 		<property name="environment.name" value="test" />
 		<property name="ear.name" value="ntfs_public_ssl_test.ear" />
@@ -207,6 +246,8 @@
 	</target>
 	
 	<target name="build-fs-public-ssl-train">
+		<property name="staging.project" value="fsservice" />
+		<property name="staging.env" value="training" />
 		<property name="client.name" value="public-ssl" />
 		<property name="environment.name" value="train" />
 		<property name="ear.name" value="ntfs_public_ssl_train.ear" />
@@ -214,6 +255,8 @@
 	</target>
 	
 	<target name="build-fs-public-ssl-prod">
+		<property name="staging.project" value="fsservice" />
+		<property name="staging.env" value="production" />
 		<property name="client.name" value="public-ssl" />
 		<property name="environment.name" value="prod" />
 		<property name="ear.name" value="ntfs_public_ssl_prod.ear" />
@@ -257,8 +300,8 @@
 			<fileset dir="${dist.dir}" includes="*.jar" />
 		</ear>
 		
-		<mkdir dir="${staging.dir}/${VERSION}"/>
-		<copy todir="${staging.dir}/${VERSION}" verbose="true">
+		<mkdir dir="${staging.dir}/${staging.env}/${staging.project}"/>
+		<copy todir="${staging.dir}/${staging.env}/${staging.project}" verbose="true">
 			<fileset file="${dist.dir}/${ear.name}">
 			</fileset>
 		</copy>
@@ -278,7 +321,25 @@
 		-->
 	</target>
 	
+	<!--	BUILD CENTRAL TARGETS -->
+	
+	<target name="build-central-all-test">
+		<antcall target="build-central-test"></antcall>
+		<antcall target="build-central-ustest"></antcall>
+	</target>
+	
+	<target name="build-central-all-train">
+		<antcall target="build-central-train"></antcall>
+	</target>
+	
+	<target name="build-central-all-prod">
+		<antcall target="build-central-prod"></antcall>
+		<antcall target="build-central-usprod"></antcall>
+	</target>
+	
 	<target name="build-central-local">
+		<property name="staging.project" value="hosted-central" />
+		<property name="staging.env" value="local" />
 		<property name="client.name" value="central" />
 		<property name="environment.name" value="local" />
 		<property name="ear.name" value="NTServices_1_0.ear" />
@@ -286,6 +347,8 @@
 	</target>
 	
 	<target name="build-central-test">
+		<property name="staging.project" value="hosted-central" />
+		<property name="staging.env" value="testing" />
 		<property name="client.name" value="central" />
 		<property name="environment.name" value="test" />
 		<property name="ear.name" value="NTServices_1_0.ear" />
@@ -293,6 +356,8 @@
 	</target>
 	
 	<target name="build-central-train">
+		<property name="staging.project" value="hosted-central" />
+		<property name="staging.env" value="training" />
 		<property name="client.name" value="central" />
 		<property name="environment.name" value="train" />
 		<property name="ear.name" value="NTServices_1_0.ear" />
@@ -300,6 +365,8 @@
 	</target>
 	
 	<target name="build-central-prod">
+		<property name="staging.project" value="hosted-central" />
+		<property name="staging.env" value="production" />
 		<property name="client.name" value="central" />
 		<property name="environment.name" value="prod" />
 		<property name="ear.name" value="NTServices_1_0.ear" />
@@ -307,6 +374,8 @@
 	</target>
 	
 	<target name="build-central-ustest">
+		<property name="staging.project" value="us-central" />
+		<property name="staging.env" value="testing" />
 		<property name="client.name" value="central" />
 		<property name="environment.name" value="ustest" />
 		<property name="ear.name" value="NTServices_1_0.ear" />
@@ -314,6 +383,8 @@
 	</target>
 			
 	<target name="build-central-usprod">
+		<property name="staging.project" value="us-central" />
+		<property name="staging.env" value="production" />
 		<property name="client.name" value="central" />
 		<property name="environment.name" value="usprod" />
 		<property name="ear.name" value="NTServices_1_0.ear" />
@@ -392,8 +463,8 @@
 			<fileset dir="${dist.dir}" includes="*.jar,*.war" />
 		</ear>
 		
-		<mkdir dir="${staging.dir}/${VERSION}"/>
-		<copy todir="${staging.dir}/${VERSION}" verbose="true">
+		<mkdir dir="${staging.dir}/${staging.env}/${staging.project}"/>
+		<copy todir="${staging.dir}/${staging.env}/${staging.project}" verbose="true">
 			<fileset file="${dist.dir}/${ear.name}">
 			</fileset>
 		</copy>
