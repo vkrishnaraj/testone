@@ -39,6 +39,8 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 
 	private static final String NEWLINE_INDICATOR = "*";
 	private static Logger logger = Logger.getLogger(ClientEventHandlerImpl.class);
+	private static final String PROPERTY_SEND_BEORN_TELEX = "beorn.telex.enabled";
+	private static final String PROPERTY_SEND_PCN_TELEX = "pcn.telex.enabled";
 	
 	@Override
 	public void doEventOnForward(ForwardOhd fw) {
@@ -89,6 +91,10 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 		ArrayList<OHD_Log> logs = new ArrayList<OHD_Log>();
 		logs.add(dto.getLog());
 		doEventOnForward(logs);
+		
+		if (!PropertyBMO.isTrue(PROPERTY_SEND_BEORN_TELEX)) {
+			return;
+		}
 		
 		if (stringExists(dto.getSpecialInstructions())) {
 			StringBuffer str = new StringBuffer(256);
@@ -402,7 +408,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 
 	@Override
 	public void printPcn(String address, ProactiveNotification pcn) {
-		if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_PCN_ENABLED)) {
+		if (PropertyBMO.isTrue(PROPERTY_SEND_PCN_TELEX)) {
 			logger.info("Attemptign to print PCN: " + pcn.getPcn_id());
 			SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
 			
