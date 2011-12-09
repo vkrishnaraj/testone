@@ -18,7 +18,7 @@ public class NK_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Incoming Incidents"));
 		verifyTrue(selenium.isTextPresent("Delayed Incidents"));
 		verifyTrue(selenium.isTextPresent("Pilferage Incidents"));
-		verifyTrue(selenium.isTextPresent("Damage Incidents"));
+		verifyTrue(selenium.isTextPresent("Damaged Incidents"));
 		verifyTrue(selenium.isTextPresent("Incidents Assigned in Last 24 Hours"));
 		verifyTrue(selenium.isTextPresent("Created Requests"));
 		verifyTrue(selenium.isTextPresent("Temporary Incident(s)"));
@@ -28,12 +28,12 @@ public class NK_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Inbound Bags"));
 		verifyTrue(selenium.isTextPresent("Incoming Requests"));
 		verifyTrue(selenium.isTextPresent("Bags To Be Delivered"));
-		verifyTrue(selenium.isTextPresent("Temporary On-Hand(s)"));
+		verifyTrue(selenium.isTextPresent("Temporary On-hand(s)"));
 		verifyTrue(selenium.isTextPresent("Mass On-hand(s)"));
 		verifyTrue(selenium.isTextPresent("On-hand Bags"));
 
 		verifyTrue(selenium.isTextPresent("Claim Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Claims to Be Processed"));
+		verifyTrue(selenium.isTextPresent("Claims To Be Processed"));
 		verifyTrue(selenium.isTextPresent("Created Interim Expense Requests"));
 
 		verifyTrue(selenium.isTextPresent("Other Tasks")); //SECTION HEADER

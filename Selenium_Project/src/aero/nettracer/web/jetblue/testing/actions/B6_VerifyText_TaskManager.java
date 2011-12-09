@@ -33,7 +33,7 @@ public class B6_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("On-hand Bags"));
 
 		verifyTrue(selenium.isTextPresent("Claim Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Claims to Be Processed"));
+		verifyTrue(selenium.isTextPresent("Claims To Be Processed"));
 		verifyTrue(selenium.isTextPresent("Expense Requests"));
 		verifyTrue(selenium.isTextPresent("Created Expense Requests"));
 		verifyTrue(selenium.isTextPresent("Approved Payments"));

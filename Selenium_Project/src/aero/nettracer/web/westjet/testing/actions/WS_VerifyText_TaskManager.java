@@ -29,18 +29,19 @@ public class WS_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Incoming ROH"));
 		verifyTrue(selenium.isTextPresent("Baggage To Be Delivered"));
 		verifyTrue(selenium.isTextPresent("Temporary OHD(s)"));
-		verifyTrue(selenium.isTextPresent("Local OHD(s)"));
+		verifyTrue(selenium.isTextPresent("Mass OHD(s)"));
+		verifyTrue(selenium.isTextPresent("Local OHDs"));
 		verifyTrue(selenium.isTextPresent("Forward Copies"));
 
 		verifyTrue(selenium.isTextPresent("Claim Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Claims to Be Processed"));
+		verifyTrue(selenium.isTextPresent("Claims To Be Processed"));
 		verifyTrue(selenium.isTextPresent("Created Interim Expense Requests"));
+		verifyTrue(selenium.isTextPresent("Expense Requests"));
 		verifyTrue(selenium.isTextPresent("Approved Payments"));
 
-		verifyTrue(selenium.isTextPresent("Other Tasks")); //SECTION HEADER
+		verifyTrue(selenium.isTextPresent("Local Tasks")); //SECTION HEADER
 		verifyTrue(selenium.isTextPresent("Inbox"));
 		verifyTrue(selenium.isTextPresent("Local Tasks"));
-		verifyTrue(selenium.isTextPresent("Expense Requests"));
 		verifyTrue(selenium.isTextPresent("Local Guest Messages"));
 		verifyTrue(selenium.isTextPresent("Bag Buzz"));
 		verifyTrue(selenium.isTextPresent("Manage Fault Dispute"));
