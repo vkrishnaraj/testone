@@ -124,7 +124,7 @@
 			<classpath>
 				<path refid="project.classpath" />
 				<path location="${classes.dir}" />
-				<path location="c:\jboss-5.1.0.GA\client\slf4j-api.jar" />
+				<path location="${slf4j.dir}\slf4j-api.jar" />
 			</classpath>
 			<annotationconfiguration configurationfile="${classes.dir}/hibernate_main.cfg.xml" />
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="central-svc-ddl.sql" delimiter=";" format="true" />
