@@ -11,7 +11,7 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	@Test
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
-		selenium.click("//a[contains(@href, 'lostDelay.do')]");
+		selenium.click("menucol_1.1");
 		selenium.waitForPageToLoad("30000");
 		Thread.sleep(500);
 		selenium.click("//td/table/tbody/tr/td/input[3]");
