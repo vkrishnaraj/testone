@@ -52,7 +52,7 @@ public class Settings {
 	public static final String START_URL_NK = "spirit/logoff.do";
 	
 	//VARIABLE SETTINGS / GLOBALS
-	public static String PAWOB = "";
+	public static String INCIDENT_ID = "";
 	public static int SEARCH_ALL = 0;
 	public static int SEARCH_LD = 1;
 	public static int SEARCH_DAM = 2;

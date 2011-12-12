@@ -23,5 +23,9 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("2003-201"));
 		verifyFalse(selenium.isTextPresent("\\?\\?\\?"));
 	}
+	
+	public boolean checkNoErrorPage() {
+		return !selenium.isTextPresent("There is an error with your request.");
+	}
 
 }

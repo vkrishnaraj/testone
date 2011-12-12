@@ -56,8 +56,8 @@ public class CreateNewLD extends DefaultSeleneseTestCase {
 		selenium.click("savetracingButton");
 		selenium.waitForPageToLoad("180000");
 		String pawob = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-		Settings.PAWOB = pawob;
-		System.out.println("PAWOB # Set: " + Settings.PAWOB);
+		Settings.INCIDENT_ID = pawob;
+		System.out.println("PAWOB # Set: " + Settings.INCIDENT_ID);
 		
 	}
 }

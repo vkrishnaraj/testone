@@ -15,8 +15,8 @@ public class SearchSpecificPAWOB extends DefaultSeleneseTestCase {
 		selenium.click("menucol_1.5");
 		selenium.waitForPageToLoad("30000");
 		selenium.select("itemType_ID", "label=All");
-		System.out.println("PAWOB = " + Settings.PAWOB);
-		selenium.type("incident_ID", Settings.PAWOB);
+		System.out.println("PAWOB = " + Settings.INCIDENT_ID);
+		selenium.type("incident_ID", Settings.INCIDENT_ID);
 		selenium.click("button");
 		selenium.waitForPageToLoad("30000");
 	}
