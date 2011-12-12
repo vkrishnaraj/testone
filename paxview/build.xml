@@ -243,7 +243,7 @@
 		<property name="staging.env" value="hudson" />
 		<antcall target="build-hudson" />
 		<antcall target="ear" /> 
-		<copy todir="${staging.dir}/${staging.env}" file="${build.dir}/paxview.ear"/>
+		<copy todir="${staging.dir}" file="${build.dir}/paxview.ear"/>
 	</target>
 			
 	
