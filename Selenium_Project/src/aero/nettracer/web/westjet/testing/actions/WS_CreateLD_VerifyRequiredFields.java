@@ -13,13 +13,14 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		goToTaskManager();
 		selenium.click("//a[contains(@href, 'lostDelay.do')]");
 		selenium.waitForPageToLoad("30000");
-		selenium.click("//input[@id='button' and @value='Submit For Tracing']");
+		Thread.sleep(500);
+		selenium.click("//td/table/tbody/tr/td/input[3]");
 		assertEquals("Last Name is required.", selenium.getAlert());
 		selenium.type("name=passenger[0].lastname", "Test");
-		selenium.click("//input[@id='button' and @value='Submit For Tracing']");
+		selenium.click("name=savetracingButton");
 		assertEquals("First Name is required.", selenium.getAlert());
 		selenium.type("name=passenger[0].firstname", "Test");
-		selenium.click("//input[@id='button' and @value='Submit For Tracing']");
+		selenium.click("savetracingButton");
 		assertEquals("Street Address is required.", selenium.getAlert());
 		selenium.type("name=addresses[0].address1", "123 Test");
 		selenium.click("//input[@id='button' and @value='Submit For Tracing']");
@@ -68,7 +69,7 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		selenium.click("//input[@id='button' and @value='Submit For Tracing']");
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent("Delayed PIR has been submitted."));
-		checkCopyrightAndQuestionMarks();
+		checkCopyrightAndQuestionMarks(); 
 		selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 		selenium.waitForPageToLoad("30000");
 	}
