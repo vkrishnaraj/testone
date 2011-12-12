@@ -23,10 +23,11 @@ public class Settings {
 	public static final String BROWSER_CUSTOM = "*custom";
 	public static final String BROWSER_FIREFOXCUSTOM = "*firefox C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
 	
-	public static final boolean ECLIPSE_RUNS_SERVER = true;
+	public static final boolean ECLIPSE_RUNS_SERVER = false;
 	
 	//URL ROOT FOR WEB APP BEING TESTED
 	public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
+	//public static final String APP_URL_LOCAL = "http://192.168.2.120:8380/";
 	
 	//DELAY IN MS BETWEEN ACTIONS
 	public static final String EXECUTION_SPEED_FAST = "2";
@@ -39,11 +40,14 @@ public class Settings {
 	public static final String PASSWORD_ADMIN = "IpoL!Jan7";
 	public static final String PASSWORD_TEST = "nttest@Hud1";
 	public static final String PASSWORD_CHANGE = "nttest@Hud2";
+	//public static final String USERNAME_ADMIN = "ntadmin";
+	//public static final String PASSWORD_ADMIN = "Ladendead51!";
 	
 	//START URLS
 	public static final String START_URL = "tracer/logoff.do";
 	public static final String START_URL_B6 = "jetblue/logoff.do";
 	public static final String START_URL_WS = "westjet/logoff.do";
+	//public static final String START_URL_WS = "wjtracer/";
 	public static final String START_URL_AD = "azul/logoff.do";
 	public static final String START_URL_NK = "spirit/logoff.do";
 	
