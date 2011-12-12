@@ -46,6 +46,9 @@
 	<property name="axis2.classpath" value="base.libraries" />
 	<property name="build.dir" value="${root.dir}\\bin" />
 
+	<mkdir dir="${build.classes.dir}" />
+	<mkdir dir="${dist.dir}" />
+	
 	<target name="services_recompile">
 		<antcall target="services_java2wsdl" />
 		<antcall target="services_wsdl2java" />
