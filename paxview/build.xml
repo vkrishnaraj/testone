@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <project name="paxview" default="build-tracer-alpha">
 
+	<property file="common.properties" />
 	<property name="src.dir" location="${basedir}/src" />
-	<property name="build.dir" location="${basedir}/build" />
+	<!--property name="build.dir" location="${basedir}/build" /-->
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="dist.dir" location="${basedir}/dist" />
 	<property name="webroot.dir" location="${basedir}/webroot" />
@@ -95,6 +96,14 @@
 		<antcall target="war" >
 		</antcall> 	
 	</target>
+
+	<target name="build-westjet-hudson">
+		<property name="company.name" value="westjet" />
+		<property name="environment.name" value="hudson" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
 	<target name="build-westjet-qa">
 		<property name="company.name" value="westjet" />
 		<property name="environment.name" value="qa" />
@@ -112,6 +121,13 @@
 	<target name="build-jetblue-qa">
 		<property name="company.name" value="jetblue" />
 		<property name="environment.name" value="qa" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+
+	<target name="build-jetblue-hudson">
+		<property name="company.name" value="jetblue" />
+		<property name="environment.name" value="hudson" />
 		<antcall target="war" >
 		</antcall> 	
 	</target>
@@ -150,6 +166,13 @@
 		<antcall target="war" >
 		</antcall> 	
 	</target>
+
+	<target name="build-azul-hudson">
+		<property name="company.name" value="azul" />
+		<property name="environment.name" value="hudson" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
 	
 	<target name="build-spirit-training">
 		<property name="company.name" value="spirit" />
@@ -171,12 +194,26 @@
 		<antcall target="war" >
 		</antcall> 	
 	</target>
+
+	<target name="build-spirit-hudson">
+		<property name="company.name" value="spirit" />
+		<property name="environment.name" value="hudson" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
 	
 	<target name="build-test">
 		<antcall target="build-azul-test" /> 	
 		<antcall target="build-jetblue-qa" /> 
 		<antcall target="build-spirit-test" /> 
 		<antcall target="build-westjet-test" /> 
+	</target>
+
+	<target name="build-hudson">
+		<antcall target="build-azul-hudson" /> 	
+		<antcall target="build-jetblue-hudson" /> 
+		<antcall target="build-spirit-hudson" /> 
+		<antcall target="build-westjet-hudson" /> 
 	</target>
 	
 	<target name="build-train">
@@ -198,6 +235,15 @@
 		<property name="ear.build" value="true" />
 		<antcall target="build-test" />
 		<antcall target="ear" /> 
+	</target>
+
+	<target name="build-ear-hudson">
+		<property name="app.xml.location" value="metadata/hudson" />
+		<property name="ear.build" value="true" />
+		<property name="staging.env" value="hudson" />
+		<antcall target="build-hudson" />
+		<antcall target="ear" /> 
+		<copy todir="${staging.dir}/${staging.env}" file="${build.dir}/paxview.ear"/>
 	</target>
 			
 	
