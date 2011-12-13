@@ -586,6 +586,16 @@
 		<property name="app.xml.location" value="metadata/ab/service" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+
+	<target name="build-ear-hudson-avis-service" depends="delete-wars">
+		<property name="staging.project" value="abservice" />
+		<property name="staging.env" value="hudson" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />
+		<antcall target="build-war-hudson-avis"/>
+		<antcall target="build-jar-avis-service"/>
+		<property name="app.xml.location" value="metadata/ab/service" />
+		<antcall target="donotrun-build-ear" />
+	</target>
 	
 	<target name="build-ear-testing-airtran" depends="delete-wars">
 		<property name="staging.project" value="fltracer" />
