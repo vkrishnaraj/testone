@@ -1,4 +1,4 @@
-package aero.nettracer.web.spirit.testing.actions;
+package aero.nettracer.web.spirit.testing.actions.nt.core;
 
 import org.junit.Test;
 

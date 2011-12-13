@@ -7,8 +7,8 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import aero.nettracer.web.defaul.testing.actions.Admin_overall;
-import aero.nettracer.web.defaul.testing.actions.Def_Login;
-import aero.nettracer.web.defaul.testing.actions.Def_Logout;
+import aero.nettracer.web.defaul.testing.actions.nt.core.Def_Login;
+import aero.nettracer.web.defaul.testing.actions.nt.core.Def_Logout;
 import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
 
 @RunWith(Suite.class)

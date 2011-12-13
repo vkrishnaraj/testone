@@ -1,4 +1,4 @@
-package aero.nettracer.web.westjet.testing.actions;
+package aero.nettracer.web.westjet.testing.actions.nt.taskman;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package aero.nettracer.web.defaul.testing.actions;
+package aero.nettracer.web.defaul.testing.actions.nt.core;
 
 import org.junit.Test;
 
