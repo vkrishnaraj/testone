@@ -26,6 +26,7 @@ import aero.nettracer.web.jetblue.testing.actions.nt.incidents.damage.B6_CloseDa
 import aero.nettracer.web.jetblue.testing.actions.nt.incidents.damage.B6_CreateDam_VerifyRequiredFields;
 import aero.nettracer.web.jetblue.testing.actions.nt.incidents.lostdelay.B6_CloseLD_VerifyRequiredFields;
 import aero.nettracer.web.jetblue.testing.actions.nt.incidents.lostdelay.B6_CreateLD_VerifyRequiredFields;
+import aero.nettracer.web.jetblue.testing.actions.nt.incidents.lostdelay.B6_EditLD_VerifyText;
 import aero.nettracer.web.jetblue.testing.actions.nt.incidents.pilferage.B6_ClosePilf_VerifyRequiredFields;
 import aero.nettracer.web.jetblue.testing.actions.nt.incidents.pilferage.B6_CreatePilf_VerifyRequiredFields;
 import aero.nettracer.web.jetblue.testing.actions.nt.taskman.B6_VerifyText_TaskManager;
@@ -62,7 +63,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 	B6_Login.class, Def_Logout.class, B6_LoginFailure.class, B6_LoginTest.class, 
 	Def_PasswordResetNTTest.class, Def_Logout.class, 
 	B6_Login.class, B6_VerifyText_TaskManager.class,
-	B6_CreateLD_VerifyRequiredFields.class, B6_CloseLD_VerifyRequiredFields.class,
+	B6_CreateLD_VerifyRequiredFields.class, B6_EditLD_VerifyText.class, B6_CloseLD_VerifyRequiredFields.class,
 	B6_CreateDam_VerifyRequiredFields.class, B6_CloseDam_VerifyRequiredFields.class,
 	B6_CreatePilf_VerifyRequiredFields.class, B6_ClosePilf_VerifyRequiredFields.class,
 	NK_Login.class, Def_Logout.class, NK_LoginFailure.class, NK_LoginTest.class, 
