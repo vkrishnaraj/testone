@@ -19,7 +19,7 @@ public class WS_CloseDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("name=doclose");
 				selenium.waitForPageToLoad("30000");
 				verifyTrue(selenium.isTextPresent("Please select a reason for loss"));
-				selenium.select("name=loss_code", "label=22- Bag received too late from check-in");
+				selenium.select("name=loss_code", "label=80- Damage");
 				selenium.click("name=doclose");
 				selenium.waitForPageToLoad("30000");
 				if (checkNoErrorPage()) {
