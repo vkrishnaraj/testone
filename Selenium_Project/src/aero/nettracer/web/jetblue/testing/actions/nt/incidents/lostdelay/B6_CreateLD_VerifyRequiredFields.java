@@ -19,6 +19,9 @@ public class B6_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=savetracingButton");
+				assertEquals("Record Locator is required.", selenium.getAlert());
+				selenium.type("name=recordlocator", "TESTER");
+				selenium.click("name=savetracingButton");
 				assertEquals("Last Name is required.", selenium.getAlert());
 				selenium.type("name=passenger[0].lastname", "Test");
 				selenium.click("name=savetracingButton");
@@ -33,6 +36,9 @@ public class B6_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("name=savetracingButton");
 				assertEquals("State/Province is required if country is set to 'United States'", selenium.getAlert());
 				selenium.select("name=addresses[0].state_ID", "label=Georgia");
+				selenium.click("name=savetracingButton");
+				assertEquals("Zip is required.", selenium.getAlert());
+				selenium.type("name=addresses[0].zip", "30152");
 				selenium.click("name=savetracingButton");
 				assertEquals("From/To is required.", selenium.getAlert());
 				selenium.type("name=theitinerary[0].legfrom", "LAX");
@@ -56,20 +62,14 @@ public class B6_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("id=calendar31");
 				selenium.click("link=Today");
 				selenium.click("name=savetracingButton");
+				assertEquals("Bag Tag Number is required.", selenium.getAlert());
+				selenium.type("name=claimcheck[0].claimchecknum", "B6123456");
+				selenium.click("name=savetracingButton");
 				assertEquals("Color is required.", selenium.getAlert());
 				selenium.select("name=theitem[0].color", "label=BK - Black");
 				selenium.click("name=savetracingButton");
 				assertEquals("Type is required.", selenium.getAlert());
 				selenium.select("name=theitem[0].bagtype", "label=22");
-				selenium.click("name=savetracingButton");
-				assertEquals("Record Locator is required.", selenium.getAlert());
-				selenium.type("name=recordlocator", "TESTER");
-				selenium.click("name=savetracingButton");
-				assertEquals("Zip is required.", selenium.getAlert());
-				selenium.type("name=addresses[0].zip", "30152");
-				selenium.click("name=savetracingButton");
-				assertEquals("Bag Tag Number is required.", selenium.getAlert());
-				selenium.type("name=claimcheck[0].claimchecknum", "B6123456");
 				selenium.click("name=savetracingButton");
 				selenium.waitForPageToLoad("30000");
 				if (checkNoErrorPage()) {

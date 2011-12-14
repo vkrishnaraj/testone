@@ -67,6 +67,10 @@ public class NK_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("name=savetracingButton");
 				assertEquals("Description is required.", selenium.getAlert());
 				selenium.type("name=inventorylist[0].description", "TEST");
+				selenium.type("name=inventorylist[1].description", "TEST");
+				selenium.type("name=inventorylist[2].description", "TEST");
+				selenium.select("name=inventorylist[1].categorytype_ID", "label=Art");
+				selenium.select("name=inventorylist[2].categorytype_ID", "label=Art");
 				selenium.click("name=savetracingButton");
 				assertEquals("Mobile Phone is required.", selenium.getAlert());
 				selenium.type("name=addresses[0].mobile", "(555) 555-4444");

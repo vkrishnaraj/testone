@@ -12,7 +12,7 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 		selenium.type("username", Settings.USERNAME_ADMIN);
 		selenium.type("password", Settings.PASSWORD_ADMIN);
 		selenium.click("button");
-		selenium.waitForPageToLoad("30000");
+		selenium.waitForPageToLoad("60000");
 		verifyTrue(selenium.isTextPresent("Task Manager Home"));
 	}
 	
@@ -21,7 +21,7 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 		selenium.type("username", Settings.USERNAME_TEST);
 		selenium.type("password", Settings.PASSWORD_TEST);
 		selenium.click("button");
-		selenium.waitForPageToLoad("30000");
+		selenium.waitForPageToLoad("60000");
 		verifyTrue(selenium.isTextPresent("Task Manager Home"));
 	}
 	
@@ -30,7 +30,7 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 		selenium.type("username", Settings.USERNAME_TEST);
 		selenium.type("password", Settings.PASSWORD_CHANGE);
 		selenium.click("button");
-		selenium.waitForPageToLoad("30000");
+		selenium.waitForPageToLoad("60000");
 		verifyTrue(selenium.isTextPresent("Invalid username and/or password, please try again"));
 	}
 

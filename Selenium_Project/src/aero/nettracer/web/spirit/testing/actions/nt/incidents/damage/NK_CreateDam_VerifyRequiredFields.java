@@ -67,6 +67,10 @@ public class NK_CreateDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("name=saveButton");
 				assertEquals("Description is required.", selenium.getAlert());
 				selenium.type("name=inventorylist[0].description", "Test");
+				selenium.type("name=inventorylist[1].description", "Test");
+				selenium.type("name=inventorylist[2].description", "Test");
+				selenium.select("name=inventorylist[1].categorytype_ID", "label=Art");
+				selenium.select("name=inventorylist[2].categorytype_ID", "label=Art");
 				selenium.click("name=saveButton");
 				assertEquals("Damage Description is required.", selenium.getAlert());
 				selenium.type("name=theitem[0].damage", "Test");
