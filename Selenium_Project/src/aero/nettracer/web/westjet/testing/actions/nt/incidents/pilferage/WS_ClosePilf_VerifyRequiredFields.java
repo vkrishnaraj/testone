@@ -11,32 +11,32 @@ public class WS_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("PIR Details"));
-			selenium.click("//td[@id='navmenucell']/div/dl/dd[12]/a/span[2]");
+			verifyTrue(selenium.isTextPresent("Pilferage Details"));
+			selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
 			selenium.waitForPageToLoad("30000");
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=doclose");
 				selenium.waitForPageToLoad("30000");
 				verifyTrue(selenium.isTextPresent("Please select a reason for loss"));
-				selenium.select("name=loss_code", "label=32- Off-loaded by error");
+				selenium.select("name=loss_code", "label=22- Bag received too late from check-in");
 				selenium.click("name=doclose");
 				selenium.waitForPageToLoad("30000");
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("Delayed PIR has been closed."));
+					verifyTrue(selenium.isTextPresent("Pilferage PIR has been closed."));
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					selenium.waitForPageToLoad("30000");
 				} else {
-					System.out.println("!!!!!!!!!!!!!!! - Close Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+					System.out.println("!!!!!!!!!!!!!!! - Close Pilferage Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);
 				}
 			} else {
-				System.out.println("!!!!!!!!!!!!!!! - Close Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				System.out.println("!!!!!!!!!!!!!!! - Close Pilferage Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);
 			}
 		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Edit Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			System.out.println("!!!!!!!!!!!!!!! - Edit Pilferage Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
 		}
 	}

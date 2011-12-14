@@ -53,6 +53,8 @@ public class Settings {
 	
 	//VARIABLE SETTINGS / GLOBALS
 	public static String INCIDENT_ID = "";
+	public static String DAMAGE_ID = "";
+	public static String PILFERAGE_ID = "";
 	public static int SEARCH_ALL = 0;
 	public static int SEARCH_LD = 1;
 	public static int SEARCH_DAM = 2;

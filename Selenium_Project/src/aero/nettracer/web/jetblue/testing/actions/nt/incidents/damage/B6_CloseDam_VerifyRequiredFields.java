@@ -12,38 +12,31 @@ public class B6_CloseDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Pawob Information"));
-			selenium.click("//td[@id='navmenucell']/div/dl/dd[6]/a/span[2]");
+			selenium.click("//td[@id='navmenucell']/div/dl/dd[8]/a/span[2]");
 			selenium.waitForPageToLoad("30000");
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=doclose");
-				assertEquals("Arrival Flight is required.", selenium.getAlert());
-				selenium.type("name=theitem[0].arrivedonflightnum", "123");
-				selenium.click("name=doclose");
-				assertEquals("Arrival Date is required.", selenium.getAlert());
-				selenium.click("id=calendar20");
-				selenium.click("link=Today");
-				selenium.click("name=doclose");
 				selenium.waitForPageToLoad("30000");
-				verifyTrue(selenium.isTextPresent("Please select a fault airline and station"));
-				selenium.select("name=faultstation_id", "label=CBS");
+				verifyTrue(selenium.isTextPresent("Please select a reason for loss"));
+				selenium.select("name=loss_code", "label=81- Damage");
 				selenium.click("name=doclose");
 				selenium.waitForPageToLoad("30000");
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Pawob has been closed."));
+					verifyTrue(selenium.isTextPresent("Damaged Baggage Report has been closed."));
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					selenium.waitForPageToLoad("30000");
 				} else {
-					System.out.println("!!!!!!!!!!!!!!! - Close Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+					System.out.println("!!!!!!!!!!!!!!! - Close Damaged Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);
 				}
 			} else {
-				System.out.println("!!!!!!!!!!!!!!! - Close Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				System.out.println("!!!!!!!!!!!!!!! - Close Damaged Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);
 			}
 		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Edit Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			System.out.println("!!!!!!!!!!!!!!! - Edit Damaged Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
 		}
 	}
