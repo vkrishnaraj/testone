@@ -44,12 +44,12 @@ public class Settings {
 	//public static final String PASSWORD_ADMIN = "Ladendead51!";
 	
 	//START URLS
-	public static final String START_URL = "tracer/logoff.do";
-	public static final String START_URL_B6 = "jetblue/logoff.do";
-	public static final String START_URL_WS = "westjet/logoff.do";
+	public static final String START_URL = "tracer";
+	public static final String START_URL_B6 = "jetblue";
+	public static final String START_URL_WS = "westjet";
 	//public static final String START_URL_WS = "wjtracer/";
-	public static final String START_URL_AD = "azul/logoff.do";
-	public static final String START_URL_NK = "spirit/logoff.do";
+	public static final String START_URL_AD = "azul";
+	public static final String START_URL_NK = "spirit";
 	
 	//VARIABLE SETTINGS / GLOBALS
 	public static String INCIDENT_ID = "";
