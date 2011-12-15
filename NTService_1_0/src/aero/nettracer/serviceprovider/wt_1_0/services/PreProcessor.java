@@ -271,7 +271,8 @@ public class PreProcessor {
 		Address a = null;
 		if(pax != null){
 			for(int j = 0; j < pax.length;j++){
-				if(pax[j].getAddress() != null && pax[j].getAddress().isTemporaryAddress() != perm){
+				//loupas - if an address as a person with a last name, it is considered a permanent address
+				if(pax[j].getAddress() != null && (pax[j].getAddress().isTemporaryAddress() != perm || (perm && pax[j].getLastname() != null && pax[j].getLastname().trim().length() > 0))){
 					a = pax[j].getAddress();
 					break;
 				}

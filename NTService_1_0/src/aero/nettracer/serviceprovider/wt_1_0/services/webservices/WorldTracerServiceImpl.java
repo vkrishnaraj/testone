@@ -2130,10 +2130,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			
 			Address ntpa = PreProcessor.getAhlAddress(data, true);
 			
-			//loupas - WT seems to require a perm address, if there is no perm address, use a temp address instead
-			if(ntpa == null){
-				ntpa = PreProcessor.getAhlAddress(data, false);
-			}
 			if(ntpa != null){
 				WTRAddressType pa = ct.addNewPermanentAddress();
 				if(ntpa.getAddress1()!=null && ntpa.getAddress1().length() > 0){
@@ -3992,11 +3988,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			
 			//find first permanent address
 			Address ntpa = PreProcessor.getAhlAddress(data, true);
-			
-			//loupas - WT seems to require a perm address, if there is no perm address, use a temp address instead
-			if(ntpa == null){
-				ntpa = PreProcessor.getAhlAddress(data, false);
-			}
+
 			if(ntpa != null){
 				WTRAddressAmendType pa = ct.addNewPermanentAddress();
 				if(ntpa.getAddress1()!=null && ntpa.getAddress1().length() > 0){
