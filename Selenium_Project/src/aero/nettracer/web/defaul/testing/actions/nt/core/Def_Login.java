@@ -9,6 +9,7 @@ public class Def_Login extends LoginUtil {
 	
 	@Test
 	public void testLogin() throws Exception {
+		selenium.setTimeout(Settings.LOGIN_TIMEOUT);
 		selenium.open(Settings.START_URL);
 		loginAdminProcedure();
 	}

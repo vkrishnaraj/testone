@@ -12,17 +12,17 @@ public class NK_InboxMessage extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[27]/td/a");
-		selenium.waitForPageToLoad("30000");
+		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("name=new");
-			selenium.waitForPageToLoad("30000");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				String inc_id = "NO ID FOUND";
 				boolean has_inc_id = false;
-				if (Settings.INCIDENT_ID != null && !Settings.INCIDENT_ID.equals("")) {
-					inc_id = Settings.INCIDENT_ID;
+				if (Settings.INCIDENT_ID_NK != null && !Settings.INCIDENT_ID_NK.equals("")) {
+					inc_id = Settings.INCIDENT_ID_NK;
 					has_inc_id = true;
 				}
 				selenium.select("name=recp_list[0].station_id", "label=BOS");
@@ -32,26 +32,26 @@ public class NK_InboxMessage extends DefaultSeleneseTestCase {
 					selenium.select("name=file_type", "label=Incident");
 					selenium.type("name=file_ref_number", "TTTTT");
 					selenium.click("name=send2");
-					selenium.waitForPageToLoad("30000");
+					waitForPageToLoadImproved();
 					verifyTrue(selenium.isTextPresent("Incorrect incident number/type"));
 					selenium.type("name=file_ref_number", inc_id);
 				}
 				selenium.click("name=send2");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Message has been sent."));
 				selenium.click("css=u");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				selenium.select("name=cbroStation", "label=BOS");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				selenium.click("//div[@id='maincontent']/form/table/tbody/tr[27]/td/a");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				selenium.click("link=Test Message: " + inc_id);
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Test Message that references Incident: " + inc_id));
 				selenium.click("id=menucol_0.0");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				selenium.select("name=cbroStation", "label=CLAIM");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 			} else {
 				System.out.println("!!!!!!!!!!!!!!!! - Message Creation Page did not load. Error Page loaded instead. - !!!!!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);

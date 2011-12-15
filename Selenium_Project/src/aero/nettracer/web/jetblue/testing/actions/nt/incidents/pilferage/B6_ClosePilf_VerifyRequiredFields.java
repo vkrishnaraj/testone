@@ -13,16 +13,16 @@ public class B6_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Pawob Information"));
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[9]/a/span[2]");
-			selenium.waitForPageToLoad("30000");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=doclose");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
 					verifyTrue(selenium.isTextPresent("Pilferage Pawob has been closed."));
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					selenium.waitForPageToLoad("30000");
+					waitForPageToLoadImproved();
 				} else {
 					System.out.println("!!!!!!!!!!!!!!! - Close Pilferage Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);

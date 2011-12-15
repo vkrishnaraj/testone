@@ -2,6 +2,8 @@ package aero.nettracer.web.utility;
 
 public class Settings {
 	
+	///////////////////////////////////////////////////////////SELENIUM SETTINGS ////////////////////////////////////////////////////////
+	
 	//browser options
 	public static final String BROWSER_IEXPLORE = "*iexplore";
 	public static final String BROWSER_MOCK = "*mock";
@@ -25,14 +27,18 @@ public class Settings {
 	
 	public static final boolean ECLIPSE_RUNS_SERVER = true;
 	
-	//URL ROOT FOR WEB APP BEING TESTED
-	public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
-	//public static final String APP_URL_LOCAL = "http://192.168.2.120:8380/";
-	
 	//DELAY IN MS BETWEEN ACTIONS
 	public static final String EXECUTION_SPEED_FAST = "2";
 	public static final String EXECUTION_SPEED_NORMAL = "250";
 	public static final String EXECUTION_SPEED_SLOW = "1000";
+	
+	
+	
+	//////////////////////////////////////////////////////////GENERIC TEST SETTINGS////////////////////////////////////////////////////////
+	
+	//URL ROOT FOR WEB APP BEING TESTED
+	public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
+	//public static final String APP_URL_LOCAL = "http://192.168.2.120:8380/";
 	
 	//LOGIN CREDENTIALS
 	public static final String USERNAME_ADMIN = "ntauto";
@@ -43,23 +49,70 @@ public class Settings {
 	//public static final String USERNAME_ADMIN = "ntadmin";
 	//public static final String PASSWORD_ADMIN = "Ladendead51!";
 	
-	//START URLS
-	public static final String START_URL = "tracer";
-	public static final String START_URL_B6 = "jetblue";
-	public static final String START_URL_WS = "westjet";
-	//public static final String START_URL_WS = "wjtracer/";
-	public static final String START_URL_AD = "azul";
-	public static final String START_URL_NK = "spirit";
+	//TIMEOUT SETTINGS
+	public static final String LOGIN_TIMEOUT = "120000";
+	public static final String PAGE_LOAD_TIMEOUT = "120000";
 	
 	//VARIABLE SETTINGS / GLOBALS
-	public static String INCIDENT_ID = "";
-	public static String DAMAGE_ID = "";
-	public static String PILFERAGE_ID = "";
 	public static int SEARCH_ALL = 0;
 	public static int SEARCH_LD = 1;
 	public static int SEARCH_DAM = 2;
 	public static int SEARCH_PILF = 3;
 	public static int SEARCH_CURRENT = SEARCH_ALL;
 	public static boolean LOGGED_IN = false;
+	
+	
+	
+	///////////////////////////////////////////////////////////// COMPANY SPECIFIC SETTINGS //////////////////////////////////////////////
+	
+	/////////////////////////////////////////////////////////// DEFAULT COMPANY ///////////////////////////////////////////////////////
+	
+	public static final String START_URL = "tracer";
+	public static String INCIDENT_ID = "";
+	public static String DAMAGE_ID = "";
+	public static String PILFERAGE_ID = "";
+	
+
+	
+	/////////////////////////////////////////////////////////// AZUL ///////////////////////////////////////////////////////
+
+	public static final String START_URL_AD = "azul";
+	public static String INCIDENT_ID_AD = "";
+	public static String DAMAGE_ID_AD = "";
+	public static String PILFERAGE_ID_AD = "";
+	
+
+	
+	/////////////////////////////////////////////////////////// JETBLUE ///////////////////////////////////////////////////////
+		
+	public static final String START_URL_B6 = "jetblue";
+	public static String INCIDENT_ID_B6 = "";
+	public static String DAMAGE_ID_B6 = "";
+	public static String PILFERAGE_ID_B6 = "";
+	
+
+	
+	/////////////////////////////////////////////////////////// SPIRIT ///////////////////////////////////////////////////////
+
+	public static final String START_URL_NK = "spirit";
+	public static String INCIDENT_ID_NK = "";
+	public static String DAMAGE_ID_NK = "";
+	public static String PILFERAGE_ID_NK = "";
+	
+
+	
+	/////////////////////////////////////////////////////////// WESTJET ///////////////////////////////////////////////////////
+	
+	public static final String START_URL_WS = "westjet";
+	//public static final String START_URL_WS = "wjtracer/";
+	public static String INCIDENT_ID_WS = "";
+	public static String DAMAGE_ID_WS = "";
+	public static String PILFERAGE_ID_WS = "";
+	
+
+	
+	/////////////////////////////////////////////////////////// AVIS ///////////////////////////////////////////////////////
+	
+	
 	
 }

@@ -11,11 +11,11 @@ public class B6_CreatePilf_VerifyRequiredFields extends DefaultSeleneseTestCase 
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 		selenium.click("id=menucol_3.1");
-		selenium.waitForPageToLoad("30000");
+		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("name=skip_prepopulate");
-			selenium.waitForPageToLoad("30000");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=saveButton");
@@ -74,15 +74,15 @@ public class B6_CreatePilf_VerifyRequiredFields extends DefaultSeleneseTestCase 
 				assertEquals("Item is required.", selenium.getAlert());
 				selenium.type("name=article[0].article", "Test");
 				selenium.click("name=saveButton");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					verifyTrue(selenium.isTextPresent("Missing Item Report has been submitted."));
 					checkCopyrightAndQuestionMarks();
 					String pilferage_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					Settings.PILFERAGE_ID = pilferage_id;
-					System.out.println("B6: Pilferage Incident Created: " + Settings.PILFERAGE_ID);
+					Settings.PILFERAGE_ID_B6 = pilferage_id;
+					System.out.println("B6: Pilferage Incident Created: " + Settings.PILFERAGE_ID_B6);
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					selenium.waitForPageToLoad("30000");
+					waitForPageToLoadImproved();
 				} else {
 					System.out.println("!!!!!!!!!!!!!!! - Create Pilferage Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);

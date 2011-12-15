@@ -12,21 +12,21 @@ public class AD_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Incident Information"));
-			selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
-			selenium.waitForPageToLoad("30000");
+			selenium.click("//td[@id='navmenucell']/div/dl/dd[9]/a/span[2]");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=doclose");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Please select a reason for loss"));
 				selenium.select("name=loss_code", "label=94- PFR CRIADA ERRONEAMENTE OU EM DUPLICIDADE - FS BASE ONDE RIB FOI CRIADA");
 				selenium.click("name=doclose");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
 					verifyTrue(selenium.isTextPresent("Pilferage Incident has been closed."));
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					selenium.waitForPageToLoad("30000");
+					waitForPageToLoadImproved();
 				} else {
 					System.out.println("!!!!!!!!!!!!!!! - Close Pilferage Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);

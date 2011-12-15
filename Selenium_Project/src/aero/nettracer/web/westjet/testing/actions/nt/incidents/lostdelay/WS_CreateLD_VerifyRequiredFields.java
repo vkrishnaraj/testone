@@ -11,7 +11,7 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 		selenium.click("menucol_1.1");
-		selenium.waitForPageToLoad("30000");
+		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("savetracingButton");
@@ -66,15 +66,15 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			assertEquals("Phone is required.", selenium.getAlert());
 			selenium.type("name=addresses[0].mobile", "(555) 555-4444");
 			selenium.click("savetracingButton");
-			selenium.waitForPageToLoad("30000");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				verifyTrue(selenium.isTextPresent("Delayed PIR has been submitted."));
 				checkCopyrightAndQuestionMarks();
 				String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-				Settings.INCIDENT_ID = incident_id;
-				System.out.println("WS: Lost/Delay Incident Created: " + Settings.INCIDENT_ID);
+				Settings.INCIDENT_ID_WS = incident_id;
+				System.out.println("WS: Lost/Delay Incident Created: " + Settings.INCIDENT_ID_WS);
 				selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 			} else {
 				System.out.println("!!!!!!!!!!!!!!! - Create Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);

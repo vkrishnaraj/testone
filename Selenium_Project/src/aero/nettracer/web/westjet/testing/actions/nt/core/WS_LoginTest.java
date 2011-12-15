@@ -9,6 +9,7 @@ public class WS_LoginTest extends LoginUtil {
 	
 	@Test
 	public void testLogin() throws Exception {
+		selenium.setTimeout(Settings.LOGIN_TIMEOUT);
 		selenium.open(Settings.START_URL_WS);
 		loginTestProcedure();
 	}

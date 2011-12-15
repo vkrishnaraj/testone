@@ -1,9 +1,5 @@
 package aero.nettracer.web.utility;
 
-import org.junit.Test;
-
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
-import aero.nettracer.web.utility.Settings;
 
 public class LoginUtil extends DefaultSeleneseTestCase {
 	
@@ -12,7 +8,7 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 		selenium.type("username", Settings.USERNAME_ADMIN);
 		selenium.type("password", Settings.PASSWORD_ADMIN);
 		selenium.click("button");
-		selenium.waitForPageToLoad("60000");
+		waitForPageToLoadImproved();
 		verifyTrue(selenium.isTextPresent("Task Manager Home"));
 	}
 	
@@ -21,7 +17,7 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 		selenium.type("username", Settings.USERNAME_TEST);
 		selenium.type("password", Settings.PASSWORD_TEST);
 		selenium.click("button");
-		selenium.waitForPageToLoad("60000");
+		waitForPageToLoadImproved();
 		verifyTrue(selenium.isTextPresent("Task Manager Home"));
 	}
 	
@@ -30,8 +26,12 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 		selenium.type("username", Settings.USERNAME_TEST);
 		selenium.type("password", Settings.PASSWORD_CHANGE);
 		selenium.click("button");
-		selenium.waitForPageToLoad("60000");
+		waitForPageToLoadImproved();
 		verifyTrue(selenium.isTextPresent("Invalid username and/or password, please try again"));
+	}
+	
+	public void waitForPageToLoadImproved() {
+		selenium.waitForPageToLoad(Settings.LOGIN_TIMEOUT);
 	}
 
 	

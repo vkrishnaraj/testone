@@ -11,11 +11,11 @@ public class NK_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 		selenium.click("id=menucol_1.1");
-		selenium.waitForPageToLoad("30000");
+		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("name=skip_prepopulate");
-			selenium.waitForPageToLoad("30000");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=savetracingButton");
@@ -75,15 +75,15 @@ public class NK_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				assertEquals("Mobile Phone is required.", selenium.getAlert());
 				selenium.type("name=addresses[0].mobile", "(555) 555-4444");
 				selenium.click("savetracingButton");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been submitted."));
 					checkCopyrightAndQuestionMarks();
 					String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					Settings.INCIDENT_ID = incident_id;
-					System.out.println("NK: Lost/Delay Incident Created: " + Settings.INCIDENT_ID);
+					Settings.INCIDENT_ID_NK = incident_id;
+					System.out.println("NK: Lost/Delay Incident Created: " + Settings.INCIDENT_ID_NK);
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					selenium.waitForPageToLoad("30000");
+					waitForPageToLoadImproved();
 				} else {
 					System.out.println("!!!!!!!!!!!!!!! - Create Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);

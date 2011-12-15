@@ -11,11 +11,11 @@ public class B6_CreateDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 		selenium.click("id=menucol_2.1");
-		selenium.waitForPageToLoad("30000");
+		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("name=skip_prepopulate");
-			selenium.waitForPageToLoad("30000");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=saveButton");
@@ -74,15 +74,15 @@ public class B6_CreateDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				assertEquals("Damage Description is required.", selenium.getAlert());
 				selenium.type("name=theitem[0].damage", "Test");
 				selenium.click("name=saveButton");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					verifyTrue(selenium.isTextPresent("Damaged Bag Report has been submitted."));
 					checkCopyrightAndQuestionMarks();
 					String damage_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					Settings.DAMAGE_ID = damage_id;
-					System.out.println("B6: Damaged Incident Created: " + Settings.DAMAGE_ID);
+					Settings.DAMAGE_ID_B6 = damage_id;
+					System.out.println("B6: Damaged Incident Created: " + Settings.DAMAGE_ID_B6);
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					selenium.waitForPageToLoad("30000");
+					waitForPageToLoadImproved();
 				} else {
 					System.out.println("!!!!!!!!!!!!!!! - Create Damaged Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);

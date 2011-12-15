@@ -13,7 +13,7 @@ public class B6_CloseLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Pawob Information"));
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[6]/a/span[2]");
-			selenium.waitForPageToLoad("30000");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=doclose");
@@ -24,16 +24,22 @@ public class B6_CloseLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("id=calendar20");
 				selenium.click("link=Today");
 				selenium.click("name=doclose");
-				selenium.waitForPageToLoad("30000");
-				verifyTrue(selenium.isTextPresent("Please select a fault airline and station"));
-				selenium.select("name=faultstation_id", "label=CBS");
-				selenium.click("name=doclose");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
+				if (selenium.isTextPresent("Please select a fault airline and station")) {
+					selenium.select("name=faultstation_id", "label=CBS");
+					selenium.click("name=doclose");
+					waitForPageToLoadImproved();
+				}
+				if (selenium.isTextPresent("Please select a reason for loss")) {
+					selenium.select("name=loss_code", "label=21- Failed to Load");
+					selenium.click("name=doclose");
+					waitForPageToLoadImproved();
+				}
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
 					verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Pawob has been closed."));
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					selenium.waitForPageToLoad("30000");
+					waitForPageToLoadImproved();
 				} else {
 					System.out.println("!!!!!!!!!!!!!!! - Close Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);

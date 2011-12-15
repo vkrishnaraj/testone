@@ -27,5 +27,9 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	public boolean checkNoErrorPage() {
 		return !selenium.isTextPresent("There is an error with your request.");
 	}
+	
+	public void waitForPageToLoadImproved() {
+		selenium.waitForPageToLoad(Settings.PAGE_LOAD_TIMEOUT);
+	}
 
 }

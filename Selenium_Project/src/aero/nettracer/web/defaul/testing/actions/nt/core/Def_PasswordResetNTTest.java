@@ -15,11 +15,11 @@ public class Def_PasswordResetNTTest extends DefaultSeleneseTestCase {
 	
 	private void resetPassProcedure(String pass) {
 		selenium.click("//a[contains(@href, 'agentAdmin.do?self_edit=1')]");
-		selenium.waitForPageToLoad("30000");
+		waitForPageToLoadImproved();
 		selenium.type("password", pass);
 		selenium.type("password2", pass);
 		selenium.click("save");
-		selenium.waitForPageToLoad("30000");
+		waitForPageToLoadImproved();
 		verifyTrue(selenium.isTextPresent("has been updated."));
 	}
 }

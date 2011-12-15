@@ -9,8 +9,11 @@ public class AD_Login extends LoginUtil {
 	
 	@Test
 	public void testLogin() throws Exception {
+		selenium.setTimeout(Settings.LOGIN_TIMEOUT);
 		selenium.open(Settings.START_URL_AD);
 		loginAdminProcedure();
+		selenium.select("name=cbroStation", "label=CSB");
+		waitForPageToLoadImproved();
 	}
 	
 }

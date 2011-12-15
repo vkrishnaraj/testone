@@ -11,11 +11,11 @@ public class B6_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 		selenium.click("id=menucol_1.1");
-		selenium.waitForPageToLoad("30000");
+		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("name=skip_prepopulate");
-			selenium.waitForPageToLoad("30000");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=savetracingButton");
@@ -71,15 +71,15 @@ public class B6_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				assertEquals("Type is required.", selenium.getAlert());
 				selenium.select("name=theitem[0].bagtype", "label=22");
 				selenium.click("name=savetracingButton");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Report has been submitted."));
 					checkCopyrightAndQuestionMarks();
 					String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					Settings.INCIDENT_ID = incident_id;
-					System.out.println("B6: Lost/Delay Incident Created: " + Settings.INCIDENT_ID);
+					Settings.INCIDENT_ID_B6 = incident_id;
+					System.out.println("B6: Lost/Delay Incident Created: " + Settings.INCIDENT_ID_B6);
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					selenium.waitForPageToLoad("30000");
+					waitForPageToLoadImproved();
 				} else {
 					System.out.println("!!!!!!!!!!!!!!! - Create Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);

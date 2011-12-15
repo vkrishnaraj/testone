@@ -13,20 +13,20 @@ public class NK_CloseDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Incident Information"));
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[8]/a/span[2]");
-			selenium.waitForPageToLoad("30000");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=doclose");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Please select a reason for loss"));
 				selenium.select("name=loss_code", "label=22- Bag received too late from check-in actions");
 				selenium.click("name=doclose");
-				selenium.waitForPageToLoad("30000");
+				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
 					verifyTrue(selenium.isTextPresent("Damaged Baggage Report has been closed."));
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					selenium.waitForPageToLoad("30000");
+					waitForPageToLoadImproved();
 				} else {
 					System.out.println("!!!!!!!!!!!!!!! - Close Damaged Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);
