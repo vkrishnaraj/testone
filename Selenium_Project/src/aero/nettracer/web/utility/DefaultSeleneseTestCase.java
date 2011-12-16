@@ -14,7 +14,7 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	public void goToTaskManager() {
 		if (!selenium.isTextPresent("Task Manager Home")) {
 			selenium.click("menucol_0.0");
-			selenium.waitForPageToLoad("30000");
+			waitForPageToLoadImproved();
 		}
 	}
 	

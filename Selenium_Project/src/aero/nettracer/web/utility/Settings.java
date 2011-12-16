@@ -71,6 +71,7 @@ public class Settings {
 	public static String INCIDENT_ID = "";
 	public static String DAMAGE_ID = "";
 	public static String PILFERAGE_ID = "";
+	public static String ONHAND_ID = "";
 	
 
 	
@@ -80,6 +81,7 @@ public class Settings {
 	public static String INCIDENT_ID_AD = "";
 	public static String DAMAGE_ID_AD = "";
 	public static String PILFERAGE_ID_AD = "";
+	public static String ONHAND_ID_AD = "";
 	
 
 	
@@ -89,6 +91,7 @@ public class Settings {
 	public static String INCIDENT_ID_B6 = "";
 	public static String DAMAGE_ID_B6 = "";
 	public static String PILFERAGE_ID_B6 = "";
+	public static String ONHAND_ID_B6 = "";
 	
 
 	
@@ -98,6 +101,7 @@ public class Settings {
 	public static String INCIDENT_ID_NK = "";
 	public static String DAMAGE_ID_NK = "";
 	public static String PILFERAGE_ID_NK = "";
+	public static String ONHAND_ID_NK = "";
 	
 
 	
@@ -108,6 +112,7 @@ public class Settings {
 	public static String INCIDENT_ID_WS = "";
 	public static String DAMAGE_ID_WS = "";
 	public static String PILFERAGE_ID_WS = "";
+	public static String ONHAND_ID_WS = "";
 	
 
 	
