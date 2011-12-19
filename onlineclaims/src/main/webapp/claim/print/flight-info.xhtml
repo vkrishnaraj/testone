@@ -82,7 +82,7 @@
 
 	<h:panelGrid columns="3" width="75%">
 	
-		<h:panelGroup>
+		<h:panelGroup rendered="#{!passengerController.flightLabel.recheckBag.hidden}">
 			<t:outputText value="#{passengerController.flightLabel.recheckBag.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
@@ -90,16 +90,16 @@
 			<t:outputText value=":" />
 		</h:panelGroup>
 
-		<rich:spacer width="18" title="" />
+		<rich:spacer width="18" title="" rendered="#{!passengerController.flightLabel.recheckBag.hidden}"/>
 
-		<h:outputText id="recheckBag" value="#{passengerBean.recheckBagDisp}" >
+		<h:outputText id="recheckBag" value="#{passengerBean.recheckBagDisp}" rendered="#{!passengerController.flightLabel.recheckBag.hidden}">
 		</h:outputText>
 
-		<rich:spacer width="100%" height="15" title="" />
-		<rich:spacer width="100%" height="15" title="" />
-		<rich:spacer width="100%" height="15" title="" />
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.recheckBag.hidden}"/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.recheckBag.hidden}"/>
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.recheckBag.hidden}"/>
 
-		<h:panelGroup>
+		<h:panelGroup rendered="#{!passengerController.flightLabel.inspectbag.hidden}">
 			<t:outputText value="#{passengerController.flightLabel.inspectbag.label}" />
 			<h:outputText value="&#160;" />
 			<h:outputLabel value="*" styleClass="requiredField"
@@ -107,14 +107,14 @@
 			<t:outputText value=":" />
 		</h:panelGroup>
 
-		<rich:spacer width="18" title="" />
+		<rich:spacer width="18" title="" rendered="#{!passengerController.flightLabel.inspectbag.hidden}" />
 
-		<h:outputText value="#{passengerBean.inspectbagDisp}" >
+		<h:outputText value="#{passengerBean.inspectbagDisp}" rendered="#{!passengerController.flightLabel.inspectbag.hidden}" >
 		</h:outputText>
 
-		<rich:spacer width="100%" height="15" title="" />
-		<rich:spacer width="100%" height="15" title="" />
-		<rich:spacer width="100%" height="15" title="" />
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.inspectbag.hidden}" />
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.inspectbag.hidden}" />
+		<rich:spacer width="100%" height="15" title="" rendered="#{!passengerController.flightLabel.inspectbag.hidden}" />
 
 		<h:panelGroup>
 			<t:outputText
