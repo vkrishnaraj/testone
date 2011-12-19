@@ -7,6 +7,19 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import aero.nettracer.web.avis.testing.actions.lf.core.AB_Login;
+import aero.nettracer.web.avis.testing.actions.lf.core.AB_LoginFailure;
+import aero.nettracer.web.avis.testing.actions.lf.found.AB_CloseFound;
+import aero.nettracer.web.avis.testing.actions.lf.found.AB_CreateFound_Detailed;
+import aero.nettracer.web.avis.testing.actions.lf.found.AB_CreateFound_VerifyRequiredFields;
+import aero.nettracer.web.avis.testing.actions.lf.found.AB_SearchFound;
+import aero.nettracer.web.avis.testing.actions.lf.lost.AB_CloseLost;
+import aero.nettracer.web.avis.testing.actions.lf.lost.AB_CreateLost_Detailed;
+import aero.nettracer.web.avis.testing.actions.lf.lost.AB_CreateLost_VerifyRequiredFields;
+import aero.nettracer.web.avis.testing.actions.lf.lost.AB_SearchLost;
+import aero.nettracer.web.avis.testing.actions.lf.match.AB_ConfirmMatch;
+import aero.nettracer.web.avis.testing.actions.lf.match.AB_CreateDelivery;
+import aero.nettracer.web.avis.testing.actions.lf.match.AB_ManualMatch_FoundToLost;
 import aero.nettracer.web.azul.testing.actions.nt.core.AD_Login;
 import aero.nettracer.web.azul.testing.actions.nt.core.AD_LoginFailure;
 import aero.nettracer.web.azul.testing.actions.nt.core.AD_LoginTest;
@@ -101,7 +114,14 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 	WS_CreateLD_VerifyRequiredFields.class, WS_CloseLD_VerifyRequiredFields.class, WS_InboxMessage.class,
 	WS_CreateDam_VerifyRequiredFields.class, WS_CloseDam_VerifyRequiredFields.class,
 	WS_CreatePilf_VerifyRequiredFields.class, WS_ClosePilf_VerifyRequiredFields.class,
-	WS_CreateOHD_VerifyRequiredFields.class, WS_ForwardOHD.class, WS_ReceiveOHD.class
+	WS_CreateOHD_VerifyRequiredFields.class, WS_ForwardOHD.class, WS_ReceiveOHD.class,
+	// AVIS
+	AB_LoginFailure.class, AB_Login.class,
+	AB_CreateLost_VerifyRequiredFields.class, AB_CreateFound_VerifyRequiredFields.class,
+	AB_SearchLost.class, AB_SearchFound.class, AB_ManualMatch_FoundToLost.class,
+	AB_CloseFound.class, AB_SearchLost.class, AB_CloseLost.class,
+	AB_CreateLost_Detailed.class, AB_CreateFound_Detailed.class,
+	AB_ConfirmMatch.class, AB_CreateDelivery.class
 	})
 public class TestEverything { 
 	

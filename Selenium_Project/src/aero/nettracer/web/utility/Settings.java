@@ -118,6 +118,10 @@ public class Settings {
 	
 	/////////////////////////////////////////////////////////// AVIS ///////////////////////////////////////////////////////
 	
+	public static final String START_URL_AB = "avis";
+	public static String LOST_ID_AB = "";
+	public static String FOUND_ID_AB = "";
+	
 	
 	
 }
