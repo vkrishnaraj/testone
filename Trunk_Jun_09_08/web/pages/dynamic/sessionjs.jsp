@@ -117,13 +117,13 @@
 			        return false;
 				}
 /* BEGIN ADDRESS VALIDATION */
-			} else if (elementName == "lost.client.address.address1") {
+			} else if (elementName == "lost.client.address.decryptedAddress1") {
 				if (currentElement.value.length == 0) {
 					alert("<%= (String)bundle.getString("colname.street_addr1") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
 			        return false;
 				}
-			} else if (elementName == "lost.client.address.city") {
+			} else if (elementName == "lost.client.address.decryptedCity") {
 				if (currentElement.value.length == 0) {
 					alert("<%= (String)bundle.getString("colname.city") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
@@ -133,14 +133,14 @@
 				country = currentElement.value;
 				
 				if (country == "US") {
-					element = getFieldByName("lost.client.address.state", form);
+					element = getFieldByName("lost.client.address.decryptedState", form);
 					if (element.value.length == 0) {
 						alert("<%= (String)bundle.getString("colname.state") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 				        element.focus();
 				        return false;
 					}
 					
-					element = getFieldByName("lost.client.address.zip", form);
+					element = getFieldByName("lost.client.address.decryptedZip", form);
 					if (element.value.length == 0) {
 						alert("<%= (String)bundle.getString("colname.zip") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 				        element.focus();
