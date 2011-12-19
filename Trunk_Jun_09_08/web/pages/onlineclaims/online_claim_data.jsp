@@ -191,21 +191,6 @@ phIndex++; %>
 </td>
 <td class="boldCell"><bean:message key="oc.label.num.passengers" /></td><td><bean:write name="claim" property="passengersTravelingWithYou" scope="request"/></td>
 </tr><tr>
-<td class="boldCell"><bean:message key="oc.label.recheck.bag" /></td>
-<td><logic:match value="true" name="claim" property="haveToRecheck" scope="request">
-<bean:message key="oc.label.yes"/>
-</logic:match>
-<logic:match value="false" name="claim" property="haveToRecheck" scope="request">
-<bean:message key="oc.label.no"/>
-</logic:match></td>
-<td class="boldCell"><bean:message key="oc.label.bag.inspected" /></td>
-<td><logic:match value="true" name="claim" property="wasBagInspected" scope="request">
-<bean:message key="oc.label.yes"/>
-</logic:match>
-<logic:match value="false" name="claim" property="wasBagInspected" scope="request">
-<bean:message key="oc.label.no"/>
-</logic:match></td>
-</tr><tr>
 <td class="boldCell"><bean:message key="oc.label.excess.charge" /></td>
 <td><logic:match value="true" name="claim" property="chargedForExcessBaggage" scope="request">
 <bean:message key="oc.label.yes"/>
