@@ -117,7 +117,7 @@
 			        return false;
 				}
 /* BEGIN ADDRESS VALIDATION */
-/*			} else if (elementName == "lost.client.address.address1") {
+			} else if (elementName == "lost.client.address.address1") {
 				if (currentElement.value.length == 0) {
 					alert("<%= (String)bundle.getString("colname.street_addr1") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
@@ -146,11 +146,11 @@
 				        element.focus();
 				        return false;
 					}
-				} */
+				}
 /* END ADDRESS VALIDATION */			
 			
 			}
-			if (elementName == "lost.client.email") {
+			if (elementName == "lost.client.decryptedEmail") {
 				if (currentElement.value != getFieldByName("lost.client.confirmEmail", form).value) {
 					alert("<%= (String)bundle.getString("colname.lf.email") %>" + " <%= (String)bundle.getString("error.validation.cannot.confirm.email") %>");
 			        currentElement.focus();
@@ -182,7 +182,7 @@
 		
 		var primaryPhone = getFieldByName("primaryPhoneNumber", form).value;
 		var secondaryPhone = getFieldByName("secondaryPhoneNumber", form).value;
-		var email = getFieldByName("lost.client.email", form).value;
+		var email = getFieldByName("lost.client.decryptedEmail", form).value;
 		if (primaryPhone.length == 0 && secondaryPhone.length == 0 && email.length == 0) {
 			alert("<%= (String)bundle.getString("colname.lf.phone.or.email") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			return false;
