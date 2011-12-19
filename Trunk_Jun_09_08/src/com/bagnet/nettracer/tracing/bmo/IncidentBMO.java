@@ -333,6 +333,10 @@ public class IncidentBMO {
 					if (oldinc.getWtFile() != null && iDTO.getWtFile() == null) {
 						iDTO.setWtFile(oldinc.getWtFile());
 					}
+					
+					if (oldinc.getOc_claim_id() != 0 && iDTO.getOc_claim_id() == 0) {
+						iDTO.setOc_claim_id(oldinc.getOc_claim_id());
+					}
 
 					//to persist language setting
 					if (oldinc.getLanguage() != null && iDTO.getLanguage() == null) {
