@@ -1,0 +1,5 @@
+surefire
+client-0
+maven-archiver
+client-0.war
+lfc-client-model.jar
