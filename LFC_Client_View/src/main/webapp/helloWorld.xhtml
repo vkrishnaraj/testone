@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="/template.xhtml">
+	<ui:define name="body">
+		<h:form>
+			<rich:panel header="Richfaces Panel Example" style="width: 315px">
+				<t:outputText value="Type name: " />
+				<t:inputText value="#{helloWorld.name}" />
+				<a4j:commandButton value="Convert Name" reRender="nameConverted" action="#{helloWorld.convertNameToUpperCase}" />
+			</rich:panel>
+		</h:form>
+		<h:panelGroup id="nameConverted">
+			<h:outputText value="Hello, " rendered="#{not empty helloWorld.name}" />
+			<h:outputText value="#{helloWorld.name}" />
+		</h:panelGroup>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/avis_template.xhtml">
+	<ui:define name="title">Avis: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form>
+			<h:panelGroup>
+				<h1><t:outputText value="#{msg.status_text_title}" escape="false"/></h1>
+				<h2><t:outputText value="#{msg.status_text_report_title}" /></h2>
+				<table>
+					<tr><td>
+						<t:outputText value="#{msg.status_label_report_id}" />
+					</td><td>
+						<t:outputText value="#{msg.status_label_status}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.lostReport.reportId}" />
+					</td><td>
+						<t:outputText value="#{lostAndFound.lostReport.status}" />
+					</td></tr>
+				</table>
+				<h2><t:outputText value="#{msg.lostform_text_about_title}" /></h2>
+				<table>
+					<tr><td>
+						<t:outputText value="#{msg.status_label_item_disposition}" />
+					</td><td colspan="2">
+						<t:outputText value="#{msg.status_label_item_tracking}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.lostReport.disposition}" />
+					</td><td colspan="2">
+						<t:outputText value="#{lostAndFound.lostReport.trackingNumber}" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td>
+						<t:outputText value="#{msg.lostform_label_date}" />
+					</td><td>
+						<t:outputText value="#{msg.lostform_label_item_brand}" />
+					</td><td>
+						<t:outputText value="#{msg.lostform_label_item_serial}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.lostReport.itemDate}" />
+					</td><td>
+						<t:outputText value="#{lostAndFound.lostReport.itemBrand}" />
+					</td><td>
+						<t:outputText value="#{lostAndFound.lostReport.itemSerial}" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td>
+						<t:outputText value="#{msg.lostform_label_item_category}" />
+					</td><td>
+						<t:outputText value="#{msg.lostform_label_item_subcat}" />
+					</td><td>
+						<t:outputText value="#{msg.lostform_label_item_color}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.categoryDesc}" />
+					</td><td>
+						<t:outputText value="#{lostAndFound.subCategoryDesc}" />
+					</td><td>
+						<t:outputText value="#{lostAndFound.colorDesc}" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td colspan="3">
+						<t:outputText value="#{msg.lostform_label_item_desc}" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:outputText value="#{lostAndFound.lostReport.itemDesc}" />
+					</td></tr>
+				</table>
+				<h2><t:outputText value="#{msg.lostform_text_contact_title}" /></h2>
+				<table>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.lostReport.contact.lastName}, #{lostAndFound.lostReport.contact.firstName} #{lostAndFound.lostReport.contact.middleInitial}" />
+					</td></tr>
+<!-- BEGIN ADDRESS INFO UI -->
+	 				<tr><td>
+						<t:outputText value="#{lostAndFound.lostReport.contact.address.address1}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.lostReport.contact.address.address2}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.lostReport.contact.address.city}, #{lostAndFound.lostReport.contact.address.state} #{lostAndFound.lostReport.contact.address.postal}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.countryDesc}" />
+					</td></tr>                                                     
+<!-- END ADDRESS INFO UI -->
+					<tr><td>
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.primaryPhone.number}" />
+					</td><td>
+						<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.typeText}#{lostAndFound.lostReport.contact.secondaryPhone.number}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.lostReport.contact.emailAddress}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{msg.lostform_label_vantive_number} #{lostAndFound.lostReport.vantiveNumber}" />
+					</td></tr>
+				</table>
+				<h2><t:outputText value="#{msg.lostform_text_trip_title}" /></h2>
+				<table>
+					<tr><td>
+						<t:outputText value="#{msg.lostform_label_rent_location}" />
+					</td><td>
+						<t:outputText value="#{msg.lostform_label_drop_location}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.pickUpLocationDesc}" />
+					</td><td>
+						<t:outputText value="#{lostAndFound.dropOffLocationDesc}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{msg.lostform_label_agree_number}" />
+					</td><td>
+						<t:outputText value="#{msg.lostform_label_mva_number}" />
+					</td></tr>
+					<tr><td>
+						<t:outputText value="#{lostAndFound.lostReport.agreementNumber}" />
+					</td><td>
+						<t:outputText value="#{lostAndFound.lostReport.mvaNumber}" />
+					</td></tr>
+					<tr><td colspan="2">
+						<t:outputText value="#{msg.lostform_label_where_lost}" />
+					</td></tr>
+					<tr><td colspan="2">
+						<t:outputText value="#{lostAndFound.lostReport.whereLost}" />
+					</td></tr>
+				</table>
+				<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToLanding}" />
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

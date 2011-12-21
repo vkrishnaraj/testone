@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/avis_template.xhtml">
+	<ui:define name="title">Avis: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form>
+			<h:panelGroup>
+				<h1><t:outputText value="#{msg.success_text_title}" escape="false"/></h1>
+				<h2><t:outputText value="#{msg.success_text_confirm_title}" /></h2>
+				<p><t:outputText value="#{msg.success_text_thank_you}" /></p>
+				<p><t:outputText value="#{msg.success_text_tracking} #{lostAndFound.lostReport.reportId}" /></p>
+				<p><t:outputText value="#{msg.success_text_email}" /></p>
+				<p><t:outputText value="#{msg.success_text_option}" escape="false"/></p>
+				<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToLanding}" />
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,122 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+<f:view contentType="text/html" encoding="UTF-8">
+<f:loadBundle basename="budget" var="msg"/>	
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=8" />
+	<title><ui:insert name="title">Default Title</ui:insert></title>
+	<link rel="SHORTCUT ICON" href="https://www.budget.com/budgetWeb/images/common/budgeticon.ico" />
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=UTF-8" />
+	<META name="Description" content="" />
+	<META name="Keywords" content="" />
+	<link href="https://www.budget.com/budgetWeb/html/css/content.css" rel="stylesheet" type="text/css" />
+	<link href="https://www.budget.com/budgetWeb/html/css/smartservices.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" type="text/css" href="../_css/budget_master.css" />
+	<script language="JavaScript" src="https://www.budget.com/budgetWeb/html/js/en/common/lookUp.js"></script>
+	<script type="text/javascript" src="https://www.budget.com/budgetWeb/html/js/en/header/main_header_menu.js"></script>
+	<script type="text/javascript" src="https://www.budget.com/budgetWeb/html/js/en/header/header_search_txt_replace.js"></script>
+	<script type="text/javascript" src="https://www.budget.com/budgetWeb/html/js/en/common/s_code_remote.js"></script>
+	
+</head>
+<body>
+<div class="mainWrapper">
+<!-- start:budgetWEB/html/en/common/header.html -->
+<script type="text/javascript" src="https://www.budget.com/budgetWeb/html/js/en/common/cookie.js"></script>
+<script type="text/javascript">
+
+function MM_openBrWindow(theURL,winName,features)
+{ //v2.0
+  window.open(theURL,winName,features);
+}
+</script>
+
+<!-- TODO: PAGE DEFAULT CONTENT GOES HERE -->
+<div class="header_container">
+  <div class="main_nav_top">
+  <a href="https://www.budget.com/budgetWeb/home/home.ex"><img src="https://www.budget.com/budgetWeb/images/header/logo.gif" width="220" height="34" border="0" alt="home" title="budget.com car rental home" /></a></div>
+  <div id="ddtopmenubar" class="main_menu">
+    <ul>
+      <li class="first"><a href="https://www.budget.com/budgetWeb/reservation/initializer.ex?action=reset" title="car rental">car rental</a></li>
+      <li><a href="https://www.budget.com/budgetWeb/html/en/deals/index.html" title="specials">specials</a></li>
+      <li><a href="https://www.budget.com/budgetWeb/html/en/cars/index.html" title="car types">car types</a></li>
+      <li><a href="https://www.budget.com/budgetWeb/locationsearch/location.ex?action=locationsearch" title="locations">locations</a></li>
+      <li><a href="https://www.budget.com/budgetWeb/html/en/smartservices/index.html" title="smart services">smart services</a></li>
+      <li><a href="https://www.budget.com/budgetWeb/profile/frequentrenter.ex?action=frequentRenter" title="frequent renter">frequent renter</a></li>
+      <li class="last"><a href="https://www.budget.com/budgetWeb/feedback/feedbackrouter.ex?feedbackhome=display-contactus" title="customer care">customer care</a></li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- end:budgetWEB/html/en/common/header.html -->
+  <div class="contentWrapper">
+<!-- EXAMPLE CSS BELOW -->
+<!--     <div class="full_page_header">
+      <p class="contentHeader">Content Main Title </p>
+      <p class="contentSubHeader">Sub-header text</p>
+      <p><span class="elevnPxBluBld"><strong>In Summary:</strong></span>&nbsp;&nbsp;<span class="twlvPxBlk">Marketing or instructional text.</span></p>
+    </div>  -->
+    <div class="full_page_header">
+
+		<ui:insert name="body" />
+		<br/>
+		<p><t:outputText value="#{msg.general_liability}" /></p>
+
+  </div>
+  <br/>
+<!--start footer.html-->
+<!-- Start scripts for expanding footer links -->
+	<script>
+    function footerSwitch(state){
+		if(state == 'closed'){
+	      document.getElementById('pageFooter').style.height = '145px';
+	      //document.getElementById('footer_left').style.display = 'none';
+	      //document.getElementById('footer_right').style.display = 'none';
+	      document.getElementById('largeFooter').style.display = 'block';
+	      document.getElementById('largeFooter').style.marginTop = '25px';
+		  document.getElementById('toggleLink').href = "javascript:footerSwitch('open');";
+		  document.getElementById('toggleLink').innerHTML = "-";
+	    }
+	    if(state == 'open'){
+	      document.getElementById('pageFooter').style.height = '50px';
+	      document.getElementById('footer_left').style.display = 'block';
+	      document.getElementById('footer_right').style.display = 'block';
+	      document.getElementById('largeFooter').style.display = 'none';
+		  document.getElementById('toggleLink').href = "javascript:footerSwitch('closed');";
+		  document.getElementById('toggleLink').innerHTML = "+";
+	    }
+	}
+    </script>
+<!-- End scripts for expanding footer links -->
+
+<div class="pageFooter clearfix" id="pageFooter">
+<div class="footer_left" id="footer_left"><a href="https://www.budget.com/budgetWeb/home/home.ex" title="home">home</a> | <a href="https://m.budget.com" title="mobile site">mobile site</a> | <a href="https://www.budget.com/budgetWeb/html/en/customer/privacy/index.html" title="PRIVACY">PRIVACY</a> | <a href="https://www.budget.com/budgetWeb/html/en/customer/sitemap.html" title="site map">site map</a> | <a href="https://www.budget.com/budgetSearch/sitesearch/performSearch.ex?ui_mode=question&amp;charset=UTF-8&amp;language=en-US&amp;site=Budget&amp;searchtype=WebSearch&amp;question_box=" title="search">search</a> | <a href="https://www.budget.com/budgetWeb/html/en/aboutus/index.html" title="about us">about us</a> | <a href="https://www.budget.com/budgetWeb/feedback/feedbackrouter.ex?feedbackhome=display-contactus" title="contact us">contact us</a></div>
+<div style=" margin-top:1px; float:right;">Copyright &#169; 2011 Budget Rent A Car System, Inc. </div>
+</div>
+<div class="bottomGrad"></div>
+
+<script type="text/javascript">
+
+	var custom_var = '';
+
+</script>
+<!-- scripts for Hover feature Start -->
+<script type="text/javascript" src="https://www.budget.com/budgetWeb/html/js/en/includedJS/ajax_request.js"></script>
+<script type="text/javascript" src="https://www.budget.com/budgetWeb/html/js/en/hovers/balloon.config.js"></script>
+<script type="text/javascript" src="https://www.budget.com/budgetWeb/html/js/en/hovers/balloon_min.js"></script>
+
+<!-- scripts for Hover feature End -->
+
+
+<!--end footer.html-->
+</div>
+</div>
+</body>
+</f:view>
+</html>

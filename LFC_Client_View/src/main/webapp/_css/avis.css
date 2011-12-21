@@ -1,0 +1,372 @@
+.content {
+	font-family: Arial, Helvetica;
+	font-size: 11px; 
+	color: #505050;
+}
+.black {
+	font-family: Arial, Helvetica;
+	font-size: 11px;
+	line-height: 11px; 
+	color: #000000;
+	font-weight: normal;
+}
+.contentNoReq {
+	font-family: Arial, Helvetica;
+	font-size: 11px; 
+	color: #000000;
+	font-weight: normal;
+}
+.formLabel {
+	font-family: Arial, Helvetica;
+	font-size: 11px; 
+	color: #000000;
+	font-weight: bold;
+}
+sup {
+	font-family: Arial, Helvetica;
+	font-size: 9px; 
+	color: #505050;
+	line-height: 11px;
+}
+.contentRed {
+    font-family: Arial, Helvetica;
+    font-size: 11px; 
+    color: #ed2a24;
+}
+.title {
+	font-family: Arial, Helvetica;
+	font-size: 18px; 
+	color: #222a72;
+	font-weight: bold;
+}
+.titleRed {
+    font-family: Arial, Helvetica;
+    font-size: 18px; 
+    color: #ed2a24;
+    font-weight: bold;
+}
+.huge {
+	font-family: Arial, Helvetica;
+	font-size: 32px; 
+	color: #ed2a24;
+	font-weight: bold;
+}
+.header {
+	font-family: Arial, Helvetica;
+	font-size: 16px; 
+	color: #505050;
+	font-weight: normal;
+}
+.headerSpecial {
+    font-family: Arial, Helvetica;
+    font-size: 16px; 
+    color: #505050;
+    font-weight: normal;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.subheader {
+	font-family: Arial, Helvetica;
+	font-size: 14px; 
+	padding: 0px 5px 0px 5px;
+	color: #1f236c;
+	font-weight: bold;
+}
+.mmSubHdr {
+    font-family: arial, verdana, helvetica;
+    font-weight: bold;
+    font-size: 11px;
+	line-height: 11px;
+	height: 25px;
+    color: #000000;
+    vertical-align: middle;
+    padding: 0px 0px 0px 10px; 
+}
+.boxHeader {
+	font-family: Arial, Helvetica;
+	font-size: 13px; 
+	color: #ffffff;
+	font-weight: bold;
+	padding-left: 8px;
+}
+.dealHeader {
+	font-family: Arial, Helvetica;
+	font-size: 14px; 
+	color: #ffffff;
+	font-weight: bold;
+	padding-left: 8px;
+}
+.sideModuleHdr {
+	font-family: arial, verdana, helvetica;
+	font-weight: bold;
+	font-size: 13px;
+	color: #ffffff;
+	padding: 0px 0px 0px 10px;
+}
+.sideModuleSubHdr {
+	font-family: arial, verdana, helvetica;
+	font-weight: bold;
+	font-size: 11px;
+	color: #505050;
+	padding: 0 0 0 10px;
+    background-image: url('https://www.avis.com/car-rental/images/sidebar_module_sub.gif');
+    background-repeat: no-repeat;
+    _padding-top: 2px;
+}
+.sideModuleContent {
+	font-family: arial, verdana, helvetica;
+	font-weight: normal;
+	font-size: 11px;
+	color: #505050;
+	padding: 10px 10px 3px 10px;
+}
+.sideModuleContentAds {
+	font-family: arial, verdana, helvetica;
+	font-weight: normal;
+	font-size: 11px;
+	color: #505050;
+	padding: 0px 10px 3px 10px;
+}
+.footer {
+	font-family: Arial, Helvetica;
+	font-size: 10px; 
+	color: #222a72;
+	font-weight: normal;
+}
+.alert {
+	font-family: Arial, Helvetica;
+	font-size: 11px; 
+	color: #ff0000;
+	font-weight: bold;
+}
+a:link {
+	font-size: 11px; 
+	color: #0000ff; 
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+	text-decoration: underline;
+}
+a:active {
+	font-size: 11px; 
+	color: #0000ff; 
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+	text-decoration: underline;
+}
+a:visited {
+	font-size: 11px; 
+	color: #0000ff; 
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+	text-decoration: underline;
+}
+a:hover {
+	font-size: 11px; 
+	color: #505050; 
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+	text-decoration: none;
+}
+.button a{
+	font-family: Arial, Helvetica;
+	font-size: 11px;
+	font-weight: bold;
+	color: #ffffff;
+	text-decoration: none;
+	width: 100%;
+	height: 15px;
+	display: block;
+}
+.button a:hover{
+	font-family: Arial, Helvetica;
+	font-size: 11px;
+	font-weight: bold;
+	color: #f78c22;
+	text-decoration: none;
+	width: 100%;
+	background-color: #ffffff;
+}
+.red { 
+	font-family: arial, verdana, helvetica;
+	font-weight: normal;
+	font-size: 12px;
+	color: #ec2e2a;
+	font-weight: bold;
+}
+li {
+	font-family: Arial, Helvetica;
+	font-size: 11px; 
+	color: #505050;
+}
+li.bold {
+	font-family: Arial, Helvetica;
+	font-size: 11px; 
+	color: #505050;
+	font-weight: bold;
+}
+.smallWh {
+	font-size: 10px; 
+	color: #ffffff; 
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+}
+.small {
+	font-size: 10px; 
+	color: #505050; 
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+}
+a.smallWh:link {
+	font-size: 10px; 
+	color: #ffffff; 
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+	text-decoration: underline;
+}
+a.smallWh:active {
+	font-size: 10px; 
+	color: #ffffff; 
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+	text-decoration: underline;
+}
+a.smallWh:visited {
+	font-size: 10px; 
+	color: #ffffff; 
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+	text-decoration: underline;
+}
+a.smallWh:hover {
+	font-size: 10px; 
+	color: #ffffff; 
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+	text-decoration: none;
+}
+input {
+	/*height: 18px;
+	font-family: Arial, Helvetica;
+	font-weight: normal;
+	font-size: 11px;
+	color: #505050;
+	border-color: #7A8899; 
+	border-size: 0px;
+	*/
+	color: #333333; 
+	background-color: #ffffff; 
+	font-size: 11px; 
+	font-family: verdana; 
+	border: 1px solid #a5acb2;	
+}
+.button{
+	border: 0px solid #ffffff;
+}
+.dealBlock{
+	width:440px;
+	background:url(https://www.avis.com/car-rental/images/bg_deal_module_content.gif) repeat;
+	padding:8px 15px 7px 15px;
+	margin:0;
+	_margin:0;
+	font-family: Arial, Helvetica;
+	font-size: 11px; 
+	color: #505050;
+}
+.dealContainerDiv{
+	padding:0px;
+	margin:0px;
+	width:510px;
+	height:171px;
+}
+/*.dealHPleft{
+	width:148px;
+	height:171px;
+	float:left;
+	padding:0px;
+	margin-left:71px;
+	margin-right:35px;
+}
+.dealHPright{
+	width:148px;
+	height:171px;
+	float:left;
+	padding:0px;
+	margin-left:36px;
+	margin-right:71px;
+}
+.dealCopyDiv{
+	width:148px;
+	height:32px;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:0px;
+	padding-bottom:0px;
+	margin:0px;
+}
+.dealLinkDiv{
+	width:148px;
+	height:42px;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:0px;
+	padding-bottom:0px;
+	margin:0px;
+}
+.dealImgDiv{
+	width:148px;
+	height:97px;
+	padding:0px;
+	margin:0px;
+}*/
+.dealHPleft{
+	width:255px;
+	height:171px;
+	float:left;
+	padding:0px;
+	margin-left:0px;
+	margin-right:0px;
+}
+.dealHPright{
+	width:255px;
+	height:171px;
+	float:left;
+	padding:0px;
+	margin-left:0px;
+	margin-right:0px;
+}
+.dealImgDiv{
+	width:255px;
+	height:97px;
+	padding:0px;
+	margin:0px;
+}
+.dealCopyDiv{
+	width:255px;
+	height:32px;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:0px;
+	padding-bottom:0px;
+	margin:0px;
+}
+.dealLinkDiv{
+	width:255px;
+	height:42px;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:0px;
+	padding-bottom:0px;
+	margin:0px;
+}
+.dealThreeWide{
+	width:148px;
+	float:left;
+	padding-top:0px;
+	padding-left:5px;
+	padding-right:5px;
+	margin-right:20px;
+	_margin-right:15px;
+}
+.moduleBottom{
+    padding: 0 0 10px 0;
+}

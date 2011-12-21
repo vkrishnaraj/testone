@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+<f:view contentType="text/html" encoding="UTF-8">
+<f:loadBundle basename="southwest" var="msg"/>	
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<title><ui:insert name="title">Default Title</ui:insert></title>
+<link rel="stylesheet" type="text/css" href="../_css/southwest_master.css"/>
+</head>
+<body>
+<div id="main">
+<!-- ########## BEGIN HEADER ########## -->    
+
+<!-- ########## END HEADER ########## -->
+<div class="bodyOtherPages">
+<div class="contentBg" id="mainBodyDiv">
+<table border="0" cellpadding="0" cellspacing="0" width="890">
+<tr width="890">
+<td valign="top">
+<div>		  
+		<!-- #################### END HEADER TEMPLATE ########################## -->
+
+		<ui:insert name="body" />
+		<br/>
+		<p><t:outputText value="#{msg.general_liability}" /></p>
+		<!-- #################### BEGIN FOOTER TEMPLATE ######################## -->
+</div>	    
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="clear"></div>
+<!-- ########## BEGIN FOOTER ########## -->
+
+<!-- ########## END FOOTER ########## -->
+</div> 
+</body>
+</f:view>
+</html>

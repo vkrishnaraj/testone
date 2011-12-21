@@ -1,0 +1,18 @@
+
+.col25 {
+	width: 25%;
+}
+
+.errormsg {
+	clear: none;
+	color: red;
+	margin-top: 2px;
+	font-size: 8pt;
+}
+
+.infomsg {
+	color: green;
+	list-style: none;
+	font-size: 10pt;
+	font-weight: bold;
+}
