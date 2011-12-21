@@ -3,7 +3,7 @@
 	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
 	<factory>
-		<exception-handler-factory>aero.nettracer.avis.exception.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
+		<exception-handler-factory>aero.nettracer.lfc.exception.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
 	</factory>
 	<application>
 		<!-- Spring Configuration -->
