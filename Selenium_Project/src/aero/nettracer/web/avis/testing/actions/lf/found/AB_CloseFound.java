@@ -13,7 +13,7 @@ public class AB_CloseFound extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			System.out.println("VERIFYING CLOSE STATUS: " + selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
-			verifyEquals("Close", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
+			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
 		} else {
 			System.err.println("Edit Found Page Did Not Reload After Closing. Error Page Loaded Instead.");
 			verifyTrue(false);

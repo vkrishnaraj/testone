@@ -15,11 +15,16 @@ public class AB_ConfirmMatch extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
+			selenium.type("name=filter.lostId", Settings.LOST_ID_AB);
+			selenium.type("name=filter.foundId", Settings.FOUND_ID_AB);
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
 			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[5]/a");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("Lost Report Id 	Found Item Id 	Score \n<LOSTID> 	<FOUNDID> 	45.0"));
+				verifyTrue(selenium.isTextPresent("Lost Report Id 	Found Item Id 	Score \n" +
+						Settings.LOST_ID_AB + " 	" + Settings.FOUND_ID_AB + " 	55.0"));
 				selenium.click("id=button");
 				waitForPageToLoadImproved();
 				selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[7]/a[2]");
