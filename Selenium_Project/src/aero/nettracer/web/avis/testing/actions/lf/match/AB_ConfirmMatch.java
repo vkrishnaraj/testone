@@ -15,6 +15,7 @@ public class AB_ConfirmMatch extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
+			verifyTrue(selenium.isTextPresent("Trace Results"));
 			selenium.type("name=filter.lostId", Settings.LOST_ID_AB);
 			selenium.type("name=filter.foundId", Settings.FOUND_ID_AB);
 			selenium.click("id=button");
@@ -23,8 +24,10 @@ public class AB_ConfirmMatch extends DefaultSeleneseTestCase {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("Lost Report Id 	Found Item Id 	Score \n" +
-						Settings.LOST_ID_AB + " 	" + Settings.FOUND_ID_AB + " 	55.0"));
+				verifyTrue(selenium.isTextPresent("Match Details"));
+				verifyEquals(Settings.LOST_ID_AB, selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td/a"));
+				verifyEquals(Settings.FOUND_ID_AB, selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/a"));
+				verifyEquals("55.0", selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td[3]"));
 				selenium.click("id=button");
 				waitForPageToLoadImproved();
 				selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[7]/a[2]");
