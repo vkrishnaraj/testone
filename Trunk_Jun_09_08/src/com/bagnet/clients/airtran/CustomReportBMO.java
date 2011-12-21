@@ -27,6 +27,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JExcelApiExporter;
 import net.sf.jasperreports.engine.export.JExcelApiExporterParameter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
@@ -107,6 +108,7 @@ public class CustomReportBMO implements
 				addStation.setGoal((Double)station[4]);
 				addStation.setCompanycode(station[5]!=null?(String)station[5]:null);
 				addStation.setRegion_goal(station[7]!=null?(Double)station[7]:0.0);
+				addStation.setDomestic(station[8]!=null?(((String)station[8]).equalsIgnoreCase("US")?true:false):false);
 				stationMap.put((Long)station[6], addStation);
 					
 				double callresult = eiw.getEnplanement(srDTO.getStarttime(), (srDTO
@@ -136,7 +138,9 @@ public class CustomReportBMO implements
 			companyTotal.setStationcode("System Total");
 			companyTotal.setStation_region("Total");
 			
-
+			StatReport_Custom_1_DTO domesticTotal = new StatReport_Custom_1_DTO();
+			domesticTotal.setStation_region("Total");
+			domesticTotal.setStationcode("Domestic Total");
 			
 			for(Object[] loss:lossList){
 				if(!stationMap.containsKey((Long)loss[0])){
@@ -151,131 +155,218 @@ public class CustomReportBMO implements
 					station.setLoss10(incidents);
 					region.setLoss10(region.getLoss10() + incidents);
 					companyTotal.setLoss10(companyTotal.getLoss10() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss10(domesticTotal.getLoss10() + incidents);
+					}
 				} else if (((Integer) loss[1]).intValue() == 12){
 					station.setLoss12(incidents);
 					region.setLoss12(region.getLoss12() + incidents);
 					companyTotal.setLoss12(companyTotal.getLoss12() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss12(domesticTotal.getLoss12() + incidents);
+					}
 				} else if (((Integer) loss[1]).intValue() == 15){
 					station.setLoss15(incidents);
 					region.setLoss15(region.getLoss15() + incidents);
 					companyTotal.setLoss15(companyTotal.getLoss15() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss15(domesticTotal.getLoss15() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 18){
 					station.setLoss18(incidents);
 					region.setLoss18(region.getLoss18() + incidents);
 					companyTotal.setLoss18(companyTotal.getLoss18() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss18(domesticTotal.getLoss18() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 23){
 					station.setLoss23(incidents);
 					region.setLoss23(region.getLoss23() + incidents);
 					companyTotal.setLoss23(companyTotal.getLoss23() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss23(domesticTotal.getLoss23() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 24){
 					station.setLoss24(incidents);
 					region.setLoss24(region.getLoss24() + incidents);
 					companyTotal.setLoss24(companyTotal.getLoss24() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss24(domesticTotal.getLoss24() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 25){
 					station.setLoss25(incidents);
 					region.setLoss25(region.getLoss25() + incidents);
 					companyTotal.setLoss25(companyTotal.getLoss25() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss25(domesticTotal.getLoss25() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 26){
 					station.setLoss26(incidents);
 					region.setLoss26(region.getLoss26() + incidents);
 					companyTotal.setLoss26(companyTotal.getLoss26() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss26(domesticTotal.getLoss26() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 30){
 					station.setLoss30(incidents);
 					region.setLoss30(region.getLoss30() + incidents);
 					companyTotal.setLoss30(companyTotal.getLoss30() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss30(domesticTotal.getLoss30() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 32){
 					station.setLoss32(incidents);
 					region.setLoss32(region.getLoss32() + incidents);
 					companyTotal.setLoss32(companyTotal.getLoss32() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss32(domesticTotal.getLoss32() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 33){
 					station.setLoss33(incidents);
 					region.setLoss33(region.getLoss33() + incidents);
 					companyTotal.setLoss33(companyTotal.getLoss33() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss33(domesticTotal.getLoss33() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 35){
 					station.setLoss35(incidents);
 					region.setLoss35(region.getLoss35() + incidents);
 					companyTotal.setLoss35(companyTotal.getLoss35() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss35(domesticTotal.getLoss35() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 42){
 					station.setLoss42(incidents);
 					region.setLoss42(region.getLoss42() + incidents);
 					companyTotal.setLoss42(companyTotal.getLoss42() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss42(domesticTotal.getLoss42() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 51){
 					station.setLoss51(incidents);
 					region.setLoss51(region.getLoss51() + incidents);
 					companyTotal.setLoss51(companyTotal.getLoss51() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss51(domesticTotal.getLoss51() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 54){
 					station.setLoss54(incidents);
 					region.setLoss54(region.getLoss54() + incidents);
 					companyTotal.setLoss54(companyTotal.getLoss54() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss54(domesticTotal.getLoss54() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 56){
 					station.setLoss56(incidents);
 					region.setLoss56(region.getLoss56() + incidents);
 					companyTotal.setLoss56(companyTotal.getLoss56() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss56(domesticTotal.getLoss56() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 63){
 					station.setLoss63(incidents);
 					region.setLoss63(region.getLoss63() + incidents);
 					companyTotal.setLoss63(companyTotal.getLoss63() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss63(domesticTotal.getLoss63() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 64){
 					station.setLoss64(incidents);
 					region.setLoss64(region.getLoss64() + incidents);
 					companyTotal.setLoss64(companyTotal.getLoss64() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss64(domesticTotal.getLoss64() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 73){
 					station.setLoss73(incidents);
 					region.setLoss73(region.getLoss73() + incidents);
 					companyTotal.setLoss73(companyTotal.getLoss73() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss73(domesticTotal.getLoss73() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 74){
 					station.setLoss74(incidents);
 					region.setLoss74(region.getLoss74() + incidents);
 					companyTotal.setLoss74(companyTotal.getLoss74() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss74(domesticTotal.getLoss74() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 76){
 					station.setLoss76(incidents);
 					region.setLoss76(region.getLoss76() + incidents);
 					companyTotal.setLoss76(companyTotal.getLoss76() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss76(domesticTotal.getLoss76() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 78){
 					station.setLoss78(incidents);
 					region.setLoss78(region.getLoss78() + incidents);
 					companyTotal.setLoss78(companyTotal.getLoss78() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss78(domesticTotal.getLoss78() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 80){
 					station.setLoss80(incidents);
 					region.setLoss80(region.getLoss80() + incidents);
 					companyTotal.setLoss80(companyTotal.getLoss80() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss80(domesticTotal.getLoss80() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 81){
 					station.setLoss81(incidents);
 					region.setLoss81(region.getLoss81() + incidents);
 					companyTotal.setLoss81(companyTotal.getLoss81() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss81(domesticTotal.getLoss81() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 82){
 					station.setLoss82(incidents);
 					region.setLoss82(region.getLoss82() + incidents);
 					companyTotal.setLoss82(companyTotal.getLoss82() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss82(domesticTotal.getLoss82() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 90){
 					station.setLoss90(incidents);
 					region.setLoss90(region.getLoss90() + incidents);
 					companyTotal.setLoss90(companyTotal.getLoss90() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss90(domesticTotal.getLoss90() + incidents);
+					}
 			    }
 				
 			}
 			
-			ArrayList<StatReportElement> submitList = new ArrayList<StatReportElement>();
+			ArrayList<StatReportElement> stationDataList = new ArrayList<StatReportElement>();
+			ArrayList<StatReportElement> summaryList = new ArrayList<StatReportElement>();
 			double companyBoarded = 0;
+			double domesticBoarded = 0;
 
 			for(StatReport_Custom_1_DTO station:stationMap.values()){
-				submitList.add(createStatReportElement(station, false));
+				stationDataList.add(createStatReportElement(station, false));
 				StatReport_Custom_1_DTO r = regionMap.get(station.getRegionid());
 				r.setBoarded(r.getBoarded() + station.getBoarded());
 				companyBoarded += station.getBoarded();
+				if (station.isDomestic()) {
+					domesticBoarded += station.getBoarded();
+				}
 			}
 			
 			for(StatReport_Custom_1_DTO region:regionMap.values()){
-				submitList.add(createStatReportElement(region, false));
+				if(srDTO.getOutputtype() == TracingConstants.REPORT_OUTPUT_XLS){
+					summaryList.add(createStatReportElement(region, false));
+				} else {
+					summaryList.add(createStatReportElement(region, false));
+				}
 			}
 			
 			companyTotal.setBoarded(companyBoarded);
-			submitList.add(createStatReportElement(companyTotal, false));
-			companyTotal.setStationcode("Domestic/DOT Total");
-			submitList.add(createStatReportElement(companyTotal, true));
+			domesticTotal.setBoarded(domesticBoarded);
+			summaryList.add(createStatReportElement(companyTotal, false));
+			summaryList.add(createStatReportElement(domesticTotal, true));
 			
 			if(srDTO.getOutputtype() == TracingConstants.REPORT_OUTPUT_XLS){
-				return create501ExcelReport(rootpath, 0, user, submitList, parameters);
+				return create501ExcelReport(rootpath, 0, user, summaryList, stationDataList, parameters);
 			} else {
 				return ReportBMO.getReportFile(new ArrayList(stationMap.values()), parameters, reportname, rootpath, srDTO
 						.getOutputtype(), request);
@@ -389,7 +480,7 @@ public class CustomReportBMO implements
 			stationq = " and s.station_ID in (:station_ID) ";
 		}
 		String stationSQL = "select s.stationcode as stationcode, r.id as region_id, r.name as region_name" +
-		", r.director as region_director, s.goal as station_goal, s.companycode_id as companycode, s.station_ID as station_id, r.target as region_target " +
+		", r.director as region_director, s.goal as station_goal, s.companycode_id as companycode, s.station_ID as station_id, r.target as region_target, s.countrycode_ID as countryCode " +
 		"from station s left outer join region r on s.region_id = r.id " +
 		"where s.active = 1 and s.companycode_ID = :companycode_ID " +
 		stationq +
@@ -417,6 +508,7 @@ public class CustomReportBMO implements
 			stationQuery.addScalar("companycode", Hibernate.STRING);
 			stationQuery.addScalar("station_id", Hibernate.LONG);
 			stationQuery.addScalar("region_target", Hibernate.DOUBLE);
+			stationQuery.addScalar("countryCode", Hibernate.STRING);
 			
 			List<Object[]> stationList = stationQuery.list();
 			return stationList;
@@ -435,6 +527,7 @@ public class CustomReportBMO implements
 		DecimalFormat dfBoarded = new DecimalFormat("#");
 		
 		StatReportElement toAdd = new StatReportElement();
+		toAdd.setDot(stat.getDomesticStr());
 		toAdd.setE1(stat.getStationcode());
 		toAdd.setE2(stat.getLoss10());
 		toAdd.setE3(stat.getLoss12());
@@ -1548,67 +1641,30 @@ public class CustomReportBMO implements
 		}
 	}*/
 
-	public String create501ExcelReport(String root, int salvageId, Agent user, List dlist, Map parameters) {
+	public String create501ExcelReport(String root, int salvageId, Agent user, List summaryList, List stationDataList, Map parameters) {
 
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		String fileName = ReportingConstants.RPT_20_CUSTOM_501_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
 		String outputpath = root + ReportingConstants.REPORT_TMP_PATH + fileName;
 		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
 		virtualizer.setReadOnly(false);
-		
-		FastReportBuilder drb = new FastReportBuilder();
-		drb.setTitle("AIRTRAN AIRWAYS " + (String)parameters.get("title"));
-		drb.setSubtitle((String)parameters.get("sdate") + " TO " + (String)parameters.get("edate"));
-		
+				
 		try {
-			Style header = new Style();
-			header.setBackgroundColor(java.awt.Color.GRAY);
-			header.setOverridesExistingStyle(true);
-			Style column = new Style();
-			column.setBackgroundColor(java.awt.Color.WHITE);
-			column.setOverridesExistingStyle(true);
-			drb.setIgnorePagination(true);
-			drb.addColumn("REGION", "e32", String.class.getName(), 200, column, header);
-			drb.addColumn("LOCN", "e1", String.class.getName(), 50, column, header);
-			drb.addColumn("10", "e2", Integer.class.getName(), 50, column, header);
-			drb.addColumn("12", "e3", Integer.class.getName(), 50, column, header);
-			drb.addColumn("15", "e4", Integer.class.getName(), 50, column, header);
-			drb.addColumn("18", "e5", Integer.class.getName(), 50, column, header);
-			drb.addColumn("23", "e6", Integer.class.getName(), 50, column, header);
-			drb.addColumn("24", "e7", Integer.class.getName(), 50, column, header);
-			drb.addColumn("25", "e8", Integer.class.getName(), 50, column, header);
-			drb.addColumn("26", "e9", Integer.class.getName(), 50, column, header);
-			drb.addColumn("30", "e10", Integer.class.getName(), 50, column, header);
-			drb.addColumn("32", "e11", Integer.class.getName(), 50, column, header);
-			drb.addColumn("33", "e12", Integer.class.getName(), 50, column, header);
-			drb.addColumn("35", "e13", Integer.class.getName(), 50, column, header);
-			drb.addColumn("42", "e14", Integer.class.getName(), 50, column, header);
-			drb.addColumn("51", "e15", Integer.class.getName(), 50, column, header);
-			drb.addColumn("54", "e16", Integer.class.getName(), 50, column, header);
-			drb.addColumn("56", "e17", Integer.class.getName(), 50, column, header);
-			drb.addColumn("63", "e18", Integer.class.getName(), 50, column, header);
-			drb.addColumn("64", "e19", Integer.class.getName(), 50, column, header);
-			drb.addColumn("73", "e20", Integer.class.getName(), 50, column, header);
-			drb.addColumn("74", "e21", Integer.class.getName(), 50, column, header);
-			drb.addColumn("76", "e22", Integer.class.getName(), 50, column, header);
-			drb.addColumn("78", "e23", Integer.class.getName(), 50, column, header);
-			drb.addColumn("80", "e24", Integer.class.getName(), 50, column, header);
-			drb.addColumn("81", "e25", Integer.class.getName(), 50, column, header);
-			drb.addColumn("82", "e26", Integer.class.getName(), 50, column, header);
-			drb.addColumn("90", "e27", Integer.class.getName(), 50, column, header);
-			drb.addColumn("TOTAL", "e28", String.class.getName(), 50, column, header);
-			drb.addColumn("BOARD", "e29", String.class.getName(), 50, column, header);
-			drb.addColumn("RATIO", "e30", String.class.getName(), 50, column, header);
-			drb.addColumn("GOALS", "e31", String.class.getName(), 50, column, header);
-			drb.addColumn("REGION GOALS", "e33", String.class.getName(), 50, column, header);
+			JasperPrint summary = generateReportTab(summaryList, parameters, true);
+			JasperPrint stations = generateReportTab(stationDataList, parameters, false);
 			
-			DynamicReport report = drb.build();
-						
-			JRDataSource data = new JRBeanCollectionDataSource(dlist);
 			
-			JasperPrint jp = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), data);
+			ArrayList<JasperPrint> tabs = new ArrayList<JasperPrint>();
+			summary.setPageWidth(2000);
+			stations.setPageWidth(2000);
+			tabs.add(summary);
+			tabs.add(stations);
+			
+			String[] sheetNames = { "System Summary", "Stations" };
+			
 			parameters.put(JRParameter.IS_IGNORE_PAGINATION, true);
-			parameters.put(JExcelApiExporterParameter.JASPER_PRINT,  jp);
+			parameters.put(JRXlsExporterParameter.SHEET_NAMES, sheetNames);
+			parameters.put(JExcelApiExporterParameter.JASPER_PRINT_LIST,  tabs);
 			parameters.put(JExcelApiExporterParameter.OUTPUT_FILE_NAME, outputpath);
 			parameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, false);
 			parameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, false);
@@ -1617,6 +1673,7 @@ public class CustomReportBMO implements
 			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, true);
 			parameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, true); 
 			parameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, true);
+			parameters.put(JExcelApiExporterParameter.IS_DETECT_CELL_TYPE, true);
 			
 			
 			JExcelApiExporter exporter = new JExcelApiExporter();
@@ -1631,6 +1688,68 @@ public class CustomReportBMO implements
 		} 
 		virtualizer.cleanup();
 		return fileName;
+	}
+
+	private JasperPrint generateReportTab(List dlist, Map parameters,
+			boolean summaryTab) throws ColumnBuilderException,
+			ClassNotFoundException, JRException {
+		FastReportBuilder drb = new FastReportBuilder();
+		
+		if (summaryTab) {
+			drb.setTitle("AIRTRAN AIRWAYS " + (String)parameters.get("title"));
+			drb.setSubtitle((String)parameters.get("sdate") + " TO " + (String)parameters.get("edate"));
+		}
+		
+		Style header = new Style();
+		header.setBackgroundColor(java.awt.Color.GRAY);
+		header.setOverridesExistingStyle(true);
+		
+		Style column = new Style();
+		column.setBackgroundColor(java.awt.Color.WHITE);
+		column.setOverridesExistingStyle(true);
+		drb.setIgnorePagination(true);
+		
+		drb.addColumn("REGION", "e32", String.class.getName(), 200, column, header);
+		drb.addColumn("LOCN", "e1", String.class.getName(), 50, column, header);
+		if (!summaryTab) {
+			drb.addColumn("DOM", "dot", String.class.getName(), 50, column, header);
+		}
+		drb.addColumn("10", "e2", Integer.class.getName(), 50, column, header);
+		drb.addColumn("12", "e3", Integer.class.getName(), 50, column, header);
+		drb.addColumn("15", "e4", Integer.class.getName(), 50, column, header);
+		drb.addColumn("18", "e5", Integer.class.getName(), 50, column, header);
+		drb.addColumn("23", "e6", Integer.class.getName(), 50, column, header);
+		drb.addColumn("24", "e7", Integer.class.getName(), 50, column, header);
+		drb.addColumn("25", "e8", Integer.class.getName(), 50, column, header);
+		drb.addColumn("26", "e9", Integer.class.getName(), 50, column, header);
+		drb.addColumn("30", "e10", Integer.class.getName(), 50, column, header);
+		drb.addColumn("32", "e11", Integer.class.getName(), 50, column, header);
+		drb.addColumn("33", "e12", Integer.class.getName(), 50, column, header);
+		drb.addColumn("35", "e13", Integer.class.getName(), 50, column, header);
+		drb.addColumn("42", "e14", Integer.class.getName(), 50, column, header);
+		drb.addColumn("51", "e15", Integer.class.getName(), 50, column, header);
+		drb.addColumn("54", "e16", Integer.class.getName(), 50, column, header);
+		drb.addColumn("56", "e17", Integer.class.getName(), 50, column, header);
+		drb.addColumn("63", "e18", Integer.class.getName(), 50, column, header);
+		drb.addColumn("64", "e19", Integer.class.getName(), 50, column, header);
+		drb.addColumn("73", "e20", Integer.class.getName(), 50, column, header);
+		drb.addColumn("74", "e21", Integer.class.getName(), 50, column, header);
+		drb.addColumn("76", "e22", Integer.class.getName(), 50, column, header);
+		drb.addColumn("78", "e23", Integer.class.getName(), 50, column, header);
+		drb.addColumn("80", "e24", Integer.class.getName(), 50, column, header);
+		drb.addColumn("81", "e25", Integer.class.getName(), 50, column, header);
+		drb.addColumn("82", "e26", Integer.class.getName(), 50, column, header);
+		drb.addColumn("90", "e27", Integer.class.getName(), 50, column, header);
+		drb.addColumn("TOTAL", "e28i", Integer.class.getName(), 50, column, header);
+		drb.addColumn("BOARD", "e29i", Integer.class.getName(), 50, column, header);
+		drb.addColumn("RATIO", "e30f", Float.class.getName(), 50, column, header);
+		drb.addColumn("GOALS", "e31f", Float.class.getName(), 50, column, header);
+		drb.addColumn("REGION GOALS", "e33f", Float.class.getName(), 50, column, header);
+		
+		DynamicReport report = drb.build();
+		JRDataSource data = new JRBeanCollectionDataSource(dlist);
+		JasperPrint jp = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), data);
+		return jp;
 	}
 	
 }

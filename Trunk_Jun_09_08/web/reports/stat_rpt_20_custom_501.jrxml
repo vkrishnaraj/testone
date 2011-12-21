@@ -72,6 +72,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 	<field name="loss90" class="java.lang.Integer"/>
 	<field name="goal_times_boarded" class="java.lang.Double"/>
 	<field name="companycode" class="java.lang.String"/>
+	<field name="domesticStr" class="java.lang.String"/>
 	<variable name="subloss10" class="java.lang.Integer" resetType="Group" resetGroup="Region" calculation="Sum">
 		<variableExpression><![CDATA[$F{loss10}]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
@@ -181,111 +182,111 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 		<initialValueExpression><![CDATA[new java.lang.Long(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss10" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss10}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss10} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss12" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss12}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss12} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss15" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss15}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss15} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss18" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss18}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss18} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss23" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss23}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss23} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss24" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss24}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss24} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss25" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss25}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss25} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss26" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss26}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss26} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss30" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss30}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss30} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss32" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss32}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss32} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss33" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss33}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss33} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss35" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss35}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss35} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss42" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss42}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss42} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss51" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss51}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss51} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss54" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss54}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss54} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss56" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss56}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss56} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss63" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss63}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss63} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss64" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss64}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss64} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss73" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss73}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss73} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss74" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss74}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss74} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss76" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss76}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss76} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss78" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss78}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss78} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss80" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss80}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss80} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss81" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss81}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss81} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss82" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss82}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss82} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalloss90" class="java.lang.Integer" calculation="Sum">
-		<variableExpression><![CDATA[$F{loss90}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{loss90} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Integer(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totallosstotal" class="java.lang.Long" calculation="Sum">
-		<variableExpression><![CDATA[$F{total}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{total} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Long(0)]]></initialValueExpression>
 	</variable>
 	<variable name="subboardedtotal" class="java.lang.Double" resetType="Group" resetGroup="Region" calculation="Sum">
@@ -293,7 +294,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 		<initialValueExpression><![CDATA[new java.lang.Double(0)]]></initialValueExpression>
 	</variable>
 	<variable name="totalboardedtotal" class="java.lang.Double" calculation="Sum">
-		<variableExpression><![CDATA[$F{boarded}]]></variableExpression>
+		<variableExpression><![CDATA[$F{domesticStr}.equalsIgnoreCase("Yes") ? $F{boarded} : 0]]></variableExpression>
 		<initialValueExpression><![CDATA[new java.lang.Double(0)]]></initialValueExpression>
 	</variable>
 	<variable name="subratiototal" class="java.lang.Double" resetType="Group" resetGroup="Region" calculation="Average">
@@ -1401,7 +1402,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 	<pageHeader>
 		<band height="16">
 			<staticText>
-				<reportElement key="staticText-13" mode="Opaque" x="32" y="2" width="24" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="staticText-13" mode="Opaque" x="6" y="2" width="24" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -1790,6 +1791,19 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				</textElement>
 				<text><![CDATA[90]]></text>
 			</staticText>
+			<staticText>
+				<reportElement key="staticText-13" mode="Opaque" x="33" y="2" width="24" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Arial" size="8" isBold="false" isItalic="true" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[DOM]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -2031,15 +2045,15 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				</textElement>
 				<textFieldExpression class="java.lang.Long"><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
-				<reportElement key="textField-37" mode="Opaque" x="34" y="4" width="23" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-37" mode="Opaque" x="8" y="4" width="23" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+				<textElement verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{stationcode}]]></textFieldExpression>
@@ -2213,6 +2227,19 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				</textElement>
 				<textFieldExpression class="java.lang.Double"><![CDATA[$F{goal_times_boarded}]]></textFieldExpression>
 			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-37" mode="Opaque" x="33" y="4" width="23" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Arial" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Times-Roman" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{domesticStr}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 	<columnFooter>
@@ -2261,8 +2288,7 @@ from incident,station where incident.stationassigned_ID = station.station_ID gro
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="7" isBold="false" isItalic="true" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[DOMESTIC/
-DOT TOTAL]]></text>
+				<text><![CDATA[DOMESTIC TOTAL]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
 				<reportElement key="textField-92" mode="Opaque" x="56" y="6" width="20" height="12" forecolor="#000000" backcolor="#FFFFFF"/>

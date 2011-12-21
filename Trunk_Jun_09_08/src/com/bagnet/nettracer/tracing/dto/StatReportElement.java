@@ -1,6 +1,41 @@
 package com.bagnet.nettracer.tracing.dto;
 
 public class StatReportElement {
+	Object e1;
+	Object e2;
+	Object e3;
+	Object e4;
+	Object e5;
+	Object e6;
+	Object e7;
+	Object e8;
+	Object e9;
+	Object e10;
+	Object e11;
+	Object e12;
+	Object e13;
+	Object e14;
+	Object e15;
+	Object e16;
+	Object e17;
+	Object e18;
+	Object e19;
+	Object e20;
+	Object e21;
+	Object e22;
+	Object e23;
+	Object e24;
+	Object e25;
+	Object e26;	
+	Object e27;	
+	Object e28;	
+	Object e29;	
+	Object e30;	
+	Object e31;	
+	Object e32;	
+	Object e33;
+	Object dot;
+	
 	public Object getE1() {
 		return e1;
 	}
@@ -199,39 +234,33 @@ public class StatReportElement {
 	public void setE33(Object e33) {
 		this.e33 = e33;
 	}	
-	Object e1;
-	Object e2;
-	Object e3;
-	Object e4;
-	Object e5;
-	Object e6;
-	Object e7;
-	Object e8;
-	Object e9;
-	Object e10;
-	Object e11;
-	Object e12;
-	Object e13;
-	Object e14;
-	Object e15;
-	Object e16;
-	Object e17;
-	Object e18;
-	Object e19;
-	Object e20;
-	Object e21;
-	Object e22;
-	Object e23;
-	Object e24;
-	Object e25;
-	Object e26;	
-	Object e27;	
-	Object e28;	
-	Object e29;	
-	Object e30;	
-	Object e31;	
-	Object e32;	
-	Object e33;
 
+	
+	public Object getDot() {
+		return dot;
+	}
+	public void setDot(Object dot) {
+		this.dot = dot;
+	}
+	
+	public Integer getE28i() {
+		return Integer.valueOf((String)e28);
+	}
+	
+	public Integer getE29i() {
+		return Integer.valueOf((String)e29);
+	}
+
+	public Float getE30f() {
+		return Float.valueOf((String)e30);
+	}
+	
+	public Float getE31f() {
+		return Float.valueOf((String)e31);
+	}
+	
+	public Float getE33f() {
+		return Float.valueOf((String)e33);
+	}
 	
 }

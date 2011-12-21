@@ -59,7 +59,15 @@ public class StatReport_Custom_1_DTO {
 	private double goal;
 	private double goal_times_boarded;
 	private double ratio501;
+	private boolean domestic;
 	
+	
+	public boolean isDomestic() {
+		return domestic;
+	}
+	public void setDomestic(boolean domestic) {
+		this.domestic = domestic;
+	}
 	/**
 	 * @return Returns the station_region.
 	 */
@@ -526,6 +534,8 @@ public class StatReport_Custom_1_DTO {
 		this.ratio501 = ratio501;
 	}
 
-	
+	public String getDomesticStr() {
+		return this.isDomestic() ? "Yes" : "";  
+	}
 	
 }
