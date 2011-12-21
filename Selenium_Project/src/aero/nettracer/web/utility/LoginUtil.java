@@ -27,7 +27,9 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 		selenium.type("password", Settings.PASSWORD_CHANGE);
 		selenium.click("button");
 		waitForPageToLoadImproved();
-		verifyTrue(selenium.isTextPresent("Invalid username and/or password, please try again"));
+		boolean pleaseTryAgain = selenium.isTextPresent("Invalid username and/or password, please try again");
+		boolean lockedOut = selenium.isTextPresent("This agent has been locked out due to excessive failed login attempts. Please contact system administrator.");
+		verifyTrue(pleaseTryAgain || lockedOut);
 	}
 	
 	public void waitForPageToLoadImproved() {
