@@ -989,6 +989,13 @@
 			<exclude name="**/**/jndi.properties"/>
 		</jar>
 	</target>
+
+	<target name="build-jar-lfc-service">
+		<jar destfile="${build.dir}/dist/web/lfc-service-remote.jar" basedir="${build.dir}/ab_web/classes/">
+			<include name="**/**/aero/nettracer/lf/services/LFCClientServiceRemote.class" />
+			<include name="**/**/com/bagnet/nettracer/tracing/constant/TracingConstants.class" />
+		</jar>
+	</target>
 	
 	<target name="build-jar-ntfs-model">
 		<delete file="${build.dir}/claim_model.jar" failonerror="false"/>
