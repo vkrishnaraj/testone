@@ -18,7 +18,7 @@ public class AB_CreateFound_VerifyRequiredFields extends DefaultSeleneseTestCase
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				String found_id = selenium.getText("//div[@id='maincontent']/table/tbody/tr/td/input");
+				String found_id = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input");
 				Settings.FOUND_ID_AB = found_id;
 				System.out.println("AB: Found Item Created: " + Settings.FOUND_ID_AB);
 				verifyTrue(!Settings.FOUND_ID_AB.equals("0"));

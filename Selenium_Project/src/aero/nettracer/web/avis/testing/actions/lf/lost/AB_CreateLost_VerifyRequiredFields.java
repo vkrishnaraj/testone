@@ -39,7 +39,7 @@ public class AB_CreateLost_VerifyRequiredFields extends DefaultSeleneseTestCase 
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				String lost_id = selenium.getText("//div[@id='maincontent']/table/tbody/tr/td/input");
+				String lost_id = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input");
 				Settings.LOST_ID_AB = lost_id;
 				System.out.println("AB: Lost Report Created: " + Settings.LOST_ID_AB);
 				verifyTrue(!Settings.LOST_ID_AB.equals("0"));
