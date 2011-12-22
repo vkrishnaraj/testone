@@ -54,7 +54,7 @@ public class LostAndFoundLoginController {
 	}
 	
 	public String loginSouthwest() {
-		lostReport.setCompany("SW");
+		lostReport.setCompany("SWA");
 		return login();
 	}
 	
@@ -81,7 +81,7 @@ public class LostAndFoundLoginController {
 	}
 	
 	public String goToFormPageSouthwest() {
-		lostReport.setCompany("SW");
+		lostReport.setCompany("SWA");
 		return goToFormPage();
 	}
 	

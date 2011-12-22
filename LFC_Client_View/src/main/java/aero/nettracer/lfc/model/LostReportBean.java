@@ -19,10 +19,15 @@ public class LostReportBean implements Serializable{
 	private long itemSubCategory;
 	private String itemColor;
 	private String itemDesc;
+	private String itemLongDesc;
 	private String whereLost;
 	private String company;
 	private ContactBean contact = new ContactBean();
-	private Date rentalDate;
+	private Date dateLost;
+	private String itemModel;
+	private String itemSize;
+	private String itemCaseColor;
+	private PhoneBean lostPhone = new PhoneBean();
 	
 	//For Status Page
 	private String status;
@@ -182,12 +187,52 @@ public class LostReportBean implements Serializable{
 		this.company = company;
 	}
 
-	public void setRentalDate(Date rentalDate) {
-		this.rentalDate = rentalDate;
+	public void setDateLost(Date dateLost) {
+		this.dateLost = dateLost;
 	}
 
-	public Date getRentalDate() {
-		return rentalDate;
+	public Date getDateLost() {
+		return dateLost;
+	}
+
+	public String getItemLongDesc() {
+		return itemLongDesc;
+	}
+
+	public void setItemLongDesc(String itemLongDesc) {
+		this.itemLongDesc = itemLongDesc;
+	}
+
+	public String getItemModel() {
+		return itemModel;
+	}
+
+	public void setItemModel(String itemModel) {
+		this.itemModel = itemModel;
+	}
+
+	public String getItemSize() {
+		return itemSize;
+	}
+
+	public void setItemSize(String itemSize) {
+		this.itemSize = itemSize;
+	}
+
+	public String getItemCaseColor() {
+		return itemCaseColor;
+	}
+
+	public void setItemCaseColor(String itemCaseColor) {
+		this.itemCaseColor = itemCaseColor;
+	}
+
+	public PhoneBean getLostPhone() {
+		return lostPhone;
+	}
+
+	public void setLostPhone(PhoneBean lostPhone) {
+		this.lostPhone = lostPhone;
 	}
 
 }

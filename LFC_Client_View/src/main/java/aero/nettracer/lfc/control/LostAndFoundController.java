@@ -127,14 +127,6 @@ public class LostAndFoundController {
 				isValid = false;
 			}			
 		}
-		if (lostReport.getPickUpLocation() < 1) {														// VALIDATE: PICK UP
-			FacesUtil.addError("Rental Location is required.");
-			isValid = false;
-		}
-		if (lostReport.getDropOffLocation() < 1) {														// VALIDATE: DROP OFF
-			FacesUtil.addError("Drop Off Rental Location is required.");
-			isValid = false;
-		}
 		boolean hasContactPhoneOrEmail = false;
 		if (lostReport.getContact().getPrimaryPhone().getNumber() != null								// VALIDATE: PHONE AND EMAIL
 				&& lostReport.getContact().getPrimaryPhone().getNumber().trim().length() > 0) {
@@ -156,6 +148,25 @@ public class LostAndFoundController {
 		if (!hasContactPhoneOrEmail) {
 			FacesUtil.addError("Contact Information must contain at least one Phone Number or Email Address.");
 			isValid = false;
+		}
+		if (getCompany().equals("SWA")) {
+			if (lostReport.getDateLost() == null) {													    // VALIDATE: DATE LOST
+				FacesUtil.addError("Date Lost is required.");
+				isValid = false;
+			}
+			if (lostReport.getDropOffLocation() < 1) {													// VALIDATE: LOST AIRPORT
+				FacesUtil.addError("Airport Item Was Lost At is required.");
+				isValid = false;
+			}
+		} else {
+			if (lostReport.getPickUpLocation() < 1) {													// VALIDATE: PICK UP
+				FacesUtil.addError("Rental Location is required.");
+				isValid = false;
+			}
+			if (lostReport.getDropOffLocation() < 1) {													// VALIDATE: DROP OFF
+				FacesUtil.addError("Drop Off Rental Location is required.");
+				isValid = false;
+			}
 		}
 		return isValid;
 	}
