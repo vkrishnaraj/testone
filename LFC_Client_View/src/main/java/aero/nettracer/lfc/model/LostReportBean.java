@@ -1,6 +1,7 @@
 package aero.nettracer.lfc.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class LostReportBean implements Serializable{
 
@@ -21,6 +22,7 @@ public class LostReportBean implements Serializable{
 	private String whereLost;
 	private String company;
 	private ContactBean contact = new ContactBean();
+	private Date rentalDate;
 	
 	//For Status Page
 	private String status;
@@ -178,6 +180,14 @@ public class LostReportBean implements Serializable{
 
 	public void setCompany(String company) {
 		this.company = company;
+	}
+
+	public void setRentalDate(Date rentalDate) {
+		this.rentalDate = rentalDate;
+	}
+
+	public Date getRentalDate() {
+		return rentalDate;
 	}
 
 }

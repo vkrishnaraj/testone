@@ -235,21 +235,34 @@
 						</a4j:outputPanel>
 					</td></tr>
 					<tr><td>&#160;</td></tr>
-					<tr><td style="width: 50%;" >
+					<tr></tr>
+					
+					
+					<tr>
+					<td style="width: 33%;"><t:outputText value="#{msg.lostform_label_rental_date}" /></td>
+					<td style="width: 33%;" >
 						<t:outputText value="#{msg.lostform_label_agree_number}" />
-					</td><td style="width: 50%;" >
+					</td><td style="width: 33%;" >
 						<t:outputText value="#{msg.lostform_label_mva_number}" />
 					</td></tr>
-					<tr><td>
-						<t:inputText value="#{lostAndFound.lostReport.agreementNumber}"  maxlength="9" style="width: 70%;"/>
+					<tr>
+					<td ><rich:calendar value="#{lostAndFound.lostReport.rentalDate}"  
+                           locale="en"  
+                           popup="true"  
+                           datePattern="MM/dd/yyyy"
+                           enableManualInput="true"                        
+                           cellWidth="24px" cellHeight="22px" style="width:200px"/>  
+					</td>
+					<td>
+						<t:inputText value="#{lostAndFound.lostReport.agreementNumber}"  maxlength="9" style="width: 95%;"/>
 					</td><td>
-						<t:inputText value="#{lostAndFound.lostReport.mvaNumber}" maxlength="8" style="width: 70%;"/>
+						<t:inputText value="#{lostAndFound.lostReport.mvaNumber}" maxlength="8" style="width: 95%;"/>
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td colspan="2">
 						<t:outputText value="#{msg.lostform_label_where_lost}" />
 					</td></tr>
-					<tr><td colspan="2">
+					<tr><td colspan="3">
 						<t:inputText value="#{lostAndFound.lostReport.whereLost}"  style="width: 100%" />
 					</td></tr>
 				</table><br/><br/>
