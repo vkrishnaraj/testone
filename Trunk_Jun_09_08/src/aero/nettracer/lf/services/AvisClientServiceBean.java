@@ -21,10 +21,10 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
+import com.bagnet.nettracer.tracing.db.lf.LFLossInfo;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
-import com.bagnet.nettracer.tracing.db.lf.LFReservation;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 
 import aero.nettracer.avis.model.AddressBean;
@@ -54,11 +54,12 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		
 		remote.setWhereLost(host.getRemarks());
 		
-		if(host.getReservation() != null){
-			remote.setAgreementNumber(host.getReservation().getAgreementNumber());
-			remote.setDropOffLocation(host.getReservation().getDropoffLocationId());
-			remote.setMvaNumber(host.getReservation().getMvaNumber());
-			remote.setPickUpLocation(host.getReservation().getPickupLocationId());
+		if(host.getLossInfo() != null){
+			remote.setMvaNumber(host.getLossInfo().getMvaNumber());
+			remote.setAgreementNumber(host.getLossInfo().getAgreementNumber());
+			remote.setDropOffLocation(host.getLossInfo().getDestinationId());
+			remote.setPickUpLocation(host.getLossInfo().getOriginId());
+			remote.setRentalDate(host.getLossInfo().getLossdate());
 		}
 		
 		if(host.getItem() != null){
@@ -163,16 +164,17 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		item.setType(TracingConstants.LF_TYPE_LOST);
 		host.setItem(item);
 		
-		LFReservation reservation = new LFReservation();
-		reservation.setAgreementNumber(lostReport.getAgreementNumber());
+		LFLossInfo lossinfo = new LFLossInfo();
+		lossinfo.setAgreementNumber(lostReport.getAgreementNumber());
 		Station dropoff = new Station();
 		dropoff.setStation_ID(lostReport.getDropOffLocation());
-		reservation.setDropoffLocation(dropoff);
-		reservation.setMvaNumber(lostReport.getMvaNumber());
+		lossinfo.setDestination(dropoff);
+		lossinfo.setMvaNumber(lostReport.getMvaNumber());
 		Station pickup = new Station();
 		pickup.setStation_ID(lostReport.getPickUpLocation());
-		reservation.setPickupLocation(pickup);
-		host.setReservation(reservation);
+		lossinfo.setOrigin(pickup);
+		lossinfo.setLossdate(lostReport.getRentalDate());
+		host.setLossInfo(lossinfo);
 		
 		if(lostReport.getContact() != null){
 			LFPerson client = new LFPerson();

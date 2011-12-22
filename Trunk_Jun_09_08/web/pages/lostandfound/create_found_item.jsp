@@ -385,30 +385,66 @@
        					if (item.getType() == TracingConstants.LF_TYPE_FOUND) { %>
 	         				<tr>
        					<%	int dispositionId = item.getDispositionId();
-     						if (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED || dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP) { %>
-		         					<td class="header">
-         						<% if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_DELIVERED) { %>
-		         						<bean:message key="colname.lf.tracking.number" />:&nbsp;<html:text name="item" property="trackingNumber" size="20" styleClass="textfield" />&nbsp;
-         						<% } else if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_PICKED_UP) { %>
-		         						<bean:message key="lf.picked.up" />&nbsp;
-         						<% } %>
-		         						[<a style="color:#fff;" href='create_found_item.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
-		         					</td>
-    					<%	} else { %>
-       							<td class="header" >&nbsp;</td>
-       					<%  } %>
-      							<td class="header" colspan=2>
+       						if (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED){
+       							%>
+								<td class="header">
+								<bean:message key="colname.lf.tracking.number" />:&nbsp;
+								<input type="text" name="item[<%=i %>].trackingNumber" size="20" class="textfield" value="<%=item.getTrackingNumber() == null ? "" : item.getTrackingNumber() %>" />&nbsp;
+									[<a style="color:#fff;" href='create_found_item.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
+								</td>
+								<td class="header">
+									&nbsp;
+								</td>
+								<td class="header">
+      								<% if (item.getLost() != null) { %>
+      									<bean:message key="lf.match.lost" />:&nbsp;<a style="color:#fff;" href='create_lost_report.do?lostId=<%=item.getLost().getId() %>'><%=item.getLost().getId() %></a>&nbsp;<br/>
+      								<% } else { %>
+      									<bean:message key="lf.match.lost" />:&nbsp;<br/>
+      								<% } %>
+      							</td>
+								<%
+       						} else if (dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP){
+    							%>
+								<td class="header">
+									&nbsp;
+								</td>
+								<td class="header">
+									<bean:message key="lf.picked.up"/>&nbsp;
+									[<a style="color:#fff;" href='create_found_item.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
+								</td>
+								<td class="header">
+      								<% if (item.getLost() != null) { %>
+      									<bean:message key="lf.match.lost" />:&nbsp;<a style="color:#fff;" href='create_lost_report.do?lostId=<%=item.getLost().getId() %>'><%=item.getLost().getId() %></a>&nbsp;<br/>
+      								<% } else { %>
+      									<bean:message key="lf.match.lost" />:&nbsp;<br/>
+      								<% } %>
+      							</td>
+   								<%
+       						} else {
+       							%>
+									<td class="header">
+									<bean:message key="colname.lf.tracking.number" />:&nbsp;
+									<input type="text" name="item[<%=i %>].trackingNumber" size="20" class="textfield" value="<%=item.getTrackingNumber() == null ? "" : item.getTrackingNumber() %>" />
+									&nbsp;
+									</td>
+									<td class="header">
+										<a style="color:#fff;" href='create_found_item.do?pickup=1&itemId=<%=item.getId() %>'><bean:message key="lf.picked.up"/></a>
+									</td>
+									<td class="header">
       								<% if (item.getLost() != null) { %>
       									<bean:message key="lf.match.lost" />:&nbsp;<a style="color:#fff;" href='create_lost_report.do?lostId=<%=item.getLost().getId() %>'><%=item.getLost().getId() %></a>&nbsp;
       									<% if (dispositionId == TracingConstants.LF_DISPOSITION_OTHER || dispositionId == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) { %>
-										[<a style="color:#fff;" href='create_found_item.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
+										<br>[<a style="color:#fff;" href='create_found_item.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
 										<% } %>
       								<% } else { %>
-      									<bean:message key="lf.match.found" />:&nbsp;
+      									<bean:message key="lf.match.lost" />:&nbsp;
   										<input type="text" size="10" class="textfield" id="foundInput" onchange="setLostId(this.value,1,<%=item.getId() %>)" />&nbsp;
-										[<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" ><bean:message key="button.do_match" /></a>]
+										<br>[<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" ><bean:message key="button.do_match" /></a>]
       								<% } %>
       							</td>
+       							<%
+       						}
+     					%>	
 	       					</tr>
          				<tr>
 	         				<td>

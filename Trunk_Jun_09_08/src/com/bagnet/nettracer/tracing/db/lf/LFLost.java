@@ -68,8 +68,8 @@ public class LFLost implements LFObject {
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPerson.class, cascade = CascadeType.ALL)
 	private LFPerson client;
 
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFReservation.class, cascade = CascadeType.ALL)
-	private LFReservation reservation;
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFLossInfo.class, cascade = CascadeType.ALL)
+	private LFLossInfo lossInfo;
 
 	@OneToMany(mappedBy = "lost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy(clause = "id")
@@ -131,12 +131,12 @@ public class LFLost implements LFObject {
 		this.client = client;
 	}
 
-	public LFReservation getReservation() {
-		return reservation;
+	public LFLossInfo getLossInfo() {
+		return lossInfo;
 	}
 
-	public void setReservation(LFReservation reservation) {
-		this.reservation = reservation;
+	public void setLossInfo(LFLossInfo lossInfo) {
+		this.lossInfo = lossInfo;
 	}
 
 	public Set<LFItem> getItems() {
@@ -198,7 +198,7 @@ public class LFLost implements LFObject {
 	@Override
 	@Transient
 	public String getDisStation() {
-		return getReservation().getDropoffLocation().getStationcode();
+		return getLossInfo().getDestination().getStationcode();
 	}
 
 	@Override

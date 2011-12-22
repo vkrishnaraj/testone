@@ -35,7 +35,6 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
-import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
@@ -202,7 +201,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		if(dto.getStation() != null && dto.getStation().getStation_ID() != -1){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-				sql += " and o.reservation.dropoffLocation.station_ID = " + dto.getStation().getStation_ID();
+				sql += " and o.lossInfo.destination.station_ID = " + dto.getStation().getStation_ID();
 			} else {
 				sql += " and o.location.station_ID = " + dto.getStation().getStation_ID();
 			}
@@ -685,7 +684,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	private String getLostQuery(Station station){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
-				"where l.reservation.dropoffLocation.station_ID = " + station.getStation_ID()
+				"where l.lossInfo.destination.station_ID = " + station.getStation_ID()
 				+ " and l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
 		return sql;
 	}
@@ -925,7 +924,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		//TODO location criteria
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh " +
 		"where mh.status.status_ID = " + TracingConstants.LF_TRACING_OPEN
-		+ " and (mh.lost.reservation.dropoffLocation = " + station.getStation_ID() + " or " +
+		+ " and (mh.lost.lossInfo.destination = " + station.getStation_ID() + " or " +
 				"mh.found.location = " + station.getStation_ID() + ")";
 		return sql;
 	}
@@ -1434,7 +1433,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public long getFilteredTraceResultsCount(Station station, TraceResultsFilter filter) {
 		String sql = "select count(distinct m) from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
 		sql += getSqlFromTraceResultsForm(filter);
-		 sql += " and (m.lost.reservation.dropoffLocation = " + station.getStation_ID() + " or " +
+		 sql += " and (m.lost.lossInfo.destination = " + station.getStation_ID() + " or " +
 			"m.found.location = " + station.getStation_ID() + ")";
 		Session sess = null;
 		try{
@@ -1484,7 +1483,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(Station station, TraceResultsFilter filter, int start, int offset) {
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
 		sql += getSqlFromTraceResultsForm(filter);
-		sql +=  " and (m.lost.reservation.dropoffLocation = " + station.getStation_ID() + " or " +
+		sql +=  " and (m.lost.lossInfo.destination = " + station.getStation_ID() + " or " +
 			"m.found.location = " + station.getStation_ID() + ")";
 		List<LFMatchHistory> results = null;
 		Session sess = null;
@@ -1551,10 +1550,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	@Override
 	public void getStillSearchingList() {
-		String sql = "select l.id lostid from lflost l, station s, lfreservation r " +
+		String sql = "select l.id lostid from lflost l, station s, lflossinfo r " +
 		" where l.status_ID = " + TracingConstants.LF_STATUS_OPEN +
 		" and l.reservation_id = r.id " +
-		" and r.dropofflocation_station_ID = s.Station_ID " +
+		" and r.destination_station_ID = s.Station_ID " +
 		" and (datediff(curdate(),l.emailSentDate) >= s.priority or l.emailSentDate is null)";
 
 		Session sess = null;
@@ -1595,9 +1594,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				HtmlEmail he = new HtmlEmail();
 				String currentLocale = lost.getAgent().getCurrentlocale();
 				
-				String from = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_from();
-				String host = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_host();
-				int port = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_port();
+				String from = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_from();
+				String host = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_host();
+				int port = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_port();
 				
 				he.setHostName(host);
 				he.setSmtpPort(port);
@@ -1650,9 +1649,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					HtmlEmail he = new HtmlEmail();
 					String currentLocale = lost.getAgent().getCurrentlocale();
 
-					String from = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_from();
-					String host = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_host();
-					int port = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_port();
+					String from = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_from();
+					String host = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_host();
+					int port = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_port();
 
 					he.setHostName(host);
 					he.setSmtpPort(port);
@@ -1744,9 +1743,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				HtmlEmail he = new HtmlEmail();
 				String currentLocale = lost.getAgent().getCurrentlocale();
 				
-				String from = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_from();
-				String host = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_host();
-				int port = lost.getReservation().getDropoffLocation().getCompany().getVariable().getEmail_port();
+				String from = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_from();
+				String host = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_host();
+				int port = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_port();
 				
 				he.setHostName(host);
 				he.setSmtpPort(port);
@@ -1763,7 +1762,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				
 				
 				h.put("LOSTID", (new Long(id)).toString());
-				h.put("DAYS", (new Integer(lost.getReservation().getDropoffLocation().getPriority()).toString()));//TODO station driven
+				h.put("DAYS", (new Integer(lost.getLossInfo().getDestination().getPriority()).toString()));//TODO station driven
 				h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
 
 				

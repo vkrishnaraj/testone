@@ -118,5 +118,19 @@ public final class LostReportForm extends ActionForm {
 			return "";
 		}
 	}
+	
+	public String getDisLossdate(){
+		if(lost != null && lost.getLossInfo() != null){
+			return lost.getLossInfo().getDisLossdate(getDateFormat());
+		} else {
+			return null;
+		}
+	}
+	
+	public void setDisLossdate(String date){
+		if(lost != null && lost.getLossInfo() != null){
+			lost.getLossInfo().setDisLossdate(date, getDateFormat());
+		}
+	}
 
 }

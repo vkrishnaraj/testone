@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
@@ -43,9 +44,14 @@ public class LFPhone {
 	private int phoneType;
 	
 	@ManyToOne
-	@JoinColumn(name = "person_id", nullable = false)
+	@JoinColumn(name = "person_id", nullable = true)
 	@Fetch(FetchMode.SELECT)
 	private LFPerson person;
+	
+	@OneToOne
+	@JoinColumn(name = "item_id", nullable = true)
+	@Fetch(FetchMode.SELECT)
+	private LFItem item;
 
 	public long getId() {
 		return id;
@@ -131,6 +137,14 @@ public class LFPhone {
 			}
 		}
 		return sb.toString();
+	}
+
+	public void setItem(LFItem item) {
+		this.item = item;
+	}
+
+	public LFItem getItem() {
+		return item;
 	}
 	
 }

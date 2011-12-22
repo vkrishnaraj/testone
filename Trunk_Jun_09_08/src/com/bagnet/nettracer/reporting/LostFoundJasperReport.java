@@ -126,7 +126,7 @@ public class LostFoundJasperReport {
 				+ tableName
 				+ " lf "
 				+ "join station s on lf.station_ID = s.station_ID join status st on lf.status_ID = st.status_ID "
-				+ (isLost ? "join lfreservation r on lf.reservation_id = r.id join station ds on r.dropofflocation_station_ID = ds.station_ID "
+				+ (isLost ? "join lflossinfo r on lf.lossInfo_id = r.id join station ds on r.destination_station_ID = ds.station_ID "
 						: "")
 				+ "join lfitem i on lf.id = i."
 				+ idName
@@ -135,7 +135,6 @@ public class LostFoundJasperReport {
 		Calendar calendarStart = new GregorianCalendar();
 		calendarStart.setTime(DateUtils.convertToDate(srDto.getStarttime(),
 				srDto.getDateFormat(), null));
-		calendarStart.add(Calendar.DAY_OF_MONTH, -1);
 
 		Calendar calendarEnd = new GregorianCalendar();
 		calendarEnd.setTime(DateUtils.convertToDate(srDto.getEndtime(),
@@ -266,8 +265,8 @@ public class LostFoundJasperReport {
 		if (isLost) {
 			itemType = TracingConstants.LF_TYPE_LOST;
 			typeId = "lost_id";
-			sql += "left outer join lfreservation r on r.dropofflocation_station_id = s.station_id " +
-				   "left outer join lflost lf on lf.reservation_id = r.id ";
+			sql += "left outer join lflossinfo r on r.destination_station_id = s.station_id " +
+				   "left outer join lflost lf on lf.lossInfo_id = r.id ";
 		} else {
 			itemType = TracingConstants.LF_TYPE_FOUND;
 			typeId = "found_id";
@@ -301,8 +300,8 @@ public class LostFoundJasperReport {
 		
 		String sql = "select s.stationcode,s.associated_airport, count(distinct mh1.id) as \'matchedCount\' from station s ";
 		if (isLost) {
-			sql += "left outer join lfreservation r on r.dropofflocation_station_id = s.station_id " +
-				   "left outer join lflost lf on lf.reservation_id = r.id ";
+			sql += "left outer join lflossinfo r on r.destination_station_id = s.station_id " +
+				   "left outer join lflost lf on lf.lossInfo_id = r.id ";
 		} else {
 			sql += "left outer join lffound lf on lf.station_id = s.station_id ";
 		}
@@ -342,7 +341,6 @@ public class LostFoundJasperReport {
 		
 		Calendar calendarStart = new GregorianCalendar();
 		calendarStart.setTime(DateUtils.convertToDate(srDto.getStarttime(), srDto.getDateFormat(), null));
-		calendarStart.add(Calendar.DAY_OF_MONTH, -1);
 		
 		String endDateString = srDto.getEndtime();
 		if (endDateString == null || endDateString.isEmpty()) {
@@ -511,7 +509,7 @@ public class LostFoundJasperReport {
 		
 		Calendar calendarStart = new GregorianCalendar();
 		calendarStart.setTime(DateUtils.convertToDate(srDto.getStarttime(), srDto.getDateFormat(), null));
-		calendarStart.add(Calendar.DAY_OF_MONTH, -1);
+
 		
 		String endDateString = srDto.getEndtime();
 		if (endDateString == null || endDateString.isEmpty()) {
@@ -536,8 +534,8 @@ public class LostFoundJasperReport {
 					 "ifnull(matched.count,0) as 'matched_count',ifnull(salvaged.count,0) as 'salvaged_count', " +
 					 "ifnull(notmatched.count,0) as 'not_matched_count', ifnull(matchedbyother.count,0) as 'matched_by_other_count' from station s " +
 					 "left outer join (select s.station_id,count(i1.id) as 'count' from station s " +
-					 				  "left outer join lfreservation r on s.station_id = r.dropoffLocation_station_id " +
-					 				  "left outer join lflost lf on r.id = lf.reservation_id " +
+					 				  "left outer join lflossinfo r on s.station_id = r.destination_station_id " +
+					 				  "left outer join lflost lf on r.id = lf.lossInfo_id " +
 					 				  "left outer join lfitem i1 on lf.id = i1.lost_id and i1.type = " + TracingConstants.LF_TYPE_LOST + " " +
 					 				  "where 1 = 1 and lf.openDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
 					 				  "group by s.station_id) lost on s.station_id = lost.station_id " +
@@ -575,6 +573,7 @@ public class LostFoundJasperReport {
 					 				  "and i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") " + 
 					 				  "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
 					 				  "group by s.station_id) matchedbyother on s.station_id = matchedbyother.station_id " +
+					 				  
 		             "where s.associated_airport in ('ABG','AVS','BGT');";
 		
 		return sql;
@@ -661,8 +660,8 @@ public class LostFoundJasperReport {
 		if (isLost) {
 			idName = "lost_id";
 			dateName = "openDate";
-			joinSql = "left outer join lfreservation r on s.station_id = r.dropoffLocation_station_id " +
-					  "left outer join lflost lf on r.id = lf.reservation_id ";
+			joinSql = "left outer join lflossinfo r on s.station_id = r.destination_station_id " +
+					  "left outer join lflost lf on r.id = lf.lossInfo_id ";
 			type = TracingConstants.LF_TYPE_LOST;
 		} else {
 			idName = "found_id";
@@ -673,7 +672,6 @@ public class LostFoundJasperReport {
 		
 		Calendar calendarStart = new GregorianCalendar();
 		calendarStart.setTime(DateUtils.convertToDate(srDto.getStarttime(), srDto.getDateFormat(), null));
-		calendarStart.add(Calendar.DAY_OF_MONTH, -1);
 		
 		String endDateString = srDto.getEndtime();
 		if (endDateString == null || endDateString.isEmpty()) {

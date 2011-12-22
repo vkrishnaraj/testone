@@ -39,6 +39,67 @@ public class LFItem {
 	
 	private int type;
 	
+	private String longDescription;
+	
+	public String getLongDescription() {
+		return longDescription;
+	}
+
+	public void setLongDescription(String longDescription) {
+		this.longDescription = longDescription;
+	}
+
+	public String getCaseColor() {
+		return caseColor;
+	}
+
+	public void setCaseColor(String caseColor) {
+		this.caseColor = caseColor;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
+	}
+
+	public String getItemCondition() {
+		return itemCondition;
+	}
+
+	public void setItemCondition(String itemCondition) {
+		this.itemCondition = itemCondition;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
+	public LFPhone getPhone() {
+		return phone;
+	}
+
+	public void setPhone(LFPhone phone) {
+		this.phone = phone;
+	}
+
+	private String caseColor;
+	
+	private String model;
+	
+	private String itemCondition;
+	
+	private String size;
+	
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPhone.class, cascade = CascadeType.ALL)
+	private LFPhone phone;
+	
 	@ManyToOne
 	@JoinColumn(name = "disposition_status_ID", nullable = true)
 	private Status disposition;

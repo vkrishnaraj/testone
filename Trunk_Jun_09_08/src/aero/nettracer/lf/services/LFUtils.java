@@ -16,10 +16,10 @@ import com.bagnet.nettracer.tracing.db.lf.LFAddress;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
+import com.bagnet.nettracer.tracing.db.lf.LFLossInfo;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
-import com.bagnet.nettracer.tracing.db.lf.LFReservation;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -54,13 +54,13 @@ public class LFUtils {
 		items.add(item);
 		lost.setItems(items);
 		
-		LFReservation reservation = new LFReservation();
+		LFLossInfo lossinfo = new LFLossInfo();
 		Station dropoffLocation = new Station();
 		Station pickupLocation = new Station();
 		dropoffLocation.setStation_ID(agent.getStation().getStation_ID());
-		reservation.setPickupLocation(pickupLocation);
-		reservation.setDropoffLocation(dropoffLocation);
-		lost.setReservation(reservation);
+		lossinfo.setOrigin(pickupLocation);
+		lossinfo.setDestination(dropoffLocation);
+		lost.setLossInfo(lossinfo);
 		
 		LFPerson client = new LFPerson();
 		LFAddress address = new LFAddress();

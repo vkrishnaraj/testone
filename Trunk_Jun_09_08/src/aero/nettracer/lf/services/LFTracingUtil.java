@@ -18,10 +18,10 @@ import com.bagnet.nettracer.tracing.db.lf.LFAddress;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
+import com.bagnet.nettracer.tracing.db.lf.LFLossInfo;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
-import com.bagnet.nettracer.tracing.db.lf.LFReservation;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
@@ -83,11 +83,12 @@ public class LFTracingUtil {
 		String sql = "select l from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
 				" left outer join l.items i " +
 				" where l.status.status_ID = :status" +
-				" and i.disposition.status_ID = :disposition";
+				" and i.disposition.status_ID = :disposition" +
+				" and (l.lossInfo.lossdate is null or l.lossInfo.lossdate <= :founddate) ";
 		boolean hasLocation = false;
 		if(found != null && found.getLocation() != null){
-				sql += " and (l.reservation.pickupLocation.station_ID = :foundstation " +
-				" or l.reservation.dropoffLocation.station_ID = :foundstation)" ;
+				sql += " and (l.lossInfo.origin.station_ID = :foundstation " +
+				" or l.lossInfo.destination.station_ID = :foundstation)" ;
 				hasLocation = true;
 		}
 		Session sess = null;
@@ -96,6 +97,7 @@ public class LFTracingUtil {
 			Query q = sess.createQuery(sql);
 			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
 			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
+			q.setDate("founddate", found.getFoundDate());
 			if(hasLocation){
 				q.setParameter("foundstation", found.getLocation().getStation_ID());
 			}
@@ -120,9 +122,9 @@ public class LFTracingUtil {
 				" and f.foundDate > :founddate";
 		
 				boolean hasReservation = false;
-				if(lost != null && lost.getReservation() != null 
-						&& lost.getReservation().getDropoffLocation() != null 
-						&& lost.getReservation().getPickupLocation() != null){
+				if(lost != null && lost.getLossInfo() != null 
+						&& lost.getLossInfo().getDestination() != null 
+						&& lost.getLossInfo().getOrigin() != null){
 					sql += " and (f.location.station_ID = :pickup or f.location.station_ID = :dropoff)";
 					hasReservation = true;
 				}
@@ -135,10 +137,14 @@ public class LFTracingUtil {
 			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DATE, -1 * PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS));
-			q.setDate("founddate", cal.getTime()); //DATE
+			if(hasReservation && lost.getLossInfo().getLossdate() != null && lost.getLossInfo().getLossdate().after(cal.getTime())){
+				q.setDate("founddate", lost.getLossInfo().getLossdate());
+			} else {
+				q.setDate("founddate", cal.getTime()); //DATE
+			}
 			if(hasReservation){
-				q.setParameter("pickup", lost.getReservation().getPickupLocation().getStation_ID());
-				q.setParameter("dropoff", lost.getReservation().getDropoffLocation().getStation_ID());
+				q.setParameter("pickup", lost.getLossInfo().getOrigin().getStation_ID());
+				q.setParameter("dropoff", lost.getLossInfo().getDestination().getStation_ID());
 			}
 			List<LFFound> results = q.list();
 			sess.close();
@@ -248,8 +254,8 @@ public class LFTracingUtil {
 		}
 		
 		//process reservation
-		if(match.getLost() != null && match.getLost().getReservation() != null){
-			LFReservation lr = match.getLost().getReservation();
+		if(match.getLost() != null && match.getLost().getLossInfo() != null){
+			LFLossInfo lr = match.getLost().getLossInfo();
 			if(lr.getMvaNumber() != null && lr.getMvaNumber().trim().length() > 0
 					&& match.getFound() != null && match.getFound().getMvaNumber() != null 
 					&& match.getFound().getMvaNumber().trim().length() > 0){

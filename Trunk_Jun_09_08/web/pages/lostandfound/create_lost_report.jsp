@@ -505,17 +505,17 @@
 						<td>
 							<bean:message key="colname.lf.agreement.number" />
 							<br>
-							<html:text name="lostReportForm" property="lost.reservation.agreementNumber" size="10" styleClass="textfield" />
+							<html:text name="lostReportForm" property="lost.lossInfo.agreementNumber" size="10" styleClass="textfield" />
 						</td>
 						<td>
 							<bean:message key="colname.lf.mva.number" />
 							<br>
-							<html:text name="lostReportForm" property="lost.reservation.mvaNumber" size="10" styleClass="textfield" />
+							<html:text name="lostReportForm" property="lost.lossInfo.mvaNumber" size="10" styleClass="textfield" />
 						</td>
 						<td>
 							<bean:message key="colname.lf.rental.location" />&nbsp;<span class="reqfield">*</span>
 							<br>
-		            		<html:select name="lostReportForm" property="lost.reservation.pickupLocationId" styleClass="dropdown" >
+		            		<html:select name="lostReportForm" property="lost.lossInfo.originId" styleClass="dropdown" >
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
 		            		</html:select>
@@ -523,14 +523,19 @@
 						<td>
 							<bean:message key="colname.lf.dropoff.location" />&nbsp;<span class="reqfield">*</span>
 							<br>
-		            		<html:select name="lostReportForm" property="lost.reservation.dropoffLocationId" styleClass="dropdown" >
+		            		<html:select name="lostReportForm" property="lost.lossInfo.destinationId" styleClass="dropdown" >
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
 		            		</html:select>
 						</td>
 					</tr>
 					<tr>
-						<td colspan=4>
+						<td>
+							<bean:message key="colname.lf.rentaldate"/>
+							<br>
+							<html:text name="lostReportForm" property="disLossdate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.lostReportForm.disLossdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+						</td>
+						<td colspan=3>
 							<bean:message key="colname.lf.where.did.you.leave.it" />
 							<br>
 							<html:text name="lostReportForm" property="lost.remarks" size="80" styleClass="textfield" />

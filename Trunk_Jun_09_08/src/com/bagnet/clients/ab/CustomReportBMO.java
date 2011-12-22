@@ -43,6 +43,7 @@ import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
+import com.bagnet.nettracer.tracing.dto.StatReportElement;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
@@ -409,6 +410,43 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		return fileName;
 	}
 	
+	private JasperPrint getNoDataReport(){
+
+		FastReportBuilder drb = new FastReportBuilder();
+		drb.setTitle("NO DATA GENERATED FOR THIS REPORT");
+
+		drb.setPageSizeAndOrientation(Page.Page_Legal_Landscape());
+		drb.setPrintBackgroundOnOddRows(true);
+		try {
+			
+			Style header = new Style();
+			header.setHorizontalAlign(HorizontalAlign.CENTER);
+			header.setVerticalAlign(VerticalAlign.MIDDLE);
+			Style detailStyle = new Style("detail");
+			detailStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+			detailStyle.setVerticalAlign(VerticalAlign.MIDDLE);
+		
+			
+			drb.setIgnorePagination(true);
+			drb.setUseFullPageWidth(true);
+
+			drb.addColumn("", "e1", String.class.getName(), 50, detailStyle, header);
+			
+			DynamicReport report = drb.build();
+			
+			ArrayList data = new ArrayList();
+			StatReportElement e = new StatReportElement();
+			e.setE1("");
+			data.add(e);
+			return getJasperPrint(report, data);
+		} catch (ColumnBuilderException cbe) {
+			logger.error(cbe, cbe);
+		} catch (ClassNotFoundException cnfe) {
+			logger.error(cnfe, cnfe);
+		} 
+		return null;
+	}
+	
 	private ArrayList<JasperPrint> getMgtSumReportTabs(StatReportDTO srDto, Agent user, ResourceBundle resources) {
 		String dateFormat = user.getDateformat().getFormat();
 		srDto.setDateFormat(dateFormat);
@@ -417,21 +455,21 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		
 		JasperPrint mgtSumTab = getManagementSummaryTab(srDto, user, resources);
 		if (mgtSumTab == null) {
-			return null;
+			mgtSumTab = getNoDataReport();
 		}
 		tabs.add(mgtSumTab);
 		
 		srDto.setType(TracingConstants.LF_TYPE_LOST);
 		JasperPrint lostItemizationTab = getLfItemizationTab(srDto, user, resources);
 		if (lostItemizationTab == null) {
-			return null;
+			lostItemizationTab = getNoDataReport();
 		}
 		tabs.add(lostItemizationTab);
 
 		srDto.setType(TracingConstants.LF_TYPE_FOUND);
 		JasperPrint foundItemizationTab = getLfItemizationTab(srDto, user, resources);
 		if (foundItemizationTab == null) {
-			return null;
+			foundItemizationTab = getNoDataReport();
 		}
 		tabs.add(foundItemizationTab);
 		
