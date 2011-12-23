@@ -250,9 +250,9 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 	}
 
 	@Override
-	public List<CategoryBean> getCategories() {
+	public List<CategoryBean> getCategories(String companycode) {
 		LFServiceBean bean = new LFServiceBean();
-		List<LFCategory> categories = bean.getCategories();
+		List<LFCategory> categories = bean.getCategories(companycode);
 		if(categories == null){
 			return null;
 		}

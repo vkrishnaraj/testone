@@ -65,11 +65,12 @@ public class GeneralServiceBean implements GeneralServiceRemote{
 		String sql = "from com.bagnet.nettracer.tracing.db.Station s where s.company.companyCode_ID = :companycode";
 		// s.associated_airport in (:associated_airports)";
 		if (associated_airports != null && !associated_airports.isEmpty()) {
-			sql += " and ";
+			sql += " and (";
 			for (String company: associated_airports) {
 				sql += "s.associated_airport = \'" + company + "\' or ";
 			}
 			sql = sql.substring(0, sql.lastIndexOf(" or "));
+			sql += ")";
 		}
 		Query q = sess.createQuery(sql);
 		q.setParameter("companycode", companycode);

@@ -18,7 +18,7 @@ public interface AvisClientServiceRemote {
 	public long saveOrUpdateLostReport(LostReportBean lostReport);
 	
 	public ArrayList<KeyValueBean> getColors();
-	public List<CategoryBean> getCategories();
+	public List<CategoryBean> getCategories(String companycode);
 	
 	public List<KeyValueBean> getCountries();
 	public List<KeyValueBean> getStations(String companycode);

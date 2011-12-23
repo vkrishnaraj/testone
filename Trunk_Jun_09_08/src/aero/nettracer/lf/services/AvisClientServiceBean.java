@@ -250,9 +250,9 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 	}
 
 	@Override
-	public List<CategoryBean> getCategories() {
+	public List<CategoryBean> getCategories(String companycode) {
 		LFServiceBean bean = new LFServiceBean();
-		List<LFCategory> categories = bean.getCategories();
+		List<LFCategory> categories = bean.getCategories(companycode);
 		if(categories == null){
 			return null;
 		}
@@ -301,7 +301,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		//get stations
 		if(sub_company != null){
 			List<String> companies = new ArrayList<String>();
-			if (!sub_company.equals(TracingConstants.LF_ABG_COMPANY_ID)) {
+			if ("AB".equalsIgnoreCase(companycode) && !sub_company.equals(TracingConstants.LF_ABG_COMPANY_ID)) {
 				companies.add(TracingConstants.LF_ABG_COMPANY_ID);
 			}
 			companies.add(sub_company);
@@ -335,7 +335,7 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		
 		if(sub_company != null){
 			List<String> companies = new ArrayList<String>();
-			if (!sub_company.equals(TracingConstants.LF_ABG_COMPANY_ID)) {
+			if ("AB".equalsIgnoreCase(companycode) && !sub_company.equals(TracingConstants.LF_ABG_COMPANY_ID)) {
 				companies.add(TracingConstants.LF_ABG_COMPANY_ID);
 			}
 			companies.add(sub_company);

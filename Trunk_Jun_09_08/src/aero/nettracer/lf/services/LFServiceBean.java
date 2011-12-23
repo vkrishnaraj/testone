@@ -651,10 +651,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<LFCategory> getCategories() {
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFCategory cat order by cat.description";
+	public List<LFCategory> getCategories(String companycode) {
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFCategory cat where cat.companycode = :companycode order by cat.description";
 		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery(sql);
+		q.setParameter("companycode", companycode);
 		List<LFCategory> categoryList = null;
 		
 		try{

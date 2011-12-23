@@ -118,7 +118,7 @@ public class LFUtils {
 		}
 		
 		if (session.getAttribute("lfcategorylist") == null) {
-			session.setAttribute("lfcategorylist", new LFServiceBean().getCategories());
+			session.setAttribute("lfcategorylist", new LFServiceBean().getCategories(user.getCompanycode_ID()));
 		}
 		
 		if (session.getAttribute("lfsubcategorylist") == null) {

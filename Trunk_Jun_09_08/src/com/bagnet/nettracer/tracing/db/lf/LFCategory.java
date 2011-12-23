@@ -39,6 +39,13 @@ public class LFCategory {
 		this.score = score;
 	}
 	
+	public void setCompanycode(String companycode) {
+		this.companycode = companycode;
+	}
+	public String getCompanycode() {
+		return companycode;
+	}
+
 	@Id
 	@GeneratedValue
 	private long id;
@@ -47,4 +54,5 @@ public class LFCategory {
 	@org.hibernate.annotations.OrderBy(clause = "id")
 	Set<LFSubCategory> subcategories;
 	private long score;
+	private String companycode;
 }

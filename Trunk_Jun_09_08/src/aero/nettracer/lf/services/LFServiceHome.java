@@ -36,7 +36,7 @@ public interface LFServiceHome {
 	
 	public
 	ArrayList<LabelValueBean> getColors();
-	public List<LFCategory> getCategories();
+	public List<LFCategory> getCategories(String companycode);
 
 	public boolean closeLostReport(long id, Agent agent);
 	public void sendStillSearching(long id);

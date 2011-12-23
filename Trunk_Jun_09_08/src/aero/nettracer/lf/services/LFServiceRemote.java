@@ -19,6 +19,6 @@ public interface LFServiceRemote {
 	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent);
 	
 	public ArrayList<LabelValueBean> getColors();
-	public List<LFCategory> getCategories();
+	public List<LFCategory> getCategories(String companycode);
 
 }
