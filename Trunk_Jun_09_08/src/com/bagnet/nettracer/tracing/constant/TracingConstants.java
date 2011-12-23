@@ -468,6 +468,9 @@ public class TracingConstants {
 	public final static String LF_AVIS_COMPANY_ID = "AVS";
 	public final static String LF_BUDGET_COMPANY_ID = "BGT";
 	public final static String LF_ABG_COMPANY_ID = "ABG";
+	public final static String LF_SWA_COMPANY_ID = "SWA";
+	public final static String LF_AB_COMPANY_ID = "AB";
+	public final static String LF_WN_COMPANY_ID = "WN";
 	
 	public final static String AJAX_SUBCATEGORY = "subcategory";
 	
