@@ -59,7 +59,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			remote.setAgreementNumber(host.getLossInfo().getAgreementNumber());
 			remote.setDropOffLocation(host.getLossInfo().getDestinationId());
 			remote.setPickUpLocation(host.getLossInfo().getOriginId());
-			remote.setRentalDate(host.getLossInfo().getLossdate());
+			remote.setDateLost(host.getLossInfo().getLossdate());
 		}
 		
 		if(host.getItem() != null){
@@ -173,7 +173,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		Station pickup = new Station();
 		pickup.setStation_ID(lostReport.getPickUpLocation());
 		lossinfo.setOrigin(pickup);
-		lossinfo.setLossdate(lostReport.getRentalDate());
+		lossinfo.setLossdate(lostReport.getDateLost());
 		host.setLossInfo(lossinfo);
 		
 		if(lostReport.getContact() != null){
