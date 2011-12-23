@@ -60,7 +60,7 @@ public class RemoteService {
 		try {
 			LFCClientServiceRemote o = getRemoteService();
 			if (o != null) {
-				categories = o.getCategories();
+				categories = o.getCategories(company);
 				colors = o.getColors();
 				states = o.getState();
 				countries = o.getCountries();
@@ -135,7 +135,7 @@ public class RemoteService {
 			LFCClientServiceRemote o = getRemoteService();
 			if (o != null) {
 				toReturn = o.getLostReport(id, name);
-				categories = o.getCategories();
+				categories = o.getCategories(company);
 				colors = o.getColors();
 				states = o.getState();
 				countries = o.getCountries();
