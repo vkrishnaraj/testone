@@ -503,7 +503,7 @@
 	<target name="build-ear-local-avis-service" depends="delete-wars">
 		<property name="staging.project" value="abservice" />
 		<property name="staging.env" value="local" />
-		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar,lib/lfc-client-model.jar" />
 		<antcall target="build-war-local-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />

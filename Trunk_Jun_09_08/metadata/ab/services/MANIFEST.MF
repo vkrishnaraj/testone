@@ -4,4 +4,5 @@ Created-By: 19.0-b09 (Sun Microsystems Inc.)
 Class-Path:  
  lib/orchestra.jar   
  lib/avis-client-model.jar 
+ lib/lfc-client-model.jar
 
