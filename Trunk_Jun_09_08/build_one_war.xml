@@ -580,7 +580,7 @@
 	<target name="build-ear-testing-avis-service" depends="delete-wars">
 		<property name="staging.project" value="abservice" />
 		<property name="staging.env" value="testing" />
-		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar,lib/lfc-client-model.jar" />
 		<antcall target="build-war-testing-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
@@ -590,7 +590,7 @@
 	<target name="build-ear-hudson-avis-service" depends="delete-wars">
 		<property name="staging.project" value="abservice" />
 		<property name="staging.env" value="hudson" />
-		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar,lib/lfc-client-model.jar" />
 		<antcall target="hibernate_generate" />
 		<antcall target="build-war-hudson-avis"/>
 		<antcall target="build-jar-avis-service"/>
@@ -655,7 +655,7 @@
 	<target name="build-ear-training-avis-service" depends="delete-wars">
 		<property name="staging.project" value="abservice" />
 		<property name="staging.env" value="training" />
-		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar,lib/lfc-client-model.jar" />
 		<antcall target="build-war-training-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
@@ -684,7 +684,7 @@
 	<target name="build-ear-production-avis-service" depends="delete-wars">
 		<property name="staging.project" value="abservice" />
 		<property name="staging.env" value="production" />
-		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar,lib/lfc-client-model.jar" />
 		<antcall target="build-war-production-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
