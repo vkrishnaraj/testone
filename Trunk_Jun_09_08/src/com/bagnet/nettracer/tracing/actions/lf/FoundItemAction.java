@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.lf.services.LFServiceWrapper;
 import aero.nettracer.lf.services.LFUtils;
@@ -120,6 +122,13 @@ public class FoundItemAction extends CheckedAction {
 				String foundId = (String) request.getParameter("lostId");
 				long id = Long.valueOf(foundId);
 				LFLost lost = LFServiceWrapper.getInstance().getLostReport(id);
+				if (lost == null) {
+					ActionMessages errors = new ActionMessages();
+					ActionMessage error = new ActionMessage("error.invalid.lost.id");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+					return mapping.findForward(TracingConstants.LF_CREATE_FOUND_ITEM);
+				}
 				long matchId = LFServiceWrapper.getInstance().createManualMatch(lost, fiForm.getFound());
 				if(LFServiceWrapper.getInstance().confirmMatch(matchId)){
 					found = LFServiceWrapper.getInstance().getFoundItem(fiForm.getFound().getId());

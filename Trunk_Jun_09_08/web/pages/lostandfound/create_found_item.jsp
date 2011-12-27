@@ -164,6 +164,8 @@
 		document.getElementById('itemId').value = itemId;
 	}
 	
+	
+	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
 <html:form focus="found.id" action="create_found_item.do" method="post" onsubmit="return validateFoundItemForm(this);">
@@ -201,8 +203,10 @@
 		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 		        </h1>
     			<span class="reqfield">*</span>
-   				<bean:message key="message.required" /> 
+   				<bean:message key="message.required" />
+   				<center><font color="red">
          		<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+         		</font></center>
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
        				<tr>
 						<td>
@@ -439,7 +443,8 @@
       								<% } else { %>
       									<bean:message key="lf.match.lost" />:&nbsp;
   										<input type="text" size="10" class="textfield" id="foundInput" onchange="setLostId(this.value,1,<%=item.getId() %>)" />&nbsp;
-										<br>[<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" ><bean:message key="button.do_match" /></a>]
+										<!-- [<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" ><bean:message key="button.do_match" /></a>]-->
+										[<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" onmousedown="validateId('foundInput', this);" ><bean:message key="button.do_match" /></a>]
       								<% } %>
       							</td>
        							<%

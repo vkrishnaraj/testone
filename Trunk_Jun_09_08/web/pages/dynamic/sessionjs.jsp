@@ -192,6 +192,15 @@
 	
 	}
 	
+	function validateId(fieldName) {
+		var id = document.getElementById(fieldName);
+		if (id.value.length == 0) {
+			alert("<%= (String)bundle.getString("colname.id") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			return false;
+		}
+		return true;
+	}
+	
 	function validateFoundItemForm(form) {
 		var currentElement;
 		for (var i = 0; i < form.length; ++i) {
