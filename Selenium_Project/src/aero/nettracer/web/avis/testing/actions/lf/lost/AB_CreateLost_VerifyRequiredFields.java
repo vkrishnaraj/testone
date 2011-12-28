@@ -28,7 +28,7 @@ public class AB_CreateLost_VerifyRequiredFields extends DefaultSeleneseTestCase 
 			selenium.type("name=lost.client.address.decryptedCity", "Test");
 			selenium.click("id=button");
 			assertEquals("Rental Location is required.", selenium.getAlert());
-			selenium.select("name=lost.reservation.pickupLocationId", "label=ABE");
+			selenium.select("name=lost.lossInfo.originId", "label=ABE");
 			selenium.click("id=button");
 			assertEquals("Phone number or email is required.", selenium.getAlert());
 			selenium.type("name=lost.client.decryptedEmail", "test@test.com");

@@ -26,9 +26,9 @@ public class AB_CreateLost_Detailed extends DefaultSeleneseTestCase {
 			selenium.select("id=category_0", "label=Bags");
 			selenium.select("name=item[0].color", "label=Black");
 			selenium.type("name=item[0].description", "Test Description");
-			selenium.type("name=lost.reservation.agreementNumber", "111222333");
-			selenium.type("name=lost.reservation.mvaNumber", "333222111");
-			selenium.select("name=lost.reservation.pickupLocationId", "label=ABE");
+			selenium.type("name=lost.lossInfo.agreementNumber", "111222333");
+			selenium.type("name=lost.lossInfo.mvaNumber", "333222111");
+			selenium.select("name=lost.lossInfo.originId", "label=ABE");
 			selenium.type("name=lost.remarks", "Test Location");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
