@@ -444,7 +444,7 @@
       									<bean:message key="lf.match.lost" />:&nbsp;
   										<input type="text" size="10" class="textfield" id="foundInput" onchange="setLostId(this.value,1,<%=item.getId() %>)" />&nbsp;
 										<!-- [<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" ><bean:message key="button.do_match" /></a>]-->
-										[<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" onmousedown="validateId('foundInput', this);" ><bean:message key="button.do_match" /></a>]
+										[<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" onmousedown="validateId('foundInput');" ><bean:message key="button.do_match" /></a>]
       								<% } %>
       							</td>
        							<%
