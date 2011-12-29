@@ -18,6 +18,7 @@ import aero.nettracer.lfc.faces.util.FacesUtil;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.KeyValueBean;
 import aero.nettracer.lfc.model.LostReportBean;
+import aero.nettracer.lfc.remote.RemoteService;
 import aero.nettracer.lfc.service.ClientViewService;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -37,7 +38,6 @@ public class LostAndFoundController {
 	private List<SelectItem> states;
 	private List<SelectItem> countries;
 	private List<CategoryBean> categories;
-	private String rootFolder = "/avis";
 	private String statePickUp;
 	private String stateDropOff;
 	private List<SelectItem> locationsPickUp;
@@ -51,9 +51,6 @@ public class LostAndFoundController {
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 		.getExternalContext().getSession(false);
 		lostReport = (LostReportBean) session.getAttribute("lostReport");
-		if (lostReport != null && lostReport.getCompany() != null && lostReport.getCompany().equals(TracingConstants.LF_BUDGET_COMPANY_ID)) {
-			rootFolder = "/budget";
-		}
 	}
 
 	public LostReportBean getLostReport() {
@@ -81,6 +78,14 @@ public class LostAndFoundController {
 	
 	public String backToLanding() {
 		return "landing?faces-redirect=true";
+	}
+	
+	public String backToBagcheck() {
+		return "bagcheck?faces-redirect=true";
+	}
+	
+	public String goToFormPage() {
+		return "lostform?faces-redirect=true";
 	}
 	
 	private boolean validate() {
@@ -173,7 +178,7 @@ public class LostAndFoundController {
 
 	public List<SelectItem> getLocations() {
 		if (locations == null) {
-			locations = clientViewService.getLocations(getCompany());
+			locations = clientViewService.getLocations(getSubCompany());
 		}
 		return locations;
 	}
@@ -183,7 +188,7 @@ public class LostAndFoundController {
 	}
 	
 	public List<SelectItem> getLocationsPickUp() {
-		locationsPickUp = clientViewService.getLocationsByState(getCompany(), getStatePickUp());
+		locationsPickUp = clientViewService.getLocationsByState(getSubCompany(), getStatePickUp());
 		return locationsPickUp;
 	}
 
@@ -192,7 +197,7 @@ public class LostAndFoundController {
 	}
 	
 	public List<SelectItem> getLocationsDropOff() {
-		locationsDropOff = clientViewService.getLocationsByState(getCompany(), getStateDropOff());
+		locationsDropOff = clientViewService.getLocationsByState(getSubCompany(), getStateDropOff());
 		return locationsDropOff;
 	}
 
@@ -253,7 +258,7 @@ public class LostAndFoundController {
 
 	public List<SelectItem> getColors() {
 		if (colors == null) {
-			colors = clientViewService.getColors(getCompany());
+			colors = clientViewService.getColors();
 		}
 		return colors;
 	}
@@ -264,7 +269,7 @@ public class LostAndFoundController {
 
 	public List<SelectItem> getStates() {
 		if (states == null) {
-			states = clientViewService.getStates(getCompany());
+			states = clientViewService.getStates();
 		}
 		return states;
 	}
@@ -275,7 +280,7 @@ public class LostAndFoundController {
 
 	public List<SelectItem> getCountries() {
 		if (countries == null) {
-			countries = clientViewService.getCountries(getCompany());
+			countries = clientViewService.getCountries();
 		}
 		return countries;
 	}
@@ -295,6 +300,13 @@ public class LostAndFoundController {
 	private String getCompany() {
 		if (lostReport != null) {
 			return lostReport.getCompany();
+		}
+		return null;
+	}
+	
+	private String getSubCompany() {
+		if (lostReport != null) {
+			return lostReport.getSubCompany();
 		}
 		return null;
 	}

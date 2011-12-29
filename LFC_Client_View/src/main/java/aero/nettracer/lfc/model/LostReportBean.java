@@ -22,6 +22,7 @@ public class LostReportBean implements Serializable{
 	private String itemLongDesc;
 	private String whereLost;
 	private String company;
+	private String subCompany;
 	private ContactBean contact = new ContactBean();
 	private Date dateLost;
 	private String itemModel;
@@ -233,6 +234,14 @@ public class LostReportBean implements Serializable{
 
 	public void setLostPhone(PhoneBean lostPhone) {
 		this.lostPhone = lostPhone;
+	}
+
+	public String getSubCompany() {
+		return subCompany;
+	}
+
+	public void setSubCompany(String subCompany) {
+		this.subCompany = subCompany;
 	}
 
 }

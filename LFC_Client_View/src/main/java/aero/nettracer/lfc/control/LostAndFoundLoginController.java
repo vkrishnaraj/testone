@@ -44,22 +44,25 @@ public class LostAndFoundLoginController {
 	}
 	
 	public String loginAvis() {
-		lostReport.setCompany(TracingConstants.LF_AVIS_COMPANY_ID);
+		lostReport.setSubCompany(TracingConstants.LF_AVIS_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_AB_COMPANY_ID);
 		return login();
 	}
 	
 	public String loginBudget() {
-		lostReport.setCompany(TracingConstants.LF_BUDGET_COMPANY_ID);
+		lostReport.setSubCompany(TracingConstants.LF_BUDGET_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_AB_COMPANY_ID);
 		return login();
 	}
 	
 	public String loginSouthwest() {
-		lostReport.setCompany("SWA");
+		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_WN_COMPANY_ID);
 		return login();
 	}
 	
 	public String login() {
-		LostReportBean lostReport = clientViewService.login(login, getCompany());
+		LostReportBean lostReport = clientViewService.login(login);
 		if (lostReport != null) {
 			//invalidateSession();
 			HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
@@ -71,36 +74,32 @@ public class LostAndFoundLoginController {
 	}
 	
 	public String goToFormPageAvis() {
-		lostReport.setCompany(TracingConstants.LF_AVIS_COMPANY_ID);
-		return goToFormPage();
+		lostReport.setSubCompany(TracingConstants.LF_AVIS_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_AB_COMPANY_ID);
+		return goToFormPage("lostform");
 	}
 	
 	public String goToFormPageBudget() {
-		lostReport.setCompany(TracingConstants.LF_BUDGET_COMPANY_ID);
-		return goToFormPage();
+		lostReport.setSubCompany(TracingConstants.LF_BUDGET_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_AB_COMPANY_ID);
+		return goToFormPage("lostform");
 	}
 	
 	public String goToFormPageSouthwest() {
-		lostReport.setCompany("SWA");
-		return goToFormPage();
+		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_WN_COMPANY_ID);
+		return goToFormPage("bagcheck");
 	}
 	
-	public String goToFormPage() {
-		if (RemoteService.getLists(getCompany())) {
+	public String goToFormPage(String page) {
+		if (RemoteService.getLists()) {
 			//invalidateSession();
 			HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 			.getExternalContext().getSession(false);
 			session.setAttribute("lostReport", lostReport);
-			return "lostform?faces-redirect=true";
+			return page + "?faces-redirect=true";
 		}
 		FacesUtil.addError("Server Communication Error.");
-		return null;
-	}
-	
-	private String getCompany() {
-		if (lostReport != null) {
-			return lostReport.getCompany();
-		}
 		return null;
 	}
 

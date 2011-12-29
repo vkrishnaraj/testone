@@ -24,12 +24,12 @@ public class ClientViewServiceImpl implements ClientViewService {
 	}
 
 	@Override
-	public LostReportBean login(LoginBean loginBean, String company) {
+	public LostReportBean login(LoginBean loginBean) {
 		if (loginBean != null) {
 			String name = loginBean.getLastName();
 			String id = loginBean.getTrackingNumber();
 			if (name != null && id != null && name.length() > 0 && id.length() > 0 && id.matches("^[0-9]*$")) {
-				LostReportBean remote = RemoteService.getReport(Long.parseLong(id), name, company);
+				LostReportBean remote = RemoteService.getReport(Long.parseLong(id), name);
 				if (remote != null) {
 					if (remote.getReportId() != null) {
 						return remote;
@@ -63,14 +63,14 @@ public class ClientViewServiceImpl implements ClientViewService {
 	}
 
 	@Override
-	public List<SelectItem> getLocations(String company) {
-		List<SelectItem> toReturn = convertToSelectItem(RemoteService.getLocations(company));
+	public List<SelectItem> getLocations(String subCompany) {
+		List<SelectItem> toReturn = convertToSelectItem(RemoteService.getLocations(subCompany));
 		return toReturn;
 	}
 	
 	@Override
-	public List<SelectItem> getLocationsByState(String company, String state) {
-		HashMap<String, ArrayList<KeyValueBean>> locationList = RemoteService.getLocationsByState(company);
+	public List<SelectItem> getLocationsByState(String subCompany, String state) {
+		HashMap<String, ArrayList<KeyValueBean>> locationList = RemoteService.getLocationsByState(subCompany);
 		List<SelectItem> toReturn = new ArrayList<SelectItem>();
 		if (locationList != null && state != null && state.length() > 0) {
 			List<KeyValueBean> locationsByState = locationList.get(state);
@@ -88,20 +88,20 @@ public class ClientViewServiceImpl implements ClientViewService {
 	}
 
 	@Override
-	public List<SelectItem> getColors(String company) {
-		List<SelectItem> toReturn = convertToSelectItem(RemoteService.getColors(company));
+	public List<SelectItem> getColors() {
+		List<SelectItem> toReturn = convertToSelectItem(RemoteService.getColors());
 		return toReturn;
 	}
 
 	@Override
-	public List<SelectItem> getStates(String company) {
-		List<SelectItem> toReturn = convertToSelectItem(RemoteService.getStates(company));
+	public List<SelectItem> getStates() {
+		List<SelectItem> toReturn = convertToSelectItem(RemoteService.getStates());
 		return toReturn;
 	}
 
 	@Override
-	public List<SelectItem> getCountries(String company) {
-		List<SelectItem> toReturn = convertToSelectItem(RemoteService.getCountries(company));
+	public List<SelectItem> getCountries() {
+		List<SelectItem> toReturn = convertToSelectItem(RemoteService.getCountries());
 		return toReturn;
 	}
 	

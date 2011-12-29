@@ -51,7 +51,7 @@ public class ViewExpiredExceptionExceptionHandler extends ExceptionHandlerWrappe
 	                    fc.setViewRoot( view );
                     }
                     
-                    nav.handleNavigation(fc, null, "landing");
+                    nav.handleNavigation(fc, null, "landing?faces-redirect=true");
                     fc.renderResponse();
  
                 } finally {

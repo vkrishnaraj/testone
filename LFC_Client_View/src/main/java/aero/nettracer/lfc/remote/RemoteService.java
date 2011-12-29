@@ -9,6 +9,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+
 import aero.nettracer.lf.services.LFCClientServiceRemote;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.KeyValueBean;
@@ -24,12 +26,16 @@ public class RemoteService {
 	
 	static Context ctx;
 	
-	private static List<CategoryBean> categories;
+	private static List<CategoryBean> categoriesAB;
+	private static List<CategoryBean> categoriesWN;
 	private static List<KeyValueBean> colors;
 	private static List<KeyValueBean> states;
 	private static List<KeyValueBean> countries;
-	private static List<KeyValueBean> locations;
-	private static HashMap<String, ArrayList<KeyValueBean>> locationsByState;
+	private static List<KeyValueBean> locationsAB_AVS;
+	private static List<KeyValueBean> locationsAB_BGT;
+	private static List<KeyValueBean> locationsWN;
+	private static HashMap<String, ArrayList<KeyValueBean>> locationsByStateAB_AVS;
+	private static HashMap<String, ArrayList<KeyValueBean>> locationsByStateAB_BGT;
 
 	public static Context getInitialContext() throws NamingException {
 		Properties p = new Properties();
@@ -56,16 +62,20 @@ public class RemoteService {
 		return o;
 	}
 	
-	public static boolean getLists(String company) {
+	public static boolean getLists() {
 		try {
 			LFCClientServiceRemote o = getRemoteService();
 			if (o != null) {
-				categories = o.getCategories(company);
+				categoriesAB = o.getCategories(TracingConstants.LF_AB_COMPANY_ID);
+				categoriesWN = o.getCategories(TracingConstants.LF_WN_COMPANY_ID);
 				colors = o.getColors();
 				states = o.getState();
 				countries = o.getCountries();
-				locations = o.getStations("AB", company);
-				locationsByState = o.getStationsByState("AB", company);
+				locationsWN = o.getStations(TracingConstants.LF_WN_COMPANY_ID);
+				locationsAB_AVS = o.getStations(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_AVIS_COMPANY_ID);
+				locationsByStateAB_AVS = o.getStationsByState(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_AVIS_COMPANY_ID);
+				locationsAB_BGT = o.getStations(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_BUDGET_COMPANY_ID);
+				locationsByStateAB_BGT = o.getStationsByState(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_BUDGET_COMPANY_ID);
 			}
 			ctx.close();
 		} catch (NamingException ex) {
@@ -76,70 +86,86 @@ public class RemoteService {
 	}
 	
 	public static List<CategoryBean> getCategories(String company) {
-		if (categories == null) {
-			if (!getLists(company)) {
+		if (categoriesAB == null || categoriesWN == null) {
+			if (!getLists()) {
 				return null;
 			}
 		}
-		return categories;
+		if (company.equals(TracingConstants.LF_AB_COMPANY_ID)) {
+			return categoriesAB;
+		}
+		return categoriesWN;
 	}
 	
-	public static List<KeyValueBean> getColors(String company) {
+	public static List<KeyValueBean> getColors() {
 		if (colors == null) {
-			if (!getLists(company)) {
+			if (!getLists()) {
 				return null;
 			}
 		}
 		return colors;
 	}
 	
-	public static List<KeyValueBean> getCountries(String company) {
+	public static List<KeyValueBean> getCountries() {
 		if (countries == null) {
-			if (!getLists(company)) {
+			if (!getLists()) {
 				return null;
 			}
 		}
 		return countries;
 	}
 	
-	public static List<KeyValueBean> getStates(String company) {
+	public static List<KeyValueBean> getStates() {
 		if (states == null) {
-			if (!getLists(company)) {
+			if (!getLists()) {
 				return null;
 			}
 		}
 		return states;
 	}
 	
-	public static List<KeyValueBean> getLocations(String company) {
-		if (locations == null) {
-			if (!getLists(company)) {
+	public static List<KeyValueBean> getLocations(String subCompany) {
+		if (locationsAB_AVS == null || locationsAB_BGT == null || locationsWN == null) {
+			if (!getLists()) {
 				return null;
 			}
 		}
-		return locations;
+		if (subCompany.equals(TracingConstants.LF_AVIS_COMPANY_ID)) {
+			return locationsAB_AVS;
+		} else if (subCompany.equals(TracingConstants.LF_BUDGET_COMPANY_ID)) {
+			return locationsAB_BGT;
+		}
+		return locationsWN;
 	}
 	
-	public static HashMap<String, ArrayList<KeyValueBean>> getLocationsByState(String company) {
-		if (locationsByState == null) {
-			if (!getLists(company)) {
+	public static HashMap<String, ArrayList<KeyValueBean>> getLocationsByState(String subCompany) {
+		if (locationsByStateAB_AVS == null || locationsByStateAB_BGT == null) {
+			if (!getLists()) {
 				return null;
 			}
 		}
-		return locationsByState;
+		if (subCompany.equals(TracingConstants.LF_AVIS_COMPANY_ID)) {
+			return locationsByStateAB_AVS;
+		}
+		return locationsByStateAB_BGT;
 	}
 	
-	public static LostReportBean getReport(long id, String name, String company) {
+	public static LostReportBean getReport(long id, String name) {
 		LostReportBean toReturn = new LostReportBean();
 		try {
 			LFCClientServiceRemote o = getRemoteService();
 			if (o != null) {
 				toReturn = o.getLostReport(id, name);
-				categories = o.getCategories(company);
-				colors = o.getColors();
-				states = o.getState();
-				countries = o.getCountries();
-				locations = o.getStations("AB", company);
+//				categoriesAB = o.getCategories(TracingConstants.LF_AB_COMPANY_ID);
+//				categoriesWN = o.getCategories(TracingConstants.LF_WN_COMPANY_ID);
+//				colors = o.getColors();
+//				states = o.getState();
+//				countries = o.getCountries();
+//				locationsWN = o.getStations(TracingConstants.LF_WN_COMPANY_ID);
+//				locationsAB_AVS = o.getStations(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_AVIS_COMPANY_ID);
+//				locationsByStateAB_AVS = o.getStationsByState(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_AVIS_COMPANY_ID);
+//				locationsAB_BGT = o.getStations(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_BUDGET_COMPANY_ID);
+//				locationsByStateAB_BGT = o.getStationsByState(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_BUDGET_COMPANY_ID);
 			}
 			ctx.close();
 		} catch (NamingException ex) {
