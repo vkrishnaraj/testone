@@ -11,12 +11,12 @@
     <session-factory>	
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ab_local</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/aa_local</property>
 		<property name="hibernate.connection.username">nettracer</property>
 		<property name="hibernate.connection.password">nettracer</property>
 		<property name="hibernate.show_sql">false</property>
-		<property name="jdbc.fetch_size">50</property> 
-		<property name="jdbc.batch_size">25</property> 
+		<property name="jdbc.fetch_size">50</property>
+		<property name="jdbc.batch_size">25</property>
 		<property name="jdbc.use_scrollable_resultset">false</property> 
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<property name="company.code">AB</property>
@@ -32,10 +32,10 @@
 		
 		<property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
 		<property name="hibernate.cache.provider_configuration_file_resource_path">/ehcache.xml</property>
-		<property name="hibernate.cache.use_second_level_cache">false</property>
+		<property name="hibernate.cache.use_second_level_cache">true</property>
 		<property name="hibernate.cache.use_query_cache">false</property>
-		
-<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Work_Shift.hbm.xml"/>
+
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Work_Shift.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company_Specific_Variable.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company_specific_irregularity_code.hbm.xml"/>
@@ -310,8 +310,10 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFLossInfo"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFRemark" />
 		<mapping class="com.bagnet.nettracer.tracing.db.Region"/>
 
+		
     </session-factory>
 
 </hibernate-configuration>
