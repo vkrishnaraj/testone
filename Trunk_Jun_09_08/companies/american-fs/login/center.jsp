@@ -32,7 +32,14 @@
           
           <tr>
             <td align=right width=50% valign=middle>
-              <html:hidden property="companyCode" value="UA" />
+              <bean:message key="prompt.company" />
+              :
+            </td>
+            <td>
+              <SELECT NAME="companyCode" class="dropdown">
+              	<option value="UA" selected="selected">United</option>
+              	<option value="OW">Owens Group</option>
+              </SELECT>
             </td>
           </tr>
           <tr>
