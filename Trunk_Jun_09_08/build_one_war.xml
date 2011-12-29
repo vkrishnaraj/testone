@@ -470,6 +470,7 @@
 		<antcall target="build-ear-testing-avis-service"/>
 		<antcall target="build-ear-testing-airtran"/>
 		<antcall target="build-ear-testing-delta"/>
+		<antcall target="build-ear-testing-united"/>
 		<antcall target="build-ear-testing-demo-and-jetblue"/>
 		<antcall target="build-cron-testing-all"/>
 	</target>
@@ -478,6 +479,7 @@
 		<antcall target="build-ear-training"/>
 		<antcall target="build-ear-training-avis"/>
 		<antcall target="build-ear-training-avis-service"/>
+		<antcall target="build-ear-training-united"/>
 		<antcall target="build-cron-training-all"/>
 	</target>
 	
@@ -486,6 +488,7 @@
 		<antcall target="build-ear-production-avis"/>
 		<antcall target="build-ear-production-avis-service"/>
 		<antcall target="build-ear-production-airtran"/>
+		<antcall target="build-ear-production-united"/>
 		<antcall target="build-cron-production-all"/>
 	</target>
 	
@@ -557,6 +560,7 @@
 		<antcall target="build-war-testing-spirit"/>
 		<antcall target="build-war-testing-azul"/>
 		<antcall target="build-war-testing-delta"/>
+		<antcall target="build-war-testing-united"/>
 		<property name="app.xml.location" value="metadata/testing" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -626,6 +630,15 @@
 		<property name="app.xml.location" value="metadata/delta/test" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+
+	<target name="build-ear-testing-united" depends="delete-wars">
+		<property name="staging.project" value="united-fs" />
+		<property name="staging.env" value="testing" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-testing-united"/>
+		<property name="app.xml.location" value="metadata/united-fs/test" />
+		<antcall target="donotrun-build-ear" />
+	</target>
 	
 	<target name="build-ear-testing-demo-and-jetblue" depends="delete-wars">
 		<property name="staging.project" value="demo-b6tracer" />
@@ -648,6 +661,7 @@
 		<antcall target="build-war-training-spirit"/>
 		<antcall target="build-war-training-azul"/>
 		<antcall target="build-war-training-delta"/>
+		<antcall target="build-war-training-united"/>
 		<property name="app.xml.location" value="metadata/training" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -688,6 +702,15 @@
 		<property name="avis.service.includes" value="*.war"/>
 		<antcall target="build-war-production-avis"/>
 		<property name="app.xml.location" value="metadata/ab/prod" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-production-united" depends="delete-wars">
+		<property name="staging.project" value="united-fs" />
+		<property name="staging.env" value="prod" />
+		<property name="avis.service.includes" value="*.war"/>
+		<antcall target="build-war-production-united"/>
+		<property name="app.xml.location" value="metadata/united-fs/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
@@ -761,6 +784,14 @@
 		<property name="environment.name" value="test"/>
 		<property name="delta.init.complete" value="true" />
 		<antcall target="donotrun-build-delta" />
+	</target>
+
+	<target name="build-war-testing-united" depends="delete">
+		<property name="ant_project_name" value="united-fs" />
+		<property name="ant_war_name" value="united_testing" />
+		<property name="environment.name" value="test"/>
+		<property name="united.init.complete" value="true" />
+		<antcall target="donotrun-build-united" />
 	</target>
 
 	<target name="build-war-testing-airtran" depends="delete">
@@ -896,6 +927,14 @@
 		<antcall target="donotrun-build-delta" />
 	</target>
 	
+	<target name="build-war-production-united" depends="delete">
+		<property name="ant_project_name" value="united-fs" />
+		<property name="ant_war_name" value="united_production" />
+		<property name="environment.name" value="prod"/>
+		<property name="united.init.complete" value="true" />
+		<antcall target="donotrun-build-united" />
+	</target>
+	
 	<!-- END PRODUCTION WAR TARGETS -->
 	
 	<!-- TRAINING WAR TARGETS -->
@@ -914,6 +953,14 @@
 		<property name="environment.name" value="train"/>
 		<property name="delta.init.complete" value="true" />
 		<antcall target="donotrun-build-delta" />
+	</target>
+
+	<target name="build-war-training-united" depends="delete">
+		<property name="ant_project_name" value="united-fs" />
+		<property name="ant_war_name" value="united_training" />
+		<property name="environment.name" value="train"/>
+		<property name="delta.init.complete" value="true" />
+		<antcall target="donotrun-build-united" />
 	</target>
 		
 	<target name="build-war-training-westjet" depends="delete">
