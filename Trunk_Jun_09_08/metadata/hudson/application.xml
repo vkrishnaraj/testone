@@ -57,6 +57,13 @@
          <context-root>united</context-root>
      </web>
   </module>
+
+   <module>
+     <web>
+         <web-uri>american_hudson.war</web-uri>
+         <context-root>american</context-root>
+     </web>
+  </module>
   
   <!--
      <module>

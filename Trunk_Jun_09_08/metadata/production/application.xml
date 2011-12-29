@@ -53,8 +53,8 @@
   
      <module>
      <web>
-         <web-uri>continental_production.war</web-uri>
-         <context-root>continental</context-root>
+         <web-uri>united_production.war</web-uri>
+         <context-root>united</context-root>
      </web>
   </module>
   

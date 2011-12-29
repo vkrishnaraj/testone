@@ -471,6 +471,7 @@
 		<antcall target="build-ear-testing-airtran"/>
 		<antcall target="build-ear-testing-delta"/>
 		<antcall target="build-ear-testing-united"/>
+		<antcall target="build-ear-testing-american"/>
 		<antcall target="build-ear-testing-demo-and-jetblue"/>
 		<antcall target="build-cron-testing-all"/>
 	</target>
@@ -480,6 +481,7 @@
 		<antcall target="build-ear-training-avis"/>
 		<antcall target="build-ear-training-avis-service"/>
 		<antcall target="build-ear-training-united"/>
+		<antcall target="build-ear-training-american"/>
 		<antcall target="build-cron-training-all"/>
 	</target>
 	
@@ -530,6 +532,15 @@
 		<property name="app.xml.location" value="metadata/united-fs/local" />		
 		<antcall target="donotrun-build-ear" />
 	</target>
+
+	<target name="build-ear-local-american" depends="delete-wars">
+		<property name="staging.project" value="american-fs" />
+		<property name="staging.env" value="local" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-local-american"/>
+		<property name="app.xml.location" value="metadata/american-fs/local" />		
+		<antcall target="donotrun-build-ear" />
+	</target>
 	
 	<target name="build-ear-local-fraud" depends="delete-wars">
 		<property name="staging.project" value="fstracer" />
@@ -577,6 +588,7 @@
 		<antcall target="build-war-hudson-azul"/>
 		<antcall target="build-war-hudson-delta"/>
 		<antcall target="build-war-hudson-united"/>
+		<antcall target="build-war-hudson-american"/>
 		<property name="app.xml.location" value="metadata/hudson" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -639,6 +651,15 @@
 		<property name="app.xml.location" value="metadata/united-fs/test" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+
+	<target name="build-ear-testing-american" depends="delete-wars">
+		<property name="staging.project" value="american-fs" />
+		<property name="staging.env" value="testing" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-testing-american"/>
+		<property name="app.xml.location" value="metadata/american-fs/test" />
+		<antcall target="donotrun-build-ear" />
+	</target>
 	
 	<target name="build-ear-testing-demo-and-jetblue" depends="delete-wars">
 		<property name="staging.project" value="demo-b6tracer" />
@@ -662,6 +683,7 @@
 		<antcall target="build-war-training-azul"/>
 		<antcall target="build-war-training-delta"/>
 		<antcall target="build-war-training-united"/>
+		<antcall target="build-war-training-american"/>
 		<property name="app.xml.location" value="metadata/training" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -673,6 +695,24 @@
 		<antcall target="build-war-training-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/train" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-training-united" depends="delete-wars">
+		<property name="staging.project" value="united" />
+		<property name="staging.env" value="training" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-training-united"/>
+		<property name="app.xml.location" value="metadata/united-fs/train" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-training-american" depends="delete-wars">
+		<property name="staging.project" value="american" />
+		<property name="staging.env" value="training" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-training-american"/>
+		<property name="app.xml.location" value="metadata/american-fs/train" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
@@ -711,6 +751,15 @@
 		<property name="avis.service.includes" value="*.war"/>
 		<antcall target="build-war-production-united"/>
 		<property name="app.xml.location" value="metadata/united-fs/prod" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-production-american" depends="delete-wars">
+		<property name="staging.project" value="american-fs" />
+		<property name="staging.env" value="prod" />
+		<property name="avis.service.includes" value="*.war"/>
+		<antcall target="build-war-production-american"/>
+		<property name="app.xml.location" value="metadata/american-fs/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
@@ -794,6 +843,14 @@
 		<antcall target="donotrun-build-united" />
 	</target>
 
+	<target name="build-war-testing-american" depends="delete">
+		<property name="ant_project_name" value="american-fs" />
+		<property name="ant_war_name" value="american_testing" />
+		<property name="environment.name" value="test"/>
+		<property name="american.init.complete" value="true" />
+		<antcall target="donotrun-build-american" />
+	</target>
+
 	<target name="build-war-testing-airtran" depends="delete">
 		<property name="ant_project_name" value="airtran" />
 		<property name="ant_war_name" value="airtran-test" />
@@ -857,8 +914,16 @@
 		<property name="ant_project_name" value="united-fs" />
 		<property name="ant_war_name" value="united_hudson" />
 		<property name="environment.name" value="hudson"/>
-		<property name="delta.init.complete" value="true" />
+		<property name="united.init.complete" value="true" />
 		<antcall target="donotrun-build-united" />
+	</target>
+
+	<target name="build-war-hudson-american" depends="delete">
+		<property name="ant_project_name" value="american-fs" />
+		<property name="ant_war_name" value="american_hudson" />
+		<property name="environment.name" value="hudson"/>
+		<property name="american.init.complete" value="true" />
+		<antcall target="donotrun-build-american" />
 	</target>
 
 	<target name="build-war-hudson-airtran" depends="delete">
@@ -934,6 +999,14 @@
 		<property name="united.init.complete" value="true" />
 		<antcall target="donotrun-build-united" />
 	</target>
+
+	<target name="build-war-production-american" depends="delete">
+		<property name="ant_project_name" value="american-fs" />
+		<property name="ant_war_name" value="american_production" />
+		<property name="environment.name" value="prod"/>
+		<property name="american.init.complete" value="true" />
+		<antcall target="donotrun-build-american" />
+	</target>
 	
 	<!-- END PRODUCTION WAR TARGETS -->
 	
@@ -959,8 +1032,16 @@
 		<property name="ant_project_name" value="united-fs" />
 		<property name="ant_war_name" value="united_training" />
 		<property name="environment.name" value="train"/>
-		<property name="delta.init.complete" value="true" />
+		<property name="american.init.complete" value="true" />
 		<antcall target="donotrun-build-united" />
+	</target>
+
+	<target name="build-war-training-american" depends="delete">
+		<property name="ant_project_name" value="american-fs" />
+		<property name="ant_war_name" value="american_training" />
+		<property name="environment.name" value="train"/>
+		<property name="american.init.complete" value="true" />
+		<antcall target="donotrun-build-american" />
 	</target>
 		
 	<target name="build-war-training-westjet" depends="delete">
@@ -1013,6 +1094,14 @@
 		<property name="ua.init.complete" value="true" />
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-united" />
+	</target>
+
+	<target name="build-war-local-american" depends="delete">
+		<property name="ant_project_name" value="american-fs" />
+		<property name="ant_war_name" value="aa" />
+		<property name="aa.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-american" />
 	</target>
 
 	<target name="build-war-local-avis" depends="delete">
@@ -1721,6 +1810,40 @@
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/united-fs/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+	</target>
+	
+	<target name="donotrun-build-american">		
+		<copy todir="${basedir}/src" file="companies/american-fs/environment/${environment.name}/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/american-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/american-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/american-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/web/pages/login" file="companies/american-fs/environment/${environment.name}/login/center.jsp" />
+		
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/american-fs/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/LostDelayReceipt.jrxml" /> -->
+		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/DamageReceipt.jrxml" /> -->
+		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/MissingReceipt.jrxml" /> -->
+
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/american-fs/custom_ui.properties" />
+		<!-- <copy todir="${basedir}/src" file="companies/delta-fs/report_email.html" /> -->
+
+		<!-- Hibernate main dependent on environment -->
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/american-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 
