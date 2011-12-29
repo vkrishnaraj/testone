@@ -83,6 +83,12 @@ public class LFLost implements LFObject {
 	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<LFDelivery> deliveries;
 	
+	@OneToMany(mappedBy = "lost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private Set<LFRemark> agentRemarks;
+	
 	public long getId() {
 		return id;
 	}
@@ -265,6 +271,14 @@ public class LFLost implements LFObject {
 
 	public void setVantiveNumber(String vantiveNumber) {
 		this.vantiveNumber = vantiveNumber;
+	}
+
+	public void setAgentRemarks(Set<LFRemark> agentRemarks) {
+		this.agentRemarks = agentRemarks;
+	}
+
+	public Set<LFRemark> getAgentRemarks() {
+		return agentRemarks;
 	}
 	
 }

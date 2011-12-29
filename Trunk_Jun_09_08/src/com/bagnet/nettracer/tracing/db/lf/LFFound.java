@@ -7,13 +7,19 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -54,6 +60,14 @@ public class LFFound implements LFObject {
 	
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPerson.class, cascade = CascadeType.ALL)
 	private LFPerson client;
+	
+	private String barcode;
+	
+	@OneToMany(mappedBy = "found", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private Set<LFRemark> agentRemarks;
 
 	public long getId() {
 		return id;
@@ -190,6 +204,22 @@ public class LFFound implements LFObject {
 	
 	public void setStatusId(int statusId) {
 		status.setStatus_ID(statusId);
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setAgentRemarks(Set<LFRemark> agentRemarks) {
+		this.agentRemarks = agentRemarks;
+	}
+
+	public Set<LFRemark> getAgentRemarks() {
+		return agentRemarks;
 	}
 	
 }
