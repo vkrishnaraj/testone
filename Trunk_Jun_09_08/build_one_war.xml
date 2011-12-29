@@ -588,7 +588,7 @@
 		<antcall target="build-war-hudson-azul"/>
 		<antcall target="build-war-hudson-delta"/>
 		<antcall target="build-war-hudson-united"/>
-		<antcall target="build-war-hudson-american"/>
+		<!--antcall target="build-war-hudson-american"/-->
 		<antcall target="build-war-hudson-lfc"/>
 		<property name="app.xml.location" value="metadata/hudson" />
 		<antcall target="donotrun-build-ear" />
