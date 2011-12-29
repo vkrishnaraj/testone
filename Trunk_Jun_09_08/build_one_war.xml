@@ -520,11 +520,11 @@
 	</target>
 
 	<target name="build-ear-local-united" depends="delete-wars">
-		<property name="staging.project" value="ua" />
+		<property name="staging.project" value="united-fs" />
 		<property name="staging.env" value="local" />
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="build-war-local-united"/>
-		<property name="app.xml.location" value="metadata/ua/local" />		
+		<property name="app.xml.location" value="metadata/united-fs/local" />		
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
@@ -823,8 +823,8 @@
 	</target>
 
 	<target name="build-war-hudson-united" depends="delete">
-		<property name="ant_project_name" value="ua" />
-		<property name="ant_war_name" value="ua_hudson" />
+		<property name="ant_project_name" value="united-fs" />
+		<property name="ant_war_name" value="united_hudson" />
 		<property name="environment.name" value="hudson"/>
 		<property name="delta.init.complete" value="true" />
 		<antcall target="donotrun-build-united" />
@@ -961,7 +961,7 @@
 	</target>
 
 	<target name="build-war-local-united" depends="delete">
-		<property name="ant_project_name" value="ua" />
+		<property name="ant_project_name" value="united-fs" />
 		<property name="ant_war_name" value="ua" />
 		<property name="ua.init.complete" value="true" />
 		<property name="environment.name" value="local" />
@@ -1648,15 +1648,15 @@
 	</target>
 
 	<target name="donotrun-build-united">		
-		<copy todir="${basedir}/src" file="companies/ua/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/ua/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/ua/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/ua/environment/${environment.name}/hibernate_reporting.cfg.xml" />
-		<copy todir="${basedir}/web/pages/login" file="companies/ua/environment/${environment.name}/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/united-fs/environment/${environment.name}/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/united-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/united-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/united-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/web/pages/login" file="companies/united-fs/environment/${environment.name}/login/center.jsp" />
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
 			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/ua/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/united-fs/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
@@ -1666,14 +1666,14 @@
 
 		<antcall target="jasper_compile" />
 
-		<copy todir="${basedir}/src" file="companies/ua/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/united-fs/custom_ui.properties" />
 		<!-- <copy todir="${basedir}/src" file="companies/delta-fs/report_email.html" /> -->
 
 		<!-- Hibernate main dependent on environment -->
 
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
-			<property name="overrideResource" value="${basedir}/companies/ua/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/united-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 

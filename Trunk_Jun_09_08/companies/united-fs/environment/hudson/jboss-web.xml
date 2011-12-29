@@ -1,0 +1,3 @@
+<jboss-web>
+	<context-root>/united</context-root>
+</jboss-web>

@@ -1,0 +1,3 @@
+<jboss-web>
+	<context-root>/delta</context-root>
+</jboss-web>
