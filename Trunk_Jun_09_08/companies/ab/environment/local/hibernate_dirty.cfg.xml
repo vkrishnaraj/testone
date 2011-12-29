@@ -307,10 +307,10 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFLost"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFPerson"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFPhone"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFReservation"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFLossInfo"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail"/>
-		
+		<mapping class="com.bagnet.nettracer.tracing.db.Region"/>
 
 		
     </session-factory>
