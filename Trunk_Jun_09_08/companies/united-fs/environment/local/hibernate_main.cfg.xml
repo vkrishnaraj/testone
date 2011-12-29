@@ -12,7 +12,7 @@
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
     	<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ua_local</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/aa_local</property>
 		<property name="hibernate.connection.username">nettracer</property>
 		<property name="hibernate.connection.password">nettracer</property>
 		<property name="jdbc.fetch_size">50</property> 
