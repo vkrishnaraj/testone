@@ -1,7 +1,11 @@
 package com.bagnet.nettracer.tracing.constant;
 
 import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+
 
 /**
  * Contains all the application constants.
@@ -471,6 +475,17 @@ public class TracingConstants {
 	public final static String LF_SWA_COMPANY_ID = "SWA";
 	public final static String LF_AB_COMPANY_ID = "AB";
 	public final static String LF_WN_COMPANY_ID = "WN";
+	
+	public final static Map<String, String> LF_SUBCOMPANIES;
+	static{
+		Map<String,String>temp = new HashMap<String,String>();
+		temp.put("AVS","AB");
+		temp.put("BGT","AB");
+		temp.put("ABG","AB");
+		temp.put("SWA","WN");
+		LF_SUBCOMPANIES = Collections.unmodifiableMap(temp);
+	}
+	
 	
 	public final static String AJAX_SUBCATEGORY = "subcategory";
 	

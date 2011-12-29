@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 import aero.nettracer.lfc.model.AddressBean;
 import aero.nettracer.lfc.model.CategoryBean;
@@ -45,12 +46,15 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 
 	@Override
 	public LostReportBean getLostReport(long id, String lastname) {
+		GeneralServiceBean gbean = new GeneralServiceBean();
 		LFServiceBean bean = new LFServiceBean();
 		LFLost host = bean.getLostReport(id, lastname);
 		if(host == null){
 			return null;
 		}
 		LostReportBean remote = new LostReportBean();
+		remote.setSubCompany(host.getCompanyId());
+		remote.setCompany(gbean.getCompanyFromSubCompany(host.getCompanyId()));
 		
 		remote.setWhereLost(host.getRemarks());
 		
@@ -89,8 +93,6 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			contact.setLastName(host.getClient().getLastName());
 			contact.setMiddleInitial(host.getClient().getMiddleName());
 
-//			contact.setVantiveNumber(host.getClient().getVantiveNumber());
-
 			if(host.getClient().getAddress() != null){
 				AddressBean address = new AddressBean();
 				address.setAddress1(host.getClient().getAddress().getDecryptedAddress1());
@@ -124,7 +126,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 
 	private Agent getWebAgent(){
 		GeneralServiceBean bean = new GeneralServiceBean();
-		return bean.getAgent("avisweb", "AB");
+		return bean.getAgent("avisweb", TracerProperties.get("wt.company.code"));
 	}
 	
 	@Override
@@ -139,9 +141,9 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		host.setAgent(agent);
 		
 		host.setVantiveNumber(lostReport.getVantiveNumber());
-		host.setCompanyId(lostReport.getCompany());
+		host.setCompanyId(lostReport.getSubCompany());
 		
-		Station station = StationBMO.getStationByCode("WEB", "AB");
+		Station station = StationBMO.getStationByCode("WEB", TracerProperties.get("wt.company.code"));
 		//TODO web location
 		host.setLocation(station);
 		
@@ -184,7 +186,6 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			client.setFirstName(lostReport.getContact().getFirstName());
 			client.setLastName(lostReport.getContact().getLastName());
 			client.setMiddleName(lostReport.getContact().getMiddleInitial());
-//			client.setVantiveNumber(lostReport.getContact().getVantiveNumber());
 			
 			HashSet<LFPhone> phones = new HashSet<LFPhone>();
 			if(lostReport.getContact().getPrimaryPhone() != null){

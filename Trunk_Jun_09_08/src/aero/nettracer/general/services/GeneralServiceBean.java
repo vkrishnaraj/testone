@@ -9,6 +9,7 @@ import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.State;
@@ -131,5 +132,9 @@ public class GeneralServiceBean implements GeneralServiceRemote{
 	public static void main(String [] args){
 		GeneralServiceBean bean = new GeneralServiceBean();
 		System.out.println(bean.getAgent("ntadmin", "B6").getAgent_ID());
+	}
+
+	public String getCompanyFromSubCompany(String subcompany){
+		return TracingConstants.LF_SUBCOMPANIES.get(subcompany);
 	}
 }

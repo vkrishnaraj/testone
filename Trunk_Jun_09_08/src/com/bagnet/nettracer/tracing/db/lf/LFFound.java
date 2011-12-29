@@ -189,6 +189,9 @@ public class LFFound implements LFObject {
 	@Override
 	@Transient
 	public String getClientName() {
+		if(client == null){
+			return "";
+		}
 		String clientName = client.getLastName() + ", " + client.getFirstName();
 		String middleName = client.getMiddleName();
 		if (middleName != null && !middleName.isEmpty()) {
