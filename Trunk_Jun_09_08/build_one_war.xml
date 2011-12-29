@@ -589,6 +589,7 @@
 		<antcall target="build-war-hudson-delta"/>
 		<antcall target="build-war-hudson-united"/>
 		<antcall target="build-war-hudson-american"/>
+		<antcall target="build-war-hudson-lfc"/>
 		<property name="app.xml.location" value="metadata/hudson" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -612,6 +613,16 @@
 		<property name="app.xml.location" value="metadata/ab/service" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+	
+	<target name="build-ear-testing-lfc-service" depends="delete-wars">
+		<property name="staging.project" value="lfcservice" />
+		<property name="staging.env" value="testing" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,lfc-service.jar,lib/lfc-client-model.jar" />
+		<antcall target="build-war-testing-lfc"/>
+		<antcall target="build-jar-lfc-service"/>
+		<property name="app.xml.location" value="metadata/lfc/service" />
+		<antcall target="donotrun-build-ear" />
+	</target>
 
 	<target name="build-ear-hudson-avis-service" depends="delete-wars">
 		<property name="staging.project" value="abservice" />
@@ -621,6 +632,17 @@
 		<antcall target="build-war-hudson-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-hudson-lfc-service" depends="delete-wars">
+		<property name="staging.project" value="lfcservice" />
+		<property name="staging.env" value="hudson" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,lfc-service.jar,lib/lfc-client-model.jar" />
+		<antcall target="hibernate_generate" />
+		<antcall target="build-war-hudson-lfc"/>
+		<antcall target="build-jar-lfc-service"/>
+		<property name="app.xml.location" value="metadata/lfc/service" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
@@ -726,6 +748,16 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
+	<target name="build-ear-training-lfc-service" depends="delete-wars">
+		<property name="staging.project" value="lfcservice" />
+		<property name="staging.env" value="training" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,lfc-service.jar,lib/lfc-client-model.jar" />
+		<antcall target="build-war-training-lfc"/>
+		<antcall target="build-jar-lfc-service"/>
+		<property name="app.xml.location" value="metadata/lfc/service" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
 	<target name="build-ear-production" depends="delete-wars">
 		<property name="staging.project" value="hosted" />
 		<property name="staging.env" value="production" />
@@ -773,6 +805,16 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
+	<target name="build-ear-production-lfc-service" depends="delete-wars">
+		<property name="staging.project" value="lfcservice" />
+		<property name="staging.env" value="production" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,lfc-service.jar,lib/lfc-client-model.jar" />
+		<antcall target="build-war-production-lfc"/>
+		<antcall target="build-jar-lfc-service"/>
+		<property name="app.xml.location" value="metadata/lfc/service" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
 	<target name="build-ear-production-airtran" depends="delete-wars">
 		<property name="staging.project" value="fltracer" />
 		<property name="staging.env" value="production" />
@@ -793,6 +835,14 @@
 		<property name="ab.init.complete" value="true" />
 		<property name="environment.name" value="test" />
 		<antcall target="donotrun-build-ab" />
+	</target>
+
+	<target name="build-war-testing-lfc" depends="delete">
+		<property name="ant_project_name" value="lfc" />
+		<property name="ant_war_name" value="lfc_testing" />
+		<property name="ab.init.complete" value="true" />
+		<property name="environment.name" value="test" />
+		<antcall target="donotrun-build-lfc" />
 	</target>
 		
 	<target name="build-war-testing-westjet" depends="delete">
@@ -869,6 +919,14 @@
 		<property name="environment.name" value="hudson" />
 		<antcall target="donotrun-build-ab" />
 	</target>
+
+	<target name="build-war-hudson-lfc" depends="delete">
+		<property name="ant_project_name" value="lfc" />
+		<property name="ant_war_name" value="lfc_hudson" />
+		<property name="ab.init.complete" value="true" />
+		<property name="environment.name" value="hudson" />
+		<antcall target="donotrun-build-lfc" />
+	</target>
 		
 	<target name="build-war-hudson-westjet" depends="delete">
 		<property name="ant_project_name" value="westjet" />
@@ -944,6 +1002,14 @@
 		<property name="environment.name" value="prod" />
 		<antcall target="donotrun-build-ab" />
 	</target>
+	
+	<target name="build-war-production-lfc" depends="delete">
+		<property name="ant_project_name" value="lfc" />
+		<property name="ant_war_name" value="lfc_production" />
+		<property name="ab.init.complete" value="true" />
+		<property name="environment.name" value="prod" />
+		<antcall target="donotrun-build-lfc" />
+	</target>
 		
 	<target name="build-war-production-westjet" depends="delete">
 		<property name="ant_project_name" value="westjet" />
@@ -1018,6 +1084,14 @@
 		<property name="ab.init.complete" value="true" />
 		<property name="environment.name" value="train" />
 		<antcall target="donotrun-build-ab" />
+	</target>
+
+	<target name="build-war-training-lfc" depends="delete">
+		<property name="ant_project_name" value="lfc" />
+		<property name="ant_war_name" value="lfc_training" />
+		<property name="ab.init.complete" value="true" />
+		<property name="environment.name" value="train" />
+		<antcall target="donotrun-build-lfc" />
 	</target>
 	
 	<target name="build-war-training-delta" depends="delete">
@@ -1111,6 +1185,14 @@
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-ab" />
 	</target>
+
+	<target name="build-war-local-lfc" depends="delete">
+		<property name="ant_project_name" value="lfc" />
+		<property name="ant_war_name" value="lfc" />
+		<property name="ab.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-lfc" />
+	</target>
 	
 	<target name="build-war-local-fraud" depends="delete">
 		<property name="ant_project_name" value="fraud" />
@@ -1154,9 +1236,19 @@
 	</target>
 
 	<target name="build-jar-lfc-service">
-		<jar destfile="${build.dir}/dist/web/lfc-service-remote.jar" basedir="${build.dir}/ab_web/classes/">
+		<jar destfile="${build.dir}/dist/web/lfc-service-remote.jar" basedir="${build.dir}/lfc_web/classes/">
 			<include name="**/**/aero/nettracer/lf/services/LFCClientServiceRemote.class" />
 			<include name="**/**/com/bagnet/nettracer/tracing/constant/TracingConstants.class" />
+		</jar>
+		<jar destfile="${build.dir}/dist/web/lfc-service.jar" basedir="${build.dir}/lfc_web/classes/"
+			manifest="${src.dir}/../metadata/lfc/services/MANIFEST.MF">
+			<metainf dir="${src.dir}/../metadata/lfc/services">
+				<include name="ejb-jar.xml"/>
+			</metainf>
+			<include name="**/**/*.class" />
+			<include name="**/**/*.xml" />
+			<include name="**/**/*.properties" />
+			<exclude name="**/**/jndi.properties"/>
 		</jar>
 	</target>
 	
@@ -1260,6 +1352,60 @@
 	</target>
 	
 	<!-- END AVIS CRON TARGETS -->
+	
+	<!-- LFC CRON TARGETS -->
+
+	<target name="build-cron-local-lfc">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="local" />
+		<property name="ant_project_name" value="lfc" />
+		<property name="sub_path" value="local/" />
+		<property name="cron.job.config.file" value="companies/lfc/environment/local/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="lfclocal-" />
+		<antcall target="cron-service" />
+	</target>
+	
+	<target name="build-cron-testing-lfc">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="testing" />
+		<property name="ant_project_name" value="lfc" />
+		<property name="sub_path" value="test/" />
+		<property name="cron.job.config.file" value="companies/lfc/environment/test/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="lfctest-" />
+		<antcall target="cron-service" />
+	</target>
+	
+	<target name="build-cron-training-lfc">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="training" />
+		<property name="ant_project_name" value="lfc" />
+		<property name="sub_path" value="train/" />
+		<property name="cron.job.config.file" value="companies/lfc/environment/train/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="lfctrain-" />
+		<antcall target="cron-service" />
+	</target>
+
+	<target name="build-cron-production-lfc">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="production" />
+		<property name="ant_project_name" value="lfc" />
+		<property name="sub_path" value="prod/" />
+		<property name="cron.job.config.file" value="companies/lfc/environment/prod/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="lfcprod-" />
+		<antcall target="cron-service" />
+	</target>		
+
+	<target name="build-cron-hudson-lfc">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="hudson" />
+		<property name="ant_project_name" value="lfc" />
+		<property name="sub_path" value="hudson/" />
+		<property name="cron.job.config.file" value="companies/lfc/environment/hudson/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="lfchudson-" />
+		<antcall target="cron-service" />
+	</target>
+	
+	<!-- END LFC CRON TARGETS -->
 	
 	<!-- WESTJET CRON TARGETS -->
 	
@@ -1643,6 +1789,37 @@
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/ab/ApplicationResources_fr.properties" />
+		<!--
+		<antcall target="build-war" />
+		-->
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+		<delete file="${basedir}/src/report_email_fr.html" />
+	</target>
+
+	<target name="donotrun-build-lfc" if="lfc.init.complete">
+		<property name="include.lfc" value="1" />
+		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/lfc/environment/${environment.name}/header_bg_noconf.gif" />
+		<copy todir="${basedir}/web/pages/login" file="companies/lfc/environment/${environment.name}/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/lfc/environment/${environment.name}/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/lfc/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/lfc/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/lfc/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/lfc/custom_ui.properties" />
+		<copy todir="${basedir}/src" file="companies/lfc/pax_comm_email.html" />
+		<copy todir="${basedir}/src" file="companies/lfc/pax_comm_email_fr.html" />
+		<copy todir="${basedir}/src" file="companies/lfc/closed_report_email.html" />
+		<copy todir="${basedir}/src" file="companies/lfc/create_report_email.html" />
+			<copy todir="${basedir}/src" file="companies/lfc/found_report_email.html" />
+			<copy todir="${basedir}/src" file="companies/lfc/update_report_email.html" />
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/lfc/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/lfc/ApplicationResources_fr.properties" />
 		<!--
 		<antcall target="build-war" />
 		-->
