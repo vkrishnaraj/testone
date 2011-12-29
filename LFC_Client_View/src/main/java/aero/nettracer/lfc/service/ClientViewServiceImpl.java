@@ -8,6 +8,8 @@ import javax.faces.model.SelectItem;
 
 import org.springframework.stereotype.Service;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+
 import aero.nettracer.lfc.faces.util.FacesUtil;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.KeyValueBean;
@@ -24,12 +26,17 @@ public class ClientViewServiceImpl implements ClientViewService {
 	}
 
 	@Override
-	public LostReportBean login(LoginBean loginBean) {
+	public LostReportBean login(LoginBean loginBean, String company) {
 		if (loginBean != null) {
 			String name = loginBean.getLastName();
 			String id = loginBean.getTrackingNumber();
 			if (name != null && id != null && name.length() > 0 && id.length() > 0 && id.matches("^[0-9]*$")) {
-				LostReportBean remote = RemoteService.getReport(Long.parseLong(id), name);
+				LostReportBean remote = null;
+				if (company != null && company.equals(TracingConstants.LF_AB_COMPANY_ID)) {
+					remote = RemoteService.getReportAB(Long.parseLong(id), name);
+				} else {
+					remote = RemoteService.getReportLF(Long.parseLong(id), name);
+				}
 				if (remote != null) {
 					if (remote.getReportId() != null) {
 						return remote;

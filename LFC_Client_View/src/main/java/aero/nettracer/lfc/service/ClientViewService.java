@@ -10,7 +10,7 @@ import aero.nettracer.lfc.model.LostReportBean;
 
 public interface ClientViewService {
 	public String convertToUpperCase(String word);
-	public LostReportBean login(LoginBean loginBean);
+	public LostReportBean login(LoginBean loginBean, String company);
 	public long create(LostReportBean lostReport);
 	public List<SelectItem> getLocations(String subCompany);
 	public List<CategoryBean> getCategories(String company);

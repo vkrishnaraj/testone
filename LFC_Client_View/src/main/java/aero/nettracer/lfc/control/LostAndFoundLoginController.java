@@ -44,30 +44,25 @@ public class LostAndFoundLoginController {
 	}
 	
 	public String loginAvis() {
-		lostReport.setSubCompany(TracingConstants.LF_AVIS_COMPANY_ID);
-		lostReport.setCompany(TracingConstants.LF_AB_COMPANY_ID);
-		return login();
+		return login(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_AVIS_COMPANY_ID);
 	}
 	
 	public String loginBudget() {
-		lostReport.setSubCompany(TracingConstants.LF_BUDGET_COMPANY_ID);
-		lostReport.setCompany(TracingConstants.LF_AB_COMPANY_ID);
-		return login();
+		return login(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_BUDGET_COMPANY_ID);
 	}
 	
 	public String loginSouthwest() {
-		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
-		lostReport.setCompany(TracingConstants.LF_WN_COMPANY_ID);
-		return login();
+		return login(TracingConstants.LF_WN_COMPANY_ID, TracingConstants.LF_SWA_COMPANY_ID);
 	}
 	
-	public String login() {
-		LostReportBean lostReport = clientViewService.login(login);
-		if (lostReport != null) {
-			//invalidateSession();
+	public String login(String company, String subCompany) {
+		LostReportBean report = clientViewService.login(login, company);
+		if (report != null) {
+			report.setSubCompany(subCompany);
+			report.setCompany(company);
 			HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 			.getExternalContext().getSession(false);
-			session.setAttribute("lostReport", lostReport);
+			session.setAttribute("lostReport", report);
 			return "status?faces-redirect=true";
 		}
 		return null;
