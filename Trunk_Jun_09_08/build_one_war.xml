@@ -1809,7 +1809,6 @@
 
 	<target name="donotrun-build-lfc" if="lfc.init.complete">
 		<property name="include.lfc" value="1" />
-		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/lfc/environment/${environment.name}/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/lfc/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/lfc/environment/${environment.name}/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/lfc/environment/${environment.name}/hibernate_main.cfg.xml" />
