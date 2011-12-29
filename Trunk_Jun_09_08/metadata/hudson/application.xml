@@ -53,7 +53,7 @@
 
    <module>
      <web>
-         <web-uri>ua_hudson.war</web-uri>
+         <web-uri>united_hudson.war</web-uri>
          <context-root>united</context-root>
      </web>
   </module>
