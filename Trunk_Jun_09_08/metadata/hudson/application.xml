@@ -50,6 +50,13 @@
          <context-root>delta</context-root>
      </web>
   </module>
+
+   <module>
+     <web>
+         <web-uri>ua_hudson.war</web-uri>
+         <context-root>united</context-root>
+     </web>
+  </module>
   
   <!--
      <module>

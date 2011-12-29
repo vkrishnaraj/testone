@@ -824,7 +824,7 @@
 
 	<target name="build-war-hudson-united" depends="delete">
 		<property name="ant_project_name" value="ua" />
-		<property name="ant_war_name" value="ua" />
+		<property name="ant_war_name" value="ua_hudson" />
 		<property name="environment.name" value="hudson"/>
 		<property name="delta.init.complete" value="true" />
 		<antcall target="donotrun-build-united" />
