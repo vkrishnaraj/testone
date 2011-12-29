@@ -514,6 +514,16 @@
 		<property name="app.xml.location" value="metadata/ab/service" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+	 
+	<target name="build-ear-local-lfc-service" depends="delete-wars">
+		<property name="staging.project" value="lfcservice" />
+		<property name="staging.env" value="local" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,lfc-service.jar,lib/lfc-client-model.jar" />
+		<antcall target="build-war-local-lfc"/>
+		<antcall target="build-jar-lfc-service"/>
+		<property name="app.xml.location" value="metadata/lfc/service" />
+		<antcall target="donotrun-build-ear" />
+	</target>
 	
 	<target name="build-ear-local-westjet" depends="delete-wars">
 		<property name="staging.project" value="wstracer" />
