@@ -280,8 +280,8 @@
 			<classpath refid="project.classpath" />
 		</javac>
 		
-		<ant target="build-war">
-		</ant>
+		<!--ant target="build-war">
+		</ant-->
 		
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_main.cfg.xml" overwrite="true" />
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_geo.cfg.xml" overwrite="true" />
