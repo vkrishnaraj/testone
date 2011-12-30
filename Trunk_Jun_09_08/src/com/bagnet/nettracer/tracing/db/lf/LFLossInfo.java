@@ -78,18 +78,32 @@ public class LFLossInfo {
 	}
 	
 	public int getOriginId() {
-		return getOrigin().getStation_ID();
+		if (getOrigin() != null) {
+			return getOrigin().getStation_ID();
+		}
+		return 0;
 	}
 	
 	public void setOriginId(int originId) {
+		if (getOrigin() == null) {
+			Station newOrigin = new Station();
+			setOrigin(newOrigin);
+		}
 		getOrigin().setStation_ID(originId);
 	}
 	
 	public int getDestinationId() {
-		return getDestination().getStation_ID();
+		if (getDestination() != null) {
+			return getDestination().getStation_ID();
+		}
+		return 0;
 	}
 	
 	public void setDestinationId(int destinationId) {
+		if (getDestination() == null) {
+			Station newDestination = new Station();
+			setDestination(newDestination);
+		}
 		getDestination().setStation_ID(destinationId);
 	}
 	

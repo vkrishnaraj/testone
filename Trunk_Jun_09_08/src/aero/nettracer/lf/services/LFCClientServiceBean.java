@@ -168,13 +168,17 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		
 		LFLossInfo lossinfo = new LFLossInfo();
 		lossinfo.setAgreementNumber(lostReport.getAgreementNumber());
-		Station dropoff = new Station();
-		dropoff.setStation_ID(lostReport.getDropOffLocation());
-		lossinfo.setDestination(dropoff);
+		if (lostReport.getDropOffLocation() > 0) {
+			Station dropoff = new Station();
+			dropoff.setStation_ID(lostReport.getDropOffLocation());
+			lossinfo.setDestination(dropoff);
+		}
 		lossinfo.setMvaNumber(lostReport.getMvaNumber());
-		Station pickup = new Station();
-		pickup.setStation_ID(lostReport.getPickUpLocation());
-		lossinfo.setOrigin(pickup);
+		if (lostReport.getPickUpLocation() > 0) {
+			Station pickup = new Station();
+			pickup.setStation_ID(lostReport.getPickUpLocation());
+			lossinfo.setOrigin(pickup);
+		}
 		lossinfo.setLossdate(lostReport.getDateLost());
 		host.setLossInfo(lossinfo);
 		
