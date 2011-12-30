@@ -14,12 +14,12 @@ import aero.nettracer.fs.model.detection.TraceResponse;
 
 
 @RemoteBindings({
-	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3843", jndiBinding="NTServices_1_0/ClaimBean/testingRemoteSSL"),
-	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3844", jndiBinding="NTServices_1_0/ClaimBean/trainingRemoteSSL"),
-	@RemoteBinding(clientBindUrl="sslsocket://184.172.41.4:3845", jndiBinding="NTServices_1_0/ClaimBean/productionRemoteSSL"),
-	@RemoteBinding(clientBindUrl="sslsocket://10.8.185.136:3843", jndiBinding="NTServices_1_0/ClaimBean/testingRemoteSSL"),
-	@RemoteBinding(clientBindUrl="sslsocket://10.8.185.136:3844", jndiBinding="NTServices_1_0/ClaimBean/trainingRemoteSSL"),
-	@RemoteBinding(clientBindUrl="sslsocket://10.8.185.136:3845", jndiBinding="NTServices_1_0/ClaimBean/productionRemoteSSL"),
+//	@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3843", jndiBinding="NTServices_1_0/ClaimBean/testingRemoteSSL")
+	//@RemoteBinding(clientBindUrl="sslsocket://184.172.24.144:3844", jndiBinding="NTServices_1_0/ClaimBean/trainingRemoteSSL"),
+	//@RemoteBinding(clientBindUrl="sslsocket://184.172.41.4:3845", jndiBinding="NTServices_1_0/ClaimBean/productionRemoteSSL"),
+	//@RemoteBinding(clientBindUrl="sslsocket://10.8.185.136:3843", jndiBinding="NTServices_1_0/ClaimBean/testingRemoteSSL")
+	//@RemoteBinding(clientBindUrl="sslsocket://10.8.185.136:3844", jndiBinding="NTServices_1_0/ClaimBean/trainingRemoteSSL"),
+	//@RemoteBinding(clientBindUrl="sslsocket://10.8.185.136:3845", jndiBinding="NTServices_1_0/ClaimBean/productionRemoteSSL"),
 	@RemoteBinding(jndiBinding="NTServices_1_0/ClaimBean/remote")
 })
 //@RemoteBinding(jndiBinding="custom/remote/MySession")
