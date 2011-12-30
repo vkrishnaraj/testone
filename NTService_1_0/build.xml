@@ -276,12 +276,9 @@
 	</target>
 	
 	<target name="build-fs-donotrun">
-		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on"
-							
-							memoryinitialsize="256m"       memorymaximumsize="256m"
-							>
-							<classpath refid="project.classpath" />
-						</javac>
+		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on" memoryinitialsize="256m" memorymaximumsize="256m" >
+			<classpath refid="project.classpath" />
+		</javac>
 		
 		<ant target="build-war">
 		</ant>
