@@ -279,7 +279,12 @@
 		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on" memoryinitialsize="256m" memorymaximumsize="256m" >
 			<classpath refid="project.classpath" />
 		</javac>
-		
+		<copy todir="${build.dir}/services-war" overwrite="true">
+			<fileset dir="${webroot.dir}" >
+				<include name="WEB-INF/**/*"/>
+				<include name="META-INF/**/*"/>
+			</fileset>
+		</copy>
 		<!--ant target="build-war">
 		</ant-->
 		
