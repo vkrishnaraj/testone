@@ -32,7 +32,7 @@
           
           <tr>
             <td align=right width=50% valign=middle>
-              <html:hidden property="companyCode" value="AA" />
+              <html:hidden property="companyCode" value="UA" />
             </td>
           </tr>
           <tr>
