@@ -189,7 +189,7 @@
 		<property name="staging.project" value="fsservice" />
 		<property name="staging.env" value="hudson" />
 		<property name="client.name" value="internal" />
-		<property name="environment.name" value="local" />
+		<property name="environment.name" value="hudson" />
 		<property name="ear.name" value="ntfs_internal_hudson.ear" />
 		<antcall target="build-fs-donotrun" />
 	</target>
@@ -362,7 +362,7 @@
 		<property name="staging.project" value="hosted-central" />
 		<property name="staging.env" value="hudson" />
 		<property name="client.name" value="central" />
-		<property name="environment.name" value="local" />
+		<property name="environment.name" value="hudson" />
 		<property name="ear.name" value="NTServices_1_0.ear" />
 		<antcall target="build-central-donotrun" />
 	</target>
