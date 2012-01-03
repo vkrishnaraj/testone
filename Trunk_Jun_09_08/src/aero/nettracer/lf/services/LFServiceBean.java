@@ -461,6 +461,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	
 	@Override
+	@Deprecated
 	public long saveOrUpdateDelivery(LFDelivery delivery){
 		Session sess = null;
 		Transaction t = null;
@@ -496,6 +497,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	@Override
+	@Deprecated
 	public LFDelivery getDelivery(long id) {
 		Session sess = HibernateWrapper.getSession().openSession();
 		LFDelivery d = null;
@@ -1050,6 +1052,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
+	@Deprecated
 	public String getLostReport(Date startdate, Date enddate, Station station,
 			int matchType, boolean shipped) {
 		// TODO Auto-generated method stub
@@ -1057,6 +1060,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
+	@Deprecated
 	public String getFoundReport(Date startdate, Date enddate, Station station,
 			int matchType, boolean shipped) {
 		// TODO Auto-generated method stub
@@ -1553,7 +1557,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public void getStillSearchingList() {
 		String sql = "select l.id lostid from lflost l, station s, lflossinfo r " +
 		" where l.status_ID = " + TracingConstants.LF_STATUS_OPEN +
-		" and l.reservation_id = r.id " +
+		" and l.lossInfo_id = r.id " +
 		" and r.destination_station_ID = s.Station_ID " +
 		" and (datediff(curdate(),l.emailSentDate) >= s.priority or l.emailSentDate is null)";
 
