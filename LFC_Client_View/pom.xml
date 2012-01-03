@@ -8,6 +8,7 @@
     <packaging>war</packaging>
     
     <name>LFC_Client_View</name>
+	<url>http://maven.apache.org</url>
     
     	<!-- Shared version number properties -->
 	<properties>
