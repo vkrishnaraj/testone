@@ -317,7 +317,7 @@
 		
 
 		<ear destfile="${dist.dir}/${ear.name}" appxml="${src.dir}/../metadata/fs/application.xml">
-			<fileset dir="${dist.dir}" includes="*.jar" />
+			<fileset dir="${dist.dir}" includes="nt_fs.jar, claim_model.jar" />
 		</ear>
 		
 		<mkdir dir="${staging.dir}/${staging.env}/${staging.project}"/>
