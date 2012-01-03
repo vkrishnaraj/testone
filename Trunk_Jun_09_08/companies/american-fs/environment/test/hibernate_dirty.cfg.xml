@@ -20,7 +20,7 @@
 		<property name="jdbc.batch_size">25</property> 
 		<property name="jdbc.use_scrollable_resultset">false</property> 
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-		<property name="company.code">WS</property>
+		<property name="company.code">AA</property>
 		<property name="hibernate.connection.isolation">1</property>
 			
 		<!-- c3p0 -->
