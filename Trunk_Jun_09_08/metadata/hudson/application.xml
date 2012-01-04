@@ -67,6 +67,13 @@
 
    <module>
      <web>
+         <web-uri>webjet_hudson.war</web-uri>
+         <context-root>webjet</context-root>
+     </web>
+  </module>
+
+   <module>
+     <web>
          <web-uri>lfc_hudson.war</web-uri>
          <context-root>lostandfound</context-root>
      </web>
