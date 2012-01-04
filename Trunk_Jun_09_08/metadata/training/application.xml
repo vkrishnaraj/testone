@@ -63,6 +63,12 @@
          <context-root>american</context-root>
      </web>
   </module>
+   <module>
+     <web>
+         <web-uri>webjet_training.war</web-uri>
+         <context-root>webjet</context-root>
+     </web>
+  </module>
   
   <!--
      <module>

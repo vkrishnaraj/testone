@@ -64,6 +64,13 @@
      </web>
   </module>
   
+   <module>
+     <web>
+         <web-uri>webjet_testing.war</web-uri>
+         <context-root>webjet</context-root>
+     </web>
+  </module>
+  
   <!--
      <module>
      <web>
