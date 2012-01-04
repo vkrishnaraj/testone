@@ -1,0 +1,3 @@
+<jboss-web>
+	<context-root>/webjet</context-root>
+</jboss-web>
