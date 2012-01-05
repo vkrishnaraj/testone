@@ -474,7 +474,6 @@ public class TracingConstants {
 	public final static String LF_ABG_COMPANY_ID = "ABG";
 	public final static String LF_SWA_COMPANY_ID = "SWA";
 	public final static String LF_AB_COMPANY_ID = "AB";
-	public final static String LF_WN_COMPANY_ID = "WN";
 	
 	public final static Map<String, String> LF_SUBCOMPANIES;
 	static{
@@ -482,7 +481,7 @@ public class TracingConstants {
 		temp.put("AVS","AB");
 		temp.put("BGT","AB");
 		temp.put("ABG","AB");
-		temp.put("SWA","WN");
+		temp.put("SWA","LF");
 		LF_SUBCOMPANIES = Collections.unmodifiableMap(temp);
 	}
 	
