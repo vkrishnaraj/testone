@@ -76,11 +76,11 @@
 						<t:outputText value="#{msg.lostform_label_item_case_color}" />
 					</td></tr>
 					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.itemSize}" />
+						<t:outputText value="#{lostAndFound.lostReport.itemSize}" />
 					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostPhone.number}" />
+						<t:outputText value="#{lostAndFound.lostReport.lostPhone.number}" />
 					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.itemCaseColor}" />
+						<t:outputText value="#{lostAndFound.caseColorDesc}" />
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="3">
@@ -124,9 +124,6 @@
 					<tr><td class="twlvPxBlk">
 						<t:outputText value="#{lostAndFound.lostReport.contact.emailAddress}" />
 					</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_vantive_number} #{lostAndFound.lostReport.vantiveNumber}" />
-					</td></tr>
 				</table>
 				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_trip_title}" /></p>
 				<table>
@@ -141,7 +138,10 @@
 						<t:outputText value="#{lostAndFound.lostReport.dateLost}" />
 					</td></tr>
 				</table>
-				<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToLanding}" />
+				<div align="center">
+				<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToLanding}" />&#160;&#160;&#160;
+				<a4j:commandButton value="#{msg.general_button_print}" action="null" onclick="window.print();return false;" />
+				</div><br/>
 			</h:panelGroup>
 		</h:form>
 	</ui:define>

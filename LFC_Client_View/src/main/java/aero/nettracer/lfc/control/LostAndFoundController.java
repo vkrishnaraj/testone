@@ -88,6 +88,10 @@ public class LostAndFoundController {
 		return "lostform?faces-redirect=true";
 	}
 	
+	public String goToStatus() {
+		return "status?faces-redirect=true";
+	}
+	
 	private boolean validate() {
 		boolean isValid = true;
 		if (lostReport.getContact().getFirstName() == null												// VALIDATE: FIRST NAME
@@ -375,6 +379,16 @@ public class LostAndFoundController {
 	
 	public String getColorDesc() {
 		String testIt = lostReport.getItemColor();
+		for (SelectItem key : getColors()) {
+			if (((String) key.getValue()).equals(testIt)) {
+				return key.getLabel();
+			}
+		}
+		return testIt;
+	}
+	
+	public String getCaseColorDesc() {
+		String testIt = lostReport.getItemCaseColor();
 		for (SelectItem key : getColors()) {
 			if (((String) key.getValue()).equals(testIt)) {
 				return key.getLabel();
