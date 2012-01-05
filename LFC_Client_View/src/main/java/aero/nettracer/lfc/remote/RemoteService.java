@@ -103,11 +103,11 @@ public class RemoteService {
 		try {
 			LFCClientServiceRemote o = getRemoteServiceLF();
 			if (o != null) {
-				categoriesLF = o.getCategories(TracingConstants.LF_WN_COMPANY_ID);
+				categoriesLF = o.getCategories(TracingConstants.LF_LF_COMPANY_ID);
 				colors = o.getColors();
 				states = o.getState();
 				countries = o.getCountries();
-				locationsLF = o.getStations(TracingConstants.LF_WN_COMPANY_ID);
+				locationsLF = o.getStations(TracingConstants.LF_LF_COMPANY_ID);
 			}
 			ctx.close();
 		} catch (NamingException ex) {

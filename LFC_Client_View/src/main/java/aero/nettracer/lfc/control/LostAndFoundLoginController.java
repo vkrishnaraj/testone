@@ -52,7 +52,7 @@ public class LostAndFoundLoginController {
 	}
 	
 	public String loginSouthwest() {
-		return login(TracingConstants.LF_WN_COMPANY_ID, TracingConstants.LF_SWA_COMPANY_ID);
+		return login(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_SWA_COMPANY_ID);
 	}
 	
 	public String login(String company, String subCompany) {
@@ -82,7 +82,7 @@ public class LostAndFoundLoginController {
 	
 	public String goToFormPageSouthwest() {
 		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
-		lostReport.setCompany(TracingConstants.LF_WN_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
 		return goToFormPage("bagcheck");
 	}
 	
