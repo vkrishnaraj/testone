@@ -9,7 +9,7 @@
 	template="../layout/southwest_template.xhtml">
 	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
 	<ui:define name="body">
-		<h:form>
+		<h:form id="lostForm" >
 			<h:panelGroup>
 				<p class="contentHeader"><t:outputText value="#{msg.lostform_text_title}" escape="false"/></p>
 				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_policy_title}" /></p>
@@ -246,14 +246,14 @@
 				</div>
 				<div align="center">
 				<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}" />&#160;&#160;&#160;
-				<a4j:commandButton value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" onclick="return validateEmail(this);"/>
+				<a4j:commandButton value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" onclick="if (!validateEmail()) {return false;}"/>
 				</div><br/>
 			</h:panelGroup>
 			<script type="text/javascript">
-				function validateEmail(theForm) {
-					var theEmail = theForm.getElementById("email").value;
+				function validateEmail() {
+					var theEmail = document.getElementById("lostForm:email").value;
 					if (!theEmail) {
-						return confirm("Please be advised that if an e-mail address is not provided, we" + 
+						return window.confirm("Please be advised that if an e-mail address is not provided, we" + 
 								" will contact you via telephone and only in the event that we find an item closely" + 
 								" matching the description of your reported lost item.");
 					} else {
