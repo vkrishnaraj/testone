@@ -211,7 +211,7 @@
 						<t:outputText value="#{msg.lostform_label_email_confirm}" />
 					</td></tr>
 					<tr><td colspan="3">
-						<t:inputText value="#{lostAndFound.lostReport.contact.emailAddress}"  style="width: 95%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.emailAddress}"  style="width: 95%" id="email"/>
 					</td><td colspan="3">
 						<t:inputText value="#{lostAndFound.lostReport.contact.confirmEmail}"  style="width: 100%" />
 					</td></tr>
@@ -246,9 +246,22 @@
 				</div>
 				<div align="center">
 				<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}" />&#160;&#160;&#160;
-				<a4j:commandButton value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" />
+				<a4j:commandButton value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" onclick="return validateEmail(this);"/>
 				</div><br/>
 			</h:panelGroup>
+			<script type="text/javascript">
+				function validateEmail(theForm) {
+					var theEmail = theForm.getElementById("email").value;
+					if (!theEmail) {
+						return confirm("Please be advised that if an e-mail address is not provided, we" + 
+								" will contact you via telephone and only in the event that we find an item closely" + 
+								" matching the description of your reported lost item.");
+					} else {
+						return true;
+					}
+					
+				}
+			</script>
 		</h:form>
 	</ui:define>
 </ui:composition>
