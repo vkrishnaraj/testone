@@ -122,6 +122,44 @@ public class Settings {
 	public static String LOST_ID_AB = "";
 	public static String FOUND_ID_AB = "";
 	
+
+	
+	/////////////////////////////////////////////////////////// DELTA ////////////////////////////////////////////////////////
+	
+	public static final String START_URL_DL = "delta";
+	public static String CLAIM_ID_DL = "";
+	
+
+	
+	/////////////////////////////////////////////////////////// UNITED ////////////////////////////////////////////////////////
+	
+	public static final String START_URL_UA = "united";
+	public static String CLAIM_ID_UA = "";
+	
+
+	
+	/////////////////////////////////////////////////////////// AMERICAN ////////////////////////////////////////////////////////
+	
+	public static final String START_URL_AA = "american";
+	public static String CLAIM_ID_AA = "";
+	
+
+	
+	/////////////////////////////////////////////////////////// LOSTANDFOUND ////////////////////////////////////////////////////////
+	
+	public static final String START_URL_LF = "lostandfound";
+	public static String CLAIM_ID_LF = "";
+	
+
+	
+	/////////////////////////////////////////////////////////// WEBJET ///////////////////////////////////////////////////////
+	
+	public static final String START_URL_WH = "webjet";
+	public static String INCIDENT_ID_WH = "";
+	public static String DAMAGE_ID_WH = "";
+	public static String PILFERAGE_ID_WH = "";
+	public static String ONHAND_ID_WH = "";
+	
 	
 	
 }
