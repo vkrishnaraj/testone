@@ -89,6 +89,10 @@ public class LFLost implements LFObject {
 	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<LFRemark> agentRemarks;
 	
+	private boolean email1;
+	
+	private boolean email2;
+	
 	public long getId() {
 		return id;
 	}
@@ -279,6 +283,22 @@ public class LFLost implements LFObject {
 
 	public Set<LFRemark> getAgentRemarks() {
 		return agentRemarks;
+	}
+
+	public void setEmail1(boolean email1) {
+		this.email1 = email1;
+	}
+
+	public boolean isEmail1() {
+		return email1;
+	}
+
+	public void setEmail2(boolean email2) {
+		this.email2 = email2;
+	}
+
+	public boolean isEmail2() {
+		return email2;
 	}
 	
 }

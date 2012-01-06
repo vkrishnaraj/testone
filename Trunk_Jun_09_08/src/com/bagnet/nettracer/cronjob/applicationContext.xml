@@ -105,7 +105,7 @@
 		<constructor-arg value="${lz.move.type}" />
 	</bean>
 	
-	<bean id="avis" class="aero.nettracer.lf.services.LFServiceBean">
+	<bean id="lf" class="aero.nettracer.lf.services.LFServiceBean">
 	</bean>
 	
 	<bean id="fsDataRetentionBean" class="aero.nettracer.fs.utilities.DataRetentionUtil">
@@ -163,15 +163,27 @@
 		<property name="concurrent" value="false" />
 	</bean>
 	
-	<bean id="avisStillSearching" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetBeanName" value="avis" />
+	<bean id="lfStillSearching" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="lf" />
 		<property name="targetMethod" value="getStillSearchingList" />
 		<property name="concurrent" value="false" />
 	</bean>
 	
-	<bean id="avisAutoClose" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetBeanName" value="avis" />
+	<bean id="lfAutoClose" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="lf" />
 		<property name="targetMethod" value="autoClose" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="lf1NoticeEmail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="lf" />
+		<property name="targetMethod" value="send1stNoticeEmails" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="lf2NoticeEmail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="lf" />
+		<property name="targetMethod" value="send2ndNoticeEmails" />
 		<property name="concurrent" value="false" />
 	</bean>
 	
@@ -229,14 +241,24 @@
 		<property name="cronExpression" value="${lz.move.cron}" />
 	</bean>
 	
-	<bean id="cronAvisStillSearching" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="avisStillSearching" />
-		<property name="cronExpression" value="${avis.stillsearch.cron}" />
+	<bean id="cronLfStillSearching" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="lfStillSearching" />
+		<property name="cronExpression" value="${lf.stillsearch.cron}" />
 	</bean>
 	
-	<bean id="cronAvisAutoClose" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="avisAutoClose" />
-		<property name="cronExpression" value="${avis.autoclose.cron}" />
+	<bean id="cronLfAutoClose" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="lfAutoClose" />
+		<property name="cronExpression" value="${lf.autoclose.cron}" />
+	</bean>
+	
+	<bean id="cronLf1stNotice" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="lf1NoticeEmail" />
+		<property name="cronExpression" value="${lf.stillsearch.cron}" />
+	</bean>
+	
+	<bean id="cronLf2ndNotice" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="lf2NoticeEmail" />
+		<property name="cronExpression" value="${lf.stillsearch.cron}" />
 	</bean>
 		
 	<bean id="cronFsDataRetention" class="org.springframework.scheduling.quartz.CronTriggerBean">

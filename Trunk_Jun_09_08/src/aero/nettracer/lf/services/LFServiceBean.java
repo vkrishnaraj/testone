@@ -8,10 +8,13 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
 
+import org.apache.commons.lang.WordUtils;
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
@@ -46,7 +49,13 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
 @Stateless
 public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
+	private static int EMAIL_FIRST_NOTICE_DAY = 3;
+	
+	private static int EMAIL_SECOND_NOTICE_DAY = 7;
+	
 	private static String autoagent = "autoagent";
+	
+	private static ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale("US"));
 	
 	public Agent getAutoAgent(){
 		GeneralServiceBean bean = new GeneralServiceBean();
@@ -1585,119 +1594,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	@Override
-	public void sendStillSearching(long id) {
-		LFLost lost = getLostReport(id);
-		if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
-			try {
-
-				String root = TracerProperties.get("email.resources");
-				String configpath = root + "/";
-				String imagepath = root + "/";
-				boolean embedImage = true;
-				
-				HtmlEmail he = new HtmlEmail();
-				String currentLocale = lost.getAgent().getCurrentlocale();
-				
-				String from = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_from();
-				String host = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_host();
-				int port = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_port();
-				
-				he.setHostName(host);
-				he.setSmtpPort(port);
-
-				he.setFrom(from);
-				ArrayList al = new ArrayList();
-				al.add(new InternetAddress(lost.getClient().getDecryptedEmail()));
-				he.setTo(al);
-				
-				he.setSubject("Avis Budget Group - Notification");
-				
-				HashMap h = new HashMap();
-				String htmlFileName = "update_report_email.html";
-				
-				
-				h.put("LOSTID", (new Long(id)).toString());
-				h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
-
-				// set embedded images
-				if (embedImage) {
-					String img1 = he.embed(new URL("file:" + imagepath + "avis_email_banner.jpg"),
-					"avis_email_banner.jpg");
-					h.put("BANNER_IMAGE", img1);
-				}
-					
-
-				String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
-				he.setHtmlMsg(msg);
-				he.send();
-				
-				lost.setEmailSentDate(new Date());
-				saveOrUpdateLostReport(lost, getAutoAgent());
-				
-			}catch (Exception e){
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public void closeLostAndEmail(long id, Agent agent){
-		LFLost lost = getLostReport(id);
-		if(lost!=null){
-			if(lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
-				try {
-					String root = TracerProperties.get("email.resources");
-					String configpath = root + "/";
-					String imagepath = root + "/";
-					boolean embedImage = true;
-
-					HtmlEmail he = new HtmlEmail();
-					String currentLocale = lost.getAgent().getCurrentlocale();
-
-					String from = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_from();
-					String host = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_host();
-					int port = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_port();
-
-					he.setHostName(host);
-					he.setSmtpPort(port);
-
-					he.setFrom(from);
-					ArrayList al = new ArrayList();
-					al.add(new InternetAddress(lost.getClient().getDecryptedEmail()));
-					he.setTo(al);
-
-					he.setSubject("Avis Budget Group - Notification");
-
-					HashMap h = new HashMap();
-					String htmlFileName = "closed_report_email.html";
-
-					h.put("LOSTID", (new Long(id)).toString());
-					h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
-
-					if (embedImage) {
-						String img1 = he.embed(new URL("file:" + imagepath + "avis_email_banner.jpg"),
-						"avis_email_banner.jpg");
-						h.put("BANNER_IMAGE", img1);
-					}
-
-					String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
-					if(msg == null){
-						System.out.println("email is null");
-					}
-					he.setHtmlMsg(msg);
-					he.send();
-					lost.setEmailSentDate(new Date());
-				}catch (Exception e){
-					e.printStackTrace();
-				}
-			}
-			lost.setCloseDate(new Date());
-			Status status = new Status();
-			status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
-			lost.setStatus(status);
-			saveOrUpdateLostReport(lost, agent);
-		}
-	}
 	
 	public void autoClose(){
 		int daysTillClose = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_CLOSE_DAYS);
@@ -1734,13 +1630,187 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	private List<Long> getXDayList(int day, int notice) throws Exception{
+		String sql = "select l.id lostid from lflost l " +
+		" where l.status_ID != " + TracingConstants.LF_STATUS_CLOSED +
+		" and (datediff(curdate(),l.openDate)) = :day ";
+		
+		switch(notice){
+		case 1: sql+=" and l.email1 = 0";break;
+		case 2: sql+=" and l.email2 = 0";break;
+		default:throw new Exception();
+		}
+		
+		Session sess = null;
+		SQLQuery pq = null;
+		ArrayList<Long>lostIds = new ArrayList<Long>();
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			pq = sess.createSQLQuery(sql.toString());
+			pq.setParameter("day", day);
+			pq.addScalar("lostid", Hibernate.LONG);
+			List<Long> listMatchingFiles = pq.list();
+			for (Long strs : listMatchingFiles) {
+				lostIds.add((Long) strs);
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			if(sess != null){
+				sess.close();
+			}
+		}
+		
+		return lostIds;
+	}
+	
+	public void send1stNoticeEmails(){
+		try {
+			List<Long> lostIds = getXDayList(EMAIL_FIRST_NOTICE_DAY, 1);
+			if(lostIds != null){
+				for(Long id: lostIds){
+					send1stNotice(id);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void send2ndNoticeEmails(){
+		try {
+			List<Long> lostIds = getXDayList(EMAIL_SECOND_NOTICE_DAY, 2);
+			if(lostIds != null){
+				for(Long id: lostIds){
+					send2ndNotice(id);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+
+	
+	private HashMap<String,String> getEmailParams(LFLost lost){
+		HashMap<String,String> h = new HashMap<String,String>();
+		h.put("LOSTID", (new Long(lost.getId())).toString());
+		if(lost.getLossInfo()!=null && lost.getLossInfo().getDestination()!= null){
+			h.put("DAYS", (new Integer(lost.getLossInfo().getDestination().getPriority()).toString()));
+		}
+		if(lost.getClient() != null){
+			h.put("FIRSTNAME", WordUtils.capitalize(lost.getClient().getFirstName().toLowerCase()));
+			h.put("LASTNAME", WordUtils.capitalize(lost.getClient().getLastName().toLowerCase()));
+		}
+		h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
+		
+		if("AB".equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
+			h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
+			h.put("SUBJECTLINE", resources.getString("ab.email.subject"));
+		} else if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
+			h.put("COMPANY", "Southwest");
+			h.put("SUBJECTLINE", resources.getString("wn.email.subject"));
+		}
+		
+		return h;
+	}
+	
 	public void sendLostCreatedEmail(long id){
 		LFLost lost = getLostReport(id);
+		HashMap<String,String> h = getEmailParams(lost);
+		if(sendEmail(lost, h, "create_report_email.html", h.get("SUBJECTLINE"))){
+			lost.setEmailSentDate(new Date());
+			saveOrUpdateLostReport(lost,getAutoAgent());
+		}
+	}
+	
+	public void sendStillSearching(long id){
+		LFLost lost = getLostReport(id);
+		HashMap<String,String> h = getEmailParams(lost);
+		if(sendEmail(lost, h, "update_report_email.html",  h.get("SUBJECTLINE"))){
+			lost.setEmailSentDate(new Date());
+			saveOrUpdateLostReport(lost,getAutoAgent());
+		}
+	}
+	public void send1stNotice(long id){
+		LFLost lost = getLostReport(id);
+		HashMap<String,String> h = getEmailParams(lost);
+		if(!lost.isEmail1() && sendEmail(lost, h, "update_1_report_email.html", h.get("SUBJECTLINE"))){
+			lost.setEmailSentDate(new Date());
+			lost.setEmail1(true);
+			saveOrUpdateLostReport(lost,getAutoAgent());
+		}
+	}
+	
+	public void send2ndNotice(long id){
+		LFLost lost = getLostReport(id);
+		HashMap<String,String> h = getEmailParams(lost);
+		String email = "update_2_report_email.html";
+		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId()) && dataplan(lost)){
+			email = "update_2_ipad_report_email.html";
+		}
+		if(!lost.isEmail2() && sendEmail(lost, h, email, h.get("SUBJECTLINE"))){
+			lost.setEmailSentDate(new Date());
+			lost.setEmail2(true);
+			saveOrUpdateLostReport(lost,getAutoAgent());
+		}
+	}
+	
+	public void sendFoundEmail(long id){
+		LFLost lost = getLostReport(id);
+		HashMap<String,String> h = getEmailParams(lost);
+		if(sendEmail(lost, h, "found_report_email.html", h.get("SUBJECTLINE"))){
+			lost.setEmailSentDate(new Date());
+			saveOrUpdateLostReport(lost,getAutoAgent());
+		}
+	}
+	
+	public void closeLostAndEmail(long id, Agent agent){
+		LFLost lost = getLostReport(id);
+		HashMap<String,String> h = getEmailParams(lost);
+
+		String email = "closed_report_email.html";
+		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId()) && dataplan(lost)){
+			email = "closed_report_ipad_email.html";
+		}
+		
+		if(sendEmail(lost, h, email, h.get("SUBJECTLINE"))){
+			//regardless of the send status of the email, close the report
+		}
+		lost.setCloseDate(new Date());
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
+		lost.setStatus(status);
+		saveOrUpdateLostReport(lost, agent);
+	}
+	
+	private boolean dataplan(LFLost lost){
+		if(lost != null && lost.getItem() != null){
+			if(lost.getItem().getCategory() == 7 ||      //cellphone
+			   lost.getItem().getSubCategory() == 34 ||  //laptop
+			   lost.getItem().getSubCategory() == 48){   //PDA
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean sendEmail(LFLost lost, HashMap params, String htmlFileName, String subjectline){
 		if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
 			try {
 				String root = TracerProperties.get("email.resources");
+				String imgbanner = TracerProperties.get("lf.email.banner");
 				String configpath = root + "/";
 				String imagepath = root + "/";
+				if("AB".equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
+					configpath = root + "/";
+					imagepath = root + "/";
+				} else if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
+					configpath = root + "/WN/";
+					imagepath = root + "/WN/";
+				}
 				boolean embedImage = true;
 				
 				System.out.println("path: " + root);
@@ -1760,43 +1830,37 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				al.add(new InternetAddress(lost.getClient().getDecryptedEmail()));
 				he.setTo(al);
 				
-				he.setSubject("Avis Budget Group - Notification");
-				
-				HashMap h = new HashMap();
-				String htmlFileName = "create_report_email.html";
-				
-				
-				h.put("LOSTID", (new Long(id)).toString());
-				h.put("DAYS", (new Integer(lost.getLossInfo().getDestination().getPriority()).toString()));//TODO station driven
-				h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
+				if(subjectline != null){
+					subjectline = subjectline.replace("{LOSTID}", "" + lost.getId());
+				}
+				he.setSubject(subjectline);
 
-				
 				// set embedded images
 				if (embedImage) {
 					try{
-					String img1 = he.embed(new URL("file:" + imagepath + "avis_email_banner.jpg"),
-							"avis_email_banner.jpg");
-					h.put("BANNER_IMAGE", img1);
+					String img1 = he.embed(new URL("file:" + imagepath + imgbanner),
+							imgbanner);
+					params.put("BANNER_IMAGE", img1);
 					}catch(Exception e){
 						e.printStackTrace();
+						System.out.println(imagepath + imgbanner);
 					}
 				}
-					
 				
-				String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
+				String msg = EmailParser.parse(configpath + htmlFileName, params, currentLocale);
 				if(msg == null){
 					System.out.println("email is null");
 				}
 				he.setHtmlMsg(msg);
 				he.send();
 				
-				lost.setEmailSentDate(new Date());
-				saveOrUpdateLostReport(lost,getAutoAgent());
-				
 			}catch (Exception e){
 				e.printStackTrace();
+				return false;
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	public void testEmail(){
@@ -1804,7 +1868,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			HtmlEmail he = new HtmlEmail();
 			
 			String from = "test@nettracer.aero";
-			String host = "74.86.4.179";
+			String host = "10.8.185.132";
 			int port = 8625;
 			
 			he.setHostName(host);
@@ -1826,9 +1890,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	public static void main(String [] args){
-		LFServiceBean bean = new LFServiceBean();
-		bean.testEmail();
-		bean.getStillSearchingList();
+		String x = "fdas fdsa {LOSTID}";
+		System.out.println(x.replace("{LOSTID}", "" + 1234));
+		
+//		LFServiceBean bean = new LFServiceBean();
+//		bean.testEmail();
+//		bean.sendLostCreatedEmail(2865);
+//		bean.getStillSearchingList();
 	}
 	
 }
