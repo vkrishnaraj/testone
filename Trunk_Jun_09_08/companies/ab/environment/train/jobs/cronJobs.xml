@@ -9,8 +9,8 @@
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="cronAvisStillSearching" />
-				<ref bean="cronAvisAutoClose" />
+				<ref bean="cronLfStillSearching" />
+				<ref bean="cronLfAutoClose" />
 			</list>
 		</property>
 	</bean>
