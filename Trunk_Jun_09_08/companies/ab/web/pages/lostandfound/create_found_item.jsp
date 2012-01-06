@@ -236,6 +236,16 @@
 					</tr>
 					<tr>
 						<td>
+							<bean:message key="colname.lf.agreement.number" />
+							<br>
+							<html:text name="foundItemForm" property="found.agreementNumber" size="10" styleClass="textfield" />
+						</td>
+						<td>
+							<bean:message key="colname.lf.mva.number" />
+							<br>
+							<html:text name="foundItemForm" property="found.mvaNumber" size="10" styleClass="textfield" />
+						</td>
+						<td>
 							<bean:message key="colname.lf.found.location" />
 							<br>
 		            		<html:select name="foundItemForm" property="found.locationId" styleClass="dropdown" >

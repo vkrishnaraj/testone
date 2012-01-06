@@ -158,26 +158,24 @@
 		}
 	}
 	
-	function setLostId(lostId, matchItem, itemId) {
-		document.getElementById('lostId').value = lostId;
+	function setFoundId(foundId, matchItem, itemId) {
+		document.getElementById('foundId').value = foundId;
 		document.getElementById('matchItem').value = matchItem;
 		document.getElementById('itemId').value = itemId;
 	}
 	
-	
-	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form focus="found.id" action="create_found_item.do" method="post" onsubmit="return validateFoundItemForm(this);">
+<html:form focus="lost.id" action="create_lost_report.do" method="post" onsubmit="return validateLfReportForm(this);">
 <input type="hidden" name="delete_these_elements" value="" />
 <html:hidden property="matchItem" styleId="matchItem" value="" />
 <html:hidden property="itemId" styleId="itemId" value="" />
-<html:hidden property="lostId" styleId="lostId" value="" />
+<html:hidden property="foundId" styleId="foundId" value="" />
 	<tr>
         <td colspan="3" id="pageheadercell">
           <div id="pageheaderleft">
             <h1>
-            	<bean:message key="header.found.item" />
+            	<bean:message key="header.lost.report" />
             </h1>
           </div>
           <div id="pageheaderright">
@@ -192,64 +190,73 @@
         </td>
       </tr>
    	<tr>
-   	<tr>
    		<td id="middlecolumn">        
      		<div id="maincontent">
          		<logic:present name="reportfile" scope="request">
             		<center><a href="#" onclick="openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request"/>','report',800,600);return false;"><b><bean:message key="link.view_report" /></b></a></center>
            		</logic:present>
 				<h1 class="green">
-		        	<bean:message key="header.report.information" />
-		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
-		        </h1>
-    			<span class="reqfield">*</span>
-   				<bean:message key="message.required" />
+					<bean:message key="header.report.information" />
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+				</h1>
+				<span class="reqfield">*</span>
+				<bean:message key="message.required" /> 
    				<center><font color="red">
-         		<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+         			<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
          		</font></center>
-         		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-       				<tr>
+				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+					<tr>
 						<td>
 							<bean:message key="colname.lf.report.id" />
 							<br/>
-							<html:text name="foundItemForm" property="found.id" disabled="true" styleClass="disabledtextfield" />
+							<html:text name="lostReportForm" property="lost.id" disabled="true" styleClass="disabledtextfield" size="15"/>
 						</td>
 						<td>
 							<bean:message key="colname.lf.created.date" />
 							<br/>
-							<html:text name="foundItemForm" property="disFoundDate" disabled="true" styleClass="disabledtextfield" />
+							<html:text name="lostReportForm" property="disOpenDate" disabled="true" styleClass="disabledtextfield" size="15"/>
 						</td>
 						<td>
 							<bean:message key="colname.lf.created.agent" />
 							<br/>
-							<html:text name="foundItemForm" property="found.agent.username" disabled="true" styleClass="disabledtextfield" />
+							<html:text name="lostReportForm" property="lost.agent.username" disabled="true" styleClass="disabledtextfield" size="15"/>
 						</td>
+						<td>
+							<bean:message key="colname.lf.closed.date" />
+							<br/>
+							<html:text name="lostReportForm" property="disClosedDate" disabled="true" styleClass="disabledtextfield" size="15"/>
+						</td>
+						<td>
+							<bean:message key="colname.lf.closed.agent" />
+							<br/>
+							<html:text name="lostReportForm" property="closedAgentUsername" disabled="true" styleClass="disabledtextfield" size="15"/>
+						</td>
+					</tr>
+					<tr>
 						<td>
 							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
 							<br/>
-         					<html:select name="foundItemForm" property="found.companyId" styleClass="dropdown" >
+         					<html:select name="lostReportForm" property="lost.companyId" styleClass="dropdown" >
          						<html:option value="<%=TracingConstants.LF_ABG_COMPANY_ID %>"><bean:message key="option.lf.please.select" /></html:option>
          						<html:option value="<%=TracingConstants.LF_AVIS_COMPANY_ID %>"><bean:message key="option.lf.avis" /></html:option>
          						<html:option value="<%=TracingConstants.LF_BUDGET_COMPANY_ID %>"><bean:message key="option.lf.budget" /></html:option>
          					</html:select>
 						</td>
-					</tr>
-					<tr>
-						<td>
-							<bean:message key="colname.lf.found.location" />
-							<br>
-		            		<html:select name="foundItemForm" property="found.locationId" styleClass="dropdown" >
-		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
-		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
-		            		</html:select>
-						</td>
 						<td>
          					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
          					<br>
-         					<html:select name="foundItemForm" property="found.statusId" styleClass="dropdown" >
+         					<html:select name="lostReportForm" property="lost.statusId" styleClass="dropdown" >
          						<html:option value="-1"><bean:message key="option.lf.please.select" /></html:option>
          						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
          					</html:select>
+         				</td>
+         				<td>
+         					<bean:message key="colname.lf.vantive.number" />
+         					<br>
+         					<html:text name="lostReportForm" property="lost.vantiveNumber" size="10" styleClass="textfield" />
+         				</td>
+         				<td colspan="2">
+         					&nbsp;
          				</td>
 					</tr>
 				</table>
@@ -263,43 +270,43 @@
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
          			<tr>
 			            <td colspan=2>
-			              <bean:message key="colname.last_name.req" />
+			              <bean:message key="colname.last_name.req" />&nbsp;<span class="reqfield">*</span>
 			              <br>
-			              <html:text name="foundItemForm" property="found.client.lastName" size="20" maxlength="20" styleClass="textfield" />
+			              <html:text name="lostReportForm" property="lost.client.lastName" size="20" maxlength="20" styleClass="textfield" />
 			            </td>
 			            <td nowrap colspan="2">
-			              <bean:message key="colname.first_name.req" />
+			              <bean:message key="colname.first_name.req" />&nbsp;<span class="reqfield">*</span>
 			              <br>
-			              <html:text name="foundItemForm" property="found.client.firstName" size="20" maxlength="20" styleClass="textfield" />
+			              <html:text name="lostReportForm" property="lost.client.firstName" size="20" maxlength="20" styleClass="textfield" />
 			            </td>
-			            <td colspan=2>
+			            <td>
 			              <bean:message key="colname.mid_initial" />
 			              <br>
-			              <html:text name="foundItemForm" property="found.client.middleName" size="1" maxlength="1" styleClass="textfield" />
+			              <html:text name="lostReportForm" property="lost.client.middleName" size="1" maxlength="1" styleClass="textfield" />
 			            </td>
 			        </tr>
 	            	<tr>
 		                <td colspan=2>
-		                  <bean:message key="colname.street_addr1" />
+		                  <bean:message key="colname.street_addr1" />&nbsp;<span class="reqfield">*</span>
 		                  <br>
-		                  <html:text name="foundItemForm" property="found.client.address.decryptedAddress1" size="45" maxlength="50" styleClass="textfield" />
+		                  <html:text name="lostReportForm" property="lost.client.address.decryptedAddress1" size="45" maxlength="50" styleClass="textfield" />
 		                </td>
 		                <td colspan=3>
 		                  <bean:message key="colname.street_addr2" />
 		                  <br>
-		                  <html:text name="foundItemForm" property="found.client.address.decryptedAddress2" size="35" maxlength="50" styleClass="textfield" />
+		                  <html:text name="lostReportForm" property="lost.client.address.decryptedAddress2" size="35" maxlength="50" styleClass="textfield" />
 		                </td>
 		              </tr>
 		              <tr>
 		                <td>
-		                  <bean:message key="colname.city" />
+		                  <bean:message key="colname.city" />&nbsp;<span class="reqfield">*</span>
 		                  <br>
-		                  <html:text name="foundItemForm" property="found.client.address.decryptedCity" size="10" maxlength="50" styleClass="textfield" />
+		                  <html:text name="lostReportForm" property="lost.client.address.decryptedCity" size="10" maxlength="50" styleClass="textfield" />
 		                </td>
 		                <td>
 		                  <bean:message key="colname.state" />
 		                  <br />
-		                  <html:select name="foundItemForm" property="found.client.address.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" >
+		                  <html:select name="lostReportForm" property="lost.client.address.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" >
 		                  	<html:option value="">
 			                    <bean:message key="select.none" />
 		                    </html:option>
@@ -309,17 +316,17 @@
 		                <td>
 		                  <bean:message key="colname.province" />
 		                  <br />
-		                  <html:text name="foundItemForm" property="found.client.address.decryptedProvince" size="10" maxlength="100" styleId="province" styleClass="textfield" onchange="fieldChanged('province');" />
+		                  <html:text name="lostReportForm" property="lost.client.address.decryptedProvince" size="10" maxlength="100" styleId="province" styleClass="textfield" onchange="fieldChanged('province');" />
 		                </td>
 		                <td>
 		                  <bean:message key="colname.zip" />
 		                  <br>
-		                  <html:text name="foundItemForm" property="found.client.address.decryptedZip" size="11" maxlength="11" styleClass="textfield" />
+		                  <html:text name="lostReportForm" property="lost.client.address.decryptedZip" size="11" maxlength="11" styleClass="textfield" />
 		                </td>
 		                <td>
-		                  <bean:message key="colname.country" />
+		                  <bean:message key="colname.country" />&nbsp;<span class="reqfield">*</span>
 		                  <br>
-		                  <html:select name="foundItemForm" property="found.client.address.country" styleId="country" styleClass="dropdown" onchange="fieldChanged('country');">
+		                  <html:select name="lostReportForm" property="lost.client.address.country" styleId="country" styleClass="dropdown" onchange="fieldChanged('country');">
 		                    <html:option value="">
 		                      <bean:message key="select.none" />
 		                    </html:option>
@@ -331,8 +338,8 @@
 		              	<td colspan="2">
 		              		<bean:message key="colname.lf.primary.phone" />
 		              		<br/>
-		              		<html:text name="foundItemForm" property="primaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
-		              		<html:select name="foundItemForm" property="primaryNumberType" styleClass="dropdown" >
+		              		<html:text name="lostReportForm" property="primaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
+		              		<html:select name="lostReportForm" property="primaryNumberType" styleClass="dropdown" >
 		              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_MOBILE) %>"><bean:message key="option.lf.mobile" /></html:option>
@@ -343,10 +350,10 @@
 		              	<td colspan="3">
 		              		<bean:message key="colname.lf.secondary.phone" />
 		              		<br/>
-		              		<html:text name="foundItemForm" property="secondaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
-		              		<html:select name="foundItemForm" property="secondaryNumberType" styleClass="dropdown" >
+		              		<html:text name="lostReportForm" property="secondaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
+		              		<html:select name="lostReportForm" property="secondaryNumberType" styleClass="dropdown" >
 		              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
-		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME)%>"><bean:message key="option.lf.home" /></html:option>
+		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_MOBILE) %>"><bean:message key="option.lf.mobile" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
@@ -357,12 +364,12 @@
 		              	<td colspan="2" >
 		              		<bean:message key="colname.lf.email" />
 		              		<br />
-		              		<html:text name="foundItemForm" property="found.client.decryptedEmail" size="35" maxlength="100" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="lost.client.decryptedEmail" size="35" maxlength="100" styleClass="textfield" />
 		              	</td>
 		              	<td colspan="3" >
 		              		<bean:message key="colname.lf.confirm.email" />
 		              		<br />
-		              		<html:text name="foundItemForm" property="found.client.confirmEmail" size="35" maxlength="100" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="lost.client.confirmEmail" size="35" maxlength="100" styleClass="textfield" />
 		              	</td>
 		              </tr>
 				</table>
@@ -374,73 +381,37 @@
 				<span class="reqfield">*</span>
 				<bean:message key="message.required" /> 
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-         			<logic:iterate indexId="i" id="item" name="foundItemForm" property="found.items" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
-         			<% 
-       					if (item.getType() == TracingConstants.LF_TYPE_FOUND) { %>
+         			<logic:iterate indexId="i" id="item" name="lostReportForm" property="lost.items" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
+         				<% 
+         					if (item.getType() == TracingConstants.LF_TYPE_LOST) { %>
 	         				<tr>
-       					<%	int dispositionId = item.getDispositionId();
-       						if (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED){
-       							%>
-								<td class="header">
-								<bean:message key="colname.lf.tracking.number" />:&nbsp;
-								<input type="text" name="item[<%=i %>].trackingNumber" size="20" class="textfield" value="<%=item.getTrackingNumber() == null ? "" : item.getTrackingNumber() %>" />&nbsp;
-									[<a style="color:#fff;" href='create_found_item.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
-								</td>
-								<td class="header">
-									&nbsp;
-								</td>
-								<td class="header">
-      								<% if (item.getLost() != null) { %>
-      									<bean:message key="lf.match.lost" />:&nbsp;<a style="color:#fff;" href='create_lost_report.do?lostId=<%=item.getLost().getId() %>'><%=item.getLost().getId() %></a>&nbsp;<br/>
-      								<% } else { %>
-      									<bean:message key="lf.match.lost" />:&nbsp;<br/>
-      								<% } %>
-      							</td>
-								<%
-       						} else if (dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP){
-    							%>
-								<td class="header">
-									&nbsp;
-								</td>
-								<td class="header">
-									<bean:message key="lf.picked.up"/>&nbsp;
-									[<a style="color:#fff;" href='create_found_item.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
-								</td>
-								<td class="header">
-      								<% if (item.getLost() != null) { %>
-      									<bean:message key="lf.match.lost" />:&nbsp;<a style="color:#fff;" href='create_lost_report.do?lostId=<%=item.getLost().getId() %>'><%=item.getLost().getId() %></a>&nbsp;<br/>
-      								<% } else { %>
-      									<bean:message key="lf.match.lost" />:&nbsp;<br/>
-      								<% } %>
-      							</td>
-   								<%
-       						} else {
-       							%>
-									<td class="header">
-									<bean:message key="colname.lf.tracking.number" />:&nbsp;
-									<input type="text" name="item[<%=i %>].trackingNumber" size="20" class="textfield" value="<%=item.getTrackingNumber() == null ? "" : item.getTrackingNumber() %>" />
-									&nbsp;
-									</td>
-									<td class="header">
-										<a style="color:#fff;" href='create_found_item.do?pickup=1&itemId=<%=item.getId() %>'><bean:message key="lf.picked.up"/></a>
-									</td>
-									<td class="header">
-      								<% if (item.getLost() != null) { %>
-      									<bean:message key="lf.match.lost" />:&nbsp;<a style="color:#fff;" href='create_lost_report.do?lostId=<%=item.getLost().getId() %>'><%=item.getLost().getId() %></a>&nbsp;
-      									<% if (dispositionId == TracingConstants.LF_DISPOSITION_OTHER || dispositionId == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) { %>
-										<br>[<a style="color:#fff;" href='create_found_item.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
+         					<%  int dispositionId = item.getDispositionId();
+         						if (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED || dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP) { %>
+			         					<td class="header" >
+	         						<% if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_DELIVERED) { %>
+			         						<bean:message key="colname.lf.tracking.number" />:&nbsp;<html:text name="item" property="trackingNumber" size="20" styleClass="textfield" />&nbsp;
+	         						<% } else if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_PICKED_UP) { %>
+			         						<bean:message key="lf.picked.up" />&nbsp;
+	         						<% } %>
+			         						[<a style="color:#fff;" href='create_lost_report.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
+			         					</td>
+        					<%	} else { %>
+        							<td class="header" >&nbsp;</td>
+        					<%  } %>
+       							<td class="header" colspan=2>
+       								<% if (item.getFound() != null) { %>
+       									<bean:message key="lf.match.found" />:&nbsp;<a style="color:#fff;" href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getId() %></a>&nbsp;
+       									<% if (dispositionId == TracingConstants.LF_DISPOSITION_OTHER || dispositionId == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) { %>
+											[<a style="color:#fff;" href='create_lost_report.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
 										<% } %>
-      								<% } else { %>
-      									<bean:message key="lf.match.lost" />:&nbsp;
-  										<input type="text" size="10" class="textfield" id="foundInput" onchange="setLostId(this.value,1,<%=item.getId() %>)" />&nbsp;
-										<!-- [<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" ><bean:message key="button.do_match" /></a>]-->
-										[<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" onclick="return validateId('foundInput');" ><bean:message key="button.do_match" /></a>]
-      								<% } %>
-      							</td>
-       							<%
-       						}
-     					%>	
-	       					</tr>
+       								<% } else { %>
+       									<bean:message key="lf.match.found" />:&nbsp;
+   										<input type="text" size="10" class="textfield" id="foundInput" onchange="setFoundId(this.value,1,<%=item.getId() %>)" />&nbsp;
+										<!--[<a style="color:#fff;" href="javascript:document.lostReportForm.submit();" ><bean:message key="button.do_match" /></a>]-->
+										[<a style="color:#fff;" href="javascript:document.lostReportForm.submit();" onclick="return validateId('foundInput');" ><bean:message key="button.do_match" /></a>]
+       								<% } %>
+       							</td>
+    	   					</tr>
          				<tr>
 	         				<td>
 	         					<bean:message key="colname.lf.brand" />
@@ -504,7 +475,7 @@
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList colorList = (ArrayList) request.getSession().getAttribute("lfcolorlist");
-	         							LabelValueBean color;
+	         							LabelValueBean color = new LabelValueBean();
 	         							for (int j = 0; j < colorList.size(); ++j) {
 	         								color = (LabelValueBean) colorList.get(j);
 	         						%>
@@ -522,10 +493,59 @@
 	         					<textarea name="item[<%=i %>].description" cols="80" rows="3" class="textfield" ><%=item.getDescription() == null ? "" : item.getDescription() %></textarea>
 	         				</td>
 	         			</tr>
-	         		<% } %>
+	         			<% } %>
          			</logic:iterate>
          		</table>
          		<br/>
+				<h1 class="green">
+					<bean:message key="header.trip.information" />
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+				</h1>
+				<span class="reqfield">*</span>
+				<bean:message key="message.required" /> 
+				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+					<tr>
+						<td>
+							<bean:message key="colname.lf.agreement.number" />
+							<br>
+							<html:text name="lostReportForm" property="lost.lossInfo.agreementNumber" size="10" styleClass="textfield" />
+						</td>
+						<td>
+							<bean:message key="colname.lf.mva.number" />
+							<br>
+							<html:text name="lostReportForm" property="lost.lossInfo.mvaNumber" size="10" styleClass="textfield" />
+						</td>
+						<td>
+							<bean:message key="colname.lf.rental.location" />&nbsp;<span class="reqfield">*</span>
+							<br>
+		            		<html:select name="lostReportForm" property="lost.lossInfo.originId" styleClass="dropdown" >
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+		            		</html:select>
+						</td>
+						<td>
+							<bean:message key="colname.lf.dropoff.location" />&nbsp;<span class="reqfield">*</span>
+							<br>
+		            		<html:select name="lostReportForm" property="lost.lossInfo.destinationId" styleClass="dropdown" >
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+		            		</html:select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<bean:message key="colname.lf.rentaldate"/>
+							<br>
+							<html:text name="lostReportForm" property="disLossdate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.lostReportForm.disLossdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+						</td>
+						<td colspan=3>
+							<bean:message key="colname.lf.where.did.you.leave.it" />
+							<br>
+							<html:text name="lostReportForm" property="lost.remarks" size="80" styleClass="textfield" />
+						</td>
+					</tr>
+				</table>
+				<br/>
 				<center>
 					<html:submit property="save" styleId="button">
 						<bean:message key="button.save" />

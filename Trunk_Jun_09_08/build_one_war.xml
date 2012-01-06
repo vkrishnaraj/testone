@@ -518,6 +518,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	 
+	<target name="build-ear-local-lfc" depends="delete-wars">
+		<property name="staging.project" value="lfc" />
+		<property name="staging.env" value="local" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-local-lfc"/>
+		<property name="app.xml.location" value="metadata/lfc/local" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	 
 	<target name="build-ear-local-lfc-service" depends="delete-wars">
 		<property name="staging.project" value="lfcservice" />
 		<property name="staging.env" value="local" />
