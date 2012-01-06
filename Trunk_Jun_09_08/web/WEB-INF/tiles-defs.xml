@@ -910,6 +910,10 @@
     <definition name="create_delivery" extends="user_menu">
         <put name="center"   value="/pages/lostandfound/create_delivery.jsp"/>
     </definition>
+
+    <definition name="enter_items" extends="user_menu">
+        <put name="center"   value="/pages/lfc/enter_items.jsp"/>
+    </definition>
     
     <definition name="ajax_subcategory" path="/pages/ajax_divs/subcategory.jsp">
     </definition>

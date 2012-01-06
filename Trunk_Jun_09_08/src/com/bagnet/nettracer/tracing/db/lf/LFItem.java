@@ -41,6 +41,8 @@ public class LFItem {
 	
 	private String longDescription;
 	
+	private int value;
+	
 	public String getLongDescription() {
 		return longDescription;
 	}
@@ -227,6 +229,14 @@ public class LFItem {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
 	}
 	
 }

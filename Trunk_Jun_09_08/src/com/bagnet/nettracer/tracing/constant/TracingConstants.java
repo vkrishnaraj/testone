@@ -185,6 +185,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_LF_OPEN_FOUND_ITEMS = "Open Found Items";
 	public static final String SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_SALVAGE = "Items to Salvage";
 	public static final String SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_DELIVER = "Items to Deliver";
+
+	public static final String SYSTEM_COMPONENT_NAME_LFC_ITEM_ENTRY_WORKFLOW = "LFC Item Entry Workflow";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -461,6 +463,8 @@ public class TracingConstants {
 	public final static String LF_VIEW_OPEN_FOUND = "view_open_found";
 	public final static String LF_VIEW_ITEMS_TO_SALVAGE = "view_items_salvage";
 	public final static String LF_VIEW_ITEMS_TO_DELIVER = "view_items_deliver";
+	
+	public final static String LFC_ENTER_ITEMS = "enter_items";
 	
 	public final static int LF_PHONE_PRIMARY = 1;
 	public final static int LF_PHONE_SECONDARY = 2;
@@ -970,6 +974,11 @@ public class TracingConstants {
 	public static final int FS_ACTION_DELETE = 5;
 	public static final int FS_ACTION_DATA_RETENTION_SCAN = 6;
 	public static final String SESSION_REDIRECT_URL = "SESSION_REDIRECT_URL";
+	
+	public static final int LFC_ITEM_LOW_VALUE = 1;
+	public static final int LFC_ITEM_HIGH_VALUE = 2;
+	
+	public static final int HISTORY_OBJ_TYPE_FOUND = 1;
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

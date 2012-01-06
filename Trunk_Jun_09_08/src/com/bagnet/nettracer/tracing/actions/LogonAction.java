@@ -7,9 +7,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.naming.Context;
 import javax.servlet.ServletContext;
@@ -55,6 +53,7 @@ import com.bagnet.nettracer.tracing.forms.ViewMassOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm;
+import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
@@ -167,6 +166,9 @@ public class LogonAction extends Action {
 				}
 			}
 		}
+		
+		// Create the history container object
+		session.setAttribute("historyContainer", new HistoryContainer());
 
 		// Save our logged-in user in the session
 		session.setAttribute("lastupdate", new Date());

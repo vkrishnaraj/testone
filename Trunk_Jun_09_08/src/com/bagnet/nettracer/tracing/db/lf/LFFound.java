@@ -144,6 +144,10 @@ public class LFFound implements LFObject {
 	public String getDisFoundDate(String dateFormat) {
 		return DateUtils.formatDate(foundDate, dateFormat, "", null);
 	}
+
+	public void setDisFoundDate(String date, String dateFormat) {
+		this.foundDate = DateUtils.convertToDate(date, dateFormat, null);
+	}
 	
 	public String getCompanyId() {
 		return companyId;

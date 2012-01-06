@@ -272,6 +272,8 @@
 		
 		<form-bean name="regionForm" type="com.bagnet.nettracer.tracing.forms.RegionForm" />	
 
+		<form-bean name="enterItemsForm" type="com.bagnet.nettracer.tracing.forms.lfc.EnterItemsForm" />	
+
 	</form-beans>
 	<!-- global exception -->
 	<global-exceptions>
@@ -539,6 +541,8 @@
 		
 		<forward name="subcategory" path="ajax_subcategory" />
 		<forward name="create_claim_prorate" path="create_claim_prorate" />
+
+		<forward name="enter_items" path="enter_items" />
 		
 	</global-forwards>
 
@@ -876,6 +880,8 @@
 		<action path="/view_items_salvage" type="com.bagnet.nettracer.tracing.actions.lf.SalvageItemsAction" name="handleItemsForm" scope="session" validate="false"></action>
 		<action path="/view_items_deliver" type="com.bagnet.nettracer.tracing.actions.lf.DeliverItemsAction" name="handleItemsForm" scope="session" validate="false"></action>
 		<action path="/create_delivery" type="com.bagnet.nettracer.tracing.actions.lf.CreateDeliveryAction" name="createDeliveryForm" scope="session" validate="false"></action>
+
+		<action path="/enter_items" type="com.bagnet.nettracer.tracing.actions.lfc.EnterItemsAction" name="enterItemsForm" scope="session" validate="false"></action>
 
 	</action-mappings>
 

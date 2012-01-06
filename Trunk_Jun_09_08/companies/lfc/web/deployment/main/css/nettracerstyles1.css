@@ -506,3 +506,22 @@ h2#fraudlink {
 	padding: 0px;
 	font-size: 1.2em;	
 }
+
+
+div#itementryleft {
+	margin: 0px;
+	padding: 2px;
+	width: 80%;	
+	float:left;
+}
+
+div#itementryright {
+	margin: 0px;
+	padding: 2px;
+	width: 20%;	
+	float:left;
+}
+	
+	
+	
+	

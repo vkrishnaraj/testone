@@ -135,10 +135,9 @@ public class LFUtils {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static boolean actionChangeSubCategory(LFSearchDTO sDto, HttpServletRequest request) {
+	public static boolean actionChangeSubCategory(long catId, HttpServletRequest request) {
 		boolean success = false;
 		if (request.getParameter("changesubcategory") != null && request.getParameter("changesubcategory").equals("1")) {
-			long catId = sDto.getCategory();
 			if (catId <= 0) {
 				request.getSession().setAttribute("lfsubcategorylist", new ArrayList<LFSubCategory>());
 				success = true;
@@ -155,7 +154,5 @@ public class LFUtils {
 		}
 		return success;
 	}
-	
-	
 
 }

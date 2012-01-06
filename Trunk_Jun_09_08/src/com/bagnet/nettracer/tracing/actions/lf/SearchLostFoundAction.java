@@ -47,7 +47,7 @@ public class SearchLostFoundAction extends CheckedAction {
 		
 		LFSearchDTO searchDto = (LFSearchDTO) form;
 		LFUtils.getLists(user, session);
-		if (LFUtils.actionChangeSubCategory(searchDto, request)) {
+		if (LFUtils.actionChangeSubCategory(searchDto.getCategory(), request)) {
 			request.setAttribute("formName", "searchLostFoundForm");
 			return mapping.findForward(TracingConstants.AJAX_SUBCATEGORY);
 		}
