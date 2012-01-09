@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -17,7 +18,12 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 @Entity
 @Table(name="lflossinfo")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-public class LFLossInfo {
+public class LFLossInfo implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3566745444509507964L;
+
 	@Id
 	@GeneratedValue
 	private long id;

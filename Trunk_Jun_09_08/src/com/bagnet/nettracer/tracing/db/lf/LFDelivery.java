@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +15,12 @@ import org.hibernate.annotations.Proxy;
 
 @Entity
 @Proxy(lazy = false)
-public class LFDelivery {
+public class LFDelivery implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 866779027387055317L;
 
 	@Id
 	@GeneratedValue

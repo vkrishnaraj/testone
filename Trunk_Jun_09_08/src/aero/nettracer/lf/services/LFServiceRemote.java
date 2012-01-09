@@ -10,6 +10,7 @@ import org.apache.struts.util.LabelValueBean;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 
 @Remote
 public interface LFServiceRemote {
@@ -21,4 +22,5 @@ public interface LFServiceRemote {
 	public ArrayList<LabelValueBean> getColors();
 	public List<LFCategory> getCategories(String companycode);
 
+	public List<LFMatchHistory> traceFoundItem(long id);
 }

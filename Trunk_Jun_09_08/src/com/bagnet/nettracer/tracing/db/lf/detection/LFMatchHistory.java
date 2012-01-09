@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.lf.detection;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -23,7 +24,12 @@ import com.bagnet.nettracer.tracing.db.lf.LFLost;
 
 @Entity
 @Proxy(lazy = false)
-public class LFMatchHistory {
+public class LFMatchHistory implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2203263893678251215L;
 
 	@Id
 	@GeneratedValue

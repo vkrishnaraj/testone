@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
+import java.io.Serializable;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -21,7 +22,12 @@ import aero.nettracer.security.AES;
 
 @Entity
 @Proxy(lazy = false)
-public class LFPerson {
+public class LFPerson implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7228145418177131087L;
 
 	@Id
 	@GeneratedValue

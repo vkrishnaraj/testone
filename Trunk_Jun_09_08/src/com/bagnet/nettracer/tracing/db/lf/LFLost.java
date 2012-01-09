@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -30,7 +31,12 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Proxy(lazy = false)
-public class LFLost implements LFObject {
+public class LFLost implements LFObject, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7672592006533855019L;
 
 	@Id
 	@GeneratedValue

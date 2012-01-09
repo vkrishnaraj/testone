@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -14,7 +16,12 @@ import org.hibernate.annotations.FetchMode;
 import com.bagnet.nettracer.tracing.db.GeneralRemark;
 
 @Entity
-public class LFRemark {
+public class LFRemark implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5769095740895350735L;
+
 	@Id
 	@GeneratedValue
 	long id;
