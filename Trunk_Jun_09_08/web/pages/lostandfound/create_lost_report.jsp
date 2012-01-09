@@ -503,7 +503,7 @@
 	         				<td>
 	         					<bean:message key="colname.lf.lostPhoneNumber" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].phone.decryptedPhoneNumber" class="textfield" value="<%=item.getPhone() != null && item.getPhone().getDecryptedPhoneNumber() != null ? item.getPhone().getDecryptedPhoneNumber() : "" %>" />
+	         					<input type="text" name="item[<%=i %>].dispPhone" class="textfield" value="<%=item.getDispPhone()%>" />
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.caseColor" />

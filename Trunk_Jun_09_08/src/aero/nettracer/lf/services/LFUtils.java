@@ -56,9 +56,9 @@ public class LFUtils {
 		
 		LFLossInfo lossinfo = new LFLossInfo();
 		Station dropoffLocation = new Station();
-		Station pickupLocation = new Station();
+		//Station pickupLocation = new Station();
 		dropoffLocation.setStation_ID(agent.getStation().getStation_ID());
-		lossinfo.setOrigin(pickupLocation);
+		//lossinfo.setOrigin(pickupLocation);
 		lossinfo.setDestination(dropoffLocation);
 		lost.setLossInfo(lossinfo);
 		

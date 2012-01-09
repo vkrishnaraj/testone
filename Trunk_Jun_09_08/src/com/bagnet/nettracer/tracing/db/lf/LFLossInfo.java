@@ -85,11 +85,14 @@ public class LFLossInfo {
 	}
 	
 	public void setOriginId(int originId) {
-		if (getOrigin() == null) {
-			Station newOrigin = new Station();
-			setOrigin(newOrigin);
+		if (originId != 0) {
+			if (getOrigin() == null) {
+				setOrigin(new Station());
+			}
+			getOrigin().setStation_ID(originId);
+		} else {
+			setOrigin(null);
 		}
-		getOrigin().setStation_ID(originId);
 	}
 	
 	public int getDestinationId() {
@@ -100,11 +103,14 @@ public class LFLossInfo {
 	}
 	
 	public void setDestinationId(int destinationId) {
-		if (getDestination() == null) {
-			Station newDestination = new Station();
-			setDestination(newDestination);
+		if (destinationId != 0) {
+			if (getDestination() == null) {
+				setDestination(new Station());
+			}
+			getDestination().setStation_ID(destinationId);
+		} else {
+			setDestination(null);
 		}
-		getDestination().setStation_ID(destinationId);
 	}
 	
 	public String getAgreementNumber() {

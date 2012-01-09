@@ -93,7 +93,6 @@
 	}
 	
 	function validateLfReportForm(form) {
-		alert("HERE!!!");
 		for (var i = 0; i < form.length; ++i) {
 		
 			currentElement = form.elements[i];
@@ -165,9 +164,15 @@
 			        currentElement.focus();
 			        return false;
 				}
+			} else if (elementName == "lost.lossInfo.originId") {
+				if (currentElement.value.length == 0) {
+					alert("<%= (String)bundle.getString("colname.lf.rental.location") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        currentElement.focus();
+			        return false;
+				}
 			} else if (elementName == "lost.lossInfo.destinationId") {
 				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.lf.lost.location") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+					alert("<%= (String)bundle.getString("colname.lf.dropoff.location") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
 			        return false;
 				}
