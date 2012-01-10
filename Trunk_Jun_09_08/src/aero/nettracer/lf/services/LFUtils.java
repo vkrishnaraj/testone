@@ -9,6 +9,9 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.classic.Session;
+
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -23,7 +26,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
-import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
+import com.bagnet.nettracer.tracing.db.salvage.Salvage;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -170,6 +173,22 @@ public class LFUtils {
 			}
 		}
 		return success;
+	}
+	
+	public static LFCategory loadCategory(long id) {
+		Session session = null;
+		LFCategory category = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			category = (LFCategory) session.get(LFCategory.class, id);
+		} catch (Exception e) {
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return category;
 	}
 
 }

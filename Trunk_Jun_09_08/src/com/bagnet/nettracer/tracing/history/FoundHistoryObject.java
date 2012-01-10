@@ -27,7 +27,7 @@ public class FoundHistoryObject extends HistoryObject {
 	public void setHasTraceResults(boolean hasTraceResults) {
 		this.hasTraceResults = hasTraceResults;
 	}
-
+	
 	@Override
 	public String getUniqueId() {
 		return date.getTime() + ":" + getType() + ":" + found.getId();

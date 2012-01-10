@@ -153,4 +153,12 @@ public class LFPhone implements Serializable{
 		return item;
 	}
 	
+	public boolean isEmpty() {
+		boolean empty = true;
+		if (getDecryptedPhoneNumber() != null && !getDecryptedPhoneNumber().isEmpty()) {
+			empty = false;
+		}
+		return empty;
+	}
+	
 }

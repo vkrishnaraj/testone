@@ -116,5 +116,24 @@ public final class EnterItemsForm extends ActionForm {
 		}
 		return 0;
 	}
+	
+	public String getDisFoundPhoneNumber() {
+		String toReturn = "";
+		if (found.getItem().getPhone() != null) {
+			toReturn = found.getItem().getPhone().getDecryptedPhoneNumber();
+		}
+		return toReturn;
+	}
+	
+	public void setDisFoundPhoneNumber(String phoneNumber) {
+		LFPhone phone = found.getItem().getPhone();
+		if (phone == null) {
+			phone = new LFPhone();
+			phone.setNumberType(LFPhone.MOBILE);
+			phone.setItem(found.getItem());
+			found.getItem().setPhone(phone);
+		}
+		phone.setDecryptedPhoneNumber(phoneNumber);
+	}
 
 }

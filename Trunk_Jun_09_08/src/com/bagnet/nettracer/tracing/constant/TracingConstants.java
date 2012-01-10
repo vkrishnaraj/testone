@@ -467,6 +467,13 @@ public class TracingConstants {
 	
 	public final static String LFC_ENTER_ITEMS = "enter_items";
 	
+	public final static int LF_LOCATION_SHELF = 0;
+	public final static int LF_LOCATION_VERIFICATION = 1;
+	
+	public final static int LF_STATUS_ENTERED = 0;
+	public final static int LF_STATUS_VERIFICATION_NEEDED = 1;
+	public final static int LF_STATUS_MOVED = 2;
+	
 	public final static int LF_PHONE_PRIMARY = 1;
 	public final static int LF_PHONE_SECONDARY = 2;
 	public final static int LF_PHONE_TYPE_HOME = 3;
@@ -493,6 +500,7 @@ public class TracingConstants {
 	
 	
 	public final static String AJAX_SUBCATEGORY = "subcategory";
+	public final static String AJAX_ITEM_SUMMARY = "itemsummary";
 	
 	public final static int LINK_TYPE_CLAIM_PAGE = 1;
 	public final static int LINK_TYPE_FRAUD_RESULTS_PAGE = 2;

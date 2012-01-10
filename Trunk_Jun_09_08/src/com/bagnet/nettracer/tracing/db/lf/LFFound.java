@@ -75,6 +75,12 @@ public class LFFound implements LFObject, Serializable {
 	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<LFRemark> agentRemarks;
 
+	private int itemLocation;
+	private String binId; 
+	
+	@Transient
+	private int entryStatus;
+	
 	public long getId() {
 		return id;
 	}
@@ -235,4 +241,37 @@ public class LFFound implements LFObject, Serializable {
 		return agentRemarks;
 	}
 	
+	@Transient
+	public String getSummaryDesc() {
+		return item.getSummaryDesc();
+	}
+
+	public int getItemLocation() {
+		return itemLocation;
+	}
+
+	public void setItemLocation(int itemLocation) {
+		this.itemLocation = itemLocation;
+	}
+
+	public String getBinId() {
+		return binId;
+	}
+
+	public void setBinId(String binId) {
+		this.binId = binId;
+	}
+
+	public int getEntryStatus() {
+		return entryStatus;
+	}
+
+	public void setEntryStatus(int entryStatus) {
+		this.entryStatus = entryStatus;
+	}
+	
+	public boolean hasContactInfo() {
+		return !client.isEmpty();
+	}
+
 }

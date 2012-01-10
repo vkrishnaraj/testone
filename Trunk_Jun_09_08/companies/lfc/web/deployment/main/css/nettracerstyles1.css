@@ -507,21 +507,30 @@ h2#fraudlink {
 	font-size: 1.2em;	
 }
 
-
 div#itementryleft {
-	margin: 0px;
-	padding: 2px;
 	width: 80%;	
-	float:left;
 }
 
 div#itementryright {
-	margin: 0px;
-	padding: 2px;
-	width: 20%;	
-	float:left;
+	width: 19%;	
 }
 	
+#itementryleft, #itementryright {
+	margin: 0px;
+	padding: 4px;
+	float: left;	
+}	
 	
-	
+.summaryActionItem {
+	background-color: #FE8080;
+}
+
+.summaryItem, .summaryActionItem {
+	padding: 3px;
+	margin-top: 8px;
+	border-width: 1px;
+	border-color: black;
+	border-style: solid;
+}
+
 	

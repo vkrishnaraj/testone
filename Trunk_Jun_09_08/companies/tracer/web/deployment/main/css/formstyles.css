@@ -123,7 +123,7 @@ div#buttons input {
 	margin:0px 10px;
 }
 
-#button {
+#button, .button {
 	background-color: #1F43AE;
 	border: 0px none;
 	height: 20px;

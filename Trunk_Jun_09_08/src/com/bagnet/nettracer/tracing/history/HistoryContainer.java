@@ -3,16 +3,15 @@ package com.bagnet.nettracer.tracing.history;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 
 public class HistoryContainer {
 
-	private LinkedHashMap<String, HistoryObject> queue;
+	private HistoryQueue<String, HistoryObject> queue;
 	
 	public HistoryContainer() {
-		queue = new HistoryQueue(PropertyBMO.getValueAsInt("history.queue.size"));
+		queue = new HistoryQueue<String, HistoryObject>(PropertyBMO.getValueAsInt("history.queue.size"));
 	}
 	
 	public HistoryObject get(String key) {

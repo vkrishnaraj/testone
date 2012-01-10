@@ -271,5 +271,19 @@ public class LFAddress implements Serializable{
 			this.zip = null;
 		}
 	}
+	
+	public boolean isEmpty() {
+		boolean empty = true;
+		if ((getDecryptedAddress1() != null && !getDecryptedAddress1().isEmpty())
+				|| (getDecryptedAddress2() != null && !getDecryptedAddress2().isEmpty())
+				|| (getDecryptedCity() != null && !getDecryptedCity().isEmpty())
+				|| (getDecryptedState() != null && !getDecryptedState().isEmpty())
+				|| (getDecryptedProvince() != null && !getDecryptedProvince().isEmpty())
+				|| (getDecryptedZip() != null && !getDecryptedZip().isEmpty())) {
+			empty = false;
+		}
+
+		return empty;
+	}
 		
 }

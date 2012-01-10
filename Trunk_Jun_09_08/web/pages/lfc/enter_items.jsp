@@ -12,6 +12,10 @@
 <%@ page import="org.apache.struts.util.LabelValueBean" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.lf.LFCategory" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.lf.LFSubCategory" %>
+<%@ page import="com.bagnet.nettracer.tracing.history.HistoryContainer" %>
+<%@ page import="com.bagnet.nettracer.tracing.history.HistoryObject" %>
+<%@ page import="com.bagnet.nettracer.tracing.history.FoundHistoryObject" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Iterator" %>
 <%@page import="java.util.ResourceBundle" %>
@@ -22,6 +26,9 @@
  	
  	ArrayList categoryList = (ArrayList) request.getSession().getAttribute("lfcategorylist");
  	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
+ 	
+ 	int itemCount = PropertyBMO.getValueAsInt("lfc.item.entry.display.count");
+ 	ArrayList<HistoryObject> history = ((HistoryContainer) request.getSession().getAttribute("historyContainer")).getNewestItems(itemCount);
 %>
 
 
@@ -134,8 +141,40 @@
 		return true;
 	}
 	
+	function updateItemLocation(moveId, divId, historyId) {
+		o = document.enterItemsForm;
+		o.fhoId.value = historyId;
+		o.divId.value = divId;
+		document.getElementById(moveId).innerHTML = "<bean:message key="ajax.please_wait" />";
+		postForm("enterItemsForm", true, function (req) {
+			o.fhoId.value = "";
+			o.divId.value = "";
+			document.getElementById(moveId).innerHTML = req.responseText; 
+			updateSaveButton();
+		});
+	}
+	
+	function updateSaveButton() {
+		document.getElementById("saveButton").disabled = false;
+		for (var j = 0; j < <%=itemCount %>; ++j) {
+			var divId = "moveDiv_" + j;
+			var div = document.getElementById(divId);
+			if (div != null) {
+				document.getElementById("saveButton").disabled = true;
+			} else {
+				var sumDivId = "summaryItem_" + j;
+				var sumDiv = document.getElementById(sumDivId);
+				if (sumDiv != null) {
+					sumDiv.className = "summaryItem";
+				}
+			}
+		}
+	}
+	
 </SCRIPT>
 <html:form focus="found.barcode" action="enter_items.do" method="post" onsubmit="return validateItemEntry(this);" >
+<input type="hidden" name="divId">
+<input type="hidden" name="fhoId">
 	<tr>
         <td colspan="3" id="pageheadercell">
           <div id="pageheaderleft">
@@ -160,9 +199,9 @@
      		<div id="maincontent">
      			<div id="itementryleft">
      				<h1 class="green">
-		        	<bean:message key="header.item.information" />
-		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
-		        </h1>
+			        	<bean:message key="header.item.information" />
+			        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+			        </h1>
     			<span class="reqfield">*</span>
    				<bean:message key="message.required" />
      				<table class="<%=cssFormClass %>" cellpadding=0 cellspacing=0 >
@@ -244,10 +283,15 @@
 	         				</td>
      					</tr>
      					<tr>
-     						<td colspan=5>
+     						<td colspan=3>
      							<bean:message key="colname.lfc.description" />
      							<br>
      							<html:text name="enterItemsForm" property="found.item.description" size="40" maxlength="20" styleClass="textfield" />
+     						</td>
+     						<td colspan=2>
+    							<bean:message key="colname.lf.lostPhoneNumber" />
+     							<br>
+     							<html:text name="enterItemsForm" property="disFoundPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
      						</td>
      					</tr>
      				</table>
@@ -353,15 +397,10 @@
 				              	</td>
 				              </tr>
 				              <tr>
-				              	<td colspan="2" >
+				              	<td colspan="5" >
 				              		<bean:message key="colname.lf.email" />
 				              		<br />
 				              		<html:text name="enterItemsForm" property="found.client.decryptedEmail" size="30" maxlength="100" styleClass="textfield" />
-				              	</td>
-				              	<td colspan="3" >
-				              		<bean:message key="colname.lf.confirm.email" />
-				              		<br />
-				              		<html:text name="enterItemsForm" property="found.client.confirmEmail" size="30" maxlength="100" styleClass="textfield" />
 				              	</td>
 				              </tr>
 						</table>
@@ -369,13 +408,59 @@
 				<center>
 					<input id="button" type="button" value='<bean:message key="lfc.button.contact.info" />' onClick="displayContactDiv();">
 					&nbsp;&nbsp;
-					<html:submit property="save" styleId="button">
+					<html:submit property="save" styleId="saveButton" styleClass="button" >
 						<bean:message key="button.save" />
 					</html:submit>
 				</center>
      			</div>
-     			<div id="itementryright" style="background-color:red;height:100%">
-     				ITEM ENTRY UPDATE DIV
+     			<div id="itementryright" >
+     				<h1 class="green" >
+			        	<bean:message key="header.item.entry.summary" />
+			        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+			        </h1>
+   					<br/>
+     				<% 
+     					for (int i = history.size() - 1; i >= 0; --i) { 
+     						FoundHistoryObject fho = (FoundHistoryObject) history.get(i);
+							int status = fho.getFound().getEntryStatus();
+							boolean needsVerification = status == TracingConstants.LF_STATUS_VERIFICATION_NEEDED || (fho.isHasTraceResults() && status != TracingConstants.LF_STATUS_MOVED);
+						  	String cssClass = needsVerification ? "summaryActionItem" : "summaryItem";
+     					%>
+						<div id="summaryItem_<%=i %>" class="<%=cssClass %>">
+							<span style="font-weight: bold;" ><bean:message key="colname.lfc.item.id" />:&nbsp;</span><%=fho.getFound().getBarcode() %>
+							<br>
+							<span style="font-weight: bold;" ><bean:message key="lfc.summary.desc" />:&nbsp;</span><%=fho.getFound().getSummaryDesc() %>
+							<br>
+							<span style="font-weight: bold;" ><bean:message key="lfc.item.entry.status" />:&nbsp;</span>
+							<%
+								if (status == TracingConstants.LF_STATUS_ENTERED) {
+							%>
+									<bean:message key="lf.status.entered" />
+							<%
+								} else if (status == TracingConstants.LF_STATUS_VERIFICATION_NEEDED) {
+							%>
+									<bean:message key="lf.status.verification.needed" />
+							<%
+								} else if (status == TracingConstants.LF_STATUS_MOVED) {
+							%>
+									<bean:message key="lf.status.moved" />
+							<%
+								}
+							%>
+							<% 	if (needsVerification) { %>
+								<div id="moveDiv_<%=i %>" >
+									<span style="font-weight: bold;" ><bean:message key="lfc.bin.id" />:&nbsp;</span>
+									<html:text name="enterItemsForm" property="found.binId" size="5" maxlength="50" styleClass="textfield" />
+									<center>
+										<input class="button" type="button" value='<bean:message key="lfc.button.item.moved" />' onClick="updateItemLocation('summaryItem_<%=i %>','<%=i %>','<%=fho.getUniqueId() %>')">
+									</center>
+									<script>
+										document.getElementById('saveButton').disabled = true;
+									</script>
+								</div>
+							<%	} %>
+						</div>
+     				<% } %>
      			</div>
      			<script>
 					fieldChanged('state');

@@ -540,6 +540,7 @@
 		<forward name="select_claim" path="select_claim" />
 		
 		<forward name="subcategory" path="ajax_subcategory" />
+		<forward name="itemsummary" path="ajax_itemsummary" />
 		<forward name="create_claim_prorate" path="create_claim_prorate" />
 
 		<forward name="enter_items" path="enter_items" />

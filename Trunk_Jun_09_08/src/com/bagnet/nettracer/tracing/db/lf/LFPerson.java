@@ -18,6 +18,8 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
 
+import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.Phone;
 import aero.nettracer.security.AES;
 
 @Entity
@@ -150,6 +152,32 @@ public class LFPerson implements Serializable{
 			}
 		}
 		return this.decryptedEmail;
+	}
+	
+	public boolean isEmpty() {
+		boolean empty = true;
+
+		if ((firstName != null && !firstName.isEmpty())
+				|| (lastName != null && !lastName.isEmpty())
+				|| (middleName != null && !middleName.isEmpty())
+				|| (getDecryptedEmail() != null && !getDecryptedEmail().isEmpty())) {
+			empty = false;
+		}
+		
+		if (empty) {
+			empty = address.isEmpty();
+		}
+		
+		if (empty) {
+			for (LFPhone p: phones) {
+				empty = p.isEmpty();
+				if (!empty) {
+					break;
+				}
+			}
+		}
+		
+		return empty;
 	}
 	
 }

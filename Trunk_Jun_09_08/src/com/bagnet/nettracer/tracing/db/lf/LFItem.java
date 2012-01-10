@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
+import java.util.Iterator;
+
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
@@ -14,6 +16,8 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
+
+import aero.nettracer.lf.services.LFUtils;
 
 import com.bagnet.nettracer.tracing.db.Status;
 
@@ -249,20 +253,41 @@ public class LFItem implements Serializable{
 		this.value = value;
 	}
 	
-	public String getDispPhone() {
-		if (phone != null && phone.getDecryptedPhoneNumber() != null) {
-			return phone.getDecryptedPhoneNumber();
+	public String getSummaryDesc() {
+		String toReturn = getCatDesc() + ",";
+		
+		if (brand != null && !brand.isEmpty()) {
+			toReturn += brand + ",";
 		}
-		return "";
+		
+		if (model != null && !model.isEmpty()) {
+			toReturn += model + ",";
+		}
+
+		if (color != null && !color.isEmpty()) {
+			color += model + ",";
+		}
+		toReturn = toReturn.substring(0, toReturn.lastIndexOf(','));
+		return toReturn;
 	}
 	
-	public void setDispPhone(String dispPhone) {
-		if (dispPhone != null && !dispPhone.trim().equals("")) {
-			if (phone == null) {
-				phone = new LFPhone();
+	private String getCatDesc() {
+		String toReturn = "";
+		LFCategory cat = LFUtils.loadCategory(category);
+		if (cat != null) {
+			toReturn = cat.getDescription();
+			if (subCategory > 0) {
+				Iterator<LFSubCategory> it = cat.getSubcategories().iterator();
+				while (it.hasNext()) {
+					LFSubCategory subcat = it.next();
+					if (subcat.getId() == subCategory) {
+						toReturn += subcat.getDescription() + ",";
+						break;
+					}
+				}
 			}
-			phone.setDecryptedPhoneNumber(dispPhone);
 		}
+		return toReturn;
 	}
 	
 }

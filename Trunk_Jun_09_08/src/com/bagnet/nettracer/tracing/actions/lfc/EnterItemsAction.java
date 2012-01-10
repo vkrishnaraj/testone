@@ -20,6 +20,7 @@ import com.bagnet.nettracer.tracing.forms.lfc.EnterItemsForm;
 import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
 
 public class EnterItemsAction extends CheckedAction {
 	
@@ -45,6 +46,16 @@ public class EnterItemsAction extends CheckedAction {
 				request.setAttribute("formName", "enterItemsForm");
 				return mapping.findForward(TracingConstants.AJAX_SUBCATEGORY);
 			}
+			
+			String fhoId = (String) request.getParameter("fhoId");
+			if (fhoId != null && !fhoId.isEmpty()) {
+				HistoryContainer hc = (HistoryContainer) session.getAttribute("historyContainer");
+				FoundHistoryObject fho = (FoundHistoryObject) hc.get(fhoId);
+				fho.getFound().setEntryStatus(TracingConstants.LF_STATUS_MOVED);
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(fho.getFound(), user);
+				request.setAttribute("divId", request.getParameter("divId"));
+				return mapping.findForward(TracingConstants.AJAX_ITEM_SUMMARY);
+			}
 		}
 		
 		LFFound found = eiForm.getFound();
@@ -52,6 +63,9 @@ public class EnterItemsAction extends CheckedAction {
 			eiForm.setFound(LFUtils.createLFFound(user));
 			eiForm.getFound().setCompanyId(TracingConstants.LF_SWA_COMPANY_ID);
 		} else if (request.getParameter("save") != null) {
+			if (found.hasContactInfo()) {
+				found.setEntryStatus(TracingConstants.LF_STATUS_VERIFICATION_NEEDED);
+			}
 			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 			
 			// 1. create the history object
@@ -63,6 +77,7 @@ public class EnterItemsAction extends CheckedAction {
 			history.put(fho.getUniqueId(), fho);
 			
 			// 3. submit the history object to the trace handler
+			TraceHandler.trace(fho);
 			
 			// 4. clone the found and set it on the form
 			eiForm.setFound(duplicateFound(found, user));
