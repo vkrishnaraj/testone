@@ -1,12 +1,18 @@
 package com.bagnet.nettracer.tracing.forms.lf;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+import com.bagnet.nettracer.tracing.db.lf.LFRemark;
 
 public final class LostReportForm extends ActionForm {
 
@@ -14,6 +20,7 @@ public final class LostReportForm extends ActionForm {
 	
 	private String dateFormat;
 	private LFLost lost;
+	private List<LFRemark> remarklist;
 	
 	public String getDateFormat() {
 		return dateFormat;
@@ -131,6 +138,39 @@ public final class LostReportForm extends ActionForm {
 		if(lost != null && lost.getLossInfo() != null){
 			lost.getLossInfo().setDisLossdate(date, getDateFormat());
 		}
+	}
+
+	public List<LFRemark> getRemarklist() {
+		if (remarklist == null) { 
+			remarklist = new ArrayList<LFRemark>();
+			if (getLost() != null && getLost().getAgentRemarks() != null) {
+				remarklist = new ArrayList<LFRemark>(getLost().getAgentRemarks());
+			}
+		}
+		return remarklist;
+	}
+
+	public LFRemark getRemark(int index) {
+		if (index < 0) index = 0;
+		LFRemark r = null;
+		while (this.remarklist.size() <= index) {
+			r = new LFRemark();
+			r.getRemark().setType(TracingConstants.REMARK_REGULAR);
+			this.remarklist.add(r);
+		}
+		return (LFRemark) this.remarklist.get(index);
+	}
+
+	public void setRemarklist(List<LFRemark> remarklist) {
+		this.remarklist = remarklist;
+	}
+	
+	public void populateRemarks() {
+		for (int i = 0, s = remarklist.size(); i < s; i++) {
+			LFRemark lfr = remarklist.get(i);
+			lfr.setLost(getLost());
+		}
+		lost.setAgentRemarks(new LinkedHashSet<LFRemark>(remarklist));		
 	}
 
 }

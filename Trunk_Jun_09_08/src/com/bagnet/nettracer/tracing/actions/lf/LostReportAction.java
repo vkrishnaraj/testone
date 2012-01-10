@@ -1,7 +1,11 @@
 package com.bagnet.nettracer.tracing.actions.lf;
 
+import java.text.SimpleDateFormat;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,13 +24,17 @@ import aero.nettracer.lf.services.LFUtils;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.LFRemark;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.forms.lf.LostReportForm;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -61,6 +69,7 @@ public class LostReportAction extends CheckedAction {
 			long id = Long.parseLong(request.getParameter("lostId"));
 			lostReport = LFServiceWrapper.getInstance().getLostReport(id);
 		} else {
+			lrForm.populateRemarks();
 			lostReport = lrForm.getLost();
 		}
 		
@@ -97,29 +106,62 @@ public class LostReportAction extends CheckedAction {
 					//TODO handle the failed undo
 				}
 			} 
-		} else if (request.getParameter("matchItem") != null) {
+		} else if (request.getParameter("addremark") != null) {
+			//set new remark with current time
+			LFRemark r = lrForm.getRemark(lrForm.getRemarklist().size());
+			r.getRemark().setRemarkdate(TracerDateTime.getGMTDate());
+			r.getRemark().setAgent(user);
+			r.getRemark().setRemarktext("");
+			r.getRemark().set_DATEFORMAT(user.getDateformat().getFormat());
+			r.getRemark().set_TIMEFORMAT(user.getTimeformat().getFormat());
+			r.getRemark().set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+			request.setAttribute("remark", Integer.toString(lrForm.getRemarklist().size() - 1));
+		} else if (request.getParameter("matchItem") != null) {  // ALWAYS HAVE THIS PARAMETER RUN LAST!!!! CG: 1.9.12
 
 			try {
 				String foundId = (String) request.getParameter("foundId");
-				long id = Long.valueOf(foundId);
-				LFFound found = LFServiceWrapper.getInstance().getFoundItem(id);
-				if (found == null) {
-					ActionMessages errors = new ActionMessages();
-					ActionMessage error = new ActionMessage("error.invalid.found.id");
-					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-					saveMessages(request, errors);
-					return mapping.findForward(TracingConstants.LF_CREATE_LOST_REPORT);
-				}
-				long matchId = LFServiceWrapper.getInstance().createManualMatch(lrForm.getLost(), found);
-				if(LFServiceWrapper.getInstance().confirmMatch(matchId)){
-					lostReport = LFServiceWrapper.getInstance().getLostReport(lrForm.getLost().getId());
-				} else {
-					//TODO fail to create manual match, do something....
+				if (foundId != null && !foundId.trim().equals("")) {
+					long id = Long.valueOf(foundId);
+					LFFound found = LFServiceWrapper.getInstance().getFoundItem(id);
+					if (found == null) {
+						ActionMessages errors = new ActionMessages();
+						ActionMessage error = new ActionMessage("error.invalid.found.id");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+						return mapping.findForward(TracingConstants.LF_CREATE_LOST_REPORT);
+					}
+					long matchId = LFServiceWrapper.getInstance().createManualMatch(lrForm.getLost(), found);
+					if(LFServiceWrapper.getInstance().confirmMatch(matchId)){
+						lostReport = LFServiceWrapper.getInstance().getLostReport(lrForm.getLost().getId());
+					} else {
+						//TODO fail to create manual match, do something....
+					}
 				}
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
 			}
 
+		}
+		
+		boolean deleteRemark = false;
+
+		String index = "0";
+		Enumeration e = request.getParameterNames();
+		while (e.hasMoreElements()) {
+			String parameter = (String) e.nextElement();
+			if (parameter.indexOf("[") != -1) {
+				index = parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]"));
+					if (parameter.indexOf("deleteRemark") != -1) {
+					deleteRemark = true;
+					break;
+				}
+			}
+		}
+		if (deleteRemark) {
+			List remarkList = lrForm.getRemarklist();
+			if (remarkList != null)
+				remarkList.remove(Integer.parseInt(index));
+			request.setAttribute("remark", Integer.toString(lrForm.getRemarklist().size() - 1));
 		}
 
 		lrForm.setLost(lostReport);

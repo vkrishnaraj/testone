@@ -93,7 +93,6 @@
 	}
 	
 	function validateLfReportForm(form) {
-		alert("HERE!!!");
 		for (var i = 0; i < form.length; ++i) {
 		
 			currentElement = form.elements[i];

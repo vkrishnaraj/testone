@@ -420,6 +420,7 @@ public class TracingConstants {
 	public final static int REMARK_CLOSING = 2;
 	public final static int REMARK_WORLDTRACER_REQUEST = 3;
 	public final static int REMARK_WORLDTRACER_RESPONSE = 4;
+	public final static int REMARK_CALL = 5;
 
 	// report output type
 	public final static int REPORT_OUTPUT_UNDECLARED = -1;

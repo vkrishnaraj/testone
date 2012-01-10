@@ -69,6 +69,9 @@ public class LFRemark implements Serializable{
 	}
 
 	public GeneralRemark getRemark() {
+		if (remark == null) {
+			remark = new GeneralRemark();
+		}
 		return remark;
 	}
 

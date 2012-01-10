@@ -166,7 +166,7 @@
 	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form focus="lost.id" action="create_lost_report.do" method="post" onsubmit="return validateLfReportForm(this);">
+<html:form focus="lost.id" action="create_lost_report.do" method="post" >
 <input type="hidden" name="delete_these_elements" value="" />
 <html:hidden property="matchItem" styleId="matchItem" value="" />
 <html:hidden property="itemId" styleId="itemId" value="" />
@@ -546,13 +546,17 @@
 					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 				</h1>
 				<span class="reqfield">*</span>
-				<bean:message key="message.required" /> 
-				<!-- <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
-				 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX REMARKS GO HERE!!! XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-				</table> -->
-				<br/>
+				<bean:message key="message.required" />
+				
+			<jsp:include page="/pages/lostandfound/remark_lost.jsp" />
+			
+      <center><html:submit property="addremark" styleId="button">
+        <bean:message key="button.add_remark" />
+      </html:submit></center>
+      <br>
+      <br>
 				<center>
-					<html:submit property="save" styleId="button">
+					<html:submit property="save" styleId="button" onclick="return validateLfReportForm(this);">
 						<bean:message key="button.save" />
 					</html:submit>
 				</center>
