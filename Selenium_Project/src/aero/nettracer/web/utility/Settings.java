@@ -148,7 +148,8 @@ public class Settings {
 	/////////////////////////////////////////////////////////// LOSTANDFOUND ////////////////////////////////////////////////////////
 	
 	public static final String START_URL_LF = "lostandfound";
-	public static String CLAIM_ID_LF = "";
+	public static String LOST_ID_LF = "";
+	public static String FOUND_ID_LF = "";
 	
 
 	
