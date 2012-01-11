@@ -989,6 +989,19 @@ public class TracingConstants {
 	
 	public static final int HISTORY_OBJ_TYPE_FOUND = 1;
 	
+	public static final int LFC_CALL_OUTCOME_NO_CALL = 0;
+	public static final int LFC_CALL_OUTCOME_SPOKE_WITH_CUSTOMER = 1;
+	public static final int LFC_CALL_OUTCOME_SPOKE_HAS_ITEM = 2;
+	public static final int LFC_CALL_OUTCOME_INCORRECT_NUMBER = 3;
+	public static final int LFC_CALL_OUTCOME_LEFT_MESSAGE = 4;
+	public static final int LFC_CALL_OUTCOME_NO_ANSWER = 5;
+
+	public static final String LFC_CONDITION_NEW = "NEW";
+	public static final String LFC_CONDITION_GOOD = "GOOD";
+	public static final String LFC_CONDITION_AVERAGE = "AVERAGE";
+	public static final String LFC_CONDITION_POOR = "POOR";
+	
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;

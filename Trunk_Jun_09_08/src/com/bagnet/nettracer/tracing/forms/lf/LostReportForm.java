@@ -166,11 +166,19 @@ public final class LostReportForm extends ActionForm {
 	}
 	
 	public void populateRemarks() {
+		List<LFRemark> newRemarks = new ArrayList<LFRemark>();
 		for (int i = 0, s = remarklist.size(); i < s; i++) {
 			LFRemark lfr = remarklist.get(i);
-			lfr.setLost(getLost());
+			if (lfr.getRemark().getRemarktext() != null && !lfr.getRemark().getRemarktext().trim().equals("")) {
+				lfr.setLost(getLost());
+				if (lfr.getOutcome() != 0) {
+					lfr.getRemark().setType(TracingConstants.REMARK_CALL);
+				}
+				newRemarks.add(lfr);
+			}
 		}
-		lost.setAgentRemarks(new LinkedHashSet<LFRemark>(remarklist));		
+		lost.setAgentRemarks(new LinkedHashSet<LFRemark>(newRemarks));
+		setRemarklist(newRemarks);
 	}
 
 }

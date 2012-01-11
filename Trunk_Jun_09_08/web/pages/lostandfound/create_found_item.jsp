@@ -168,7 +168,7 @@
 	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form focus="found.id" action="create_found_item.do" method="post" onsubmit="return validateFoundItemForm(this);">
+<html:form focus="found.id" action="create_found_item.do" method="post" >
 <input type="hidden" name="delete_these_elements" value="" />
 <html:hidden property="matchItem" styleId="matchItem" value="" />
 <html:hidden property="itemId" styleId="itemId" value="" />
@@ -209,7 +209,7 @@
          		</font></center>
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
        				<tr>
-						<td>
+						<td colspan=2>
 							<bean:message key="colname.lf.report.id" />
 							<br/>
 							<html:text name="foundItemForm" property="found.id" disabled="true" styleClass="disabledtextfield" />
@@ -224,17 +224,15 @@
 							<br/>
 							<html:text name="foundItemForm" property="found.agent.username" disabled="true" styleClass="disabledtextfield" />
 						</td>
+					</tr>
+					<tr>
 						<td>
 							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
 							<br/>
          					<html:select name="foundItemForm" property="found.companyId" styleClass="dropdown" >
-         						<html:option value="<%=TracingConstants.LF_ABG_COMPANY_ID %>"><bean:message key="option.lf.please.select" /></html:option>
-         						<html:option value="<%=TracingConstants.LF_AVIS_COMPANY_ID %>"><bean:message key="option.lf.avis" /></html:option>
-         						<html:option value="<%=TracingConstants.LF_BUDGET_COMPANY_ID %>"><bean:message key="option.lf.budget" /></html:option>
+         						<html:option value="<%=TracingConstants.LF_SWA_COMPANY_ID %>"><bean:message key="option.lf.southwest" /></html:option>
          					</html:select>
 						</td>
-					</tr>
-					<tr>
 						<td>
 							<bean:message key="colname.lf.found.location" />
 							<br>
@@ -250,6 +248,11 @@
          						<html:option value="-1"><bean:message key="option.lf.please.select" /></html:option>
          						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
          					</html:select>
+         				</td>
+						<td>
+         					<bean:message key="colname.lfc.barcode" />
+         					<br>
+							<html:text name="foundItemForm" property="found.barcode" styleClass="textfield" />
          				</td>
 					</tr>
 				</table>
@@ -443,14 +446,41 @@
 	       					</tr>
          				<tr>
 	         				<td>
+	         					<bean:message key="colname.lfc.value" />
+	         					<br>
+		         				<select name="item[<%=i %>].value" class="dropdown" >
+			              			<option value="0"><bean:message key="option.lf.please.select" /></option>
+			              			<option value="<%=TracingConstants.LFC_ITEM_HIGH_VALUE %>" <% if (item.getValue() == TracingConstants.LFC_ITEM_HIGH_VALUE) { %>selected<% } %> ><bean:message key="lfc.high.value" /></option>
+			              			<option value="<%=TracingConstants.LFC_ITEM_LOW_VALUE %>" <% if (item.getValue() == TracingConstants.LFC_ITEM_LOW_VALUE) { %>selected<% } %> ><bean:message key="lfc.low.value" /></option>
+			              		</select>
+	         				</td>
+	         				<td colspan=2>
+	         					<bean:message key="colname.lfc.condition" />
+	         					<br>
+		              			<html:select name="item" property="itemCondition" styleClass="dropdown" >
+			              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+			              			<html:option value="<%=TracingConstants.LFC_CONDITION_NEW%>"><bean:message key="option.lfc.condition.new" /></html:option>
+			              			<html:option value="<%=TracingConstants.LFC_CONDITION_GOOD %>"><bean:message key="option.lfc.condition.good" /></html:option>
+			              			<html:option value="<%=TracingConstants.LFC_CONDITION_AVERAGE %>"><bean:message key="option.lfc.condition.average" /></html:option>
+			              			<html:option value="<%=TracingConstants.LFC_CONDITION_POOR %>"><bean:message key="option.lfc.condition.poor" /></html:option>
+		              			</html:select>
+	         				</td>
+	         			</tr>
+         				<tr>
+	         				<td>
 	         					<bean:message key="colname.lf.brand" />
 	         					<br>
 	         					<input type="text" name="item[<%=i %>].brand" class="textfield" value="<%=item.getBrand() == null ? "" : item.getBrand() %>" />
 	         				</td>
-	         				<td colspan=2>
+	         				<td>
 	         					<bean:message key="colname.lf.serial" />
 	         					<br>
 	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" value="<%=item.getSerialNumber() == null ? "" : item.getSerialNumber() %>" />
+	         				</td>
+	         				<td>
+	         					<bean:message key="colname.lf.model" />
+	         					<br>
+	         					<input type="text" name="item[<%=i %>].model" class="textfield" value="<%=item.getModel() == null ? "" : item.getModel() %>" />
 	         				</td>
 	         			</tr>
 	         			<tr>
@@ -515,21 +545,72 @@
 	         					</select>
 	         				</td>
 	         			</tr>
+         				<tr>
+	         				<td>
+	         					<bean:message key="colname.lf.size" />
+	         					<br>
+	         					<input type="text" name="item[<%=i %>].size" class="textfield" value="<%=item.getSize() == null ? "" : item.getSize() %>" />
+	         				</td>
+	         				<td>
+	         					<bean:message key="colname.lf.lostPhoneNumber" />
+	         					<br>
+	         					<input type="text" name="item[<%=i %>].dispPhone" class="textfield" value="<%=item.getDispPhone()%>" />
+	         				</td>
+	         				<td>
+	         					<bean:message key="colname.lf.caseColor" />
+	         					<br>
+	         					<select name="item[<%=i %>].caseColor" class="dropdown" >
+	         						<option value=""><bean:message key="option.lf.please.select" /></option>
+	         						<%
+	         							ArrayList caseColorList = (ArrayList) request.getSession().getAttribute("lfcolorlist");
+	         							LabelValueBean caseColor = new LabelValueBean();
+	         							for (int j = 0; j < caseColorList.size(); ++j) {
+	         								caseColor = (LabelValueBean) caseColorList.get(j);
+	         						%>
+	         								<option value="<%=caseColor.getValue() %>" <% if (item.getCaseColor() != null && item.getCaseColor().equals(caseColor.getValue())) { %>selected<% } %> ><%=caseColor.getLabel() %></option>
+	         						<%	
+	         							}
+         							%>
+	         					</select>
+	         				</td>
+	         			</tr>
 	         			<tr>
 	         				<td colspan=3>
 	         					<bean:message key="colname.lf.description" />
 	         					<br>
-	         					<textarea name="item[<%=i %>].description" cols="80" rows="3" class="textfield" ><%=item.getDescription() == null ? "" : item.getDescription() %></textarea>
+	         					<input type="text" name="item[<%=i %>].description" class="textfield" style="width: 95%;" value="<%=item.getDescription() == null ? "" : item.getDescription() %>" />
+	         				</td>
+	         			</tr>
+	         			<tr>
+	         				<td colspan=3>
+	         					<bean:message key="colname.lf.long.description" />
+	         					<br>
+	         					<textarea name="item[<%=i %>].longDescription" cols="80" rows="3" class="textfield" ><%=item.getLongDescription() == null ? "" : item.getLongDescription() %></textarea>
 	         				</td>
 	         			</tr>
 	         		<% } %>
          			</logic:iterate>
          		</table>
          		<br/>
+         		<h1 class="green">
+					<bean:message key="header.remarks" />
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+				</h1>
+				<span class="reqfield">*</span>
+				<bean:message key="message.required" />
+				
+			<jsp:include page="/pages/lostandfound/remark_found.jsp" />
+			
+      <center><html:submit property="addremark" styleId="button">
+        <bean:message key="button.add_remark" />
+      </html:submit></center>
+      <br>
+      <br>
 				<center>
-					<html:submit property="save" styleId="button">
+					<html:hidden property="save" value="" disabled="true" />
+					<html:button property="saveButton" styleId="button" onclick="if (validateFoundItemForm(this.form)) {this.form.save.disabled = false; this.form.submit();} else { this.form.save.disabled = true; return false; }">
 						<bean:message key="button.save" />
-					</html:submit>
+					</html:button>
 				</center>
 				<script>
 					fieldChanged('state');

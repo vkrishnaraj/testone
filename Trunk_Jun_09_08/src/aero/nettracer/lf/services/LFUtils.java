@@ -127,6 +127,18 @@ public class LFUtils {
 		found.setFoundDate(new Date());
 		found.setAgent(agent);
 		found.setLocation(agent.getStation());
+
+		LFRemark r = new LFRemark();
+		r.getRemark().setType(TracingConstants.REMARK_REGULAR);
+		r.getRemark().setRemarkdate(TracerDateTime.getGMTDate());
+		r.getRemark().setAgent(agent);
+		r.getRemark().setRemarktext("");
+		r.getRemark().set_DATEFORMAT(agent.getDateformat().getFormat());
+		r.getRemark().set_TIMEFORMAT(agent.getTimeformat().getFormat());
+		r.getRemark().set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(agent.getDefaulttimezone()).getTimezone()));
+		List<LFRemark> remarklist = new ArrayList<LFRemark>();
+		remarklist.add(r);
+		found.setAgentRemarks(new LinkedHashSet<LFRemark>(remarklist));
 		
 		return found;
 	}

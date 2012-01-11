@@ -1,18 +1,23 @@
 package com.bagnet.nettracer.tracing.forms.lf;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+import com.bagnet.nettracer.tracing.db.lf.LFRemark;
 
 public final class FoundItemForm extends ActionForm {
 
 	private static final long serialVersionUID = 1L;
 	private String dateFormat;
 	private LFFound found;
+	private List<LFRemark> remarklist;
 	
 	public String getDateFormat() {
 		return dateFormat;
@@ -104,6 +109,47 @@ public final class FoundItemForm extends ActionForm {
 			return new ArrayList<LFItem>(found.getItems()).get(index);
 		}
 		return null;
+	}
+
+	public List<LFRemark> getRemarklist() {
+		if (remarklist == null) { 
+			remarklist = new ArrayList<LFRemark>();
+			if (getFound() != null && getFound().getAgentRemarks() != null) {
+				remarklist = new ArrayList<LFRemark>(getFound().getAgentRemarks());
+			}
+		}
+		return remarklist;
+	}
+
+	public LFRemark getRemark(int index) {
+		if (index < 0) index = 0;
+		LFRemark r = null;
+		while (this.remarklist.size() <= index) {
+			r = new LFRemark();
+			r.getRemark().setType(TracingConstants.REMARK_REGULAR);
+			this.remarklist.add(r);
+		}
+		return (LFRemark) this.remarklist.get(index);
+	}
+
+	public void setRemarklist(List<LFRemark> remarklist) {
+		this.remarklist = remarklist;
+	}
+	
+	public void populateRemarks() {
+		List<LFRemark> newRemarks = new ArrayList<LFRemark>();
+		for (int i = 0, s = remarklist.size(); i < s; i++) {
+			LFRemark lfr = remarklist.get(i);
+			if (lfr.getRemark().getRemarktext() != null && !lfr.getRemark().getRemarktext().trim().equals("")) {
+				lfr.setFound(getFound());
+				if (lfr.getOutcome() != 0) {
+					lfr.getRemark().setType(TracingConstants.REMARK_CALL);
+				}
+				newRemarks.add(lfr);
+			}
+		}
+		found.setAgentRemarks(new LinkedHashSet<LFRemark>(newRemarks));
+		setRemarklist(newRemarks);
 	}
 
 }

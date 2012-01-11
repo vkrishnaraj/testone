@@ -1,6 +1,9 @@
 package com.bagnet.nettracer.tracing.actions.lf;
 
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +25,10 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.LFRemark;
 import com.bagnet.nettracer.tracing.forms.lf.FoundItemForm;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -50,6 +56,27 @@ public class FoundItemAction extends CheckedAction {
 		FoundItemForm fiForm = (FoundItemForm) form;
 		fiForm.setDateFormat(user.getDateformat().getFormat());
 		
+		boolean deleteRemark = false;
+
+		String index = "0";
+		Enumeration e = request.getParameterNames();
+		while (e.hasMoreElements()) {
+			String parameter = (String) e.nextElement();
+			if (parameter.indexOf("[") != -1) {
+				index = parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]"));
+					if (parameter.indexOf("deleteRemark") != -1) {
+					deleteRemark = true;
+					break;
+				}
+			}
+		}
+		if (deleteRemark) {
+			List remarkList = fiForm.getRemarklist();
+			if (remarkList != null)
+				remarkList.remove(Integer.parseInt(index));
+			request.setAttribute("remark", Integer.toString(fiForm.getRemarklist().size() - 1));
+		}
+		
 		LFFound found = null;
 		if (request.getParameter("createNew") != null) {
 			found = LFUtils.createLFFound(user);
@@ -57,6 +84,7 @@ public class FoundItemAction extends CheckedAction {
 			long id = Long.parseLong(request.getParameter("foundId"));
 			found = LFServiceWrapper.getInstance().getFoundItem(id);
 		} else {
+			fiForm.populateRemarks();
 			found = fiForm.getFound();
 		}
 		
@@ -81,6 +109,16 @@ public class FoundItemAction extends CheckedAction {
 			if (found.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
 				LFServiceWrapper.getInstance().traceFoundItem(found.getId());
 			}
+		} else if (request.getParameter("addremark") != null) {
+			//set new remark with current time
+			LFRemark r = fiForm.getRemark(fiForm.getRemarklist().size());
+			r.getRemark().setRemarkdate(TracerDateTime.getGMTDate());
+			r.getRemark().setAgent(user);
+			r.getRemark().setRemarktext("");
+			r.getRemark().set_DATEFORMAT(user.getDateformat().getFormat());
+			r.getRemark().set_TIMEFORMAT(user.getTimeformat().getFormat());
+			r.getRemark().set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+			request.setAttribute("remark", Integer.toString(fiForm.getRemarklist().size() - 1));
 		} else if (request.getParameter("undo") != null) {
 			//handles both undoing a delivery and a pickup
 			long itemId = Long.valueOf((String) request.getParameter("itemId"));

@@ -62,6 +62,27 @@ public class LostReportAction extends CheckedAction {
 		LostReportForm lrForm = (LostReportForm) form;
 		lrForm.setDateFormat(user.getDateformat().getFormat());
 		
+		boolean deleteRemark = false;
+
+		String index = "0";
+		Enumeration e = request.getParameterNames();
+		while (e.hasMoreElements()) {
+			String parameter = (String) e.nextElement();
+			if (parameter.indexOf("[") != -1) {
+				index = parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]"));
+					if (parameter.indexOf("deleteRemark") != -1) {
+					deleteRemark = true;
+					break;
+				}
+			}
+		}
+		if (deleteRemark) {
+			List remarkList = lrForm.getRemarklist();
+			if (remarkList != null)
+				remarkList.remove(Integer.parseInt(index));
+			request.setAttribute("remark", Integer.toString(lrForm.getRemarklist().size() - 1));
+		}
+		
 		LFLost lostReport = null;
 		if (request.getParameter("createNew") != null) {
 			lostReport = LFUtils.createLFLost(user);
@@ -141,27 +162,6 @@ public class LostReportAction extends CheckedAction {
 				logger.error(nfe);
 			}
 
-		}
-		
-		boolean deleteRemark = false;
-
-		String index = "0";
-		Enumeration e = request.getParameterNames();
-		while (e.hasMoreElements()) {
-			String parameter = (String) e.nextElement();
-			if (parameter.indexOf("[") != -1) {
-				index = parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]"));
-					if (parameter.indexOf("deleteRemark") != -1) {
-					deleteRemark = true;
-					break;
-				}
-			}
-		}
-		if (deleteRemark) {
-			List remarkList = lrForm.getRemarklist();
-			if (remarkList != null)
-				remarkList.remove(Integer.parseInt(index));
-			request.setAttribute("remark", Integer.toString(lrForm.getRemarklist().size() - 1));
 		}
 
 		lrForm.setLost(lostReport);

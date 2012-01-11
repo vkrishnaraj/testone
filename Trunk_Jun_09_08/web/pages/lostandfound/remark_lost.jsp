@@ -25,8 +25,9 @@
 %>
 				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
         <logic:iterate id="remark" indexId="i" name="lostReportForm" property="remarklist" type="com.bagnet.nettracer.tracing.db.lf.LFRemark">
-			
-          <logic:equal name="remark" property="remark.type" value="<%= "" + TracingConstants.REMARK_REGULAR %>">
+<%
+		if (remark.getRemark().getType() == TracingConstants.REMARK_REGULAR || remark.getRemark().getType() == TracingConstants.REMARK_CALL) {
+%>			
             <logic:present name="remark" property="remark.agent">
 	            <bean:define id="agent" name="remark" property="remark.agent" type="com.bagnet.nettracer.tracing.db.Agent" />
 	          </logic:present>
@@ -55,6 +56,60 @@
                 </logic:present>
               </td>
             </tr>
+<%
+			if (remark.getId() != 0) {
+				if (remark.getOutcome() > 0) {
+%>
+            <tr>
+            		<td colspan=3>
+		              		<bean:message key="colname.lf.remark.call" />
+		              		&#160;&#160;&#160;
+<%
+					if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_SPOKE_WITH_CUSTOMER) {
+%>
+		              			<bean:message key="option.lf.call.spoke" />
+<%
+					} else if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_SPOKE_HAS_ITEM) {
+%>
+		              			<bean:message key="option.lf.call.has.item" />
+<%
+					} else if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_INCORRECT_NUMBER) {
+%>
+		              			<bean:message key="option.lf.call.wrong.number" />
+<%
+					} else if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_LEFT_MESSAGE) {
+%>
+		              			<bean:message key="option.lf.call.left.message" />
+<%
+					} else if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_NO_ANSWER) {
+%>
+		              			<bean:message key="option.lf.call.no.answer" />
+<%
+					}
+%>
+		            </td>
+            </tr>
+<%
+				}
+			} else {
+%>
+            <tr>
+            		<td colspan=3>
+		              		<bean:message key="colname.lf.remark.call" />
+		              		&#160;&#160;&#160;
+	         				<select name="remark[<%=i %>].outcome" class="dropdown" >
+		              			<option value="<%=String.valueOf(TracingConstants.LFC_CALL_OUTCOME_NO_CALL) %>" <% if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_NO_CALL) { %>selected<% } %> ><bean:message key="option.lf.call.no.call" /></option>
+		              			<option value="<%=String.valueOf(TracingConstants.LFC_CALL_OUTCOME_SPOKE_WITH_CUSTOMER) %>" <% if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_SPOKE_WITH_CUSTOMER) { %>selected<% } %> ><bean:message key="option.lf.call.spoke" /></option>
+		              			<option value="<%=String.valueOf(TracingConstants.LFC_CALL_OUTCOME_SPOKE_HAS_ITEM) %>" <% if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_SPOKE_HAS_ITEM) { %>selected<% } %> ><bean:message key="option.lf.call.has.item" /></option>
+		              			<option value="<%=String.valueOf(TracingConstants.LFC_CALL_OUTCOME_INCORRECT_NUMBER) %>" <% if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_INCORRECT_NUMBER) { %>selected<% } %> ><bean:message key="option.lf.call.wrong.number" /></option>
+		              			<option value="<%=String.valueOf(TracingConstants.LFC_CALL_OUTCOME_LEFT_MESSAGE) %>" <% if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_LEFT_MESSAGE) { %>selected<% } %> ><bean:message key="option.lf.call.left.message" /></option>
+		              			<option value="<%=String.valueOf(TracingConstants.LFC_CALL_OUTCOME_NO_ANSWER) %>" <% if (remark.getOutcome() == TracingConstants.LFC_CALL_OUTCOME_NO_ANSWER) { %>selected<% } %> ><bean:message key="option.lf.call.no.answer" /></option>
+	         				</select>
+		            </td>
+            </tr>
+<%
+			}
+%>
             <tr>
 <%
             String remarkDescription = "remark[" + i + "].remark.remarktext";
@@ -102,7 +157,9 @@
 			}
 %>
             </tr>
-          </logic:equal>
+<%
+		}
+%>
 
         </logic:iterate>
       </table>

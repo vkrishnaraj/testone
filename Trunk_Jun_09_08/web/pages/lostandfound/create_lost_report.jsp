@@ -556,9 +556,11 @@
       <br>
       <br>
 				<center>
-					<html:submit property="save" styleId="button" onclick="return validateLfReportForm(this);">
+					<html:hidden property="save" value="" disabled="true" />
+					<html:button property="saveButton" styleId="button" onclick="if (validateLfReportForm(this.form)) {this.form.save.disabled = false; this.form.submit();} else { this.form.save.disabled = true; return false; }">
 						<bean:message key="button.save" />
-					</html:submit>
+					</html:button>
+					
 				</center>
 				<script>
 					fieldChanged('state');
