@@ -15,7 +15,7 @@ import com.bagnet.nettracer.email.HtmlEmail;
 
 public class HttpMonitor {
 
-	private static final long SECONDS_TILL_ALERT = 20000;
+	private static final long SECONDS_TILL_ALERT = 15000;
 	static Logger logger = Logger.getLogger(HttpMonitor.class);
 
 	public static void main(String[] args) {
@@ -92,7 +92,7 @@ public class HttpMonitor {
 				// Sleep 5 minutes 
 				Calendar stTime = new GregorianCalendar();
 				long elapse = stTime.getTimeInMillis() - sTime.getTimeInMillis();
-				long remaining = 10 * 60 * 1000 - elapse;
+				long remaining = 5 * 60 * 1000 - elapse;
 				logger.info("Sleeping for " + (remaining/1000)+ " seconds...");
 				Thread.sleep(remaining);
 			} catch (InterruptedException e) {
