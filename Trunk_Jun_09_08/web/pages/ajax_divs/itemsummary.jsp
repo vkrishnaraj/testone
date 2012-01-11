@@ -12,11 +12,9 @@
 	ArrayList<HistoryObject> history = ((HistoryContainer) request.getSession().getAttribute("historyContainer")).getNewestItems(PropertyBMO.getValueAsInt("lfc.item.entry.display.count"));
 	int divNum = Integer.parseInt((String) request.getAttribute("divId"));
 	request.removeAttribute("divId");
-	String itemId = "#summaryItem_" + divNum;
 	FoundHistoryObject fho = (FoundHistoryObject) history.get(divNum);
 	int status = fho.getFound().getEntryStatus();
 	boolean needsVerification = status == TracingConstants.LF_STATUS_VERIFICATION_NEEDED || (fho.isHasTraceResults() && status != TracingConstants.LF_STATUS_MOVED);
-  	String cssClass = needsVerification ? "summaryActionItem" : "summaryItem";
 %>
 <span style="font-weight: bold;" ><bean:message key="colname.lfc.item.id" />:&nbsp;</span><%=fho.getFound().getBarcode() %>
 <br>

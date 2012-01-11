@@ -23,7 +23,7 @@
 <%
 	Agent a = (Agent)session.getAttribute("user");
  	String cssFormClass = "form2";
- 	
+ 	 
  	ArrayList categoryList = (ArrayList) request.getSession().getAttribute("lfcategorylist");
  	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
  	
