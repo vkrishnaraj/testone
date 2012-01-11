@@ -279,7 +279,8 @@ public class LFAddress implements Serializable{
 				|| (getDecryptedCity() != null && !getDecryptedCity().isEmpty())
 				|| (getDecryptedState() != null && !getDecryptedState().isEmpty())
 				|| (getDecryptedProvince() != null && !getDecryptedProvince().isEmpty())
-				|| (getDecryptedZip() != null && !getDecryptedZip().isEmpty())) {
+				|| (getDecryptedZip() != null && !getDecryptedZip().isEmpty())
+				|| (getCountry() != null && !getCountry().isEmpty())) {
 			empty = false;
 		}
 
