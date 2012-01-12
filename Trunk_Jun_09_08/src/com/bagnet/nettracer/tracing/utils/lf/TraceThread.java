@@ -32,12 +32,7 @@ public class TraceThread implements Runnable{
 	@Override
 	public void run() {
 		try {
-			Context ctx = ConnectionUtil.getInitialContext(PropertyBMO.LF_EJB_SERVER_LOCATION);
-//			Context ctx = ConnectionUtil.getInitialContext("jnp://192.168.2.145:1399");
-//			LFServiceRemote bean = (LFServiceRemote) ConnectionUtil.getRemoteEjb(ctx, "tracer/LFServiceBean/remote");
-//			if(bean == null){
-//				throw new RemoteConnectionException("unable to connect: " + PropertyBMO.LF_EJB_SERVER_LOCATION);
-//			}
+			Context ctx = ConnectionUtil.getInitialContext(PropertyBMO.getValue(PropertyBMO.LF_EJB_SERVER_LOCATION));
 			while(true){
 				container.setWaiting(true);
 				FoundHistoryObject f = queue.take();
@@ -50,13 +45,14 @@ public class TraceThread implements Runnable{
 					logger.error("unable to connect to service " + PropertyBMO.LF_EJB_SERVER_LOCATION);
 				}
 				if(bean != null){
+					container.setConnectError(false);
 					List<LFMatchHistory> r = bean.traceFoundItem(f.getFound().getId());
 					f.setHasTraceResults(r != null && r.size() > 0);
 				} else {
 					//unable to connect to service
 					System.out.println("unable to connect");
 					queue.put(f);
-					//TODO email
+					container.setConnectError(true);
 				}
 			}
 			

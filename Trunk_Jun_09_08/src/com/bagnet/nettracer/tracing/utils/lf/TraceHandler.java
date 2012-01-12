@@ -38,7 +38,7 @@ public class TraceHandler {
 	private static synchronized void startThreads() throws RemoteConnectionException{
 		if(queue == null){
 			v = new Vector<ThreadContainer>();
-			queue = new ArrayBlockingQueue<FoundHistoryObject>(100);
+			queue = new ArrayBlockingQueue<FoundHistoryObject>(10000);
 			ThreadMonitor tm = new ThreadMonitor(v);
 			Thread t = new Thread(tm, "TraceHandlerMonitorThread");
 			t.start();

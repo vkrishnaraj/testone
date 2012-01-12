@@ -39,10 +39,24 @@ public class ThreadContainer {
 	public boolean isSentNotification() {
 		return sentNotification;
 	}
+	public void setConnectError(boolean connectError) {
+		this.connectError = connectError;
+	}
+	public boolean isConnectError() {
+		return connectError;
+	}
+	public void setConnectErrorEmailDate(Date connectErrorEmailDate) {
+		this.connectErrorEmailDate = connectErrorEmailDate;
+	}
+	public Date getConnectErrorEmailDate() {
+		return connectErrorEmailDate;
+	}
 	private String id;
 	private Thread thread;
 	private Date startTime;
 	private boolean isWaiting; 
 	private boolean dead = false;
 	private boolean sentNotification = false;
+	private boolean connectError = false;
+	private Date connectErrorEmailDate;
 }

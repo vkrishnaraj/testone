@@ -19,6 +19,7 @@ public class ThreadMonitor implements Runnable{
 	private static Vector<ThreadContainer> container;
 	private static final long TIMEOUT = 120000;
 	private static final long POLL_INTERVAL = 30000;
+	private static final long EMAIL_INTERVAL = 240000;
 	
 	public ThreadMonitor(Vector<ThreadContainer> container){
 		this.container = container;
@@ -41,6 +42,12 @@ public class ThreadMonitor implements Runnable{
 							catch(Exception e){
 								e.printStackTrace();
 							}
+						}
+					}
+					if(tc.isConnectError()){
+						if(!tc.isDead() && (tc.getConnectErrorEmailDate() == null || now.getTime() - tc.getConnectErrorEmailDate().getTime() > EMAIL_INTERVAL)){
+							sendAlertEmail("Thread: " + tc.getId() + " has a connection error");
+							tc.setConnectErrorEmailDate(now);
 						}
 					}
 				}
