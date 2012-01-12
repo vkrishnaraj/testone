@@ -770,8 +770,8 @@ public class LFServiceBeanTest {
 	
 	public LFLost createLostTestCase(){
 		LFLost lost = new LFLost();
-		GeneralServiceBean bean = new GeneralServiceBean();
-		Agent agent = bean.getAgent("avisweb", TracerProperties.get("wt.company.code"));
+		LFServiceBean sbean = new LFServiceBean();
+		Agent agent = sbean.getAutoAgent();
 		
 		lost.setAgent(agent);
 		String subcompany = null;
@@ -838,8 +838,8 @@ public class LFServiceBeanTest {
 	public LFFound createFoundTestCase(){
 		LFFound found = new LFFound();
 
-		GeneralServiceBean bean = new GeneralServiceBean();
-		Agent agent = bean.getAgent("avisweb", TracerProperties.get("wt.company.code"));
+		LFServiceBean sbean = new LFServiceBean();
+		Agent agent = sbean.getAutoAgent();
 		found.setAgent(agent);
 		found.setFoundDate(new Date());
 		
