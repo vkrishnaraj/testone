@@ -44,7 +44,7 @@ public class TraceHandler {
 			t.start();
 		}
 		while(threadCount() < CONNECTION_THREADS && v.size() < MAX_CONNECTION_THREADS){
-			String id = "TraceThread " + v.size();
+			String id = "LFCTraceThread " + v.size();
 			ThreadContainer container = new ThreadContainer();
 			container.setId(id);
 			container.setStartTime(new Date());
