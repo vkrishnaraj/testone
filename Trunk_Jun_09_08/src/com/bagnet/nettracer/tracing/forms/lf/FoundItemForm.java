@@ -124,7 +124,7 @@ public final class FoundItemForm extends ActionForm {
 	public LFRemark getRemark(int index) {
 		if (index < 0) index = 0;
 		LFRemark r = null;
-		while (this.remarklist.size() <= index) {
+		while (getRemarklist().size() <= index) {
 			r = new LFRemark();
 			r.getRemark().setType(TracingConstants.REMARK_REGULAR);
 			this.remarklist.add(r);
@@ -138,7 +138,7 @@ public final class FoundItemForm extends ActionForm {
 	
 	public void populateRemarks() {
 		List<LFRemark> newRemarks = new ArrayList<LFRemark>();
-		for (int i = 0, s = remarklist.size(); i < s; i++) {
+		for (int i = 0, s = getRemarklist().size(); i < s; i++) {
 			LFRemark lfr = remarklist.get(i);
 			if (lfr.getRemark().getRemarktext() != null && !lfr.getRemark().getRemarktext().trim().equals("")) {
 				lfr.setFound(getFound());
