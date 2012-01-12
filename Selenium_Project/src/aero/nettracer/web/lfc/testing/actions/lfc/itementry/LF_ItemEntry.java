@@ -7,12 +7,13 @@ import aero.nettracer.web.utility.LoginUtil;
 public class LF_ItemEntry extends LoginUtil {
 
 	@Test
-	public void testItemEntry() throws Exception {
+	public void testItemEntry1() throws Exception {
 
 		selenium.click("//a[contains(@href, 'enter_items.do')]");
 
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td/input", "");
 			selenium.click("id=saveButton");
 			assertEquals("Item Received Date is required.", selenium.getAlert());
@@ -45,7 +46,11 @@ public class LF_ItemEntry extends LoginUtil {
 		} else {
 			return;
 		}
+		
+	}
 
+	@Test
+	public void testItemEntry2() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: b"));
 			verifyTrue(selenium.isTextPresent("Desc: Blueprints/Posters"));
@@ -72,7 +77,10 @@ public class LF_ItemEntry extends LoginUtil {
 		} else {
 			return;
 		}
+	}
 
+	@Test
+	public void testItemEntry3() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: c"));
 			verifyTrue(selenium.isTextPresent("Desc: Books/Notebooks"));
@@ -99,6 +107,10 @@ public class LF_ItemEntry extends LoginUtil {
 		} else {
 			return;
 		}
+	}
+	
+	@Test
+	public void testItemEntry4() throws Exception {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: d"));
@@ -127,6 +139,10 @@ public class LF_ItemEntry extends LoginUtil {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry5() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: e"));
 			verifyTrue(selenium.isTextPresent("Desc: Camera/Photo Equipment"));
@@ -154,6 +170,10 @@ public class LF_ItemEntry extends LoginUtil {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry6() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: f"));
 			verifyTrue(selenium.isTextPresent("Desc: Cards (ATM/Credit/ID)"));
@@ -181,6 +201,10 @@ public class LF_ItemEntry extends LoginUtil {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry7() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: g"));
 			verifyTrue(selenium.isTextPresent("Desc: Cellphone"));
@@ -210,6 +234,10 @@ public class LF_ItemEntry extends LoginUtil {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry8() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: h"));
 			verifyTrue(selenium.isTextPresent("Desc: Cellphone Accessories"));
@@ -236,6 +264,10 @@ public class LF_ItemEntry extends LoginUtil {
 		} else {
 			return;
 		}
+	}
+	
+	@Test
+	public void testItemEntry9() throws Exception {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: i"));
@@ -266,6 +298,10 @@ public class LF_ItemEntry extends LoginUtil {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry10() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: j"));
 			verifyTrue(selenium.isTextPresent("Desc: Computer-Related"));
@@ -293,6 +329,10 @@ public class LF_ItemEntry extends LoginUtil {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry11() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: k"));
 			verifyTrue(selenium.isTextPresent("Desc: Cosmetic/Shaving Kit"));
@@ -320,6 +360,10 @@ public class LF_ItemEntry extends LoginUtil {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry12() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: l"));
 			verifyTrue(selenium.isTextPresent("Desc: Electronic Equipment"));
@@ -347,6 +391,10 @@ public class LF_ItemEntry extends LoginUtil {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry13() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: m"));
 			verifyTrue(selenium.isTextPresent("Desc: Glasses"));
@@ -373,6 +421,10 @@ public class LF_ItemEntry extends LoginUtil {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry14() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyEquals("01/01/2012", selenium.getValue("//div[@id='itementryleft']/table/tbody/tr/td/input"));
 			verifyEquals("2", selenium.getValue("//div[@id='itementryleft']/table/tbody/tr/td[5]/select"));
@@ -410,6 +462,10 @@ public class LF_ItemEntry extends LoginUtil {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry15() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: o"));
 			verifyTrue(selenium.isTextPresent("Desc: Bags,test,test"));
