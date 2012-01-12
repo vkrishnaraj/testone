@@ -3,6 +3,7 @@ package com.bagnet.nettracer.tracing.history;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 
@@ -28,10 +29,12 @@ public class HistoryContainer {
 			return toReturn;
 		}
 		Collection<HistoryObject> values = queue.values();
-		Iterator<HistoryObject> it = values.iterator();
-		while (it.hasNext() && toReturn.size() < numItems) {
-			toReturn.add(it.next());
+		ArrayList<HistoryObject> temp = new ArrayList<HistoryObject>(values);
+		int tempSize = temp.size();
+		if (tempSize < numItems) {
+			return temp;
 		}
+		toReturn = new ArrayList<HistoryObject>(temp.subList(tempSize - numItems, tempSize - 1));
 		return toReturn;
 	}
 	
