@@ -77,7 +77,7 @@ public class EnterItemsAction extends CheckedAction {
 			history.put(fho.getUniqueId(), fho);
 			
 			// 3. submit the history object to the trace handler
-			TraceHandler.trace(fho);
+			TraceHandler.testTrace(fho, 0, 0);
 			
 			// 4. clone the found and set it on the form
 			eiForm.setFound(duplicateFound(found, user));
