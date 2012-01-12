@@ -34,7 +34,7 @@ public class HistoryContainer {
 		if (tempSize < numItems) {
 			return temp;
 		}
-		toReturn = new ArrayList<HistoryObject>(temp.subList(tempSize - numItems, tempSize - 1));
+		toReturn = new ArrayList<HistoryObject>(temp.subList(tempSize - numItems, tempSize));
 		return toReturn;
 	}
 	
