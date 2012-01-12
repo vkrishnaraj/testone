@@ -3214,4 +3214,49 @@
 	
 	<!-- END UNUSED TARGETS -->
 	
+	<path id="classpath.test">
+		<pathelement location="${build.dir}/lfc_web/classes" />
+		<fileset dir="lib">
+			<patternset refid="jar.files" />
+		</fileset>
+	</path>	
+	
+  	<target name="test-local-lfc-services" depends="build-ear-local-lfc-service">
+		<javac srcdir="./autotest" fork="true" destdir="${build.dir}/lfc_web/classes" debug="on" memoryinitialsize="256m" >
+			<classpath refid="project.classpath" />
+			<exclude name="com/bagnet/nettracer/cronjob/**" />
+			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl" />
+			<exclude name="com/bagnet/clients/us/**" unless="include.us" />
+			<exclude name="com/bagnet/clients/demo/**" unless="include.demo" />
+			<exclude name="com/bagnet/clients/ws/**" unless="include.ws" />
+			<exclude name="com/bagnet/clients/b6/**" unless="include.b6" />
+		</javac>
+  		
+    	<junit printsummary="yes" showoutput="true" >
+      		<classpath refid="classpath.test" />
+      		<formatter type="xml" usefile="false" />
+      		<test name="aero.nettracer.lf.services.LFServiceBeanTest" />
+    	</junit>
+    	
+  </target>
+	
+  	<target name="test-hudson-lfc-services" depends="build-ear-hudson-lfc-service">
+		<javac srcdir="./autotest" fork="true" destdir="${build.dir}/lfc_web/classes" debug="on" memoryinitialsize="256m" >
+			<classpath refid="project.classpath" />
+			<exclude name="com/bagnet/nettracer/cronjob/**" />
+			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl" />
+			<exclude name="com/bagnet/clients/us/**" unless="include.us" />
+			<exclude name="com/bagnet/clients/demo/**" unless="include.demo" />
+			<exclude name="com/bagnet/clients/ws/**" unless="include.ws" />
+			<exclude name="com/bagnet/clients/b6/**" unless="include.b6" />
+		</javac>
+  		
+    	<junit printsummary="yes" showoutput="true" >
+      		<classpath refid="classpath.test" />
+      		<formatter type="xml" usefile="false" />
+      		<test name="aero.nettracer.lf.services.LFServiceBeanTest" />
+    	</junit>
+    	
+  </target>
+	
 </project>

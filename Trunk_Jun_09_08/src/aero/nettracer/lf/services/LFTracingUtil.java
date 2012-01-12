@@ -33,10 +33,13 @@ public class LFTracingUtil {
 	public static final double SCORE_CATEGORY = 10;
 	public static final double SCORE_CATEGORY_PARTICLE = 10;
 	private static final double SCORE_COLOR = 5;
+	private static final double SCORE_MODEL = 5;
+	private static final double SCORE_CASE_COLOR = 5;
 	private static final double SCORE_SERIAL_NUMBER = 20;
 	private static final double SCORE_PHONE = 10;
 	private static final double SCORE_NAME = 10;
 	private static final double SCORE_DESCRIPTION = 10;
+	private static final double SCORE_LONG_DESCRIPTION = 10;
 	private static final double SCORE_ADDRESS = 10;
 	private static final double SCORE_BRAND = 10;
 	private static final double SCORE_MVA = 15;
@@ -79,17 +82,17 @@ public class LFTracingUtil {
 		return f;
 	}
 	
-	public static List<LFLost> getPotentialLost(LFFound found){
+	public static List<LFLost> getAvisPotentialLost(LFFound found){
 		String sql = "select l from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
-				" left outer join l.items i " +
-				" where l.status.status_ID = :status" +
-				" and i.disposition.status_ID = :disposition" +
-				" and (l.lossInfo.lossdate is null or l.lossInfo.lossdate <= :founddate) ";
+		" left outer join l.items i " +
+		" where l.status.status_ID = :status" +
+		" and i.disposition.status_ID = :disposition" +
+		" and (l.lossInfo.lossdate is null or l.lossInfo.lossdate <= :founddate) ";
 		boolean hasLocation = false;
 		if(found != null && found.getLocation() != null){
-				sql += " and (l.lossInfo.origin.station_ID = :foundstation " +
-				" or l.lossInfo.destination.station_ID = :foundstation)" ;
-				hasLocation = true;
+			sql += " and (l.lossInfo.origin.station_ID = :foundstation " +
+			" or l.lossInfo.destination.station_ID = :foundstation)" ;
+			hasLocation = true;
 		}
 		Session sess = null;
 		try{
@@ -104,7 +107,33 @@ public class LFTracingUtil {
 			List<LFLost> results = (List<LFLost>)q.list();
 			sess.close();
 			return results;
-			
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return null;
+	}
+
+	public static List<LFLost> getLFCPotentialLost(LFFound found){
+		String sql = "select l from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
+		" left outer join l.items i " +
+		" where l.status.status_ID = :status" +
+		" and i.disposition.status_ID = :disposition";
+
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
+			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
+			List<LFLost> results = (List<LFLost>)q.list();
+			sess.close();
+			return results;
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -115,20 +144,31 @@ public class LFTracingUtil {
 		return null;
 	}
 	
-	public static List<LFFound> getPotentialFound(LFLost lost){
+	public static List<LFLost> getPotentialLost(LFFound found){
+		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(found.getCompanyId()))){
+			return getAvisPotentialLost(found);
+		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(found.getCompanyId()))){
+			return getLFCPotentialLost(found);
+		} else {
+			//TODO handle exception
+			return null;
+		}
+	}
+	
+	private static List<LFFound> getAvisPotentialFound(LFLost lost){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
-				" where f.status.status_ID = :status" +
-				" and f.item.disposition.status_ID = :disposition" +
-				" and f.foundDate > :founddate";
-		
-				boolean hasReservation = false;
-				if(lost != null && lost.getLossInfo() != null 
-						&& lost.getLossInfo().getDestination() != null 
-						&& lost.getLossInfo().getOrigin() != null){
-					sql += " and (f.location.station_ID = :pickup or f.location.station_ID = :dropoff)";
-					hasReservation = true;
-				}
-				
+		" where f.status.status_ID = :status" +
+		" and f.item.disposition.status_ID = :disposition" +
+		" and f.foundDate > :founddate";
+
+		boolean hasReservation = false;
+		if(lost != null && lost.getLossInfo() != null 
+				&& lost.getLossInfo().getDestination() != null 
+				&& lost.getLossInfo().getOrigin() != null){
+			sql += " and (f.location.station_ID = :pickup or f.location.station_ID = :dropoff)";
+			hasReservation = true;
+		}
+
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -149,7 +189,7 @@ public class LFTracingUtil {
 			List<LFFound> results = q.list();
 			sess.close();
 			return results;
-			
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
@@ -158,6 +198,80 @@ public class LFTracingUtil {
 			}
 		}
 		return null;
+	}
+	
+	private static List<LFFound> getLFCPotentialFound(LFLost lost){
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
+		" where f.status.status_ID = :status" +
+		" and f.item.disposition.status_ID = :disposition" +
+		" and f.foundDate > :founddate";
+
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
+			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DATE, -1 * PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS));
+			q.setDate("founddate", cal.getTime()); //DATE
+			List<LFFound> results = q.list();
+			sess.close();
+			return results;
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return null;
+	}
+	
+	public static List<LFFound> getPotentialFound(LFLost lost){
+		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
+			return getAvisPotentialFound(lost);
+		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
+			return getLFCPotentialFound(lost);
+		} else {
+			//TODO handle exception
+			return null;
+		}
+	}
+	
+	private static List<LFPhone> getPhones(LFLost lost){
+		ArrayList<LFPhone> ret = new ArrayList<LFPhone>();
+		if(lost != null){
+			ret.addAll(getPhones(lost.getClient()));
+			ret.addAll(getPhones(lost.getItem()));
+		}
+		return ret;
+	}
+	
+	private static List<LFPhone> getPhones(LFFound found){
+		ArrayList<LFPhone> ret = new ArrayList<LFPhone>();
+		if(found != null){
+			ret.addAll(getPhones(found.getClient()));
+			ret.addAll(getPhones(found.getItem()));
+		}
+		return ret;
+	}
+	
+	private static List<LFPhone> getPhones(LFPerson person){
+		ArrayList<LFPhone> ret = new ArrayList<LFPhone>();
+		if(person != null && person.getPhones() != null){
+			ret.addAll(person.getPhones());
+		}
+		return ret;
+	}
+	
+	private static List<LFPhone> getPhones(LFItem item){
+		ArrayList<LFPhone> ret = new ArrayList<LFPhone>();
+		if(item != null && item.getPhone() != null){
+			ret.add(item.getPhone());
+		}
+		return ret;
 	}
 	
 	public static double processMatch(LFMatchHistory match){
@@ -181,20 +295,18 @@ public class LFTracingUtil {
 				}
 			}
 			
-			if(lc.getPhones() != null && fc.getPhones() != null){
-				for(LFPhone lphone:lc.getPhones()){
-					for(LFPhone fphone:fc.getPhones()){
-						if(lphone.getDecryptedPhoneNumber() != null && lphone.getDecryptedPhoneNumber().trim().length() > 0
-								&& fphone.getDecryptedPhoneNumber() != null && fphone.getDecryptedPhoneNumber().trim().length() > 0){
-							if(lphone.getDecryptedPhoneNumber().equalsIgnoreCase(fphone.getDecryptedPhoneNumber())){
-								LFMatchDetail detail = new LFMatchDetail();
-								detail.setDescription("Phone Number Match");
-								detail.setMatchHistory(match);
-								detail.setScore(SCORE_PHONE);
-								detail.setDecryptedFoundValue(fphone.getDecryptedPhoneNumber());
-								detail.setDecryptedLostValue(lphone.getDecryptedPhoneNumber());
-								match.getDetails().add(detail);
-							}
+			for(LFPhone lphone:getPhones(match.getLost())){
+				for(LFPhone fphone:getPhones(match.getFound())){
+					if(lphone.getDecryptedPhoneNumber() != null && lphone.getDecryptedPhoneNumber().trim().length() > 0
+							&& fphone.getDecryptedPhoneNumber() != null && fphone.getDecryptedPhoneNumber().trim().length() > 0){
+						if(lphone.getDecryptedPhoneNumber().equalsIgnoreCase(fphone.getDecryptedPhoneNumber())){
+							LFMatchDetail detail = new LFMatchDetail();
+							detail.setDescription("Phone Number Match");
+							detail.setMatchHistory(match);
+							detail.setScore(SCORE_PHONE);
+							detail.setDecryptedFoundValue(fphone.getDecryptedPhoneNumber());
+							detail.setDecryptedLostValue(lphone.getDecryptedPhoneNumber());
+							match.getDetails().add(detail);
 						}
 					}
 				}
@@ -347,6 +459,18 @@ public class LFTracingUtil {
 						match.getDetails().add(detail);
 					}
 				}
+				if(litem.getCaseColor() != null && litem.getCaseColor().trim().length() > 0
+						&& fitem.getCaseColor() != null && fitem.getCaseColor().trim().length() > 0){
+					if(litem.getCaseColor().equalsIgnoreCase(fitem.getCaseColor())){
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("Case Color Match");
+						detail.setMatchHistory(match);
+						detail.setScore(SCORE_CASE_COLOR);
+						detail.setDecryptedFoundValue(fitem.getCaseColor());
+						detail.setDecryptedLostValue(litem.getCaseColor());
+						match.getDetails().add(detail);
+					}
+				}
 				if(litem.getDescription() != null && litem.getDescription().trim().length() > 0
 						&& fitem.getDescription() != null && fitem.getDescription().trim().length() > 0){
 					if(StringCompare.compareStrings(litem.getDescription(), fitem.getDescription()) > 60){
@@ -356,6 +480,30 @@ public class LFTracingUtil {
 						detail.setScore(SCORE_DESCRIPTION);
 						detail.setDecryptedFoundValue(fitem.getDescription());
 						detail.setDecryptedLostValue(litem.getDescription());
+						match.getDetails().add(detail);
+					}
+				}
+				if(litem.getLongDescription() != null && litem.getLongDescription().trim().length() > 0
+						&& fitem.getLongDescription() != null && fitem.getLongDescription().trim().length() > 0){
+					if(StringCompare.compareStrings(litem.getLongDescription(), fitem.getLongDescription()) > 60){
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("Long Description Match");
+						detail.setMatchHistory(match);
+						detail.setScore(SCORE_LONG_DESCRIPTION);
+						detail.setDecryptedFoundValue(fitem.getLongDescription());
+						detail.setDecryptedLostValue(litem.getLongDescription());
+						match.getDetails().add(detail);
+					}
+				}
+				if(litem.getModel() != null && litem.getModel().trim().length() > 0
+						&& fitem.getModel() != null && fitem.getModel().trim().length() > 0){
+					if(StringCompare.compareStrings(litem.getModel(), fitem.getModel()) > 80){
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("Model Match");
+						detail.setMatchHistory(match);
+						detail.setScore(SCORE_MODEL);
+						detail.setDecryptedFoundValue(fitem.getModel());
+						detail.setDecryptedLostValue(litem.getModel());
 						match.getDetails().add(detail);
 					}
 				}
@@ -418,6 +566,7 @@ public class LFTracingUtil {
 	}
 	
 	public static List<LFMatchHistory> traceFound(long id, LFServiceBean bean) throws Exception{
+		System.out.println("tracing: " + id);
 		LFFound found = bean.getFoundItem(id);
 		List<LFLost> lostList = getPotentialLost(found);
 		ArrayList<LFMatchHistory> matchList = new ArrayList<LFMatchHistory>();
