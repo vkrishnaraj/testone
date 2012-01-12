@@ -290,4 +290,20 @@ public class LFItem implements Serializable{
 		return toReturn;
 	}
 	
+	public String getDispPhone() {
+		if (phone != null && phone.getDecryptedPhoneNumber() != null) {
+			return phone.getDecryptedPhoneNumber();
+		}
+		return "";
+	}
+	
+	public void setDispPhone(String dispPhone) {
+		if (dispPhone != null && !dispPhone.trim().equals("")) {
+			if (phone == null) {
+				phone = new LFPhone();
+			}
+			phone.setDecryptedPhoneNumber(dispPhone);
+		}
+	}
+	
 }
