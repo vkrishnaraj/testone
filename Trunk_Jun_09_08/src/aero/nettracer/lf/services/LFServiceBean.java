@@ -201,6 +201,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sql += " and p.phoneNumber = \'" + phone + "\'";
 		}
 		
+		if(dto.getType() == TracingConstants.LF_TYPE_FOUND && dto.getBarcode() != null && dto.getBarcode().trim().length() > 0){
+			sql += " and o.barcode = " + dto.getBarcode();
+		}
 		if(dto.getId() > 0){
 			sql += " and o.id = " + dto.getId();
 		}
