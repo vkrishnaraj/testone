@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="USAir-NT 1.75.0.6" default="build-usair-dev">
 
+	<path id="project.classpath">
+		<fileset dir="${lib.build-client.dir}">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${lib.jar.dir}">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${basedir}/lib/provided">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${basedir}/lib/client-us">
+			<patternset refid="jar.files" />
+		</fileset>
+	</path>
+	
 	<property file="user.properties" />
 	<property file="common.properties" />
 	<property environment="env" />
@@ -428,20 +443,7 @@
 
 		<mkdir dir="${build.dir}/webservices/passengerview" />
 
-		<path id="project.classpath">
-			<fileset dir="${lib.build-client.dir}">
-				<patternset refid="jar.files" />
-			</fileset>
-			<fileset dir="${lib.jar.dir}">
-				<patternset refid="jar.files" />
-			</fileset>
-			<fileset dir="${basedir}/lib/provided">
-				<patternset refid="jar.files" />
-			</fileset>
-			<fileset dir="${basedir}/lib/client-us">
-				<patternset refid="jar.files" />
-			</fileset>
-		</path>
+		
 	</target>
 
 	
