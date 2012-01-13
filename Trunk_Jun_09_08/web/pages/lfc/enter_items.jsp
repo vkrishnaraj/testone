@@ -128,6 +128,10 @@
 					alert("<%= (String)bundle.getString("colname.lfc.item.id") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
 			        return false;
+				} else if (isNaN(currentElement.value) || currentElement.value.indexOf('-') != -1 || currentElement.value.indexOf('.') != -1) {
+					alert("<%= (String)bundle.getString("colname.lfc.item.id") %>" + " <%= (String)bundle.getString("error.validation.validNumber") %>");
+			        currentElement.focus();
+			        return false;
 				}
 			} else if (elementName == "found.item.category") {
 				if (currentElement.value == 0) {
