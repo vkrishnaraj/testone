@@ -69,7 +69,7 @@
 	<target name="build-dev">
 		<antcall target="build-usair-dev-ear" />
 		<antcall target="build-usair-fraud-dev-ear" />
-		<antcall target="build-cron-dev" />
+		<antcall target="usair-build-cron-dev" />
 	</target>
 
 	<target name="build-usair-dev-ear" depends="delete-wars">
