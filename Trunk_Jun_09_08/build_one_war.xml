@@ -572,7 +572,7 @@
 		<property name="app.xml.location" value="metadata/webjet/local" />		
 		<antcall target="donotrun-build-ear" />
 	</target>
-	
+
 	<target name="build-ear-local-fraud" depends="delete-wars">
 		<property name="staging.project" value="fstracer" />
 		<property name="staging.env" value="local" />
@@ -604,6 +604,7 @@
 		<antcall target="build-war-testing-delta"/>
 		<antcall target="build-war-testing-united"/>
 		<antcall target="build-war-testing-webjet"/>
+		<antcall target="build-war-testing-lfc"/>
 		<property name="app.xml.location" value="metadata/testing" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -1279,6 +1280,14 @@
 		<antcall target="donotrun-build-webjet" />
 	</target>
 
+	<target name="build-war-local-lfc" depends="delete">
+		<property name="ant_project_name" value="lfc" />
+		<property name="ant_war_name" value="lfc" />
+		<property name="lfc.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-lfc" />
+	</target>
+
 	<target name="build-war-local-avis" depends="delete">
 		<property name="ant_project_name" value="ab" />
 		<property name="ant_war_name" value="ab" />
@@ -1287,14 +1296,6 @@
 		<antcall target="donotrun-build-ab" />
 	</target>
 
-	<target name="build-war-local-lfc" depends="delete">
-		<property name="ant_project_name" value="lfc" />
-		<property name="ant_war_name" value="lfc" />
-		<property name="lfc.init.complete" value="true" />
-		<property name="environment.name" value="local" />
-		<antcall target="donotrun-build-lfc" />
-	</target>
-	
 	<target name="build-war-local-fraud" depends="delete">
 		<property name="ant_project_name" value="fraud" />
 		<property name="ant_war_name" value="fraud" />
