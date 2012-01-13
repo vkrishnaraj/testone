@@ -1390,6 +1390,7 @@
 		<antcall target="build-cron-testing-jetblue"/>
 		<antcall target="build-cron-testing-azul"/>
 		<antcall target="build-cron-testing-spirit"/>
+		<antcall target="build-cron-testing-lfc"/>
 	</target>
 	<target name="build-cron-training-all">
 		<antcall target="build-cron-training-avis"/>
@@ -1397,6 +1398,7 @@
 		<antcall target="build-cron-training-jetblue"/>
 		<antcall target="build-cron-training-azul"/>
 		<antcall target="build-cron-training-spirit"/>
+		<antcall target="build-cron-training-lfc"/>
 	</target>
 	<target name="build-cron-production-all">
 		<antcall target="build-cron-production-avis"/>
@@ -1404,6 +1406,7 @@
 		<antcall target="build-cron-production-jetblue"/>
 		<antcall target="build-cron-production-azul"/>
 		<antcall target="build-cron-production-spirit"/>
+		<antcall target="build-cron-production-lfc"/>
 	</target>
 	<target name="build-cron-hudson-all">
 		<antcall target="build-cron-hudson-avis"/>
