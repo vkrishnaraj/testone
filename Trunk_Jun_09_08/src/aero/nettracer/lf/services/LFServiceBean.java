@@ -16,11 +16,13 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.lang.WordUtils;
 import org.apache.struts.util.LabelValueBean;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 
 import aero.nettracer.general.services.GeneralServiceBean;
 import aero.nettracer.security.AES;
@@ -529,6 +531,25 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			f = (LFFound) sess.load(LFFound.class, id);
 
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return f;
+	}
+	
+	@Override
+	public LFFound getFoundItemByBarcode(String barcode){
+		if(barcode == null || barcode.trim().length() == 0){
+			return null;
+		}
+		Session sess = HibernateWrapper.getSession().openSession();
+		LFFound f = null;
+		try{
+			Criteria crit = sess.createCriteria(LFFound.class).add(Restrictions.eq("barcode", barcode));
+			return (LFFound) crit.uniqueResult();
 		}catch (Exception e){
 			e.printStackTrace();
 		}

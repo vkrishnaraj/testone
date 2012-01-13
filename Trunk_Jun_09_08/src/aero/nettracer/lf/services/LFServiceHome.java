@@ -84,4 +84,6 @@ public interface LFServiceHome {
 			throws NonUniqueResultException;
 
 	public boolean unrejectMatch(long id);
+
+	public LFFound getFoundItemByBarcode(String barcode);
 }

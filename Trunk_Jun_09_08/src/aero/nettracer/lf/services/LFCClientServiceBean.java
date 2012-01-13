@@ -126,7 +126,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 
 	private Agent getWebAgent(){
 		GeneralServiceBean bean = new GeneralServiceBean();
-		return bean.getAgent("avisweb", TracerProperties.get("wt.company.code"));
+		return bean.getAgent("webagent", TracerProperties.get("wt.company.code"));
 	}
 	
 	@Override

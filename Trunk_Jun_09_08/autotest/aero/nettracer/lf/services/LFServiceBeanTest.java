@@ -152,6 +152,19 @@ public class LFServiceBeanTest {
 	}
 	
 	@Test
+	public void foundLoadByBarcodeTest(){
+		LFServiceBean bean = new LFServiceBean();
+		Agent agent = bean.getAutoAgent();
+		LFFound found = createFoundTestCase();
+		String barcode = "junittest" + new Date().getTime();
+		found.setBarcode(barcode);
+		long id = bean.saveOrUpdateFoundItem(found, agent);
+		assertTrue(id > 0);
+		LFFound barcodeFind = bean.getFoundItemByBarcode(barcode);
+		assertTrue(barcodeFind.getId() == id);
+	}
+	
+	@Test
 	public void getColorsTest(){
 		LFServiceBean bean = new LFServiceBean();
 		ArrayList<LabelValueBean> b = bean.getColors();
