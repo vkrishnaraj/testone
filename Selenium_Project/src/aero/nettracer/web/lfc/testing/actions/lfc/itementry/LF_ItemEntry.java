@@ -66,6 +66,11 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']"));
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "c");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Books/Notebooks");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -96,6 +101,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "d");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Briefcase/Portfolio");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -127,6 +141,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+						
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "e");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Camera/Photo Equipment");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -158,6 +181,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "f");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Cards (ATM/Credit/ID)");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -189,6 +221,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "g");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Cellphone");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -220,6 +261,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "h");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Cellphone Accessories");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -253,6 +303,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "i");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Clothing");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -284,6 +343,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "j");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Computer-Related");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -317,6 +385,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "k");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Cosmetic/Shaving Kit");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -348,6 +425,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "l");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Electronic Equipment");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -379,6 +465,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "m");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Glasses");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -410,6 +505,15 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td/input", "01/01/2012");
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "n");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Jewelry/Watches");
@@ -486,3 +590,4 @@ public class LF_ItemEntry extends LoginUtil {
 	}
 
 }
+
