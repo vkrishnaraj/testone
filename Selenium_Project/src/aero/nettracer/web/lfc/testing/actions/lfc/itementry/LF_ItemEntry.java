@@ -21,8 +21,17 @@ public class LF_ItemEntry extends LoginUtil {
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			selenium.click("//div[@id='itementryleft']/center/input[2]");
 			assertEquals("Item ID is required.", selenium.getAlert());
+			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "-1");
+			selenium.click("id=saveButton");
+			assertEquals("Item ID must be numeric.", selenium.getAlert());
+			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "1.5");
+			selenium.click("id=saveButton");
+			assertEquals("Item ID must be numeric.", selenium.getAlert());
+			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "a");
+			selenium.click("id=saveButton");
+			assertEquals("Item ID must be numeric.", selenium.getAlert());
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "1");
-			selenium.click("//div[@id='itementryleft']/center/input[2]");
+			selenium.click("id=saveButton");
 			assertEquals("Category is required.", selenium.getAlert());
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Bags");
 			selenium.click("//div[@id='itementryleft']/center/input[2]");
