@@ -6,7 +6,7 @@ import aero.nettracer.web.utility.LoginUtil;
 
 public class LF_ItemEntry extends LoginUtil {
 	
-	private String testId;
+	private static String testId;
 
 	@Test
 	public void testItemEntry1() throws Exception {
