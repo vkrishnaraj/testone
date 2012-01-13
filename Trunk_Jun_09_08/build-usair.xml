@@ -35,7 +35,14 @@
 		<antcall target="build-usair-common" />
 	</target>
 	
+	<target name="build-dev">
+		<antcall target="build-usair-dev-ear" />
+		<antcall target="build-usair-fraud-dev-ear" />
+	</target>
+
 	<target name="build-usair-dev-ear" depends="delete-wars">
+		<property name="staging.env" value="dev" />
+		<property name="staging.project" value="usair" />
 		<property name="ant_project_name" value="usair" />
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-usair-dev"/>
@@ -44,12 +51,15 @@
 	</target>
 
 	<target name="build-usair-fraud-dev-ear" depends="delete-wars">
+		<property name="staging.env" value="dev/fraud" />
+		<property name="staging.project" value="usair" />
 		<property name="ant_project_name" value="usair" />
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-usair-fraud-dev"/>
 		<property name="app.xml.location" value="metadata/usair/fraud-dev" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+	
 	
 	<target name="build-usair-dev">
 		<ant antfile="build-gen.xml" target="delete" />
@@ -345,7 +355,7 @@
 			</fileset>
 		</copy>
 		<!--<antcall target="aa-jar-ntfs-model"></antcall>-->
-		
+		<copy todir="${staging.dir}/${staging.env}/${staging.project}" file="${build.dir}/tracer.ear"/>
 	</target>
 	
 	<target name="hibernate_generate" description="Generates Hibernate class descriptor files." depends="compile-web">
