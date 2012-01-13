@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="USAir-NT 1.75.0.6" default="build-usair-dev">
 
+	<patternset id="java.files">
+		<include name="**/**/*.java" />
+	</patternset>
+	<patternset id="class.files">
+		<include name="**/**/*.class" />
+	</patternset>
+	<patternset id="jar.files">
+		<include name="**/*.jar" />
+		<include name="**/*.zip" />
+	</patternset>
+	<patternset id="xml.files">
+		<include name="**/**/*.xml" />
+	</patternset>
+	<patternset id="hbm.xml.files">
+		<include name="**/**/*.hbm.xml" />
+	</patternset>
 	<path id="project.classpath">
 		<fileset dir="${lib.build-client.dir}">
 			<patternset refid="jar.files" />
