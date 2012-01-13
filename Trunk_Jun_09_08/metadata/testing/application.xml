@@ -78,19 +78,4 @@
      </web>
   </module>
   
-  <!--
-     <module>
-     <web>
-         <web-uri>american_testing.war</web-uri>
-         <context-root>american</context-root>
-     </web>
-  </module>
-  
-     <module>
-     <web>
-         <web-uri>continental_testing.war</web-uri>
-         <context-root>continental</context-root>
-     </web>
-  </module>
-  -->
 </application> 
