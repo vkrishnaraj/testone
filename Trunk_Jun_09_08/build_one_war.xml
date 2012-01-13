@@ -474,6 +474,7 @@
 		<antcall target="build-ear-testing-united"/>
 		<antcall target="build-ear-testing-american"/>
 		<antcall target="build-ear-testing-webjet"/>
+		<antcall target="build-ear-testing-lfc"/>
 		<antcall target="build-ear-testing-demo-and-jetblue"/>
 		<antcall target="build-cron-testing-all"/>
 	</target>
@@ -602,10 +603,11 @@
 		<antcall target="build-war-testing-jetblue"/>
 		<antcall target="build-war-testing-spirit"/>
 		<antcall target="build-war-testing-azul"/>
-		<antcall target="build-war-testing-delta"/>
+		<!--antcall target="build-war-testing-delta"/>
+		<antcall target="build-war-testing-american"/>
 		<antcall target="build-war-testing-united"/>
 		<antcall target="build-war-testing-webjet"/>
-		<antcall target="build-war-testing-lfc"/>
+		<antcall target="build-war-testing-lfc"/-->
 		<property name="app.xml.location" value="metadata/testing" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -724,6 +726,15 @@
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="build-war-testing-webjet"/>
 		<property name="app.xml.location" value="metadata/webjet/test" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="build-ear-testing-lfc" depends="delete-wars">
+		<property name="staging.project" value="lfc" />
+		<property name="staging.env" value="testing" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-testing-lfc"/>
+		<property name="app.xml.location" value="metadata/lfc/test" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
