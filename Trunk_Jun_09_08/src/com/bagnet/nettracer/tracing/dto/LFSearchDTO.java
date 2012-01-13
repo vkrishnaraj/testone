@@ -37,6 +37,7 @@ public class LFSearchDTO extends ActionForm  {
 	private long subCategory;
 	private String brand;
 	private String itemDescription;
+	private String barcode;
 
 	public String getFirstName() {
 		return firstName;
@@ -244,6 +245,14 @@ public class LFSearchDTO extends ActionForm  {
 
 	public void setItemDescription(String itemDescription) {
 		this.itemDescription = itemDescription;
+	}
+
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
 	}
 		
 }
