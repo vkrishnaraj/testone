@@ -403,7 +403,7 @@
         					<%  } %>
        							<td class="header" colspan=2>
        								<% if (item.getFound() != null) { %>
-       									<bean:message key="lf.match.found" />:&nbsp;<a style="color:#fff;" href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getId() %></a>&nbsp;
+       									<bean:message key="lf.match.found" />:&nbsp;<a style="color:#fff;" href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getBarcode() %></a>&nbsp;
        									<% if (dispositionId == TracingConstants.LF_DISPOSITION_OTHER || dispositionId == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) { %>
 											[<a style="color:#fff;" href='create_lost_report.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
 										<% } %>

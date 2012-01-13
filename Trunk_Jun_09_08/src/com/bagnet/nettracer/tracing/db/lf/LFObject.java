@@ -6,4 +6,5 @@ public interface LFObject {
 	public String getDisStation();
 	public String getDisplayDate(String dateFormat);
 	public String getClientName();
+	public String getBarcode();
 }

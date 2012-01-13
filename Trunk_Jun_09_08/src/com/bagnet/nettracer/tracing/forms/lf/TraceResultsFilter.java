@@ -14,6 +14,7 @@ public class TraceResultsFilter implements Serializable{
 	private boolean closed;
 	private boolean confirmed;
 	private boolean rejected;
+	private String barcode;
 	
 	public int getLostId() {
 		return lostId;
@@ -63,6 +64,14 @@ public class TraceResultsFilter implements Serializable{
 		this.rejected = rejected;
 	}
 	
+	public String getBarcode() {
+		return barcode;
+	}
+
+	public void setBarcode(String barcode) {
+		this.barcode = barcode;
+	}
+
 	public boolean filterResults() {
 		boolean filterResults = false;
 		filterResults |= open;

@@ -143,7 +143,12 @@ public class LostReportAction extends CheckedAction {
 				String foundId = (String) request.getParameter("foundId");
 				if (foundId != null && !foundId.trim().equals("")) {
 					long id = Long.valueOf(foundId);
-					LFFound found = LFServiceWrapper.getInstance().getFoundItem(id);
+					LFFound found;
+					if (TracingConstants.LF_SUBCOMPANIES.get(lostReport.getCompanyId()).equals(TracingConstants.LF_AB_COMPANY_ID)) {
+						found = LFServiceWrapper.getInstance().getFoundItem(id);
+					} else {
+						found = LFServiceWrapper.getInstance().getFoundItemByBarcode(id + "");
+					}
 					if (found == null) {
 						ActionMessages errors = new ActionMessages();
 						ActionMessage error = new ActionMessage("error.invalid.found.id");

@@ -1559,6 +1559,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if (filter.getFoundId() > 0) {
 			sql += " and m.found.id = " + filter.getFoundId();
 		}
+
+		if (filter.getBarcode() != null && !filter.getBarcode().equals("")) {
+			sql += " and m.found.barcode = '" + filter.getBarcode() + "'";
+		}
 		
 		boolean filterByStatus = filter.getOpen() || filter.getClosed() || filter.getConfirmed() || filter.getRejected(); 
 		if (filterByStatus) {

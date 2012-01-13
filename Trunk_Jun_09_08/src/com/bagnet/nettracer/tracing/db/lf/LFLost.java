@@ -231,6 +231,12 @@ public class LFLost implements LFObject, Serializable {
 
 	@Override
 	@Transient
+	public String getBarcode() {
+		return "";
+	}
+
+	@Override
+	@Transient
 	public String getClientName() {
 		String clientName = client.getLastName() + ", " + client.getFirstName();
 		String middleName = client.getMiddleName();

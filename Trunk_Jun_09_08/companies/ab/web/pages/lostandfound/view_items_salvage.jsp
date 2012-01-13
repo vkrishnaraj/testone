@@ -16,9 +16,11 @@
  	request.removeAttribute("type");
 %>
 
+
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
+    
+	var cal1xx = new CalendarPopup();	
     
 	function goprev() {
 	  o = document.handleItemsForm;
@@ -47,7 +49,7 @@
 
 </script>
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form action="view_items_deliver.do" method="post" onsubmit="return validateSearch(this);">
+<html:form action="view_items_salvage.do" method="post" onsubmit="return validateSearch(this);">
 	<tr>
         <td colspan="3" id="pageheadercell">
           <div id="pageheaderleft">
@@ -70,12 +72,15 @@
    		<td id="middlecolumn">        
      		<div id="maincontent">
 				<h1 class="green">
-					<bean:message key="header.deliver.items" />
+					<bean:message key="header.salvage.items" />
 					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 		        </h1>
          		<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
          			<tr>
+         				<td class="header">
+         					<bean:message key="colname.lf.select" />
+         				</td>
          				<td class="header">
          					<bean:message key="colname.lf.id" />
          				</td>
@@ -88,15 +93,14 @@
          				<td class="header">
          					<bean:message key="colname.lf.item.description" />
          				</td>
-         				<td class="header">
-         					<bean:message key="colname.lf.action" />
-         				</td>
          			</tr>
          			<logic:iterate indexId="i" id="item" name="handleItemsForm" property="foundItems" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
-         				<% if (item.getType() == TracingConstants.LF_TYPE_FOUND) { %>
          				<tr>
          					<td>
-         						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getBarcode() %></a>
+         						<input type="checkbox" name="item[<%=i %>].selected" />
+         					</td>
+         					<td>
+         						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getId() %></a>
          					</td>
          					<td>
          						<%=item.getDisposition().getDescription() %>
@@ -107,12 +111,7 @@
          					<td>
          						<%=item.getDescription() == null || item.getDescription().isEmpty() ? "&nbsp;" : item.getDescription() %>
          					</td>
-         					<td>
-         						<a href='create_delivery.do?itemId=<%=item.getId() %>'><bean:message key="lf.create.delivery" /></a>,&nbsp;
-         						<a href='create_delivery.do?itemId=<%=item.getId() %>&pickedUp=1'><bean:message key="lf.picked.up" /></a>
-         					</td>
          				</tr>
-         				<% } %>
          			</logic:iterate>
          			<tr>
 					   <td colspan="11">
@@ -120,6 +119,12 @@
 					   </td>
 				    </tr>
 			    </table>
+			    <br/>
+				<center>
+					<html:submit property="salvageItems" styleId="button">
+						<bean:message key="button.salvage.items" />
+					</html:submit>
+				</center>
 			    <script language=javascript>
 					document.location.href="#result";
 			    </script>

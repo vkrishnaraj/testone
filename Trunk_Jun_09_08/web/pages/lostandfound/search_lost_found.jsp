@@ -91,6 +91,33 @@
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
        				<tr>
              			<td>
+               				<bean:message key="colname.reference.type" />
+               				<br>
+               				<html:select name="searchLostFoundForm" property="type" styleClass="dropdown" onchange="switchID(this)">
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_TYPE_LOST) %>"><bean:message key="search.type.lost" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_TYPE_FOUND) %>"><bean:message key="search.type.found" /></html:option>
+               				</html:select>                  
+             			</td>
+             			<SCRIPT LANGUAGE="JavaScript">
+             				
+             				function switchID(companyList) {
+             					var company = companyList.options[companyList.selectedIndex].value;
+         						var lostCell = document.getElementById("lost.id.cell");
+         						var foundCell = document.getElementById("found.id.cell");
+             					if (company == 1) {
+             						lostCell.style.display = "inline";
+             						foundCell.style.display = "none";
+             						foundCell.getElementsByTagName("input")[0].value = "";
+             					} else {
+             						lostCell.style.display = "none";
+             						lostCell.getElementsByTagName("input")[0].value = "";
+             						foundCell.style.display = "inline";
+             					}
+             				}
+             				
+             			</SCRIPT>
+             			<bean:define id="searchType" name="searchLostFoundForm" property="type" type="java.lang.Integer" />
+             			<td id="lost.id.cell" style="display: <%= searchType < 2 ? "inline" : "none" %>;">
                				<bean:message key="colname.reference.id" />
                				<br>
                				<logic:equal name="searchLostFoundForm" property="id" value="0" >
@@ -100,13 +127,10 @@
                					<html:text name="searchLostFoundForm" property="id" size="10" styleClass="textfield" />
                				</logic:greaterThan>                  
              			</td>
-             			<td>
-               				<bean:message key="colname.reference.type" />
+             			<td id="found.id.cell" style="display: <%= searchType == 2 ? "inline" : "none" %>;">
+               				<bean:message key="colname.reference.id" />
                				<br>
-               				<html:select name="searchLostFoundForm" property="type" styleClass="dropdown" >
-               					<html:option value="<%=String.valueOf(TracingConstants.LF_TYPE_LOST) %>"><bean:message key="search.type.lost" /></html:option>
-               					<html:option value="<%=String.valueOf(TracingConstants.LF_TYPE_FOUND) %>"><bean:message key="search.type.found" /></html:option>
-               				</html:select>                  
+               				<html:text name="searchLostFoundForm" property="barcode" size="10" styleClass="textfield" />
              			</td>
              			<td>
            					<bean:message key="colname.station_number" />
@@ -244,7 +268,7 @@
               						<a href="create_lost_report.do?lostId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
               					</logic:equal>
               					<logic:equal name="searchLostFoundForm" property="type" value="<%=String.valueOf(TracingConstants.LF_TYPE_FOUND) %>" >
-              						<a href="create_found_item.do?foundId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
+              						<a href="create_found_item.do?foundId=<%=result.getId() %>"><bean:write name="result" property="barcode" /></a>
               					</logic:equal>
               				</td>
               				<td>

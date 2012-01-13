@@ -60,7 +60,7 @@
        						<a href='create_lost_report.do?lostId=<bean:write name="match" property="lost.id" />' ><bean:write name="match" property="lost.id" /></a>
        					</td>
        					<td>
-       						<a href='create_found_item.do?foundId=<bean:write name="match" property="found.id" />' ><bean:write name="match" property="found.barcode" /></a>
+       						<a href='create_found_item.do?foundId=<bean:write name="match" property="found.id" />' ><bean:write name="match" property="found.id" /></a>
        					</td>
        					<td>
        						<bean:write name="match" property="totalScore" />

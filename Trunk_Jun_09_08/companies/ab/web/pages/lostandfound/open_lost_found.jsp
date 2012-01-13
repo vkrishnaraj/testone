@@ -107,7 +107,7 @@
               					<% if (type.equals("lost")) { %>
               						<a href="create_lost_report.do?lostId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
               					<% } else { %>
-              						<a href="create_found_item.do?foundId=<%=result.getId() %>"><bean:write name="result" property="barcode" /></a>
+              						<a href="create_found_item.do?foundId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
               					<% } %>
               				</td>
               				<td>

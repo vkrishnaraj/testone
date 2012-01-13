@@ -100,7 +100,7 @@
          						<input type="checkbox" name="item[<%=i %>].selected" />
          					</td>
          					<td>
-         						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getId() %></a>
+         						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getBarcode() %></a>
          					</td>
          					<td>
          						<%=item.getDisposition().getDescription() %>

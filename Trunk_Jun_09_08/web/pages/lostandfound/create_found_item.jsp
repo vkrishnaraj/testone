@@ -168,7 +168,7 @@
 	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form focus="found.id" action="create_found_item.do" method="post" >
+<html:form focus="found.barcode" action="create_found_item.do" method="post" >
 <input type="hidden" name="delete_these_elements" value="" />
 <html:hidden property="matchItem" styleId="matchItem" value="" />
 <html:hidden property="itemId" styleId="itemId" value="" />
@@ -209,11 +209,21 @@
          		</font></center>
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
        				<tr>
-						<td colspan=2>
+
+            		<logic:notEmpty name="foundItemForm" property="found.barcode">
+						<td>
 							<bean:message key="colname.lf.report.id" />
-							<br/>
-							<html:text name="foundItemForm" property="found.id" disabled="true" styleClass="disabledtextfield" />
-						</td>
+         					<br>
+							<html:text name="foundItemForm" property="found.barcode" disabled="true" styleClass="disabledtextfield" />
+         				</td>
+					</logic:notEmpty>
+					<logic:empty name="foundItemForm" property="found.barcode">
+						<td>
+							<bean:message key="colname.lf.report.id" />
+         					<br>
+							<html:text name="foundItemForm" property="found.barcode" styleClass="textfield" />
+         				</td>
+         			</logic:empty>
 						<td>
 							<bean:message key="colname.lf.created.date" />
 							<br/>
@@ -248,11 +258,6 @@
          						<html:option value="-1"><bean:message key="option.lf.please.select" /></html:option>
          						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
          					</html:select>
-         				</td>
-						<td>
-         					<bean:message key="colname.lfc.barcode" />
-         					<br>
-							<html:text name="foundItemForm" property="found.barcode" styleClass="textfield" />
          				</td>
 					</tr>
 				</table>

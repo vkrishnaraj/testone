@@ -96,7 +96,7 @@
          				<% if (item.getType() == TracingConstants.LF_TYPE_FOUND) { %>
          				<tr>
          					<td>
-         						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getBarcode() %></a>
+         						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getId() %></a>
          					</td>
          					<td>
          						<%=item.getDisposition().getDescription() %>
