@@ -60,17 +60,17 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_1']/center/input");
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			verifyTrue(selenium.isEditable("id=saveButton"));
 			verifyTrue(selenium.isTextPresent("Item ID: b"));
 			verifyTrue(selenium.isTextPresent("Desc: Blueprints/Posters"));
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']"));
-			
-			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
-				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
-			}
-			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "c");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Books/Notebooks");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -95,21 +95,21 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_2']/center/input");
+
+			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
+			}
+			
+			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
+			}
+			
 			verifyTrue(selenium.isEditable("id=saveButton"));
 			verifyTrue(selenium.isTextPresent("Item ID: c"));
 			verifyTrue(selenium.isTextPresent("Desc: Books/Notebooks"));
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
-			
-			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
-				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
-			}
-
-			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
-				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
-			}
-			
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "d");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Briefcase/Portfolio");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -135,12 +135,6 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_2']/center/input");
-			verifyTrue(selenium.isEditable("id=saveButton"));
-			verifyTrue(selenium.isTextPresent("Item ID: d"));
-			verifyTrue(selenium.isTextPresent("Desc: Briefcase/Portfolio"));
-			verifyTrue(selenium.isTextPresent("Status:  Moved"));
-			verifyFalse(selenium.isElementPresent("name=found.binId"));
-			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			
 			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
@@ -149,7 +143,13 @@ public class LF_ItemEntry extends LoginUtil {
 			if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 			}
-						
+			
+			verifyTrue(selenium.isEditable("id=saveButton"));
+			verifyTrue(selenium.isTextPresent("Item ID: d"));
+			verifyTrue(selenium.isTextPresent("Desc: Briefcase/Portfolio"));
+			verifyTrue(selenium.isTextPresent("Status:  Moved"));
+			verifyFalse(selenium.isElementPresent("name=found.binId"));
+			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "e");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Camera/Photo Equipment");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -178,10 +178,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isEditable("id=saveButton"));
 			verifyTrue(selenium.isTextPresent("Item ID: e"));
 			verifyTrue(selenium.isTextPresent("Desc: Camera/Photo Equipment"));
-			verifyTrue(selenium.isTextPresent("Status:  Moved"));
-			verifyFalse(selenium.isElementPresent("name=found.binId"));
-			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
-
+			
 			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 			}
@@ -190,6 +187,9 @@ public class LF_ItemEntry extends LoginUtil {
 				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 			}
 			
+			verifyTrue(selenium.isTextPresent("Status:  Moved"));
+			verifyFalse(selenium.isElementPresent("name=found.binId"));
+			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "f");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Cards (ATM/Credit/ID)");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -215,13 +215,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_2']/center/input");
-			verifyTrue(selenium.isEditable("id=saveButton"));
-			verifyTrue(selenium.isTextPresent("Item ID: f"));
-			verifyTrue(selenium.isTextPresent("Desc: Cards (ATM/Credit/ID)"));
-			verifyTrue(selenium.isTextPresent("Status:  Moved"));
-			verifyFalse(selenium.isElementPresent("name=found.binId"));
-			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
-
+			
 			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 			}
@@ -230,6 +224,12 @@ public class LF_ItemEntry extends LoginUtil {
 				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 			}
 			
+			verifyTrue(selenium.isEditable("id=saveButton"));
+			verifyTrue(selenium.isTextPresent("Item ID: f"));
+			verifyTrue(selenium.isTextPresent("Desc: Cards (ATM/Credit/ID)"));
+			verifyTrue(selenium.isTextPresent("Status:  Moved"));
+			verifyFalse(selenium.isElementPresent("name=found.binId"));
+			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "g");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Cellphone");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -255,13 +255,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_2']/center/input");
-			verifyTrue(selenium.isEditable("id=saveButton"));
-			verifyTrue(selenium.isTextPresent("Item ID: g"));
-			verifyTrue(selenium.isTextPresent("Desc: Cellphone"));
-			verifyTrue(selenium.isTextPresent("Status:  Moved"));
-			verifyFalse(selenium.isElementPresent("name=found.binId"));
-			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
-
+			
 			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 			}
@@ -270,6 +264,12 @@ public class LF_ItemEntry extends LoginUtil {
 				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 			}
 			
+			verifyTrue(selenium.isEditable("id=saveButton"));
+			verifyTrue(selenium.isTextPresent("Item ID: g"));
+			verifyTrue(selenium.isTextPresent("Desc: Cellphone"));
+			verifyTrue(selenium.isTextPresent("Status:  Moved"));
+			verifyFalse(selenium.isElementPresent("name=found.binId"));
+			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "h");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Cellphone Accessories");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -297,13 +297,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_2']/center/input");
-			verifyTrue(selenium.isEditable("id=saveButton"));
-			verifyTrue(selenium.isTextPresent("Item ID: h"));
-			verifyTrue(selenium.isTextPresent("Desc: Cellphone Accessories"));
-			verifyTrue(selenium.isTextPresent("Status:  Moved"));
-			verifyFalse(selenium.isElementPresent("name=found.binId"));
-			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
-
+			
 			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 			}
@@ -312,6 +306,12 @@ public class LF_ItemEntry extends LoginUtil {
 				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 			}
 			
+			verifyTrue(selenium.isEditable("id=saveButton"));
+			verifyTrue(selenium.isTextPresent("Item ID: h"));
+			verifyTrue(selenium.isTextPresent("Desc: Cellphone Accessories"));
+			verifyTrue(selenium.isTextPresent("Status:  Moved"));
+			verifyFalse(selenium.isElementPresent("name=found.binId"));
+			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "i");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Clothing");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -337,13 +337,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_2']/center/input");
-			verifyTrue(selenium.isEditable("id=saveButton"));
-			verifyTrue(selenium.isTextPresent("Item ID: i"));
-			verifyTrue(selenium.isTextPresent("Desc: Clothing"));
-			verifyTrue(selenium.isTextPresent("Status:  Moved"));
-			verifyFalse(selenium.isElementPresent("name=found.binId"));
-			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
-
+			
 			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 			}
@@ -352,6 +346,12 @@ public class LF_ItemEntry extends LoginUtil {
 				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 			}
 			
+			verifyTrue(selenium.isEditable("id=saveButton"));
+			verifyTrue(selenium.isTextPresent("Item ID: i"));
+			verifyTrue(selenium.isTextPresent("Desc: Clothing"));
+			verifyTrue(selenium.isTextPresent("Status:  Moved"));
+			verifyFalse(selenium.isElementPresent("name=found.binId"));
+			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "j");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Computer-Related");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -379,13 +379,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_2']/center/input");
-			verifyTrue(selenium.isEditable("id=saveButton"));
-			verifyTrue(selenium.isTextPresent("Item ID: j"));
-			verifyTrue(selenium.isTextPresent("Desc: Computer-Related"));
-			verifyTrue(selenium.isTextPresent("Status:  Moved"));
-			verifyFalse(selenium.isElementPresent("name=found.binId"));
-			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
-
+			
 			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 			}
@@ -394,6 +388,12 @@ public class LF_ItemEntry extends LoginUtil {
 				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 			}
 			
+			verifyTrue(selenium.isEditable("id=saveButton"));
+			verifyTrue(selenium.isTextPresent("Item ID: j"));
+			verifyTrue(selenium.isTextPresent("Desc: Computer-Related"));
+			verifyTrue(selenium.isTextPresent("Status:  Moved"));
+			verifyFalse(selenium.isElementPresent("name=found.binId"));
+			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "k");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Cosmetic/Shaving Kit");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -419,13 +419,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_2']/center/input");
-			verifyTrue(selenium.isEditable("id=saveButton"));
-			verifyTrue(selenium.isTextPresent("Item ID: k"));
-			verifyTrue(selenium.isTextPresent("Desc: Cosmetic/Shaving Kit"));
-			verifyTrue(selenium.isTextPresent("Status:  Moved"));
-			verifyFalse(selenium.isElementPresent("name=found.binId"));
-			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
-
+			
 			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 			}
@@ -434,6 +428,12 @@ public class LF_ItemEntry extends LoginUtil {
 				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 			}
 			
+			verifyTrue(selenium.isEditable("id=saveButton"));
+			verifyTrue(selenium.isTextPresent("Item ID: k"));
+			verifyTrue(selenium.isTextPresent("Desc: Cosmetic/Shaving Kit"));
+			verifyTrue(selenium.isTextPresent("Status:  Moved"));
+			verifyFalse(selenium.isElementPresent("name=found.binId"));
+			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "l");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Electronic Equipment");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -459,13 +459,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_2']/center/input");
-			verifyTrue(selenium.isEditable("id=saveButton"));
-			verifyTrue(selenium.isTextPresent("Item ID: l"));
-			verifyTrue(selenium.isTextPresent("Desc: Electronic Equipment"));
-			verifyTrue(selenium.isTextPresent("Status:  Moved"));
-			verifyFalse(selenium.isElementPresent("name=found.binId"));
-			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
-
+			
 			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 			}
@@ -474,6 +468,12 @@ public class LF_ItemEntry extends LoginUtil {
 				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 			}
 			
+			verifyTrue(selenium.isEditable("id=saveButton"));
+			verifyTrue(selenium.isTextPresent("Item ID: l"));
+			verifyTrue(selenium.isTextPresent("Desc: Electronic Equipment"));
+			verifyTrue(selenium.isTextPresent("Status:  Moved"));
+			verifyFalse(selenium.isElementPresent("name=found.binId"));
+			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "m");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Glasses");
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td[3]/select/option[3]");
@@ -499,13 +499,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			verifyFalse(selenium.isEditable("id=saveButton"));
 			selenium.click("//div[@id='moveDiv_2']/center/input");
-			verifyTrue(selenium.isEditable("id=saveButton"));
-			verifyTrue(selenium.isTextPresent("Item ID: m"));
-			verifyTrue(selenium.isTextPresent("Desc: Glasses"));
-			verifyTrue(selenium.isTextPresent("Status:  Moved"));
-			verifyFalse(selenium.isElementPresent("name=found.binId"));
-			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
-
+			
 			if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 				selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 			}
@@ -514,6 +508,12 @@ public class LF_ItemEntry extends LoginUtil {
 				selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 			}
 			
+			verifyTrue(selenium.isEditable("id=saveButton"));
+			verifyTrue(selenium.isTextPresent("Item ID: m"));
+			verifyTrue(selenium.isTextPresent("Desc: Glasses"));
+			verifyTrue(selenium.isTextPresent("Status:  Moved"));
+			verifyFalse(selenium.isElementPresent("name=found.binId"));
+			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td/input", "01/01/2012");
 			selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", "n");
 			selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Jewelry/Watches");
