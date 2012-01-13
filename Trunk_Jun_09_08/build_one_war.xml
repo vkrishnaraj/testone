@@ -468,6 +468,7 @@
 		<antcall target="build-ear-testing"/>
 		<antcall target="build-ear-testing-avis"/>
 		<antcall target="build-ear-testing-avis-service"/>
+		<antcall target="build-ear-testing-lfc-service"/>
 		<antcall target="build-ear-testing-airtran"/>
 		<antcall target="build-ear-testing-delta"/>
 		<antcall target="build-ear-testing-united"/>
