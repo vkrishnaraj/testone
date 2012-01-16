@@ -20,10 +20,12 @@ import aero.nettracer.avis.model.KeyValueBean;
 import aero.nettracer.general.services.GeneralServiceBean;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
@@ -78,6 +80,36 @@ public class LFServiceBeanTest {
 	}
 
 	
+	
+	@Test
+	public void hasAutoAgent(){
+		LFServiceBean bean = new LFServiceBean();
+		Agent auto = bean.getAutoAgent();
+		assertTrue(auto != null && auto.getUsername().equals("autoagent"));
+		assertTrue(auto.getCompanycode_ID().equals(TracerProperties.get("wt.company.code")));
+	}
+	
+	@Test
+	public void hasWebAgent(){
+		GeneralServiceBean bean = new GeneralServiceBean();
+		Agent web = bean.getAgent("webagent", TracerProperties.get("wt.company.code"));
+		assertTrue(web != null && web.getUsername().equals("webagent"));
+		assertTrue(web.getCompanycode_ID().equals(TracerProperties.get("wt.company.code")));
+	}
+	
+	@Test
+	public void hasWebStation(){
+		Station location = StationBMO.getStationByCode("WEB", TracerProperties.get("wt.company.code"));
+		assertTrue(location != null && location.getStationcode().equalsIgnoreCase("WEB"));
+	}
+	
+	@Test
+	public void hasEmailParams(){
+		Company company = CompanyBMO.getCompany(TracerProperties.get("wt.company.code"));
+		assertTrue(company.getVariable().getEmail_from() != null && company.getVariable().getEmail_from().trim().length() > 0);
+		assertTrue(company.getVariable().getEmail_host() != null && company.getVariable().getEmail_host().trim().length() > 0);
+		assertTrue(company.getVariable().getEmail_port() > 0);
+	}
 	
 	@Test
 	public void lostSaveLoadTest(){
