@@ -276,9 +276,6 @@
 	</target>
 	
 	<target name="build-fs-donotrun">
-		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on" memoryinitialsize="256m" memorymaximumsize="256m" >
-			<classpath refid="project.classpath" />
-		</javac>
 		<copy todir="${build.dir}/services-war" overwrite="true">
 			<fileset dir="${webroot.dir}" >
 				<include name="WEB-INF/**/*"/>
@@ -290,6 +287,10 @@
 		
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_main.cfg.xml" overwrite="true" />
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_geo.cfg.xml" overwrite="true" />
+
+		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on" memoryinitialsize="256m" memorymaximumsize="256m" >
+			<classpath refid="project.classpath" />
+		</javac>
 		
 		<jar destfile="${dist.dir}/nt_fs.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">
 			<metainf dir="${src.dir}/../metadata/fs">
@@ -429,12 +430,9 @@
 
 		
 		
-		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on"
-					
-					memoryinitialsize="256m"       memorymaximumsize="256m"
-					>
-					<classpath refid="project.classpath" />
-				</javac>
+		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on" memoryinitialsize="256m" memorymaximumsize="256m" >
+			<classpath refid="project.classpath" />
+		</javac>
 
 		<copy todir="${build.dir}/services-war/WEB-INF/classes" overwrite="true">
 			<fileset dir="${src.dir}" >
