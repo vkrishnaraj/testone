@@ -353,6 +353,9 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		}
 		ArrayList<KeyValueBean>ret = new ArrayList<KeyValueBean>();
 		for(Station station:stations){
+			if(station.getAssociated_airport() != null && station.getAssociated_airport().equalsIgnoreCase(TracingConstants.LF_LFC_COMPANY_ID)){
+				continue;
+			}
 			KeyValueBean toAdd = new KeyValueBean();
 			toAdd.setKey("" + station.getStation_ID());
 			toAdd.setValue(station.getStationdesc());

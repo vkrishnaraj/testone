@@ -487,6 +487,7 @@ public class TracingConstants {
 	public final static String LF_SWA_COMPANY_ID = "SWA";
 	public final static String LF_AB_COMPANY_ID = "AB";
 	public final static String LF_LF_COMPANY_ID = "LF";
+	public final static String LF_LFC_COMPANY_ID = "LFC";
 	
 	public final static Map<String, String> LF_SUBCOMPANIES;
 	static{
