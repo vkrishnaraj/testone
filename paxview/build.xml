@@ -67,6 +67,7 @@
 		<ear destfile="${build.dir}/paxview.ear" appxml="${basedir}/${app.xml.location}/application.xml">
 			<fileset dir="${dist.dir}" includes="*.war"/>
 		</ear>
+		<copy todir="${staging.dir}/${staging.env}/${staging.project}" file="${build.dir}/paxview.ear"/>
 	</target>
 
 	<target name="build-tracer-alpha">
@@ -233,6 +234,8 @@
 	<target name="build-ear-test">
 		<property name="app.xml.location" value="metadata/test" />
 		<property name="ear.build" value="true" />
+		<property name="staging.env" value="testing" />
+		<property name="staging.project" value="paxview" />
 		<antcall target="build-test" />
 		<antcall target="ear" /> 
 	</target>
