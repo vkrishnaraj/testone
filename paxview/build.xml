@@ -244,9 +244,9 @@
 		<property name="app.xml.location" value="metadata/hudson" />
 		<property name="ear.build" value="true" />
 		<property name="staging.env" value="hudson" />
+		<property name="staging.project" value="paxview" />
 		<antcall target="build-hudson" />
 		<antcall target="ear" /> 
-		<copy todir="${staging.dir}" file="${build.dir}/paxview.ear"/>
 	</target>
 			
 	
