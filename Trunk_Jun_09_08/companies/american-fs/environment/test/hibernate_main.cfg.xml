@@ -14,7 +14,7 @@
     	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
 		<property name="hibernate.connection.url">jdbc:mysql://testingdbhost:3306/aa_testing</property>
 		<property name="hibernate.connection.username">aa_user</property>
-		<property name="hibernate.connection.password">?4f&swuN</property>
+		<property name="hibernate.connection.password">?4f&amp;swuN</property>
 		<property name="hibernate.show_sql">false</property>
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
