@@ -1,4 +1,4 @@
-<%@ page language="java"%>
+<%@ page contentType="text/javascript" %> 
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@ page import="org.apache.struts.action.Action"%>
 
@@ -10,7 +10,6 @@
 	java.util.Locale myLocale = (java.util.Locale) session
 			.getAttribute("org.apache.struts.action.LOCALE");
 %>
-<script language="javascript">
   
   
   <jsp:include page="/pages/worldtracer/wt_required_fields.jsp"/>
@@ -97,5 +96,3 @@
   function validateReqForward(form) {
   	return true;
   }
-
-</script>
