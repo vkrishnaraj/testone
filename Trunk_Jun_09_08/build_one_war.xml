@@ -844,7 +844,7 @@
 
 	<target name="build-ear-production-united" depends="delete-wars">
 		<property name="staging.project" value="united-fs" />
-		<property name="staging.env" value="prod" />
+		<property name="staging.env" value="production" />
 		<property name="avis.service.includes" value="*.war"/>
 		<antcall target="build-war-production-united"/>
 		<property name="app.xml.location" value="metadata/united-fs/prod" />
@@ -853,7 +853,7 @@
 
 	<target name="build-ear-production-american" depends="delete-wars">
 		<property name="staging.project" value="american-fs" />
-		<property name="staging.env" value="prod" />
+		<property name="staging.env" value="production" />
 		<property name="avis.service.includes" value="*.war"/>
 		<antcall target="build-war-production-american"/>
 		<property name="app.xml.location" value="metadata/american-fs/prod" />
@@ -862,7 +862,7 @@
 
 	<target name="build-ear-production-webjet" depends="delete-wars">
 		<property name="staging.project" value="webjet" />
-		<property name="staging.env" value="prod" />
+		<property name="staging.env" value="production" />
 		<property name="avis.service.includes" value="*.war"/>
 		<antcall target="build-war-production-webjet"/>
 		<property name="app.xml.location" value="metadata/webjet/prod" />

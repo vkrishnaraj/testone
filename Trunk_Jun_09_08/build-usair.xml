@@ -152,6 +152,8 @@
 	
 	<target name="build-usair-prod-ear" depends="delete-wars">
 		<property name="ant_project_name" value="usair" />
+		<property name="staging.env" value="prod/fraud" />
+		<property name="staging.project" value="usair" />
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-usair-prod"/>
 		<property name="app.xml.location" value="metadata/usair/prod" />
