@@ -137,7 +137,7 @@
 <!--	BUILD ALL TARGETS -->
 	<target name="build-all">
 		<antcall target="build-testing"></antcall>
-		<antcall target="build-traing"></antcall>
+		<antcall target="build-training"></antcall>
 		<antcall target="build-production"></antcall>
 	</target>
 	
@@ -146,7 +146,7 @@
 		<antcall target="build-central-all-test"></antcall>
 	</target>
 	
-	<target name="build-traing">
+	<target name="build-training">
 		<antcall target="build-fs-all-train"></antcall>
 		<antcall target="build-central-all-train"></antcall>
 	</target>
