@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-2.5.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-2.5.xsd
+     	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+     	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd">
+		    
+	
+	<!--<jee:jndi-lookup id="dataSource" jndi-name="jdbc/OnlineClaims" />-->
+	
+    <!-- This activates post-processors for annotation-based config -->
+    <!-- http://www.infoq.com/articles/spring-2.5-part-1 -->
+    
+    <context:annotation-config/>
+    
+	<context:component-scan base-package="com.nettracer.claims.hibernate"/>
+	<context:component-scan base-package="com.nettracer.claims.core.service"/>
+	<context:component-scan base-package="com.nettracer.claims.webservices.client"/>
+	<context:component-scan base-package="com.nettracer.claims.core.dao"/>
+	<!--<context:component-scan base-package="com.nettracer.claims.core.model"/>-->
+	<context:component-scan base-package="com.nettracer.claims.admin.controller"/>
+	<context:component-scan base-package="com.nettracer.claims.passenger.controller"/>
+	<context:component-scan base-package="com.nettracer.claims.incident.controller"/>
+
+     
+     
+     <!-- Configure the c3p0 datasource -->
+<bean id="poolConfig" class="com.mchange.v2.c3p0.PoolConfig">
+<property name="acquireIncrement"><value>1</value></property> 
+<property name="idleConnectionTestPeriod"><value>30</value></property>
+<property name="maxIdleTime"><value>300</value></property>
+<property name="maxPoolSize"><value>10</value></property>
+<property name="minPoolSize"><value>2</value></property>
+<property name="initialPoolSize"><value>2</value></property>
+<property name="maxStatements"><value>0</value></property>
+<property name="maxStatementsPerConnection"><value>0</value></property>
+</bean>
+
+<!-- Register the database driver -->
+<bean id="driverClass" class="java.lang.Class" factory-method="forName">
+<constructor-arg><value>org.gjt.mm.mysql.Driver</value></constructor-arg>
+</bean>
+<bean id="driverInstance" class="java.lang.Class" factory-method="newInstance" factory-bean="driverClass" depends-on="driverClass" />
+
+<!-- Create the c3p0 unpooled ds --> <!-- PRODUCTION DB = 10.60.98.66 :: DEV DB = localhost -->
+<bean id="unpooledDataSource" class="com.mchange.v2.c3p0.DataSources" factory-method="unpooledDataSource" depends-on="driverInstance" >
+<constructor-arg index="0"><value>jdbc:mysql://10.60.98.66:3306/onlineclaims</value></constructor-arg>
+<constructor-arg index="1"><value>emergency</value></constructor-arg>
+<constructor-arg index="2"><value>Em3r6eNcy</value></constructor-arg>
+</bean>
+
+<!-- Create the pooled data source to actually use -->
+<bean id="dataSource" class="com.mchange.v2.c3p0.DataSources" factory-method="pooledDataSource" depends-on="unpooledDataSource">
+<constructor-arg><ref local="unpooledDataSource"/></constructor-arg>
+<constructor-arg><ref local="poolConfig"/></constructor-arg>
+</bean>
+     
+<!--  <bean id="dataSource" class="com.mchange.v2.c3p0.PoolBackedDataSource" destroy-method="close">
+	    <property name="driverClass" value="org.gjt.mm.mysql.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://192.168.2.105:3306/onlineclaims" />
+		<property name="user" value="nettracer" />
+		<property name="password" value="nettracer" />
+	</bean>  -->
+	
+	
+     
+    <bean id="sessionFactory" class="com.nettracer.claims.hibernate.ScanningAnnotationSessionFactoryBean" autowire="byName">
+		<property name="mappingLocations" value="classpath*:META-INF/hibernate.hbm.xml,classpath*:META-INF/plugin.hbm.xml"/>
+		<property name="dataSource" ref="dataSource" />
+	 </bean>
+	 
+	 <bean id="hibernateDaoSupport" class="com.nettracer.claims.hibernate.HibernateDaoSupport" autowire="byName">
+		<property name="autoSessionFactory" ref="sessionFactory" />
+	 </bean>
+
+	<!-- Transaction Manager setup -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	    <property name="dataSource" ref="dataSource"/>
+	</bean>
+
+	<!--
+		AOP advice to set get* and find* methods to Read-Only and everything
+		else to transactional
+	-->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="*" rollback-for="Exception" />
+		</tx:attributes>
+	</tx:advice>
+
+	<!--
+		Assign the above AOP transaction advice to all classes in the
+		com.nettracer.claims.core.service package that end with "Service"
+	-->
+	<aop:config> 
+		<aop:pointcut id="claimsServiceMethods" expression="execution(* com.nettracer.claims.core.service.*Service.*(..))" /> 
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="claimsServiceMethods" />
+	</aop:config>
+	
+	<!-- Passenger Module configuration (Initialize at server start up)-->
+	<bean id="passengerBootstrap" class="com.nettracer.claims.admin.bootstrap.PassengerBootstrap" />
+	
+	<!-- Webservices Integration -->
+	
+</beans>
