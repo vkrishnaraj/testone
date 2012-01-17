@@ -249,6 +249,15 @@
 		<antcall target="ear" /> 
 	</target>
 
+	<target name="build-ear-prod">
+		<property name="app.xml.location" value="metadata/prod" />
+		<property name="ear.build" value="true" />
+		<property name="staging.env" value="production" />
+		<property name="staging.project" value="paxview" />
+		<antcall target="build-prod" />
+		<antcall target="ear" /> 
+	</target>
+
 	<target name="build-ear-hudson">
 		<property name="app.xml.location" value="metadata/hudson" />
 		<property name="ear.build" value="true" />

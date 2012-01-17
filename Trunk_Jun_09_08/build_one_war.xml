@@ -603,11 +603,11 @@
 		<antcall target="build-war-testing-jetblue"/>
 		<antcall target="build-war-testing-spirit"/>
 		<antcall target="build-war-testing-azul"/>
-		<!--antcall target="build-war-testing-delta"/>
+		<antcall target="build-war-testing-delta"/>
 		<antcall target="build-war-testing-american"/>
 		<antcall target="build-war-testing-united"/>
 		<antcall target="build-war-testing-webjet"/>
-		<antcall target="build-war-testing-lfc"/-->
+		<antcall target="build-war-testing-lfc"/>
 		<property name="app.xml.location" value="metadata/testing" />
 		<antcall target="donotrun-build-ear" />
 	</target>
