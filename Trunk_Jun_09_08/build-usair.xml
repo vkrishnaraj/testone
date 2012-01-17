@@ -71,6 +71,17 @@
 		<antcall target="build-usair-fraud-dev-ear" />
 		<antcall target="usair-build-cron-dev" />
 	</target>
+	
+	<target name="build-beta">
+		<antcall target="build-usair-beta-ear" />
+		<antcall target="usair-build-cron-beta" />			
+	</target>
+
+	<target name="build-prod">
+		<antcall target="build-usair-prod-ear" />
+		<antcall target="usair-build-cron-prod1" />			
+		<antcall target="usair-build-cron-prod2" />			
+	</target>
 
 	<target name="build-usair-dev-ear" depends="delete-wars">
 		<property name="staging.env" value="dev" />
