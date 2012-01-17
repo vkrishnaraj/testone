@@ -3,10 +3,11 @@ package aero.nettracer.lf.services;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.NonUniqueResultException;
+
+import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -32,7 +33,7 @@ public interface LFServiceHome {
 	public LFFound getFoundItem(long id);
 	public int searchFoundCount(LFSearchDTO dto);
 	public List<LFFound> searchFound(LFSearchDTO dto, int start, int offset);
-	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent);
+	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent) throws NonUniqueBarcodeException;
 	
 	public
 	ArrayList<LabelValueBean> getColors();
@@ -85,5 +86,5 @@ public interface LFServiceHome {
 
 	public boolean unrejectMatch(long id);
 
-	public LFFound getFoundItemByBarcode(String barcode);
+	public LFFound getFoundItemByBarcode(String barcode) throws NonUniqueBarcodeException;
 }

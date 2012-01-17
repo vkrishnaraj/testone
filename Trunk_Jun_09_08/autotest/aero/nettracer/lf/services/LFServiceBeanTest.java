@@ -1,6 +1,7 @@
 package aero.nettracer.lf.services;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,15 +10,14 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.junit.Test;
 
-import aero.nettracer.avis.model.KeyValueBean;
 import aero.nettracer.general.services.GeneralServiceBean;
+import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
@@ -112,6 +112,32 @@ public class LFServiceBeanTest {
 	}
 	
 	@Test
+	public void barcodeConstraintTest(){
+		LFServiceBean bean = new LFServiceBean();
+		Agent agent = bean.getAutoAgent();
+		LFFound found = createFoundTestCase();
+		String barcode = "junittest" + new Date().getTime();
+		found.setBarcode(barcode);
+		long id = 0;
+		try {
+			id = bean.saveOrUpdateFoundItem(found, agent);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+		assertTrue(id > 0);
+		LFFound found2 = createFoundTestCase();
+		found2.setBarcode(barcode);
+		boolean caughtConstraint = false;
+		try {
+			long id2 = bean.saveOrUpdateFoundItem(found2, agent);
+		} catch (NonUniqueBarcodeException e) {
+			caughtConstraint = true;
+		}
+		assertTrue(caughtConstraint);
+	}
+	
+	@Test
 	public void lostSaveLoadTest(){
 		try {
 			LFServiceBean bean = new LFServiceBean();
@@ -137,7 +163,7 @@ public class LFServiceBeanTest {
 		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(companyID)){
 			subcompany = TracingConstants.LF_SWA_COMPANY_ID;
 		} else {
-			assertTrue(false);
+			fail();
 		}
 		companies.add(subcompany);
 		List<Station> stations = bean.getStations(companyID, companies);
@@ -160,7 +186,7 @@ public class LFServiceBeanTest {
 		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(companyID)){
 			subcompany = TracingConstants.LF_SWA_COMPANY_ID;
 		} else {
-			assertTrue(false);
+			fail();
 		}
 		HashMap<String,ArrayList<aero.nettracer.lfc.model.KeyValueBean>> map = bean.getStationsByState(companyID, subcompany);
 		for(String key:map.keySet()){
@@ -176,7 +202,13 @@ public class LFServiceBeanTest {
 	public void foundSaveLoadTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFFound found = createFoundTestCase();
-		long foundId = bean.saveOrUpdateFoundItem(found, null);
+		long foundId;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, null);
+		} catch (NonUniqueBarcodeException e) {
+			foundId = -1;
+			e.printStackTrace();
+		}
 		assertTrue(foundId != -1);
 		
 		LFFound loaded = bean.getFoundItem(foundId);
@@ -190,11 +222,25 @@ public class LFServiceBeanTest {
 		LFFound found = createFoundTestCase();
 		String barcode = "junittest" + new Date().getTime();
 		found.setBarcode(barcode);
-		long id = bean.saveOrUpdateFoundItem(found, agent);
+		long id = 0;
+		try {
+			id = bean.saveOrUpdateFoundItem(found, agent);
+		} catch (NonUniqueBarcodeException e1) {
+			e1.printStackTrace();
+		}
 		assertTrue(id > 0);
-		LFFound barcodeFind = bean.getFoundItemByBarcode(barcode);
+		
+		LFFound barcodeFind = null;
+		try {
+			barcodeFind = bean.getFoundItemByBarcode(barcode);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		assertTrue(barcodeFind.getId() == id);
 	}
+	
+
 	
 	@Test
 	public void getColorsTest(){
@@ -373,11 +419,21 @@ public class LFServiceBeanTest {
 		LFFound found1 = createFoundTestCase();
 		found1.setFoundDate(gc.getTime());
 		found1.setLocation(location);
-		assertTrue(bean.saveOrUpdateFoundItem(found1, null) != -1);
+		try {
+			assertTrue(bean.saveOrUpdateFoundItem(found1, null) != -1);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		LFFound found2 = createFoundTestCase();
 		found2.setFoundDate(gc.getTime());
 		found2.setLocation(location);
-		assertTrue(bean.saveOrUpdateFoundItem(found2, null) != -1);
+		try {
+			assertTrue(bean.saveOrUpdateFoundItem(found2, null) != -1);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		
 		assertTrue(bean.getFoundCount(location) > 1);
 		
@@ -409,11 +465,21 @@ public class LFServiceBeanTest {
 		LFFound found1 = createFoundTestCase();
 		found1.setFoundDate(gc.getTime());
 		found1.setLocation(location);
-		assertTrue(bean.saveOrUpdateFoundItem(found1, null) != -1);
+		try {
+			assertTrue(bean.saveOrUpdateFoundItem(found1, null) != -1);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		LFFound found2 = createFoundTestCase();
 		found2.setFoundDate(gc.getTime());
 		found2.setLocation(location);
-		assertTrue(bean.saveOrUpdateFoundItem(found2, null) != -1);
+		try {
+			assertTrue(bean.saveOrUpdateFoundItem(found2, null) != -1);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		
 		assertTrue(bean.getItemsToSalvageCount(location) > 1);
 		
@@ -447,9 +513,19 @@ public class LFServiceBeanTest {
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_DISPOSITION_SALVAGED);
 		found1.getItem().setDisposition(status);
-		assertTrue(bean.saveOrUpdateFoundItem(found1, null) > -1);
+		try {
+			assertTrue(bean.saveOrUpdateFoundItem(found1, null) > -1);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		found2.getItem().setDisposition(status);
-		assertTrue(bean.saveOrUpdateFoundItem(found2, null) > -1);
+		try {
+			assertTrue(bean.saveOrUpdateFoundItem(found2, null) > -1);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		
 		LFSearchDTO dto = new LFSearchDTO();
 		dto.setDisposition(status);
@@ -662,7 +738,13 @@ public class LFServiceBeanTest {
 		status.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 		found.getItem().setDisposition(status);
 		found.setLocation(location);
-		long id = bean.saveOrUpdateFoundItem(found, null);
+		long id = 0;
+		try {
+			id = bean.saveOrUpdateFoundItem(found, null);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		assertTrue(id > -1);
 		
 		assertTrue(bean.getDeliveryPendingCount(location) > 0);
@@ -725,7 +807,13 @@ public class LFServiceBeanTest {
 		assertTrue(loaded != null && loaded.getId() == lostId);
 	
 		LFFound found = createFoundTestCase();
-		long foundId = bean.saveOrUpdateFoundItem(found, bean.getAutoAgent());
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, bean.getAutoAgent());
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		assertTrue(foundId != -1);
 		
 		List<LFMatchHistory> results = bean.traceLostItem(lostId);
@@ -791,7 +879,13 @@ public class LFServiceBeanTest {
 	public void traceFoundTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFFound found = createFoundTestCase();
-		long foundId = bean.saveOrUpdateFoundItem(found, null);
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, null);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		assertTrue(foundId != -1);
 		
 		LFFound loaded = bean.getFoundItem(foundId);
@@ -825,7 +919,7 @@ public class LFServiceBeanTest {
 		} else if (agent.getCompanycode_ID().equalsIgnoreCase(TracingConstants.LF_AB_COMPANY_ID)){
 			subcompany = TracingConstants.LF_AVIS_COMPANY_ID;
 		} else {
-			assertTrue(false);
+			fail();
 		}
 		lost.setCompanyId(subcompany);
 		lost.setOpenDate(new Date());
@@ -894,7 +988,7 @@ public class LFServiceBeanTest {
 		} else if (agent.getCompanycode_ID().equalsIgnoreCase(TracingConstants.LF_AB_COMPANY_ID)){
 			subcompany = TracingConstants.LF_AVIS_COMPANY_ID;
 		} else {
-			assertTrue(false);
+			fail();
 		}
 		
 		found.setCompanyId(subcompany);

@@ -18,6 +18,7 @@ import org.apache.commons.lang.WordUtils;
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -25,6 +26,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import aero.nettracer.general.services.GeneralServiceBean;
+import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 import aero.nettracer.security.AES;
 
 import com.bagnet.nettracer.email.HtmlEmail;
@@ -544,20 +546,28 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	@Override
-	public LFFound getFoundItemByBarcode(String barcode){
+	public LFFound getFoundItemByBarcode(String barcode) throws NonUniqueBarcodeException{
 		if(barcode == null || barcode.trim().length() == 0){
 			return null;
 		}
 		Session sess = HibernateWrapper.getSession().openSession();
 		LFFound f = null;
+		List<LFFound> list = null;
 		try{
 			Criteria crit = sess.createCriteria(LFFound.class).add(Restrictions.eq("barcode", barcode));
-			return (LFFound) crit.uniqueResult();
-		}catch (Exception e){
+			list = crit.list();
+		}catch (HibernateException e){
 			e.printStackTrace();
 		}
 		finally{
 			sess.close();
+		}
+		if(list != null && list.size() > 0){
+			if(list.size() > 1){
+				throw new NonUniqueBarcodeException(barcode);
+			} else {
+				f = list.get(0);
+			}
 		}
 		return f;
 	}
@@ -614,7 +624,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent) {
+	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent) throws NonUniqueBarcodeException {
 		Session sess = null;
 		Transaction t = null;
 		long reportId = -1;
@@ -657,6 +667,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 			return reportId;
 		} else {
+			if(foundItem != null && foundItem.getBarcode() != null){
+				//did we fail on a barcode constraint?
+				LFFound f = this.getFoundItemByBarcode(foundItem.getBarcode());
+				if(f != null && f.getId() != foundItem.getId()){
+					throw new NonUniqueBarcodeException(foundItem.getBarcode());
+				}
+			}
 			return -1;
 		}
 	}

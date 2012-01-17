@@ -7,6 +7,8 @@ import javax.ejb.Remote;
 
 import org.apache.struts.util.LabelValueBean;
 
+import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
+
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
@@ -25,5 +27,5 @@ public interface LFServiceRemote {
 
 	public List<LFMatchHistory> traceFoundItem(long id);
 	
-	public LFFound getFoundItemByBarcode(String barcode);
+	public LFFound getFoundItemByBarcode(String barcode) throws NonUniqueBarcodeException;
 }
