@@ -331,6 +331,7 @@
 		<property name="sub_path" value="production/"/>
 		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs1.xml" />
 		<ant antfile="build-gen.xml" target="build-cron-service" />
+		<copy file="${build.dir}\artifacts\usair\prod1-tracer-cron.jar" todir="${staging.dir}/prod"></copy>
 	</target>
 	
 	<target name="usair-build-cron-prod2">
@@ -339,6 +340,7 @@
 		<property name="sub_path" value="production/"/>
 		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs2.xml" />
 		<ant antfile="build-gen.xml" target="build-cron-service" />
+		<copy file="${build.dir}\artifacts\usair\prod2-tracer-cron.jar" todir="${staging.dir}/prod"></copy>
 	</target>
 	
 	<target name="usair-build-cron-prod2-1">
