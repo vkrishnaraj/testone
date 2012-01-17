@@ -130,6 +130,8 @@
 	
 	<target name="build-usair-beta-ear" depends="delete-wars">
 		<property name="ant_project_name" value="usair" />
+		<property name="staging.env" value="beta/fraud" />
+		<property name="staging.project" value="usair" />
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-usair-beta"/>
 		<property name="app.xml.location" value="metadata/usair/train" />
@@ -302,7 +304,7 @@
 		<property name="jarprefix" value="dev-"/>
 		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs.xml" />
 		<ant antfile="build-gen.xml" target="build-cron-service" />
-		<copy file="c:\workspace\trunk\other\build\artifacts\usair\dev-tracer-cron.jar" todir="c:\upload"></copy>
+		<copy file="${build.dir}\artifacts\usair\dev-tracer-cron.jar" todir="${staging.dir}/dev"></copy>
 	</target>
 
 	<target name="usair-build-cron-fraud">
@@ -320,6 +322,7 @@
 		<property name="jarprefix" value="beta-"/>
 		<property name="cron.job.config.file" value="companies/usair/${sub_path}jobs/cronJobs.xml" />
 		<ant antfile="build-gen.xml" target="build-cron-service" />
+		<copy file="${build.dir}\artifacts\usair\beta-tracer-cron.jar" todir="${staging.dir}/beta"></copy>
 	</target>
 	
 	<target name="usair-build-cron-prod1">
