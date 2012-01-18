@@ -624,10 +624,25 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Status:  Moved"));
 			verifyFalse(selenium.isElementPresent("name=found.binId"));
 			verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_2']/center/input[@type='button']"));
+			
 		} else {
 			return;
 		}
 
+	}
+	
+	@Test
+	public void testItemEntry16() throws Exception {
+		selenium.type("//div[@id='itementryleft']/table/tbody/tr/td[2]/input", testId);
+		selenium.select("//div[@id='itementryleft']/table/tbody/tr/td[3]/select", "label=Bags");
+		selenium.click("//div[@id='itementryleft']/center[2]/input[2]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("The barcode you entered already exists in the system. Please select another one and try again."));
+		} else {
+			System.err.println("Failed to load page for duplicate barcode check: testItemEntry16().");
+			return;
+		}
 	}
 
 }
