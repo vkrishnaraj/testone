@@ -203,12 +203,6 @@
          		<logic:present name="reportfile" scope="request">
             		<center><a href="#" onclick="openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request"/>','report',800,600);return false;"><b><bean:message key="link.view_report" /></b></a></center>
            		</logic:present>
-				<h1 class="green">
-		        	<bean:message key="header.report.information" />
-		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
-		        </h1>
-    			<span class="reqfield">*</span>
-   				<bean:message key="message.required" />
    				<center>
    					<font color="red">
          				<logic:messagesPresent message="true">
@@ -216,10 +210,17 @@
          						<br/>
          						<bean:write name="msg"/>
          						<br/>
+         						<br/>
        						</html:messages>
    						</logic:messagesPresent>
          			</font>
        			</center>
+				<h1 class="green">
+		        	<bean:message key="header.report.information" />
+		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+		        </h1>
+    			<span class="reqfield">*</span>
+   				<bean:message key="message.required" />
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
        				<tr>
 
