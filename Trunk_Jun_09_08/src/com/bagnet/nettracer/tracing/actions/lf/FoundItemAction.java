@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.lf.services.LFServiceWrapper;
 import aero.nettracer.lf.services.LFUtils;
+import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -40,6 +41,7 @@ public class FoundItemAction extends CheckedAction {
 		HttpSession session = request.getSession();
 
 		TracerUtils.checkSession(session);
+		ActionMessages errors = new ActionMessages();
 
 		Agent user = (Agent) session.getAttribute("user");
 		if (user == null || form == null) {
@@ -89,25 +91,33 @@ public class FoundItemAction extends CheckedAction {
 		}
 		
 		if (request.getParameter("save") != null) {
-			if(found.getItem() != null && found.getItem().getTrackingNumber() != null && found.getItem().getTrackingNumber().trim().length() > 0){
-				//we have a manual delivery
-				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
-				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
-				if (found.getItem().getLost() != null) {
-					found.getItem().getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-					if(found.getItem().getLost().getItem() != null){
-						found.getItem().getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
-						found.getItem().getLost().getItem().setTrackingNumber(found.getItem().getTrackingNumber());
+			try {
+				if(found.getItem() != null && found.getItem().getTrackingNumber() != null && found.getItem().getTrackingNumber().trim().length() > 0){
+					//we have a manual delivery
+					found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
+					found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
+					if (found.getItem().getLost() != null) {
+						found.getItem().getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
+						if(found.getItem().getLost().getItem() != null){
+							found.getItem().getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
+							found.getItem().getLost().getItem().setTrackingNumber(found.getItem().getTrackingNumber());
+						}
 					}
 				}
-			}
-			
-			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
-			if (found.getItem().getLost() != null) {
-				LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
-			}
-			if (found.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
-				LFServiceWrapper.getInstance().traceFoundItem(found.getId());
+				
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+				if (found.getItem().getLost() != null) {
+					LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
+				}
+				if (found.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
+					LFServiceWrapper.getInstance().traceFoundItem(found.getId());
+				}
+			} catch (NonUniqueBarcodeException nube) {
+				logger.error(nube, nube);
+				ActionMessage error = new ActionMessage("error.non.unique.barcode");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+				request.setAttribute("enableIdField", "true");
 			}
 		} else if (request.getParameter("addremark") != null) {
 			//set new remark with current time
@@ -161,7 +171,6 @@ public class FoundItemAction extends CheckedAction {
 				long id = Long.valueOf(foundId);
 				LFLost lost = LFServiceWrapper.getInstance().getLostReport(id);
 				if (lost == null) {
-					ActionMessages errors = new ActionMessages();
 					ActionMessage error = new ActionMessage("error.invalid.lost.id");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);

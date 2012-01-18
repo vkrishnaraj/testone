@@ -20,6 +20,11 @@
  	
  	ArrayList categoryList = (ArrayList) request.getSession().getAttribute("lfcategorylist");
  	
+ 	boolean enableIdField = false;
+ 	if (request.getAttribute("enableIdField") != null) {
+		enableIdField = ((String) request.getAttribute("enableIdField")).equals("true");
+		request.removeAttribute("enableIdField");
+ 	}
 %>
 
 
@@ -204,9 +209,17 @@
 		        </h1>
     			<span class="reqfield">*</span>
    				<bean:message key="message.required" />
-   				<center><font color="red">
-         		<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-         		</font></center>
+   				<center>
+   					<font color="red">
+         				<logic:messagesPresent message="true">
+         					<html:messages id="msg" message="true">
+         						<br/>
+         						<bean:write name="msg"/>
+         						<br/>
+       						</html:messages>
+   						</logic:messagesPresent>
+         			</font>
+       			</center>
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
        				<tr>
 
@@ -214,7 +227,11 @@
 						<td>
 							<bean:message key="colname.lf.report.id" />
          					<br>
-							<html:text name="foundItemForm" property="found.barcode" disabled="true" styleClass="disabledtextfield" />
+         					<% if (enableIdField) { %>
+								<html:text name="foundItemForm" property="found.barcode" styleClass="textfield" />
+         					<% } else { %>
+								<html:text name="foundItemForm" property="found.barcode" disabled="true" styleClass="disabledtextfield" />
+							<% } %>
          				</td>
 					</logic:notEmpty>
 					<logic:empty name="foundItemForm" property="found.barcode">
