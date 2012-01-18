@@ -849,7 +849,6 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			files = new ArrayList<File> ();
 			for (int i = 0; i < wsFile.length; i++) {
 				file = new File();
-				file.setId(wsFile[i].getId());
 				file.setName(wsFile[i].getFilename());
 				file.setPath(wsFile[i].getPath());
 				file.setInterim(wsFile[i].getInterim());
@@ -1009,7 +1008,6 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			for (int i = 0; i < files.size(); i++) {
 				file=files.get(i);
 				wsFile = com.bagnet.nettracer.ws.onlineclaims.xsd.File.Factory.newInstance();
-				//wsFile.setId(file.getId());
 				wsFile.setFilename(file.getName());
 				wsFile.setPath(file.getPath());
 				wsFile.setInterim(file.isInterim());

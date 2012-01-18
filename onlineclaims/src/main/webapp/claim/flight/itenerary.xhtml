@@ -144,7 +144,7 @@
 
 			<rich:column>
 				<t:inputText value="#{item.flightNum}"  size="5" id="flightNum#{rowIndex+1}"
-						readonly="#{passengerController.readOnlyOnSubmitted}"
+						readonly="#{passengerController.readOnlyOnSubmitted}" maxlength="5"
 						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 											'Flight Number - Itinerary Segment #{rowIndex+1}'"
 						label="FlightNumber Row#{rowIndex+1}">

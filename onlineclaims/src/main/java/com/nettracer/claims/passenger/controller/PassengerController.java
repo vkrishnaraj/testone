@@ -73,6 +73,17 @@ import com.nettracer.claims.webservices.client.OnlineClaimsWS;
 @Qualifier("passengerController")
 public class PassengerController {
 	private static Logger logger = Logger.getLogger(PassengerController.class);
+	
+	private final int PAGE_DIRECTION = 0;
+	private final int PAGE_INSTRUCTION = 1;
+	private final int PAGE_LIABILITY = 2;
+	private final int PAGE_PASSENGER_INFO = 3;
+	private final int PAGE_FLIGHT_INFO = 4;
+	private final int PAGE_BAG_INFO = 5;
+	private final int PAGE_FILE_UPLOAD = 6;
+	private final int PAGE_ADDITIONAL_INFO = 7;
+	private final int PAGE_SUBMIT = 8;
+	private final int PAGE_SUCCESS = 9;
 
 	CaptchaBean captchaBean = new CaptchaBean();
 	LoginBean loginBean = new LoginBean();
@@ -112,6 +123,7 @@ public class PassengerController {
 	private List<SelectItem> airlines;
 	private String appFontSize = "none";
 	private boolean interimFile = false;
+	private int currentPage = PAGE_DIRECTION;	
 
 	@Autowired
 	PaxViewService passengerService;
@@ -187,10 +199,12 @@ public class PassengerController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			currentPage = PAGE_PASSENGER_INFO;
 			return "gotoPassengerInfo";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -207,10 +221,12 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			currentPage = PAGE_LIABILITY;
 			return "gotoLiability";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -227,10 +243,12 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			currentPage = PAGE_INSTRUCTION;
 			return "gotoPPFInstruction";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -247,10 +265,12 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			currentPage = PAGE_LIABILITY;
 			return "gotoLiability";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -267,10 +287,12 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			currentPage = PAGE_INSTRUCTION;
 			return "gotoPPFInstruction";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -323,6 +345,7 @@ public class PassengerController {
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -394,6 +417,7 @@ public class PassengerController {
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -439,6 +463,7 @@ public class PassengerController {
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -478,6 +503,7 @@ public class PassengerController {
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -518,6 +544,7 @@ public class PassengerController {
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -572,6 +599,7 @@ public class PassengerController {
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -595,10 +623,12 @@ public class PassengerController {
 			 * context.setViewRoot(viewRoot); context.renderResponse(); //
 			 * Optional
 			 */
+			currentPage = PAGE_DIRECTION;
 			return "gotoDirectionPage";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 
@@ -670,10 +700,12 @@ public class PassengerController {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				currentPage = PAGE_FLIGHT_INFO;
 				return "gotoFlightDetails";
 			} else {
 				FacesUtil
 						.addError("Your session has been expired. Please login again");
+				currentPage = PAGE_DIRECTION;
 				return "passengerLogout";
 			}
 		}
@@ -1096,18 +1128,15 @@ public class PassengerController {
 						} else {
 							List<Bag> oldBagList = passengerBean.getBagList();
 							for (Bag l : lostBagList) {
-								boolean notAdded = true;
-								for (int i = 0; i < oldBagList.size(); i++) {
-									Bag b = oldBagList.get(i);
-									if (b != null && b.getBagTagNumber().equals(
-											l.getBagTagNumber())) {
-										notAdded = false;
+								if (oldBagList.size() > 0) {
+									Bag b = oldBagList.get(0);
+									if (b != null) {
+										b.setBagTagNumber(l.getBagTagNumber());
+										b.setBagArrivalStatus(l.getBagArrivalStatus());
 										compiledList.add(b);
-										oldBagList.remove(i);
-										break;
 									}
-								}
-								if (notAdded) {
+									oldBagList.remove(0);
+								} else {
 									compiledList.add(l);
 								}
 							}
@@ -1135,10 +1164,12 @@ public class PassengerController {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				currentPage = PAGE_BAG_INFO;
 				return "gotoBagDetails";
 			} else {
 				FacesUtil
 						.addError("Your session has been expired. Please log in again");
+				currentPage = PAGE_DIRECTION;
 				return "passengerLogout";
 			}
 		}
@@ -1213,10 +1244,12 @@ public class PassengerController {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+				currentPage = PAGE_FILE_UPLOAD;
 				return "gotoFileUpload";
 			} else {
 				FacesUtil
 						.addError("Your session has been expired. Please log in again");
+				currentPage = PAGE_DIRECTION;
 				return "passengerLogout";
 			}
 		}
@@ -1350,7 +1383,7 @@ public class PassengerController {
 				.getExternalContext().getSession(false);
 		baggageState = (Long) session.getAttribute("baggageState");
 		try {
-			FileHelper.deleteImage(baggageState.intValue(), file.getName());
+			FileHelper.deleteImage(baggageState.intValue(), file.getName(), file.getPath());
 			for (int i = fileSize - 1; i >= 0; i--) {
 				File f = files.get(i);
 				if (f.getName().equals(file.getName())) {
@@ -1400,11 +1433,13 @@ public class PassengerController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			currentPage = PAGE_ADDITIONAL_INFO;
 			return "gotoFraudQuestion";
 		} else {
 
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -1446,10 +1481,12 @@ public class PassengerController {
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			//populateClaimTotal(); //REMOVED PER MEAGAN 7-28-11
+			currentPage = PAGE_SUBMIT;
 			return "gotoSubmitClaim";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -1497,11 +1534,13 @@ public class PassengerController {
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			setReadOnlyOnSubmitted(true);
 			passengerBean.setStatus("SUBMITTED");
+			currentPage = PAGE_SUCCESS;
 			return "gotoSavedScreen";
 		} else {
 
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -1577,10 +1616,12 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			currentPage = PAGE_PASSENGER_INFO;
 			return "gotoPassengerInfo";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -1596,10 +1637,12 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			currentPage = PAGE_FLIGHT_INFO;
 			return "gotoFlightDetails";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -1615,10 +1658,12 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			currentPage = PAGE_BAG_INFO;
 			return "gotoBagDetails";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -1634,10 +1679,12 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			currentPage = PAGE_FILE_UPLOAD;
 			return "gotoFileUpload";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -1653,10 +1700,12 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			currentPage = PAGE_ADDITIONAL_INFO;
 			return "gotoFraudQuestion";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -1672,10 +1721,12 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			currentPage = PAGE_SUBMIT;
 			return "gotoSubmitClaim";
 		} else {
 			FacesUtil
 					.addError("Your session has been expired. Please log in again");
+			currentPage = PAGE_DIRECTION;
 			return "passengerLogout";
 		}
 	}
@@ -1709,7 +1760,31 @@ public class PassengerController {
 	}
 
 	public String passengerLogout() {
-		return FacesUtil.passengerLogout();
+		switch (currentPage) {
+			case PAGE_PASSENGER_INFO:
+				savePassengerInfo();
+				break;
+			case PAGE_FLIGHT_INFO:
+				saveFlightInfo();
+				break;
+			case PAGE_BAG_INFO:
+				saveBagInfo();
+				break;
+			case PAGE_FILE_UPLOAD:
+				saveFileInfo();
+				break;
+			case PAGE_ADDITIONAL_INFO:
+				saveFraudQuestion();
+				break;
+			case PAGE_SUBMIT:
+				submitPassengerInfo();
+				break;
+		}
+		if (FacesUtil.isError()) {
+			currentPage = PAGE_DIRECTION;
+			return FacesUtil.passengerLogout();
+		}
+		return null;
 	}
 
 	public CaptchaBean getCaptchaBean() {

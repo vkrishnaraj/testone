@@ -3,6 +3,8 @@
  */
 package com.nettracer.claims.faces.util;
 
+import java.util.Iterator;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -31,6 +33,17 @@ public class FacesUtil {
 
 	public static void addError(String message){
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, ""));
+	}
+	
+	public static boolean isError() {
+		Iterator<FacesMessage> iter = FacesContext.getCurrentInstance().getMessages();
+		while (iter.hasNext()) {
+			FacesMessage current = iter.next();
+			if (current.getSeverity().equals(FacesMessage.SEVERITY_ERROR)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public static void addInfo(String componentId,String message){
