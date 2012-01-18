@@ -202,6 +202,11 @@
    		<td id="middlecolumn">        
      		<div id="maincontent">
      			<div id="itementryleft">
+     				<center>
+	     				<font color=red>
+		                  <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/><br/></html:messages></logic:messagesPresent>
+		                </font>
+	                </center>
      				<h1 class="green">
 			        	<bean:message key="header.item.information" />
 			        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>

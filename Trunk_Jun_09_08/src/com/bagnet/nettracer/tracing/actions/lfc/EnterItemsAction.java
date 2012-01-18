@@ -8,9 +8,12 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.lf.services.LFServiceWrapper;
 import aero.nettracer.lf.services.LFUtils;
+import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -30,6 +33,7 @@ public class EnterItemsAction extends CheckedAction {
 		HttpSession session = request.getSession();
 
 		TracerUtils.checkSession(session);
+		ActionMessages errors = new ActionMessages();
 
 		Agent user = (Agent) session.getAttribute("user");
 		if (user == null || form == null) {
@@ -63,24 +67,31 @@ public class EnterItemsAction extends CheckedAction {
 			eiForm.setFound(LFUtils.createLFFound(user));
 			eiForm.getFound().setCompanyId(TracingConstants.LF_SWA_COMPANY_ID);
 		} else if (request.getParameter("save") != null) {
-			if (found.hasContactInfo()) {
-				found.setEntryStatus(TracingConstants.LF_STATUS_VERIFICATION_NEEDED);
+			try {
+				if (found.hasContactInfo()) {
+					found.setEntryStatus(TracingConstants.LF_STATUS_VERIFICATION_NEEDED);
+				}
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+				
+				// 1. create the history object
+				FoundHistoryObject fho = new FoundHistoryObject();
+				fho.setFound(found);
+				
+				// 2. add the history object to the history container
+				HistoryContainer history = (HistoryContainer) session.getAttribute("historyContainer");
+				history.put(fho.getUniqueId(), fho);
+				
+				// 3. submit the history object to the trace handler
+				TraceHandler.trace(fho);
+				
+				// 4. clone the found and set it on the form
+				eiForm.setFound(duplicateFound(found, user));
+			} catch (NonUniqueBarcodeException nube) {
+				logger.error(nube, nube);
+				ActionMessage error = new ActionMessage("error.non.unique.barcode");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
 			}
-			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
-			
-			// 1. create the history object
-			FoundHistoryObject fho = new FoundHistoryObject();
-			fho.setFound(found);
-			
-			// 2. add the history object to the history container
-			HistoryContainer history = (HistoryContainer) session.getAttribute("historyContainer");
-			history.put(fho.getUniqueId(), fho);
-			
-			// 3. submit the history object to the trace handler
-			TraceHandler.trace(fho);
-			
-			// 4. clone the found and set it on the form
-			eiForm.setFound(duplicateFound(found, user));
 		}
 
 		return mapping.findForward(TracingConstants.LFC_ENTER_ITEMS);
