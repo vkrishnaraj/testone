@@ -27,6 +27,7 @@ import org.hibernate.criterion.Restrictions;
 
 import aero.nettracer.general.services.GeneralServiceBean;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
+import aero.nettracer.lf.services.exception.UpdateException;
 import aero.nettracer.security.AES;
 
 import com.bagnet.nettracer.email.HtmlEmail;
@@ -379,7 +380,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	@Override
-	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent) {
+	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent) throws UpdateException {
 		Session sess = null;
 		Transaction t = null;
 		long reportId = -1;
@@ -436,7 +437,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 			return reportId;
 		} else {
-			return -1;
+			throw new UpdateException();
 		}
 	}
 	
@@ -624,7 +625,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent) throws NonUniqueBarcodeException {
+	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent) throws UpdateException {
 		Session sess = null;
 		Transaction t = null;
 		long reportId = -1;
@@ -674,7 +675,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					throw new NonUniqueBarcodeException(foundItem.getBarcode());
 				}
 			}
-			return -1;
+			throw new UpdateException();
 		}
 	}
 
@@ -728,8 +729,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			Status status = new Status();
 			status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
 			lost.setStatus(status);
-			if(saveOrUpdateLostReport(lost, agent) > -1){
-				return true;
+			try {
+				if(saveOrUpdateLostReport(lost, agent) > -1){
+					return true;
+				}
+			} catch (UpdateException e) {
+				e.printStackTrace();
 			}
 		}
 		return false;
@@ -1767,7 +1772,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		HashMap<String,String> h = getEmailParams(lost);
 		if(sendEmail(lost, h, "create_report_email.html", h.get("SUBJECTLINE"))){
 			lost.setEmailSentDate(new Date());
-			saveOrUpdateLostReport(lost,getAutoAgent());
+			try {
+				saveOrUpdateLostReport(lost,getAutoAgent());
+			} catch (UpdateException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -1776,7 +1785,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		HashMap<String,String> h = getEmailParams(lost);
 		if(sendEmail(lost, h, "update_report_email.html",  h.get("SUBJECTLINE"))){
 			lost.setEmailSentDate(new Date());
-			saveOrUpdateLostReport(lost,getAutoAgent());
+			try {
+				saveOrUpdateLostReport(lost,getAutoAgent());
+			} catch (UpdateException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	public void send1stNotice(long id){
@@ -1785,7 +1798,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(!lost.isEmail1() && sendEmail(lost, h, "update_1_report_email.html", h.get("SUBJECTLINE"))){
 			lost.setEmailSentDate(new Date());
 			lost.setEmail1(true);
-			saveOrUpdateLostReport(lost,getAutoAgent());
+			try {
+				saveOrUpdateLostReport(lost,getAutoAgent());
+			} catch (UpdateException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -1799,7 +1816,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(!lost.isEmail2() && sendEmail(lost, h, email, h.get("SUBJECTLINE"))){
 			lost.setEmailSentDate(new Date());
 			lost.setEmail2(true);
-			saveOrUpdateLostReport(lost,getAutoAgent());
+			try {
+				saveOrUpdateLostReport(lost,getAutoAgent());
+			} catch (UpdateException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -1808,7 +1829,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		HashMap<String,String> h = getEmailParams(lost);
 		if(sendEmail(lost, h, "found_report_email.html", h.get("SUBJECTLINE"))){
 			lost.setEmailSentDate(new Date());
-			saveOrUpdateLostReport(lost,getAutoAgent());
+			try {
+				saveOrUpdateLostReport(lost,getAutoAgent());
+			} catch (UpdateException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -1828,7 +1853,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_STATUS_CLOSED);
 		lost.setStatus(status);
-		saveOrUpdateLostReport(lost, agent);
+		try {
+			saveOrUpdateLostReport(lost, agent);
+		} catch (UpdateException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private boolean dataplan(LFLost lost){

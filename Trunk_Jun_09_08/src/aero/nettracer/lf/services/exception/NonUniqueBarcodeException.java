@@ -1,6 +1,6 @@
 package aero.nettracer.lf.services.exception;
 
-public class NonUniqueBarcodeException extends Exception{
+public class NonUniqueBarcodeException extends UpdateException{
 	/**
 	 * 
 	 */

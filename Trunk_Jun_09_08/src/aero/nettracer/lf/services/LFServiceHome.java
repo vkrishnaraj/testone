@@ -8,6 +8,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.hibernate.NonUniqueResultException;
 
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
+import aero.nettracer.lf.services.exception.UpdateException;
 
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -28,12 +29,12 @@ public interface LFServiceHome {
 	public LFLost getLostReport(long id, String lastname);
 	public int searchLostCount(LFSearchDTO dto);
 	public List<LFLost> searchLost(LFSearchDTO dto, int start, int offset);
-	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent);
+	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent) throws UpdateException;
 	
 	public LFFound getFoundItem(long id);
 	public int searchFoundCount(LFSearchDTO dto);
 	public List<LFFound> searchFound(LFSearchDTO dto, int start, int offset);
-	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent) throws NonUniqueBarcodeException;
+	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent) throws NonUniqueBarcodeException, UpdateException;
 	
 	public
 	ArrayList<LabelValueBean> getColors();

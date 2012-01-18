@@ -18,6 +18,7 @@ import org.junit.Test;
 
 import aero.nettracer.general.services.GeneralServiceBean;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
+import aero.nettracer.lf.services.exception.UpdateException;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
@@ -124,6 +125,9 @@ public class LFServiceBeanTest {
 		} catch (NonUniqueBarcodeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail(ue.getMessage());
 		}
 		assertTrue(id > 0);
 		LFFound found2 = createFoundTestCase();
@@ -133,6 +137,8 @@ public class LFServiceBeanTest {
 			long id2 = bean.saveOrUpdateFoundItem(found2, agent);
 		} catch (NonUniqueBarcodeException e) {
 			caughtConstraint = true;
+		} catch (UpdateException e) {
+			e.printStackTrace();
 		}
 		assertTrue(caughtConstraint);
 	}
@@ -202,14 +208,16 @@ public class LFServiceBeanTest {
 	public void foundSaveLoadTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFFound found = createFoundTestCase();
-		long foundId;
+		long foundId = 0;
 		try {
 			foundId = bean.saveOrUpdateFoundItem(found, null);
 		} catch (NonUniqueBarcodeException e) {
 			foundId = -1;
 			e.printStackTrace();
+		} catch (UpdateException ue){
+			fail();
 		}
-		assertTrue(foundId != -1);
+		assertTrue(foundId > 0);
 		
 		LFFound loaded = bean.getFoundItem(foundId);
 		assertTrue(loaded != null && loaded.getId() == foundId);
@@ -227,6 +235,9 @@ public class LFServiceBeanTest {
 			id = bean.saveOrUpdateFoundItem(found, agent);
 		} catch (NonUniqueBarcodeException e1) {
 			e1.printStackTrace();
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
 		}
 		assertTrue(id > 0);
 		
@@ -274,8 +285,14 @@ public class LFServiceBeanTest {
 	public void autoCloseTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFLost lost = createLostTestCase();
-		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
-		assertTrue(lostId != -1);
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
 		bean.closeLostAndEmail(lostId, bean.getAutoAgent());
 		LFLost loaded = bean.getLostReport(lostId);
 		assertTrue(loaded != null && loaded.getId() == lostId);
@@ -286,8 +303,14 @@ public class LFServiceBeanTest {
 	public void closeLostReportTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFLost lost = createLostTestCase();
-		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
-		assertTrue(lostId != -1);
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
 		
 		assertTrue(bean.closeLostReport(lostId, bean.getAutoAgent()));
 		LFLost load = bean.getLostReport(lostId);
@@ -298,7 +321,12 @@ public class LFServiceBeanTest {
 		
 		long closedate = load.getCloseDate().getTime();
 		
-		assertTrue(bean.saveOrUpdateLostReport(load, agent) > -1);
+		try {
+			assertTrue(bean.saveOrUpdateLostReport(load, agent) > 0);
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
 		LFLost load2 = bean.getLostReport(lostId);
 		assertTrue(closedate == load2.getCloseDate().getTime());
 		
@@ -306,7 +334,12 @@ public class LFServiceBeanTest {
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
 		load2.setStatus(status);
-		assertTrue(bean.saveOrUpdateLostReport(load2, agent) > -1);
+		try {
+			assertTrue(bean.saveOrUpdateLostReport(load2, agent) > 0);
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
 		LFLost load3 = bean.getLostReport(lostId);
 		assertTrue(load3.getCloseAgent() == null);
 		assertTrue(load3.getCloseDate() == null);
@@ -323,10 +356,20 @@ public class LFServiceBeanTest {
 		
 		LFLost lost1 = createLostTestCase();
 		lost1.setOpenDate(gc.getTime());
-		assertTrue(bean.saveOrUpdateLostReport(lost1, bean.getAutoAgent()) != -1);
+		try {
+			assertTrue(bean.saveOrUpdateLostReport(lost1, bean.getAutoAgent()) > 0);
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
 		LFLost lost2 = createLostTestCase();
 		lost2.setOpenDate(gc.getTime());
-		assertTrue(bean.saveOrUpdateLostReport(lost2, bean.getAutoAgent()) != -1);
+		try {
+			assertTrue(bean.saveOrUpdateLostReport(lost2, bean.getAutoAgent()) > 0);
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
 //		assertTrue(bean.searchLostCount(dto) == 2);
 	}
 	
@@ -383,12 +426,22 @@ public class LFServiceBeanTest {
 		lost1.setOpenDate(gc.getTime());
 		lost1.setLocation(location);
 		lost1.getLossInfo().setDestination(location);
-		assertTrue(bean.saveOrUpdateLostReport(lost1, bean.getAutoAgent()) != -1);
+		try {
+			assertTrue(bean.saveOrUpdateLostReport(lost1, bean.getAutoAgent()) > 0);
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
 		LFLost lost2 = createLostTestCase();
 		lost2.setOpenDate(gc.getTime());
 		lost2.setLocation(location);
 		lost2.getLossInfo().setDestination(location);
-		assertTrue(bean.saveOrUpdateLostReport(lost2, bean.getAutoAgent()) != -1);
+		try {
+			assertTrue(bean.saveOrUpdateLostReport(lost2, bean.getAutoAgent()) > 0);
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
 		
 		assertTrue(bean.getLostCount(location) > 1);
 		
@@ -424,6 +477,9 @@ public class LFServiceBeanTest {
 		} catch (NonUniqueBarcodeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
 		}
 		LFFound found2 = createFoundTestCase();
 		found2.setFoundDate(gc.getTime());
@@ -433,6 +489,9 @@ public class LFServiceBeanTest {
 		} catch (NonUniqueBarcodeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
 		}
 		
 		assertTrue(bean.getFoundCount(location) > 1);
@@ -470,6 +529,9 @@ public class LFServiceBeanTest {
 		} catch (NonUniqueBarcodeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
 		}
 		LFFound found2 = createFoundTestCase();
 		found2.setFoundDate(gc.getTime());
@@ -479,6 +541,9 @@ public class LFServiceBeanTest {
 		} catch (NonUniqueBarcodeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
 		}
 		
 		assertTrue(bean.getItemsToSalvageCount(location) > 1);
@@ -518,6 +583,9 @@ public class LFServiceBeanTest {
 		} catch (NonUniqueBarcodeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
 		}
 		found2.getItem().setDisposition(status);
 		try {
@@ -525,6 +593,9 @@ public class LFServiceBeanTest {
 		} catch (NonUniqueBarcodeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
 		}
 		
 		LFSearchDTO dto = new LFSearchDTO();
@@ -744,6 +815,9 @@ public class LFServiceBeanTest {
 		} catch (NonUniqueBarcodeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
 		}
 		assertTrue(id > -1);
 		
@@ -782,8 +856,14 @@ public class LFServiceBeanTest {
 		assertTrue(loaded != null && loaded.getId() == id);
 		
 		LFLost lost = createLostTestCase();
-		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
-		assertTrue(lostId != -1);
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
 		
 		LFDelivery delivery = new LFDelivery();
 		delivery.setLost(lost);
@@ -800,8 +880,14 @@ public class LFServiceBeanTest {
 	public void traceLostTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFLost lost = createLostTestCase();
-		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
-		assertTrue(lostId != -1);
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e1) {
+			e1.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
 		
 		LFLost loaded = bean.getLostReport(lostId);
 		assertTrue(loaded != null && loaded.getId() == lostId);
@@ -813,6 +899,9 @@ public class LFServiceBeanTest {
 		} catch (NonUniqueBarcodeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
 		}
 		assertTrue(foundId != -1);
 		
@@ -871,8 +960,14 @@ public class LFServiceBeanTest {
 	public void testEmail(){
 		LFServiceBean bean = new LFServiceBean();
 		LFLost lost = createLostTestCase();
-		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
-		assertTrue(lostId != -1);
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
 	}
 	
 	@Test
@@ -885,6 +980,9 @@ public class LFServiceBeanTest {
 		} catch (NonUniqueBarcodeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
 		}
 		assertTrue(foundId != -1);
 		
@@ -892,8 +990,14 @@ public class LFServiceBeanTest {
 		assertTrue(loaded != null && loaded.getId() == foundId);
 	
 		LFLost lost = createLostTestCase();
-		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
-		assertTrue(lostId != -1);
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
 		
 		List<LFMatchHistory> results = bean.traceFoundItem(foundId);
 		System.out.println("trace lost results: " + (results!=null?results.size():"null"));

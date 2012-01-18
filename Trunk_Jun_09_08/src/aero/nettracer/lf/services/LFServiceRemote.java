@@ -8,6 +8,7 @@ import javax.ejb.Remote;
 import org.apache.struts.util.LabelValueBean;
 
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
+import aero.nettracer.lf.services.exception.UpdateException;
 
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
@@ -20,7 +21,7 @@ public interface LFServiceRemote {
 	public String echo(String s);
 
 	public LFLost getLostReport(long id, String lastname);
-	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent);
+	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent) throws NonUniqueBarcodeException, UpdateException;
 	
 	public ArrayList<LabelValueBean> getColors();
 	public List<LFCategory> getCategories(String companycode);

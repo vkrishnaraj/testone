@@ -34,6 +34,7 @@ import aero.nettracer.avis.model.KeyValueBean;
 import aero.nettracer.avis.model.LostReportBean;
 import aero.nettracer.avis.model.PhoneBean;
 import aero.nettracer.general.services.GeneralServiceBean;
+import aero.nettracer.lf.services.exception.UpdateException;
 
 @Stateless
 public class AvisClientServiceBean implements AvisClientServiceRemote{
@@ -229,7 +230,12 @@ public class AvisClientServiceBean implements AvisClientServiceRemote{
 		host.setStatus(status);
 		
 		LFServiceBean bean = new LFServiceBean();
-		return bean.saveOrUpdateLostReport(host, getWebAgent());
+		try {
+			return bean.saveOrUpdateLostReport(host, getWebAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			return -1;
+		}
 	}
 
 	@Override

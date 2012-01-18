@@ -14,12 +14,12 @@ import org.apache.struts.action.ActionMapping;
 
 import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
+import aero.nettracer.lf.services.exception.UpdateException;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
-import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.forms.lf.HandleItemsForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -106,8 +106,9 @@ public class SalvageItemsAction extends CheckedAction {
 					try {
 						serviceBean.saveOrUpdateFoundItem(item.getFound(), agent);
 					} catch (NonUniqueBarcodeException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
+					} catch (UpdateException ue){
+						ue.printStackTrace();
 					}
 				}
 			}
