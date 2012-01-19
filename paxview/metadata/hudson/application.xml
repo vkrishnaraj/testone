@@ -34,5 +34,12 @@
          <context-root>azul-paxview</context-root>
      </web>
   </module>
+    
+   <module>
+     <web>
+         <web-uri>webjet-pv-hudson.war</web-uri>
+         <context-root>webjet-paxview</context-root>
+     </web>
+  </module>
   
 </application> 

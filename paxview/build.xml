@@ -175,6 +175,34 @@
 		</antcall> 	
 	</target>
 	
+	<target name="build-webjet-training">
+		<property name="company.name" value="webjet" />
+		<property name="environment.name" value="training" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-webjet-prod">
+		<property name="company.name" value="webjet" />
+		<property name="environment.name" value="prod" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-webjet-test">
+		<property name="company.name" value="webjet" />
+		<property name="environment.name" value="test" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+
+	<target name="build-webjet-hudson">
+		<property name="company.name" value="webjet" />
+		<property name="environment.name" value="hudson" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
 	<target name="build-spirit-training">
 		<property name="company.name" value="spirit" />
 		<property name="environment.name" value="qa" />
@@ -208,6 +236,7 @@
 		<antcall target="build-jetblue-qa" /> 
 		<antcall target="build-spirit-test" /> 
 		<antcall target="build-westjet-test" /> 
+		<antcall target="build-webjet-test" /> 
 	</target>
 
 	<target name="build-hudson">
@@ -215,6 +244,7 @@
 		<antcall target="build-jetblue-hudson" /> 
 		<antcall target="build-spirit-hudson" /> 
 		<antcall target="build-westjet-hudson" /> 
+		<antcall target="build-webjet-hudson" /> 	
 	</target>
 	
 	<target name="build-train">
@@ -222,6 +252,7 @@
 		<antcall target="build-jetblue-training" /> 
 		<antcall target="build-spirit-training" /> 
 		<antcall target="build-westjet-qa" /> 
+		<antcall target="build-webjet-training" /> 	
 	</target>
 	
 	<target name="build-prod">
@@ -229,6 +260,7 @@
 		<antcall target="build-jetblue-prod" /> 
 		<antcall target="build-spirit-prod" /> 
 		<antcall target="build-westjet-prod" /> 
+		<antcall target="build-webjet-prod" /> 	
 	</target>
 	
 	<target name="build-ear-test">
