@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.lf.services.LFServiceWrapper;
 import aero.nettracer.lf.services.LFUtils;
+import aero.nettracer.lf.services.exception.UpdateException;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -46,6 +47,7 @@ public class LostReportAction extends CheckedAction {
 		HttpSession session = request.getSession();
 
 		TracerUtils.checkSession(session);
+		ActionMessages errors = new ActionMessages();
 
 		Agent user = (Agent) session.getAttribute("user");
 		if (user == null || form == null) {
@@ -95,12 +97,22 @@ public class LostReportAction extends CheckedAction {
 		}
 		
 		if (request.getParameter("save") != null) {
-			LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport, user);
-			if (lostReport.getItem().getFound() != null) {
-				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(lostReport.getItem().getFound(), user);
-			}
-			if(lostReport.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
-				LFServiceWrapper.getInstance().traceLostItem(lostReport.getId());
+			try {
+				LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport, user);
+				if (lostReport.getItem().getFound() != null) {
+					LFServiceWrapper.getInstance().saveOrUpdateFoundItem(lostReport.getItem().getFound(), user);
+				}
+				if(lostReport.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
+					LFServiceWrapper.getInstance().traceLostItem(lostReport.getId());
+				}
+				ActionMessage error = new ActionMessage("message.lost.save.success");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			} catch (UpdateException ue) {
+				logger.error(ue, ue);
+				ActionMessage error = new ActionMessage("error.failed.to.save");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
 			}
 		} else if (request.getParameter("undo") != null) {
 			long itemId = Long.valueOf((String) request.getParameter("itemId"));
@@ -150,7 +162,6 @@ public class LostReportAction extends CheckedAction {
 						found = LFServiceWrapper.getInstance().getFoundItemByBarcode(id + "");
 					}
 					if (found == null) {
-						ActionMessages errors = new ActionMessages();
 						ActionMessage error = new ActionMessage("error.invalid.found.id");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);

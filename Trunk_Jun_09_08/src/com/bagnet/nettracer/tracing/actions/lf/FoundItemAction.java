@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMessages;
 import aero.nettracer.lf.services.LFServiceWrapper;
 import aero.nettracer.lf.services.LFUtils;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
+import aero.nettracer.lf.services.exception.UpdateException;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -85,7 +86,10 @@ public class FoundItemAction extends CheckedAction {
 		} else if (request.getParameter("foundId") != null) {
 			long id = Long.parseLong(request.getParameter("foundId"));
 			found = LFServiceWrapper.getInstance().getFoundItem(id);
-		} else {
+		} else if (request.getParameter("barcode") != null) {
+			String barcode = (String) request.getParameter("barcode");
+			found = LFServiceWrapper.getInstance().getFoundItemByBarcode(barcode);
+		}else {
 			fiForm.populateRemarks();
 			found = fiForm.getFound();
 		}
@@ -112,12 +116,20 @@ public class FoundItemAction extends CheckedAction {
 				if (found.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
 					LFServiceWrapper.getInstance().traceFoundItem(found.getId());
 				}
+				ActionMessage error = new ActionMessage("message.found.save.success");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
 			} catch (NonUniqueBarcodeException nube) {
 				logger.error(nube, nube);
 				ActionMessage error = new ActionMessage("error.non.unique.barcode");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				request.setAttribute("enableIdField", "true");
+			} catch (UpdateException ue) {
+				logger.error(ue, ue);
+				ActionMessage error = new ActionMessage("error.failed.to.save");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
 			}
 		} else if (request.getParameter("addremark") != null) {
 			//set new remark with current time

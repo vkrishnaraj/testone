@@ -115,6 +115,38 @@
 		</h2>
 		</center>
 		
+		<% if (UserPermissions.hasPermission("Load Found from Task Manager", a)) { %>
+			<script>
+			
+				function loadFoundItemPage() {
+					var barcode = document.getElementById("barcode");
+					if (!barcode || barcode.value.length == 0 
+								 || isNaN(barcode.value) 
+								 || barcode.value.indexOf('-') != -1 
+								 || barcode.value.indexOf('.') != -1) {
+						alert('<%=bundle.getString("barcode.required") %>');
+					} else {
+						document.location.href="create_found_item.do?barcode=" + barcode.value;
+					}
+				}
+			
+			</script>
+			<table class="form2" cellspacing="0" cellpadding="0" >
+				<tr>
+					<td class="header" >
+						<b><bean:message key="load.found.item" /></b>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<center>
+							<input type="text" id="barcode" class="textfield" />&nbsp;&nbsp;
+							<input id="button" type="button" value='<bean:message key="button.load" />' onClick="return loadFoundItemPage();" >
+						</center>
+					</td>
+				</tr>
+			</table>
+		<% } %>
 		
         <table class="form2" cellspacing="0" cellpadding="0">
           <logic:present name="activityList" scope="session">
