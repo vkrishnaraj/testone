@@ -24,7 +24,7 @@ public class LF_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Load Found Item"));
 		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[2]/td/center/input[2]");
 		assertEquals("Please enter a valid barcode", selenium.getAlert());
-		selenium.type("//div[@id='maincontent']/form/table/tbody/tr[2]/td/center/input", "1234");
+		selenium.type("//div[@id='maincontent']/form/table/tbody/tr[2]/td/center/input", Settings.FOUND_ID_LF);
 		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[2]/td/center/input[2]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
