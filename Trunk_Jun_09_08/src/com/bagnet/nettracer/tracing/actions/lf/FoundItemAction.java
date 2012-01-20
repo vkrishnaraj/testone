@@ -89,6 +89,9 @@ public class FoundItemAction extends CheckedAction {
 		} else if (request.getParameter("barcode") != null) {
 			String barcode = (String) request.getParameter("barcode");
 			found = LFServiceWrapper.getInstance().getFoundItemByBarcode(barcode);
+			if (found == null) {
+				found = LFUtils.createLFFound(user);
+			}
 		}else {
 			fiForm.populateRemarks();
 			found = fiForm.getFound();
