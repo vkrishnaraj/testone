@@ -431,14 +431,14 @@ public class ReservationIntegrationImpl extends
 						// claimcheck
 						if (bag.getBagTag() != null && bag.getBagTag().length() > 0) {
 							Incident_Claimcheck ic = form.getClaimcheck(bagIndex);
-							ic.setClaimchecknum(bag.getBagTag());
+							ic.setClaimchecknum(bag.getBagTag().substring(0, Math.min(bag.getBagTag().length(), 13)));
 						}
 	
 						// bag info
 						Item theitem = form.getItem(bagIndex, itemtype);
 						if (itemtype != TracingConstants.LOST_DELAY
 								&& bag.getBagTag() != null && bag.getBagTag().length() > 0) {
-							theitem.setClaimchecknum(bag.getBagTag());
+							theitem.setClaimchecknum(bag.getBagTag().substring(0, Math.min(bag.getBagTag().length(), 13)));
 						}
 						theitem.set_DATEFORMAT(user.getDateformat().getFormat());
 						theitem.setCurrency_ID(user.getDefaultcurrency());
