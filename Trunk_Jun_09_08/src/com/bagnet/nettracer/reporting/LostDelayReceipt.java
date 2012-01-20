@@ -116,6 +116,8 @@ public class LostDelayReceipt {
 
 		parameters.put("createdate", theform.getDispcreatetime());
 		parameters.put("pass_name", (pa.getLastname() != null ? (pa.getLastname() + ", ") : "") + (pa.getFirstname() != null ? pa.getFirstname() : ""));
+		parameters.put("pass_lastname", (pa.getLastname() != null ? pa.getLastname() : ""));
+		parameters.put("pass_firstname", (pa.getFirstname() != null ? pa.getFirstname() : ""));
 		parameters.put("file_reference", theform.getIncident_ID());
 
 		String phno = pa.getAddress(0).getHomephone();
@@ -129,6 +131,9 @@ public class LostDelayReceipt {
 		parameters.put("city_st_zip", (pa.getAddress(0).getCity() != null ? (pa.getAddress(0).getCity() + ", ") : "")
 				+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : (pa.getAddress(0).getProvince() != null ? (pa.getAddress(0).getProvince() + " ") : ""))
 				+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
+		parameters.put("city", (pa.getAddress(0).getCity() != null ? pa.getAddress(0).getCity() : ""));
+		parameters.put("state", (pa.getAddress(0).getState_ID() != null ? pa.getAddress(0).getState_ID() : (pa.getAddress(0).getProvince() != null ? pa.getAddress(0).getProvince() : "")));
+		parameters.put("zip", (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
 		
 		if (pa.getAddress(0).isPermanent()) {
 			parameters.put("valid_until", "Permanent");

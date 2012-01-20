@@ -2157,14 +2157,13 @@
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
-		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/LostDelayReceipt.jrxml" /> -->
-		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/DamageReceipt.jrxml" /> -->
-		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/MissingReceipt.jrxml" /> -->
+		<copy todir="${basedir}/web/reports" file="companies/webjet/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/webjet/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/webjet/DamageReceipt.jrxml" />
 
 		<antcall target="jasper_compile" />
 
 		<copy todir="${basedir}/src" file="companies/webjet/custom_ui.properties" />
-		<!-- <copy todir="${basedir}/src" file="companies/delta-fs/report_email.html" /> -->
 
 		<!-- Hibernate main dependent on environment -->
 
