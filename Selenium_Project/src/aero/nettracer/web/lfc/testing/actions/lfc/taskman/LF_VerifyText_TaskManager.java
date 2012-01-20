@@ -28,7 +28,7 @@ public class LF_VerifyText_TaskManager extends LoginUtil {
 		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[2]/td/center/input[2]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			verifyEquals("1234", selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input"));
+			verifyEquals(Settings.FOUND_ID_LF, selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input"));
 		} else {
 			return;
 		}
