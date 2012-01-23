@@ -11,15 +11,21 @@ public class LF_VerifyText_TaskManager extends LoginUtil {
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 		
-//		verifyTrue(selenium.isTextPresent("Claim Tasks")); //SECTION HEADER
-//		verifyTrue(selenium.isTextPresent("Pending Fraud Check Requests"));
+		verifyTrue(selenium.isTextPresent("Load Found Item")); //SECTION HEADER
+		
+		verifyTrue(selenium.isTextPresent("Lost and Found Tasks")); //SECTION HEADER
+		verifyTrue(selenium.isTextPresent("Trace Results"));
+		verifyTrue(selenium.isTextPresent("Open Lost Reports"));
+		verifyTrue(selenium.isTextPresent("Open Found Items"));
+		verifyTrue(selenium.isTextPresent("Items to Salvage"));
+		verifyTrue(selenium.isTextPresent("Items to Deliver"));
 		
 		checkCopyrightAndQuestionMarks();
 	}
 
 	@Test
 	public void testFoundItemField() throws Exception {
-		Settings.FOUND_ID_LF = "1326484684085";
+//		Settings.FOUND_ID_LF = "1326484684085";
 		checkCopyrightAndQuestionMarks();
 		verifyTrue(selenium.isTextPresent("Load Found Item"));
 		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[2]/td/center/input[2]");
