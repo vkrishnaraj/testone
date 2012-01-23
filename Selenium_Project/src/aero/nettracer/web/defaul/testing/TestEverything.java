@@ -55,6 +55,7 @@ import aero.nettracer.web.lfc.testing.actions.lfc.core.LF_Login;
 import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_CloseFound;
 import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_CreateFound_Detailed;
 import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_CreateFound_VerifyRequiredFields;
+import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_FoundReportSummary;
 import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_SearchFound;
 import aero.nettracer.web.lfc.testing.actions.lfc.itementry.LF_ItemEntry;
 import aero.nettracer.web.lfc.testing.actions.lfc.lost.LF_CloseLost;
@@ -140,7 +141,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 	LF_Login.class, LF_CreateLost_VerifyRequiredFields.class, LF_CreateFound_VerifyRequiredFields.class,
 	LF_SearchLost.class, LF_SearchFound.class, LF_ManualMatch_FoundToLost.class,
 	LF_CloseFound.class, LF_SearchLost.class, LF_CloseLost.class,
-	LF_CreateLost_Detailed.class, LF_CreateFound_Detailed.class, LF_VerifyText_TaskManager.class,
+	LF_CreateLost_Detailed.class, LF_CreateFound_Detailed.class, LF_VerifyText_TaskManager.class, LF_FoundReportSummary.class,
 	LF_ConfirmMatch.class, LF_CreateDelivery.class, LF_ItemEntry.class
 	})
 public class TestEverything { 

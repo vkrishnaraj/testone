@@ -1,3 +1,4 @@
+<%@page import="com.bagnet.nettracer.tracing.forms.lf.FoundItemForm"%>
 <%@ page language="java" %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
@@ -169,7 +170,27 @@
 		document.getElementById('itemId').value = itemId;
 	}
 	
-	
+    function show(name,link1,link2) {
+  	  jQuery(name).show();
+  	  toggleLinks(link1,link2);
+  	  document.getElementById(name).value = "true";
+    }
+    
+    function hide(name,link1,link2) {
+  	  jQuery(name).hide();
+  	  toggleLinks(link1,link2);
+  	  document.getElementById(name).value = "false";
+    }
+    
+    function toggleLinks(link1,link2) {
+	  	  if (jQuery(link1).is(':visible')) {
+	  		  jQuery(link1).hide();
+	  		  jQuery(link2).show();
+	  	  } else {
+	  		  jQuery(link1).show();
+	  		  jQuery(link2).hide();
+	  	  }
+	  }
 	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
@@ -215,6 +236,135 @@
    						</logic:messagesPresent>
          			</font>
        			</center>
+       			<logic:equal name="foundItemForm" property="displaySummary" value="true">
+					<h1 class="green">
+			        	<bean:message key="header.report.summary" />
+			        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+			        </h1>
+			        	<logic:equal name="foundItemForm" property="hasContactInfo" value="true" >
+					        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+			        			<tr>
+			        				<td class="summaryActionItem" >
+			        					<center><a href="#contactInfo" ><b><bean:message key="message.contact.info.present" /></b></a></center>
+			        				</td>
+			        			</tr>
+					        </table>
+			        	</logic:equal>
+			        	<logic:notEmpty name="foundItemForm" property="traceResults" >
+			        		<logic:iterate indexId="i" id="match" name="foundItemForm" property="traceResults" type="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory" >
+					        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+			        			<tr>
+			        				<td class="header" >
+			        					<bean:message key="colname.description" />
+			        				</td>
+			        				<td class="header" >
+			        					<bean:message key="header.found.item" />:&nbsp;
+			        					<bean:write name="match" property="found.barcode" />
+			        				</td>
+			        				<td class="header" >
+			        					<bean:message key="header.lost.report" />:&nbsp;
+			        					<a style="color:#fff;" href="create_lost_report.do?lostId=<bean:write name="match" property="lost.id" />" >
+			        						<bean:write name="match" property="lost.id" />
+			        					</a>
+			        				</td>
+			        				<td class="header" >
+			        					<bean:message key="colname.lf.action" />
+			        				</td>
+			        			</tr>
+			        			<logic:iterate indexId="j" id="detail" name="match" property="details" type="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail" >
+			        				<bean:size id="numDetails" name="match" property="details" />
+				        			<tr>
+				        				<td>
+				        					<bean:write name="detail" property="description" />
+				        				</td>
+				        				<td>
+				        					<bean:write name="detail" property="decryptedFoundValue" />
+				        				</td>
+				        				<td>
+				        					<bean:write name="detail" property="decryptedLostValue" />
+				        				</td>
+				        				<% if (j == 0) { %>
+				        					<td rowspan=<bean:write name="numDetails" /> >
+			         						<% 
+			         						   int statusId = match.getStatus().getStatus_ID();
+			         						   if (statusId == TracingConstants.LF_TRACING_CONFIRMED) { %>
+			         							<a href='create_found_item.do?unconfirm=1&matchId=<%=match.getId() %>'><bean:message key="button.un_match" /></a>
+			         						<% } else { %>
+			         							<a href='create_found_item.do?confirm=1&matchId=<%=match.getId() %>'><bean:message key="button.do_match" /></a>,&nbsp;
+			         							<a href='create_found_item.do?reject=1&matchId=<%=match.getId() %>'><bean:message key="button.reject" /></a>
+			         						<% } %>
+				        					</td>
+				        				<% } %>
+				        			</tr> 
+			        			</logic:iterate>
+					        </table>
+					        </logic:iterate>
+			        	</logic:notEmpty>
+			        	
+			        	<!-- REJECTED RESULTS START HERE -->
+			        	<logic:notEmpty name="foundItemForm" property="rejectedResults" >
+			        		<div style="width:100%;" >
+                    		<a name="rm" ></a>
+                    		<span style="float:left;">
+							<h1 class="green">
+					        	<bean:message key="header.rejected.matches" />
+					        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					        </h1>
+					        </span>
+					        </div>
+					        <span style="float:right;" >
+								<a id="showMatches" href="#rm" onClick="show('#rejectedMatches','#showMatches','#hideMatches')"><bean:message key="link.show" /></a>
+								<a id="hideMatches" href="#rm" onClick="hide('#rejectedMatches','#showMatches','#hideMatches')" style="display:none;" ><bean:message key="link.hide" /></a>
+							</span>
+			        	<div id="rejectedMatches" style="margin:0;padding:0;display:none;" >
+			        		<logic:iterate indexId="i" id="match" name="foundItemForm" property="rejectedResults" type="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory" >
+			        		
+					        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+			        			<tr>
+			        				<td class="header" >
+			        					<bean:message key="colname.description" />
+			        				</td>
+			        				<td class="header" >
+			        					<bean:message key="header.found.item" />:&nbsp;
+			        					<bean:write name="match" property="found.barcode" />
+			        				</td>
+			        				<td class="header" >
+			        					<bean:message key="header.lost.report" />:&nbsp;
+			        					<a style="color:#fff;" href="create_lost_report.do?lostId=<bean:write name="match" property="lost.id" />" >
+			        						<bean:write name="match" property="lost.id" />
+			        					</a>
+			        				</td>
+			        				<td class="header" >
+			        					<bean:message key="colname.lf.action" />
+			        				</td>
+			        			</tr>
+			        			<logic:iterate indexId="j" id="detail" name="match" property="details" type="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail" >
+			        				<bean:size id="numDetails" name="match" property="details" />
+				        			<tr>
+				        				<td>
+				        					<bean:write name="detail" property="description" />
+				        				</td>
+				        				<td>
+				        					<bean:write name="detail" property="decryptedFoundValue" />
+				        				</td>
+				        				<td>
+				        					<bean:write name="detail" property="decryptedLostValue" />
+				        				</td>
+				        				<% if (j == 0) { %>
+				        					<td rowspan=<bean:write name="numDetails" /> >
+			         							<a href='create_found_item.do?unreject=1&matchId=<%=match.getId() %>'><bean:message key="button.unreject" /></a>
+				        					</td>
+				        				<% } %>
+				        			</tr> 
+			        			</logic:iterate>
+					        </table>
+					        </logic:iterate>
+					        </div>
+					        <br/>
+			        	</logic:notEmpty>
+			        	
+       			</logic:equal>
+       			
 				<h1 class="green">
 		        	<bean:message key="header.report.information" />
 		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
@@ -280,6 +430,7 @@
 					</tr>
 				</table>
 				<br/>
+				<a name="contactInfo" ></a>
 				<h1 class="green">
 		        	<bean:message key="header.contact.information" />
 		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>

@@ -1,7 +1,10 @@
 package com.bagnet.nettracer.tracing.actions.lf;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -16,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.lf.services.LFServiceWrapper;
 import aero.nettracer.lf.services.LFUtils;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
@@ -24,11 +28,15 @@ import aero.nettracer.lf.services.exception.UpdateException;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
+import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
+import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.forms.lf.FoundItemForm;
+import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -55,7 +63,7 @@ public class FoundItemAction extends CheckedAction {
 		}
 		
 		LFUtils.getLists(user, session);
-		
+		LFServiceBean serviceBean = new LFServiceBean();
 		FoundItemForm fiForm = (FoundItemForm) form;
 		fiForm.setDateFormat(user.getDateformat().getFormat());
 		
@@ -83,6 +91,8 @@ public class FoundItemAction extends CheckedAction {
 		LFFound found = null;
 		if (request.getParameter("createNew") != null) {
 			found = LFUtils.createLFFound(user);
+			fiForm.setTraceResults(null);
+			fiForm.setRejectedResults(null);
 		} else if (request.getParameter("foundId") != null) {
 			long id = Long.parseLong(request.getParameter("foundId"));
 			found = LFServiceWrapper.getInstance().getFoundItem(id);
@@ -215,9 +225,35 @@ public class FoundItemAction extends CheckedAction {
 				}
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 			}
+		} else if (request.getParameter("matchId") != null) {
+			try {
+				long matchId = Long.valueOf(request.getParameter("matchId"));
+				if (request.getParameter("reject") != null) {
+					serviceBean.rejectMatch(matchId);
+				} else if (request.getParameter("unreject") != null) {
+					serviceBean.unrejectMatch(matchId);
+				} else if (request.getParameter("confirm") != null) {
+					serviceBean.confirmMatch(matchId);
+				} else if (request.getParameter("unconfirm") != null) {
+					serviceBean.undoMatch(matchId);
+				}
+			} catch (NumberFormatException nfe) {
+				logger.error(nfe, nfe);
+			}
 		}
 
 		fiForm.setFound(found);
+		if (found.getId() != 0) {
+			TraceResultsFilter filter = new TraceResultsFilter();
+			filter.setRejected(true);
+			fiForm.setRejectedResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000));
+			
+			filter.setBarcode(found.getBarcode());
+			filter.setOpen(true);
+			filter.setConfirmed(true);
+			filter.setRejected(false);
+			fiForm.setTraceResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000));
+		}
 		return mapping.findForward(TracingConstants.LF_CREATE_FOUND_ITEM);
 		
 	}

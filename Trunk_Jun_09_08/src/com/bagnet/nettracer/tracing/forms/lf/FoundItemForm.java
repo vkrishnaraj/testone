@@ -11,6 +11,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
+import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 
 public final class FoundItemForm extends ActionForm {
 
@@ -18,6 +19,8 @@ public final class FoundItemForm extends ActionForm {
 	private String dateFormat;
 	private LFFound found;
 	private List<LFRemark> remarklist;
+	private List<LFMatchHistory> traceResults;
+	private List<LFMatchHistory> rejectedResults;
 	
 	public String getDateFormat() {
 		return dateFormat;
@@ -152,4 +155,28 @@ public final class FoundItemForm extends ActionForm {
 		setRemarklist(newRemarks);
 	}
 
+	public List<LFMatchHistory> getTraceResults() {
+		return traceResults;
+	}
+
+	public void setTraceResults(List<LFMatchHistory> traceResults) {
+		this.traceResults = traceResults;
+	}
+	
+	public boolean getDisplaySummary() {
+		return  (traceResults != null && !traceResults.isEmpty()) || (rejectedResults != null && !rejectedResults.isEmpty()) || found.hasContactInfo();
+	}
+	
+	public boolean getHasContactInfo() {
+		return found.hasContactInfo();
+	}
+
+	public List<LFMatchHistory> getRejectedResults() {
+		return rejectedResults;
+	}
+
+	public void setRejectedResults(List<LFMatchHistory> rejectedResults) {
+		this.rejectedResults = rejectedResults;
+	}
+	
 }

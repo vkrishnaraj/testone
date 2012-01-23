@@ -11,14 +11,17 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask" %>
 <%@ page import="java.util.Iterator" %>
 <%@ taglib prefix="nt" uri="http://nettracerTags"%> 
-
+<%
+	Agent a = (Agent) session.getAttribute("user");
+	boolean hasLoadFoundPermission = UserPermissions.hasPermission("Load Found from Task Manager", a);
+%>
 <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <tr>
   
   <td id="middlecolumn">
     
     <div id="maincontent">
-      <html:form action="/logon">
+      <html:form action="/logon" focus="barcode" >
         <input type="hidden" name="taskmanager" value="1">
         
           	<div class="headerleft">
@@ -56,7 +59,6 @@
 				boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 				boolean lfUser = PropertyBMO.isTrue("lf.user");
 				
-				Agent a = (Agent) session.getAttribute("user");
 				ResourceBundle bundle = ResourceBundle.getBundle(
 						"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 				
@@ -115,7 +117,7 @@
 		</h2>
 		</center>
 		
-		<% if (UserPermissions.hasPermission("Load Found from Task Manager", a)) { %>
+		<% if (hasLoadFoundPermission) { %> 
 			<script>
 			
 				function loadFoundItemPage() {
@@ -346,3 +348,8 @@
           </logic:present>
         </table>
       </html:form>
+<script>
+	if (document.getElementById("barcode") != null) {
+		document.getElementById("barcode").focus();
+	}
+</script>

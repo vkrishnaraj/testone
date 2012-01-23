@@ -47,7 +47,7 @@ public class TraceResultsAction extends CheckedAction {
 			trForm.setFilter(new TraceResultsFilter());
 		}
 		
-		// TODO: take this out logic out back and shoot it in the head!
+		// TODO: take this logic out back and shoot it in the head!
 		String value = request.getParameter("open");
 		if (value != null) {
 			trForm.getFilter().setOpen(value.equals("true"));
