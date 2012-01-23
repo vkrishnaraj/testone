@@ -24,6 +24,17 @@
 		<property name="cronExpression" value="${data.feed.cron}" />
 	</bean>
 	
+	<bean id="lfTraceAll" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="lf" />
+		<property name="targetMethod" value="traceAllFoundItems" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="cronLfTraceAll" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="lfTraceAll" />
+		<property name="cronExpression" value="${lf.traceall.cron}" />
+	</bean>
+	
 	<!--  The bean that manages all the scheduled jobs and their threads -->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
@@ -31,6 +42,7 @@
 				<ref bean="cronLfAutoClose" />
 				<ref bean="cronLf1stNotice" />
 				<ref bean="cronLf2ndNotice" />
+				<ref bean="cronLfTraceAll" />
 			</list>
 		</property>
 	</bean>

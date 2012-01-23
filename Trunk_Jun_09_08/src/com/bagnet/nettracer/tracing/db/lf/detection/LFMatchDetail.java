@@ -110,12 +110,18 @@ public class LFMatchDetail implements Serializable{
 	}
 	
 	public void setDecryptedLostValue(String lostValue){
-		this.decryptedLostValue = null; 
-		try {
-			this.lostValue = AES.encrypt(lostValue);
+		this.decryptedLostValue = lostValue; 
+	}
+	
+	@Transient
+	public void encrypt(){
+		try{
+			this.lostValue = AES.encrypt(this.decryptedLostValue);
+			this.foundValue = AES.encrypt(this.decryptedFoundValue);
 		} catch (Exception e){
 			e.printStackTrace();
 			this.lostValue = null;
+			this.foundValue = null;
 		}
 	}
 	
@@ -131,13 +137,7 @@ public class LFMatchDetail implements Serializable{
 	}
 	
 	public void setDecryptedFoundValue(String foundValue){
-		this.decryptedFoundValue = null; 
-		try {
-			this.foundValue = AES.encrypt(foundValue);
-		} catch (Exception e){
-			e.printStackTrace();
-			this.foundValue = null;
-		}
+		this.decryptedFoundValue = foundValue; 
 	}
 	
 }

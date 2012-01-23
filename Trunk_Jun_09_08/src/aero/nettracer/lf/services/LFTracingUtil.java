@@ -2,10 +2,13 @@ package aero.nettracer.lf.services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.match.StringCompare;
@@ -46,6 +49,9 @@ public class LFTracingUtil {
 	private static final double SCORE_AGREEMENT_NUMBER = 15;
 	private static final double SCORE_EMAIL = 10;
 	
+	
+	private static HashMap<Long, LFLost> lostMap;
+	private static int LOSTMAP_MAX_SIZE = 6000;
 	
 	private static String replaceNull(String string) {
 		  if (string == null) return "";
@@ -118,19 +124,31 @@ public class LFTracingUtil {
 		return null;
 	}
 
-	public static List<LFLost> getLFCPotentialLost(LFFound found){
-		String sql = "select l from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
-		" left outer join l.items i " +
-		" where l.status.status_ID = :status" +
-		" and i.disposition.status_ID = :disposition";
-
+	public static List<Long> getLFCPotentialLostId(LFFound found){
+		String sql = "select l.id id from lflost l  " +
+		" left outer join lfitem i on l.id = i.lost_id " +
+		" left outer join lflossinfo li on l.lossInfo_id = li.id " +
+		" where l.status_ID = :status" +
+		" and i.disposition_status_ID = :disposition" +
+		" and (li.lossdate is null or li.lossdate <= :founddate) ";
+		boolean hasLocation = false;
+		if(found != null && found.getLocation() != null){
+			sql += " and (li.origin_station_ID = :foundstation " +
+			" or li.destination_station_ID = :foundstation)" ;
+			hasLocation = true;
+		}
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery(sql);
+			SQLQuery q = sess.createSQLQuery(sql);
 			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
 			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
-			List<LFLost> results = (List<LFLost>)q.list();
+			q.setDate("founddate", found.getFoundDate());
+			if(hasLocation){
+				q.setParameter("foundstation", found.getLocation().getStation_ID());
+			}
+			q.addScalar("id", Hibernate.LONG);
+			List<Long> results = (List<Long>)q.list();
 			sess.close();
 			return results;
 
@@ -144,13 +162,40 @@ public class LFTracingUtil {
 		return null;
 	}
 	
+	public static List<LFLost> getLFCPotentialLost(LFFound found){
+		return getLFCPotentialLost(found, null);
+	}
+	
+	public static List<LFLost> getLFCPotentialLost(LFFound found, LFServiceBean bean){
+		List<Long> list = getLFCPotentialLostId(found);
+		if(bean == null){
+			bean = new LFServiceBean();
+		}
+		ArrayList<LFLost> ret = new ArrayList<LFLost>();
+		for(Long l:list){
+			if(lostMap != null && lostMap.containsKey(l)){
+				ret.add(lostMap.get(l));
+			} else {
+				LFLost toAdd = bean.getLostReport(l);
+				if(lostMap != null && lostMap.size() < LOSTMAP_MAX_SIZE){
+					lostMap.put(l,toAdd);
+				}
+				ret.add(toAdd);
+			}
+		}
+		return ret;
+	}
+	
 	public static List<LFLost> getPotentialLost(LFFound found){
+		return getPotentialLost(found, null);
+	}
+	
+	public static List<LFLost> getPotentialLost(LFFound found, LFServiceBean bean){
 		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(found.getCompanyId()))){
 			return getAvisPotentialLost(found);
 		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(found.getCompanyId()))){
-			return getLFCPotentialLost(found);
+			return getLFCPotentialLost(found, bean);
 		} else {
-			//TODO handle exception
 			return null;
 		}
 	}
@@ -206,6 +251,14 @@ public class LFTracingUtil {
 		" and f.item.disposition.status_ID = :disposition" +
 		" and f.foundDate > :founddate";
 
+		boolean hasReservation = false;
+		if(lost != null && lost.getLossInfo() != null 
+				&& lost.getLossInfo().getDestination() != null 
+				&& lost.getLossInfo().getOrigin() != null){
+			sql += " and (f.location.station_ID = :dropoff)";
+			hasReservation = true;
+		}
+
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -214,7 +267,14 @@ public class LFTracingUtil {
 			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DATE, -1 * PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS));
-			q.setDate("founddate", cal.getTime()); //DATE
+			if(hasReservation && lost.getLossInfo().getLossdate() != null && lost.getLossInfo().getLossdate().after(cal.getTime())){
+				q.setDate("founddate", lost.getLossInfo().getLossdate());
+			} else {
+				q.setDate("founddate", cal.getTime()); //DATE
+			}
+			if(hasReservation){
+				q.setParameter("dropoff", lost.getLossInfo().getDestination().getStation_ID());
+			}
 			List<LFFound> results = q.list();
 			sess.close();
 			return results;
@@ -235,7 +295,6 @@ public class LFTracingUtil {
 		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
 			return getLFCPotentialFound(lost);
 		} else {
-			//TODO handle exception
 			return null;
 		}
 	}
@@ -568,7 +627,8 @@ public class LFTracingUtil {
 	public static List<LFMatchHistory> traceFound(long id, LFServiceBean bean) throws Exception{
 		System.out.println("tracing: " + id);
 		LFFound found = bean.getFoundItem(id);
-		List<LFLost> lostList = getPotentialLost(found);
+		List<LFLost> lostList = getPotentialLost(found, bean);
+		System.out.println("tracing: " + id + " against " + lostList.size());
 		ArrayList<LFMatchHistory> matchList = new ArrayList<LFMatchHistory>();
 		
 		for(LFLost lost:lostList){
@@ -582,13 +642,65 @@ public class LFTracingUtil {
 			double score = processMatch(match);
 			match.setScore(score);
 			if(score > CUTOFF){
-				if(bean.saveOrUpdateTraceResult(match) > -1){
-				matchList.add(match);
-				} else {
-					throw new Exception("failed to add trace result");
+				try{
+					if(bean.saveOrUpdateTraceResult(match) > -1){
+						matchList.add(match);
+					} else {
+						throw new Exception("failed to add trace result");
+					}
+				} catch (org.hibernate.exception.ConstraintViolationException e){
+					//already traced this result, ignore
 				}
 			}
 		}
 		return matchList;
 	}
+	
+	private static List<Long> getFoundItemsForTracing(){
+		String sql = "select f.id id from lffound f, lfitem i " +	
+		" where f.item_id = i.id and i.disposition_status_ID = :disposition " +
+		" and f.status_ID = :status " +
+		" and f.foundDate > :salvagedate";
+
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery q = sess.createSQLQuery(sql);
+			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
+			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DATE, -1 * PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS));
+			q.setDate("salvagedate", cal.getTime()); //DATE
+			q.addScalar("id", Hibernate.LONG);
+			
+			List<Long> results = q.list();
+			sess.close();
+			return results;
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return null;
+	}
+	
+	public static void traceAllFoundItems(boolean useCache){
+		lostMap = null;
+		if(useCache){
+			lostMap = new HashMap<Long, LFLost>(10000);
+		}
+		List<Long> foundList = getFoundItemsForTracing();
+		for(Long l:foundList){
+			try {
+				traceFound(l);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		lostMap = null;
+	}
+	
 }

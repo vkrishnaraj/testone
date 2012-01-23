@@ -1214,9 +1214,49 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return success;
 	}
 	
+	private boolean hasMatch(LFMatchHistory match){
+		String sql = "select m.id from lfmatchhistory m where m.found_id = :found and m.lost_id = :lost and m.score = :score";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery q = sess.createSQLQuery(sql);
+			q.setParameter("found", match.getFound().getId());
+			q.setParameter("lost", match.getLost().getId());
+			q.setParameter("score", match.getScore());
+			q.addScalar("id", Hibernate.LONG);
+			List list = q.list();
+			if(list.size() > 0){
+				return true;
+			} else {
+				return false;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
 	@Override
 	public long saveOrUpdateTraceResult(LFMatchHistory match) throws org.hibernate.exception.ConstraintViolationException{
+		//loupas - encryption is cpu intensive, first check to see if we need to save then encrypt
+		if(match.getId() == 0 && !hasMatch(match)){
+			if(match.getDetails() != null){
+				for(LFMatchDetail detail:match.getDetails()){
+					detail.encrypt();
+				}
+			}
+		} else {
+			return -1;
+		}
 		Session sess = null;
 		Transaction t = null;
 		long id = -1;
@@ -1963,14 +2003,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	public static void main(String [] args){
-		String x = "fdas fdsa {LOSTID}";
-		System.out.println(x.replace("{LOSTID}", "" + 1234));
-		
-//		LFServiceBean bean = new LFServiceBean();
-//		bean.testEmail();
-//		bean.sendLostCreatedEmail(2865);
-//		bean.getStillSearchingList();
+	public void traceAllFoundItems(){
+		LFTracingUtil.traceAllFoundItems(true);
 	}
+	
 	
 }

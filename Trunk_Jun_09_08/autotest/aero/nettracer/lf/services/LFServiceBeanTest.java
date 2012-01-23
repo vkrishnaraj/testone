@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -19,6 +20,7 @@ import org.junit.Test;
 import aero.nettracer.general.services.GeneralServiceBean;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 import aero.nettracer.lf.services.exception.UpdateException;
+import aero.nettracer.security.AES;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
@@ -1009,6 +1011,74 @@ public class LFServiceBeanTest {
 		}
 		assertTrue(hasMatch != null);
 		assertTrue(verifyMatchDetails(hasMatch));
+	}
+	
+	@Test
+	public void traceAllTest(){
+		LFServiceBean bean = new LFServiceBean();
+		LFFound found = createFoundTestCase();
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, null);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
+		}
+		assertTrue(foundId != -1);
+		
+		LFFound loaded = bean.getFoundItem(foundId);
+		assertTrue(loaded != null && loaded.getId() == foundId);
+	
+		LFLost lost = createLostTestCase();
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
+		Date start = new Date();
+		bean.traceAllFoundItems();
+		Date end = new Date();
+		System.out.println((end.getTime() - start.getTime()));
+		List<LFMatchHistory> results = bean.getTraceResultsForFound(foundId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+		LFMatchHistory hasMatch = null;
+		for(LFMatchHistory match:results){
+			if(match.getFound().getId() == foundId && match.getLost().getId() == lostId){
+				hasMatch = match;
+			}
+		}
+		assertTrue(hasMatch != null);
+		assertTrue(verifyMatchDetails(hasMatch));
+	}
+	
+//	@Test
+	public void speedTest(){
+		try {
+			Date start = new Date();
+			for(int i = 0; i < 10000; i++){
+				AES.encrypt("hello World");
+			}
+			Date end = new Date();
+			System.out.println((end.getTime()-start.getTime())/10000.0);
+			
+			start = new Date();
+			for(int i = 0; i < 10000; i++){
+				AES.decrypt("A09094FD96469A5302D340CCB93FFFEA150A0629F78702DA856A4DD50FC312A7");
+			}
+			end = new Date();
+			System.out.println((end.getTime()-start.getTime())/10000.0);
+			
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
 	}
 	
 	public LFLost createLostTestCase(){
