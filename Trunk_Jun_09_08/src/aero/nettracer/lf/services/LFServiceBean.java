@@ -1214,7 +1214,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return success;
 	}
 	
-	private boolean hasMatch(LFMatchHistory match){
+	public boolean hasMatch(LFMatchHistory match){
 		String sql = "select m.id from lfmatchhistory m where m.found_id = :found and m.lost_id = :lost and m.score = :score";
 		Session sess = null;
 		try{
@@ -1248,14 +1248,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@Override
 	public long saveOrUpdateTraceResult(LFMatchHistory match) throws org.hibernate.exception.ConstraintViolationException{
 		//loupas - encryption is cpu intensive, first check to see if we need to save then encrypt
-		if(match.getId() == 0 && !hasMatch(match)){
-			if(match.getDetails() != null){
-				for(LFMatchDetail detail:match.getDetails()){
-					detail.encrypt();
+		if(match.getId() == 0){//only need this check first time saving
+			if(!hasMatch(match)){
+				if(match.getDetails() != null){
+					for(LFMatchDetail detail:match.getDetails()){
+						detail.encrypt();
+					}
 				}
+			} else {
+				throw new org.hibernate.exception.ConstraintViolationException("", null, null);
 			}
-		} else {
-			return -1;
 		}
 		Session sess = null;
 		Transaction t = null;

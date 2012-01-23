@@ -640,6 +640,7 @@ public class LFServiceBeanTest {
 			threwException = true;
 		}
 		assertTrue(threwException);
+		assertTrue(bean.hasMatch(newMatch));
 	}
 	
 	@Test
