@@ -3252,6 +3252,12 @@
       		<formatter type="xml" usefile="true" />
       		<test name="aero.nettracer.lf.services.LFServiceBeanTest" />
     	</junit>
+  		
+  	   	<junit printsummary="yes" showoutput="true" >
+  	      		<classpath refid="classpath.test" />
+  	      		<formatter type="xml" usefile="true" />
+  	      		<test name="com.bagnet.nettracer.tracing.utils.general.LoggerTest" />
+  	    	</junit>
     	
   </target>
 	
@@ -3270,6 +3276,12 @@
       		<classpath refid="classpath.test" />
       		<formatter type="xml" usefile="true" />
       		<test name="aero.nettracer.lf.services.LFServiceBeanTest" />
+    	</junit>
+  		
+    	<junit printsummary="yes" showoutput="true" >
+      		<classpath refid="classpath.test" />
+      		<formatter type="xml" usefile="true" />
+      		<test name="com.bagnet.nettracer.tracing.utils.general.LoggerTest" />
     	</junit>
     	
   </target>

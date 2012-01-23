@@ -279,6 +279,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFRemark" />
 		
 		<mapping class="com.bagnet.nettracer.tracing.db.Region"/>
-		
+		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralLog"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralLFLog"/>		
 
 		
