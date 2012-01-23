@@ -14,25 +14,25 @@ public class LF_CreateLost_VerifyRequiredFields extends DefaultSeleneseTestCase 
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			assertEquals("Last Name is required.", selenium.getAlert());
 			selenium.type("name=lost.client.lastName", "Test");
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			assertEquals("First Name is required.", selenium.getAlert());
 			selenium.type("name=lost.client.firstName", "Test");
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			assertEquals("Street Address is required.", selenium.getAlert());
 			selenium.type("name=lost.client.address.decryptedAddress1", "123 Test");
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			assertEquals("City is required.", selenium.getAlert());
 			selenium.type("name=lost.client.address.decryptedCity", "Test");
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			assertEquals("Phone number or email is required.", selenium.getAlert());
 			selenium.type("name=lost.client.decryptedEmail", "test@test.com");
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			assertEquals("Email and confirm email must match.", selenium.getAlert());
 			selenium.type("name=lost.client.confirmEmail", "test@test.com");
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();

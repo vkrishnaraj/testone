@@ -14,14 +14,14 @@ public class LF_CreateFound_VerifyRequiredFields extends DefaultSeleneseTestCase
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			assertEquals("Report Id is required.", selenium.getAlert());
 			selenium.type("name=found.barcode", "Test");
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			assertEquals("Report Id is not a valid number.", selenium.getAlert());
 			String found_id = String.valueOf(System.currentTimeMillis());
 			selenium.type("name=found.barcode", found_id);
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();

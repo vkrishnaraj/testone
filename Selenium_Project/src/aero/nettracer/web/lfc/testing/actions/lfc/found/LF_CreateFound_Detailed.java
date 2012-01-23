@@ -21,7 +21,7 @@ public class LF_CreateFound_Detailed extends DefaultSeleneseTestCase {
 			selenium.select("id=category_0", "label=Bags");
 			selenium.select("name=item[0].color", "label=Black");
 			selenium.type("name=item[0].description", "Test Description");
-			selenium.click("id=button");
+			selenium.click("saveButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
