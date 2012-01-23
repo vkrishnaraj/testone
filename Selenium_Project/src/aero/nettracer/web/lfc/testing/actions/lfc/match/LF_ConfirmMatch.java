@@ -17,7 +17,7 @@ public class LF_ConfirmMatch extends DefaultSeleneseTestCase {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Trace Results"));
 			selenium.type("name=filter.lostId", Settings.LOST_ID_LF);
-			selenium.type("name=filter.foundId", Settings.FOUND_ID_LF);
+			selenium.type("name=filter.barcode", Settings.FOUND_ID_LF);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[5]/a");
