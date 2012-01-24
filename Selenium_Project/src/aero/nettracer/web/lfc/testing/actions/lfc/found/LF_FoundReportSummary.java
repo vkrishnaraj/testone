@@ -92,4 +92,22 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 			return;
 		}
 	}
+	
+	@Test
+	public void testLocationField() {
+		verifyTrue(selenium.isTextPresent("Item Location"));
+		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[4]/select"));
+		selenium.select("name=found.itemLocation", "label=Verification Bin");
+		selenium.click("name=saveButton");
+		waitForPageToLoadImproved();
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			verifyEquals("1", selenium.getValue("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[4]/select"));
+		} else {
+			System.out.println("Failed in test found item trace results summary.");
+			verifyTrue(false);
+			return;
+		}
+	}
 }
