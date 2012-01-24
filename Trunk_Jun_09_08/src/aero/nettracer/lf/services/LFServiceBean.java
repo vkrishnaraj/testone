@@ -1388,7 +1388,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@Override
 	public List<LFMatchHistory> traceFoundItem(long id) {
 		try {
-			return LFTracingUtil.traceFound(id, this);
+			return LFTracingUtil.traceFound(id, this, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -1398,7 +1398,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@Override
 	public List<LFMatchHistory> traceLostItem(long id) {
 		try {
-			return LFTracingUtil.traceLost(id, this);
+			return LFTracingUtil.traceLost(id, this, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

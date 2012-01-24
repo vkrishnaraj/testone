@@ -2,6 +2,7 @@ package aero.nettracer.lf.services;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -28,6 +29,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
+import com.bagnet.nettracer.tracing.utils.general.Logger;
 
 public class LFTracingUtil {
 	
@@ -583,17 +585,18 @@ public class LFTracingUtil {
 		return match.getTotalScore();
 	}
 	
-	public static List<LFMatchHistory> traceLost(long id) throws Exception{
+	public static List<LFMatchHistory> traceLost(long id, boolean log) throws Exception{
 		LFServiceBean bean = new LFServiceBean();
-		return traceLost(id, bean);
+		return traceLost(id, bean, log);
 	}
 	
-	public static List<LFMatchHistory> traceFound(long id) throws Exception{
+	public static List<LFMatchHistory> traceFound(long id, boolean log) throws Exception{
 		LFServiceBean bean = new LFServiceBean();
-		return traceFound(id, bean);
+		return traceFound(id, bean, log);
 	}
 	
-	public static List<LFMatchHistory> traceLost(long id, LFServiceBean bean) throws Exception{
+	public static List<LFMatchHistory> traceLost(long id, LFServiceBean bean, boolean log) throws Exception{
+		Date start = new Date();
 		LFLost lost = bean.getLostReport(id);
 		List<LFFound> foundList = getPotentialFound(lost);
 		ArrayList<LFMatchHistory> matchList = new ArrayList<LFMatchHistory>();
@@ -621,14 +624,17 @@ public class LFTracingUtil {
 				}
 			}
 		}
+		Date end = new Date();
+		if(log){
+			Logger.logLF("" + id, "TRACE LOST", end.getTime()-start.getTime());
+		}
 		return matchList;
 	}
 	
-	public static List<LFMatchHistory> traceFound(long id, LFServiceBean bean) throws Exception{
-		System.out.println("tracing: " + id);
+	public static List<LFMatchHistory> traceFound(long id, LFServiceBean bean, boolean log) throws Exception{
+		Date start = new Date();
 		LFFound found = bean.getFoundItem(id);
 		List<LFLost> lostList = getPotentialLost(found, bean);
-		System.out.println("tracing: " + id + " against " + lostList.size());
 		ArrayList<LFMatchHistory> matchList = new ArrayList<LFMatchHistory>();
 		
 		for(LFLost lost:lostList){
@@ -652,6 +658,10 @@ public class LFTracingUtil {
 					//already traced this result, ignore
 				}
 			}
+		}
+		Date end = new Date();
+		if(log){
+			Logger.logLF("" + id, "TRACE FOUND", end.getTime()-start.getTime());
 		}
 		return matchList;
 	}
@@ -688,6 +698,7 @@ public class LFTracingUtil {
 	}
 	
 	public static void traceAllFoundItems(boolean useCache){
+		Date start = new Date();
 		lostMap = null;
 		if(useCache){
 			lostMap = new HashMap<Long, LFLost>(10000);
@@ -695,11 +706,13 @@ public class LFTracingUtil {
 		List<Long> foundList = getFoundItemsForTracing();
 		for(Long l:foundList){
 			try {
-				traceFound(l);
+				traceFound(l, false);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		Date end = new Date();
+		Logger.logLF(null, "TRACE ALL FOUND: " + foundList.size(), end.getTime() - start.getTime());
 		lostMap = null;
 	}
 	
