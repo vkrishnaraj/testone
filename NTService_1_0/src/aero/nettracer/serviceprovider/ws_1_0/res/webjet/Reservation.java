@@ -2,17 +2,18 @@ package aero.nettracer.serviceprovider.ws_1_0.res.webjet;
 
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.log4j.Logger;
+import org.tempuri.AddBookingCommentsDocument;
+import org.tempuri.AddBookingCommentsDocument.AddBookingComments;
+import org.tempuri.Baggage;
+import org.tempuri.Booking;
+import org.tempuri.FlightLeg;
+import org.tempuri.GetBookingInformationDocument;
+import org.tempuri.GetBookingInformationDocument.GetBookingInformation;
+import org.tempuri.GetBookingInformationResponseDocument;
+import org.tempuri.GetBookingInformationResponseDocument.GetBookingInformationResponse;
+import org.tempuri.Passenger;
+import org.tempuri.WSNetTracerStub;
 
-import spirit.common.contracts.Bag;
-import spirit.common.contracts.Passenger;
-import spirit.common.contracts.Segment;
-import spirit.nettracer.contracts.AddBookingCommentsInput;
-import spirit.nettracer.contracts.AddBookingCommentsInputDocument;
-import spirit.nettracer.contracts.GetBookingInformationInput;
-import spirit.nettracer.contracts.GetBookingInformationInputDocument;
-import spirit.nettracer.contracts.GetBookingInformationOutput;
-import spirit.nettracer.contracts.GetBookingInformationOutputDocument;
-import spirit.nettracer.contracts.NetTracerImplStub;
 import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.common.db.ParameterType;
 import aero.nettracer.serviceprovider.common.db.User;
@@ -51,27 +52,25 @@ public class Reservation implements ReservationInterface {
 		
 			String endpoint = user.getProfile().getParameters().get(ParameterType.RESERVATION_ENDPOINT);
 			
-						
 			// 1) STUB & TIMEOUTES
-			NetTracerImplStub stub = new NetTracerImplStub(endpoint);
+			WSNetTracerStub stub = new WSNetTracerStub(endpoint);
 			stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(1 * 60 * 1000));
 			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
 
 			// CREATE OUTGOING DOCUMENT
-			GetBookingInformationInputDocument bi = GetBookingInformationInputDocument.Factory.newInstance();
-			GetBookingInformationInput bi2 = bi.addNewGetBookingInformationInput();
-			bi2.setBagTagNumber("");
-			bi2.setRecordLocator(pnr);
+			GetBookingInformationDocument bi = GetBookingInformationDocument.Factory.newInstance();
+			GetBookingInformation bi2 = bi.addNewGetBookingInformation();
+			bi2.setBookingLocator(pnr);
 			
 			// MAKE REQUEST WITH STUB
-			GetBookingInformationOutputDocument spiritres = stub.getBookingInformation(bi);
+			GetBookingInformationResponseDocument webjetres = stub.getBookingInformation(bi);
 			
 
 			// OUTPUT RESPONSE
-			logger.info("Spirit Response: " + spiritres);
+			logger.info("WebJet Response: " + webjetres);
 			
 			// CHECK FOR VALID RESPONSE
-			if (spiritres!= null && spiritres.getGetBookingInformationOutput() != null) {
+			if (webjetres!= null && webjetres.getGetBookingInformationResponse() != null) {
 				// ADD RESERVATION TO THE RESPONSE
 				aero.nettracer.serviceprovider.ws_1_0.common.xsd.Reservation res = response
 				.addNewReservation();
@@ -79,8 +78,9 @@ public class Reservation implements ReservationInterface {
 				// DO WORK
 				int bagsChecked = 0;
 				int paxAffected = 0;
-				
-				GetBookingInformationOutput booking = spiritres.getGetBookingInformationOutput();
+
+				GetBookingInformationResponse bookingResponse = webjetres.getGetBookingInformationResponse();
+				Booking booking = bookingResponse.getGetBookingInformationResult();
 				
 				
 				if (booking.getPassengers() != null && booking.getPassengers().getPassengerArray() != null) {
@@ -89,125 +89,47 @@ public class Reservation implements ReservationInterface {
 						aero.nettracer.serviceprovider.ws_1_0.common.xsd.Passenger p = res.addNewPassengers();
 						Address add = p.addNewAddresses();
 						
-						if (pax.getEmail() != null)
+						if (pax.getEmail() != null) {
 							add.setEmailAddress(pax.getEmail());
+						}
 						
-						if (pax.getFirstName() != null)
+						if (pax.getFirstName() != null) {
 							p.setFirstname(pax.getFirstName());
-						
-						if (pax.getMiddleName() != null)
-							p.setMiddlename(pax.getMiddleName());
+						}
 						
 						if (pax.getLastName() != null) {
-							if (pax.getSuffix() != null) {
-								p.setLastname(pax.getLastName() + " " + pax.getSuffix());
-							} else {
-								p.setLastname(pax.getLastName());
-							}
+							p.setLastname(pax.getLastName());
 						}
 						
-						if (pax.getFrequentFlyerNumber() != null)
-							p.setFfNumber(pax.getFrequentFlyerNumber());
+						if (pax.getFidelityCardNumber() != null) {
+							p.setFfNumber(pax.getFidelityCardNumber());
+						}
 						
+						if (pax.getBags() != null && pax.getBags().getBaggageArray().length > 0) {
 
-						if (pax.getTitle() != null) {
-							p.setSalutation(0);
-							String salu = pax.getTitle().toUpperCase();
-							if (salu != null) {
-								if (salu.equals("DR"))
-									p.setSalutation(1);
-								else if (salu.equals("MR"))
-									p.setSalutation(2);
-								else if (salu.equals("MS"))
-									p.setSalutation(3);
-								else if (salu.equals("MISS"))
-									p.setSalutation(4);
-								else if (salu.equals("MRS")) 
-									p.setSalutation(5);
-							}
-						}
-						
-						
-						if (pax.getAddresses() != null) {
-							for (spirit.common.contracts.Address a: pax.getAddresses().getAddressArray()) {
-								if (a.getAddress1() != null)
-									add.setAddress1(a.getAddress1());
-								
-								if (a.getAddress2() != null)
-									add.setAddress2(a.getAddress2());
-								
-								if (a.getCity() != null)
-									add.setCity(a.getCity());
-								
-								if (a.getPostalCode() != null)
-									add.setZip(a.getPostalCode());
-								
-								if (a.getPhone() != null)
-									add.setHomePhone(a.getPhone());
-								
-								if (a.getCountryCode() != null)
-									add.setCountry(a.getCountryCode());
-								
-								if (a.getCountryCode() != null && !a.getCountryCode().equals("US")) {
-									add.setProvince(a.getProvinceState());
-								} else {
-									add.setState(a.getProvinceState());
-								}						
-							}
-						}
-						
-						if (pax.getBaggage() != null && pax.getBaggage().getBagArray().length > 0) {
-
-							for (Bag bag: pax.getBaggage().getBagArray()) {
+							for (Baggage bag: pax.getBags().getBaggageArray()) {
 								
 								ClaimCheck cc = res.addNewClaimChecks();
-								cc.setTimeChecked(bag.getBagTagDate());
-								cc.setTagNumber(bag.getDescriptionCode());
+								cc.setTagNumber(bag.getBagTagNumber());
 								
-								/*
-								if (lastCheckedDate == null) {
-									lastCheckedDate = bag.getBagTagDate();
-								} else if (bag.getBagTagDate().getTimeInMillis() > lastCheckedDate.getTimeInMillis()) {
-									lastCheckedDate = bag.getBagTagDate();
-								}						
+							}
+						}
+						
 
-								if (res.getCheckedLocation() == 0 && bag.getBagTagDate().equals(lastCheckedDate)) {
-									// static final int INT_UNSPECIFIED = 1;
-									// static final int INT_CUSTOMER = 2;
-									// static final int INT_KIOSK = 3;
-									// static final int INT_RES_SALES_AGENT = 4;
-									// static final int INT_RES_GROUP_AGENT = 5;
-									// static final int INT_TRAVEL_AGENT = 6;
-									// static final int INT_AGENT_CHECK_IN = 7;
-									// static final int INT_DCS = 8;
-									// bag.getSource();
-									// res.setCheckedLocation(arg0);
-								}
-								*/
-
-								
+						if (pax.getFlightSegment() != null && pax.getFlightSegment().getFlightLegs() != null && 
+								pax.getFlightSegment().getFlightLegs().getFlightLegArray()!= null) {
+							for (FlightLeg seg: pax.getFlightSegment().getFlightLegs().getFlightLegArray()) {
+								Itinerary i = res.addNewPassengerItinerary();
+								mapSegmentsToItinerary(seg, i);
+								Itinerary j = res.addNewBagItinerary();
+								mapSegmentsToItinerary(seg, j);
 							}
 						}
 					}
 				}
 				
-
-				if (booking.getBaggageItinerary() != null && booking.getBaggageItinerary().getSegmentArray() != null) {
-					for (Segment seg: booking.getBaggageItinerary().getSegmentArray()) {
-						Itinerary i = res.addNewBagItinerary();
-						mapSegmentsToItinerary(seg, i);
-					}
-				}
-				
-				if (booking.getPassengerItinerary() != null && booking.getPassengerItinerary().getSegmentArray() != null) {
-					for (Segment seg: booking.getBaggageItinerary().getSegmentArray()) {
-						Itinerary i = res.addNewPassengerItinerary();
-						mapSegmentsToItinerary(seg, i);
-					}					
-				}
-				
-				if (booking.getRecordLocator() != null && booking.getRecordLocator().length() > 0) {
-					res.setPnr(booking.getRecordLocator());
+				if (booking.getBookingLocator() != null && booking.getBookingLocator().length() > 0) {
+					res.setPnr(booking.getBookingLocator());
 				}
 				
 				res.setNumberChecked(bagsChecked);
@@ -225,30 +147,30 @@ public class Reservation implements ReservationInterface {
 		return response;
 	}
 
-	private void mapSegmentsToItinerary(Segment seg, Itinerary i) {
+	private void mapSegmentsToItinerary(FlightLeg seg, Itinerary i) {
 //		if (seg.getArrivalDateTime() != null)
 //			i.setActarrivetime(seg.getArrivalDateTime());
 //		
 //		if (seg.getDepartureDateTime() != null)
 //			i.setActdeparttime(seg.getDepartureDateTime());
 //		
-		if (seg.getArrivalStation() != null)
-			i.setArrivalCity(seg.getArrivalStation());
+//		if (seg.get != null)
+//			i.setAirline(seg.getCarrierCode());
+//		
+		if (seg.getOriginAirport() != null && seg.getOriginAirport().getIATACode() != null)
+			i.setArrivalCity(seg.getOriginAirport().getIATACode());
 		
-		if (seg.getDepartureStation() != null)
-			i.setDepartureCity(seg.getDepartureStation());
+		if (seg.getDestinyAirport() != null && seg.getDestinyAirport().getIATACode() != null)
+			i.setDepartureCity(seg.getDestinyAirport().getIATACode());
 		
-		if (seg.getNbr() != null)
-			i.setFlightnum(seg.getNbr());
+		if (seg.getFlight() != null && seg.getFlight().getFlightNumber() != 0)
+			i.setFlightnum(String.valueOf(seg.getFlight().getFlightNumber()));
 		
-		if (seg.getCarrierCode() != null)
-			i.setAirline(seg.getCarrierCode());
+		if (seg.getGMTArrivalDateTime() != null)
+			i.setScharrivetime(seg.getGMTArrivalDateTime());
 		
-		if (seg.getSTA() != null)
-			i.setScharrivetime(seg.getSTA());
-		
-		if (seg.getSTD() != null)
-			i.setSchdeparttime(seg.getSTD());
+		if (seg.getGMTDepartureDateTime() != null)
+			i.setSchdeparttime(seg.getGMTDepartureDateTime());
 	}
 
 	// TODO: ABOVE HERE
@@ -258,18 +180,13 @@ public class Reservation implements ReservationInterface {
 		try {
 
 			String endpoint = user.getProfile().getParameters().get(ParameterType.RESERVATION_ENDPOINT);
-				//"https://206.57.4.54/NetTracerInternal/NetTracerService.svc";
-			
-			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\cacerts");
-			System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
-			System.out.println(System.getProperty("javax.net.ssl.trustStore"));
-			System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
 
-			NetTracerImplStub stub = new NetTracerImplStub(endpoint);			
-			AddBookingCommentsInputDocument bi = AddBookingCommentsInputDocument.Factory.newInstance();
-			AddBookingCommentsInput bi2 = bi.addNewAddBookingCommentsInput();
-			bi2.setComments(remark);
-			bi2.setRecordLocator(pnr);
+			WSNetTracerStub stub = new WSNetTracerStub(endpoint);
+			AddBookingCommentsDocument bi = AddBookingCommentsDocument.Factory.newInstance();
+			AddBookingComments bi2 = bi.addNewAddBookingComments();
+			org.tempuri.AddBookingComments bi3 = bi2.addNewOAddBookingComments();
+			bi3.setComments(remark);
+			bi3.setRecordLocator(pnr);
 			stub.addBookingComments(bi);
 			
 			
