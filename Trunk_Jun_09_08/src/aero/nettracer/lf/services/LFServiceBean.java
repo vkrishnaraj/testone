@@ -51,6 +51,8 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.EmailParser;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
+import com.bagnet.nettracer.tracing.utils.general.Logger;
+
 @Stateless
 public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
@@ -1816,6 +1818,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			lost.setEmailSentDate(new Date());
 			try {
 				saveOrUpdateLostReport(lost,getAutoAgent());
+				Logger.logLF(""+id, "LOST CREATED EMAIL SENT", 0);
 			} catch (UpdateException e) {
 				e.printStackTrace();
 			}
@@ -1829,6 +1832,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			lost.setEmailSentDate(new Date());
 			try {
 				saveOrUpdateLostReport(lost,getAutoAgent());
+				Logger.logLF(""+id, "STILL SEARCHING EMAIL SENT", 0);
 			} catch (UpdateException e) {
 				e.printStackTrace();
 			}
@@ -1842,6 +1846,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			lost.setEmail1(true);
 			try {
 				saveOrUpdateLostReport(lost,getAutoAgent());
+				Logger.logLF(""+id, "1ST NOTICE EMAIL SENT", 0);
 			} catch (UpdateException e) {
 				e.printStackTrace();
 			}
@@ -1860,6 +1865,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			lost.setEmail2(true);
 			try {
 				saveOrUpdateLostReport(lost,getAutoAgent());
+				Logger.logLF(""+id, "2ND NOTICE EMAIL SENT", 0);
 			} catch (UpdateException e) {
 				e.printStackTrace();
 			}
@@ -1873,6 +1879,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			lost.setEmailSentDate(new Date());
 			try {
 				saveOrUpdateLostReport(lost,getAutoAgent());
+				Logger.logLF(""+id, "FOUND EMAIL SENT", 0);
 			} catch (UpdateException e) {
 				e.printStackTrace();
 			}
@@ -1897,6 +1904,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		lost.setStatus(status);
 		try {
 			saveOrUpdateLostReport(lost, agent);
+			Logger.logLF(""+id, "CLOSED EMAIL SENT", 0);
 		} catch (UpdateException e) {
 			e.printStackTrace();
 		}
