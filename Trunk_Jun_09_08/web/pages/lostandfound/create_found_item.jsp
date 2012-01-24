@@ -397,7 +397,7 @@
 							<br/>
 							<html:text name="foundItemForm" property="disFoundDate" disabled="true" styleClass="disabledtextfield" />
 						</td>
-						<td>
+						<td colspan=2>
 							<bean:message key="colname.lf.created.agent" />
 							<br/>
 							<html:text name="foundItemForm" property="found.agent.username" disabled="true" styleClass="disabledtextfield" />
@@ -425,6 +425,16 @@
          					<html:select name="foundItemForm" property="found.statusId" styleClass="dropdown" >
          						<html:option value="-1"><bean:message key="option.lf.please.select" /></html:option>
          						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
+         					</html:select>
+         				</td>
+						<td>
+         					<bean:message key="colname.lf.item.location" />
+         					<br>
+         					<html:select name="foundItemForm" property="found.itemLocation" styleClass="dropdown" >
+         						<html:option value="<%=String.valueOf(TracingConstants.LF_LOCATION_SHELF) %>"><bean:message key="lf.location.shelf" /></html:option>
+         						<html:option value="<%=String.valueOf(TracingConstants.LF_LOCATION_VERIFICATION) %>"><bean:message key="lf.location.verification" /></html:option>
+         						<html:option value="<%=String.valueOf(TracingConstants.LF_LOCATION_WAITING) %>"><bean:message key="lf.location.waiting" /></html:option>
+         						<html:option value="<%=String.valueOf(TracingConstants.LF_LOCATION_DELIVERY) %>"><bean:message key="lf.location.delivery" /></html:option>
          					</html:select>
          				</td>
 					</tr>

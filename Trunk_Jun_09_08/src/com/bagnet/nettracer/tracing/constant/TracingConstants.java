@@ -369,7 +369,7 @@ public class TracingConstants {
 	public final static int TASK_STATUS_NOT_COMPLETED = 79;
 	
 	public final static int LF_STATUS_SALVAGED = 45;
-
+	
 	// match status
 	public final static int MATCH_STATUS_OPEN = 15;
 	public final static int MATCH_STATUS_REJECTED = 21;
@@ -469,6 +469,8 @@ public class TracingConstants {
 	
 	public final static int LF_LOCATION_SHELF = 0;
 	public final static int LF_LOCATION_VERIFICATION = 1;
+	public final static int LF_LOCATION_WAITING = 2;
+	public final static int LF_LOCATION_DELIVERY = 3;
 	
 	public final static int LF_STATUS_ENTERED = 0;
 	public final static int LF_STATUS_VERIFICATION_NEEDED = 1;
