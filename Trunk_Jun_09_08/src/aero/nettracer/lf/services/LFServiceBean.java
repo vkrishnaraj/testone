@@ -1,5 +1,6 @@
 package aero.nettracer.lf.services;
 
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,7 +51,6 @@ import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.EmailParser;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
-
 import com.bagnet.nettracer.tracing.utils.general.Logger;
 
 @Stateless
@@ -235,7 +235,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		if(dto.getMvaNumber() != null && dto.getMvaNumber().trim().length() > 0){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-				sql += " and o.reservation.mvaNumber = \'" + dto.getMvaNumber() + "\'";
+				sql += " and o.lossInfo.mvaNumber = \'" + dto.getMvaNumber() + "\'";
 			} else {
 				sql += " and o.mvaNumber = \'" + dto.getMvaNumber() + "\'";
 			}
@@ -261,7 +261,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		if(dto.getAgreementNumber() != null && dto.getAgreementNumber().trim().length() > 0){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-				sql += " and o.reservation.agreementNumber = \'" + dto.getAgreementNumber().trim() + "\'";
+				sql += " and o.lossInfo.agreementNumber = \'" + dto.getAgreementNumber().trim() + "\'";
 			} else {
 				sql += " and o.agreementNumber = \'" + dto.getAgreementNumber().trim() + "\'";
 			}
@@ -2015,6 +2015,74 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void traceAllFoundItems(){
 		LFTracingUtil.traceAllFoundItems(true);
+	}
+
+
+	@Override
+	public int getShelvedTraceResultsCount(Station station) {
+		if(station == null){
+			return 0;
+		}
+		String query = "select count(mh.id) from lfmatchhistory mh "
+					 + "left outer join lffound lf on mh.found_id = lf.id "
+					 + "where mh.status_Status_ID = " + TracingConstants.LF_TRACING_OPEN + " " 
+					 + "and lf.status_ID = " + TracingConstants.LF_STATUS_OPEN + " "
+					 + "and lf.station_ID = " + station.getStation_ID() + " ";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createSQLQuery(query);
+			List result = q.list();
+			sess.close();
+			return ((BigInteger) result.get(0)).intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return 0;
+	}
+
+
+	@Override
+	public List<LFFound> getShelvedTraceResultsPaginated(Station station, int start, int offset) {
+		if(station == null){
+			return null;
+		}
+		
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m left outer join m.found "
+				   + "where m.status = " + TracingConstants.LF_TRACING_OPEN + " and m.found.status = " + TracingConstants.LF_STATUS_OPEN + " "
+				   + "and m.found.location.station_ID = " + station.getStation_ID() + " "
+				   + "order by m.id asc group by m.found.id";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			
+			if (start > -1 && offset > -1 ) {
+				q.setFirstResult(start);
+				q.setMaxResults(offset);
+			} else {
+				throw new Exception("Invalided pagination bounds");
+			}
+			
+			List result = q.list();
+			result.get(0);
+			ArrayList<LFFound> toReturn = new ArrayList<LFFound>();
+			for (int i = 0; i < result.size(); ++i) {
+				toReturn.add((LFFound) ((Object[]) result.get(i))[1]);
+			}
+			return toReturn;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return null;
 	}
 	
 	

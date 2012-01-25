@@ -36,8 +36,7 @@ public interface LFServiceHome {
 	public List<LFFound> searchFound(LFSearchDTO dto, int start, int offset);
 	public long saveOrUpdateFoundItem(LFFound foundItem, Agent agent) throws NonUniqueBarcodeException, UpdateException;
 	
-	public
-	ArrayList<LabelValueBean> getColors();
+	public ArrayList<LabelValueBean> getColors();
 	public List<LFCategory> getCategories(String companycode);
 
 	public boolean closeLostReport(long id, Agent agent);
@@ -54,6 +53,8 @@ public interface LFServiceHome {
 	public List<LFMatchHistory> getTraceResultsPaginated(Station station, int start, int offset);
 	public int getDeliveryPendingCount(Station station);
 	public List<LFItem> getDeliveryPendingPaginatedList(Station station, int start, int offset);
+	public int getShelvedTraceResultsCount(Station station);
+	public List<LFFound> getShelvedTraceResultsPaginated(Station station, int start, int offset);
 	
 	//LF reporting
 	public String getLostReport(Date startdate, Date enddate, Station station, int matchType, boolean shipped);
