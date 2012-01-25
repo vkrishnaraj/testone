@@ -4,14 +4,22 @@ import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.log4j.Logger;
 import org.tempuri.AddBookingCommentsDocument;
 import org.tempuri.AddBookingCommentsDocument.AddBookingComments;
+import org.tempuri.AutenticacaoHeader;
 import org.tempuri.Baggage;
 import org.tempuri.Booking;
+import org.tempuri.ConsultaSimplesHeader;
+import org.tempuri.EfetuarLoginDocument;
+import org.tempuri.EfetuarLoginDocument.EfetuarLogin;
+import org.tempuri.EfetuarLoginResponseDocument;
+import org.tempuri.EfetuarLoginResponseDocument.EfetuarLoginResponse;
 import org.tempuri.FlightLeg;
 import org.tempuri.GetBookingInformationDocument;
 import org.tempuri.GetBookingInformationDocument.GetBookingInformation;
 import org.tempuri.GetBookingInformationResponseDocument;
 import org.tempuri.GetBookingInformationResponseDocument.GetBookingInformationResponse;
+import org.tempuri.Language;
 import org.tempuri.Passenger;
+import org.tempuri.SessaoUsuario;
 import org.tempuri.WSNetTracerStub;
 
 import aero.nettracer.serviceprovider.common.ServiceConstants;
@@ -31,6 +39,10 @@ public class Reservation implements ReservationInterface {
 
 	private static Logger logger = Logger.getLogger(Reservation.class);
 	
+	private static final String USU_EMAIL = "nettracer@webjet.com.br";
+	private static final String USU_SENHA = "nettracer123";
+	private static final String USU_SIGLA_CIA_AEREA = "WJB";
+	
 	@Override
 	public EnplanementResponse getEnplanements(User user) throws UnexpectedException {
 		return null;
@@ -40,13 +52,8 @@ public class Reservation implements ReservationInterface {
 	public OsiResponse getOsiContents(User user, String pnr, String bagTag) throws UnexpectedException {
 		return null;
 	}
-
-	@Override
-	public ReservationResponse getReservationData(User user, String pnr, String bagTag) throws UnexpectedException {
-		// DEFINE RESPONSE
-		ReservationResponse response = ReservationResponse.Factory
-		.newInstance();
-		
+	
+	public SessaoUsuario getSession(User user) throws UnexpectedException {
 
 		try {
 		
@@ -58,9 +65,55 @@ public class Reservation implements ReservationInterface {
 			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
 
 			// CREATE OUTGOING DOCUMENT
+			EfetuarLoginDocument bi = EfetuarLoginDocument.Factory.newInstance();
+			EfetuarLogin bi2 = bi.addNewEfetuarLogin();
+			AutenticacaoHeader bi3 = bi2.addNewParAutenticacaoHeader();
+			bi3.setLanguage(Language.ENGLISH);
+			bi3.setUsuEmail(USU_EMAIL);
+			bi3.setUsuSenha(USU_SENHA);
+			bi3.setSiglaCiaAerea(USU_SIGLA_CIA_AEREA);
+			
+			// MAKE REQUEST WITH STUB
+			EfetuarLoginResponseDocument docRes = stub.efetuarLogin(bi);
+			EfetuarLoginResponse sessionRes = docRes.getEfetuarLoginResponse();
+			return sessionRes.getEfetuarLoginResult();
+			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			return null;
+		} 
+		
+	}
+
+	@Override
+	public ReservationResponse getReservationData(User user, String pnr, String bagTag) throws UnexpectedException {
+		// DEFINE RESPONSE
+		ReservationResponse response = ReservationResponse.Factory
+		.newInstance();
+		
+
+		try {
+			SessaoUsuario session = getSession(user);
+			if (session == null) {
+				response.addNewError().setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
+				return response;
+			}
+			
+			String endpoint = user.getProfile().getParameters().get(ParameterType.RESERVATION_ENDPOINT);
+			
+			// 1) STUB & TIMEOUTES
+			WSNetTracerStub stub = new WSNetTracerStub(endpoint);
+			stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(1 * 60 * 1000));
+			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
+
+			// CREATE OUTGOING DOCUMENT
 			GetBookingInformationDocument bi = GetBookingInformationDocument.Factory.newInstance();
 			GetBookingInformation bi2 = bi.addNewGetBookingInformation();
 			bi2.setBookingLocator(pnr);
+			ConsultaSimplesHeader header = bi2.addNewOConsultaHeader();
+			header.setSessao(session);
+			bi2.setOConsultaHeader(header);
 			
 			// MAKE REQUEST WITH STUB
 			GetBookingInformationResponseDocument webjetres = stub.getBookingInformation(bi);
@@ -178,7 +231,12 @@ public class Reservation implements ReservationInterface {
 	public RemarkResponse writeRemark(User user, String pnr, String remark) throws UnexpectedException {
 		RemarkResponse response = RemarkResponse.Factory.newInstance();
 		try {
-
+			SessaoUsuario session = getSession(user);
+			if (session == null) {
+				response.addNewError().setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
+				return response;
+			}
+			
 			String endpoint = user.getProfile().getParameters().get(ParameterType.RESERVATION_ENDPOINT);
 
 			WSNetTracerStub stub = new WSNetTracerStub(endpoint);
@@ -187,6 +245,7 @@ public class Reservation implements ReservationInterface {
 			org.tempuri.AddBookingComments bi3 = bi2.addNewOAddBookingComments();
 			bi3.setComments(remark);
 			bi3.setRecordLocator(pnr);
+			bi3.setSessao(session);
 			stub.addBookingComments(bi);
 			
 			
