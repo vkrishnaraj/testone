@@ -237,7 +237,7 @@ function updatePagination() {
                 <td>
                 	<bean:message key="colname.recordlocator" />
                 	<br />
-                	<html:text property="recordlocator" size="8" maxlength="6" styleClass="textfield" />
+                	<html:text property="recordlocator" size="8" maxlength="8" styleClass="textfield" />
                 </td>
                 
               </tr>
