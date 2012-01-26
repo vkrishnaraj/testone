@@ -411,7 +411,7 @@
               <td>
                 <bean:message key="colname.recordlocator.req" />
                 <br>
-                <html:text property="recordlocator" size="18" maxlength="8" styleClass="textfield" />
+                <html:text property="recordlocator" size="18" maxlength="6" styleClass="textfield" />
               </td>
               <td>
                 <bean:message key="colname.ticket" />

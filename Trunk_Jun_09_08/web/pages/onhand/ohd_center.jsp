@@ -579,7 +579,7 @@ function gotoHistoricalReport() {
         <html:text property="bagTagNumber" size="18" maxlength="10"
           styleClass="textfield" /></td>
         <td><bean:message key="colname.pnr" /> <br>
-        <html:text property="pnr" size="10" maxlength="8"
+        <html:text property="pnr" size="10" maxlength="6"
           styleClass="textfield" /></td>
         <td><bean:message key="colname.storage_location" /> <br>
         <html:text property="storage_location" size="22" maxlength="25"
