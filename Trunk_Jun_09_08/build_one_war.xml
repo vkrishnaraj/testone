@@ -2172,6 +2172,7 @@
 			<property name="overrideResource" value="${basedir}/companies/webjet/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/webjet/ApplicationResources_pt.properties" />
 
 		<antcall target="fast_all" />
 		<antcall target="delete" />
