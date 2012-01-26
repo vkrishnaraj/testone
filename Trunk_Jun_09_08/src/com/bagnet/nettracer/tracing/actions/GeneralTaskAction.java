@@ -233,7 +233,7 @@ public class GeneralTaskAction extends Action{
 				}while(gtask == null && attempts++ < 2);
 			}
 			if (gtask == null){
-				//TODO redirect error task not availiable
+				//TODO redirect error task not available
 				
 				request.setAttribute("errorMsg", "generaltask.taskunavailable");
 				request.setAttribute("taskmanagerbutton", 1);

@@ -3,7 +3,7 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
-
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="org.apache.struts.action.DynaActionForm" %>
 <%@ page import="java.util.ResourceBundle" %>
@@ -13,7 +13,7 @@
 <%@ taglib prefix="nt" uri="http://nettracerTags"%> 
 <%
 	Agent a = (Agent) session.getAttribute("user");
-	boolean hasLoadFoundPermission = UserPermissions.hasPermission("Load Found from Task Manager", a);
+	boolean hasLoadFoundPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LFC_LOAD_FOUND_FROM_TASK_MANAGER, a);
 %>
 <jsp:include page="/pages/includes/taskmanager_header.jsp" />
 <tr>

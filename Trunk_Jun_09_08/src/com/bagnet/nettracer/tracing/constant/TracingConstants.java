@@ -187,6 +187,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_DELIVER = "Items to Deliver";
 
 	public static final String SYSTEM_COMPONENT_NAME_LFC_ITEM_ENTRY_WORKFLOW = "LFC Item Entry Workflow";
+	public static final String SYSTEM_COMPONENT_NAME_LFC_SHELVED_ITEMS_WITH_TRACE_RESULTS = "Shelved Items with Trace Results";
+	public static final String SYSTEM_COMPONENT_NAME_LFC_LOAD_FOUND_FROM_TASK_MANAGER = "Load Found from Task Manager";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -466,6 +468,7 @@ public class TracingConstants {
 	public final static String LF_VIEW_ITEMS_TO_DELIVER = "view_items_deliver";
 	
 	public final static String LFC_ENTER_ITEMS = "enter_items";
+	public final static String LFC_SHELVED_TRACE_RESULTS = "shelved_trace_results";
 	
 	public final static int LF_LOCATION_SHELF = 0;
 	public final static int LF_LOCATION_VERIFICATION = 1;
@@ -987,8 +990,8 @@ public class TracingConstants {
 	public static final int FS_ACTION_DATA_RETENTION_SCAN = 6;
 	public static final String SESSION_REDIRECT_URL = "SESSION_REDIRECT_URL";
 	
-	public static final int LFC_ITEM_LOW_VALUE = 1;
-	public static final int LFC_ITEM_HIGH_VALUE = 2;
+	public static final int LFC_ITEM_LOW_VALUE = 0;
+	public static final int LFC_ITEM_HIGH_VALUE = 1;
 	
 	public static final int HISTORY_OBJ_TYPE_FOUND = 1;
 	

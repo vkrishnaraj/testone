@@ -273,6 +273,7 @@
 		<form-bean name="regionForm" type="com.bagnet.nettracer.tracing.forms.RegionForm" />	
 
 		<form-bean name="enterItemsForm" type="com.bagnet.nettracer.tracing.forms.lfc.EnterItemsForm" />	
+		<form-bean name="shelvedTraceResultsForm" type="com.bagnet.nettracer.tracing.forms.lfc.ShelvedTraceResultsForm" />	
 
 	</form-beans>
 	<!-- global exception -->
@@ -544,6 +545,7 @@
 		<forward name="create_claim_prorate" path="create_claim_prorate" />
 
 		<forward name="enter_items" path="enter_items" />
+		<forward name="shelved_trace_results" path="shelved_trace_results" />
 		
 	</global-forwards>
 
@@ -883,6 +885,7 @@
 		<action path="/create_delivery" type="com.bagnet.nettracer.tracing.actions.lf.CreateDeliveryAction" name="createDeliveryForm" scope="session" validate="false"></action>
 
 		<action path="/enter_items" type="com.bagnet.nettracer.tracing.actions.lfc.EnterItemsAction" name="enterItemsForm" scope="session" validate="false"></action>
+		<action path="/shelved_trace_results" type="com.bagnet.nettracer.tracing.actions.lfc.ShelvedTraceResultsAction" name="shelvedTraceResultsForm" scope="session" validate="false"></action>
 
 	</action-mappings>
 

@@ -1586,10 +1586,6 @@ document.onkeydown = function(){
 		hasurlfocus(0);
 	}
     
-    if (window.event && window.event.keyCode == 78 && window.event.ctrlKey) {
-      return false;
-    }
-
 	if (window.event && window.event.keyCode == 69 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(1);
@@ -1618,6 +1614,11 @@ document.onkeydown = function(){
 	if (window.event && (window.event.keyCode == 113 || (window.event.keyCode == 83 && window.event.ctrlKey))) {
 		window.event.keyCode = 505;
 		loadQuickSearchModal();
+	}
+	
+	if (window.event && (window.event.keyCode == 78 && window.event.ctrlKey)) {
+		window.event.keyCode = 505;
+		document.location.href="shelved_trace_results.do?getNextItem=1";
 	}
 
 	if (window.event && window.event.keyCode == 84 && window.event.ctrlKey) {

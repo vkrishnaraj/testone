@@ -511,6 +511,11 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LFC_SHELVED_ITEMS_WITH_TRACE_RESULTS)) { 
+																					int x = new LFServiceBean().getShelvedTraceResultsCount(agent.getStation(), -1);
+																					if (x != -1) {
+																						entries = x;
+																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_TRACE_RESULTS)) {
 																					int x = new LFServiceBean().getTraceResultsCount(agent.getStation());
 																					if (x != -1) {

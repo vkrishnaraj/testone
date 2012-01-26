@@ -43,6 +43,7 @@
 				<ref bean="cronLf1stNotice" />
 				<ref bean="cronLf2ndNotice" />
 				<ref bean="cronLfTraceAll" />
+				<ref bean="LockCleanupTrigger" />
 			</list>
 		</property>
 	</bean>

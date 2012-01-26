@@ -2019,15 +2019,21 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 
 	@Override
-	public int getShelvedTraceResultsCount(Station station) {
+	public int getShelvedTraceResultsCount(Station station, int value) {
 		if(station == null){
 			return 0;
 		}
 		String query = "select count(mh.id) from lfmatchhistory mh "
 					 + "left outer join lffound lf on mh.found_id = lf.id "
+					 + "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " "
 					 + "where mh.status_Status_ID = " + TracingConstants.LF_TRACING_OPEN + " " 
 					 + "and lf.status_ID = " + TracingConstants.LF_STATUS_OPEN + " "
-					 + "and lf.station_ID = " + station.getStation_ID() + " ";
+					 + "and lf.station_ID = " + station.getStation_ID() + " "
+					 + "and lf.itemLocation = " + TracingConstants.LF_LOCATION_SHELF + " ";
+		if (value > -1) {
+			query += "and i.value = " + value;
+		}
+		
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -2047,14 +2053,17 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 
 	@Override
-	public List<LFFound> getShelvedTraceResultsPaginated(Station station, int start, int offset) {
+	public List<LFFound> getShelvedTraceResultsPaginated(Station station, int value, int start, int offset) {
 		if(station == null){
 			return null;
 		}
 		
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m left outer join m.found "
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m "
 				   + "where m.status = " + TracingConstants.LF_TRACING_OPEN + " and m.found.status = " + TracingConstants.LF_STATUS_OPEN + " "
 				   + "and m.found.location.station_ID = " + station.getStation_ID() + " "
+				   + "and m.found.item.value = " + value + " "
+				   + "and m.found.itemLocation = " + TracingConstants.LF_LOCATION_SHELF + " "
+				   + "and not exists (from com.bagnet.nettracer.tracing.db.Lock l where l.lockKey = m.found.barcode) "
 				   + "order by m.id asc group by m.found.id";
 		Session sess = null;
 		try{
@@ -2065,14 +2074,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				q.setFirstResult(start);
 				q.setMaxResults(offset);
 			} else {
-				throw new Exception("Invalided pagination bounds");
+				throw new Exception("Invalid pagination bounds");
 			}
 			
 			List result = q.list();
-			result.get(0);
+			
 			ArrayList<LFFound> toReturn = new ArrayList<LFFound>();
 			for (int i = 0; i < result.size(); ++i) {
-				toReturn.add((LFFound) ((Object[]) result.get(i))[1]);
+				toReturn.add(((LFMatchHistory) result.get(i)).getFound());
 			}
 			return toReturn;
 		}catch(Exception e){

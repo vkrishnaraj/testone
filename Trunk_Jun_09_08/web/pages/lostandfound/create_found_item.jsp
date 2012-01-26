@@ -254,20 +254,20 @@
 			        		<logic:iterate indexId="i" id="match" name="foundItemForm" property="traceResults" type="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory" >
 					        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
 			        			<tr>
-			        				<td class="header" >
+			        				<td class="header" style="width:20%;" >
 			        					<bean:message key="colname.description" />
 			        				</td>
-			        				<td class="header" >
+			        				<td class="header" style="width:30%;" >
 			        					<bean:message key="header.found.item" />:&nbsp;
 			        					<bean:write name="match" property="found.barcode" />
 			        				</td>
-			        				<td class="header" >
+			        				<td class="header" style="width:30%;" >
 			        					<bean:message key="header.lost.report" />:&nbsp;
 			        					<a style="color:#fff;" href="create_lost_report.do?lostId=<bean:write name="match" property="lost.id" />" >
 			        						<bean:write name="match" property="lost.id" />
 			        					</a>
 			        				</td>
-			        				<td class="header" >
+			        				<td class="header" style="width:20%;" >
 			        					<bean:message key="colname.lf.action" />
 			        				</td>
 			        			</tr>
@@ -306,6 +306,7 @@
 			        		<div style="width:100%;" >
                     		<a name="rm" ></a>
                     		<span style="float:left;">
+                    		<br/>
 							<h1 class="green">
 					        	<bean:message key="header.rejected.matches" />
 					        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
@@ -321,20 +322,20 @@
 			        		
 					        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
 			        			<tr>
-			        				<td class="header" >
+			        				<td class="header" style="width:20%;" >
 			        					<bean:message key="colname.description" />
 			        				</td>
-			        				<td class="header" >
+			        				<td class="header" style="width:30%;" >
 			        					<bean:message key="header.found.item" />:&nbsp;
 			        					<bean:write name="match" property="found.barcode" />
 			        				</td>
-			        				<td class="header" >
+			        				<td class="header" style="width:30%;" >
 			        					<bean:message key="header.lost.report" />:&nbsp;
 			        					<a style="color:#fff;" href="create_lost_report.do?lostId=<bean:write name="match" property="lost.id" />" >
 			        						<bean:write name="match" property="lost.id" />
 			        					</a>
 			        				</td>
-			        				<td class="header" >
+			        				<td class="header" style="width:20%;" >
 			        					<bean:message key="colname.lf.action" />
 			        				</td>
 			        			</tr>

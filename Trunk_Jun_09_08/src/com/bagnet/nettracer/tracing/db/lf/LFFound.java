@@ -242,8 +242,27 @@ public class LFFound implements LFObject, Serializable {
 	}
 	
 	@Transient
+	public String getExtendedSummaryDesc() {
+		if (item != null) {
+			String toReturn = item.getExtendedSummaryDesc();
+			if (toReturn == null) {
+				toReturn = "";
+			}
+			return toReturn;
+		}
+		return "";
+	}
+	
+	@Transient
 	public String getSummaryDesc() {
-		return item.getSummaryDesc();
+		if (item != null) {
+			String toReturn = item.getSummaryDesc();
+			if (toReturn == null) {
+				toReturn = "";
+			}
+			return toReturn;
+		}
+		return "";
 	}
 
 	public int getItemLocation() {

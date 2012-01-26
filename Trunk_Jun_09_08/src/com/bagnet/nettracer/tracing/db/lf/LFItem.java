@@ -253,6 +253,20 @@ public class LFItem implements Serializable{
 		this.value = value;
 	}
 	
+	public String getExtendedSummaryDesc() {
+		String toReturn = getSummaryDesc() + ",";
+		
+		if (description != null && !description.isEmpty()) {
+			toReturn += description + ",";
+		}
+		
+		if (longDescription != null && !longDescription.isEmpty()) {
+			toReturn += longDescription + ",";
+		}
+		toReturn = toReturn.substring(0, toReturn.lastIndexOf(','));
+		return toReturn;
+	}
+	
 	public String getSummaryDesc() {
 		String toReturn = getCatDesc() + ",";
 		
@@ -262,6 +276,10 @@ public class LFItem implements Serializable{
 		
 		if (model != null && !model.isEmpty()) {
 			toReturn += model + ",";
+		}
+
+		if (serialNumber != null && !serialNumber.isEmpty()) {
+			toReturn += serialNumber + ",";
 		}
 
 		if (color != null && !color.isEmpty()) {

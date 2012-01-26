@@ -914,6 +914,10 @@
     <definition name="enter_items" extends="user_menu">
         <put name="center"   value="/pages/lfc/enter_items.jsp"/>
     </definition>
+
+    <definition name="shelved_trace_results" extends="user_menu">
+        <put name="center"   value="/pages/taskmanager/shelved_trace_results.jsp"/>
+    </definition>
     
     <definition name="ajax_subcategory" path="/pages/ajax_divs/subcategory.jsp">
     </definition>
