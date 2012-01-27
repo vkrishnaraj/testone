@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.actions.lfc;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -100,7 +102,8 @@ public class EnterItemsAction extends CheckedAction {
 	
 	private LFFound duplicateFound(LFFound found, Agent agent) {
 		LFFound toReturn = LFUtils.createLFFound(agent);
-		toReturn.setFoundDate(found.getFoundDate());
+		toReturn.setReceivedDate(found.getReceivedDate());
+		toReturn.setFoundDate(new Date());
 		toReturn.getItem().setValue(found.getItem().getValue());
 		toReturn.setCompanyId(found.getCompanyId());
 		return toReturn;

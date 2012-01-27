@@ -219,7 +219,7 @@
 								<bean:message key="colname.lfc.item.received.date" />
 								(<%= a.getDateformat().getFormat() %>)&nbsp;<span class="reqfield">*</span>
 								<br>
-								<html:text property="disFoundDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.enterItemsForm,'disFoundDate','calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+								<html:text property="disReceivedDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.enterItemsForm,'disReceivedDate','calendar','<%= a.getDateformat().getFormat() %>'); return false;">
 							</td>
 							<td>
 								<br>

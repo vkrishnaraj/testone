@@ -394,11 +394,16 @@
          				</td>
          			</logic:empty>
 						<td>
+							<bean:message key="colname.lf.received.date" />
+							<br/>
+							<html:text name="foundItemForm" property="disReceivedDate" disabled="true" styleClass="disabledtextfield" />
+						</td>
+						<td>
 							<bean:message key="colname.lf.created.date" />
 							<br/>
 							<html:text name="foundItemForm" property="disFoundDate" disabled="true" styleClass="disabledtextfield" />
 						</td>
-						<td colspan=2>
+						<td>
 							<bean:message key="colname.lf.created.agent" />
 							<br/>
 							<html:text name="foundItemForm" property="found.agent.username" disabled="true" styleClass="disabledtextfield" />

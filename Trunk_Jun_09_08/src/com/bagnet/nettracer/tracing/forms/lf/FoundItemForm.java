@@ -37,6 +37,10 @@ public final class FoundItemForm extends ActionForm {
 	public void setFound(LFFound found) {
 		this.found = found;
 	}
+	
+	public String getDisReceivedDate() {
+		return found.getDisReceivedDate(dateFormat);
+	}
 
 	public String getDisFoundDate() {
 		return found.getDisFoundDate(dateFormat);

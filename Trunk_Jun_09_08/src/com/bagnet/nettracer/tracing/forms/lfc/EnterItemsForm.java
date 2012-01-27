@@ -30,6 +30,14 @@ public final class EnterItemsForm extends ActionForm {
 		this.found = found;
 	}
 
+	public String getDisReceivedDate() {
+		return found.getDisReceivedDate(dateFormat);
+	}
+	
+	public void setDisReceivedDate(String date) {
+		found.setDisReceivedDate(date, dateFormat);
+	}
+
 	public String getDisFoundDate() {
 		return found.getDisFoundDate(dateFormat);
 	}

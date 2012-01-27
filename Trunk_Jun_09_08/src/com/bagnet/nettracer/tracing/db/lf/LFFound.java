@@ -44,6 +44,7 @@ public class LFFound implements LFObject, Serializable {
 	private String agreementNumber;
 	private String mvaNumber;
 	
+	private Date receivedDate;
 	private Date foundDate;
 
 	@ManyToOne
@@ -153,8 +154,16 @@ public class LFFound implements LFObject, Serializable {
 		this.client = client;
 	}
 	
+	public String getDisReceivedDate(String dateFormat) {
+		return DateUtils.formatDate(receivedDate, dateFormat, agent.getCurrenttimezone(), null);
+	}
+	
+	public void setDisReceivedDate(String date, String dateFormat) {
+		this.receivedDate = DateUtils.convertToDate(date, dateFormat, null);
+	}
+	
 	public String getDisFoundDate(String dateFormat) {
-		return DateUtils.formatDate(foundDate, dateFormat, "", null);
+		return DateUtils.formatDate(foundDate, dateFormat, agent.getCurrenttimezone(), null);
 	}
 
 	public void setDisFoundDate(String date, String dateFormat) {
@@ -291,6 +300,14 @@ public class LFFound implements LFObject, Serializable {
 	
 	public boolean hasContactInfo() {
 		return !client.isEmpty();
+	}
+
+	public Date getReceivedDate() {
+		return receivedDate;
+	}
+
+	public void setReceivedDate(Date receivedDate) {
+		this.receivedDate = receivedDate;
 	}
 
 }
