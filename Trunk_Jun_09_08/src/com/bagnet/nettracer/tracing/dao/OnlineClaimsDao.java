@@ -343,7 +343,7 @@ public class OnlineClaimsDao {
 						existingDbClaim.setStatus(currentStatus);
 	
 						if (checkSubmitCondition(existingDbClaim)) {
-							existingDbClaim.setStatus(STATUS_SUBMITTED);
+							existingDbClaim.setStatus(STATUS_REVIEW);
 							existingDbClaim.setSubmitDate(TracerDateTime.getGMTDate());
 						}
 					}
