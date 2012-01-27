@@ -251,7 +251,7 @@ public class LFTracingUtil {
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
 		" where f.status.status_ID = :status" +
 		" and f.item.disposition.status_ID = :disposition" +
-		" and f.foundDate > :founddate";
+		" and f.receivedDate > :founddate";
 
 		boolean hasReservation = false;
 		if(lost != null && lost.getLossInfo() != null 
@@ -670,7 +670,7 @@ public class LFTracingUtil {
 		String sql = "select f.id id from lffound f, lfitem i " +	
 		" where f.item_id = i.id and i.disposition_status_ID = :disposition " +
 		" and f.status_ID = :status " +
-		" and f.foundDate > :salvagedate";
+		" and f.receivedDate > :salvagedate";
 
 		Session sess = null;
 		try{

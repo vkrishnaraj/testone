@@ -11,13 +11,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.junit.Test;
 
 import aero.nettracer.general.services.GeneralServiceBean;
+import aero.nettracer.lf.services.LFCClientServiceBean;
+import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 import aero.nettracer.lf.services.exception.UpdateException;
 import aero.nettracer.security.AES;
@@ -1155,6 +1156,7 @@ public class LFServiceBeanTest {
 		LFServiceBean sbean = new LFServiceBean();
 		Agent agent = sbean.getAutoAgent();
 		found.setAgent(agent);
+		found.setReceivedDate(new Date());
 		found.setFoundDate(new Date());
 		
 		String subcompany = null;
