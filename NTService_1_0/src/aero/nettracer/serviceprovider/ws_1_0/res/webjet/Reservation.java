@@ -1,5 +1,8 @@
 package aero.nettracer.serviceprovider.ws_1_0.res.webjet;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.log4j.Logger;
 import org.tempuri.AddBookingCommentsDocument;
@@ -146,6 +149,11 @@ public class Reservation implements ReservationInterface {
 							add.setEmailAddress(pax.getEmail());
 						}
 						
+						if (pax.getCellPhoneNumber() > 0) {
+							add.setMobilePhone("" + pax.getCellPhoneCountryCode() + "-" 
+									+ pax.getCellPhoneRegionCode() + "-" + pax.getCellPhoneNumber());
+						}
+						
 						if (pax.getFirstName() != null) {
 							p.setFirstname(pax.getFirstName());
 						}
@@ -164,6 +172,7 @@ public class Reservation implements ReservationInterface {
 								
 								ClaimCheck cc = res.addNewClaimChecks();
 								cc.setTagNumber(bag.getBagTagNumber());
+								cc.setTimeChecked(GregorianCalendar.getInstance());
 								
 							}
 						}
