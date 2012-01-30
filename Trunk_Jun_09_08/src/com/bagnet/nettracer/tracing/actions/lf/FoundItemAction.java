@@ -243,7 +243,7 @@ public class FoundItemAction extends CheckedAction {
 		}
 
 		fiForm.setFound(found);
-		if (found.getId() != 0) {
+		if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"") && found.getId() != 0) {
 			TraceResultsFilter filter = new TraceResultsFilter();
 			filter.setRejected(true);
 			fiForm.setRejectedResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000));
