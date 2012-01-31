@@ -1780,7 +1780,7 @@ public class PassengerController {
 				submitPassengerInfo();
 				break;
 		}
-		if (FacesUtil.isError()) {
+		if (!FacesUtil.isError()) {
 			currentPage = PAGE_DIRECTION;
 			return FacesUtil.passengerLogout();
 		}
