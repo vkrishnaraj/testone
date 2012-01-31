@@ -103,6 +103,11 @@
 		  %>
 		  	<input type="button" value="View Online Claim" onclick="loadSlideupContainer('<%=url %>')" id="button" />
 		  	<br />&nbsp;
+              <script type="text/javascript">
+				if (document.getElementById("slideUpContainerVisible").value == 'yes') {
+					loadSlideupContainer('<%=url %>');
+				}
+          	 </script>
 		  <% 
 		  } 
 		  %>

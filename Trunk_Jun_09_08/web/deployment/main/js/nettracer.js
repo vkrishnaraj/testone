@@ -283,8 +283,10 @@ function loadSlideupContainer(url) {
 	jQuery("#sliderContentFrame").load(url);
 	if (slideUpContainer.is( ":visible" )){
 		slideUpContainer.slideUp( 500 );
+		document.getElementById("slideUpContainerVisible").value = 'no';
 	} else {
 		slideUpContainer.slideDown( 500 );
+		document.getElementById("slideUpContainerVisible").value = 'yes';
 	}
 }
 
@@ -293,8 +295,10 @@ function handleEvent(event) {
 	var slideUpContainer = jQuery("#slideUpContainer");
 	if (slideUpContainer.is( ":visible" )){
 		slideUpContainer.slideUp( 500 );
+		document.getElementById("slideUpContainerVisible").value = 'no';
 	} else {
 		slideUpContainer.slideDown( 500 );
+		document.getElementById("slideUpContainerVisible").value = 'yes';
 	}
 }
 
