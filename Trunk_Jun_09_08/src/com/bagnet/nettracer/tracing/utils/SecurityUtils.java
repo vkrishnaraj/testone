@@ -15,7 +15,7 @@ import java.util.regex.Matcher;
 import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
+import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -125,7 +125,7 @@ public class SecurityUtils {
 		
 		return agent;
 	}
-
+	
 	/**
 	 * logintype == 0: application login
 	 * logintype == 1: webservice login
@@ -146,15 +146,26 @@ public class SecurityUtils {
 			
 			
 			sess = HibernateWrapper.getSession().openSession();
-			
+
 			Criteria criteria = sess.createCriteria(Agent.class);
 			criteria.add(Expression.eq("username", username));
-			criteria.add(Expression.eq("password", TEA.encryptTEA(password)));
+			criteria.add(Expression.eq("password", StringUtils.sha1(password, true)));
 			criteria.add(Expression.eq("companycode_ID", companyCode));
 
 			List results = criteria.list();
-			if (results == null || results.size() < 1) {
+			if (results == null || results.size() < 1){
+				//loupas - check to see if the password is still using TEA encryption, if so, return the agent with reset_password=true
+				Criteria criteriaTEA = sess.createCriteria(Agent.class);
+				criteriaTEA.add(Expression.eq("username", username));
+				criteriaTEA.add(Expression.eq("password", TEA.encryptTEA(password)));
+				criteriaTEA.add(Expression.eq("companycode_ID", companyCode));
+				results = criteriaTEA.list();
+				if(results != null && results.size() > 0 ){
+					((Agent) results.get(0)).setReset_password(true);
+				}
+			}
 
+			if (results == null || results.size() < 1) {
 				// Add 1 to # of times login failed.
 				Criteria criteria2 = sess.createCriteria(Agent.class);
 				criteria2.add(Expression.eq("username", username));
@@ -163,15 +174,15 @@ public class SecurityUtils {
 				if (results2.size() == 1) {
 					agent = (Agent)results2.get(0);
 					int maxFailedAttempts = AdminUtils.getCompVariable(companyCode).getMax_failed_logins();
-					
+
 					if (maxFailedAttempts > 0) {
 						int failedAttempts = agent.getFailed_logins() + 1;
 						agent.setFailed_logins(failedAttempts);
-						
+
 						if (failedAttempts >= maxFailedAttempts && !agent.isAccount_locked()) {
 							agent.setAccount_locked(true);
 							HibernateUtils.save(agent);
-							
+
 							if (AdminUtils.getCompVariable(companyCode).getAudit_agent() == 1) {
 								Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(agent, agent);
 								if (audit_agent != null) {
@@ -182,7 +193,7 @@ public class SecurityUtils {
 							HibernateUtils.save(agent);
 						}
 					}
-					
+
 				}
 				if (agent != null) {
 					if (agent.isAccount_locked()) {
@@ -317,6 +328,7 @@ public class SecurityUtils {
 	 */
 	public static boolean isPolicyAcceptablePassword(String companycode_id, String password, String username, HttpServletRequest request, boolean suppress) {
 		boolean securePolicy = false;
+		int passlength = 8;
 		
 		Session sess = null;
 		try {
@@ -327,6 +339,9 @@ public class SecurityUtils {
 			if (csv != null && csv.getSecure_password() == 1) {
 				securePolicy = true;
 			}
+			if(csv != null){
+				passlength = csv.getMin_pass_size();
+			}
 			if (sess != null) sess.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -335,10 +350,9 @@ public class SecurityUtils {
 		// Must not have a space on either end
 		password = password.trim();
 		
-		if (securePolicy) {
 			//
 			// Password must be > 8 characters
-			if (password.length() < 8) {
+			if (password.length() < passlength) {
 				if (!suppress)
 					request.setAttribute("securePolicy", 1);
 				return false;
@@ -390,15 +404,64 @@ public class SecurityUtils {
 				request.setAttribute("securePolicy", 1);
 			return false;
 
-		} else {
-			
-			if (password.length() >= 4) 
-				return true;
-			
-			if (!suppress)
-				request.setAttribute("minimalPolicy", 1);
-			return false;
-		}
 		
 	}
+	
+	public static boolean lastXPasswords(long agent_id, int passcount, String password){
+		String sql = "select id as id from passwordhistory where agent_id = :agent_id and pcount <= :passcount and password = :password";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery q = sess.createSQLQuery(sql);
+			q.setParameter("agent_id", agent_id);
+			q.setParameter("passcount", passcount);
+			q.setParameter("password", password);
+			q.addScalar("id", Hibernate.LONG);
+			List<Long> ret = q.list();
+			if(ret != null && ret.size() > 0){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if(sess != null){
+				sess.close();
+			}
+		}
+		return false;
+	}
+	
+	public static boolean insertPasswordHistory(long agent_id, String password){
+		String updateSql = "update passwordhistory set pcount=pcount+1 where agent_id = :agent_id";
+		String insertSql = "insert into passwordhistory (agent_id, password, pcount) values (:agent_id, :password, :pcount)";
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery updateq = sess.createSQLQuery(updateSql);
+			SQLQuery insertq = sess.createSQLQuery(insertSql);
+			updateq.setParameter("agent_id", agent_id);
+			insertq.setParameter("agent_id", agent_id);
+			insertq.setParameter("password", password);
+			insertq.setParameter("pcount", 1);
+			t = sess.beginTransaction();
+			updateq.executeUpdate();
+			insertq.executeUpdate();
+			t.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} finally {
+			if(sess != null){
+				sess.close();
+			}
+		}
+		return false;
+	}
+
 }

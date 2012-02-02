@@ -528,7 +528,7 @@
 		<property name="app.xml.location" value="metadata/lfc/local" />
 		<antcall target="donotrun-build-ear" />
 	</target>
-	 
+	
 	<target name="build-ear-local-lfc-service" depends="delete-wars">
 		<property name="staging.project" value="lfcservice" />
 		<property name="staging.env" value="local" />
@@ -1299,7 +1299,7 @@
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-lfc" />
 	</target>
-
+	
 	<target name="build-war-local-avis" depends="delete">
 		<property name="ant_project_name" value="ab" />
 		<property name="ant_war_name" value="ab" />
@@ -3264,6 +3264,12 @@
   	      		<formatter type="xml" usefile="true" />
   	      		<test name="com.bagnet.nettracer.tracing.utils.general.LoggerTest" />
   	    	</junit>
+  		
+  	   	<junit printsummary="yes" showoutput="true" >
+  	      		<classpath refid="classpath.test" />
+  	      		<formatter type="xml" usefile="true" />
+  	      		<test name="com.bagnet.nettracer.tracing.utils.SecurityUtilsTest" />
+  	    	</junit>
     	
   </target>
 	
@@ -3289,7 +3295,12 @@
       		<formatter type="xml" usefile="true" />
       		<test name="com.bagnet.nettracer.tracing.utils.general.LoggerTest" />
     	</junit>
-    	
+ 	   	<junit printsummary="yes" showoutput="true" >
+  	      		<classpath refid="classpath.test" />
+  	      		<formatter type="xml" usefile="true" />
+  	      		<test name="com.bagnet.nettracer.tracing.utils.SecurityUtilsTest" />
+  	    	</junit>
+  		
   </target>
 	
 </project>

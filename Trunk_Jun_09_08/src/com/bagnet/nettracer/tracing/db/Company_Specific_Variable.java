@@ -77,7 +77,8 @@ public class Company_Specific_Variable implements Serializable {
 	private int scannerDefaultBack;
 	private int scannerDefaultForward;
 	private String blindEmail;
-	
+	private int min_pass_size;
+	private int pass_x_history;
 
 	/**
 	 * @return the wt_write_enabled
@@ -1008,6 +1009,29 @@ public class Company_Specific_Variable implements Serializable {
 	
 	public void setAutoCloseOhd(boolean autoCloseOhd) {
 		this.autoCloseOhd = autoCloseOhd;
+	}
+	
+	
+	public void setMin_pass_size(int min_pass_size) {
+		this.min_pass_size = min_pass_size;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getMin_pass_size() {
+		return min_pass_size;
+	}
+	
+	public void setPass_x_history(int pass_x_history) {
+		this.pass_x_history = pass_x_history;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getPass_x_history() {
+		return pass_x_history;
 	}
 	
 	

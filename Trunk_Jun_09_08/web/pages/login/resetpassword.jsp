@@ -4,6 +4,19 @@
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Company" %>
+
+<% 
+Agent a = (Agent) session.getAttribute("usertemp");
+ResourceBundle bundle = ResourceBundle.getBundle(
+		"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
+Company c = com.bagnet.nettracer.tracing.bmo.CompanyBMO.getCompany(a.getCompanycode_ID());
+String passSecure = bundle.getString("error.security.password.secure").replace("{0}","" + (c!=null?c.getVariable().getMin_pass_size():8));
+String passMin = bundle.getString("error.security.password.minimal").replace("{0}","" + (c!=null?c.getVariable().getMin_pass_size():8));
+%>
 
 <html:form action="/passreset" focus="password1" onsubmit="return validatePassresetForm(this);">
   <html:javascript formName="passresetForm" />
@@ -57,10 +70,10 @@
               <td align="left">
 		       	  <font color="red">
 		            <logic:present name="minimalPolicy" scope="request">
-		            	<bean:message key="error.security.password.minimal"/>
+		            	<%=passMin%>
 		            </logic:present>
 		            <logic:present name="securePolicy" scope="request">
-		         		<bean:message key="error.security.password.secure"/>
+		         		<%=passSecure%>
 		            </logic:present>
 				  </font>
               </td>

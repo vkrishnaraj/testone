@@ -15,11 +15,13 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
-import com.bagnet.nettracer.tracing.utils.TEA;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 
 public class ResetPasswordAction extends Action {
 
@@ -40,12 +42,15 @@ public class ResetPasswordAction extends Action {
 			agent = (Agent) session.getAttribute("usertemp");
 		}
 
+		Company comp = CompanyBMO.getCompany(agent.getCompanycode_ID());
+		
 		if (request.getParameter("resetpass") != null) {
 
 			// Validate the request parameters specified by the user
 			ActionMessages errors = new ActionMessages();
 			String password1 = (String) PropertyUtils.getSimpleProperty(form, "password1");
 			String password2 = (String) PropertyUtils.getSimpleProperty(form, "password2");
+			String password1sha1 = StringUtils.sha1(password1.trim(),true);
 			
 			
 			if (password1.trim().length() == 0) {
@@ -63,7 +68,9 @@ public class ResetPasswordAction extends Action {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				return mapping.findForward(TracingConstants.PASS_RESET);
-			} else if ((TEA.encryptTEA(password1.trim())).equals(agent.getPassword())) {
+			} else if (SecurityUtils.lastXPasswords(agent.getAgent_ID(),
+					comp!=null?comp.getVariable().getPass_x_history():20, 
+					password1sha1)){
 				ActionMessage error = new ActionMessage("error.password.sameasold");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
@@ -73,7 +80,8 @@ public class ResetPasswordAction extends Action {
 			} 
 			
 			// change pass and send user back to login
-			agent.setPassword(TEA.encryptTEA(password1.trim()));
+			agent.setPassword(password1sha1);
+			SecurityUtils.insertPasswordHistory(agent.getAgent_ID(), password1sha1);
 			agent.setLast_pass_reset_date(new Date());
 			agent.setReset_password(false);
 			HibernateUtils.save(agent);

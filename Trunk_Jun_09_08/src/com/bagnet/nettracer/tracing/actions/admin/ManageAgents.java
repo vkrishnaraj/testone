@@ -21,9 +21,11 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.validator.DynaValidatorForm;
 
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.NTDateFormat;
 import com.bagnet.nettracer.tracing.db.NTTimeFormat;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -32,7 +34,7 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Agent;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
-import com.bagnet.nettracer.tracing.utils.TEA;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.audit.AuditAgentUtils;
@@ -341,9 +343,21 @@ public final class ManageAgents extends Action {
 				
 				if (dForm.get("passwordChanged") != null && dForm.get("passwordChanged").equals("1")) {
 					boolean validPw = SecurityUtils.isPolicyAcceptablePassword(agent.getCompanycode_ID(), (String) dForm.get("password"), agent.getUsername(), request, false);
-					if (validPw) {
-						agent.setPassword(TEA.encryptTEA((String) dForm.get("password")));
+					String password = StringUtils.sha1((String)dForm.get("password"),true);
+					Company comp = CompanyBMO.getCompany(agent.getCompanycode_ID());
+					boolean passX = SecurityUtils.lastXPasswords(agent.getAgent_ID(), comp!=null?comp.getVariable().getPass_x_history():20, password); 
+					if (validPw && !passX) {
+						agent.setPassword(password);
+						SecurityUtils.insertPasswordHistory(agent.getAgent_ID(), password);
 					} else {
+						if(passX){
+							ActionMessage error = new ActionMessage("error.password.sameasold");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+						}
+						if(!validPw){
+							request.setAttribute("securePolicy", 1);
+						}
 						if (request.getParameter("self") != null) {
 							return mapping.findForward(TracingConstants.EDIT_SELF);
 						} else {

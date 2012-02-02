@@ -10,9 +10,20 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 
-<%
-  Agent a = (Agent)session.getAttribute("user");
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Company" %>
+
+<% 
+Agent a = (Agent) session.getAttribute("user");
+ResourceBundle bundle = ResourceBundle.getBundle(
+		"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
+Company c = com.bagnet.nettracer.tracing.bmo.CompanyBMO.getCompany(a.getCompanycode_ID());
+String passSecure = bundle.getString("error.security.password.secure").replace("{0}","" + (c!=null?c.getVariable().getMin_pass_size():8));
+String passMin = bundle.getString("error.security.password.minimal").replace("{0}","" + (c!=null?c.getVariable().getMin_pass_size():8));
 %>
+
 
 
 <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
@@ -51,10 +62,10 @@
           <font color="red">
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
             <logic:present name="minimalPolicy" scope="request">
-            	<bean:message key="error.security.password.minimal"/>
+		            	<%=passMin%>
             </logic:present>
             <logic:present name="securePolicy" scope="request">
-            	<bean:message key="error.security.password.secure"/>
+		         		<%=passSecure%>
             </logic:present>
           </font>
           <tr>

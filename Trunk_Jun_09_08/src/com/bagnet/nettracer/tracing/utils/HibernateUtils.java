@@ -339,6 +339,8 @@ public class HibernateUtils {
 						c.getVariable().setPass_expire_days(obj.getVariable().getPass_expire_days());
 						c.getVariable().setMax_failed_logins(obj.getVariable().getMax_failed_logins());
 						c.getVariable().setSecure_password(obj.getVariable().getSecure_password());
+						c.getVariable().setMin_pass_size(obj.getVariable().getMin_pass_size());
+						c.getVariable().setPass_x_history(obj.getVariable().getPass_x_history());
 					}
 
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_AUDITING)) {

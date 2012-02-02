@@ -158,6 +158,8 @@ public final class ManageCompany extends Action {
 					dForm.setPass_expire_days("" + cmpny.getVariable().getPass_expire_days());
 					dForm.setAccount_lockout("" + cmpny.getVariable().getMax_failed_logins());
 					dForm.setSecure_password("" + cmpny.getVariable().getSecure_password());
+					dForm.setMin_pass_size(cmpny.getVariable().getMin_pass_size());
+					dForm.setPass_x_history(cmpny.getVariable().getPass_x_history());
 				}
 
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_AUDITING)) {
@@ -357,6 +359,8 @@ public final class ManageCompany extends Action {
 					var.setPass_expire_days(Integer.parseInt((String) dForm.getPass_expire_days()));
 					var.setMax_failed_logins(Integer.parseInt((String) dForm.getAccount_lockout()));
 					var.setSecure_password(Integer.parseInt((String) dForm.getSecure_password()));
+					var.setMin_pass_size(dForm.getMin_pass_size());
+					var.setPass_x_history(dForm.getPass_x_history());
 				}
 				
 				

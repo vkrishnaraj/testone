@@ -48,31 +48,30 @@
 	            </td>
 	          </tr>
 	          <tr>
-	            <td>
-	              <bean:message key="colname.secure_pw_policy" />
+	          <td>
+	          <bean:message key="colname.secure_pw_min_length" />
 	              <font color=red>
 	                *
 	              </font>
 	              :
-	            </td>
-	            <td>
-	              <select name="secure_password" style="dropdown">
-	                <option value="1"
-	                <logic:equal name="companyForm" property="secure_password" value="1">
-	                  selected="selected"
-	                </logic:equal>
-	                >
-	                <bean:message key="select.yes" />
-	                <option value="0"
-	                <logic:equal name="companyForm" property="secure_password" value="0">
-	                  selected="selected"
-	                </logic:equal>
-	                >
-	                <bean:message key="select.no" />
-	              </select>
-	            </td>
+	          </td>
+	          <td>
+	          	 <html:text styleClass="textfield" name="companyForm" property="min_pass_size" size="4" maxlength="4" styleId="min_pass_size" />
+	          </td>
 	          </tr>
-	                    <tr>
+	          <tr>
+	            <td>
+	             <bean:message key="colname.secure_pw_x_history" />
+	            	<font color=red>
+	          		*
+	              </font>
+	              :
+	              </td>
+	              <td>
+	              <html:text styleClass="textfield" name="companyForm" property="pass_x_history" size="4" maxlength="4" />
+	             </td>
+	         </tr>
+	         <tr>
             <td colspan="2">
               &nbsp;
             </td>
@@ -81,7 +80,7 @@
             <td colspan="2">
               <center><INPUT type="button" Id="button" value="Back" onClick="history.back()">
               &nbsp;
-              <html:submit styleId="button" property="save">
+              <html:submit styleId="button" property="save" onclick="if(min_pass_size.value < 8)alert('Minimum password length must be at least eigth(8) characters');">
                 <bean:message key="button.save" />
               </html:submit></center>
             </td>

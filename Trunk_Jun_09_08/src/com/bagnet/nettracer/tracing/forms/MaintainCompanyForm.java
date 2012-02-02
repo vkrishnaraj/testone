@@ -87,6 +87,8 @@ public final class MaintainCompanyForm extends ValidatorForm {
  	private Integer scannerDefaultForward;
  	private String blindEmail;
 	private boolean auto_wt_amend;
+	private Integer min_pass_size;
+	private Integer pass_x_history;
 
 
 	public String getWt_write_enabled() {
@@ -375,6 +377,22 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public void setAutoCloseOhd(boolean autoCloseOhd) {
 		this.autoCloseOhd = autoCloseOhd;
+	}
+
+	public void setMin_pass_size(Integer min_pass_size) {
+		this.min_pass_size = min_pass_size;
+	}
+
+	public Integer getMin_pass_size() {
+		return min_pass_size;
+	}
+
+	public void setPass_x_history(Integer pass_x_history) {
+		this.pass_x_history = pass_x_history;
+	}
+
+	public Integer getPass_x_history() {
+		return pass_x_history;
 	}
 
 
