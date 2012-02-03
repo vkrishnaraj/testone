@@ -2059,13 +2059,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m "
-				   + "left outer join m.found f left outer join f.item i "
-				   + "where m.status = " + TracingConstants.LF_TRACING_OPEN + " and f.status = " + TracingConstants.LF_STATUS_OPEN + " "
-				   + "and f.location.station_ID = " + station.getStation_ID() + " "
-				   + "and i.value = " + value + " "
-				   + "and f.itemLocation = " + TracingConstants.LF_LOCATION_SHELF + " "
-				   + "and not exists (from com.bagnet.nettracer.tracing.db.Lock l where l.lockKey = f.barcode) "
-				   + "order by m.id asc group by f.id";
+				   + "where m.status = " + TracingConstants.LF_TRACING_OPEN + " and m.found.status = " + TracingConstants.LF_STATUS_OPEN + " "
+				   + "and m.found.location.station_ID = " + station.getStation_ID() + " "
+				   + "and m.found.item.value = " + value + " "
+				   + "and m.found.itemLocation = " + TracingConstants.LF_LOCATION_SHELF + " "
+				   + "and not exists (from com.bagnet.nettracer.tracing.db.Lock l where l.lockKey = m.found.barcode) "
+				   + "group by m.found.id order by m.id asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -2082,8 +2081,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			ArrayList<LFFound> toReturn = new ArrayList<LFFound>();
 			for (int i = 0; i < result.size(); ++i) {
-//				toReturn.add(((LFMatchHistory) result.get(i)).getFound());
-				toReturn.add((LFFound) ((Object[]) result.get(i))[1]);
+				toReturn.add(((LFMatchHistory) result.get(i)).getFound());
 			}
 			return toReturn;
 		}catch(Exception e){
