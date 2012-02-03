@@ -2064,7 +2064,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				   + "and m.found.item.value = " + value + " "
 				   + "and m.found.itemLocation = " + TracingConstants.LF_LOCATION_SHELF + " "
 				   + "and not exists (from com.bagnet.nettracer.tracing.db.Lock l where l.lockKey = m.found.barcode) "
-				   + "order by m.id asc group by m.found.barcode";
+				   + "order by m.id asc group by m.found";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
