@@ -2023,7 +2023,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(station == null){
 			return 0;
 		}
-		String query = "select count(mh.id) from lfmatchhistory mh "
+		String query = "select count(x.match_id) from ("
+					 + "select distinct mh.id as match_id from lfmatchhistory mh "
 					 + "left outer join lffound lf on mh.found_id = lf.id "
 					 + "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " "
 					 + "where mh.status_Status_ID = " + TracingConstants.LF_TRACING_OPEN + " " 
@@ -2031,8 +2032,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					 + "and lf.station_ID = " + station.getStation_ID() + " "
 					 + "and lf.itemLocation = " + TracingConstants.LF_LOCATION_SHELF + " ";
 		if (value > -1) {
-			query += "and i.value = " + value;
+			query += "and i.value = " + value + " ";
 		}
+		
+		query += "group by lf.id order by mh.id asc) x ";
 		
 		Session sess = null;
 		try{

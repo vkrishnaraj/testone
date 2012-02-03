@@ -89,7 +89,7 @@
                			<td>
                				<center>
                				<bean:message key="colname.lfc.value" />:&nbsp;
-           					<html:select name="shelvedTraceResultsForm" property="value" styleClass="dropdown" >
+           					<html:select name="shelvedTraceResultsForm" property="value" styleClass="dropdown" onchange="javascript:document.shelvedTraceResultsForm.submit();" >
       							<html:option value="<%=String.valueOf(TracingConstants.LFC_ITEM_LOW_VALUE) %>" ><bean:message key="lfc.low.value" /></html:option>
       							<html:option value="<%=String.valueOf(TracingConstants.LFC_ITEM_HIGH_VALUE) %>" ><bean:message key="lfc.high.value" /></html:option>
            					</html:select>
