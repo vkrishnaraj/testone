@@ -2082,7 +2082,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			ArrayList<LFFound> toReturn = new ArrayList<LFFound>();
 			for (int i = 0; i < result.size(); ++i) {
-				toReturn.add(((LFMatchHistory) result.get(i)).getFound());
+//				toReturn.add(((LFMatchHistory) result.get(i)).getFound());
+				toReturn.add((LFFound) ((Object[]) result.get(i))[1]);
 			}
 			return toReturn;
 		}catch(Exception e){
