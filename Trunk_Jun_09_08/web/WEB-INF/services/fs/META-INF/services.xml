@@ -6,7 +6,7 @@
         <messageReceivers>
             <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="aero.nettracer.fs.service.SimpleServiceMessageReceiverInOut"/>
         </messageReceivers>
-        <parameter name="ServiceClass">aero.nettracer.fs.service.SimpleServiceSkeleton</parameter>
+        <parameter name="ServiceClass">aero.nettracer.fs.service.SimpleServiceImplementation</parameter>
         <parameter name="useOriginalwsdl">true</parameter>
         <parameter name="modifyUserWSDLPortAddress">true</parameter>
         <operation name="submitClaim" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://service.fs.nettracer.aero">
