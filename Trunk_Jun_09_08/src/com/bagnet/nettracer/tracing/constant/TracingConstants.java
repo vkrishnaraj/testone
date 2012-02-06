@@ -1020,7 +1020,8 @@ public class TracingConstants {
 
 	public static String getDBTimeFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
-			return DB_TIMEFORMAT_MSSQL;
+			//loupas - for sqlserver we need to use the datetime format as oppose to the time format
+			return DB_DATETIMEFORMAT_MSSQL;
 		} else if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.MySQLDialect")) {
 			return DB_TIMEFORMAT;
 		} else {

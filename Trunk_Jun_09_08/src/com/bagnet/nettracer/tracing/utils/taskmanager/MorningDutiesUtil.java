@@ -36,8 +36,6 @@ import com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
-import com.bagnet.nettracer.tracing.utils.SpringUtils;
-import com.bagnet.nettracer.wt.WorldTracerException;
 
 public class MorningDutiesUtil extends TaskManagerUtil {
 	private static Logger logger = Logger.getLogger(HibernateUtils.class);
@@ -529,6 +527,15 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		return DateUtils.convertToGMTDate(now.getTime());
 	}
 	
+	protected static Date time1970(Date d){
+		GregorianCalendar c = new GregorianCalendar();
+		c.setTime(d);
+		c.set(Calendar.DATE, 1);
+		c.set(Calendar.MONTH, 0);
+		c.set(Calendar.YEAR, 1970);
+		return c.getTime();
+	}
+	
 	protected static String getDateRange(int day) {
 		return getDateRange(day, 0);
 	}
@@ -547,6 +554,9 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		start.add(Calendar.DATE, -report_offset);
 		end.add(Calendar.DATE, -report_offset);
 		
+		Date stime = MorningDutiesUtil.time1970(start.getTime());
+		Date etime = MorningDutiesUtil.time1970(end.getTime());
+		
 		String sql = "";
 		switch (day) {
 		case TWODAY:
@@ -555,11 +565,11 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 			sql = "((i.createdate = '"
 				+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
 					+ "' and i.createtime >= '"
-					+ DateUtils.formatDate(start.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 							+ "') or (i.createdate = '"
 					+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
 					+ "' and i.createtime < '" 
-					+ DateUtils.formatDate(end.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ DateUtils.formatDate(etime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 							+ "'))";
 			break;
 		case THREEDAY:
@@ -568,11 +578,11 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 			sql = "((i.createdate = '" 
 				+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
 				+ "' and i.createtime >= '" 
-				+ DateUtils.formatDate(start.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+				+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 							+ "') or (i.createdate = '"
 							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
 					+ "' and i.createtime < '" 
-					+ DateUtils.formatDate(start.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ DateUtils.formatDate(etime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 							+ "'))";
 			break;
 		case FOURDAY:
@@ -581,7 +591,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 			sql = "((i.createdate = '" 
 				+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
 					+ "' and i.createtime < '" 
-					+ DateUtils.formatDate(end.getTime(),TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ DateUtils.formatDate(etime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 							+ "') or i.createdate < '"
 							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
 							+ "')";
