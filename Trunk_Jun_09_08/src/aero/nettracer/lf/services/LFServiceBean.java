@@ -1308,6 +1308,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		match.setFound(found);
 		match.setLost(lost);
 		if(found != null && lost != null && !isAlreadyMatched(match)) {
+			// MJS: The Management Summary and Itemization Report depends on
+			// manual matches having a score of -1. If this number is changed
+			// for any reason, make sure to change the score in the query for
+			// that report as well.
 			match.setScore(-1);
 			Status status = new Status();
 			status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);

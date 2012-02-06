@@ -569,11 +569,10 @@ public class LostFoundJasperReport {
 					 				  "left outer join lffound lf on lf.station_id = s.station_id " +
 					 				  "left outer join lfmatchhistory mh1 on (lf.id = mh1.found_id) join lfmatchhistory mh2 on (mh1.lost_id = mh2.lost_id and mh1.found_id = mh2.found_id) " +
 					 				  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
-					 				  "where mh1.status_status_id = " + TracingConstants.LF_TRACING_CONFIRMED + " and mh2.score = 0 " +
+					 				  "where mh1.status_status_id = " + TracingConstants.LF_TRACING_CONFIRMED + " and mh2.score = -1 " +
 					 				  "and i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") " + 
 					 				  "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
-					 				  "group by s.station_id) matchedbyother on s.station_id = matchedbyother.station_id " +
-					 				  
+					 				  "group by s.station_id) matchedbyother on s.station_id = matchedbyother.station_id " +				 				  
 		             "where s.associated_airport in ('ABG','AVS','BGT');";
 		
 		return sql;
