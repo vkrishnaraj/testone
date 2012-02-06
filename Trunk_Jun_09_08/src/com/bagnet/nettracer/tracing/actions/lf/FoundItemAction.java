@@ -229,13 +229,21 @@ public class FoundItemAction extends CheckedAction {
 			try {
 				long matchId = Long.valueOf(request.getParameter("matchId"));
 				if (request.getParameter("reject") != null) {
-					serviceBean.rejectMatch(matchId);
+					if (serviceBean.rejectMatch(matchId)) {
+						found = serviceBean.getFoundItem(fiForm.getFound().getId());
+					}
 				} else if (request.getParameter("unreject") != null) {
-					serviceBean.unrejectMatch(matchId);
+					if (serviceBean.unrejectMatch(matchId)) {
+						found = serviceBean.getFoundItem(fiForm.getFound().getId());
+					}
 				} else if (request.getParameter("confirm") != null) {
-					serviceBean.confirmMatch(matchId);
+					if (serviceBean.confirmMatch(matchId)) {
+						found = serviceBean.getFoundItem(fiForm.getFound().getId());
+					}
 				} else if (request.getParameter("unconfirm") != null) {
-					serviceBean.undoMatch(matchId);
+					if(LFServiceWrapper.getInstance().undoMatch(matchId)){
+						found = LFServiceWrapper.getInstance().getFoundItem(fiForm.getFound().getId());
+					}
 				}
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe, nfe);
