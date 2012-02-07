@@ -116,8 +116,8 @@
 		
 			currentElement = form.elements[i];
 			elementName = currentElement.name;
-			
-			if (elementName == "disFoundDate") {
+
+			if (elementName == "disReceivedDate") {
 				if (currentElement.value.length == 0) {
 					alert("<%= (String)bundle.getString("colname.lfc.item.received.date") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
