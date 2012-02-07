@@ -69,7 +69,7 @@
 				  <td nowrap>Dispute Agent: <bean:write name="disputeAgent" property="username" /></td>
 				</tr>
 				<tr>
-				  <td colspan="2" nowrap>Dispute Explanation:<br />
+				  <td colspan="2">Dispute Explanation:<br />
 				    <bean:write name="dispute" property="disputeExplanation" scope="request" />
 				  </td>
 				</tr>
