@@ -838,6 +838,8 @@
 		<property name="staging.env" value="production" />
 		<property name="avis.service.includes" value="*.war"/>
 		<antcall target="build-war-production-avis"/>
+		<antcall target="build-war-production-lfc"/>
+		<antcall target="build-war-production-webjet"/>
 		<property name="app.xml.location" value="metadata/ab/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
