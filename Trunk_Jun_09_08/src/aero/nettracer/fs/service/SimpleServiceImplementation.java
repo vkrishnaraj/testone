@@ -81,7 +81,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     private void createClaim(File wsFile, SimpleResponse res) {
 
     	GeneralServiceBean bean = new GeneralServiceBean();
-    	Agent user = bean.getAgent("ntadmin", TracerProperties.get("wt.company.code"));
+    	Agent user = bean.getAgent("webagent", TracerProperties.get("wt.company.code"));
 
 		boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 
