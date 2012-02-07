@@ -570,7 +570,7 @@ public class LF_ItemEntry extends LoginUtil {
 	public void testItemEntry14() throws Exception {
 		if (checkNoErrorPage()) {
 			verifyEquals("01/01/2012", selenium.getValue("//div[@id='itementryleft']/table/tbody/tr/td/input"));
-			verifyEquals("2", selenium.getValue("//div[@id='itementryleft']/table/tbody/tr/td[5]/select"));
+			verifyEquals("1", selenium.getValue("//div[@id='itementryleft']/table/tbody/tr/td[5]/select"));
 			
 			testId = String.valueOf(System.currentTimeMillis());
 			selenium.click("//div[@id='itementryleft']/table/tbody/tr/td/img");
