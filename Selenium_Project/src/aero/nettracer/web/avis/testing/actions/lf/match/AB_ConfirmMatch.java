@@ -11,7 +11,7 @@ public class AB_ConfirmMatch extends DefaultSeleneseTestCase {
 	public void testAB_Login() throws Exception {
 		Thread.sleep(5000);
 		goToTaskManager();
-		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[3]/td/a");
+		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[7]/td/a");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
