@@ -96,7 +96,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(LF_ProcessTraceResults.lostId));
+//			verifyTrue(selenium.isTextPresent(LF_ProcessTraceResults.lostId));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
 			verifyTrue(selenium.isTextPresent("Cellphone,Apple,iPhone 4S,AP1234"));
 			selenium.click("//div[@id='maincontent']/table/tbody/tr/td/center/input");
