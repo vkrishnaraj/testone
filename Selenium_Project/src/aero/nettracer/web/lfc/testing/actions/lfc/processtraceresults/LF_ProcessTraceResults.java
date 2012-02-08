@@ -69,13 +69,13 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			return;
 		}
 		
-		if (!checkNoErrorPage()) {
-//			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
 //			verifyTrue(selenium.isTextPresent("Report Summary"));
 //			verifyTrue(selenium.isTextPresent("Found Item:  " + LF_ProcessTraceResults.foundId));
 //			verifyTrue(selenium.isTextPresent("Lost Report:  " + LF_ProcessTraceResults.lostId));
-//			System.out.println("LFPTR: created Found Item: " + LF_ProcessTraceResults.foundId);
-//		} else {
+			System.out.println("LFPTR: created Found Item: " + LF_ProcessTraceResults.foundId);
+		} else {
 			System.out.println("LFPTR: An error occurred while saving the Found Item.");
 			return;
 		}
