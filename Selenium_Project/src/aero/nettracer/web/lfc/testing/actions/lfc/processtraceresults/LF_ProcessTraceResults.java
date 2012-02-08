@@ -10,7 +10,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 	private static String foundId;
 	
 	@Test
-	public void createLostReport() throws Exception {
+	public void testCreateLostReport() throws Exception {
 		selenium.click("//a[contains(@href, 'create_lost_report.do?createNew=1')]");
 		waitForPageToLoadImproved();
 		
@@ -48,7 +48,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 	}
 	
 	@Test
-	public void createFoundItem() throws Exception {
+	public void testCreateFoundItem() throws Exception {
 		selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
 		waitForPageToLoadImproved();
 		
