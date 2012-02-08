@@ -89,6 +89,13 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			selenium.select("//div[@id='maincontent']/table/tbody/tr/td/center/select", "label=High");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("LFPTR: Failed to pull up high value trace results.");
+			return;
+		}
+
+		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_ProcessTraceResults.lostId));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
 			verifyTrue(selenium.isTextPresent("Cellphone,Apple,iPhone 4S,AP1234"));
