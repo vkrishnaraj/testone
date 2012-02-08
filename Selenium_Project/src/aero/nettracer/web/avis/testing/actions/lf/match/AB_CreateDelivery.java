@@ -10,7 +10,7 @@ public class AB_CreateDelivery extends DefaultSeleneseTestCase {
 	@Test
 	public void testAB_Login() throws Exception {
 		goToTaskManager();
-		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[7]/td/a");
+		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[6]/td/a");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
