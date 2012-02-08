@@ -3,11 +3,11 @@ package aero.nettracer.web.lfc.testing.actions.lfc.processtraceresults;
 import org.junit.Test;
 
 import aero.nettracer.web.utility.LoginUtil;
-import aero.nettracer.web.utility.Settings;
 
 public class LF_ProcessTraceResults extends LoginUtil {
 	
-	private static String testId;
+	private static String lostId;
+	private static String foundId;
 	
 	@Test
 	public void createLostReport() throws Exception {
@@ -38,8 +38,8 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your lost report was successfully saved."));
-			Settings.LOST_ID_LF = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input");
-			System.out.println("LFPTR: created Lost Report: " + Settings.LOST_ID_LF);
+			LF_ProcessTraceResults.lostId = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input");
+			System.out.println("LFPTR: created Lost Report: " + LF_ProcessTraceResults.lostId);
 		} else {
 			System.out.println("LFPTR: An error occurred while saving the Lost Report.");
 			return;
@@ -53,8 +53,8 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			testId = String.valueOf(System.currentTimeMillis());
-			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", testId);
+			LF_ProcessTraceResults.foundId = String.valueOf(System.currentTimeMillis());
+			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_ProcessTraceResults.foundId);
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/select", "label=High");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "Apple");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input", "AP1234");
@@ -72,10 +72,9 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
 			verifyTrue(selenium.isTextPresent("Report Summary"));
-			verifyTrue(selenium.isTextPresent("Found Item:  " + Settings.FOUND_ID_LF));
-			verifyTrue(selenium.isTextPresent("Lost Report:  " + Settings.LOST_ID_LF));
-			Settings.FOUND_ID_LF = testId;
-			System.out.println("LFPTR: created Found Item: " + testId);
+			verifyTrue(selenium.isTextPresent("Found Item:  " + LF_ProcessTraceResults.foundId));
+			verifyTrue(selenium.isTextPresent("Lost Report:  " + LF_ProcessTraceResults.lostId));
+			System.out.println("LFPTR: created Found Item: " + LF_ProcessTraceResults.foundId);
 		} else {
 			System.out.println("LFPTR: An error occurred while saving the Found Item.");
 			return;
@@ -90,7 +89,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			selenium.select("//div[@id='maincontent']/table/tbody/tr/td/center/select", "label=High");
-			verifyTrue(selenium.isTextPresent(Settings.LOST_ID_LF));
+			verifyTrue(selenium.isTextPresent(LF_ProcessTraceResults.lostId));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
 			verifyTrue(selenium.isTextPresent("Cellphone,Apple,iPhone 4S,AP1234"));
 			selenium.click("//div[@id='maincontent']/table/tbody/tr/td/center/input");
@@ -101,8 +100,8 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Found Item:  " + Settings.FOUND_ID_LF));
-			verifyTrue(selenium.isTextPresent("Lost Report:  " + Settings.LOST_ID_LF));
+			verifyTrue(selenium.isTextPresent("Found Item:  " + LF_ProcessTraceResults.foundId));
+			verifyTrue(selenium.isTextPresent("Lost Report:  " + LF_ProcessTraceResults.lostId));
 			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a");
 			waitForPageToLoadImproved();
 		} else {
@@ -114,7 +113,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			selenium.click("//div[@id='maincontent']/table/tbody/tr/td[3]/a");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("LFPTR: Failed to navigate to Lost Report: " + Settings.LOST_ID_LF + " from the Found Item page.");
+			System.out.println("LFPTR: Failed to navigate to Lost Report: " + LF_ProcessTraceResults.lostId + " from the Found Item page.");
 			return;		
 		}
 		
@@ -123,7 +122,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("LFPTR: Failed to close Lost Report: " + Settings.LOST_ID_LF);
+			System.out.println("LFPTR: Failed to close Lost Report: " + LF_ProcessTraceResults.lostId);
 			return;		
 		}
 		
@@ -132,7 +131,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("LFPTR: Failed to save Lost Report: " + Settings.LOST_ID_LF);
+			System.out.println("LFPTR: Failed to save Lost Report: " + LF_ProcessTraceResults.lostId);
 			return;		
 		}
 		
@@ -140,7 +139,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("LFPTR: Failed to navigate to Found Item: " + Settings.FOUND_ID_LF + " from the Lost Report page.");
+			System.out.println("LFPTR: Failed to navigate to Found Item: " + LF_ProcessTraceResults.foundId + " from the Lost Report page.");
 			return;		
 		}
 		
@@ -153,7 +152,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyFalse(selenium.isTextPresent(Settings.FOUND_ID_LF));
+			verifyFalse(selenium.isTextPresent(LF_ProcessTraceResults.foundId));
 			verifyFalse(selenium.isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
 			selenium.click("//a[contains(@href, 'logon.do?taskmanager=1')]");
 			waitForPageToLoadImproved();
