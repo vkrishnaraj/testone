@@ -66,6 +66,9 @@ public class DisputeResolutionAction extends CheckedAction {
 		request.setAttribute("incident", incident);
 		
 		Incident myIncident = IncidentUtils.findIncidentByID(incident);
+		request.setAttribute("incidentdate", myIncident.getDisplaydate());
+			
+		
 		if(theform.getFaultcompany_id() == null && myIncident != null && myIncident.getFaultstation() != null){
 			theform.setFaultcompany_id(myIncident.getFaultstation().getCompany().getCompanyCode_ID());
 		}
@@ -247,7 +250,6 @@ public class DisputeResolutionAction extends CheckedAction {
 			}
 			request.setAttribute("statusDesc", myStatusDesc);
 		}
-		
 		
 		return TracingConstants.DISPUTE_RESOLUTION_READ_ONLY;
 	}

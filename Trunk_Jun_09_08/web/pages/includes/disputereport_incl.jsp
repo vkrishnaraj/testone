@@ -59,7 +59,7 @@
 
 </script>
 <tr>
-  <td nowrap width=20%>
+  <td nowrap colspan="3" width=20% >
     <a name="fault"></a>
     <bean:message key="colname.faultcompany" />
     <br>
@@ -75,7 +75,7 @@
           <html:options collection="faultCompanyList" property="companyCode_ID" labelProperty="companydesc" />
         </html:select>     
   </td>
-    <td nowrap>
+    <td colspan="3" nowrap>
     	<div id="faultstationdiv">
     <logic:present name="faultstationlist" scope="request">
       <bean:message key="colname.faultstation" />
@@ -91,7 +91,7 @@
     </td>
 </tr>
 <tr>
-  <td nowrap colspan=2>
+  <td nowrap colspan="6">
     <bean:message key="colname.closereport.losscode" />
     <br>
       <html:select property="loss_code" styleClass="dropdown">      
