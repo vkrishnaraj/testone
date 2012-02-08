@@ -39,7 +39,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your lost report was successfully saved."));
 			Settings.LOST_ID_LF = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input");
-			System.out.println("LFPTR: created Found Item: " + Settings.LOST_ID_LF);
+			System.out.println("LFPTR: created Lost Report: " + Settings.LOST_ID_LF);
 		} else {
 			System.out.println("LFPTR: An error occurred while saving the Lost Report.");
 			return;
