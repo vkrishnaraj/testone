@@ -39,7 +39,7 @@ public class TraceHandler {
 		if(queue == null){
 			v = new Vector<ThreadContainer>();
 			queue = new ArrayBlockingQueue<FoundHistoryObject>(10000);
-			ThreadMonitor tm = new ThreadMonitor(v);
+			ThreadMonitor tm = new ThreadMonitor(v,queue);
 			Thread t = new Thread(tm, "TraceHandlerMonitorThread");
 			t.start();
 		}

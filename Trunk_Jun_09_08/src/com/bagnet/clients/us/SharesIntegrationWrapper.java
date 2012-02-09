@@ -1,6 +1,7 @@
 package com.bagnet.clients.us;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 
@@ -28,8 +29,24 @@ public class SharesIntegrationWrapper {
 	private String pnrContents;
 	private Logger logger = Logger.getLogger(SharesIntegrationWrapper.class);
 	private String endpoint = PropertyBMO.getValue(PropertyBMO.PROPERTY_BOOKING_ENDPOINT);
-
+	
+	
+	public void sendTelex(String message, String address, boolean async){
+		if(async){
+			try{
+				SharesIntegrationThreadHandler.sendTelex(message, address);
+			}catch (Exception e){
+				//default to sync call
+				sendTelex(message, address);
+				return;
+			}
+		} else {
+			sendTelex(message, address);
+		}
+	}
+	
 	public void sendTelex(String message, String address) {
+		Date start = new Date();
 		try {
 			ServicesStub stub = new ServicesStub(endpoint);
 			SendPrintMessageDocument printDoc = SendPrintMessageDocument.Factory.newInstance();
@@ -47,7 +64,10 @@ public class SharesIntegrationWrapper {
 		} catch (Exception e) {
 			e.printStackTrace();
 			setErrorMessage("Error calling webservice: " + e.toString());
+			com.bagnet.nettracer.tracing.utils.general.Logger.logTelex("", "Error calling webservice", start);
+			return;
 		}
+		com.bagnet.nettracer.tracing.utils.general.Logger.logTelex("SENDTELEX", "TELEX SUCCESSFUL: " + address, start);
 	}
 	
 	public boolean writeCommentToPNR(String recordLocator, String comment) {
@@ -197,7 +217,7 @@ public class SharesIntegrationWrapper {
 		int myMaxLength = telexMaxLengthPerTransmission - (label.length() + 8);
 		
 		if (message.length() < telexMaxLengthPerTransmission) {
-			sendTelex(message, address);
+			sendTelex(message, address, true);
 		} else {
 			ArrayList<String> list = StringUtils.divideUpBigString(message, myMaxLength, "*");
 			
@@ -208,7 +228,7 @@ public class SharesIntegrationWrapper {
 				counter++;
 				j = myPageLabel + j;
 				
-				sendTelex(j, address);
+				sendTelex(j, address, true);
 			}
 		}
 	}

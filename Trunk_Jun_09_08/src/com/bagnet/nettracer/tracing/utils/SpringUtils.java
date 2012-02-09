@@ -7,6 +7,7 @@ import com.bagnet.nettracer.integrations.events.ClientEventHandler;
 import com.bagnet.nettracer.integrations.reports.CustomReportBMO;
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.tracing.bmo.LockBMO;
+import com.bagnet.nettracer.tracing.utils.general.ThreadHandler;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
@@ -23,6 +24,8 @@ public class SpringUtils {
 	public final static String WORLDTRACER_SERVICE = "wtService";
 	public final static String EVENT_HANDLER = "eventHandler";
 	public final static String PRECODER = "precoder";
+	
+	public final static String SHARES_INTEGRATION = "sharesIntegration";
 
 	private static final String WORLDTRACER_CONNECTOR = "wtConnector";
 	private static final String WORLDTRACER_CONNECTION_POOL = "wtConnectionPool";
@@ -84,6 +87,10 @@ public class SpringUtils {
 	
 	public static RuleMapper getWtRuleMap() {
 		return (RuleMapper) getBean(WORLDTRACER_RULE_MAP);
+	}
+	
+	public static ThreadHandler getSharesIntegrationHandler(){
+		return (ThreadHandler) getBean(SHARES_INTEGRATION);
 	}
 	
 	

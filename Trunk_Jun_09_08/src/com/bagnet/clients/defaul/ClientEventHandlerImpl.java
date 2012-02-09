@@ -27,6 +27,12 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 	}
 
 	@Override
+	public void doPcn(OHD_Log ohd_log, boolean async){
+		// Do nothing
+		
+	}
+	
+	@Override
 	public void printPcn(String address, ProactiveNotification pcn) {
 		// Do nothing
 		

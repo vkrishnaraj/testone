@@ -303,6 +303,8 @@ public class BagService {
 	 */
 	public String forwardMessage(ForwardMessageForm form, Agent user, MessageResources messages) {
 
+		Date start = new Date();
+		
 		// create an on-hand entry
 		OHD oDTO = new OHD();
 
@@ -345,6 +347,7 @@ public class BagService {
 		OhdBMO oBMO = new OhdBMO();
 		boolean result = oBMO.insertOHD(oDTO, user);
 		if(!result) {
+			com.bagnet.nettracer.tracing.utils.general.Logger.logForward(oDTO.getOHD_ID(), "BEORN: NO RESULTS", start);
 			return null;
 		}
 
@@ -409,11 +412,12 @@ public class BagService {
 		}
 
 		try {
-			SpringUtils.getClientEventHandler().doPcn(log);
+			SpringUtils.getClientEventHandler().doPcn(log, true);
 		} catch (Exception e) {
 			logger.error("Error performing PCN lookup...");
 			e.printStackTrace();
 		}
+		com.bagnet.nettracer.tracing.utils.general.Logger.logForward(oDTO.getOHD_ID(), "BEORN", start);
 		return oDTO.getOHD_ID();
 	}
 

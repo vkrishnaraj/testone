@@ -6,8 +6,11 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.db.logger.GeneralForwardLog;
 import com.bagnet.nettracer.tracing.db.logger.GeneralLog;
 import com.bagnet.nettracer.tracing.db.logger.GeneralLFLog;
+import com.bagnet.nettracer.tracing.db.logger.GeneralPcnLog;
+import com.bagnet.nettracer.tracing.db.logger.GeneralTelexLog;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class Logger {
@@ -58,5 +61,23 @@ public class Logger {
 	public static boolean logLF(String refId, String desc, long elapse){
 		GeneralLFLog log = new GeneralLFLog();
 		return log(log, refId, desc, elapse);
+	}
+	
+	public static boolean logPcn(String refId, String desc, Date starttime){
+		GeneralPcnLog log = new GeneralPcnLog();
+		Date endtime = new Date();
+		return log(log, refId, desc, starttime!=null?endtime.getTime()-starttime.getTime():0);
+	}
+	
+	public static boolean logTelex(String refId, String desc, Date starttime){
+		GeneralTelexLog log = new GeneralTelexLog();
+		Date endtime = new Date();
+		return log(log, refId, desc, starttime!=null?endtime.getTime()-starttime.getTime():0);
+	}
+	
+	public static boolean logForward(String refId, String desc, Date starttime){
+		GeneralForwardLog log = new GeneralForwardLog();
+		Date endtime = new Date();
+		return log(log, refId, desc, starttime!=null?endtime.getTime()-starttime.getTime():0);
 	}
 }

@@ -150,7 +150,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 			SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
 			logger.info(str.toString());
 			try {
-				iw.sendTelex(str.toString(), dto.getSpecialInstructions());
+				iw.sendTelex(str.toString(), dto.getSpecialInstructions(),true);
 			} catch (Exception e) {
 				// Ignore - there's nothing we can do.
 				e.printStackTrace();
@@ -165,8 +165,23 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 		return false;
 	}
 	
+	public void doPcn(OHD_Log ohd_log, boolean async){
+		if(async){
+			try {
+				SharesIntegrationThreadHandler.doPcn(ohd_log);
+			} catch (Exception e) {
+				//async failed, submit sync
+				doPcn(ohd_log);
+				return;
+			}
+		} else {
+			doPcn(ohd_log);
+		}
+	}
+	
 	@Override
 	public void doPcn(OHD_Log ohd_log) {
+		Date start = new Date();
 		if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_PCN_ENABLED)) {
 			String refId = ohd_log.getOhd().getClaimnum();
 			
@@ -187,11 +202,13 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 					
 				} catch (Exception e) {
 					logger.info("Aborting PCN generation: Booking web service exception. "+ refId, e);
+					com.bagnet.nettracer.tracing.utils.general.Logger.logPcn(refId, "Aborting PCN generation: Booking web service exception. "+ refId, start);
 					return;
 				}
 				
 				if (!cont) {
 					logger.info("Aborting PCN generation: No booking information."+ refId);
+					com.bagnet.nettracer.tracing.utils.general.Logger.logPcn(refId, "Aborting PCN generation: No booking information."+ refId, start);
 					return;
 				} else {
 					Booking booking = iw.getBooking();
@@ -224,6 +241,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 						
 					} else {
 						logger.info("Aborting PCN generation: No name information."+ refId);
+						com.bagnet.nettracer.tracing.utils.general.Logger.logPcn(refId, "Aborting PCN generation: No name information."+ refId, start);
 						return;
 					}
 					
@@ -232,6 +250,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 						oia.setPnr(booking.getRecordLocator());
 					} else {
 						logger.info("Aborting PCN generation: No record locator."+ refId);
+						com.bagnet.nettracer.tracing.utils.general.Logger.logPcn(refId, "Aborting PCN generation: No record locator."+ refId, start);
 						return;
 					}
 					
@@ -251,6 +270,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 							Station destStation = StationBMO.getStationByCode(destinationStation, "US");
 							if (destStation == null) {
 								logger.info("Aborting PCN generation: Destination station doesn't exist for US."+ refId);
+								com.bagnet.nettracer.tracing.utils.general.Logger.logPcn(refId, "Aborting PCN generation: Destination station doesn't exist for US."+ refId, start);
 								return;
 							} 
 
@@ -294,17 +314,20 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 							}
 						} else {
 							logger.info("Aborting PCN generation: No segments."+ refId);
+							com.bagnet.nettracer.tracing.utils.general.Logger.logPcn(refId, "Aborting PCN generation: No segments."+ refId, start);
 							return;
 						}
 						
 						if (pcn.getMissedFlightAirline() == null || pcn.getMissedFlightDate() == null || pcn.getMissedFlightNumber() == null) {
 							logger.info("Aborting PCN generation: We were not able to determine the final flight returned for the given day in the itinerary."+ refId);
+							com.bagnet.nettracer.tracing.utils.general.Logger.logPcn(refId, "Aborting PCN generation: We were not able to determine the final flight returned for the given day in the itinerary."+ refId, start);
 							return;
 						}
 						
 						
 					} else {
 						logger.info("Aborting PCN generation: No itinerary for "+ refId);
+						com.bagnet.nettracer.tracing.utils.general.Logger.logPcn(refId, "Aborting PCN generation: No itinerary for "+ refId, start);
 						return;
 					}
 					
@@ -341,7 +364,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 			} catch (Exception e) {
 				
 				logger.error("Exception encountered loading & saving PCN " + refId, e);
-
+				com.bagnet.nettracer.tracing.utils.general.Logger.logPcn(refId, "Exception encountered loading & saving PCN " + refId, start);
 				e.printStackTrace();
 						
 				if (t != null) {
@@ -352,7 +375,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 					sess.close();
 				}
 			}
-		
+			com.bagnet.nettracer.tracing.utils.general.Logger.logPcn(refId, "PCN SUCCESSFUL", start);
 		}
 	}
 	
@@ -479,7 +502,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 					           "TO PROCESS YOUR REPORT." + NEWLINE_INDICATOR + NEWLINE_INDICATOR + NEWLINE_INDICATOR);
 			message.append("-------------------");
 			
-			iw.sendTelex(message.toString(), address);
+			iw.sendTelex(message.toString(), address,true);
 		}
 	}
 

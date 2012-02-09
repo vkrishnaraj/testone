@@ -38,6 +38,9 @@
 		
 	<bean id="precoder"
 		class="com.bagnet.clients.${precoder.class.path}.PrecoderImpl" />
+		
+	<bean id="sharesIntegration"
+		class="com.bagnet.clients.us.SharesIntegrationThreadHandler" />
 
 	<!-- Hibernate config -->
 	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper"
@@ -105,4 +108,5 @@
 	
 	<bean id="ntManagementBean" class="com.bagnet.nettracer.jmx.NetTracerManagementBean" >
 	</bean>
+	
 </beans>

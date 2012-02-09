@@ -20,6 +20,8 @@ public interface ClientEventHandler {
 	
 	public void doPcn(OHD_Log ohd_log);
 	
+	public void doPcn(OHD_Log ohd_log, boolean async);
+	
 	public void printPcn(String address, ProactiveNotification pcn);
 
 	public void doEventOnForward(ForwardMessage fw);

@@ -108,6 +108,9 @@ public class PropertyBMO {
 	public static final String PROPERTY_WT_USE_STATE_NAME = "wt.state.name";
 	public static final String PROPERTY_WT_USE_COUNTRY_NAME = "wt.country.name";
 	
+	public static final String PROPERTY_SHARES_THREAD_COUNT = "shares.thread.count";
+	public static final String PROPERTY_SHARES_MAX_THREAD_COUNT = "shares.max.thread.count";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

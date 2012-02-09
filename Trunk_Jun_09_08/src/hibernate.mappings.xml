@@ -280,6 +280,9 @@
 		
 		<mapping class="com.bagnet.nettracer.tracing.db.Region"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralLog"/>
-		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralLFLog"/>		
+		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralLFLog"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralPcnLog"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralTelexLog"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralForwardLog"/>			
 
 		

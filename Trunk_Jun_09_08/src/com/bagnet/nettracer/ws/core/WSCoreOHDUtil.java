@@ -758,6 +758,7 @@ public class WSCoreOHDUtil {
    */
   public com.bagnet.nettracer.ws.core.BeornOHDResponseDocument beornOHD(
       com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD) {
+	  Date start = new Date();
   	logger.info("Start Web Service Response... " + beornOHD);
   	String errorMsg = "BEORN Failed: ";
   	
@@ -1008,7 +1009,7 @@ public class WSCoreOHDUtil {
 	  		}
 	  		
 	  		try {
-	  			SpringUtils.getClientEventHandler().doPcn(log);
+	  			SpringUtils.getClientEventHandler().doPcn(log, true);
 	  		} catch (Exception e) {
 	  			logger.error("Error performing PCN lookup...");
 	  			e.printStackTrace();
@@ -1024,6 +1025,7 @@ public class WSCoreOHDUtil {
   	res.setReturn(so);
   	
   	logger.info("Stop Web Service Response...");
+  	com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(so.getOhdId(), "BEORN webserivce", start);
     return resDoc;
   }
   
