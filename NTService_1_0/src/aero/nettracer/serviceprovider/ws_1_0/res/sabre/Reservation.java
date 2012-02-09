@@ -239,21 +239,15 @@ public class Reservation implements ReservationInterface {
 								String city = arr[0].substring(2);
 								add.setCity(city.trim());
 								
-								String state = "";
-								try {
-									state = arr[1];
-								} catch (Exception e) {
-									// Ignore exception.
-									// State was unable to be parsed because there was no comma between city and state
-									// Sample is below
-									// <AddressLine>N/MIKE JOHNSON</AddressLine>
-									// <AddressLine>A/123 MAIN
-									// STREET</AddressLine>
-									// <AddressLine>C/JERSEY CITY,
-									// NJ</AddressLine>
-									// <AddressLine>Z/07306</AddressLine>
+								if (arr.length > 1) {
+									add.setState(arr[1].trim());
+									if (arr.length > 2) {
+										add.setCountry(arr[2].trim());
+									}
+								} else {
+									add.setState("");
 								}
-								add.setState(state.trim());
+								
 							} else if (line.startsWith("Z/")) {
 								add.setZip(line.substring(2));
 							}
