@@ -17,7 +17,7 @@ public class AB_CreateFound_Detailed extends DefaultSeleneseTestCase {
 
 			selenium.select("id=category_0", "label=Bags");
 			selenium.click("name=item[0].description");
-			selenium.type("name=item[0].description", "Test Description Test Description Test Description Test Description Test Description Test Description Test DescriptionTest Description Test Description Test Description Test Description Test Description Test Description Test Description 241 245 249 Should not see this text, beyond 250 character limit");
+			selenium.type("name=item[0].description", "Test Description Test Description Test Description Test Description Test Description Test Description Test DescriptionTest Description Test Description Test Description Test Description Test Description Test Description Test Description");
 			selenium.click("name=item[0].color");	
 			selenium.select("name=item[0].color", "label=Black");
 			selenium.type("name=item[0].brand", "Test Brand");
