@@ -25,7 +25,9 @@ public class AB_CreateLost_Detailed extends DefaultSeleneseTestCase {
 			selenium.type("name=item[0].serialNumber", "123321456");
 			selenium.select("id=category_0", "label=Bags");
 			selenium.select("name=item[0].color", "label=Black");
+			selenium.click("name=item[0].description");
 			selenium.type("name=item[0].description", "Test Description Test Description Test Description Test Description Test Description Test Description Test DescriptionTest Description Test Description Test Description Test Description Test Description Test Description Test Description 241 245 249 Should not see this text, beyond 250 character limit");
+			selenium.click("name=item[0].color");
 			selenium.type("name=lost.lossInfo.agreementNumber", "111222333");
 			selenium.type("name=lost.lossInfo.mvaNumber", "333222111");
 			selenium.select("name=lost.lossInfo.originId", "label=ABE");
