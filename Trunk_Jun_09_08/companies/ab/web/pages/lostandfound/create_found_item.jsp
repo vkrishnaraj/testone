@@ -164,7 +164,11 @@
 		document.getElementById('itemId').value = itemId;
 	}
 	
-	
+	function textCounter2(field, maxlimit) {
+	    if (field.value.length > maxlimit) {
+	      field.value = field.value.substring(0, maxlimit);
+	    }
+	}
 	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
@@ -529,7 +533,11 @@
 	         				<td colspan=3>
 	         					<bean:message key="colname.lf.description" />
 	         					<br>
-	         					<textarea name="item[<%=i %>].description" cols="80" rows="3" class="textfield" ><%=item.getDescription() == null ? "" : item.getDescription() %></textarea>
+	         					<textarea name="item[<%=i %>].description" cols="80" rows="3" class="textfield" 
+	         					onblur="textCounter2(this.form.elements['item[<%=i %>].description'],250);" 
+	         					onkeydown="textCounter2(this.form.elements['item[<%=i %>].description'],250);" 
+	         					onkeyup="textCounter2(this.form.elements['item[<%=i %>].description'],250);"
+	         					><%=item.getDescription() == null ? "" : item.getDescription() %></textarea>
 	         				</td>
 	         			</tr>
 	         		<% } %>

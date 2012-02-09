@@ -191,6 +191,12 @@
 	  		  jQuery(link2).hide();
 	  	  }
 	  }
+    
+	function textCounter2(field, maxlimit) {
+	    if (field.value.length > maxlimit) {
+	      field.value = field.value.substring(0, maxlimit);
+	    }
+	}
 	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
@@ -768,14 +774,18 @@
 	         				<td colspan=3>
 	         					<bean:message key="colname.lf.description" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].description" class="textfield" style="width: 95%;" value="<%=item.getDescription() == null ? "" : item.getDescription() %>" />
+	         					<input type="text" name="item[<%=i %>].description" class="textfield" size="250" style="width: 95%;" value="<%=item.getDescription() == null ? "" : item.getDescription() %>" />
 	         				</td>
 	         			</tr>
 	         			<tr>
 	         				<td colspan=3>
 	         					<bean:message key="colname.lf.long.description" />
 	         					<br>
-	         					<textarea name="item[<%=i %>].longDescription" cols="80" rows="3" class="textfield" ><%=item.getLongDescription() == null ? "" : item.getLongDescription() %></textarea>
+	         					<textarea name="item[<%=i %>].longDescription" cols="80" rows="3" class="textfield" 
+	         					onblur="textCounter2(this.form.elements['item[<%=i %>].description'],2000);" 
+	         					onkeydown="textCounter2(this.form.elements['item[<%=i %>].description'],2000);" 
+	         					onkeyup="textCounter2(this.form.elements['item[<%=i %>].description'],2000);"
+	         					><%=item.getLongDescription() == null ? "" : item.getLongDescription() %></textarea>
 	         				</td>
 	         			</tr>
 	         		<% } %>
