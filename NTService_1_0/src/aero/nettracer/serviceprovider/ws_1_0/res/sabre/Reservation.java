@@ -225,11 +225,17 @@ public class Reservation implements ReservationInterface {
 						Address padd = cust.getAddress();
 						String[] lines = padd.getAddressLineArray();
 
-						// Example:
+						// Example Domestic:
 						// <AddressLine>N/FRED PARKER</AddressLine>
 						// <AddressLine>A/3045 JOHN F KENNDY</AddressLine>
 						// <AddressLine>C/NEW YORK, NY</AddressLine>
 						// <AddressLine>Z/10018</AddressLine>
+						
+						// Example Foreign:
+						// <AddressLine>N/FRED PARKER</AddressLine>
+						// <AddressLine>A/3045 TEST STREET</AddressLine>
+						// <AddressLine>C/TORONTO, ON, CA</AddressLine>
+						// <AddressLine>Z/A1B 2C3</AddressLine>
 						
 						for (String line: lines) {
 							if (line.startsWith("A/")) {
