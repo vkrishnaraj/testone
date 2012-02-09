@@ -76,6 +76,16 @@ function validatereqFields(form, formType) {
 		} else if(currentElementName.indexOf("].claimchecknum") != -1 && currentElement.value.length > 0) {
 			ccCount += 1;
 		}
+		
+		if (currentElementName.indexOf("customcleared") != -1) {  
+		
+		 if (currentElement.value == "")
+		  {
+		    alert("<%= (String)bundle.getString( "colname.custom") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		    currentElement.focus();
+		    return false;
+		  }
+		}
 	}
 	if(ccCount > bagIndices.length) {
 		alert('<%= (String) bundle.getString( "error.validation.too.many.claimchecks")%>');
