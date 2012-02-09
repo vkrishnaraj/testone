@@ -687,14 +687,17 @@ public class OHDUtils {
 		String ohd_id = ohd.getOHD_ID();
 		Session sess = null;
 		Transaction t = null;
+		Status openStatus = new Status();
+		openStatus.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);		
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 
 			OHD_Log log = getLastLog(ohd_id);
+			t = sess.beginTransaction();
+			
 			if (log.getPcn() != null) {
-				t = sess.beginTransaction();
 				ProactiveNotificationBMO.checkClosePcn(log.getPcn(), sess, log);
-				t.commit();
+				
 			}
 
 			Connection conn = sess.connection();
@@ -703,8 +706,9 @@ public class OHDUtils {
 			String sql = "update ohd_log set log_status = " + TracingConstants.LOG_RECEIVED + " where ohd_id = '" + ohd_id
 					+ "' and log_status = " + TracingConstants.LOG_NOT_RECEIVED;
 			stmt.execute(sql);
+			t.commit();
+
 			stmt.close();
-			
 			
 		} catch (Exception e) {
 			if (t!= null) {
@@ -1403,6 +1407,7 @@ public class OHDUtils {
 			cri.createCriteria("ohd").add(Expression.eq("OHD_ID", ohd_id));
 			cri.addOrder(Order.desc("OHDLog_ID"));
 			List result = cri.list();
+			System.out.println("!!!!!!!LOG LIST!!!! "+result);
 			if (result != null && result.size() > 0)
 				return (OHD_Log)result.get(0);
 			
