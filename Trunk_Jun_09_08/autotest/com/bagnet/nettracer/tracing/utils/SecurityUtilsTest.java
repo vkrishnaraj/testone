@@ -56,7 +56,7 @@ public class SecurityUtilsTest {
 		String password = "Password12!";
 		ActionMessages errors = new ActionMessages();
 		
-		
+		System.out.println("TEA password:"+TEA.encryptTEA(password));
 		assertTrue(setPassword(TEA_PASSWORD));
 		Agent agent = SecurityUtils.authUser(JUNIT_USER, password, companyCode, 2, errors);
 		assertTrue(agent != null);
