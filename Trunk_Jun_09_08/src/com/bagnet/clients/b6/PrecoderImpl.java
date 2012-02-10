@@ -69,7 +69,7 @@ public class PrecoderImpl implements Precoder{
 		}	
 		//Case 1:Another airline in the itinerary
 		if(hasAnotherAirline){
-			return getFaultInfo(inc, 58, "CBS");
+			return getFaultInfo(inc, 58, "N/A");
 		}
 		//Case 2:pax itin differs from bag itin
 		if(!hasSameItin(paxItin, bagItin)){
@@ -107,8 +107,8 @@ public class PrecoderImpl implements Precoder{
 	}
 	
 	private PrecoderResult setFaultMissing(Incident inc){
-		//Missing is always 91:CBS
-		return getFaultInfo(inc, 91, "CBS");
+		//Missing is always 91:N/A
+		return getFaultInfo(inc, 91, "N/A");
 	}
 	
 	private boolean hasSameItin(List<Itinerary> a, List<Itinerary> b){

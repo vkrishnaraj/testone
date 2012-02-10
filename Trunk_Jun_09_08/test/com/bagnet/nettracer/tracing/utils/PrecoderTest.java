@@ -137,7 +137,7 @@ public class PrecoderTest {
 		inc = getIncident(TracingConstants.MISSING_ARTICLES);
 		inc.setItinerary(null);
 		pr = pc.getFaultStationAndLossCode(inc);
-		assertTrue(pr.getLossCode() == 91 && pr.getFaultStation().getStationcode().equals("CBS"));
+		assertTrue(pr.getLossCode() == 91 && pr.getFaultStation().getStationcode().equals("N/A"));
 		
 		//no default station
 		inc = getIncident(TracingConstants.DAMAGED_BAG);
@@ -177,7 +177,7 @@ public class PrecoderTest {
 			}
 		}
 		pr = pc.getFaultStationAndLossCode(inc);
-		assertTrue(pr.getLossCode() == 34 && pr.getFaultStation().getStationcode().equals("CBS"));
+		assertTrue(pr.getLossCode() == 34 && pr.getFaultStation().getStationcode().equals("N/A"));
 
 		//Case 2:pax itin differs from bag itin
 		inc = getIncident(TracingConstants.LOST_DELAY);
@@ -254,7 +254,7 @@ public class PrecoderTest {
 		PrecoderResult pr;
 		inc = getIncident(TracingConstants.MISSING_ARTICLES);
 		pr = pc.getFaultStationAndLossCode(inc);
-		assertTrue(pr.getLossCode() == 91 && pr.getFaultStation().getStationcode().equals("CBS"));
+		assertTrue(pr.getLossCode() == 91 && pr.getFaultStation().getStationcode().equals("N/A"));
 	}
 	
 	@Test
@@ -289,7 +289,7 @@ public class PrecoderTest {
 		inc = IncidentBMO.getIncidentByID("AUSB600026374", sess);
 		inc = getIncident(TracingConstants.MISSING_ARTICLES);
 		pr = pc.getFaultStationAndLossCode(inc);
-		assertTrue(pr.getLossCode() == 91 && pr.getFaultStation().getStationcode().equals("CBS"));
+		assertTrue(pr.getLossCode() == 91 && pr.getFaultStation().getStationcode().equals("N/A"));
 		
 		//AUAB600002089 lost one pax seg, two bag segs(dupped)
 		inc = IncidentBMO.getIncidentByID("AUAB600002089", sess);
