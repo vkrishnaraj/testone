@@ -20,6 +20,7 @@
 				<prop key="training.mode">TRAINING</prop>
 				<prop key="wt.rules">com.bagnet.clients.defaul.wt.DefaultWorldTracerRuleMap</prop>
 				<prop key="reservation.version.name"></prop>
+				<prop key="shares.class.path">defaul</prop>
 			</props>
 		</property>
 	</bean>
