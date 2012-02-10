@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.Date;
 
+import org.apache.struts.action.ActionMessages;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -53,9 +54,11 @@ public class SecurityUtilsTest {
 	public void loginTEStoSHA1passResetTest(){
 		String companyCode = "OW";
 		String password = "Password12!";
+		ActionMessages errors = new ActionMessages();
+		
 		
 		assertTrue(setPassword(TEA_PASSWORD));
-		Agent agent = SecurityUtils.authUser(JUNIT_USER, password, companyCode, 2, null);
+		Agent agent = SecurityUtils.authUser(JUNIT_USER, password, companyCode, 2, errors);
 		assertTrue(agent != null);
 		assertTrue(agent.isReset_password());
 		
