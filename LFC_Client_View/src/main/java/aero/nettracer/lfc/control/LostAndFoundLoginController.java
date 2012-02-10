@@ -83,7 +83,13 @@ public class LostAndFoundLoginController {
 	public String goToFormPageSouthwest() {
 		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
-		return goToFormPage("bagcheck");
+		return goToFormPage("bagunchecked");
+	}
+	
+	public String goToCheckedPageSouthwest() {
+		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
+		return goToFormPage("bagchecked");
 	}
 	
 	public String goToFormPage(String page) {

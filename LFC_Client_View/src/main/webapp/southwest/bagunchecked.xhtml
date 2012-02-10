@@ -11,13 +11,11 @@
 	<ui:define name="body">
 		<h:form id="pageForm">
 			<h:panelGroup style="width: 315px">
-				<p class="contentHeader"><t:outputText value="#{msg.bagcheck_text_title}" escape="false"/></p>
-				<p class="twlvPxBlk"><t:outputText value="#{msg.bagcheck_text_intro}" /></p><br/>
-				<p class="twlvPxBlk"><t:outputText value="#{msg.bagcheck_text_question}" /></p><br/>
-				<div align="center">
-				<a4j:commandButton value="#{msg.bagcheck_button_unchecked}" action="#{lostAndFound.goToFormPage}" />&#160;&#160;&#160;
-				<a4j:commandButton value="#{msg.bagcheck_button_checked}" action="#{lostAndFound.backToLanding}" />
-				</div><br/><br/>
+				<p class="contentHeader"><t:outputText value="#{msg.bagunchecked_text_title}" escape="false"/></p>
+				<p class="twlvPxBlk"><t:outputText value="#{msg.bagunchecked_text_intro}" /></p>
+				<p class="twlvPxBlk"><t:outputText value="#{msg.bagunchecked_text_file_desc}" /></p><br/>
+				<a4j:commandButton value="#{msg.bagunchecked_button_file_lost}" action="#{lostAndFound.goToFormPage}" /><br/><br/>
+				<hr></hr>
 			</h:panelGroup>
 		</h:form>
 	</ui:define>
