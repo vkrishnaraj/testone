@@ -56,24 +56,25 @@ public class SecurityUtilsTest {
 		String password = "Password12!";
 		ActionMessages errors = new ActionMessages();
 		
-		System.out.println("TEA password:"+TEA.encryptTEA(password));
 		assertTrue(setPassword(TEA_PASSWORD));
 		Agent agent = SecurityUtils.authUser(JUNIT_USER, password, companyCode, 2, errors);
 		assertTrue(agent != null);
 		assertTrue(agent.isReset_password());
 		
-//		assertTrue(setPassword(SHA1_PASSWORD));
-//		agent = SecurityUtils.authUser(JUNIT_USER, password, companyCode, 2, null);
-//		assertTrue(agent != null);
-//		assertTrue(!agent.isReset_password());
+		assertTrue(setPassword(SHA1_PASSWORD));
+		agent = SecurityUtils.authUser(JUNIT_USER, password, companyCode, 2, errors);
+		assertTrue(agent != null);
+		assertTrue(!agent.isReset_password());
 	}
 	
-//	@Test
+	@Test
 	public void lastXPasswordsTest(){
 		String companyCode = "OW";
 		String password = "Password12!";
+		ActionMessages errors = new ActionMessages();
+		
 		assertTrue(setPassword(SHA1_PASSWORD));
-		Agent agent = SecurityUtils.authUser(JUNIT_USER, password, companyCode, 2, null);
+		Agent agent = SecurityUtils.authUser(JUNIT_USER, password, companyCode, 2, errors);
 		assertTrue(agent!=null);
 		
 		String newPassword1 = StringUtils.sha1("password" + (new Date()).getTime(), true);
@@ -101,7 +102,7 @@ public class SecurityUtilsTest {
 		assertTrue(!SecurityUtils.lastXPasswords(agent.getAgent_ID(), 0, newPassword1));
 	}
 	
-//	@Test
+	@Test
 	public void isPolicyAcceptablePasswordTest(){
 		Company comp = CompanyBMO.getCompany(TracerProperties.get("wt.company.code"));
 		String passwordMinLengthFail = ACCEPTABLE_PASSWORD.substring(0, comp.getVariable().getMin_pass_size() - 1);
