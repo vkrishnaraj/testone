@@ -40,7 +40,7 @@
 		class="com.bagnet.clients.${precoder.class.path}.PrecoderImpl" />
 		
 	<bean id="sharesIntegration"
-		class="com.bagnet.clients.us.SharesIntegrationThreadHandler" />
+		class="com.bagnet.clients.${shares.class.path}.SharesIntegrationThreadHandler" />
 
 	<!-- Hibernate config -->
 	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper"
