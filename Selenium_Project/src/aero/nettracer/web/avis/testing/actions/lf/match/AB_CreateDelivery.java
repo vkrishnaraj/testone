@@ -15,7 +15,7 @@ public class AB_CreateDelivery extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			System.out.println("Setting Manual Match To Picked Up.");
-			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a[3]");
+			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a[2]");
 			waitForPageToLoadImproved();
 			System.out.println("Setting Confirmed Match To Delivery.");
 			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a");
