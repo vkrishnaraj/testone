@@ -17,6 +17,8 @@ public final class SearchLostFoundForm extends ValidatorForm {
 	private String customer_tel = "";
 	private String s_createtime = "";
 	private String e_createtime = "";
+	private String s_renttime = "";
+	private String e_renttime = "";
 	private String location;
 	private int filing_station;
 	private String item_description;
@@ -214,5 +216,32 @@ public final class SearchLostFoundForm extends ValidatorForm {
 	 */
 	public void setS_createtime(String s_createtime) {
 		this.s_createtime = s_createtime;
+	}
+	
+	/**
+	 * @return Returns the s_createtime.
+	 */
+	public String getS_renttime() {
+		return s_renttime;
+	}
+
+	/**
+	 * @param s_createtime
+	 *          The s_createtime to set.
+	 */
+	public void setS_renttime(String s_renttime) {
+		this.s_renttime = s_renttime;
+	}
+	
+	public String getE_renttime() {
+		return e_renttime;
+	}
+
+	/**
+	 * @param s_createtime
+	 *          The s_createtime to set.
+	 */
+	public void setE_renttime(String e_renttime) {
+		this.e_renttime = e_renttime;
 	}
 }

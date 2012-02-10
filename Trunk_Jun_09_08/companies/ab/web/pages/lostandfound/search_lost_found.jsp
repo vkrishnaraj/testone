@@ -140,18 +140,27 @@
            			</tr>
            			<tr>           				
            				<td nowrap colspan=2>
-			                <bean:message key="colname.lf.date.range" />
+			                <bean:message key="colname.lf.date.travel_range" />
 			                (<%= a.getDateformat().getFormat() %>)
 			                <br>
 			                <html:text property="startDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.startDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">&nbsp;-
 			                <html:text property="endDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.endDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
 		                </td>
-		                <td >
+		                <td nowrap colspan=3>
+			                <bean:message key="colname.lf.date.rental_range" />
+			                (<%= a.getDateformat().getFormat() %>)
+			                <br>
+			             	<html:text property="startRentDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3" name="calendar3" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.startRentDate,'calendar3','<%= a.getDateformat().getFormat() %>'); return false;">&nbsp;-
+			                <html:text property="endRentDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar4" name="calendar4" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.endRentDate,'calendar4','<%= a.getDateformat().getFormat() %>'); return false;">
+		                </td>
+		            </tr>
+           			<tr>
+           				<td nowrap colspan=2>
 							<bean:message key="colname.lf.agreement.number" />
 							<br>
 							<html:text name="searchLostFoundForm" property="agreementNumber" size="15" styleClass="textfield" />
 						</td>
-		                <td colspan=2>
+		                <td colspan=3>
 		                	<bean:message key="colname.lf.mva.number" />
 							<br>
 							<html:text name="searchLostFoundForm" property="mvaNumber" size="10" styleClass="textfield" />

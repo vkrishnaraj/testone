@@ -357,6 +357,25 @@ public class LostFoundBMO {
 					sql.append(" and lfd.dateFoundLost = :sdate ");
 				}
 			}
+			
+			Date srdate = null, erdate = null;
+			System.out.println("HEY! IT PASSES HERE! 1");
+			if (daform.getS_renttime() != null && daform.getS_renttime().length() > 0) {
+				srdate = DateUtils.convertToDate(daform.getS_renttime(), user.getDateformat().getFormat(), null);
+			}
+			if (daform.getE_renttime() != null && daform.getE_renttime().length() > 0) {
+				erdate = DateUtils.convertToDate(daform.getE_renttime(), user.getDateformat().getFormat(), null);
+			}
+			
+			if (srdate != null && !srdate.equals("")) {
+				if (erdate != null && !erdate.equals("")) {
+					if (srdate.equals(erdate)) sql.append(" and lfd.dateFoundLost = :srdate ");
+					else sql.append(" and lfd.dateFoundLost between :srdate and :erdate ");
+				} else {
+					sql.append(" and lfd.dateFoundLost = :srdate ");
+				}
+			}
+			System.out.println("HEY! IT PASSED HERE! 1");
 
 			if (daform.getReport_status_ID() != null && daform.getReport_status_ID().length() > 0) {
 				sql.append(" and lfd.report_status.status_ID = :report_status_ID ");
@@ -421,6 +440,18 @@ public class LostFoundBMO {
 					}
 				} else {
 					q.setDate("sdate", sdate);
+				}
+			}
+			
+			if (srdate != null && !srdate.equals("")) {
+				if (erdate != null && !erdate.equals("")) {
+					if (sdate.equals(erdate)) q.setDate("srdate", srdate);
+					else {
+						q.setDate("srdate", srdate);
+						q.setDate("erdate", erdate);
+					}
+				} else {
+					q.setDate("srdate", srdate);
 				}
 			}
 

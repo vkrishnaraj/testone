@@ -259,6 +259,25 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				sql += " and o.foundDate < \'" + date + "\'";
 			}
 		}
+		if(dto.getStartRentDate() != null && dto.getStartRentDate().trim().length() > 0){
+			String date = DateUtils.formatDate(dto.getStartRentDateAsDate(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
+			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
+				sql += " and o.lossInfo.lossdate >= \'" + date + "\'";
+			}/* else {
+				sql += " and o.foundDate >= \'" + date + "\'";
+			}*/
+		}
+		if(dto.getEndRentDate() != null && dto.getEndRentDate().trim().length() > 0){
+			GregorianCalendar cal = new GregorianCalendar();
+			cal.setTime(dto.getEndRentDateAsDate());
+			cal.add(Calendar.DATE, 1);
+			String date = DateUtils.formatDate(cal.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
+			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
+				sql += " and o.lossInfo.lossdate < \'" + date + "\'";
+			}/* else {
+				sql += " and o.foundDate < \'" + date + "\'";
+			}*/
+		}
 		if(dto.getAgreementNumber() != null && dto.getAgreementNumber().trim().length() > 0){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " and o.lossInfo.agreementNumber = \'" + dto.getAgreementNumber().trim() + "\'";

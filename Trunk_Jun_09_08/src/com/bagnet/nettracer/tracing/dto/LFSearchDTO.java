@@ -24,6 +24,8 @@ public class LFSearchDTO extends ActionForm  {
 	private long id; 
 	private String startDate;
 	private String endDate; 
+	private String startRentDate;
+	private String endRentDate; 
 	private Station station;
 	private Agent agent; // na
 	private Status status; 
@@ -253,6 +255,30 @@ public class LFSearchDTO extends ActionForm  {
 
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
+	}
+
+	public String getStartRentDate() {
+		return startRentDate;
+	}
+	
+	public Date getStartRentDateAsDate(){
+		return DateUtils.convertToDate(this.startRentDate, this.agent.getDateformat().getFormat(), this.agent.getDefaultlocale());
+	}
+
+	public void setStartRentDate(String startRentDate) {
+		this.startRentDate = startRentDate;
+	}
+
+	public String getEndRentDate() {
+		return endRentDate;
+	}
+	
+	public Date getEndRentDateAsDate(){
+		return DateUtils.convertToDate(this.endRentDate, this.agent.getDateformat().getFormat(), this.agent.getDefaultlocale());
+	}
+
+	public void setEndRentDate(String endRentDate) {
+		this.endRentDate = endRentDate;
 	}
 		
 }
