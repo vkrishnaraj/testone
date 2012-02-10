@@ -339,6 +339,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 </table>
 <div id="calendardiv" STYLE="position:absolute;visibility:hidden;background-color:white;layer-background-color:white; z-index:100"></div>
 
+<logic:present name="user" scope="session">
 
 <script language="javascript">
 
@@ -350,7 +351,7 @@ jQuery(document).ready(function () {
 
 </script>
 
-<logic:present name="user" scope="session">
+
 <%
 	String isVis = request.getParameter("slideUpContainerVisible");
 	if (isVis == null || !isVis.equals("yes")) {
