@@ -22,7 +22,7 @@ public class LF_CreateDelivery extends DefaultSeleneseTestCase {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				selenium.type("name=foundItem.trackingNumber", "123123123123");
+				selenium.type("name=item.trackingNumber", "123123123123");
 				selenium.click("name=save");
 				waitForPageToLoadImproved();
 				selenium.click("id=menucol_2.3");
@@ -31,7 +31,7 @@ public class LF_CreateDelivery extends DefaultSeleneseTestCase {
 				selenium.select("name=type", "label=Lost");
 				selenium.click("id=button");
 				waitForPageToLoadImproved();
-				verifyEquals("123123123123", selenium.getValue("name=foundItem.trackingNumber"));
+				verifyEquals("123123123123", selenium.getValue("name=item.trackingNumber"));
 			} else {
 				System.out.println("Delivery Info Page Didn't Load. Error Page Loaded Instead.");
 				verifyTrue(false);
