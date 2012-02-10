@@ -155,6 +155,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 	}
 	
 	public void insertData(Date flightdate, String a, String b, String c, String d, String e){
+		System.out.println(a);
 		String sql = "insert into scandata (createdate,flightdate,a,b,c,d,e) values (:date,:flightdate,:a,:b,:c,:d,:e)";
 		Session sess = null;
 		Transaction t = null;
@@ -331,5 +332,47 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 //		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-25.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-25.del");
+		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-26.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-26.del");
+		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-27.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-27.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-28.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-28.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-29.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-29.del");
+		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-30.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-30.del");
+		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-31.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-31.del");
+		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-01.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-01.del");
+		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-02.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-02.del");
+		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-03.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-03.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-04.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-04.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-05.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-05.del");
+		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-06.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-06.del");
+		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-07.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-07.del");
+		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-08.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-08.del");
 	}
 }
