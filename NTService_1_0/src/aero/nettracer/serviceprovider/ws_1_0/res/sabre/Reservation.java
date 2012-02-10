@@ -17,6 +17,8 @@ import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.axis2.engine.Handler;
 import org.apache.axis2.engine.Phase;
 import org.apache.log4j.Logger;
+import org.apache.xmlbeans.XmlError;
+import org.apache.xmlbeans.XmlOptions;
 import org.ebxml.www.namespaces.messageheader.MessageHeaderDocument;
 import org.ebxml.www.namespaces.messageheader.MessageHeaderDocument.MessageHeader;
 import org.ebxml.www.namespaces.messageheader.PartyIdDocument.PartyId;
@@ -56,25 +58,29 @@ import com.sabre.webservices.sabrexml._2003._07.EndTransactionRSDocument;
 import com.sabre.webservices.sabrexml._2003._07.IgnoreTransactionRQDocument;
 import com.sabre.webservices.sabrexml._2003._07.IgnoreTransactionRSDocument;
 import com.sabre.webservices.sabrexml._2003._07.ItemType;
-import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryRSDocument;
-import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryReadRQDocument;
+import com.sabre.webservices.sabrexml._2003._07.ItemType.FlightSegment;
 import com.sabre.webservices.sabrexml._2003._07.SabreCommandLLSRQDocument;
 import com.sabre.webservices.sabrexml._2003._07.SabreCommandLLSRSDocument;
 import com.sabre.webservices.sabrexml._2003._07.AddRemarkRQDocument.AddRemarkRQ;
 import com.sabre.webservices.sabrexml._2003._07.AddRemarkRQDocument.AddRemarkRQ.BasicRemark;
-import com.sabre.webservices.sabrexml._2003._07.CustomerInfoType.Customer;
-import com.sabre.webservices.sabrexml._2003._07.CustomerInfoType.Customer.Address;
-import com.sabre.webservices.sabrexml._2003._07.CustomerInfoType.Customer.CustLoyalty;
-import com.sabre.webservices.sabrexml._2003._07.CustomerInfoType.Customer.Email;
-import com.sabre.webservices.sabrexml._2003._07.CustomerInfoType.Customer.PersonName;
-import com.sabre.webservices.sabrexml._2003._07.CustomerInfoType.Customer.Telephone;
 import com.sabre.webservices.sabrexml._2003._07.EndTransactionRQDocument.EndTransactionRQ;
 import com.sabre.webservices.sabrexml._2003._07.IgnoreTransactionRQDocument.IgnoreTransactionRQ;
-import com.sabre.webservices.sabrexml._2003._07.ItemType.Air;
-import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryRSDocument.OTATravelItineraryRS.TravelItinerary;
-import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryReadRQDocument.OTATravelItineraryReadRQ;
-import com.sabre.webservices.sabrexml._2003._07.OTATravelItineraryReadRQDocument.OTATravelItineraryReadRQ.UniqueID;
 import com.sabre.webservices.sabrexml._2003._07.SabreCommandLLSRQDocument.SabreCommandLLSRQ;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument.TravelItineraryReadRQ;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument.TravelItineraryReadRQ.MessagingDetails;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument.TravelItineraryReadRQ.POS;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument.TravelItineraryReadRQ.POS.Source;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument.TravelItineraryReadRQ.UniqueID;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.TravelItinerary;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.TravelItinerary.CustomerInfo;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.TravelItinerary.CustomerInfo.Address;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.TravelItinerary.CustomerInfo.Address.AddressLine;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.TravelItinerary.CustomerInfo.CustLoyalty;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.TravelItinerary.CustomerInfo.PersonName;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.TravelItinerary.CustomerInfo.Telephone;
 import com.sabre.webservices.websvc.AddRemarkServiceStub;
 import com.sabre.webservices.websvc.EndTransactionServiceStub;
 import com.sabre.webservices.websvc.IgnoreTransactionServiceStub;
@@ -83,6 +89,7 @@ import com.sabre.webservices.websvc.SabreCommandLLSServiceStub;
 import com.sabre.webservices.websvc.SessionCloseRQServiceStub;
 import com.sabre.webservices.websvc.SessionCreateRQServiceStub2;
 import com.sabre.webservices.websvc.SessionValidateRQServiceStub;
+import com.sabre.webservices.websvc.TravelItineraryReadServiceStub2;
 
 public class Reservation implements ReservationInterface {
 
@@ -112,7 +119,7 @@ public class Reservation implements ReservationInterface {
 	private static final String ACTION_ADD_REMARK_RQ = "AddRemarkLLSRQ";
 	private static final String ACTION_END_RQ = "EndTransactionLLSRQ";
 	private static final String ACTION_IGNORE_RQ = "IgnoreTransactionLLSRQ";
-	private static final String ACTION_TRAVEL_ITINERARY_RQ = "OTA_TravelItineraryReadLLSRQ";
+	private static final String ACTION_TRAVEL_ITINERARY_RQ = "TravelItineraryReadLLSRQ";
 	private static final String ACTION_SESSION_VALIDATE_RQ = "SessionValidateRQ";
 
 	private static Logger logger = Logger.getLogger(Reservation.class);
@@ -146,36 +153,33 @@ public class Reservation implements ReservationInterface {
 						"This feature not capable of implementation.");
 			}
 
-			OTATravelItineraryRSDocument doc = loadPnr(connParams, pnr, false);
+			TravelItineraryReadRSDocument doc = loadPnr(connParams, pnr, false);
 			
-			if (doc.getOTATravelItineraryRS().getErrors() != null && doc.getOTATravelItineraryRS().getErrors().getError() != null && doc.getOTATravelItineraryRS().getErrors().getError().getErrorMessage() != null) {
-				exceptionText = doc.getOTATravelItineraryRS().getErrors().getError().getErrorMessage();
+			if (doc.getTravelItineraryReadRS().getErrors() != null && doc.getTravelItineraryReadRS().getErrors().getError() != null && doc.getTravelItineraryReadRS().getErrors().getError().getErrorMessage() != null) {
+				exceptionText = doc.getTravelItineraryReadRS().getErrors().getError().getErrorMessage();
 				throw new Exception();
 			}
 			
-			TravelItinerary ti = doc.getOTATravelItineraryRS()
+			TravelItinerary ti = doc.getTravelItineraryReadRS()
 					.getTravelItinerary();
-			Customer cust = ti.getCustomerInfos().getCustomerInfo()
-					.getCustomer();
+			CustomerInfo cust = ti.getCustomerInfo();
 
 			aero.nettracer.serviceprovider.ws_1_0.common.xsd.Reservation res = response
 					.addNewReservation();
 
 			PersonName[] pns = cust.getPersonNameArray();
 			CustLoyalty[] custLoyalty = cust.getCustLoyaltyArray();
-			Email[] email = cust.getEmailArray();
 			Telephone[] telephones = cust.getTelephoneArray();
 			
 			if (ti.getItineraryInfo() != null && ti.getItineraryInfo().getReservationItems() != null) {
 				ItemType[] items = ti.getItineraryInfo().getReservationItems().getItemArray();
 
 				for (ItemType item : items) {
-					Air[] airs = item.getAirArray();
-					for (Air air : airs) {
+					FlightSegment air = item.getFlightSegment();
 						Itinerary itin = res.addNewPassengerItinerary();
-						itin.setDepartureCity(air.getDepartureAirport()
+						itin.setDepartureCity(air.getOriginLocation()
 								.getLocationCode());
-						itin.setArrivalCity(air.getArrivalAirport()
+						itin.setArrivalCity(air.getDestinationLocation()
 								.getLocationCode());
 						itin.setFlightnum(air.getFlightNumber());
 						String depTime = air.getDepartureDateTime();
@@ -193,12 +197,10 @@ public class Reservation implements ReservationInterface {
 						itin.setScharrivetime(scharrivetime);
 						if (air.getMarketingAirline() != null) {
 							itin.setAirline(air.getMarketingAirline().getCode());
-						} else if (air.getOperatingAirline() != null) {
-							itin.setAirline(air.getOperatingAirline().getCode());
+						} else if (air.getOperatingAirlineArray() != null && air.getOperatingAirlineArray(0) != null) {
+							itin.setAirline(air.getOperatingAirlineArray(0).getCode());
 						}
 						air.getArrivalDateTime();
-	
-					}
 				}
 			}
 
@@ -208,8 +210,7 @@ public class Reservation implements ReservationInterface {
 			for (int i = 0; i < pns.length; ++i) {
 				PersonName pn = pns[i];
 				Passenger pax = res.addNewPassengers();
-				String paxKey = pn.getTPAExtensions().getNameNumber()
-						.getNumber();
+				String paxKey = pn.getNameNumber().toString();
 				paxMap.put(paxKey, pax);
 				if (firstPax == null) {
 					firstPax = pax;
@@ -219,11 +220,18 @@ public class Reservation implements ReservationInterface {
 				pax.setLastname(pn.getSurname());
 				aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address add = pax
 						.addNewAddresses();
+				
+				String[] email = pn.getEmailArray();
+				if (email != null && email.length > 0 && email[0] != null && email[0].trim().length() > 2) {
+					String theEmail = email[0].substring(2);
+					theEmail = theEmail.substring(0, theEmail.length() - 2);
+					add.setEmailAddress(theEmail);
+				}
 
 				if (i == 0) {
 					if (cust.getAddress() != null) {
 						Address padd = cust.getAddress();
-						String[] lines = padd.getAddressLineArray();
+						AddressLine[] lines = padd.getAddressLineArray();
 
 						// Example Domestic:
 						// <AddressLine>N/FRED PARKER</AddressLine>
@@ -237,7 +245,8 @@ public class Reservation implements ReservationInterface {
 						// <AddressLine>C/TORONTO, ON, CA</AddressLine>
 						// <AddressLine>Z/A1B 2C3</AddressLine>
 						
-						for (String line: lines) {
+						for (AddressLine aLine: lines) {
+							String line = aLine.getStringValue();
 							if (line.startsWith("A/")) {
 								add.setAddress1(line.substring(2));
 							} else if (line.startsWith("C/")) {
@@ -315,14 +324,7 @@ public class Reservation implements ReservationInterface {
 				pax.setFfStatus(custL.getShortText());
 			}
 
-			for (Email e : email) {
-				Passenger pax = paxMap.get(e.getNameNumber());
-				aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address a = pax
-						.getAddresses();
-				a.setEmailAddress(e.getStringValue());
-			}
-
-			res.setPnr(doc.getOTATravelItineraryRS().getTravelItinerary()
+			res.setPnr(doc.getTravelItineraryReadRS().getTravelItinerary()
 					.getItineraryRef().getID());
 
 			res.setNilOsi();
@@ -692,12 +694,12 @@ public class Reservation implements ReservationInterface {
 
 	}
 
-	public static OTATravelItineraryRSDocument loadPnr(
+	public static TravelItineraryReadRSDocument loadPnr(
 			SabreConnection connParams, String pnr, boolean getData)
 			throws RemoteException {
 		try {
 
-			OTA_TravelItineraryServiceStub2 stub = new OTA_TravelItineraryServiceStub2(
+			TravelItineraryReadServiceStub2 stub = new TravelItineraryReadServiceStub2(
 					null, connParams.getEndpoint());
 
 			SecurityDocument securityDocument = getSecurityDocument(connParams);
@@ -705,19 +707,27 @@ public class Reservation implements ReservationInterface {
 					ACTION_TRAVEL_ITINERARY_RQ, "Travel");
 			
 			
-			OTATravelItineraryReadRQDocument rqDoc = OTATravelItineraryReadRQDocument.Factory
+			TravelItineraryReadRQDocument rqDoc = TravelItineraryReadRQDocument.Factory
 					.newInstance();
-			OTATravelItineraryReadRQ readRq = rqDoc.addNewOTATravelItineraryReadRQ();
+			TravelItineraryReadRQ readRq = rqDoc.addNewTravelItineraryReadRQ();
+			POS myPos = readRq.addNewPOS();
+			Source mySource = myPos.addNewSource();
+			mySource.setPseudoCityCode(connParams.getPseudoCityCode());
+			MessagingDetails myMess = readRq.addNewMessagingDetails();
+			myMess.addNewTransaction().setCode("PNR");
 			UniqueID id = readRq.addNewUniqueID();
 			id.setID(pnr);
-			readRq.setVersion("2003A.TsabreXML1.14.1");
+			Calendar stamp = Calendar.getInstance();
+			readRq.setTimeStamp(stamp.getTime().toString());
+			readRq.setVersion("1.1.1");
 
-			OTATravelItineraryRSDocument responseDocument = null;
+			TravelItineraryReadRSDocument responseDocument = null;
 
 			if (!getData) {
 				logger.info(LOAD_PNR_NO_DATA + connParams.getLoggingString());
-
-				responseDocument = stub.oTA_TravelItineraryReadRQ(rqDoc, mhDoc,
+				validate(rqDoc);
+				logger.debug(LOAD_PNR_NO_DATA + rqDoc.toString());
+				responseDocument = stub.travelItineraryReadRQ(rqDoc, mhDoc,
 						securityDocument);
 
 				logger.info(LOAD_PNR_NO_DATA + responseDocument.toString());
@@ -903,5 +913,25 @@ public class Reservation implements ReservationInterface {
 		}
 		mh.setAction(action);
 		return mhDoc;
+	}
+	
+	protected static boolean validate(org.apache.xmlbeans.XmlObject xml){
+		org.apache.xmlbeans.XmlOptions options = new XmlOptions();
+		ArrayList<XmlError> errors = new ArrayList<XmlError>();
+		options.setErrorListener(errors);
+		try{
+			boolean valid = xml.validate(options);
+			if(!valid){
+				for(XmlError error:errors){
+					String errorStr = "Message: " + error.getMessage() + "\n";
+					errorStr += "Location of invalid XML: " + error.getCursorLocation().xmlText() + "\n";
+					logger.error(errorStr);
+				}
+			}
+			return valid;
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

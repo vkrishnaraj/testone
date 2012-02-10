@@ -13,9 +13,10 @@ public class RealTest {
 	public void testReservationResponseData() throws Exception {
 
 		Session sess = HibernateWrapper.getSession().openSession();
-		User user = (User) sess.load(User.class, 1);
+		User user = (User) sess.load(User.class, 2);
 		Reservation res = new Reservation();
-		ReservationResponse response = res.getReservationData(user, "PDOMZX", null);
+		ReservationResponse response = res.getReservationData(user, "GNJDYG", null);
+		System.out.println("RESPONSE:: " + response.toString());
 		int i = 0;
 	}
 }
