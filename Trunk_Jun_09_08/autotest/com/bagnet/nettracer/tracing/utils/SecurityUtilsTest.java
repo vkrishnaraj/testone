@@ -59,13 +59,13 @@ public class SecurityUtilsTest {
 		assertTrue(agent != null);
 		assertTrue(agent.isReset_password());
 		
-		assertTrue(setPassword(SHA1_PASSWORD));
-		agent = SecurityUtils.authUser(JUNIT_USER, password, companyCode, 2, null);
-		assertTrue(agent != null);
-		assertTrue(!agent.isReset_password());
+//		assertTrue(setPassword(SHA1_PASSWORD));
+//		agent = SecurityUtils.authUser(JUNIT_USER, password, companyCode, 2, null);
+//		assertTrue(agent != null);
+//		assertTrue(!agent.isReset_password());
 	}
 	
-	@Test
+//	@Test
 	public void lastXPasswordsTest(){
 		String companyCode = "OW";
 		String password = "Password12!";
@@ -98,7 +98,7 @@ public class SecurityUtilsTest {
 		assertTrue(!SecurityUtils.lastXPasswords(agent.getAgent_ID(), 0, newPassword1));
 	}
 	
-	@Test
+//	@Test
 	public void isPolicyAcceptablePasswordTest(){
 		Company comp = CompanyBMO.getCompany(TracerProperties.get("wt.company.code"));
 		String passwordMinLengthFail = ACCEPTABLE_PASSWORD.substring(0, comp.getVariable().getMin_pass_size() - 1);
