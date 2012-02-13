@@ -22,7 +22,7 @@ public class LF_CreateDelivery extends DefaultSeleneseTestCase {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				selenium.type("name=item.trackingNumber", "123123123123");
+				selenium.type("name=trackingNumber", "123123123123");
 				selenium.click("name=save");
 				waitForPageToLoadImproved();
 				selenium.click("id=menucol_2.3");
