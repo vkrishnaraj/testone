@@ -26,6 +26,7 @@ public class LF_CreateLost_Detailed extends DefaultSeleneseTestCase {
 			selenium.select("id=category_0", "label=Bags");
 			selenium.select("name=item[0].color", "label=Black");
 			selenium.type("name=item[0].description", "Test Description Test Description Test Description Test Description Test Description Test Description Test DescriptionTest Description Test Description Test Description Test Description Test Description Test Description Test Description 241 245 249 Should not see this text, beyond 250 character limit");
+			selenium.fireEvent("name=item[0].description", "blur");
 			selenium.click("saveButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
