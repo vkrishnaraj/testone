@@ -183,4 +183,17 @@ public final class FoundItemForm extends ActionForm {
 		this.rejectedResults = rejectedResults;
 	}
 	
+	public LFItem getFoundItem() {
+		if (found != null) {
+			return found.getItem();
+		}
+		return null;
+	}
+	
+	public void setFoundItem(LFItem foundItem) {
+		if (found != null) {
+			found.setItem(foundItem);
+		}
+	}
+	
 }

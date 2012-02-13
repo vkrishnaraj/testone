@@ -54,6 +54,8 @@ public class LFItem implements Serializable{
 	
 	private int value;
 	
+	private boolean deliveryRejected;
+	
 	@Transient
 	private String dispPhone;
 	
@@ -323,5 +325,15 @@ public class LFItem implements Serializable{
 			phone.setDecryptedPhoneNumber(dispPhone);
 		}
 	}
+
+	public boolean getDeliveryRejected() {
+		return deliveryRejected;
+	}
+
+	public void setDeliveryRejected(boolean deliveryRejected) {
+		this.deliveryRejected = deliveryRejected;
+	}
+	
+	
 	
 }

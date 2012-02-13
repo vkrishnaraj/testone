@@ -121,10 +121,15 @@ public class LostReportAction extends CheckedAction {
 			if (item != null) {
 				item.setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 				item.setTrackingNumber(null);
+				item.setDeliveryRejected(false);
 				
-				item.getFound().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
-				item.getFound().getItem().setTrackingNumber(null);
-				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(item.getFound(), user);
+				if (item.getFound() != null) {
+					LFItem foundItem = item.getFound().getItem();
+					foundItem.setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+					foundItem.setTrackingNumber(null);
+					foundItem.setDeliveryRejected(false);
+					LFServiceWrapper.getInstance().saveOrUpdateFoundItem(item.getFound(), user);
+				}
 			}
 			lostReport.setStatusId(TracingConstants.LF_STATUS_OPEN);
 			LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport, user);

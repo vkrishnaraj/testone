@@ -391,35 +391,39 @@
 				<bean:message key="message.required" /> 
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
          			<logic:iterate indexId="i" id="item" name="lostReportForm" property="lost.items" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
-         				<% 
-         					if (item.getType() == TracingConstants.LF_TYPE_LOST) { %>
-	         				<tr>
-         					<%  int dispositionId = item.getDispositionId();
-         						if (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED || dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP) { %>
-			         					<td class="header" >
+         				<% if (item.getType() == TracingConstants.LF_TYPE_LOST) { %> 
+         				<tr>
+         				<td style="width:45%;" class="header" >
+       						<% 
+       						int dispositionId = item.getDispositionId();
+       						if (item.getFound() != null) { %>
+       								<bean:message key="lf.match.found" />:&nbsp;<a style="color:#fff;" href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getBarcode() %></a>&nbsp;
+	      							<% if (dispositionId == TracingConstants.LF_DISPOSITION_OTHER || dispositionId == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) { %>
+										[<a style="color:#fff;" href='create_lost_report.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
+									<% } %>
+       						<% } else { %>
+       								<bean:message key="lf.match.found" />:&nbsp;
+   									<input type="text" size="10" class="textfield" id="foundInput" onchange="setFoundId(this.value,1,<%=item.getId() %>)" />&nbsp;
+									<!--[<a style="color:#fff;" href="javascript:document.lostReportForm.submit();" ><bean:message key="button.do_match" /></a>]-->
+									[<a style="color:#fff;" href="javascript:document.lostReportForm.submit();" onclick="return validateId('foundInput');" ><bean:message key="button.do_match" /></a>]
+       						<% } %>
+       					</td>
+       					<td colspan=2 style="width:55%;" class="header" >
+       						<% 
+         						if (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED || dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP || item.getDeliveryRejected()) { %>
 	         						<% if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_DELIVERED) { %>
 			         						<bean:message key="colname.lf.tracking.number" />:&nbsp;<html:text name="item" property="trackingNumber" size="20" styleClass="textfield" />&nbsp;
 	         						<% } else if (item.getDispositionId() == TracingConstants.LF_DISPOSITION_PICKED_UP) { %>
 			         						<bean:message key="lf.picked.up" />&nbsp;
+	         						<% } else if (item.getDeliveryRejected()) {%>
+	         								<bean:message key="lf.delivery.rejected" />
 	         						<% } %>
 			         						[<a style="color:#fff;" href='create_lost_report.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
-			         					</td>
         					<%	} else { %>
-        							<td class="header" >&nbsp;</td>
+        							&nbsp;
         					<%  } %>
-       							<td class="header" colspan=2>
-       								<% if (item.getFound() != null) { %>
-       									<bean:message key="lf.match.found" />:&nbsp;<a style="color:#fff;" href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getBarcode() %></a>&nbsp;
-       									<% if (dispositionId == TracingConstants.LF_DISPOSITION_OTHER || dispositionId == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) { %>
-											[<a style="color:#fff;" href='create_lost_report.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
-										<% } %>
-       								<% } else { %>
-       									<bean:message key="lf.match.found" />:&nbsp;
-   										<input type="text" size="10" class="textfield" id="foundInput" onchange="setFoundId(this.value,1,<%=item.getId() %>)" />&nbsp;
-										<!--[<a style="color:#fff;" href="javascript:document.lostReportForm.submit();" ><bean:message key="button.do_match" /></a>]-->
-										[<a style="color:#fff;" href="javascript:document.lostReportForm.submit();" onclick="return validateId('foundInput');" ><bean:message key="button.do_match" /></a>]
-       								<% } %>
-       							</td>
+        					</td>
+       							
     	   					</tr>
          				<tr>
 	         				<td>

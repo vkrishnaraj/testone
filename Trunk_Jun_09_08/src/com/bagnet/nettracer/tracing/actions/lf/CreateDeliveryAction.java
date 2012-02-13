@@ -56,6 +56,21 @@ public class CreateDeliveryAction extends CheckedAction {
 				
 				response.sendRedirect("view_items_deliver.do");
 				return null;
+			} else if (request.getParameter("deliveryRejected") != null) {
+				item.setDeliveryRejected(true);
+				List<LFItem> items = serviceBean.getItemsByLostFoundId(item.getFound().getId(), TracingConstants.LF_TYPE_FOUND);
+				for (LFItem i: items) {
+					i.setTrackingNumber(null);
+					i.setDeliveryRejected(true);
+					i.setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
+					i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
+					i.getFound().setStatusId(TracingConstants.LF_STATUS_CLOSED);
+					
+					serviceBean.saveOrUpdateLostReport(i.getLost(), user);
+					serviceBean.saveOrUpdateFoundItem(i.getFound(), user);
+				}
+				response.sendRedirect("view_items_deliver.do");
+				return null;
 			}
 			cdForm.setItem(item);
 		} else if (request.getParameter("save") != null) {

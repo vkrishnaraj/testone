@@ -95,20 +95,21 @@
          			<logic:iterate indexId="i" id="item" name="handleItemsForm" property="foundItems" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
          				<% if (item.getType() == TracingConstants.LF_TYPE_FOUND) { %>
          				<tr>
-         					<td>
+         					<td style="width:15%;">
          						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getBarcode() %></a>
          					</td>
-         					<td>
+         					<td style="width:15%;">
          						<%=item.getDisposition().getDescription() %>
          					</td>
-         					<td>
+         					<td style="width:10%;">
          						<%=item.getFound().getDisplayDate(a.getDateformat().getFormat()) %>
          					</td>
-         					<td>
+         					<td style="width:30%;">
          						<%=item.getDescription() == null || item.getDescription().isEmpty() ? "&nbsp;" : item.getDescription() %>
          					</td>
-         					<td>
+         					<td style="width:30%;">
          						<a href='create_delivery.do?itemId=<%=item.getId() %>'><bean:message key="lf.create.delivery" /></a>,&nbsp;
+         						<a href='create_delivery.do?itemId=<%=item.getId() %>&deliveryRejected=1'><bean:message key="lf.delivery.rejected" /></a>,&nbsp;
          						<a href='create_delivery.do?itemId=<%=item.getId() %>&pickedUp=1'><bean:message key="lf.picked.up" /></a>
          					</td>
          				</tr>

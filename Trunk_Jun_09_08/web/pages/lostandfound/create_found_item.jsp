@@ -26,6 +26,9 @@
 		enableIdField = ((String) request.getAttribute("enableIdField")).equals("true");
 		request.removeAttribute("enableIdField");
  	}
+ 	
+ 	int dispositionId = 0;
+ 	boolean haveDeliveryInformation = false;
 %>
 
 
@@ -577,57 +580,14 @@
          			<% 
        					if (item.getType() == TracingConstants.LF_TYPE_FOUND) { %>
 	         				<tr>
-       					<%	int dispositionId = item.getDispositionId();
-       						if (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED){
-       							%>
-								<td class="header">
-								<bean:message key="colname.lf.tracking.number" />:&nbsp;
-								<input type="text" name="item[<%=i %>].trackingNumber" size="20" class="textfield" value="<%=item.getTrackingNumber() == null ? "" : item.getTrackingNumber() %>" />&nbsp;
-									[<a style="color:#fff;" href='create_found_item.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
-								</td>
-								<td class="header">
-									&nbsp;
-								</td>
-								<td class="header">
-      								<% if (item.getLost() != null) { %>
-      									<bean:message key="lf.match.lost" />:&nbsp;<a style="color:#fff;" href='create_lost_report.do?lostId=<%=item.getLost().getId() %>'><%=item.getLost().getId() %></a>&nbsp;<br/>
-      								<% } else { %>
-      									<bean:message key="lf.match.lost" />:&nbsp;<br/>
-      								<% } %>
-      							</td>
-								<%
-       						} else if (dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP){
-    							%>
-								<td class="header">
-									&nbsp;
-								</td>
-								<td class="header">
-									<bean:message key="lf.picked.up"/>&nbsp;
-									[<a style="color:#fff;" href='create_found_item.do?undo=1&itemId=<%=item.getId() %>'><bean:message key="lf.undo" /></a>]
-								</td>
-								<td class="header">
-      								<% if (item.getLost() != null) { %>
-      									<bean:message key="lf.match.lost" />:&nbsp;<a style="color:#fff;" href='create_lost_report.do?lostId=<%=item.getLost().getId() %>'><%=item.getLost().getId() %></a>&nbsp;<br/>
-      								<% } else { %>
-      									<bean:message key="lf.match.lost" />:&nbsp;<br/>
-      								<% } %>
-      							</td>
-   								<%
-       						} else {
-       							%>
-									<td class="header">
-									<bean:message key="colname.lf.tracking.number" />:&nbsp;
-									<input type="text" name="item[<%=i %>].trackingNumber" size="20" class="textfield" value="<%=item.getTrackingNumber() == null ? "" : item.getTrackingNumber() %>" />
-									&nbsp;
-									</td>
-									<td class="header">
-										<a style="color:#fff;" href='create_found_item.do?pickup=1&itemId=<%=item.getId() %>'><bean:message key="lf.picked.up"/></a>
-									</td>
-									<td class="header">
+       					<%	dispositionId = item.getDispositionId();
+       						haveDeliveryInformation = (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED || dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP) || item.getDeliveryRejected();
+       						%>
+       						<td colspan=3 class="header">
       								<% if (item.getLost() != null) { %>
       									<bean:message key="lf.match.lost" />:&nbsp;<a style="color:#fff;" href='create_lost_report.do?lostId=<%=item.getLost().getId() %>'><%=item.getLost().getId() %></a>&nbsp;
       									<% if (dispositionId == TracingConstants.LF_DISPOSITION_OTHER || dispositionId == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) { %>
-										<br>[<a style="color:#fff;" href='create_found_item.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
+										[<a style="color:#fff;" href='create_found_item.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
 										<% } %>
       								<% } else { %>
       									<bean:message key="lf.match.lost" />:&nbsp;
@@ -636,9 +596,6 @@
 										[<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" onclick="return validateId('foundInput');" ><bean:message key="button.do_match" /></a>]
       								<% } %>
       							</td>
-       							<%
-       						}
-     					%>	
 	       					</tr>
          				<tr>
 	         				<td>
@@ -792,6 +749,69 @@
          			</logic:iterate>
          		</table>
          		<br/>
+         		<h1 class="green">
+					<bean:message key="header.delivery.information" />
+					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+				</h1>
+				<table class="<%=cssFormClass %>" cellpadding=0 cellspacing=0 >
+				<% if (haveDeliveryInformation) { %>
+					<tr >
+						<td class="header" style="width:50%;" >
+							<bean:message key="lf.colname.delivery.summary" />
+						</td>
+						<td class="header" style="width:50%;" >
+							<bean:message key="colname.lf.action" />
+						</td>
+					</tr>
+					<tr>
+	         		<logic:equal name="foundItemForm" property="foundItem.disposition.status_ID" value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>" >
+						<td>
+							<bean:message key="colname.lf.tracking.number" />:&nbsp;
+							<bean:write name="foundItemForm" property="foundItem.trackingNumber" />
+						</td>
+						<td>
+							<a href='create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
+						</td>
+					</logic:equal>
+	         		<logic:equal name="foundItemForm" property="foundItem.deliveryRejected" value="true" >
+						<td>
+							<bean:message key="lf.delivery.rejected" />
+						</td>
+						<td>
+							<a href='create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
+						</td>
+					</logic:equal>
+	         		<logic:equal name="foundItemForm" property="foundItem.disposition.status_ID" value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" >
+						<td>
+							<bean:message key="lf.picked.up" />
+						</td>
+						<td>
+							<a href='create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
+						</td>
+					</logic:equal>
+					</tr>
+				<% } else { %>
+					<tr>
+						<td colspan=3 class="header" >
+							<bean:message key="lf.colname.enter.delivery.information" />
+						</td>
+					</tr>
+					<tr>
+						<td style="width:50%;" >
+							<bean:message key="colname.lf.tracking.number" />:&nbsp;
+							<html:text name="foundItemForm" property="foundItem.trackingNumber" size="20" styleClass="textfield" />
+							&nbsp;
+						</td>
+						<td  style="width:25%;" >
+							<a href='create_found_item.do?deliveryRejected=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.delivery.rejected"/></a>
+						</td>
+						<td style="width:25%;" >
+							<a href='create_found_item.do?pickup=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.picked.up"/></a>
+						</td>
+					</tr>
+				<% } %>
+				</table>
+				<br/>
          		<h1 class="green">
 					<bean:message key="header.remarks" />
 					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>

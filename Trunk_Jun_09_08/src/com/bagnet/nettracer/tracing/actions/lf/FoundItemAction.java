@@ -162,7 +162,7 @@ public class FoundItemAction extends CheckedAction {
 			if (item != null) {
 				int disposition;
 				if(item.getFound() != null && item.getLost() != null && 
-						LFServiceWrapper.getInstance().findConfirmedMatch(item.getLost().getId(), item.getFound().getId()) > 0){
+					LFServiceWrapper.getInstance().findConfirmedMatch(item.getLost().getId(), item.getFound().getId()) > 0){
 					disposition = TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED;
 				} else {
 					disposition = TracingConstants.LF_DISPOSITION_OTHER;
@@ -178,6 +178,13 @@ public class FoundItemAction extends CheckedAction {
 					}
 					item.getLost().setStatusId(TracingConstants.LF_STATUS_OPEN);
 					LFServiceWrapper.getInstance().saveOrUpdateLostReport(item.getLost(), user);
+				}
+				
+				if (item.getDeliveryRejected()) {
+					item.setDeliveryRejected(false);
+					if (item.getLost() != null) {
+						item.getLost().getItem().setDeliveryRejected(false);
+					}
 				}
 			}
 			found.setStatusId(TracingConstants.LF_STATUS_OPEN);
@@ -247,6 +254,23 @@ public class FoundItemAction extends CheckedAction {
 				}
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe, nfe);
+			}
+		} else if (request.getParameter("deliveryRejected") != null) {
+			if(found.getItem() != null){
+				found.getItem().setDeliveryRejected(true);
+				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
+				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
+				if(found.getItem().getLost() != null){
+					found.getItem().getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
+					if(found.getItem().getLost().getItem() != null){
+						//loupas - even though the model supports multiple items for a lost, the way tracing and matching currently works
+						//multiple items per lost cannot work unless there is some major refactoring
+						found.getItem().getLost().getItem().setDeliveryRejected(true);
+						found.getItem().getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
+					}
+					LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
+				}
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 			}
 		}
 

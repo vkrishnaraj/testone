@@ -35,7 +35,6 @@ import aero.nettracer.web.azul.testing.actions.nt.onhands.AD_ReceiveOHD;
 import aero.nettracer.web.azul.testing.actions.nt.taskman.AD_InboxMessage;
 import aero.nettracer.web.azul.testing.actions.nt.taskman.AD_VerifyText_TaskManager;
 import aero.nettracer.web.defaul.testing.actions.nt.core.Def_Logout;
-import aero.nettracer.web.defaul.testing.actions.nt.core.Def_PasswordResetNTTest;
 import aero.nettracer.web.jetblue.testing.actions.nt.core.B6_Login;
 import aero.nettracer.web.jetblue.testing.actions.nt.core.B6_LoginFailure;
 import aero.nettracer.web.jetblue.testing.actions.nt.core.B6_LoginTest;
@@ -52,6 +51,7 @@ import aero.nettracer.web.jetblue.testing.actions.nt.onhands.B6_ReceiveOHD;
 import aero.nettracer.web.jetblue.testing.actions.nt.taskman.B6_InboxMessage;
 import aero.nettracer.web.jetblue.testing.actions.nt.taskman.B6_VerifyText_TaskManager;
 import aero.nettracer.web.lfc.testing.actions.lfc.core.LF_Login;
+import aero.nettracer.web.lfc.testing.actions.lfc.delivery.LF_CreateDeliveryFromFound;
 import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_CloseFound;
 import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_CreateFound_Detailed;
 import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_CreateFound_VerifyRequiredFields;
@@ -147,7 +147,8 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 	LF_SearchLost.class, LF_SearchFound.class, LF_ManualMatch_FoundToLost.class,
 	LF_CloseFound.class, LF_SearchLost.class, LF_CloseLost.class, 
 	LF_CreateLost_Detailed.class, LF_CreateFound_Detailed.class, LF_VerifyText_TaskManager.class, LF_FoundReportSummary.class,
-	LF_ConfirmMatch.class, LF_CreateDelivery.class, LF_ItemEntry.class, LF_ProcessTraceResults.class
+	LF_ConfirmMatch.class, LF_CreateDelivery.class, LF_ItemEntry.class, LF_ProcessTraceResults.class,
+	LF_CreateDeliveryFromFound.class
 	})
 public class TestEverything { 
 	
