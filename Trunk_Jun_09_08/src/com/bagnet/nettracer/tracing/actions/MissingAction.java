@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -75,6 +76,7 @@ import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
 import com.bagnet.nettracer.tracing.utils.MessageUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TaskUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
@@ -224,7 +226,7 @@ public class MissingAction extends CheckedAction {
 				if(request.getAttribute("currentstatus") != null) {
 					currentStatus = Integer.parseInt((String)request.getAttribute("currentstatus"));
 				}
-
+				System.out.println("CHECK THIS OUT!!! Current Status: "+currentStatus);
 				if(currentStatus == TracingConstants.MBR_STATUS_CLOSED) {
 					
 					//if it is closed user can only edit it if they have the permission to edit closed files
@@ -238,6 +240,7 @@ public class MissingAction extends CheckedAction {
 				}
 				//not closed
 				else {
+					request.setAttribute("disputeProcess", disputeProcess);
 					return (mapping.findForward(TracingConstants.MISSING_CLOSE));
 				}
 			}
@@ -431,7 +434,26 @@ public class MissingAction extends CheckedAction {
 				
 			} else if (error.getKey().equals("error.unable_to_close_incident")) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				request.setAttribute("currentstatus", iDTO.getStatus().getStatus_ID());
 				saveMessages(request, errors);
+				boolean hasclose = false;
+				
+				for (int i = 0; i < theform.getRemarklist().size(); i++) {
+					Remark r = theform.getClosingRemark(i);
+					if (r.getRemarktype() == TracingConstants.REMARK_CLOSING) {
+						hasclose = true;
+						break;
+					}
+				}
+				if (!hasclose) {
+					// add closing remark if there isn't one
+					Remark r = theform.getClosingRemark(theform.getRemarklist().size());
+					r.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+					r.setAgent(user);
+					r.set_DATEFORMAT(user.getDateformat().getFormat());
+					r.set_TIMEFORMAT(user.getTimeformat().getFormat());
+					r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+				}
 				return (mapping.findForward(TracingConstants.MISSING_CLOSE));
 			}	else {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);

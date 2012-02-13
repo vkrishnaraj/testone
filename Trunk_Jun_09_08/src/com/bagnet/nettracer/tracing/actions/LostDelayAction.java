@@ -373,6 +373,7 @@ public class LostDelayAction extends CheckedAction {
 				}
 				//not closed
 				else {
+					request.setAttribute("disputeProcess", disputeProcess);
 					return (mapping.findForward(TracingConstants.LD_CLOSE));
 				}
 		}
