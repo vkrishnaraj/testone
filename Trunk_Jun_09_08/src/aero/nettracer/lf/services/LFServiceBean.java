@@ -1898,14 +1898,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public void sendFoundEmail(long id){
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
-		if(sendEmail(lost, h, "found_report_email.html", h.get("SUBJECTLINE"))){
-			lost.setEmailSentDate(new Date());
-			lost.setFoundEmail(true);
-			try {
-				saveOrUpdateLostReport(lost,getAutoAgent());
-				Logger.logLF(""+id, "FOUND EMAIL SENT", 0);
-			} catch (UpdateException e) {
-				e.printStackTrace();
+		if(!lost.isFoundEmail()){
+			if(sendEmail(lost, h, "found_report_email.html", h.get("SUBJECTLINE"))){
+				lost.setEmailSentDate(new Date());
+				lost.setFoundEmail(true);
+				try {
+					saveOrUpdateLostReport(lost,getAutoAgent());
+					Logger.logLF(""+id, "FOUND EMAIL SENT", 0);
+				} catch (UpdateException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
