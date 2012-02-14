@@ -9,35 +9,35 @@
  
    <module>
      <web>
-         <web-uri>westjet-pv-train.war</web-uri>
+         <web-uri>westjet-pv-qa.war</web-uri>
          <context-root>westjet-paxview</context-root>
      </web>
   </module>
     
    <module>
      <web>
-         <web-uri>jetblue-pv-qa.war</web-uri>
+         <web-uri>jetblue-pv-training.war</web-uri>
          <context-root>jetblue-paxview</context-root>
      </web>
   </module>
   
    <module>
      <web>
-         <web-uri>spirit-pv-train.war</web-uri>
+         <web-uri>spirit-pv-qa.war</web-uri>
          <context-root>spirit-paxview</context-root>
      </web>
   </module>
     
    <module>
      <web>
-         <web-uri>azul-pv-train.war</web-uri>
+         <web-uri>azul-pv-training.war</web-uri>
          <context-root>azul-paxview</context-root>
      </web>
   </module>
     
    <module>
      <web>
-         <web-uri>webjet-pv-train.war</web-uri>
+         <web-uri>webjet-pv-training.war</web-uri>
          <context-root>webjet-paxview</context-root>
      </web>
   </module>
