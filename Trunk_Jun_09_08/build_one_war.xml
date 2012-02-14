@@ -493,6 +493,7 @@
 		<antcall target="build-ear-production"/>
 		<antcall target="build-ear-production-avis"/>
 		<antcall target="build-ear-production-avis-service"/>
+		<antcall target="build-ear-production-lfc-service"/>
 		<antcall target="build-ear-production-airtran"/>
 		<antcall target="build-ear-production-united"/>
 		<antcall target="build-ear-production-webjet"/>
