@@ -928,7 +928,7 @@
 			<% boolean val2 = PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_CUSTOMCLEARED_SELECT); %>
 
 			<td><bean:message key="colname.custom" /> <br> 
-				<% if(!val2 || (myform.getCustomcleared()==1 || myform.getCustomcleared()==2)){ %>
+				<% if(!val2 || (myform.getCustomcleared()==1 || myform.getCustomcleared()==0)){ %>
 				<html:select name="incidentForm" property="customcleared" styleClass="dropdown" >
          			<html:option value="">
 						<bean:message key="select.please_select" />
