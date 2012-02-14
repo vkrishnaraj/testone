@@ -24,5 +24,23 @@
          <context-root>webjet</context-root>
      </web>
   </module>
+ <module>
+     <web>
+         <web-uri>united_production.war</web-uri>
+         <context-root>united</context-root>
+     </web>
+  </module>
+ <module>
+     <web>
+         <web-uri>american_production.war</web-uri>
+         <context-root>american</context-root>
+     </web>
+  </module>
+ <module>
+     <web>
+         <web-uri>delta_production.war</web-uri>
+         <context-root>delta</context-root>
+     </web>
+  </module>
   
 </application> 
