@@ -687,8 +687,6 @@ public class OHDUtils {
 		String ohd_id = ohd.getOHD_ID();
 		Session sess = null;
 		Transaction t = null;
-		Status openStatus = new Status();
-		openStatus.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);		
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 
