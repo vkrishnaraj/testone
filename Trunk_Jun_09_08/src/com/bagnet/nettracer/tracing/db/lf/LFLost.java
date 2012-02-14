@@ -99,6 +99,8 @@ public class LFLost implements LFObject, Serializable {
 	
 	private boolean email2;
 	
+	private boolean foundEmail;
+	
 	public long getId() {
 		return id;
 	}
@@ -311,6 +313,14 @@ public class LFLost implements LFObject, Serializable {
 
 	public boolean isEmail2() {
 		return email2;
+	}
+
+	public void setFoundEmail(boolean foundEmail) {
+		this.foundEmail = foundEmail;
+	}
+
+	public boolean isFoundEmail() {
+		return foundEmail;
 	}
 	
 }

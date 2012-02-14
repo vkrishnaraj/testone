@@ -1900,6 +1900,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		HashMap<String,String> h = getEmailParams(lost);
 		if(sendEmail(lost, h, "found_report_email.html", h.get("SUBJECTLINE"))){
 			lost.setEmailSentDate(new Date());
+			lost.setFoundEmail(true);
 			try {
 				saveOrUpdateLostReport(lost,getAutoAgent());
 				Logger.logLF(""+id, "FOUND EMAIL SENT", 0);
