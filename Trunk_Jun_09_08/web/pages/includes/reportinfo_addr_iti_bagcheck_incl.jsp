@@ -928,9 +928,9 @@
 			<% boolean val2 = PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_CUSTOMCLEARED_SELECT); %>
 
 			<td><bean:message key="colname.custom" /> <br> 
-				<% if(!val2){ %>
-				<html:select property="customcleared" styleClass="dropdown">
-					<html:option value="">
+				<% if(!val2 || (myform.getCustomcleared()==1 || myform.getCustomcleared()==2)){ %>
+				<html:select name="incidentForm" property="customcleared" styleClass="dropdown" >
+         			<html:option value="">
 						<bean:message key="select.please_select" />
 					</html:option>
 					<html:option value="1">
@@ -939,9 +939,9 @@
 					<html:option value="0">
 						<bean:message key="select.no" />
 					</html:option>
-				</html:select> 
+    			</html:select>
 				<% } else { %> 
-				<html:select property="customcleared" styleClass="dropdown" value="">
+				 <html:select name="incidentForm" property="customcleared" styleClass="dropdown" value="">
 					<html:option value="">
 						<bean:message key="select.please_select" />
 					</html:option>
@@ -951,7 +951,7 @@
 					<html:option value="0">
 						<bean:message key="select.no" />
 					</html:option>
-				</html:select> <% } %>
+				</html:select> <%  } %>
 				</td>
 		</tr>
 		<!-- provide space for bag weight feature - start -->
