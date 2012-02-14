@@ -58,60 +58,48 @@
 
 
 </script>
-<tr>
-  <td nowrap colspan="3" width=20% >
-    <a name="fault"></a>
-    <bean:message key="colname.faultcompany" />
-    <br>
-    <input type="hidden" name="getstation">
-      <%
- 		 		Agent faultagent = (Agent)session.getAttribute("user");
-        	
-      %>
-        <html:select property="faultcompany_id" styleClass="dropdown" disabled="true" onchange="getstations();">
-          <html:option value="">
-            <bean:message key="select.please_select" />
-          </html:option>
-          <html:options collection="faultCompanyList" property="companyCode_ID" labelProperty="companydesc" />
-        </html:select>     
-  </td>
-    <td colspan="3" nowrap>
-    	<div id="faultstationdiv">
-    <logic:present name="faultstationlist" scope="request">
-      <bean:message key="colname.faultstation" />
-      <br>
-      <html:select property="faultstation_id" styleClass="dropdown">  
-          <html:option value="">
-            <bean:message key="select.please_select" />
-          </html:option>
-          <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
-      </html:select>
-      </logic:present>
-      </div>
-    </td>
-</tr>
-<tr>
-  <td nowrap colspan="6">
-    <bean:message key="colname.closereport.losscode" />
-    <br>
-      <html:select property="loss_code" styleClass="dropdown">      
-          <html:option value="0">
-            <bean:message key="select.please_select" />
-          </html:option>
-    <%
-          java.util.List codes = (java.util.List)request.getAttribute("losscodes");
-    
-          for (java.util.Iterator i = codes.iterator(); i.hasNext(); ) {
-            com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
-                                                                                      com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
-    %>
-            <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();  if (lost_code.equals("" + code.getLoss_code())) { %> SELECTED <% } %>>
-            <%= "" + code.getLoss_code() %>-
-            <%= "" + code.getDescription() %>
-            </OPTION>
-    <%
-          }
-    %>
-      </html:select>
-  </td>
-</tr>
+		<bean:define id="station" name="dispute" property="suggestedFaultStation" scope="request" />
+		<bean:define id="disputeAgent" name="dispute" property="disputeAgent" scope="request" />
+		<bean:define id="displaydate" name="incidentdate" scope="request" />
+		<bean:define id="resolutionAgent" name="dispute" property="resolutionAgent" scope="request" />
+		<bean:define id="determinedFaultStation" name="dispute" property="determinedFaultStation" scope="request" />
+		<bean:define id="status" name="dispute" property="status" scope="request" />
+            	<tr>
+				  <td colspan="2" nowrap>Dispute Date: <bean:write name="dispute" property="dispTimestampCreated" /></td>
+				  <td colspan="2" nowrap>Dispute Agent: <bean:write name="disputeAgent" property="username" /></td>
+				   <td colspan="2" nowrap>Incident Date: <bean:write name="incidentdate" /></td>
+				</tr>
+				<tr>
+				  <td colspan="6">Dispute Explanation:<br />
+				    <bean:write name="dispute" property="disputeExplanation" scope="request" />
+				  </td>
+				</tr>
+				<tr>
+				  <td colspan="3" nowrap>Suggested Fault Station: <bean:write name="station" property="stationcode" /></td>
+				  <td colspan="3" nowrap>Suggested Reason for Loss: <bean:write name="dispute" property="suggestedLossCode" scope="request" /></td>
+				</tr> 
+				<tr>
+					<td colspan="6">&nbsp;</td>
+				</tr>  
+				
+				<logic:notEqual name="status" property="status_ID" value='<%="" + TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN%>'>
+            	<tr>
+            	<td colspan="3" nowrap>Resolved Date: <bean:write name="dispute" property="dispTimestampResolved" /></td>
+            	</tr>
+            	<tr>
+				  <td colspan="3" nowrap>Dispute Resolution: <%="" + request.getAttribute("statusDesc") %></td>
+				  <td colspan="3" nowrap>Resolution Agent: <bean:write name="resolutionAgent" property="username" /></td>
+				</tr>
+				<tr>
+				  <td colspan="6">Resolution Remarks:<br />
+				    <bean:write name="dispute" property="resolutionRemarks" scope="request" />
+				  </td>
+				</tr>
+				<tr>
+				  <td colspan="2" nowrap>Determined Fault Station: <bean:write name="determinedFaultStation" property="stationcode" /></td>
+				  <td colspan="2" nowrap>Determined Reason for Loss: <bean:write name="dispute" property="determinedLossCode" scope="request" /></td>
+				</tr> 
+				<tr>
+					<td colspan="6">&nbsp;</td>
+				</tr> 
+				</logic:notEqual>
