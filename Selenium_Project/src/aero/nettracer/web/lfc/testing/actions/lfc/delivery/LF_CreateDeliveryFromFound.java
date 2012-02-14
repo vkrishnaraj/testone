@@ -146,7 +146,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Delivery rejected"));
-			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
@@ -158,8 +158,8 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
 			verifyTrue(selenium.isTextPresent("Delivery rejected"));
-			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
-			selenium.click("xpath=(//a[contains(text(),'Undo')])[2]");
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a"));
+			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CDFF: Failed to load the Lost Report from the Found Item page.");
@@ -193,7 +193,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Picked up by customer"));
-			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
@@ -205,7 +205,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
 			verifyTrue(selenium.isTextPresent("Picked up by customer"));
-			verifyTrue(selenium.isElementPresent("//a[contains(text(),'Undo')]"));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
 			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
