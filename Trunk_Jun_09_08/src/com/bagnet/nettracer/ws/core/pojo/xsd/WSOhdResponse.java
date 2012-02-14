@@ -15,8 +15,48 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
  */
 public interface WSOhdResponse extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSOhdResponse.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.sA332F380CC86A9BA665F4B1F0488351C")
+            "schemaorg_apache_xmlbeans.system.sB1D181FCD070B8C28352F412287BB191")
                                                                                                                            .resolveHandle("wsohdresponse51cftype");
+
+    /**
+     * Gets the "claimCheckNumber" element
+     */
+    java.lang.String getClaimCheckNumber();
+
+    /**
+     * Gets (as xml) the "claimCheckNumber" element
+     */
+    org.apache.xmlbeans.XmlString xgetClaimCheckNumber();
+
+    /**
+     * Tests for nil "claimCheckNumber" element
+     */
+    boolean isNilClaimCheckNumber();
+
+    /**
+     * True if has "claimCheckNumber" element
+     */
+    boolean isSetClaimCheckNumber();
+
+    /**
+     * Sets the "claimCheckNumber" element
+     */
+    void setClaimCheckNumber(java.lang.String claimCheckNumber);
+
+    /**
+     * Sets (as xml) the "claimCheckNumber" element
+     */
+    void xsetClaimCheckNumber(org.apache.xmlbeans.XmlString claimCheckNumber);
+
+    /**
+     * Nils the "claimCheckNumber" element
+     */
+    void setNilClaimCheckNumber();
+
+    /**
+     * Unsets the "claimCheckNumber" element
+     */
+    void unsetClaimCheckNumber();
 
     /**
      * Gets the "errorResponse" element

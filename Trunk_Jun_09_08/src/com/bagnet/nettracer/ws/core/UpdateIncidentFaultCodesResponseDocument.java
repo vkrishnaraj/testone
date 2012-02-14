@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core;
  */
 public interface UpdateIncidentFaultCodesResponseDocument extends org.apache.xmlbeans.XmlObject {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateIncidentFaultCodesResponseDocument.class.getClassLoader(),
-            "schemaorg_apache_xmlbeans.system.sA332F380CC86A9BA665F4B1F0488351C")
+            "schemaorg_apache_xmlbeans.system.sB1D181FCD070B8C28352F412287BB191")
                                                                                                                            .resolveHandle("updateincidentfaultcodesresponse6a5adoctype");
 
     /**
@@ -42,7 +42,7 @@ public interface UpdateIncidentFaultCodesResponseDocument extends org.apache.xml
      */
     public interface UpdateIncidentFaultCodesResponse extends org.apache.xmlbeans.XmlObject {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(UpdateIncidentFaultCodesResponse.class.getClassLoader(),
-                "schemaorg_apache_xmlbeans.system.sA332F380CC86A9BA665F4B1F0488351C")
+                "schemaorg_apache_xmlbeans.system.sB1D181FCD070B8C28352F412287BB191")
                                                                                                                                .resolveHandle("updateincidentfaultcodesresponse7a9eelemtype");
 
         /**

@@ -5,6 +5,7 @@ import java.util.Date;
 public class WS_OhdResponse {
 
 	private String ohdId;
+	private String claimCheckNumber;
 	private String errorResponse;
 	
 
@@ -32,5 +33,12 @@ public class WS_OhdResponse {
 	 */
 	public void setErrorResponse(String errorResponse) {
 		this.errorResponse = errorResponse;
+	}
+	
+	public void setClaimCheckNumber(String claimCheckNumber) {
+		this.claimCheckNumber = claimCheckNumber;
+	}
+	public String getClaimCheckNumber() {
+		return claimCheckNumber;
 	}
 	}

@@ -70,8 +70,11 @@ public class Logger {
 	}
 	
 	public static boolean logTelex(String refId, String desc, Date starttime){
+		return logTelex(refId, desc, starttime, new Date());
+	}
+	
+	public static boolean logTelex(String refId, String desc, Date starttime, Date endtime){
 		GeneralTelexLog log = new GeneralTelexLog();
-		Date endtime = new Date();
 		return log(log, refId, desc, starttime!=null?endtime.getTime()-starttime.getTime():0);
 	}
 	

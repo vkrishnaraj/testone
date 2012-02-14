@@ -110,6 +110,21 @@ public class NTCoreService {
 		return so;
 	}
 	
+	
+	/**
+	 * BEORN
+	 * @param sf WS_FWD
+	 * @return
+	 */
+	public WS_OhdResponse[] bulkBeornOHD(String session_id, WS_BEORN[] si) {
+		/*
+    	WSCoreIncidentUtil coreutil = new WSCoreForwardUtil();
+    	return coreutil.forwardOHD(forwardOHD);
+		*/
+		WS_OhdResponse[] so = null;
+		return so;
+	}
+	
 	/**
 	 * BEORN
 	 * @param sf WS_FWD

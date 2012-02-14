@@ -1,8 +1,8 @@
 /*
  * An XML document type.
- * Localname: authenticate
+ * Localname: bulkBeornOHD
  * Namespace: http://core.ws.nettracer.bagnet.com
- * Java type: com.bagnet.nettracer.ws.core.AuthenticateDocument
+ * Java type: com.bagnet.nettracer.ws.core.BulkBeornOHDDocument
  *
  * Automatically generated - do not modify.
  */
@@ -10,160 +10,130 @@ package com.bagnet.nettracer.ws.core;
 
 
 /**
- * A document containing one authenticate(@http://core.ws.nettracer.bagnet.com) element.
+ * A document containing one bulkBeornOHD(@http://core.ws.nettracer.bagnet.com) element.
  *
  * This is a complex type.
  */
-public interface AuthenticateDocument extends org.apache.xmlbeans.XmlObject {
-    public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthenticateDocument.class.getClassLoader(),
+public interface BulkBeornOHDDocument extends org.apache.xmlbeans.XmlObject {
+    public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(BulkBeornOHDDocument.class.getClassLoader(),
             "schemaorg_apache_xmlbeans.system.sB1D181FCD070B8C28352F412287BB191")
-                                                                                                                           .resolveHandle("authenticatea58fdoctype");
+                                                                                                                           .resolveHandle("bulkbeornohd16afdoctype");
 
     /**
-     * Gets the "authenticate" element
+     * Gets the "bulkBeornOHD" element
      */
-    com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate getAuthenticate();
+    com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.BulkBeornOHD getBulkBeornOHD();
 
     /**
-     * Sets the "authenticate" element
+     * Sets the "bulkBeornOHD" element
      */
-    void setAuthenticate(
-        com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate authenticate);
+    void setBulkBeornOHD(
+        com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.BulkBeornOHD bulkBeornOHD);
 
     /**
-     * Appends and returns a new empty "authenticate" element
+     * Appends and returns a new empty "bulkBeornOHD" element
      */
-    com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate addNewAuthenticate();
+    com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.BulkBeornOHD addNewBulkBeornOHD();
 
     /**
-     * An XML authenticate(@http://core.ws.nettracer.bagnet.com).
+     * An XML bulkBeornOHD(@http://core.ws.nettracer.bagnet.com).
      *
      * This is a complex type.
      */
-    public interface Authenticate extends org.apache.xmlbeans.XmlObject {
-        public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Authenticate.class.getClassLoader(),
+    public interface BulkBeornOHD extends org.apache.xmlbeans.XmlObject {
+        public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType) org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(BulkBeornOHD.class.getClassLoader(),
                 "schemaorg_apache_xmlbeans.system.sB1D181FCD070B8C28352F412287BB191")
-                                                                                                                               .resolveHandle("authenticatede7eelemtype");
+                                                                                                                               .resolveHandle("bulkbeornohd7a7eelemtype");
 
         /**
-         * Gets the "username" element
+         * Gets the "session_id" element
          */
-        java.lang.String getUsername();
+        java.lang.String getSessionId();
 
         /**
-         * Gets (as xml) the "username" element
+         * Gets (as xml) the "session_id" element
          */
-        org.apache.xmlbeans.XmlString xgetUsername();
+        org.apache.xmlbeans.XmlString xgetSessionId();
 
         /**
-         * Tests for nil "username" element
+         * Tests for nil "session_id" element
          */
-        boolean isNilUsername();
+        boolean isNilSessionId();
 
         /**
-         * True if has "username" element
+         * True if has "session_id" element
          */
-        boolean isSetUsername();
+        boolean isSetSessionId();
 
         /**
-         * Sets the "username" element
+         * Sets the "session_id" element
          */
-        void setUsername(java.lang.String username);
+        void setSessionId(java.lang.String sessionId);
 
         /**
-         * Sets (as xml) the "username" element
+         * Sets (as xml) the "session_id" element
          */
-        void xsetUsername(org.apache.xmlbeans.XmlString username);
+        void xsetSessionId(org.apache.xmlbeans.XmlString sessionId);
 
         /**
-         * Nils the "username" element
+         * Nils the "session_id" element
          */
-        void setNilUsername();
+        void setNilSessionId();
 
         /**
-         * Unsets the "username" element
+         * Unsets the "session_id" element
          */
-        void unsetUsername();
+        void unsetSessionId();
 
         /**
-         * Gets the "password" element
+         * Gets array of all "si" elements
          */
-        java.lang.String getPassword();
+        com.bagnet.nettracer.ws.core.pojo.xsd.WSBEORN[] getSiArray();
 
         /**
-         * Gets (as xml) the "password" element
+         * Gets ith "si" element
          */
-        org.apache.xmlbeans.XmlString xgetPassword();
+        com.bagnet.nettracer.ws.core.pojo.xsd.WSBEORN getSiArray(int i);
 
         /**
-         * Tests for nil "password" element
+         * Tests for nil ith "si" element
          */
-        boolean isNilPassword();
+        boolean isNilSiArray(int i);
 
         /**
-         * True if has "password" element
+         * Returns number of "si" element
          */
-        boolean isSetPassword();
+        int sizeOfSiArray();
 
         /**
-         * Sets the "password" element
+         * Sets array of all "si" element
          */
-        void setPassword(java.lang.String password);
+        void setSiArray(com.bagnet.nettracer.ws.core.pojo.xsd.WSBEORN[] siArray);
 
         /**
-         * Sets (as xml) the "password" element
+         * Sets ith "si" element
          */
-        void xsetPassword(org.apache.xmlbeans.XmlString password);
+        void setSiArray(int i, com.bagnet.nettracer.ws.core.pojo.xsd.WSBEORN si);
 
         /**
-         * Nils the "password" element
+         * Nils the ith "si" element
          */
-        void setNilPassword();
+        void setNilSiArray(int i);
 
         /**
-         * Unsets the "password" element
+         * Inserts and returns a new empty value (as xml) as the ith "si" element
          */
-        void unsetPassword();
+        com.bagnet.nettracer.ws.core.pojo.xsd.WSBEORN insertNewSi(int i);
 
         /**
-         * Gets the "companycode" element
+         * Appends and returns a new empty value (as xml) as the last "si" element
          */
-        java.lang.String getCompanycode();
+        com.bagnet.nettracer.ws.core.pojo.xsd.WSBEORN addNewSi();
 
         /**
-         * Gets (as xml) the "companycode" element
+         * Removes the ith "si" element
          */
-        org.apache.xmlbeans.XmlString xgetCompanycode();
-
-        /**
-         * Tests for nil "companycode" element
-         */
-        boolean isNilCompanycode();
-
-        /**
-         * True if has "companycode" element
-         */
-        boolean isSetCompanycode();
-
-        /**
-         * Sets the "companycode" element
-         */
-        void setCompanycode(java.lang.String companycode);
-
-        /**
-         * Sets (as xml) the "companycode" element
-         */
-        void xsetCompanycode(org.apache.xmlbeans.XmlString companycode);
-
-        /**
-         * Nils the "companycode" element
-         */
-        void setNilCompanycode();
-
-        /**
-         * Unsets the "companycode" element
-         */
-        void unsetCompanycode();
+        void removeSi(int i);
 
         /**
          * A factory class with static methods for creating instances
@@ -173,15 +143,15 @@ public interface AuthenticateDocument extends org.apache.xmlbeans.XmlObject {
             private Factory() {
             } // No instance of this class allowed
 
-            public static com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate newInstance() {
-                return (com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.BulkBeornOHD newInstance() {
+                return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.BulkBeornOHD) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                                     .newInstance(type,
                     null);
             }
 
-            public static com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate newInstance(
+            public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.BulkBeornOHD newInstance(
                 org.apache.xmlbeans.XmlOptions options) {
-                return (com.bagnet.nettracer.ws.core.AuthenticateDocument.Authenticate) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+                return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.BulkBeornOHD) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                                     .newInstance(type,
                     options);
             }
@@ -196,150 +166,150 @@ public interface AuthenticateDocument extends org.apache.xmlbeans.XmlObject {
         private Factory() {
         } // No instance of this class allowed
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument newInstance() {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument newInstance() {
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .newInstance(type,
                 null);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument newInstance(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument newInstance(
             org.apache.xmlbeans.XmlOptions options) {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .newInstance(type,
                 options);
         }
 
         /** @param xmlAsString the string value to parse */
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             java.lang.String xmlAsString)
             throws org.apache.xmlbeans.XmlException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(xmlAsString,
                 type, null);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             java.lang.String xmlAsString, org.apache.xmlbeans.XmlOptions options)
             throws org.apache.xmlbeans.XmlException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(xmlAsString,
                 type, options);
         }
 
         /** @param file the file from which to load an xml document */
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             java.io.File file)
             throws org.apache.xmlbeans.XmlException, java.io.IOException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(file,
                 type, null);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             java.io.File file, org.apache.xmlbeans.XmlOptions options)
             throws org.apache.xmlbeans.XmlException, java.io.IOException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(file,
                 type, options);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             java.net.URL u)
             throws org.apache.xmlbeans.XmlException, java.io.IOException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(u,
                 type, null);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             java.net.URL u, org.apache.xmlbeans.XmlOptions options)
             throws org.apache.xmlbeans.XmlException, java.io.IOException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(u,
                 type, options);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             java.io.InputStream is)
             throws org.apache.xmlbeans.XmlException, java.io.IOException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(is,
                 type, null);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             java.io.InputStream is, org.apache.xmlbeans.XmlOptions options)
             throws org.apache.xmlbeans.XmlException, java.io.IOException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(is,
                 type, options);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             java.io.Reader r)
             throws org.apache.xmlbeans.XmlException, java.io.IOException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(r,
                 type, null);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             java.io.Reader r, org.apache.xmlbeans.XmlOptions options)
             throws org.apache.xmlbeans.XmlException, java.io.IOException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(r,
                 type, options);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             javax.xml.stream.XMLStreamReader sr)
             throws org.apache.xmlbeans.XmlException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(sr,
                 type, null);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             javax.xml.stream.XMLStreamReader sr,
             org.apache.xmlbeans.XmlOptions options)
             throws org.apache.xmlbeans.XmlException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(sr,
                 type, options);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             org.w3c.dom.Node node) throws org.apache.xmlbeans.XmlException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(node,
                 type, null);
         }
 
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             org.w3c.dom.Node node, org.apache.xmlbeans.XmlOptions options)
             throws org.apache.xmlbeans.XmlException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(node,
                 type, options);
         }
 
         /** @deprecated {@link XMLInputStream} */
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             org.apache.xmlbeans.xml.stream.XMLInputStream xis)
             throws org.apache.xmlbeans.XmlException,
                 org.apache.xmlbeans.xml.stream.XMLStreamException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(xis,
                 type, null);
         }
 
         /** @deprecated {@link XMLInputStream} */
-        public static com.bagnet.nettracer.ws.core.AuthenticateDocument parse(
+        public static com.bagnet.nettracer.ws.core.BulkBeornOHDDocument parse(
             org.apache.xmlbeans.xml.stream.XMLInputStream xis,
             org.apache.xmlbeans.XmlOptions options)
             throws org.apache.xmlbeans.XmlException,
                 org.apache.xmlbeans.xml.stream.XMLStreamException {
-            return (com.bagnet.nettracer.ws.core.AuthenticateDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument) org.apache.xmlbeans.XmlBeans.getContextTypeLoader()
                                                                                                    .parse(xis,
                 type, options);
         }

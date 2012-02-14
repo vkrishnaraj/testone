@@ -14,13 +14,156 @@ package com.bagnet.nettracer.ws.core.pojo.xsd.impl;
  */
 public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl
     implements com.bagnet.nettracer.ws.core.pojo.xsd.WSOhdResponse {
-    private static final javax.xml.namespace.QName ERRORRESPONSE$0 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName CLAIMCHECKNUMBER$0 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+            "claimCheckNumber");
+    private static final javax.xml.namespace.QName ERRORRESPONSE$2 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "errorResponse");
-    private static final javax.xml.namespace.QName OHDID$2 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
+    private static final javax.xml.namespace.QName OHDID$4 = new javax.xml.namespace.QName("http://pojo.core.ws.nettracer.bagnet.com/xsd",
             "ohdId");
 
     public WSOhdResponseImpl(org.apache.xmlbeans.SchemaType sType) {
         super(sType);
+    }
+
+    /**
+     * Gets the "claimCheckNumber" element
+     */
+    public java.lang.String getClaimCheckNumber() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(CLAIMCHECKNUMBER$0,
+                    0);
+
+            if (target == null) {
+                return null;
+            }
+
+            return target.getStringValue();
+        }
+    }
+
+    /**
+     * Gets (as xml) the "claimCheckNumber" element
+     */
+    public org.apache.xmlbeans.XmlString xgetClaimCheckNumber() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(CLAIMCHECKNUMBER$0,
+                    0);
+
+            return target;
+        }
+    }
+
+    /**
+     * Tests for nil "claimCheckNumber" element
+     */
+    public boolean isNilClaimCheckNumber() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(CLAIMCHECKNUMBER$0,
+                    0);
+
+            if (target == null) {
+                return false;
+            }
+
+            return target.isNil();
+        }
+    }
+
+    /**
+     * True if has "claimCheckNumber" element
+     */
+    public boolean isSetClaimCheckNumber() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            return get_store().count_elements(CLAIMCHECKNUMBER$0) != 0;
+        }
+    }
+
+    /**
+     * Sets the "claimCheckNumber" element
+     */
+    public void setClaimCheckNumber(java.lang.String claimCheckNumber) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                           .find_element_user(CLAIMCHECKNUMBER$0,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.SimpleValue) get_store()
+                                                               .add_element_user(CLAIMCHECKNUMBER$0);
+            }
+
+            target.setStringValue(claimCheckNumber);
+        }
+    }
+
+    /**
+     * Sets (as xml) the "claimCheckNumber" element
+     */
+    public void xsetClaimCheckNumber(
+        org.apache.xmlbeans.XmlString claimCheckNumber) {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(CLAIMCHECKNUMBER$0,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .add_element_user(CLAIMCHECKNUMBER$0);
+            }
+
+            target.set(claimCheckNumber);
+        }
+    }
+
+    /**
+     * Nils the "claimCheckNumber" element
+     */
+    public void setNilClaimCheckNumber() {
+        synchronized (monitor()) {
+            check_orphaned();
+
+            org.apache.xmlbeans.XmlString target = null;
+            target = (org.apache.xmlbeans.XmlString) get_store()
+                                                         .find_element_user(CLAIMCHECKNUMBER$0,
+                    0);
+
+            if (target == null) {
+                target = (org.apache.xmlbeans.XmlString) get_store()
+                                                             .add_element_user(CLAIMCHECKNUMBER$0);
+            }
+
+            target.setNil();
+        }
+    }
+
+    /**
+     * Unsets the "claimCheckNumber" element
+     */
+    public void unsetClaimCheckNumber() {
+        synchronized (monitor()) {
+            check_orphaned();
+            get_store().remove_element(CLAIMCHECKNUMBER$0, 0);
+        }
     }
 
     /**
@@ -32,7 +175,7 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(ERRORRESPONSE$0,
+                                                           .find_element_user(ERRORRESPONSE$2,
                     0);
 
             if (target == null) {
@@ -52,7 +195,7 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ERRORRESPONSE$0,
+                                                         .find_element_user(ERRORRESPONSE$2,
                     0);
 
             return target;
@@ -68,7 +211,7 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ERRORRESPONSE$0,
+                                                         .find_element_user(ERRORRESPONSE$2,
                     0);
 
             if (target == null) {
@@ -86,7 +229,7 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(ERRORRESPONSE$0) != 0;
+            return get_store().count_elements(ERRORRESPONSE$2) != 0;
         }
     }
 
@@ -99,12 +242,12 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(ERRORRESPONSE$0,
+                                                           .find_element_user(ERRORRESPONSE$2,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(ERRORRESPONSE$0);
+                                                               .add_element_user(ERRORRESPONSE$2);
             }
 
             target.setStringValue(errorResponse);
@@ -120,12 +263,12 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ERRORRESPONSE$0,
+                                                         .find_element_user(ERRORRESPONSE$2,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(ERRORRESPONSE$0);
+                                                             .add_element_user(ERRORRESPONSE$2);
             }
 
             target.set(errorResponse);
@@ -141,12 +284,12 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(ERRORRESPONSE$0,
+                                                         .find_element_user(ERRORRESPONSE$2,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(ERRORRESPONSE$0);
+                                                             .add_element_user(ERRORRESPONSE$2);
             }
 
             target.setNil();
@@ -159,7 +302,7 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
     public void unsetErrorResponse() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(ERRORRESPONSE$0, 0);
+            get_store().remove_element(ERRORRESPONSE$2, 0);
         }
     }
 
@@ -172,7 +315,7 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(OHDID$2,
+                                                           .find_element_user(OHDID$4,
                     0);
 
             if (target == null) {
@@ -192,7 +335,7 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(OHDID$2,
+                                                         .find_element_user(OHDID$4,
                     0);
 
             return target;
@@ -208,7 +351,7 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(OHDID$2,
+                                                         .find_element_user(OHDID$4,
                     0);
 
             if (target == null) {
@@ -226,7 +369,7 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
         synchronized (monitor()) {
             check_orphaned();
 
-            return get_store().count_elements(OHDID$2) != 0;
+            return get_store().count_elements(OHDID$4) != 0;
         }
     }
 
@@ -239,12 +382,12 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.SimpleValue target = null;
             target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                           .find_element_user(OHDID$2,
+                                                           .find_element_user(OHDID$4,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.SimpleValue) get_store()
-                                                               .add_element_user(OHDID$2);
+                                                               .add_element_user(OHDID$4);
             }
 
             target.setStringValue(ohdId);
@@ -260,12 +403,12 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(OHDID$2,
+                                                         .find_element_user(OHDID$4,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(OHDID$2);
+                                                             .add_element_user(OHDID$4);
             }
 
             target.set(ohdId);
@@ -281,12 +424,12 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
 
             org.apache.xmlbeans.XmlString target = null;
             target = (org.apache.xmlbeans.XmlString) get_store()
-                                                         .find_element_user(OHDID$2,
+                                                         .find_element_user(OHDID$4,
                     0);
 
             if (target == null) {
                 target = (org.apache.xmlbeans.XmlString) get_store()
-                                                             .add_element_user(OHDID$2);
+                                                             .add_element_user(OHDID$4);
             }
 
             target.setNil();
@@ -299,7 +442,7 @@ public class WSOhdResponseImpl extends org.apache.xmlbeans.impl.values.XmlComple
     public void unsetOhdId() {
         synchronized (monitor()) {
             check_orphaned();
-            get_store().remove_element(OHDID$2, 0);
+            get_store().remove_element(OHDID$4, 0);
         }
     }
 }

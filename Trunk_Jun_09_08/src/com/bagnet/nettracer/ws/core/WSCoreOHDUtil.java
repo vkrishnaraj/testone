@@ -50,6 +50,8 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.ws.core.BeornOHDDocument.BeornOHD;
+import com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.BulkBeornOHD;
+import com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument.BulkBeornOHDResponse;
 import com.bagnet.nettracer.ws.core.InsertQuickOHDDocument.InsertQuickOHD;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSBEORN;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSForwardItinerary;
@@ -751,6 +753,49 @@ public class WSCoreOHDUtil {
 	}
   }
 
+  public com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument bulkBeornOHD(
+	      com.bagnet.nettracer.ws.core.BulkBeornOHDDocument beornOHDList) {
+	  Date start = new Date();
+	  WSBEORN[] b = beornOHDList.getBulkBeornOHD().getSiArray();
+	  
+	  	logger.info("Start Web Service Response... bulkBeorn");
+	  	String errorMsg = "BEORN Failed: ";
+  	  	BulkBeornOHDResponseDocument resDoc = BulkBeornOHDResponseDocument.Factory.newInstance();
+  	  	BulkBeornOHDResponse res = resDoc.addNewBulkBeornOHDResponse();
+	  	
+	  	
+	  	BulkBeornOHD insertFields = beornOHDList.getBulkBeornOHD();
+	    
+	  	// Authenticate
+	    String sessionId = insertFields.getSessionId();
+	    String result = WSCoreUtil.reauth(sessionId,TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_MESSAGE);
+	  	
+	  	if (result != null) {
+	  	  	WSOhdResponse so = WSOhdResponse.Factory.newInstance();
+	  		so.setErrorResponse(errorMsg + result);
+	  		WSOhdResponse[] soa= {so};
+	  		res.setReturnArray(soa);
+	  		return resDoc;
+	  	}
+	  	Agent agent = WSCoreUtil.getAgent(sessionId);
+	  	Date end = new Date();
+	  	
+	  	ArrayList<WSOhdResponse> soList = new ArrayList<WSOhdResponse>();
+	  	int i = 0;
+	  	if(insertFields.getSiArray() != null){
+	  		for(i = 0; i < insertFields.getSiArray().length; i++){
+	  			WSOhdResponse so = processBeorn(agent, insertFields.getSiArray(i));
+	  			soList.add(so);
+	  		}
+	  	}
+	  	res.setReturnArray((WSOhdResponse[])soList.toArray(new WSOhdResponse[0]));
+	  	Long id = start.getTime() % 100000;
+	  	com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(id.toString(), "Bulk BEORN webserivce auth " + i, start, end);
+	  	com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(id.toString(), "Bulk BEORN webserivce " + i, start);
+	  	return resDoc;
+	  	
+  }
+  
   /**
    * insert ohd into nt from outside
    * @param beornOHD
@@ -761,106 +806,175 @@ public class WSCoreOHDUtil {
 	  Date start = new Date();
   	logger.info("Start Web Service Response... " + beornOHD);
   	String errorMsg = "BEORN Failed: ";
+	  	BeornOHDResponseDocument resDoc = BeornOHDResponseDocument.Factory.newInstance();
+  	  	BeornOHDResponseDocument.BeornOHDResponse res = resDoc.addNewBeornOHDResponse();
   	
-  	BeornOHDResponseDocument resDoc = BeornOHDResponseDocument.Factory.newInstance();
-  	BeornOHDResponseDocument.BeornOHDResponse res = resDoc.addNewBeornOHDResponse();
-  	WSOhdResponse so = WSOhdResponse.Factory.newInstance();
   	
   	BeornOHD insertFields = beornOHD.getBeornOHD();
-  	
-  	boolean onhandIsNew = true;
     
   	// Authenticate
     String sessionId = insertFields.getSessionId();
     String result = WSCoreUtil.reauth(sessionId,TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_MESSAGE);
   	
   	if (result != null) {
+
+  	  	WSOhdResponse so = WSOhdResponse.Factory.newInstance();
   		so.setErrorResponse(errorMsg + result);
   		res.setReturn(so);
   		return resDoc;
   	}
-  	
-  	// Search for OHD within last 24 hours of this ID.
   	Agent agent = WSCoreUtil.getAgent(sessionId);
+  	
+  	Date end = new Date();
 
+  	WSOhdResponse ret = processBeorn(agent, insertFields.getSi());
   	
-  	String bagTagNumber = insertFields.getSi().getClaimCheckNumber();
-  	
-  	String foundAtStation = insertFields.getSi().getFoundAtStation();
-  	Station foundStation = TracerUtils.getStationByCode(foundAtStation, agent.getCompanycode_ID());
-  	
-  	if (foundStation == null) {
-  		so.setErrorResponse(errorMsg + "Invalid Station");
-  		res.setReturn(so);
-  		return resDoc;
-  	}
-	
-  	
-  	Date foundDate = null;
-  	boolean localTime = PropertyBMO.isTrue("webservices.qoh.islocaltime");
-  	
-  	try {
-  		if (!localTime) {
-  			foundDate = DateUtils.convertSystemCalendarToGMTDate(insertFields.getSi().getFounddatetime());
-  		} else {
-  			// Date is being sent as local server time
-  			foundDate = DateUtils.convertGMTDateToLocalTime(insertFields.getSi().getFounddatetime().getTime());
-  		}
-  	} catch (Exception e) {
-  		foundDate = TracerDateTime.getGMTDate();
-  	}
-  	
-  	if (foundDate == null) {
-  		so.setErrorResponse("Warning: Invalid Date, current time used.");
-  		res.setReturn(so);
-  	}
-  	
-  	OHD onhand = null;
-  	if (bagTagNumber != null && bagTagNumber.length() > 0)
-  		onhand = OHDUtils.getExistingOnhandWithin24HoursAtStation(bagTagNumber, foundStation);
-  	
-  	// If OHD within last 24 hours with this ID:
-  	if (onhand != null) {
-  		so.setOhdId(onhand.getOHD_ID());
-  		so.setErrorResponse("Warning: Duplicate of OHD inserted in last 24 hours at station.");
-  		onhandIsNew = false;
-  		
-    	// Has OHD been modified to a status we can't work with?
-    	if (onhand.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_OPEN) {
-    		so.setErrorResponse(errorMsg + "OHD Status does not allow modification by this service.");
-    		res.setReturn(so);
-    		return resDoc;
-    	}
-  	} else {
-
-  		onhand = createOnhand(agent, bagTagNumber, foundStation, foundDate, null);
-
-  	}
-  	
-  	// Forward the onhand
-  	if (onhand != null) {
-  		try {
-	  		WSBEORN si = insertFields.getSi();
-	  		String finalFlightNumber = "";
-	  		String finalFlightAirline = "";
-	  		String finalDestination = "";
-	  		Date finalFlightDate = new Date();
+  	logger.info("Stop Web Service Response...");
+  	com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(ret.getOhdId(), "BEORN webserivce auth", start, end);
+  	com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(ret.getOhdId(), "BEORN webserivce", start);
+    res.setReturn(ret);
+  	return resDoc;
+  }
+  
+  private static WSOhdResponse processBeorn(Agent agent, WSBEORN si){
+	  	WSOhdResponse so = WSOhdResponse.Factory.newInstance();	
+	  	String errorMsg = "BEORN Failed: ";
+	  	boolean onhandIsNew = true;
+	  	
+	  	String bagTagNumber = si.getClaimCheckNumber();
+	  	
+	  	so.setClaimCheckNumber(bagTagNumber);
+	  	
+	  	String foundAtStation = si.getFoundAtStation();
+	  	Station foundStation = TracerUtils.getStationByCode(foundAtStation, agent.getCompanycode_ID());
+	  	
+	  	if (foundStation == null) {
+	  		so.setErrorResponse(errorMsg + "Invalid Station");
+	  		return so;
+	  	}
+		
+	  	
+	  	Date foundDate = null;
+	  	boolean localTime = PropertyBMO.isTrue("webservices.qoh.islocaltime");
+	  	
+	  	try {
+	  		if (!localTime) {
+	  			foundDate = DateUtils.convertSystemCalendarToGMTDate(si.getFounddatetime());
+	  		} else {
+	  			// Date is being sent as local server time
+	  			foundDate = DateUtils.convertGMTDateToLocalTime(si.getFounddatetime().getTime());
+	  		}
+	  	} catch (Exception e) {
+	  		foundDate = TracerDateTime.getGMTDate();
+	  	}
+	  	
+	  	if (foundDate == null) {
+	  		so.setErrorResponse("Warning: Invalid Date, current time used.");
+	  	}
+	  	
+	  	OHD onhand = null;
+	  	if (bagTagNumber != null && bagTagNumber.length() > 0)
+	  		onhand = OHDUtils.getExistingOnhandWithin24HoursAtStation(bagTagNumber, foundStation);
+	  	
+	  	// If OHD within last 24 hours with this ID:
+	  	if (onhand != null) {
+	  		so.setOhdId(onhand.getOHD_ID());
+	  		so.setErrorResponse("Warning: Duplicate of OHD inserted in last 24 hours at station.");
+	  		onhandIsNew = false;
 	  		
-	  		// Update the onhand's status
-	  		Status status = new Status();
-	  		status.setStatus_ID(TracingConstants.OHD_STATUS_IN_TRANSIT);
-	  		onhand.setStatus(status);
-	  		
-	  		if (onhandIsNew) {
-	  			if (si.getBaggageItineraryArray().length > 0) {
-			  		// Set bag itinerary
-			  		HashSet itinerary = new HashSet();
-			  		onhand.setItinerary(itinerary);
+	    	// Has OHD been modified to a status we can't work with?
+	    	if (onhand.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_OPEN) {
+	    		so.setErrorResponse(errorMsg + "OHD Status does not allow modification by this service.");
+	    		return so;
+	    	}
+	  	} else {
 
-			  		for (int i=0; i < si.getBaggageItineraryArray().length; ++i) {
-			  			WSForwardItinerary segment = si.getBaggageItineraryArray(i);
+	  		onhand = createOnhand(agent, bagTagNumber, foundStation, foundDate, null);
+
+	  	}
+	  	
+	  	// Forward the onhand
+	  	if (onhand != null) {
+	  		try {
+		  		String finalFlightNumber = "";
+		  		String finalFlightAirline = "";
+		  		String finalDestination = "";
+		  		Date finalFlightDate = new Date();
+		  		
+		  		// Update the onhand's status
+		  		Status status = new Status();
+		  		status.setStatus_ID(TracingConstants.OHD_STATUS_IN_TRANSIT);
+		  		onhand.setStatus(status);
+		  		
+		  		if (onhandIsNew) {
+		  			if (si.getBaggageItineraryArray().length > 0) {
+				  		// Set bag itinerary
+				  		HashSet itinerary = new HashSet();
+				  		onhand.setItinerary(itinerary);
+
+				  		for (int i=0; i < si.getBaggageItineraryArray().length; ++i) {
+				  			WSForwardItinerary segment = si.getBaggageItineraryArray(i);
+				  			
+					  		OHD_Itinerary seg = new OHD_Itinerary();
+				  			
+				  			seg.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
+				  			if (i==0)
+				  				seg.setLegfrom_type(TracingConstants.LEG_B_STATION);
+				  			else 
+				  				seg.setLegfrom_type(TracingConstants.LEG_T_STATION);
+				  			
+				  			if (i == si.getBaggageItineraryArray().length -1)
+				  				seg.setLegto_type(TracingConstants.LEG_E_STATION);
+				  			else
+				  				seg.setLegto_type(TracingConstants.LEG_T_STATION);
+				  			
+				  			seg.setAirline(segment.getAirline());
+				  			seg.setArrivedate(segment.getArrivedate().getTime());
+				  			seg.setDepartdate(segment.getDepartdate().getTime());
+				  			seg.setFlightnum(segment.getFlightnum());
+				  			seg.setLegfrom(segment.getLegfrom());
+				  			seg.setLegto(segment.getLegto());
+				  			seg.setScharrivetime(segment.getArrivedate().getTime());
+				  			seg.setSchdeparttime(segment.getDepartdate().getTime());
+				  			seg.setOhd(onhand);
+
+				  			itinerary.add(seg);
+				  		}
+		  			}
+
+		  			// Fault station
+			  		Station faultStation = TracerUtils.getStationByCode(si.getFaultStation(), agent.getCompanycode_ID());
+			  		onhand.setFaultstation_ID(faultStation.getStation_ID());
+			  		
+			  		// Fault reason
+			  		int lossCode = si.getLossCode();
+			  		Company_specific_irregularity_code code = LossCodeBMO.getLossCode(lossCode, TracingConstants.OHD, CompanyBMO.getCompany(agent.getCompanycode_ID()));
+			  		if(code != null) {
+			  			onhand.setLoss_code(code.getCode_id());
+			  		}
+			  		
+		  		}
+		  		
+		  		// Save forward log
+		  		OHD_Log log = new OHD_Log();
+		  		log.setOhd(onhand);
+		  		log.setExpeditenum(si.getExpediteNumber());
+		  		log.setForwarding_agent(agent);
+		  		log.setForward_time(TracerDateTime.getGMTDate());
+		  		log.setMessage(si.getMessage());
+		  		log.setDestStationCode(TracerUtils.getStationByCode(si.getDestinationStation(), agent.getCompanycode_ID()).getStation_ID());
+		  		log.setLog_status(TracingConstants.LOG_NOT_RECEIVED);
+		  		
+		  		if (si.getForwardItineraryArray().length > 0) {
+			  		HashSet forwardItin = new HashSet();
+			  		log.setItinerary(forwardItin);
+			
+			  		// Set forward itinerary
+			  		for (int i=0; i < si.getForwardItineraryArray().length; ++i) {
 			  			
-				  		OHD_Itinerary seg = new OHD_Itinerary();
+			  			WSForwardItinerary segment = si.getForwardItineraryArray(i);
+
+			  			OHD_Log_Itinerary seg = new OHD_Log_Itinerary();
 			  			
 			  			seg.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
 			  			if (i==0)
@@ -881,152 +995,90 @@ public class WSCoreOHDUtil {
 			  			seg.setLegto(segment.getLegto());
 			  			seg.setScharrivetime(segment.getArrivedate().getTime());
 			  			seg.setSchdeparttime(segment.getDepartdate().getTime());
-			  			seg.setOhd(onhand);
 
-			  			itinerary.add(seg);
+			  			seg.setLog(log);
+			  			forwardItin.add(seg);
+			  			if (i == si.getForwardItineraryArray().length -1) {
+			  				finalFlightAirline = seg.getAirline();
+			  				finalFlightNumber = seg.getFlightnum();
+			  				finalDestination = seg.getLegto(); 
+			  				finalFlightDate = seg.getDepartdate();
+			  				
+			  			}
 			  		}
-	  			}
-
-	  			// Fault station
-		  		Station faultStation = TracerUtils.getStationByCode(si.getFaultStation(), agent.getCompanycode_ID());
-		  		onhand.setFaultstation_ID(faultStation.getStation_ID());
-		  		
-		  		// Fault reason
-		  		int lossCode = si.getLossCode();
-		  		Company_specific_irregularity_code code = LossCodeBMO.getLossCode(lossCode, TracingConstants.OHD, CompanyBMO.getCompany(agent.getCompanycode_ID()));
-		  		if(code != null) {
-		  			onhand.setLoss_code(code.getCode_id());
 		  		}
 		  		
-	  		}
-	  		
-	  		// Save forward log
-	  		OHD_Log log = new OHD_Log();
-	  		log.setOhd(onhand);
-	  		log.setExpeditenum(si.getExpediteNumber());
-	  		log.setForwarding_agent(agent);
-	  		log.setForward_time(TracerDateTime.getGMTDate());
-	  		log.setMessage(si.getMessage());
-	  		log.setDestStationCode(TracerUtils.getStationByCode(si.getDestinationStation(), agent.getCompanycode_ID()).getStation_ID());
-	  		log.setLog_status(TracingConstants.LOG_NOT_RECEIVED);
-	  		
-	  		if (si.getForwardItineraryArray().length > 0) {
-		  		HashSet forwardItin = new HashSet();
-		  		log.setItinerary(forwardItin);
-		
-		  		// Set forward itinerary
-		  		for (int i=0; i < si.getForwardItineraryArray().length; ++i) {
-		  			
-		  			WSForwardItinerary segment = si.getForwardItineraryArray(i);
+		  		// Add a remark
+		  		
+		  		MessageResources messages = MessageResources
+					.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
-		  			OHD_Log_Itinerary seg = new OHD_Log_Itinerary();
-		  			
-		  			seg.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
-		  			if (i==0)
-		  				seg.setLegfrom_type(TracingConstants.LEG_B_STATION);
-		  			else 
-		  				seg.setLegfrom_type(TracingConstants.LEG_T_STATION);
-		  			
-		  			if (i == si.getBaggageItineraryArray().length -1)
-		  				seg.setLegto_type(TracingConstants.LEG_E_STATION);
-		  			else
-		  				seg.setLegto_type(TracingConstants.LEG_T_STATION);
-		  			
-		  			seg.setAirline(segment.getAirline());
-		  			seg.setArrivedate(segment.getArrivedate().getTime());
-		  			seg.setDepartdate(segment.getDepartdate().getTime());
-		  			seg.setFlightnum(segment.getFlightnum());
-		  			seg.setLegfrom(segment.getLegfrom());
-		  			seg.setLegto(segment.getLegto());
-		  			seg.setScharrivetime(segment.getArrivedate().getTime());
-		  			seg.setSchdeparttime(segment.getDepartdate().getTime());
-
-		  			seg.setLog(log);
-		  			forwardItin.add(seg);
-		  			if (i == si.getForwardItineraryArray().length -1) {
-		  				finalFlightAirline = seg.getAirline();
-		  				finalFlightNumber = seg.getFlightnum();
-		  				finalDestination = seg.getLegto(); 
-		  				finalFlightDate = seg.getDepartdate();
-		  				
-		  			}
+					Remark r = new Remark();
+					r.setAgent(agent);
+					r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+					Station station = StationBMO.getStation("" + log.getDestStationCode());
+					r.setRemarktext(messages.getMessage(new Locale(agent.getCurrentlocale()), "bagforwardMessage") + " " + station.getCompany().getCompanyCode_ID()
+							+ messages.getMessage(new Locale(agent.getCurrentlocale()), "aposS") + " " + station.getStationcode() + " station.");
+					r.setOhd(onhand);
+					//Add a remark to the OHD saying the bag is forwarded.
+					Set remarks = onhand.getRemarks();
+					
+					if (remarks == null) {
+						HashSet newRemarks = new HashSet();
+						newRemarks.add(r);
+						onhand.setRemarks(newRemarks);
+					} else {
+						remarks.add(r);
+					}
+		  		
+		  		// Save On-hand
+		  		OhdBMO obmo = new OhdBMO();
+		  		boolean insertResult = obmo.insertOHD(onhand, onhand.getAgent(), foundStation);
+		  		if (!insertResult) {
+		  			so.setErrorResponse(errorMsg + "Unable to perform BEORN.");
+		  	    return so;
+		  		} 
+		  		so.setOhdId(onhand.getOHD_ID());
+					
+				HibernateUtils.save(log);
+					
+		  		BeornDTO dto = new BeornDTO();
+		  		dto.setSpecialInstructions(si.getSpecialInstructions());
+		  		dto.setExpediteNumber(si.getExpediteNumber());
+		  		dto.setFinalFlightNumber(finalFlightNumber);
+		  		dto.setFaultStation(si.getFaultStation());
+		  		dto.setFinalDestination(finalDestination);
+		  		dto.setFinalFlightDepartureDate(finalFlightDate);
+		  		dto.setFinalFlightAirline(finalFlightAirline);
+		  		dto.setReasonForLoss("" + si.getLossCode());
+		  		dto.setTagNumber(si.getClaimCheckNumber());
+		  		dto.setOnhand(onhand.getOHD_ID());
+		  		dto.setLog(log);
+		  		
+		  		try {
+		  			SpringUtils.getClientEventHandler().doEventOnBeornWS(dto);
+		  		} catch (Exception e) {
+		  			logger.error("Error performing client-specific BEORN Action...");
+		  			e.printStackTrace();
 		  		}
-	  		}
-	  		
-	  		// Add a remark
-	  		
-	  		MessageResources messages = MessageResources
-				.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
-
-				Remark r = new Remark();
-				r.setAgent(agent);
-				r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-				Station station = StationBMO.getStation("" + log.getDestStationCode());
-				r.setRemarktext(messages.getMessage(new Locale(agent.getCurrentlocale()), "bagforwardMessage") + " " + station.getCompany().getCompanyCode_ID()
-						+ messages.getMessage(new Locale(agent.getCurrentlocale()), "aposS") + " " + station.getStationcode() + " station.");
-				r.setOhd(onhand);
-				//Add a remark to the OHD saying the bag is forwarded.
-				Set remarks = onhand.getRemarks();
-				
-				if (remarks == null) {
-					HashSet newRemarks = new HashSet();
-					newRemarks.add(r);
-					onhand.setRemarks(newRemarks);
-				} else {
-					remarks.add(r);
-				}
-	  		
-	  		// Save On-hand
-	  		OhdBMO obmo = new OhdBMO();
-	  		boolean insertResult = obmo.insertOHD(onhand, onhand.getAgent(), foundStation);
-	  		if (!insertResult) {
+		  		
+		  		try {
+		  			SpringUtils.getClientEventHandler().doPcn(log, true);
+		  		} catch (Exception e) {
+		  			logger.error("Error performing PCN lookup...");
+		  			e.printStackTrace();
+		  		}
+					
+	  		} catch (Exception e) {
+	  			e.printStackTrace();
 	  			so.setErrorResponse(errorMsg + "Unable to perform BEORN.");
-	  	  	res.setReturn(so);
-	  	    return resDoc;
-	  		} 
-	  		so.setOhdId(onhand.getOHD_ID());
-				
-			HibernateUtils.save(log);
-				
-	  		BeornDTO dto = new BeornDTO();
-	  		dto.setSpecialInstructions(insertFields.getSi().getSpecialInstructions());
-	  		dto.setExpediteNumber(si.getExpediteNumber());
-	  		dto.setFinalFlightNumber(finalFlightNumber);
-	  		dto.setFaultStation(si.getFaultStation());
-	  		dto.setFinalDestination(finalDestination);
-	  		dto.setFinalFlightDepartureDate(finalFlightDate);
-	  		dto.setFinalFlightAirline(finalFlightAirline);
-	  		dto.setReasonForLoss("" + si.getLossCode());
-	  		dto.setTagNumber(si.getClaimCheckNumber());
-	  		dto.setOnhand(onhand.getOHD_ID());
-	  		dto.setLog(log);
-	  		
-	  		try {
-	  			SpringUtils.getClientEventHandler().doEventOnBeornWS(dto);
-	  		} catch (Exception e) {
-	  			logger.error("Error performing client-specific BEORN Action...");
-	  			e.printStackTrace();
 	  		}
-	  		
-	  		try {
-	  			SpringUtils.getClientEventHandler().doPcn(log, true);
-	  		} catch (Exception e) {
-	  			logger.error("Error performing PCN lookup...");
-	  			e.printStackTrace();
-	  		}
-				
-  		} catch (Exception e) {
-  			e.printStackTrace();
-  			so.setErrorResponse(errorMsg + "Unable to perform BEORN.");
-  		}
-  	}
-  	
-  	// Return Response
-  	res.setReturn(so);
-  	
-  	logger.info("Stop Web Service Response...");
-  	com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(so.getOhdId(), "BEORN webserivce", start);
-    return resDoc;
+	  	}
+	  	
+	  	// Return Response
+	  	
+	  	logger.info("Stop Web Service Response...");
+	    return so;
   }
   
   public static OHD createOnhand(Agent agent, String bagTagNumber, Station foundStation, Date foundDate, String comment) {

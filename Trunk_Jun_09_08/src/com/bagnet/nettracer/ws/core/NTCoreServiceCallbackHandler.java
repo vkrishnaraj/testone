@@ -69,6 +69,21 @@ public abstract class NTCoreServiceCallbackHandler {
     }
 
     /**
+     * auto generated Axis2 call back method for bulkBeornOHD method
+     * override this method for handling normal response from bulkBeornOHD operation
+     */
+    public void receiveResultbulkBeornOHD(
+        com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument result) {
+    }
+
+    /**
+     * auto generated Axis2 Error handler
+     * override this method for handling error response from bulkBeornOHD operation
+     */
+    public void receiveErrorbulkBeornOHD(java.lang.Exception e) {
+    }
+
+    /**
      * auto generated Axis2 call back method for insertQuickOHD method
      * override this method for handling normal response from insertQuickOHD operation
      */

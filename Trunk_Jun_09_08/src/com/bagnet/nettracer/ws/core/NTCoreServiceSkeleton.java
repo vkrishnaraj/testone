@@ -34,6 +34,17 @@ public class NTCoreServiceSkeleton {
 
     /**
      * Auto generated method signature
+     * @param bulkBeornOHD
+     */
+    public com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument bulkBeornOHD(
+        com.bagnet.nettracer.ws.core.BulkBeornOHDDocument bulkBeornOHD) {
+        //TODO : fill this with the necessary business logic
+        throw new java.lang.UnsupportedOperationException("Please implement " +
+            this.getClass().getName() + "#bulkBeornOHD");
+    }
+
+    /**
+     * Auto generated method signature
      * @param insertQuickOHD
      */
     public com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument insertQuickOHD(

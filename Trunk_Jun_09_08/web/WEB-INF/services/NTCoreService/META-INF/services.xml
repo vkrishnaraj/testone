@@ -17,6 +17,10 @@
             <actionMapping>urn:updateIncidentFaultCodes</actionMapping>
             <outputActionMapping>urn:updateIncidentFaultCodesResponse</outputActionMapping>
         </operation>
+        <operation name="bulkBeornOHD" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:bulkBeornOHD</actionMapping>
+            <outputActionMapping>urn:bulkBeornOHDResponse</outputActionMapping>
+        </operation>
         <operation name="insertQuickOHD" mep="http://www.w3.org/ns/wsdl/in-out">
             <actionMapping>urn:insertQuickOHD</actionMapping>
             <outputActionMapping>urn:insertQuickOHDResponse</outputActionMapping>

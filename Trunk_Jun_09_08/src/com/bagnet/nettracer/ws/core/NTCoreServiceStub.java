@@ -88,7 +88,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //creating the operations
         org.apache.axis2.description.AxisOperation __operation;
 
-        _operations = new org.apache.axis2.description.AxisOperation[11];
+        _operations = new org.apache.axis2.description.AxisOperation[12];
 
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
@@ -110,7 +110,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
         __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "insertQuickOHD"));
+                "http://core.ws.nettracer.bagnet.com", "bulkBeornOHD"));
         _service.addOperation(__operation);
 
         _operations[2] = __operation;
@@ -118,7 +118,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
         __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "beornOHD"));
+                "http://core.ws.nettracer.bagnet.com", "insertQuickOHD"));
         _service.addOperation(__operation);
 
         _operations[3] = __operation;
@@ -126,7 +126,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
         __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "getOHD"));
+                "http://core.ws.nettracer.bagnet.com", "beornOHD"));
         _service.addOperation(__operation);
 
         _operations[4] = __operation;
@@ -134,7 +134,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
         __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "UpdateBdoDelivery"));
+                "http://core.ws.nettracer.bagnet.com", "getOHD"));
         _service.addOperation(__operation);
 
         _operations[5] = __operation;
@@ -142,7 +142,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
         __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "insertOHD"));
+                "http://core.ws.nettracer.bagnet.com", "UpdateBdoDelivery"));
         _service.addOperation(__operation);
 
         _operations[6] = __operation;
@@ -150,7 +150,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
         __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "getIncident"));
+                "http://core.ws.nettracer.bagnet.com", "insertOHD"));
         _service.addOperation(__operation);
 
         _operations[7] = __operation;
@@ -158,7 +158,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
         __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "logoff"));
+                "http://core.ws.nettracer.bagnet.com", "getIncident"));
         _service.addOperation(__operation);
 
         _operations[8] = __operation;
@@ -166,7 +166,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
         __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "insertIncident"));
+                "http://core.ws.nettracer.bagnet.com", "logoff"));
         _service.addOperation(__operation);
 
         _operations[9] = __operation;
@@ -174,10 +174,18 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         __operation = new org.apache.axis2.description.OutInAxisOperation();
 
         __operation.setName(new javax.xml.namespace.QName(
-                "http://core.ws.nettracer.bagnet.com", "queryForFaultCode"));
+                "http://core.ws.nettracer.bagnet.com", "insertIncident"));
         _service.addOperation(__operation);
 
         _operations[10] = __operation;
+
+        __operation = new org.apache.axis2.description.OutInAxisOperation();
+
+        __operation.setName(new javax.xml.namespace.QName(
+                "http://core.ws.nettracer.bagnet.com", "queryForFaultCode"));
+        _service.addOperation(__operation);
+
+        _operations[11] = __operation;
     }
 
     //populates the faults
@@ -187,10 +195,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * @see com.bagnet.nettracer.ws.core.NTCoreService#authenticate
-     * @param authenticate132
+     * @param authenticate144
      */
     public com.bagnet.nettracer.ws.core.AuthenticateResponseDocument authenticate(
-        com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate132)
+        com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate144)
         throws java.rmi.RemoteException {
         try {
             org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[0].getName());
@@ -209,7 +217,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    authenticate132,
+                    authenticate144,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com",
@@ -289,10 +297,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startauthenticate
-     * @param authenticate132
+     * @param authenticate144
      */
     public void startauthenticate(
-        com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate132,
+        com.bagnet.nettracer.ws.core.AuthenticateDocument authenticate144,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
         org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[0].getName());
@@ -310,7 +318,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                authenticate132,
+                authenticate144,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com", "authenticate")));
@@ -424,10 +432,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * @see com.bagnet.nettracer.ws.core.NTCoreService#updateIncidentFaultCodes
-     * @param updateIncidentFaultCodes134
+     * @param updateIncidentFaultCodes146
      */
     public com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesResponseDocument updateIncidentFaultCodes(
-        com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument updateIncidentFaultCodes134)
+        com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument updateIncidentFaultCodes146)
         throws java.rmi.RemoteException {
         try {
             org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[1].getName());
@@ -447,7 +455,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    updateIncidentFaultCodes134,
+                    updateIncidentFaultCodes146,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com",
@@ -527,10 +535,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startupdateIncidentFaultCodes
-     * @param updateIncidentFaultCodes134
+     * @param updateIncidentFaultCodes146
      */
     public void startupdateIncidentFaultCodes(
-        com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument updateIncidentFaultCodes134,
+        com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument updateIncidentFaultCodes146,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
         org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[1].getName());
@@ -548,7 +556,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                updateIncidentFaultCodes134,
+                updateIncidentFaultCodes146,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com",
@@ -662,14 +670,251 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
     /**
      * Auto generated method signature
-     * @see com.bagnet.nettracer.ws.core.NTCoreService#insertQuickOHD
-     * @param insertQuickOHD136
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#bulkBeornOHD
+     * @param bulkBeornOHD148
      */
-    public com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument insertQuickOHD(
-        com.bagnet.nettracer.ws.core.InsertQuickOHDDocument insertQuickOHD136)
+    public com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument bulkBeornOHD(
+        com.bagnet.nettracer.ws.core.BulkBeornOHDDocument bulkBeornOHD148)
         throws java.rmi.RemoteException {
         try {
             org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[2].getName());
+            _operationClient.getOptions().setAction("urn:bulkBeornOHD");
+            _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+            addPropertyToOperationClient(_operationClient,
+                org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+                "&");
+
+            // create a message context
+            org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+            // create SOAP envelope with that payload
+            org.apache.axiom.soap.SOAPEnvelope env = null;
+
+            env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                        .getSoapVersionURI()),
+                    bulkBeornOHD148,
+                    optimizeContent(
+                        new javax.xml.namespace.QName(
+                            "http://core.ws.nettracer.bagnet.com",
+                            "bulkBeornOHD")));
+
+            //adding SOAP soap_headers
+            _serviceClient.addHeadersToEnvelope(env);
+            // set the message context with that soap envelope
+            _messageContext.setEnvelope(env);
+
+            // add the message contxt to the operation client
+            _operationClient.addMessageContext(_messageContext);
+
+            //execute the operation client
+            _operationClient.execute(true);
+
+            org.apache.axis2.context.MessageContext _returnMessageContext = _operationClient.getMessageContext(org.apache.axis2.wsdl.WSDLConstants.MESSAGE_LABEL_IN_VALUE);
+            org.apache.axiom.soap.SOAPEnvelope _returnEnv = _returnMessageContext.getEnvelope();
+
+            java.lang.Object object = fromOM(_returnEnv.getBody()
+                                                       .getFirstElement(),
+                    com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument.class,
+                    getEnvelopeNamespaces(_returnEnv));
+            _messageContext.getTransportOut().getSender()
+                           .cleanup(_messageContext);
+
+            return (com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument) object;
+        } catch (org.apache.axis2.AxisFault f) {
+            org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+            if (faultElt != null) {
+                if (faultExceptionNameMap.containsKey(faultElt.getQName())) {
+                    //make the fault by reflection
+                    try {
+                        java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                        java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                        java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                        //message class
+                        java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                        java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                        java.lang.Object messageObject = fromOM(faultElt,
+                                messageClass, null);
+                        java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                new java.lang.Class[] { messageClass });
+                        m.invoke(ex, new java.lang.Object[] { messageObject });
+
+                        throw new java.rmi.RemoteException(ex.getMessage(), ex);
+                    } catch (java.lang.ClassCastException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.ClassNotFoundException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.NoSuchMethodException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.reflect.InvocationTargetException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.IllegalAccessException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    } catch (java.lang.InstantiationException e) {
+                        // we cannot intantiate the class - throw the original Axis fault
+                        throw f;
+                    }
+                } else {
+                    throw f;
+                }
+            } else {
+                throw f;
+            }
+        }
+    }
+
+    /**
+     * Auto generated method signature for Asynchronous Invocations
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#startbulkBeornOHD
+     * @param bulkBeornOHD148
+     */
+    public void startbulkBeornOHD(
+        com.bagnet.nettracer.ws.core.BulkBeornOHDDocument bulkBeornOHD148,
+        final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
+        throws java.rmi.RemoteException {
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[2].getName());
+        _operationClient.getOptions().setAction("urn:bulkBeornOHD");
+        _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
+
+        addPropertyToOperationClient(_operationClient,
+            org.apache.axis2.description.WSDL2Constants.ATTR_WHTTP_QUERY_PARAMETER_SEPARATOR,
+            "&");
+
+        // create SOAP envelope with that payload
+        org.apache.axiom.soap.SOAPEnvelope env = null;
+        org.apache.axis2.context.MessageContext _messageContext = new org.apache.axis2.context.MessageContext();
+
+        //Style is Doc.
+        env = toEnvelope(getFactory(_operationClient.getOptions()
+                                                    .getSoapVersionURI()),
+                bulkBeornOHD148,
+                optimizeContent(
+                    new javax.xml.namespace.QName(
+                        "http://core.ws.nettracer.bagnet.com", "bulkBeornOHD")));
+
+        // adding SOAP soap_headers
+        _serviceClient.addHeadersToEnvelope(env);
+        // create message context with that soap envelope
+        _messageContext.setEnvelope(env);
+
+        // add the message context to the operation client
+        _operationClient.addMessageContext(_messageContext);
+
+        _operationClient.setCallback(new org.apache.axis2.client.async.AxisCallback() {
+                public void onMessage(
+                    org.apache.axis2.context.MessageContext resultContext) {
+                    try {
+                        org.apache.axiom.soap.SOAPEnvelope resultEnv = resultContext.getEnvelope();
+
+                        java.lang.Object object = fromOM(resultEnv.getBody()
+                                                                  .getFirstElement(),
+                                com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument.class,
+                                getEnvelopeNamespaces(resultEnv));
+                        callback.receiveResultbulkBeornOHD((com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument) object);
+                    } catch (org.apache.axis2.AxisFault e) {
+                        callback.receiveErrorbulkBeornOHD(e);
+                    }
+                }
+
+                public void onError(java.lang.Exception error) {
+                    if (error instanceof org.apache.axis2.AxisFault) {
+                        org.apache.axis2.AxisFault f = (org.apache.axis2.AxisFault) error;
+                        org.apache.axiom.om.OMElement faultElt = f.getDetail();
+
+                        if (faultElt != null) {
+                            if (faultExceptionNameMap.containsKey(
+                                        faultElt.getQName())) {
+                                //make the fault by reflection
+                                try {
+                                    java.lang.String exceptionClassName = (java.lang.String) faultExceptionClassNameMap.get(faultElt.getQName());
+                                    java.lang.Class exceptionClass = java.lang.Class.forName(exceptionClassName);
+                                    java.lang.Exception ex = (java.lang.Exception) exceptionClass.newInstance();
+
+                                    //message class
+                                    java.lang.String messageClassName = (java.lang.String) faultMessageMap.get(faultElt.getQName());
+                                    java.lang.Class messageClass = java.lang.Class.forName(messageClassName);
+                                    java.lang.Object messageObject = fromOM(faultElt,
+                                            messageClass, null);
+                                    java.lang.reflect.Method m = exceptionClass.getMethod("setFaultMessage",
+                                            new java.lang.Class[] { messageClass });
+                                    m.invoke(ex,
+                                        new java.lang.Object[] { messageObject });
+
+                                    callback.receiveErrorbulkBeornOHD(new java.rmi.RemoteException(
+                                            ex.getMessage(), ex));
+                                } catch (java.lang.ClassCastException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbulkBeornOHD(f);
+                                } catch (java.lang.ClassNotFoundException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbulkBeornOHD(f);
+                                } catch (java.lang.NoSuchMethodException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbulkBeornOHD(f);
+                                } catch (java.lang.reflect.InvocationTargetException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbulkBeornOHD(f);
+                                } catch (java.lang.IllegalAccessException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbulkBeornOHD(f);
+                                } catch (java.lang.InstantiationException e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbulkBeornOHD(f);
+                                } catch (org.apache.axis2.AxisFault e) {
+                                    // we cannot intantiate the class - throw the original Axis fault
+                                    callback.receiveErrorbulkBeornOHD(f);
+                                }
+                            } else {
+                                callback.receiveErrorbulkBeornOHD(f);
+                            }
+                        } else {
+                            callback.receiveErrorbulkBeornOHD(f);
+                        }
+                    } else {
+                        callback.receiveErrorbulkBeornOHD(error);
+                    }
+                }
+
+                public void onFault(
+                    org.apache.axis2.context.MessageContext faultContext) {
+                    org.apache.axis2.AxisFault fault = org.apache.axis2.util.Utils.getInboundFaultFromMessageContext(faultContext);
+                    onError(fault);
+                }
+
+                public void onComplete() {
+                    // Do nothing by default
+                }
+            });
+
+        org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
+
+        if ((_operations[2].getMessageReceiver() == null) &&
+                _operationClient.getOptions().isUseSeparateListener()) {
+            _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
+            _operations[2].setMessageReceiver(_callbackReceiver);
+        }
+
+        //execute the operation client
+        _operationClient.execute(false);
+    }
+
+    /**
+     * Auto generated method signature
+     * @see com.bagnet.nettracer.ws.core.NTCoreService#insertQuickOHD
+     * @param insertQuickOHD150
+     */
+    public com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument insertQuickOHD(
+        com.bagnet.nettracer.ws.core.InsertQuickOHDDocument insertQuickOHD150)
+        throws java.rmi.RemoteException {
+        try {
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
             _operationClient.getOptions().setAction("urn:insertQuickOHD");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -685,7 +930,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    insertQuickOHD136,
+                    insertQuickOHD150,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com",
@@ -765,13 +1010,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startinsertQuickOHD
-     * @param insertQuickOHD136
+     * @param insertQuickOHD150
      */
     public void startinsertQuickOHD(
-        com.bagnet.nettracer.ws.core.InsertQuickOHDDocument insertQuickOHD136,
+        com.bagnet.nettracer.ws.core.InsertQuickOHDDocument insertQuickOHD150,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[2].getName());
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
         _operationClient.getOptions().setAction("urn:insertQuickOHD");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -786,7 +1031,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                insertQuickOHD136,
+                insertQuickOHD150,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com", "insertQuickOHD")));
@@ -887,10 +1132,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
         org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
 
-        if ((_operations[2].getMessageReceiver() == null) &&
+        if ((_operations[3].getMessageReceiver() == null) &&
                 _operationClient.getOptions().isUseSeparateListener()) {
             _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[2].setMessageReceiver(_callbackReceiver);
+            _operations[3].setMessageReceiver(_callbackReceiver);
         }
 
         //execute the operation client
@@ -900,13 +1145,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * @see com.bagnet.nettracer.ws.core.NTCoreService#beornOHD
-     * @param beornOHD138
+     * @param beornOHD152
      */
     public com.bagnet.nettracer.ws.core.BeornOHDResponseDocument beornOHD(
-        com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD138)
+        com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD152)
         throws java.rmi.RemoteException {
         try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[4].getName());
             _operationClient.getOptions().setAction("urn:beornOHD");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -922,7 +1167,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    beornOHD138,
+                    beornOHD152,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com", "beornOHD")));
@@ -1001,13 +1246,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startbeornOHD
-     * @param beornOHD138
+     * @param beornOHD152
      */
     public void startbeornOHD(
-        com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD138,
+        com.bagnet.nettracer.ws.core.BeornOHDDocument beornOHD152,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[3].getName());
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[4].getName());
         _operationClient.getOptions().setAction("urn:beornOHD");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1022,7 +1267,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                beornOHD138,
+                beornOHD152,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com", "beornOHD")));
@@ -1123,10 +1368,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
         org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
 
-        if ((_operations[3].getMessageReceiver() == null) &&
+        if ((_operations[4].getMessageReceiver() == null) &&
                 _operationClient.getOptions().isUseSeparateListener()) {
             _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[3].setMessageReceiver(_callbackReceiver);
+            _operations[4].setMessageReceiver(_callbackReceiver);
         }
 
         //execute the operation client
@@ -1136,13 +1381,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * @see com.bagnet.nettracer.ws.core.NTCoreService#getOHD
-     * @param getOHD140
+     * @param getOHD154
      */
     public com.bagnet.nettracer.ws.core.GetOHDResponseDocument getOHD(
-        com.bagnet.nettracer.ws.core.GetOHDDocument getOHD140)
+        com.bagnet.nettracer.ws.core.GetOHDDocument getOHD154)
         throws java.rmi.RemoteException {
         try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[4].getName());
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[5].getName());
             _operationClient.getOptions().setAction("urn:getOHD");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1158,7 +1403,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    getOHD140,
+                    getOHD154,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com", "getOHD")));
@@ -1237,13 +1482,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startgetOHD
-     * @param getOHD140
+     * @param getOHD154
      */
     public void startgetOHD(
-        com.bagnet.nettracer.ws.core.GetOHDDocument getOHD140,
+        com.bagnet.nettracer.ws.core.GetOHDDocument getOHD154,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[4].getName());
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[5].getName());
         _operationClient.getOptions().setAction("urn:getOHD");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1258,7 +1503,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                getOHD140,
+                getOHD154,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com", "getOHD")));
@@ -1359,10 +1604,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
         org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
 
-        if ((_operations[4].getMessageReceiver() == null) &&
+        if ((_operations[5].getMessageReceiver() == null) &&
                 _operationClient.getOptions().isUseSeparateListener()) {
             _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[4].setMessageReceiver(_callbackReceiver);
+            _operations[5].setMessageReceiver(_callbackReceiver);
         }
 
         //execute the operation client
@@ -1372,13 +1617,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * @see com.bagnet.nettracer.ws.core.NTCoreService#UpdateBdoDelivery
-     * @param updateBdoDelivery142
+     * @param updateBdoDelivery156
      */
     public com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument UpdateBdoDelivery(
-        com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument updateBdoDelivery142)
+        com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument updateBdoDelivery156)
         throws java.rmi.RemoteException {
         try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[5].getName());
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[6].getName());
             _operationClient.getOptions().setAction("urn:UpdateBdoDelivery");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1394,7 +1639,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    updateBdoDelivery142,
+                    updateBdoDelivery156,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com",
@@ -1474,13 +1719,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startUpdateBdoDelivery
-     * @param updateBdoDelivery142
+     * @param updateBdoDelivery156
      */
     public void startUpdateBdoDelivery(
-        com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument updateBdoDelivery142,
+        com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument updateBdoDelivery156,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[5].getName());
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[6].getName());
         _operationClient.getOptions().setAction("urn:UpdateBdoDelivery");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1495,7 +1740,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                updateBdoDelivery142,
+                updateBdoDelivery156,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com",
@@ -1597,10 +1842,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
         org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
 
-        if ((_operations[5].getMessageReceiver() == null) &&
+        if ((_operations[6].getMessageReceiver() == null) &&
                 _operationClient.getOptions().isUseSeparateListener()) {
             _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[5].setMessageReceiver(_callbackReceiver);
+            _operations[6].setMessageReceiver(_callbackReceiver);
         }
 
         //execute the operation client
@@ -1610,13 +1855,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * @see com.bagnet.nettracer.ws.core.NTCoreService#insertOHD
-     * @param insertOHD144
+     * @param insertOHD158
      */
     public com.bagnet.nettracer.ws.core.InsertOHDResponseDocument insertOHD(
-        com.bagnet.nettracer.ws.core.InsertOHDDocument insertOHD144)
+        com.bagnet.nettracer.ws.core.InsertOHDDocument insertOHD158)
         throws java.rmi.RemoteException {
         try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[6].getName());
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[7].getName());
             _operationClient.getOptions().setAction("urn:insertOHD");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1632,7 +1877,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    insertOHD144,
+                    insertOHD158,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com", "insertOHD")));
@@ -1711,13 +1956,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startinsertOHD
-     * @param insertOHD144
+     * @param insertOHD158
      */
     public void startinsertOHD(
-        com.bagnet.nettracer.ws.core.InsertOHDDocument insertOHD144,
+        com.bagnet.nettracer.ws.core.InsertOHDDocument insertOHD158,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[6].getName());
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[7].getName());
         _operationClient.getOptions().setAction("urn:insertOHD");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1732,7 +1977,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                insertOHD144,
+                insertOHD158,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com", "insertOHD")));
@@ -1833,10 +2078,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
         org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
 
-        if ((_operations[6].getMessageReceiver() == null) &&
+        if ((_operations[7].getMessageReceiver() == null) &&
                 _operationClient.getOptions().isUseSeparateListener()) {
             _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[6].setMessageReceiver(_callbackReceiver);
+            _operations[7].setMessageReceiver(_callbackReceiver);
         }
 
         //execute the operation client
@@ -1846,13 +2091,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * @see com.bagnet.nettracer.ws.core.NTCoreService#getIncident
-     * @param getIncident146
+     * @param getIncident160
      */
     public com.bagnet.nettracer.ws.core.GetIncidentResponseDocument getIncident(
-        com.bagnet.nettracer.ws.core.GetIncidentDocument getIncident146)
+        com.bagnet.nettracer.ws.core.GetIncidentDocument getIncident160)
         throws java.rmi.RemoteException {
         try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[7].getName());
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[8].getName());
             _operationClient.getOptions().setAction("urn:getIncident");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1868,7 +2113,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    getIncident146,
+                    getIncident160,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com", "getIncident")));
@@ -1947,13 +2192,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startgetIncident
-     * @param getIncident146
+     * @param getIncident160
      */
     public void startgetIncident(
-        com.bagnet.nettracer.ws.core.GetIncidentDocument getIncident146,
+        com.bagnet.nettracer.ws.core.GetIncidentDocument getIncident160,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[7].getName());
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[8].getName());
         _operationClient.getOptions().setAction("urn:getIncident");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -1968,7 +2213,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                getIncident146,
+                getIncident160,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com", "getIncident")));
@@ -2069,10 +2314,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
         org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
 
-        if ((_operations[7].getMessageReceiver() == null) &&
+        if ((_operations[8].getMessageReceiver() == null) &&
                 _operationClient.getOptions().isUseSeparateListener()) {
             _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[7].setMessageReceiver(_callbackReceiver);
+            _operations[8].setMessageReceiver(_callbackReceiver);
         }
 
         //execute the operation client
@@ -2082,13 +2327,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * @see com.bagnet.nettracer.ws.core.NTCoreService#logoff
-     * @param logoff148
+     * @param logoff162
      */
     public com.bagnet.nettracer.ws.core.LogoffResponseDocument logoff(
-        com.bagnet.nettracer.ws.core.LogoffDocument logoff148)
+        com.bagnet.nettracer.ws.core.LogoffDocument logoff162)
         throws java.rmi.RemoteException {
         try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[8].getName());
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[9].getName());
             _operationClient.getOptions().setAction("urn:logoff");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -2104,7 +2349,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    logoff148,
+                    logoff162,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com", "logoff")));
@@ -2183,13 +2428,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startlogoff
-     * @param logoff148
+     * @param logoff162
      */
     public void startlogoff(
-        com.bagnet.nettracer.ws.core.LogoffDocument logoff148,
+        com.bagnet.nettracer.ws.core.LogoffDocument logoff162,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[8].getName());
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[9].getName());
         _operationClient.getOptions().setAction("urn:logoff");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -2204,7 +2449,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                logoff148,
+                logoff162,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com", "logoff")));
@@ -2305,10 +2550,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
         org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
 
-        if ((_operations[8].getMessageReceiver() == null) &&
+        if ((_operations[9].getMessageReceiver() == null) &&
                 _operationClient.getOptions().isUseSeparateListener()) {
             _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[8].setMessageReceiver(_callbackReceiver);
+            _operations[9].setMessageReceiver(_callbackReceiver);
         }
 
         //execute the operation client
@@ -2318,13 +2563,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * @see com.bagnet.nettracer.ws.core.NTCoreService#insertIncident
-     * @param insertIncident150
+     * @param insertIncident164
      */
     public com.bagnet.nettracer.ws.core.InsertIncidentResponseDocument insertIncident(
-        com.bagnet.nettracer.ws.core.InsertIncidentDocument insertIncident150)
+        com.bagnet.nettracer.ws.core.InsertIncidentDocument insertIncident164)
         throws java.rmi.RemoteException {
         try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[9].getName());
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[10].getName());
             _operationClient.getOptions().setAction("urn:insertIncident");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -2340,7 +2585,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    insertIncident150,
+                    insertIncident164,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com",
@@ -2420,13 +2665,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startinsertIncident
-     * @param insertIncident150
+     * @param insertIncident164
      */
     public void startinsertIncident(
-        com.bagnet.nettracer.ws.core.InsertIncidentDocument insertIncident150,
+        com.bagnet.nettracer.ws.core.InsertIncidentDocument insertIncident164,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[9].getName());
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[10].getName());
         _operationClient.getOptions().setAction("urn:insertIncident");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -2441,7 +2686,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                insertIncident150,
+                insertIncident164,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com", "insertIncident")));
@@ -2542,10 +2787,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
         org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
 
-        if ((_operations[9].getMessageReceiver() == null) &&
+        if ((_operations[10].getMessageReceiver() == null) &&
                 _operationClient.getOptions().isUseSeparateListener()) {
             _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[9].setMessageReceiver(_callbackReceiver);
+            _operations[10].setMessageReceiver(_callbackReceiver);
         }
 
         //execute the operation client
@@ -2555,13 +2800,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature
      * @see com.bagnet.nettracer.ws.core.NTCoreService#queryForFaultCode
-     * @param queryForFaultCode152
+     * @param queryForFaultCode166
      */
     public com.bagnet.nettracer.ws.core.QueryForFaultCodeResponseDocument queryForFaultCode(
-        com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument queryForFaultCode152)
+        com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument queryForFaultCode166)
         throws java.rmi.RemoteException {
         try {
-            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[10].getName());
+            org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[11].getName());
             _operationClient.getOptions().setAction("urn:queryForFaultCode");
             _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -2577,7 +2822,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
             env = toEnvelope(getFactory(_operationClient.getOptions()
                                                         .getSoapVersionURI()),
-                    queryForFaultCode152,
+                    queryForFaultCode166,
                     optimizeContent(
                         new javax.xml.namespace.QName(
                             "http://core.ws.nettracer.bagnet.com",
@@ -2657,13 +2902,13 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
     /**
      * Auto generated method signature for Asynchronous Invocations
      * @see com.bagnet.nettracer.ws.core.NTCoreService#startqueryForFaultCode
-     * @param queryForFaultCode152
+     * @param queryForFaultCode166
      */
     public void startqueryForFaultCode(
-        com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument queryForFaultCode152,
+        com.bagnet.nettracer.ws.core.QueryForFaultCodeDocument queryForFaultCode166,
         final com.bagnet.nettracer.ws.core.NTCoreServiceCallbackHandler callback)
         throws java.rmi.RemoteException {
-        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[10].getName());
+        org.apache.axis2.client.OperationClient _operationClient = _serviceClient.createClient(_operations[11].getName());
         _operationClient.getOptions().setAction("urn:queryForFaultCode");
         _operationClient.getOptions().setExceptionToBeThrownOnSOAPFault(true);
 
@@ -2678,7 +2923,7 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
         //Style is Doc.
         env = toEnvelope(getFactory(_operationClient.getOptions()
                                                     .getSoapVersionURI()),
-                queryForFaultCode152,
+                queryForFaultCode166,
                 optimizeContent(
                     new javax.xml.namespace.QName(
                         "http://core.ws.nettracer.bagnet.com",
@@ -2780,10 +3025,10 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
         org.apache.axis2.util.CallbackReceiver _callbackReceiver = null;
 
-        if ((_operations[10].getMessageReceiver() == null) &&
+        if ((_operations[11].getMessageReceiver() == null) &&
                 _operationClient.getOptions().isUseSeparateListener()) {
             _callbackReceiver = new org.apache.axis2.util.CallbackReceiver();
-            _operations[10].setMessageReceiver(_callbackReceiver);
+            _operations[11].setMessageReceiver(_callbackReceiver);
         }
 
         //execute the operation client
@@ -2835,6 +3080,30 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
     private org.apache.axiom.om.OMElement toOM(
         com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.BulkBeornOHDDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
+                new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
+        org.apache.axiom.om.OMElement documentElement = builder.getDocumentElement();
+
+        ((org.apache.axiom.om.impl.OMNodeEx) documentElement).setParent(null);
+
+        return documentElement;
+    }
+
+    private org.apache.axiom.om.OMElement toOM(
+        com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.om.impl.builder.StAXOMBuilder builder = new org.apache.axiom.om.impl.builder.StAXOMBuilder(org.apache.axiom.om.OMAbstractFactory.getOMFactory(),
                 new org.apache.axis2.util.StreamWrapper(param.newXMLStreamReader()));
@@ -3100,6 +3369,19 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
 
     private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
         org.apache.axiom.soap.SOAPFactory factory,
+        com.bagnet.nettracer.ws.core.BulkBeornOHDDocument param,
+        boolean optimizeContent) throws org.apache.axis2.AxisFault {
+        org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
+
+        if (param != null) {
+            envelope.getBody().addChild(toOM(param, optimizeContent));
+        }
+
+        return envelope;
+    }
+
+    private org.apache.axiom.soap.SOAPEnvelope toEnvelope(
+        org.apache.axiom.soap.SOAPFactory factory,
         com.bagnet.nettracer.ws.core.UpdateIncidentFaultCodesDocument param,
         boolean optimizeContent) throws org.apache.axis2.AxisFault {
         org.apache.axiom.soap.SOAPEnvelope envelope = factory.getDefaultEnvelope();
@@ -3259,6 +3541,28 @@ public class NTCoreServiceStub extends org.apache.axis2.client.Stub {
                             extraNamespaces));
                 } else {
                     return com.bagnet.nettracer.ws.core.InsertQuickOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.BulkBeornOHDDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
+                }
+            }
+
+            if (com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument.class.equals(
+                        type)) {
+                if (extraNamespaces != null) {
+                    return com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching(),
+                        new org.apache.xmlbeans.XmlOptions().setLoadAdditionalNamespaces(
+                            extraNamespaces));
+                } else {
+                    return com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument.Factory.parse(param.getXMLStreamReaderWithoutCaching());
                 }
             }
 
