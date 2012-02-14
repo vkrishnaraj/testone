@@ -1,4 +1,4 @@
-package aero.nettracer.web.lfc.testing.actions.lfc.match;
+package aero.nettracer.web.lfc.testing.actions.lfc.delivery;
 
 import org.junit.Test;
 
