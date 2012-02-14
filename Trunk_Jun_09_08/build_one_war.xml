@@ -762,6 +762,7 @@
 		<antcall target="build-war-training-united"/>
 		<antcall target="build-war-training-american"/>
 		<antcall target="build-war-training-webjet"/>
+		<antcall target="build-war-training-lfc"/>
 		<property name="app.xml.location" value="metadata/training" />
 		<antcall target="donotrun-build-ear" />
 	</target>
