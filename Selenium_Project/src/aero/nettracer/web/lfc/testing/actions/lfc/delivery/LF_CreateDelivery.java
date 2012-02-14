@@ -145,17 +145,11 @@ public class LF_CreateDelivery extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyDeliveryOptions();
-			selenium.click("//a[contains(@href, 'view_items_deliver.do')]");
 		} else {
 			System.out.println("CD: Failed to undo the delivery information for Found Item: " + LF_CreateDelivery.foundId);
 			return;
 		}
 		
-		if (!checkNoErrorPage()) {
-			System.out.println("CD: Failed to load the Items to Deliver page.");
-			return;
-		}
-			
 	}
 	
 	@Test
@@ -202,15 +196,8 @@ public class LF_CreateDelivery extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyDeliveryOptions();
-			selenium.click("//a[contains(@href, 'view_items_deliver.do')]");
-			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CD: Failed to undo the rejected delivery information for Found Item: " + LF_CreateDelivery.foundId);
-			return;
-		}
-		
-		if (!checkNoErrorPage()) {
-			System.out.println("CD: Failed to load the Items to Deliver page.");
 			return;
 		}
 		
