@@ -104,6 +104,7 @@ public class EnterItemsAction extends CheckedAction {
 		LFFound toReturn = LFUtils.createLFFound(agent);
 		toReturn.setReceivedDate(found.getReceivedDate());
 		toReturn.setFoundDate(new Date());
+		toReturn.setLocation(found.getLocation());
 		toReturn.getItem().setValue(found.getItem().getValue());
 		toReturn.setCompanyId(found.getCompanyId());
 		return toReturn;

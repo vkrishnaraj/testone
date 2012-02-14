@@ -123,6 +123,12 @@
 			        currentElement.focus();
 			        return false;
 				}
+			} else if (elementName == "found.locationId") {
+				if (currentElement.value.length == 0) {
+					alert("<%= (String)bundle.getString("colname.lfc.found.station") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        currentElement.focus();
+			        return false;
+				}
 			} else if (elementName == "found.barcode") {
 				if (currentElement.value.length == 0) {
 					alert("<%= (String)bundle.getString("colname.lfc.item.id") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
@@ -208,6 +214,38 @@
 		                </font>
 	                </center>
      				<h1 class="green">
+			        	<bean:message key="header.entry.information" />
+			        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+			        </h1>
+    			<span class="reqfield">*</span>
+   				<bean:message key="message.required" />
+				<table class="<%=cssFormClass %>" cellpadding=0 cellspacing=0 >
+					<tr>
+   						<td style="width:33%;">
+							<bean:message key="colname.lfc.item.received.date" />
+							(<%= a.getDateformat().getFormat() %>)&nbsp;<span class="reqfield">*</span>
+							<html:text property="disReceivedDate" size="12" maxlength="11" styleClass="textfield" styleId="disReceivedDate" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.enterItemsForm,'disReceivedDate','calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+						</td>
+						<td style="width:33%;">
+							<bean:message key="colname.lf.found.location" />&nbsp;<span class="reqfield">*</span>
+							<br>
+		            		<html:select name="enterItemsForm" property="found.locationId" styleClass="dropdown" styleId="foundLocationId" >
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+		            		</html:select>
+           				</td>
+           				<td style="width:33%;">
+           					<bean:message key="colname.lfc.value" />
+           					<br>
+           					<html:select name="enterItemsForm" property="found.item.value" styleId="value" styleClass="dropdown" >
+      							<html:option value="<%=String.valueOf(TracingConstants.LFC_ITEM_LOW_VALUE) %>" ><bean:message key="lfc.low.value" /></html:option>
+      							<html:option value="<%=String.valueOf(TracingConstants.LFC_ITEM_HIGH_VALUE) %>" ><bean:message key="lfc.high.value" /></html:option>
+           					</html:select>
+						</td>
+					</tr>
+				</table>
+				<br/>
+     				<h1 class="green">
 			        	<bean:message key="header.item.information" />
 			        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 			        </h1>
@@ -215,92 +253,76 @@
    				<bean:message key="message.required" />
      				<table class="<%=cssFormClass %>" cellpadding=0 cellspacing=0 >
      					<tr>
-     						<td>
-								<bean:message key="colname.lfc.item.received.date" />
-								(<%= a.getDateformat().getFormat() %>)&nbsp;<span class="reqfield">*</span>
-								<br>
-								<html:text property="disReceivedDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.enterItemsForm,'disReceivedDate','calendar','<%= a.getDateformat().getFormat() %>'); return false;">
-							</td>
-							<td>
-								<br>
+     						<td style="width:33%;">
 								<bean:message key="colname.lfc.item.id" />&nbsp;<span class="reqfield">*</span>
 								<br>
-								<html:text property="found.barcode" size="12" styleClass="textfield" />
+								<html:text property="found.barcode" size="12" styleId="barcode" styleClass="textfield" />
 							</td>
-							<td>
-								<br>
+							<td style="width:33%;">
 	           					<bean:message key="colname.lfc.category" />&nbsp;<span class="reqfield">*</span>
 	           					<br/>
 	           					<input type="hidden" name="changesubcategory">
-	           					<html:select name="enterItemsForm" property="found.item.category" styleClass="dropdown" onchange="getSubCategory();" >
+	           					<html:select name="enterItemsForm" property="found.item.category" styleClass="dropdown" styleId="category" onchange="getSubCategory();" >
 	           						<html:option value="0"><bean:message key="option.lf.please.select" /></html:option>
 	           						<html:options collection="lfcategorylist" property="id" labelProperty="description" />
 	           					</html:select>
 	           				</td>
-	           				<td>
+	           				<td style="width:33%;">
 	           					<div id="subcategorydiv">
-	           					<br>
 	           					<bean:message key="colname.lfc.subcategory" />
 	           					<br/>
-	           					<html:select name="enterItemsForm" property="found.item.subCategory" styleClass="dropdown" >
+	           					<html:select name="enterItemsForm" property="found.item.subCategory" styleClass="dropdown" styleId="subCategory" >
 	           						<option value="0"><bean:message key="option.lf.please.select" /></option>
 	      							<html:options collection="lfsubcategorylist" property="id" labelProperty="description" />
 	           					</html:select>
 	           					</div>
 	           				</td>
-	           				<td>
-	           					<br>
-	           					<bean:message key="colname.lfc.value" />
-	           					<br>
-	           					<html:select name="enterItemsForm" property="found.item.value" styleClass="dropdown" >
-	      							<html:option value="<%=String.valueOf(TracingConstants.LFC_ITEM_LOW_VALUE) %>" ><bean:message key="lfc.low.value" /></html:option>
-	      							<html:option value="<%=String.valueOf(TracingConstants.LFC_ITEM_HIGH_VALUE) %>" ><bean:message key="lfc.high.value" /></html:option>
-	           					</html:select>
-	           				</td>
      					</tr>
      					<tr>
-     						<td>
+     						<td style="width:33%;">
      							<bean:message key="colname.lfc.brand" />
      							<br>
-     							<html:text name="enterItemsForm" property="found.item.brand" size="12" styleClass="textfield" />
+     							<html:text name="enterItemsForm" property="found.item.brand" size="12" styleClass="textfield" styleId="brand" />
      						</td>
-     						<td>
+     						<td style="width:33%;">
      							<bean:message key="colname.lfc.model" />
      							<br>
-     							<html:text name="enterItemsForm" property="found.item.model" size="12" styleClass="textfield" />
-     						</td>
+     							<html:text name="enterItemsForm" property="found.item.model" size="12" styleClass="textfield" styleId="model" />
+     						</td style="width:33%;">
      						<td>
     							<bean:message key="colname.lfc.serial.number" />
      							<br>
-     							<html:text name="enterItemsForm" property="found.item.serialNumber" size="12" styleClass="textfield" />
+     							<html:text name="enterItemsForm" property="found.item.serialNumber" size="12" styleClass="textfield" styleId="serialNumber" />
      						</td>
-     						<td>
+   						</tr>
+   						<tr>
+     						<td style="width:33%;">
 	         					<bean:message key="colname.lfc.color" />
 	         					<br>
-	         					<html:select name="enterItemsForm" property="found.item.color" styleClass="dropdown" >
+	         					<html:select name="enterItemsForm" property="found.item.color" styleClass="dropdown" styleId="color" >
 	           						<option value=""><bean:message key="option.lf.please.select" /></option>
 	      							<html:options collection="lfcolorlist" property="value" labelProperty="label" />
 	           					</html:select>
 	         				</td>
-     						<td>
+     						<td style="width:33%;">
 	         					<bean:message key="colname.lfc.case.color" />
 	         					<br>
-	         					<html:select name="enterItemsForm" property="found.item.caseColor" styleClass="dropdown" >
+	         					<html:select name="enterItemsForm" property="found.item.caseColor" styleClass="dropdown" styleId="caseColor" >
 	           						<option value=""><bean:message key="option.lf.please.select" /></option>
 	      							<html:options collection="lfcolorlist" property="value" labelProperty="label" />
 	           					</html:select>
 	         				</td>
+     						<td style="width:33%;">
+    							<bean:message key="colname.lf.lostPhoneNumber" />
+     							<br>
+     							<html:text name="enterItemsForm" property="disFoundPhoneNumber" size="15" maxlength="25" styleClass="textfield" styleId="disFoundPhoneNumber" />
+     						</td>
      					</tr>
      					<tr>
      						<td colspan=3>
      							<bean:message key="colname.lfc.description" />
      							<br>
-     							<html:text name="enterItemsForm" property="found.item.description" size="40" maxlength="20" styleClass="textfield" />
-     						</td>
-     						<td colspan=2>
-    							<bean:message key="colname.lf.lostPhoneNumber" />
-     							<br>
-     							<html:text name="enterItemsForm" property="disFoundPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
+     							<html:text name="enterItemsForm" property="found.item.description" size="40" maxlength="30" styleClass="textfield" styleId="description" />
      						</td>
      					</tr>
      				</table>
@@ -317,41 +339,41 @@
 					            <td colspan=2>
 					              <bean:message key="colname.last_name.req" />
 					              <br>
-					              <html:text name="enterItemsForm" property="found.client.lastName" styleId="lastName" size="20" maxlength="20" styleClass="textfield" />
+					              <html:text name="enterItemsForm" property="found.client.lastName" styleId="lastName" size="20" maxlength="20" styleClass="textfield" styleId="lastName" />
 					            </td>
 					            <td nowrap colspan="2">
 					              <bean:message key="colname.first_name.req" />
 					              <br>
-					              <html:text name="enterItemsForm" property="found.client.firstName" size="20" maxlength="20" styleClass="textfield" />
+					              <html:text name="enterItemsForm" property="found.client.firstName" size="20" maxlength="20" styleClass="textfield" styleId="firstName" />
 					            </td>
 					            <td>
 					              <bean:message key="colname.mid_initial" />
 					              <br>
-					              <html:text name="enterItemsForm" property="found.client.middleName" size="1" maxlength="1" styleClass="textfield" />
+					              <html:text name="enterItemsForm" property="found.client.middleName" size="1" maxlength="1" styleClass="textfield" styleId="middleName" />
 					            </td>
 					        </tr>
 			            	<tr>
 				                <td colspan=2>
 				                  <bean:message key="colname.street_addr1" />
 				                  <br>
-				                  <html:text name="enterItemsForm" property="found.client.address.decryptedAddress1" size="30" maxlength="50" styleClass="textfield" />
+				                  <html:text name="enterItemsForm" property="found.client.address.decryptedAddress1" size="30" maxlength="50" styleClass="textfield" styleId="addr1" />
 				                </td>
 				                <td colspan=3>
 				                  <bean:message key="colname.street_addr2" />
 				                  <br>
-				                  <html:text name="enterItemsForm" property="found.client.address.decryptedAddress2" size="30" maxlength="50" styleClass="textfield" />
+				                  <html:text name="enterItemsForm" property="found.client.address.decryptedAddress2" size="30" maxlength="50" styleClass="textfield" styleId="addr2" />
 				                </td>
 				              </tr>
 				              <tr>
 				                <td>
 				                  <bean:message key="colname.city" />
 				                  <br>
-				                  <html:text name="enterItemsForm" property="found.client.address.decryptedCity" size="10" maxlength="50" styleClass="textfield" />
+				                  <html:text name="enterItemsForm" property="found.client.address.decryptedCity" size="10" maxlength="50" styleClass="textfield" styleId="city" />
 				                </td>
 				                <td>
 				                  <bean:message key="colname.state" />
 				                  <br />
-				                  <html:select name="enterItemsForm" property="found.client.address.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" >
+				                  <html:select name="enterItemsForm" property="found.client.address.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" styleId="state" >
 				                  	<html:option value="">
 					                    <bean:message key="select.none" />
 				                    </html:option>
@@ -366,7 +388,7 @@
 				                <td>
 				                  <bean:message key="colname.zip" />
 				                  <br>
-				                  <html:text name="enterItemsForm" property="found.client.address.decryptedZip" size="11" maxlength="11" styleClass="textfield" />
+				                  <html:text name="enterItemsForm" property="found.client.address.decryptedZip" size="11" maxlength="11" styleClass="textfield" styleId="zip" />
 				                </td>
 				                <td>
 				                  <bean:message key="colname.country" />
@@ -383,7 +405,7 @@
 				              	<td colspan="2">
 				              		<bean:message key="colname.lf.primary.phone" />
 				              		<br/>
-				              		<html:text name="enterItemsForm" property="primaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
+				              		<html:text name="enterItemsForm" property="primaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" styleId="primaryPhone" />
 				              		<html:select name="enterItemsForm" property="primaryNumberType" styleClass="dropdown" >
 				              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
@@ -395,7 +417,7 @@
 				              	<td colspan="3">
 				              		<bean:message key="colname.lf.secondary.phone" />
 				              		<br/>
-				              		<html:text name="enterItemsForm" property="secondaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
+				              		<html:text name="enterItemsForm" property="secondaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" styleId="secondaryPhone" />
 				              		<html:select name="enterItemsForm" property="secondaryNumberType" styleClass="dropdown" >
 				              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME)%>"><bean:message key="option.lf.home" /></html:option>
@@ -409,7 +431,7 @@
 				              	<td colspan="5" >
 				              		<bean:message key="colname.lf.email" />
 				              		<br />
-				              		<html:text name="enterItemsForm" property="found.client.decryptedEmail" size="30" maxlength="100" styleClass="textfield" />
+				              		<html:text name="enterItemsForm" property="found.client.decryptedEmail" size="30" maxlength="100" styleClass="textfield" styleId="email" />
 				              	</td>
 				              </tr>
 						</table>
@@ -459,7 +481,7 @@
 							<% 	if (needsVerification) { %>
 								<div id="moveDiv_<%=i %>" >
 									<span style="font-weight: bold;" ><bean:message key="lfc.bin.id" />:&nbsp;</span>
-									<html:text name="enterItemsForm" property="found.binId" size="5" maxlength="50" styleClass="textfield" />
+									<html:text name="enterItemsForm" property="found.binId" size="5" maxlength="50" styleClass="textfield" styleId="binId" />
 									<center>
 										<input class="button" type="button" value='<bean:message key="lfc.button.item.moved" />' onClick="updateItemLocation('summaryItem_<%=i %>','<%=i %>','<%=fho.getUniqueId() %>')">
 									</center>
