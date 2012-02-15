@@ -405,7 +405,7 @@
 	
 	<target name="build-central-ustest">
 		<property name="staging.project" value="us-central" />
-		<property name="staging.env" value="testing" />
+		<property name="staging.env" value="dev" />
 		<property name="client.name" value="central" />
 		<property name="environment.name" value="ustest" />
 		<property name="ear.name" value="NTServices_1_0.ear" />
