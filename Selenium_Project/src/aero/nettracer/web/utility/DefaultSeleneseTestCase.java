@@ -13,7 +13,8 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	
 	public void goToTaskManager() {
 		if (!selenium.isTextPresent("Task Manager Home")) {
-			selenium.click("menucol_0.0");
+//			selenium.click("menucol_0.0");
+			selenium.click("//a[@id='menucol_0.0']/u");
 			waitForPageToLoadImproved();
 		}
 	}

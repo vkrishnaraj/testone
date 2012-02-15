@@ -16,7 +16,6 @@ public class LF_ClearPendingDeliveries extends LoginUtil {
 	public void testClearPendingDeliveries() {
 		goToTaskManager();
 		selenium.click("//div[@id='maincontent']/form/table[2]/tbody/tr[7]/td/a");
-//		selenium.click("//ul[@id='menubuilder0']/li[5]/a");
 		waitForPageToLoadImproved();
 		int i = 1;
 		if (checkNoErrorPage()) {
