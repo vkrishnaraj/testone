@@ -136,7 +136,7 @@ public class LF_CreateDelivery extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("Tracking Number:  654654654"));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
 			selenium.click("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a");
-			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
+//			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CD: Failed to load the Found Item: " + LF_CreateDelivery.foundId);
@@ -187,7 +187,7 @@ public class LF_CreateDelivery extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("Delivery rejected"));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
 			selenium.click("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a");
-			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
+//			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CD: Failed to load the Found Item: " + LF_CreateDelivery.foundId);
@@ -238,7 +238,7 @@ public class LF_CreateDelivery extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("Picked up by customer"));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
 			selenium.click("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a");
-			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
+//			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CD: Failed to load the Found Item: " + LF_CreateDelivery.foundId);
