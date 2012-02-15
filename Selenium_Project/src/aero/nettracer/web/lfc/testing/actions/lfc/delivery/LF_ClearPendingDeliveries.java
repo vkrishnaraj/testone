@@ -14,12 +14,7 @@ public class LF_ClearPendingDeliveries extends LoginUtil {
 
 	@Test
 	public void testClearPendingDeliveries() {
-		System.out.println("CPD: Attempting to navigate to the Task Manager page.");
 		goToTaskManager();
-		if (!checkNoErrorPage()) {
-			System.out.println("CPD: An error occurred in navigating to the Task Manager.");
-			return;
-		}
 		selenium.click("//div[@id='maincontent']/form/table[2]/tbody/tr[7]/td/a");
 //		selenium.click("//ul[@id='menubuilder0']/li[5]/a')]");
 		waitForPageToLoadImproved();
