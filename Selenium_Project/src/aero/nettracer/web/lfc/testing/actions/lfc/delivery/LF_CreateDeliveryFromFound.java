@@ -164,7 +164,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Delivery rejected"));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
+			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
@@ -211,7 +211,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Picked up by customer"));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
+			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
@@ -223,7 +223,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
 			verifyTrue(selenium.isTextPresent("Picked up by customer"));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
+			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
 			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
