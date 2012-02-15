@@ -88,9 +88,6 @@
          				<td class="header">
          					<bean:message key="colname.lf.item.description" />
          				</td>
-         				<td class="header">
-         					<bean:message key="colname.lf.action" />
-         				</td>
          			</tr>
          			<logic:iterate indexId="i" id="item" name="handleItemsForm" property="foundItems" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
          				<% if (item.getType() == TracingConstants.LF_TYPE_FOUND) { %>
@@ -106,11 +103,6 @@
          					</td>
          					<td style="width:30%;">
          						<%=item.getDescription() == null || item.getDescription().isEmpty() ? "&nbsp;" : item.getDescription() %>
-         					</td>
-         					<td style="width:30%;">
-         						<a href='create_delivery.do?itemId=<%=item.getId() %>'><bean:message key="lf.create.delivery" /></a>,&nbsp;
-         						<a href='create_delivery.do?itemId=<%=item.getId() %>&deliveryRejected=1'><bean:message key="lf.delivery.rejected" /></a>,&nbsp;
-         						<a href='create_delivery.do?itemId=<%=item.getId() %>&pickedUp=1'><bean:message key="lf.picked.up" /></a>
          					</td>
          				</tr>
          				<% } %>

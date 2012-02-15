@@ -89,6 +89,29 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 	}
 	
 	@Test
+	public void testItemsToDeliverPage() {
+		selenium.click("//a[contains(@href, 'view_items_deliver.do')]");
+		waitForPageToLoadImproved();
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent(LF_CreateDelivery.foundId));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td/a"));
+			verifyTrue(selenium.isTextPresent("To Be Delivered"));
+		} else {
+			System.out.println("CDFF: Failed to load the Items to Deliver page.");
+			return;
+		}
+		
+		selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td/a");
+		waitForPageToLoadImproved();
+		
+		if (!checkNoErrorPage()) {
+			System.out.println("CDFF: Failed to return to the Found Item page.");
+			return;
+		}
+	}
+	
+	@Test
 	public void testTrackingNumber() throws Exception {
     	selenium.type("//div[@id='maincontent']/table[5]/tbody/tr[2]/td/input", "12341234");
 		selenium.click("//div[@id='maincontent']/center[3]/input[2]");
@@ -182,51 +205,61 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 	}
 	
-//	@Test
-//	public void testPickedUpByCustomer() {
-//		selenium.click("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[3]/a");
-//		waitForPageToLoadImproved();
-//		
-//		if (checkNoErrorPage()) {
-//			verifyTrue(selenium.isTextPresent("Picked up by customer"));
-//			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
-//			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
-//			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("CDFF: An error occured after clicking Picked Up by Customer on the Found Item page.");
-//			return;
-//		}
-//		
-//		if (checkNoErrorPage()) {
-//			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
-//			verifyTrue(selenium.isTextPresent("Picked up by customer"));
-//			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
-//			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("CDFF: An error occured while loading the Lost Report from the Found Item page.");
-//			return;
-//		}
-//		
-//		if (checkNoErrorPage()) {
-//			verifyEquals("Open", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
-//			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td/a");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("CDFF: An error occurred on the Lost Report page while un-doing Picked Up by Customer.");
-//			return;
-//		}
-//
-//		if (checkNoErrorPage()) {
-//			verifyEquals("Open", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
-//			verifyDeliveryOptions();
-//		} else {
-//			System.out.println("CDFF: Failed to load the Found Item after verifying the Lost Report.");
-//			return;
-//		}
-//		
-//	}
+	@Test
+	public void testPickedUpByCustomer() {
+		selenium.click("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[3]/a");
+		waitForPageToLoadImproved();
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Picked up by customer"));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
+			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
+			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CDFF: An error occured after clicking Picked Up by Customer on the Found Item page.");
+			return;
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
+			verifyTrue(selenium.isTextPresent("Picked up by customer"));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td[2]/a"));
+			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CDFF: An error occured while loading the Lost Report from the Found Item page.");
+			return;
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyEquals("Open", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
+			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td/a");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CDFF: An error occurred on the Lost Report page while un-doing Picked Up by Customer.");
+			return;
+		}
+
+		if (checkNoErrorPage()) {
+			verifyEquals("Open", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
+			verifyDeliveryOptions();
+		} else {
+			System.out.println("CDFF: Failed to load the Found Item after verifying the Lost Report.");
+			return;
+		}
+		
+	}
+	
+	private void verifyDeliveryInformationPresent() {
+		
+		// Create Delivery
+		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a"));
+		// Delivery Rejected
+		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a[2]"));
+		// Picked Up by Customer
+		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a[3]"));
+	}
 	
 	private void verifyDeliveryOptions() {
 		verifyTrue(selenium.isTextPresent("Tracking Number:"));
