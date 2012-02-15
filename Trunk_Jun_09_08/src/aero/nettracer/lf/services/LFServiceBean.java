@@ -1895,7 +1895,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	public void sendFoundEmail(long id){
+	public boolean sendFoundEmail(long id){
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
 		if(!lost.isFoundEmail()){
@@ -1908,8 +1908,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				} catch (UpdateException e) {
 					e.printStackTrace();
 				}
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public void closeLostAndEmail(long id, Agent agent){
