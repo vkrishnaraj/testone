@@ -86,29 +86,28 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			System.out.println("CDFF: An error occurred while manually matching the Lost Report and Found Item.");
 			return;
 		}
-	}
-	
-	@Test
-	public void testItemsToDeliverPage() {
+
+		// Verify the Items to Deliver page
 		selenium.click("//a[contains(@href, 'view_items_deliver.do')]");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(LF_CreateDelivery.foundId));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td/a"));
+			verifyTrue(selenium.isTextPresent(LF_CreateDeliveryFromFound.foundId));
+			verifyTrue(selenium.isElementPresent("//a[contains(text(),'" + LF_CreateDeliveryFromFound.foundId + "')]"));
 			verifyTrue(selenium.isTextPresent("To Be Delivered"));
 		} else {
 			System.out.println("CDFF: Failed to load the Items to Deliver page.");
-			return;
+			verifyTrue(false);
 		}
 		
-		selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td/a");
+		selenium.click("//a[contains(text(),'" + LF_CreateDeliveryFromFound.foundId + "')]");
 		waitForPageToLoadImproved();
 		
 		if (!checkNoErrorPage()) {
 			System.out.println("CDFF: Failed to return to the Found Item page.");
 			return;
 		}
+		
 	}
 	
 	@Test
