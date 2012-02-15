@@ -297,7 +297,16 @@
 			         						<% 
 			         						   int statusId = match.getStatus().getStatus_ID();
 			         						   if (statusId == TracingConstants.LF_TRACING_CONFIRMED) { %>
-			         							<a href='create_found_item.do?unconfirm=1&matchId=<%=match.getId() %>'><bean:message key="button.un_match" /></a>
+			         							<a href='create_found_item.do?unconfirm=1&matchId=<%=match.getId() %>'><bean:message key="button.un_match" /></a>,<br/> 
+				         							<% 
+				         							String email = match.getLost().getClient().getDecryptedEmail();
+				         							if (email != null && !email.isEmpty()) {
+				         							   if (match.getLost().isFoundEmail()) { %>
+				         								<bean:message key="message.customer.notified" />
+				         							<% } else { %>
+				         								<a href='create_found_item.do?email=1&matchId=<%=match.getId() %>'><bean:message key="button.email.customer" /></a>
+				         							<% } 
+			         								}%>
 			         						<% } else { %>
 			         							<a href='create_found_item.do?confirm=1&matchId=<%=match.getId() %>'><bean:message key="button.do_match" /></a>,&nbsp;
 			         							<a href='create_found_item.do?reject=1&matchId=<%=match.getId() %>'><bean:message key="button.reject" /></a>

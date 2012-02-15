@@ -102,7 +102,7 @@ public class FoundItemAction extends CheckedAction {
 			if (found == null) {
 				found = LFUtils.createLFFound(user);
 			}
-		}else {
+		} else {
 			fiForm.populateRemarks();
 			found = fiForm.getFound();
 		}
@@ -249,7 +249,23 @@ public class FoundItemAction extends CheckedAction {
 					}
 				} else if (request.getParameter("unconfirm") != null) {
 					if(LFServiceWrapper.getInstance().undoMatch(matchId)){
-						found = LFServiceWrapper.getInstance().getFoundItem(fiForm.getFound().getId());
+						found = serviceBean.getFoundItem(fiForm.getFound().getId());
+					}
+				} else if (request.getParameter("email") != null) {
+					try {
+						LFMatchHistory match = getMatchById(fiForm.getTraceResults(), matchId);
+						if (match != null && serviceBean.sendFoundEmail(match.getLost().getId())) {
+							found = serviceBean.getFoundItem(fiForm.getFound().getId());
+						} else {
+							ActionMessage error = new ActionMessage("message.email.error");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+						}
+					} catch (Exception ex) {
+						logger.error(ex, ex);
+						ActionMessage error = new ActionMessage("message.email.error");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
 					}
 				}
 			} catch (NumberFormatException nfe) {
@@ -272,7 +288,7 @@ public class FoundItemAction extends CheckedAction {
 				}
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 			}
-		}
+		} 
 
 		fiForm.setFound(found);
 		if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"") && found.getId() != 0) {
@@ -298,5 +314,16 @@ public class FoundItemAction extends CheckedAction {
 		}
 		return null;
 	}
+
+	private LFMatchHistory getMatchById(List<LFMatchHistory> items, long id) {
+		for (LFMatchHistory item: items) {
+			if (item.getId() == id) {
+				return item;
+			}
+		}
+		return null;
+	}
+	
+	
 	
 }
