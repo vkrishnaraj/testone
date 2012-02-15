@@ -581,7 +581,7 @@ public class Reservation implements ReservationInterface {
 			
 			rqDoc.getSabreCommandLLSRQ().getRequest().setOutput(SabreCommandLLSRQ.Request.Output.SCREEN);
 			
-
+			validate(rqDoc);
 			SabreCommandLLSRSDocument responseDocument = stub
 					.sabreCommandLLSRQ(rqDoc, mhDoc, securityDocument);
 
@@ -619,6 +619,7 @@ public class Reservation implements ReservationInterface {
 				logger.info(ADD_REMARK + connParams.getLoggingString()
 						+ " Remark: " + remark);
 
+				validate(rqDoc);
 				AddRemarkRSDocument responseDocument = stub.addRemarkRQ(rqDoc,
 						mhDoc, securityDocument);
 
@@ -650,6 +651,7 @@ public class Reservation implements ReservationInterface {
 
 			logger.info(END_TRANSACTION + connParams.getLoggingString());
 
+			validate(rqDoc);
 			EndTransactionRSDocument responseDocument = stub.endTransactionRQ(
 					rqDoc, mhDoc, securityDocument);
 
@@ -676,11 +678,15 @@ public class Reservation implements ReservationInterface {
 					.newInstance();
 			IgnoreTransactionRQ rqDoc1 = rqDoc.addNewIgnoreTransactionRQ();
 			rqDoc1.setVersion("2003A.TsabreXML1.0.1");
-
+			//rqDoc1.addNewTPAExtensions().addNewMessagingDetails().addNewMDRSubset().setCode("PNR");
+			com.sabre.webservices.sabrexml._2003._07.IgnoreTransactionRQDocument.IgnoreTransactionRQ.POS.Source source = rqDoc1.addNewPOS().addNewSource();
+			source.setPseudoCityCode(connParams.getPseudoCityCode());
 			rqDoc1.addNewIgnoreTransaction().setInd(true);
 
 			logger.info(IGNORE_TRANSACTION + connParams.getLoggingString());
 
+			validate(rqDoc);
+			logger.debug(IGNORE_TRANSACTION + rqDoc.toString());
 			IgnoreTransactionRSDocument responseDocument = stub
 					.ignoreTransactionRQ(rqDoc, mhDoc, securityDocument);
 
@@ -755,9 +761,10 @@ public class Reservation implements ReservationInterface {
 					ACTION_SESSION_CLOSE_RQ);
 			SessionCloseRQDocument rqDoc = SessionCloseRQDocument.Factory
 					.newInstance();
-			rqDoc.addNewSessionCloseRQ();
+			rqDoc.addNewSessionCloseRQ().addNewPOS().addNewSource().setPseudoCityCode(connParams.getPseudoCityCode());
 
 			logger.info(CLOSE_PREFIX + connParams.getLoggingString());
+			validate(rqDoc);
 			SessionCloseRSDocument responseDocument = stub.sessionCloseRQ(
 					rqDoc, mhDoc, securityDocument);
 
@@ -784,6 +791,7 @@ public class Reservation implements ReservationInterface {
 			rqDoc.addNewSessionValidateRQ();
 
 			logger.info(VALIDATE_SESSION + connParams.getLoggingString());
+			validate(rqDoc);
 			SessionValidateRSDocument responseDocument = stub
 					.sessionValidateRQ(rqDoc, mhDoc, securityDocument);
 
@@ -853,10 +861,11 @@ public class Reservation implements ReservationInterface {
 					.newInstance();
 			MessageHeaderDocument mhDoc = getMessageHeader(connParams,
 					ACTION_SESSION_CREATE_RQ);
-			rqDoc.addNewSessionCreateRQ();
+			rqDoc.addNewSessionCreateRQ().addNewPOS().addNewSource().setPseudoCityCode(connParams.getPseudoCityCode());
 
 			logger.info(CREATE_PREFIX + connParams.getLoggingString());
 
+			validate(rqDoc);
 			SessionCreateRSDocument responseDocument = stub.sessionCreateRQ(
 					rqDoc, mhDoc, securityDocument);
 			logger.debug(CREATE_PREFIX + responseDocument.toString());
