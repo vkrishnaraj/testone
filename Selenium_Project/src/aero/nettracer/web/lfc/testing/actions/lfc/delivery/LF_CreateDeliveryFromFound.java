@@ -223,7 +223,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
 			verifyTrue(selenium.isTextPresent("Picked up by customer"));
-			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a"));
 			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
