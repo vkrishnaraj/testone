@@ -48,37 +48,10 @@ public class CreateDeliveryAction extends CheckedAction {
 			long itemId = Long.valueOf(request.getParameter("itemId"));
 			item = serviceBean.getItem(itemId);
 			if (request.getParameter("pickedUp") != null) {
-//				List<LFItem> items = serviceBean.getItemsByLostFoundId(item.getFound().getId(), TracingConstants.LF_TYPE_FOUND);
-//				for (LFItem i: items) {
-//					i.setTrackingNumber(null);
-//					i.setDispositionId(TracingConstants.LF_DISPOSITION_PICKED_UP);
-//					i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-//					i.getFound().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-//					i.getFound().setDeliveredDate(new Date());
-//					
-//					serviceBean.saveOrUpdateLostReport(i.getLost(), user);
-//					serviceBean.saveOrUpdateFoundItem(i.getFound(), user);
-//				}
-//				response.sendRedirect("view_items_deliver.do");
-//				return null;
 				dispositionToUse = TracingConstants.LF_DISPOSITION_PICKED_UP;
 			} else if (request.getParameter("deliveryRejected") != null) {
 				item.setDeliveryRejected(true);
 				dispositionToUse = TracingConstants.LF_DISPOSITION_OTHER;
-//				List<LFItem> items = serviceBean.getItemsByLostFoundId(item.getFound().getId(), TracingConstants.LF_TYPE_FOUND);
-//				for (LFItem i: items) {
-//					i.setTrackingNumber(null);
-//					i.setDeliveryRejected(true);
-//					i.setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
-//					i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-//					i.getFound().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-//					i.getFound().setDeliveredDate(new Date());
-//					
-//					serviceBean.saveOrUpdateLostReport(i.getLost(), user);
-//					serviceBean.saveOrUpdateFoundItem(i.getFound(), user);
-//				}
-//				response.sendRedirect("view_items_deliver.do");
-//				return null;
 			}
 			
 			if (dispositionToUse == -1) {			
@@ -87,19 +60,6 @@ public class CreateDeliveryAction extends CheckedAction {
 		} else if (request.getParameter("save") != null) {
 			item = cdForm.getItem();
 			dispositionToUse = TracingConstants.LF_DISPOSITION_DELIVERED;
-//			List<LFItem> items = serviceBean.getItemsByLostFoundId(item.getFound().getId(), TracingConstants.LF_TYPE_FOUND);
-//			for (LFItem i: items) {
-//				i.setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
-//				i.setTrackingNumber(item.getTrackingNumber());
-//				i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-//				i.getFound().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-//				i.getFound().setDeliveredDate(new Date());
-//
-//				serviceBean.saveOrUpdateLostReport(i.getLost(), user);
-//				serviceBean.saveOrUpdateFoundItem(i.getFound(), user);
-//			}
-//			response.sendRedirect("view_items_deliver.do");
-//			return null;
 		}
 		
 		if (dispositionToUse != -1) {
