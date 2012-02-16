@@ -286,16 +286,6 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 	}
 	
-	private void verifyDeliveryInformationPresent() {
-		
-		// Create Delivery
-		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a"));
-		// Delivery Rejected
-		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a[2]"));
-		// Picked Up by Customer
-		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a[3]"));
-	}
-	
 	private void verifyDeliveryOptions() {
 		verifyTrue(selenium.isTextPresent("Tracking Number:"));
 		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td/input"));
