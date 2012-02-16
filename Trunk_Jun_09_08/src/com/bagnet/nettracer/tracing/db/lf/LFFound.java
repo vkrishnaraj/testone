@@ -46,6 +46,7 @@ public class LFFound implements LFObject, Serializable {
 	
 	private Date receivedDate;
 	private Date foundDate;
+	private Date deliveredDate;
 
 	@ManyToOne
 	@JoinColumn(name = "station_ID", nullable = false)
@@ -310,4 +311,12 @@ public class LFFound implements LFObject, Serializable {
 		this.receivedDate = receivedDate;
 	}
 
+	public Date getDeliveredDate() {
+		return deliveredDate;
+	}
+
+	public void setDeliveredDate(Date deliveredDate) {
+		this.deliveredDate = deliveredDate;
+	}
+	
 }

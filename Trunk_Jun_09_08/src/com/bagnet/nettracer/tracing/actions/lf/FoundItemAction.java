@@ -1,10 +1,8 @@
 package com.bagnet.nettracer.tracing.actions.lf;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -28,12 +26,10 @@ import aero.nettracer.lf.services.exception.UpdateException;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
-import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.forms.lf.FoundItemForm;
 import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
@@ -112,6 +108,7 @@ public class FoundItemAction extends CheckedAction {
 				if(found.getItem() != null && found.getItem().getTrackingNumber() != null && found.getItem().getTrackingNumber().trim().length() > 0){
 					//we have a manual delivery
 					found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
+					found.setDeliveredDate(new Date());
 					found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
 					if (found.getItem().getLost() != null) {
 						found.getItem().getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
@@ -187,6 +184,7 @@ public class FoundItemAction extends CheckedAction {
 					}
 				}
 			}
+			found.setDeliveredDate(null);
 			found.setStatusId(TracingConstants.LF_STATUS_OPEN);
 			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 		} else if (request.getParameter("unmatchItem") != null) {
@@ -220,6 +218,7 @@ public class FoundItemAction extends CheckedAction {
 		} else if (request.getParameter("pickup") != null){
 			if(found.getItem() != null){
 				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_PICKED_UP);
+				found.setDeliveredDate(new Date());
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
 				if(found.getItem().getLost() != null){
 					found.getItem().getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
@@ -275,6 +274,7 @@ public class FoundItemAction extends CheckedAction {
 			if(found.getItem() != null){
 				found.getItem().setDeliveryRejected(true);
 				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
+				found.setDeliveredDate(new Date());
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
 				if(found.getItem().getLost() != null){
 					found.getItem().getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
