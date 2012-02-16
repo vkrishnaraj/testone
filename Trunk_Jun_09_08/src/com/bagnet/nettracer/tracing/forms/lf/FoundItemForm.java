@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.forms.lf;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -193,6 +194,32 @@ public final class FoundItemForm extends ActionForm {
 	public void setFoundItem(LFItem foundItem) {
 		if (found != null) {
 			found.setItem(foundItem);
+		}
+	}
+	
+	public String getDispCheckAmount() {
+		String toReturn = "";
+		try {
+			DecimalFormat df = new DecimalFormat("#0.00");
+			if (found.getCheckAmount() > 0) {
+				toReturn = df.format(found.getCheckAmount());
+			}
+		} catch (NumberFormatException nfe) {
+			System.err.println(nfe.getStackTrace());
+		}
+		return toReturn;
+	}
+	
+	public void setDispCheckAmount(String dispCheckAmount) {
+		try {
+			if (dispCheckAmount == null || dispCheckAmount.isEmpty()) {
+				found.setCheckAmount(0);
+			} else {
+				double checkAmount = Double.valueOf(dispCheckAmount);
+				found.setCheckAmount(checkAmount);
+			}
+		} catch (NumberFormatException nfe) {
+			System.err.println(nfe.getStackTrace());
 		}
 	}
 	

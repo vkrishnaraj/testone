@@ -155,6 +155,42 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			System.out.println("CDFF: Failed to load the Found Item after verifying the Lost Report.");
 			return;
 		}
+		
+		selenium.type("//input[@id='checkAmount']", "a");
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		assertEquals("Check Amount must be a number greater than zero.", selenium.getAlert());
+		selenium.type("id=checkAmount", "-1");
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		assertEquals("Check Amount must be a number greater than zero.", selenium.getAlert());
+		selenium.type("//input[@id='checkAmount']", "15");
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		assertEquals("Tracking Number and Check Number must be supplied if a Check Amount is entered.", selenium.getAlert());
+		selenium.type("//input[@id='checkNumber']", "1234");
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		assertEquals("Tracking Number and Check Number must be supplied if a Check Amount is entered.", selenium.getAlert());
+		selenium.type("//input[@id='trackingNumber']", "123123123");
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		waitForPageToLoadImproved();
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			verifyTrue(selenium.isTextPresent("Tracking Number:  123123123"));
+			verifyEquals("1234", selenium.getValue("//input[@id='checkNumber']"));
+			verifyEquals("15.00", selenium.getValue("//input[@id='checkAmount']"));
+			selenium.click("xpath=(//a[contains(text(),'Undo')])[2]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CDFF: An error occurred while saving the Found Item with check information.");
+			return;
+		}
+
+		if (checkNoErrorPage()) {
+			selenium.type("//input[@id='checkNumber']", "");
+			selenium.type("//input[@id='checkAmount']", "");
+		} else {
+			System.out.println("CDFF: An error occurred while removing delivery information from the Found Item.");
+			return;
+		}
 	}
 	
 	@Test

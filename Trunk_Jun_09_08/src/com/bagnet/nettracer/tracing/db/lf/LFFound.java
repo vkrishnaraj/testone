@@ -47,6 +47,9 @@ public class LFFound implements LFObject, Serializable {
 	private Date receivedDate;
 	private Date foundDate;
 	private Date deliveredDate;
+	
+	private String checkNumber;
+	private double checkAmount;
 
 	@ManyToOne
 	@JoinColumn(name = "station_ID", nullable = false)
@@ -317,6 +320,22 @@ public class LFFound implements LFObject, Serializable {
 
 	public void setDeliveredDate(Date deliveredDate) {
 		this.deliveredDate = deliveredDate;
+	}
+
+	public String getCheckNumber() {
+		return checkNumber;
+	}
+
+	public void setCheckNumber(String checkNumber) {
+		this.checkNumber = checkNumber;
+	}
+
+	public double getCheckAmount() {
+		return checkAmount;
+	}
+
+	public void setCheckAmount(double checkAmount) {
+		this.checkAmount = checkAmount;
 	}
 	
 }

@@ -225,6 +225,25 @@
 					currentElement.focus();
 			        return false;
 				}
+			} else if (elementName == "dispCheckAmount") {
+				if (currentElement.value != "" && currentElement.value != "0") {
+					if (isNaN(currentElement.value) || currentElement.value.indexOf('-') != -1) {
+						alert("<%=(String) bundle.getString("lf.colname.check.amount") %>" + " " + "<%=(String) bundle.getString("error.message.must.be.a.number") %>");
+						currentElement.focus();
+						return false;
+					} else {
+						var trackingNumber = document.getElementById("trackingNumber");
+						var checkNumber = document.getElementById("checkNumber");
+						
+						if (!trackingNumber.value || !checkNumber ||
+							trackingNumber.value.length == 0 || checkNumber.value.length == 0) {
+							alert("<%=(String) bundle.getString("error.message.check.tracking.required") %>");
+							currentElement.focus();
+							return false;
+								
+						}
+					}
+				}				
 			}
 		}
 		return true;

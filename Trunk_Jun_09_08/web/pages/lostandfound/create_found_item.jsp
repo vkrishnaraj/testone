@@ -203,7 +203,7 @@
 	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form focus="found.barcode" action="create_found_item.do" method="post" >
+<html:form focus="found.barcode" action="create_found_item.do" method="post" onsubmit="return validateFoundItemForm(this);" >
 <input type="hidden" name="delete_these_elements" value="" />
 <html:hidden property="matchItem" styleId="matchItem" value="" />
 <html:hidden property="itemId" styleId="itemId" value="" />
@@ -808,7 +808,7 @@
 					<tr>
 						<td style="width:50%;" >
 							<bean:message key="colname.lf.tracking.number" />:&nbsp;
-							<html:text name="foundItemForm" property="foundItem.trackingNumber" size="20" styleClass="textfield" />
+							<html:text name="foundItemForm" property="foundItem.trackingNumber" size="20" styleClass="textfield" styleId="trackingNumber" />
 							&nbsp;
 						</td>
 						<td  style="width:25%;" >
@@ -819,6 +819,16 @@
 						</td>
 					</tr>
 				<% } %>
+					<tr>
+						<td>
+							<bean:message key="lf.colname.check.number" />:&nbsp;
+							<html:text name="foundItemForm" property="found.checkNumber" size="10" styleClass="textfield" styleId="checkNumber" />
+						</td>
+						<td <% if (!haveDeliveryInformation) { %>colspan=2<% } %>>
+							<bean:message key="lf.colname.check.amount" />:&nbsp;
+							<html:text name="foundItemForm" property="dispCheckAmount" size="10" styleClass="textfield" styleId="checkAmount" />
+						</td>
+					</tr>
 				</table>
 				<br/>
          		<h1 class="green">
