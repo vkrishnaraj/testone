@@ -218,6 +218,12 @@ public class Reservation implements ReservationInterface {
 
 				pax.setFirstname(pn.getGivenName());
 				pax.setLastname(pn.getSurname());
+				if (connParams.getCompany() != null && connParams.getCompany().equals("WS")
+						&& pn.getProfileIndexArray() != null && pn.getProfileIndexArray(0) != null) {
+					pax.setFfAirline("WS");
+					pax.setFfNumber(pn.getProfileIndexArray(0));
+					pax.setFfStatus("PROFILE");
+				}
 				aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address add = pax
 						.addNewAddresses();
 				
@@ -342,36 +348,38 @@ public class Reservation implements ReservationInterface {
 				check.setTimeChecked(bag.getCheckedTime());
 			}
 
-			for (SabreParsedBagItin itin : dto.getItin()) {
-				Itinerary i = res.addNewBagItinerary();
-				i.setAirline(itin.getAirline());
-				i.setArrivalCity(itin.getArrivalCity());
-				i.setTimeChecked(itin.getCheckedTime());
-				i.setDepartureCity(itin.getDepartureCity());
-				i.setFlightnum(itin.getFlight());
-				
-				// Logical fix for departuretime not being present for bag itins.
-				Calendar schdeparttime = itin.getCheckedTime();
-				for (Itinerary it: res.getPassengerItineraryArray()) {
-					try {
-						if (i.getAirline().equals(it.getAirline()) 
-								&& i.getArrivalCity().equals(it.getArrivalCity())
-								&& i.getDepartureCity().equals(it.getDepartureCity())
-								&& i.getFlightnum().equals(it.getFlightnum())
-								) {
-							schdeparttime = it.getSchdeparttime();
-							
-							break;
+			if (connParams.getCompany() == null || !connParams.getCompany().equals("WS")) {
+				for (SabreParsedBagItin itin : dto.getItin()) {
+					Itinerary i = res.addNewBagItinerary();
+					i.setAirline(itin.getAirline());
+					i.setArrivalCity(itin.getArrivalCity());
+					i.setTimeChecked(itin.getCheckedTime());
+					i.setDepartureCity(itin.getDepartureCity());
+					i.setFlightnum(itin.getFlight());
+					
+					// Logical fix for departuretime not being present for bag itins.
+					Calendar schdeparttime = itin.getCheckedTime();
+					for (Itinerary it: res.getPassengerItineraryArray()) {
+						try {
+							if (i.getAirline().equals(it.getAirline()) 
+									&& i.getArrivalCity().equals(it.getArrivalCity())
+									&& i.getDepartureCity().equals(it.getDepartureCity())
+									&& i.getFlightnum().equals(it.getFlightnum())
+									) {
+								schdeparttime = it.getSchdeparttime();
+								
+								break;
+							}
+						} catch (Exception ex) {
+							// Ignore
 						}
-					} catch (Exception ex) {
-						// Ignore
 					}
+					
+					if (schdeparttime != null) {
+						i.setSchdeparttime(schdeparttime);
+					}
+					
 				}
-				
-				if (schdeparttime != null) {
-					i.setSchdeparttime(schdeparttime);
-				}
-				
 			}
 
 			int checkedLocation = 0;
