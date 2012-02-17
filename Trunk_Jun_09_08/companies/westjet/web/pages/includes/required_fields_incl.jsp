@@ -230,16 +230,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
           currentElement.focus();
           return false;
         }
-      } 
-      else if (currentElementName.indexOf(".membership") != -1) {  
-        if (currentElement.value.length != 0)
-        {
-          alert('<%=(String) bundle.getString("error.validation.leftBlank") + " " + bundle.getString("membership.information") %>');
-          currentElement.focus();
-          return false;
-        }
-      }
-      
+      }       
       else if (currentElementName.indexOf("numpassengers") != -1) {  
         if (currentElement.value.length == 0)
         {
@@ -348,23 +339,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
       currentElementName=currentElement.name;
 
 
-  	 if (currentElementName.indexOf("companycode_ID") != -1) {  
-          if (currentElement.value.length != 0)
-          {
-            alert('<%=(String) bundle.getString("error.validation.leftBlank") + " " + bundle.getString("colname.airline_membership")%>');
-            currentElement.focus();
-            return false;
-          }
-        }
-      else if (currentElementName.indexOf("membership") != -1) {  
-          if (currentElement.value.length != 0)
-          {
-            alert('<%=(String) bundle.getString("error.validation.leftBlank") + " " + bundle.getString("membership.information")%>');
-            currentElement.focus();
-            return false;
-          }
-        }	
-      else if (currentElementName.indexOf(".legfrom") != -1) {  
+  	 if (currentElementName.indexOf(".legfrom") != -1) {  
           if (currentElement.value.length == 0)
           {
                alert("<%= (String)bundle.getString( "colname.fromto") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
