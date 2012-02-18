@@ -187,11 +187,21 @@ public class Reservation implements ReservationInterface {
 	
 						SimpleDateFormat sdf = new SimpleDateFormat(
 								"yyyy-MM-dd'T'HH:mm:ss");
+						SimpleDateFormat sdf_noyear = new SimpleDateFormat(
+								"MM-dd'T'HH:mm:ss");
 						Calendar schdeparttime = new GregorianCalendar();
 						Calendar scharrivetime = new GregorianCalendar();
 	
-						schdeparttime.setTime(sdf.parse(depTime));
-						scharrivetime.setTime(sdf.parse(arrTime));
+						if (depTime.indexOf("-") < 4) {
+							schdeparttime.setTime(sdf_noyear.parse(depTime));
+						} else {
+							schdeparttime.setTime(sdf.parse(depTime));
+						}
+						if (arrTime.indexOf("-") < 4) {
+							scharrivetime.setTime(sdf_noyear.parse(arrTime));
+						} else {
+							scharrivetime.setTime(sdf.parse(arrTime));
+						}
 	
 						itin.setSchdeparttime(schdeparttime);
 						itin.setScharrivetime(scharrivetime);
