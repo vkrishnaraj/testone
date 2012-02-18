@@ -175,7 +175,8 @@ public class Reservation implements ReservationInterface {
 				ItemType[] items = ti.getItineraryInfo().getReservationItems().getItemArray();
 
 				for (ItemType item : items) {
-					FlightSegment air = item.getFlightSegment();
+					if (item.getFlightSegment() != null) {
+						FlightSegment air = item.getFlightSegment();
 						Itinerary itin = res.addNewPassengerItinerary();
 						itin.setDepartureCity(air.getOriginLocation()
 								.getLocationCode());
@@ -211,6 +212,7 @@ public class Reservation implements ReservationInterface {
 							itin.setAirline(air.getOperatingAirlineArray(0).getCode());
 						}
 						air.getArrivalDateTime();
+					}
 				}
 			}
 
