@@ -80,7 +80,7 @@
             <td colspan="2">
               <center><INPUT type="button" Id="button" value="Back" onClick="history.back()">
               &nbsp;
-              <html:submit styleId="button" property="save" onclick="if(min_pass_size.value < 8)alert('Minimum password length must be at least eigth(8) characters');">
+              <html:submit styleId="button" property="save" onclick="if(min_pass_size.value < 8){alert('Minimum password length must be at least eigth(8) characters');return false}">
                 <bean:message key="button.save" />
               </html:submit></center>
             </td>

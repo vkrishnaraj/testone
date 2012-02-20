@@ -20,6 +20,7 @@ import aero.nettracer.web.avis.testing.actions.lf.lost.AB_SearchLost;
 import aero.nettracer.web.avis.testing.actions.lf.match.AB_ConfirmMatch;
 import aero.nettracer.web.avis.testing.actions.lf.match.AB_CreateDelivery;
 import aero.nettracer.web.avis.testing.actions.lf.match.AB_ManualMatch_FoundToLost;
+import aero.nettracer.web.azul.testing.actions.nt.admin.AD_Security;
 import aero.nettracer.web.azul.testing.actions.nt.core.AD_Login;
 import aero.nettracer.web.azul.testing.actions.nt.core.AD_LoginFailure;
 import aero.nettracer.web.azul.testing.actions.nt.core.AD_LoginTest;
@@ -35,6 +36,7 @@ import aero.nettracer.web.azul.testing.actions.nt.onhands.AD_ReceiveOHD;
 import aero.nettracer.web.azul.testing.actions.nt.taskman.AD_InboxMessage;
 import aero.nettracer.web.azul.testing.actions.nt.taskman.AD_VerifyText_TaskManager;
 import aero.nettracer.web.defaul.testing.actions.nt.core.Def_Logout;
+import aero.nettracer.web.jetblue.testing.actions.nt.admin.B6_Security;
 import aero.nettracer.web.jetblue.testing.actions.nt.core.B6_Login;
 import aero.nettracer.web.jetblue.testing.actions.nt.core.B6_LoginFailure;
 import aero.nettracer.web.jetblue.testing.actions.nt.core.B6_LoginTest;
@@ -66,6 +68,7 @@ import aero.nettracer.web.lfc.testing.actions.lfc.match.LF_ConfirmMatch;
 import aero.nettracer.web.lfc.testing.actions.lfc.match.LF_ManualMatch_FoundToLost;
 import aero.nettracer.web.lfc.testing.actions.lfc.processtraceresults.LF_ProcessTraceResults;
 import aero.nettracer.web.lfc.testing.actions.lfc.taskman.LF_VerifyText_TaskManager;
+import aero.nettracer.web.spirit.testing.actions.nt.admin.NK_Security;
 import aero.nettracer.web.spirit.testing.actions.nt.core.NK_Login;
 import aero.nettracer.web.spirit.testing.actions.nt.core.NK_LoginFailure;
 import aero.nettracer.web.spirit.testing.actions.nt.core.NK_LoginTest;
@@ -81,6 +84,7 @@ import aero.nettracer.web.spirit.testing.actions.nt.onhands.NK_ReceiveOHD;
 import aero.nettracer.web.spirit.testing.actions.nt.taskman.NK_InboxMessage;
 import aero.nettracer.web.spirit.testing.actions.nt.taskman.NK_VerifyText_TaskManager;
 import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
+import aero.nettracer.web.westjet.testing.actions.nt.admin.WS_Security;
 import aero.nettracer.web.westjet.testing.actions.nt.core.WS_Login;
 import aero.nettracer.web.westjet.testing.actions.nt.core.WS_LoginFailure;
 import aero.nettracer.web.westjet.testing.actions.nt.core.WS_LoginTest;
@@ -107,6 +111,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 	AD_CreateDam_VerifyRequiredFields.class, AD_CloseDam_VerifyRequiredFields.class,
 	AD_CreatePilf_VerifyRequiredFields.class, AD_ClosePilf_VerifyRequiredFields.class,
 	AD_CreateOHD_VerifyRequiredFields.class, AD_ForwardOHD.class, AD_ReceiveOHD.class,
+	AD_Security.class,
 	// JETBLUE
 	B6_Login.class, Def_Logout.class, B6_LoginFailure.class, B6_LoginTest.class, 
 //	Def_PasswordResetNTTest.class, 
@@ -116,6 +121,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 	B6_InboxMessage.class, B6_CreateDam_VerifyRequiredFields.class, B6_CloseDam_VerifyRequiredFields.class,
 	B6_CreatePilf_VerifyRequiredFields.class, B6_ClosePilf_VerifyRequiredFields.class,
 	B6_CreateOHD_VerifyRequiredFields.class, B6_ForwardOHD.class, B6_ReceiveOHD.class,
+	B6_Security.class,
 	// SPIRIT
 	NK_Login.class, Def_Logout.class, NK_LoginFailure.class, NK_LoginTest.class, 
 //	Def_PasswordResetNTTest.class, 
@@ -125,6 +131,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 	NK_CreateDam_VerifyRequiredFields.class, NK_CloseDam_VerifyRequiredFields.class,
 	NK_CreatePilf_VerifyRequiredFields.class, NK_ClosePilf_VerifyRequiredFields.class,
 	NK_CreateOHD_VerifyRequiredFields.class, NK_ForwardOHD.class, NK_ReceiveOHD.class,
+	NK_Security.class,
 	// WESTJET
 	WS_Login.class, Def_Logout.class, WS_LoginFailure.class, WS_LoginTest.class, 
 //	Def_PasswordResetNTTest.class, 
@@ -134,6 +141,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 	WS_CreateDam_VerifyRequiredFields.class, WS_CloseDam_VerifyRequiredFields.class,
 	WS_CreatePilf_VerifyRequiredFields.class, WS_ClosePilf_VerifyRequiredFields.class,
 	WS_CreateOHD_VerifyRequiredFields.class, WS_ForwardOHD.class, WS_ReceiveOHD.class,
+	WS_Security.class,
 //	// AVIS
 	AB_LoginFailure.class, AB_Login.class,
 	AB_CreateLost_VerifyRequiredFields.class, AB_CreateFound_VerifyRequiredFields.class,
