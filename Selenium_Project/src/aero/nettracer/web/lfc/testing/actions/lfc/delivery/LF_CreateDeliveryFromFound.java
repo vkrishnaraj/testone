@@ -189,8 +189,17 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			selenium.type("//input[@id='checkNumber']", "");
 			selenium.type("//input[@id='checkAmount']", "");
+			selenium.click("xpath=(//input[@id='button'])[2]");
+			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CDFF: An error occurred while removing delivery information from the Found Item.");
+			return;
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+		} else {
+			System.out.println("CDFF: Failed to save the Found Item after removing check number and check amount.");
 			return;
 		}
 	}
