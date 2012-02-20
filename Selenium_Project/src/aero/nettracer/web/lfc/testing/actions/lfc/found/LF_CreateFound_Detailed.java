@@ -16,6 +16,8 @@ public class LF_CreateFound_Detailed extends DefaultSeleneseTestCase {
 			checkCopyrightAndQuestionMarks();
 			String found_id = String.valueOf(System.currentTimeMillis());
 			selenium.type("name=found.barcode", found_id);
+			selenium.click("//img[@id='calendar']");
+			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			selenium.type("name=item[0].brand", "Test Brand");
 			selenium.type("name=item[0].serialNumber", "123321456");
 			selenium.select("id=category_0", "label=Bags");

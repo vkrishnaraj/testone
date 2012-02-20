@@ -33,6 +33,7 @@
 
 
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
     
 	var cal1xx = new CalendarPopup();
@@ -395,7 +396,7 @@
 
             		<logic:notEmpty name="foundItemForm" property="found.barcode">
 						<td>
-							<bean:message key="colname.lf.report.id" />
+							<bean:message key="colname.lf.report.id" />&nbsp;<span class="reqfield">*</span>
          					<br>
          					<% if (enableIdField) { %>
 								<html:text name="foundItemForm" property="found.barcode" styleClass="textfield" />
@@ -406,15 +407,20 @@
 					</logic:notEmpty>
 					<logic:empty name="foundItemForm" property="found.barcode">
 						<td>
-							<bean:message key="colname.lf.report.id" />
+							<bean:message key="colname.lf.report.id" />&nbsp;<span class="reqfield">*</span>
          					<br>
 							<html:text name="foundItemForm" property="found.barcode" styleClass="textfield" />
          				</td>
          			</logic:empty>
 						<td>
-							<bean:message key="colname.lf.received.date" />
+							<bean:message key="colname.lf.received.date" />&nbsp;<span class="reqfield">*</span>
 							<br/>
-							<html:text name="foundItemForm" property="disReceivedDate" disabled="true" styleClass="disabledtextfield" />
+							<logic:empty name="foundItemForm" property="found.receivedDate" >
+								<html:text name="foundItemForm" property="disReceivedDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.foundItemForm.disReceivedDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+							</logic:empty>
+							<logic:notEmpty name="foundItemForm" property="found.receivedDate">
+								<html:text name="foundItemForm" property="disReceivedDate" disabled="true" styleClass="disabledtextfield" />
+							</logic:notEmpty>
 						</td>
 						<td>
 							<bean:message key="colname.lf.created.date" />

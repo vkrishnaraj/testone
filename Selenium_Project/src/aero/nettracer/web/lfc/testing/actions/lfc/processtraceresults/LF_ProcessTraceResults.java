@@ -55,6 +55,8 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		if (checkNoErrorPage()) {
 			LF_ProcessTraceResults.foundId = String.valueOf(System.currentTimeMillis());
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_ProcessTraceResults.foundId);
+			selenium.click("//img[@id='calendar']");
+			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/select", "label=High");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "Apple");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input", "AP1234");

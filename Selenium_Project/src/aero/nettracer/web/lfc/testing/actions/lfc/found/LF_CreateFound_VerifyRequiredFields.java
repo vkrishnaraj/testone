@@ -22,6 +22,10 @@ public class LF_CreateFound_VerifyRequiredFields extends DefaultSeleneseTestCase
 			String found_id = String.valueOf(System.currentTimeMillis());
 			selenium.type("name=found.barcode", found_id);
 			selenium.click("saveButton");
+			assertEquals("Date Received is required.", selenium.getAlert());
+			selenium.click("//img[@id='calendar']");
+			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
+			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
