@@ -48,7 +48,7 @@ public class LFFound implements LFObject, Serializable {
 	private Date foundDate;
 	private Date deliveredDate;
 	
-	private String checkNumber;
+	private int checkNumber;
 	private double checkAmount;
 
 	@ManyToOne
@@ -322,11 +322,11 @@ public class LFFound implements LFObject, Serializable {
 		this.deliveredDate = deliveredDate;
 	}
 
-	public String getCheckNumber() {
+	public int getCheckNumber() {
 		return checkNumber;
 	}
 
-	public void setCheckNumber(String checkNumber) {
+	public void setCheckNumber(int checkNumber) {
 		this.checkNumber = checkNumber;
 	}
 

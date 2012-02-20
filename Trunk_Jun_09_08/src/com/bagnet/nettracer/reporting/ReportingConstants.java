@@ -119,5 +119,18 @@ public class ReportingConstants {
 
 	public static final int RPT_20_CUSTOM_88 = 88;
 	public static final String RPT_20_CUSTOM_88_NAME = "management_summary_report";
+	
+	// Custom reports for LFC
+	public static final int RPT_20_CUSTOM_89 = 89;
+	public static final String RPT_20_CUSTOM_89_NAME = "daily_status_report";
+	
+	public static final int RPT_20_CUSTOM_90 = 90;
+	public static final String RPT_20_CUSTOM_90_NAME = "itemization_report";
+	
+	public static final int RPT_20_CUSTOM_91 = 91;
+	public static final String RPT_20_CUSTOM_91_NAME = "summary_report";
+	
+	public static final int RPT_20_CUSTOM_92 = 92;
+	public static final String RPT_20_CUSTOM_92_NAME = "disbursements";
 
 }

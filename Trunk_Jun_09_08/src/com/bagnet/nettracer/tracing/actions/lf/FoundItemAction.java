@@ -216,7 +216,7 @@ public class FoundItemAction extends CheckedAction {
 				logger.error(nfe);
 			}
 		} else if (request.getParameter("pickup") != null){
-			if(found.getItem() != null){
+			if(found.getItem() != null && found.getCheckAmount() == 0){
 				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_PICKED_UP);
 				found.setDeliveredDate(new Date());
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
@@ -230,6 +230,10 @@ public class FoundItemAction extends CheckedAction {
 					LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
 				}
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+			} else {
+				ActionMessage error = new ActionMessage("error.message.check.tracking.required");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
 			}
 		} else if (request.getParameter("matchId") != null) {
 			try {
@@ -271,7 +275,7 @@ public class FoundItemAction extends CheckedAction {
 				logger.error(nfe, nfe);
 			}
 		} else if (request.getParameter("deliveryRejected") != null) {
-			if(found.getItem() != null){
+			if(found.getItem() != null && found.getCheckAmount() == 0){
 				found.getItem().setDeliveryRejected(true);
 				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
 				found.setDeliveredDate(new Date());
@@ -287,6 +291,10 @@ public class FoundItemAction extends CheckedAction {
 					LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
 				}
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+			} else {
+				ActionMessage error = new ActionMessage("error.message.check.tracking.required");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
 			}
 		} 
 
