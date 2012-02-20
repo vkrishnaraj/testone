@@ -125,6 +125,12 @@ public final class EnterItemsForm extends ActionForm {
 		return 0;
 	}
 	
+	public void setSubCategory(long subCategory) {
+		if (found.getItem() != null) {
+			found.getItem().setSubCategory(subCategory);
+		}
+	}
+	
 	public String getDisFoundPhoneNumber() {
 		String toReturn = "";
 		if (found.getItem().getPhone() != null) {
