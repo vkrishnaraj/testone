@@ -100,6 +100,9 @@ public class SecurityUtilsTest {
 		assertTrue(!SecurityUtils.lastXPasswords(agent.getAgent_ID(), 2, newPassword1));
 		assertTrue(!SecurityUtils.lastXPasswords(agent.getAgent_ID(), 1, newPassword1));
 		assertTrue(!SecurityUtils.lastXPasswords(agent.getAgent_ID(), 0, newPassword1));
+		
+		//new agent test
+		assertTrue(!SecurityUtils.insertPasswordHistory(0, newPassword1));
 	}
 	
 	@Test

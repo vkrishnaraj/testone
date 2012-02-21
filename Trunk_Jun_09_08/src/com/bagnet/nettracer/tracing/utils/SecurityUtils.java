@@ -432,6 +432,10 @@ public class SecurityUtils {
 	}
 	
 	public static boolean insertPasswordHistory(long agent_id, String password){
+		if(agent_id <= 0){
+			return false;//do not insert password into history for an agent that hasn't been created yet
+						 //makes it a pain to bulk insert agents
+		}
 		String updateSql = "update passwordhistory set pcount=pcount+1 where agent_id = :agent_id";
 		String insertSql = "insert into passwordhistory (agent_id, password, pcount) values (:agent_id, :password, :pcount)";
 		Session sess = null;
