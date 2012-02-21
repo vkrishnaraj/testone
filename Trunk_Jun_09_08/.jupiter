@@ -77,24 +77,21 @@
       </Phase>
     </Filters>
   </Review>
-  <Review id="LFC: Delivery workflow">
-    <Description>Added delivery refusal option and modified LF delivery workflow.</Description>
+  <Review id="LFC: Delivery Workflow">
+    <Description>Second Try</Description>
     <Author>msanders</Author>
-    <CreationDate format="yyyy-MM-dd :: HH:mm:ss:SSS z">2012-02-20 :: 16:22:11:499 EST</CreationDate>
+    <CreationDate format="yyyy-MM-dd :: HH:mm:ss:SSS z">2012-02-21 :: 13:38:08:223 EST</CreationDate>
     <Directory>review</Directory>
     <Reviewers>
       <Entry id="bsmith" name="bsmith"/>
-      <Entry id="cgordon" name="cgordon"/>
-      <Entry id="mloupas" name="mloupas"/>
       <Entry id="msanders" name="msanders"/>
-      <Entry id="sfine" name="sfine"/>
     </Reviewers>
     <Files>
       <Entry name="src/com/bagnet/nettracer/tracing/actions/lf/CreateDeliveryAction.java"/>
       <Entry name="src/com/bagnet/nettracer/tracing/actions/lf/FoundItemAction.java"/>
-      <Entry name="web/pages/lostandfound/create_delivery.jsp"/>
-      <Entry name="web/pages/lostandfound/create_found_item.jsp"/>
       <Entry name="web/pages/dynamic/sessionjs.jsp"/>
+      <Entry name="web/pages/lostandfound/create_found_item.jsp"/>
+      <Entry name="web/pages/lostandfound/view_items_deliver.jsp"/>
     </Files>
     <FieldItems>
       <FieldItem id="Type" default="item.label.unset">
@@ -109,7 +106,7 @@
         <Entry name="item.type.label.suggestion"/>
         <Entry name="item.type.label.other"/>
       </FieldItem>
-      <FieldItem id="Severity" default="item.severity.label.critical">
+      <FieldItem id="Severity" default="item.label.unset">
         <Entry name="item.label.unset"/>
         <Entry name="item.severity.label.critical"/>
         <Entry name="item.severity.label.major"/>
@@ -117,7 +114,7 @@
         <Entry name="item.severity.label.minor"/>
         <Entry name="item.severity.label.trivial"/>
       </FieldItem>
-      <FieldItem id="Resolution" default="item.resolution.label.validNeedsfixing">
+      <FieldItem id="Resolution" default="item.label.unset">
         <Entry name="item.label.unset"/>
         <Entry name="item.resolution.label.validNeedsfixing"/>
         <Entry name="item.resolution.label.validFixlater"/>
