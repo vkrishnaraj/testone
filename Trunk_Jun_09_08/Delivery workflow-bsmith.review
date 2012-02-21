@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Review id="LFC: Delivery workflow">
+  <ReviewIssue id="GYX92CXV">
+    <ReviewIssueMeta>
+      <CreationDate format="yyyy-MM-dd :: HH:mm:ss:SSS z">2012-02-21 :: 13:10:35:395 EST</CreationDate>
+      <LastModificationDate format="yyyy-MM-dd :: HH:mm:ss:SSS z">2012-02-21 :: 13:11:18:770 EST</LastModificationDate>
+    </ReviewIssueMeta>
+    <ReviewerId>bsmith</ReviewerId>
+    <AssignedTo>msanders</AssignedTo>
+    <File></File>
+    <Type>item.type.label.programLogic</Type>
+    <Severity>item.severity.label.critical</Severity>
+    <Summary>Bad logic</Summary>
+    <Description></Description>
+    <Annotation></Annotation>
+    <Revision></Revision>
+    <Resolution>item.resolution.label.validNeedsfixing</Resolution>
+    <Status>item.status.label.open</Status>
+  </ReviewIssue>
+</Review>
