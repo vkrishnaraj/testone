@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Review id="LFC: Delivery workflow">
+  <ReviewIssue id="GYX9G1DP">
+    <ReviewIssueMeta>
+      <CreationDate format="yyyy-MM-dd :: HH:mm:ss:SSS z">2012-02-21 :: 13:21:13:597 EST</CreationDate>
+      <LastModificationDate format="yyyy-MM-dd :: HH:mm:ss:SSS z">2012-02-21 :: 13:21:23:582 EST</LastModificationDate>
+    </ReviewIssueMeta>
+    <ReviewerId>msanders</ReviewerId>
+    <AssignedTo>msanders</AssignedTo>
+    <File line="34">src/com/bagnet/nettracer/tracing/actions/lf/CreateDeliveryAction.java</File>
+    <Type>item.type.label.programLogic</Type>
+    <Severity>item.severity.label.critical</Severity>
+    <Summary>test</Summary>
+    <Description>test</Description>
+    <Annotation></Annotation>
+    <Revision></Revision>
+    <Resolution>item.resolution.label.validNeedsfixing</Resolution>
+    <Status>item.status.label.open</Status>
+  </ReviewIssue>
+</Review>
