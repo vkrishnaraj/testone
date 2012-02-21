@@ -419,7 +419,7 @@ public class LF_ItemEntry extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Jewelry/Watches,test,test,test"));
+			verifyTrue(selenium.isTextPresent("Desc: Jewelry/Watches, Bracelet, test, test, test"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();

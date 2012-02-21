@@ -270,22 +270,22 @@ public class LFItem implements Serializable{
 	}
 	
 	public String getSummaryDesc() {
-		String toReturn = getCatDesc() + ",";
+		String toReturn = getCatDesc() + ",\n";
 		
 		if (brand != null && !brand.isEmpty()) {
-			toReturn += brand + ",";
+			toReturn += brand + ",\n";
 		}
 		
 		if (model != null && !model.isEmpty()) {
-			toReturn += model + ",";
+			toReturn += model + ",\n";
 		}
 
 		if (serialNumber != null && !serialNumber.isEmpty()) {
-			toReturn += serialNumber + ",";
+			toReturn += serialNumber + ",\n";
 		}
 
 		if (color != null && !color.isEmpty()) {
-			color += model + ",";
+			color += model + ",\n";
 		}
 		toReturn = toReturn.substring(0, toReturn.lastIndexOf(','));
 		return toReturn;
@@ -301,7 +301,7 @@ public class LFItem implements Serializable{
 				while (it.hasNext()) {
 					LFSubCategory subcat = it.next();
 					if (subcat.getId() == subCategory) {
-						toReturn += subcat.getDescription() + ",";
+						toReturn += ",\n" + subcat.getDescription();
 						break;
 					}
 				}
