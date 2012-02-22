@@ -18,7 +18,6 @@ import java.util.GregorianCalendar;
 import org.apache.log4j.Logger;
 
 // TODO:
-//  1. Write to database
 //  2. Ping public site
 //  3. Session management
 //  4. Status page
@@ -28,32 +27,7 @@ import org.apache.log4j.Logger;
 
 public class HttpMonitorWorkerThread implements Runnable {
 
-	private String label = null;
-	private String url = null;
-	private String paramString = null;
-	public String getLabel() {
-		return label;
-	}
-
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public String getParamString() {
-		return paramString;
-	}
-
-	public void setParamString(String paramString) {
-		this.paramString = paramString;
-	}
+	private MonitorUrl monUrl;
 
 	public String getResponseString() {
 		return responseString;
@@ -79,7 +53,7 @@ public class HttpMonitorWorkerThread implements Runnable {
 		this.stopTime = stopTime;
 	}
 
-	private String test = null;
+
 	private 	String responseString = null;
 	private Calendar startTime = null;
 	private Calendar stopTime = null;
@@ -89,12 +63,11 @@ public class HttpMonitorWorkerThread implements Runnable {
 		
 	}
 	
-	public HttpMonitorWorkerThread(String label, String url, String paramString, String test) {
-		this.label = label;
-		this.url = url;
-		this.paramString = paramString;
-		this.test = test;
+	public HttpMonitorWorkerThread(MonitorUrl monUrl) {
+		this.monUrl = monUrl;
+
 	}
+
 	
 	public boolean isFinished()
 	{
@@ -112,15 +85,15 @@ public class HttpMonitorWorkerThread implements Runnable {
 		if (responseString == null) {
 			return false;
 		}
-		return responseString.contains(test);  
+		return responseString.contains(monUrl.getTest());  
 	}
 	
 	@Override
 	public void run() {
-		logger.info("Performing test for: " + label);
+		logger.info("Performing test for: " + monUrl.getTitle());
 		startTime = new GregorianCalendar();
 		try {
-			responseString = sendGetRequest(url, paramString);
+			responseString = sendGetRequest(monUrl.getUrl(), monUrl.getParamString());
 		} catch (Exception e) {
 			responseString = e.getMessage();
 		}
@@ -252,7 +225,7 @@ public class HttpMonitorWorkerThread implements Runnable {
 	}
 
 	public String printFullStatus() {
-		return "isFinished: " + isFinished() + "; isPassingTests: " + isPassingTests() + "; Elapsed Time: " + getElapsedTimeInMillis() + "; \nURL: " + url +"\n  Response String: " + responseString;
+		return "isFinished: " + isFinished() + "; isPassingTests: " + isPassingTests() + "; Elapsed Time: " + getElapsedTimeInMillis() + "; \nURL: " + monUrl.getUrl() +"\n  Response String: " + responseString;
 	}
 
 }

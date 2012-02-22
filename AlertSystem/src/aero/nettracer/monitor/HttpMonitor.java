@@ -15,75 +15,57 @@ import com.bagnet.nettracer.email.HtmlEmail;
 
 public class HttpMonitor {
 
-	private static final long SECONDS_TILL_ALERT = 15000;
+//	private static final long SECONDS_TILL_ALERT = 15000;
+	private static final int PRODUCTION_TIMEOUT = 20000;
+	private static final int PRODUCTION_RETRY = 20000;
+	
 	static Logger logger = Logger.getLogger(HttpMonitor.class);
 
 	public static void main(String[] args) {
 
-		// Perform request on URL
-		ArrayList<String[]> urls = new ArrayList<String[]>();
 
-		// addTestUrl(urls, "JetBlue",
-		// "https://jetblue.nettracer.aero/tracer/logon.do",
-		// "companyCode=B6&username=ntadmin&password=Ladendead51!", "Pawob");
-		// addTestUrl(urls, "Azul",
-		// "https://azul.nettracer.aero/tracer/logon.do",
-		// "companyCode=AD&username=ntadmin&password=Ladendead51!", "Incoming");
-		// addTestUrl(urls, "Spirit",
-		// "https://spirit.nettracer.aero/tracer/logon.do",
-		// "companyCode=NK&username=ntadmin&password=Ladendead51!", "Incoming");
-		// addTestUrl(urls, "WestJet",
-		// "https://westjet.nettracer.aero/tracer/logon.do",
-		// "companyCode=WS&username=ntadmin&password=Ladendead51!", "PIR");
-
-		addTestUrl(urls, "JetBlue",
-				"https://jetblue.nettracer.aero/tracer/logoff.do", "", "Owens");
-		addTestUrl(urls, "Azul",
-				"https://azul.nettracer.aero/tracer/logoff.do", "", "Owens");
-		addTestUrl(urls, "Spirit",
-				"https://spirit.nettracer.aero/tracer/logoff.do", "", "Owens");
-		addTestUrl(urls, "WestJet",
-				"https://westjet.nettracer.aero/tracer/logoff.do", "", "Owens");
-		addTestUrl(urls, "US Air Paxview",
-				"https://usairways.nettracer.aero/pax-view/claim/login.do", "",
-				"baggage");
-		addTestUrl(urls, "Avis",
-				"https://avis.nettracer.aero/abtracer/logoff.do", "",
-				"NetTracer");
+		ArrayList<MonitorUrl> urls = new ArrayList<MonitorUrl>();
+		urls.add(new MonitorUrl("JetBlue",	"https://jetblue.nettracer.aero/tracer/logoff.do", "", "Owens", true, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("Azul", "https://azul.nettracer.aero/tracer/logoff.do", "", "Owens", true, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("Spirit", "https://spirit.nettracer.aero/tracer/logoff.do", "", "Owens", true, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("WestJet",	"https://westjet.nettracer.aero/tracer/logoff.do", "", "Owens", true, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("US Air Paxview","https://usairways.nettracer.aero/pax-view/claim/login.do", "","baggage", true, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("Avis","https://avis.nettracer.aero/abtracer/logoff.do", "", "NetTracer", true, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
 		
+		urls.add(new MonitorUrl("B6 Testing", "https://testing.nettracer.aero/jetblue/logoff.do", "", "Owens", false, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("Avis Testing", "https://testing.nettracer.aero/avis/logoff.do", "", "NetTracer", false, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("WestJet Testing", "https://testing.nettracer.aero/westjet/logoff.do", "",	"Owens", false, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("B6 Training", "https://training.nettracer.aero/jetblue/logoff.do", "", "Owens", false, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("Avis Training", "https://training.nettracer.aero/avis/logoff.do", "", "NetTracer", false, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("WestJet Training", "https://training.nettracer.aero/westjet/logoff.do", "",	"Owens", false, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
 		
-		addTestUrl(urls, "B6 Testing", "https://testing.nettracer.aero/jetblue/logoff.do", "", "Owens");
-		addTestUrl(urls, "Avis Testing", "https://testing.nettracer.aero/avis/logoff.do", "", "NetTracer");
-		addTestUrl(urls, "WestJet Testing", "https://testing.nettracer.aero/westjet/logoff.do", "",	"Owens");
-		addTestUrl(urls, "B6 Training", "https://training.nettracer.aero/jetblue/logoff.do", "", "Owens");
-		addTestUrl(urls, "Avis Training", "https://training.nettracer.aero/avis/logoff.do", "", "NetTracer");
-		addTestUrl(urls, "WestJet Training", "https://training.nettracer.aero/westjet/logoff.do", "",	"Owens");		
 		
 		while (true) {
 			Calendar sTime = new GregorianCalendar();
-			for (String[] url : urls) {
+			for (MonitorUrl url : urls) {
 
 				HttpMonitorWorkerThread wt = null;
 				
 				wt = createHttpMonitorWorkerThread(url);
-				sleep(SECONDS_TILL_ALERT);
+				sleep(PRODUCTION_TIMEOUT);
 
 				if (wt.isFinished() && wt.isPassingTests()
-						&& wt.getElapsedTimeInMillis() < SECONDS_TILL_ALERT) {
+						&& wt.getElapsedTimeInMillis() < PRODUCTION_TIMEOUT) {
 					logger.info("  Test successful...");
-					SimpleJdbcLogger.log(wt.getLabel(), wt.getUrl(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
+					SimpleJdbcLogger.log(url.getTitle(), url.getUrl(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
 				} else {
 					logger.info("  Test failure; " + wt.printFullStatus());
 					try {
-						SimpleJdbcLogger.log(wt.getLabel(), wt.getUrl(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, true);
-						sendEmail(wt.printFullStatus());
+						SimpleJdbcLogger.log(url.getTitle(), url.getUrl(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, true);
+						
+						sendEmail(wt.printFullStatus(), url.isProduction());
 						
 					} catch (AddressException e) {
 						e.printStackTrace();
-						SimpleJdbcLogger.log(wt.getLabel(), wt.getUrl(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
+						SimpleJdbcLogger.log(url.getTitle(), url.getUrl(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
 					} catch (EmailException e) {
 						e.printStackTrace();
-						SimpleJdbcLogger.log(wt.getLabel(), wt.getUrl(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
+						SimpleJdbcLogger.log(url.getTitle(), url.getUrl(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
 					}
 				}
 			}
@@ -110,11 +92,10 @@ public class HttpMonitor {
 	}
 
 	private static HttpMonitorWorkerThread createHttpMonitorWorkerThread(
-			String[] url) {
+			MonitorUrl monUrl) {
 		
 		HttpMonitorWorkerThread wt;
-		wt = new HttpMonitorWorkerThread(
-				url[0], url[1], url[2], url[3]);
+		wt = new HttpMonitorWorkerThread(monUrl);
 		Thread t = new Thread(wt);
 		t.start();
 		return wt;
@@ -126,7 +107,7 @@ public class HttpMonitor {
 		urls.add(x);
 	}
 
-	public static void sendEmail(String msg) throws EmailException, AddressException {
+	public static void sendEmail(String msg, boolean isProduction) throws EmailException, AddressException {
 		Properties properties = new Properties();
 		try {
 			properties.load(HttpMonitor.class.getResourceAsStream("/email.properties"));
@@ -137,7 +118,10 @@ public class HttpMonitor {
 		String host = properties.getProperty("host");
 		String from = properties.getProperty("from");
 		String to = properties.getProperty("support_email");
-//		String to = properties.getProperty("support_sms");
+		if (!isProduction) {
+			to = properties.getProperty("notice_email");
+		}
+
 		String subject = properties.getProperty("monitor_name");
 		int port = Integer.parseInt(properties.getProperty("port"));
 
