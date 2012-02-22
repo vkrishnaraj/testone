@@ -39,9 +39,9 @@ public class LFItemizationReport extends LFReport {
 	@Override
 	protected String getSqlString(StatReportDTO srDto) {
 		String sql = "select s.stationcode,lf.barcode,date(lf.foundDate) as 'date_recorded',date(lf.receivedDate) as 'date_received', " +
-					 "i.value,c.description as 'category',ifnull(sc.description,'') as 'subcategory',lf.status_id as 'status', " +
-					 "i.disposition_status_id as 'disposition',i.description as 'title',datediff(date(lf.deliveredDate), " +
-					 "date(lf.receivedDate)) as 'return_time',ifnull(i.trackingNumber,'') as 'tracking_number', " +
+					 "i.value,ifnull(c.description,'') as 'category',ifnull(sc.description,'') as 'subcategory',lf.status_id as 'status', " +
+					 "i.disposition_status_id as 'disposition',i.description as 'title',ifnull(datediff(date(lf.deliveredDate), date(lf.receivedDate)),-1) as 'return_time', " + 
+					 "ifnull(i.trackingNumber,'') as 'tracking_number', " +
 					 "(i.lost_id is null) as 'returned_with_lost_report' from station s " +
 					 "left outer join lffound lf on s.station_id = lf.station_id " +
 					 "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
@@ -101,8 +101,8 @@ public class LFItemizationReport extends LFReport {
 			currentRow.setStatus(resources.getString("STATUS_KEY_" + data[STATUS]));
 			currentRow.setDisposition(resources.getString("STATUS_KEY_" + data[DISPOSITION]));
 			currentRow.setTitle((String) data[TITLE]);		
-			currentRow.setReturnTime((Integer) data[RETURN_TIME]);		
 			currentRow.setTrackingNumber((String) data[TRACKING_NUMBER]);
+			currentRow.setReturnTime((Integer) data[RETURN_TIME]);
 			
 			if (((Integer) data[RETURNED_WITH_LOST_REPORT]) == 1) {
 				currentRow.setReturnedWithLostReport(resources.getString("lf.itemization.returned.with.lost.report.yes"));

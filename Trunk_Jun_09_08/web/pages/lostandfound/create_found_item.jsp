@@ -653,7 +653,7 @@
 	         			</tr>
 	         			<tr>
 	         				<td>
-	         					<bean:message key="colname.lf.category" />
+	         					<bean:message key="colname.lf.category" />&nbsp;<span class="reqfield">*</span>
 	         					<br>
 	         					<select name="item[<%=i %>].category" class="dropdown" onchange="updateSubCategories('category_<%=i %>', <%=i %>);" id="category_<%=i %>" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>

@@ -231,6 +231,12 @@
 					currentElement.focus();
 			        return false;
 				}
+			} else if (elementName.indexOf("category") != -1) {
+				if (currentElement.value == 0) {
+					alert("<%= (String)bundle.getString("colname.lfc.category") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        currentElement.focus();
+			        return false;
+				}			
 			} else if (elementName == "found.checkNumber") {
 				if (isNaN(currentElement.value) || currentElement.value.indexOf('-') != -1) { 
 					alert("<%=(String) bundle.getString("lf.colname.check.number") %>" + " " + "<%=(String) bundle.getString("error.message.must.be.a.number") %>");

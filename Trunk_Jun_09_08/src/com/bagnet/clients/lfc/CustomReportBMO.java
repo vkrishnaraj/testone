@@ -163,7 +163,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.addColumn(resources.getString("report.lf.itemization.disposition"), "disposition", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.itemization.item.title"), "title", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.itemization.tracking.number"), "trackingNumber", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.lf.itemization.actual.return.time"), "returnTime", Integer.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.itemization.actual.return.time"), "dispReturnTime", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.itemization.returned.with.report.filed"), "returnedWithLostReport", String.class.getName(), 50, detailStyle, header);
 
 			drb.setIgnorePagination(true);

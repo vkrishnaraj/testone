@@ -26,6 +26,9 @@ public class LF_CreateFound_VerifyRequiredFields extends DefaultSeleneseTestCase
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			selenium.click("name=saveButton");
+			assertEquals("Category is required.", selenium.getAlert());
+			selenium.select("//select[@id='category_0']", "label=Bags");
+			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();

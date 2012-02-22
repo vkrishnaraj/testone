@@ -119,5 +119,12 @@ public class LFItemizationReportRow {
 	public void setReturnedWithLostReport(String returnedWithLostReport) {
 		this.returnedWithLostReport = returnedWithLostReport;
 	}
+	
+	public String getDispReturnTime() {
+		if (returnTime >= 0) {
+			return String.valueOf(returnTime);
+		}
+		return "";
+	}
 
 }
