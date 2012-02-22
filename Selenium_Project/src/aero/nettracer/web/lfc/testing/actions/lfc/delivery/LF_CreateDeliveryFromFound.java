@@ -8,6 +8,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 	
 	public static String lostId;
 	public static String foundId;
+	public static String today;
 
 	@Test
 	public void testCreateLost() throws Exception {
@@ -57,6 +58,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_CreateDeliveryFromFound.foundId);
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
+			LF_CreateDeliveryFromFound.lostId = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td[2]/input");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "HTC");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input", "HTC1234");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input", "Eris");
@@ -94,7 +96,6 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(LF_CreateDeliveryFromFound.foundId));
 			verifyTrue(selenium.isElementPresent("//a[contains(text(),'" + LF_CreateDeliveryFromFound.foundId + "')]"));
 			verifyTrue(selenium.isTextPresent("To Be Delivered"));
 		} else {
@@ -121,6 +122,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Tracking Number:  12341234"));
 			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
+			verifyEquals(LF_CreateDeliveryFromFound.today, selenium.getTable("//div[@id='maincontent']/table[5].1.2"));
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
@@ -212,6 +214,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Delivery rejected"));
 			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
+			verifyEquals(LF_CreateDeliveryFromFound.today, selenium.getTable("//div[@id='maincontent']/table[5].1.2"));
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
@@ -259,6 +262,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Picked up by customer"));
 			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
+			verifyEquals(LF_CreateDeliveryFromFound.today, selenium.getTable("//div[@id='maincontent']/table[5].1.2"));
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();

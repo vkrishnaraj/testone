@@ -166,6 +166,14 @@ public class LFFound implements LFObject, Serializable {
 		this.receivedDate = DateUtils.convertToDate(date, dateFormat, null);
 	}
 	
+	public String getDisDeliveredDate(String dateFormat) {
+		return DateUtils.formatDate(deliveredDate, dateFormat, agent.getCurrenttimezone(), null);
+	}
+	
+	public void setDisDeliveredDate(String date, String dateFormat) {
+		this.deliveredDate = DateUtils.convertToDate(date, dateFormat, null);
+	}
+	
 	public String getDisFoundDate(String dateFormat) {
 		return DateUtils.formatDate(foundDate, dateFormat, agent.getCurrenttimezone(), null);
 	}

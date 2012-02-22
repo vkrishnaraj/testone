@@ -29,6 +29,7 @@
  	
  	int dispositionId = 0;
  	boolean haveDeliveryInformation = false;
+ 	boolean deliveryRejected = false;
 %>
 
 
@@ -596,6 +597,7 @@
        					if (item.getType() == TracingConstants.LF_TYPE_FOUND) { %>
 	         				<tr>
        					<%	dispositionId = item.getDispositionId();
+       						deliveryRejected = item.getDeliveryRejected();
        						haveDeliveryInformation = (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED || dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP) || item.getDeliveryRejected();
        						%>
        						<td colspan=3 class="header">
@@ -771,10 +773,13 @@
 				<table class="<%=cssFormClass %>" cellpadding=0 cellspacing=0 >
 				<% if (haveDeliveryInformation) { %>
 					<tr >
-						<td class="header" style="width:50%;" >
+						<td class="header" style="width:33%;" >
 							<bean:message key="lf.colname.delivery.summary" />
 						</td>
-						<td class="header" style="width:50%;" >
+						<td class="header" style="width:33%;" >
+							<bean:message key="colname.lf.delivered.date" />
+						</td>
+						<td class="header" style="width:33%;" >
 							<bean:message key="colname.lf.action" />
 						</td>
 					</tr>
@@ -784,26 +789,23 @@
 							<bean:message key="colname.lf.tracking.number" />:&nbsp;
 							<bean:write name="foundItemForm" property="foundItem.trackingNumber" />
 						</td>
-						<td>
-							<a href='create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
-						</td>
 					</logic:equal>
 	         		<logic:equal name="foundItemForm" property="foundItem.deliveryRejected" value="true" >
 						<td>
 							<bean:message key="lf.delivery.rejected" />
-						</td>
-						<td>
-							<a href='create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
 						</td>
 					</logic:equal>
 	         		<logic:equal name="foundItemForm" property="foundItem.disposition.status_ID" value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" >
 						<td>
 							<bean:message key="lf.picked.up" />
 						</td>
-						<td>
-							<a href='create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
-						</td>
 					</logic:equal>
+					<td>
+						<bean:write name="foundItemForm" property="disDeliveredDate" />
+					</td>
+					<td>
+						<a href='create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
+					</td>
 					</tr>
 				<% } else { %>
 					<tr>
@@ -815,7 +817,6 @@
 						<td style="width:50%;" >
 							<bean:message key="colname.lf.tracking.number" />:&nbsp;
 							<html:text name="foundItemForm" property="foundItem.trackingNumber" size="20" styleClass="textfield" styleId="trackingNumber" />
-							&nbsp;
 						</td>
 						<td  style="width:25%;" >
 							<a href='create_found_item.do?deliveryRejected=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.delivery.rejected"/></a>
@@ -828,11 +829,19 @@
 					<tr>
 						<td>
 							<bean:message key="lf.colname.check.number" />:&nbsp;
-							<html:text name="foundItemForm" property="found.checkNumber" size="10" styleClass="textfield" styleId="checkNumber" />
+							<% if (dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP || deliveryRejected) { %>
+								<html:text name="foundItemForm" property="found.checkNumber" size="10" styleClass="disabledtextfield" styleId="checkNumber" />
+							<% } else { %>
+								<html:text name="foundItemForm" property="found.checkNumber" size="10" styleClass="textfield" styleId="checkNumber" />
+							<% } %>
 						</td>
-						<td <% if (!haveDeliveryInformation) { %>colspan=2<% } %>>
+						<td colspan=2 >
 							<bean:message key="lf.colname.check.amount" />:&nbsp;
-							<html:text name="foundItemForm" property="dispCheckAmount" size="10" styleClass="textfield" styleId="checkAmount" />
+							<% if (dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP || deliveryRejected) { %>
+								<html:text name="foundItemForm" property="dispCheckAmount" size="10" styleClass="disabledtextfield" styleId="checkAmount" />
+							<% } else { %>
+								<html:text name="foundItemForm" property="dispCheckAmount" size="10" styleClass="textfield" styleId="checkAmount" />
+							<% } %>
 						</td>
 					</tr>
 				</table>
