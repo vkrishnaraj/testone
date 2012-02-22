@@ -299,19 +299,19 @@
 			         						<% 
 			         						   int statusId = match.getStatus().getStatus_ID();
 			         						   if (statusId == TracingConstants.LF_TRACING_CONFIRMED) { %>
-			         							<a href='create_found_item.do?unconfirm=1&matchId=<%=match.getId() %>'><bean:message key="button.un_match" /></a> 
+			         							<bean:message key="button.un_match" /> 
 				         							<% 
 				         							String email = match.getLost().getClient().getDecryptedEmail();
 				         							if (email != null && !email.isEmpty()) {
 				         							   if (match.getLost().isFoundEmail()) { %>
 				         								<br/>,<bean:message key="message.customer.notified" />
 				         							<% } else { %>
-				         								<br/>,<a href='create_found_item.do?email=1&matchId=<%=match.getId() %>'><bean:message key="button.email.customer" /></a>
+				         								<br/>,<bean:message key="button.email.customer" />
 				         							<% } 
 			         								}%>
 			         						<% } else { %>
-			         							<a href='create_found_item.do?confirm=1&matchId=<%=match.getId() %>'><bean:message key="button.do_match" /></a>,&nbsp;
-			         							<a href='create_found_item.do?reject=1&matchId=<%=match.getId() %>'><bean:message key="button.reject" /></a>
+			         							<bean:message key="button.do_match" />
+			         							<bean:message key="button.reject" />
 			         						<% } %>
 				        					</td>
 				        				<% } %>
@@ -373,7 +373,7 @@
 				        				</td>
 				        				<% if (j == 0) { %>
 				        					<td rowspan=<bean:write name="numDetails" /> >
-			         							<a href='create_found_item.do?unreject=1&matchId=<%=match.getId() %>'><bean:message key="button.unreject" /></a>
+			         							<bean:message key="button.unreject" />
 				        					</td>
 				        				<% } %>
 				        			</tr> 
@@ -605,13 +605,13 @@
       								<% if (item.getLost() != null) { %>
       									<bean:message key="lf.match.lost" />:&nbsp;<a style="color:#fff;" href='create_lost_report.do?lostId=<%=item.getLost().getId() %>'><%=item.getLost().getId() %></a>&nbsp;
       									<% if (dispositionId == TracingConstants.LF_DISPOSITION_OTHER || dispositionId == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) { %>
-										[<a style="color:#fff;" href='create_found_item.do?unmatchItem=1&itemId=<%=item.getId() %>'><bean:message key="button.un_match" /></a>]
+										[<bean:message key="button.un_match" />]
 										<% } %>
       								<% } else { %>
       									<bean:message key="lf.match.lost" />:&nbsp;
   										<input type="text" size="10" class="textfield" id="foundInput" onchange="setLostId(this.value,1,<%=item.getId() %>)" />&nbsp;
 										<!-- [<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" ><bean:message key="button.do_match" /></a>]-->
-										[<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" onclick="return validateId('foundInput');" ><bean:message key="button.do_match" /></a>]
+										[<bean:message key="button.do_match" />]
       								<% } %>
       							</td>
 	       					</tr>
@@ -805,7 +805,7 @@
 						<bean:write name="foundItemForm" property="disDeliveredDate" />
 					</td>
 					<td>
-						<a href='create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
+						<bean:message key="lf.undo" />
 					</td>
 					</tr>
 				<% } else { %>
@@ -817,32 +817,24 @@
 					<tr>
 						<td style="width:50%;" >
 							<bean:message key="colname.lf.tracking.number" />:&nbsp;
-							<html:text name="foundItemForm" property="foundItem.trackingNumber" size="20" styleClass="textfield" styleId="trackingNumber" />
+							<html:text name="foundItemForm" property="foundItem.trackingNumber" size="20" disabled="true" styleClass="disabledtextfield" styleId="trackingNumber" />
 						</td>
 						<td  style="width:25%;" >
-							<a href='create_found_item.do?deliveryRejected=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.delivery.rejected"/></a>
+							<bean:message key="lf.delivery.rejected"/>
 						</td>
 						<td style="width:25%;" >
-							<a href='create_found_item.do?pickup=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.picked.up"/></a>
+							<bean:message key="lf.picked.up"/>
 						</td>
 					</tr>
 				<% } %>
 					<tr>
 						<td>
 							<bean:message key="lf.colname.check.number" />:&nbsp;
-							<% if (dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP || deliveryRejected) { %>
-								<html:text name="foundItemForm" property="found.checkNumber" size="10" styleClass="disabledtextfield" styleId="checkNumber" />
-							<% } else { %>
-								<html:text name="foundItemForm" property="found.checkNumber" size="10" styleClass="textfield" styleId="checkNumber" />
-							<% } %>
+							<html:text name="foundItemForm" property="found.checkNumber" size="10" disabled="true" styleClass="disabledtextfield" styleId="checkNumber" />
 						</td>
 						<td colspan=2 >
 							<bean:message key="lf.colname.check.amount" />:&nbsp;
-							<% if (dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP || deliveryRejected) { %>
-								<html:text name="foundItemForm" property="dispCheckAmount" size="10" styleClass="disabledtextfield" styleId="checkAmount" />
-							<% } else { %>
-								<html:text name="foundItemForm" property="dispCheckAmount" size="10" styleClass="textfield" styleId="checkAmount" />
-							<% } %>
+							<html:text name="foundItemForm" property="dispCheckAmount" size="10" disabled="true" styleClass="disabledtextfield" styleId="checkAmount" />
 						</td>
 					</tr>
 				</table>
@@ -856,17 +848,6 @@
 				
 			<jsp:include page="/pages/lostandfound/remark_found.jsp" />
 			
-      <center><html:submit property="addremark" styleId="button">
-        <bean:message key="button.add_remark" />
-      </html:submit></center>
-      <br>
-      <br>
-				<center>
-					<html:hidden property="save" value="" disabled="true" />
-					<html:button property="saveButton" styleId="button" onclick="if (validateFoundItemForm(this.form)) {this.form.save.disabled = false; this.form.submit();} else { this.form.save.disabled = true; return false; }">
-						<bean:message key="button.save" />
-					</html:button>
-				</center>
 				<script>
 					fieldChanged('state');
 					fieldChanged('country');

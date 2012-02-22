@@ -186,6 +186,15 @@ public class LostReportAction extends CheckedAction {
 		}
 
 		lrForm.setLost(lostReport);
+		
+		if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"")) {
+			if (lrForm.getLost().getStatus().getStatus_ID() == TracingConstants.LF_STATUS_CLOSED) {
+				if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LFC_REOPEN_LOST_FOUND, user)) {
+					return mapping.findForward(TracingConstants.LF_CREATE_LOST_REPORT_RO);
+				}
+			}
+		}
+		
 		return mapping.findForward(TracingConstants.LF_CREATE_LOST_REPORT);
 		
 	}

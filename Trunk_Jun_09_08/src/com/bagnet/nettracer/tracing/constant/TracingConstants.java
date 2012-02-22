@@ -189,6 +189,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_LFC_ITEM_ENTRY_WORKFLOW = "LFC Item Entry Workflow";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_SHELVED_ITEMS_WITH_TRACE_RESULTS = "Shelved Items with Trace Results";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_LOAD_FOUND_FROM_TASK_MANAGER = "Load Found from Task Manager";
+	public static final String SYSTEM_COMPONENT_NAME_LFC_REOPEN_LOST_FOUND = "Reopen Lost and Found";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -474,6 +475,7 @@ public class TracingConstants {
 	public final static int LF_LOCATION_VERIFICATION = 1;
 	public final static int LF_LOCATION_WAITING = 2;
 	public final static int LF_LOCATION_DELIVERY = 3;
+	public final static int LF_LOCATION_SALVAGED = 4;
 	
 	public final static int LF_STATUS_ENTERED = 0;
 	public final static int LF_STATUS_VERIFICATION_NEEDED = 1;
@@ -973,7 +975,9 @@ public class TracingConstants {
 	public static final String CLAIM_CREATE_CLAIM_PRORATE = "create_claim_prorate";
 	
 	public static final String LF_CREATE_LOST_REPORT = "create_lost_report";
+	public static final String LF_CREATE_LOST_REPORT_RO = "create_lost_report_ro";
 	public static final String LF_CREATE_FOUND_ITEM = "create_found_item";
+	public static final String LF_CREATE_FOUND_ITEM_RO = "create_found_item_ro";
 	public static final String LF_SEARCH_LOST_FOUND = "search_lost_found";
 	public static final String LF_CREATE_DELIVERY = "create_delivery";
 	

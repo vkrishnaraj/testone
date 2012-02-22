@@ -875,8 +875,16 @@
         <put name="center"   value="/pages/lostandfound/create_lost_report.jsp"/>
     </definition>
 
+    <definition name="create_lost_report_ro" extends="user_menu">
+        <put name="center"   value="/pages/lostandfound/create_lost_report_ro.jsp"/>
+    </definition>
+
     <definition name="create_found_item" extends="user_menu">
         <put name="center"   value="/pages/lostandfound/create_found_item.jsp"/>
+    </definition>
+
+    <definition name="create_found_item_ro" extends="user_menu">
+        <put name="center"   value="/pages/lostandfound/create_found_item_ro.jsp"/>
     </definition>
 
     <definition name="search_lost_found" extends="user_menu">
