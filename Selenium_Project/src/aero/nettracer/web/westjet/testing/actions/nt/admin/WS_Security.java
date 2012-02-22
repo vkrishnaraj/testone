@@ -12,9 +12,9 @@ public class WS_Security extends DefaultSeleneseTestCase{
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();
-		selenium.type("//input[@id='min_pass_size']", "8");
+		selenium.type("name=min_pass_size", "8");
 		selenium.click("xpath=(//input[@id='button'])[2]");
-		verifyEquals("8", selenium.getValue("//input[@id='min_pass_size']"));
+		verifyEquals("8", selenium.getValue("name=min_pass_size"));
 		verifyTrue(selenium.isTextPresent("Company Information Saved."));
 		
 		goToTaskManager();
@@ -22,10 +22,10 @@ public class WS_Security extends DefaultSeleneseTestCase{
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();
-		selenium.type("//input[@id='min_pass_size']", "7");
+		selenium.type("name=min_pass_size", "7");
 		selenium.click("xpath=(//input[@id='button'])[2]");
 		assertEquals("Minimum password length must be at least eigth(8) characters", selenium.getAlert());
-		verifyEquals("7", selenium.getValue("//input[@id='min_pass_size']"));
+		verifyEquals("7", selenium.getValue("name=min_pass_size"));
 		verifyTrue(!selenium.isTextPresent("Company Information Saved."));
 		
 		goToTaskManager();
@@ -33,9 +33,9 @@ public class WS_Security extends DefaultSeleneseTestCase{
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();
-		verifyNotEquals("7", selenium.getValue("//input[@id='min_pass_size']"));
+		verifyNotEquals("7", selenium.getValue("name=min_pass_size"));
 		
-		selenium.type("//input[@id='min_pass_size']", "9");
+		selenium.type("name=min_pass_size", "9");
 		selenium.click("xpath=(//input[@id='button'])[2]");
 		waitForPageToLoadImproved();
 		verifyTrue(selenium.isTextPresent("Company Information Saved."));
