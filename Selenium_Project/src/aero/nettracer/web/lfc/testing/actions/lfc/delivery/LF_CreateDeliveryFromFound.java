@@ -80,7 +80,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			return;
 		}
 		
-		selenium.type("//div[@id='maincontent']/table[4]/tbody/tr/td/input", LF_CreateDeliveryFromFound.lostId);
+		selenium.type("//input[@id='foundInput']", LF_CreateDeliveryFromFound.lostId);
 		selenium.click("xpath=(//a[contains(text(),'Confirm Match')])[2]");
 		waitForPageToLoadImproved();
 		
