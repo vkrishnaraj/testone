@@ -143,10 +143,14 @@ public class NTReservationIntegrationImpl extends
 		if (retList.size() > 0) {
 			return retList;
 		}
-			
-		populateOhdFormInner(request, form);
-		HttpSession session = request.getSession();
-		session.setAttribute("OnHandForm", form);
+
+		if (booking != null) {
+			populateOhdFormInner(request, form);
+			HttpSession session = request.getSession();
+			session.setAttribute("OnHandForm", form);
+		} else {
+			retList.add("error.communication.reservation.system");
+		}
 		return retList;
 
 	}
@@ -228,13 +232,13 @@ public class NTReservationIntegrationImpl extends
 			formPax.setAddresses(faddresses);
 		}
 		
-		aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary[] itinArr = booking.getPassengerItineraryArray();
-		int routingType = TracingConstants.PASSENGER_ROUTING;
+		//aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary[] itinArr = booking.getPassengerItineraryArray();
+		//int routingType = TracingConstants.PASSENGER_ROUTING;
 		form.setItinerarylist(new ArrayList());
-		processOhdItinerary(form, itinArr, routingType);
+		//processOhdItinerary(form, itinArr, routingType);
 		
 		aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary[] bagItinArr = booking.getBagItineraryArray();
-		routingType = TracingConstants.BAGGAGE_ROUTING;
+		int routingType = TracingConstants.BAGGAGE_ROUTING;
 		processOhdItinerary(form, bagItinArr, routingType);
 	}
 

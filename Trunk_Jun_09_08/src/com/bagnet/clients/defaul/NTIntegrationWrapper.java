@@ -3,6 +3,7 @@ package com.bagnet.clients.defaul;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
+import org.apache.axis2.jaxws.server.ServerConstants;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.log4j.Logger;
 
@@ -17,6 +18,7 @@ import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Reservation;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
@@ -78,7 +80,16 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			this.setErrorMessage("error.communication.reservation.system");
 		}
 		
-		if (resDoc == null || resDoc.getGetReservationDataResponse().getReturn().getError() != null) {
+		if (resDoc == null) {
+			return null;
+		} else if (resDoc.getGetReservationDataResponse().getReturn().getError() != null) {
+			String error = resDoc.getGetReservationDataResponse().getReturn().getError().getDescription();
+			if (error != null) {
+				this.setErrorMessage(error);
+				if (error.equals("PNR NOT VALID")) {
+					this.setErrorMessage("No matching data found in reservation system.");
+				}
+			}
 			return null;
 		}
 		else if (resDoc.getGetReservationDataResponse().getReturn().getReservation() != null) {
