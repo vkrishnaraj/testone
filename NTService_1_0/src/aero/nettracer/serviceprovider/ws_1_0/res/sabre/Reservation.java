@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.wsdl.Output;
-
 import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.axis2.engine.Handler;
 import org.apache.axis2.engine.Phase;
@@ -52,20 +50,20 @@ import aero.nettracer.serviceprovider.ws_1_0.response.xsd.RemarkResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.ReservationResponse;
 
 import com.sabre.webservices.sabrexml._2003._07.AddRemarkRQDocument;
+import com.sabre.webservices.sabrexml._2003._07.AddRemarkRQDocument.AddRemarkRQ;
+import com.sabre.webservices.sabrexml._2003._07.AddRemarkRQDocument.AddRemarkRQ.BasicRemark;
 import com.sabre.webservices.sabrexml._2003._07.AddRemarkRSDocument;
 import com.sabre.webservices.sabrexml._2003._07.EndTransactionRQDocument;
+import com.sabre.webservices.sabrexml._2003._07.EndTransactionRQDocument.EndTransactionRQ;
 import com.sabre.webservices.sabrexml._2003._07.EndTransactionRSDocument;
 import com.sabre.webservices.sabrexml._2003._07.IgnoreTransactionRQDocument;
+import com.sabre.webservices.sabrexml._2003._07.IgnoreTransactionRQDocument.IgnoreTransactionRQ;
 import com.sabre.webservices.sabrexml._2003._07.IgnoreTransactionRSDocument;
 import com.sabre.webservices.sabrexml._2003._07.ItemType;
 import com.sabre.webservices.sabrexml._2003._07.ItemType.FlightSegment;
 import com.sabre.webservices.sabrexml._2003._07.SabreCommandLLSRQDocument;
-import com.sabre.webservices.sabrexml._2003._07.SabreCommandLLSRSDocument;
-import com.sabre.webservices.sabrexml._2003._07.AddRemarkRQDocument.AddRemarkRQ;
-import com.sabre.webservices.sabrexml._2003._07.AddRemarkRQDocument.AddRemarkRQ.BasicRemark;
-import com.sabre.webservices.sabrexml._2003._07.EndTransactionRQDocument.EndTransactionRQ;
-import com.sabre.webservices.sabrexml._2003._07.IgnoreTransactionRQDocument.IgnoreTransactionRQ;
 import com.sabre.webservices.sabrexml._2003._07.SabreCommandLLSRQDocument.SabreCommandLLSRQ;
+import com.sabre.webservices.sabrexml._2003._07.SabreCommandLLSRSDocument;
 import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument;
 import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument.TravelItineraryReadRQ;
 import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument.TravelItineraryReadRQ.MessagingDetails;
@@ -73,7 +71,7 @@ import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument.Tr
 import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument.TravelItineraryReadRQ.POS.Source;
 import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRQDocument.TravelItineraryReadRQ.UniqueID;
 import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument;
-import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS;
+import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.Errors.Error;
 import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.TravelItinerary;
 import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.TravelItinerary.CustomerInfo;
 import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.TravelItineraryReadRS.TravelItinerary.CustomerInfo.Address;
@@ -84,7 +82,6 @@ import com.sabre.webservices.sabrexml._2003._07.TravelItineraryReadRSDocument.Tr
 import com.sabre.webservices.websvc.AddRemarkServiceStub;
 import com.sabre.webservices.websvc.EndTransactionServiceStub;
 import com.sabre.webservices.websvc.IgnoreTransactionServiceStub;
-import com.sabre.webservices.websvc.OTA_TravelItineraryServiceStub2;
 import com.sabre.webservices.websvc.SabreCommandLLSServiceStub;
 import com.sabre.webservices.websvc.SessionCloseRQServiceStub;
 import com.sabre.webservices.websvc.SessionCreateRQServiceStub2;
@@ -155,9 +152,20 @@ public class Reservation implements ReservationInterface {
 
 			TravelItineraryReadRSDocument doc = loadPnr(connParams, pnr, false);
 			
-			if (doc.getTravelItineraryReadRS().getErrors() != null && doc.getTravelItineraryReadRS().getErrors().getError() != null && doc.getTravelItineraryReadRS().getErrors().getError().getErrorMessage() != null) {
-				exceptionText = doc.getTravelItineraryReadRS().getErrors().getError().getErrorMessage();
-				throw new Exception();
+			if (doc.getTravelItineraryReadRS().getErrors() != null && doc.getTravelItineraryReadRS().getErrors().getError() != null) {
+				Error error = doc.getTravelItineraryReadRS().getErrors().getError();
+				exceptionText = "";
+				if (error.getErrorMessage() != null) {
+					exceptionText = exceptionText + error.getErrorMessage();
+				}
+				if (error.getErrorInfo() != null && error.getErrorInfo().getMessage() != null) {
+					exceptionText = exceptionText + error.getErrorInfo().getMessage();
+				}
+				if (exceptionText.length() == 0) {
+					throw new Exception();
+				} else {
+					exceptionText = null;
+				}
 			}
 			
 			TravelItinerary ti = doc.getTravelItineraryReadRS()
@@ -231,10 +239,14 @@ public class Reservation implements ReservationInterface {
 				pax.setFirstname(pn.getGivenName());
 				pax.setLastname(pn.getSurname());
 				if (connParams.getCompany() != null && connParams.getCompany().equals("WS")
-						&& pn.getProfileIndexArray() != null && pn.getProfileIndexArray(0) != null) {
-					pax.setFfAirline("WS");
-					pax.setFfNumber(pn.getProfileIndexArray(0));
-					pax.setFfStatus("PROFILE");
+						&& pn.getProfileIndexArray() != null && pn.getProfileIndexArray().length > 0) {
+					for (String profile : pn.getProfileIndexArray()) {
+						if (profile.startsWith("TRAVELER/")) {
+							pax.setFfAirline("WS");
+							pax.setFfNumber(profile.substring(9));
+							pax.setFfStatus("PROFILE");
+						}
+					}
 				}
 				aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address add = pax
 						.addNewAddresses();
