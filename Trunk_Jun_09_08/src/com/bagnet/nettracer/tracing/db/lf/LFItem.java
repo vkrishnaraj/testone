@@ -311,7 +311,7 @@ public class LFItem implements Serializable{
 	}
 	
 	public String getDispPhone() {
-		if (phone != null && phone.getDecryptedPhoneNumber() != null) {
+		if (phone != null && phone.getDecryptedPhoneNumber() != null && phone.getDecryptedPhoneNumber()!="") {
 			return phone.getDecryptedPhoneNumber();
 		}
 		return "";

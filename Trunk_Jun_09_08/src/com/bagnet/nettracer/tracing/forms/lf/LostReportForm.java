@@ -107,8 +107,10 @@ public final class LostReportForm extends ActionForm {
 				break;
 			}
 		}
-		phone.setPerson(lost.getClient());
-		lost.getClient().getPhones().add(phone);
+		if(phone.getDecryptedPhoneNumber()!=null && !phone.getDecryptedPhoneNumber().isEmpty()){
+			phone.setPerson(lost.getClient());
+			lost.getClient().getPhones().add(phone);
+		}
 	}
 	
 	public LFItem getItem(int index) {

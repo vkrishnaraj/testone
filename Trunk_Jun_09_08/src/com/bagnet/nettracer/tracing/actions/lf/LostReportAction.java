@@ -176,7 +176,10 @@ public class LostReportAction extends CheckedAction {
 					if(LFServiceWrapper.getInstance().confirmMatch(matchId)){
 						lostReport = LFServiceWrapper.getInstance().getLostReport(lrForm.getLost().getId());
 					} else {
-						//TODO fail to create manual match, do something....
+						ActionMessage error = new ActionMessage("error.invalid.foundMatched.id");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+						return mapping.findForward(TracingConstants.LF_CREATE_LOST_REPORT);//TODO fail to create manual match, do something....
 					}
 				}
 			} catch (NumberFormatException nfe) {

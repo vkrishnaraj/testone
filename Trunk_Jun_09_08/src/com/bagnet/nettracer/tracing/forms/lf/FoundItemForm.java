@@ -116,8 +116,10 @@ public final class FoundItemForm extends ActionForm {
 				break;
 			}
 		}
-		phone.setPerson(found.getClient());
-		found.getClient().getPhones().add(phone);
+		if(phone.getDecryptedPhoneNumber()!=null && !phone.getDecryptedPhoneNumber().isEmpty()){
+			phone.setPerson(found.getClient());
+			found.getClient().getPhones().add(phone);
+		}
 	}
 	
 	public LFItem getItem(int index) {

@@ -17,6 +17,8 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.lang.WordUtils;
 import org.apache.struts.util.LabelValueBean;
+import org.dozer.DozerBeanMapper;
+import org.dozer.spring.DozerBeanMapperFactoryBean;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -51,6 +53,7 @@ import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.EmailParser;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.general.DeepCopy;
 import com.bagnet.nettracer.tracing.utils.general.Logger;
 
 @Stateless
@@ -405,6 +408,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		Session sess = null;
 		Transaction t = null;
 		long reportId = -1;
+		
 		boolean isNew = (lostReport!=null&&lostReport.getId()==0)?true:false;
 		
 		boolean isNewlyClosed = this.isNewlyClosed(lostReport);
@@ -418,21 +422,48 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			lostReport.setCloseAgent(null);
 		}
 		
+		boolean failed=false;
 		try{
-			sess = HibernateWrapper.getSession().openSession();
+
+ 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
-			sess.saveOrUpdate(lostReport);
-			t.commit();
+			
+				LFLost lrClone=(LFLost)DeepCopy.copy(lostReport);
+				sess.saveOrUpdate(lrClone);
+				t.commit();
+				DozerBeanMapper map = new DozerBeanMapper();
+				sess.close();
+				
+				sess = HibernateWrapper.getSession().openSession();
+				LFLost temp = (LFLost) sess.load(LFLost.class, lrClone.getId());
+				map.map(temp, lostReport);
+				lostReport.setClient(temp.getClient());
+				sess.close();
+				
+				sess = HibernateWrapper.getSession().openSession();
+				t = sess.beginTransaction();
+				sess.saveOrUpdate(lostReport);
+				t.commit();
+//			}
+//			else
+//			{
+//				sess.saveOrUpdate(lostReport);
+//				t.commit();
+//			}
+
 			reportId = lostReport.getId();
 		}catch (Exception e) {
 			e.printStackTrace();
 			try {
 				t.rollback();
+
 			} catch (Exception ex) {
 				// Fails
 				ex.printStackTrace();
+				
 			}
-		} finally {
+		}
+		finally {
 			if (sess != null) {
 				try {
 					sess.close();
@@ -441,6 +472,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				}
 			}
 		}
+		
+		
+		
 		if(lostReport.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_CLOSED){
 			//close any open trace results
 			closeOpenTraceResults(lostReport.getId(), TracingConstants.LF_TYPE_LOST);
@@ -456,6 +490,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			} else if (agent != null) {
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_MODIFY, (int) reportId, 0);
 			}
+			
 			return reportId;
 		} else {
 			throw new UpdateException();
@@ -653,11 +688,34 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		boolean isNew = (foundItem!=null&&foundItem.getId()==0)?true:false;
 		
 		boolean isNewlyClosed = this.isNewlyClosed(foundItem);
+		
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
-			sess.saveOrUpdate(foundItem);
-			t.commit();
+			
+				LFFound fiClone=(LFFound)DeepCopy.copy(foundItem);
+				sess.saveOrUpdate(fiClone); //This is when the inserting happens
+				t.commit(); //Then Updates
+				DozerBeanMapper map = new DozerBeanMapper(); //Shallow copying to the original record. Can't use the session.load feature because it then alters the pointer to the original and even though the save succeed, the user doesn't see that
+//				map.map(fiClone, foundItem);
+				sess.close();
+				
+				sess = HibernateWrapper.getSession().openSession();
+				LFFound temp = (LFFound) sess.load(LFFound.class, fiClone.getId());
+				map.map(temp, foundItem);
+				foundItem.setClient(temp.getClient());
+				sess.close();
+				
+				sess = HibernateWrapper.getSession().openSession();
+				t = sess.beginTransaction();
+				sess.saveOrUpdate(foundItem);
+				t.commit();
+//			}
+//			else{
+//				sess.saveOrUpdate(foundItem);
+//				t.commit();
+//			}
+			
 			reportId = foundItem.getId();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -671,6 +729,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			if (sess != null) {
 				try {
 					sess.close();
+					
+					
+					//HibernateWrapper.getSession().close();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -722,7 +783,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		colors.add(new LabelValueBean("Multiple Colors", "MC"));
 		return colors;
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<LFCategory> getCategories(String companycode) {
@@ -1894,6 +1955,20 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 		}
 	}
+	
+//	public void sendFoundEmail(long id){
+//		LFLost lost = getLostReport(id);
+//		HashMap<String,String> h = getEmailParams(lost);
+//		if(sendEmail(lost, h, "found_report_email.html", h.get("SUBJECTLINE"))){
+//			lost.setEmailSentDate(new Date());
+//			try {
+//				saveOrUpdateLostReport(lost,getAutoAgent());
+//				Logger.logLF(""+id, "FOUND EMAIL SENT", 0);
+//			} catch (UpdateException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 	
 	public boolean sendFoundEmail(long id){
 		LFLost lost = getLostReport(id);

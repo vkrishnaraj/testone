@@ -211,6 +211,10 @@ public class FoundItemAction extends CheckedAction {
 					found = LFServiceWrapper.getInstance().getFoundItem(fiForm.getFound().getId());
 				} else {
 					//TODO fail to create manual match, do something....
+					ActionMessage error = new ActionMessage("error.invalid.lostMatched.id");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+					return mapping.findForward(TracingConstants.LF_CREATE_FOUND_ITEM);
 				}
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
