@@ -136,7 +136,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
-			System.out.println("CDFF: Created Found Item: " + LF_CreateLostAndFoundReadOnly.foundId);
+			System.out.println("CLAFRO: Created Found Item: " + LF_CreateLostAndFoundReadOnly.foundId);
 			
 			// Manually match to the Lost Report that we just created.
 			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr/td/input", LF_CreateLostAndFoundReadOnly.lostId);
