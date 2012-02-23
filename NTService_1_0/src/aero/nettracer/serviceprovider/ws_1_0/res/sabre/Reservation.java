@@ -161,7 +161,7 @@ public class Reservation implements ReservationInterface {
 				if (error.getErrorInfo() != null && error.getErrorInfo().getMessage() != null) {
 					exceptionText = exceptionText + error.getErrorInfo().getMessage();
 				}
-				if (exceptionText.length() == 0) {
+				if (exceptionText.length() > 0) {
 					throw new Exception();
 				} else {
 					exceptionText = null;
