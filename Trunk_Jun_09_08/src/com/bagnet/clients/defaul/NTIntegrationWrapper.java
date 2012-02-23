@@ -87,7 +87,7 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			if (error != null) {
 				this.setErrorMessage(error);
 				if (error.equals("PNR NOT VALID")) {
-					this.setErrorMessage("No matching data found in reservation system.");
+					this.setErrorMessage("error.pnr.not.available");
 				}
 			}
 			return null;
