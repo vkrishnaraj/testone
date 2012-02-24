@@ -845,6 +845,9 @@
 		<antcall target="build-war-production-united"/>
 		<antcall target="build-war-production-american"/>
 		<antcall target="build-war-production-delta"/>
+		<antcall target="build-war-production-jetblue"/>
+		<antcall target="build-war-production-azul"/>
+		<antcall target="build-war-production-spirit"/>
 		<property name="app.xml.location" value="metadata/ab/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
