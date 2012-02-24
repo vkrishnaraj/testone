@@ -14,7 +14,7 @@ public class FileHelper {
 	private static final String BASE_PATH = "c:/nettracer_claims_files/";
 	private static String path;
 	
-	private static String getFilePath(int claimId) {
+	private static String getFilePath(String incidentId) {
 		
 		Calendar cal = new GregorianCalendar();
 		int year = cal.get(Calendar.YEAR);
@@ -23,14 +23,14 @@ public class FileHelper {
 		
 		String datePath = year + "/" + month + "/" + day + "/";
 		
-		String filePath = BASE_PATH + datePath + claimId;
+		String filePath = BASE_PATH + datePath + incidentId;
 		return filePath;
 		
 	}
 
-	public static boolean saveImage(int claimId, String fileName, byte[] file) throws IOException {
+	public static boolean saveImage(String incidentId, String fileName, byte[] file) throws IOException {
 		
-		String filePath = getFilePath(claimId);
+		String filePath = getFilePath(incidentId);
 		
 		if (!makeFolder(filePath)) {
 			//Error in creating a directory.
@@ -60,7 +60,7 @@ public class FileHelper {
 		return true;
 	}
 	
-	public static boolean deleteImage(int claimId, String fileName, String filePath) throws IOException {
+	public static boolean deleteImage(String incidentId, String fileName, String filePath) throws IOException {
 		
 		// A File object to represent the filename
 	    java.io.File f = new java.io.File(filePath + "/" + fileName);

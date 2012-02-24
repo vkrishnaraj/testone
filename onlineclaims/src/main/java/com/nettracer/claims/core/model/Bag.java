@@ -18,18 +18,18 @@ public class Bag {
 	private String bagPrice;
 	private String bagCurrency;
 	private String bagOwner;
-	private Boolean hardSided;
-	private Boolean wheelsRollers;
-	private Boolean feet;
-	private Boolean trim;
-	private Boolean softSided;
-	private Boolean zippers;
-	private Boolean retractableHandel;
-	private Boolean pockets;
-	private Boolean locks;
-	private Boolean pullStrap;
-	private Boolean nameTag;
-	private Boolean ribbonsPersonalMarkings;
+	private boolean hardSided;
+	private boolean wheelsRollers;
+	private boolean feet;
+	private boolean trim;
+	private boolean softSided;
+	private boolean zippers;
+	private boolean retractableHandel;
+	private boolean pockets;
+	private boolean locks;
+	private boolean pullStrap;
+	private boolean nameTag;
+	private boolean ribbonsPersonalMarkings;
 	private boolean leather;
 	private boolean metal;
 	private String trimDescription;
@@ -125,99 +125,99 @@ public class Bag {
 		this.bagType = bagType;
 	}
 
-	public Boolean getHardSided() {
+	public boolean getHardSided() {
 		return hardSided;
 	}
 
-	public void setHardSided(Boolean hardSided) {
+	public void setHardSided(boolean hardSided) {
 		this.hardSided = hardSided;
 	}
 
-	public Boolean getWheelsRollers() {
+	public boolean getWheelsRollers() {
 		return wheelsRollers;
 	}
 
-	public void setWheelsRollers(Boolean wheelsRollers) {
+	public void setWheelsRollers(boolean wheelsRollers) {
 		this.wheelsRollers = wheelsRollers;
 	}
 
-	public Boolean getFeet() {
+	public boolean getFeet() {
 		return feet;
 	}
 
-	public void setFeet(Boolean feet) {
+	public void setFeet(boolean feet) {
 		this.feet = feet;
 	}
 
-	public Boolean getTrim() {
+	public boolean getTrim() {
 		return trim;
 	}
 
-	public void setTrim(Boolean trim) {
+	public void setTrim(boolean trim) {
 		this.trim = trim;
 	}
 
-	public Boolean getSoftSided() {
+	public boolean getSoftSided() {
 		return softSided;
 	}
 
-	public void setSoftSided(Boolean softSided) {
+	public void setSoftSided(boolean softSided) {
 		this.softSided = softSided;
 	}
 
-	public Boolean getZippers() {
+	public boolean getZippers() {
 		return zippers;
 	}
 
-	public void setZippers(Boolean zippers) {
+	public void setZippers(boolean zippers) {
 		this.zippers = zippers;
 	}
 
-	public Boolean getRetractableHandel() {
+	public boolean getRetractableHandel() {
 		return retractableHandel;
 	}
 
-	public void setRetractableHandel(Boolean retractableHandel) {
+	public void setRetractableHandel(boolean retractableHandel) {
 		this.retractableHandel = retractableHandel;
 	}
 
-	public Boolean getPockets() {
+	public boolean getPockets() {
 		return pockets;
 	}
 
-	public void setPockets(Boolean pockets) {
+	public void setPockets(boolean pockets) {
 		this.pockets = pockets;
 	}
 
-	public Boolean getLocks() {
+	public boolean getLocks() {
 		return locks;
 	}
 
-	public void setLocks(Boolean locks) {
+	public void setLocks(boolean locks) {
 		this.locks = locks;
 	}
 
-	public Boolean getPullStrap() {
+	public boolean getPullStrap() {
 		return pullStrap;
 	}
 
-	public void setPullStrap(Boolean pullStrap) {
+	public void setPullStrap(boolean pullStrap) {
 		this.pullStrap = pullStrap;
 	}
 
-	public Boolean getNameTag() {
+	public boolean getNameTag() {
 		return nameTag;
 	}
 
-	public void setNameTag(Boolean nameTag) {
+	public void setNameTag(boolean nameTag) {
 		this.nameTag = nameTag;
 	}
 
-	public Boolean getRibbonsPersonalMarkings() {
+	public boolean getRibbonsPersonalMarkings() {
 		return ribbonsPersonalMarkings;
 	}
 
-	public void setRibbonsPersonalMarkings(Boolean ribbonsPersonalMarkings) {
+	public void setRibbonsPersonalMarkings(boolean ribbonsPersonalMarkings) {
 		this.ribbonsPersonalMarkings = ribbonsPersonalMarkings;
 	}
 

@@ -1339,9 +1339,7 @@ public class PassengerController {
 							HttpSession session = (HttpSession) FacesUtil
 									.getFacesContext().getExternalContext()
 									.getSession(false);
-							baggageState = (Long) session
-									.getAttribute("baggageState");
-							FileHelper.saveImage(baggageState.intValue(),
+							FileHelper.saveImage(passengerBean.getIncidentID(),
 									fileName, data);
 							file.setPath(FileHelper.getPath());
 							file.setInterim(isInterimFile());
@@ -1381,9 +1379,8 @@ public class PassengerController {
 		int fileSize = files.size();
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
-		baggageState = (Long) session.getAttribute("baggageState");
 		try {
-			FileHelper.deleteImage(baggageState.intValue(), file.getName(), file.getPath());
+			FileHelper.deleteImage(passengerBean.getIncidentID(), file.getName(), file.getPath());
 			for (int i = fileSize - 1; i >= 0; i--) {
 				File f = files.get(i);
 				if (f.getName().equals(file.getName())) {

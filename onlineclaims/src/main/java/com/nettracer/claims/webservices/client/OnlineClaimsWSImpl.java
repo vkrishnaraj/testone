@@ -321,7 +321,14 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          // Prepare XML documents for request
 		 SaveClaimDocument request = SaveClaimDocument.Factory.newInstance();
 		 SaveClaim subDoc1 = request.addNewSaveClaim();
-		 //claim.setClaimId(passengerBean.getClaimId()); //mandatory field for save through web service
+		 
+		 claim.setEmailAddress(passengerBean.getEmailAddress());
+		 claim.setOccupation(passengerBean.getOccupation());
+		 claim.setBusinessName(passengerBean.getBusinessName());
+		 claim.setFrequentFlierNumber(passengerBean.getFrequentFlyerNumber());
+		 claim.setSocialSecurity(passengerBean.getSocialSecurityNumber());
+		 
+		 //Passengers
 		 claim.setPassengerArray(null);
 		 for (Passenger pass : passengerBean.getPassengers()) {
 			 com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger claimPass = claim.addNewPassenger();
@@ -331,16 +338,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			 claimPass.setSalutation(pass.getSalutation());
 			 claimPass.setAccept(pass.getAccept());
 		 }
-		 claim.setEmailAddress(passengerBean.getEmailAddress());
-		 claim.setOccupation(passengerBean.getOccupation());
-		 claim.setBusinessName(passengerBean.getBusinessName());
 		 
-		 if(null != claim.getPermanentAddress()){
-			 wsPermanentAddress=claim.getPermanentAddress();
-		 }else{
-			 wsPermanentAddress= com.bagnet.nettracer.ws.onlineclaims.xsd.Address.Factory.newInstance();
-		 }
-		
+		 //Addresses
+		 wsPermanentAddress = com.bagnet.nettracer.ws.onlineclaims.xsd.Address.Factory.newInstance();
 		 wsPermanentAddress.setAddress1(passengerBean.getAddress().get(0).getAddressLine1());
 		 wsPermanentAddress.setAddress2(passengerBean.getAddress().get(0).getAddressLine2());
 		 wsPermanentAddress.setCity(passengerBean.getAddress().get(0).getCity());
@@ -349,12 +349,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		 wsPermanentAddress.setStateProvince(passengerBean.getAddress().get(0).getStateRegion());
 		 claim.setPermanentAddress(wsPermanentAddress);
 		 
-		 if(null != claim.getMailingAddress()){
-			 wsMailingAddress=claim.getMailingAddress();
-		 }else{
-			 wsMailingAddress= com.bagnet.nettracer.ws.onlineclaims.xsd.Address.Factory.newInstance();
-		 }
-		 
+		 wsMailingAddress= com.bagnet.nettracer.ws.onlineclaims.xsd.Address.Factory.newInstance();
 		 wsMailingAddress.setAddress1(passengerBean.getAddress().get(1).getAddressLine1());
 		 wsMailingAddress.setAddress2(passengerBean.getAddress().get(1).getAddressLine2());
 		 wsMailingAddress.setCity(passengerBean.getAddress().get(1).getCity());
@@ -363,74 +358,54 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		 wsMailingAddress.setStateProvince(passengerBean.getAddress().get(1).getStateRegion());
 		 claim.setMailingAddress(wsMailingAddress);
 		 
-		 if(null != claim.getPhoneArray() && claim.getPhoneArray().length > 0){
-			 phoneArray= claim.getPhoneArray();
-			for (int i = 0; i < phoneArray.length; i++) {
-				 Phone phone=phoneArray[i];
-				 if(phone.getPhoneType().equals("Home")){
-					 phone.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneHome());
-				 }else if(phone.getPhoneType().equals("Mobile")){
-					 phone.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneMobile());
-				 }else if(phone.getPhoneType().equals("Fax")){
-					 phone.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneFax());
-				 }else if(phone.getPhoneType().equals("Business")){
-					 phone.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneBusiness());
-				 }
-				 //phoneArray[i]=phone;
-			}
+		 //Phones
+		 Phone phone1=Phone.Factory.newInstance();
+		 phone1.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneHome());
+		 phone1.setPhoneType("Home");
 			 
-		 }else{
-			 Phone phone1=Phone.Factory.newInstance();
-			 phone1.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneHome());
-			 phone1.setPhoneType("Home");
+		 Phone phone2=Phone.Factory.newInstance();
+		 phone2.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneMobile());
+		 phone2.setPhoneType("Mobile");
 			 
-			 Phone phone2=Phone.Factory.newInstance();
-			 phone2.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneMobile());
-			 phone2.setPhoneType("Mobile");
+		 Phone phone3=Phone.Factory.newInstance();
+		 phone3.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneFax());
+		 phone3.setPhoneType("Fax");
 			 
-			 Phone phone3=Phone.Factory.newInstance();
-			 phone3.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneFax());
-			 phone3.setPhoneType("Fax");
+		 Phone phone4=Phone.Factory.newInstance();
+		 phone4.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneBusiness());
+		 phone4.setPhoneType("Business");
 			 
-			 Phone phone4=Phone.Factory.newInstance();
-			 phone4.setPhoneNumber(passengerBean.getAddress().get(0).getPhoneBusiness());
-			 phone4.setPhoneType("Business");
-			 
-			 phoneArray=new Phone[]{phone1,phone2,phone3,phone4};
-		 }
+		 phoneArray=new Phone[]{phone1,phone2,phone3,phone4};
 		 
-		 claim.setPhoneArray(phoneArray);
-		 claim.setFrequentFlierNumber(passengerBean.getFrequentFlyerNumber());
-		 claim.setSocialSecurity(passengerBean.getSocialSecurityNumber());
+		 claim.setPhoneArray(phoneArray);  
+		          
+         //Bag Tags
+         List<Bag> bagTagList = passengerBean.getBagTagList();
+         com.bagnet.nettracer.ws.onlineclaims.xsd.Bag wsBag=null;
+         Bag bag=null;
+         if(null != bagTagList && bagTagList.size() >0){
+			com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBagArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[bagTagList.size()];
+				for (int i=0; i<bagTagList.size();i++) {
+					wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
+					bag=bagTagList.get(i);
+					wsBag.setTag(bag.getBagTagNumber());
+					wsBag.setBagArrive(new Boolean (bag.getBagArrivalStatus()));
+					wsBagArray[i]=wsBag;
+				}
+			claim.setBagArray(wsBagArray);
+         }
+         
+         //Itineraries
+         setWSItineraries(passengerBean.getItineraryList(),claim); // GOOD TO GO	 
+         
+         //Bag Info
+         setWSBags(passengerBean.getBagList(),claim); // GOOD TO GO
+         
+         //Files Uploaded
+         setWSFiles(passengerBean.getFiles(),claim); // GOOD TO GO
 		 
          subDoc1.setIncidentId(passengerBean.getIncidentID()); //claim number is the incident Id
          subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
-         
-         //setWSFiles(passengerBean.getFiles(),claim);
-         
-        /* 
-         //Bag
-         setWSBags(passengerBean.getBagList(),claim);
-         
-         //File
-         setWSFiles(passengerBean.getFiles(),claim);
-         
-         //Fraud Question
-         claim.setFiledPreviousClaim(passengerBean.getAnotherClaim());
-         claim.setFiledPreviousAirline(passengerBean.getWhichAirline());
-         if(null != passengerBean.getDateOfClaim()){
-        	 calendar=Calendar.getInstance();
-        	 calendar.setTime(passengerBean.getDateOfClaim());
-        	 claim.setFiledPrevoiusDate(calendar);
-        	 calendar=null; //GC
-         }
-         claim.setFiledPreviousClaimant(passengerBean.getClaimantName());
-         claim.setTsaInspected(passengerBean.getTsaInspect());
-         claim.setTsaNotePresent(passengerBean.getBagConfirmNote());
-         claim.setTsaInspectionLocation(passengerBean.getInspectionPlace());
-         claim.setComments(passengerBean.getAdditionalComments());
-         //submit claim
-         claim.setAccept(passengerBean.getTypeAccept());*/
          
          subDoc1.setClaim(claim);
          // Set System Username & PW
