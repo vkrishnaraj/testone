@@ -15,12 +15,31 @@
 				<p class="twlvPxBlk"><t:outputText value="#{msg.bagunchecked_text_intro}" /></p>
 				<p class="twlvPxBlk"><t:outputText value="#{msg.bagunchecked_text_file_desc}" /></p><br/>
 				<p class="twlvPxBlk">
-					<t:outputText value="#{msg.bagunchecked_text_faq_title}" /><br/><br/>
+					<h2 class="swa_faq_title"><t:outputText value="#{msg.bagunchecked_text_faq_title}" /></h2>
 					<t:outputText value="#{msg.bagunchecked_text_faq}" escape="false"/>
 				</p><br/>
 				<a4j:commandButton value="#{msg.bagunchecked_button_file_lost}" action="#{lostAndFound.goToFormPage}" /><br/><br/>
 				<hr></hr>
 			</h:panelGroup>
+			<script type="text/javascript">
+			<!--
+			function toggleQuestion(quesDT) {
+				if(quesDT.className == 'first_item collapsed') {
+					quesDT.className = "first_item collapsed expanded";
+					document.getElementById(quesDT.id + 'a').className = "active";
+				} else if(quesDT.className == 'collapsed') {
+					quesDT.className = "collapsed expanded";
+					document.getElementById(quesDT.id + 'a').className = "active";
+				} else if(quesDT.className == 'collapsed expanded') {
+					quesDT.className = "collapsed";
+					document.getElementById(quesDT.id + 'a').className = "";
+				} else {
+					quesDT.className = "first_item collapsed";
+					document.getElementById(quesDT.id + 'a').className = "";
+				}
+			}
+			//-->
+			</script>
 		</h:form>
 	</ui:define>
 </ui:composition>

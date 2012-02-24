@@ -258,3 +258,51 @@ input[type="button"], input[type="submit"], input[type="reset"] {
     margin-top: 5px;
     width: 86px;
 }
+
+.swa_expandables_expandable_list dd, .swa_expandables_expandable_list dt span {
+    padding-left: 30px;
+}
+
+.swa_expandables_expandable_list dt.collapsed span {
+    background: url("../_images/southwest/icon_open_dt.png") no-repeat scroll left 2px transparent;
+    display: inline-block;
+}
+
+.swa_expandables_expandable_list dt.expanded span {
+    background: url("../_images/southwest/icon_close_dt.png") no-repeat scroll left 2px transparent;
+}
+
+dl.swa_expandables_expandable_list {
+    background: url("../_images/southwest/dotted_grayOverBlue_1_2.gif") repeat-x scroll center bottom transparent;
+    margin-top: 0;
+    padding-bottom: 1px;
+}
+
+.swa_expandables_expandable_list dt {
+    background: url("../_images/southwest/dotted_grayOverBlue_1_2.gif") repeat-x scroll center top transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+}
+
+.swa_expandables_expandable_list dt.first_item {
+    background: none repeat scroll 0 0 transparent;
+}
+
+.swa_expandables_expandable_list dd {
+    display: none;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+.swa_expandables_expandable_list dd.active {
+    display: block;
+}
+
+h2.swa_faq_title {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
