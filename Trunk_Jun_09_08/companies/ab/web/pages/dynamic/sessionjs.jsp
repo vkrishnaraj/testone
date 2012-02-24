@@ -1663,10 +1663,7 @@ document.onkeydown = function(){
 		hideAllMenus(root,root);
 	}
 
-	if (document.activeElement.id == "barcode" && window.event && window.event.keyCode == 13) {
-		window.event.keyCode = 9;
-	}
-
+	
 	if(window.event && window.event.keyCode == 505) { 
 		return false; 
 	}
