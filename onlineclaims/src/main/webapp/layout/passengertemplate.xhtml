@@ -49,6 +49,7 @@
 		<!-- <script type="text/javascript" src="../_js/nav.js"></script> -->
 		<h:form>
 			<h:commandLink value="Log Out" rendered="#{sessionPassengerBean.logoutRenderer}"
+				 	 onclick="if (!window.confirm('Are you sure? Clicking OK will result in the loss of unsaved data.')) { return false; }"
 						action="#{passengerController.passengerLogout}" styleClass="passlogoutnav"/>
 		</h:form>
 		<script type="text/javascript" src="../_js/safariCheck.js"></script>

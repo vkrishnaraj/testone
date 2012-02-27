@@ -1107,6 +1107,10 @@ public class PassengerController {
 				try {
 					List<Bag> bagTagList = passengerBean.getBagTagList();
 					List<Bag> lostBagList = new ArrayList<Bag>();
+					if (passengerBean.getBagsTravelWith() == 0) {
+						FacesUtil.addError("Please select the number of checked bags you traveled with");
+						return null;
+					}
 					if (bagTagList != null && bagTagList.size() > 0) {
 						for (Bag lostBag : bagTagList) {
 							if (Boolean.parseBoolean(lostBag.getBagArrivalStatus()) == false) {
@@ -1757,31 +1761,31 @@ public class PassengerController {
 	}
 
 	public String passengerLogout() {
-		switch (currentPage) {
-			case PAGE_PASSENGER_INFO:
-				savePassengerInfo();
-				break;
-			case PAGE_FLIGHT_INFO:
-				saveFlightInfo();
-				break;
-			case PAGE_BAG_INFO:
-				saveBagInfo();
-				break;
-			case PAGE_FILE_UPLOAD:
-				saveFileInfo();
-				break;
-			case PAGE_ADDITIONAL_INFO:
-				saveFraudQuestion();
-				break;
-			case PAGE_SUBMIT:
-				submitPassengerInfo();
-				break;
-		}
-		if (!FacesUtil.isError()) {
+//		switch (currentPage) {
+//			case PAGE_PASSENGER_INFO:
+//				savePassengerInfo();
+//				break;
+//			case PAGE_FLIGHT_INFO:
+//				saveFlightInfo();
+//				break;
+//			case PAGE_BAG_INFO:
+//				saveBagInfo();
+//				break;
+//			case PAGE_FILE_UPLOAD:
+//				saveFileInfo();
+//				break;
+//			case PAGE_ADDITIONAL_INFO:
+//				saveFraudQuestion();
+//				break;
+//			case PAGE_SUBMIT:
+//				submitPassengerInfo();
+//				break;
+//		}
+//		if (!FacesUtil.isError()) {
 			currentPage = PAGE_DIRECTION;
 			return FacesUtil.passengerLogout();
-		}
-		return null;
+//		}
+//		return null;
 	}
 
 	public CaptchaBean getCaptchaBean() {
