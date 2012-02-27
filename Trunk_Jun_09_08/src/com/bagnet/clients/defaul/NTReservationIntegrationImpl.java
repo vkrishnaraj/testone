@@ -483,6 +483,10 @@ public class NTReservationIntegrationImpl extends
 			theitem.setBagnumber(i);
 			theitem.setStatus(StatusBMO.getStatus(
 					TracingConstants.ITEM_STATUS_OPEN));
+			if (itemtype != TracingConstants.LOST_DELAY && form.getClaimcheck(i) != null
+					&& form.getClaimcheck(i).getClaimchecknum() != null) {
+				theitem.setClaimchecknum(form.getClaimcheck(i).getClaimchecknum());
+			}
 
 		}
 		
