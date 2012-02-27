@@ -232,13 +232,13 @@ public class NTReservationIntegrationImpl extends
 			formPax.setAddresses(faddresses);
 		}
 		
-		//aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary[] itinArr = booking.getPassengerItineraryArray();
-		//int routingType = TracingConstants.PASSENGER_ROUTING;
+		aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary[] itinArr = booking.getPassengerItineraryArray();
+		int routingType = TracingConstants.PASSENGER_ROUTING;
 		form.setItinerarylist(new ArrayList());
-		//processOhdItinerary(form, itinArr, routingType);
+		processOhdItinerary(form, itinArr, routingType);
 		
 		aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary[] bagItinArr = booking.getBagItineraryArray();
-		int routingType = TracingConstants.BAGGAGE_ROUTING;
+		routingType = TracingConstants.BAGGAGE_ROUTING;
 		processOhdItinerary(form, bagItinArr, routingType);
 	}
 
