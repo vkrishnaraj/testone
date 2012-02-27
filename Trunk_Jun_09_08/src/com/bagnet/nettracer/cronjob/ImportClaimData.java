@@ -242,7 +242,7 @@ public abstract class ImportClaimData {
 
 	public boolean setVariablesFromArgs(String[] args) {
 		boolean success = true;
-		if (args.length != 6 || args.length != 7) {
+		if (args.length != 6 && args.length != 7) {
 			success = false;
 		} else {
 			try {
