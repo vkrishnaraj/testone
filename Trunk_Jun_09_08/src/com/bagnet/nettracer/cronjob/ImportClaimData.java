@@ -58,6 +58,10 @@ public abstract class ImportClaimData {
 	protected String filePath;
 	protected int queueSize;
 	protected int submissionThreadCount;
+	protected String username;
+	protected String password;
+	protected String company;
+	protected int runWhich;
 	
 	protected PrintWriter outputFile;
 	protected ArrayBlockingQueue<aero.nettracer.fs.model.File> queue;
@@ -74,18 +78,22 @@ public abstract class ImportClaimData {
 		}
 		
 		// TODO UNCOMMENT THIS SECTION!!!
-//		// import existing nettracer claims
-//		if (ntUser) {
-//			 importNtClaims();
-//		}
-//		
-//		importThirdPartyClaims();
-//		
-//		sleepForABit();
+		// import existing nettracer claims
+		if (ntUser & runWhich == 1) {
+			 importNtClaims();
+		}
+		
+		if (runWhich == 2) {
+			importThirdPartyClaims();
+		
+			sleepForABit();
+		}
 		
 		// submit any files to fraud services that have not been submitted yet
-		submitFilesToFraudServices();		
-		sleepForABit();
+		if (runWhich == 3) {
+			submitFilesToFraudServices();		
+			sleepForABit();
+		}
 		
 		closeOutputFile();
 		
@@ -234,13 +242,19 @@ public abstract class ImportClaimData {
 
 	public boolean setVariablesFromArgs(String[] args) {
 		boolean success = true;
-		if (args.length != 3) {
+		if (args.length != 6 || args.length != 7) {
 			success = false;
 		} else {
 			try {
-				this.filePath = args[0];
-				this.submissionThreadCount = Integer.valueOf(args[1]);
-				this.queueSize = Integer.valueOf(args[2]);
+				this.username = args[0];
+				this.password = args[1];
+				this.company = args[2];
+				this.runWhich = Integer.valueOf(args[3]);
+				this.submissionThreadCount = Integer.valueOf(args[4]);
+				this.queueSize = Integer.valueOf(args[5]);
+				if (args.length == 7) {
+					this.filePath = args[6];
+				}
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
 				success = false;

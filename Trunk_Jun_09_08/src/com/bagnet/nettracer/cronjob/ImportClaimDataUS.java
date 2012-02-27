@@ -721,8 +721,9 @@ public class ImportClaimDataUS extends ImportClaimData {
 	public static void main(String[] args) {
 		ImportClaimDataUS importer = new ImportClaimDataUS();
 		if (!importer.setVariablesFromArgs(args)) {
-			System.err.println("Usage:\t" + ImportClaimDataUS.class.getSimpleName() + " [crm file path] [thread count] [queue size]");
-			System.err.println("Example:\t" + ImportClaimDataUS.class.getSimpleName() + " C:\\crm 3 500");
+			System.err.println("Usage:\t" + ImportClaimDataUS.class.getSimpleName() + " [username] [password] [company] " +
+					"[process(1=import, 2=third party, 3=submit to FS)] [thread count] [queue size] [crm file path(OPTIONAL)]");
+			System.err.println("Example:\t" + ImportClaimDataUS.class.getSimpleName() + " ntadmin Ladendead51! US 1 3 500 C:\\crm");
 		} else {		
 			importer.importClaims();
 		}
