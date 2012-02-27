@@ -17,7 +17,6 @@
 				<ref bean="LockCleanupTrigger" />
 				<ref bean="TwentyForHourEmailTrigger" />
 				<ref bean="CrmTrigger" />
-				<ref bean="cronFsDataRetention" />
 			</list>
 		</property>
 	</bean>

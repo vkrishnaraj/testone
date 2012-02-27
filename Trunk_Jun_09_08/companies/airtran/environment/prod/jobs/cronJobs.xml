@@ -13,7 +13,6 @@
 				<ref bean="cronOldPassiveTracerTrigger" />
 				<ref bean="RemoveMassOhdTrigger" />
 				<ref bean="BillingTrigger" />
-				<ref bean="cronFsDataRetention" />
 			</list>
 		</property>
 	</bean>

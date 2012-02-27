@@ -10,7 +10,6 @@
 		<property name="triggers">
 			<list>
 				<ref bean="LockCleanupTrigger" />
-				<ref bean="cronFsDataRetention" />
 			</list>
 		</property>
 	</bean>
