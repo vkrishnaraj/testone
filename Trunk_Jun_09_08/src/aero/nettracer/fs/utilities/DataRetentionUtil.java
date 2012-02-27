@@ -31,6 +31,7 @@ public class DataRetentionUtil {
 	}
 	
 	public void deleteOldFiles(){
+		if(false){//loupas - removing data rentention for the time being
 		String sql = "select f.id from aero.nettracer.fs.model.File f left outer join f.incident i left outer join f.claims c" +
 				" where (i.timestampOpen < :date or c.claimDate < :date) ";
 		
@@ -54,6 +55,7 @@ public class DataRetentionUtil {
 		}catch (Exception e){
 			e.printStackTrace();
 			sess.close();
+		}
 		}
 	}
 	
