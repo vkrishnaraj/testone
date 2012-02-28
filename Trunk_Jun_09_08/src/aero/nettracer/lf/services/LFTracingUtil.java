@@ -134,6 +134,8 @@ public class LFTracingUtil {
 		" and i.disposition_status_ID = :disposition" +
 		" and (li.lossdate is null or li.lossdate <= :founddate) ";
 		boolean hasLocation = false;
+		//loupas - removing limiting potentail list by reservation location
+		//update leaving this in for now....until we change our mind again
 		if(found != null && found.getLocation() != null){
 			sql += " and (li.origin_station_ID = :foundstation " +
 			" or li.destination_station_ID = :foundstation)" ;
@@ -198,7 +200,7 @@ public class LFTracingUtil {
 		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(found.getCompanyId()))){
 			return getLFCPotentialLost(found, bean);
 		} else {
-			return null;
+			return getLFCPotentialLost(found, bean);//for demo
 		}
 	}
 	
@@ -254,6 +256,8 @@ public class LFTracingUtil {
 		" and f.receivedDate > :founddate";
 
 		boolean hasReservation = false;
+		//loupas - removing limiting potentail list by reservation location
+		//update leaving this in for now....until we change our mind again
 		if(lost != null && lost.getLossInfo() != null 
 				&& lost.getLossInfo().getDestination() != null 
 				&& lost.getLossInfo().getOrigin() != null){
@@ -297,7 +301,7 @@ public class LFTracingUtil {
 		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
 			return getLFCPotentialFound(lost);
 		} else {
-			return null;
+			return getLFCPotentialFound(lost);//for demo
 		}
 	}
 	

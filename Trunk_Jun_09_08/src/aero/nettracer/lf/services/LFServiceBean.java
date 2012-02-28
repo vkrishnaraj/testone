@@ -408,7 +408,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		Session sess = null;
 		Transaction t = null;
 		long reportId = -1;
-		
 		boolean isNew = (lostReport!=null&&lostReport.getId()==0)?true:false;
 		
 		boolean isNewlyClosed = this.isNewlyClosed(lostReport);
@@ -422,48 +421,21 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			lostReport.setCloseAgent(null);
 		}
 		
-		boolean failed=false;
 		try{
-
- 			sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
-			
-				LFLost lrClone=(LFLost)DeepCopy.copy(lostReport);
-				sess.saveOrUpdate(lrClone);
-				t.commit();
-				DozerBeanMapper map = new DozerBeanMapper();
-				sess.close();
-				
-				sess = HibernateWrapper.getSession().openSession();
-				LFLost temp = (LFLost) sess.load(LFLost.class, lrClone.getId());
-				map.map(temp, lostReport);
-				lostReport.setClient(temp.getClient());
-				sess.close();
-				
-				sess = HibernateWrapper.getSession().openSession();
-				t = sess.beginTransaction();
-				sess.saveOrUpdate(lostReport);
-				t.commit();
-//			}
-//			else
-//			{
-//				sess.saveOrUpdate(lostReport);
-//				t.commit();
-//			}
-
+			sess.saveOrUpdate(lostReport);
+			t.commit();
 			reportId = lostReport.getId();
 		}catch (Exception e) {
 			e.printStackTrace();
 			try {
 				t.rollback();
-
 			} catch (Exception ex) {
 				// Fails
 				ex.printStackTrace();
-				
 			}
-		}
-		finally {
+		} finally {
 			if (sess != null) {
 				try {
 					sess.close();
@@ -472,9 +444,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				}
 			}
 		}
-		
-		
-		
 		if(lostReport.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_CLOSED){
 			//close any open trace results
 			closeOpenTraceResults(lostReport.getId(), TracingConstants.LF_TYPE_LOST);
@@ -490,7 +459,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			} else if (agent != null) {
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_MODIFY, (int) reportId, 0);
 			}
-			
 			return reportId;
 		} else {
 			throw new UpdateException();
@@ -688,34 +656,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		boolean isNew = (foundItem!=null&&foundItem.getId()==0)?true:false;
 		
 		boolean isNewlyClosed = this.isNewlyClosed(foundItem);
-		
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
-			
-				LFFound fiClone=(LFFound)DeepCopy.copy(foundItem);
-				sess.saveOrUpdate(fiClone); //This is when the inserting happens
-				t.commit(); //Then Updates
-				DozerBeanMapper map = new DozerBeanMapper(); //Shallow copying to the original record. Can't use the session.load feature because it then alters the pointer to the original and even though the save succeed, the user doesn't see that
-//				map.map(fiClone, foundItem);
-				sess.close();
-				
-				sess = HibernateWrapper.getSession().openSession();
-				LFFound temp = (LFFound) sess.load(LFFound.class, fiClone.getId());
-				map.map(temp, foundItem);
-				foundItem.setClient(temp.getClient());
-				sess.close();
-				
-				sess = HibernateWrapper.getSession().openSession();
-				t = sess.beginTransaction();
-				sess.saveOrUpdate(foundItem);
-				t.commit();
-//			}
-//			else{
-//				sess.saveOrUpdate(foundItem);
-//				t.commit();
-//			}
-			
+			sess.saveOrUpdate(foundItem);
+			t.commit();
 			reportId = foundItem.getId();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -729,9 +674,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			if (sess != null) {
 				try {
 					sess.close();
-					
-					
-					//HibernateWrapper.getSession().close();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -824,14 +766,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	private String getLostQuery(Station station){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
-				"where l.lossInfo.destination.station_ID = " + station.getStation_ID()
+				"where (l.lossInfo.destination.station_ID = " + station.getStation_ID()
+				+ " or l.lossInfo.destination.lz_ID = " + station.getStation_ID() + ")"
 				+ " and l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
 		return sql;
 	}
 	
 	private String getFoundQuery(Station station){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
-				"where f.location.station_ID = " + station.getStation_ID()
+				"where (f.location.station_ID = " + station.getStation_ID()
+				+ " or f.location.lz_ID = " + station.getStation_ID() + ")"
 				+ " and f.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
 		return sql;
 	}
@@ -843,8 +787,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		String cutoff = DateUtils.formatDate(today.getTime(), TracingConstants.getDBDateTimeFormat(HibernateWrapper.getConfig().getProperties()), null, null);
 		
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
-		"where i.found.location.station_ID = " + station.getStation_ID() +
-		" and i.found.foundDate < \'" + cutoff + "\'"
+		"where (i.found.location.station_ID = " + station.getStation_ID() 
+		+ " or i.found.location.lz_ID = " + station.getStation_ID() + ")"
+		+ " and i.found.foundDate < \'" + cutoff + "\'"
 		+ " and i.found.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED
 		+ " and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_OTHER;
 		return sql;
@@ -1064,12 +1009,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		//TODO location criteria
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh " +
 		"where mh.status.status_ID = " + TracingConstants.LF_TRACING_OPEN
-		+ " and (mh.lost.lossInfo.destination = " + station.getStation_ID() + " or " +
-				"mh.found.location = " + station.getStation_ID() + ")";
+		+ " and (mh.lost.lossInfo.destination.station_ID = " + station.getStation_ID() + " or " +
+				" mh.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or " +
+				" mh.found.location.station_ID = " + station.getStation_ID() + " or " +
+				" mh.found.location.lz_ID = " + station.getStation_ID() + ")";
 		return sql;
 	}
 	
 	@Override
+	//TODO review if this needs to be deprecated
 	public int getTraceResultsCount(Station station) {
 		if(station == null){
 			return 0;
@@ -1093,6 +1041,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
+	//TODO review if this needs to be deprecated
 	public List<LFMatchHistory> getTraceResultsPaginated(Station station, int start, int offset) {
 		if(station == null){
 			return null;
@@ -1131,7 +1080,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return 0;
 		}
 		String query = "select count (i.id) from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
-				"where i.found.location.station_ID = " + station.getStation_ID() +
+				"where (i.found.location.station_ID = " + station.getStation_ID() +
+				" or i.found.location.lz_ID = " + station.getStation_ID() + ")" +
 				" and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED +
 				" and i.type = " + TracingConstants.LF_TYPE_FOUND;
 		Session sess = null;
@@ -1158,7 +1108,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		
 		String query = "from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
-		"where i.found.location.station_ID = " + station.getStation_ID() +
+		"where (i.found.location.station_ID = " + station.getStation_ID() +
+		" or i.found.location.lz_ID = " + station.getStation_ID() + ")" +
 		" and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED + 
 		" and i.type = " + TracingConstants.LF_TYPE_FOUND + 
 		" order by i.found.foundDate asc";
@@ -1621,8 +1572,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public long getFilteredTraceResultsCount(Station station, TraceResultsFilter filter) {
 		String sql = "select count(distinct m) from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
 		sql += getSqlFromTraceResultsForm(filter);
-		 sql += " and (m.lost.lossInfo.destination = " + station.getStation_ID() + " or " +
-			"m.found.location = " + station.getStation_ID() + ")";
+		 sql += " and (m.lost.lossInfo.destination.station_ID = " + station.getStation_ID() + " or " +
+		 		" m.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or " +
+		 		" m.found.location.station_ID = " + station.getStation_ID() + " or " +
+		 		" m.found.location.lz_ID = " + station.getStation_ID() + ")";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1671,8 +1624,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(Station station, TraceResultsFilter filter, int start, int offset) {
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
 		sql += getSqlFromTraceResultsForm(filter);
-		sql +=  " and (m.lost.lossInfo.destination = " + station.getStation_ID() + " or " +
-			"m.found.location = " + station.getStation_ID() + ")";
+		sql +=  " and (m.lost.lossInfo.destination.station_ID = " + station.getStation_ID() + " or " +
+		 		" m.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or " +
+		 		" m.found.location.station_ID = " + station.getStation_ID() + " or " +
+		 		" m.found.location.lz_ID = " + station.getStation_ID() + ")";
 		List<LFMatchHistory> results = null;
 		Session sess = null;
 		try{
@@ -1890,6 +1845,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		} else if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
 			h.put("COMPANY", "Southwest");
 			h.put("SUBJECTLINE", resources.getString("wn.email.subject"));
+		} else {
+			h.put("COMPANY", "Company");
+			h.put("SUBJECTLINE", resources.getString("dm.email.subject"));
 		}
 		
 		return h;
@@ -2037,6 +1995,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				} else if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
 					configpath = root + "/WN/";
 					imagepath = root + "/WN/";
+				} else {
+					configpath = root + "/DM/";
+					imagepath = root + "/DM/";
 				}
 				boolean embedImage = true;
 				
