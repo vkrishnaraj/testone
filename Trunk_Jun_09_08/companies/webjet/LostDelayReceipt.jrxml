@@ -3,8 +3,8 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="2.357947691000002"/>
-	<property name="ireport.x" value="24"/>
-	<property name="ireport.y" value="1079"/>
+	<property name="ireport.x" value="97"/>
+	<property name="ireport.y" value="720"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -49,7 +49,7 @@
 			<staticText>
 				<reportElement mode="Transparent" x="122" y="509" width="419" height="20"/>
 				<textElement>
-					<font fontName="Calibri" size="12" isBold="true"/>
+					<font fontName="Calibri" size="12" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Acompanhamento de Bagagem]]></text>
 			</staticText>
@@ -90,13 +90,6 @@
 			<line>
 				<reportElement mode="Opaque" x="1" y="728" width="550" height="1"/>
 			</line>
-			<staticText>
-				<reportElement mode="Transparent" x="21" y="375" width="210" height="28"/>
-				<textElement>
-					<font fontName="Calibri" size="18" isBold="true"/>
-				</textElement>
-				<text><![CDATA[  Informações Importantes]]></text>
-			</staticText>
 			<line>
 				<reportElement mode="Opaque" x="551" y="387" width="1" height="342"/>
 			</line>
@@ -123,7 +116,7 @@
 			<staticText>
 				<reportElement mode="Transparent" x="11" y="569" width="100" height="20"/>
 				<textElement>
-					<font fontName="Calibri" size="12" isBold="true"/>
+					<font fontName="Calibri" size="12" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[+55 21 9999 9999]]></text>
 			</staticText>
@@ -157,14 +150,14 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Calibri" size="16" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Calibri" size="16" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement mode="Transparent" x="11" y="589" width="537" height="20"/>
 				<textElement>
-					<font fontName="Calibri" size="12" isBold="true"/>
+					<font fontName="Calibri" size="12" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[centraldebagagens@webjet.com.br]]></text>
 			</staticText>
@@ -221,7 +214,7 @@
 			<staticText>
 				<reportElement mode="Transparent" x="124" y="489" width="100" height="20"/>
 				<textElement>
-					<font fontName="Calibri" size="12" isBold="true"/>
+					<font fontName="Calibri" size="12" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Serviços]]></text>
 			</staticText>
@@ -232,14 +225,14 @@
 			<textField>
 				<reportElement mode="Transparent" x="21" y="65" width="288" height="39"/>
 				<textElement>
-					<font fontName="Calibri" size="16" isBold="true"/>
+					<font fontName="Calibri" size="16" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name2}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="textField-2" mode="Opaque" x="1" y="1" width="393" height="49" isPrintWhenDetailOverflows="true" forecolor="#7BC641" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
-					<font fontName="Arial" size="30" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="30" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Seu Processo de Bagagem]]></text>
 			</staticText>
@@ -309,7 +302,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Calibri" size="16" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Calibri" size="16" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_lastname}]]></textFieldExpression>
 			</textField>
@@ -341,7 +334,7 @@
 			<staticText>
 				<reportElement mode="Transparent" x="107" y="469" width="100" height="20"/>
 				<textElement>
-					<font fontName="Calibri" size="12" isBold="true"/>
+					<font fontName="Calibri" size="12" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[www.webjet.com.br]]></text>
 			</staticText>
@@ -396,6 +389,13 @@
 					<font fontName="Calibri" size="12"/>
 				</textElement>
 				<text><![CDATA[Itens proibidos na bagagem despachada:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Transparent" x="21" y="375" width="210" height="28"/>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri" size="16" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Informações Importantes]]></text>
 			</staticText>
 		</band>
 	</pageHeader>
