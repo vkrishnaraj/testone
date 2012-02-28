@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -13,8 +14,12 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 
 @Embeddable
-public class GeneralRemark {
+public class GeneralRemark implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7624184475644182733L;
 	@ManyToOne
 	@JoinColumn(name = "agent_ID", nullable = false)
 	private Agent agent;
