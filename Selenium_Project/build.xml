@@ -26,7 +26,7 @@
     	<junit printsummary="yes" showoutput="true" >
       		<classpath refid="classpath.test" />
       		<formatter type="xml" usefile="true" />
-      		<test name="aero.nettracer.web.defaul.testing.TestEverything" />
+      		<test name="aero.nettracer.web.defaul.testing.TestAvis" />
     		<jvmarg value="-Dselenium.port=1234"/>
     	</junit>
   </target>
