@@ -21,7 +21,7 @@
   <td id="middlecolumn">
     
     <div id="maincontent">
-      <html:form action="/logon" focus="barcode" >
+      <html:form action="/logon">
         <input type="hidden" name="taskmanager" value="1">
         
           	<div class="headerleft">
