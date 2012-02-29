@@ -21,8 +21,17 @@
       		<classpath refid="classpath.test"/>
     	</javac>
   	</target>
-    	
+  	
   	<target name="test" depends="compile-test">
+    	<junit printsummary="yes" >
+      		<classpath refid="classpath.test" />
+      		<formatter type="xml" usefile="true" />
+      		<test name="aero.nettracer.web.defaul.testing.TestEverything" />
+    	</junit>
+  </target>
+  	
+    	
+  	<target name="testNew" depends="compile-test">
   		<parallel>
 	    	<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="classpath.test" />
