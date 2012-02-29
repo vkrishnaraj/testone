@@ -91,11 +91,6 @@ a img {
     position: relative;
 }
 
-#body {
-    background: url("../_images/southwest/cloudsBG.png") no-repeat scroll left bottom transparent;
-    padding: 0 0 1em;
-}
-
 #footer {
     border-top: 1px dotted #999999;
     clear: both;
@@ -209,11 +204,11 @@ ul#socialLinks li a.flickr {
     display: inline;
     float: left;
     margin: 20px 0 0;
-    width: 150px;
+    width: 100px;
 }
 
 #middleColumn {
-    width: 635px;
+    width: 735px;
     color: #666666;
     font-family: Arial,sans-serif;
     font-size: 13px;
@@ -225,7 +220,7 @@ ul#socialLinks li a.flickr {
 #rightColumn {
     float: right;
     margin: 20px 20px 0 0;
-    width: 144px;
+    width: 94px;
 }
 
 .contentHeader {
@@ -247,16 +242,12 @@ ul#socialLinks li a.flickr {
 }
 
 input[type="button"], input[type="submit"], input[type="reset"] {
-	background: url("../_images/southwest/button.png") no-repeat scroll left top transparent;
     border: medium none;
-    color: white;
     cursor: pointer;
     font-size: 11px;
     font-weight: bold;
-    height: 26px;
     line-height: 22px;
     margin-top: 5px;
-    width: 86px;
 }
 
 .swa_expandables_expandable_list dd, .swa_expandables_expandable_list dt span {
@@ -305,4 +296,21 @@ dl.swa_expandables_expandable_list {
 h2.swa_faq_title {
     font-size: 22px;
     margin-bottom: 5px;
+}
+
+.submitButtonWhite {
+    background-color: transparent;
+    background-image: url("../_images/southwest/button_white.gif");
+    background-position: left top;
+    background-repeat: no-repeat;
+    height: 25px;
+    width: 101px;
+	color: #2683F9;
+}
+
+.submitButtonOrange {
+	background: url("../_images/southwest/button.png") no-repeat scroll left top transparent;
+    height: 26px;
+    width: 86px;
+    color: white;
 }

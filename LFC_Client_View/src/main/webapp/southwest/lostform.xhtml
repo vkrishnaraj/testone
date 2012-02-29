@@ -32,7 +32,7 @@
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_category}" />
+						<t:outputText value="#{msg.lostform_label_item_category} *" />
 					</td><td class="twlvPxBlk">
 						<t:outputText value="#{msg.lostform_label_item_subcat}" />
 					</td><td class="twlvPxBlk">
@@ -92,9 +92,9 @@
 				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_contact_title}" /></p><br/><br/>
 				<table style="width: 95%;">
 					<tr><td class="twlvPxBlk" colspan="2" style="width: 34%;">
-						<t:outputText value="#{msg.lostform_label_name_last}"/>
+						<t:outputText value="#{msg.lostform_label_name_last} *"/>
 					</td><td class="twlvPxBlk" colspan="2" style="width: 33%;">
-						<t:outputText value="#{msg.lostform_label_name_first}"/>
+						<t:outputText value="#{msg.lostform_label_name_first} *"/>
 					</td><td class="twlvPxBlk" colspan="2" style="width: 33%;">
 						<t:outputText value="#{msg.lostform_label_name_mi}"/>
 					</td></tr>
@@ -108,7 +108,7 @@
 <!-- BEGIN ADDRESS INFO UI -->
 	 				<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="6">
-						<t:outputText value="#{msg.lostform_label_address_addr1}" />
+						<t:outputText value="#{msg.lostform_label_address_addr1} *" />
 					</td></tr>
 					<tr><td colspan="6">
 						<t:inputText value="#{lostAndFound.lostReport.contact.address.address1}"  style="width: 100%" />
@@ -122,7 +122,7 @@
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="2">
-						<t:outputText value="#{msg.lostform_label_address_city}" />
+						<t:outputText value="#{msg.lostform_label_address_city} *" />
 					</td><td class="twlvPxBlk" colspan="2">
 						<t:outputText value="#{msg.lostform_label_address_state}" />
 					</td><td class="twlvPxBlk" colspan="2">
@@ -142,7 +142,7 @@
 					<tr><td class="twlvPxBlk" colspan="3" style="width: 50%;">
 						<t:outputText value="#{msg.lostform_label_address_province}" />
 					</td><td class="twlvPxBlk" colspan="3" style="width: 50%;">
-						<t:outputText value="#{msg.lostform_label_address_country}" />
+						<t:outputText value="#{msg.lostform_label_address_country} *" />
 					</td></tr>
 					<tr><td colspan="3">
 						<t:inputText value="#{lostAndFound.lostReport.contact.address.province}"  style="width: 95%" />
@@ -220,9 +220,9 @@
 				<table style="width: 95%;">
 					<tr>
 					<td class="twlvPxBlk" style="width: 50%;">
-						<t:outputText value="#{msg.lostform_label_date_lost}" />
+						<t:outputText value="#{msg.lostform_label_date_lost} *" />
 					</td><td class="twlvPxBlk" style="width: 50%;" >
-						<t:outputText value="#{msg.lostform_label_drop_location}" />
+						<t:outputText value="#{msg.lostform_label_drop_location} *" />
 					</td></tr>
 					<tr>
 					<td >
@@ -244,9 +244,9 @@
 					<rich:messages id="reportMsg" errorClass="errormsg" infoClass="infomsg" layout="list"/>
 					<rich:spacer width="100%" height="15" title="" />
 				</div>
-				<div align="center">
-				<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}" />&#160;&#160;&#160;
-				<a4j:commandButton value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" onclick="if (!validateEmail()) {return false;}"/>
+				<div align="right">
+				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}" />&#160;&#160;&#160;
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" onclick="if (!validateEmail()) {return false;}"/>
 				</div><br/>
 			</h:panelGroup>
 			<script type="text/javascript">

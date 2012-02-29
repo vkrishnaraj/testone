@@ -81,7 +81,7 @@ public class LostAndFoundController {
 	}
 	
 	public String backToBagcheck() {
-		return "bagcheck?faces-redirect=true";
+		return "bagunchecked?faces-redirect=true";
 	}
 	
 	public String goToFormPage() {
@@ -165,6 +165,10 @@ public class LostAndFoundController {
 			}
 			if (lostReport.getDropOffLocation() < 1) {													// VALIDATE: LOST AIRPORT
 				FacesUtil.addError("Airport Item Was Lost At is required.");
+				isValid = false;
+			}
+			if (lostReport.getItemCategory() < 1) {													 	// VALIDATE: CATEGORY
+				FacesUtil.addError("Item Category is required.");
 				isValid = false;
 			}
 		} else {
