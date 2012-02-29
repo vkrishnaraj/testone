@@ -29,7 +29,7 @@ public class SeleniumTestBrowserDefault extends Settings {
 		if (ECLIPSE_RUNS_SERVER) {
 			server.stop();
 		} else {
-//			browser.shutDownSeleniumServer();
+			browser.shutDownSeleniumServer();
 		}
 	}
 
