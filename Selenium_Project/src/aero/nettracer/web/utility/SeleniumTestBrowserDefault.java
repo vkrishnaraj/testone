@@ -3,6 +3,7 @@ package aero.nettracer.web.utility;
 //custom settings class, read in some configs for your
 //tests from a properties file blah blah blah use your
 //imagination
+import org.junit.Test;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
 
@@ -32,11 +33,16 @@ public class SeleniumTestBrowserDefault extends Settings {
 	}
 
 	public synchronized static void initBrowser() {
-
+		int port = 6789;
+		if (System.getProperty("selenium.port") != null) {
+			port = Integer.parseInt(System.getProperty("selenium.port"));
+		}
+		System.out.println("Launching with port: " + port);
 		if (browser == null) {
+			
 			if (ECLIPSE_RUNS_SERVER) {
 				RemoteControlConfiguration config = new RemoteControlConfiguration();
-				config.setPort(6789);
+				config.setPort(port);
 				try {
 					server = new SeleniumServer(config);
 					server.start();
@@ -44,10 +50,16 @@ public class SeleniumTestBrowserDefault extends Settings {
 					e.printStackTrace();
 				}
 			}
-			browser = new DefaultSelenium("localhost", 6789, BROWSER_IEXPLORE,
+			browser = new DefaultSelenium("localhost", port, BROWSER_IEXPLORE,
 					APP_URL_LOCAL);
+			 
+
+			
 			browser.start();
-			browser.setSpeed(EXECUTION_SPEED_FAST);
+			browser.useXpathLibrary("javascript-xpath");
+//			browser.setSpeed();
 		}
+	}
+	
 	}
 }
