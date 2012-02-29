@@ -12,8 +12,11 @@ public class B6_Login extends LoginUtil {
 		selenium.setTimeout(Settings.LOGIN_TIMEOUT);
 		selenium.open(Settings.START_URL_B6);
 		loginAdminProcedure();
-		selenium.select("name=cbroStation", "label=CBS");
-		waitForPageToLoadImproved();
+		String logStation = selenium.getSelectedLabel("name=cbroStation");
+		if (logStation != null && !logStation.equals("CBS")) {
+			selenium.select("name=cbroStation", "label=CBS");
+			waitForPageToLoadImproved();
+		}
 	}
 	
 }

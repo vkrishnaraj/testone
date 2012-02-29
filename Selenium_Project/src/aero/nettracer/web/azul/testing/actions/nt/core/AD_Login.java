@@ -12,8 +12,11 @@ public class AD_Login extends LoginUtil {
 		selenium.setTimeout(Settings.LOGIN_TIMEOUT);
 		selenium.open(Settings.START_URL_AD);
 		loginAdminProcedure();
-		selenium.select("name=cbroStation", "label=CSB");
-		waitForPageToLoadImproved();
+		String logStation = selenium.getSelectedLabel("name=cbroStation");
+		if (logStation != null && !logStation.equals("CSB")) {
+			selenium.select("name=cbroStation", "label=CSB");
+			waitForPageToLoadImproved();
+		}
 	}
 	
 }

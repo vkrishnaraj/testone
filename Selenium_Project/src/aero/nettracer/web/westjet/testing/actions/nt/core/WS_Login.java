@@ -12,8 +12,11 @@ public class WS_Login extends LoginUtil {
 		selenium.setTimeout(Settings.LOGIN_TIMEOUT);
 		selenium.open(Settings.START_URL_WS);
 		loginAdminProcedure();
-		selenium.select("name=cbroStation", "label=YYC");
-		waitForPageToLoadImproved();
+		String logStation = selenium.getSelectedLabel("name=cbroStation");
+		if (logStation != null && !logStation.equals("YYC")) {
+			selenium.select("name=cbroStation", "label=YYC");
+			waitForPageToLoadImproved();
+		}
 	}
 	
 }
