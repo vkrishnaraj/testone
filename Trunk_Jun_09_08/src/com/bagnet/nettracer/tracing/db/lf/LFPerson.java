@@ -1,8 +1,6 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -101,9 +99,6 @@ public class LFPerson implements Serializable{
 	}
 
 	public Set<LFPhone> getPhones() {
-		if (phones == null) {
-			phones = new LinkedHashSet<LFPhone>();
-		}
 		return phones;
 	}
 
@@ -158,102 +153,6 @@ public class LFPerson implements Serializable{
 		}
 		return this.decryptedEmail;
 	}
-	
-	// START PHONE STUFF HERE!!
-		
-		@Transient
-		public String getHomePhone() {
-			return getPhoneNumber(LFPhone.HOME);
-		}
-
-		public void setHomePhone(String homePhone) {
-			setPhoneNumber(LFPhone.HOME, homePhone);
-		}
-
-		@Transient
-		public String getWorkPhone() {
-			return getPhoneNumber(LFPhone.WORK);
-		}
-
-		public void setWorkPhone(String workPhone) {
-			setPhoneNumber(LFPhone.WORK, workPhone);
-		}
-
-		@Transient
-		public String getMobilePhone() {
-			return getPhoneNumber(LFPhone.MOBILE);
-		}
-
-		public void setMobilePhone(String mobilePhone) {
-			setPhoneNumber(LFPhone.MOBILE, mobilePhone);
-		}
-
-//		@Transient
-//		public String getPagerPhone() {
-//			return getPhoneNumber(LFPhone.PAGER);
-//		}
-//
-//		public void setPagerPhone(String pagerPhone) {
-//			setPhoneNumber(LFPhone.PAGER, pagerPhone);
-//		}
-
-		@Transient
-		public String getAlternatePhone() {
-			return getPhoneNumber(LFPhone.ALTERNATE);
-		}
-
-		public void setAlternatePhone(String alternatePhone) {
-			setPhoneNumber(LFPhone.ALTERNATE, alternatePhone);
-		}
-
-		private String getPhoneNumber(int type) {
-			return getPhone(type).getDecryptedPhoneNumber();
-		}
-
-		private void setPhoneNumber(int type, String phoneNumber) {
-			if (phoneNumber != null && !phoneNumber.isEmpty() && !(phoneNumber=="521B24E7815424EB34F975D40A450668")) {
-				LFPhone phone = getPhone(type);
-				phone.setDecryptedPhoneNumber(phoneNumber);
-				
-				boolean addPhone = true;
-				Iterator<LFPhone> i = getPhones().iterator();
-				while (i.hasNext()) {
-					if (i.next().getPhoneType() == type) {
-						addPhone = false;
-						break;
-					}
-				}
-				
-				if (addPhone) {
-					phones.add(phone);
-				}
-			}
-		}
-		
-		private LFPhone getPhone(int type) {
-
-			LFPhone phone = null;
-			LFPhone candidate = null;
-			Iterator<LFPhone> i = getPhones().iterator();
-			while (i.hasNext()) {
-				candidate = i.next();
-				if (candidate.getPhoneType() == type) {
-					phone = candidate;
-					break;
-				}
-			}
-			
-			if (phone == null) {
-				phone = new LFPhone();
-				phone.setPerson(this);
-//				if (claim != null) {
-//					phone.setIncident(claim.getIncident());
-//				}
-				phone.setPhoneType(type);
-			}
-
-			return phone;
-		}
 	
 	public boolean isEmpty() {
 		boolean empty = true;
