@@ -22,11 +22,12 @@
     	</javac>
   	</target>
   	
-  	<target name="test" depends="compile-test">
-    	<junit printsummary="yes" >
+  	<target name="test" depends="compile-test" >
+    	<junit printsummary="yes" showoutput="true" >
       		<classpath refid="classpath.test" />
       		<formatter type="xml" usefile="true" />
       		<test name="aero.nettracer.web.defaul.testing.TestEverything" />
+    		<jvmarg value="-Dselenium.port=1234"/>
     	</junit>
   </target>
   	
