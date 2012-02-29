@@ -107,11 +107,11 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 //	Def_PasswordResetNTTest.class, 
 	Def_Logout.class, 
 	NK_Login.class, NK_VerifyText_TaskManager.class,
-	NK_CreateLD_VerifyRequiredFields.class, NK_CloseLD_VerifyRequiredFields.class, NK_InboxMessage.class,
-	NK_CreateDam_VerifyRequiredFields.class, NK_CloseDam_VerifyRequiredFields.class,
-	NK_CreatePilf_VerifyRequiredFields.class, NK_ClosePilf_VerifyRequiredFields.class,
-	NK_CreateOHD_VerifyRequiredFields.class, NK_ForwardOHD.class, NK_ReceiveOHD.class,
-	NK_Security.class	
+	NK_CreateLD_VerifyRequiredFields.class, NK_CloseLD_VerifyRequiredFields.class, NK_InboxMessage.class
+//	NK_CreateDam_VerifyRequiredFields.class, NK_CloseDam_VerifyRequiredFields.class,
+//	NK_CreatePilf_VerifyRequiredFields.class, NK_ClosePilf_VerifyRequiredFields.class,
+//	NK_CreateOHD_VerifyRequiredFields.class, NK_ForwardOHD.class, NK_ReceiveOHD.class,
+//	NK_Security.class	
 	})
 public class TestSpirit { 
 	

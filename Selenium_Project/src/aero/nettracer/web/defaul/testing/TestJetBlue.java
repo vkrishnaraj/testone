@@ -108,11 +108,11 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 //	Def_PasswordResetNTTest.class, 
 	Def_Logout.class, 
 	B6_Login.class, B6_VerifyText_TaskManager.class,
-	B6_CreateLD_VerifyRequiredFields.class, B6_EditLD_VerifyText.class, B6_CloseLD_VerifyRequiredFields.class,
-	B6_InboxMessage.class, B6_CreateDam_VerifyRequiredFields.class, B6_CloseDam_VerifyRequiredFields.class,
-	B6_CreatePilf_VerifyRequiredFields.class, B6_ClosePilf_VerifyRequiredFields.class,
-	B6_CreateOHD_VerifyRequiredFields.class, B6_ForwardOHD.class, B6_ReceiveOHD.class,
-	B6_Security.class
+	B6_CreateLD_VerifyRequiredFields.class, B6_EditLD_VerifyText.class, B6_CloseLD_VerifyRequiredFields.class
+//	B6_InboxMessage.class, B6_CreateDam_VerifyRequiredFields.class, B6_CloseDam_VerifyRequiredFields.class,
+//	B6_CreatePilf_VerifyRequiredFields.class, B6_ClosePilf_VerifyRequiredFields.class,
+//	B6_CreateOHD_VerifyRequiredFields.class, B6_ForwardOHD.class, B6_ReceiveOHD.class,
+//	B6_Security.class
 	
 	})
 public class TestJetBlue { 
