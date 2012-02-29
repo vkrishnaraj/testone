@@ -107,7 +107,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 	// AZUL
 	AD_Login.class, Def_Logout.class, AD_LoginFailure.class, AD_LoginTest.class, 
 //	Def_PasswordResetNTTest.class,
-	Def_Logout.class, 
+	Def_Logout.class
 //	AD_Login.class, AD_VerifyText_TaskManager.class,
 //	AD_CreateLD_VerifyRequiredFields.class, AD_CloseLD_VerifyRequiredFields.class, AD_InboxMessage.class,
 //	AD_CreateDam_VerifyRequiredFields.class, AD_CloseDam_VerifyRequiredFields.class,

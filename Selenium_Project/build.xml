@@ -34,7 +34,28 @@
   	
     	
   	<target name="test" depends="compile-test">
+  		<!--
+        <java jar="lib/selenium-server.jar" fork="true" spawn="true">
+             <arg line="-port 1231"/>
+         </java>
+        <java jar="lib/selenium-server.jar" fork="true" spawn="true">
+             <arg line="-port 1232"/>
+         </java>
+        <java jar="lib/selenium-server.jar" fork="true" spawn="true">
+             <arg line="-port 1233"/>
+         </java>
+        <waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
+            <http url="http://localhost:1231/selenium-server/driver/?cmd=testComplete"/>
+        </waitfor>
+        <waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
+            <http url="http://localhost:1232/selenium-server/driver/?cmd=testComplete"/>
+        </waitfor>
+        <waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
+            <http url="http://localhost:1233/selenium-server/driver/?cmd=testComplete"/>
+        </waitfor>
+		-->
   		
+
   		<parallel>
 	    	<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="classpath.test" />
@@ -72,7 +93,8 @@
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestLfc" />
 	    		<jvmarg value="-Dselenium.port=1236"/>
-	    	</junit>  		-->
+	    	</junit>  		
+  		-->
   		</parallel>
   </target>
 	
