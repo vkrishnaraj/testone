@@ -109,11 +109,11 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 //	Def_PasswordResetNTTest.class,
 	Def_Logout.class, 
 	AD_Login.class, AD_VerifyText_TaskManager.class,
-	AD_CreateLD_VerifyRequiredFields.class, AD_CloseLD_VerifyRequiredFields.class, AD_InboxMessage.class,
-	AD_CreateDam_VerifyRequiredFields.class, AD_CloseDam_VerifyRequiredFields.class,
-	AD_CreatePilf_VerifyRequiredFields.class, AD_ClosePilf_VerifyRequiredFields.class,
-	AD_CreateOHD_VerifyRequiredFields.class, AD_ForwardOHD.class, AD_ReceiveOHD.class,
-	AD_Security.class
+//	AD_CreateLD_VerifyRequiredFields.class, AD_CloseLD_VerifyRequiredFields.class, AD_InboxMessage.class,
+//	AD_CreateDam_VerifyRequiredFields.class, AD_CloseDam_VerifyRequiredFields.class,
+//	AD_CreatePilf_VerifyRequiredFields.class, AD_ClosePilf_VerifyRequiredFields.class,
+//	AD_CreateOHD_VerifyRequiredFields.class, AD_ForwardOHD.class, AD_ReceiveOHD.class,
+//	AD_Security.class
 	
 	})
 public class TestAzul { 
