@@ -22,7 +22,7 @@
     	</javac>
   	</target>
   	
-  	<target name="testNormal" depends="compile-test" >
+  	<target name="test" depends="compile-test" >
   		
     	<junit printsummary="yes" showoutput="true" fork="true" >
       		<classpath refid="classpath.test" />
@@ -33,7 +33,7 @@
   </target>
   	
     	
-  	<target name="test" depends="compile-test">
+  	<target name="testNew" depends="compile-test">
   		<!--
         <java jar="lib/selenium-server.jar" fork="true" spawn="true">
              <arg line="-port 1231"/>

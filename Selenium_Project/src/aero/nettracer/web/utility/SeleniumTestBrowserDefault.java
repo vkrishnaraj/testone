@@ -24,12 +24,11 @@ public class SeleniumTestBrowserDefault extends Settings {
 	}
 
 	public synchronized static void stopBrowser() {
-//		browser.close();
-		//		browser.stop();
+		browser.stop();
 		if (ECLIPSE_RUNS_SERVER) {
 			server.stop();
 		} else {
-//			browser.shutDownSeleniumServer();
+			browser.shutDownSeleniumServer();
 		}
 	}
 
