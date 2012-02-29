@@ -34,14 +34,18 @@ public class SeleniumTestBrowserDefault extends Settings {
 
 	public synchronized static void initBrowser() {
 		int port = 6789;
+		
 		if (System.getProperty("selenium.port") != null) {
 			port = Integer.parseInt(System.getProperty("selenium.port"));
 		}
-		System.out.println("Launching with port: " + port);
+		
+		System.out.println("Port set to: " + port);
+		
 		if (browser == null) {
 			
 			if (ECLIPSE_RUNS_SERVER) {
 				RemoteControlConfiguration config = new RemoteControlConfiguration();
+		
 				config.setPort(port);
 				try {
 					server = new SeleniumServer(config);
@@ -61,5 +65,5 @@ public class SeleniumTestBrowserDefault extends Settings {
 		}
 	}
 	
-	}
+	
 }
