@@ -90,7 +90,7 @@ public class HttpMonitorWorkerThread implements Runnable {
 	
 	@Override
 	public void run() {
-		logger.info("Performing test for: " + monUrl.getTitle());
+		logger.info("Performing HttP test for: " + monUrl.getTitle());
 		startTime = new GregorianCalendar();
 		try {
 			responseString = sendGetRequest(monUrl.getUrl(), monUrl.getParamString());
