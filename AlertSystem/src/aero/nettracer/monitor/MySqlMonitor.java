@@ -21,9 +21,9 @@ import com.bagnet.nettracer.email.HtmlEmail;
 class MySqlMonitor {
 
 	static Logger logger = Logger.getLogger(MySqlMonitor.class);
-	static int nullCount=0;
 	private static final int PRODUCTION_TIMEOUT = 20000;
 	private static final int PRODUCTION_RETRY = 20000;
+	
   public static void main(String[] args) {
 
 	  ArrayList<MonitorDB> DBs = new ArrayList<MonitorDB>();
