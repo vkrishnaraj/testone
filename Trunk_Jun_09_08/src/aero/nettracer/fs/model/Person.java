@@ -91,8 +91,11 @@ public class Person implements Serializable {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
-		this.setFirstNameSoundex((new Soundex()).encode(firstName));
-		this.setFirstNameDmp((new DoubleMetaphone()).encode(firstName));
+		try {
+			this.setFirstNameSoundex((new Soundex()).encode(firstName));
+			this.setFirstNameDmp((new DoubleMetaphone()).encode(firstName));
+		} catch (Exception e) {			
+		}
 	}
 
 	public String getLastName() {
@@ -101,8 +104,11 @@ public class Person implements Serializable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-		this.setLastNameSoundex((new Soundex()).encode(lastName));
-		this.setLastNameDmp((new DoubleMetaphone()).encode(lastName));
+		try {
+			this.setLastNameSoundex((new Soundex()).encode(lastName));
+			this.setLastNameDmp((new DoubleMetaphone()).encode(lastName));
+		} catch (Exception e) {
+		}
 	}
 
 	public String getRedactedSocialSecurity() {
