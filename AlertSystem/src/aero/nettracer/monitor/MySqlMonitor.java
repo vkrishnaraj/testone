@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 import com.bagnet.nettracer.email.EmailException;
 import com.bagnet.nettracer.email.HtmlEmail;
 
-class MySqlMonitor {
+public class MySqlMonitor {
 
 	static Logger logger = Logger.getLogger(MySqlMonitor.class);
 	private static final int PRODUCTION_TIMEOUT = 20000;
