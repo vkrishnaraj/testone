@@ -45,11 +45,11 @@ class MySqlMonitor {
 				if (wt.isFinished() && wt.isPassingTests()
 						&& wt.getElapsedTimeInMillis() < PRODUCTION_TIMEOUT) {
 					logger.info("  Test successful...");
-					//SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
+					SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
 				} else {
 					logger.info("  Test failure; " + wt.printFullStatus());
 					try {
-						//SimpleJdbcLogger.log(DB.getDBName(), DB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, true);
+						SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, true);
 						if(wt.getResponseString().toLowerCase().contains("null"))
 						{
 							nullCount++;
@@ -66,10 +66,10 @@ class MySqlMonitor {
 						
 					} catch (AddressException e) {
 						e.printStackTrace();
-						//SimpleJdbcLogger.log(DB.getDBName(), DB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
+						SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
 					} catch (EmailException e) {
 						e.printStackTrace();
-						//SimpleJdbcLogger.log(DB.getDBName(), DB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
+						SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
 					}
 				}
 				
@@ -96,58 +96,6 @@ class MySqlMonitor {
 				e.printStackTrace();
 			}
 		}
-  
-//  try {
-//  /* Create string of connection url within 
-//            specified format with machine name, 
-//  port number and database name. Here machine
-//            name id localhost and database 
-//            name is usermaster. */
-//  String connectionURL = 
-//            "jdbc:mysql://localhost:8080/abtracer";
-//
-//  // declare a connection by using Connection interface 
-//  Connection connection = null;
-//
-//        // declare object of Statement interface that uses for executing sql statements.
-//  Statement statement = null;
-//
-//            // declare a resultset that uses as a table for output data from the table.
-//  ResultSet rs = null;
-// // int updateQuery = 0;
-//
-//  // Load JBBC driver "com.mysql.jdbc.Driver".
-//  Class.forName("com.mysql.jdbc.Driver").newInstance();
-//
-//  /* Create a connection by using getConnection()
-//            method that takes parameters of string type 
-//            connection url, user name and password to 
-//            connect to database. */
-//  connection = DriverManager.getConnection
-//            (connectionURL, "root", "nettracer");
-//  
-//
-//        /* createStatement() is used for create 
-//            statement object that is used for sending sql 
-//            statements to the specified database. */
-//  statement = connection.createStatement();
-//  String QueryString="";
-//  
-//  // sql query to retrieve slave status  
-//  QueryString = "Show Slave Status";
-//  rs = statement.executeQuery(QueryString);
-//  while (rs.next()) {
-//  System.out.println(rs.getInt(1) + " " + rs.getString(2) + " " + rs.getString(3) + "  "+rs.getString(4)+"\n");
-//  }
-//
-//  // close all the connections.
-//  rs.close();
-//  statement.close();
-//  connection.close();
-//  } 
-//  catch (Exception ex) {
-//  System.out.println("Unable to connect to batabase.");
-//  }
   }
   
   private static void sleep(long wait) {
