@@ -483,6 +483,7 @@
 		<antcall target="build-ear-training"/>
 		<antcall target="build-ear-training-avis"/>
 		<antcall target="build-ear-training-avis-service"/>
+		<antcall target="build-ear-training-lfc-service"/>
 		<antcall target="build-ear-training-united"/>
 		<antcall target="build-ear-training-american"/>
 		<antcall target="build-ear-training-webjet"/>
