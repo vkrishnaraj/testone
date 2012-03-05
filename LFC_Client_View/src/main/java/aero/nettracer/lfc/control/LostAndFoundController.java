@@ -158,7 +158,7 @@ public class LostAndFoundController {
 			FacesUtil.addError("Contact Information must contain at least one Phone Number or Email Address.");
 			isValid = false;
 		}
-		if (getSubCompany().equals("SWA")) {
+		if (getSubCompany().equals("SWA") ) {
 			if (lostReport.getDateLost() == null) {													    // VALIDATE: DATE LOST
 				FacesUtil.addError("Date Lost is required.");
 				isValid = false;
@@ -172,6 +172,10 @@ public class LostAndFoundController {
 				isValid = false;
 			}
 		} else {
+			if (lostReport.getDateLost() == null) {													    // VALIDATE: DATE LOST
+				FacesUtil.addError("Rental Date is required.");
+				isValid = false;
+			}
 			if (lostReport.getPickUpLocation() < 1) {													// VALIDATE: PICK UP
 				FacesUtil.addError("Rental Location is required.");
 				isValid = false;
