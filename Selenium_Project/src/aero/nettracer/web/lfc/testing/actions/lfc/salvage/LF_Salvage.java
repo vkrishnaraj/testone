@@ -150,39 +150,20 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// Low value, > 30 days
 		if (checkNoErrorPage()) {
 			Calendar now = Calendar.getInstance();
-			now.add(Calendar.DAY_OF_MONTH, -31);
+			now.add(Calendar.DAY_OF_YEAR, -40);
 			lvCutoff = df.format(now.getTime());
 
 			LF_Salvage.LOW_GT_30 = String.valueOf(System.currentTimeMillis());
-			selenium.type("//input[@name='found.barcode']",
-					LF_Salvage.LOW_GT_30);
-			selenium.type(
-					"//div[@id='maincontent']/table/tbody/tr/td[2]/input",
-					lvCutoff);
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input",
-					"Plantronics");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input",
-					"PN5678");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input",
-					"Backbeat");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td/select",
-					"label=Cellphone Accessories");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td[2]/select",
-					"label=Cordless Ear Plug");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select",
-					"label=Black");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select",
-					"label=Black");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[6]/td/input",
-					"Low value, > 30 days");
+			selenium.type("//input[@name='found.barcode']", LF_Salvage.LOW_GT_30);
+			selenium.type("//div[@id='maincontent']/table/tbody/tr/td[2]/input", lvCutoff);
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "Plantronics");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input", "PN5678");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input", "Backbeat");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td/select", "label=Cellphone Accessories");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[2]/select", "label=Cordless Ear Plug");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=Black");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select", "label=Black");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[6]/td/input", "Low value, > 30 days");
 			selenium.click("xpath=(//input[@id='button'])[2]");
 			waitForPageToLoadImproved();
 		} else {
@@ -192,10 +173,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isTextPresent("Your found item was successfully saved."));
-			System.out.println("LFS: Created Low value, > 30 Found Item: "
-					+ LF_Salvage.LOW_GT_30 + " with date: " + lvCutoff);
+			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			System.out.println("LFS: Created Low value, > 30 Found Item: " + LF_Salvage.LOW_GT_30 + " with date: " + lvCutoff);
 			selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
 			waitForPageToLoadImproved();
 		} else {
@@ -261,7 +240,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// High value, > 60 days
 		if (checkNoErrorPage()) {
 			Calendar now = Calendar.getInstance();
-			now.add(Calendar.DAY_OF_MONTH, -61);
+			now.add(Calendar.DAY_OF_YEAR, -61);
 			hvCutoff = df.format(now.getTime());
 
 			LF_Salvage.HIGH_GT_60 = String.valueOf(System.currentTimeMillis());
