@@ -81,7 +81,9 @@ public class HttpMonitor {
 				long elapse = stTime.getTimeInMillis() - sTime.getTimeInMillis();
 				long remaining = 5 * 60 * 1000 - elapse;
 				logger.info("Sleeping for " + (remaining/1000)+ " seconds...");
-				Thread.sleep(remaining);
+				if(remaining>0){
+					Thread.sleep(remaining);
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

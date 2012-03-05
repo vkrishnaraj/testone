@@ -163,7 +163,7 @@ public class MySQLMonitorWorkerThread implements Runnable {
 						  nulltrue=true;
 					  }
 					  
-					  if((rs.getInt("Seconds_Behind_Master")>600) || nulltrue)
+					  if((rs.getInt("Seconds_Behind_Master")>1800) || nulltrue)
 					  {
 						  sb.append("Failure: Seconds_Behind_Master is: "+rs.getString("Seconds_Behind_Master")+" ");
 						  fail=true;
@@ -189,76 +189,7 @@ public class MySQLMonitorWorkerThread implements Runnable {
 		return result;
 	}
 
-	/**
-	 * Reads data from the data reader and posts it to a server via POST
-	 * request. data - The data you want to send endpoint - The server's address
-	 * output - writes the server's response to output
-	 * 
-	 * @throws Exception
-	 */
-//	private static void postData(Reader data, URL endpoint, Writer output) throws Exception {
-//		Connection urlc = null;
-//		try {
-//			urlc = (Connection) endpoint.openConnection();
-//			try {
-//				urlc.setRequestMethod("POST");
-//			} catch (ProtocolException e) {
-//				throw new Exception(
-//						"Shouldn't happen: HttpURLConnection doesn't support POST??",
-//						e);
-//			}
-//			urlc.setDoOutput(true);
-//			urlc.setDoInput(true);
-//			urlc.setUseCaches(false);
-//			urlc.setAllowUserInteraction(false);
-//			urlc.setRequestProperty("Content-type", "text/xml; charset="
-//					+ "UTF-8");
-//
-//			OutputStream out = urlc.getOutputStream();
-//
-//			try {
-//				Writer writer = new OutputStreamWriter(out, "UTF-8");
-//				pipe(data, writer);
-//				writer.close();
-//			} catch (IOException e) {
-//				throw new Exception("IOException while posting data", e);
-//			} finally {
-//				if (out != null)
-//					out.close();
-//			}
-//
-//			InputStream in = urlc.getInputStream();
-//			try {
-//				Reader reader = new InputStreamReader(in);
-//				pipe(reader, output);
-//				reader.close();
-//			} catch (IOException e) {
-//				throw new Exception("IOException while reading response", e);
-//			} finally {
-//				if (in != null)
-//					in.close();
-//			}
-//
-//		} catch (IOException e) {
-//			throw new Exception("Connection error (is server running at "
-//					+ endpoint + " ?): " + e);
-//		} finally {
-//			if (urlc != null)
-//				urlc.disconnect();
-//		}
-//	}
 
-	/**
-	 * Pipes everything from the reader to the writer via a buffer
-	 */
-//	private static void pipe(Reader reader, Writer writer) throws IOException {
-//		char[] buf = new char[1024];
-//		int read = 0;
-//		while ((read = reader.read(buf)) >= 0) {
-//			writer.write(buf, 0, read);
-//		}
-//		writer.flush();
-//	}
 
 	public String printFullStatus() {
 		return "isFinished: " + isFinished() + "; isPassingTests: " + isPassingTests() + "; Elapsed Time: " + getElapsedTimeInMillis() + "; \nURL: " + monDB.getConnectionURL() +"\n  Response String: " + responseString;

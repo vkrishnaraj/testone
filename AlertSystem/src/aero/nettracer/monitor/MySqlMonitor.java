@@ -45,11 +45,11 @@ public class MySqlMonitor {
 				if (wt.isFinished() && wt.isPassingTests()
 						&& wt.getElapsedTimeInMillis() < PRODUCTION_TIMEOUT) {
 					logger.info("  Test successful...");
-					SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
+//					SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
 				} else {
 					logger.info("  Test failure; " + wt.printFullStatus());
 					try {
-						SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, true);
+//						SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, true);
 						if(wt.getResponseString().toLowerCase().contains("null"))
 						{
 							nullCount++;
@@ -66,10 +66,10 @@ public class MySqlMonitor {
 						
 					} catch (AddressException e) {
 						e.printStackTrace();
-						SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
+//						SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
 					} catch (EmailException e) {
 						e.printStackTrace();
-						SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
+//						SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, false);
 					}
 				}
 				
