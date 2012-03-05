@@ -32,9 +32,6 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 @Proxy(lazy = false)
 public class LFFound implements LFObject, Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2713442669778194028L;
 
 	@Id
@@ -83,6 +80,11 @@ public class LFFound implements LFObject, Serializable {
 	private int itemLocation;
 	private String binId; 
 	
+	@ManyToOne
+	@JoinColumn(name = "salvage_id", nullable = true)
+	@Fetch(FetchMode.SELECT)
+	private LFSalvage salvage;
+		
 	@Transient
 	private int entryStatus;
 	
@@ -158,8 +160,8 @@ public class LFFound implements LFObject, Serializable {
 		this.client = client;
 	}
 	
-	public String getDisReceivedDate(String dateFormat) {
-		return DateUtils.formatDate(receivedDate, dateFormat, agent.getCurrenttimezone(), null);
+	public String getDisReceivedDate() {
+		return DateUtils.formatDate(receivedDate, agent.getDateformat().getFormat(), agent.getCurrenttimezone(), null);
 	}
 	
 	public void setDisReceivedDate(String date, String dateFormat) {
@@ -344,6 +346,14 @@ public class LFFound implements LFObject, Serializable {
 
 	public void setCheckAmount(double checkAmount) {
 		this.checkAmount = checkAmount;
+	}
+
+	public LFSalvage getSalvage() {
+		return salvage;
+	}
+
+	public void setSalvage(LFSalvage salvage) {
+		this.salvage = salvage;
 	}
 	
 }

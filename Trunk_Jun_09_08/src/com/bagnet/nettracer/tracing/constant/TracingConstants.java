@@ -190,6 +190,9 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_LFC_SHELVED_ITEMS_WITH_TRACE_RESULTS = "Shelved Items with Trace Results";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_LOAD_FOUND_FROM_TASK_MANAGER = "Load Found from Task Manager";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_REOPEN_LOST_FOUND = "Reopen Lost and Found";
+	public static final String SYSTEM_COMPONENT_NAME_LFC_SALVAGE_WORKFLOW = "LFC Salvage Workflow";
+	public static final String SYSTEM_COMPONENT_NAME_LFC_CREATE_SALVAGE = "Create Salvage";
+	public static final String SYSTEM_COMPONENT_NAME_LFC_SEARCH_SALVAGE = "Search Salvage";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -470,6 +473,8 @@ public class TracingConstants {
 	
 	public final static String LFC_ENTER_ITEMS = "enter_items";
 	public final static String LFC_SHELVED_TRACE_RESULTS = "shelved_trace_results";
+	public final static String LFC_SALVAGE = "lf_salvage";
+	public final static String LFC_SEARCH_SALVAGE = "lf_search_salvage";
 	
 	public final static int LF_LOCATION_SHELF = 0;
 	public final static int LF_LOCATION_VERIFICATION = 1;
@@ -510,6 +515,9 @@ public class TracingConstants {
 	
 	public final static String AJAX_SUBCATEGORY = "subcategory";
 	public final static String AJAX_ITEM_SUMMARY = "itemsummary";
+	public final static String AJAX_SALVAGE_ITEMS = "salvageitems";
+	public final static String AJAX_BLANK = "blank";
+	public final static String AJAX_LF_BLANK = "lf_blank";
 	
 	public final static int LINK_TYPE_CLAIM_PAGE = 1;
 	public final static int LINK_TYPE_FRAUD_RESULTS_PAGE = 2;

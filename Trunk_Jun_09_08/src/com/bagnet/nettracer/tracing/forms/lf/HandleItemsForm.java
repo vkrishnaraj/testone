@@ -15,6 +15,11 @@ public final class HandleItemsForm extends ActionForm {
 	private String prevpage;
 	private String pagination;
 	
+	private String dateFormat;
+	private String startDate;
+	private String endDate;
+	private int value;
+	
 	ArrayList<LFItem> foundItems;
 
 	public String getCurrpage() {
@@ -62,6 +67,38 @@ public final class HandleItemsForm extends ActionForm {
 			return foundItems.get(index);
 		}
 		return null;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
 	}
 	
 }

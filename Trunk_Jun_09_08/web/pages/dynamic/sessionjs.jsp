@@ -1710,6 +1710,11 @@ document.onkeydown = function(){
 		window.event.keyCode = 9;
 	}
 
+	if (document.activeElement.id == "addBarcode" && window.event && window.event.keyCode == 13) {
+		window.event.keyCode = 9;
+		addItemAjax();
+	}
+
 	if(window.event && window.event.keyCode == 505) { 
 		return false; 
 	}

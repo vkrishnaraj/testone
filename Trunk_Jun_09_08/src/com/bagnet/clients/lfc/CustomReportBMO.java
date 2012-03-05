@@ -35,6 +35,7 @@ import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.reporting.lf.LFDailyStatusReport;
 import com.bagnet.nettracer.reporting.lf.LFDisbursementsReport;
 import com.bagnet.nettracer.reporting.lf.LFItemizationReport;
+import com.bagnet.nettracer.reporting.lf.LFSalvageReport;
 import com.bagnet.nettracer.reporting.lf.LFSummaryReport;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -62,6 +63,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		case ReportingConstants.RPT_20_CUSTOM_92:
 			creportdata = createDisbursementsReport(srDTO, ReportBMO.getCustomReport(92).getResource_key(), rootpath, request, user);
 			break;
+		case ReportingConstants.RPT_20_CUSTOM_93:
+			creportdata = createSalvageReport(srDTO, ReportBMO.getCustomReport(92).getResource_key(), rootpath, request, user);
+			break;
 		default:
 			break;
 
@@ -79,7 +83,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			return null;
 		}
 		
-		String fileName = ReportingConstants.LOST_FOUND_REPORT_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String fileName = ReportingConstants.RPT_20_CUSTOM_89_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
 		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
 		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
 		virtualizer.setReadOnly(false);
@@ -133,7 +137,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			return null;
 		}
 		
-		String fileName = ReportingConstants.LOST_FOUND_REPORT_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String fileName = ReportingConstants.RPT_20_CUSTOM_90_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
 		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
 		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
 		virtualizer.setReadOnly(false);
@@ -191,7 +195,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			return null;
 		}
 		
-		String fileName = ReportingConstants.LOST_FOUND_REPORT_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String fileName = ReportingConstants.RPT_20_CUSTOM_91_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
 		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
 		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
 		virtualizer.setReadOnly(false);
@@ -239,7 +243,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			return null;
 		}
 		
-		String fileName = ReportingConstants.LOST_FOUND_REPORT_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String fileName = ReportingConstants.RPT_20_CUSTOM_92_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
 		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
 		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
 		virtualizer.setReadOnly(false);
@@ -268,6 +272,57 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.setIgnorePagination(true);
 			drb.setUseFullPageWidth(true);
 	
+			DynamicReport report = drb.build();
+			exportJasperReport(reportData, report, outputpath);
+			
+		} catch (ColumnBuilderException cbe) {
+			cbe.printStackTrace();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} 
+		virtualizer.cleanup();
+		return fileName;
+	}
+
+	@SuppressWarnings("rawtypes")
+	private String createSalvageReport(StatReportDTO srDTO, String resourceKey, String rootpath, HttpServletRequest request, Agent user) {
+		srDTO.setDateFormat(user.getDateformat().getFormat());
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+		List reportData = new LFSalvageReport(resources).getData(srDTO);
+		if (reportData == null) {
+			return null;
+		}
+		
+		String fileName = ReportingConstants.RPT_20_CUSTOM_93_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
+		virtualizer.setReadOnly(false);
+		
+		FastReportBuilder drb = new FastReportBuilder();
+		drb.setTitle(resources.getString("report.lf.salvage.report.header") + ": " + srDTO.getSalvageId());
+		drb.setPrintBackgroundOnOddRows(true);
+		drb.setPageSizeAndOrientation(Page.Page_Letter_Landscape());
+		drb.setSubtitle(getSalvageSubTitle(srDTO, user, resources));
+		
+		
+		Style header = new Style();
+		header.setHorizontalAlign(HorizontalAlign.CENTER);
+		header.setVerticalAlign(VerticalAlign.MIDDLE);
+		Style detailStyle = new Style("detail");
+		detailStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+		detailStyle.setVerticalAlign(VerticalAlign.MIDDLE);
+		
+		try {
+			drb.addColumn(resources.getString("report.lf.salvage.barcode"), "barcode", Long.class.getName(), 10, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.salvage.date.received"), "dateReceived", String.class.getName(), 10, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.salvage.value"), "value", String.class.getName(), 10, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.salvage.category"), "category", String.class.getName(), 15, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.salvage.sub.category"), "subCategory", String.class.getName(), 15, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.salvage.item.title"), "title", String.class.getName(), 20, detailStyle, header);
+			
+			drb.setIgnorePagination(true);
+			drb.setUseFullPageWidth(true);
+			
 			DynamicReport report = drb.build();
 			exportJasperReport(reportData, report, outputpath);
 			
@@ -310,8 +365,16 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 	private String getSubTitle(StatReportDTO srDto, Agent user, ResourceBundle resources) {
 		StringBuilder sb = new StringBuilder();
 		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
-		sb.append(resources.getString("lf.ir.report.created.on") + runDate + " ");
+		sb.append(resources.getString("lf.ir.report.created.on") + " " + runDate + " ");
 		sb.append("by " + user.getUsername() + " for: " + srDto.getStarttime() + " - " + srDto.getEndtime() + " ");
+		return sb.toString();
+	}
+
+	private String getSalvageSubTitle(StatReportDTO srDto, Agent user, ResourceBundle resources) {
+		StringBuilder sb = new StringBuilder();
+		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
+		sb.append(resources.getString("lf.ir.report.created.on") + " " + runDate + " ");
+		sb.append("by " + user.getUsername() + " for salvage Id: " + srDto.getSalvageId());
 		return sb.toString();
 	}
 	

@@ -133,4 +133,7 @@ public class ReportingConstants {
 	public static final int RPT_20_CUSTOM_92 = 92;
 	public static final String RPT_20_CUSTOM_92_NAME = "disbursements";
 
+	public static final int RPT_20_CUSTOM_93 = 93;
+	public static final String RPT_20_CUSTOM_93_NAME = "salvage_report";
+
 }

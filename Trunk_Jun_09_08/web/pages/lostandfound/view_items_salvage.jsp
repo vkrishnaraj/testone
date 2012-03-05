@@ -71,6 +71,39 @@
    	<tr>
    		<td id="middlecolumn">        
      		<div id="maincontent">
+     			<h1 class="green">
+		        	<bean:message key="header.search_criteria" />
+		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+		        </h1>
+		        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+     				<tr>
+     					<td style="width:70%;">
+			                <bean:message key="colname.lf.date.range" />
+			                (<%= a.getDateformat().getFormat() %>)
+			                <br>
+			                <html:text property="startDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.handleItemsForm.startDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">&nbsp;-
+			                <html:text property="endDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.handleItemsForm.endDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
+		                </td>
+		                <td style="width:30%;">
+		                	<bean:message key="colname.lfc.value" />:&nbsp;
+		                	<br>
+           					<html:select name="handleItemsForm" property="value" styleClass="dropdown" >
+      							<html:option value="<%=String.valueOf(TracingConstants.LFC_ITEM_LOW_VALUE) %>" ><bean:message key="lfc.low.value" /></html:option>
+      							<html:option value="<%=String.valueOf(TracingConstants.LFC_ITEM_HIGH_VALUE) %>" ><bean:message key="lfc.high.value" /></html:option>
+           					</html:select>
+		                </td>
+     				</tr>
+     				<tr>
+     					<td colspan=3 >
+     						<center>
+								<html:submit property="filterItems" styleId="button">
+									<bean:message key="button.filter" />
+								</html:submit>
+							</center>
+     					</td>
+     				</tr>
+     			</table>
+		        <br/>
 				<h1 class="green">
 					<bean:message key="header.salvage.items" />
 					<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
@@ -78,35 +111,57 @@
          		<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
          			<tr>
-         				<td class="header">
-         					<bean:message key="colname.lf.select" />
-         				</td>
-         				<td class="header">
+         				<td class="header" style="width:20%;">
          					<bean:message key="colname.lf.id" />
          				</td>
-         				<td class="header">
-         					<bean:message key="colname.lf.disposition" />
+         				<td class="header" style="width:20%;">
+         					<bean:message key="colname.lf.received.date" />
          				</td>
-         				<td class="header">
-         					<bean:message key="colname.lf.date" />
+         				<td class="header" style="width:20%;">
+         					<bean:message key="colname.lf.item.location" />
          				</td>
-         				<td class="header">
+         				<td class="header" style="width:40%;">
          					<bean:message key="colname.lf.item.description" />
          				</td>
          			</tr>
          			<logic:iterate indexId="i" id="item" name="handleItemsForm" property="foundItems" type="com.bagnet.nettracer.tracing.db.lf.LFItem" >
          				<tr>
          					<td>
-         						<input type="checkbox" name="item[<%=i %>].selected" />
-         					</td>
-         					<td>
          						<a href='create_found_item.do?foundId=<%=item.getFound().getId() %>'><%=item.getFound().getBarcode() %></a>
          					</td>
          					<td>
-         						<%=item.getDisposition().getDescription() %>
+         						<%=item.getFound().getDisReceivedDate() %>
          					</td>
          					<td>
-         						<%=item.getFound().getDisplayDate(a.getDateformat().getFormat()) %>
+         						<% 
+         							int location = item.getFound().getItemLocation();
+         							switch (location) {
+         							case TracingConstants.LF_LOCATION_SHELF: %>
+         								<bean:message key="lf.location.shelf" />
+         							<%	
+         								break;
+         							case TracingConstants.LF_LOCATION_VERIFICATION: %>
+         								<bean:message key="lf.location.verification" />
+         							<%
+         								break;
+         							case TracingConstants.LF_LOCATION_WAITING: %>
+         								<bean:message key="lf.location.waiting" />
+         							<% 
+         								break;
+ 									case TracingConstants.LF_LOCATION_DELIVERY: %>
+         								<bean:message key="lf.location.delivery" />
+       								<%
+       									break;
+       								case TracingConstants.LF_LOCATION_SALVAGED: %>
+         								<bean:message key="lf.location.salvaged" />
+         							<%
+         								break;
+         							default: %>
+         								<bean:message key="lf.location.unknown" />
+         						<%	
+         								break;
+         							} 
+         						%>
          					</td>
          					<td>
          						<%=item.getDescription() == null || item.getDescription().isEmpty() ? "&nbsp;" : item.getDescription() %>
@@ -120,11 +175,6 @@
 				    </tr>
 			    </table>
 			    <br/>
-				<center>
-					<html:submit property="salvageItems" styleId="button">
-						<bean:message key="button.salvage.items" />
-					</html:submit>
-				</center>
 			    <script language=javascript>
 					document.location.href="#result";
 			    </script>

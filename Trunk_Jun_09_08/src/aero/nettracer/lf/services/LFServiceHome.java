@@ -17,8 +17,10 @@ import com.bagnet.nettracer.tracing.db.lf.LFDelivery;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
+import com.bagnet.nettracer.tracing.forms.lfc.SalvageSearchForm;
 
 public interface LFServiceHome {
 
@@ -55,6 +57,8 @@ public interface LFServiceHome {
 	public List<LFItem> getDeliveryPendingPaginatedList(Station station, int start, int offset);
 	public int getShelvedTraceResultsCount(Station station, int value);
 	public List<LFFound> getShelvedTraceResultsPaginated(Station station, int value, int start, int offset);
+	public int getSalvageCount(Station station, SalvageSearchForm ssForm);
+	public List<LFSalvage> getSalvagesPaginated(Station station, SalvageSearchForm ssForm, int start, int offset);
 	
 	//LF reporting
 	public String getLostReport(Date startdate, Date enddate, Station station, int matchType, boolean shipped);

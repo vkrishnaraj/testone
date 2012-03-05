@@ -568,5 +568,15 @@ public class StatReportDTO {
 	public void setStationCode(String stationCode) {
 		this.stationCode = stationCode;
 	}
+	
+	private long salvageId;
+
+	public long getSalvageId() {
+		return salvageId;
+	}
+
+	public void setSalvageId(long salvageId) {
+		this.salvageId = salvageId;
+	}
 
 }

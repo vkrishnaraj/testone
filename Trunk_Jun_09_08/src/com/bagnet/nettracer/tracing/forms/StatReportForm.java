@@ -605,4 +605,15 @@ public final class StatReportForm extends ValidatorForm {
 		this.event = event;
 	}
 
+	private long salvageId;
+
+	public long getSalvageId() {
+		return salvageId;
+	}
+
+	public void setSalvageId(long salvageId) {
+		this.salvageId = salvageId;
+	}
+	
+	
 }

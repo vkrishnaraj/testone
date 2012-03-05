@@ -256,7 +256,7 @@ public class LFItem implements Serializable{
 	}
 	
 	public String getExtendedSummaryDesc() {
-		String toReturn = getSummaryDesc() + ",";
+		String toReturn = getSummaryDesc() + ", ";
 		
 		if (description != null && !description.isEmpty()) {
 			toReturn += description + ",";
@@ -333,7 +333,5 @@ public class LFItem implements Serializable{
 	public void setDeliveryRejected(boolean deliveryRejected) {
 		this.deliveryRejected = deliveryRejected;
 	}
-	
-	
-	
+
 }

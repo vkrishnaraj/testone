@@ -924,12 +924,24 @@
     </definition>
 
     <definition name="shelved_trace_results" extends="user_menu">
-        <put name="center"   value="/pages/taskmanager/shelved_trace_results.jsp"/>
+        <put name="center"   value="/pages/lfc/shelved_trace_results.jsp"/>
+    </definition>
+
+    <definition name="lf_salvage" extends="user_menu">
+        <put name="center"   value="/pages/lfc/lf_salvage.jsp"/>
+    </definition>
+
+    <definition name="lf_search_salvage" extends="user_menu">
+        <put name="center"   value="/pages/lfc/lf_search_salvage.jsp"/>
     </definition>
     
     <definition name="ajax_subcategory" path="/pages/ajax_divs/subcategory.jsp">
     </definition>
     <definition name="ajax_itemsummary" path="/pages/ajax_divs/itemsummary.jsp">
+    </definition>
+    <definition name="ajax_salvageitems" path="/pages/ajax_divs/salvageitems.jsp">
+    </definition>
+    <definition name="ajax_blank" path="/pages/ajax_divs/lf_blank.jsp">
     </definition>
 
  </tiles-definitions>

@@ -18,7 +18,6 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.lang.WordUtils;
 import org.apache.struts.util.LabelValueBean;
 import org.dozer.DozerBeanMapper;
-import org.dozer.spring.DozerBeanMapperFactoryBean;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -46,10 +45,13 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
+import com.bagnet.nettracer.tracing.forms.lf.HandleItemsForm;
 import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
+import com.bagnet.nettracer.tracing.forms.lfc.SalvageSearchForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.EmailParser;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -570,6 +572,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return f;
 	}
 	
+	public LFFound getFoundItemByBarcode(long barcode) throws NonUniqueBarcodeException {
+		return getFoundItemByBarcode(String.valueOf(barcode));
+	}
+	
 	@Override
 	public LFFound getFoundItemByBarcode(String barcode) throws NonUniqueBarcodeException{
 		if(barcode == null || barcode.trim().length() == 0){
@@ -795,6 +801,55 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return sql;
 	}
 	
+	private String getLFCItemsToSalvageQuery(Station station, HandleItemsForm hiForm) {
+		
+		int lowValueSalvageDays = PropertyBMO.getValueAsInt("lf.low.value.salvage.days");
+		int highValueSalvageDays = PropertyBMO.getValueAsInt("lf.high.value.salvage.days");
+		
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFItem i " +
+					 "where i.found.location.station_ID = " + station.getStation_ID() + " " +
+					 "and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
+					 "and (i.disposition.status_ID in (" + TracingConstants.LF_DISPOSITION_OTHER + "," + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED + ") or i.deliveryRejected = 1) ";
+		
+		if (hiForm == null) {
+			
+			sql += "and ((i.value = " + TracingConstants.LFC_ITEM_LOW_VALUE + " and dateDiff(now(),date(i.found.receivedDate)) >= " + lowValueSalvageDays + ") or " +
+					 	"(i.value = " + TracingConstants.LFC_ITEM_HIGH_VALUE + " and dateDiff(now(),date(i.found.receivedDate)) >= " + highValueSalvageDays + "))";
+		
+		} else if (hiForm.getValue() == TracingConstants.LFC_ITEM_LOW_VALUE) {
+		
+			sql += "and i.value = " + TracingConstants.LFC_ITEM_LOW_VALUE + " and dateDiff(now(),date(i.found.receivedDate)) >= " + lowValueSalvageDays + " ";
+		
+		} else if (hiForm.getValue() == TracingConstants.LFC_ITEM_HIGH_VALUE) {
+		
+			sql += "and i.value = " + TracingConstants.LFC_ITEM_HIGH_VALUE + " and dateDiff(now(),date(i.found.receivedDate)) >= " + highValueSalvageDays + " ";
+		
+		}
+		
+		if (hiForm != null && hiForm.getStartDate() != null && !hiForm.getStartDate().isEmpty()) {
+			String startDate = hiForm.getStartDate();
+			Calendar start = new GregorianCalendar();
+			start.setTime(DateUtils.convertToDate(startDate, hiForm.getDateFormat(), null));
+
+			
+			String endDate = hiForm.getEndDate();
+			if (endDate == null || endDate.isEmpty()) {
+				endDate = startDate;
+			}
+			
+			Calendar end = new GregorianCalendar();
+			end.setTime(DateUtils.convertToDate(endDate, hiForm.getDateFormat(), null));
+			end.add(Calendar.DAY_OF_MONTH, 1);
+			
+			startDate = DateUtils.formatDate(start.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+			endDate = DateUtils.formatDate(end.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+			
+			sql += "and i.found.receivedDate between \'" + startDate + "\' and \'" + endDate + "\' ";
+		}
+		
+		return sql;
+	}
+	
 	private int getLostCount(String sql){
 		if(sql == null){
 			return 0;
@@ -993,8 +1048,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public int getItemsToSalvageCount(Station station) {
 		if(station == null){
 			return 0;
+		} else if (station.getCompany().getCompanyCode_ID().equals(TracingConstants.LF_AB_COMPANY_ID)) {
+			return getItemCount(getItemsToSalvageQuery(station));
+		} else if (station.getCompany().getCompanyCode_ID().equals(TracingConstants.LF_LF_COMPANY_ID)) {
+			return getItemCount(getLFCItemsToSalvageQuery(station, null));
 		}
-		return getItemCount(getItemsToSalvageQuery(station));
+		return 0;
+	}
+	
+	public int getLFItemsToSalvageCount(Station station, HandleItemsForm hiForm) {
+		return getItemCount(getLFCItemsToSalvageQuery(station, hiForm));
 	}
 
 	@Override
@@ -1003,6 +1066,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return null;
 		}
 		return getItemPaginatedList(getItemsToSalvageQuery(station), start, offset);
+	}
+	
+	public List<LFItem> getLFItemsToSalvagePaginatedList(Station station, HandleItemsForm hiForm, int start, int offset) {
+		if (station == null || hiForm == null) {
+			return null;
+		}
+		return getItemPaginatedList(getLFCItemsToSalvageQuery(station, hiForm), start, offset);
 	}
 
 	private String getTraceResultsQuery(Station station){
@@ -2161,5 +2231,145 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 	
+	public LFSalvage loadSalvage(long id) {
+		Session session = null;
+		LFSalvage salvage = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			salvage = (LFSalvage) session.get(LFSalvage.class, id);
+		} catch (Exception e) {
+			System.err.println(e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return salvage;
+	}
+	
+	public boolean saveSalvage(LFSalvage salvage) {
+		boolean success = false;
+		if (salvage == null) {
+			return success;
+		}
+		Session session = null;
+		Transaction transaction = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			transaction = session.beginTransaction();
+			if(salvage.getId() > 0) {
+				session.merge(salvage);
+			} else {
+				session.save(salvage);
+			}
+			transaction.commit();
+			success = true;
+		} catch (Exception e) {
+			System.err.println(e);
+			if (transaction != null) {
+				transaction.rollback();
+			}
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return success;
+	}
+	
+	@Override
+	public int getSalvageCount(Station station, SalvageSearchForm ssForm) {
+		if(station == null){
+			return 0;
+		}
+		
+		String sql = "select count(s.id) " + getSalvageQueryFromForm(station, ssForm);
+		
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			List result = q.list();
+			sess.close();
+			return ((Long) result.get(0)).intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return 0;
+	}
+	
+	@Override
+	@SuppressWarnings({ "rawtypes" })
+	public List<LFSalvage> getSalvagesPaginated(Station station, SalvageSearchForm ssForm, int start, int offset) {
+		if(station == null){
+			return null;
+		}
+		
+		String sql = getSalvageQueryFromForm(station, ssForm);
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			
+			if (start > -1 && offset > -1 ) {
+				q.setFirstResult(start);
+				q.setMaxResults(offset);
+			} else {
+				throw new Exception("Invalid pagination bounds");
+			}
+			
+			List result = q.list();
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return null;
+	}
+	
+	private String getSalvageQueryFromForm(Station station, SalvageSearchForm ssForm) {
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFSalvage s " +
+		"where s.location.station_ID = " + station.getStation_ID() + " ";
+		
+		if (ssForm.getS_createtime() != null && !ssForm.getS_createtime().isEmpty()) {
+			Calendar calendarStart = new GregorianCalendar();
+			calendarStart.setTime(DateUtils.convertToDate(ssForm.getS_createtime(), ssForm.getDateFormat(), null));
+			
+			String endDateString = ssForm.getE_createtime();
+			if (endDateString == null || endDateString.isEmpty()) {
+				endDateString = ssForm.getS_createtime();
+			}
+			
+			Calendar calendarEnd = new GregorianCalendar();
+			calendarEnd.setTime(DateUtils.convertToDate(endDateString, ssForm.getDateFormat(), null));
+			calendarEnd.add(Calendar.DAY_OF_MONTH, 1);
+			
+			String startDate = DateUtils.formatDate(calendarStart.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+			String endDate = DateUtils.formatDate(calendarEnd.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+			
+			sql += "and s.createdDate between \'" + startDate + "\' and \'" + endDate + "\' ";
+		}
+		
+		if (ssForm.getSalvageId() != 0) {
+			sql += "and s.id = " + ssForm.getSalvageId() + " ";
+		}
+		
+		if (ssForm.getSalvageStatus() > 0) {
+			sql += "and s.status.status_ID = " + ssForm.getSalvageStatus() + " ";
+		} 
+		
+		sql += "order by s.createdDate asc";
+		
+		return sql;
+	}
 	
 }

@@ -4,7 +4,7 @@
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Company_specific_irregularity_code.hbm.xml"/>
 	<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Airport.hbm.xml"/>
 	
-		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Deliver_ServiceLevel.hbm.xml"/>
+		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_Deliver_ServiceLevel.hbm.xml"/> 
 		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_DeliverCo_Station.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/audit/Audit_DeliverCompany.hbm.xml"/>
 		
@@ -277,6 +277,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFSubCategory" />
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFLog" />
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFRemark" />
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFSalvage" />
 		
 		<mapping class="com.bagnet.nettracer.tracing.db.Region"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralLog"/>

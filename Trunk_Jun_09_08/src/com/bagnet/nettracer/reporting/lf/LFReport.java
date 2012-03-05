@@ -42,7 +42,6 @@ public abstract class LFReport {
 	protected void getDatesFromDto(StatReportDTO srDto) {
 		Calendar start = new GregorianCalendar();
 		start.setTime(DateUtils.convertToDate(srDto.getStarttime(), srDto.getDateFormat(), null));
-
 		
 		String endDateString = srDto.getEndtime();
 		if (endDateString == null || endDateString.isEmpty()) {

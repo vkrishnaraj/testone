@@ -41,6 +41,7 @@ public class SalvageItemsAction extends CheckedAction {
 
 		LFServiceBean serviceBean = new LFServiceBean();
 		HandleItemsForm hiForm = (HandleItemsForm) form;
+		hiForm.setDateFormat(user.getDateformat().getFormat());
 		if (request.getParameter("salvageItems") != null) {
 			salvageItems(hiForm.getFoundItems(), serviceBean, user);
 		}
@@ -50,7 +51,11 @@ public class SalvageItemsAction extends CheckedAction {
 		int currpage = 0;
 		List<LFItem> resultSet = new ArrayList<LFItem>();
 		
-		rowcount = serviceBean.getItemsToSalvageCount(user.getStation());
+		if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"")) {
+			rowcount = serviceBean.getLFItemsToSalvageCount(user.getStation(), hiForm);
+		} else {
+			rowcount = serviceBean.getItemsToSalvageCount(user.getStation());
+		}
 		
 		currpage = hiForm.getCurrpage() != null ? Integer.parseInt(hiForm.getCurrpage()) : 0;
 		if (hiForm.getNextpage() != null && hiForm.getNextpage().equals("1")) {
@@ -63,7 +68,11 @@ public class SalvageItemsAction extends CheckedAction {
 		
 		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 		
-		resultSet = serviceBean.getItemsToSalvagePaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage);
+		if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"")) {
+			resultSet = serviceBean.getLFItemsToSalvagePaginatedList(user.getStation(), hiForm, (currpage * rowsperpage), rowsperpage);
+		} else {
+			resultSet = serviceBean.getItemsToSalvagePaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage);
+		}
 
 		if (totalpages <= currpage) {
 			currpage = 0;
