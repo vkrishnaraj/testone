@@ -254,7 +254,13 @@ public class Reservation implements ReservationInterface {
 				String[] email = pn.getEmailArray();
 				if (email != null && email.length > 0 && email[0] != null && email[0].trim().length() > 2) {
 					String theEmail = email[0].substring(2);
-					theEmail = theEmail.substring(0, theEmail.length() - 2);
+					int dotIndex = theEmail.lastIndexOf(".");
+					String suffix = theEmail.substring(dotIndex);
+					while (suffix.length() > 1 && !suffix.matches("^\\.[A-Za-z]*$")) {
+						suffix = suffix.substring(0, suffix.length() - 1);
+					}
+					int emailIndex = dotIndex + suffix.length();
+					theEmail = theEmail.substring(0, emailIndex);
 					add.setEmailAddress(theEmail);
 				}
 
@@ -345,7 +351,7 @@ public class Reservation implements ReservationInterface {
 			}
 
 			for (CustLoyalty custL : custLoyalty) {
-				Passenger pax = paxMap.get(custL.getNameNumber());
+				Passenger pax = paxMap.get(custL.getNameNumber().toString());
 				if (pax == null) {
 					pax = firstPax;
 				}

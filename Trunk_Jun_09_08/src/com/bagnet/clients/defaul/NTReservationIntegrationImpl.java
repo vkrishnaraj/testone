@@ -280,7 +280,7 @@ public class NTReservationIntegrationImpl extends
 			}
 		}
 		
-		if (noneAdded) {
+		if (noneAdded && form.getItinerarylist().size() == 0) {
 			OHD_Itinerary fitin = form.getItinerary(form.getItinerarylist().size());
 			fitin.setItinerarytype(routingType);
 		}
