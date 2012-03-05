@@ -171,6 +171,14 @@ public class LostAndFoundController {
 				FacesUtil.addError("Item Category is required.");
 				isValid = false;
 			}
+			if (lostReport.getItemCategory() == 7) {								 	// VALIDATE: LOST PHONE NUM
+				if (lostReport.getLostPhone() == null 
+						|| lostReport.getLostPhone().getNumber() == null 
+						|| lostReport.getLostPhone().getNumber().trim().length() == 0) {
+					FacesUtil.addError("Lost Phone Phone Number is required for Category \"Cellphone\".");
+					isValid = false;
+				}
+			}
 		} else {
 			if (lostReport.getDateLost() == null) {													    // VALIDATE: DATE LOST
 				FacesUtil.addError("Rental Date is required.");
