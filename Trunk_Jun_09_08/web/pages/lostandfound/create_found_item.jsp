@@ -248,11 +248,10 @@
          			</font>
        			</center>
        			<logic:equal name="foundItemForm" property="displaySummary" value="true">
-       			<center>
 					<h1 class="green">
 			        	<bean:message key="header.report.summary" />
 			        	<!-- a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a-->
-			        </h1></center><br>
+			        </h1><br>
 			        	<logic:equal name="foundItemForm" property="hasContactInfo" value="true" >
 					        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
 			        			<tr>
