@@ -35,19 +35,14 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isTextPresent("The salvage was successfully saved."));
+			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
 			verifyTrue(selenium.isElementPresent("//input[@id='addBarcode']"));
-			LF_Salvage.SALVAGE_ID = selenium
-					.getValue("//input[@id='salvageId']");
-			System.out
-					.println("LFS: Created salvage: " + LF_Salvage.SALVAGE_ID);
+			LF_Salvage.SALVAGE_ID = selenium.getValue("//input[@id='salvageId']");
+			System.out.println("LFS: Created salvage: " + LF_Salvage.SALVAGE_ID);
 			selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: An error occurred when trying to save salvage: "
-							+ LF_Salvage.SALVAGE_ID);
+			System.out.println("LFS: An error occurred when trying to save salvage: " + LF_Salvage.SALVAGE_ID);
 			return;
 		}
 
@@ -56,31 +51,24 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.click("//input[@id='button']");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: An error occurred when trying to navigate to the salvage search page.");
+			System.out.println("LFS: An error occurred when trying to navigate to the salvage search page.");
 			return;
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isElementPresent("//a[contains(@href, 'lf_salvage.do?id="
-							+ LF_Salvage.SALVAGE_ID + "')]"));
-			selenium.click("//a[contains(@href, 'lf_salvage.do?id="
-					+ LF_Salvage.SALVAGE_ID + "')]");
+			verifyTrue(selenium.isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]"));
+			selenium.click("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("LFS: Salvage Id: " + LF_Salvage.SALVAGE_ID
-					+ " was not found on the salvage search page.");
+			System.out.println("LFS: Salvage Id: " + LF_Salvage.SALVAGE_ID + " was not found on the salvage search page.");
 			return;
 		}
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isElementPresent("//input[@id='salvageId']"));
-			verifyEquals(LF_Salvage.SALVAGE_ID,
-					selenium.getValue("//input[@id='salvageId']"));
+			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 		} else {
-			System.out
-					.println("LFS: An error occurred when attempting to navigate back to the salvage page from the salvage search page.");
+			System.out.println("LFS: An error occurred when attempting to navigate back to the salvage page from the salvage search page.");
 			return;
 		}
 
@@ -97,49 +85,28 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// Low value, < 30 days
 		if (checkNoErrorPage()) {
 			LF_Salvage.LOW_LT_30 = String.valueOf(System.currentTimeMillis());
-			selenium.type("//input[@name='found.barcode']",
-					LF_Salvage.LOW_LT_30);
+			selenium.type("//input[@name='found.barcode']", LF_Salvage.LOW_LT_30);
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
-			LF_Salvage.TODAY = selenium
-					.getValue("//input[@name='disReceivedDate']");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input",
-					"Plantronics");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input",
-					"PN1234");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input",
-					"Backbeat");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td/select",
-					"label=Cellphone Accessories");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td[2]/select",
-					"label=Cordless Ear Plug");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select",
-					"label=Black");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select",
-					"label=Black");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[6]/td/input",
-					"Low value, < 30 days");
+			LF_Salvage.TODAY = selenium.getValue("//input[@name='disReceivedDate']");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "Plantronics");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input", "PN1234");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input", "Backbeat");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td/select", "label=Cellphone Accessories");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[2]/select", "label=Cordless Ear Plug");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=Black");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select", "label=Black");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[6]/td/input", "Low value, < 30 days");
 			selenium.click("xpath=(//input[@id='button'])[3]");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: An error occurred when attempting to navigate to the Found Item page from the salvage search page.");
+			System.out.println("LFS: An error occurred when attempting to navigate to the Found Item page from the salvage search page.");
 			return;
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isTextPresent("Your found item was successfully saved."));
-			System.out.println("LFS: Created Low value, < 30 Found Item: "
-					+ LF_Salvage.LOW_LT_30);
+			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			System.out.println("LFS: Created Low value, < 30 Found Item: " + LF_Salvage.LOW_LT_30);
 			selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
 			waitForPageToLoadImproved();
 		} else {
@@ -186,37 +153,18 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 
 			LF_Salvage.HIGH_LT_60 = String.valueOf(System.currentTimeMillis());
-			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input",
-					LF_Salvage.HIGH_LT_60);
+			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_Salvage.HIGH_LT_60);
 			selenium.click("//div[@id='maincontent']/table/tbody/tr/td[2]/img");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[2]/td/select",
-					"label=High");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input",
-					"Plantronics");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input",
-					"PN90123");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input",
-					"Backbeat");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td/select",
-					"label=Cellphone Accessories");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td[2]/select",
-					"label=Cordless Ear Plug");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select",
-					"label=Black");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select",
-					"label=Black");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[6]/td/input",
-					"High value, < 60 days");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/select", "label=High");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "Plantronics");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input", "PN90123");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input", "Backbeat");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td/select", "label=Cellphone Accessories");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[2]/select", "label=Cordless Ear Plug");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=Black");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select", "label=Black");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[6]/td/input", "High value, < 60 days");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
