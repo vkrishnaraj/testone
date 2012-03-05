@@ -146,7 +146,8 @@ public class SalvageAction extends CheckedAction {
 				} else {
 					salvageDays = PropertyBMO.getValueAsInt("lf.low.value.salvage.days");
 				}
-				salvageCutoff.add(Calendar.DAY_OF_MONTH, (-1 * salvageDays));
+				
+				salvageCutoff.add(Calendar.DAY_OF_YEAR, (-1 * salvageDays));
 				
 				Calendar rxDate = Calendar.getInstance();
 				rxDate.setTime(found.getReceivedDate());
