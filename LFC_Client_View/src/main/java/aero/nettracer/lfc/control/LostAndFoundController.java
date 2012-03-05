@@ -1,9 +1,13 @@
 package aero.nettracer.lfc.control;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.NavigationHandler;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpSession;
@@ -51,6 +55,13 @@ public class LostAndFoundController {
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 		.getExternalContext().getSession(false);
 		lostReport = (LostReportBean) session.getAttribute("lostReport");
+		if (getCompany() == null) {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            try {
+            	fc.getExternalContext().redirect("landing.do");
+            } catch (IOException e) {
+            }
+		}
 	}
 
 	public LostReportBean getLostReport() {
@@ -158,7 +169,7 @@ public class LostAndFoundController {
 			FacesUtil.addError("Contact Information must contain at least one Phone Number or Email Address.");
 			isValid = false;
 		}
-		if (getSubCompany().equals("SWA") ) {
+		if (getSubCompany() != null && getSubCompany().equals("SWA") ) {
 			if (lostReport.getDateLost() == null) {													    // VALIDATE: DATE LOST
 				FacesUtil.addError("Date Lost is required.");
 				isValid = false;
@@ -197,8 +208,12 @@ public class LostAndFoundController {
 	}
 
 	public List<SelectItem> getLocations() {
-		if (locations == null) {
-			locations = clientViewService.getLocations(getSubCompany());
+		if (locations == null || locations.isEmpty()) {
+			if (getSubCompany() != null) {
+				locations = clientViewService.getLocations(getSubCompany());
+			} else {
+				locations = new ArrayList<SelectItem>();
+			}
 		}
 		return locations;
 	}
@@ -208,7 +223,9 @@ public class LostAndFoundController {
 	}
 	
 	public List<SelectItem> getLocationsPickUp() {
-		locationsPickUp = clientViewService.getLocationsByState(getSubCompany(), getStatePickUp());
+		if (getSubCompany() != null) {
+			locationsPickUp = clientViewService.getLocationsByState(getSubCompany(), getStatePickUp());
+		}
 		return locationsPickUp;
 	}
 
@@ -217,7 +234,9 @@ public class LostAndFoundController {
 	}
 	
 	public List<SelectItem> getLocationsDropOff() {
-		locationsDropOff = clientViewService.getLocationsByState(getSubCompany(), getStateDropOff());
+		if (getSubCompany() != null) {
+			locationsDropOff = clientViewService.getLocationsByState(getSubCompany(), getStateDropOff());
+		}
 		return locationsDropOff;
 	}
 
@@ -226,7 +245,7 @@ public class LostAndFoundController {
 	}
 	
 	private void populateCategories() {
-		if (categories == null) {
+		if (categories == null && getCompany() != null) {
 			categories = clientViewService.getCategories(getCompany());
 		}
 	}
@@ -252,8 +271,8 @@ public class LostAndFoundController {
 
 	public List<SelectItem> getSubCategories() {
 		populateCategories();
+		subCategories = new ArrayList<SelectItem>();
 		if (categories != null) {
-			subCategories = new ArrayList<SelectItem>();
 			for (CategoryBean cat : categories) {
 				if (cat != null && cat.getId() == lostReport.getItemCategory() && cat.getSubcategories() != null) {
 					for (KeyValueBean key : cat.getSubcategories()) {
