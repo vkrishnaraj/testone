@@ -156,7 +156,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		detailStyle.setVerticalAlign(VerticalAlign.MIDDLE);
 		
 		try {
-			drb.addColumn(resources.getString("report.lf.itemization.barcode"), "barcode", Long.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.itemization.barcode"), "barcode", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.itemization.date.recorded"), "dateRecorded", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.itemization.date.received"), "dateReceived", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.itemization.value"), "value", String.class.getName(), 50, detailStyle, header);

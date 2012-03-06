@@ -2,7 +2,7 @@ package com.bagnet.nettracer.reporting.lf;
 
 public class LFItemizationReportRow {
 	
-	private long barcode;
+	private String barcode;
 	private String dateRecorded;
 	private String dateReceived;
 	private String value;
@@ -24,11 +24,11 @@ public class LFItemizationReportRow {
 		this.stationcode = stationcode;
 	}
 	
-	public long getBarcode() {
+	public String getBarcode() {
 		return barcode;
 	}
 	
-	public void setBarcode(long barcode) {
+	public void setBarcode(String barcode) {
 		this.barcode = barcode;
 	}
 	

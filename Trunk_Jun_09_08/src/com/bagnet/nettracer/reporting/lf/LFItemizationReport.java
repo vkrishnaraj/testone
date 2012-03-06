@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 
-import com.bagnet.nettracer.reporting.LFDisbursementsReportRow;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 
@@ -58,7 +57,7 @@ public class LFItemizationReport extends LFReport {
 		query.setDate("startDate", startDate);
 		query.setDate("endDate", endDate);
 		
-		query.addScalar("barcode", Hibernate.LONG);
+		query.addScalar("barcode", Hibernate.STRING);
 		query.addScalar("date_recorded", Hibernate.STRING);
 		query.addScalar("date_received", Hibernate.STRING);
 		query.addScalar("value", Hibernate.INTEGER);
@@ -83,7 +82,7 @@ public class LFItemizationReport extends LFReport {
 			currentRow = new LFItemizationReportRow();
 			Object[] data = (Object[]) raw.get(i);
 			
-			currentRow.setBarcode((Long) data[BARCODE]);
+			currentRow.setBarcode((String) data[BARCODE]);
 			currentRow.setDateRecorded((String) data[DATE_RECORDED]);
 			currentRow.setDateReceived((String) data[DATE_RECEIVED]);
 			
