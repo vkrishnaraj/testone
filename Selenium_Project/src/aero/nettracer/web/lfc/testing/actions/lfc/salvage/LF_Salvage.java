@@ -271,8 +271,9 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 		try {
-			selenium.wait(LF_Salvage.TIMEOUT);
-//			Thread.sleep(2000);
+			synchronized (selenium) {
+				selenium.wait(LF_Salvage.TIMEOUT);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -290,8 +291,9 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 		try {
-			selenium.wait(LF_Salvage.TIMEOUT);
-//			Thread.sleep(2000);
+			synchronized (selenium) {
+				selenium.wait(LF_Salvage.TIMEOUT);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -308,8 +310,9 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 		try {
-			selenium.wait(LF_Salvage.TIMEOUT);
-//			Thread.sleep(2000);
+			synchronized (selenium) {
+				selenium.wait(LF_Salvage.TIMEOUT);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -384,9 +387,11 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
+
 		try {
-			selenium.wait(LF_Salvage.TIMEOUT);
-//			Thread.sleep(2000);
+			synchronized (selenium) {
+				selenium.wait(LF_Salvage.TIMEOUT);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -419,8 +424,9 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		try {
-			selenium.wait(LF_Salvage.TIMEOUT);
-//			Thread.sleep(2000);
+			synchronized (selenium) {
+				selenium.wait(LF_Salvage.TIMEOUT);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
