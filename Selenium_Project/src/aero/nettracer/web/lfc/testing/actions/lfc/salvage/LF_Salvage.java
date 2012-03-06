@@ -202,8 +202,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: An error occurred when attempting to load the Found Item page.");
+			System.out.println("LFS: An error occurred when attempting to load the Found Item page.");
 			return;
 		}
 
@@ -253,8 +252,9 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 		try {
-			selenium.wait(2000);
-//			Thread.sleep(2000);
+			synchronized (selenium) {
+				selenium.wait(LF_Salvage.TIMEOUT);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
