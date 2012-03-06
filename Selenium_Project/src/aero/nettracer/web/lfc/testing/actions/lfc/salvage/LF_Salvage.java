@@ -249,8 +249,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		// try to enter LOW_LT_30
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_LT_30);
-		selenium.focus("//input[@id='addBarcode']");
 		selenium.selectWindow(null);
+		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 
 		if (checkNoErrorPage()) {
@@ -262,8 +262,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		// try to enter LOW_GT_30
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
-		selenium.focus("//input[@id='addBarcode']");
 		selenium.selectWindow(null);
+		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 
 		if (checkNoErrorPage()) {
@@ -276,8 +276,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		// try to enter HIGH_LT_60
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.HIGH_LT_60);
-		selenium.focus("//input[@id='addBarcode']");
 		selenium.selectWindow(null);
+		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 
 		if (checkNoErrorPage()) {
@@ -289,8 +289,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		// try to enter HIGH_GT_60
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.HIGH_GT_60);
-		selenium.focus("//input[@id='addBarcode']");
 		selenium.selectWindow(null);
+		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 
 		if (checkNoErrorPage()) {
@@ -361,8 +361,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
-		selenium.focus("//input[@id='addBarcode']");
 		selenium.selectWindow(null);
+		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 
 		try {
@@ -393,8 +393,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
 			selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
-			selenium.focus("//input[@id='addBarcode']");
 			selenium.selectWindow(null);
+			selenium.focus("//input[@id='addBarcode']");
 			selenium.keyPressNative("10");
 		} else {
 			System.out.println("LFS: failed to save the new salvage for adding duplicate items.");
