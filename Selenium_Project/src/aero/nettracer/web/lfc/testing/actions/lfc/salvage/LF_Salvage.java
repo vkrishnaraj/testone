@@ -18,7 +18,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	private static String TODAY;
 
 	@Test
-	public void testCreateSalvage() {
+	public void testACreateSalvage() {
 		selenium.click("//a[contains(@href, 'lf_salvage.do?createNew=1')]");
 		waitForPageToLoadImproved();
 
@@ -73,7 +73,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	}
 
 	@Test
-	public void testCreateFoundItems() {
+	public void testBCreateFoundItems() {
 		SimpleDateFormat df = new SimpleDateFormat("MM/DD/yyyy");
 		String lvCutoff = "";
 		String hvCutoff = "";
@@ -219,7 +219,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	}
 
 	@Test
-	public void testAddItemsToSalvage() {
+	public void testCAddItemsToSalvage() {
 		selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
 		waitForPageToLoadImproved();
 
@@ -375,7 +375,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	}
 
 	@Test
-	public void testAddToAnotherSalvage() {
+	public void testDAddToAnotherSalvage() {
 		selenium.click("//a[contains(@href, 'lf_salvage.do?createNew=1')]");
 		waitForPageToLoadImproved();
 
@@ -423,7 +423,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	}
 
 	@Test
-	public void testCloseSalvage() {
+	public void testECloseSalvage() {
 		selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
 		waitForPageToLoadImproved();
 
