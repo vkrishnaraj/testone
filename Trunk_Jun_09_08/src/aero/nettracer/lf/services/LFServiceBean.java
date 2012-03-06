@@ -2071,7 +2071,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				}
 				boolean embedImage = true;
 				
-				System.out.println("path: " + root);
+//				System.out.println("path: " + root);
 				
 				HtmlEmail he = new HtmlEmail();
 				String currentLocale = lost.getAgent().getCurrentlocale();
@@ -2100,14 +2100,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 							imgbanner);
 					params.put("BANNER_IMAGE", img1);
 					}catch(Exception e){
-						e.printStackTrace();
-						System.out.println(imagepath + imgbanner);
+//						e.printStackTrace();
+						System.out.println("Unable to find email banner: " + imagepath + imgbanner);
 					}
 				}
 				
 				String msg = EmailParser.parse(configpath + htmlFileName, params, currentLocale);
 				if(msg == null){
-					System.out.println("email is null");
+					System.out.println("email is null, check email path: " + configpath + htmlFileName);
 				}
 				he.setHtmlMsg(msg);
 				he.send();

@@ -163,8 +163,10 @@ public class LostReportAction extends CheckedAction {
 					LFFound found;
 					if (TracingConstants.LF_SUBCOMPANIES.get(lostReport.getCompanyId()).equals(TracingConstants.LF_AB_COMPANY_ID)) {
 						found = LFServiceWrapper.getInstance().getFoundItem(id);
+					} else if (lostReport.getCompanyId().equals(TracingConstants.LF_DEMO_COMPANY_ID)){
+						found = LFServiceWrapper.getInstance().getFoundItem(id);
 					} else {
-						found = LFServiceWrapper.getInstance().getFoundItemByBarcode(id + "");
+						found = LFServiceWrapper.getInstance().getFoundItemByBarcode(id + "");//LFC user, use barcode
 					}
 					if (found == null) {
 						ActionMessage error = new ActionMessage("error.invalid.found.id");

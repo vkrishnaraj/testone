@@ -60,7 +60,11 @@
 	<taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask">
 		<classpath refid="project.classpath" />
 	</taskdef>
-
+	
+	<taskdef name="if" classname="ise.antelope.tasks.IfTask">
+		<classpath refid="project.classpath" />
+	</taskdef>
+	
 	<!-- END GLOBAL TASKDEFS -->
 	
 	<!-- GLOBAL PATHS -->
@@ -354,6 +358,15 @@
 
 		<antcall target="package-web-env-spec" />
 		
+		<available file="${basedir}/companies/${ant_project_name}/environment/${environment.name}/web" type="dir" property="dir.exists"/>
+		<if name="dir.exists" exists="true">
+		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
+			<fileset dir="${basedir}/companies/${ant_project_name}/environment/${environment.name}/web">
+				<exclude name="**/*/jboss-web.xml"/>
+			</fileset>
+		</copy>
+		</if>
+		
 		<copy todir="${build.dir}/${ant_project_name}/webWorking" overwrite="false" includeemptydirs="true">
 			<fileset dir="${basedir}/companies/${ant_project_name}/web">
 				<exclude name="**/*/jboss-web.xml"/>
@@ -459,9 +472,16 @@
 	<!-- END UTILITY TARGETS -->
 	
 	<target name="build-all">
+		<antcall target="build-demo"/>
 		<antcall target="build-testing"/>
 		<antcall target="build-training"/>
 		<antcall target="build-production"/>
+	</target>
+	
+	<target name="build-demo">
+		<antcall target="build-ear-demo"/>
+		<antcall target="build-ear-demo-lfc-service"/>
+		<antcall target="build-cron-demo-all"/>
 	</target>
 	
 	<target name="build-testing">
@@ -477,6 +497,11 @@
 		<antcall target="build-ear-testing-lfc"/>
 		<antcall target="build-ear-testing-demo-and-jetblue"/>
 		<antcall target="build-cron-testing-all"/>
+	</target>
+	
+	<target name="build-local">
+		<antcall target="build-ear-local-lfc"/>
+		<antcall target="build-ear-local-westjet"/>
 	</target>
 	
 	<target name="build-training">
@@ -633,6 +658,16 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
+	<target name="build-ear-demo" depends="delete-wars">
+		<property name="staging.project" value="hosted" />
+		<property name="staging.env" value="demo" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="hibernate_generate" />
+		<antcall target="build-war-demo-lfc"/>
+		<property name="app.xml.location" value="metadata/demo" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
 	<target name="build-ear-testing-avis" depends="delete-wars">
 		<property name="staging.project" value="abtracer" />
 		<property name="staging.env" value="testing" />
@@ -680,6 +715,17 @@
 		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,lfc-service.jar,lib/lfc-client-model.jar" />
 		<antcall target="hibernate_generate" />
 		<antcall target="build-war-hudson-lfc"/>
+		<antcall target="build-jar-lfc-service"/>
+		<property name="app.xml.location" value="metadata/lfc/service" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="build-ear-demo-lfc-service" depends="delete-wars">
+		<property name="staging.project" value="lfcservice" />
+		<property name="staging.env" value="demo" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,lfc-service.jar,lib/lfc-client-model.jar" />
+		<antcall target="hibernate_generate" />
+		<antcall target="build-war-demo-lfc"/>
 		<antcall target="build-jar-lfc-service"/>
 		<property name="app.xml.location" value="metadata/lfc/service" />
 		<antcall target="donotrun-build-ear" />
@@ -1021,6 +1067,14 @@
 		<antcall target="donotrun-build-lfc" />
 	</target>
 		
+	<target name="build-war-demo-lfc" depends="delete">
+		<property name="ant_project_name" value="lfc" />
+		<property name="ant_war_name" value="lfc_demo" />
+		<property name="lfc.init.complete" value="true" />
+		<property name="environment.name" value="demo" />
+		<antcall target="donotrun-build-lfc" />
+	</target>
+	
 	<target name="build-war-hudson-westjet" depends="delete">
 		<property name="ant_project_name" value="westjet" />
 		<property name="ant_war_name" value="westjet_hudson" />
@@ -1425,6 +1479,10 @@
 		<antcall target="build-cron-hudson-jetblue"/>
 		<antcall target="build-cron-hudson-spirit"/>
 		<antcall target="build-cron-hudson-westjet"/>
+		<antcall target="build-cron-hudson-lfc"/>
+	</target>
+	<target name="build-cron-demo-all">
+		<antcall target="build-cron-demo-lfc"/>
 	</target>
 	
 	<!-- AVIS CRON TARGETS -->
@@ -1530,6 +1588,16 @@
 		<property name="sub_path" value="hudson/" />
 		<property name="cron.job.config.file" value="companies/lfc/environment/hudson/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="lfchudson-" />
+		<antcall target="cron-service" />
+	</target>
+	
+	<target name="build-cron-demo-lfc">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="demo" />
+		<property name="ant_project_name" value="lfc" />
+		<property name="sub_path" value="demo/" />
+		<property name="cron.job.config.file" value="companies/lfc/environment/demo/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="lfcdemo-" />
 		<antcall target="cron-service" />
 	</target>
 	
