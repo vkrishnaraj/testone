@@ -1,5 +1,6 @@
 package aero.nettracer.web.lfc.testing.actions.lfc.salvage;
 
+import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -250,7 +251,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// try to enter LOW_LT_30
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_LT_30);
 		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyPressNative("10");
+		selenium.keyDown("//input[@id='addBarcode']", "\\13");
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.LOW_LT_30 + " was received on: " + LF_Salvage.TODAY + " and cannot be salvaged before: 30 days."));
@@ -261,8 +262,14 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		// try to enter LOW_GT_30
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
-		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyPressNative("10");
+		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		try {
+			synchronized (selenium) {
+				selenium.wait(LF_Salvage.TIMEOUT);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_Salvage.LOW_GT_30));
@@ -275,7 +282,14 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// try to enter HIGH_LT_60
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.HIGH_LT_60);
 		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyPressNative("10");
+		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		try {
+			synchronized (selenium) {
+				selenium.wait(LF_Salvage.TIMEOUT);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.HIGH_LT_60 + " was received on: " + LF_Salvage.TODAY + " and cannot be salvaged before: 60 days."));
@@ -287,7 +301,14 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// try to enter HIGH_GT_60
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.HIGH_GT_60);
 		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyPressNative("10");
+		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		try {
+			synchronized (selenium) {
+				selenium.wait(LF_Salvage.TIMEOUT);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_Salvage.HIGH_GT_60));
@@ -358,7 +379,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyPressNative("10");
+		selenium.keyDown("//input[@id='addBarcode']", "\\13");
 
 		try {
 			synchronized (selenium) {
@@ -367,7 +388,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
+
 		verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.LOW_GT_30 + " has already been added to this salvage."));
 
 	}
@@ -389,10 +410,18 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
 			selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 			selenium.focus("//input[@id='addBarcode']");
-			selenium.keyPressNative("10");
+			selenium.keyDown("//input[@id='addBarcode']", "\\13");
 		} else {
 			System.out.println("LFS: failed to save the new salvage for adding duplicate items.");
 			return;
+		}
+
+		try {
+			synchronized (selenium) {
+				selenium.wait(LF_Salvage.TIMEOUT);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 
 		if (checkNoErrorPage()) {
