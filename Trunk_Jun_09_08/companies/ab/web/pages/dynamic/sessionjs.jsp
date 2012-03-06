@@ -177,6 +177,13 @@
 			        return false;
 				}
 			}
+			if (elementName == "lost.disLossdate") {
+				if (currentElement.value.length == 0) {
+					alert("<%= (String)bundle.getString("colname.lf.datelost") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        currentElement.focus();
+			        return false;
+				}
+			}
 
 		}
 		
@@ -1614,7 +1621,12 @@ document.onkeydown = function(){
 		window.event.keyCode = 505;
 		loadQuickSearchModal();
 	}
-
+	
+	if (window.event && (window.event.keyCode == 114 || (window.event.keyCode == 72 && window.event.ctrlKey))) {
+		window.event.keyCode = 505;
+		loadQuickHistoryModal();
+	}
+	
 	if (window.event && window.event.keyCode == 84 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(6);
