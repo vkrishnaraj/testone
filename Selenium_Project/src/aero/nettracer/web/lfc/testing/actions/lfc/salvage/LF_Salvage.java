@@ -15,6 +15,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	private static String HIGH_LT_60;
 	private static String HIGH_GT_60;
 	private static String TODAY;
+	private static int TIMEOUT = 2000;
 
 	@Test
 	public void testCreateSalvage() {
@@ -252,7 +253,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 		try {
-			Thread.sleep(2000);
+			selenium.wait(2000);
+//			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -269,7 +271,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 		try {
-			Thread.sleep(2000);
+			selenium.wait(LF_Salvage.TIMEOUT);
+//			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -287,7 +290,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 		try {
-			Thread.sleep(2000);
+			selenium.wait(LF_Salvage.TIMEOUT);
+//			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -304,7 +308,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 		try {
-			Thread.sleep(2000);
+			selenium.wait(LF_Salvage.TIMEOUT);
+//			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -380,7 +385,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyPressNative("10");
 		try {
-			Thread.sleep(2000);
+			selenium.wait(LF_Salvage.TIMEOUT);
+//			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -413,7 +419,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		try {
-			Thread.sleep(2000);
+			selenium.wait(LF_Salvage.TIMEOUT);
+//			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

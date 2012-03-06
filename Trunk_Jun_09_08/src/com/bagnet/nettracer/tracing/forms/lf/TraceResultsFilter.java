@@ -8,27 +8,27 @@ public class TraceResultsFilter implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 5206810436388053586L;
-	private int lostId;
-	private int foundId;
+	private long lostId;
+	private long foundId;
 	private boolean open;
 	private boolean closed;
 	private boolean confirmed;
 	private boolean rejected;
 	private String barcode;
 	
-	public int getLostId() {
+	public long getLostId() {
 		return lostId;
 	}
 	
-	public void setLostId(int lostId) {
+	public void setLostId(long lostId) {
 		this.lostId = lostId;
 	}
 	
-	public int getFoundId() {
+	public long getFoundId() {
 		return foundId;
 	}
 	
-	public void setFoundId(int foundId) {
+	public void setFoundId(long foundId) {
 		this.foundId = foundId;
 	}
 	

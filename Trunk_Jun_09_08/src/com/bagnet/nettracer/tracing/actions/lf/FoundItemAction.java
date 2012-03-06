@@ -306,12 +306,14 @@ public class FoundItemAction extends CheckedAction {
 		if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"") && found.getId() != 0) {
 			TraceResultsFilter filter = new TraceResultsFilter();
 			filter.setRejected(true);
+			filter.setFoundId(found.getId());
 			fiForm.setRejectedResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000));
 			
 			filter.setBarcode(found.getBarcode());
 			filter.setOpen(true);
 			filter.setConfirmed(true);
 			filter.setRejected(false);
+			filter.setFoundId(found.getId());
 			fiForm.setTraceResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000));
 
 			if (fiForm.getFound().getStatus().getStatus_ID() == TracingConstants.LF_STATUS_CLOSED) {
