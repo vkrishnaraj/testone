@@ -332,7 +332,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("601", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[3]/select"));
 			verifyEquals("4", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
-			selenium.click("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]");
+			selenium.open("/lostandfound/lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID);
+//			selenium.click("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFS: failed to navigate back to Found Item HIGH_GT_60: " + LF_Salvage.HIGH_GT_60);
