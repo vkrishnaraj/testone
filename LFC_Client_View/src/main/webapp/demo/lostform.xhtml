@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/demo_template.xhtml">
+	<ui:define name="title">Demo: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form>
+			<h:panelGroup>
+				<h1><t:outputText value="#{msg.lostform_text_title}" escape="false"/></h1>
+				<h2><t:outputText value="#{msg.lostform_text_policy_title}" /></h2>
+				<p><t:outputText value="#{msg.lostform_text_policy_desc}" /></p>
+				<h2><t:outputText value="#{msg.lostform_text_about_title}" /></h2><br/><br/>
+				<table style="width: 95%;">
+					<tr><td style="width: 34%;">
+						<t:outputText value="#{msg.lostform_label_date}" />
+					</td><td style="width: 33%;">
+						<t:outputText value="#{msg.lostform_label_item_brand}" />
+					</td><td style="width: 33%;">
+						<t:outputText value="#{msg.lostform_label_item_serial}" />
+					</td></tr>
+					<tr><td>
+						<t:inputText value="#{lostAndFound.lostReport.itemDate}"  style="width: 95%;"/>
+					</td><td>
+						<t:inputText value="#{lostAndFound.lostReport.itemBrand}"  style="width: 95%;"/>
+					</td><td>
+						<t:inputText value="#{lostAndFound.lostReport.itemSerial}"  style="width: 100%;"/>
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td>
+						<t:outputText value="#{msg.lostform_label_item_category}" />
+					</td><td>
+						<t:outputText value="#{msg.lostform_label_item_subcat}" />
+					</td><td>
+						<t:outputText value="#{msg.lostform_label_item_color}" />
+					</td></tr>
+					<tr><td>
+						<t:selectOneMenu value="#{lostAndFound.lostReport.itemCategory}"  style="width: 95%;">
+							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="0" />
+							<f:selectItems value="#{lostAndFound.categoryList}" />
+							<a4j:support event="onchange" reRender="subcat" limitToList="true"/>
+						</t:selectOneMenu>
+					</td><td>
+						<a4j:outputPanel id="subcat" ajaxRendered="true">
+							<t:selectOneMenu value="#{lostAndFound.lostReport.itemSubCategory}"  style="width: 95%;">
+								<f:selectItems value="#{lostAndFound.subCategories}" />
+							</t:selectOneMenu>
+						</a4j:outputPanel>
+					</td><td>
+						<t:selectOneMenu value="#{lostAndFound.lostReport.itemColor}"  style="width: 100%;">
+							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="" />
+							<f:selectItems value="#{lostAndFound.colors}" />
+						</t:selectOneMenu>
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td colspan="3">
+						<t:outputText value="#{msg.lostform_label_item_desc}" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:inputTextarea rows="3" value="#{lostAndFound.lostReport.itemDesc}" style="width: 100%;" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td colspan="1">
+						<t:outputText value="#{msg.lostform_label_drop_location}" />
+					</td><td style="width: 33%;"><t:outputText value="#{msg.lostform_label_date_lost}" /></td>
+					</tr>
+					<tr><td>
+						<t:selectOneMenu value="#{lostAndFound.lostReport.dropOffLocation}"  style="width: 100%;">
+							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="0" />
+							<f:selectItems value="#{lostAndFound.locations}" />
+						</t:selectOneMenu>
+					</td>
+					<td ><rich:calendar value="#{lostAndFound.lostReport.dateLost}"  
+                           locale="en"  
+                           popup="true"  
+                           datePattern="MM/dd/yyyy"
+                           enableManualInput="true"                        
+                           cellWidth="24px" cellHeight="22px" style="width:200px"/>  
+					</td>
+					</tr>
+					<tr><td>&#160;</td></tr>
+					<tr></tr>
+					<tr><td colspan="2">
+						<t:outputText value="#{msg.lostform_label_where_lost}" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:inputText value="#{lostAndFound.lostReport.whereLost}"  style="width: 100%" />
+					</td></tr>
+					
+				</table><br/>
+				<h2><t:outputText value="#{msg.lostform_text_contact_title}" /></h2><br/><br/>
+				<table style="width: 95%;">
+					<tr><td colspan="2" style="width: 34%;">
+						<t:outputText value="#{msg.lostform_label_name_last}"/>
+					</td><td colspan="2" style="width: 33%;">
+						<t:outputText value="#{msg.lostform_label_name_first}"/>
+					</td><td colspan="2" style="width: 33%;">
+						<t:outputText value="#{msg.lostform_label_name_mi}"/>
+					</td></tr>
+					<tr><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.lastName}"  style="width: 95%" />
+					</td><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.firstName}"  style="width: 95%" />
+					</td><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.middleInitial}"  style="width: 100%" />
+					</td></tr>
+<!-- BEGIN ADDRESS INFO UI -->
+	 				<tr><td>&#160;</td></tr>
+					<tr><td colspan="6">
+						<t:outputText value="#{msg.lostform_label_address_addr1}" />
+					</td></tr>
+					<tr><td colspan="6">
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.address1}"  style="width: 100%" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td colspan="6">
+						<t:outputText value="#{msg.lostform_label_address_addr2}" />
+					</td></tr>
+					<tr><td colspan="6">
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.address2}"  style="width: 100%" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td colspan="2">
+						<t:outputText value="#{msg.lostform_label_address_city}" />
+					</td><td colspan="2">
+						<t:outputText value="#{msg.lostform_label_address_state}" />
+					</td><td colspan="2">
+						<t:outputText value="#{msg.lostform_label_address_postal}" />
+					</td></tr>
+					<tr><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.city}"  style="width: 95%" />
+					</td><td colspan="2">
+						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.state}"  style="width: 95%" >
+							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="" />
+							<f:selectItems value="#{lostAndFound.states}" />
+						</t:selectOneMenu>
+					</td><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.postal}"  style="width: 100%" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td colspan="3" style="width: 50%;">
+						<t:outputText value="#{msg.lostform_label_address_province}" />
+					</td><td colspan="3" style="width: 50%;">
+						<t:outputText value="#{msg.lostform_label_address_country}" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.province}"  style="width: 95%" />
+					</td><td colspan="3">
+						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.country}"  style="width: 100%" >
+							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="" />
+							<f:selectItems value="#{lostAndFound.countries}" />
+						</t:selectOneMenu>
+					</td></tr>                                                     
+<!-- END ADDRESS INFO UI -->
+					<tr><td>&#160;</td></tr>
+					<tr><td colspan="6">
+						<t:outputText value="#{msg.lostform_label_phone_primary}" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:inputText value="#{lostAndFound.lostReport.contact.primaryPhone.number}"  style="width: 95%" />
+					</td><td colspan="3">
+					    <h:panelGroup style="width: 100%" >
+					      <t:selectOneRadio id="primaryType" layout="spread" value="#{lostAndFound.lostReport.contact.primaryPhone.type}">
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.work}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.home}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.mobile}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.other}" itemLabel=""/>
+					      </t:selectOneRadio>
+					      <h:panelGrid columns="4" columnClasses="col25, col25, col25, col25" style="width: 100%;" >
+					      	<t:outputLabel value="#{msg.lostform_label_phone_work}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_home}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_mobile}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_other}" />
+					        <t:radio for="primaryType" index="0" />
+					        <t:radio for="primaryType" index="1" />
+					        <t:radio for="primaryType" index="2" />
+					        <t:radio for="primaryType" index="3" />
+					      </h:panelGrid>
+					    </h:panelGroup>	
+					</td></tr>
+					<tr><td colspan="6">
+						<t:outputText value="#{msg.lostform_label_phone_secondary}" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:inputText value="#{lostAndFound.lostReport.contact.secondaryPhone.number}"  style="width: 95%" />
+					</td><td colspan="3">
+					    <h:panelGroup style="width: 100%" >
+					      <t:selectOneRadio id="secondaryType" layout="spread" value="#{lostAndFound.lostReport.contact.secondaryPhone.type}">
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.work}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.home}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.mobile}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.other}" itemLabel=""/>
+					      </t:selectOneRadio>
+					      <h:panelGrid columns="4" columnClasses="col25, col25, col25, col25" style="width: 100%;" >
+					      	<t:outputLabel value="#{msg.lostform_label_phone_work}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_home}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_mobile}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_other}" />
+					        <t:radio for="secondaryType" index="0" />
+					        <t:radio for="secondaryType" index="1" />
+					        <t:radio for="secondaryType" index="2" />
+					        <t:radio for="secondaryType" index="3" />
+					      </h:panelGrid>
+					    </h:panelGroup>	
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td colspan="2">
+						<t:outputText value="#{msg.lostform_label_email}" />
+					</td><td colspan="2">
+						<t:outputText value="#{msg.lostform_label_email_confirm}" />
+					</td></tr>
+					<tr><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.emailAddress}"  style="width: 95%" />
+					</td><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.confirmEmail}"  style="width: 95%" />
+					</td></tr>
+				</table><br/>
+				<br/><br/>
+				<div>
+					<rich:messages id="reportMsg" errorClass="errormsg" infoClass="infomsg" layout="list"/>
+					<rich:spacer width="100%" height="15" title="" />
+				</div>
+				<div align="center">
+				<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToLanding}" />&#160;&#160;&#160;
+				<a4j:commandButton value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" />
+				</div><br/>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

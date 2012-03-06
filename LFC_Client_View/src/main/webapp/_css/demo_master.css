@@ -1,0 +1,32 @@
+#mainBackground {
+    background: url("../_images/demo/BG_main.jpg") repeat-x fixed center top transparent;
+    float: left;
+    width: 100%;
+    text-align:center;
+    display:block;
+}
+
+#main .bodyOtherPages .contentBg{
+padding:10px 10px 0 10px;
+background-repeat:repeat-x;
+background-color:#FFFFFF;
+_height:629px;
+min-height:629px;
+width:950px;
+}
+
+#header {
+    margin: 5px 0 0;
+}
+
+#header .banner {
+
+}
+
+#footer {
+
+}
+
+#footer .banner {
+	
+}

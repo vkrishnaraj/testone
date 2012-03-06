@@ -190,6 +190,9 @@ public class LostAndFoundController {
 					isValid = false;
 				}
 			}
+		
+		}else if (getSubCompany().equals("DEM")){
+			//TODO require fields for demo????	
 		} else {
 			if (lostReport.getDateLost() == null) {													    // VALIDATE: DATE LOST
 				FacesUtil.addError("Rental Date is required.");

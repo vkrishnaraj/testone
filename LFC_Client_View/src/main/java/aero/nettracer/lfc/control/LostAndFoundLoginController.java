@@ -55,6 +55,10 @@ public class LostAndFoundLoginController {
 		return login(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_SWA_COMPANY_ID);
 	}
 	
+	public String loginDemo() {
+		return login(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_DEMO_COMPANY_ID);
+	}
+	
 	public String login(String company, String subCompany) {
 		LostReportBean report = clientViewService.login(login, company);
 		if (report != null) {
@@ -71,6 +75,12 @@ public class LostAndFoundLoginController {
 	public String goToFormPageAvis() {
 		lostReport.setSubCompany(TracingConstants.LF_AVIS_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_AB_COMPANY_ID);
+		return goToFormPage("lostform");
+	}
+	
+	public String goToFormPageDemo() {
+		lostReport.setSubCompany(TracingConstants.LF_DEMO_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
 		return goToFormPage("lostform");
 	}
 	
