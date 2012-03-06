@@ -153,12 +153,12 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 //	AB_CreateLost_Detailed.class, AB_CreateFound_Detailed.class,
 //	AB_ConfirmMatch.class, AB_CreateDelivery.class,
 	// LFC
-	LF_Login.class, /*LF_CreateLost_VerifyRequiredFields.class, LF_CreateFound_VerifyRequiredFields.class,
+	LF_Login.class, LF_CreateLost_VerifyRequiredFields.class, LF_CreateFound_VerifyRequiredFields.class,
 	LF_SearchLost.class, LF_SearchFound.class, LF_ManualMatch_FoundToLost.class,
 	LF_CloseFound.class, LF_SearchLost.class, LF_CloseLost.class, 
 	LF_CreateLost_Detailed.class, LF_CreateFound_Detailed.class, LF_FoundReportSummary.class, LF_VerifyText_TaskManager.class, 
 	LF_ConfirmMatch.class, LF_CreateDeliveryFromFound.class, LF_ItemEntry.class, LF_ProcessTraceResults.class,
-	LF_CreateLostAndFoundReadOnly.class,*/ LF_Salvage.class/*, LF_SalvageSearch.class*/
+	LF_CreateLostAndFoundReadOnly.class, LF_Salvage.class, LF_SalvageSearch.class
 	
 	})
 public class TestEverything { 
