@@ -3,7 +3,6 @@ package aero.nettracer.web.lfc.testing.actions.lfc.salvage;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.apache.tools.ant.taskdefs.WaitFor;
 import org.junit.Test;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
@@ -18,7 +17,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	private static String TODAY;
 
 	@Test
-	public void testACreateSalvage() {
+	public void testCreateSalvage() {
 		selenium.click("//a[contains(@href, 'lf_salvage.do?createNew=1')]");
 		waitForPageToLoadImproved();
 
@@ -73,7 +72,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	}
 
 	@Test
-	public void testBCreateFoundItems() {
+	public void testCreateFoundItems() {
 		SimpleDateFormat df = new SimpleDateFormat("MM/DD/yyyy");
 		String lvCutoff = "";
 		String hvCutoff = "";
@@ -219,7 +218,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	}
 
 	@Test
-	public void testCAddItemsToSalvage() {
+	public void testAddItemsToSalvage() {
 		selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
 		waitForPageToLoadImproved();
 
@@ -375,7 +374,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	}
 
 	@Test
-	public void testDAddToAnotherSalvage() {
+	public void testAddToAnotherSalvage() {
 		selenium.click("//a[contains(@href, 'lf_salvage.do?createNew=1')]");
 		waitForPageToLoadImproved();
 
@@ -423,7 +422,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	}
 
 	@Test
-	public void testECloseSalvage() {
+	public void testCloseSalvage() {
 		selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
 		waitForPageToLoadImproved();
 
