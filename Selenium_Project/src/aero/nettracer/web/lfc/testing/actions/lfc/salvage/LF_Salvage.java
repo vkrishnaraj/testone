@@ -228,29 +228,23 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.click("//input[@id='button']");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: An error occurred when trying to load the salvage search page from the Found Item page.");
+			System.out.println("LFS: An error occurred when trying to load the salvage search page from the Found Item page.");
 			return;
 		}
 
 		if (checkNoErrorPage()) {
-			selenium.click("//a[contains(@href, 'lf_salvage.do?id="
-					+ LF_Salvage.SALVAGE_ID + "')]");
+			selenium.click("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: the search page returned no results for salvage: "
-							+ LF_Salvage.SALVAGE_ID);
+			System.out.println("LFS: the search page returned no results for salvage: " + LF_Salvage.SALVAGE_ID);
 			return;
 		}
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isElementPresent("//input[@id='salvageId']"));
-			verifyEquals(LF_Salvage.SALVAGE_ID,
-					selenium.getValue("//input[@id='salvageId']"));
+			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 		} else {
-			System.out.println("LFS: failed to load salvage: "
-					+ LF_Salvage.SALVAGE_ID + " from the salvage search page.");
+			System.out.println("LFS: failed to load salvage: " + LF_Salvage.SALVAGE_ID + " from the salvage search page.");
 			return;
 		}
 
@@ -261,17 +255,13 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.LOW_LT_30
-					+ " was received on: " + LF_Salvage.TODAY
-					+ " and cannot be salvaged before: 30 days."));
+			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.LOW_LT_30 + " was received on: " + LF_Salvage.TODAY + " and cannot be salvaged before: 30 days."));
 		} else {
-			System.out.println("LFS: failed to enter LOW_LT_30: "
-					+ LF_Salvage.LOW_LT_30);
+			System.out.println("LFS: failed to enter LOW_LT_30: " + LF_Salvage.LOW_LT_30);
 			return;
 		}
 
@@ -282,17 +272,14 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_Salvage.LOW_GT_30));
-			verifyTrue(selenium
-					.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics, Backbeat, PN5678"));
+			verifyTrue(selenium.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics, Backbeat, PN5678"));
 		} else {
-			System.out.println("LFS: failed to enter LOW_GT_30: "
-					+ LF_Salvage.LOW_GT_30);
+			System.out.println("LFS: failed to enter LOW_GT_30: " + LF_Salvage.LOW_GT_30);
 			return;
 		}
 
@@ -303,17 +290,13 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.HIGH_LT_60
-					+ " was received on: " + LF_Salvage.TODAY
-					+ " and cannot be salvaged before: 60 days."));
+			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.HIGH_LT_60 + " was received on: " + LF_Salvage.TODAY + " and cannot be salvaged before: 60 days."));
 		} else {
-			System.out.println("LFS: failed to enter HIGH_LT_60: "
-					+ LF_Salvage.HIGH_LT_60);
+			System.out.println("LFS: failed to enter HIGH_LT_60: " + LF_Salvage.HIGH_LT_60);
 			return;
 		}
 
@@ -324,19 +307,16 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_Salvage.HIGH_GT_60));
-			verifyTrue(selenium
-					.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics, Backbeat, PN4567"));
+			verifyTrue(selenium.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics, Backbeat, PN4567"));
 			selenium.click("//a[@id='menucol_0.0']/u");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("LFS: failed to enter HIGH_GT_60: "
-					+ LF_Salvage.HIGH_GT_60);
+			System.out.println("LFS: failed to enter HIGH_GT_60: " + LF_Salvage.HIGH_GT_60);
 			return;
 		}
 
@@ -352,38 +332,31 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("601", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[3]/select"));
 			verifyEquals("4", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
-			selenium.click("//a[contains(@href, 'lf_salvage.do?id="
-					+ LF_Salvage.SALVAGE_ID + "')]");
+			selenium.click("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: failed to navigate back to Found Item HIGH_GT_60: "
-							+ LF_Salvage.HIGH_GT_60);
+			System.out.println("LFS: failed to navigate back to Found Item HIGH_GT_60: " + LF_Salvage.HIGH_GT_60);
 			return;
 		}
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isElementPresent("//input[@id='salvageId']"));
-			verifyEquals(LF_Salvage.SALVAGE_ID,
-					selenium.getValue("//input[@id='salvageId']"));
+			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("LFS: failed to navigate back to salvage Id: "
-					+ LF_Salvage.SALVAGE_ID);
+			System.out.println("LFS: failed to navigate back to salvage Id: " + LF_Salvage.SALVAGE_ID);
 			return;
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isTextPresent("The salvage was successfully saved."));
+			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
 			verifyFalse(selenium.isTextPresent(LF_Salvage.LOW_LT_30));
 			verifyTrue(selenium.isTextPresent(LF_Salvage.LOW_GT_30));
 			verifyFalse(selenium.isTextPresent(LF_Salvage.HIGH_LT_60));
 			verifyTrue(selenium.isTextPresent(LF_Salvage.HIGH_GT_60));
 		} else {
-			System.out.println("LFS: An error occurred while attempting to save salvage: "
-							+ LF_Salvage.SALVAGE_ID);
+			System.out.println("LFS: An error occurred while attempting to save salvage: " + LF_Salvage.SALVAGE_ID);
 			return;
 		}
 
@@ -393,7 +366,6 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -410,50 +382,40 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: failed to create a new salvage for adding duplicate items.");
+			System.out.println("LFS: failed to create a new salvage for adding duplicate items.");
 			return;
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isTextPresent("The salvage was successfully saved."));
+			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
 			selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 			selenium.focus("//input[@id='addBarcode']");
 			selenium.keyPressNative("10");
 		} else {
-			System.out
-					.println("LFS: failed to save the new salvage for adding duplicate items.");
+			System.out.println("LFS: failed to save the new salvage for adding duplicate items.");
 			return;
 		}
 
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.LOW_GT_30
-					+ " was already included in salvage: "
-					+ LF_Salvage.SALVAGE_ID));
+			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.LOW_GT_30 + " was already included in salvage: " + LF_Salvage.SALVAGE_ID));
 			selenium.select("//select[@id='statusId']", "label=Closed");
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: an error occurred while attempting to add duplicate item LOW_GT_30: "
-							+ LF_Salvage.LOW_GT_30);
+			System.out.println("LFS: an error occurred while attempting to add duplicate item LOW_GT_30: " + LF_Salvage.LOW_GT_30);
 			return;
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isTextPresent("The salvage was successfully saved."));
+			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
 		} else {
-			System.out
-					.println("LFS: an error occurred while attempting to close duplicate savlage.");
+			System.out.println("LFS: an error occurred while attempting to close duplicate savlage.");
 			return;
 		}
 
@@ -469,29 +431,23 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.click("//input[@id='button']");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: An error occurred when trying to load the salvage search page after closing duplicate salvage.");
+			System.out.println("LFS: An error occurred when trying to load the salvage search page after closing duplicate salvage.");
 			return;
 		}
 
 		if (checkNoErrorPage()) {
-			selenium.click("//a[contains(@href, 'lf_salvage.do?id="
-					+ LF_Salvage.SALVAGE_ID + "')]");
+			selenium.click("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: the search page returned no results for salvage: "
-							+ LF_Salvage.SALVAGE_ID);
+			System.out.println("LFS: the search page returned no results for salvage: " + LF_Salvage.SALVAGE_ID);
 			return;
 		}
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isElementPresent("//input[@id='salvageId']"));
-			verifyEquals(LF_Salvage.SALVAGE_ID,
-					selenium.getValue("//input[@id='salvageId']"));
+			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 		} else {
-			System.out.println("LFS: failed to load salvage: "
-					+ LF_Salvage.SALVAGE_ID + " from the salvage search page.");
+			System.out.println("LFS: failed to load salvage: " + LF_Salvage.SALVAGE_ID + " from the salvage search page.");
 			return;
 		}
 
@@ -500,18 +456,14 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: an error occurred while attempting to load salvage: "
-							+ LF_Salvage.SALVAGE_ID);
+			System.out.println("LFS: an error occurred while attempting to load salvage: " + LF_Salvage.SALVAGE_ID);
 			return;
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isTextPresent("The salvage was successfully saved."));
+			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
 		} else {
-			System.out
-					.println("LFS: an error occurred while attempting to close original savlage.");
+			System.out.println("LFS: an error occurred while attempting to close original savlage.");
 			return;
 		}
 

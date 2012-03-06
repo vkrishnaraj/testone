@@ -214,7 +214,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			selenium.click("//div[@id='maincontent']/table/tbody/tr[6]/td[2]/table/tbody/tr[18]/td/input");
-			selenium.click("//div[@id='maincontent']/table/tbody/tr[32]/td/input[2]");
+			selenium.click("xpath=(//input[@id='button'])[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLAFRO: An error occurred when attempting to open the permissions page for the Admin group.");
