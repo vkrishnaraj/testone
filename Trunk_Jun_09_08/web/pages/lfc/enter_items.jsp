@@ -459,9 +459,9 @@
      					%>
 						<div id="summaryItem_<%=i %>" class="<%=cssClass %>">
 							<span style="font-weight: bold;" ><bean:message key="colname.lfc.item.id" />:&nbsp;</span><%=fho.getFound().getBarcode() %>
-							<br>
+							<!-- br-->
 							<span style="font-weight: bold;" ><bean:message key="lfc.summary.desc" />:&nbsp;</span><%=fho.getFound().getSummaryDesc() %>
-							<br>
+							<!-- br-->
 							<span style="font-weight: bold;" ><bean:message key="lfc.item.entry.status" />:&nbsp;</span>
 							<%
 								if (status == TracingConstants.LF_STATUS_ENTERED) {
