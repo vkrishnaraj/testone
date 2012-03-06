@@ -23,14 +23,12 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isTextPresent("Please save the salvage to begin adding items."));
+			verifyTrue(selenium.isTextPresent("Please save the salvage to begin adding items."));
 			verifyFalse(selenium.isElementPresent("//input[@id='addBarcode']"));
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
 		} else {
-			System.out
-					.println("LFS: An error occurred when trying to navigate to the salvage page.");
+			System.out.println("LFS: An error occurred when trying to navigate to the salvage page.");
 			return;
 		}
 
@@ -97,7 +95,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=Black");
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select", "label=Black");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[6]/td/input", "Low value, < 30 days");
-			selenium.click("xpath=(//input[@id='button'])[3]");
+			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFS: An error occurred when attempting to navigate to the Found Item page from the salvage search page.");
@@ -131,7 +129,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=Black");
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select", "label=Black");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[6]/td/input", "Low value, > 30 days");
-			selenium.click("xpath=(//input[@id='button'])[2]");
+			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out
@@ -174,10 +172,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isTextPresent("Your found item was successfully saved."));
-			System.out.println("LFS: Created High value, < 60 Found Item: "
-					+ LF_Salvage.HIGH_LT_60);
+			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			System.out.println("LFS: Created High value, < 60 Found Item: " + LF_Salvage.HIGH_LT_60);
 			selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
 			waitForPageToLoadImproved();
 		} else {
@@ -192,38 +188,17 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			hvCutoff = df.format(now.getTime());
 
 			LF_Salvage.HIGH_GT_60 = String.valueOf(System.currentTimeMillis());
-			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input",
-					LF_Salvage.HIGH_GT_60);
-			selenium.type(
-					"//div[@id='maincontent']/table/tbody/tr/td[2]/input",
-					hvCutoff);
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[2]/td/select",
-					"label=High");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input",
-					"Plantronics");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input",
-					"PN4567");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input",
-					"Backbeat");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td/select",
-					"label=Cellphone Accessories");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td[2]/select",
-					"label=Cordless Ear Plug");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select",
-					"label=Black");
-			selenium.select(
-					"//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select",
-					"label=Black");
-			selenium.type(
-					"//div[@id='maincontent']/table[3]/tbody/tr[6]/td/input",
-					"High value, > 60 days");
+			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_Salvage.HIGH_GT_60);
+			selenium.type("//div[@id='maincontent']/table/tbody/tr/td[2]/input", hvCutoff);
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/select", "label=High");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "Plantronics");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input", "PN4567");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input", "Backbeat");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td/select", "label=Cellphone Accessories");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[2]/select", "label=Cordless Ear Plug");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=Black");
+			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select", "label=Black");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[6]/td/input", "High value, > 60 days");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
@@ -233,16 +208,10 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium
-					.isTextPresent("Your found item was successfully saved."));
-			verifyEquals(
-					"600",
-					selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[3]/select"));
-			verifyEquals(
-					"0",
-					selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
-			System.out.println("LFS: Created High value, > 60 Found Item: "
-					+ LF_Salvage.HIGH_GT_60 + " with date: " + hvCutoff);
+			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			verifyEquals("600", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[3]/select"));
+			verifyEquals("0", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
+			System.out.println("LFS: Created High value, > 60 Found Item: " + LF_Salvage.HIGH_GT_60 + " with date: " + hvCutoff);
 		} else {
 			System.out.println("LFS: Failed to save found item: HIGH_GT_60.");
 			return;
