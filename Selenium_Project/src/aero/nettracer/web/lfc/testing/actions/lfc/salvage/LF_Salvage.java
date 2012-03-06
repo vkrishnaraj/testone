@@ -250,7 +250,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// try to enter LOW_LT_30
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_LT_30);
 		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyPressNative("10");
+//		selenium.keyPressNative("10");
+		selenium.keyPressNative("13");
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -267,7 +268,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// try to enter LOW_GT_30
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyPressNative("10");
+//		selenium.keyPressNative("10");
+		selenium.keyPressNative("13");
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -285,7 +287,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// try to enter HIGH_LT_60
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.HIGH_LT_60);
 		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyPressNative("10");
+//		selenium.keyPressNative("10");
+		selenium.keyPressNative("13");
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -302,7 +305,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// try to enter HIGH_GT_60
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.HIGH_GT_60);
 		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyPressNative("10");
+//		selenium.keyPressNative("10");
+		selenium.keyPressNative("13");
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -331,11 +335,27 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("601", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[3]/select"));
 			verifyEquals("4", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
-			selenium.open("/lostandfound/lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID);
-//			selenium.click("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]");
+			selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFS: failed to navigate back to Found Item HIGH_GT_60: " + LF_Salvage.HIGH_GT_60);
+			return;
+		}
+		
+		if (checkNoErrorPage()) {
+			selenium.type("//input[@id='sId']", LF_Salvage.SALVAGE_ID);
+			selenium.click("//input[@id='button']");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("LFS: An error occurred when trying to load the salvage search page from the Found Item page.");
+			return;
+		}
+
+		if (checkNoErrorPage()) {
+			selenium.click("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("LFS: the search page returned no results for salvage: " + LF_Salvage.SALVAGE_ID);
 			return;
 		}
 
@@ -362,7 +382,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyPressNative("10");
+//		selenium.keyPressNative("10");
+		selenium.keyPressNative("13");
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
@@ -390,7 +411,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
 			selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 			selenium.focus("//input[@id='addBarcode']");
-			selenium.keyPressNative("10");
+//			selenium.keyPressNative("10");
+			selenium.keyPressNative("13");
 		} else {
 			System.out.println("LFS: failed to save the new salvage for adding duplicate items.");
 			return;
