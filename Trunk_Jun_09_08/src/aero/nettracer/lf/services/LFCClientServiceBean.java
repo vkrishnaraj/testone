@@ -78,6 +78,15 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			remote.setItemSubCategory(host.getItem().getSubCategory());
 			remote.setItemCategory(host.getItem().getCategory());
 			remote.setTrackingNumber(host.getItem().getTrackingNumber());
+			remote.setItemSize(host.getItem().getSize());
+			remote.setItemLongDesc(host.getItem().getLongDescription());
+			remote.setItemCaseColor(host.getItem().getCaseColor());
+			remote.setItemModel(host.getItem().getModel());
+			if(host.getItem().getPhone() != null){
+				PhoneBean phone = new PhoneBean();
+				phone.setNumber(host.getItem().getPhone().getDecryptedPhoneNumber());
+				remote.setLostPhone(phone);
+			}
 		}
 		
 		remote.setReportId("" + host.getId());
@@ -165,6 +174,18 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		item.setSerialNumber(lostReport.getItemSerial());
 		item.setSubCategory(lostReport.getItemSubCategory());
 		item.setType(TracingConstants.LF_TYPE_LOST);
+		item.setModel(lostReport.getItemModel());
+		item.setCaseColor(lostReport.getItemCaseColor());
+		item.setLongDescription(lostReport.getItemLongDesc());
+		item.setSize(lostReport.getItemSize());
+
+		if(lostReport.getLostPhone() != null){
+			LFPhone lostPhone = new LFPhone();
+			lostPhone.setDecryptedPhoneNumber(lostReport.getLostPhone().getNumber());
+			lostPhone.setPhoneType(lostReport.getLostPhone().getType());
+			lostPhone.setItem(item);
+			item.setPhone(lostPhone);
+		}
 		host.setItem(item);
 		
 		LFLossInfo lossinfo = new LFLossInfo();
