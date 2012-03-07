@@ -26,7 +26,6 @@ import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
-import com.bagnet.nettracer.tracing.db.salvage.Salvage;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -201,6 +200,14 @@ public class LFUtils {
 			}
 		}
 		return category;
+	}
+	
+	public static String padBarcode(String barcode) {
+		StringBuilder sb = new StringBuilder(barcode);
+		while (sb.length() < 8) {
+			sb.insert(0, "0");
+		}
+		return sb.toString();
 	}
 
 }

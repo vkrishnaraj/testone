@@ -73,6 +73,7 @@ public class EnterItemsAction extends CheckedAction {
 				if (found.hasContactInfo()) {
 					found.setEntryStatus(TracingConstants.LF_STATUS_VERIFICATION_NEEDED);
 				}
+				
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 				
 				// 1. create the history object

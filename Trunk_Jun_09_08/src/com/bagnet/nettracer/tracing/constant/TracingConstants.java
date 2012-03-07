@@ -1020,6 +1020,7 @@ public class TracingConstants {
 	public static final String LFC_CONDITION_AVERAGE = "AVERAGE";
 	public static final String LFC_CONDITION_POOR = "POOR";
 	
+	public static final int LF_BARCODE_LENGTH = 8;	
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

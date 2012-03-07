@@ -42,6 +42,7 @@ public class FoundItemAction extends CheckedAction {
 	
 	private static final Logger logger = Logger.getLogger(FoundItemAction.class);
 	
+	@SuppressWarnings("rawtypes")
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 
@@ -104,6 +105,7 @@ public class FoundItemAction extends CheckedAction {
 		}
 		
 		if (request.getParameter("save") != null) {
+			
 			try {
 				if(found.getItem() != null && found.getItem().getTrackingNumber() != null && found.getItem().getTrackingNumber().trim().length() > 0){
 					//we have a manual delivery
@@ -344,7 +346,5 @@ public class FoundItemAction extends CheckedAction {
 		}
 		return null;
 	}
-	
-	
 	
 }
