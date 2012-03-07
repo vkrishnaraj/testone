@@ -1,10 +1,7 @@
 package com.bagnet.nettracer.tracing.forms.lfc;
 
-import java.util.Set;
-
 import org.apache.struts.action.ActionForm;
 
-import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 

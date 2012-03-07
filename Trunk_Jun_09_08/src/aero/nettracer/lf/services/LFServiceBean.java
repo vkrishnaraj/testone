@@ -572,10 +572,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return f;
 	}
 	
-	public LFFound getFoundItemByBarcode(long barcode) throws NonUniqueBarcodeException {
-		return getFoundItemByBarcode(String.valueOf(barcode));
-	}
-	
 	@Override
 	public LFFound getFoundItemByBarcode(String barcode) throws NonUniqueBarcodeException{
 		if(barcode == null || barcode.trim().length() == 0){

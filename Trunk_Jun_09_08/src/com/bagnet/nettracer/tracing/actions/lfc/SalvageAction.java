@@ -118,7 +118,7 @@ public class SalvageAction extends CheckedAction {
 			LFFound found = null;
 			boolean success = true;
 			try {
-				barcode = padBarcode((String) request.getParameter("addItem"));
+				barcode = (String) request.getParameter("addItem");
 				found = serviceBean.getFoundItemByBarcode(barcode);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe, nfe);
@@ -171,7 +171,7 @@ public class SalvageAction extends CheckedAction {
 			
 			boolean success = true;
 			try {
-				String barcode = padBarcode((String) request.getParameter("removeItem"));
+				String barcode = (String) request.getParameter("removeItem");
 				LFFound found = serviceBean.getFoundItemByBarcode(barcode);
 								
 				if (found == null) {
@@ -248,12 +248,12 @@ public class SalvageAction extends CheckedAction {
 		return success;
 	}
 	
-	private String padBarcode(String barcode) {
-		StringBuilder sb = new StringBuilder(barcode);
-		if (barcode.length() < 8) {
-			sb.append("0");
-		}
-		return sb.toString();
-	}
+//	private String padBarcode(String barcode) {
+//		StringBuilder sb = new StringBuilder(barcode);
+//		if (barcode.length() < 8) {
+//			sb.append("0");
+//		}
+//		return sb.toString();
+//	}
 	
 }
