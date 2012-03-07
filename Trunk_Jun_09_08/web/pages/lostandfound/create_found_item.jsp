@@ -495,7 +495,7 @@
 			              <br>
 			              <html:text name="foundItemForm" property="found.client.firstName" size="20" maxlength="20" styleClass="textfield" />
 			            </td>
-			            <td colspan=2>
+			            <td>
 			              <bean:message key="colname.mid_initial" />
 			              <br>
 			              <html:text name="foundItemForm" property="found.client.middleName" size="1" maxlength="1" styleClass="textfield" />
