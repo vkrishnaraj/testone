@@ -285,7 +285,7 @@ public class LFItem implements Serializable{
 		}
 
 		if (color != null && !color.isEmpty()) {
-			color += model + ",\n";
+			toReturn += color + ",\n";
 		}
 		toReturn = toReturn.substring(0, toReturn.lastIndexOf(",\n"));
 		return toReturn;
