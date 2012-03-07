@@ -515,8 +515,8 @@ public class LFServiceBeanTest {
 		assertTrue(correctStation);
 	}
 	
-	@Test
-	public void tmSalvageList(){
+	
+	private void tmSalvageListAvis(){
 		LFServiceBean bean = new LFServiceBean();
 		
 		GregorianCalendar gc = new GregorianCalendar();
@@ -617,6 +617,15 @@ public class LFServiceBeanTest {
 		assertTrue(isSalvageStatus);
 		assertTrue(hasFound1);
 		assertTrue(hasFound2);
+	}
+	
+	@Test
+	public void tmSalvageList(){
+		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(TracerProperties.get("wt.company.code"))){
+			tmSalvageListAvis();
+		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracerProperties.get("wt.company.code"))){
+			//TODO LFC test case
+		}
 	}
 	
 	@Test
@@ -1167,6 +1176,8 @@ public class LFServiceBeanTest {
 		} else {
 			fail();
 		}
+		
+		found.setBarcode("junittestcft" + new Date().getTime());
 		
 		found.setCompanyId(subcompany);
 		
