@@ -857,7 +857,7 @@
 				</h1>
 				<span class="reqfield">*</span>
 				<bean:message key="message.required" />
-				
+			<a name="remarks" ></a>
 			<jsp:include page="/pages/lostandfound/remark_found.jsp" />
 			
       <center><html:submit property="addremark" styleId="button">
@@ -874,6 +874,9 @@
 				<script>
 					fieldChanged('state');
 					fieldChanged('country');
+					<% if (request.getAttribute("remark") != null) { %>
+						document.location.href="#remarks";
+					<% } %>
              	</script>
    			</div>
    		</td>
