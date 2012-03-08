@@ -38,8 +38,10 @@ public class LFTracingUtil {
 	public static final double SCORE_CATEGORY = 10;
 	public static final double SCORE_CATEGORY_PARTICLE = 10;
 	private static final double SCORE_COLOR = 5;
+	private static final double LFC_SCORE_COLOR = 4;
 	private static final double SCORE_MODEL = 5;
 	private static final double SCORE_CASE_COLOR = 5;
+	private static final double LFC_SCORE_CASE_COLOR = 4;
 	private static final double SCORE_SERIAL_NUMBER = 20;
 	private static final double SCORE_PHONE = 10;
 	private static final double SCORE_NAME = 10;
@@ -47,6 +49,7 @@ public class LFTracingUtil {
 	private static final double SCORE_LONG_DESCRIPTION = 10;
 	private static final double SCORE_ADDRESS = 10;
 	private static final double SCORE_BRAND = 10;
+	private static final double LFC_SCORE_BRAND = 9;
 	private static final double SCORE_MVA = 15;
 	private static final double SCORE_AGREEMENT_NUMBER = 15;
 	private static final double SCORE_EMAIL = 10;
@@ -341,6 +344,8 @@ public class LFTracingUtil {
 	
 	public static double processMatch(LFMatchHistory match){
 		
+		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(match.getFound().getCompanyId()));
+		
 		//process person
 		if(match.getLost().getClient() != null && match.getFound().getClient() != null){
 			LFPerson lc = match.getLost().getClient();
@@ -477,7 +482,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Brand Match");
 						detail.setMatchHistory(match);
-						detail.setScore(SCORE_BRAND);
+						detail.setScore(isLFC?LFC_SCORE_BRAND:SCORE_BRAND);
 						detail.setDecryptedFoundValue(fitem.getBrand());
 						detail.setDecryptedLostValue(litem.getBrand());
 						match.getDetails().add(detail);
@@ -518,7 +523,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Color Match");
 						detail.setMatchHistory(match);
-						detail.setScore(SCORE_COLOR);
+						detail.setScore(isLFC?LFC_SCORE_COLOR:SCORE_COLOR);
 						detail.setDecryptedFoundValue(fitem.getColor());
 						detail.setDecryptedLostValue(litem.getColor());
 						match.getDetails().add(detail);
@@ -530,7 +535,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Case Color Match");
 						detail.setMatchHistory(match);
-						detail.setScore(SCORE_CASE_COLOR);
+						detail.setScore(isLFC?LFC_SCORE_CASE_COLOR:SCORE_CASE_COLOR);
 						detail.setDecryptedFoundValue(fitem.getCaseColor());
 						detail.setDecryptedLostValue(litem.getCaseColor());
 						match.getDetails().add(detail);
