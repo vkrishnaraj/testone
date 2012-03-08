@@ -664,7 +664,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		boolean isNewlyClosed = this.isNewlyClosed(foundItem);
 		
-		if (foundItem.getBarcode().length() < TracingConstants.LF_BARCODE_LENGTH) {
+		if (foundItem.getBarcode() != null && foundItem.getBarcode().length() < TracingConstants.LF_BARCODE_LENGTH) {
 			foundItem.setBarcode(LFUtils.padBarcode(foundItem.getBarcode()));
 		}
 		
