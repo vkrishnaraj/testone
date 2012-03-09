@@ -30,13 +30,13 @@ public class LFSummaryReport extends LFReport {
 					 "select lost.date as 'lost_date',found.date as 'found_date',lost.id_count as 'lost_id_count',found.id_count as 'found_id_count' from " + 
 					 "(select date(lfl.openDate) as 'date',count(lfl.id) as 'id_count' from lflost lfl where lfl.openDate between :startDate and :endDate group by date(lfl.openDate)) lost " +
 					 "left outer join " +
-					 "(select date(lff.receivedDate) as 'date',count(lff.id) as 'id_count' from lffound lff where lff.foundDate between :startDate and :endDate group by date(lff.receivedDate)) found " +
+					 "(select date(lff.foundDate) as 'date',count(lff.id) as 'id_count' from lffound lff where lff.foundDate between :startDate and :endDate group by date(lff.foundDate)) found " +
 					 "on lost.date = found.date " +
 					 "union " + 
 					 "select lost.date as 'lost_date',found.date as 'found_date',lost.id_count as 'lost_id_count',found.id_count as 'found_id_count' from " + 
 					 "(select date(lfl.openDate) as 'date',count(lfl.id) as 'id_count' from lflost lfl where lfl.openDate between :startDate and :endDate group by date(lfl.openDate)) lost " +
 					 "right outer join " +
-					 "(select date(lff.receivedDate) as 'date',count(lff.id) as 'id_count' from lffound lff where lff.foundDate between :startDate and :endDate group by date(lff.receivedDate)) found " +
+					 "(select date(lff.foundDate) as 'date',count(lff.id) as 'id_count' from lffound lff where lff.foundDate between :startDate and :endDate group by date(lff.foundDate)) found " +
 					 "on lost.date = found.date) as combo " +
 					 "order by date;";
 		
