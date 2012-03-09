@@ -249,7 +249,9 @@ public class LFFound implements LFObject, Serializable {
 	}
 
 	public void setBarcode(String barcode) {
-		this.barcode = barcode;
+		if (barcode != null) {
+			this.barcode = barcode.trim();
+		}
 	}
 
 	public String getBarcode() {
