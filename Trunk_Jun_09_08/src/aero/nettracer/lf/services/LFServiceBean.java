@@ -455,11 +455,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				sendLostCreatedEmail(reportId);
 				if (agent != null) {
 					LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CREATE, (int) reportId, 0);
+					Logger.logLF(""+reportId, LFLogUtil.EVENT_CREATE, 0);
 				}
 			} else if (isNewlyClosed && agent != null) {
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CLOSE, (int) reportId, 0);
+				Logger.logLF(""+reportId, LFLogUtil.EVENT_CLOSE, 0);
 			} else if (agent != null) {
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_MODIFY, (int) reportId, 0);
+				Logger.logLF(""+reportId, LFLogUtil.EVENT_MODIFY, 0);
 			}
 			return reportId;
 		} else {
@@ -697,10 +700,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(reportId > 0){
 			if(isNew && agent != null){
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CREATE, 0, (int) reportId);
+				Logger.logLF(""+reportId, LFLogUtil.EVENT_CREATE, 0);
 			} else if (isNewlyClosed && agent != null) {
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CLOSE, 0, (int) reportId);
+				Logger.logLF(""+reportId, LFLogUtil.EVENT_CLOSE, 0);
 			} else if (agent != null) {
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_MODIFY, 0, (int) reportId);
+				Logger.logLF(""+reportId, LFLogUtil.EVENT_MODIFY, 0);
 			}
 			return reportId;
 		} else {
@@ -728,6 +734,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		colors.add(new LabelValueBean("Brown", "BN"));
 		colors.add(new LabelValueBean("Green", "GN"));
 		colors.add(new LabelValueBean("Purple", "PU"));
+		colors.add(new LabelValueBean("Orange", "OR"));
 
 		colors.add(new LabelValueBean("Pink", "PK"));
 		colors.add(new LabelValueBean("Gold", "GD"));
