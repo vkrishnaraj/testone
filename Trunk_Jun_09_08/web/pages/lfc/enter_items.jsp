@@ -373,7 +373,7 @@
 				                <td>
 				                  <bean:message key="colname.state" />
 				                  <br />
-				                  <html:select name="enterItemsForm" property="found.client.address.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" styleId="state" >
+				                  <html:select name="enterItemsForm" property="found.client.address.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" styleId="state">
 				                  	<html:option value="">
 					                    <bean:message key="select.none" />
 				                    </html:option>
@@ -388,7 +388,7 @@
 				                <td>
 				                  <bean:message key="colname.zip" />
 				                  <br>
-				                  <html:text name="enterItemsForm" property="found.client.address.decryptedZip" size="11" maxlength="11" styleClass="textfield" styleId="zip" />
+				                  <html:text name="enterItemsForm" property="found.client.address.decryptedZip" size="11" maxlength="11" styleClass="textfield" styleId="zip"/>
 				                </td>
 				                <td>
 				                  <bean:message key="colname.country" />
@@ -405,7 +405,7 @@
 				              	<td colspan="2">
 				              		<bean:message key="colname.lf.primary.phone" />
 				              		<br/>
-				              		<html:text name="enterItemsForm" property="primaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" styleId="primaryPhone" />
+				              		<html:text name="enterItemsForm" property="primaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" styleId="primaryPhone"/>
 				              		<html:select name="enterItemsForm" property="primaryNumberType" styleClass="dropdown" >
 				              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
@@ -458,7 +458,7 @@
 						  	String cssClass = needsVerification ? "summaryActionItem" : "summaryItem";
      					%>
 						<div id="summaryItem_<%=i %>" class="<%=cssClass %>">
-							<span style="font-weight: bold;" ><bean:message key="colname.lfc.item.id" />:&nbsp;</span><%=fho.getFound().getBarcode() %>
+							<span style="font-weight: bold;" ><bean:message key="colname.lfc.item.id" />:&nbsp;</span><a href="create_found_item.do?barcode=<%=fho.getFound().getBarcode() %>"><%=fho.getFound().getBarcode() %></a>
 							<!-- br-->
 							<span style="font-weight: bold;" ><bean:message key="lfc.summary.desc" />:&nbsp;</span><%=fho.getFound().getSummaryDesc() %>
 							<!-- br-->

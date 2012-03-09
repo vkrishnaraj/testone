@@ -16,7 +16,7 @@
 	int status = fho.getFound().getEntryStatus();
 	boolean needsVerification = status == TracingConstants.LF_STATUS_VERIFICATION_NEEDED || (fho.isHasTraceResults() && status != TracingConstants.LF_STATUS_MOVED);
 %>
-<span style="font-weight: bold;" ><bean:message key="colname.lfc.item.id" />:&nbsp;</span><%=fho.getFound().getBarcode() %>
+<span style="font-weight: bold;" ><bean:message key="colname.lfc.item.id" />:&nbsp;</span><a href="create_found_item.do?barcode=<%=fho.getFound().getBarcode() %>"><%=fho.getFound().getBarcode() %></a>
 <br>
 <span style="font-weight: bold;" ><bean:message key="lfc.summary.desc" />:&nbsp;</span><%=fho.getFound().getSummaryDesc() %>
 <br>
