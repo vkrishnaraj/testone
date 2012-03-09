@@ -116,6 +116,8 @@ public class LostDelayReceipt {
 
 		parameters.put("createdate", theform.getDispcreatetime());
 		parameters.put("pass_name", (pa.getLastname() != null ? (pa.getLastname() + ", ") : "") + (pa.getFirstname() != null ? pa.getFirstname() : ""));
+		parameters.put("pass_name2", (pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : ""));
+		
 		parameters.put("pass_lastname", (pa.getLastname() != null ? pa.getLastname() : ""));
 		parameters.put("pass_firstname", (pa.getFirstname() != null ? pa.getFirstname() : ""));
 		parameters.put("file_reference", theform.getIncident_ID());
@@ -202,6 +204,21 @@ public class LostDelayReceipt {
 			File logo = new File(sc.getRealPath("/") + "reports/logo.jpg");
 			if (logo.exists()) {
 				parameters.put("logo", logo.getAbsolutePath());
+			}
+			
+			File itemInfo = new File(sc.getRealPath("/")+"reports/item.jpg");
+			if(itemInfo.exists()){
+				parameters.put("itemInfo", itemInfo.getAbsolutePath());
+			}
+			
+			File bullet= new File(sc.getRealPath("/")+"reports/bullet.jpg");
+			if(bullet.exists()){
+				parameters.put("bullet", bullet.getAbsolutePath());
+			}
+			
+			File WebLogo= new File(sc.getRealPath("/")+"reports/webLogo.jpg");
+			if(WebLogo.exists()){
+				parameters.put("webLogo", WebLogo.getAbsolutePath());
 			}
 			
 			File powered = new File(sc.getRealPath("/") + "deployment/main/images/nettracer/poweredby_net_tracer.jpg");

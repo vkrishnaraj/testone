@@ -61,6 +61,22 @@ public class DamageReceipt {
 			if (powered.exists()) {
 				parameters.put("powered", powered.getAbsolutePath());
 			}
+			
+
+			File itemInfo = new File(sc.getRealPath("/")+"reports/item.jpg");
+			if(itemInfo.exists()){
+				parameters.put("itemInfo", itemInfo.getAbsolutePath());
+			}
+			
+			File bullet= new File(sc.getRealPath("/")+"reports/bullet.jpg");
+			if(bullet.exists()){
+				parameters.put("bullet", bullet.getAbsolutePath());
+			}
+			
+			File WebLogo= new File(sc.getRealPath("/")+"reports/webLogo.jpg");
+			if(WebLogo.exists()){
+				parameters.put("webLogo", WebLogo.getAbsolutePath());
+			}
 
 			ReportBMO rbmo = new ReportBMO(request);
 			

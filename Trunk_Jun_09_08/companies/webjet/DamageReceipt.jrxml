@@ -4,7 +4,7 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="2.5937424601000028"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="720"/>
+	<property name="ireport.y" value="1392"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -37,6 +37,9 @@
 	<parameter name="powered" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="pass_firstname" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="pass_name2" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="bullet" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="webLogo" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="itemInfo" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[select incident_ID from incident]]>
 	</queryString>
@@ -278,8 +281,8 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name2}]]></textFieldExpression>
 			</textField>
 			<image hAlign="Center">
-				<reportElement mode="Transparent" x="3" y="633" width="548" height="90"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Sean Fine\\Desktop\\Work files\\item.png"]]></imageExpression>
+				<reportElement mode="Transparent" x="2" y="630" width="548" height="90"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{itemInfo}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement mode="Transparent" x="21" y="414" width="527" height="32"/>
@@ -374,23 +377,23 @@
 			</staticText>
 			<image>
 				<reportElement mode="Transparent" x="11" y="416" width="10" height="13"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Sean Fine\\Desktop\\Work files\\Bullet.png"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{bullet}]]></imageExpression>
 			</image>
 			<image>
 				<reportElement mode="Transparent" x="11" y="448" width="10" height="13"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Sean Fine\\Desktop\\Work files\\Bullet.png"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{bullet}]]></imageExpression>
 			</image>
 			<image>
 				<reportElement mode="Transparent" x="11" y="552" width="10" height="13"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Sean Fine\\Desktop\\Work files\\Bullet.png"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{bullet}]]></imageExpression>
 			</image>
 			<image>
 				<reportElement mode="Transparent" x="11" y="610" width="10" height="13"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Sean Fine\\Desktop\\Work files\\Bullet.png"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{bullet}]]></imageExpression>
 			</image>
 			<image>
 				<reportElement mode="Transparent" x="422" y="2" width="130" height="64"/>
-				<imageExpression class="java.lang.String"><![CDATA["C:\\Users\\Sean Fine\\Desktop\\Work files\\Logo2.PNG"]]></imageExpression>
+				<imageExpression class="java.lang.String"><![CDATA[$P{webLogo}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement mode="Transparent" x="21" y="376" width="210" height="28"/>
