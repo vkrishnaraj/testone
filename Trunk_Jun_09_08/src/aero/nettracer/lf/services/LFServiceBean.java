@@ -581,10 +581,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return null;
 		}
 		
-		if (barcode.length() < TracingConstants.LF_BARCODE_LENGTH) {
-			barcode = LFUtils.padBarcode(barcode);
-		}
-		
 		Session sess = HibernateWrapper.getSession().openSession();
 		LFFound f = null;
 		List<LFFound> list = null;
@@ -666,10 +662,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		boolean isNew = (foundItem!=null&&foundItem.getId()==0)?true:false;
 		
 		boolean isNewlyClosed = this.isNewlyClosed(foundItem);
-		
-		if (foundItem.getBarcode() != null && foundItem.getBarcode().length() < TracingConstants.LF_BARCODE_LENGTH) {
-			foundItem.setBarcode(LFUtils.padBarcode(foundItem.getBarcode()));
-		}
 		
 		try{
 			sess = HibernateWrapper.getSession().openSession();

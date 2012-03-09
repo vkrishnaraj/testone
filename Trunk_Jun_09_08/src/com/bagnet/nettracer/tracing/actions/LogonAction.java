@@ -20,6 +20,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.lf.services.LFServiceBean;
@@ -39,6 +40,7 @@ import com.bagnet.nettracer.tracing.db.ForwardNotice;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
 import com.bagnet.nettracer.tracing.dto.ActivityDTO;
@@ -99,8 +101,22 @@ public class LogonAction extends Action {
 		Agent agent = null;
 		HttpSession session = request.getSession();
 
+		ActionMessages errors = new ActionMessages();
 		request.setAttribute("maintask", "1");
-
+		
+		if (request.getParameter("loadBarcode") != null) {
+			LFFound found = new LFServiceBean().getFoundItemByBarcode(request.getParameter("loadBarcode"));
+			if (found == null) {
+				ActionMessage error = new ActionMessage("error.unable.add.item");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+				return (mapping.findForward("success"));
+			} else {
+				response.sendRedirect("create_found_item.do?barcode=" + found.getBarcode());
+				return null;
+			}
+		}
+		
 		if (request.getParameter("taskmanager") != null) {
 			if (session.getAttribute("user") == null) {
 				response.sendRedirect("logoff.do");
@@ -113,7 +129,6 @@ public class LogonAction extends Action {
 		}
 
 		// Validate the request parameters specified by the user
-		ActionMessages errors = new ActionMessages();
 		String username = (String) PropertyUtils.getSimpleProperty(form, "username");
 		String password = (String) PropertyUtils.getSimpleProperty(form, "password");
 		String companyCode = request.getParameter("companyCode");
@@ -230,6 +245,8 @@ public class LogonAction extends Action {
 			response.sendRedirect(redirectUrl);
 			return null;
 		}
+		
+		
 		return (mapping.findForward("success"));
 	}
 

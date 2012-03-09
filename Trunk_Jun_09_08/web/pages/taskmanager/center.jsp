@@ -23,7 +23,12 @@
     <div id="maincontent">
       <html:form action="/logon">
         <input type="hidden" name="taskmanager" value="1">
-        
+        	<logic:messagesPresent message="true">
+          	  <center>
+          	  	<font color="red" >
+          			<html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages>
+          	  	</font>
+          	  </center></logic:messagesPresent>
           	<div class="headerleft">
           		<h1 class="green">
 	            	<bean:message key="header.taskhome" />
@@ -127,12 +132,16 @@
 								 || barcode.value.indexOf('-') != -1 
 								 || barcode.value.indexOf('.') != -1) {
 						alert('<%=bundle.getString("barcode.required") %>');
+						return false;
 					} else {
-						document.location.href="create_found_item.do?barcode=" + barcode.value;
+						document.getElementById("loadBarcode").value = barcode.value;
+						document.forms["logonForm"].submit();
+						return true;
 					}
 				}
 			
 			</script>
+			<input type="hidden" name="loadBarcode" id="loadBarcode" value="" />
 			<table class="form2" cellspacing="0" cellpadding="0" >
 				<tr>
 					<td class="header" >
@@ -143,7 +152,9 @@
 					<td>
 						<center>
 							<input type="text" id="barcode" class="textfield" />&nbsp;&nbsp;
-							<input id="button" type="button" value='<bean:message key="button.load" />' onClick="return loadFoundItemPage();" >
+							<html:submit styleId="button" onclick="loadFoundItemPage();" >
+								<bean:message key='button.load' />
+							</html:submit>
 						</center>
 					</td>
 				</tr>

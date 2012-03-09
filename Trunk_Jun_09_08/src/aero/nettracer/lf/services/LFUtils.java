@@ -201,13 +201,5 @@ public class LFUtils {
 		}
 		return category;
 	}
-	
-	public static String padBarcode(String barcode) {
-		StringBuilder sb = new StringBuilder(barcode);
-		while (sb.length() < 8) {
-			sb.insert(0, "0");
-		}
-		return sb.toString();
-	}
 
 }
