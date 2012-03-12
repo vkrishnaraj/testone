@@ -9,7 +9,14 @@
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
+				<!-- <ref bean="cronDataFeedTrigger" />  -->
+				<ref bean="cronMoveToLzTrigger" /> 
+				<ref bean="cronNewPassiveTracerTrigger" /> 
+				<!-- <ref bean="cronWtQueueTrigger" />  -->
+				<ref bean="cronOldPassiveTracerTrigger" />
+				<!-- <ref bean="cronMoveToWtTrigger" />  -->
 				<ref bean="LockCleanupTrigger" />
+				<!-- <ref bean="cronFsDataRetention" /> -->
 			</list>
 		</property>
 	</bean>
