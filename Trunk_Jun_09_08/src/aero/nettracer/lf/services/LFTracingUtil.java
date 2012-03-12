@@ -41,9 +41,9 @@ public class LFTracingUtil {
 	private static final double SCORE_MODEL = 5;
 	private static final double SCORE_CASE_COLOR = 5;
 	private static final double LFC_SCORE_CASE_COLOR = 4;
-	private static final double SCORE_SERIAL_NUMBER = 20;
-	private static final double SCORE_PHONE = 10;
-	private static final double SCORE_NAME = 10;
+	private static final double SCORE_SERIAL_NUMBER = 25;
+	private static final double SCORE_PHONE = 25;
+	private static final double SCORE_NAME = 25;
 	private static final double SCORE_DESCRIPTION = 10;
 	private static final double SCORE_LONG_DESCRIPTION = 10;
 	private static final double SCORE_ADDRESS = 10;
@@ -51,7 +51,7 @@ public class LFTracingUtil {
 	private static final double LFC_SCORE_BRAND = 9;
 	private static final double SCORE_MVA = 15;
 	private static final double SCORE_AGREEMENT_NUMBER = 15;
-	private static final double SCORE_EMAIL = 10;
+	private static final double SCORE_EMAIL = 25;
 	
 	
 	private static HashMap<Long, LFLost> lostMap;
