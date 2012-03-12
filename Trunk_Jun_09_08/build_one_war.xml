@@ -1456,6 +1456,8 @@
 		<antcall target="build-cron-testing-azul"/>
 		<antcall target="build-cron-testing-spirit"/>
 		<antcall target="build-cron-testing-lfc"/>
+		<antcall target="build-cron-testing-webjet"/>
+				
 	</target>
 	<target name="build-cron-training-all">
 		<antcall target="build-cron-training-avis"/>
@@ -1464,6 +1466,7 @@
 		<antcall target="build-cron-training-azul"/>
 		<antcall target="build-cron-training-spirit"/>
 		<antcall target="build-cron-training-lfc"/>
+		<antcall target="build-cron-training-webjet"/>
 	</target>
 	<target name="build-cron-production-all">
 		<antcall target="build-cron-production-avis"/>
@@ -1472,6 +1475,7 @@
 		<antcall target="build-cron-production-azul"/>
 		<antcall target="build-cron-production-spirit"/>
 		<antcall target="build-cron-production-lfc"/>
+		<antcall target="build-cron-production-webjet"/>
 	</target>
 	<target name="build-cron-hudson-all">
 		<antcall target="build-cron-hudson-avis"/>
@@ -1480,6 +1484,7 @@
 		<antcall target="build-cron-hudson-spirit"/>
 		<antcall target="build-cron-hudson-westjet"/>
 		<antcall target="build-cron-hudson-lfc"/>
+		<antcall target="build-cron-hudson-webjet"/>
 	</target>
 	<target name="build-cron-demo-all">
 		<antcall target="build-cron-demo-lfc"/>
@@ -1646,6 +1651,50 @@
 	</target>
 	
 	<!-- END WESTJET CRON TARGETS -->
+	
+	<!-- WEBJET CRON TARGETS -->
+		
+		<target name="build-cron-testing-webjet">
+			<property name="staging.project" value="cron" />
+			<property name="staging.env" value="testing" />
+			<property name="ant_project_name" value="webjet" />
+			<property name="sub_path" value="test/" />
+			<property name="cron.job.config.file" value="companies/webjet/environment/test/jobs/cronJobs.xml" />
+			<property name="jarprefix" value="whtest-" />
+			<antcall target="cron-service" />
+		</target>
+		
+		<target name="build-cron-training-webjet">
+			<property name="staging.project" value="cron" />
+			<property name="staging.env" value="training" />
+			<property name="ant_project_name" value="webjet" />
+			<property name="sub_path" value="train/" />
+			<property name="cron.job.config.file" value="companies/webjet/environment/train/jobs/cronJobs.xml" />
+			<property name="jarprefix" value="whtrain-" />
+			<antcall target="cron-service" />
+		</target>
+
+		<target name="build-cron-production-webjet">
+			<property name="staging.project" value="cron" />
+			<property name="staging.env" value="production" />
+			<property name="ant_project_name" value="webjet" />
+			<property name="sub_path" value="prod/" />
+			<property name="jarprefix" value="whprod-" />
+			<property name="cron.job.config.file" value="companies/webjet/environment/prod/jobs/cronJobs.xml" />
+			<antcall target="cron-service" />
+		</target>
+
+		<target name="build-cron-hudson-webjet">
+			<property name="staging.project" value="cron" />
+			<property name="staging.env" value="hudson" />
+			<property name="ant_project_name" value="webjet" />
+			<property name="sub_path" value="hudson/" />
+			<property name="jarprefix" value="whhudson-" />
+			<property name="cron.job.config.file" value="companies/webjet/environment/hudson/jobs/cronJobs.xml" />
+			<antcall target="cron-service" />
+		</target>
+		
+		<!-- END WEBJET CRON TARGETS -->
 	
 	<!-- JETBLUE CRON TARGETS -->
 	
