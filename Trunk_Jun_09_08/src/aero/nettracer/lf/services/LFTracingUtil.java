@@ -33,7 +33,6 @@ import com.bagnet.nettracer.tracing.utils.general.Logger;
 
 public class LFTracingUtil {
 	
-	public static final int CUTOFF = 9;
 	public static final double SCORE_VANTIVE = 10;
 	public static final double SCORE_CATEGORY = 10;
 	public static final double SCORE_CATEGORY_PARTICLE = 10;
@@ -620,7 +619,7 @@ public class LFTracingUtil {
 			match.setDetails(new LinkedHashSet<LFMatchDetail>());
 			double score = processMatch(match);
 			match.setScore(score);
-			if(score > CUTOFF){
+			if(score > PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACE_CUTOFF)){
 				try{
 					long matchid = bean.saveOrUpdateTraceResult(match);
 					if(matchid > -1){
@@ -656,7 +655,7 @@ public class LFTracingUtil {
 			match.setDetails(new LinkedHashSet<LFMatchDetail>());
 			double score = processMatch(match);
 			match.setScore(score);
-			if(score > CUTOFF){
+			if(score > PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACE_CUTOFF)){
 				try{
 					if(bean.saveOrUpdateTraceResult(match) > -1){
 						matchList.add(match);
