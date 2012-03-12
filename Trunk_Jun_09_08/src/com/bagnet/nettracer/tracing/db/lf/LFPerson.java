@@ -157,10 +157,14 @@ public class LFPerson implements Serializable{
 	public boolean isEmpty() {
 		boolean empty = true;
 
-		if ((firstName != null && !firstName.isEmpty())
-				|| (lastName != null && !lastName.isEmpty())
-				|| (middleName != null && !middleName.isEmpty())
-				|| (getDecryptedEmail() != null && !getDecryptedEmail().isEmpty())) {
+//		if ((firstName != null && !firstName.isEmpty())
+//				|| (lastName != null && !lastName.isEmpty())
+//				|| (middleName != null && !middleName.isEmpty())
+//				|| (getDecryptedEmail() != null && !getDecryptedEmail().isEmpty())) {
+//			empty = false;
+//		}
+		
+		if (getDecryptedEmail() != null && !getDecryptedEmail().isEmpty()) {
 			empty = false;
 		}
 		
