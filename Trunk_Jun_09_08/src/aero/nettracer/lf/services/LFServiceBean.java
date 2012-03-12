@@ -716,24 +716,24 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@Override
 	public ArrayList<LabelValueBean> getColors() {
 		ArrayList <LabelValueBean> colors = new ArrayList<LabelValueBean>();
-		colors.add(new LabelValueBean("White", "WT"));
-		colors.add(new LabelValueBean("Black", "BK"));
-		colors.add(new LabelValueBean("Grey", "GY"));
-		colors.add(new LabelValueBean("Blue", "BU"));
-		//colors.add(new LabelValueBean("Beige", "BE"));
-		colors.add(new LabelValueBean("Red", "RD"));
-		colors.add(new LabelValueBean("Yellow", "YW"));
-		colors.add(new LabelValueBean("Brown", "BN"));
-		colors.add(new LabelValueBean("Green", "GN"));
-		colors.add(new LabelValueBean("Purple", "PU"));
-		colors.add(new LabelValueBean("Orange", "OR"));
-
-		colors.add(new LabelValueBean("Pink", "PK"));
-		colors.add(new LabelValueBean("Gold", "GD"));
-		colors.add(new LabelValueBean("Silver", "SV"));
-		colors.add(new LabelValueBean("Plaid", "PL"));
 		
+		colors.add(new LabelValueBean("Black", "BK"));
+		colors.add(new LabelValueBean("Blue", "BU"));
+		colors.add(new LabelValueBean("Brown", "BN"));
+		colors.add(new LabelValueBean("Gold", "GD"));
+		colors.add(new LabelValueBean("Green", "GN"));
+		colors.add(new LabelValueBean("Grey", "GY"));
 		colors.add(new LabelValueBean("Multiple Colors", "MC"));
+		colors.add(new LabelValueBean("Orange", "OR"));
+		colors.add(new LabelValueBean("Pink", "PK"));
+		colors.add(new LabelValueBean("Plaid", "PL"));
+		colors.add(new LabelValueBean("Purple", "PU"));
+		colors.add(new LabelValueBean("Red", "RD"));
+		colors.add(new LabelValueBean("Silver", "SV"));
+		colors.add(new LabelValueBean("White", "WT"));
+		colors.add(new LabelValueBean("Yellow", "YW"));
+		
+		
 		return colors;
 	}
 	
