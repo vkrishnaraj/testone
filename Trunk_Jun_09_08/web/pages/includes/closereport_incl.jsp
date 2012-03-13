@@ -12,6 +12,7 @@
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
