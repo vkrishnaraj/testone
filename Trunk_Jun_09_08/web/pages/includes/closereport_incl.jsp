@@ -109,6 +109,13 @@
                       <bean:message key="button.lock.fault.information" />
                       </html:submit>
       				</logic:equal>
+      				<logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+      					<% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_ALLOW_OPEN_INCIDENT_DISPUTE)) { %>
+	   	              		<html:submit property="lock_fault" styleId="button">
+                      		<bean:message key="button.lock.fault.information" />
+                      		</html:submit>
+                      	<% { %>
+      				</logic:notEqual>
     	<% 	  } 
     	   }  %>
     </td>
