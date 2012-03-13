@@ -114,7 +114,7 @@
 	   	              		<html:submit property="lock_fault" styleId="button">
                       		<bean:message key="button.lock.fault.information" />
                       		</html:submit>
-                      	<% { %>
+                      	<% } %>
       				</logic:notEqual>
     	<% 	  } 
     	   }  %>
