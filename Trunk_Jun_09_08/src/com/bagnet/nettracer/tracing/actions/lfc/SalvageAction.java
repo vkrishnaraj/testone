@@ -163,7 +163,7 @@ public class SalvageAction extends CheckedAction {
 			
 			if (success) {
 				request.setAttribute("found", found);
-				new Thread(new SalvageItemRunnable(salvage, found, user, true)).start();
+				SalvageManager.getQueue().put(new SalvageItemContainer(salvage, found, user, true));
 			}
 
 			return mapping.findForward(TracingConstants.AJAX_SALVAGE_ITEMS);
