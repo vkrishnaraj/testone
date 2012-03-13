@@ -33,25 +33,27 @@ import com.bagnet.nettracer.tracing.utils.general.Logger;
 
 public class LFTracingUtil {
 	
-	public static final double SCORE_VANTIVE = 10;
-	public static final double SCORE_CATEGORY = 10;
-	public static final double SCORE_CATEGORY_PARTICLE = 10;
-	private static final double SCORE_COLOR = 5;
-	private static final double LFC_SCORE_COLOR = 4;
-	private static final double SCORE_MODEL = 5;
-	private static final double SCORE_CASE_COLOR = 5;
-	private static final double LFC_SCORE_CASE_COLOR = 4;
-	private static final double SCORE_SERIAL_NUMBER = 25;
-	private static final double SCORE_PHONE = 25;
-	private static final double SCORE_NAME = 25;
-	private static final double SCORE_DESCRIPTION = 10;
-	private static final double SCORE_LONG_DESCRIPTION = 10;
-	private static final double SCORE_ADDRESS = 10;
-	private static final double SCORE_BRAND = 10;
-	private static final double LFC_SCORE_BRAND = 9;
-	private static final double SCORE_MVA = 15;
-	private static final double SCORE_AGREEMENT_NUMBER = 15;
-	private static final double SCORE_EMAIL = 25;
+//	public static final double SCORE_VANTIVE = 10;
+//	public static final double SCORE_CATEGORY = 10;
+//	public static final double SCORE_CATEGORY_PARTICLE = 10;
+//	private static final double SCORE_COLOR = 5;
+//	private static final double LFC_SCORE_COLOR = 4;
+//	private static final double SCORE_MODEL = 5;
+//	private static final double SCORE_CASE_COLOR = 5;
+//	private static final double LFC_SCORE_CASE_COLOR = 4;
+//	private static final double SCORE_SERIAL_NUMBER = 25;
+//	private static final double SCORE_PHONE = 25;
+//	private static final double SCORE_NAME = 25;
+//	private static final double SCORE_DESCRIPTION = 10;
+//	private static final double SCORE_LONG_DESCRIPTION = 10;
+//	private static final double SCORE_ADDRESS = 10;
+//	private static final double SCORE_BRAND = 10;
+//	private static final double LFC_SCORE_BRAND = 9;
+//	private static final double SCORE_MVA = 15;
+//	private static final double SCORE_AGREEMENT_NUMBER = 15;
+//	private static final double SCORE_EMAIL = 25;
+	
+	
 	
 	
 	private static HashMap<Long, LFLost> lostMap;
@@ -61,6 +63,8 @@ public class LFTracingUtil {
 		  if (string == null) return "";
 		  return string.trim();
 	  }
+	
+	
 	
 	private static LFSubCategory getSubCategory(long id){
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -357,7 +361,7 @@ public class LFTracingUtil {
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("Name Match");
 					detail.setMatchHistory(match);
-					detail.setScore(SCORE_NAME);
+					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NAME));
 					detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
 					detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
 					match.getDetails().add(detail);
@@ -372,7 +376,7 @@ public class LFTracingUtil {
 							LFMatchDetail detail = new LFMatchDetail();
 							detail.setDescription("Phone Number Match");
 							detail.setMatchHistory(match);
-							detail.setScore(SCORE_PHONE);
+							detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_PHONE));
 							detail.setDecryptedFoundValue(fphone.getDecryptedPhoneNumber());
 							detail.setDecryptedLostValue(lphone.getDecryptedPhoneNumber());
 							match.getDetails().add(detail);
@@ -388,7 +392,7 @@ public class LFTracingUtil {
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("Email Match");
 					detail.setMatchHistory(match);
-					detail.setScore(SCORE_EMAIL);
+					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_EMAIL));
 					detail.setDecryptedFoundValue(fc.getDecryptedEmail());
 					detail.setDecryptedLostValue(lc.getDecryptedEmail());
 					match.getDetails().add(detail);
@@ -422,7 +426,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Address Match");
 						detail.setMatchHistory(match);
-						detail.setScore(SCORE_ADDRESS);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_ADDRESS));
 						String lostStateProvince = lc.getAddress().getDecryptedState()!=null?lc.getAddress().getDecryptedState():lc.getAddress().getDecryptedProvince()!=null?lc.getAddress().getDecryptedProvince():"";
 						String foundStateProvince = fc.getAddress().getDecryptedState()!=null?fc.getAddress().getDecryptedState():fc.getAddress().getDecryptedProvince()!=null?fc.getAddress().getDecryptedProvince():"";
 						detail.setDecryptedFoundValue(fc.getAddress().getDecryptedAddress1() + " " + fc.getAddress().getDecryptedCity() + " " + foundStateProvince);
@@ -444,7 +448,7 @@ public class LFTracingUtil {
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("MVA Number Match");
 					detail.setMatchHistory(match);
-					detail.setScore(SCORE_MVA);
+					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_MVA));
 					detail.setDecryptedFoundValue(match.getFound().getMvaNumber());
 					detail.setDecryptedLostValue(lr.getMvaNumber());
 					match.getDetails().add(detail);
@@ -460,7 +464,7 @@ public class LFTracingUtil {
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("Rental Agreement Number Match");
 					detail.setMatchHistory(match);
-					detail.setScore(SCORE_AGREEMENT_NUMBER);
+					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_AGREEMENT));
 					detail.setDecryptedFoundValue(match.getFound().getAgreementNumber());
 					detail.setDecryptedLostValue(lr.getAgreementNumber());
 					match.getDetails().add(detail);
@@ -481,7 +485,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Brand Match");
 						detail.setMatchHistory(match);
-						detail.setScore(isLFC?LFC_SCORE_BRAND:SCORE_BRAND);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_BRAND));
 						detail.setDecryptedFoundValue(fitem.getBrand());
 						detail.setDecryptedLostValue(litem.getBrand());
 						match.getDetails().add(detail);
@@ -494,7 +498,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Category Match");
 						detail.setMatchHistory(match);
-						detail.setScore(SCORE_CATEGORY_PARTICLE);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_SUBCATEGORY));
 						LFSubCategory sub = getSubCategory(litem.getSubCategory());
 						if(sub != null){
 							detail.setScore(sub.getScore());
@@ -506,7 +510,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Partial Category Match");
 						detail.setMatchHistory(match);
-						detail.setScore(SCORE_CATEGORY);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_CATEGORY));
 						LFCategory cat = getCategory(litem.getCategory());
 						if(cat != null){
 							detail.setScore(cat.getScore());
@@ -522,7 +526,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Color Match");
 						detail.setMatchHistory(match);
-						detail.setScore(isLFC?LFC_SCORE_COLOR:SCORE_COLOR);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_COLOR));
 						detail.setDecryptedFoundValue(fitem.getColor());
 						detail.setDecryptedLostValue(litem.getColor());
 						match.getDetails().add(detail);
@@ -534,7 +538,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Case Color Match");
 						detail.setMatchHistory(match);
-						detail.setScore(isLFC?LFC_SCORE_CASE_COLOR:SCORE_CASE_COLOR);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_CASE_COLOR));
 						detail.setDecryptedFoundValue(fitem.getCaseColor());
 						detail.setDecryptedLostValue(litem.getCaseColor());
 						match.getDetails().add(detail);
@@ -546,7 +550,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Description Match");
 						detail.setMatchHistory(match);
-						detail.setScore(SCORE_DESCRIPTION);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_DESCRIPTION));
 						detail.setDecryptedFoundValue(fitem.getDescription());
 						detail.setDecryptedLostValue(litem.getDescription());
 						match.getDetails().add(detail);
@@ -558,7 +562,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Long Description Match");
 						detail.setMatchHistory(match);
-						detail.setScore(SCORE_LONG_DESCRIPTION);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_LONG_DESCRIPTION));
 						detail.setDecryptedFoundValue(fitem.getLongDescription());
 						detail.setDecryptedLostValue(litem.getLongDescription());
 						match.getDetails().add(detail);
@@ -570,7 +574,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Model Match");
 						detail.setMatchHistory(match);
-						detail.setScore(SCORE_MODEL);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_MODEL));
 						detail.setDecryptedFoundValue(fitem.getModel());
 						detail.setDecryptedLostValue(litem.getModel());
 						match.getDetails().add(detail);
@@ -582,7 +586,7 @@ public class LFTracingUtil {
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Serial Number Match");
 						detail.setMatchHistory(match);
-						detail.setScore(SCORE_SERIAL_NUMBER);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_SERIAL));
 						detail.setDecryptedFoundValue(fitem.getSerialNumber());
 						detail.setDecryptedLostValue(litem.getSerialNumber());
 						match.getDetails().add(detail);

@@ -112,6 +112,25 @@ public class PropertyBMO {
 	
 	public static final String PROPERTY_SHARES_THREAD_COUNT = "shares.thread.count";
 	public static final String PROPERTY_SHARES_MAX_THREAD_COUNT = "shares.max.thread.count";
+
+	public static final String LF_TRACING_WEIGHT_SERIAL = "lf.tracing.weight.serial";
+	public static final String LF_TRACING_WEIGHT_NAME = "lf.tracing.weight.name";
+	public static final String LF_TRACING_WEIGHT_ADDRESS = "lf.tracing.weight.address";
+	public static final String LF_TRACING_WEIGHT_PHONE = "lf.tracing.weight.phone";
+	public static final String LF_TRACING_WEIGHT_EMAIL = "lf.tracing.weight.email";
+
+	public static final String LF_TRACING_WEIGHT_MVA = "lf.tracing.weight.mva";
+	public static final String LF_TRACING_WEIGHT_AGREEMENT = "lf.tracing.weight.agreement";
+	public static final String LF_TRACING_BRAND = "lf.tracing.weight.brand";
+	public static final String LF_TRACING_WEIGHT_SUBCATEGORY = "lf.tracing.weight.subcategory";
+	public static final String LF_TRACING_WEIGHT_CATEGORY = "lf.tracing.weight.category";
+	public static final String LF_TRACING_WEIGHT_COLOR = "lf.tracing.weight.color";
+	public static final String LF_TRACING_WEIGHT_DESCRIPTION = "lf.tracing.weight.description";
+	public static final String LF_TRACING_WEIGHT_LONG_DESCRIPTION = "lf.tracing.weight.longdescription";
+	public static final String LF_TRACING_WEIGHT_MODEL = "lf.tracing.weight.model";
+	public static final String LF_TRACING_WEIGHT_CASE_COLOR = "lf.tracing.weight.casecolor";
+	
+	
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
