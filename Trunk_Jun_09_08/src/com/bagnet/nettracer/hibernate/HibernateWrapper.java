@@ -105,7 +105,11 @@ public class HibernateWrapper {
 			// Obtain the correct session factory for reporting - pointing to a different db.
 				if (sf_prod_reporting== null) {
 
-					sf_prod_reporting = cfg_prod_reporting.configure(new File(hibernate_reporting_path)).buildSessionFactory();
+					//LOUPAS - Cannot resolve this path even though the path is correct, some how Jboss5 and our multi-war to one ear architecture 
+					//         is some how conflicting with the path.  Have seen this problem in other areas of the application
+					//         Use HibernateWrapper.class.getResource instead of File
+//					sf_prod_reporting = cfg_prod_reporting.configure(new File(hibernate_reporting_path)).buildSessionFactory();
+					sf_prod_reporting = cfg_prod_reporting.configure(HibernateWrapper.class.getResource("/hibernate_reporting.cfg.xml")).buildSessionFactory();
 				}
 				return sf_prod_reporting;
 			
