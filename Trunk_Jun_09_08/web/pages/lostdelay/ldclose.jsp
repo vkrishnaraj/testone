@@ -1,3 +1,4 @@
+<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <%@ page language="java" %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
@@ -197,7 +198,17 @@
                   </logic:equal>
                   <logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
                   
-                  <% if (TracerProperties.isTrue(TracerProperties.SAVE_ON_CLOSE_PAGE)) { %>
+                  	<% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_ALLOW_OPEN_INCIDENT_DISPUTE)) { %>
+                      <logic:equal name="disputeProcess" scope="request" value="false">
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ 
+		                   		String incidentId = "" + request.getAttribute("incident");
+    		  					if (! DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
+		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>
+		                     <% } 
+		                    } %>
+	                  </logic:equal>
+	                <% } 
+                     if (TracerProperties.isTrue(TracerProperties.SAVE_ON_CLOSE_PAGE)) { %>
                     <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />
                     </html:submit>
