@@ -27,7 +27,7 @@ public class LF_ConfirmMatch extends DefaultSeleneseTestCase {
 				verifyTrue(selenium.isTextPresent("Match Details"));
 				verifyEquals(Settings.LOST_ID_LF, selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td/a"));
 				verifyEquals(Settings.FOUND_ID_LF, selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/a"));
-				verifyEquals("55.0", selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td[3]"));
+//				verifyEquals("55.0", selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td[3]"));
 				selenium.click("id=menucol_0.6");
 				waitForPageToLoadImproved();
 				selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[7]/a[2]");
