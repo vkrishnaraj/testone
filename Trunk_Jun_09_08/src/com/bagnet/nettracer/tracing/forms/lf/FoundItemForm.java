@@ -2,7 +2,6 @@ package com.bagnet.nettracer.tracing.forms.lf;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.apache.struts.action.ActionForm;
@@ -19,7 +18,6 @@ public final class FoundItemForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
 	private String dateFormat;
 	private LFFound found;
-	private List<LFRemark> remarklist;
 	private List<LFMatchHistory> traceResults;
 	private List<LFMatchHistory> rejectedResults;
 	
@@ -129,45 +127,15 @@ public final class FoundItemForm extends ActionForm {
 		return null;
 	}
 
-	public List<LFRemark> getRemarklist() {
-		if (remarklist == null) { 
-			remarklist = new ArrayList<LFRemark>();
-			if (getFound() != null && getFound().getAgentRemarks() != null) {
-				remarklist = new ArrayList<LFRemark>(getFound().getAgentRemarks());
-			}
-		}
-		return remarklist;
-	}
-
 	public LFRemark getRemark(int index) {
 		if (index < 0) index = 0;
 		LFRemark r = null;
-		while (getRemarklist().size() <= index) {
+		while (getFound().getAgentRemarks().size() <= index) {
 			r = new LFRemark();
 			r.getRemark().setType(TracingConstants.REMARK_REGULAR);
-			this.remarklist.add(r);
+			getFound().getAgentRemarks().add(r);
 		}
-		return (LFRemark) this.remarklist.get(index);
-	}
-
-	public void setRemarklist(List<LFRemark> remarklist) {
-		this.remarklist = remarklist;
-	}
-	
-	public void populateRemarks() {
-		List<LFRemark> newRemarks = new ArrayList<LFRemark>();
-		for (int i = 0, s = getRemarklist().size(); i < s; i++) {
-			LFRemark lfr = remarklist.get(i);
-			if (lfr.getRemark().getRemarktext() != null && !lfr.getRemark().getRemarktext().trim().equals("")) {
-				lfr.setFound(getFound());
-				if (lfr.getOutcome() != 0) {
-					lfr.getRemark().setType(TracingConstants.REMARK_CALL);
-				}
-				newRemarks.add(lfr);
-			}
-		}
-		found.setAgentRemarks(new LinkedHashSet<LFRemark>(newRemarks));
-		setRemarklist(newRemarks);
+		return (LFRemark) getFound().getAgentRemarks().toArray(new LFRemark[0])[index];
 	}
 
 	public List<LFMatchHistory> getTraceResults() {

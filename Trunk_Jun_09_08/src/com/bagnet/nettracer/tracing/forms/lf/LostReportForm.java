@@ -1,14 +1,13 @@
 package com.bagnet.nettracer.tracing.forms.lf;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
@@ -20,7 +19,7 @@ public final class LostReportForm extends ActionForm {
 	
 	private String dateFormat;
 	private LFLost lost;
-	private List<LFRemark> remarklist;
+//	private List<LFRemark> remarklist;
 	
 	public String getDateFormat() {
 		return dateFormat;
@@ -142,45 +141,15 @@ public final class LostReportForm extends ActionForm {
 		}
 	}
 
-	public List<LFRemark> getRemarklist() {
-		if (remarklist == null) { 
-			remarklist = new ArrayList<LFRemark>();
-			if (getLost() != null && getLost().getAgentRemarks() != null) {
-				remarklist = new ArrayList<LFRemark>(getLost().getAgentRemarks());
-			}
-		}
-		return remarklist;
-	}
-
 	public LFRemark getRemark(int index) {
 		if (index < 0) index = 0;
 		LFRemark r = null;
-		while (getRemarklist().size() <= index) {
+		while (getLost().getAgentRemarks().size() <= index) {
 			r = new LFRemark();
 			r.getRemark().setType(TracingConstants.REMARK_REGULAR);
-			this.remarklist.add(r);
+			getLost().getAgentRemarks().add(r);
 		}
-		return (LFRemark) this.remarklist.get(index);
-	}
-
-	public void setRemarklist(List<LFRemark> remarklist) {
-		this.remarklist = remarklist;
-	}
-	
-	public void populateRemarks() {
-		List<LFRemark> newRemarks = new ArrayList<LFRemark>();
-		for (int i = 0, s = getRemarklist().size(); i < s; i++) {
-			LFRemark lfr = remarklist.get(i);
-			if (lfr.getRemark().getRemarktext() != null && !lfr.getRemark().getRemarktext().trim().equals("")) {
-				lfr.setLost(getLost());
-				if (lfr.getOutcome() != 0) {
-					lfr.getRemark().setType(TracingConstants.REMARK_CALL);
-				}
-				newRemarks.add(lfr);
-			}
-		}
-		lost.setAgentRemarks(new LinkedHashSet<LFRemark>(newRemarks));
-		setRemarklist(newRemarks);
+		return (LFRemark) getLost().getAgentRemarks().toArray()[index];
 	}
 
 }

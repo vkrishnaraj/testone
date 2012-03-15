@@ -179,6 +179,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_CREATE_LOST_REPORT = "Create Lost Report";
 	public static final String SYSTEM_COMPONENT_NAME_CREATE_FOUND_ITEM = "Create Found Item";
 	public static final String SYSTEM_COMPONENT_NAME_SEARCH_LOST_FOUND = "Search Lost/Found";
+	public static final String SYSTEM_COMPONENT_NAME_SEARCH_LOST_REPORTS = "Search Lost Reports";
+	public static final String SYSTEM_COMPONENT_NAME_SEARCH_FOUND_ITEMS = "Search Found Items";
 	
 	public static final String SYSTEM_COMPONENT_NAME_LF_TRACE_RESULTS = "Trace Results";
 	public static final String SYSTEM_COMPONENT_NAME_LF_OPEN_LOST_REPORTS = "Open Lost Reports";
@@ -193,6 +195,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_LFC_SALVAGE_WORKFLOW = "LFC Salvage Workflow";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_CREATE_SALVAGE = "Create Salvage";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_SEARCH_SALVAGE = "Search Salvage";
+	public static final String SYSTEM_COMPONENT_NAME_LFC_UPDATE_LF_REMARKS = "Update LF Remarks";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;

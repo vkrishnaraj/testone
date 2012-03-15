@@ -1,7 +1,10 @@
 package com.bagnet.nettracer.tracing.actions.lf;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -64,27 +67,6 @@ public class FoundItemAction extends CheckedAction {
 		FoundItemForm fiForm = (FoundItemForm) form;
 		fiForm.setDateFormat(user.getDateformat().getFormat());
 		
-		boolean deleteRemark = false;
-
-		String index = "0";
-		Enumeration e = request.getParameterNames();
-		while (e.hasMoreElements()) {
-			String parameter = (String) e.nextElement();
-			if (parameter.indexOf("[") != -1) {
-				index = parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]"));
-					if (parameter.indexOf("deleteRemark") != -1) {
-					deleteRemark = true;
-					break;
-				}
-			}
-		}
-		if (deleteRemark) {
-			List remarkList = fiForm.getRemarklist();
-			if (remarkList != null)
-				remarkList.remove(Integer.parseInt(index));
-			request.setAttribute("remark", Integer.toString(fiForm.getRemarklist().size() - 1));
-		}
-		
 		LFFound found = null;
 		if (request.getParameter("createNew") != null) {
 			found = LFUtils.createLFFound(user);
@@ -100,13 +82,46 @@ public class FoundItemAction extends CheckedAction {
 				found = LFUtils.createLFFound(user);
 			}
 		} else {
-			fiForm.populateRemarks();
 			found = fiForm.getFound();
+		}
+		
+		boolean deleteRemark = false;
+
+		String index = "0";
+		Enumeration e = request.getParameterNames();
+		while (e.hasMoreElements()) {
+			String parameter = (String) e.nextElement();
+			if (parameter.indexOf("[") != -1) {
+				index = parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]"));
+					if (parameter.indexOf("deleteRemark") != -1) {
+					deleteRemark = true;
+					break;
+				}
+			}
+		}
+		if (deleteRemark) {
+			Set<LFRemark> remarkList = found.getAgentRemarks();
+			int indexToRemove = Integer.parseInt(index);
+			if (remarkList != null && !remarkList.isEmpty() && remarkList.size() > indexToRemove) {
+				int i = 0;
+				Iterator<LFRemark> iterator = remarkList.iterator();
+				while (iterator.hasNext()) {
+					LFRemark remark = iterator.next();
+					if (i == indexToRemove) {
+						remark.setFound(null);
+						remarkList.remove(remark);
+						break;
+					}
+					++i;
+				}
+			}
+			request.setAttribute("remark", Integer.toString(fiForm.getFound().getAgentRemarks().size() - 1));
 		}
 		
 		if (request.getParameter("save") != null) {
 			
 			try {
+				populateRemarks(found);
 				if(found.getItem() != null && found.getItem().getTrackingNumber() != null && found.getItem().getTrackingNumber().trim().length() > 0){
 					//we have a manual delivery
 					found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
@@ -145,14 +160,19 @@ public class FoundItemAction extends CheckedAction {
 			}
 		} else if (request.getParameter("addremark") != null) {
 			//set new remark with current time
-			LFRemark r = fiForm.getRemark(fiForm.getRemarklist().size());
+//			LFRemark r = fiForm.getRemark(fiForm.getFound().getAgentRemarks().size());
+			populateRemarks(found);
+			LFRemark r = new LFRemark();
+			r.getRemark().setType(TracingConstants.REMARK_REGULAR);
 			r.getRemark().setRemarkdate(TracerDateTime.getGMTDate());
 			r.getRemark().setAgent(user);
 			r.getRemark().setRemarktext("");
 			r.getRemark().set_DATEFORMAT(user.getDateformat().getFormat());
 			r.getRemark().set_TIMEFORMAT(user.getTimeformat().getFormat());
 			r.getRemark().set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
-			request.setAttribute("remark", Integer.toString(fiForm.getRemarklist().size() - 1));
+			r.setFound(found);
+			found.getAgentRemarks().add(r);
+			request.setAttribute("remark", Integer.toString(found.getAgentRemarks().size() - 1));
 		} else if (request.getParameter("undo") != null) {
 			//handles both undoing a delivery and a pickup
 			long itemId = Long.valueOf((String) request.getParameter("itemId"));
@@ -345,6 +365,21 @@ public class FoundItemAction extends CheckedAction {
 			}
 		}
 		return null;
+	}
+
+	private void populateRemarks(LFFound found) {
+		Iterator<LFRemark> iterator = found.getAgentRemarks().iterator();
+		while (iterator.hasNext()) {
+			LFRemark lfr = iterator.next();
+			if (lfr.getRemark().getRemarktext() != null && !lfr.getRemark().getRemarktext().trim().equals("")) {
+				lfr.setFound(found);
+				if (lfr.getOutcome() != 0) {
+					lfr.getRemark().setType(TracingConstants.REMARK_CALL);
+				}
+			} else {
+				found.getAgentRemarks().remove(lfr);
+			}
+		}
 	}
 	
 }

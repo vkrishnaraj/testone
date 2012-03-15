@@ -1,8 +1,9 @@
 package com.bagnet.nettracer.tracing.actions.lf;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -25,14 +26,10 @@ import aero.nettracer.lf.services.exception.UpdateException;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Remark;
-import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
-import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
-import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.forms.lf.LostReportForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -78,12 +75,6 @@ public class LostReportAction extends CheckedAction {
 				}
 			}
 		}
-		if (deleteRemark) {
-			List remarkList = lrForm.getRemarklist();
-			if (remarkList != null)
-				remarkList.remove(Integer.parseInt(index));
-			request.setAttribute("remark", Integer.toString(lrForm.getRemarklist().size() - 1));
-		}
 		
 		LFLost lostReport = null;
 		if (request.getParameter("createNew") != null) {
@@ -92,12 +83,31 @@ public class LostReportAction extends CheckedAction {
 			long id = Long.parseLong(request.getParameter("lostId"));
 			lostReport = LFServiceWrapper.getInstance().getLostReport(id);
 		} else {
-			lrForm.populateRemarks();
 			lostReport = lrForm.getLost();
+		}
+		
+		if (deleteRemark) {
+			Set<LFRemark> remarkList = lostReport.getAgentRemarks();
+			int indexToRemove = Integer.parseInt(index);
+			if (remarkList != null && !remarkList.isEmpty() && remarkList.size() > indexToRemove) {
+				int i = 0;
+				Iterator<LFRemark> iterator = remarkList.iterator();
+				while (iterator.hasNext()) {
+					LFRemark remark = iterator.next();
+					if (i == indexToRemove) {
+						remark.setLost(null);
+						remarkList.remove(remark);
+						break;
+					}
+					++i;
+				}
+			}
+			request.setAttribute("remark", Integer.toString(lrForm.getLost().getAgentRemarks().size() - 1));
 		}
 		
 		if (request.getParameter("save") != null) {
 			try {
+				populateRemarks(lostReport);
 				LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport, user);
 				if (lostReport.getItem().getFound() != null) {
 					LFServiceWrapper.getInstance().saveOrUpdateFoundItem(lostReport.getItem().getFound(), user);
@@ -146,14 +156,19 @@ public class LostReportAction extends CheckedAction {
 			} 
 		} else if (request.getParameter("addremark") != null) {
 			//set new remark with current time
-			LFRemark r = lrForm.getRemark(lrForm.getRemarklist().size());
+//			LFRemark r = lrForm.getRemark(lrForm.getLost().getAgentRemarks().size());
+			populateRemarks(lostReport);
+			LFRemark r = new LFRemark();
+			r.getRemark().setType(TracingConstants.REMARK_REGULAR);
 			r.getRemark().setRemarkdate(TracerDateTime.getGMTDate());
 			r.getRemark().setAgent(user);
 			r.getRemark().setRemarktext("");
 			r.getRemark().set_DATEFORMAT(user.getDateformat().getFormat());
 			r.getRemark().set_TIMEFORMAT(user.getTimeformat().getFormat());
 			r.getRemark().set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
-			request.setAttribute("remark", Integer.toString(lrForm.getRemarklist().size() - 1));
+			r.setLost(lostReport);
+			lostReport.getAgentRemarks().add(r);
+			request.setAttribute("remark", Integer.toString(lostReport.getAgentRemarks().size() - 1));
 		} else if (request.getParameter("matchItem") != null) {  // ALWAYS HAVE THIS PARAMETER RUN LAST!!!! CG: 1.9.12
 
 			try {
@@ -211,6 +226,21 @@ public class LostReportAction extends CheckedAction {
 			}
 		}
 		return null;
+	}
+	
+	private void populateRemarks(LFLost lost) {
+		Iterator<LFRemark> iterator = lost.getAgentRemarks().iterator();
+		while (iterator.hasNext()) {
+			LFRemark lfr = iterator.next();
+			if (lfr.getRemark().getRemarktext() != null && !lfr.getRemark().getRemarktext().trim().equals("")) {
+				lfr.setLost(lost);
+				if (lfr.getOutcome() != 0) {
+					lfr.getRemark().setType(TracingConstants.REMARK_CALL);
+				}
+			} else {
+				lost.getAgentRemarks().remove(lfr);
+			}
+		}
 	}
 	
 }

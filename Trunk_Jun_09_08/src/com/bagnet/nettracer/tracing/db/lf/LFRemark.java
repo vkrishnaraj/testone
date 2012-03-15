@@ -24,14 +24,14 @@ public class LFRemark implements Serializable{
 
 	@Id
 	@GeneratedValue
-	long id;
+	private long id;
 	
-	long calltime;
+	private long calltime;
 	
-	int outcome;
+	private int outcome;
 	
 	@Embedded
-	GeneralRemark remark;
+	private GeneralRemark remark;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "found_id", nullable = true)

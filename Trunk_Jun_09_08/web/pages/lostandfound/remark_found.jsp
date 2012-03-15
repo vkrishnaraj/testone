@@ -24,7 +24,7 @@
 	String cssFormClass = "form2";
 %>
 				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-        <logic:iterate id="remark" indexId="i" name="foundItemForm" property="remarklist" type="com.bagnet.nettracer.tracing.db.lf.LFRemark">
+        <logic:iterate id="remark" indexId="i" name="foundItemForm" property="found.agentRemarks" type="com.bagnet.nettracer.tracing.db.lf.LFRemark">
 <%
 		if (remark.getRemark().getType() == TracingConstants.REMARK_REGULAR || remark.getRemark().getType() == TracingConstants.REMARK_CALL) {
 %>			
@@ -121,11 +121,10 @@
 	
             <td valign="top" colspan=3>
 <%
-                if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_REMARKS, a)) {
+                if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LFC_UPDATE_LF_REMARKS, a)) {
 %>
 
-                  <textarea name="<%= remarkDescription %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);" onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);">
-                  <%= remark.getRemark().getRemarktext() %>
+                  <textarea name="<%= remarkDescription %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);" onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"><%= remark.getRemark().getRemarktext() %>
                   </textarea>
                   <input name="<%= remarkDescription + "2" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
                   <br>
