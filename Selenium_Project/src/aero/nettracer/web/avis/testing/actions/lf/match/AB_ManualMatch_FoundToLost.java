@@ -9,7 +9,8 @@ public class AB_ManualMatch_FoundToLost extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testAB_Login() throws Exception {
-		selenium.click("link=Confirm Match");
+//		selenium.click("link=Confirm Match");
+		selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[3]/a");
 		assertEquals("ID is required.", selenium.getAlert());
 		selenium.type("id=foundInput", Settings.LOST_ID_AB);
 		selenium.click("link=Confirm Match");
