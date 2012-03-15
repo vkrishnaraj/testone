@@ -10,14 +10,14 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 	@Test
 	public void testContactInfoNotification() {
 		verifyTrue(selenium.isTextPresent("Report Summary"));
-		selenium.type("//div[@id='maincontent']/table[3]/tbody/tr/td/input", "Test");
+		selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/input", "Test");
 		selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr/td/center/a/b"));
-			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr/td/input", "");
+			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td/input", "");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {

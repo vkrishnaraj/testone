@@ -7,19 +7,25 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import aero.nettracer.web.avis.testing.actions.lf.core.AB_Login;
-import aero.nettracer.web.avis.testing.actions.lf.core.AB_LoginFailure;
-import aero.nettracer.web.avis.testing.actions.lf.found.AB_CloseFound;
-import aero.nettracer.web.avis.testing.actions.lf.found.AB_CreateFound_Detailed;
-import aero.nettracer.web.avis.testing.actions.lf.found.AB_CreateFound_VerifyRequiredFields;
-import aero.nettracer.web.avis.testing.actions.lf.found.AB_SearchFound;
-import aero.nettracer.web.avis.testing.actions.lf.lost.AB_CloseLost;
-import aero.nettracer.web.avis.testing.actions.lf.lost.AB_CreateLost_Detailed;
-import aero.nettracer.web.avis.testing.actions.lf.lost.AB_CreateLost_VerifyRequiredFields;
-import aero.nettracer.web.avis.testing.actions.lf.lost.AB_SearchLost;
-import aero.nettracer.web.avis.testing.actions.lf.match.AB_ConfirmMatch;
-import aero.nettracer.web.avis.testing.actions.lf.match.AB_CreateDelivery;
-import aero.nettracer.web.avis.testing.actions.lf.match.AB_ManualMatch_FoundToLost;
+import aero.nettracer.web.lfc.testing.actions.lfc.core.LF_Login;
+import aero.nettracer.web.lfc.testing.actions.lfc.delivery.LF_CreateDeliveryFromFound;
+import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_CloseFound;
+import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_CreateFound_Detailed;
+import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_CreateFound_VerifyRequiredFields;
+import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_FoundReportSummary;
+import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_SearchFound;
+import aero.nettracer.web.lfc.testing.actions.lfc.itementry.LF_ItemEntry;
+import aero.nettracer.web.lfc.testing.actions.lfc.lost.LF_CloseLost;
+import aero.nettracer.web.lfc.testing.actions.lfc.lost.LF_CreateLostAndFoundReadOnly;
+import aero.nettracer.web.lfc.testing.actions.lfc.lost.LF_CreateLost_Detailed;
+import aero.nettracer.web.lfc.testing.actions.lfc.lost.LF_CreateLost_VerifyRequiredFields;
+import aero.nettracer.web.lfc.testing.actions.lfc.lost.LF_SearchLost;
+import aero.nettracer.web.lfc.testing.actions.lfc.match.LF_ConfirmMatch;
+import aero.nettracer.web.lfc.testing.actions.lfc.match.LF_ManualMatch_FoundToLost;
+import aero.nettracer.web.lfc.testing.actions.lfc.processtraceresults.LF_ProcessTraceResults;
+import aero.nettracer.web.lfc.testing.actions.lfc.salvage.LF_Salvage;
+import aero.nettracer.web.lfc.testing.actions.lfc.salvage.LF_SalvageSearch;
+import aero.nettracer.web.lfc.testing.actions.lfc.taskman.LF_VerifyText_TaskManager;
 import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
 
 @RunWith(Suite.class)
@@ -65,19 +71,19 @@ import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
 //	WS_CreateOHD_VerifyRequiredFields.class, WS_ForwardOHD.class, WS_ReceiveOHD.class,
 //	WS_Security.class,
 	// AVIS
-	AB_LoginFailure.class, AB_Login.class,
-	AB_CreateLost_VerifyRequiredFields.class, AB_CreateFound_VerifyRequiredFields.class,
-	AB_SearchLost.class, AB_SearchFound.class, AB_ManualMatch_FoundToLost.class,
-	AB_CloseFound.class, AB_SearchLost.class, AB_CloseLost.class,
-	AB_CreateLost_Detailed.class, AB_CreateFound_Detailed.class,
-	AB_ConfirmMatch.class, AB_CreateDelivery.class/*,
+//	AB_LoginFailure.class, AB_Login.class,
+//	AB_CreateLost_VerifyRequiredFields.class, AB_CreateFound_VerifyRequiredFields.class,
+//	AB_SearchLost.class, AB_SearchFound.class, AB_ManualMatch_FoundToLost.class,
+//	AB_CloseFound.class, AB_SearchLost.class, AB_CloseLost.class,
+//	AB_CreateLost_Detailed.class, AB_CreateFound_Detailed.class,
+//	AB_ConfirmMatch.class, AB_CreateDelivery.class,
 	// LFC
 	LF_Login.class, LF_CreateLost_VerifyRequiredFields.class, LF_CreateFound_VerifyRequiredFields.class,
 	LF_SearchLost.class, LF_SearchFound.class, LF_ManualMatch_FoundToLost.class,
 	LF_CloseFound.class, LF_SearchLost.class, LF_CloseLost.class, 
 	LF_CreateLost_Detailed.class, LF_CreateFound_Detailed.class, LF_FoundReportSummary.class, LF_VerifyText_TaskManager.class, 
 	LF_ConfirmMatch.class, LF_CreateDeliveryFromFound.class, LF_ItemEntry.class, LF_ProcessTraceResults.class,
-	LF_CreateLostAndFoundReadOnly.class, LF_Salvage.class, LF_SalvageSearch.class*/
+	LF_CreateLostAndFoundReadOnly.class, LF_Salvage.class, LF_SalvageSearch.class
 	
 	})
 public class TestEverything { 

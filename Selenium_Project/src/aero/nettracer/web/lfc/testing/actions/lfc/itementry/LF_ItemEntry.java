@@ -66,76 +66,76 @@ public class LF_ItemEntry extends LoginUtil {
 		
 	}
 		
-	@Test
-	public void testLastNamePresent() {
-		testId = String.valueOf(System.currentTimeMillis());
-		selenium.type("//input[@id='barcode']", testId);
-		selenium.select("//select[@id='category']", "label=Bags");
-		selenium.click("//input[@id='button']");
-		verifyFalse(selenium.isEditable("//input[@id='button']"));
-		selenium.type("//input[@id='lastName']", "test");
-		selenium.click("//input[@id='saveButton']");
-		waitForPageToLoadImproved();
-		
-		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Bags"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(1);
-			clearSummaryDivs();
-		} else {
-			System.out.println("LFIE: Failed to save item with last name present.");
-			return;
-		}
-	}
+//	@Test
+//	public void testLastNamePresent() {
+//		testId = String.valueOf(System.currentTimeMillis());
+//		selenium.type("//input[@id='barcode']", testId);
+//		selenium.select("//select[@id='category']", "label=Bags");
+//		selenium.click("//input[@id='button']");
+//		verifyFalse(selenium.isEditable("//input[@id='button']"));
+//		selenium.type("//input[@id='lastName']", "test");
+//		selenium.click("//input[@id='saveButton']");
+//		waitForPageToLoadImproved();
+//		
+//		if (checkNoErrorPage()) {
+//			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
+//			verifyTrue(selenium.isTextPresent("Desc: Bags"));
+//			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+//			verifySummaryDiv(1);
+//			clearSummaryDivs();
+//		} else {
+//			System.out.println("LFIE: Failed to save item with last name present.");
+//			return;
+//		}
+//	}
 	
-	@Test
-	public void testFirstNamePresent() {
-		testId = String.valueOf(System.currentTimeMillis());
-		selenium.type("//input[@id='barcode']", testId);
-		selenium.select("//select[@id='category']", "label=Blueprints/Posters");
-		selenium.click("//select[@id='category']/option[3]");
-		selenium.click("//input[@id='button']");
-		selenium.type("//input[@id='firstName']", "test");
-		selenium.click("//input[@id='saveButton']");
-		waitForPageToLoadImproved();
-		
-		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Blueprints/Posters"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
-			clearSummaryDivs();
-		} else {
-			System.out.println("LFIE: Failed to save item with first name present.");
-			return;			
-		}
-
-	}
+//	@Test
+//	public void testFirstNamePresent() {
+//		testId = String.valueOf(System.currentTimeMillis());
+//		selenium.type("//input[@id='barcode']", testId);
+//		selenium.select("//select[@id='category']", "label=Blueprints/Posters");
+//		selenium.click("//select[@id='category']/option[3]");
+//		selenium.click("//input[@id='button']");
+//		selenium.type("//input[@id='firstName']", "test");
+//		selenium.click("//input[@id='saveButton']");
+//		waitForPageToLoadImproved();
+//		
+//		if (checkNoErrorPage()) {
+//			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
+//			verifyTrue(selenium.isTextPresent("Desc: Blueprints/Posters"));
+//			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+//			verifySummaryDiv(2);
+//			clearSummaryDivs();
+//		} else {
+//			System.out.println("LFIE: Failed to save item with first name present.");
+//			return;			
+//		}
+//
+//	}
 	
-	@Test
-	public void testMiddleNamePresent() {
-		testId = String.valueOf(System.currentTimeMillis());
-		selenium.type("//input[@id='barcode']", testId);
-		selenium.select("//select[@id='category']", "label=Books/Notebooks");
-		selenium.click("//select[@id='category']/option[4]");
-		selenium.click("//input[@id='button']");
-		selenium.type("//input[@id='middleName']", "t");
-		selenium.click("//input[@id='saveButton']");
-		waitForPageToLoadImproved();
-		
-		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Books/Notebooks"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
-			clearSummaryDivs();
-		} else {
-			System.out.println("LFIE: Failed to save item with middle name present.");
-			return;			
-		}
-		
-	}
+//	@Test
+//	public void testMiddleNamePresent() {
+//		testId = String.valueOf(System.currentTimeMillis());
+//		selenium.type("//input[@id='barcode']", testId);
+//		selenium.select("//select[@id='category']", "label=Books/Notebooks");
+//		selenium.click("//select[@id='category']/option[4]");
+//		selenium.click("//input[@id='button']");
+//		selenium.type("//input[@id='middleName']", "t");
+//		selenium.click("//input[@id='saveButton']");
+//		waitForPageToLoadImproved();
+//		
+//		if (checkNoErrorPage()) {
+//			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
+//			verifyTrue(selenium.isTextPresent("Desc: Books/Notebooks"));
+//			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+//			verifySummaryDiv(2);
+//			clearSummaryDivs();
+//		} else {
+//			System.out.println("LFIE: Failed to save item with middle name present.");
+//			return;			
+//		}
+//		
+//	}
 	
 	@Test
 	public void testAddress1Present() {
@@ -152,7 +152,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Briefcase/Portfolio"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(1);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with address 1 present.");

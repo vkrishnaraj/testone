@@ -1,8 +1,8 @@
 package aero.nettracer.web.lfc.testing.actions.lfc.salvage;
 
-import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.junit.Test;
 
@@ -17,6 +17,9 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 	private static String HIGH_GT_60;
 	private static String TODAY;
 	private static int TIMEOUT = 2000;
+	
+	private static long DATE_DELTA_31 = 2678400000l;
+	private static long DATE_DELTA_61 = 5270400000l;
 
 	@Test
 	public void testCreateSalvage() {
@@ -115,13 +118,15 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		// Low value, > 30 days
 		if (checkNoErrorPage()) {
-			Calendar now = Calendar.getInstance();
-			now.add(Calendar.DAY_OF_YEAR, -40);
-			lvCutoff = df.format(now.getTime());
+			Date now = new Date();
+			now.setTime(now.getTime() - DATE_DELTA_31);
+//			Calendar now = Calendar.getInstance();
+//			now.add(Calendar.DAY_OF_YEAR, -31);
+			lvCutoff = df.format(now);
 
 			LF_Salvage.LOW_GT_30 = String.valueOf(System.currentTimeMillis());
 			selenium.type("//input[@name='found.barcode']", LF_Salvage.LOW_GT_30);
-			selenium.type("//div[@id='maincontent']/table/tbody/tr/td[2]/input", lvCutoff);
+			selenium.type("//div[@id='maincontent']/table/tbody/tr/td[2]/input", "02/11/2012");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "Plantronics");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input", "PN5678");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input", "Backbeat");
@@ -184,9 +189,11 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		// High value, > 60 days
 		if (checkNoErrorPage()) {
-			Calendar now = Calendar.getInstance();
-			now.add(Calendar.DAY_OF_YEAR, -61);
-			hvCutoff = df.format(now.getTime());
+			Date now = new Date();
+			now.setTime(now.getTime() - DATE_DELTA_61);
+//			Calendar now = Calendar.getInstance();
+//			now.add(Calendar.DAY_OF_YEAR, -61);
+			hvCutoff = df.format(now);
 
 			LF_Salvage.HIGH_GT_60 = String.valueOf(System.currentTimeMillis());
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_Salvage.HIGH_GT_60);
