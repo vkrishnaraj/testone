@@ -15,9 +15,9 @@ public class AB_CreateFound_VerifyRequiredFields extends DefaultSeleneseTestCase
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("id=button");
-			assertEquals("Company is required.", selenium.getAlert());
-			selenium.select("name=found.companyId", "label=Avis");
-			selenium.click("id=button");
+//			assertEquals("Company is required.", selenium.getAlert());
+//			selenium.select("name=found.companyId", "label=Avis");
+//			selenium.click("id=button");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
