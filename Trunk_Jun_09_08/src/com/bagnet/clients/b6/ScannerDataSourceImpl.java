@@ -12,14 +12,11 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import com.bagnet.clients.us.ScannerComparator;
 import com.bagnet.nettracer.datasources.ScannerDataSource;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDataDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 import au.com.bytecode.opencsv.CSVReader;
 
@@ -137,6 +134,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 	}
 	
 	public List<String[]> consumeScannerDataFromCSV(String file){
+		System.out.println(file);
 		try{
 			CSVReader reader = new CSVReader(new FileReader(file));
 			List<String[]> item = reader.readAll();
@@ -154,13 +152,16 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 		return null;
 	}
 	
-	public void insertData(Date flightdate, String a, String b, String c, String d, String e){
-		System.out.println(a);
+	public void insertData(Session sess, Date flightdate, String a, String b, String c, String d, String e){
+//		System.out.println(a);
 		String sql = "insert into scandata (createdate,flightdate,a,b,c,d,e) values (:date,:flightdate,:a,:b,:c,:d,:e)";
-		Session sess = null;
+//		Session sess = null;
+		
 		Transaction t = null;
 		try{
-			sess = HibernateWrapper.getSession().openSession();
+			if(sess == null || !sess.isOpen()){
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			t = sess.beginTransaction();
 			SQLQuery q = sess.createSQLQuery(sql);
 			q.setParameter("date", DateUtils.convertToGMTDate(new Date()));
@@ -174,19 +175,27 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 			t.commit();
 		}catch (Exception e1) {
 			e1.printStackTrace();
-		} finally {
 			if (sess != null) {
 				try {
 					sess.close();
-				} catch (Exception e1) {
-					e1.printStackTrace();
+				} catch (Exception e2) {
+					e2.printStackTrace();
 				}
 			}
+		} finally {
+//			if (sess != null) {
+//				try {
+//					sess.close();
+//				} catch (Exception e1) {
+//					e1.printStackTrace();
+//				}
+//			}
 		}
 	}
 	
 	public void consumeBAG_A(String file){
 		List<String[]>list = this.consumeScannerDataFromCSV(file);
+		Session sess = HibernateWrapper.getSession().openSession();
 		if(list!=null){
 			for(String[]s:list){
 				String bagtag = s[0]+s[1];
@@ -202,18 +211,26 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 				if(s[17].trim().length()>0){
 					remark+="<br/>"+s[17].trim();
 				}
-				this.insertData(d, bagtag, remark,null,null,null);
+				this.insertData(sess,d, bagtag, remark,null,null,null);
+			}
+		}
+		if (sess != null) {
+			try {
+				sess.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 		}
 	}
 	
 	public void consumeBAG_B(String file){
 		List<String[]>list = this.consumeScannerDataFromCSV(file);
+		Session sess = HibernateWrapper.getSession().openSession();
 		if(list!=null){
 			for(String[]s:list){
 				String bagtag = s[0]+s[1];
 				String date = s[3];
-				Date d = DateUtils.convertToDate(date, "yyyymmdd", "US");
+				Date d = DateUtils.convertToDate(date, "yyyyMMdd", "US");
 				String remark = "Tag Number: "+bagtag;
 				if(s[8].trim().length()>0){
 					remark+="<br/>"+s[8].trim();
@@ -224,13 +241,21 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 				if(s[15].trim().length()>0){
 					remark+="<br/>"+s[15].trim();
 				}
-				this.insertData(d, bagtag, remark,null,null,null);
+				this.insertData(sess,d, bagtag, remark,null,null,null);
+			}
+		}
+		if (sess != null) {
+			try {
+				sess.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 		}
 	}
 	
 	public void consumeHISTORY_A(String file){
 		List<String[]>list = this.consumeScannerDataFromCSV(file);
+		Session sess = HibernateWrapper.getSession().openSession();
 		if(list!=null){
 			for(String[]s:list){
 				String bagtag = s[3]+s[4];
@@ -249,19 +274,26 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 				if(s[6].trim().length()>0){
 					remark += "<br/>" + s[6].trim();
 				}
-				this.insertData(d,bagtag, remark,loc,null,null);
+				this.insertData(sess,d,bagtag, remark,loc,null,null);
+			}
+		}
+		if (sess != null) {
+			try {
+				sess.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 		}
 	}
 	
 	public void consumeHISTORY_B(String file){
-		System.out.println("tick");
 		List<String[]>list = this.consumeScannerDataFromCSV(file);
+		Session sess = HibernateWrapper.getSession().openSession();
 		if(list!=null){
 			for(String[]s:list){
 				String bagtag = s[2]+s[3];
 				String date = s[1];
-				Date d = DateUtils.convertToDate(date, "yyyymmdd", "US");
+				Date d = DateUtils.convertToDate(date, "yyyyMMdd", "US");
 				String loc = "MCO";
 				if(s[4].trim().length() > 0){
 					loc += ":" + s[4].trim();
@@ -275,7 +307,14 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 				if(s[5].trim().length()>0){
 					remark += "<br/>" + s[5].trim();
 				}
-				this.insertData(d,bagtag, remark,loc,null,null);
+				this.insertData(sess,d,bagtag, remark,loc,null,null);
+			}
+		}
+		if (sess != null) {
+			try {
+				sess.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 		}
 	}
@@ -326,16 +365,16 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 //
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-23.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-23.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-24.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-24.del");
 //		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-25.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-25.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-26.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-26.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-27.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-27.del");
 //		
@@ -344,19 +383,19 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 //		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-29.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-29.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-30.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-30.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-31.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-31.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-01.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-01.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-02.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-02.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-03.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-03.del");
 //		
@@ -365,14 +404,56 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 //		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-05.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-05.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-06.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-06.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-07.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-07.del");
-		
+//		
 //		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-08.del");	
 //		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-08.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-09.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-09.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-10.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-10.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-11.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-11.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-12.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-12.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-13.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-13.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-14.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-14.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-15.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-15.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-16.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-16.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-17.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-17.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-18.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-18.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-19.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-19.del");
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-20.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-20.del");	
+//		
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-21.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-21.del");	
+//
+//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-22.del");	
+//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-22.del");	
 	}
 }
