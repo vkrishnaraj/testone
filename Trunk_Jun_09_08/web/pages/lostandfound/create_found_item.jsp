@@ -277,7 +277,9 @@
 			        					<bean:write name="match" property="found.barcode" />
 			        				</td>
 			        				<td class="header" style="width:20%;" >
-			        					<bean:message key="colname.score" />
+			        					<bean:message key="colname.score" />:&nbsp;
+			        					
+				        					<bean:write name="match" property="score" />
 			        				</td>
 			        				<td class="header" style="width:20%;" >
 			        					<bean:message key="header.lost.report" />:&nbsp;
