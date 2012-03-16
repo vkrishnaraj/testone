@@ -29,8 +29,17 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 		return !selenium.isTextPresent("There is an error with your request.");
 	}
 	
-	public void waitForPageToLoadImproved() {
+	public void waitForPageToLoadImproved(long wait){
+		try {
+			Thread.sleep(wait);
+		} catch (InterruptedException e) {
+			//continue
+		}
 		selenium.waitForPageToLoad(Settings.PAGE_LOAD_TIMEOUT);
+	}
+	
+	public void waitForPageToLoadImproved() {
+		waitForPageToLoadImproved(0);
 	}
 	
 	public void verifyTrue(boolean testThis) {
