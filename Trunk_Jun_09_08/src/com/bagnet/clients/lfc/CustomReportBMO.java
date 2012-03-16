@@ -35,6 +35,7 @@ import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.reporting.lf.LFDailyStatusReport;
 import com.bagnet.nettracer.reporting.lf.LFDisbursementsReport;
 import com.bagnet.nettracer.reporting.lf.LFItemizationReport;
+import com.bagnet.nettracer.reporting.lf.LFLostItemizationReport;
 import com.bagnet.nettracer.reporting.lf.LFSalvageReport;
 import com.bagnet.nettracer.reporting.lf.LFSummaryReport;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
@@ -65,6 +66,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			break;
 		case ReportingConstants.RPT_20_CUSTOM_93:
 			creportdata = createSalvageReport(srDTO, ReportBMO.getCustomReport(92).getResource_key(), rootpath, request, user);
+			break;
+		case ReportingConstants.RPT_20_CUSTOM_94:
+			creportdata = createLostItemizationReport(srDTO, ReportBMO.getCustomReport(92).getResource_key(), rootpath, request, user);
 			break;
 		default:
 			break;
@@ -173,6 +177,63 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.setIgnorePagination(true);
 			drb.setUseFullPageWidth(true);
 	
+			DynamicReport report = drb.build();
+			exportJasperReport(reportData, report, outputpath);
+			
+		} catch (ColumnBuilderException cbe) {
+			cbe.printStackTrace();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} 
+		virtualizer.cleanup();
+		return fileName;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private String createLostItemizationReport(StatReportDTO srDTO, String resourceKey, String rootpath, HttpServletRequest request, Agent user) {
+		srDTO.setDateFormat(user.getDateformat().getFormat());
+		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+		List reportData = new LFLostItemizationReport(resources).getData(srDTO);
+		if (reportData == null) {
+			return null;
+		}
+		
+		String fileName = ReportingConstants.RPT_20_CUSTOM_90_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
+		virtualizer.setReadOnly(false);
+		
+		FastReportBuilder drb = new FastReportBuilder();
+		drb.setTitle(resources.getString("report.lf.lost.itemization.report.header") + " " + runDate);
+		drb.setPageSizeAndOrientation(Page.Page_Legal_Landscape());
+		drb.setSubtitle(getSubTitle(srDTO, user, resources));
+		
+		
+		Style header = new Style();
+		header.setHorizontalAlign(HorizontalAlign.CENTER);
+		header.setVerticalAlign(VerticalAlign.MIDDLE);
+		Style detailStyle = new Style("detail");
+		detailStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+		detailStyle.setVerticalAlign(VerticalAlign.MIDDLE);
+		
+		try {
+			
+			drb.addColumn(resources.getString("report.lf.lost.itemization.id"), "id", Long.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.lost.itemization.station"), "station", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.lost.itemization.date"), "openDate", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.lost.itemization.category"), "category", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.lost.itemization.sub.category"), "subCategory", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.lost.itemization.brand"), "brand", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.lost.itemization.model"), "model", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.lost.itemization.serial.number"), "serialNumber", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.lost.itemization.color"), "color", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.lost.itemization.case.color"), "caseColor", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.lost.itemization.description"), "description", String.class.getName(), 50, detailStyle, header);
+			
+			drb.setIgnorePagination(true);
+			drb.setUseFullPageWidth(true);
+			
 			DynamicReport report = drb.build();
 			exportJasperReport(reportData, report, outputpath);
 			

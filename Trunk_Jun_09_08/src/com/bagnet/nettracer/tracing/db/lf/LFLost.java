@@ -188,6 +188,10 @@ public class LFLost implements LFObject, Serializable {
 	public void setRemarks(String remarks) {
 		this.remarks = remarks;
 	}
+	
+	public String getDisOpenDate() {
+		return DateUtils.formatDate(openDate, this.agent.getDateformat().getFormat(), "", null);
+	}
 
 	public String getDisOpenDate(String dateFormat) {
 		return DateUtils.formatDate(openDate, dateFormat, "", null);

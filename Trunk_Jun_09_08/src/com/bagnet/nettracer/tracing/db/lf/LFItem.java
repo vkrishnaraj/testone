@@ -56,9 +56,6 @@ public class LFItem implements Serializable{
 	
 	private boolean deliveryRejected;
 	
-	@Transient
-	private String dispPhone;
-	
 	public String getLongDescription() {
 		return longDescription;
 	}
