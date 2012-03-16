@@ -41,10 +41,6 @@ public class SearchLostFoundAction extends CheckedAction {
 			return null;
 		}
 
-		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SEARCH_LOST_FOUND, user)) {
-			return (mapping.findForward(TracingConstants.NO_PERMISSION));
-		}
-		
 		LFSearchDTO searchDto = (LFSearchDTO) form;
 		LFUtils.getLists(user, session);
 		if (LFUtils.actionChangeSubCategory(searchDto.getCategory(), request)) {
@@ -57,6 +53,15 @@ public class SearchLostFoundAction extends CheckedAction {
 
 		searchDto.setAgent(user);
 		int type = searchDto.getType();
+		if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"")) {
+			if (request.getParameter("found") != null) {
+				type = TracingConstants.LF_TYPE_FOUND;
+			} else if (request.getParameter("lost") != null) {
+				type = TracingConstants.LF_TYPE_LOST;
+			}
+			searchDto.setType(type);
+		}
+		
 		List resultSet = new ArrayList();
 		if (request.getParameter("clear") == null) {
 			LFServiceBean serviceBean = new LFServiceBean();

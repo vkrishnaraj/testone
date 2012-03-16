@@ -11,6 +11,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.classic.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
@@ -89,8 +90,9 @@ public abstract class LFReport {
 		String stationSql = "";
 		String stationId = srDto.getStation_ID()[0];
 		if (stationId != null && !stationId.equals("0")) {
-			stationSql += "and s.stationcode = \'" + stationId + "\' ";
+			stationSql += "and s.stationcode = '" + stationId + "' ";
 		}
+		stationSql += "and s.companycode_ID = '" + TracingConstants.LF_LF_COMPANY_ID + "' ";
 		return stationSql;
 	}
 	

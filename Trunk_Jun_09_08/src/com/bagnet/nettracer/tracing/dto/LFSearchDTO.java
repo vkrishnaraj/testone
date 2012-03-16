@@ -1,9 +1,9 @@
 package com.bagnet.nettracer.tracing.dto;
 
 import java.util.Date;
-import java.util.Locale;
 
 import org.apache.struts.action.ActionForm;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -28,7 +28,7 @@ public class LFSearchDTO extends ActionForm  {
 	private String endRentDate; 
 	private Station station;
 	private Agent agent; // na
-	private Status status; 
+	private Status status;
 	private Status disposition;
 	private String agreementNumber;
 	private String mvaNumber; 
@@ -40,7 +40,10 @@ public class LFSearchDTO extends ActionForm  {
 	private String brand;
 	private String itemDescription;
 	private String barcode;
-
+	private int dispositionId;
+	private int statusId;
+	private int stationId;
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -186,19 +189,19 @@ public class LFSearchDTO extends ActionForm  {
 	}
 	
 	public int getStatusId() {
-		return status.getStatus_ID();
+		return statusId;
 	}
 	
 	public void setStatusId(int statusId) {
-		this.status.setStatus_ID(statusId);
+		this.statusId = statusId;
 	}
 	
 	public int getStationId() {
-		return station.getStation_ID();
+		return stationId;
 	}
 	
 	public void setStationId(int stationId) {
-		this.station.setStation_ID(stationId);
+		this.stationId = stationId;
 	}
 
 	public void setDisposition(Status disposition) {
@@ -210,11 +213,11 @@ public class LFSearchDTO extends ActionForm  {
 	}
 	
 	public int getDispositionId(){
-		return disposition.getStatus_ID();
+		return dispositionId;
 	}
 	
 	public void setDispositionId(int dispositionId){
-		this.disposition.setStatus_ID(dispositionId);
+		this.dispositionId = dispositionId;
 	}
 
 	public long getCategory() {

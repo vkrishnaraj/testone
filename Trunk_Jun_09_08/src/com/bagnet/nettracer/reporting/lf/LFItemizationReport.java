@@ -46,7 +46,7 @@ public class LFItemizationReport extends LFReport {
 					 "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					 "left outer join lfcategory c on i.category = c.id " +
 					 "left outer join lfsubcategory sc on i.subCategory = sc.id " +
-					 "where lf.receivedDate between :startDate and :endDate " +
+					 "where lf.receivedDate between :startDate and :endDate " + getStationSql(srDto) + " " +
 					 "order by s.stationcode,lf.receivedDate;";
 		return sql;
 	}

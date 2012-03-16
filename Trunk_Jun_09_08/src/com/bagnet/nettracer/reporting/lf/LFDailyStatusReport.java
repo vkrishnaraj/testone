@@ -80,7 +80,7 @@ public class LFDailyStatusReport extends LFReport {
 					                  "and (i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") or i.deliveryRejected = 1) " +
 					                  "and i.lost_id is null " +
 					                  "group by date(lf.receivedDate) order by date(lf.receivedDate),s.station_id) lvirwor on s.station_id = lvirwor.station_id " +
-					 getStationSql(srDto) + 
+					 "where 1 = 1 " + getStationSql(srDto) + 
 					 "group by date(lf.receivedDate),s.stationcode " +
 					 "order by s.stationcode,date(lf.receivedDate);";
 		

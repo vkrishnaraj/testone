@@ -10,7 +10,7 @@ public class LF_CreateLost_Detailed extends DefaultSeleneseTestCase {
 	@Test
 	public void testAB_Login() throws Exception {
 		goToTaskManager();
-		selenium.click("id=menucol_2.1");
+		selenium.click("id=menucol_2.3");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();

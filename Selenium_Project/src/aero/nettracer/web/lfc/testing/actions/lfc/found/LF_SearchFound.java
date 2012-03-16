@@ -9,11 +9,11 @@ public class LF_SearchFound extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testAB_Login() throws Exception {
-		selenium.click("id=menucol_2.3");
+		selenium.click("id=menucol_2.2");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			selenium.select("name=type", "label=Found");
+//			selenium.select("name=type", "label=Found");
 			selenium.type("name=barcode", Settings.FOUND_ID_LF);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();

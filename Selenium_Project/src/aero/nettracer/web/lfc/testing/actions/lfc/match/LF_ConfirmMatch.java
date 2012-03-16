@@ -33,9 +33,9 @@ public class LF_ConfirmMatch extends DefaultSeleneseTestCase {
 				selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[7]/a[2]");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					selenium.click("id=menucol_2.3");
+					selenium.click("id=menucol_2.4");
 					waitForPageToLoadImproved();
-					selenium.select("name=type", "label=Lost");
+//					selenium.select("name=type", "label=Lost");
 					selenium.type("name=id", Settings.LOST_ID_LF);
 					selenium.click("id=button");
 					waitForPageToLoadImproved();

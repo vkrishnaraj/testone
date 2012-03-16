@@ -9,11 +9,11 @@ public class LF_SearchLost extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testAB_Login() throws Exception {
-		selenium.click("id=menucol_2.3");
+		selenium.click("id=menucol_2.4");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			selenium.select("name=type", "label=Lost");
+//			selenium.select("name=type", "label=Lost");
 			selenium.type("name=id", Settings.LOST_ID_LF);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();

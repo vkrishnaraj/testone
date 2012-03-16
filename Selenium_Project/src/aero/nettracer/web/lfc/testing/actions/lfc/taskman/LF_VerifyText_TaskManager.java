@@ -28,16 +28,16 @@ public class LF_VerifyText_TaskManager extends LoginUtil {
 //		Settings.FOUND_ID_LF = "1326484684085";
 		checkCopyrightAndQuestionMarks();
 		verifyTrue(selenium.isTextPresent("Load Found Item"));
-		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[2]/td/center/input[2]");
+		selenium.click("//input[@id='button']");
 		assertEquals("Please enter a valid barcode", selenium.getAlert());
-		selenium.type("//div[@id='maincontent']/form/table/tbody/tr[2]/td/center/input", Settings.FOUND_ID_LF);
-		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[2]/td/center/input[2]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			verifyEquals(Settings.FOUND_ID_LF, selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input"));
-		} else {
-			return;
-		}
+//		selenium.type("//div[@id='maincontent']/form/table/tbody/tr[2]/td/center/input", Settings.FOUND_ID_LF);
+//		selenium.click("//input[@id='button']");
+//		waitForPageToLoadImproved();
+//		if (checkNoErrorPage()) {
+//			verifyEquals(Settings.FOUND_ID_LF, selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input"));
+//		} else {
+//			return;
+//		}
 	}
 	
 }

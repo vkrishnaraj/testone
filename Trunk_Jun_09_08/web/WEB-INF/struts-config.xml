@@ -534,7 +534,6 @@
 		<forward name="create_found_item" path="create_found_item" />
 		<forward name="create_found_item_ro" path="create_found_item_ro" />
 		<forward name="search_lost_found" path="search_lost_found" />
-		<forward name="search_lost_found" path="search_lost_found" />
 
 		<forward name="view_trace_results" path="view_trace_results" />
 		<forward name="view_trace_details" path="view_trace_details" />
@@ -887,7 +886,7 @@
 		<action path="/create_lost_report_ro" type="com.bagnet.nettracer.tracing.actions.lf.LostReportAction" name="lostReportForm" scope="session" validate="false"></action>		
 		<action path="/create_found_item" type="com.bagnet.nettracer.tracing.actions.lf.FoundItemAction" name="foundItemForm" scope="session" validate="false"></action>		
 		<action path="/create_found_item_ro" type="com.bagnet.nettracer.tracing.actions.lf.FoundItemAction" name="foundItemForm" scope="session" validate="false"></action>		
-		<action path="/search_lost_found" type="com.bagnet.nettracer.tracing.actions.lf.SearchLostFoundAction" name="searchLostFoundForm" scope="session" validate="false"></action>		
+		<action path="/search_lost_found" type="com.bagnet.nettracer.tracing.actions.lf.SearchLostFoundAction" name="searchLostFoundForm" scope="request" validate="false"></action>		
 
 		<action path="/lost_found_manager" type="com.bagnet.nettracer.tracing.actions.lf.LostFoundManagerAction" name="lostFoundManagerForm" scope="request" validate="false"></action>
 		<action path="/view_trace_results" type="com.bagnet.nettracer.tracing.actions.lf.TraceResultsAction" name="traceResultsForm" scope="session" validate="false"></action>
