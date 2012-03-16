@@ -27,6 +27,7 @@ public interface LFServiceRemote {
 	public List<LFCategory> getCategories(String companycode);
 
 	public List<LFMatchHistory> traceFoundItem(long id);
+	public List<LFMatchHistory> traceLostItem(long id);
 	
 	public LFFound getFoundItemByBarcode(String barcode) throws NonUniqueBarcodeException;
 }

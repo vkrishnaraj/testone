@@ -50,7 +50,7 @@ public class ThreadMonitor implements Runnable{
 					if(!tc.isDead() && tc.isConnectError()){
 						logger.error("Thread Failure: " + tc.getId() + "has a connection error");
 						if(tc.getConnectErrorEmailDate() == null || now.getTime() - tc.getConnectErrorEmailDate().getTime() > EMAIL_INTERVAL){
-							AlertEmail.sendAlertEmail("EBJ connection error", "Thread: " + tc.getId() + " has a connection error");
+							AlertEmail.sendAlertEmail("EJB connection error", "Thread: " + tc.getId() + " has a connection error");
 							tc.setConnectErrorEmailDate(now);
 						}
 					}

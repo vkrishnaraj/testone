@@ -11,17 +11,15 @@ import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
 import com.bagnet.nettracer.tracing.utils.general.ConnectionUtil;
 import com.bagnet.nettracer.tracing.utils.general.ThreadContainer;
-import com.bagnet.nettracer.tracing.utils.general.ThreadMonitor;
 
 import javax.naming.Context;
-import javax.naming.NamingException;
 
 import org.apache.log4j.Logger;
 
 public class TraceThread implements Runnable{
 	private static final Logger logger = Logger.getLogger(TraceThread.class);
 	
-	private ArrayBlockingQueue<FoundHistoryObject> queue;
+	private ArrayBlockingQueue<Object[]> queue;
 	private ThreadContainer container;
 	
 	public TraceThread(ArrayBlockingQueue queue, ThreadContainer container){
@@ -35,7 +33,7 @@ public class TraceThread implements Runnable{
 			Context ctx = ConnectionUtil.getInitialContext(PropertyBMO.getValue(PropertyBMO.LF_EJB_SERVER_LOCATION));
 			while(true){
 				container.setWaiting(true);
-				FoundHistoryObject f = queue.take();
+				Object[] o = queue.take();
 				container.setStartTime(new Date());
 				container.setWaiting(false);
 				LFServiceRemote bean = null;
@@ -46,12 +44,18 @@ public class TraceThread implements Runnable{
 				}
 				if(bean != null){
 					container.setConnectError(false);
-					List<LFMatchHistory> r = bean.traceFoundItem(f.getFound().getId());
-					f.setHasTraceResults(r != null && r.size() > 0);
+					if(o[0] == TraceHandler.TYPE_FOUND){
+						bean.traceFoundItem((Long)o[1]);
+					} else if (o[0] == TraceHandler.TYPE_LOST){
+						bean.traceLostItem((Long)o[1]);
+					} else if (o[0] == TraceHandler.TYPE_FOUND_HISTORY_OBJECT){
+						List<LFMatchHistory> r = bean.traceFoundItem(((FoundHistoryObject)o[1]).getFound().getId());
+						((FoundHistoryObject)o[1]).setHasTraceResults(r != null && r.size() > 0);
+					}
 				} else {
 					//unable to connect to service
 					System.out.println("unable to connect");
-					queue.put(f);
+					queue.put(o);
 					container.setConnectError(true);
 				}
 			}

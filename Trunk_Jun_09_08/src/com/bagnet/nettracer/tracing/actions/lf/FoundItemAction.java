@@ -40,6 +40,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
 
 public class FoundItemAction extends CheckedAction {
 	
@@ -61,6 +62,8 @@ public class FoundItemAction extends CheckedAction {
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_FOUND_ITEM, user)) {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
+		
+		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"");
 		
 		LFUtils.getLists(user, session);
 		LFServiceBean serviceBean = new LFServiceBean();
@@ -141,7 +144,11 @@ public class FoundItemAction extends CheckedAction {
 					LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
 				}
 				if (found.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
-					LFServiceWrapper.getInstance().traceFoundItem(found.getId());
+					if(isLFC){
+						TraceHandler.trace(found);//Async tracing for LFC	
+					} else {
+						LFServiceWrapper.getInstance().traceFoundItem(found.getId());
+					}
 				}
 				ActionMessage error = new ActionMessage("message.found.save.success");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -325,7 +332,7 @@ public class FoundItemAction extends CheckedAction {
 		} 
 
 		fiForm.setFound(found);
-		if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"") && found.getId() != 0) {
+		if (isLFC && found.getId() != 0) {
 			TraceResultsFilter filter = new TraceResultsFilter();
 			filter.setRejected(true);
 			filter.setFoundId(found.getId());

@@ -27,6 +27,8 @@ import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.lf.RemoteConnectionException;
+import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
 
 import aero.nettracer.lf.services.exception.UpdateException;
 import aero.nettracer.lfc.model.AddressBean;
@@ -257,7 +259,16 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		
 		LFServiceBean bean = new LFServiceBean();
 		try {
-			return bean.saveOrUpdateLostReport(host, getWebAgent());
+			
+			long ret = bean.saveOrUpdateLostReport(host, getWebAgent());
+			if(ret > 0){
+				try {
+					TraceHandler.trace(host);
+				} catch (RemoteConnectionException e) {
+					//unable to connect to trace service, fail silently
+				}
+			}
+			return ret;
 		} catch (UpdateException e) {
 			e.printStackTrace();
 			return -1;

@@ -35,6 +35,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
 
 public class LostReportAction extends CheckedAction {
 	
@@ -55,6 +56,8 @@ public class LostReportAction extends CheckedAction {
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_LOST_REPORT, user)) {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
+		
+		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"");
 		
 		LFUtils.getLists(user, session);
 		
@@ -113,7 +116,11 @@ public class LostReportAction extends CheckedAction {
 					LFServiceWrapper.getInstance().saveOrUpdateFoundItem(lostReport.getItem().getFound(), user);
 				}
 				if(lostReport.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
-					LFServiceWrapper.getInstance().traceLostItem(lostReport.getId());
+					if(isLFC){
+						TraceHandler.trace(lostReport);//Async tracing for LFC
+					} else {
+						LFServiceWrapper.getInstance().traceLostItem(lostReport.getId());
+					}
 				}
 				ActionMessage error = new ActionMessage("message.lost.save.success");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
