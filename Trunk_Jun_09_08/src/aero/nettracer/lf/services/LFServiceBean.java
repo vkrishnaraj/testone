@@ -1702,7 +1702,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		sql +=  " and (m.lost.lossInfo.destination.station_ID = " + station.getStation_ID() + " or " +
 		 		" m.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or " +
 		 		" m.found.location.station_ID = " + station.getStation_ID() + " or " +
-		 		" m.found.location.lz_ID = " + station.getStation_ID() + ")";
+		 		" m.found.location.lz_ID = " + station.getStation_ID() + ")" +
+		 		" order by score desc, id";
 		List<LFMatchHistory> results = null;
 		Session sess = null;
 		try{

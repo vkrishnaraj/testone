@@ -272,11 +272,14 @@
 			        				<td class="header" style="width:20%;" >
 			        					<bean:message key="colname.description" />
 			        				</td>
-			        				<td class="header" style="width:30%;" >
+			        				<td class="header" style="width:20%;" >
 			        					<bean:message key="header.found.item" />:&nbsp;
 			        					<bean:write name="match" property="found.barcode" />
 			        				</td>
-			        				<td class="header" style="width:30%;" >
+			        				<td class="header" style="width:20%;" >
+			        					<bean:message key="colname.score" />
+			        				</td>
+			        				<td class="header" style="width:20%;" >
 			        					<bean:message key="header.lost.report" />:&nbsp;
 			        					<a style="color:#fff;" href="create_lost_report.do?lostId=<bean:write name="match" property="lost.id" />" >
 			        						<bean:write name="match" property="lost.id" />
@@ -294,6 +297,9 @@
 				        				</td>
 				        				<td>
 				        					<bean:write name="detail" property="decryptedFoundValue" />
+				        				</td>
+				        				<td>
+				        					<bean:write name="detail" property="score" />
 				        				</td>
 				        				<td>
 				        					<bean:write name="detail" property="decryptedLostValue" />
