@@ -25,8 +25,8 @@ public class LF_CreateFound_Detailed extends DefaultSeleneseTestCase {
 			selenium.type("name=item[0].description", "Test Description Test Description Test Description Test Description Test Description Test Description Test DescriptionTest Description Test Description Test Description Test Description Test Description Test Description Test Description 241 245");
 			selenium.fireEvent("name=item[0].description", "blur");
 			selenium.click("saveButton");
-			waitForPageToLoadImproved(1000);//since trace results are async, wait a second
-			selenium.click("saveButton");//resubmitting to reload the page hopefully with trace results
+			waitForPageToLoadImproved(3000);//since trace results are async, wait a second
+//			selenium.click("saveButton");//resubmitting to reload the page hopefully with trace results
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
