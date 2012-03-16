@@ -26,7 +26,8 @@ public class LF_CreateFound_Detailed extends DefaultSeleneseTestCase {
 			selenium.fireEvent("name=item[0].description", "blur");
 			selenium.click("saveButton");
 			waitForPageToLoadImproved(3000);//since trace results are async, wait a second
-//			selenium.click("saveButton");//resubmitting to reload the page hopefully with trace results
+			selenium.click("saveButton");//resubmitting to reload the page hopefully with trace results
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
