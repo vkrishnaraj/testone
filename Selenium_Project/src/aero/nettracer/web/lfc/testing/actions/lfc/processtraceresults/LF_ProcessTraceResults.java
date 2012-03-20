@@ -108,7 +108,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Found Item:  " + LF_ProcessTraceResults.foundId));
 			verifyTrue(selenium.isTextPresent("Lost Report:  " + LF_ProcessTraceResults.lostId));
-			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a");
+			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to verify and confirm trace result info on the Found Item page.");
@@ -116,7 +116,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/table/tbody/tr/td[3]/a");
+			selenium.click("//div[@id='maincontent']/table/tbody/tr/td[4]/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to navigate to Lost Report: " + LF_ProcessTraceResults.lostId + " from the Found Item page.");

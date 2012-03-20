@@ -9,10 +9,27 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testContactInfoNotification() {
-		verifyTrue(selenium.isTextPresent("Report Summary"));
-		selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/input", "Test");
+//		selenium.click("id=menucol_0.0");
 		selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 		waitForPageToLoadImproved();
+//		if (checkNoErrorPage()) {
+//			selenium.type("//input[@id='barcode']", Settings.FOUND_ID_LF);
+//			selenium.click("//input[@id='button']");
+//			waitForPageToLoadImproved();
+//		} else {
+//			System.out.println("FRS: Failed to load the task manager page.");
+//			return;
+//		}
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Report Summary"));
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/input", "Test");
+			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("FRS: failed to load Lost Item: " + Settings.FOUND_ID_LF);
+			return;
+		}
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
@@ -41,14 +58,14 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 	public void testTraceResults() throws Exception {
 		verifyTrue(selenium.isTextPresent("Found Item:  " + Settings.FOUND_ID_LF));
 		verifyTrue(selenium.isTextPresent("Lost Report:  " + Settings.LOST_ID_LF));
-		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a"));
-		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a[2]"));
-		selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a");
+		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a"));
+		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a[2]"));
+		selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a"));
-			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a");
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a"));
+			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("Failed in test found item trace results summary.");
@@ -57,9 +74,9 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a"));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a[2]"));
-			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a[2]");
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a"));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a[2]"));
+			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("Failed in test found item trace results summary.");
@@ -83,9 +100,8 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyFalse(selenium.isTextPresent("Rejected Matches"));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a"));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a"));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/a[2]"));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a"));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a[2]"));
 		} else {
 			System.out.println("Failed in test found item trace results summary.");
 			verifyTrue(false);

@@ -139,8 +139,8 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 			System.out.println("CLAFRO: Created Found Item: " + LF_CreateLostAndFoundReadOnly.foundId);
 			
 			// Manually match to the Lost Report that we just created.
-			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr/td/input", LF_CreateLostAndFoundReadOnly.lostId);
-			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
+			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr/td/input", LF_CreateLostAndFoundReadOnly.lostId);
+			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLAFRO: Failed to create the Found Item.");
