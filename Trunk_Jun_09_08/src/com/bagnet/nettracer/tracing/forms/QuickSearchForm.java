@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.struts.action.ActionForm;
 
 import com.bagnet.nettracer.tracing.dto.QuickSearchDTO;
+import com.bagnet.nettracer.tracing.history.HistoryObject;
 
 /**
  * @author Ankur Gupta
@@ -16,9 +17,13 @@ public final class QuickSearchForm extends ActionForm {
 
 	private String search;
 	private QuickSearchDTO dto;
+	private ArrayList<HistoryObject> histCon;
 
 	public String getSearch() {
-		return search;
+		if(search!=null)
+			return search;
+		else
+			return "";
 	}
 
 	public void setSearch(String search) {
@@ -31,6 +36,14 @@ public final class QuickSearchForm extends ActionForm {
 
 	public void setDto(QuickSearchDTO dto) {
 		this.dto = dto;
+	}
+	
+	public ArrayList<HistoryObject> getHistCon() {
+		return histCon;
+	}
+
+	public void setHistCon(ArrayList<HistoryObject> HistCon) {
+		this.histCon = HistCon;
 	}
 
 }

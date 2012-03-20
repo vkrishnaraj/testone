@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.Calendar;
 
 import javax.naming.Context;
 import javax.servlet.ServletContext;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.axis2.databinding.types.xsd.DateTime;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -56,6 +58,8 @@ import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
+import com.bagnet.nettracer.tracing.history.HistoryObject;
+import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.ExpenseUtils;

@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -38,8 +39,11 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
+import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -302,7 +306,8 @@ public class SearchIncidentAction extends Action {
 				List faultCompanyList = null;
 
 				// find out what kind of incident this is
-
+				FoundHistoryObject FHO;
+				HistoryContainer HCL;
 				switch (itemType) {
 				case TracingConstants.LOST_DELAY:
 					if(UserPermissions.hasLimitedSavePermission(user, inc)) {
@@ -343,6 +348,7 @@ public class SearchIncidentAction extends Action {
 						}
 					}
 					saveToken(request);
+					HistoryUtils.AddToHistoryContainer(session, "Loaded Delayed Incident.", incident, "searchIncident.do?incident=", "Delayed Incident", true);
 					return (mapping.findForward(TracingConstants.LD_MAIN));
 				case TracingConstants.DAMAGED_BAG:
 					if(UserPermissions.hasLimitedSavePermission(user, inc)) {
@@ -365,6 +371,7 @@ public class SearchIncidentAction extends Action {
 						theform.setAllow_remark_update(1);
 					request.setAttribute("damaged", "1");
 					saveToken(request);
+					HistoryUtils.AddToHistoryContainer(session, "Loaded Damaged Incident.", incident, "searchIncident.do?incident=", "Damaged Incident", true);
 					return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 				case TracingConstants.MISSING_ARTICLES:
 					if(UserPermissions.hasLimitedSavePermission(user, inc)) {
@@ -387,6 +394,7 @@ public class SearchIncidentAction extends Action {
 						theform.setAllow_remark_update(1);
 					request.setAttribute("missing", "1");
 					saveToken(request);
+					HistoryUtils.AddToHistoryContainer(session, "Loaded Pilfered Incident.", incident, "searchIncident.do?incident=", "Pilfered Incident", true);
 					return (mapping.findForward(TracingConstants.MISSING_MAIN));
 				default:
 					return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));

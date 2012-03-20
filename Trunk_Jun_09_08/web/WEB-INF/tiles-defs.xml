@@ -803,6 +803,9 @@
     <definition name="ajax_quickSearchResponse" path="/pages/ajax_divs/quicksearch.jsp">
     </definition>
     
+    <definition name="ajax_quickHistoryResponse" path="/pages/ajax_divs/quickhistory.jsp">
+    </definition>
+    
     <definition name="ajax_toggle" path="/pages/ajax_divs/blank.jsp">
     </definition>
     

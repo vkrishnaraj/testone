@@ -203,18 +203,32 @@ function hideAllMenus(elementItem, root) {
 
 
 function loadQuickSearchModal() {
-
-jQuery("#dialog").dialog({bgiframe : true,
-				autoOpen: false, modal: true, draggable: false, resizable: false, 
-				width: 700, height: 500, title: 'Quick Search' 
-	});
-
-	jQuery('#dialog-inner-content').html('<div style="text-align: center; padding: 5 5 5 5; border-bottom: 2px blue solid;"><strong>Please enter your search criteria</strong><br/><p/><input type="text" name="search" class="textfield" id="quickSearchQuery3" onKeyDown="quickSearchKey3();"/>&nbsp; <button type="button" id="button" onclick="quickSearchKey4();">Search</button><br />');	
+	
+	jQuery("#dialog").dialog({bgiframe : true,
+					autoOpen: false, modal: true, draggable: false, resizable: false, 
+					width: 700, height: 500, title: 'Quick Search' 
+		});
+/*<script type="text/javascript">$(document).ready(function() {	$(".tab_content").hide();	$(".tab_content:first").show(); 	$("ul.tabs li").click(function() {		$("ul.tabs li").removeClass("active");		$(this).addClass("active");		$(".tab_content").hide();		var activeTab = $(this).attr("rel"); 		$("#"+activeTab).fadeIn(); 	});});</script>*/
+	jQuery('#dialog-inner-content').html('<style type="text/css">	ul.tabs {margin: 0px 0 0 0;	padding: 0;	float: left; list-style: none;	height: 32px; width: 100%;	}	ul.tabs li { padding: 0px 21px ; height: 31px; line-height: 31px; background: #FFFFFF; cursor: pointer;	margin: 0; float: right; font-weight: bold;	}	ul.tabs li:hover {	text-decoration:underline }	ul.tabs li.active{ display:none; }	.tab_container {clear: both; float: left; width: 100%; background: #FFFFFF;	}	.tab_content {	padding: -5px;	font-size: 1em;	display: none;	} </style><div id="header"><ul class="tabs"><li  rel="search" class="active"><span style="cursor:hand;" onclick="loadQuickSearchModal();">Search</span></li>	<li rel="history" ><span style="cursor:hand;" onclick="loadQuickHistoryModal();">History</span></li></ul></div><br/><br/><div style="text-align: center; padding: 0 5 0 5; border-bottom: 2px blue solid;">      <strong>Please enter your search criteria</strong><br/><p/><input type="text" name="search" class="textfield" id="quickSearchQuery3" onKeyDown="quickSearchKey3();"/>&nbsp; <button type="button" id="button" onclick="quickSearchKey4();">Search</button><br /><br /></div>');
 	jQuery("#dialog").dialog("open");
-	var currentElement = document.getElementById("dialog-inner-content");
-	currentElement.focus();
-}
+	jQuery("#dialog").dialog("option", "title","Quick Search");
+		var currentElement = document.getElementById("dialog-inner-content");
+		
+		currentElement.focus();
+	}
 
+function loadQuickHistoryModal() {
+
+	jQuery("#dialog").dialog({bgiframe : true,
+			autoOpen: false, modal: true, draggable: false, resizable: false, 
+			width: 700, height: 500, title: 'Quick History' });
+	jQuery('#dialog-inner-content').html(getLoadingContent());	
+	jQuery("#dialog").dialog("open");
+	jQuery("#dialog").dialog("option", "title","Quick History");
+	jQuery('#dialog-inner-content').load("quickHistory.do", {}, function() { /* AFTER LOADING CONTENT */});
+	lock = false;
+	
+	}
 
 function quickSearchKey4(e) {
 		var searchContent = document.getElementById('quickSearchQuery3').value;
@@ -276,6 +290,15 @@ function quickSearchKey2(skip) {
 		jQuery('#dialog-inner-content').load("quickSearch.do?search=" + searchContent, {}, function() { /* AFTER LOADING CONTENT */});
 		lock = false;
 	}
+}
+
+function switchView(e) {
+	jQuery("ul.tabs li").removeClass("active");
+	jQuery(e).children("li").addClass("active");
+	jQuery(".tab_content").hide();
+	document.getElementById('History').value;
+	var activeTab = jQuery(e).children("li").attr("rel");
+	jQuery("#"+activeTab).show();
 }
 
 function qPrepopulateIncident(type, content, pnrOrTag) {

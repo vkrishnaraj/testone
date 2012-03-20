@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 import java.util.Iterator;
@@ -31,8 +32,11 @@ import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
+import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
+import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -47,7 +51,8 @@ public class BDOAction extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		HttpSession session = request.getSession();
-
+		String BDOID=null;
+		String BDOID2=null;
 		// check session
 		TracerUtils.checkSession(session);
 
@@ -79,11 +84,11 @@ public class BDOAction extends Action {
 			request.setAttribute("show_word_for", "1"); // show "BDO for" in
 			
 			String bdo_id2 = request.getParameter("bdo_id");
-
+			BDOID2=bdo_id2;
 			int bdo_id = 0;
 
 			if (bdo_id2 != null && !"".equals(bdo_id2)) {
-
+				BDOID=bdo_id2;
 				bdo_id = Integer.parseInt(bdo_id2);
 
 				Iterator it = BDOUtils.findWt_id(bdo_id);
@@ -91,7 +96,7 @@ public class BDOAction extends Action {
 				while (it.hasNext()) {
 
 					BDO bdo = (BDO) it.next();
-
+					BDOID=bdo.getBDO_ID_ref();
 					if (null != bdo.getIncident()
 							&& !bdo.getIncident().toString().equals("")) {
 						if (null != bdo.getIncident().getWtFile()
@@ -200,6 +205,8 @@ public class BDOAction extends Action {
 					saveMessages(request, messages);
 					return (mapping.findForward(TracingConstants.BDO_MAIN));
 				}
+				//Create BDO
+				HistoryUtils.AddToHistoryContainer(session, "Saved Baggage Delivery Order.", String.valueOf(bdo.getBDO_ID_ref()), "bdo.do?bdo_id=", "Baggage Delivery Order", false, String.valueOf(bdo.getBDO_ID()));
 			} catch (Exception e) {
 				ActionMessage error =  new ActionMessage("error.unable_to_insert_bdo");
 				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -265,6 +272,7 @@ public class BDOAction extends Action {
 				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, messages);
 			} else {
+				HistoryUtils.AddToHistoryContainer(session, "Loaded Baggage Delivery Order.", BDOID, "bdo.do?bdo_id=", "Baggage Delivery Order", true, BDOID2);
 				request.setAttribute("showbdo", "1");
 				request.setAttribute("showprint", "1");
 				return (mapping.findForward(TracingConstants.BDO_MAIN));

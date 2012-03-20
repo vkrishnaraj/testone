@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -29,7 +30,10 @@ import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.LostFoundIncidentForm;
+import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -88,6 +92,8 @@ public class AddLostItem extends Action {
 
 			if (bs.insertLostAndFound(Lform, user)) {
 				request.setAttribute("file_ref_number", Lform.getFile_ref_number());
+				//On update and creation??
+				HistoryUtils.AddToHistoryContainer(session, "Saved Lost Item.", Lform.getFile_ref_number(), "addLost.do?file_ref_number=", "Lost Item", false);
 				return (mapping.findForward(TracingConstants.LOST_FOUND_SUCCESS));
 			}
 		} else {
@@ -101,6 +107,7 @@ public class AddLostItem extends Action {
 					saveMessages(request, errors);
 					return (mapping.findForward(TracingConstants.SEARCH_LOST_FOUND));
 				}
+				HistoryUtils.AddToHistoryContainer(session, "Loaded Lost Item.", Lform.getFile_ref_number(), "addLost.do?file_ref_number=", "Lost Item", true);
 			} else {
 				//Create a new on-hand entry
 				TracerUtils.populateLostItem(Lform, user, request);

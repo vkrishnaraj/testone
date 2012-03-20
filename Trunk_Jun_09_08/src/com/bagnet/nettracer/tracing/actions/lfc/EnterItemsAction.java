@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions.lfc;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,7 +80,11 @@ public class EnterItemsAction extends CheckedAction {
 				// 1. create the history object
 				FoundHistoryObject fho = new FoundHistoryObject();
 				fho.setFound(found);
-				
+				fho.setDate(Calendar.getInstance().getTime()); 
+				fho.setStatusDesc("Added Found Item");
+				fho.setObjectType("Found Item");
+				fho.setObjectID(found.getBarcode());
+				fho.setLinkURL("create_found_item.do?barcode=");
 				// 2. add the history object to the history container
 				HistoryContainer history = (HistoryContainer) session.getAttribute("historyContainer");
 				history.put(fho.getUniqueId(), fho);

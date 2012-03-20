@@ -37,6 +37,7 @@ import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.forms.lf.FoundItemForm;
 import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -153,6 +154,8 @@ public class FoundItemAction extends CheckedAction {
 				ActionMessage error = new ActionMessage("message.found.save.success");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
+				
+				HistoryUtils.AddToHistoryContainer(session, "Saved Found Item.", found.getBarcode(), "create_found_item.do?barcode=", "Found Item", false);
 			} catch (NonUniqueBarcodeException nube) {
 				logger.error(nube, nube);
 				ActionMessage error = new ActionMessage("error.non.unique.barcode");

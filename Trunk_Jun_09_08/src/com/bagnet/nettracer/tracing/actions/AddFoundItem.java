@@ -37,7 +37,10 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.LostAndFound_Photo;
 import com.bagnet.nettracer.tracing.forms.LostFoundIncidentForm;
+import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -158,8 +161,10 @@ public class AddFoundItem extends Action {
 				request.setAttribute("file_ref_number", Lform.getFile_ref_number());
 				//logger.error(">>>>>>>>>saveActionType (1-addnew; 3-update) : " + saveActionType);
 				if (saveActionType == UPDATE_RECORD) {
+					HistoryUtils.AddToHistoryContainer(session, "Updated Found Item.", Lform.getFile_ref_number(), "addFound.do?file_ref_number=", "Found Item", false);
 					return (mapping.findForward(TracingConstants.UPDATE_LOST_FOUND_SUCCESS));
 				} else {
+					HistoryUtils.AddToHistoryContainer(session, "Created Found Item.", Lform.getFile_ref_number(), "addFound.do?file_ref_number=", "Found Item", false);
 					return (mapping.findForward(TracingConstants.LOST_FOUND_SUCCESS));
 				}
 				//return (mapping.findForward(TracingConstants.LOST_FOUND_SUCCESS));
@@ -189,6 +194,8 @@ public class AddFoundItem extends Action {
 			if (file_ref_number != null && file_ref_number.length() > 0) {
 				//open an existing lost item report.
 				BagService bs = new BagService();
+				//Load Found Item
+				HistoryUtils.AddToHistoryContainer(session, "Loaded Found Item.", Lform.getFile_ref_number(), "addFound.do?file_ref_number=", "Found Item", true);
 				if (!bs.findLostFoundByID(file_ref_number, Lform, user, true, request)) {
 					ActionMessage error = new ActionMessage("error.no.foundreport");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);

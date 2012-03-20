@@ -1622,6 +1622,11 @@ document.onkeydown = function(){
 		loadQuickSearchModal();
 	}
 	
+	if (window.event && (window.event.keyCode == 114 || (window.event.keyCode == 72 && window.event.ctrlKey))) {
+		window.event.keyCode = 505;
+		loadQuickHistoryModal();
+	}
+	
 	if (window.event && window.event.keyCode == 84 && window.event.ctrlKey) {
 		window.event.keyCode = 505;
 		nourlfocus(6);

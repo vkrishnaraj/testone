@@ -66,10 +66,13 @@ import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.dr.Dispute;
 import com.bagnet.nettracer.tracing.db.dr.DisputeUtils;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
@@ -425,10 +428,13 @@ public class MissingAction extends CheckedAction {
 				
 				//return (mapping.findForward(TracingConstants.INSERT_SUCCESS));
 				if (saveActionType == UPDATE_RECORD) {
+					HistoryUtils.AddToHistoryContainer(session, "Updated Pilfered Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Pilfered Incident", false);
 					return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
 				} else if (saveActionType == CLOSE_RECORD) {
+					HistoryUtils.AddToHistoryContainer(session, "Closed Pilfered Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Pilfered Incident", false);
 					return (mapping.findForward(TracingConstants.CLOSE_FILE_SUCCESS));
 				} else {
+					HistoryUtils.AddToHistoryContainer(session, "Created Pilfered Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Pilfered Incident", false);
 					return (mapping.findForward(TracingConstants.INSERT_SUCCESS));
 				}
 				

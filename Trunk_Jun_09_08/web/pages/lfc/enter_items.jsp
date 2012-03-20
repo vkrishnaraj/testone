@@ -451,11 +451,14 @@
 			        </h1>
    					<br/>
      				<% 
-     					for (int i = history.size() - 1; i >= 0; --i) { 
-     						FoundHistoryObject fho = (FoundHistoryObject) history.get(i);
+	     				for (int i = history.size() - 1; i >= 0; --i) { 
+	 						FoundHistoryObject fho = (FoundHistoryObject) history.get(i);
+	 						if(fho.getFound()!=null)
+	 						{
 							int status = fho.getFound().getEntryStatus();
 							boolean needsVerification = status == TracingConstants.LF_STATUS_VERIFICATION_NEEDED || (fho.isHasTraceResults() && status != TracingConstants.LF_STATUS_MOVED);
 						  	String cssClass = needsVerification ? "summaryActionItem" : "summaryItem";
+	 						
      					%>
 						<div id="summaryItem_<%=i %>" class="<%=cssClass %>">
 							<span style="font-weight: bold;" ><bean:message key="colname.lfc.item.id" />:&nbsp;</span><a href="create_found_item.do?barcode=<%=fho.getFound().getBarcode() %>"><%=fho.getFound().getBarcode() %></a>
@@ -491,7 +494,8 @@
 								</div>
 							<%	} %>
 						</div>
-     				<% } %>
+     				<% }
+     				} %>
      			</div>
      			<script>
 					fieldChanged('state');

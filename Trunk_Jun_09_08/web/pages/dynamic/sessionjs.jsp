@@ -164,7 +164,8 @@
 			        currentElement.focus();
 			        return false;
 				}
-			} else if (elementName == "lost.lossInfo.destinationId") {
+			} 
+			if (elementName == "lost.lossInfo.destinationId") {
 				if (currentElement.value.length == 0) {
 					alert("<%= (String)bundle.getString("colname.lf.lost.location") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
@@ -1651,6 +1652,11 @@ document.onkeydown = function(){
 	if (window.event && (window.event.keyCode == 113 || (window.event.keyCode == 83 && window.event.ctrlKey))) {
 		window.event.keyCode = 505;
 		loadQuickSearchModal();
+	}
+	
+	if (window.event && (window.event.keyCode == 114 || (window.event.keyCode == 72 && window.event.ctrlKey))) {
+		window.event.keyCode = 505;
+		loadQuickHistoryModal();
 	}
 	
 	if (window.event && (window.event.keyCode == 78 && window.event.ctrlKey)) {
