@@ -39,8 +39,23 @@ public class HistoryUtils {
 			}
 		}
 		else
-		{
-			HCL.put(ObjectID, FHO);
+		{	
+			if(FHO.getStatusDesc().contains("Created") || FHO.getStatusDesc().contains("Added"))
+			{
+				HCL.put(ObjectID+"C"+HCL.getQueue().size(), FHO);
+			}
+			else if(FHO.getStatusDesc().contains("Saved") || FHO.getStatusDesc().contains("Updated") )
+			{
+				HCL.put(ObjectID+"U"+HCL.getQueue().size(), FHO);
+			}
+			else if(FHO.getStatusDesc().contains("Closed"))
+			{
+				HCL.put(ObjectID+"Cl"+HCL.getQueue().size(), FHO);
+			}
+			else
+			{
+				HCL.put(ObjectID+HCL.getQueue().size(), FHO);
+			}
 			session.setAttribute("historyContainer", HCL);
 		}
 	}
@@ -56,13 +71,28 @@ public class HistoryUtils {
 		
 		if(loaded){
 			if(HCL.getQueue().isEmpty() || (HCL.get(FHO.getObjectID())==null))
-			{	HCL.put(ObjectID, FHO);
+			{	HCL.put(ObjectID+HCL.getQueue().size(), FHO);
 				session.setAttribute("historyContainer", HCL);
 			}
 		}
 		else
 		{
-			HCL.put(ObjectID, FHO);
+			if(FHO.getStatusDesc().contains("Created") || FHO.getStatusDesc().contains("Added"))
+			{
+				HCL.put(ObjectID+"C"+HCL.getQueue().size(), FHO);
+			}
+			else if(FHO.getStatusDesc().contains("Saved") || FHO.getStatusDesc().contains("Updated") )
+			{
+				HCL.put(ObjectID+"U"+HCL.getQueue().size(), FHO);
+			}
+			else if(FHO.getStatusDesc().contains("Closed"))
+			{
+				HCL.put(ObjectID+"Cl"+HCL.getQueue().size(), FHO);
+			}
+			else
+			{
+				HCL.put(ObjectID+HCL.getQueue().size(), FHO);
+			}
 			session.setAttribute("historyContainer", HCL);
 		}
 	}
