@@ -92,20 +92,6 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			verifyTrue(false);
 		}
 		
-		if (checkNoErrorPage()) {
-			selenium.click("//input[@id='topSave']");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLDVRF: Failed to save the incident.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Delayed PIR has been modified."));
-		} else {
-			System.out.println("CLDVRF: Failed to save the incident using the top save button.");
-			return;
-		}
 	}
 	
 	@Test
@@ -120,6 +106,24 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		selenium.keyDown(locator, "\\13");
 		verifyEquals("1487", selenium.getValue("//input[@id='remark[0].counter']"));
 
+	}
+	
+	@Test
+	public void testTopSaveButton() {
+		if (checkNoErrorPage()) {
+			selenium.click("//input[@id='topSave']");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CLDVRF: Failed to save the incident.");
+			return;
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Delayed PIR has been modified."));
+		} else {
+			System.out.println("CLDVRF: Failed to save the incident using the top save button.");
+			return;
+		}
 	}
 	
 	private void typeString(String locator, String string) {
