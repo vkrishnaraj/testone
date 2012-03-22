@@ -58,9 +58,10 @@ public class DisputeUtils {
 	
 	public static List<Dispute> getPaginatedDisputeList(Agent user, int rowsperpage, int currpage, boolean iscount,
 			boolean dirtyRead){
-		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d where 1=1 ";
-		sql += " and d.status = :status";
+		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d";
+		sql += " where 1=1 and d.status = :status";
 		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz)";
+		sql += " order by d.created_timestamp";
 		Query q = null;
 		
 		Session sess = HibernateWrapper.getSession().openSession();

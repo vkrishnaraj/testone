@@ -419,6 +419,7 @@ public class ManageMessage extends Action {
 		//A new recipient is selected.
 		if (request.getParameter("add") != null) {
 			Recipient rcpt = new Recipient();
+			rcpt.setCompany_code(user.getCompanycode_ID());
 			theForm.getRecp_list().add(rcpt);
 		} else {
 			//New message is composed.

@@ -197,11 +197,20 @@ function updatePagination() {
                       <bean:message key="colname.suggested.loss.code" />
                     </b>
                   </td>
+                  <td>
+                    <b>
+                      <bean:message key="colname.travel.date" />
+                    </b>
+                  </td>
                 </tr>
                 <logic:iterate id="dispute" name="resultlist" type="com.bagnet.nettracer.tracing.db.dr.Dispute">
                   	<bean:define id="station" name="dispute" property="suggestedFaultStation" />
 					<bean:define id="disputeAgent" name="dispute" property="disputeAgent" />
 					<bean:define id="incident" name="dispute" property="incident" />
+					<%	String deptDate= dispute.getIncident().getItinerary_list().get(0).getDisdepartdate();
+					%>
+					
+					<bean:define id="itinerary" name="dispute" property="incident.itinerary" />
 					<bean:define id="beforeDisputeFaultStation" name="dispute" property="beforeDisputeFaultStation" />
                   <tr>
                     <td>
@@ -227,6 +236,9 @@ function updatePagination() {
                     </td>
                     <td>
                       <bean:write name="dispute" property="suggestedLossCode" />
+                    </td>
+                    <td>
+                      <%= deptDate %>
                     </td>
                   </tr>
                 </logic:iterate>

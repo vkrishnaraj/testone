@@ -7,6 +7,7 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
@@ -58,6 +59,9 @@
 
 
 </script>
+<% boolean val = PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_DISPUTE_SELECT); %>
+
+ 
 <tr>
   <td nowrap colspan="3" width=20% >
     <a name="fault"></a>
@@ -80,21 +84,32 @@
     <logic:present name="faultstationlist" scope="request">
       <bean:message key="colname.faultstation" />
       <br>
-      <html:select property="faultstation_id" styleClass="dropdown">  
+      <% if(val) {%>
+      <html:select property="faultstation_id" styleClass="dropdown" value="">  
           <html:option value="">
             <bean:message key="select.please_select" />
           </html:option>
-          <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
+          <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode"  />
       </html:select>
+      <% }
+      else { %>
+       <html:select property="faultstation_id" styleClass="dropdown" >  
+          <html:option value="">
+            <bean:message key="select.please_select" />
+          </html:option>
+          <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode"  />
+      </html:select>
+      <% } %>
       </logic:present>
       </div>
-    </td>
+    </td> 
 </tr>
 <tr>
   <td nowrap colspan="6">
     <bean:message key="colname.closereport.losscode" />
     <br>
-      <html:select property="loss_code" styleClass="dropdown">      
+     <% if(val) {%>
+      <html:select property="loss_code" styleClass="dropdown" value="0">      
           <html:option value="0">
             <bean:message key="select.please_select" />
           </html:option>
@@ -113,5 +128,27 @@
           }
     %>
       </html:select>
+       <% }
+     else { %>
+     <html:select property="loss_code" styleClass="dropdown">      
+          <html:option value="0">
+            <bean:message key="select.please_select" />
+          </html:option>
+    <%
+          java.util.List codes = (java.util.List)request.getAttribute("losscodes");
+    
+          for (java.util.Iterator i = codes.iterator(); i.hasNext(); ) {
+            com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
+                                                                                      com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
+    %>
+            <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();  if (lost_code.equals("" + code.getLoss_code())) { %> SELECTED <% } %>>
+            <%= "" + code.getLoss_code() %>-
+            <%= "" + code.getDescription() %>
+            </OPTION>
+    <%
+          }
+    %>
+      </html:select>
+      <% } %>
   </td>
 </tr>
