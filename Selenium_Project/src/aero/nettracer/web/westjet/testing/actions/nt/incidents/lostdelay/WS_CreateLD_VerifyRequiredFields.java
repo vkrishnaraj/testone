@@ -95,13 +95,15 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testPressEnterInRemarksField() {
-		
-		verifyEquals("1500", selenium.getValue("id=remark[0].counter"));
-		typeString("id=remark[0]", "Test line");
-		selenium.focus("id=remark[0]");
-		selenium.keyPress("id=remark[0]", "\\13");
-		selenium.keyPress("id=remark[0]", "\\13");
-		verifyEquals("1488", selenium.getValue("id=remark[0].counter"));
+		String locator = "//textarea[@id='remark[0]']";
+		verifyEquals("1500", selenium.getValue("//input[@id='remark[0].counter']"));
+		typeString(locator, "Test line");
+		selenium.focus(locator);
+		selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
+		selenium.keyDown(locator, "\\13");
+		selenium.keyDown(locator, "\\13");
+		selenium.keyDown(locator, "\\13");
+		verifyEquals("1487", selenium.getValue("//input[@id='remark[0].counter']"));
 
 	}
 	
