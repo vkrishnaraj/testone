@@ -91,6 +91,21 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			System.out.println("!!!!!!!!!!!!!!! - Prepopulate Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
 		}
+		
+		if (checkNoErrorPage()) {
+			selenium.click("//input[@id='topSave']");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CLDVRF: Failed to save the incident.");
+			return;
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Delayed PIR has been modified."));
+		} else {
+			System.out.println("CLDVRF: Failed to save the incident using the top save button.");
+			return;
+		}
 	}
 	
 	@Test
