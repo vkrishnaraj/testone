@@ -1,78 +1,132 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<link href="css/master.css" rel="stylesheet" type="text/css" />
-<link href="css/sIFR-screen.css" rel="stylesheet" type="text/css" media="screen" />
-<link href="css/sIFR-print.css" rel="stylesheet" type="text/css" media="print" />
-<script type="text/javascript" src="js/sifr.js"></script>
-<script type="text/javascript" src="js/sifr-addons.js"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>NetTracer Baggage Tracking Service</title>
-</head>
-<body>
-  <div id="wrapper">
-    <div id="header"></div>
-    <!-- /header -->
-    <div id="content">
-      <h1>Check baggage status</h1>
-      <div id="francais">&gt;&gt; <a href="#">Fran&ccedil;ais</a></div>
-      <!-- /francais -->
-      <p><strong>Delayed Baggage</strong>: If you have notified a NetTracer Customer Service Agent of your delayed baggage, please enter your claim number below to check the current status of your baggage.</p>
+	<head>
+		<link href="css/master.css" rel="stylesheet" type="text/css" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="js/protofx.js"></script>
+		<script language="javascript" src="js/nettracer.js"></script>
 
-      <form:form method="POST" action="search.htm" onsubmit="formatForm(this)">
-      <table cellspacing="0" cellpadding="0" id="inputDelayedBags">
-         <c:if test="${!empty noneFound }">
-      		<tr>
-          		<td>&nbsp;</td>
-         		 <td class="formError" colspan="2"><spring:message code="no.incident.found"/></td>
-        	</tr>
-        </c:if>
-        <tr>
-          <td><label for="last name">Last Name:</label></td>
-          <td class="formField"><form:input path="lastname" tabindex="1" cssClass="formField" /></td>
-          <td class="formError"><form:errors path="lastname" cssClass="errors" /></td>
-        </tr>
-        <tr>
-          <td><label for="claim number">Claim Number:</label></td>
-          <td class="formField"><form:input path="claimnumber" tabindex="2" cssClass="formField" /></td>
-          <td class="formError"><form:errors path="claimnumber" /></td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td class="smallFormText" colspan="2"><strong>Claim number</strong> - You may omit leading zeros when entering your claim number. For example:
-            ATLDA1 becomes ATLDA00000001. </td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-          <td><div id="searchButtonContainer">
-                <input type="submit" class="button" tabindex="3"/>
-            </div></td>
-        </tr>
-      </table>
-      </form:form>
-      <div class="hr"></div>
-      <p><img src="images/icon_Advisory.png" alt="Important Note" width="20" height="20" style="float: left; margin: 0 10px 100px 0;" />If you have not already notified us of your delayed baggage, please contact our System Baggage Service office Monday through Friday from 7:30am to 7:30pm.</p>
-      <p><strong>System Baggage Service</strong>: 1-555-555-5555.</p>
-    </div>
-    <!-- /content -->
-    <div id="footer">
-      <div id="copyright">&copy; NetTracer. All rights reserved.</div>
-    </div>
-    <!-- /footer -->
-  </div>
-  <!-- /wrapper -->
-<script type="text/javascript">
-if(typeof sIFR == "function"){
-// This is the preferred "named argument" syntax
+		<title><spring:message code="pv0" />
+		</title>
+	</head>
+	<body>
+		<form:form method="POST" action="search.htm" name="searchForm" onsubmit="formatForm(this)">
+			<table cellspacing="0" width="600" border="0">
+				<tr>
+					<td>
+						<img src="images/pvlogo.jpg" />
+					</td>
+					<td valign="top" align="right">
+					<% /* SPANISH NOT AVAILABLE FOR SPIRIT BECAUSE THEY HAVE NOT TRANSLATED THE TEXT
+					<c:choose>
+						<c:when test="${siteLanguage == 'es'}">
+						<a href="search.htm?locale=en"><spring:message code="english"/></a>
+						</c:when>
+						<c:when test="${(empty siteLanguage) and cookie.userLanguage.value == 'es'}">
+						<a href="search.htm?locale=en"><spring:message code="english"/></a>
+						</c:when>
+						<c:otherwise>
+						<a href="search.htm?locale=es"><spring:message code="spanish"/></a>
+						</c:otherwise>
+					</c:choose>
+					*/ %>
+					</td>
+				</tr>
+				<tr>
+					<td id="topcell" colspan="2">
+						<!-- here -->
 
-	sIFR.replaceElement("h1", named({sFlashSrc: "flash/din.swf", sColor: "#00285e", sWmode: "transparent"}));
-};
-</script>
-</body>
+						<div id="content" style="">
+
+							<p />
+							<h3>
+								<spring:message code="pv1" />
+							</h3>
+							<p>
+								<spring:message code="pv2" />
+							</p>
+							<p>
+								<spring:message code="pv2.more" />
+							</p>
+							<c:if test="${!empty noneFound }">
+								<p>
+									<font color=red><spring:message code="no.incident.found" />
+									</font>
+								</p>
+							</c:if>
+
+							<div id="formbox" style="margin-top: 1em; width: 575px;">
+
+								<h3>
+									<spring:message code="pv3" />
+								</h3>
+								<table width="100%">
+									<tr>
+										<td class="label" width="15%">
+											<span><spring:message code="pv4" />:</span>
+										</td>
+										<td width="25%">
+											<form:input path="lastname" tabindex="1" cssClass="textField"
+												size="20" maxlength="50" />
+													<spring:hasBindErrors name="command">
+														<br/><font color=red><form:errors path="lastname" /></font>
+													</spring:hasBindErrors>			
+										</td>
+										<td width="2%"></td>
+										<td width="48%" rowspan="3">
+
+											<p>
+												<br />
+												<font style="font-size: 11px;"><spring:message
+														code="pv5" />
+												</font>
+												<br />
+												<font style="font-size: 11px; line-height: 25px;">ATLDA00000486
+													&nbsp;<spring:message code="becomes"/>&nbsp; ATLDA486</font>
+											</p>
+
+										</td>
+									</tr>
+									<tr>
+										<td width="15%" class="label">
+											<span><spring:message code="pv6" />:</span>
+										</td>
+										<td width="25%">
+											<form:input path="claimnumber" tabindex="2"
+												cssClass="textField" size="20" maxlength="50"
+												onblur="fillzero(this,13);" />
+												<spring:hasBindErrors name="command">
+													<br/><font color=red><form:errors path="claimnumber" /></font>
+												</spring:hasBindErrors>
+										</td>
+										<td width="2%"></td>
+									</tr>
+									<tr>
+
+										<td>
+											&nbsp;
+										</td>
+										<td>
+											<span class="button" style="width: 100px;">
+												<input type="submit" tabindex="3" value='<spring:message code="pv7" />' align="absmiddle" />
+											</span>
+										</td>
+										<td width="2%"></td>
+									</tr>
+								</table>
+							</div>
+							<p />
+
+						</div>
+						</td>
+						</tr>
+						</table>
+						</form:form>
+
+						</body>
 </html>
