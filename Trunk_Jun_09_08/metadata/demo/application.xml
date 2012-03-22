@@ -13,6 +13,14 @@
          <context-root>lostandfound</context-root>
      </web>
   </module>
+
+     <module>
+     <web>
+         <web-uri>alaska_demo.war</web-uri>
+         <context-root>tracer</context-root>
+     </web>
+  </module>
+  
   
 
 </application> 

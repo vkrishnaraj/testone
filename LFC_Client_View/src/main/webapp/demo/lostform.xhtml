@@ -12,8 +12,10 @@
 		<h:form>
 			<h:panelGroup>
 				<h1><t:outputText value="#{msg.lostform_text_title}" escape="false"/></h1>
+				<br/>
 				<h2><t:outputText value="#{msg.lostform_text_policy_title}" /></h2>
 				<p><t:outputText value="#{msg.lostform_text_policy_desc}" /></p>
+				<br/>
 				<h2><t:outputText value="#{msg.lostform_text_about_title}" /></h2><br/><br/>
 				<table style="width: 95%;">
 					<tr><td style="width: 34%;">
@@ -23,11 +25,19 @@
 					</td><td style="width: 33%;">
 						<t:outputText value="#{msg.lostform_label_item_serial}" />
 					</td></tr>
-					<tr><td>
-						<t:inputText value="#{lostAndFound.lostReport.itemDate}"  style="width: 95%;"/>
-					</td><td>
+					<tr>
+					<td colspan="1"><rich:calendar value="#{lostAndFound.lostReport.dateLost}"  
+                           locale="en"  
+                           popup="true"  
+                           datePattern="MM/dd/yyyy"
+                           enableManualInput="true"                        
+                           cellWidth="24px" cellHeight="22px" style="width:200px"/>  
+					</td>
+					
+					<!--<td><t:inputText value="#{lostAndFound.lostReport.itemDate}"  style="width: 95%;"/></td>-->
+					<td colspan="1">
 						<t:inputText value="#{lostAndFound.lostReport.itemBrand}"  style="width: 95%;"/>
-					</td><td>
+					</td><td colspan="1">
 						<t:inputText value="#{lostAndFound.lostReport.itemSerial}"  style="width: 100%;"/>
 					</td></tr>
 					<tr><td>&#160;</td></tr>
@@ -61,12 +71,16 @@
 						<t:outputText value="#{msg.lostform_label_item_desc}" />
 					</td></tr>
 					<tr><td colspan="3">
-						<t:inputTextarea rows="3" value="#{lostAndFound.lostReport.itemDesc}" style="width: 100%;" />
+						<t:inputText value="#{lostAndFound.lostReport.itemDesc}"  style="width: 100%;"/>
+						<!--  <t:inputTextarea rows="3" value="#{lostAndFound.lostReport.itemDesc}" style="width: 100%;" />-->
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td colspan="1">
 						<t:outputText value="#{msg.lostform_label_drop_location}" />
-					</td><td style="width: 33%;"><t:outputText value="#{msg.lostform_label_date_lost}" /></td>
+					</td>
+					<td colspan="2">
+						<t:outputText value="#{msg.lostform_label_where_lost}" />
+					</td>
 					</tr>
 					<tr><td>
 						<t:selectOneMenu value="#{lostAndFound.lostReport.dropOffLocation}"  style="width: 100%;">
@@ -74,22 +88,13 @@
 							<f:selectItems value="#{lostAndFound.locations}" />
 						</t:selectOneMenu>
 					</td>
-					<td ><rich:calendar value="#{lostAndFound.lostReport.dateLost}"  
-                           locale="en"  
-                           popup="true"  
-                           datePattern="MM/dd/yyyy"
-                           enableManualInput="true"                        
-                           cellWidth="24px" cellHeight="22px" style="width:200px"/>  
+					<td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.whereLost}"  style="width: 100%" />
 					</td>
+					
 					</tr>
 					<tr><td>&#160;</td></tr>
 					<tr></tr>
-					<tr><td colspan="2">
-						<t:outputText value="#{msg.lostform_label_where_lost}" />
-					</td></tr>
-					<tr><td colspan="3">
-						<t:inputText value="#{lostAndFound.lostReport.whereLost}"  style="width: 100%" />
-					</td></tr>
 					
 				</table><br/>
 				<h2><t:outputText value="#{msg.lostform_text_contact_title}" /></h2><br/><br/>
@@ -151,7 +156,7 @@
 						<t:inputText value="#{lostAndFound.lostReport.contact.address.province}"  style="width: 95%" />
 					</td><td colspan="3">
 						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.country}"  style="width: 100%" >
-							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="" />
+							<f:selectItem itemLabel="United States" itemValue="US" />
 							<f:selectItems value="#{lostAndFound.countries}" />
 						</t:selectOneMenu>
 					</td></tr>                                                     

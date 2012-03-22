@@ -664,6 +664,7 @@
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="hibernate_generate" />
 		<antcall target="build-war-demo-lfc"/>
+		<antcall target="build-war-demo-alaska"/>
 		<property name="app.xml.location" value="metadata/demo" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -1073,6 +1074,14 @@
 		<property name="lfc.init.complete" value="true" />
 		<property name="environment.name" value="demo" />
 		<antcall target="donotrun-build-lfc" />
+	</target>
+	
+	<target name="build-war-demo-alaska" depends="delete">
+		<property name="ant_project_name" value="alaska" />
+		<property name="ant_war_name" value="alaska_demo" />
+		<property name="alaska.init.complete" value="true" />
+		<property name="environment.name" value="demo" />
+		<antcall target="donotrun-build-alaska" />
 	</target>
 	
 	<target name="build-war-hudson-westjet" depends="delete">
@@ -1488,6 +1497,7 @@
 	</target>
 	<target name="build-cron-demo-all">
 		<antcall target="build-cron-demo-lfc"/>
+		<antcall target="build-cron-demo-da"/>
 	</target>
 	
 	<!-- AVIS CRON TARGETS -->
@@ -1603,6 +1613,16 @@
 		<property name="sub_path" value="demo/" />
 		<property name="cron.job.config.file" value="companies/lfc/environment/demo/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="lfcdemo-" />
+		<antcall target="cron-service" />
+	</target>
+	
+	<target name="build-cron-demo-da">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="demo" />
+		<property name="ant_project_name" value="alaska" />
+		<property name="sub_path" value="demo/" />
+		<property name="cron.job.config.file" value="companies/alaska/environment/demo/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="dademo-" />
 		<antcall target="cron-service" />
 	</target>
 	
@@ -2064,6 +2084,40 @@
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/lfc/ApplicationResources_fr.properties" />
+		<!--
+		<antcall target="build-war" />
+		-->
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+		<delete file="${basedir}/src/report_email_fr.html" />
+	</target>
+	
+	<target name="donotrun-build-alaska" if="alaska.init.complete">
+		<property name="include.lfc" value="1" />
+		<property name="include.demo" value="1" />
+		<copy todir="${basedir}/web/pages/login" file="companies/alaska/login/center.jsp" />
+		<copy todir="${basedir}/src" file="companies/alaska/environment/${environment.name}/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/alaska/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/alaska/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/alaska/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/web/reports" file="companies/alaska/environment/${environment.name}/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/alaska/environment/${environment.name}/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/alaska/environment/${environment.name}/MissingReceipt.jrxml" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/alaska/custom_ui.properties" />
+		<!--<copy todir="${basedir}/src" file="companies/alaska/pax_comm_email.html" />
+		<copy todir="${basedir}/src" file="companies/alaska/pax_comm_email_fr.html" />
+		<copy todir="${basedir}/src" file="companies/alaska/closed_report_email.html" />
+		<copy todir="${basedir}/src" file="companies/alaska/create_report_email.html" />
+			<copy todir="${basedir}/src" file="companies/alaska/found_report_email.html" />
+			<copy todir="${basedir}/src" file="companies/alaska/update_report_email.html" />-->
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/alaska/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<!--<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/alaska/ApplicationResources_fr.properties" />-->
 		<!--
 		<antcall target="build-war" />
 		-->

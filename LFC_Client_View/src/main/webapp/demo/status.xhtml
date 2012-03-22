@@ -46,7 +46,8 @@
 						<t:outputText value="#{msg.lostform_label_item_serial}" />
 					</td></tr>
 					<tr><td>
-						<t:outputText value="#{lostAndFound.lostReport.itemDate}" />
+					<t:outputText value="#{lostAndFound.lostReport.dateLost}" />
+						<!--  <t:outputText value="#{lostAndFound.lostReport.itemDate}" />-->
 					</td><td>
 						<t:outputText value="#{lostAndFound.lostReport.itemBrand}" />
 					</td><td>
@@ -82,16 +83,16 @@
 						<t:outputText value="#{lostAndFound.dropOffLocationDesc}" />
 					</td></tr>
 					
-					<tr><td>
+					<!--  <tr><td>
 						<t:outputText value="#{msg.lostform_label_date_lost}" />
 					</td><td>
 						<t:outputText value="#{lostAndFound.lostReport.dateLost}" />
-					</td></tr>
+					</td></tr>-->
 					<tr></tr>
 					<tr></tr>
-					<tr><td colspan="1">
+					<tr><td colspan="2">
 						<t:outputText value="#{msg.lostform_label_where_lost}" />
-					</td><td colspan="1">
+					</td><td colspan="2">
 						<t:outputText value="#{lostAndFound.lostReport.whereLost}" />
 					</td></tr>
 					
@@ -124,28 +125,6 @@
 						<t:outputText value="#{lostAndFound.lostReport.contact.emailAddress}" />
 					</td></tr>
 					<tr></tr>
-				</table>
-				<h2><t:outputText value="#{msg.lostform_text_trip_title}" /></h2>
-				<table>
-					<tr><td>
-						<t:outputText value="#{msg.lostform_label_drop_location}" />
-					</td></tr>
-					<tr><td>
-						<t:outputText value="#{lostAndFound.dropOffLocationDesc}" />
-					</td></tr>
-					<tr><td>
-						<t:outputText value="#{msg.lostform_label_date_lost}" />
-					</td><td>
-						<t:outputText value="#{lostAndFound.lostReport.dateLost}" />
-					</td></tr>
-					<tr></tr>
-					<tr></tr>
-					<tr><td colspan="2">
-						<t:outputText value="#{msg.lostform_label_where_lost}" />
-					</td></tr>
-					<tr><td colspan="2">
-						<t:outputText value="#{lostAndFound.lostReport.whereLost}" />
-					</td></tr>
 				</table>
 				<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToLanding}" />
 			</h:panelGroup>

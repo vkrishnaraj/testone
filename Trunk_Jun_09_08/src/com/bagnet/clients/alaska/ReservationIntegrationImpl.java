@@ -46,21 +46,21 @@ public class ReservationIntegrationImpl extends
 
 		
 		// Populate objects
-		claim1.setClaimchecknum("AS456789");
+		claim1.setClaimchecknum("DA456789");
 		
-		form.setRecordlocator("ALASKA");
+		form.setRecordlocator("DADEMO");
 		form.setNumpassengers(1);
 		form.setNumbagchecked(1);
 		form.setNumbagreceived(0);
 		form.setTicketnumber("0271234567890");
 		
-		form.setOtherSystemInformation("ALASKA\n1.1BRABSON/JIMMY\n1 DA 726A 31DEC T DFWFLL HK2   130P  410P\nTKT/TIME LIMIT\n1.T-TL/X/1200/06MAR/MOW016\nAA FACTS\n1.OSI AA TKTL TL/X/1200/06MAR/MOW016\n2.OSI CLAIMED FROM SU PNR LOC MGDOLE\nPHONES\n1.H-555-555-5555\nREMARKS\n1.H-PAX CALLED TO CONF RES AUG10\n");
+		form.setOtherSystemInformation("DADEMO\n1.1BRABSON/JOHN\n1 DA 726A 31DEC T DFWFLL HK2   130P  410P\nTKT/TIME LIMIT\n1.T-TL/X/1200/06MAR/MOW016\nAA FACTS\n1.OSI AA TKTL TL/X/1200/06MAR/MOW016\n2.OSI CLAIMED FROM SU PNR LOC MGDOLE\nPHONES\n1.H-555-555-5555\nREMARKS\n1.H-PAX CALLED TO CONF RES AUG10\n");
 		
-		currentPax.setFirstname("Jimmy");
+		currentPax.setFirstname("JOHN");
 		currentPax.setLastname("Brabson");
 		
 		AirlineMembership am = new AirlineMembership();
-		am.setCompanycode_ID("AS");
+		am.setCompanycode_ID("DA");
 		am.setMembershipnum("123456789");
 		am.setMembershipstatus("Gold");
 		currentPax.setMembership(am);
@@ -72,13 +72,15 @@ public class ReservationIntegrationImpl extends
 		address.setPermanent(true);
 		address.setHomephone("555-555-5555");
 		
-		ia.setAirline("AS");
-		ia.setLegfrom("MCO");
-		ia.setLegto("SEA");
+		ia.setAirline("DA");
+		ia.setLegfrom("ATL");
+		ia.setLegto("DFW");
 		ia.setFlightnum("1100");
 		
-		GregorianCalendar dt = new GregorianCalendar(2010,6,14,6,30);
-		GregorianCalendar at = new GregorianCalendar(2010,6,14,9,30);
+//		GregorianCalendar dt = new GregorianCalendar(2010,6,14,6,30);
+//		GregorianCalendar at = new GregorianCalendar(2010,6,14,9,30);
+		GregorianCalendar dt = new GregorianCalendar();
+		GregorianCalendar at = new GregorianCalendar();
 		
 		ia.setDepartdate(dt.getTime());
 		ia.setSchdeparttime(dt.getTime());
@@ -87,9 +89,9 @@ public class ReservationIntegrationImpl extends
 		
 		ia.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
 		
-		ic.setAirline("AS");
-		ic.setLegfrom("MCO");
-		ic.setLegto("SEA");
+		ic.setAirline("DA");
+		ic.setLegfrom("ATL");
+		ic.setLegto("DFW");
 		ic.setFlightnum("1100");
 		
 		ic.setDepartdate(dt.getTime());
@@ -188,7 +190,7 @@ public class ReservationIntegrationImpl extends
 //		Itinerary ic = form.getItinerary(1, TracingConstants.BAGGAGE_ROUTING);
 //		Itinerary id = form.getItinerary(3, TracingConstants.BAGGAGE_ROUTING);
 //		Incident_Claimcheck claim1 = form.getClaimcheck(0);
-		form.setBagTagNumber("AS456789");
+		form.setBagTagNumber("DA456789");
 //		Incident_Claimcheck claim2 = form.getClaimcheck(1);
 //		form.getItem(0, -1);
 
@@ -196,7 +198,7 @@ public class ReservationIntegrationImpl extends
 		// Populate objects
 //		claim1.setClaimchecknum("AS456789");
 		
-		form.setRecordlocator("ALASKA");
+		form.setRecordlocator("DADEMO");
 //		form.setNumpassengers(1);
 //		form.setNumbagchecked(1);
 //		form.setNumbagreceived(0);
@@ -206,7 +208,7 @@ public class ReservationIntegrationImpl extends
 		
 //		form.setOtherSystemInformation("ALASKA\n1.1BRABSON/JIMMY\n1 DA 726A 31DEC T DFWFLL HK2   130P  410P\nTKT/TIME LIMIT\n1.T-TL/X/1200/06MAR/MOW016\nAA FACTS\n1.OSI AA TKTL TL/X/1200/06MAR/MOW016\n2.OSI CLAIMED FROM SU PNR LOC MGDOLE\nPHONES\n1.H-555-555-5555\nREMARKS\n1.H-PAX CALLED TO CONF RES AUG10\n");
 		
-		currentPax.setFirstname("Jimmy");
+		currentPax.setFirstname("John");
 		currentPax.setLastname("Brabson");
 		
 		form.setMembershipnum("123456789");
@@ -225,14 +227,15 @@ public class ReservationIntegrationImpl extends
 //		address.setPermanent(true);
 		address.setHomephone("555-555-5555");
 		
-		ia.setAirline("AS");
-		ia.setLegfrom("MCO");
-		ia.setLegto("SEA");
+		ia.setAirline("DA");
+		ia.setLegfrom("ATL");
+		ia.setLegto("DFW");
 		ia.setFlightnum("1100");
 		
-		GregorianCalendar dt = new GregorianCalendar(2010,6,14,6,30);
-		GregorianCalendar at = new GregorianCalendar(2010,6,14,9,30);
-		
+//		GregorianCalendar dt = new GregorianCalendar(2010,6,14,6,30);
+//		GregorianCalendar at = new GregorianCalendar(2010,6,14,9,30);
+		GregorianCalendar dt = new GregorianCalendar();
+		GregorianCalendar at = new GregorianCalendar();
 		ia.setDepartdate(dt.getTime());
 		ia.setSchdeparttime(dt.getTime());
 		ia.setArrivedate(at.getTime());

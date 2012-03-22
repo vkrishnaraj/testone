@@ -8,11 +8,14 @@
 
 #main .bodyOtherPages .contentBg{
 padding:10px 10px 0 10px;
-background-repeat:repeat-x;
+background: url("../_images/demo/body_bg.jpg") repeat-y scroll left top transparent;
 background-color:#FFFFFF;
 _height:629px;
 min-height:629px;
 width:950px;
+font-family: Arial,Tahoma,sans-serif;
+font-size: 11px;
+line-height: 1em;
 }
 
 #header {
