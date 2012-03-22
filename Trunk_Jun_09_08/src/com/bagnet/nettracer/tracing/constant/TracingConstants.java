@@ -196,6 +196,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_LFC_CREATE_SALVAGE = "Create Salvage";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_SEARCH_SALVAGE = "Search Salvage";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_UPDATE_LF_REMARKS = "Update LF Remarks";
+	public static final String SYSTEM_COMPONENT_NAME_SAVE_BUTTON_TOP_OF_PAGE = "Save Button at Top of Page";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;

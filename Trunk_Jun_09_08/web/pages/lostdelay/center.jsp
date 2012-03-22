@@ -693,7 +693,7 @@
 
 		<%-- <html:submit property="savetracing" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');"> --%>
 			<html:hidden property="savetracing" value="" disabled="true" />
-                <html:button property="savetracingButton" styleId="button" onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false) {this.form.savetracing.disabled = false; this.form.submit();} else {enableButtons(); this.form.savetracing.disabled = true; return false;}">
+                <html:button property="savetracingButton" styleClass="button" styleId="saveButton" onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false) {this.form.savetracing.disabled = false; this.form.submit();} else {enableButtons(); this.form.savetracing.disabled = true; return false;}">
                   <bean:message key="button.savetracing" />
                 </html:button>
 

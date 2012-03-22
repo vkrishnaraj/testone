@@ -18,6 +18,25 @@
       countfield.value = maxlimit - field.value.length;
     }
   }
+  
+	function insertNewLine(elementId) {
+		if (elementId.indexOf("remark") != -1 && window.event && window.event.keyCode == 13) {
+			insertAtCursor(document.getElementById(elementId), '\n');
+			window.event.keyCode = 505;
+		}
+  	}
+	
+	function insertAtCursor(myField, myValue) {
+		if (document.selection) {
+			myField.focus();
+			sel = document.selection.createRange();
+			sel.text = myValue;
+			sel.collapse(false);
+			sel.select();
+		} else {
+			myField.value += myValue;
+		}
+	}
 </SCRIPT>
 <%
   Agent a = (Agent)session.getAttribute("user");
@@ -86,6 +105,7 @@
             </tr>
             <tr>
 <%
+			String remarkId = "remark[" + i + "]";
             String remarkDescription = "remark[" + i + "].remarktext";
             String remarkText        = "this.form.elements['" + remarkDescription + "']";
             String remarkText2       = "this.form.elements['" + remarkDescription + "2']";
@@ -98,10 +118,10 @@
                 if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_REMARKS, a)) {
 %>
 
-                  <textarea name="<%= remarkDescription %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);" onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"
+                  <textarea name="<%= remarkDescription %>" id="<%=remarkId %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);insertNewLine('<%=remarkId %>');" onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"
                   <logic:equal name="incidentForm" property="readonly" value="1"><% if (remark.getRemark_ID() > 0) {%> readonly="readonly"<% } %></logic:equal>
                   ><%= remark.getRemarktext() %></textarea>
-                  <input name="<%= remarkDescription + "2" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
+                  <input name="<%= remarkDescription + "2" %>" id="<%=remarkId + ".counter" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
                   <br>
                   <logic:notEqual name="incidentForm" property="readonly" value="1">
                   <html:submit styleId="button" property="deleteRemark" indexed="true">
@@ -121,9 +141,9 @@
 			} else  {
 %>
 				<td valign="top" colspan=3>
-                  <textarea name="<%= remarkDescription %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);" 
+                  <textarea name="<%= remarkDescription %>" id="<%=remarkId %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);insertNewLine('<%=remarkId %>');" 
                   	onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"><%= remark.getRemarktext() %></textarea>
-                  <input name="<%= remarkDescription + "2" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
+                  <input name="<%= remarkDescription + "2" %>" id="<%=remarkId + ".counter" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
                   <br>
                   <html:submit styleId="button" property="deleteRemark" indexed="true">
                     <bean:message key="button.delete_remark" />

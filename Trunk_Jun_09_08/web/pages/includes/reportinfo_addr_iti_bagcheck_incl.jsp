@@ -219,6 +219,9 @@
 				</c:otherwise>
 			</c:choose>
 		</c:if>
+		<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SAVE_BUTTON_TOP_OF_PAGE, a)) { %> 
+			<input type="button" id="topSave" class="button" onClick="document.getElementById('saveButton').click();" value="<bean:message key="button.save" />" >
+		<% } %>
 	</div>
 
 

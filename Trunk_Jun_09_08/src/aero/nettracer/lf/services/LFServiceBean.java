@@ -2166,7 +2166,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		String query = "select count(x.match_id) from ("
 					 + "select distinct mh.id as match_id from lfmatchhistory mh "
 					 + "left outer join lffound lf on mh.found_id = lf.id "
-					 + "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " "
+					 + "join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " "
 					 + "where mh.status_Status_ID = " + TracingConstants.LF_TRACING_OPEN + " " 
 					 + "and lf.status_ID = " + TracingConstants.LF_STATUS_OPEN + " "
 					 + "and lf.station_ID = " + station.getStation_ID() + " "
