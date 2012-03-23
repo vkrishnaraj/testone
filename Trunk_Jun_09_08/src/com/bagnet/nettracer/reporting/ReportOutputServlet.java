@@ -131,13 +131,8 @@ public class ReportOutputServlet extends HttpServlet {
 					int type = Integer.parseInt(request.getParameter("print"));
 					switch (type) {
 						case ReportingConstants.CLAIM_PAYOUT_RPT:
-							Claim claim = cform.getClaim();
-							if (claim.getNtIncident() == null || claim.getNtIncident().getExpenselist() == null || claim.getNtIncident().getExpenselist().isEmpty()) {
-								iFile = null;
-							} else {
-								iFile = getFile(ClaimPayoutRpt.createReport(cform.getClaim().getId(), sc, request), sc);
-							}
-							break;
+							iFile = getFile(ClaimPayoutRpt.createReport(cform.getClaim().getNtIncident(), sc, request), sc);
+						break;
 						case ReportingConstants.CLAIM_PRORATE_RPT:
 							ClaimProrateForm cpform = (ClaimProrateForm) session.getAttribute("claimProrateForm");
 							iFile = getFile(ClaimProrateRpt.createReport(cpform, sc, request), sc);

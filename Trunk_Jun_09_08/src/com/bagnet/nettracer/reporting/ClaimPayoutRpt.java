@@ -20,6 +20,7 @@ import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Claim;
+import com.bagnet.nettracer.tracing.db.Incident;
 
 /**
  * @author Matt
@@ -38,14 +39,12 @@ public class ClaimPayoutRpt {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static String createReport(long claim_ID, ServletContext sc, HttpServletRequest request) {
+	public static String createReport(Incident incident, ServletContext sc, HttpServletRequest request) {
 		try {
-			ClaimBMO cBMO = new ClaimBMO();
-			Claim claim = cBMO.findClaimByID(claim_ID);
-			if (claim == null || claim.getIncident() == null || claim.getNtIncident().getExpenses() == null) {
+			if (incident == null || incident.getExpenses() == null) {
 				return null;
 			}
-			List expenselist = new ArrayList(claim.getNtIncident().getExpenses());
+			List expenselist = new ArrayList(incident.getExpenses());
 
 			Map parameters = new HashMap();
 			parameters.put("title", ReportingConstants.CLAIM_PAYOUT_TITLE);
