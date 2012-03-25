@@ -1873,6 +1873,22 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return lostIds;
 	}
 	
+	public void sendEmailsProdFix(){
+		for(int day = 4; day < 13; day++){
+		try {
+			List<Long> lostIds = getXDayList(day, 1);//day,notice1
+			if(lostIds != null){
+				for(Long id: lostIds){
+					send1stNotice(id);
+				}
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+	}
+	
 	public void send1stNoticeEmails(){
 		try {
 			List<Long> lostIds = getXDayList(EMAIL_FIRST_NOTICE_DAY, 1);
