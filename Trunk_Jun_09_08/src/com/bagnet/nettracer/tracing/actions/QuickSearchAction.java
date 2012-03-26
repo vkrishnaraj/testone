@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -36,6 +37,9 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
+import com.bagnet.nettracer.tracing.history.HistoryContainer;
+import com.bagnet.nettracer.tracing.history.HistoryObject;
+
 
 public class QuickSearchAction extends Action {
 
@@ -162,6 +166,13 @@ public class QuickSearchAction extends Action {
 
 		theForm.setDto(dto);
 		request.setAttribute("QuickSearchDTO", dto);
+		HistoryContainer hcl =(HistoryContainer)session.getAttribute("historyContainer");
+		ArrayList<HistoryObject> Hlist=hcl.getRevNewestItems(10);
+		
+		logger.info("Scanning for user's recent history");
+		
+		theForm.setHistCon(Hlist);
+		
 		return (mapping.findForward(REDIRECT_SUCCESS));
 	}
 

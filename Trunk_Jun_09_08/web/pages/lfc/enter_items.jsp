@@ -453,9 +453,7 @@
      				<% 
 	     				for (int i = history.size() - 1; i >= 0; --i) { 
 	 						FoundHistoryObject fho = (FoundHistoryObject) history.get(i);
-	 						if(fho.getFound()!=null)
-	 						{
-							int status = fho.getFound().getEntryStatus();
+	 						int status = fho.getFound().getEntryStatus();
 							boolean needsVerification = status == TracingConstants.LF_STATUS_VERIFICATION_NEEDED || (fho.isHasTraceResults() && status != TracingConstants.LF_STATUS_MOVED);
 						  	String cssClass = needsVerification ? "summaryActionItem" : "summaryItem";
 	 						
@@ -494,7 +492,7 @@
 								</div>
 							<%	} %>
 						</div>
-     				<% }
+     				<% 
      				} %>
      			</div>
      			<script>

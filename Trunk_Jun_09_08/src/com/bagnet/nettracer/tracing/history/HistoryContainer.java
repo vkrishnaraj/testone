@@ -39,17 +39,18 @@ public class HistoryContainer {
 		ArrayList<HistoryObject> temp = new ArrayList<HistoryObject>(values);
 		int tempSize = temp.size();
 		if (tempSize < numItems) {
-			if(numItems==10){
-				Collections.reverse(temp);
-			}
 			return temp;
 		}
 		toReturn = new ArrayList<HistoryObject>(temp.subList(tempSize - numItems, tempSize));
 		System.out.println("toReturn before reversal: "+toReturn);
-		if(numItems==10){
-			Collections.reverse(toReturn);
-		}
+	
 		System.out.println("toReturn after reversal: "+toReturn);
+		return toReturn;
+	}
+	
+	public ArrayList<HistoryObject> getRevNewestItems(int numItems) {
+		ArrayList<HistoryObject> toReturn = getNewestItems(numItems);
+		Collections.reverse(toReturn);
 		return toReturn;
 	}
 	
