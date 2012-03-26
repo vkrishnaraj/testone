@@ -29,17 +29,29 @@ public class LFLostItemizationReport extends LFReport {
 	}
 
 	@Override
-	protected String getSqlString(StatReportDTO srDto) {
-		String sql = "select l.id,s.stationcode,date(l.openDate) as 'date',ifnull(c1.description,'') as 'category',ifnull(c2.description,'') as 'sub_category', " +
-					 "ifnull(i.brand,'') as 'brand',ifnull(i.model,'') as 'model',ifnull(i.serialNumber,'') as 'serial_number',ifnull(i.color,'') as 'color', " +
-					 "ifnull(i.caseColor,'') as 'case_color',ifnull(i.description,'') as 'description' from lflost l " +
+	protected String getSqlString(StatReportDTO srDto) {			
+//		String sql = "select l.id,s.stationcode,date(l.openDate) as 'date',ifnull(c1.description,'') as 'category',ifnull(c2.description,'') as 'sub_category', " +
+//					 "ifnull(i.brand,'') as 'brand',ifnull(i.model,'') as 'model',ifnull(i.serialNumber,'') as 'serial_number',ifnull(i.color,'') as 'color', " +
+//					 "ifnull(i.caseColor,'') as 'case_color',ifnull(i.description,'') as 'description' from lflost l " +
+//					 "left outer join lfitem i on l.id = i.lost_id and i.type = " + TracingConstants.LF_TYPE_LOST + " " +
+//					 "left outer join lfcategory c1 on i.category = c1.id " +
+//					 "join lfsubcategory c2 on i.subCategory = c2.id " +
+//					 "left outer join lflossinfo li on l.lossInfo_id = li.id " +
+//					 "join station s on li.destination_station_ID = s.Station_ID " +
+//					 "where date(l.openDate) between :startDate and :endDate " + getStationSql(srDto) +
+//					 "order by s.stationcode, l.openDate desc;";
+		String sql = "select l.id,s.stationcode,date(l.openDate) as 'date',ifnull(c.description,'') as 'category', " +
+					 "ifnull(sc.description,'') as 'sub_category',ifnull(i.brand,'') as 'brand',ifnull(i.model,'') as 'model', " +
+					 "ifnull(i.serialNumber,'') as 'serial_number',ifnull(i.color,'') as 'color', ifnull(i.caseColor,'') as 'case_color', " +
+					 "ifnull(i.description,'') as 'description' from lflost l " +
 					 "left outer join lfitem i on l.id = i.lost_id and i.type = " + TracingConstants.LF_TYPE_LOST + " " +
-					 "left outer join lfcategory c1 on i.category = c1.id " +
-					 "left outer join lfsubcategory c2 on i.subCategory = c2.id " +
-					 "join lflossinfo li on l.lossInfo_id = li.id " +
-					 "join station s on li.destination_station_ID = s.Station_ID " +
-					 "where l.openDate between :startDate and :endDate " + getStationSql(srDto) +
-					 "order by s.stationcode, l.openDate desc;";
+					 "left outer join lflossinfo li on l.lossinfo_id = li.id " +
+					 "join station s on li.destination_station_ID = s.station_ID " +
+					 "join lfcategory c on i.category = c.id " +
+					 "left outer join lfsubcategory sc on i.subCategory = sc.id " +
+					 "where date(l.openDate) between :startDate and :endDate " + getStationSql(srDto) +
+					 "order by s.stationcode,date;";
+		
 		return sql;
 	}
 

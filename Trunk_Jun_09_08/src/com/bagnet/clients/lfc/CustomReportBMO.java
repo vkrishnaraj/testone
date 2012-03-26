@@ -65,10 +65,10 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			creportdata = createDisbursementsReport(srDTO, ReportBMO.getCustomReport(92).getResource_key(), rootpath, request, user);
 			break;
 		case ReportingConstants.RPT_20_CUSTOM_93:
-			creportdata = createSalvageReport(srDTO, ReportBMO.getCustomReport(92).getResource_key(), rootpath, request, user);
+			creportdata = createSalvageReport(srDTO, ReportBMO.getCustomReport(93).getResource_key(), rootpath, request, user);
 			break;
 		case ReportingConstants.RPT_20_CUSTOM_94:
-			creportdata = createLostItemizationReport(srDTO, ReportBMO.getCustomReport(92).getResource_key(), rootpath, request, user);
+			creportdata = createLostItemizationReport(srDTO, ReportBMO.getCustomReport(94).getResource_key(), rootpath, request, user);
 			break;
 		default:
 			break;
@@ -199,7 +199,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			return null;
 		}
 		
-		String fileName = ReportingConstants.RPT_20_CUSTOM_90_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String fileName = ReportingConstants.RPT_20_CUSTOM_94_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
 		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
 		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
 		virtualizer.setReadOnly(false);
@@ -242,6 +242,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		} catch (ClassNotFoundException cnfe) {
 			cnfe.printStackTrace();
 		} 
+		
 		virtualizer.cleanup();
 		return fileName;
 	}
@@ -420,7 +421,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			exporter.exportReport();
 		} catch (JRException e) {
 			logger.error(e, e);
-		}
+		} 
 	}
 	
 	private String getSubTitle(StatReportDTO srDto, Agent user, ResourceBundle resources) {

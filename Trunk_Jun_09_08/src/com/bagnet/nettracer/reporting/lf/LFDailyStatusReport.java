@@ -33,56 +33,56 @@ public class LFDailyStatusReport extends LFReport {
 	@Override
 	protected String getSqlString(StatReportDTO srDto) {
 		
-		String sql = "select ifnull(date(lf.receivedDate),'') as 'received_date',s.stationcode,ifnull(hvir.count, 0) as 'hvir_count', " +
+		String sql = "select ifnull(lf.receivedDate,'') as 'received_date',s.stationcode,ifnull(hvir.count, 0) as 'hvir_count', " +
 					 "ifnull(lvir.count, 0) as 'lvir_count',ifnull(hvirwr.count, 0) as 'hvirwr_count', " +
 					 "ifnull(lvirwr.count, 0) as 'lvirwr_count',ifnull(hvirwor.count, 0) as 'hvirwor_count', " +
 					 "ifnull(lvirwor.count, 0) as 'lvirwor_count' from station s " +
-					 "left outer join lffound lf on s.station_id = lf.station_id " +
-					 "left outer join (select s.station_id,count(i.id) as 'count' from station s " +
+					 "join lffound lf on s.station_id = lf.station_id " +
+					 "left outer join (select lf.receivedDate as 'received_date',s.station_id,count(i.id) as 'count' from station s " +
                         			  "left outer join lffound lf on s.station_id = lf.station_id " +
                         			  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " + 
                         			  "where lf.receivedDate between :startDate and :endDate and i.value = " + TracingConstants.LFC_ITEM_HIGH_VALUE + " " +
-                        			  "group by date(lf.receivedDate) order by date(lf.receivedDate),s.station_id) hvir on s.station_id = hvir.station_id " +
-					 "left outer join (select s.station_id,count(i.id) as 'count' from station s " +
+                        			  "group by lf.receivedDate,s.station_id order by lf.receivedDate,s.station_id) hvir on lf.receivedDate = hvir.received_date and s.station_id = hvir.station_id " +
+					 "left outer join (select lf.receivedDate as 'received_date',s.station_id,count(i.id) as 'count' from station s " +
 					 				  "left outer join lffound lf on s.station_id = lf.station_id " +
 					 				  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					 				  "where lf.receivedDate between :startDate and :endDate and i.value = " + TracingConstants.LFC_ITEM_LOW_VALUE + " " +
-					 				  "group by date(lf.receivedDate) order by date(lf.receivedDate),s.station_id) lvir on s.station_id = lvir.station_id " + 
-					 "left outer join (select s.station_id,count(i.id) as 'count' from station s " +
+					 				  "group by lf.receivedDate,s.station_id order by lf.receivedDate,s.station_id) lvir on lf.receivedDate = lvir.received_date and s.station_id = lvir.station_id " + 
+					 "left outer join (select lf.receivedDate as 'received_date',s.station_id,count(i.id) as 'count' from station s " +
 					                  "left outer join lffound lf on s.station_id = lf.station_id " +
 					                  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 				                      "where lf.receivedDate between :startDate and :endDate and i.value = " + TracingConstants.LFC_ITEM_HIGH_VALUE + " " +
 				                      "and lf.status_id = " + TracingConstants.LF_STATUS_CLOSED + " " + 
 				                      "and (i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") or i.deliveryRejected = 1) " +
 				                      "and i.lost_id is not null " + 
-				                      "group by date(lf.receivedDate) order by date(lf.receivedDate),s.station_id) hvirwr on s.station_id = hvirwr.station_id " +
-				     "left outer join (select s.station_id,count(i.id) as 'count' from station s " +
+				                      "group by lf.receivedDate,s.station_id order by lf.receivedDate,s.station_id) hvirwr on lf.receivedDate = hvirwr.received_date and s.station_id = hvirwr.station_id " +
+				     "left outer join (select lf.receivedDate as 'received_date',s.station_id,count(i.id) as 'count' from station s " +
 					                  "left outer join lffound lf on s.station_id = lf.station_id " +
 					                  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					                  "where lf.receivedDate between :startDate and :endDate and i.value = " + TracingConstants.LFC_ITEM_LOW_VALUE + " " +
 					                  "and lf.status_id = " + TracingConstants.LF_STATUS_CLOSED + " " +
 					                  "and (i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") or i.deliveryRejected = 1) " +
 					                  "and i.lost_id is not null " +
-					                  "group by date(lf.receivedDate) order by date(lf.receivedDate),s.station_id) lvirwr on s.station_id = lvirwr.station_id " +
-					 "left outer join (select s.station_id,count(i.id) as 'count' from station s " +
+					                  "group by lf.receivedDate,s.station_id order by lf.receivedDate,s.station_id) lvirwr on lf.receivedDate = lvirwr.received_date and s.station_id = lvirwr.station_id " +
+					 "left outer join (select lf.receivedDate as 'received_date',s.station_id,count(i.id) as 'count' from station s " +
 					                  "left outer join lffound lf on s.station_id = lf.station_id " +
 					                  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					                  "where lf.receivedDate between :startDate and :endDate and i.value = " + TracingConstants.LFC_ITEM_HIGH_VALUE + " " +
 					                  "and lf.status_id = " + TracingConstants.LF_STATUS_CLOSED + " " +
 					                  "and (i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") or i.deliveryRejected = 1) " +
 					                  "and i.lost_id is null " +
-					                  "group by date(lf.receivedDate) order by date(lf.receivedDate),s.station_id) hvirwor on s.station_id = hvirwor.station_id " +
-					 "left outer join (select s.station_id,count(i.id) as 'count' from station s " +
+					                  "group by lf.receivedDate,s.station_id order by lf.receivedDate,s.station_id) hvirwor on lf.receivedDate = hvir.received_date and s.station_id = hvirwor.station_id " +
+					 "left outer join (select lf.receivedDate as 'received_date',s.station_id,count(i.id) as 'count' from station s " +
 					                  "left outer join lffound lf on s.station_id = lf.station_id " +
 					                  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					                  "where lf.receivedDate between :startDate and :endDate and i.value = " + TracingConstants.LFC_ITEM_LOW_VALUE + " " +
 					                  "and lf.status_id = " + TracingConstants.LF_STATUS_CLOSED + " " + 
 					                  "and (i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") or i.deliveryRejected = 1) " +
 					                  "and i.lost_id is null " +
-					                  "group by date(lf.receivedDate) order by date(lf.receivedDate),s.station_id) lvirwor on s.station_id = lvirwor.station_id " +
-					 "where 1 = 1 " + getStationSql(srDto) + 
-					 "group by date(lf.receivedDate),s.stationcode " +
-					 "order by s.stationcode,date(lf.receivedDate);";
+					                  "group by lf.receivedDate,s.station_id order by lf.receivedDate,s.station_id) lvirwor on lf.receivedDate = lvirwor.received_date and s.station_id = lvirwor.station_id " +
+					 "where 1 = 1 " + getStationSql(srDto) + " and lf.receivedDate between :startDate and :endDate " +
+					 "group by lf.receivedDate,s.stationcode " +
+					 "order by s.stationcode,lf.receivedDate;";
 		
 		return sql;
 	}

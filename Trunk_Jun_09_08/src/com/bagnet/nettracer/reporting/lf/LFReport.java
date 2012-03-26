@@ -51,7 +51,7 @@ public abstract class LFReport {
 		
 		Calendar end = new GregorianCalendar();
 		end.setTime(DateUtils.convertToDate(endDateString, srDto.getDateFormat(), null));
-		end.add(Calendar.DAY_OF_MONTH, 1);
+//		end.add(Calendar.DAY_OF_MONTH, 1);
 		
 		startDate = start.getTime();
 		endDate = end.getTime();
