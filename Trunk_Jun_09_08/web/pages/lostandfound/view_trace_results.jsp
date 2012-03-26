@@ -205,7 +205,7 @@
 				    </tr>
 			    </table>
 			    <script language=javascript>
-					document.location.href="#result";
+					/*document.location.href="#result";*/
 					toggleState('open','openCb');
 					toggleState('closed','closedCb');
 					toggleState('confirmed','confirmedCb');

@@ -105,7 +105,7 @@
      				<input id="button" type="button" value='<bean:message key="claim.button.back" />' onClick="history.back()">
      			</center>
 			    <script language=javascript>
-					document.location.href="#result";
+					/*document.location.href="#result";*/
 			    </script>
    			</div>
  		</td>
