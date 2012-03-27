@@ -14,6 +14,7 @@ package com.bagnet.nettracer.ws.onlineclaims.impl;
  */
 public class AuthIncidentResponseDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public AuthIncidentResponseDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -47,17 +48,7 @@ public class AuthIncidentResponseDocumentImpl extends org.apache.xmlbeans.impl.v
      */
     public void setAuthIncidentResponse(com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.AuthIncidentResponse authIncidentResponse)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.AuthIncidentResponse target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.AuthIncidentResponse)get_store().find_element_user(AUTHINCIDENTRESPONSE$0, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.AuthIncidentResponse)get_store().add_element_user(AUTHINCIDENTRESPONSE$0);
-            }
-            target.set(authIncidentResponse);
-        }
+        generatedSetterHelperImpl(authIncidentResponse, AUTHINCIDENTRESPONSE$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**
@@ -80,6 +71,7 @@ public class AuthIncidentResponseDocumentImpl extends org.apache.xmlbeans.impl.v
      */
     public static class AuthIncidentResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.AuthIncidentResponseDocument.AuthIncidentResponse
     {
+        private static final long serialVersionUID = 1L;
         
         public AuthIncidentResponseImpl(org.apache.xmlbeans.SchemaType sType)
         {
@@ -140,17 +132,7 @@ public class AuthIncidentResponseDocumentImpl extends org.apache.xmlbeans.impl.v
          */
         public void setReturn(com.bagnet.nettracer.ws.onlineclaims.xsd.Incident xreturn)
         {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                com.bagnet.nettracer.ws.onlineclaims.xsd.Incident target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Incident)get_store().find_element_user(RETURN$0, 0);
-                if (target == null)
-                {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Incident)get_store().add_element_user(RETURN$0);
-                }
-                target.set(xreturn);
-            }
+            generatedSetterHelperImpl(xreturn, RETURN$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
         }
         
         /**

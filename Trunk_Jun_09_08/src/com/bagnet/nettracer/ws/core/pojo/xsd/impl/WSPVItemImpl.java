@@ -13,6 +13,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd.impl;
  */
 public class WSPVItemImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem
 {
+    private static final long serialVersionUID = 1L;
     
     public WSPVItemImpl(org.apache.xmlbeans.SchemaType sType)
     {

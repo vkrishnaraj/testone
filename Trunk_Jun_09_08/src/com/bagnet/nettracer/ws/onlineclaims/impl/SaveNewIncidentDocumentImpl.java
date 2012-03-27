@@ -14,6 +14,7 @@ package com.bagnet.nettracer.ws.onlineclaims.impl;
  */
 public class SaveNewIncidentDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public SaveNewIncidentDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -47,17 +48,7 @@ public class SaveNewIncidentDocumentImpl extends org.apache.xmlbeans.impl.values
      */
     public void setSaveNewIncident(com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.SaveNewIncident saveNewIncident)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.SaveNewIncident target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.SaveNewIncident)get_store().find_element_user(SAVENEWINCIDENT$0, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.SaveNewIncident)get_store().add_element_user(SAVENEWINCIDENT$0);
-            }
-            target.set(saveNewIncident);
-        }
+        generatedSetterHelperImpl(saveNewIncident, SAVENEWINCIDENT$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**
@@ -80,6 +71,7 @@ public class SaveNewIncidentDocumentImpl extends org.apache.xmlbeans.impl.values
      */
     public static class SaveNewIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentDocument.SaveNewIncident
     {
+        private static final long serialVersionUID = 1L;
         
         public SaveNewIncidentImpl(org.apache.xmlbeans.SchemaType sType)
         {
@@ -523,17 +515,7 @@ public class SaveNewIncidentDocumentImpl extends org.apache.xmlbeans.impl.values
          */
         public void setIncident(com.bagnet.nettracer.ws.onlineclaims.xsd.Incident incident)
         {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                com.bagnet.nettracer.ws.onlineclaims.xsd.Incident target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Incident)get_store().find_element_user(INCIDENT$6, 0);
-                if (target == null)
-                {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Incident)get_store().add_element_user(INCIDENT$6);
-                }
-                target.set(incident);
-            }
+            generatedSetterHelperImpl(incident, INCIDENT$6, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
         }
         
         /**
@@ -630,17 +612,7 @@ public class SaveNewIncidentDocumentImpl extends org.apache.xmlbeans.impl.values
          */
         public void setAuth(com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth auth)
         {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$8, 0);
-                if (target == null)
-                {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$8);
-                }
-                target.set(auth);
-            }
+            generatedSetterHelperImpl(auth, AUTH$8, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
         }
         
         /**

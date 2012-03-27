@@ -14,6 +14,7 @@ package com.bagnet.nettracer.ws.onlineclaims.impl;
  */
 public class LoadClaimResponseDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public LoadClaimResponseDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -47,17 +48,7 @@ public class LoadClaimResponseDocumentImpl extends org.apache.xmlbeans.impl.valu
      */
     public void setLoadClaimResponse(com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument.LoadClaimResponse loadClaimResponse)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument.LoadClaimResponse target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument.LoadClaimResponse)get_store().find_element_user(LOADCLAIMRESPONSE$0, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument.LoadClaimResponse)get_store().add_element_user(LOADCLAIMRESPONSE$0);
-            }
-            target.set(loadClaimResponse);
-        }
+        generatedSetterHelperImpl(loadClaimResponse, LOADCLAIMRESPONSE$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**
@@ -80,6 +71,7 @@ public class LoadClaimResponseDocumentImpl extends org.apache.xmlbeans.impl.valu
      */
     public static class LoadClaimResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument.LoadClaimResponse
     {
+        private static final long serialVersionUID = 1L;
         
         public LoadClaimResponseImpl(org.apache.xmlbeans.SchemaType sType)
         {
@@ -140,17 +132,7 @@ public class LoadClaimResponseDocumentImpl extends org.apache.xmlbeans.impl.valu
          */
         public void setReturn(com.bagnet.nettracer.ws.onlineclaims.xsd.Claim xreturn)
         {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                com.bagnet.nettracer.ws.onlineclaims.xsd.Claim target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Claim)get_store().find_element_user(RETURN$0, 0);
-                if (target == null)
-                {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Claim)get_store().add_element_user(RETURN$0);
-                }
-                target.set(xreturn);
-            }
+            generatedSetterHelperImpl(xreturn, RETURN$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
         }
         
         /**

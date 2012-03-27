@@ -16,17 +16,17 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Claim extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("claimd979type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sA32E7A8E195DFE62F7139238BD50407D").resolveHandle("claimd979type");
     
     /**
      * Gets the "attemptToClaimAtArrival" element
      */
-    boolean getAttemptToClaimAtArrival();
+    int getAttemptToClaimAtArrival();
     
     /**
      * Gets (as xml) the "attemptToClaimAtArrival" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetAttemptToClaimAtArrival();
+    org.apache.xmlbeans.XmlInt xgetAttemptToClaimAtArrival();
     
     /**
      * True if has "attemptToClaimAtArrival" element
@@ -36,12 +36,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "attemptToClaimAtArrival" element
      */
-    void setAttemptToClaimAtArrival(boolean attemptToClaimAtArrival);
+    void setAttemptToClaimAtArrival(int attemptToClaimAtArrival);
     
     /**
      * Sets (as xml) the "attemptToClaimAtArrival" element
      */
-    void xsetAttemptToClaimAtArrival(org.apache.xmlbeans.XmlBoolean attemptToClaimAtArrival);
+    void xsetAttemptToClaimAtArrival(org.apache.xmlbeans.XmlInt attemptToClaimAtArrival);
     
     /**
      * Unsets the "attemptToClaimAtArrival" element
@@ -101,12 +101,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "bagClearCustoms" element
      */
-    boolean getBagClearCustoms();
+    int getBagClearCustoms();
     
     /**
      * Gets (as xml) the "bagClearCustoms" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetBagClearCustoms();
+    org.apache.xmlbeans.XmlInt xgetBagClearCustoms();
     
     /**
      * True if has "bagClearCustoms" element
@@ -116,12 +116,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "bagClearCustoms" element
      */
-    void setBagClearCustoms(boolean bagClearCustoms);
+    void setBagClearCustoms(int bagClearCustoms);
     
     /**
      * Sets (as xml) the "bagClearCustoms" element
      */
-    void xsetBagClearCustoms(org.apache.xmlbeans.XmlBoolean bagClearCustoms);
+    void xsetBagClearCustoms(org.apache.xmlbeans.XmlInt bagClearCustoms);
     
     /**
      * Unsets the "bagClearCustoms" element
@@ -171,12 +171,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "baggageReroutedEnRoute" element
      */
-    boolean getBaggageReroutedEnRoute();
+    int getBaggageReroutedEnRoute();
     
     /**
      * Gets (as xml) the "baggageReroutedEnRoute" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetBaggageReroutedEnRoute();
+    org.apache.xmlbeans.XmlInt xgetBaggageReroutedEnRoute();
     
     /**
      * True if has "baggageReroutedEnRoute" element
@@ -186,12 +186,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "baggageReroutedEnRoute" element
      */
-    void setBaggageReroutedEnRoute(boolean baggageReroutedEnRoute);
+    void setBaggageReroutedEnRoute(int baggageReroutedEnRoute);
     
     /**
      * Sets (as xml) the "baggageReroutedEnRoute" element
      */
-    void xsetBaggageReroutedEnRoute(org.apache.xmlbeans.XmlBoolean baggageReroutedEnRoute);
+    void xsetBaggageReroutedEnRoute(org.apache.xmlbeans.XmlInt baggageReroutedEnRoute);
     
     /**
      * Unsets the "baggageReroutedEnRoute" element
@@ -331,12 +331,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "chargedForExcessBaggage" element
      */
-    boolean getChargedForExcessBaggage();
+    int getChargedForExcessBaggage();
     
     /**
      * Gets (as xml) the "chargedForExcessBaggage" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetChargedForExcessBaggage();
+    org.apache.xmlbeans.XmlInt xgetChargedForExcessBaggage();
     
     /**
      * True if has "chargedForExcessBaggage" element
@@ -346,12 +346,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "chargedForExcessBaggage" element
      */
-    void setChargedForExcessBaggage(boolean chargedForExcessBaggage);
+    void setChargedForExcessBaggage(int chargedForExcessBaggage);
     
     /**
      * Sets (as xml) the "chargedForExcessBaggage" element
      */
-    void xsetChargedForExcessBaggage(org.apache.xmlbeans.XmlBoolean chargedForExcessBaggage);
+    void xsetChargedForExcessBaggage(org.apache.xmlbeans.XmlInt chargedForExcessBaggage);
     
     /**
      * Unsets the "chargedForExcessBaggage" element
@@ -581,12 +581,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "declaredExcessValue" element
      */
-    boolean getDeclaredExcessValue();
+    int getDeclaredExcessValue();
     
     /**
      * Gets (as xml) the "declaredExcessValue" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetDeclaredExcessValue();
+    org.apache.xmlbeans.XmlInt xgetDeclaredExcessValue();
     
     /**
      * True if has "declaredExcessValue" element
@@ -596,12 +596,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "declaredExcessValue" element
      */
-    void setDeclaredExcessValue(boolean declaredExcessValue);
+    void setDeclaredExcessValue(int declaredExcessValue);
     
     /**
      * Sets (as xml) the "declaredExcessValue" element
      */
-    void xsetDeclaredExcessValue(org.apache.xmlbeans.XmlBoolean declaredExcessValue);
+    void xsetDeclaredExcessValue(org.apache.xmlbeans.XmlInt declaredExcessValue);
     
     /**
      * Unsets the "declaredExcessValue" element
@@ -651,12 +651,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "differentClaimCheck" element
      */
-    boolean getDifferentClaimCheck();
+    int getDifferentClaimCheck();
     
     /**
      * Gets (as xml) the "differentClaimCheck" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetDifferentClaimCheck();
+    org.apache.xmlbeans.XmlInt xgetDifferentClaimCheck();
     
     /**
      * True if has "differentClaimCheck" element
@@ -666,12 +666,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "differentClaimCheck" element
      */
-    void setDifferentClaimCheck(boolean differentClaimCheck);
+    void setDifferentClaimCheck(int differentClaimCheck);
     
     /**
      * Sets (as xml) the "differentClaimCheck" element
      */
-    void xsetDifferentClaimCheck(org.apache.xmlbeans.XmlBoolean differentClaimCheck);
+    void xsetDifferentClaimCheck(org.apache.xmlbeans.XmlInt differentClaimCheck);
     
     /**
      * Unsets the "differentClaimCheck" element
@@ -811,12 +811,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "filedPreviousClaim" element
      */
-    boolean getFiledPreviousClaim();
+    int getFiledPreviousClaim();
     
     /**
      * Gets (as xml) the "filedPreviousClaim" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetFiledPreviousClaim();
+    org.apache.xmlbeans.XmlInt xgetFiledPreviousClaim();
     
     /**
      * True if has "filedPreviousClaim" element
@@ -826,12 +826,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "filedPreviousClaim" element
      */
-    void setFiledPreviousClaim(boolean filedPreviousClaim);
+    void setFiledPreviousClaim(int filedPreviousClaim);
     
     /**
      * Sets (as xml) the "filedPreviousClaim" element
      */
-    void xsetFiledPreviousClaim(org.apache.xmlbeans.XmlBoolean filedPreviousClaim);
+    void xsetFiledPreviousClaim(org.apache.xmlbeans.XmlInt filedPreviousClaim);
     
     /**
      * Unsets the "filedPreviousClaim" element
@@ -961,12 +961,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "haveToRecheck" element
      */
-    boolean getHaveToRecheck();
+    int getHaveToRecheck();
     
     /**
      * Gets (as xml) the "haveToRecheck" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetHaveToRecheck();
+    org.apache.xmlbeans.XmlInt xgetHaveToRecheck();
     
     /**
      * True if has "haveToRecheck" element
@@ -976,12 +976,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "haveToRecheck" element
      */
-    void setHaveToRecheck(boolean haveToRecheck);
+    void setHaveToRecheck(int haveToRecheck);
     
     /**
      * Sets (as xml) the "haveToRecheck" element
      */
-    void xsetHaveToRecheck(org.apache.xmlbeans.XmlBoolean haveToRecheck);
+    void xsetHaveToRecheck(org.apache.xmlbeans.XmlInt haveToRecheck);
     
     /**
      * Unsets the "haveToRecheck" element
@@ -1481,12 +1481,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "privateInsurance" element
      */
-    boolean getPrivateInsurance();
+    int getPrivateInsurance();
     
     /**
      * Gets (as xml) the "privateInsurance" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetPrivateInsurance();
+    org.apache.xmlbeans.XmlInt xgetPrivateInsurance();
     
     /**
      * True if has "privateInsurance" element
@@ -1496,12 +1496,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "privateInsurance" element
      */
-    void setPrivateInsurance(boolean privateInsurance);
+    void setPrivateInsurance(int privateInsurance);
     
     /**
      * Sets (as xml) the "privateInsurance" element
      */
-    void xsetPrivateInsurance(org.apache.xmlbeans.XmlBoolean privateInsurance);
+    void xsetPrivateInsurance(org.apache.xmlbeans.XmlInt privateInsurance);
     
     /**
      * Unsets the "privateInsurance" element
@@ -1711,12 +1711,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "reportedToAnotherAirline" element
      */
-    boolean getReportedToAnotherAirline();
+    int getReportedToAnotherAirline();
     
     /**
      * Gets (as xml) the "reportedToAnotherAirline" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetReportedToAnotherAirline();
+    org.apache.xmlbeans.XmlInt xgetReportedToAnotherAirline();
     
     /**
      * True if has "reportedToAnotherAirline" element
@@ -1726,12 +1726,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "reportedToAnotherAirline" element
      */
-    void setReportedToAnotherAirline(boolean reportedToAnotherAirline);
+    void setReportedToAnotherAirline(int reportedToAnotherAirline);
     
     /**
      * Sets (as xml) the "reportedToAnotherAirline" element
      */
-    void xsetReportedToAnotherAirline(org.apache.xmlbeans.XmlBoolean reportedToAnotherAirline);
+    void xsetReportedToAnotherAirline(org.apache.xmlbeans.XmlInt reportedToAnotherAirline);
     
     /**
      * Unsets the "reportedToAnotherAirline" element
@@ -1941,12 +1941,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "ticketWithAnotherAirline" element
      */
-    boolean getTicketWithAnotherAirline();
+    int getTicketWithAnotherAirline();
     
     /**
      * Gets (as xml) the "ticketWithAnotherAirline" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetTicketWithAnotherAirline();
+    org.apache.xmlbeans.XmlInt xgetTicketWithAnotherAirline();
     
     /**
      * True if has "ticketWithAnotherAirline" element
@@ -1956,12 +1956,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "ticketWithAnotherAirline" element
      */
-    void setTicketWithAnotherAirline(boolean ticketWithAnotherAirline);
+    void setTicketWithAnotherAirline(int ticketWithAnotherAirline);
     
     /**
      * Sets (as xml) the "ticketWithAnotherAirline" element
      */
-    void xsetTicketWithAnotherAirline(org.apache.xmlbeans.XmlBoolean ticketWithAnotherAirline);
+    void xsetTicketWithAnotherAirline(org.apache.xmlbeans.XmlInt ticketWithAnotherAirline);
     
     /**
      * Unsets the "ticketWithAnotherAirline" element
@@ -1971,12 +1971,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "tsaInspected" element
      */
-    boolean getTsaInspected();
+    int getTsaInspected();
     
     /**
      * Gets (as xml) the "tsaInspected" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetTsaInspected();
+    org.apache.xmlbeans.XmlInt xgetTsaInspected();
     
     /**
      * True if has "tsaInspected" element
@@ -1986,12 +1986,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "tsaInspected" element
      */
-    void setTsaInspected(boolean tsaInspected);
+    void setTsaInspected(int tsaInspected);
     
     /**
      * Sets (as xml) the "tsaInspected" element
      */
-    void xsetTsaInspected(org.apache.xmlbeans.XmlBoolean tsaInspected);
+    void xsetTsaInspected(org.apache.xmlbeans.XmlInt tsaInspected);
     
     /**
      * Unsets the "tsaInspected" element
@@ -2041,12 +2041,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "tsaNotePresent" element
      */
-    boolean getTsaNotePresent();
+    int getTsaNotePresent();
     
     /**
      * Gets (as xml) the "tsaNotePresent" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetTsaNotePresent();
+    org.apache.xmlbeans.XmlInt xgetTsaNotePresent();
     
     /**
      * True if has "tsaNotePresent" element
@@ -2056,12 +2056,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "tsaNotePresent" element
      */
-    void setTsaNotePresent(boolean tsaNotePresent);
+    void setTsaNotePresent(int tsaNotePresent);
     
     /**
      * Sets (as xml) the "tsaNotePresent" element
      */
-    void xsetTsaNotePresent(org.apache.xmlbeans.XmlBoolean tsaNotePresent);
+    void xsetTsaNotePresent(org.apache.xmlbeans.XmlInt tsaNotePresent);
     
     /**
      * Unsets the "tsaNotePresent" element
@@ -2071,12 +2071,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Gets the "wasBagInspected" element
      */
-    boolean getWasBagInspected();
+    int getWasBagInspected();
     
     /**
      * Gets (as xml) the "wasBagInspected" element
      */
-    org.apache.xmlbeans.XmlBoolean xgetWasBagInspected();
+    org.apache.xmlbeans.XmlInt xgetWasBagInspected();
     
     /**
      * True if has "wasBagInspected" element
@@ -2086,12 +2086,12 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     /**
      * Sets the "wasBagInspected" element
      */
-    void setWasBagInspected(boolean wasBagInspected);
+    void setWasBagInspected(int wasBagInspected);
     
     /**
      * Sets (as xml) the "wasBagInspected" element
      */
-    void xsetWasBagInspected(org.apache.xmlbeans.XmlBoolean wasBagInspected);
+    void xsetWasBagInspected(org.apache.xmlbeans.XmlInt wasBagInspected);
     
     /**
      * Unsets the "wasBagInspected" element

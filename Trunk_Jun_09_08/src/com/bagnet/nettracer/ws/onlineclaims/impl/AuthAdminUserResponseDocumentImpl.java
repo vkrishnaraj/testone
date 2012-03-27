@@ -14,6 +14,7 @@ package com.bagnet.nettracer.ws.onlineclaims.impl;
  */
 public class AuthAdminUserResponseDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public AuthAdminUserResponseDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -47,17 +48,7 @@ public class AuthAdminUserResponseDocumentImpl extends org.apache.xmlbeans.impl.
      */
     public void setAuthAdminUserResponse(com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument.AuthAdminUserResponse authAdminUserResponse)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument.AuthAdminUserResponse target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument.AuthAdminUserResponse)get_store().find_element_user(AUTHADMINUSERRESPONSE$0, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument.AuthAdminUserResponse)get_store().add_element_user(AUTHADMINUSERRESPONSE$0);
-            }
-            target.set(authAdminUserResponse);
-        }
+        generatedSetterHelperImpl(authAdminUserResponse, AUTHADMINUSERRESPONSE$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**
@@ -80,6 +71,7 @@ public class AuthAdminUserResponseDocumentImpl extends org.apache.xmlbeans.impl.
      */
     public static class AuthAdminUserResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.AuthAdminUserResponseDocument.AuthAdminUserResponse
     {
+        private static final long serialVersionUID = 1L;
         
         public AuthAdminUserResponseImpl(org.apache.xmlbeans.SchemaType sType)
         {

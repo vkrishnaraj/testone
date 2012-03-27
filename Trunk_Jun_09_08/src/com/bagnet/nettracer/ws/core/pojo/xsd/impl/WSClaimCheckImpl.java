@@ -13,6 +13,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd.impl;
  */
 public class WSClaimCheckImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck
 {
+    private static final long serialVersionUID = 1L;
     
     public WSClaimCheckImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -90,15 +91,12 @@ public class WSClaimCheckImpl extends org.apache.xmlbeans.impl.values.XmlComplex
     }
     
     /**
-     * Sets array of all "scans" element
+     * Sets array of all "scans" element  WARNING: This method is not atomicaly synchronized.
      */
     public void setScansArray(com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints[] scansArray)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            arraySetterHelper(scansArray, SCANS$0);
-        }
+        check_orphaned();
+        arraySetterHelper(scansArray, SCANS$0);
     }
     
     /**

@@ -14,6 +14,7 @@ package com.bagnet.nettracer.ws.onlineclaims.impl;
  */
 public class SaveClaimResponseDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public SaveClaimResponseDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -47,17 +48,7 @@ public class SaveClaimResponseDocumentImpl extends org.apache.xmlbeans.impl.valu
      */
     public void setSaveClaimResponse(com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument.SaveClaimResponse saveClaimResponse)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument.SaveClaimResponse target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument.SaveClaimResponse)get_store().find_element_user(SAVECLAIMRESPONSE$0, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument.SaveClaimResponse)get_store().add_element_user(SAVECLAIMRESPONSE$0);
-            }
-            target.set(saveClaimResponse);
-        }
+        generatedSetterHelperImpl(saveClaimResponse, SAVECLAIMRESPONSE$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**
@@ -80,6 +71,7 @@ public class SaveClaimResponseDocumentImpl extends org.apache.xmlbeans.impl.valu
      */
     public static class SaveClaimResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument.SaveClaimResponse
     {
+        private static final long serialVersionUID = 1L;
         
         public SaveClaimResponseImpl(org.apache.xmlbeans.SchemaType sType)
         {

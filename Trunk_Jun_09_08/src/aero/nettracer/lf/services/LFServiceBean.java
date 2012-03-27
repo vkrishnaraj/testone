@@ -717,6 +717,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public ArrayList<LabelValueBean> getColors() {
 		ArrayList <LabelValueBean> colors = new ArrayList<LabelValueBean>();
 		
+		colors.add(new LabelValueBean("Does Not Apply", TracingConstants.LFC_COLOR_DOESNOTAPPLY));
 		colors.add(new LabelValueBean("Black", "BK"));
 		colors.add(new LabelValueBean("Blue", "BU"));
 		colors.add(new LabelValueBean("Brown", "BN"));

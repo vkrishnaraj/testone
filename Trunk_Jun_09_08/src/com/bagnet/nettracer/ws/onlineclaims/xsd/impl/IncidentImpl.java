@@ -13,6 +13,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd.impl;
  */
 public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.xsd.Incident
 {
+    private static final long serialVersionUID = 1L;
     
     public IncidentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -304,15 +305,12 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
-     * Sets array of all "bag" element
+     * Sets array of all "bag" element  WARNING: This method is not atomicaly synchronized.
      */
     public void setBagArray(com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentBag[] bagArray)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            arraySetterHelper(bagArray, BAG$4);
-        }
+        check_orphaned();
+        arraySetterHelper(bagArray, BAG$4);
     }
     
     /**
@@ -456,7 +454,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
             {
                 throw new IndexOutOfBoundsException();
             }
-            return (org.apache.xmlbeans.XmlString)target;
+            return target;
         }
     }
     
@@ -778,17 +776,7 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
      */
     public void setDeliveryAddress(com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentAddress deliveryAddress)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentAddress target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentAddress)get_store().find_element_user(DELIVERYADDRESS$10, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentAddress)get_store().add_element_user(DELIVERYADDRESS$10);
-            }
-            target.set(deliveryAddress);
-        }
+        generatedSetterHelperImpl(deliveryAddress, DELIVERYADDRESS$10, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**
@@ -1242,15 +1230,12 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
-     * Sets array of all "itinerary" element
+     * Sets array of all "itinerary" element  WARNING: This method is not atomicaly synchronized.
      */
     public void setItineraryArray(com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentItinerary[] itineraryArray)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            arraySetterHelper(itineraryArray, ITINERARY$18);
-        }
+        check_orphaned();
+        arraySetterHelper(itineraryArray, ITINERARY$18);
     }
     
     /**
@@ -1986,15 +1971,12 @@ public class IncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexCont
     }
     
     /**
-     * Sets array of all "phone" element
+     * Sets array of all "phone" element  WARNING: This method is not atomicaly synchronized.
      */
     public void setPhoneArray(com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentPhone[] phoneArray)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            arraySetterHelper(phoneArray, PHONE$30);
-        }
+        check_orphaned();
+        arraySetterHelper(phoneArray, PHONE$30);
     }
     
     /**

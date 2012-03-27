@@ -23,29 +23,29 @@ public class Claim {
 	private String checkedLocation;
 	private int passengersTravelingWithYou;
 	private String whereWasBaggageChecked;
-	private boolean haveToRecheck;
-	private boolean wasBagInspected;
-	private boolean ticketWithAnotherAirline;
-	private boolean chargedForExcessBaggage;
-	private boolean declaredExcessValue;
+	private int haveToRecheck;
+	private int wasBagInspected;
+	private int ticketWithAnotherAirline;
+	private int chargedForExcessBaggage;
+	private int declaredExcessValue;
 	private String declaredCurrency;
 	private String declaredValue;
-	private boolean bagClearCustoms;
-	private boolean baggageReroutedEnRoute;
+	private int bagClearCustoms;
+	private int baggageReroutedEnRoute;
 	private String reroutedAirlineCity;
 	private String reroutedReason;
-	private boolean differentClaimCheck;
-	private boolean attemptToClaimAtArrival;
+	private int differentClaimCheck;
+	private int attemptToClaimAtArrival;
 	private String lastSawBaggage;
 	private String whereDidYouFileReport;
-	private boolean reportedToAnotherAirline;
+	private int reportedToAnotherAirline;
 	private File[] file;
-	private boolean filedPreviousClaim;
+	private int filedPreviousClaim;
 	private String filedPreviousAirline;
 	private Date filedPrevoiusDate;
 	private String filedPreviousClaimant;
-	private boolean tsaInspected;
-	private boolean tsaNotePresent;
+	private int tsaInspected;
+	private int tsaNotePresent;
 	private String tsaInspectionLocation;
 	private String comments;
 	private String ticketNumber;
@@ -59,7 +59,7 @@ public class Claim {
 	private String reportedAirline;
 	private String reportedCity;
 	private String reportedFileNumber;
-	private boolean privateInsurance;
+	private int privateInsurance;
 	private String privateInsuranceName;
 	private String privateInsuranceAddr;
 
@@ -239,43 +239,43 @@ public class Claim {
 		this.whereWasBaggageChecked = whereWasBaggageChecked;
 	}
 
-	public boolean isHaveToRecheck() {
+	public int isHaveToRecheck() {
 		return haveToRecheck;
 	}
 
-	public void setHaveToRecheck(boolean haveToRecheck) {
+	public void setHaveToRecheck(int haveToRecheck) {
 		this.haveToRecheck = haveToRecheck;
 	}
 
-	public boolean isWasBagInspected() {
+	public int isWasBagInspected() {
 		return wasBagInspected;
 	}
 
-	public void setWasBagInspected(boolean wasBagInspected) {
+	public void setWasBagInspected(int wasBagInspected) {
 		this.wasBagInspected = wasBagInspected;
 	}
 
-	public boolean isTicketWithAnotherAirline() {
+	public int isTicketWithAnotherAirline() {
 		return ticketWithAnotherAirline;
 	}
 
-	public void setTicketWithAnotherAirline(boolean ticketWithAnotherAirline) {
+	public void setTicketWithAnotherAirline(int ticketWithAnotherAirline) {
 		this.ticketWithAnotherAirline = ticketWithAnotherAirline;
 	}
 
-	public boolean isChargedForExcessBaggage() {
+	public int isChargedForExcessBaggage() {
 		return chargedForExcessBaggage;
 	}
 
-	public void setChargedForExcessBaggage(boolean chargedForExcessBaggage) {
+	public void setChargedForExcessBaggage(int chargedForExcessBaggage) {
 		this.chargedForExcessBaggage = chargedForExcessBaggage;
 	}
 
-	public boolean isDeclaredExcessValue() {
+	public int isDeclaredExcessValue() {
 		return declaredExcessValue;
 	}
 
-	public void setDeclaredExcessValue(boolean declaredExcessValue) {
+	public void setDeclaredExcessValue(int declaredExcessValue) {
 		this.declaredExcessValue = declaredExcessValue;
 	}
 
@@ -287,19 +287,19 @@ public class Claim {
 		this.declaredValue = declaredValue;
 	}
 
-	public boolean isBagClearCustoms() {
+	public int isBagClearCustoms() {
 		return bagClearCustoms;
 	}
 
-	public void setBagClearCustoms(boolean bagClearCustoms) {
+	public void setBagClearCustoms(int bagClearCustoms) {
 		this.bagClearCustoms = bagClearCustoms;
 	}
 
-	public boolean isBaggageReroutedEnRoute() {
+	public int isBaggageReroutedEnRoute() {
 		return baggageReroutedEnRoute;
 	}
 
-	public void setBaggageReroutedEnRoute(boolean baggageReroutedEnRoute) {
+	public void setBaggageReroutedEnRoute(int baggageReroutedEnRoute) {
 		this.baggageReroutedEnRoute = baggageReroutedEnRoute;
 	}
 
@@ -319,19 +319,19 @@ public class Claim {
 		this.reroutedReason = reroutedReason;
 	}
 
-	public boolean isDifferentClaimCheck() {
+	public int isDifferentClaimCheck() {
 		return differentClaimCheck;
 	}
 
-	public void setDifferentClaimCheck(boolean differentClaimCheck) {
+	public void setDifferentClaimCheck(int differentClaimCheck) {
 		this.differentClaimCheck = differentClaimCheck;
 	}
 
-	public boolean isAttemptToClaimAtArrival() {
+	public int isAttemptToClaimAtArrival() {
 		return attemptToClaimAtArrival;
 	}
 
-	public void setAttemptToClaimAtArrival(boolean attemptToClaimAtArrival) {
+	public void setAttemptToClaimAtArrival(int attemptToClaimAtArrival) {
 		this.attemptToClaimAtArrival = attemptToClaimAtArrival;
 	}
 
@@ -351,19 +351,19 @@ public class Claim {
 		this.whereDidYouFileReport = whereDidYouFileReport;
 	}
 
-	public boolean isReportedToAnotherAirline() {
+	public int isReportedToAnotherAirline() {
 		return reportedToAnotherAirline;
 	}
 
-	public void setReportedToAnotherAirline(boolean reportedToAnotherAirline) {
+	public void setReportedToAnotherAirline(int reportedToAnotherAirline) {
 		this.reportedToAnotherAirline = reportedToAnotherAirline;
 	}
 
-	public boolean isFiledPreviousClaim() {
+	public int isFiledPreviousClaim() {
 		return filedPreviousClaim;
 	}
 
-	public void setFiledPreviousClaim(boolean filedPreviousClaim) {
+	public void setFiledPreviousClaim(int filedPreviousClaim) {
 		this.filedPreviousClaim = filedPreviousClaim;
 	}
 
@@ -391,19 +391,19 @@ public class Claim {
 		this.filedPreviousClaimant = filedPreviousClaimant;
 	}
 
-	public boolean isTsaInspected() {
+	public int isTsaInspected() {
 		return tsaInspected;
 	}
 
-	public void setTsaInspected(boolean tsaInspected) {
+	public void setTsaInspected(int tsaInspected) {
 		this.tsaInspected = tsaInspected;
 	}
 
-	public boolean isTsaNotePresent() {
+	public int isTsaNotePresent() {
 		return tsaNotePresent;
 	}
 
-	public void setTsaNotePresent(boolean tsaNotePresent) {
+	public void setTsaNotePresent(int tsaNotePresent) {
 		this.tsaNotePresent = tsaNotePresent;
 	}
 
@@ -503,11 +503,11 @@ public class Claim {
 		this.reportedFileNumber = reportedFileNumber;
 	}
 
-	public boolean isPrivateInsurance() {
+	public int isPrivateInsurance() {
 		return privateInsurance;
 	}
 
-	public void setPrivateInsurance(boolean privateInsurance) {
+	public void setPrivateInsurance(int privateInsurance) {
 		this.privateInsurance = privateInsurance;
 	}
 

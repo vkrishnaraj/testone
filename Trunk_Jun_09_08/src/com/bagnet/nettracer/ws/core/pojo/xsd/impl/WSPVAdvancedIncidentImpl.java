@@ -13,6 +13,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd.impl;
  */
 public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident
 {
+    private static final long serialVersionUID = 1L;
     
     public WSPVAdvancedIncidentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -202,15 +203,12 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
     }
     
     /**
-     * Sets array of all "claimChecks" element
+     * Sets array of all "claimChecks" element  WARNING: This method is not atomicaly synchronized.
      */
     public void setClaimChecksArray(com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck[] claimChecksArray)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            arraySetterHelper(claimChecksArray, CLAIMCHECKS$2);
-        }
+        check_orphaned();
+        arraySetterHelper(claimChecksArray, CLAIMCHECKS$2);
     }
     
     /**
@@ -1321,15 +1319,12 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
     }
     
     /**
-     * Sets array of all "items" element
+     * Sets array of all "items" element  WARNING: This method is not atomicaly synchronized.
      */
     public void setItemsArray(com.bagnet.nettracer.ws.core.pojo.xsd.WSPVItem[] itemsArray)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            arraySetterHelper(itemsArray, ITEMS$20);
-        }
+        check_orphaned();
+        arraySetterHelper(itemsArray, ITEMS$20);
     }
     
     /**
@@ -1473,15 +1468,12 @@ public class WSPVAdvancedIncidentImpl extends org.apache.xmlbeans.impl.values.Xm
     }
     
     /**
-     * Sets array of all "passengers" element
+     * Sets array of all "passengers" element  WARNING: This method is not atomicaly synchronized.
      */
     public void setPassengersArray(com.bagnet.nettracer.ws.core.pojo.xsd.WSPVPassenger[] passengersArray)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            arraySetterHelper(passengersArray, PASSENGERS$22);
-        }
+        check_orphaned();
+        arraySetterHelper(passengersArray, PASSENGERS$22);
     }
     
     /**

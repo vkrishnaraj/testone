@@ -13,6 +13,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd.impl;
  */
 public class PassengerViewImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView
 {
+    private static final long serialVersionUID = 1L;
     
     public PassengerViewImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -261,17 +262,7 @@ public class PassengerViewImpl extends org.apache.xmlbeans.impl.values.XmlComple
      */
     public void setData(com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident data)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident target = null;
-            target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident)get_store().find_element_user(DATA$4, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident)get_store().add_element_user(DATA$4);
-            }
-            target.set(data);
-        }
+        generatedSetterHelperImpl(data, DATA$4, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**

@@ -17,7 +17,7 @@ package com.bagnet.nettracer.ws.onlineclaims;
 public interface AuthIncidentResponseDocument extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthIncidentResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("authincidentresponsedce0doctype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthIncidentResponseDocument.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sA32E7A8E195DFE62F7139238BD50407D").resolveHandle("authincidentresponsedce0doctype");
     
     /**
      * Gets the "authIncidentResponse" element
@@ -42,7 +42,7 @@ public interface AuthIncidentResponseDocument extends org.apache.xmlbeans.XmlObj
     public interface AuthIncidentResponse extends org.apache.xmlbeans.XmlObject
     {
         public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthIncidentResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s0D4EBC34E91068711A7A497F703CCBD2").resolveHandle("authincidentresponseafe9elemtype");
+            org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(AuthIncidentResponse.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sA32E7A8E195DFE62F7139238BD50407D").resolveHandle("authincidentresponseafe9elemtype");
         
         /**
          * Gets the "return" element

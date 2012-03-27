@@ -13,6 +13,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd.impl;
  */
 public class ItineraryImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary
 {
+    private static final long serialVersionUID = 1L;
     
     public ItineraryImpl(org.apache.xmlbeans.SchemaType sType)
     {

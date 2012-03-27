@@ -14,6 +14,7 @@ package com.bagnet.nettracer.ws.onlineclaims.impl;
  */
 public class SaveClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public SaveClaimDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -47,17 +48,7 @@ public class SaveClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
      */
     public void setSaveClaim(com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument.SaveClaim saveClaim)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument.SaveClaim target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument.SaveClaim)get_store().find_element_user(SAVECLAIM$0, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument.SaveClaim)get_store().add_element_user(SAVECLAIM$0);
-            }
-            target.set(saveClaim);
-        }
+        generatedSetterHelperImpl(saveClaim, SAVECLAIM$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**
@@ -80,6 +71,7 @@ public class SaveClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
      */
     public static class SaveClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.SaveClaimDocument.SaveClaim
     {
+        private static final long serialVersionUID = 1L;
         
         public SaveClaimImpl(org.apache.xmlbeans.SchemaType sType)
         {
@@ -396,17 +388,7 @@ public class SaveClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
          */
         public void setClaim(com.bagnet.nettracer.ws.onlineclaims.xsd.Claim claim)
         {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                com.bagnet.nettracer.ws.onlineclaims.xsd.Claim target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Claim)get_store().find_element_user(CLAIM$4, 0);
-                if (target == null)
-                {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.Claim)get_store().add_element_user(CLAIM$4);
-                }
-                target.set(claim);
-            }
+            generatedSetterHelperImpl(claim, CLAIM$4, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
         }
         
         /**
@@ -503,17 +485,7 @@ public class SaveClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
          */
         public void setAuth(com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth auth)
         {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$6, 0);
-                if (target == null)
-                {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$6);
-                }
-                target.set(auth);
-            }
+            generatedSetterHelperImpl(auth, AUTH$6, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
         }
         
         /**

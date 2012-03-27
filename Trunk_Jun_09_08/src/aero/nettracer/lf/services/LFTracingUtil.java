@@ -522,7 +522,8 @@ public class LFTracingUtil {
 				}
 				if(litem.getColor() != null && litem.getColor().trim().length() > 0
 						&& fitem.getColor() != null && fitem.getColor().trim().length() > 0){
-					if(litem.getColor().equalsIgnoreCase(fitem.getColor())){
+					if(litem.getColor().equalsIgnoreCase(fitem.getColor()) &&
+							!litem.getColor().equalsIgnoreCase(TracingConstants.LFC_COLOR_DOESNOTAPPLY)){
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Color Match");
 						detail.setMatchHistory(match);
@@ -534,7 +535,8 @@ public class LFTracingUtil {
 				}
 				if(litem.getCaseColor() != null && litem.getCaseColor().trim().length() > 0
 						&& fitem.getCaseColor() != null && fitem.getCaseColor().trim().length() > 0){
-					if(litem.getCaseColor().equalsIgnoreCase(fitem.getCaseColor())){
+					if(litem.getCaseColor().equalsIgnoreCase(fitem.getCaseColor()) &&
+							!litem.getCaseColor().equalsIgnoreCase(TracingConstants.LFC_COLOR_DOESNOTAPPLY)){
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Case Color Match");
 						detail.setMatchHistory(match);

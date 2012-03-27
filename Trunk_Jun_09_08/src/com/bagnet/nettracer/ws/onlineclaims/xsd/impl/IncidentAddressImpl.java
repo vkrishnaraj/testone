@@ -13,6 +13,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd.impl;
  */
 public class IncidentAddressImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.xsd.IncidentAddress
 {
+    private static final long serialVersionUID = 1L;
     
     public IncidentAddressImpl(org.apache.xmlbeans.SchemaType sType)
     {

@@ -14,6 +14,7 @@ package com.bagnet.nettracer.ws.onlineclaims.impl;
  */
 public class AuthPassengerResponseDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public AuthPassengerResponseDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -47,17 +48,7 @@ public class AuthPassengerResponseDocumentImpl extends org.apache.xmlbeans.impl.
      */
     public void setAuthPassengerResponse(com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument.AuthPassengerResponse authPassengerResponse)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument.AuthPassengerResponse target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument.AuthPassengerResponse)get_store().find_element_user(AUTHPASSENGERRESPONSE$0, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument.AuthPassengerResponse)get_store().add_element_user(AUTHPASSENGERRESPONSE$0);
-            }
-            target.set(authPassengerResponse);
-        }
+        generatedSetterHelperImpl(authPassengerResponse, AUTHPASSENGERRESPONSE$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**
@@ -80,6 +71,7 @@ public class AuthPassengerResponseDocumentImpl extends org.apache.xmlbeans.impl.
      */
     public static class AuthPassengerResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.AuthPassengerResponseDocument.AuthPassengerResponse
     {
+        private static final long serialVersionUID = 1L;
         
         public AuthPassengerResponseImpl(org.apache.xmlbeans.SchemaType sType)
         {
@@ -140,17 +132,7 @@ public class AuthPassengerResponseDocumentImpl extends org.apache.xmlbeans.impl.
          */
         public void setReturn(com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView xreturn)
         {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView)get_store().find_element_user(RETURN$0, 0);
-                if (target == null)
-                {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.PassengerView)get_store().add_element_user(RETURN$0);
-                }
-                target.set(xreturn);
-            }
+            generatedSetterHelperImpl(xreturn, RETURN$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
         }
         
         /**

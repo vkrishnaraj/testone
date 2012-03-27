@@ -13,6 +13,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd.impl;
  */
 public class PassengerImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.xsd.Passenger
 {
+    private static final long serialVersionUID = 1L;
     
     public PassengerImpl(org.apache.xmlbeans.SchemaType sType)
     {

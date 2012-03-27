@@ -14,6 +14,7 @@ package com.bagnet.nettracer.ws.onlineclaims.impl;
  */
 public class SaveNewIncidentResponseDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public SaveNewIncidentResponseDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -47,17 +48,7 @@ public class SaveNewIncidentResponseDocumentImpl extends org.apache.xmlbeans.imp
      */
     public void setSaveNewIncidentResponse(com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.SaveNewIncidentResponse saveNewIncidentResponse)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.SaveNewIncidentResponse target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.SaveNewIncidentResponse)get_store().find_element_user(SAVENEWINCIDENTRESPONSE$0, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.SaveNewIncidentResponse)get_store().add_element_user(SAVENEWINCIDENTRESPONSE$0);
-            }
-            target.set(saveNewIncidentResponse);
-        }
+        generatedSetterHelperImpl(saveNewIncidentResponse, SAVENEWINCIDENTRESPONSE$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**
@@ -80,6 +71,7 @@ public class SaveNewIncidentResponseDocumentImpl extends org.apache.xmlbeans.imp
      */
     public static class SaveNewIncidentResponseImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.SaveNewIncidentResponse
     {
+        private static final long serialVersionUID = 1L;
         
         public SaveNewIncidentResponseImpl(org.apache.xmlbeans.SchemaType sType)
         {

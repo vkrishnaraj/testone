@@ -13,6 +13,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd.impl;
  */
 public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.xsd.Bag
 {
+    private static final long serialVersionUID = 1L;
     
     public BagImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -984,15 +985,12 @@ public class BagImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentIm
     }
     
     /**
-     * Sets array of all "contents" element
+     * Sets array of all "contents" element  WARNING: This method is not atomicaly synchronized.
      */
     public void setContentsArray(com.bagnet.nettracer.ws.onlineclaims.xsd.Contents[] contentsArray)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            arraySetterHelper(contentsArray, CONTENTS$14);
-        }
+        check_orphaned();
+        arraySetterHelper(contentsArray, CONTENTS$14);
     }
     
     /**

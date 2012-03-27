@@ -14,6 +14,7 @@ package com.bagnet.nettracer.ws.onlineclaims.impl;
  */
 public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument
 {
+    private static final long serialVersionUID = 1L;
     
     public LoadClaimDocumentImpl(org.apache.xmlbeans.SchemaType sType)
     {
@@ -47,17 +48,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
      */
     public void setLoadClaim(com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument.LoadClaim loadClaim)
     {
-        synchronized (monitor())
-        {
-            check_orphaned();
-            com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument.LoadClaim target = null;
-            target = (com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument.LoadClaim)get_store().find_element_user(LOADCLAIM$0, 0);
-            if (target == null)
-            {
-                target = (com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument.LoadClaim)get_store().add_element_user(LOADCLAIM$0);
-            }
-            target.set(loadClaim);
-        }
+        generatedSetterHelperImpl(loadClaim, LOADCLAIM$0, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
     }
     
     /**
@@ -80,6 +71,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
      */
     public static class LoadClaimImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentImpl implements com.bagnet.nettracer.ws.onlineclaims.LoadClaimDocument.LoadClaim
     {
+        private static final long serialVersionUID = 1L;
         
         public LoadClaimImpl(org.apache.xmlbeans.SchemaType sType)
         {
@@ -615,17 +607,7 @@ public class LoadClaimDocumentImpl extends org.apache.xmlbeans.impl.values.XmlCo
          */
         public void setAuth(com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth auth)
         {
-            synchronized (monitor())
-            {
-                check_orphaned();
-                com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth target = null;
-                target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().find_element_user(AUTH$8, 0);
-                if (target == null)
-                {
-                    target = (com.bagnet.nettracer.ws.onlineclaims.xsd.NtAuth)get_store().add_element_user(AUTH$8);
-                }
-                target.set(auth);
-            }
+            generatedSetterHelperImpl(auth, AUTH$8, 0, org.apache.xmlbeans.impl.values.XmlObjectBase.KIND_SETTERHELPER_SINGLETON);
         }
         
         /**
