@@ -205,14 +205,14 @@
 				<rich:spacer width="160px"/>
 			
 				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.previous.label}"
-				 	tabindex="4" immediate="true" action="#{passengerController.goBackToFraudQuestion}"
+				 	tabindex="4" immediate="true" action="#{passengerController.goBackToFraudQuestion}" onclick="this.disabled=true;"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px" rendered="#{!passengerController.readOnlyOnSubmitted}"/>
 				
 				<h:commandButton id="forwardSubmit" value="#{passengerController.submitClaimLabel.claimSubmit.label}"
 				 	tabindex="5" action="#{passengerController.submitPassengerInfo}"
-				 	rendered="#{!passengerController.readOnlyOnSubmitted}"
+				 	rendered="#{!passengerController.readOnlyOnSubmitted}" onclick="this.disabled=true;"
 					styleClass="button140pxred button140pxred2" />
 				
 			

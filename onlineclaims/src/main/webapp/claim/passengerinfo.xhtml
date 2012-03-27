@@ -150,19 +150,19 @@
 				<rich:spacer width="290px"/>
 			
 				<h:commandButton id="savePassInfo" value="#{passengerController.passengerInfoLabel.save.label}"
-				 		tabindex="25" action="#{passengerController.savePassengerInfo}"
+				 		tabindex="25" action="#{passengerController.savePassengerInfo}" onclick="this.disabled=true;"
 						styleClass="button140pxred button140pxred2" />
 				
 				<rich:spacer width="20px"/>
 			
 				<h:commandButton id="cancelPassInfo" value="#{passengerController.flightLabel.previous.label}"
-				 	tabindex="26" immediate="true" action="#{passengerController.goBackToLiability}"
+				 	tabindex="26" immediate="true" action="#{passengerController.goBackToLiability}" onclick="this.disabled=true;"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.forward.label}"
-				 	tabindex="27" action="#{passengerController.gotoFlightDetails}"
+				 	tabindex="27" action="#{passengerController.gotoFlightDetails}" onclick="this.disabled=true;"
 					styleClass="button140pxred button140pxred2" />
 				
 			

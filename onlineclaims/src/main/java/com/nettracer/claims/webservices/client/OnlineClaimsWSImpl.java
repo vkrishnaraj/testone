@@ -245,27 +245,27 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         passengerBean.setBagCheckLocation(null != claim.getCheckedLocation()
         		? claim.getCheckedLocation() :"");
         passengerBean.setNoOfPassenger(claim.getPassengersTravelingWithYou());
-        passengerBean.setRecheckBag(claim.getHaveToRecheck());
-        passengerBean.setInspectbag(claim.getWasBagInspected());
-        passengerBean.setChargeExcessBaggage(claim.getChargedForExcessBaggage());
+        passengerBean.setRecheckBag(intToBool(claim.getHaveToRecheck()));
+        passengerBean.setInspectbag(intToBool(claim.getWasBagInspected()));
+        passengerBean.setChargeExcessBaggage(intToBool(claim.getChargedForExcessBaggage()));
         passengerBean.setNoOfCheckedBag(0);
         passengerBean.setNoOfmissingBag(claim.getBagsStillMissing());
         passengerBean.setBagClaimCheck(""); //not DifferentClaimCheck
-        passengerBean.setDeclarePayExcessValue(claim.getDeclaredExcessValue());
+        passengerBean.setDeclarePayExcessValue(intToBool(claim.getDeclaredExcessValue()));
         passengerBean.setDeclaredValue(null != claim.getDeclaredValue() 
         		&& ! claim.getDeclaredValue().equals("?")
         		? Double.parseDouble(claim.getDeclaredValue()) : 0D);
-        passengerBean.setClearCustomBag(claim.getBagClearCustoms());
+        passengerBean.setClearCustomBag(intToBool(claim.getBagClearCustoms()));
         passengerBean.setBagWeight(claim.getBagWeight());
-        passengerBean.setRerouteBag(claim.getBaggageReroutedEnRoute());
-        passengerBean.setDifferentClaimCheck(claim.getDifferentClaimCheck());
+        passengerBean.setRerouteBag(intToBool(claim.getBaggageReroutedEnRoute()));
+        passengerBean.setDifferentClaimCheck(intToBool(claim.getDifferentClaimCheck()));
         passengerBean.setReroutedCityAirline(claim.getReroutedAirlineCity());
         passengerBean.setReason(claim.getReroutedReason());
-        passengerBean.setImmediateClaimAttempt(claim.getAttemptToClaimAtArrival());
+        passengerBean.setImmediateClaimAttempt(intToBool(claim.getAttemptToClaimAtArrival()));
         passengerBean.setWhenBagSeen(claim.getLastSawBaggage());
         passengerBean.setFileReportCity(claim.getWhereDidYouFileReport());
-        passengerBean.setReportAnotherAirline(claim.getReportedToAnotherAirline());
-        passengerBean.setDifferentAirlineTicket(claim.getTicketWithAnotherAirline());
+        passengerBean.setReportAnotherAirline(intToBool(claim.getReportedToAnotherAirline()));
+        passengerBean.setDifferentAirlineTicket(intToBool(claim.getTicketWithAnotherAirline()));
         passengerBean.setTicketNumber(claim.getTicketNumber());
         passengerBean.setDeclaredValueCurrency(claim.getDeclaredCurrency());	
         passengerBean.setClaimAmountCurrency(claim.getPaxClaimAmountCurrency());
@@ -282,7 +282,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         setFiles(claim,passengerBean);
        
         //Fraud Question
-        passengerBean.setAnotherClaim(claim.getFiledPreviousClaim());
+        passengerBean.setAnotherClaim(intToBool(claim.getFiledPreviousClaim()));
         passengerBean.setWhichAirline(claim.getFiledPreviousAirline());
         if(null != claim.getFiledPrevoiusDate()){
         	Calendar temp = claim.getFiledPrevoiusDate();
@@ -291,13 +291,13 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         	passengerBean.setDateOfClaim(temp.getTime());
         }
         passengerBean.setClaimantName(claim.getFiledPreviousClaimant());
-        passengerBean.setTsaInspect(claim.getTsaInspected());
-        passengerBean.setBagConfirmNote(claim.getTsaNotePresent());
+        passengerBean.setTsaInspect(intToBool(claim.getTsaInspected()));
+        passengerBean.setBagConfirmNote(intToBool(claim.getTsaNotePresent()));
         passengerBean.setInspectionPlace(claim.getTsaInspectionLocation());
         passengerBean.setAdditionalComments(claim.getComments());
         passengerBean.setClaimAmount(claim.getPaxClaimAmount());
         passengerBean.setClaimDate(claim.getPaxClaimDate());
-        passengerBean.setPrivateInsurance(claim.getPrivateInsurance());
+        passengerBean.setPrivateInsurance(intToBool(claim.getPrivateInsurance()));
         passengerBean.setPrivateInsuranceName(claim.getPrivateInsuranceName());
         passengerBean.setPrivateInsuranceAddr(claim.getPrivateInsuranceAddr());
         passengerBean.setReportedAirline(claim.getReportedAirline());
@@ -442,26 +442,26 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          		? passengerBean.getBagCheckLocation() :"");
          claim.setCheckedLocationDescription(passengerBean.getBagCheckDescription());
          claim.setPassengersTravelingWithYou(passengerBean.getNoOfPassenger());
-         claim.setHaveToRecheck(passengerBean.getRecheckBag());
-         claim.setWasBagInspected(passengerBean.getInspectbag());
-         claim.setChargedForExcessBaggage(passengerBean.getChargeExcessBaggage());
+         claim.setHaveToRecheck(boolToInt(passengerBean.getRecheckBag()));
+         claim.setWasBagInspected(boolToInt(passengerBean.getInspectbag()));
+         claim.setChargedForExcessBaggage(boolToInt(passengerBean.getChargeExcessBaggage()));
          //claim.setNoOfCheckedBag(0); //To be implemented later
          claim.setBagsStillMissing(passengerBean.getNoOfmissingBag());
          //claim.setBagpassengerBeanCheck(""); //not DifferentpassengerBeanCheck
-         claim.setDeclaredExcessValue(passengerBean.getDeclarePayExcessValue());
+         claim.setDeclaredExcessValue(boolToInt(passengerBean.getDeclarePayExcessValue()));
          claim.setDeclaredValue(passengerBean.getDeclaredValue()+"");
          claim.setDeclaredCurrency(passengerBean.getDeclaredValueCurrency()); 
-         claim.setBagClearCustoms(passengerBean.getClearCustomBag());
+         claim.setBagClearCustoms(boolToInt(passengerBean.getClearCustomBag()));
          claim.setBagWeight(passengerBean.getBagWeight());              
-         claim.setBaggageReroutedEnRoute(passengerBean.getRerouteBag());
-         claim.setDifferentClaimCheck(passengerBean.getDifferentClaimCheck());
+         claim.setBaggageReroutedEnRoute(boolToInt(passengerBean.getRerouteBag()));
+         claim.setDifferentClaimCheck(boolToInt(passengerBean.getDifferentClaimCheck()));
          claim.setReroutedAirlineCity(passengerBean.getReroutedCityAirline());
          claim.setReroutedReason(passengerBean.getReason());
-         claim.setAttemptToClaimAtArrival(passengerBean.getImmediateClaimAttempt());
+         claim.setAttemptToClaimAtArrival(boolToInt(passengerBean.getImmediateClaimAttempt()));
          claim.setLastSawBaggage(passengerBean.getWhenBagSeen());
          claim.setWhereDidYouFileReport(passengerBean.getFileReportCity());
-         claim.setReportedToAnotherAirline(passengerBean.getReportAnotherAirline());
-         claim.setTicketWithAnotherAirline(passengerBean.getDifferentAirlineTicket());
+         claim.setReportedToAnotherAirline(boolToInt(passengerBean.getReportAnotherAirline()));
+         claim.setTicketWithAnotherAirline(boolToInt(passengerBean.getDifferentAirlineTicket()));
          claim.setTicketNumber(passengerBean.getTicketNumber());
          claim.setReportedAirline(passengerBean.getReportedAirline());
          claim.setReportedCity(passengerBean.getReportedCity());
@@ -573,7 +573,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		subDoc1.setIncidentId(passengerBean.getIncidentID()); //claim number is the incident Id
 		subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
 
-		claim.setFiledPreviousClaim(passengerBean.getAnotherClaim());
+		claim.setFiledPreviousClaim(boolToInt(passengerBean.getAnotherClaim()));
         claim.setFiledPreviousAirline(passengerBean.getWhichAirline());
         if(null != passengerBean.getDateOfClaim()){
        	 calendar=Calendar.getInstance();
@@ -583,11 +583,11 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
        	 calendar=null; //GC
         }
         claim.setFiledPreviousClaimant(passengerBean.getClaimantName());
-        claim.setTsaInspected(passengerBean.getTsaInspect());
-        claim.setTsaNotePresent(passengerBean.getBagConfirmNote());
+        claim.setTsaInspected(boolToInt(passengerBean.getTsaInspect()));
+        claim.setTsaNotePresent(boolToInt(passengerBean.getBagConfirmNote()));
         claim.setTsaInspectionLocation(passengerBean.getInspectionPlace());
         claim.setComments(passengerBean.getAdditionalComments());
-        claim.setPrivateInsurance(passengerBean.isPrivateInsurance());
+        claim.setPrivateInsurance(boolToInt(passengerBean.isPrivateInsurance()));
         claim.setPrivateInsuranceName(passengerBean.getPrivateInsuranceName());
         claim.setPrivateInsuranceAddr(passengerBean.getPrivateInsuranceAddr());
 		 
@@ -1147,6 +1147,28 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		}  
 		logger.fatal("HOUR DIFFERENCE = " + hourDifference);  
 		return hourDifference;
+	}
+	
+	private Boolean intToBool(int toConvert) {
+		if (toConvert == 0) {
+			return false;
+		} else if (toConvert == 1) {
+			return true;
+		} else {
+			return null;
+		}
+	}
+	
+	private int boolToInt (Boolean toConvert) {
+		if (toConvert == null) {
+			return -1;
+		} else {
+			if (toConvert) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}
 	}
 
 }

@@ -148,6 +148,7 @@
 						<f:selectItem itemValue="WT" itemLabel="White"/>
 						<f:selectItem itemValue="YW" itemLabel="Yellow"/>
 						<f:selectItem itemValue="PR" itemLabel="Pattern"/>
+						<f:selectItem itemValue="XX" itemLabel="Other"/>
 				</t:selectOneMenu>
 				
 				
@@ -542,7 +543,7 @@
 	
 			function displayMCMessage(selection, bagRow) {
 				theDisplay = "none";
-				if (selection == "MC" || selection == "PR") {
+				if (selection == "MC" || selection == "PR" || selection == "XX") {
 					theDisplay = "block";
 				}
 				document.getElementById("appForm:bagList:" + bagRow + ":mcMessage").style.display = theDisplay;

@@ -129,13 +129,13 @@ Receipts are required for all interim reimbursement
 				<rich:spacer width="450px"/>
 			
 				<h:commandButton id="cancelPassInfo" value="#{passengerController.passengerInfoLabel.cancel.label}"
-				 	tabindex="26" immediate="true" action="#{passengerController.cancel}"
+				 	tabindex="26" immediate="true" action="#{passengerController.cancel}" onclick="this.disabled=true;"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="dirforward" value="#{passengerController.generalLabel.forward.label}" tabindex="0"
-				action="#{passengerController.gotoLiability}"
+				action="#{passengerController.gotoLiability}" onclick="this.disabled=true;"
 				styleClass="button140pxred button140pxred2" />
 				
 				</div>

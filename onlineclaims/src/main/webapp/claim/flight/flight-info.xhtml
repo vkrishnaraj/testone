@@ -101,7 +101,7 @@
 			<f:selectItem itemLabel="Remote" itemValue="Remote" />
 			<f:selectItem itemLabel="Unchecked" itemValue="Unchecked" />
 			<f:selectItem itemLabel="Other" itemValue="Other" />
-			<a4j:support event="onchange" reRender="checkDesc" limitToList="true"/>
+			<a4j:support event="onchange" ajaxSingle="true" reRender="checkDesc" limitToList="true"/>
 		</h:selectOneMenu>
 		<a4j:outputPanel id="checkDesc" ajaxRendered="true">
 			<t:inputText value="#{passengerBean.bagCheckDescription}" styleClass="passInout"

@@ -259,7 +259,7 @@ it will be necessary to complete a Passenger Property Form." styleClass="passfon
 			<h:outputText value="&#160;" styleClass="passfontstyle" />
 			<div><h:commandButton id="dirforward" rendered="#{passengerBean.onlineAvailable}"
 				value="#{passengerDirectionList[1].displayText}" tabindex="0"
-				action="#{passengerController.gotoPPFInstruction}"
+				action="#{passengerController.gotoPPFInstruction}" onclick="this.disabled=true;"
 				styleClass="button140pxredextended fright" />
 				
 			 <h:outputLink value="http://www.usairways.com/en-US/Resources/_downloads/traveltools/baggage_claim_form.pdf" target="_blank" rendered="#{passengerBean.claimsAvailable}">
@@ -275,7 +275,7 @@ it will be necessary to complete a Passenger Property Form." styleClass="passfon
 				
 				<h:commandButton id="dirforward2" value="#{passengerController.generalLabel.forward.label}" tabindex="0"
 				action="#{passengerController.gotoPPFInstruction}" rendered="#{passengerBean.completeClaim}"
-				styleClass="button140pxred button140pxred2" />
+				styleClass="button140pxred button140pxred2"  onclick="this.disabled=true;"/>
 				
 				
 				</div>

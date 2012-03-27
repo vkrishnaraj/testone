@@ -232,7 +232,7 @@ Receipts are required for all interim reimbursement
 				<rich:spacer width="290px"/>
 			
 				<h:commandButton id="saveSubmitClaim" value="#{passengerController.passengerInfoLabel.save.label}"
-				 		tabindex="1" action="#{passengerController.saveFileInfo}"
+				 		tabindex="1" action="#{passengerController.saveFileInfo}" onclick="this.disabled=true;"
 				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
 						styleClass="button140pxred button140pxred2" />
 				
@@ -240,13 +240,13 @@ Receipts are required for all interim reimbursement
 			
 				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.previous.label}"
 				 	tabindex="2" immediate="true" action="#{passengerController.goBackToBagDetails}"
-				 	 onclick="if (!window.confirm('Are you sure? Clicking OK will result in the loss of unsaved data.')) { return false; }"
+				 	 onclick="if (!window.confirm('Are you sure? Clicking OK will result in the loss of unsaved data.')) { return false; } else { this.disabled=true; }"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="forwardSubmit" value="#{passengerController.passengerInfoLabel.forward.label}"
-				 	tabindex="3" action="#{passengerController.gotoFraudQuestion}"
+				 	tabindex="3" action="#{passengerController.gotoFraudQuestion}" onclick="this.disabled=true;"
 					styleClass="button140pxred button140pxred2" />
 				
 			

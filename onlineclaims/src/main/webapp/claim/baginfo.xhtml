@@ -142,7 +142,7 @@
 				<rich:spacer width="290px"/>
 			
 				<h:commandButton id="savePassInfo" value="#{passengerController.passengerInfoLabel.save.label}"
-						  action="#{passengerController.saveBagInfo}"
+						  action="#{passengerController.saveBagInfo}" onclick="this.disabled=true;"
 				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
 						styleClass="button140pxred button140pxred2" />
 				
@@ -150,13 +150,13 @@
 			
 				<h:commandButton id="prevFlightInfo" value="#{passengerController.flightLabel.previous.label}"
 				 	 immediate="true"  action="#{passengerController.goBackToFlightDetails}"
-				 	 onclick="if (!window.confirm('Are you sure? Clicking OK will result in the loss of unsaved data.')) { return false; }"
+				 	 onclick="if (!window.confirm('Are you sure? Clicking OK will result in the loss of unsaved data.')) { return false; } else { this.disabled=true; }"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.forward.label}"
-				 	action="#{passengerController.gotoFileUpload}"
+				 	action="#{passengerController.gotoFileUpload}" onclick="this.disabled=true;"
 					styleClass="button140pxred button140pxred2" />
 				
 			
