@@ -178,11 +178,23 @@ public class LostAndFoundController {
 				FacesUtil.addError("Airport Item Was Lost At is required.");
 				isValid = false;
 			}
+			if (lostReport.getItemColor() != null && lostReport.getItemColor().trim().length() == 0) {	// VALIDATE: ITEM COLOR
+				FacesUtil.addError("Item Color is required.");
+				isValid = false;
+			}
+			if (lostReport.getItemCaseColor() != null 
+					&& lostReport.getItemCaseColor().trim().length() == 0) {							// VALIDATE: ITEM CASE COLOR
+				FacesUtil.addError("Item Case Color is required.");
+				isValid = false;
+			}
 			if (lostReport.getItemCategory() < 1) {													 	// VALIDATE: CATEGORY
 				FacesUtil.addError("Item Category is required.");
 				isValid = false;
+			} else if (lostReport.getItemSubCategory() == 0) {											// VALIDATE: SUBCATEGORY
+				FacesUtil.addError("Item Subcategory is required for Category \"\".");
+				isValid = false;
 			}
-			if (lostReport.getItemCategory() == 7) {								 	// VALIDATE: LOST PHONE NUM
+			if (lostReport.getItemCategory() == 7) {								 					// VALIDATE: LOST PHONE NUM
 				if (lostReport.getLostPhone() == null 
 						|| lostReport.getLostPhone().getNumber() == null 
 						|| lostReport.getLostPhone().getNumber().trim().length() == 0) {

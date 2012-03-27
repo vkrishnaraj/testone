@@ -16,27 +16,12 @@
 				<p class="twlvPxBlk"><t:outputText value="#{msg.lostform_text_policy_desc}" /></p><br/>
 				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_about_title}" /></p><br/><br/>
 				<table style="width: 95%;">
-					<tr><td class="twlvPxBlk" style="width: 34%;">
-						<t:outputText value="#{msg.lostform_label_item_model}" />
-					</td><td class="twlvPxBlk" style="width: 33%;">
-						<t:outputText value="#{msg.lostform_label_item_brand}" />
-					</td><td class="twlvPxBlk" style="width: 33%;">
-						<t:outputText value="#{msg.lostform_label_item_serial}" />
-					</td></tr>
-					<tr><td>
-						<t:inputText value="#{lostAndFound.lostReport.itemModel}"  style="width: 95%;"/>
-					</td><td>
-						<t:inputText value="#{lostAndFound.lostReport.itemBrand}"  style="width: 95%;"/>
-					</td><td>
-						<t:inputText value="#{lostAndFound.lostReport.itemSerial}"  style="width: 100%;"/>
-					</td></tr>
-					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk">
 						<t:outputText value="#{msg.lostform_label_item_category} *" />
 					</td><td class="twlvPxBlk">
 						<t:outputText value="#{msg.lostform_label_item_subcat}" />
 					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_color}" />
+						<t:outputText value="#{msg.lostform_label_item_color} *" />
 					</td></tr>
 					<tr><td>
 						<t:selectOneMenu value="#{lostAndFound.lostReport.itemCategory}"  style="width: 95%;">
@@ -57,12 +42,27 @@
 						</t:selectOneMenu>
 					</td></tr>
 					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" style="width: 34%;">
+						<t:outputText value="#{msg.lostform_label_item_brand}" />
+					</td><td class="twlvPxBlk" style="width: 33%;">
+						<t:outputText value="#{msg.lostform_label_item_model}" />
+					</td><td class="twlvPxBlk" style="width: 33%;">
+						<t:outputText value="#{msg.lostform_label_item_serial}" />
+					</td></tr>
+					<tr><td>
+						<t:inputText value="#{lostAndFound.lostReport.itemBrand}"  style="width: 95%;"/>
+					</td><td>
+						<t:inputText value="#{lostAndFound.lostReport.itemModel}"  style="width: 95%;"/>
+					</td><td>
+						<t:inputText value="#{lostAndFound.lostReport.itemSerial}"  style="width: 100%;"/>
+					</td></tr>
+					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk">
 						<t:outputText value="#{msg.lostform_label_item_size}" />
 					</td><td class="twlvPxBlk">
 						<t:outputText value="#{msg.lostform_label_item_phone}" />
 					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_case_color}" />
+						<t:outputText value="#{msg.lostform_label_item_case_color} *" />
 					</td></tr>
 					<tr><td>
 						<t:inputText value="#{lostAndFound.lostReport.itemSize}"  style="width: 95%;"/>
@@ -145,10 +145,12 @@
 						<t:outputText value="#{msg.lostform_label_address_country} *" />
 					</td></tr>
 					<tr><td colspan="3">
-						<t:inputText value="#{lostAndFound.lostReport.contact.address.province}"  style="width: 95%" />
+						<t:inputText id="province" value="#{lostAndFound.lostReport.contact.address.province}"  
+							style="width: 95%" disabled="true"/>
 					</td><td colspan="3">
-						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.country}"  style="width: 100%" >
-							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="" />
+						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.country}" onchange="adjustAddressReq(this);"
+							style="width: 100%" >
+							<f:selectItem itemLabel="#{msg.general_list_united_states}" itemValue="US" />
 							<f:selectItems value="#{lostAndFound.countries}" />
 						</t:selectOneMenu>
 					</td></tr>                                                     
@@ -260,6 +262,15 @@
 						return true;
 					}
 					
+				}
+				
+				function adjustAddressReq(countryList) {
+					province = document.getElementById("lostForm:province");
+					if (countryList.options[countryList.selectedIndex].value == "US") {
+						province.disabled = true;
+					} else {
+						province.disabled = false;
+					}
 				}
 			</script>
 		</h:form>
