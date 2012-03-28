@@ -87,6 +87,6 @@ public class Lock implements Serializable {
 	}
 	
 	public static enum LockType{
-		AF_COUNT, AF_SUMMARY, AF_DETAIL, TM_INCIDENT, LF_FOUND
+		AF_COUNT, AF_SUMMARY, AF_DETAIL, TM_INCIDENT, LF_FOUND, DISPUTE
 	};
 }

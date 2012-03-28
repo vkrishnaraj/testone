@@ -17,7 +17,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -82,6 +86,14 @@ public class DisputeResolutionAction extends CheckedAction {
 			
 			
 			if (actionType.equalsIgnoreCase("start")) {
+				if(user.getCompanycode_ID().equals("US")){ // Change to US
+					myIncident.setLoss_code(0);
+					Session sess = HibernateWrapper.getSession().openSession();
+					Transaction t = sess.beginTransaction();
+					sess.saveOrUpdate(myIncident);
+					t.commit();
+			        
+				}
 				forwardTarget = TracingConstants.DISPUTE_RESOLUTION;
 			} else if (actionType.equalsIgnoreCase("reopen")){ 
 				if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
@@ -125,6 +137,7 @@ public class DisputeResolutionAction extends CheckedAction {
 					success = manuallyModifyDispute(incident, theform, user);
 				} 
 				
+				DisputeUtils.unlockDispute(myIncident.getDispute().getLock(), myIncident.getDispute());
 				DisputeResolutionUtils.lockIncident(incident); 
 				DisputeResolutionUtils.auditIncidentLockOrUnlock(incident, user);
 				//DisputeResolutionUtils.lockIncidentWithAudit(incident, user);

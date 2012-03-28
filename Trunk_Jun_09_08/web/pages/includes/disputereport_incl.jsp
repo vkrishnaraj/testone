@@ -84,7 +84,7 @@
     <logic:present name="faultstationlist" scope="request">
       <bean:message key="colname.faultstation" />
       <br>
-      <% if(val) {%>
+      <% if(val && request.getParameter("actionType").equals("start")) {%>
       <html:select property="faultstation_id" styleClass="dropdown" value="">  
           <html:option value="">
             <bean:message key="select.please_select" />
@@ -108,6 +108,7 @@
   <td nowrap colspan="6">
     <bean:message key="colname.closereport.losscode" />
     <br>
+     
      <% if(val) {%>
       <html:select property="loss_code" styleClass="dropdown" value="0">      
           <html:option value="0">

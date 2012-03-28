@@ -67,6 +67,19 @@ public class SearchDisputeAction extends CheckedAction {
 		
 		SearchDisputeForm theform = (SearchDisputeForm) form;
 		
+		if (actionType.equalsIgnoreCase("getnext"))
+		{
+			Dispute d=DisputeUtils.getDispute(user);
+			if(d!=null){
+				String nextDispute=d.getIncident().getIncident_ID();
+				if(nextDispute!=null){
+					response.sendRedirect("disputeResolution.do?id="+nextDispute+"&actionType=viewToResolve");
+					return null;
+				}
+			}
+			
+		}
+		
 		// search
 		List<Dispute> resultList = new ArrayList<Dispute>();
 		long rowcount = -1;

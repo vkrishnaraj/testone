@@ -11,12 +11,22 @@ import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.LockBMO;
+import com.bagnet.nettracer.tracing.bmo.TaskManagerBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.Lock.LockType;
 import com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz;
+import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.ItemTraceResultsTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
 public class DisputeUtils {
 	private static Logger logger = Logger.getLogger(DisputeUtils.class);
@@ -53,6 +63,111 @@ public class DisputeUtils {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+	
+	public static Dispute getDispute(Agent agent) {
+		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d";
+		sql += " where 1=1 and d.status = :status";
+		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz) and Lock_ID=null";
+		sql += " order by d.created_timestamp";
+
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+				
+			q = sess.createQuery(sql.toString());
+			q.setInteger("status", TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN);
+			q.setParameter("station", agent.getStation().getStation_ID());
+			q.setParameter("lz", agent.getStation().getLz_ID());
+			
+			List<Dispute> result = q.list();
+			if (result.size() > 0) {
+				Dispute nDispute=(Dispute) result.get(0);
+				if(lockDispute(nDispute)!=null){
+					Status s = new Status();
+					s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
+					nDispute.setStatus(s);
+					nDispute.setDisputeAgent(agent);
+
+					sess = HibernateWrapper.getSession().openSession();
+					try {
+						HibernateUtils.save(nDispute, sess);
+					} catch (Exception e) {
+						logger.error("Error Saving: ", e);
+						e.printStackTrace();
+						nDispute = null;
+					} finally {
+						if (sess != null) {
+							try {
+								sess.close();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+					
+				return nDispute;
+			}
+		   }
+		} catch (Exception e) {
+			logger.error("unable to list disputes in paginated fashion " + e);
+			e.printStackTrace();
+			return null;
+		} 
+		
+		return null;
+	}
+	
+	public static Dispute lockDispute(Dispute dis){
+		String key = String.valueOf(dis.getDispute_res_id());
+		if(key == null){
+			return null;
+		}
+		
+		LockBMO lockBmo = SpringUtils.getLockBmo();
+		Lock lock = null;
+		int i = 0;
+		try {
+			do {
+				i++;
+				try {
+					lock = lockBmo.createLock(LockType.DISPUTE, key, 300000L);
+				} catch (Exception ex) {
+					logger.info("Dispute for " + key
+							+ " alreaedy locked, waiting..");
+					try {
+						Thread.sleep(1000L);
+					} catch (InterruptedException e) {
+						throw new Exception(
+								"unable to acquire lock " + key, e);
+					}
+				}
+			} while (lock == null && i < 2);
+			if(lock == null) {
+				throw new Exception("unable to lock task " + key);
+			}
+			dis.setLock(lock);
+			return dis;
+		} catch (Exception e) {
+			return null;
+		} 
+	}
+	
+	public static void unlockDispute(Lock lock, Dispute dispute){
+		try {
+			if(lock != null){
+				SpringUtils.getLockBmo().releaseLock(lock);
+			} else {
+				if(dispute != null && dispute.getIncident() != null){
+					lock = SpringUtils.getLockBmo().loadLock(LockType.DISPUTE, String.valueOf(dispute.getDispute_res_id()));
+					if(lock != null){
+						SpringUtils.getLockBmo().releaseLock(lock);
+					}
+				}
+			}
+		} catch (Exception e) {
+			// Ignore any exceptions release the lock.
 		}
 	}
 	
@@ -171,6 +286,7 @@ public class DisputeUtils {
 			}
 			
 			HibernateUtils.save(dispute, sess);
+			unlockDispute(dispute.getLock(), dispute);
 			return true;
 		}
 		catch (Exception e){
@@ -202,7 +318,8 @@ public class DisputeUtils {
 			}
 			
 			HibernateUtils.save(dispute, sess);
-			
+
+			unlockDispute(dispute.getLock(), dispute);
 			//update incident on the new fault station and fault code information
 			Incident incidentToUpdate = IncidentBMO.getIncidentByID(incidentId, sess);
 			if (incidentToUpdate != null) {

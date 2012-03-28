@@ -10,6 +10,8 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
+
 
 <%
   	Agent a = (Agent)session.getAttribute("user");
@@ -84,6 +86,13 @@
     	<br/>
     	<input type="submit" id="button" value='Return to Dispute Manager' onclick='document.location.href="searchDispute.do?actionType=manage";return false;'>
     	&nbsp;
+    	<% boolean val = PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_DISPUTE_GETNEXT); 
+    	if(val)
+    	{%>
+    	
+    		<input type="submit" id="button" value='Go To Next' onclick='document.location.href="searchDispute.do?actionType=getnext";return false;'>
+    	
+    	<% } %>
     	</td>
     	</tr>
     </table>

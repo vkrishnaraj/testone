@@ -23,6 +23,7 @@ import org.hibernate.annotations.Proxy;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -88,6 +89,17 @@ public class Dispute {
 	}
 	public void setResolution_timestamp(Date resolution_timestamp) {
 		this.resolution_timestamp = resolution_timestamp;
+	}
+	
+
+	Lock lock;
+	
+	@Transient
+	public Lock getLock() {
+		return lock;
+	}
+	public void setLock(Lock lock) {
+		this.lock = lock;
 	}
 	
 //	public String getIncident() {
