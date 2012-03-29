@@ -88,6 +88,7 @@ public class PropertyBMO {
 	public static final String PROPERTY_INCIDENT_CUSTOMCLEARED_SELECT = "incident.customcleared.pleaseselect";
 	public static final String PROPERTY_INCIDENT_DISPUTE_SELECT = "incident.dispute.pleaseselect";
 	public static final String PROPERTY_INCIDENT_DISPUTE_GETNEXT = "incident.dispute.getnext";
+	public static final String PROPERTY_INCIDENT_FAULT_LOCK = "incident.dispute.faultlock";
 	
 	public static final String PROPERTY_DEFAULT_DAM_CODE = "default.dam.code";
 	public static final String PROPERTY_DEFAULT_PIL_CODE = "default.pil.code";

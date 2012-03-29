@@ -350,6 +350,26 @@ public class LostDelayAction extends CheckedAction {
 			theform.setLocked(false);
 			request.removeAttribute("unlock_fault");
 		}
+		if (request.getParameter("lock_faultcode") != null){
+			DisputeResolutionUtils.lockIncidentCode(theform.getIncident_ID(),theform);
+			theform.setCodeLocked(true);
+			request.removeAttribute("lock_fault");
+		}
+		if (request.getParameter("unlock_faultcode") != null){
+			DisputeResolutionUtils.unlockIncidentCode(theform.getIncident_ID());
+			theform.setCodeLocked(false);
+			request.removeAttribute("unlock_fault");
+		}
+		if (request.getParameter("lock_faultstation") != null){
+			DisputeResolutionUtils.lockIncidentStation(theform.getIncident_ID(),theform);
+			theform.setStationLocked(true);
+			request.removeAttribute("lock_faultstation");
+		}
+		if (request.getParameter("unlock_faultstation") != null){
+			DisputeResolutionUtils.unlockIncidentStation(theform.getIncident_ID());
+			theform.setStationLocked(false);
+			request.removeAttribute("unlock_fault");
+		}
 		
 		// close report
 		if(MBRActionUtils.actionClose(theform, request, user, errors)) {
@@ -593,13 +613,13 @@ public class LostDelayAction extends CheckedAction {
 				//logger.error(">>>>>>>>>saveActionType (1-addnew; 2-close; 3-update) : " + saveActionType);
 				
 				if (saveActionType == UPDATE_RECORD) {
-					HistoryUtils.AddToHistoryContainer(session, "Updated Delayed Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Delayed Incident", false);
+					//HistoryUtils.AddToHistoryContainer(session, "Updated Delayed Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Delayed Incident", false);
 					return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
 				} else if (saveActionType == CLOSE_RECORD) {
-					HistoryUtils.AddToHistoryContainer(session, "Closed Delayed Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Delayed Incident", false);
+					//HistoryUtils.AddToHistoryContainer(session, "Closed Delayed Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Delayed Incident", false);
 					return (mapping.findForward(TracingConstants.CLOSE_FILE_SUCCESS));
 				} else {
-					HistoryUtils.AddToHistoryContainer(session, "Created Delayed Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Delayed Incident", false);
+					//HistoryUtils.AddToHistoryContainer(session, "Created Delayed Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Delayed Incident", false);
 					return (mapping.findForward(TracingConstants.INSERT_SUCCESS));
 				}
 			}

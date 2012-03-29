@@ -118,6 +118,8 @@ public class Incident implements Serializable {
 	private Dispute dispute;
 	
 	private boolean locked = false;	//for dispute resolution process
+	private boolean codeLocked = false;	//for dispute resolution process
+	private boolean stationLocked = false;	//for dispute resolution process
 	
 	private String revenueCode;
 	
@@ -136,6 +138,22 @@ public class Incident implements Serializable {
 	}
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+	}
+	
+	@Column(name="codeLocked", nullable=false)
+	public boolean isCodeLocked() {
+		return codeLocked;
+	}
+	public void setCodeLocked(boolean locked) {
+		this.codeLocked = locked;
+	}
+	
+	@Column(name="stationLocked", nullable=false)
+	public boolean isStationLocked() {
+		return stationLocked;
+	}
+	public void setStationLocked(boolean locked) {
+		this.stationLocked = locked;
 	}
 	
 	@OneToOne(mappedBy = "incident")

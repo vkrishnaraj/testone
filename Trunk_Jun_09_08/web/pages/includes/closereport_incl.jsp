@@ -3,6 +3,7 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
@@ -11,18 +12,20 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+String cssFormClass = "form2_ld";
 %>
 
 
 <%
 
   int lossCodeInt = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();
-  
-  
+	String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
+	Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
   
   Company_specific_irregularity_code lc = null;
   if (lossCodeInt != 0) {
@@ -40,6 +43,11 @@
   Station faultStation = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getFaultstation();
   String faultAirline = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getFaultcompany_id();
   
+
+	if(inc != null) {
+		request.setAttribute("faultStationCode", inc.getFaultstation().getStationcode());
+	}
+	request.setAttribute("lossCode", lc);
 %>
 
 
@@ -79,6 +87,16 @@
           <html:options collection="faultCompanyList" property="companyCode_ID" labelProperty="companydesc" />
         </html:select>     
   </td>
+  <% if(DisputeResolutionUtils.isIncidentStationLocked(request.getAttribute("incident").toString())) { %>
+    <td nowrap>
+               <div id="faultstationdiv">
+		<b><bean:message key="colname.faultstation" /></b>
+                 <br>
+                 <c:out value="${faultStationCode}" default="Not Set" />
+               </div>
+        </td>
+        <%}
+  else {%>
     <td nowrap>
     	<div id="faultstationdiv">
     <logic:present name="faultstationlist" scope="request">
@@ -93,6 +111,12 @@
       </logic:present>
       </div>
     </td>
+    <%} %>
+    
+    <% boolean val=PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_FAULT_LOCK);
+    
+    if(!val)
+    {%>
     <td align="center" valign="baseline">
     	<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
     		  String incidentId = "" + request.getAttribute("incident");
@@ -120,8 +144,63 @@
     	<% 	  } 
     	   }  %>
     </td>
+    <% }
+    else {
+          				<logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+      					<% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_ALLOW_OPEN_INCIDENT_DISPUTE)) { %>
+	   	              		<html:submit property="lock_fault" styleId="button">
+                      		<bean:message key="button.lock.fault.information" />
+                      		</html:submit>
+                      	<% } %>
+      				</logic:notEqual>
+%>
+     <td align="center" valign="baseline">
+    	<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
+    		  String incidentId = "" + request.getAttribute("incident");
+    		  if (DisputeResolutionUtils.isIncidentStationLocked(incidentId)) {
+    	%>
+    	              <html:submit property="unlock_faultstation" styleId="button">
+                      <bean:message key="button.unlock.fault.station" />
+                    </html:submit>
+
+    	<%		  
+    		  } else {
+    	%>
+      				<logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+    	              <html:submit property="lock_faultstation" styleId="button">
+                      <bean:message key="button.lock.fault.station" />
+                      </html:submit>
+      				</logic:equal>
+    	<% 	  }
+    		  if (DisputeResolutionUtils.isIncidentCodeLocked(incidentId)) {
+    	%>
+    	              <html:submit property="unlock_faultcode" styleId="button">
+                      <bean:message key="button.unlock.fault.code" />
+                    </html:submit>
+
+    	<%		  
+    		  } else {
+    	%>
+      				<logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+    	              <html:submit property="lock_faultcode" styleId="button">
+                      <bean:message key="button.lock.fault.code" />
+                      </html:submit>
+      				</logic:equal>
+    	<% 	  }
+    	   }  %>
+    </td>
+    <% } %>
 </tr>
 <tr>
+ <% if(DisputeResolutionUtils.isIncidentCodeLocked(request.getAttribute("incident").toString())) { %>
+   
+        <td nowrap colspan=2>
+	      <b><bean:message key="colname.losscode" /></b>
+               <br>
+               <c:out value="${lossCode.loss_code}-${lossCode.description}" default="Not Set" />
+        </td>
+        <%}
+ else {%>
   <td nowrap colspan="3">
     <bean:message key="colname.closereport.losscode" />
     <br>
@@ -145,4 +224,5 @@
     %>
       </html:select>
   </td>
+  <% }%>
 </tr>

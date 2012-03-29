@@ -93,6 +93,8 @@ public final class IncidentForm extends ValidatorForm {
 	private String btnUpdateDispute = "No button";  // to support multiple submit buttons in dispute resolution 
 	
 	private boolean locked = false;	//for dispute resolution process
+	private boolean codelocked = false;	//for dispute resolution process
+	private boolean stationlocked = false;	//for dispute resolution process
 	
 	private String teletypeAddress; //for the big Teletype String for historical reporting
 	private long oc_claim_id;
@@ -124,6 +126,18 @@ public final class IncidentForm extends ValidatorForm {
 	}
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+	}
+	public boolean isCodeLocked() {
+		return codelocked;
+	}
+	public void setCodeLocked(boolean locked) {
+		this.codelocked = locked;
+	}
+	public boolean isStationLocked() {
+		return stationlocked;
+	}
+	public void setStationLocked(boolean locked) {
+		this.stationlocked = locked;
 	}
 	public String getResolutionRemarks() {
 		return resolutionRemarks;

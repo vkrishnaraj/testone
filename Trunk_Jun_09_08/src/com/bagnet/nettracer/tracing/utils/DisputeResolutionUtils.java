@@ -43,6 +43,32 @@ public class DisputeResolutionUtils {
 		return result;
 	}
 	
+	public static boolean isIncidentStationLocked(String incident_ID) {
+		boolean result = false;
+		
+		Incident myIncident = IncidentUtils.findIncidentByID(incident_ID);
+		
+		if (myIncident != null) {
+			if (myIncident.isStationLocked()) {
+				result = true;
+			}
+		}
+		return result;
+	}
+	
+	public static boolean isIncidentCodeLocked(String incident_ID) {
+		boolean result = false;
+		
+		Incident myIncident = IncidentUtils.findIncidentByID(incident_ID);
+		
+		if (myIncident != null) {
+			if (myIncident.isCodeLocked()) {
+				result = true;
+			}
+		}
+		return result;
+	}
+	
 	public static Incident lockIncident(String incident_ID, IncidentForm theForm){
 		Incident result = IncidentUtils.findIncidentByID(incident_ID);
 		Station faultStation = new Station();
@@ -92,6 +118,97 @@ public class DisputeResolutionUtils {
 		return result;
 	}
 	
+	public static Incident lockIncidentCode(String incident_ID, IncidentForm theForm){
+		Incident result = IncidentUtils.findIncidentByID(incident_ID);
+				
+		if (result != null) {
+			if (! result.isCodeLocked()) {
+				Session sess = HibernateWrapper.getSession().openSession();
+				Transaction t = null;
+				try {
+					if(theForm != null){
+						t = sess.beginTransaction();
+						result.setLoss_code(theForm.getLoss_code());
+						sess.saveOrUpdate(result);
+						t.commit();
+					}
+					t = sess.beginTransaction();
+					result.setCodeLocked(true);
+					sess.update(result);
+					t.commit();
+					sess.close();
+					sess = null;
+				} catch (Exception e) {
+					e.printStackTrace();
+					try {
+						t.rollback();
+					} catch (Exception ex) {
+						// Fails
+						ex.printStackTrace();
+					}
+				} finally {
+					if (sess != null) {
+						try {
+							sess.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}	
+		}
+		
+		return result;
+	}
+	
+	public static Incident lockIncidentStation(String incident_ID, IncidentForm theForm){
+		Incident result = IncidentUtils.findIncidentByID(incident_ID);
+		Station faultStation = new Station();
+		if(theForm != null && theForm.getFaultstation_id() > 0){
+			faultStation = StationBMO.getStation(theForm.getFaultstation_id());
+		}
+		
+		if (result != null) {
+			if (! result.isStationLocked()) {
+				Session sess = HibernateWrapper.getSession().openSession();
+				Transaction t = null;
+				try {
+					if(theForm != null){
+						t = sess.beginTransaction();
+						Station s = (Station) sess.load(Station.class, theForm.getFaultstation().getStation_ID());
+						result.setFaultstation(s);
+						sess.saveOrUpdate(result);
+						t.commit();
+					}
+					t = sess.beginTransaction();
+					result.setStationLocked(true);
+					sess.update(result);
+					t.commit();
+					sess.close();
+					sess = null;
+				} catch (Exception e) {
+					e.printStackTrace();
+					try {
+						t.rollback();
+					} catch (Exception ex) {
+						// Fails
+						ex.printStackTrace();
+					}
+				} finally {
+					if (sess != null) {
+						try {
+							sess.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}	
+		}
+		
+		return result;
+	}
+	
 	public static Incident lockIncident(String incident_ID) throws HibernateException {
 		return lockIncident(incident_ID, null);
 	}
@@ -106,6 +223,80 @@ public class DisputeResolutionUtils {
 				try {
 					t = sess.beginTransaction();
 					result.setLocked(false);
+					sess.update(result);
+					t.commit();
+					sess.close();
+					sess = null;
+				} catch (Exception e) {
+					e.printStackTrace();
+					try {
+						t.rollback();
+					} catch (Exception ex) {
+						// Fails
+						ex.printStackTrace();
+					}
+				} finally {
+					if (sess != null) {
+						try {
+							sess.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}	
+			} 
+		}
+		
+		return result;
+	}
+	
+	public static Incident unlockIncidentCode(String incident_ID) throws HibernateException {
+		Incident result = IncidentUtils.findIncidentByID(incident_ID);
+		
+		if (result != null) {
+			if (result.isCodeLocked()) {
+				Session sess = HibernateWrapper.getSession().openSession();
+				Transaction t = null;
+				try {
+					t = sess.beginTransaction();
+					result.setCodeLocked(false);
+					sess.update(result);
+					t.commit();
+					sess.close();
+					sess = null;
+				} catch (Exception e) {
+					e.printStackTrace();
+					try {
+						t.rollback();
+					} catch (Exception ex) {
+						// Fails
+						ex.printStackTrace();
+					}
+				} finally {
+					if (sess != null) {
+						try {
+							sess.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}	
+			} 
+		}
+		
+		return result;
+	}
+	
+	public static Incident unlockIncidentStation(String incident_ID) throws HibernateException {
+		Incident result = IncidentUtils.findIncidentByID(incident_ID);
+		
+		if (result != null) {
+			if (result.isStationLocked()) {
+				Session sess = HibernateWrapper.getSession().openSession();
+				Transaction t = null;
+				try {
+					t = sess.beginTransaction();
+					result.setStationLocked(false);
 					sess.update(result);
 					t.commit();
 					sess.close();
