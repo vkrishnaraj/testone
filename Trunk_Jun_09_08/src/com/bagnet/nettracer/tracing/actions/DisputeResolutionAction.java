@@ -24,6 +24,7 @@ import org.hibernate.Transaction;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -86,7 +87,7 @@ public class DisputeResolutionAction extends CheckedAction {
 			
 			
 			if (actionType.equalsIgnoreCase("start")) {
-				if(user.getCompanycode_ID().equals("US")){ // Change to US
+				if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_DISPUTE_SELECT)){ // Change to US
 					myIncident.setLoss_code(0);
 					Session sess = HibernateWrapper.getSession().openSession();
 					Transaction t = sess.beginTransaction();
