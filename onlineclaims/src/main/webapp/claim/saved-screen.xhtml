@@ -110,7 +110,8 @@
 				<rich:spacer width="20px"/>
 			
 				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.previous.label}"
-				 	tabindex="4" immediate="true" action="#{passengerController.goBackToSubmitClaim}" onclick="this.disabled=true;"
+				 	tabindex="4" immediate="true" action="#{passengerController.goBackToSubmitClaim}" 
+				 	onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
 					styleClass="button140pxred button140pxred2" />
 			
 			</div>

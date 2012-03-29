@@ -143,7 +143,8 @@
 				<rich:spacer width="290px"/>
 			
 				<h:commandButton id="saveSubmitClaim" value="#{passengerController.passengerInfoLabel.save.label}"
-				 		tabindex="4"  onclick="this.disabled=true;"
+				 		tabindex="4"  
+				 		onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
 				 		 action="#{passengerController.saveFraudQuestion}"
 				 		 disabled="#{passengerController.readOnlyOnSubmitted}"
 						styleClass="button140pxred button140pxred2" />
@@ -152,13 +153,14 @@
 			
 				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.previous.label}"
 				 	tabindex="5" immediate="true" action="#{passengerController.goBackToFileUpload}"
-				 	 onclick="if (!window.confirm('Are you sure? Clicking OK will result in the loss of unsaved data.')) { return false; } else { this.disabled=true; }"
+				 	 onclick="if (!window.confirm('Are you sure? Clicking OK will result in the loss of unsaved data.')) { return false; } else { setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50); }"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="forwardSubmit" value="#{passengerController.passengerInfoLabel.forward.label}"
-				 	tabindex="6" action="#{passengerController.gotoSubmitClaim}" onclick="this.disabled=true;"
+				 	tabindex="6" action="#{passengerController.gotoSubmitClaim}" 
+				 	onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
 					styleClass="button140pxred button140pxred2" />
 				
 			

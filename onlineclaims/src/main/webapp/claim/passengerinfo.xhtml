@@ -150,19 +150,22 @@
 				<rich:spacer width="290px"/>
 			
 				<h:commandButton id="savePassInfo" value="#{passengerController.passengerInfoLabel.save.label}"
-				 		tabindex="25" action="#{passengerController.savePassengerInfo}" onclick="this.disabled=true;"
+				 		tabindex="25" action="#{passengerController.savePassengerInfo}" 
+				 		onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
 						styleClass="button140pxred button140pxred2" />
 				
 				<rich:spacer width="20px"/>
 			
 				<h:commandButton id="cancelPassInfo" value="#{passengerController.flightLabel.previous.label}"
-				 	tabindex="26" immediate="true" action="#{passengerController.goBackToLiability}" onclick="this.disabled=true;"
+				 	tabindex="26" immediate="true" action="#{passengerController.goBackToLiability}" 
+				 	onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="forwardPassInfo" value="#{passengerController.passengerInfoLabel.forward.label}"
-				 	tabindex="27" action="#{passengerController.gotoFlightDetails}" onclick="this.disabled=true;"
+				 	tabindex="27" action="#{passengerController.gotoFlightDetails}" 
+				 	onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
 					styleClass="button140pxred button140pxred2" />
 				
 			

@@ -165,13 +165,15 @@ Lifesaving Medication
 				<rich:spacer width="450px"/>
 			
 				<h:commandButton id="cancelPassInfo" value="#{passengerController.flightLabel.previous.label}"
-				 	tabindex="26" immediate="true" action="#{passengerController.goBackToPPFInstruction}" onclick="this.disabled=true;"
+				 	tabindex="26" immediate="true" action="#{passengerController.goBackToPPFInstruction}" 
+				 	onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
 					styleClass="button140pxred button140pxred2" />
 					
 				<rich:spacer width="20px"/>
 				
 				<h:commandButton id="dirforward" value="#{passengerController.generalLabel.forward.label}" tabindex="0"
-				action="#{passengerController.gotoPassengerInfo}" onclick="this.disabled=true;"
+				action="#{passengerController.gotoPassengerInfo}" 
+				onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
 				styleClass="button140pxred button140pxred2" />
 				
 				</div>

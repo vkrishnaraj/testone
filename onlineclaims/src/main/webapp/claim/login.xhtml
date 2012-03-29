@@ -124,7 +124,8 @@
 						<h:outputText value="&#160;" />
 						<h:commandButton id="passLoginContinue"
 							value="#{passengerLoginController.loginLabel.continueButton.label}"
-							action="#{passengerLoginController.gotoDirectionPage}" onclick="this.disabled=true;"
+							action="#{passengerLoginController.gotoDirectionPage}" 
+							onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
 							tabindex="4" styleClass="button140pxred loginbutton140pxred" />
 					</h:panelGrid>
 				</h:panelGrid>
