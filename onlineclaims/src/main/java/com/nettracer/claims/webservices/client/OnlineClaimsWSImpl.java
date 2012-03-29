@@ -1150,9 +1150,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 	}
 	
 	private Boolean intToBool(int toConvert) {
-		if (toConvert == 1) {
+		if (toConvert == 2) {
 			return false;
-		} else if (toConvert == 2) {
+		} else if (toConvert == 1) {
 			return true;
 		} else {
 			return null;
@@ -1164,9 +1164,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			return 0;
 		} else {
 			if (toConvert) {
-				return 2;
-			} else {
 				return 1;
+			} else {
+				return 2;
 			}
 		}
 	}
