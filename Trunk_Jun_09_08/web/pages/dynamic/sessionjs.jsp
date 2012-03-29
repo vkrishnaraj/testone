@@ -1,5 +1,5 @@
 <%@ page contentType="text/javascript" %> 
-
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@page import="java.util.TimeZone"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -609,11 +609,30 @@
         return false;
       }
     }
+    
+    else if (currentElementName.indexOf("numRonKitsIssued") != -1) {
+		if (currentElement.value == -1) {
+			alert("<%= (String)bundle.getString("please.select.a.value.for") %>" + " " + " <%= (String)bundle.getString("number.ron.kits.issued") %>");
+	        currentElement.focus();
+	        return false;
+		}
+	}
+
+    else if (currentElementName.indexOf("replacementBagIssued") != -1) {
+		if (currentElement.value == -1) {
+			alert("<%= (String)bundle.getString("please.select.a.value.for") %>" + " " + " <%= (String)bundle.getString("replacement.bag.issued") %>");
+	        currentElement.focus();
+	        return false;
+		}
+	}
+	
+	
     }
     
 
     if (form.name == "incidentForm"){
     	if (!validatereq(form)) return false;
+    	
     } else if (form.name == "OnHandForm") {
     	if (!validatereqOHD(form)) return false;
     }

@@ -8,11 +8,12 @@ import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 
+import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
 import com.bagnet.nettracer.reporting.LFDisbursementsReportRow;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 
-public class LFDisbursementsReport extends LFReport {
+public class LFDisbursementsReport extends AbstractNtJasperReport {
 
 	static {
 		logger = Logger.getLogger(LFDisbursementsReport.class);

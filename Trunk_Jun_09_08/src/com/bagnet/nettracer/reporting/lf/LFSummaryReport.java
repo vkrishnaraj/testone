@@ -8,9 +8,10 @@ import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 
+import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 
-public class LFSummaryReport extends LFReport {
+public class LFSummaryReport extends AbstractNtJasperReport {
 
 	static {
 		logger = Logger.getLogger(LFSummaryReport.class);

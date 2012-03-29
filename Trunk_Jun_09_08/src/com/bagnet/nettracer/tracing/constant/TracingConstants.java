@@ -196,7 +196,10 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_LFC_CREATE_SALVAGE = "Create Salvage";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_SEARCH_SALVAGE = "Search Salvage";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_UPDATE_LF_REMARKS = "Update LF Remarks";
+	
 	public static final String SYSTEM_COMPONENT_NAME_SAVE_BUTTON_TOP_OF_PAGE = "Save Button at Top of Page";
+	public static final String SYSTEM_COMPONENT_NAME_ISSUE_RON_KITS = "Issue RON Kits";
+	public static final String SYSTEM_COMPONENT_NAME_ISSUE_REPLACEMENT_BAGS = "Issue Replacement Bags";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -1023,6 +1026,13 @@ public class TracingConstants {
 	public static final String LFC_CONDITION_GOOD = "GOOD";
 	public static final String LFC_CONDITION_AVERAGE = "AVERAGE";
 	public static final String LFC_CONDITION_POOR = "POOR";
+	
+	public static final int YES = 1;
+	public static final int NO = 0;
+	
+	public static final int DAMAGE_MINOR = 0;
+	public static final int DAMAGE_MAJOR = 1;
+	public static final int DAMAGE_COMPLETE = 2;
 	
 	public static final String LFC_COLOR_DOESNOTAPPLY = "XX";
 	

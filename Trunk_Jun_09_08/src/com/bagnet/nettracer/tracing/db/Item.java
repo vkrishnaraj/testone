@@ -75,6 +75,9 @@ public class Item implements Serializable {
 	
 	private int wt_bag_selected;
 	private boolean isItemOrBdoCanceled;
+	
+	private int replacementBagIssued;
+	
 	/**
 	 * @return Returns the bag_weight;
 	 * 
@@ -966,6 +969,17 @@ public class Item implements Serializable {
 	private double roundToTwoDecimals(double d) {
     	DecimalFormat twoDForm = new DecimalFormat("#.##");
     	return Double.valueOf(twoDForm.format(d));
+	}
+	
+	/** 
+	 * @hibernate.property type="integer"
+	 */
+	public int getReplacementBagIssued() {
+		return replacementBagIssued;
+	}
+
+	public void setReplacementBagIssued(int replacementBagIssued) {
+		this.replacementBagIssued = replacementBagIssued;
 	}
 	
 }

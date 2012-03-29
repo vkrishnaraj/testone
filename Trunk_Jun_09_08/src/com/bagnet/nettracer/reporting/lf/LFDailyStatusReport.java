@@ -8,10 +8,11 @@ import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 
+import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 
-public class LFDailyStatusReport extends LFReport {
+public class LFDailyStatusReport extends AbstractNtJasperReport {
 
 	static {
 		logger = Logger.getLogger(LFDailyStatusReport.class);
@@ -80,7 +81,7 @@ public class LFDailyStatusReport extends LFReport {
 					                  "and (i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") or i.deliveryRejected = 1) " +
 					                  "and i.lost_id is null " +
 					                  "group by lf.receivedDate,s.station_id order by lf.receivedDate,s.station_id) lvirwor on lf.receivedDate = lvirwor.received_date and s.station_id = lvirwor.station_id " +
-					 "where 1 = 1 " + getStationSql(srDto) + " and lf.receivedDate between :startDate and :endDate " +
+					 "where 1 = 1 " + getStationSql(srDto) + "and s.companycode_ID = '" + TracingConstants.LF_LF_COMPANY_ID + "' and lf.receivedDate between :startDate and :endDate " +
 					 "group by lf.receivedDate,s.stationcode " +
 					 "order by s.stationcode,lf.receivedDate;";
 		

@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.reporting.lf;
+package com.bagnet.nettracer.reporting;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -15,7 +15,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-public abstract class LFReport {
+public abstract class AbstractNtJasperReport {
 	
 	protected static Logger logger;
 	
@@ -24,7 +24,7 @@ public abstract class LFReport {
 	protected Date startDate;
 	protected Date endDate;
 	
-	protected LFReport(ResourceBundle resources) {
+	protected AbstractNtJasperReport(ResourceBundle resources) {
 		this.resources = resources;
 	}
 	
@@ -92,7 +92,7 @@ public abstract class LFReport {
 		if (stationId != null && !stationId.equals("0")) {
 			stationSql += "and s.stationcode = '" + stationId + "' ";
 		}
-		stationSql += "and s.companycode_ID = '" + TracingConstants.LF_LF_COMPANY_ID + "' ";
+		
 		return stationSql;
 	}
 	

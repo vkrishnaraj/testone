@@ -352,6 +352,7 @@ public final class IncidentForm extends ValidatorForm {
 			addr.setCountrycode_ID(PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_COUNTRY));
 			addr.setPassenger(a);
 			a.addAddress(addr);
+			a.setNumRonKitsIssued(-1);
 			this.passengerlist.add(a);
 		} else {
 			// prevent null membership
@@ -455,6 +456,7 @@ public final class IncidentForm extends ValidatorForm {
 				ii.setItem(item);
 				item.getInventorylist().add(ii);
 			}
+			item.setReplacementBagIssued(-1);
 			this.itemlist.add(item);
 			return item;
 		}

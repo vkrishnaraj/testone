@@ -43,6 +43,7 @@ public class Passenger implements Serializable {
 	private AirlineMembership membership;
 	private Set addresses;
 	private Incident incident;
+	private int numRonKitsIssued;
 
 	public JRBeanCollectionDataSource getAddressesForReport() {
 		if (addresses == null || addresses.size() < 1) return null;
@@ -457,6 +458,17 @@ public class Passenger implements Serializable {
 	public void addAddress(Address address) {
 		if (this.getAddresses() == null) this.setAddresses(new HashSet());
 		this.getAddresses().add(address);
+	}
+
+	/** 
+	 * @hibernate.property type="integer"
+	 */
+	public int getNumRonKitsIssued() {
+		return numRonKitsIssued;
+	}
+
+	public void setNumRonKitsIssued(int numRonKitsIssued) {
+		this.numRonKitsIssued = numRonKitsIssued;
 	}
 
 }

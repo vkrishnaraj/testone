@@ -60,7 +60,6 @@ import org.hibernate.criterion.Expression;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
-import ar.com.fdvs.dj.domain.AutoText;
 import ar.com.fdvs.dj.domain.CustomExpression;
 import ar.com.fdvs.dj.domain.DJCalculation;
 import ar.com.fdvs.dj.domain.DynamicReport;
@@ -87,7 +86,9 @@ import com.bagnet.nettracer.exceptions.MissingRequiredFieldsException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.other.JRGovernedFileVirtualizer;
 import com.bagnet.nettracer.other.JRMaxFilesException;
+import com.bagnet.nettracer.reporting.ReplacementBagIssuanceReport;
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.reporting.RonKitIssuanceReport;
 import com.bagnet.nettracer.reporting.SalvageReport;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.SalvageDAO;
@@ -114,8 +115,6 @@ import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesDJReport;
-import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
 /**
  * @author Administrator
@@ -175,11 +174,17 @@ public class ReportBMO {
 				return create_onhand_rpt(srDTO, ReportingConstants.RPT_10, ReportingConstants.RPT_10_NAME, messages.getMessage(new Locale(user
 						.getCurrentlocale()), "header.reportnum.10"));
 			case ReportingConstants.RPT_20:
-				return SpringUtils.getCustomReportBMO().createCustomReport(srDTO, req, user, rootpath);
+				if (srDTO.getCustomreportnum() == ReportingConstants.RPT_20_CUSTOM_95) {
+					return createRonKitIssuanceReport(srDTO, ReportBMO.getCustomReport(95).getResource_key(), rootpath, user);
+				} else if (srDTO.getCustomreportnum() == ReportingConstants.RPT_20_CUSTOM_96) {
+					return createReplacementBagIssuanceReport(srDTO, ReportBMO.getCustomReport(96).getResource_key(), rootpath, user);
+				} else {
+					return SpringUtils.getCustomReportBMO().createCustomReport(srDTO, req, user, rootpath);
+				}
 			case ReportingConstants.RPT_INBOUND_EXPEDITE_BAGS:
 				return create_onhand_rpt(srDTO, ReportingConstants.RPT_INBOUND_EXPEDITE_BAGS, 
 										ReportingConstants.RPT_INBOUND_EXPEDITE_BAGS_NAME, messages.getMessage(new Locale(user
-						.getCurrentlocale()), "header.reportnum.30"));				
+						.getCurrentlocale()), "header.reportnum.30"));	
 			default:
 				return null;
 			}
@@ -198,6 +203,140 @@ public class ReportBMO {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes" })
+	private String createRonKitIssuanceReport(StatReportDTO srDTO, String resourceKey, String rootpath, Agent user) {
+		srDTO.setDateFormat(user.getDateformat().getFormat());
+		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+		List reportData = new RonKitIssuanceReport(resources).getData(srDTO);
+		if (reportData == null) {
+			return null;
+		}
+		
+		String fileName = ReportingConstants.RPT_20_CUSTOM_95_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
+		virtualizer.setReadOnly(false);
+		
+		FastReportBuilder drb = new FastReportBuilder();
+		drb.setTitle(resources.getString("report.ron.kit.issuance.report.header") + " " + runDate);
+		drb.setPrintBackgroundOnOddRows(true);
+		drb.setSubtitle(getSubTitle(srDTO, user, resources));
+		
+		
+		Style header = new Style();
+		header.setHorizontalAlign(HorizontalAlign.CENTER);
+		header.setVerticalAlign(VerticalAlign.MIDDLE);
+		Style detailStyle = new Style("detail");
+		detailStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+		detailStyle.setVerticalAlign(VerticalAlign.MIDDLE);
+		
+		try {
+			drb.addColumn(resources.getString("report.rki.create.date"), "createDate", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.rki.station"), "stationCode", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.rki.incident.id"), "incidentId", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.rki.num.issued"), "numIssued", Integer.class.getName(), 50, detailStyle, header);
+
+			drb.setIgnorePagination(true);
+			drb.setUseFullPageWidth(true);
+	
+			DynamicReport report = drb.build();
+			exportJasperReport(reportData, report, outputpath);
+			
+		} catch (ColumnBuilderException cbe) {
+			cbe.printStackTrace();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} 
+		virtualizer.cleanup();
+		return fileName;
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	private String createReplacementBagIssuanceReport(StatReportDTO srDTO, String resourceKey, String rootpath, Agent user) {
+		srDTO.setDateFormat(user.getDateformat().getFormat());
+		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+		List reportData = new ReplacementBagIssuanceReport(resources).getData(srDTO);
+		if (reportData == null) {
+			return null;
+		}
+		
+		String fileName = ReportingConstants.RPT_20_CUSTOM_96_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
+		virtualizer.setReadOnly(false);
+		
+		FastReportBuilder drb = new FastReportBuilder();
+		drb.setTitle(resources.getString("report.replacement.bag.issuance.report.header") + " " + runDate);
+		drb.setPrintBackgroundOnOddRows(true);
+		drb.setSubtitle(getSubTitle(srDTO, user, resources));
+		
+		
+		Style header = new Style();
+		header.setHorizontalAlign(HorizontalAlign.CENTER);
+		header.setVerticalAlign(VerticalAlign.MIDDLE);
+		Style detailStyle = new Style("detail");
+		detailStyle.setHorizontalAlign(HorizontalAlign.CENTER);
+		detailStyle.setVerticalAlign(VerticalAlign.MIDDLE);
+		
+		try {
+			drb.addColumn(resources.getString("report.rbi.create.date"), "createDate", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.rbi.station"), "stationCode", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.rbi.incident.id"), "incidentId", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.rbi.num.affected"), "numBagsAffected", Integer.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.rbi.num.issued"), "numBagsIssued", Integer.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.rbi.level.of.damage"), "levelOfDamage", String.class.getName(), 50, detailStyle, header);
+
+			drb.setIgnorePagination(true);
+			drb.setUseFullPageWidth(true);
+	
+			DynamicReport report = drb.build();
+			exportJasperReport(reportData, report, outputpath);
+			
+		} catch (ColumnBuilderException cbe) {
+			cbe.printStackTrace();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} 
+		virtualizer.cleanup();
+		return fileName;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void exportJasperReport(List reportData, DynamicReport report, String outputpath) {
+		JRDataSource data = new JRBeanCollectionDataSource(reportData);
+		
+		try {
+			JasperPrint jp = DynamicJasperHelper.generateJasperPrint(report, new ClassicLayoutManager(), data);
+			Map parameters = new HashMap();
+			parameters.put(JRParameter.IS_IGNORE_PAGINATION, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.JASPER_PRINT, jp);
+			parameters.put(JExcelApiExporterParameter.OUTPUT_FILE_NAME, outputpath);
+			parameters.put(JExcelApiExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+			parameters.put(JExcelApiExporterParameter.IS_WHITE_PAGE_BACKGROUND, Boolean.FALSE);
+			parameters.put(JExcelApiExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_COLUMNS, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_REMOVE_EMPTY_SPACE_BETWEEN_ROWS, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_FONT_SIZE_FIX_ENABLED, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_COLLAPSE_ROW_SPAN, Boolean.TRUE);
+			parameters.put(JExcelApiExporterParameter.IS_DETECT_CELL_TYPE, true);
+			
+			JExcelApiExporter exporter = new JExcelApiExporter();
+			exporter.setParameters(parameters);
+			exporter.exportReport();
+		} catch (JRException e) {
+			logger.error(e, e);
+		} 
+	}
+	
+	private String getSubTitle(StatReportDTO srDto, Agent user, ResourceBundle resources) {
+		StringBuilder sb = new StringBuilder();
+		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
+		sb.append(resources.getString("lf.ir.report.created.on") + " " + runDate + " ");
+		sb.append("by " + user.getUsername() + " for: " + srDto.getStarttime() + " - " + srDto.getEndtime() + " ");
+		return sb.toString();
+	}
 	
 	private String create_mbr_rpt(StatReportDTO srDTO, int reportnum, String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();

@@ -138,4 +138,10 @@ public class ReportingConstants {
 
 	public static final int RPT_20_CUSTOM_94 = 94;
 	public static final String RPT_20_CUSTOM_94_NAME = "lost_itemization_report";
+	
+	public static final int RPT_20_CUSTOM_95 = 95;
+	public static final String RPT_20_CUSTOM_95_NAME = "ron_kit_issuance_summary";
+	
+	public static final int RPT_20_CUSTOM_96 = 96;
+	public static final String RPT_20_CUSTOM_96_NAME = "replacement_baggage_summary";
 }

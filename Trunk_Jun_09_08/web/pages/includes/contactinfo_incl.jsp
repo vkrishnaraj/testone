@@ -8,6 +8,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 
 
 <%@page import="org.apache.struts.util.LabelValueBean"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -332,6 +333,22 @@
               </tr>
             </logic:iterate>
           </logic:present>
+          <% if (request.getAttribute("lostdelay") != null && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUE_RON_KITS, a)) { %> 
+	          <tr>
+	          	<td colspan=5>
+	          		<bean:message key="number.ron.kits.issued" />:&nbsp;
+	          		<html:select name="passenger" property="numRonKitsIssued" styleId="numRonKitsIssued" styleClass="dropdown" indexed="true" >
+  						<html:option value="-1"><bean:message key="select.please_select" /></html:option>
+  						<html:option value="0">0</html:option>
+  						<html:option value="1">1</html:option>
+  						<html:option value="2">2</html:option>
+  						<html:option value="3">3</html:option>
+  						<html:option value="4">4</html:option>
+  						<html:option value="5">5</html:option>
+  					</html:select>
+	          	</td>
+	          </tr>
+          <% } %>
           <tr>
             <td colspan=5>
               <input type="button" value="<bean:message key="button.delete_passenger" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_PAX %>_<%=i%>', '<bean:message key="colname.passenger" />')" id="button">

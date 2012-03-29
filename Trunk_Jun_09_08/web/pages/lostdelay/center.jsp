@@ -15,13 +15,16 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
-
+<%@page import="java.util.ResourceBundle" %>
+<%@page import="java.util.Locale" %>
 <%
 	Agent a = (Agent) session.getAttribute("user");
 	String cssFormClass = "form2_ld";
 	IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
 	Station stationAss = StationBMO.getStation(myform.getStationassigned_ID());
 	boolean submitOnSave = PropertyBMO.isTrue("ntfs.submit.lostdelay");
+	ResourceBundle bundle = ResourceBundle.getBundle(
+			"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 %>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>

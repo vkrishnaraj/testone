@@ -9,7 +9,7 @@
  <module>
      <web>
          <web-uri>ab.war</web-uri>
-         <context-root>abtracer</context-root>
+         <context-root>avis</context-root>
      </web>
   </module>
   

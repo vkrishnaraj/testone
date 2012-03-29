@@ -8,10 +8,11 @@ import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 
+import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 
-public class LFItemizationReport extends LFReport {
+public class LFItemizationReport extends AbstractNtJasperReport {
 
 	static {
 		logger = Logger.getLogger(LFItemizationReport.class);
@@ -46,7 +47,7 @@ public class LFItemizationReport extends LFReport {
 					 "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					 "left outer join lfcategory c on i.category = c.id " +
 					 "left outer join lfsubcategory sc on i.subCategory = sc.id " +
-					 "where lf.receivedDate between :startDate and :endDate " + getStationSql(srDto) + " and lf.receivedDate between :startDate and :endDate " +
+					 "where lf.receivedDate between :startDate and :endDate " + getStationSql(srDto) + "and s.companycode_ID = '" + TracingConstants.LF_LF_COMPANY_ID + "' and lf.receivedDate between :startDate and :endDate " +
 					 "order by s.stationcode,lf.receivedDate;";
 		return sql;
 	}

@@ -7,10 +7,11 @@ import java.util.ResourceBundle;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 
+import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 
-public class LFSalvageReport extends LFReport {
+public class LFSalvageReport extends AbstractNtJasperReport {
 	
 	private final int BARCODE = 0;
 	private final int DATE_RECEIVED = 1;
