@@ -10,8 +10,10 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Billing;
 import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+import com.bagnet.nettracer.tracing.history.HistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
 
 /**
@@ -23,78 +25,31 @@ import com.bagnet.nettracer.tracing.history.HistoryContainer;
  */
 public class HistoryUtils {
 
-	public static void AddToHistoryContainer(HttpSession session, String Desc, String ObjectID, String LinkURL, String ObjType, boolean loaded) {
-		FoundHistoryObject FHO=new FoundHistoryObject();
-		FHO.setDate(Calendar.getInstance().getTime()); 
-		FHO.setStatusDesc(Desc);
-		FHO.setObjectType(ObjType);
-		FHO.setObjectID(ObjectID);
-		FHO.setLinkURL(LinkURL);
+	public static void AddToHistoryContainer(HttpSession session, HistoryObject HO, String actualId) {
 		HistoryContainer HCL=(HistoryContainer)session.getAttribute("historyContainer");
 		
-		if(loaded){
-			if(HCL.getQueue().isEmpty() || (HCL.get(FHO.getObjectID())==null))
-			{	HCL.put(ObjectID, FHO);
-				session.setAttribute("historyContainer", HCL);
+		if(HO.getStatusDesc().contains(TracingConstants.HIST_DESCRIPTION_LOAD))
+		{
+			if(HCL.getQueue().isEmpty() || (HCL.get(HO.getObjectID())==null))
+			{	
+				HCL.put(HO.getObjectID(), HO);
 			}
 		}
-		else
-		{	
-			if(FHO.getStatusDesc().contains("Created") || FHO.getStatusDesc().contains("Added"))
-			{
-				HCL.put(ObjectID+"C"+HCL.getQueue().size(), FHO);
-			}
-			else if(FHO.getStatusDesc().contains("Saved") || FHO.getStatusDesc().contains("Updated") )
-			{
-				HCL.put(ObjectID+"U"+HCL.getQueue().size(), FHO);
-			}
-			else if(FHO.getStatusDesc().contains("Closed"))
-			{
-				HCL.put(ObjectID+"Cl"+HCL.getQueue().size(), FHO);
-			}
-			else
-			{
-				HCL.put(ObjectID+HCL.getQueue().size(), FHO);
-			}
-			session.setAttribute("historyContainer", HCL);
+		else if(HO.getStatusDesc().contains(TracingConstants.HIST_DESCRIPTION_CREATE) || HO.getStatusDesc().contains(TracingConstants.HIST_DESCRIPTION_ADD))
+		{
+			HCL.put(HO.getObjectID()+"C"+HCL.getQueue().size(), HO);
 		}
-	}
-	public static void AddToHistoryContainer(HttpSession session, String Desc, String ObjectID, String LinkURL, String ObjType, boolean loaded, String actualId) {
-		FoundHistoryObject FHO=new FoundHistoryObject();
-		FHO.setDate(Calendar.getInstance().getTime()); 
-		FHO.setStatusDesc(Desc);
-		FHO.setObjectID(ObjectID);
-		FHO.setObjectType(ObjType);
-		FHO.setActualID(actualId);
-		FHO.setLinkURL(LinkURL);
-		HistoryContainer HCL=(HistoryContainer)session.getAttribute("historyContainer");
-		
-		if(loaded){
-			if(HCL.getQueue().isEmpty() || (HCL.get(FHO.getObjectID())==null))
-			{	HCL.put(ObjectID+HCL.getQueue().size(), FHO);
-				session.setAttribute("historyContainer", HCL);
-			}
+		else if(HO.getStatusDesc().contains(TracingConstants.HIST_DESCRIPTION_SAVE) || HO.getStatusDesc().contains(TracingConstants.HIST_DESCRIPTION_UPDATE) )
+		{
+			HCL.put(HO.getObjectID()+"U"+HCL.getQueue().size(), HO);
+		}
+		else if(HO.getStatusDesc().contains(TracingConstants.HIST_DESCRIPTION_CLOSE))
+		{
+			HCL.put(HO.getObjectID()+"Cl"+HCL.getQueue().size(), HO);
 		}
 		else
 		{
-			if(FHO.getStatusDesc().contains("Created") || FHO.getStatusDesc().contains("Added"))
-			{
-				HCL.put(ObjectID+"C"+HCL.getQueue().size(), FHO);
-			}
-			else if(FHO.getStatusDesc().contains("Saved") || FHO.getStatusDesc().contains("Updated") )
-			{
-				HCL.put(ObjectID+"U"+HCL.getQueue().size(), FHO);
-			}
-			else if(FHO.getStatusDesc().contains("Closed"))
-			{
-				HCL.put(ObjectID+"Cl"+HCL.getQueue().size(), FHO);
-			}
-			else
-			{
-				HCL.put(ObjectID+HCL.getQueue().size(), FHO);
-			}
-			session.setAttribute("historyContainer", HCL);
+			HCL.put(HO.getObjectID()+HCL.getQueue().size(), HO);
 		}
 	}
-
 }

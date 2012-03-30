@@ -30,71 +30,9 @@ jQuery(document).ready(function() {
 	jQuery(".tab_content").hide();
 	jQuery(".tab_content:first").show(); 
 
-	/*jQuery("ul.tabs li").click(function() {
-		jQuery("ul.tabs li").removeClass("active");
-		jQuery(this).addClass("active");
-		jQuery(".tab_content").hide();
-		var activeTab = jQuery(this).attr("rel");
-		jQuery("#"+activeTab).show();
-	});*/
 });
 
 </script> 
-
-<style type="text/css">
-
-	ul.tabs {
-		margin: 0px 0 0 0;
-		padding: 0;
-		float: left;
-		list-style: none;
-		height: 32px;
-		/*border-top: 1px solid #999999;*
-		border-left: 1px solid #5c9ccc;*/
-		width: 100%;
-	}
-	ul.tabs li {
-		
-		padding: 0px 21px ;
-		height: 31px;
-		line-height: 31px;
-		/*border: 1px solid #5c9ccc;
-		position: relative;
-		overflow: hidden;
-		border-left: none;*/
-		background: #FFFFFF;
-		
-		cursor: pointer;
-		margin: 0;
-		float: right;
-		font-weight: bold;
-	}
-	ul.tabs li:hover {
-		/*background: #177ecd;
-		*color:white;*/
-		text-decoration:underline;
-	}
-	ul.tabs li.active{
-		/*background: #5c9ccc;
-		/border-top: 1px solid #5c9ccc;*/
-		display:none;
-	}
-	.tab_container {
-		/*border: 1px solid #5c9ccc;*/
-		/*border-top: none;*/
-		clear: both;
-		float: left; 
-		width: 100%;
-		background: #FFFFFF;
-	}
-	.tab_content {
-		padding: -5px;
-		font-size: 1em;
-		display: none;
-	}
- 
-</style>
-
 
 <div id="header">
 	<ul class="tabs">
@@ -149,17 +87,6 @@ jQuery(document).ready(function() {
 
 <div id="search" class="tab_content">
 
-<!-- <div id="header">
-	<ul class="tabs">
-		<li  class="active" rel="search" >
-			<a>Search</a>
-		</li>
-		<li rel="history" >
-			<a>History</a>
-		</li>
-	</ul>
-</div>-->
-
 	<html:text styleId="quickSearchQuery3" name="quickSearchForm" property="search" onkeydown="quickSearchKey3()" styleClass="textfield" size="20" maxlength="15"></html:text>
 &nbsp;
 <button type="button" id="button" onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  quickSearchKey4();">Search</button>
@@ -202,7 +129,6 @@ jQuery(document).ready(function() {
 	<% } %>
 	</center>
 	
-	<!-- </div>-->
 	<br />
 <% } %>
 </c:if>
