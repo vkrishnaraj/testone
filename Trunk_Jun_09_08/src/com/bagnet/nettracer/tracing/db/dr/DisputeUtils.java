@@ -89,7 +89,7 @@ public class DisputeUtils {
 				s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
 				nDispute.setStatus(s);
 				nDispute.setDisputeAgent(agent);
-
+				sess.close();
 				sess = HibernateWrapper.getSession().openSession();
 				
 				HibernateUtils.save(nDispute, sess);

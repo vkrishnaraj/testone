@@ -38,11 +38,8 @@
   Station faultStation = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getFaultstation();
   String faultAirline = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getFaultcompany_id();
   
-
-	if(inc != null) {
-		request.setAttribute("faultStationCode", inc.getFaultstation().getStationcode());
-	}
-	request.setAttribute("lossCode", lc);
+	String LockedStation=inc.getFaultstation().getStationcode();
+	String LockedCode=lc.getLoss_code()+"-"+lc.getDescription();
 %>
 
 
@@ -87,7 +84,7 @@
                <div id="faultstationdiv">
 		<b><bean:message key="colname.faultstation" /></b>
                  <br>
-                 <%=inc.getFaultstation().getStationcode()%>
+                 <%=(LockedStation!=null)?LockedStation:"Not Set"%>
                </div>
         </td>
         <%}
@@ -192,7 +189,7 @@
         <td nowrap colspan=2>
 	      <b><bean:message key="colname.losscode" /></b>
                <br>
-               <%=lc.getLoss_code()%>-<%=lc.getDescription()%>
+               <%=(LockedCode!=null)?LockedCode:"Not Set"%>
         </td>
         <%}
  else {%>

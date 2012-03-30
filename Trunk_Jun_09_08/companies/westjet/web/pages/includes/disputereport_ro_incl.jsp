@@ -61,44 +61,46 @@
 </script>
 		<bean:define id="station" name="dispute" property="suggestedFaultStation" scope="request" />
 		<bean:define id="disputeAgent" name="dispute" property="disputeAgent" scope="request" />
+		<bean:define id="displaydate" name="incidentdate" scope="request" />
 		<bean:define id="resolutionAgent" name="dispute" property="resolutionAgent" scope="request" />
 		<bean:define id="determinedFaultStation" name="dispute" property="determinedFaultStation" scope="request" />
 		<bean:define id="status" name="dispute" property="status" scope="request" />
             	<tr>
-				  <td nowrap>Dispute Date: <bean:write name="dispute" property="dispTimestampCreated" /></td>
-				  <td nowrap>Dispute Agent: <bean:write name="disputeAgent" property="username" /></td>
+				  <td colspan="2" nowrap>Dispute Date: <bean:write name="dispute" property="dispTimestampCreated" /></td>
+				  <td colspan="2" nowrap>Dispute Agent: <bean:write name="disputeAgent" property="username" /></td>
+				   <td colspan="2" nowrap><bean:message key="colname.incident.date" /> <bean:write name="incidentdate" /></td>
 				</tr>
 				<tr>
-				  <td colspan="2">Dispute Explanation:<br />
+				  <td colspan="6">Dispute Explanation:<br />
 				    <bean:write name="dispute" property="disputeExplanation" scope="request" />
 				  </td>
 				</tr>
 				<tr>
-				  <td nowrap>Suggested Fault Station: <bean:write name="station" property="stationcode" /></td>
-				  <td nowrap>Suggested Reason for Loss: <bean:write name="dispute" property="suggestedLossCode" scope="request" /></td>
+				  <td colspan="3" nowrap>Suggested Fault Station: <bean:write name="station" property="stationcode" /></td>
+				  <td colspan="3" nowrap>Suggested Reason for Loss: <bean:write name="dispute" property="suggestedLossCode" scope="request" /></td>
 				</tr> 
 				<tr>
-					<td colspan="2">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 				</tr>  
 				
 				<logic:notEqual name="status" property="status_ID" value='<%="" + TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN%>'>
             	<tr>
-            	<td nowrap>Resolved Date: <bean:write name="dispute" property="dispTimestampResolved" /></td>
+            	<td colspan="3" nowrap>Resolved Date: <bean:write name="dispute" property="dispTimestampResolved" /></td>
             	</tr>
             	<tr>
-				  <td nowrap>Dispute Resolution: <%="" + request.getAttribute("statusDesc") %></td>
-				  <td nowrap>Resolution Agent: <bean:write name="resolutionAgent" property="username" /></td>
+				  <td colspan="3" nowrap>Dispute Resolution: <%="" + request.getAttribute("statusDesc") %></td>
+				  <td colspan="3" nowrap>Resolution Agent: <bean:write name="resolutionAgent" property="username" /></td>
 				</tr>
 				<tr>
-				  <td colspan="2" nowrap>Resolution Remarks:<br />
+				  <td colspan="6">Resolution Remarks:<br />
 				    <bean:write name="dispute" property="resolutionRemarks" scope="request" />
 				  </td>
 				</tr>
 				<tr>
-				  <td nowrap>Determined Fault Station: <bean:write name="determinedFaultStation" property="stationcode" /></td>
-				  <td nowrap>Determined Reason for Loss: <bean:write name="dispute" property="determinedLossCode" scope="request" /></td>
+				  <td colspan="2" nowrap>Determined Fault Station: <bean:write name="determinedFaultStation" property="stationcode" /></td>
+				  <td colspan="2" nowrap>Determined Reason for Loss: <bean:write name="dispute" property="determinedLossCode" scope="request" /></td>
 				</tr> 
 				<tr>
-					<td colspan="2">&nbsp;</td>
+					<td colspan="6">&nbsp;</td>
 				</tr> 
 				</logic:notEqual>
