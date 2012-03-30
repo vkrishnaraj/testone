@@ -32,6 +32,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.LostFoundIncidentForm;
 import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
+import com.bagnet.nettracer.tracing.history.LostItemHistoryObject;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -87,13 +88,19 @@ public class AddLostItem extends Action {
 		request.setAttribute("oStatusList", oStatusList);
 
 
+		LostItemHistoryObject LHO=new LostItemHistoryObject();
+		LHO.setObjectID(Lform.getFile_ref_number());
+		LHO.setLinkURL("addLost.do?file_ref_number=");
+		LHO.setObjectType(TracingConstants.HIST_DESCRIPTION_LOSTITEM);
 		if (request.getParameter("save") != null) {
 			BagService bs = new BagService();
 
 			if (bs.insertLostAndFound(Lform, user)) {
 				request.setAttribute("file_ref_number", Lform.getFile_ref_number());
 				//On update and creation??
-				HistoryUtils.AddToHistoryContainer(session, "Saved Lost Item.", Lform.getFile_ref_number(), "addLost.do?file_ref_number=", "Lost Item", false);
+
+				LHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_SAVE+" "+TracingConstants.HIST_DESCRIPTION_LOSTITEM);
+				HistoryUtils.AddToHistoryContainer(session, LHO, null);
 				return (mapping.findForward(TracingConstants.LOST_FOUND_SUCCESS));
 			}
 		} else {
@@ -107,11 +114,12 @@ public class AddLostItem extends Action {
 					saveMessages(request, errors);
 					return (mapping.findForward(TracingConstants.SEARCH_LOST_FOUND));
 				}
-				HistoryUtils.AddToHistoryContainer(session, "Loaded Lost Item.", Lform.getFile_ref_number(), "addLost.do?file_ref_number=", "Lost Item", true);
 			} else {
 				//Create a new on-hand entry
 				TracerUtils.populateLostItem(Lform, user, request);
 			}
+			LHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_LOAD+" "+TracingConstants.HIST_DESCRIPTION_LOSTITEM);
+			HistoryUtils.AddToHistoryContainer(session, LHO, null);
 		}
 
 		return mapping.findForward(TracingConstants.LOST_FOUND);

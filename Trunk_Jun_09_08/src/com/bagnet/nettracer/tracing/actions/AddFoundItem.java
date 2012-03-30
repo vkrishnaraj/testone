@@ -160,11 +160,18 @@ public class AddFoundItem extends Action {
 			if (bs.insertLostAndFound(Lform, user)) {
 				request.setAttribute("file_ref_number", Lform.getFile_ref_number());
 				//logger.error(">>>>>>>>>saveActionType (1-addnew; 3-update) : " + saveActionType);
+				FoundHistoryObject FHO=new FoundHistoryObject();
+				//FHO.setFound(Lform.);
+				FHO.setObjectID(Lform.getFile_ref_number());
+				FHO.setLinkURL("addFound.do?file_ref_number=");
+				FHO.setObjectType(TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
 				if (saveActionType == UPDATE_RECORD) {
-					HistoryUtils.AddToHistoryContainer(session, "Updated Found Item.", Lform.getFile_ref_number(), "addFound.do?file_ref_number=", "Found Item", false);
+					FHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_UPDATE+" "+TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
+					HistoryUtils.AddToHistoryContainer(session, FHO, null);
 					return (mapping.findForward(TracingConstants.UPDATE_LOST_FOUND_SUCCESS));
 				} else {
-					HistoryUtils.AddToHistoryContainer(session, "Created Found Item.", Lform.getFile_ref_number(), "addFound.do?file_ref_number=", "Found Item", false);
+					FHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_CREATE+" "+TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
+					HistoryUtils.AddToHistoryContainer(session, FHO, null);
 					return (mapping.findForward(TracingConstants.LOST_FOUND_SUCCESS));
 				}
 				//return (mapping.findForward(TracingConstants.LOST_FOUND_SUCCESS));
@@ -195,7 +202,13 @@ public class AddFoundItem extends Action {
 				//open an existing lost item report.
 				BagService bs = new BagService();
 				//Load Found Item
-				HistoryUtils.AddToHistoryContainer(session, "Loaded Found Item.", Lform.getFile_ref_number(), "addFound.do?file_ref_number=", "Found Item", true);
+				FoundHistoryObject FHO=new FoundHistoryObject();
+				//FHO.setFound(found);
+				FHO.setObjectID(Lform.getFile_ref_number());
+				FHO.setLinkURL("addFound.do?file_ref_number=");
+				FHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_LOAD+" "+TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
+				FHO.setObjectType(TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
+				HistoryUtils.AddToHistoryContainer(session, FHO, null);
 				if (!bs.findLostFoundByID(file_ref_number, Lform, user, true, request)) {
 					ActionMessage error = new ActionMessage("error.no.foundreport");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);

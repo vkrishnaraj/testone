@@ -31,6 +31,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
 import com.bagnet.nettracer.tracing.forms.lf.LostReportForm;
+import com.bagnet.nettracer.tracing.history.LostItemHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -86,7 +87,13 @@ public class LostReportAction extends CheckedAction {
 		} else if (request.getParameter("lostId") != null) {
 			long id = Long.parseLong(request.getParameter("lostId"));
 			lostReport = LFServiceWrapper.getInstance().getLostReport(id);
-			HistoryUtils.AddToHistoryContainer(session, "Load Lost Report", String.valueOf(lostReport.getId()), "create_lost_report.do?lostId=", "Lost Report", true);
+			LostItemHistoryObject LHO=new LostItemHistoryObject();
+			LHO.setLostItem(lostReport);
+			LHO.setObjectID(String.valueOf(lostReport.getId()));
+			LHO.setLinkURL("create_lost_report.do?lostId=");
+			LHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_LOAD+" "+TracingConstants.HIST_DESCRIPTION_LOSTITEM);
+			LHO.setObjectType(TracingConstants.HIST_DESCRIPTION_LOSTITEM);
+			HistoryUtils.AddToHistoryContainer(session, LHO, null);
 		} else {
 			lostReport = lrForm.getLost();
 		}
@@ -127,7 +134,14 @@ public class LostReportAction extends CheckedAction {
 				ActionMessage error = new ActionMessage("message.lost.save.success");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
-				HistoryUtils.AddToHistoryContainer(session, "Saved Lost Report.", String.valueOf(lostReport.getId()), "create_lost_report.do?lostId=", "Lost Report", false);
+				LostItemHistoryObject LHO=new LostItemHistoryObject();
+				LHO.setLostItem(lostReport);
+				LHO.setObjectID(String.valueOf(lostReport.getId()));
+				LHO.setLinkURL("create_lost_report.do?lostId=");
+				LHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_SAVE+" "+TracingConstants.HIST_DESCRIPTION_LOSTITEM);
+				LHO.setObjectType(TracingConstants.HIST_DESCRIPTION_LOSTITEM);
+				HistoryUtils.AddToHistoryContainer(session, LHO, null);
+				
 			} catch (UpdateException ue) {
 				logger.error(ue, ue);
 				ActionMessage error = new ActionMessage("error.failed.to.save");

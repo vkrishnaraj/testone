@@ -66,7 +66,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendOhd;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
-import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+import com.bagnet.nettracer.tracing.history.OHDHistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -368,15 +368,24 @@ public class OnHandAction extends CheckedAction {
 				}
 				else {
 					//logger.error(">>>>>>>>>saveActionType (1-addnew; 2-close; 3-update) : " + saveActionType);
+					OHDHistoryObject OHO=new OHDHistoryObject();
+					OHO.setOHD(oDTO);
+					OHO.setObjectID(oDTO.getOHD_ID());
+					OHO.setLinkURL("addOnHandBag.do?ohd_ID=");
+					OHO.setObjectType(TracingConstants.HIST_DESCRIPTION_ONHAND);
+					
 					if (saveActionType == UPDATE_RECORD) {
-						HistoryUtils.AddToHistoryContainer(session, "Updated On Hand.", oDTO.getOHD_ID(), "addOnHandBag.do?ohd_ID=", "On Hand", false);
+						OHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_UPDATE+" "+TracingConstants.HIST_DESCRIPTION_ONHAND);
+						HistoryUtils.AddToHistoryContainer(session, OHO, null);
 						return (mapping.findForward(TracingConstants.UPDATE_ON_HAND_SUCCESS));
 					} else if (saveActionType == CLOSE_RECORD) {
-						HistoryUtils.AddToHistoryContainer(session, "Closed On Hand.", oDTO.getOHD_ID(), "addOnHandBag.do?ohd_ID=", "On Hand", false);
+						OHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_CLOSE+" "+TracingConstants.HIST_DESCRIPTION_ONHAND);
+						HistoryUtils.AddToHistoryContainer(session, OHO, null);
 						return (mapping.findForward(TracingConstants.CONFIRM_CLOSE_ON_HAND_SUCCESS));
 						
 					} else {
-						HistoryUtils.AddToHistoryContainer(session, "Created On Hand.", oDTO.getOHD_ID(), "addOnHandBag.do?ohd_ID=", "On Hand", false);
+						OHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_CREATE+" "+TracingConstants.HIST_DESCRIPTION_ONHAND);
+						HistoryUtils.AddToHistoryContainer(session, OHO, null);
 						return (mapping.findForward(TracingConstants.INSERT_ON_HAND_SUCCESS));
 					}
 					
@@ -570,7 +579,13 @@ public class OnHandAction extends CheckedAction {
 						saveMessages(request, errors);
 						return (mapping.findForward(TracingConstants.SEARCH_ONHAND));
 					}
-					HistoryUtils.AddToHistoryContainer(session, "Loaded On Hand.", ohd.getOHD_ID(), "addOnHandBag.do?ohd_ID=", "On Hand", true);
+					OHDHistoryObject OHO=new OHDHistoryObject();
+					OHO.setOHD(ohd);
+					OHO.setObjectID(ohd.getOHD_ID());
+					OHO.setLinkURL("addOnHandBag.do?ohd_ID=");
+					OHO.setObjectType(TracingConstants.HIST_DESCRIPTION_ONHAND);
+					OHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_LOAD+" "+TracingConstants.HIST_DESCRIPTION_ONHAND);
+					HistoryUtils.AddToHistoryContainer(session, OHO, null);
 					
 					if(request.getParameter("wtq_reinstate") != null && request.getParameter("wtq_reinstate").trim().length() > 0) {
 						WtqReinstateOhd wtq = new WtqReinstateOhd();

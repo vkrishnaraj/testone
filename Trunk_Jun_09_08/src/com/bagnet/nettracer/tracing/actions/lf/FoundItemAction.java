@@ -43,6 +43,8 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
 
+import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+
 public class FoundItemAction extends CheckedAction {
 	
 	private static final Logger logger = Logger.getLogger(FoundItemAction.class);
@@ -155,7 +157,13 @@ public class FoundItemAction extends CheckedAction {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				
-				HistoryUtils.AddToHistoryContainer(session, "Saved Found Item.", found.getBarcode(), "create_found_item.do?barcode=", "Found Item", false);
+				FoundHistoryObject FHO=new FoundHistoryObject();
+				FHO.setFound(found);
+				FHO.setObjectID(found.getBarcode());
+				FHO.setLinkURL("create_found_item.do?barcode=");
+				FHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_SAVE+" "+TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
+				FHO.setObjectType(TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
+				HistoryUtils.AddToHistoryContainer(session, FHO, null);
 			} catch (NonUniqueBarcodeException nube) {
 				logger.error(nube, nube);
 				ActionMessage error = new ActionMessage("error.non.unique.barcode");

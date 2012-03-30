@@ -22,7 +22,7 @@ public abstract class HistoryObject {
 	}
 	
 	public void setLinkURL(String LinkURL) {
-		if(getObjectType()!=null && getObjectType().equals("Baggage Delivery Order"))
+		if(getActualID()!=null)
 		{
 			this.linkURL = LinkURL+getActualID();
 		}

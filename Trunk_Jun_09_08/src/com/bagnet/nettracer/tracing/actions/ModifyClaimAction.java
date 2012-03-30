@@ -46,7 +46,7 @@ import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
-import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+import com.bagnet.nettracer.tracing.history.ClaimHistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
@@ -186,7 +186,13 @@ public class ModifyClaimAction extends CheckedAction {
 			if (id > 0) {
 				claim = ClaimDAO.loadClaim(id);
 				// insert log entry here
-				HistoryUtils.AddToHistoryContainer(session, "Loaded Claim.", String.valueOf(claim.getId()), "claim_resolution.do?claimId=", "Claim", true);				
+				ClaimHistoryObject CHO=new ClaimHistoryObject();
+				CHO.setClaim(claim);
+				CHO.setObjectID(String.valueOf(claim.getId()));
+				CHO.setLinkURL("claim_resolution.do?claimId=");
+				CHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_LOAD+" "+TracingConstants.HIST_DESCRIPTION_CLAIM);
+				CHO.setObjectType(TracingConstants.HIST_DESCRIPTION_CLAIM);
+				HistoryUtils.AddToHistoryContainer(session, CHO, null);
 				ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_LOAD);
 				if (claim.getNtIncident() != null) {
 					ntIncident = claim.getNtIncident();
@@ -262,7 +268,13 @@ public class ModifyClaimAction extends CheckedAction {
 			boolean claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);
 			if (claimSaved) {
 				claim = ClaimDAO.loadClaim(claim.getId());
-				HistoryUtils.AddToHistoryContainer(session, "Saved Claim.", String.valueOf(claim.getId()), "claim_resolution.do?claimId=", "Claim", false);
+				ClaimHistoryObject CHO=new ClaimHistoryObject();
+				CHO.setClaim(claim);
+				CHO.setObjectID(String.valueOf(claim.getId()));
+				CHO.setLinkURL("claim_resolution.do?claimId=");
+				CHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_SAVE+" "+TracingConstants.HIST_DESCRIPTION_CLAIM);
+				CHO.setObjectType(TracingConstants.HIST_DESCRIPTION_CLAIM);
+				HistoryUtils.AddToHistoryContainer(session, CHO, null);
 			}
 			
 			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!= null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);

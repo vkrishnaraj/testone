@@ -66,7 +66,7 @@ import com.bagnet.nettracer.tracing.db.dr.DisputeUtils;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.history.HistoryObject;
-import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+import com.bagnet.nettracer.tracing.history.IncidentHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
@@ -455,16 +455,23 @@ public class DamagedAction extends CheckedAction {
 				theform.setNotifiedOfRequirements(false);
 				request.setAttribute("damaged", "1");
 				request.setAttribute("Incident_ID", iDTO.getIncident_ID());
-				
+				IncidentHistoryObject IHO=new IncidentHistoryObject();
+				IHO.setIncident(iDTO);
+				IHO.setObjectID(iDTO.getIncident_ID());
+				IHO.setLinkURL("searchIncident.do?incident=");
+				IHO.setObjectType(TracingConstants.HIST_DESCRIPTION_DAMAGED+" "+TracingConstants.HIST_DESCRIPTION_INCIDENT);
 				//logger.error(">>>>>>>>>saveActionType (1-addnew; 2-close; 3-update) : " + saveActionType);
 				if (saveActionType == UPDATE_RECORD) {
-					//HistoryUtils.AddToHistoryContainer(session, "Updated Damaged Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Damaged Incident", false);
+					IHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_UPDATE+" "+TracingConstants.HIST_DESCRIPTION_DAMAGED+" "+TracingConstants.HIST_DESCRIPTION_INCIDENT);
+					HistoryUtils.AddToHistoryContainer(session, IHO, null);
 					return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
 				} else if (saveActionType == CLOSE_RECORD) {
-					//HistoryUtils.AddToHistoryContainer(session, "Closed Damaged Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Damaged Incident", false);
+					IHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_CLOSE+" "+TracingConstants.HIST_DESCRIPTION_DAMAGED+" "+TracingConstants.HIST_DESCRIPTION_INCIDENT);
+					HistoryUtils.AddToHistoryContainer(session, IHO, null);
 					return (mapping.findForward(TracingConstants.CLOSE_FILE_SUCCESS));
 				} else {
-					//HistoryUtils.AddToHistoryContainer(session, "Created Damaged Incident.", iDTO.getIncident_ID(), "searchIncident.do?incident=", "Damaged Incident", false);
+					IHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_CREATE+" "+TracingConstants.HIST_DESCRIPTION_DAMAGED+" "+TracingConstants.HIST_DESCRIPTION_INCIDENT);
+					HistoryUtils.AddToHistoryContainer(session, IHO, null);
 					return (mapping.findForward(TracingConstants.INSERT_SUCCESS));
 				}
 		
