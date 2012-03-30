@@ -17,11 +17,6 @@
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
-String cssFormClass = "form2_ld";
-%>
-
-
-<%
 
   int lossCodeInt = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();
 	String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
@@ -92,7 +87,7 @@ String cssFormClass = "form2_ld";
                <div id="faultstationdiv">
 		<b><bean:message key="colname.faultstation" /></b>
                  <br>
-                 <c:out value="${faultStationCode}" default="Not Set" />
+                 <%=inc.getFaultstation().getStationcode()%>
                </div>
         </td>
         <%}
@@ -145,15 +140,15 @@ String cssFormClass = "form2_ld";
     	   }  %>
     </td>
     <% }
-    else {
-          				<logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
+    else { %>
+          			<logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
       					<% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_ALLOW_OPEN_INCIDENT_DISPUTE)) { %>
 	   	              		<html:submit property="lock_fault" styleId="button">
                       		<bean:message key="button.lock.fault.information" />
                       		</html:submit>
                       	<% } %>
       				</logic:notEqual>
-%>
+
      <td align="center" valign="baseline">
     	<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
     		  String incidentId = "" + request.getAttribute("incident");
@@ -197,7 +192,7 @@ String cssFormClass = "form2_ld";
         <td nowrap colspan=2>
 	      <b><bean:message key="colname.losscode" /></b>
                <br>
-               <c:out value="${lossCode.loss_code}-${lossCode.description}" default="Not Set" />
+               <%=lc.getLoss_code()%>-<%=lc.getDescription()%>
         </td>
         <%}
  else {%>

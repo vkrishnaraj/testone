@@ -44,29 +44,22 @@ public class DisputeResolutionUtils {
 	}
 	
 	public static boolean isIncidentStationLocked(String incident_ID) {
-		boolean result = false;
 		
 		Incident myIncident = IncidentUtils.findIncidentByID(incident_ID);
 		
 		if (myIncident != null) {
-			if (myIncident.isStationLocked()) {
-				result = true;
-			}
+			return myIncident.isStationLocked();
 		}
-		return result;
+		return false;
 	}
 	
 	public static boolean isIncidentCodeLocked(String incident_ID) {
-		boolean result = false;
-		
 		Incident myIncident = IncidentUtils.findIncidentByID(incident_ID);
 		
 		if (myIncident != null) {
-			if (myIncident.isCodeLocked()) {
-				result = true;
-			}
+			return myIncident.isCodeLocked();
 		}
-		return result;
+		return false;
 	}
 	
 	public static Incident lockIncident(String incident_ID, IncidentForm theForm){
@@ -118,7 +111,7 @@ public class DisputeResolutionUtils {
 		return result;
 	}
 	
-	public static Incident lockIncidentCode(String incident_ID, IncidentForm theForm){
+	public static Incident lockIncidentCode(String incident_ID, int loss_code){
 		Incident result = IncidentUtils.findIncidentByID(incident_ID);
 				
 		if (result != null) {
@@ -126,18 +119,12 @@ public class DisputeResolutionUtils {
 				Session sess = HibernateWrapper.getSession().openSession();
 				Transaction t = null;
 				try {
-					if(theForm != null){
-						t = sess.beginTransaction();
-						result.setLoss_code(theForm.getLoss_code());
-						sess.saveOrUpdate(result);
-						t.commit();
-					}
 					t = sess.beginTransaction();
+					result.setLoss_code(loss_code);
+					sess.saveOrUpdate(result);
 					result.setCodeLocked(true);
 					sess.update(result);
 					t.commit();
-					sess.close();
-					sess = null;
 				} catch (Exception e) {
 					e.printStackTrace();
 					try {
@@ -161,31 +148,21 @@ public class DisputeResolutionUtils {
 		return result;
 	}
 	
-	public static Incident lockIncidentStation(String incident_ID, IncidentForm theForm){
+	public static Incident lockIncidentStation(String incident_ID, int stationID){
 		Incident result = IncidentUtils.findIncidentByID(incident_ID);
-		Station faultStation = new Station();
-		if(theForm != null && theForm.getFaultstation_id() > 0){
-			faultStation = StationBMO.getStation(theForm.getFaultstation_id());
-		}
-		
+				
 		if (result != null) {
 			if (! result.isStationLocked()) {
 				Session sess = HibernateWrapper.getSession().openSession();
 				Transaction t = null;
 				try {
-					if(theForm != null){
-						t = sess.beginTransaction();
-						Station s = (Station) sess.load(Station.class, theForm.getFaultstation().getStation_ID());
-						result.setFaultstation(s);
-						sess.saveOrUpdate(result);
-						t.commit();
-					}
 					t = sess.beginTransaction();
+					Station s = (Station) sess.load(Station.class, stationID); 
+					result.setFaultstation(s);
+					sess.saveOrUpdate(result);
 					result.setStationLocked(true);
 					sess.update(result);
 					t.commit();
-					sess.close();
-					sess = null;
 				} catch (Exception e) {
 					e.printStackTrace();
 					try {
@@ -225,8 +202,6 @@ public class DisputeResolutionUtils {
 					result.setLocked(false);
 					sess.update(result);
 					t.commit();
-					sess.close();
-					sess = null;
 				} catch (Exception e) {
 					e.printStackTrace();
 					try {
@@ -262,8 +237,6 @@ public class DisputeResolutionUtils {
 					result.setCodeLocked(false);
 					sess.update(result);
 					t.commit();
-					sess.close();
-					sess = null;
 				} catch (Exception e) {
 					e.printStackTrace();
 					try {
@@ -299,8 +272,6 @@ public class DisputeResolutionUtils {
 					result.setStationLocked(false);
 					sess.update(result);
 					t.commit();
-					sess.close();
-					sess = null;
 				} catch (Exception e) {
 					e.printStackTrace();
 					try {

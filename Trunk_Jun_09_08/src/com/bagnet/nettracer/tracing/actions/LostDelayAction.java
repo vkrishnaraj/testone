@@ -351,7 +351,7 @@ public class LostDelayAction extends CheckedAction {
 			request.removeAttribute("unlock_fault");
 		}
 		if (request.getParameter("lock_faultcode") != null){
-			DisputeResolutionUtils.lockIncidentCode(theform.getIncident_ID(),theform);
+			DisputeResolutionUtils.lockIncidentCode(theform.getIncident_ID(),theform.getLoss_code());
 			theform.setCodeLocked(true);
 			request.removeAttribute("lock_fault");
 		}
@@ -361,7 +361,7 @@ public class LostDelayAction extends CheckedAction {
 			request.removeAttribute("unlock_fault");
 		}
 		if (request.getParameter("lock_faultstation") != null){
-			DisputeResolutionUtils.lockIncidentStation(theform.getIncident_ID(),theform);
+			DisputeResolutionUtils.lockIncidentStation(theform.getIncident_ID(),theform.getFaultstation().getStation_ID());
 			theform.setStationLocked(true);
 			request.removeAttribute("lock_faultstation");
 		}

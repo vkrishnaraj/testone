@@ -245,7 +245,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		myDispute.setResolutionAgent(user);		//got better idea?
 		myDispute.setDeterminedFaultStation(iDTO.getFaultstation());
 		myDispute.setDeterminedLossCode(iDTO.getLoss_code());
-		
+		DisputeUtils.unlockDispute(myDispute.getLock(), myDispute);
 		DisputeUtils.saveDispute(myDispute);
 		
 		return TracingConstants.DISPUTE_RESOLUTION_INSERT_NEW_SUCCESS;

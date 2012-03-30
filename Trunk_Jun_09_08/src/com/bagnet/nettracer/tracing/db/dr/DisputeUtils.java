@@ -85,36 +85,32 @@ public class DisputeUtils {
 			if (result.size() > 0) {
 				Dispute nDispute=(Dispute) result.get(0);
 				if(lockDispute(nDispute)!=null){
-					Status s = new Status();
-					s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
-					nDispute.setStatus(s);
-					nDispute.setDisputeAgent(agent);
+				Status s = new Status();
+				s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
+				nDispute.setStatus(s);
+				nDispute.setDisputeAgent(agent);
 
-					sess = HibernateWrapper.getSession().openSession();
-					try {
-						HibernateUtils.save(nDispute, sess);
-					} catch (Exception e) {
-						logger.error("Error Saving: ", e);
-						e.printStackTrace();
-						nDispute = null;
-					} finally {
-						if (sess != null) {
-							try {
-								sess.close();
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
-						}
-					}
+				sess = HibernateWrapper.getSession().openSession();
+				
+				HibernateUtils.save(nDispute, sess);
 					
 				return nDispute;
 			}
 		   }
 		} catch (Exception e) {
-			logger.error("unable to list disputes in paginated fashion " + e);
+			logger.error("Error getting dispute " + e);
 			e.printStackTrace();
-			return null;
 		} 
+		finally {
+			if (sess != null) {
+				try {
+					sess.close();
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		
 		return null;
 	}
@@ -150,6 +146,7 @@ public class DisputeUtils {
 			dis.setLock(lock);
 			return dis;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		} 
 	}
@@ -286,7 +283,6 @@ public class DisputeUtils {
 			}
 			
 			HibernateUtils.save(dispute, sess);
-			unlockDispute(dispute.getLock(), dispute);
 			return true;
 		}
 		catch (Exception e){
