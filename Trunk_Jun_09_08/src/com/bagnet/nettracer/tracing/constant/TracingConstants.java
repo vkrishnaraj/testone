@@ -1014,6 +1014,11 @@ public class TracingConstants {
 	public static final int LFC_ITEM_HIGH_VALUE = 1;
 	
 	public static final int HISTORY_OBJ_TYPE_FOUND = 1;
+	public static final int HISTORY_OBJ_TYPE_INCIDENT = 2; 
+	public static final int HISTORY_OBJ_TYPE_OHD = 3; 
+	public static final int HISTORY_OBJ_TYPE_CLAIM = 4; 
+	public static final int HISTORY_OBJ_TYPE_LOST = 5; 
+	public static final int HISTORY_OBJ_TYPE_BDO = 6; 
 	
 	public static final int LFC_CALL_OUTCOME_NO_CALL = 0;
 	public static final int LFC_CALL_OUTCOME_SPOKE_WITH_CUSTOMER = 1;
@@ -1035,6 +1040,23 @@ public class TracingConstants {
 	public static final int DAMAGE_COMPLETE = 2;
 	
 	public static final String LFC_COLOR_DOESNOTAPPLY = "XX";
+	
+	public static final String HIST_DESCRIPTION_CREATE = "Created";
+	public static final String HIST_DESCRIPTION_ADD = "Added";
+	public static final String HIST_DESCRIPTION_SAVE = "Saved";
+	public static final String HIST_DESCRIPTION_UPDATE = "Updated";
+	public static final String HIST_DESCRIPTION_CLOSE = "Closed";
+	public static final String HIST_DESCRIPTION_LOAD = "Loaded";
+	
+	public static final String HIST_DESCRIPTION_FOUNDITEM = "Found Item";
+	public static final String HIST_DESCRIPTION_DAMAGED = "Damaged";
+	public static final String HIST_DESCRIPTION_MISSING = "Pilfered";
+	public static final String HIST_DESCRIPTION_DELAYED = "Delayed";
+	public static final String HIST_DESCRIPTION_INCIDENT = "Incident";
+	public static final String HIST_DESCRIPTION_ONHAND = "On Hand";
+	public static final String HIST_DESCRIPTION_LOSTITEM = "Lost Item";
+	public static final String HIST_DESCRIPTION_BDO = "Baggage Delivery Order";
+	public static final String HIST_DESCRIPTION_CLAIM = "Claim";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
