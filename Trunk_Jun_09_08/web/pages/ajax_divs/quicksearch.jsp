@@ -20,6 +20,11 @@
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.db.OHD"%>
 
+<head>
+<link href="<%=request.getContextPath()%>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
+<link href="<%=request.getContextPath()%>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer.js"></script>
+</head>
 <script type="text/javascript">
 
 jQuery(document).ready(function() {

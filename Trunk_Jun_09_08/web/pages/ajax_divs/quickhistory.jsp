@@ -23,6 +23,11 @@
 src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
 </script>-->
 
+<head>
+<link href="<%=request.getContextPath()%>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
+<link href="<%=request.getContextPath()%>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer.js"></script>
+</head>
 <script type="text/javascript">
 
 jQuery(document).ready(function() {
