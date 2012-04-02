@@ -29,7 +29,7 @@
                 <div class="menu">
                   <dl>
                     <dd>
-                      <a href='searchIncident.do?incident='><span class="aa">&nbsp;
+                      <a href='searchIncident.do?incident=<bean:write name="claimSettlementForm" property="incident_ID" />'><span class="aa">&nbsp;
                           <br />
                           &nbsp;</span>
                         <span class="bb"><bean:message key="menu.incident_info" /></span>

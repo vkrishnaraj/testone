@@ -38,6 +38,7 @@ import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.bmo.claims.ClaimSettlementBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
@@ -113,6 +114,13 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 			
 			request.setAttribute("incident", ntIncidentId);
+			
+			if (ntIncidentId != null) {
+				if (ClaimSettlementBMO.getClaimSettlement(ntIncidentId, null) != null) {
+					request.setAttribute("claimSettlementExists", "1");
+				}
+			}
+			
 			if (theform == null)
 				theform = new IncidentForm();
 			
