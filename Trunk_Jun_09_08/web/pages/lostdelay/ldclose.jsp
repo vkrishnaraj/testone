@@ -47,6 +47,23 @@
 	var doCheck = 0;
     
     <jsp:include page="/pages/includes/ldclose.jsp" />
+    
+    function populateBagInfo(form) {
+   		var arrivalFlight = document.getElementsByName("theitem[0].arrivedonflightnum")[0].value;
+   		var arrivalDate = document.getElementsByName("theitem[0].disarrivedondate")[0].value;
+
+   		for (var i = 1;; ++i) {
+    		var element = document.getElementById("theitem[" + i + "].arrivedonairline_ID");
+    		if (!element) {
+    			break;
+    		}
+    		
+    		document.getElementById("theitem[" + i + "].arrivedonflightnum").value = arrivalFlight;
+    		document.getElementById("theitem[" + i + "].disarrivedondate").value = arrivalDate;
+   		}
+    	
+    }
+    
   </script>
   
   
@@ -131,7 +148,7 @@
           <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
             <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
               <tr>
-                <td colspan=3>
+                <td colspan=4>
                   <a name='additem<%= i %>'></a>
                   <b><bean:message key="colname.bag_number" />
                   :
@@ -164,6 +181,13 @@
                   <%= a.getDateformat().getFormat() %>)
                   <br>
                   <html:text name="theitem" property="disarrivedondate" size="13" maxlength="13" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2<%= i %>" name="calendar2<%= i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitem[" + i + "].disarrivedondate" %>','calendar2<%= i %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+                  <% if (i == 0) { %>
+                  <td><br>
+                  	<center>
+                  		<input type="button" id="button" onclick="populateBagInfo(this);" value="<bean:message key="apply.to.all"/>" />
+                  	</center>
+                  </td>
+                  <% } %>
               </tr>
             </table>
           </logic:iterate>
