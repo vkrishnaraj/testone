@@ -48,24 +48,7 @@
     
     <jsp:include page="/pages/includes/ldclose.jsp" />
     
-    function populateBagInfo(form) {
-   		var arrivalFlight = document.getElementsByName("theitem[0].arrivedonflightnum")[0].value;
-   		var arrivalDate = document.getElementsByName("theitem[0].disarrivedondate")[0].value;
-
-   		for (var i = 1;; ++i) {
-    		var element = document.getElementById("theitem[" + i + "].arrivedonairline_ID");
-    		if (!element) {
-    			break;
-    		}
-    		
-    		document.getElementById("theitem[" + i + "].arrivedonflightnum").value = arrivalFlight;
-    		document.getElementById("theitem[" + i + "].disarrivedondate").value = arrivalDate;
-   		}
-    	
-    }
-    
   </script>
-  
   
   <html:form action="lostDelay.do" method="post" enctype="multipart/form-data" onsubmit="return validateLdClose(this, doCheck);">
     <tr>
