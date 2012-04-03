@@ -22,6 +22,7 @@ public final class SearchDisputeForm extends ValidatorForm {
 	private int status_ID;
 	private String s_createtime = "";
 	private String e_createtime = "";
+	private int dispute_type=0;
 	
 	private int[] status_IDs;
 	
@@ -83,6 +84,14 @@ public final class SearchDisputeForm extends ValidatorForm {
 
 	public void setStatus_ID(int status_ID) {
 		this.status_ID = status_ID;
+	}
+	
+	public int getDispute_type() {
+		return dispute_type;
+	}
+
+	public void setDispute_type(int dispute_type) {
+		this.dispute_type = dispute_type;
 	}
 
 	public String getS_createtime() {

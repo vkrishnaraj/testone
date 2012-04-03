@@ -200,6 +200,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_SAVE_BUTTON_TOP_OF_PAGE = "Save Button at Top of Page";
 	public static final String SYSTEM_COMPONENT_NAME_ISSUE_RON_KITS = "Issue RON Kits";
 	public static final String SYSTEM_COMPONENT_NAME_ISSUE_REPLACEMENT_BAGS = "Issue Replacement Bags";
+	public static final String SYSTEM_COMPONENT_NAME_SPLIT_LOCK = "Split Code and Station Lock";
+	public static final String SYSTEM_COMPONENT_NAME_GET_NEXT = "Get Next Dispute";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;

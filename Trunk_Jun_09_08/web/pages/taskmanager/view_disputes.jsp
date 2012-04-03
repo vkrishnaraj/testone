@@ -6,6 +6,9 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%
   Agent a = (Agent)session.getAttribute("user");
   if (request.getAttribute("rowsperpage") == null) {
@@ -131,6 +134,22 @@ function updatePagination() {
                   <html:text property="incident_ID" size="20" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
                 </td>
                 <td>
+                	<bean:message key="colname.dispute.type"/>
+                	<html:select property="dispute_type" styleClass="dropdown">      
+				        <html:option value="0">
+				          <bean:message key="select.please_select" />
+				        </html:option>
+				        <html:option value="1">
+				          <bean:message key="select.code_dispute" />
+				        </html:option>
+				        <html:option value="2">
+				          <bean:message key="select.station_dispute" />
+				        </html:option>
+				        <html:option value="3">
+				          <bean:message key="select.code_station_dispute" />
+				        </html:option>
+				    </html:select>
+				        
                 </td>
               </tr>
 
@@ -145,6 +164,16 @@ function updatePagination() {
                   <bean:message key="button.reset" />
                 </html:reset>
 									
+                <% boolean showGetNext = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_GET_NEXT, a);
+                PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_DISPUTE_GETNEXT); 
+		    	if(showGetNext)
+		    	{%>
+		    	
+		    	    <html:submit property="getnext" styleId="button">
+                    	<bean:message key="button.getnext" />
+                    </html:submit>
+                
+		    	<% } %>
 
                 </td>
               </tr>
@@ -202,12 +231,21 @@ function updatePagination() {
                       <bean:message key="colname.travel.date" />
                     </b>
                   </td>
+                  <td>
+                    <b>
+                      <bean:message key="colname.dispute.type" />
+                    </b>
+                  </td>
                 </tr>
                 <logic:iterate id="dispute" name="resultlist" type="com.bagnet.nettracer.tracing.db.dr.Dispute">
                   	<bean:define id="station" name="dispute" property="suggestedFaultStation" />
 					<bean:define id="disputeAgent" name="dispute" property="disputeAgent" />
 					<bean:define id="incident" name="dispute" property="incident" />
 					<%	String deptDate= dispute.getIncident().getItinerary_list().get(0).getDisdepartdate();
+						String bfs=dispute.getBeforeDisputeFaultStation().getStationcode();
+						String sfs=dispute.getSuggestedFaultStation().getStationcode();
+						int blc=dispute.getBeforeDisputeLossCode();
+						int slc=dispute.getSuggestedLossCode();
 					%>
 					
 					<bean:define id="itinerary" name="dispute" property="incident.itinerary" />
@@ -239,6 +277,11 @@ function updatePagination() {
                     </td>
                     <td>
                       <%= deptDate %>
+                    </td>
+                    <td>
+                    <%=(bfs==sfs&&blc!=slc)?"Code Dispute":"" %>
+                    <%=(bfs!=sfs&&blc==slc)?"Station Dispute":"" %>
+                    <%=(bfs!=sfs&&blc!=slc)?"Code and Station Dispute":"" %>
                     </td>
                   </tr>
                 </logic:iterate>

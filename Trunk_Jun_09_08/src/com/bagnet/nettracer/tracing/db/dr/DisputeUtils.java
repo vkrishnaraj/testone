@@ -66,22 +66,24 @@ public class DisputeUtils {
 		}
 	}
 	
-	public static Dispute getDispute(Agent agent) {
-		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d";
-		sql += " where 1=1 and d.status = :status";
-		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz) and Lock_ID=null";
-		sql += " order by d.created_timestamp";
+	public static Dispute getDispute(Agent agent, int DisputeType) {
+//		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d";
+//		sql += " where 1=1 and d.status = :status";
+//		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz) and Lock_ID=null";
+//		sql += " order by d.created_timestamp";
+//
+//		Query q = null;
+//				
+//			q = sess.createQuery(sql.toString());
+//			q.setInteger("status", TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN);
+//			q.setParameter("station", agent.getStation().getStation_ID());
+//			q.setParameter("lz", agent.getStation().getLz_ID());
+//		q.list();
+		List<Dispute> result = getPaginatedDisputeList(agent, 0, 0,false, true, DisputeType);
+			
 
-		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-				
-			q = sess.createQuery(sql.toString());
-			q.setInteger("status", TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN);
-			q.setParameter("station", agent.getStation().getStation_ID());
-			q.setParameter("lz", agent.getStation().getLz_ID());
-			
-			List<Dispute> result = q.list();
 			if (result.size() > 0) {
 				Dispute nDispute=(Dispute) result.get(0);
 				if(lockDispute(nDispute)!=null){
@@ -170,9 +172,28 @@ public class DisputeUtils {
 	
 	public static List<Dispute> getPaginatedDisputeList(Agent user, int rowsperpage, int currpage, boolean iscount,
 			boolean dirtyRead){
+		return getPaginatedDisputeList(user, rowsperpage, currpage, iscount, dirtyRead, -1);
+	}
+	
+	public static List<Dispute> getPaginatedDisputeList(Agent user, int rowsperpage, int currpage, boolean iscount,
+			boolean dirtyRead, int DisputeType){
 		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d";
 		sql += " where 1=1 and d.status = :status";
 		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz)";
+		
+		if(DisputeType==1)
+		{
+			sql += " and d.beforeDisputeLossCode != d.suggestedLossCode and d.beforeDisputeFaultStation = d.suggestedFaultStation";
+		}
+		else if(DisputeType==2)
+		{
+			sql += " and d.beforeDisputeFaultStation != d.suggestedFaultStation and d.beforeDisputeLossCode = d.suggestedLossCode";
+		}
+		else if(DisputeType==3)
+		{
+			sql += " and d.beforeDisputeLossCode != d.suggestedLossCode and d.beforeDisputeFaultStation != d.suggestedFaultStation";
+		}
+		
 		sql += " order by d.created_timestamp";
 		Query q = null;
 		

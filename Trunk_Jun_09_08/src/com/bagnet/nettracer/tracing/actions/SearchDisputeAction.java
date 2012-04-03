@@ -67,9 +67,9 @@ public class SearchDisputeAction extends CheckedAction {
 		
 		SearchDisputeForm theform = (SearchDisputeForm) form;
 		
-		if (actionType.equalsIgnoreCase("getnext"))
+		if (request.getParameter("getnext")!=null)
 		{
-			Dispute d=DisputeUtils.getDispute(user);
+			Dispute d=DisputeUtils.getDispute(user, theform.getDispute_type());
 			if(d!=null){
 				String nextDispute=d.getIncident().getIncident_ID();
 				if(nextDispute!=null){
@@ -85,6 +85,7 @@ public class SearchDisputeAction extends CheckedAction {
 		long rowcount = -1;
 		
 		String incidentIdFromSearchForm = theform.getIncident_ID();
+		int disputeType=theform.getDispute_type();
 		//if the incident id is specified, then it comes from search button
 		//in this case there is at most one dispute returned;
 		//if the dispute is not open status, then view only for everyone, no more update
@@ -121,7 +122,7 @@ public class SearchDisputeAction extends CheckedAction {
 				int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 				request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 				int totalpages = 0;
-
+				
 				int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request.getParameter("currpage")) : 0;
 				if (request.getParameter("nextpage") != null && request.getParameter("nextpage").equals("1"))
 					currpage++;
@@ -138,7 +139,7 @@ public class SearchDisputeAction extends CheckedAction {
 					request.setAttribute("currpage", "0");
 				}
 
-				resultList = DisputeUtils.getPaginatedDisputeList(user, rowsperpage, currpage, false, true);
+				resultList = DisputeUtils.getPaginatedDisputeList(user, rowsperpage, currpage, false, true, disputeType);
 
 				if (currpage + 1 == totalpages)
 					request.setAttribute("end", "1");
