@@ -44,7 +44,7 @@ public class Reservation implements ReservationInterface {
 	
 	private static final String USU_EMAIL = "nettracer@webjet.com.br";
 	private static final String USU_SENHA = "nettracer123";
-	private static final String USU_SIGLA_CIA_AEREA = "WJB";
+	private static final String USU_SIGLA_CIA_AEREA = "WJ";
 	
 	@Override
 	public EnplanementResponse getEnplanements(User user) throws UnexpectedException {
@@ -68,13 +68,16 @@ public class Reservation implements ReservationInterface {
 			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
 
 			// CREATE OUTGOING DOCUMENT
+			String resUser = user.getProfile().getParameters().get(ParameterType.RESERVATION_USER);
+			String pass = user.getProfile().getParameters().get(ParameterType.RESERVATION_PASS);
+			String city = user.getProfile().getParameters().get(ParameterType.RESERVATION_CITY);
 			EfetuarLoginDocument bi = EfetuarLoginDocument.Factory.newInstance();
 			EfetuarLogin bi2 = bi.addNewEfetuarLogin();
 			AutenticacaoHeader bi3 = bi2.addNewParAutenticacaoHeader();
 			bi3.setLanguage(Language.ENGLISH);
-			bi3.setUsuEmail(USU_EMAIL);
-			bi3.setUsuSenha(USU_SENHA);
-			bi3.setSiglaCiaAerea(USU_SIGLA_CIA_AEREA);
+			bi3.setUsuEmail(resUser != null ? resUser: USU_EMAIL);
+			bi3.setUsuSenha(pass != null ? pass : USU_SENHA);
+			bi3.setSiglaCiaAerea(city != null ? city : USU_SIGLA_CIA_AEREA);
 			
 			// MAKE REQUEST WITH STUB
 			EfetuarLoginResponseDocument docRes = stub.efetuarLogin(bi);
