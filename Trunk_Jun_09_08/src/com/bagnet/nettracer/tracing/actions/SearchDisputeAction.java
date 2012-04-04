@@ -139,7 +139,7 @@ public class SearchDisputeAction extends CheckedAction {
 					request.setAttribute("currpage", "0");
 				}
 
-				resultList = DisputeUtils.getPaginatedDisputeList(user, rowsperpage, currpage, false, true, disputeType);
+				resultList = DisputeUtils.getPaginatedDisputeList(user, rowsperpage, currpage, false, true, disputeType, false);
 
 				if (currpage + 1 == totalpages)
 					request.setAttribute("end", "1");

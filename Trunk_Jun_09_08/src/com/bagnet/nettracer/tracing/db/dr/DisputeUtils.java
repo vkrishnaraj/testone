@@ -79,7 +79,7 @@ public class DisputeUtils {
 //			q.setParameter("station", agent.getStation().getStation_ID());
 //			q.setParameter("lz", agent.getStation().getLz_ID());
 //		q.list();
-		List<Dispute> result = getPaginatedDisputeList(agent, 0, 0,false, true, DisputeType);
+		List<Dispute> result = getPaginatedDisputeList(agent, 0, 0,false, true, DisputeType, true);
 			
 
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -172,14 +172,19 @@ public class DisputeUtils {
 	
 	public static List<Dispute> getPaginatedDisputeList(Agent user, int rowsperpage, int currpage, boolean iscount,
 			boolean dirtyRead){
-		return getPaginatedDisputeList(user, rowsperpage, currpage, iscount, dirtyRead, -1);
+		return getPaginatedDisputeList(user, rowsperpage, currpage, iscount, dirtyRead, -1,false);
 	}
 	
 	public static List<Dispute> getPaginatedDisputeList(Agent user, int rowsperpage, int currpage, boolean iscount,
-			boolean dirtyRead, int DisputeType){
+			boolean dirtyRead, int DisputeType,boolean getNext){
 		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d";
 		sql += " where 1=1 and d.status = :status";
 		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz)";
+		
+		if(getNext)
+		{
+			sql += " and Lock_ID=null";
+		}
 		
 		if(DisputeType==1)
 		{
