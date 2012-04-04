@@ -37,13 +37,15 @@ public class Settings {
 	//////////////////////////////////////////////////////////GENERIC TEST SETTINGS////////////////////////////////////////////////////////
 	
 	//URL ROOT FOR WEB APP BEING TESTED
-	public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
-	//public static final String APP_URL_LOCAL = "http://192.168.2.120:8380/";
+	//public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
+	public static final String APP_URL_LOCAL = "http://192.168.2.106:8080/";
 	
 	//LOGIN CREDENTIALS
 	public static final String USERNAME_ADMIN = "ntauto";
+	public static final String USERNAME_OGADMIN = "ogadmin";
 	public static final String USERNAME_TEST = "nttestauto";
 	public static final String PASSWORD_ADMIN = "IpoL!Jan7";
+	public static final String PASSWORD_OGADMIN = "Ladendead51!";
 	public static final String PASSWORD_TEST = "nttest@Hud1";
 	public static final String PASSWORD_CHANGE = "nttest@Hud2";
 	//public static final String USERNAME_ADMIN = "ntadmin";
@@ -107,8 +109,8 @@ public class Settings {
 	
 	/////////////////////////////////////////////////////////// WESTJET ///////////////////////////////////////////////////////
 	
-	public static final String START_URL_WS = "westjet";
-	//public static final String START_URL_WS = "wjtracer/";
+	//public static final String START_URL_WS = "westjet";
+	public static final String START_URL_WS = "wjtracer/";
 	public static String INCIDENT_ID_WS = "";
 	public static String DAMAGE_ID_WS = "";
 	public static String PILFERAGE_ID_WS = "";
