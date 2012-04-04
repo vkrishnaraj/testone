@@ -7,7 +7,6 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
-<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%
   Agent a = (Agent)session.getAttribute("user");
@@ -165,7 +164,7 @@ function updatePagination() {
                 </html:reset>
 									
                 <% boolean showGetNext = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_GET_NEXT, a);
-                PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_DISPUTE_GETNEXT); 
+                
 		    	if(showGetNext)
 		    	{%>
 		    	

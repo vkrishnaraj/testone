@@ -12,7 +12,6 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
-<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
@@ -110,8 +109,6 @@
     <%} %>
     
     <% boolean val=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SPLIT_LOCK, a);
-    PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_FAULT_LOCK);
-    
     if(!val)
     {%>
     <td align="center" valign="baseline">

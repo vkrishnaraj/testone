@@ -67,21 +67,8 @@ public class DisputeUtils {
 	}
 	
 	public static Dispute getDispute(Agent agent, int DisputeType) {
-//		String sql = "from com.bagnet.nettracer.tracing.db.dr.Dispute d";
-//		sql += " where 1=1 and d.status = :status";
-//		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz) and Lock_ID=null";
-//		sql += " order by d.created_timestamp";
-//
-//		Query q = null;
-//				
-//			q = sess.createQuery(sql.toString());
-//			q.setInteger("status", TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN);
-//			q.setParameter("station", agent.getStation().getStation_ID());
-//			q.setParameter("lz", agent.getStation().getLz_ID());
-//		q.list();
 		List<Dispute> result = getPaginatedDisputeList(agent, 0, 0,false, true, DisputeType, true);
 			
-
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			if (result.size() > 0) {
@@ -91,9 +78,6 @@ public class DisputeUtils {
 				s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
 				nDispute.setStatus(s);
 				nDispute.setDisputeAgent(agent);
-				sess.close();
-				sess = HibernateWrapper.getSession().openSession();
-				
 				HibernateUtils.save(nDispute, sess);
 					
 				return nDispute;
