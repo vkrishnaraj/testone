@@ -379,39 +379,39 @@ public class US_DisputeManage extends LoginUtil {
 			return;
 		}
 		
-		if(checkNoErrorPage())
-		{
-		selenium.type("name=incident_ID", Settings.INCIDENT_ID_WS);
-		selenium.click("name=getnext");
-		waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("DisputeManageError: Failed after searching for Code and Station Disputes");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-		selenium.click("xpath=(//input[@id='button'])[3]");
-		waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("DisputeManageError: Failed after getting the next");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-		selenium.click("id=button");
-		waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("DisputeManageError: Failed after Modifying the Dispute");
-			return;
-		}
+//		if(checkNoErrorPage()) //COMMENTED FOR ERROR PURPOSES. MAY NEED LATER
+//		{
+//		selenium.type("name=incident_ID", Settings.INCIDENT_ID_WS);
+//		selenium.click("name=getnext");
+//		waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("DisputeManageError: Failed after searching for Code and Station Disputes");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//		selenium.click("xpath=(//input[@id='button'])[3]");
+//		waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("DisputeManageError: Failed after getting the next");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//		selenium.click("id=button");
+//		waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("DisputeManageError: Failed after Modifying the Dispute");
+//			return;
+//		}
 		
 		if(checkNoErrorPage())
 		{
