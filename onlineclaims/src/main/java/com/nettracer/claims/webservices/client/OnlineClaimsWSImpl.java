@@ -297,7 +297,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         passengerBean.setAdditionalComments(claim.getComments());
         passengerBean.setClaimAmount(claim.getPaxClaimAmount());
         passengerBean.setClaimDate(claim.getPaxClaimDate());
-        passengerBean.setPrivateInsurance(intToBool(claim.getPrivateInsurance()));
+        passengerBean.setPrivateInsurance(claim.getPrivateInsurance() == 1 ? true : false);
         passengerBean.setPrivateInsuranceName(claim.getPrivateInsuranceName());
         passengerBean.setPrivateInsuranceAddr(claim.getPrivateInsuranceAddr());
         passengerBean.setReportedAirline(claim.getReportedAirline());
