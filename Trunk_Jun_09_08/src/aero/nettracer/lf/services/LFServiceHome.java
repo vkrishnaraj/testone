@@ -93,4 +93,8 @@ public interface LFServiceHome {
 	public boolean unrejectMatch(long id);
 
 	public LFFound getFoundItemByBarcode(String barcode) throws NonUniqueBarcodeException;
+
+	public List<LFMatchHistory> traceLostItem(long id, boolean isPrimary);
+	public List<LFMatchHistory> traceFoundItem(long id, boolean isPrimary);
+	
 }

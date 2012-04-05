@@ -6,13 +6,16 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.log4j.Logger;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
+
 
 public class ThreadMonitor implements Runnable{
 	private static final Logger logger = Logger.getLogger(ThreadMonitor.class);
 	
 	private Vector<ThreadContainer> container;
 	private ArrayBlockingQueue queue;
-	private static final long TIMEOUT = 240000;//4min
+	private static final long TIMEOUT = 360000;//6min
 	private static final long POLL_INTERVAL = 30000;//30sec
 	private static final long EMAIL_INTERVAL = 300000;//5min
 	
@@ -50,8 +53,11 @@ public class ThreadMonitor implements Runnable{
 					if(!tc.isDead() && tc.isConnectError()){
 						logger.error("Thread Failure: " + tc.getId() + "has a connection error");
 						if(tc.getConnectErrorEmailDate() == null || now.getTime() - tc.getConnectErrorEmailDate().getTime() > EMAIL_INTERVAL){
-							AlertEmail.sendAlertEmail("EJB connection error", "Thread: " + tc.getId() + " has a connection error");
+							AlertEmail.sendAlertEmail("EJB connection error", "Thread: " + tc.getId() + " has a connection error " + 
+									TracerProperties.getInstanceLabel() +
+									" connecting to " + PropertyBMO.getValue(PropertyBMO.LF_EJB_SERVER_LOCATION));
 							tc.setConnectErrorEmailDate(now);
+							tc.setConnectError(false);
 						}
 					}
 				}

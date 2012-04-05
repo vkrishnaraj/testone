@@ -135,7 +135,17 @@ public class PropertyBMO {
 	public static final String LF_TRACING_WEIGHT_MODEL = "lf.tracing.weight.model";
 	public static final String LF_TRACING_WEIGHT_CASE_COLOR = "lf.tracing.weight.casecolor";
 	
+	public static final String LF_EMAIL_RETURNADDR_INIT = "lf.email.returnaddr.init";
+	public static final String LF_EMAIL_RETURNADDR_FIRST = "lf.email.returnaddr.first";
+	public static final String LF_EMAIL_RETURNADDR_SECOND = "lf.email.returnaddr.second";
+	public static final String LF_EMAIL_RETURNADDR_CLOSE = "lf.email.returnaddr.close";
 	
+	public static final String LF_TRACING_USE_CACHE = "lf.tracing.use.cache";
+	public static final String LF_TRACING_CACHE_SIZE = "lf.tracing.cache.size";
+	public static final String LF_TRACING_CACHE_EXPIRE = "lf.tracing.cache.expire";
+	public static final String LF_TRACING_CACHE_EXPIRE_RAND = "lf.tracing.cache.expire.rand";
+	public static final String LF_TRACING_CACHE_CLEANUP_INTERVAL = "lf.tracing.cache.cleanup.interval";
+	public static final String LF_TRACING_SECONDARY_TRACE = "lf.tracing.secondary.trace";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

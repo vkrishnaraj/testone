@@ -3,8 +3,8 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="2.853116706110003"/>
-	<property name="ireport.x" value="779"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="563"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -74,7 +74,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Calibri" size="16" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Endereço 2]]></text>
+				<text><![CDATA[Complemento]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Transparent" x="45" y="529" width="493" height="20"/>
@@ -131,7 +131,7 @@
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Calibri" size="16" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Endereço 1]]></text>
+				<text><![CDATA[Endereço]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-26" mode="Opaque" x="0" y="218" width="121" height="27" forecolor="#000000" backcolor="#FFFFFF"/>

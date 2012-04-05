@@ -223,19 +223,19 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(dto.getFirstName() != null && dto.getFirstName().trim().length() > 0){
 			sql += " and o.client.firstName = \'" + dto.getFirstName().toUpperCase() + "\'";
 		}
-		if(dto.getStation() != null && dto.getStation().getStation_ID() != -1){
+		if(dto.getStationId() != -1){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-				sql += " and o.lossInfo.destination.station_ID = " + dto.getStation().getStation_ID();
+				sql += " and o.lossInfo.destination.station_ID = " + dto.getStationId();
 			} else {
-				sql += " and o.location.station_ID = " + dto.getStation().getStation_ID();
+				sql += " and o.location.station_ID = " + dto.getStationId();
 			}
 		}
-		if(dto.getStatus() != null && dto.getStatus().getStatus_ID() != -1){
-			sql += " and o.status.status_ID = " + dto.getStatus().getStatus_ID();
+		if(dto.getStatusId() != -1){
+			sql += " and o.status.status_ID = " + dto.getStatusId();
 		}
-		if(dto.getDisposition() != null && dto.getDisposition().getStatus_ID() != -1){
+		if(dto.getDispositionId() != -1){
 			if(dto.getType() == TracingConstants.LF_TYPE_FOUND){
-				sql += " and o.item.disposition.status_ID = " + dto.getDisposition().getStatus_ID();
+				sql += " and o.item.disposition.status_ID = " + dto.getDispositionId();
 			}
 		}
 		if(dto.getMvaNumber() != null && dto.getMvaNumber().trim().length() > 0){
@@ -455,14 +455,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				sendLostCreatedEmail(reportId);
 				if (agent != null) {
 					LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CREATE, (int) reportId, 0);
-					Logger.logLF(""+reportId, LFLogUtil.EVENT_CREATE, 0);
+					Logger.logLF(""+reportId, "LOST " + LFLogUtil.EVENT_CREATE, 0);
 				}
 			} else if (isNewlyClosed && agent != null) {
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CLOSE, (int) reportId, 0);
-				Logger.logLF(""+reportId, LFLogUtil.EVENT_CLOSE, 0);
+				Logger.logLF(""+reportId, "LOST " +  LFLogUtil.EVENT_CLOSE, 0);
 			} else if (agent != null) {
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_MODIFY, (int) reportId, 0);
-				Logger.logLF(""+reportId, LFLogUtil.EVENT_MODIFY, 0);
+				Logger.logLF(""+reportId, "LOST " +  LFLogUtil.EVENT_MODIFY, 0);
 			}
 			return reportId;
 		} else {
@@ -692,13 +692,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(reportId > 0){
 			if(isNew && agent != null){
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CREATE, 0, (int) reportId);
-				Logger.logLF(""+reportId, LFLogUtil.EVENT_CREATE, 0);
+				Logger.logLF(""+reportId, "FOUND " + LFLogUtil.EVENT_CREATE, 0);
 			} else if (isNewlyClosed && agent != null) {
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_CLOSE, 0, (int) reportId);
-				Logger.logLF(""+reportId, LFLogUtil.EVENT_CLOSE, 0);
+				Logger.logLF(""+reportId, "FOUND " + LFLogUtil.EVENT_CLOSE, 0);
 			} else if (agent != null) {
 				LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_MODIFY, 0, (int) reportId);
-				Logger.logLF(""+reportId, LFLogUtil.EVENT_MODIFY, 0);
+				Logger.logLF(""+reportId, "FOUND " + LFLogUtil.EVENT_MODIFY, 0);
 			}
 			return reportId;
 		} else {
@@ -1122,7 +1122,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		if(station == null){
 			return null;
 		}
-		String query = getTraceResultsQuery(station) + " order by mh.lost.openDate asc";
+		String query = getTraceResultsQuery(station) + " order by score desc, id";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1323,90 +1323,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return success;
 	}
 	
-	public boolean hasMatch(LFMatchHistory match){
-		String sql = "select m.id from lfmatchhistory m where m.found_id = :found and m.lost_id = :lost and m.score = :score";
-		Session sess = null;
-		try{
-			sess = HibernateWrapper.getSession().openSession();
-			SQLQuery q = sess.createSQLQuery(sql);
-			q.setParameter("found", match.getFound().getId());
-			q.setParameter("lost", match.getLost().getId());
-			q.setParameter("score", match.getScore());
-			q.addScalar("id", Hibernate.LONG);
-			List list = q.list();
-			if(list.size() > 0){
-				return true;
-			} else {
-				return false;
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+
 	
 	@Override
 	public long saveOrUpdateTraceResult(LFMatchHistory match) throws org.hibernate.exception.ConstraintViolationException{
-		//loupas - encryption is cpu intensive, first check to see if we need to save then encrypt
-		if(match.getId() == 0){//only need this check first time saving
-			if(!hasMatch(match)){
-				if(match.getDetails() != null){
-					for(LFMatchDetail detail:match.getDetails()){
-						detail.encrypt();
-					}
-				}
-			} else {
-				throw new org.hibernate.exception.ConstraintViolationException("", null, null);
-			}
-		}
-		Session sess = null;
-		Transaction t = null;
-		long id = -1;
-		try{
-			sess = HibernateWrapper.getSession().openSession();
-			t = sess.beginTransaction();
-			sess.saveOrUpdate(match);
-			t.commit();
-			id = match.getId();
-		} catch (org.hibernate.exception.ConstraintViolationException e){
-			try {
-				t.rollback();
-			} catch (Exception ex) {
-				// Fails
-				ex.printStackTrace();
-			}
-			throw e;
-		} catch (Exception e) {
-			e.printStackTrace();
-			try {
-				t.rollback();
-			} catch (Exception ex) {
-				// Fails
-				ex.printStackTrace();
-			}
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		if(id > 0){
-			return id;
-		} else {
-			return -1;
-		}
+		return LFTracingUtil.saveLFMatchHistory(match);
 	}
 
 	@Override
@@ -1498,18 +1419,50 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	@Override
 	public List<LFMatchHistory> traceFoundItem(long id) {
+		ArrayList<LFMatchHistory> ret = new ArrayList<LFMatchHistory>();
+		List<LFMatchHistory> toAdd = this.traceFoundItem(id, true);
+		if(toAdd!=null){
+			ret.addAll(toAdd);
+		}
+		if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_SECONDARY_TRACE)){
+			toAdd = this.traceFoundItem(id, false);
+			if(toAdd!=null){
+				ret.addAll(toAdd);
+			}
+		}
+		return ret;
+	}
+	
+	@Override
+	public List<LFMatchHistory> traceFoundItem(long id, boolean isPrimary) {
 		try {
-			return LFTracingUtil.traceFound(id, this, true);
+			return LFTracingUtil.traceFound(id, this, true, isPrimary);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-
+	
 	@Override
 	public List<LFMatchHistory> traceLostItem(long id) {
+		ArrayList<LFMatchHistory> ret = new ArrayList<LFMatchHistory>();
+		List<LFMatchHistory> toAdd = this.traceLostItem(id, true);
+		if(toAdd!=null){
+			ret.addAll(toAdd);
+		}
+		if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_SECONDARY_TRACE)){
+			toAdd = this.traceLostItem(id, false);
+			if(toAdd!=null){
+				ret.addAll(toAdd);
+			}
+		}
+		return ret;
+	}
+	
+	@Override
+	public List<LFMatchHistory> traceLostItem(long id, boolean isPrimary){
 		try {
-			return LFTracingUtil.traceLost(id, this, true);
+			return LFTracingUtil.traceLost(id, this, true, isPrimary);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -1778,7 +1731,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		" where l.status_ID = " + TracingConstants.LF_STATUS_OPEN +
 		" and l.lossInfo_id = r.id " +
 		" and r.destination_station_ID = s.Station_ID " +
-		" and (datediff(curdate(),l.emailSentDate) >= s.priority or l.emailSentDate is null)";
+		" and (datediff(curdate(),l.emailSentDate) >= s.priority or l.emailSentDate is null)" +
+		" and l.id not in (select mh.lost_id from lfmatchhistory mh where mh.lost_id = l.id and mh.status_Status_ID = " +
+		TracingConstants.LF_TRACING_CONFIRMED +
+		" ) ";
 
 		Session sess = null;
 		SQLQuery pq = null;
@@ -1840,10 +1796,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	private List<Long> getXDayList(int day, int notice) throws Exception{
+	protected List<Long> getXDayList(int day, int notice) throws Exception{
 		String sql = "select l.id lostid from lflost l " +
 		" where l.status_ID != " + TracingConstants.LF_STATUS_CLOSED +
-		" and (datediff(curdate(),l.openDate)) = :day ";
+		" and (datediff(curdate(),l.openDate)) = :day " +
+		" and l.id not in (select mh.lost_id from lfmatchhistory mh where mh.lost_id = l.id and mh.status_Status_ID = " +
+		TracingConstants.LF_TRACING_CONFIRMED +
+		" ) ";
 		
 		switch(notice){
 		case 1: sql+=" and l.email1 = 0";break;
@@ -1872,22 +1831,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		
 		return lostIds;
-	}
-	
-	public void sendEmailsProdFix(){
-		for(int day = 4; day < 13; day++){
-		try {
-			List<Long> lostIds = getXDayList(day, 1);//day,notice1
-			if(lostIds != null){
-				for(Long id: lostIds){
-					send1stNotice(id);
-				}
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}
 	}
 	
 	public void send1stNoticeEmails(){
@@ -1932,6 +1875,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
 		
+		//by default we use the return address from the company variable
+		h.put("RETURNADDRESS", lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_from());
+		
 		if("AB".equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
 			h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
 			h.put("SUBJECTLINE", resources.getString("ab.email.subject"));
@@ -1949,6 +1895,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public void sendLostCreatedEmail(long id){
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
+		
+		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
+			//use no reply email
+			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_INIT));
+		}
+		
 		if(sendEmail(lost, h, "create_report_email.html", h.get("SUBJECTLINE"))){
 			lost.setEmailSentDate(new Date());
 			try {
@@ -1976,6 +1928,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public void send1stNotice(long id){
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
+		
+		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
+			//use no reply email
+			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_FIRST));
+		}
+		
 		if(!lost.isEmail1() && sendEmail(lost, h, "update_1_report_email.html", h.get("SUBJECTLINE"))){
 			lost.setEmailSentDate(new Date());
 			lost.setEmail1(true);
@@ -1991,6 +1949,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public void send2ndNotice(long id){
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
+		
+		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
+			//use no reply email
+			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_SECOND));
+		}
+		
 		String email = "update_2_report_email.html";
 		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId()) && dataplan(lost)){
 			email = "update_2_ipad_report_email.html";
@@ -2044,6 +2008,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
 
+		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
+			//use no reply email
+			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_CLOSE));
+		}
+		
 		String email = "closed_report_email.html";
 		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId()) && dataplan(lost)){
 			email = "closed_report_ipad_email.html";
@@ -2099,7 +2068,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				HtmlEmail he = new HtmlEmail();
 				String currentLocale = lost.getAgent().getCurrentlocale();
 				
-				String from = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_from();
+				String from = (String) params.get("RETURNADDRESS");
+				if(from == null || from.trim().length() == 0){
+					from = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_from();
+				}
+				
 				String host = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_host();
 				int port = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_port();
 				
@@ -2148,7 +2121,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			HtmlEmail he = new HtmlEmail();
 			
-			String from = "test@nettracer.aero";
+			String from = "noreply@lostandfound.aero";
 			String host = "10.8.185.132";
 			int port = 8625;
 			
@@ -2158,6 +2131,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			he.setFrom(from);
 			ArrayList al = new ArrayList();
 			al.add(new InternetAddress("mloupas@nettracer.aero"));
+			al.add(new InternetAddress("noreply@lostandfound.aero"));
 			he.setTo(al);
 			
 			he.setSubject("Avis Budget Group - Test Email");
@@ -2186,7 +2160,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					 + "join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " "
 					 + "where mh.status_Status_ID = " + TracingConstants.LF_TRACING_OPEN + " " 
 					 + "and lf.status_ID = " + TracingConstants.LF_STATUS_OPEN + " "
-					 + "and lf.station_ID = " + station.getStation_ID() + " "
 					 + "and lf.itemLocation = " + TracingConstants.LF_LOCATION_SHELF + " ";
 		if (value > -1) {
 			query += "and i.value = " + value + " ";
@@ -2220,7 +2193,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m "
 				   + "where m.status = " + TracingConstants.LF_TRACING_OPEN + " and m.found.status = " + TracingConstants.LF_STATUS_OPEN + " "
-				   + "and m.found.location.station_ID = " + station.getStation_ID() + " "
 				   + "and m.found.item.value = " + value + " "
 				   + "and m.found.itemLocation = " + TracingConstants.LF_LOCATION_SHELF + " "
 				   + "and not exists (from com.bagnet.nettracer.tracing.db.Lock l where l.lockKey = m.found.barcode) "
@@ -2394,5 +2366,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		return sql;
 	}
-	
+	public static void main(String [] args){
+		LFServiceBean bean = new LFServiceBean();
+		bean.testEmail();
+	}
 }

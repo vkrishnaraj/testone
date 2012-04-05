@@ -142,5 +142,7 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="lib/client-us/us-scanpointsclient.jar"/>
 	<classpathentry kind="lib" path="lib/jars/lfc-client-model.jar"/>
+	<classpathentry kind="lib" path="lib/jars/opencsv-2.3.jar"/>
+	<classpathentry kind="lib" path="lib/provided/SimpleService.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

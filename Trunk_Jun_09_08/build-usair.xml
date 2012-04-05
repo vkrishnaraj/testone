@@ -204,6 +204,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/usair/LostDelayReceipt.jrxml" overwrite="true" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/DamageReceipt.jrxml" overwrite="true" />
 		<copy todir="${basedir}/web/reports" file="companies/usair/MissingReceipt.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<ant target="jasper_compile" antfile="build-gen.xml"/>
 		
 		<copy todir="${basedir}/src" file="companies/usair/custom_ui.properties" overwrite="true" />

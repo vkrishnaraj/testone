@@ -89,7 +89,7 @@
 			<bean:write name="result" property="matchSummary" filter="false" />
 		</td>
 		<td rowspan=<%=claims.length %>>
-			<a href="fraud_results.do?matchId=<%=result.getId() %>">
+			<a href="fraud_results.do?matchId=<%=result.getId() %>&incident=<bean:write name="incident" scope="request"/>">
 				<bean:message key="claim.match.details" />
 			</a>
 			<% if (!sameCompany) { %>
@@ -176,7 +176,7 @@
 		<!-- FUN'S OVER!! -->
 		
 		<td>
-			<a href="fraud_results.do?matchId=<%=result.getId() %>">
+			<a href="fraud_results.do?matchId=<%=result.getId() %>&incident=<bean:write name="incident" scope="request"/>">
 				<bean:message key="claim.match.details" />
 			</a>
 			<% if (!sameCompany) { %>

@@ -396,7 +396,7 @@ public class OnlineClaim {
 		this.whereWasBaggageChecked = whereWasBaggageChecked;
 	}
 
-	public int isHaveToRecheck() {
+	public int getHaveToRecheck() {
 		return haveToRecheck;
 	}
 
@@ -404,7 +404,7 @@ public class OnlineClaim {
 		this.haveToRecheck = haveToRecheck;
 	}
 
-	public int isWasBagInspected() {
+	public int getWasBagInspected() {
 		return wasBagInspected;
 	}
 
@@ -412,7 +412,7 @@ public class OnlineClaim {
 		this.wasBagInspected = wasBagInspected;
 	}
 
-	public int isTicketWithAnotherAirline() {
+	public int getTicketWithAnotherAirline() {
 		return ticketWithAnotherAirline;
 	}
 
@@ -420,7 +420,7 @@ public class OnlineClaim {
 		this.ticketWithAnotherAirline = ticketWithAnotherAirline;
 	}
 
-	public int isChargedForExcessBaggage() {
+	public int getChargedForExcessBaggage() {
 		return chargedForExcessBaggage;
 	}
 
@@ -428,7 +428,7 @@ public class OnlineClaim {
 		this.chargedForExcessBaggage = chargedForExcessBaggage;
 	}
 
-	public int isDeclaredExcessValue() {
+	public int getDeclaredExcessValue() {
 		return declaredExcessValue;
 	}
 
@@ -444,7 +444,7 @@ public class OnlineClaim {
 		this.declaredValue = declaredValue;
 	}
 
-	public int isBagClearCustoms() {
+	public int getBagClearCustoms() {
 		return bagClearCustoms;
 	}
 
@@ -452,7 +452,7 @@ public class OnlineClaim {
 		this.bagClearCustoms = bagClearCustoms;
 	}
 
-	public int isBaggageReroutedEnRoute() {
+	public int getBaggageReroutedEnRoute() {
 		return baggageReroutedEnRoute;
 	}
 
@@ -476,7 +476,7 @@ public class OnlineClaim {
 		this.reroutedReason = reroutedReason;
 	}
 
-	public int isDifferentClaimCheck() {
+	public int getDifferentClaimCheck() {
 		return differentClaimCheck;
 	}
 
@@ -484,7 +484,7 @@ public class OnlineClaim {
 		this.differentClaimCheck = differentClaimCheck;
 	}
 
-	public int isAttemptToClaimAtArrival() {
+	public int getAttemptToClaimAtArrival() {
 		return attemptToClaimAtArrival;
 	}
 
@@ -508,7 +508,7 @@ public class OnlineClaim {
 		this.whereDidYouFileReport = whereDidYouFileReport;
 	}
 
-	public int isReportedToAnotherAirline() {
+	public int getReportedToAnotherAirline() {
 		return reportedToAnotherAirline;
 	}
 
@@ -516,7 +516,7 @@ public class OnlineClaim {
 		this.reportedToAnotherAirline = reportedToAnotherAirline;
 	}
 
-	public int isFiledPreviousClaim() {
+	public int getFiledPreviousClaim() {
 		return filedPreviousClaim;
 	}
 
@@ -548,7 +548,7 @@ public class OnlineClaim {
 		this.filedPreviousClaimant = filedPreviousClaimant;
 	}
 
-	public int isTsaInspected() {
+	public int getTsaInspected() {
 		return tsaInspected;
 	}
 
@@ -556,7 +556,7 @@ public class OnlineClaim {
 		this.tsaInspected = tsaInspected;
 	}
 
-	public int isTsaNotePresent() {
+	public int getTsaNotePresent() {
 		return tsaNotePresent;
 	}
 
@@ -712,7 +712,7 @@ public class OnlineClaim {
 		this.reportedFileNumber = reportedFileNumber;
 	}
 
-	public int isPrivateInsurance() {
+	public int getPrivateInsurance() {
 		return privateInsurance;
 	}
 

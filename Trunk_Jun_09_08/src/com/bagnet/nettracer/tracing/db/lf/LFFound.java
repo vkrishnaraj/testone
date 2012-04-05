@@ -88,6 +88,9 @@ public class LFFound implements LFObject, Serializable {
 	@Transient
 	private int entryStatus;
 	
+	@Transient
+	private long lastLoaded;
+	
 	public long getId() {
 		return id;
 	}
@@ -356,6 +359,14 @@ public class LFFound implements LFObject, Serializable {
 
 	public void setSalvage(LFSalvage salvage) {
 		this.salvage = salvage;
+	}
+
+	public void setLastLoaded(long lastLoaded) {
+		this.lastLoaded = lastLoaded;
+	}
+
+	public long getLastLoaded() {
+		return lastLoaded;
 	}
 	
 }

@@ -3,14 +3,14 @@ package aero.nettracer.lf.services;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.hibernate.Hibernate;
-import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.match.StringCompare;
 
@@ -24,47 +24,148 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLossInfo;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.LFObject;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.general.AlertEmail;
 import com.bagnet.nettracer.tracing.utils.general.Logger;
+import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
 
 public class LFTracingUtil {
 	
-//	public static final double SCORE_VANTIVE = 10;
-//	public static final double SCORE_CATEGORY = 10;
-//	public static final double SCORE_CATEGORY_PARTICLE = 10;
-//	private static final double SCORE_COLOR = 5;
-//	private static final double LFC_SCORE_COLOR = 4;
-//	private static final double SCORE_MODEL = 5;
-//	private static final double SCORE_CASE_COLOR = 5;
-//	private static final double LFC_SCORE_CASE_COLOR = 4;
-//	private static final double SCORE_SERIAL_NUMBER = 25;
-//	private static final double SCORE_PHONE = 25;
-//	private static final double SCORE_NAME = 25;
-//	private static final double SCORE_DESCRIPTION = 10;
-//	private static final double SCORE_LONG_DESCRIPTION = 10;
-//	private static final double SCORE_ADDRESS = 10;
-//	private static final double SCORE_BRAND = 10;
-//	private static final double LFC_SCORE_BRAND = 9;
-//	private static final double SCORE_MVA = 15;
-//	private static final double SCORE_AGREEMENT_NUMBER = 15;
-//	private static final double SCORE_EMAIL = 25;
+	private static ConcurrentHashMap<Long, LFLost> lostCache;
+	private static ConcurrentHashMap<Long, LFFound> foundCache;
+	
+	private static long lastCacheClean = 0;
+	private static long lastCacheAlert = 0;
+	
+	private static final int DEFAULT_CACHE_SIZE = 20000;
+	private static final long DEFAULT_CACHE_EXPIRE = 180 * 60000;//3h
+	private static final int DEFAULT_CACHE_EXPRIE_RAND = 120;//2h
+	private static final long DEFAULT_CACHE_CLEAN_INTERVAL = 30 * 60000;//30min
+	private static final long CACHE_ALERT_INTERVAL = 240 * 60000;//4h
+	private static final double CACHE_ALERT_PERCENT = 0.9;
+
+	
+	private static boolean hasExpired(LFObject o){
+		long now = new Date().getTime();
+		long expire = PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_CACHE_EXPIRE) * 60000;
+		return now - o.getLastLoaded() > (expire!=0?expire:DEFAULT_CACHE_EXPIRE);
+	}
+	
+	private static void cacheFullSendAlert(){
+		long now = new Date().getTime();
+		if(now - lastCacheAlert > CACHE_ALERT_INTERVAL){
+			int fsize = foundCache.size();
+			int lsize = lostCache.size();
+			boolean clean = cleanCache();
+			int fcleanSize = foundCache.size();
+			int lcleanSize = lostCache.size();
+			lastCacheAlert = now;
+			AlertEmail.sendAlertEmail("LFC Tracing Cache",
+					"Cache for LFC Tracing has exceeded limit<br/>" +
+					"Lost cache preclean:   " + lsize + "<br/>" +
+					"Lost cache post clean: " + lcleanSize + "<br/>" + 
+					"Found cache preclean:   " + fsize + "<br/>" +
+					"Found cache post clean: " + fcleanSize + "<br/>" +
+					"Instance Label " + TracerProperties.getInstanceLabel() + 
+					"Alert interval " + CACHE_ALERT_INTERVAL + "<br/>" +
+					"Cache Cleaned: " + clean);
+		}
+	}
+	
+	protected static long getExpireOffset(){
+		int offset = PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_CACHE_EXPIRE_RAND);
+		offset = offset!=0?offset:DEFAULT_CACHE_EXPRIE_RAND;
+		return (long)Math.floor(offset*Math.random()*60000);
+	}
+	
+	public static LFFound loadFound(long foundId, LFServiceBean bean, boolean forceReload){
+		if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_USE_CACHE)){
+			int cacheSize = PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_CACHE_SIZE);
+			cacheSize = cacheSize!=0?cacheSize:DEFAULT_CACHE_SIZE;
+			if(foundCache == null){
+				foundCache = new ConcurrentHashMap<Long, LFFound>(cacheSize);
+			}
+			Long id = new Long(foundId);
+			if(!forceReload && foundCache.containsKey(id) && !hasExpired((LFObject)foundCache.get(id)) ){
+				return (LFFound)foundCache.get(id);
+			} else {
+				LFFound found = bean.getFoundItem(foundId);
+				found.setLastLoaded(new Date().getTime() + getExpireOffset());
+				if(foundCache.size() < cacheSize){
+					foundCache.put(id, found);
+				}
+				if (foundCache.size() > (cacheSize * CACHE_ALERT_PERCENT)){
+					cacheFullSendAlert();
+				}
+				return found;
+			}
+		} else {
+			return bean.getFoundItem(foundId);
+		}
+	}
+	
+	public static LFLost loadLost(long lostId, LFServiceBean bean, boolean forceReload){
+		if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_USE_CACHE)){
+			int cacheSize = PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_CACHE_SIZE);
+			cacheSize = cacheSize!=0?cacheSize:DEFAULT_CACHE_SIZE;
+			if(lostCache == null){
+				lostCache = new ConcurrentHashMap<Long, LFLost>(cacheSize);
+			}
+			Long id = new Long(lostId);
+			if(!forceReload && lostCache.containsKey(id) && !hasExpired((LFObject)lostCache.get(id)) ){
+				return (LFLost)lostCache.get(id);
+			} else {
+				LFLost lost = bean.getLostReport(lostId);
+				lost.setLastLoaded(new Date().getTime() + getExpireOffset());
+				if(lostCache.size() < cacheSize){
+					lostCache.put(id, lost);
+				} 
+				if (lostCache.size() > (cacheSize * CACHE_ALERT_PERCENT)){
+					cacheFullSendAlert();
+				}
+				return lost;
+			}
+		} else {
+			return bean.getLostReport(lostId);
+		}
+	}
 	
 	
-	
-	
-	private static HashMap<Long, LFLost> lostMap;
-	private static int LOSTMAP_MAX_SIZE = 6000;
+	public static synchronized boolean cleanCache(){
+		long interval = PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_CACHE_CLEANUP_INTERVAL) * 60000;
+		interval = interval!=0?interval:DEFAULT_CACHE_CLEAN_INTERVAL;
+		long now = new Date().getTime();
+		if(now - lastCacheClean > interval){
+			lastCacheClean = now;
+			if(lostCache != null){
+				for(LFLost lost:lostCache.values()){
+					if(hasExpired(lost)){
+						lostCache.remove(new Long(lost.getId()));
+					}
+				}
+			}
+			if(foundCache != null){
+				for(LFFound found:foundCache.values()){
+					if(hasExpired(found)){
+						lostCache.remove(new Long(found.getId()));
+					}
+				}
+			}
+			return true;
+		}
+		return false;
+	}
 	
 	private static String replaceNull(String string) {
 		  if (string == null) return "";
 		  return string.trim();
 	  }
-	
-	
 	
 	private static LFSubCategory getSubCategory(long id){
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -96,52 +197,14 @@ public class LFTracingUtil {
 		return f;
 	}
 	
-	public static List<LFLost> getAvisPotentialLost(LFFound found){
-		String sql = "select l from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
-		" left outer join l.items i " +
-		" where l.status.status_ID = :status" +
-		" and i.disposition.status_ID = :disposition" +
-		" and (l.lossInfo.lossdate is null or l.lossInfo.lossdate <= :founddate) ";
-		boolean hasLocation = false;
-		if(found != null && found.getLocation() != null){
-			sql += " and (l.lossInfo.origin.station_ID = :foundstation " +
-			" or l.lossInfo.destination.station_ID = :foundstation)" ;
-			hasLocation = true;
-		}
-		Session sess = null;
-		try{
-			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery(sql);
-			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
-			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
-			q.setDate("founddate", found.getFoundDate());
-			if(hasLocation){
-				q.setParameter("foundstation", found.getLocation().getStation_ID());
-			}
-			List<LFLost> results = (List<LFLost>)q.list();
-			sess.close();
-			return results;
-
-		}catch(Exception e){
-			e.printStackTrace();
-		}finally{
-			if(sess != null && sess.isOpen()){
-				sess.close();
-			}
-		}
-		return null;
-	}
-
-	public static List<Long> getLFCPotentialLostId(LFFound found){
-		String sql = "select l.id id from lflost l  " +
+	public static List<Long> getAvisPotentialLostId(LFFound found){
+		String sql = "select l.id from LFLost l " +
 		" left outer join lfitem i on l.id = i.lost_id " +
 		" left outer join lflossinfo li on l.lossInfo_id = li.id " +
 		" where l.status_ID = :status" +
 		" and i.disposition_status_ID = :disposition" +
 		" and (li.lossdate is null or li.lossdate <= :founddate) ";
 		boolean hasLocation = false;
-		//loupas - removing limiting potentail list by reservation location
-		//update leaving this in for now....until we change our mind again
 		if(found != null && found.getLocation() != null){
 			sql += " and (li.origin_station_ID = :foundstation " +
 			" or li.destination_station_ID = :foundstation)" ;
@@ -172,62 +235,78 @@ public class LFTracingUtil {
 		return null;
 	}
 	
-	public static List<LFLost> getLFCPotentialLost(LFFound found){
-		return getLFCPotentialLost(found, null);
-	}
-	
-	public static List<LFLost> getLFCPotentialLost(LFFound found, LFServiceBean bean){
-		List<Long> list = getLFCPotentialLostId(found);
-		if(bean == null){
-			bean = new LFServiceBean();
-		}
-		ArrayList<LFLost> ret = new ArrayList<LFLost>();
-		for(Long l:list){
-			if(lostMap != null && lostMap.containsKey(l)){
-				ret.add(lostMap.get(l));
+	public static List<Long> getLFCPotentialLostId(LFFound found, boolean isPrimary){
+		String sql = "select l.id id from lflost l  " +
+		" left outer join lfitem i on l.id = i.lost_id " +
+		" left outer join lflossinfo li on l.lossInfo_id = li.id " +
+		" where l.status_ID = :status" +
+		" and i.disposition_status_ID = :disposition" +
+		" and (li.lossdate is null or li.lossdate <= :founddate) ";
+		boolean hasLocation = false;
+		//loupas - removing limiting potentail list by reservation location
+		//update leaving this in for now....until we change our mind again
+		if(found != null && found.getLocation() != null){
+			if(isPrimary){
+				sql += " and (li.destination_station_ID = :foundstation)" ;
 			} else {
-				LFLost toAdd = bean.getLostReport(l);
-				if(lostMap != null && lostMap.size() < LOSTMAP_MAX_SIZE){
-					lostMap.put(l,toAdd);
-				}
-				ret.add(toAdd);
+				sql += " and (li.destination_station_ID != :foundstation)" ;
+			}
+			hasLocation = true;
+		}
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery q = sess.createSQLQuery(sql);
+			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
+			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
+			q.setDate("founddate", found.getFoundDate());
+			if(hasLocation){
+				q.setParameter("foundstation", found.getLocation().getStation_ID());
+			}
+			q.addScalar("id", Hibernate.LONG);
+			List<Long> results = (List<Long>)q.list();
+			sess.close();
+			return results;
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
 			}
 		}
-		return ret;
+		return null;
 	}
 	
-	public static List<LFLost> getPotentialLost(LFFound found){
-		return getPotentialLost(found, null);
-	}
-	
-	public static List<LFLost> getPotentialLost(LFFound found, LFServiceBean bean){
+	public static List<Long> getPotentialLostId(LFFound found, LFServiceBean bean, boolean isPrimary){
 		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(found.getCompanyId()))){
-			return getAvisPotentialLost(found);
+			return getAvisPotentialLostId(found);
 		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(found.getCompanyId()))){
-			return getLFCPotentialLost(found, bean);
+			return getLFCPotentialLostId(found, isPrimary);
 		} else {
-			return getLFCPotentialLost(found, bean);//for demo
+			return getLFCPotentialLostId(found, true);//for demo
 		}
 	}
 	
-	private static List<LFFound> getAvisPotentialFound(LFLost lost){
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
-		" where f.status.status_ID = :status" +
-		" and f.item.disposition.status_ID = :disposition" +
+	private static List<Long> getAvisPotentialFoundId(LFLost lost){
+		String sql = "select f.id from LFFound f " +
+		" left outer join lfitem i on f.id = i.found_id " +
+		" where f.status_ID = :status" +
+		" and i.disposition_status_ID = :disposition" +
 		" and f.foundDate > :founddate";
 
 		boolean hasReservation = false;
 		if(lost != null && lost.getLossInfo() != null 
 				&& lost.getLossInfo().getDestination() != null 
 				&& lost.getLossInfo().getOrigin() != null){
-			sql += " and (f.location.station_ID = :pickup or f.location.station_ID = :dropoff)";
+			sql += " and (f.station_ID = :pickup or f.station_ID = :dropoff)";
 			hasReservation = true;
 		}
 
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery(sql);
+			SQLQuery q = sess.createSQLQuery(sql);
 			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
 			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
 			Calendar cal = Calendar.getInstance();
@@ -241,7 +320,8 @@ public class LFTracingUtil {
 				q.setParameter("pickup", lost.getLossInfo().getOrigin().getStation_ID());
 				q.setParameter("dropoff", lost.getLossInfo().getDestination().getStation_ID());
 			}
-			List<LFFound> results = q.list();
+			q.addScalar("id", Hibernate.LONG);
+			List<Long> results = (List<Long>)q.list();
 			sess.close();
 			return results;
 
@@ -255,26 +335,30 @@ public class LFTracingUtil {
 		return null;
 	}
 	
-	private static List<LFFound> getLFCPotentialFound(LFLost lost){
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
-		" where f.status.status_ID = :status" +
-		" and f.item.disposition.status_ID = :disposition" +
+	private static List<Long> getLFCPotentialFoundId(LFLost lost, boolean isPrimary){
+		String sql = "select f.id from LFFound f " +
+		" left outer join lfitem i on f.id = i.found_id " +
+		" where f.status_ID = :status" +
+		" and i.disposition_status_ID = :disposition" +
 		" and f.receivedDate > :founddate";
 
 		boolean hasReservation = false;
 		//loupas - removing limiting potentail list by reservation location
 		//update leaving this in for now....until we change our mind again
 		if(lost != null && lost.getLossInfo() != null 
-				&& lost.getLossInfo().getDestination() != null 
-				&& lost.getLossInfo().getOrigin() != null){
-			sql += " and (f.location.station_ID = :dropoff)";
+				&& lost.getLossInfo().getDestination() != null){
+			if(isPrimary){
+				sql += " and (f.station_ID = :dropoff)";
+			} else {
+				sql += " and (f.station_ID != :dropoff)";
+			}
 			hasReservation = true;
 		}
 
 		Session sess = null;
-		try{
+		try{			
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery(sql);
+			SQLQuery q = sess.createSQLQuery(sql);
 			q.setParameter("status", TracingConstants.LF_STATUS_OPEN);
 			q.setParameter("disposition", TracingConstants.LF_DISPOSITION_OTHER);
 			Calendar cal = Calendar.getInstance();
@@ -287,7 +371,8 @@ public class LFTracingUtil {
 			if(hasReservation){
 				q.setParameter("dropoff", lost.getLossInfo().getDestination().getStation_ID());
 			}
-			List<LFFound> results = q.list();
+			q.addScalar("id", Hibernate.LONG);
+			List<Long> results = (List<Long>)q.list();
 			sess.close();
 			return results;
 
@@ -301,13 +386,13 @@ public class LFTracingUtil {
 		return null;
 	}
 	
-	public static List<LFFound> getPotentialFound(LFLost lost){
+	public static List<Long> getPotentialFoundId(LFLost lost, boolean isPrimary){
 		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
-			return getAvisPotentialFound(lost);
+			return getAvisPotentialFoundId(lost);
 		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
-			return getLFCPotentialFound(lost);
+			return getLFCPotentialFoundId(lost, isPrimary);
 		} else {
-			return getLFCPotentialFound(lost);//for demo
+			return getLFCPotentialFoundId(lost, true);//for demo
 		}
 	}
 	
@@ -345,7 +430,39 @@ public class LFTracingUtil {
 		return ret;
 	}
 	
-	public static double processMatch(LFMatchHistory match){
+	/**
+	 * 
+	 * returns true if both non-empty strings are different
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static boolean isDifferentIgnoreEmpty(String a, String b){
+		if(a != null && a.trim().length() > 0 && b != null && b.trim().length() > 0
+				&& !a.equalsIgnoreCase(b)){
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isSameStateCountry(LFAddress a, LFAddress b){
+		if(a == null || b == null){
+			return true;//we are missing address information, default true
+		} else {
+			if(isDifferentIgnoreEmpty(a.getCountry(), b.getCountry())){
+				return false;//countries are different
+			} else {
+				if(a.getCountry() != null && a.getCountry().equalsIgnoreCase("US")){
+					return !isDifferentIgnoreEmpty(a.getDecryptedState(), b.getDecryptedState());
+				} else {
+					return true;//country is not US, we are not comparing province at this time, returning true
+				}
+			}
+		}
+	}
+	
+	public static double processMatch(LFMatchHistory match, boolean isPrimary){
 		
 		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(match.getFound().getCompanyId()));
 		
@@ -398,13 +515,14 @@ public class LFTracingUtil {
 					match.getDetails().add(detail);
 				}
 			}
-			
+
 			if(lc.getAddress() != null && fc.getAddress() != null){
-				if(lc.getAddress().getDecryptedAddress1() != null && lc.getAddress().getDecryptedAddress1().trim().length() > 0
-						&& fc.getAddress().getDecryptedAddress1() != null && fc.getAddress().getDecryptedAddress1().trim().length() > 0
+				if(fc.getAddress().getDecryptedAddress1() != null && fc.getAddress().getDecryptedAddress1().trim().length() > 0
+						&& lc.getAddress().getDecryptedAddress1() != null && lc.getAddress().getDecryptedAddress1().trim().length() > 0
 						&& lc.getAddress().getDecryptedCity() != null && lc.getAddress().getDecryptedCity().trim().length() > 0
-						&& fc.getAddress().getDecryptedCity() != null && fc.getAddress().getDecryptedCity().trim().length() > 0){
-					
+						&& fc.getAddress().getDecryptedCity() != null && fc.getAddress().getDecryptedCity().trim().length() > 0
+						&& isSameStateCountry(lc.getAddress(), fc.getAddress())){
+
 					LFAddress la = lc.getAddress();
 					LFAddress fa = fc.getAddress();
 					
@@ -439,7 +557,7 @@ public class LFTracingUtil {
 		}
 		
 		//process reservation
-		if(match.getLost() != null && match.getLost().getLossInfo() != null){
+		if(isPrimary && match.getLost() != null && match.getLost().getLossInfo() != null){
 			LFLossInfo lr = match.getLost().getLossInfo();
 			if(lr.getMvaNumber() != null && lr.getMvaNumber().trim().length() > 0
 					&& match.getFound() != null && match.getFound().getMvaNumber() != null 
@@ -479,7 +597,7 @@ public class LFTracingUtil {
 		if(match.getLost().getItems() != null && match.getFound().getItem() != null){
 			LFItem fitem = match.getFound().getItem();
 			for(LFItem litem:match.getLost().getItems()){
-				if(litem.getBrand() != null && litem.getBrand().trim().length() > 0
+				if(isPrimary && litem.getBrand() != null && litem.getBrand().trim().length() > 0
 						&& fitem.getBrand() != null && fitem.getBrand().trim().length() > 0){
 					if(StringCompare.compareStrings(litem.getBrand(), fitem.getBrand()) > 80.0){
 						LFMatchDetail detail = new LFMatchDetail();
@@ -491,7 +609,7 @@ public class LFTracingUtil {
 						match.getDetails().add(detail);
 					}
 				}
-				if(litem.getCategory() > 0 && fitem.getCategory() > 0
+				if(isPrimary && litem.getCategory() > 0 && fitem.getCategory() > 0
 					&& litem.getCategory() == fitem.getCategory()){
 					if(litem.getSubCategory() > 0 && fitem.getSubCategory() > 0
 						&& litem.getSubCategory() == fitem.getSubCategory()){
@@ -520,7 +638,7 @@ public class LFTracingUtil {
 						match.getDetails().add(detail);
 					}
 				}
-				if(litem.getColor() != null && litem.getColor().trim().length() > 0
+				if(isPrimary && litem.getColor() != null && litem.getColor().trim().length() > 0
 						&& fitem.getColor() != null && fitem.getColor().trim().length() > 0){
 					if(litem.getColor().equalsIgnoreCase(fitem.getColor()) &&
 							!litem.getColor().equalsIgnoreCase(TracingConstants.LFC_COLOR_DOESNOTAPPLY)){
@@ -533,7 +651,7 @@ public class LFTracingUtil {
 						match.getDetails().add(detail);
 					}
 				}
-				if(litem.getCaseColor() != null && litem.getCaseColor().trim().length() > 0
+				if(isPrimary && litem.getCaseColor() != null && litem.getCaseColor().trim().length() > 0
 						&& fitem.getCaseColor() != null && fitem.getCaseColor().trim().length() > 0){
 					if(litem.getCaseColor().equalsIgnoreCase(fitem.getCaseColor()) &&
 							!litem.getCaseColor().equalsIgnoreCase(TracingConstants.LFC_COLOR_DOESNOTAPPLY)){
@@ -546,7 +664,7 @@ public class LFTracingUtil {
 						match.getDetails().add(detail);
 					}
 				}
-				if(litem.getDescription() != null && litem.getDescription().trim().length() > 0
+				if(isPrimary && litem.getDescription() != null && litem.getDescription().trim().length() > 0
 						&& fitem.getDescription() != null && fitem.getDescription().trim().length() > 0){
 					if(StringCompare.compareStrings(litem.getDescription(), fitem.getDescription()) > 60){
 						LFMatchDetail detail = new LFMatchDetail();
@@ -558,7 +676,7 @@ public class LFTracingUtil {
 						match.getDetails().add(detail);
 					}
 				}
-				if(litem.getLongDescription() != null && litem.getLongDescription().trim().length() > 0
+				if(isPrimary && litem.getLongDescription() != null && litem.getLongDescription().trim().length() > 0
 						&& fitem.getLongDescription() != null && fitem.getLongDescription().trim().length() > 0){
 					if(StringCompare.compareStrings(litem.getLongDescription(), fitem.getLongDescription()) > 60){
 						LFMatchDetail detail = new LFMatchDetail();
@@ -570,7 +688,7 @@ public class LFTracingUtil {
 						match.getDetails().add(detail);
 					}
 				}
-				if(litem.getModel() != null && litem.getModel().trim().length() > 0
+				if(isPrimary && litem.getModel() != null && litem.getModel().trim().length() > 0
 						&& fitem.getModel() != null && fitem.getModel().trim().length() > 0){
 					if(StringCompare.compareStrings(litem.getModel(), fitem.getModel()) > 80){
 						LFMatchDetail detail = new LFMatchDetail();
@@ -599,31 +717,25 @@ public class LFTracingUtil {
 		return match.getTotalScore();
 	}
 	
-	public static List<LFMatchHistory> traceLost(long id, boolean log) throws Exception{
-		LFServiceBean bean = new LFServiceBean();
-		return traceLost(id, bean, log);
-	}
-	
-	public static List<LFMatchHistory> traceFound(long id, boolean log) throws Exception{
-		LFServiceBean bean = new LFServiceBean();
-		return traceFound(id, bean, log);
-	}
-	
-	public static List<LFMatchHistory> traceLost(long id, LFServiceBean bean, boolean log) throws Exception{
+	public static List<LFMatchHistory> traceLost(long id, LFServiceBean bean, boolean log, boolean isPrimary) throws Exception{
+		if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_USE_CACHE)){
+			cleanCache();
+		}
 		Date start = new Date();
-		LFLost lost = bean.getLostReport(id);
-		List<LFFound> foundList = getPotentialFound(lost);
+		LFLost lost = loadLost(id, bean, true);
+		List<Long> foundList = getPotentialFoundId(lost,isPrimary);
+//		System.out.println("potential found " + isPrimary + " " + foundList.size());
 		ArrayList<LFMatchHistory> matchList = new ArrayList<LFMatchHistory>();
 		
-		for(LFFound found:foundList){
+		for(Long foundId:foundList){
 			LFMatchHistory match = new LFMatchHistory();
 			match.setLost(lost);
-			match.setFound(found);
+			match.setFound(loadFound(foundId, bean, false));
 			Status status = new Status();
 			status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
 			match.setStatus(status);
 			match.setDetails(new LinkedHashSet<LFMatchDetail>());
-			double score = processMatch(match);
+			double score = processMatch(match,isPrimary);
 			match.setScore(score);
 			if(score > PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACE_CUTOFF)){
 				try{
@@ -640,26 +752,120 @@ public class LFTracingUtil {
 		}
 		Date end = new Date();
 		if(log){
-			Logger.logLF("" + id, "TRACE LOST", end.getTime()-start.getTime());
+			if(isPrimary){
+				Logger.logLF("" + id, "TRACE LOST", end.getTime()-start.getTime());
+			} else {
+				Logger.logLF("" + id, "TRACE LOST SEC", end.getTime()-start.getTime());
+			}
 		}
 		return matchList;
 	}
 	
-	public static List<LFMatchHistory> traceFound(long id, LFServiceBean bean, boolean log) throws Exception{
+	public static boolean hasMatch(LFMatchHistory match){
+		String sql = "select m.id from lfmatchhistory m where m.found_id = :found and m.lost_id = :lost and m.score = :score";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery q = sess.createSQLQuery(sql);
+			q.setParameter("found", match.getFound().getId());
+			q.setParameter("lost", match.getLost().getId());
+			q.setParameter("score", match.getScore());
+			q.addScalar("id", Hibernate.LONG);
+			List list = q.list();
+			if(list.size() > 0){
+				return true;
+			} else {
+				return false;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static synchronized long saveLFMatchHistory(LFMatchHistory match) throws org.hibernate.exception.ConstraintViolationException{
+		//loupas - encryption is cpu intensive, first check to see if we need to save then encrypt
+		if(match.getId() == 0){//only need this check first time saving
+			if(!hasMatch(match)){
+				if(match.getDetails() != null){
+					for(LFMatchDetail detail:match.getDetails()){
+						detail.encrypt();
+					}
+				}
+			} else {
+				throw new org.hibernate.exception.ConstraintViolationException("", null, null);
+			}
+		}
+		Session sess = null;
+		Transaction t = null;
+		long id = -1;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(match);
+			t.commit();
+			id = match.getId();
+		} catch (org.hibernate.exception.ConstraintViolationException e){
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if(id > 0){
+			return id;
+		} else {
+			return -1;
+		}
+	}
+	
+	public static List<LFMatchHistory> traceFound(long id, LFServiceBean bean, boolean log, boolean isPrimary) throws Exception{
+		if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_USE_CACHE)){
+			cleanCache();
+		}
 		Date start = new Date();
-		LFFound found = bean.getFoundItem(id);
-		List<LFLost> lostList = getPotentialLost(found, bean);
+		LFFound found = loadFound(id, bean, true);
+		List<Long> lostList = getPotentialLostId(found, bean, isPrimary);
 		ArrayList<LFMatchHistory> matchList = new ArrayList<LFMatchHistory>();
+//		System.out.println("potential lost " + isPrimary + " " + lostList.size());
 		
-		for(LFLost lost:lostList){
+		
+		for(Long lostId:lostList){
 			LFMatchHistory match = new LFMatchHistory();
-			match.setLost(lost);
+			match.setLost(loadLost(lostId,bean, false));
 			match.setFound(found);
 			Status status = new Status();
 			status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
 			match.setStatus(status);
 			match.setDetails(new LinkedHashSet<LFMatchDetail>());
-			double score = processMatch(match);
+			double score = processMatch(match,isPrimary);
 			match.setScore(score);
 			if(score > PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACE_CUTOFF)){
 				try{
@@ -675,7 +881,11 @@ public class LFTracingUtil {
 		}
 		Date end = new Date();
 		if(log){
-			Logger.logLF("" + id, "TRACE FOUND", end.getTime()-start.getTime());
+			if(isPrimary){
+				Logger.logLF("" + id, "TRACE FOUND", end.getTime()-start.getTime());
+			} else {
+				Logger.logLF("" + id, "TRACE FOUND SEC", end.getTime()-start.getTime());
+			}
 		}
 		return matchList;
 	}
@@ -713,21 +923,33 @@ public class LFTracingUtil {
 	
 	public static void traceAllFoundItems(boolean useCache){
 		Date start = new Date();
-		lostMap = null;
-		if(useCache){
-			lostMap = new HashMap<Long, LFLost>(10000);
-		}
 		List<Long> foundList = getFoundItemsForTracing();
 		for(Long l:foundList){
 			try {
-				traceFound(l, false);
+				LFFound f = new LFFound();
+				f.setId(l);
+				TraceHandler.trace(f);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		while(TraceHandler.getQueueSize() > 0){
+			try {
+				System.out.println("Traceall queue size: " + TraceHandler.getQueueSize());
+				Thread.sleep(60000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		try {
+			Thread.sleep(60000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Date end = new Date();
 		Logger.logLF(null, "TRACE ALL FOUND: " + foundList.size(), end.getTime() - start.getTime());
-		lostMap = null;
 	}
 	
 }

@@ -3,6 +3,11 @@ package aero.nettracer.lf.services;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -650,7 +655,7 @@ public class LFServiceBeanTest {
 			threwException = true;
 		}
 		assertTrue(threwException);
-		assertTrue(bean.hasMatch(newMatch));
+		assertTrue(LFTracingUtil.hasMatch(newMatch));
 	}
 	
 	@Test
@@ -739,6 +744,33 @@ public class LFServiceBeanTest {
 		assertTrue(hasMatch1);
 		assertTrue(hasMatch2);
 		assertTrue(i == 2);
+		
+		//test email
+		try {
+			List<Long> ids = bean.getXDayList(0,1);
+			boolean hasId = false;
+			for(long id:ids){
+				if(id == match1.getLost().getId())hasId=true;
+			}
+			assertTrue(hasId);
+			
+			Status status = new Status();
+			status.setStatus_ID(TracingConstants.LF_TRACING_CONFIRMED);
+			match1.setStatus(status);
+			bean.saveOrUpdateTraceResult(match1);
+			
+			ids = bean.getXDayList(0,1);
+			hasId = false;
+			for(long id:ids){
+				if(id == match1.getLost().getId())hasId=true;
+			}
+			assertTrue(!hasId);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			assertTrue(false);
+		}
+		
 	}
 	
 //	@Test
@@ -1054,6 +1086,14 @@ public class LFServiceBeanTest {
 		assertTrue(lostId > 0);
 		Date start = new Date();
 		bean.traceAllFoundItems();
+		System.out.println("sleeping");
+		try {
+			Thread.sleep(120000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("end sleep");
 		Date end = new Date();
 		System.out.println((end.getTime() - start.getTime()));
 		List<LFMatchHistory> results = bean.getTraceResultsForFound(foundId);
@@ -1066,6 +1106,51 @@ public class LFServiceBeanTest {
 		}
 		assertTrue(hasMatch != null);
 		assertTrue(verifyMatchDetails(hasMatch));
+	}
+	
+	@Test
+	public void isSameCountryStateTest(){
+		LFAddress a = new LFAddress();
+		LFAddress b = new LFAddress();
+		
+		//null cases
+		assertTrue(LFTracingUtil.isSameStateCountry(null, null));
+		assertTrue(LFTracingUtil.isSameStateCountry(a, null));
+		assertTrue(LFTracingUtil.isSameStateCountry(null, b));
+		assertTrue(LFTracingUtil.isSameStateCountry(a,b));
+		
+		//same state/country
+		a.setCountry("US");
+		b.setCountry("US");
+		a.setDecryptedState("GA");
+		b.setDecryptedState("GA");
+		assertTrue(LFTracingUtil.isSameStateCountry(a, b));
+		
+		//same country/missing state
+		a.setDecryptedState(null);
+		assertTrue(a.getState() == null);//make sure state properly nulls
+		assertTrue(LFTracingUtil.isSameStateCountry(a, b));
+		
+		//same country/different state
+		a.setDecryptedState("AL");
+		assertTrue(!LFTracingUtil.isSameStateCountry(a, b));
+		
+		//missing country
+		a.setCountry(null);
+		assertTrue(LFTracingUtil.isSameStateCountry(a, b));
+		
+		//empty string country
+		a.setCountry("");
+		assertTrue(LFTracingUtil.isSameStateCountry(a, b));
+		
+		//different country
+		a.setCountry("CA");
+		assertTrue(!LFTracingUtil.isSameStateCountry(a, b));
+		
+		//same country not US
+		b.setCountry("CA");
+		assertTrue(LFTracingUtil.isSameStateCountry(a, b));
+		
 	}
 	
 //	@Test
@@ -1269,6 +1354,33 @@ public class LFServiceBeanTest {
 		match.setStatus(status);
 		match.setScore(20);
 		return match;
+	}
+	
+//	@Test
+	public void testTracing(){
+		
+		LFServiceBean bean = new LFServiceBean();
+		for(int i = 0; i < 100; i++){
+			System.out.println(LFTracingUtil.getExpireOffset() / 60000);
+		}
+////		bean.send1stNotice(8869);
+////		bean.send2ndNotice(8869);
+////		bean.sendFoundEmail(8869);
+////		bean.closeLostAndEmail(8869, bean.getAutoAgent());
+//		Date start = new Date();
+//		bean.traceFoundItem(11047);
+//		bean.traceFoundItem(11047);
+////		LFTracingUtil.cleanCache();
+//		bean.traceFoundItem(11047);
+//		bean.traceFoundItem(11047);
+//		bean.traceLostItem(8864);
+//		bean.traceLostItem(8864);
+////		LFTracingUtil.cleanCache();
+//		bean.traceLostItem(8864);
+//		bean.traceLostItem(8864);
+////		LFTracingUtil.cleanCache();
+//		Date end = new Date();
+////		System.out.println(end.getTime() - start.getTime());
 	}
 	
 }

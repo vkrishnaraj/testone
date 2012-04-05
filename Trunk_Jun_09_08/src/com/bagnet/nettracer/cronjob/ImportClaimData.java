@@ -81,6 +81,7 @@ public abstract class ImportClaimData {
 		// import existing nettracer claims
 		if (ntUser & runWhich == 1) {
 			 importNtClaims();
+			 sleepForABit();
 		}
 		
 		if (runWhich == 2) {

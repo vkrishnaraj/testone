@@ -32,31 +32,35 @@ public class TraceThread implements Runnable{
 		try {
 			Context ctx = ConnectionUtil.getInitialContext(PropertyBMO.getValue(PropertyBMO.LF_EJB_SERVER_LOCATION));
 			while(true){
-				container.setWaiting(true);
-				Object[] o = queue.take();
-				container.setStartTime(new Date());
-				container.setWaiting(false);
-				LFServiceRemote bean = null;
 				try{
-					bean = (LFServiceRemote)ctx.lookup("tracer/LFServiceBean/remote");
-				} catch (Exception e){
-					logger.error("unable to connect to service " + PropertyBMO.LF_EJB_SERVER_LOCATION);
-				}
-				if(bean != null){
-					container.setConnectError(false);
-					if(o[0] == TraceHandler.TYPE_FOUND){
-						bean.traceFoundItem((Long)o[1]);
-					} else if (o[0] == TraceHandler.TYPE_LOST){
-						bean.traceLostItem((Long)o[1]);
-					} else if (o[0] == TraceHandler.TYPE_FOUND_HISTORY_OBJECT){
-						List<LFMatchHistory> r = bean.traceFoundItem(((FoundHistoryObject)o[1]).getFound().getId());
-						((FoundHistoryObject)o[1]).setHasTraceResults(r != null && r.size() > 0);
+					container.setWaiting(true);
+					Object[] o = queue.take();
+					container.setStartTime(new Date());
+					container.setWaiting(false);
+					LFServiceRemote bean = null;
+					try{
+						bean = (LFServiceRemote)ctx.lookup("tracer/LFServiceBean/remote");
+					} catch (Exception e){
+						logger.error("unable to connect to service " + PropertyBMO.getValue(PropertyBMO.LF_EJB_SERVER_LOCATION));
 					}
-				} else {
-					//unable to connect to service
-					System.out.println("unable to connect");
-					queue.put(o);
-					container.setConnectError(true);
+					if(bean != null){
+						container.setConnectError(false);
+						if(o[0] == TraceHandler.TYPE_FOUND){
+							bean.traceFoundItem((Long)o[1]);
+						} else if (o[0] == TraceHandler.TYPE_LOST){
+							bean.traceLostItem((Long)o[1]);
+						} else if (o[0] == TraceHandler.TYPE_FOUND_HISTORY_OBJECT){
+							List<LFMatchHistory> r = bean.traceFoundItem(((FoundHistoryObject)o[1]).getFound().getId());
+							((FoundHistoryObject)o[1]).setHasTraceResults(r != null && r.size() > 0);
+						}
+					} else {
+						//unable to connect to service
+						System.out.println("unable to connect");
+						queue.put(o);
+						container.setConnectError(true);
+					}
+				} catch (Exception e2){
+					e2.printStackTrace();
 				}
 			}
 			

@@ -192,54 +192,54 @@ phIndex++; %>
 <td class="boldCell"><bean:message key="oc.label.num.passengers" /></td><td><bean:write name="claim" property="passengersTravelingWithYou" scope="request"/></td>
 </tr><tr>
 <td class="boldCell"><bean:message key="oc.label.excess.charge" /></td>
-<td><logic:match value="true" name="claim" property="chargedForExcessBaggage" scope="request">
+<td><logic:match value="1" name="claim" property="chargedForExcessBaggage" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="chargedForExcessBaggage" scope="request">
+<logic:match value="2" name="claim" property="chargedForExcessBaggage" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 <td class="boldCell"><bean:message key="oc.label.est.weight" /></td><td><bean:write name="claim" property="bagWeight" scope="request"/></td>                                                                                     <!-- Not Persisted -->
 </tr><tr>
 <td class="boldCell"><bean:message key="oc.label.excess.value" /></td>
-<td><logic:match value="true" name="claim" property="declaredExcessValue" scope="request">
+<td><logic:match value="1" name="claim" property="declaredExcessValue" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="declaredExcessValue" scope="request">
+<logic:match value="2" name="claim" property="declaredExcessValue" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 <td class="boldCell"><bean:message key="oc.label.value.declared" /></td>
 <td><bean:write name="claim" property="declaredValue" scope="request"/>&#160;<bean:write name="claim" property="declaredCurrency" scope="request"/></td>
 </tr><tr>
 <td class="boldCell"><bean:message key="oc.label.bag.clear.customs" /></td>
-<td><logic:match value="true" name="claim" property="bagClearCustoms" scope="request">
+<td><logic:match value="1" name="claim" property="bagClearCustoms" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="bagClearCustoms" scope="request">
+<logic:match value="2" name="claim" property="bagClearCustoms" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 <td class="boldCell"><bean:message key="oc.label.bag.rerouted" /></td>
-<td><logic:match value="true" name="claim" property="baggageReroutedEnRoute" scope="request">
+<td><logic:match value="1" name="claim" property="baggageReroutedEnRoute" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="baggageReroutedEnRoute" scope="request">
+<logic:match value="2" name="claim" property="baggageReroutedEnRoute" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 </tr><tr>
 <td class="boldCell"><bean:message key="oc.label.diff.claim.check" /></td>
-<td><logic:match value="true" name="claim" property="differentClaimCheck" scope="request">
+<td><logic:match value="1" name="claim" property="differentClaimCheck" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="differentClaimCheck" scope="request">
+<logic:match value="2" name="claim" property="differentClaimCheck" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 <td class="boldCell"><bean:message key="oc.label.who.rerouted" /></td><td><bean:write name="claim" property="reroutedAirlineCity" scope="request"/></td>
 </tr><tr>
 <td class="boldCell"><bean:message key="oc.label.reroute.reason" /></td><td><bean:write name="claim" property="reroutedReason" scope="request"/></td>
 <td class="boldCell"><bean:message key="oc.label.claim.immediately" /></td>
-<td><logic:match value="true" name="claim" property="attemptToClaimAtArrival" scope="request">
+<td><logic:match value="1" name="claim" property="attemptToClaimAtArrival" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="attemptToClaimAtArrival" scope="request">
+<logic:match value="2" name="claim" property="attemptToClaimAtArrival" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 </tr><tr>
@@ -247,10 +247,10 @@ phIndex++; %>
 <td class="boldCell"><bean:message key="oc.label.city.filed" /></td><td><bean:write name="claim" property="whereDidYouFileReport" scope="request"/></td>
 </tr><tr>
 <td class="boldCell"><bean:message key="oc.label.another.airline" /></td>
-<td><logic:match value="true" name="claim" property="reportedToAnotherAirline" scope="request">
+<td><logic:match value="1" name="claim" property="reportedToAnotherAirline" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="reportedToAnotherAirline" scope="request">
+<logic:match value="2" name="claim" property="reportedToAnotherAirline" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 <td class="boldCell"><bean:message key="oc.label.another.airline.name" /></td><td><bean:write name="claim" property="reportedAirline" scope="request"/></td>
@@ -259,10 +259,10 @@ phIndex++; %>
 <td class="boldCell"><bean:message key="oc.label.another.airline.file" /></td><td><bean:write name="claim" property="reportedFileNumber" scope="request"/></td>
 </tr><tr>
 <td class="boldCell"><bean:message key="oc.label.ticket.airline" /></td>
-<td><logic:match value="true" name="claim" property="ticketWithAnotherAirline" scope="request">
+<td><logic:match value="1" name="claim" property="ticketWithAnotherAirline" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="ticketWithAnotherAirline" scope="request">
+<logic:match value="2" name="claim" property="ticketWithAnotherAirline" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>                                                                                 <!-- Not Persisted -->
 <td class="boldCell"><bean:message key="oc.label.ticket.number" /></td><td><bean:write name="claim" property="ticketNumber" scope="request"/></td>                <!-- Not Persisted -->
@@ -477,10 +477,10 @@ phIndex++; %>
 <h1><bean:message key="oc.label.prev.claim.title" /></h1>
 <table class="ocTable" width="95%"><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.priv.insur" /></td>
-<td><logic:match value="true" name="claim" property="privateInsurance" scope="request">
+<td><logic:match value="1" name="claim" property="privateInsurance" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="privateInsurance" scope="request">
+<logic:match value="2" name="claim" property="privateInsurance" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 </tr><tr>
@@ -488,10 +488,10 @@ phIndex++; %>
 <td class="boldCell"><bean:message key="oc.label.priv.insur.addr" /></td><td><bean:write name="claim" property="privateInsuranceAddr" scope="request"/></td>
 </tr><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.prev.claim" /></td>
-<td><logic:match value="true" name="claim" property="filedPreviousClaim" scope="request">
+<td><logic:match value="1" name="claim" property="filedPreviousClaim" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="filedPreviousClaim" scope="request">
+<logic:match value="2" name="claim" property="filedPreviousClaim" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 </tr><tr>
@@ -501,17 +501,17 @@ phIndex++; %>
 <td class="boldCell"><bean:message key="oc.label.prev.claim.name" /></td><td colspan="3"><bean:write name="claim" property="filedPreviousClaimant" scope="request"/></td>
 </tr><tr>
 <td class="boldCell"><bean:message key="oc.label.prev.claim.tsa.inspect" /></td>
-<td><logic:match value="true" name="claim" property="tsaInspected" scope="request">
+<td><logic:match value="1" name="claim" property="tsaInspected" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="tsaInspected" scope="request">
+<logic:match value="2" name="claim" property="tsaInspected" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 <td class="boldCell"><bean:message key="oc.label.prev.claim.tsa.note" /></td>
-<td><logic:match value="true" name="claim" property="tsaNotePresent" scope="request">
+<td><logic:match value="1" name="claim" property="tsaNotePresent" scope="request">
 <bean:message key="oc.label.yes"/>
 </logic:match>
-<logic:match value="false" name="claim" property="tsaNotePresent" scope="request">
+<logic:match value="2" name="claim" property="tsaNotePresent" scope="request">
 <bean:message key="oc.label.no"/>
 </logic:match></td>
 </tr><tr>

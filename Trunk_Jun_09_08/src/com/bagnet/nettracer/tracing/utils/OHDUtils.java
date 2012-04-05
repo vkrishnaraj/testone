@@ -1712,7 +1712,7 @@ public class OHDUtils {
 			String sql = "select count(dispute.dispute_res_id)";
 			sql += " from com.bagnet.nettracer.tracing.db.dr.Dispute dispute where 1=1";
 			sql += " and dispute.status = :status";
-			sql += " and (dispute.incident.stationassigned.station_ID = :station or dispute.incident.stationassigned.lz_ID = :lz)";
+			sql += " and (dispute.incident.faultstation.station_ID = :station or dispute.incident.faultstation.lz_ID = :lz)";
 			
 			Query q = sess.createQuery(sql);
 			q.setInteger("status", TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN);

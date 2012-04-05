@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import java.lang.Cloneable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +33,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Proxy(lazy = false)
-public class LFLost implements LFObject, Serializable {
+public class LFLost implements LFObject, Serializable, Cloneable {
 
 	/**
 	 * 
@@ -100,6 +102,9 @@ public class LFLost implements LFObject, Serializable {
 	private boolean email2;
 	
 	private boolean foundEmail;
+	
+	@Transient
+	private long lastLoaded;
 	
 	public long getId() {
 		return id;
@@ -325,6 +330,14 @@ public class LFLost implements LFObject, Serializable {
 
 	public boolean isFoundEmail() {
 		return foundEmail;
+	}
+
+	public void setLastLoaded(long lastLoaded) {
+		this.lastLoaded = lastLoaded;
+	}
+
+	public long getLastLoaded() {
+		return lastLoaded;
 	}
 	
 }

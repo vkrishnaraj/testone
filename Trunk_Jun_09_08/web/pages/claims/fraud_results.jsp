@@ -192,6 +192,7 @@
 					    	<jsp:param name="beanName" value="fraudResultsForm" />
 					    	<jsp:param name="beanProperty" value="primaryResults" />
 					    	<jsp:param name="company" value="<%=company %>" />
+					    	<jsp:param name="incident" value="<%=incident %>" />
 
 				    </jsp:include>
             	</table>
@@ -205,6 +206,7 @@
 					    	<jsp:param name="beanName" value="fraudResultsForm" />
 					    	<jsp:param name="beanProperty" value="secondaryResults" />
 					    	<jsp:param name="company" value="<%=company %>" />
+							<jsp:param name="incident" value="<%=incident %>" />
 
 				    </jsp:include>
             	</table>
