@@ -239,7 +239,7 @@ public class Claim {
 		this.whereWasBaggageChecked = whereWasBaggageChecked;
 	}
 
-	public int isHaveToRecheck() {
+	public int getHaveToRecheck() {
 		return haveToRecheck;
 	}
 
@@ -247,7 +247,7 @@ public class Claim {
 		this.haveToRecheck = haveToRecheck;
 	}
 
-	public int isWasBagInspected() {
+	public int getWasBagInspected() {
 		return wasBagInspected;
 	}
 
@@ -255,7 +255,7 @@ public class Claim {
 		this.wasBagInspected = wasBagInspected;
 	}
 
-	public int isTicketWithAnotherAirline() {
+	public int getTicketWithAnotherAirline() {
 		return ticketWithAnotherAirline;
 	}
 
@@ -263,7 +263,7 @@ public class Claim {
 		this.ticketWithAnotherAirline = ticketWithAnotherAirline;
 	}
 
-	public int isChargedForExcessBaggage() {
+	public int getChargedForExcessBaggage() {
 		return chargedForExcessBaggage;
 	}
 
@@ -271,7 +271,7 @@ public class Claim {
 		this.chargedForExcessBaggage = chargedForExcessBaggage;
 	}
 
-	public int isDeclaredExcessValue() {
+	public int getDeclaredExcessValue() {
 		return declaredExcessValue;
 	}
 
@@ -287,7 +287,7 @@ public class Claim {
 		this.declaredValue = declaredValue;
 	}
 
-	public int isBagClearCustoms() {
+	public int getBagClearCustoms() {
 		return bagClearCustoms;
 	}
 
@@ -295,7 +295,7 @@ public class Claim {
 		this.bagClearCustoms = bagClearCustoms;
 	}
 
-	public int isBaggageReroutedEnRoute() {
+	public int getBaggageReroutedEnRoute() {
 		return baggageReroutedEnRoute;
 	}
 
@@ -319,7 +319,7 @@ public class Claim {
 		this.reroutedReason = reroutedReason;
 	}
 
-	public int isDifferentClaimCheck() {
+	public int getDifferentClaimCheck() {
 		return differentClaimCheck;
 	}
 
@@ -327,7 +327,7 @@ public class Claim {
 		this.differentClaimCheck = differentClaimCheck;
 	}
 
-	public int isAttemptToClaimAtArrival() {
+	public int getAttemptToClaimAtArrival() {
 		return attemptToClaimAtArrival;
 	}
 
@@ -351,7 +351,7 @@ public class Claim {
 		this.whereDidYouFileReport = whereDidYouFileReport;
 	}
 
-	public int isReportedToAnotherAirline() {
+	public int getReportedToAnotherAirline() {
 		return reportedToAnotherAirline;
 	}
 
@@ -359,7 +359,7 @@ public class Claim {
 		this.reportedToAnotherAirline = reportedToAnotherAirline;
 	}
 
-	public int isFiledPreviousClaim() {
+	public int getFiledPreviousClaim() {
 		return filedPreviousClaim;
 	}
 
@@ -391,7 +391,7 @@ public class Claim {
 		this.filedPreviousClaimant = filedPreviousClaimant;
 	}
 
-	public int isTsaInspected() {
+	public int getTsaInspected() {
 		return tsaInspected;
 	}
 
@@ -399,7 +399,7 @@ public class Claim {
 		this.tsaInspected = tsaInspected;
 	}
 
-	public int isTsaNotePresent() {
+	public int getTsaNotePresent() {
 		return tsaNotePresent;
 	}
 
@@ -503,7 +503,7 @@ public class Claim {
 		this.reportedFileNumber = reportedFileNumber;
 	}
 
-	public int isPrivateInsurance() {
+	public int getPrivateInsurance() {
 		return privateInsurance;
 	}
 
