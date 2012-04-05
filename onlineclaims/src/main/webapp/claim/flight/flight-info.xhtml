@@ -45,7 +45,7 @@
 			<f:selectItem itemLabel="6" itemValue="6" />
 			<f:selectItem itemLabel="7" itemValue="7" />
 			<f:selectItem itemLabel="8" itemValue="8" />
-			<a4j:support event="onchange" reRender="lostBag,ticketTablePanel" limitToList="true"/>
+			<a4j:support event="onchange" ajaxSingle="true" reRender="lostBag,ticketTablePanel" limitToList="true"/>
 		</h:selectOneMenu>
 
 		<rich:spacer width="14" height="10" title="" />
@@ -371,7 +371,7 @@
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
-			<a4j:support event="onchange" reRender="declVal,declValText,declValCurr,declValCurrText" limitToList="true"/>
+			<a4j:support event="onchange" ajaxSingle="true" reRender="declVal,declValText,declValCurr,declValCurrText" limitToList="true"/>
 		</h:selectOneMenu>
 		
 		<rich:spacer width="100%" height="15" title=""/>
@@ -502,7 +502,7 @@
 			<f:selectItem itemLabel="--" itemValue="" />
 			<f:selectItem itemLabel="Yes" itemValue="true" />
 			<f:selectItem itemLabel="No" itemValue="false" />
-			<a4j:support event="onchange" reRender="rerouteCity,rerouteCityInput" limitToList="true"/>
+			<a4j:support event="onchange" ajaxSingle="true" reRender="rerouteCity,rerouteCityInput" limitToList="true"/>
 		</h:selectOneMenu>
 		
 		<rich:spacer width="100%" height="15" title=""/>

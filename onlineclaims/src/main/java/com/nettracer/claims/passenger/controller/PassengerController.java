@@ -1434,6 +1434,9 @@ public class PassengerController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			if (passengerBean.isPrivateInsurance() == null) {
+				passengerBean.setPrivateInsurance(false);
+			}
 			currentPage = PAGE_ADDITIONAL_INFO;
 			return "gotoFraudQuestion";
 		} else {
