@@ -192,12 +192,12 @@
 			<version>1.5.1</version>
 		</dependency>
 		  -->
-<!-- 	<dependency>
+	 	<dependency>
 			<groupId>org.apache.xmlbeans</groupId>
 			<artifactId>xmlbeans</artifactId>
 			<version>2.4.0</version>
 			<scope>provided</scope>
-		</dependency> -->
+		</dependency> 
 		
 		<!-- Unit Testing -->
 		<!--<dependency>
