@@ -153,7 +153,7 @@ public class LFTracingUtil {
 			if(foundCache != null){
 				for(LFFound found:foundCache.values()){
 					if(hasExpired(found)){
-						lostCache.remove(new Long(found.getId()));
+						foundCache.remove(new Long(found.getId()));
 					}
 				}
 			}
@@ -430,6 +430,41 @@ public class LFTracingUtil {
 		return ret;
 	}
 	
+<<<<<<< LFTracingUtil.java
+	/**
+	 * 
+	 * returns true if both non-empty strings are different
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static boolean isDifferentIgnoreEmpty(String a, String b){
+		if(a != null && a.trim().length() > 0 && b != null && b.trim().length() > 0
+				&& !a.equalsIgnoreCase(b)){
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isSameStateCountry(LFAddress a, LFAddress b){
+		if(a == null || b == null){
+			return true;//we are missing address information, default true
+		} else {
+			if(isDifferentIgnoreEmpty(a.getCountry(), b.getCountry())){
+				return false;//countries are different
+			} else {
+				if(a.getCountry() != null && a.getCountry().equalsIgnoreCase("US")){
+					return !isDifferentIgnoreEmpty(a.getDecryptedState(), b.getDecryptedState());
+				} else {
+					return true;//country is not US, we are not comparing province at this time, returning true
+				}
+			}
+		}
+	}
+	
+	public static double processMatch(LFMatchHistory match){
+=======
 	/**
 	 * 
 	 * returns true if both non-empty strings are different
@@ -463,6 +498,7 @@ public class LFTracingUtil {
 	}
 	
 	public static double processMatch(LFMatchHistory match, boolean isPrimary){
+>>>>>>> 1.35
 		
 		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(match.getFound().getCompanyId()));
 		
@@ -933,6 +969,23 @@ public class LFTracingUtil {
 				e.printStackTrace();
 			}
 		}
+<<<<<<< LFTracingUtil.java
+		while(TraceHandler.getQueueSize() > 0){
+			try {
+				Thread.sleep(60000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		try {
+			Thread.sleep(60000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+=======
 		while(TraceHandler.getQueueSize() > 0){
 			try {
 				System.out.println("Traceall queue size: " + TraceHandler.getQueueSize());
@@ -948,6 +1001,7 @@ public class LFTracingUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+>>>>>>> 1.35
 		Date end = new Date();
 		Logger.logLF(null, "TRACE ALL FOUND: " + foundList.size(), end.getTime() - start.getTime());
 	}
