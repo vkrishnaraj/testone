@@ -58,7 +58,7 @@
 
 </script>
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form focus="id" action="search_lost_found.do" method="post" onsubmit="return validateSearch(this);">
+<html:form focus="<%=(request.getParameter("found")!=null?"barcode":"id") %>" action="search_lost_found.do" method="post" onsubmit="return validateSearch(this);">
 	<tr>
         <td colspan="3" id="pageheadercell">
           <div id="pageheaderleft">
