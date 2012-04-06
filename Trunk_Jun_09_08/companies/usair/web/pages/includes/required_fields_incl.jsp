@@ -190,24 +190,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 		    if (retVal == false) { return false; }
 	      }
       } 
-      else if (currentElementName.indexOf("faultstation_id") != -1) {  
-		
-		 if (currentElement.value == "")
-		  {
-		    alert("<%= (String)bundle.getString( "colname.custom") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-		    currentElement.focus();
-		    return false;
-		  }
-		}
-	  else if (currentElementName.indexOf("customcleared") != -1) {  
-		
-		 if (currentElement.value == "0")
-		  {
-		    alert("<%= (String)bundle.getString( "colname.custom") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-		    currentElement.focus();
-		    return false;
-		  }
-		}
+      
     }
     
 
@@ -221,6 +204,34 @@ ResourceBundle bundle = ResourceBundle.getBundle(
       return false;
     }
 
+  }
+  
+  function validateReqDisputeForm(form)
+  {
+  	for (var j=0;j < form.length; j++) {
+  	
+      currentElement = form.elements[j];
+      currentElementName=currentElement.name;
+  	if (currentElementName.indexOf("faultstation_id") != -1) {  
+		
+		 if (currentElement.value == "")
+		  {
+		    alert("<%= (String)bundle.getString( "colname.faultstation") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		    currentElement.focus();
+		    return false;
+		  }
+		}
+	  else if (currentElementName.indexOf("loss_code") != -1) {  
+		
+		 if (currentElement.value == "0")
+		  {
+		    alert("<%= (String)bundle.getString( "colname.closereport.losscode") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		    currentElement.focus();
+		    return false;
+		  }
+		}
+		
+	}
   }
     
   function validatereqOHDForm(form) {

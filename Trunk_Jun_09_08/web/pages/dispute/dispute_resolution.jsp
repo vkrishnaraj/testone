@@ -161,7 +161,7 @@
 
                   &nbsp;
                   
-                  <html:submit property="requestDispute" styleId="button" onclick="doCheck = 1;">
+                  <html:submit property="requestDispute" styleId="button" onclick="doCheck = 1; return validateReqDisputeForm(this.form)" >
                     <bean:message key="button.request.dispute.report" />
                   </html:submit>
                   </logic:notEqual>
