@@ -21,7 +21,7 @@ public class RonKitIssuanceReport extends AbstractNtJasperReport {
 	}
 
 	@Override
-	protected String getSqlString(StatReportDTO srDto) {
+	protected String getMySqlSqlString(StatReportDTO srDto) {
 		String sql = "select date(i.createdate) as 'create_date',s.stationcode,i.incident_ID,ron_kits.num_issued from incident i " +
 					 "left outer join station s on i.stationcreated_ID = s.station_ID " +
 					 "left outer join (select sum(p.numRonKitsIssued) as 'num_issued',p.incident_ID from passenger p " +
@@ -61,6 +61,19 @@ public class RonKitIssuanceReport extends AbstractNtJasperReport {
 			toReturn.add(currentRow);
 		}
 		return toReturn;
+	}
+
+	@Override
+	protected String getSqlServerSqlString(StatReportDTO srDto) {
+		String sql = "select cast(convert(varchar(10), i.createdate, 111) as datetime) as 'create_date',s.stationcode,i.incident_ID,ron_kits.num_issued from incident i " +
+				 	 "left outer join station s on i.stationcreated_ID = s.station_ID " +
+				 	 "left outer join (select sum(p.numRonKitsIssued) as 'num_issued',p.incident_ID from passenger p " +
+				 				  	  "where p.numRonKitsIssued > 0 " +
+				 				      "group by p.incident_ID) ron_kits on i.incident_ID = ron_kits.incident_ID " +
+ 				     "where num_issued > 0 " +	
+ 				     "and cast(convert(varchar(10), i.createdate, 111) as datetime) between :startDate and :endDate " + getStationSql(srDto) + 
+ 				     "order by s.stationcode,i.createdate;";
+		return sql;
 	}
 	
 	

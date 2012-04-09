@@ -24,7 +24,7 @@ public class ReplacementBagIssuanceReport extends AbstractNtJasperReport {
 	}
 
 	@Override
-	protected String getSqlString(StatReportDTO srDto) {
+	protected String getMySqlSqlString(StatReportDTO srDto) {
 		String sql = "select date(i.createdate) as 'create_date',s.stationcode,i.incident_ID,count(it.item_ID) as 'num_bags_affected', " +
 					 "sum(it.replacementBagIssued) as 'num_bags_issued',it.lvlofdamage from incident i " +
 					 "left outer join station s on i.stationcreated_ID = s.station_ID " +
@@ -79,6 +79,18 @@ public class ReplacementBagIssuanceReport extends AbstractNtJasperReport {
 			toReturn.add(currentRow);
 		}
 		return toReturn;
+	}
+
+	@Override
+	protected String getSqlServerSqlString(StatReportDTO srDto) {
+		String sql = "select cast(convert(varchar(10), i.createdate, 111) as datetime) as 'create_date',s.stationcode,i.incident_ID,count(it.item_ID) as 'num_bags_affected', " +
+				 "sum(it.replacementBagIssued) as 'num_bags_issued',it.lvlofdamage from incident i " +
+				 "left outer join station s on i.stationcreated_ID = s.station_ID " +
+				 "left outer join item it on i.incident_ID = it.incident_ID " +
+				 "where it.replacementBagIssued > 0 " +
+				 "and cast(convert(varchar(10), i.createdate, 111) as datetime) between :startDate and :endDate " + getStationSql(srDto) + 
+				 "group by i.incident_ID,it.lvlofdamage,i.createdate,s.stationcode;";
+		return sql;
 	}
 
 }

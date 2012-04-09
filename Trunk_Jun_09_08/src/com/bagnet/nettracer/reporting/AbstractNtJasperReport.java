@@ -11,9 +11,9 @@ import org.hibernate.SQLQuery;
 import org.hibernate.classic.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public abstract class AbstractNtJasperReport {
 	
@@ -31,7 +31,7 @@ public abstract class AbstractNtJasperReport {
 	@SuppressWarnings("rawtypes")
 	public List getData(StatReportDTO srDto) {
 		getDatesFromDto(srDto);
-		String sql = getSqlString(srDto);
+		String sql = TracerUtils.isSqlServerClient(srDto.getCompanyCode()) ? getSqlServerSqlString(srDto) : getMySqlSqlString(srDto);
 		List raw = getDataFromDb(sql);
 		if (raw == null || raw.isEmpty()) {
 			return null;
@@ -96,7 +96,8 @@ public abstract class AbstractNtJasperReport {
 		return stationSql;
 	}
 	
-	protected abstract String getSqlString(StatReportDTO srDto);
+	protected abstract String getMySqlSqlString(StatReportDTO srDto);
+	protected abstract String getSqlServerSqlString(StatReportDTO srDto);
 
 	protected abstract void setQueryArgumentsAndScalars(SQLQuery query);
 

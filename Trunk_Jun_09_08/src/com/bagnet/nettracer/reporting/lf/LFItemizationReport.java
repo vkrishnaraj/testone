@@ -37,7 +37,7 @@ public class LFItemizationReport extends AbstractNtJasperReport {
 	}
 
 	@Override
-	protected String getSqlString(StatReportDTO srDto) {
+	protected String getMySqlSqlString(StatReportDTO srDto) {
 		String sql = "select s.stationcode,lf.barcode,date(lf.foundDate) as 'date_recorded',date(lf.receivedDate) as 'date_received', " +
 					 "i.value,ifnull(c.description,'') as 'category',ifnull(sc.description,'') as 'subcategory',lf.status_id as 'status', " +
 					 "i.disposition_status_id as 'disposition',i.description as 'title',ifnull(datediff(date(lf.deliveredDate), date(lf.receivedDate)),-1) as 'return_time', " + 
@@ -113,6 +113,11 @@ public class LFItemizationReport extends AbstractNtJasperReport {
 			toReturn.add(currentRow);
 		}
 		return toReturn;
+	}
+
+	@Override
+	protected String getSqlServerSqlString(StatReportDTO srDto) {
+		return this.getMySqlSqlString(srDto);
 	}
 
 }

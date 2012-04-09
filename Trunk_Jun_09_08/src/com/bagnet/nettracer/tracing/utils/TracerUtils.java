@@ -1707,5 +1707,9 @@ public class TracerUtils {
 		}
 		return null;
 	}
+	
+	public static boolean isSqlServerClient(String companyCode) {
+		return (companyCode.equals(TracingConstants.COMPANY_CODE_US) || companyCode.equals(TracingConstants.COMPANY_CODE_FL));
+	}
 
 }

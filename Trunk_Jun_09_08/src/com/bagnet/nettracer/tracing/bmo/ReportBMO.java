@@ -206,6 +206,7 @@ public class ReportBMO {
 	@SuppressWarnings({ "rawtypes" })
 	private String createRonKitIssuanceReport(StatReportDTO srDTO, String resourceKey, String rootpath, Agent user) {
 		srDTO.setDateFormat(user.getDateformat().getFormat());
+		srDTO.setCompanyCode(user.getCompanycode_ID());
 		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		List reportData = new RonKitIssuanceReport(resources).getData(srDTO);
@@ -255,6 +256,7 @@ public class ReportBMO {
 	@SuppressWarnings({ "rawtypes" })
 	private String createReplacementBagIssuanceReport(StatReportDTO srDTO, String resourceKey, String rootpath, Agent user) {
 		srDTO.setDateFormat(user.getDateformat().getFormat());
+		srDTO.setCompanyCode(user.getCompanycode_ID());
 		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		List reportData = new ReplacementBagIssuanceReport(resources).getData(srDTO);

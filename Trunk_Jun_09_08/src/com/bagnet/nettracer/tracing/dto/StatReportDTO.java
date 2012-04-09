@@ -32,7 +32,16 @@ public class StatReportDTO {
 	private int type;
 	private String dateFormat;
 	private String event;
+	private String companyCode;
 		
+	public String getCompanyCode() {
+		return companyCode;
+	}
+
+	public void setCompanyCode(String companyCode) {
+		this.companyCode = companyCode;
+	}
+
 	public String getEvent() {
 		return event;
 	}

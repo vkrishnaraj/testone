@@ -31,7 +31,7 @@ public class LFDisbursementsReport extends AbstractNtJasperReport {
 	}
 
 	@Override
-	protected String getSqlString(StatReportDTO srDto) {
+	protected String getMySqlSqlString(StatReportDTO srDto) {
 		String sql = "select date(lff.deliveredDate) as 'deliveredDate',lff.checkAmount,lff.checkNumber,ifnull(lfl.id,0) as 'lost_id',lff.barcode,i.trackingNumber from lffound lff " +
 					 "left outer join lfitem i on lff.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					 "left outer join lflost lfl on i.lost_id = lfl.id " +
@@ -73,6 +73,11 @@ public class LFDisbursementsReport extends AbstractNtJasperReport {
 			toReturn.add(currentRow);
 		}
 		return toReturn;
+	}
+
+	@Override
+	protected String getSqlServerSqlString(StatReportDTO srDto) {
+		return this.getMySqlSqlString(srDto);
 	}
 
 }

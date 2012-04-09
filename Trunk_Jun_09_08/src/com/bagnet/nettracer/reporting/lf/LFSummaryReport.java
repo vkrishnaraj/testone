@@ -26,7 +26,7 @@ public class LFSummaryReport extends AbstractNtJasperReport {
 	}
 
 	@Override
-	protected String getSqlString(StatReportDTO srDto) {
+	protected String getMySqlSqlString(StatReportDTO srDto) {
 		String sql = "select greatest(ifnull(combo.lost_date, 0), ifnull(combo.found_date, 0)) as 'date', ifnull(combo.lost_id_count, 0) as 'nlrr', ifnull(combo.found_id_count, 0) as 'nfie' from ( " +
 					 "select lost.date as 'lost_date',found.date as 'found_date',lost.id_count as 'lost_id_count',found.id_count as 'found_id_count' from " + 
 					 "(select date(lfl.openDate) as 'date',count(lfl.id) as 'id_count' from lflost lfl where lfl.openDate between :startDate and :endDate group by date(lfl.openDate)) lost " +
@@ -72,6 +72,11 @@ public class LFSummaryReport extends AbstractNtJasperReport {
 			toReturn.add(currentRow);
 		}
 		return toReturn;
+	}
+
+	@Override
+	protected String getSqlServerSqlString(StatReportDTO srDto) {
+		return this.getMySqlSqlString(srDto);
 	}
 	
 }

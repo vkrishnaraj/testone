@@ -1078,6 +1078,9 @@ public class TracingConstants {
 	public static final String REPORT_METHOD_NAME_CBRO_CLAIM = "CBRO Claim";
 	public static final String REPORT_METHOD_NAME_CBRO_PHONE = "CBRO Phone";
 	
+	public static final String COMPANY_CODE_US = "US";
+	public static final String COMPANY_CODE_FL = "FL";
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;

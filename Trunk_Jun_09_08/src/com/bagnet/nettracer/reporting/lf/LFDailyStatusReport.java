@@ -32,7 +32,7 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 	}
 
 	@Override
-	protected String getSqlString(StatReportDTO srDto) {
+	protected String getMySqlSqlString(StatReportDTO srDto) {
 		
 		String sql = "select ifnull(lf.receivedDate,'') as 'received_date',s.stationcode,ifnull(hvir.count, 0) as 'hvir_count', " +
 					 "ifnull(lvir.count, 0) as 'lvir_count',ifnull(hvirwr.count, 0) as 'hvirwr_count', " +
@@ -125,6 +125,11 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 			toReturn.add(currentRow);
 		}
 		return toReturn;
+	}
+
+	@Override
+	protected String getSqlServerSqlString(StatReportDTO srDto) {
+		return this.getMySqlSqlString(srDto);
 	}
 	
 }

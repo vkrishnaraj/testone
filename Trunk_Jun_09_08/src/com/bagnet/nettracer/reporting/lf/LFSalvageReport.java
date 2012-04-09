@@ -25,7 +25,7 @@ public class LFSalvageReport extends AbstractNtJasperReport {
 	}
 	
 	@Override
-	protected String getSqlString(StatReportDTO srDto) {
+	protected String getMySqlSqlString(StatReportDTO srDto) {
 		String sql = "select lf.barcode,date(lf.receivedDate) as 'date_received',i.value,ifnull(c.description,'') as 'category', " +
 					 "ifnull(sc.description,'') as 'subcategory',i.description as 'title' from lfsalvage s " +
 					 "left outer join lffound lf on s.id = lf.salvage_id " +
@@ -79,6 +79,11 @@ public class LFSalvageReport extends AbstractNtJasperReport {
 			toReturn.add(currentRow);
 		}
 		return toReturn;
+	}
+
+	@Override
+	protected String getSqlServerSqlString(StatReportDTO srDto) {
+		return this.getMySqlSqlString(srDto);
 	}
 
 }

@@ -30,7 +30,7 @@ public class LFLostItemizationReport extends AbstractNtJasperReport {
 	}
 
 	@Override
-	protected String getSqlString(StatReportDTO srDto) {			
+	protected String getMySqlSqlString(StatReportDTO srDto) {			
 		String sql = "select l.id,s.stationcode,date(l.openDate) as 'date',ifnull(c.description,'') as 'category', " +
 					 "ifnull(sc.description,'') as 'sub_category',ifnull(i.brand,'') as 'brand',ifnull(i.model,'') as 'model', " +
 					 "ifnull(i.serialNumber,'') as 'serial_number',ifnull(i.color,'') as 'color', ifnull(i.caseColor,'') as 'case_color', " +
@@ -88,6 +88,11 @@ public class LFLostItemizationReport extends AbstractNtJasperReport {
 			toReturn.add(currentRow);
 		}
 		return toReturn;
+	}
+
+	@Override
+	protected String getSqlServerSqlString(StatReportDTO srDto) {
+		return this.getMySqlSqlString(srDto);
 	}
 	
 }
