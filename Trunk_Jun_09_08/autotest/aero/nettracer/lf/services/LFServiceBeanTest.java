@@ -1056,7 +1056,8 @@ public class LFServiceBeanTest {
 		assertTrue(verifyMatchDetails(hasMatch));
 	}
 	
-	@Test
+//	@Test
+//  This is now an async process that requires the LFService to be running
 	public void traceAllTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFFound found = createFoundTestCase();
