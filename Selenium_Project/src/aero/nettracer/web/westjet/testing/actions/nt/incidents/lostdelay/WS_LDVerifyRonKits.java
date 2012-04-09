@@ -9,26 +9,27 @@ public class WS_LDVerifyRonKits extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testRonKits() {
-//		selenium.click("//ul[@id='menubuilder1']/li/a");
-		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+		selenium.click("//ul[@id='menubuilder1']/li/a");
+//		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
 		waitForPageToLoadImproved();
 		
-//		if (checkNoErrorPage()) {
-//			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td/input[2]");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("LDVRK: Failed to load the delayed incident page.");
-//			return;
-//		}
-//		
-//		if (checkNoErrorPage()) {
-//			verifyFalse(selenium.isTextPresent("# RON Kits issued:"));
-//			verifyFalse(selenium.isElementPresent("//select[@id='numRonKitsIssued']"));
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("LDVRK: Failed to load the delayed incident page after pressing skip prepopulation.");
-//			return;
-//		}
+		if (checkNoErrorPage()) {
+			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td/input[2]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("LDVRK: Failed to load the delayed incident page.");
+			return;
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyFalse(selenium.isTextPresent("# RON Kits issued:"));
+			verifyFalse(selenium.isElementPresent("//select[@id='numRonKitsIssued']"));
+			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("LDVRK: Failed to load the delayed incident page after pressing skip prepopulation.");
+			return;
+		}
 		
 		if (checkNoErrorPage()) {
 			selenium.select("//div[@id='mainlogin']/form/table/tbody/tr[3]/td[2]/select", "label=Owens Group");
@@ -74,7 +75,7 @@ public class WS_LDVerifyRonKits extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.check("//div[@id='maincontent']/table/tbody/tr[12]/td[2]/table/tbody/tr[4]/td/input");
+			selenium.check("//div[@id='maincontent']/table/tbody/tr[18]/td[2]/table/tbody/tr[8]/td/input");
 			selenium.click("//div[@id='maincontent']/table/tbody/tr[32]/td/input[2]");
 			waitForPageToLoadImproved();
 		} else {
@@ -216,7 +217,7 @@ public class WS_LDVerifyRonKits extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.uncheck("//div[@id='maincontent']/table/tbody/tr[12]/td[2]/table/tbody/tr[4]/td/input");
+			selenium.uncheck("//div[@id='maincontent']/table/tbody/tr[18]/td[2]/table/tbody/tr[8]/td/input");
 			selenium.click("//div[@id='maincontent']/table/tbody/tr[32]/td/input[2]");
 			waitForPageToLoadImproved();
 		} else {

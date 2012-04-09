@@ -9,26 +9,27 @@ public class WS_LDVerifyReplacementBags extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testRonKits() {
-//		selenium.click("//ul[@id='menubuilder2']/li/a");
-		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+		selenium.click("//ul[@id='menubuilder2']/li/a");
+//		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
 		waitForPageToLoadImproved();
 		
-//		if (checkNoErrorPage()) {
-//			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td/input[2]");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("LDVRK: Failed to load the delayed incident page.");
-//			return;
-//		}
-//		
-//		if (checkNoErrorPage()) {
-//			verifyFalse(selenium.isTextPresent("Replacement bag issued"));
-//			verifyFalse(selenium.isElementPresent("//select[@id='replacementBagIssued']"));
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("LDVRK: Failed to load the delayed incident page after pressing skip prepopulation.");
-//			return;
-//		}
+		if (checkNoErrorPage()) {
+			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td/input[2]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("LDVRK: Failed to load the delayed incident page.");
+			return;
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyFalse(selenium.isTextPresent("Replacement bag issued"));
+			verifyFalse(selenium.isElementPresent("//select[@id='replacementBagIssued']"));
+			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("LDVRK: Failed to load the delayed incident page after pressing skip prepopulation.");
+			return;
+		}
 		
 		if (checkNoErrorPage()) {
 			selenium.select("//div[@id='mainlogin']/form/table/tbody/tr[3]/td[2]/select", "label=Owens Group");
@@ -96,7 +97,7 @@ public class WS_LDVerifyReplacementBags extends DefaultSeleneseTestCase {
 			selenium.click("//div[@id='mainlogin']/form/table/tbody/tr[7]/td/p/input");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("LDVRK: Failed on log out after setting the issue ron kit permission.");
+			System.out.println("LDVRK: Failed on log out after setting the issue replacement bag permission.");
 			return;
 		}
 		
@@ -104,7 +105,7 @@ public class WS_LDVerifyReplacementBags extends DefaultSeleneseTestCase {
 			selenium.click("//ul[@id='menubuilder2']/li/a");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("LDVRK: Failed on log back in after setting the issue ron kit permission.");
+			System.out.println("LDVRK: Failed on log back in after setting the issue replacement bag permission.");
 			return;
 		}
 		
@@ -135,7 +136,7 @@ public class WS_LDVerifyReplacementBags extends DefaultSeleneseTestCase {
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			selenium.click("id=itcalendar20");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
-			selenium.type("//tr[@id='claimcheck_0']/td[2]/input", "3333333333");
+			selenium.type("//div[@id='item_0']/table/tbody/tr/td[2]/input", "3333333333");
 			selenium.select("//div[@id='item_0']/table/tbody/tr[3]/td/select", "label=WT - White/clear");
 			selenium.select("//div[@id='item_0']/table/tbody/tr[3]/td/select[2]", "label=50");
 			selenium.select("//tr[@id='inventory_0_0']/td/select", "label=Art");
@@ -145,7 +146,7 @@ public class WS_LDVerifyReplacementBags extends DefaultSeleneseTestCase {
 			selenium.type("//tr[@id='inventory_0_1']/td[2]/input", "test");
 			selenium.type("//tr[@id='inventory_0_2']/td[2]/input", "test");
 			selenium.type("//div[@id='item_0']/table/tbody/tr[7]/td/input", "test");
-			selenium.click("//input[@id='saveButton']");
+			selenium.click("//div[@id='maincontent']/table[5]/tbody/tr/td/input[2]");
 			assertEquals("Please select a value for  Replacement bag issued", selenium.getAlert());
 			selenium.select("//select[@id='replacementBagIssued']", "label=yes");
 			selenium.click("//div[@id='maincontent']/table[5]/tbody/tr/td/input[2]");
