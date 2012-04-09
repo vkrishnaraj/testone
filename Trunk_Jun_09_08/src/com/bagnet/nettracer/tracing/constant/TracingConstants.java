@@ -1060,6 +1060,24 @@ public class TracingConstants {
 	public static final String HIST_DESCRIPTION_BDO = "Baggage Delivery Order";
 	public static final String HIST_DESCRIPTION_CLAIM = "Claim";
 	
+	public static final int REPORT_METHOD_IN_PERSON = 0;
+	public static final int REPORT_METHOD_BSO_PHONE = 1;
+	public static final int REPORT_METHOD_CALL_CENTER = 2;
+	public static final int REPORT_METHOD_ONLINE = 3;
+	public static final int REPORT_METHOD_CBRO_ONLINE = 3;
+	public static final int REPORT_METHOD_KIOSK = 4;
+	public static final int REPORT_METHOD_CBRO_CLAIM = 5;
+	public static final int REPORT_METHOD_CBRO_PHONE = 6;
+	
+	public static final String REPORT_METHOD_NAME_IN_PERSON = "In Person";
+	public static final String REPORT_METHOD_NAME_BSO_PHONE = "BSO Phone";
+	public static final String REPORT_METHOD_NAME_CALL_CENTER = "Call Center";
+	public static final String REPORT_METHOD_NAME_ONLINE = "Internet";
+	public static final String REPORT_METHOD_NAME_CBRO_ONLINE = "CBRO Internet";
+	public static final String REPORT_METHOD_NAME_KIOSK = "Kiosk";
+	public static final String REPORT_METHOD_NAME_CBRO_CLAIM = "CBRO Claim";
+	public static final String REPORT_METHOD_NAME_CBRO_PHONE = "CBRO Phone";
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;

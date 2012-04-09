@@ -39,7 +39,9 @@ import org.hibernate.annotations.Proxy;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.dr.Dispute;
+import com.bagnet.nettracer.tracing.utils.ClientUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 
 /**
  * @author Administrator
@@ -211,16 +213,17 @@ public class Incident implements Serializable {
 
 	@Transient
 	public String getReportMethodString(int val) {
-		if (val == 0)
-			return "In Person";
-		else if (val == 1)
-			return "BSO Phone";
-		else if (val == 2)
-			return "Call Center";
-		else if (val == 3)
-			return "Internet";
-		else
-			return "Kiosk";
+//		if (val == 0)
+//			return "In Person";
+//		else if (val == 1)
+//			return "BSO Phone";
+//		else if (val == 2)
+//			return "Call Center";
+//		else if (val == 3)
+//			return "Internet";
+//		else
+//			return "Kiosk";
+		return ((ClientUtils) SpringUtils.getBean("clientUtils")).getReportMethodName(val);
 	}
 
 	@Version

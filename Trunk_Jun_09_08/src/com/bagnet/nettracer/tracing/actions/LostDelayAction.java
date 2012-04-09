@@ -37,8 +37,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
-import aero.nettracer.fs.model.File;
-
 import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -51,22 +49,19 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
-import com.bagnet.nettracer.tracing.db.LostAndFound_Photo;
 import com.bagnet.nettracer.tracing.db.Match;
 import com.bagnet.nettracer.tracing.db.Match_Detail;
 import com.bagnet.nettracer.tracing.db.Message;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Passenger;
-import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Remark;
-import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.dr.Dispute;
@@ -78,12 +73,10 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqReinstateAhl;
 import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
-import com.bagnet.nettracer.tracing.history.HistoryContainer;
-import com.bagnet.nettracer.tracing.history.HistoryObject;
-import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
 import com.bagnet.nettracer.tracing.history.IncidentHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.ClientUtils;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
@@ -101,8 +94,6 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
-
-import com.bagnet.nettracer.tracing.db.Item_Inventory;
 
 public class LostDelayAction extends CheckedAction {
 	private static Logger logger = Logger.getLogger(LostDelayAction.class);
@@ -913,16 +904,18 @@ public class LostDelayAction extends CheckedAction {
 					.getStationcode());
 			report_info.put("nonrevenue", form.getNonrevenue() == 0 ? "no" : "yes");
 
-			if(form.getReportmethod() == 0)
-				report_info.put("reportmethod", "In Person");
-			else if(form.getReportmethod() == 1)
-				report_info.put("reportmethod", "BSO Phone");
-			else if(form.getReportmethod() == 2)
-				report_info.put("reportmethod", "Call Center");
-			else if(form.getReportmethod() == 3)
-				report_info.put("reportmethod", "Internet");
-			else if(form.getReportmethod() == 4)
-				report_info.put("reportmethod", "Kiosk");
+//			if(form.getReportmethod() == 0)
+//				report_info.put("reportmethod", "In Person");
+//			else if(form.getReportmethod() == 1)
+//				report_info.put("reportmethod", "BSO Phone");
+//			else if(form.getReportmethod() == 2)
+//				report_info.put("reportmethod", "Call Center");
+//			else if(form.getReportmethod() == 3)
+//				report_info.put("reportmethod", "Internet");
+//			else if(form.getReportmethod() == 4)
+//				report_info.put("reportmethod", "Kiosk");
+			
+			report_info.put("reportmethod", ((ClientUtils) SpringUtils.getBean("clientUtils")).getReportMethodName(form.getReportmethod()));
 
 			report_info.put("recordlocator", form.getRecordlocator());
 			report_info.put("ticketnumber", form.getTicketnumber());

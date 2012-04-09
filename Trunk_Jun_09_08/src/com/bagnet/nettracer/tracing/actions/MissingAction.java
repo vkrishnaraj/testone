@@ -30,15 +30,12 @@ import javax.servlet.http.HttpSession;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
-
-import aero.nettracer.fs.model.File;
 
 import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
@@ -50,15 +47,11 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
-import com.bagnet.nettracer.tracing.db.Match;
-import com.bagnet.nettracer.tracing.db.Match_Detail;
 import com.bagnet.nettracer.tracing.db.Message;
-import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
@@ -66,11 +59,10 @@ import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.dr.Dispute;
 import com.bagnet.nettracer.tracing.db.dr.DisputeUtils;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
-import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
-import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.history.IncidentHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.ClientUtils;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
@@ -659,17 +651,19 @@ public class MissingAction extends CheckedAction {
 			report_info.put("stationassigned", StationBMO.getStation("" + form.getStationassigned_ID()).getStationcode());
 			report_info.put("nonrevenue", form.getNonrevenue() == 0 ? "no" : "yes");
 
-			if (form.getReportmethod() == 0)
-				report_info.put("reportmethod", "In Person");
-			else if (form.getReportmethod() == 1)
-				report_info.put("reportmethod", "BSO Phone");
-			else if (form.getReportmethod() == 2)
-				report_info.put("reportmethod", "Call Center");
-			else if (form.getReportmethod() == 3)
-				report_info.put("reportmethod", "Internet");
-			else if (form.getReportmethod() == 4)
-				report_info.put("reportmethod", "Kiosk");
+//			if (form.getReportmethod() == 0)
+//				report_info.put("reportmethod", "In Person");
+//			else if (form.getReportmethod() == 1)
+//				report_info.put("reportmethod", "BSO Phone");
+//			else if (form.getReportmethod() == 2)
+//				report_info.put("reportmethod", "Call Center");
+//			else if (form.getReportmethod() == 3)
+//				report_info.put("reportmethod", "Internet");
+//			else if (form.getReportmethod() == 4)
+//				report_info.put("reportmethod", "Kiosk");
 
+			report_info.put("reportmethod", ((ClientUtils) SpringUtils.getBean("clientUtils")).getReportMethodName(form.getReportmethod()));
+			
 			report_info.put("recordlocator", form.getRecordlocator());
 			report_info.put("ticketnumber", form.getTicketnumber());
 			

@@ -37,18 +37,12 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
-import aero.nettracer.fs.model.File;
-import aero.nettracer.fs.model.FsIncident;
-import aero.nettracer.fs.model.detection.MatchHistory;
-import aero.nettracer.fs.model.detection.TraceResponse;
-
 import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -64,12 +58,10 @@ import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.dr.Dispute;
 import com.bagnet.nettracer.tracing.db.dr.DisputeUtils;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
-import com.bagnet.nettracer.tracing.history.HistoryContainer;
-import com.bagnet.nettracer.tracing.history.HistoryObject;
 import com.bagnet.nettracer.tracing.history.IncidentHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
-import com.bagnet.nettracer.tracing.utils.ClaimUtils;
+import com.bagnet.nettracer.tracing.utils.ClientUtils;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
@@ -660,16 +652,18 @@ public class DamagedAction extends CheckedAction {
 			report_info.put("stationassigned", StationBMO.getStation("" + form.getStationassigned_ID()).getStationcode());
 			report_info.put("nonrevenue", form.getNonrevenue() == 0 ? "no" : "yes");
 
-			if (form.getReportmethod() == 0)
-				report_info.put("reportmethod", "In Person");
-			else if (form.getReportmethod() == 1)
-				report_info.put("reportmethod", "BSO Phone");
-			else if (form.getReportmethod() == 2)
-				report_info.put("reportmethod", "Call Center");
-			else if (form.getReportmethod() == 3)
-				report_info.put("reportmethod", "Internet");
-			else if (form.getReportmethod() == 4)
-				report_info.put("reportmethod", "Kiosk");
+//			if (form.getReportmethod() == 0)
+//				report_info.put("reportmethod", "In Person");
+//			else if (form.getReportmethod() == 1)
+//				report_info.put("reportmethod", "BSO Phone");
+//			else if (form.getReportmethod() == 2)
+//				report_info.put("reportmethod", "Call Center");
+//			else if (form.getReportmethod() == 3)
+//				report_info.put("reportmethod", "Internet");
+//			else if (form.getReportmethod() == 4)
+//				report_info.put("reportmethod", "Kiosk");
+			
+			report_info.put("reportmethod", ((ClientUtils) SpringUtils.getBean("clientUtils")).getReportMethodName(form.getReportmethod()));
 
 			report_info.put("recordlocator", form.getRecordlocator());
 			report_info.put("ticketnumber", form.getTicketnumber());

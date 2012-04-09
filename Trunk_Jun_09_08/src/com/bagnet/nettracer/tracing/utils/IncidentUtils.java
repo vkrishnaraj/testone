@@ -224,13 +224,14 @@ public class IncidentUtils {
 	 * get report method id
 	 */
 	public static int getReportMethod(String val) {
-		if (val == null || val.length() == 0) return 0;
-		if (val.equals("In Person")) return 0;
-		else if (val.equals("BSO Phone")) return 1;
-		else if (val.equals("Call Center")) return 2;
-		else if (val.equals("Internet")) return 3;
-		else if (val.equals("Kiosk")) return 4;
-		else return 0;
+//		if (val == null || val.length() == 0) return 0;
+//		if (val.equals("In Person")) return 0;
+//		else if (val.equals("BSO Phone")) return 1;
+//		else if (val.equals("Call Center")) return 2;
+//		else if (val.equals("Internet")) return 3;
+//		else if (val.equals("Kiosk")) return 4;
+//		else return 0;
+		return ((ClientUtils) SpringUtils.getBean("clientUtils")).getReportMethodType(val);
 	}
 	
 	public static int getSalutationid(String val) {

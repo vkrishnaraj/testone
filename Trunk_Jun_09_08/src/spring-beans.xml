@@ -21,6 +21,7 @@
 				<prop key="wt.rules">com.bagnet.clients.defaul.wt.DefaultWorldTracerRuleMap</prop>
 				<prop key="reservation.version.name"></prop>
 				<prop key="shares.class.path">defaul</prop>
+				<prop key="client.utils.class.path">defaul</prop>
 			</props>
 		</property>
 	</bean>
@@ -29,6 +30,8 @@
 		class="com.bagnet.clients.${scanner.class.path}.ScannerDataSourceImpl" />
 
 	<bean id="customReportBmo" class="com.bagnet.clients.${report.class.path}.CustomReportBMO" />
+	
+	<bean id="clientUtils" class="com.bagnet.clients.${client.utils.class.path}.ClientUtilsImpl" />
 
 
 	<bean id="reservationIntegration"

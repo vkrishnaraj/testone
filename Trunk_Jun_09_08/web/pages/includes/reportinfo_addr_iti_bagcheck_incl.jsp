@@ -399,24 +399,9 @@
 					</html:select>
 					<% } %>
 				</div></td>
-			<td><bean:message key="colname.report_method" /> <br> <html:select
-					property="reportmethod" styleClass="dropdown">
-					<html:option value="0">
-						<bean:message key="select.in_person" />
-					</html:option>
-					<html:option value="1">
-						<bean:message key="select.bsophone" />
-					</html:option>
-					<html:option value="2">
-						<bean:message key="select.callcenter" />
-					</html:option>
-					<html:option value="3">
-						<bean:message key="select.online" />
-					</html:option>
-					<html:option value="4">
-						<bean:message key="select.kiosk" />
-					</html:option>
-				</html:select></td>
+			<td>
+				<jsp:include page="/pages/includes/report_method_incl.jsp" />
+			</td>
 			<td><bean:message key="colname.recordlocator.req" /> <br>
 				<html:text property="recordlocator" size="18" maxlength="6"
 					styleClass="textfield" /></td>
