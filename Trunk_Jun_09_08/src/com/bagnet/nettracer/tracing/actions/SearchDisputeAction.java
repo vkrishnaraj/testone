@@ -67,6 +67,13 @@ public class SearchDisputeAction extends CheckedAction {
 		
 		SearchDisputeForm theform = (SearchDisputeForm) form;
 		
+		if(request.getParameter("disputeType")!=null)
+		{
+			theform.setDispute_type(Integer.parseInt(request.getParameter("disputeType")));
+		}
+		session.setAttribute("disputeType",theform.getDispute_type());
+		
+		int disputeType=theform.getDispute_type();
 		if (request.getParameter("getnext")!=null)
 		{
 			Dispute d=DisputeUtils.getDispute(user, theform.getDispute_type());
@@ -85,7 +92,8 @@ public class SearchDisputeAction extends CheckedAction {
 		long rowcount = -1;
 		
 		String incidentIdFromSearchForm = theform.getIncident_ID();
-		int disputeType=theform.getDispute_type();
+		
+		
 		//if the incident id is specified, then it comes from search button
 		//in this case there is at most one dispute returned;
 		//if the dispute is not open status, then view only for everyone, no more update
@@ -107,7 +115,7 @@ public class SearchDisputeAction extends CheckedAction {
 			}
 			forwardTarget = TracingConstants.VIEW_ONLY_DISPUTE;
 		} else {
-			rowcount = DisputeUtils.getDisputeCount(user);
+			rowcount = DisputeUtils.getDisputeCount(user, disputeType);
 			if (rowcount <= 0) {
 				ActionMessages errors = new ActionMessages();
 				ActionMessage error = new ActionMessage("error.nosearchresult");

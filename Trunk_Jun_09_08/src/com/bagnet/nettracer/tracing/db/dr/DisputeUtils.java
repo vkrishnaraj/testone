@@ -32,9 +32,26 @@ public class DisputeUtils {
 	private static Logger logger = Logger.getLogger(DisputeUtils.class);
 	
 	public static long getDisputeCount(Agent user){
+		return getDisputeCount(user, -1);
+	}	
+	
+	public static long getDisputeCount(Agent user, int DisputeType){
 		String sql = "select count (d.dispute_res_id) from com.bagnet.nettracer.tracing.db.dr.Dispute d where 1=1 ";
 		sql += " and d.status = :status";
 		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz)";
+		
+		if(DisputeType==1)
+		{
+			sql += " and d.beforeDisputeLossCode != d.suggestedLossCode and d.beforeDisputeFaultStation = d.suggestedFaultStation";
+		}
+		else if(DisputeType==2)
+		{
+			sql += " and d.beforeDisputeFaultStation != d.suggestedFaultStation and d.beforeDisputeLossCode = d.suggestedLossCode";
+		}
+		else if(DisputeType==3)
+		{
+			sql += " and d.beforeDisputeLossCode != d.suggestedLossCode and d.beforeDisputeFaultStation != d.suggestedFaultStation";
+		}
 		
 		Query q = null;
 		

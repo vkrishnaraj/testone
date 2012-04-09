@@ -84,7 +84,7 @@
     	<tr>
     	<td>
     	<br/>
-    	<input type="submit" id="button" value='Return to Dispute Manager' onclick='document.location.href="searchDispute.do?actionType=manage";return false;'>
+    	<input type="submit" id="button" value='Return to Dispute Manager' onclick='document.location.href="searchDispute.do?actionType=manage&disputeType=<%=session.getAttribute("disputeType")==null?0:session.getAttribute("disputeType")%>";return false;'>
     	&nbsp;
     	</td>
     	</tr>
