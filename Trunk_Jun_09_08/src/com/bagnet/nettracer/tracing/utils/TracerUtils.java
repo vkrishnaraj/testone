@@ -34,13 +34,6 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
-import aero.nettracer.fs.model.FsAddress;
-import aero.nettracer.fs.model.FsIncident;
-import aero.nettracer.fs.model.Person;
-import aero.nettracer.fs.model.Phone;
-import aero.nettracer.fs.model.PnrData;
-import aero.nettracer.fs.model.Reservation;
-
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -76,7 +69,6 @@ import com.bagnet.nettracer.tracing.db.XDescElement;
 import com.bagnet.nettracer.tracing.db.i8n.KeyValueBean;
 import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
 import com.bagnet.nettracer.tracing.dto.RevenueCode;
-import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.LostFoundIncidentForm;
@@ -483,6 +475,11 @@ public class TracerUtils {
 				session.getAttribute("nonRevenueCodesList") != null ? 
 						session.getAttribute("nonRevenueCodesList") :
 							getNonRevenueCodesList());
+		
+		session.setAttribute("reportmethodslist", 
+				session.getAttribute("reportmethodlist") != null ?
+						session.getAttribute("reportmethodlist") :
+							((ClientUtils) SpringUtils.getBean("clientUtils")).getReportMethodsList(user.getCurrentlocale()));
 
 	}
 

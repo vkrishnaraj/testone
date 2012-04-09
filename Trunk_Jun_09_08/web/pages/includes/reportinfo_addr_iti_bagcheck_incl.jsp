@@ -400,7 +400,11 @@
 					<% } %>
 				</div></td>
 			<td>
-				<jsp:include page="/pages/includes/report_method_incl.jsp" />
+				<bean:message key="colname.report_method" /> 
+				<br> 
+				<html:select property="reportmethod" styleClass="dropdown">
+					<html:options collection="reportmethodslist" property="value" labelProperty="label" />
+				</html:select>
 			</td>
 			<td><bean:message key="colname.recordlocator.req" /> <br>
 				<html:text property="recordlocator" size="18" maxlength="6"

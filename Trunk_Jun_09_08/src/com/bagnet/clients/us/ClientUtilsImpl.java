@@ -1,5 +1,12 @@
 package com.bagnet.clients.us;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import org.apache.struts.util.LabelValueBean;
+
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.ClientUtils;
 
@@ -50,6 +57,29 @@ public class ClientUtilsImpl implements ClientUtils {
 			}
 		}
 		return type;
+	}
+	
+	@Override
+	public List<LabelValueBean> getReportMethodsList(String locale) {
+		ArrayList<LabelValueBean> result = new ArrayList<LabelValueBean>();
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(locale));
+		
+		result.add(getLabelValueBean(resources.getString("select.in_person"), String.valueOf(TracingConstants.REPORT_METHOD_IN_PERSON)));
+		result.add(getLabelValueBean(resources.getString("select.bsophone"), String.valueOf(TracingConstants.REPORT_METHOD_BSO_PHONE)));
+		result.add(getLabelValueBean(resources.getString("select.callcenter"), String.valueOf(TracingConstants.REPORT_METHOD_CALL_CENTER)));
+		result.add(getLabelValueBean(resources.getString("select.kiosk"), String.valueOf(TracingConstants.REPORT_METHOD_KIOSK)));
+		result.add(getLabelValueBean(resources.getString("select.cbro.claim"), String.valueOf(TracingConstants.REPORT_METHOD_CBRO_CLAIM)));
+		result.add(getLabelValueBean(resources.getString("select.online"), String.valueOf(TracingConstants.REPORT_METHOD_CBRO_ONLINE)));
+		result.add(getLabelValueBean(resources.getString("select.cbro.phone"), String.valueOf(TracingConstants.REPORT_METHOD_CBRO_PHONE)));
+		
+		return result;
+	}
+	
+	private LabelValueBean getLabelValueBean(String label, String value) {
+		LabelValueBean bean = new LabelValueBean();
+		bean.setLabel(label);
+		bean.setValue(value);
+		return bean;
 	}
 
 }
