@@ -336,7 +336,7 @@
           <% if (request.getAttribute("lostdelay") != null && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUE_RON_KITS, a)) { %> 
 	          <tr>
 	          	<td colspan=5>
-	          		<bean:message key="number.ron.kits.issued" />:&nbsp;
+	          		*&nbsp;<bean:message key="number.ron.kits.issued" />:&nbsp;
 	          		<html:select name="passenger" property="numRonKitsIssued" styleId="numRonKitsIssued" styleClass="dropdown" indexed="true" >
   						<html:option value="-1"><bean:message key="select.please_select" /></html:option>
   						<html:option value="0">0</html:option>
