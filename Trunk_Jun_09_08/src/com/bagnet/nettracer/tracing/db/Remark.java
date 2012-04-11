@@ -26,6 +26,7 @@ public class Remark implements Serializable {
 	private Agent agent;
 	private String createtime = "";
 	private String remarktext = "";
+	private String readonlyremarktext = "";
 	private int remarktype;
 	
 	private Incident incident;
@@ -185,6 +186,16 @@ public class Remark implements Serializable {
 	 */
 	public String getRemarktext() {
 		return remarktext;
+	}
+	
+	/**
+	 * @return Returns the remarktext.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getReadonlyremarktext() {
+		readonlyremarktext=remarktext.replaceAll("\r\n", "<br>");
+		return readonlyremarktext;
 	}
 
 	/**
