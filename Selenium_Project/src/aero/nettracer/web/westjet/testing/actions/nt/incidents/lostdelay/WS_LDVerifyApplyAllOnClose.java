@@ -3,6 +3,7 @@ package aero.nettracer.web.westjet.testing.actions.nt.incidents.lostdelay;
 import org.junit.Test;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
+import aero.nettracer.web.utility.Settings;
 
 public class WS_LDVerifyApplyAllOnClose extends DefaultSeleneseTestCase {
 	
@@ -98,7 +99,7 @@ public class WS_LDVerifyApplyAllOnClose extends DefaultSeleneseTestCase {
 			verifyEquals("", selenium.getValue("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/input"));
 			selenium.click("id=button");
 			verifyEquals("1234", selenium.getValue("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[2]/input"));
-			verifyEquals("04/02/2012", selenium.getValue("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/input"));
+			verifyEquals(Settings.TODAYS_DATE, selenium.getValue("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/input"));
 		} else {
 			System.out.println("LDVAAOC: Failed to reload the lost delayed incident.");
 			verifyTrue(false);

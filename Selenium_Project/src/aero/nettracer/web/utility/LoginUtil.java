@@ -9,6 +9,9 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 		selenium.type("password", Settings.PASSWORD_ADMIN);
 		selenium.click("button");
 		waitForPageToLoadImproved();
+		boolean pleaseTryAgain = selenium.isTextPresent("Invalid username and/or password, please try again");
+		boolean lockedOut = selenium.isTextPresent("This agent has been locked out due to excessive failed login attempts. Please contact system administrator.");
+		verifyFalse(pleaseTryAgain || lockedOut);
 		verifyTrue(selenium.isTextPresent("Task Manager Home"));
 	}
 	
@@ -18,6 +21,9 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 		selenium.type("password", Settings.PASSWORD_TEST);
 		selenium.click("button");
 		waitForPageToLoadImproved();
+		boolean pleaseTryAgain = selenium.isTextPresent("Invalid username and/or password, please try again");
+		boolean lockedOut = selenium.isTextPresent("This agent has been locked out due to excessive failed login attempts. Please contact system administrator.");
+		verifyFalse(pleaseTryAgain || lockedOut);
 		verifyTrue(selenium.isTextPresent("Task Manager Home"));
 	}
 	
@@ -30,6 +36,19 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 		boolean pleaseTryAgain = selenium.isTextPresent("Invalid username and/or password, please try again");
 		boolean lockedOut = selenium.isTextPresent("This agent has been locked out due to excessive failed login attempts. Please contact system administrator.");
 		verifyTrue(pleaseTryAgain || lockedOut);
+	}
+	
+	public void loginOGAdminProcedure() throws Exception {
+		System.out.println("Logging In Using " + Settings.USERNAME_OGADMIN + " " + Settings.PASSWORD_OGADMIN);
+		selenium.select("name=companyCode", "label=Owens Group");
+		selenium.type("username", Settings.USERNAME_OGADMIN);
+		selenium.type("password", Settings.PASSWORD_OGADMIN);
+		selenium.click("button");
+		waitForPageToLoadImproved();
+		boolean pleaseTryAgain = selenium.isTextPresent("Invalid username and/or password, please try again");
+		boolean lockedOut = selenium.isTextPresent("This agent has been locked out due to excessive failed login attempts. Please contact system administrator.");
+		verifyFalse(pleaseTryAgain || lockedOut);
+		verifyTrue(selenium.isTextPresent("Task Manager Home"));
 	}
 	
 	public void waitForPageToLoadImproved() {

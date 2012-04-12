@@ -13,11 +13,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.select("name=companyCode", "label=Owens Group");
-		selenium.type("name=username", Settings.USERNAME_OGADMIN);
-		selenium.type("password", Settings.PASSWORD_OGADMIN);
-		selenium.click("id=button");
-		waitForPageToLoadImproved();
+			loginOGAdminProcedure();
 		}
 		else
 		{
@@ -27,8 +23,8 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("id=menucol_9.2");
-		waitForPageToLoadImproved();
+			selenium.click("id=menucol_9.2");
+			waitForPageToLoadImproved();
 		}
 		else
 		{

@@ -1,5 +1,9 @@
 package aero.nettracer.web.utility;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class Settings {
 	
 	///////////////////////////////////////////////////////////SELENIUM SETTINGS ////////////////////////////////////////////////////////
@@ -62,7 +66,8 @@ public class Settings {
 	public static int SEARCH_PILF = 3;
 	public static int SEARCH_CURRENT = SEARCH_ALL;
 	public static boolean LOGGED_IN = false;
-	
+	public static DateFormat DEFAULT_SDF = new SimpleDateFormat("MM/dd/yyyy");
+	public static String TODAYS_DATE = DEFAULT_SDF.format(Calendar.getInstance().getTime());
 	
 	
 	///////////////////////////////////////////////////////////// COMPANY SPECIFIC SETTINGS //////////////////////////////////////////////
