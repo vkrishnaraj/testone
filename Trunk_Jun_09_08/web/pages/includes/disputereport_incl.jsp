@@ -109,7 +109,7 @@
     <bean:message key="colname.closereport.losscode" />
     <br>
      
-     <% if(val) {%>
+     <% if(val && request.getParameter("actionType").equals("start")) {%>
       <html:select property="loss_code" styleClass="dropdown" value="0">      
           <html:option value="0">
             <bean:message key="select.please_select" />
@@ -121,7 +121,7 @@
             com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
                                                                                       com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
     %>
-            <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();  if (lost_code.equals("" + code.getLoss_code())) { %> SELECTED <% } %>>
+            <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code(); %>>
             <%= "" + code.getLoss_code() %>-
             <%= "" + code.getDescription() %>
             </OPTION>

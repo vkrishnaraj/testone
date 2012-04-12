@@ -184,11 +184,6 @@ public class DisputeResolutionAction extends CheckedAction {
 		BagService bs = new BagService();
 		try {
 			bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES);
-			if (actionType.equalsIgnoreCase("start")) {
-				if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_DISPUTE_SELECT)){ 
-					theform.setLoss_code(0);
-				}
-			}
 		}
 		catch (Exception e) {
 		}
