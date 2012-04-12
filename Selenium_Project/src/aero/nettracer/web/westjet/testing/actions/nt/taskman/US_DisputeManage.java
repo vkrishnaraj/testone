@@ -45,7 +45,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("xpath=(//a[contains(text(),'Maintain')])[78]");
+		selenium.click("//a[contains(@href, 'createGroup.do?companyCode=WS')]");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -56,7 +56,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("xpath=(//a[contains(text(),'Maintain')])[22]");
+		selenium.click("//a[contains(@href, 'componentAdmin.do?groupId=151')]");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -67,8 +67,8 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.check("name=1000");
-		selenium.check("name=1001");
+		selenium.check("name=700");
+		selenium.check("name=701");
 		selenium.click("name=save");
 		waitForPageToLoadImproved();
 		}
@@ -422,11 +422,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.select("name=companyCode", "label=Owens Group");
-		selenium.type("name=username", Settings.USERNAME_OGADMIN);
-		selenium.type("password", Settings.PASSWORD_OGADMIN);
-		selenium.click("id=button");
-		waitForPageToLoadImproved();
+			loginOGAdminProcedure();
 		}
 		else
 		{
@@ -458,7 +454,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("xpath=(//a[contains(text(),'Maintain')])[78]");
+		selenium.click("//a[contains(@href, 'createGroup.do?companyCode=WS')]");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -469,7 +465,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("xpath=(//a[contains(text(),'Maintain')])[22]");
+		selenium.click("//a[contains(@href, 'componentAdmin.do?groupId=151')]");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -480,8 +476,8 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.uncheck("name=1000");
-		selenium.uncheck("name=1001");
+		selenium.uncheck("name=700");
+		selenium.uncheck("name=701");
 		selenium.click("name=save");
 		waitForPageToLoadImproved();
 		}
