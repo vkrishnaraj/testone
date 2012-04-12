@@ -13,7 +13,6 @@ import java.util.TimeZone;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.NumberUtils;
-import javax.persistence.Transient;
 import com.cci.utils.parser.ElementNode;
 
 
@@ -189,13 +188,6 @@ public class Remark implements Serializable {
 		return remarktext;
 	}
 	
-	/**
-	 * @return Returns the remarktext.
-	 * 
-	 * @hibernate.property type="string"
-	 * 
-	 */
-	@Transient
 	public String getReadonlyremarktext() {
 		readonlyremarktext=remarktext.replaceAll("\r\n", "<br>");
 		return readonlyremarktext;
