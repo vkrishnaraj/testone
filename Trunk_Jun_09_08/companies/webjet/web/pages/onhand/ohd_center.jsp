@@ -1297,7 +1297,7 @@ function gotoHistoricalReport() {
               </html:submit>
             </logic:notEqual> <%
     } else {
- %> <bean:write name="remark" property="readonlyremarktext" filter="false"/> <%
+ %> <pre><bean:write name="remark" property="remarktext"/></pre> <%
     }
  %>
             </td>

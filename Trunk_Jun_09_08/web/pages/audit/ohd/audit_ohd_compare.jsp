@@ -598,7 +598,7 @@ function updatePagination() {
               <logic:iterate id="audit_ohd" name="compareList" scope="request">
                 <td>
                   <logic:iterate indexId="i" id="remark" name="audit_ohd" property="remarkList" type="com.bagnet.nettracer.tracing.db.audit.Audit_OHD_Remark">
-                    <bean:write name="remark" property="readonlyremarktext" filter="false"/>
+                    <pre><bean:write name="remark" property="remarktext" /></pre>
                     <br>
                     <br>
                   </logic:iterate>
