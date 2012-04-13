@@ -221,7 +221,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.type("name=incident_ID", Settings.INCIDENT_ID_WS);
+		selenium.type("name=incident_ID", Settings.DAMAGE_ID_WS);
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
 		}
