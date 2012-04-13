@@ -10,18 +10,14 @@ public class LF_QuickHistory extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testQuickHistory() {
-		String LOW_LT_30;
-			selenium.click("id=menucol_3.1");
-			waitForPageToLoadImproved();
+
+		selenium.click("id=menucol_2.2");
+		waitForPageToLoadImproved();
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("id=calendar");
-			selenium.click("link=Today");
-			LOW_LT_30= String.valueOf(System.currentTimeMillis());
-			selenium.type("id=barcode",LOW_LT_30);
-			selenium.select("id=category", "label=Bags");
-			selenium.click("id=saveButton");
+			selenium.type("name=barcode",Settings.FOUND_ID_LF);
+			selenium.click("id=button");
 			waitForPageToLoadImproved();
 			
 		}
@@ -30,39 +26,6 @@ public class LF_QuickHistory extends DefaultSeleneseTestCase {
 			System.out.println("QuickHistoryError: Failed after clicking Enter Items link");
 			return;
 		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("id=menucol_2.3");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after saving a new found item");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-		selenium.click("id=button");
-		waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after clicking Search Lost/Found Items link - 1");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-		selenium.click("link=3");
-		waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after Searching Lost/Found Items");
-			return;
-		}	
 		
 		if(checkNoErrorPage())
 		{
@@ -77,35 +40,35 @@ public class LF_QuickHistory extends DefaultSeleneseTestCase {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("id=menucol_2.3");
+			selenium.click("id=menucol_2.4");
 			waitForPageToLoadImproved();
 		}
 		else
 		{
-			System.out.println("QuickHistoryError: Failed after saving Lost items");
+			System.out.println("QuickHistoryError: Failed after saving a new found item");
 			return;
 		}
 		
 		if(checkNoErrorPage())
 		{
-		selenium.select("name=type", "label=Found");
-		selenium.click("id=button");
-		waitForPageToLoadImproved();
+			selenium.type("name=id",Settings.LOST_ID_LF);
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
-			System.out.println("QuickHistoryError: Failed after clicking Search Lost/Found Items link - 2");
+			System.out.println("QuickHistoryError: Failed after clicking Search Lost/Found Items link - 1");
 			return;
 		}
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=4312");
+			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
 		}
 		else
 		{
-			System.out.println("QuickHistoryError: Failed after changing to found and searching for Found Items");
+			System.out.println("QuickHistoryError: Failed after loading Lost Items");
 			return;
 		}
 		

@@ -27,17 +27,6 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=" + Settings.INCIDENT_ID_WS);
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after searching Delayed Items");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
 			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
 			selenium.click("id=menucol_2.3");
@@ -58,17 +47,6 @@ public class WS_QuickHistory extends LoginUtil {
 		else
 		{
 			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("link=" + Settings.DAMAGE_ID_WS);
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after searching damaged items");
 			return;
 		}
 		
@@ -99,17 +77,6 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=" + Settings.PILFERAGE_ID_WS);
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after searching Pilfered Items");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
 			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
 			selenium.click("id=menucol_4.4");
@@ -130,17 +97,6 @@ public class WS_QuickHistory extends LoginUtil {
 		else
 		{
 			System.out.println("QuickHistoryError: Failed after saving a pilfered item and view on-hand");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("link=" + Settings.ONHAND_ID_WS);
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after saving searching on-hands");
 			return;
 		}
 		
