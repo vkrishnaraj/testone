@@ -361,6 +361,15 @@
                     <bean:message key="select.complete" />
                   </html:option>
                 </html:select>
+              	<% if (request.getAttribute("damaged") != null && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUE_REPLACEMENT_BAGS, a)) { %>
+	          		<br />
+         			<bean:message key="replacement.bag.issued" /><br/>
+         			<html:select name="theitem" property="replacementBagIssued" styleId="replacementBagIssued" styleClass="dropdown" indexed="true" >
+						<html:option value="-1"><bean:message key="select.please_select" /></html:option>
+						<html:option value="<%=String.valueOf(TracingConstants.YES) %>"><bean:message key="select.yes" /></html:option>
+						<html:option value="<%=String.valueOf(TracingConstants.NO) %>"><bean:message key="select.no" /></html:option>
+					</html:select>
+         		<% } %>
               </td>
               <td>
                 <bean:message key="colname.cost" />
