@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
@@ -59,7 +60,7 @@ public class HistoryContainer {
 		int j = 0;
 		
 		for (int i = temp.size() - 1; i >= 0 && j < numItems; --i) {
-			if (FoundHistoryObject.class.isInstance(temp.get(i))) {
+			if (FoundHistoryObject.class.isInstance(temp.get(i)) && (TracingConstants.HIST_DESCRIPTION_ADD + " " + TracingConstants.HIST_DESCRIPTION_FOUNDITEM).equals(temp.get(i).getStatusDesc())) {
 				toReturn.add((FoundHistoryObject)temp.get(i));
 				++j;
 			}

@@ -81,7 +81,7 @@ public class EnterItemsAction extends CheckedAction {
 				FoundHistoryObject fho = new FoundHistoryObject();
 				fho.setFound(found);
 				fho.setDate(Calendar.getInstance().getTime()); 
-				fho.setStatusDesc("Added Found Item");
+				fho.setStatusDesc(TracingConstants.HIST_DESCRIPTION_ADD + " " + TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
 				fho.setObjectType("Found Item");
 				fho.setObjectID(found.getBarcode());
 				fho.setLinkURL("create_found_item.do?barcode=");
