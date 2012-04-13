@@ -74,7 +74,7 @@
       <%
  		 		Agent faultagent = (Agent)session.getAttribute("user");
 
-      boolean stationLock=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FAULT_STATION_LOCK, a);
+      boolean stationLock=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FAULT_STATION_LOCK, a) && inc.getStatus().getStatus_ID()==13 && !(inc.isLocked()));
         	
       %>
         <html:select property="faultcompany_id" styleClass="dropdown" onchange="getstations();">
@@ -84,7 +84,7 @@
           <html:options collection="faultCompanyList" property="companyCode_ID" labelProperty="companydesc" />
         </html:select>     
   </td>
-  <% if(DisputeResolutionUtils.isIncidentLocked(request.getAttribute("incident").toString()) || DisputeResolutionUtils.isIncidentStationLocked(request.getAttribute("incident").toString()) || (stationLock  && (inc.isLocked() || inc.isCodeLocked() || inc.isStationLocked()) && inc.getStatus().getStatus_ID()==13)) { %>
+  <% if(DisputeResolutionUtils.isIncidentStationLocked(request.getAttribute("incident").toString()) || stationLock ) { %>
     <td nowrap>
                <div id="faultstationdiv">
 		<b><bean:message key="colname.faultstation" /></b>
@@ -221,7 +221,7 @@
     <% } %>
 </tr>
 <tr>
- <% if(DisputeResolutionUtils.isIncidentLocked(request.getAttribute("incident").toString()) || DisputeResolutionUtils.isIncidentCodeLocked(request.getAttribute("incident").toString())) { %>
+ <% if(DisputeResolutionUtils.isIncidentCodeLocked(request.getAttribute("incident").toString())) { %>
    
         <td nowrap colspan=3>
 	      <b><bean:message key="colname.losscode" /></b>
@@ -243,6 +243,11 @@
           for (java.util.Iterator i = codes.iterator(); i.hasNext(); ) {
             com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
                                                                                       com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
+            
+            if(stationLock && ( (code.getLoss_code()==75 && lossCodeInt!=75) || (code.getLoss_code()==76 && lossCodeInt!=76) || (code.getLoss_code()==83 && lossCodeInt!=83)  || (code.getLoss_code()==93 && lossCodeInt!=93) || (code.getLoss_code()==66 && lossCodeInt!=66)) )
+            {
+            	continue;
+            }
     %>
             <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();  if (lost_code.equals("" + code.getLoss_code())) { %> SELECTED <% } %>>
             <%= "" + code.getLoss_code() %>-
