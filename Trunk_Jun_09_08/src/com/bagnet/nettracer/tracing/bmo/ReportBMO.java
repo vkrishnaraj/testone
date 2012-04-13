@@ -2894,11 +2894,11 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				simpleDateQ += " and d.created_timestamp >= '"
 						+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 						+ " "
-						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties(), true),null,null)
 						+ "' and d.created_timestamp <= '"
 						+ DateUtils.formatDate(edate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 						+ " "
-						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties(), true),null,null)
 						+ "'";
 				
 			} else if (sdate != null) {
@@ -2908,7 +2908,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				simpleDateQ += " and d.created_timestamp >= '"
 					+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 					+ " "
-					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties(), true),null,null)
 					+ "'";
 			}
 
