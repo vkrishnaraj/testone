@@ -333,10 +333,10 @@
               </tr>
             </logic:iterate>
           </logic:present>
-          <% if (request.getAttribute("lostdelay") != null && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUE_RON_KITS, a)) { %> 
+          <% if (request.getAttribute("lostdelay") != null && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUE_RON_KITS, a) && !(i.intValue() > 0)) { %> 
 	          <tr>
 	          	<td colspan=5>
-	          		*&nbsp;<bean:message key="number.ron.kits.issued" />:&nbsp;
+	          		<bean:message key="number.ron.kits.issued" />:&nbsp;
 	          		<html:select name="passenger" property="numRonKitsIssued" styleId="numRonKitsIssued" styleClass="dropdown" indexed="true" >
   						<html:option value="-1"><bean:message key="select.please_select" /></html:option>
   						<html:option value="0">0</html:option>
@@ -345,6 +345,11 @@
   						<html:option value="3">3</html:option>
   						<html:option value="4">4</html:option>
   						<html:option value="5">5</html:option>
+  						<html:option value="6">6</html:option>
+  						<html:option value="7">7</html:option>
+  						<html:option value="8">8</html:option>
+  						<html:option value="9">9</html:option>
+  						<html:option value="10">10</html:option>
   					</html:select>
 	          	</td>
 	          </tr>
