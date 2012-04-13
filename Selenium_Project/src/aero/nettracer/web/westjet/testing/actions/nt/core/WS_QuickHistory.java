@@ -15,6 +15,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
+			selenium.type("incident_ID", Settings.INCIDENT_ID_WS);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		}
@@ -26,7 +27,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=CBSWS00000297");
+			selenium.click("link=" + Settings.INCIDENT_ID_WS);
 			waitForPageToLoadImproved();
 		}
 		else
@@ -38,6 +39,7 @@ public class WS_QuickHistory extends LoginUtil {
 		if(checkNoErrorPage())
 		{
 			selenium.click("name=saveButton");
+			waitForPageToLoadImproved();
 			selenium.click("id=menucol_2.3");
 			waitForPageToLoadImproved();
 		}
@@ -49,6 +51,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
+			selenium.type("incident_ID", Settings.DAMAGE_ID_WS);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		}
@@ -60,7 +63,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=CBSWS00000302");
+			selenium.click("link=" + Settings.DAMAGE_ID_WS);
 			waitForPageToLoadImproved();
 		}
 		else
@@ -72,6 +75,7 @@ public class WS_QuickHistory extends LoginUtil {
 		if(checkNoErrorPage())
 		{
 			selenium.click("name=saveButton");
+			waitForPageToLoadImproved();
 			selenium.click("id=menucol_3.3");
 			waitForPageToLoadImproved();
 		}
@@ -83,6 +87,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
+			selenium.type("incident_ID", Settings.PILFERAGE_ID_WS);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		}
@@ -94,7 +99,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=CBSWS00000401");
+			selenium.click("link=" + Settings.PILFERAGE_ID_WS);
 			waitForPageToLoadImproved();
 		}
 		else
@@ -106,7 +111,8 @@ public class WS_QuickHistory extends LoginUtil {
 		if(checkNoErrorPage())
 		{
 			selenium.click("name=saveButton");
-			selenium.click("id=menucol_4.3");
+			waitForPageToLoadImproved();
+			selenium.click("id=menucol_4.4");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -117,6 +123,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
+			selenium.type("incident_ID", Settings.ONHAND_ID_WS);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		}
@@ -128,7 +135,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=CBSWS00000276");
+			selenium.click("link=" + Settings.ONHAND_ID_WS);
 			waitForPageToLoadImproved();
 		}
 		else
@@ -171,7 +178,7 @@ public class WS_QuickHistory extends LoginUtil {
 		}
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=CBSWS00000001");
+			selenium.click("link=ACYWS00000041");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -215,7 +222,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=YYCWS00000007");
+			selenium.click("link=CUNWS00000021");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -259,7 +266,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=68");
+			selenium.click("link=6");
 			waitForPageToLoadImproved();
 		}
 		else

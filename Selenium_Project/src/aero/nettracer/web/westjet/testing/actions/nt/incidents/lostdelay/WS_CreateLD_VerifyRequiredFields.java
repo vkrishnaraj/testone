@@ -120,6 +120,9 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Delayed PIR has been modified."));
+			checkCopyrightAndQuestionMarks();
+			selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
+			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLDVRF: Failed to save the incident using the top save button.");
 			return;

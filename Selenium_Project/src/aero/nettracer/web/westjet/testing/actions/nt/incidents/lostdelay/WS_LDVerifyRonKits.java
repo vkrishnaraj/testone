@@ -2,15 +2,14 @@ package aero.nettracer.web.westjet.testing.actions.nt.incidents.lostdelay;
 
 import org.junit.Test;
 
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
+import aero.nettracer.web.utility.LoginUtil;
 import aero.nettracer.web.utility.Settings;
 
-public class WS_LDVerifyRonKits extends DefaultSeleneseTestCase {
+public class WS_LDVerifyRonKits extends LoginUtil {
 
 	@Test
-	public void testRonKits() {
+	public void testRonKits() throws Exception {
 		selenium.click("//ul[@id='menubuilder1']/li/a");
-//		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -32,11 +31,7 @@ public class WS_LDVerifyRonKits extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.select("//div[@id='mainlogin']/form/table/tbody/tr[3]/td[2]/select", "label=Owens Group");
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[4]/td[2]/input", Settings.USERNAME_OGADMIN);
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[5]/td[2]/input", Settings.PASSWORD_OGADMIN);
-			selenium.click("//div[@id='mainlogin']/form/table/tbody/tr[7]/td/p/input");
-			waitForPageToLoadImproved();
+			loginOGAdminProcedure();
 		} else {
 			System.out.println("LDVRK: Failed to log out of the application.");
 			return;
@@ -92,10 +87,7 @@ public class WS_LDVerifyRonKits extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[4]/td[2]/input", Settings.USERNAME_ADMIN);
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[5]/td[2]/input", Settings.PASSWORD_ADMIN);
-			selenium.click("//div[@id='mainlogin']/form/table/tbody/tr[7]/td/p/input");
-			waitForPageToLoadImproved();
+			loginAdminProcedure();
 		} else {
 			System.out.println("LDVRK: Failed on log out after setting the issue ron kit permission.");
 			return;
@@ -174,11 +166,7 @@ public class WS_LDVerifyRonKits extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.select("//div[@id='mainlogin']/form/table/tbody/tr[3]/td[2]/select", "label=Owens Group");
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[4]/td[2]/input", Settings.USERNAME_OGADMIN);
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[5]/td[2]/input", Settings.PASSWORD_OGADMIN);
-			selenium.click("//div[@id='mainlogin']/form/table/tbody/tr[7]/td/p/input");
-			waitForPageToLoadImproved();
+			loginOGAdminProcedure();
 		} else {
 			System.out.println("LDVRK: An error occurred while attempting to verify the damaged incident.");
 			return;
@@ -234,10 +222,7 @@ public class WS_LDVerifyRonKits extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[4]/td[2]/input", Settings.USERNAME_ADMIN);
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[5]/td[2]/input", Settings.PASSWORD_ADMIN);
-			selenium.click("//div[@id='mainlogin']/form/table/tbody/tr[7]/td/p/input");
-			waitForPageToLoadImproved();
+			loginAdminProcedure();
 		} else {
 			System.out.println("LDVRK: An error occurred while attempting to log out of the application.");
 			return;
