@@ -189,7 +189,7 @@ public class LF_ItemEntry extends LoginUtil {
 	public void testCityPresent() {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
-		selenium.select("//select[@id='category']", "label=Cards (ATM/Credit/ID)");
+		selenium.select("//select[@id='category']", "label=Cards (ATM, Credit, etc.)");
 		selenium.click("//select[@id='category']/option[7]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='city']", "test");
@@ -198,7 +198,7 @@ public class LF_ItemEntry extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Cards (ATM/Credit/ID)"));
+			verifyTrue(selenium.isTextPresent("Desc: Cards (ATM, Credit, etc.)"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();

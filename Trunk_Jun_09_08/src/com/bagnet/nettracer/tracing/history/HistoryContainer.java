@@ -42,15 +42,29 @@ public class HistoryContainer {
 			return temp;
 		}
 		toReturn = new ArrayList<HistoryObject>(temp.subList(tempSize - numItems, tempSize));
-		System.out.println("toReturn before reversal: "+toReturn);
 	
-		System.out.println("toReturn after reversal: "+toReturn);
 		return toReturn;
 	}
 	
 	public ArrayList<HistoryObject> getRevNewestItems(int numItems) {
 		ArrayList<HistoryObject> toReturn = getNewestItems(numItems);
 		Collections.reverse(toReturn);
+		return toReturn;
+	}
+	
+	public ArrayList<FoundHistoryObject> getNewestFoundHistoryItems(int numItems) {
+		ArrayList<FoundHistoryObject> toReturn = new ArrayList<FoundHistoryObject>();
+		
+		ArrayList<HistoryObject> temp = new ArrayList<HistoryObject>(queue.values());
+		int j = 0;
+		
+		for (int i = temp.size() - 1; i >= 0 && j < numItems; --i) {
+			if (FoundHistoryObject.class.isInstance(temp.get(i))) {
+				toReturn.add((FoundHistoryObject)temp.get(i));
+				++j;
+			}
+		}
+		
 		return toReturn;
 	}
 	

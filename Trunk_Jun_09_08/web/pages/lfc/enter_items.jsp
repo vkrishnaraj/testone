@@ -13,7 +13,6 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.lf.LFCategory" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.lf.LFSubCategory" %>
 <%@ page import="com.bagnet.nettracer.tracing.history.HistoryContainer" %>
-<%@ page import="com.bagnet.nettracer.tracing.history.HistoryObject" %>
 <%@ page import="com.bagnet.nettracer.tracing.history.FoundHistoryObject" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="java.util.ArrayList" %>
@@ -28,7 +27,7 @@
  	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
  	
  	int itemCount = PropertyBMO.getValueAsInt("lfc.item.entry.display.count");
- 	ArrayList<HistoryObject> history = ((HistoryContainer) request.getSession().getAttribute("historyContainer")).getNewestItems(itemCount);
+ 	ArrayList<FoundHistoryObject> history = ((HistoryContainer) request.getSession().getAttribute("historyContainer")).getNewestFoundHistoryItems(itemCount);
 %>
 
 
@@ -452,7 +451,7 @@
    					<br/>
      				<% 
 	     				for (int i = history.size() - 1; i >= 0; --i) { 
-	 						FoundHistoryObject fho = (FoundHistoryObject) history.get(i);
+	 						FoundHistoryObject fho = history.get(i);
 	 						int status = fho.getFound().getEntryStatus();
 							boolean needsVerification = status == TracingConstants.LF_STATUS_VERIFICATION_NEEDED || (fho.isHasTraceResults() && status != TracingConstants.LF_STATUS_MOVED);
 						  	String cssClass = needsVerification ? "summaryActionItem" : "summaryItem";
