@@ -233,7 +233,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
+		selenium.click("//td[@id='navmenucell']/div/dl/dd[9]/a/span[2]");
 		waitForPageToLoadImproved();
 		}
 		else
