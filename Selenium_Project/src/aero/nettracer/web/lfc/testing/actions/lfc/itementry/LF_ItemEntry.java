@@ -152,7 +152,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Briefcase/Portfolio"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(1);
+			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with address 1 present.");

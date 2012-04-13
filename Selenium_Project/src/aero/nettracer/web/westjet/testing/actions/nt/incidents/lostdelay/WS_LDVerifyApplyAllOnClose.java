@@ -56,6 +56,7 @@ public class WS_LDVerifyApplyAllOnClose extends DefaultSeleneseTestCase {
 			selenium.type("//tr[@id='inventory_0_1']/td[2]/input", "test");
 			selenium.type("//tr[@id='inventory_0_2']/td[2]/input", "test");
 			selenium.click("//div[@id='maincontent']/center[5]/input");
+			waitForPageToLoadImproved();
 			selenium.select("//div[@id='item_1']/table/tbody/tr[3]/td/select", "label=BK - Black");
 			selenium.select("//div[@id='item_1']/table/tbody/tr[3]/td/select[2]", "label=03");
 			selenium.select("//tr[@id='inventory_1_0']/td/select", "label=Alcohol");

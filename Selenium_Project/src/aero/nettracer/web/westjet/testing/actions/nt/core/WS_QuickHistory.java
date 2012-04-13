@@ -102,6 +102,17 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
+			selenium.click("link=" + Settings.ONHAND_ID_WS);
+			waitForPageToLoadImproved();
+		}
+		else
+		{
+			System.out.println("QuickHistoryError: Failed after saving searching on-hands");
+			return;
+		}
+		
+		if(checkNoErrorPage())
+		{
 			selenium.click("name=savetracing");
 			waitForPageToLoadImproved();
 		}
