@@ -79,7 +79,7 @@ public class WS_QuickHistory extends LoginUtil {
 		{
 			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
-			selenium.click("id=menucol_4.4");
+			selenium.click("id=menucol_4.3");
 			waitForPageToLoadImproved();
 		}
 		else
