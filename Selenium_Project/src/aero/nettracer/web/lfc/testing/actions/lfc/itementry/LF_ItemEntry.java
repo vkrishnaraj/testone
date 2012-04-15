@@ -152,7 +152,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Briefcase/Portfolio"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with address 1 present.");
@@ -176,7 +176,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Camera/Photo Equipment"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with address 1 present.");
@@ -200,7 +200,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Cards (ATM, Credit, etc.)"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with city present.");
@@ -226,7 +226,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Cellphone"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with state present.");
@@ -250,7 +250,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Cellphone Accessories"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with province present.");
@@ -274,7 +274,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Clothing"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with zip present.");
@@ -303,7 +303,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Computer-Related"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with country present.");
@@ -328,7 +328,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Cosmetic/Shaving Kit"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with primary phone number present.");
@@ -353,7 +353,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Electronic Equipment"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with secondary phone number present.");
@@ -377,7 +377,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Glasses"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with email present.");
@@ -421,7 +421,7 @@ public class LF_ItemEntry extends LoginUtil {
 			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
 			verifyTrue(selenium.isTextPresent("Desc: Jewelry/Watches, Bracelet, test, test, test"));
 			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-			verifySummaryDiv(2);
+			verifySummaryDiv(0);
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to save item with everything present.");
