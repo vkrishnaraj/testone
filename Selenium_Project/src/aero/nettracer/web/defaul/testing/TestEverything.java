@@ -146,7 +146,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.US_DisputeManage;
 	WS_Login.class, 
 	
 	Def_Logout.class, WS_LoginFailure.class, WS_LoginTest.class, 
-	Def_PasswordResetNTTest.class, 
+//	Def_PasswordResetNTTest.class, 
 	Def_Logout.class, 
 	WS_Login.class, WS_VerifyText_TaskManager.class,
 	WS_CreateLD_VerifyRequiredFields.class, WS_CloseLD_VerifyRequiredFields.class, 
