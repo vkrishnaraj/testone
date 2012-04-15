@@ -65,6 +65,7 @@ public class HistoryContainer {
 				++j;
 			}
 		}
+		Collections.reverse(toReturn);
 		
 		return toReturn;
 	}
