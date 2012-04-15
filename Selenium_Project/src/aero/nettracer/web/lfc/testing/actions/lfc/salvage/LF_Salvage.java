@@ -78,7 +78,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testCreateFoundItems() {
-		SimpleDateFormat df = new SimpleDateFormat("MM/DD/yyyy");
+		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		String lvCutoff = "";
 		String hvCutoff = "";
 		selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
