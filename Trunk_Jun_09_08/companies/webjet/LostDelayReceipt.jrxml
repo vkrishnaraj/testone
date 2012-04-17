@@ -3,8 +3,8 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="2.357947691000002"/>
-	<property name="ireport.x" value="30"/>
-	<property name="ireport.y" value="528"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="912"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -121,7 +121,7 @@
 				<textElement>
 					<font fontName="Calibri" size="12" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<text><![CDATA[+55 21 9999 9999]]></text>
+				<text><![CDATA[0800 723 1234]]></text>
 			</staticText>
 			<line>
 				<reportElement mode="Opaque" x="1" y="387" width="20" height="1"/>
@@ -162,7 +162,7 @@
 				<textElement>
 					<font fontName="Calibri" size="12" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<text><![CDATA[centraldebagagens@webjet.com.br]]></text>
+				<text><![CDATA[falecom@webjet.com.br ]]></text>
 			</staticText>
 			<line>
 				<reportElement mode="Opaque" x="0" y="387" width="1" height="342"/>
