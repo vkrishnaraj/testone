@@ -610,22 +610,6 @@
       }
     }
     
-    else if (currentElementName.indexOf("numRonKitsIssued") != -1) {
-		if (currentElement.value == -1) {
-			alert("<%= (String)bundle.getString("please.select.a.value.for") %>" + " " + " <%= (String)bundle.getString("number.ron.kits.issued") %>");
-	        currentElement.focus();
-	        return false;
-		}
-	}
-
-    else if (currentElementName.indexOf("replacementBagIssued") != -1) {
-		if (currentElement.value == -1) {
-			alert("<%= (String)bundle.getString("please.select.a.value.for") %>" + " " + " <%= (String)bundle.getString("replacement.bag.issued") %>");
-	        currentElement.focus();
-	        return false;
-		}
-	}
-	
 	
     }
     
