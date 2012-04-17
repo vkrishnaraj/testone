@@ -83,9 +83,6 @@
 												<font style="font-size: 11px;"><spring:message
 														code="pv5" />
 												</font>
-												<br />
-												<font style="font-size: 11px; line-height: 25px;">SAOWH00000015
-													&nbsp;<spring:message code="becomes"/>&nbsp; SAOWH15</font>
 											</p>
 
 										</td>
