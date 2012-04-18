@@ -14,7 +14,7 @@ import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionThread;
 public class ConnectionUtil {
 	private static final Logger logger = Logger.getLogger(TraceHandler.class);
 
-	private final static long DEFAULT_TIMEOUT = 1000;
+	private final static long DEFAULT_TIMEOUT = 10000;
 
 	static String user     = null;
 	static String password = null;
