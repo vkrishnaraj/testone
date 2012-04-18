@@ -12,6 +12,8 @@ import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 public class PropertyBMO {
 
 	private static Logger logger = Logger.getLogger(PropertyBMO.class);
@@ -147,6 +149,10 @@ public class PropertyBMO {
 	public static final String LF_TRACING_CACHE_CLEANUP_INTERVAL = "lf.tracing.cache.cleanup.interval";
 	public static final String LF_TRACING_SECONDARY_TRACE = "lf.tracing.secondary.trace";
 	
+	public static final String LIMITED_CODES_LOSSDELAY = "limited.codes.lossdelay";
+	public static final String LIMITED_CODES_DAMAGED = "limited.codes.damaged";
+	public static final String LIMITED_CODES_MISSING = "limited.codes.missing";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){
@@ -219,6 +225,17 @@ public class PropertyBMO {
 	
 	public static List<String> getValueList(String keyVal) {
 		List<String> list = getValues(keyVal);
+		if(list == null || list.size() == 0) {
+			return null;
+		}
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static List<String> getSplitList(String keyVal) {
+		String value = getValue(keyVal);
+		List<String> list=Arrays.asList(value.split(","));
+		
 		if(list == null || list.size() == 0) {
 			return null;
 		}

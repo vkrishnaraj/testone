@@ -25,7 +25,8 @@
 	int lossCodeInt = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();
 	String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
 	Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
-	
+	java.util.List LimitedLossCodes=PropertyBMO.getSplitList(PropertyBMO.LIMITED_CODES_MISSING);
+
 	Company_specific_irregularity_code lc = null;
 	if (lossCodeInt != 0 && inc != null) { 
 	  int itemType = inc.getItemtype().getItemType_ID();
@@ -52,6 +53,7 @@
 			  && myDispute.getStatus().getStatus_ID() == TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN) { 
 			disputeActionType = "viewToResolve"; 
 	  }
+	  boolean stationLock=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && inc.getStatus().getStatus_ID()==13 && !(inc.isLocked()));
 %>
   <html:form action="missing.do" method="post" enctype="multipart/form-data">
     <tr>
@@ -161,11 +163,42 @@
 			  </td>              
             </tr>
             <tr>
+                <% if(stationLock){ %>
+            <td nowrap colspan="3">
+			    <b><bean:message key="colname.closereport.losscode" /></b>
+			    <br>
+			      <html:select property="loss_code" styleClass="dropdown">      
+			          <html:option value="0">
+			            <bean:message key="select.please_select" />
+			          </html:option>
+			    <%
+			          java.util.List codes = (java.util.List)request.getAttribute("losscodes");
+			    	 
+			          for (java.util.Iterator i = codes.iterator(); i.hasNext(); ) {
+			            com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
+			                                                                                      com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
+			            
+			            if(code.getLoss_code()!=lossCodeInt && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
+			            {
+			            	continue;
+			            }
+			    %>
+			            <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();  if (lost_code.equals("" + code.getLoss_code())) { %> SELECTED <% } %>>
+			            <%= "" + code.getLoss_code() %>-
+			            <%= "" + code.getDescription() %>
+			            </OPTION>
+			    <%
+			          }
+			    %>
+			      </html:select>
+			  </td>
+            <% } else { %>
               <td nowrap colspan=3>
 		      <b><bean:message key="colname.losscode" /></b>
                 <br>
                 <c:out value="${lossCode.loss_code}-${lossCode.description}" default="Not Set" />
               </td>
+              <% } %>
             </tr>
           </table>
                     <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
@@ -240,6 +273,11 @@
 	                  </logic:equal>
 	                  <% } %>
                   <INPUT id="button" type="button" value="Back" onClick="history.back()">
+                  <% if (stationLock) { %>
+	                  <html:submit property="save" styleId="button">
+	                  <bean:message key="button.save" />
+	                </html:submit>
+	              <% } %>
                   </td>
                   </tr>
                   </table>

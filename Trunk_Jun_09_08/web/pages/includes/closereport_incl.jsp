@@ -74,7 +74,6 @@
       <%
  		 		Agent faultagent = (Agent)session.getAttribute("user");
 
-      boolean stationLock=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FAULT_STATION_LOCK, a) && inc.getStatus().getStatus_ID()==13 && !(inc.isLocked()));
         	
       %>
         <html:select property="faultcompany_id" styleClass="dropdown" onchange="getstations();">
@@ -84,7 +83,7 @@
           <html:options collection="faultCompanyList" property="companyCode_ID" labelProperty="companydesc" />
         </html:select>     
   </td>
-  <% if(DisputeResolutionUtils.isIncidentStationLocked(request.getAttribute("incident").toString()) || stationLock ) { %>
+  <% if(DisputeResolutionUtils.isIncidentStationLocked(request.getAttribute("incident").toString())) {%>
     <td nowrap>
                <div id="faultstationdiv">
 		<b><bean:message key="colname.faultstation" /></b>
@@ -156,38 +155,6 @@
 		<% 	  }
 		}  %>
 		</td>
-		<% }
-    else if(stationLock) 
-    { %>
-    
-    <td align="center" valign="baseline">
-    	<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
-    		  String incidentId = "" + request.getAttribute("incident");
-    		  if (DisputeResolutionUtils.isIncidentLocked(incidentId)) {
-    	%>
-    	              <html:submit property="unlock_fault" styleId="button">
-                      <bean:message key="button.unlock.fault.information" />
-                    </html:submit>
-
-    	<%		  
-    		  } else {
-    	%>
-      				<logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
-    	              <html:submit property="lock_fault" styleId="button">
-                      <bean:message key="button.lock.fault.information" />
-                      </html:submit>
-      				</logic:equal>
-      				<logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
-      					<% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_ALLOW_OPEN_INCIDENT_DISPUTE)) { %>
-	   	              		<html:submit property="lock_fault" styleId="button">
-                      		<bean:message key="button.lock.fault.information" />
-                      		</html:submit>
-                      	<% } %>
-      				</logic:notEqual>
-    	<% 	  } 
-    	   }  %>
-    </td>
-    
     <% 
     } else {
     %>
@@ -243,11 +210,6 @@
           for (java.util.Iterator i = codes.iterator(); i.hasNext(); ) {
             com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
                                                                                       com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
-            
-            if(stationLock && ( (code.getLoss_code()==75 && lossCodeInt!=75) || (code.getLoss_code()==76 && lossCodeInt!=76) || (code.getLoss_code()==83 && lossCodeInt!=83)  || (code.getLoss_code()==93 && lossCodeInt!=93) || (code.getLoss_code()==66 && lossCodeInt!=66)) )
-            {
-            	continue;
-            }
     %>
             <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();  if (lost_code.equals("" + code.getLoss_code())) { %> SELECTED <% } %>>
             <%= "" + code.getLoss_code() %>-
