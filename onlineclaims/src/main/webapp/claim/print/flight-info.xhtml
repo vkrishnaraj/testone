@@ -58,9 +58,7 @@
 				rendered="#{passengerController.flightLabel.bagCheckedLocation.required}" />
 			<t:outputText value=":" />
 		</h:panelGroup>
-		<h:outputText value="#{passengerBean.bagCheckLocation}" rendered="#{!passengerController.bcdRender}" />
-		<h:outputText value="#{passengerBean.bagCheckLocation}: #{passengerBean.bagCheckDescription}" 
-			rendered="#{passengerController.bcdRender}" />
+		<h:outputText value="#{passengerBean.bagCheckLocation}#{passengerController.bagCheckDescriptionPrint}" />
 
 		<rich:spacer width="14" height="10" title="" />
 
@@ -74,8 +72,6 @@
 		</h:panelGroup>
 		<h:outputText id="noOfPassenger" value="#{passengerBean.noOfPassenger}" >
 		</h:outputText>
-			<h:outputText value="#{passengerBean.bagCheckDescription}" rendered="#{passengerController.bcdRender}">
-			</h:outputText>
 
 	</h:panelGrid>
 

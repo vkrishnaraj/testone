@@ -990,9 +990,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				wsFile=null; //GC
 				file=null;
 			}
-			claim.setFileArray(wsFileArray);
-			wsFileArray=null; //GC
 		}
+		claim.setFileArray(wsFileArray);
+		wsFileArray=null; //GC
 
 	}
 

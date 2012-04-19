@@ -1787,6 +1787,11 @@ public class PassengerController {
 //		}
 //		return null;
 	}
+	
+	public String getBagCheckDescriptionPrint() {
+		String toReturn = passengerBean.getBagCheckDescription();
+		return (toReturn == null ? "" : ": " + toReturn);
+	}
 
 	public CaptchaBean getCaptchaBean() {
 		return captchaBean;
