@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-
-<jasperReport name="MissingReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MissingReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -68,7 +69,7 @@
 					<pen lineWidth="2.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-29" mode="Opaque" x="9" y="84" width="130" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -87,8 +88,8 @@
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[בשם יו.אס.איירוייס, אנא קבלו את התנצלותינו על חוסר בפריטים במזוודתכם. לחישוב הפיצוי נדרש למלא טופס
-Passenger Property Form (PPF) רכוש לנוסע 
-WWW.USAIRWAYS.COM את הטופס ניתן להוריד באתר החברה 
+Passenger Property Form (PPF) רכוש לנוסע
+WWW.USAIRWAYS.COM את הטופס ניתן למצוא באתר החברה
 ניתן גם לקבל את הטופס בכל שדה תעופה שחברת יו.אס.איירוייס פועלת, במחלקת איתור כבודה.
 ללא דיחוי )PPFעל מנת לסייע בהחלטתנו בנוגע לתלונה חשוב למלא את הטופס (
 את הטופס המלא יש לשלוח לכתובת/פקס הנ"ל עם המסמכים הנחוצים, נציג שירות איתור כבודה ייצור עמכם קשר בתוך 15 ימי עסקים מיום קבלת הטופס
@@ -135,7 +136,7 @@ FAX: 480-693-2305
     WWW.USAIRWAYS.COM     המידה נמצא באתר
  * יו.אס.איירוייס אינה נוטלת על עצמה אחריות לדברי ערך או פריטים מסחריים כולל, אבל לא מוגבל ל-
     כסף, ניירות סחירים, בטחונות, מסמכים עיסקיים, ספרים, כתבי יד, ציוד צילום או ציוד חשמלי, כלי נגינה,
-    תכשיטים, כלי כסף, מתכות יקרות ערך, פרוות, עתיקות, יצירות אומנות, ציורים ועבודות אומנות אחרות, 
+    תכשיטים, כלי כסף, מתכות יקרות ערך, פרוות, עתיקות, יצירות אומנות, ציורים ועבודות אומנות אחרות,
     תרופות מצילות חיים או דוגמיות, אשר נישלחים בכבודת בטן או בכבודת יד.
  * אחריות על נזק מוכח כתוצאה מאובדן, איחור או נזק למזוודה, כשהמזוודה בחזקת יו.אס.איירוייס מוגבל
     ל- 3,300 $ לנסיעה בתוך ארה"ב, אלא אם כן הוצהר על נזק חריג.
@@ -151,8 +152,8 @@ FAX: 480-693-2305
 לנוסעים הטסים לאירופה, טלפון – 008-00245607890
 ]]></text>
 			</staticText>
-			<image scaleImage="RetainShape" hyperlinkType="None">
-				<reportElement key="image-2" x="473" y="688" width="76" height="38">
+			<image scaleImage="RetainShape">
+				<reportElement key="image-2" mode="Transparent" x="473" y="688" width="76" height="38">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -163,8 +164,8 @@ FAX: 480-693-2305
 				</box>
 				<imageExpression class="java.lang.String"><![CDATA[$P{powered}]]></imageExpression>
 			</image>
-			<image scaleImage="RetainShape" hyperlinkType="None">
-				<reportElement key="image-3" x="3" y="1" width="137" height="62">
+			<image scaleImage="RetainShape">
+				<reportElement key="image-3" mode="Transparent" x="3" y="1" width="137" height="62">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -181,7 +182,7 @@ FAX: 480-693-2305
 					<pen lineWidth="2.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-10" mode="Opaque" x="340" y="428" width="101" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -194,7 +195,7 @@ FAX: 480-693-2305
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-16" mode="Opaque" x="63" y="534" width="343" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -214,7 +215,7 @@ FAX: 480-693-2305
 				</textElement>
 				<text><![CDATA[שם הנוסע:]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-14" mode="Opaque" x="62" y="498" width="344" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -234,7 +235,7 @@ FAX: 480-693-2305
 				</textElement>
 				<text><![CDATA[עיר, מדינה, מיקוד:]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-11" mode="Opaque" x="68" y="445" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -247,7 +248,7 @@ FAX: 480-693-2305
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-15" mode="Opaque" x="65" y="516" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -281,7 +282,7 @@ FAX: 480-693-2305
 				</textElement>
 				<text><![CDATA[מקום פתיחת התלונה:]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-56" mode="Opaque" x="194" y="427" width="86" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -308,7 +309,7 @@ FAX: 480-693-2305
 				</textElement>
 				<text><![CDATA[כתובת 2 :]]></text>
 			</staticText>
-			<textField pattern="(###)###-####" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="(###)###-####" isBlankWhenNull="false">
 				<reportElement key="textField-12" mode="Opaque" x="241" y="467" width="165" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -342,7 +343,7 @@ FAX: 480-693-2305
 				</textElement>
 				<text><![CDATA[מספר תלונה:]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-13" mode="Opaque" x="61" y="483" width="345" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -355,7 +356,7 @@ FAX: 480-693-2305
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-54" mode="Opaque" x="26" y="427" width="42" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>

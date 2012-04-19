@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-
-<jasperReport name="MissingReceipt" pageWidth="612" pageHeight="792" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MissingReceipt" pageWidth="612" pageHeight="792" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="213"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -422,7 +420,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{missing.receipt.paragraph_7}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="RetainShape">
-				<reportElement key="image-2" x="473" y="688" width="76" height="38">
+				<reportElement key="image-2" mode="Transparent" x="473" y="688" width="76" height="38">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -486,7 +484,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{lostdelay.receipt.colname.date}+":"]]></textFieldExpression>
 			</textField>
 			<image scaleImage="RetainShape">
-				<reportElement key="image-3" x="3" y="1" width="137" height="62">
+				<reportElement key="image-3" mode="Transparent" x="3" y="1" width="137" height="62">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
