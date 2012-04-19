@@ -106,7 +106,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 
 	@Override
 	protected Agent loadAgent() {
-		return SecurityUtils.authUser("ntadmin", "Ladendead51!", "US",
+		return SecurityUtils.authUser(username, password, company,
 				0, new ActionMessages());
 	}
 
@@ -371,7 +371,7 @@ public class ImportClaimDataUS extends ImportClaimData {
 			toReturn.setAmountPaid(Double.valueOf(data[CLAIM_AMOUNT_COMPENSATED]));
 		}
 
-		value = data[CLAIM_AMOUNT_COMPENSATED];
+		value = data[CLAIM_INCIDENT_TYPE];
 		if (!value.equals("~")) {
 			toReturn.setClaimType(getClaimType(data[CLAIM_INCIDENT_TYPE]));
 		}
