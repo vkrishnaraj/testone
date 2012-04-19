@@ -71,7 +71,7 @@
 				</tr>
 				<tr>
 				  <td colspan="6">Dispute Explanation:<br />
-				    <pre><bean:write name="dispute" property="disputeExplanation" scope="request" /></pre>
+				    <bean:write name="dispute" property="readOnlyDisputeExplanation" scope="request" filter="false"/>
 				  </td>
 				</tr>
 				<tr>
@@ -92,7 +92,7 @@
 				</tr>
 				<tr>
 				  <td colspan="6">Resolution Remarks:<br />
-				    <pre><bean:write name="dispute" property="resolutionRemarks" scope="request" /></pre>
+				    <bean:write name="dispute" property="readOnlyResolutionRemarks" scope="request" filter="false"/>
 				  </td>
 				</tr>
 				<tr>

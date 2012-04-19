@@ -45,11 +45,13 @@ public class Dispute {
 	private Station suggestedFaultStation;
 	private int suggestedLossCode = 0;
 	private String disputeExplanation;	//new
+	private String readOnlyDisputeExplanation;	//new
 	
 	private Agent resolutionAgent;	//new
 	private Station determinedFaultStation;
 	private int determinedLossCode = 0;
 	private String resolutionRemarks;	//new
+	private String readOnlyResolutionRemarks;	//new
 	
 	private Station beforeDisputeFaultStation;	//new
 	private int beforeDisputeLossCode = 0;	//new
@@ -164,6 +166,19 @@ public class Dispute {
 		this.disputeExplanation = disputeExplanation;
 	}
 	
+	public String getReadOnlyDisputeExplanation() {
+		this.readOnlyDisputeExplanation=this.disputeExplanation.replaceAll("\r\n", "<br>");
+		return readOnlyDisputeExplanation;
+	}
+	public void setReadOnlyDisputeExplanation(String disputeExplanation) {
+		if(disputeExplanation!=null)
+		{
+			this.readOnlyDisputeExplanation=disputeExplanation.replaceAll("\r\n", "<br>");
+		}
+	}
+
+
+	
 	@ManyToOne
 	@JoinColumn(name = "resolution_agent_ID", nullable = false)
 	public Agent getResolutionAgent() {
@@ -179,6 +194,16 @@ public class Dispute {
 		this.resolutionRemarks = resolutionRemarks;
 	}
 	
+	public String getReadOnlyResolutionRemarks() {
+		this.readOnlyResolutionRemarks=this.resolutionRemarks.replaceAll("\r\n", "<br>");
+		return readOnlyResolutionRemarks;
+	}
+	public void setReadOnlyResolutionRemarks(String resolutionRemarks) {
+		if(resolutionRemarks!=null)
+		{
+			this.readOnlyDisputeExplanation=readOnlyResolutionRemarks=resolutionRemarks.replaceAll("\r\n", "<br>");
+		}
+	}
 	@ManyToOne
 	@JoinColumn(name = "before_dispute_fault_station_ID", nullable = false)
 	public Station getBeforeDisputeFaultStation() {

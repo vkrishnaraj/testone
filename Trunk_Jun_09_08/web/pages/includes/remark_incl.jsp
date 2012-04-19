@@ -131,7 +131,7 @@
 <%
                 }
                 else {
-%>				<pre><bean:write name="remark" property="remarktext" /></pre>	
+%>				<bean:write name="remark" property="readonlyremarktext" filter="false"/>	
 <%
                 }
 %>
