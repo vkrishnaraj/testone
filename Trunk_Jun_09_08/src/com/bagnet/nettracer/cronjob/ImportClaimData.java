@@ -62,6 +62,7 @@ public abstract class ImportClaimData {
 	protected String password;
 	protected String company;
 	protected int runWhich;
+	protected boolean submitToFraud = false;
 	
 	protected PrintWriter outputFile;
 	protected ArrayBlockingQueue<aero.nettracer.fs.model.File> queue;
@@ -77,14 +78,18 @@ public abstract class ImportClaimData {
 			return;
 		}
 		
+		if (runWhich == 13 || runWhich == 23 || runWhich == 3) {
+			submitToFraud = true;
+		}
+		
 		// TODO UNCOMMENT THIS SECTION!!!
 		// import existing nettracer claims
-		if (ntUser & runWhich == 1) {
+		if (ntUser && (runWhich == 1 || runWhich == 13)) {
 			 importNtClaims();
 			 sleepForABit();
 		}
 		
-		if (runWhich == 2) {
+		if (runWhich == 2 || runWhich == 23) {
 			importThirdPartyClaims();
 		
 			sleepForABit();
@@ -205,7 +210,9 @@ public abstract class ImportClaimData {
 				}
 				
 				// add the file to the queue to be submitted to fraud services
-				queue.put(file);
+				if (submitToFraud) {
+					queue.put(file);
+				}
 
 				if (ibmo.saveAndAuditIncident(incident, agent, null) <= 0) {
 					logger.error("\tError saving incident: "
@@ -266,7 +273,7 @@ public abstract class ImportClaimData {
 	
 	private boolean init() {
 		boolean success = true;
-		if (!contactCentralServices()) {
+		if (submitToFraud && !contactCentralServices()) {
 			logger.error("Failed to connect to central services.");
 			return false;
 		}
@@ -280,8 +287,9 @@ public abstract class ImportClaimData {
 			logger.error("Failed to load the agent from the database.");
 			return false;
 		}
-		
-		initSubmissionThreads();	
+		if (submitToFraud) {
+			initSubmissionThreads();
+		}
 		return success;
 	}
 	

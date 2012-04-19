@@ -284,7 +284,9 @@ public class ImportClaimDataUS extends ImportClaimData {
 					FileDAO.saveFile(claim.getFile(), true);
 					
 					// add the file to the queue to be submitted to fraud services
-					queue.put(claim.getFile());
+					if (submitToFraud) {
+						queue.put(claim.getFile());
+					}
 					
 					writeToProcessedClaimsFile(key);
 					double end = System.currentTimeMillis();
