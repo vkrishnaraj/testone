@@ -73,13 +73,13 @@ public abstract class ImportClaimData {
 	
 	public void importClaims() {
 		
+		if (runWhich == 13 || runWhich == 23 || runWhich == 3) {
+			submitToFraud = true;
+		}
+		
 		if (!init()) {
 			logger.error("Failed to init.");
 			return;
-		}
-		
-		if (runWhich == 13 || runWhich == 23 || runWhich == 3) {
-			submitToFraud = true;
 		}
 		
 		// TODO UNCOMMENT THIS SECTION!!!
