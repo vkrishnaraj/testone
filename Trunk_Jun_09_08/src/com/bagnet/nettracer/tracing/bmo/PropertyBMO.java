@@ -234,7 +234,10 @@ public class PropertyBMO {
 	@SuppressWarnings("unchecked")
 	public static List<String> getSplitList(String keyVal) {
 		String value = getValue(keyVal);
-		List<String> list=Arrays.asList(value.split(","));
+		List<String> list=null;
+		if(value!=null){
+			list=Arrays.asList(value.split(","));
+		}
 		
 		if(list == null || list.size() == 0) {
 			return null;

@@ -26,6 +26,8 @@
 	Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
 	
 	java.util.List LimitedLossCodes=PropertyBMO.getSplitList(PropertyBMO.LIMITED_CODES_DAMAGED);
+	
+	
 	Company_specific_irregularity_code lc = null;
 	if (lossCodeInt != 0 && inc != null) { 
 	  int itemType = inc.getItemtype().getItemType_ID();
@@ -178,7 +180,7 @@
 			            com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
 			                                                                                      com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
 			            
-			            if(code.getLoss_code()!=lossCodeInt && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
+			            if(code.getLoss_code()!=lossCodeInt && LimitedLossCodes!=null && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
 			            {
 			            	continue;
 			            }

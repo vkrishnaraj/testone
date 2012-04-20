@@ -178,7 +178,7 @@
 			            com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
 			                                                                                      com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
 			            
-			            if(code.getLoss_code()!=lossCodeInt && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
+			            if(code.getLoss_code()!=lossCodeInt && LimitedLossCodes!=null && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
 			            {
 			            	continue;
 			            }
