@@ -213,7 +213,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		if(dto.getType() == TracingConstants.LF_TYPE_FOUND && dto.getBarcode() != null && dto.getBarcode().trim().length() > 0){
 			sql += " and o.barcode = \'" + dto.getBarcode() + "\'";
-		} else if(dto.getType() == TracingConstants.LF_TYPE_LOST && dto.getId() > 0){
+		} else if(dto.getId() > 0){
 			sql += " and o.id = " + dto.getId();
 		}
 
