@@ -167,7 +167,7 @@ public class Dispute {
 	}
 	@Transient
 	public String getReadOnlyDisputeExplanation() {
-		if(!disputeExplanation.equals(null)) {
+		if(disputeExplanation!=null) {
 			return disputeExplanation.replaceAll("\r\n", "<br>");
 		} else {
 			return "";
@@ -194,7 +194,7 @@ public class Dispute {
 
 	@Transient
 	public String getReadOnlyResolutionRemarks() {
-		if(!resolutionRemarks.equals(null)){
+		if(resolutionRemarks!=null){
 			return resolutionRemarks.replaceAll("\r\n", "<br>");
 		} else {
 			return "";
