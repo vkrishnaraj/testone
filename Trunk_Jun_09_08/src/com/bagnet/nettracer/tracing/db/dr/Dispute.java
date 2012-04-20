@@ -167,8 +167,12 @@ public class Dispute {
 	}
 	@Transient
 	public String getReadOnlyDisputeExplanation() {
-		this.readOnlyDisputeExplanation=this.disputeExplanation.replaceAll("\r\n", "<br>");
-		return readOnlyDisputeExplanation;
+		if(!disputeExplanation.equals(null)) {
+			return disputeExplanation.replaceAll("\r\n", "<br>");
+		} else {
+			return "";
+		}
+		
 	}
 
 
@@ -190,8 +194,11 @@ public class Dispute {
 
 	@Transient
 	public String getReadOnlyResolutionRemarks() {
-		this.readOnlyResolutionRemarks=this.resolutionRemarks.replaceAll("\r\n", "<br>");
-		return readOnlyResolutionRemarks;
+		if(!resolutionRemarks.equals(null)){
+			return resolutionRemarks.replaceAll("\r\n", "<br>");
+		} else {
+			return "";
+		} 
 	}
 	
 	@ManyToOne
