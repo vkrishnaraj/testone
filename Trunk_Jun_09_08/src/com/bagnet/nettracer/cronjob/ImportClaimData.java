@@ -345,9 +345,21 @@ public abstract class ImportClaimData {
 		queue = new ArrayBlockingQueue<aero.nettracer.fs.model.File>(queueSize);
 		threads = new Thread[submissionThreadCount];
 		for (int i = 0; i < submissionThreadCount; ++i) {
-			threads[i] = new Thread(new SubmissionThread(queue));
-			threads[i].start(); 
-			outputFile.println("Created SubmissionThread: " + (i + 1));
+			Context ctx = null;
+			ClaimRemote remote = null;
+			try {
+				ctx = ConnectionUtil.getInitialContext();
+				remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+			} catch (Exception e) {
+				logger.error(e, e);
+			}
+			if (remote != null) {
+				threads[i] = new Thread(new SubmissionThread(queue, remote));
+				threads[i].start(); 
+				outputFile.println("Created SubmissionThread: " + (i + 1));
+			} else {
+				outputFile.println("Failed Remote for SubmissionThread: " + (i + 1));
+			}
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException e) {
@@ -356,17 +368,8 @@ public abstract class ImportClaimData {
 		}
 	}
 	
-	private void submitToFraudAndSave(aero.nettracer.fs.model.File file) {
-		Context ctx = null;
-		ClaimRemote remote = null;
-		long originalFileId;
-		try {
-			ctx = ConnectionUtil.getInitialContext();
-			remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
-		} catch (Exception e) {
-			logger.error(e, e);
-		}
-		
+	private void submitToFraudAndSave(aero.nettracer.fs.model.File file, ClaimRemote remote) {
+		long originalFileId;		
 		long remoteFileId = 0;
 		if (remote == null || file == null) {
 			return;
@@ -531,9 +534,11 @@ public abstract class ImportClaimData {
 	public class SubmissionThread implements Runnable {
 
 		private ArrayBlockingQueue<aero.nettracer.fs.model.File> queue;
+		ClaimRemote remote;
 		
-		public SubmissionThread(ArrayBlockingQueue<aero.nettracer.fs.model.File> queue) {
+		public SubmissionThread(ArrayBlockingQueue<aero.nettracer.fs.model.File> queue, ClaimRemote remote) {
 			this.queue = queue;
+			this.remote = remote;
 		}
 		
 		@Override
@@ -541,7 +546,18 @@ public abstract class ImportClaimData {
 			while(true){
 				try{
 					File file = queue.take();
-					submitToFraudAndSave(file);
+					try {
+						remote.echoTest("TEST");
+					} catch(Exception ex) {
+						Context ctx = null;
+						try {
+							ctx = ConnectionUtil.getInitialContext();
+							remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+						} catch (Exception e) {
+							logger.error(e, e);
+						}
+					}
+					submitToFraudAndSave(file, remote);
 				}catch(Exception e){
 					e.printStackTrace();
 				}
