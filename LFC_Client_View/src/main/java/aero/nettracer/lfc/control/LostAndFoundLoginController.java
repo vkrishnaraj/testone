@@ -67,7 +67,11 @@ public class LostAndFoundLoginController {
 			HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 			.getExternalContext().getSession(false);
 			session.setAttribute("lostReport", report);
-			return "status?faces-redirect=true";
+			if(TracingConstants.LF_SWA_COMPANY_ID.equals(subCompany)) {
+				return "lostform?faces-redirect=true";
+			} else {
+				return "status?faces-redirect=true";
+			}
 		}
 		return null;
 	}

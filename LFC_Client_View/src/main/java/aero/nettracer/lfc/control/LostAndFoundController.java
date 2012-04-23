@@ -87,6 +87,21 @@ public class LostAndFoundController {
 		return null;
 	}
 	
+	public String editReport() {
+		if (validate()) {
+			long id = clientViewService.create(lostReport);
+			if (id != -1) {
+				lostReport.setReportId(id + "");
+				HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+				session.setAttribute("lostReport", lostReport);
+				return "editsuccess?faces-redirect=true";
+			}
+			FacesUtil.addError("Server Communication Error.");
+		}
+		return null;
+	}
+	
 	public String backToLanding() {
 		return "landing?faces-redirect=true";
 	}

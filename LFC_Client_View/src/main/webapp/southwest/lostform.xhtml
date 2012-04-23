@@ -248,7 +248,11 @@
 				</div>
 				<div align="right">
 				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}" />&#160;&#160;&#160;
-				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" onclick="if (!validateEmail()) {return false;}"/>
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" 
+				onclick="if (!validateEmail()) {return false;}" rendered="#{empty lostAndFound.lostReport.reportId}"/>
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_update}" action="#{lostAndFound.editReport}" 
+				onclick="if (!validateEmail()) {return false;}" rendered="#{not empty lostAndFound.lostReport.reportId}"/>
+				
 				</div><br/>
 			</h:panelGroup>
 			<script type="text/javascript">
