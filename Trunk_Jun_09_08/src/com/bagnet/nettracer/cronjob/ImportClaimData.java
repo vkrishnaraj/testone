@@ -63,6 +63,8 @@ public abstract class ImportClaimData {
 	protected String company;
 	protected int runWhich;
 	protected boolean submitToFraud = false;
+	protected int maxReturn;
+	protected boolean traceActive = false;
 	
 	protected PrintWriter outputFile;
 	protected ArrayBlockingQueue<aero.nettracer.fs.model.File> queue;
@@ -250,7 +252,7 @@ public abstract class ImportClaimData {
 
 	public boolean setVariablesFromArgs(String[] args) {
 		boolean success = true;
-		if (args.length != 6 && args.length != 7) {
+		if (args.length != 8 && args.length != 9) {
 			success = false;
 		} else {
 			try {
@@ -258,10 +260,12 @@ public abstract class ImportClaimData {
 				this.password = args[1];
 				this.company = args[2];
 				this.runWhich = Integer.valueOf(args[3]);
-				this.submissionThreadCount = Integer.valueOf(args[4]);
-				this.queueSize = Integer.valueOf(args[5]);
-				if (args.length == 7) {
-					this.filePath = args[6];
+				this.traceActive = Integer.valueOf(args[4]) == 1;
+				this.submissionThreadCount = Integer.valueOf(args[5]);
+				this.maxReturn = Integer.valueOf(args[6]);
+				this.queueSize = Integer.valueOf(args[7]);
+				if (args.length == 9) {
+					this.filePath = args[8];
 				}
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
@@ -420,7 +424,9 @@ public abstract class ImportClaimData {
 				file = FileDAO.loadFile(originalFileId);
 				file.setSwapId(remoteFileId);
 				FileDAO.saveFile(file, false);
-				remote.traceFile(remoteFileId, 6, true, false);
+				if (traceActive) {
+					remote.traceFile(remoteFileId, 6, true, false);
+				}
 				logger.info("File: " + file.getId() + " saved to central services with remote id: " + remoteFileId);
 			} else {
 				logger.info("Failed to save file: " + file.getId() + " to fraud services.");
@@ -436,6 +442,7 @@ public abstract class ImportClaimData {
 		LinkedHashSet<Long> map = new LinkedHashSet<Long>();		
 		Session session = null;
 		boolean haveFiles = false;
+		int noneAdded = 0;
 		try {
 			while (true) {
 				session = HibernateWrapper.getSession().openSession();
@@ -462,8 +469,14 @@ public abstract class ImportClaimData {
 				}
 
 				if (!haveFiles) {
-					outputFile.println("No more files to process. Exiting loop...");
-					break;
+					outputFile.println("No files were added to the process.");
+					if (noneAdded == 5) {
+						outputFile.println("No more files to process. Exiting loop...");
+						break;
+					}
+					noneAdded++;
+				} else {
+					noneAdded = 0;
 				}
 				
 				while (queue.size() > 5) {
