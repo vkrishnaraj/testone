@@ -449,7 +449,7 @@ public abstract class ImportClaimData {
 	
 				String sql = "from aero.nettracer.fs.model.File as file where file.swapId = 0";
 				Query query = session.createQuery(sql);
-				query.setMaxResults(15);
+				query.setMaxResults(maxReturn);
 				List<aero.nettracer.fs.model.File> files = query.list();
 				session.close();
 				
