@@ -482,7 +482,7 @@ public abstract class ImportClaimData {
 					noneAdded = 0;
 				}
 				
-				while (queue.size() > 5) {
+				while (queue.size() > submissionThreadCount + 5) {
 					try {
 						outputFile.println("Waiting for threads to work the queue...");
 						Thread.sleep(5000);
