@@ -84,7 +84,7 @@ public class DisputeUtils {
 	}
 	
 	public static Dispute getDispute(Agent agent, int DisputeType) {
-		List<Dispute> result = getPaginatedDisputeList(agent, 0, 0,false, true, DisputeType, true);
+		List<Dispute> result = getPaginatedDisputeList(agent, 1, 0,false, true, DisputeType, true);
 			
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {

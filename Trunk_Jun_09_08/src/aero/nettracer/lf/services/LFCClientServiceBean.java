@@ -180,6 +180,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		item.setCaseColor(lostReport.getItemCaseColor());
 		item.setLongDescription(lostReport.getItemLongDesc());
 		item.setSize(lostReport.getItemSize());
+		
 
 		if(lostReport.getLostPhone() != null){
 			LFPhone lostPhone = new LFPhone();
@@ -250,6 +251,10 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			
 			
 			host.setClient(client);
+			if(lostReport!=null && lostReport.getReportId()!=null)
+			{
+				host.setId(Long.valueOf(lostReport.getReportId()));
+			}
 		}	
 		
 		
