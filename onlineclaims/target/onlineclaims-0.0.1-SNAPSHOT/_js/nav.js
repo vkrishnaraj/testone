@@ -1,1 +1,0 @@
-document.write("<div class=\"logoutnav\"><ul id=\"nav\" class=\"nav\"><li class=\"topnav\"><a href=\"/onlineclaims/admin/login.faces\" class=\"arrow\">Log Out</a><div class=\"subnav\"></div></li></ul></div>");
