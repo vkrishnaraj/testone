@@ -1,13 +1,9 @@
 package aero.nettracer.web.lfc.testing.actions.client.southwest;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
-
-import com.thoughtworks.selenium.DefaultSelenium;
 
 public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 
@@ -84,8 +80,8 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testLostReportPage() throws Exception {
-		selenium.click("id=lostForm:j_id175");
-		waitForPageToLoadImproved();
+		selenium.click("id=lostForm:j_id177");
+//		waitForPageToLoadImproved();
 		assertEquals("Please be advised that if an e-mail address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", selenium.getConfirmation());
 		verifyTrue(selenium.isTextPresent("First Name is required."));
 		verifyTrue(selenium.isTextPresent("Last Name is required."));
@@ -102,6 +98,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		selenium.select("id=lostForm:j_id23", "label=Cellphone");
 		selenium.select("id=lostForm:j_id31", "label=Black");
 		selenium.select("id=lostForm:j_id57", "label=Does Not Apply");
+		selenium.type("id=lostForm:j_id55", "555-555-5555");
 		selenium.type("id=lostForm:j_id77", "Test");
 		selenium.type("id=lostForm:j_id79", "John");
 		selenium.type("id=lostForm:j_id85", "123 Test");
@@ -109,10 +106,11 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		selenium.select("id=lostForm:j_id99", "label=Georgia");
 		selenium.type("id=lostForm:j_id103", "30339");
 		selenium.type("id=lostForm:email", "test@nettracer.aero");
+		selenium.type("id=lostForm:j_id157", "test@nettracer.aero");
 		selenium.click("id=lostForm:j_id165PopupButton");
-		selenium.click("css=div.rich-calendar-tool-btn.rich-calendar-tool-btn-hover");
+		selenium.click("//td[@id='lostForm:j_id165Footer']/table/tbody/tr/td[5]/div");
 		selenium.select("id=lostForm:j_id167", "label=test");
-		selenium.click("id=lostForm:j_id175");
+		selenium.click("id=lostForm:j_id177");
 		waitForPageToLoadImproved();
 		verifyTrue(selenium.isTextPresent("Email Address and Confirm Email Address must match."));
 		verifyTrue(selenium.isTextPresent("Lost Phone Phone Number is required for Category \"Cellphone\"."));
@@ -150,6 +148,74 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
 		selenium.click("id=j_id7:j_id92");
 		waitForPageToLoadImproved();
+	}
+	
+	@Test
+	public void testUpdateReport() {
+
+		selenium.open(Settings.START_URL_LF_LG);
+		selenium.type("id=pageForm:j_id17", "Test");
+		selenium.type("id=pageForm:j_id21", Settings.LOST_ID_LF_WN);
+		selenium.click("id=pageForm:j_id23");
+		waitForPageToLoadImproved();
+		
+		if(checkNoErrorPage())
+		{
+			verifyTrue(selenium.isTextPresent("Lost Item Report Form"));
+
+			selenium.select("id=lostForm:j_id23", "label=Bags");
+			selenium.select("id=lostForm:j_id28", "label=Cloth Bag");
+			selenium.select("id=lostForm:j_id31", "label=Black");
+			selenium.select("id=lostForm:j_id57", "label=Does Not Apply");
+			selenium.type("id=lostForm:j_id41", "2");
+			selenium.type("id=lostForm:j_id43", "2");
+			selenium.type("id=lostForm:j_id45", "2");
+			selenium.type("id=lostForm:j_id53", "2");
+			selenium.type("id=lostForm:j_id55", "2");
+			selenium.type("id=lostForm:j_id63", "2");
+			selenium.type("id=lostForm:j_id67", "21");
+			selenium.type("id=lostForm:j_id77", "2");
+			selenium.type("id=lostForm:j_id79", "2");
+			selenium.type("id=lostForm:j_id81", "2");
+			selenium.type("id=lostForm:j_id85", "2");
+			selenium.type("id=lostForm:j_id89", "2");
+			selenium.type("id=lostForm:j_id97", "2");
+			selenium.type("id=lostForm:j_id103", "2");
+			selenium.click("id=lostForm:j_id178");
+			waitForPageToLoadImproved();
+		}
+
+
+		if(checkNoErrorPage())
+		{
+			verifyTrue(selenium.isTextPresent("Thank You For Updating Your Lost Item"));
+			verifyTrue(selenium.isTextPresent("Edit Lost Item Confirmation"));
+			verifyTrue(selenium.isTextPresent("Thank you for flying with Southwest Airlines and filling out our On-Line Lost Item Report Form."));
+			String lost_id = selenium.getText("id=j_id7:j_id18");
+			Settings.LOST_ID_LF_WN = lost_id;
+			System.out.println("WN CLIENT VIEW LOST CREATED: " + Settings.LOST_ID_LF_WN);
+			verifyTrue(selenium.isTextPresent("You will be emailed updates on the status of your report every few days."));
+			verifyTrue(selenium.isTextPresent("If you would like to see a printable version of your Lost Item Report, please click the review button below."));
+			selenium.click("id=j_id7:j_id26");
+			waitForPageToLoadImproved();
+		}
+
+		if(checkNoErrorPage())
+		{
+			verifyTrue(selenium.isTextPresent("Contact Information"));
+			verifyTrue(selenium.isTextPresent("2, 2"));
+			verifyTrue(selenium.isTextPresent("2"));
+			verifyTrue(selenium.isTextPresent("2, GA 2"));
+			verifyTrue(selenium.isTextPresent("United States"));
+			verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
+			selenium.click("id=j_id7:j_id93");
+			waitForPageToLoadImproved();
+		}
+		
+		if(checkNoErrorPage())
+		{
+			verifyTrue(selenium.isTextPresent("Update Lost Item Report Information"));
+		}
 	}
 	
 }

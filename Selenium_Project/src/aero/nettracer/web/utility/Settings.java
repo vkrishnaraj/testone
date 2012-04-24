@@ -161,6 +161,7 @@ public class Settings {
 	// CLIENT VIEW SOUTHWEST
 	
 	public static final String START_URL_LF_WN = "/client/southwest/landing.do";
+	public static final String START_URL_LF_LG = "/client/southwest/login.do";
 	public static String LOST_ID_LF_WN = "";
 	
 

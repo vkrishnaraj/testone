@@ -61,6 +61,7 @@ import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_CreateFound_VerifyReq
 import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_FoundReportSummary;
 import aero.nettracer.web.lfc.testing.actions.lfc.found.LF_SearchFound;
 import aero.nettracer.web.lfc.testing.actions.lfc.itementry.LF_ItemEntry;
+import aero.nettracer.web.lfc.testing.actions.client.southwest.LF_WN_CreateLost;
 import aero.nettracer.web.lfc.testing.actions.lfc.lost.LF_CloseLost;
 import aero.nettracer.web.lfc.testing.actions.lfc.lost.LF_CreateLostAndFoundReadOnly;
 import aero.nettracer.web.lfc.testing.actions.lfc.lost.LF_CreateLost_Detailed;
@@ -128,7 +129,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.US_DisputeManage;
 	B6_CreatePilf_VerifyRequiredFields.class, B6_ClosePilf_VerifyRequiredFields.class,
 	B6_CreateOHD_VerifyRequiredFields.class, B6_ForwardOHD.class, B6_ReceiveOHD.class,
 	B6_Security.class,
-	// SPIRIT
+//	 SPIRIT
 	NK_Login.class, Def_Logout.class, NK_LoginFailure.class, 
 	NK_Login.class, NK_VerifyText_TaskManager.class,
 	NK_CreateLD_VerifyRequiredFields.class, NK_CloseLD_VerifyRequiredFields.class, NK_InboxMessage.class,
@@ -136,7 +137,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.US_DisputeManage;
 	NK_CreatePilf_VerifyRequiredFields.class, NK_ClosePilf_VerifyRequiredFields.class,
 	NK_CreateOHD_VerifyRequiredFields.class, NK_ForwardOHD.class, NK_ReceiveOHD.class,
 	NK_Security.class,
-	// WESTJET
+//	 WESTJET
 	WS_Login.class, Def_Logout.class, WS_LoginFailure.class, 
 	WS_Login.class, WS_VerifyText_TaskManager.class,
 	WS_CreateLD_VerifyRequiredFields.class, WS_CloseLD_VerifyRequiredFields.class, 
@@ -153,14 +154,14 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.US_DisputeManage;
 	AB_CloseFound.class, AB_SearchLost.class, AB_CloseLost.class,
 	AB_CreateLost_Detailed.class, AB_CreateFound_Detailed.class,
 	AB_ConfirmMatch.class, AB_CreateDelivery.class,
-//	// LFC
+	// LFC
 	LF_Login.class, 
 	LF_CreateLost_VerifyRequiredFields.class, LF_CreateFound_VerifyRequiredFields.class,
 	LF_SearchLost.class, LF_SearchFound.class, LF_ManualMatch_FoundToLost.class,
 	LF_CloseFound.class, LF_SearchLost.class, LF_CloseLost.class, 
 	LF_CreateLost_Detailed.class, LF_CreateFound_Detailed.class, LF_FoundReportSummary.class, LF_VerifyText_TaskManager.class, 
 	LF_ConfirmMatch.class, LF_CreateDeliveryFromFound.class, LF_ItemEntry.class, LF_ProcessTraceResults.class,
-	LF_CreateLostAndFoundReadOnly.class, LF_Salvage.class, LF_SalvageSearch.class, LF_QuickHistory.class
+	LF_CreateLostAndFoundReadOnly.class, LF_Salvage.class, LF_SalvageSearch.class, LF_QuickHistory.class, LF_WN_CreateLost.class
 	
 	})
 public class TestEverything { 
