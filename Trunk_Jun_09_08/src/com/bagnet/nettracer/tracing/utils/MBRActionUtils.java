@@ -175,6 +175,7 @@ public class MBRActionUtils {
 		if (request.getParameter("delete_these_elements") != null && request.getParameter("delete_these_elements").length() > 0) {
 			String deleteTheseElements =  request.getParameter("delete_these_elements");
 			String[] elements = deleteTheseElements.split(",");
+			boolean itemsDeleted = false;
 			
 			HashMap<String, ArrayList<Integer>> elementBreakdown = new HashMap();
 			HashMap<Integer, ArrayList<Integer>> inventoryBreakdown = new HashMap();
@@ -226,8 +227,10 @@ public class MBRActionUtils {
 
 					if(key.equals(TracingConstants.JSP_DELETE_ITEM)) {
 						List itemList = theform.getItemlist();
-						if (itemList != null)
+						if (itemList != null) {
 							itemList.remove(index);
+							itemsDeleted = true;
+						}
 					}
 					
 					if(key.equals(TracingConstants.JSP_DELETE_PAX)) {
@@ -242,6 +245,15 @@ public class MBRActionUtils {
 							articleList.remove(index);
 					} 		
 				}
+			}
+			
+			if (itemsDeleted) {
+				List itemList = theform.getItemlist();
+				for (int i = 0; i < itemList.size(); i++) {
+					Item item = (Item) itemList.get(i);
+					item.setBagnumber(i);					
+				}
+				request.setAttribute("item", Integer.toString(theform.getItemlist().size() - 1));
 			}
 		}
 		
