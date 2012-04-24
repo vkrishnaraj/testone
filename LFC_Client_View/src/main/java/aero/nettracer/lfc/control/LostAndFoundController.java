@@ -3,13 +3,11 @@ package aero.nettracer.lfc.control;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.NavigationHandler;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -22,10 +20,7 @@ import aero.nettracer.lfc.faces.util.FacesUtil;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.KeyValueBean;
 import aero.nettracer.lfc.model.LostReportBean;
-import aero.nettracer.lfc.remote.RemoteService;
 import aero.nettracer.lfc.service.ClientViewService;
-
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 @Component("lostAndFound")
 @Qualifier("lostAndFound")
@@ -35,6 +30,8 @@ public class LostAndFoundController {
 	private static Logger logger = Logger
 			.getLogger(LostAndFoundController.class);
 	private LostReportBean lostReport = new LostReportBean();
+	private boolean update;
+	
 	private List<SelectItem> locations;
 	private List<SelectItem> categoryList;
 	private List<SelectItem> subCategories;
@@ -46,6 +43,7 @@ public class LostAndFoundController {
 	private String stateDropOff;
 	private List<SelectItem> locationsPickUp;
 	private List<SelectItem> locationsDropOff;
+	
  
 	@Autowired
 	private ClientViewService clientViewService;
@@ -55,6 +53,7 @@ public class LostAndFoundController {
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 		.getExternalContext().getSession(false);
 		lostReport = (LostReportBean) session.getAttribute("lostReport");
+		update = (session.getAttribute("edit")!=null && session.getAttribute("edit").equals(true));
 		if (getCompany() == null) {
             FacesContext fc = FacesContext.getCurrentInstance();
             try {
@@ -62,6 +61,11 @@ public class LostAndFoundController {
             } catch (IOException e) {
             }
 		}
+	}
+	
+	public boolean isEditting()
+	{
+		return update;
 	}
 
 	public LostReportBean getLostReport() {
@@ -104,6 +108,10 @@ public class LostAndFoundController {
 	
 	public String backToLanding() {
 		return "landing?faces-redirect=true";
+	}
+	
+	public String backToLogin() {
+		return "login?faces-redirect=true";
 	}
 	
 	public String backToBagcheck() {

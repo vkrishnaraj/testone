@@ -1,6 +1,7 @@
 package aero.nettracer.lfc.control;
 
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +69,13 @@ public class LostAndFoundLoginController {
 			.getExternalContext().getSession(false);
 			session.setAttribute("lostReport", report);
 			if(TracingConstants.LF_SWA_COMPANY_ID.equals(subCompany)) {
-				return "lostform?faces-redirect=true";
+				if(report.getStatus().equals("Closed")) {
+					return "closedform?faces-redirect=true";
+				} else {
+					session.setAttribute("edit", true);
+					return "lostform?faces-redirect=true";
+				}
+				
 			} else {
 				return "status?faces-redirect=true";
 			}
@@ -95,12 +102,18 @@ public class LostAndFoundLoginController {
 	}
 	
 	public String goToFormPageSouthwest() {
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+				session.setAttribute("edit", false);
 		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
 		return goToFormPage("bagunchecked");
 	}
 	
 	public String goToCheckedPageSouthwest() {
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+				session.setAttribute("edit", false);
 		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
 		return goToFormPage("bagchecked");
