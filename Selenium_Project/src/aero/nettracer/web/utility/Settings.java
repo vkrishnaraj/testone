@@ -158,6 +158,11 @@ public class Settings {
 	public static String LOST_ID_LF = "";
 	public static String FOUND_ID_LF = "";
 	
+	// CLIENT VIEW SOUTHWEST
+	
+	public static final String START_URL_LF_WN = "/client/southwest/landing.do";
+	public static String LOST_ID_LF_WN = "";
+	
 
 	
 	/////////////////////////////////////////////////////////// WEBJET ///////////////////////////////////////////////////////
