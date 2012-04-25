@@ -195,7 +195,7 @@ public class LostReportBean implements Serializable{
 	public Date getDateLost() {
 		return dateLost;
 	}
-
+	
 	public String getItemLongDesc() {
 		return itemLongDesc;
 	}

@@ -1,7 +1,10 @@
 package aero.nettracer.lfc.control;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,8 +72,11 @@ public class LostAndFoundLoginController {
 			.getExternalContext().getSession(false);
 			session.setAttribute("lostReport", report);
 			if(TracingConstants.LF_SWA_COMPANY_ID.equals(subCompany)) {
-				if(report.getStatus().equals("Closed")) {
+				if(report.getStatus().equals("Closed") || (Integer.valueOf(report.getItemDate())) > 30 )  { 
 					return "closedform?faces-redirect=true";
+				} else if(Integer.valueOf(report.getItemDate())>14) {
+					session.setAttribute("edit", true);
+					return "status?faces-redirect=true";
 				} else {
 					session.setAttribute("edit", true);
 					return "lostform?faces-redirect=true";

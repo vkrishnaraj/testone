@@ -255,7 +255,7 @@ Voor passagiers  reizend binnen Europa, wilt u alstublieft contact opnemen met U
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[www.usairways.com/baggage]]></text>
+				<text><![CDATA[www.usairways.com/baggagePPF]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-48" mode="Opaque" x="69" y="270" width="412" height="50" forecolor="#000000" backcolor="#FFFFFF"/>

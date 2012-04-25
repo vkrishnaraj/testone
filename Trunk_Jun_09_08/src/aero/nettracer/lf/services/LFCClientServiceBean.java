@@ -1,6 +1,7 @@
 package aero.nettracer.lf.services;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -55,6 +56,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		if(host == null){
 			return null;
 		}
+		
 		LostReportBean remote = new LostReportBean();
 		remote.setSubCompany(host.getCompanyId());
 		remote.setCompany(gbean.getCompanyFromSubCompany(host.getCompanyId()));
@@ -92,6 +94,10 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		}
 		
 		remote.setReportId("" + host.getId());
+		
+		if(TracingConstants.LF_LF_COMPANY_ID.equals(remote.getCompany())){
+			remote.setItemDate(String.valueOf( (Calendar.getInstance().getTime().getTime() - host.getOpenDate().getTime() ) /(1000*60*60*24) ));
+		}
 		
 		if(host.getStatus() != null){
 			remote.setStatus(host.getStatus().getDescription());
