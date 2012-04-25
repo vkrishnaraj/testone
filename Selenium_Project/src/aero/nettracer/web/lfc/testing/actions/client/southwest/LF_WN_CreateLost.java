@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
+import aero.nettracer.web.utility.LoginUtil;
 
 public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 
@@ -174,7 +175,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			selenium.type("id=lostForm:j_id55", "2");
 			selenium.type("id=lostForm:j_id63", "2");
 			selenium.type("id=lostForm:j_id67", "21");
-			selenium.type("id=lostForm:j_id77", "2");
+			selenium.type("id=lostForm:j_id77", "Test");
 			selenium.type("id=lostForm:j_id79", "2");
 			selenium.type("id=lostForm:j_id81", "2");
 			selenium.type("id=lostForm:j_id85", "2");
@@ -203,7 +204,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		if(checkNoErrorPage())
 		{
 			verifyTrue(selenium.isTextPresent("Contact Information"));
-			verifyTrue(selenium.isTextPresent("2, 2"));
+			verifyTrue(selenium.isTextPresent("Test, 2"));
 			verifyTrue(selenium.isTextPresent("2"));
 			verifyTrue(selenium.isTextPresent("2, GA 2"));
 			verifyTrue(selenium.isTextPresent("United States"));
@@ -215,6 +216,56 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		if(checkNoErrorPage())
 		{
 			verifyTrue(selenium.isTextPresent("Update Lost Item Report Information"));
+		}
+	}
+	
+	@Test
+	public void testUpdateClosedReport() {
+
+		selenium.open(Settings.START_URL_LF);
+		selenium.type("username", Settings.USERNAME_ADMIN);
+		selenium.type("password", Settings.PASSWORD_ADMIN);
+		selenium.click("button");
+		waitForPageToLoadImproved();
+		
+		if(checkNoErrorPage())
+		{
+			selenium.click("id=menucol_2.3");
+			waitForPageToLoadImproved();
+		}
+		
+		if(checkNoErrorPage())
+		{
+			selenium.type("name=id", Settings.LOST_ID_LF_WN);
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		}
+		
+		if(checkNoErrorPage())
+		{
+			selenium.select("name=lost.statusId", "label=Closed");
+			selenium.click("name=saveButton");
+			waitForPageToLoadImproved();
+		}
+		
+		if(checkNoErrorPage())
+		{
+			selenium.click("link=[ Logout ]");
+			waitForPageToLoadImproved();
+		}
+		
+		if(checkNoErrorPage())
+		{
+			selenium.open(Settings.START_URL_LF_LG);
+			selenium.type("id=pageForm:j_id17", "Test");
+			selenium.type("id=pageForm:j_id21", Settings.LOST_ID_LF_WN);
+			selenium.click("id=pageForm:j_id23");
+			waitForPageToLoadImproved();
+		}
+		
+		if(checkNoErrorPage())
+		{
+			verifyTrue(selenium.isTextPresent("Lost Report is Closed"));
 		}
 	}
 	
