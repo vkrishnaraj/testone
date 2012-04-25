@@ -1789,6 +1789,10 @@ public class PassengerController {
 	}
 	
 	public String getBagCheckDescriptionPrint() {
+		if (passengerBean == null) {
+			HttpSession session = (HttpSession) FacesUtil.getFacesContext().getExternalContext().getSession(false);
+			this.passengerBean = (PassengerBean) session.getAttribute("passengerBean");
+		}
 		String toReturn = passengerBean.getBagCheckDescription();
 		return (toReturn == null ? "" : ": " + toReturn);
 	}
