@@ -519,8 +519,41 @@ public class PassengerBean {
 		return completeClaim;
 	}
 	
-	public boolean isShowClaimMessage() {
+	public boolean isLostDelay() {
+		if (passengerData != null) {
+			return (passengerData.getItemType() == 1);
+		}
+		return true;
+	}
+	
+	public boolean isMissing() {
+		if (passengerData != null) {
+			return (passengerData.getItemType() == 2);
+		}
+		return false;
+	}
+	
+	public boolean isDamage() {
+		if (passengerData != null) {
+			return (passengerData.getItemType() == 3);
+		}
+		return false;
+	}
+	
+	private boolean isShowClaimMessage() {
 		return ((isOnlineAvailable() || isClaimsAvailable()) && !isSecondClaim());
+	}
+	
+	public boolean isShowClaimMessageLD() {
+		return (isShowClaimMessage() && isLostDelay());
+	}
+	
+	public boolean isShowClaimMessageMiss() {
+		return (isShowClaimMessage() && isMissing());
+	}
+	
+	public boolean isShowClaimMessageDam() {
+		return (isShowClaimMessage() && isDamage());
 	}
 	
 	public boolean isScansAvailable() {

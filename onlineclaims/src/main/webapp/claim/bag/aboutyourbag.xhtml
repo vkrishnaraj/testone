@@ -378,7 +378,13 @@
 	
 	<rich:spacer width="100%" height="25"/>
 	<div>
-		<t:outputText value="#{passengerController.bagDetailsLabel.descriptionOfContents.label}" styleClass="subHeader" />
+		<t:outputText value="#{passengerController.bagDetailsLabel.descriptionOfContents.label}" styleClass="subHeader" /><br/>
+		<t:outputText value="Please list all contents contained in your delayed bag." 
+			styleClass="requiredField" rendered="#{passengerBean.lostDelay}"/>
+		<t:outputText value="Please list all missing items." 
+			styleClass="requiredField" rendered="#{passengerBean.missing}"/>
+		<t:outputText value="Please list all damaged items." 
+			styleClass="requiredField" rendered="#{passengerBean.damage}"/>
 	</div>
 	<rich:spacer width="100%" height="10" title="" />
 	<a4j:region renderRegionOnly="true"  >

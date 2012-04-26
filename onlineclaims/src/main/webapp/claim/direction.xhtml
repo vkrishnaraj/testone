@@ -248,7 +248,14 @@
 			<h:outputText styleClass="passfontstyle" value="&#160;" />
 			<h:outputText styleClass="passfontstyle" value="&#160;" />
 			<div><h:outputText value="In the unlikely event that your baggage is not returned to you within the first five (5) days,
-it will be necessary to complete a Passenger Property Form." styleClass="passfontstyle" rendered="#{passengerBean.showClaimMessage}"/>
+it will be necessary to complete a Passenger Property Form. Any interim expenses will also require this form." 
+			styleClass="passfontstyle" rendered="#{passengerBean.showClaimMessageLD}"/>
+			<h:outputText value="In the unlikely event that your baggage is missing contents,
+it will be necessary to complete a Passenger Property Form. Any interim expenses will also require this form." 
+			styleClass="passfontstyle" rendered="#{passengerBean.showClaimMessageMiss}"/>
+			<h:outputText value="In the unlikely event that your baggage has been damaged,
+it will be necessary to complete a Passenger Property Form. Any interim expenses will also require this form." 
+			styleClass="passfontstyle" rendered="#{passengerBean.showClaimMessageDam}"/>
 			<h:outputText value="This claim has already been submitted. You may view the claim pages again or print the claim for
 			your records using the buttons below." styleClass="passfontstyle" rendered="#{passengerBean.completeClaim}" />
 			<h:outputText value="A claim for this incident has already been submitted by another claimant. You may submit your 
