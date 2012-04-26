@@ -487,7 +487,13 @@ phIndex++; %>
 <bean:message key="oc.label.type.dam"/>
 </logic:match>
 <logic:match value="4" name="claim" property="claimType" scope="request">
-<bean:message key="oc.label.type.inter"/>
+<bean:message key="oc.label.type.interld"/>
+</logic:match>
+<logic:match value="5" name="claim" property="claimType" scope="request">
+<bean:message key="oc.label.type.intermiss"/>
+</logic:match>
+<logic:match value="6" name="claim" property="claimType" scope="request">
+<bean:message key="oc.label.type.interdam"/>
 </logic:match></td>
 </tr><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.priv.insur" /></td>
