@@ -377,7 +377,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			 
 		 phoneArray=new Phone[]{phone1,phone2,phone3,phone4};
 		 
-		 claim.setPhoneArray(phoneArray);  
+		 claim.setPhoneArray(phoneArray);
 		          
          //Bag Tags
          List<Bag> bagTagList = passengerBean.getBagTagList();
@@ -538,6 +538,19 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
 
 		setWSFiles(passengerBean.getFiles(), claim);
+
+		int offset = 0;
+		for (File file : passengerBean.getFiles()) {
+			if (file.isInterim()) {
+				offset = 3;
+			}
+		}
+		 
+		if (passengerBean.getPassengerData() != null) {
+			claim.setClaimType(passengerBean.getPassengerData().getItemType() + offset);
+		} else {
+			claim.setClaimType(1 + offset);
+		}
 		 
 		subDoc1.setClaim(claim);
 		if(null != subDoc1.getAuth()){

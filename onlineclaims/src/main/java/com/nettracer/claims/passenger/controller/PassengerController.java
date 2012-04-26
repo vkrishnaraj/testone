@@ -1113,11 +1113,13 @@ public class PassengerController {
 					}
 					if (bagTagList != null && bagTagList.size() > 0) {
 						for (Bag lostBag : bagTagList) {
-							if (Boolean.parseBoolean(lostBag.getBagArrivalStatus()) == false) {
+							if ((passengerBean.getPassengerData() != null && passengerBean.getPassengerData().getItemType() != 1)
+									|| !(Boolean.parseBoolean(lostBag.getBagArrivalStatus()))) {
 								lostBagList.add(lostBag);
 							}
 						}
-						if (passengerBean.getLostBag() != lostBagList.size()) {
+						if (!(passengerBean.getPassengerData() != null && passengerBean.getPassengerData().getItemType() != 1)
+								&& (passengerBean.getLostBag() != lostBagList.size())) {
 							FacesUtil
 									.addError("Please match the no. of Bags lost with the Arrival status of the Bag");
 							return null;
