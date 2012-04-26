@@ -389,6 +389,7 @@ public class LFServiceBeanTest {
 		LFSearchDTO dto = new LFSearchDTO();
 		dto.setType(TracingConstants.LF_TYPE_FOUND);
 		dto.setPhoneNumber("555-555-5555");
+		dto.setAgentName("ntauto");
 //		dto.setOpenDate(new Date());
 //		dto.setStartDate("06/15/2011");
 //		dto.setEndDate("06/16/2011");
