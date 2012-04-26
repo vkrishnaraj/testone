@@ -96,7 +96,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		remote.setReportId("" + host.getId());
 		
 		if(TracingConstants.LF_LF_COMPANY_ID.equals(remote.getCompany())){
-			remote.setItemDate(String.valueOf( (Calendar.getInstance().getTime().getTime() - host.getOpenDate().getTime() ) /(1000*60*60*24) ));
+			remote.setDaysFromCreate( (Calendar.getInstance().getTime().getTime() - host.getOpenDate().getTime() ) /(1000*60*60*24) );
 		}
 		
 		if(host.getStatus() != null){

@@ -733,6 +733,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		colors.add(new LabelValueBean("Silver", "SV"));
 		colors.add(new LabelValueBean("White", "WT"));
 		colors.add(new LabelValueBean("Yellow", "YW"));
+		colors.add(new LabelValueBean("Clear", "CL"));
 		
 		
 		return colors;

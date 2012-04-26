@@ -72,9 +72,9 @@ public class LostAndFoundLoginController {
 			.getExternalContext().getSession(false);
 			session.setAttribute("lostReport", report);
 			if(TracingConstants.LF_SWA_COMPANY_ID.equals(subCompany)) {
-				if(report.getStatus().equals("Closed") || (Integer.valueOf(report.getItemDate())) > 30 )  { 
+				if(report.getStatus().equals("Closed") || report.getDaysFromCreate() > 30 )  { 
 					return "closedform?faces-redirect=true";
-				} else if(Integer.valueOf(report.getItemDate())>14) {
+				} else if(report.getDaysFromCreate()>14) {
 					session.setAttribute("edit", true);
 					return "status?faces-redirect=true";
 				} else {

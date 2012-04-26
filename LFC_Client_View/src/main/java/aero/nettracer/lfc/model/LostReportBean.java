@@ -29,6 +29,7 @@ public class LostReportBean implements Serializable{
 	private String itemSize;
 	private String itemCaseColor;
 	private PhoneBean lostPhone = new PhoneBean();
+	private int daysFromCreate;
 	
 	//For Status Page
 	private String status;
@@ -242,6 +243,14 @@ public class LostReportBean implements Serializable{
 
 	public void setSubCompany(String subCompany) {
 		this.subCompany = subCompany;
+	}
+	
+	public long getDaysFromCreate() {
+		return daysFromCreate;
+	}
+
+	public void setDaysFromCreate(long daysFromCreate) {
+		this.daysFromCreate = (int)daysFromCreate;
 	}
 
 }
