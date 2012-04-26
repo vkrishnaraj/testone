@@ -306,12 +306,14 @@ phIndex++; %>
 <logic:notEmpty name="claim" property="bag" scope="request">
 <logic:iterate id="bags" name="claim" property="bag" type="com.bagnet.nettracer.tracing.db.onlineclaims.OCBag" indexId="bagsIndex">
 <h3><bean:message key="oc.label.bag.number" />&nbsp;<%= bagsIndex.intValue() + 1 %></h3>
+<% if ((c.getClaimType() == 1 || c.getClaimType() == 4)) { %>
 <logic:match value="true" name="bags" property="bagArrive" >
 <table class="ocTable" width="95%"><tr>
 <td class="boldCell"><bean:message key="oc.label.bag.tag" /></td><td><bean:write name="bags" property="tag"/></td>
 </tr></table>
 </logic:match>
 <logic:match value="false" name="bags" property="bagArrive" >
+<% } %>
 <table class="ocTable" width="95%"><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.bag.tag" /></td><td colspan="2"><bean:write name="bags" property="tag"/></td>
 <td class="boldCell" colspan="2"><bean:message key="oc.label.bag.brand" /></td><td colspan="2"><bean:write name="bags" property="brand"/></td>
@@ -429,7 +431,9 @@ phIndex++; %>
 <tr><td colspan="9"><bean:message key="oc.label.bag.contents.none" /></td></tr>
 </logic:notPresent>
 </table>
+<% if ((c.getClaimType() == 1 || c.getClaimType() == 4)) { %>
 </logic:match>
+<% } %>
 </logic:iterate>
 </logic:notEmpty>
 <logic:empty name="claim" property="bag" scope="request">
