@@ -32,6 +32,9 @@ public class OnlineClaim {
 	@Id
 	@GeneratedValue
 	private long claimId;
+	
+	@Basic
+	private int claimType;
 
 	@ManyToOne(targetEntity = com.bagnet.nettracer.tracing.db.Incident.class)
 	@JoinColumn(name = "incident_id", nullable = false)
@@ -226,6 +229,14 @@ public class OnlineClaim {
 	
 	@Column(length = 100)
 	private String privateInsuranceAddr;
+
+	public int getClaimType() {
+		return claimType;
+	}
+
+	public void setClaimType(int claimType) {
+		this.claimType = claimType;
+	}
 	
 	public String getBagWeight() {
 		return bagWeight;

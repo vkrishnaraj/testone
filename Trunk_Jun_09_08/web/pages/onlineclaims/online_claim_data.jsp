@@ -476,6 +476,20 @@ phIndex++; %>
 <!-- OC Previous Claims Information -->
 <h1><bean:message key="oc.label.prev.claim.title" /></h1>
 <table class="ocTable" width="95%"><tr>
+<td class="boldCell"><bean:message key="oc.label.claim.type" /></td>
+<td colspan="3"><logic:match value="1" name="claim" property="claimType" scope="request">
+<bean:message key="oc.label.type.ld"/>
+</logic:match>
+<logic:match value="2" name="claim" property="claimType" scope="request">
+<bean:message key="oc.label.type.miss"/>
+</logic:match>
+<logic:match value="3" name="claim" property="claimType" scope="request">
+<bean:message key="oc.label.type.dam"/>
+</logic:match>
+<logic:match value="4" name="claim" property="claimType" scope="request">
+<bean:message key="oc.label.type.inter"/>
+</logic:match></td>
+</tr><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.priv.insur" /></td>
 <td><logic:match value="1" name="claim" property="privateInsurance" scope="request">
 <bean:message key="oc.label.yes"/>
