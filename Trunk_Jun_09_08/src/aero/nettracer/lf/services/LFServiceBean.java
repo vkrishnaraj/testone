@@ -301,6 +301,17 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 		}
 		
+		if(dto.getAgentName() != null && dto.getAgentName().trim().length() > 0){
+			try {
+				String ag = dto.getAgentName();
+				if(ag != null){
+					sql += " and o.agent.username = \'" + ag + "\'";
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 		return sql;
 	}
 	

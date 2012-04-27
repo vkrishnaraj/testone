@@ -28,6 +28,7 @@ public class LFSearchDTO extends ActionForm  {
 	private String endRentDate; 
 	private Station station;
 	private Agent agent; // na
+	private String agentName;
 	private Status status;
 	private Status disposition;
 	private String agreementNumber;
@@ -242,6 +243,14 @@ public class LFSearchDTO extends ActionForm  {
 
 	public void setBrand(String brand) {
 		this.brand = brand;
+	}
+	
+	public String getAgentName() {
+		return agentName;
+	}
+
+	public void setAgentName(String agentName) {
+		this.agentName = agentName;
 	}
 
 	public String getItemDescription() {
