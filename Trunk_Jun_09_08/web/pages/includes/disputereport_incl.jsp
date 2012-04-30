@@ -8,6 +8,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
@@ -18,16 +19,23 @@
 <%
 
   int lossCodeInt = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();
-  
+  String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
+  Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
+  java.util.List LimitedLossCodes=PropertyBMO.getSplitList(PropertyBMO.LIMITED_CODES_LOSSDELAY);
+  boolean updateLossCodes=false;
+  boolean limitedCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && inc.getStatus().getStatus_ID()==13 && !(inc.isLocked())  && UserPermissions.hasIncidentSavePermission(a, inc));
   
   
   Company_specific_irregularity_code lc = null;
   if (lossCodeInt != 0) {
 	int itemType = 3;
+	updateLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_DAMAGE_LOSS_CODES, a));
   	if (request.getAttribute("lostdelay") != null) {
     	itemType = 1;
+    	updateLossCodes=(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES, a));
   	} else if (request.getAttribute("missing") != null) {
      		 itemType = 2;
+     		updateLossCodes=(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_MISSING_LOSS_CODES, a));
     }	
     
     lc = LossCodeBMO.getLossCode(lossCodeInt, itemType, a.getStation().getCompany());
@@ -141,6 +149,10 @@
           for (java.util.Iterator i = codes.iterator(); i.hasNext(); ) {
             com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
                                                                                       com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
+            if(!updateLossCodes && limitedCodes && code.getLoss_code()!=lossCodeInt && LimitedLossCodes!=null && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
+            {
+            	continue;
+            }
     %>
             <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();  if (lost_code.equals("" + code.getLoss_code())) { %> SELECTED <% } %>>
             <%= "" + code.getLoss_code() %>-
