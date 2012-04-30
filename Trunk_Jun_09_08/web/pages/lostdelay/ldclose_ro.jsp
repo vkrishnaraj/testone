@@ -189,8 +189,7 @@
                 </div>
               </td>
 			  <td align="center" valign="bottom">
-			    	<!-- Sean - KEEP UNTIL IT'S DETERMINED WE DON'T NEED THIS HERE 
-			    	< if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
+			    	<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, a)){ 
 			    		  String incidentId = "" + request.getAttribute("incident");
 			    		  if (DisputeResolutionUtils.isIncidentLocked(incidentId)) {
 			    	%>
@@ -198,8 +197,8 @@
 			    	<html:submit property="unlock_fault" styleId="button">
                       <bean:message key="button.unlock.fault.information" />
                     </html:submit>
-			    	<    } 
-			    	   } >--> 
+			    	<%    } 
+			    	   } %>
 			  </td>              
             </tr>
             <tr>
