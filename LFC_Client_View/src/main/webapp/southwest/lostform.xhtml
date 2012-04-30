@@ -141,19 +141,19 @@
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="3" style="width: 50%;">
-						<t:outputText value="#{msg.lostform_label_address_province}" />
-					</td><td class="twlvPxBlk" colspan="3" style="width: 50%;">
 						<t:outputText value="#{msg.lostform_label_address_country} *" />
+					</td><td class="twlvPxBlk" colspan="3" style="width: 50%;">
+						<t:outputText value="#{msg.lostform_label_address_province}" />
 					</td></tr>
 					<tr><td colspan="3">
-						<t:inputText id="province" value="#{lostAndFound.lostReport.contact.address.province}"  
-							style="width: 95%" />
-					</td><td colspan="3">
 						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.country}" onchange="adjustAddressReq(this);"
 							style="width: 100%" id="country">
 							<f:selectItem itemLabel="#{msg.general_list_united_states}" itemValue="US" />
 							<f:selectItems value="#{lostAndFound.countries}" />
 						</t:selectOneMenu>
+					</td><td colspan="3">
+						<t:inputText id="province" value="#{lostAndFound.lostReport.contact.address.province}"  
+							style="width: 95%" />
 					</td></tr>                                                     
 <!-- END ADDRESS INFO UI -->
 					<tr><td>&#160;</td></tr>
@@ -248,8 +248,12 @@
 					<rich:spacer width="100%" height="15" title="" />
 				</div>
 				<div align="right">
-				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}" />&#160;&#160;&#160;
-				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" onclick="if (!validateEmail()) {return false;}"/>
+				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}"  rendered="#{empty lostAndFound.lostReport.reportId}" />
+				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToLogin}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" 
+				onclick="if (!validateEmail()) {return false;}" rendered="#{empty lostAndFound.lostReport.reportId}"/>
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_update}" action="#{lostAndFound.editReport}" 
+				onclick="if (!validateEmail()) {return false;}" rendered="#{not empty lostAndFound.lostReport.reportId}"/>
 				
 				</div><br/>
 			</h:panelGroup>
