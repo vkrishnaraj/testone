@@ -313,10 +313,22 @@ function disableButton(aButton) {
         
         <td id="middlecolumn">
         <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SAVE_BUTTON_TOP_OF_PAGE, a)) { %> 
-			<div style="width:100%;text-align:center;" >
-				<input type="button" id="topSave" class="button" onClick="document.getElementById('saveButton').click();" value="<bean:message key="button.save" />" >
-				<br /><br />
-			</div>
+        <logic:notEqual name="incidentForm" property="readonly"
+          value="1">
+          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td align="center" valign="top"><br>
+              <logic:notEqual name="incidentForm" property="incident_ID"
+                value="">
+					<div style="width:100%;text-align:center;" >
+						<input type="button" id="topSave" class="button" onClick="document.getElementById('saveButton').click();" value="<bean:message key="button.save" />" >
+						<br /><br />
+					</div>
+			  </logic:notEqual>
+			  </td>
+		  </tr>
+		  </table>
+		</logic:notEqual>
 		<% } %>
         <jsp:include page="/pages/includes/reportinfo_addr_iti_bagcheck_incl.jsp" />
         <jsp:include page="/pages/includes/mbrbag_incl.jsp" /> <jsp:include

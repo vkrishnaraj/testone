@@ -306,7 +306,7 @@ public class UserPermissions {
 		}
 		
 		// If the user has full permission, allow it to be edited.
-		if (hasPermission(componentNameAll, a)) {
+		if (hasPermission(componentNameAll, a) || hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a)) {
 			return false;
 		} 
 
