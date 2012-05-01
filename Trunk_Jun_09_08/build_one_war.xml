@@ -1466,6 +1466,7 @@
 		<antcall target="build-cron-testing-spirit"/>
 		<antcall target="build-cron-testing-lfc"/>
 		<antcall target="build-cron-testing-webjet"/>
+		<antcall target="build-cron-testing-airtran"/>
 				
 	</target>
 	<target name="build-cron-training-all">
@@ -1485,6 +1486,7 @@
 		<antcall target="build-cron-production-spirit"/>
 		<antcall target="build-cron-production-lfc"/>
 		<antcall target="build-cron-production-webjet"/>
+		<antcall target="build-cron-production-airtran"/>
 	</target>
 	<target name="build-cron-hudson-all">
 		<antcall target="build-cron-hudson-avis"/>
