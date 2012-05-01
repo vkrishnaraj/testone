@@ -128,6 +128,11 @@
           for (java.util.Iterator i = codes.iterator(); i.hasNext(); ) {
             com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
                                                                                       com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
+            
+            if(!updateLossCodes && limitedCodes && code.getLoss_code()!=lossCodeInt && LimitedLossCodes!=null && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
+            {
+            	continue;
+            }
     %>
             <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code(); %>>
             <%= "" + code.getLoss_code() %>-
