@@ -32,10 +32,10 @@
 	updateLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_DAMAGE_LOSS_CODES, a));
   	if (request.getAttribute("lostdelay") != null) {
     	itemType = 1;
-    	updateLossCodes=(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES, a));
+    	updateLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_LOSS_CODES, a));
   	} else if (request.getAttribute("missing") != null) {
      		 itemType = 2;
-     		updateLossCodes=(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_MISSING_LOSS_CODES, a));
+     		updateLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_MISSING_LOSS_CODES, a));
     }	
     
     lc = LossCodeBMO.getLossCode(lossCodeInt, itemType, a.getStation().getCompany());
