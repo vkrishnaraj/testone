@@ -81,7 +81,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testLostReportPage() throws Exception {
-		selenium.click("id=lostForm:j_id177");
+		selenium.click("id=lostForm:j_id174");
 //		waitForPageToLoadImproved();
 		assertEquals("Please be advised that if an e-mail address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", selenium.getConfirmation());
 		verifyTrue(selenium.isTextPresent("First Name is required."));
@@ -99,29 +99,27 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		selenium.select("id=lostForm:j_id23", "label=Cellphone");
 		selenium.select("id=lostForm:j_id31", "label=Black");
 		selenium.select("id=lostForm:j_id57", "label=Does Not Apply");
-		selenium.type("id=lostForm:j_id55", "555-555-5555");
 		selenium.type("id=lostForm:j_id77", "Test");
 		selenium.type("id=lostForm:j_id79", "John");
 		selenium.type("id=lostForm:j_id85", "123 Test");
 		selenium.type("id=lostForm:j_id97", "Test");
-		selenium.select("id=lostForm:j_id99", "label=Georgia");
-		selenium.type("id=lostForm:j_id103", "30339");
+		selenium.select("id=lostForm:state", "label=Georgia");
+		selenium.type("id=lostForm:j_id102", "30339");
 		selenium.type("id=lostForm:email", "test@nettracer.aero");
-		selenium.type("id=lostForm:j_id157", "test@nettracer.aero");
-		selenium.click("id=lostForm:j_id165PopupButton");
-		selenium.click("//td[@id='lostForm:j_id165Footer']/table/tbody/tr/td[5]/div");
-		selenium.select("id=lostForm:j_id167", "label=test");
-		selenium.click("id=lostForm:j_id177");
-		waitForPageToLoadImproved();
+		selenium.click("id=lostForm:j_id163PopupButton");
+		selenium.click("//td[@id='lostForm:j_id163Footer']/table/tbody/tr/td[5]/div");
+		selenium.select("id=lostForm:j_id165", "label=test");
+		selenium.click("id=lostForm:j_id174");
+		//waitForPageToLoadImproved();
 		verifyTrue(selenium.isTextPresent("Email Address and Confirm Email Address must match."));
 		verifyTrue(selenium.isTextPresent("Lost Phone Phone Number is required for Category \"Cellphone\"."));
-		selenium.type("id=lostForm:j_id157", "test@nettracer.aero");
+		selenium.type("id=lostForm:j_id155", "test@nettracer.aero");
 		selenium.select("id=lostForm:j_id23", "label=Bags");
-		selenium.click("id=lostForm:j_id175");
-		waitForPageToLoadImproved();
+		selenium.click("id=lostForm:j_id174");
+		//waitForPageToLoadImproved();
 		verifyTrue(selenium.isTextPresent("Item Subcategory is required for Category \"\"."));
 		selenium.select("id=lostForm:j_id28", "label=Cloth Bag");
-		selenium.click("id=lostForm:j_id175");
+		selenium.click("id=lostForm:j_id174");
 		waitForPageToLoadImproved();
 	}
 
@@ -181,8 +179,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			selenium.type("id=lostForm:j_id85", "2");
 			selenium.type("id=lostForm:j_id89", "2");
 			selenium.type("id=lostForm:j_id97", "2");
-			selenium.type("id=lostForm:j_id103", "2");
-			selenium.click("id=lostForm:j_id178");
+			selenium.click("id=lostForm:j_id175");
 			waitForPageToLoadImproved();
 		}
 
@@ -206,7 +203,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("Contact Information"));
 			verifyTrue(selenium.isTextPresent("Test, 2"));
 			verifyTrue(selenium.isTextPresent("2"));
-			verifyTrue(selenium.isTextPresent("2, GA 2"));
+			verifyTrue(selenium.isTextPresent("2, GA 30339"));
 			verifyTrue(selenium.isTextPresent("United States"));
 			verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
 			selenium.click("id=j_id7:j_id93");
@@ -230,7 +227,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("id=menucol_2.3");
+			selenium.click("id=menucol_2.4");
 			waitForPageToLoadImproved();
 		}
 		
@@ -266,6 +263,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		if(checkNoErrorPage())
 		{
 			verifyTrue(selenium.isTextPresent("Lost Report is Closed"));
+			selenium.close();
 		}
 	}
 	

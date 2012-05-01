@@ -9,7 +9,7 @@ public class LF_SearchFound extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testAB_Login() throws Exception {
-		selenium.click("id=menucol_2.4");
+		selenium.click("id=menucol_2.2");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
