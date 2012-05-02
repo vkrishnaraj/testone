@@ -55,7 +55,7 @@
 			disputeActionType = "viewToResolve"; 
 	  }
 	  
-	  boolean stationLock=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && inc.getStatus().getStatus_ID()==13 && !(inc.isLocked())  && UserPermissions.hasIncidentSavePermission(a, inc));
+	  boolean stationLock=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && inc.getStatus().getStatus_ID()==13 && !(inc.isLocked())  && (UserPermissions.hasIncidentSavePermission(a, inc) || a.getStation().getStationcode().equals(inc.getFaultstationcode())) );
       
 %>
   <html:form action="damaged.do" method="post" enctype="multipart/form-data">
