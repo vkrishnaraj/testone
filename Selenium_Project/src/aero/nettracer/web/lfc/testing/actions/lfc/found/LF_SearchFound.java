@@ -15,7 +15,7 @@ public class LF_SearchFound extends DefaultSeleneseTestCase {
 			checkCopyrightAndQuestionMarks();
 //			selenium.select("name=type", "label=Found");
 			selenium.type("name=barcode", Settings.FOUND_ID_LF);
-			selenium.type("name=agentName", Settings.USERNAME_TEST);
+			selenium.type("name=agentName", Settings.USERNAME_ADMIN);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {

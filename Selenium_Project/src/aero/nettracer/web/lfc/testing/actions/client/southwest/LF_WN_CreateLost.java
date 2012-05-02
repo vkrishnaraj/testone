@@ -82,7 +82,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 	@Test
 	public void testLostReportPage() throws Exception {
 		selenium.click("id=lostForm:j_id174");
-//		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(1000, false);
 		assertEquals("Please be advised that if an e-mail address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", selenium.getConfirmation());
 		verifyTrue(selenium.isTextPresent("First Name is required."));
 		verifyTrue(selenium.isTextPresent("Last Name is required."));
@@ -110,13 +110,13 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		selenium.click("//td[@id='lostForm:j_id163Footer']/table/tbody/tr/td[5]/div");
 		selenium.select("id=lostForm:j_id165", "label=test");
 		selenium.click("id=lostForm:j_id174");
-		//waitForPageToLoadImproved();
+		waitForPageToLoadImproved(1000, false);
 		verifyTrue(selenium.isTextPresent("Email Address and Confirm Email Address must match."));
 		verifyTrue(selenium.isTextPresent("Lost Phone Phone Number is required for Category \"Cellphone\"."));
 		selenium.type("id=lostForm:j_id155", "test@nettracer.aero");
 		selenium.select("id=lostForm:j_id23", "label=Bags");
 		selenium.click("id=lostForm:j_id174");
-		//waitForPageToLoadImproved();
+		waitForPageToLoadImproved(1000, false);
 		verifyTrue(selenium.isTextPresent("Item Subcategory is required for Category \"\"."));
 		selenium.select("id=lostForm:j_id28", "label=Cloth Bag");
 		selenium.click("id=lostForm:j_id174");
@@ -189,12 +189,11 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("Thank You For Updating Your Lost Item"));
 			verifyTrue(selenium.isTextPresent("Edit Lost Item Confirmation"));
 			verifyTrue(selenium.isTextPresent("Thank you for flying with Southwest Airlines and filling out our On-Line Lost Item Report Form."));
-			String lost_id = selenium.getText("id=j_id7:j_id18");
+			String lost_id = selenium.getText("id=j_id7:j_id16");
 			Settings.LOST_ID_LF_WN = lost_id;
 			System.out.println("WN CLIENT VIEW LOST CREATED: " + Settings.LOST_ID_LF_WN);
-			verifyTrue(selenium.isTextPresent("You will be emailed updates on the status of your report every few days."));
 			verifyTrue(selenium.isTextPresent("If you would like to see a printable version of your Lost Item Report, please click the review button below."));
-			selenium.click("id=j_id7:j_id26");
+			selenium.click("id=j_id7:j_id24");
 			waitForPageToLoadImproved();
 		}
 
@@ -263,7 +262,6 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		if(checkNoErrorPage())
 		{
 			verifyTrue(selenium.isTextPresent("Lost Report is Closed"));
-			selenium.close();
 		}
 	}
 	

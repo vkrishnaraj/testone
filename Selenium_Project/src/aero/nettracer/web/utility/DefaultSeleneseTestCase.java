@@ -30,16 +30,22 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	public void waitForPageToLoadImproved(long wait){
+		waitForPageToLoadImproved(wait, true);
+	}
+	
+	public void waitForPageToLoadImproved(long wait, boolean useWait){
 		try {
 			Thread.sleep(wait);
 		} catch (InterruptedException e) {
 			//continue
 		}
-		selenium.waitForPageToLoad(Settings.PAGE_LOAD_TIMEOUT);
+		if (useWait) {
+			waitForPageToLoadImproved();
+		}
 	}
 	
 	public void waitForPageToLoadImproved() {
-		waitForPageToLoadImproved(0);
+		selenium.waitForPageToLoad(Settings.PAGE_LOAD_TIMEOUT);
 	}
 	
 	public void verifyTrue(boolean testThis) {
