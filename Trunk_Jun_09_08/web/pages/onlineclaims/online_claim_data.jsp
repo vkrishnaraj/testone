@@ -310,8 +310,7 @@ phIndex++; %>
 <table class="ocTable" width="95%"><tr>
 <td class="boldCell"><bean:message key="oc.label.bag.tag" /></td><td><bean:write name="bags" property="tag"/></td>
 </tr></table>
-<% } 
-   if (!(c.getClaimType() == 1 || c.getClaimType() == 4) || !bags.isBagArrive()) { %>
+<% } else { %>
 <table class="ocTable" width="95%"><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.bag.tag" /></td><td colspan="2"><bean:write name="bags" property="tag"/></td>
 <td class="boldCell" colspan="2"><bean:message key="oc.label.bag.brand" /></td><td colspan="2"><bean:write name="bags" property="brand"/></td>
