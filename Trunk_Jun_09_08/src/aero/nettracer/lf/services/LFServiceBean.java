@@ -1387,7 +1387,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			Query q = sess.createQuery(sql);
 			q.setParameter("lostId", lostId);
 			q.setParameter("foundId", foundId);
-			q.setParameter("score", 0.0);
+			q.setParameter("score", -1.0);
 			Long result = (Long) q.uniqueResult();
 			sess.close();
 			return  result;

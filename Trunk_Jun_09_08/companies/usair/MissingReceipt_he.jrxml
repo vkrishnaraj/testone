@@ -87,13 +87,15 @@
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[בשם יו.אס.איירוייס, אנא קבלו את התנצלותינו על חוסר בפריטים במזוודתכם. לחישוב הפיצוי נדרש למלא טופס
-Passenger Property Form (PPF) רכוש לנוסע
-WWW.USAIRWAYS.COM/BAGGAGEPPF את הטופס ניתן למצוא באתר החברה
-ניתן גם לקבל את הטופס בכל שדה תעופה שחברת יו.אס.איירוייס פועלת, במחלקת איתור כבודה.
-ללא דיחוי )PPFעל מנת לסייע בהחלטתנו בנוגע לתלונה חשוב למלא את הטופס (
-את הטופס המלא יש לשלוח לכתובת/פקס הנ"ל עם המסמכים הנחוצים, נציג שירות איתור כבודה ייצור עמכם קשר בתוך 15 ימי עסקים מיום קבלת הטופס
-]]></text>
+				<text><![CDATA[בשם חברת יו.אס.איירוייס, אנא קבלו את התנצלותנו על חוסר בפריטים במזוודתכם. לחישוב הפיצוי נדרש למלא טופס רכוש לנוסע
+(PPF Passenger Property Form).
+
+את הטופס ניתן למצוא באתר החברה WWW.USAIRWAYS.COM/BAGGAGEPPF ,ניתן גם לקבל את הטופס בכל שדה תעופה שחברת יו.אס.איירוייס פועלת, במחלקת איתור כבודה.
+
+על מנת לסייע בהחלטתנו בנוגע לתלונה חשוב למלא את הטופס ללא דיחוי.
+
+את הטופס המלא יש לשלוח לכתובת.פקס הנ"ל עם המסמכים הנחוצים,נציג שירות איתור כבודה ייצור עמכם קשר בתוך 15 ימי עסקים מיום קבלת הטופס.
+ ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-45" mode="Opaque" x="8" y="361" width="506" height="13" forecolor="#000000" backcolor="#FFFFFF"/>

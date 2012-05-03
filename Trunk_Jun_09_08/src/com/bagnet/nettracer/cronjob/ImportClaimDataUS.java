@@ -271,6 +271,11 @@ public class ImportClaimDataUS extends ImportClaimData {
 	
 					claim = createClaimFromCrmData(crmIncidentIds.get(key), importedClaims.get(key));
 					claim = createRelatedPassengerData(claim, relatedPassengers.get(key));
+					if (claim.getIncident().getFile()!=null)
+					{
+						claim.setFile(claim.getIncident().getFile());
+						claim.getFile().getClaims().add(claim);
+					}
 					if (claim.getFile() == null) {
 						aero.nettracer.fs.model.File file = new aero.nettracer.fs.model.File();
 						claim.setFile(file);
