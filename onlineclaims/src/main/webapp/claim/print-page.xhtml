@@ -59,7 +59,7 @@
 								<rich:spacer width="100%" height="10" title=""/>
 							</div>
 								<t:dataTable width="200" align="center" id="printfileTable"
-									value="#{passengerController.fileDataModelList}" var="file">
+									value="#{passengerBean.files}" var="file">
 									<h:column>
 										<h:outputText value="#{file.name}" />
 									</h:column>
