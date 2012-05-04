@@ -524,9 +524,11 @@ public class LostFoundJasperReport {
 		String endDate = DateUtils.formatDate(calendarEnd.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
 
 		String stationSql = "";
+		String assocStationSql = "where s.associated_airport in ('ABG','AVS','BGT');";
 		String stationId = srDto.getStation_ID()[0];
 		if (stationId != null && !stationId.equals("0")) {
 			stationSql += "and s.stationcode = \'" + stationId + "\' ";
+			assocStationSql = "where s.stationcode = \'" + stationId + "\';";
 		}
 		
 		
@@ -573,7 +575,7 @@ public class LostFoundJasperReport {
 					 				  "and i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") " + 
 					 				  "and lf.foundDate between \'" + startDate + "\' and \'" + endDate + "\' " + stationSql +
 					 				  "group by s.station_id) matchedbyother on s.station_id = matchedbyother.station_id " +				 				  
-		             "where s.associated_airport in ('ABG','AVS','BGT');";
+					 assocStationSql;
 		
 		return sql;
 	}
