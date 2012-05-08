@@ -85,16 +85,21 @@ public class DisputeUtils {
 	
 	public static Dispute getDispute(Agent agent, int DisputeType) {
 		List<Dispute> result = getPaginatedDisputeList(agent, 1, 0,false, true, DisputeType, true);
-			
+		boolean lockedFound=false;
+		if(result==null || result.size()==0)
+		{
+			result=getPaginatedDisputeList(agent, 1, 0,false, true, DisputeType, false);
+		}
+		else
+		{
+			lockedFound=true;
+		}
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			if (result.size() > 0) {
 				Dispute nDispute=(Dispute) result.get(0);
-				if(lockDispute(nDispute)!=null){
-				Status s = new Status();
-				s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
-				nDispute.setStatus(s);
-				nDispute.setDisputeAgent(agent);
+				if(lockedFound || lockDispute(nDispute, agent)!=null){
+				nDispute.setResolutionAgent(agent);
 				HibernateUtils.save(nDispute, sess);
 					
 				return nDispute;
@@ -118,7 +123,7 @@ public class DisputeUtils {
 		return null;
 	}
 	
-	public static Dispute lockDispute(Dispute dis){
+	public static Dispute lockDispute(Dispute dis, Agent user){
 		String key = String.valueOf(dis.getDispute_res_id());
 		if(key == null){
 			return null;
@@ -131,7 +136,7 @@ public class DisputeUtils {
 			do {
 				i++;
 				try {
-					lock = lockBmo.createLock(LockType.DISPUTE, key, 300000L);
+					lock = lockBmo.createLock(LockType.DISPUTE, key, 300000L, user);
 				} catch (Exception ex) {
 					logger.info("Dispute for " + key
 							+ " alreaedy locked, waiting..");
@@ -184,7 +189,11 @@ public class DisputeUtils {
 		
 		if(getNext)
 		{
-			sql += " and Lock_ID=null";
+			sql += " and (d.dispute_res_id IN (select l.lockKey from com.bagnet.nettracer.tracing.db.Lock l where l.lockType=:disp and l.owner=:agent)) ";
+		}
+		else
+		{
+			sql += " and (d.dispute_res_id NOT IN (select l.lockKey from com.bagnet.nettracer.tracing.db.Lock l where l.lockType=:disp)) ";
 		}
 		
 		if(DisputeType==1)
@@ -210,6 +219,12 @@ public class DisputeUtils {
 			
 			q.setParameter("station", user.getStation().getStation_ID());
 			q.setParameter("lz", user.getStation().getLz_ID());	
+			q.setParameter("disp", LockType.DISPUTE);
+			
+			if(getNext)
+			{
+				q.setParameter("agent", String.valueOf(user.getAgent_ID()) );
+			}
 			
 //			logger.error("getPaginatedDisputeList() : lzId = " + user.getStation().getLz_ID() + " and stationId = " + user.getStation().getStation_ID());
 			

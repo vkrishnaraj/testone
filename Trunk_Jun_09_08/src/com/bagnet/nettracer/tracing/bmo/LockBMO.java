@@ -8,6 +8,7 @@ import org.hibernate.criterion.Example;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident_Assoc;
 import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Lock.LockType;
@@ -15,7 +16,7 @@ import com.bagnet.nettracer.tracing.db.Lock.LockType;
 public class LockBMO extends HibernateDaoSupport {
 	
 	@Transactional
-	public Lock createLock(LockType type, String key, Long durationMillis) {
+	public Lock createLock(LockType type, String key, Long durationMillis, Agent user) {
 		if(type == null || key == null) return null;
 		
 		Lock tmp = new Lock();
@@ -30,10 +31,17 @@ public class LockBMO extends HibernateDaoSupport {
 		tmp.setExpirationDate(expirationDate);
 		tmp.setLockType(type);
 		tmp.setLockKey(key);
-		
+		if(user!=null){
+			tmp.setOwner(String.valueOf(user.getAgent_ID()));
+		}
 		Session sess = getSession(false);
 		sess.save(tmp);
 		return tmp;
+	}
+	
+	@Transactional
+	public Lock createLock(LockType type, String key, Long durationMillis) {
+		return createLock(type, key, durationMillis, null);
 	}
 	
 	@Transactional
