@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.db.dr;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -27,6 +28,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
+import com.bagnet.nettracer.tracing.db.taskmanager.DisputeResolutionTask;
 
 public class DisputeUtils {
 	private static Logger logger = Logger.getLogger(DisputeUtils.class);
@@ -39,6 +41,8 @@ public class DisputeUtils {
 		String sql = "select count (d.dispute_res_id) from com.bagnet.nettracer.tracing.db.dr.Dispute d where 1=1 ";
 		sql += " and d.status = :status";
 		sql += " and (d.incident.faultstation.station_ID = :station or d.incident.faultstation.lz_ID = :lz)";
+		
+		sql += " and (d.dispute_res_id NOT IN (select t.dispute.dispute_res_id from com.bagnet.nettracer.tracing.db.taskmanager.DisputeResolutionTask t where t.status.status_ID=:taskstatus)) ";
 		
 		if(DisputeType==1)
 		{
@@ -61,7 +65,8 @@ public class DisputeUtils {
 			q.setInteger("status", TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN);
 			
 			q.setParameter("station", user.getStation().getStation_ID());
-			q.setParameter("lz", user.getStation().getLz_ID());		
+			q.setParameter("lz", user.getStation().getLz_ID());	
+			q.setParameter("taskstatus", TracingConstants.TASK_MANAGER_WORKING);
 			
 //			logger.error("getDisputeList() : lzId = " + user.getStation().getLz_ID() + " and stationId = " + user.getStation().getStation_ID());
 			
@@ -99,10 +104,24 @@ public class DisputeUtils {
 			if (result.size() > 0) {
 				Dispute nDispute=(Dispute) result.get(0);
 				if(lockedFound || lockDispute(nDispute, agent)!=null){
-				nDispute.setResolutionAgent(agent);
-				HibernateUtils.save(nDispute, sess);
-					
-				return nDispute;
+
+					Status s = new Status();
+					s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
+					DisputeResolutionTask DRT=new DisputeResolutionTask();
+					List<DisputeResolutionTask> taskList=TaskManagerBMO.getTaskByDisputeId(nDispute.getDispute_res_id(), s);
+					if(taskList==null || taskList.isEmpty()){
+						DRT.setAssigned_agent(agent);
+						DRT.setDispute(nDispute);
+						DRT.setLock(nDispute.getLock());
+						DRT.setOpened_timestamp(new Date());
+						DRT.setStatus(s);
+						TaskManagerBMO.saveTask(DRT);
+					}
+				
+					nDispute.setResolutionAgent(agent);
+					HibernateUtils.save(nDispute, sess);
+						
+					return nDispute;
 			}
 		   }
 		} catch (Exception e) {
@@ -189,11 +208,11 @@ public class DisputeUtils {
 		
 		if(getNext)
 		{
-			sql += " and (d.dispute_res_id IN (select l.lockKey from com.bagnet.nettracer.tracing.db.Lock l where l.lockType=:disp and l.owner=:agent)) ";
+			sql += " and (d.dispute_res_id IN (select t.dispute.dispute_res_id from com.bagnet.nettracer.tracing.db.taskmanager.DisputeResolutionTask t where t.assigned_agent=:agent and t.status.status_ID=:taskstatus)) ";
 		}
 		else
 		{
-			sql += " and (d.dispute_res_id NOT IN (select l.lockKey from com.bagnet.nettracer.tracing.db.Lock l where l.lockType=:disp)) ";
+			sql += " and (d.dispute_res_id NOT IN (select t.dispute.dispute_res_id from com.bagnet.nettracer.tracing.db.taskmanager.DisputeResolutionTask t where t.status.status_ID=:taskstatus)) ";
 		}
 		
 		if(DisputeType==1)
@@ -219,11 +238,11 @@ public class DisputeUtils {
 			
 			q.setParameter("station", user.getStation().getStation_ID());
 			q.setParameter("lz", user.getStation().getLz_ID());	
-			q.setParameter("disp", LockType.DISPUTE);
+			q.setParameter("taskstatus", TracingConstants.TASK_MANAGER_WORKING);
 			
 			if(getNext)
 			{
-				q.setParameter("agent", String.valueOf(user.getAgent_ID()) );
+				q.setParameter("agent", user);
 			}
 			
 //			logger.error("getPaginatedDisputeList() : lzId = " + user.getStation().getLz_ID() + " and stationId = " + user.getStation().getStation_ID());
@@ -324,7 +343,22 @@ public class DisputeUtils {
 				dispute.setDispute_res_id(myExistingDispute.getDispute_res_id());
 			}
 			
+			
 			HibernateUtils.save(dispute, sess);
+			Status s=new Status();
+			s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
+			List<DisputeResolutionTask> tasklist=TaskManagerBMO.getTaskByDisputeId(dispute.getDispute_res_id(), s);
+			s.setStatus_ID(TracingConstants.TASK_MANAGER_CLOSED);
+			if(tasklist!=null){
+				for(DisputeResolutionTask task:tasklist){ //Should only ever be one working task
+					if(task!=null){
+						task.setStatus(s);
+						TaskManagerBMO.saveTask(task);
+					}
+				}
+			}
+			
+			unlockDispute(dispute.getLock(), dispute);
 			return true;
 		}
 		catch (Exception e){
@@ -356,7 +390,20 @@ public class DisputeUtils {
 			}
 			
 			HibernateUtils.save(dispute, sess);
-
+			
+			Status s=new Status();
+			s.setStatus_ID(TracingConstants.TASK_MANAGER_WORKING);
+			List<DisputeResolutionTask> tasklist=TaskManagerBMO.getTaskByDisputeId(dispute.getDispute_res_id(), s);
+			s.setStatus_ID(TracingConstants.TASK_MANAGER_CLOSED);
+			if(tasklist!=null){
+				for(DisputeResolutionTask task:tasklist){ //Should only ever be one working task
+					if(task!=null){
+						task.setStatus(s);
+						TaskManagerBMO.saveTask(task);
+					}
+				}
+			}
+			
 			unlockDispute(dispute.getLock(), dispute);
 			//update incident on the new fault station and fault code information
 			Incident incidentToUpdate = IncidentBMO.getIncidentByID(incidentId, sess);

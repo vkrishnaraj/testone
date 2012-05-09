@@ -9,9 +9,11 @@ import org.hibernate.Session;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.TaskActivity;
+import com.bagnet.nettracer.tracing.db.taskmanager.DisputeResolutionTask;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 
 public class TaskManagerBMO {
@@ -45,6 +47,19 @@ public class TaskManagerBMO {
 		q = sess.createQuery(sql.toString());
 		q.setParameter("id", incident_id);
 		List <MorningDutiesTask>l = q.list();
+		sess.close();
+		return l;
+	}
+	
+	public static List<DisputeResolutionTask>getTaskByDisputeId(long dispute_id, Status status){
+		String sql = "from com.bagnet.nettracer.tracing.db.taskmanager.DisputeResolutionTask t "
+			+ "where t.dispute.dispute_res_id = :id and t.status = :taskstatus";
+		Query q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		q = sess.createQuery(sql.toString());
+		q.setParameter("id", dispute_id);
+		q.setParameter("taskstatus", status);
+		List <DisputeResolutionTask>l = q.list();
 		sess.close();
 		return l;
 	}
