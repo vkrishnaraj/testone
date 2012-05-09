@@ -118,7 +118,7 @@ public class NTCoreServiceImplementation extends NTCoreServiceSkeleton{
     	return new WSCoreIncidentUtil().queryForFaultCode(queryForFaultCode);   	
     }
     
-  	public com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument updateBdoDelivery(com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument updateBdoDelivery) {
+  	public com.bagnet.nettracer.ws.core.UpdateBdoDeliveryResponseDocument UpdateBdoDelivery(com.bagnet.nettracer.ws.core.UpdateBdoDeliveryDocument updateBdoDelivery) {
   		return new WSCoreIncidentUtil().createBdo(updateBdoDelivery);
   	}
 
