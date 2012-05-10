@@ -40,8 +40,19 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.type("incident_ID", Settings.DAMAGE_ID_WS);
+			//selenium.type("incident_ID", Settings.DAMAGE_ID_WS);
 			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		}
+		else
+		{
+			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
+			return;
+		}
+		
+		if(checkNoErrorPage())
+		{
+			selenium.click("xpath=(//a[contains(@href, 'searchIncident.do?incident=')])[1]");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -65,13 +76,24 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.type("incident_ID", Settings.PILFERAGE_ID_WS);
+			//selenium.type("incident_ID", Settings.PILFERAGE_ID_WS);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		}
 		else
 		{
 			System.out.println("QuickHistoryError: Failed after saving a damaged item and/or view Pilfered items");
+			return;
+		}
+		
+		if(checkNoErrorPage())
+		{
+			selenium.click("xpath=(//a[contains(@href, 'searchIncident.do?incident=')])[1]");
+			waitForPageToLoadImproved();
+		}
+		else
+		{
+			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
 			return;
 		}
 		
@@ -90,7 +112,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.type("incident_ID", Settings.ONHAND_ID_WS);
+			//selenium.type("incident_ID", Settings.ONHAND_ID_WS);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		}
@@ -102,17 +124,26 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=" + Settings.ONHAND_ID_WS);
+			selenium.click("xpath=(//a[contains(@href, 'addOnHandBag.do?ohd_ID=')])[1]");
 			waitForPageToLoadImproved();
 		}
 		else
 		{
-			System.out.println("QuickHistoryError: Failed after saving searching on-hands");
+			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
 			return;
 		}
 		
 		if(checkNoErrorPage())
 		{
+			selenium.select("name=bagColor", "label=WT - White/clear");
+			selenium.select("name=bagType", "label=01");
+			selenium.type("itinerarylist[0].legfrom", "LAS");
+			selenium.type("itinerarylist[0].legto", "ATL");
+			selenium.type("itinerarylist[0].flightnum", "1234");
+			selenium.click("id=calendar20");
+			selenium.click("link=Today");
+			selenium.click("id=calendar30");
+			selenium.click("link=Today");
 			selenium.click("name=savetracing");
 			waitForPageToLoadImproved();
 		}

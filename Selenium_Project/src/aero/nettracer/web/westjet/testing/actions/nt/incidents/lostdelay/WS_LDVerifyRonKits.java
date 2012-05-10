@@ -21,8 +21,8 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyFalse(selenium.isTextPresent("# RON Kits issued:"));
-			verifyFalse(selenium.isElementPresent("//select[@id='numRonKitsIssued']"));
+//			verifyFalse(selenium.isTextPresent("# RON Kits issued:"));
+//			verifyFalse(selenium.isElementPresent("//select[@id='numRonKitsIssued']"));
 			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
 			waitForPageToLoadImproved();
 		} else {

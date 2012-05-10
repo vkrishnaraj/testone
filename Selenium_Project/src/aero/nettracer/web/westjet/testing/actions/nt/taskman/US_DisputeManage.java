@@ -210,7 +210,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("id=menucol_2.3");
+		selenium.click("id=menucol_1.4");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -221,7 +221,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.type("name=incident_ID", Settings.DAMAGE_ID_WS);
+		selenium.type("name=incident_ID", Settings.INCIDENT_ID_WS);
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
 		}
@@ -233,7 +233,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("//td[@id='navmenucell']/div/dl/dd[9]/a/span[2]");
+		selenium.click("//td[@id='navmenucell']/div/dl/dd[12]/a/span[2]");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -244,7 +244,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("id=button");
+		selenium.click("name=lock_faultstation");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -255,7 +255,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("id=button");
+		selenium.click("name=unlock_faultstation");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -288,7 +288,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("xpath=(//input[@id='button'])[5]");
+		selenium.click("xpath=(//input[@id='button'])[6]");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -300,7 +300,7 @@ public class US_DisputeManage extends LoginUtil {
 		if(checkNoErrorPage())
 		{
 			selenium.select("name=faultstation_id", "label=AUA");
-			selenium.select("name=loss_code", "label=84- Bag dented");
+			selenium.select("name=loss_code", "label=33- Not off-loaded");
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
 		}
