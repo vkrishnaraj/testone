@@ -1032,12 +1032,11 @@ public class WSCoreIncidentUtil {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				
-			} finally {
-				sess.close();
 				if (t != null ) {
 					t.rollback();
 				}
+			} finally {
+				sess.close();
 			}
 		}
 
