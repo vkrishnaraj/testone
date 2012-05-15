@@ -1,7 +1,9 @@
 package aero.nettracer.lfc.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class LostReportBean implements Serializable{
 
@@ -30,6 +32,7 @@ public class LostReportBean implements Serializable{
 	private String itemCaseColor;
 	private PhoneBean lostPhone = new PhoneBean();
 	private long daysFromCreate;
+	private List<SegmentBean> segments;
 	
 	//For Status Page
 	private String status;
@@ -251,6 +254,19 @@ public class LostReportBean implements Serializable{
 
 	public void setDaysFromCreate(long daysFromCreate) {
 		this.daysFromCreate = daysFromCreate;
+	}
+
+	public List<SegmentBean> getSegments() {
+		if (segments == null) {
+			segments = new ArrayList<SegmentBean>();
+			SegmentBean segment = new SegmentBean();
+			segments.add(segment);
+		}
+		return segments;
+	}
+
+	public void setSegments(List<SegmentBean> segments) {
+		this.segments = segments;
 	}
 
 }

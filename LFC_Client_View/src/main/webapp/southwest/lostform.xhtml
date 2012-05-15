@@ -16,76 +16,85 @@
 				<p class="twlvPxBlk"><t:outputText value="#{msg.lostform_text_policy_desc}" /></p><br/>
 				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_about_title}" /></p><br/><br/>
 				<table style="width: 95%;">
-					<tr><td class="twlvPxBlk">
+					<tr><td class="twlvPxBlk" style="width: 25%;" colspan="3">
 						<t:outputText value="#{msg.lostform_label_item_category} *" />
-					</td><td class="twlvPxBlk">
+					</td><td class="twlvPxBlk" style="width: 25%;" colspan="3">
 						<t:outputText value="#{msg.lostform_label_item_subcat}" />
-					</td><td class="twlvPxBlk">
+					</td><td class="twlvPxBlk" style="width: 25%;" colspan="3">
 						<t:outputText value="#{msg.lostform_label_item_color} *" />
+					</td><td class="twlvPxBlk" style="width: 25%;" colspan="3">
+						<t:outputText value="#{msg.lostform_label_item_case_color} *" />
 					</td></tr>
-					<tr><td>
+					<tr><td colspan="3">
 						<t:selectOneMenu value="#{lostAndFound.lostReport.itemCategory}"  style="width: 95%;">
 							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="0" />
 							<f:selectItems value="#{lostAndFound.categoryList}" />
 							<a4j:support event="onchange" reRender="subcat" limitToList="true"/>
 						</t:selectOneMenu>
-					</td><td>
+					</td><td colspan="3">
 						<a4j:outputPanel id="subcat" ajaxRendered="true">
 							<t:selectOneMenu value="#{lostAndFound.lostReport.itemSubCategory}"  style="width: 95%;">
 								<f:selectItems value="#{lostAndFound.subCategories}" />
 							</t:selectOneMenu>
 						</a4j:outputPanel>
-					</td><td>
-						<t:selectOneMenu value="#{lostAndFound.lostReport.itemColor}"  style="width: 100%;">
+					</td><td colspan="3">
+						<t:selectOneMenu value="#{lostAndFound.lostReport.itemColor}"  style="width: 95%;">
 							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="" />
 							<f:selectItems value="#{lostAndFound.colors}" />
 						</t:selectOneMenu>
-					</td></tr>
-					<tr><td>&#160;</td></tr>
-					<tr><td class="twlvPxBlk" style="width: 34%;">
-						<t:outputText value="#{msg.lostform_label_item_brand}" />
-					</td><td class="twlvPxBlk" style="width: 33%;">
-						<t:outputText value="#{msg.lostform_label_item_model}" />
-					</td><td class="twlvPxBlk" style="width: 33%;">
-						<t:outputText value="#{msg.lostform_label_item_serial}" />
-					</td></tr>
-					<tr><td>
-						<t:inputText value="#{lostAndFound.lostReport.itemBrand}"  style="width: 95%;"/>
-					</td><td>
-						<t:inputText value="#{lostAndFound.lostReport.itemModel}"  style="width: 95%;"/>
-					</td><td>
-						<t:inputText value="#{lostAndFound.lostReport.itemSerial}"  style="width: 100%;"/>
-					</td></tr>
-					<tr><td>&#160;</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_size}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_phone}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_case_color} *" />
-					</td></tr>
-					<tr><td>
-						<t:inputText value="#{lostAndFound.lostReport.itemSize}"  style="width: 95%;"/>
-					</td><td>
-						<t:inputText value="#{lostAndFound.lostReport.lostPhone.number}"  style="width: 95%;"/>
-					</td><td>
+					</td><td colspan="3">
 						<t:selectOneMenu value="#{lostAndFound.lostReport.itemCaseColor}"  style="width: 100%;">
 							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="" />
 							<f:selectItems value="#{lostAndFound.colors}" />
 						</t:selectOneMenu>
 					</td></tr>
 					<tr><td>&#160;</td></tr>
-					<tr><td class="twlvPxBlk" colspan="3">
+					<tr><td class="twlvPxBlk" style="width: 34%;" colspan="4">
+						<t:outputText value="#{msg.lostform_label_item_brand}" />
+					</td><td class="twlvPxBlk" style="width: 33%;" colspan="4">
+						<t:outputText value="#{msg.lostform_label_item_model}" />
+					</td><td class="twlvPxBlk" style="width: 33%;" colspan="4">
+						<t:outputText value="#{msg.lostform_label_item_serial}" />
+					</td></tr>
+					<tr><td colspan="4">
+						<t:inputText value="#{lostAndFound.lostReport.itemBrand}"  style="width: 95%;"/>
+					</td><td colspan="4">
+						<t:inputText value="#{lostAndFound.lostReport.itemModel}"  style="width: 95%;"/>
+					</td><td colspan="4">
+						<t:inputText value="#{lostAndFound.lostReport.itemSerial}"  style="width: 100%;"/>
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="4">
+						<t:outputText value="#{msg.lostform_label_date_lost} *" />
+					</td><td class="twlvPxBlk" colspan="4">
+						<t:outputText value="#{msg.lostform_label_item_size}" />
+					</td><td class="twlvPxBlk" colspan="4">
+						<t:outputText value="#{msg.lostform_label_item_phone}" />
+					</td></tr>
+					<tr><td colspan="4">
+						<rich:calendar value="#{lostAndFound.lostReport.dateLost}"  
+                           locale="en"  
+                           popup="true"  
+                           datePattern="MM/dd/yyyy"
+                           enableManualInput="true"                        
+                           cellWidth="24px" cellHeight="22px" style="width:250px"/>  
+					</td><td colspan="4">
+						<t:inputText value="#{lostAndFound.lostReport.itemSize}"  style="width: 95%;"/>
+					</td><td colspan="4">
+						<t:inputText value="#{lostAndFound.lostReport.lostPhone.number}"  style="width: 100%;"/>
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="12">
 						<t:outputText value="#{msg.lostform_label_item_desc}" />
 					</td></tr>
-					<tr><td colspan="3">
+					<tr><td colspan="12">
 						<t:inputText value="#{lostAndFound.lostReport.itemDesc}" style="width: 100%;" maxlength="250" />
 					</td></tr>
 					<tr><td>&#160;</td></tr>
-					<tr><td class="twlvPxBlk" colspan="3">
+					<tr><td class="twlvPxBlk" colspan="12">
 						<t:outputText value="#{msg.lostform_label_item_long_desc}" />
 					</td></tr>
-					<tr><td colspan="3">
+					<tr><td colspan="12">
 						<t:inputTextarea rows="3" value="#{lostAndFound.lostReport.itemLongDesc}" style="width: 100%;" />
 					</td></tr>
 				</table><br/>
@@ -147,13 +156,13 @@
 					</td></tr>
 					<tr><td colspan="3">
 						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.country}" onchange="adjustAddressReq(this);"
-							style="width: 100%" id="country">
+							style="width: 95%" id="country">
 							<f:selectItem itemLabel="#{msg.general_list_united_states}" itemValue="US" />
 							<f:selectItems value="#{lostAndFound.countries}" />
 						</t:selectOneMenu>
 					</td><td colspan="3">
 						<t:inputText id="province" value="#{lostAndFound.lostReport.contact.address.province}"  
-							style="width: 95%" />
+							style="width: 100%" />
 					</td></tr>                                                     
 <!-- END ADDRESS INFO UI -->
 					<tr><td>&#160;</td></tr>
@@ -220,29 +229,56 @@
 					</td></tr>
 				</table><br/>
 				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_trip_title}" /></p><br/><br/>
-				<table style="width: 95%;">
-					<tr>
-					<td class="twlvPxBlk" style="width: 50%;">
-						<t:outputText value="#{msg.lostform_label_date_lost} *" />
-					</td><td class="twlvPxBlk" style="width: 50%;" >
-						<t:outputText value="#{msg.lostform_label_drop_location} *" />
-					</td></tr>
-					<tr>
-					<td >
-						<rich:calendar value="#{lostAndFound.lostReport.dateLost}"  
-                           locale="en"  
-                           popup="true"  
-                           datePattern="MM/dd/yyyy"
-                           enableManualInput="true"                        
-                           cellWidth="24px" cellHeight="22px" style="width:200px"/>  
-					</td>
-					<td>
-						<t:selectOneMenu value="#{lostAndFound.lostReport.dropOffLocation}"  style="width: 100%;">
-							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="0" />
-							<f:selectItems value="#{lostAndFound.locations}" />
-						</t:selectOneMenu>
-					</td></tr>
-				</table><br/><br/>
+				<a4j:region renderRegionOnly="true"  >
+					<a4j:outputPanel id="segmentPanel" >
+						<rich:dataTable id="segmentTable" style="width: 95%"
+								value="#{lostAndFound.lostReport.segments}" var="segment" >
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column>
+										<t:outputText value="#{msg.lostform_header_segment_departure}" />
+									</rich:column>
+									<rich:column>
+										<t:outputText value="#{msg.lostform_header_segment_arrival}" />
+									</rich:column>
+									<rich:column>
+										<t:outputText value="#{msg.lostform_header_segment_flight}" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+							
+							<rich:column>
+								<t:selectOneMenu value="#{segment.departureLocation}"  style="width: 100%;">
+									<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="0" />
+									<f:selectItems value="#{lostAndFound.locations}" />
+								</t:selectOneMenu>
+							</rich:column>
+							<rich:column>
+								<t:selectOneMenu value="#{segment.arrivalLocation}"  style="width: 100%;">
+									<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="0" />
+									<f:selectItems value="#{lostAndFound.locations}" />
+								</t:selectOneMenu>
+							</rich:column>
+							<rich:column>
+								<h:inputText value="#{segment.flightNumber}" style="width: 95%;"/>
+							</rich:column>
+						</rich:dataTable>
+	
+						<rich:spacer width="100%" height="10" title="" />
+						<div style="width: 95%">
+							<div align="center">
+								<a4j:commandButton value="#{msg.general_button_add}"  
+									  action="#{lostAndFound.addSegment}" limitToList="true"
+									reRender="segmentPanel" styleClass="submitButtonOrange">								
+								</a4j:commandButton>&#160;&#160;&#160;
+								<a4j:commandButton value="#{msg.general_button_delete}"  
+									  action="#{lostAndFound.deleteSegment}" limitToList="true"
+									reRender="segmentPanel" styleClass="submitButtonOrange">								
+								</a4j:commandButton>
+							</div>
+						</div>
+					</a4j:outputPanel>
+				</a4j:region><br/><br/>
 				<div>
 					<rich:messages id="reportMsg" errorClass="errormsg" infoClass="infomsg" layout="list"/>
 					<rich:spacer width="100%" height="15" title="" />
@@ -269,6 +305,11 @@
 					}
 					
 				}
+				
+				/* 
+								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
+								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+				*/
 				
 				function adjustAddressReq(countryList) {
 					province = document.getElementById("lostForm:province");

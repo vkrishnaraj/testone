@@ -43,6 +43,8 @@
 						<t:outputText value="#{msg.lostform_label_item_subcat}" />
 					</td><td class="twlvPxBlk">
 						<t:outputText value="#{msg.lostform_label_item_color}" />
+					</td><td class="twlvPxBlk">
+						<t:outputText value="#{msg.lostform_label_item_case_color}" />
 					</td></tr>
 					<tr><td class="twlvPxBlk">
 						<t:outputText value="#{lostAndFound.categoryDesc}" />
@@ -50,21 +52,23 @@
 						<t:outputText value="#{lostAndFound.subCategoryDesc}" />
 					</td><td class="twlvPxBlk">
 						<t:outputText value="#{lostAndFound.colorDesc}" />
+					</td><td class="twlvPxBlk">
+						<t:outputText value="#{lostAndFound.caseColorDesc}" />
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk">
+						<t:outputText value="#{msg.lostform_label_date_lost}" />
+					</td><td class="twlvPxBlk">
 						<t:outputText value="#{msg.lostform_label_item_size}" />
 					</td><td class="twlvPxBlk">
 						<t:outputText value="#{msg.lostform_label_item_phone}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_case_color}" />
 					</td></tr>
 					<tr><td class="twlvPxBlk">
+						<t:outputText value="#{lostAndFound.lostReport.dateLost}" />
+					</td><td class="twlvPxBlk">
 						<t:outputText value="#{lostAndFound.lostReport.itemSize}" />
 					</td><td class="twlvPxBlk">
 						<t:outputText value="#{lostAndFound.lostReport.lostPhone.number}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.caseColorDesc}" />
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="3">
@@ -112,15 +116,21 @@
 				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_trip_title}" /></p>
 				<table>
 					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_drop_location}" />
+						<t:outputText value="#{msg.lostform_header_segment_departure}" />
 					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.dropOffLocationDesc}" />
-					</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_date_lost}" />
+						<t:outputText value="#{msg.lostform_header_segment_arrival}" />
 					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.dateLost}" />
+						<t:outputText value="#{msg.lostform_header_segment_flight}" />
 					</td></tr>
+					<a4j:repeat id="segments" value="#{lostAndFound.lostReport.segments}" var="segment" rowKeyVar="rowIndex" >
+						<tr><td class="twlvPxBlk">
+							<t:outputText value="#{segment.departureLocationDesc}" />
+						</td><td class="twlvPxBlk">
+							<t:outputText value="#{segment.arrivalLocationDesc}" />
+						</td><td class="twlvPxBlk">
+							<t:outputText value="#{segment.flightNumber}" />
+						</td></tr>
+					</a4j:repeat>
 				</table>
 				<div align="center">
 				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToLanding}" rendered="#{!lostAndFound.editting}" />
