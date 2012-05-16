@@ -30,6 +30,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
+import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.forms.lf.LostReportForm;
 import com.bagnet.nettracer.tracing.history.LostItemHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -37,6 +38,7 @@ import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.lf.RemoteConnectionException;
 import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
 
 public class LostReportAction extends CheckedAction {
@@ -67,15 +69,22 @@ public class LostReportAction extends CheckedAction {
 		lrForm.setDateFormat(user.getDateformat().getFormat());
 		
 		boolean deleteRemark = false;
+		boolean deleteSegment = false;
 
-		String index = "0";
+		String delRemIndex = "0";
+		String delSegIndex = "0";
 		Enumeration e = request.getParameterNames();
 		while (e.hasMoreElements()) {
 			String parameter = (String) e.nextElement();
 			if (parameter.indexOf("[") != -1) {
-				index = parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]"));
-					if (parameter.indexOf("deleteRemark") != -1) {
+				if (parameter.indexOf("deleteRemark") != -1) {
 					deleteRemark = true;
+					delRemIndex = parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]"));
+					break;
+				}
+				if (parameter.indexOf("deleteSegment") != -1) {
+					deleteSegment = true;
+					delSegIndex = parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]"));
 					break;
 				}
 			}
@@ -100,7 +109,7 @@ public class LostReportAction extends CheckedAction {
 		
 		if (deleteRemark) {
 			Set<LFRemark> remarkList = lostReport.getAgentRemarks();
-			int indexToRemove = Integer.parseInt(index);
+			int indexToRemove = Integer.parseInt(delRemIndex);
 			if (remarkList != null && !remarkList.isEmpty() && remarkList.size() > indexToRemove) {
 				int i = 0;
 				Iterator<LFRemark> iterator = remarkList.iterator();
@@ -117,6 +126,24 @@ public class LostReportAction extends CheckedAction {
 			request.setAttribute("remark", Integer.toString(lrForm.getLost().getAgentRemarks().size() - 1));
 		}
 		
+		if (deleteSegment) {
+			Set<LFSegment> segments = lostReport.getSegments();
+			int indexToRemove = Integer.parseInt(delSegIndex);
+			if (segments != null && !segments.isEmpty() && segments.size() > indexToRemove) {
+				int i = 0;
+				Iterator<LFSegment> iterator = segments.iterator();
+				while (iterator.hasNext()) {
+					LFSegment segment = iterator.next();
+					if (i == indexToRemove) {
+						segment.setLost(null);
+						segments.remove(segment);
+						break;
+					}
+					++i;
+				}
+			}
+		}
+		
 		if (request.getParameter("save") != null) {
 			try {
 				populateRemarks(lostReport);
@@ -126,7 +153,11 @@ public class LostReportAction extends CheckedAction {
 				}
 				if(lostReport.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
 					if(isLFC){
-						TraceHandler.trace(lostReport);//Async tracing for LFC
+						try{
+							TraceHandler.trace(lostReport);//Async tracing for LFC
+						} catch (RemoteConnectionException re){
+							//do not prevent item entry even if tracing fails
+						}
 					} else {
 						LFServiceWrapper.getInstance().traceLostItem(lostReport.getId());
 					}
@@ -172,7 +203,7 @@ public class LostReportAction extends CheckedAction {
 			LFItem item = getItemById(lrForm.getLost().getItems(), itemId);
 			if (item != null) {
 				long matchId = LFServiceWrapper.getInstance().findConfirmedMatch(item.getLost().getId(), item.getFound().getId());
-				if(LFServiceWrapper.getInstance().undoMatch(matchId)){
+				if(LFServiceWrapper.getInstance().undoMatch(matchId, user)){
 					lostReport = LFServiceWrapper.getInstance().getLostReport(lrForm.getLost().getId());
 				} else {
 					//TODO handle the failed undo
@@ -193,6 +224,14 @@ public class LostReportAction extends CheckedAction {
 			r.setLost(lostReport);
 			lostReport.getAgentRemarks().add(r);
 			request.setAttribute("remark", Integer.toString(lostReport.getAgentRemarks().size() - 1));
+		} else if (request.getParameter("addsegment") != null) {		
+			int numberToAdd = TracerUtils.getNumberToAdd(request, "addsegmentnum");
+			LFSegment s = null;
+			for (int i=0; i<numberToAdd; ++i) {
+				s = new LFSegment();
+				s.setLost(lostReport);
+				lostReport.getSegments().add(s);
+			}
 		} else if (request.getParameter("matchItem") != null) {  // ALWAYS HAVE THIS PARAMETER RUN LAST!!!! CG: 1.9.12
 
 			try {
@@ -214,7 +253,7 @@ public class LostReportAction extends CheckedAction {
 						return mapping.findForward(TracingConstants.LF_CREATE_LOST_REPORT);
 					}
 					long matchId = LFServiceWrapper.getInstance().createManualMatch(lrForm.getLost(), found);
-					if(LFServiceWrapper.getInstance().confirmMatch(matchId)){
+					if(LFServiceWrapper.getInstance().confirmMatch(matchId, user)){
 						lostReport = LFServiceWrapper.getInstance().getLostReport(lrForm.getLost().getId());
 					} else {
 						ActionMessage error = new ActionMessage("error.invalid.foundMatched.id");

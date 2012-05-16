@@ -13,6 +13,8 @@
 				<ref bean="cronOldPassiveTracerTrigger" />
 				<ref bean="RemoveMassOhdTrigger" />
 				<ref bean="BillingTrigger" />
+				<ref bean="cronMoveToWtTrigger" /> 
+				<ref bean="cronWtQueueTrigger" /> 
 			</list>
 		</property>
 	</bean>

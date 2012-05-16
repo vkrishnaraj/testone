@@ -98,12 +98,21 @@
     <logic:present name="faultstationlist" scope="request">
       <bean:message key="colname.faultstation" />
       <br>
+      <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_CLOSE_STATION)){ %>
+      <html:select property="faultstation_id" styleClass="dropdown" value="">  
+          <html:option value="">
+            <bean:message key="select.please_select" />
+          </html:option>
+          <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
+      </html:select>
+      <% } else { %>
       <html:select property="faultstation_id" styleClass="dropdown">  
           <html:option value="">
             <bean:message key="select.please_select" />
           </html:option>
           <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
       </html:select>
+      <% } %>
       </logic:present>
       </div>
     </td>

@@ -80,6 +80,7 @@ public final class ManageAirport extends Action {
 			al.add(new LabelValueBean(messages.getMessage(new Locale(user.getCurrentlocale()), "airportadmin.country.us"), "0"));
 			al.add(new LabelValueBean(messages.getMessage(new Locale(user.getCurrentlocale()), "airportadmin.country.canada"), "1"));
 			al.add(new LabelValueBean(messages.getMessage(new Locale(user.getCurrentlocale()), "airportadmin.country.other"), "2"));
+			al.add(new LabelValueBean(messages.getMessage(new Locale(user.getCurrentlocale()), "airportadmin.country.brazil"), "3"));
 			
 			session.setAttribute("countryTypeList", al);
 		}

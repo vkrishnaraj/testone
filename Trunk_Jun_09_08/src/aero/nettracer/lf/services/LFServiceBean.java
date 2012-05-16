@@ -46,6 +46,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
+import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
@@ -67,11 +68,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	private static String autoagent = "autoagent";
 	
+	private static Agent auto;
+	
 	private static ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale("US"));
 	
 	public Agent getAutoAgent(){
-		GeneralServiceBean bean = new GeneralServiceBean();
-		return bean.getAgent(autoagent, TracerProperties.get("wt.company.code"));
+		if (auto == null) {
+			GeneralServiceBean bean = new GeneralServiceBean();
+			auto = bean.getAgent(autoagent, TracerProperties.get("wt.company.code"));
+		}
+		return auto;
 	}
 	
 	
@@ -416,8 +422,54 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	private void cleanUpSegments(LFLost toSave, boolean paxView) {
+		if (toSave.getId() != 0 && paxView) {
+			LFLost current = this.getLostReport(toSave.getId());
+			if(current != null && current.getSegments() != null && current.getSegments().size() > 0
+					&& toSave != null && toSave.getSegments() != null && toSave.getSegments().size() > 0) {
+				Session sess = null;
+				Transaction t = null;
+				try{
+					sess = HibernateWrapper.getSession().openSession();
+					t = sess.beginTransaction();
+					for (LFSegment cSeg : current.getSegments()) {
+						boolean deleteThis = true;
+						for (LFSegment sSeg : toSave.getSegments()) {
+							if (sSeg.getId() == cSeg.getId()) {
+								deleteThis = false;
+							}
+						}
+						if (deleteThis) {
+							sess.delete(cSeg);
+						}
+					}
+					t.commit();
+				}catch (Exception e) {
+					e.printStackTrace();
+					try {
+						t.rollback();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				} finally {
+					if (sess != null) {
+						try {
+							sess.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				} // END FINALLY
+			} // END CHECK Segments
+		} // END if (id != 0)
+	}
+	
 	@Override
 	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent) throws UpdateException {
+		return saveOrUpdateLostReport(lostReport, agent, false);
+	}
+	
+	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent, boolean paxView) throws UpdateException {
 		Session sess = null;
 		Transaction t = null;
 		long reportId = -1;
@@ -433,6 +485,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			lostReport.setCloseDate(null);
 			lostReport.setCloseAgent(null);
 		}
+		
+		cleanUpSegments(lostReport, paxView);
 		
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1482,7 +1536,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public boolean confirmMatch(long id) {
+	public boolean confirmMatch(long id, Agent agent) {
 		if (id != -1) {
 			LFMatchHistory match = getTraceResult(id);
 			if(match != null && !isAlreadyMatched(match)){
@@ -1495,6 +1549,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 					match.getFound().getItem().setDisposition(deliveryStatus);
 					match.getFound().getItem().setLost(match.getLost());
+					try {
+						saveOrUpdateFoundItem(match.getFound(), agent);
+					} catch (UpdateException e) {
+						e.printStackTrace();
+						return false;
+					}
 				}
 				
 				if(match.getLost() != null && match.getLost().getItem() != null){
@@ -1502,6 +1562,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 					match.getLost().getItem().setDisposition(deliveryStatus);
 					match.getLost().getItem().setFound(match.getFound());
+					try {
+						saveOrUpdateLostReport(match.getLost(), agent);
+					} catch (UpdateException e) {
+						e.printStackTrace();
+						return false;
+					}
 				}
 				
 				saveOrUpdateTraceResult(match);
@@ -1527,7 +1593,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public boolean rejectMatch(long id) {
+	public boolean rejectMatch(long id, Agent agent) {
 		LFMatchHistory match = getTraceResult(id);
 		if(match != null){
 			Status status = new Status();
@@ -1542,7 +1608,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	@Override
-	public boolean unrejectMatch(long id){
+	public boolean unrejectMatch(long id, Agent agent){
 		LFMatchHistory match = getTraceResult(id);
 		if(match != null){
 			Status status = new Status();
@@ -1571,7 +1637,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public boolean undoMatch(long id) {
+	public boolean undoMatch(long id, Agent agent) {
 		LFMatchHistory match = getTraceResult(id);
 		if(match != null){
 			Status status = new Status();
@@ -1583,6 +1649,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
 				match.getFound().getItem().setDisposition(deliveryStatus);
 				match.getFound().getItem().setLost(null);
+				try {
+					saveOrUpdateFoundItem(match.getFound(), agent);
+				} catch (UpdateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return false;
+				}
 			}
 			
 			if(match.getLost() != null && match.getLost().getItem() != null){
@@ -1590,6 +1663,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				deliveryStatus.setStatus_ID(TracingConstants.LF_DISPOSITION_OTHER);
 				match.getLost().getItem().setDisposition(deliveryStatus);
 				match.getLost().getItem().setFound(null);
+				try {
+					saveOrUpdateLostReport(match.getLost(), agent);
+				} catch (UpdateException e) {
+					e.printStackTrace();
+					return false;
+				}
 			}
 			saveOrUpdateTraceResult(match);
 			List<LFMatchHistory> matchList = getAssociatedTraceResults(match);
@@ -1888,7 +1967,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
 		
 		//by default we use the return address from the company variable
-		h.put("RETURNADDRESS", lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_from());
+		h.put("RETURNADDRESS", getAutoAgent().getStation().getCompany().getVariable().getEmail_from());
 		
 		if("AB".equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
 			h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
@@ -2082,11 +2161,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				
 				String from = (String) params.get("RETURNADDRESS");
 				if(from == null || from.trim().length() == 0){
-					from = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_from();
+					from = getAutoAgent().getStation().getCompany().getVariable().getEmail_from();
 				}
 				
-				String host = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_host();
-				int port = lost.getLossInfo().getDestination().getCompany().getVariable().getEmail_port();
+				String host = getAutoAgent().getStation().getCompany().getVariable().getEmail_host();
+				int port = getAutoAgent().getStation().getCompany().getVariable().getEmail_port();
 				
 				he.setHostName(host);
 				he.setSmtpPort(port);

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 
@@ -26,6 +27,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFLossInfo;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.lf.RemoteConnectionException;
@@ -38,6 +40,7 @@ import aero.nettracer.lfc.model.ContactBean;
 import aero.nettracer.lfc.model.KeyValueBean;
 import aero.nettracer.lfc.model.LostReportBean;
 import aero.nettracer.lfc.model.PhoneBean;
+import aero.nettracer.lfc.model.SegmentBean;
 import aero.nettracer.general.services.GeneralServiceBean;
 
 @Stateless
@@ -56,7 +59,6 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		if(host == null){
 			return null;
 		}
-		
 		LostReportBean remote = new LostReportBean();
 		remote.setSubCompany(host.getCompanyId());
 		remote.setCompany(gbean.getCompanyFromSubCompany(host.getCompanyId()));
@@ -95,12 +97,12 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		
 		remote.setReportId("" + host.getId());
 		
-		if(TracingConstants.LF_LF_COMPANY_ID.equals(remote.getCompany())){
-			remote.setDaysFromCreate( (Calendar.getInstance().getTime().getTime() - host.getOpenDate().getTime() ) /(1000*60*60*24) );
-		}
-		
 		if(host.getStatus() != null){
 			remote.setStatus(host.getStatus().getDescription());
+		}
+		
+		if(TracingConstants.LF_LF_COMPANY_ID.equals(remote.getCompany())){
+			remote.setDaysFromCreate( (Calendar.getInstance().getTime().getTime() - host.getOpenDate().getTime() ) /(1000*60*60*24) );
 		}
 		
 		if(host.getClient() != null){
@@ -137,6 +139,21 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 				}
 			}
 			remote.setContact(contact);
+		}
+		
+		if (host.getSegments() != null) {
+			List<SegmentBean> remoteSegs = new ArrayList<SegmentBean>();
+			for (LFSegment seg : host.getSegments()) {
+				SegmentBean remoteSeg = new SegmentBean();
+				remoteSeg.setArrivalLocation(seg.getDestinationId());
+				remoteSeg.setArrivalLocationDesc(seg.getDestination().getStationdesc());
+				remoteSeg.setDepartureLocation(seg.getOriginId());
+				remoteSeg.setDepartureLocationDesc(seg.getOrigin().getStationdesc());
+				remoteSeg.setFlightNumber(seg.getFlightNumber());
+				remoteSeg.setId(seg.getId());
+				remoteSegs.add(remoteSeg);
+			}
+			remote.setSegments(remoteSegs);
 		}
 		
 		return remote;
@@ -186,7 +203,6 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		item.setCaseColor(lostReport.getItemCaseColor());
 		item.setLongDescription(lostReport.getItemLongDesc());
 		item.setSize(lostReport.getItemSize());
-		
 
 		if(lostReport.getLostPhone() != null){
 			LFPhone lostPhone = new LFPhone();
@@ -257,11 +273,27 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			
 			
 			host.setClient(client);
-			if(lostReport!=null && lostReport.getReportId()!=null)
-			{
-				host.setId(Long.valueOf(lostReport.getReportId()));
-			}
 		}	
+
+		if(lostReport.getReportId()!=null) {
+			host.setId(Long.valueOf(lostReport.getReportId()));
+		}
+		
+		if (lostReport.getSegments() != null) {
+			Set<LFSegment> segments = new LinkedHashSet<LFSegment>();
+			for (SegmentBean remoteSeg : lostReport.getSegments()) {
+				LFSegment segment = new LFSegment();
+				segment.setDestinationId(remoteSeg.getArrivalLocation());
+				segment.setOriginId(remoteSeg.getDepartureLocation());
+				segment.setFlightNumber(remoteSeg.getFlightNumber());
+				segment.setLost(host);
+				if (remoteSeg.getId() != 0) {
+					segment.setId(remoteSeg.getId());
+				}
+				segments.add(segment);
+			}
+			host.setSegments(segments);
+		}
 		
 		
 		Status status = new Status();
@@ -271,7 +303,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		LFServiceBean bean = new LFServiceBean();
 		try {
 			
-			long ret = bean.saveOrUpdateLostReport(host, getWebAgent());
+			long ret = bean.saveOrUpdateLostReport(host, getWebAgent(), true);
 			if(ret > 0){
 				try {
 					TraceHandler.trace(host);

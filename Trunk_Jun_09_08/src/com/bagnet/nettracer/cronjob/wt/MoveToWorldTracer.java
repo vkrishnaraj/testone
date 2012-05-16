@@ -142,11 +142,7 @@ public class MoveToWorldTracer {
 		int hours = 0;
 
 		// select OHD's that meet requirements
-		if (ohdOal > 0 && ohdOal < ohdHours) {
-			hours = ohdOal;
-		} else {
-			hours = ohdHours;
-		}
+		hours = getMinimumNonZero(ohdOal, ohdHours);
 		if (hours > 0) {
 			List<OHD> temp = obmo.findMoveToWtOhd(hours, companyCode);
 			List<OHD> ohdList = null;
@@ -195,11 +191,7 @@ public class MoveToWorldTracer {
 			}
 		}
 
-		if (incOal > 0 && incOal < (incDays * 24)) {
-			hours = incOal;
-		} else {
-			hours = incDays * 24;
-		}
+		hours = getMinimumNonZero(incOal, incDays*24);
 		if (hours > 0) {
 			// get the incidents that need to be moved
 			List<Incident> tempInc = ibmo.findMoveToWtInc(hours, companyCode);
@@ -223,6 +215,24 @@ public class MoveToWorldTracer {
 		}
 	}
 
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return Return the positive, non-zero minimum value between a and b.  If a and b are both zero or negative, return zero
+	 */
+	protected static int getMinimumNonZero(int a, int b){
+		if(a>0 && b>0){
+			return Math.min(a, b);
+		} else if (a>0){
+			return a;
+		} else if (b>0){
+			return b;
+		} else {
+			return 0;
+		}
+	}
+	
 	private List<Incident> filterIncList(List<Incident> temp, int myHours, int oalHours, String company) {
 		List<Incident> result = new ArrayList<Incident>();
 		Calendar c = new GregorianCalendar();
@@ -379,6 +389,9 @@ public class MoveToWorldTracer {
 			if (claimCompany != null && !claimCompany.equalsIgnoreCase(company)) {
 				return true;
 			}
+		} else if (PropertyBMO.isTrue(PropertyBMO.WT_TAGLESS_AS_OAL) && (ohd.getClaimnum() == null || ohd.getClaimnum().trim().length() == 0)){
+			//loupas - if property enabled, treat a missing tag ohd as the same as a bag from another airline with regards of when to push to worldtracer
+			return true;
 		}
 		return false;
 	}

@@ -40,6 +40,7 @@ public class LFFound implements LFObject, Serializable {
 	
 	private String agreementNumber;
 	private String mvaNumber;
+	private String flightNumber;
 	
 	private Date receivedDate;
 	private Date foundDate;
@@ -113,6 +114,14 @@ public class LFFound implements LFObject, Serializable {
 
 	public void setMvaNumber(String mvaNumber) {
 		this.mvaNumber = mvaNumber;
+	}
+
+	public String getFlightNumber() {
+		return flightNumber;
+	}
+
+	public void setFlightNumber(String flightNumber) {
+		this.flightNumber = flightNumber;
 	}
 
 	public Date getFoundDate() {

@@ -89,7 +89,7 @@
 			<bean:write name="result" property="matchSummary" filter="false" />
 		</td>
 		<td rowspan=<%=claims.length %>>
-			<a href="fraud_results.do?matchId=<%=result.getId() %>&incident=<bean:write name="incident" scope="request"/>">
+			<a href="fraud_results.do?matchId=<%=result.getId() %><logic:present name="incident" scope="request">&incident=<bean:write name="incident" scope="request"/></logic:present>">
 				<bean:message key="claim.match.details" />
 			</a>
 			<% if (!sameCompany) { %>

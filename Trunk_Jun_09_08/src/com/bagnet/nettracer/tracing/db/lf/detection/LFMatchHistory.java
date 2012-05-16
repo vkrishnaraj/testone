@@ -35,11 +35,11 @@ public class LFMatchHistory implements Serializable {
 	@GeneratedValue
 	private long id;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFLost.class, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFLost.class, cascade = {})//cascade needs to be none
 	@Fetch(FetchMode.SELECT)
 	private LFLost lost;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFFound.class, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFFound.class, cascade = {})//cascade needs to be none
 	@Fetch(FetchMode.SELECT)
 	private LFFound found;
 	

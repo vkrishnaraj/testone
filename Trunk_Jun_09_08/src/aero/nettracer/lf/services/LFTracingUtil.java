@@ -27,6 +27,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFObject;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
@@ -236,9 +237,10 @@ public class LFTracingUtil {
 	}
 	
 	public static List<Long> getLFCPotentialLostId(LFFound found, boolean isPrimary){
-		String sql = "select l.id id from lflost l  " +
+		String sql = "select distinct(l.id) id from lflost l  " +
 		" left outer join lfitem i on l.id = i.lost_id " +
 		" left outer join lflossinfo li on l.lossInfo_id = li.id " +
+		" left outer join lfsegment s on l.id = s.lost_id " +
 		" where l.status_ID = :status" +
 		" and i.disposition_status_ID = :disposition" +
 		" and (li.lossdate is null or li.lossdate <= :founddate) ";
@@ -247,9 +249,9 @@ public class LFTracingUtil {
 		//update leaving this in for now....until we change our mind again
 		if(found != null && found.getLocation() != null){
 			if(isPrimary){
-				sql += " and (li.destination_station_ID = :foundstation)" ;
+				sql += " and (s.destination_station_ID = :foundstation or s.origin_station_ID = :foundstation2)" ;
 			} else {
-				sql += " and (li.destination_station_ID != :foundstation)" ;
+				sql += " and (s.destination_station_ID != :foundstation and s.origin_station_ID != :foundstation2)" ;
 			}
 			hasLocation = true;
 		}
@@ -262,6 +264,7 @@ public class LFTracingUtil {
 			q.setDate("founddate", found.getFoundDate());
 			if(hasLocation){
 				q.setParameter("foundstation", found.getLocation().getStation_ID());
+				q.setParameter("foundstation2", found.getLocation().getStation_ID());
 			}
 			q.addScalar("id", Hibernate.LONG);
 			List<Long> results = (List<Long>)q.list();
@@ -348,9 +351,9 @@ public class LFTracingUtil {
 		if(lost != null && lost.getLossInfo() != null 
 				&& lost.getLossInfo().getDestination() != null){
 			if(isPrimary){
-				sql += " and (f.station_ID = :dropoff)";
+				sql += " and (f.station_ID in :dropoff)";
 			} else {
-				sql += " and (f.station_ID != :dropoff)";
+				sql += " and (f.station_ID not in :dropoff)";
 			}
 			hasReservation = true;
 		}
@@ -369,7 +372,7 @@ public class LFTracingUtil {
 				q.setDate("founddate", cal.getTime()); //DATE
 			}
 			if(hasReservation){
-				q.setParameter("dropoff", lost.getLossInfo().getDestination().getStation_ID());
+				q.setParameter("dropoff", lost.getSegmentSQL());
 			}
 			q.addScalar("id", Hibernate.LONG);
 			List<Long> results = (List<Long>)q.list();
@@ -590,6 +593,23 @@ public class LFTracingUtil {
 					return 0;
 				}
 			}
+
+			if(match.getFound() != null && match.getFound().getFlightNumber() != null 
+					&& match.getFound().getFlightNumber().trim().length() > 0
+					&& match.getLost().getSegments() != null && match.getLost().getSegments().size() > 0) {
+				for (LFSegment seg : match.getLost().getSegments()) {
+					if(seg.getFlightNumber() != null && seg.getFlightNumber().trim().length() > 0
+							&& seg.getFlightNumber().trim().equalsIgnoreCase(match.getFound().getFlightNumber().trim())){
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("Flight Number Match");
+						detail.setMatchHistory(match);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_FLIGHT_NUMBER));
+						detail.setDecryptedFoundValue(match.getFound().getFlightNumber());
+						detail.setDecryptedLostValue(seg.getFlightNumber());
+						match.getDetails().add(detail);
+					}
+				}
+			}
 			
 		}
 		
@@ -792,7 +812,7 @@ public class LFTracingUtil {
 		}
 	}
 	
-	public static synchronized long saveLFMatchHistory(LFMatchHistory match) throws org.hibernate.exception.ConstraintViolationException{
+	public static long saveLFMatchHistory(LFMatchHistory match) throws org.hibernate.exception.ConstraintViolationException{
 		//loupas - encryption is cpu intensive, first check to see if we need to save then encrypt
 		if(match.getId() == 0){//only need this check first time saving
 			if(!hasMatch(match)){

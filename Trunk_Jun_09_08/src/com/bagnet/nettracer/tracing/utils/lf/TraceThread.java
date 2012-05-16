@@ -34,6 +34,7 @@ public class TraceThread implements Runnable{
 			while(true){
 				try{
 					container.setWaiting(true);
+					container.setDead(false);
 					Object[] o = queue.take();
 					container.setStartTime(new Date());
 					container.setWaiting(false);
@@ -58,6 +59,7 @@ public class TraceThread implements Runnable{
 						System.out.println("unable to connect");
 						queue.put(o);
 						container.setConnectError(true);
+						Thread.sleep(30000);
 					}
 				} catch (Exception e2){
 					e2.printStackTrace();

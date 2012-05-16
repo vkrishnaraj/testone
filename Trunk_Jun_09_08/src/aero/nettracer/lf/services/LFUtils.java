@@ -25,6 +25,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
+import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -91,6 +92,14 @@ public class LFUtils {
 		List<LFRemark> remarklist = new ArrayList<LFRemark>();
 		remarklist.add(r);
 		lost.setAgentRemarks(new LinkedHashSet<LFRemark>(remarklist));
+		
+		if (TracingConstants.LF_LF_COMPANY_ID.equals(agent.getCompanycode_ID())) {
+			LFSegment s = new LFSegment();
+			s.setLost(lost);
+			LinkedHashSet<LFSegment> segs = new LinkedHashSet<LFSegment>();
+			segs.add(s);
+			lost.setSegments(segs);
+		}
 		
 		return lost;
 	}

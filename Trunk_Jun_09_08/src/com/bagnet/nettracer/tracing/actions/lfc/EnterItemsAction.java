@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.forms.lfc.EnterItemsForm;
 import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.lf.RemoteConnectionException;
 import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
 
 public class EnterItemsAction extends CheckedAction {
@@ -90,7 +91,11 @@ public class EnterItemsAction extends CheckedAction {
 				history.put(fho.getUniqueId(), fho);
 				
 				// 3. submit the history object to the trace handler
-				TraceHandler.trace(fho);
+				try{
+					TraceHandler.trace(fho);
+				} catch (RemoteConnectionException re){
+					//do not prevent item entry even if tracing fails
+				}
 				
 				// 4. clone the found and set it on the form
 				eiForm.setFound(duplicateFound(found, user));

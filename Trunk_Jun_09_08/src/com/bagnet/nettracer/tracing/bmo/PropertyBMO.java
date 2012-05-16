@@ -84,6 +84,7 @@ public class PropertyBMO {
 	public static final String DISPLAY_NON_REVENUE_CODES = "display.non.revenue.codes";
 	public static final String PROPERTY_BDO_RECEIPT_MOBILE_FIRST = "bdo_receipt_mobile_first";
 	public static final String PROPERTY_ALLOW_OPEN_INCIDENT_DISPUTE = "allow_open_incident_dispute";
+	public static final String PROPERTY_INCIDENT_CLOSE_STATION = "incident.close.station";
 
 	public static final String PROPERTY_OIA_AGENT = "oia.agent";
 	public static final String PROPERTY_OIA_HOURS_BEFORE_EXPIRE = "oia.hours.before.expire";
@@ -136,6 +137,7 @@ public class PropertyBMO {
 	public static final String LF_TRACING_WEIGHT_LONG_DESCRIPTION = "lf.tracing.weight.longdescription";
 	public static final String LF_TRACING_WEIGHT_MODEL = "lf.tracing.weight.model";
 	public static final String LF_TRACING_WEIGHT_CASE_COLOR = "lf.tracing.weight.casecolor";
+	public static final String LF_TRACING_WEIGHT_FLIGHT_NUMBER = "lf.tracing.weight.flightnumber";
 	
 	public static final String LF_EMAIL_RETURNADDR_INIT = "lf.email.returnaddr.init";
 	public static final String LF_EMAIL_RETURNADDR_FIRST = "lf.email.returnaddr.first";
@@ -152,6 +154,11 @@ public class PropertyBMO {
 	public static final String LIMITED_CODES_LOSSDELAY = "limited.codes.lossdelay";
 	public static final String LIMITED_CODES_DAMAGED = "limited.codes.damaged";
 	public static final String LIMITED_CODES_MISSING = "limited.codes.missing";
+	
+	public static final String THREAD_MONITOR_THREAD_TIMEOUT = "thread.monitor.thread.timeout";
+	public static final String THREAD_MONITOR_EMAIL_INTERVAL = "thread.monitor.email.interval";
+	
+	public static final String WT_TAGLESS_AS_OAL = "wt.tagless.as.oal";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

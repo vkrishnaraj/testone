@@ -12,6 +12,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
+import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 
 public final class LostReportForm extends ActionForm {
 
@@ -115,6 +116,13 @@ public final class LostReportForm extends ActionForm {
 	public LFItem getItem(int index) {
 		if (lost.getItems() != null && index < lost.getItems().size()) {
 			return new ArrayList<LFItem>(lost.getItems()).get(index);
+		}
+		return null;
+	}
+
+	public LFSegment getSegment(int index) {
+		if (lost.getSegments() != null && index < lost.getSegments().size()) {
+			return new ArrayList<LFSegment>(lost.getSegments()).get(index);
 		}
 		return null;
 	}

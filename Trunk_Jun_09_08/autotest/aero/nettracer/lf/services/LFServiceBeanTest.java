@@ -662,8 +662,9 @@ public class LFServiceBeanTest {
 	@Test
 	public void matchHistorySaveLoadStatusTest(){
 		LFServiceBean bean = new LFServiceBean();
+		Agent agent = bean.getAutoAgent();
 		LFMatchHistory match = createMatchHistory();
-		
+
 		long id = bean.saveOrUpdateTraceResult(match);
 		assertTrue(id != -1);
 		
@@ -674,7 +675,7 @@ public class LFServiceBeanTest {
 		assertTrue(loaded.getFound().getItem().getLost() == null);
 		assertTrue(loaded.getLost().getItem().getFound() == null);
 		
-		assertTrue(bean.confirmMatch(id));
+		assertTrue(bean.confirmMatch(id, agent));
 		loaded = bean.getTraceResult(id);
 		assertTrue(loaded != null && loaded.getId() == id && loaded.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_CONFIRMED);	
 		assertTrue(loaded.getFound().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
@@ -682,7 +683,7 @@ public class LFServiceBeanTest {
 		assertTrue(loaded.getFound().getItem().getLost().getId() == match.getLost().getId());
 		assertTrue(loaded.getLost().getItem().getFound().getId() == match.getFound().getId());
 		
-		assertTrue(bean.undoMatch(id));
+		assertTrue(bean.undoMatch(id, agent));
 		loaded = bean.getTraceResult(id);
 		assertTrue(loaded != null && loaded.getId() == id && loaded.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_OPEN);	
 		assertTrue(loaded.getFound().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_OTHER);
@@ -690,7 +691,7 @@ public class LFServiceBeanTest {
 		assertTrue(loaded.getFound().getItem().getLost() == null);
 		assertTrue(loaded.getLost().getItem().getFound() == null);
 		
-		assertTrue(bean.rejectMatch(id));
+		assertTrue(bean.rejectMatch(id, agent));
 		loaded = bean.getTraceResult(id);
 		assertTrue(loaded != null && loaded.getId() == id && loaded.getStatus().getStatus_ID() == TracingConstants.LF_TRACING_REJECTED);	
 		assertTrue(loaded.getFound().getItem().getDisposition().getStatus_ID() == TracingConstants.LF_DISPOSITION_OTHER);
@@ -703,10 +704,23 @@ public class LFServiceBeanTest {
 	public void loadTraceResultsForFoundTest(){
 		LFServiceBean bean = new LFServiceBean();
 		LFMatchHistory match1 = createMatchHistory();
+		Agent agent = bean.getAutoAgent();
+		try {
+			assertTrue(bean.saveOrUpdateFoundItem(match1.getFound(), agent)>0);
+			assertTrue(bean.saveOrUpdateLostReport(match1.getLost(), agent)>0);
+		} catch (UpdateException e) {
+			e.printStackTrace();
+		}
 		long matchId1 = bean.saveOrUpdateTraceResult(match1);
 		assertTrue(matchId1 != -1);
 		LFMatchHistory match2 = createMatchHistory();
 		match2.setFound(match1.getFound());
+		try {
+			assertTrue(bean.saveOrUpdateFoundItem(match2.getFound(), agent)>0);
+			assertTrue(bean.saveOrUpdateLostReport(match2.getLost(), agent)>0);
+		} catch (UpdateException e) {
+			e.printStackTrace();
+		}
 		long matchId2 = bean.saveOrUpdateTraceResult(match2);
 		assertTrue(matchId2 != -1);
 		
@@ -1348,9 +1362,17 @@ public class LFServiceBeanTest {
 	}
 	
 	public LFMatchHistory createMatchHistory(){
+		LFServiceBean bean = new LFServiceBean();
+		Agent agent = bean.getAutoAgent();
 		LFMatchHistory match = new LFMatchHistory();
 		match.setLost(createLostTestCase());
 		match.setFound(createFoundTestCase());
+		try {
+			assertTrue(bean.saveOrUpdateFoundItem(match.getFound(), agent)>0);
+			assertTrue(bean.saveOrUpdateLostReport(match.getLost(), agent)>0);
+		} catch (UpdateException e) {
+			e.printStackTrace();
+		}
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_TRACING_OPEN);
 		match.setStatus(status);
@@ -1362,9 +1384,12 @@ public class LFServiceBeanTest {
 	public void testTracing(){
 		
 		LFServiceBean bean = new LFServiceBean();
-		for(int i = 0; i < 100; i++){
-			System.out.println(LFTracingUtil.getExpireOffset() / 60000);
-		}
+		
+		bean.traceAllFoundItems();
+		
+//		for(int i = 0; i < 100; i++){
+//			System.out.println(LFTracingUtil.getExpireOffset() / 60000);
+//		}
 ////		bean.send1stNotice(8869);
 ////		bean.send2ndNotice(8869);
 ////		bean.sendFoundEmail(8869);

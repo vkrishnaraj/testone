@@ -408,7 +408,7 @@
        				<tr>
 
             		<logic:notEmpty name="foundItemForm" property="found.barcode">
-						<td>
+						<td colspan="2">
 							<bean:message key="colname.lf.report.id" />&nbsp;<span class="reqfield">*</span>
          					<br>
          					<% if (enableIdField) { %>
@@ -419,7 +419,7 @@
          				</td>
 					</logic:notEmpty>
 					<logic:empty name="foundItemForm" property="found.barcode">
-						<td>
+						<td colspan="2">
 							<bean:message key="colname.lf.report.id" />&nbsp;<span class="reqfield">*</span>
          					<br>
 							<html:text name="foundItemForm" property="found.barcode" styleClass="textfield" />
@@ -461,6 +461,11 @@
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
 		            		</html:select>
+						</td>
+						<td>
+							<bean:message key="colname.lf.segment.flight" />
+							<br/>
+							<html:text name="foundItemForm" property="found.flightNumber" size="20" maxlength="20" styleClass="textfield" />
 						</td>
 						<td>
          					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>

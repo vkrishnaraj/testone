@@ -84,19 +84,19 @@ public class TraceResultsAction extends CheckedAction {
 					request.setAttribute("match", match);
 					return mapping.findForward(TracingConstants.LF_VIEW_TRACE_DETAILS);
 				} else if (request.getParameter("reject") != null) {
-					serviceBean.rejectMatch(matchId);
+					serviceBean.rejectMatch(matchId, user);
 				} else if (request.getParameter("unconfirm") != null) {
-					serviceBean.undoMatch(matchId);
+					serviceBean.undoMatch(matchId, user);
 				} else if (request.getParameter("unreject") != null) {
-					serviceBean.unrejectMatch(matchId);
+					serviceBean.unrejectMatch(matchId, user);
 				} else if (request.getParameter("confirm") != null) {
-					serviceBean.confirmMatch(matchId);
+					serviceBean.confirmMatch(matchId, user);
 				}
 			}
 		} else if (request.getParameter("reject") != null) {
-			updateMatchHistories(getSelected(trForm.getMatches()), serviceBean, REJECT);			
+			updateMatchHistories(getSelected(trForm.getMatches()), serviceBean, REJECT, user);			
 		} else if (request.getParameter("unreject") != null) {
-			updateMatchHistories(getSelected(trForm.getMatches()), serviceBean, UNREJECT);			
+			updateMatchHistories(getSelected(trForm.getMatches()), serviceBean, UNREJECT, user);			
 		}
 		
 		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
@@ -163,17 +163,17 @@ public class TraceResultsAction extends CheckedAction {
 		return selectedMatches;
 	}
 	
-	private void updateMatchHistories(ArrayList<Long> matchIds, LFServiceBean serviceBean, int actionType) {
+	private void updateMatchHistories(ArrayList<Long> matchIds, LFServiceBean serviceBean, int actionType, Agent user) {
 		// I used a switch here due to our recent debate
 		switch (actionType) {
 			case REJECT:
 				for (long id: matchIds) {
-					serviceBean.rejectMatch(id);
+					serviceBean.rejectMatch(id, user);
 				}
 				break;
 			case UNREJECT:
 				for (long id: matchIds) {
-					serviceBean.unrejectMatch(id);
+					serviceBean.unrejectMatch(id, user);
 				}
 				break;
 			default:

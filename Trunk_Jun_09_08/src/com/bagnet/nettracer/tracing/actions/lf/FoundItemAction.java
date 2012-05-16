@@ -41,6 +41,7 @@ import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.lf.RemoteConnectionException;
 import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
 
 import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
@@ -148,7 +149,11 @@ public class FoundItemAction extends CheckedAction {
 				}
 				if (found.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
 					if(isLFC){
-						TraceHandler.trace(found);//Async tracing for LFC	
+						try{
+							TraceHandler.trace(found);//Async tracing for LFC
+						} catch (RemoteConnectionException re){
+							//do not prevent item entry even if tracing fails
+						}
 					} else {
 						LFServiceWrapper.getInstance().traceFoundItem(found.getId());
 					}
@@ -230,7 +235,7 @@ public class FoundItemAction extends CheckedAction {
 		} else if (request.getParameter("unmatchItem") != null) {
 			LFItem item = fiForm.getFound().getItem();
 			long matchId = LFServiceWrapper.getInstance().findConfirmedMatch(item.getLost().getId(), item.getFound().getId());
-			if(LFServiceWrapper.getInstance().undoMatch(matchId)){
+			if(LFServiceWrapper.getInstance().undoMatch(matchId, user)){
 				found = LFServiceWrapper.getInstance().getFoundItem(fiForm.getFound().getId());
 			} else {
 				//TODO handle the failed undo
@@ -247,7 +252,7 @@ public class FoundItemAction extends CheckedAction {
 					return mapping.findForward(TracingConstants.LF_CREATE_FOUND_ITEM);
 				}
 				long matchId = LFServiceWrapper.getInstance().createManualMatch(lost, fiForm.getFound());
-				if(LFServiceWrapper.getInstance().confirmMatch(matchId)){
+				if(LFServiceWrapper.getInstance().confirmMatch(matchId, user)){
 					found = LFServiceWrapper.getInstance().getFoundItem(fiForm.getFound().getId());
 				} else {
 					//TODO fail to create manual match, do something....
@@ -283,19 +288,19 @@ public class FoundItemAction extends CheckedAction {
 			try {
 				long matchId = Long.valueOf(request.getParameter("matchId"));
 				if (request.getParameter("reject") != null) {
-					if (serviceBean.rejectMatch(matchId)) {
+					if (serviceBean.rejectMatch(matchId, user)) {
 						found = serviceBean.getFoundItem(fiForm.getFound().getId());
 					}
 				} else if (request.getParameter("unreject") != null) {
-					if (serviceBean.unrejectMatch(matchId)) {
+					if (serviceBean.unrejectMatch(matchId, user)) {
 						found = serviceBean.getFoundItem(fiForm.getFound().getId());
 					}
 				} else if (request.getParameter("confirm") != null) {
-					if (serviceBean.confirmMatch(matchId)) {
+					if (serviceBean.confirmMatch(matchId, user)) {
 						found = serviceBean.getFoundItem(fiForm.getFound().getId());
 					}
 				} else if (request.getParameter("unconfirm") != null) {
-					if(LFServiceWrapper.getInstance().undoMatch(matchId)){
+					if(LFServiceWrapper.getInstance().undoMatch(matchId, user)){
 						found = serviceBean.getFoundItem(fiForm.getFound().getId());
 					}
 				} else if (request.getParameter("email") != null) {

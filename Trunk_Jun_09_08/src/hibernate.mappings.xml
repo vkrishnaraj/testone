@@ -278,6 +278,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFLog" />
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFRemark" />
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFSalvage" />
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFSegment" />
 		
 		<mapping class="com.bagnet.nettracer.tracing.db.Region"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralLog"/>

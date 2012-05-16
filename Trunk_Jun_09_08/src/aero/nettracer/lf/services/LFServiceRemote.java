@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import org.apache.struts.util.LabelValueBean;
+import org.hibernate.exception.ConstraintViolationException;
 
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 import aero.nettracer.lf.services.exception.UpdateException;

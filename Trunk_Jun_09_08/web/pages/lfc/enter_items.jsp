@@ -233,7 +233,12 @@
 		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
 		            		</html:select>
            				</td>
-           				<td style="width:33%;">
+					    <td style="width:17%;">
+					        <bean:message key="colname.lf.segment.flight" />
+					        <br>
+					        <html:text name="enterItemsForm" property="found.flightNumber" size="10" maxlength="20" styleClass="textfield" styleId="flightNumber"/>
+					    </td>
+           				<td style="width:17%;">
            					<bean:message key="colname.lfc.value" />
            					<br>
            					<html:select name="enterItemsForm" property="found.item.value" styleId="value" styleClass="dropdown" >

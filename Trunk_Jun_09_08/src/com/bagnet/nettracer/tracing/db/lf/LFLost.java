@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -30,6 +31,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 
 @Entity
 @Proxy(lazy = false)
@@ -78,6 +80,12 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFLossInfo.class, cascade = CascadeType.ALL)
 	private LFLossInfo lossInfo;
+
+	@OneToMany(mappedBy = "lost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private Set<LFSegment> segments;
 
 	@OneToMany(mappedBy = "lost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy(clause = "id")
@@ -338,6 +346,27 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 
 	public long getLastLoaded() {
 		return lastLoaded;
+	}
+
+	public Set<LFSegment> getSegments() {
+		return segments;
+	}
+
+	public void setSegments(Set<LFSegment> segments) {
+		this.segments = segments;
+	}
+	
+	@Transient
+	public String getSegmentSQL() {
+		ArrayList<String> stations = new ArrayList<String>();
+		stations.add(0 + "");
+		if (segments != null) {
+			for (LFSegment seg: segments) {
+				stations.add(seg.getOriginId() + "");
+				stations.add(seg.getDestinationId() + "");
+			}
+		}
+		return "(" + StringUtils.join(stations,",") + ")";
 	}
 	
 }

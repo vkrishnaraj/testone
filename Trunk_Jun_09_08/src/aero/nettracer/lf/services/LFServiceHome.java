@@ -69,9 +69,9 @@ public interface LFServiceHome {
 	public List<LFMatchHistory> getTraceResultsForFound(long id);
 	public List<LFMatchHistory> traceFoundItem(long id);
 	public List<LFMatchHistory> traceLostItem(long id);
-	public boolean confirmMatch(long id);
-	public boolean rejectMatch(long id);
-	public boolean undoMatch(long id);
+	public boolean confirmMatch(long id, Agent agent);
+	public boolean rejectMatch(long id, Agent agent);
+	public boolean undoMatch(long id, Agent agent);
 
 	long saveOrUpdateDelivery(LFDelivery delivery);
 
@@ -79,7 +79,7 @@ public interface LFServiceHome {
 
 	LFMatchHistory getTraceResult(long id);
 
-	long saveOrUpdateTraceResult(LFMatchHistory match);
+	public long saveOrUpdateTraceResult(LFMatchHistory match);
 
 	LFItem getItem(long id);
 
@@ -90,7 +90,7 @@ public interface LFServiceHome {
 	public long findConfirmedMatch(long lostId, long foundId)
 			throws NonUniqueResultException;
 
-	public boolean unrejectMatch(long id);
+	public boolean unrejectMatch(long id, Agent agent);
 
 	public LFFound getFoundItemByBarcode(String barcode) throws NonUniqueBarcodeException;
 

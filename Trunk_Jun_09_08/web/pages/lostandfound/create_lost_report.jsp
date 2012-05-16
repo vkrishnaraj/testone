@@ -1,3 +1,4 @@
+<%@page import="com.bagnet.nettracer.tracing.db.Station"%>
 <%@ page language="java" %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
@@ -19,6 +20,7 @@
  	String cssFormClass = "form2";
  	
  	ArrayList categoryList = (ArrayList) request.getSession().getAttribute("lfcategorylist");
+ 	ArrayList stationList = (ArrayList) request.getSession().getAttribute("stationlist");
  	
 %>
 
@@ -228,14 +230,9 @@
 							<html:text name="lostReportForm" property="lost.agent.username" disabled="true" styleClass="disabledtextfield" size="15"/>
 						</td>
 						<td>
-							<bean:message key="colname.lf.closed.date" />
-							<br/>
-							<html:text name="lostReportForm" property="disClosedDate" disabled="true" styleClass="disabledtextfield" size="15"/>
-						</td>
-						<td>
-							<bean:message key="colname.lf.closed.agent" />
-							<br/>
-							<html:text name="lostReportForm" property="closedAgentUsername" disabled="true" styleClass="disabledtextfield" size="15"/>
+							<bean:message key="colname.lf.datelost"/>
+							<br>
+							<html:text name="lostReportForm" property="disLossdate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.lostReportForm.disLossdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
 						</td>
 					</tr>
 					<tr>
@@ -254,18 +251,15 @@
          						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
          					</html:select>
          				</td>
-         				<td colspan="2">
-							<bean:message key="colname.lf.lost.location" />&nbsp;<span class="reqfield">*</span>
-							<br>
-		            		<html:select name="lostReportForm" property="lost.lossInfo.destinationId" styleClass="dropdown" >
-		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
-		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
-		            		</html:select>
+						<td>
+							<bean:message key="colname.lf.closed.date" />
+							<br/>
+							<html:text name="lostReportForm" property="disClosedDate" disabled="true" styleClass="disabledtextfield" size="15"/>
 						</td>
 						<td>
-							<bean:message key="colname.lf.datelost"/>
-							<br>
-							<html:text name="lostReportForm" property="disLossdate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.lostReportForm.disLossdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+							<bean:message key="colname.lf.closed.agent" />
+							<br/>
+							<html:text name="lostReportForm" property="closedAgentUsername" disabled="true" styleClass="disabledtextfield" size="15"/>
 						</td>
 					</tr>
 				</table>
@@ -382,6 +376,88 @@
 		              	</td>
 		              </tr>
 				</table>
+				<br/>
+				<h1 class="green">
+		        	<bean:message key="header.itinerary.information" />
+		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+		        </h1>
+    			<span class="reqfield">*</span>
+   				<bean:message key="message.required" /> 
+				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+         			<logic:iterate indexId="i" id="segment" name="lostReportForm" property="lost.segments" type="com.bagnet.nettracer.tracing.db.lf.LFSegment" >
+         				<tr>
+	         		<!-- 		<td>
+								<bean:message key="colname.lf.segment.origin" />
+								<br>
+	         					<select name="segment[<%=i %>].originId" class="dropdown" id="origin_<%=i %>" >
+	         						<option value=""><bean:message key="option.lf.please.select" /></option>
+	         						<%
+	         							Station origStation;
+	         							for (int j = 0; j < stationList.size(); ++j) {
+	         								origStation = (Station) stationList.get(j);
+	         						%>
+	         								<option value="<%=origStation.getStation_ID() %>" <% if (origStation.getStation_ID() == segment.getOriginId()) { %>selected<% } %>><%=origStation.getStationcode() %></option>
+	         						<%	
+	         							}
+         							%>
+	         					</select>
+							</td>
+	         				<td>
+								<bean:message key="colname.lf.segment.destination" />
+								<br>
+	         					<select name="segment[<%=i %>].destinationId" class="dropdown" id="destination_<%=i %>" >
+	         						<option value=""><bean:message key="option.lf.please.select" /></option>
+	         						<%
+	         							Station destStation;
+	         							for (int j = 0; j < stationList.size(); ++j) {
+	         								destStation = (Station) stationList.get(j);
+	         						%>
+	         								<option value="<%=destStation.getStation_ID() %>" <% if (destStation.getStation_ID() == segment.getDestinationId()) { %>selected<% } %>><%=destStation.getStationcode() %></option>
+	         						<%	
+	         							}
+         							%>
+	         					</select>
+							</td>  -->
+						<td>
+							<bean:message key="colname.lf.segment.origin" />&nbsp;<span class="reqfield">*</span>
+							<br>
+		            		<html:select name="segment" property="originId" styleClass="dropdown" indexed="true">
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+		            		</html:select>
+						</td>
+						<td>
+							<bean:message key="colname.lf.segment.destination" />&nbsp;<span class="reqfield">*</span>
+							<br>
+		            		<html:select name="segment" property="destinationId" styleClass="dropdown" indexed="true" >
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+		            		</html:select>
+						</td>
+			              	<td>
+			              		<bean:message key="colname.lf.segment.flight" />
+			              		<br />
+		              			<html:text name="segment" property="flightNumber" size="20" maxlength="20" styleClass="textfield" indexed="true" />
+			              	</td>
+			              	<td>
+			                  <input id="button" type="submit" value="<bean:message key="button.delete_segment" />" name="deleteSegment[<%=i %>]" />
+			              	</td>
+         				</tr>
+         			</logic:iterate>
+				</table>
+				<center>
+					<select name="addsegmentnum">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+					</select>
+					<html:submit property="addsegment" styleId="button">
+						<bean:message key="button.add_cust_itinerary" />
+					</html:submit>
+				</center>
+				<br/>
 				<br/>
 				<h1 class="green">
 					<bean:message key="header.item.information" />
