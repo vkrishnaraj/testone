@@ -17,7 +17,7 @@ public interface WorldTracerRule<T> {
 		ALPHA("[^a-zA-Z\\s/]"),
 		ALPHA_NUMERIC("[^a-zA-Z\\s0-9/]"),
 		FREE_FLOW("[\\.#\"><%]\\?"),
-		CONTENT_FIELD("[\\:\\.#\"><%!@$%^&*()_+-]"),
+		CONTENT_FIELD("[\\:\\.#\"><%!@$%^&*()_+-?]"),
 		ALL(null);
 		
 		private String replaceChars;
