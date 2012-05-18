@@ -857,7 +857,11 @@ public class WSCoreOHDUtil {
 			  }
 		  }
 	  }
-	  return StationBMO.getStation(id);
+	  Station station = StationBMO.getStation(id);
+	  if(station != null && station.getStationcode() != null && station.getCompany() != null && station.getCountrycode_ID() != null){
+		  map.put(station.getStationcode() + station.getCompany().getCompanyCode_ID(), station);
+	  }
+	  return station;
   }
   
   
