@@ -307,10 +307,10 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         
         passengerBean.setStatus(claim.getStatus());
         
-        passengerBean.setDelayed(claim.getClaimType() % 2 == 1);
-        passengerBean.setPilferage(claim.getClaimType() % 20 >= 10);
-        passengerBean.setDamaged(claim.getClaimType() % 200 >= 100);
-        passengerBean.setInterim(claim.getClaimType() >= 1000);
+        passengerBean.setDelayed(isBitSet(claim.getClaimType(), 0));
+        passengerBean.setPilferage(isBitSet(claim.getClaimType(), 1));
+        passengerBean.setDamaged(isBitSet(claim.getClaimType(), 2));
+        passengerBean.setInterim(isBitSet(claim.getClaimType(), 3));
         
        
        return passengerBean;
@@ -411,18 +411,10 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          setWSFiles(passengerBean.getFiles(),claim); // GOOD TO GO
 		 
  		 int claimType = 0;
-		 if (passengerBean.isDelayed()) {
-		 	claimType += 1;
-		 }
-		 if (passengerBean.isPilferage()) {
-			claimType += 10;
-		 }
-		 if (passengerBean.isDamaged()) {
-			claimType += 100;
-		 }
-		 if (passengerBean.isInterim()) {
-			claimType += 1000;
-		 }
+		 claimType = encodeBit(claimType, 0, passengerBean.isDelayed());
+		 claimType = encodeBit(claimType, 1, passengerBean.isPilferage());
+		 claimType = encodeBit(claimType, 2, passengerBean.isDamaged());
+		 claimType = encodeBit(claimType, 3, passengerBean.isInterim());
 		 claim.setClaimType(claimType);
 		 
          subDoc1.setIncidentId(passengerBean.getIncidentID()); //claim number is the incident Id
@@ -1190,6 +1182,25 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				return 2;
 			}
 		}
+	}
+	
+	/** Checks whether desired bit is 1 or 0. Index starts at 0 for first bit position.*/
+	public static boolean isBitSet(int value, int index) {
+		int mask = 1<<index;
+		return (mask&value) > 0;
+	}
+
+	/** Encodes desired bit to 1 or 0. Index starts at 0 for first bit position. Boolean determines 1 or 0.*/
+	public static int encodeBit(int value, int index, boolean bit) {
+		int submask = 1<<index;
+		if (bit) {
+			return value|submask;
+		}
+		int valIndex = Integer.numberOfTrailingZeros(Integer.highestOneBit(value));
+		double power = Math.max(index, valIndex) + 1;
+		int alter = (int) (Math.pow(2D, power) - 1D);
+		int mask = submask^alter;
+		return value&mask;
 	}
 
 }
