@@ -80,6 +80,10 @@ public class PassengerBean {
 	private boolean privateInsurance;
 	private String privateInsuranceName;
 	private String privateInsuranceAddr;
+	private boolean delayed;
+	private boolean pilferage;
+	private boolean damaged;
+	private boolean interim;
 	
 	//For About Your Flight Page
 	//private List<Bag> bagList;
@@ -474,6 +478,30 @@ public class PassengerBean {
 	}
 	public void setBagCheckDescription(String bagCheckDescription) {
 		this.bagCheckDescription = bagCheckDescription;
+	}
+	public boolean isDelayed() {
+		return delayed;
+	}
+	public void setDelayed(boolean delayed) {
+		this.delayed = delayed;
+	}
+	public boolean isDamaged() {
+		return damaged;
+	}
+	public void setDamaged(boolean damaged) {
+		this.damaged = damaged;
+	}
+	public boolean isInterim() {
+		return interim;
+	}
+	public void setInterim(boolean interim) {
+		this.interim = interim;
+	}
+	public boolean isPilferage() {
+		return pilferage;
+	}
+	public void setPilferage(boolean pilferage) {
+		this.pilferage = pilferage;
 	}
 	public void setPassengerData(WSPVAdvancedIncident passengerData) {
 		this.passengerData = passengerData; 

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 import javax.faces.context.FacesContext;
+import javax.persistence.Transient;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.axis2.AxisFault;
@@ -306,6 +307,11 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         
         passengerBean.setStatus(claim.getStatus());
         
+        passengerBean.setDelayed(claim.getClaimType() % 2 == 1);
+        passengerBean.setPilferage(claim.getClaimType() % 20 >= 10);
+        passengerBean.setDamaged(claim.getClaimType() % 200 >= 100);
+        passengerBean.setInterim(claim.getClaimType() >= 1000);
+        
        
        return passengerBean;
 									
@@ -403,6 +409,21 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          
          //Files Uploaded
          setWSFiles(passengerBean.getFiles(),claim); // GOOD TO GO
+		 
+ 		 int claimType = 0;
+		 if (passengerBean.isDelayed()) {
+		 	claimType += 1;
+		 }
+		 if (passengerBean.isPilferage()) {
+			claimType += 10;
+		 }
+		 if (passengerBean.isDamaged()) {
+			claimType += 100;
+		 }
+		 if (passengerBean.isInterim()) {
+			claimType += 1000;
+		 }
+		 claim.setClaimType(claimType);
 		 
          subDoc1.setIncidentId(passengerBean.getIncidentID()); //claim number is the incident Id
          subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
@@ -538,20 +559,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
 
 		setWSFiles(passengerBean.getFiles(), claim);
-
-		int offset = 0;
-		for (File file : passengerBean.getFiles()) {
-			if (file.isInterim()) {
-				offset = 3;
-			}
-		}
-		 
-		if (passengerBean.getPassengerData() != null) {
-			claim.setClaimType(passengerBean.getPassengerData().getItemType() + offset);
-		} else {
-			claim.setClaimType(1 + offset);
-		}
-		 
+		
 		subDoc1.setClaim(claim);
 		if(null != subDoc1.getAuth()){
 			subDoc2 = subDoc1.getAuth();
