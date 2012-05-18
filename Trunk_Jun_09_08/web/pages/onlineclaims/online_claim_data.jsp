@@ -476,23 +476,17 @@ phIndex++; %>
 <h1><bean:message key="oc.label.prev.claim.title" /></h1>
 <table class="ocTable" width="95%"><tr>
 <td class="boldCell"><bean:message key="oc.label.claim.type" /></td>
-<td colspan="3"><logic:match value="1" name="claim" property="claimType" scope="request">
-<bean:message key="oc.label.type.ld"/>
+<td colspan="3"><logic:match value="true" name="claim" property="delayed" scope="request">
+<bean:message key="oc.label.type.ld"/>,&#160;
 </logic:match>
-<logic:match value="2" name="claim" property="claimType" scope="request">
-<bean:message key="oc.label.type.miss"/>
+<logic:match value="2" name="claim" property="missing" scope="request">
+<bean:message key="oc.label.type.miss"/>,&#160;
 </logic:match>
-<logic:match value="3" name="claim" property="claimType" scope="request">
-<bean:message key="oc.label.type.dam"/>
+<logic:match value="3" name="claim" property="damaged" scope="request">
+<bean:message key="oc.label.type.dam"/>,&#160;
 </logic:match>
-<logic:match value="4" name="claim" property="claimType" scope="request">
-<bean:message key="oc.label.type.interld"/>
-</logic:match>
-<logic:match value="5" name="claim" property="claimType" scope="request">
-<bean:message key="oc.label.type.intermiss"/>
-</logic:match>
-<logic:match value="6" name="claim" property="claimType" scope="request">
-<bean:message key="oc.label.type.interdam"/>
+<logic:match value="4" name="claim" property="interim" scope="request">
+<bean:message key="oc.label.type.inter"/>
 </logic:match></td>
 </tr><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.priv.insur" /></td>

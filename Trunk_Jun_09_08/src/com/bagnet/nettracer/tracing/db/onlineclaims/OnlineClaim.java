@@ -17,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -746,5 +747,26 @@ public class OnlineClaim {
 	public void setPrivateInsuranceAddr(String privateInsuranceAddr) {
 		this.privateInsuranceAddr = privateInsuranceAddr;
 	}
+	
+	@Transient
+	public boolean isDelayed() {
+		return getClaimType() % 2 == 1;
+	}
+	
+	@Transient
+	public boolean isMissing() {
+		return getClaimType() % 20 >= 10;
+	}
+	
+	@Transient
+	public boolean isDamaged() {
+		return getClaimType() % 200 >= 100;
+	}
+	
+	@Transient
+	public boolean isInterim() {
+		return getClaimType() >= 1000;
+	}
+	
 	
 }
