@@ -11,6 +11,8 @@ public class Claim {
 	private Date travelDate;
 	private double amountClaimed;
 	private String amountClaimedCurrency;
+	private double amountPaid;
+	private String amountPaidCurrency;
 	private Person[] claimants;
 	private Segment[] segments;
 	private Receipt[] receipts;
@@ -50,6 +52,18 @@ public class Claim {
 	}
 	public void setAmountClaimedCurrency(String amountClaimedCurrency) {
 		this.amountClaimedCurrency = amountClaimedCurrency;
+	}
+	public double getAmountPaid() {
+		return amountPaid;
+	}
+	public void setAmountPaid(double amountPaid) {
+		this.amountPaid = amountPaid;
+	}
+	public String getAmountPaidCurrency() {
+		return amountPaidCurrency;
+	}
+	public void setAmountPaidCurrency(String amountPaidCurrency) {
+		this.amountPaidCurrency = amountPaidCurrency;
 	}
 	public Person[] getClaimants() {
 		return claimants;

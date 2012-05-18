@@ -186,7 +186,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 				ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SUBMIT);
 				if (hasViewFraudResultsPermission && results != null) {
 					res.setSearchSummary(results.getMetaSummary());
-					res.setWarningColor(results.getDisplayClass());
+					res.setWarningColor(results.getThreatLevel());
 					res.setWarningLevel(results.getThreatLevel());
 				}
 					
@@ -211,6 +211,8 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	claim.setAirlineClaimId(wsClaim.getAirlineClaimId());
     	claim.setAmountClaimed(wsClaim.getAmountClaimed());
     	claim.setAmountClaimedCurrency(wsClaim.getAmountClaimedCurrency());
+    	claim.setAmountClaimed(wsClaim.getAmountPaid());
+    	claim.setAmountClaimedCurrency(wsClaim.getAmountPaidCurrency());
     	claim.setClaimDate(wsClaim.getClaimDate().getTime());
     	claim.setClaimType(wsClaim.getClaimType());
     	claim.setTravelDate(wsClaim.getTravelDate().getTime());
@@ -250,7 +252,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	incident.setIncidentType(wsIncident.getIncidentType());
     	incident.setNumberDaysOpen(wsIncident.getNumberDaysOpen());
     	incident.setNumberOfBdos(wsIncident.getNumberOfBdosCreated());
-    	incident.setPassengers(copyWStoNTPass(wsIncident.getPassengersArray(), incident, null, null));
+    	incident.setPassengers(copyWStoNTPass(wsIncident.getClaimantsArray(), incident, null, null));
     	incident.setSegments(copyWStoNTSeg(wsIncident.getSegmentsArray(), incident, null, null));    	
     	// END POPULATE INCIDENT FROM WS
     	
@@ -264,7 +266,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	reservation.setCcType(wsRes.getCcType());
     	reservation.setFormOfPayment(wsRes.getFormOfPayment());
     	reservation.setRecordLocator(wsRes.getRecordLocator());
-    	reservation.setPassengers(copyWStoNTPass(wsRes.getPassengersArray(), null, reservation, null));
+    	reservation.setPassengers(copyWStoNTPass(wsRes.getClaimantsArray(), null, reservation, null));
     	reservation.setSegments(copyWStoNTSeg(wsRes.getSegmentsArray(), null, reservation, null));
     	incident.setReservation(reservation);
     	// END POPULATE RESERVATION FROM WS

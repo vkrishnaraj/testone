@@ -1711,5 +1711,24 @@ public class TracerUtils {
 	public static boolean isSqlServerClient(String companyCode) {
 		return (companyCode.equals(TracingConstants.COMPANY_CODE_US) || companyCode.equals(TracingConstants.COMPANY_CODE_FL));
 	}
+	
+	/** Checks whether desired bit is 1 or 0. Index starts at 0 for first bit position.*/
+	public static boolean isBitSet(int value, int index) {
+		int mask = 1<<index;
+		return (mask&value) > 0;
+	}
+
+	/** Encodes desired bit to 1 or 0. Index starts at 0 for first bit position. Boolean determines 1 or 0.*/
+	public static int encodeBit(int value, int index, boolean bit) {
+		int submask = 1<<index;
+		if (bit) {
+			return value|submask;
+		}
+		int valIndex = Integer.numberOfTrailingZeros(Integer.highestOneBit(value));
+		double power = Math.max(index, valIndex) + 1;
+		int alter = (int) (Math.pow(2D, power) - 1D);
+		int mask = submask^alter;
+		return value&mask;
+	}
 
 }

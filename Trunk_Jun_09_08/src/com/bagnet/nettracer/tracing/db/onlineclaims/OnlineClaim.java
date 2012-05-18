@@ -24,6 +24,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 @Entity
 @Table(name = "oc_claim")
@@ -750,22 +751,22 @@ public class OnlineClaim {
 	
 	@Transient
 	public boolean isDelayed() {
-		return getClaimType() % 2 == 1;
+		return TracerUtils.isBitSet(getClaimType(), 0);
 	}
 	
 	@Transient
 	public boolean isMissing() {
-		return getClaimType() % 20 >= 10;
+		return TracerUtils.isBitSet(getClaimType(), 1);
 	}
 	
 	@Transient
 	public boolean isDamaged() {
-		return getClaimType() % 200 >= 100;
+		return TracerUtils.isBitSet(getClaimType(), 2);
 	}
 	
 	@Transient
 	public boolean isInterim() {
-		return getClaimType() >= 1000;
+		return TracerUtils.isBitSet(getClaimType(), 3);
 	}
 	
 	
