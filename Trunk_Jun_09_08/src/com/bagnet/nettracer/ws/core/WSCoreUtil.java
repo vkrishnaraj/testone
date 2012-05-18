@@ -193,7 +193,47 @@ public class WSCoreUtil {
 		}
 		return null;
 	}
+	
+	
+	public static Agent getWebsessionAgent(String session_id, String component_id) throws AuthenticationException {
 
+		Session sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Webservice_Session.class);
+			cri.add(Expression.eq("session_id", session_id));
+			ArrayList thelist = (ArrayList) cri.list();
+			try {
+				sess.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if (thelist != null && thelist.size() > 0) {
+				Webservice_Session ws = (Webservice_Session) thelist.get(0);
+				Date nowdate = TracerDateTime.getGMTDate();
+				Date authdate = ws.getDate_active();
+				long milsec = nowdate.getTime() - authdate.getTime();
+				long hourdiff = milsec / (1000 * 60 * 60);
+				if (hourdiff > HOURS_BEFORE_EXPIRATION) {
+					throw new AuthenticationException("User session expired, please retrieve a new session id using authenticate call.");
+				} else {
+					// check to see if webservice is enabled or not
+					if (SecurityUtils.isWebServiceEnabled(ws.getCompanycode_id().toUpperCase())) {
+						// check to see if agent has permission to access this component
+						Agent agent = AdminUtils.getAgentBasedOnUsername(ws.getUsername(), ws.getCompanycode_id());
+						if (agent != null && (component_id == null || UserPermissions.hasPermission(component_id, agent))){//loupas - if no component then return success by request of byron
+								return agent;
+
+						} else {
+							throw new AuthenticationException("User has no permission to access this webservice method call, please contact admin to add permission.");
+						}
+
+					} else {
+						throw new AuthenticationException("Webservice disabled.");
+					}
+				}
+			}
+			throw new AuthenticationException("Unable to authenticate user session, please reauthenticate.");
+	}
+	
 	/**
 	 * re authenticate with sessionid, make sure it is less than 24 hours since
 	 * insert

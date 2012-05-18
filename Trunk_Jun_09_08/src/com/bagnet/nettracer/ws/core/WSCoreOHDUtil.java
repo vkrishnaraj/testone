@@ -3,8 +3,10 @@ package com.bagnet.nettracer.ws.core;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
@@ -768,23 +770,24 @@ public class WSCoreOHDUtil {
 	    
 	  	// Authenticate
 	    String sessionId = insertFields.getSessionId();
-	    String result = WSCoreUtil.reauth(sessionId,TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_MESSAGE);
-	  	
-	  	if (result != null) {
+	    Agent agent = null;
+	    try{
+	    	agent = WSCoreUtil.getWebsessionAgent(sessionId, null);
+	    } catch (AuthenticationException e){
 	  	  	WSOhdResponse so = WSOhdResponse.Factory.newInstance();
-	  		so.setErrorResponse(errorMsg + result);
+	  		so.setErrorResponse(errorMsg + e.getMessage());
 	  		WSOhdResponse[] soa= {so};
 	  		res.setReturnArray(soa);
 	  		return resDoc;
-	  	}
-	  	Agent agent = WSCoreUtil.getAgent(sessionId);
+	    }
 	  	Date end = new Date();
 	  	
 	  	ArrayList<WSOhdResponse> soList = new ArrayList<WSOhdResponse>();
 	  	int i = 0;
+	  	HashMap stationMap = new HashMap();
 	  	if(insertFields.getSiArray() != null){
 	  		for(i = 0; i < insertFields.getSiArray().length; i++){
-	  			WSOhdResponse so = processBeorn(agent, insertFields.getSiArray(i));
+	  			WSOhdResponse so = processBeorn(agent, insertFields.getSiArray(i), stationMap);
 	  			soList.add(so);
 	  		}
 	  	}
@@ -814,20 +817,20 @@ public class WSCoreOHDUtil {
     
   	// Authenticate
     String sessionId = insertFields.getSessionId();
-    String result = WSCoreUtil.reauth(sessionId,TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_MESSAGE);
-  	
-  	if (result != null) {
-
+    
+    Agent agent = null;
+    try{
+    	agent = WSCoreUtil.getWebsessionAgent(sessionId, null);
+    } catch (AuthenticationException e){
   	  	WSOhdResponse so = WSOhdResponse.Factory.newInstance();
-  		so.setErrorResponse(errorMsg + result);
+  		so.setErrorResponse(errorMsg + e.getMessage());
   		res.setReturn(so);
   		return resDoc;
-  	}
-  	Agent agent = WSCoreUtil.getAgent(sessionId);
+    }
   	
   	Date end = new Date();
 
-  	WSOhdResponse ret = processBeorn(agent, insertFields.getSi());
+  	WSOhdResponse ret = processBeorn(agent, insertFields.getSi(), new HashMap());
   	
   	logger.info("Stop Web Service Response...");
   	com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(ret.getOhdId(), "BEORN webserivce auth", start, end);
@@ -836,7 +839,31 @@ public class WSCoreOHDUtil {
   	return resDoc;
   }
   
-  private static WSOhdResponse processBeorn(Agent agent, WSBEORN si){
+  private static Station getStation(String stationcode, String companycode, HashMap map){
+	  if(map != null && map.containsKey(stationcode+companycode)){
+		  return (Station)map.get(stationcode+companycode);
+	  } else {
+		  Station ret = TracerUtils.getStationByCode(stationcode, companycode);
+		  map.put(stationcode+companycode, ret);
+		  return ret;
+	  }
+  }
+  
+  private static Station getStationById(int id, HashMap map){
+	  if(map != null){
+		  for(Station station:(Collection<Station>)map.values()){
+			  if(station.getStation_ID() == id){
+				  return station;
+			  }
+		  }
+	  }
+	  return StationBMO.getStation(id);
+  }
+  
+  
+  private static WSOhdResponse processBeorn(Agent agent, WSBEORN si, HashMap stationMap){
+	  Date loadstart = new Date();
+	  
 	  	WSOhdResponse so = WSOhdResponse.Factory.newInstance();	
 	  	String errorMsg = "BEORN Failed: ";
 	  	boolean onhandIsNew = true;
@@ -846,7 +873,7 @@ public class WSCoreOHDUtil {
 	  	so.setClaimCheckNumber(bagTagNumber);
 	  	
 	  	String foundAtStation = si.getFoundAtStation();
-	  	Station foundStation = TracerUtils.getStationByCode(foundAtStation, agent.getCompanycode_ID());
+	  	Station foundStation = getStation(foundAtStation,agent.getCompanycode_ID(), stationMap);
 	  	
 	  	if (foundStation == null) {
 	  		so.setErrorResponse(errorMsg + "Invalid Station");
@@ -943,7 +970,7 @@ public class WSCoreOHDUtil {
 		  			}
 
 		  			// Fault station
-			  		Station faultStation = TracerUtils.getStationByCode(si.getFaultStation(), agent.getCompanycode_ID());
+		  			Station faultStation = getStation(si.getFaultStation(), agent.getCompanycode_ID(), stationMap);
 			  		onhand.setFaultstation_ID(faultStation.getStation_ID());
 			  		
 			  		// Fault reason
@@ -954,7 +981,7 @@ public class WSCoreOHDUtil {
 			  		}
 			  		
 		  		}
-		  		
+		  
 		  		// Save forward log
 		  		OHD_Log log = new OHD_Log();
 		  		log.setOhd(onhand);
@@ -962,7 +989,7 @@ public class WSCoreOHDUtil {
 		  		log.setForwarding_agent(agent);
 		  		log.setForward_time(TracerDateTime.getGMTDate());
 		  		log.setMessage(si.getMessage());
-		  		log.setDestStationCode(TracerUtils.getStationByCode(si.getDestinationStation(), agent.getCompanycode_ID()).getStation_ID());
+		  		log.setDestStationCode(getStation(si.getDestinationStation(), agent.getCompanycode_ID(), stationMap).getStation_ID());
 		  		log.setLog_status(TracingConstants.LOG_NOT_RECEIVED);
 		  		
 		  		if (si.getForwardItineraryArray().length > 0) {
@@ -1009,14 +1036,14 @@ public class WSCoreOHDUtil {
 		  		}
 		  		
 		  		// Add a remark
-		  		
+		  			  		
 		  		MessageResources messages = MessageResources
 					.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
 					Remark r = new Remark();
 					r.setAgent(agent);
 					r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-					Station station = StationBMO.getStation("" + log.getDestStationCode());
+					Station station = getStationById(log.getDestStationCode(), stationMap);
 					r.setRemarktext(messages.getMessage(new Locale(agent.getCurrentlocale()), "bagforwardMessage") + " " + station.getCompany().getCompanyCode_ID()
 							+ messages.getMessage(new Locale(agent.getCurrentlocale()), "aposS") + " " + station.getStationcode() + " station.");
 					r.setOhd(onhand);
@@ -1031,17 +1058,23 @@ public class WSCoreOHDUtil {
 						remarks.add(r);
 					}
 		  		
+					com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(onhand.getOHD_ID(), "Bulk BEORN webserivce load OHD", loadstart);	
 		  		// Save On-hand
+				Date ohdstart = new Date();
 		  		OhdBMO obmo = new OhdBMO();
+		  		com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(onhand.getOHD_ID(), "Bulk BEORN webserivce save OHD", ohdstart);
 		  		boolean insertResult = obmo.insertOHD(onhand, onhand.getAgent(), foundStation);
 		  		if (!insertResult) {
 		  			so.setErrorResponse(errorMsg + "Unable to perform BEORN.");
 		  	    return so;
 		  		} 
 		  		so.setOhdId(onhand.getOHD_ID());
-					
+				
+		  		Date logstart = new Date();
 				HibernateUtils.save(log);
-					
+				com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(onhand.getOHD_ID(), "Bulk BEORN webserivce log OHD", logstart);
+				Date telpcnstart = new Date();
+				
 		  		BeornDTO dto = new BeornDTO();
 		  		dto.setSpecialInstructions(si.getSpecialInstructions());
 		  		dto.setExpediteNumber(si.getExpediteNumber());
@@ -1054,7 +1087,7 @@ public class WSCoreOHDUtil {
 		  		dto.setTagNumber(si.getClaimCheckNumber());
 		  		dto.setOnhand(onhand.getOHD_ID());
 		  		dto.setLog(log);
-		  		
+		  		  		
 		  		try {
 		  			SpringUtils.getClientEventHandler().doEventOnBeornWS(dto);
 		  		} catch (Exception e) {
@@ -1068,7 +1101,9 @@ public class WSCoreOHDUtil {
 		  			logger.error("Error performing PCN lookup...");
 		  			e.printStackTrace();
 		  		}
-					
+				
+		  		com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(onhand.getOHD_ID(), "Bulk BEORN webserivce PCN TELEX", telpcnstart);
+		  		
 	  		} catch (Exception e) {
 	  			e.printStackTrace();
 	  			so.setErrorResponse(errorMsg + "Unable to perform BEORN.");
@@ -1076,7 +1111,6 @@ public class WSCoreOHDUtil {
 	  	}
 	  	
 	  	// Return Response
-	  	
 	  	logger.info("Stop Web Service Response...");
 	    return so;
   }
