@@ -119,6 +119,8 @@ public class Reservation implements ReservationInterface {
 	private static final String ACTION_TRAVEL_ITINERARY_RQ = "TravelItineraryReadLLSRQ";
 	private static final String ACTION_SESSION_VALIDATE_RQ = "SessionValidateRQ";
 
+	protected static final Pattern phonePattern = Pattern.compile("([ 0-9\\-]*)(-[A-Z])");
+	
 	private static Logger logger = Logger.getLogger(Reservation.class);
 
 	@Override
@@ -308,14 +310,13 @@ public class Reservation implements ReservationInterface {
 			}
 
 			ArrayList<String> numbersLeftToAdd = new ArrayList<String>();
-			Pattern p = Pattern.compile("([0-9\\-]*)(-[A-Z])");
 
 			for (int i = 0; i < telephones.length; ++i) {
 				Telephone tel = telephones[i];
 
 				String phone = tel.getPhoneNumber();
 				String phoneText = phone;
-				Matcher m = p.matcher(phone);
+				Matcher m = phonePattern.matcher(phone);
 
 				if (m.find()) {
 					phoneText = m.group(1);
