@@ -355,7 +355,12 @@ public class Reservation implements ReservationInterface {
 				if (pax == null) {
 					pax = firstPax;
 				}
-				pax.setFfAirline(custL.getProgramID());
+				if(custL.getCodeshare() != null && custL.getCodeshare().trim().length() > 0){
+					pax.setFfAirline(custL.getCodeshare());
+				} else {
+					pax.setFfAirline(custL.getProgramID());	
+				}
+				
 				pax.setFfNumber(custL.getMembershipID());
 				pax.setFfStatus(custL.getShortText());
 			}
