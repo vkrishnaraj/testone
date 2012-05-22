@@ -479,13 +479,13 @@ phIndex++; %>
 <td colspan="3"><logic:match value="true" name="claim" property="delayed" scope="request">
 <bean:message key="oc.label.type.ld"/>,&#160;
 </logic:match>
-<logic:match value="2" name="claim" property="missing" scope="request">
+<logic:match value="true" name="claim" property="missing" scope="request">
 <bean:message key="oc.label.type.miss"/>,&#160;
 </logic:match>
-<logic:match value="3" name="claim" property="damaged" scope="request">
+<logic:match value="true" name="claim" property="damaged" scope="request">
 <bean:message key="oc.label.type.dam"/>,&#160;
 </logic:match>
-<logic:match value="4" name="claim" property="interim" scope="request">
+<logic:match value="true" name="claim" property="interim" scope="request">
 <bean:message key="oc.label.type.inter"/>
 </logic:match></td>
 </tr><tr>
