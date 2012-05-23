@@ -824,7 +824,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			passengerBean.setBagList(bagList);
 			List<Bag> bagTagList = new ArrayList<Bag>();
 			for (Bag b : bagList) {
-				bagTagList.add(b);
+				if (!b.getBagTagNumber().equals("INTERIM")) {
+					bagTagList.add(b);
+				}
 			}
 			passengerBean.setBagTagList(bagTagList); //For ticket-info
 		}
@@ -900,37 +902,39 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				bag=bagList.get(i);
 				if(null != bag){
 					wsBag.setTag(bag.getBagTagNumber());
-					wsBag.setNameOnBag(bag.getNameonBag());
-					wsBag.setBrand(bag.getBrandOftheBag());
-					wsBag.setExternalMarkings(bag.getExternalMarkings());
-					if(null !=bag.getBagPurchaseDate()){
-						calendar=Calendar.getInstance();
-						calendar.setTime(bag.getBagPurchaseDate());
-						//calendar.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
-						wsBag.setPurchaseDate(calendar);
-						calendar=null;//GC
+					if (!bag.getBagTagNumber().equals("INTERIM")) {
+						wsBag.setNameOnBag(bag.getNameonBag());
+						wsBag.setBrand(bag.getBrandOftheBag());
+						wsBag.setExternalMarkings(bag.getExternalMarkings());
+						if(null !=bag.getBagPurchaseDate()){
+							calendar=Calendar.getInstance();
+							calendar.setTime(bag.getBagPurchaseDate());
+							//calendar.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
+							wsBag.setPurchaseDate(calendar);
+							calendar=null;//GC
+						}
+	
+						wsBag.setBagColor(bag.getBagColor());
+						wsBag.setBagType(bag.getBagType());
+						wsBag.setHardSided(bag.getHardSided());
+						wsBag.setSoftSided(bag.getSoftSided());
+						wsBag.setLocks(bag.getLocks());
+						wsBag.setWheels(bag.getWheelsRollers());
+						wsBag.setZippers(bag.getZippers());
+						wsBag.setPullStrap(bag.getPullStrap());
+						wsBag.setFeet(bag.getFeet());
+						wsBag.setRetractibleHandle(bag.getRetractableHandel());
+						wsBag.setNameTag(bag.getNameTag());
+						wsBag.setTrim(bag.getTrim());
+						wsBag.setPockets(bag.getPockets());
+						wsBag.setRibbonsOrMarkings(bag.getRibbonsPersonalMarkings());
+						wsBag.setBagValue(bag.getBagPrice());
+						wsBag.setBagCurrency(bag.getBagCurrency());
+						wsBag.setBagOwner(bag.getBagOwner());
+						wsBag.setLeather(bag.isLeather());
+						wsBag.setMetal(bag.isMetal());
+						wsBag.setTrimDescription(bag.getTrimDescription());
 					}
-
-					wsBag.setBagColor(bag.getBagColor());
-					wsBag.setBagType(bag.getBagType());
-					wsBag.setHardSided(bag.getHardSided());
-					wsBag.setSoftSided(bag.getSoftSided());
-					wsBag.setLocks(bag.getLocks());
-					wsBag.setWheels(bag.getWheelsRollers());
-					wsBag.setZippers(bag.getZippers());
-					wsBag.setPullStrap(bag.getPullStrap());
-					wsBag.setFeet(bag.getFeet());
-					wsBag.setRetractibleHandle(bag.getRetractableHandel());
-					wsBag.setNameTag(bag.getNameTag());
-					wsBag.setTrim(bag.getTrim());
-					wsBag.setPockets(bag.getPockets());
-					wsBag.setRibbonsOrMarkings(bag.getRibbonsPersonalMarkings());
-					wsBag.setBagValue(bag.getBagPrice());
-					wsBag.setBagCurrency(bag.getBagCurrency());
-					wsBag.setBagOwner(bag.getBagOwner());
-					wsBag.setLeather(bag.isLeather());
-					wsBag.setMetal(bag.isMetal());
-					wsBag.setTrimDescription(bag.getTrimDescription());
 					//ticket section
 					wsBag.setBagArrive(new Boolean(bag.getBagArrivalStatus()));
 
@@ -966,6 +970,10 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 							wsBagArray[j] = null;
 							break;
 						}
+					}
+					if (wsBag.getTag().equals("INTERIM")) {
+						newWsBagArray[bagIndex]=wsBag;
+						bagIndex++;
 					}
 					wsBag=null;//GC
 					bag=null;

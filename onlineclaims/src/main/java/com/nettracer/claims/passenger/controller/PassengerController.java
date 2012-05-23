@@ -1137,9 +1137,16 @@ public class PassengerController {
 							compiledList = lostBagList;
 						} else {
 							List<Bag> oldBagList = passengerBean.getBagList();
+							int offset = 0;
+							if (passengerBean.isInterim()) {
+								offset = 1;
+							}
 							for (Bag l : lostBagList) {
-								if (oldBagList.size() > 0) {
+								if ((oldBagList.size() - offset) > 0) {
 									Bag b = oldBagList.get(0);
+									if (l.getBagTagNumber().equals("INTERIM")) {
+										b = oldBagList.get(oldBagList.size() - 1);
+									}
 									if (b != null) {
 										b.setBagTagNumber(l.getBagTagNumber());
 										b.setBagArrivalStatus(l.getBagArrivalStatus());
@@ -1147,7 +1154,16 @@ public class PassengerController {
 									}
 									oldBagList.remove(0);
 								} else {
-									compiledList.add(l);
+									if (l.getBagTagNumber().equals("INTERIM")) {
+										Bag b = oldBagList.get(0);
+										if (b != null) {
+											b.setBagTagNumber(l.getBagTagNumber());
+											b.setBagArrivalStatus(l.getBagArrivalStatus());
+											compiledList.add(b);
+										}
+									} else {
+										compiledList.add(l);
+									}
 								}
 							}
 						}
