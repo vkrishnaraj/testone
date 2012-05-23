@@ -407,7 +407,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          setWSItineraries(passengerBean.getItineraryList(),claim); // GOOD TO GO	 
          
          //Bag Info
-         setWSBags(passengerBean.getBagList(),claim); // GOOD TO GO
+         setWSBags(passengerBean.getBagList(),claim,passengerBean.isInterim()); // GOOD TO GO
          
          //Files Uploaded
          setWSFiles(passengerBean.getFiles(),claim); // GOOD TO GO
@@ -519,7 +519,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		 subDoc1.setIncidentId(passengerBean.getIncidentID()); //claim number is the incident Id
 		 subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
 		 
-		 setWSBags(passengerBean.getBagList(),claim);
+		 setWSBags(passengerBean.getBagList(),claim,passengerBean.isInterim());
 		 
 		 subDoc1.setClaim(claim);
          if(null != subDoc1.getAuth()){
@@ -884,7 +884,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 
 	}
 	
-	private void setWSBags(List<Bag> bagList, Claim claim) {
+	private void setWSBags(List<Bag> bagList, Claim claim, boolean interim) {
 		com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBagArray= null;
 		com.bagnet.nettracer.ws.onlineclaims.xsd.Bag wsBag=null;
 		com.bagnet.nettracer.ws.onlineclaims.xsd.Contents[] wsContentArray=null;
@@ -894,8 +894,12 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		Calendar calendar=null;
 		if(null != bagList && bagList.size() >0){
 			wsBagArray=claim.getBagArray();
+			int offset = 0;
+			if (interim) {
+				offset = 1;
+			}
 			com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] newWsBagArray =
-					new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[wsBagArray.length];
+					new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[wsBagArray.length + offset];
 			int bagIndex = 0;
 			for (int i=0; i<bagList.size();i++) {
 				wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
