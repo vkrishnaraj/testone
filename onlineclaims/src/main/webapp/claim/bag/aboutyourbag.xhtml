@@ -14,7 +14,7 @@
 	
 	<rich:panel id="aboutbagpanel" style="border:0px">
 	<a4j:repeat id="bagList" value="#{passengerBean.bagList}" var="bagItem" rowKeyVar="rowIndex" >
-	<h:panelGroup rendered="#{bagItem.bagTagNumber eq 'INTERIM'}" >
+	<h:panelGroup rendered="#{!(bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM')}" >
 	<div>
 		<t:outputText value="#{passengerController.bagDetailsLabel.bagNumberLabel.label}:"	styleClass="subHeader" /> 
 		<t:outputText value="#{rowIndex+1}" styleClass="subHeader"/>
@@ -381,7 +381,7 @@
 	</h:panelGroup>
 	
 	<div>
-		<t:outputText value="#{passengerController.bagDetailsLabel.descriptionOfContents.label}" styleClass="subHeader" rendered="#{bagItem.bagArrivalStatus eq 'false'}"/>
+		<t:outputText value="#{passengerController.bagDetailsLabel.descriptionOfContents.label}" styleClass="subHeader" rendered="#{!(bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM')}"/>
 		<t:outputText value="Description of Delayed Expenses." 
 			styleClass="subHeader" rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM'}"/>
 		<br/>
