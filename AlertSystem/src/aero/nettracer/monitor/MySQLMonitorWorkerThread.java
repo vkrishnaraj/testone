@@ -58,7 +58,7 @@ public class MySQLMonitorWorkerThread implements Runnable {
 	private 	String responseString = null;
 	private Calendar startTime = null;
 	private Calendar stopTime = null;
-	static Logger logger = Logger.getLogger(HttpMonitorWorkerThread.class);
+	static Logger logger = Logger.getLogger(MySQLMonitorWorkerThread.class);
 	
 	public MySQLMonitorWorkerThread() {
 		
@@ -164,8 +164,12 @@ public class MySQLMonitorWorkerThread implements Runnable {
 					  }
 					  
 					  if((rs.getInt("Seconds_Behind_Master")>1800) || nulltrue)
-					  {
-						  sb.append("Failure: Seconds_Behind_Master is: "+rs.getString("Seconds_Behind_Master")+" ");
+					  {		String error="No Error Listed.";
+						  if(!rs.getString("Last_Error").equals("") && !rs.getString("Last_Error").equals(null))
+						  {
+							  error=rs.getString("Last_Error");
+						  }
+						  sb.append("Failure: Seconds_Behind_Master is: "+rs.getString("Seconds_Behind_Master")+" Last_Errno is: "+rs.getString("Last_Errno")+" Last_Error is: "+error+" ");
 						  fail=true;
 					  }
 				  }
@@ -175,6 +179,10 @@ public class MySQLMonitorWorkerThread implements Runnable {
 				  }
 				  sb.append("Finished.");
 				  result = sb.toString();
+				  if(result==null)
+				  {
+					  result="null";
+				  }
 				  // close all the connections.
 				  rs.close();
 				  statement.close();

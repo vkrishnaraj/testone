@@ -50,7 +50,7 @@ public class MySqlMonitor {
 					logger.info("  Test failure; " + wt.printFullStatus());
 					try {
 //						SimpleJdbcLogger.log(MDB.getDBName(), MDB.getConnectionURL(), wt.getStartTime(), wt.getStopTime(), wt.isFinished()? wt.getElapsedTimeInMillis() : 0, true);
-						if(wt.getResponseString().toLowerCase().contains("null"))
+						if(wt.getResponseString()==null || wt.getResponseString().toLowerCase().contains("null"))
 						{
 							nullCount++;
 							if(nullCount==2)
@@ -131,7 +131,7 @@ public class MySqlMonitor {
 			to = properties.getProperty("notice_email");
 		}
 
-		String subject = properties.getProperty("monitor_name");
+		String subject = properties.getProperty("monitor_name2");
 		int port = Integer.parseInt(properties.getProperty("port"));
 
 		String message = msg;
