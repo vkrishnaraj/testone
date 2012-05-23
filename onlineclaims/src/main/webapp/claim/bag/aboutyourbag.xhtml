@@ -386,11 +386,11 @@
 			styleClass="subHeader" rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM'}"/>
 		<br/>
 		<t:outputText value="Please list all contents that are missing." 
-			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.pilferage and !passengerBean.damaged}"/>
+			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.pilferage and !passengerBean.damaged and !(bagItem.bagTagNumber eq 'INTERIM')}"/>
 		<t:outputText value="Please list all contents that are damaged." 
-			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'true' and !passengerBean.pilferage and passengerBean.damaged}"/>
+			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'true' and !passengerBean.pilferage and passengerBean.damaged and !(bagItem.bagTagNumber eq 'INTERIM')}"/>
 		<t:outputText value="Please list all contents that are missing or damaged." 
-			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.pilferage and passengerBean.damaged}"/>
+			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.pilferage and passengerBean.damaged and !(bagItem.bagTagNumber eq 'INTERIM')}"/>
 		<t:outputText value="Please list all contents contained in your delayed bag. " 
 			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'false'}"/>
 		<t:outputText value="Please list all of your delayed expenses." 
