@@ -306,10 +306,68 @@ phIndex++; %>
 <logic:notEmpty name="claim" property="bag" scope="request">
 <logic:iterate id="bags" name="claim" property="bag" type="com.bagnet.nettracer.tracing.db.onlineclaims.OCBag" indexId="bagsIndex">
 <h3><bean:message key="oc.label.bag.number" />&nbsp;<%= bagsIndex.intValue() + 1 %></h3>
-<% if (bags.isBagArrive() && (c.getClaimType() == 1 || c.getClaimType() == 4)) { %>
+<% if (bags.isBagArrive() && !(c.isDamaged() || c.isMissing()) && !bags.getTag().equals("INTERIM")) { %>
 <table class="ocTable" width="95%"><tr>
 <td class="boldCell"><bean:message key="oc.label.bag.tag" /></td><td><bean:write name="bags" property="tag"/></td>
 </tr></table>
+<% } else if (bags.isBagArrive() && c.isInterim() && bags.getTag().equals("INTERIM")) { %>
+<table class="ocTable" width="95%"><tr>
+<td class="boldCell" colspan="9"><bean:message key="oc.title.delayed.expenses" /></td></tr>
+<logic:present name="bags" property="contents">
+<logic:notEmpty name="bags" property="contents">
+<tr>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.gender" /></td>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.article" /></td>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.color" /></td>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.size" /></td>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.brand" /></td>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.store" /></td>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.date" /></td>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.price" /></td>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.currency" /></td>
+</tr>
+<logic:iterate id="conts" name="bags" property="contents" type="com.bagnet.nettracer.tracing.db.onlineclaims.OCContents">
+<tr>
+<td>
+<logic:equal value="0" name="conts" property="male">
+<bean:message key="oc.label.bag.contents.gender.na"/>
+</logic:equal>
+<logic:equal value="1" name="conts" property="male">
+<bean:message key="oc.label.bag.contents.gender.male"/>
+</logic:equal>
+<logic:equal value="2" name="conts" property="male">
+<bean:message key="oc.label.bag.contents.gender.female"/>
+</logic:equal>
+<logic:equal value="3" name="conts" property="male">
+<bean:message key="oc.label.bag.contents.gender.child"/>
+</logic:equal>
+<logic:equal value="4" name="conts" property="male">
+<bean:message key="oc.label.bag.contents.gender.infant"/>
+</logic:equal>
+<logic:equal value="5" name="conts" property="male">
+<bean:message key="oc.label.bag.contents.gender.fchild"/>
+</logic:equal>
+</td>
+<td><bean:write name="conts" property="article"/></td>
+<td><bean:write name="conts" property="color"/></td>
+<td><bean:write name="conts" property="size"/></td>
+<td><bean:write name="conts" property="brand"/></td>
+<td><bean:write name="conts" property="purchasedAt"/></td>
+<td><bean:write name="conts" property="purchasedDate"/></td>
+<td><bean:write name="conts" property="price"/>&#160;<bean:write name="conts" property="currency"/></td>
+<td><bean:write name="conts" property="contentOwner"/></td>
+</tr>
+</logic:iterate>
+<tr><td colspan="9">Total Cost: <bean:write name="bags" property="grandTotal"/></td></tr>
+</logic:notEmpty>
+<logic:empty name="bags" property="contents">
+<tr><td colspan="9"><bean:message key="oc.label.bag.contents.none" /></td></tr>
+</logic:empty>
+</logic:present>
+<logic:notPresent name="bags" property="contents">
+<tr><td colspan="9"><bean:message key="oc.label.bag.contents.none" /></td></tr>
+</logic:notPresent>
+</table>
 <% } else { %>
 <table class="ocTable" width="95%"><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.bag.tag" /></td><td colspan="2"><bean:write name="bags" property="tag"/></td>
