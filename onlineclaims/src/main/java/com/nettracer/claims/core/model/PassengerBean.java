@@ -547,21 +547,21 @@ public class PassengerBean {
 		return completeClaim;
 	}
 	
-	public boolean isLostDelay() {
+	private boolean isLostDelay() {
 		if (passengerData != null) {
 			return (passengerData.getItemType() == 1);
 		}
 		return true;
 	}
 	
-	public boolean isMissing() {
+	private boolean isMissing() {
 		if (passengerData != null) {
 			return (passengerData.getItemType() == 2);
 		}
 		return false;
 	}
 	
-	public boolean isDamage() {
+	private boolean isDamage() {
 		if (passengerData != null) {
 			return (passengerData.getItemType() == 3);
 		}

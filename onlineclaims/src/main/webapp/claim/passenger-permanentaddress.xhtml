@@ -14,25 +14,25 @@
 	<h:panelGrid columns="16">
 		<h:selectBooleanCheckbox value="#{passengerBean.delayed}" disabled="#{passengerController.readOnlyOnSubmitted}" />
 		<rich:spacer width="5"/>
-		<t:outputText value="Lost/Delayed"  styleClass="requiredField"/>
-		<rich:spacer width="20"/>
-		
-		<h:selectBooleanCheckbox value="#{passengerBean.pilferage}" 
-			 disabled="#{passengerController.readOnlyOnSubmitted}"/>
-		<rich:spacer width="5"/>
-		<t:outputText value="Missing Items" styleClass="requiredField"/>
-		<rich:spacer width="20"/>
-		
-		<h:selectBooleanCheckbox value="#{passengerBean.damaged}" 
-			 disabled="#{passengerController.readOnlyOnSubmitted}"/>
-		<rich:spacer width="5"/>
-		<t:outputText value="Damaged" styleClass="requiredField"/>
+		<t:outputText value="Lost Luggage"  styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{passengerBean.interim}" 
 			 disabled="#{passengerController.readOnlyOnSubmitted}"/>
 		<rich:spacer width="5"/>
-		<t:outputText value="Interim Expenses" styleClass="requiredField"/>
+		<t:outputText value="Delayed Expenses" styleClass="requiredField"/>
+		<rich:spacer width="20"/>
+		
+		<h:selectBooleanCheckbox value="#{passengerBean.pilferage}" 
+			 disabled="#{passengerController.readOnlyOnSubmitted}"/>
+		<rich:spacer width="5"/>
+		<t:outputText value="Contents Missing" styleClass="requiredField"/>
+		<rich:spacer width="20"/>
+		
+		<h:selectBooleanCheckbox value="#{passengerBean.damaged}" 
+			 disabled="#{passengerController.readOnlyOnSubmitted}"/>
+		<rich:spacer width="5"/>
+		<t:outputText value="Damage" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 	</h:panelGrid>
 	<rich:spacer width="100%" height="20" title="" />

@@ -1113,14 +1113,20 @@ public class PassengerController {
 					}
 					if (bagTagList != null && bagTagList.size() > 0) {
 						for (Bag lostBag : bagTagList) {
-							if (!passengerBean.isLostDelay() || !(Boolean.parseBoolean(lostBag.getBagArrivalStatus()))) {
+							if (passengerBean.isPilferage() || passengerBean.isDamaged() || !(Boolean.parseBoolean(lostBag.getBagArrivalStatus()))) {
 								lostBagList.add(lostBag);
 							}
 						}
-						if (passengerBean.isLostDelay() && passengerBean.getLostBag() != lostBagList.size()) {
-							FacesUtil
-									.addError("Please match the no. of Bags lost with the Arrival status of the Bag");
+						if (!(passengerBean.isPilferage() || passengerBean.isDamaged()) && passengerBean.isDelayed() && passengerBean.getLostBag() != lostBagList.size()) {
+							FacesUtil.addError("Please match the no. of Bags lost with the Arrival status of the Bag");
 							return null;
+						}
+						
+						if (passengerBean.isInterim()) {
+							Bag interimBag = new Bag();
+							interimBag.setBagArrivalStatus("true");
+							interimBag.setBagTagNumber("INTERIM");
+							lostBagList.add(interimBag);
 						}
 						// Logic for step 3 o 6 About Your Bag (multiple page)
 						// passengerBean.setBagList(lostBagList);

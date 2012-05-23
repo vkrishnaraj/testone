@@ -307,10 +307,12 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         
         passengerBean.setStatus(claim.getStatus());
         
-        passengerBean.setDelayed(isBitSet(claim.getClaimType(), 0));
-        passengerBean.setPilferage(isBitSet(claim.getClaimType(), 1));
-        passengerBean.setDamaged(isBitSet(claim.getClaimType(), 2));
-        passengerBean.setInterim(isBitSet(claim.getClaimType(), 3));
+        if (wsPermanentAddress.getAddress1() != null && wsPermanentAddress.getAddress1().length() > 0) {
+        	passengerBean.setDelayed(isBitSet(claim.getClaimType(), 0));
+        	passengerBean.setPilferage(isBitSet(claim.getClaimType(), 1));
+        	passengerBean.setDamaged(isBitSet(claim.getClaimType(), 2));
+        	passengerBean.setInterim(isBitSet(claim.getClaimType(), 3));
+        }
         
        
        return passengerBean;
