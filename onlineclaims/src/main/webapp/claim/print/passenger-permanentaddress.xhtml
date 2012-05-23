@@ -8,6 +8,32 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 
+	<div>
+		<t:outputText value="Please select the type(s) of claims you are filing." styleClass="subHeader" />
+	</div>
+	<rich:spacer width="100%" height="10" title="" />
+	<h:panelGrid columns="16">
+		<h:selectBooleanCheckbox value="#{passengerBean.delayed}" disabled="true" />
+		<rich:spacer width="5"/>
+		<t:outputText value="Lost Luggage"  styleClass="requiredField"/>
+		<rich:spacer width="20"/>
+		
+		<h:selectBooleanCheckbox value="#{passengerBean.interim}" disabled="true"/>
+		<rich:spacer width="5"/>
+		<t:outputText value="Delayed Expenses" styleClass="requiredField"/>
+		<rich:spacer width="20"/>
+		
+		<h:selectBooleanCheckbox value="#{passengerBean.pilferage}" disabled="true"/>
+		<rich:spacer width="5"/>
+		<t:outputText value="Contents Missing" styleClass="requiredField"/>
+		<rich:spacer width="20"/>
+		
+		<h:selectBooleanCheckbox value="#{passengerBean.damaged}" disabled="true"/>
+		<rich:spacer width="5"/>
+		<t:outputText value="Damage" styleClass="requiredField"/>
+		<rich:spacer width="20"/>
+	</h:panelGrid>
+	<rich:spacer width="100%" height="20" title="" />
 				
 				<rich:dataTable id="passengerNameTable" var="pass"
 					columnsWidth="30%,25%,22%,23%" 
