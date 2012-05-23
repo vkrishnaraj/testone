@@ -763,7 +763,6 @@ public class OnlineClaimsServiceImplementation extends
 					diffPax = true;
 				}
 				Claim ret = dao.convertClaimDbToWs(c);
-				ret.setClaimType(inc.getItemtype().getItemType_ID());
 				if (diffPax) {
 					ret.setStatus("SECOND_CLAIM");
 				}
