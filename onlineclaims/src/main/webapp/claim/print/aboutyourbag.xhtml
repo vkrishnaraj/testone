@@ -14,6 +14,7 @@
 	
 	<rich:panel id="aboutbagpanel" style="border:0px">
 	<a4j:repeat value="#{passengerBean.bagList}" var="bagItem" rowKeyVar="rowIndex" >
+	<h:panelGroup rendered="#{!(bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM')}" >
 	<div>
 		<t:outputText value="#{passengerController.bagDetailsLabel.bagNumberLabel.label}:"	styleClass="subHeader" /> 
 		<t:outputText value="#{rowIndex+1}" styleClass="subHeader"/>
@@ -271,8 +272,23 @@
 	</h:panelGrid>
 	
 	<rich:spacer width="100%" height="25"/>
+	</h:panelGroup>
+	
 	<div>
-		<t:outputText value="#{passengerController.bagDetailsLabel.descriptionOfContents.label}" styleClass="subHeader" />
+		<t:outputText value="#{passengerController.bagDetailsLabel.descriptionOfContents.label}" styleClass="subHeader" rendered="#{!(bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM')}"/>
+		<t:outputText value="Description of Delayed Expenses." 
+			styleClass="subHeader" rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM'}"/>
+		<br/>
+		<t:outputText value="Please list all contents that are missing." 
+			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.pilferage and !passengerBean.damaged and !(bagItem.bagTagNumber eq 'INTERIM')}"/>
+		<t:outputText value="Please list all contents that are damaged." 
+			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'true' and !passengerBean.pilferage and passengerBean.damaged and !(bagItem.bagTagNumber eq 'INTERIM')}"/>
+		<t:outputText value="Please list all contents that are missing or damaged." 
+			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.pilferage and passengerBean.damaged and !(bagItem.bagTagNumber eq 'INTERIM')}"/>
+		<t:outputText value="Please list all contents contained in your delayed bag. " 
+			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'false'}"/>
+		<t:outputText value="Please list all of your delayed expenses." 
+			styleClass="requiredField" rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM'}"/>
 	</div>
 	<rich:spacer width="100%" height="10" title="" />
 	<a4j:region renderRegionOnly="true">
