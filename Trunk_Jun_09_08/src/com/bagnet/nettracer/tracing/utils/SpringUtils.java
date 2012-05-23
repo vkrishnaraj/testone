@@ -49,6 +49,10 @@ public class SpringUtils {
 		return ctx.getBean(beanName);
 	}
 	
+	public static void init() {
+		
+	}
+	
 	public static ReservationIntegration getReservationIntegration() {
 		return (ReservationIntegration) getBean(RESERVATION_INTEGRATION);
 	}

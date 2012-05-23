@@ -97,6 +97,7 @@ public class ClaimUtils {
 		claim.setClaimDate(new Date());
 		claim.setAirline(user.getCompanycode_ID());
 		claim.setAmountClaimedCurrency(user.getDefaultcurrency());
+		claim.setAmountPaidCurrency(user.getDefaultcurrency());
 		
 		// create the person
 		Person person = new Person();
@@ -504,6 +505,7 @@ public class ClaimUtils {
 		}
 		
 		claim.setAmountPaid(amountPaid);
+		claim.setAmountPaidCurrency(currency);
 		claim.setAmountClaimed(amount);
 		claim.setAmountClaimedCurrency(currency);
 	

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -169,25 +170,46 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		if(lostReport == null){
 			return -1;
 		}
-		LFLost host = new LFLost();
+		LFLost host = null;
+		boolean update = false;
+
+		if (lostReport.getReportId()!=null) {
+			LFServiceBean bean = new LFServiceBean();
+			host = bean.getLostReport(Long.valueOf(lostReport.getReportId()));
+		}
 		
-		Agent agent = getWebAgent();
-		//TODO web agent
-		host.setAgent(agent);
+		if (host != null) {
+			update = true;
+		} else {
+			host = new LFLost();
+		}
+		
+		if (!update) {
+			Agent agent = getWebAgent();
+			//TODO web agent
+			host.setAgent(agent);
+			host.setCompanyId(lostReport.getSubCompany());
+			
+			Station station = StationBMO.getStationByCode("WEB", TracerProperties.get("wt.company.code"));
+			//TODO web location
+			host.setLocation(station);
+			
+			//TODO normalize dates
+			host.setOpenDate(new Date());
+			
+			Status status = new Status();
+			status.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
+			host.setStatus(status);
+		}
 		
 		host.setVantiveNumber(lostReport.getVantiveNumber());
-		host.setCompanyId(lostReport.getSubCompany());
-		
-		Station station = StationBMO.getStationByCode("WEB", TracerProperties.get("wt.company.code"));
-		//TODO web location
-		host.setLocation(station);
-		
-		//TODO normalize dates
-		host.setOpenDate(new Date());
 		
 		host.setRemarks(lostReport.getWhereLost());
 		
 		LFItem item = new LFItem();
+		if (update) {
+			item = host.getItem();
+		}
 		item.setBrand(lostReport.getItemBrand());
 		item.setCategory(lostReport.getItemCategory());
 		item.setColor(lostReport.getItemColor());
@@ -206,14 +228,27 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 
 		if(lostReport.getLostPhone() != null){
 			LFPhone lostPhone = new LFPhone();
+			if (update) {
+				lostPhone = item.getPhone();
+			}
 			lostPhone.setDecryptedPhoneNumber(lostReport.getLostPhone().getNumber());
 			lostPhone.setPhoneType(lostReport.getLostPhone().getType());
 			lostPhone.setItem(item);
-			item.setPhone(lostPhone);
+			
+			if (!update) {
+				item.setPhone(lostPhone);
+			}
 		}
-		host.setItem(item);
+		
+		if (!update) {
+			host.setItem(item);
+		}
 		
 		LFLossInfo lossinfo = new LFLossInfo();
+		if (update) {
+			lossinfo = host.getLossInfo();
+		}
+		
 		lossinfo.setAgreementNumber(lostReport.getAgreementNumber());
 		if (lostReport.getDropOffLocation() > 0) {
 			Station dropoff = new Station();
@@ -227,10 +262,16 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			lossinfo.setOrigin(pickup);
 		}
 		lossinfo.setLossdate(lostReport.getDateLost());
-		host.setLossInfo(lossinfo);
+		
+		if (!update) {
+			host.setLossInfo(lossinfo);
+		}
 		
 		if(lostReport.getContact() != null){
 			LFPerson client = new LFPerson();
+			if (update) {
+				client = host.getClient();
+			}
 			
 			client.setConfirmEmail(lostReport.getContact().getConfirmEmail());
 			client.setDecryptedEmail(lostReport.getContact().getEmailAddress());
@@ -238,29 +279,51 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			client.setLastName(lostReport.getContact().getLastName());
 			client.setMiddleName(lostReport.getContact().getMiddleInitial());
 			
-			HashSet<LFPhone> phones = new HashSet<LFPhone>();
+			Set<LFPhone> phones = new HashSet<LFPhone>();
+			Iterator<LFPhone> phoneIter = null;
+			boolean addPhone = true;
+			if (update) {
+				phones = client.getPhones();
+				phoneIter = phones.iterator();
+			}
 			if(lostReport.getContact().getPrimaryPhone() != null){
 				LFPhone toAdd = new LFPhone();
+				if (update && phoneIter != null && phoneIter.hasNext()) {
+					toAdd = phoneIter.next();
+					addPhone = false;
+				}
 				toAdd.setPhoneType(TracingConstants.LF_PHONE_PRIMARY);
 				toAdd.setNumberType(lostReport.getContact().getPrimaryPhone().getType());
 				toAdd.setPerson(client);
 				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getPrimaryPhone().getNumber());
-				phones.add(toAdd);
+				if (addPhone) {
+					phones.add(toAdd);
+				}
 			}
+			addPhone = true;
 			if(lostReport.getContact().getSecondaryPhone() != null){
 				LFPhone toAdd = new LFPhone();
+				if (update && phoneIter != null  && phoneIter.hasNext()) {
+					toAdd = phoneIter.next();
+					addPhone = false;
+				}
 				toAdd.setPhoneType(TracingConstants.LF_PHONE_SECONDARY);
 				toAdd.setNumberType(lostReport.getContact().getSecondaryPhone().getType());
 				toAdd.setPerson(client);
 				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getSecondaryPhone().getNumber());
-				phones.add(toAdd);
+				if (addPhone) {
+					phones.add(toAdd);
+				}
 			}
-			if(phones.size() > 0){
+			if(!update && phones.size() > 0){
 				client.setPhones(phones);
 			}
 
 			if(lostReport.getContact().getAddress() != null){
 				LFAddress address = new LFAddress();
+				if (update) {
+					address = client.getAddress();
+				}
 				address.setDecryptedAddress1(lostReport.getContact().getAddress().getAddress1());
 				address.setDecryptedAddress2(lostReport.getContact().getAddress().getAddress2());
 				address.setDecryptedCity(lostReport.getContact().getAddress().getCity());
@@ -268,13 +331,16 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 				address.setDecryptedProvince(lostReport.getContact().getAddress().getProvince());
 				address.setDecryptedState(lostReport.getContact().getAddress().getState());
 				address.setDecryptedZip(lostReport.getContact().getAddress().getPostal());
-				client.setAddress(address);
+				if (!update) {
+					client.setAddress(address);
+				}
 			}
 			
-			
-			host.setClient(client);
+			if (!update) {
+				host.setClient(client);
+			}
 		}	
-
+		
 		if(lostReport.getReportId()!=null) {
 			host.setId(Long.valueOf(lostReport.getReportId()));
 		}
@@ -294,11 +360,6 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			}
 			host.setSegments(segments);
 		}
-		
-		
-		Status status = new Status();
-		status.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
-		host.setStatus(status);
 		
 		LFServiceBean bean = new LFServiceBean();
 		try {

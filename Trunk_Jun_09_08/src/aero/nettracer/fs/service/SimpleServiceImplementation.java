@@ -211,8 +211,8 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	claim.setAirlineClaimId(wsClaim.getAirlineClaimId());
     	claim.setAmountClaimed(wsClaim.getAmountClaimed());
     	claim.setAmountClaimedCurrency(wsClaim.getAmountClaimedCurrency());
-    	claim.setAmountClaimed(wsClaim.getAmountPaid());
-    	claim.setAmountClaimedCurrency(wsClaim.getAmountPaidCurrency());
+    	claim.setAmountPaid(wsClaim.getAmountPaid());
+    	claim.setAmountPaidCurrency(wsClaim.getAmountPaidCurrency());
     	claim.setClaimDate(wsClaim.getClaimDate().getTime());
     	claim.setClaimType(wsClaim.getClaimType());
     	claim.setTravelDate(wsClaim.getTravelDate().getTime());

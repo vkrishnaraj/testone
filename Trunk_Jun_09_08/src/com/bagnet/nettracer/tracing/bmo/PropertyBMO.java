@@ -93,6 +93,8 @@ public class PropertyBMO {
 	public static final String PROPERTY_INCIDENT_DISPUTE_GETNEXT = "incident.dispute.getnext";
 	public static final String PROPERTY_INCIDENT_FAULT_LOCK = "incident.dispute.faultlock";
 	
+	public static final String PROPERTY_INCIDENT_CLOSE_STATION = "incident.close.station";
+	
 	public static final String PROPERTY_DEFAULT_DAM_CODE = "default.dam.code";
 	public static final String PROPERTY_DEFAULT_PIL_CODE = "default.pil.code";
 
