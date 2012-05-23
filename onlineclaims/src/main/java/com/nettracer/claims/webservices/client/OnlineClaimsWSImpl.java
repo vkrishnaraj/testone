@@ -976,8 +976,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 						}
 					}
 					if (wsBag.getTag().equals("INTERIM")) {
-						newWsBagArray[bagIndex]=wsBag;
-						bagIndex++;
+						newWsBagArray[newWsBagArray.length - 1]=wsBag;
 					}
 					wsBag=null;//GC
 					bag=null;
@@ -988,6 +987,11 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					newWsBagArray[bagIndex]=wsBagArray[i];
 					bagIndex++;
 				}
+			}
+			if (interim && newWsBagArray[newWsBagArray.length - 1] == null) {
+				wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
+				wsBag.setBagArrive(true);
+				wsBag.setTag("INTERIM");
 			}
 			claim.setBagArray(newWsBagArray);
 		}
