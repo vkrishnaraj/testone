@@ -524,14 +524,14 @@
 				if (theBag) {
 					theRows = theBag.getElementsByTagName("tr");
 					bagPrice = document.getElementById("appForm:bagList:" + bagRow + ":bagPrice");
-					var theTotal = 0;
-					if (bagPrice != null) {
+					var theTotal = '0';
+					if (bagPrice) {
 						theTotal = bagPrice.value;
 					}
 					theTotal = theTotal.replace(",","");
 					theCurrSel = document.getElementById("appForm:bagList:" + bagRow + ":bagCurrency");
 					var theCurr = null;
-					if (theCurrSel != null) {
+					if (theCurrSel) {
 						theCurr = theCurrSel.options[theCurrSel.selectedIndex].value;
 					}
 					theTotal = parseFloat(theTotal);
@@ -546,7 +546,7 @@
 					for (i = 1; i < l; i++) {
 						if (singleCurr) {
 							theSel = theRows[i].getElementsByTagName("td")[7].getElementsByTagName("select")[0];
-							if (theCurr == null) {
+							if (!theCurr) {
 								theCurr = theSel.options[theSel.selectedIndex].value;
 							}
 							if (theCurr != theSel.options[theSel.selectedIndex].value) {

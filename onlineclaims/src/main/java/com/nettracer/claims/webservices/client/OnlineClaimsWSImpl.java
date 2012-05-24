@@ -895,7 +895,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		if(null != bagList && bagList.size() >0){
 			wsBagArray=claim.getBagArray();
 			int offset = 0;
-			if (interim) {
+			if (interim && !"INTERIM".equals(wsBagArray[wsBagArray.length - 1].getTag())) {
 				offset = 1;
 			}
 			com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] newWsBagArray =
@@ -992,6 +992,8 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
 				wsBag.setBagArrive(true);
 				wsBag.setTag("INTERIM");
+				newWsBagArray[newWsBagArray.length - 1] = wsBag;
+				wsBag=null;//GC
 			}
 			claim.setBagArray(newWsBagArray);
 		}
