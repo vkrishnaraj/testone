@@ -1155,7 +1155,7 @@ public class PassengerController {
 									}
 									oldBagList.remove(index);
 								} else {
-									if (l.getBagTagNumber().equals("INTERIM")) {
+									if (l.getBagTagNumber().equals("INTERIM") && oldBagList.size() > 0) {
 										Bag b = oldBagList.get(0);
 										if (b != null) {
 											b.setBagTagNumber(l.getBagTagNumber());
