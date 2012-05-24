@@ -105,6 +105,11 @@
   <servlet-class>com.bagnet.nettracer.servlets.showImage</servlet-class>
  </servlet>
  <servlet>
+  <servlet-name>StartSpring</servlet-name>
+  <servlet-class>com.bagnet.nettracer.servlets.StartSpring</servlet-class>
+  <load-on-startup>0</load-on-startup>
+ </servlet>
+ <servlet>
   <servlet-name>log4j-init</servlet-name>
   <servlet-class>com.bagnet.nettracer.logging.Log4jInit</servlet-class>
   <init-param>

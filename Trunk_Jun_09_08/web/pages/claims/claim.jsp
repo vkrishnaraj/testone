@@ -416,7 +416,7 @@
                           </html:select>
                         </td>
                       </tr>
-                      <tr>
+                      <!--<tr>
                         <td colspan="2">
                           <bean:message key="colname.amount_paid" />
                           <br />
@@ -429,7 +429,7 @@
                             <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
                           </html:select>
                         </td>
-                      <tr>
+                      <tr>-->
                         <td colspan="4">
                           <bean:message key="colname.reason" />
                           &nbsp;(
