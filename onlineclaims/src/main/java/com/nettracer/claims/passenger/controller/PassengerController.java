@@ -372,6 +372,10 @@ public class PassengerController {
 				}
 				passNum++;
 			}
+			if (!(passengerBean.isDelayed() || passengerBean.isDamaged() || passengerBean.isPilferage() || passengerBean.isInterim())) {
+				toReturn = false;
+				FacesUtil.addError("Claim Type is Required.");
+			}
 		}
 		return toReturn;
 	}
