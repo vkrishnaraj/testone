@@ -64,7 +64,7 @@ public class SecurityUtils {
 			
 			Criteria criteria = sess.createCriteria(Agent.class);
 			criteria.add(Expression.eq("username", username));
-			criteria.add(Expression.eq("password", TEA.encryptTEA(password)));
+			criteria.add(Expression.eq("password", StringUtils.sha1(password, true)));
 			List results = criteria.list();
 			
 			if (results == null || results.size() < 1) {
