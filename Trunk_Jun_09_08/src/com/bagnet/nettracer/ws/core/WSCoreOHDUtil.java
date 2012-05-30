@@ -1132,16 +1132,18 @@ public class WSCoreOHDUtil {
 		ohd.setOhd_type(TracingConstants.MASS_OHD_TYPE);
 		ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN));
 		
-		Remark r = new Remark();
-		r.setAgent(agent);
-		r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-		r.setOhd(ohd);
-		r.setRemarktext(comment);
-		r.setRemarktype(TracingConstants.REMARK_REGULAR);
-		
-		Set<Remark> remarks = new HashSet<Remark>();
-		remarks.add(r);
-		ohd.setRemarks(remarks);
+		if(comment != null){
+			Remark r = new Remark();
+			r.setAgent(agent);
+			r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+			r.setOhd(ohd);
+			r.setRemarktext(comment);
+			r.setRemarktype(TracingConstants.REMARK_REGULAR);
+
+			Set<Remark> remarks = new HashSet<Remark>();
+			remarks.add(r);
+			ohd.setRemarks(remarks);
+		}
 		
 		return ohd;
   }
