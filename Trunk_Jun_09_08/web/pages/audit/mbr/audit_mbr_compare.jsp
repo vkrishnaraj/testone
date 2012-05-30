@@ -751,7 +751,7 @@ function updatePagination() {
                       :
                       <bean:write name="remark" property="agentUsername" />
                       <br>
-                      <bean:write name="remark" property="readonlyremarktext"/>
+                      <bean:write name="remark" property="remarktext"/>
                       <br>
                       <br>
                     </logic:notEqual>
@@ -810,7 +810,7 @@ function updatePagination() {
                         :
                         <bean:write name="remark" property="agentUsername" />
                         <br>
-                        <bean:write name="remark" property="readonlyremarktext" filter="false"/>
+                        <bean:write name="remark" property="remarktext" filter="false"/>
                         <br>
                         <br>
                       </logic:notEqual>
