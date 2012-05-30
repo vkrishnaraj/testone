@@ -188,7 +188,7 @@ public class Remark implements Serializable {
 	}
 	
 	public String getReadonlyremarktext() {
-		if(!remarktext.equals(null))
+		if(remarktext != null)
 		{
 			return remarktext.replaceAll("\r\n", "<br>");
 		}
