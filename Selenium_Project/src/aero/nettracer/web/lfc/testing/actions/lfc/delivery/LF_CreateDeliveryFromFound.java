@@ -30,6 +30,8 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/select", "label=Cellphone");
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/select", "label=Black");
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=White");
+			selenium.select("segment[0].originId", "label=ATL");
+			selenium.select("segment[0].destinationId", "label=BOS");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {

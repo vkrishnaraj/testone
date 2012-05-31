@@ -87,12 +87,14 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[3]/td[4]/input", "30314");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/input", "5556667777");
 			selenium.select("document.forms['lostReportForm'].elements[24]", "label=Home");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/input", "Nokia");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td[2]/input", "NKC987");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td[3]/input", "Old Brick");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/select", "label=Cellphone");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/select", "label=Yellow");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=Red");
+			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td/input", "Nokia");
+			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[2]/input", "NKC987");
+			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[3]/input", "Old Brick");
+			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[3]/td/select", "label=Cellphone");
+			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[3]/td[3]/select", "label=Yellow");
+			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[4]/td[3]/select", "label=Red");
+			selenium.select("segment[0].originId", "label=ATL");
+			selenium.select("segment[0].destinationId", "label=BOS");
 			selenium.click("xpath=(//input[@id='button'])[3]");
 			waitForPageToLoadImproved();
 		} else {

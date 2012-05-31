@@ -29,6 +29,8 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/select", "label=Cellphone");
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/select", "label=White");
 			selenium.select("document.forms[0].elements[38]", "label=Black");
+			selenium.select("segment[0].originId", "label=ATL");
+			selenium.select("segment[0].destinationId", "label=BOS");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
