@@ -149,25 +149,27 @@
 				}
 /* END ADDRESS VALIDATION */			
 			
-			}
-			if (elementName == "lost.client.decryptedEmail") {
+			} else if (elementName == "lost.client.decryptedEmail") {
 				if (currentElement.value != getFieldByName("lost.client.confirmEmail", form).value) {
 					alert("<%= (String)bundle.getString("colname.lf.email") %>" + " <%= (String)bundle.getString("error.validation.cannot.confirm.email") %>");
 			        currentElement.focus();
 			        return false;
 				}
-			} 
-			
-			if (elementName == "lost.statusId") {
+			} else if (elementName == "lost.statusId") {
 				if (currentElement.value == '-1') {
 					alert("<%= (String)bundle.getString("colname.lf.status") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
 			        return false;
 				}
-			} 
-			if (elementName == "lost.lossInfo.destinationId") {
+			} else if (elementName.indexOf("originId") != -1) {
 				if (currentElement.value.length == 0) {
-					alert("<%= (String)bundle.getString("colname.lf.lost.location") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+					alert("<%= (String)bundle.getString("colname.lf.segment.origin") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        currentElement.focus();
+			        return false;
+				}
+			} else if (elementName.indexOf("destinationId") != -1) {
+				if (currentElement.value.length == 0) {
+					alert("<%= (String)bundle.getString("colname.lf.segment.destination") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
 			        return false;
 				}
