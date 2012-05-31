@@ -164,6 +164,17 @@ public class Audit_OHD_Remark implements Serializable {
 		this.remarktext = remarktext;
 	}
 
+	public String getReadonlyremarktext() {
+		if(remarktext != null)
+		{
+			return remarktext.replaceAll("\r\n", "<br>");
+		}
+		else
+		{
+			return "";
+		}
+	}
+	
 	/**
 	 * @return Returns the remarktype.
 	 * 

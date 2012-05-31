@@ -180,6 +180,18 @@ public class Audit_Remark implements Serializable {
 	public void setRemarktype(int remarktype) {
 		this.remarktype = remarktype;
 	}
+	
+	
+	public String getReadonlyremarktext() {
+		if(remarktext != null)
+		{
+			return remarktext.replaceAll("\r\n", "<br>");
+		}
+		else
+		{
+			return "";
+		}
+	}
 
 	/**
 	 * @return Returns the _DATEFORMAT.
