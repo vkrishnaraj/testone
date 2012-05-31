@@ -480,6 +480,10 @@ public class IncidentBMO {
 	}
 
 	public int updateRemarksOnly(String incident_id, Set remarks, Agent mod_agent) throws HibernateException {
+		return updateRemarksAndLossCodeOnly(incident_id, remarks, mod_agent, -99);
+	}
+
+	public int updateRemarksAndLossCodeOnly(String incident_id, Set remarks, Agent mod_agent, int losscode) throws HibernateException {
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -507,6 +511,11 @@ public class IncidentBMO {
 				} else {
 					return -1;
 				}
+				
+				if (losscode > 0) {
+					oldinc.setLoss_code(losscode);
+				}
+				
 				sess.saveOrUpdate(oldinc);
 				t.commit();
 			} else {
