@@ -27,17 +27,17 @@ public class LF_CreateLost_VerifyRequiredFields extends DefaultSeleneseTestCase 
 			assertEquals("City is required.", selenium.getAlert());
 			selenium.type("name=lost.client.address.decryptedCity", "Test");
 			selenium.click("saveButton");
-			assertEquals("Phone number or email is required.", selenium.getAlert());
-			selenium.type("name=lost.client.decryptedEmail", "test@test.com");
-			selenium.click("saveButton");
-			assertEquals("Email and confirm email must match.", selenium.getAlert());
-			selenium.type("name=lost.client.confirmEmail", "test@test.com");
-			selenium.click("saveButton");
 			assertEquals("Departure Airport is required.", selenium.getAlert());
 			selenium.select("name=segment[0].originId", "label=ATL");
 			selenium.click("saveButton");
 			assertEquals("Arrival Airport is required.", selenium.getAlert());
 			selenium.select("name=segment[0].destinationId", "label=BOS");
+			selenium.click("saveButton");
+			assertEquals("Phone number or email is required.", selenium.getAlert());
+			selenium.type("name=lost.client.decryptedEmail", "test@test.com");
+			selenium.click("saveButton");
+			assertEquals("Email and confirm email must match.", selenium.getAlert());
+			selenium.type("name=lost.client.confirmEmail", "test@test.com");
 			selenium.click("saveButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
