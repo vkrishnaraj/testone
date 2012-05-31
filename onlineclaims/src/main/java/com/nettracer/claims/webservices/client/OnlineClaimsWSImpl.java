@@ -298,7 +298,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         passengerBean.setAdditionalComments(claim.getComments());
         passengerBean.setClaimAmount(claim.getPaxClaimAmount());
         passengerBean.setClaimDate(claim.getPaxClaimDate());
-        passengerBean.setPrivateInsurance(claim.getPrivateInsurance() == 1 ? true : false);
+        passengerBean.setPrivateInsurance(intToBool(claim.getPrivateInsurance()));
         passengerBean.setPrivateInsuranceName(claim.getPrivateInsuranceName());
         passengerBean.setPrivateInsuranceAddr(claim.getPrivateInsuranceAddr());
         passengerBean.setReportedAirline(claim.getReportedAirline());
@@ -602,7 +602,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         claim.setTsaNotePresent(boolToInt(passengerBean.getBagConfirmNote()));
         claim.setTsaInspectionLocation(passengerBean.getInspectionPlace());
         claim.setComments(passengerBean.getAdditionalComments());
-        claim.setPrivateInsurance(boolToInt(passengerBean.isPrivateInsurance()));
+        claim.setPrivateInsurance(boolToInt(passengerBean.getPrivateInsurance()));
         claim.setPrivateInsuranceName(passengerBean.getPrivateInsuranceName());
         claim.setPrivateInsuranceAddr(passengerBean.getPrivateInsuranceAddr());
 		 

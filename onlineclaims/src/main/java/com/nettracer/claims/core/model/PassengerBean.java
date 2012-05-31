@@ -77,7 +77,7 @@ public class PassengerBean {
 	private String reportedAirline;
 	private String reportedCity;
 	private String reportedFileNumber;
-	private boolean privateInsurance;
+	private Boolean privateInsurance;
 	private String privateInsuranceName;
 	private String privateInsuranceAddr;
 	private boolean delayed;
@@ -653,10 +653,10 @@ public class PassengerBean {
 	public void setReportedFileNumber(String reportedFileNumber) {
 		this.reportedFileNumber = reportedFileNumber;
 	}
-	public boolean isPrivateInsurance() {
+	public Boolean getPrivateInsurance() {
 		return privateInsurance;
 	}
-	public void setPrivateInsurance(boolean privateInsurance) {
+	public void setPrivateInsurance(Boolean privateInsurance) {
 		this.privateInsurance = privateInsurance;
 	}
 	public String getPrivateInsuranceName() {
@@ -752,6 +752,9 @@ public class PassengerBean {
 		return "No";
 	}
 	public String getPrivateInsuranceDisp() {
-		return (privateInsurance ? "Yes" : "No");
+		if (privateInsurance != null) {
+			return (privateInsurance ? "Yes" : "No");
+		}
+		return "No";
 	}
 }
