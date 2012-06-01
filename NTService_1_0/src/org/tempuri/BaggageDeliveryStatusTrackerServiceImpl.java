@@ -49,7 +49,7 @@ public class BaggageDeliveryStatusTrackerServiceImpl extends BaggageDeliveryStat
 				return "UNABLE_DELIVER";
 			}
 			if(code.equalsIgnoreCase("AD")){
-				return "ON_TRUCK";//AD-assigned driver
+				return "PICKED_UP";//AD-assigned driver
 			}
 			if(code.equalsIgnoreCase("BD")){
 				return "ON_TRUCK";//BD-out for delivery
