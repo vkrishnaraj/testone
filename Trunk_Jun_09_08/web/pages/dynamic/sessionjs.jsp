@@ -1740,6 +1740,7 @@ function verifyPaginationLimit(field) {
 }
 
 function populateBagInfo(form) {
+	var arrivalAirline = document.getElementsByName("theitem[0].arrivedonairline_ID")[0].value;
 	var arrivalFlight = document.getElementsByName("theitem[0].arrivedonflightnum")[0].value;
 	var arrivalDate = document.getElementsByName("theitem[0].disarrivedondate")[0].value;
 
@@ -1749,6 +1750,7 @@ function populateBagInfo(form) {
 			break;
 		}
 		
+		document.getElementById("theitem[" + i + "].arrivedonairline_ID").value = arrivalAirline;
 		document.getElementById("theitem[" + i + "].arrivedonflightnum").value = arrivalFlight;
 		document.getElementById("theitem[" + i + "].disarrivedondate").value = arrivalDate;
 	}
