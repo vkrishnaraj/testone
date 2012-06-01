@@ -131,14 +131,14 @@ public class LostAndFoundController {
 	private boolean validate() {
 		boolean isValid = true;
 		isValid = validateName();
-		isValid = validateAddress();
-		isValid = validateContact();
+		isValid = validateAddress() && isValid;
+		isValid = validateContact() && isValid;
 		if (getSubCompany() != null && getSubCompany().equals("SWA") ) {
-			isValid = validateLF_SWA();
+			isValid = validateLF_SWA() && isValid;
 		}else if (getSubCompany().equals("DEM")){
-			isValid = validateLF_DEM();
+			isValid = validateLF_DEM() && isValid;
 		} else {
-			isValid = validateAB();
+			isValid = validateAB() && isValid;
 		}
 		return isValid;
 	}
@@ -263,6 +263,7 @@ public class LostAndFoundController {
 	
 	private boolean validateLF_SWA() {
 		boolean isValid = true;
+		isValid = validateSegments();
 		if (lostReport.getDateLost() == null) {													    // VALIDATE: DATE LOST
 			FacesUtil.addError("Date Lost is required.");
 			isValid = false;
@@ -291,7 +292,6 @@ public class LostAndFoundController {
 				isValid = false;
 			}
 		}
-		isValid = validateSegments();
 		return isValid;
 	}
 	

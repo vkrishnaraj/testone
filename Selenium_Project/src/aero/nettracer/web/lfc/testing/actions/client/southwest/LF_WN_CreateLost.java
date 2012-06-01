@@ -81,7 +81,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testLostReportPage() throws Exception {
-		selenium.click("id=lostForm:j_id174");
+		selenium.click("id=lostForm:j_id193");
 		waitForPageToLoadImproved(1000, false);
 		assertEquals("Please be advised that if an e-mail address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", selenium.getConfirmation());
 		verifyTrue(selenium.isTextPresent("First Name is required."));
@@ -92,34 +92,36 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Zip Code is required."));
 		verifyTrue(selenium.isTextPresent("Contact Information must contain at least one Phone Number or Email Address."));
 		verifyTrue(selenium.isTextPresent("Date Lost is required."));
-		verifyTrue(selenium.isTextPresent("Airport Item Was Lost At is required."));
 		verifyTrue(selenium.isTextPresent("Item Color is required."));
 		verifyTrue(selenium.isTextPresent("Item Case Color is required."));
 		verifyTrue(selenium.isTextPresent("Item Category is required."));
-		selenium.select("id=lostForm:j_id23", "label=Cellphone");
-		selenium.select("id=lostForm:j_id31", "label=Black");
-		selenium.select("id=lostForm:j_id57", "label=Does Not Apply");
-		selenium.type("id=lostForm:j_id77", "Test");
-		selenium.type("id=lostForm:j_id79", "John");
-		selenium.type("id=lostForm:j_id85", "123 Test");
-		selenium.type("id=lostForm:j_id97", "Test");
+		verifyTrue(selenium.isTextPresent("Arrival Airport required for Segment #1 in the \"About Your Trip\" section."));
+		verifyTrue(selenium.isTextPresent("Departure Airport required for Segment #1 in the \"About Your Trip\" section."));
+		selenium.select("id=lostForm:j_id25", "label=Cellphone");
+		selenium.select("id=lostForm:j_id33", "label=Black");
+		selenium.select("id=lostForm:j_id37", "label=Does Not Apply");
+		selenium.type("id=lostForm:j_id81", "Test");
+		selenium.type("id=lostForm:j_id83", "John");
+		selenium.type("id=lostForm:j_id89", "123 Test");
+		selenium.type("id=lostForm:j_id101", "Test");
 		selenium.select("id=lostForm:state", "label=Georgia");
-		selenium.type("id=lostForm:j_id102", "30339");
+		selenium.type("id=lostForm:j_id106", "30339");
 		selenium.type("id=lostForm:email", "test@nettracer.aero");
-		selenium.click("id=lostForm:j_id163PopupButton");
-		selenium.click("//td[@id='lostForm:j_id163Footer']/table/tbody/tr/td[5]/div");
-		selenium.select("id=lostForm:j_id165", "label=test");
-		selenium.click("id=lostForm:j_id174");
+		selenium.click("id=lostForm:j_id59PopupButton");
+		selenium.click("//td[@id='lostForm:j_id59Footer']/table/tbody/tr/td[5]/div");
+		selenium.select("id=lostForm:segmentTable:0:j_id172", "label=ATL - Atlanta, GA");
+		selenium.select("id=lostForm:segmentTable:0:j_id176", "label=BOS - Boston, MA");
+		selenium.click("id=lostForm:j_id193");
 		waitForPageToLoadImproved(1000, false);
 		verifyTrue(selenium.isTextPresent("Email Address and Confirm Email Address must match."));
 		verifyTrue(selenium.isTextPresent("Lost Phone Phone Number is required for Category \"Cellphone\"."));
 		selenium.type("id=lostForm:j_id155", "test@nettracer.aero");
 		selenium.select("id=lostForm:j_id23", "label=Bags");
-		selenium.click("id=lostForm:j_id174");
+		selenium.click("id=lostForm:j_id193");
 		waitForPageToLoadImproved(1000, false);
 		verifyTrue(selenium.isTextPresent("Item Subcategory is required for Category \"\"."));
 		selenium.select("id=lostForm:j_id28", "label=Cloth Bag");
-		selenium.click("id=lostForm:j_id174");
+		selenium.click("id=lostForm:j_id193");
 		waitForPageToLoadImproved();
 	}
 
@@ -162,10 +164,10 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		{
 			verifyTrue(selenium.isTextPresent("Lost Item Report Form"));
 
-			selenium.select("id=lostForm:j_id23", "label=Bags");
+			selenium.select("id=lostForm:j_id25", "label=Bags");
 			selenium.select("id=lostForm:j_id28", "label=Cloth Bag");
-			selenium.select("id=lostForm:j_id31", "label=Black");
-			selenium.select("id=lostForm:j_id57", "label=Does Not Apply");
+			selenium.select("id=lostForm:j_id33", "label=Black");
+			selenium.select("id=lostForm:j_id37", "label=Does Not Apply");
 			selenium.type("id=lostForm:j_id41", "2");
 			selenium.type("id=lostForm:j_id43", "2");
 			selenium.type("id=lostForm:j_id45", "2");
