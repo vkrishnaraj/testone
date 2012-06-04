@@ -159,15 +159,15 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.US_DisputeManage;
 	AB_SearchLost.class, AB_SearchFound.class, AB_ManualMatch_FoundToLost.class,
 	AB_CloseFound.class, AB_SearchLost.class, AB_CloseLost.class,
 	AB_CreateLost_Detailed.class, AB_CreateFound_Detailed.class,
-	AB_ConfirmMatch.class, AB_CreateDelivery.class,
+	AB_ConfirmMatch.class, AB_CreateDelivery.class
 	// LFC
-	LF_Login.class, 
-	LF_CreateLost_VerifyRequiredFields.class, LF_CreateFound_VerifyRequiredFields.class,
-	LF_SearchLost.class, LF_SearchFound.class, LF_ManualMatch_FoundToLost.class,
-	LF_CloseFound.class, LF_SearchLost.class, LF_CloseLost.class, 
-	LF_CreateLost_Detailed.class, LF_CreateFound_Detailed.class, LF_FoundReportSummary.class, LF_VerifyText_TaskManager.class, 
-	LF_ConfirmMatch.class, LF_CreateDeliveryFromFound.class, LF_ItemEntry.class, LF_ProcessTraceResults.class,
-	LF_CreateLostAndFoundReadOnly.class, LF_Salvage.class, LF_SalvageSearch.class, LF_QuickHistory.class, LF_WN_CreateLost.class
+//	LF_Login.class, 
+//	LF_CreateLost_VerifyRequiredFields.class, LF_CreateFound_VerifyRequiredFields.class,
+//	LF_SearchLost.class, LF_SearchFound.class, LF_ManualMatch_FoundToLost.class,
+//	LF_CloseFound.class, LF_SearchLost.class, LF_CloseLost.class, 
+//	LF_CreateLost_Detailed.class, LF_CreateFound_Detailed.class, LF_FoundReportSummary.class, LF_VerifyText_TaskManager.class, 
+//	LF_ConfirmMatch.class, LF_CreateDeliveryFromFound.class, LF_ItemEntry.class, LF_ProcessTraceResults.class,
+//	LF_CreateLostAndFoundReadOnly.class, LF_Salvage.class, LF_SalvageSearch.class, LF_QuickHistory.class, LF_WN_CreateLost.class
 	
 	})
 public class TestEverything { 
