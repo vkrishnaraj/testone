@@ -23,12 +23,12 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[3]/td[4]/input", "30318");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/input", "1112223333");
 			selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/select", "label=Home");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/input", "Apple");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td[2]/input", "AP1234");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td[3]/input", "iPhone 4S");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/select", "label=Cellphone");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/select", "label=White");
-			selenium.select("document.forms[0].elements[38]", "label=Black");
+			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td/input", "Apple");
+			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[2]/input", "AP1234");
+			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[3]/input", "iPhone 4S");
+			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[3]/td/select", "label=Cellphone");
+			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[3]/td[3]/select", "label=White");
+			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[4]/td[3]/select", "label=Black");
 			selenium.select("segment[0].originId", "label=ATL");
 			selenium.select("segment[0].destinationId", "label=BOS");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");

@@ -216,8 +216,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
-			verifyEquals("600", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[3]/select"));
-			verifyEquals("0", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
+			verifyEquals("600", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
+			verifyEquals("0", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/select"));
 			System.out.println("LFS: Created High value, > 60 Found Item: " + LF_Salvage.HIGH_GT_60 + " with date: " + hvCutoff);
 		} else {
 			System.out.println("LFS: Failed to save found item: HIGH_GT_60.");
@@ -337,8 +337,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyEquals("601", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[3]/select"));
-			verifyEquals("4", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
+			verifyEquals("601", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
+			verifyEquals("4", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/select"));
 			selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
 			waitForPageToLoadImproved();
 		} else {
