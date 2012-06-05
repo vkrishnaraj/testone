@@ -115,12 +115,12 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved(1000, false);
 		verifyTrue(selenium.isTextPresent("Email Address and Confirm Email Address must match."));
 		verifyTrue(selenium.isTextPresent("Lost Phone Phone Number is required for Category \"Cellphone\"."));
-		selenium.type("id=lostForm:j_id155", "test@nettracer.aero");
-		selenium.select("id=lostForm:j_id23", "label=Bags");
+		selenium.type("id=lostForm:j_id159", "test@nettracer.aero");
+		selenium.select("id=lostForm:j_id25", "label=Bags");
 		selenium.click("id=lostForm:j_id193");
 		waitForPageToLoadImproved(1000, false);
-		verifyTrue(selenium.isTextPresent("Item Subcategory is required for Category \"\"."));
-		selenium.select("id=lostForm:j_id28", "label=Cloth Bag");
+		verifyTrue(selenium.isTextPresent("Item Subcategory is required for Category \"Bags\"."));
+		selenium.select("id=lostForm:j_id30", "label=Cloth Bag");
 		selenium.click("id=lostForm:j_id193");
 		waitForPageToLoadImproved();
 	}
@@ -147,7 +147,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Test, GA 30339"));
 		verifyTrue(selenium.isTextPresent("United States"));
 		verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
-		selenium.click("id=j_id7:j_id92");
+		selenium.click("id=j_id7:j_id102");
 		waitForPageToLoadImproved();
 	}
 	
@@ -164,24 +164,19 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		{
 			verifyTrue(selenium.isTextPresent("Lost Item Report Form"));
 
-			selenium.select("id=lostForm:j_id25", "label=Bags");
-			selenium.select("id=lostForm:j_id28", "label=Cloth Bag");
-			selenium.select("id=lostForm:j_id33", "label=Black");
-			selenium.select("id=lostForm:j_id37", "label=Does Not Apply");
-			selenium.type("id=lostForm:j_id41", "2");
-			selenium.type("id=lostForm:j_id43", "2");
-			selenium.type("id=lostForm:j_id45", "2");
-			selenium.type("id=lostForm:j_id53", "2");
-			selenium.type("id=lostForm:j_id55", "2");
+			selenium.type("id=lostForm:j_id47", "2");
+			selenium.type("id=lostForm:j_id49", "2");
+			selenium.type("id=lostForm:j_id51", "2");
+			selenium.type("id=lostForm:j_id61", "2");
 			selenium.type("id=lostForm:j_id63", "2");
-			selenium.type("id=lostForm:j_id67", "21");
-			selenium.type("id=lostForm:j_id77", "Test");
-			selenium.type("id=lostForm:j_id79", "2");
-			selenium.type("id=lostForm:j_id81", "2");
+			selenium.type("id=lostForm:j_id67", "2");
+			selenium.type("id=lostForm:j_id71", "21");
+			selenium.type("id=lostForm:j_id83", "2");
 			selenium.type("id=lostForm:j_id85", "2");
 			selenium.type("id=lostForm:j_id89", "2");
-			selenium.type("id=lostForm:j_id97", "2");
-			selenium.click("id=lostForm:j_id175");
+			selenium.type("id=lostForm:j_id93", "2");
+			selenium.type("id=lostForm:j_id101", "2");
+			selenium.click("id=lostForm:j_id194");
 			waitForPageToLoadImproved();
 		}
 
@@ -207,7 +202,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("2, GA 30339"));
 			verifyTrue(selenium.isTextPresent("United States"));
 			verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
-			selenium.click("id=j_id7:j_id93");
+			selenium.click("id=j_id7:j_id103");
 			waitForPageToLoadImproved();
 		}
 		
@@ -263,7 +258,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		
 		if(checkNoErrorPage())
 		{
-			verifyTrue(selenium.isTextPresent("Lost Report is Closed"));
+			verifyTrue(selenium.isTextPresent("This item has been closed and can no longer be viewed."));
 		}
 	}
 	
