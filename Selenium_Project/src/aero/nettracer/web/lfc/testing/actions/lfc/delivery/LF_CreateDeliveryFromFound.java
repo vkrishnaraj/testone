@@ -118,7 +118,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 	@Test
 	public void testTrackingNumber() throws Exception {
     	selenium.type("//div[@id='maincontent']/table[5]/tbody/tr[2]/td/input", "12341234");
-		selenium.click("//div[@id='maincontent']/center[4]/input[2]");
+		selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {

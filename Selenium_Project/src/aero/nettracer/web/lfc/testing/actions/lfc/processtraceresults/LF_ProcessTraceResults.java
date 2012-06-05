@@ -136,7 +136,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your lost report was successfully saved."));
-			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td/a");
+			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to save Lost Report: " + LF_ProcessTraceResults.lostId);

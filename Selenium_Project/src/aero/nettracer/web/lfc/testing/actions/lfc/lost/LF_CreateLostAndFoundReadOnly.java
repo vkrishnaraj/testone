@@ -157,7 +157,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testDLostAndFoundReadOnly() {
-		selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/select", "label=Closed");
+		selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[4]/select", "label=Closed");
 		selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 		waitForPageToLoadImproved();
 		
