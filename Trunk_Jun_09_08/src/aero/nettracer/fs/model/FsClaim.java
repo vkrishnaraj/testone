@@ -48,7 +48,7 @@ public class FsClaim implements Serializable {
 	protected double amountClaimed;
 	protected String amountClaimedCurrency;
 	protected double amountPaid;
-	//protected String amountPaidCurrency;
+//	protected String amountPaidCurrency;
 	protected int fraudStatus; // 0=unknown, 1 = believed fraud, 2=known fraud
 	protected boolean denied;
 	protected String privateReasonForDenial;
@@ -189,7 +189,7 @@ public class FsClaim implements Serializable {
 //	public void setAmountPaidCurrency(String amountPaidCurrency) {
 //		this.amountPaidCurrency = amountPaidCurrency;
 //	}
-
+//
 	public int getFraudStatus() {
 		return fraudStatus;
 	}

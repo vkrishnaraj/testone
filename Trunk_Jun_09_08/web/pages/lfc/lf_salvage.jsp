@@ -14,6 +14,7 @@
 <%@ page import="java.util.Date" %>
 <%
 	Agent agent = (Agent)session.getAttribute("user"); 
+	SalvageForm lfSalvageForm=(SalvageForm) session.getAttribute("lfSalvageForm");
   	String cssFormClass = "form2";
   	
   	int divId = 0;
@@ -36,7 +37,7 @@
 			jQuery('#barcodeDiv').before(req.responseText);
 			document.lfSalvageForm.addBarcode.value="";
 			document.lfSalvageForm.addBarcode.focus();
-			document.lfSalvageForm.lastDivNum.value = document.lfSalvageForm.lastDivNum.value + 1;
+			document.lfSalvageForm.lastDivNum.value = parseInt(document.lfSalvageForm.lastDivNum.value) + 1;
 		});
 	}
 	
@@ -130,12 +131,14 @@
             		<td style="width:25%;">
 						<bean:message key="colname.lf.created.date" />
 						<br/>
-						<html:text name="lfSalvageForm" property="disCreatedDate" disabled="true" styleClass="disabledtextfield" styleId="createdDate" size="15"/>
+						<input type="text" disabled="true" value="<%= lfSalvageForm.getDisCreatedDate(agent) %>" class="disabledtextfield"  />
+						
 					</td>
             		<td style="width:25%;">
 						<bean:message key="colname.lf.closed.date" />
 						<br/>
-						<html:text name="lfSalvageForm" property="disClosedDate" disabled="true" styleClass="disabledtextfield" styleId="closedDate" size="15"/>
+						<input type="text" disabled="true" value="<%= lfSalvageForm.getDisClosedDate(agent) %>" class="disabledtextfield" />
+						
 					</td>
 					<td style="width:25%;">
 						<bean:message key="colname.lf.status" />
@@ -168,15 +171,15 @@
      				</td>
      			</tr>
      		</table>
-     			<logic:iterate indexId="i" id="found" name="lfSalvageForm" property="salvage.items" type="com.bagnet.nettracer.tracing.db.lf.LFFound" >
+     			<logic:iterate indexId="i" id="found" name="salvagefounds"  type="com.bagnet.nettracer.tracing.db.lf.LFSalvageFound" >
      			<div id="<%=String.valueOf(divId) %>" >
      			<table class="<%=cssFormClass %>" style="margin:0;padding:0;" cellspacing=0 cellpadding=0 >
      				<tr>
 	    				<td style="width:20%;">
-	    					<a href='create_found_item.do?foundId=<bean:write name="found" property="id" />' ><bean:write name="found" property="barcode" /></a>
+	    					<a href='create_found_item.do?foundId=<bean:write name="found" property="foundID" />' ><bean:write name="found" property="foundBarcode" /></a>
 	    				</td>
 	    				<td style="width:20%;">
-	    					<bean:write name="found" property="disReceivedDate" />
+	    					<%= found.getDisCreatedDate(agent.getDateformat().getFormat()) %>
 	    				</td>
 	    				<td style="width:40%;">
 	    					<bean:write name="found" property="extendedSummaryDesc" />
@@ -184,13 +187,11 @@
 	    				<td style="width:20%;">
 	    					<center>
 	     					<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_OPEN) %>" >
-		    					<a href='#' onclick="removeItemAjax('<%=divId %>','<bean:write name="found" property="barcode" />')" ><bean:message key="lf.salvage.remove" /></a>
-	    						<!-- input type="button" class="button" id="button_<%=divId %>" onclick="removeItemAjax('<%=divId %>','<bean:write name="found" property="id" />')" value='<bean:message key="lf.salvage.remove" />' -->
-	    					</logic:equal>
+		    					<a href='#' onclick="removeItemAjax('<%=divId %>','<bean:write name="found" property="foundBarcode" />')" ><bean:message key="lf.salvage.remove" /></a>
+	    						</logic:equal>
 	     					<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_CLOSED) %>" >
 	     						<bean:message key="lf.salvage.remove" />
-	    						<!-- input type="button" class="button" id="button_<%=divId %>" onclick="removeItemAjax('<%=divId %>','<bean:write name="found" property="id" />')" value='<bean:message key="lf.salvage.remove" />' disabled -->
-	    					</logic:equal>
+	    						</logic:equal>
 	    					</center>
 	    				</td>
      				</tr>

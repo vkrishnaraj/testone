@@ -47,6 +47,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
 import com.bagnet.nettracer.tracing.db.lf.LFSegment;
+import com.bagnet.nettracer.tracing.db.lf.LFSalvageFound;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
@@ -58,6 +59,7 @@ import com.bagnet.nettracer.tracing.utils.EmailParser;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.general.DeepCopy;
 import com.bagnet.nettracer.tracing.utils.general.Logger;
+import com.bagnet.nettracer.tracing.dto.SalvageDTO;
 
 @Stateless
 public class LFServiceBean implements LFServiceRemote, LFServiceHome{
@@ -170,6 +172,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		boolean haveBrand = dto.getBrand() != null && !dto.getBrand().isEmpty();
 		boolean haveDesc = dto.getItemDescription() != null && !dto.getItemDescription().isEmpty();
 		
+		if(TracingConstants.LF_LF_COMPANY_ID.equals(dto.getAgent().getCompanycode_ID()) && dto.getType() == TracingConstants.LF_TYPE_LOST && dto.getStationId() != -1)
+		{
+			sql += "left outer join o.segments seg";
+		}
+		
 		if (category > 0 || haveBrand || haveDesc) {
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " left outer join o.items i";
@@ -231,7 +238,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		if(dto.getStationId() != -1){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-				sql += " and o.lossInfo.destination.station_ID = " + dto.getStationId();
+				if(TracingConstants.LF_LF_COMPANY_ID.equals(dto.getAgent().getCompanycode_ID()))
+				{
+					sql += " and (seg.destination.station_ID = " + dto.getStationId() +" or seg.origin.station_ID = " + dto.getStationId()+")";
+				} else {
+					sql += " and o.lossInfo.destination.station_ID = " + dto.getStationId();
+				}
 			} else {
 				sql += " and o.location.station_ID = " + dto.getStationId();
 			}
@@ -843,10 +855,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	private String getLostQuery(Station station){
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l " +
-				"where (l.lossInfo.destination.station_ID = " + station.getStation_ID()
-				+ " or l.lossInfo.destination.lz_ID = " + station.getStation_ID() + ")"
-				+ " and l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l where ";
+				if(!TracingConstants.LF_LF_COMPANY_ID.equals(station.getCompany().getCompanyCode_ID()))
+				{
+					sql +=" (l.lossInfo.destination.station_ID = " + station.getStation_ID()+
+							" or l.lossInfo.destination.lz_ID = " + station.getStation_ID()+") and";
+				}
+				sql += " l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
+				
 		return sql;
 	}
 	
@@ -1149,12 +1165,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	private String getTraceResultsQuery(Station station){
 		//TODO location criteria
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh " +
-		"where mh.status.status_ID = " + TracingConstants.LF_TRACING_OPEN
-		+ " and (mh.lost.lossInfo.destination.station_ID = " + station.getStation_ID() + " or " +
-				" mh.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or " +
-				" mh.found.location.station_ID = " + station.getStation_ID() + " or " +
-				" mh.found.location.lz_ID = " + station.getStation_ID() + ")";
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh";
+				
+		sql += " where mh.status.status_ID = " + TracingConstants.LF_TRACING_OPEN;
+		if(!TracingConstants.LF_LF_COMPANY_ID.equals(station.getCompany().getCompanyCode_ID()))
+		{
+			sql +=" and (mh.lost.lossInfo.destination.station_ID = " + station.getStation_ID() + " or "+
+					" mh.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or "+
+					" mh.found.location.station_ID = " + station.getStation_ID() + " or " +
+					" mh.found.location.lz_ID = " + station.getStation_ID() + ")";
+		} 
 		return sql;
 	}
 	
@@ -1692,10 +1712,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public long getFilteredTraceResultsCount(Station station, TraceResultsFilter filter) {
 		String sql = "select count(distinct m) from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
 		sql += getSqlFromTraceResultsForm(filter);
-		 sql += " and (m.lost.lossInfo.destination.station_ID = " + station.getStation_ID() + " or " +
-		 		" m.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or " +
-		 		" m.found.location.station_ID = " + station.getStation_ID() + " or " +
-		 		" m.found.location.lz_ID = " + station.getStation_ID() + ")";
+		if(!TracingConstants.LF_LF_COMPANY_ID.equals(station.getCompany().getCompanyCode_ID()))
+		{
+			sql +=" and (m.lost.lossInfo.destination.station_ID = " + station.getStation_ID() + " or "+
+					" m.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or "+
+					" m.found.location.station_ID = " + station.getStation_ID() + " or " +
+			 		" m.found.location.lz_ID = " + station.getStation_ID() + ")";
+		}
+		
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1742,13 +1766,19 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(Station station, TraceResultsFilter filter, int start, int offset) {
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m ";
+		
+		sql+=" where 1 = 1 ";
 		sql += getSqlFromTraceResultsForm(filter);
-		sql +=  " and (m.lost.lossInfo.destination.station_ID = " + station.getStation_ID() + " or " +
-		 		" m.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or " +
-		 		" m.found.location.station_ID = " + station.getStation_ID() + " or " +
-		 		" m.found.location.lz_ID = " + station.getStation_ID() + ")" +
-		 		" order by score desc, id";
+		if(!TracingConstants.LF_LF_COMPANY_ID.equals(station.getCompany().getCompanyCode_ID()))
+		{
+			sql +=" and (m.lost.lossInfo.destination.station_ID = " + station.getStation_ID() + " or "+
+					" m.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or " +
+					" m.found.location.station_ID = " + station.getStation_ID() + " or " +
+			 		" m.found.location.lz_ID = " + station.getStation_ID() + ")";
+		}
+		
+ 		sql +=	" order by score desc, id";
 		List<LFMatchHistory> results = null;
 		Session sess = null;
 		try{
@@ -1957,9 +1987,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	private HashMap<String,String> getEmailParams(LFLost lost){
 		HashMap<String,String> h = new HashMap<String,String>();
 		h.put("LOSTID", (new Long(lost.getId())).toString());
+		
 		if(lost.getLossInfo()!=null && lost.getLossInfo().getDestination()!= null){
 			h.put("DAYS", (new Integer(lost.getLossInfo().getDestination().getPriority()).toString()));
 		}
+				
 		if(lost.getClient() != null){
 			h.put("FIRSTNAME", WordUtils.capitalize(lost.getClient().getFirstName().toLowerCase()));
 			h.put("LASTNAME", WordUtils.capitalize(lost.getClient().getLastName().toLowerCase()));
@@ -2317,22 +2349,163 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 	
-	public LFSalvage loadSalvage(long id) {
-		Session session = null;
-		LFSalvage salvage = null;
+	public Agent getAgent(int agentid){
+		if(agentid == 0){
+			return null;
+		}
 		
+		Session sess = HibernateWrapper.getSession().openSession();
+		Agent a = null;
+		List<Agent> list = null;
+		try{
+			Criteria crit = sess.createCriteria(Agent.class).add(Restrictions.eq("agent_ID", agentid));
+			list = crit.list();
+		}catch (HibernateException e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		if(list != null && list.size() > 0){
+			a = list.get(0);
+		}
+		return a;
+	}
+	
+	public Station getStation(int stationid){
+		if(stationid == 0){
+			return null;
+		}
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		Station s = null;
+		List<Station> list = null;
+		try{
+			Criteria crit = sess.createCriteria(Station.class).add(Restrictions.eq("station_ID", stationid));
+			list = crit.list();
+		}catch (HibernateException e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		if(list != null && list.size() > 0){
+			s = list.get(0);
+		}
+		return s;
+	}
+	
+	public LFSalvage loadSalvage(long id) {
+		String sql = "select s.id, s.createdDate, s.closedDate, s.status_ID, s.agent_ID, s.station_id from LFSalvage s" +
+				" where id=:sid ";
+		SQLQuery q = null;
+		
+		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-			session = HibernateWrapper.getSession().openSession();
-			salvage = (LFSalvage) session.get(LFSalvage.class, id);
+			q = sess.createSQLQuery(sql.toString());
+			q.setParameter("sid", id);
+			q.addScalar("s.id",Hibernate.LONG);
+			q.addScalar("s.createdDate",Hibernate.DATE);
+			q.addScalar("s.closedDate",Hibernate.DATE);
+			q.addScalar("s.status_id",Hibernate.INTEGER);
+			q.addScalar("s.agent_ID",Hibernate.INTEGER);
+			q.addScalar("s.station_id",Hibernate.INTEGER);
+			List<Object[]> lis = q.list();
+			LFSalvage salv=new LFSalvage();
+			Object[] o=lis.get(0);
+			salv.setId(Long.valueOf(o[0].toString()));
+			salv.setCreatedDate((Date)o[1]);
+			if(o[2]!=null){
+				salv.setClosedDate((Date)o[2]);
+			}
+			salv.setStatus(new Status());
+			salv.setStatusId(Integer.valueOf(o[3].toString()));
+			int aid=Integer.valueOf(o[4].toString());
+			Agent a=getAgent(aid);
+			salv.setAgent(a);
+			int stid=Integer.valueOf(o[5].toString());
+			Station sta=getStation(stid);
+			salv.setLocation(sta);
+			return salv;
 		} catch (Exception e) {
-			System.err.println(e);
+			e.printStackTrace();
+			return null;
 		} finally {
-			if (session != null) {
-				session.close();
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		return salvage;
 	}
+	
+	public List<LFSalvageFound> loadSalvageFound(long id) {
+		String sql = "select f.id, f.barcode, f.receivedDate, i.brand, i.model, i.serialNumber, i.color, i.description, i.longDescription, a.username, a.currentTimeZone, i.category, i.subcategory from LFFound f" +
+				" left join Agent a on f.agent_ID=a.agent_ID left join LFItem i on f.item_id=i.id where salvage_id=:sid ";
+		SQLQuery q = null;
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			q.setParameter("sid", id);
+			List lis = q.list();
+			List<LFSalvageFound> results=new ArrayList();
+			Object[] o;
+			LFSalvageFound dto;
+			for (int i = 0; i < lis.size(); ++i) {
+				o = (Object[]) lis.get(i);
+				dto=new LFSalvageFound();
+				dto.setFoundID(o[0].toString());
+				dto.setFoundBarcode(o[1].toString());
+				dto.setReceivedDate((Date)o[2]);
+				dto.setBrand(o[3].toString());
+				dto.setModel(o[4].toString());
+				dto.setSerialNumber(o[5].toString());
+				dto.setColor(o[6].toString());
+				dto.setDescription(o[7].toString());
+				if(o[8]!=null){
+					dto.setLongDescription(o[8].toString());
+				}
+				dto.setUsername(o[9].toString());
+				dto.setCurrentTimeZone(o[10].toString());
+				dto.setCategory(Long.valueOf(o[11].toString()));
+				dto.setSubcategory(Long.valueOf(o[12].toString()));
+				results.add(dto);
+			}
+			
+			return results;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+		
+		
+//		Session session = null;
+//		LFSalvage salvage = null;
+//		
+//		try {
+//			session = HibernateWrapper.getSession().openSession();
+//			salvage = (LFSalvage) session.get(LFSalvage.class, id);
+//		} catch (Exception e) {
+//			System.err.println(e);
+//		} finally {
+//			if (session != null) {
+//				session.close();
+//			}
+//		}
+//		return salvage;
+	//}
 	
 	public boolean saveSalvage(LFSalvage salvage) {
 		boolean success = false;
@@ -2457,6 +2630,99 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		return sql;
 	}
+	
+	public List<SalvageDTO> getSalvageSearch(Station station, SalvageSearchForm ssForm, int rowsperpage, int currpage) {
+		String sql = "select s.id, s.createdDate, s.createdDate, a.username, a.currentTimeZone, s.status_ID, count(f.id) from LFSalvage s left join LFFound f on s.id = f.salvage_id " +
+		" left join Agent a on s.agent_ID=a.agent_ID where s.station_ID = :station ";
+		
+		if (ssForm.getS_createtime() != null && !ssForm.getS_createtime().isEmpty()) {
+			sql += "and s.createdDate between :startDate and :endDate ";
+		}
+		
+		if (ssForm.getSalvageId() != 0) {
+			sql += "and s.id = :sid ";
+		}
+		
+		if (ssForm.getSalvageStatus() > 0) {
+			sql += "and s.status_ID = :sstatus ";
+		} 
+		
+		sql += " group by s.id order by s.createdDate asc";
+		
+		SQLQuery q = null;
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("station", station.getStation_ID());
+			
+			if (ssForm.getSalvageStatus() > 0) {
+				q.setInteger("sstatus", ssForm.getSalvageStatus());
+			}
+			
+			if (ssForm.getSalvageId() != 0) {
+				q.setParameter("sid", ssForm.getSalvageId());
+			}			
+			
+			if (ssForm.getS_createtime() != null && !ssForm.getS_createtime().isEmpty()) {
+				
+				Calendar calendarStart = new GregorianCalendar();
+				calendarStart.setTime(DateUtils.convertToDate(ssForm.getS_createtime(), ssForm.getDateFormat(), null));
+				
+				String endDateString = ssForm.getE_createtime();
+				if (endDateString == null || endDateString.isEmpty()) {
+					endDateString = ssForm.getS_createtime();
+				}
+				
+				Calendar calendarEnd = new GregorianCalendar();
+				calendarEnd.setTime(DateUtils.convertToDate(endDateString, ssForm.getDateFormat(), null));
+				calendarEnd.add(Calendar.DAY_OF_MONTH, 1);
+				
+				String startDate = DateUtils.formatDate(calendarStart.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+				String endDate = DateUtils.formatDate(calendarEnd.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
+				
+				q.setParameter("startDate", startDate);
+				q.setParameter("endDate", endDate);
+			}
+			
+			if (rowsperpage > 0) {
+				int startnum = currpage * rowsperpage;
+				q.setFirstResult(startnum);
+				q.setMaxResults(rowsperpage);
+			}
+			List lis = q.list();
+			List<SalvageDTO> results=new ArrayList();
+			Object[] o;
+			SalvageDTO dto;
+			for (int i = 0; i < lis.size(); ++i) {
+				o = (Object[]) lis.get(i);
+				dto=new SalvageDTO();
+				dto.setSalvageID(Long.valueOf(o[0].toString()));
+				dto.setCreatedDate((Date)o[1]);
+				dto.setClosedDate((Date)o[2]);
+				dto.setAgent(o[3].toString());
+				dto.setTimeZone(o[4].toString());
+				dto.setStatus(Integer.valueOf(o[5].toString()));
+				dto.setItemCount(Integer.valueOf(o[6].toString()));
+				results.add(dto);
+			}
+			
+			return results;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public static void main(String [] args){
 		LFServiceBean bean = new LFServiceBean();
 		bean.testEmail();

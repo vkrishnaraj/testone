@@ -161,15 +161,15 @@
                     </b>
                   </td>
                 </tr>
-                <logic:iterate indexId="i" id="salvage" name="salvages" type="com.bagnet.nettracer.tracing.db.lf.LFSalvage" >
+                <logic:iterate indexId="i" id="salvage" name="salvages" type="com.bagnet.nettracer.tracing.dto.SalvageDTO" >
                   <tr>
                     <td>
-                      <a href='lf_salvage.do?id=<bean:write name="salvage" property="id" />'>
-                      	<bean:write name="salvage" property="id" />
+                      <a href='lf_salvage.do?id=<bean:write name="salvage" property="salvageID" />'>
+                      	<bean:write name="salvage" property="salvageID" />
                       </a>
                     </td>
                     <td>
-                    	<%=salvage.getAgent().getUsername() %>
+                    	<%=salvage.getAgent() %>
                     </td>
                     <td>
                       <%=salvage.getDisCreatedDate(a.getDateformat().getFormat()) %>
@@ -178,14 +178,15 @@
                       <%=salvage.getDisClosedDate(a.getDateformat().getFormat()) %>
                     </td>
                     <td>
-                    	<% if (salvage.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN) { %>
+                    	<% if (salvage.getStatus() == TracingConstants.LF_STATUS_OPEN) { %>
                       		<bean:message key="salvage.status_open" />
                     	<% } else { %>
                       		<bean:message key="salvage.status_closed" />
                     	<% } %>
                     </td>
                     <td>
-                      <%=salvage.getItems().size() %>
+                    	<%= salvage.getItemCount() %>
+                      <!--  <=salvage.getItems().size() %>-->
                     </td>
                   </tr>
                 </logic:iterate> 

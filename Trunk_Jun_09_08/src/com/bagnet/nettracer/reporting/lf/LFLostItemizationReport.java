@@ -31,18 +31,20 @@ public class LFLostItemizationReport extends AbstractNtJasperReport {
 
 	@Override
 	protected String getMySqlSqlString(StatReportDTO srDto) {			
-		String sql = "select l.id,s.stationcode,date(l.openDate) as 'date',ifnull(c.description,'') as 'category', " +
-					 "ifnull(sc.description,'') as 'sub_category',ifnull(i.brand,'') as 'brand',ifnull(i.model,'') as 'model', " +
-					 "ifnull(i.serialNumber,'') as 'serial_number',ifnull(i.color,'') as 'color', ifnull(i.caseColor,'') as 'case_color', " +
-					 "ifnull(i.description,'') as 'description' from lflost l " +
-					 "left outer join lfitem i on l.id = i.lost_id and i.type = " + TracingConstants.LF_TYPE_LOST + " " +
-					 "left outer join lflossinfo li on l.lossinfo_id = li.id " +
-					 "join station s on li.destination_station_ID = s.station_ID " +
-					 "join lfcategory c on i.category = c.id " +
-					 "left outer join lfsubcategory sc on i.subCategory = sc.id " +
-					 "where date(l.openDate) between :startDate and :endDate " + getStationSql(srDto) + "and s.companycode_ID = '" + TracingConstants.LF_LF_COMPANY_ID + "' " +
-					 "order by s.stationcode,date;";
-		
+		String sql= "select l.id,s.stationcode,date(l.openDate) as 'date',ifnull(c.description,'') as 'category', " +
+		"ifnull(sc.description,'') as 'sub_category',ifnull(i.brand,'') as 'brand',ifnull(i.model,'') as 'model', " +
+		"ifnull(i.serialNumber,'') as 'serial_number',ifnull(i.color,'') as 'color', ifnull(i.caseColor,'') as 'case_color', " +
+		"ifnull(i.description,'') as 'description' from lflost l " +
+				
+		"left outer join lfitem i on l.id = i.lost_id and i.type = " + TracingConstants.LF_TYPE_LOST + " ";
+		sql+= "left outer join (select lost_id, max(id)id from lfsegment group by lost_id) fs on l.id = fs.lost_id " +
+		"left join lfsegment seg on fs.id = seg.id " +
+		"join station s on seg.destination_station_ID = s.station_ID ";
+
+		sql+= "join lfcategory c on i.category = c.id " +
+		"left outer join lfsubcategory sc on i.subCategory = sc.id " +
+		"where date(l.openDate) between :startDate and :endDate " + getStationSql(srDto); 
+		sql+=  "order by s.stationcode,date;";
 		return sql;
 	}
 

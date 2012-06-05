@@ -3,6 +3,7 @@ package com.bagnet.nettracer.tracing.forms.lfc;
 import org.apache.struts.action.ActionForm;
 
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public final class SalvageForm extends ActionForm {
@@ -24,6 +25,17 @@ public final class SalvageForm extends ActionForm {
 	public String getDisClosedDate() {
 		if (salvage.getClosedDate() != null) {
 			return DateUtils.formatDate(salvage.getClosedDate(), salvage.getAgent().getDateformat().getFormat(), salvage.getAgent().getCurrenttimezone(), null);
+		}
+		return "";
+	}
+	
+	public String getDisCreatedDate(Agent a) {
+		return DateUtils.formatDate(salvage.getCreatedDate(), a.getDateformat().getFormat(), a.getCurrenttimezone(), null);
+	}
+
+	public String getDisClosedDate(Agent a) {
+		if (salvage.getClosedDate() != null) {
+			return DateUtils.formatDate(salvage.getClosedDate(), a.getDateformat().getFormat(), a.getCurrenttimezone(), null);
 		}
 		return "";
 	}

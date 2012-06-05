@@ -233,7 +233,19 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 	@Override
 	@Transient
 	public String getDisStation() {
-		return getLossInfo().getDestination().getStationcode();
+		if(TracingConstants.LF_LF_COMPANY_ID.equals(agent.getCompanycode_ID()))
+		{
+			String toReturn="";
+			for(LFSegment seg:getSegments())
+			{
+				toReturn=seg.getDestination().getStationcode();
+			}
+			return toReturn;
+		}
+		else
+		{
+			return getLossInfo().getDestination().getStationcode();
+		}
 	}
 
 	@Override

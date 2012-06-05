@@ -163,20 +163,13 @@
              			</td>
            			</tr>
            			<tr>           				
-           				<td nowrap colspan=<%=(request.getParameter("found")!=null? 1:2) %>>
+           				<td nowrap colspan=2>
 			                <bean:message key="colname.lf.date.range" />
 			                (<%= a.getDateformat().getFormat() %>)
 			                <br>
 			                <html:text property="startDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.startDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">&nbsp;-
 			                <html:text property="endDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.endDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
 		                </td>
-		                <logic:equal name="searchLostFoundForm" property="type" value="<%=String.valueOf(TracingConstants.LF_TYPE_FOUND) %>" >
-		                <td nowrap colspan=1>
-			                <bean:message key="colname.agent.name" />
-			                <html:text name="searchLostFoundForm" property="agentName" size="20" maxlength="20" styleClass="textfield" />
-			               
-		                </td>
-		                </logic:equal>
            			</tr>
            			<tr>
            				<td>

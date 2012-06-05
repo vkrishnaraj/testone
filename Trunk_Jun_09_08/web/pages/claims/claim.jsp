@@ -416,7 +416,7 @@
                           </html:select>
                         </td>
                       </tr>
-                      <!--<tr>
+                      <!-- <tr>
                         <td colspan="2">
                           <bean:message key="colname.amount_paid" />
                           <br />

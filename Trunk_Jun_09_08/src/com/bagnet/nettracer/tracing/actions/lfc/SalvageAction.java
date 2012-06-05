@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,6 +33,7 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
+import com.bagnet.nettracer.tracing.db.lf.LFSalvageFound;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.forms.lfc.SalvageForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -57,6 +60,7 @@ public class SalvageAction extends CheckedAction {
 		LFServiceBean serviceBean = new LFServiceBean();
 		SalvageForm sForm = (SalvageForm) form;
 		LFSalvage salvage = sForm.getSalvage();
+		List<LFSalvageFound> salvageItems=new ArrayList();
 		if (request.getParameter("createNew") != null) {
 			salvage = createSalvage(user);
 		} else if (request.getParameter("id") != null) {
@@ -69,6 +73,7 @@ public class SalvageAction extends CheckedAction {
 			
 			if (id != -1) {
 				salvage = serviceBean.loadSalvage(id);
+				salvageItems = serviceBean.loadSalvageFound(id);
 			} else {
 				ActionMessage error = new ActionMessage("error.invalid.salvage.id");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -164,6 +169,7 @@ public class SalvageAction extends CheckedAction {
 			if (success) {
 				request.setAttribute("found", found);
 				SalvageManager.getQueue().put(new SalvageItemContainer(salvage, found, user, true));
+				
 			}
 
 			return mapping.findForward(TracingConstants.AJAX_SALVAGE_ITEMS);
@@ -173,7 +179,7 @@ public class SalvageAction extends CheckedAction {
 			try {
 				String barcode = (String) request.getParameter("removeItem");
 				LFFound found = serviceBean.getFoundItemByBarcode(barcode);
-								
+
 				if (found == null) {
 					success = false;
 				} else {
@@ -196,6 +202,7 @@ public class SalvageAction extends CheckedAction {
 					
 					serviceBean.saveOrUpdateFoundItem(found, user);
 					salvage = serviceBean.loadSalvage(salvage.getId());
+					salvageItems = serviceBean.loadSalvageFound(salvage.getId());
 				}
 				
 			} catch (NumberFormatException nfe) {
@@ -211,6 +218,7 @@ public class SalvageAction extends CheckedAction {
 		} else if (request.getParameter("save") != null) {
 			saveSalvage(serviceBean, salvage, request, errors);
 			salvage = serviceBean.loadSalvage(salvage.getId());
+			salvageItems = serviceBean.loadSalvageFound(salvage.getId());
 		} 
 		
 		if (salvage.getId() == 0) {
@@ -220,6 +228,7 @@ public class SalvageAction extends CheckedAction {
 		}
 		
 		sForm.setSalvage(salvage);
+		request.setAttribute("salvagefounds", salvageItems);
 		return mapping.findForward(TracingConstants.LFC_SALVAGE);
 	}
 	

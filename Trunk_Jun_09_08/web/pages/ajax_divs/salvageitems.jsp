@@ -28,7 +28,7 @@
 		</td>
 		<td style="width:20%;">
 			<center>
-				<a href='#' onclick="removeItemAjax('<%=divId %>','<bean:write name="found" property="id" />')" ><bean:message key="lf.salvage.remove" /></a>
+				<a href='#' onclick="removeItemAjax('<%=divId %>','<bean:write name="found" property="barcode" />')" ><bean:message key="lf.salvage.remove" /></a>
 				<!-- input type="button" class="button" id="button_<%=divId %>" onclick="removeItemAjax('<%=divId %>','<bean:write name="found" property="id" />')" value='<bean:message key="lf.salvage.remove" />'-->
 			</center>
 		</td>

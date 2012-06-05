@@ -158,7 +158,7 @@
 		                </td>
 		                <logic:equal name="searchLostFoundForm" property="type" value="<%=String.valueOf(TracingConstants.LF_TYPE_FOUND) %>" >
 		                <td nowrap colspan=2>
-			                <bean:message key="colname.agent.name" />
+			                <bean:message key="colname.agent.name" /><br/>
 			                <html:text name="searchLostFoundForm" property="agentName" size="20" maxlength="20" styleClass="textfield" />
 			               
 		                </td>

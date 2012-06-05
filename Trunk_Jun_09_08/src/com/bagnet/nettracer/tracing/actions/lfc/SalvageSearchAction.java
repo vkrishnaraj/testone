@@ -22,6 +22,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
 import com.bagnet.nettracer.tracing.forms.lfc.SalvageSearchForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.dto.SalvageDTO;
 
 public class SalvageSearchAction extends CheckedAction {
 	
@@ -55,8 +56,10 @@ public class SalvageSearchAction extends CheckedAction {
 				currpage--;
 			
 			int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
-	
-			List<LFSalvage> salvages = serviceBean.getSalvagesPaginated(user.getStation(), ssForm, (currpage * rowsperpage), rowsperpage);
+			List<SalvageDTO> salvages = new ArrayList();
+			//List<LFSalvage>
+			salvages = serviceBean.getSalvageSearch(user.getStation(), ssForm, (currpage * rowsperpage), rowsperpage);
+					//.getSalvagesPaginated(user.getStation(), ssForm, (currpage * rowsperpage), rowsperpage);
 			
 			if (totalpages <= currpage) {
 				currpage = 0;

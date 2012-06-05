@@ -348,8 +348,8 @@ public class LFTracingUtil {
 		boolean hasReservation = false;
 		//loupas - removing limiting potentail list by reservation location
 		//update leaving this in for now....until we change our mind again
-		if(lost != null && lost.getLossInfo() != null 
-				&& lost.getLossInfo().getDestination() != null){
+		if(lost != null && lost.getSegments() != null 
+				&& lost.getSegments().size() > 0){
 			if(isPrimary){
 				sql += " and (f.station_ID in :dropoff)";
 			} else {
