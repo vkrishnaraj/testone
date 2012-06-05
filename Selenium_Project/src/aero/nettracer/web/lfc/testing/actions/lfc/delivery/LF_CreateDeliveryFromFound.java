@@ -32,7 +32,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[4]/td[3]/select", "label=White");
 			selenium.select("segment[0].originId", "label=ATL");
 			selenium.select("segment[0].destinationId", "label=BOS");
-			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
+			selenium.click("//div[@id='maincontent']/center[4]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CDFF: An error occurred while creating the Lost Report.");
