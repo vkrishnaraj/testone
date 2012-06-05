@@ -12,8 +12,8 @@ public class LF_CloseLost extends DefaultSeleneseTestCase {
 		selenium.click("saveButton");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			System.out.println("VERIFYING CLOSE AGENT: " + selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td[5]/input"));
-			verifyEquals("ntauto", selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td[5]/input"));
+			System.out.println("VERIFYING CLOSE AGENT: " + selenium.getValue("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[4]/input"));
+			verifyEquals("ntauto", selenium.getValue("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[4]/input"));
 		} else {
 			System.err.println("Edit Lost Page Did Not Load After Close. Error Page Loaded Instead.");
 			verifyTrue(false);

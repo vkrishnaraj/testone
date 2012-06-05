@@ -23,7 +23,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[3]/td[2]/select", "label=Georgia");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[3]/td[4]/input", "30318");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/input", "1112223333");
-			selenium.select("document.forms['lostReportForm'].elements[24]", "label=Home");
+			selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/select", "label=Home");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/input", "HTC");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td[2]/input", "HTC1234");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td[3]/input", "Eris");
