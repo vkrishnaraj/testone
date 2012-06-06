@@ -228,7 +228,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
 			verifyTrue(selenium.isTextPresent("Delivery rejected"));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a"));
+			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
@@ -258,7 +258,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testPickedUpByCustomer() {
-		selenium.click("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[3]/a");
+		selenium.click("//div[@id='maincontent']/table[3]/tbody/tr[2]/td[3]/a");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
