@@ -924,7 +924,9 @@ public class Consumer implements Runnable{
 	
 	
 
-	protected static void processName(MatchHistory match, Person p1, Person p2){
+	protected static boolean processName(MatchHistory match, Person p1, Person p2){
+		System.out.println(p1.getFirstName());
+		boolean hasMatch = false;
 		Set<MatchDetail> details = match.getDetails();
 		String content1 = null;
 		if(p1.getParent() != null){
@@ -952,6 +954,7 @@ public class Consumer implements Runnable{
 			detail.setMatch(match);
 			detail.setMatchtype(MatchType.name);
 			details.add(detail);
+			hasMatch = true;
 
 
 		} else if (stringCompareValue > 0.9){
@@ -970,6 +973,7 @@ public class Consumer implements Runnable{
 				detail.setPercent(stringCompareValue * P_NAME);
 			}
 			details.add(detail);
+			hasMatch = true;
 			
 		} else {
 
@@ -993,6 +997,7 @@ public class Consumer implements Runnable{
 					detail.setPercent(P_SOUNDEX);
 				}
 				details.add(detail);
+				hasMatch = true;
 			}
 			if (p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null
 					&& p1.getFirstNameDmp().length() > 0 && p1.getLastNameDmp().length() > 0
@@ -1011,15 +1016,17 @@ public class Consumer implements Runnable{
 					detail.setPercent(P_METAPHONE);
 				}
 				details.add(detail);
+				hasMatch = true;
 			}
 		}
+		return hasMatch;
 	}
 	
 	protected static void processPerson(MatchHistory match){
 
 		Set<Person> plist1 = match.getFile1().getPersonCache();
 		if(plist1 == null){
-			plist1 = getPersons(match.getFile1(), true);
+			plist1 = getPersons(match.getFile1());
 		}	
 		Set<Person> plist2 = null;
 		if(match.getFile2() != null){
@@ -1028,8 +1035,7 @@ public class Consumer implements Runnable{
 		
 		Set <MatchDetail> details = match.getDetails();
 		HashSet<String> nameHashSet = new HashSet<String>();
-		HashSet<String> emailHashSet = new HashSet<String>();
-		HashSet<Person> parentPerson = new HashSet<Person>();
+		HashSet<String> emailHashSet = new HashSet<String>();;
 		
 		for(Person p1:plist1){
 			for(Person p2:plist2){
@@ -1037,14 +1043,23 @@ public class Consumer implements Runnable{
 				if(p1.getFirstName() != null && p1.getFirstName().trim().length() > 0 
 						&& p1.getLastName() != null && p1.getLastName().trim().length() > 0 && p2.getFirstName() != null && p2.getLastName() != null){
 
-					Person parent = p1.getParent()!=null?p1.getParent():p1;
 					String content2 = p2.getFirstName().trim() + " " + p2.getLastName().trim();
 					String comparator = p1.getFirstName().trim() + " " + p1.getLastName().trim() + "/" + content2;
 					comparator = comparator.toUpperCase();
-					if (!nameHashSet.contains(comparator) && !parentPerson.contains(parent)) {
-						parentPerson.add(parent);
+					if (!nameHashSet.contains(comparator)) {
 						nameHashSet.add(comparator);
-						processName(match,p1,p2);
+						if(!processName(match,p1,p2)){
+							//try nicknames
+							List<FsNameAlias> names = FsNameAliasBMO.getAlias(p1.getFirstName());
+							for(FsNameAlias name:names){
+								Person nickname = new Person();
+								nickname.setFirstName(name.getAlias());
+								nickname.setLastName(p1.getLastName());
+								if(processName(match,nickname,p2)){
+									break;
+								}
+							}
+						}
 					}
 				}//end name
 				// TODO: Update contents appropriately
