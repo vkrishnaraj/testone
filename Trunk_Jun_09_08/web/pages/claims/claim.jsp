@@ -1064,7 +1064,7 @@
 		                   		<td>
 		                   			<bean:message key="claim.incident.number" />
 		                   			<br/>
-		                   			<input name="claimForm" value="<bean:write name="claimForm" property="claim.ntIncident.incident_ID" />" size="20" maxlength="20" type="text" />
+		                   			<input name="claimForm" value="<bean:write name="claimForm" property="claim.ntIncident.incident_ID" />" size="20" maxlength="20" type="text" class="textfield" />
 		                   		</td>
 		                   		<td>
 		                   			<bean:message key="claim.incident.type" />
@@ -1095,6 +1095,41 @@
 		                   	
                    		</table>
 	                    </logic:notEmpty> 
+                    <% } else { %>
+                    	<!-- INCIDENT INFO FOR FRAUD ONLY CUSTOMERS -->
+                    	<h1 class="green">
+                   			<bean:message key="header.incident_summary" />
+							<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+                    	</h1>
+                    	<table class="form2" cellspacing="0" cellpadding="0">
+		                   	<tr>
+		                   		<td>
+		                   			<bean:message key="claim.incident.number" />
+		                   			<br/>
+		                   			<% String incident_ID = ((ClaimForm)session.getAttribute("claimForm")).getClaim().getIncident().getAirlineIncidentId(); %>
+		                   			<input type="text" name="claim.incident.airlineIncidentId" size="20" maxlength="13" value="<%=incident_ID != null ? incident_ID : "" %>" class="textfield" />
+		                   		</td>
+		                   		<td>
+		                   			<bean:message key="claim.incident.type" />
+		                   			<br/>
+		                   			
+		                   			<html:select name="claimForm" property="claim.incident.incidentType" styleClass="dropdown" >
+			                            <html:option value="">
+			                              <bean:message key="select.please_select" />
+			                            </html:option>
+			                            <html:option value="<%= String.valueOf(TracingConstants.LOST_DELAY) %>">
+			                            	<bean:message key="claim.type.lostdelay" />
+			                            </html:option>
+			                            <html:option value="<%= String.valueOf(TracingConstants.MISSING_ARTICLES) %>">
+			                            	<bean:message key="claim.type.missing" />
+			                            </html:option>
+			                            <html:option value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>">
+			                            	<bean:message key="claim.type.damaged" />
+			                            </html:option>
+			                        </html:select>
+		                   		</td>
+		                   	</tr>
+                   		</table>
                     <% } %>
                     <br />
                     <br/>
