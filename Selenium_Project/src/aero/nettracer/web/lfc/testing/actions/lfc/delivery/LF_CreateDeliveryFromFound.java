@@ -137,7 +137,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/input"));
 			verifyEquals("12341234", selenium.getValue("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/input"));
-			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a");
+			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CDFF: Failed to load the Lost Report after saving the tracking number.");
@@ -146,7 +146,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyEquals("Open", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
-			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td/a");
+			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CDFF: An error occurred on the Lost Report page while un-doing the tracking number.");
@@ -229,7 +229,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
 			verifyTrue(selenium.isTextPresent("Delivery rejected"));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a"));
-			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a");
+			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CDFF: Failed to load the Lost Report from the Found Item page.");
@@ -239,7 +239,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyEquals("Open", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
-			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td/a");
+			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CDFF: An error occurred on the Lost Report page while un-doing Delivery Rejected.");
@@ -277,7 +277,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
 			verifyTrue(selenium.isTextPresent("Picked up by customer"));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a"));
-			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td[2]/a");
+			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CDFF: An error occured while loading the Lost Report from the Found Item page.");
@@ -286,7 +286,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyEquals("Open", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
-			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td/a");
+			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CDFF: An error occurred on the Lost Report page while un-doing Picked Up by Customer.");

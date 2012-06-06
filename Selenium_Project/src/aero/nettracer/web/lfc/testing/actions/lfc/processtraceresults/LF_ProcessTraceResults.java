@@ -144,7 +144,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/center[4]/input[2]");
+			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to navigate to Found Item: " + LF_ProcessTraceResults.foundId + " from the Lost Report page.");
