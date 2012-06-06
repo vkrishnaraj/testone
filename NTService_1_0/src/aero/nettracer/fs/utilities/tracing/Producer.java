@@ -47,9 +47,9 @@ public class Producer {
 	private static final Logger logger = Logger.getLogger(Producer.class);
 	private static final String ACCESS_NOT_GRANTED = "*** Access not Granted ***";
 	private static final int MAX_WAIT = 40;
-	public static final double MILE_SEARCH_RADIUS = 2;
+	public static final double MILE_SEARCH_RADIUS = 10;
 	private static final long WAIT_TIME = 250;
-	private static final double MILE_SEARCH_ZIP = 4;
+	private static final double MILE_SEARCH_ZIP = 10;
 	private static final double MILE_SEARCH_CITY = 10;
 	public static final String invalidChars = "[\'%\"]";
 	

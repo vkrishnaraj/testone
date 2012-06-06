@@ -37,22 +37,22 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 public class Consumer implements Runnable{
 
 	private static final Logger logger = Logger.getLogger(Consumer.class);
-	private static final String SIMILAR_NAME = "Name Match (Similar)";
-	private static final String DOUBLE_METAPHONE_MATCH = "Name Match (Double Metaphone)";
-	private static final String EXACT_NAME_MATCH = "Name Match (Exact)";
-	private static final String SOUNDEX_MATCH = "Name Match (Soundex)";
+	protected static final String SIMILAR_NAME = "Name Match (Similar)";
+	protected static final String DOUBLE_METAPHONE_MATCH = "Name Match (Double Metaphone)";
+	protected static final String EXACT_NAME_MATCH = "Name Match (Exact)";
+	protected static final String SOUNDEX_MATCH = "Name Match (Soundex)";
 	
-	private static final String DOUBLE_METAPHONE_NICKNAME_MATCH = "Nickname Match (Double Metaphone)";
-	private static final String SIMILAR_NICKNAME_MATCH = "Nickname Match (Similar)";
-	private static final String EXACT_NICKNAME_MATCH = "Nickname Match (Exact)";
-	private static final String SOUNDEX_NICKNAME_MATCH = "Nickname Match (Soundex)";
+	protected static final String DOUBLE_METAPHONE_NICKNAME_MATCH = "Nickname Match (Double Metaphone)";
+	protected static final String SIMILAR_NICKNAME_MATCH = "Nickname Match (Similar)";
+	protected static final String EXACT_NICKNAME_MATCH = "Nickname Match (Exact)";
+	protected static final String SOUNDEX_NICKNAME_MATCH = "Nickname Match (Soundex)";
 	
 	public static final int MATCH = 3;
 	public static final Integer integerZero = new Integer(0);
 	public static final double MIN_MATCH_SCORE = 10;
-	public static final double P_SOUNDEX = 5;
-	public static final double P_METAPHONE = 5;
-	public static final double P_NAME = 5;
+	public static final double P_SOUNDEX = 4;
+	public static final double P_METAPHONE = 4;
+	public static final double P_NAME = 20;
 	public static final double P_PHONE = 10;
 	public static final double P_CC_TYPE = 5;
 	public static final double P_CC_EXP = 5;
@@ -924,8 +924,98 @@ public class Consumer implements Runnable{
 	
 	
 
+	protected static void processName(MatchHistory match, Person p1, Person p2){
+		Set<MatchDetail> details = match.getDetails();
+		String content1 = null;
+		if(p1.getParent() != null){
+			content1 = p1.getParent().getFirstName().trim() + " " + p1.getParent().getLastName().trim();
+		} else {
+			content1 = p1.getFirstName().trim() + " " + p1.getLastName().trim();
+		}
+		String content2 = p2.getFirstName().trim() + " " + p2.getLastName().trim();
+		double stringCompareValue = StringCompare.compareStrings(p1.getFirstName().toUpperCase() + " " + p1.getLastName().toUpperCase(),
+				p2.getFirstName().toUpperCase() + " " + p2.getLastName().toUpperCase())/100;
+		
+		if (p1.getFirstName().equalsIgnoreCase(p2.getFirstName())
+				&& p1.getLastName().equalsIgnoreCase(p2.getLastName())) {
+			
+			MatchDetail detail = new MatchDetail();
+			detail.setContent1(content1);
+			detail.setContent2(content2);
+			if(p1.getParent() != null){
+				detail.setDescription(EXACT_NICKNAME_MATCH);
+				detail.setPercent(P_NAME * P_NICK_NAME_MULTIPLIER);
+			} else {
+				detail.setDescription(EXACT_NAME_MATCH);
+				detail.setPercent(P_NAME);
+			}
+			detail.setMatch(match);
+			detail.setMatchtype(MatchType.name);
+			details.add(detail);
+
+
+		} else if (stringCompareValue > 0.9){
+			MatchDetail detail = new MatchDetail();
+			detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
+			detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+			detail.setDescription(SIMILAR_NAME);
+			detail.setMatch(match);
+			detail.setPercent(stringCompareValue * .1);
+			detail.setMatchtype(MatchType.name);
+			if(p1.getParent() != null){
+				detail.setDescription(SIMILAR_NICKNAME_MATCH);
+				detail.setPercent(stringCompareValue * P_NAME * P_NICK_NAME_MULTIPLIER);
+			} else {
+				detail.setDescription(SIMILAR_NAME);
+				detail.setPercent(stringCompareValue * P_NAME);
+			}
+			details.add(detail);
+			
+		} else {
+
+//			System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
+//			System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
+			if (p1.getFirstNameSoundex() != null && p2.getFirstNameSoundex() != null
+					&& p1.getFirstNameSoundex().length() > 0 
+					&& p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex())
+					&& p1.getLastNameSoundex().length() > 0 
+					&& p1.getLastNameSoundex().equals(p2.getLastNameSoundex())) {
+				MatchDetail detail = new MatchDetail();
+				detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
+				detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+				detail.setMatch(match);
+				detail.setMatchtype(MatchType.name);
+				if(p1.getParent() != null){
+					detail.setDescription(SOUNDEX_NICKNAME_MATCH);
+					detail.setPercent(P_SOUNDEX * P_NICK_NAME_MULTIPLIER);
+				} else {
+					detail.setDescription(SOUNDEX_MATCH);
+					detail.setPercent(P_SOUNDEX);
+				}
+				details.add(detail);
+			}
+			if (p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null
+					&& p1.getFirstNameDmp().length() > 0 && p1.getLastNameDmp().length() > 0
+					&& p1.getFirstNameDmp().equals(p2.getFirstNameDmp())
+					&& p1.getLastNameDmp().equals(p2.getLastNameDmp())) {
+				MatchDetail detail = new MatchDetail();
+				detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
+				detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+				detail.setMatch(match);
+				detail.setMatchtype(MatchType.name);
+				if(p1.getParent() != null){
+					detail.setDescription(DOUBLE_METAPHONE_NICKNAME_MATCH);
+					detail.setPercent(P_METAPHONE * P_NICK_NAME_MULTIPLIER);
+				} else {
+					detail.setDescription(DOUBLE_METAPHONE_MATCH);
+					detail.setPercent(P_METAPHONE);
+				}
+				details.add(detail);
+			}
+		}
+	}
 	
-	private static void processPerson(MatchHistory match){
+	protected static void processPerson(MatchHistory match){
 
 		Set<Person> plist1 = match.getFile1().getPersonCache();
 		if(plist1 == null){
@@ -939,121 +1029,22 @@ public class Consumer implements Runnable{
 		Set <MatchDetail> details = match.getDetails();
 		HashSet<String> nameHashSet = new HashSet<String>();
 		HashSet<String> emailHashSet = new HashSet<String>();
-		HashSet<String> ffHashSet = new HashSet<String>();
 		HashSet<Person> parentPerson = new HashSet<Person>();
 		
 		for(Person p1:plist1){
 			for(Person p2:plist2){
+
 				if(p1.getFirstName() != null && p1.getFirstName().trim().length() > 0 
 						&& p1.getLastName() != null && p1.getLastName().trim().length() > 0 && p2.getFirstName() != null && p2.getLastName() != null){
-					
-					String content1 = "";
-					Person parent = null;
-					if(p1.getParent() != null){
-						content1 = p1.getParent().getFirstName().trim() + " " + p1.getParent().getLastName().trim();
-						parent = p1.getParent();
-					} else {
-						content1 = p1.getFirstName().trim() + " " + p1.getLastName().trim();
-						parent = p1;
-					}
+
+					Person parent = p1.getParent()!=null?p1.getParent():p1;
 					String content2 = p2.getFirstName().trim() + " " + p2.getLastName().trim();
 					String comparator = p1.getFirstName().trim() + " " + p1.getLastName().trim() + "/" + content2;
 					comparator = comparator.toUpperCase();
 					if (!nameHashSet.contains(comparator) && !parentPerson.contains(parent)) {
+						parentPerson.add(parent);
 						nameHashSet.add(comparator);
-
-						if (p1.getFirstName().equalsIgnoreCase(p2.getFirstName())
-								&& p1.getLastName().equalsIgnoreCase(p2.getLastName())) {
-							
-							MatchDetail detail = new MatchDetail();
-							detail.setContent1(content1);
-							detail.setContent2(content2);
-							if(p1.getParent() != null){
-								detail.setDescription(EXACT_NICKNAME_MATCH);
-								detail.setPercent(P_NAME * P_NICK_NAME_MULTIPLIER);
-								parentPerson.add(p1.getParent());
-							} else {
-								detail.setDescription(EXACT_NAME_MATCH);
-								detail.setPercent(P_NAME);
-								parentPerson.add(p1);
-							}
-							detail.setMatch(match);
-							detail.setMatchtype(MatchType.name);
-							details.add(detail);
-
-
-						} else {
-
-//							System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
-//							System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
-							boolean matchedName = false;
-							if (p1.getFirstNameSoundex() != null && p2.getFirstNameSoundex() != null
-									&& p1.getFirstNameSoundex().length() > 0 
-									&& p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex())
-									&& p1.getLastNameSoundex().length() > 0 
-									&& p1.getLastNameSoundex().equals(p2.getLastNameSoundex())) {
-								matchedName = true;
-								MatchDetail detail = new MatchDetail();
-								detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-								detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-								detail.setMatch(match);
-								detail.setMatchtype(MatchType.name);
-								if(p1.getParent() != null){
-									detail.setDescription(SOUNDEX_NICKNAME_MATCH);
-									detail.setPercent(P_SOUNDEX * P_NICK_NAME_MULTIPLIER);
-									parentPerson.add(p1.getParent());
-								} else {
-									detail.setDescription(SOUNDEX_MATCH);
-									detail.setPercent(P_SOUNDEX);
-									parentPerson.add(p1);
-								}
-								details.add(detail);
-							}
-							if (p1.getFirstNameDmp() != null && p2.getFirstNameDmp() != null
-									&& p1.getFirstNameDmp().length() > 0 && p1.getLastNameDmp().length() > 0
-									&& p1.getFirstNameDmp().equals(p2.getFirstNameDmp())
-									&& p1.getLastNameDmp().equals(p2.getLastNameDmp())) {
-								matchedName = true;
-								MatchDetail detail = new MatchDetail();
-								detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-								detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-								detail.setMatch(match);
-								detail.setMatchtype(MatchType.name);
-								if(p1.getParent() != null){
-									detail.setDescription(DOUBLE_METAPHONE_NICKNAME_MATCH);
-									detail.setPercent(P_METAPHONE * P_NICK_NAME_MULTIPLIER);
-									parentPerson.add(p1.getParent());
-								} else {
-									detail.setDescription(DOUBLE_METAPHONE_MATCH);
-									detail.setPercent(P_METAPHONE);
-									parentPerson.add(p1);
-								}
-								details.add(detail);
-							}
-							if (!matchedName) {
-								double score = StringCompare.compareStrings(p1.getFirstName() + " " + p1.getLastName(),
-										p2.getFirstName() + " " + p2.getLastName());
-								if (score >= 90) {
-									MatchDetail detail = new MatchDetail();
-									detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-									detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
-									detail.setDescription(SIMILAR_NAME);
-									detail.setMatch(match);
-									detail.setPercent(score * .1);
-									detail.setMatchtype(MatchType.name);
-									if(p1.getParent() != null){
-										detail.setDescription(SIMILAR_NICKNAME_MATCH);
-										detail.setPercent(score * .1 * P_NICK_NAME_MULTIPLIER);
-										parentPerson.add(p1.getParent());
-									} else {
-										detail.setDescription(SIMILAR_NAME);
-										detail.setPercent(score * .1);
-										parentPerson.add(p1);
-									}
-									details.add(detail);
-								}
-							}
-						}
+						processName(match,p1,p2);
 					}
 				}//end name
 				// TODO: Update contents appropriately
