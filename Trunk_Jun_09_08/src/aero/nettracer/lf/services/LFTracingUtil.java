@@ -350,12 +350,12 @@ public class LFTracingUtil {
 		//update leaving this in for now....until we change our mind again
 		if(lost != null && lost.getSegments() != null 
 				&& lost.getSegments().size() > 0){
+			String stations = lost.getSegmentSQL();
 			if(isPrimary){
-				sql += " and (f.station_ID in :dropoff)";
+				sql += " and (f.station_ID in " + stations + ")";
 			} else {
-				sql += " and (f.station_ID not in :dropoff)";
+				sql += " and (f.station_ID not in " + stations + ")";
 			}
-			hasReservation = true;
 		}
 
 		Session sess = null;
@@ -370,9 +370,6 @@ public class LFTracingUtil {
 				q.setDate("founddate", lost.getLossInfo().getLossdate());
 			} else {
 				q.setDate("founddate", cal.getTime()); //DATE
-			}
-			if(hasReservation){
-				q.setParameter("dropoff", lost.getSegmentSQL());
 			}
 			q.addScalar("id", Hibernate.LONG);
 			List<Long> results = (List<Long>)q.list();
