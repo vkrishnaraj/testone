@@ -238,11 +238,9 @@
                   <td class="header">
                     <bean:message key="colname.claim.id" />
                   </td>
-                  <% if (ntUser) { %>
                   <td class="header">
                     <bean:message key="colname.incident.id" />
                   </td>
-                  <% } %>
                   <td class="header">
                       <bean:message key="colname.claim.date.created" />
                   </td>
@@ -263,6 +261,15 @@
                 				</a>
                 			</logic:notEmpty>
                 			<logic:empty name="results" property="ntIncidentId" >
+                				<bean:message key="colname.na" />
+                			</logic:empty>
+                		</td>
+                		<% } else { %>
+                		<td>
+                			<logic:notEmpty name="results" property="incident.airlineIncidentId" >
+                				<bean:write name="results" property="incident.airlineIncidentId" />
+                			</logic:notEmpty>
+                			<logic:empty name="results" property="incident.airlineIncidentId" >
                 				<bean:message key="colname.na" />
                 			</logic:empty>
                 		</td>
