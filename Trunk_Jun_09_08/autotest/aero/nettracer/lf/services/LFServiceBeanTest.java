@@ -47,6 +47,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFObject;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
@@ -444,6 +445,12 @@ public class LFServiceBeanTest {
 		LFLost lost2 = createLostTestCase();
 		lost2.setOpenDate(gc.getTime());
 		lost2.setLocation(location);
+		
+		HashSet<LFSegment>segments = new HashSet<LFSegment>();
+		LFSegment segment = new LFSegment();
+		segment.setDestination(location);
+		segments.add(segment);
+		lost2.setSegments(segments);
 		lost2.getLossInfo().setDestination(location);
 		try {
 			assertTrue(bean.saveOrUpdateLostReport(lost2, bean.getAutoAgent()) > 0);
@@ -1243,6 +1250,14 @@ public class LFServiceBeanTest {
 		res.setMvaNumber("123456");
 		res.setAgreementNumber("123456");
 		lost.setLossInfo(res);
+		
+		LFSegment segment = new LFSegment();
+		segment.setDestination(location);
+		segment.setOrigin(location);
+		segment.setFlightNumber("1234");
+		HashSet<LFSegment>segments = new HashSet<LFSegment>();
+		segments.add(segment);
+		lost.setSegments(segments);
 		
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
