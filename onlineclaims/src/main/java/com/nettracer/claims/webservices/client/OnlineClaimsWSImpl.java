@@ -272,6 +272,13 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         passengerBean.setClaimAmountCurrency(claim.getPaxClaimAmountCurrency());
         passengerBean.setBagCheckDescription(claim.getCheckedLocationDescription());
         
+        if (wsPermanentAddress != null && wsPermanentAddress.getAddress1() != null && wsPermanentAddress.getAddress1().length() > 0) {
+        	passengerBean.setDelayed(isBitSet(claim.getClaimType(), 0));
+        	passengerBean.setPilferage(isBitSet(claim.getClaimType(), 1));
+        	passengerBean.setDamaged(isBitSet(claim.getClaimType(), 2));
+        	passengerBean.setInterim(isBitSet(claim.getClaimType(), 3));
+        }
+        
                
         //itinerary
         setItineraries(claim,passengerBean);
@@ -306,13 +313,6 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         passengerBean.setReportedFileNumber(claim.getReportedFileNumber());
         
         passengerBean.setStatus(claim.getStatus());
-        
-        if (wsPermanentAddress != null && wsPermanentAddress.getAddress1() != null && wsPermanentAddress.getAddress1().length() > 0) {
-        	passengerBean.setDelayed(isBitSet(claim.getClaimType(), 0));
-        	passengerBean.setPilferage(isBitSet(claim.getClaimType(), 1));
-        	passengerBean.setDamaged(isBitSet(claim.getClaimType(), 2));
-        	passengerBean.setInterim(isBitSet(claim.getClaimType(), 3));
-        }
         
        
        return passengerBean;
@@ -817,8 +817,15 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					contentList=null; //GC
 
 				}
-
-				bagList.add(bag);
+				// ONLY ADD BAG IF THEY ARE FILING A PILFERAGE OR DAMAGE
+				// IF THOSE ARE FALSE THEN ADD INTERIM BAG IF THEY ARE FILING INTERIM
+				// OTHERWISE JUST ADD BAGS MARKED AS DELAYED
+				if (passengerBean.isPilferage() 
+						|| passengerBean.isDamaged() 
+						|| (passengerBean.isInterim() && "INTERIM".equals(bag.getBagTagNumber())) 
+						|| !wsBag[i].getBagArrive()) {
+					bagList.add(bag);
+				}
 				bag=null; //GC
 			}
 			passengerBean.setBagList(bagList);

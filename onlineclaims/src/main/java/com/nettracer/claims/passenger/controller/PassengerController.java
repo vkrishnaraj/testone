@@ -565,6 +565,10 @@ public class PassengerController {
 						passengerBean, (Claim) session.getAttribute("claim"));
 				if (finalClaim) {
 					logger.info("CLaim  saved successfully.");
+					Claim reload = onlineClaimsWS.getClaim(passengerBean.getPassengerData(), 
+							passengerBean.getPassengerData().getPassengersArray(0).getLastname(), 
+							passengerBean.getPassengerData().getPassengersArray(0).getFirstname());
+					passengerBean = onlineClaimsWS.getPassengerData(passengerBean.getPassengerData(), reload);
 					return true;
 				} else {
 					return false;
