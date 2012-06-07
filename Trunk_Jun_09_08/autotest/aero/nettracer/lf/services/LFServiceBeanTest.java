@@ -449,6 +449,7 @@ public class LFServiceBeanTest {
 		HashSet<LFSegment>segments = new HashSet<LFSegment>();
 		LFSegment segment = new LFSegment();
 		segment.setDestination(location);
+		segment.setOrigin(location);
 		segments.add(segment);
 		lost2.setSegments(segments);
 		segment.setLost(lost2);
