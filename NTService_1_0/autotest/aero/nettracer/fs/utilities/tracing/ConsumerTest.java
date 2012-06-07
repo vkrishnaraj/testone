@@ -38,8 +38,8 @@ public class ConsumerTest {
 		assertTrue(Consumer.SIMILAR_NAME.equals(detail.getDescription()));
 		
 		//Nick Name Match - single match, score 10
-		p1.setFirstName("Patrick");
-		p1.setParent(createPerson("Patrick","Schneider","F"));
+		p1.setFirstName("Pat");
+//		p1.setParent(createPerson("Patrick","Schneider","F"));
 		match.setDetails(new HashSet<MatchDetail>());
 		Consumer.processName(match,p1,p2);
 		assertTrue(match.getDetails() != null && match.getDetails().size() == 1);
@@ -48,7 +48,8 @@ public class ConsumerTest {
 		assertTrue(Consumer.EXACT_NICKNAME_MATCH.equals(detail.getDescription()));
 		
 		//Similar nick name match - single match, score [9,10)
-		p1.setFirstName("Patrick F");
+		p1.setFirstName("Patrick");
+		p2.setFirstName("Pat F");
 		match.setDetails(new HashSet<MatchDetail>());
 		Consumer.processName(match,p1,p2);
 		assertTrue(match.getDetails() != null && match.getDetails().size() == 1);
@@ -81,29 +82,29 @@ public class ConsumerTest {
 		assertTrue(Consumer.DOUBLE_METAPHONE_MATCH.equals(detail.getDescription()));
 		
 		
-		//SoundEx nick name - single match, score 2
-		p1.setFirstName("James");
-		p1.setParent(createPerson("Patrick","Schneider","F"));
-		p1.setFirstNameSoundex("AAAA");
-		p2.setFirstNameSoundex("AAAA");
-		match.setDetails(new HashSet<MatchDetail>());
-		Consumer.processName(match,p1,p2);
-		assertTrue(match.getDetails() != null && match.getDetails().size() == 1);
-		detail = match.getDetails().iterator().next();
-		assertTrue(detail.getPercent() == 2);
-		assertTrue(Consumer.SOUNDEX_NICKNAME_MATCH.equals(detail.getDescription()));
-		
-		//DMP nick name - single match, score 2
-		p1.setFirstName("James");
-		p1.setParent(createPerson("Patrick","Schneider","F"));
-		p1.setFirstNameDmp("AAAA");
-		p2.setFirstNameDmp("AAAA");
-		match.setDetails(new HashSet<MatchDetail>());
-		Consumer.processName(match,p1,p2);
-		assertTrue(match.getDetails() != null && match.getDetails().size() == 1);
-		detail = match.getDetails().iterator().next();
-		assertTrue(detail.getPercent() == 2);
-		assertTrue(Consumer.DOUBLE_METAPHONE_NICKNAME_MATCH.equals(detail.getDescription()));
+//		//SoundEx nick name - single match, score 2
+//		p1.setFirstName("James");
+////		p1.setParent(createPerson("Patrick","Schneider","F"));
+//		p1.setFirstNameSoundex("AAAA");
+//		p2.setFirstNameSoundex("AAAA");
+//		match.setDetails(new HashSet<MatchDetail>());
+//		Consumer.processName(match,p1,p2);
+//		assertTrue(match.getDetails() != null && match.getDetails().size() == 1);
+//		detail = match.getDetails().iterator().next();
+//		assertTrue(detail.getPercent() == 2);
+//		assertTrue(Consumer.SOUNDEX_NICKNAME_MATCH.equals(detail.getDescription()));
+//		
+//		//DMP nick name - single match, score 2
+//		p1.setFirstName("James");
+////		p1.setParent(createPerson("Patrick","Schneider","F"));
+//		p1.setFirstNameDmp("AAAA");
+//		p2.setFirstNameDmp("AAAA");
+//		match.setDetails(new HashSet<MatchDetail>());
+//		Consumer.processName(match,p1,p2);
+//		assertTrue(match.getDetails() != null && match.getDetails().size() == 1);
+//		detail = match.getDetails().iterator().next();
+//		assertTrue(detail.getPercent() == 2);
+//		assertTrue(Consumer.DOUBLE_METAPHONE_NICKNAME_MATCH.equals(detail.getDescription()));
 		
 		//SoundEx and DMP - 2 matches total score 8
 		p1.setFirstName("James");
@@ -122,22 +123,22 @@ public class ConsumerTest {
 		totalscore += detail.getPercent();
 		assertTrue(totalscore == 8);
 		
-		//SoundEx and DMP nick name - 2 matches total score 4
-		p1.setFirstName("James");
-		p1.setParent(createPerson("Patrick","Schneider","F"));
-		p1.setFirstNameSoundex("AAAA");
-		p1.setFirstNameDmp("AAAA");
-		p2.setFirstNameSoundex("AAAA");
-		p2.setFirstNameDmp("AAAA");
-		match.setDetails(new HashSet<MatchDetail>());
-		Consumer.processName(match,p1,p2);
-		assertTrue(match.getDetails() != null && match.getDetails().size() == 2);
-		i = match.getDetails().iterator();
-		detail = i.next();
-		totalscore = detail.getPercent();
-		detail = i.next();
-		totalscore += detail.getPercent();
-		assertTrue(totalscore == 4);
+//		//SoundEx and DMP nick name - 2 matches total score 4
+//		p1.setFirstName("James");
+////		p1.setParent(createPerson("Patrick","Schneider","F"));
+//		p1.setFirstNameSoundex("AAAA");
+//		p1.setFirstNameDmp("AAAA");
+//		p2.setFirstNameSoundex("AAAA");
+//		p2.setFirstNameDmp("AAAA");
+//		match.setDetails(new HashSet<MatchDetail>());
+//		Consumer.processName(match,p1,p2);
+//		assertTrue(match.getDetails() != null && match.getDetails().size() == 2);
+//		i = match.getDetails().iterator();
+//		detail = i.next();
+//		totalscore = detail.getPercent();
+//		detail = i.next();
+//		totalscore += detail.getPercent();
+//		assertTrue(totalscore == 4);
 
 		
 	}

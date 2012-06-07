@@ -925,7 +925,10 @@ public class Consumer implements Runnable{
 	
 
 	protected static boolean processName(MatchHistory match, Person p1, Person p2){
-		System.out.println(p1.getFirstName());
+		return processName(match,p1,p2,true);
+	}
+	
+	protected static boolean processName(MatchHistory match, Person p1, Person p2, boolean searchNicknames){
 		boolean hasMatch = false;
 		Set<MatchDetail> details = match.getDetails();
 		String content1 = null;
@@ -959,8 +962,8 @@ public class Consumer implements Runnable{
 
 		} else if (stringCompareValue > 0.9){
 			MatchDetail detail = new MatchDetail();
-			detail.setContent1(p1.getFirstName() + " " + p1.getLastName());
-			detail.setContent2(p2.getFirstName() + " " + p2.getLastName());
+			detail.setContent1(content1);
+			detail.setContent2(content2);
 			detail.setDescription(SIMILAR_NAME);
 			detail.setMatch(match);
 			detail.setPercent(stringCompareValue * .1);
@@ -975,7 +978,22 @@ public class Consumer implements Runnable{
 			details.add(detail);
 			hasMatch = true;
 			
-		} else {
+		} else if(searchNicknames) {
+			
+
+			//process nick names
+			List<FsNameAlias> names = FsNameAliasBMO.getAlias(p1.getFirstName());
+			for(FsNameAlias name:names){
+				Person nickname = new Person();
+				nickname.setFirstName(name.getAlias());
+				nickname.setLastName(p1.getLastName());
+				nickname.setParent(p1);
+				if(processName(match,nickname,p2,false)){
+					return true;
+				}
+			}
+
+
 
 //			System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
 //			System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
@@ -1048,18 +1066,7 @@ public class Consumer implements Runnable{
 					comparator = comparator.toUpperCase();
 					if (!nameHashSet.contains(comparator)) {
 						nameHashSet.add(comparator);
-						if(!processName(match,p1,p2)){
-							//try nicknames
-							List<FsNameAlias> names = FsNameAliasBMO.getAlias(p1.getFirstName());
-							for(FsNameAlias name:names){
-								Person nickname = new Person();
-								nickname.setFirstName(name.getAlias());
-								nickname.setLastName(p1.getLastName());
-								if(processName(match,nickname,p2)){
-									break;
-								}
-							}
-						}
+						processName(match,p1,p2);
 					}
 				}//end name
 				// TODO: Update contents appropriately
