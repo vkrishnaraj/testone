@@ -451,6 +451,7 @@ public class LFServiceBeanTest {
 		segment.setDestination(location);
 		segments.add(segment);
 		lost2.setSegments(segments);
+		segment.setLost(lost2);
 		lost2.getLossInfo().setDestination(location);
 		try {
 			assertTrue(bean.saveOrUpdateLostReport(lost2, bean.getAutoAgent()) > 0);
@@ -1258,6 +1259,7 @@ public class LFServiceBeanTest {
 		HashSet<LFSegment>segments = new HashSet<LFSegment>();
 		segments.add(segment);
 		lost.setSegments(segments);
+		segment.setLost(lost);
 		
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
