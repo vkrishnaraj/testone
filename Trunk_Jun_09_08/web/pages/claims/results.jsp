@@ -11,6 +11,7 @@
 <%@ page import="aero.nettracer.fs.model.FsClaim" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="java.util.LinkedHashSet" %>
+<%@page import="com.bagnet.nettracer.tracing.forms.FraudResultsForm"%>
 
 <tr>
 	<td class="header">
@@ -39,8 +40,11 @@
 	</td>
 </tr>
 <% String results = request.getParameter("beanProperty"); %>
+
+<% boolean hasResults = false;%>
 <logic:iterate id="result" indexId="i" name='<%=request.getParameter("beanName") %>' property='<%=results %>' type="aero.nettracer.fs.model.detection.MatchHistory" >
 <% 
+	hasResults = true;
 	Agent a = (Agent)session.getAttribute("user");
 	AccessRequest.RequestStatus status = result.getFile2().getRequestStatus();
 	String company = request.getParameter("company");
@@ -187,3 +191,11 @@
 				</tr>
 			<% } %>
 </logic:iterate>
+<% if(hasResults == false){%>
+<tr>
+	<td colspan="8">
+	<bean:message key="fraud.no.results"/>
+	</td>
+</tr>
+
+<% } %>

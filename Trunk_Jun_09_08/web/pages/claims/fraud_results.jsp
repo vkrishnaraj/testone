@@ -152,7 +152,6 @@
     	<td id="middlecolumn">
         	<div id="maincontent">
                 
-
                 		<h1>
                 	<bean:message key="claim.meta.summary" />&nbsp;<bean:write name="displayId" scope="request"/>
                 </h1>
@@ -163,6 +162,13 @@
                 	<br />
                 </logic:empty>
 					<logic:notEmpty name="fraudResultsForm" property="traceResponse">
+					<logic:equal value="false" name="fraudResultsForm" property="traceResponse.traceComplete">
+					<br/>
+					<font color=red> 
+						<bean:message key="fraud.still.searching"/>: <%=myform.getTraceResponse().getSecondsUntilReload() %>
+					</font>		
+					<br/>
+					</logic:equal>
        		<table class="form2" cellspacing="0" cellpadding="0">
 				<tr>
 						<td <%=myform.getTraceResponse().getDisplayClass() %>>
@@ -182,8 +188,8 @@
 					</logic:notEmpty>
 	
 	
-                
-                
+
+
                 <h1>
                 	<bean:message key="claim.fraud.primary_results" />
                 </h1>
