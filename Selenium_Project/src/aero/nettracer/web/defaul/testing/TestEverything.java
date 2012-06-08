@@ -74,6 +74,7 @@ import aero.nettracer.web.lfc.testing.actions.lfc.match.LF_ManualMatch_FoundToLo
 import aero.nettracer.web.lfc.testing.actions.lfc.processtraceresults.LF_ProcessTraceResults;
 import aero.nettracer.web.lfc.testing.actions.lfc.salvage.LF_Salvage;
 import aero.nettracer.web.lfc.testing.actions.lfc.salvage.LF_SalvageSearch;
+import aero.nettracer.web.lfc.testing.actions.lfc.core.LF_BoxCount;
 import aero.nettracer.web.lfc.testing.actions.lfc.core.LF_QuickHistory;
 import aero.nettracer.web.lfc.testing.actions.lfc.taskman.LF_VerifyText_TaskManager;
 import aero.nettracer.web.spirit.testing.actions.nt.admin.NK_Audit;
@@ -167,7 +168,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.US_DisputeManage;
 	LF_CloseFound.class, LF_SearchLost.class, LF_CloseLost.class, 
 	LF_CreateLost_Detailed.class, LF_CreateFound_Detailed.class, LF_FoundReportSummary.class, LF_VerifyText_TaskManager.class, 
 	LF_ConfirmMatch.class, LF_CreateDeliveryFromFound.class, LF_ItemEntry.class, LF_ProcessTraceResults.class,
-	LF_CreateLostAndFoundReadOnly.class, LF_Salvage.class, LF_SalvageSearch.class, LF_QuickHistory.class, LF_WN_CreateLost.class
+	LF_CreateLostAndFoundReadOnly.class,LF_Salvage.class, LF_SalvageSearch.class, LF_BoxCount.class, LF_QuickHistory.class, LF_WN_CreateLost.class
 	
 	})
 public class TestEverything { 
