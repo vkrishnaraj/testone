@@ -108,6 +108,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_SCANNER_DATA = "Scanner Data";
 	public final static String SYSTEM_COMPONENT_NAME_FORWARD_NOTICES = "Forward Copies";
 	public final static String SYSTEM_COMPONENT_NAME_CAPTCHAS = "Captcha";
+	public static final String SYSTEM_COMPONENT_NAME_BOX_COUNT = "Box Count";
 	
 	public final static String SYSTEM_COMPONENT_FORWARD_PCN = "pcn";
 
@@ -485,6 +486,7 @@ public class TracingConstants {
 	public final static String LFC_SHELVED_TRACE_RESULTS = "shelved_trace_results";
 	public final static String LFC_SALVAGE = "lf_salvage";
 	public final static String LFC_SEARCH_SALVAGE = "lf_search_salvage";
+	public final static String LFC_BOXCOUNT = "lf_boxcount";
 	
 	public final static int LF_LOCATION_SHELF = 0;
 	public final static int LF_LOCATION_VERIFICATION = 1;
@@ -526,6 +528,7 @@ public class TracingConstants {
 	public final static String AJAX_SUBCATEGORY = "subcategory";
 	public final static String AJAX_ITEM_SUMMARY = "itemsummary";
 	public final static String AJAX_SALVAGE_ITEMS = "salvageitems";
+	public final static String AJAX_NEWSTATION = "newstation";
 	public final static String AJAX_BLANK = "blank";
 	public final static String AJAX_LF_BLANK = "lf_blank";
 	

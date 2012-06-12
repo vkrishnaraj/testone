@@ -933,6 +933,10 @@
     <definition name="lf_salvage" extends="user_menu">
         <put name="center"   value="/pages/lfc/lf_salvage.jsp"/>
     </definition>
+    
+    <definition name="lf_boxcount" extends="user_menu">
+        <put name="center"   value="/pages/lfc/lf_boxcount.jsp"/>
+    </definition>
 
     <definition name="lf_search_salvage" extends="user_menu">
         <put name="center"   value="/pages/lfc/lf_search_salvage.jsp"/>
@@ -943,6 +947,8 @@
     <definition name="ajax_itemsummary" path="/pages/ajax_divs/itemsummary.jsp">
     </definition>
     <definition name="ajax_salvageitems" path="/pages/ajax_divs/salvageitems.jsp">
+    </definition>
+    <definition name="ajax_newstation" path="/pages/ajax_divs/newstation.jsp">
     </definition>
     <definition name="ajax_blank" path="/pages/ajax_divs/lf_blank.jsp">
     </definition>

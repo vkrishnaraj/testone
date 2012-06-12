@@ -16,6 +16,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.history.FoundHistoryObject" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
 <%@ page import="java.util.Iterator" %>
 <%@page import="java.util.ResourceBundle" %>
 <%@page import="java.util.Locale" %>
@@ -40,15 +41,25 @@
     
 	var cal1xx = new CalendarPopup();
 	
+	
 	function getSubCategory() {
-		o = document.enterItemsForm;
-		o.changesubcategory.value = "1";
-		document.getElementById("subcategorydiv").innerHTML = "<bean:message key="ajax.please_wait" />";
-		postForm("enterItemsForm", true, function (req) { 
-			o.changesubcategory.value = "0";
-			document.getElementById("subcategorydiv").innerHTML = req.responseText; 
-
-		});
+		var catList=document.getElementById("category");
+		var subCatList=document.getElementById("subCategory");
+		var selectedCategory=catList.options[catList.selectedIndex].value;
+		subCatList.options.length=1;
+		
+		subCatList.options[0]=new Option("<bean:message key="option.lf.please.select" />","0",true,false);
+		<logic:iterate indexId="i" id="cList" name="lfcategorylist"  type="com.bagnet.nettracer.tracing.db.lf.LFCategory" >
+		if(<%=cList.getId()%>==selectedCategory)
+			{	
+				<% String source="lfsubcategorylist"+cList.getId();%>
+				<logic:iterate indexId="j" id="scList" name="<%=source%>"  type="com.bagnet.nettracer.tracing.db.lf.LFSubCategory" >
+					subCatList.options[<%=j+1%>]=new Option("<%=scList.getDescription()%>","<%=scList.getId()%>",false,false);
+				</logic:iterate>
+			}
+		</logic:iterate>
+		
+		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
 	}
 	
 	function displayContactDiv() {
@@ -275,9 +286,9 @@
 	           					<div id="subcategorydiv">
 	           					<bean:message key="colname.lfc.subcategory" />
 	           					<br/>
-	           					<html:select name="enterItemsForm" property="found.item.subCategory" styleClass="dropdown" styleId="subCategory" >
+	           					<html:select name="enterItemsForm" property="found.item.subCategory" styleClass="dropdown" styleId="subCategory">
 	           						<option value="0"><bean:message key="option.lf.please.select" /></option>
-	      							<html:options collection="lfsubcategorylist" property="id" labelProperty="description" />
+	           						<html:options collection="lfsubcategorylist" property="id" labelProperty="description" style="display:none"/>
 	           					</html:select>
 	           					</div>
 	           				</td>

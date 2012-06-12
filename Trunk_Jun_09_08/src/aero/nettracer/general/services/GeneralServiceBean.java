@@ -4,8 +4,11 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 
+import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 
@@ -132,6 +135,29 @@ public class GeneralServiceBean implements GeneralServiceRemote{
 	public static void main(String [] args){
 		GeneralServiceBean bean = new GeneralServiceBean();
 		System.out.println(bean.getAgent("ntadmin", "B6").getAgent_ID());
+	}
+	
+	public static Agent getAgent(int agentid){
+		if(agentid == 0){
+			return null;
+		}
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		Agent a = null;
+		List<Agent> list = null;
+		try{
+			Criteria crit = sess.createCriteria(Agent.class).add(Restrictions.eq("agent_ID", agentid));
+			list = crit.list();
+		}catch (HibernateException e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		if(list != null && list.size() > 0){
+			a = list.get(0);
+		}
+		return a;
 	}
 
 	public String getCompanyFromSubCompany(String subcompany){

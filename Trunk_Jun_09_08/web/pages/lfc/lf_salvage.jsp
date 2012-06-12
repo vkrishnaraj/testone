@@ -31,6 +31,7 @@
 		o = document.lfSalvageForm;
 		o.addItem.value = o.addBarcode.value;
 		o.divId.value = o.lastDivNum.value;
+		if(o.addItem.value){
 		postForm("lfSalvageForm", true, function (req) {
 			o.addItem.value = "";
 			o.divId.value = "";
@@ -39,6 +40,7 @@
 			document.lfSalvageForm.addBarcode.focus();
 			document.lfSalvageForm.lastDivNum.value = parseInt(document.lfSalvageForm.lastDivNum.value) + 1;
 		});
+		}
 	}
 	
 	function removeItemAjax(divId, foundId) {

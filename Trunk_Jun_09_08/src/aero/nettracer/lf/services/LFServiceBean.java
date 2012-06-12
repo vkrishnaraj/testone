@@ -25,6 +25,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import aero.nettracer.general.services.GeneralServiceBean;
@@ -35,6 +36,7 @@ import aero.nettracer.security.AES;
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -48,6 +50,8 @@ import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
 import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvageFound;
+import com.bagnet.nettracer.tracing.db.lf.LFBoxContainer;
+import com.bagnet.nettracer.tracing.db.lf.LFBoxCount;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
@@ -2349,16 +2353,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 	
-	public Agent getAgent(int agentid){
-		if(agentid == 0){
+	public LFBoxContainer loadBoxContainer(Date date){
+		if(date == null){
 			return null;
 		}
 		
 		Session sess = HibernateWrapper.getSession().openSession();
-		Agent a = null;
-		List<Agent> list = null;
+		LFBoxContainer s = null;
+		List<LFBoxContainer> list = null;
 		try{
-			Criteria crit = sess.createCriteria(Agent.class).add(Restrictions.eq("agent_ID", agentid));
+			Criteria crit = sess.createCriteria(LFBoxContainer.class).add(Restrictions.eq("dateCount", date));
 			list = crit.list();
 		}catch (HibernateException e){
 			e.printStackTrace();
@@ -2367,21 +2371,23 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess.close();
 		}
 		if(list != null && list.size() > 0){
-			a = list.get(0);
+			s = list.get(0);
 		}
-		return a;
+		return s;
 	}
 	
-	public Station getStation(int stationid){
-		if(stationid == 0){
+	public LFBoxCount loadBoxCount(Station sta, Date date){
+		if(date == null || sta == null){
 			return null;
 		}
 		
 		Session sess = HibernateWrapper.getSession().openSession();
-		Station s = null;
-		List<Station> list = null;
+		LFBoxCount s = null;
+		List<LFBoxCount> list = null;
 		try{
-			Criteria crit = sess.createCriteria(Station.class).add(Restrictions.eq("station_ID", stationid));
+			Criteria crit = sess.createCriteria(LFBoxCount.class).add(Restrictions.eq("source", sta))
+					.createCriteria("container").add(Restrictions.eq("dateCount", date));
+			//crit = sess.createCriteria(LFBoxCount.class).add(Restrictions.eq("source", sta));
 			list = crit.list();
 		}catch (HibernateException e){
 			e.printStackTrace();
@@ -2421,10 +2427,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			salv.setStatus(new Status());
 			salv.setStatusId(Integer.valueOf(o[3].toString()));
 			int aid=Integer.valueOf(o[4].toString());
-			Agent a=getAgent(aid);
+			Agent a=GeneralServiceBean.getAgent(aid);
 			salv.setAgent(a);
 			int stid=Integer.valueOf(o[5].toString());
-			Station sta=getStation(stid);
+			Station sta=StationBMO.getStation(stid);
 			salv.setLocation(sta);
 			return salv;
 		} catch (Exception e) {
@@ -2538,6 +2544,68 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return success;
 	}
 	
+	public boolean saveContainer(LFBoxContainer container) {
+		boolean success = false;
+		if (container == null) {
+			return success;
+		}
+		Session session = null;
+		Transaction transaction = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			transaction = session.beginTransaction();
+			if(container.getId() > 0) {
+				session.merge(container);
+			} else {
+				session.save(container);
+			}
+			transaction.commit();
+			success = true;
+		} catch (Exception e) {
+			System.err.println(e);
+			if (transaction != null) {
+				transaction.rollback();
+			}
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return success;
+	}
+	
+	public boolean saveCount(LFBoxCount count) {
+		boolean success = false;
+		if (count == null) {
+			return success;
+		}
+		Session session = null;
+		Transaction transaction = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			transaction = session.beginTransaction();
+			if(count.getId() > 0) {
+				session.merge(count);
+			} else {
+				session.save(count);
+			}
+			transaction.commit();
+			success = true;
+		} catch (Exception e) {
+			System.err.println(e);
+			if (transaction != null) {
+				transaction.rollback();
+			}
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return success;
+	}
+	
 	@Override
 	public int getSalvageCount(Station station, SalvageSearchForm ssForm) {
 		if(station == null){
@@ -2632,7 +2700,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	public List<SalvageDTO> getSalvageSearch(Station station, SalvageSearchForm ssForm, int rowsperpage, int currpage) {
-		String sql = "select s.id, s.createdDate, s.createdDate, a.username, a.currentTimeZone, s.status_ID, count(f.id) from LFSalvage s left join LFFound f on s.id = f.salvage_id " +
+		String sql = "select s.id, s.createdDate, s.closedDate, a.username, a.currentTimeZone, s.status_ID, count(f.id) from LFSalvage s left join LFFound f on s.id = f.salvage_id " +
 		" left join Agent a on s.agent_ID=a.agent_ID where s.station_ID = :station ";
 		
 		if (ssForm.getS_createtime() != null && !ssForm.getS_createtime().isEmpty()) {

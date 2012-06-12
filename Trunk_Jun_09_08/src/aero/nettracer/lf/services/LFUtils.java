@@ -165,6 +165,13 @@ public class LFUtils {
 			session.setAttribute("lfsubcategorylist", new ArrayList<LFSubCategory>());
 		}
 		
+		List<LFCategory> categories = (List) session.getAttribute("lfcategorylist");
+		for (LFCategory c: categories) {
+				session.setAttribute("lfsubcategorylist"+c.getId(), c.getSubcategories());
+				//success = true;
+				//break;
+		}
+		
 		session.setAttribute("lfstatuslist", session
 				.getAttribute("lfstatuslist") != null ? session
 						.getAttribute("lfstatuslist") : TracerUtils.getStatusList(TracingConstants.TABLE_LF_STATUS, user.getCurrentlocale()));
