@@ -287,7 +287,8 @@
 		
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_main.cfg.xml" overwrite="true" />
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_geo.cfg.xml" overwrite="true" />
-
+		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/dozer/fs/dozerBeanMapping.xml" overwrite="true" />
+		
 		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on" memoryinitialsize="256m" memorymaximumsize="256m" >
 			<classpath refid="project.classpath" />
 		</javac>
@@ -297,10 +298,11 @@
 				<include name="ejb-jar.xml"/>
 			</metainf>
 			<include name="${build.dir}/services-war/WEB-INF/classes/" />
-			<include name="**/**/fraud/Claim*.class" />
+			<include name="**/**/fraud/**/*.class" />
+			<include name="**/**/fraud/client/*.class" />
 			<include name="**/**/nettracer/fs/utilities/tracing/*.class" />
 			<include name="**/**/nettracer/fs/utilities/*.class" />
-			<include name="**/**/nettracer/fs/model/*.class" />
+			<include name="**/**/nettracer/fs/model/**/*.class" />
 			<include name="**/**/nettracer/fs/bmo/*.class" />
 			<include name="**/**/PrivacyPermissions*.class" />
 			<include name="**/**/HibernateWrapper.class" />
@@ -308,6 +310,14 @@
 			<include name="**/**/**/common/db/*.class" />
 			<include name="**/common/pojo/*.class" />
 			<include name="**/**/*.xml" />
+		</jar>
+		
+		<jar destfile="${dist.dir}/nt_fs_client.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">
+			<include name="**/**/fraud/client/ClaimClientRemote.class" />
+			<include name="**/**/fraud/ClaimRemote.class" />
+			<include name="**/**/fraud/PrivacyPermissionsRemote.class" />
+			<include name="**/**/fraud/PrivacyPermissionsBean.class" />
+			<include name="**/**/db/PrivacyPermissions*.class" />
 		</jar>
 		
 		<!--
