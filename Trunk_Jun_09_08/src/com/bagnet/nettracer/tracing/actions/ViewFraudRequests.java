@@ -21,8 +21,10 @@ import org.apache.struts.util.MessageResources;
 
 import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.MatchHistory;
-import aero.nettracer.selfservice.fraud.ClaimRemote;
+import aero.nettracer.fs.utilities.TransportMapper;
+import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
@@ -60,8 +62,8 @@ public class ViewFraudRequests extends CheckedAction {
 		String approveId = (String) request.getParameter("approveId");
 		String denyId = (String) request.getParameter("denyId");
 		Context ctx = ConnectionUtil.getInitialContext();
-		ClaimRemote remote = (ClaimRemote) ctx
-				.lookup("NTServices_1_0/ClaimBean/remote");
+		ClaimClientRemote remote = (ClaimClientRemote) ctx
+				.lookup(PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 
 		if (approveId != null) {
 			remote.approveRequest(Long.parseLong(approveId), null, user.getFirstname() + " " + user.getLastname());
@@ -107,8 +109,8 @@ public class ViewFraudRequests extends CheckedAction {
 			}
 
 			// TODO - Get list
-			requestList = remote.getOutstandingRequests(user.getCompanycode_ID(), rowsperpage * currpage,
-					rowsperpage);
+			requestList = TransportMapper.map(remote.getOutstandingRequests(user.getCompanycode_ID(), rowsperpage * currpage,
+					rowsperpage));
 
 			if (currpage + 1 == totalpages)
 				request.setAttribute("end", "1");

@@ -14,7 +14,8 @@ import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.detection.TraceResponse;
-import aero.nettracer.selfservice.fraud.ClaimRemote;
+import aero.nettracer.fs.utilities.TransportMapper;
+import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
@@ -56,7 +57,7 @@ public class ConnectionUtil {
 		 try {
 			ctx = getInitialContext();
 		  if (ctx != null) {
-			  ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+			  ClaimClientRemote remote = (ClaimClientRemote) getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 			  if(remote != null){
 				  ret = remote.echoTest(echo);
 			  }
@@ -102,9 +103,9 @@ public class ConnectionUtil {
 		  Context ctx = getInitialContext();
 		  long id = -1;
 		  if (ctx != null) {
-			  ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+			  ClaimClientRemote remote = (ClaimClientRemote) getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 			  if(remote != null){
-			  id = remote.insertFile(file);
+			  id = remote.insertFile(TransportMapper.map(file));
 			  }
 			  ctx.close();
 		  }
@@ -118,7 +119,7 @@ public class ConnectionUtil {
 			TraceResponse results = null;
 			try {
 				Context ctx = ConnectionUtil.getInitialContext();
-				ClaimRemote remote = (ClaimRemote) getRemoteEjb(ctx,PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+				ClaimClientRemote remote = (ClaimClientRemote) getRemoteEjb(ctx,PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 				
 				if (remote != null) {
 					int wait = 6;
@@ -127,7 +128,7 @@ public class ConnectionUtil {
 					} catch (Exception e) {
 						//
 					}
-					results = remote.traceFile(fileId, wait, primary, hasViewResultsPermission);
+					results = TransportMapper.map(remote.traceFile(fileId, wait, primary, hasViewResultsPermission));
 				}
 				ctx.close();
 			} catch (Exception e) {
@@ -172,6 +173,29 @@ public class ConnectionUtil {
 		}
 		return file;
 
+	}
+	
+	public static File getFsFile(long id, String companycode){
+		  File file = null;
+		try{
+		  Context ctx = getInitialContext();
+
+		  if (ctx != null) {
+			  ClaimClientRemote remote = (ClaimClientRemote) getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+			  if(remote != null){
+			  file = TransportMapper.map(remote.getFile(id, companycode));
+			  }
+			  try {
+				ctx.close();
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		  }
+		} catch (Exception e){
+			  e.printStackTrace();
+		  }
+		  return file;
 	}
 	  
 	  // DO NOT USE - NEED TO CLOSE CONTEXT

@@ -28,7 +28,8 @@ import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
-import aero.nettracer.selfservice.fraud.ClaimRemote;
+import aero.nettracer.fs.utilities.TransportMapper;
+import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -75,7 +76,7 @@ public class FraudResultsAction extends CheckedAction {
 
 		File file = null;
 		FsClaim claim = null;
-		if (ntUser && incidentIdString != null) {
+		if (ntUser && incidentIdString != null && !incidentIdString.equals("null")) {
 			file = FileDAO.loadFile(incidentIdString);
 			if (file == null) {
 				Incident iDto = new IncidentBMO().findIncidentByID(incidentIdString);
@@ -83,7 +84,7 @@ public class FraudResultsAction extends CheckedAction {
 			}
 			request.setAttribute("claimId", claimIdString);
 			request.setAttribute("incident", incidentIdString);
-		} else if (claimIdString != null) {
+		} else if (claimIdString != null && !claimIdString.equals("null")) {
 			claim = ClaimDAO.loadClaim(Long.parseLong(claimIdString));
 			resultsForm.setClaimId(claim.getId());
 			request.setAttribute("claimId", String.valueOf(claim.getId()));
@@ -131,16 +132,16 @@ public class FraudResultsAction extends CheckedAction {
 			
 			if (id > 0) {
 				Context ctx = null;
-				ClaimRemote remote = null;
+				ClaimClientRemote remote = null;
 				try {
 					ctx = ConnectionUtil.getInitialContext();
-					remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+					remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 					if (remote == null) {
 						ActionMessage error = new ActionMessage("error.fs.could.not.communicate");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 						saveMessages(request, errors);
 					} else {
-						traceResponse = remote.getFileMatches(id); 
+						traceResponse = TransportMapper.map(remote.getFileMatches(id)); 
 						results = traceResponse.getMatchHistory();
 					}
 				} catch (Exception e) {
@@ -200,7 +201,7 @@ public class FraudResultsAction extends CheckedAction {
 				}
 				
 				Context ctx = ConnectionUtil.getInitialContext();
-				ClaimRemote remote = (ClaimRemote) ctx.lookup("NTServices_1_0/ClaimBean/remote");
+				ClaimClientRemote remote = (ClaimClientRemote) ctx.lookup(PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 				if (remote != null) {
 					remote.deleteMatch(ids);
 				}

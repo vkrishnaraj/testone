@@ -24,7 +24,8 @@ import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Segment;
-import aero.nettracer.selfservice.fraud.ClaimRemote;
+import aero.nettracer.fs.utilities.TransportMapper;
+import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -301,10 +302,10 @@ public abstract class ImportClaimData {
 		boolean success = true;
 		String test = "test";
 		Context ctx = null;
-		ClaimRemote remote = null;
+		ClaimClientRemote remote = null;
 		try {
 			ctx = ConnectionUtil.getInitialContext();
-			remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+			remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 			if (remote == null) {
 				success = false;
 			} else {
@@ -346,10 +347,10 @@ public abstract class ImportClaimData {
 		threads = new Thread[submissionThreadCount];
 		for (int i = 0; i < submissionThreadCount; ++i) {
 			Context ctx = null;
-			ClaimRemote remote = null;
+			ClaimClientRemote remote = null;
 			try {
 				ctx = ConnectionUtil.getInitialContext();
-				remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+				remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 			} catch (Exception e) {
 				logger.error(e, e);
 			}
@@ -368,7 +369,7 @@ public abstract class ImportClaimData {
 		}
 	}
 	
-	private void submitToFraudAndSave(aero.nettracer.fs.model.File file, ClaimRemote remote) {
+	private void submitToFraudAndSave(aero.nettracer.fs.model.File file, ClaimClientRemote remote) {
 		long originalFileId;		
 		long remoteFileId = 0;
 		if (remote == null || file == null) {
@@ -422,7 +423,7 @@ public abstract class ImportClaimData {
 			file.setClaims(fsClaims);
 			logger.info("Submitting file: " + originalFileId + " to central services...");
 			double start = System.currentTimeMillis();
-			remoteFileId = remote.insertFile(file);
+			remoteFileId = remote.insertFile(TransportMapper.map(file));
 			if (remoteFileId > 0) {
 				file = FileDAO.loadFile(originalFileId);
 				file.setSwapId(remoteFileId);
@@ -534,9 +535,9 @@ public abstract class ImportClaimData {
 	public class SubmissionThread implements Runnable {
 
 		private ArrayBlockingQueue<aero.nettracer.fs.model.File> queue;
-		ClaimRemote remote;
+		ClaimClientRemote remote;
 		
-		public SubmissionThread(ArrayBlockingQueue<aero.nettracer.fs.model.File> queue, ClaimRemote remote) {
+		public SubmissionThread(ArrayBlockingQueue<aero.nettracer.fs.model.File> queue, ClaimClientRemote remote) {
 			this.queue = queue;
 			this.remote = remote;
 		}
@@ -552,7 +553,7 @@ public abstract class ImportClaimData {
 						Context ctx = null;
 						try {
 							ctx = ConnectionUtil.getInitialContext();
-							remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+							remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 						} catch (Exception e) {
 							logger.error(e, e);
 						}

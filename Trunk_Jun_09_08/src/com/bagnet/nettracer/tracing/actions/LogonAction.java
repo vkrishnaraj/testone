@@ -26,7 +26,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.lf.services.LFServiceBean;
-import aero.nettracer.selfservice.fraud.ClaimRemote;
+import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
@@ -346,7 +346,7 @@ public class LogonAction extends Action {
 							
 							try {
 							Context ctx = ConnectionUtil.getInitialContext();
-							ClaimRemote remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx,PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+							ClaimClientRemote remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx,PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 							if(remote != null){
 								x = remote.getOutstandingRequetsCount(agent.getCompanycode_ID());
 							}

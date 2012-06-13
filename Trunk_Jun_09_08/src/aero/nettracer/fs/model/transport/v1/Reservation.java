@@ -1,8 +1,7 @@
-package aero.nettracer.fs.model;
+package aero.nettracer.fs.model.transport.v1;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,7 +17,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
-import aero.nettracer.fs.model.detection.Whitelist;
+import aero.nettracer.fs.model.transport.v1.detection.Whitelist;
 
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 
@@ -278,21 +277,12 @@ public class Reservation implements Serializable {
 		this.purchaser = purchaser;
 	}
 	
-	public FsAddress getBillingAddress() {
-		if(purchaser == null || purchaser.getAddresses() == null){
-			return null;
-		}
-		return purchaser.getAddresses().toArray(new FsAddress[0])[0];
-	}
-	
-	public void setBillingAddress(FsAddress billingAddress) {
-		if(purchaser == null){
-			return;
-		}
-		if(purchaser != null && purchaser.getAddresses() == null){
-			purchaser.setAddresses(new HashSet<FsAddress>());
-		}
-		purchaser.getAddresses().clear();
-		purchaser.getAddresses().add(billingAddress);
-	}
+//	public FsAddress getBillingAddress() {
+//		return purchaser.getAddresses().toArray(new FsAddress[0])[0];
+//	}
+//	
+//	public void setBillingAddress(FsAddress billingAddress) {
+//		purchaser.getAddresses().clear();
+//		purchaser.getAddresses().add(billingAddress);
+//	}
 }

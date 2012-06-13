@@ -32,7 +32,8 @@ import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.TraceResponse;
-import aero.nettracer.selfservice.fraud.ClaimRemote;
+import aero.nettracer.fs.utilities.TransportMapper;
+import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
@@ -48,7 +49,6 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.history.ClaimHistoryObject;
-import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
@@ -308,10 +308,10 @@ public class ModifyClaimAction extends CheckedAction {
 			if (ntfsUser) {
 				// 2. save the claim on central services
 				Context ctx = null;
-				ClaimRemote remote = null;
+				ClaimClientRemote remote = null;
 				try {
 					ctx = ConnectionUtil.getInitialContext();
-					remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+					remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 				} catch (Exception e) {
 					logger.error(e);
 				}
@@ -362,7 +362,7 @@ public class ModifyClaimAction extends CheckedAction {
 					}
 					
 					file.setClaims(fsClaims);
-					remoteFileId = remote.insertFile(file);
+					remoteFileId = remote.insertFile(TransportMapper.map(file));
 					claim = ClaimDAO.loadClaim(claim.getId());
 					if (remoteFileId > 0) {
 						claim.getFile().setSwapId(remoteFileId);
