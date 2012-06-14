@@ -313,7 +313,7 @@
 		</jar>
 		
 		<jar destfile="${dist.dir}/nt_fs_client.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">
-			<include name="**/**/fraud/client/ClaimClientRemote.class" />
+			<include name="**/**/fraud/client/ClaimClientRemote*.class" />
 			<include name="**/**/fraud/ClaimRemote.class" />
 			<include name="**/**/fraud/PrivacyPermissionsRemote.class" />
 			<include name="**/**/fraud/PrivacyPermissionsBean.class" />

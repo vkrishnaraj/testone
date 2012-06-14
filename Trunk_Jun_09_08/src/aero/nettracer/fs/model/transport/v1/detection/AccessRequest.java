@@ -21,8 +21,8 @@ import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-import aero.nettracer.fs.model.File;
-import aero.nettracer.fs.model.messaging.FsMessage;
+import aero.nettracer.fs.model.transport.v1.File;
+import aero.nettracer.fs.model.transport.v1.messaging.FsMessage;
 
 @Entity
 @Proxy(lazy = false)

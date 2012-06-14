@@ -14,14 +14,15 @@ import aero.nettracer.fs.model.transport.v0.detection.TraceResponse;
 import aero.nettracer.fs.model.transport.v0.File;
 import aero.nettracer.selfservice.fraud.ClaimBean;
 
+
 @Stateless
-public class ClaimClientBeanV1 implements ClaimClientRemote{
+public class ClaimClientBeanV1 implements ClaimClientRemoteV1{
 
 	ClaimBean bean = new ClaimBean();
 	
 	@Override
 	public String echoTest(String s) {
-		return bean.echoTest(s);
+		return bean.echoTest("V1"+s);
 	}
 
 	@Override
