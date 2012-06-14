@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
@@ -371,8 +372,9 @@ public class Producer {
 		//		System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
 		//		System.out.println("Consumer BEGIN: " + (new Date()));
 		
+		traceProgress.put(file.getId(), new TraceProgress(file.getId(),(new Date()).getTime(),v,fileQueue.size()));
+		
 		if(returnResults){
-			boolean isFinished = true;
 			//		System.out.println("  Potential results: " + fileQueue.size());
 			//		System.out.println("  MaxDelay: " + maxDelay);
 			try {
@@ -388,7 +390,6 @@ public class Producer {
 					file.setPhoneCache(null);
 				} else if (i >= MAX_WAIT) {
 					logger.debug("***WARNING: Maximum Search Time Exceeded: " + (WAIT_TIME * MAX_WAIT) + "ms");
-					isFinished = false;
 				}
 
 			} catch (InterruptedException e) {
@@ -401,23 +402,7 @@ public class Producer {
 			TraceResponse tr = new TraceResponse();
 
 			tr.setMatchHistory(mh);
-			tr.setTraceComplete(isFinished);
 			analyzeFile(file, tr, addresses);
-
-
-			if (!isFinished) {
-				Date nowTime = new Date();
-				double i = v.size();
-				double totalSize = fileQueue.size();
-				double percComplete = ((double) i / (double) totalSize * 100);
-				long timeElapsed = (nowTime.getTime() - starttime.getTime()) / 1000;
-				double percentRemaining = 100 - percComplete;
-				double secondsToComplete = (double) timeElapsed / percComplete * percentRemaining;
-				logger.debug("Percent complete: " + (i / totalSize * 100) + " (" + i + "/" + totalSize
-						+ ")  Minutes remaining: " + secondsToComplete / 60);
-
-				tr.setSecondsUntilReload((int)(secondsToComplete*1.1));
-			}
 			return tr; 
 		} else {
 			return null;
@@ -426,6 +411,13 @@ public class Producer {
 	
 
 	public static void analyzeFile(File file, TraceResponse tr, Set<FsAddress> addresses) {
+		Producer.cleanTraceProgress();
+		TraceProgress tp = traceProgress.get(file.getId());
+		if(tp != null && traceProgress.get(file.getId()).stillRunning()){
+			tr.setTraceComplete(false);
+			tr.setSecondsUntilReload(tp.getSecondsUntilComplete());
+		}
+		
 		LinkedHashSet<MetaWarning> metaWarnings = new LinkedHashSet<MetaWarning>();
 		tr.setMetaWarning(metaWarnings);
 		
@@ -912,5 +904,17 @@ public class Producer {
 		}
 
 	}
+
+	private static ConcurrentHashMap<Long,TraceProgress> traceProgress = new ConcurrentHashMap<Long,TraceProgress>();
+	
+	public static void cleanTraceProgress(){
+		long now = (new Date()).getTime();
+		for(TraceProgress tp:traceProgress.values()){
+			if(!tp.stillRunning() || now - tp.getStartTime() > 1000 * 60 * 5){
+				traceProgress.remove(tp.getFileId());
+			}
+		}
+	}
+	
 	
 }
