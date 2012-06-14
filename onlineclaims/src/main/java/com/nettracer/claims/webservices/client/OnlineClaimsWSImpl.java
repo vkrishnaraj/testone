@@ -752,12 +752,14 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 	 */
 	private void setBags(Claim claim, PassengerBean passengerBean) {
 		List<Bag> bagList=null;
+		List<Bag> bagTagList = null;
 		Bag bag=null;
 		List<Content> contentList=null;
 		Content content=null;
 		com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBag=claim.getBagArray();
 		if(null != wsBag && wsBag.length >0){
 			bagList=new ArrayList<Bag>();
+			bagTagList = new ArrayList<Bag>();
 			for (int i = 0; i < wsBag.length; i++) {
 				bag= new Bag();
 				bag.setBagTagNumber(wsBag[i].getTag()); //clarification pending for bagtag number
@@ -826,15 +828,12 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 						|| !wsBag[i].getBagArrive()) {
 					bagList.add(bag);
 				}
+				if (!"INTERIM".equals(bag.getBagTagNumber())) {
+					bagTagList.add(bag);
+				}
 				bag=null; //GC
 			}
 			passengerBean.setBagList(bagList);
-			List<Bag> bagTagList = new ArrayList<Bag>();
-			for (Bag b : bagList) {
-				if (!b.getBagTagNumber().equals("INTERIM")) {
-					bagTagList.add(b);
-				}
-			}
 			passengerBean.setBagTagList(bagTagList); //For ticket-info
 		}
 
