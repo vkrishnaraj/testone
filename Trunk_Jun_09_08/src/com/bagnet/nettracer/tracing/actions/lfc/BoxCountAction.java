@@ -1,13 +1,11 @@
 package com.bagnet.nettracer.tracing.actions.lfc;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,31 +17,18 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.lf.services.LFUtils;
-import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
-import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
-import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.lf.LFFound;
-import com.bagnet.nettracer.tracing.db.lf.LFLost;
-import com.bagnet.nettracer.tracing.db.lf.LFBoxCount;
-import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
-import com.bagnet.nettracer.tracing.db.lf.LFSalvageFound;
 import com.bagnet.nettracer.tracing.db.lf.LFBoxContainer;
-import com.bagnet.nettracer.tracing.dto.StatReportDTO;
+import com.bagnet.nettracer.tracing.db.lf.LFBoxCount;
 import com.bagnet.nettracer.tracing.forms.lfc.BoxCountForm;
-import com.bagnet.nettracer.tracing.forms.lfc.SalvageForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class BoxCountAction extends CheckedAction {
