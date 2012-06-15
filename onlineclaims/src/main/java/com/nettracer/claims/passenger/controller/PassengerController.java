@@ -598,6 +598,7 @@ public class PassengerController {
 				return null;
 			}
 			if (saveFinalCLaim(session)) {
+				session.setAttribute("passengerBean", passengerBean);
 				return gotoSavedScreen();
 			} else {
 				logger.error("Claim submission is not successful");
