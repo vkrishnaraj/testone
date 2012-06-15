@@ -9,10 +9,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
+
 import aero.nettracer.fs.model.File;
 import aero.nettracer.selfservice.fraud.PrivacyPermissionsBean;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
-import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class DataRententionService {
 	private Date getDeleteDate(String companycode) throws Exception{

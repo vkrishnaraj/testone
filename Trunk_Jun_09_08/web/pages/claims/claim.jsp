@@ -398,16 +398,12 @@
                         </td>
                       </tr>
                       <tr>
-                      	<td colspan="1">
+                      	<td colspan="2">
                           <bean:message key="colname.claim_amount" />
                           <br />
                           <html:text property="claim.amountClaimed" size="13" maxlength="13" styleClass="textfield" />
                         </td>
-                        <td colspan="1">
-                          <bean:message key="colname.amount_paid" />
-                          <br />
-                          <html:text property="claim.amountPaid" size="13" maxlength="13" styleClass="textfield" />
-                        </td>
+ 
                         <td colspan="2">
                           <bean:message key="colname.currency" />
                           <br />
@@ -416,6 +412,20 @@
                           </html:select>
                         </td>
                       </tr>
+                      <tr>
+                        <td colspan="2">
+                          <bean:message key="colname.amount_paid" />
+                          <br />
+                          <html:text property="claim.amountPaid" size="13" maxlength="13" styleClass="textfield" />
+                        </td>
+                        <td colspan="2">
+                          <bean:message key="colname.currency" />
+                          <br />
+                          <html:select property="claim.amountPaidCurrency" styleClass="dropdown">
+                            <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
+                          </html:select>
+                        </td>
+                      <tr>
                         <td colspan="4">
                           <bean:message key="colname.reason" />
                           &nbsp;(

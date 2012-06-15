@@ -45,8 +45,9 @@ import aero.nettracer.fs.service.objects.xsd.File;
 import aero.nettracer.fs.service.objects.xsd.Receipt;
 import aero.nettracer.fs.service.objects.xsd.Reservation;
 import aero.nettracer.fs.service.objects.xsd.SimpleResponse;
+import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.general.services.GeneralServiceBean;
-import aero.nettracer.selfservice.fraud.ClaimRemote;
+import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
 public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     
@@ -119,10 +120,10 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 		if (ntfsUser) {
 ////////////// 2. save the claim on central services
 			Context ctx = null;
-			ClaimRemote remote = null;
+			ClaimClientRemote remote = null;
 			try {
 				ctx = ConnectionUtil.getInitialContext();
-				remote = (ClaimRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+				remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 			} catch (Exception e) {
 				//logger.error(e);
 			}
@@ -172,7 +173,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 				}
 					
 				file.setClaims(fsClaims);
-				remoteFileId = remote.insertFile(file);
+				remoteFileId = remote.insertFile(TransportMapper.map(file));
 				claim = ClaimDAO.loadClaim(claim.getId());
 				if (remoteFileId > 0) {
 					claim.getFile().setSwapId(remoteFileId);
@@ -212,7 +213,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	claim.setAmountClaimed(wsClaim.getAmountClaimed());
     	claim.setAmountClaimedCurrency(wsClaim.getAmountClaimedCurrency());
     	claim.setAmountPaid(wsClaim.getAmountPaid());
-//    	claim.setAmountPaidCurrency(wsClaim.getAmountPaidCurrency());
+    	claim.setAmountPaidCurrency(wsClaim.getAmountPaidCurrency());
     	claim.setClaimDate(wsClaim.getClaimDate().getTime());
     	claim.setClaimType(wsClaim.getClaimType());
     	claim.setTravelDate(wsClaim.getTravelDate().getTime());

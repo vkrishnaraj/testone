@@ -416,6 +416,8 @@ public class Producer {
 		if(tp != null && traceProgress.get(file.getId()).stillRunning()){
 			tr.setTraceComplete(false);
 			tr.setSecondsUntilReload(tp.getSecondsUntilComplete());
+		} else {
+			tr.setTraceComplete(true);
 		}
 		
 		LinkedHashSet<MetaWarning> metaWarnings = new LinkedHashSet<MetaWarning>();
