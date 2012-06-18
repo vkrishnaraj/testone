@@ -136,7 +136,6 @@
 	<classpathentry kind="lib" path="lib/jars/libphonenumber-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/jars/java-core-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/jars/deliverySERV.jar"/>
-	<classpathentry kind="lib" path="lib/jars/nt_fs.jar"/>
 	<classpathentry kind="lib" path="D:/jboss-5.1.0.GA-ntapp/client/jbossall-client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/avis-client-model.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
@@ -144,5 +143,6 @@
 	<classpathentry kind="lib" path="lib/jars/lfc-client-model.jar"/>
 	<classpathentry kind="lib" path="lib/jars/opencsv-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/provided/SimpleService.jar"/>
+	<classpathentry kind="lib" path="lib/jars/nt_fs_client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

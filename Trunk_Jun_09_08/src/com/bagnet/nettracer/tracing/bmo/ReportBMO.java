@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
+import javax.naming.Context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -51,6 +52,8 @@ import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -58,6 +61,8 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
+import aero.nettracer.selfservice.fraud.ClaimRemote;
+import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
 import ar.com.fdvs.dj.domain.CustomExpression;
@@ -99,6 +104,7 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.salvage.Salvage;
 import com.bagnet.nettracer.tracing.dto.DisputeResolutionReportDTO;
+import com.bagnet.nettracer.tracing.dto.FraudValuationReportDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_3_DTO;
@@ -115,6 +121,7 @@ import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 /**
  * @author Administrator
@@ -178,6 +185,8 @@ public class ReportBMO {
 					return createRonKitIssuanceReport(srDTO, ReportBMO.getCustomReport(95).getResource_key(), rootpath, user);
 				} else if (srDTO.getCustomreportnum() == ReportingConstants.RPT_20_CUSTOM_96) {
 					return createReplacementBagIssuanceReport(srDTO, ReportBMO.getCustomReport(96).getResource_key(), rootpath, user);
+				} else if (srDTO.getCustomreportnum() == ReportingConstants.RPT_20_CUSTOM_201) {
+					return create_fraud_valuation_rpt(srDTO, ReportingConstants.RPT_20_CUSTOM_201_NAME, "Fraud Valuation Report");
 				} else {
 					return SpringUtils.getCustomReportBMO().createCustomReport(srDTO, req, user, rootpath);
 				}
@@ -2975,7 +2984,144 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			sess.close();
 		}
 	} // end of dispute resolution report
+
 	
+	//fraud valuation report begins
+	public String create_fraud_valuation_rpt(StatReportDTO srDTO, String reportname, String reporttitle) throws HibernateException {
+		Session sess = HibernateWrapper.getDirtySession().openSession();
+		try {
+			Map parameters = new HashMap();
+			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+
+			parameters.put("title", reporttitle);
+
+			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+
+			/*************** use direct jdbc sql statement **************/
+			Connection conn = sess.connection();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = null;
+			String sql = ""
+					
+					+ "select c.id, i.airlineIncidentId, c.claimDate, c.amountClaimed, c.amountClaimedCurrency, c.amountPaid, c.amountPaidCurrency, s.description "
+					+ "from fsfile f, fsclaim c, fsincident i, status s where 1=1 and ";
+			
+			Date sdate = null, edate = null;
+			Date sdate1 = null, edate1 = null; // add one for timezone
+			Date stime = null; // time to compare (04:00 if eastern, for example)
+
+			String simpleDateQ = "";
+			
+			ArrayList dateal = null;
+			if ((dateal = calculateDateDiff(srDTO,tz,user)) == null) {
+				return null;
+			} 
+			sdate = (Date)dateal.get(0);sdate1 = (Date)dateal.get(1);
+			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
+			stime = (Date)dateal.get(4);
+			
+			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
+			if (sdate != null && edate != null) {
+				parameters.put("sdate", srDTO.getStarttime());
+				if (!sdate.equals(edate)) {
+					parameters.put("edate", srDTO.getEndtime());
+				}
+				simpleDateQ += " and c.claimDate >= '"
+						+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ " "
+						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties(), true),null,null)
+						+ "' and c.claimDate <= '"
+						+ DateUtils.formatDate(edate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ " "
+						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties(), true),null,null)
+						+ "'";
+				
+			} else if (sdate != null) {
+				parameters.put("sdate", srDTO.getStarttime());
+				edate = null;
+				
+				simpleDateQ += " and c.claimDate >= '"
+					+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+					+ " "
+					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties(), true),null,null)
+					+ "'";
+			}
+
+			sql += simpleDateQ;
+			
+			sql += " and c.file_id = f.id and f.statusId = s.Status_ID and f.id = i.file_id";
+			
+			rs = stmt.executeQuery(sql);
+
+			FraudValuationReportDTO sr = null;
+			List claimList = new ArrayList();
+			List<String> idList = new ArrayList<String>();
+
+			while (rs.next()) {
+				sr = new FraudValuationReportDTO();
+				
+				sr.setClaimID(rs.getString("id"));
+				sr.setIncidentID(rs.getString("airlineIncidentId"));
+				sr.setClaimDate(rs.getDate("claimDate"));
+				sr.setStatus(rs.getString("description"));
+				sr.setAmountClaimed(rs.getString("amountClaimed"));
+				sr.setAmountClaimedCurrency(rs.getString("amountClaimedCurrency"));
+				sr.setAmountPaid(rs.getString("amountPaid"));
+				sr.setAmountPaidCurrency(rs.getString("amountPaidCurrency"));
+				
+				sr.set_DATEFORMAT(user.getDateformat().getFormat());
+				sr.set_TIMEZONE(tz);
+				
+				claimList.add(sr);
+				idList.add(rs.getString("id"));
+			}
+			
+			stmt.close();
+			rs.close();
+			
+			if (sr == null) {
+				logger.debug("no data for report");
+				return "";
+			}
+			
+			Map<String, Integer> matches = null;
+			Context ctx = null;
+			ClaimClientRemote remote = null;
+			try {
+				ctx = ConnectionUtil.getInitialContext();
+				remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+				if (remote != null) {
+					matches = remote.getMatches(idList);
+				}
+			} catch (Exception e) {
+				logger.error(e, e);
+			} finally {
+				if (ctx != null) {
+					ctx.close();
+				}
+			}
+			
+			if (matches != null) {
+				for (int i = 0; i < claimList.size(); i++) {
+					sr = (FraudValuationReportDTO) claimList.get(i);
+					sr.setMatches(matches.get(sr.getClaimID()));
+					claimList.set(i, sr);
+				}
+			}
+
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(claimList);
+			
+			return FraudValuationReportBMO.getReportFileDj(ds, parameters, reportname, rootpath, srDTO.getOutputtype(), req, this);			
+		} catch (Exception e) {
+			logger.error("unable to create report " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	} // end of fraud valuation report
 	
 	
 	

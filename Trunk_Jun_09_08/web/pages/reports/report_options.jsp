@@ -304,8 +304,13 @@
                             <bean:message key="header.report_options" />
                         </strong>
                       </td>
-                    </tr>
-                    <jsp:include page="/pages/clients/${company}/report${customreportnum}.jsp" />
+                    </tr>                  
+                    <logic:equal name="customreportnum" scope="request" value="201">
+                  	  <jsp:include page="report201.jsp" />
+                    </logic:equal>
+                  	<logic:notEqual name="customreportnum" scope="request" value="201">
+                      <jsp:include page="/pages/clients/${company}/report${customreportnum}.jsp" />
+                    </logic:notEqual>
                     </table>
                   </c:if>
 	                  
