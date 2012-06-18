@@ -2,6 +2,7 @@ package aero.nettracer.selfservice.fraud.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.Stateless;
@@ -104,6 +105,11 @@ public class ClaimClientBeanV1 implements ClaimClientRemoteV1{
 	@Override
 	public boolean deleteMatch(Set<Long> matchIds) {
 		return bean.deleteMatch(matchIds);
+	}
+	
+	@Override
+	public Map<String, Integer> getMatches(List<String> idList) {
+		return bean.getMatches(idList);
 	}
 
 }

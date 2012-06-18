@@ -1,6 +1,7 @@
 package aero.nettracer.selfservice.fraud.client;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import aero.nettracer.fs.model.transport.v0.File;
@@ -23,4 +24,5 @@ public interface ClaimClientRemote {
 	public File getFile(long fileId, String airline);
 	public boolean deleteMatch(long matchId);
 	public boolean deleteMatch(Set<Long>matchIds);
+	public Map<String, Integer> getMatches(List<String> idList);
 }

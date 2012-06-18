@@ -1,16 +1,19 @@
 package aero.nettracer.selfservice.fraud;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-
 import javax.ejb.Stateless;
-
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -41,8 +44,8 @@ import aero.nettracer.fs.utilities.DataRetentionThread;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.GeoLocation;
 import aero.nettracer.fs.utilities.InternationalException;
-import aero.nettracer.fs.utilities.tracing.Consumer;
 import aero.nettracer.fs.utilities.WhiteListUtil;
+import aero.nettracer.fs.utilities.tracing.Consumer;
 import aero.nettracer.fs.utilities.tracing.Producer;
 import aero.nettracer.fs.utilities.tracing.TraceWrapper;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
@@ -758,6 +761,44 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			sess.close();
 			return false;
 		}
+	}
+	
+	public Map<String, Integer> getMatches(List<String> idList) {
+		Map<String, Integer> toReturn = new HashMap<String, Integer>();
+		
+		String sql = "select c.swapId, count(*) matches from fsclaim c, fsfile f, matchhistory h where c.swapId in (";
+		for (String id : idList) {
+			if (id != null && id.length() != 0) {
+				sql += id + ", ";
+			}
+		}
+		sql += "-1) and c.file_id = f.id and f.id = h.file1_id group by c.swapId";
+		
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+
+			Connection conn = sess.connection();
+			Statement stmt = conn.createStatement();
+			ResultSet rs = null;
+			
+			rs = stmt.executeQuery(sql);
+			
+			while (rs.next()) {
+				toReturn.put(rs.getString("swapId"), rs.getInt("matches"));
+			}
+			
+			stmt.close();
+			rs.close();
+			
+		} catch (Exception e) {
+			logger.error("unable to retrieve matches " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+		
+		return toReturn;
 	}
 	
 	
