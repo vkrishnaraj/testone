@@ -8,6 +8,7 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="aero.nettracer.fs.model.FsClaim" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
@@ -84,6 +85,12 @@
             			</tr>
             		</logic:iterate>
             	</table>
+            	<br/>
+            	<br/>
+            	<logic:notEmpty scope="request" name="matchClaim">
+            		<% FsClaim FSC=(FsClaim)request.getAttribute("matchClaim"); %>
+                	<jsp:include page="/pages/claims/claim_ro.jsp?claimId=<%=FSC.getId() %>" />
+                </logic:notEmpty>
             	<br />
             	<center>
             		<input id="button" type="button" value='<bean:message key="button.back" />' onClick="history.back()">
