@@ -869,7 +869,6 @@
 		                   		<td>
 		                   			<bean:message key="claim.incident.type" />
 		                   			<br/>
-		                   			<html:text name="matchClaim" property="incident.incidentType"  disabled="true" />
 		                   			<html:select name="matchClaim" property="incident.incidentType" styleClass="dropdown" disabled="true" >
 			                            <html:option value="">
 			                              <bean:message key="select.please_select" />
