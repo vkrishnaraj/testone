@@ -539,40 +539,32 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 
 		try {
 			fullFile = (File) sess.load(File.class, fileId);
+			String company = fullFile.getValidatingCompanycode();
+			List<PrivacyPermissions> p = PrivacyPermissionsBean.getPrivacyPermissions();
+			
 			if (fullFile != null) {
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_FILE, fullFile.getId(), airline);
-				String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.file.id = :fileId and ar.requestedAirline = :requestingAirline";
-
-				Query q = sess.createQuery(sql);
-				q.setParameter("requestingAirline", airline);
-				q.setParameter("fileId", fileId);
-
-				List<AccessRequest> requests = q.list();
-				RequestStatus highest = null;
-				if (requests != null && requests.size() > 0) {
-					highest = RequestStatus.Created;
-					for (AccessRequest req : requests) {
-						if (req.getStatus().equals(RequestStatus.Approved)) {
-							highest = RequestStatus.Approved;
-						}
-					}
+				
+				
+				RequestStatus rs;
+				long requestedId;
+				if(fullFile.getValidatingCompanycode().equals(airline)){
+					requestedId = fullFile.getId();
+					rs = Producer.getRequestStatus(requestedId, airline);
+					fullFile.setRequestStatus(rs);
+				} else{
+					requestedId = fullFile.getId();
+					rs = Producer.getRequestStatus(requestedId, airline);
+					fullFile.setRequestStatus(rs);
 				}
 				
-				if (highest != null) {
+				if(rs != null && rs.equals(RequestStatus.Approved)){
+					Producer.censorFile(fullFile, AccessLevelType.req, airline, p);
 					
-					AccessLevelType access = AccessLevelType.def;
-					if (highest == RequestStatus.Approved) {
-						access = AccessLevelType.req;
-					}
-					PrivacyPermissions p1 = null;
-					for(PrivacyPermissions p: PrivacyPermissionsBean.getPrivacyPermissions()){
-						if(p.getKey().getCompanycode().equals(airline) && p.getKey().getLevel().equals(access)){
-							p1 = p;
-						}
-					}
-					Producer.censorFile(fullFile, p1);
-					return fullFile;
+				} else {
+					Producer.censorFile(fullFile, AccessLevelType.def, airline, p);
 				}
+				AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_FILE, fullFile.getId(), airline);
+				return fullFile;
 			}
 
 		} catch (Exception e) {

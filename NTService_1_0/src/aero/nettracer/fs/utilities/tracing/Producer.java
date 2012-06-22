@@ -683,12 +683,12 @@ public class Producer {
 		String company1 = (match.getFile1()!=null?match.getFile1().getValidatingCompanycode():null);
 		String company2 = (match.getFile2()!=null?match.getFile2().getValidatingCompanycode():null);
 		
-		for(PrivacyPermissions p: plist){
-			if(p.getKey().getCompanycode().equals(company1) && p.getKey().getLevel().equals(level)){
-				p1 = p;
+		for(PrivacyPermissions pl: plist){
+			if(pl.getKey().getCompanycode().equals(company1) && pl.getKey().getLevel().equals(level)){
+				p1 = pl;
 			}
-			if(p.getKey().getCompanycode().equals(company2) && p.getKey().getLevel().equals(level)){
-				p2 = p;
+			if(pl.getKey().getCompanycode().equals(company2) && pl.getKey().getLevel().equals(level)){
+				p2 = pl;
 			}
 		}
 		
@@ -838,6 +838,53 @@ public class Producer {
 				if(!p.isTraveldate()){
 					claim.setTravelDate(null);
 				}
+				for(Person per:claim.getClaimants()){
+					if(!p.isName()){
+						per.setFirstName(s);
+						per.setMiddleName(s);
+						per.setLastName(s);
+						per.setFirstNameSoundex(s);
+						per.setFirstNameDmp(s);
+						per.setLastNameSoundex(s);
+						per.setLastNameDmp(s);
+					}
+					if(!p.isEmail()){ 
+						per.setEmailAddress(s);
+					}
+					if(!p.isDrivers()){
+						per.setDriversLicenseState(s);
+						per.setDriversLicenseProvince(s);
+						per.setDriversLicenseCountry(s);
+						per.setDriversLicenseNumber(s);
+					}
+					if(!p.isFfn()){
+						per.setFfAirline(s);
+						per.setFfNumber(s);
+					}
+					if(!p.isPassport()){
+						per.setPassportIssuer(s);
+						per.setPassportNumber(s);
+					}
+					if(!p.isSsn()){
+						per.setSocialSecurity(s);
+					}
+					if(!p.isDob()){
+						per.setDateOfBirth(null);
+					}
+					
+					if(!p.isAddress()){
+						per.getAddress().setAddress1(s);
+						per.getAddress().setAddress2(s);
+						per.getAddress().setCity(s);
+						per.getAddress().setCountry(s);
+						per.getAddress().setLattitude(0);
+						per.getAddress().setLongitude(0);
+						per.getAddress().setState(s);
+						per.getAddress().setZip(s);
+						per.getAddress().setProvince(s);
+					}
+				}
+				
 			}
 		}
 		
@@ -904,6 +951,28 @@ public class Producer {
 				}
 			}
 		}
+	}
+		
+	
+	public static void censorFile(File f, AccessLevelType level, String userCompany, List<PrivacyPermissions> plist){
+		String s = ACCESS_NOT_GRANTED;
+		PrivacyPermissions p1 = new PrivacyPermissions();
+		String company1 = f.getValidatingCompanycode();
+		
+		for(PrivacyPermissions p: plist){
+			if(p.getKey().getCompanycode().equals(company1) && p.getKey().getLevel().equals(level)){
+				p1 = p;
+			}
+		}
+		
+			if(company1 == null || company1.trim().length() == 0 || !company1.equals(userCompany)){
+				censorFile(f, p1);
+			} else {
+				p1.setAllEnabled(true);
+			}
+		
+		
+		/**/
 
 	}
 
