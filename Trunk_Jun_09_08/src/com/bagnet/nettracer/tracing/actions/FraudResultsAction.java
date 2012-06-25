@@ -36,7 +36,6 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
-import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.FraudResultsForm;
@@ -166,15 +165,15 @@ public class FraudResultsAction extends CheckedAction {
 			}
 //			request.setAttribute("claimId", resultsForm.getClaimId());
 			fsFile =ConnectionUtil.getFsFile(match.getFile2().getId(),match.getFile1().getValidatingCompanycode());
+			List<FsClaim> matchClaims=new ArrayList();
 			if(fsFile!=null)
-			{
+			{	
+				int i=1;
+				FsClaim matchClaim=null;
 				for(FsClaim fsclaim:fsFile.getClaims()){
-					for(FsClaim mclaim:match.getFile2().getClaims())
-					if(fsclaim.getSwapId()==mclaim.getSwapId()){
-						request.setAttribute("matchClaim", (FsClaim)mclaim);
-						break;
-					}
+					matchClaims.add(fsclaim);
 				}
+				request.setAttribute("matchClaims", (List<FsClaim>)matchClaims);
 			}
 			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_MATCH_HISTORY, matchId, TracingConstants.FS_ACTION_LOAD);
 			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));

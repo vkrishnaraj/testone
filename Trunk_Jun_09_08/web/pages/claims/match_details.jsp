@@ -87,9 +87,8 @@
             	</table>
             	<br/>
             	<br/>
-            	<logic:notEmpty scope="request" name="matchClaim">
-            		<% FsClaim FSC=(FsClaim)request.getAttribute("matchClaim"); %>
-                	<jsp:include page="/pages/claims/claim_ro.jsp?claimId=<%=FSC.getId() %>" />
+            	<logic:notEmpty scope="request" name="matchClaims">
+            		<jsp:include page="/pages/claims/claim_ro.jsp" />
                 </logic:notEmpty>
             	<br />
             	<center>
