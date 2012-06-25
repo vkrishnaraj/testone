@@ -37,4 +37,8 @@ public class TransportMapper {
 		return mapper.map(fsfile, aero.nettracer.fs.model.File.class);
 	}
 	
+	public static aero.nettracer.fs.model.transport.v1.detection.AccessRequestDTO map(aero.nettracer.fs.model.detection.AccessRequestDTO dto){
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		return mapper.map(dto, aero.nettracer.fs.model.transport.v1.detection.AccessRequestDTO.class);
+	}
 }

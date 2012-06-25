@@ -1,5 +1,6 @@
 package aero.nettracer.selfservice.fraud;
 
+import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -10,10 +11,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.Map;
+
 
 import javax.ejb.Stateless;
+
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -34,6 +37,7 @@ import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
+import aero.nettracer.fs.model.detection.AccessRequestDTO;
 import aero.nettracer.fs.model.detection.Blacklist;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
@@ -44,14 +48,15 @@ import aero.nettracer.fs.utilities.DataRetentionThread;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.GeoLocation;
 import aero.nettracer.fs.utilities.InternationalException;
-import aero.nettracer.fs.utilities.WhiteListUtil;
 import aero.nettracer.fs.utilities.tracing.Consumer;
+import aero.nettracer.fs.utilities.WhiteListUtil;
 import aero.nettracer.fs.utilities.tracing.Producer;
 import aero.nettracer.fs.utilities.tracing.TraceWrapper;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions.AccessLevelType;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Stateless
@@ -517,7 +522,119 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return q.list();
 
 	}
+	
+	private static String getAccessRequestsQuery(AccessRequestDTO dto){
+		String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status in (:status)";
+		
+		if(dto.getType() == TracingConstants.FS_ACCESS_REQUEST_TYPE_ALL){
+			sql += " and (ar.requestedAirline = :airline or ar.file.validatingCompanycode = :airline)";
+		} else if(dto.getType() == TracingConstants.FS_ACCESS_REQUEST_TYPE_OUTGOING){
+			sql += " and ar.requestedAirline = :airline";
+		} else {
+			sql += " and ar.file.validatingCompanycode = :airline";
+		}
+		
+		if(dto.getStartDate() != null && dto.getEndDate() != null){
+			sql += " and ar.requestedDate between :start and :end";
+		}
+		return sql;
+	}
+	
+	public List<AccessRequest> getAccessRequests(AccessRequestDTO dto, int begin, int perPage) {
+		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_ACCESS_REQUESTS, -1, dto.getAirlinecode());
+		Session sess = HibernateWrapper.getSession().openSession();
 
+		String sql = getAccessRequestsQuery(dto) + " order by ar.requestedDate desc";
+
+		Query q = sess.createQuery(sql);
+
+		ArrayList<AccessRequest.RequestStatus> status = new ArrayList<AccessRequest.RequestStatus>();
+		if(dto.isApproved()){
+			status.add(AccessRequest.RequestStatus.Approved);
+		}
+		if(dto.isDenied()){
+			status.add(AccessRequest.RequestStatus.Denied);
+		}
+		if(dto.isPending()){
+			status.add(AccessRequest.RequestStatus.Created);
+		}
+		
+		if(status.size() == 0){
+			//no status selected
+			return null;
+		}
+		
+		q.setParameterList("status", status);
+		q.setParameter("airline", dto.getAirlinecode());
+		if(dto.getStartDate() != null && dto.getEndDate() != null){
+			q.setParameter("start", dto.getStartDate());
+			q.setParameter("end", dto.getEndDate());
+		}
+		q.setMaxResults(perPage);
+		q.setFirstResult(begin);
+
+		List<AccessRequest> arlist = (List<AccessRequest>)q.list();
+		
+		if(arlist != null){
+			List<PrivacyPermissions> plist = PrivacyPermissionsBean.getPrivacyPermissions();
+			for(AccessRequest ar:arlist){
+				if(ar.getMatchHistory() != null){
+					String company = ar.getFile().getValidatingCompanycode();
+					RequestStatus rs = ar.getStatus();
+					AccessLevelType level = AccessLevelType.def;
+					PrivacyPermissions filePermission = null;
+					if(rs != null && rs.equals(RequestStatus.Approved)){
+						level = AccessLevelType.req;
+					}
+					for(PrivacyPermissions p:plist){
+						if(p.getKey().getCompanycode().equals(company) && p.getKey().getLevel().equals(level)){
+							filePermission = p;
+						}
+					}
+					
+					Producer.censor(ar.getMatchHistory(), level, dto.getAirlinecode(), plist);
+					if(!ar.getFile().getValidatingCompanycode().equalsIgnoreCase(dto.getAirlinecode())){
+						Producer.censorFile(ar.getFile(), filePermission);
+					}
+				}
+			}
+		}
+		
+		return arlist;
+	}
+	
+	public int getAccessRequestsCount(AccessRequestDTO dto) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		String sql = "select count(ar.id) " + getAccessRequestsQuery(dto);
+
+		Query q = sess.createQuery(sql);
+
+		ArrayList<AccessRequest.RequestStatus> status = new ArrayList<AccessRequest.RequestStatus>();
+		if(dto.isApproved()){
+			status.add(AccessRequest.RequestStatus.Approved);
+		}
+		if(dto.isDenied()){
+			status.add(AccessRequest.RequestStatus.Denied);
+		}
+		if(dto.isPending()){
+			status.add(AccessRequest.RequestStatus.Created);
+		}
+		
+		if(status.size() == 0){
+			//no status selected
+			return 0;
+		}
+		
+		q.setParameterList("status", status);
+		q.setParameter("airline", dto.getAirlinecode());
+		if(dto.getStartDate() != null && dto.getEndDate() != null){
+			q.setParameter("start", dto.getStartDate());
+			q.setParameter("end", dto.getEndDate());
+		}
+		List list = q.list();
+		return ((Long) list.get(0)).intValue();
+	}
+	
 	@Override
 	public void approveRequest(long requestId, String message, String agent) {
 		RequestStatus status = RequestStatus.Approved;

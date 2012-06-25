@@ -25,6 +25,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.fs.model.detection.AccessRequestDTO;
+import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
@@ -348,7 +350,11 @@ public class LogonAction extends Action {
 							Context ctx = ConnectionUtil.getInitialContext();
 							ClaimClientRemote remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx,PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 							if(remote != null){
-								x = remote.getOutstandingRequetsCount(agent.getCompanycode_ID());
+								AccessRequestDTO ardto = new AccessRequestDTO();
+								ardto.setPending(true);
+								ardto.setType(TracingConstants.FS_ACCESS_REQUEST_TYPE_INCOMING);
+								ardto.setAirlinecode(agent.getCompanycode_ID());
+								x = remote.getAccessRequestsCount(TransportMapper.map(ardto));
 							}
 							ctx.close();
 							} catch (Exception e) {

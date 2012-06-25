@@ -1008,6 +1008,10 @@ public class TracingConstants {
 	public static final int FS_AUDIT_ITEM_TYPE_MATCH_HISTORY = 3;
 	public static final int FS_AUDIT_ITEM_TYPE_PROCESS = 4;
 	
+	public static final int FS_ACCESS_REQUEST_TYPE_ALL = 1;
+	public static final int FS_ACCESS_REQUEST_TYPE_INCOMING = 2;
+	public static final int FS_ACCESS_REQUEST_TYPE_OUTGOING = 3;
+	
 	public static final int FS_ACTION_LOAD = 1;
 	public static final int FS_ACTION_SAVE = 2;
 	public static final int FS_ACTION_SUBMIT = 3;

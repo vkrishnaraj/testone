@@ -7,6 +7,9 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.naming.Context;
@@ -20,6 +23,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
 import aero.nettracer.fs.model.detection.AccessRequest;
+import aero.nettracer.fs.model.detection.AccessRequestDTO;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
@@ -28,6 +32,8 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
+import com.bagnet.nettracer.tracing.forms.ViewFraudRequestForm;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
@@ -55,9 +61,57 @@ public class ViewFraudRequests extends CheckedAction {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
+		
+		ViewFraudRequestForm theForm = (ViewFraudRequestForm)form;
+		if(theForm.getDto() == null || request.getParameter("resetFilter") != null){
+			theForm.setDto(new AccessRequestDTO());
+			theForm.getDto().setPending(true);
+			theForm.getDto().setAirlinecode(user.getCompanycode_ID());
+			theForm.getDto().setType(TracingConstants.FS_ACCESS_REQUEST_TYPE_INCOMING);
+			theForm.setEndDate(null);
+			theForm.setStartDate(null);
+		}
+		
+		if(theForm.getStartDate() != null && theForm.getStartDate().trim().length() > 0){
+			theForm.getDto().setStartDate(DateUtils.convertToDate(theForm.getStartDate().trim(), user.getDateformat().getFormat(),  user.getDefaultlocale()));
+			Date edate = null;
+			if(theForm.getEndDate() == null || theForm.getEndDate().trim().length() == 0){
+				edate = theForm.getDto().getStartDate();
+			} else {
+				edate = DateUtils.convertToDate(theForm.getEndDate().trim(), user.getDateformat().getFormat(),  user.getDefaultlocale());
+			}
+			//add a day to the end date
+			Calendar c = new GregorianCalendar();
+			c.setTime(edate);
+			c.add(Calendar.DAY_OF_MONTH, 1);
+			theForm.getDto().setEndDate(c.getTime());
+		} else {
+			theForm.getDto().setStartDate(null);
+			theForm.getDto().setEndDate(null);
+		}
 
+		session.setAttribute("requestForm", theForm);
+		
 //		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user))
 //			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		
+		if (request.getParameter("matchId") != null) {
+			long matchId = Long.parseLong(request.getParameter("matchId"));
+			MatchHistory match = getMatchHistoryFromResults(matchId, (List<AccessRequest>)session.getAttribute("requestList"));
+			request.setAttribute("match", match);
+			int status = match.getFile2().getStatusId();
+			if (status == TracingConstants.STATUS_SUSPECTED_FRAUD || status == TracingConstants.STATUS_KNOWN_FRAUD) {
+				request.setAttribute("status", status);
+			}
+			
+//			if (match.getFile2().getClaim() != null) {
+//				request.setAttribute("claimId", match.getFile2().getClaim().getSwapId());
+//			} else {
+//				request.setAttribute("claimId", match.getFile2().getIncident().getAirlineIncidentId());
+//			}
+			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
+		}
 		
 		String approveId = (String) request.getParameter("approveId");
 		String denyId = (String) request.getParameter("denyId");
@@ -77,7 +131,7 @@ public class ViewFraudRequests extends CheckedAction {
 		// menu highlite
 		request.setAttribute("highlite", TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS);
 
-		int requestListCount = remote.getOutstandingRequetsCount(user.getCompanycode_ID());
+		int requestListCount = remote.getAccessRequestsCount(TransportMapper.map(theForm.getDto()));
 		List<OHD_Log> bagsList = null;
 		List requestList = null;
 		if (requestListCount > 0) {
@@ -109,7 +163,7 @@ public class ViewFraudRequests extends CheckedAction {
 			}
 
 			// TODO - Get list
-			requestList = TransportMapper.map(remote.getOutstandingRequests(user.getCompanycode_ID(), rowsperpage * currpage,
+			requestList = TransportMapper.map(remote.getAccessRequests(TransportMapper.map(theForm.getDto()), rowsperpage * currpage,
 					rowsperpage));
 
 			if (currpage + 1 == totalpages)
@@ -123,8 +177,9 @@ public class ViewFraudRequests extends CheckedAction {
 			}
 
 			/** ************ end of pagination ************* */
-			request.setAttribute("requestList", requestList);
+			session.setAttribute("requestList", requestList);
 		} else {
+			session.setAttribute("requestList", null);
 			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"),
 					TracingConstants.ROWS_SEARCH_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
@@ -134,22 +189,7 @@ public class ViewFraudRequests extends CheckedAction {
 			request.setAttribute("currpage", Integer.toString(currpage));
 		}
 		
-		if (request.getParameter("matchId") != null) {
-			long matchId = Long.parseLong(request.getParameter("matchId"));
-			MatchHistory match = getMatchHistoryFromResults(matchId, requestList);
-			request.setAttribute("match", match);
-			int status = match.getFile2().getStatusId();
-			if (status == TracingConstants.STATUS_SUSPECTED_FRAUD || status == TracingConstants.STATUS_KNOWN_FRAUD) {
-				request.setAttribute("status", status);
-			}
-			
-//			if (match.getFile2().getClaim() != null) {
-//				request.setAttribute("claimId", match.getFile2().getClaim().getSwapId());
-//			} else {
-//				request.setAttribute("claimId", match.getFile2().getIncident().getAirlineIncidentId());
-//			}
-			return (mapping.findForward(TracingConstants.CLAIM_MATCH_DETAILS));
-		}
+
 
 //		ActionMessages errors = new ActionMessages();
 //		if (false) {

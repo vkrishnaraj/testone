@@ -694,7 +694,7 @@
 		<!-- View Incoming Bags -->
 		<action path="/incomingBags" type="com.bagnet.nettracer.tracing.actions.ViewIncomingBags" name="viewIncomingRequestForm" scope="request" validate="false"></action>
 		
-		<action path="/fraudRequests" type="com.bagnet.nettracer.tracing.actions.ViewFraudRequests" name="viewFraudRequestForm" scope="request" validate="false"></action>
+		<action path="/fraudRequests" type="com.bagnet.nettracer.tracing.actions.ViewFraudRequests" name="viewFraudRequestForm" scope="session" validate="false"></action>
 
 		<!-- View Incoming Incidents -->
 		<action path="/incomingReports" type="com.bagnet.nettracer.tracing.actions.ViewIncomingIncidents" name="searchIncidentForm" scope="request" validate="false"></action>

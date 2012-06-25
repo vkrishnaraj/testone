@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import aero.nettracer.fs.model.transport.v0.detection.AccessRequestDTO;
 import aero.nettracer.fs.model.transport.v0.File;
 import aero.nettracer.fs.model.transport.v0.detection.AccessRequest;
 import aero.nettracer.fs.model.transport.v0.detection.TraceResponse;
@@ -24,5 +25,7 @@ public interface ClaimClientRemote {
 	public File getFile(long fileId, String airline);
 	public boolean deleteMatch(long matchId);
 	public boolean deleteMatch(Set<Long>matchIds);
+	public List<AccessRequest> getAccessRequests(AccessRequestDTO dto, int begin,int perPage);
+	public int getAccessRequestsCount(AccessRequestDTO dto);
 	public Map<String, Integer> getMatches(List<String> idList);
 }

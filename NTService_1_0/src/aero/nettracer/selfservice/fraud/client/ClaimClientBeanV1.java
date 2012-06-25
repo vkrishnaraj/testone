@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
+import aero.nettracer.fs.model.transport.v0.detection.AccessRequestDTO;
 import aero.nettracer.fs.model.transport.v0.detection.AccessRequest;
 import aero.nettracer.fs.model.transport.v0.detection.TraceResponse;
 import aero.nettracer.fs.model.transport.v0.File;
@@ -108,8 +109,28 @@ public class ClaimClientBeanV1 implements ClaimClientRemoteV1{
 	}
 	
 	@Override
+	public int getAccessRequestsCount(AccessRequestDTO dto){
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		return bean.getAccessRequestsCount(mapper.map((aero.nettracer.fs.model.transport.v1.detection.AccessRequestDTO)dto, aero.nettracer.fs.model.detection.AccessRequestDTO.class));
+	}
+
+	@Override
+	public List<AccessRequest> getAccessRequests(AccessRequestDTO dto,int begin, int perPage) {
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		List<aero.nettracer.fs.model.detection.AccessRequest> fslist = bean.getAccessRequests(mapper.map((aero.nettracer.fs.model.transport.v1.detection.AccessRequestDTO)dto, aero.nettracer.fs.model.detection.AccessRequestDTO.class),begin,perPage);
+		ArrayList<AccessRequest> ntlist = null;
+		if(fslist != null){
+			ntlist = new ArrayList<AccessRequest>();
+			for(aero.nettracer.fs.model.detection.AccessRequest fs:fslist){
+				ntlist.add(mapper.map(fs, aero.nettracer.fs.model.transport.v1.detection.AccessRequest.class));
+			}
+		} 
+		return ntlist;
+	}
+
+	@Override
 	public Map<String, Integer> getMatches(List<String> idList) {
 		return bean.getMatches(idList);
 	}
-
+	
 }

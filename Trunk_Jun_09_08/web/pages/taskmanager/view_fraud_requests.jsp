@@ -11,8 +11,12 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.CompanyBMO" %>
 <%@ page import="aero.nettracer.fs.model.FsClaim" %>
+<%@ page import="aero.nettracer.fs.model.detection.AccessRequestDTO" %>
+<%@ page import="aero.nettracer.fs.model.detection.AccessRequest" %>
+<%@ page import="com.bagnet.nettracer.tracing.forms.ViewFraudRequestForm" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+  ViewFraudRequestForm form = (ViewFraudRequestForm)session.getAttribute("requestForm");
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
 	request.getAttribute("org.apache.struts.action.MESSAGE");
 	java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
@@ -20,23 +24,28 @@
 
 %>
   
+  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+  <SCRIPT LANGUAGE="JavaScript">
+	var cal1xx = new CalendarPopup();	
+  </SCRIPT>
+  
   <%@page import="com.bagnet.nettracer.tracing.bmo.RequestOhdBMO"%>
 <script language="javascript">
     
 function goprev() {
-  o = document.viewIncomingRequestForm;
+  o = document.viewFraudRequestForm;
   o.prevpage.value = "1";
   o.submit();
 }
 
 function gonext() {
-  o = document.viewIncomingRequestForm;
+  o = document.viewFraudRequestForm;
   o.nextpage.value="1";
   o.submit();
 }
 
 function gopage(i) {
-  o = document.viewIncomingRequestForm;
+  o = document.viewFraudRequestForm;
   o.currpage.value = i;
   o.submit();
 }
@@ -44,45 +53,8 @@ function updatePagination() {
     return true;
 }
 
-
-  function batchReceive()
-  {
-    if (confirm("<%= (String)myMessages.getMessage(myLocale, "check.receive") %>?"))
-    {  
-      var checked = 0;
-      var received="";
-    
-      for (var j=0;j<document.viewIncomingRequestForm.length;j++) 
-      {
-        currentElement = document.viewIncomingRequestForm.elements[j];
-        if (currentElement.type=="checkbox")
-        {
-          if (currentElement.checked)
-          {
-            if (checked > 0) 
-              received += ",";
-            checked +=1;
-            received +=currentElement.value;
-          }
-        }
-      }
-
-      if (checked < 1)
-      {
-        alert("<%= (String)myMessages.getMessage(myLocale, "error.validation.missingBags") %>");
-      }
-      else
-      {
-        document.viewIncomingRequestForm.close1.value="1";
-        document.viewIncomingRequestForm.ohd_ID.value=received;
-        document.viewIncomingRequestForm.submit();
-      }
-    }
-  } 
-
-
   </script>
-  <html:form action="incomingBags.do" method="post" onsubmit="fillzero(this.ohd_num, 13); return true;">
+  <html:form action="fraudRequests.do" method="post">
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       
@@ -96,10 +68,51 @@ function updatePagination() {
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
-
+		
+			<table class="form2" cellspacing="0" cellpadding="0">
+			<tr>
+				<td>
+					<bean:message key="fraud.access.request.type" />:
+					<br>
+					<html:select name="viewFraudRequestForm" property="dto.type" styleId="value" styleClass="dropdown" >
+						<html:option value="<%=String.valueOf(TracingConstants.FS_ACCESS_REQUEST_TYPE_ALL) %>" ><bean:message key="fraud.access.request.type.all" /></html:option>
+      					<html:option value="<%=String.valueOf(TracingConstants.FS_ACCESS_REQUEST_TYPE_INCOMING) %>" ><bean:message key="fraud.access.request.type.incoming" /></html:option>
+      					<html:option value="<%=String.valueOf(TracingConstants.FS_ACCESS_REQUEST_TYPE_OUTGOING) %>" ><bean:message key="fraud.access.request.type.outgoing" /></html:option>
+           			</html:select>
+				</td>
+                <td nowrap>
+                  <bean:message key="colname.date_range" />:
+                  (
+                  <%= a.getDateformat().getFormat() %>)
+                  <br>
+                    <html:text name="viewFraudRequestForm" property="startDate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.viewFraudRequestForm.startDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">-
+       				<html:text name="viewFraudRequestForm" property="endDate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.viewFraudRequestForm.endDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
+                </td>
+					<td>
+						<bean:message key="fraud.access.request.status" />:
+						<br>						
+						<html:checkbox  styleId='pending' name='viewFraudRequestForm' property="dto.pending" /><bean:message key="fraud.access.request.pending" />&nbsp;
+						<html:checkbox  styleId='approved' name='viewFraudRequestForm' property="dto.approved" /><bean:message key="fraud.access.request.approved" />&nbsp;
+						<html:checkbox  styleId='denied' name='viewFraudRequestForm' property="dto.denied" /><bean:message key="fraud.access.request.denied" />&nbsp;
+						
+					</td>
+				</tr>
+				     <tr>
+     					<td colspan=3 >
+     						<center>
+								<html:submit property="filter" styleId="button">
+									<bean:message key="button.filter" />
+								</html:submit>
+							</center>
+     					</td>
+     				</tr>
+			</table>
           <br>
           <table class="form2" cellspacing="0" cellpadding="0">
            		<tr >
+           			<td class="header">
+           				<b><bean:message key="fraud.access.request.type" /></b>
+           			</td>
            			<td class="header">
            				<b><bean:message key="colname.reference.id" /></b>
            			</td>
@@ -122,9 +135,16 @@ function updatePagination() {
            				<b><bean:message key="colname.fraudresults.action" /></b>
            			</td>
            		</tr>
-            <logic:present name="requestList" scope="request">
+           	<% boolean hasResults = false;%>	
+            <logic:present name="requestList" scope="session">
               <logic:iterate id="requested" name="requestList" type="aero.nettracer.fs.model.detection.AccessRequest">
               	<%
+
+              		hasResults=true;
+              		boolean outgoing = false;
+              		if(requested.getRequestedAirline().equalsIgnoreCase(a.getCompanycode_ID())){
+              			outgoing = true;
+              		}
               		String disStatus = requested.getFile().getDisStatus();
               		int rowspan = 1;
               		if (requested.getFile().getClaims() != null && !requested.getFile().getClaims().isEmpty()) {
@@ -132,14 +152,28 @@ function updatePagination() {
               			int i = 0;
               			rowspan = claims.length;
               	%>
+              	
+
               			<tr <%=disStatus %>>
               				<td>
+              					<% if(outgoing){ %>
+              						<bean:message key="fraud.access.request.type.outgoing" />
+              					<% } else { %>
+              						<bean:message key="fraud.access.request.type.incoming" />
+              					<% } %>
+              				</td>
+              				<td>
+              					<% if(!outgoing){ %>
 		           				<a href='claim_resolution.do?claimId=<%=claims[i].getSwapId() %>&back=1'>
 		           					<%=claims[i].getSwapId() %>
 		           				</a>
+		           				<% } else { %>
+		           					<%=claims[i].getSwapId() %>
+		           				<% } %>
 		           			</td>
 		           			<td>
 		           				<%
+		           				
 									switch (claims[i].getClaimType()) {
 										case 0: %>
 											<bean:message key="match.type.claim" />
@@ -156,10 +190,14 @@ function updatePagination() {
 										default:
 											break;
 									}
-								%>
+		           				%>
 		           			</td>
 		           			<td rowspan=<%=rowspan %>>
+		           			<% if(!outgoing){ %>
 	            				<bean:write name="requested" property="requestedAirline" />
+	            			<% } else { %>
+	            				<bean:write name="requested" property="file.validatingCompanycode" />
+	            			<% } %>
 	            			</td>
 	            			<td rowspan=<%=rowspan %>>
 	            				<%=requested.getDisRequestedDate(a.getDateformat().getFormat()) %>
@@ -179,25 +217,41 @@ function updatePagination() {
 	            				<a href="fraudRequests.do?matchId=<%=requested.getMatchHistory().getId() %>">
 	           						<bean:message key="claim.match.details" />
 	           					</a><br /><br/>
+	           					<% if(outgoing != true && requested.getStatus().equals(AccessRequest.RequestStatus.Created)){ %>
 	            				<a href="fraudRequests.do?approveId=<%=requested.getId() %>">
 	           						<bean:message key="claim.match.approve" />
 	           					</a><br /><br/>
 	            				<a href="fraudRequests.do?denyId=<%=requested.getId() %>">
 	           						<bean:message key="claim.match.deny" />
 	           					</a>
+	           					<% } else { %>
+	           						<bean:write name="requested" property="status"/>
+	           					<% } %>
 	            			</td>
               			</tr>
               		<%
               		if (claims.length > 1) {
               		   for (i = 1; i < claims.length; ++i) { %>
               		   	<tr <%=disStatus %>>
+              		   	    <td>
+              					<% if(outgoing){ %>
+              						<bean:message key="fraud.access.request.type.outgoing" />
+              					<% } else { %>
+              						<bean:message key="fraud.access.request.type.incoming" />
+              					<% } %>
+              				</td>
               				<td>
-		           				<a href='claim_resolution.do?claimId=<%=claims[i].getSwapId() %>&back=1'>
+              					<% if(!outgoing){ %>
+	           					<a href='claim_resolution.do?claimId=<%=claims[i].getSwapId() %>&back=1'>
 		           					<bean:write name="requested" property="file.claim.swapId" />
 		           				</a>
+		           				<% } else { %>
+		           					<bean:write name="requested" property="file.claim.swapId" />
+		           				<% } %>
 		           			</td>
 		           			<td>
 		           				<%
+		       
 									switch (claims[i].getClaimType()) {
 										case 0: %>
 											<bean:message key="match.type.claim" />
@@ -214,19 +268,32 @@ function updatePagination() {
 										default:
 											break;
 									}
-								%>
+							 %>
+		           				
 		           			</td>
 	           			</tr>              			
           			<% }
               		}
               		} else { %>
 	            		<tr <%=disStatus %>>
+	            		    <td>
+              					<% if(outgoing){ %>
+              						<bean:message key="fraud.access.request.type.outgoing" />
+              					<% } else { %>
+              						<bean:message key="fraud.access.request.type.incoming" />
+              					<% } %>
+              				</td>
 		        			<td>
+		        				<% if(!outgoing){ %>
 			    				<a href='searchIncident.do?incident=<bean:write name="requested" property="file.incident.airlineIncidentId" />&back=1' >
 			    					<bean:write name="requested" property="file.incident.airlineIncidentId" />
 			    				</a>
+		           				<% } else { %>
+		           					<bean:write name="requested" property="file.incident.airlineIncidentId" />
+		           				<% } %>
 			    			</td>
 			    			<td>
+			    			
 							        <logic:equal name="requested" property="file.incident.incidentType" value="0" >
 			   						<bean:message key="match.type.incident" />
 			   					</logic:equal>
@@ -239,9 +306,15 @@ function updatePagination() {
 			   					<logic:equal name="requested" property="file.incident.incidentType" value="<%= String.valueOf(TracingConstants.DAMAGED_BAG) %>" >
 			   						<bean:message key="match.type.incident" />:&nbsp;<bean:message key="claim.type.damaged" />
 			   					</logic:equal>
+			 
+		           			
 			    			</td>
 			    			<td>
+			    			<% if(!outgoing) { %>
 			    				<bean:write name="requested" property="requestedAirline" />
+			    			<% } else { %>
+	            				<bean:write name="requested" property="file.validatingCompanycode" />
+	            			<% } %>
 			    			</td>
 			    			<td>
 			    				<%=requested.getDisRequestedDate(a.getDateformat().getFormat()) %>
@@ -261,17 +334,27 @@ function updatePagination() {
 			    				<a href="fraudRequests.do?matchId=<%=requested.getMatchHistory().getId() %>">
 			   						<bean:message key="claim.match.details" />
 			   					</a><br /><br/>
+			   				<% if(outgoing != true && requested.getStatus().equals(AccessRequest.RequestStatus.Created)){ %>
 			    				<a href="fraudRequests.do?approveId=<%=requested.getId() %>">
 			   						<bean:message key="claim.match.approve" />
 			   					</a><br /><br/>
 			    				<a href="fraudRequests.do?denyId=<%=requested.getId() %>">
 			   						<bean:message key="claim.match.deny" />
 			   					</a>
+			   				<% } else { %>
+	           						<bean:write name="requested" property="status"/>
+	           				<% } %>
 			    			</td>
 		            </tr>
 		   		<% } %>
               </logic:iterate>
-              
+              <% if(hasResults == false){ %>
+				<tr>
+					<td colspan="8">
+					<bean:message key="fraud.access.request.no.results"/>
+				</td>
+				</tr>
+				<% } %>
               <tr>
                 <td colspan="11">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
@@ -286,5 +369,4 @@ function updatePagination() {
               </td>
             </tr>
           </table>
-          
         </html:form>
