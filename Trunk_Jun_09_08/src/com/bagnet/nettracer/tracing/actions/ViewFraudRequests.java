@@ -22,6 +22,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
 
+import aero.nettracer.fs.model.File;
+import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.AccessRequestDTO;
 import aero.nettracer.fs.model.detection.MatchHistory;
@@ -103,6 +105,21 @@ public class ViewFraudRequests extends CheckedAction {
 			int status = match.getFile2().getStatusId();
 			if (status == TracingConstants.STATUS_SUSPECTED_FRAUD || status == TracingConstants.STATUS_KNOWN_FRAUD) {
 				request.setAttribute("status", status);
+			}
+
+			File fsFile=null;
+			fsFile =ConnectionUtil.getFsFile(match.getFile2().getId(),match.getFile1().getValidatingCompanycode());
+			List<FsClaim> matchClaims=new ArrayList();
+			if(fsFile!=null)
+			{	
+				session.setAttribute("claimstatuslist", session
+						.getAttribute("claimstatuslist") != null ? session
+						.getAttribute("claimstatuslist") : TracerUtils.getStatusList(TracingConstants.TABLE_CLAIM, user.getCurrentlocale()));
+				FsClaim matchClaim=null;
+				for(FsClaim fsclaim:fsFile.getClaims()){
+					matchClaims.add(fsclaim);
+				}
+				request.setAttribute("matchClaims", (List<FsClaim>)matchClaims);
 			}
 			
 //			if (match.getFile2().getClaim() != null) {

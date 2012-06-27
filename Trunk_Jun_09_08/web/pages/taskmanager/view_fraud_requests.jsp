@@ -243,10 +243,10 @@ function updatePagination() {
               				<td>
               					<% if(!outgoing){ %>
 	           					<a href='claim_resolution.do?claimId=<%=claims[i].getSwapId() %>&back=1'>
-		           					<bean:write name="requested" property="file.claim.swapId" />
+		           					<span><%=claims[i].getSwapId() %></span>
 		           				</a>
 		           				<% } else { %>
-		           					<bean:write name="requested" property="file.claim.swapId" />
+		           					<span><%=claims[i].getSwapId() %></span>
 		           				<% } %>
 		           			</td>
 		           			<td>

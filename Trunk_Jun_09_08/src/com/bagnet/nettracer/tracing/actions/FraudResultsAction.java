@@ -168,7 +168,6 @@ public class FraudResultsAction extends CheckedAction {
 			List<FsClaim> matchClaims=new ArrayList();
 			if(fsFile!=null)
 			{	
-				int i=1;
 				FsClaim matchClaim=null;
 				for(FsClaim fsclaim:fsFile.getClaims()){
 					matchClaims.add(fsclaim);
