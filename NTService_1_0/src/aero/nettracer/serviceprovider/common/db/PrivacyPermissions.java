@@ -44,6 +44,7 @@ public class PrivacyPermissions implements Serializable{
 	}
 
 	boolean autosend;
+	boolean showallclaiminfo;
 	
 	boolean name;
 	boolean address;
@@ -261,6 +262,14 @@ public class PrivacyPermissions implements Serializable{
 
 	public void setAutosend(boolean autosend) {
 		this.autosend = autosend;
+	}
+	
+	public boolean isShowallclaiminfo() {
+		return showallclaiminfo;
+	}
+	
+	public void setShowallclaiminfo(boolean sendallclaiminfo) {
+		this.showallclaiminfo = sendallclaiminfo;
 	}
 	
 	public boolean isName() {
