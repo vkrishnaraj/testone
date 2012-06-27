@@ -62,6 +62,19 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 		}
 	}
 
+	public void doEventOnForward(List<OHD_Log> logs, boolean async){
+		if(async){
+			try{
+				SharesIntegrationThreadHandler.sendForwardMessage(logs);
+			}catch (Exception e){
+				//default to sync call
+				doEventOnForward(logs);
+				return;
+			}
+		} else {
+			doEventOnForward(logs);
+		}
+	}
 	
 	@Override
 	public void doEventOnForward(List<OHD_Log> logs) {
@@ -90,7 +103,7 @@ public class ClientEventHandlerImpl implements ClientEventHandler {
 		
 		ArrayList<OHD_Log> logs = new ArrayList<OHD_Log>();
 		logs.add(dto.getLog());
-		doEventOnForward(logs);
+		doEventOnForward(logs, true);
 		
 		if (!PropertyBMO.isTrue(PROPERTY_SEND_BEORN_TELEX)) {
 			return;

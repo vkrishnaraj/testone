@@ -1,6 +1,7 @@
 package com.bagnet.clients.us;
 
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.apache.log4j.Logger;
@@ -36,6 +37,8 @@ public class SharesIntegrationThread implements Runnable{
 					sendTelex((String[])args[1]);
 				} else if ((Integer)args[0] == SharesIntegrationThreadHandler.PCN){
 					doPcn((OHD_Log)args[1]);
+				} else if ((Integer)args[0] == SharesIntegrationThreadHandler.FM){
+					sendForwardMessage((List<OHD_Log>)args[1]);
 				}
 				
 			} catch (InterruptedException e) {
@@ -49,6 +52,7 @@ public class SharesIntegrationThread implements Runnable{
 	private boolean sendTelex(String [] args){
 		if(MOCK){
 			try {
+				System.out.println("Mock sendTelex");
 				Thread.sleep(MOCK_TIME);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -64,6 +68,7 @@ public class SharesIntegrationThread implements Runnable{
 	private boolean doPcn(OHD_Log log){
 		if(MOCK){
 			try {
+				System.out.println("Mock doPcn");
 				Thread.sleep(MOCK_TIME);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -81,4 +86,24 @@ public class SharesIntegrationThread implements Runnable{
 		}
 	}
 	
+	private boolean sendForwardMessage(List<OHD_Log> logs){
+		if(MOCK){
+			try{
+				System.out.println("Mock sendForwardMessage");
+				Thread.sleep(MOCK_TIME);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+			return true;
+		} else {
+			try {
+				SpringUtils.getClientEventHandler().doEventOnForward(logs);
+			} catch (Exception e) {
+				logger.error("Error performing forward...");
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		}
+	}
 }

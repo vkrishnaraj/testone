@@ -1,6 +1,7 @@
 package com.bagnet.clients.us;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.ArrayBlockingQueue;
 
@@ -20,6 +21,7 @@ public class SharesIntegrationThreadHandler implements ThreadHandler{
 	
 	public static final Integer SEND_TELEX = 1;
 	public static final Integer PCN = 2;
+	public static final Integer FM = 3;
 	
 	private static int maxItems = 0;
 	
@@ -80,6 +82,11 @@ public class SharesIntegrationThreadHandler implements ThreadHandler{
 	public static void doPcn(OHD_Log ohd_log) throws Exception{
 		Object[] toAdd = {PCN,ohd_log};
 		addToQueue(toAdd);
+	}
+	
+	public static void sendForwardMessage(List<OHD_Log> logs) throws Exception{
+		Object[] toAdd = {FM,logs};
+		addToQueue(toAdd);		
 	}
 	
 	private static void addToQueue(Object[] o) throws Exception{

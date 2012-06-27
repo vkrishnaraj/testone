@@ -1066,14 +1066,14 @@ public class WSCoreOHDUtil {
 		  		// Save On-hand
 				Date ohdstart = new Date();
 		  		OhdBMO obmo = new OhdBMO();
-		  		com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(onhand.getOHD_ID(), "Bulk BEORN webserivce save OHD", ohdstart);
+		  		
 		  		boolean insertResult = obmo.insertOHD(onhand, onhand.getAgent(), foundStation);
 		  		if (!insertResult) {
 		  			so.setErrorResponse(errorMsg + "Unable to perform BEORN.");
 		  	    return so;
 		  		} 
 		  		so.setOhdId(onhand.getOHD_ID());
-				
+		  		com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(onhand.getOHD_ID(), "Bulk BEORN webserivce save OHD", ohdstart);
 		  		Date logstart = new Date();
 				HibernateUtils.save(log);
 				com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(onhand.getOHD_ID(), "Bulk BEORN webserivce log OHD", logstart);
