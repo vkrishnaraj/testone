@@ -76,6 +76,7 @@ public class FraudResultsAction extends CheckedAction {
 
 		File file = null;
 		FsClaim claim = null;
+		request.setAttribute("incident", "");
 		if (ntUser && incidentIdString != null && !incidentIdString.equals("null")) {
 			file = FileDAO.loadFile(incidentIdString);
 			if (file == null) {

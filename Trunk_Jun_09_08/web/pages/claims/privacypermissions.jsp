@@ -32,6 +32,26 @@
 			return false;
 		}
 	}
+  
+  function checkAll(){
+
+		var list=document.getElementById('permissions');
+		for(var i=1, crow; crow=list.rows[i]; i++) {
+			if(crow.cells[0].id!="autosend")
+			{
+				var lab=crow.cells[0].id;
+				if(jQuery('#defshowallclaiminfo').is(':checked')){
+					jQuery('#def'+lab).attr('checked',true);
+					jQuery('#req'+lab).attr('checked',true);
+				}
+				else {
+					jQuery('#def'+lab).attr('checked',false);
+					jQuery('#req'+lab).attr('checked',false);
+				}
+			}
+			
+		}
+	}
   </script>
     
   <!-- onsumbit="if(retention<1){alert('Retention must be at least one(1) year')};" -->
@@ -78,7 +98,7 @@
 			</tr>
 		</table>
 
-		<table class="form2">
+		<table class="form2" id="permissions">
 
         	
         		<tr>
@@ -105,15 +125,24 @@
         			
         		%>
         		<tr>
-        			<td>
+        			<td id="<%=label %>">
         				<bean:message key="<%=messageKey%>"/>
         			</td>
+        			<% if(label=="showallclaiminfo"){ %>
+        			<td>
+        			<html:checkbox  styleId='<%=defId %>' name='privacyPermissionsForm' property="<%=defProperty %>" onclick='checkAll()'/>
+        			</td>
+        			<td>
+        			<html:checkbox  styleId='<%=reqId %>' name='privacyPermissionsForm' property="<%=reqProperty %>" />
+        			</td>
+        			<% } else { %>
         			<td>
         			<html:checkbox  styleId='<%=defId %>' name='privacyPermissionsForm' property="<%=defProperty %>" onclick='<%=checkReq %>'/>
         			</td>
         			<td>
         			<html:checkbox  styleId='<%=reqId %>' name='privacyPermissionsForm' property="<%=reqProperty %>" />
         			</td>
+        			<% } %>
         		</tr>
         		<%}%>
         		

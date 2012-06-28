@@ -108,7 +108,7 @@ public class ViewFraudRequests extends CheckedAction {
 			}
 
 			File fsFile=null;
-			fsFile =ConnectionUtil.getFsFile(match.getFile2().getId(),match.getFile1().getValidatingCompanycode());
+			fsFile =ConnectionUtil.getFsFile(match.getFile1().getId(),match.getFile2().getValidatingCompanycode());
 			List<FsClaim> matchClaims=new ArrayList();
 			if(fsFile!=null)
 			{	

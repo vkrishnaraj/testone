@@ -176,7 +176,7 @@
                         <td>
                         	<bean:message key="colname.claim.date" />
                         	<br />
-                        	<html:text property="dispCreateTime" styleClass="textfield" disabled="true" />
+                        	<input type="text" disabled="true" value="<%=matchClaim.getDisClaimDate(a.getDateformat().getFormat()) %>" class="disabledtextfield"  />
                         </td>
                       	<td>
                       		<bean:message key="header.claim_type"/>
@@ -1108,7 +1108,6 @@
 		                   		<td>
 		                   			<bean:message key="claim.incident.number" />
 		                   			<br/>
-		                   			<% String incident_ID = ((ClaimForm)session.getAttribute("claimForm")).getClaim().getIncident().getAirlineIncidentId(); %>
 		                   			<html:text name="matchClaim" disabled="true"  property="incident.airlineIncidentId" size="20" maxlength="13"  styleClass="textfield" /> <!-- value="<=incident_ID != null ? incident_ID : "" %>" -->
 		                   		</td>
 		                   		<td>
