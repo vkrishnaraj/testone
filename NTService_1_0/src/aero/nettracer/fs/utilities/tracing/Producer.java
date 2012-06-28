@@ -809,8 +809,8 @@ public class Producer {
 				address.setAddress2(s);
 				address.setCity(s);
 				address.setCountry(s);
-				address.setLattitude(0);
-				address.setLongitude(0);
+				address.setLattitude(-1);
+				address.setLongitude(-1);
 				address.setState(s);
 				address.setZip(s);
 				address.setProvince(s);
@@ -827,10 +827,10 @@ public class Producer {
 		if(f.getClaims() != null){
 			for(FsClaim claim: f.getClaims()){
 				if(!p.isAmountclaimed()){
-					claim.setAmountClaimed(0);
+					claim.setAmountClaimed(-1);
 				}
 				if(!p.isAmountpaid()){
-					claim.setAmountPaid(0);
+					claim.setAmountPaid(-1);
 				}
 				if(!p.isDenied()){
 					//				f.getClaim().setDenied(null);
@@ -877,8 +877,8 @@ public class Producer {
 						per.getAddress().setAddress2(s);
 						per.getAddress().setCity(s);
 						per.getAddress().setCountry(s);
-						per.getAddress().setLattitude(0);
-						per.getAddress().setLongitude(0);
+						per.getAddress().setLattitude(-1);
+						per.getAddress().setLongitude(-1);
 						per.getAddress().setState(s);
 						per.getAddress().setZip(s);
 						per.getAddress().setProvince(s);
