@@ -225,7 +225,7 @@ public class FraudValuationReportBMO {
 		drb = drb.addColumn(reportHeadingAmountClaimedCurrency,"amountClaimedCurrency",String.class.getName(),24);
 		drb = drb.addColumn(reportHeadingAmountPaid,"amountPaid",String.class.getName(),24);
 		drb = drb.addColumn(reportHeadingAmountPaidCurrency,"amountPaidCurrency",String.class.getName(),24);
-		drb = drb.addColumn(reportHeadingMatches,"matches",String.class.getName(),30);
+		drb = drb.addColumn(reportHeadingMatches,"matches",Integer.class.getName(),30);
         
 		//get the general information of the report, such as Report Title
 		String myReportTitle = "Fraud Valuation Report";
