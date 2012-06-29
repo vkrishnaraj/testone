@@ -3005,7 +3005,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			String sql = ""
 					
 					+ "select c.id, i.airlineIncidentId, c.claimDate, c.amountClaimed, c.amountClaimedCurrency, c.amountPaid, c.amountPaidCurrency, s.description "
-					+ "from fsfile f, fsclaim c, fsincident i, status s where 1=1 and ";
+					+ "from fsfile f, fsclaim c, fsincident i, status s where 1=1 ";
 			
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
@@ -3050,7 +3050,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 			sql += simpleDateQ;
 			
-			sql += " and c.file_id = f.id and f.statusId = s.Status_ID and f.id = i.file_id";
+			sql += " and c.file_id = f.id and c.statusId = s.Status_ID and f.id = i.file_id";
 			
 			rs = stmt.executeQuery(sql);
 
@@ -3105,8 +3105,10 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			if (matches != null) {
 				for (int i = 0; i < claimList.size(); i++) {
 					sr = (FraudValuationReportDTO) claimList.get(i);
-					sr.setMatches(matches.get(sr.getClaimID()));
-					claimList.set(i, sr);
+					if(matches.containsKey(sr.getClaimID())){
+						sr.setMatches(matches.get(sr.getClaimID()));
+						claimList.set(i, sr);
+					}
 				}
 			}
 
