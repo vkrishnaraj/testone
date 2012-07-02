@@ -147,4 +147,7 @@ public class ReportingConstants {
 	
 	public static final int RPT_20_CUSTOM_201 = 201;
 	public static final String RPT_20_CUSTOM_201_NAME = "fraud_valuation_summary";
+	
+	public static final int RPT_20_CUSTOM_202 = 202;
+	public static final String RPT_20_CUSTOM_202_NAME = "wh_daily_status_report";
 }

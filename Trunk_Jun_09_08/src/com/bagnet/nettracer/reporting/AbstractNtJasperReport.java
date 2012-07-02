@@ -11,6 +11,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.classic.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -24,8 +25,15 @@ public abstract class AbstractNtJasperReport {
 	protected Date startDate;
 	protected Date endDate;
 	
+	protected Agent user;
+	
 	protected AbstractNtJasperReport(ResourceBundle resources) {
 		this.resources = resources;
+	}
+	
+	protected AbstractNtJasperReport(ResourceBundle resources, Agent agent) {
+		this.resources = resources;
+		this.user = agent;
 	}
 	
 	@SuppressWarnings("rawtypes")
