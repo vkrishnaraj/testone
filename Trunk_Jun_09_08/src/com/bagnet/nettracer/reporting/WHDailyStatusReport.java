@@ -170,7 +170,7 @@ public class WHDailyStatusReport extends AbstractNtJasperReport {
 				sql += sbCompanyQuery.toString();
 			} else if (intc.length() > 0 && srDTO.getFaultstation_ID() != null && !srDTO.getFaultstation_ID()[0].equals("0")) {
 				intc = intc.substring(0,intc.length() - 1);
-				sql += " and incident.faultstation_ID in (" + intc + ") ";
+				sql += " and i.faultstation_ID in (" + intc + ") ";
 			}
 
 			Date sdate = null, edate = null;
@@ -188,13 +188,13 @@ public class WHDailyStatusReport extends AbstractNtJasperReport {
 			if (sdate != null && edate != null) {
 				if (sdate.equals(edate)) {
 					// need to add the timezone diff here
-					sql += " and ((incident.createdate = '" 
+					sql += " and ((i.createdate = '" 
 							+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)  
-							+ "' and incident.createtime >= '" 
+							+ "' and i.createtime >= '" 
 							+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "') or (incident.createdate= '"
+							+ "') or (i.createdate= '"
 							+ DateUtils.formatDate(sdate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "' and incident.createtime <= '"
+							+ "' and i.createtime <= '"
 							+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 							+ "'))";
 
@@ -202,29 +202,29 @@ public class WHDailyStatusReport extends AbstractNtJasperReport {
 
 					// first get the beginning and end dates using date and time, then get
 					// dates in between
-					sql += " and ((incident.createdate = '" 
+					sql += " and ((i.createdate = '" 
 						+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)  
-						+ "' and incident.createtime >= '" 
+						+ "' and i.createtime >= '" 
 						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-						+ "') or (incident.createdate= '"
+						+ "') or (i.createdate= '"
 						+ DateUtils.formatDate(edate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-						+ "' and incident.createtime <= '"
+						+ "' and i.createtime <= '"
 						+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-						+ "') or (incident.createdate > '"
+						+ "') or (i.createdate > '"
 						+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-						+ "' and incident.createdate <= '"
+						+ "' and i.createdate <= '"
 						+ DateUtils.formatDate(edate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 						+ "'))";
 
 				}
 			} else if (sdate != null) {
-				sql += " and ((incident.createdate = '" 
+				sql += " and ((i.createdate = '" 
 					+ DateUtils.formatDate(sdate,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)  
-					+ "' and incident.createtime >= '" 
+					+ "' and i.createtime >= '" 
 					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-					+ "') or (incident.createdate= '"
+					+ "') or (i.createdate= '"
 					+ DateUtils.formatDate(sdate1,TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-					+ "' and incident.createtime <= '"
+					+ "' and i.createtime <= '"
 					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
 					+ "'))";
 

@@ -48,7 +48,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		String creportdata = null;
 		switch (srDTO.getCustomreportnum()) {
 		case ReportingConstants.RPT_20_CUSTOM_202:
-			creportdata = createWHDailyStatusReport(srDTO, ReportBMO.getCustomReport(89).getResource_key(), rootpath, request, user);
+			creportdata = createWHDailyStatusReport(srDTO, ReportBMO.getCustomReport(202).getResource_key(), rootpath, request, user);
 			break;
 		default:
 			break;
@@ -87,27 +87,27 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		detailStyle.setVerticalAlign(VerticalAlign.MIDDLE);
 		
 		try {
-			drb.addColumn(resources.getString("report.wh.daily.status.mbr"), "mbr", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.type"), "type", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.mbr"), "mbr", String.class.getName(), 75, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.type"), "type", String.class.getName(), 40, detailStyle, header);
 			drb.addColumn(resources.getString("report.wh.daily.status.status"), "status", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.name"), "name", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.airline"), "airline", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.flight"), "flight", Integer.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.origin"), "origin", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.destination"), "destination", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.route"), "route", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.open.station"), "openStation", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.name"), "name", String.class.getName(), 75, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.airline"), "airline", String.class.getName(), 30, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.flight"), "flight", Integer.class.getName(), 20, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.origin"), "origin", String.class.getName(), 30, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.destination"), "destination", String.class.getName(), 30, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.route"), "route", String.class.getName(), 75, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.open.station"), "openStation", String.class.getName(), 30, detailStyle, header);
 			drb.addColumn(resources.getString("report.wh.daily.status.open.user"), "openUser", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.wh.daily.status.open.date"), "openDate", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.wh.daily.status.open.time"), "openTime", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.close.station"), "closeStation", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.close.station"), "closeStation", String.class.getName(), 30, detailStyle, header);
 			drb.addColumn(resources.getString("report.wh.daily.status.close.user"), "closeUser", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.wh.daily.status.close.date"), "closeDate", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.wh.daily.status.close.time"), "closeTime", String.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.wh.daily.status.total.time"), "total", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.fault.station"), "faultStation", String.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.fault.code"), "faultCode", Integer.class.getName(), 50, detailStyle, header);
-			drb.addColumn(resources.getString("report.wh.daily.status.fault.desc"), "faultDesc", String.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.fault.station"), "faultStation", String.class.getName(), 30, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.fault.code"), "faultCode", Integer.class.getName(), 20, detailStyle, header);
+			drb.addColumn(resources.getString("report.wh.daily.status.fault.desc"), "faultDesc", String.class.getName(), 100, detailStyle, header);
 
 			drb.setIgnorePagination(true);
 			drb.setUseFullPageWidth(true);
