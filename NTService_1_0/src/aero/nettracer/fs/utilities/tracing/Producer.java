@@ -493,14 +493,14 @@ public class Producer {
 			MetaWarning warn = new MetaWarning();
 			tr.getMetaWarning().add(warn);
 			warn.setDescription("Total Known Fraud Results: " + knownFraudCount);
-			warn.setThreatLevel(TraceResponse.THREAT_LEVEL_YELLOW);
+			warn.setThreatLevel(TraceResponse.THREAT_LEVEL_RED);
 			warn.setPercentageMatch(0);
 		}
 		if (suspectedFraudCount > 0){
 			MetaWarning warn = new MetaWarning();
 			tr.getMetaWarning().add(warn);
 			warn.setDescription("Total Suspected Fraud Results: " + suspectedFraudCount);
-			warn.setThreatLevel(TraceResponse.THREAT_LEVEL_RED);
+			warn.setThreatLevel(TraceResponse.THREAT_LEVEL_YELLOW);
 			warn.setPercentageMatch(0);
 		}
 
