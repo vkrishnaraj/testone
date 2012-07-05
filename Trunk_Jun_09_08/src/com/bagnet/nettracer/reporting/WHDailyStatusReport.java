@@ -70,9 +70,17 @@ public class WHDailyStatusReport extends AbstractNtJasperReport {
 		
 		boolean reset2AllStations = true;
 		if (myCompanyList != null) {
-			sbCompanyQuery.append(" AND s2.companycode_ID IN ");
+			sbCompanyQuery.append(" AND s1.companycode_ID IN ");
 			
 			List<String> myCompanyIdList = Arrays.asList(myCompanyList);
+			
+			int numOfCompanyInList = myCompanyIdList.size();
+			if (numOfCompanyInList == 1) {
+				String myCompanyId = myCompanyIdList.get(0);
+				if (myCompanyId.equalsIgnoreCase(user.getCompanycode_ID())) {
+					reset2AllStations = false;
+				}
+			} 
 			
 			String myCompanySql = "(";
 			
@@ -91,20 +99,31 @@ public class WHDailyStatusReport extends AbstractNtJasperReport {
 		/*** STOP ***/
 		
 		String sql = "select i.incident_ID mbr, t.description type, st.description status, CONCAT(CONCAT(p.firstname, ' '),p.lastname) name, " +
-				"it.airline airline, it.flightnum flight, it.legfrom origin, it.legto destination,  " +
-				"it.theRoute route, s1.stationcode open_station,  " +
+				"IFNULL(it.airline,'N/A') airline, IFNULL(it.flightnum,'0') flight, " +
+				"IFNULL(it.legfrom,'N/A') origin, IFNULL(it.legto,'N/A') destination,  " +
+				"IFNULL(it.theRoute,'N/A') route, s1.stationcode open_station,  " +
 				"a1.username open_user, i.createdate open_date, i.createtime open_time,  " +
 				"IFNULL(s2.stationcode,'N/A') close_station, IFNULL(a2.username,'N/A') close_user,  " +
 				"IFNULL(DATE(i.close_date), 'N/A') close_date, IFNULL(TIME(i.close_date), 'N/A') close_time,  " +
 				"IFNULL(CONCAT(DATEDIFF(i.close_date, i.createdate),' DAYS'), 'N/A') total,  " +
 				"IFNULL(fs.stationcode, 'N/A') fault_station, i.loss_code fault_code, IFNULL(c.description, 'N/A') fault_desc " +
 				"from station s1, status st, itemtype t, agent a1, passenger p, incident i  " +
-				"left join (select it1.incident_ID, it1.airline, it1.flightnum, it1.legfrom, it1.legto,  " +
-				"CONCAT(CONCAT(it1.legfrom, '/'),it1.legto) theRoute from itinerary it1) it on (i.incident_ID = it.incident_ID) " +
+				"left join (SELECT incident_id, route as theRoute, " +
+				    "if (route NOT LIKE '/%' AND CHAR_LENGTH(route) > 1, SUBSTR(route, 1, 3), 'No Data') legfrom, " +
+				    "if (route NOT LIKE '%/' AND CHAR_LENGTH(route) > 1, SUBSTR(route, -3), 'No Data') legto, airline, flightnum " +
+				    "FROM  " +
+				    "(SELECT incident_id, GROUP_CONCAT(legs ORDER BY incident_id ASC, itinerary_id ASC) route, airline, flightnum " +
+				    "FROM  " +
+				    "(SELECT incident_id,itinerary_id,airline, flightnum, concat(legfrom, '/', legto) legs " +
+				    "FROM itinerary " +
+				    "WHERE itinerarytype = 0 " +
+				    "ORDER BY incident_id, itinerary_id ASC) itin1 " +
+				    "GROUP BY incident_id) routes " +
+				    ") it on (i.incident_ID = it.incident_ID) " +
 				"left join station fs on (i.faultstation_ID = fs.Station_ID) " +
 				"left join company_irregularity_codes c on (i.loss_code = c.loss_code and c.companycode_ID = 'WH') " +
 				"left join (select ai2.audit_incident_id, ai2.incident_ID, ai2.modify_agent_id from audit_incident ai2  " +
-				"where ai2.status_ID = 13 group by ai2.incident_ID order by ai2.modify_time asc) ai on (i.incident_ID = ai.incident_ID) " +
+			        "where ai2.status_ID = 13 group by ai2.incident_ID order by ai2.modify_time asc) ai on (i.incident_ID = ai.incident_ID) " +
 				"left join agent a2 on (ai.modify_agent_id = a2.Agent_ID) " +
 				"left join station s2 on (a2.station_ID = s2.station_ID) " +
 				"where 1=1 ";
@@ -234,6 +253,8 @@ public class WHDailyStatusReport extends AbstractNtJasperReport {
 				" and i.agent_ID = a1.Agent_ID and i.incident_ID = p.incident_ID " +
 				" group by i.incident_ID";
 		
+			logger.info("SQL for report:\n\n" + sql);
+			
 		return sql;
 	}
 
