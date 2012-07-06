@@ -159,6 +159,10 @@ public class StatReportAction extends Action {
 					&&new Integer(customreportnum).intValue() == ReportingConstants.RPT_20_CUSTOM_101 
 					&& new Integer(reportnum).intValue() == ReportingConstants.RPT_20){
 				daform.setOutputtype(2);//default to xls
+			} else if (customreportnum != null && reportnum != null 
+					&&new Integer(customreportnum).intValue() == ReportingConstants.RPT_20_CUSTOM_202 
+					&& new Integer(reportnum).intValue() == ReportingConstants.RPT_20){
+				daform.setOutputtype(2);//default to xls
 			}
 		}
 
