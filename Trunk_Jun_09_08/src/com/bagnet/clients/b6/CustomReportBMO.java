@@ -373,17 +373,18 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 				dto.setFlights((String) obj[4]);
 				dto.setDestination((String) obj[5]);
 				dto.setOrigin((String) obj[6]);
-				dto.setCreated_station((String) obj[7]);
-				dto.setStatus((String) obj[8]);
-				dto.setCharge_city((String) obj[9]);
-				dto.setCharge_code((Integer) obj[10]);
-				dto.setPnr((String) obj[11]);
-				dto.setBag_tags((String) obj[12]);
-				dto.setCheckin_location((String) obj[13]);
-				dto.setBag_colors((String) obj[14]);
-				dto.setBag_types((String) obj[15]);
-				dto.setFinalSegmentDateTime((Date) obj[16]);
-				dto.setAssigned_station((String) obj[17]);
+				dto.setCountry((String) obj[7]);
+				dto.setCreated_station((String) obj[8]);
+				dto.setStatus((String) obj[9]);
+				dto.setCharge_city((String) obj[10]);
+				dto.setCharge_code((Integer) obj[11]);
+				dto.setPnr((String) obj[12]);
+				dto.setBag_tags((String) obj[13]);
+				dto.setCheckin_location((String) obj[14]);
+				dto.setBag_colors((String) obj[15]);
+				dto.setBag_types((String) obj[16]);
+				dto.setFinalSegmentDateTime((Date) obj[17]);
+				dto.setAssigned_station((String) obj[18]);
 				reportList.add(dto);
 			}
 						
