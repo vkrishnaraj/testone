@@ -21,6 +21,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.MessageResources;
+import org.dozer.DozerBeanMapperSingletonWrapper;
+import org.dozer.Mapper;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
@@ -72,6 +74,9 @@ public class ViewFraudRequests extends CheckedAction {
 			theForm.getDto().setType(TracingConstants.FS_ACCESS_REQUEST_TYPE_INCOMING);
 			theForm.setEndDate(null);
 			theForm.setStartDate(null);
+		} else if ((request.getParameter("matchId") != null || request.getParameter("approveId") != null || request.getParameter("denyId") != null) 
+				&& session.getAttribute("linkForm") != null){
+			theForm = (ViewFraudRequestForm) session.getAttribute("linkForm");
 		}
 		
 		if(theForm.getStartDate() != null && theForm.getStartDate().trim().length() > 0){
@@ -92,7 +97,10 @@ public class ViewFraudRequests extends CheckedAction {
 			theForm.getDto().setEndDate(null);
 		}
 
-		session.setAttribute("requestForm", theForm);
+		session.setAttribute("viewFraudRequestForm", theForm);
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		ViewFraudRequestForm linkForm = mapper.map(theForm, ViewFraudRequestForm.class);
+		session.setAttribute("linkForm", linkForm);
 		
 //		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user))
 //			return (mapping.findForward(TracingConstants.NO_PERMISSION));

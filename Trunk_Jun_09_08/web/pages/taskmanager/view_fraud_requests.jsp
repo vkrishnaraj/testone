@@ -16,7 +16,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.forms.ViewFraudRequestForm" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
-  ViewFraudRequestForm form = (ViewFraudRequestForm)session.getAttribute("requestForm");
+  ViewFraudRequestForm form = (ViewFraudRequestForm)session.getAttribute("viewFraudRequestForm");
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
 	request.getAttribute("org.apache.struts.action.MESSAGE");
 	java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
