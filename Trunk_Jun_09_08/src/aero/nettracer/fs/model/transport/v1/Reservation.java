@@ -123,30 +123,13 @@ public class Reservation implements Serializable {
 	public void setFormOfPayment(String formOfPayment) {
 		this.formOfPayment = formOfPayment;
 	}
-
-	public String getRedactedCcNumber() {
-		String toReturn = "";
-		if ((ccNumber != null && !ccNumber.isEmpty()) || (getCcNumLastFour() != null && !getCcNumLastFour().isEmpty())) {
-			toReturn += "************" + getCcNumLastFour();
-		}
-		return toReturn;
-	}
 	
 	public String getCcNumber() {
 		return this.ccNumber;
 	}
-
-	public void setRedactedCcNumber(String ccNumber) {
-		setCcNumber(ccNumber);
-	}
 	
 	public void setCcNumber(String ccNumber) {
-		if (ccNumber != null && ccNumber.trim().length() > 0 && (ccNumber.matches("[0-9]{4}+") || ccNumber.matches("[0-9]{16}+"))) {
-			if (ccNumber.length() == 16) {
-				this.ccNumber = StringUtils.sha1(ccNumber,true);
-			}
-			this.setCcNumLastFour(ccNumber.substring(ccNumber.length() - 4));
-		}
+		this.ccNumber = ccNumber;
 	}
 
 	public double getTicketAmount() {

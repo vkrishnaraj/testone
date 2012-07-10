@@ -142,11 +142,16 @@ public class Reservation implements Serializable {
 	}
 	
 	public void setCcNumber(String ccNumber) {
-		if (ccNumber != null && ccNumber.trim().length() > 0 && (ccNumber.matches("[0-9]{4}+") || ccNumber.matches("[0-9]{16}+"))) {
-			if (ccNumber.length() == 16) {
+		if (ccNumber != null && ccNumber.trim().length() > 0 && (ccNumber.matches("[0-9]{4,}"))) {
+			if (ccNumber.length() > 12) {
 				this.ccNumber = StringUtils.sha1(ccNumber,true);
+			} else {
+				this.ccNumber = null;
 			}
 			this.setCcNumLastFour(ccNumber.substring(ccNumber.length() - 4));
+		} else if(ccNumber == null || ccNumber.trim().length() == 0){
+			this.ccNumber = null;
+			this.ccNumLastFour = null;
 		}
 	}
 
