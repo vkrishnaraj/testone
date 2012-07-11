@@ -11,8 +11,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.apache.struts.util.MessageResources;
-
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 /**
@@ -40,7 +38,7 @@ public class EmailParser {
 					i2 = s.indexOf('}', i1);
 					if (i2 > i1) {
 						toparse = s.substring(i1 + 1, i2);
-						tmpValue = (String) h.get(toparse); // get the parsed string
+						tmpValue = String.valueOf( h.get(toparse)); // get the parsed string
 						if (tmpValue != null) {
 							toparse = tmpValue;
 						}
@@ -58,6 +56,7 @@ public class EmailParser {
 			}
 			return sb.toString();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 	}

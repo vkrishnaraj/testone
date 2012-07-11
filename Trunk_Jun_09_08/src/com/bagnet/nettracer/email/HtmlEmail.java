@@ -15,7 +15,6 @@
  */
 package com.bagnet.nettracer.email;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -24,7 +23,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
 import javax.activation.URLDataSource;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;

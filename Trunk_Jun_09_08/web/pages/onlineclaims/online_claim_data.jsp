@@ -370,6 +370,18 @@ phIndex++; %>
 </table>
 <% } else { %>
 <table class="ocTable" width="95%"><tr>
+<%     if (bags.isBagArrive()) { 
+	       if (!c.isDamaged()) {%>
+<td class="boldCell" colspan="9"><bean:message key="oc.title.missing.claim" /></td>
+<%         } else if (!c.isMissing()) { %>
+<td class="boldCell" colspan="9"><bean:message key="oc.title.damaged.claim" /></td>
+<%         } else { %>
+<td class="boldCell" colspan="9"><bean:message key="oc.title.miss.damage.claim" /></td>
+<%         } 
+       } else { %>
+<td class="boldCell" colspan="9"><bean:message key="oc.title.delayed.claim" /></td>
+<%     } %>
+</tr><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.bag.tag" /></td><td colspan="2"><bean:write name="bags" property="tag"/></td>
 <td class="boldCell" colspan="2"><bean:message key="oc.label.bag.brand" /></td><td colspan="2"><bean:write name="bags" property="brand"/></td>
 </tr><tr>

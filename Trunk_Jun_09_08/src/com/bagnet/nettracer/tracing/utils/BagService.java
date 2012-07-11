@@ -677,8 +677,7 @@ public class BagService {
 			if(theform.getReadonly() == 1) {
 				// the agent may have permission to save the loss code even though this is read only. This boolean will return true if that is the case.
 				boolean stationLock=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, mod_agent) 
-						&& iDTO.getStatus().getStatus_ID()==13 && !(iDTO.isLocked())  
-						&& (UserPermissions.hasIncidentSavePermission(mod_agent, iDTO) || mod_agent.getStation().getStation_ID() == theform.getFaultstation_id()) );
+						&& iDTO.getStatus().getStatus_ID()==13 && mod_agent.getStation().getStation_ID() == theform.getFaultstation_id() );
 				if (stationLock) { // If true save remarks and loss code. Otherwise just save remarks.
 					result = iBMO.updateRemarksAndLossCodeOnly(iDTO.getIncident_ID(), iDTO.getRemarks(), mod_agent, iDTO.getLoss_code());
 				} else if(theform.getAllow_remark_update() == 1) {

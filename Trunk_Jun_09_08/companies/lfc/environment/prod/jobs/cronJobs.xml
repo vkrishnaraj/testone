@@ -35,7 +35,10 @@
 		<property name="cronExpression" value="${lf.traceall.cron}" />
 	</bean>
 	
-	<!--  The bean that manages all the scheduled jobs and their threads -->
+	<bean id="cronLfWeekly" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="lfReportEmail" />
+		<property name="cronExpression" value="${lf.reportemail.cron}" />
+	</bean>
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
@@ -43,6 +46,7 @@
 				<ref bean="cronLf1stNotice" />
 				<ref bean="cronLf2ndNotice" />
 				<ref bean="cronLfTraceAll" />
+				<ref bean="cronLfWeekly" />
 				<ref bean="LockCleanupTrigger" />
 			</list>
 		</property>

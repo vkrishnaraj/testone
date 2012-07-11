@@ -3,11 +3,6 @@ package aero.nettracer.lf.services;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,18 +12,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.apache.struts.util.LabelValueBean;
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.junit.Test;
 
 import aero.nettracer.general.services.GeneralServiceBean;
-import aero.nettracer.lf.services.LFCClientServiceBean;
-import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 import aero.nettracer.lf.services.exception.UpdateException;
-import aero.nettracer.security.AES;
 
-import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -44,7 +33,6 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLossInfo;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
-import com.bagnet.nettracer.tracing.db.lf.LFObject;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSegment;
@@ -97,6 +85,15 @@ public class LFServiceBeanTest {
 		Agent auto = bean.getAutoAgent();
 		assertTrue(auto != null && auto.getUsername().equals("autoagent"));
 		assertTrue(auto.getCompanycode_ID().equals(TracerProperties.get("wt.company.code")));
+	}
+	
+	@Test
+	public void sendLFWeeklyEmailTest() {
+		LFServiceBean bean=new LFServiceBean();
+		GeneralServiceBean gbean = new GeneralServiceBean();
+		Agent web = gbean.getAgent("webagent", TracerProperties.get("wt.company.code"));
+		bean.sendLFWeekly(web.getAgent_ID());
+		assertTrue(true);
 	}
 	
 	@Test

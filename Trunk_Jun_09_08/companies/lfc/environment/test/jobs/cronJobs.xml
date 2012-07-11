@@ -17,6 +17,11 @@
 		<property name="jobDetail" ref="lfTraceAll" />
 		<property name="cronExpression" value="${lf.traceall.cron}" />
 	</bean>
+	
+	<bean id="cronLfWeekly" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="lfReportEmail" />
+		<property name="cronExpression" value="${lf.reportemail.cron}" />
+	</bean>
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>

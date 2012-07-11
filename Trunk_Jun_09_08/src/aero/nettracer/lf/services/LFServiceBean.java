@@ -2,6 +2,7 @@ package aero.nettracer.lf.services;
 
 import java.math.BigInteger;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,7 +18,6 @@ import javax.mail.internet.InternetAddress;
 
 import org.apache.commons.lang.WordUtils;
 import org.apache.struts.util.LabelValueBean;
-import org.dozer.DozerBeanMapper;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -25,7 +25,6 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import aero.nettracer.general.services.GeneralServiceBean;
@@ -41,6 +40,8 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.lf.LFBoxContainer;
+import com.bagnet.nettracer.tracing.db.lf.LFBoxCount;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFDelivery;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
@@ -48,22 +49,19 @@ import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
-import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvageFound;
-import com.bagnet.nettracer.tracing.db.lf.LFBoxContainer;
-import com.bagnet.nettracer.tracing.db.lf.LFBoxCount;
+import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
+import com.bagnet.nettracer.tracing.dto.SalvageDTO;
 import com.bagnet.nettracer.tracing.forms.lf.HandleItemsForm;
 import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
 import com.bagnet.nettracer.tracing.forms.lfc.SalvageSearchForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.EmailParser;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
-import com.bagnet.nettracer.tracing.utils.general.DeepCopy;
 import com.bagnet.nettracer.tracing.utils.general.Logger;
-import com.bagnet.nettracer.tracing.dto.SalvageDTO;
 
 @Stateless
 public class LFServiceBean implements LFServiceRemote, LFServiceHome{
@@ -2019,6 +2017,1037 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return h;
 	}
 	
+	private HashMap<String,String> getEmailParams(){
+		
+		
+		HashMap<String,String> h = new HashMap<String,String>();
+		GregorianCalendar cal=new GregorianCalendar();
+		long lastFour = System.currentTimeMillis() + (4 * 86400 * 7 * 1000);
+		long lastWeek = System.currentTimeMillis() + (86400 * 7 * 1000);
+		Date endDate=new Date();
+		//DateUtils.addDays(endDate, -7);
+		Date week=DateUtils.addDays(endDate, -7);
+		Date fourWeek=DateUtils.addDays(endDate, -28);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		Date beginMonth=cal.getTime();
+		cal.set(Calendar.DAY_OF_YEAR, 1);
+		Date beginYear=cal.getTime();
+		System.out.println(DateUtils.formatDate(fourWeek,TracingConstants.DB_DATEFORMAT, null, null));
+		
+		int weeklyTotal=0;
+		int MTD=0;
+		int YTD=0;
+		//DateUtils.
+		cal.setTime(week);
+		int i=1;
+		do{
+			h.put("date"+i, DateUtils.formatDate(cal.getTime(),TracingConstants.DISPLAY_DATEFORMAT, null, null));
+			cal.add(cal.DATE, 1);
+			i++;
+		}
+		while(endDate.after(cal.getTime()));
+		cal.setTime(fourWeek);
+		i=1;
+		do{
+			h.put("week"+i,DateUtils.formatDate(cal.getTime(), TracingConstants.DISPLAY_DATEFORMAT, null, null));
+			cal.add(cal.DATE, 7);
+			i++;
+		}
+		while((DateUtils.addDays(endDate,1)).after(cal.getTime()));
+		
+		getLostReportsEntered(h, endDate,week);
+		getBoxesEntered(h,endDate,week);	
+		getHighValueEntered(h,endDate,week);
+		getLowValueEntered(h,endDate,week);
+		getHighValueReturned(h,endDate,week);
+		getLowValueReturned(h,endDate,week);
+		getMTDTotals(h,endDate,beginMonth);
+		getYTDTotals(h,endDate,beginYear);
+		getWeekItemCounts(h,endDate,fourWeek);		
+		
+		h.put("STARTDATE",DateUtils.formatDate(fourWeek, TracingConstants.DISPLAY_DATEFORMAT, null, null));
+		h.put("ENDDATE", DateUtils.formatDate(endDate, TracingConstants.DISPLAY_DATEFORMAT, null, null));
+		h.put("SUBJECTLINE", "Weekly Summary Report: {STARTDATE} - {ENDDATE}");
+		
+		return h;
+	}
+	
+	public void getBoxesEntered(HashMap h,Date endDate, Date week)
+	{
+		int weeklyTotal=0;
+		//Boxes Entered
+		String sql = "select bc.dateCount, case sum(b.boxCount) when null then 0 else sum(b.boxCount) end from lfBoxCount b left join lfboxcontainer bc on bc.id =b.container_ID "+
+				"where bc.dateCount < :enddate and bc.dateCount >= :lastweek group by date(bc.dateCount)";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+			for (int i = 0; i < lis.size(); ++i) {
+				o = (Object[]) lis.get(i);
+				for(int j=1; j<8; j++){
+					if(DateUtils.formatDate(o[0].toString(), TracingConstants.DB_DATETIMEFORMAT,TracingConstants.DISPLAY_DATEFORMAT, null, null).equals(h.get("date"+j))){
+						if(o[1]!=null){
+							h.put("BoxesReceived"+(j), o[1].toString());
+							weeklyTotal+=Integer.valueOf(o[1].toString());
+						} else {
+		
+							h.put("BoxesReceived"+(j), "0");
+						}
+					}
+					else if(h.get("BoxesReceived"+(j))==(null))
+					{
+						h.put("BoxesReceived"+(j), "0");
+					}
+				}
+			}
+			}
+			else
+			{
+				for(int j=1; j<8; j++){
+					h.put("BoxesReceived"+(j), "0");
+				}
+			}
+			h.put("BoxesReceivedWeek", String.valueOf(weeklyTotal));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void getLostReportsEntered(HashMap h,Date endDate, Date week)
+	{
+	int weeklyTotal=0;
+		//Lost Reports Entered
+		String sql = "select opendate, case count(*) when null then 0 else count(*) end from lflost "+
+				"where openDate < :enddate and OpenDate >= :lastweek group by date(openDate)";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+			for (int i = 0; i < lis.size(); i++) {
+				o = (Object[]) lis.get(i);
+				for(int j=1; j<8; j++){
+					if(DateUtils.formatDate((Date)o[0], TracingConstants.DISPLAY_DATEFORMAT, null, null).equals(h.get("date"+(j)))){
+						if(o[1]!=null){
+						h.put("LostEntered"+(j), o[1].toString());
+						weeklyTotal+=Integer.valueOf(o[1].toString());
+						}
+						else {
+							h.put("LostEntered"+(j), "0");
+						}
+					}
+					else if(h.get("LostEntered"+(j))==(null))
+					{
+						h.put("LostEntered"+(j), "0");
+					}
+				}
+			}
+			}
+			else
+			{
+				for(int j=1; j<8; j++){
+					h.put("LostEntered"+(j), "0");
+				}
+			}
+			h.put("LostWeekEntered", String.valueOf(weeklyTotal));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+
+	public void getHighValueEntered(HashMap h,Date endDate, Date week)
+	{
+		int weeklyTotal=0;
+		//High Value Items entered
+		String sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=1 and f.receivedDate < :enddate and f.receivedDate >= :lastweek group by date(f.receivedDate)";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+			for (int i = 0; i < lis.size(); ++i) {
+				o = (Object[]) lis.get(i);
+				for(int j=1; j<8; j++){
+					if(DateUtils.formatDate((Date)o[0], TracingConstants.DISPLAY_DATEFORMAT, null, null).equals(h.get("date"+j))){
+						if(o[1]!=null){
+							h.put("HighEntered"+(j), o[1].toString());
+							weeklyTotal+=Integer.valueOf(o[1].toString());
+						} else {
+							h.put("HighEntered"+(j), "0");
+						}
+					}
+					else if(h.get("HighEntered"+(j))==(null))
+					{
+						h.put("HighEntered"+(j), "0");
+					}
+				}
+			}
+			}
+			else
+			{
+				for(int j=1; j<8; j++){
+					h.put("HighEntered"+(j), "0");
+				}
+			}
+			h.put("HighEnteredWeek", String.valueOf(weeklyTotal));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void getLowValueEntered(HashMap h,Date endDate, Date week)
+	{
+		int weeklyTotal=0;
+		//Est Low Value Items entered
+		
+		String sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=0 and f.receivedDate < :enddate and f.receivedDate >= :lastweek group by date(f.receivedDate)";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+			for (int i = 0; i < lis.size(); ++i) {
+				o = (Object[]) lis.get(i);
+				for(int j=1; j<8; j++){
+					if(DateUtils.formatDate((Date)o[0], TracingConstants.DISPLAY_DATEFORMAT, null, null).equals(h.get("date"+j))){
+						if(o[1]!=null){
+							h.put("LowEntered"+(j), o[1].toString());
+							weeklyTotal+=Integer.valueOf(o[1].toString());
+						} else {
+							h.put("LowEntered"+(j), "0");
+						}
+					}
+					else if(h.get("LowEntered"+(j))==(null))
+					{
+						h.put("LowEntered"+(j), "0");
+					}
+				}
+			}
+
+			}
+			else
+			{
+				for(int j=1; j<8; j++){
+					h.put("LowEntered"+(j), "0");
+				}
+			}
+			h.put("LowEnteredWeek", String.valueOf(weeklyTotal));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void getHighValueReturned(HashMap h, Date endDate, Date week)
+	{
+		int weeklyTotal=0;
+		//High Value Items returned
+		String sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=1 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1) group by date(f.deliveredDate)";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+			for (int i = 0; i < lis.size(); ++i) {
+				o = (Object[]) lis.get(i);
+				for(int j=1; j<8; j++){
+					if(DateUtils.formatDate((Date)o[0], TracingConstants.DISPLAY_DATEFORMAT, null, null).equals(h.get("date"+j))){
+						if(o[1]!=null){
+							h.put("HighReturned"+(j), o[1].toString());
+							weeklyTotal+=Integer.valueOf(o[1].toString());
+						} else {
+							h.put("HighReturned"+(j), "0");					
+						}
+					}
+					else if(h.get("HighReturned"+(j))==(null))
+					{
+						h.put("HighReturned"+(j), "0");
+					}
+				}
+			}
+			}
+			else
+			{
+				for(int j=1; j<8; j++){
+					h.put("HighReturned"+(j), "0");
+				}
+			}
+			h.put("HighReturnedWeek", weeklyTotal);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void getLowValueReturned(HashMap h, Date endDate, Date week)
+	{
+		int weeklyTotal=0;
+		//Low Value Items returned
+		String sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=0 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1) group by date(f.deliveredDate)";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+			for (int i = 0; i < lis.size(); ++i) {
+				o = (Object[]) lis.get(i);
+				for(int j=1; j<8; j++){
+					if(DateUtils.formatDate((Date)o[0], TracingConstants.DISPLAY_DATEFORMAT, null, null).equals(h.get("date"+j))){
+						if(o[1]!=null){
+							h.put("LowReturned"+(j), o[1].toString());
+							weeklyTotal+=Integer.valueOf(o[1].toString());
+						} else {
+							h.put("LowReturned"+(j), "0");
+						}
+					}
+					else if(h.get("LowReturned"+(j))==(null))
+					{
+						h.put("LowReturned"+(j), "0");
+					}
+				}
+			}
+			}
+			else
+			{
+				for(int j=1; j<8; j++){
+					h.put("LowReturned"+(j), "0");
+				}
+			}
+			h.put("LowReturnedWeek", weeklyTotal);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void getMTDTotals(HashMap h, Date endDate, Date week)
+	{
+		//Low Value Items returned
+		String sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=0 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1)";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("LowReturnedMTD", o[1].toString());
+				}
+				else {
+					h.put("LowReturnedMTD", "0");
+				}
+			}
+			else {
+				h.put("LowReturnedMTD", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//High Value Items Returned Month to Date
+		sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=1 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1)";
+		q = null;
+		sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("HighReturnedMTD", o[1].toString());
+				}
+				else {
+					h.put("HighReturnedMTD", "0");
+				}
+			}
+			else {
+				h.put("HighReturnedMTD", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//Low Value Items Entered Month to Date
+		sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=0 and f.receivedDate < :enddate and f.receivedDate >= :lastweek";
+		q = null;
+		sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("LowEnteredMTD", o[1].toString());
+				}
+				else {
+					h.put("LowEnteredMTD", "0");
+				}
+			}
+			else {
+				h.put("LowEnteredMTD", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//High Value Items Entered Month to Date
+		sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=1 and f.receivedDate < :enddate and f.receivedDate >= :lastweek";
+		q = null;
+		sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("HighEnteredMTD", o[1].toString());
+				}
+				else {
+					h.put("HighEnteredMTD", "0");
+				}
+			}
+			else {
+				h.put("HighEnteredMTD", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//Boxes Entered Month to Date
+		sql = "select bc.dateCount, case sum(b.boxCount) when null then 0 else sum(b.boxCount) end from lfBoxCount b left join lfboxcontainer bc on bc.id =b.container_ID "+
+				"where bc.dateCount < :enddate and bc.dateCount >= :lastweek";
+		q = null;
+		sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("BoxesReceivedMTD", o[1].toString());
+				}
+				else {
+					h.put("BoxesReceivedMTD", "0");
+				}
+			}
+			else {
+				h.put("BoxesReceivedMTD", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//Lost Reports Entered Month to Date
+		sql = "select opendate, case count(*) when null then 0 else count(*) end from lflost "+
+				"where openDate < :enddate and OpenDate >= :lastweek";
+		q = null;
+		sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("LostMTDEntered", o[1].toString());
+				}
+				else {
+					h.put("LostMTDEntered", "0");
+				}
+			}
+			else {
+				h.put("LostMTDEntered", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void getYTDTotals(HashMap h, Date endDate, Date week)
+	{
+		//Low Value Items returned
+		String sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=0 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1)";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("LowReturnedYTD", o[1].toString());
+				}
+				else {
+					h.put("LowReturnedYTD", "0");
+				}
+			}
+			else {
+				h.put("LowReturnedYTD", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//High Value Items Returned year to Date
+		sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=1 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1)";
+		q = null;
+		sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("HighReturnedYTD", o[1].toString());
+				}
+				else {
+					h.put("HighReturnedYTD", "0");
+				}
+			}
+			else {
+				h.put("HighReturnedYTD", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//Low Value Items Entered Year to Date
+		sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=0 and f.receivedDate < :enddate and f.receivedDate >= :lastweek";
+		q = null;
+		sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("LowEnteredYTD", o[1].toString());
+				}
+				else {
+					h.put("LowEnteredYTD", "0");
+				}
+			}
+			else {
+				h.put("LowEnteredYTD", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//High Value Items Entered year to Date
+		sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
+				"where i.value=1 and f.receivedDate < :enddate and f.receivedDate >= :lastweek";
+		q = null;
+		sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("HighEnteredYTD", o[1].toString());
+				}
+				else {
+					h.put("HighEnteredYTD", "0");
+				}
+			}
+			else {
+				h.put("HighEnteredYTD", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//Boxes Entered year to Date
+		sql = "select bc.dateCount, case sum(b.boxCount) when null then 0 else sum(b.boxCount) end from lfBoxCount b left join lfboxcontainer bc on bc.id =b.container_ID "+
+				"where bc.dateCount < :enddate and bc.dateCount >= :lastweek";
+		q = null;
+		sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("BoxesReceivedYTD", o[1].toString());
+				}
+				else {
+					h.put("BoxesReceivedYTD", "0");
+				}
+			}
+			else {
+				h.put("BoxesReceivedYTD", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		//Lost Reports Entered Year to Date
+		sql = "select opendate, case count(*) when null then 0 else count(*) end from lflost "+
+				"where openDate < :enddate and OpenDate >= :lastweek";
+		q = null;
+		sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			if(lis.size()!=0){
+				o=(Object[]) lis.get(0);
+				if(o[1]!=null){
+					h.put("LostYTDEntered", o[1].toString());
+				}
+				else {
+					h.put("LostYTDEntered", "0");
+				}
+			}
+			else {
+				h.put("LostYTDEntered", "0");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void getWeekItemCounts(HashMap h, Date endDate, Date fourweek)
+	{
+		int lowenterTotal=0;
+		int highenterTotal=0;
+		int lowShipTotal=0;
+		int highShipTotal=0;
+		int lowWOCTotal=0;
+		int highWOCTotal=0;
+		int LowReceived=0;
+        DecimalFormat twoPlaces = new DecimalFormat("0.00");
+		//Item and Status Counts (Last 4 weeks)
+		String sql="select bc.dateCount, Round(10.56 * .9 * case sum(b.boxCount) when null then 0 else sum(b.boxCount) end) from lfBoxCount b left join lfboxcontainer bc on bc.id =b.container_ID "
+				+"where bc.dateCount < :enddate and bc.dateCount >= :fourweek";
+		SQLQuery q = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("fourweek", DateUtils.formatDate(fourweek, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			o = (Object[]) lis.get(0);
+			if(lis.size()!=0){
+				if(o[1]!=null){
+					h.put("LowReceived", o[1].toString());
+					LowReceived=Integer.valueOf(o[1].toString());
+				} else {
+					h.put("lowReceived", "0");
+				}
+			}
+			else
+			{
+				for(int j=1; j<8; j++){
+					h.put("lowReceived", "0");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		sess = HibernateWrapper.getSession().openSession();
+		sql = "select q1.val, q1.wk1, q1.ct1, q2.ct2, q3.ct3, (q2.ct2+q3.ct3)/q1.ct1*100 as 'Return' "+ 
+			"from (select case  value when 0 then 'Low Value' else 'High Value' END as val, makedate(year(f.receivedDate), 7*week(f.receivedDate)-6) as wk1, "+
+			"case count(*) when null then 0 else count(*) end as ct1 from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek group by value, week(f.receivedDate)) as q1 left outer join "+
+			"(select case  value when 0 then 'Low Value' else 'High Value' END as val, makedate(year(f.receivedDate), 7*week(f.receivedDate)-6) as wk2, "+
+			"case count(*) when null then 0 else count(*) end as ct2 from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1) group by value, week(f.receivedDate, 3)) q2 "+
+			"on q2.val = q1.val and q1.wk1 = q2.wk2 left outer join "+
+			"(select case  value when 0 then 'Low Value' else 'High Value' END as val, makedate(year(f.receivedDate), 7*week(f.receivedDate)-6) as wk3, "+
+			"case count(*) when null then 0 else count(*) end as ct3  from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and (trackingNumber is null or trackingNumber = '') and lost_id is not null group by value, week(f.receivedDate, 3)) q3 "+
+			"on q3.val = q1.val and q3.wk3 = q1.wk1 group by val, q1.wk1 order by q1.wk1 asc, q1.val desc";
+//		sql = "select case  value when 0 then 'Low Value' else 'High Value' END as val, makedate(year(f.receivedDate), 7*week(f.receivedDate)-6) as wk3, "+
+//			"case count(*) when null then 0 else count(*) end as ct2  from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and (trackingNumber is null or trackingNumber = '') and lost_id is not null group by value, week(f.receivedDate, 3)";
+	    q = null;
+		try {
+			q = sess.createSQLQuery(sql.toString());
+			
+			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("fourweek", DateUtils.formatDate(fourweek, TracingConstants.DB_DATEFORMAT, null, null));
+			
+			List lis = q.list();
+			Object[] o;
+			for (int i = 1; i <6; ++i) {
+				h.put("lowEntered"+(i),"0");
+				h.put("lowShipped"+(i), "0");
+				h.put("lowWOC"+(i), "0");
+				h.put("highEntered"+(i), "0");
+				h.put("highShipped"+(i), "0");
+				h.put("highWOC"+(i), "0");
+			}
+			
+			int rowNum=0;
+			for (int i = 0; i < lis.size(); ++i) {
+				o = (Object[]) lis.get(i);
+				if(i%2==0 )
+				{
+					rowNum++;
+				}
+				if(o[0].toString().equals("Low Value")){
+					if(o[2]!=null){
+						h.put("lowEntered"+(rowNum), o[2].toString());
+						lowenterTotal+=Integer.valueOf(o[2].toString());
+					} else {
+						h.put("lowEntered"+(rowNum), "0");
+					}
+					if(o[3]!=null){
+						h.put("lowShipped"+(rowNum), o[3].toString());
+						lowShipTotal+=Integer.valueOf(o[3].toString());
+					} else {
+						h.put("lowShipped"+(rowNum), "0");
+					}
+					if(o[4]!=null){
+						h.put("lowWOC"+(rowNum), o[4].toString());
+						lowWOCTotal+=Integer.valueOf(o[4].toString());
+					} else {
+						h.put("lowWOC"+(rowNum), "0");
+					}
+					
+				}
+				else if (o[0].toString().equals("High Value"))
+				{
+					if(o[2]!=null){
+						h.put("highEntered"+(rowNum), o[2].toString());
+						highenterTotal+=Integer.valueOf(o[2].toString());
+					} else {
+						h.put("highEntered"+(rowNum), "0");
+					}
+					if(o[3]!=null){
+						h.put("highShipped"+(rowNum), o[3].toString());
+						highShipTotal+=Integer.valueOf(o[3].toString());
+					} else {
+						h.put("highShipped"+(rowNum), "0");
+					}
+
+					if(o[4]!=null){
+						h.put("highWOC"+(rowNum), o[4].toString());
+						highWOCTotal+=Integer.valueOf(o[4].toString());
+					} else {
+						h.put("highWOC"+(rowNum), "0");
+					}
+					
+				}
+			}
+			h.put("LowEnterTotal", String.valueOf(lowenterTotal));
+			h.put("LowShipTotal", String.valueOf(lowShipTotal));
+			h.put("highEnterTotal", String.valueOf(highenterTotal));
+			h.put("highShipTotal", String.valueOf(highShipTotal));
+			h.put("LowWocTotal", String.valueOf(lowWOCTotal));
+			h.put("highWocTotal", String.valueOf(highWOCTotal));
+			h.put("TotalWoc", String.valueOf(highWOCTotal+lowWOCTotal));
+			
+			h.put("TotalShipped", String.valueOf(highShipTotal+lowShipTotal));
+			h.put("TotalReceived", String.valueOf(LowReceived+highenterTotal));
+
+
+			h.put("HighReceivedPercent", twoPlaces.format((Double.valueOf(highenterTotal)/Double.valueOf(LowReceived+highenterTotal))*100)+"%");
+			h.put("LowReceivedPercent", twoPlaces.format(Double.valueOf(LowReceived)/(Double.valueOf(LowReceived+highenterTotal))*100)+"%");
+			h.put("TotalReturnedPercent", twoPlaces.format(Double.valueOf(highShipTotal+lowShipTotal+highWOCTotal+lowWOCTotal)/(Double.valueOf(LowReceived+highenterTotal))*100)+"%");
+			
+			h.put("LowTotal", String.valueOf(lowWOCTotal+lowShipTotal));
+			h.put("HighTotal",String.valueOf( highShipTotal+highWOCTotal));
+			h.put("TotalTotal", String.valueOf(highShipTotal+lowShipTotal+highWOCTotal+lowWOCTotal));
+
+			h.put("LowReturnedPercent", twoPlaces.format((Double.valueOf(lowShipTotal+lowWOCTotal)/Double.valueOf(LowReceived))*100)+"%");
+			h.put("HighReturnedPercent", twoPlaces.format((Double.valueOf(highShipTotal+highWOCTotal)/Double.valueOf(highenterTotal))*100)+"%");
+			h.put("TotalReceivedPercent", twoPlaces.format((Double.valueOf(LowReceived)/(Double.valueOf(LowReceived+highenterTotal))*100)+(Double.valueOf(highenterTotal)/Double.valueOf(LowReceived+highenterTotal))*100)+"%");
+			
+			h.put("HighVariance", twoPlaces.format( ((((Double.valueOf(highShipTotal+highWOCTotal)/Double.valueOf(highenterTotal))*100)-9.97)/9.97)*100) +"%");
+			h.put("LowVariance", twoPlaces.format( ((((Double.valueOf(lowShipTotal+lowWOCTotal)/Double.valueOf(LowReceived))*100)-1.19)/1.19)*100)+"%");
+			h.put("TotalVariance", twoPlaces.format( (((Double.valueOf(highShipTotal+lowShipTotal+highWOCTotal+lowWOCTotal)/(Double.valueOf(LowReceived+highenterTotal))*100)-1.90)/1.90)*100)+"%");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public void sendLostCreatedEmail(long id){
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
@@ -2036,6 +3065,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			} catch (UpdateException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	public void sendLFWeekly(){
+//		Agent a=GeneralServiceBean.getAgent(id);
+		Agent a = getAutoAgent();
+		HashMap<String,String> h = getEmailParams();
+		if(sendEmail(a, h, "weekly_email.html",  h.get("SUBJECTLINE"))){
+			Logger.logLF(""+a.getAgent_ID(), "WEEKLY REPORT EMAIL SENT", 0);
 		}
 	}
 	
@@ -2242,6 +3280,60 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return true;
 		}
 		return false;
+	}
+	
+	public boolean sendEmail(Agent a, HashMap params, String htmlFileName, String subjectline){
+		//if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
+			try {
+				String root = TracerProperties.get("email.resources");
+				String imgbanner = TracerProperties.get("lf.email.banner");
+				String configpath = root + "/";
+				String imagepath = root + "/";
+				configpath = root + "/WN/";
+				imagepath = root + "/WN/";
+				boolean embedImage = true;
+				
+//				System.out.println("path: " + root);
+				
+				HtmlEmail he = new HtmlEmail();
+				String currentLocale = a.getCurrentlocale();
+				
+				String from = (String) params.get("RETURNADDRESS");
+				if(from == null || from.trim().length() == 0){
+					from = getAutoAgent().getStation().getCompany().getVariable().getEmail_from();
+				}
+				
+				String host = getAutoAgent().getStation().getCompany().getVariable().getEmail_host();
+				int port = getAutoAgent().getStation().getCompany().getVariable().getEmail_port();
+				
+				he.setHostName(host);
+				he.setSmtpPort(port);
+
+				he.setFrom(from);
+				ArrayList al = new ArrayList();
+				al.add(new InternetAddress("lfcmetrics@nettracer.aero")); 
+				he.setTo(al);
+				
+				String msg = EmailParser.parse(configpath + htmlFileName, params, currentLocale);
+				if(subjectline != null){
+					subjectline = subjectline.replace("{STARTDATE}", "" + params.get("STARTDATE"));
+					subjectline = subjectline.replace("{ENDDATE}", "" + params.get("ENDDATE"));
+				}
+				he.setSubject(subjectline);
+
+				if(msg == null){
+					System.out.println("email is null, check email path: " + configpath + htmlFileName);
+				}
+				he.setHtmlMsg(msg);
+				he.send();
+				
+			}catch (Exception e){
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		//}
+		//return false;
 	}
 	
 	public void testEmail(){
