@@ -297,20 +297,15 @@
                       if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) {
                       	if ((ntUser && ntfsUser) || ntfsUser) { 
                       		if (((ClaimForm)session.getAttribute("claimForm")).getClaim().getId() == 0) {
-	                      		if (((ClaimForm)session.getAttribute("claimForm")).getClaim().getNtIncident() != null) { %>
+	                      		if (((ClaimForm)session.getAttribute("claimForm")).getClaim().getIncident() != null && 
+	                      				((ClaimForm)session.getAttribute("claimForm")).getClaim().getIncident().getId() != 0) { %>
 	                      
 			                   <a href='fraud_results.do?incident=<bean:write name="claimForm" property="claim.ntIncident.incident_ID" />'><span class="aa">&nbsp;<br />&nbsp;</span>
 			                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
 			                        <span class="cc">&nbsp;
 			                          <br />
 			                          &nbsp;</span></a>
-	                      		<% } else { %>
-		                   <a href='fraud_results.do'><span class="aa">&nbsp;<br />&nbsp;</span>
-		                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
-		                        <span class="cc">&nbsp;
-		                          <br />
-		                          &nbsp;</span></a>
-	                   	  		<% } 
+	                      		<% } 
                       		} else { %>
 		                   	<a href='fraud_results.do?claimId=<bean:write name="claimForm" property="claim.id" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
 		                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
