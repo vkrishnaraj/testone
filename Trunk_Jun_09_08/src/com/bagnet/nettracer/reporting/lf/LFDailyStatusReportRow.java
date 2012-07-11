@@ -11,6 +11,7 @@ public class LFDailyStatusReportRow {
 	private int lvirwr;
 	private int hvirwor;
 	private int lvirwor;
+	private int boxCount;
 	
 	public String getReceivedDate() {
 		return receivedDate;
@@ -74,6 +75,14 @@ public class LFDailyStatusReportRow {
 	
 	public void setLvirwor(int lvirwor) {
 		this.lvirwor = lvirwor;
+	}
+
+	public int getBoxCount() {
+		return boxCount;
+	}
+	
+	public void setBoxCount(int boxCount) {
+		this.boxCount = boxCount;
 	}
 
 }

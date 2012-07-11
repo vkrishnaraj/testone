@@ -26,6 +26,7 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 	private final int LVIRWR_COUNT = 5;
 	private final int HVIRWOR_COUNT = 6;
 	private final int LVIRWOR_COUNT = 7;
+	private final int BOX_COUNT = 8;
 
 	public LFDailyStatusReport(ResourceBundle resources) {
 		super(resources);
@@ -37,8 +38,14 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 		String sql = "select ifnull(lf.receivedDate,'') as 'received_date',s.stationcode,ifnull(hvir.count, 0) as 'hvir_count', " +
 					 "ifnull(lvir.count, 0) as 'lvir_count',ifnull(hvirwr.count, 0) as 'hvirwr_count', " +
 					 "ifnull(lvirwr.count, 0) as 'lvirwr_count',ifnull(hvirwor.count, 0) as 'hvirwor_count', " +
-					 "ifnull(lvirwor.count, 0) as 'lvirwor_count' from station s " +
-					 "join lffound lf on s.station_id = lf.station_id " +
+					 "ifnull(lvirwor.count, 0) as 'lvirwor_count', ifnull(boxc.boxcount, 0) as 'box_count' from " +
+					 "(select xx.dateCount as 'received_date', x.station_ID as 'station' from lfboxcount x "+
+					 "left outer join lfboxcontainer xx on x.container_ID = xx.id where xx.dateCount between :startDate and :endDate group by xx.dateCount UNION "+
+					 "select tt.receivedDate 'received_date', tt.station_ID 'station' from lffound tt where tt.receivedDate between :startDate and :endDate ) zz " +
+					 "left outer join station s on zz.station = s.Station_ID " +
+					 "join lffound lf on zz.received_date = lf.receivedDate " + // left join lfboxcount bcc on bcc.id=bc.container_id
+					 "left outer join (select bcc.dateCount as 'received_date', bc.boxCount as 'boxcount', bc.station_ID as 'station' from lfboxcount bc "+
+					 				  "left outer join lfboxcontainer bcc on bc.container_ID = bcc.id where bcc.dateCount between :startDate and :endDate group by bcc.dateCount order by bcc.dateCount, bc.Station_ID) boxc on zz.received_date= boxc.received_date " +
 					 "left outer join (select lf.receivedDate as 'received_date',s.station_id,count(i.id) as 'count' from station s " +
                         			  "left outer join lffound lf on s.station_id = lf.station_id " +
                         			  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " + 
@@ -82,7 +89,7 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 					                  "and i.lost_id is null " +
 					                  "group by lf.receivedDate,s.station_id order by lf.receivedDate,s.station_id) lvirwor on lf.receivedDate = lvirwor.received_date and s.station_id = lvirwor.station_id " +
 					 "where 1 = 1 " + getStationSql(srDto) + "and s.companycode_ID = '" + TracingConstants.LF_LF_COMPANY_ID + "' and lf.receivedDate between :startDate and :endDate " +
-					 "group by lf.receivedDate,s.stationcode " +
+					 "group by zz.received_date,s.stationcode " +
 					 "order by s.stationcode,lf.receivedDate;";
 		
 		return sql;
@@ -101,6 +108,7 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 		query.addScalar("lvirwr_count", Hibernate.INTEGER);
 		query.addScalar("hvirwor_count", Hibernate.INTEGER);
 		query.addScalar("lvirwor_count", Hibernate.INTEGER);
+		query.addScalar("box_count", Hibernate.INTEGER);
 		
 	}
 	
@@ -121,6 +129,7 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 			currentRow.setLvirwr((Integer) data[LVIRWR_COUNT]);
 			currentRow.setHvirwor((Integer) data[HVIRWOR_COUNT]);
 			currentRow.setLvirwor((Integer) data[LVIRWOR_COUNT]);
+			currentRow.setBoxCount((Integer) data[BOX_COUNT]);
 			
 			toReturn.add(currentRow);
 		}

@@ -116,6 +116,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.addColumn(resources.getString("report.lf.daily.status.lvirwr"), "lvirwr", Integer.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.daily.status.hvirwor"), "hvirwor", Integer.class.getName(), 50, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.daily.status.lvirwor"), "lvirwor", Integer.class.getName(), 50, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.daily.status.boxcount"), "boxCount", Integer.class.getName(), 50, detailStyle, header);
 
 			drb.setIgnorePagination(true);
 			drb.setUseFullPageWidth(true);
