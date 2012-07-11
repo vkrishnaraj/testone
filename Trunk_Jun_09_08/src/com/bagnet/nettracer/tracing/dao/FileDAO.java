@@ -35,6 +35,13 @@ private static final String EXCEPTION_MESSAGE = "Exception in FileDAO";
 	}
 	
 	public static boolean saveFile(File file, boolean firstSave) {
+		//set empty string airlineIncidentId to null for database constraint to work properly
+		if(file != null && file.getIncident() != null 
+				&& file.getIncident().getAirlineIncidentId() != null 
+				&& file.getIncident().getAirlineIncidentId().trim().length() == 0){
+			file.getIncident().setAirlineIncidentId(null);
+		}
+		
 		boolean success = false;
 		if (file == null) {
 			return success;
