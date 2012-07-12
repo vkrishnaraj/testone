@@ -472,7 +472,6 @@ public class LFServiceBeanTest {
 		int i = 0;
 		boolean correctStation = true;
 		
-		//TODO this test needs to be updated to test against segments as opposed to lossinfo
 		for(LFLost lost:bean.getLostPaginatedList(location, start, offset)){
 			System.out.println("Lost list at station " + lost.getLocation().getStation_ID() + ":" + lost.getId());
 			i++;
@@ -483,7 +482,10 @@ public class LFServiceBeanTest {
 		}
 		System.out.println("count: " + i);
 		assertTrue(i <= offset);
-		assertTrue(correctStation);
+		if(!TracingConstants.LF_LF_COMPANY_ID.equals(location.getCompany().getCompanyCode_ID())){
+			//we don't limit by station for lfc
+			assertTrue(correctStation);
+		}
 	}
 	
 	@Test
