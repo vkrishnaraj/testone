@@ -63,7 +63,7 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("savetracingButton");
 				assertEquals("Email is required.", selenium.getAlert());
 				selenium.type("name=addresses[0].email", "email@email.com");
-				//selenium.select("id=numRonKitsIssued", "label=1");
+				selenium.select("id=numRonKitsIssued", "label=1");
 				selenium.click("savetracingButton");
 				assertEquals("Baggage Tag Number is required.", selenium.getAlert());
 				selenium.type("name=claimcheck[0].claimchecknum", "WS123456");
