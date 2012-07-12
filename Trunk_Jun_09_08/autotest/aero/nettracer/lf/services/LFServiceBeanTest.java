@@ -471,10 +471,13 @@ public class LFServiceBeanTest {
 		int offset = 15;
 		int i = 0;
 		boolean correctStation = true;
+		
+		//TODO this test needs to be updated to test against segments as opposed to lossinfo
 		for(LFLost lost:bean.getLostPaginatedList(location, start, offset)){
 			System.out.println("Lost list at station " + lost.getLocation().getStation_ID() + ":" + lost.getId());
 			i++;
-			if(lost.getLossInfo().getDestination().getStation_ID() != location.getStation_ID()){
+			if((lost.getLossInfo().getDestination().getStation_ID() != location.getStation_ID()
+				&& lost.getLossInfo().getDestination().getLz_ID() != location.getStation_ID())){
 				correctStation = false;
 			}
 		}
