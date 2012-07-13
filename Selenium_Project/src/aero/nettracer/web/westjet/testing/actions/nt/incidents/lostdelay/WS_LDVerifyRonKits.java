@@ -110,7 +110,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("# RON Kits issued:"));
+			verifyTrue(selenium.isTextPresent("# Toiletry Kits issued:"));
 			verifyTrue(selenium.isElementPresent("//select[@id='numRonKitsIssued']"));
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[4]/input", "444444");
 			selenium.type("//div[@id='pax_0']/table/tbody/tr[2]/td/input", "test");
@@ -138,7 +138,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 			selenium.type("//tr[@id='inventory_0_1']/td[2]/input", "test");
 			selenium.type("//tr[@id='inventory_0_2']/td[2]/input", "test");
 			selenium.click("//input[@id='saveButton']");
-			assertEquals("Please select a value for  # RON Kits issued", selenium.getAlert());
+			assertEquals("Please select a value for  # Toiletry Kits issued", selenium.getAlert());
 			selenium.select("//select[@id='numRonKitsIssued']", "label=1");
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
