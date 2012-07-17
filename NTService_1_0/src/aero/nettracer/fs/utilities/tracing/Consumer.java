@@ -613,7 +613,7 @@ public class Consumer implements Runnable{
 		return ret;
 	}
 	
-	private static void processAddress(MatchHistory match){
+	protected static void processAddress(MatchHistory match){
 		Set<FsAddress> plist1 = match.getFile1().getAddressCache();
 		if(plist1 == null){
 			plist1 = getAddresses(match.getFile1());
@@ -628,6 +628,8 @@ public class Consumer implements Runnable{
 		Set <MatchDetail> details = match.getDetails();
 		HashSet<String> addressHashSet = new HashSet<String>();
 		
+		boolean hasProxMatch = false;
+		boolean hasCloseProxMatch = false;
 		for(FsAddress a1:plist1){
 			String tas1 = getStringVersionOfAddress(a1);
 			for(FsAddress a2:plist2){
@@ -666,7 +668,13 @@ public class Consumer implements Runnable{
 									detail.setPercent(WHITELIST_MATCH);
 									detail.setDescription(detail.getDescription() + " (Whitelisted - " + (a1.getWhitelist()!=null?a1.getWhitelist().getDescription():a2.getWhitelist().getDescription()) + ")");
 								} else {
-									detail.setPercent(ADDRESS_FAR_PROXIMITY);
+									if(hasProxMatch){
+										//only counting prox match once
+										detail.setPercent(0.0);
+									} else {
+										detail.setPercent(ADDRESS_FAR_PROXIMITY);
+										hasProxMatch = true;
+									}
 								}
 								detail.setMatchtype(MatchType.address);
 								details.add(detail);
@@ -683,7 +691,12 @@ public class Consumer implements Runnable{
 									detail.setPercent(WHITELIST_MATCH);
 									detail.setDescription(detail.getDescription() + " (Whitelisted - " + (a1.getWhitelist()!=null?a1.getWhitelist().getDescription():a2.getWhitelist().getDescription()) + ")");
 								} else {
-									detail.setPercent(ADDRESS_CLOSE_PROXIMITY);
+									if(hasCloseProxMatch){
+										detail.setPercent(0.0);
+									} else {
+										detail.setPercent(ADDRESS_CLOSE_PROXIMITY);
+										hasCloseProxMatch = true;
+									}
 								}
 								detail.setMatchtype(MatchType.address);
 								details.add(detail);

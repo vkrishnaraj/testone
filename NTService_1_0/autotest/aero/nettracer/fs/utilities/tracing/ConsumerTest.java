@@ -11,11 +11,13 @@ import org.junit.Test;
 
 import aero.nettracer.fs.model.CreditCard;
 import aero.nettracer.fs.model.File;
+import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.utilities.GeoCode;
 
 public class ConsumerTest {
 	@Test
@@ -364,6 +366,119 @@ public class ConsumerTest {
 		Consumer.proccessCreditCard(c1, c2, mh);
 		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
 				&& "Credit Card 4 digit Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+	}
+	
+	@Test
+	public void testProximityMatch(){
+		MatchHistory mh = createMatchHistory(createFile(),createFile());
+		FsAddress address1 = new FsAddress();
+		address1.setLattitude(1);
+		address1.setLongitude(1);
+		address1.setGeocodeType(GeoCode.ACCURACY_STREET);
+		address1.setAddress1("2765 Paces Ferry Rd");
+		address1.setCity("Atlanta");
+		address1.setState("GA");
+		address1.setZip("30339");
+		address1.setCountry("US");
+		
+		FsAddress address2 = new FsAddress();
+		address2.setLattitude(1);
+		address2.setLongitude(1);
+		address2.setGeocodeType(GeoCode.ACCURACY_STREET);
+		address2.setAddress1("2765 Paces Ferry Rd");
+		address2.setCity("Atlanta");
+		address2.setState("GA");
+		address2.setZip("30339");
+		address2.setCountry("US");
+		
+		//single close prox
+		mh.getFile1().getClaims().iterator().next().getClaimant().setAddress(address1);
+		mh.getFile2().getClaims().iterator().next().getClaimant().setAddress(address2);
+		Consumer.processAddress(mh);
+		assertTrue(mh.getDetails().size() > 0);
+		int proxCount = 0;
+		int proxScore = 0;
+		int closeProxCount = 0;
+		int closeProxScore = 0;
+		for(MatchDetail md:mh.getDetails()){
+			if(md.getDescription().contains("Close Proximity Match")){
+				closeProxCount++;
+				closeProxScore += md.getPercent();
+			}
+			else if(md.getDescription().contains("Proximity Match")){
+				proxCount++;
+				proxScore += md.getPercent();
+			}
+		}
+		assertTrue(proxCount == 0 && proxScore == 0 && closeProxCount == 1 && closeProxScore == 20);
+		
+		//single prox
+		address2.setLongitude(1.1);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.processAddress(mh);
+		assertTrue(mh.getDetails().size() > 0);
+		proxCount = 0;
+		proxScore = 0;
+		closeProxCount = 0;
+		closeProxScore = 0;
+		for(MatchDetail md:mh.getDetails()){
+			if(md.getDescription().contains("Close Proximity Match")){
+				closeProxCount++;
+				closeProxScore += md.getPercent();
+			}
+			else if(md.getDescription().contains("Proximity Match")){
+				proxCount++;
+				proxScore += md.getPercent();
+			}
+		}
+		assertTrue(proxCount == 1 && proxScore == 5 && closeProxCount == 0 && closeProxScore == 0);
+		
+		
+		FsAddress address3 = new FsAddress();
+		address3.setLattitude(1);
+		address3.setLongitude(1);
+		address3.setGeocodeType(GeoCode.ACCURACY_STREET);
+		address3.setAddress1("2760 Paces Ferry Rd");
+		address3.setCity("Atlanta");
+		address3.setState("GA");
+		address3.setZip("30339");
+		address3.setCountry("US");
+		Person p3 = new Person();
+		p3.setAddress(address3);
+		mh.getFile1().getClaims().iterator().next().getClaimants().add(p3);
+		
+		FsAddress address4 = new FsAddress();
+		address4.setLattitude(1);
+		address4.setLongitude(1.1);
+		address4.setGeocodeType(GeoCode.ACCURACY_STREET);
+		address4.setAddress1("2760 Paces Ferry Rd");
+		address4.setCity("Atlanta");
+		address4.setState("GA");
+		address4.setZip("30339");
+		address4.setCountry("US");
+		Person p4 = new Person();
+		p4.setAddress(address4);
+		mh.getFile2().getClaims().iterator().next().getClaimants().add(p4);
+		
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.processAddress(mh);
+		assertTrue(mh.getDetails().size() > 0);
+		proxCount = 0;
+		proxScore = 0;
+		closeProxCount = 0;
+		closeProxScore = 0;
+		for(MatchDetail md:mh.getDetails()){
+			if(md.getDescription().contains("Close Proximity Match")){
+				closeProxCount++;
+				closeProxScore += md.getPercent();
+			}
+			else if(md.getDescription().contains("Proximity Match")){
+				proxCount++;
+				proxScore += md.getPercent();
+			}
+		}
+		assertTrue(proxCount > 1 && proxScore == 5 && closeProxCount == 0 && closeProxScore == 0);
 		
 	}
 	
