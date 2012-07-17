@@ -298,7 +298,7 @@ public class Audit_Claim implements Serializable {
 	/**
 	 * @return Returns the claim_ID.
 	 * 
-	 * @hibernate.property type="integer"
+	 * @hibernate.property type="long"
 	 */
 	public long getClaim_ID() {
 		return Claim_ID;

@@ -56,6 +56,7 @@ public class ExpensePayoutBMO {
 						"updating.expense.audit", user), user, sess);
 				tx2.commit();
 			} catch (Exception e) {
+				logger.error("Error updating expense "+ep.getExpensepayout_ID(), e);
 				tx2.rollback();
 			}
 			return true;
