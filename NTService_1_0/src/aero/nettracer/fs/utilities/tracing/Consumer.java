@@ -816,14 +816,14 @@ public class Consumer implements Runnable{
 		}
 	}
 
-	private static void proccessCreditCard(CreditCard r1, CreditCard r2, MatchHistory match){
+	protected static void proccessCreditCard(CreditCard r1, CreditCard r2, MatchHistory match){
 		if(r1 != null && r2 != null){
 			boolean num4 = (r1.getCcNumLastFour() != null && r1.getCcNumLastFour().trim().length() > 0 && r1.getCcNumLastFour().equals(r2.getCcNumLastFour())) ? true:false;
 			boolean num16 = (r1.getCcNumber() != null && r1.getCcNumber().trim().length() > 0 && r1.getCcNumber().equals(r2.getCcNumber())) ? true:false;
 			boolean type = (r1.getCcType() != null && r1.getCcType().trim().length() > 0 && r1.getCcType().equals(r2.getCcType())) ? true:false;
-			boolean exp = (r1.getCcExpMonth() != 0 && r1.getCcExpMonth() == r2.getCcExpMonth() && r1.getCcExpYear() == r2.getCcExpYear() ) ? true:false;
-			boolean typeEmpty = (r1.getCcType() != null && r1.getCcType().trim().length() > 0) ? false:true;
-			boolean expEmpty = (r1.getCcExpMonth() != 0) ? false:true;
+			boolean exp = (r1.getCcExpMonth() != 0 && r1.getCcExpMonth() == r2.getCcExpMonth() && r1.getCcExpYear() != 0 && r1.getCcExpYear() == r2.getCcExpYear() ) ? true:false;
+			boolean typeEmpty = (r1.getCcType() != null && r1.getCcType().trim().length() > 0 && r2.getCcType() != null && r2.getCcType().trim().length() > 0) ? false:true;
+			boolean expEmpty = (r1.getCcExpMonth() != 0 && r2.getCcExpMonth() !=0 && r1.getCcExpYear() != 0 && r2.getCcExpYear() != 0) ? false:true;
 			
 			
 //			System.out.print("1CC4:" + (r1.getCcNumLastFour() == null ? "null":r1.getCcNumLastFour()) + " ");
@@ -847,7 +847,7 @@ public class Consumer implements Runnable{
 					detail.setDescription("Credit Card Full Match");
 					detail.setPercent(P_CC_16 + P_CC_EXP + P_CC_TYPE);
 					detail.setMatchtype(MatchType.cc);
-				} else if(type && expEmpty) {
+				} else if(type) {
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
@@ -856,7 +856,7 @@ public class Consumer implements Runnable{
 					detail.setDescription("Credit Card Number and Type Match");
 					detail.setPercent(P_CC_16 + P_CC_TYPE);
 					detail.setMatchtype(MatchType.cc);
-				} else if(exp && typeEmpty){
+				} else if(exp){
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
@@ -865,7 +865,7 @@ public class Consumer implements Runnable{
 					detail.setDescription("Credit Card Number and Expiration Match");
 					detail.setPercent(P_CC_16 + P_CC_EXP);
 					detail.setMatchtype(MatchType.cc);
-				} else if(expEmpty && typeEmpty){
+				} else {
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);

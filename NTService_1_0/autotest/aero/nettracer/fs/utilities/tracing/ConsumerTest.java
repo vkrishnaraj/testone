@@ -5,12 +5,15 @@ import static org.junit.Assert.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 import org.junit.Test;
 
+import aero.nettracer.fs.model.CreditCard;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchHistory;
 
@@ -176,6 +179,193 @@ public class ConsumerTest {
 		assertTrue(match.getDetails().size()==2);
 	}
 	
+	@Test
+	public void testProcessCC(){
+		MatchHistory mh = new MatchHistory();
+		CreditCard c1 = new CreditCard();
+		CreditCard c2 = new CreditCard();
+		String cc1 = "1234123412341234";
+		String cc2 = "4321432143214321";
+		String last4a = "1234";
+		String last4b = "4321";
+		
+		
+		c1.setCcNumber(cc1);
+		c2.setCcNumber(cc1);
+		c1.setCcNumLastFour(last4a);
+		c2.setCcNumLastFour(last4a);
+		c1.setCcExpMonth(2);
+		c2.setCcExpMonth(2);
+		c1.setCcExpYear(12);
+		c2.setCcExpYear(12);
+		c1.setCcType("VI");
+		c2.setCcType("VI");
+		
+		//full 16 match
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card Full Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//16 and type with null expiration
+		c2.setCcExpYear(0);
+		c2.setCcExpMonth(0);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card Number and Type Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//16 and type with different expiration
+		c2.setCcExpYear(14);
+		c2.setCcExpMonth(6);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card Number and Type Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//16 and exp with null type
+		c2.setCcExpYear(14);
+		c2.setCcExpMonth(6);
+		c1.setCcExpYear(14);
+		c1.setCcExpMonth(6);
+		c1.setCcType(null);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card Number and Expiration Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//16 and exp with different type
+		c2.setCcExpYear(14);
+		c2.setCcExpMonth(6);
+		c1.setCcExpYear(14);
+		c1.setCcExpMonth(6);
+		c1.setCcType("VI");
+		c2.setCcType("AX");
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card Number and Expiration Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//16 only
+		c2.setCcExpYear(0);
+		c2.setCcExpMonth(0);
+		c1.setCcExpYear(0);
+		c1.setCcExpMonth(0);
+		c1.setCcType("VI");
+		c2.setCcType("AX");
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card Number Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//4 full match
+		c1.setCcNumber(null);
+		c2.setCcNumber(null);
+		c1.setCcNumLastFour(last4a);
+		c2.setCcNumLastFour(last4a);
+		c1.setCcExpMonth(6);
+		c2.setCcExpMonth(6);
+		c1.setCcExpYear(14);
+		c2.setCcExpYear(14);
+		c1.setCcType("VI");
+		c2.setCcType("VI");
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card 4 digit, type and expiration Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//4 type c1 null exp year
+		c1.setCcExpYear(0);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card 4 digit and Type Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//4 type c2 null exp year
+		c1.setCcExpYear(14);
+		c2.setCcExpYear(0);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card 4 digit and Type Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//4 type c1 null exp month
+		c1.setCcExpYear(14);
+		c2.setCcExpYear(14);
+		c1.setCcExpMonth(0);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card 4 digit and Type Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//4 type c1 null exp month/yeah
+		c1.setCcExpYear(0);
+		c2.setCcExpYear(14);
+		c1.setCcExpMonth(0);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card 4 digit and Type Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//4 type c1/c2 null exp
+		c1.setCcExpYear(0);
+		c2.setCcExpYear(0);
+		c1.setCcExpMonth(0);
+		c2.setCcExpMonth(0);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card 4 digit and Type Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//4 type c1/c2 exp diff
+		c1.setCcExpYear(14);
+		c2.setCcExpYear(12);
+		c1.setCcExpMonth(6);
+		c2.setCcExpMonth(6);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 0);
+		
+		//4 exp c1 type null
+		c1.setCcExpYear(14);
+		c2.setCcExpYear(14);
+		c1.setCcExpMonth(6);
+		c2.setCcExpMonth(6);
+		c1.setCcType(null);
+		c2.setCcType("VI");
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card 4 digit and Expiration Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//4 exp c2 type null
+		c2.setCcType(null);
+		c1.setCcType("VI");
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card 4 digit and Expiration Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+		//4 exp type diff
+		c2.setCcType("AX");
+		c1.setCcType("VI");
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 0);
+		
+		//4 only
+		c1.setCcExpYear(0);
+		c2.setCcExpYear(0);
+		c1.setCcExpMonth(0);
+		c2.setCcExpMonth(0);
+		c1.setCcType(null);
+		c2.setCcType(null);
+		mh.setDetails(new LinkedHashSet<MatchDetail>());
+		Consumer.proccessCreditCard(c1, c2, mh);
+		assertTrue(mh.getDetails() != null && mh.getDetails().size() == 1 
+				&& "Credit Card 4 digit Match".equals(mh.getDetails().iterator().next().getDescription()));
+		
+	}
 	
 	private static File createFile(){
 		File file = new File();
