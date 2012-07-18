@@ -31,6 +31,7 @@
 	<script type="text/javascript" src="http://tickets.airtran.com/Common/scripts/protofx.js"></script>
 	
 	<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer.js"></script>
+	<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_load.js"></script>
 	
 	
 	<style type="text/css">

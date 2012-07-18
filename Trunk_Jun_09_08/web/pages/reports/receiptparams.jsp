@@ -76,6 +76,7 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
 <link href="deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
 <link href="deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/nettracer.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/nettracer_load.js"></SCRIPT>
 <table cellspacing="0" id="bodytable">
   <tr>
     <td id="topcell">

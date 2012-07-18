@@ -49,6 +49,7 @@ response.addDateHeader("Expires", -1);
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/javascript-xpath-latest.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/designScripts.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer.js"></script>
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_load.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/date.js"></script>
 
 
