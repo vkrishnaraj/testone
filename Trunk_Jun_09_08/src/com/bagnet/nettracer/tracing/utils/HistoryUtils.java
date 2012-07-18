@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.utils;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.hibernate.criterion.Expression;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Billing;
+import com.bagnet.nettracer.tracing.forms.QuickSearchForm;
 import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
@@ -51,5 +53,13 @@ public class HistoryUtils {
 		{
 			HCL.put(HO.getObjectID()+HCL.getQueue().size(), HO);
 		}
+	}
+	
+	public static void getHistoryContainer(QuickSearchForm theForm,HttpSession session)
+	{
+		HistoryContainer hcl =(HistoryContainer)session.getAttribute("historyContainer");
+		ArrayList<HistoryObject> Hlist=hcl.getRevNewestItems(10);
+				
+		theForm.setHistCon(Hlist);
 	}
 }

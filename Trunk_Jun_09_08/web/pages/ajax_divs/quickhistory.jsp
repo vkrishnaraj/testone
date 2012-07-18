@@ -44,7 +44,7 @@ jQuery(document).ready(function() {
 	<ul class="tabs">
 		<span onclick="switchView(this)"><li  rel="search" >Search
 		</li></span>
-		<span onclick="switchView(this)"><li class="active" rel="history" onclick="switchView()">History
+		<span onclick="switchView(this)"><li class="active" rel="history" >History
 		</li></span>
 	</ul>
 </div>
@@ -92,10 +92,10 @@ jQuery(document).ready(function() {
 </div>
 
 <div id="search" class="tab_content">
-
-	<html:text styleId="quickSearchQuery3" name="quickSearchForm" property="search" onkeydown="quickSearchKey3()" styleClass="textfield" size="20" maxlength="15"></html:text>
+<div style="text-align: center; padding: 0 5 0 5; border-bottom: 2px blue solid;">      <strong>Please enter your search criteria</strong><br/><p/><input type="text" name="search" class="textfield" id="quickSearchQuery3" onKeyDown="quickSearchKey3();"/>&nbsp; <button type="button" id="button" onclick="quickSearchKey4();">Search</button><br /><br /></div>
+	<!--<html:text styleId="quickSearchQuery3" name="quickSearchForm" property="search" onkeydown="quickSearchKey3()" styleClass="textfield" size="20" maxlength="15"></html:text>
 &nbsp;
-<button type="button" id="button" onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  quickSearchKey4();">Search</button>
+<button type="button" id="button" onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  quickSearchKey4();">Search</button>-->
 
 
 <c:if test="${quickSearchForm.dto.prepop == true}">

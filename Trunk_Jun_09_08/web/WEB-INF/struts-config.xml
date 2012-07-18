@@ -872,7 +872,7 @@
 			<forward name="success" path="ajax_quickSearchResponse"/>
 		</action>
 		
-		<action path="/quickHistory" type="com.bagnet.nettracer.tracing.actions.QuickSearchAction" name="quickSearchForm" scope="request" validate="false">
+		<action path="/quickHistory" type="com.bagnet.nettracer.tracing.actions.QuickHistoryAction" name="quickSearchForm" scope="request" validate="false">
 			<forward name="success" path="ajax_quickHistoryResponse"/>
 		</action>
 		

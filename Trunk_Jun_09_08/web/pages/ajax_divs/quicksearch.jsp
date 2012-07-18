@@ -31,7 +31,7 @@
 jQuery(document).ready(function() {
 	
 	jQuery(".tab_content").hide();
-	jQuery(".tab_content:first").show(); 
+	jQuery(".tab_content:last").show(); 
 	
 });
 
@@ -39,19 +39,62 @@ jQuery(document).ready(function() {
 
 <div id="header">
 	<ul class="tabs">
-		<span onclick="switchView(this)"><li  class="active" rel="search" >Search
+		<span onclick="switchView(this)" id="searchShow" ><li  class="active" rel="search">Search
 		</li></span>
-		<span onclick="switchView(this)"><li rel="history" >History
+		<span onclick="switchView(this)" id="historyShow"><li rel="history">History
 		</li></span>
 	</ul>
 </div>
 <div style="text-align: center; padding: 0 0 0 0; border-bottom: 2px blue solid;">
 <div class="tab_container"> 
-<div id="search" class="tab_content">
+<div id="history" class="tab_content">
+	<span style="float:left">
+		<h1>Matching User History</h1>
+	</span>
 
-	<html:text styleId="quickSearchQuery3" name="quickSearchForm" property="search" onkeydown="quickSearchKey3()" styleClass="textfield" size="20" maxlength="15"></html:text>
+	<c:if test="${empty quickSearchForm.histCon}">
+		<br/><br/><div style="text-align:center; color:red;"><bean:message key="result.nohistory"/></div>
+	</c:if>
+
+	<c:if test="${!empty quickSearchForm.histCon}">
+
+		<table class="modaltable" cellspacing="2" cellpadding="2">
+			<tr class="mh">
+				<td class="mh"><b> <bean:message
+					key="colname.history_objectId" /></b></td>
+				<td class="mh"><b> <bean:message
+					key="colname.history_objectType" /></b></td>
+				<td class="mh"><b> <bean:message
+					key="colname.history_description" /></b></td>
+				<td class="mh"><b> <bean:message
+					key="colname.history_date" /> </b></td>
+			</tr>
+
+			<logic:iterate id="results" name="quickSearchForm"
+				property="histCon"
+				type="com.bagnet.nettracer.tracing.history.HistoryObject">
+				
+				<tr class="modaltdG">
+					<!--<td><=session.getAttribute("user")%></td>-->
+					<td style="text-align:left;"><a href="<bean:write name="results" property="linkURL"/>"><bean:write name="results" property="objectID" /></a></td>
+					<td style="text-align:left;"><bean:write name="results" property="objectType" /></td>
+					
+					<td style="text-align:left;"><bean:write name="results" property="statusDesc" /></td>
+					<td style="text-align:left;"><bean:write name="results" property="date" /></td>
+					
+				</tr>
+			</logic:iterate>
+		</table>
+	</c:if>
+</div>
+
+<div id="search" class="tab_content">
+<div style="text-align: center; padding: 0 5 0 5; border-bottom: 2px blue solid;">      <strong>Please enter your search criteria</strong><br/><p/><input type="text" name="search" class="textfield" id="quickSearchQuery3" onKeyDown="quickSearchKey3();"/>&nbsp; <button type="button" id="button" onclick="quickSearchKey4();">Search</button><br /><br /></div>
+	<!--<html:text styleId="quickSearchQuery3" name="quickSearchForm" property="search" onkeydown="quickSearchKey3()" styleClass="textfield" size="20" maxlength="15"></html:text>
 &nbsp;
-<button type="button" id="button" onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  quickSearchKey4();">Search</button>
+<button type="button" id="button" onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  quickSearchKey4();">Search</button>-->
+
+
 <c:if test="${quickSearchForm.dto.prepop == true}">
 <% if (createOnHand || createMissing || createDelayed || createDamaged) { %>
 	 <div style="text-align: center; padding: 5 5 5 5; border-bottom: 2px blue solid;">
@@ -88,6 +131,7 @@ jQuery(document).ready(function() {
 	On-Hand</button>
 	<% } %>
 	</center>
+	
 	<br />
 <% } %>
 </c:if>
@@ -441,11 +485,11 @@ Automated Search Dates: <c:out  value="${quickSearchForm.dto.startDate}"/> - <c:
 <table class="modaltable" cellspacing="2" cellpadding="2">
 
 	<tr class="mh">
-              <td width="120" class="mh"><b><bean:message key="scanner.string1" /></b></td>
-              <td width="60" class="mh"><b><bean:message key="scanner.string2" /></b></td>
-              <td width="60" class="mh"><b><bean:message key="scanner.string3" /></b></td>
-              <td width="200" class="mh"><b><bean:message key="scanner.string4" /></b></td>
-              <td width="60" class="mh"><b><bean:message key="scanner.ohd.id" /></b></td>
+              <td width="24%" class="mh"><b><bean:message key="scanner.string1" /></b></td>
+              <td width="12%" class="mh"><b><bean:message key="scanner.string2" /></b></td>
+              <td width="12%" class="mh"><b><bean:message key="scanner.string3" /></b></td>
+              <td width="40%" class="mh"><b><bean:message key="scanner.string4" /></b></td>
+              <td width="12%" class="mh"><b><bean:message key="scanner.ohd.id" /></b></td>
 	</tr>
 	            <c:forEach var="scannerDTO" items="${quickSearchForm.dto.SList}">
 				<tr class="modaltdG">
@@ -477,7 +521,7 @@ Automated Search Dates: <c:out  value="${quickSearchForm.dto.startDate}"/> - <c:
                   <c:if test='${scannerDTO.string4 != null && scannerDTO.string4 != ""}'>
                     <c:out value="${scannerDTO.string4}" escapeXml="false"/>
                   </c:if>
-                  <c:if test='${scannerDTO.string4 == null || scannerDTO.string4 == ""}'>
+                   <c:if test='${scannerDTO.string4 == null || scannerDTO.string4 == ""}'>
                     &nbsp;
                   </c:if>
                 </td>
@@ -501,45 +545,5 @@ Automated Search Dates: <c:out  value="${quickSearchForm.dto.startDate}"/> - <c:
 
 
 <br />
-</div>
-
-<div id="history" class="tab_content">
-	<span style="float:left">
-		<h1>Matching User History</h1>
-	</span>
-
-	<c:if test="${empty quickSearchForm.histCon}">
-		<br/><br/><div style="text-align:center; color:red;"><bean:message key="result.nohistory"/></div>
-	</c:if>
-
-	<c:if test="${!empty quickSearchForm.histCon}">
-
-		<table class="modaltable" cellspacing="2" cellpadding="2">
-			<tr class="mh">
-				<td class="mh"><b> <bean:message
-					key="colname.history_objectId" /></b></td>
-				<td class="mh"><b> <bean:message
-					key="colname.history_objectType" /></b></td>
-				<td class="mh"><b> <bean:message
-					key="colname.history_description" /></b></td>
-				<td class="mh"><b> <bean:message
-					key="colname.history_date" /> </b></td>
-			</tr>
-
-			<logic:iterate id="results" name="quickSearchForm"
-				property="histCon"
-				type="com.bagnet.nettracer.tracing.history.HistoryObject">
-				
-				<tr class="modaltdG">
-					<td style="text-align:left;"><a href="<bean:write name="results" property="linkURL"/>"><bean:write name="results" property="objectID" /></a></td>
-					<td style="text-align:left;"><bean:write name="results" property="objectType" /></td>
-					
-					<td style="text-align:left;"><bean:write name="results" property="statusDesc" /></td>
-					<td style="text-align:left;"><bean:write name="results" property="date" /></td>
-					
-				</tr>
-			</logic:iterate>
-		</table>
-	</c:if>
 </div>
 </div>

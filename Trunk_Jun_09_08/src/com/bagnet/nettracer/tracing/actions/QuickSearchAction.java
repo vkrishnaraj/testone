@@ -31,6 +31,7 @@ import com.bagnet.nettracer.tracing.forms.QuickSearchForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -80,7 +81,7 @@ public class QuickSearchAction extends Action {
 
 		HttpSession session = request.getSession(); // check session/user
 		TracerUtils.checkSession(session);
-
+		
 		Agent user = (Agent) session.getAttribute("user");
 		if (user == null || form == null) {
 			response.sendRedirect("logoff.do");
@@ -166,12 +167,13 @@ public class QuickSearchAction extends Action {
 
 		theForm.setDto(dto);
 		request.setAttribute("QuickSearchDTO", dto);
-		HistoryContainer hcl =(HistoryContainer)session.getAttribute("historyContainer");
-		ArrayList<HistoryObject> Hlist=hcl.getRevNewestItems(10);
-		
 		logger.info("Scanning for user's recent history");
-		
-		theForm.setHistCon(Hlist);
+		HistoryUtils.getHistoryContainer(theForm, session);
+//		HistoryContainer hcl =(HistoryContainer)session.getAttribute("historyContainer");
+//		ArrayList<HistoryObject> Hlist=hcl.getRevNewestItems(10);
+//		
+//		
+//		theForm.setHistCon(Hlist);
 		
 		return (mapping.findForward(REDIRECT_SUCCESS));
 	}
