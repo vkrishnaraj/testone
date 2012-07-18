@@ -253,7 +253,7 @@ function getLoadingContent() {
 	return h;
 }
 
-
+//Why are there two getLoadingContents?
 function getLoadingContent() {
 	jQuery('#dialog').dialog('option', 'buttons', {} );
 	var h = '<div style="margin-top: 50px; text-align: center">';
