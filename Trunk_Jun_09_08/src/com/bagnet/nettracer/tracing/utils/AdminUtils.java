@@ -21,6 +21,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
@@ -33,7 +34,6 @@ import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.IATA_irregularity_code;
-import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.NTDateFormat;
 import com.bagnet.nettracer.tracing.db.NTTimeFormat;
@@ -708,11 +708,40 @@ public class AdminUtils {
 				int startnum = currpage * rowsperpage;
 				cri.setFirstResult(startnum);
 				cri.setMaxResults(rowsperpage);
-			}
+			} 
 			return cri.list();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	public static int getCompaniesCount(MaintainCompanyForm dForm){
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Company.class);
+
+			String ccode = null;
+			if (dForm != null) {
+				ccode = (String) dForm.getCompanySearchName();
+			}
+			if (ccode != null && ccode.length() > 0) {
+				cri.add(Expression.like("companyCode_ID", ccode));
+			}
+			cri.setProjection(Projections.rowCount());
+			return ((Integer)cri.list().get(0)).intValue();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return 0;
 		} finally {
 			if (sess != null) {
 				try {

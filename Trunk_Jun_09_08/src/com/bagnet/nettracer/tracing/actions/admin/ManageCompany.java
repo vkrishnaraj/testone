@@ -449,9 +449,9 @@ public final class ManageCompany extends Action {
 			//return mapping.findForward(TracingConstants.LOGON);
 		}
 
-		List companyList = AdminUtils.getCompanies(dForm, 0, 0);
+		int companyCount = AdminUtils.getCompaniesCount(dForm);
 
-		if (companyList != null && companyList.size() > 0) {
+		if (companyCount > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
 			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_ADMIN_PAGES, session);
@@ -466,7 +466,7 @@ public final class ManageCompany extends Action {
 			request.setAttribute("currpage", Integer.toString(currpage));
 
 			// get row count
-			rowcount = companyList.size();
+			rowcount = companyCount;
 
 			// find out total pages
 			totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
@@ -476,7 +476,7 @@ public final class ManageCompany extends Action {
 				request.setAttribute("currpage", "0");
 			}
 
-			companyList = AdminUtils.getCompanies(dForm, rowsperpage, currpage);
+			List companyList = AdminUtils.getCompanies(dForm, rowsperpage, currpage);
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {
