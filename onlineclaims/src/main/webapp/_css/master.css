@@ -1060,20 +1060,20 @@ td.dottedhr {
 /* ---------------------------- Passenger Module ----------------------------------------*/
 
 .formLabel{
-	font-family: Arial;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12.1px;
 	color: #333333 ;
 }
 
 .commandLink{
-	font-family: Arial;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.1em;
 	color: #24427C;
 	text-decoration: underline;
 }
 
 .subHeader {
-	font-family: Arial, Verdana, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.3em;
 	font-style: normal;
 	line-height: normal;
@@ -1086,7 +1086,7 @@ td.dottedhr {
 
 .passlogoutnav { /*position:relative;*/
 	color: #FFFFFF;
-	font-family: Arial, Regular;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.3em;
 	float: right;
 	clear: left;
@@ -1103,7 +1103,7 @@ td.dottedhr {
 }
 
 .bodycopy {
-	font-family: Arial, Verdana, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.1em;
 	font-style: normal;
 	line-height: 1.4em;
@@ -1165,7 +1165,7 @@ td.dottedhr {
 
 .dr-mpnl-pnl-text {
 	color: #000000;
-	font-family: Arial, Verdana, sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 11px;
 	font-weight: bold;
 	margin-top: 17px;
@@ -1174,7 +1174,7 @@ td.dottedhr {
 .requiredField {
 	font: bolder;
 	font-size: 1.1em;
-	font-family: Arial;
+	font-family: Arial, Helvetica, sans-serif;
 	color: #333333 ;
 }
 
@@ -1258,14 +1258,14 @@ td.dottedhr {
 /* Ticket Info page */
 .ticketInfo {
 	font-size: 0.9em;
-	font-family: Arial;
+	font-family: Arial, Helvetica, sans-serif;
 	color: #333333 ;
 }
 }
 
 .font1-1em {
 	font-size: 1.1em;
-	font-family: Arial;
+	font-family: Arial, Helvetica, sans-serif;
 	color: #333333 ;
 }
 
@@ -1284,7 +1284,7 @@ td.dottedhr {
 
 .wrapText {
 	white-space: pre-wrap;
-	font-family: Arial;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12.1px;
 	color: #333333 ;
 }
@@ -1324,14 +1324,14 @@ td.dottedhr {
 
 .typeAccept {
 	margin-left: 15px;
-	font-family: Arial;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.1em;
 	color: #333333 ;
 }
 
 .signature {
 	margin-left: 25px;
-	font-family: Arial;
+	font-family: Arial, Helvetica, sans-serif;
 	font-size: 1.1em;
 	color: #333333 ;
 }

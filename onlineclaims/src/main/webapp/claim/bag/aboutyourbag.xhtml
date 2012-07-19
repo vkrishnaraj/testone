@@ -80,7 +80,7 @@
 				<h:panelGroup>
 					<t:inputText  value="#{bagItem.bagPrice}" style="width:50px;" 
 									required="false" id="bagPrice" onchange="calculateTotal(#{rowIndex}, true)"
-									readonly="#passengerController.readOnlyOnSubmitted}"
+									readonly="#{passengerController.readOnlyOnSubmitted}"
 									validatorMessage="#{passengerController.bagDetailsLabel.nameonBag.label} :
 									#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
 									label="Bag Price">

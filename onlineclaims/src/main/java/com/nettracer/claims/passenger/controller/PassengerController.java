@@ -1670,6 +1670,7 @@ public class PassengerController {
 		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
+			populateItenarary();
 			currentPage = PAGE_FLIGHT_INFO;
 			return "gotoFlightDetails";
 		} else {
