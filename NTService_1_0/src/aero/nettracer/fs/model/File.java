@@ -47,6 +47,8 @@ public class File implements Serializable {
 	@Transient
 	Set<Person> personCache = null;
 	@Transient
+	Set<Person> nicknameCache = null;
+	@Transient
 	Set<FsAddress> addressCache = null;
 	@Transient
 	Set<Phone> phoneCache = null;
@@ -119,13 +121,21 @@ public class File implements Serializable {
 	public long getSwapId() {
 		return swapId;
 	}
-
-	public Set<Person> getPersonCache() {
-		return personCache;
+	
+	public Set<Person> getPersonCache(boolean nickname) {
+		if(nickname){
+			return this.nicknameCache;
+		} else {
+			return personCache;
+		}
 	}
 
-	public void setPersonCache(Set<Person> personCache) {
-		this.personCache = personCache;
+	public void setPersonCache(Set<Person> personCache, boolean nickname) {
+		if(nickname){
+			this.nicknameCache = personCache;
+		} else {
+			this.personCache = personCache;
+		}
 	}
 
 	public Set<FsAddress> getAddressCache() {

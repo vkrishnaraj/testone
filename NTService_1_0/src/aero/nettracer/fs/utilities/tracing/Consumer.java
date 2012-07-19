@@ -1055,9 +1055,10 @@ public class Consumer implements Runnable{
 	
 	protected static void processPerson(MatchHistory match){
 
-		Set<Person> plist1 = match.getFile1().getPersonCache();
+		Set<Person> plist1 = match.getFile1().getPersonCache(false);
 		if(plist1 == null){
 			plist1 = getPersons(match.getFile1());
+			match.getFile1().setPersonCache(plist1, false);
 		}	
 		Set<Person> plist2 = null;
 		if(match.getFile2() != null){

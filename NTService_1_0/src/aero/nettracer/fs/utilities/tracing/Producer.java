@@ -147,7 +147,7 @@ public class Producer {
             + "where 1=0 ";
 
 		Set<Person> persons = Consumer.getPersons(file, true);
-		file.setPersonCache(persons);
+		file.setPersonCache(persons, true);
 		if(persons != null) for (Person person : persons) {
 			
 			if(person.getFirstNameSoundex() != null && person.getLastNameSoundex() != null
@@ -385,7 +385,8 @@ public class Producer {
 				endtime = new Date();
 				if (maxDelay == -1) {
 					logger.debug("  Complete Trace Elapsed Time: "  + (endtime.getTime() - starttime.getTime()));
-					file.setPersonCache(null);
+					file.setPersonCache(null, true);
+					file.setPersonCache(null, false);
 					file.setAddressCache(null);
 					file.setPhoneCache(null);
 				} else if (i >= MAX_WAIT) {
