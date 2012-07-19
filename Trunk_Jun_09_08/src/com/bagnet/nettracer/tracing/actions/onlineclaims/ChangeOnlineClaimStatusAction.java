@@ -28,7 +28,8 @@ public class ChangeOnlineClaimStatusAction extends Action {
 
 		Agent user = (Agent) session.getAttribute("user");
 
-		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLERICAL_CLAIMS_FEATURES, user)) {
+		if (!(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLERICAL_CLAIMS_FEATURES, user)
+				|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CENTRAL_BAGGAGE_CLAIMS_FEATURES, user))) {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
 		

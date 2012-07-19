@@ -305,14 +305,14 @@ phIndex++; %>
 <logic:present name="claim" property="bag" scope="request">
 <logic:notEmpty name="claim" property="bag" scope="request">
 <logic:iterate id="bags" name="claim" property="bag" type="com.bagnet.nettracer.tracing.db.onlineclaims.OCBag" indexId="bagsIndex">
-<h3><bean:message key="oc.label.bag.number" />&nbsp;<%= bagsIndex.intValue() + 1 %></h3>
 <% if (bags.isBagArrive() && !(c.isDamaged() || c.isMissing()) && !bags.getTag().equals("INTERIM")) { %>
+<h3><bean:message key="oc.label.bag.number" />&nbsp;<%= bagsIndex.intValue() + 1 %></h3>
 <table class="ocTable" width="95%"><tr>
 <td class="boldCell"><bean:message key="oc.label.bag.tag" /></td><td><bean:write name="bags" property="tag"/></td>
 </tr></table>
 <% } else if (bags.isBagArrive() && c.isInterim() && bags.getTag().equals("INTERIM")) { %>
-<table class="ocTable" width="95%"><tr>
-<td class="boldCell" colspan="9"><bean:message key="oc.title.delayed.expenses" /></td></tr>
+<h3><bean:message key="oc.title.delayed.expenses" /></h3>
+<table class="ocTable" width="95%">
 <logic:present name="bags" property="contents">
 <logic:notEmpty name="bags" property="contents">
 <tr>
@@ -369,6 +369,7 @@ phIndex++; %>
 </logic:notPresent>
 </table>
 <% } else { %>
+<h3><bean:message key="oc.label.bag.number" />&nbsp;<%= bagsIndex.intValue() + 1 %></h3>
 <table class="ocTable" width="95%"><tr>
 <%     if (bags.isBagArrive()) { 
 	       if (!c.isDamaged()) {%>
