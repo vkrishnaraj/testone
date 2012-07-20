@@ -3587,23 +3587,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 		}
 	}
-		
-		
-//		Session session = null;
-//		LFSalvage salvage = null;
-//		
-//		try {
-//			session = HibernateWrapper.getSession().openSession();
-//			salvage = (LFSalvage) session.get(LFSalvage.class, id);
-//		} catch (Exception e) {
-//			System.err.println(e);
-//		} finally {
-//			if (session != null) {
-//				session.close();
-//			}
-//		}
-//		return salvage;
-	//}
 	
 	public boolean saveSalvage(LFSalvage salvage) {
 		boolean success = false;
