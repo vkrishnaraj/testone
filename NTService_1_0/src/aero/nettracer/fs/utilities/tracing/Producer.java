@@ -557,7 +557,7 @@ public class Producer {
 
 		//matching on file1 only because Mike is whining
 		String personSql = "from aero.nettracer.fs.model.detection.MatchHistory m where 1=1 " +
-		"and (m.file1.id = :id) and m.deleted = 0 order by m.primarymatch desc, m.file2.statusId desc, m.createdate desc, m.overallScore desc";
+		"and (m.file1.id = :id) and m.deleted = 0 order by m.primarymatch desc, m.file2.statusId desc, m.createdate desc, m.overallScore desc, m.id desc";
 		
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();

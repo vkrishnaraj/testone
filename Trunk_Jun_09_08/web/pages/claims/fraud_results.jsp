@@ -165,7 +165,7 @@
 					<logic:equal value="false" name="fraudResultsForm" property="traceResponse.traceComplete">
 					<br/>
 					<font color=red> 
-						<bean:message key="fraud.still.searching"/>: <%=myform.getTraceResponse().getSecondsUntilReload() %>
+						<bean:message key="fraud.still.searching"/>: <%=myform.getTraceResponse().getSecondsUntilReload() %> <bean:message key="fraud.still.seconds"/>
 					</font>		
 					<br/>
 					</logic:equal>
