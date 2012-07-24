@@ -64,7 +64,7 @@
 				<bean:message key="colname.claim.id" />:&#160;<a href="claim_resolution.do?claimId=<%=claims[j].getSwapId() %>">
 					<%=claims[j].getSwapId() %>
 				</a><br/>
-				<% if (claims[j].getIncident().getAirlineIncidentId() != null) { 
+				<% if (claims[j].getIncident()!=null && claims[j].getIncident().getAirlineIncidentId() != null) { 
 						if (ntUser) { %>
 				<bean:message key="claim.incident.number" />:&#160;<a href="searchIncident.do?incident=<%=claims[j].getIncident().getAirlineIncidentId() %>">
 					<%=claims[j].getIncident().getAirlineIncidentId() %>
@@ -76,7 +76,7 @@
 			</td>
 		<% } else { %>
 			<td><bean:message key="colname.claim.id" />:&#160;<%=claims[j].getSwapId() %><br/>
-			<% if (claims[j].getIncident().getAirlineIncidentId() != null) { %>
+			<% if (claims[j].getIncident()!=null && claims[j].getIncident().getAirlineIncidentId() != null) { %>
 				<bean:message key="claim.incident.number" />:&#160;<%=claims[j].getIncident().getAirlineIncidentId() %>
 			<% } %>
 			</td>

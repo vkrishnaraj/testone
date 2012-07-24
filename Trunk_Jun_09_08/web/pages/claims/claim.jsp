@@ -634,19 +634,19 @@
 				                <td colspan=2>
 				                  <bean:message key="colname.street_addr1" />
 				                  <br>
-				                  <input type="text" name="person[<%=i %>].address.address1" size="45" maxlength="50" value="<%=person.getAddress().getAddress1() == null ? "" : person.getAddress().getAddress1() %>" class="textfield" />
+				                  <input type="text" name="person[<%=i %>].address.address1" size="45" maxlength="50" value="<%=(person.getAddress()==null || person.getAddress().getAddress1() == null) ? "" : person.getAddress().getAddress1() %>" class="textfield" />
 				                </td>
 				                <td colspan=3>
 				                  <bean:message key="colname.street_addr2" />
 				                  <br>
-				                  <input type="text" name="person[<%=i %>].address.address1" size="35" maxlength="50" value="<%=person.getAddress().getAddress2() == null ? "" : person.getAddress().getAddress2() %>" class="textfield" />
+				                  <input type="text" name="person[<%=i %>].address.address1" size="35" maxlength="50" value="<%=(person.getAddress()==null || person.getAddress().getAddress2() == null) ? "" : person.getAddress().getAddress2() %>" class="textfield" />
 				                </td>
 				              </tr>
 				              <tr>
 				                <td>
 				                  <bean:message key="colname.city" />
 				                  <br>
-				                  <input type="text" name="person[<%=i %>].address.city" size="15" maxlength="50" value="<%=person.getAddress().getCity() == null ? "" : person.getAddress().getCity() %>" class="textfield" />
+				                  <input type="text" name="person[<%=i %>].address.city" size="15" maxlength="50" value="<%=(person.getAddress()==null || person.getAddress().getCity() == null) ? "" : person.getAddress().getCity() %>" class="textfield" />
 				                </td>
 				                <td>
 				                  <bean:message key="colname.state" />
@@ -654,7 +654,10 @@
 				                  <select name="person[<%=i %>].address.state" id="state_<%=i %>" class="dropdown" onchange="fieldChanged('state_<%=i %>');">
 				                  		<option value=""><bean:message key="select.none"/></option>
 				                  <% 
-				                  		String state = person.getAddress().getState();
+				                  		String state =""; 
+				                  		if(person.getAddress()!=null && person.getAddress().getState()!=null){
+				                  		 	state= person.getAddress().getState();
+				                  		}
 				                  		for (LabelValueBean bean: stateList) {
 				                  %>
 				                  			<option value="<%=bean.getValue() %>" <% if (bean.getValue().equals(state)) { %>selected<% } %>><%=bean.getLabel() %></option>
@@ -666,12 +669,12 @@
 			                  	<td>
 				                  <bean:message key="colname.province" />
 				                  <br />
-				                  <input type="text" name="person[<%=i %>].address.province" id="province_<%=i %>" size="10" maxlength="100" value="<%=person.getAddress().getProvince() == null ? "" : person.getAddress().getProvince() %>" class="textfield" onchange="fieldChanged('province_<%=i %>');" />
+				                  <input type="text" name="person[<%=i %>].address.province" id="province_<%=i %>" size="10" maxlength="100" value="<%=(person.getAddress()==null || person.getAddress().getProvince() == null) ? "" : person.getAddress().getProvince() %>" class="textfield" onchange="fieldChanged('province_<%=i %>');" />
 				                </td>
 				                <td>
 				                  <bean:message key="colname.zip" />
 				                  <br>
-				                  <input type="text" name="person[<%=i %>].address.zip" size="11" maxlength="11" value="<%=person.getAddress().getZip() == null ? "" : person.getAddress().getZip() %>" class="textfield" />
+				                  <input type="text" name="person[<%=i %>].address.zip" size="11" maxlength="11" value="<%=(person.getAddress()==null || person.getAddress().getZip() == null) ? "" : person.getAddress().getZip() %>" class="textfield" />
 				                </td>
 				                <td>
 				                  <bean:message key="colname.country" />
@@ -679,7 +682,10 @@
 				                  <select name="person[<%=i %>].address.country" class="dropdown" id="country_<%=i %>" onchange="fieldChanged('country_<%=i %>');">
 				                  		<option value=""><bean:message key="select.none"/></option>
 				                  <% 
-				                  		String country = person.getAddress().getCountry();
+				                  		String country = "";
+					                  	if(person.getAddress()!=null && person.getAddress().getCountry()!=null){
+				                  		 	country= person.getAddress().getCountry();
+				                  		}
 				                  		for (LabelValueBean bean: countryList) {
 				                  %>
 				                  			<option value="<%=bean.getValue() %>" <% if (bean.getValue().equals(country)) { %>selected<% } %>><%=bean.getLabel() %></option>
