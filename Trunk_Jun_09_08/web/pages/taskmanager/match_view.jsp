@@ -211,6 +211,7 @@
               </logic:present>
               <br>
               <logic:iterate id="items" indexId="i" name="itemlist" scope="request" type="com.bagnet.nettracer.tracing.db.Item">
+              	<% if(items!=null){ %>
                 <table class="form2" cellspacing="0" cellpadding="0">
                   <logic:equal name="items" property="OHD_ID" value="">
                     <tr>
@@ -309,6 +310,7 @@
                     </tr>
                   </logic:equal>
                 </table>
+                <% } %>
               </logic:iterate>
             </logic:present>
             
