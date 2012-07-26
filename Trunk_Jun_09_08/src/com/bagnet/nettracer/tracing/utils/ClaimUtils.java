@@ -83,6 +83,21 @@ public class ClaimUtils {
 
 	private static Logger logger = Logger.getLogger(TracerUtils.class);
 
+	private static HashMap<String,Company> companyCache = null;
+	
+	public static Company getCompany(String companycode){
+		if(companyCache == null){
+			companyCache = new HashMap<String, Company>();
+		}
+		if(companyCache.containsKey(companycode)){
+			return companyCache.get(companycode);
+		} else {
+			Company company = CompanyBMO.getCompany(companycode);
+			companyCache.put(companycode, company);
+			return company;
+		}
+	}
+	
 	public static Claim createClaim(Agent user) {
 		return createClaim(user, null);
 	}
@@ -90,7 +105,8 @@ public class ClaimUtils {
 	@Transactional
 	public static Claim createClaim(Agent user, Incident ntIncident) {
 		
-		Company company = CompanyBMO.getCompany(user.getCompanycode_ID());
+		Company company = getCompany(user.getCompanycode_ID());
+
 		
 		// create the claim
 		Claim claim = new Claim();
@@ -231,7 +247,7 @@ public class ClaimUtils {
 	}
 	
 	private static FsIncident createFsIncident(Agent user) {
-		Company company = CompanyBMO.getCompany(user.getCompanycode_ID());
+		Company company = getCompany(user.getCompanycode_ID());
 		FsIncident fsIncident = new FsIncident();
 		fsIncident.setAirline(user.getCompanycode_ID());
 		
