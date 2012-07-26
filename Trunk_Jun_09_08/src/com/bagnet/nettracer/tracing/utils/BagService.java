@@ -1428,7 +1428,7 @@ public class BagService {
 			}
 			lost.setCreate_date(theform.getCreate_date());
 			if(theform.getDispCloseDateTime() != null && theform.getDispDateFoundLost().length() > 0) {
-				lost.setDateFoundLost(DateUtils.convertToDate(theform.getDispDateFoundLost(), theform.getFiling_agent()
+				lost.setDateFoundLost(DateUtils.convertToDate(theform.getDispDateFoundLost(), user
 						.getDateformat().getFormat(), theform.getFiling_agent().getCurrentlocale()));
 			}
 			else {
