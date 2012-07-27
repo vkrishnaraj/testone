@@ -769,15 +769,16 @@
 	</target>
 	
 	<target name="buildEscrowUSAir">
-		<property name="ant_project_name" value="services"/>
+		<property name="ant_project_name" value="usair-services"/>
+		<property name="escrow_loc" value="${build.dir}/${ant_project_name}/escrow"/>
 
-		<delete dir="${build.dir}/${ant_project_name}/escrow"/>
-		<mkdir dir="${build.dir}/${ant_project_name}/escrow" />
+		<delete dir="${escrow_loc}"/>
+		<mkdir dir="${escrow_loc}" />
 		
-		<mkdir dir="${build.dir}/${ant_project_name}/escrow/src" />
-		<mkdir dir="${build.dir}/${ant_project_name}/escrow/lib" />
+		<mkdir dir="${escrow_loc}/src" />
+		<mkdir dir="${escrow_loc}/lib" />
 		
-		<copy todir="${build.dir}/${ant_project_name}/escrow/src" >
+		<copy todir="${escrow_loc}/src" >
 			<fileset dir="./src">
 				<include name="**/*.java"/>
 				<exclude name="**/spirit/*.*/"/>
@@ -788,24 +789,38 @@
 			</fileset>
 		</copy>
 
-		<copy todir="${build.dir}/${ant_project_name}/escrow/web" >
+		<copy todir="${escrow_loc}/environments" >
+			<fileset dir="./environments" 
+			includes="central/usprod/**,
+				      central/ustest/**"/>
+		</copy>
+
+		<copy todir="${escrow_loc}/web" >
 			<fileset dir="./web" />
 		</copy>
 		
-		<copy todir="${build.dir}/${ant_project_name}/escrow/metadata" >
+		<copy todir="${escrow_loc}/metadata" >
 			<fileset dir="./metadata" />
 		</copy>
 		
-		<copy todir="${build.dir}/${ant_project_name}/escrow/lib" >
+		<copy todir="${escrow_loc}/lib" >
 			<fileset dir="./lib" />
 		</copy>
 		
-		<copy todir="${build.dir}/${ant_project_name}/escrow/providedJars" >
+		<copy todir="${escrow_loc}/providedJars" >
 			<fileset dir="./providedJars" />
 		</copy>
 		
-		<copy todir="${build.dir}/${ant_project_name}/escrow/" file="./build.xml" />
+		<copy todir="${escrow_loc}" file="./build.xml" />
+
 		
+		<copy file="build_central.bat" todir="${escrow_loc}"></copy>
+		<copy file="escrow_usair.properties" todir="${escrow_loc}"></copy>
+		
+		<copy todir="${escrow.staging}">
+			<fileset dir="${escrow_loc}"/>
+		</copy>
+				
 	</target>
 
 
