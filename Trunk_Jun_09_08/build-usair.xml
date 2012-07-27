@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="USAir-NT 1.75.0.6" default="build-usair-dev">
+	
+	<property file="user.properties" />
+	<property file="common.properties" />
+	<property environment="env" />
+	<property name="lib" value="lib/jars" />
+	<property name="buildlib" value="lib/build-client" />
+	<property name="artifact.dir" value="${build.dir}/artifacts/" />
+	<property name="ant.regexp.matcherimpl" value="org.apache.tools.ant.util.regexp.JakartaOroRegexp" />
+	<property name="main-class" value="com.bagnet.nettracer.cronjob.NettracerCron" />
 
 	<patternset id="java.files">
 		<include name="**/**/*.java" />
@@ -32,14 +41,6 @@
 		</fileset>
 	</path>
 	
-	<property file="user.properties" />
-	<property file="common.properties" />
-	<property environment="env" />
-	<property name="lib" value="lib/jars" />
-	<property name="buildlib" value="lib/build-client" />
-	<property name="artifact.dir" value="${build.dir}/artifacts/" />
-	<property name="ant.regexp.matcherimpl" value="org.apache.tools.ant.util.regexp.JakartaOroRegexp" />
-	<property name="main-class" value="com.bagnet.nettracer.cronjob.NettracerCron" />
 	<taskdef name="hibernatedoclet" classname="org.xdoclet.ant.XDocletTask">
 		<classpath refid="project.classpath" />
 	</taskdef>
@@ -364,17 +365,96 @@
 	
 	<target name="buildEscrow">
 		<property name="ant_project_name" value="usair"/>
+		<property name="escrow_loc" value="${build.dir}/${ant_project_name}/escrow"/>
 
-		<delete dir="${build.dir}/${ant_project_name}/escrow"/>
-		<mkdir dir="${build.dir}/${ant_project_name}/escrow" />
+		<delete dir="${escrow_loc}"/>
+		<mkdir dir="${escrow_loc}" />
+
+		<mkdir dir="${escrow_loc}/companies/usair" />
+		<copy todir="${escrow_loc}/companies/usair" >
+			<fileset dir="companies/usair"/>
+		</copy> 
+		<mkdir dir="${escrow_loc}/companies/tracer" />
+		<copy todir="${escrow_loc}/companies/tracer" >
+			<fileset dir="companies/tracer"/>
+		</copy> 
+
+		<mkdir dir="${escrow_loc}/lib" />
+		<copy todir="${escrow_loc}/lib" >
+			<fileset dir="lib"/>
+		</copy> 
+
+		<mkdir dir="${escrow_loc}/metadata/usair" />
+		<copy todir="${escrow_loc}/metadata/usair" >
+			<fileset dir="metadata/usair"/>
+		</copy> 
+
+		<mkdir dir="${escrow_loc}/src" />
+		<copy todir="${escrow_loc}/src" >
+			<fileset dir="src"
+			excludes="com/bagnet/clients/**"/>
+		</copy> 
+		<mkdir dir="${escrow_loc}/src/com/bagnet/clients/us" />
+		<copy todir="${escrow_loc}/src/com/bagnet/clients/us" >
+			<fileset dir="src/com/bagnet/clients/us"/>
+		</copy> 
+		<mkdir dir="${escrow_loc}/src/com/bagnet/clients/defaul" />
+		<copy todir="${escrow_loc}/src/com/bagnet/clients/defaul" >
+			<fileset dir="src/com/bagnet/clients/defaul"/>
+		</copy> 
+
+		<mkdir dir="${escrow_loc}/utils" />
+		<copy todir="${escrow_loc}/utils" >
+			<fileset dir="utils"/>
+		</copy> 
+
+		<mkdir dir="${escrow_loc}/web" />
+		<copy todir="${escrow_loc}/web" >
+			<fileset dir="web"/>
+		</copy> 
 		
-		<!--
-			All Source Code
-			Tracer Company Folder
-			Specific Company Folder
-			Lib folder
-			Ant
-		-->
+		<copy file="build_dev.bat" todir="${escrow_loc}"></copy>
+		<copy file="build-gen.xml" todir="${escrow_loc}"></copy>
+		<copy file="build-usair.xml" todir="${escrow_loc}"></copy>
+		<copy file="build.xml" todir="${escrow_loc}"></copy>
+		<copy file="escrow_usair.properties" todir="${escrow_loc}"></copy>
+		
+		<copy todir="${escrow.nt.staging}">
+			<fileset dir="${escrow_loc}"/>
+		</copy>
+		
+		<antcall target="escrow-onlineclaims" />
+		
+		<copy file="${jboss.rar.loc}/jboss5_1_ntapp/jboss-5.1.0.GA-ntapp.zip" todir="${escrow.jboss.nt}"></copy>
+		<copy file="${jboss.rar.loc}/jboss5_1_central/jboss-5.1.0.GA-ntservice.zip" todir="${escrow.jboss.ntservice}"></copy>
+		<copy file="${jboss.rar.loc}/jboss4_2_onlineclaims/jboss-4.2.3.GA-onlineclaims.zip" todir="${escrow.jboss.oc}"></copy>
+		<copy file="${jboss.rar.loc}/nettracer_cron/nettracer-cron-service.zip" todir="${escrow.cron.service}"></copy>
+		
+		<copy todir="${escrow.staging}">
+			<fileset dir="${escrow.relMan.loc}/usair"/>
+		</copy>
+		
+		<zip destfile="${escrow.staging}/usair-nettracer-escrow.zip">
+			<fileset dir="${escrow.staging}" />
+		</zip>
+		
+	</target>
+	
+	<target name="escrow-onlineclaims">
+
+		<copy todir="${escrow.oc.staging}/src">
+			<fileset dir="${escrow.oc.loc}/src"/>
+		</copy>
+
+		<copy todir="${escrow.oc.staging}/environment">
+			<fileset dir="${escrow.oc.loc}/environment"/>
+		</copy>
+		
+		<copy file="${escrow.oc.loc}/OnlineClaimsService-client.jar" todir="${escrow.oc.staging}"/>
+		<copy file="${escrow.oc.loc}/build-onlineclaims.bat" todir="${escrow.oc.staging}"/>
+		<copy file="${escrow.oc.loc}/usair-escrow-pom.xml" tofile="${escrow.oc.staging}/pom.xml"/>
+		<copy file="${escrow.oc.loc}/usair-escrow-pom2.xml" todir="${escrow.oc.staging}"/>
+		
 	</target>
 	
 	<target name="delete-wars">
