@@ -67,7 +67,7 @@ public class FsClaim implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	
 	//TODO IMPORTANT - this annotation is needed by NetTracer, however, cannot be part of the claim_model.jar that NTFS uses.  If you are rebuilding the model jar, this annotation needs to be commented out - Loupas
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+//	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	
 	private Set<Person> claimants;
 
@@ -76,7 +76,7 @@ public class FsClaim implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	
 	//TODO IMPORTANT - this annotation is needed by NetTracer, however, cannot be part of the claim_model.jar that NTFS uses.  If you are rebuilding the model jar, this annotation needs to be commented out - Loupas
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+//	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	
 	private Set<Segment> segments;
 
@@ -85,7 +85,7 @@ public class FsClaim implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	
 	//TODO IMPORTANT - this annotation is needed by NetTracer, however, cannot be part of the claim_model.jar that NTFS uses.  If you are rebuilding the model jar, this annotation needs to be commented out - Loupas
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+//	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	
 	private Set<FsReceipt> receipts;
 	
