@@ -222,7 +222,7 @@ public final class LostFoundIncidentForm extends ValidatorForm {
 
 		if (this.dispDateFoundLost == null || this.dispDateFoundLost.equals("")) {
 			if (this.getDateFoundLost() != null) this.dispDateFoundLost = DateUtils.formatDate(this
-					.getDateFoundLost(), _DATEFORMAT, null, _TIMEZONE);
+					.getDateFoundLost(), _DATEFORMAT, null, null); //_TIMEZONE
 		}
 		return this.dispDateFoundLost;
 	}
