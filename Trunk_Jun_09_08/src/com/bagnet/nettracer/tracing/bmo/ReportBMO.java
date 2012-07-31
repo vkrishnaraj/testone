@@ -3092,7 +3092,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				ctx = ConnectionUtil.getInitialContext();
 				remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 				if (remote != null) {
-					matches = remote.getMatches(idList);
+					matches = remote.getMatches(idList, user.getCompanycode_ID());
 				}
 			} catch (Exception e) {
 				logger.error(e, e);
