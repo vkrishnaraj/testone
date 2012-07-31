@@ -873,6 +873,13 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	}
 	
 	public Map<String, Integer> getMatches(List<String> idList) {
+		return getMatches(idList, "US");//TODO deprecate when US is updated to 3.2.1.1		
+	}
+	
+	public Map<String, Integer> getMatches(List<String> idList, String companycode) {
+		if(companycode == null){
+			return null;
+		}
 		Map<String, Integer> toReturn = new HashMap<String, Integer>();
 		
 		String sql = "select c.swapId, count(*) matches from fsclaim c, fsfile f, matchhistory h where c.swapId in (";
@@ -881,7 +888,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				sql += id + ", ";
 			}
 		}
-		sql += "-1) and c.file_id = f.id and f.id = h.file1_id group by c.swapId";
+		sql += "-1) and c.file_id = f.id and f.validatingCompanycode = '" + companycode + "' and f.id = h.file1_id group by c.swapId";
 		
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {

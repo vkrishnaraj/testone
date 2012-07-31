@@ -28,4 +28,5 @@ public interface ClaimClientRemote {
 	public List<AccessRequest> getAccessRequests(AccessRequestDTO dto, int begin,int perPage);
 	public int getAccessRequestsCount(AccessRequestDTO dto);
 	public Map<String, Integer> getMatches(List<String> idList);
+	public Map<String, Integer> getMatches(List<String> idList, String companycode);
 }

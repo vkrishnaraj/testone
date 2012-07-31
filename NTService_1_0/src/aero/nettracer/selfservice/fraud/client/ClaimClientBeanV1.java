@@ -133,4 +133,9 @@ public class ClaimClientBeanV1 implements ClaimClientRemoteV1{
 		return bean.getMatches(idList);
 	}
 	
+	@Override
+	public Map<String, Integer> getMatches(List<String> idList, String companycode) {
+		return bean.getMatches(idList, companycode);
+	}
+	
 }
