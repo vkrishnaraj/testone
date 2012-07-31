@@ -42,9 +42,9 @@ jQuery(document).ready(function() {
 
 <div id="header">
 	<ul class="tabs">
-		<span onclick="switchView(this)"><li  rel="search" >Search
+		<span onclick="switchView(this)" id="searchShow"><li  rel="search" >Search
 		</li></span>
-		<span onclick="switchView(this)"><li class="active" rel="history" >History
+		<span onclick="switchView(this)" id="historyShow"><li class="active" rel="history" >History
 		</li></span>
 	</ul>
 </div>
