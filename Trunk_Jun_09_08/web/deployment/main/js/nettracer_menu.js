@@ -203,7 +203,12 @@ function hideAllMenus(elementItem, root) {
 
 
 function loadQuickSearchModal() {
-	
+	var s=document.getElementById("searchShow");
+	var h=document.getElementById("historyShow");
+	var l=document.getElementById("loadKey");
+	if(h!=null && l==null){
+		switchView(s);
+	} else {
 	jQuery("#dialog").dialog({bgiframe : true,
 					autoOpen: false, modal: true, draggable: false, resizable: false, 
 					width: 700, height: 500, title: 'Quick Search' 
@@ -212,6 +217,7 @@ function loadQuickSearchModal() {
 	jQuery('#dialog-inner-content').html('<style type="text/css">	ul.tabs {margin: 0px 0 0 0;	padding: 0;	float: left; list-style: none;	height: 32px; width: 100%;	}	ul.tabs li { padding: 0px 21px ; height: 31px; line-height: 31px; background: #FFFFFF; cursor: pointer;	margin: 0; float: right; font-weight: bold;	}	ul.tabs li:hover {	text-decoration:underline }	ul.tabs li.active{ display:none; }	.tab_container {clear: both; float: left; width: 100%; background: #FFFFFF;	}	.tab_content {	padding: -5px;	font-size: 1em;	display: none;	} </style><div id="header"><ul class="tabs"><li  rel="search" class="active"><span style="cursor:hand;" onclick="loadQuickSearchModal();">Search</span></li>	<li rel="history" ><span style="cursor:hand;" id="loadKey" onclick="loadQuickHistoryModal();">History</span></li></ul></div><br/><br/><div style="text-align: center; padding: 0 5 0 5; border-bottom: 2px blue solid;">      <strong>Please enter your search criteria</strong><br/><p/><input type="text" name="search" class="textfield" id="quickSearchQuery3" onKeyDown="quickSearchKey3();"/>&nbsp; <button type="button" id="button" onclick="quickSearchKey4();">Search</button><br /><br /></div>');
 	jQuery("#dialog").dialog("open");
 	jQuery("#dialog").dialog("option", "title","Quick Search");
+	}
 		var currentElement = document.getElementById("dialog-inner-content");
 		
 		currentElement.focus();
@@ -222,6 +228,7 @@ function loadQuickHistoryModal() {
 	var h=document.getElementById("historyShow");
 	var l=document.getElementById("loadKey");
 	if(s!=null && l==null){
+		jQuery("#dialog").empty();
 		switchView(h);
 	} else {
 	jQuery("#dialog").dialog({bgiframe : true,

@@ -89,11 +89,12 @@ jQuery(document).ready(function() {
 </div>
 
 <div id="search" class="tab_content">
-<div style="text-align: center; padding: 0 5 0 5; border-bottom: 2px blue solid;">      <strong>Please enter your search criteria</strong><br/><p/><input type="text" name="search" class="textfield" id="quickSearchQuery3" onKeyDown="quickSearchKey3();"/>&nbsp; <button type="button" id="button" onclick="quickSearchKey4();">Search</button><br /><br /></div>
-	<!--<html:text styleId="quickSearchQuery3" name="quickSearchForm" property="search" onkeydown="quickSearchKey3()" styleClass="textfield" size="20" maxlength="15"></html:text>
-&nbsp;
-<button type="button" id="button" onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  quickSearchKey4();">Search</button>-->
-
+<div style="text-align: center; padding: 0 5 0 5; border-bottom: 2px blue solid;"> 
+	<strong>Please enter your search criteria</strong>
+	<br/>
+	<p/>
+	<input type="text" styleId="quickSearchQuery3" name="quickSearchForm" property="search" onkeydown="quickSearchKey3()" styleClass="textfield" size="20" maxlength="15"/>&nbsp; 
+	<button type="button" id="button" onclick="quickSearchKey4();">Search</button><br /><br /></div>
 
 <c:if test="${quickSearchForm.dto.prepop == true}">
 <% if (createOnHand || createMissing || createDelayed || createDamaged) { %>
