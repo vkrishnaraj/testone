@@ -93,7 +93,7 @@ jQuery(document).ready(function() {
 	<strong>Please enter your search criteria</strong>
 	<br/>
 	<p/>
-	<input type="text" styleId="quickSearchQuery3" name="quickSearchForm" property="search" onkeydown="quickSearchKey3()" styleClass="textfield" size="20" maxlength="15"/>&nbsp; 
+	<input type="text" styleId="quickSearchQuery3" name="quickSearchForm" property="search" onkeydown="quickSearchKey3()" styleClass="textfield" size="20" maxlength="15" value="<bean:write name="quickSearchForm" property="search" />"/>&nbsp; 
 	<button type="button" id="button" onclick="quickSearchKey4();">Search</button><br /><br /></div>
 
 <c:if test="${quickSearchForm.dto.prepop == true}">
