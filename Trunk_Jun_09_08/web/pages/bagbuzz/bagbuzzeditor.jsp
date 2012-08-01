@@ -35,6 +35,13 @@ function validate(){
 	}
 }
 
+function limitText(limitField, limitCount, limitNum) {
+	if (limitField.value.length > limitNum) {
+		limitField.value = limitField.value.substring(0, limitNum);
+	} else {
+		limitCount.value = limitNum - limitField.value.length;
+	}
+}
 </script>
 <script type="text/javascript">
 window.onload = function()
@@ -46,12 +53,13 @@ oFCKeditor.Height	= 450 ;
 oFCKeditor.Width    = 800 ;
 oFCKeditor.ReplaceTextarea() ;
 };
+
 </script>
 
 
 
 <html:form action="bagbuzzsearch.do">
-
+<input type="text" name="countdown" value="256"/>
 <table>
 <tr>
 <td>
@@ -61,7 +69,7 @@ oFCKeditor.ReplaceTextarea() ;
 <tr>
 <td>
 <bean:message key="bagbuzz.colname.description"/>  
-<textarea style="overflow:hidden;" rows="1" cols="20" name="description"> <bean:write name="bagbuzz" property="description" /></textarea>
+<textarea style="overflow:hidden;" rows="1" cols="20" name="description" onKeyDown="limitText(this.form.description,this.form.countdown,256);"  onKeyUp="limitText(this.form.description,this.form.countdown,256);"> <bean:write name="bagbuzz" property="description" /></textarea>
 </td>
 </tr>
 <tr>

@@ -19,7 +19,13 @@
 
 <script language="javascript1.2">
   
-
+function limitText(limitField, limitCount, limitNum) {
+	if (limitField.value.length > limitNum) {
+		limitField.value = limitField.value.substring(0, limitNum);
+	} else {
+		limitCount.value = limitNum - limitField.value.length;
+	}
+}
    WYSIWYG.attach('textarea1');
 </script>
 
@@ -35,7 +41,7 @@
 <tr>
 <td>
 Description:  
-<textarea style="overflow:hidden;" rows="1" cols="20" name="description"> <bean:write name="bagbuzz" property="description" /></textarea>
+<textarea style="overflow:hidden;" rows="1" cols="20" name="description"> <bean:write name="bagbuzz" property="description"  onKeyDown="limitText(this.form.description,this.form.countdown,256);"  onKeyUp="limitText(this.form.description,this.form.countdown,256);"/></textarea>
 <input type="FILE" name="theFile1" />
 <html:submit
           property="uploadPhoto" styleId="button">
