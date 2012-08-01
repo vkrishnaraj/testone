@@ -434,6 +434,8 @@
 			<fileset dir="${escrow.relMan.loc}/usair"/>
 		</copy>
 		
+		<delete file="${escrow.staging}/usair-nettracer-escrow.zip"/>
+		
 		<zip destfile="${escrow.staging}/usair-nettracer-escrow.zip">
 			<fileset dir="${escrow.staging}" />
 		</zip>
