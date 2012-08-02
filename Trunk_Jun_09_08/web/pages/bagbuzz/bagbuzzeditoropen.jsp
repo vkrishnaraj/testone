@@ -31,6 +31,7 @@ function limitText(limitField, limitCount, limitNum) {
 
 
 <html:form action="bagbuzzsearch.do">
+<input type="hidden" name="countdown" value="256"/>
 
 <table>
 <tr>

@@ -59,7 +59,7 @@ oFCKeditor.ReplaceTextarea() ;
 
 
 <html:form action="bagbuzzsearch.do">
-<input type="text" name="countdown" value="256"/>
+<input type="hidden" name="countdown" value="256"/>
 <table>
 <tr>
 <td>

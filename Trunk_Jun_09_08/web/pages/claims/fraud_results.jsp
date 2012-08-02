@@ -25,7 +25,36 @@
   }
   
 %>
+  <Script language="javascript">
+  jQuery(document).ready(function() {
+		
+		jQuery("#refresh").hide(); 
+
+	});
   
+  var count=<%=myform.getTraceResponse().getSecondsUntilReload() %>;
+
+  var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+
+  function timer()
+  {
+    count=count-1;
+    if (count < 0)
+    {
+       clearInterval(counter);
+       //counter ended, do something here
+       return;
+    }
+    if(count==0)
+   	{
+    	jQuery("#timer").hide();
+    	jQuery("#refresh").show();
+   	}
+
+    //Do code for showing the number of seconds here
+    document.getElementById("timer").innerHTML=count+" seconds";
+  }
+  </Script>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   
@@ -164,9 +193,10 @@
 					<logic:notEmpty name="fraudResultsForm" property="traceResponse">
 					<logic:equal value="false" name="fraudResultsForm" property="traceResponse.traceComplete">
 					<br/>
+					<% String claimid = request.getParameter("claimId"); %>
 					<font color=red> 
-						<bean:message key="fraud.still.searching"/>: <%=myform.getTraceResponse().getSecondsUntilReload() %> <bean:message key="fraud.still.seconds"/>
-					</font>		
+						<bean:message key="fraud.still.searching"/>: <span id="timer"> </span> <span id="refresh" style="display:none"><a href='fraud_results.do?claimId=<%=claimid %>' ><bean:message key="fraud.still.refresh"/></a></span>
+					 </font>		
 					<br/>
 					</logic:equal>
        		<table class="form2" cellspacing="0" cellpadding="0">

@@ -599,10 +599,10 @@
 						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 					</h1>
 					</span>
-					<span style="float:right;" >
+					<!-- <span style="float:right;" >
 						<a id="anshow" href="#an" onClick="show('#names','#anshow','#anhide')"><bean:message key="link.show" /></a>
 						<a id="anhide" href="#an" onClick="hide('#names','#anshow','#anhide')" style="display:none;" ><bean:message key="link.hide" /></a>
-					</span>
+					</span>-->
 					</div>
 					
 						<div id="names" style="margin:0;padding:0;display:none;">
@@ -884,10 +884,10 @@
 						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
 					</h1>
 					</span>
-					<span style="float:right;" >
+					<!-- <span style="float:right;" >
 						<a id="rsshow" href="#rs" onClick="show('#receipts','#rsshow','#rshide')"><bean:message key="link.show" /></a>
 						<a id="rshide" href="#rs" onClick="hide('#receipts','#rsshow','#rshide')" style="display:none;"><bean:message key="link.hide" /></a>
-					</span>
+					</span>-->
 					</div>
 					<div id="receipts" style="display:none;" >
 					<table class="form2" cellspacing="0" cellpadding="0" >
