@@ -29,7 +29,7 @@ public class Settings {
 	public static final String BROWSER_CUSTOM = "*custom";
 	public static final String BROWSER_FIREFOXCUSTOM = "*firefox C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
 	
-	public static final boolean ECLIPSE_RUNS_SERVER = true;
+	public static final boolean ECLIPSE_RUNS_SERVER = false;
 	
 	//DELAY IN MS BETWEEN ACTIONS
 	public static final String EXECUTION_SPEED_FAST = "2";
