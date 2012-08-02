@@ -11,6 +11,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.HashMap;
@@ -306,9 +307,16 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 			.replaceAll("\\s+", " ");
 			ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(s, MAX_CONTENT_DESC_LENGTH);
-			if(al.get(0).length() > 0){
-				m.put(key, al.get(0));
+			for(int j = 0; j < al.size(); j++){
+				if(al.get(j).length() > 0){
+					m.put(key+j, al.get(j));
+				}
 			}
+			
+//			if(al.get(0).length() > 0){
+//				m.put(key, al.get(0));
+//			}
+			m.remove(key);
 		}
 		return m;
 	}
@@ -1578,7 +1586,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						c2 = d2.addNewBagContents();
 					}
 					ContentType c = c2.addNewContent();
-					c.setCategory(key);
+					c.setCategory(key.substring(0, key.length()-1));
+					//c.setCategory(key);
 					c.setDescription(cm.get(key));
 				}
 				
@@ -1985,7 +1994,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 									cx = t3.addNewBagContents();
 								}
 								ContentType c = cx.addNewContent();
-								c.setCategory(key);
+								c.setCategory(key.substring(0, key.length()-1));
 								c.setDescription(cm.get(key));
 							}
 //							for (Content content:cList){
@@ -3579,7 +3588,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						c2 = d2.addNewBagContents();
 					}
 					ContentType c = c2.addNewContent();
-					c.setCategory(key);
+					c.setCategory(key.substring(0, key.length()-1));
+					//c.setCategory(key);
 					c.setDescription(cm.get(key));
 				}
 //				for (Content content:cList){
@@ -3820,7 +3830,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 									cx = t3.addNewBagContents();
 								}
 								ContentType c = cx.addNewContent();
-								c.setCategory(key);
+								c.setCategory(key.substring(0, key.length()-1));
+								//c.setCategory(key);
 								c.setDescription(cm.get(key));
 							}
 							
