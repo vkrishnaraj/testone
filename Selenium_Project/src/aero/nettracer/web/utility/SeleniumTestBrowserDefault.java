@@ -38,7 +38,7 @@ public class SeleniumTestBrowserDefault extends Settings {
 				fstream = new FileWriter(f);
 			}
 			BufferedWriter out = new BufferedWriter(fstream);
-			out.write("?sessionId=" + browser.getCookieByName("JSESSIONID") + "&cmd=testComplete");
+			out.write("?sessionId=" + browser.getCookieByName("JSESSIONID") + "&cmd=testComplete\n");
 			out.close();
 		} catch (IOException e) {
 			System.out.println("Write Error: " + e.getMessage());
