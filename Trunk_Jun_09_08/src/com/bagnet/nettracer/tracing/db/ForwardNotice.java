@@ -98,7 +98,7 @@ public class ForwardNotice implements Serializable {
 		String post = null;
 		for (OHD_Log_Itinerary itin: (Set<OHD_Log_Itinerary>)forward.getItinerary()) {
 			
-			if (itin.getLegto().equalsIgnoreCase(station.getStationcode())) {
+			if (itin.getLegto() != null && itin.getLegto().equalsIgnoreCase(station.getStationcode())) {
 				pre = "<strong>";
 				post = "</strong>";
 			} else {
