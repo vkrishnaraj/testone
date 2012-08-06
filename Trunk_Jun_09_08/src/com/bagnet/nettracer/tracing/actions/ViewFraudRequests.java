@@ -108,7 +108,7 @@ public class ViewFraudRequests extends CheckedAction {
 		
 		if (request.getParameter("matchId") != null) {
 			long matchId = Long.parseLong(request.getParameter("matchId"));
-			MatchHistory match = getMatchHistoryFromResults(matchId, (List<AccessRequest>)session.getAttribute("requestList"));
+			MatchHistory match = getMatchHistoryFromResults(matchId, (List<AccessRequest>)session.getAttribute("requestList"), request);
 			request.setAttribute("match", match);
 			int status = match.getFile2().getStatusId();
 			if (status == TracingConstants.STATUS_SUSPECTED_FRAUD || status == TracingConstants.STATUS_KNOWN_FRAUD) {
@@ -226,7 +226,7 @@ public class ViewFraudRequests extends CheckedAction {
 		return mapping.findForward("viewfraudrequests");
 	}
 	
-	private static MatchHistory getMatchHistoryFromResults(long matchId, List<AccessRequest> requestList) {
+	private static MatchHistory getMatchHistoryFromResults(long matchId, List<AccessRequest> requestList, HttpServletRequest request) {
 		if (requestList == null || requestList.isEmpty()) {
 			return null;
 		}
@@ -234,6 +234,12 @@ public class ViewFraudRequests extends CheckedAction {
 		MatchHistory toReturn = null;
 		for (AccessRequest ar: requestList) {
 			if (matchId == ar.getMatchHistory().getId()) {
+				request.setAttribute("requestAgent", ar.getRequestedAgent());
+				if(ar.getContact()!=null){
+					request.setAttribute("contact", ar.getContact()); //
+				} else {
+					request.setAttribute("contact", ""); //
+				}
 				toReturn = ar.getMatchHistory();
 				break;
 			}

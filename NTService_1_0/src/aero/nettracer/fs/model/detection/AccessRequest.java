@@ -39,6 +39,8 @@ public class AccessRequest implements Serializable {
 
 	@OneToOne(fetch = FetchType.EAGER)
 	private File file;
+	
+	private String contact;
 
 	public File getFile() {
 		return file;
@@ -134,6 +136,14 @@ public class AccessRequest implements Serializable {
 
 	public void setResponseAgent(String responseAgent) {
 		this.responseAgent = responseAgent;
+	}
+	
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
 	}
 
 	public static long getSerialversionuid() {

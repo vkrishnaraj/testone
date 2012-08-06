@@ -33,9 +33,9 @@ public class ClaimWebService{
 
 
 	public void requestAccess(String username, String password, long fileId, long matchId, String agent,
-			String requestingAirline, String message) {
+			String requestingAirline, String message, String contact) {
 		ClaimRemote remote = new ClaimBean();
-		remote.requestAccess(fileId, matchId, agent, requestingAirline, message);
+		remote.requestAccess(fileId, matchId, agent, requestingAirline, message, contact);
 
 	}
 

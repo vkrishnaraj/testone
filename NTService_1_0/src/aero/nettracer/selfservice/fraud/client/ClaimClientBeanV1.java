@@ -58,8 +58,8 @@ public class ClaimClientBeanV1 implements ClaimClientRemoteV1{
 
 	@Override
 	public void requestAccess(long fileId, long matchId, String agent,
-				String requestingAirline, String message) {
-		bean.requestAccess(fileId, matchId, agent, requestingAirline, message);
+				String requestingAirline, String message, String contact) {
+		bean.requestAccess(fileId, matchId, agent, requestingAirline, message, contact);
 	}
 
 	@Override

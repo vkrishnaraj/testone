@@ -450,7 +450,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	
 
 	@Override
-	public void requestAccess(long fileId, long matchHistory, String agent, String requestingAirline, String message) {
+	public void requestAccess(long fileId, long matchHistory, String agent, String requestingAirline, String message, String contact) {
 		//TODO do we need to check for dup request?
 //		if(hasRequest(fileId, requestingAirline)){
 //			return;
@@ -477,6 +477,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		request.setFile(file);
 		request.setMatchHistory(mh);
 		request.setRequestedAgent(agent);
+		request.setContact(contact);
 		request.setRequestedDate(DateUtils.convertToGMTDate(new Date()));
 		request.setRequestedAirline(requestingAirline);
 		if(autosend){
@@ -543,7 +544,6 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public List<AccessRequest> getAccessRequests(AccessRequestDTO dto, int begin, int perPage) {
 		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_ACCESS_REQUESTS, -1, dto.getAirlinecode());
 		Session sess = HibernateWrapper.getSession().openSession();
-
 		String sql = getAccessRequestsQuery(dto) + " order by ar.requestedDate desc";
 
 		Query q = sess.createQuery(sql);

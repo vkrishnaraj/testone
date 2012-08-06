@@ -132,7 +132,7 @@ public class FraudTrace {
 //	@Test
 	public void request(){
 		ClaimBean bean = new ClaimBean();
-		bean.requestAccess(312992, 9, "nettracer user", "B6", "Yo Mike");
+		bean.requestAccess(312992, 9, "nettracer user", "B6", "Yo Mike", "555-555-5555");
 	}
 	
 	  public static File createFile() {

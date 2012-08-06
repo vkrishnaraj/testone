@@ -12,6 +12,7 @@ public final class RequestInfoForm extends ActionForm {
 
 	private ArrayList<MatchHistory> requestedMatches;
 	private String message;
+	private String contact;
 	private String originalClaimId;
 	
 	public ArrayList<MatchHistory> getRequestedMatches() {
@@ -36,6 +37,14 @@ public final class RequestInfoForm extends ActionForm {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	
+	public String getContact() {
+		return contact;
+	}
+
+	public void setContact(String contact) {
+		this.contact = contact;
 	}
 
 	
