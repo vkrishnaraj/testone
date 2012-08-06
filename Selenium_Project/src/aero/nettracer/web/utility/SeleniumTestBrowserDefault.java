@@ -3,6 +3,11 @@ package aero.nettracer.web.utility;
 //custom settings class, read in some configs for your
 //tests from a properties file blah blah blah use your
 //imagination
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.junit.Test;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
@@ -24,6 +29,21 @@ public class SeleniumTestBrowserDefault extends Settings {
 	}
 
 	public synchronized static void stopBrowser() {
+		try {
+			File f = new File("sessions.txt");
+			FileWriter fstream;
+			if (f.exists()) {
+				fstream = new FileWriter(f, true);
+			} else {
+				fstream = new FileWriter(f);
+			}
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write("?sessionId=" + browser.getCookieByName("JSESSIONID") + "&cmd=testComplete");
+			out.close();
+		} catch (IOException e) {
+			System.out.println("Write Error: " + e.getMessage());
+		}
+		
 //		browser.stop();
 //		if (ECLIPSE_RUNS_SERVER) {
 //			server.stop();
