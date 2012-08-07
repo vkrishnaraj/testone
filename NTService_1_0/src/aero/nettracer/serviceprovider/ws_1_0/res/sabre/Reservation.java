@@ -575,8 +575,10 @@ public class Reservation implements ReservationInterface {
 							itin.setDepartureCity(depCity);
 						}
 
-						if (itin.getCheckedTime() == null
-								|| itin.getCheckedTime().compareTo(checkedTime) < 0) {
+						if (itin.getCheckedTime() == null) {
+							//  8/7/12 CG: Removing this OR to fix parsing issue for B6. No idea why its here, if
+							//             B6 complains about something else after deployed keep it in mind.
+							//	|| itin.getCheckedTime().compareTo(checkedTime) < 0) {
 							itin.setCheckedTime(checkedTime);
 						}
 						itinMap.put(itin.key(), itin);
