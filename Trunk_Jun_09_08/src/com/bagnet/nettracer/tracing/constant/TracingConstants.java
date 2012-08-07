@@ -122,8 +122,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_ADD_DAMAGED_BAG = "Add Damaged Bag";
 	public final static String SYSTEM_COMPONENT_NAME_ACTIVE_TRACING = "Active Tracing";
 	public final static String SYSTEM_COMPONENT_NAME_OSI_LD = "Other System Information LD";
-	public final static String SYSTEM_COMPONENT_NAME_OSI_DAM = "Other System Information PIL";
-	public final static String SYSTEM_COMPONENT_NAME_OSI_PIL = "Other System Information DAM";
+	public final static String SYSTEM_COMPONENT_NAME_OSI_DAM = "Other System Information DAM";
+	public final static String SYSTEM_COMPONENT_NAME_OSI_PIL = "Other System Information PIL";
 	public final static String SYSTEM_COMPONENT_NAME_CUSTOMER_COMMENTS = "Customer Comments";
 	public final static String SYSTEM_COMPONENT_NAME_CREATE_TEMP_INCIDENTS = "Create Temp Incidents";
 	public final static String SYSTEM_COMPONENT_NAME_CREATE_TEMP_OHD = "Create Temp OHD";
