@@ -2213,50 +2213,28 @@ public class IncidentBMO {
 
 			ep.setIncident(inc);
 			inc.getExpenses().add(ep);
-			if (inc.getClaims()!=null || inc.getClaims().size()<=0) {
-				Claim c = new Claim();
-				
-				c.setNtIncident(inc);
-				
-				c.setAmountClaimedCurrency(inc.getAgent().getDefaultcurrency());
-				// mjs: begin NTFS modification
-//				c.setCountryofissue(AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID());
-				String countryOfIssue = AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID();
-//				for (Person claimant: c.getClaimants()) {
-//					claimant.setPassportIssuer(countryOfIssue);
-//				}
-				// mjs: end NTFS modification
-				Status st = new Status();
-				st.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
-				c.setStatus(st);
-				
-				LinkedHashSet<Claim> claims = new LinkedHashSet<Claim>();
-				claims.add(c);
-				inc.setClaims(claims);
-				sess.save(c);
-			}
-			
-			if (inc.getClaims()!=null || inc.getClaims().size()<=0) {
-				Claim c = new Claim();
-				
-				c.setNtIncident(inc);
-				
-				c.setAmountClaimedCurrency(inc.getAgent().getDefaultcurrency());
-				// mjs: begin NTFS modification
-				String countryOfIssue = AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID();
-//				for (Person claimant: c.getClaimants()) {
-//					claimant.setPassportIssuer(countryOfIssue);
-//				}
-				// mjs: end NTFS modification
-				Status st = new Status();
-				st.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
-				c.setStatus(st);
-				
-				LinkedHashSet<Claim> claims = new LinkedHashSet<Claim>();
-				claims.add(c);
-				inc.setClaims(claims);
-				sess.save(c);
-			}
+//			if (inc.getClaims()==null || inc.getClaims().size()<=0) {
+//				Claim c = new Claim();
+//				
+//				c.setNtIncident(inc);
+//				
+//				c.setAmountClaimedCurrency(inc.getAgent().getDefaultcurrency());
+//				// mjs: begin NTFS modification
+////				c.setCountryofissue(AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID());
+//				String countryOfIssue = AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID();
+////				for (Person claimant: c.getClaimants()) {
+////					claimant.setPassportIssuer(countryOfIssue);
+////				}
+//				// mjs: end NTFS modification
+//				Status st = new Status();
+//				st.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
+//				c.setStatus(st);
+//				
+//				LinkedHashSet<Claim> claims = new LinkedHashSet<Claim>();
+//				claims.add(c);
+//				inc.setClaims(claims);
+//				sess.save(c);
+//			}
 			sess.save(ep);
 			sess.update(inc);
 			tx.commit();
@@ -2305,43 +2283,43 @@ public class IncidentBMO {
 	}
 
 	public static void auditClaim(Incident inc, String reasonForAudit, Agent user, Session sess) throws Exception {
-		Set<Claim> clist=inc.getClaims();
-
-		for(Claim claim:clist){
+//		Set<Claim> clist=inc.getClaims();
+//
+//		for(Claim claim:clist){
 		Audit_Claim ac = new Audit_Claim();
 		ac.setExpenses(new HashSet());
 
-		ClaimProrate cp = claim.getClaimprorate();
-		if (cp != null) {
-			Audit_ClaimProrate a_cp = new Audit_ClaimProrate();
-			BeanUtils.copyProperties(a_cp, cp);
-			Prorate_Itinerary pi = null;
-			Audit_Prorate_Itinerary a_pi = null;
-			ArrayList pilist = new ArrayList();
-			if (cp.getProrate_itineraries() != null) {
-				for (int i = 0; i < cp.getPi_list().size(); i++) {
-					pi = (Prorate_Itinerary) cp.getPi_list().get(i);
-					a_pi = new Audit_Prorate_Itinerary();
-					BeanUtils.copyProperties(a_pi, pi);
-					pi.setClaimprorate(cp);
-					a_pi.setAudit_claimprorate(a_cp);
-					pilist.add(a_pi);
-				}
-				a_cp.setProrate_itineraries(new LinkedHashSet(pilist));
-			}
-			ac.setAudit_claimprorate(a_cp);
-		}
+		//ClaimProrate cp = claim.getClaimprorate();
+//		if (cp != null) {
+//			Audit_ClaimProrate a_cp = new Audit_ClaimProrate();
+//			//BeanUtils.copyProperties(a_cp, cp);
+//			Prorate_Itinerary pi = null;
+//			Audit_Prorate_Itinerary a_pi = null;
+//			ArrayList pilist = new ArrayList();
+//			if (cp.getProrate_itineraries() != null) {
+//				for (int i = 0; i < cp.getPi_list().size(); i++) {
+//					pi = (Prorate_Itinerary) cp.getPi_list().get(i);
+//					a_pi = new Audit_Prorate_Itinerary();
+//					BeanUtils.copyProperties(a_pi, pi);
+//					pi.setClaimprorate(cp);
+//					a_pi.setAudit_claimprorate(a_cp);
+//					pilist.add(a_pi);
+//				}
+//				a_cp.setProrate_itineraries(new LinkedHashSet(pilist));
+//			}
+//			ac.setAudit_claimprorate(a_cp);
+//		}
 
 		ac.setModify_time(TracerDateTime.getGMTDate());
 		ac.setModify_agent(user);
 		ac.setModify_reason(reasonForAudit);
-		ac.setClaim_ID(claim.getId());
-		ac.setClaimamount(claim.getAmountClaimed());
+//		ac.setClaim_ID(claim.getId());
+//		ac.setClaimamount(claim.getAmountClaimed());
 		
-		ac.setIncident(claim.getNtIncident());
+		ac.setIncident(inc);
 
 		Status st = new Status();
-		st.setStatus_ID(claim.getStatus().getStatus_ID());
+		st.setStatus_ID(inc.getStatus().getStatus_ID());
 		ac.setStatus(st);
 		
 		Date modifyTime = TracerDateTime.getGMTDate();
@@ -2365,7 +2343,7 @@ public class IncidentBMO {
 			sess.save(aep);
 		}
 		sess.save(ac);
-		}
+//		}
 	}
 	
 	private Incident normalizePhoneNumbers(Incident iDTO) {
