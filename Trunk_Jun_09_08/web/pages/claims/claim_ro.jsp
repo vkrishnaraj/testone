@@ -1252,6 +1252,11 @@
 								<html:option value="0"><bean:message key="payment.type.cash" /></html:option>
 								<html:option value="1"><bean:message key="payment.type.check" /></html:option>
 								<html:option value="2"><bean:message key="payment.type.cc" /></html:option>
+								<html:option value="3"><bean:message key="payment.type.inv.reroute" /></html:option>
+								<html:option value="4"><bean:message key="payment.type.universal" /></html:option>
+								<html:option value="5"><bean:message key="payment.type.misc" /></html:option>
+								<html:option value="6"><bean:message key="payment.type.other.cc" /></html:option>
+								<html:option value="7"><bean:message key="payment.type.other" /></html:option>
 							</html:select>
                         </td>
 						<td colspan=2>
