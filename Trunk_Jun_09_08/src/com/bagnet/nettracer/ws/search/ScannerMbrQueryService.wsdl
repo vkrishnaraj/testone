@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://search.ws.nettracer.bagnet.com" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax21="http://pojo.search.ws.nettracer.bagnet.com/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://search.ws.nettracer.bagnet.com">
+    <wsdl:types>
+        <xs:schema xmlns:ax22="http://pojo.search.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://search.ws.nettracer.bagnet.com">
+            <xs:import namespace="http://pojo.search.ws.nettracer.bagnet.com/xsd"/>
+            <xs:element name="queryNetTracer">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="args0" nillable="true" type="xs:string"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="args1" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="queryNetTracerResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax22:Match"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.search.ws.nettracer.bagnet.com/xsd">
+            <xs:complexType name="Match">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="allTagsInIncident" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="created" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="incident" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="matchingPnr" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="matchingTagNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="pnr" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="queryNetTracerRequest">
+        <wsdl:part name="parameters" element="ns:queryNetTracer"/>
+    </wsdl:message>
+    <wsdl:message name="queryNetTracerResponse">
+        <wsdl:part name="parameters" element="ns:queryNetTracerResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="ScannerMbrQueryServicePortType">
+        <wsdl:operation name="queryNetTracer">
+            <wsdl:input message="ns:queryNetTracerRequest" wsaw:Action="urn:queryNetTracer"/>
+            <wsdl:output message="ns:queryNetTracerResponse" wsaw:Action="urn:queryNetTracerResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="ScannerMbrQueryServiceSoap11Binding" type="ns:ScannerMbrQueryServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="queryNetTracer">
+            <soap:operation soapAction="urn:queryNetTracer" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="ScannerMbrQueryServiceSoap12Binding" type="ns:ScannerMbrQueryServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="queryNetTracer">
+            <soap12:operation soapAction="urn:queryNetTracer" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="ScannerMbrQueryServiceHttpBinding" type="ns:ScannerMbrQueryServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="queryNetTracer">
+            <http:operation location="ScannerMbrQueryService/queryNetTracer"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="queryNetTracer"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="queryNetTracer"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="ScannerMbrQueryService">
+        <wsdl:port name="ScannerMbrQueryServiceHttpSoap11Endpoint" binding="ns:ScannerMbrQueryServiceSoap11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/ScannerMbrQueryService"/>
+        </wsdl:port>
+        <wsdl:port name="ScannerMbrQueryServiceHttpSoap12Endpoint" binding="ns:ScannerMbrQueryServiceSoap12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/ScannerMbrQueryService"/>
+        </wsdl:port>
+        <wsdl:port name="ScannerMbrQueryServiceHttpEndpoint" binding="ns:ScannerMbrQueryServiceHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/ScannerMbrQueryService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
