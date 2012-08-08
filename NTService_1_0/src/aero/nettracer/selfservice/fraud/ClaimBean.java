@@ -450,7 +450,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	
 
 	@Override
-	public void requestAccess(long fileId, long matchHistory, String agent, String requestingAirline, String message, String contact) {
+	public void requestAccess(long fileId, long matchHistory, String agent, String requestingAirline, String message) { //, String contact
 		//TODO do we need to check for dup request?
 //		if(hasRequest(fileId, requestingAirline)){
 //			return;
@@ -477,7 +477,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		request.setFile(file);
 		request.setMatchHistory(mh);
 		request.setRequestedAgent(agent);
-		request.setContact(contact);
+		//request.setContact(contact);
 		request.setRequestedDate(DateUtils.convertToGMTDate(new Date()));
 		request.setRequestedAirline(requestingAirline);
 		if(autosend){

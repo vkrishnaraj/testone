@@ -85,14 +85,14 @@ public class RequestInfoAction extends CheckedAction {
 			ClaimRemote remote = (ClaimRemote) ctx
 					.lookup("NTServices_1_0/ClaimBean/remote");
 			String message = form.getMessage();
-			String contact = form.getContact();
+			//String contact = form.getContact();
 			if (remote != null) {
 				int agentId = user.getAgent_ID();
 				long itemId;
 				for (MatchHistory m: form.getRequestedMatches()) {
 					itemId = m.getId();
 					ClaimUtils.enterAuditClaimEntry(agentId, TracingConstants.FS_AUDIT_ITEM_TYPE_MATCH_HISTORY, itemId, TracingConstants.FS_ACTION_REQUEST_INFO);
-					remote.requestAccess(m.getFile2().getId(), itemId, user.getFirstname() + " " + user.getLastname(), user.getCompanycode_ID(), message, contact);
+					remote.requestAccess(m.getFile2().getId(), itemId, user.getFirstname() + " " + user.getLastname(), user.getCompanycode_ID(), message); //, contact
 				}
 			}
 			ctx.close();

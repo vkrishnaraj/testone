@@ -17,7 +17,8 @@ public interface ClaimClientRemote {
 	public TraceResponse getFileMatches(long fileId);
 	public int getIncidentCacheSize();
 	public int getClaimCacheSize();
-	public void requestAccess(long fileId, long matchId, String agent, String requestingAirline, String message, String contact);
+	public void requestAccess(long fileId, long matchId, String agent, String requestingAirline, String message);
+	//public void requestAccess(long fileId, long matchId, String agent, String requestingAirline, String message, String contact);
 	public List<AccessRequest> getOutstandingRequests(String airlineId, int begin, int perPage);
 	public int getOutstandingRequetsCount(String airlineId);
 	public void approveRequest(long requestId, String message, String agent);

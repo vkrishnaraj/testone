@@ -62,7 +62,7 @@ public class AccessRequest implements aero.nettracer.fs.model.transport.v0.detec
 	private Date requestedDate;
 
 	private String requestedAgent;
-	private String contact;
+	//private String contact;
 	private String requestedAirline;
 
 	public String getRequestedAirline() {
@@ -121,13 +121,13 @@ public class AccessRequest implements aero.nettracer.fs.model.transport.v0.detec
 		this.requestedAgent = requestedAgent;
 	}
 
-	public String getContact() {
-		return contact;
-	}
-
-	public void setContact(String contact) {
-		this.contact = contact;
-	}
+//	public String getContact() {
+//		return contact;
+//	}
+//
+//	public void setContact(String contact) {
+//		this.contact = contact;
+//	}
 
 	public Date getResponseDate() {
 		return responseDate;

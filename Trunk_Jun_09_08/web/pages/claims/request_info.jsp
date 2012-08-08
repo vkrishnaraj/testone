@@ -82,14 +82,14 @@
 		            		<% } %>
 	            		</tr>
             		</logic:iterate>
-            		<tr>
+            		<!-- <tr>
             			<td colspan="3"><b><bean:message key="colname.requestagent" /></b></td>
             			<td colspan="3"><b><bean:message key="colname.contact" /></b></td>
             		</tr>
             		<tr>
-            			<td colspan="3"><input type="text" disabled="true" class="textfield" value="<%=a.getFirstname()%> <%=a.getLastname()%>"/></td>
+            			<td colspan="3"><input type="text" disabled="true" class="textfield" value="<=a.getFirstname()%> <=a.getLastname()%>"/></td>
             			<td colspan="3"><html:text property="contact"/></td>
-            		</tr>
+            		</tr>-->
             		<tr><td colspan="6">&nbsp;</td></tr>
 	            	<tr><td colspan="6"><bean:message key="colname.message" /></td></tr>
 	            	<tr>

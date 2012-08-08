@@ -66,7 +66,7 @@
 	                </table>
                 </logic:notEmpty>
                 
-            	<table class="form2" cellspacing="0" cellpadding="0" >
+            	<!-- <table class="form2" cellspacing="0" cellpadding="0" >
             		<tr>
             			<td class="header">
             				<bean:message key="claim.match.detail.name" />
@@ -79,7 +79,7 @@
             				<td><bean:write scope="request" name="requestAgent" /></td>
             				<td><bean:write scope="request" name="contact" /></td>
            			</tr>
-            	</table>
+            	</table>-->
                 
             	<table class="form2" cellspacing="0" cellpadding="0" > 
             		<tr>
