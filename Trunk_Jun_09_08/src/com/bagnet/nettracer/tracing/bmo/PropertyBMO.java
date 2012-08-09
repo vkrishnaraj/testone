@@ -160,6 +160,8 @@ public class PropertyBMO {
 	
 	public static final String WT_TAGLESS_AS_OAL = "wt.tagless.as.oal";
 	
+	public static final String DIRECT_ACCESS_URL = "direct.access.url";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){
