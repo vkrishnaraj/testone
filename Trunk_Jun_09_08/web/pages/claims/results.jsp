@@ -50,7 +50,7 @@
 	AccessRequest.RequestStatus status = result.getFile2().getRequestStatus();
 	String company = request.getParameter("company");
 	String disStatus = result.getFile2().getDisStatus();
-	boolean sameCompany = result.getFile2().getValidatingCompanycode().equals(company);
+	boolean sameCompany = result.getFile2().getValidatingCompanycode().equals(company) || status != null;
 	boolean ntUser = PropertyBMO.isTrue("nt.user");
 	FsClaim[] claims = result.getFile2().getClaims().toArray(new FsClaim[0]);
 	if (claims != null && claims.length > 0) { %>

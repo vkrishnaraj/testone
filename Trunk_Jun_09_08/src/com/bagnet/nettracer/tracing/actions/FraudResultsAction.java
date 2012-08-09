@@ -68,6 +68,9 @@ public class FraudResultsAction extends CheckedAction {
 		boolean ntUser = PropertyBMO.isTrue("nt.user");
 		FraudResultsForm resultsForm = (FraudResultsForm) form;
 		String claimIdString = request.getParameter("claimId");
+		if(claimIdString == null){
+			claimIdString = (String) request.getAttribute("claimId");
+		}
 		String incidentIdString = request.getParameter("incident");
 		if(incidentIdString == null){
 			incidentIdString = (String) request.getAttribute("incident");
@@ -76,7 +79,7 @@ public class FraudResultsAction extends CheckedAction {
 
 		File file = null;
 		FsClaim claim = null;
-		request.setAttribute("incident", "");
+		request.setAttribute("incident", "null");
 		if (ntUser && incidentIdString != null && !incidentIdString.equals("null")) {
 			file = FileDAO.loadFile(incidentIdString);
 			if (file == null) {
