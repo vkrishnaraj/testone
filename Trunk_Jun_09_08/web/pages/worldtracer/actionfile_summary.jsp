@@ -125,8 +125,8 @@ function updatePagination() {
 					<td>
 						<c:choose>
 						<c:when test="${!empty actionData.incident_id}">
-							<c:url	value="/lostDelay.do" var="incidentLink">
-								<c:param name="incident_ID" value="${actionData.incident_id}" />
+							<c:url	value="/searchIncident.do" var="incidentLink">
+								<c:param name="incident" value="${actionData.incident_id}" />
 							</c:url>
 							<bean:message key="nettracer.id" />:&nbsp;<a href="${incidentLink}">${actionData.incident_id}</a>
 							<br /><bean:message key="worldtracer.id" />:&nbsp;<a href="worldtraceraf.do?rawtext=1&ahl_id=${actionData.wt_incident_id}">${actionData.wt_incident_id}</a>
