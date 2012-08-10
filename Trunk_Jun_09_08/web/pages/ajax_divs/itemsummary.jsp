@@ -9,7 +9,7 @@
 <%@ page import="java.util.ArrayList" %>
 
 <%
-	ArrayList<HistoryObject> history = ((HistoryContainer) request.getSession().getAttribute("historyContainer")).getNewestItems(PropertyBMO.getValueAsInt("lfc.item.entry.display.count"));
+	ArrayList<FoundHistoryObject> history = ((HistoryContainer) request.getSession().getAttribute("historyContainer")).getNewestFoundHistoryItems(PropertyBMO.getValueAsInt("lfc.item.entry.display.count"));
 	int divNum = Integer.parseInt((String) request.getAttribute("divId"));
 	request.removeAttribute("divId");
 	FoundHistoryObject fho = (FoundHistoryObject) history.get(divNum);
