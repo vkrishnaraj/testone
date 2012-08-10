@@ -246,7 +246,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	private static final boolean FORCE_FAILURE = false;
 	RuleMapper wtRuleMap = new UsWorldTracerRuleMap();
 
-	private static final int MAX_CONTENT_DESC_LENGTH = 90;
+	private static final int MAX_CONTENT_DESC_LENGTH = 45;
 	private static final int MAX_CONTENT_SPLIT = 2;
 	private static final int LOSS_COMMENT_MAX = 58;
   
