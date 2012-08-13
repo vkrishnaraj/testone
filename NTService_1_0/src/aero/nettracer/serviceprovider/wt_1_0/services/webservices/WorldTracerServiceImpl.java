@@ -316,7 +316,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if(al.get(0).length() > 0){
 				m.put(key, al.get(0));
 			}
-			m.remove(key);
+			//m.remove(key);
 		}
 		return m;
 	}
