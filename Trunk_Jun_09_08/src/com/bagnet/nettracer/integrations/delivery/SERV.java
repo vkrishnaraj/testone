@@ -115,10 +115,10 @@ public class SERV implements BDOIntegration {
 			logger.info("POINT 6\n\n");
 			bdo.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
 			bdo.set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
-			bdo.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(agent.getCurrenttimezone())
-					.getTimezone()));
-			Calendar createCal = new GregorianCalendar(bdo.get_TIMEZONE());
-			createCal.setTime(bdo.getCreatedate());
+			bdo.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById("27").getTimezone())); //agent.getCurrenttimezone()
+			Calendar createCal = new GregorianCalendar(); //bdo.get_TIMEZONE()
+			String CDate=DateUtils.formatDate(bdo.getCreatedate(), TracingConstants.DB_DATEFORMAT_MSSQL, null, null);
+			createCal.setTime(DateUtils.convertToDate(CDate, TracingConstants.DB_DATEFORMAT_MSSQL, null));
 			ws.setCreatedDate(createCal);
 			ws.setPickUpDate(createCal);
 			
