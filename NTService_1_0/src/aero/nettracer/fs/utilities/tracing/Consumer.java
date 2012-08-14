@@ -1086,11 +1086,11 @@ public class Consumer implements Runnable{
 				// TODO: Update contents appropriately
 				// TODO: Need to split up license number from issuer (they should build).
 				
-				boolean driverNumberNull = p1.getDriversLicenseNumber() == null || p1.getDriversLicenseNumber().trim().length() > 0 
-										|| p2.getDriversLicenseNumber() == null || p2.getDriversLicenseNumber().trim().length() > 0 ? true:false;
+				boolean driverNumberNull = p1.getDriversLicenseNumber() == null || p1.getDriversLicenseNumber().trim().length() == 0 
+										|| p2.getDriversLicenseNumber() == null || p2.getDriversLicenseNumber().trim().length() == 0 ? true:false;
 				boolean driverNumber = !driverNumberNull && p1.getDriversLicenseNumber().equalsIgnoreCase(p2.getDriversLicenseNumber()) ? true:false;
-				boolean driverIssueNull = p1.getDriversLicenseIssuer() == null || p1.getDriversLicenseIssuer().trim().length() > 0 
-											|| p2.getDriversLicenseIssuer() == null || p2.getDriversLicenseIssuer().trim().length() > 0 ? true:false;
+				boolean driverIssueNull = p1.getDriversLicenseIssuer() == null || p1.getDriversLicenseIssuer().trim().length() == 0 
+											|| p2.getDriversLicenseIssuer() == null || p2.getDriversLicenseIssuer().trim().length() == 0 ? true:false;
 				boolean driverIssue = !driverIssueNull && p1.getDriversLicenseIssuer().equalsIgnoreCase(p2.getDriversLicenseIssuer()) ? true:false;
 				
 				if(driverNumber && driverIssue){
