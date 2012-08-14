@@ -23,7 +23,6 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.tracing.utils.StringUtils;
 
 @Entity
 @Proxy(lazy = false)
@@ -111,26 +110,19 @@ public class Person implements Serializable {
 		}
 	}
 
-	public String getRedactedSocialSecurity() {
-		String toReturn = "";
-		if (socialSecurity != null && !socialSecurity.isEmpty()) {
-			toReturn = "*********";
-		}
-		return toReturn;
-	}
 
 	public String getSocialSecurity() {
 		return this.socialSecurity;
 	}
 
-	public void setRedactedSocialSecurity(String socialSecurity) {
-		this.setSocialSecurity(socialSecurity);
-	}
-
+	
 	public void setSocialSecurity(String socialSecurity) {
-		if (socialSecurity != null && socialSecurity.matches("[0-9]{9}")) {
-			this.socialSecurity = StringUtils.sha1(socialSecurity, true);
-		}
+		this.socialSecurity = socialSecurity;
+		/**
+		 * This number should already be hashed from the application, we only need to persist the hash value
+		 * Any future data integrations will need to use the same hash method as the nt application
+		 */
+
 	}
 
 	public String getEmailAddress() {
@@ -256,13 +248,7 @@ public class Person implements Serializable {
 		this.driversLicenseState = driversLicenseState;
 	}
 
-	public String getRedactedDriversLicenseNumber() {
-		String toReturn = "";
-		if (driversLicenseNumber != null && !driversLicenseNumber.isEmpty()) {
-			toReturn = "*********";
-		}
-		return toReturn;
-	}
+	
 
 	public String getDriversLicenseProvince() {
 		return driversLicenseProvince;
@@ -276,16 +262,15 @@ public class Person implements Serializable {
 		return this.driversLicenseNumber;
 	}
 
-	public void setRedactedDriversLicenseNumber(String driversLicenseNumber) {
-		setDriversLicenseNumber(driversLicenseNumber);
-	}
+
 
 	public void setDriversLicenseNumber(String driversLicenseNumber) {
-		if (driversLicenseNumber != null
-				&& driversLicenseNumber.matches("[A-Za-z0-9]{5,15}")) {
-			this.driversLicenseNumber = StringUtils.sha1(driversLicenseNumber,
-					true);
-		}
+		/**
+		 * This number should already be hashed from the application, we only need to persist the hash value
+		 * Any future data integrations will need to use the same hash method as the nt application
+		 */
+		this.driversLicenseNumber = driversLicenseNumber;
+		
 	}
 
 	public String getPassportIssuer() {
@@ -296,27 +281,15 @@ public class Person implements Serializable {
 		this.passportIssuer = passportIssuer;
 	}
 
-	public String getRedactedPassportNumber() {
-		String toReturn = "";
-		if (passportNumber != null && !passportNumber.isEmpty()) {
-			toReturn = "***************";
-		}
-		return toReturn;
-	}
 
 	public String getPassportNumber() {
 		return this.passportNumber;
 	}
 
-	public void setRedactedPassportNumber(String passportNumber) {
-		setPassportNumber(passportNumber);
-	}
 
 	public void setPassportNumber(String passportNumber) {
-		if (passportNumber != null
-				&& passportNumber.matches("[A-Za-z0-9]{5,15}")) {
-			this.passportNumber = StringUtils.sha1(passportNumber, true);
-		}
+		this.passportNumber = passportNumber;
+
 	}
 
 	public String getFfAirline() {
