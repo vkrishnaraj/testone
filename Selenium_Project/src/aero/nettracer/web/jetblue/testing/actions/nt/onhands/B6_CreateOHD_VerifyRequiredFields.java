@@ -41,4 +41,40 @@ public class B6_CreateOHD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			verifyTrue(false);
 		}
 	}
+	
+	@Test
+	public void testAD_CreateOHD_VerifyBagHop() throws Exception {
+//		goToTaskManager();
+//		selenium.click("id=menucol_4.4");
+//		waitForPageToLoadImproved();
+//		if (checkNoErrorPage()) {
+//			selenium.type("name=incident_ID", Settings.ONHAND_ID_B6);
+//			selenium.click("id=button");
+//			waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			selenium.select("name=disposal_status.status_ID", "label=BagHop Pickup");
+			selenium.click("name=savetracing");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("Error: Failed to save change to BagHop Pickup");
+		}
+		if (checkNoErrorPage()) {
+			selenium.click("link="+Settings.ONHAND_ID_B6);
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("Error: Reload On Hand");
+		}
+		if(checkNoErrorPage()){
+			selenium.select("name=status.status_ID", "label=Closed");
+			selenium.click("name=savetracing");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("Error: Failed to save change to Closed");
+		}
+		if (checkNoErrorPage()) {
+			selenium.click("link="+Settings.ONHAND_ID_B6);
+			waitForPageToLoadImproved();
+			verifyEquals("label=BagHop Pickup", selenium.getText("name=disposal_status.status_ID"));
+		}
+	}
 }
