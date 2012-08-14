@@ -61,7 +61,7 @@ public class Consumer implements Runnable{
 	public static final double P_CC_16 = 30;
 	public static final double P_SSN = 30;
 	public static final double P_DRIVERS = 30;
-	public static final double P_FFN = 10;
+	public static final double P_FFN = 15;
 	public static final double P_PASSPORT = 30;
 	public static final double P_EMAIL = 20;
 	
