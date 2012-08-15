@@ -4,6 +4,7 @@ import com.bagnet.nettracer.cronjob.utilities.CronUtils;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
 public class NetTracerManagementBean {
 
@@ -13,6 +14,10 @@ public class NetTracerManagementBean {
 	
 	public void reloadTracerFileProperties() {
 		TracerProperties.reloadProperties();
+	}
+	
+	public void reloadLookupAirlineTable() {
+		LookupAirlineCodes.reloadTable();
 	}
 	
 	public void sendBillingReport(String companyCode) {

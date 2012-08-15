@@ -23,12 +23,13 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 			.getLogger(ScannerMbrQueryServiceImpl.class);
 	
 	private static final int INCIDENT_ID = 0;
-	private static final int TYPE = 1;
-	private static final int CREATEDATE = 2;
-	private static final int CLAIMCHECK_C = 3;
-	private static final int CLAIMCHECK_ITM = 4;
-	private static final int PNR = 5;
-	private static final String LD_TYPE = "Lost/Delayed";
+	private static final int TYPE_ID = 1;
+	private static final int TYPE = 2;
+	private static final int CREATEDATE = 3;
+	private static final int CLAIMCHECK_C = 4;
+	private static final int CLAIMCHECK_ITM = 5;
+	private static final int PNR = 6;
+	private static final int LD_TYPE = 1;
     
    /**
     * Auto generated method signature
@@ -36,7 +37,7 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     * @param queryNetTracer
     */
    public com.bagnet.nettracer.ws.search.QueryNetTracerResponseDocument queryNetTracer(com.bagnet.nettracer.ws.search.QueryNetTracerDocument queryNetTracer) {
-	   return queryNetTracer(queryNetTracer, 4);
+	   return queryNetTracer(queryNetTracer, 30);
    }
    
    public com.bagnet.nettracer.ws.search.QueryNetTracerResponseDocument queryNetTracer(com.bagnet.nettracer.ws.search.QueryNetTracerDocument queryNetTracer, int subDays) {
@@ -73,7 +74,7 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     		subTime = "DATEADD(day, -" + subDays + ", GETUTCDATE())";
     	}
     	
-    	String query = "select i.Incident_ID as id, it.description as type, " + addTime + " as createdatetime, "
+    	String query = "select i.Incident_ID as id, it.ItemType_ID as type_id, it.description as type, " + addTime + " as createdatetime, "
 	    		+ "c.claimchecknum as c_check, itm.claimchecknum as itm_check, i.recordlocator as pnr from incident i "
     			+ "left outer join incident_claimcheck c on i.Incident_ID = c.incident_ID "
     			+ "left outer join item itm on i.Incident_ID = itm.incident_ID "
@@ -106,11 +107,13 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     		returnMe = " or (i.recordlocator in (";
     		boolean notFirst = false;
     		for (String pnr: pnrs) {
-    			if (notFirst) {
-    				returnMe += ", ";
+    			if (pnr != null && pnr.trim().length() > 0) {
+	    			if (notFirst) {
+	    				returnMe += ", ";
+	    			}
+	    			returnMe += "'" + pnr + "'";
+	    			notFirst = true;
     			}
-    			returnMe += "'" + pnr + "'";
-    			notFirst = true;
     		}
     		returnMe += ")) ";
     	}
@@ -182,8 +185,8 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
         		returnMe += temp.replaceAll("%TABLE%", "c");
     		}
     		for (String key: tenDig.keySet()) {
-    			String temp = " or (%TABLE%.claimchecknum_leading = " + key.substring(0, 1) + " and %TABLE%.claimchecknum_ticketingcode = '" + key.substring(1) 
-    					+ "' and %TABLE%.claimchecknum_bagnumber in (";
+    			String temp = " or ((%TABLE%.claimchecknum_leading = " + key.substring(0, 1) + " or %TABLE%.claimchecknum_leading is null) "
+    					+ "and %TABLE%.claimchecknum_ticketingcode = '" + key.substring(1) + "' and %TABLE%.claimchecknum_bagnumber in (";
         		boolean notFirst = false;
         		for (String tag: tenDig.get(key)) {
         			if (notFirst) {
@@ -208,6 +211,7 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 			SQLQuery query = session.createSQLQuery(sql);
 
 			query.addScalar("id", Hibernate.STRING);
+			query.addScalar("type_id", Hibernate.INTEGER);
 			query.addScalar("type", Hibernate.STRING);
 			query.addScalar("createdatetime", Hibernate.TIMESTAMP);
 			query.addScalar("c_check", Hibernate.STRING);
@@ -237,6 +241,7 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 			
 			if (row != null) {
 				String incident = (String) row[INCIDENT_ID];
+				int type_id = (Integer) row[TYPE_ID];
 				String type = (String) row[TYPE];
 				Calendar create = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 				Date createDate = (Date) row[CREATEDATE];
@@ -248,7 +253,7 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 				String itm_check = (String) row[CLAIMCHECK_ITM];
 				String pnr = (String) row[PNR];
 				String claimcheck = itm_check;
-				if (LD_TYPE.equals(type)) {
+				if (LD_TYPE == type_id) {
 					claimcheck = c_check;
 				}
 				
@@ -287,11 +292,13 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 							match.setMatchingTagNumberArray(matchTags);
 						}
 					}
-					match.setPnr(pnr);
-					if (hasMatch(pnr, pnrs)) {
-						String[] matchPnrs = new String[1];
-						matchPnrs[0] = pnr;
-						match.setMatchingPnrArray(matchPnrs);
+					if (pnr != null && pnr.trim().length() > 0) {
+						match.setPnr(pnr);
+						if (hasMatch(pnr, pnrs)) {
+							String[] matchPnrs = new String[1];
+							matchPnrs[0] = pnr;
+							match.setMatchingPnrArray(matchPnrs);
+						}
 					}
 					matches.put(incident, match);
 				}

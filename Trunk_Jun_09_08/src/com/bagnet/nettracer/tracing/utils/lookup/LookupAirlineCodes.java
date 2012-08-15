@@ -3,6 +3,7 @@
  */
 package com.bagnet.nettracer.tracing.utils.lookup;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
@@ -24,6 +25,9 @@ public class LookupAirlineCodes {
 	public static final String PATTERN_9_DIGIT_BAG_TAG = "^\\d{9}$";
 	public static final String PATTERN_8_CHAR_BAG_TAG = "^[a-zA-Z0-9]{2}\\d{6}$";
 	
+	public static HashMap<String, String> TWO_CHAR_TO_THREE_DIGIT = null;
+	public static HashMap<String, String> THREE_DIGIT_TO_TWO_CHAR = null;
+	
 
 	/**
 	 * Returns the two letter airline code when passed in the three
@@ -34,19 +38,13 @@ public class LookupAirlineCodes {
 	 * @return Two letter airline code.  Returns null if no match is found.
 	 */
 	public static String getTwoLetterAirlineCode(String threeDigitCode) {
-		Session sess = HibernateWrapper.getSession().openSession();
-
-		SQLQuery query = sess.createSQLQuery("SELECT * FROM LOOKUP_AIRLINE_CODES WHERE Airline_3_Digit_Ticketing_Code = :string");
-		query.addScalar("Airline_2_Character_Code", Hibernate.STRING);
-		//query.addScalar("Airline_3_Digit_Ticketing_Code", Hibernate.STRING);
-		query.setString("string", threeDigitCode);
-		
-		List results = query.list();
-		sess.close();
-		
-		if (results != null && results.size() >0) {
-			return (String)results.get(0);
+		if (THREE_DIGIT_TO_TWO_CHAR == null) {
+			reloadTable();
 		}
+		if (THREE_DIGIT_TO_TWO_CHAR.containsKey(threeDigitCode)) {
+			return THREE_DIGIT_TO_TWO_CHAR.get(threeDigitCode);
+		}
+		THREE_DIGIT_TO_TWO_CHAR.put(threeDigitCode, null);
 		return null;
 	}
 	
@@ -58,20 +56,13 @@ public class LookupAirlineCodes {
 	 * @return Three digit airline ticketing code.  Returns null if no match is found.
 	 */
 	public static String getThreeDigitTicketingCode(String twoCharacterCode) {
-		
-		Session sess = HibernateWrapper.getSession().openSession();
-
-		SQLQuery query = sess.createSQLQuery("SELECT * FROM LOOKUP_AIRLINE_CODES WHERE Airline_2_Character_Code = :string");
-		
-		query.addScalar("Airline_3_Digit_Ticketing_Code", Hibernate.STRING);
-		query.setString("string", twoCharacterCode);
-		
-		List results = query.list();
-		sess.close();
-		
-		if (results != null && results.size() >0) {
-			return (String)results.get(0);
+		if (TWO_CHAR_TO_THREE_DIGIT == null) {
+			reloadTable();
 		}
+		if (TWO_CHAR_TO_THREE_DIGIT.containsKey(twoCharacterCode)) {
+			return TWO_CHAR_TO_THREE_DIGIT.get(twoCharacterCode);
+		}
+		TWO_CHAR_TO_THREE_DIGIT.put(twoCharacterCode, null);
 		return null;
 	}
 	
@@ -192,5 +183,27 @@ public class LookupAirlineCodes {
 			return bagTag.substring(0, 2);
 		}
 		return null;	
+	}
+	
+	public static void reloadTable() {
+		Session sess = HibernateWrapper.getSession().openSession();
+
+		SQLQuery query = sess.createSQLQuery("SELECT Airline_2_Character_Code, Airline_3_Digit_Ticketing_Code FROM LOOKUP_AIRLINE_CODES");
+		query.addScalar("Airline_2_Character_Code", Hibernate.STRING);
+		query.addScalar("Airline_3_Digit_Ticketing_Code", Hibernate.STRING);
+		
+		List results = query.list();
+		sess.close();
+		
+		if (results != null && results.size() >0) {
+			TWO_CHAR_TO_THREE_DIGIT = new HashMap<String, String>();
+			THREE_DIGIT_TO_TWO_CHAR = new HashMap<String, String>();
+			for(Object result: results) {
+				Object[] res = (Object[]) result;
+				TWO_CHAR_TO_THREE_DIGIT.put((String) res[0], (String) res[1]);
+				THREE_DIGIT_TO_TWO_CHAR.put((String) res[1], (String) res[0]);
+			}
+		}
+		
 	}
 }
