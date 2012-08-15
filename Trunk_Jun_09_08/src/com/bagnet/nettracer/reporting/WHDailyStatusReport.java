@@ -105,7 +105,7 @@ public class WHDailyStatusReport extends AbstractNtJasperReport {
 				"a1.username open_user, i.createdate open_date, i.createtime open_time,  " +
 				"IFNULL(s2.stationcode,'N/A') close_station, IFNULL(a2.username,'N/A') close_user,  " +
 				"IFNULL(DATE(i.close_date), 'N/A') close_date, IFNULL(TIME(i.close_date), 'N/A') close_time,  " +
-				"IFNULL(CONCAT(DATEDIFF(i.close_date, i.createdate),' DAYS'), 'N/A') total,  " +
+				"IFNULL(DATEDIFF(i.close_date, i.createdate), 'N/A') total,  " +
 				"IFNULL(fs.stationcode, 'N/A') fault_station, i.loss_code fault_code, IFNULL(c.description, 'N/A') fault_desc " +
 				"from station s1, status st, itemtype t, agent a1, passenger p, incident i  " +
 				"left join (SELECT incident_id, route as theRoute, " +
