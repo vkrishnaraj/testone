@@ -10,6 +10,7 @@ import com.bagnet.nettracer.tracing.db.logger.GeneralForwardLog;
 import com.bagnet.nettracer.tracing.db.logger.GeneralLog;
 import com.bagnet.nettracer.tracing.db.logger.GeneralLFLog;
 import com.bagnet.nettracer.tracing.db.logger.GeneralPcnLog;
+import com.bagnet.nettracer.tracing.db.logger.GeneralScanQueryLog;
 import com.bagnet.nettracer.tracing.db.logger.GeneralTelexLog;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
@@ -82,5 +83,10 @@ public class Logger {
 		GeneralForwardLog log = new GeneralForwardLog();
 		Date endtime = new Date();
 		return log(log, refId, desc, starttime!=null?endtime.getTime()-starttime.getTime():0);
+	}
+	
+	public static boolean logScanQuery(String refId, String desc, long elapse){
+		GeneralScanQueryLog log = new GeneralScanQueryLog();
+		return log(log, refId, desc, elapse);
 	}
 }

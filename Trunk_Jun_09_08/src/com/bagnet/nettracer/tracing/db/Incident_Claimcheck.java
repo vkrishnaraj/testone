@@ -8,6 +8,9 @@ package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
 
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
+
 /**
  * @author Administrator
  * 
@@ -16,6 +19,10 @@ import java.io.Serializable;
 public class Incident_Claimcheck implements Serializable {
 	private int Claimcheck_ID;
 	private String claimchecknum="";
+	private int claimchecknum_leading;
+	private String claimchecknum_ticketingcode;
+	private String claimchecknum_carriercode;
+	private String claimchecknum_bagnumber;
 	private String OHD_ID="";
 	private String tempOHD_ID="";
 	private Incident incident;
@@ -72,7 +79,109 @@ public class Incident_Claimcheck implements Serializable {
 	 *          The claimchecknum to set.
 	 */
 	public void setClaimchecknum(String claimchecknum) {
+		if (claimchecknum != null)
+			claimchecknum = TracerUtils.removeSpaces(claimchecknum);
 		this.claimchecknum = claimchecknum;
+		setClaimSearchParams(claimchecknum);
+	}
+	
+	private void setClaimSearchParams(String claimchecknum) {
+		if (claimchecknum != null && claimchecknum.length() > 7 && claimchecknum.length() < 11) {
+			String leading = null;
+			String ticketing = null;
+			String carrier = null;
+			String bagnum = null;
+			
+			if (claimchecknum.length() == 8) {
+				carrier = claimchecknum.substring(0, 2);
+				ticketing = LookupAirlineCodes.getThreeDigitTicketingCode(carrier);
+				bagnum = claimchecknum.substring(2);
+			} else if (claimchecknum.length() == 9) {
+				ticketing = claimchecknum.substring(0, 3);
+				carrier = LookupAirlineCodes.getTwoLetterAirlineCode(ticketing);
+				bagnum = claimchecknum.substring(3);
+			} else if (claimchecknum.length() == 10) {
+				leading = claimchecknum.substring(0, 1);
+				ticketing = claimchecknum.substring(1, 4);
+				carrier = LookupAirlineCodes.getTwoLetterAirlineCode(ticketing);
+				bagnum = claimchecknum.substring(4);
+			}
+			
+			if (leading != null && leading.matches("^[0-9]{1}$")) {
+				setClaimchecknum_leading(Integer.parseInt(leading));
+			}
+			setClaimchecknum_carriercode(carrier);
+			setClaimchecknum_ticketingcode(ticketing);
+			setClaimchecknum_bagnumber(bagnum);
+		}
+	}
+
+	/**
+	 * @return Returns the claimchecknum_leading.
+	 * 
+	 * @hibernate.property type="integer"
+	 */
+	public int getClaimchecknum_leading() {
+		return claimchecknum_leading;
+	}
+
+	/**
+	 * @param claimchecknum_leading
+	 *          The claimchecknum_leading to set.
+	 */
+	public void setClaimchecknum_leading(int claimchecknum_leading) {
+		this.claimchecknum_leading = claimchecknum_leading;
+	}
+
+	/**
+	 * @return Returns the claimchecknum_ticketingcode.
+	 * 
+	 * @hibernate.property type="string" length="3"
+	 */
+	public String getClaimchecknum_ticketingcode() {
+		return claimchecknum_ticketingcode;
+	}
+
+	/**
+	 * @param claimchecknum_ticketingcode
+	 *          The claimchecknum_ticketingcode to set.
+	 */
+	public void setClaimchecknum_ticketingcode(String claimchecknum_ticketingcode) {
+		this.claimchecknum_ticketingcode = claimchecknum_ticketingcode;
+	}
+
+	/**
+	 * @return Returns the claimchecknum_carriercode.
+	 * 
+	 * @hibernate.property type="string" length="2"
+	 */
+	public String getClaimchecknum_carriercode() {
+		return claimchecknum_carriercode;
+	}
+
+	/**
+	 * @param claimchecknum_carriercode
+	 *          The claimchecknum_carriercode to set.
+	 */
+	public void setClaimchecknum_carriercode(String claimchecknum_carriercode) {
+		this.claimchecknum_carriercode = claimchecknum_carriercode;
+	}
+
+	/**
+	 * @return Returns the claimchecknum_bagnumber.
+	 * 
+	 * @hibernate.property type="string" length="6"
+	 */
+	public String getClaimchecknum_bagnumber() {
+		return claimchecknum_bagnumber;
+	}
+
+	/**
+	 * @param claimchecknum_bagnumber
+	 *          The claimchecknum_bagnumber to set.
+	 */
+	public void setClaimchecknum_bagnumber(String claimchecknum_bagnumber) {
+		this.claimchecknum_bagnumber = claimchecknum_bagnumber;
 	}
 
 	/**
