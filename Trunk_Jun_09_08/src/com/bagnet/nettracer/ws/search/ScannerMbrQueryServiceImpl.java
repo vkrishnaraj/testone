@@ -30,6 +30,8 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 	private static final int CLAIMCHECK_ITM = 5;
 	private static final int PNR = 6;
 	private static final int LD_TYPE = 1;
+	private static final int MISS_TYPE = 1;
+	private static final int DAM_TYPE = 1;
     
    /**
     * Auto generated method signature
@@ -74,11 +76,10 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     		subTime = "DATEADD(day, -" + subDays + ", GETUTCDATE())";
     	}
     	
-    	String query = "select i.Incident_ID as id, it.ItemType_ID as type_id, it.description as type, " + addTime + " as createdatetime, "
+    	String query = "select i.Incident_ID as id, i.itemtype_ID as type_id, 'UNKNOWN' as type, " + addTime + " as createdatetime, "
 	    		+ "c.claimchecknum as c_check, itm.claimchecknum as itm_check, i.recordlocator as pnr from incident i "
     			+ "left outer join incident_claimcheck c on i.Incident_ID = c.incident_ID "
     			+ "left outer join item itm on i.Incident_ID = itm.incident_ID "
-    			+ "join itemtype it on i.itemtype_ID = it.ItemType_ID "
     			+ "where " + subTime + " <= " + addTime + " and (1=0 " + generatePNR(pnrs) + generateTAG(tags) + ") "
     			+ "order by i.Incident_ID";
     	
@@ -255,6 +256,11 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 				String claimcheck = itm_check;
 				if (LD_TYPE == type_id) {
 					claimcheck = c_check;
+					type = "Delayed";
+				} else if (MISS_TYPE == type_id) {
+					type = "Pilfered";
+				} else if (DAM_TYPE == type_id) {
+					type = "Damaged";
 				}
 				
 				if (matches.containsKey(incident) && claimcheck != null && claimcheck.trim().length() > 0) {
@@ -262,20 +268,30 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 					String[] oldTags = match.getAllTagsInIncidentArray();
 					int oldSize = oldTags.length;
 					String[] allTags = new String[oldSize + 1];
+					boolean notAdded = true;
 					for (int j = 0; j < oldSize; j++) {
+						if (claimcheck.equals(oldTags[j])) {
+							notAdded = false;
+						}
 						allTags[j] = oldTags[j];
 					}
-					allTags[oldSize] = claimcheck;
-					match.setAllTagsInIncidentArray(allTags);
-					if (hasMatch(allTags[oldSize], tags)) {
-						String[] oldMatchTags = match.getMatchingTagNumberArray();
-						int oldMatchSize = oldMatchTags.length;
-						String[] matchTags = new String[oldMatchSize + 1];
-						for (int j = 0; j < oldMatchSize; j++) {
-							matchTags[j] = oldMatchTags[j];
+					if (notAdded) {
+						allTags[oldSize] = claimcheck;
+						match.setAllTagsInIncidentArray(allTags);
+						String test = hasMatch(allTags[oldSize], tags, true);
+						if (null != test) {
+							String[] oldMatchTags = match.getMatchingTagNumberArray();
+							int oldMatchSize = 0;
+							if (oldMatchTags != null && oldMatchTags.length > 0) {
+								oldMatchSize = oldMatchTags.length;
+							}
+							String[] matchTags = new String[oldMatchSize + 1];
+							for (int j = 0; j < oldMatchSize; j++) {
+								matchTags[j] = oldMatchTags[j];
+							}
+							matchTags[oldMatchSize] = test;
+							match.setMatchingTagNumberArray(matchTags);
 						}
-						matchTags[oldMatchSize] = allTags[oldSize];
-						match.setMatchingTagNumberArray(matchTags);
 					}
 				} else {
 					match = Match.Factory.newInstance();
@@ -286,15 +302,16 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 						String[] allTags = new String[1];
 						allTags[0] = claimcheck;
 						match.setAllTagsInIncidentArray(allTags);
-						if (hasMatch(allTags[0], tags)) {
+						String test = hasMatch(allTags[0], tags, true);
+						if (null != test) {
 							String[] matchTags = new String[1];
-							matchTags[0] = allTags[0];
+							matchTags[0] = test;
 							match.setMatchingTagNumberArray(matchTags);
 						}
 					}
 					if (pnr != null && pnr.trim().length() > 0) {
 						match.setPnr(pnr);
-						if (hasMatch(pnr, pnrs)) {
+						if (null != hasMatch(pnr, pnrs, false)) {
 							String[] matchPnrs = new String[1];
 							matchPnrs[0] = pnr;
 							match.setMatchingPnrArray(matchPnrs);
@@ -308,15 +325,18 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 		return toReturn;
 	}
 	
-	private boolean hasMatch(String test, String[] list) {
+	private String hasMatch(String test, String[] list, boolean tag) {
 		if (test == null) {
-			return false;
+			return null;
 		}
 		for (int i = 0; i < list.length; i++) {
 			if (test.equalsIgnoreCase(list[i])) {
-				return true;
+				return test;
+			}
+			if (tag && test.substring(test.length() - 6).equalsIgnoreCase(list[i].substring(list[i].length() - 6))) {
+				return list[i];
 			}
 		}
-		return false;
+		return null;
 	}
 }
