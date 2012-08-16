@@ -69,12 +69,18 @@ public class B6_CreateOHD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			selenium.click("name=savetracing");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("Error: Failed to save change to Closed");
+			System.out.println("Error: Failed to load Onhand");
 		}
 		if (checkNoErrorPage()) {
 			selenium.click("link="+Settings.ONHAND_ID_B6);
 			waitForPageToLoadImproved();
+		} else {
+			System.out.println("Error: Failed to close Onhand");
+		}
+		if (checkNoErrorPage()) {
 			verifyEquals("label=BagHop Pickup", selenium.getText("name=disposal_status.status_ID"));
+		} else {
+			System.out.println("Error: Failed to load Onhand");
 		}
 	}
 }
