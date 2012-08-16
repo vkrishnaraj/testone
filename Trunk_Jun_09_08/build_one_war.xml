@@ -399,7 +399,7 @@
 				<exclude name="c3p0*.jar" />
 				<exclude name="hibernate*.jar" />
 				<exclude name="ReservationService*.jar" />
-				<exclude name="scannermbrqueryservice.jar.jar" />
+				<exclude name="ScannerMbrQueryService.jar" />
 				<exclude name="SimpleService.jar" />
 				<exclude name="axis2*.jar" />
 				<exclude name="jxl*.jar" />
