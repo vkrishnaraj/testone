@@ -134,7 +134,7 @@
 	</target>
 	
 	<target name="compile-web" depends="init">
-		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}_web/classes" debug="on" verbose="true"
+		<javac srcdir="./src" fork="false" destdir="${build.dir}/${ant_project_name}_web/classes" debug="on" verbose="true"
 					memoryinitialsize="256m"       memorymaximumsize="256m"
 		>
 			<classpath refid="project.classpath" />
@@ -294,6 +294,8 @@
 				<exclude name="c3p0*.jar" />
 				<exclude name="hibernate*.jar" />
 				<exclude name="ReservationService*.jar" />
+				<exclude name="scannermbrqueryservice.jar.jar" />
+				<exclude name="SimpleService.jar" />
 				<exclude name="axis2*.jar" />
 				<exclude name="jxl*.jar" />
 				<exclude name="iText*.jar" />

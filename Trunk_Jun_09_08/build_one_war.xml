@@ -195,7 +195,7 @@
 	<!-- COMPILE TARGETS -->
 
 	<target name="compile-core" depends="init">
-		<javac srcdir="./src" fork="true" destdir="${build.dir}/${ant_project_name}/classes" debug="on">
+		<javac srcdir="./src" fork="false" destdir="${build.dir}/${ant_project_name}/classes" debug="on" verbose="true">
 			<classpath refid="project.classpath" />
 			<exclude name="com/bagnet/nettracer/tracing/actions/**/*.*" />
 			<exclude name="com/bagnet/nettracer/ws/**/*.*" />
@@ -399,6 +399,8 @@
 				<exclude name="c3p0*.jar" />
 				<exclude name="hibernate*.jar" />
 				<exclude name="ReservationService*.jar" />
+				<exclude name="scannermbrqueryservice.jar.jar" />
+				<exclude name="SimpleService.jar" />
 				<exclude name="axis2*.jar" />
 				<exclude name="jxl*.jar" />
 				<exclude name="iText*.jar" />
