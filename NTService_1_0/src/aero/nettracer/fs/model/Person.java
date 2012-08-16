@@ -324,22 +324,6 @@ public class Person implements Serializable {
 		this.dateOfBirth = dateOfBirth;
 	}
 
-	public String getDisDateOfBirth() {
-		return DateUtils.formatDate(dateOfBirth, dateFormat, "", null);
-	}
-
-	public String getDisDateOfBirth(String _DATEFORMAT) {
-		return DateUtils.formatDate(dateOfBirth, _DATEFORMAT, "", null);
-	}
-
-	public void setDisDateOfBirth(String dateOfBirth) {
-		setDateOfBirth(DateUtils.convertToDate(dateOfBirth, dateFormat, null));
-	}
-
-	public void setDisDateOfBirth(String dateOfBirth, String _DATEFORMAT) {
-		setDateOfBirth(DateUtils.convertToDate(dateOfBirth, _DATEFORMAT, null));
-	}
-
 	public void setParent(Person parent) {
 		this.parent = parent;
 	}
