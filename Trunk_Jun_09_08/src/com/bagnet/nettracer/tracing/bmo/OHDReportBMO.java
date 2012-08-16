@@ -258,6 +258,7 @@ public class OHDReportBMO {
 		String reportHeadingItinerary = "Itinerary";
 		String reportHeadingFinal = "Destination";
 		String reportHeadingStatus = "Status";
+		String reportHeadingBagDisp = "BagDisp";
 		String reportHeadingHoldingStation = "Holding Station";
 		String reportHeadingFoundStation = "Found Station";
 		
@@ -297,6 +298,11 @@ public class OHDReportBMO {
 		String myStatus = resourceBundle.getString("report.ohd.heading.status");
 		if (!( myStatus == null || myStatus.equalsIgnoreCase("") )) {
 			reportHeadingStatus = myStatus;
+		}
+		
+		String myBagDisp= resourceBundle.getString("report.ohd.heading.bagdisposition");
+		if (!( myBagDisp == null || myBagDisp.equalsIgnoreCase("") )) {
+			reportHeadingBagDisp = myBagDisp;
 		}
 		
 		String myHoldingStation = resourceBundle.getString("report.ohd.heading.holding.station");
@@ -428,6 +434,11 @@ public class OHDReportBMO {
 				reportHeadingStatus).setWidth(new Integer(30)).setStyle(detailStyle)
 				.setHeaderStyle(headerStyle).build();
 		
+		AbstractColumn columnBagDisp = ColumnBuilder.getNew()
+				.setColumnProperty("bagdispdesc", String.class.getName()).setTitle(
+				reportHeadingBagDisp).setWidth(new Integer(30)).setStyle(detailStyle)
+				.setHeaderStyle(headerStyle).build();
+		
 		AbstractColumn columnHoldingStationCode = ColumnBuilder.getNew()
 				.setColumnProperty("holdingstation", String.class.getName())
 				.setTitle(reportHeadingHoldingStation).setWidth(new Integer(30)).setStyle(
@@ -459,6 +470,7 @@ public class OHDReportBMO {
 		reportColumns.put("columnItinerary", columnItinerary);
 		reportColumns.put("columnFinal", columnFinal);
 		reportColumns.put("columnStatus", columnStatus);
+		reportColumns.put("columnBagDisp", columnBagDisp);
 		reportColumns.put("columnHoldingStationCode", columnHoldingStationCode);
 		reportColumns.put("columnFaultStation", columnFaultStation);
 		reportColumns.put("columnLossCode", columnLossCode);
@@ -512,6 +524,7 @@ public class OHDReportBMO {
 		String reportHeadingItinerary = "Itinerary";
 		String reportHeadingFinal = "Destination";
 		String reportHeadingStatus = "Status";
+		String reportHeadingBagDisp = "Bag Disposition";
 		String reportHeadingHoldingStation = "Holding Station";
 		String reportHeadingLossCode = "Loss Code";
 		String reportHeadingFoundStation = "Found Station";
@@ -553,6 +566,11 @@ public class OHDReportBMO {
 			reportHeadingStatus = myStatus;
 		}
 		
+		String myBagDisp= resourceBundle.getString("report.ohd.heading.bagdisposition");
+		if (!( myBagDisp == null || myBagDisp.equalsIgnoreCase("") )) {
+			reportHeadingBagDisp = myBagDisp;
+		}
+		
 		String myHoldingStation = resourceBundle.getString("report.ohd.heading.holding.station");
 		if (!( myHoldingStation == null || myHoldingStation.equalsIgnoreCase("") )) {
 			reportHeadingHoldingStation = myHoldingStation;
@@ -580,6 +598,7 @@ public class OHDReportBMO {
         		drb = drb.addColumn(reportHeadingItinerary,"itinerary",String.class.getName(),30);
         		drb = drb.addColumn(reportHeadingFinal,"final_destination",String.class.getName(),30);
         		drb = drb.addColumn(reportHeadingStatus,"statusdesc",String.class.getName(),30);
+        		drb = drb.addColumn(reportHeadingBagDisp,"bagdispdesc",String.class.getName(),30);
         		drb = drb.addColumn(reportHeadingHoldingStation,"holdingstation",String.class.getName(),24);
         		drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),23);
         		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),20);
@@ -594,6 +613,7 @@ public class OHDReportBMO {
         		drb = drb.addColumn(reportHeadingItinerary,"itinerary",String.class.getName(),30);
         		drb = drb.addColumn(reportHeadingFinal,"final_destination",String.class.getName(),30);
         		drb = drb.addColumn(reportHeadingStatus,"statusdesc",String.class.getName(),30);
+        		drb = drb.addColumn(reportHeadingBagDisp,"bagdispdesc",String.class.getName(),30);
         		drb = drb.addColumn(reportHeadingHoldingStation,"holdingstation",String.class.getName(),24);
         		drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),23);
         		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),20);
@@ -608,6 +628,7 @@ public class OHDReportBMO {
 	    		drb = drb.addColumn(reportHeadingItinerary,"itinerary",String.class.getName(),30);
 	    		drb = drb.addColumn(reportHeadingFinal,"final_destination",String.class.getName(),30);
 	    		drb = drb.addColumn(reportHeadingStatus,"statusdesc",String.class.getName(),30);
+        		drb = drb.addColumn(reportHeadingBagDisp,"bagdispdesc",String.class.getName(),30);
 	    		drb = drb.addColumn(reportHeadingHoldingStation,"holdingstation",String.class.getName(),24);
 	    		drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),23);
 	    		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),20);
@@ -671,6 +692,7 @@ public class OHDReportBMO {
 			AbstractColumn columnItinerary = reportColumns.get("columnItinerary");
 			AbstractColumn columnFinal = reportColumns.get("columnFinal");
 			AbstractColumn columnStatus = reportColumns.get("columnStatus");
+			AbstractColumn columnBagDisp = reportColumns.get("columnBagDisp");
 			AbstractColumn columnHoldingStationCode = reportColumns.get("columnHoldingStationCode");
 			AbstractColumn columnFaultStation = reportColumns.get("columnFaultStation");
 			AbstractColumn columnLossCode = reportColumns.get("columnLossCode");
@@ -692,6 +714,7 @@ public class OHDReportBMO {
 			drb.addColumn(columnItinerary);
 			drb.addColumn(columnFinal);
 			drb.addColumn(columnStatus);
+			drb.addColumn(columnBagDisp);
 			drb.addColumn(columnHoldingStationCode);
 			drb.addColumn(columnFaultStation);
 			drb.addColumn(columnLossCode);

@@ -81,6 +81,21 @@
        </html:select>
      </td>
    </tr>
+   
+   <tr>
+     <td>
+       <bean:message key="colname.bagdisposition" />
+       :
+     </td>
+     <td>
+       <html:select property="disposition_id_combo" styleClass="dropdown" multiple="true">
+         <html:option value="0">
+           <bean:message key="select.all" />
+         </html:option>
+         <html:options collection="dStatusList"  property="status_ID" labelProperty="description" />
+       </html:select>
+     </td>
+   </tr>
 
  <tr>
    <td>

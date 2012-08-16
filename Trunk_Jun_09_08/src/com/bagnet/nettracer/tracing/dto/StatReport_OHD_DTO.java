@@ -28,6 +28,7 @@ public class StatReport_OHD_DTO {
 	private String rfounddate;
 	private String rfoundtime;
 	private String statusdesc;
+	private String bagdispdesc;
 	private String customer_name;
 	private String itinerary;
 	private String final_destination;
@@ -171,6 +172,18 @@ public class StatReport_OHD_DTO {
 	 */
 	public void setStatusdesc(String statusdesc) {
 		this.statusdesc = statusdesc;
+	}
+	/**
+	 * @return the bagdispdesc
+	 */
+	public String getBagdispdesc() {
+		return bagdispdesc;
+	}
+	/**
+	 * @param statusdesc the statusdesc to set
+	 */
+	public void setBagdispdesc(String bagdispdesc) {
+		this.bagdispdesc = bagdispdesc;
 	}
 	/**
 	 * @return the customer_name

@@ -55,6 +55,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
+import org.apache.taglibs.standard.resources.Resources;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -424,6 +425,7 @@ public class ReportBMO {
 //				sql += " and incident.status_ID=" + srDTO.getStatus_ID();
 			
 			String statusIdList = "";
+			String dispositionIdList= "";
 			String myMbrSubtitleStatus = "";
 			if (srDTO.getStatus_id_combo() != null) {
 				for (int i = 0; i < srDTO.getStatus_id_combo().length; i++) {
@@ -1461,6 +1463,11 @@ public class ReportBMO {
 			if (myStatus_id_combo != null && myStatus_id_combo[0].intValue() >= 1) {
 				q.setParameterList("status_id_combo", Arrays.asList(myStatus_id_combo));
 				//parameters.put("showsubtotal", "show");
+			}
+			
+			Integer[] myDisposition_id_combo = srDTO.getDisposition_id_combo();
+			if (myDisposition_id_combo != null && myDisposition_id_combo[0].intValue() >= 1) {
+				q.setParameterList("disposition_id_combo", Arrays.asList(myDisposition_id_combo));
 			}
 			
 			if (srDTO.getAgent() != null && srDTO.getAgent().length() > 0) {
@@ -3146,21 +3153,23 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			Statement stmt = conn.createStatement();
 			ResultSet rs = null;
 			String sql = "select ohd.found_station_ID,s1.stationcode as fscode,holding_station_ID,s2.stationcode as hscode, "
-					 + "ohd.OHD_ID,ohd.founddate,ohd.foundtime,status.description as stdesc,"
+					 + "ohd.OHD_ID,ohd.founddate,ohd.foundtime,st1.status_ID as stdesc, st2.status_ID as bdesc,"
 					 + "p.firstname,p.lastname,it.legfrom,it.legto,it.flightnum,s3.stationcode as faultstationcode,cic.loss_code " 
-					 + "from station s1,station s2,status,agent,ohd " 
+					 + "from station s1,station s2,status st1, status st2,agent,ohd " 
 					 + "left outer join ohd_passenger p on p.OHD_ID = ohd.OHD_ID "
 					 + "left outer join ohd_itinerary it on it.OHD_ID = ohd.OHD_ID "
 					 + "left outer join station s3 on s3.station_ID = ohd.faultStation_ID "  
 					 + "left outer join company_irregularity_codes cic on cic.code_id = ohd.loss_code "   
 					 + "where s1.station_ID = ohd.found_station_ID and s2.station_ID = ohd.holding_station_ID "
-					 + "and status.status_ID = ohd.status_ID and agent.Agent_ID = ohd.agent_ID and "
+					 + "and st1.status_ID = ohd.status_ID and st2.status_ID = ohd.disposal_status_ID and agent.Agent_ID = ohd.agent_ID and "
 					 + "s1.companycode_ID = '" + user.getStation().getCompany().getCompanyCode_ID() + "' ";
 
 //			if (srDTO.getStatus_ID() >= 1)
 //				sql += " and ohd.status_ID=" + srDTO.getStatus_ID();
+			String dispositionIdList = "";
 			String statusIdList = "";
 			String myOhdSubtitleStatus = "";
+			String myOhdDispositionStatus = "";
 			if (srDTO.getStatus_id_combo() != null) {
 				for (int i = 0; i < srDTO.getStatus_id_combo().length; i++) {
 					statusIdList += srDTO.getStatus_id_combo()[i] + ",";
@@ -3179,6 +3188,25 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 					}
 				} 
 			}	
+			
+			if (srDTO.getDisposition_id_combo() != null) {
+				for (int i = 0; i < srDTO.getDisposition_id_combo().length; i++) {
+					dispositionIdList += srDTO.getDisposition_id_combo()[i] + ",";
+					myOhdDispositionStatus += TracerUtils.getText(Status.getKey(srDTO.getDisposition_id_combo()[i]), user) + ",";
+				}
+				
+				int dispositionIdListLength = dispositionIdList.length();
+				if (dispositionIdListLength > 0) {
+					if (srDTO.getDisposition_id_combo()[0].intValue() >= 1) {
+						dispositionIdList = dispositionIdList.substring(0,dispositionIdListLength - 1);
+						sql += " and ohd.disposal_status_id in (" + dispositionIdList + ") ";
+						
+						myOhdDispositionStatus = myOhdDispositionStatus.substring(0,myOhdDispositionStatus.length() - 1);
+					} else {
+						myOhdDispositionStatus = "";
+					}
+				}
+			}
 			
 			parameters.put("ohd_subtitle_status", myOhdSubtitleStatus);
 			
@@ -3300,7 +3328,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			String lastpassname = "";
 			String lastit = "";
 			String temppassname = "",tempit = "";
-
+			ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 			while (rs.next()) {
 				if (lastohdid == null || !(rs.getString("OHD_ID").equals(lastohdid))) {
 					if (lastohdid != null) {
@@ -3317,7 +3345,8 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 					lastohdid = sr.getOHD_ID();
 					sr.setFounddate(rs.getDate("founddate"));
 					sr.setFoundtime(rs.getTime("foundtime"));
-					sr.setStatusdesc(rs.getString("stdesc"));
+					sr.setStatusdesc(resources.getString("STATUS_KEY_"+rs.getString("stdesc")));
+					sr.setBagdispdesc(resources.getString("STATUS_KEY_"+rs.getString("bdesc")));
 					
 					// new requirements: fault city & fault code
 					sr.setFaultstationcode(rs.getString("faultstationcode"));
@@ -3412,6 +3441,14 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				}	
 			} else {
 				parameters.put("status", TracerUtils.getText("reports.all", user));
+			}
+			
+			if (srDTO.getDispositionId() >= 1) {
+				if (sr != null) {
+					parameters.put("bagdisp", sr.getBagdispdesc());
+				}	
+			} else {
+				parameters.put("bagdisp", TracerUtils.getText("reports.all", user));
 			}
 
 			// summary or detail; summary = 0; detail = 1

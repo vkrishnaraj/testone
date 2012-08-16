@@ -62,6 +62,16 @@ public final class StatReportForm extends ValidatorForm {
 	public void setStatus_id_combo(Integer[] status_id_combo) {
 		this.status_id_combo = status_id_combo;
 	}
+	
+	private Integer[] disposition_id_combo;
+
+	public Integer[] getDisposition_id_combo() {
+		return disposition_id_combo;
+	}
+
+	public void setDisposition_id_combo(Integer[] disposition_id_combo) {
+		this.disposition_id_combo = disposition_id_combo;
+	}
 
 	private int boarded;
 	private int perpassengers;
