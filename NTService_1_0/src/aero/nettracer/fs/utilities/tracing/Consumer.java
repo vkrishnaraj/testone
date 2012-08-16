@@ -52,7 +52,7 @@ public class Consumer implements Runnable{
 	public static final double MIN_MATCH_SCORE = 10;
 	public static final double P_SOUNDEX = 4;
 	public static final double P_METAPHONE = 4;
-	public static final double P_NAME = 20;
+	public static final double P_NAME = 25;
 	public static final double P_PHONE = 10;
 	public static final double P_CC_TYPE = 5;
 	public static final double P_CC_EXP = 5;
