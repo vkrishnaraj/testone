@@ -3155,13 +3155,14 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			String sql = "select ohd.found_station_ID,s1.stationcode as fscode,holding_station_ID,s2.stationcode as hscode, "
 					 + "ohd.OHD_ID,ohd.founddate,ohd.foundtime,st1.status_ID as stdesc, st2.status_ID as bdesc,"
 					 + "p.firstname,p.lastname,it.legfrom,it.legto,it.flightnum,s3.stationcode as faultstationcode,cic.loss_code " 
-					 + "from station s1,station s2,status st1, status st2,agent,ohd " 
+					 + "from station s1,station s2,status st1,agent,ohd " 
 					 + "left outer join ohd_passenger p on p.OHD_ID = ohd.OHD_ID "
 					 + "left outer join ohd_itinerary it on it.OHD_ID = ohd.OHD_ID "
 					 + "left outer join station s3 on s3.station_ID = ohd.faultStation_ID "  
-					 + "left outer join company_irregularity_codes cic on cic.code_id = ohd.loss_code "   
+					 + "left outer join company_irregularity_codes cic on cic.code_id = ohd.loss_code "  
+					 + "left outer join status st2 on st2.status_ID=ohd.disposal_status_ID "
 					 + "where s1.station_ID = ohd.found_station_ID and s2.station_ID = ohd.holding_station_ID "
-					 + "and st1.status_ID = ohd.status_ID and st2.status_ID = ohd.disposal_status_ID and agent.Agent_ID = ohd.agent_ID and "
+					 + "and st1.status_ID = ohd.status_ID and agent.Agent_ID = ohd.agent_ID and " //and st2.status_ID = ohd.disposal_status_ID
 					 + "s1.companycode_ID = '" + user.getStation().getCompany().getCompanyCode_ID() + "' ";
 
 //			if (srDTO.getStatus_ID() >= 1)
@@ -3346,7 +3347,11 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 					sr.setFounddate(rs.getDate("founddate"));
 					sr.setFoundtime(rs.getTime("foundtime"));
 					sr.setStatusdesc(resources.getString("STATUS_KEY_"+rs.getString("stdesc")));
-					sr.setBagdispdesc(resources.getString("STATUS_KEY_"+rs.getString("bdesc")));
+					if(rs.getString("bdesc")!=null){
+						sr.setBagdispdesc(resources.getString("STATUS_KEY_"+rs.getString("bdesc")));
+					} else {
+						sr.setBagdispdesc("");
+					}
 					
 					// new requirements: fault city & fault code
 					sr.setFaultstationcode(rs.getString("faultstationcode"));
