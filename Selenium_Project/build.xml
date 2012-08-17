@@ -49,7 +49,7 @@
       		<test name="aero.nettracer.web.defaul.testing.TestEverything" />
     		<jvmarg value="-Dselenium.port=1234"/>
     	</junit>
-  </target>
+  	</target>
   	
     	
   	<target name="testNew" depends="compile-test">
