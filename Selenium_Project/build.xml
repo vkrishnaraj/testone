@@ -77,7 +77,7 @@
 
   		<parallel>
   			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="classpath.test" />
+	      		<classpath refid="junitpath.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestWestJet" />
 	    		<jvmarg value="-Dselenium.port=1234"/>

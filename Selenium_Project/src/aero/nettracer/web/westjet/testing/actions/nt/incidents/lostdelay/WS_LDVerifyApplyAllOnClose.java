@@ -85,7 +85,7 @@ public class WS_LDVerifyApplyAllOnClose extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//td[@id='navmenucell']/div/dl/dd[12]/a/span[2]");
+			selenium.click("//td[@id='navmenucell']/div/dl/dd[13]/a/span[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVAAOC: Failed to save the lost delayed incident.");
