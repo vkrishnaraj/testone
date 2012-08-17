@@ -76,7 +76,13 @@
   		
 
   		<parallel>
-	    	<junit printsummary="yes"  showoutput="true" fork="true">
+  			<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="classpath.test" />
+	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestWestJet" />
+	    		<jvmarg value="-Dselenium.port=1234"/>
+	    	</junit>
+	    <!--	<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="classpath.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestAzul" />
@@ -97,12 +103,6 @@
   			<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="classpath.test" />
 	      		<formatter type="xml" usefile="true" />
-	      		<test name="aero.nettracer.web.defaul.testing.TestWestJet" />
-	    		<jvmarg value="-Dselenium.port=1234"/>
-	    	</junit>
-  			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="classpath.test" />
-	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestAvis" />
 	    		<jvmarg value="-Dselenium.port=1234"/>
 	    	</junit>
@@ -112,6 +112,7 @@
 	      		<test name="aero.nettracer.web.defaul.testing.TestLfc" />
 	    		<jvmarg value="-Dselenium.port=1234"/>
 	    	</junit>  	
+		-->
   		</parallel>
   </target>
 	
