@@ -3,7 +3,7 @@ package com.bagnet.nettracer.ws.search.pojo;
 import java.util.Calendar;
 
 public class Match {
-	private String[] matchingPnr;
+	private String matchingPnr;
 	private String[] matchingTagNumber;
 	private String incident;
 	private String type;
@@ -11,10 +11,10 @@ public class Match {
 	private String pnr;
 	private String[] allTagsInIncident;
 	
-	public String[] getMatchingPnr() {
+	public String getMatchingPnr() {
 		return matchingPnr;
 	}
-	public void setMatchingPnr(String[] matchingPnr) {
+	public void setMatchingPnr(String matchingPnr) {
 		this.matchingPnr = matchingPnr;
 	}
 	public String[] getMatchingTagNumber() {

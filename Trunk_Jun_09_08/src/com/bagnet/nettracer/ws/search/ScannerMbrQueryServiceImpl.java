@@ -44,8 +44,8 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
    
    public com.bagnet.nettracer.ws.search.QueryNetTracerResponseDocument queryNetTracer(com.bagnet.nettracer.ws.search.QueryNetTracerDocument queryNetTracer, int subDays) {
 		QueryNetTracer query = queryNetTracer.getQueryNetTracer();
-		String[] tags = query.getArgs0Array();
-		String[] pnrs = query.getArgs1Array();
+		String[] tags = query.getTagNumberArray();
+		String[] pnrs = query.getPnrArray();
 		
 		QueryNetTracerResponseDocument resDoc = QueryNetTracerResponseDocument.Factory.newInstance();
 		QueryNetTracerResponse queryRes = resDoc.addNewQueryNetTracerResponse();
@@ -76,12 +76,25 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     		subTime = "DATEADD(day, -" + subDays + ", GETUTCDATE())";
     	}
     	
+    	String where = " where " + subTime + " <= " + addTime + " and (1=0 ";
+    	
+    	String pnrSelect = generatePNR(pnrs, where);
+    	String tagSelect = generateTAG(tags, where);
+    	String unionSelect = "";
+    	if (pnrSelect != null && pnrSelect.length() > 0) {
+    		unionSelect = pnrSelect;
+    		if (tagSelect != null && tagSelect.length() > 0) {
+    			unionSelect += " UNION " + tagSelect;
+    		}
+    	} else if (tagSelect != null && tagSelect.length() > 0) {
+    		unionSelect = tagSelect;
+    	}
+    	
     	String query = "select i.Incident_ID as id, i.itemtype_ID as type_id, 'UNKNOWN' as type, " + addTime + " as createdatetime, "
 	    		+ "c.claimchecknum as c_check, itm.claimchecknum as itm_check, i.recordlocator as pnr from incident i "
     			+ "left outer join incident_claimcheck c on i.Incident_ID = c.incident_ID "
     			+ "left outer join item itm on i.Incident_ID = itm.incident_ID "
-    			+ "where " + subTime + " <= " + addTime + " and (1=0 " + generatePNR(pnrs) + generateTAG(tags) + ") "
-    			+ "order by i.Incident_ID";
+    			+ "where i.Incident_ID in ( " + unionSelect + " ) " + "order by i.Incident_ID";
     	
     	logger.info("QUERY: \n\n" + query + "\n\nEND QUERY\n");
     	
@@ -102,10 +115,10 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     	queryRes.setReturnArray(ret);    	
     }
     
-    private String generatePNR(String[] pnrs) {
-    	String returnMe = "";
+    private String generatePNR(String[] pnrs, String where) {
+    	String returnMe = null; 
     	if (pnrs != null && pnrs.length > 0) {
-    		returnMe = " or (i.recordlocator in (";
+    		returnMe = "select i.Incident_ID from incident i " + where + " or (i.recordlocator in (";
     		boolean notFirst = false;
     		for (String pnr: pnrs) {
     			if (pnr != null && pnr.trim().length() > 0) {
@@ -116,13 +129,13 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 	    			notFirst = true;
     			}
     		}
-    		returnMe += ")) ";
+    		returnMe += ")) )";
     	}
     	return returnMe;
     }
     
-    private String generateTAG(String[] tags) {
-    	String returnMe = "";
+    private String generateTAG(String[] tags, String where) {
+    	String returnMe = null;
     	if (tags != null && tags.length > 0) {
     		HashMap<String, ArrayList<String>> eightDig = new HashMap<String, ArrayList<String>>();
     		HashMap<String, ArrayList<String>> nineDig = new HashMap<String, ArrayList<String>>();
@@ -157,48 +170,55 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     				}
     			}
     		}
-    		for (String key: eightDig.keySet()) {
-    			String temp = " or (%TABLE%.claimchecknum_carriercode = '" + key + "' and %TABLE%.claimchecknum_bagnumber in (";
-        		boolean notFirst = false;
-        		for (String tag: eightDig.get(key)) {
-        			if (notFirst) {
-        				temp += ", ";
-        			}
-        			temp += "'" + tag + "'";
-        			notFirst = true;
-        		}
-        		temp += ")) ";
-        		returnMe += temp.replaceAll("%TABLE%", "itm");
-        		returnMe += temp.replaceAll("%TABLE%", "c");
-    		}
-    		for (String key: nineDig.keySet()) {
-    			String temp = " or (%TABLE%.claimchecknum_ticketingcode = '" + key + "' and %TABLE%.claimchecknum_bagnumber in (";
-        		boolean notFirst = false;
-        		for (String tag: nineDig.get(key)) {
-        			if (notFirst) {
-        				temp += ", ";
-        			}
-        			temp += "'" + tag + "'";
-        			notFirst = true;
-        		}
-        		temp += ")) ";
-        		returnMe += temp.replaceAll("%TABLE%", "itm");
-        		returnMe += temp.replaceAll("%TABLE%", "c");
-    		}
-    		for (String key: tenDig.keySet()) {
-    			String temp = " or ((%TABLE%.claimchecknum_leading = '" + key.substring(0, 1) + "' or %TABLE%.claimchecknum_leading is null) "
-    					+ "and %TABLE%.claimchecknum_ticketingcode = '" + key.substring(1) + "' and %TABLE%.claimchecknum_bagnumber in (";
-        		boolean notFirst = false;
-        		for (String tag: tenDig.get(key)) {
-        			if (notFirst) {
-        				temp += ", ";
-        			}
-        			temp += "'" + tag + "'";
-        			notFirst = true;
-        		}
-        		temp += ")) ";
-        		returnMe += temp.replaceAll("%TABLE%", "itm");
-        		returnMe += temp.replaceAll("%TABLE%", "c");
+    		if (!eightDig.isEmpty() || !nineDig.isEmpty() || !tenDig.isEmpty()) {
+        		String icSelect = "select i.Incident_ID from incident i "
+        				+ "left outer join incident_claimcheck c on i.Incident_ID = c.incident_ID " + where;
+        		String itemSelect = "select i.Incident_ID from incident i "
+        				+ "left outer join item itm on i.Incident_ID = itm.incident_ID " + where;
+	    		for (String key: eightDig.keySet()) {
+	    			String temp = " or (%TABLE%.claimchecknum_carriercode = '" + key + "' and %TABLE%.claimchecknum_bagnumber in (";
+	        		boolean notFirst = false;
+	        		for (String tag: eightDig.get(key)) {
+	        			if (notFirst) {
+	        				temp += ", ";
+	        			}
+	        			temp += "'" + tag + "'";
+	        			notFirst = true;
+	        		}
+	        		temp += ")) ";
+	        		itemSelect += temp.replaceAll("%TABLE%", "itm");
+	        		icSelect += temp.replaceAll("%TABLE%", "c");
+	    		}
+	    		for (String key: nineDig.keySet()) {
+	    			String temp = " or (%TABLE%.claimchecknum_ticketingcode = '" + key + "' and %TABLE%.claimchecknum_bagnumber in (";
+	        		boolean notFirst = false;
+	        		for (String tag: nineDig.get(key)) {
+	        			if (notFirst) {
+	        				temp += ", ";
+	        			}
+	        			temp += "'" + tag + "'";
+	        			notFirst = true;
+	        		}
+	        		temp += ")) ";
+	        		itemSelect += temp.replaceAll("%TABLE%", "itm");
+	        		icSelect += temp.replaceAll("%TABLE%", "c");
+	    		}
+	    		for (String key: tenDig.keySet()) {
+	    			String temp = " or ((%TABLE%.claimchecknum_leading = '" + key.substring(0, 1) + "' or %TABLE%.claimchecknum_leading is null) "
+	    					+ "and %TABLE%.claimchecknum_ticketingcode = '" + key.substring(1) + "' and %TABLE%.claimchecknum_bagnumber in (";
+	        		boolean notFirst = false;
+	        		for (String tag: tenDig.get(key)) {
+	        			if (notFirst) {
+	        				temp += ", ";
+	        			}
+	        			temp += "'" + tag + "'";
+	        			notFirst = true;
+	        		}
+	        		temp += ")) ";
+	        		itemSelect += temp.replaceAll("%TABLE%", "itm");
+	        		icSelect += temp.replaceAll("%TABLE%", "c");
+	    		}
+	    		returnMe = icSelect + " ) UNION " + itemSelect + " ) ";
     		}
     	}
     	return returnMe;
@@ -312,9 +332,7 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 					if (pnr != null && pnr.trim().length() > 0) {
 						match.setPnr(pnr);
 						if (null != hasMatch(pnr, pnrs, false)) {
-							String[] matchPnrs = new String[1];
-							matchPnrs[0] = pnr;
-							match.setMatchingPnrArray(matchPnrs);
+							match.setMatchingPnr(pnr);
 						}
 					}
 					matches.put(incident, match);

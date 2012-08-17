@@ -6,8 +6,8 @@
             <xs:element name="queryNetTracer">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" name="args0" nillable="true" type="xs:string"/>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" name="args1" nillable="true" type="xs:string"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="pnr" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -25,7 +25,7 @@
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="allTagsInIncident" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="created" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="incident" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="matchingPnr" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="matchingPnr" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="matchingTagNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="pnr" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
