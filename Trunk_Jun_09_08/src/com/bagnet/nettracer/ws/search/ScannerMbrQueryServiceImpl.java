@@ -186,7 +186,7 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
         		returnMe += temp.replaceAll("%TABLE%", "c");
     		}
     		for (String key: tenDig.keySet()) {
-    			String temp = " or ((%TABLE%.claimchecknum_leading = " + key.substring(0, 1) + " or %TABLE%.claimchecknum_leading is null) "
+    			String temp = " or ((%TABLE%.claimchecknum_leading = '" + key.substring(0, 1) + "' or %TABLE%.claimchecknum_leading is null) "
     					+ "and %TABLE%.claimchecknum_ticketingcode = '" + key.substring(1) + "' and %TABLE%.claimchecknum_bagnumber in (";
         		boolean notFirst = false;
         		for (String tag: tenDig.get(key)) {

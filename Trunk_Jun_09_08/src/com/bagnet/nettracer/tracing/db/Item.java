@@ -35,7 +35,7 @@ public class Item implements Serializable {
 	private Status status;
 	private String claimchecknum; // ohd claimcheck matched with (for mishandled
 	// only)
-	private int claimchecknum_leading;
+	private String claimchecknum_leading;
 	private String claimchecknum_ticketingcode;
 	private String claimchecknum_carriercode;
 	private String claimchecknum_bagnumber;
@@ -738,7 +738,7 @@ public class Item implements Serializable {
 			}
 			
 			if (leading != null && leading.matches("^[0-9]{1}$")) {
-				setClaimchecknum_leading(Integer.parseInt(leading));
+				setClaimchecknum_leading(leading);
 			}
 			setClaimchecknum_carriercode(carrier);
 			setClaimchecknum_ticketingcode(ticketing);
@@ -749,9 +749,9 @@ public class Item implements Serializable {
 	/**
 	 * @return Returns the claimchecknum_leading.
 	 * 
-	 * @hibernate.property type="integer"
+	 * @hibernate.property type="string" length="1"
 	 */
-	public int getClaimchecknum_leading() {
+	public String getClaimchecknum_leading() {
 		return claimchecknum_leading;
 	}
 
@@ -759,7 +759,7 @@ public class Item implements Serializable {
 	 * @param claimchecknum_leading
 	 *          The claimchecknum_leading to set.
 	 */
-	public void setClaimchecknum_leading(int claimchecknum_leading) {
+	public void setClaimchecknum_leading(String claimchecknum_leading) {
 		this.claimchecknum_leading = claimchecknum_leading;
 	}
 
