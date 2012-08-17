@@ -2129,53 +2129,53 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				ct.addNewCountry().setCountryCode(fieldList.get(0));
 			}
 
-//			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PA);
-//			if (fieldList != null && fieldList.size() > 0) {
-//				WTRAddressType pa = ct.addNewPermanentAddress();
-//				for (int i = 0; i < fieldList.size() && i < 2; i++) {
-//					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
-//					pa.addAddressLine(address);
-//				}
-//			}
-			
-			Address ntpa = PreProcessor.getAhlAddress(data, true);
-			
-			if(ntpa != null){
+			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PA);
+			if (fieldList != null && fieldList.size() > 0) {
 				WTRAddressType pa = ct.addNewPermanentAddress();
-				if(ntpa.getAddress1()!=null && ntpa.getAddress1().length() > 0){
-					StringLength1To58 pa1 = pa.addNewAddressLine();
-					pa1.setStringValue(ntpa.getAddress1());
-				}
-				if(ntpa.getAddress2()!=null && ntpa.getAddress2().length() > 0){
-					StringLength1To58 pa2 = pa.addNewAddressLine();
-					pa2.setStringValue(ntpa.getAddress2());
-				}
-				if(ntpa.getCity()!=null && ntpa.getCity().length() > 0){
-					pa.setCity(ntpa.getCity());
-				}
-				if(ntpa.getState() != null && ntpa.getState().length() > 0 
-						&& ntpa.getCountryCode() != null 
-						&& (ntpa.getCountryCode().equalsIgnoreCase("US") || ntpa.getCountryCode().equalsIgnoreCase("United States"))){
-					StateProvType state = pa.addNewState();
-					state.setStringValue(ntpa.getState());
-					pa.setState(state);
-				} else if(ntpa.getProvince() != null && ntpa.getProvince().length() > 0){
-					//there is no province field for WT
-					StateProvType state = pa.addNewState();
-					state.setStringValue(ntpa.getProvince());
-					pa.setState(state);
-				}
-				if(ntpa.getZip() != null && ntpa.getZip().length() > 0){
-					aero.sita.www.bag.wtr._2009._01.WTRAddressType.PostalCode zip = pa.addNewPostalCode();
-					zip.setStringValue(ntpa.getZip());
-					pa.setPostalCode(zip);
-				}
-				if(ntpa.getCountryCode() != null && ntpa.getCountryCode().length() > 0){
-					aero.sita.www.bag.wtr._2009._01.WTRAddressType.Country country = pa.addNewCountry();
-					country.setStringValue(ntpa.getCountryCode());
-					pa.setCountry(country);
+				for (int i = 0; i < fieldList.size() && i < 2; i++) {
+					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
+					pa.addAddressLine(address);
 				}
 			}
+			
+//			Address ntpa = PreProcessor.getAhlAddress(data, true);
+//			
+//			if(ntpa != null){
+//				WTRAddressType pa = ct.addNewPermanentAddress();
+//				if(ntpa.getAddress1()!=null && ntpa.getAddress1().length() > 0){
+//					StringLength1To58 pa1 = pa.addNewAddressLine();
+//					pa1.setStringValue(ntpa.getAddress1());
+//				}
+//				if(ntpa.getAddress2()!=null && ntpa.getAddress2().length() > 0){
+//					StringLength1To58 pa2 = pa.addNewAddressLine();
+//					pa2.setStringValue(ntpa.getAddress2());
+//				}
+//				if(ntpa.getCity()!=null && ntpa.getCity().length() > 0){
+//					pa.setCity(ntpa.getCity());
+//				}
+//				if(ntpa.getState() != null && ntpa.getState().length() > 0 
+//						&& ntpa.getCountryCode() != null 
+//						&& (ntpa.getCountryCode().equalsIgnoreCase("US") || ntpa.getCountryCode().equalsIgnoreCase("United States"))){
+//					StateProvType state = pa.addNewState();
+//					state.setStringValue(ntpa.getState());
+//					pa.setState(state);
+//				} else if(ntpa.getProvince() != null && ntpa.getProvince().length() > 0){
+//					//there is no province field for WT
+//					StateProvType state = pa.addNewState();
+//					state.setStringValue(ntpa.getProvince());
+//					pa.setState(state);
+//				}
+//				if(ntpa.getZip() != null && ntpa.getZip().length() > 0){
+//					aero.sita.www.bag.wtr._2009._01.WTRAddressType.PostalCode zip = pa.addNewPostalCode();
+//					zip.setStringValue(ntpa.getZip());
+//					pa.setPostalCode(zip);
+//				}
+//				if(ntpa.getCountryCode() != null && ntpa.getCountryCode().length() > 0){
+//					aero.sita.www.bag.wtr._2009._01.WTRAddressType.Country country = pa.addNewCountry();
+//					country.setStringValue(ntpa.getCountryCode());
+//					pa.setCountry(country);
+//				}
+//			}
 			
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.ZIP);
@@ -2192,56 +2192,55 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			// ct.setState(fieldList.get(0));
 			// }
 
-//			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TA);
-//			if (fieldList != null && fieldList.size() > 0) {
-//				WTRAddressType ta = ct.addNewTempAddress().addNewAddress();			
-//				for (int i = 0; i < fieldList.size() && i < 2; i++) {
-//					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
-//					ta.addAddressLine(address);
-//				}
-//			}
-
-			//get first temp address
-			Address ntta = PreProcessor.getAhlAddress(data, false);
-			
-			if(ntta != null){
-				aero.sita.www.bag.wtr._2009._01.ContactInfoType.TempAddress ta = ct.addNewTempAddress();
-				WTRAddressType t = ta.addNewAddress();
-				if(ntta.getAddress1()!=null && ntta.getAddress1().length() > 0){
-					StringLength1To58 ta1 = t.addNewAddressLine();
-					ta1.setStringValue(ntta.getAddress1());
-				}
-				if(ntta.getAddress2()!=null && ntta.getAddress2().length() > 0){
-					StringLength1To58 ta2 = t.addNewAddressLine();
-					ta2.setStringValue(ntta.getAddress2());
-				}
-				if(ntta.getCity()!=null && ntta.getCity().length() > 0){
-					t.setCity(ntta.getCity());
-				}
-				if(ntta.getState() != null && ntta.getState().length() > 0 
-						&& ntta.getCountryCode() != null 
-						&& (ntta.getCountryCode().equalsIgnoreCase("US") || ntta.getCountryCode().equalsIgnoreCase("United States"))){
-					StateProvType state = t.addNewState();
-					state.setStringValue(ntta.getState());
-					t.setState(state);
-				} else if(ntta.getProvince() != null && ntta.getProvince().length() > 0){
-					//there is no province field for WT
-					StateProvType state = t.addNewState();
-					state.setStringValue(ntta.getProvince());
-					t.setState(state);
-				}
-				if(ntta.getZip() != null && ntta.getZip().length() > 0){
-					aero.sita.www.bag.wtr._2009._01.WTRAddressType.PostalCode zip = t.addNewPostalCode();
-					zip.setStringValue(ntta.getZip());
-					t.setPostalCode(zip);
-				}
-				if(ntta.getCountryCode() != null && ntta.getCountryCode().length() > 0){
-					aero.sita.www.bag.wtr._2009._01.WTRAddressType.Country country = t.addNewCountry();
-					country.setStringValue(ntta.getCountryCode());
-					t.setCountry(country);
+			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TA);
+			if (fieldList != null && fieldList.size() > 0) {
+				WTRAddressType ta = ct.addNewTempAddress().addNewAddress();			
+				for (int i = 0; i < fieldList.size() && i < 2; i++) {
+					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
+					ta.addAddressLine(address);
 				}
 			}
-			
+
+			//get first temp address
+//			Address ntta = PreProcessor.getAhlAddress(data, false);
+//			
+//			if(ntta != null){
+//				aero.sita.www.bag.wtr._2009._01.ContactInfoType.TempAddress ta = ct.addNewTempAddress();
+//				WTRAddressType t = ta.addNewAddress();
+//				if(ntta.getAddress1()!=null && ntta.getAddress1().length() > 0){
+//					StringLength1To58 ta1 = t.addNewAddressLine();
+//					ta1.setStringValue(ntta.getAddress1());
+//				}
+//				if(ntta.getAddress2()!=null && ntta.getAddress2().length() > 0){
+//					StringLength1To58 ta2 = t.addNewAddressLine();
+//					ta2.setStringValue(ntta.getAddress2());
+//				}
+//				if(ntta.getCity()!=null && ntta.getCity().length() > 0){
+//					t.setCity(ntta.getCity());
+//				}
+//				if(ntta.getState() != null && ntta.getState().length() > 0 
+//						&& ntta.getCountryCode() != null 
+//						&& (ntta.getCountryCode().equalsIgnoreCase("US") || ntta.getCountryCode().equalsIgnoreCase("United States"))){
+//					StateProvType state = t.addNewState();
+//					state.setStringValue(ntta.getState());
+//					t.setState(state);
+//				} else if(ntta.getProvince() != null && ntta.getProvince().length() > 0){
+//					//there is no province field for WT
+//					StateProvType state = t.addNewState();
+//					state.setStringValue(ntta.getProvince());
+//					t.setState(state);
+//				}
+//				if(ntta.getZip() != null && ntta.getZip().length() > 0){
+//					aero.sita.www.bag.wtr._2009._01.WTRAddressType.PostalCode zip = t.addNewPostalCode();
+//					zip.setStringValue(ntta.getZip());
+//					t.setPostalCode(zip);
+//				}
+//				if(ntta.getCountryCode() != null && ntta.getCountryCode().length() > 0){
+//					aero.sita.www.bag.wtr._2009._01.WTRAddressType.Country country = t.addNewCountry();
+//					country.setStringValue(ntta.getCountryCode());
+//					t.setCountry(country);
+//				}
+//			}
 			// Set Flight Information
 
 			int itinCount = 0;
