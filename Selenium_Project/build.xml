@@ -13,6 +13,11 @@
 		<include name="*.class" />
 	</patternset>
 	
+	
+	<patternset id="java.files">
+		<include name="*.java" />
+	</patternset>
+	
 	<path id="classpath.test">
 		<pathelement location="${builddir}" />
 		<fileset dir="lib">
@@ -27,6 +32,9 @@
 		</fileset>
 		<fileset dir="build">
 			<patternset refid="class.files" />
+		</fileset>
+		<fileset dir="src">
+			<patternset refid="java.files" />
 		</fileset>
 	</path>	
 			
