@@ -82,5 +82,18 @@ public class B6_CreateOHD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		} else {
 			System.out.println("Error: Failed to load Onhand");
 		}
+		if(checkNoErrorPage()){
+			selenium.select("name=status.status_ID", "label=Open");
+			selenium.click("name=savetracing");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("Error: Failed to load Onhand");
+		}
+		if (checkNoErrorPage()) {
+			selenium.click("link="+Settings.ONHAND_ID_B6);
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("Error: Failed to close Onhand");
+		}
 	}
 }
