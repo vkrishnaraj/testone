@@ -76,8 +76,9 @@
             			</td>
             		</tr>
             		<tr>
-            				<td><bean:write scope="request" name="requestAgent" /></td>
-            				<td><bean:write scope="request" name="contact" /></td>
+            			
+            				<td>write scope="request" name="requestAgent" /></td>
+            				<td>write scope="request" name="contact" /></td>
            			</tr>
             	</table>-->
                 
