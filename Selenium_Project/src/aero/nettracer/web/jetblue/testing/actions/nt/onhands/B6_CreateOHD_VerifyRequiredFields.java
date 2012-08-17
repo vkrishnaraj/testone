@@ -78,7 +78,7 @@ public class B6_CreateOHD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			System.out.println("Error: Failed to close Onhand");
 		}
 		if (checkNoErrorPage()) {
-			verifyEquals("label=BagHop Pickup", selenium.getText("name=disposal_status.status_ID"));
+			verifyEquals("98", selenium.getValue("name=disposal_status.status_ID"));
 		} else {
 			System.out.println("Error: Failed to load Onhand");
 		}
