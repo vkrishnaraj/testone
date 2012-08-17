@@ -18,11 +18,19 @@
 		<fileset dir="lib">
 			<patternset refid="jar.files" />
 		</fileset>
+	</path>	
+	
+	<path id="junitpath.test">
+		<pathelement location="${builddir}" />
+		<fileset dir="lib">
+			<patternset refid="jar.files" />
+		</fileset>
 		<fileset dir="build">
 			<patternset refid="class.files" />
 		</fileset>
 	</path>	
 			
+
 
   	<target name="compile-test" >
     	<javac srcdir="${srcdir}" destdir="${builddir}" includeantruntime="yes"  >
@@ -36,7 +44,7 @@
         </java>
 
     	<junit printsummary="yes" showoutput="true" fork="false" >
-      		<classpath refid="classpath.test" />
+      		<classpath refid="junitpath.test" />
       		<formatter type="xml" usefile="true" />
       		<test name="aero.nettracer.web.defaul.testing.TestEverything" />
     		<jvmarg value="-Dselenium.port=1234"/>
