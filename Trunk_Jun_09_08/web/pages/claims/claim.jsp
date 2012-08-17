@@ -605,7 +605,7 @@
 					</span>-->
 					</div>
 					
-						<div id="names" style="margin:0;padding:0;display:none;">
+						<div id="names" style="margin:0;padding:0;">
 					<table class="form2" cellspacing="0" cellpadding="0" >
 						<logic:iterate indexId="i" id="p" name="claimForm" property="claim.claimants" type="aero.nettracer.fs.model.Person" >
 						<% if (i > 0) { 
@@ -889,7 +889,7 @@
 						<a id="rshide" href="#rs" onClick="hide('#receipts','#rsshow','#rshide')" style="display:none;"><bean:message key="link.hide" /></a>
 					</span>-->
 					</div>
-					<div id="receipts" style="display:none;" >
+					<div id="receipts"  >
 					<table class="form2" cellspacing="0" cellpadding="0" >
 						<logic:iterate indexId="i" id="r" name="claimForm" property="claim.receipts" type="aero.nettracer.fs.model.FsReceipt" >
 						  <%
