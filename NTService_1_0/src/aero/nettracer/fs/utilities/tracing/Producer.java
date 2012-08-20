@@ -23,6 +23,7 @@ import aero.nettracer.fs.model.FsMatchHistoryAudit;
 import aero.nettracer.fs.model.GreyListAddress;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
+import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.AccessRequest;
@@ -253,6 +254,46 @@ public class Producer {
 					"where ccNumLastFour = \'" + format(file.getIncident().getReservation().getCcNumLastFour()) +"\' ";
 		}
 
+		Set<FsClaim> claims = file.getClaims();
+		Set<FsReceipt> receipts= new HashSet<FsReceipt>();
+		Set<String> ccNumbers = new HashSet<String>();
+		//we might have duplicate Phone objects with the same phone number, we want unique phone numbers
+		for(FsClaim claim:claims){
+			receipts.addAll(claim.getReceipts());
+		}
+		for(FsReceipt receipt:receipts)
+		{
+			ccNumbers.add(receipt.getCcLastFour());
+		}
+		
+		if((ccNumbers!=null && ccNumbers.size()>0)){
+			sql += " union select null as f1_id, " +
+					"f2.id as f2_id, " +
+					"f3.id as f3_id, " +
+					"null as f4_id, " +
+					"null as f5_id, " +
+					"null as f6_id, " +
+					"null as f7_id, " +
+					"'cc' as type " +
+					"from fsReceipt rec " +
+					"left outer join fsclaim c2 on rec.claim_id = c2.id " +
+					"left outer join fsincident i2 on i2.claim_id = c2.id " +
+					"left outer join FsFile f2 on f2.id = c2.file_id " +
+					"left outer join FsFile f3 on f3.id = i2.file_id " +
+					"where ";
+					if(ccNumbers.size()>0)
+					{
+						for(String ccnumber:ccNumbers)
+						{
+							sql+="rec.ccLastFour = \'"+format(ccnumber)+"\' OR ";
+						}
+					}
+					sql=sql.substring(0, sql.length()-3);
+					//ccNumLastFour = \'" + format(file.getIncident().getReservation().getCcNumLastFour()) +"\'";
+					
+			
+		}
+				
 		Set<FsAddress> addresses = Consumer.getAddresses(file);
 		file.setAddressCache(addresses);
 		if (addresses != null && addresses.size() > 0) {
