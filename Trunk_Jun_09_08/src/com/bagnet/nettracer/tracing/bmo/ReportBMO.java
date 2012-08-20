@@ -3070,7 +3070,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				
 				sr.setClaimID(rs.getString("id"));
 				sr.setIncidentID(rs.getString("airlineIncidentId"));
-				sr.setClaimDate(rs.getDate("claimDate"));
+				sr.setClaimDate(rs.getTimestamp("claimDate"));
 				sr.setStatus(rs.getString("description"));
 				sr.setAmountClaimed(rs.getString("amountClaimed"));
 				sr.setAmountClaimedCurrency(rs.getString("amountClaimedCurrency"));

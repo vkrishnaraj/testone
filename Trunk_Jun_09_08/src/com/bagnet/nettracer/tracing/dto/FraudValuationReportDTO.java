@@ -1,13 +1,9 @@
 package com.bagnet.nettracer.tracing.dto;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.TimeZone;
 
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.db.Status;
 
 public class FraudValuationReportDTO {
 	
@@ -33,10 +29,7 @@ public class FraudValuationReportDTO {
 	}
 
 	public String getReportClaimDate() {
-		java.util.Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getClaimDate(), TracingConstants.DB_DATEFORMAT, null, null) + " "
-				+ DateUtils.formatDate(getClaimDate(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
-		
-		return DateUtils.formatDate(tempdate, _DATEFORMAT, null, _TIMEZONE);
+		return DateUtils.formatDate(getClaimDate(), _DATEFORMAT, null, _TIMEZONE);
 
 	}
 	
