@@ -52,7 +52,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 	public aero.nettracer.fs.service.SubmitClaimResponseDocument submitClaim (aero.nettracer.fs.service.SubmitClaimDocument submitClaim) {
 		SubmitClaim claim = submitClaim.getSubmitClaim();
 		File file = claim.getData();
-		
+				
 		SubmitClaimResponseDocument resDoc = SubmitClaimResponseDocument.Factory.newInstance();
 		SubmitClaimResponse claimRes = resDoc.addNewSubmitClaimResponse();
 		SimpleResponse res = claimRes.addNewReturn();
@@ -222,13 +222,12 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	claim.setAmountClaimedCurrency(wsClaim.getAmountClaimedCurrency());
     	claim.setAmountPaid(wsClaim.getAmountPaid());
     	claim.setAmountPaidCurrency(wsClaim.getAmountPaidCurrency());
+    	Calendar c = new GregorianCalendar();
     	if(wsClaim.getClaimDate() != null){
-    		claim.setClaimDate(wsClaim.getClaimDate().getTime());
-    	} else {
-        	Calendar c = new GregorianCalendar();
-        	c.setTimeZone(TimeZone.getTimeZone("GMT"));
-        	claim.setClaimDate(c.getTime());
+    		c = wsClaim.getClaimDate();
     	}
+    	c.setTimeZone(TimeZone.getTimeZone("GMT"));
+    	claim.setClaimDate(c.getTime());
 
     	claim.setClaimType(wsClaim.getClaimType());
     	claim.setTravelDate(wsClaim.getTravelDate()!=null?wsClaim.getTravelDate().getTime():null);

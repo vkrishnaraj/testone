@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -110,7 +111,7 @@ public class ClaimUtils {
 		
 		// create the claim
 		Claim claim = new Claim();
-		claim.setClaimDate(new Date());
+		claim.setClaimDate(Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTime()); // UTC Time for create claim
 		claim.setAirline(user.getCompanycode_ID());
 		claim.setAmountClaimedCurrency(user.getDefaultcurrency());
 		claim.setAmountPaidCurrency(user.getDefaultcurrency());
