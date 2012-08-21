@@ -222,12 +222,15 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	claim.setAmountClaimedCurrency(wsClaim.getAmountClaimedCurrency());
     	claim.setAmountPaid(wsClaim.getAmountPaid());
     	claim.setAmountPaidCurrency(wsClaim.getAmountPaidCurrency());
-    	Calendar c = new GregorianCalendar();
+    	Calendar c = Calendar.getInstance();
     	if(wsClaim.getClaimDate() != null){
     		c = wsClaim.getClaimDate();
     	}
     	c.setTimeZone(TimeZone.getTimeZone("GMT"));
-    	claim.setClaimDate(c.getTime());
+		Calendar time = Calendar.getInstance();
+		time.set(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), 
+				c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), c.get(Calendar.SECOND));
+    	claim.setClaimDate(time.getTime());
 
     	claim.setClaimType(wsClaim.getClaimType());
     	claim.setTravelDate(wsClaim.getTravelDate()!=null?wsClaim.getTravelDate().getTime():null);

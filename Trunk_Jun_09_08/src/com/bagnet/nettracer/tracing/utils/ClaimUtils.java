@@ -111,7 +111,11 @@ public class ClaimUtils {
 		
 		// create the claim
 		Claim claim = new Claim();
-		claim.setClaimDate(Calendar.getInstance(TimeZone.getTimeZone("GMT")).getTime()); // UTC Time for create claim
+		Calendar tzFix = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		Calendar time = Calendar.getInstance();
+		time.set(tzFix.get(Calendar.YEAR), tzFix.get(Calendar.MONTH), tzFix.get(Calendar.DAY_OF_MONTH), 
+				tzFix.get(Calendar.HOUR_OF_DAY), tzFix.get(Calendar.MINUTE), tzFix.get(Calendar.SECOND));
+		claim.setClaimDate(time.getTime()); // UTC Time for create claim
 		claim.setAirline(user.getCompanycode_ID());
 		claim.setAmountClaimedCurrency(user.getDefaultcurrency());
 		claim.setAmountPaidCurrency(user.getDefaultcurrency());
