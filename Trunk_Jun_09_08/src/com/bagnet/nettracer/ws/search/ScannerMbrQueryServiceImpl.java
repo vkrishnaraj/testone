@@ -71,6 +71,10 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     @SuppressWarnings("rawtypes")
 	public void querySystem(String[] tags, String[] pnrs, QueryNetTracerResponse queryRes, int subDays) {
     	
+    	if (tags == null || pnrs == null || tags.length == 0 || pnrs.length == 0) {
+    		return;
+    	}
+    	
     	String addTime = "ADDTIME(i.createdate, i.createtime)";
     	String subTime = "DATE_SUB(UTC_TIMESTAMP(), INTERVAL " + subDays + " DAY)";
     	
@@ -85,7 +89,7 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     	
     	String pnrSelect = generatePNR(pnrs, where);
     	String tagSelect = generateTAG(tags, where);
-    	String unionSelect = "";
+    	String unionSelect = "null";
     	if (pnrSelect != null && pnrSelect.length() > 0) {
     		unionSelect = pnrSelect;
     		if (tagSelect != null && tagSelect.length() > 0) {
