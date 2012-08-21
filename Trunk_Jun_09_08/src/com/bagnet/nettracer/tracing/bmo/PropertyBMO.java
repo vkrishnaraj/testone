@@ -162,6 +162,8 @@ public class PropertyBMO {
 	
 	public static final String DIRECT_ACCESS_URL = "direct.access.url";
 	
+	public static final String SCANQUERY_DAYS_BACK = "scanquery.days.back";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

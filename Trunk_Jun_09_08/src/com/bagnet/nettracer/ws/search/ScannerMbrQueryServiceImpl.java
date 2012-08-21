@@ -13,6 +13,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.classic.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.ws.search.QueryNetTracerDocument.QueryNetTracer;
 import com.bagnet.nettracer.ws.search.QueryNetTracerResponseDocument.QueryNetTracerResponse;
 import com.bagnet.nettracer.ws.search.pojo.xsd.Match;
@@ -39,7 +40,11 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     * @param queryNetTracer
     */
    public com.bagnet.nettracer.ws.search.QueryNetTracerResponseDocument queryNetTracer(com.bagnet.nettracer.ws.search.QueryNetTracerDocument queryNetTracer) {
-	   return queryNetTracer(queryNetTracer, 4);
+	   int daysBack = PropertyBMO.getValueAsInt(PropertyBMO.SCANQUERY_DAYS_BACK);
+	   if (daysBack == 0) {
+		   daysBack = 4;
+	   }
+	   return queryNetTracer(queryNetTracer, daysBack);
    }
    
    public com.bagnet.nettracer.ws.search.QueryNetTracerResponseDocument queryNetTracer(com.bagnet.nettracer.ws.search.QueryNetTracerDocument queryNetTracer, int subDays) {
