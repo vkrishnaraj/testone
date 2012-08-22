@@ -408,7 +408,7 @@
 					             		<bean:message key="colname.dob" />
 					             		(<%= a.getDateformat().getFormat() %>)
 					             		<br />
-					             		<html:text name="matchClaim" property="claimant.dateOfBirth" size="12" maxlength="11" styleClass="textfield" disabled="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.claimForm.claimantDateOfBirth,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+					             		<html:text name="matchClaim" property="claimant.disDateOfBirth" size="12" maxlength="11" styleClass="textfield" disabled="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.claimForm.claimantDateOfBirth,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
 					             		
 					             	</td>
 					             </tr>
