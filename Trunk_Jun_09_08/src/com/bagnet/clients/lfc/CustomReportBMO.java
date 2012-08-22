@@ -387,6 +387,8 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.addColumn(resources.getString("report.lf.salvage.value"), "value", String.class.getName(), 10, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.salvage.category"), "category", String.class.getName(), 15, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.salvage.sub.category"), "subCategory", String.class.getName(), 15, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.salvage.item.brand"), "brand", String.class.getName(), 15, detailStyle, header);
+			drb.addColumn(resources.getString("report.lf.salvage.item.model"), "model", String.class.getName(), 15, detailStyle, header);
 			drb.addColumn(resources.getString("report.lf.salvage.item.title"), "title", String.class.getName(), 20, detailStyle, header);
 			
 			drb.setIgnorePagination(true);

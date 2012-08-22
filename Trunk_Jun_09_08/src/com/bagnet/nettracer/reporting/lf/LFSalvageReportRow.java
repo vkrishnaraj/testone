@@ -8,6 +8,8 @@ public class LFSalvageReportRow {
 	private String category;
 	private String subCategory;
 	private String title;
+	private String brand;
+	private String model;
 	
 	public long getBarcode() {
 		return barcode;
@@ -55,6 +57,22 @@ public class LFSalvageReportRow {
 	
 	public void setTitle(String title) {
 		this.title = title;
+	}
+
+	public String getBrand() {
+		return brand;
+	}
+
+	public void setBrand(String brand) {
+		this.brand = brand;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public void setModel(String model) {
+		this.model = model;
 	}
 	
 }

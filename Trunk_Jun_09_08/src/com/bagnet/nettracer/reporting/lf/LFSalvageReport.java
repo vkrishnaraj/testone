@@ -19,6 +19,8 @@ public class LFSalvageReport extends AbstractNtJasperReport {
 	private final int CATEGORY = 3;
 	private final int SUB_CATEGORY = 4;
 	private final int TITLE = 5;
+	private final int BRAND = 6;
+	private final int MODEL = 7;
 
 	public LFSalvageReport(ResourceBundle resources) {
 		super(resources);
@@ -27,7 +29,8 @@ public class LFSalvageReport extends AbstractNtJasperReport {
 	@Override
 	protected String getMySqlSqlString(StatReportDTO srDto) {
 		String sql = "select lf.barcode,date(lf.receivedDate) as 'date_received',i.value,ifnull(c.description,'') as 'category', " +
-					 "ifnull(sc.description,'') as 'subcategory',i.description as 'title' from lfsalvage s " +
+					 "ifnull(sc.description,'') as 'subcategory',i.description as 'title', " +
+					 "i.brand as 'brand', i.model as 'model' from lfsalvage s " +
 					 "left outer join lffound lf on s.id = lf.salvage_id " +
 					 "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					 "left outer join lfcategory c on i.category = c.id " +
@@ -46,6 +49,8 @@ public class LFSalvageReport extends AbstractNtJasperReport {
 		query.addScalar("category", Hibernate.STRING);
 		query.addScalar("subcategory", Hibernate.STRING);
 		query.addScalar("title", Hibernate.STRING);
+		query.addScalar("brand", Hibernate.STRING);
+		query.addScalar("model", Hibernate.STRING);
 		
 	}
 
@@ -75,6 +80,8 @@ public class LFSalvageReport extends AbstractNtJasperReport {
 			currentRow.setCategory((String) data[CATEGORY]);
 			currentRow.setSubCategory((String) data[SUB_CATEGORY]);
 			currentRow.setTitle((String) data[TITLE]);		
+			currentRow.setBrand((String) data[BRAND]);		
+			currentRow.setModel((String) data[MODEL]);		
 			
 			toReturn.add(currentRow);
 		}
