@@ -42,7 +42,7 @@ public class Settings {
 	
 	//URL ROOT FOR WEB APP BEING TESTED
 	public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
-	//public static final String APP_URL_LOCAL = "http://192.168.2.106:8080/";
+//	public static final String APP_URL_LOCAL = "http://192.168.2.106:8080/";
 	
 	//LOGIN CREDENTIALS
 	public static final String USERNAME_ADMIN = "ntauto";
@@ -52,8 +52,8 @@ public class Settings {
 	public static final String PASSWORD_OGADMIN = "Ladendead51!";
 	public static final String PASSWORD_TEST = "nttest@Hud1";
 	public static final String PASSWORD_CHANGE = "nttest@Hud2";
-	//public static final String USERNAME_ADMIN = "ntadmin";
-	//public static final String PASSWORD_ADMIN = "Ladendead51!";
+//	public static final String USERNAME_ADMIN = "ntadmin";
+//	public static final String PASSWORD_ADMIN = "InstaNokia41!";
 	
 	//TIMEOUT SETTINGS
 	public static final String LOGIN_TIMEOUT = "120000";
@@ -115,7 +115,7 @@ public class Settings {
 	/////////////////////////////////////////////////////////// WESTJET ///////////////////////////////////////////////////////
 	
 	public static final String START_URL_WS = "westjet";
-	//public static final String START_URL_WS = "wjtracer/";
+//	public static final String START_URL_WS = "wjtracer/";
 	public static String INCIDENT_ID_WS = "";
 	public static String DAMAGE_ID_WS = "";
 	public static String PILFERAGE_ID_WS = "";
@@ -174,6 +174,11 @@ public class Settings {
 	public static String PILFERAGE_ID_WH = "";
 	public static String ONHAND_ID_WH = "";
 	
+	/////////////////////////////////////////////////////////// WEBJET ///////////////////////////////////////////////////////
+		
+	public static String CLAIMMADE_ID_FS = "";
+	public static String CLAIMREQ_ID_FS = "";
+
 	
 	
 }

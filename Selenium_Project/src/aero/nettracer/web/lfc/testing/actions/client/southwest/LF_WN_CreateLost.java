@@ -117,6 +117,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Lost Phone Phone Number is required for Category \"Cellphone\"."));
 		selenium.type("id=lostForm:j_id159", "test@nettracer.aero");
 		selenium.select("id=lostForm:j_id25", "label=Bags");
+		waitForPageToLoadImproved(1000, false);
 		selenium.click("id=lostForm:j_id193");
 		waitForPageToLoadImproved(1000, false);
 		verifyTrue(selenium.isTextPresent("Item Subcategory is required for Category \"Bags\"."));
