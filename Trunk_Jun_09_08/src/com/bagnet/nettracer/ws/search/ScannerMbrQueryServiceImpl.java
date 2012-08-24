@@ -71,7 +71,7 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     @SuppressWarnings("rawtypes")
 	public void querySystem(String[] tags, String[] pnrs, QueryNetTracerResponse queryRes, int subDays) {
     	
-    	if ((tags == null && pnrs == null) || (tags.length == 0 && pnrs.length == 0)) {
+    	if ((tags == null || tags.length == 0) && (pnrs == null || pnrs.length == 0)) {
     		return;
     	}
     	
