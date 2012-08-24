@@ -18,9 +18,9 @@ public class FS_CreateFile extends LoginUtil {
 		selenium.click("id=menucol_1.1");
 		waitForPageToLoadImproved();
 		String name=String.valueOf(new Date().getTime());
-		selenium.type("name=claimant.lastName", "WILL");
-		selenium.type("name=claimant.firstName","THIS");
-		selenium.type("name=address1", "WORK");
+		selenium.type("name=claimant.lastName", "WILL"+name);
+		selenium.type("name=claimant.firstName","THIS"+name);
+		selenium.type("name=address1", "WORK"+name);
 		selenium.type("name=city", "Testville");
 		selenium.select("name=state", "label=Alabama");
 		selenium.type("name=zip", "12345");
@@ -38,9 +38,9 @@ public class FS_CreateFile extends LoginUtil {
 		waitForPageToLoadImproved();
 		selenium.click("name=skipPrepopulate");
 		waitForPageToLoadImproved();
-		selenium.type("name=claimant.lastName", "WILL");
-		selenium.type("name=claimant.firstName","THIS");
-		selenium.type("name=address1", "WORK");
+		selenium.type("name=claimant.lastName", "WILL"+name);
+		selenium.type("name=claimant.firstName","THIS"+name);
+		selenium.type("name=address1", "WORK"+name);
 		selenium.type("name=city", "Testville");
 		selenium.select("name=state", "label=Alabama");
 		selenium.type("name=zip", "12345");
@@ -52,17 +52,6 @@ public class FS_CreateFile extends LoginUtil {
 		System.out.println("FS: Claim Made ID: " + Settings.CLAIMMADE_ID_FS);
 		verifyTrue(selenium.isTextPresent(Settings.CLAIMREQ_ID_FS));
 		selenium.click("name=primaryResults[0].requestSelected");
-//		int tablesize=Integer.valueOf(selenium.getXpathCount("//div[@id='maincontent']/table[2]/tbody/tr").toString());
-//		for(int i=2;  i<tablesize; i++){
-//			String disabled=selenium
-//					getAttribute("//div[@id='maincontent']/table/tbody/tr["+i+"]/td/input");
-//			if(!disabled.contains("disabled")){
-//				
-//				String claimreq_id = selenium.getText("//div[@id='maincontent']/table/tbody/tr["+i+"]/td[3]/"); //broken
-//				Settings.CLAIMREQ_ID_FS = claimreq_id;
-//				break;
-//			}
-//		}
 		
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
