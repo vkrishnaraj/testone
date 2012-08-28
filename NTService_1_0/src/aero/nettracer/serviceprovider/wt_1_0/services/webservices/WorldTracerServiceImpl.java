@@ -4053,60 +4053,60 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			// ct.setState(fieldList.get(0));
 			// }
 
-//			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TA);
-//			if (fieldList != null && fieldList.size() > 0) {
-//				WTRAddressAmendType ta = ct.addNewTempAddress().addNewAddress();
-//				
-//				for (int i = 0; i < fieldList.size() && i < 2; i++) {
-//					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
-//					StringLength0To58AmendType ta1 = ta.addNewAddressLine();
-//					ta1.setSeq(i + 1);
-//					ta1.setStringValue(address);
-//				}
-//			}
-			
-			//get first temp address
-			Address ntta = PreProcessor.getAhlAddress(data, false);
-			
-			if(ntta != null){
-				TempAddress ta = ct.addNewTempAddress();
-				WTRAddressAmendType t = ta.addNewAddress();
-				if(ntta.getAddress1()!=null && ntta.getAddress1().length() > 0){
-					StringLength0To58AmendType ta1 = t.addNewAddressLine();
-					ta1.setSeq(1);
-					ta1.setStringValue(ntta.getAddress1());
-				}
-				if(ntta.getAddress2()!=null && ntta.getAddress2().length() > 0){
-					StringLength0To58AmendType ta2 = t.addNewAddressLine();
-					ta2.setSeq(2);
-					ta2.setStringValue(ntta.getAddress2());
-				}
-				if(ntta.getCity()!=null && ntta.getCity().length() > 0){
-					t.setCity(ntta.getCity());
-				}
-				if(ntta.getState() != null && ntta.getState().length() > 0 
-						&& ntta.getCountryCode() != null 
-						&& (ntta.getCountryCode().equalsIgnoreCase("US") || ntta.getCountryCode().equalsIgnoreCase("United States"))){
-					WTRAddressAmendType.State state = t.addNewState();
-					state.setStringValue(ntta.getState());
-					t.setState(state);
-				} else if(ntta.getProvince() != null && ntta.getProvince().length() > 0){
-					//there is no province field for WT
-					WTRAddressAmendType.State state = t.addNewState();
-					state.setStringValue(ntta.getProvince());
-					t.setState(state);
-				}
-				if(ntta.getZip() != null && ntta.getZip().length() > 0){
-					PostalCode zip = t.addNewPostalCode();
-					zip.setStringValue(ntta.getZip());
-					t.setPostalCode(zip);
-				}
-				if(ntta.getCountryCode() != null && ntta.getCountryCode().length() > 0){
-					Country country = t.addNewCountry();
-					country.setStringValue(ntta.getCountryCode());
-					t.setCountry(country);
+			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TA);
+			if (fieldList != null && fieldList.size() > 0) {
+				WTRAddressAmendType ta = ct.addNewTempAddress().addNewAddress();
+
+				for (int i = 0; i < fieldList.size() && i < 2; i++) {
+					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
+					StringLength0To58AmendType ta1 = ta.addNewAddressLine();
+					ta1.setSeq(i + 1);
+					ta1.setStringValue(address);
 				}
 			}
+			
+			//get first temp address
+//			Address ntta = PreProcessor.getAhlAddress(data, false);
+//			
+//			if(ntta != null){
+//				TempAddress ta = ct.addNewTempAddress();
+//				WTRAddressAmendType t = ta.addNewAddress();
+//				if(ntta.getAddress1()!=null && ntta.getAddress1().length() > 0){
+//					StringLength0To58AmendType ta1 = t.addNewAddressLine();
+//					ta1.setSeq(1);
+//					ta1.setStringValue(ntta.getAddress1());
+//				}
+//				if(ntta.getAddress2()!=null && ntta.getAddress2().length() > 0){
+//					StringLength0To58AmendType ta2 = t.addNewAddressLine();
+//					ta2.setSeq(2);
+//					ta2.setStringValue(ntta.getAddress2());
+//				}
+//				if(ntta.getCity()!=null && ntta.getCity().length() > 0){
+//					t.setCity(ntta.getCity());
+//				}
+//				if(ntta.getState() != null && ntta.getState().length() > 0 
+//						&& ntta.getCountryCode() != null 
+//						&& (ntta.getCountryCode().equalsIgnoreCase("US") || ntta.getCountryCode().equalsIgnoreCase("United States"))){
+//					WTRAddressAmendType.State state = t.addNewState();
+//					state.setStringValue(ntta.getState());
+//					t.setState(state);
+//				} else if(ntta.getProvince() != null && ntta.getProvince().length() > 0){
+//					//there is no province field for WT
+//					WTRAddressAmendType.State state = t.addNewState();
+//					state.setStringValue(ntta.getProvince());
+//					t.setState(state);
+//				}
+//				if(ntta.getZip() != null && ntta.getZip().length() > 0){
+//					PostalCode zip = t.addNewPostalCode();
+//					zip.setStringValue(ntta.getZip());
+//					t.setPostalCode(zip);
+//				}
+//				if(ntta.getCountryCode() != null && ntta.getCountryCode().length() > 0){
+//					Country country = t.addNewCountry();
+//					country.setStringValue(ntta.getCountryCode());
+//					t.setCountry(country);
+//				}
+//			}
 
 			// Set Flight Information
 			int itinCount = 0;
