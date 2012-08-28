@@ -1974,19 +1974,19 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
 
 			parameters.put("title", reporttitle);
-			String sqlselect = "from com.bagnet.nettracer.tracing.db.Itinerary i_a where 1=1 ";
-			String companylimit = " and i_a.incident.stationassigned.company.companyCode_ID = :companyCode_ID ";
+			String sqlselect = "from com.bagnet.nettracer.tracing.db.Incident i_a left outer join i_a.itinerary as itin where 1=1 "; //left outer join i_a.itinerary as itin
+			String companylimit = " and i_a.stationassigned.company.companyCode_ID = :companyCode_ID ";
 			// mbr report type
 			String mbrtypeq = "";
 			if (srDTO.getItemType_ID() >= 1) {
-				mbrtypeq = " and i_a.incident.itemtype.itemType_ID = :itemType_ID ";
+				mbrtypeq = " and i_a.itemtype.itemType_ID = :itemType_ID ";
 			}
 
 			StringBuffer sb = new StringBuffer(512);
 			String stationq = "";
 			// orignating station
 			if (srDTO.getB_stationcode() != null && srDTO.getB_stationcode().length() > 0) {
-				sb.append(" and (i_a.legfrom = :b_stationcode and i_a.legfrom_type = ").append(TracingConstants.LEG_B_STATION).append(") ");
+				sb.append(" and (itin.legfrom = :b_stationcode and itin.legfrom_type = ").append(TracingConstants.LEG_B_STATION).append(") ");
 				// terminating station
 				if (srDTO.getE_stationcode() != null && srDTO.getE_stationcode().length() > 0) {
 					sb.append(" and (i_b.legto = :e_stationcode and i_b.legto_type = ").append(TracingConstants.LEG_E_STATION).append(") ");
@@ -1995,42 +1995,42 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 					if (srDTO.getT_stationcode() != null && srDTO.getT_stationcode().length() > 0) {
 						sb.append(" and ((i_c.legfrom = :t_stationcode and i_c.legfrom_type = ").append(TracingConstants.LEG_T_STATION).append(") ");
 						sb.append(" or (i_c.legto = :t_stationcode and i_c.legto_type = ").append(TracingConstants.LEG_T_STATION).append(")) ");
-						sqlselect = "from " + "com.bagnet.nettracer.tracing.db.Itinerary i_a, " + "com.bagnet.nettracer.tracing.db.Itinerary i_b, "
-								+ "com.bagnet.nettracer.tracing.db.Itinerary i_c " + "where i_a.incident.incident_ID = i_b.incident.incident_ID and"
-								+ " i_a.incident.incident_ID = i_c.incident.incident_ID and i_a.itinerarytype = 0 ";
+						sqlselect = "from " + "com.bagnet.nettracer.tracing.db.Incident i_a left outer join i_a.Itinerary as itin, " + "com.bagnet.nettracer.tracing.db.Itinerary i_b, "
+								+ "com.bagnet.nettracer.tracing.db.Itinerary i_c " + "where i_a.incident_ID = i_b.incident.incident_ID and"
+								+ " i_a.incident_ID = i_c.incident.incident_ID and itin.itinerarytype = 0 ";
 						hasc = true;
 					} else {
 						// orignating station + terminating station
-						sqlselect = "from " + "com.bagnet.nettracer.tracing.db.Itinerary i_a, " + "com.bagnet.nettracer.tracing.db.Itinerary i_b where "
-								+ " i_a.incident.incident_ID = i_b.incident.incident_ID and i_a.itinerarytype = 0 ";
+						sqlselect = "from " + "com.bagnet.nettracer.tracing.db.Incident i_a left outer join i_a.Itinerary as itin, " + "com.bagnet.nettracer.tracing.db.Itinerary i_b where "
+								+ " i_a.incident_ID = i_b.incident.incident_ID and itin.itinerarytype = 0 ";
 					}
 				} else {
 					// orignating station + transfer station
 					if (srDTO.getT_stationcode() != null && srDTO.getT_stationcode().length() > 0) {
 						sb.append(" and ((i_b.legfrom = :t_stationcode and i_b.legfrom_type = ").append(TracingConstants.LEG_T_STATION).append(") ");
 						sb.append(" or (i_b.legto = :t_stationcode and i_b.legto_type = ").append(TracingConstants.LEG_T_STATION).append(")) ");
-						sqlselect = "from " + "com.bagnet.nettracer.tracing.db.Itinerary i_a, " + "com.bagnet.nettracer.tracing.db.Itinerary i_b where "
-								+ "  i_a.incident.incident_ID = i_b.incident.incident_ID and i_a.itinerarytype = 0 ";
+						sqlselect = "from " + "com.bagnet.nettracer.tracing.db.Incident i_a left outer join i_a.Itinerary as itin, " + "com.bagnet.nettracer.tracing.db.Itinerary i_b where "
+								+ "  i_a.incident_ID = i_b.incident.incident_ID and itin.itinerarytype = 0 ";
 						hasb = true;
 					}
 				}
 			} else {
 				// terminating station
 				if (srDTO.getE_stationcode() != null && srDTO.getE_stationcode().length() > 0) {
-					sb.append(" and (i_a.legto = :e_stationcode and i_a.legto_type = ").append(TracingConstants.LEG_E_STATION).append(") ");
+					sb.append(" and (itin.legto = :e_stationcode and itin.legto_type = ").append(TracingConstants.LEG_E_STATION).append(") ");
 					// terminating station + transfer station
 					if (srDTO.getT_stationcode() != null && srDTO.getT_stationcode().length() > 0) {
 						sb.append(" and ((i_b.legfrom = :t_stationcode and i_b.legfrom_type = ").append(TracingConstants.LEG_T_STATION).append(") ");
 						sb.append(" or (i_b.legto = :t_stationcode and i_b.legto_type = ").append(TracingConstants.LEG_T_STATION).append(")) ");
-						sqlselect = "from " + "com.bagnet.nettracer.tracing.db.Itinerary i_a, " + "com.bagnet.nettracer.tracing.db.Itinerary i_b where "
-								+ " i_a.incident.incident_ID = i_b.incident.incident_ID and i_a.itinerarytype = 0 ";
+						sqlselect = "from " + "com.bagnet.nettracer.tracing.db.Itinerary itin, " + "com.bagnet.nettracer.tracing.db.Itinerary i_b where "
+								+ " i_a.incident_ID = i_b.incident.incident_ID and itin.itinerarytype = 0 ";
 						hasb = true;
 					}
 				} else {
 					// transfer station only
 					if (srDTO.getT_stationcode() != null && srDTO.getT_stationcode().length() > 0) {
-						sb.append(" and ((i_a.legfrom = :t_stationcode and i_a.legfrom_type = ").append(TracingConstants.LEG_T_STATION).append(") ");
-						sb.append(" or (i_a.legto = :t_stationcode and i_a.legto_type = ").append(TracingConstants.LEG_T_STATION).append(")) ");
+						sb.append(" and ((itin.legfrom = :t_stationcode and itin.legfrom_type = ").append(TracingConstants.LEG_T_STATION).append(") ");
+						sb.append(" or (itin.legto = :t_stationcode and itin.legto_type = ").append(TracingConstants.LEG_T_STATION).append(")) ");
 					}
 				}
 			}
@@ -2055,24 +2055,24 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 
 			if (intc.length() > 0 && srDTO.getFaultstation_ID() != null && !srDTO.getFaultstation_ID()[0].equals("0")) {
 				intc = intc.substring(0,intc.length() - 1);
-				faultq += " and i_a.incident.faultstation.station_ID in (" + intc + ") ";
+				faultq += " and i_a.faultstation.station_ID in (" + intc + ") ";
 			}
 			// END NEW
 			
 			
 			String losscodeq = "";
 			if (srDTO.getLoss_code() > 0) {
-				losscodeq = " and i_a.incident.loss_code = :loss_code";
+				losscodeq = " and i_a.loss_code = :loss_code";
 			}
 
 			String statusq = "";
 			if (srDTO.getStatus_ID() >= 1) {
-				statusq = " and i_a.incident.status.status_ID= :status_ID ";
+				statusq = " and i_a.status.status_ID= :status_ID ";
 			}
 
 			String agentq = "";
 			if (srDTO.getAgent() != null && srDTO.getAgent().length() > 0) {
-				agentq = " and i_a.incident.agent.username like :agent_username ";
+				agentq = " and i_a.agent.username like :agent_username ";
 				parameters.put("agent_username", srDTO.getAgent());
 			}
 
@@ -2094,24 +2094,24 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				parameters.put("sdate", srDTO.getStarttime());
 				if (sdate.equals(edate)) {
 					// need to add the timezone diff here
-					dateq = " and ((i_a.incident.createdate= :startdate and i_a.incident.createtime >= :starttime) "
-							+ " or (i_a.incident.createdate= :startdate1 and i_a.incident.createtime <= :starttime))";
+					dateq = " and ((i_a.createdate= :startdate and i_a.createtime >= :starttime) "
+							+ " or (i_a.createdate= :startdate1 and i_a.createtime <= :starttime))";
 
 					edate = null;
 				} else {
 
 					// first get the beginning and end dates using date and time, then get
 					// dates in between
-					dateq = " and ((i_a.incident.createdate= :startdate and i_a.incident.createtime >= :starttime) "
-							+ " or (i_a.incident.createdate= :enddate1 and i_a.incident.createtime <= :starttime)"
-							+ " or (i_a.incident.createdate > :startdate and i_a.incident.createdate <= :enddate))";
+					dateq = " and ((i_a.createdate= :startdate and i_a.createtime >= :starttime) "
+							+ " or (i_a.createdate= :enddate1 and i_a.createtime <= :starttime)"
+							+ " or (i_a.createdate > :startdate and i_a.createdate <= :enddate))";
 
 					parameters.put("edate", srDTO.getEndtime());
 				}
 			} else if (sdate != null) {
 				parameters.put("sdate", srDTO.getStarttime());
-				dateq = " and ((i_a.incident.createdate= :startdate and i_a.incident.createtime >= :starttime) "
-						+ " or (i_a.incident.createdate= :startdate1 and i_a.incident.createtime <= :starttime))";
+				dateq = " and ((i_a.createdate= :startdate and i_a.createtime >= :starttime) "
+						+ " or (i_a.createdate= :startdate1 and i_a.createtime <= :starttime))";
 				edate = null;
 			}
 
@@ -2124,7 +2124,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			if (srDTO.getDepartdate() != null && srDTO.getDepartdate().length() > 0) {
 				ddate = DateUtils.convertToDate(srDTO.getDepartdate(), user.getDateformat().getFormat(), null);
 				if (ddate != null) {
-					traveldateq = "and (i_a.departdate = :departdate ";
+					traveldateq = "and (itin.departdate = :departdate ";
 					if (hasb)
 						traveldateq += " or i_b.departdate = :departdate ";
 					if (hasc)
@@ -2136,7 +2136,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			if (srDTO.getArrivaldate() != null && srDTO.getArrivaldate().length() > 0) {
 				adate = DateUtils.convertToDate(srDTO.getArrivaldate(), user.getDateformat().getFormat(), null);
 				if (adate != null) {
-					traveldateq += "and (i_a.arrivedate = :arrivedate ";
+					traveldateq += "and (itin.arrivedate = :arrivedate ";
 					if (hasb)
 						traveldateq += " or i_b.arrivedate = :arrivedate ";
 					if (hasc)
@@ -2146,12 +2146,12 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				}
 			}
 
-			String sql = "select distinct i_a.incident.stationassigned.station_ID,i_a.incident.stationassigned.stationcode,"
-					+ " i_a.incident.faultstation.station_ID,i_a.incident.faultstation.stationcode,"
-					+ " i_a.incident.incident_ID, i_a.incident.itemtype.itemType_ID,i_a.incident.loss_code,"
-					+ " i_a.incident.createdate,i_a.incident.createtime,i_a.incident.status.status_ID,i_a.incident.itemtype.itemType_ID " + sqlselect
+			String sql = "select distinct i_a.stationassigned.station_ID,i_a.stationassigned.stationcode,"
+					+ " i_a.faultstation.station_ID,i_a.faultstation.stationcode,"
+					+ " i_a.incident_ID, i_a.itemtype.itemType_ID,i_a.loss_code,"
+					+ " i_a.createdate,i_a.createtime,i_a.status.status_ID,i_a.itemtype.itemType_ID " + sqlselect
 					+ mbrtypeq + stationq + faultq + losscodeq + statusq + agentq + dateq + traveldateq + companylimit
-					+ " order by i_a.incident.itemtype.itemType_ID, i_a.incident.incident_ID ";
+					+ " order by i_a.itemtype.itemType_ID, i_a.incident_ID ";
 			
 			Query q = sess.createQuery(sql);
 			
