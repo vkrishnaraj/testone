@@ -13,145 +13,145 @@ public class WS_QuickHistory extends LoginUtil {
 		selenium.click("id=menucol_1.4");
 		waitForPageToLoadImproved();
 		
-		if(checkNoErrorPage())
-		{
-			selenium.type("incident_ID", Settings.INCIDENT_ID_WS);
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after clicking View Delayed Items");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("name=saveButton");
-			waitForPageToLoadImproved();
-			selenium.click("id=menucol_2.3");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after loading a delayed item");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			//selenium.type("incident_ID", Settings.DAMAGE_ID_WS);
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("xpath=(//a[contains(@href, 'searchIncident.do?incident=')])[1]");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("name=saveButton");
-			waitForPageToLoadImproved();
-			selenium.click("id=menucol_3.3");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after loading a damaged item");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			//selenium.type("incident_ID", Settings.PILFERAGE_ID_WS);
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after saving a damaged item and/or view Pilfered items");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("xpath=(//a[contains(@href, 'searchIncident.do?incident=')])[1]");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("name=saveButton");
-			waitForPageToLoadImproved();
-			selenium.click("id=menucol_4.4");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after loading a pilfered item");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			//selenium.type("incident_ID", Settings.ONHAND_ID_WS);
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after saving a pilfered item and view on-hand");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("xpath=(//a[contains(@href, 'addOnHandBag.do?ohd_ID=')])[1]");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.select("name=bagColor", "label=WT - White/clear");
-			selenium.select("name=bagType", "label=01");
-			selenium.type("itinerarylist[0].legfrom", "LAS");
-			selenium.type("itinerarylist[0].legto", "ATL");
-			selenium.type("itinerarylist[0].flightnum", "1234");
-			selenium.click("id=calendar20");
-			selenium.click("link=Today");
-			selenium.click("id=calendar30");
-			selenium.click("link=Today");
-			selenium.click("name=savetracing");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after loading on-hand");
-			return;
-		}
+//		if(checkNoErrorPage())
+//		{
+//			selenium.type("incident_ID", Settings.INCIDENT_ID_WS);
+//			selenium.click("id=button");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after clicking View Delayed Items");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			selenium.click("name=saveButton");
+//			waitForPageToLoadImproved();
+//			selenium.click("id=menucol_2.3");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after loading a delayed item");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			//selenium.type("incident_ID", Settings.DAMAGE_ID_WS);
+//			selenium.click("id=button");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			selenium.click("xpath=(//a[contains(@href, 'searchIncident.do?incident=')])[1]");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			selenium.click("name=saveButton");
+//			waitForPageToLoadImproved();
+//			selenium.click("id=menucol_3.3");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after loading a damaged item");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			//selenium.type("incident_ID", Settings.PILFERAGE_ID_WS);
+//			selenium.click("id=button");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after saving a damaged item and/or view Pilfered items");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			selenium.click("xpath=(//a[contains(@href, 'searchIncident.do?incident=')])[1]");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			selenium.click("name=saveButton");
+//			waitForPageToLoadImproved();
+//			selenium.click("id=menucol_4.4");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after loading a pilfered item");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			//selenium.type("incident_ID", Settings.ONHAND_ID_WS);
+//			selenium.click("id=button");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after saving a pilfered item and view on-hand");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			selenium.click("xpath=(//a[contains(@href, 'addOnHandBag.do?ohd_ID=')])[1]");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			selenium.select("name=bagColor", "label=WT - White/clear");
+//			selenium.select("name=bagType", "label=01");
+//			selenium.type("itinerarylist[0].legfrom", "LAS");
+//			selenium.type("itinerarylist[0].legto", "ATL");
+//			selenium.type("itinerarylist[0].flightnum", "1234");
+//			selenium.click("id=calendar20");
+//			selenium.click("link=Today");
+//			selenium.click("id=calendar30");
+//			selenium.click("link=Today");
+//			selenium.click("name=savetracing");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after loading on-hand");
+//			return;
+//		}
 		
 		if(checkNoErrorPage())
 		{
@@ -264,7 +264,9 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=6");
+//			System.out.println("*** WE ARE STOPPED ***");
+			Thread.sleep(200000);
+			selenium.click("link=29");
 			waitForPageToLoadImproved();
 		}
 		else
