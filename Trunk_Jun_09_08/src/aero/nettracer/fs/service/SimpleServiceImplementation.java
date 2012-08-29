@@ -17,7 +17,7 @@ import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
-import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.SecurityUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
@@ -33,31 +33,49 @@ import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.service.SubmitClaimDocument.SubmitClaim;
 import aero.nettracer.fs.service.SubmitClaimResponseDocument.SubmitClaimResponse;
 import aero.nettracer.fs.service.objects.xsd.Address;
+import aero.nettracer.fs.service.objects.xsd.Authentication;
 import aero.nettracer.fs.service.objects.xsd.File;
 import aero.nettracer.fs.service.objects.xsd.Receipt;
 import aero.nettracer.fs.service.objects.xsd.Reservation;
 import aero.nettracer.fs.service.objects.xsd.SimpleResponse;
 import aero.nettracer.fs.utilities.TransportMapper;
-import aero.nettracer.general.services.GeneralServiceBean;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 import org.apache.commons.lang.StringUtils;
+import org.apache.struts.action.ActionMessages;
 
 public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     
+	
     /**
      * Auto generated method signature
      * 
      * @param submitClaim
      */
 	public aero.nettracer.fs.service.SubmitClaimResponseDocument submitClaim (aero.nettracer.fs.service.SubmitClaimDocument submitClaim) {
-		SubmitClaim claim = submitClaim.getSubmitClaim();
-		File file = claim.getData();
-				
 		SubmitClaimResponseDocument resDoc = SubmitClaimResponseDocument.Factory.newInstance();
 		SubmitClaimResponse claimRes = resDoc.addNewSubmitClaimResponse();
 		SimpleResponse res = claimRes.addNewReturn();
 		
-		createClaim(file, res);
+		Agent agent = null;
+		
+		if(submitClaim != null && submitClaim.getSubmitClaim() != null && submitClaim.getSubmitClaim().getAuthentication() != null){
+			Authentication auth = submitClaim.getSubmitClaim().getAuthentication();
+			ActionMessages errors = new ActionMessages();
+			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 1, errors);
+			if(!errors.isEmpty()){
+				res.setSearchSummary("Incorrect username/password");
+				return resDoc;
+			}
+		} else {
+			res.setSearchSummary("username/password not provided");
+			return resDoc;
+		}
+
+		
+		SubmitClaim claim = submitClaim.getSubmitClaim();
+		File file = claim.getData();
+		
+		createClaim(file, res, agent);
 		
 		return resDoc;
     }
@@ -72,12 +90,10 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#updateClaimStatus");
     }
     
-    private void createClaim(File wsFile, SimpleResponse res) {
-
+    private void createClaim(File wsFile, SimpleResponse res, Agent user) {
+    	
     	//TODO required field validation
     	
-    	GeneralServiceBean bean = new GeneralServiceBean();
-    	Agent user = bean.getAgent("webagent", TracerProperties.get("wt.company.code"));
 
 		boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 
