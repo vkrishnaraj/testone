@@ -37,6 +37,7 @@ public class LFSalvageFound implements Serializable {
 	private String extendedDescription;
 	private String username;
 	private String currentTimeZone;
+	private String salvageBoxId;
 	private long category;
 	private long subCategory;
 	
@@ -102,6 +103,14 @@ public class LFSalvageFound implements Serializable {
 	
 	public void setBrand(String brand) {
 		this.brand = brand;
+	}
+	
+	public String getSalvageBoxId() {
+		return salvageBoxId;
+	}
+	
+	public void setSalvageBoxId(String salvageBoxId) {
+		this.salvageBoxId = salvageBoxId;
 	}
 
 	public String getModel() {

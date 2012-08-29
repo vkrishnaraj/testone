@@ -56,7 +56,8 @@ public class SalvageAction extends CheckedAction {
 		
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		LFUtils.getLists(user, session);
-		
+
+		request.setAttribute("salvage", "1");
 		LFServiceBean serviceBean = new LFServiceBean();
 		SalvageForm sForm = (SalvageForm) form;
 		LFSalvage salvage = sForm.getSalvage();
@@ -116,6 +117,9 @@ public class SalvageAction extends CheckedAction {
 		request.setAttribute("divId", divId);
 		String addItem = (String) request.getParameter("addItem");
 		String removeItem = (String) request.getParameter("removeItem");
+		String newBoxId = (String) request.getParameter("newBoxId");
+		String prevBoxId = (String) request.getParameter("previousBoxId");
+		String updateItem = (String) request.getParameter("boxUpdateFound");
 
 		if (addItem != null && !addItem.isEmpty()) {
 			
@@ -150,6 +154,12 @@ public class SalvageAction extends CheckedAction {
 					salvageDays = PropertyBMO.getValueAsInt("lf.high.value.salvage.days");
 				} else {
 					salvageDays = PropertyBMO.getValueAsInt("lf.low.value.salvage.days");
+				}
+				
+				if(newBoxId!=null && !newBoxId.isEmpty()) {
+					found.setSalvageBoxId(newBoxId);
+					serviceBean.saveOrUpdateFoundItem(found, user);
+					request.setAttribute("lastBoxId", newBoxId);
 				}
 				
 				salvageCutoff.add(Calendar.DAY_OF_YEAR, (-1 * salvageDays));
@@ -203,6 +213,7 @@ public class SalvageAction extends CheckedAction {
 					serviceBean.saveOrUpdateFoundItem(found, user);
 					salvage = serviceBean.loadSalvage(salvage.getId());
 					salvageItems = serviceBean.loadSalvageFound(salvage.getId());
+					request.setAttribute("lastBoxId",salvageItems.get(salvageItems.size()-1).getSalvageBoxId());
 				}
 				
 			} catch (NumberFormatException nfe) {
@@ -215,6 +226,34 @@ public class SalvageAction extends CheckedAction {
 			}
 			
 			return mapping.findForward(TracingConstants.AJAX_LF_BLANK);
+		} else if (updateItem != null && !updateItem.isEmpty() && prevBoxId!=null && !prevBoxId.isEmpty()) {
+			
+			boolean success = true;
+			try {
+				String barcode = (String) request.getParameter("updateItem");
+				LFFound found = serviceBean.getFoundItemByBarcode(updateItem);
+
+				if (found == null) {
+					success = false;
+				} else {
+					found.setSalvageBoxId(prevBoxId);
+					serviceBean.saveOrUpdateFoundItem(found, user);
+					salvage = serviceBean.loadSalvage(salvage.getId());
+					salvageItems = serviceBean.loadSalvageFound(salvage.getId());
+					request.setAttribute("salvagefounds", salvageItems);
+					request.setAttribute("lastBoxId",salvageItems.get(salvageItems.size()-1).getSalvageBoxId());
+				}
+				
+			} catch (NumberFormatException nfe) {
+				logger.error(nfe, nfe);
+				success = false;
+			} finally {
+				if (!success) {
+					request.setAttribute("message", resources.getString("error.unable.update.item") + ": " + updateItem);
+				}
+			}
+			
+			return mapping.findForward(TracingConstants.AJAX_LF_BLANK); // mapping.findForward(TracingConstants.LFC_SALVAGE);
 		} else if (request.getParameter("save") != null) {
 			saveSalvage(serviceBean, salvage, request, errors);
 			salvage = serviceBean.loadSalvage(salvage.getId());
@@ -229,6 +268,9 @@ public class SalvageAction extends CheckedAction {
 		
 		sForm.setSalvage(salvage);
 		request.setAttribute("salvagefounds", salvageItems);
+		if(salvageItems!=null && salvageItems.size()>0){
+			request.setAttribute("lastBoxId",salvageItems.get(salvageItems.size()-1).getSalvageBoxId());
+		}
 		return mapping.findForward(TracingConstants.LFC_SALVAGE);
 	}
 	

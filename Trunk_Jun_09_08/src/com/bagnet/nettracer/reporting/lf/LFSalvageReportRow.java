@@ -10,6 +10,7 @@ public class LFSalvageReportRow {
 	private String title;
 	private String brand;
 	private String model;
+	private String salvageBoxId;
 	
 	public long getBarcode() {
 		return barcode;
@@ -25,6 +26,14 @@ public class LFSalvageReportRow {
 	
 	public void setDateReceived(String dateReceived) {
 		this.dateReceived = dateReceived;
+	}
+	
+	public String getSalvageBoxId() {
+		return salvageBoxId;
+	}
+	
+	public void setSalvageBoxId(String salvageBoxId) {
+		this.salvageBoxId = salvageBoxId;
 	}
 	
 	public String getValue() {

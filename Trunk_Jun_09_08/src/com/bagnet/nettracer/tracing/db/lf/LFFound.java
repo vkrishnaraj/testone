@@ -60,6 +60,9 @@ public class LFFound implements LFObject, Serializable {
 	@Column(length = 3)
 	private String companyId;
 	
+	@JoinColumn(name = "salvageBoxId", nullable = false)
+	private String salvageBoxId;
+	
 	@ManyToOne
 	@JoinColumn(name = "status_ID", nullable = false)
 	private Status status;
@@ -106,6 +109,14 @@ public class LFFound implements LFObject, Serializable {
 
 	public void setAgreementNumber(String agreementNumber) {
 		this.agreementNumber = agreementNumber;
+	}
+	
+	public String getSalvageBoxId() {
+		return salvageBoxId;
+	}
+
+	public void setSalvageBoxId(String salvageBoxId) {
+		this.salvageBoxId = salvageBoxId;
 	}
 
 	public String getMvaNumber() {

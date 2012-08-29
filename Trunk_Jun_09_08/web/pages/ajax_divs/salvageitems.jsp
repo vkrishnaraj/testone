@@ -17,19 +17,22 @@
 <div id="<%=divId %>" >
 <table class="<%=cssFormClass %>" style="margin:0;padding:0;" cellspacing=0 cellpadding=0 >
 	<tr>
-		<td style="width:20%;">
+		<td style="width:15%;">
+			<input type="text" name="prevBoxId" id="prevBoxId" class="textfield" value="<bean:write name="found" property="salvageBoxId" />" onkeyup="boxIdUpdate(event,this,'<bean:write name="found" property="barcode" />')" />
+		</td>
+		<td style="width:15%;">
 			<a href='create_found_item.do?foundId=<bean:write name="found" property="id" />' ><bean:write name="found" property="barcode" /></a>
 		</td>
-		<td style="width:20%;">
+		<td style="width:15%;">
 			<bean:write name="found" property="disReceivedDate" />
 		</td>
 		<td style="width:40%;">
 			<bean:write name="found" property="summaryDesc" />
 		</td>
-		<td style="width:20%;">
+		<td style="width:15%;">
 			<center>
 				<a href='#' onclick="removeItemAjax('<%=divId %>','<bean:write name="found" property="barcode" />')" ><bean:message key="lf.salvage.remove" /></a>
-				<!-- input type="button" class="button" id="button_<%=divId %>" onclick="removeItemAjax('<%=divId %>','<bean:write name="found" property="id" />')" value='<bean:message key="lf.salvage.remove" />'-->
+				<!-- input type="button" class="button" id="button_<=divId %>" onclick="removeItemAjax('<=divId %>','<bean:write name="found" property="id" />')" value='<bean:message key="lf.salvage.remove" />'-->
 			</center>
 		</td>
 	</tr>

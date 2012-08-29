@@ -11,6 +11,7 @@
 <%@ page import="com.bagnet.nettracer.reporting.ReportingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.StatReportForm" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.lfc.SalvageForm" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Date" %>
 <%
 	Agent agent = (Agent)session.getAttribute("user"); 
@@ -18,6 +19,8 @@
   	String cssFormClass = "form2";
   	
   	int divId = 0;
+  	String salvageFoundSize=String.valueOf(request.getAttribute("salvagefoundsize"));
+//  	String salvageFoundSize=String.valueOf(Integer.valueOf(request.getAttribute("salvagefoundsize"))-1);
 %>
   
   
@@ -27,9 +30,10 @@
     
 	var cal1xx = new CalendarPopup();	
 
-	function addItemAjax() {
+	/*function addItemAjax() {
 		o = document.lfSalvageForm;
 		o.addItem.value = o.addBarcode.value;
+		
 		o.divId.value = o.lastDivNum.value;
 		if(o.addItem.value){
 		postForm("lfSalvageForm", true, function (req) {
@@ -41,6 +45,41 @@
 			document.lfSalvageForm.lastDivNum.value = parseInt(document.lfSalvageForm.lastDivNum.value) + 1;
 		});
 		}
+	}*/
+	
+	function addItemAjax() {
+	 var key=event.keyCode || event.which;
+	 if (key==9){
+		o = document.lfSalvageForm;
+		o.addItem.value = o.addBarcode.value;
+		o.newBoxId.value = o.addBoxId.value;
+		o.divId.value = o.lastDivNum.value;
+		if(o.addItem.value){
+		postForm("lfSalvageForm", true, function (req) {
+			o.addItem.value = "";
+			o.divId.value = "";
+			jQuery('#barcodeDiv').before(req.responseText);
+			document.lfSalvageForm.addBarcode.value="";
+			document.lfSalvageForm.addBarcode.focus();
+			document.lfSalvageForm.lastDivNum.value = parseInt(document.lfSalvageForm.lastDivNum.value) + 1;
+		});
+		}
+	 }
+	}
+	
+	function boxIdUpdate(key,boxID, foundId){
+		 //var key=event.keyCode || event.which;
+		 if (key==9){
+ 			o = document.lfSalvageForm;
+ 			o.previousBoxId.value = boxID.value;
+ 			o.boxUpdateFound.value=foundId;
+ 			postForm("lfSalvageForm", true, function (req) {
+ 				o.prevBoxId.value = "";
+ 	 			o.boxUpdateFound.value="";
+ 	 			jQuery('#barcodeDiv').before(req.responseText);
+ 	 			
+ 			});
+		 }
 	}
 	
 	function removeItemAjax(divId, foundId) {
@@ -62,10 +101,13 @@
   </SCRIPT>
   
   
-  <html:form focus="addBarcode" action="lf_salvage.do" method="post" >
+  <html:form focus="addBoxId" action="lf_salvage.do" method="post" >
   <input type="hidden" name="addItem" id="addItem" value="" />
+  <input type="hidden" name="newBoxId" id="newBoxId" value="" />
   <input type="hidden" name="removeItem" id="removeItem" value="" />
   <input type="hidden" name="divId" id="divId" value="" />
+  <input type="hidden" name="boxUpdateFound" id="boxUpdateFound" value="" />
+  <input type="hidden" name="previousBoxId" id="previousBoxId" value="" />
     <tr>
         <td colspan="3" id="pageheadercell">
           <div id="pageheaderleft">
@@ -160,15 +202,18 @@
      		<table class="<%=cssFormClass %>" style="margin-bottom:0;padding-bottom:0;" cellspacing=0 cellpadding=0 >
      			<tr>
      				<td class="header" style="width:20%;" >
+     					<bean:message key="colname.lfc.item.salvageboxid" />
+     				</td>
+     				<td class="header" style="width:15%;" >
      					<bean:message key="colname.lfc.item.id" />
      				</td>
-     				<td class="header" style="width:20%;" >
+     				<td class="header" style="width:15%;" >
      					<bean:message key="colname.lf.salvage.created.date" />
      				</td>
      				<td class="header" style="width:40%;" >
      					<bean:message key="colname.lfc.found.description" />
      				</td>
-     				<td class="header" style="width:20%;" >
+     				<td class="header" style="width:10%;" >
      					<bean:message key="colname.lf.action" />
      				</td>
      			</tr>
@@ -177,16 +222,26 @@
      			<div id="<%=String.valueOf(divId) %>" >
      			<table class="<%=cssFormClass %>" style="margin:0;padding:0;" cellspacing=0 cellpadding=0 >
      				<tr>
-	    				<td style="width:20%;">
+	    				<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_OPEN) %>" >
+    	 					<td style="width:20%;">
+	    						<input type="text" name="prevBoxId" id="prevBoxId" class="textfield" value="<bean:write name="found" property="salvageBoxId" />" onkeydown="if (event.keyCode==13) {event.keyCode=9; boxIdUpdate(event.keyCode,this,'<bean:write name="found" property="foundBarcode" />')}"/> <!-- onkeyup="boxIdUpdate(this,'<bean:write name="found" property="foundBarcode" />')" -->
+     						</td>
+	    				</logic:equal>
+	    				<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_CLOSED) %>" >
+    	 					<td style="width:20%;">
+	    						<html:text name="found" property="salvageBoxId" disabled="true" styleClass="textfield" />
+     						</td>
+	    				</logic:equal>
+	    				<td style="width:15%;">
 	    					<a href='create_found_item.do?foundId=<bean:write name="found" property="foundID" />' ><bean:write name="found" property="foundBarcode" /></a>
 	    				</td>
-	    				<td style="width:20%;">
+	    				<td style="width:15%;">
 	    					<%= found.getDisCreatedDate(agent.getDateformat().getFormat()) %>
 	    				</td>
 	    				<td style="width:40%;">
 	    					<bean:write name="found" property="extendedSummaryDesc" />
 	    				</td>
-	    				<td style="width:20%;">
+	    				<td style="width:10%;">
 	    					<center>
 	     					<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_OPEN) %>" >
 		    					<a href='#' onclick="removeItemAjax('<%=divId %>','<bean:write name="found" property="foundBarcode" />')" ><bean:message key="lf.salvage.remove" /></a>
@@ -205,9 +260,17 @@
      			<div id="barcodeDiv" >
      			<table class="<%=cssFormClass %>" style="margin-top:0;padding-top:0;" cellspacing=0 cellpadding=0 >
      			<tr>
+     				<td colspan=1 style="width:20%;">
+     					<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_OPEN) %>" >
+    	 					<input type="text" name="addBoxId" id="addBoxId" class="textfield" value="<%=(request.getAttribute("lastBoxId")!=null?request.getAttribute("lastBoxId"):"") %>" onkeydown="if (event.keyCode==13) {event.keyCode=9; return event.keyCode }" />
+     					</logic:equal>
+     					<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_CLOSED) %>" >
+	     					<input type="text" name="addBoxId" id="addBoxId" class="disabledtextfield" disabled value="<%=request.getAttribute("lastBoxId") %>"  />
+     					</logic:equal>
+     				</td>
      				<td colspan=4>
      					<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_OPEN) %>" >
-    	 					<input type="text" name="addBarcode" id="addBarcode" class="textfield" />
+    	 					<input type="text" name="addBarcode" id="addBarcode" class="textfield" onkeyup="addItemAjax()"  />
      					</logic:equal>
      					<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_CLOSED) %>" >
 	     					<input type="text" name="addBarcode" id="addBarcode" class="disabledtextfield" disabled />
