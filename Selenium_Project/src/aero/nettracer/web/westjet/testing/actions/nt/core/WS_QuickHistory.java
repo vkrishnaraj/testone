@@ -266,7 +266,8 @@ public class WS_QuickHistory extends LoginUtil {
 		{
 //			System.out.println("*** WE ARE STOPPED ***");
 			Thread.sleep(200000);
-			selenium.click("link=29");
+			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[1]/a");
+//			selenium.click("link=29");
 			waitForPageToLoadImproved();
 		}
 		else
