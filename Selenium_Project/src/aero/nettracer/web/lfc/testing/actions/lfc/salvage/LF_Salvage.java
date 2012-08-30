@@ -256,6 +256,10 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		// try to enter LOW_LT_30
+
+		selenium.type("//input[@id='addBoxId']", "BOX1");
+		selenium.focus("//input[@id='addBoxId']");
+		selenium.keyDown("//input[@id='addBoxId']", "\\13");
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_LT_30);
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyDown("//input[@id='addBarcode']", "\\13");
@@ -316,7 +320,20 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
+		
+		if(checkNoErrorPage()) {
+			selenium.type("xpath=(//input[@id='prevBoxId'])[2]","BOX2");
+			selenium.focus("xpath=(//input[@id='prevBoxId'])[2]");
+			selenium.keyDown("xpath=(//input[@id='prevBoxId'])[2]", "\\13");
+			try {
+				synchronized (selenium) {
+					selenium.wait(LF_Salvage.TIMEOUT);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_Salvage.HIGH_GT_60));
 			verifyTrue(selenium.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics, Backbeat, PN4567"));
