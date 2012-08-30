@@ -134,6 +134,7 @@ public class FoundItemAction extends CheckedAction {
 					found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
 					found.setDeliveredDate(new Date());
 					found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
+					
 					if (found.getItem().getLost() != null) {
 						found.getItem().getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
 						if(found.getItem().getLost().getItem() != null){
@@ -141,6 +142,11 @@ public class FoundItemAction extends CheckedAction {
 							found.getItem().getLost().getItem().setTrackingNumber(found.getItem().getTrackingNumber());
 						}
 					}
+				}
+				
+				if(found.getSalvageBoxId()==null)
+				{
+					found.setSalvageBoxId("");
 				}
 				
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
