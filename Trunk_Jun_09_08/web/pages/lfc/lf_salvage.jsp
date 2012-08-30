@@ -265,7 +265,7 @@
     	 					<input type="text" name="addBoxId" id="addBoxId" class="textfield" value="<%=(request.getAttribute("lastBoxId")!=null?request.getAttribute("lastBoxId"):"") %>" onkeydown="if (event.keyCode==13) {event.keyCode=9; return event.keyCode }" />
      					</logic:equal>
      					<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_CLOSED) %>" >
-	     					<input type="text" name="addBoxId" id="addBoxId" class="disabledtextfield" disabled value="<%=request.getAttribute("lastBoxId") %>"  />
+	     					<input type="text" name="addBoxId" id="addBoxId" class="disabledtextfield" disabled value="<%=(request.getAttribute("lastBoxId")!=null?request.getAttribute("lastBoxId"):"") %>"  />
      					</logic:equal>
      				</td>
      				<td colspan=4>
