@@ -75,6 +75,16 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	private int min_pass_size;
 	private int pass_x_history;
 	
+	//AUTO CLOSE
+	private int auto_close_days_back;
+	private int auto_close_ld_code;
+	private int auto_close_dam_code;
+	private int auto_close_pil_code;
+	private int auto_close_ld_station;
+	private int auto_close_dam_station;
+	private int auto_close_pil_station;
+
+	
 	
 	/**
 	 * @return Returns the default_loss_code.
@@ -894,6 +904,83 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	 */
 	public int getPass_x_history() {
 		return pass_x_history;
+	}
+	
+	public void setAuto_close_days_back(int auto_close_days_back) {
+		this.auto_close_days_back = auto_close_days_back;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getAuto_close_days_back() {
+		return auto_close_days_back;
+	}
+	
+	public void setAuto_close_ld_code(int auto_close_ld_code) {
+		this.auto_close_ld_code = auto_close_ld_code;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getAuto_close_ld_code() {
+		return auto_close_ld_code;
+	}
+	
+	public void setAuto_close_dam_code(int auto_close_dam_code) {
+		this.auto_close_dam_code = auto_close_dam_code;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getAuto_close_dam_code() {
+		return auto_close_dam_code;
+	}
+	
+	public void setAuto_close_pil_code(int auto_close_pil_code) {
+		this.auto_close_pil_code = auto_close_pil_code;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getAuto_close_pil_code() {
+		return auto_close_pil_code;
+	}
+	
+	public void setAuto_close_ld_station(int auto_close_ld_station) {
+		this.auto_close_ld_station = auto_close_ld_station;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getAuto_close_ld_station() {
+		return auto_close_ld_station;
+	}
+	
+	public void setAuto_close_dam_station(int auto_close_dam_station) {
+		this.auto_close_dam_station = auto_close_dam_station;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getAuto_close_dam_station() {
+		return auto_close_dam_station;
+	}
+	
+	public void setAuto_close_pil_station(int auto_close_pil_station) {
+		this.auto_close_pil_station = auto_close_pil_station;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getAuto_close_pil_station() {
+		return auto_close_pil_station;
 	}
 	
 	

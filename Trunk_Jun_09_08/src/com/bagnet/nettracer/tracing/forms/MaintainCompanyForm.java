@@ -89,6 +89,15 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private boolean auto_wt_amend;
 	private Integer min_pass_size;
 	private Integer pass_x_history;
+	
+	//AUTO CLOSE
+	private Integer auto_close_days_back;
+	private Integer auto_close_ld_code;
+	private Integer auto_close_dam_code;
+	private Integer auto_close_pil_code;
+	private Integer auto_close_ld_station;
+	private Integer auto_close_dam_station;
+	private Integer auto_close_pil_station;
 
 
 	public String getWt_write_enabled() {
@@ -393,6 +402,62 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public Integer getPass_x_history() {
 		return pass_x_history;
+	}
+
+	public Integer getAuto_close_days_back() {
+		return auto_close_days_back;
+	}
+
+	public void setAuto_close_days_back(Integer auto_close_days_back) {
+		this.auto_close_days_back = auto_close_days_back;
+	}
+
+	public Integer getAuto_close_ld_code() {
+		return auto_close_ld_code;
+	}
+
+	public void setAuto_close_ld_code(Integer auto_close_ld_code) {
+		this.auto_close_ld_code = auto_close_ld_code;
+	}
+
+	public Integer getAuto_close_dam_code() {
+		return auto_close_dam_code;
+	}
+
+	public void setAuto_close_dam_code(Integer auto_close_dam_code) {
+		this.auto_close_dam_code = auto_close_dam_code;
+	}
+
+	public Integer getAuto_close_pil_code() {
+		return auto_close_pil_code;
+	}
+
+	public void setAuto_close_pil_code(Integer auto_close_pil_code) {
+		this.auto_close_pil_code = auto_close_pil_code;
+	}
+
+	public Integer getAuto_close_ld_station() {
+		return auto_close_ld_station;
+	}
+
+	public void setAuto_close_ld_station(Integer auto_close_ld_station) {
+		this.auto_close_ld_station = auto_close_ld_station;
+	}
+
+	public Integer getAuto_close_dam_station() {
+		return auto_close_dam_station;
+	}
+
+	public void setAuto_close_dam_station(Integer auto_close_dam_station) {
+		this.auto_close_dam_station = auto_close_dam_station;
+	}
+
+	public Integer getAuto_close_pil_station() {
+		return auto_close_pil_station;
+	}
+
+	public void setAuto_close_pil_station(Integer auto_close_pil_station) {
+		this.auto_close_pil_station = auto_close_pil_station;
 	}
 
 

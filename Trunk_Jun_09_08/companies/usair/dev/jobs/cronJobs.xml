@@ -17,6 +17,7 @@
 				<ref bean="LockCleanupTrigger" />
 				<ref bean="TwentyForHourEmailTrigger" />
 				<ref bean="CrmTrigger" />
+				<ref bean="AutoCloseTrigger" />
 			</list>
 		</property>
 	</bean>

@@ -244,6 +244,110 @@
             <%
             }
 	        %>
+	        
+	          <tr>
+	            <td>
+	              <bean:message key="colname.auto.close.days.back" />
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="auto_close_days_back" size="4" maxlength="4" />
+	            </td>
+	          </tr>
+
+	          <logic:notEmpty name="fullStationList" scope="request">
+	            <tr>
+	              <td>
+	                <bean:message key="colname.auto.close.ld.station" />
+	                :
+	              </td>
+	              <td>
+	                <html:select name="companyForm" property="auto_close_ld_station" styleClass="dropdown">
+	                  <html:options collection="fullStationList" property="station_ID" labelProperty="stationcode" />
+	                </html:select>
+	              </td>
+	            </tr>
+	          </logic:notEmpty>
+	          
+	          <tr>
+	            <td>
+	              <bean:message key="colname.auto.close.ld.code" />
+	              :
+	            </td>
+	            <td>
+	              
+			<html:select name="companyForm" property="auto_close_ld_code" styleClass="dropdown">
+	      <html:option value="0">
+	        <bean:message key="select.please_select" />
+	      </html:option>
+	      <html:options collection="losscodes" property="loss_code" labelProperty="combination" />
+	    </html:select>
+	    
+	            </td>
+	          </tr>
+
+	          <logic:notEmpty name="fullStationList" scope="request">
+	            <tr>
+	              <td>
+	                <bean:message key="colname.auto.close.dam.station" />
+	                :
+	              </td>
+	              <td>
+	                <html:select name="companyForm" property="auto_close_dam_station" styleClass="dropdown">
+	                  <html:options collection="fullStationList" property="station_ID" labelProperty="stationcode" />
+	                </html:select>
+	              </td>
+	            </tr>
+	          </logic:notEmpty>
+	          
+	          <tr>
+	            <td>
+	              <bean:message key="colname.auto.close.dam.code" />
+	              :
+	            </td>
+	            <td>
+	              
+			<html:select name="companyForm" property="auto_close_dam_code" styleClass="dropdown">
+	      <html:option value="0">
+	        <bean:message key="select.please_select" />
+	      </html:option>
+	      <html:options collection="losscodes_dam" property="loss_code" labelProperty="combination" />
+	    </html:select>
+	    
+	            </td>
+	          </tr>
+
+	          <logic:notEmpty name="fullStationList" scope="request">
+	            <tr>
+	              <td>
+	                <bean:message key="colname.auto.close.pil.station" />
+	                :
+	              </td>
+	              <td>
+	                <html:select name="companyForm" property="auto_close_pil_station" styleClass="dropdown">
+	                  <html:options collection="fullStationList" property="station_ID" labelProperty="stationcode" />
+	                </html:select>
+	              </td>
+	            </tr>
+	          </logic:notEmpty>
+	          
+	          <tr>
+	            <td>
+	              <bean:message key="colname.auto.close.pil.code" />
+	              :
+	            </td>
+	            <td>
+	              
+			<html:select name="companyForm" property="auto_close_pil_code" styleClass="dropdown">
+	      <html:option value="0">
+	        <bean:message key="select.please_select" />
+	      </html:option>
+	      <html:options collection="losscodes_pil" property="loss_code" labelProperty="combination" />
+	    </html:select>
+	    
+	            </td>
+	          </tr>
+	          
 		    <tr>
             <td colspan="2">
               &nbsp;

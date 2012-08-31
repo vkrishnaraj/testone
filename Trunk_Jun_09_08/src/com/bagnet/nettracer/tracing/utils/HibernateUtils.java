@@ -321,6 +321,14 @@ public class HibernateUtils {
 						
 						c.getVariable().setScannerDefaultBack(obj.getVariable().getScannerDefaultBack());
 						c.getVariable().setScannerDefaultForward(obj.getVariable().getScannerDefaultForward());
+						
+						c.getVariable().setAuto_close_days_back(obj.getVariable().getAuto_close_days_back());
+						c.getVariable().setAuto_close_ld_code(obj.getVariable().getAuto_close_ld_code());
+						c.getVariable().setAuto_close_dam_code(obj.getVariable().getAuto_close_dam_code());
+						c.getVariable().setAuto_close_pil_code(obj.getVariable().getAuto_close_pil_code());
+						c.getVariable().setAuto_close_ld_station(obj.getVariable().getAuto_close_ld_station());
+						c.getVariable().setAuto_close_dam_station(obj.getVariable().getAuto_close_dam_station());
+						c.getVariable().setAuto_close_pil_station(obj.getVariable().getAuto_close_pil_station());
 					}
 					
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {

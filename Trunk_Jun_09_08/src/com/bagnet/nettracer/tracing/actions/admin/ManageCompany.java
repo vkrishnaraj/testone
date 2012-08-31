@@ -87,6 +87,14 @@ public final class ManageCompany extends Action {
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 		
+		List codes_dam = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.DAMAGED_BAG, false, user);
+		//add to the loss codes
+		request.setAttribute("losscodes_dam", codes_dam);
+		
+		List codes_pil = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.MISSING_ARTICLES, false, user);
+		//add to the loss codes
+		request.setAttribute("losscodes_pil", codes_pil);
+		
 		String pageState = null;
 		if (dForm.getPageState() != null && !dForm.getPageState().equals("")) {
 			pageState = (String)dForm.getPageState();
@@ -142,6 +150,14 @@ public final class ManageCompany extends Action {
 					dForm.setScannerDefaultBack(new Integer(cmpny.getVariable().getScannerDefaultBack()));
 					dForm.setScannerDefaultForward(new Integer(cmpny.getVariable().getScannerDefaultForward()));
 					dForm.setBlindEmail(cmpny.getVariable().getBlindEmail());
+					
+					dForm.setAuto_close_days_back(cmpny.getVariable().getAuto_close_days_back());
+					dForm.setAuto_close_ld_code(cmpny.getVariable().getAuto_close_ld_code());
+					dForm.setAuto_close_dam_code(cmpny.getVariable().getAuto_close_dam_code());
+					dForm.setAuto_close_pil_code(cmpny.getVariable().getAuto_close_pil_code());
+					dForm.setAuto_close_ld_station(cmpny.getVariable().getAuto_close_ld_station());
+					dForm.setAuto_close_dam_station(cmpny.getVariable().getAuto_close_dam_station());
+					dForm.setAuto_close_pil_station(cmpny.getVariable().getAuto_close_pil_station());
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {
@@ -338,6 +354,28 @@ public final class ManageCompany extends Action {
 					}
 					if (dForm.getScannerDefaultForward() != null) {
 						var.setScannerDefaultForward(dForm.getScannerDefaultForward().intValue());
+					}
+
+					if (dForm.getAuto_close_days_back() != null) {
+						var.setAuto_close_days_back(dForm.getAuto_close_days_back().intValue());
+					}
+					if (dForm.getAuto_close_ld_code() != null) {
+						var.setAuto_close_ld_code(dForm.getAuto_close_ld_code().intValue());
+					}
+					if (dForm.getAuto_close_dam_code() != null) {
+						var.setAuto_close_dam_code(dForm.getAuto_close_dam_code().intValue());
+					}
+					if (dForm.getAuto_close_pil_code() != null) {
+						var.setAuto_close_pil_code(dForm.getAuto_close_pil_code().intValue());
+					}
+					if (dForm.getAuto_close_ld_station() != null) {
+					var.setAuto_close_ld_station(dForm.getAuto_close_ld_station().intValue());
+					}
+					if (dForm.getAuto_close_dam_station() != null) {
+					var.setAuto_close_dam_station(dForm.getAuto_close_dam_station().intValue());
+					}
+					if (dForm.getAuto_close_pil_station() != null) {
+					var.setAuto_close_pil_station(dForm.getAuto_close_pil_station().intValue());
 					}
 				}
 				

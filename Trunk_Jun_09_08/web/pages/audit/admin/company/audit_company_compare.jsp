@@ -872,6 +872,90 @@ function updatePagination() {
                 </td>
               </logic:iterate>
             </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.auto.close.days.back" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.auto_close_days_back" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.auto.close.ld.code" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.auto_close_ld_code" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.auto.close.dam.code" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.auto_close_dam_code" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.auto.close.pil.code" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.auto_close_pil_code" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.auto.close.ld.station" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.auto_close_ld_station" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.auto.close.dam.station" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.auto_close_dam_station" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.auto.close.pil.station" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.auto_close_pil_station" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
 
 
           </table>
