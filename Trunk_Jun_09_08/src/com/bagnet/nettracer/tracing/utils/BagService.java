@@ -1546,6 +1546,14 @@ public class BagService {
 					oDTO.setBagarrivedate(DateUtils.convertToDate(theform.getDispBagArriveDate(), theform.getAgent()
 							.getDateformat().getFormat(), theform.getAgent().getCurrentlocale()));
 				}
+				if(theform.getDispWarehouseSentDate() != null) {
+					oDTO.setWarehouseSentDate(DateUtils.convertToDate(theform.getDispWarehouseSentDate(), theform.getAgent()
+							.getDateformat().getFormat(), theform.getAgent().getCurrentlocale()));
+				}
+				if(theform.getDispWarehouseReceivedDate() != null) {
+					oDTO.setWarehouseReceivedDate(DateUtils.convertToDate(theform.getDispWarehouseReceivedDate(), theform.getAgent()
+							.getDateformat().getFormat(), theform.getAgent().getCurrentlocale()));
+				}
 
 				if(oDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED) {
 					oDTO.setClose_date(TracerDateTime.getGMTDate());

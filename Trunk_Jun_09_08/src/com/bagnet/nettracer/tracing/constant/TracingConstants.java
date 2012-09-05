@@ -200,6 +200,7 @@ public class TracingConstants {
 	
 	public static final String SYSTEM_COMPONENT_NAME_SAVE_BUTTON_TOP_OF_PAGE = "Save Button at Top of Page";
 	public static final String SYSTEM_COMPONENT_NAME_ISSUE_RON_KITS = "Issue RON Kits";
+	public static final String SYSTEM_COMPONENT_NAME_ASSIGN_WAREHOUSE_DATES = "Assign Warehouse Dates";
 	public static final String SYSTEM_COMPONENT_NAME_ISSUE_REPLACEMENT_BAGS = "Issue Replacement Bags";
 	public static final String SYSTEM_COMPONENT_NAME_SPLIT_LOCK = "Split Code and Station Lock";
 	public static final String SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES = "Limited Loss Codes";

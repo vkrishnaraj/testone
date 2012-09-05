@@ -36,6 +36,8 @@ public class OHD implements Serializable {
 	private Date foundtime;
 	private Date founddate;
 	private Date bagarrivedate;
+	private Date warehouseSentDate;
+	private Date warehouseReceivedDate;
 	private String claimnum;
 	private String claimchecknum_leading;
 	private String claimchecknum_ticketingcode;
@@ -124,6 +126,38 @@ public class OHD implements Serializable {
 	 */
 	public void setBagarrivedate(Date bagarrivedate) {
 		this.bagarrivedate = bagarrivedate;
+	}
+	
+	/**
+	 * @hibernate.property type="date"
+	 * @return Returns the warehouseSentDate.
+	 */
+	public Date getWarehouseSentDate() {
+		return warehouseSentDate;
+	}
+
+	/**
+	 * @param warehouseSentDate
+	 *          The warehouseSentDate to set.
+	 */
+	public void setWarehouseSentDate(Date warehouseSentDate) {
+		this.warehouseSentDate = warehouseSentDate;
+	}
+	
+	/**
+	 * @hibernate.property type="date"
+	 * @return Returns the warehouseReceivedDate.
+	 */
+	public Date getWarehouseReceivedDate() {
+		return warehouseReceivedDate;
+	}
+
+	/**
+	 * @param warehouseReceivedDate
+	 *          The warehouseReceivedDate to set.
+	 */
+	public void setWarehouseReceivedDate(Date warehouseReceivedDate) {
+		this.warehouseReceivedDate = warehouseReceivedDate;
 	}
 
 	/**

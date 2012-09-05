@@ -32,10 +32,14 @@ public final class OnHandForm extends ValidatorForm {
 	private Agent agent;
 	private String ohd_id;
 	private String dispBagArriveDate = "";
+	private String dispWarehouseReceivedDate = "";
+	private String dispWarehouseSentDate = "";
 	private String found_company;
 	private String storage_location;
 	private String found_station;
 	private Date bagarrivedate;
+	private Date warehouseReceivedDate;
+	private Date warehouseSentDate;
 	private String holding_company;
 	private String holding_station;
 	private String lastname;
@@ -723,6 +727,30 @@ public final class OnHandForm extends ValidatorForm {
 		}
 		return this.dispBagArriveDate;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getDispWarehouseReceivedDate() {
+		if (this.dispWarehouseReceivedDate == null || this.dispWarehouseReceivedDate.equals("")) {
+			if (this.getWarehouseReceivedDate() != null) this.dispWarehouseReceivedDate = DateUtils.formatDate(this
+					.getWarehouseReceivedDate(), _DATEFORMAT, null, null);
+		}
+		return this.dispWarehouseReceivedDate; 
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public String getDispWarehouseSentDate() {
+		if (this.dispWarehouseSentDate == null || this.dispWarehouseSentDate.equals("")) {
+			if (this.getWarehouseSentDate() != null) this.dispWarehouseSentDate = DateUtils.formatDate(this
+					.getWarehouseSentDate(), _DATEFORMAT, null, null);
+		}
+		return this.dispWarehouseSentDate;
+	}
 
 	/**
 	 * @return
@@ -862,6 +890,36 @@ public final class OnHandForm extends ValidatorForm {
 	}
 
 	/**
+	 * @return Returns the warehouseReceivedDate.
+	 */
+	public Date getWarehouseReceivedDate() {
+		return warehouseReceivedDate;
+	}
+
+	/**
+	 * @param bagarrivedate
+	 *          The warehouseReceivedDate to set.
+	 */
+	public void setWarehouseReceivedDate(Date warehouseReceivedDate) {
+		this.warehouseReceivedDate = warehouseReceivedDate;
+	}
+	
+	/**
+	 * @return Returns the warehouseSentDate.
+	 */
+	public Date getWarehouseSentDate() {
+		return warehouseSentDate;
+	}
+
+	/**
+	 * @param bagarrivedate
+	 *          The warehouseSentDate to set.
+	 */
+	public void setWarehouseSentDate(Date warehouseSentDate) {
+		this.warehouseSentDate = warehouseSentDate;
+	}
+	
+	/**
 	 * @return Returns the bagarrivedate.
 	 */
 	public Date getBagarrivedate() {
@@ -882,6 +940,22 @@ public final class OnHandForm extends ValidatorForm {
 	 */
 	public void setDispBagArriveDate(String dispBagArriveDate) {
 		this.dispBagArriveDate = dispBagArriveDate;
+	}
+	
+	/**
+	 * @param dispBagArriveDate
+	 *          The dispBagArriveDate to set.
+	 */
+	public void setDispWarehouseReceivedDate(String dispWarehouseReceivedDate) {
+		this.dispWarehouseReceivedDate = dispWarehouseReceivedDate;
+	}
+	
+	/**
+	 * @param dispBagArriveDate
+	 *          The dispBagArriveDate to set.
+	 */
+	public void setDispWarehouseSentDate(String dispWarehouseSentDate) {
+		this.dispWarehouseSentDate = dispWarehouseSentDate;
 	}
 
 	public String getForwarded_station() {

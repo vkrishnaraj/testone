@@ -659,6 +659,32 @@ function gotoHistoricalReport() {
           maxlength="100" styleClass="textfield" /></div>
         </td>
       </tr>
+      <% if ( UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ASSIGN_WAREHOUSE_DATES, a) ) { %> 
+	  
+       <tr>
+	          <td>
+	          		<bean:message key="colname.warehouse.received.date" /> (
+        <%=a.getDateformat().getFormat()%>) <br>
+        <html:text property="dispWarehouseReceivedDate" size="11" maxlength="10"
+          styleClass="textfield" /><img
+          src="deployment/main/images/calendar/calendar_icon.gif"
+          id="calendar2" name="calendar2" height="15" width="20"
+          border="0" onmouseover="this.style.cursor='hand'"
+          onClick="cal1xx.select(document.OnHandForm.dispWarehouseReceivedDate,'calendar2','<%=a.getDateformat().getFormat()%>'); return false;">
+	          	</td>
+	          	<td colspan=2>
+	          		<bean:message key="colname.warehouse.sent.date" /> (
+        <%=a.getDateformat().getFormat()%>) <br>
+        <html:text property="dispWarehouseSentDate" size="11" maxlength="10"
+          styleClass="textfield" /><img
+          src="deployment/main/images/calendar/calendar_icon.gif"
+          id="calendar3" name="calendar3" height="15" width="20"
+          border="0" onmouseover="this.style.cursor='hand'"
+          onClick="cal1xx.select(document.OnHandForm.dispWarehouseSentDate,'calendar3','<%=a.getDateformat().getFormat()%>'); return false;">
+	          	</td>
+	          	
+	          </tr>
+	          <% } %>
     </table>
     <br>
     <br>
