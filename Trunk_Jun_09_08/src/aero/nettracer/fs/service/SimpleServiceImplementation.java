@@ -2,22 +2,12 @@ package aero.nettracer.fs.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TimeZone;
 
 import javax.naming.Context;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
 
-import org.apache.axiom.om.OMAbstractFactory;
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.llom.OMTextImpl;
-import org.apache.axiom.soap.SOAPEnvelope;
-import org.apache.axiom.soap.SOAPFactory;
-import org.apache.axiom.soap.SOAPMessage;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -220,33 +210,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 						toAdd = toAdd.replace("</li>", " ");
 						s.add(toAdd);
 					}
-//					XMLInputFactory xfact = XMLInputFactory.newFactory();
-//					xfact.setProperty(XMLInputFactory.IS_COALESCING, false);
-
-//					SOAPFactory factory = OMAbstractFactory.getSOAP11Factory();
-//					SOAPEnvelope envelope = factory.getDefaultEnvelope();
-//					OMElement xmlElement= factory.createOMElement("result", envelope.getDefaultNamespace());
-//					envelope.getBody().addChild(xmlElement);
-//					OMTextImpl omText = (OMTextImpl) xmlElement.getOMFactory().createOMText(xmlElement, StringUtils.join(s.toArray(), "/"), XMLStreamConstants.CDATA);
-//					xmlElement.addChild(omText);
-					
-//					try {
-//						System.out.println(omText.toString());
-//						System.out.println(omText.getText());
-//						System.out.println(omText.getTextAsQName());
-//						System.out.println(xmlElement.toStringWithConsume());
-//						System.out.println(envelope.toStringWithConsume());
-//					} catch (XMLStreamException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					try {
-//						res.setSearchSummary(envelope.toStringWithConsume());
-						res.setSearchSummary(StringUtils.join(s.toArray(), "||"));
-//					} catch (XMLStreamException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
+					res.setSearchSummary(StringUtils.join(s.toArray(), "||"));
 					res.setWarningColor(results.getThreatLevel());
 					res.setWarningLevel(results.getThreatLevel());
 					String directAccessUrl = PropertyBMO.getValue(PropertyBMO.DIRECT_ACCESS_URL);
