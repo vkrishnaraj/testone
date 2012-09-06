@@ -22,9 +22,13 @@ import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 public class AutoClose {
 	
@@ -42,11 +46,11 @@ public class AutoClose {
 	public void autoCloseIncidents() {
 		
 		Company comp = CompanyBMO.getCompany(companyCode);
-		logger.info("COMPANY LOADED: " + comp.getCompanyCode_ID());
+		logger.debug("COMPANY LOADED: " + comp.getCompanyCode_ID());
 		
 		if (comp != null && comp.getVariable() != null) {
 			Company_Specific_Variable vars = comp.getVariable();
-			logger.info("VARIABLES LOADED: " + vars.getAuto_close_days_back()
+			logger.debug("VARIABLES LOADED: " + vars.getAuto_close_days_back()
 					+ ", " + vars.getAuto_close_ld_code()
 					+ ", " + vars.getAuto_close_ld_station()
 					+ ", " + vars.getAuto_close_dam_code()
@@ -57,7 +61,7 @@ public class AutoClose {
 			
 			if (vars.getAuto_close_days_back() > 0) {
 
-				logger.info("RUNNING AUTO-CLOSE: " + vars.getAuto_close_days_back());
+				logger.debug("RUNNING AUTO-CLOSE: " + vars.getAuto_close_days_back());
 				Session session = null;
 				try {
 					session = HibernateWrapper.getSession().openSession();
@@ -66,7 +70,7 @@ public class AutoClose {
 					String date = DateUtils.formatDate(cal.getTime(),TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()),null,null);
 					String sql = "select Incident_ID from incident where createdate < '" + date + "' and status_ID != " + TracingConstants.MBR_STATUS_CLOSED;
 					
-					logger.info("QUERY PREPARED: " + sql);
+					logger.debug("QUERY PREPARED: " + sql);
 					
 					SQLQuery query = session.createSQLQuery(sql);
 
@@ -111,7 +115,21 @@ public class AutoClose {
 						Set<Remark> remarks = inc.getRemarks();
 						remarks.add(r);
 						IncidentBMO iBMO = new IncidentBMO();
-						iBMO.saveAndAuditIncident(inc, agent, session);
+						int success = iBMO.saveAndAuditIncident(inc, agent, session);
+						
+						if (success != 1) {
+							logger.error("INCIDENT " + inc.getIncident_ID() + " DID NOT SUCCESSFULLY AUTO-CLOSE!");
+							continue;
+						}
+						
+						if (inc.getWtFile() != null && inc.getWtFile().getWt_status() != WTStatus.CLOSED) {
+							WtqIncidentAction wtq = new WtqCloseAhl();
+							wtq.setAgent(agent);
+							wtq.setCreatedate(TracerDateTime.getGMTDate());
+							wtq.setIncident(inc);
+							WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+						}
+
 						successfulCloses++;
 					}
 
