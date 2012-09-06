@@ -1343,6 +1343,14 @@
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-westjet" />
 	</target>
+	
+	<target name="build-war-local-jetblue" depends="delete">
+		<property name="ant_project_name" value="jetblue" />
+		<property name="ant_war_name" value="jetblue" />
+		<property name="jetblue.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-jetblue" />
+	</target>
 
 	<target name="build-war-local-united" depends="delete">
 		<property name="ant_project_name" value="united-fs" />
@@ -1874,6 +1882,16 @@
 		<antcall target="cron-service" />
 	</target>
 	
+	<target name="build-cron-production-american">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="production" />
+		<property name="ant_project_name" value="american-fs"/>
+		<property name="jarprefix" value="american-prod-"/>
+		<property name="sub_path" value="prod/"/>
+		<property name="cron.job.config.file" value="companies/american-fs/environment/${sub_path}jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
+	
 	<!-- END AIRTRAN CRON TARGETS -->
 	
 	<!-- USAIR CRON TARGETS -->
@@ -1983,6 +2001,7 @@
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_reporting.cfg.xml" overwrite="true"/>
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/dozerBeanMapping.xml" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/spring-beans.xml" />
 		
 		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
 		<copy tofile="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob/cronJobs.xml" file="${cron.job.config.file}" overwrite="true" />

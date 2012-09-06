@@ -391,6 +391,7 @@
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_dirty.cfg.xml" overwrite="true"/>
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/dozerBeanMapping.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
+		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/spring-beans.xml" />
 		<copy verbose="yes" todir="${build.dir}/${ant_project_name}/classes/com/bagnet/clients/us/resources" file="src/com/bagnet/clients/us/resources/usair-logo.jpg" />
 		<copy todir="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob" file="src/com/bagnet/nettracer/cronjob/applicationContext.xml" />
 		<copy tofile="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/cronjob/cronJobs.xml" file="${cron.job.config.file}" overwrite="true" />
