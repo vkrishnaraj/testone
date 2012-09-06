@@ -91,6 +91,7 @@ public class AutoClose {
 						String inc_id = (String) results.get(i);
 						Incident inc = IncidentBMO.getIncidentByID(inc_id, session);
 						inc.setStatus(StatusBMO.getStatus(TracingConstants.MBR_STATUS_CLOSED));
+						inc.setClosedate(TracerDateTime.getGMTDate());
 						if (inc.getItemtype_ID() == TracingConstants.LOST_DELAY) {
 							inc.setLoss_code(vars.getAuto_close_ld_code());
 							inc.setFaultstation(ldStat);
