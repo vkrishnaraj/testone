@@ -26,6 +26,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.incidents.pilferage.WS_Crea
 import aero.nettracer.web.westjet.testing.actions.nt.onhands.WS_CreateOHD_VerifyRequiredFields;
 import aero.nettracer.web.westjet.testing.actions.nt.onhands.WS_ForwardOHD;
 import aero.nettracer.web.westjet.testing.actions.nt.onhands.WS_ReceiveOHD;
+import aero.nettracer.web.westjet.testing.actions.nt.onhands.WS_TestWarehouse;
 import aero.nettracer.web.westjet.testing.actions.nt.taskman.US_DisputeManage;
 import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_InboxMessage;
 import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskManager;
@@ -40,7 +41,7 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 	WS_InboxMessage.class,
 	WS_CreateDam_VerifyRequiredFields.class, WS_CloseDam_VerifyRequiredFields.class,
 	WS_CreatePilf_VerifyRequiredFields.class, WS_ClosePilf_VerifyRequiredFields.class,
-	WS_CreateOHD_VerifyRequiredFields.class, WS_ForwardOHD.class, WS_ReceiveOHD.class,
+	WS_CreateOHD_VerifyRequiredFields.class, WS_ForwardOHD.class, WS_ReceiveOHD.class, WS_TestWarehouse.class,
 	WS_Security.class, WS_LDVerifyApplyAllOnClose.class, US_DisputeManage.class, 
 	WS_LDVerifyRonKits.class, WS_LDVerifyReplacementBags.class, WS_QuickHistory.class,
 	WS_Audit.class
