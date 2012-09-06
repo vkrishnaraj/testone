@@ -79,7 +79,8 @@ public class AutoClose {
 					Station ldStat = StationBMO.getStation(vars.getAuto_close_ld_station());
 					Station damStat = StationBMO.getStation(vars.getAuto_close_dam_station());
 					Station pilStat = StationBMO.getStation(vars.getAuto_close_pil_station());
-					
+					String autoCloseAgent = "ntadmin";                                                                     // PROPERTY???
+			 		Agent agent = AdminUtils.getAgentBasedOnUsername(autoCloseAgent, companyCode);
 					int successfulCloses = 0;
 					
 					for (int i = 0; i < results.size(); i++) {
@@ -98,9 +99,9 @@ public class AutoClose {
 						} else {
 							continue;
 						}
-						String autoCloseAgent = "ntadmin";                                                                     // PROPERTY???
+
 				 		Remark r = new Remark();
-				 		Agent agent = AdminUtils.getAgentBasedOnUsername(autoCloseAgent, companyCode);
+
 						r.setAgent(agent);
 						r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
 						r.setRemarktext("This File was auto-closed due to the amount of time in open status.");                // PROPERTY???
