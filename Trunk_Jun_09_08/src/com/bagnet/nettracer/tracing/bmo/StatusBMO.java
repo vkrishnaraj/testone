@@ -35,5 +35,19 @@ public class StatusBMO {
 		}
 	}
 	
+	public static List<Status> getStatuses(int table_ID) throws HibernateException {
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Status status where table_ID= :table_ID");
+			q.setInteger("table_ID", table_ID);
+			return q.list();
+		} catch (Exception e) {
+			logger.error("Unable to retrieve status from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
 
 }

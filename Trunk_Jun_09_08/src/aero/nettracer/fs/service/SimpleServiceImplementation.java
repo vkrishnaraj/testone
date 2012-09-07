@@ -2,7 +2,9 @@ package aero.nettracer.fs.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -11,10 +13,13 @@ import javax.naming.Context;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Claim;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -31,6 +36,7 @@ import aero.nettracer.fs.model.detection.MetaWarning;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.service.SubmitClaimDocument.SubmitClaim;
 import aero.nettracer.fs.service.SubmitClaimResponseDocument.SubmitClaimResponse;
+import aero.nettracer.fs.service.UpdateClaimStatusResponseDocument.UpdateClaimStatusResponse;
 import aero.nettracer.fs.service.objects.xsd.Address;
 import aero.nettracer.fs.service.objects.xsd.Authentication;
 import aero.nettracer.fs.service.objects.xsd.File;
@@ -44,6 +50,33 @@ import org.apache.struts.action.ActionMessages;
 
 public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     
+	private HashMap<Integer,String> statusMap = null;
+	
+	
+	private boolean validStatusId(int status){
+		if(statusMap == null){
+			statusMap = new HashMap<Integer,String>();
+			List<Status> list = StatusBMO.getStatuses(TracingConstants.STATUS_TABLE_ID_FS);
+			if(list != null){
+				for(Status s:list){
+					statusMap.put(s.getStatus_ID(), s.getDescription());
+				}
+			}
+		}
+		return statusMap.containsKey(status);
+	}
+	
+	private String getStatusDescriptions(){
+		if(statusMap == null || statusMap.size() == 0){
+			return "No valid status codes found, please contact NetTracer";
+		}
+		String ret = "";
+		for(Integer i:statusMap.keySet()){
+			ret += i + ":" + statusMap.get(i) + "||";
+		}
+		return ret;
+	}
+	
 	
     /**
      * Auto generated method signature
@@ -86,7 +119,71 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
      */
     public aero.nettracer.fs.service.UpdateClaimStatusResponseDocument updateClaimStatus (aero.nettracer.fs.service.UpdateClaimStatusDocument updateClaimStatus) {
     	//TODO : fill this with the necessary business logic
-    	throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#updateClaimStatus");
+    	UpdateClaimStatusResponseDocument resDoc = UpdateClaimStatusResponseDocument.Factory.newInstance();
+    	UpdateClaimStatusResponse claimRes = resDoc.addNewUpdateClaimStatusResponse();
+		SimpleResponse res = claimRes.addNewReturn();
+    	
+    	
+    	Agent agent = null;
+    	if(updateClaimStatus != null && updateClaimStatus.getUpdateClaimStatus() != null && updateClaimStatus.getUpdateClaimStatus().getAuthentication() != null){
+			Authentication auth = updateClaimStatus.getUpdateClaimStatus().getAuthentication();
+			ActionMessages errors = new ActionMessages();
+			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 1, errors);
+			if(!errors.isEmpty()){
+				res.setSearchSummary("Incorrect username/password");
+				return resDoc;
+			}
+		} else {
+			res.setSearchSummary("username/password not provided");
+			return resDoc;
+    	}
+    	
+    	long claimId = updateClaimStatus.getUpdateClaimStatus().getFileId();//Even though the wsdl states file id, it is really the claim id
+    	Claim claim = ClaimDAO.loadClaim(claimId);
+    	if(claim == null){
+    		res.setSearchSummary("file " + claimId + " not found");
+    		return resDoc;
+    	}
+    	
+    	Double amountPaid = updateClaimStatus.getUpdateClaimStatus().getAmountPaid();
+    	String amountPaidCurrency = updateClaimStatus.getUpdateClaimStatus().getAmountPaidCurrency();
+    	int statusId = updateClaimStatus.getUpdateClaimStatus().getResolutionStatus();
+    	
+    	if(amountPaidCurrency == null || amountPaidCurrency.trim().length() == 0){
+//    		res.setSearchSummary("must provide currency type");
+//    		return resDoc;
+    		
+    		//The wsdl states that this is an optional field, so if no currency is provided, use previous
+    		amountPaidCurrency = claim.getAmountPaidCurrency();
+    	}
+    	
+    	if(!validStatusId(statusId)){
+    		res.setSearchSummary("" + statusId +" is not a valid status ID.  Please use one of the following: " + getStatusDescriptions());
+    		return resDoc;
+    	}
+    	
+    	claim.setAmountPaid(amountPaid);
+    	claim.setAmountPaidCurrency(amountPaidCurrency);
+    	claim.setStatusId(statusId);
+    	
+		boolean firstSave = claim.getId() == 0;
+		boolean claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);
+		if (claimSaved) {
+			claim = ClaimDAO.loadClaim(claim.getId());
+		} else {
+			//TODO handle error
+			res.setSearchSummary("There was an error saving this claim");
+			return resDoc;
+		}
+		
+		res.setFileId(claim.getId());
+		ClaimUtils.enterAuditClaimEntry(agent.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!= null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
+		
+		boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
+		if (claimSaved && ntfsUser) {
+			submitClaimToFs(claim, firstSave, res, agent);
+		}
+    	return resDoc;
     }
     
     private void createClaim(File wsFile, SimpleResponse res, Agent user) {
@@ -131,104 +228,109 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 		
 		res.setFileId(claim.getId());
 		ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!= null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
-						
-		if (ntfsUser) {
-////////////// 2. save the claim on central services
-			Context ctx = null;
-			ClaimClientRemote remote = null;
-			try {
-				ctx = ConnectionUtil.getInitialContext();
-				remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
-			} catch (Exception e) {
-				//logger.error(e);
-			}
-			
-			long remoteFileId = 0;
-			if (remote == null) {
-				res.setSearchSummary("There was an error connecting to the fraud service.");
-				return;
-			} else {
-				LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
-				
-				for (FsClaim current: file.getClaims()) {
-					FsClaim newClaim = new FsClaim();
-					try {
-						BeanUtils.copyProperties(newClaim, current);
-					} catch (Exception e) {
-							
-					}
-					LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
-					newClaim.setSegments(segs);
-					
-					LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
-					newClaim.setClaimants(pers);
-						
-					for (Person p: current.getClaimants()) {
-						p.setClaim(newClaim);
-						pers.add(p);
-					}
-						
-					for (Segment s: current.getSegments()) {
-						s.setClaim(newClaim);
-						segs.add(s);
-					}
-						
-					LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
-					newClaim.setReceipts(receipts);
-					for (FsReceipt r: current.getReceipts()) {
-						r.setClaim(newClaim);
-						receipts.add(r);
-					}
-						
-					file.setStatusId(claim.getStatusId());
-					newClaim.setFile(file);
-					file.setIncident(newClaim.getIncident());
-					newClaim.getIncident().setFile(file);
-					fsClaims.add(newClaim);
-				}
-					
-				file.setClaims(fsClaims);
-				remoteFileId = remote.insertFile(TransportMapper.map(file));
-				claim = ClaimDAO.loadClaim(claim.getId());
-				if (remoteFileId > 0) {
-					claim.getFile().setSwapId(remoteFileId);
-					FileDAO.saveFile(claim.getFile(), false);
-				}
-				//logger.info("Claim saved to central services: " + remoteFileId);
-					
-////////////////// 3. submit the claim for tracing
-				boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
-				TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave, hasViewFraudResultsPermission);
-				ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SUBMIT);
-				if (hasViewFraudResultsPermission && results != null) {
-					ArrayList<String> s = new ArrayList<String>();
-					for(MetaWarning mw:results.getMetaWarning()){
-						String toAdd = mw.getDescription();
-						toAdd = toAdd.replace("<ul>", " ");
-						toAdd = toAdd.replace("</ul>", " ");
-						toAdd = toAdd.replace("<li>", " ");
-						toAdd = toAdd.replace("</li>", " ");
-						s.add(toAdd);
-					}
-					res.setSearchSummary(StringUtils.join(s.toArray(), "||"));
-					res.setWarningColor(results.getThreatLevel());
-					res.setWarningLevel(results.getThreatLevel());
-					String directAccessUrl = PropertyBMO.getValue(PropertyBMO.DIRECT_ACCESS_URL);
-					if(res.getFileId() != 0 && directAccessUrl != null){
-						res.setDirectAccessUrl(directAccessUrl + "fraud_results.do?claimId=" + res.getFileId());
-					}
-				}
-					
-				if (ctx != null) {
-					try {
-						ctx.close();
-					} catch (Exception e) {
-						
-					}
-				}
-			} // END REMOTE CALLS
-		} // END NTFS_USER SECTION
+		
+		if (claimSaved && ntfsUser) {
+			submitClaimToFs(claim, firstSave, res, user);
+		}
     } // END METHOD createClaim
+    
+    
+    private void submitClaimToFs(FsClaim claim, boolean firstSave, SimpleResponse res, Agent user){
+		Context ctx = null;
+		ClaimClientRemote remote = null;
+		aero.nettracer.fs.model.File file = claim.getFile();
+		try {
+			ctx = ConnectionUtil.getInitialContext();
+			remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+		} catch (Exception e) {
+			//logger.error(e);
+		}
+		
+		long remoteFileId = 0;
+		if (remote == null) {
+			res.setSearchSummary("There was an error connecting to the fraud service.");
+			return;
+		} else {
+			LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
+			
+			for (FsClaim current: file.getClaims()) {
+				FsClaim newClaim = new FsClaim();
+				try {
+					BeanUtils.copyProperties(newClaim, current);
+				} catch (Exception e) {
+						
+				}
+				LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
+				newClaim.setSegments(segs);
+				
+				LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
+				newClaim.setClaimants(pers);
+					
+				for (Person p: current.getClaimants()) {
+					p.setClaim(newClaim);
+					pers.add(p);
+				}
+					
+				for (Segment s: current.getSegments()) {
+					s.setClaim(newClaim);
+					segs.add(s);
+				}
+					
+				LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
+				newClaim.setReceipts(receipts);
+				for (FsReceipt r: current.getReceipts()) {
+					r.setClaim(newClaim);
+					receipts.add(r);
+				}
+					
+				file.setStatusId(claim.getStatusId());
+				newClaim.setFile(file);
+				file.setIncident(newClaim.getIncident());
+				newClaim.getIncident().setFile(file);
+				fsClaims.add(newClaim);
+			}
+				
+			file.setClaims(fsClaims);
+			remoteFileId = remote.insertFile(TransportMapper.map(file));
+			claim = ClaimDAO.loadClaim(claim.getId());
+			if (remoteFileId > 0) {
+				claim.getFile().setSwapId(remoteFileId);
+				FileDAO.saveFile(claim.getFile(), false);
+			}
+			//logger.info("Claim saved to central services: " + remoteFileId);
+				
+//////////////////3. submit the claim for tracing
+			boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
+			TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave, hasViewFraudResultsPermission);
+			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SUBMIT);
+			if (hasViewFraudResultsPermission && results != null) {
+				ArrayList<String> s = new ArrayList<String>();
+				for(MetaWarning mw:results.getMetaWarning()){
+					String toAdd = mw.getDescription();
+					toAdd = toAdd.replace("<ul>", " ");
+					toAdd = toAdd.replace("</ul>", " ");
+					toAdd = toAdd.replace("<li>", " ");
+					toAdd = toAdd.replace("</li>", " ");
+					s.add(toAdd);
+				}
+				res.setSearchSummary(StringUtils.join(s.toArray(), "||"));
+				res.setWarningColor(results.getThreatLevel());
+				res.setWarningLevel(results.getThreatLevel());
+				String directAccessUrl = PropertyBMO.getValue(PropertyBMO.DIRECT_ACCESS_URL);
+				if(res.getFileId() != 0 && directAccessUrl != null){
+					res.setDirectAccessUrl(directAccessUrl + "fraud_results.do?claimId=" + res.getFileId());
+				}
+			}
+				
+			if (ctx != null) {
+				try {
+					ctx.close();
+				} catch (Exception e) {
+					
+				}
+			}
+		} // END REMOTE CALLS
+    }
     
     private void copyWStoNTFile(File wsFile, aero.nettracer.fs.model.File file, FsClaim claim) {
     	aero.nettracer.fs.service.objects.xsd.Claim wsClaim = wsFile.getClaim();
@@ -404,4 +506,5 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	}
     	return segments;
     }
+    
 }
