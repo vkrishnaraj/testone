@@ -142,99 +142,103 @@ public class SecurityUtils {
 			ActionMessages errors) {
 		Session sess = null;
 		Agent agent = null;
-		try {
-			
-			
-			sess = HibernateWrapper.getSession().openSession();
-
-			Criteria criteria = sess.createCriteria(Agent.class);
-			criteria.add(Expression.eq("username", username));
-			criteria.add(Expression.eq("password", StringUtils.sha1(password, true)));
-			criteria.add(Expression.eq("companycode_ID", companyCode));
-
-			List results = criteria.list();
-			if (results == null || results.size() < 1){
-				//loupas - check to see if the password is still using TEA encryption, if so, return the agent with reset_password=true
-				Criteria criteriaTEA = sess.createCriteria(Agent.class);
-				criteriaTEA.add(Expression.eq("username", username));
-				criteriaTEA.add(Expression.eq("password", TEA.encryptTEA(password)));
-				criteriaTEA.add(Expression.eq("companycode_ID", companyCode));
-				results = criteriaTEA.list();
-				if(results != null && results.size() > 0 ){
-					((Agent) results.get(0)).setReset_password(true);
-				}
-			}
-
-			if (results == null || results.size() < 1) {
-				// Add 1 to # of times login failed.
-				Criteria criteria2 = sess.createCriteria(Agent.class);
-				criteria2.add(Expression.eq("username", username));
-				criteria2.add(Expression.eq("companycode_ID", companyCode));
-				List results2 = criteria2.list();
-				if (results2.size() == 1) {
-					agent = (Agent)results2.get(0);
-					int maxFailedAttempts = AdminUtils.getCompVariable(companyCode).getMax_failed_logins();
-
-					if (maxFailedAttempts > 0) {
-						int failedAttempts = agent.getFailed_logins() + 1;
-						agent.setFailed_logins(failedAttempts);
-
-						if (failedAttempts >= maxFailedAttempts && !agent.isAccount_locked()) {
-							agent.setAccount_locked(true);
-							HibernateUtils.save(agent);
-
-							if (AdminUtils.getCompVariable(companyCode).getAudit_agent() == 1) {
-								Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(agent, agent);
-								if (audit_agent != null) {
-									HibernateUtils.saveNew(audit_agent);
-								}
-							}		
-						} else {
-							HibernateUtils.save(agent);
-						}
+		if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
+			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
+		} else {
+			try {
+				
+				
+				sess = HibernateWrapper.getSession().openSession();
+	
+				Criteria criteria = sess.createCriteria(Agent.class);
+				criteria.add(Expression.eq("username", username));
+				criteria.add(Expression.eq("password", StringUtils.sha1(password, true)));
+				criteria.add(Expression.eq("companycode_ID", companyCode));
+	
+				List results = criteria.list();
+				if (results == null || results.size() < 1){
+					//loupas - check to see if the password is still using TEA encryption, if so, return the agent with reset_password=true
+					Criteria criteriaTEA = sess.createCriteria(Agent.class);
+					criteriaTEA.add(Expression.eq("username", username));
+					criteriaTEA.add(Expression.eq("password", TEA.encryptTEA(password)));
+					criteriaTEA.add(Expression.eq("companycode_ID", companyCode));
+					results = criteriaTEA.list();
+					if(results != null && results.size() > 0 ){
+						((Agent) results.get(0)).setReset_password(true);
 					}
-
 				}
-				if (agent != null) {
-					if (agent.isAccount_locked()) {
-						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.lockedout"));
+	
+				if (results == null || results.size() < 1) {
+					// Add 1 to # of times login failed.
+					Criteria criteria2 = sess.createCriteria(Agent.class);
+					criteria2.add(Expression.eq("username", username));
+					criteria2.add(Expression.eq("companycode_ID", companyCode));
+					List results2 = criteria2.list();
+					if (results2.size() == 1) {
+						agent = (Agent)results2.get(0);
+						int maxFailedAttempts = AdminUtils.getCompVariable(companyCode).getMax_failed_logins();
+	
+						if (maxFailedAttempts > 0) {
+							int failedAttempts = agent.getFailed_logins() + 1;
+							agent.setFailed_logins(failedAttempts);
+	
+							if (failedAttempts >= maxFailedAttempts && !agent.isAccount_locked()) {
+								agent.setAccount_locked(true);
+								HibernateUtils.save(agent);
+	
+								if (AdminUtils.getCompVariable(companyCode).getAudit_agent() == 1) {
+									Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(agent, agent);
+									if (audit_agent != null) {
+										HibernateUtils.saveNew(audit_agent);
+									}
+								}		
+							} else {
+								HibernateUtils.save(agent);
+							}
+						}
+	
+					}
+					if (agent != null) {
+						if (agent.isAccount_locked()) {
+							errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.lockedout"));
+						} else {
+							errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
+						}
 					} else {
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
 					}
 				} else {
-					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
-				}
-			} else {
-				agent = (Agent) results.get(0);
-				if (!agent.isActive()) {
-					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.inactive"));
-				}
-				
-				if (logintype == 1 && agent.isWs_enabled() != true) {
-					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.ws_disabled"));
-				} else if (logintype == 0 && agent.isWeb_enabled() != true) {
-					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.web_disabled"));
-				}
-				if (agent.isAccount_locked()) {
-					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.lockedout"));
-				} else {
-					agent.setFailed_logins(0);
-					HibernateUtils.save(agent);
-					if (PropertyBMO.isTrue(PropertyBMO.LF_USER)) {
-						LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_LOGIN, 0, 0);
+					agent = (Agent) results.get(0);
+					if (!agent.isActive()) {
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.inactive"));
+					}
+					
+					if (logintype == 1 && agent.isWs_enabled() != true) {
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.ws_disabled"));
+					} else if (logintype == 0 && agent.isWeb_enabled() != true) {
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.web_disabled"));
+					}
+					if (agent.isAccount_locked()) {
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.lockedout"));
+					} else {
+						agent.setFailed_logins(0);
+						HibernateUtils.save(agent);
+						if (PropertyBMO.isTrue(PropertyBMO.LF_USER)) {
+							LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_LOGIN, 0, 0);
+						}
 					}
 				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.database.connection"));
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
+	
+			} catch (Exception e) {
+				e.printStackTrace();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.database.connection"));
+			} finally {
+				if (sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}
