@@ -3183,8 +3183,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			email = "closed_report_ipad_email.html";
 		}
 		
-		if(sendEmail(lost, h, email, h.get("SUBJECTLINE"))){
+		boolean isNotMatched = !(lost.getItem() != null && lost.getItem().getFound() != null && lost.getItem().getLost() != null);
+		
+		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId()) && isNotMatched) {
+			if(sendEmail(lost, h, email, h.get("SUBJECTLINE"))){
 			//regardless of the send status of the email, close the report
+			}
 		}
 		lost.setCloseDate(new Date());
 		Status status = new Status();

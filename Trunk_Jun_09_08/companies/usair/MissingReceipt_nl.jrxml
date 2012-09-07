@@ -49,7 +49,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[ MISSING ARTICLE RECEIPT]]></text>
+				<text><![CDATA[BEWIJS VAN AANGIFTE VAN VERLOREN ARTIKELEN]]></text>
 			</staticText>
 			<line>
 				<reportElement key="line-2" mode="Opaque" x="0" y="69" width="1" height="613" forecolor="#000000" backcolor="#FFFFFF"/>

@@ -3,7 +3,7 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="117"/>
 	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
@@ -34,19 +34,19 @@
 	<parameter name="stationname" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="powered" class="java.lang.String" isForPrompting="false"/>
 	<background>
-		<band />
+		<band/>
 	</background>
 	<title>
-		<band />
+		<band/>
 	</title>
 	<pageHeader>
-		<band height="729" >
+		<band height="729">
 			<staticText>
-				<reportElement key="textField-1" mode="Opaque" x="193" y="22" width="313" height="23" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-1" mode="Opaque" x="193" y="22" width="313" height="42" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[DAMAGED BAGGAGE RECEIPT]]></text>
+				<text><![CDATA[RECIBO DE BAGAGEM DANIFICADA]]></text>
 			</staticText>
 			<line>
 				<reportElement key="line-1" mode="Opaque" x="2" y="77" width="549" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -351,18 +351,18 @@ A menos que o valor seja declarado, a responsabilidade por danos resultante de p
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band />
+		<band/>
 	</columnHeader>
 	<detail>
-		<band />
+		<band/>
 	</detail>
 	<columnFooter>
-		<band />
+		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band />
+		<band/>
 	</pageFooter>
 	<summary>
-		<band />
+		<band/>
 	</summary>
 </jasperReport>
