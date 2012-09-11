@@ -50,6 +50,7 @@ public class Settings {
 	public static final String USERNAME_TEST = "nttestauto";
 	public static final String PASSWORD_ADMIN = "IpoL!Jan7";
 	public static final String PASSWORD_OGADMIN = "Ladendead51!";
+//	public static final String PASSWORD_OGADMIN = "InstaNokia41!";
 	public static final String PASSWORD_TEST = "nttest@Hud1";
 	public static final String PASSWORD_CHANGE = "nttest@Hud2";
 //	public static final String USERNAME_ADMIN = "ntadmin";
@@ -120,6 +121,7 @@ public class Settings {
 	public static String DAMAGE_ID_WS = "";
 	public static String PILFERAGE_ID_WS = "";
 	public static String ONHAND_ID_WS = "";
+	public static String FOUND_ID_WS = "";
 	
 
 	
