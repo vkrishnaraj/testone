@@ -1457,7 +1457,8 @@ public class BagService {
 			lost.setReport_status(theform.getReport_status());
 			lost.setReport_type(theform.getReport_type());
 			lost.setPhotos(new LinkedHashSet(theform.getPhotoList()));
-
+			lost.setCategory_id(theform.getCategory_id());
+			
 			// prevent status id of 0
 			if(lost.getDisposal_status() == null || lost.getDisposal_status().getStatus_ID() == 0)
 				lost.setDisposal_status(null);

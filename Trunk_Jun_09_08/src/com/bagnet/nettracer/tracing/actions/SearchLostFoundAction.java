@@ -21,6 +21,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.lf.services.LFServiceBean;
+
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.LostAndFoundIncident;
@@ -54,6 +56,11 @@ public class SearchLostFoundAction extends Action {
 
 		
 		SearchLostFoundForm daform = (SearchLostFoundForm) form;
+		
+		if (session.getAttribute("lfcategorylist") == null) {
+			session.setAttribute("lfcategorylist", new LFServiceBean().getCategories(user.getCompanycode_ID()));
+		}
+		
 		
 		if (request.getParameter("search") == null) {
 			daform.setReport_status_ID("" + TracingConstants.LOST_FOUND_OPEN);

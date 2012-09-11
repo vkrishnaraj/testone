@@ -90,12 +90,12 @@ function updatePagination() {
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
-                <td>
+                <td style="width:25%">
                   <bean:message key="colname.lostfound_ref_number" />
                   <br>
                   <html:text property="file_ref_number" size="14" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
                 </td>
-                <td>
+                <td style="width:25%">
                   <bean:message key="colname.lostfound_status" />
                   <br>
                   <html:select property="report_status_ID" styleClass="dropdown">
@@ -154,7 +154,7 @@ function updatePagination() {
                   <br>
                   <html:text property="location" size="25" maxlength="100" styleClass="textfield" />
                 </td>
-                <td colspan=2>
+                <td colspan="2">
                   <bean:message key="colname.found_by" />
                   <br>
                   <html:text property="finding_agent_name" size="25" maxlength="50" styleClass="textfield" />
@@ -169,6 +169,27 @@ function updatePagination() {
 	                  <html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
 	                </html:select>
                 </td>
+              </tr>
+              <tr>
+              	<td>
+              		<bean:message key="colname.last_name"/><br/>
+              		<html:text name="searchLostAndFoundForm" property="lastname" size="20" maxlength="20" styleClass="textfield" />
+              	</td>
+              	<td>
+              		<bean:message key="colname.first_name"/><br/>
+              		<html:text name="searchLostAndFoundForm" property="firstname" size="20" maxlength="20" styleClass="textfield" />
+              	</td>
+              	<td colspan="2">
+     				<bean:message key="colname.lf.category" />
+     				<br/>
+     				<input type="hidden" name="changesubcategory">
+     					<html:select name="searchLostAndFoundForm" property="category" styleClass="dropdown" >
+     					<html:option value="0">
+     						<bean:message key="option.lf.please.select" />
+  						</html:option>
+     					<html:options collection="lfcategorylist" property="id" labelProperty="description" />
+  					</html:select>
+     			</td>
               </tr>
               <tr>
                 <td colspan=4>

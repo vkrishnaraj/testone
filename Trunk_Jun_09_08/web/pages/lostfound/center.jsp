@@ -317,6 +317,18 @@ function gotoHistoricalReport() {
                 </td>
               </tr>
               <tr>
+              	<td colspan="1">
+              		<bean:message key="colname.lf.category" />
+     				<br/>
+     					<html:select name="LostAndFoundForm" property="category_id" styleClass="dropdown" >
+     					<html:option value="0">
+     						<bean:message key="option.lf.please.select" />
+  						</html:option>
+     					<html:options collection="lfcategorylist" property="id" labelProperty="description" />
+  					</html:select>
+              	</td>
+              </tr>
+              <tr>
                 <td colspan="2">
 <%
                   if (found == null) {

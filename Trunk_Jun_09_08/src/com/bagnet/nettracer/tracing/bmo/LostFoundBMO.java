@@ -339,6 +339,20 @@ public class LostFoundBMO {
 			if (daform.getItem_description() != null && daform.getItem_description().length() > 0) {
 				sql.append(" and lfd.item_description like :item_description ");
 			}
+			
+			if (daform.getFirstname()!=null && daform.getFirstname().length() >0){
+				sql.append(" and lfd.customer_firstname like :fname "); 
+			}
+			
+			if (daform.getLastname()!=null && daform.getLastname().length() >0){
+				sql.append(" and lfd.customer_lastname like :lname "); 
+			}
+			
+			if (daform.getCategory()!=null && daform.getCategory().length()>0  && !daform.getCategory().equals("0")){
+				sql.append(" and lfd.category_id = :catId "); 
+			}
+
+
 
 			Date sdate = null, edate = null;
 			
@@ -465,6 +479,18 @@ public class LostFoundBMO {
 
 			if (daform.getReport_type() != null && daform.getReport_type().length() > 0) {
 				q.setInteger("report_type", Integer.parseInt(daform.getReport_type()));
+			}
+			
+			if (daform.getFirstname()!=null && daform.getFirstname().length() >0){
+				q.setString("fname", daform.getFirstname());
+			}
+			
+			if (daform.getLastname()!=null && daform.getLastname().length() >0){
+				q.setString("lname", daform.getLastname());
+			}
+			
+			if (daform.getCategory()!=null && daform.getCategory().length()>0 && !daform.getCategory().equals("0")){
+				q.setInteger("catId", Integer.parseInt(daform.getCategory()));
 			}
 
 			return q.list();

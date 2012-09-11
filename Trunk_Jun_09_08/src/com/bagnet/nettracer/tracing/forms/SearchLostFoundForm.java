@@ -19,7 +19,10 @@ public final class SearchLostFoundForm extends ValidatorForm {
 	private String e_createtime = "";
 	private String s_renttime = "";
 	private String e_renttime = "";
+	private String firstname = "";
+	private String lastname = "";
 	private String location;
+	private String category;
 	private int filing_station;
 	private String item_description;
 	private String disposal_status_ID;
@@ -40,6 +43,21 @@ public final class SearchLostFoundForm extends ValidatorForm {
 	public void setCustomer_address(String customer_address) {
 		this.customer_address = customer_address;
 	}
+	
+	/**
+	 * @return Returns the category.
+	 */
+	public String getCategory() {
+		return category;
+	}
+
+	/**
+	 * @param customer_address
+	 *          The customer_address to set.
+	 */
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
 	/**
 	 * @return Returns the customer_name.
@@ -55,6 +73,37 @@ public final class SearchLostFoundForm extends ValidatorForm {
 	public void setCustomer_name(String customer_name) {
 		this.customer_name = customer_name;
 	}
+	
+	/**
+	 * @return Returns the lastname.
+	 */
+	public String getLastname() {
+		return lastname;
+	}
+
+	/**
+	 * @param lastname
+	 *          The lastname to set.
+	 */
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+	
+	/**
+	 * @return Returns the firstname.
+	 */
+	public String getFirstname() {
+		return firstname;
+	}
+
+	/**
+	 * @param firstname
+	 *          The firstname to set.
+	 */
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
 
 	/**
 	 * @return Returns the customer_tel.

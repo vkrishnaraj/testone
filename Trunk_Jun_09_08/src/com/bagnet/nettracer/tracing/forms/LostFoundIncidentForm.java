@@ -7,6 +7,7 @@ import java.util.TimeZone;
 
 import org.apache.struts.validator.ValidatorForm;
 
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -36,6 +37,7 @@ public final class LostFoundIncidentForm extends ValidatorForm {
 	private String customer_zip;
 	private String customer_email;
 	private String customer_tel;
+	private int category_id;
 	private Date create_date;
 	private String location;
 	private String item_description;
@@ -234,6 +236,31 @@ public final class LostFoundIncidentForm extends ValidatorForm {
 		return customer_countrycode_ID;
 	}
 
+	/**
+	 * @param category_ID
+	 *          The category_ID to set.
+	 */
+	public void setCategory_id(int category_id) {
+		this.category_id = category_id;
+	}
+	
+	/**
+	 * @return Returns the category_ID.
+	 */
+	public int getCategory_id() {
+		return category_id;
+	}
+
+	public String getCategory() {
+		String category = null;
+		if (category_id != 0) {
+			category = CategoryBMO.getCategory(category_id, "en").getDescription();
+		}
+
+		if (category == null) category = "";
+		return category;
+
+	}
 	/**
 	 * @param customer_countrycode_ID
 	 *          The customer_countrycode_ID to set.

@@ -32,6 +32,8 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
+import aero.nettracer.lf.services.LFServiceBean;
+
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -71,6 +73,10 @@ public class AddFoundItem extends Action {
 
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)) return (mapping
 				.findForward(TracingConstants.NO_PERMISSION));
+		
+		if (session.getAttribute("lfcategorylist") == null) {
+			session.setAttribute("lfcategorylist", new LFServiceBean().getCategories(user.getCompanycode_ID()));
+		}
 
 		request.setAttribute("found", "1");
 		ActionMessages errors = new ActionMessages();

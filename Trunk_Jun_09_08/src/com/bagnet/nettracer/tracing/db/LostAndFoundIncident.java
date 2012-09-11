@@ -48,6 +48,7 @@ public class LostAndFoundIncident implements Serializable {
 	private Agent closing_agent;
 	private Station create_station;
 	private int report_type;
+	private int category_id;
 	private int readonly;
 	private String remark;
 	private Set photos;
@@ -566,6 +567,22 @@ public class LostAndFoundIncident implements Serializable {
 	 */
 	public void setReport_type(int report_type) {
 		this.report_type = report_type;
+	}
+	
+	/**
+	 * @hibernate.property type="integer"
+	 * @return Returns the category_id.
+	 */
+	public int getCategory_id() {
+		return category_id;
+	}
+
+	/**
+	 * @param category_id
+	 *          The report_type to set.
+	 */
+	public void setCategory_id(int category_id) {
+		this.category_id = category_id;
 	}
 
 	public String getState() {
