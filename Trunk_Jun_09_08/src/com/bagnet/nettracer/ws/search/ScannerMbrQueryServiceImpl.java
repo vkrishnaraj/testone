@@ -31,8 +31,8 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
 	private static final int CLAIMCHECK_ITM = 5;
 	private static final int PNR = 6;
 	private static final int LD_TYPE = 1;
-	private static final int MISS_TYPE = 1;
-	private static final int DAM_TYPE = 1;
+	private static final int MISS_TYPE = 2;
+	private static final int DAM_TYPE = 3;
     
    /**
     * Auto generated method signature
