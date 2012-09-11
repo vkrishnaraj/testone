@@ -9,7 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -19,7 +21,6 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
 
-import com.bagnet.nettracer.tracing.db.TimeZone;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
@@ -35,6 +36,7 @@ public class Salvage {
 	private int status;
 	private Set<SalvageBox> salvageBoxes;
 	private Set<SalvageOHDReference> ohdReferences;
+	private SalvageRemark remark;
 	
 	
 	@Id
@@ -115,6 +117,16 @@ public class Salvage {
 	
 	public void setOhdReferences(Set<SalvageOHDReference> ohdReferences) {
 		this.ohdReferences = ohdReferences;
+	}
+
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name="remark_id", nullable=true)
+	public SalvageRemark getRemark() {
+		return remark;
+	}
+
+	public void setRemark(SalvageRemark remark) {
+		this.remark = remark;
 	}
 	
 	@Transient

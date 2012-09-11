@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions.salvage;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -26,13 +27,17 @@ import com.bagnet.nettracer.tracing.dao.SalvageDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.LostAndFoundIncident;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.salvage.Salvage;
 import com.bagnet.nettracer.tracing.db.salvage.SalvageBox;
 import com.bagnet.nettracer.tracing.db.salvage.SalvageItem;
 import com.bagnet.nettracer.tracing.db.salvage.SalvageOHDReference;
+import com.bagnet.nettracer.tracing.db.salvage.SalvageRemark;
 import com.bagnet.nettracer.tracing.forms.salvage.SalvageEditForm;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.EmailUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class SalvageEditAction extends CheckedAction {
@@ -62,7 +67,7 @@ public class SalvageEditAction extends CheckedAction {
 
 			// If the user is creating a new salvage from scratch, set up
 			// basic new salvage object, collections, objects.
-			salvage = createNewSalvage(user.getCompanycode_ID());
+			salvage = createNewSalvage(user);
 
 		} else if (salvageId != null) {
 
@@ -123,7 +128,8 @@ public class SalvageEditAction extends CheckedAction {
 		SalvageDAO.saveCompleteSalvage(salvage, a);
 	}
 
-	private Salvage createNewSalvage(String companyCodeId) {
+	private Salvage createNewSalvage(Agent agent) {
+		String companyCodeId = agent.getCompanycode_ID();
 		Salvage salvage;
 		salvage = new Salvage();
 		LinkedHashSet<SalvageBox> salvageBoxes = new LinkedHashSet<SalvageBox>();
@@ -157,10 +163,15 @@ public class SalvageEditAction extends CheckedAction {
 		item2.setBox(box2);
 		salvageItems2.add(item2);
 		
-		
 		LinkedHashSet<SalvageOHDReference> ohdReferences = new LinkedHashSet<SalvageOHDReference>();
 		salvage.setSalvageBoxes(salvageBoxes);
 		salvage.setOhdReferences(ohdReferences);
+		
+		SalvageRemark remark = new SalvageRemark();
+		remark.setAgent(agent);
+		remark.setCreatetime(TracerDateTime.getGMTDate());
+		remark.setRemarktype(TracingConstants.REMARK_REGULAR);
+		salvage.setRemark(remark);
 		
 		return salvage;
 	}

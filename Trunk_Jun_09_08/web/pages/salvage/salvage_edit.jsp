@@ -84,33 +84,6 @@
 	      <bean:message key="message.required" /> 
       <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 	        <bean:define id="remark" name="salvageEditForm" property="salvage.remark" type="com.bagnet.nettracer.tracing.db.salvage.SalvageRemark" />
-            <logic:present name="remark" property="agent">
-	            <bean:define id="agent" name="remark" property="agent" type="com.bagnet.nettracer.tracing.db.Agent" />
-	          </logic:present>
-            <tr>
-              <td valign="top">
-                <bean:message key="colname.date" />
-                :
-                <bean:write name="remark" property="dispcreatetime" />
-              </td>
-              <td>
-                <bean:message key="colname.station" />
-                :
-                <logic:present name="remark" property="agent">
-   
-	                <bean:write name="agent" property="companycode_ID" />
-	                &nbsp;
-	                <bean:write name="agent" property="station.stationcode" />
-	              </logic:present>
-              </td>
-              <td>
-                <bean:message key="colname.agent" />
-                :
-                <logic:present name="remark" property="agent">
-                <bean:write name="agent" property="username" />
-                </logic:present>
-              </td>
-            </tr>
             <tr>
 				<td valign="top" colspan=3>
                   <textarea name="salvage.remark.remarktext" id="remark" cols="80" rows="10" ><%= remark.getRemarktext() %></textarea>

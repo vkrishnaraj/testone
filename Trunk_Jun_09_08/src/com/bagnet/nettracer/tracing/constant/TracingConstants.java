@@ -978,6 +978,7 @@ public class TracingConstants {
 	public static final int SALVAGE_HEADER_BOX = 1;
 	public static final int SALVAGE_HEADER_OHD = 2;
 	public static final int SALVAGE_HEADER_SUMMARY = 3;
+	public static final int SALVAGE_HEADER_REMARK = 4;
 	
 	public static final String SALVAGE_SEARCH = "salvage_search";
 	public static final String SALVAGE_EDIT = "salvage_edit";

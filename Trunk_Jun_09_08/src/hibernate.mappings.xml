@@ -129,6 +129,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageBox"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageItem"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageOHDReference"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageRemark"/>
 		
 		<!-- WorldTracer Stuff -->
 		<mapping resource="com/bagnet/nettracer/tracing/db/Worldtracer_Actionfiles.hbm.xml"/>

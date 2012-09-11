@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import org.hibernate.Session;
-
-import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.salvage.Salvage;
 import com.bagnet.nettracer.tracing.db.salvage.SalvageBox;
@@ -49,6 +46,12 @@ public class SalvageReport {
 			reportRows.addAll(getItemsFromBox(box));
 		}
 		reportRows.addAll(0, getReportSummary());
+		SalvageReportRow remarkRow = getColumnHeader(TracingConstants.SALVAGE_HEADER_REMARK);
+		if (salvage.getRemark() != null && salvage.getRemark().getRemarktext() != null && !salvage.getRemark().getRemarktext().isEmpty()) {
+			remarkRow.setCol2(remarkRow.getCol2() + " " + salvage.getRemark().getRemarktext());
+			reportRows.add(0, new SalvageReportRow());
+			reportRows.add(0, remarkRow);
+		}
 		
 		return reportRows;
 	}
@@ -85,6 +88,9 @@ public class SalvageReport {
 		case TracingConstants.SALVAGE_HEADER_SUMMARY:
 			row.setCol2(resources.getString("report.salvage.column.summary"));
 			row.setCol4(resources.getString("report.salvage.column.quantity"));
+			break;
+		case TracingConstants.SALVAGE_HEADER_REMARK:
+			row.setCol2(resources.getString("report.salvage.remark"));
 			break;
 		default:
 			break;
