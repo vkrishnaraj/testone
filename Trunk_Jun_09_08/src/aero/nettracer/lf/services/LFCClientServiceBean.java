@@ -345,7 +345,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			host.setId(Long.valueOf(lostReport.getReportId()));
 		}
 		
-		if (lostReport.getSegments() != null) {
+		if (lostReport.getSegments() != null && TracingConstants.LF_SWA_COMPANY_ID.equals(host.getCompanyId())) {
 			Set<LFSegment> segments = new LinkedHashSet<LFSegment>();
 			for (SegmentBean remoteSeg : lostReport.getSegments()) {
 				LFSegment segment = new LFSegment();
