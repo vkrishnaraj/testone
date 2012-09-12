@@ -33,7 +33,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			waitForPageToLoadImproved();
 			selenium.click("xpath=(//a[contains(text(),'Maintain')])[12]");
 			waitForPageToLoadImproved();
-			selenium.click("xpath=(//a[contains(text(),'Maintain')])[22]");
+			selenium.click("xpath=(//a[contains(text(),'Maintain')])[20]");
 			waitForPageToLoadImproved();
 			selenium.click("name=704");
 			selenium.click("name=save");
@@ -51,6 +51,8 @@ public class WS_TestWarehouse extends LoginUtil {
 			selenium.click("link=[ Logout ]");
 			loginAdminProcedure();
 			selenium.click("id=menucol_4.1");
+			waitForPageToLoadImproved();
+			selenium.click("name=skip_prepopulate");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 					verifyTrue(selenium.isTextPresent("Date Received by Warehouse"));
@@ -105,7 +107,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			waitForPageToLoadImproved();
 			selenium.click("xpath=(//a[contains(text(),'Maintain')])[12]");
 			waitForPageToLoadImproved();
-			selenium.click("xpath=(//a[contains(text(),'Maintain')])[22]");
+			selenium.click("xpath=(//a[contains(text(),'Maintain')])[20]");
 			waitForPageToLoadImproved();
 			selenium.click("name=704");
 			selenium.click("name=save");
