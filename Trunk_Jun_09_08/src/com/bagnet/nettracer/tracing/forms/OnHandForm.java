@@ -33,13 +33,13 @@ public final class OnHandForm extends ValidatorForm {
 	private String ohd_id;
 	private String dispBagArriveDate = "";
 	private String dispWarehouseReceivedDate = "";
-	private String dispWarehouseSentDate = "";
+	private String dispWarehouseSentOutDate = "";
 	private String found_company;
 	private String storage_location;
 	private String found_station;
 	private Date bagarrivedate;
 	private Date warehouseReceivedDate;
-	private Date warehouseSentDate;
+	private Date warehouseSentOutDate;
 	private String holding_company;
 	private String holding_station;
 	private String lastname;
@@ -744,12 +744,12 @@ public final class OnHandForm extends ValidatorForm {
 	 * 
 	 * @return
 	 */
-	public String getDispWarehouseSentDate() {
-		if (this.dispWarehouseSentDate == null || this.dispWarehouseSentDate.equals("")) {
-			if (this.getWarehouseSentDate() != null) this.dispWarehouseSentDate = DateUtils.formatDate(this
-					.getWarehouseSentDate(), _DATEFORMAT, null, null);
+	public String getDispWarehouseSentOutDate() {
+		if (this.dispWarehouseSentOutDate == null || this.dispWarehouseSentOutDate.equals("")) {
+			if (this.getwarehouseSentOutDate() != null) this.dispWarehouseSentOutDate = DateUtils.formatDate(this
+					.getwarehouseSentOutDate(), _DATEFORMAT, null, null);
 		}
-		return this.dispWarehouseSentDate;
+		return this.dispWarehouseSentOutDate;
 	}
 
 	/**
@@ -905,18 +905,18 @@ public final class OnHandForm extends ValidatorForm {
 	}
 	
 	/**
-	 * @return Returns the warehouseSentDate.
+	 * @return Returns the warehouseSentOutDate.
 	 */
-	public Date getWarehouseSentDate() {
-		return warehouseSentDate;
+	public Date getWarehouseSentOutDate() {
+		return warehouseSentOutDate;
 	}
 
 	/**
 	 * @param bagarrivedate
-	 *          The warehouseSentDate to set.
+	 *          The warehouseSentOutDate to set.
 	 */
-	public void setWarehouseSentDate(Date warehouseSentDate) {
-		this.warehouseSentDate = warehouseSentDate;
+	public void setWarehouseSentOutDate(Date warehouseSentOutDate) {
+		this.warehouseSentOutDate = warehouseSentOutDate;
 	}
 	
 	/**
@@ -954,8 +954,8 @@ public final class OnHandForm extends ValidatorForm {
 	 * @param dispBagArriveDate
 	 *          The dispBagArriveDate to set.
 	 */
-	public void setDispWarehouseSentDate(String dispWarehouseSentDate) {
-		this.dispWarehouseSentDate = dispWarehouseSentDate;
+	public void setDispWarehouseSentOutDate(String dispWarehouseSentOutDate) {
+		this.dispWarehouseSentOutDate = dispWarehouseSentOutDate;
 	}
 
 	public String getForwarded_station() {

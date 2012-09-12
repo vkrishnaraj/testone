@@ -1547,8 +1547,8 @@ public class BagService {
 					oDTO.setBagarrivedate(DateUtils.convertToDate(theform.getDispBagArriveDate(), theform.getAgent()
 							.getDateformat().getFormat(), theform.getAgent().getCurrentlocale()));
 				}
-				if(theform.getDispWarehouseSentDate() != null) {
-					oDTO.setWarehouseSentDate(DateUtils.convertToDate(theform.getDispWarehouseSentDate(), theform.getAgent()
+				if(theform.getDispWarehouseSentOutDate() != null) {
+					oDTO.setWarehouseSentOutDate(DateUtils.convertToDate(theform.getDispWarehouseSentOutDate(), theform.getAgent()
 							.getDateformat().getFormat(), theform.getAgent().getCurrentlocale()));
 				}
 				if(theform.getDispWarehouseReceivedDate() != null) {
