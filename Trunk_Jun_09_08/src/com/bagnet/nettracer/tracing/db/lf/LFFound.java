@@ -60,7 +60,7 @@ public class LFFound implements LFObject, Serializable {
 	@Column(length = 3)
 	private String companyId;
 	
-	@JoinColumn(name = "salvageBoxId", nullable = false)
+	@JoinColumn(name = "salvageBoxId")
 	private String salvageBoxId;
 	
 	@ManyToOne
