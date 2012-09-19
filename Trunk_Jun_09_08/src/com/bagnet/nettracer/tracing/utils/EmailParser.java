@@ -39,10 +39,10 @@ public class EmailParser {
 					if (i2 > i1) {
 						toparse = s.substring(i1 + 1, i2);
 						tmpValue = String.valueOf( h.get(toparse)); // get the parsed string
-						if (tmpValue != null) {
+						if (tmpValue != null && !"null".equals(tmpValue)) {
 							toparse = tmpValue;
 						}
-						if (tmpValue == null) {
+						if (tmpValue == null || "null".equals(tmpValue)) {
 							try {
 								toparse = myResources.getString(toparse);
 							} catch (Exception e) {
