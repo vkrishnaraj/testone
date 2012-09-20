@@ -20,6 +20,7 @@
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 
 <%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Incident_Claimcheck"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Address"%><script language="javascript">
 
   
@@ -49,6 +50,13 @@ function toggledc(o) {
 			emailAlertNotice();
         	window.location = 'cancelBdo.do?bdo_id=<bean:write name="BDOForm" property="BDO_ID" />';
     	}
+    }
+    
+    function populateClaimNum(){
+    	var first = document.getElementById('bagtagSelect'),
+        second = document.getElementById('bagtagId');
+
+    	second.value = first.value;
     }
 
     function cancelItem(item) {
@@ -251,8 +259,8 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
             <td colspan="5">
               <bean:message key="colname.delivery.remarks" />
               <br />
-              <html:textarea rows="10" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,500);" onkeyup="textCounter3(this,textCounter2, 500);"/>
-              <input name="textCounter2" type="text" value="500" size="4" maxlength="4" disabled="true" />
+              <html:textarea rows="10" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,250);" onkeyup="textCounter3(this,textCounter2, 250);"/>
+              <input name="textCounter2" type="text" value="250" size="4" maxlength="4" disabled="true" />
             </td>
           </tr>
         </table>
@@ -265,11 +273,13 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 <script type="text/javascript">
 	var passengerArr = ["passenger[0].lastname", "passenger[0].firstname", "passenger[0].middlename"];
 	var addressArr = ["passenger[0].address1", "passenger[0].address2", "passenger[0].city", "passenger[0].state_ID", "passenger[0].province","passenger[0].zip","passenger[0].countrycode_ID","passenger[0].dispvalid_bdate", "passenger[0].dispvalid_edate","passenger[0].","passenger[0].email"];
-	var phoneArr = ["passenger[0].homephone", "passenger[0].workphone", "passenger[0].altphone", "passenger[0].mobile", "passenger[0].pager", "passenger[0].hotel"];
-
+	var phoneArr = ["passenger[0].homephone", "passenger[0].workphone", "passenger[0].altphone", "passenger[0].mobile", "passenger[0].pager", "passenger[0].hotel", "passenger[0].hotelphone"];
+	var itemArr = ["item[0].claimchecknum"];
+	
     var passengers = [<%=myform.getPassengerlist().size() %>];
     var addresses = [<%=myform.getPassengerlist().size() %>];
-    var phonenumbers = [<%=myform.getPassengerlist().size() %>]; 
+    var phonenumbers = [<%=myform.getPassengerlist().size() %>];
+    var items = [<%=myform.getIncident().getClaimchecks().size() %>];
 
     function emailAlertNotice() {
         <% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_BDO_CANCEL_EMAIL_ALERT)) {
@@ -361,8 +371,8 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 		String addData = p.fillValues("'passenger[0].address1': '{address1}', 'passenger[0].address2': '{address2}', 'passenger[0].city': '{city}', 'passenger[0].state_ID': '{state_ID}', 'passenger[0].province': '{province}','passenger[0].zip': '{zip}','passenger[0].countrycode_ID': '{countrycode_ID}','passenger[0].dispvalid_bdate': '{dispvalid_bdate}', 'passenger[0].dispvalid_edate': '{dispvalid_edate}','passenger[0].email':'{email}'");
 		
 		String phoneShort = messages.getMessage(locale, "gen.passenger") + " " + i + " " + messages.getMessage(locale, "gen.phone");
-		String phoneLong = p.fillValues("Name: {firstname} {lastname}<br />Home: {homephone}<br/> Work: {workphone}<br/>Others: {altphone}{mobile} {pager}<br/> Hotel: {hotel} ");
-		String phoneData = p.fillValues("'passenger[0].homephone': '{homephone}', 'passenger[0].workphone': '{workphone}', 'passenger[0].altphone': '{altphone}', 'passenger[0].mobile': '{mobile}', 'passenger[0].pager': '{pager}', 'passenger[0].hotel':'{hotel}'");
+		String phoneLong = p.fillValues("Name: {firstname} {lastname}<br />Home: {homephone}<br/> Work: {workphone}<br/>Others: {altphone}{mobile} {pager}<br/> Hotel: {hotel} {hotelphone} ");
+		String phoneData = p.fillValues("'passenger[0].homephone': '{homephone}', 'passenger[0].workphone': '{workphone}', 'passenger[0].altphone': '{altphone}', 'passenger[0].mobile': '{mobile}', 'passenger[0].pager': '{pager}', 'passenger[0].hotel':'{hotel}', 'passenger[0].hotelphone':'{hotelphone}'");
 		%>
 
 		var pax = new DropdownData();
@@ -382,6 +392,27 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 		phone.longd = "<%=phoneLong%>";
 		phone.data={<%=phoneData%>};
 	    phonenumbers[<%=i%>] = phone;
+	</logic:iterate>
+	
+	<logic:iterate id="item" name="BDOForm" property="incident.claimchecks" indexId="i" type="com.bagnet.nettracer.tracing.db.Incident_Claimcheck">
+
+		<%
+		MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		Locale locale = new Locale(a.getCurrentlocale());
+		
+		StringTemplateProcessor p = new StringTemplateProcessor();
+		p.addClass(item);
+		String bagNums= p.fillValues("{claimchecknum}");
+		String bagData = p.fillValues("'item[0].claimchecknum': '{claimchecknum}'");
+		
+		%>
+	
+		var bag = new DropdownData();
+		bag.shortd = "<%=bagNums%>";
+		bag.longd = "<%=bagNums%>";
+		bag.data={<%=bagData%>};
+		items[<%=i%>] = bag;
+
 	</logic:iterate>
 
 
@@ -417,7 +448,7 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 	<%
 		StringTemplateProcessor p = new StringTemplateProcessor();
 		p.addClass(passenger);
-		String phoneLong = p.fillValues("Home: {homephone}, Work: {workphone}, Others: {altphone} {mobile} {pager}, Hotel: {hotel} ");
+		String phoneLong = p.fillValues("Home: {homephone}, Work: {workphone}, Others: {altphone} {mobile} {pager}, Hotel: {hotel} {hotelphone}");
 	%>
 		<option value="<%=i%>"><%=phoneLong%></option>
 	</logic:iterate>
@@ -556,12 +587,17 @@ if (i.intValue() == 0) {
               </td>
             </tr>
             <tr>
-              <td colspan=2 width=50%>
+              <td colspan=2>
                 <bean:message key="colname.hotel" />
                 <br>
                 <html:text name="passenger" property="hotel" indexed="true" size="45" maxlength="50" styleClass="textfield" indexed="true" />
+              </td> 
+              <td >
+                <bean:message key="colname.hotel_ph" />
+                <br>
+                <html:text name="passenger" property="hotelphone" indexed="true" size="15" maxlength="25" styleClass="textfield" />
               </td>
-              <td colspan=3 width=50%>
+              <td colspan=2>
                 <bean:message key="colname.email" />
                 <br>
                 <html:text name="passenger" property="email" indexed="true" size="45" maxlength="50" styleClass="textfield" />
@@ -651,7 +687,9 @@ if (i.intValue() == 0) {
         </logic:notEqual>
       </logic:equal>
       <logic:notEqual name="BDOForm" property="incident_ID" value="">
-        <logic:iterate id="theitem" indexId="i" name="BDOForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
+      
+		<!-- < Incident_Claimcheck[] checkList=(Incident_Claimcheck[])myform.getIncident().getClaimchecks().toArray(); %>-->
+		<logic:iterate id="theitem" indexId="i" name="BDOForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
           <table class="form2" cellspacing="0" cellpadding="0">
             <logic:notEqual name="theitem" property="OHD_ID" value="">
               <logic:equal name="theitem" property="is_in_station" value="0">
@@ -701,7 +739,18 @@ if (i.intValue() == 0) {
             <td valign=top>
               <bean:message key="colname.claimnum" />
               <br>
-              <html:text name="theitem" property="claimchecknum" size="25" styleClass="textfield" indexed="true" />
+              <html:text name="theitem" property="claimchecknum" size="25" styleId="bagtagId" styleClass="textfield" indexed="true"/>
+              <select styleClass="dropdown" id="bagtagSelect" onchange="populateClaimNum(); mapSimpleData(this.options.selectedIndex, items, itemArr); ">
+				<option value=""><bean:message key="pick.a.bag" /></option>
+				<logic:iterate id="item" name="BDOForm"  property="incident.claimchecks" indexId="i" type="com.bagnet.nettracer.tracing.db.Incident_Claimcheck">
+					<%
+					StringTemplateProcessor p = new StringTemplateProcessor();
+					p.addClass(item);
+					String bagNums = p.fillValues("{claimchecknum}");
+					%>
+					<option value="<%=bagNums.toString()%>"><%=bagNums%></option>
+				</logic:iterate>
+			</html>
             </td>
           </tr>
           <tr>

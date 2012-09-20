@@ -30,12 +30,14 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.cronjob.tracing.PassiveTracing;
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.reporting.LostDelayReceipt;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -57,6 +59,7 @@ import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ControlLog;
+import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Assoc;
@@ -537,6 +540,8 @@ public class BagService {
 					art.setIncident(iDTO);
 				}
 			}
+			
+			
 
 			// remove spaces between claimcheck numbers for missing articles and
 			// damaged or remove the bag from item list if it is lostdelay and
@@ -545,7 +550,7 @@ public class BagService {
 			Item item = null;
 			Status itemstatus = null;
 			Item_Inventory ii = null;
-
+			
 			if(iDTO.getItemlist() != null) {
 				for(int i = iDTO.getItemlist().size() - 1; i >= 0; i--) {
 					item = (Item) iDTO.getItemlist().get(i);
@@ -608,6 +613,16 @@ public class BagService {
 						theform.getClaimchecklist().remove(i);
 					}
 
+				}
+			}
+			
+			//For Existing Incidents
+			//If Property (and Lost delay){
+			if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_DELIVERY_INSTRUCTIONS) && iDTO.getItemtype().getItemType_ID()==TracingConstants.LOST_DELAY ) {
+				if(theform.getDeliveryInstructions()!=null){
+					DeliveryInstructions DI=theform.getDeliveryInstructions();
+					DI.setInstructions(theform.getDeliveryInstructions().getInstructions());
+					HibernateUtils.save(DI);
 				}
 			}
 
@@ -1094,9 +1109,12 @@ public class BagService {
 		if(theform.getClaimchecklist().size() == 0) {
 			theform.getClaimcheck(0);
 		}
+		
+		if(iDTO.getDeliveryInstructions()!=null){
+			theform.setDeliveryInstructions(iDTO.getDeliveryInstructions());
+		}
 
 		theform.setPassengerlist(new ArrayList(iDTO.getPassengers()));
-
 		Passenger p = null;
 		Address addr = null;
 		AirlineMembership am = null;

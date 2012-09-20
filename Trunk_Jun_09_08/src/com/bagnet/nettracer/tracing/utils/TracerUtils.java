@@ -49,6 +49,7 @@ import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ControlLog;
 import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.DbLocale;
+import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -251,6 +252,16 @@ public class TracerUtils {
 			a.set_DATEFORMAT(user.getDateformat().getFormat());
 			a.setCurrency_ID(user.getDefaultcurrency());
 		}
+		
+		if(itemtype == TracingConstants.LOST_DELAY){
+			if(theform.getDeliveryInstructions()==null)
+			{
+				DeliveryInstructions DI=new DeliveryInstructions();
+				DI.setInstructions("");
+				theform.setDeliveryInstructions(DI);
+			}
+		}
+		
 
 		// set some default parameters
 		theform.setNumbagchecked(1);

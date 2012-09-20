@@ -77,6 +77,7 @@ public class Incident implements Serializable {
 	private int customcleared;
 	private int nonrevenue;
 	private ItemType itemtype;
+	private DeliveryInstructions deliveryInstructions;
 	private Status status;
 	private int loss_code;
 	
@@ -286,6 +287,24 @@ public class Incident implements Serializable {
 	 */
 	public void setAgent(Agent agent) {
 		this.agent = agent;
+	}
+	
+	/**
+	 * @return Returns the deliveryInstructions associated with this incident.
+	 * 
+	 */
+	@OneToOne
+	@JoinColumn(name = "deliveryInstructions_ID", nullable = true)
+	public DeliveryInstructions getDeliveryInstructions() {
+		return deliveryInstructions;
+	}
+
+	/**
+	 * @param deliveryInstructions
+	 *          The deliveryInstructions to set.
+	 */
+	public void setDeliveryInstructions(DeliveryInstructions deliveryInstructions) {
+		this.deliveryInstructions = deliveryInstructions;
 	}
 
 	/**

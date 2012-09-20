@@ -32,6 +32,7 @@ public class BDO_Passenger implements Serializable {
 	private String city;
 	private String zip;
 	private String hotel;
+	private String hotelphone;
 	private String homephone;
 	private String workphone;
 	private String mobile;
@@ -65,6 +66,7 @@ public class BDO_Passenger implements Serializable {
 		sb.append("<zip>" + getZip() + "</zip>");
 		sb.append("<countrycode_ID>" + getCountrycode_ID() + "</countrycode_ID>");
 		sb.append("<hotel>" + getHotel() + "</hotel>");
+		sb.append("<hotelphone>" + getHotelphone() + "</hotelphone>");
 		sb.append("<homephone>" + getHomephone() + "</homephone>");
 		sb.append("<workphone>" + getWorkphone() + "</workphone>");
 		sb.append("<cellphone>" + getMobile() + "</cellphone>");
@@ -115,6 +117,8 @@ public class BDO_Passenger implements Serializable {
 				obj.setZip(child.getTextContents());
 			} else if (child.getType().equals("countrycode_ID")) {
 				obj.setCountrycode_ID(child.getTextContents());
+			} else if (child.getType().equals("hotelphone")) {
+				obj.setHotelphone(child.getTextContents());
 			} else if (child.getType().equals("homephone")) {
 				obj.setHomephone(child.getTextContents());
 			} else if (child.getType().equals("workphone")) {
@@ -362,6 +366,23 @@ public class BDO_Passenger implements Serializable {
 	 */
 	public void setHomephone(String homephone) {
 		this.homephone = homephone;
+	}
+	
+	/**
+	 * @return Returns the hotelphone.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getHotelphone() {
+		return hotelphone;
+	}
+
+	/**
+	 * @param hotelphone
+	 *          The hotelphone to set.
+	 */
+	public void setHotelphone(String hotelphone) {
+		this.hotelphone = hotelphone;
 	}
 
 	/**

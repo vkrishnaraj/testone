@@ -9,6 +9,7 @@ package com.bagnet.nettracer.tracing.actions;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.naming.Context;
@@ -23,6 +24,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
@@ -35,6 +38,7 @@ import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -273,7 +277,10 @@ public class ModifyClaimAction extends CheckedAction {
 			deleteEmptyNames(claim);
 
 			boolean firstSave = claim.getId() == 0;
-			boolean claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);
+			boolean claimSaved=false;
+			if(validateAirlineIncidentId(claim.getIncident().getAirlineIncidentId(), errors, request, claim.getIncident().getId())) {//checks for fs_incident on local database, return turn is incidentid isn't in the table
+				claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);
+			}
 			if (claimSaved) {
 				claim = ClaimDAO.loadClaim(claim.getId());
 				ClaimHistoryObject CHO=new ClaimHistoryObject();
@@ -305,7 +312,7 @@ public class ModifyClaimAction extends CheckedAction {
 				}
 			}
 			
-			if (ntfsUser) {
+			if (ntfsUser && claimSaved) {
 				// 2. save the claim on central services
 				Context ctx = null;
 				ClaimClientRemote remote = null;
@@ -512,6 +519,41 @@ public class ModifyClaimAction extends CheckedAction {
 		receipt.setPhone(phone);
 		
 		return receipt;
+	}
+	
+	private boolean validateAirlineIncidentId(String IncidentID, ActionMessages errors, HttpServletRequest request, Long FSID){
+		if(IncidentID==null || IncidentID.isEmpty()){
+			return true;
+		}
+		String sql = "select fsi.id from aero.nettracer.fs.model.FsIncident fsi where airlineIncidentId= :incident_id";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("incident_id", IncidentID);
+			List result = q.list();
+			sess.close();
+			
+			if(result.isEmpty()){
+				return true;
+			} else if(FSID==0 || !FSID.equals(((Long) result.get(0)))) {
+				ActionMessage error = new ActionMessage("error.airlineincident");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+				return false;
+			} else {
+				return true;
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		
+		return false;
 	}
 	
 }

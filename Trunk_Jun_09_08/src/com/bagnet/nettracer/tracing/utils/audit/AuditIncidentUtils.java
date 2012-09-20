@@ -19,9 +19,12 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -43,6 +46,7 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Passenger;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Remark;
 import com.bagnet.nettracer.tracing.forms.audit.AuditMBRForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
@@ -488,6 +492,12 @@ public class AuditIncidentUtils {
 					rlist.add(a_r);
 				}
 				audit_inc.setRemarks(new HashSet(rlist));
+			}
+			
+			//DeliveryInstructions
+			if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_DELIVERY_INSTRUCTIONS) && incident.getItemtype().getItemType_ID()==TracingConstants.LOST_DELAY){
+				DeliveryInstructions DI = incident.getDeliveryInstructions();
+				audit_inc.setInstructions(DI.getInstructions());
 			}
 
 			audit_inc.setOc_claim_id(incident.getOc_claim_id());

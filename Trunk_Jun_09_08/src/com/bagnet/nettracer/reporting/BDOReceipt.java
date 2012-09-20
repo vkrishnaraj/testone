@@ -73,6 +73,31 @@ public class BDOReceipt {
 
 			for (int j = 0; j < 3; j++) {
 				BDO_Receipt_DTO brd = new BDO_Receipt_DTO();
+				String phno = pa.getHomephone();
+				if (phno == null || phno.length() == 0)
+					phno = pa.getMobile();
+				String CustInfo="Name: "+(pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : "")+", Reference Number: "+theform.getIncident_ID()+"\rAddress: "+
+						pa.getAddress1()+"\r";
+				if(pa.getAddress2()!=null && pa.getAddress2().length()>0){
+					CustInfo+=pa.getAddress2()+". ";
+				}
+				if(pa.getCity()!=null && pa.getCity().length()>0) {
+					CustInfo+=pa.getCity()+", ";
+				}
+				if(pa.getState_ID()!=null && pa.getState_ID().length()>0) {
+					CustInfo+=pa.getState_ID();
+				}
+				if(pa.getZip()!=null && pa.getZip().length()>0) {
+					CustInfo+=", "+pa.getZip();
+				}
+				CustInfo+="\r";
+				CustInfo+="Phone Number: "+phno+"\r";
+				CustInfo+="Hotel: "+pa.getHotel(); 
+				if(pa.getHotelphone()!=null && pa.getHotelphone().length()>0)
+					CustInfo+=", Hotel Phone Number: "+pa.getHotelphone();
+				
+				brd.setCustomerinfo(CustInfo);
+				
 				brd.setToname((pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : ""));
 				brd.setAddress(pa.getAddress1());
 				brd.setApt(pa.getAddress2());
@@ -81,9 +106,7 @@ public class BDOReceipt {
 				brd.setZip(pa.getZip());
 				brd.setRefNum(theform.getIncident_ID());
 
-				String phno = pa.getHomephone();
-				if (phno == null || phno.length() == 0)
-					phno = pa.getMobile();
+				
 
 				brd.setPhone(phno);
 
@@ -95,7 +118,7 @@ public class BDOReceipt {
 					if (((Item) theform.getItemlist().get(i)).getClaimchecknum() != null
 							&& ((Item) theform.getItemlist().get(i)).getClaimchecknum().length() > 0) {
 						sb.append(((Item) theform.getItemlist().get(i)).getClaimchecknum().trim());
-						sb.append(",");
+						sb.append("\r");
 					}
 					if (((Item) theform.getItemlist().get(i)).getColor() != null) {
 						sb2.append(((Item) theform.getItemlist().get(i)).getColor());
@@ -103,12 +126,13 @@ public class BDOReceipt {
 					}
 					if (((Item) theform.getItemlist().get(i)).getBagtype() != null) {
 						sb2.append(((Item) theform.getItemlist().get(i)).getBagtype());
-						sb2.append(",");
+						sb2.append(", ");
 					}
 				}
 				if (sb.length() > 0)
 					brd.setBagtag(sb.toString().substring(0, sb.toString().length() - 1));
-
+				else
+					brd.setBagtag("");
 				if (sb2.length() > 0)
 					brd.setDescription(sb2.toString().substring(0, sb2.toString().length() - 1));
 
@@ -116,16 +140,20 @@ public class BDOReceipt {
 				brd.setAgent(theform.getAgent().getUsername());
 				brd.setDate1(theform.getDispcreatetime());
 				brd.setDate2(theform.getDispdeliverydate());
-				brd.setReceivedby("");
+				brd.setReceivedby(""); //Why blank?
 				brd.setInstructions(theform.getDelivery_comments());
 
+				String deliInfo="";
 				DeliverCompany dc = BDOUtils.getDeliverCompany(theform.getDelivercompany_ID());
-				if (dc != null)
+				if (dc != null){
 					brd.setVendor(dc.getName());
+					deliInfo+=dc.getName()+", ";
+				}
 
 				StringBuilder charges = new StringBuilder("");
 				if (theform.getCurrency() != null) {
 					charges.append(theform.getCurrency());
+					
 				}
 				
 				if (theform.getCost() != null) {
@@ -134,15 +162,25 @@ public class BDOReceipt {
 				
 				try {
 					brd.setCharges(charges.toString());
+					deliInfo+=charges.toString()+"\r";
 				} catch (Exception e) {
 					brd.setCharges("");
+					deliInfo+="\r";
 				}
 				al.add(brd);
 				
+				deliInfo+=theform.getBagcount() + ",";
+
+				if (sb2.length() > 0){
+					deliInfo+=sb2.toString().substring(0, sb2.toString().length() - 1)+", ";
+				}
 				Deliver_ServiceLevel sl = DelivercompanyBMO.getServiceLevel(theform.getServicelevel_ID());
 				if (sl != null && sl.getDescription() != null) 
 					brd.setServiceLevel(sl.getDescription());	
+				deliInfo+=sl.getDescription();
+				brd.setDeliveryinfo(deliInfo); //Add this too
 				
+						
 			}
 
 			ReportBMO rbmo = new ReportBMO(request);

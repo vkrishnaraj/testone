@@ -8,6 +8,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 
 
@@ -20,6 +21,32 @@
 	var cal1xx = new CalendarPopup();	
 
 	
+	/*function textCounter2(field, countfield, maxlimit) {
+	    if (field.value.length > maxlimit) {
+	      field.value = field.value.substring(0, maxlimit);
+	    } else {
+	      countfield.value = maxlimit - field.value.length;
+	    }
+	  }*/
+	  
+		function insertNewLine2(elementId) {
+			if (window.event && window.event.keyCode == 13) {
+				insertAtCursor(elementId, '\n');
+				window.event.keyCode = 505;
+			}
+	  	}
+	  
+	  function insertAtCursor(myField, myValue) {
+			if (document.selection) {
+				myField.focus();
+				sel = document.selection.createRange();
+				sel.text = myValue;
+				sel.collapse(false);
+				sel.select();
+			} else {
+				myField.value += myValue;
+			}
+		}
 
 	
 
@@ -351,6 +378,16 @@
   						<html:option value="9">9</html:option>
   						<html:option value="10">10</html:option>
   					</html:select>
+	          	</td>
+	          </tr>
+          <% } %>
+           <% if (request.getAttribute("lostdelay") != null && !(i.intValue() > 0) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_DELIVERY_INSTRUCTIONS)) { %> 
+        
+	          <tr>
+	          	<td colspan=5>
+	          		<bean:message key="colname.delivery.instructions" />:<br/>
+	          		 <html:textarea styleId="delInstruct" name="incidentForm" property="deliveryInstructions.instructions" cols="80" rows="5" onkeydown="textCounter2(delInstruct, delInstructCounter, 250);insertNewLine2(delInstruct);" onkeyup="textCounter2(delInstruct, delInstructCounter, 250);"/>
+	          		 <input name="delInstruct2" id="delInstructCounter" type="text" value="250" size="4" maxlength="4" disabled="true" />
 	          	</td>
 	          </tr>
           <% } %>

@@ -46,6 +46,7 @@ import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Deliver_ServiceLevel;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_BDO;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -203,9 +204,13 @@ public class BDOUtils {
 			if (theform.getItemlist().size() <= 1) {
 				theform.setChoosebags(0);
 			}
+			
+			// get special directions from incident
+			if(iDTO.getDeliveryInstructions()!=null){
+				theform.setDelivery_comments(iDTO.getDeliveryInstructions().getInstructions());
+			}
 
 		}
-
 		List list = new ArrayList(BDOUtils.getDeliveryCompanies(theform.getStation().getStation_ID()));
 		if (list != null)
 			request.setAttribute("delivercompanies", list);

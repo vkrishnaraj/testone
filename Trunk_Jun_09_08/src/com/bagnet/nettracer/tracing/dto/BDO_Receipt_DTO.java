@@ -38,6 +38,8 @@ public class BDO_Receipt_DTO {
 	private String instructions;
 	private String refNum;
 	private String serviceLevel;
+	private String customerinfo;
+	private String deliveryinfo;
 
 	public String getServiceLevel() {
 		return serviceLevel;
@@ -315,6 +317,36 @@ public class BDO_Receipt_DTO {
 	 */
 	public void setInstructions(String instructions) {
 		this.instructions = instructions;
+	}
+
+	/**
+	 * @return the customerinfo
+	 */
+	public String getCustomerinfo() {
+		return customerinfo;
+	}
+
+	/**
+	 * @param customerinfo
+	 *          the customerinfo to set
+	 */
+	public void setCustomerinfo(String customerinfo) {
+		this.customerinfo = customerinfo;
+	}
+	
+	/**
+	 * @return the deliveryinfo
+	 */
+	public String getDeliveryinfo() {
+		return deliveryinfo;
+	}
+
+	/**
+	 * @param deliveryinfo
+	 *          the deliveryinfo to set
+	 */
+	public void setDeliveryinfo(String deliveryinfo) {
+		this.deliveryinfo = deliveryinfo;
 	}
 
 	public String getRefNum() {

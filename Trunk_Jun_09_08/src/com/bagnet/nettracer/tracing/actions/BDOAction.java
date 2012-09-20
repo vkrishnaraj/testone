@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.jms.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,18 +25,24 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
+import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.ExpenseType;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.history.BDOHistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
+import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -199,6 +206,18 @@ public class BDOAction extends Action {
 					messages.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, messages);
 					return (mapping.findForward(TracingConstants.BDO_MAIN));
+				} else if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_DELIVERY_INSTRUCTIONS)) {
+					Incident inc=IncidentBMO.getIncidentByID(incident,null);
+					DeliveryInstructions DI=new DeliveryInstructions();
+					if(inc.getDeliveryInstructions()!=null)
+						DI=inc.getDeliveryInstructions();
+					DI.setInstructions(bdo.getDelivery_comments());
+					HibernateUtils.save(DI);
+					if(inc.getDeliveryInstructions()==null){
+						inc.setDeliveryInstructions(DI);
+					}
+					IncidentBMO iBMO = new IncidentBMO();
+					iBMO.saveAndAuditIncident(inc, user,null);
 				}
 				//Create BDO
 				BDOHistoryObject BHO=new BDOHistoryObject();

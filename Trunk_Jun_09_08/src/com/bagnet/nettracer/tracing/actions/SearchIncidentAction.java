@@ -29,6 +29,7 @@ import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.wtq.WtqAmendAhl;
@@ -44,6 +45,7 @@ import com.bagnet.nettracer.tracing.history.HistoryContainer;
 import com.bagnet.nettracer.tracing.history.IncidentHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
+import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -334,6 +336,13 @@ public class SearchIncidentAction extends Action {
 					if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
 						theform.setAllow_remark_update(1);
 					request.setAttribute("lostdelay", "1");
+					if(inc.getDeliveryInstructions()==null)
+					{
+						DeliveryInstructions DI=new DeliveryInstructions();
+						DI.setInstructions("");
+						HibernateUtils.saveNew(DI);
+						theform.setDeliveryInstructions(DI);
+					}
 					WtqIncidentAction pendingAction = WorldTracerQueueUtils.findPendingIncidentAction(incident);
 					if(pendingAction != null) {
 						if(pendingAction instanceof WtqCreateAhl) {

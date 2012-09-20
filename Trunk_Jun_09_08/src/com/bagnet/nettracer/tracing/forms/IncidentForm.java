@@ -20,6 +20,7 @@ import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.CrmFile;
+import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -215,6 +216,8 @@ public final class IncidentForm extends ValidatorForm {
 		this.wtFile = wtFile;
 	}
 	private List<Passenger> passengerlist = new ArrayList<Passenger>();
+	
+	private DeliveryInstructions deliveryInstructions;
 	// addresses
 	//private List addresses = new ArrayList();
 	//remark table
@@ -342,6 +345,14 @@ public final class IncidentForm extends ValidatorForm {
 	 * ************** beginning of the custom code *************
 	 */
 
+	public DeliveryInstructions getDeliveryInstructions(){
+		return deliveryInstructions;
+	}
+	
+	public void setDeliveryInstructions(DeliveryInstructions deliveryInstructions){
+		this.deliveryInstructions=deliveryInstructions;
+	}
+	
 	public List<Passenger> getPassengerlist() {
 		return passengerlist;
 	}

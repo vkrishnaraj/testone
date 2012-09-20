@@ -125,6 +125,7 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Rule.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/Property.hbm.xml"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.Comment"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.DeliveryInstructions"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.salvage.Salvage"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageBox"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.salvage.SalvageItem"/>

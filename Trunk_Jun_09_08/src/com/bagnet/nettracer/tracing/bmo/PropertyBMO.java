@@ -120,6 +120,8 @@ public class PropertyBMO {
 	
 	public static final String PROPERTY_SHARES_THREAD_COUNT = "shares.thread.count";
 	public static final String PROPERTY_SHARES_MAX_THREAD_COUNT = "shares.max.thread.count";
+	
+	public static final String PROPERTY_DELIVERY_INSTRUCTIONS ="bdo.delivery.instructions";
 
 	public static final String LF_TRACING_WEIGHT_SERIAL = "lf.tracing.weight.serial";
 	public static final String LF_TRACING_WEIGHT_NAME = "lf.tracing.weight.name";

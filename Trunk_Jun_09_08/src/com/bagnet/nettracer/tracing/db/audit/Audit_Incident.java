@@ -14,8 +14,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -70,6 +74,8 @@ public class Audit_Incident implements Serializable {
 	private long oc_claim_id;
 
 	private Set claimchecks;
+	
+	private String instructions;
 
 	private ArrayList itinerary_list; // for displaying to the search incident
 	// page
@@ -141,6 +147,22 @@ public class Audit_Incident implements Serializable {
 	private Double overall_weight;
 	private String overall_weight_unit;
 	
+	/**
+	 * @return Returns the instructions associated with this incident.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getInstructions() {
+		return instructions;
+	}
+
+	/**
+	 * @param instructions
+	 *          The instructions to set.
+	 */
+	public void setInstructions(String instructions) {
+		this.instructions = instructions;
+	}
 	
 	/**
 	 * @return Returns the language.
