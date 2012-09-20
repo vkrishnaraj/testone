@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BDO_Receipt" pageWidth="612" pageHeight="792" columnWidth="552" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.zoom" value="0.8264462809917361"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="479"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -84,32 +84,25 @@
 			<elementGroup/>
 			<elementGroup/>
 			<frame>
-				<reportElement positionType="Float" mode="Transparent" x="15" y="0" width="523" height="221"/>
+				<reportElement positionType="Float" mode="Transparent" x="15" y="0" width="523" height="201"/>
 			</frame>
 			<textField>
-				<reportElement mode="Transparent" x="75" y="35" width="395" height="186"/>
+				<reportElement mode="Transparent" x="75" y="35" width="395" height="166"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customerinfo}]]></textFieldExpression>
 			</textField>
 			<frame>
-				<reportElement mode="Transparent" x="15" y="238" width="523" height="133"/>
+				<reportElement mode="Transparent" x="15" y="232" width="523" height="119"/>
 			</frame>
 			<frame>
-				<reportElement mode="Transparent" x="15" y="371" width="154" height="150"/>
+				<reportElement mode="Transparent" x="15" y="351" width="154" height="170"/>
 			</frame>
 			<frame>
-				<reportElement mode="Transparent" x="169" y="371" width="369" height="150"/>
-				<staticText>
-					<reportElement mode="Transparent" x="0" y="0" width="369" height="29"/>
-					<textElement textAlignment="Center">
-						<font size="20"/>
-					</textElement>
-					<text><![CDATA[Special Delivery Instructions]]></text>
-				</staticText>
+				<reportElement mode="Transparent" x="169" y="380" width="369" height="141"/>
 				<textField>
-					<reportElement mode="Transparent" x="0" y="29" width="369" height="121"/>
+					<reportElement mode="Transparent" x="0" y="0" width="369" height="141"/>
 					<textElement>
 						<font size="14"/>
 					</textElement>
@@ -117,28 +110,28 @@
 				</textField>
 			</frame>
 			<staticText>
-				<reportElement mode="Transparent" x="15" y="221" width="523" height="31"/>
+				<reportElement mode="Transparent" x="15" y="201" width="523" height="31"/>
 				<textElement textAlignment="Center">
 					<font size="20"/>
 				</textElement>
 				<text><![CDATA[Delivery Information]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="75" y="252" width="395" height="119"/>
+				<reportElement mode="Transparent" x="75" y="232" width="395" height="119"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{deliveryinfo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="15" y="371" width="154" height="29"/>
+				<reportElement mode="Transparent" x="15" y="351" width="154" height="29"/>
 				<textElement textAlignment="Center">
 					<font size="20"/>
 				</textElement>
 				<text><![CDATA[Bag Tag #s]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="15" y="400" width="154" height="121"/>
+				<reportElement mode="Transparent" x="15" y="380" width="154" height="141"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
@@ -156,6 +149,13 @@
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{receivedby}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="169" y="351" width="369" height="29"/>
+				<textElement textAlignment="Center">
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[Special Delivery Instructions]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>

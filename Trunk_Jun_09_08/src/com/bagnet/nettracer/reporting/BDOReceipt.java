@@ -140,7 +140,7 @@ public class BDOReceipt {
 				brd.setAgent(theform.getAgent().getUsername());
 				brd.setDate1(theform.getDispcreatetime());
 				brd.setDate2(theform.getDispdeliverydate());
-				brd.setReceivedby(""); //Why blank?
+				brd.setReceivedby("Received by: "); //Why blank?
 				brd.setInstructions(theform.getDelivery_comments());
 
 				String deliInfo="";
