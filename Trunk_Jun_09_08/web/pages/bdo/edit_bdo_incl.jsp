@@ -52,9 +52,9 @@ function toggledc(o) {
     	}
     }
     
-    function populateClaimNum(){
-    	var first = document.getElementById('bagtagSelect'),
-        second = document.getElementById('bagtagId');
+    function populateClaimNum(second,first){
+    	//var first = document.getElementById('bagtagSelect'),
+        //second = document.getElementById('bagtagId');
 
     	second.value = first.value;
     }
@@ -259,8 +259,8 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
             <td colspan="5">
               <bean:message key="colname.delivery.remarks" />
               <br />
-              <html:textarea rows="10" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,250);" onkeyup="textCounter3(this,textCounter2, 250);"/>
-              <input name="textCounter2" type="text" value="250" size="4" maxlength="4" disabled="true" />
+              <html:textarea rows="7" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,500);" onkeyup="textCounter3(this,textCounter2, 500);"/>
+              <input name="textCounter2" type="text" value="500" size="4" maxlength="4" disabled="true" />
             </td>
           </tr>
         </table>
@@ -739,8 +739,8 @@ if (i.intValue() == 0) {
             <td valign=top>
               <bean:message key="colname.claimnum" />
               <br>
-              <html:text name="theitem" property="claimchecknum" size="25" styleId="bagtagId" styleClass="textfield" indexed="true"/>
-              <select styleClass="dropdown" id="bagtagSelect" onchange="populateClaimNum(); mapSimpleData(this.options.selectedIndex, items, itemArr); ">
+              <html:text name="theitem" property="claimchecknum" size="25" styleId="<%="bagtagId"+i %>" styleClass="textfield" indexed="true"/>
+              <select styleClass="dropdown" id="bagtagSelect<%=i %>" onchange="populateClaimNum(bagtagId<%=i %>,bagtagSelect<%=i %>); mapSimpleData(this.options.selectedIndex, items, itemArr); ">
 				<option value=""><bean:message key="pick.a.bag" /></option>
 				<logic:iterate id="item" name="BDOForm"  property="incident.claimchecks" indexId="i" type="com.bagnet.nettracer.tracing.db.Incident_Claimcheck">
 					<%

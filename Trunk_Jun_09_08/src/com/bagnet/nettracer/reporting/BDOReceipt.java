@@ -76,25 +76,16 @@ public class BDOReceipt {
 				String phno = pa.getHomephone();
 				if (phno == null || phno.length() == 0)
 					phno = pa.getMobile();
-				String CustInfo="Name: "+(pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : "")+", Reference Number: "+theform.getIncident_ID()+"\rAddress: "+
-						pa.getAddress1()+"\r";
-				if(pa.getAddress2()!=null && pa.getAddress2().length()>0){
-					CustInfo+=pa.getAddress2()+". ";
-				}
-				if(pa.getCity()!=null && pa.getCity().length()>0) {
-					CustInfo+=pa.getCity()+", ";
-				}
+				String CustInfo="Reference Number: "+theform.getIncident_ID()+"\rCustomer Address:\r  "+(pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : "")+"\r  "+
+						pa.getAddress1()+" "+pa.getAddress2()+"\r  "+pa.getCity()+", ";
+				
 				if(pa.getState_ID()!=null && pa.getState_ID().length()>0) {
-					CustInfo+=pa.getState_ID();
+					CustInfo+=pa.getState_ID()+", ";
 				}
-				if(pa.getZip()!=null && pa.getZip().length()>0) {
-					CustInfo+=", "+pa.getZip();
-				}
-				CustInfo+="\r";
+				CustInfo+=pa.getZip()+"\r\r";
 				CustInfo+="Phone Number: "+phno+"\r";
 				CustInfo+="Hotel: "+pa.getHotel(); 
-				if(pa.getHotelphone()!=null && pa.getHotelphone().length()>0)
-					CustInfo+=", Hotel Phone Number: "+pa.getHotelphone();
+				CustInfo+="\rHotel Phone Number: "+pa.getHotelphone();
 				
 				brd.setCustomerinfo(CustInfo);
 				
@@ -110,32 +101,41 @@ public class BDOReceipt {
 
 				brd.setPhone(phno);
 
-				brd.setNumbags(theform.getBagcount() + "");
+				brd.setNumbags("No. of Bags: "+theform.getBagcount() + "");
 
+				String deliInfo="";
+
+				String bagInfo="";
+				bagInfo+="No. of Bags: "+theform.getBagcount() + "\r";
 				StringBuffer sb = new StringBuffer();
 				StringBuffer sb2 = new StringBuffer();
 				for (int i = 0; i < theform.getItemlist().size(); i++) {
+					bagInfo+="Bag #"+(i+1)+":\r";
 					if (((Item) theform.getItemlist().get(i)).getClaimchecknum() != null
 							&& ((Item) theform.getItemlist().get(i)).getClaimchecknum().length() > 0) {
+						bagInfo+=((Item) theform.getItemlist().get(i)).getClaimchecknum().trim()+"\r";
 						sb.append(((Item) theform.getItemlist().get(i)).getClaimchecknum().trim());
 						sb.append("\r");
 					}
 					if (((Item) theform.getItemlist().get(i)).getColor() != null) {
+						bagInfo+=((Item) theform.getItemlist().get(i)).getColor()+" ";
 						sb2.append(((Item) theform.getItemlist().get(i)).getColor());
 						sb2.append(" ");
 					}
 					if (((Item) theform.getItemlist().get(i)).getBagtype() != null) {
+						bagInfo+=((Item) theform.getItemlist().get(i)).getBagtype();
 						sb2.append(((Item) theform.getItemlist().get(i)).getBagtype());
 						sb2.append(", ");
 					}
+					bagInfo+="\r";
 				}
-				if (sb.length() > 0)
-					brd.setBagtag(sb.toString().substring(0, sb.toString().length() - 1));
-				else
-					brd.setBagtag("");
+//				if (sb.length() > 0)
+//					brd.setBagtag(sb.toString().substring(0, sb.toString().length() - 1));
+//				else
+//					brd.setBagtag("");
 				if (sb2.length() > 0)
 					brd.setDescription(sb2.toString().substring(0, sb2.toString().length() - 1));
-
+				brd.setBagtag(bagInfo);
 				brd.setRemarks("");
 				brd.setAgent(theform.getAgent().getUsername());
 				brd.setDate1(theform.getDispcreatetime());
@@ -143,7 +143,6 @@ public class BDOReceipt {
 				brd.setReceivedby("Received by: "); //Why blank?
 				brd.setInstructions(theform.getDelivery_comments());
 
-				String deliInfo="";
 				DeliverCompany dc = BDOUtils.getDeliverCompany(theform.getDelivercompany_ID());
 				if (dc != null){
 					brd.setVendor(dc.getName());
@@ -169,15 +168,11 @@ public class BDOReceipt {
 				}
 				al.add(brd);
 				
-				deliInfo+=theform.getBagcount() + ",";
-
-				if (sb2.length() > 0){
-					deliInfo+=sb2.toString().substring(0, sb2.toString().length() - 1)+", ";
-				}
 				Deliver_ServiceLevel sl = DelivercompanyBMO.getServiceLevel(theform.getServicelevel_ID());
 				if (sl != null && sl.getDescription() != null) 
 					brd.setServiceLevel(sl.getDescription());	
-				deliInfo+=sl.getDescription();
+				deliInfo+="Service Level: "+sl.getDescription();
+				deliInfo+="\r\rDelivery Instructions: "+theform.getDelivery_comments();
 				brd.setDeliveryinfo(deliInfo); //Add this too
 				
 						

@@ -40,19 +40,6 @@
 	</title>
 	<pageHeader>
 		<band height="97">
-			<staticText>
-				<reportElement key="staticText-25" mode="Transparent" x="15" y="28" width="103" height="40"/>
-				<box>
-					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
-				</box>
-				<textElement/>
-				<text><![CDATA[FORM # 008
-             MADE IN
-               U.S.A.]]></text>
-			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement key="textField-18" mode="Transparent" x="15" y="11" width="154" height="15"/>
 				<box>
@@ -94,44 +81,34 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customerinfo}]]></textFieldExpression>
 			</textField>
 			<frame>
-				<reportElement mode="Transparent" x="15" y="232" width="523" height="119"/>
+				<reportElement mode="Transparent" x="201" y="232" width="337" height="289"/>
 			</frame>
 			<frame>
-				<reportElement mode="Transparent" x="15" y="351" width="154" height="170"/>
-			</frame>
-			<frame>
-				<reportElement mode="Transparent" x="169" y="380" width="369" height="141"/>
-				<textField>
-					<reportElement mode="Transparent" x="0" y="0" width="369" height="141"/>
-					<textElement>
-						<font size="14"/>
-					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$F{instructions}]]></textFieldExpression>
-				</textField>
+				<reportElement mode="Transparent" x="15" y="201" width="175" height="320"/>
 			</frame>
 			<staticText>
-				<reportElement mode="Transparent" x="15" y="201" width="523" height="31"/>
+				<reportElement mode="Transparent" x="201" y="201" width="337" height="31"/>
 				<textElement textAlignment="Center">
-					<font size="20"/>
+					<font size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Delivery Information]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="75" y="232" width="395" height="119"/>
+				<reportElement mode="Transparent" x="201" y="232" width="337" height="277"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{deliveryinfo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="15" y="351" width="154" height="29"/>
+				<reportElement mode="Transparent" x="15" y="203" width="186" height="29"/>
 				<textElement textAlignment="Center">
-					<font size="20"/>
+					<font size="20" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Bag Tag #s]]></text>
+				<text><![CDATA[Bag Information]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="15" y="380" width="154" height="141"/>
+				<reportElement mode="Transparent" x="15" y="230" width="186" height="291"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
@@ -140,7 +117,7 @@
 			<staticText>
 				<reportElement mode="Transparent" x="15" y="0" width="523" height="35"/>
 				<textElement textAlignment="Center">
-					<font size="20"/>
+					<font size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Customer Information]]></text>
 			</staticText>
@@ -149,13 +126,6 @@
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{receivedby}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement mode="Transparent" x="169" y="351" width="369" height="29"/>
-				<textElement textAlignment="Center">
-					<font size="20"/>
-				</textElement>
-				<text><![CDATA[Special Delivery Instructions]]></text>
-			</staticText>
 		</band>
 	</detail>
 	<columnFooter>

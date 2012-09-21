@@ -386,8 +386,8 @@
 	          <tr>
 	          	<td colspan=5>
 	          		<bean:message key="colname.delivery.instructions" />:<br/>
-	          		 <html:textarea styleId="delInstruct" name="incidentForm" property="deliveryInstructions.instructions" cols="80" rows="5" onkeydown="textCounter2(delInstruct, delInstructCounter, 250);insertNewLine2(delInstruct);" onkeyup="textCounter2(delInstruct, delInstructCounter, 250);"/>
-	          		 <input name="delInstruct2" id="delInstructCounter" type="text" value="250" size="4" maxlength="4" disabled="true" />
+	          		 <html:textarea styleId="delInstruct" name="incidentForm" property="deliveryInstructions.instructions" cols="80" rows="5" onkeydown="textCounter2(delInstruct, delInstructCounter, 500);insertNewLine2(delInstruct);" onkeyup="textCounter2(delInstruct, delInstructCounter, 500);"/>
+	          		 <input name="delInstruct2" id="delInstructCounter" type="text" value="500" size="4" maxlength="4" disabled="true" />
 	          	</td>
 	          </tr>
           <% } %>
