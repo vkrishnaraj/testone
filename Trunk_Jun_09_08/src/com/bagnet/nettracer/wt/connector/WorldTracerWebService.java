@@ -1609,6 +1609,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			claimChecks.add(cl);
 		}
 		a.setClaimCheck(claimChecks.toArray(new ClaimCheck[claimChecks.size()]));
+		a.setTracingFinalized(i.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_FINAL);
 	}
 
 

@@ -126,6 +126,17 @@ public class Incident implements Serializable {
 	
 	private String revenueCode;
 	
+	private int tracingStatus;
+
+	@Column(name="tracing_status_id")
+	public int getTracingStatus() {
+		return tracingStatus;
+	}
+	
+	public void setTracingStatus(int tracingStatus) {
+		this.tracingStatus = tracingStatus;
+	}
+	
 	@Column(name="revenue_code", length=4)
 	public String getRevenueCode() {
 		return revenueCode;

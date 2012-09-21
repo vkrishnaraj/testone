@@ -678,6 +678,9 @@
                     <c:if test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
 			<html:hidden property="amendWT" value="" disabled="true" />
                       <html:button styleId="wtbutton" property="amendWTButton"
+                      <% if (myform.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
+                      disabled=true
+                      <% } %>
 			      onclick="disableButtons(); if( validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false) {this.form.amendWT.disabled = false; this.form.submit();} else {enableButtons(); this.form.amendWT.disabled = true; return false;}">
                         <bean:message key="button.amendWT" />
                       </html:button>

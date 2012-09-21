@@ -206,6 +206,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES = "Limited Loss Codes";
 	public static final String SYSTEM_COMPONENT_NAME_GET_NEXT = "Get Next Dispute";
 	
+	public static final String SYSTEM_COMPONENT_NAME_EDIT_TRACING_STATUS = "Edit Tracing Status";
+	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
 	public final static int AJAX_STATUS_OHD = 2;
@@ -1093,6 +1095,9 @@ public class TracingConstants {
 	
 	public static final int STATUS_TABLE_ID_FS = 7;
 	
+	public static final int INCIDENT_TRACING_STATUS_DEFAULT = 0;
+	public static final int INCIDENT_TRACING_STATUS_TRACING = 1;
+	public static final int INCIDENT_TRACING_STATUS_FINAL = 2;
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

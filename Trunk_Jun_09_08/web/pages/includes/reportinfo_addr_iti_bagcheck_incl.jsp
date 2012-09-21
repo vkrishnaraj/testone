@@ -200,7 +200,7 @@
 					<br />
 					<c:choose>
 						<c:when test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
-							<% if (UserPermissions.hasPermission("WorldTracer SUS/RIT", a)) { %>
+							<% if (UserPermissions.hasPermission("WorldTracer SUS/RIT", a) && myform.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
 							<a
 								href="javascript: document.forms[0].wtq_suspend.value = '1'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message
 									key="wt.ahl.suspend" /></a>
@@ -266,6 +266,24 @@
 					key="colname.stationcreated_nobr" /> <br> <html:text
 					property="stationcreatedcode" size="4" styleClass="textfield"
 					disabled="true" /></td>
+<% 			if (report_type == 1 && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_TRACING_STATUS, a)) {
+%>
+			<td nowrap="nowrap"><bean:message
+					key="colname.tracing_status" /> <br> 
+					<html:select property="tracingStatus" styleClass="dropdown" >
+						<html:option value="<%=TracingConstants.INCIDENT_TRACING_STATUS_DEFAULT %>">
+							<bean:message key="option.tracing_status.default" />
+						</html:option>
+						<html:option value="<%=TracingConstants.INCIDENT_TRACING_STATUS_TRACING %>">
+							<bean:message key="option.tracing_status.tracing" />
+						</html:option>
+						<html:option value="<%=TracingConstants.INCIDENT_TRACING_STATUS_FINAL %>">
+							<bean:message key="option.tracing_status.final" />
+						</html:option>
+					</html:select>
+			</td>
+<%          } 
+%>
 			<logic:notEmpty name="incidentForm" property="status">
 				<logic:equal name="incidentForm" property="status.status_ID"
 					value='<%= String.valueOf(TracingConstants.MBR_STATUS_CLOSED) %>'>

@@ -101,6 +101,16 @@ public final class IncidentForm extends ValidatorForm {
 	private long oc_claim_id;
 	
 	private String revenueCode;
+	
+	private int tracingStatus;
+
+	public int getTracingStatus() {
+		return tracingStatus;
+	}
+	
+	public void setTracingStatus(int tracingStatus) {
+		this.tracingStatus = tracingStatus;
+	}
 
 	
 	public String getRevenueCode() {

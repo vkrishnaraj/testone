@@ -31,7 +31,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 public abstract class WorldTracerQueue implements Serializable{
 	
 	//stored in db as string, max length of 20 chars
-	public static enum WtqStatus {PENDING, SUCCESS, FAIL, REPLACED, CANCELED}
+	public static enum WtqStatus {PENDING, SUCCESS, FAIL, REPLACED, CANCELED, LOCKED}
 	
 	private long wt_queue_id;
 

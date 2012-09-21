@@ -14,9 +14,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
@@ -96,6 +93,21 @@ public class Audit_Incident implements Serializable {
 	private boolean locked = false;	//for dispute resolution process
 	
 	private String revenueCode;
+	
+	private int tracingStatus;
+
+	/**
+	 * @return Returns the tracingStatus.
+	 * 
+	 * @hibernate.property column="tracing_status_id" type="int"
+	 */
+	public int getTracingStatus() {
+		return tracingStatus;
+	}
+	
+	public void setTracingStatus(int tracingStatus) {
+		this.tracingStatus = tracingStatus;
+	}
 	
 	/**
 	 * @hibernate.property column="revenue_code" type="string"

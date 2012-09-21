@@ -223,7 +223,10 @@
 
                   &nbsp;
                   
-                  <html:submit property="doclose" styleId="button" onclick="doCheck = 1;">
+                  <html:submit property="doclose" styleId="button" onclick="doCheck = 1;"
+                      <% if (((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
+                      disabled=true
+                      <% } %>>
                     <bean:message key="button.closereport" />
                   </html:submit>
                   </logic:notEqual>
@@ -235,7 +238,10 @@
                 		   if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_INCIDENT, a)){
                   %>
                   
-                    <html:submit property="doclosewt" styleId="wtbutton">
+                    <html:submit property="doclosewt" styleId="wtbutton"
+                      <% if (((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
+                      disabled=true
+                      <% } %>>
                       <bean:message key="button.closetoWT" />
                     </html:submit>
                   <%
