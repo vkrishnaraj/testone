@@ -98,6 +98,7 @@ import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupAmendType;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagType;
 import aero.sita.www.bag.wtr._2009._01.DelayedClaimAmendType;
+import aero.sita.www.bag.wtr._2009._01.DelayedClaimAmendType.TracingFinalized;
 import aero.sita.www.bag.wtr._2009._01.DelayedClaimType;
 import aero.sita.www.bag.wtr._2009._01.FlightDateOrARNKType;
 import aero.sita.www.bag.wtr._2009._01.FlightDateType;
@@ -160,7 +161,6 @@ import aero.sita.www.bag.wtr._2009._01.WTRAddressType;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupAmendType.DelayedBags.DelayedBag;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType.BaggageItinerary;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType.DelayedBags;
-import aero.sita.www.bag.wtr._2009._01.OnHandBagType.BagAddress;
 import aero.sita.www.bag.wtr._2009._01.OnHandBagType.Itinerary.Routes;
 import aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Initials.Intial;
 import aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Names.Name;
@@ -212,6 +212,7 @@ import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRSDocument.WTRInboxMes
 import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRSDocument.WTRInboxMessageReadRS.Messages.Message;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ.OnhandBags;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ.QuickOnhandBags;
+import aero.sita.www.bag.wtr._2009._01.impl.DelayedClaimAmendTypeImpl.TracingFinalizedImpl;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
 
 public class WorldTracerServiceImpl implements WorldTracerService {
@@ -307,16 +308,12 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 			.replaceAll("\\s+", " ");
 			ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(s, MAX_CONTENT_DESC_LENGTH);			
-//			for(int j = 0; j < al.size(); j++){
-//				if(al.get(j).length() > 0){
-//					m.put(key+j, al.get(j));
-//				}
-//			}
-			
-			if(al.get(0).length() > 0){
-				m.put(key, al.get(0));
+			for(int j = 0; j < al.size() || j <= 1; j++){
+				if(al.get(j).length() > 0){
+					m.put(key+j, al.get(j));
+				}
 			}
-			//m.remove(key);
+			m.remove(key);
 		}
 		return m;
 	}
@@ -1538,7 +1535,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.AB);
 			if (fieldList != null && fieldList.size() > 0) {
-				BagAddress ba = d2.addNewBagAddress();
+				WTRAddressType ba = d2.addNewBagAddress();
 				for (int i = 0; i < fieldList.size() && i < 2; i++) {
 					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
 					ba.addAddressLine(address);
@@ -1586,8 +1583,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						c2 = d2.addNewBagContents();
 					}
 					ContentType c = c2.addNewContent();
-//					c.setCategory(key.substring(0, key.length()-1));
-					c.setCategory(key);
+					c.setCategory(key.substring(0, key.length()-1));
+//					c.setCategory(key);
 					c.setDescription(cm.get(key));
 				}
 				
@@ -1994,8 +1991,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 									cx = t3.addNewBagContents();
 								}
 								ContentType c = cx.addNewContent();
-//								c.setCategory(key.substring(0, key.length()-1));
-								c.setCategory(key);
+								c.setCategory(key.substring(0, key.length()-1));
+//								c.setCategory(key);
 								c.setDescription(cm.get(key));
 							}
 //							for (Content content:cList){
@@ -3528,7 +3525,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.AB);
 			if (fieldList != null && fieldList.size() > 0) {
-				aero.sita.www.bag.wtr._2009._01.OnHandBagAmendType.BagAddress ba = d2.addNewBagAddress();
+				WTRAddressAmendType ba = d2.addNewBagAddress();
 				for (int i = 0; i < fieldList.size() && i < 2; i++) {
 					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
 					StringLength0To58AmendType bad = ba.addNewAddressLine();
@@ -3588,9 +3585,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						c2 = d2.addNewBagContents();
 					}
 					ContentType c = c2.addNewContent();
-//					c.setCategory(key.substring(0, key.length()-1));
-					c.setCategory(key);
+					c.setCategory(key.substring(0, key.length()-1));
+//					c.setCategory(key);
 					c.setDescription(cm.get(key));
+			
 				}
 //				for (Content content:cList){
 //					if(content.getDescription().trim().length() > 0 && content.getCategory().equals("UNKNOWN") == false){
@@ -3713,6 +3711,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				d2.addNewLossReasonCode().setIntValue(79);
 				d2.addNewLossComments().setStringValue("Created in error");
 			}
+			
+			if (incident.isTracingFinalized()) {
+				TracingFinalized tf = TracingFinalized.Factory.newInstance();
+				tf.setDateValue(new Date());
+				//tf.setPaperClaim(true);
+				d2.setTracingFinalized(tf);
+			}
 
 			if (incident.getFaultStation() != null) {
 				if (incident.getFaultStation() == null || incident.getFaultStation().trim().length() < 1) {
@@ -3830,26 +3835,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 									cx = t3.addNewBagContents();
 								}
 								ContentType c = cx.addNewContent();
-//								c.setCategory(key.substring(0, key.length()-1));
-								c.setCategory(key);
+								c.setCategory(key.substring(0, key.length()-1));
+//								c.setCategory(key);
 								c.setDescription(cm.get(key));
 							}
-							
-//							for (Content content:cList){
-//								String desc = content.getDescription()
-//								.trim()
-//								.toUpperCase()
-//								.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
-//								.replaceAll("\\s+", " ");
-//								ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(desc, MAX_CONTENT_DESC_LENGTH);
-//								for(int j = 0; j < al.size() && j < MAX_CONTENT_SPLIT; j++){
-//									if(al.get(j).length() > 0){
-//										ContentType c = cx.addNewContent();
-//										c.setCategory(content.getCategory());
-//										c.setDescription(al.get(j));
-//									}
-//								}
-//							}
 						}
 					} else {
 						throw new WorldTracerConnectionException("Bag/Item mismatch");

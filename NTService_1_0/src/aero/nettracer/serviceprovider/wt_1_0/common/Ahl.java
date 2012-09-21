@@ -20,6 +20,7 @@ public class Ahl {
 	private String faultReasonDescription;
 	private String faultStation;
 	private int faultReason;
+	private boolean tracingFinalized;
 
 	public String getFaultReasonDescription() {
 		return faultReasonDescription;
@@ -155,6 +156,14 @@ public class Ahl {
 
 	public void setExpenses(Expenses[] expenses) {
 		this.expenses = expenses;
+	}
+
+	public boolean isTracingFinalized() {
+		return tracingFinalized;
+	}
+
+	public void setTracingFinalized(boolean tracingFinalized) {
+		this.tracingFinalized = tracingFinalized;
 	}
 
 }

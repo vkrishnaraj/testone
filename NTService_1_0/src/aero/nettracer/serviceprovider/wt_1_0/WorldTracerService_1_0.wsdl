@@ -143,6 +143,7 @@
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="paxItinerary" nillable="true" type="ax23:Itinerary"/>
                     <xs:element minOccurs="0" name="pnrLocator" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tracingFinalized" type="xs:boolean"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Expenses">
