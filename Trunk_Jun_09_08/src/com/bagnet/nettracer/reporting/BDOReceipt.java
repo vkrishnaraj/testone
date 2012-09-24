@@ -106,24 +106,24 @@ public class BDOReceipt {
 				String deliInfo="";
 
 				String bagInfo="";
-				bagInfo+="No. of Bags: "+theform.getBagcount() + "\r";
+				bagInfo+="No. of Bags: "+theform.getBagcount() + "\r\r";
 				StringBuffer sb = new StringBuffer();
 				StringBuffer sb2 = new StringBuffer();
 				for (int i = 0; i < theform.getItemlist().size(); i++) {
-					bagInfo+="Bag #"+(i+1)+":\r";
+					bagInfo+="Bag #"+(i+1)+": ";
 					if (((Item) theform.getItemlist().get(i)).getClaimchecknum() != null
 							&& ((Item) theform.getItemlist().get(i)).getClaimchecknum().length() > 0) {
-						bagInfo+=((Item) theform.getItemlist().get(i)).getClaimchecknum().trim()+"\r";
+						bagInfo+="Bag Tag #: "+((Item) theform.getItemlist().get(i)).getClaimchecknum().trim()+", ";
 						sb.append(((Item) theform.getItemlist().get(i)).getClaimchecknum().trim());
 						sb.append("\r");
 					}
 					if (((Item) theform.getItemlist().get(i)).getColor() != null) {
-						bagInfo+=((Item) theform.getItemlist().get(i)).getColor()+" ";
+						bagInfo+="Color: "+((Item) theform.getItemlist().get(i)).getColor()+", ";
 						sb2.append(((Item) theform.getItemlist().get(i)).getColor());
 						sb2.append(" ");
 					}
 					if (((Item) theform.getItemlist().get(i)).getBagtype() != null) {
-						bagInfo+=((Item) theform.getItemlist().get(i)).getBagtype();
+						bagInfo+="Type: "+((Item) theform.getItemlist().get(i)).getBagtype();
 						sb2.append(((Item) theform.getItemlist().get(i)).getBagtype());
 						sb2.append(", ");
 					}
@@ -146,7 +146,7 @@ public class BDOReceipt {
 				DeliverCompany dc = BDOUtils.getDeliverCompany(theform.getDelivercompany_ID());
 				if (dc != null){
 					brd.setVendor(dc.getName());
-					deliInfo+=dc.getName()+", ";
+					deliInfo+="Delivery Company: "+dc.getName()+"\r";
 				}
 
 				StringBuilder charges = new StringBuilder("");
@@ -161,7 +161,7 @@ public class BDOReceipt {
 				
 				try {
 					brd.setCharges(charges.toString());
-					deliInfo+=charges.toString()+"\r";
+					deliInfo+="Charges: "+charges.toString()+"\r";
 				} catch (Exception e) {
 					brd.setCharges("");
 					deliInfo+="\r";
@@ -172,7 +172,6 @@ public class BDOReceipt {
 				if (sl != null && sl.getDescription() != null) 
 					brd.setServiceLevel(sl.getDescription());	
 				deliInfo+="Service Level: "+sl.getDescription();
-				deliInfo+="\r\rDelivery Instructions: "+theform.getDelivery_comments();
 				brd.setDeliveryinfo(deliInfo); //Add this too
 				
 						

@@ -259,8 +259,8 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
             <td colspan="5">
               <bean:message key="colname.delivery.remarks" />
               <br />
-              <html:textarea rows="7" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,500);" onkeyup="textCounter3(this,textCounter2, 500);"/>
-              <input name="textCounter2" type="text" value="500" size="4" maxlength="4" disabled="true" />
+              <html:textarea rows="7" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,325);" onkeyup="textCounter3(this,textCounter2, 325);"/>
+              <input name="textCounter2" type="text" value="325" size="4" maxlength="4" disabled="true" />
             </td>
           </tr>
         </table>

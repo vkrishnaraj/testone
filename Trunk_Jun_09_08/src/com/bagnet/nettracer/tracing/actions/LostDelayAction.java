@@ -49,6 +49,7 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -677,6 +678,14 @@ public class LostDelayAction extends CheckedAction {
 				return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));
 			}
 			
+
+			if(inc.getDeliveryInstructions()==null){
+				DeliveryInstructions DI=new DeliveryInstructions();
+				DI.setInstructions("");
+				HibernateUtils.saveNew(DI);
+				theform.setDeliveryInstructions(DI);
+			}
+			
 			session.setAttribute("incidentObj", inc);
 			
 			//wt  suspend or reinstate
@@ -757,6 +766,7 @@ public class LostDelayAction extends CheckedAction {
 				request.setAttribute("prepopulate",new Integer("1"));
 			}
 		}
+		
 		return (mapping.findForward(TracingConstants.LD_MAIN));
 	}
 
