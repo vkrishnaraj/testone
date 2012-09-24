@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="BDO_Receipt" pageWidth="612" pageHeight="792" columnWidth="552" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="0.8264462809917361"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="2.3579476910000046"/>
+	<property name="ireport.x" value="459"/>
+	<property name="ireport.y" value="1067"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -74,41 +74,44 @@
 				<reportElement positionType="Float" mode="Transparent" x="15" y="0" width="523" height="201"/>
 			</frame>
 			<textField>
-				<reportElement mode="Transparent" x="75" y="35" width="395" height="166"/>
+				<reportElement mode="Transparent" x="53" y="35" width="430" height="166"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customerinfo}]]></textFieldExpression>
 			</textField>
 			<frame>
-				<reportElement mode="Transparent" x="201" y="232" width="337" height="289"/>
+				<reportElement mode="Transparent" x="15" y="364" width="245" height="157"/>
 			</frame>
 			<frame>
-				<reportElement mode="Transparent" x="15" y="201" width="175" height="320"/>
+				<reportElement mode="Transparent" x="15" y="201" width="523" height="132"/>
+				<line>
+					<reportElement mode="Opaque" x="0" y="0" width="523" height="1"/>
+				</line>
 			</frame>
 			<staticText>
-				<reportElement mode="Transparent" x="201" y="201" width="337" height="31"/>
+				<reportElement mode="Transparent" x="15" y="333" width="245" height="31"/>
 				<textElement textAlignment="Center">
 					<font size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Delivery Information]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="201" y="232" width="337" height="277"/>
+				<reportElement mode="Transparent" x="15" y="364" width="245" height="157"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{deliveryinfo}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="15" y="203" width="186" height="29"/>
+				<reportElement mode="Transparent" x="15" y="201" width="523" height="29"/>
 				<textElement textAlignment="Center">
 					<font size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Bag Information]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="15" y="230" width="186" height="291"/>
+				<reportElement mode="Transparent" x="53" y="230" width="430" height="103"/>
 				<textElement>
 					<font size="14"/>
 				</textElement>
@@ -122,10 +125,33 @@
 				<text><![CDATA[Customer Information]]></text>
 			</staticText>
 			<textField>
-				<reportElement mode="Transparent" x="15" y="521" width="523" height="19"/>
+				<reportElement mode="Transparent" x="7" y="521" width="531" height="19"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{receivedby}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="260" y="333" width="278" height="31"/>
+				<textElement textAlignment="Center">
+					<font size="20" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Delivery Instructions]]></text>
+			</staticText>
+			<frame>
+				<reportElement mode="Transparent" x="261" y="364" width="277" height="157"/>
+			</frame>
+			<textField>
+				<reportElement mode="Transparent" x="271" y="364" width="267" height="157"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{instructions}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement mode="Opaque" x="15" y="333" width="523" height="1"/>
+			</line>
+			<line>
+				<reportElement mode="Opaque" x="260" y="334" width="1" height="187"/>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>

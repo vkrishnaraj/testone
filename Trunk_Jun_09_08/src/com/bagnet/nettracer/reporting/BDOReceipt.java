@@ -76,7 +76,7 @@ public class BDOReceipt {
 				String phno = pa.getHomephone();
 				if (phno == null || phno.length() == 0)
 					phno = pa.getMobile();
-				String CustInfo="Reference Number: "+theform.getIncident_ID()+"\rCustomer Address:\r  "+(pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : "")+"\r  "+
+				String CustInfo="Reference Number: "+theform.getIncident_ID()+"\rDelivery Address:\r  "+(pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : "")+"\r  "+
 						pa.getAddress1()+" "+pa.getAddress2()+"\r  "+pa.getCity()+", ";
 				
 				if(pa.getState_ID()!=null && pa.getState_ID().length()>0) {
@@ -101,24 +101,24 @@ public class BDOReceipt {
 
 				brd.setPhone(phno);
 
-				brd.setNumbags("No. of Bags: "+theform.getBagcount() + "");
+				brd.setNumbags("Number of Bags: "+theform.getBagcount() + "");
 
 				String deliInfo="";
 
 				String bagInfo="";
-				bagInfo+="No. of Bags: "+theform.getBagcount() + "\r\r";
+				bagInfo+="Number of Bags: "+theform.getBagcount() + "\r\r";
 				StringBuffer sb = new StringBuffer();
 				StringBuffer sb2 = new StringBuffer();
 				for (int i = 0; i < theform.getItemlist().size(); i++) {
-					bagInfo+="Bag #"+(i+1)+": ";
+					bagInfo+=(i+1)+":\t";
 					if (((Item) theform.getItemlist().get(i)).getClaimchecknum() != null
 							&& ((Item) theform.getItemlist().get(i)).getClaimchecknum().length() > 0) {
-						bagInfo+="Bag Tag #: "+((Item) theform.getItemlist().get(i)).getClaimchecknum().trim()+", ";
+						bagInfo+="Bag Tag #: "+((Item) theform.getItemlist().get(i)).getClaimchecknum().trim()+"\t";
 						sb.append(((Item) theform.getItemlist().get(i)).getClaimchecknum().trim());
 						sb.append("\r");
 					}
 					if (((Item) theform.getItemlist().get(i)).getColor() != null) {
-						bagInfo+="Color: "+((Item) theform.getItemlist().get(i)).getColor()+", ";
+						bagInfo+="Color: "+((Item) theform.getItemlist().get(i)).getColor()+"\t";
 						sb2.append(((Item) theform.getItemlist().get(i)).getColor());
 						sb2.append(" ");
 					}
@@ -150,13 +150,13 @@ public class BDOReceipt {
 				}
 
 				StringBuilder charges = new StringBuilder("");
-				if (theform.getCurrency() != null) {
-					charges.append(theform.getCurrency());
-					
-				}
-				
 				if (theform.getCost() != null) {
 					charges.append(theform.getCost());
+				}
+				
+				if (theform.getCurrency() != null) {
+					charges.append(" "+theform.getCurrency());
+					
 				}
 				
 				try {
