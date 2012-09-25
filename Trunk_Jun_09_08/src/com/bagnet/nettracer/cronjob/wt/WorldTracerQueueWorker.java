@@ -11,6 +11,7 @@ import com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.SpecialFlagBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
@@ -118,52 +119,57 @@ public class WorldTracerQueueWorker implements Runnable {
 				if(queue instanceof WtqCreateAhl) {
 					String wtId = null;
 					Incident incident = ((WtqIncidentAction) queue).getIncident();
-					try {
-						wtId = wtService.insertIncident(incident, dto);
-					}
-					catch(WorldTracerLoggedOutException ex) {
-						errorHandler.sendEmail("Unable to Login", ex, false, false);
-						logger.warn("weren't able to login so sleeping for 5 minutes");
-						Thread.sleep(5 * 60 * 1000);
-						continue;
-					}
-					catch (WorldTracerException ex) {
-
-						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
-						queue.setAttempts(queue.getAttempts() + 1);
-						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
-							queue.setStatus(WtqStatus.FAIL);
+					if (incident != null && TracingConstants.MBR_STATUS_CLOSED != incident.getStatus().getStatus_ID()) {
+						try {
+							wtId = wtService.insertIncident(incident, dto);
 						}
-						wtqBmo.updateQueue(queue);
-						continue;
-					}
-					catch (WorldTracerConnectionException ex) {
-
-						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
-						queue.setAttempts(queue.getAttempts() + 1);
-						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
-							queue.setStatus(WtqStatus.FAIL);
+						catch(WorldTracerLoggedOutException ex) {
+							errorHandler.sendEmail("Unable to Login", ex, false, false);
+							logger.warn("weren't able to login so sleeping for 5 minutes");
+							Thread.sleep(5 * 60 * 1000);
+							continue;
 						}
-						wtqBmo.updateQueue(queue);
-						continue;
-					} catch (CaptchaException e) {
-						logger.warn("unable to export incident; captcha exception: " + incident.getIncident_ID() + " - " + e.getMessage(), e);						
-						throw new CaptchaException();
-					} catch (Throwable ex) {
-						
-						logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
-						queue.setAttempts(queue.getAttempts() + 1);
-						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
-							queue.setStatus(WtqStatus.FAIL);
+						catch (WorldTracerException ex) {
+	
+							logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
+							queue.setAttempts(queue.getAttempts() + 1);
+							if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+								queue.setStatus(WtqStatus.FAIL);
+							}
+							wtqBmo.updateQueue(queue);
+							continue;
 						}
+						catch (WorldTracerConnectionException ex) {
+	
+							logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
+							queue.setAttempts(queue.getAttempts() + 1);
+							if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+								queue.setStatus(WtqStatus.FAIL);
+							}
+							wtqBmo.updateQueue(queue);
+							continue;
+						} catch (CaptchaException e) {
+							logger.warn("unable to export incident; captcha exception: " + incident.getIncident_ID() + " - " + e.getMessage(), e);						
+							throw new CaptchaException();
+						} catch (Throwable ex) {
+							
+							logger.warn("unable to export incident: " + incident.getIncident_ID() + " - " + ex.getMessage(), ex);
+							queue.setAttempts(queue.getAttempts() + 1);
+							if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+								queue.setStatus(WtqStatus.FAIL);
+							}
+							wtqBmo.updateQueue(queue);
+							continue;
+						}
+						logger.info("created wt ahl: " + wtId);
+						queue.setStatus(WtqStatus.SUCCESS);
 						wtqBmo.updateQueue(queue);
-						continue;
+						incident.setWtFile(new WorldTracerFile(wtId));
+						iBmo.updateIncidentNoAudit(incident);
+					} else {
+						queue.setStatus(WtqStatus.CANCELED);
+						wtqBmo.updateQueue(queue);
 					}
-					logger.info("created wt ahl: " + wtId);
-					queue.setStatus(WtqStatus.SUCCESS);
-					wtqBmo.updateQueue(queue);
-					incident.setWtFile(new WorldTracerFile(wtId));
-					iBmo.updateIncidentNoAudit(incident);
 				} 
 				// TODO: BEGIN
 				else if(queue instanceof WtqQoh) {
@@ -226,53 +232,58 @@ public class WorldTracerQueueWorker implements Runnable {
 				else if(queue instanceof WtqCreateOhd) {
 					String wtId = null;
 					OHD ohd = ((WtqOhdAction) queue).getOhd();
-					try {
-						wtId = wtService.insertOhd(ohd, dto);
-					}
-					catch(WorldTracerLoggedOutException ex) {
-						errorHandler.sendEmail("Unable to Login", ex, false, false);
-						logger.warn("weren't able to login so sleeping for 5 minutes");
-						Thread.sleep(5 * 60 * 1000);
-						continue;
-					}
-					catch (WorldTracerException ex) {
-						 
-						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
-						queue.setAttempts(queue.getAttempts() + 1);
-						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
-							queue.setStatus(WtqStatus.FAIL);
+					if (ohd != null && TracingConstants.OHD_STATUS_CLOSED != ohd.getStatus().getStatus_ID()) {
+						try {
+							wtId = wtService.insertOhd(ohd, dto);
 						}
-						wtqBmo.updateQueue(queue);
-						continue;
-					}
-					catch (WorldTracerConnectionException ex) {
-
-						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
-						queue.setAttempts(queue.getAttempts() + 1);
-						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
-							queue.setStatus(WtqStatus.FAIL);
+						catch(WorldTracerLoggedOutException ex) {
+							errorHandler.sendEmail("Unable to Login", ex, false, false);
+							logger.warn("weren't able to login so sleeping for 5 minutes");
+							Thread.sleep(5 * 60 * 1000);
+							continue;
 						}
-						wtqBmo.updateQueue(queue);
-						continue;
-					} catch (CaptchaException ex) {
-						logger.warn("unable to export ohd; captcha exception: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);						
-						throw new CaptchaException();
-						
-					} 
-					catch (Throwable ex) {
-						logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
-						queue.setAttempts(queue.getAttempts() + 1);
-						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
-							queue.setStatus(WtqStatus.FAIL);
+						catch (WorldTracerException ex) {
+							 
+							logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
+							queue.setAttempts(queue.getAttempts() + 1);
+							if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+								queue.setStatus(WtqStatus.FAIL);
+							}
+							wtqBmo.updateQueue(queue);
+							continue;
 						}
+						catch (WorldTracerConnectionException ex) {
+	
+							logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
+							queue.setAttempts(queue.getAttempts() + 1);
+							if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+								queue.setStatus(WtqStatus.FAIL);
+							}
+							wtqBmo.updateQueue(queue);
+							continue;
+						} catch (CaptchaException ex) {
+							logger.warn("unable to export ohd; captcha exception: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);						
+							throw new CaptchaException();
+							
+						} 
+						catch (Throwable ex) {
+							logger.warn("unable to export ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
+							queue.setAttempts(queue.getAttempts() + 1);
+							if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+								queue.setStatus(WtqStatus.FAIL);
+							}
+							wtqBmo.updateQueue(queue);
+							continue;
+						}
+						logger.info("created wt ohd: " + wtId);
+						queue.setStatus(WtqStatus.SUCCESS);
 						wtqBmo.updateQueue(queue);
-						continue;
+						ohd.setWtFile(new WorldTracerFile(wtId));
+						ohdBmo.updateOhdNoAudit(ohd);
+					} else {
+						queue.setStatus(WtqStatus.CANCELED);
+						wtqBmo.updateQueue(queue);
 					}
-					logger.info("created wt ohd: " + wtId);
-					queue.setStatus(WtqStatus.SUCCESS);
-					wtqBmo.updateQueue(queue);
-					ohd.setWtFile(new WorldTracerFile(wtId));
-					ohdBmo.updateOhdNoAudit(ohd);
 				}
 				else if(queue instanceof WtqCloseAhl) {
 					Incident incident = ((WtqIncidentAction) queue).getIncident();
@@ -374,7 +385,8 @@ public class WorldTracerQueueWorker implements Runnable {
 				else if(queue instanceof WtqSuspendAhl) {
 					String wtId = null;
 					Incident incident = ((WtqIncidentAction) queue).getIncident();
-					if (incident != null && incident.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) {
+					if (incident != null && incident.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING
+							&& TracingConstants.MBR_STATUS_CLOSED != incident.getStatus().getStatus_ID()) {
 						try {
 							wtId = wtService.suspendIncident(incident, dto);
 						}
@@ -425,8 +437,10 @@ public class WorldTracerQueueWorker implements Runnable {
 					} else {
 						if (incident == null) {
 							queue.setStatus(WtqStatus.FAIL);
-						} else {
+						} else if (incident.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING){
 							queue.setStatus(WtqStatus.LOCKED);
+						} else {
+							queue.setStatus(WtqStatus.CANCELED);
 						}
 						wtqBmo.updateQueue(queue);
 					}
@@ -485,54 +499,59 @@ public class WorldTracerQueueWorker implements Runnable {
 				else if(queue instanceof WtqSuspendOhd) {
 					String wtId = null;
 					OHD ohd = ((WtqOhdAction) queue).getOhd();
-					try {
-						wtId = wtService.suspendOhd(ohd, dto);
-					}
-					catch(WorldTracerLoggedOutException ex) {
-						errorHandler.sendEmail("Unable to Login", ex, false, false);
-						logger.warn("weren't able to login so sleeping for 5 minutes");
-						Thread.sleep(5 * 60 * 1000);
-						continue;
-					}
-					catch (WorldTracerException ex) {
-
-						logger.warn("unable to supsend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
-						queue.setAttempts(queue.getAttempts() + 1);
-						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
-							queue.setStatus(WtqStatus.FAIL);
+					if (ohd != null && TracingConstants.OHD_STATUS_CLOSED != ohd.getStatus().getStatus_ID()) {
+						try {
+							wtId = wtService.suspendOhd(ohd, dto);
 						}
-						wtqBmo.updateQueue(queue);
-
-						continue;
-					}
-					catch (WorldTracerConnectionException ex) {
-
-						logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
-						queue.setAttempts(queue.getAttempts() + 1);
-						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
-							queue.setStatus(WtqStatus.FAIL);
+						catch(WorldTracerLoggedOutException ex) {
+							errorHandler.sendEmail("Unable to Login", ex, false, false);
+							logger.warn("weren't able to login so sleeping for 5 minutes");
+							Thread.sleep(5 * 60 * 1000);
+							continue;
 						}
-						wtqBmo.updateQueue(queue);
-						continue;
-					} catch (CaptchaException ex) {
-						logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);						
-						throw new CaptchaException();
-					} 
-					catch (Throwable ex) {
-
-						logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
-						queue.setAttempts(queue.getAttempts() + 1);
-						if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
-							queue.setStatus(WtqStatus.FAIL);
+						catch (WorldTracerException ex) {
+	
+							logger.warn("unable to supsend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
+							queue.setAttempts(queue.getAttempts() + 1);
+							if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+								queue.setStatus(WtqStatus.FAIL);
+							}
+							wtqBmo.updateQueue(queue);
+	
+							continue;
 						}
+						catch (WorldTracerConnectionException ex) {
+	
+							logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
+							queue.setAttempts(queue.getAttempts() + 1);
+							if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+								queue.setStatus(WtqStatus.FAIL);
+							}
+							wtqBmo.updateQueue(queue);
+							continue;
+						} catch (CaptchaException ex) {
+							logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);						
+							throw new CaptchaException();
+						} 
+						catch (Throwable ex) {
+	
+							logger.warn("unable to suspend ohd: " + ohd.getOHD_ID() + " - " + ex.getMessage(), ex);
+							queue.setAttempts(queue.getAttempts() + 1);
+							if(queue.getAttempts() >= WorldTracerQueueSweeper.MAX_ATTEMPTS) {
+								queue.setStatus(WtqStatus.FAIL);
+							}
+							wtqBmo.updateQueue(queue);
+							continue;
+						}
+						logger.info("suspended wt ahl: " + wtId);
+						queue.setStatus(WtqStatus.SUCCESS);
 						wtqBmo.updateQueue(queue);
-						continue;
+						ohd.getWtFile().setWt_status(WTStatus.SUSPENDED);
+						ohdBmo.updateOhdNoAudit(ohd);
+					} else {
+						queue.setStatus(WtqStatus.CANCELED);
+						wtqBmo.updateQueue(queue);
 					}
-					logger.info("suspended wt ahl: " + wtId);
-					queue.setStatus(WtqStatus.SUCCESS);
-					wtqBmo.updateQueue(queue);
-					ohd.getWtFile().setWt_status(WTStatus.SUSPENDED);
-					ohdBmo.updateOhdNoAudit(ohd);
 				}
 				else if(queue instanceof WtqReinstateOhd) {
 					String wtId = null;
@@ -789,7 +808,8 @@ public class WorldTracerQueueWorker implements Runnable {
 					Incident incident = null;
 					try {
 						incident = ((WtqIncidentAction) queue).getIncident();
-						if (incident != null && incident.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) {
+						if (incident != null && incident.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING
+								&& TracingConstants.MBR_STATUS_CLOSED != incident.getStatus().getStatus_ID()) {
 							String result = wtService.amendAhl(incident, dto);
 						}
 					}
@@ -843,6 +863,8 @@ public class WorldTracerQueueWorker implements Runnable {
 						queue.setStatus(WtqStatus.FAIL);
 					} else if (incident.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING) {
 						queue.setStatus(WtqStatus.LOCKED);
+					} else if (TracingConstants.MBR_STATUS_CLOSED == incident.getStatus().getStatus_ID()) {
+						queue.setStatus(WtqStatus.CANCELED);
 					} else {
 						logger.info("amended AHL: " + ((WtqAmendAhl) queue).getIncident().getIncident_ID());
 						queue.setStatus(WtqStatus.SUCCESS);
@@ -850,9 +872,12 @@ public class WorldTracerQueueWorker implements Runnable {
 					wtqBmo.updateQueue(queue);
 				}
 				else if(queue instanceof WtqAmendOhd) {
+					OHD ohd = null;
 					try {
-						OHD ohd = ((WtqOhdAction) queue).getOhd();
-						String result = wtService.amendOhd(ohd, dto);
+						ohd = ((WtqOhdAction) queue).getOhd();
+						if (ohd != null && TracingConstants.OHD_STATUS_CLOSED != ohd.getStatus().getStatus_ID()) {
+							String result = wtService.amendOhd(ohd, dto);
+						}
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -893,8 +918,14 @@ public class WorldTracerQueueWorker implements Runnable {
 						wtqBmo.updateQueue(queue);
 						continue;
 					}
-					logger.info("amended ohd: " + ((WtqAmendOhd) queue).getOhd().getOHD_ID());
-					queue.setStatus(WtqStatus.SUCCESS);
+					if (ohd == null) {
+						queue.setStatus(WtqStatus.FAIL);
+					} else if (TracingConstants.OHD_STATUS_CLOSED == ohd.getStatus().getStatus_ID()) {
+						queue.setStatus(WtqStatus.CANCELED);
+					} else {
+						logger.info("amended ohd: " + ((WtqAmendOhd) queue).getOhd().getOHD_ID());
+						queue.setStatus(WtqStatus.SUCCESS);
+					}
 					wtqBmo.updateQueue(queue);
 				}
 				else if(queue instanceof WtqCreateBdo) {
