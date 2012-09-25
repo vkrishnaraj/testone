@@ -12,6 +12,8 @@ public class WS_TestWarehouse extends LoginUtil {
 		goToTaskManager();
 		selenium.click("id=menucol_4.1");
 		waitForPageToLoadImproved();
+		selenium.click("name=skip_prepopulate");
+		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 				verifyFalse(selenium.isTextPresent("Date Received by Warehouse"));
 
