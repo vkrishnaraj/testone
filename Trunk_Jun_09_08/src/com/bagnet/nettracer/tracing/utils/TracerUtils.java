@@ -253,7 +253,7 @@ public class TracerUtils {
 			a.setCurrency_ID(user.getDefaultcurrency());
 		}
 		
-		if(itemtype == TracingConstants.LOST_DELAY){
+		if(itemtype == TracingConstants.LOST_DELAY && PropertyBMO.isTrue(PropertyBMO.PROPERTY_DELIVERY_INSTRUCTIONS)){
 			if(theform.getDeliveryInstructions()==null)
 			{
 				DeliveryInstructions DI=new DeliveryInstructions();
