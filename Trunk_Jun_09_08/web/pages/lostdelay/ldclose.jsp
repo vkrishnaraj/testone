@@ -240,7 +240,7 @@
                 		   if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_INCIDENT, a)){
                   %>
                   <% if (((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
-                    <html:submit property="doclosewt" styleId="wtbutton" disabled=true>
+                    <html:submit property="doclosewt" styleId="wtbutton" disabled="true">
                       <bean:message key="button.closetoWT" />
                     </html:submit>
                   <% } else { %>
