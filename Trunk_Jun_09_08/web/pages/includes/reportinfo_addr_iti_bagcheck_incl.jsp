@@ -271,13 +271,13 @@
 			<td nowrap="nowrap"><bean:message
 					key="colname.tracing_status" /> <br> 
 					<html:select property="tracingStatus" styleClass="dropdown" >
-						<html:option value="<%=TracingConstants.INCIDENT_TRACING_STATUS_DEFAULT %>">
+						<html:option value="<%=String.valueOf(TracingConstants.INCIDENT_TRACING_STATUS_DEFAULT) %>">
 							<bean:message key="option.tracing_status.default" />
 						</html:option>
-						<html:option value="<%=TracingConstants.INCIDENT_TRACING_STATUS_TRACING %>">
+						<html:option value="<%=String.valueOf(TracingConstants.INCIDENT_TRACING_STATUS_TRACING) %>">
 							<bean:message key="option.tracing_status.tracing" />
 						</html:option>
-						<html:option value="<%=TracingConstants.INCIDENT_TRACING_STATUS_FINAL %>">
+						<html:option value="<%=String.valueOf(TracingConstants.INCIDENT_TRACING_STATUS_FINAL) %>">
 							<bean:message key="option.tracing_status.final" />
 						</html:option>
 					</html:select>

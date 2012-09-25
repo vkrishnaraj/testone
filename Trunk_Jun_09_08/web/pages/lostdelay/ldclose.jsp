@@ -222,13 +222,15 @@
                   <% } %>
 
                   &nbsp;
-                  
-                  <html:submit property="doclose" styleId="button" onclick="doCheck = 1;"
-                      <% if (((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
-                      disabled=true
-                      <% } %>>
+                  <% if (((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
+                  <html:submit property="doclose" styleId="button" disabled="true" >
                     <bean:message key="button.closereport" />
                   </html:submit>
+                  <% } else { %>
+                  <html:submit property="doclose" styleId="button" onclick="doCheck = 1;" >
+                    <bean:message key="button.closereport" />
+                  </html:submit>
+                  <% } %>
                   </logic:notEqual>
                   &nbsp;
                   	<c:if test="${!empty incidentForm.wt_id and incidentForm.wtFile.wt_status != 'CLOSED'}">
@@ -237,14 +239,15 @@
                 	   if (a.getStation().getCompany().getVariable().getWt_write_enabled() == 1){
                 		   if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER_INCIDENT, a)){
                   %>
-                  
-                    <html:submit property="doclosewt" styleId="wtbutton"
-                      <% if (((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
-                      disabled=true
-                      <% } %>>
+                  <% if (((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
+                    <html:submit property="doclosewt" styleId="wtbutton" disabled=true>
                       <bean:message key="button.closetoWT" />
                     </html:submit>
-                  <%
+                  <% } else { %>
+                    <html:submit property="doclosewt" styleId="wtbutton">
+                      <bean:message key="button.closetoWT" />
+                    </html:submit>
+                  <% }
                 		   }
                 	   }
                    }
