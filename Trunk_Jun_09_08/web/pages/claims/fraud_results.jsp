@@ -39,17 +39,14 @@
   function timer()
   {
     count=count-1;
-    if (count < 0)
+    if (count =< 0)
     {
-       clearInterval(counter);
-       //counter ended, do something here
-       return;
-    }
-    if(count==0)
-   	{
     	jQuery("#timer").hide();
     	jQuery("#refresh").show();
-   	}
+        clearInterval(counter);
+       //counter ended, do something here
+        return;
+    }
 
     //Do code for showing the number of seconds here
     document.getElementById("timer").innerHTML=count+" seconds";
