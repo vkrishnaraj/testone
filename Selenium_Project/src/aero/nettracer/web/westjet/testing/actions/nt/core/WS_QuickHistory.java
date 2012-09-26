@@ -165,7 +165,8 @@ public class WS_QuickHistory extends LoginUtil {
 		}
 		
 		if(checkNoErrorPage())
-		{
+		{	
+			selenium.select("name=report_type", "label=Found");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		}
@@ -176,7 +177,7 @@ public class WS_QuickHistory extends LoginUtil {
 		}
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=ACYWS00000041");
+			selenium.click("xpath=(//a[contains(@href, 'addFound.do?file_ref_number=')])[1]");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -207,38 +208,39 @@ public class WS_QuickHistory extends LoginUtil {
 			return;
 		}
 		
-		if(checkNoErrorPage())
-		{
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after viewing found/lost items - 2");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("link=CUNWS00000021");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after searching found/lost items - 2");
-			return;
-		}
-		
-		if(checkNoErrorPage())
-		{
-			selenium.click("name=save");
-			waitForPageToLoadImproved();	
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after loading a lost item");
-			return;
-		}
+//		if(checkNoErrorPage())
+//		{	
+//			selenium.select("name=report_type", "label=Lost");
+//			selenium.click("id=button");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after viewing found/lost items - 2");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			selenium.click("xpath=(//a[contains(@href, 'addFound.do?file_ref_number=')])[1]");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after searching found/lost items - 2");
+//			return;
+//		}
+//		
+//		if(checkNoErrorPage())
+//		{
+//			selenium.click("name=save");
+//			waitForPageToLoadImproved();	
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after loading a lost item");
+//			return;
+//		}
 		
 		if(checkNoErrorPage())
 		{
