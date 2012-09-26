@@ -27,6 +27,7 @@ public class WS_TestWarehouse extends LoginUtil {
 		if(checkNoErrorPage())
 		{	
 			selenium.click("link=[ Logout ]");
+			waitForPageToLoadImproved();
 			loginOGAdminProcedure();
 			selenium.click("id=menucol_9.2");
 			waitForPageToLoadImproved();
@@ -51,6 +52,7 @@ public class WS_TestWarehouse extends LoginUtil {
 		{
 
 			selenium.click("link=[ Logout ]");
+			waitForPageToLoadImproved();
 			loginAdminProcedure();
 			selenium.click("id=menucol_4.1");
 			waitForPageToLoadImproved();
@@ -101,6 +103,7 @@ public class WS_TestWarehouse extends LoginUtil {
 		if(checkNoErrorPage())
 		{	
 			selenium.click("link=[ Logout ]");
+			waitForPageToLoadImproved();
 			loginOGAdminProcedure();
 			selenium.click("id=menucol_9.2");
 			waitForPageToLoadImproved();
@@ -115,6 +118,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			selenium.click("name=save");
 			waitForPageToLoadImproved();
 			selenium.click("link=[ Logout ]");
+			waitForPageToLoadImproved();
 			loginAdminProcedure();
 		}
 

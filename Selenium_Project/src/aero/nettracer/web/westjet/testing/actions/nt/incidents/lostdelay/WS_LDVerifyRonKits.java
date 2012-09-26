@@ -136,7 +136,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 			selenium.type("name=inventorylist[2].description", "test");
 			selenium.select("name=theitem[0].bagtype", "label=50");
 			selenium.select("name=theitem[0].color", "label=WT - White/clear");
-			selenium.type("name=theitem[0].damage", "test");
+			selenium.type("name=claimcheck[0].claimchecknum", "3333333333");
 //			selenium.type("//div[@id='pax_0']/table/tbody/tr[2]/td/input", "test");
 //			selenium.type("//div[@id='pax_0']/table/tbody/tr[2]/td[2]/input", "test");
 //			selenium.type("//div[@id='pax_0']/table/tbody/tr[5]/td/input", "test");

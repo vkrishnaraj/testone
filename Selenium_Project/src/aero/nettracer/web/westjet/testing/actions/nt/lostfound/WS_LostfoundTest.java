@@ -20,6 +20,7 @@ public class WS_LostfoundTest extends LoginUtil {
 		System.out.println("WS: Found Item Created: " + Settings.FOUND_ID_WS);
 		selenium.click("id=menucol_5.3");
 		waitForPageToLoadImproved();
+		selenium.type("name=file_ref_number", Settings.FOUND_ID_WS);
 		selenium.type("name=lastname", "TestLast");
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
