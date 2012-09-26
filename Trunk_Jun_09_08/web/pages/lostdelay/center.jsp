@@ -677,7 +677,7 @@
                 %>
                     <c:if test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
 			<html:hidden property="amendWT" value="" disabled="true" />
-                      <% if (myform.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
+                      <% if (myform.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
                       <html:button styleId="wtbutton" property="amendWTButton" disabled="true" >
                         <bean:message key="button.amendWT" />
                       </html:button>
