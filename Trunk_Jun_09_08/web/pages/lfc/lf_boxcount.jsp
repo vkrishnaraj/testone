@@ -33,6 +33,8 @@
 	 function addCountAjax() {
 		 	o = document.lfBoxCountForm;
 			o.divId.value = o.lastDivNum.value;
+			var button=document.getElementById('addbutton');
+			button.disabled=true;
 			var list=document.getElementById('countList');
 			staList=document.getElementById('stationLists');
 			
@@ -64,6 +66,7 @@
 				
 				o.divId.value = "";
 				o.addStationName.value="";
+				button.disabled=false;
 				document.lfBoxCountForm.addStation.focus();
 				
 			
@@ -75,7 +78,8 @@
 			
 			o = document.lfBoxCountForm;
 			o.removeStation.value = remStation;
-			
+			var removelink=document.getElementById('rem'+remStation);
+			removelink.disabled=true;
 			postForm("lfBoxCountForm", true, function (req) {
 				var row=document.getElementById('countId'+o.removeStation.value);
 				if(row!=null){
@@ -89,6 +93,7 @@
 					zeroParent.removeChild(zeroRow);
 				}
 				o.removeStation.value = "";
+				removelink.disabled=false;
 				document.lfBoxCountForm.addStation.focus();
 			});
 		}
@@ -183,7 +188,7 @@
 		    				<td style="width:20%;">
 		    				<br/>
 							<center>
-	     						<input type="button" href='#' onclick="addCountAjax()" value="<bean:message key="colname.lf.boxcount.addcount"/>" />
+	     						<input type="button" id="addbutton" href='#' onclick="addCountAjax()" value="<bean:message key="colname.lf.boxcount.addcount"/>" />
 	    					</center>
 		    				</td>
 	     				</tr>
@@ -204,7 +209,7 @@
      			</tr>
 	     			<!-- <table class="<%=cssFormClass %>" style="margin:0;padding:0;" cellspacing=0 cellpadding=0 >-->
      				<logic:iterate indexId="i" id="count" name="boxCounts"  type="com.bagnet.nettracer.tracing.db.lf.LFBoxCount" >
-	              	<logic:notEqual name="count" property="boxCount" value="0">
+	              	<% if(count.getBoxCount()>0) {%>
 	              		<tr id="<%=count.getSourceId() %>" >
 	     				
 	     					
@@ -220,13 +225,13 @@
 		    				</td>
 		    				<td style="width:40%;">
 		    					<center>
-		     						<a href='#' styleId="rem<%=count.getSourceName()%>" onclick="remStationAjax('<bean:write name="count" property="sourceId" />')" ><bean:message key="lf.salvage.remove" /></a>
+		     						<a href='#' id="rem<%=count.getSourceId()%>" onclick="remStationAjax('<bean:write name="count" property="sourceId" />')" ><bean:message key="lf.salvage.remove" /></a>
 		    					</center>
 		    				</td>
 	     				
 	     			<% divId++; %>
 	     			</tr>
-	     			</logic:notEqual>
+	     			<% } %>
 	     			</logic:iterate>
      				<!-- </table>-->
 	     			

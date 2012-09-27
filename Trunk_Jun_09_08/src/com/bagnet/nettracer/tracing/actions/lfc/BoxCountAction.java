@@ -89,8 +89,10 @@ public class BoxCountAction extends CheckedAction {
 				if (boxCount == null) {
 					success = false;
 				} else {
-					boxCount.setBoxCount(boxCount.getBoxCount()-1);
-					saveCount(serviceBean, boxCount, request, errors);
+					if(boxCount.getBoxCount()>0){
+						boxCount.setBoxCount(boxCount.getBoxCount()-1);
+						saveCount(serviceBean, boxCount, request, errors);
+					}
 				}
 				
 			} catch (NumberFormatException nfe) {

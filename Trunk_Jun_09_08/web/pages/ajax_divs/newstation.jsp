@@ -31,7 +31,7 @@
 	    				</td>
 	    				<td style="width:40%;">
 	    					<center>
-	     						<a href='#' id="rem<bean:write  name="count" property="sourceName" />" onclick="remStationAjax('<bean:write name="count" property="sourceId" />')" ><bean:message key="lf.salvage.remove" /></a>
+	     						<a href='#' id="rem<bean:write  name="count" property="sourceId" />" onclick="remStationAjax('<bean:write name="count" property="sourceId" />')" ><bean:message key="lf.salvage.remove" /></a>
 	    					</center>
 	    				</td>
      				</tr>
