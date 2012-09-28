@@ -218,24 +218,25 @@ public class Consumer implements Runnable{
 		}
 		if (match.getFile1().getMatchingFiles() != null) {
 			
-			HashMap<Long, Double>matchingMap = match.getFile1().getMatchingFiles();
+			HashMap<Long, List<Double>>matchingMap = match.getFile1().getMatchingFiles();
 //			System.out.println("Data exists in matches...");
-			Double existingScore = matchingMap.get(new Long(match.getFile2().getId()));
+			List<Double> existingScores = matchingMap.get(new Long(match.getFile2().getId()));
 			
 			
-			
-			if (existingScore != null) {
-
-				String score1 = existingScore.toString();
-				score1 = score1.substring(0, Math.min(5, score1.length()));
-				
-				String score2 = match.getOverallScore() + "";
-				score2 = score2.substring(0, Math.min(5, score2.length()));
-
-				
-				if (score1.equals(score2)) { 
-					logger.debug("Returning because match exists...");
-					return;
+			for(Double existingScore:existingScores){
+				if (existingScore != null) {
+	
+					String score1 = existingScore.toString();
+					score1 = score1.substring(0, Math.min(5, score1.length()));
+					
+					String score2 = match.getOverallScore() + "";
+					score2 = score2.substring(0, Math.min(5, score2.length()));
+	
+					
+					if (score1.equals(score2)) { 
+						logger.debug("Returning because match exists...");
+						return;
+					}
 				}
 			}
 		}

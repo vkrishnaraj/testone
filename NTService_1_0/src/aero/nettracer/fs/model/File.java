@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -32,13 +33,13 @@ public class File implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Transient
-	HashMap<Long, Double> matchingFiles = null;
+	HashMap<Long, List<Double>> matchingFiles = null;
 
-	public HashMap<Long, Double> getMatchingFiles() {
+	public HashMap<Long, List<Double>> getMatchingFiles() {
 		return matchingFiles;
 	}
 
-	public void setMatchingFiles(HashMap<Long, Double> matchingFiles) {
+	public void setMatchingFiles(HashMap<Long, List<Double>> matchingFiles) {
 		this.matchingFiles = matchingFiles;
 	}
 

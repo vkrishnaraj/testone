@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
@@ -110,11 +111,20 @@ public class Producer {
 			pq.addScalar("overallScore", Hibernate.DOUBLE);
 			List<Object[]> listMatchingFiles = pq.list();
 			
-			HashMap<Long, Double> matchingMap = new HashMap<Long, Double>();
+			HashMap<Long, List<Double>> matchingMap = new HashMap<Long, List<Double>>();
+			List<Double> scoreList;
 			for (Object[] strs : listMatchingFiles) {
 				Long f1 = (Long) strs[0];
 				Double f2 = (Double) strs[1];
-				matchingMap.put(f1, f2);
+				if(matchingMap.get(f1)!=null){
+					scoreList=matchingMap.get(f1);
+					scoreList.add(f2);
+					matchingMap.put(f1, scoreList);
+				} else {
+					scoreList=new ArrayList<Double>();
+					scoreList.add(f2);
+					matchingMap.put(f1, scoreList);
+				}
 			}
 			file.setMatchingFiles(matchingMap);
 			} catch (Exception e){
