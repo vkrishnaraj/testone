@@ -174,7 +174,7 @@ public class ModifyClaimAction extends CheckedAction {
 				} else {
 					claim = ntIncident.getClaims().iterator().next();
 				}
-				file = FileDAO.loadFile(ntIncident.getIncident_ID());
+				file = FileDAO.loadFile(ntIncident.getIncident_ID()); //airlineIncMark
 			} else {
 				claim = ClaimUtils.createClaim(user);
 			}
@@ -278,7 +278,7 @@ public class ModifyClaimAction extends CheckedAction {
 
 			boolean firstSave = claim.getId() == 0;
 			boolean claimSaved=false;
-			if(validateAirlineIncidentId(claim.getIncident().getAirlineIncidentId(), errors, request, claim.getIncident().getId())) {//checks for fs_incident on local database, return turn is incidentid isn't in the table
+			if(validateAirlineIncidentId(claim.getIncident().getAirlineIncidentId(), errors, request, claim.getIncident().getId())) {//checks for fs_incident on local database, return turn is incidentid isn't in the table - airlineIncMark
 				claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);
 			}
 			if (claimSaved) {
@@ -525,32 +525,38 @@ public class ModifyClaimAction extends CheckedAction {
 		if(IncidentID==null || IncidentID.isEmpty()){
 			return true;
 		}
-		String sql = "select fsi.id from aero.nettracer.fs.model.FsIncident fsi where airlineIncidentId= :incident_id";
+		String sql = "select fsi.id from aero.nettracer.fs.model.FsIncident fsi where airlineIncidentId= :incident_id"; //airlineIncMark
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			q.setParameter("incident_id", IncidentID);
 			List result = q.list();
-			sess.close();
 			
 			if(result.isEmpty()){
 				return true;
 			} else if(FSID==0 || !FSID.equals(((Long) result.get(0)))) {
+				String errorsql = "select id from aero.nettracer.fs.model.FsClaim where incident_id= :incident_id"; //airlineIncMark
+				
+				Query q2 = sess.createQuery(sql);
+				q2.setParameter("incident_id", IncidentID);
+				List errorResult = q.list();
+				request.setAttribute("validateAirline", (Long) errorResult.get(0));
 				ActionMessage error = new ActionMessage("error.airlineincident");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
-				return false;
+				
 			} else {
 				return true;
 			}
-			
+
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
 			if(sess != null && sess.isOpen()){
 				sess.close();
 			}
+			
 		}
 		
 		return false;

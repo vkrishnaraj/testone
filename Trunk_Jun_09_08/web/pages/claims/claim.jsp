@@ -349,7 +349,8 @@
                       <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
                     </h1>
                     <font color=red>
-                      <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+                      <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages>
+                      <logic:notEmpty name="validateAirline" scope="request"><bean:message key="error.airlineIncFound"/> <a href="claim_resolution.do?claimId=<bean:write name="validateAirline" scope="request"/>"><bean:write name="validateAirline" scope="request"/></a></logic:notEmpty></logic:messagesPresent>
                     </font>
                     <br />
                     <table class="form2" cellspacing="0" cellpadding="0">
