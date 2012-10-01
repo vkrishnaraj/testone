@@ -211,10 +211,19 @@ public class NTReservationIntegrationImpl extends
 			faddr.setCity(fMap.mapStringAndTrim(NetTracerField.ADDRESS2, add.getCity()));
 			
 			
-			if (add.getCountry() == null || add.getCountry().equals("US")) {
-				faddr.setState_ID(fMap.mapStringAndTrim(NetTracerField.ADDR_STATE, add.getState()));
+			
+			if (add.getCountry() == null){
+				if(user.getCompanycode_ID().equals("WS")) {
+					faddr.setProvince(fMap.mapStringAndTrim(NetTracerField.ADDR_PROVINCE, add.getState()));
+				} else {
+					faddr.setState_ID(fMap.mapStringAndTrim(NetTracerField.ADDR_STATE, add.getState()));
+				}
 			} else {
-				faddr.setProvince(fMap.mapStringAndTrim(NetTracerField.ADDR_PROVINCE, add.getState()));
+				if(add.getCountry().equals("US")){
+					faddr.setState_ID(fMap.mapStringAndTrim(NetTracerField.ADDR_STATE, add.getState()));
+				} else {
+					faddr.setProvince(fMap.mapStringAndTrim(NetTracerField.ADDR_PROVINCE, add.getState()));
+				}
 			}
 			
 			faddr.setZip(fMap.mapStringAndTrim(NetTracerField.ADDR_ZIP, add.getZip()));
