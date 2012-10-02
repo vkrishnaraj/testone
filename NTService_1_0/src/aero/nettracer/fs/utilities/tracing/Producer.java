@@ -761,49 +761,49 @@ public class Producer {
 			}
 			if(d.getMatchtype().equals(MatchType.name)){
 				if(!p1.isAllEnabled() && !p1.isName() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isName() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isName() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.address)){
 				if(!p1.isAllEnabled() && !p1.isAddress() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isAddress() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isAddress() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.phone)){
 				if(!p1.isAllEnabled() && !p1.isPhonenumber() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isPhonenumber() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isPhonenumber() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.email)){
 				if(!p1.isAllEnabled() && !p1.isEmail() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isEmail() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isEmail() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.cc)){
 				if(!p1.isAllEnabled() && !p1.isCc() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isCc() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isCc() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.drivers)){
 				if(!p1.isAllEnabled() && !p1.isDrivers() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isDrivers() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isDrivers() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.ffn)){
 				if(!p1.isAllEnabled() && !p1.isFfn() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isFfn() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isFfn() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.ssn)){
 				if(!p1.isAllEnabled() && !p1.isSsn() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isSsn() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isSsn() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.passport)){
 				if(!p1.isAllEnabled() && !p1.isPassport() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isPassport() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isPassport() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.pnrloc)){
 				if(!p1.isAllEnabled() && !p1.isPnrloc() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isPnrloc() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isPnrloc() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.pnrdata)){
 				if(!p1.isAllEnabled() && !p1.isPnrdata() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isPnrdata() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isPnrdata() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.traveldate)){
 				if(!p1.isAllEnabled() && !p1.isTraveldate() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isTraveldate() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isTraveldate() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.ticketamount)){
 				if(!p1.isAllEnabled() && !p1.isTicketamount() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isTicketamount() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isTicketamount() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.dob)){
 				if(!p1.isAllEnabled() && !p1.isDob() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isDob() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isDob() && !p2.isShowallclaiminfo())d.setContent2(s);
 			} else if (d.getMatchtype().equals(MatchType.itin)){
 				if(!p1.isAllEnabled() && !p1.isItin() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isItin() && !p1.isShowallclaiminfo())d.setContent2(s);
+				if(!p2.isAllEnabled() && !p2.isItin() && !p2.isShowallclaiminfo())d.setContent2(s);
 			}
 			String c1=p1.getKey()!= null ? p1.getKey().getCompanycode():"NA";
 			String c2=p2.getKey()!= null ? p2.getKey().getCompanycode():"NA";
