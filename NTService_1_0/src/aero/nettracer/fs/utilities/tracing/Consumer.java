@@ -220,7 +220,10 @@ public class Consumer implements Runnable{
 			
 			HashMap<Long, List<Double>>matchingMap = match.getFile1().getMatchingFiles();
 //			System.out.println("Data exists in matches...");
-			List<Double> existingScores = matchingMap.get(new Long(match.getFile2().getId()));
+			List<Double> existingScores = new ArrayList();
+			if (matchingMap.get(new Long(match.getFile2().getId()))!=null){
+				existingScores=matchingMap.get(new Long(match.getFile2().getId()));
+			}
 			
 			
 			for(Double existingScore:existingScores){

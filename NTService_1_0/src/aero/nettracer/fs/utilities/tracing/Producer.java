@@ -565,9 +565,10 @@ public class Producer {
 			Set<FsAddress> addresses, HashSet<MetaWarning> metaWarnings) {
 		int threatLevel = 0;
 		HashMap<String, GreyListAddress> greyListMap = Util.getGreyListAddressMap();
+		HashMap<String, String> keyCheck=new HashMap<String,String>();
 		for (FsAddress a: addresses) {
 			String key = a.getLattitude() + "/" + a.getLongitude();
-			if (greyListMap.containsKey(key) && a.getGeocodeType() == 1) {
+			if (greyListMap.containsKey(key) && a.getGeocodeType() == 1 && !keyCheck.containsKey(key)) {
 				GreyListAddress gla = greyListMap.get(key);
 				MetaWarning warn = new MetaWarning();
 				metaWarnings.add(warn);
@@ -587,6 +588,7 @@ public class Producer {
 				warn.setPercentageMatch(0);
 				threatLevel = TraceResponse.THREAT_LEVEL_YELLOW;
 			}
+			keyCheck.put(key, "");
 		}
 		return threatLevel;
 	}
