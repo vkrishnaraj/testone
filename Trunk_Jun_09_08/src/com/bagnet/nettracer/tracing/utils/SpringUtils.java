@@ -1,5 +1,8 @@
 package com.bagnet.nettracer.tracing.utils;
 
+import org.jboss.cache.Cache;
+import org.jboss.cache.CacheManager;
+import org.jboss.ha.framework.server.CacheManagerLocator;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -7,9 +10,10 @@ import com.bagnet.nettracer.integrations.events.ClientEventHandler;
 import com.bagnet.nettracer.integrations.reports.CustomReportBMO;
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.tracing.bmo.LockBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.utils.general.ThreadHandler;
+import com.bagnet.nettracer.tracing.utils.lock.LockFile;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
-import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 import com.bagnet.nettracer.wt.svc.ActionFileManager;
 import com.bagnet.nettracer.wt.svc.RuleMapper;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
@@ -37,6 +41,8 @@ public class SpringUtils {
 	
 	private static final String LOCK_BMO = "lockBMO";
 	
+	private static final String INCIDENT_LOCK = "incidentLock";
+	
 	static {
 		try {
 			ctx = new ClassPathXmlApplicationContext("/spring-beans.xml");
@@ -50,7 +56,13 @@ public class SpringUtils {
 	}
 	
 	public static void init() {
-		
+		try {
+			CacheManager cacheManager = CacheManagerLocator.getCacheManagerLocator().getCacheManager( null );
+			Cache<Object, Object> myCache = cacheManager.getCache( PropertyBMO.getValue(PropertyBMO.LOCK_CACHE_CLUSTER), true );
+			myCache.start();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	public static ReservationIntegration getReservationIntegration() {
@@ -97,5 +109,7 @@ public class SpringUtils {
 		return (ThreadHandler) getBean(SHARES_INTEGRATION);
 	}
 	
-	
+	public static LockFile getLockFile(){
+		return (LockFile) getBean(INCIDENT_LOCK);
+	}
 }

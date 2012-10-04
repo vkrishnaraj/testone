@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
+import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
 import org.hibernate.classic.Session;
 
@@ -24,6 +25,7 @@ import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -829,7 +831,12 @@ public class WSCoreIncidentUtil {
 		}
 		
 		// insert into our db
-		int result = obmo.insertIncident(inc, null, inc.getAgent());
+		int result = 0;
+		try{
+			result = obmo.insertIncident(false,inc, null, inc.getAgent());
+		}catch (StaleStateException sse){
+			//loupas - should never reach this
+		}
 		if (result < 1) {
 			ws.setErrorcode("unable to insert incident into NT, please contact NT support");
 			return null;
@@ -917,7 +924,14 @@ public class WSCoreIncidentUtil {
 					remarks.add(r);
 				}
 				
-				iBMO.insertIncident(incident, null, agent);
+				try {
+					iBMO.insertIncident(false,incident, null, agent);
+				} catch (HibernateException e) {
+					e.printStackTrace();
+				} catch (StaleStateException e) {
+					//loupas - should never reach this
+					e.printStackTrace();
+				}
 				
 			}
 		}
