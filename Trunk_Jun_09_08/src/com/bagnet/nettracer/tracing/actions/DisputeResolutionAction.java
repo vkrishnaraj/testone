@@ -62,7 +62,8 @@ public class DisputeResolutionAction extends CheckedAction {
 			return null;
 		}
 		Agent user = (Agent) session.getAttribute("user");
-		
+
+		ActionMessages errors = new ActionMessages();
 		IncidentForm theform = (IncidentForm) form;
 		session.setAttribute("incidentForm", theform);
 		
@@ -127,7 +128,7 @@ public class DisputeResolutionAction extends CheckedAction {
 					success = denyDispute(incident, user, theform.getResolutionRemarks());
 				} else if (myButton.equalsIgnoreCase(myManuallyModifyDisputeBtn)) {
 					whichButton += myManuallyModifyDisputeBtn;
-					success = manuallyModifyDispute(incident, theform, user);
+					success = manuallyModifyDispute(incident, theform, user, errors);
 				} 
 				
 				DisputeUtils.unlockDispute(myIncident.getDispute().getLock(), myIncident.getDispute());
@@ -187,7 +188,8 @@ public class DisputeResolutionAction extends CheckedAction {
 		}
 		catch (Exception e) {
 		}
-		
+
+		saveMessages(request, errors);
 		return mapping.findForward(forwardTarget);
 	}
 	private String createNew(String incident, IncidentForm theform, Agent user) {
@@ -312,9 +314,10 @@ public class DisputeResolutionAction extends CheckedAction {
 		return DisputeUtils.saveDispute(myDispute);
 	}
 	
-	private boolean manuallyModifyDispute(String incidentId, IncidentForm theform, Agent user) {
+	private boolean manuallyModifyDispute(String incidentId, IncidentForm theform, Agent user, 
+			ActionMessages errors) {
 		Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incidentId);
-		
+		ActionMessage error = null;
 		myDispute.setResolution_timestamp(DateUtils.convertToGMTDate(new Date()));
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.DISPUTE_RESOLUTION_STATUS_MANUAL_CHANGE);
@@ -326,6 +329,15 @@ public class DisputeResolutionAction extends CheckedAction {
 		determinedFaultStation.setStation_ID(theform.getFaultstation_id());
 		myDispute.setDeterminedFaultStation(determinedFaultStation);
 		
+		if (theform.getLoss_code() == 0) {
+			error = new ActionMessage("error.choose_lossreason");
+			if (error != null) {
+				if (error.getKey().length() > 0) {
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				}
+			}
+			return false;
+		}
 		myDispute.setDeterminedLossCode(theform.getLoss_code());
 		
 		myDispute.setResolutionRemarks(theform.getResolutionRemarks());

@@ -142,8 +142,7 @@
           }
     %>
       </html:select>
-       <% }
-     else { %>
+       <% } else { %>
      <html:select property="loss_code" styleClass="dropdown">      
           <html:option value="0">
             <bean:message key="select.please_select" />

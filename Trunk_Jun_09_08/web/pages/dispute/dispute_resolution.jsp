@@ -4,6 +4,9 @@
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
+
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
@@ -13,6 +16,8 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
 <%
   	Agent a = (Agent)session.getAttribute("user");
+ResourceBundle bundle = ResourceBundle.getBundle(
+		"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
   	String cssFormClass = "form2_ld";
   
   	String incident = "" + request.getAttribute("incident");
@@ -46,6 +51,34 @@
     } else {
       countfield.value = maxlimit - field.value.length;
     }
+  }
+  
+  function validateReqDisputeForm(form)
+  {
+  	for (var j=0;j < form.length; j++) {
+  	
+      currentElement = form.elements[j];
+      currentElementName=currentElement.name;
+  	if (currentElementName.indexOf("faultstation_id") != -1) {  
+		
+		 if (currentElement.value == "")
+		  {
+		    alert("<%= (String)bundle.getString( "colname.faultstation") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		    currentElement.focus();
+		    return false;
+		  }
+		}
+	  else if (currentElementName.indexOf("loss_code") != -1) {  
+		
+		 if (currentElement.value == "0")
+		  {
+		    alert("<%= (String)bundle.getString( "colname.closereport.losscode") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		    currentElement.focus();
+		    return false;
+		  }
+		}
+		
+	}
   }
  </SCRIPT> 
  

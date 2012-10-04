@@ -6,6 +6,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Incident" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
@@ -13,6 +15,8 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+ResourceBundle bundle = ResourceBundle.getBundle(
+		"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
   String cssFormClass = "form2_ld";
   
 	String incident = "" + request.getAttribute("incident");
@@ -47,6 +51,34 @@
     } else {
       countfield.value = maxlimit - field.value.length;
     }
+  }
+  
+  function validateReqDisputeForm(form)
+  {
+  	for (var j=0;j < form.length; j++) {
+  	
+      currentElement = form.elements[j];
+      currentElementName=currentElement.name;
+  	if (currentElementName.indexOf("faultstation_id") != -1) {  
+		
+		 if (currentElement.value == "")
+		  {
+		    alert("<%= (String)bundle.getString( "colname.faultstation") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		    currentElement.focus();
+		    return false;
+		  }
+		}
+	  else if (currentElementName.indexOf("loss_code") != -1) {  
+		
+		 if (currentElement.value == "0")
+		  {
+		    alert("<%= (String)bundle.getString( "colname.closereport.losscode") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		    currentElement.focus();
+		    return false;
+		  }
+		}
+		
+	}
   }
  </SCRIPT> 
   
@@ -181,7 +213,7 @@
 
                   &nbsp;
                   
-                  <html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 1;">
+                  <html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 1; return validateReqDisputeForm(this.form)">
                     <bean:message key="button.manually.modify.dispute" />
                   </html:submit>
                   </logic:notEqual>
