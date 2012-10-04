@@ -165,8 +165,10 @@ public class PropertyBMO {
 	public static final String DIRECT_ACCESS_URL = "direct.access.url";
 	
 	public static final String SCANQUERY_DAYS_BACK = "scanquery.days.back";
-	
+
 	public static final String LOCK_CACHE_CLUSTER = "lock.cache.cluster";
+	
+	public static final String AUTO_CLOSE_REMARK = "auto.close.remark";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

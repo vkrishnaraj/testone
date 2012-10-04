@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
@@ -35,6 +36,8 @@ public class AutoClose {
 	
 	private static Logger logger = Logger.getLogger(AutoClose.class);
 	private String companyCode = null;
+	
+	public static final String DEFAULT_REMARK = "This Incident was auto-closed due to the amount of time in open status.";
 	
 	public AutoClose(String companyCode) {
 		this.companyCode = companyCode;
@@ -110,7 +113,8 @@ public class AutoClose {
 
 						r.setAgent(agent);
 						r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-						r.setRemarktext("This File was auto-closed due to the amount of time in open status.");                // PROPERTY???
+						String remarkText = PropertyBMO.getValue(PropertyBMO.AUTO_CLOSE_REMARK);
+						r.setRemarktext(remarkText != null ? remarkText : DEFAULT_REMARK);                
 						r.setIncident(inc);
 						r.setRemarktype(TracingConstants.REMARK_CLOSING);
 						
