@@ -288,6 +288,14 @@ public class SearchIncidentAction extends Action {
 			} else {
 				// populate session
 				int itemType = inc.getItemtype_ID();
+				List<ActionMessage> lockErrors = SpringUtils.getLockFile().getLockActionMessages(inc.getIncident_ID(), user);
+				ActionMessages errors = new ActionMessages();
+				if(lockErrors != null){
+					for(ActionMessage lockError:lockErrors){
+						errors.add(ActionMessages.GLOBAL_MESSAGE, lockError);
+						saveMessages(request, errors);
+					}
+				}
 				request.setAttribute("incident", incident);
 				session.setAttribute("incidentForm", theform);
 				List agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());

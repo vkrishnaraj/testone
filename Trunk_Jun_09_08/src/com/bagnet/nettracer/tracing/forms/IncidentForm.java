@@ -112,6 +112,7 @@ public final class IncidentForm extends ValidatorForm {
 		this.tracingStatus = tracingStatus;
 	}
 
+	private Date lastupdated;
 	
 	public String getRevenueCode() {
 		return revenueCode;
@@ -1359,5 +1360,12 @@ public final class IncidentForm extends ValidatorForm {
 			}
 		}
 		return false;
+	}
+	
+	public void setLastupdated(Date lastupdated) {
+		this.lastupdated = lastupdated;
+	}
+	public Date getLastupdated() {
+		return lastupdated;
 	}
 }

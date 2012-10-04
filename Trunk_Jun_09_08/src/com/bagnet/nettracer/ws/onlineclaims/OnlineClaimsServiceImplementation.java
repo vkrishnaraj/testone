@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
@@ -29,14 +30,13 @@ import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
-import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.AuthorizationException;
 import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
-import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -392,7 +392,15 @@ public class OnlineClaimsServiceImplementation extends
  		 		
 		
 		// insert into our db
-		int result = obmo.insertIncident(inc, null, inc.getAgent());
+		int result = 0;
+		try {
+			result = obmo.insertIncident(false,inc, null, inc.getAgent());
+		} catch (HibernateException e1) {
+			e1.printStackTrace();
+		} catch (StaleStateException e1) {
+			//loupas - should never reach this
+			e1.printStackTrace();
+		}
 		if (result < 1) {
 			return null;
 		}

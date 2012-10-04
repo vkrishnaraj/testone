@@ -41,6 +41,7 @@ import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -188,7 +189,13 @@ public class DisputeResolutionAction extends CheckedAction {
 		}
 		catch (Exception e) {
 		}
-
+		List<ActionMessage> lockErrors = SpringUtils.getLockFile().getLockActionMessages(incident, user);
+		if(lockErrors != null){
+			for(ActionMessage lockError:lockErrors){
+				errors.add(ActionMessages.GLOBAL_MESSAGE, lockError);
+				saveMessages(request, errors);
+			}
+		}
 		saveMessages(request, errors);
 		return mapping.findForward(forwardTarget);
 	}

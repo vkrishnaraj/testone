@@ -84,7 +84,8 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	private int auto_close_dam_station;
 	private int auto_close_pil_station;
 
-	
+	//incident locking
+	private int incident_lock_mins;
 	
 	/**
 	 * @return Returns the default_loss_code.
@@ -981,6 +982,18 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	 */
 	public int getAuto_close_pil_station() {
 		return auto_close_pil_station;
+	}
+	
+	
+	public void setIncident_lock_mins(int incident_lock_mins) {
+		this.incident_lock_mins = incident_lock_mins;
+	}
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getIncident_lock_mins() {
+		return incident_lock_mins;
 	}
 	
 	

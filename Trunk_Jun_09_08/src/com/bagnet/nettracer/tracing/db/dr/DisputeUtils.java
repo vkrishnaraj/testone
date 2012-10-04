@@ -14,20 +14,15 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LockBMO;
 import com.bagnet.nettracer.tracing.bmo.TaskManagerBMO;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Lock.LockType;
-import com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz;
-import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
-import com.bagnet.nettracer.tracing.db.taskmanager.ItemTraceResultsTask;
-import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
-import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 import com.bagnet.nettracer.tracing.db.taskmanager.DisputeResolutionTask;
 
 public class DisputeUtils {
@@ -411,7 +406,11 @@ public class DisputeUtils {
 				incidentToUpdate.setFaultstation(dispute.getDeterminedFaultStation());
 				incidentToUpdate.setLoss_code(dispute.getDeterminedLossCode());
 				IncidentBMO ibmo = new IncidentBMO();
-				ibmo.saveAndAuditIncident(incidentToUpdate, agent, sess);
+				try{
+					ibmo.saveAndAuditIncident(false, incidentToUpdate, agent, sess);
+				} catch (StaleStateException sse){
+					//ignore
+				}
 			}
 			return true;
 		}

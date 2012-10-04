@@ -348,6 +348,16 @@
 	            </td>
 	          </tr>
 	          
+	         <tr>
+	            <td>
+	              <bean:message key="colname.incident.lock.mins" />
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="incident_lock_mins" size="4" maxlength="4" />
+	            </td>
+	        </tr>
+	          
 		    <tr>
             <td colspan="2">
               &nbsp;
@@ -362,6 +372,8 @@
               </html:submit></center>
             </td>
           </tr>
+
+
 
         </table>
 	          

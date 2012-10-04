@@ -7,18 +7,14 @@ package com.bagnet.nettracer.tracing.utils;
 
 
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.utils.audit.AuditIncidentUtils;
-import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 
@@ -304,7 +300,7 @@ public class DisputeResolutionUtils {
 			try {
 				t = sess.beginTransaction();
 				IncidentBMO ibmo = new IncidentBMO();
-				ibmo.saveAndAuditIncident(result, agent, sess);
+				ibmo.saveAndAuditIncident(false, result, agent, sess);
 				if (! t.wasCommitted()) {
 					t.commit();
 				}
@@ -312,6 +308,7 @@ public class DisputeResolutionUtils {
 				sess.close();
 				sess = null;
 			} catch (Exception e) {
+				//catch stale state here
 				e.printStackTrace();
 				try {
 					t.rollback();
@@ -361,7 +358,7 @@ public class DisputeResolutionUtils {
 //					Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(inc, agent);
 //					sess.save(audit_dto);
 //					incidentBMO.saveAndAuditIncident(inc, agent, sess);
-					incidentBMO.saveAndAuditIncident(result, agent, sess);
+					incidentBMO.saveAndAuditIncident(false, result, agent, sess);
 					
 					if (!t.wasCommitted()) {
 						t.commit();
@@ -370,6 +367,7 @@ public class DisputeResolutionUtils {
 					sess.close();
 					sess = null;
 				} catch (Exception e) {
+					//catch stale state here
 					e.printStackTrace();
 					try {
 						t.rollback();
@@ -409,7 +407,7 @@ public class DisputeResolutionUtils {
 //					Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(inc, agent);
 //					sess.save(audit_dto);
 //					incidentBMO.saveAndAuditIncident(inc, agent, sess);
-					incidentBMO.saveAndAuditIncident(result, agent, sess);
+					incidentBMO.saveAndAuditIncident(false, result, agent, sess);
 					
 					if (!t.wasCommitted()) {
 						t.commit();
@@ -418,6 +416,7 @@ public class DisputeResolutionUtils {
 					sess.close();
 					sess = null;
 				} catch (Exception e) {
+					//catch stale state here
 					e.printStackTrace();
 					try {
 						t.rollback();

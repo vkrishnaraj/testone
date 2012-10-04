@@ -15,6 +15,7 @@ import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -116,8 +117,12 @@ public class AutoClose {
 						Set<Remark> remarks = inc.getRemarks();
 						remarks.add(r);
 						IncidentBMO iBMO = new IncidentBMO();
-						int success = iBMO.saveAndAuditIncident(inc, agent, session);
-						
+						int success = 0;
+						try{
+							success = iBMO.saveAndAuditIncident(false, inc, agent, session);
+						} catch (StaleStateException sse){
+							//ignore
+						}
 						if (success != 1) {
 							logger.error("INCIDENT " + inc.getIncident_ID() + " DID NOT SUCCESSFULLY AUTO-CLOSE!");
 							continue;

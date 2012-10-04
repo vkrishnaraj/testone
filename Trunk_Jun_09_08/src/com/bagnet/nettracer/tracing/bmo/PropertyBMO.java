@@ -166,6 +166,8 @@ public class PropertyBMO {
 	
 	public static final String SCANQUERY_DAYS_BACK = "scanquery.days.back";
 	
+	public static final String LOCK_CACHE_CLUSTER = "lock.cache.cluster";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

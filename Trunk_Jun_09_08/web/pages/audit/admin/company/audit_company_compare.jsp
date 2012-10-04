@@ -957,6 +957,18 @@ function updatePagination() {
               </logic:iterate>
             </tr>
 
+            <tr>
+              <td>
+                <bean:message key="colname.incident.lock.mins" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.incident_lock_mins" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
+
 
           </table>
           <br>

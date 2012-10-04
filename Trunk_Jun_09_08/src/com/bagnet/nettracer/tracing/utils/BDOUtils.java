@@ -34,8 +34,8 @@ import org.hibernate.criterion.Order;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
-import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -46,7 +46,6 @@ import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Deliver_ServiceLevel;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_BDO;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -1238,8 +1237,12 @@ public class BDOUtils {
 					
 					// Save incident
 					IncidentBMO ibmo = new IncidentBMO();
-					ibmo.saveAndAuditIncident(inc, a, sess);
-
+					try{
+						ibmo.saveAndAuditIncident(false, inc, a, sess);
+					} catch (StaleStateException sse){
+						//loupas - should never reach here
+					}
+					
 				}
 
 				// Save on-hand
@@ -1330,8 +1333,11 @@ public class BDOUtils {
 					remarks.add(r);
 					
 					IncidentBMO ibmo = new IncidentBMO();
-					ibmo.saveAndAuditIncident(inc, a, sess);
-
+					try{
+						ibmo.saveAndAuditIncident(false, inc, a, sess);
+					} catch (StaleStateException sse){
+						//loupas - should never reach here
+					}
 				}
 
 				// Save on-hand

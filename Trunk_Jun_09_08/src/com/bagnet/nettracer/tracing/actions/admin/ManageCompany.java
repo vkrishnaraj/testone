@@ -158,6 +158,8 @@ public final class ManageCompany extends Action {
 					dForm.setAuto_close_ld_station(cmpny.getVariable().getAuto_close_ld_station());
 					dForm.setAuto_close_dam_station(cmpny.getVariable().getAuto_close_dam_station());
 					dForm.setAuto_close_pil_station(cmpny.getVariable().getAuto_close_pil_station());
+					
+					dForm.setIncident_lock_mins(cmpny.getVariable().getIncident_lock_mins());
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {
@@ -376,6 +378,10 @@ public final class ManageCompany extends Action {
 					}
 					if (dForm.getAuto_close_pil_station() != null) {
 					var.setAuto_close_pil_station(dForm.getAuto_close_pil_station().intValue());
+					}
+					
+					if (dForm.getIncident_lock_mins() != null) {
+					var.setIncident_lock_mins(dForm.getIncident_lock_mins().intValue());	
 					}
 				}
 				

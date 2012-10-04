@@ -677,6 +677,14 @@ public class LostDelayAction extends CheckedAction {
 				saveMessages(request, errors);
 				return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));
 			}
+			session.setAttribute("incidentObj", inc);
+			List<ActionMessage> lockErrors = SpringUtils.getLockFile().getLockActionMessages(inc.getIncident_ID(), user);
+			if(lockErrors != null){
+				for(ActionMessage lockError:lockErrors){
+					errors.add(ActionMessages.GLOBAL_MESSAGE, lockError);
+					saveMessages(request, errors);
+				}
+			}
 			
 
 			if(inc.getDeliveryInstructions()==null){
@@ -686,7 +694,6 @@ public class LostDelayAction extends CheckedAction {
 				theform.setDeliveryInstructions(DI);
 			}
 			
-			session.setAttribute("incidentObj", inc);
 			
 			//wt  suspend or reinstate
 			if(request.getParameter("wtq_reinstate") != null && request.getParameter("wtq_reinstate").trim().length() > 0) {

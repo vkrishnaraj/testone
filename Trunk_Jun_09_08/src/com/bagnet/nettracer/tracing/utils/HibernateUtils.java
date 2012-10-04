@@ -329,6 +329,8 @@ public class HibernateUtils {
 						c.getVariable().setAuto_close_ld_station(obj.getVariable().getAuto_close_ld_station());
 						c.getVariable().setAuto_close_dam_station(obj.getVariable().getAuto_close_dam_station());
 						c.getVariable().setAuto_close_pil_station(obj.getVariable().getAuto_close_pil_station());
+						
+						c.getVariable().setIncident_lock_mins(obj.getVariable().getIncident_lock_mins());
 					}
 					
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {

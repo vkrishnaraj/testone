@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -230,8 +231,12 @@ public final class ViewMatch extends Action {
 				}
 
 				// match
-				iBMO.updateIncidentNoAudit(incident);
-
+				try{
+				iBMO.updateIncidentNoAudit(false,incident);
+				} catch (StaleStateException sse){
+					//loupas - should never be reach
+				}
+				
 				has_matched = true;
 
 				// match done
@@ -263,7 +268,11 @@ public final class ViewMatch extends Action {
 
 						// update matching database
 						has_matched = true;
-						iBMO.updateIncidentNoAudit(incident);
+						try{
+							iBMO.updateIncidentNoAudit(false,incident);
+							} catch (StaleStateException sse){
+								//loupas - should never be reach
+							}
 						MatchUtils.matchToOhd(Integer.parseInt(match_ID), ohd, user);
 						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED));
 						//if has the wt_id,close wt
@@ -295,7 +304,11 @@ public final class ViewMatch extends Action {
 
 						// update matching database
 						has_matched = true;
-						iBMO.updateIncidentNoAudit(incident);
+						try{
+							iBMO.updateIncidentNoAudit(false,incident);
+							} catch (StaleStateException sse){
+								//loupas - should never be reach
+							}
 						MatchUtils.matchToOhd(Integer.parseInt(match_ID), ohd, user);
 						
 						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_MATCHED));
@@ -359,7 +372,11 @@ public final class ViewMatch extends Action {
 						ic.setOHD_ID(null);
 
 						has_unmatched = true;
-						iBMO.updateIncidentNoAudit(incident);
+						try{
+							iBMO.updateIncidentNoAudit(false,incident);
+							} catch (StaleStateException sse){
+								//loupas - should never be reach
+							}
 
 						match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_OPEN));
 						request.setAttribute("unmatched", "1");
@@ -408,7 +425,11 @@ public final class ViewMatch extends Action {
 				    HibernateUtils.save(incident);
 				}*/
 				has_unmatched = true;
-				iBMO.updateIncidentNoAudit(incident);
+				try{
+					iBMO.updateIncidentNoAudit(false,incident);
+					} catch (StaleStateException sse){
+						//loupas - should never be reach
+					}
 				match.setStatus(StatusBMO.getStatus(TracingConstants.MATCH_STATUS_OPEN));
 				request.setAttribute("unmatched", "1");
 			}

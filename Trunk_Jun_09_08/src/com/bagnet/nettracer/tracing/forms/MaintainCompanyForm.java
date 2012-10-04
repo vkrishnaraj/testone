@@ -99,6 +99,8 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private Integer auto_close_dam_station;
 	private Integer auto_close_pil_station;
 
+	//lock incident
+	private Integer incident_lock_mins;
 
 	public String getWt_write_enabled() {
 		return wt_write_enabled;
@@ -458,6 +460,14 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public void setAuto_close_pil_station(Integer auto_close_pil_station) {
 		this.auto_close_pil_station = auto_close_pil_station;
+	}
+
+	public void setIncident_lock_mins(Integer incident_lock_mins) {
+		this.incident_lock_mins = incident_lock_mins;
+	}
+
+	public Integer getIncident_lock_mins() {
+		return incident_lock_mins;
 	}
 
 

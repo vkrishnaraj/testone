@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 
 import com.bagnet.nettracer.cronjob.ErrorHandler;
 import com.bagnet.nettracer.cronjob.bmo.WTQueueBmo;
@@ -11,7 +12,7 @@ import com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.SpecialFlagBMO;
-import com.bagnet.nettracer.tracing.bmo.StatusBMO;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
@@ -165,7 +166,15 @@ public class WorldTracerQueueWorker implements Runnable {
 						queue.setStatus(WtqStatus.SUCCESS);
 						wtqBmo.updateQueue(queue);
 						incident.setWtFile(new WorldTracerFile(wtId));
-						iBmo.updateIncidentNoAudit(incident);
+						try {
+							iBmo.updateIncidentNoAudit(false,incident);
+						} catch (HibernateException e) {
+							e.printStackTrace();
+						} catch (StaleStateException e) {
+							//loupas - should never reach this since the update is ignoring the stale state
+							e.printStackTrace();
+						}
+						
 					} else {
 						queue.setStatus(WtqStatus.CANCELED);
 						wtqBmo.updateQueue(queue);
@@ -331,7 +340,14 @@ public class WorldTracerQueueWorker implements Runnable {
 					incident.getWtFile().setWt_status(WTStatus.CLOSED);
 					queue.setStatus(WtqStatus.SUCCESS);
 					wtqBmo.updateQueue(queue);
-					iBmo.updateIncidentNoAudit(incident);
+					try {
+						iBmo.updateIncidentNoAudit(false, incident);
+					} catch (HibernateException e) {
+						e.printStackTrace();
+					} catch (StaleStateException e) {
+						//loupas - should never reach this since the update is ignoring the stale state
+						e.printStackTrace();
+					}
 				}
 				else if(queue instanceof WtqCloseOhd) {
 					String wtId = null;
@@ -433,7 +449,14 @@ public class WorldTracerQueueWorker implements Runnable {
 						queue.setStatus(WtqStatus.SUCCESS);
 						wtqBmo.updateQueue(queue);
 						incident.getWtFile().setWt_status(WTStatus.SUSPENDED);
-						iBmo.updateIncidentNoAudit(incident);
+						try {
+							iBmo.updateIncidentNoAudit(false,incident);
+						} catch (HibernateException e) {
+							e.printStackTrace();
+						} catch (StaleStateException e) {
+							//should never reach here
+							e.printStackTrace();
+						}
 					} else {
 						if (incident == null) {
 							queue.setStatus(WtqStatus.FAIL);
@@ -494,7 +517,14 @@ public class WorldTracerQueueWorker implements Runnable {
 					queue.setStatus(WtqStatus.SUCCESS);
 					wtqBmo.updateQueue(queue);
 					incident.getWtFile().setWt_status(WTStatus.ACTIVE);
-					iBmo.updateIncidentNoAudit(incident);
+					try {
+						iBmo.updateIncidentNoAudit(false, incident);
+					} catch (HibernateException e) {
+						e.printStackTrace();
+					} catch (StaleStateException e) {
+						//loupas - should never reach this since the update is ignoring the stale state
+						e.printStackTrace();
+					}
 				}
 				else if(queue instanceof WtqSuspendOhd) {
 					String wtId = null;
@@ -823,7 +853,14 @@ public class WorldTracerQueueWorker implements Runnable {
 						queue.setStatus(WtqStatus.CANCELED);
 						incident.getWtFile().setWt_status(WTStatus.CLOSED);
 						wtqBmo.updateQueue(queue);
-						iBmo.updateIncidentNoAudit(incident);
+						try {
+							iBmo.updateIncidentNoAudit(false, incident);
+						} catch (HibernateException e) {
+							e.printStackTrace();
+						} catch (StaleStateException e) {
+							//loupas - should never reach this since the update is ignoring the stale state
+							e.printStackTrace();
+						}
 						continue;
 					}
 					catch (WorldTracerException ex) {

@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -30,7 +31,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.cronjob.tracing.PassiveTracing;
 import com.bagnet.nettracer.email.HtmlEmail;
@@ -46,6 +46,7 @@ import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -113,6 +114,8 @@ import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 public class BagService {
 	private static Logger logger = Logger.getLogger(BagService.class);
 
+	private static ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale("US"));
+	
 	/**
 	 *  
 	 */
@@ -235,8 +238,11 @@ public class BagService {
 						r.setIncident(inc);
 						remarks.add(r);
 						// save the incident
-						bmo.insertIncident(inc, null, user);
+						bmo.insertIncident(false, inc, null, user);
 
+					}
+					catch (StaleStateException sse){
+						//loupas - should never reach here
 					}
 					catch (Exception e) {
 						logger.error("unable to find incident: " + e);
@@ -700,11 +706,22 @@ public class BagService {
 				}
 			}
 			else {
-				if(setToClosedStatus && checkClosedStatus) {
-					result = iBMO.insertIncident(iDTO, theform.getAssoc_ID(), mod_agent, true);
-				}
-				else {
-					result = iBMO.insertIncident(iDTO, theform.getAssoc_ID(), mod_agent, false);
+				try{
+					if(setToClosedStatus && checkClosedStatus) {
+						result = iBMO.insertIncident(true, iDTO, theform.getAssoc_ID(), mod_agent, true);
+					}
+					else {
+						result = iBMO.insertIncident(true, iDTO, theform.getAssoc_ID(), mod_agent, false);
+					}
+				} catch (StaleStateException e){
+					for(int i = 0; i < theform.getPassengerlist().size(); i++) {
+						pa = (Passenger) theform.getPassenger(i);
+						if(pa.getMembership() == null) {
+							pa.setMembership(new AirlineMembership());
+						}
+					}
+					logger.error("unable to insert incident due to bean stale state error: " + e);
+					return new ActionMessage("error.unable_to_insert_incident_stale_state", resources.getString("incident"));
 				}
 			}
 
@@ -1008,7 +1025,7 @@ public class BagService {
 				return null;
 
 			populateIncidentFormFromIncidentObj(incident_ID, theform, user, itemtype, iBMO, iDTO, false);
-
+			SpringUtils.getLockFile().lockIncident(user, iDTO);
 			return iDTO;
 		}
 		catch (Exception e) {

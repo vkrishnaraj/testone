@@ -47,6 +47,12 @@
 		<fileset dir="${basedir}/lib/client-us">
 			<patternset refid="jar.files" />
 		</fileset>
+		<fileset dir="${app.home.jb5}\server\all\lib">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${app.home.jb5}\common\lib">
+			<patternset refid="jar.files" />
+		</fileset>
 	</path>	
 
 	<!-- GLOBAL TASKDEFS -->

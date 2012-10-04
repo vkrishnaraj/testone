@@ -45,6 +45,9 @@
 		
 	<bean id="sharesIntegration"
 		class="com.bagnet.clients.${shares.class.path}.SharesIntegrationThreadHandler" />
+		
+	<bean id="incidentLock" class="com.bagnet.nettracer.tracing.utils.lock.CacheLockFile" >
+	</bean>
 
 	<!-- Hibernate config -->
 	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper"

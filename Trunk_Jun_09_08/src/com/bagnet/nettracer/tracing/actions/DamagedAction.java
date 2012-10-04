@@ -512,6 +512,13 @@ public class DamagedAction extends CheckedAction {
 			}
 			request.setAttribute("incident", incident);
 			session.setAttribute("incidentObj", inc);
+			List<ActionMessage> lockErrors = SpringUtils.getLockFile().getLockActionMessages(inc.getIncident_ID(), user);
+			if(lockErrors != null){
+				for(ActionMessage lockError:lockErrors){
+					errors.add(ActionMessages.GLOBAL_MESSAGE, lockError);
+					saveMessages(request, errors);
+				}
+			}
 
 		} else {
 			// prepopulate

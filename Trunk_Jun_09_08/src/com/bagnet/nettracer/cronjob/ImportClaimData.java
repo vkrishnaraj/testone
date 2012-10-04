@@ -30,6 +30,7 @@ import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -216,8 +217,13 @@ public abstract class ImportClaimData {
 				if (submitToFraud) {
 					queue.put(file);
 				}
-
-				if (ibmo.saveAndAuditIncident(incident, agent, null) <= 0) {
+				int saved = 0;
+				try{
+					saved = ibmo.saveAndAuditIncident(false, incident, agent, null);
+				} catch (StaleStateException sse){
+					//ignore
+				}
+				if (saved <= 0) {
 					logger.error("\tError saving incident: "
 							+ incident.getIncident_ID());
 					break;

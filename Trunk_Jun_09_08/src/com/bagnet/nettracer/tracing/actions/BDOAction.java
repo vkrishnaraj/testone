@@ -217,7 +217,7 @@ public class BDOAction extends Action {
 						inc.setDeliveryInstructions(DI);
 					}
 					IncidentBMO iBMO = new IncidentBMO();
-					iBMO.saveAndAuditIncident(inc, user,null);
+					iBMO.saveAndAuditIncident(false,inc, user,null);
 				}
 				//Create BDO
 				BDOHistoryObject BHO=new BDOHistoryObject();

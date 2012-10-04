@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -31,24 +30,14 @@ import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 
-import aero.nettracer.fs.model.FsAddress;
-import aero.nettracer.fs.model.FsIncident;
-import aero.nettracer.fs.model.Person;
-import aero.nettracer.fs.model.Phone;
-import aero.nettracer.fs.model.Reservation;
-import aero.nettracer.fs.model.FsClaim;
-
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
-import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
-import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
-import com.bagnet.nettracer.tracing.db.Claim;
-import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -63,7 +52,6 @@ import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.Passenger;
-import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -93,17 +81,17 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 public class IncidentBMO {
 	private static Logger logger = Logger.getLogger(IncidentBMO.class);
 
-	public int insertIncident(Incident iDTO, String assoc_ID, Agent mod_agent) throws HibernateException {
-		return insertIncident(iDTO, assoc_ID, mod_agent, false);
+	public int insertIncident(boolean checkStaleState, Incident iDTO, String assoc_ID, Agent mod_agent) throws HibernateException, StaleStateException {
+		return insertIncident(checkStaleState, iDTO, assoc_ID, mod_agent, false);
 	}
 
 
 
-	public int insertIncident(Incident iDTO, String assoc_ID, Agent mod_agent, Session sess) throws HibernateException {
-		return insertIncidentWithSession(iDTO, assoc_ID, mod_agent, false, sess);
+	public int insertIncident(boolean checkStaleState, Incident iDTO, String assoc_ID, Agent mod_agent, Session sess) throws HibernateException, StaleStateException {
+		return insertIncidentWithSession(checkStaleState, iDTO, assoc_ID, mod_agent, false, sess);
 	}
 	
-	public int insertIncidentWithSession(Incident iDTO, String assoc_ID, Agent mod_agent, boolean checkClosedStatus, Session sess) throws HibernateException {
+	public int insertIncidentWithSession(boolean checkStaleState, Incident iDTO, String assoc_ID, Agent mod_agent, boolean checkClosedStatus, Session sess) throws HibernateException, StaleStateException {
 		boolean oldStatusKept = false;
 		Transaction t = null;
 		try {
@@ -125,8 +113,14 @@ public class IncidentBMO {
 				iDTO.setChecklist_version(versionId);
 			} else {
 				oldinc = findIncidentByID(incident_id);
-				if (oldinc == null)
+				if (oldinc == null){
 					isnew = true;
+				} else {
+					//check to see if incident has been updated recently
+					if(checkStaleState && iDTO.getLastupdated().before(oldinc.getLastupdated())){
+						throw new StaleStateException();
+					}
+				}
 			}
 			
 		
@@ -280,8 +274,8 @@ public class IncidentBMO {
 		return 1;
 	}
 	
-	public int insertIncident(Incident iDTO, String assoc_ID, Agent mod_agent, boolean checkClosedStatus)
-			throws HibernateException {
+	public int insertIncident(boolean checkStaleState, Incident iDTO, String assoc_ID, Agent mod_agent, boolean checkClosedStatus)
+			throws HibernateException, StaleStateException {
 		boolean oldStatusKept = false;
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -304,8 +298,14 @@ public class IncidentBMO {
 				iDTO.setChecklist_version(versionId);
 			} else {
 				oldinc = findIncidentByID(incident_id);
-				if (oldinc == null)
+				if (oldinc == null){
 					isnew = true;
+				} else {
+					//check to see if incident has been updated recently
+					if(checkStaleState && iDTO.getLastupdated().before(oldinc.getLastupdated())){
+						throw new StaleStateException();
+					}
+				}
 			}
 			
 
@@ -447,6 +447,12 @@ public class IncidentBMO {
 			if (t != null)
 				t.rollback();
 			return -1;
+		} catch (StaleStateException sse){
+			logger.error("unable to insert into database because incident is stale: " + sse);
+
+			if (t != null)
+				t.rollback();
+			throw sse;
 		} catch (Exception e) {
 			logger.error("unable to insert into database: " + e);
 
@@ -463,8 +469,12 @@ public class IncidentBMO {
 		return 1;
 	}
 
-
-	public boolean updateIncidentNoAudit(Incident iDTO) throws HibernateException {
+	public boolean updateIncidentNoAudit(boolean checkStaleState, Incident iDTO) throws HibernateException, StaleStateException {
+		if(checkStaleState && IncidentBMO.isStale(iDTO)){
+			throw new StaleStateException();
+		}
+		
+		iDTO.setLastupdated(TracerDateTime.getGMTDate());
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -492,6 +502,7 @@ public class IncidentBMO {
 	}
 
 	public int updateRemarksAndLossCodeOnly(String incident_id, Set remarks, Agent mod_agent, int losscode) throws HibernateException {
+		//do not check for stale states on remark only saves
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -566,7 +577,11 @@ public class IncidentBMO {
 	}
 	
 	
-	public int saveAndAuditIncident(Incident incident, Agent mod_agent, Session sess) throws HibernateException {
+	public int saveAndAuditIncident(boolean checkStaleState, Incident incident, Agent mod_agent, Session sess) throws HibernateException, StaleStateException {
+		if(checkStaleState && IncidentBMO.isStale(incident)){
+			throw new StaleStateException();
+		}
+		
 		boolean sessionNull = (sess == null);
 		
 		Transaction t = null;
@@ -2113,11 +2128,15 @@ public class IncidentBMO {
 		return inc;
 	}
 	
-	public void incrementPrintedReceipt(String incident_id) {
+	public void incrementPrintedReceipt(String incident_id) throws HibernateException {
 		Incident inc = this.findIncidentByID(incident_id);
 		if (inc.getPrintedreceipt() == null) {
 			inc.setPrintedreceipt(TracerDateTime.getGMTDate());
-			this.updateIncidentNoAudit(inc);
+			try{
+				this.updateIncidentNoAudit(false,inc);
+			} catch (StaleStateException sse){
+				//loupas - should never reach this
+			}
 		}
 	}
 
@@ -2362,4 +2381,37 @@ public class IncidentBMO {
 		}
 		return iDTO;
 	}
+	
+	public static Date getIncidentLastUpdateTimestamp(String incidentId){
+		String sql = "select lastupdated from incident where incident_id = :incidentId";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("incidentId", incidentId);
+			return (Date)q.uniqueResult();
+		} catch (Exception e) {
+			logger.error("unable to get last update timestamp for incident: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close hibernate session: " + e);
+				}
+			}
+		}
+	}
+	
+	public static boolean isStale(Incident inc){
+		if(inc != null && inc.getIncident_ID() != null && inc.getLastupdated() != null){
+			Date lastUpdated = IncidentBMO.getIncidentLastUpdateTimestamp(inc.getIncident_ID());
+			if (lastUpdated != null){
+				return inc.getLastupdated().before(lastUpdated);
+			}
+		}
+		return false;
+	}
+	
 }

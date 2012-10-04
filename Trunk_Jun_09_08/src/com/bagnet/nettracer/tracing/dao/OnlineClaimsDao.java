@@ -19,6 +19,7 @@ import org.springframework.beans.BeanUtils;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCBag;
@@ -36,7 +37,6 @@ import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCPhone;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Bag;
-import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
 
 import common.Logger;
 
@@ -385,7 +385,11 @@ public class OnlineClaimsDao {
 				i.setOc_claim_id(claimId);
 				IncidentBMO iBMO = new IncidentBMO();
 				agent = AdminUtils.getAgent(PropertyBMO.getValue(PropertyBMO.PROPERTY_OIA_AGENT));
-				iBMO.saveAndAuditIncident(i, agent, sess);
+				try{
+					iBMO.saveAndAuditIncident(false, i, agent, sess);
+				} catch (StaleStateException sse){
+					//loupas - should never reach here
+				}
 			}
 			return claim;
 		} catch (Exception e) {

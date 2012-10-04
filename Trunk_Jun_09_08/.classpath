@@ -145,5 +145,7 @@
 	<classpathentry kind="lib" path="lib/jars/nt_fs_client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ScannerMbrQueryService.jar"/>
 	<classpathentry kind="lib" path="lib/jars/SimpleService.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-5.1.0.GA-clean/common/lib/jboss-ha-server-api.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-5.1.0.GA-clean/server/all/lib/jbosscache-core.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

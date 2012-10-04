@@ -377,6 +377,7 @@ public class MoveToLZThread {
 				
 				
 				// Save the incident
+				inc.setLastupdated(TracerDateTime.getGMTDate());
 				t = sess.beginTransaction();
 				sess.saveOrUpdate(inc);
 				t.commit();
