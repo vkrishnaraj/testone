@@ -838,8 +838,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					Incident incident = null;
 					try {
 						incident = ((WtqIncidentAction) queue).getIncident();
-						if (incident != null && incident.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING
-								&& TracingConstants.MBR_STATUS_CLOSED != incident.getStatus().getStatus_ID()) {
+						if (incident != null && incident.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) {
 							String result = wtService.amendAhl(incident, dto);
 						}
 					}
@@ -900,8 +899,6 @@ public class WorldTracerQueueWorker implements Runnable {
 						queue.setStatus(WtqStatus.FAIL);
 					} else if (incident.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING) {
 						queue.setStatus(WtqStatus.LOCKED);
-					} else if (TracingConstants.MBR_STATUS_CLOSED == incident.getStatus().getStatus_ID()) {
-						queue.setStatus(WtqStatus.CANCELED);
 					} else {
 						logger.info("amended AHL: " + ((WtqAmendAhl) queue).getIncident().getIncident_ID());
 						queue.setStatus(WtqStatus.SUCCESS);
@@ -912,9 +909,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					OHD ohd = null;
 					try {
 						ohd = ((WtqOhdAction) queue).getOhd();
-						if (ohd != null && TracingConstants.OHD_STATUS_CLOSED != ohd.getStatus().getStatus_ID()) {
-							String result = wtService.amendOhd(ohd, dto);
-						}
+						String result = wtService.amendOhd(ohd, dto);
 					}
 					catch(WorldTracerLoggedOutException ex) {
 						errorHandler.sendEmail("Unable to Login", ex, false, false);
@@ -955,14 +950,8 @@ public class WorldTracerQueueWorker implements Runnable {
 						wtqBmo.updateQueue(queue);
 						continue;
 					}
-					if (ohd == null) {
-						queue.setStatus(WtqStatus.FAIL);
-					} else if (TracingConstants.OHD_STATUS_CLOSED == ohd.getStatus().getStatus_ID()) {
-						queue.setStatus(WtqStatus.CANCELED);
-					} else {
-						logger.info("amended ohd: " + ((WtqAmendOhd) queue).getOhd().getOHD_ID());
-						queue.setStatus(WtqStatus.SUCCESS);
-					}
+					logger.info("amended ohd: " + ((WtqAmendOhd) queue).getOhd().getOHD_ID());
+					queue.setStatus(WtqStatus.SUCCESS);
 					wtqBmo.updateQueue(queue);
 				}
 				else if(queue instanceof WtqCreateBdo) {
