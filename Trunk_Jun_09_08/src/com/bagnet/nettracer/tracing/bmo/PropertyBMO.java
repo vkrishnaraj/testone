@@ -169,6 +169,7 @@ public class PropertyBMO {
 	public static final String LOCK_CACHE_CLUSTER = "lock.cache.cluster";
 	
 	public static final String AUTO_CLOSE_REMARK = "auto.close.remark";
+	public static final String AUTO_CLOSE_REMARK_LOC = "auto.close.remark.loc";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

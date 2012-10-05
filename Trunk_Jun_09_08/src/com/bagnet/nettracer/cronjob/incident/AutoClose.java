@@ -117,9 +117,22 @@ public class AutoClose {
 						r.setRemarktext(remarkText != null ? remarkText : DEFAULT_REMARK);                
 						r.setIncident(inc);
 						r.setRemarktype(TracingConstants.REMARK_CLOSING);
-						
 						Set<Remark> remarks = inc.getRemarks();
+						
+						int remarkLoc = PropertyBMO.getValueAsInt(PropertyBMO.AUTO_CLOSE_REMARK_LOC);
+						if (remarkLoc == 1) {
+							r.setRemarktype(TracingConstants.REMARK_REGULAR);
+						} else if (remarkLoc == 2) {
+							Remark r2 = new Remark();
+							r2.setAgent(agent);
+							r2.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+							r2.setRemarktext(remarkText != null ? remarkText : DEFAULT_REMARK);                
+							r2.setIncident(inc);
+							r2.setRemarktype(TracingConstants.REMARK_REGULAR);
+							remarks.add(r2);
+						}
 						remarks.add(r);
+						
 						IncidentBMO iBMO = new IncidentBMO();
 						int success = 0;
 						try{
