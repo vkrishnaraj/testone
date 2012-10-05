@@ -1,13 +1,10 @@
 package com.bagnet.nettracer.tracing.utils.lock;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.util.MessageResources;
@@ -19,12 +16,9 @@ import org.jboss.ha.framework.server.CacheManagerLocator;
 
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class CacheLockFile implements LockFile{
@@ -75,7 +69,7 @@ public class CacheLockFile implements LockFile{
 		}
 		
 		Object [] payload = {inc.getIncident_ID(),
-				  TracerDateTime.getGMTDate(),
+				  new Date(),
 				  agent.getAgent_ID(),
 				  agent.getUsername(),
 				  agent.getFirstname(),
@@ -102,7 +96,7 @@ public class CacheLockFile implements LockFile{
 		}
 		
 		ArrayList<Object[]> list = new ArrayList<Object[]>();
-		Date now = TracerDateTime.getGMTDate();
+		Date now = new Date();
 		long lock_interval = getLockInterval();
 		if(incidentMap != null){
 			for(Object log:incidentMap.values()){
@@ -141,16 +135,14 @@ public class CacheLockFile implements LockFile{
 			return null;
 		}
 		ArrayList<ActionMessage> ret = new ArrayList<ActionMessage>();
+		Date now = new Date();
 		for(Object[] log:logs){
 			if(agent.getAgent_ID() != (Integer)log[AGENT_ID]){
-				DateFormat df = new SimpleDateFormat(TracingConstants.DB_TIMEFORMAT);
-//				df.setTimeZone(TimeZone.getTimeZone("GMT"));
-				Date completedate = DateUtils.convertToDate(df.format(((Date)log[LOAD_TIMESTAMP])), TracingConstants.DB_TIMEFORMAT, null);
-				String d = DateUtils.formatDate(completedate, agent.getTimeformat().getFormat(), null, TimeZone.getTimeZone(agent.getCurrenttimezone()));
+				long diff = ((now.getTime() - ((Date)log[LOAD_TIMESTAMP]).getTime())/60000) + 1;//+1 to round up to the nearest minute
 				String[] vars = {messages.getMessage(new Locale(agent.getCurrentlocale()), "incident"),
 						log[AGENT_FIRSTNAME] + " " + log[AGENT_LASTNAME] +" (" + (String)log[AGENT_USERNAME] + ")",
 						(String)log[AGENT_STATION],
-						d};
+						""+diff};
 				ActionMessage toAdd = new ActionMessage("error.incident.lock", vars);
 				ret.add(toAdd);
 			}
@@ -168,5 +160,4 @@ public class CacheLockFile implements LockFile{
 		}
 		return lock_ms;
 	}
-	
 }
