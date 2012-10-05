@@ -46,10 +46,13 @@ import aero.nettracer.fs.service.objects.xsd.SimpleResponse;
 import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 
 public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     
+	private static Logger logger = Logger.getLogger(SimpleServiceImplementation.class);
+	
 	private HashMap<Integer,String> statusMap = null;
 	
 	
@@ -84,6 +87,8 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
      * @param submitClaim
      */
 	public aero.nettracer.fs.service.SubmitClaimResponseDocument submitClaim (aero.nettracer.fs.service.SubmitClaimDocument submitClaim) {
+		logger.info(submitClaim);
+		
 		SubmitClaimResponseDocument resDoc = SubmitClaimResponseDocument.Factory.newInstance();
 		SubmitClaimResponse claimRes = resDoc.addNewSubmitClaimResponse();
 		SimpleResponse res = claimRes.addNewReturn();
@@ -96,10 +101,12 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 1, errors);
 			if(!errors.isEmpty()){
 				res.setSearchSummary("Incorrect username/password");
+				logger.info(resDoc);
 				return resDoc;
 			}
 		} else {
 			res.setSearchSummary("username/password not provided");
+			logger.info(resDoc);
 			return resDoc;
 		}
 
@@ -108,7 +115,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 		File file = claim.getData();
 		
 		createClaim(file, res, agent);
-		
+		logger.info(resDoc);
 		return resDoc;
     }
  
@@ -118,7 +125,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
      * @param updateClaimStatus
      */
     public aero.nettracer.fs.service.UpdateClaimStatusResponseDocument updateClaimStatus (aero.nettracer.fs.service.UpdateClaimStatusDocument updateClaimStatus) {
-    	//TODO : fill this with the necessary business logic
+    	logger.info(updateClaimStatus);
     	UpdateClaimStatusResponseDocument resDoc = UpdateClaimStatusResponseDocument.Factory.newInstance();
     	UpdateClaimStatusResponse claimRes = resDoc.addNewUpdateClaimStatusResponse();
 		SimpleResponse res = claimRes.addNewReturn();
@@ -131,10 +138,12 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 1, errors);
 			if(!errors.isEmpty()){
 				res.setSearchSummary("Incorrect username/password");
+				logger.info(resDoc);
 				return resDoc;
 			}
 		} else {
 			res.setSearchSummary("username/password not provided");
+			logger.info(resDoc);
 			return resDoc;
     	}
     	
@@ -142,6 +151,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	Claim claim = ClaimDAO.loadClaim(claimId);
     	if(claim == null){
     		res.setSearchSummary("file " + claimId + " not found");
+    		logger.info(resDoc);
     		return resDoc;
     	}
     	
@@ -159,6 +169,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	
     	if(!validStatusId(statusId)){
     		res.setSearchSummary("" + statusId +" is not a valid status ID.  Please use one of the following: " + getStatusDescriptions());
+    		logger.info(resDoc);
     		return resDoc;
     	}
     	
@@ -173,6 +184,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 		} else {
 			//TODO handle error
 			res.setSearchSummary("There was an error saving this claim");
+			logger.info(resDoc);
 			return resDoc;
 		}
 		
@@ -183,6 +195,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 		if (claimSaved && ntfsUser) {
 			submitClaimToFs(claim, firstSave, res, agent);
 		}
+		logger.info(resDoc);
     	return resDoc;
     }
     
