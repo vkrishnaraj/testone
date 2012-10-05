@@ -584,19 +584,6 @@ public final class IncidentForm extends ValidatorForm {
 
 	public Itinerary getItinerary(int index, int type) {
 		if (index < 0) index = 0;
-		List<Itinerary> plist = new ArrayList<Itinerary>();
-		List<Itinerary> blist = new ArrayList<Itinerary>();
-		
-		for(Itinerary i:this.itinerarylist){
-			if(i.getItinerarytype()==0){
-				plist.add(i);
-			}
-		}
-		for(Itinerary i:this.itinerarylist){
-			if(i.getItinerarytype()==1){
-				blist.add(i);
-			}
-		}
 		
 		if (this.itinerarylist.size() <= index) {
 			Itinerary i = new Itinerary();
@@ -613,18 +600,19 @@ public final class IncidentForm extends ValidatorForm {
 				i.setLegto_type(TracingConstants.LEG_E_STATION);
 			} else {
 				// make the previous terminating station into trasfer station
-				int tempindex;
-				Itinerary tempi;
-				if(type==0){
-					tempindex = plist.size() - 1;
-					tempi = plist.get(tempindex);
-				} else {
-					tempindex = blist.size() - 1;
-					tempi = blist.get(tempindex);
+				int tempindex=index-1;
+				Itinerary tempi=null;
+				while(tempindex>=0){
+					tempi=itinerarylist.get(tempindex);
+					if(tempi.getItinerarytype()==type)	break;
+					tempindex--;
 				}
-				tempi.setLegto_type(TracingConstants.LEG_T_STATION);
-				i.setLegfrom_type(TracingConstants.LEG_T_STATION);
-				i.setLegto_type(TracingConstants.LEG_E_STATION);
+				
+				if(tempi!=null){
+					tempi.setLegto_type(TracingConstants.LEG_T_STATION);
+					i.setLegfrom_type(TracingConstants.LEG_T_STATION);
+					i.setLegto_type(TracingConstants.LEG_E_STATION);
+				}
 			}
 
 			this.itinerarylist.add(i);
