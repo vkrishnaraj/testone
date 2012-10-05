@@ -113,8 +113,16 @@ import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
  */
 public class BagService {
 	private static Logger logger = Logger.getLogger(BagService.class);
-
-	private static ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale("US"));
+	
+	private static MessageResources messages = null;
+	
+	static {
+		try {
+			messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		} catch (Exception e) {
+			// Ignore
+		}
+	}
 	
 	/**
 	 *  
@@ -721,7 +729,7 @@ public class BagService {
 						}
 					}
 					logger.error("unable to insert incident due to bean stale state error: " + e);
-					return new ActionMessage("error.unable_to_insert_incident_stale_state", resources.getString("incident"));
+					return new ActionMessage("error.unable_to_insert_incident_stale_state", messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "incident"));
 				}
 			}
 

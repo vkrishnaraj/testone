@@ -7,10 +7,10 @@ import java.util.Date;
 import java.util.Map;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.TimeZone;
 
 import org.apache.struts.action.ActionMessage;
+import org.apache.struts.util.MessageResources;
 import org.jboss.cache.Cache;
 import org.jboss.cache.CacheManager;
 import org.jboss.cache.CacheStatus;
@@ -39,7 +39,16 @@ public class CacheLockFile implements LockFile{
 	public static final int AGENT_LASTNAME = 5;
 	public static final int AGENT_STATION = 6;
 	
-	private static ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale("US"));
+	
+	private static MessageResources messages = null;
+	
+	static {
+		try {
+			messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		} catch (Exception e) {
+			// Ignore
+		}
+	}
 	
 	public CacheLockFile(){
 		
@@ -138,7 +147,7 @@ public class CacheLockFile implements LockFile{
 //				df.setTimeZone(TimeZone.getTimeZone("GMT"));
 				Date completedate = DateUtils.convertToDate(df.format(((Date)log[LOAD_TIMESTAMP])), TracingConstants.DB_TIMEFORMAT, null);
 				String d = DateUtils.formatDate(completedate, agent.getTimeformat().getFormat(), null, TimeZone.getTimeZone(agent.getCurrenttimezone()));
-				String[] vars = {resources.getString("incident"),
+				String[] vars = {messages.getMessage(new Locale(agent.getCurrentlocale()), "incident"),
 						log[AGENT_FIRSTNAME] + " " + log[AGENT_LASTNAME] +" (" + (String)log[AGENT_USERNAME] + ")",
 						(String)log[AGENT_STATION],
 						d};
