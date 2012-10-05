@@ -40,6 +40,10 @@ public class BDO_Receipt_DTO {
 	private String serviceLevel;
 	private String customerinfo;
 	private String deliveryinfo;
+	private String delIns;
+	private String delInfo;
+	private String bagInfo;
+	private String custInfo;
 
 	public String getServiceLevel() {
 		return serviceLevel;
@@ -47,6 +51,38 @@ public class BDO_Receipt_DTO {
 
 	public void setServiceLevel(String serviceLevel) {
 		this.serviceLevel = serviceLevel;
+	}
+	
+	public String getDelIns() {
+		return delIns;
+	}
+
+	public void setDelIns(String delIns) {
+		this.delIns = delIns;
+	}
+	
+	public String getDelInfo() {
+		return delInfo;
+	}
+
+	public void setDelInfo(String delInfo) {
+		this.delInfo = delInfo;
+	}
+	
+	public String getBagInfo() {
+		return bagInfo;
+	}
+
+	public void setBagInfo(String bagInfo) {
+		this.bagInfo = bagInfo;
+	}
+	
+	public String getCustInfo() {
+		return custInfo;
+	}
+
+	public void setCustInfo(String custInfo) {
+		this.custInfo = custInfo;
 	}
 
 	/**

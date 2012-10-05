@@ -207,17 +207,20 @@ public class BDOAction extends Action {
 					saveMessages(request, messages);
 					return (mapping.findForward(TracingConstants.BDO_MAIN));
 				} else if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_DELIVERY_INSTRUCTIONS)) {
-					Incident inc=IncidentBMO.getIncidentByID(incident,null);
-					DeliveryInstructions DI=new DeliveryInstructions();
-					if(inc.getDeliveryInstructions()!=null)
-						DI=inc.getDeliveryInstructions();
-					DI.setInstructions(bdo.getDelivery_comments());
-					HibernateUtils.save(DI);
-					if(inc.getDeliveryInstructions()==null){
-						inc.setDeliveryInstructions(DI);
+					try{
+						Incident inc=IncidentBMO.getIncidentByID(incident,null);
+						DeliveryInstructions DI=new DeliveryInstructions();
+						if(inc.getDeliveryInstructions()!=null)
+							DI=inc.getDeliveryInstructions();
+						DI.setInstructions(bdo.getDelivery_comments());
+						HibernateUtils.save(DI);
+						if(inc.getDeliveryInstructions()==null){
+							inc.setDeliveryInstructions(DI);
+						}
+						IncidentBMO iBMO = new IncidentBMO();
+						iBMO.saveAndAuditIncident(inc, user,null);
 					}
-					IncidentBMO iBMO = new IncidentBMO();
-					iBMO.saveAndAuditIncident(false,inc, user,null);
+					catch(Exception e){}
 				}
 				//Create BDO
 				BDOHistoryObject BHO=new BDOHistoryObject();

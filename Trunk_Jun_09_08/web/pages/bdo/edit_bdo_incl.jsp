@@ -259,8 +259,8 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
             <td colspan="5">
               <bean:message key="colname.delivery.remarks" />
               <br />
-              <html:textarea rows="7" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,325);" onkeyup="textCounter3(this,textCounter2, 325);"/>
-              <input name="textCounter2" type="text" value="325" size="4" maxlength="4" disabled="true" />
+              <html:textarea rows="7" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,500);" onkeyup="textCounter3(this,textCounter2, 500);"/>
+              <input name="textCounter2" type="text" value="500" size="4" maxlength="4" disabled="true" />
             </td>
           </tr>
         </table>
@@ -279,7 +279,11 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
     var passengers = [<%=myform.getPassengerlist().size() %>];
     var addresses = [<%=myform.getPassengerlist().size() %>];
     var phonenumbers = [<%=myform.getPassengerlist().size() %>];
-    var items = [<%=myform.getIncident().getClaimchecks().size() %>];
+    <% if(myform.getIncident()!=null && myform.getIncident().getClaimchecks()!=null){ %>
+    	var items = [<%=myform.getIncident().getClaimchecks().size() %>];
+    <% } else { %>
+   		var items = [0];
+    <% } %>
 
     function emailAlertNotice() {
         <% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_BDO_CANCEL_EMAIL_ALERT)) {
@@ -394,6 +398,8 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 	    phonenumbers[<%=i%>] = phone;
 	</logic:iterate>
 	
+	<logic:notEmpty name="BDOForm" property="incident.claimchecks">
+
 	<logic:iterate id="item" name="BDOForm" property="incident.claimchecks" indexId="i" type="com.bagnet.nettracer.tracing.db.Incident_Claimcheck">
 
 		<%
@@ -414,12 +420,14 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 		items[<%=i%>] = bag;
 
 	</logic:iterate>
+	</logic:notEmpty>
 
 
 
 
     });
 </script>
+
 <select style="margin-right: 10px" onChange="mapSimpleData(this.options.selectedIndex, passengers, passengerArr); ">
 	<option value=""><bean:message key="pick.a.passenger" /></option>
 	<logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
