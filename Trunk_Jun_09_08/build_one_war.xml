@@ -47,9 +47,6 @@
 		<fileset dir="${basedir}/lib/client-us">
 			<patternset refid="jar.files" />
 		</fileset>
-		<fileset dir="${app.home.jb5}\server\all\lib">
-			<patternset refid="jar.files" />
-		</fileset>
 		<fileset dir="${app.home.jb5}\common\lib">
 			<patternset refid="jar.files" />
 		</fileset>
@@ -942,6 +939,15 @@
 		<antcall target="build-war-production-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
+	<target name="build-ear-production-lfc" depends="delete-wars">
+		<property name="staging.project" value="lfcservice" />
+		<property name="staging.env" value="production" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-production-lfc"/>
+		<property name="app.xml.location" value="metadata/lfc/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
@@ -2663,6 +2669,14 @@
 			outputLocation="src/com/bagnet/nettracer/ws/onlineclaims" outputFileName="Claims.wsdl">
 		</Java2WSDLTask>
 
+	</target>
+	
+	<target name="create_new_azul_properties">
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/azul/ApplicationResources_old_pt.properties" />
+			<property name="overrideResource" value="${basedir}/companies/azul/ApplicationResources_update_pt.properties" />
+			<property name="destinationResource" value="${basedir}/companies/azul/ApplicationResources_pt.properties" />
+		</ant>
 	</target>
 	
 	<target name="aaa_wsdl2java">
