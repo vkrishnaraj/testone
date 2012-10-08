@@ -539,7 +539,7 @@ public class ModifyClaimAction extends CheckedAction {
 				String errorsql = "select id from aero.nettracer.fs.model.FsClaim where incident_id= :incident_id"; //airlineIncMark
 				
 				Query q2 = sess.createQuery(sql);
-				q2.setParameter("incident_id", IncidentID);
+				q2.setParameter("incident_id", result.get(0));
 				List errorResult = q.list();
 				request.setAttribute("validateAirline", (Long) errorResult.get(0));
 				ActionMessage error = new ActionMessage("error.airlineincident");
