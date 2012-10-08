@@ -47,6 +47,25 @@ public class TracerProperties {
 	public static final String RESERVATION_UPDATE_EXPENSES_ON = "updatecomment.expenses.is_on";
 	public static final String ALLOW_CACHING = "allow.caching";
 	public static final String DEFAULT_CHECKED_LOCATION = "default.checked.location";
+	
+	public static final String BDO_LABEL_CUSTOMER_INFORMATION="bdo.label.customer.information";
+	public static final String BDO_LABEL_NAME="bdo.label.name";
+	public static final String BDO_LABEL_ADDRESS="bdo.label.address";
+	public static final String BDO_LABEL_PHONE_NUMBER="bdo.label.phone.number";
+	public static final String BDO_LABEL_HOTEL="bdo.label.hotel";
+	public static final String BDO_LABEL_HOTEL_NUMBER="bdo.label.hotel.number";
+	public static final String BDO_LABEL_MOBILE_NUMBER="bdo.label.mobile.number";
+	public static final String BDO_LABEL_BAG_INFORMATION="bdo.label.bag.information";
+	public static final String BDO_LABEL_DELIVERY_INFORMATION="bdo.label.delivery.information";
+	public static final String BDO_LABEL_NUMBER_BAGS="bdo.label.number.bags";
+	public static final String BDO_LABEL_BAG_NUMBER="bdo.label.bag.number";
+	public static final String BDO_LABEL_COLOR="bdo.label.color";
+	public static final String BDO_LABEL_TYPE="bdo.label.type";
+	public static final String BDO_LABEL_RECEIVED_BY="bdo.label.received.by";
+	public static final String BDO_LABEL_DELIVERY_INSTRUCTIONS="bdo.label.delivery.instructions";
+	public static final String BDO_LABEL_CHARGES="bdo.label.charges";
+	public static final String BDO_LABEL_SERVICE_LEVEL="bdo.label.service.level";
+	public static final String BDO_LABEL_REFERENCE_NUMBER="bdo.label.reference.number";
 
 	private static final Logger logger = Logger.getLogger(TracerProperties.class);
 
