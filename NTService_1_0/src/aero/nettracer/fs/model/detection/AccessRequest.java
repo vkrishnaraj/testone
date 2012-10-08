@@ -40,7 +40,7 @@ public class AccessRequest implements Serializable {
 	@OneToOne(fetch = FetchType.EAGER)
 	private File file;
 	
-	private String contact;
+	//private String contact;
 
 	public File getFile() {
 		return file;
@@ -138,13 +138,13 @@ public class AccessRequest implements Serializable {
 		this.responseAgent = responseAgent;
 	}
 	
-	public String getContact() {
-		return contact;
-	}
-
-	public void setContact(String contact) {
-		this.contact = contact;
-	}
+//	public String getContact() {
+//		return contact;
+//	}
+//
+//	public void setContact(String contact) {
+//		this.contact = contact;
+//	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
