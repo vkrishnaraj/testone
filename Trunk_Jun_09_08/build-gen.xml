@@ -197,6 +197,9 @@
 			<fileset dir="${basedir}/lib/provided">
 				<patternset refid="jar.files" />
 			</fileset>
+			<fileset dir="${app.home.jb5}\common\lib">
+				<patternset refid="jar.files" />
+			</fileset>
 		</path>
 	</target>
 
