@@ -45,8 +45,8 @@ public class LookupAirlineCodes {
 		if (results != null && results.size() >0) {
 			for(Object result: results) {
 				Object[] res = (Object[]) result;
-				TWO_CHAR_TO_THREE_DIGIT.put((String) res[0], (String) res[1]);
-				THREE_DIGIT_TO_TWO_CHAR.put((String) res[1], (String) res[0]);
+				TWO_CHAR_TO_THREE_DIGIT.put(((String) res[0]).toUpperCase(), (String) res[1]);
+				THREE_DIGIT_TO_TWO_CHAR.put((String) res[1], ((String) res[0]).toUpperCase());
 			}
 		}
 	}
@@ -64,9 +64,13 @@ public class LookupAirlineCodes {
 			logger.error("LookupAirlineCodes table is null");
 		}
 		if (THREE_DIGIT_TO_TWO_CHAR.containsKey(threeDigitCode)) {
-			return THREE_DIGIT_TO_TWO_CHAR.get(threeDigitCode);
+			String temp = THREE_DIGIT_TO_TWO_CHAR.get(threeDigitCode);
+			if (temp == null || temp.isEmpty()) {
+				return null;
+			}
+			return temp;
 		}
-		THREE_DIGIT_TO_TWO_CHAR.put(threeDigitCode, null);
+		THREE_DIGIT_TO_TWO_CHAR.put(threeDigitCode, "");
 		logger.info("LookupAirlineCodes three digit code not available: " + threeDigitCode);
 		return null;
 	}
@@ -82,10 +86,15 @@ public class LookupAirlineCodes {
 		if (TWO_CHAR_TO_THREE_DIGIT == null) {
 			logger.error("LookupAirlineCodes table is null");
 		}
+		twoCharacterCode = twoCharacterCode.toUpperCase();
 		if (TWO_CHAR_TO_THREE_DIGIT.containsKey(twoCharacterCode)) {
-			return TWO_CHAR_TO_THREE_DIGIT.get(twoCharacterCode);
+			String temp = TWO_CHAR_TO_THREE_DIGIT.get(twoCharacterCode);
+			if (temp == null || temp.isEmpty()) {
+				return null;
+			}
+			return temp;
 		}
-		TWO_CHAR_TO_THREE_DIGIT.put(twoCharacterCode, null);
+		TWO_CHAR_TO_THREE_DIGIT.put(twoCharacterCode, "");
 		logger.info("LookupAirlineCodes two character code not available: " + twoCharacterCode);
 		return null;
 	}
