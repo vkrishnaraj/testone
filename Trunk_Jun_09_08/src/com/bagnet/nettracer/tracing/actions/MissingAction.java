@@ -496,7 +496,7 @@ public class MissingAction extends CheckedAction {
 		String incident = request.getParameter("incident_ID");
 		Incident inc = null;
 		if (incident != null && incident.length() > 0) {
-			if (bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES) == null) {
+			if ((inc = bs.findIncidentByID(incident, theform, user, TracingConstants.MISSING_ARTICLES)) == null) {
 				ActionMessage error = new ActionMessage("error.noincident");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
