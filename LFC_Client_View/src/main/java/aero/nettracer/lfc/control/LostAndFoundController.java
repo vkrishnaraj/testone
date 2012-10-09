@@ -54,7 +54,9 @@ public class LostAndFoundController {
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 		.getExternalContext().getSession(false);
 		lostReport = (LostReportBean) session.getAttribute("lostReport");
-		setSegmentLocationDesc(lostReport.getSegments());
+		if (getSubCompany() != null && getSubCompany().equals("SWA") ) {
+			setSegmentLocationDesc(lostReport.getSegments());
+		}
 		update = (session.getAttribute("edit")!=null && session.getAttribute("edit").equals(true));
 		if (getCompany() == null) {
             FacesContext fc = FacesContext.getCurrentInstance();
