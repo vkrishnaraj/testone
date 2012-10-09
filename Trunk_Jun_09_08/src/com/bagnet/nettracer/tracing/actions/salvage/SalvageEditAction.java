@@ -76,6 +76,14 @@ public class SalvageEditAction extends CheckedAction {
 			if (sId > 0) {
 				salvage = SalvageDAO.loadSalvage(sId);
 			}
+			
+			if (salvage != null && salvage.getRemark() == null) {
+				SalvageRemark remark = new SalvageRemark();
+				remark.setAgent(user);
+				remark.setCreatetime(TracerDateTime.getGMTDate());
+				remark.setRemarktype(TracingConstants.REMARK_REGULAR);
+				salvage.setRemark(remark);
+			}
 
 		} else {
 
