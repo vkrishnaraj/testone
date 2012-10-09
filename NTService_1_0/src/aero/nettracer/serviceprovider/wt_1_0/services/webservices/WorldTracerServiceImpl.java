@@ -308,7 +308,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 			.replaceAll("\\s+", " ");
 			ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(s, MAX_CONTENT_DESC_LENGTH);			
-			for(int j = 0; j < al.size() || j <= 1; j++){
+			for(int j = 0; j < al.size() && j <= 1; j++){
 				if(al.get(j).length() > 0){
 					m.put(key+j, al.get(j));
 				}
