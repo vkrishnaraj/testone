@@ -53,9 +53,6 @@ function toggledc(o) {
     }
     
     function populateClaimNum(second,first){
-    	//var first = document.getElementById('bagtagSelect'),
-        //second = document.getElementById('bagtagId');
-
     	second.value = first.value;
     }
 
