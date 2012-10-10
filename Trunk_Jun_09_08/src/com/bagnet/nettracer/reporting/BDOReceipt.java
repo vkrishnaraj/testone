@@ -87,8 +87,8 @@ public class BDOReceipt {
 					CustInfo+=messages.getMessage(TracerProperties.BDO_LABEL_PHONE_NUMBER)+": "+phno+"\r";
 				if(mphno==null || mphno.length()==0)
 					CustInfo+=messages.getMessage(TracerProperties.BDO_LABEL_MOBILE_NUMBER)+": "+mphno+"\r";
-					
-				CustInfo+=messages.getMessage(TracerProperties.BDO_LABEL_HOTEL)+": "+pa.getHotel(); 
+				if(pa.getHotel()!=null && pa.getHotel().length()>0)
+					CustInfo+=messages.getMessage(TracerProperties.BDO_LABEL_HOTEL)+": "+pa.getHotel(); 
 				if(pa.getHotelphone()!=null && pa.getHotelphone().length()>0){
 					CustInfo+="\r"+messages.getMessage(TracerProperties.BDO_LABEL_HOTEL_NUMBER)+": "+pa.getHotelphone();
 				}
@@ -172,7 +172,9 @@ public class BDOReceipt {
 				
 				try {
 					brd.setCharges(charges.toString());
-					deliInfo+=messages.getMessage(TracerProperties.BDO_LABEL_CHARGES)+": "+charges.toString()+"\r";
+					if(charges.length()>0){
+						deliInfo+=messages.getMessage(TracerProperties.BDO_LABEL_CHARGES)+": "+charges.toString()+"\r";
+					}
 				} catch (Exception e) {
 					brd.setCharges("");
 					deliInfo+="\r";
