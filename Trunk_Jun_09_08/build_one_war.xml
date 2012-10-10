@@ -3511,7 +3511,7 @@
   </target>
 	
   	<target name="test-hudson-lfc-services" depends="build-ear-hudson-lfc-service">
-		<javac srcdir="./autotest" fork="true" destdir="${build.dir}/lfc_web/classes" debug="on" verbose="true" memoryinitialsize="256m" >
+		<javac srcdir="./autotest" fork="false" destdir="${build.dir}/lfc_web/classes" debug="on" verbose="true" memoryinitialsize="256m" >
 			<classpath refid="project.classpath" />
 			<exclude name="com/bagnet/nettracer/cronjob/**" />
 			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl" />
