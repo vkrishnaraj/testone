@@ -13,10 +13,5 @@
      </web>
   </module>
   
-  <!--  
-   <module>
-      <java>avis-service.jar</java>
-   </module>
-  -->
   
 </application> 
