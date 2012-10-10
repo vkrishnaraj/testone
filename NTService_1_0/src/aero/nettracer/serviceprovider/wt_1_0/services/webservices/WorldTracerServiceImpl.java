@@ -301,6 +301,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 			}
 		}
+		HashMap<String,String> toReturn = new HashMap<String, String>();
 		for(String key:m.keySet()){
 			String s = m.get(key)
 			.trim()
@@ -310,12 +311,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(s, MAX_CONTENT_DESC_LENGTH);			
 			for(int j = 0; j < al.size() && j <= 1; j++){
 				if(al.get(j).length() > 0){
-					m.put(key+j, al.get(j));
+					toReturn.put(key+j, al.get(j));
 				}
 			}
-			m.remove(key);
 		}
-		return m;
+		return toReturn;
 	}
 
 	public void writeToLog(String description) {
