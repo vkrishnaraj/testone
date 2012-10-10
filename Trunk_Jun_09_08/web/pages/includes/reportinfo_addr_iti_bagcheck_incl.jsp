@@ -139,7 +139,7 @@
 		<font color="red"> <logic:messagesPresent message="true">
 				<html:messages id="msg" message="true">
 					<br />
-					<bean:write name="msg" />
+					<bean:write name="msg" filter="false"/>
 					<br />
 				</html:messages>
 			</logic:messagesPresent>
