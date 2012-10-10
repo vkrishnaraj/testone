@@ -255,5 +255,14 @@
                   </c:if>
                 </td>
               </tr>
+                  <% if (((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
+              <tr>
+                <td>
+          		  <font color=red>
+                    <bean:message key="tracing.status.close.disabled" />
+                  </font>
+                </td>
+              </tr>
+              	  <% } %>
             </table>
     </html:form>
