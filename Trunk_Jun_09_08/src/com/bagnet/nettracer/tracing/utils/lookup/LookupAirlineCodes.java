@@ -234,8 +234,8 @@ public class LookupAirlineCodes {
 			THREE_DIGIT_TO_TWO_CHAR.clear();
 			for(Object result: results) {
 				Object[] res = (Object[]) result;
-				TWO_CHAR_TO_THREE_DIGIT.put((String) res[0], (String) res[1]);
-				THREE_DIGIT_TO_TWO_CHAR.put((String) res[1], (String) res[0]);
+				TWO_CHAR_TO_THREE_DIGIT.put(((String) res[0]).toUpperCase(), (String) res[1]);
+				THREE_DIGIT_TO_TWO_CHAR.put((String) res[1], ((String) res[0]).toUpperCase());
 			}
 		}
 		
