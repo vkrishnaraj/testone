@@ -729,7 +729,7 @@ public class BagService {
 						}
 					}
 					logger.error("unable to insert incident due to bean stale state error: " + e);
-					return new ActionMessage("error.unable_to_insert_incident_stale_state", messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "incident"));
+					return new ActionMessage("error.unable_to_insert_incident_stale_state", messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "incident"),iDTO.getIncident_ID());
 				}
 			}
 
