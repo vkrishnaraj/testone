@@ -1841,6 +1841,12 @@ public class BagService {
 		theform.setOhd_type(iDTO.getOhd_type());
 		theform.setWtFile(iDTO.getWtFile());
 		theform.setEarlyBag(iDTO.isEarlyBag());
+		theform.setWarehouseReceivedDate(iDTO.getWarehouseReceivedDate());
+		theform.setWarehouseSentDate(iDTO.getWarehouseSentDate());
+		theform.setDispWarehouseReceivedDate(DateUtils.formatDate(iDTO.getWarehouseReceivedDate(), theform.getAgent().getDateformat().getFormat(), 
+				theform.getAgent().getCurrentlocale(), null ));
+		theform.setDispWarehouseSentDate(DateUtils.formatDate(iDTO.getWarehouseSentDate(), theform.getAgent().getDateformat().getFormat(), 
+				theform.getAgent().getCurrentlocale(), null ));
 
 		BeanUtils.copyProperties(theform, iDTO);
 		if(iDTO.getMembership() == null) {
