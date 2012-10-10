@@ -224,34 +224,6 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 
   }
   
-  function validateReqDisputeForm(form)
-  {
-  	for (var j=0;j < form.length; j++) {
-  	
-      currentElement = form.elements[j];
-      currentElementName=currentElement.name;
-  	if (currentElementName.indexOf("faultstation_id") != -1) {  
-		
-		 if (currentElement.value == "")
-		  {
-		    alert("<%= (String)bundle.getString( "colname.faultstation") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-		    currentElement.focus();
-		    return false;
-		  }
-		}
-	  else if (currentElementName.indexOf("loss_code") != -1) {  
-		
-		 if (currentElement.value == "0")
-		  {
-		    alert("<%= (String)bundle.getString( "colname.closereport.losscode") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-		    currentElement.focus();
-		    return false;
-		  }
-		}
-		
-	}
-  }
-    
   function validatereqOHDForm(form) {
     returnValue = true;
     var addressIndices = [];
@@ -320,7 +292,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 	
   function validateReqForward(form) {
         var theindex = 0;
-    for (var j=0;j<form.length;j++) {
+    for (var j=0;j < form.length;j++) {
       currentElement = form.elements[j];
       currentElementName=currentElement.name;
       
@@ -370,7 +342,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
   function validatereqBEORN(form)
   {
   	var theindex = 0;
-  	for (var j=0;j<form.length;j++) {
+  	for (var j=0;j< form.length;j++) {
 	    currentElement = form.elements[j];
 	    currentElementName=currentElement.name;
       
