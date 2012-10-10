@@ -744,7 +744,7 @@ public final class OnHandForm extends ValidatorForm {
 	 * 
 	 * @return
 	 */
-	public String getdispWarehouseSentDate() {
+	public String getDispWarehouseSentDate() {
 		if (this.dispWarehouseSentDate == null || this.dispWarehouseSentDate.equals("")) {
 			if (this.getWarehouseSentDate() != null) this.dispWarehouseSentDate = DateUtils.formatDate(this
 					.getWarehouseSentDate(), _DATEFORMAT, null, null);
@@ -954,7 +954,7 @@ public final class OnHandForm extends ValidatorForm {
 	 * @param dispBagArriveDate
 	 *          The dispBagArriveDate to set.
 	 */
-	public void setdispWarehouseSentDate(String dispWarehouseSentDate) {
+	public void setDispWarehouseSentDate(String dispWarehouseSentDate) {
 		this.dispWarehouseSentDate = dispWarehouseSentDate;
 	}
 
