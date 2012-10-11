@@ -42,7 +42,6 @@ public class LostAndFoundController {
 	private List<CategoryBean> categories;
 	private String statePickUp;
 	private String stateDropOff;
-	private boolean submitted=false;
 	private List<SelectItem> locationsPickUp;
 	private List<SelectItem> locationsDropOff;
 	
@@ -82,7 +81,6 @@ public class LostAndFoundController {
 	}
 	
 	public String createReport() {
-		submitted=true;
 		if (validate()) {
 			long id = clientViewService.create(lostReport);
 			if (id != -1) {
@@ -94,12 +92,10 @@ public class LostAndFoundController {
 			}
 			FacesUtil.addError("Server Communication Error.");
 		}
-		submitted=false;
 		return null;
 	}
 	
 	public String editReport() {
-		submitted=true;
 		if (validate()) {
 			long id = clientViewService.create(lostReport);
 			if (id != -1) {
@@ -111,7 +107,6 @@ public class LostAndFoundController {
 			}
 			FacesUtil.addError("Server Communication Error.");
 		}
-		submitted=false;
 		return null;
 	}
 	
