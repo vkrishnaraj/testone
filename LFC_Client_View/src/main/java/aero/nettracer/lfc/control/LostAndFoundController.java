@@ -82,6 +82,7 @@ public class LostAndFoundController {
 	}
 	
 	public String createReport() {
+		submitted=true;
 		if (validate()) {
 			long id = clientViewService.create(lostReport);
 			if (id != -1) {
@@ -93,10 +94,12 @@ public class LostAndFoundController {
 			}
 			FacesUtil.addError("Server Communication Error.");
 		}
+		submitted=false;
 		return null;
 	}
 	
 	public String editReport() {
+		submitted=true;
 		if (validate()) {
 			long id = clientViewService.create(lostReport);
 			if (id != -1) {
@@ -108,6 +111,7 @@ public class LostAndFoundController {
 			}
 			FacesUtil.addError("Server Communication Error.");
 		}
+		submitted=false;
 		return null;
 	}
 	
@@ -143,7 +147,6 @@ public class LostAndFoundController {
 		} else {
 			isValid = validateAB() && isValid;
 		}
-		submitted=false;
 		return isValid;
 	}
 	
