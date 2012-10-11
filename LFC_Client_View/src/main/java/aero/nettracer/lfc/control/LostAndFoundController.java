@@ -42,6 +42,7 @@ public class LostAndFoundController {
 	private List<CategoryBean> categories;
 	private String statePickUp;
 	private String stateDropOff;
+	private boolean submitted=false;
 	private List<SelectItem> locationsPickUp;
 	private List<SelectItem> locationsDropOff;
 	
@@ -142,6 +143,7 @@ public class LostAndFoundController {
 		} else {
 			isValid = validateAB() && isValid;
 		}
+		submitted=false;
 		return isValid;
 	}
 	
