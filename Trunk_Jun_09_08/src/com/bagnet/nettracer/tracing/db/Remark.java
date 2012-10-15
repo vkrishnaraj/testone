@@ -30,6 +30,8 @@ public class Remark implements Serializable {
 	
 	private Incident incident;
 	private OHD ohd;
+	private Claim claim;
+	//Add Claim field getters and setters
 
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
@@ -178,6 +180,7 @@ public class Remark implements Serializable {
 	public void setOhd(OHD ohd) {
 		this.ohd = ohd;
 	}
+	
 	/**
 	 * @return Returns the remarktext.
 	 * 

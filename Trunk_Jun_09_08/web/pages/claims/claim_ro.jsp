@@ -245,6 +245,13 @@
                           <input name='mod_claim_reason2' type="text" id='mod_claim_reason2' value="255" size="4" maxlength="4" disabled />
                         </td>
                       </tr>
+                      <tr>
+							<td colspan=4>
+								<bean:message key="colname.claim_remarks" />
+								<br/>
+								<html:textarea  name="matchClaim" property="claimRemark"  cols="80" rows="6" styleClass="textfield" disabled="true"/>
+							</td>
+						</tr>
                       
                     </table>
                     <br />
@@ -604,6 +611,7 @@
                             </td>
                           </tr>
                         </logic:present>
+                        
                         <tr>
                           <td align="center" valign="top" colspan=3>
                             <logic:present name="editinterim" scope="request">

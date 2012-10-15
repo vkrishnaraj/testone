@@ -26,9 +26,9 @@ public class TransportMapper {
 		return ntar;
 	}
 	
-	public static aero.nettracer.fs.model.transport.v1.File map(aero.nettracer.fs.model.File ntfile){
+	public static aero.nettracer.fs.model.transport.v2.File map(aero.nettracer.fs.model.File ntfile){
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-		aero.nettracer.fs.model.transport.v1.File fsfile = mapper.map(ntfile, aero.nettracer.fs.model.transport.v1.File.class);
+		aero.nettracer.fs.model.transport.v2.File fsfile = mapper.map(ntfile, aero.nettracer.fs.model.transport.v2.File.class);
 		return fsfile;
 	}
 	

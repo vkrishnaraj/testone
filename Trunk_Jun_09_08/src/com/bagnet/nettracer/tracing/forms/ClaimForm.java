@@ -176,7 +176,13 @@ public final class ClaimForm extends ActionForm {
 		return getClaimant().getAddresses().toArray(new FsAddress[0])[0];
 	}
 	
-
+	private String getRemark() {
+		return claim.getClaimRemark();
+	}
+	
+	private void setRemark(String remark){
+		claim.setClaimRemark(remark);
+	}
 	
 	public FsAddress getClaimantAddress(int i) {
 		Person claimant = getClaimant();

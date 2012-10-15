@@ -432,6 +432,13 @@
                           <input name='mod_claim_reason2' type="text" id='mod_claim_reason2' value="255" size="4" maxlength="4" disabled />
                         </td>
                       </tr>
+                      <tr>
+							<td colspan=4>
+								<bean:message key="colname.claim_remarks" />
+								<br/>
+								<html:textarea  name="claimForm" property="claim.claimRemark"  cols="80" rows="10" styleClass="textfield" />
+							</td>
+						</tr>
                       
                     </table>
                     <br />
@@ -1332,6 +1339,8 @@
 						</td>
 					</tr>
 					</table>
+					
+					
                     <center>
                     <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />

@@ -1,4 +1,4 @@
-package aero.nettracer.fs.model;
+package aero.nettracer.fs.model.transport.v2;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -97,7 +97,7 @@ public class FsClaim implements Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "incident_id")
-	private aero.nettracer.fs.model.FsIncident incident;
+	private FsIncident incident;
 	
 	@Transient
 	protected Person claimant = null;
@@ -110,11 +110,11 @@ public class FsClaim implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public aero.nettracer.fs.model.FsIncident getIncident() {
+	public FsIncident getIncident() {
 		return incident;
 	}
 
-	public void setIncident(aero.nettracer.fs.model.FsIncident incident) {
+	public void setIncident(FsIncident incident) {
 		this.incident = incident;
 	}
 	
