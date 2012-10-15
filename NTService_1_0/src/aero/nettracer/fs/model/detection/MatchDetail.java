@@ -29,7 +29,7 @@ public class MatchDetail implements Serializable {
 		cc("cc"), pnrloc("pnrloc"), 
 		pnrdata("pnrdata"), traveldate("traveldate"), 
 		ticketamount("ticketamount"), dob("dob"), 
-		itin("itin");
+		itin("itin"), claimRemarks("claimRemarks");
 	
 		private String label;
 		

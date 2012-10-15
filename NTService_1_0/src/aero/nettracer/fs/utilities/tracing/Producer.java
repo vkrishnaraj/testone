@@ -806,7 +806,11 @@ public class Producer {
 			} else if (d.getMatchtype().equals(MatchType.itin)){
 				if(!p1.isAllEnabled() && !p1.isItin() && !p1.isShowallclaiminfo())d.setContent1(s);
 				if(!p2.isAllEnabled() && !p2.isItin() && !p2.isShowallclaiminfo())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.claimRemarks)){
+				if(!p1.isAllEnabled() && !p1.isClaimRemarks() && !p1.isShowallclaiminfo())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isClaimRemarks() && !p2.isShowallclaiminfo())d.setContent2(s);
 			}
+			
 			String c1=p1.getKey()!= null ? p1.getKey().getCompanycode():"NA";
 			String c2=p2.getKey()!= null ? p2.getKey().getCompanycode():"NA";
 			logger.debug(c1+c2+":"+d.getContent1()+":"+d.getContent2());
@@ -891,6 +895,10 @@ public class Producer {
 				}
 				if(!p.isTraveldate()){
 					claim.setTravelDate(null);
+				}
+				
+				if(!p.isClaimRemarks()){
+					claim.setClaimRemark(s);
 				}
 				for(Person per:claim.getClaimants()){
 					if(!p.isName()){

@@ -56,6 +56,7 @@ public class FsClaim implements Serializable {
 	protected String ntIncidentId;
 	protected int claimProrateId;
 	protected int statusId;
+	protected String claimRemark;
 	
 	@ManyToOne
 	@JoinColumn(name = "file_id")
@@ -140,6 +141,14 @@ public class FsClaim implements Serializable {
 
 	public void setAirlineClaimId(String airlineClaimId) {
 		this.airlineClaimId = airlineClaimId;
+	}
+	
+	public String getClaimRemark() {
+		return claimRemark;
+	}
+
+	public void setClaimRemark(String claimRemark) {
+		this.claimRemark =claimRemark;
 	}
 
 	public String getAirline() {
