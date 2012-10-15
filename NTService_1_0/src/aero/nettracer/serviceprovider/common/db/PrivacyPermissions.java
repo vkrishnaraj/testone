@@ -76,6 +76,7 @@ public class PrivacyPermissions implements Serializable{
     boolean bdo;
 	boolean incdate;
 	boolean incremarks;
+	boolean claimRemarks;
 	
 	int retention;
 
@@ -102,6 +103,14 @@ public class PrivacyPermissions implements Serializable{
 
 	public void setCc(boolean cc) {
 		this.cc = cc;
+	}
+	
+	public boolean isClaimRemarks() {
+		return claimRemarks;
+	}
+
+	public void setClaimRemarks(boolean claimRemarks) {
+		this.claimRemarks = claimRemarks;
 	}
 
 	public boolean isDrivers() {
