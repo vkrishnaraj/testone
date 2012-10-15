@@ -334,6 +334,11 @@ function validatereqOHDFields(form) {
       }
     }
 
+    returnValue = true;
+    returnValue = validatereqWtOHDForm(form);
+    if (returnValue == false) { return returnValue; }
+    
+    
         var theindex = 0;
     for (var j=0;j < form.length; j++) {
       currentElement = form.elements[j];
@@ -388,8 +393,8 @@ function validatereqOHDFields(form) {
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
+        } 
         }
-      }
    }
     return true;
   }
