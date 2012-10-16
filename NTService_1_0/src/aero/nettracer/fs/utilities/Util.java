@@ -1,5 +1,6 @@
 package aero.nettracer.fs.utilities;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 public class Util {
 	private static HashMap<String, GreyListAddress> greyListMap = null;
 	
-	
+	private static DecimalFormat geocodeDecimalFormat = new DecimalFormat("0.00000");//5 decimal points should give us sub 7m accuracy
 	
 	public static String removeNonNumeric(String s) {
 		if (s == null) return s;
@@ -33,7 +34,7 @@ public class Util {
 			greyListMap = new HashMap<String, GreyListAddress>();
 			List<GreyListAddress> addresses = getGreyListedAddreses();
 			for (GreyListAddress a: addresses) {
-				String key = a.getLatitude() + "/" + a.getLongitude();
+				String key = normalizeGeoNumber(a.getLatitude()) + "/" + normalizeGeoNumber(a.getLongitude());
 				greyListMap.put(key, a);
 			}
 			return greyListMap;
@@ -61,4 +62,9 @@ public class Util {
 			}
 		}		
 	}
+	
+	public static String normalizeGeoNumber(double d){
+		return geocodeDecimalFormat.format(d);
+	}
+	
 }
