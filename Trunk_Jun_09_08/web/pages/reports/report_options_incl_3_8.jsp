@@ -58,7 +58,20 @@
                           <html:text property="cstarttime" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3" name="calendar3" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.statReportForm.cstarttime,'calendar3','<%= agent.getDateformat().getFormat() %>'); return false;">-
                           <html:text property="cendtime" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar4" name="calendar4" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.statReportForm.cendtime,'calendar4','<%= agent.getDateformat().getFormat() %>'); return false;"></td>
                       </tr>
-                    </logic:equal>                    
+                    </logic:equal>             
+                    <logic:equal name="reportnum" scope="request" value="7">
+                      <tr>
+                        <td>
+                          <bean:message key="colname.close_date_range" />
+                        (
+                        <%= agent.getDateformat().getFormat() %>)
+                          :
+                        </td>
+                        <td>
+                          <html:text property="cstarttime" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3" name="calendar3" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.statReportForm.cstarttime,'calendar3','<%= agent.getDateformat().getFormat() %>'); return false;">-
+                          <html:text property="cendtime" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar4" name="calendar4" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.statReportForm.cendtime,'calendar4','<%= agent.getDateformat().getFormat() %>'); return false;"></td>
+                      </tr>
+                    </logic:equal>       
                     <logic:equal name="reportnum" scope="request" value="8">
                       <tr>
                         <td>

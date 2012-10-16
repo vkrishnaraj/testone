@@ -2079,7 +2079,9 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
+			Date csdate = null, cedate=null;
 			String dateq = "";
+			String dateq2 = "";
 
 			ArrayList dateal = null;
 			if ((dateal = calculateDateDiff(srDTO,tz,user)) == null) {
@@ -2088,6 +2090,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			sdate = (Date)dateal.get(0);sdate1 = (Date)dateal.get(1);
 			edate = (Date)dateal.get(2);edate1 = (Date)dateal.get(3);
 			stime = (Date)dateal.get(4);
+			csdate = (Date)dateal.get(5); cedate=(Date)dateal.get(6);
 			
 			parameters.put("sdate", TracerUtils.getText("reports.dates", user));
 			if (sdate != null && edate != null) {
@@ -2113,6 +2116,31 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				dateq = " and ((i_a.createdate= :startdate and i_a.createtime >= :starttime) "
 						+ " or (i_a.createdate= :startdate1 and i_a.createtime <= :starttime))";
 				edate = null;
+			}
+			//Close dates
+			if (csdate != null && cedate != null) {
+				parameters.put("csdate", srDTO.getCstarttime());
+				if (csdate.equals(cedate)) {
+					// need to add the timezone diff here
+					dateq2 = " and ((i_a.closedate= :clstartdate ) ";
+							//+ " or (i_a.closedate= :clstartdate1 and i_a.closetime <= :clstarttime))";
+
+					edate = null;
+				} else {
+
+					// first get the beginning and end dates using date and time, then get
+					// dates in between
+					dateq2 = " and ((i_a.closedate= :clstartdate ) "
+							//+ " or (i_a.createdate= :clenddate1 and i_a.createtime <= :clstarttime)"
+							+ " or (i_a.closedate > :clstartdate and i_a.closedate <= :clenddate))";
+
+					parameters.put("cedate", srDTO.getCendtime());
+				}
+			} else if (csdate != null) {
+				parameters.put("clsdate", srDTO.getCstarttime());
+				dateq2 = " and (i_a.closedate= :clstartdate ) ";
+						//+ " or (i_a.closedate= :clstartdate1 and i_a.closetime <= :clstarttime))";
+				cedate = null;
 			}
 
 			// travel date departdate and arrive date
@@ -2149,8 +2177,8 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			String sql = "select distinct i_a.stationassigned.station_ID,i_a.stationassigned.stationcode,"
 					+ " i_a.faultstation.station_ID,i_a.faultstation.stationcode,"
 					+ " i_a.incident_ID, i_a.itemtype.itemType_ID,i_a.loss_code,"
-					+ " i_a.createdate,i_a.createtime,i_a.status.status_ID,i_a.itemtype.itemType_ID " + sqlselect
-					+ mbrtypeq + stationq + faultq + losscodeq + statusq + agentq + dateq + traveldateq + companylimit
+					+ " i_a.createdate,i_a.createtime,i_a.status.status_ID,i_a.itemtype.itemType_ID, i_a.closedate " + sqlselect
+					+ mbrtypeq + stationq + faultq + losscodeq + statusq + agentq + dateq + dateq2 + traveldateq + companylimit
 					+ " order by i_a.itemtype.itemType_ID, i_a.incident_ID ";
 			
 			Query q = sess.createQuery(sql);
@@ -2186,6 +2214,14 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 			if (edate != null) {
 				q.setDate("enddate1", edate1);
 				q.setDate("enddate", edate);
+			}
+		
+			if(csdate!=null){
+				q.setDate("clstartdate",csdate);
+			}
+
+			if(cedate!=null){
+				q.setDate("clenddate",cedate);
 			}
 
 			// traveldate
@@ -2240,6 +2276,7 @@ ORDER BY incident.itemtype_ID, incident.Incident_ID"
 				
 				sr.setStatusdesc(TracerUtils.getText(Status.getKey((Integer) o[9]), user));
 				sr.setTypedesc(TracerUtils.getText(ItemType.getKey((Integer) o[10]), user));
+				sr.setClosedate((Date) o[11]);
 
 				// get passengers
 				sql = "select passenger.lastname,passenger.firstname " + " from com.bagnet.nettracer.tracing.db.Passenger passenger where "

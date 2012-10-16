@@ -28,8 +28,10 @@ public class StatReport_3_DTO {
 	private int loss_code;
 	private Date createdate;
 	private Date createtime;
+	private Date closedate;
 	private String rcreatedate;
 	private String rcreatetime;
+	private String rclosedate;
 	private String statusdesc;
 	private String typedesc;
 	private String customer_name;
@@ -104,6 +106,24 @@ public class StatReport_3_DTO {
 	public void setRcreatedate(String rcreatedate) {
 		this.rcreatedate = rcreatedate;
 	}
+	
+	/**
+	 * @return Returns the rclosedate.
+	 */
+	public String getRclosedate() {
+		
+		Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getClosedate(), TracingConstants.DB_DATEFORMAT, null, null) + " "
+				+ DateUtils.formatDate(getClosedate(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
+		
+		return DateUtils.formatDate(tempdate, _DATEFORMAT, null, _TIMEZONE);
+	}
+	/**
+	 * @param rclosedate The rclosedate to set.
+	 */
+	public void setRclosedate(String rclosedate) {
+		this.rclosedate = rclosedate;
+	}
+	
 	/**
 	 * @return Returns the rcreatetime.
 	 */
@@ -172,6 +192,18 @@ public class StatReport_3_DTO {
 		this.typedesc = typedesc;
 	}
 	
+	/**
+	 * @return Returns the closedate.
+	 */
+	public Date getClosedate() {
+		return closedate;
+	}
+	/**
+	 * @param closedate The closedate to set.
+	 */
+	public void setClosedate(Date closedate) {
+		this.closedate = closedate;
+	}
 	
 	/**
 	 * @return Returns the createdate.

@@ -318,7 +318,7 @@ public final class StatReportForm extends ValidatorForm {
 	public void setCendtime(String cendtime) {
 		this.cendtime = cendtime;
 	}
-
+	
 	/**
 	 * @return Returns the cstarttime.
 	 */
@@ -333,7 +333,7 @@ public final class StatReportForm extends ValidatorForm {
 	public void setCstarttime(String cstarttime) {
 		this.cstarttime = cstarttime;
 	}
-
+	
 	/**
 	 * @return Returns the expensetype_ID.
 	 */

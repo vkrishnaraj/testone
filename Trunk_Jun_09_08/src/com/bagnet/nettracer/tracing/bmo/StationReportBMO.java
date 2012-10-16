@@ -253,7 +253,8 @@ public class StationReportBMO {
 		
 		String reportHeadingLastNameFirstName = "Last Name, First Name";
 		String reportHeadingIncidentNumber = "Report ID";
-		String reportHeadingDate = "Date";
+		String reportHeadingDate = "Create Date";
+		String reportHeadingCDate = "Close Date";
 		String reportHeadingTime = "Time";
 		String reportHeadingItinerary = "Itinerary";
 		String reportHeadingFinal = "Final";
@@ -276,6 +277,11 @@ public class StationReportBMO {
 		String myDate = resourceBundle.getString("report.station.heading.date");
 		if (!( myDate == null || myDate.equalsIgnoreCase("") )) {
 			reportHeadingDate = myDate;
+		}
+		
+		String myCDate = resourceBundle.getString("report.station.heading.close.date");
+		if (!( myCDate == null || myCDate.equalsIgnoreCase("") )) {
+			reportHeadingCDate = myCDate;
 		}
 		
 		String myTime = resourceBundle.getString("report.station.heading.time");
@@ -460,6 +466,11 @@ public class StationReportBMO {
 				.setColumnProperty("rcreatetime", String.class.getName()).setTitle(
 				reportHeadingTime).setWidth(new Integer(30)).setStyle(detailStyle)
 				.setHeaderStyle(headerStyle).build();	
+
+		AbstractColumn columnCDate = ColumnBuilder.getNew()
+				.setColumnProperty("rclosedate", String.class.getName()).setTitle(
+				reportHeadingCDate).setWidth(new Integer(40)).setStyle(detailStyle)
+				.setHeaderStyle(headerStyle).build();
 		
 		AbstractColumn columnItinerary = ColumnBuilder.getNew()
 				.setColumnProperty("itinerary", String.class.getName()).setTitle(
@@ -505,6 +516,7 @@ public class StationReportBMO {
 		reportColumns.put("columnLastNameFirstName", columnLastNameFirstName);
 		reportColumns.put("columnClaimNumber", columnClaimNumber);
 		reportColumns.put("columnDate", columnDate);
+		reportColumns.put("columnCDate", columnCDate);
 		reportColumns.put("columnTime", columnTime);
 		reportColumns.put("columnItinerary", columnItinerary);
 		reportColumns.put("columnFinal", columnFinal);
@@ -730,6 +742,7 @@ public class StationReportBMO {
 			AbstractColumn columnClaimNumber = reportColumns.get("columnClaimNumber");
 			AbstractColumn columnDate = reportColumns.get("columnDate");
 			AbstractColumn columnTime = reportColumns.get("columnTime");
+			AbstractColumn columnCDate = reportColumns.get("columnCDate");
 			AbstractColumn columnItinerary = reportColumns.get("columnItinerary");
 			AbstractColumn columnFinal = reportColumns.get("columnFinal");
 			AbstractColumn columnAssignedStationCode = reportColumns.get("columnAssignedStationCode");
@@ -749,6 +762,7 @@ public class StationReportBMO {
 			drb.addColumn(columnClaimNumber);
 			drb.addColumn(columnDate);
 			drb.addColumn(columnTime);
+			drb.addColumn(columnCDate);
 			drb.addColumn(columnItinerary);
 			drb.addColumn(columnFinal);
 			drb.addColumn(columnAssignedStationCode);
