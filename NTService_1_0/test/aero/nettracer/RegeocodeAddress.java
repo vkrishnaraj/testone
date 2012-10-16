@@ -21,6 +21,7 @@ public class RegeocodeAddress {
 		pq = sess.createSQLQuery(sql.toString());
 		pq.addScalar("id", Hibernate.LONG);
 		List<Long> result = pq.list();
+		sess.close();
 		return result;
 	}
 	
@@ -38,6 +39,7 @@ public class RegeocodeAddress {
 		pq.addScalar("id", Hibernate.LONG);
 		pq.executeUpdate();
 		t.commit();
+		sess.close();
 	}
 	
 	
@@ -55,7 +57,7 @@ public class RegeocodeAddress {
 		pq.addScalar("province", Hibernate.STRING);
 		pq.addScalar("country", Hibernate.STRING);
 		Object[] result = (Object[]) pq.uniqueResult();
-
+		sess.close();
 		
 		try {
 			GeoLocation loc = null;
