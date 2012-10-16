@@ -567,7 +567,7 @@ public class Producer {
 		HashMap<String, GreyListAddress> greyListMap = Util.getGreyListAddressMap();
 		HashMap<String, String> keyCheck=new HashMap<String,String>();
 		for (FsAddress a: addresses) {
-			String key = a.getLattitude() + "/" + a.getLongitude();
+			String key = Util.normalizeGeoNumber(a.getLattitude()) + "/" + Util.normalizeGeoNumber(a.getLongitude());
 			if (greyListMap.containsKey(key) && a.getGeocodeType() == 1 && !keyCheck.containsKey(key)) {
 				GreyListAddress gla = greyListMap.get(key);
 				MetaWarning warn = new MetaWarning();
@@ -806,9 +806,9 @@ public class Producer {
 			} else if (d.getMatchtype().equals(MatchType.itin)){
 				if(!p1.isAllEnabled() && !p1.isItin() && !p1.isShowallclaiminfo())d.setContent1(s);
 				if(!p2.isAllEnabled() && !p2.isItin() && !p2.isShowallclaiminfo())d.setContent2(s);
-			} else if (d.getMatchtype().equals(MatchType.claimRemarks)){
-				if(!p1.isAllEnabled() && !p1.isClaimRemarks() && !p1.isShowallclaiminfo())d.setContent1(s);
-				if(!p2.isAllEnabled() && !p2.isClaimRemarks() && !p2.isShowallclaiminfo())d.setContent2(s);
+//			} else if (d.getMatchtype().equals(MatchType.claimRemarks)){
+//				if(!p1.isAllEnabled() && !p1.isClaimRemarks() && !p1.isShowallclaiminfo())d.setContent1(s);
+//				if(!p2.isAllEnabled() && !p2.isClaimRemarks() && !p2.isShowallclaiminfo())d.setContent2(s);
 			}
 			
 			String c1=p1.getKey()!= null ? p1.getKey().getCompanycode():"NA";
@@ -897,9 +897,9 @@ public class Producer {
 					claim.setTravelDate(null);
 				}
 				
-				if(!p.isClaimRemarks()){
-					claim.setClaimRemark(s);
-				}
+//				if(!p.isClaimRemarks()){
+//					claim.setClaimRemark(s);
+//				}
 				for(Person per:claim.getClaimants()){
 					if(!p.isName()){
 						per.setFirstName(s);
