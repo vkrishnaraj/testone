@@ -182,8 +182,9 @@ public class BDOReceipt {
 				
 				Deliver_ServiceLevel sl = DelivercompanyBMO.getServiceLevel(theform.getServicelevel_ID());
 				if (sl != null && sl.getDescription() != null) 
-					brd.setServiceLevel(sl.getDescription());	
-				deliInfo+=messages.getMessage(TracerProperties.BDO_LABEL_SERVICE_LEVEL)+": "+sl.getDescription();
+				{	brd.setServiceLevel(sl.getDescription());	
+					deliInfo+=messages.getMessage(TracerProperties.BDO_LABEL_SERVICE_LEVEL)+": "+sl.getDescription();
+				}
 				brd.setDeliveryinfo(deliInfo); //Add this too
 				
 				al.add(brd);

@@ -45,6 +45,7 @@ public class PropertyBMO {
 	public static final String PROPERTY_DEFAULT_OHD_SEARCH_STATUS = "default.ohd.search.status";
 	public static final String PROPERTY_PCN_ENABLED = "pcn.enabled";
 	public static final String PROPERTY_TELEX_PRINTER = "telex.printer";
+	public static final String PROPERTY_DEFAULT_REPORT_SEVEN = "default.report.seven";
 
 	public static final String PROPERTY_WT_CAPTCHA = "wt.captcha";
 	public static final String RESERVATION_HOURS_FORWARD = "reservation.hours.forward";

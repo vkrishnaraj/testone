@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.reporting.ReportingConstants;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -163,6 +164,9 @@ public class StatReportAction extends Action {
 					&&new Integer(customreportnum).intValue() == ReportingConstants.RPT_20_CUSTOM_202 
 					&& new Integer(reportnum).intValue() == ReportingConstants.RPT_20){
 				daform.setOutputtype(2);//default to xls
+			} else if (reportnum !=null &&  new Integer(reportnum).intValue() == ReportingConstants.RPT_7 && PropertyBMO.isTrue(PropertyBMO.PROPERTY_DEFAULT_REPORT_SEVEN)){
+				daform.setStatus_ID(13);
+				daform.setItemType_ID(1);
 			}
 		}
 
