@@ -227,7 +227,7 @@
                     <bean:message key="button.closereport" />
                   </html:submit>
                   <% } else { %>
-                  <html:submit property="doclose" styleId="button" onclick="doCheck = 1;" >
+                  <html:submit property="doclose" styleId="button" onclick="if(!validateClose()){ return false; } doCheck = 1;" >
                     <bean:message key="button.closereport" />
                   </html:submit>
                   <% } %>

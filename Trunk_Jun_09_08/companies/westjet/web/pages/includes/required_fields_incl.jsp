@@ -477,6 +477,10 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 	  return true;
   }
   
+  function validateClose(){
+  		return window.confirm("Have you verified any Travel Bank Credit(s) for this file has been created?");
+  }
+  
   function validateReqBDO(form) {
     returnValue = true;
     

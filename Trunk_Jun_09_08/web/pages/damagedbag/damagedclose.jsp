@@ -156,7 +156,7 @@
                         <bean:message key="button.save" />
                       </html:submit>
                     <% } %>
-                    <html:submit property="doclose" styleId="button">
+                    <html:submit property="doclose" styleId="button" onclick="if(!validateClose()){ return false; }">
                       <bean:message key="button.closereport" />
                     </html:submit>
                   </logic:notEqual>
