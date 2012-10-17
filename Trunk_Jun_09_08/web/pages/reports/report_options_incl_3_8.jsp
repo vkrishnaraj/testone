@@ -21,10 +21,18 @@
                       </td>
                     </tr>
                     <tr>
+                     <logic:notEqual name="reportnum" scope="request" value="7">
                       <td>
                         <bean:message key="colname.report_type" />
                         :
                       </td>
+                      </logic:notEqual>
+                      <logic:equal name="reportnum" scope="request" value="7">
+                      <td>
+                        <bean:message key="colname.station.report_type" />
+                        :
+                      </td>
+                      </logic:equal>
                       <td>
                         <html:select property="itemType_ID" styleClass="dropdown">
                           <html:option value="0">
