@@ -157,7 +157,7 @@ public class BDOReceipt {
 				DeliverCompany dc = BDOUtils.getDeliverCompany(theform.getDelivercompany_ID());
 				if (dc != null){
 					brd.setVendor(dc.getName());
-					deliInfo+=messages.getMessage(TracerProperties.BDO_LABEL_NUMBER_BAGS)+": "+dc.getName()+"\r";
+					deliInfo+=messages.getMessage(TracerProperties.BDO_LABEL_DELIVERY_COMPANY)+": "+dc.getName()+"\r";
 				}
 
 				StringBuilder charges = new StringBuilder("");

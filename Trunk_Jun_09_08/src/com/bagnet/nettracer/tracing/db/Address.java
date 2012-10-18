@@ -31,6 +31,7 @@ public class Address implements Serializable {
 	private String city;
 	private String zip;
 	private String hotel;
+	private String hotelphone;
 	private String homephone;
 	private String workphone;
 	private String mobile;
@@ -271,6 +272,23 @@ public class Address implements Serializable {
 	 */
 	public void setHomephone(String homephone) {
 		this.homephone = homephone;
+	}
+
+	/**
+	 * @return Returns the hotelphone.
+	 * 
+	 * @hibernate.property type="string"
+	 */
+	public String getHotelphone() {
+		return hotelphone;
+	}
+
+	/**
+	 * @param homephone
+	 *          The hotelphone to set.
+	 */
+	public void setHotelphone(String hotelphone) {
+		this.hotelphone = hotelphone;
 	}
 
 	/**

@@ -285,10 +285,14 @@
                 </td>
               </tr>
               <tr>
-                <td colspan="2" width="50%">
+                <td colspan="1" width="25%">
                   <bean:message key="colname.hotel" />
                   <br>
-                  <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].hotel" %>' size="45" maxlength="50" styleClass="textfield" />
+                  <html:text property="<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].hotel" %>" size="20" maxlength="50" styleClass="textfield" />
+                </td><td colspan="1" width="25%">
+                  <bean:message key="colname.hotel_ph" />
+                  <br>
+                  <html:text property="<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].hotelphone" %>" size="20" maxlength="50" styleClass="textfield" />
                 </td>
                 
                 <logic:equal name="incidentForm" property="incident_ID" value="">
