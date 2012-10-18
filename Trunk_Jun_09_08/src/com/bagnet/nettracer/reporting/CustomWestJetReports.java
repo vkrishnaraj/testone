@@ -242,6 +242,100 @@ public class CustomWestJetReports {
 		return toReturn;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private ArrayList getRowsFromResultList3(List results, List results2, String dateFormat) {
+		ArrayList toReturn = new ArrayList();
+		SimpleReportRow reportRow;
+		Object[] row;
+		for (int i = 0; i < results.size(); ++i) {
+			row = (Object[]) results.get(i);
+			reportRow = new SimpleReportRow();
+
+			reportRow.setColumn1((String) row[0]);
+			reportRow.setColumn2((String) row[1]);
+			if (row.length > 2) {
+				reportRow.setColumn3((String) row[2]);
+				if (row.length > 3) {
+					reportRow.setColumn4((String) row[3]);
+					if (row.length > 4) {
+						reportRow.setColumn5((String) row[4]);
+						if (row.length > 5) {
+							reportRow.setColumn6((String) row[5]);
+							if (row.length > 6) {
+								reportRow.setColumn7((String) row[6]);
+								if (row.length > 7) {
+									reportRow.setColumn8((String) row[7]);
+									if (row.length > 8) {
+										reportRow.setColumn9((String) row[8]);
+										if (row.length > 9) {
+											reportRow.setColumn10((String) row[9]);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			toReturn.add(reportRow);
+		}
+		
+		if (results2 != null) {
+			reportRow = new SimpleReportRow();
+			reportRow.setColumn1("");
+			reportRow.setColumn2("");
+			reportRow.setColumn3("");
+			reportRow.setColumn4("");
+			toReturn.add(reportRow);
+			
+			reportRow = new SimpleReportRow();
+			reportRow.setColumn1("List of Files:");
+			toReturn.add(reportRow);
+
+			reportRow = new SimpleReportRow();
+			reportRow.setColumn1("Incident IDs");
+			reportRow.setColumn2("Routing Stations");
+			reportRow.setColumn3("Create Date");
+			reportRow.setColumn4("Flight Date");
+			toReturn.add(reportRow);
+//			HashMap<String,String> RouteList=new HashMap<String,String>();
+//
+//			for (int i = 0; i < results2.size(); ++i) {
+//				row = (Object[])results2.get(i);
+//				if(RouteList.get((String)row[0])==null || RouteList.get((String)row[0]).isEmpty()){
+//					RouteList.put((String)row[0], (String)row[1]);
+//				} else {
+//					if(!RouteList.get((String)row[0]).contains((String)row[1])) {
+//						RouteList.put((String)row[0], RouteList.get((String)row[0])+", "+(String)row[1]);
+//					}
+//				}
+//				
+//				if(RouteList.get((String)row[0])==null || RouteList.get((String)row[0]).isEmpty()){
+//						RouteList.put((String)row[0], (String)row[2]);
+//				} else {
+//					if(!RouteList.get((String)row[0]).contains((String)row[2])) {
+//						RouteList.put((String)row[0], RouteList.get((String)row[0])+", "+(String)row[2]);
+//					}
+//				}
+//			}
+			
+			for (int i = 0; i < results2.size(); ++i) {
+				reportRow = new SimpleReportRow();
+				row = (Object[])results2.get(i);
+				
+				reportRow.setColumn1((String)row[0]);
+				reportRow.setColumn2((String)row[1]); //create method to pick out routing stations
+				reportRow.setColumn3(DateUtils.formatDate((String)row[2], TracingConstants.DB_DATEFORMAT, dateFormat, null, null)); //Create Date
+				reportRow.setColumn4(DateUtils.formatDate((String)row[3], TracingConstants.DB_DATEFORMAT, dateFormat, null, null)); //Flight Date
+				
+				
+				toReturn.add(reportRow);
+			}
+		}
+		return toReturn;
+	}
+	
 	/**
 	 * Method is used by multiple reports - do not edit without reviewing.
 	 */
@@ -433,34 +527,20 @@ public class CustomWestJetReports {
 			+ " group by groupcol"
 			+ " order by groupcol asc ";
 
-		String sql2 = " select distinct iid column1 from ("
-			+ " select i.incident_id iid"
-			+ "   from itinerary it join incident i on it.incident_id = i.incident_id"
-			+ "   where " + "   i.createdate >= \'"
-			+ startDate
-			+ "\' and i.createdate <= \'"
-			+ endDate
-			+ "\'"
-			+ "   and itinerarytype = 0 "
-			+ "   and legfrom is not null"
-			+ "   and legfrom != ''"
-			+ stationLimit1
-			+ "   and i.itemtype_id = 2"
-			+ "   union "
-			+ " select i.incident_id iid"
-			+ "   from itinerary it join incident i on it.incident_id = i.incident_id"
-			+ "   where " + "   i.createdate >= \'"
-			+ startDate
-			+ "\' and i.createdate <= \'"
-			+ endDate
-			+ "\'"
-			+ "   and itinerarytype = 0 "
-			+ "   and legto is not null"
-			+ "   and legto != ''"
-			+ stationLimit2
-			+ "   and i.itemtype_id = 2"
-			+ "   ) as grouped"
-			+ " order by iid"; 
+		String sql2 = " SELECT incident_id column1, route column2, createdate column3, departdate column4 FROM (SELECT incident_id, GROUP_CONCAT(legs ORDER BY incident_id ASC, itinerary_id ASC) route, departdate, createdate "
+            + " FROM (SELECT it.incident_id,it.itinerary_id,it.departdate,i.createdate, "
+            + " concat(it.legfrom, '-', it.legto) legs "
+            + " FROM itinerary it inner join incident i on i.incident_id=it.incident_ID "
+            + " WHERE it.incident_id in (select i.incident_id iid from itinerary it join incident i on it.incident_id = i.incident_id where "
+			+ "   i.createdate >= \'" + startDate
+			+ "\' and i.createdate <= \'" + endDate + "\'"
+			+ "   and itinerarytype = 0 and i.itemtype_id = 2 and "
+			+ " ((legfrom is not null"
+			+ "   and legfrom != ''"+ stationLimit1+ ") or "
+			+ " (legto is not null and legto != ''"+ stationLimit2+ " ))) "
+			+ " ORDER BY it.incident_id, it.itinerary_id ASC) itin1 "
+			+ " GROUP BY incident_id) routes order by incident_id";
+			
 			
 			
 			
@@ -482,11 +562,14 @@ public class CustomWestJetReports {
 				session = HibernateWrapper.getSession().openSession();
 				SQLQuery query2 = session.createSQLQuery(sql2);
 				query2.addScalar("column1", Hibernate.STRING);
+				query2.addScalar("column2", Hibernate.STRING);
+				query2.addScalar("column3", Hibernate.STRING);
+				query2.addScalar("column4", Hibernate.STRING);
 				results2 = query2.list();
 
 			}
 			
-			toReturn = getRowsFromResultList(results, results2, srDTO.getDateFormat());
+			toReturn = getRowsFromResultList3(results, results2, srDTO.getDateFormat());
 			
 			
 		} catch (Exception e) {
