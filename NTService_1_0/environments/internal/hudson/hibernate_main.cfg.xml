@@ -66,6 +66,8 @@
 		<mapping class="aero.nettracer.fs.model.GreyListAddress"/>
 		<mapping class="aero.nettracer.fs.model.FsActionAudit"/>
 		<mapping class="aero.nettracer.fs.model.FsMatchHistoryAudit"/>
+		<mapping class="aero.nettracer.fs.model.FsIPAddress"/>
+		<mapping class="aero.nettracer.fs.model.detection.IPWhiteList"/>
 		<!--
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCPassenger" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim" />

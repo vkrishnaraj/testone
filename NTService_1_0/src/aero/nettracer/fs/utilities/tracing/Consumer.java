@@ -22,6 +22,7 @@ import aero.nettracer.fs.model.CreditCard;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.FsNameAlias;
 import aero.nettracer.fs.model.FsReceipt;
@@ -78,6 +79,7 @@ public class Consumer implements Runnable{
 	private static final double PARTIAL_PHONE_MATCH = 15;
 	private static final double WHITELIST_MATCH = 0;
 	private static final double P_DOB = 6;	
+	private static final double P_IP = 30;	
 	
 	private static final Pattern invalidPhone = Pattern.compile("^(0+|1+|3+|4+|5+|6+|7+|8+|9+)$");
 	
@@ -163,6 +165,9 @@ public class Consumer implements Runnable{
 			edate = new Date();
 			if(edate.getTime() - sdate.getTime()>timeout)System.out.println("phone: " + (edate.getTime() - sdate.getTime()));
 			sdate = edate;
+			processIPs(match);
+			edate = new Date();
+			if(edate.getTime() - sdate.getTime()>timeout)System.out.println("phone: " + (edate.getTime() - sdate.getTime()));
 			
 			
 			
@@ -1215,6 +1220,53 @@ public class Consumer implements Runnable{
 						detail.setMatch(match);
 						detail.setPercent(P_DOB);
 						detail.setMatchtype(MatchType.dob);
+						details.add(detail);
+					}
+				}
+			}
+		}
+	}
+	
+	protected static void processIPs(MatchHistory match){
+
+		Set<FsIPAddress> iplist1 = null;
+		for (FsClaim claim:match.getFile1().getClaims()) {
+			if (claim.getIpAddresses() != null) {
+				if (iplist1 == null) {
+					iplist1 = new LinkedHashSet<FsIPAddress>();
+				}
+				iplist1.addAll(claim.getIpAddresses());
+			}
+		}
+		
+		Set<FsIPAddress> iplist2 = null;
+		for (FsClaim claim:match.getFile2().getClaims()) {
+			if (claim.getIpAddresses() != null) {
+				if (iplist2 == null) {
+					iplist2 = new LinkedHashSet<FsIPAddress>();
+				}
+				iplist2.addAll(claim.getIpAddresses());
+			}
+		}
+		
+		Set <MatchDetail> details = match.getDetails();
+		
+		for(FsIPAddress ip1:iplist1){
+			for(FsIPAddress ip2:iplist2){
+				if(ip1.getIpAddress() != null){
+					if(ip1.getIpAddress().equals(ip2.getIpAddress())){
+						MatchDetail detail = new MatchDetail();
+						detail.setContent1(ip1.getIpAddress());
+						detail.setContent2(ip2.getIpAddress());
+						detail.setMatch(match);
+						detail.setMatchtype(MatchType.ipAddress);
+						if (ip1.getWhitelist() != null) {
+							detail.setDescription("IP Address Match (Whitelisted - " + ip1.getWhitelist().getDescription());
+							detail.setPercent(0);
+						} else {
+							detail.setDescription("IP Address Match");
+							detail.setPercent(P_IP);
+						}
 						details.add(detail);
 					}
 				}
