@@ -42,16 +42,16 @@ import aero.nettracer.fs.service.objects.xsd.Authentication;
 import aero.nettracer.fs.service.objects.xsd.File;
 import aero.nettracer.fs.service.objects.xsd.Receipt;
 import aero.nettracer.fs.service.objects.xsd.Reservation;
-import aero.nettracer.fs.service.objects.xsd.SimpleResponse;
+import aero.nettracer.fs.service.objects.xsd.ClaimResponse;
 import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 
-public class SimpleServiceImplementation extends SimpleServiceSkeleton {
+public class FraudServiceImplementation extends FraudServiceSkeleton {
     
-	private static Logger logger = Logger.getLogger(SimpleServiceImplementation.class);
+	private static Logger logger = Logger.getLogger(FraudServiceImplementation.class);
 	
 	private HashMap<Integer,String> statusMap = null;
 	
@@ -91,8 +91,8 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 		
 		SubmitClaimResponseDocument resDoc = SubmitClaimResponseDocument.Factory.newInstance();
 		SubmitClaimResponse claimRes = resDoc.addNewSubmitClaimResponse();
-		SimpleResponse res = claimRes.addNewReturn();
-		
+		ClaimResponse res = claimRes.addNewReturn();
+		res.setSuccess(true);
 		Agent agent = null;
 		
 		if(submitClaim != null && submitClaim.getSubmitClaim() != null && submitClaim.getSubmitClaim().getAuthentication() != null){
@@ -100,12 +100,14 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 			ActionMessages errors = new ActionMessages();
 			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 1, errors);
 			if(!errors.isEmpty()){
-				res.setSearchSummary("Incorrect username/password");
+				res.addError("Incorrect username/password");
+				res.setSuccess(false);
 				logger.info(resDoc);
 				return resDoc;
 			}
 		} else {
-			res.setSearchSummary("username/password not provided");
+			res.addError("username/password not provided");
+			res.setSuccess(false);
 			logger.info(resDoc);
 			return resDoc;
 		}
@@ -128,7 +130,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	logger.info(updateClaimStatus);
     	UpdateClaimStatusResponseDocument resDoc = UpdateClaimStatusResponseDocument.Factory.newInstance();
     	UpdateClaimStatusResponse claimRes = resDoc.addNewUpdateClaimStatusResponse();
-		SimpleResponse res = claimRes.addNewReturn();
+		ClaimResponse res = claimRes.addNewReturn();
     	
     	
     	Agent agent = null;
@@ -137,12 +139,14 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 			ActionMessages errors = new ActionMessages();
 			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 1, errors);
 			if(!errors.isEmpty()){
-				res.setSearchSummary("Incorrect username/password");
+				res.addError("Incorrect username/password");
+				res.setSuccess(false);
 				logger.info(resDoc);
 				return resDoc;
 			}
 		} else {
-			res.setSearchSummary("username/password not provided");
+			res.addError("username/password not provided");
+			res.setSuccess(false);
 			logger.info(resDoc);
 			return resDoc;
     	}
@@ -150,7 +154,8 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	long claimId = updateClaimStatus.getUpdateClaimStatus().getFileId();//Even though the wsdl states file id, it is really the claim id
     	Claim claim = ClaimDAO.loadClaim(claimId);
     	if(claim == null){
-    		res.setSearchSummary("file " + claimId + " not found");
+    		res.addError("file " + claimId + " not found");
+			res.setSuccess(false);
     		logger.info(resDoc);
     		return resDoc;
     	}
@@ -168,7 +173,8 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	}
     	
     	if(!validStatusId(statusId)){
-    		res.setSearchSummary("" + statusId +" is not a valid status ID.  Please use one of the following: " + getStatusDescriptions());
+    		res.addError("" + statusId +" is not a valid status ID.  Please use one of the following: " + getStatusDescriptions());
+			res.setSuccess(false);
     		logger.info(resDoc);
     		return resDoc;
     	}
@@ -183,7 +189,8 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 			claim = ClaimDAO.loadClaim(claim.getId());
 		} else {
 			//TODO handle error
-			res.setSearchSummary("There was an error saving this claim");
+			res.addError("There was an error saving this claim");
+			res.setSuccess(false);
 			logger.info(resDoc);
 			return resDoc;
 		}
@@ -199,11 +206,10 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	return resDoc;
     }
     
-    private void createClaim(File wsFile, SimpleResponse res, Agent user) {
+    private void createClaim(File wsFile, ClaimResponse res, Agent user) {
     	
     	//TODO required field validation
-    	
-
+ 
 		boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 
 		// create a new claim
@@ -235,7 +241,8 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 			claim = ClaimDAO.loadClaim(claim.getId());
 		} else {
 			//TODO handle error
-			res.setSearchSummary("There was an error saving this claim");
+			res.addError("There was an error saving this claim");
+			res.setSuccess(false);
 			return;
 		}
 		
@@ -248,7 +255,7 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     } // END METHOD createClaim
     
     
-    private void submitClaimToFs(FsClaim claim, boolean firstSave, SimpleResponse res, Agent user){
+    private void submitClaimToFs(FsClaim claim, boolean firstSave, ClaimResponse res, Agent user){
 		Context ctx = null;
 		ClaimClientRemote remote = null;
 		aero.nettracer.fs.model.File file = claim.getFile();
@@ -261,7 +268,8 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
 		
 		long remoteFileId = 0;
 		if (remote == null) {
-			res.setSearchSummary("There was an error connecting to the fraud service.");
+			res.addError("There was an error connecting to the fraud service.");
+			res.setSuccess(false);
 			return;
 		} else {
 			LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
@@ -371,6 +379,9 @@ public class SimpleServiceImplementation extends SimpleServiceSkeleton {
     	claim.setTravelDate(wsClaim.getTravelDate()!=null?wsClaim.getTravelDate().getTime():null);
     	claim.setClaimants(copyWStoNTPass(wsClaim.getClaimantsArray(), null, null, claim));
     	claim.setSegments(copyWStoNTSeg(wsClaim.getSegmentsArray(), null, null, claim));
+    	
+    	claim.setClaimRemark(wsClaim.getRemark());
+    	
     	if(wsClaim.getReceiptsArray() != null){
     		Set<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
     		for (Receipt wsReceipt : wsClaim.getReceiptsArray()) {

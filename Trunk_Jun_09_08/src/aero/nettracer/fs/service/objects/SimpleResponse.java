@@ -1,12 +1,15 @@
 package aero.nettracer.fs.service.objects;
 
-public class SimpleResponse {
+
+public class ClaimResponse {
 
 	private long fileId;
 	private String directAccessUrl;
 	private String searchSummary;
 	private int warningLevel;
 	private int warningColor;
+	private boolean success;
+	private String[] error;
 
 	
 	public long getFileId() {
@@ -49,5 +52,20 @@ public class SimpleResponse {
 		this.warningColor = warningColor;
 	}
 
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setError(String[] error) {
+		this.error = error;
+	}
+
+	public String[] getError() {
+		return error;
+	}
 
 }
