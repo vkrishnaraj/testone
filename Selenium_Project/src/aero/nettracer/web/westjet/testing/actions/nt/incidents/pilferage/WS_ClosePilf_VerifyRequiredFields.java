@@ -17,10 +17,14 @@ public class WS_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=doclose");
+				assertTrue(selenium.getConfirmation().matches("^Have you verified any Travel Bank Credit\\(s\\) for this file has been created[\\s\\S]$"));
+				
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Please select a reason for loss"));
 				selenium.select("name=loss_code", "label=90- Pilferage");
 				selenium.click("name=doclose");
+				assertTrue(selenium.getConfirmation().matches("^Have you verified any Travel Bank Credit\\(s\\) for this file has been created[\\s\\S]$"));
+				
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
