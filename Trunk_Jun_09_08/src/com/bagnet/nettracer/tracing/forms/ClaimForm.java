@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import org.apache.struts.action.ActionForm;
 
 import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
@@ -213,6 +214,13 @@ public final class ClaimForm extends ActionForm {
 	public FsReceipt getReceipt(int index) {
 		if (claim.getReceipts() != null && index < claim.getReceipts().size()) {
 			return new ArrayList<FsReceipt>(claim.getReceipts()).get(index);
+		}
+		return null;
+	}
+	
+	public FsIPAddress getIpAddress(int index) {
+		if (claim.getIpAddresses() != null && index < claim.getIpAddresses().size()) {
+			return new ArrayList<FsIPAddress>(claim.getIpAddresses()).get(index);
 		}
 		return null;
 	}

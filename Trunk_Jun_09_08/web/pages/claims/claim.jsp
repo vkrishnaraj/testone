@@ -1332,6 +1332,44 @@
 						</td>
 					</tr>
 					<tr>
+						<td colspan=5>
+							
+                    <a name="aip" ></a>
+					<table class="form2" cellspacing="0" cellpadding="0" >
+						<logic:iterate indexId="i" id="ips" name="claimForm" property="claim.ipAddresses" type="aero.nettracer.fs.model.FsIPAddress" >
+				          <tr id="<%= TracingConstants.JSP_DELETE_IP_ADDRESS %>_<%=i%>">
+				          <td style="margin:0;padding:0;">
+							<bean:message key="claim.colname.ipAddress" />
+							<br/>
+				                <input type="text" name="ipAddress[<%=i %>].ipAddress" size="15" maxlength="15" value="<%=ips.getIpAddress() == null ? "" : ips.getIpAddress() %>" class="textfield" />
+				            	&nbsp;&nbsp;
+				            	<input type="button" value="<bean:message key="button.delete.ip" />"
+				            		onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_IP_ADDRESS %>_<%=i %>', 
+				                '<bean:message key="header.reservation.details" />', 0)"
+				            	id="button" >
+				           </td>
+				           </tr>
+				          
+				          </logic:iterate>
+				          <tr>
+				          <td colspan="5" align="center">
+					          <select name="addIPNum">
+						          <option value="1">1</option>
+						          <option value="2">2</option>
+						          <option value="3">3</option>
+						          <option value="4">4</option>
+						          <option value="5">5</option>
+						        </select>
+					
+							    <html:submit styleId="button" property="addIPs" onclick="setField('addedips');" >
+						        	<bean:message key="button.add.ip" />
+						        </html:submit>
+				          </td>
+				          </tr>
+					</table>
+						</td>
+					</tr>
+					<tr>
 						<td colspan="5">
 							<bean:message key="header.reservation.info" />
 							<br />
@@ -1354,6 +1392,7 @@
                     <input type="hidden" name="showReceipts" id="#receipts" value="<%=request.getAttribute("showReceipts") %>" />
                     <input type="hidden" id="addednames" value="0" />
                     <input type="hidden" id="addedreceipts" value="0" />
+                    <input type="hidden" id="addedips" value="0" />
                     <script language="javascript">
 						<logic:present name="an" scope="request">
 							document.location.href="#an";
@@ -1361,6 +1400,10 @@
 						
 						<logic:present name="rs" scope="request">
 							document.location.href="#rs";
+						</logic:present>
+						
+						<logic:present name="aip" scope="request">
+							document.location.href="#aip";
 						</logic:present>
 				    </script>
                   </html:form>

@@ -264,6 +264,7 @@
 		<mapping class="aero.nettracer.fs.model.File"/>
 		<mapping class="aero.nettracer.fs.model.FsReceipt"/>
 		<mapping class="aero.nettracer.fs.model.AuditFsClaim"/>
+		<mapping class="aero.nettracer.fs.model.FsIPAddress"/>
 		
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFAddress"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFDelivery"/>

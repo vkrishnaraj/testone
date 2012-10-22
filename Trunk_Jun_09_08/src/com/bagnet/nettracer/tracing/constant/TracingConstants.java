@@ -998,6 +998,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS = "Fraud Requests";
 	public static final String JSP_DELETE_ASSOCIATED_NAME = "delName";
 	public static final String JSP_DELETE_ASSOCIATED_RECEIPT = "delReceipt";
+	public static final String JSP_DELETE_IP_ADDRESS = "delIPAddress";
 	public static final String CLAIM_CREATE_CLAIM_PRORATE = "create_claim_prorate";
 	
 	public static final String LF_CREATE_LOST_REPORT = "create_lost_report";

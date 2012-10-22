@@ -30,6 +30,7 @@ import org.hibernate.Session;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
@@ -427,11 +428,13 @@ public class ModifyClaimAction extends CheckedAction {
 	private void deleteAssociatedItems(FsClaim claim, HttpServletRequest request) {
 		deleteAssociatedElements(new ArrayList(claim.getClaimants()), claim.getClaimants(), TracingConstants.JSP_DELETE_ASSOCIATED_NAME, request);
 		deleteAssociatedElements(new ArrayList(claim.getReceipts()), claim.getReceipts(), TracingConstants.JSP_DELETE_ASSOCIATED_RECEIPT, request);	
+		deleteAssociatedElements(new ArrayList(claim.getIpAddresses()), claim.getIpAddresses(), TracingConstants.JSP_DELETE_IP_ADDRESS, request);	
 	}
 	
 	private void addAssociatedItems(FsClaim claim, HttpServletRequest request, Agent user) {
 		addAssociatedNames(claim, request, user);
 		addAssociatedReceipts(claim, request, user);
+		addIPAddresses(claim, request, user);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -489,6 +492,22 @@ public class ModifyClaimAction extends CheckedAction {
 					claim.getReceipts().add(r);
 				}
 				request.setAttribute("rs", 1);
+			} catch (NumberFormatException nfe) {
+				logger.error(nfe);
+			}
+		}
+	}
+	
+	private void addIPAddresses(FsClaim claim, HttpServletRequest request, Agent user) {
+		if (request.getParameter("addIPs") != null) {
+			try {
+				int numToAdd = Integer.parseInt(request.getParameter("addIPNum"));
+				for (int i = 0; i < numToAdd; ++i) {
+					FsIPAddress ip = new FsIPAddress();
+					ip.setClaim(claim);
+					claim.getIpAddresses().add(ip);
+				}
+				request.setAttribute("aip", 1);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
 			}

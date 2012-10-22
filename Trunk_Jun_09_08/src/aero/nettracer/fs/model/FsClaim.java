@@ -98,6 +98,12 @@ public class FsClaim implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "incident_id")
 	private aero.nettracer.fs.model.FsIncident incident;
+
+	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private Set<FsIPAddress> ipAddresses;
 	
 	@Transient
 	protected Person claimant = null;
@@ -310,6 +316,14 @@ public class FsClaim implements Serializable {
 
 	public void setReceipts(Set<FsReceipt> receipts) {
 		this.receipts = receipts;
+	}
+	
+	public Set<FsIPAddress> getIpAddresses() {
+		return ipAddresses;
+	}
+
+	public void setIpAddresses(Set<FsIPAddress> ipAddresses) {
+		this.ipAddresses = ipAddresses;
 	}
 
 	@Transient

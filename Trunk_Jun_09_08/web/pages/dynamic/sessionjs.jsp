@@ -84,6 +84,13 @@
 						}
 					}
 				
+				} else if (elementName.indexOf("ipAddress") != -1) {
+					var regex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/g;
+					if (currentElement.value.match(regex) == null) {
+						alert("<%= (String)bundle.getString("claim.colname.ipAddress") %>" + " <%= (String)bundle.getString("error.validation.ipAddress") %>");
+					    element.focus();
+					    return false;
+					}
 				}
 			
 			}
