@@ -33,8 +33,15 @@
 			disputeActionType = "viewToResolve"; 
 	  }
 %>
+
+  <script language="javascript">
+	var doCheck = 0;
+    
+    <jsp:include page="/pages/includes/damageclose.jsp" />
+    
+  </script>
   
-<html:form action="damaged.do" method="post" enctype="multipart/form-data">
+<html:form action="damaged.do" method="post" enctype="multipart/form-data" onsubmit="return validateDamClose(this, doCheck);">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">
@@ -156,7 +163,7 @@
                         <bean:message key="button.save" />
                       </html:submit>
                     <% } %>
-                    <html:submit property="doclose" styleId="button" onclick="if(!validateClose()){ return false; }">
+                    <html:submit property="doclose" styleId="button" onclick="doCheck=1;">
                       <bean:message key="button.closereport" />
                     </html:submit>
                   </logic:notEqual>

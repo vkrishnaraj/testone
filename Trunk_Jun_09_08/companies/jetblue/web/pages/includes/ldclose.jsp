@@ -36,6 +36,7 @@ function validateLdClose(form, doCheck)
 	        }
 	      } 
 	    }
+	    validateClose();
     }
 	return true;
 }

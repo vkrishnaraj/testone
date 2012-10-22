@@ -33,8 +33,15 @@
 			disputeActionType = "viewToResolve"; 
 	  }
 %>
+
+  <script language="javascript">
+	var doCheck = 0;
+    
+    <jsp:include page="/pages/includes/missingclose.jsp" />
+    
+  </script>
   
-<html:form action="missing.do" method="post" enctype="multipart/form-data">
+<html:form action="missing.do" method="post" enctype="multipart/form-data"  onsubmit="return validateMissingClose(this, doCheck);">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">
@@ -160,7 +167,7 @@
                     <% } %>
   
                     &nbsp;
-                    <html:submit property="doclose" styleId="button" onclick="if(!validateClose()){ return false; }">
+                    <html:submit property="doclose" styleId="button" onclick="doCheck=1;">
                       <bean:message key="button.closereport" />
                     </html:submit>
                   </logic:notEqual>
