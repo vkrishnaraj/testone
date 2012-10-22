@@ -16,6 +16,8 @@ public class Claim {
 	private Person[] claimants;
 	private Segment[] segments;
 	private Receipt[] receipts;
+	private String [] ipaddress;
+	private String remark;
 	
 	public String getAirlineClaimId() {
 		return airlineClaimId;
@@ -88,6 +90,18 @@ public class Claim {
 	}
 	public void setAirline(String airline) {
 		this.airline = airline;
+	}
+	public void setIpaddress(String [] ipaddress) {
+		this.ipaddress = ipaddress;
+	}
+	public String [] getIpaddress() {
+		return ipaddress;
+	}
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+	public String getRemark() {
+		return remark;
 	}
 	
 }
