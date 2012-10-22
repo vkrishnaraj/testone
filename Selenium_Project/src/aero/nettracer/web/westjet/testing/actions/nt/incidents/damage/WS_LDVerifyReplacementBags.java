@@ -121,7 +121,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 			selenium.type("//div[@id='pax_0']/table/tbody/tr[6]/td[3]/input", "test");
 			selenium.type("//div[@id='pax_0']/table/tbody/tr[6]/td[4]/input", "test");
 			selenium.type("//div[@id='pax_0']/table/tbody/tr[8]/td[3]/input", "test");
-			selenium.type("//div[@id='pax_0']/table/tbody/tr[9]/td[2]/input", "test@test.com");
+			selenium.type("//div[@id='pax_0']/table/tbody/tr[9]/td[3]/input", "test@test.com");
 			selenium.type("//table[@id='hidexItinerary0']/tbody/tr/td/input", "ABI");
 			selenium.type("//table[@id='hidexItinerary0']/tbody/tr/td/input[2]", "ABI");
 			selenium.type("//table[@id='hidexItinerary0']/tbody/tr/td[2]/input", "1234");
