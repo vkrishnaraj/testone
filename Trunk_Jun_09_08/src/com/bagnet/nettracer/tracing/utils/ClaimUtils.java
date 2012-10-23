@@ -28,6 +28,7 @@ import aero.nettracer.fs.model.AuditFsClaim;
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
@@ -154,6 +155,10 @@ public class ClaimUtils {
 		// create associated receipts
 		LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
 		claim.setReceipts(receipts);
+		
+		// create ip addresses
+		LinkedHashSet<FsIPAddress> ips = new LinkedHashSet<FsIPAddress>();
+		claim.setIpAddresses(ips);
 		
 		FsIncident fsIncident = getFsIncident(ntIncident, user);
 		claim.setIncident(fsIncident);
