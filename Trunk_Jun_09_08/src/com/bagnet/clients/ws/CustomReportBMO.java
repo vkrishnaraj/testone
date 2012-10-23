@@ -529,6 +529,10 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			Style header = setupHeader(drb);
 			drb.addColumn(resources.getString("custom.report.column.airline"), "column1", String.class.getName(), 200, header, header);
 			drb.addColumn(resources.getString("custom.report.column.numFile"), "column2", String.class.getName(), 200, header, header);
+			drb.addColumn("", "column3", String.class.getName(), 200, header, header);
+			drb.addColumn("", "column4", String.class.getName(), 200, header, header);
+			drb.addColumn("", "column5", String.class.getName(), 200, header, header);
+			drb.addColumn("", "column6", String.class.getName(), 200, header, header);
 			
 			generateDynamicReport(reportData, parameters, outputpath, drb);
 			

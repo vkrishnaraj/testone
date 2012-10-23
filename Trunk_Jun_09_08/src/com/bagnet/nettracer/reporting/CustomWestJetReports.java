@@ -213,6 +213,110 @@ public class CustomWestJetReports {
 		}
 		return toReturn;
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private ArrayList getRowsFromResultList4(List results, List results2, String dateFormat) {
+		ArrayList toReturn = new ArrayList();
+		SimpleReportRow reportRow;
+		Object[] row;
+		for (int i = 0; i < results.size(); ++i) {
+			row = (Object[]) results.get(i);
+			reportRow = new SimpleReportRow();
+
+			reportRow.setColumn1((String) row[0]);
+			reportRow.setColumn2((String) row[1]);
+			if (row.length > 2) {
+				reportRow.setColumn3((String) row[2]);
+				if (row.length > 3) {
+					reportRow.setColumn4((String) row[3]);
+					if (row.length > 4) {
+						reportRow.setColumn5((String) row[4]);
+						if (row.length > 5) {
+							reportRow.setColumn6((String) row[5]);
+							if (row.length > 6) {
+								reportRow.setColumn7((String) row[6]);
+								if (row.length > 7) {
+									reportRow.setColumn8((String) row[7]);
+									if (row.length > 8) {
+										reportRow.setColumn9((String) row[8]);
+										if (row.length > 9) {
+											reportRow.setColumn10((String) row[9]);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			toReturn.add(reportRow);
+		}
+		
+		if (results2 != null) {
+			reportRow = new SimpleReportRow();
+			reportRow.setColumn1("");
+			reportRow.setColumn2("");
+			reportRow.setColumn3("");
+			reportRow.setColumn4("");
+			reportRow.setColumn5("");
+			toReturn.add(reportRow);
+			
+			reportRow = new SimpleReportRow();
+			reportRow.setColumn1("List of Files:");
+			toReturn.add(reportRow);
+			
+			reportRow = new SimpleReportRow();
+			reportRow.setColumn1("Incident ID");
+			reportRow.setColumn2("Incident Type");
+			reportRow.setColumn3("Credit Card Refund");
+			reportRow.setColumn4("Check Amount");
+			reportRow.setColumn5("Voucher Amount");
+			reportRow.setColumn5("Total Compensation");
+			toReturn.add(reportRow);
+			
+			for (int i = 0; i < results2.size(); ++i) {
+				reportRow = new SimpleReportRow();
+				row = (Object[])results2.get(i);
+
+				reportRow.setColumn1((String)row[0]);
+				if(((Integer)row[1])==(TracingConstants.LOST_DELAY)){
+					reportRow.setColumn2("Delayed");
+				}
+				else if(((Integer)row[1])==(TracingConstants.MISSING_ARTICLES)){
+					reportRow.setColumn2("Missing");
+				}
+				else if(((Integer)row[1])==(TracingConstants.DAMAGED_BAG)){
+					reportRow.setColumn2("Damaged");
+				}
+				int col3=0;
+				int col4=0;
+				int col5=0;
+				if(row[2]!=null && row[2].toString().length()>0){
+					reportRow.setColumn3("$"+(String)row[2]);
+					col3=Integer.valueOf((String)row[2]);
+				} else {
+					reportRow.setColumn3("$0");
+				}
+				if(row[3]!=null && row[3].toString().length()>0){
+					reportRow.setColumn4("$"+(String)row[3]);
+					col4=Integer.valueOf((String)row[3]);
+				} else {
+					reportRow.setColumn4("$0");
+				}
+				if(row[4]!=null && row[4].toString().length()>0){
+					reportRow.setColumn5("$"+(String)row[4]);
+					col5=Integer.valueOf((String)row[4]);
+				} else {
+					reportRow.setColumn5("$0");
+				}
+				reportRow.setColumn6("$"+String.valueOf(col5+col4+col3));
+				
+				toReturn.add(reportRow);
+			}
+		}
+		return toReturn;
+	}
 
 	
 
@@ -764,7 +868,7 @@ public class CustomWestJetReports {
 		}
 
 
-		String sql = " select a1.airlines column1, count(a1.airlines) column2 from (select distinct i.incident_id,"
+		String sql = " select a1.airlines column1, count(a1.airlines) column2 from (select distinct i.incident_id, "
 			+ "   IF (la.Airline_2_Character_Code is not null, la.Airline_2_Character_Code, substring(claimchecknum,1,2)) airlines"
 			+ "   from incident i "
 			+ "     join incident_claimcheck ic on i.incident_id = ic.incident_id"
@@ -775,16 +879,16 @@ public class CustomWestJetReports {
 			+ "\' and i.createdate <= \'"
 			+ endDate
 			+ "\'"
-			+ "   and i.itemtype_id = 1"
+			//+ "   and i.itemtype_id = 1"  Note Must apply to all incidents
 			+ "   and claimchecknum not like '_838%' and claimchecknum not like 'WS%') as a1"
 			+ airlineLimit
 			+ "   group by a1.airlines"
 			+ "   order by column1 asc";
 
-		String sql2 = " select a1.incident column1 from (select distinct i.incident_id incident,"
-			+ "   IF (la.Airline_2_Character_Code is not null, la.Airline_2_Character_Code, substring(claimchecknum,1,2)) airlines"
+		String sql2 = " select a1.incident column1, a1.itemType_ID column2, a1.ccr column3, a1.ca column4, a1.va column5 from (select distinct i.incident_id incident, i.itemtype_id, " 
+			+ "   IF (la.Airline_2_Character_Code is not null, la.Airline_2_Character_Code, substring(claimchecknum,1,2)) airlines, sum(ep.creditcard_refund) ccr, sum(ep.checkamt) ca, sum(ep.voucheramt) va  "
 			+ "   from incident i "
-			+ "     join incident_claimcheck ic on i.incident_id = ic.incident_id"
+			+ "     join incident_claimcheck ic on i.incident_id = ic.incident_id left outer join expensepayout ep on i.incident_id=ep.incident_id"
 			+ "     left outer join lookup_airline_codes la on substring(claimchecknum, 2,3) = la.Airline_3_Digit_Ticketing_Code"
 			+ "   where "
 			+ "   i.createdate >= \'"
@@ -792,9 +896,9 @@ public class CustomWestJetReports {
 			+ "\' and i.createdate <= \'"
 			+ endDate
 			+ "\'"
-			+ "   and i.itemtype_id = 1"
+			//+ "   and i.itemtype_id = 1"
 			+ "   and claimchecknum not like '_838%' and claimchecknum not like 'WS%'"
-			+ "   ) as a1"
+			+ "   group by incident) as a1"
 			+ "   where"
 			+ "   a1.airlines like '" + airlineCode + "'"
 			+ "   order by column1 asc";
@@ -817,11 +921,15 @@ public class CustomWestJetReports {
 				session = HibernateWrapper.getSession().openSession();
 				SQLQuery query2 = session.createSQLQuery(sql2);
 				query2.addScalar("column1", Hibernate.STRING);
+				query2.addScalar("column2", Hibernate.INTEGER);
+				query2.addScalar("column3", Hibernate.STRING);
+				query2.addScalar("column4", Hibernate.STRING);
+				query2.addScalar("column5", Hibernate.STRING);
 				results2 = query2.list();
 
 			}
 			
-			toReturn = getRowsFromResultList(results, results2, srDTO.getDateFormat());
+			toReturn = getRowsFromResultList4(results, results2, srDTO.getDateFormat());
 			
 			
 		} catch (Exception e) {
