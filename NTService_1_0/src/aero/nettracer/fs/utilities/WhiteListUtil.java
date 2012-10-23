@@ -8,6 +8,7 @@ import org.hibernate.Transaction;
 
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.detection.AddressWhiteList;
+import aero.nettracer.fs.model.detection.IPWhiteList;
 import aero.nettracer.fs.model.detection.PhoneWhiteList;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
@@ -189,6 +190,32 @@ public class WhiteListUtil {
 				List<PhoneWhiteList> result = q.list();
 				if (result != null && result.size() > 0) {
 					return (PhoneWhiteList) result.get(0);
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (sess != null) {
+					sess.close();
+				}
+			}
+		}
+			
+		return null;
+	}
+	
+	
+	public static IPWhiteList isIPWhiteListed(String ip){
+		if (ip != null) {
+			Session sess = null;
+			try {
+				sess = HibernateWrapper.getSession().openSession();
+				String sql = "from aero.nettracer.fs.model.detection.IPWhiteList w where w.ipAddress = :ip";
+				Query q = sess.createQuery(sql);
+				q.setParameter("ip", ip.trim());
+				List<IPWhiteList> result = q.list();
+				if (result != null && result.size() > 0) {
+					return (IPWhiteList) result.get(0);
 				}
 
 			} catch (Exception e) {

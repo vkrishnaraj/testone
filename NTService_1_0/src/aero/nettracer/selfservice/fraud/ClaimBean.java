@@ -27,6 +27,7 @@ import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.FsMatchHistoryAudit;
 import aero.nettracer.fs.model.FsReceipt;
@@ -199,6 +200,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			claim.setSegments(resetSegmentId(claim.getSegments()));
 			claim.setBlacklist(resetBlackListId(claim.getBlacklist()));
 			claim.setReceipts(resetReceiptId(claim.getReceipts()));
+			claim.setIpAddresses(resetIpAddressId(claim.getIpAddresses()));
 		}
 		return claim;
 	}
@@ -257,6 +259,16 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			}
 		}
 		return segments;
+	}
+
+	public static Set<FsIPAddress> resetIpAddressId(Set<FsIPAddress> ips) {
+		if (ips != null) {
+			for (FsIPAddress ip : ips) {
+				ip.setId(0);
+				ip.setWhitelist(WhiteListUtil.isIPWhiteListed(ip.getIpAddress()));
+			}
+		}
+		return ips;
 	}
 
 	public static Set<Bag> resetBagId(Set<Bag> bags) {
