@@ -38,6 +38,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
 import com.bagnet.clients.us.SharesIntegrationWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
@@ -490,6 +491,7 @@ public class DamagedAction extends CheckedAction {
 					r.set_TIMEFORMAT(user.getTimeformat().getFormat());
 					r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 				}
+				theform.setLastupdated(IncidentBMO.getIncidentLastUpdateTimestamp(iDTO.getIncident_ID()));//reseting lastUpdated, otherwise agent will be unable to close incident
 				return (mapping.findForward(TracingConstants.DAMAGED_CLOSE));
 			}	else {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);

@@ -2387,7 +2387,7 @@ public class IncidentBMO {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery(sql);
+			Query q = sess.createSQLQuery(sql);
 			q.setParameter("incidentId", incidentId);
 			return (Date)q.uniqueResult();
 		} catch (Exception e) {

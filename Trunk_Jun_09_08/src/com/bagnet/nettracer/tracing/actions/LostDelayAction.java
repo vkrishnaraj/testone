@@ -654,6 +654,8 @@ public class LostDelayAction extends CheckedAction {
 //				if (isIncidentLocked) {
 //					return mapping.findForward(TracingConstants.LD_CLOSE_READ_ONLY);
 //				}
+
+				theform.setLastupdated(IncidentBMO.getIncidentLastUpdateTimestamp(iDTO.getIncident_ID()));//reseting lastUpdated, otherwise agent will be unable to close incident
 				return (mapping.findForward(TracingConstants.LD_CLOSE));
 			}
 			else {
