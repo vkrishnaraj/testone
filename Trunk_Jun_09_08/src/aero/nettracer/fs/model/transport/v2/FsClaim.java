@@ -25,7 +25,6 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
 
-import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.detection.Blacklist;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;

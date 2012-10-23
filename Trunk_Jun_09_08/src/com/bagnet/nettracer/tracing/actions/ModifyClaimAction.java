@@ -362,6 +362,14 @@ public class ModifyClaimAction extends CheckedAction {
 							receipts.add(r);
 						}
 						
+						LinkedHashSet<FsIPAddress> ipaddresses = new LinkedHashSet<FsIPAddress>();
+						newClaim.setIpAddresses(ipaddresses);
+						for(FsIPAddress ipaddress: current.getIpAddresses()){
+							ipaddress.setClaim(newClaim);
+							ipaddresses.add(ipaddress);
+						}
+						
+						
 						file.setStatusId(claim.getStatusId());
 						newClaim.setFile(file);
 						file.setIncident(newClaim.getIncident());

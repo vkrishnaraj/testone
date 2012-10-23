@@ -1261,7 +1261,7 @@ public class Consumer implements Runnable{
 						detail.setMatch(match);
 						detail.setMatchtype(MatchType.ipAddress);
 						if (ip1.getWhitelist() != null) {
-							detail.setDescription("IP Address Match (Whitelisted - " + ip1.getWhitelist().getDescription());
+							detail.setDescription("IP Address Match (Whitelisted - " + ip1.getWhitelist().getDescription()+")");
 							detail.setPercent(0);
 						} else {
 							detail.setDescription("IP Address Match");
