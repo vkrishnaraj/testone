@@ -27,6 +27,7 @@ import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
@@ -228,7 +229,9 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 		
 		// edit claim with WebService info
 		
-		copyWStoNTFile(wsFile, file, claim);
+		if (!copyWStoNTFile(wsFile, file, claim, res)) {
+			return;
+		}
 		
 		// end edit claim with WebService info
 		
@@ -353,12 +356,29 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 		} // END REMOTE CALLS
     }
     
-    private void copyWStoNTFile(File wsFile, aero.nettracer.fs.model.File file, FsClaim claim) {
+    private boolean copyWStoNTFile(File wsFile, aero.nettracer.fs.model.File file, FsClaim claim, ClaimResponse res) {
     	aero.nettracer.fs.service.objects.xsd.Claim wsClaim = wsFile.getClaim();
     	aero.nettracer.fs.service.objects.xsd.Incident wsIncident = wsFile.getIncident();
     	Reservation wsRes = wsFile.getReservation();
 
     	// POPULATE CLAIM FROM WS
+    	if (wsClaim.getIpaddressArray() != null){
+    		Set<FsIPAddress> ips = new LinkedHashSet<FsIPAddress>();
+    		for (String wsIp: wsClaim.getIpaddressArray()) {
+    			if (wsIp.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+    				FsIPAddress ip = new FsIPAddress();
+    				ip.setClaim(claim);
+    				ip.setIpAddress(wsIp);
+    				ips.add(ip);
+    			} else {
+    	    		res.addError("" + wsIp +" is not a valid IP Address.");
+    				res.setSuccess(false);
+    	    		return false;
+    			}
+    		}
+    		claim.setIpAddresses(ips);
+    	}
+    	
     	claim.setAirline(wsClaim.getAirline());
     	claim.setAirlineClaimId(wsClaim.getAirlineClaimId());
     	claim.setAmountClaimed(wsClaim.getAmountClaimed());
@@ -439,7 +459,7 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
     		incident.setReservation(reservation);
     	}
     	// END POPULATE RESERVATION FROM WS
-    	
+    	return true;
     }
     
     private Set<Person> copyWStoNTPass(aero.nettracer.fs.service.objects.xsd.Person[] wsPasgrs, FsIncident inc, aero.nettracer.fs.model.Reservation res, FsClaim claim) {
