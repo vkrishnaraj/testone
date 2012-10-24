@@ -598,6 +598,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 
+	<target name="build-ear-local-virginamerica" depends="delete-wars">
+		<property name="staging.project" value="virginamerica-fs" />
+		<property name="staging.env" value="local" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-local-virginamerica"/>
+		<property name="app.xml.location" value="metadata/virginamerica-fs/local" />		
+		<antcall target="donotrun-build-ear" />
+	</target>
+
 	<target name="build-ear-local-webjet" depends="delete-wars">
 		<property name="staging.project" value="webjet" />
 		<property name="staging.env" value="local" />
@@ -637,6 +646,7 @@
 		<antcall target="build-war-testing-azul"/>
 		<antcall target="build-war-testing-delta"/>
 		<antcall target="build-war-testing-american"/>
+		<antcall target="build-war-testing-virginamerica"/>
 		<antcall target="build-war-testing-united"/>
 		<antcall target="build-war-testing-webjet"/>
 		<antcall target="build-war-testing-lfc"/>
@@ -657,6 +667,7 @@
 		<antcall target="build-war-hudson-delta"/>
 		<antcall target="build-war-hudson-united"/>
 		<antcall target="build-war-hudson-american"/>
+		<antcall target="build-war-hudson-virginamerica"/>
 		<antcall target="build-war-hudson-webjet"/>
 		<antcall target="build-war-hudson-lfc"/>
 		<property name="app.xml.location" value="metadata/hudson" />
@@ -774,6 +785,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 
+	<target name="build-ear-testing-virginamerica" depends="delete-wars">
+		<property name="staging.project" value="virginamerica-fs" />
+		<property name="staging.env" value="testing" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-testing-virginamerica"/>
+		<property name="app.xml.location" value="metadata/virginamerica-fs/test" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
 	<target name="build-ear-testing-webjet" depends="delete-wars">
 		<property name="staging.project" value="webjet" />
 		<property name="staging.env" value="testing" />
@@ -815,6 +835,7 @@
 		<antcall target="build-war-training-delta"/>
 		<antcall target="build-war-training-united"/>
 		<antcall target="build-war-training-american"/>
+		<antcall target="build-war-training-virginamerica"/>
 		<antcall target="build-war-training-webjet"/>
 		<antcall target="build-war-training-lfc"/>
 		<property name="app.xml.location" value="metadata/training" />
@@ -846,6 +867,15 @@
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="build-war-training-american"/>
 		<property name="app.xml.location" value="metadata/american-fs/train" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-training-virginamerica" depends="delete-wars">
+		<property name="staging.project" value="virginamerica" />
+		<property name="staging.env" value="training" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-training-virginamerica"/>
+		<property name="app.xml.location" value="metadata/virginamerica-fs/train" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 
@@ -901,6 +931,8 @@
 		<antcall target="build-war-production-jetblue"/>
 		<antcall target="build-war-production-azul"/>
 		<antcall target="build-war-production-spirit"/>
+		<antcall target="build-war-production-westjet"/>	
+		<antcall target="build-war-production-virginamerica"/>	
 		<property name="app.xml.location" value="metadata/ab/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -920,6 +952,15 @@
 		<property name="avis.service.includes" value="*.war"/>
 		<antcall target="build-war-production-american"/>
 		<property name="app.xml.location" value="metadata/american-fs/prod" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-production-virginamerica" depends="delete-wars">
+		<property name="staging.project" value="virginamerica-fs" />
+		<property name="staging.env" value="production" />
+		<property name="avis.service.includes" value="*.war"/>
+		<antcall target="build-war-production-virginamerica"/>
+		<property name="app.xml.location" value="metadata/virginamerica-fs/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 
@@ -1047,6 +1088,14 @@
 		<antcall target="donotrun-build-american" />
 	</target>
 
+	<target name="build-war-testing-virginamerica" depends="delete">
+		<property name="ant_project_name" value="virginamerica-fs" />
+		<property name="ant_war_name" value="virginamerica_testing" />
+		<property name="environment.name" value="test"/>
+		<property name="vx.init.complete" value="true" />
+		<antcall target="donotrun-build-virginamerica" />
+	</target>
+
 	<target name="build-war-testing-webjet" depends="delete">
 		<property name="ant_project_name" value="webjet" />
 		<property name="ant_war_name" value="webjet_testing" />
@@ -1154,6 +1203,14 @@
 		<antcall target="donotrun-build-american" />
 	</target>
 
+	<target name="build-war-hudson-virginamerica" depends="delete">
+		<property name="ant_project_name" value="virginamerica-fs" />
+		<property name="ant_war_name" value="virginamerica_hudson" />
+		<property name="environment.name" value="hudson"/>
+		<property name="vx.init.complete" value="true" />
+		<antcall target="donotrun-build-virginamerica" />
+	</target>
+
 	<target name="build-war-hudson-webjet" depends="delete">
 		<property name="ant_project_name" value="webjet" />
 		<property name="ant_war_name" value="webjet_hudson" />
@@ -1252,6 +1309,14 @@
 		<antcall target="donotrun-build-american" />
 	</target>
 
+	<target name="build-war-production-virginamerica" depends="delete">
+		<property name="ant_project_name" value="virginamerica-fs" />
+		<property name="ant_war_name" value="virginamerica_production" />
+		<property name="environment.name" value="prod"/>
+		<property name="vx.init.complete" value="true" />
+		<antcall target="donotrun-build-virginamerica" />
+	</target>
+
 	<target name="build-war-production-webjet" depends="delete">
 		<property name="ant_project_name" value="webjet" />
 		<property name="ant_war_name" value="webjet_production" />
@@ -1302,6 +1367,14 @@
 		<property name="environment.name" value="train"/>
 		<property name="american.init.complete" value="true" />
 		<antcall target="donotrun-build-american" />
+	</target>
+
+	<target name="build-war-training-virginamerica" depends="delete">
+		<property name="ant_project_name" value="virginamerica-fs" />
+		<property name="ant_war_name" value="virginamerica_training" />
+		<property name="environment.name" value="train"/>
+		<property name="vx.init.complete" value="true" />
+		<antcall target="donotrun-build-virginamerica" />
 	</target>
 
 	<target name="build-war-training-webjet" depends="delete">
@@ -1378,6 +1451,14 @@
 		<property name="aa.init.complete" value="true" />
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-american" />
+	</target>
+
+	<target name="build-war-local-virginamerica" depends="delete">
+		<property name="ant_project_name" value="virginamerica-fs" />
+		<property name="ant_war_name" value="vx" />
+		<property name="vx.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-virginamerica" />
 	</target>
 
 	<target name="build-war-local-webjet" depends="delete">
@@ -2362,6 +2443,37 @@
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/american-fs/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+	</target>
+	
+	<target name="donotrun-build-virginamerica">		
+		<copy todir="${basedir}/src" file="companies/virginamerica-fs/environment/${environment.name}/tracer.properties" />
+		<copy todir="${basedir}/src" file="companies/virginamerica-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/virginamerica-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
+		<copy todir="${basedir}/src" file="companies/virginamerica-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+		<copy todir="${basedir}/web/pages/login" file="companies/virginamerica-fs/environment/${environment.name}/login/center.jsp" />
+		
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/virginamerica-fs/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
+
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/virginamerica-fs/custom_ui.properties" />
+
+		<!-- Hibernate main dependent on environment -->
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/virginamerica-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 

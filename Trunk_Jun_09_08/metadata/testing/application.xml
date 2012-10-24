@@ -63,6 +63,12 @@
          <context-root>american</context-root>
      </web>
   </module>
+   <module>
+     <web>
+         <web-uri>virginamerica_testing.war</web-uri>
+         <context-root>virginamerica</context-root>
+     </web>
+  </module>
   
    <module>
      <web>

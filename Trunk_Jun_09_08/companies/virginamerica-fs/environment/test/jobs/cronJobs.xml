@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	
+	<!--  The bean that manages all the scheduled jobs and their threads -->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!-- <ref bean="cronDataFeedTrigger" />  -->
+				<!-- <ref bean="cronMoveToLzTrigger" />  -->
+				<!-- <ref bean="cronNewPassiveTracerTrigger" />  -->
+				<!-- <ref bean="cronWtQueueTrigger" />  -->
+				<!-- <ref bean="cronOldPassiveTracerTrigger" />  -->
+				<!-- <ref bean="cronMoveToWtTrigger" />  -->
+				<ref bean="LockCleanupTrigger" />
+			</list>
+		</property>
+	</bean>
+
+</beans>

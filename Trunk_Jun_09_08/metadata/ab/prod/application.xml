@@ -60,5 +60,17 @@
          <context-root>azul</context-root>
      </web>
   </module>
+ <module>
+     <web>
+         <web-uri>westjet_production.war</web-uri>
+         <context-root>westjet</context-root>
+     </web>
+  </module>
+ <module>
+     <web>
+         <web-uri>virginamerica_production.war</web-uri>
+         <context-root>virginamerica</context-root>
+     </web>
+  </module>
   
 </application> 

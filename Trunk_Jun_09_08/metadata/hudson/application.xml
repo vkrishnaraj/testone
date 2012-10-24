@@ -64,6 +64,12 @@
          <context-root>american</context-root>
      </web>
   </module>
+   <module>
+     <web>
+         <web-uri>virginamerica_hudson.war</web-uri>
+         <context-root>virginamerica</context-root>
+     </web>
+  </module>
 
    <module>
      <web>
@@ -79,19 +85,4 @@
      </web>
   </module>
   
-  <!--
-     <module>
-     <web>
-         <web-uri>american_hudson.war</web-uri>
-         <context-root>american</context-root>
-     </web>
-  </module>
-  
-     <module>
-     <web>
-         <web-uri>continental_hudson.war</web-uri>
-         <context-root>continental</context-root>
-     </web>
-  </module>
-  -->
 </application> 

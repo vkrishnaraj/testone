@@ -75,20 +75,10 @@
          <context-root>lostandfound</context-root>
      </web>
   </module>
-  
-  <!--
-     <module>
+   <module>
      <web>
-         <web-uri>american_training.war</web-uri>
-         <context-root>american</context-root>
+         <web-uri>virginamerica_training.war</web-uri>
+         <context-root>virginamerica</context-root>
      </web>
   </module>
-  
-     <module>
-     <web>
-         <web-uri>continental_training.war</web-uri>
-         <context-root>continental</context-root>
-     </web>
-  </module>
-  -->
 </application> 
