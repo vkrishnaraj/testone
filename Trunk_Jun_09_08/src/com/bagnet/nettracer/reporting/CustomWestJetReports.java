@@ -272,7 +272,7 @@ public class CustomWestJetReports {
 			reportRow.setColumn3("Credit Card Refund");
 			reportRow.setColumn4("Check Amount");
 			reportRow.setColumn5("Voucher Amount");
-			reportRow.setColumn5("Total Compensation");
+			reportRow.setColumn6("Total Compensation");
 			toReturn.add(reportRow);
 			
 			for (int i = 0; i < results2.size(); ++i) {
@@ -869,10 +869,10 @@ public class CustomWestJetReports {
 
 
 		String sql = " select a1.airlines column1, count(a1.airlines) column2 from (select distinct i.incident_id, "
-			+ "   IF (la.Airline_2_Character_Code is not null, la.Airline_2_Character_Code, substring(claimchecknum,1,2)) airlines"
+			+ "   IF (la.Airline_2_Character_Code is not null, la.Airline_2_Character_Code, substring(case when i.itemtype_ID=1 then ic.claimchecknum else it.claimchecknum end,1,2)) airlines"
 			+ "   from incident i "
-			+ "     join incident_claimcheck ic on i.incident_id = ic.incident_id"
-			+ "     left outer join lookup_airline_codes la on substring(claimchecknum, 2,3) = la.Airline_3_Digit_Ticketing_Code"
+			+ "     left outer join incident_claimcheck ic on i.incident_id = ic.incident_id  left outer join item it on it.incident_ID= i.Incident_ID"
+			+ "     left outer join lookup_airline_codes la on (case when i.itemtype_ID=1 then substring(ic.claimchecknum, 2,3) else substring(it.claimchecknum, 2,3) end) = la.Airline_3_Digit_Ticketing_Code"
 			+ "   where "
 			+ "   i.createdate >= \'"
 			+ startDate
@@ -880,16 +880,17 @@ public class CustomWestJetReports {
 			+ endDate
 			+ "\'"
 			//+ "   and i.itemtype_id = 1"  Note Must apply to all incidents
-			+ "   and claimchecknum not like '_838%' and claimchecknum not like 'WS%') as a1"
+			+ "   and (case when i.itemtype_ID=1 then (ic.claimchecknum not like '_838%' and ic.claimchecknum not like 'WS%') else (it.claimchecknum not like '_838%' and it.claimchecknum not like 'WS%') end)) as a1"
 			+ airlineLimit
 			+ "   group by a1.airlines"
 			+ "   order by column1 asc";
 
-		String sql2 = " select a1.incident column1, a1.itemType_ID column2, a1.ccr column3, a1.ca column4, a1.va column5 from (select distinct i.incident_id incident, i.itemtype_id, " 
-			+ "   IF (la.Airline_2_Character_Code is not null, la.Airline_2_Character_Code, substring(claimchecknum,1,2)) airlines, sum(ep.creditcard_refund) ccr, sum(ep.checkamt) ca, sum(ep.voucheramt) va  "
-			+ "   from incident i "
-			+ "     join incident_claimcheck ic on i.incident_id = ic.incident_id left outer join expensepayout ep on i.incident_id=ep.incident_id"
-			+ "     left outer join lookup_airline_codes la on substring(claimchecknum, 2,3) = la.Airline_3_Digit_Ticketing_Code"
+		String sql2 = " select a.incident column1, a.itemType_ID column2, sum(b.ccr) column3, sum(b.ca) column4, sum(b.va) column5 from "
+			+ " (select distinct i.incident_id incident, i.itemtype_id, " 
+			+ "   IF (la.Airline_2_Character_Code is not null, la.Airline_2_Character_Code, substring(case when i.itemtype_ID=1 then ic.claimchecknum else it.claimchecknum end,1,2)) airlines "
+			+ "   from incident i left outer join incident_claimcheck ic on i.incident_id = ic.incident_id "
+			+ "   left outer join item it on it.incident_ID= i.Incident_ID " 
+			+ "	  left outer join lookup_airline_codes la on (case when i.itemtype_ID=1 then substring(ic.claimchecknum, 2,3) else substring(it.claimchecknum, 2,3) end) = la.Airline_3_Digit_Ticketing_Code " 
 			+ "   where "
 			+ "   i.createdate >= \'"
 			+ startDate
@@ -897,11 +898,16 @@ public class CustomWestJetReports {
 			+ endDate
 			+ "\'"
 			//+ "   and i.itemtype_id = 1"
-			+ "   and claimchecknum not like '_838%' and claimchecknum not like 'WS%'"
-			+ "   group by incident) as a1"
+			+ "   and (case when i.itemtype_ID=1 then (ic.claimchecknum not like '_838%' and ic.claimchecknum not like 'WS%') else (it.claimchecknum not like '_838%' and it.claimchecknum not like 'WS%') end)) as a "
+			
+			+ "   left outer join "
+			+ " (select distinct ep.incident_id incident, ep.creditcard_refund ccr, ep.checkamt ca, ep.voucheramt va, "
+			+ "   IF (la.Airline_2_Character_Code is not null, la.Airline_2_Character_Code, substring(case when i.itemtype_ID=1 then ic.claimchecknum else it.claimchecknum end,1,2)) airlines "  
+			+ "  from expensepayout ep left outer join incident i on ep.incident_ID = i.Incident_ID left outer join incident_claimcheck ic on i.incident_id = ic.incident_id left outer join item it on it.incident_ID= i.Incident_ID left outer join lookup_airline_codes la on (case when i.itemtype_ID=1 then substring(ic.claimchecknum, 2,3) else substring(it.claimchecknum, 2,3) end) = la.Airline_3_Digit_Ticketing_Code" 
+			+ " 	where  i.createdate >= '2012-06-01' and i.createdate <= '2012-10-24'   and  (case when i.itemtype_ID=1 then (ic.claimchecknum not like '_838%' and ic.claimchecknum not like 'WS%') else (it.claimchecknum not like '_838%' and it.claimchecknum not like 'WS%') end)) as b on a.incident = b.incident "
 			+ "   where"
-			+ "   a1.airlines like '" + airlineCode + "'"
-			+ "   order by column1 asc";
+			+ "   a.airlines like '" + airlineCode + "'"
+			+ "   group by column1 order by column1 asc";
 			
 
 		
