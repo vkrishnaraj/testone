@@ -146,7 +146,7 @@
       
   </SCRIPT>
  
-          <html:form action="claim_resolution.do" method="post" onsubmit="return validateFsClaimForm(this);">
+          <html:form action="claim_resolution.do" method="post" >
           <input type="hidden" name="delete_these_elements" value="" />
             <html:javascript formName="claimForm" />
             <tr>
@@ -1380,7 +1380,7 @@
 					
 					
                     <center>
-                    <html:submit property="save" styleId="button">
+                    <html:submit property="save" styleId="button" onclick="return validateFsClaimForm(this.form);">
                       <bean:message key="button.save" />
                     </html:submit>
                     <logic:notEmpty name="back" scope="request" >
