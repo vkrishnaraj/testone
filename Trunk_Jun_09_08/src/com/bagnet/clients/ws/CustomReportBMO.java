@@ -93,6 +93,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		case ReportingConstants.RPT_20_CUSTOM_85:
 			creportdata = createDelayedReport(srDTO, ReportBMO.getCustomReport(85).getResource_key(), request, user);
 			break;
+		case ReportingConstants.RPT_20_CUSTOM_210:
+			creportdata = createDisputeCountReport(srDTO, ReportBMO.getCustomReport(210).getResource_key(), request, user);
+			break;
 
 		}
 		return creportdata;
@@ -608,6 +611,50 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.addGlobalFooterVariable(10, DJCalculation.SUM, header);
 			drb.setGrandTotalLegend("Grand Total :");
 			drb.setUseFullPageWidth(true);
+			generateDynamicReport(reportData, parameters, outputpath, drb);
+			
+		} catch (JRException jre) {
+			jre.printStackTrace();
+		} catch (ColumnBuilderException cbe) {
+			cbe.printStackTrace();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} 
+		virtualizer.cleanup();
+		return fileName;
+	}
+	
+	private String createDisputeCountReport(StatReportDTO srDTO, String resource_key,
+			HttpServletRequest request, Agent user) {
+		srDTO.setDateFormat(user.getDateformat().getFormat());
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+		CustomWestJetReports custom = new CustomWestJetReports();
+		
+		List reportData = custom.getDisputeCountData(srDTO, resources);
+		
+		if (reportData == null) {
+			return null;
+		}
+		
+		Map parameters = new HashMap();
+		
+		String fileName = ReportingConstants.RPT_20_CUSTOM_210_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
+		virtualizer.setReadOnly(false);
+		
+		FastReportBuilder drb = new FastReportBuilder();
+		drb.setTitle(resources.getString("header.customreportnum.210") + "(" + srDTO.getStarttime() + " - " + srDTO.getEndtime() + ")");
+				
+		try {
+			Style header = setupHeader(drb);
+			drb.addColumn(resources.getString("custom.report.210.column.station"), "column1", String.class.getName(), 50, header, header);
+			drb.addColumn(resources.getString("custom.report.210.column.total_d"), "column2", String.class.getName(), 100, header, header);
+			drb.addColumn(resources.getString("custom.report.210.column.both_d"), "column3", String.class.getName(), 100, header, header);
+			drb.addColumn(resources.getString("custom.report.210.column.station_d"), "column4", String.class.getName(), 100, header, header);
+			drb.addColumn(resources.getString("custom.report.210.column.code_d"), "column5", String.class.getName(), 100, header, header);
+			drb.addColumn(resources.getString("custom.report.210.column.none_d"), "column6", String.class.getName(), 150, header, header);
+			
 			generateDynamicReport(reportData, parameters, outputpath, drb);
 			
 		} catch (JRException jre) {

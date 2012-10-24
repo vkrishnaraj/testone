@@ -89,12 +89,14 @@ public class ReportingConstants {
 	public static final int RPT_20_CUSTOM_83 = 83;
 	public static final int RPT_20_CUSTOM_84 = 84;
 	public static final int RPT_20_CUSTOM_85 = 85;
+	public static final int RPT_20_CUSTOM_210 = 210;
 	
 	public static final String RPT_20_CUSTOM_81_NAME = "loss_report";
 	public static final String RPT_20_CUSTOM_82_NAME = "pilferage_report";
 	public static final String RPT_20_CUSTOM_83_NAME = "dpr_report";
 	public static final String RPT_20_CUSTOM_84_NAME = "oa_pirs";
 	public static final String RPT_20_CUSTOM_85_NAME = "delayed_summary";
+	public static final String RPT_20_CUSTOM_210_NAME = "dispute_count";
 	
 	public final static String RPT_55_NAME = "stat_rpt_55";
 	public final static String RPT_101_NAME = "stat_rpt_101";

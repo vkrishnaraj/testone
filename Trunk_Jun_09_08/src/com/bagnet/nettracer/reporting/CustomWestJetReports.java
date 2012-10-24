@@ -1117,4 +1117,120 @@ public class CustomWestJetReports {
 		return toReturn;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List getDisputeCountData(StatReportDTO srDTO, ResourceBundle resources) {
+		
+		ArrayList toReturn = null;
+		Session session = null;
+
+		String startDate = DateUtils.formatDate(srDTO.getStarttime(),
+				srDTO.getDateFormat(), TracingConstants.DB_DATEFORMAT, null,
+				null);
+		String endDate = DateUtils.formatDate(srDTO.getEndtime(),
+				srDTO.getDateFormat(), TracingConstants.DB_DATEFORMAT, null,
+				null);
+
+		String sql = "select station as column1, total_d as column2, ifnull(both_d,0) as column3, " +
+				"ifnull(station_d,0) as column4, ifnull(code_d,0) as column5, ifnull(none_d,0) as column6 from " +
+				"" +
+				"(select d.before_dispute_fault_station_ID, s.stationcode station, count(d.dispute_res_id) total_d" +
+				"from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
+				"created_timestamp between '" + startDate + "' and '" + endDate + "' " +
+				"group by before_dispute_fault_station_ID order by s.stationcode) total" +
+				"" +
+				"left outer join " +
+				"" +
+				"(select d.before_dispute_fault_station_ID, count(d.dispute_res_id) both_d" +
+				"from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
+				"created_timestamp between '" + startDate + "' and '" + endDate + "'" +
+				"and d.before_dispute_fault_station_ID != d.suggested_station_ID and d.beforeDisputeLossCode != d.suggestedLossCode" +
+				"group by before_dispute_fault_station_ID order by s.stationcode) b " +
+				"on b.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID" +
+				"" +
+				"left outer join " +
+				"" +
+				"(select d.before_dispute_fault_station_ID, count(d.dispute_res_id) station_d" +
+				"from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
+				"created_timestamp between '" + startDate + "' and '" + endDate + "'" +
+				"and d.before_dispute_fault_station_ID != d.suggested_station_ID and d.beforeDisputeLossCode = d.suggestedLossCode" +
+				"group by before_dispute_fault_station_ID order by s.stationcode) station " +
+				"on station.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID" +
+				"" +
+				"left outer join " +
+				"" +
+				"(select d.before_dispute_fault_station_ID, count(d.dispute_res_id) code_d" +
+				"from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
+				"created_timestamp between '" + startDate + "' and '" + endDate + "'" +
+				"and d.beforeDisputeLossCode != d.suggestedLossCode and d.before_dispute_fault_station_ID = d.suggested_station_ID" +
+				"group by before_dispute_fault_station_ID order by s.stationcode) code " +
+				"on code.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID" +
+				"" +
+				"left outer join " +
+				"" +
+				"(select d.before_dispute_fault_station_ID, count(d.dispute_res_id) none_d" +
+				"from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
+				"created_timestamp between '" + startDate + "' and '" + endDate + "'" +
+				"and d.before_dispute_fault_station_ID = d.suggested_station_ID and d.beforeDisputeLossCode = d.suggestedLossCode" +
+				"group by before_dispute_fault_station_ID order by s.stationcode) temp " +
+				"on temp.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID";
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			SQLQuery query = session.createSQLQuery(sql);
+			query.addScalar("column1", Hibernate.STRING);
+			query.addScalar("column2", Hibernate.STRING);
+			query.addScalar("column3", Hibernate.STRING);
+			query.addScalar("column4", Hibernate.STRING);
+			query.addScalar("column5", Hibernate.STRING);
+			query.addScalar("column6", Hibernate.STRING);
+			List results = query.list();
+			
+			if (results.isEmpty()) {
+				return toReturn;
+			}
+			
+			toReturn = getRowsFromResultList(results, null, srDTO.getDateFormat());
+			populateTotalRow(toReturn);
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+
+		return toReturn;
+	}
+	
+	private void populateTotalRow(ArrayList<SimpleReportRow> toReturn) {
+		if (toReturn == null || toReturn.isEmpty()) {
+			return;
+		}
+		int total = 0;
+		int both = 0;
+		int station = 0;
+		int code = 0;
+		int none = 0;
+		for (SimpleReportRow row: toReturn) {
+			if (row != null) {
+				total += Integer.parseInt(row.getColumn2());
+				both += Integer.parseInt(row.getColumn3());
+				station += Integer.parseInt(row.getColumn4());
+				code += Integer.parseInt(row.getColumn5());
+				none += Integer.parseInt(row.getColumn6());
+			}
+		}
+		SimpleReportRow blank = new SimpleReportRow();
+		toReturn.add(blank);
+		SimpleReportRow totalRow = new SimpleReportRow();
+		totalRow.setColumn1("Total");
+		totalRow.setColumn2(total + "");
+		totalRow.setColumn3(both + "");
+		totalRow.setColumn4(station + "");
+		totalRow.setColumn5(code + "");
+		totalRow.setColumn6(none + "");
+		toReturn.add(totalRow);
+	}
+	
 }
