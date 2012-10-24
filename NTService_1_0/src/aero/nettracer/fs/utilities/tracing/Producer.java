@@ -20,6 +20,7 @@ import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.FsMatchHistoryAudit;
 import aero.nettracer.fs.model.GreyListAddress;
 import aero.nettracer.fs.model.Person;
@@ -809,6 +810,9 @@ public class Producer {
 			} else if (d.getMatchtype().equals(MatchType.claimRemarks)){
 				if(!p1.isAllEnabled() && !p1.isClaimRemarks() && !p1.isShowallclaiminfo())d.setContent1(s);
 				if(!p2.isAllEnabled() && !p2.isClaimRemarks() && !p2.isShowallclaiminfo())d.setContent2(s);
+			} else if (d.getMatchtype().equals(MatchType.ipAddress)){
+				if(!p1.isAllEnabled() && !p1.isIpAddresses() && !p1.isShowallclaiminfo())d.setContent1(s);
+				if(!p2.isAllEnabled() && !p2.isIpAddresses() && !p2.isShowallclaiminfo())d.setContent2(s);
 			}
 			
 			String c1=p1.getKey()!= null ? p1.getKey().getCompanycode():"NA";
@@ -857,6 +861,16 @@ public class Producer {
 			}
 			if(!p.isDob()){
 				person.setDateOfBirth(null);
+			}
+		}
+		
+		if (!p.isIpAddresses()) {
+			for (FsClaim claim: f.getClaims()) {
+				if (claim.getIpAddresses() != null && !claim.getIpAddresses().isEmpty()) {
+					for (FsIPAddress ip: claim.getIpAddresses()) {
+						ip.setIpAddress(s);
+					}
+				}
 			}
 		}
 		

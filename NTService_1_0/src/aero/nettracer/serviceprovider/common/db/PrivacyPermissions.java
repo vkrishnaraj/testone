@@ -77,6 +77,7 @@ public class PrivacyPermissions implements Serializable{
 	boolean incdate;
 	boolean incremarks;
 	boolean claimRemarks;
+	boolean ipAddresses;
 	
 	int retention;
 
@@ -111,6 +112,14 @@ public class PrivacyPermissions implements Serializable{
 
 	public void setClaimRemarks(boolean claimRemarks) {
 		this.claimRemarks = claimRemarks;
+	}
+	
+	public boolean isIpAddresses() {
+		return ipAddresses;
+	}
+
+	public void setIpAddresses(boolean ipAddresses) {
+		this.ipAddresses = ipAddresses;
 	}
 
 	public boolean isDrivers() {
