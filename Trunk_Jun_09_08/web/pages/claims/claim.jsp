@@ -1380,9 +1380,9 @@
 					
 					
                     <center>
-                    <html:submit property="save" styleId="button" onclick="return validateFsClaimForm(this.form);">
+                    <html:button property="save" styleId="button" onclick="this.disabled=true; if (validateFsClaimForm(this.form)) {this.disabled=false; this.form.submit();} else {this.disabled=false; return false;}">
                       <bean:message key="button.save" />
-                    </html:submit>
+                    </html:button>
                     <logic:notEmpty name="back" scope="request" >
                     	&nbsp;&nbsp;
 	            		<input id="button" type="button" value='<bean:message key="claim.button.back" />' onClick="history.back()">
