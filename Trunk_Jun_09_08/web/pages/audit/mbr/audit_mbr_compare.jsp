@@ -8,6 +8,7 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils" %>
@@ -539,6 +540,18 @@ function updatePagination() {
               </td>
             </logic:iterate>
           </tr>
+          <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_DELIVERY_INSTRUCTIONS)) {%>
+          <tr>
+          	<td>
+              <bean:message key="header.delivery_instructions" />
+            </td>
+            <logic:iterate id="audit_incident" name="compareList" scope="request">
+              <td>
+              	<bean:write name="audit_incident" property="instructions" />
+              </td>
+            </logic:iterate>
+          </tr>
+          <% } %>
           <tr>
             <td>
               <bean:message key="header.bag_itinerary" />
