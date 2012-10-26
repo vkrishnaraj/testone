@@ -3973,60 +3973,60 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			if (fieldList != null && fieldList.size() > 0) {
 				ct.addNewCountry().setCountryCode(fieldList.get(0));
 			}
-//
-//			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PA);
-//			if (fieldList != null && fieldList.size() > 0) {
-//				WTRAddressAmendType pa = ct.addNewPermanentAddress();
-//				for (int i = 0; i < fieldList.size() && i < 2; i++) {
-//					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
-//					StringLength0To58AmendType pa1 = pa.addNewAddressLine();
-//					pa1.setSeq(i + 1);
-//					pa1.setStringValue(address);
-//				}
-//			}
-//			
-			
-			//find first permanent address
-			Address ntpa = PreProcessor.getAhlAddress(data, true);
 
-			if(ntpa != null){
+			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PA);
+			if (fieldList != null && fieldList.size() > 0) {
 				WTRAddressAmendType pa = ct.addNewPermanentAddress();
-				if(ntpa.getAddress1()!=null && ntpa.getAddress1().length() > 0){
+				for (int i = 0; i < fieldList.size() && i < 2; i++) {
+					String address = BASIC_RULE.formatEntry(fieldList.get(i).trim());
 					StringLength0To58AmendType pa1 = pa.addNewAddressLine();
-					pa1.setSeq(1);
-					pa1.setStringValue(ntpa.getAddress1());
-				}
-				if(ntpa.getAddress2()!=null && ntpa.getAddress2().length() > 0){
-					StringLength0To58AmendType pa2 = pa.addNewAddressLine();
-					pa2.setSeq(2);
-					pa2.setStringValue(ntpa.getAddress2());
-				}
-				if(ntpa.getCity()!=null && ntpa.getCity().length() > 0){
-					pa.setCity(ntpa.getCity());
-				}
-				if(ntpa.getState() != null && ntpa.getState().length() > 0 
-						&& ntpa.getCountryCode() != null 
-						&& (ntpa.getCountryCode().equalsIgnoreCase("US") || ntpa.getCountryCode().equalsIgnoreCase("United States"))){
-					WTRAddressAmendType.State state = pa.addNewState();
-					state.setStringValue(ntpa.getState());
-					pa.setState(state);
-				} else if(ntpa.getProvince() != null && ntpa.getProvince().length() > 0){
-					//there is no province field for WT
-					WTRAddressAmendType.State state = pa.addNewState();
-					state.setStringValue(ntpa.getProvince());
-					pa.setState(state);
-				}
-				if(ntpa.getZip() != null && ntpa.getZip().length() > 0){
-					PostalCode zip = pa.addNewPostalCode();
-					zip.setStringValue(ntpa.getZip());
-					pa.setPostalCode(zip);
-				}
-				if(ntpa.getCountryCode() != null && ntpa.getCountryCode().length() > 0){
-					Country country = pa.addNewCountry();
-					country.setStringValue(ntpa.getCountryCode());
-					pa.setCountry(country);
+					pa1.setSeq(i + 1);
+					pa1.setStringValue(address);
 				}
 			}
+			
+//			
+//			//find first permanent address
+//			Address ntpa = PreProcessor.getAhlAddress(data, true);
+//
+//			if(ntpa != null){
+//				WTRAddressAmendType pa = ct.addNewPermanentAddress();
+//				if(ntpa.getAddress1()!=null && ntpa.getAddress1().length() > 0){
+//					StringLength0To58AmendType pa1 = pa.addNewAddressLine();
+//					pa1.setSeq(1);
+//					pa1.setStringValue(ntpa.getAddress1());
+//				}
+//				if(ntpa.getAddress2()!=null && ntpa.getAddress2().length() > 0){
+//					StringLength0To58AmendType pa2 = pa.addNewAddressLine();
+//					pa2.setSeq(2);
+//					pa2.setStringValue(ntpa.getAddress2());
+//				}
+//				if(ntpa.getCity()!=null && ntpa.getCity().length() > 0){
+//					pa.setCity(ntpa.getCity());
+//				}
+//				if(ntpa.getState() != null && ntpa.getState().length() > 0 
+//						&& ntpa.getCountryCode() != null 
+//						&& (ntpa.getCountryCode().equalsIgnoreCase("US") || ntpa.getCountryCode().equalsIgnoreCase("United States"))){
+//					WTRAddressAmendType.State state = pa.addNewState();
+//					state.setStringValue(ntpa.getState());
+//					pa.setState(state);
+//				} else if(ntpa.getProvince() != null && ntpa.getProvince().length() > 0){
+//					//there is no province field for WT
+//					WTRAddressAmendType.State state = pa.addNewState();
+//					state.setStringValue(ntpa.getProvince());
+//					pa.setState(state);
+//				}
+//				if(ntpa.getZip() != null && ntpa.getZip().length() > 0){
+//					PostalCode zip = pa.addNewPostalCode();
+//					zip.setStringValue(ntpa.getZip());
+//					pa.setPostalCode(zip);
+//				}
+//				if(ntpa.getCountryCode() != null && ntpa.getCountryCode().length() > 0){
+//					Country country = pa.addNewCountry();
+//					country.setStringValue(ntpa.getCountryCode());
+//					pa.setCountry(country);
+//				}
+//			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.ZIP);
 			if (fieldList != null && fieldList.size() > 0) {
