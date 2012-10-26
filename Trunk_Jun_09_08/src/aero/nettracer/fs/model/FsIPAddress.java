@@ -20,6 +20,7 @@ public class FsIPAddress implements Serializable {
 	@GeneratedValue
 	private long id;
 	private String ipAddress;
+	private String association;
 	
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
 	@Fetch(FetchMode.SELECT)
@@ -47,6 +48,14 @@ public class FsIPAddress implements Serializable {
 
 	public void setClaim(FsClaim claim) {
 		this.claim = claim;
+	}
+
+	public void setAssociation(String association) {
+		this.association = association;
+	}
+
+	public String getAssociation() {
+		return association;
 	}
 	
 }

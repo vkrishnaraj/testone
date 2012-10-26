@@ -23,6 +23,7 @@ public class FsIPAddress implements Serializable {
 	@GeneratedValue
 	private long id;
 	private String ipAddress;
+	private String association;
 
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.detection.IPWhiteList.class)
 	@Fetch(FetchMode.SELECT)
@@ -62,6 +63,14 @@ public class FsIPAddress implements Serializable {
 
 	public void setWhitelist(IPWhiteList whitelist) {
 		this.whitelist = whitelist;
+	}
+
+	public void setAssociation(String association) {
+		this.association = association;
+	}
+
+	public String getAssociation() {
+		return association;
 	}
 	
 }

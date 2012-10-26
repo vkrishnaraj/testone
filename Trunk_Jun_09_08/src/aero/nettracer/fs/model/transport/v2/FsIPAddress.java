@@ -2,27 +2,13 @@ package aero.nettracer.fs.model.transport.v2;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Proxy;
-
-@Entity
-@Proxy(lazy = false)
 public class FsIPAddress implements Serializable {
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue
+	private static final long serialVersionUID = 5504963603280831328L;
+	
 	private long id;
 	private String ipAddress;
-	
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
-	@Fetch(FetchMode.SELECT)
+	private String association;
+
 	private FsClaim claim;
 
 	public long getId() {
@@ -47,6 +33,14 @@ public class FsIPAddress implements Serializable {
 
 	public void setClaim(FsClaim claim) {
 		this.claim = claim;
+	}
+
+	public void setAssociation(String association) {
+		this.association = association;
+	}
+
+	public String getAssociation() {
+		return association;
 	}
 	
 }
