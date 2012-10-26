@@ -160,6 +160,10 @@ public class ClaimUtils {
 		LinkedHashSet<FsIPAddress> ips = new LinkedHashSet<FsIPAddress>();
 		claim.setIpAddresses(ips);
 		
+		// create phones
+		LinkedHashSet<Phone> claimPhones = new LinkedHashSet<Phone>();
+		claim.setPhones(claimPhones);
+		
 		FsIncident fsIncident = getFsIncident(ntIncident, user);
 		claim.setIncident(fsIncident);
 //		LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();

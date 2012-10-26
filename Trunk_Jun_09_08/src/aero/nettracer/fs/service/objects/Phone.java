@@ -3,7 +3,8 @@ package aero.nettracer.fs.service.objects;
 public class Phone {
 	private int type;
 	private String phoneNumber;
-
+	private String association;
+	
 	public int getType() {
 		return type;
 	}
@@ -18,6 +19,14 @@ public class Phone {
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
+	}
+
+	public void setAssociation(String association) {
+		this.association = association;
+	}
+
+	public String getAssociation() {
+		return association;
 	}
 
 }

@@ -869,6 +869,7 @@ public class Producer {
 				if (claim.getIpAddresses() != null && !claim.getIpAddresses().isEmpty()) {
 					for (FsIPAddress ip: claim.getIpAddresses()) {
 						ip.setIpAddress(s);
+						ip.setAssociation(s);
 					}
 				}
 			}
@@ -893,6 +894,7 @@ public class Producer {
 		for(Phone phone:phones){
 			if(!p.isPhonenumber()){
 				phone.setPhoneNumber(s);
+				phone.setAssociation(s);
 			}
 		}
 

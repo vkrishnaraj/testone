@@ -255,6 +255,14 @@ public class ModifyClaimAction extends CheckedAction {
 			request.setAttribute("showReceipts", "true");
 		}
 
+		if (claim.getPhones().size() > 0) {
+			request.setAttribute("showPhones", "true");
+		}
+		
+		if (claim.getIpAddresses().size() > 0) {
+			request.setAttribute("showIpAddresses", "true");
+		}
+		
 		String showNames = request.getParameter("showNames");
 		if (showNames != null) {
 			request.setAttribute("showNames", showNames);
@@ -265,6 +273,15 @@ public class ModifyClaimAction extends CheckedAction {
 			request.setAttribute("showReceipts", showReceipts);
 		}
 		
+		String showPhones = request.getParameter("showPhones");
+		if (showPhones != null) {
+			request.setAttribute("showPhones", showPhones);
+		}
+		
+		String showIpAddresses = request.getParameter("showIpAddresses");
+		if (showIpAddresses != null) {
+			request.setAttribute("showIpAddresses", showIpAddresses);
+		}
 
 		cform = ClaimUtils.createClaimForm(request);
 
@@ -369,6 +386,12 @@ public class ModifyClaimAction extends CheckedAction {
 							ipaddresses.add(ipaddress);
 						}
 						
+						LinkedHashSet<Phone> phones = new LinkedHashSet<Phone>();
+						newClaim.setPhones(phones);
+						for(Phone phone: current.getPhones()){
+							phone.setClaim(newClaim);
+							phones.add(phone);
+						}
 						
 						file.setStatusId(claim.getStatusId());
 						newClaim.setFile(file);
@@ -436,13 +459,15 @@ public class ModifyClaimAction extends CheckedAction {
 	private void deleteAssociatedItems(FsClaim claim, HttpServletRequest request) {
 		deleteAssociatedElements(new ArrayList(claim.getClaimants()), claim.getClaimants(), TracingConstants.JSP_DELETE_ASSOCIATED_NAME, request);
 		deleteAssociatedElements(new ArrayList(claim.getReceipts()), claim.getReceipts(), TracingConstants.JSP_DELETE_ASSOCIATED_RECEIPT, request);	
-		deleteAssociatedElements(new ArrayList(claim.getIpAddresses()), claim.getIpAddresses(), TracingConstants.JSP_DELETE_IP_ADDRESS, request);	
+		deleteAssociatedElements(new ArrayList(claim.getIpAddresses()), claim.getIpAddresses(), TracingConstants.JSP_DELETE_IP_ADDRESS, request);
+		deleteAssociatedElements(new ArrayList(claim.getPhones()), claim.getPhones(), TracingConstants.JSP_DELETE_PHONE, request);	
 	}
 	
 	private void addAssociatedItems(FsClaim claim, HttpServletRequest request, Agent user) {
 		addAssociatedNames(claim, request, user);
 		addAssociatedReceipts(claim, request, user);
 		addIPAddresses(claim, request, user);
+		addPhones(claim, request, user);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -500,6 +525,22 @@ public class ModifyClaimAction extends CheckedAction {
 					claim.getReceipts().add(r);
 				}
 				request.setAttribute("rs", 1);
+			} catch (NumberFormatException nfe) {
+				logger.error(nfe);
+			}
+		}
+	}
+	
+	private void addPhones(FsClaim claim, HttpServletRequest request, Agent user) {
+		if (request.getParameter("addPhones") != null) {
+			try {
+				int numToAdd = Integer.parseInt(request.getParameter("addPhoneNum"));
+				for (int i = 0; i < numToAdd; ++i) {
+					Phone p = new Phone();
+					p.setClaim(claim);
+					claim.getPhones().add(p);
+				}
+				request.setAttribute("ph", 1);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
 			}

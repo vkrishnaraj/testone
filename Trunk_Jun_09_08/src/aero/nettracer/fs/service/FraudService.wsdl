@@ -79,7 +79,8 @@
                     <xs:element minOccurs="0" name="claimDate" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="claimType" type="xs:int"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="claimants" nillable="true" type="ax21:Person"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="ipaddress" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="ipaddress" nillable="true" type="ax21:IpAddress"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="phones" nillable="true" type="ax21:Phone"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="receipts" nillable="true" type="ax21:Receipt"/>
                     <xs:element minOccurs="0" name="remark" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="segments" nillable="true" type="ax21:Segment"/>
@@ -119,8 +120,15 @@
             </xs:complexType>
             <xs:complexType name="Phone">
                 <xs:sequence>
+                    <xs:element minOccurs="0" name="association" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="phoneNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="type" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="IpAddress">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="association" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ipaddress" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Receipt">

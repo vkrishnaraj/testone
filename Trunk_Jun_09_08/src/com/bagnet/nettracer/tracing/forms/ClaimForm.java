@@ -225,4 +225,11 @@ public final class ClaimForm extends ActionForm {
 		return null;
 	}
 	
+	public Phone getPhone(int index) {
+		if (claim.getPhones() != null && index < claim.getPhones().size()) {
+			return new ArrayList<Phone>(claim.getPhones()).get(index);
+		}
+		return null;
+	}
+	
 }

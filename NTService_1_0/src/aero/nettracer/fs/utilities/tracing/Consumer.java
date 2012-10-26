@@ -584,13 +584,19 @@ public class Consumer implements Runnable{
 					}
 				}
 			}
-			if(incident.getReservation() != null
-					&& incident.getReservation().getPassengers() != null){
-				for(Person p:incident.getReservation().getPassengers()){
-					if(p.getPhones() != null){
-						for(Phone phone:p.getPhones()){
-							ret.add(phone);
+			if(incident.getReservation() != null){
+				if(incident.getReservation().getPassengers() != null){
+					for(Person p:incident.getReservation().getPassengers()){
+						if(p.getPhones() != null){
+							for(Phone phone:p.getPhones()){
+								ret.add(phone);
+							}
 						}
+					}
+				}
+				if(incident.getReservation().getPhones() != null){
+					for(Phone p:incident.getReservation().getPhones()){
+						ret.add(p);
 					}
 				}
 			}
@@ -602,6 +608,11 @@ public class Consumer implements Runnable{
 	public static Set<Phone> getPhones(FsClaim claim){
 		HashSet<Phone> ret = new HashSet<Phone>();
 		if(claim != null){
+			if(claim.getPhones() != null){
+				for(Phone phone:claim.getPhones()){
+					ret.add(phone);
+				}
+			}
 			if(claim.getClaimants() != null){
 				for(Person person:claim.getClaimants()){
 					if(person.getPhones() != null){

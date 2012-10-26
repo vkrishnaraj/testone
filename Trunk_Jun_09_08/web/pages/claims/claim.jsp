@@ -146,7 +146,7 @@
       
   </SCRIPT>
  
-          <html:form action="claim_resolution.do" method="post" >
+        <html:form action="claim_resolution.do" method="post" onsubmit="return validateFsClaimForm(this);">
           <input type="hidden" name="delete_these_elements" value="" />
             <html:javascript formName="claimForm" />
             <tr>
@@ -1058,6 +1058,147 @@
                     <br />
                     <br />
                     
+                    
+                    <!-- Start show phones -->
+                    <div style="width:100%;">
+                    <a name="ph" ></a>
+                    <span style="float:left;">
+					<h1 class="green" >
+						<bean:message key="header.associated.phones" />
+						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					</h1>
+					</span>
+					<span style="float:right;" >
+						<a id="phshow" href="#ph" onClick="show('#phonesD','#phshow','#phhide')" style="display:none;"><bean:message key="link.show" /></a>
+						<a id="phhide" href="#ph" onClick="hide('#phonesD','#phshow','#phhide')" ><bean:message key="link.hide" /></a>
+					</span>
+					</div>
+					<div id="phonesD"  >
+					<table class="form2" cellspacing="0" cellpadding="0">
+                    					<logic:iterate indexId="i" id="phones" name="claimForm" property="claim.phones" type="aero.nettracer.fs.model.Phone" >
+				          <tr id="<%= TracingConstants.JSP_DELETE_PHONE %>_<%=i%>">
+				          <td>
+							<bean:message key="claim.colname.phone" />
+							<br/>
+				                <input type="text" name="phone[<%=i %>].phoneNumber"  size="15" maxlength="25" value="<%=phones.getPhoneNumber() == null ? "" : phones.getPhoneNumber() %>" class="textfield" />
+				            </td>
+				            <td>
+				           	<bean:message key="claim.colname.phoneAssociation" />
+							<br/>
+								<input type="text" name="phone[<%=i %>].association"  size="15" maxlength="25" value="<%=phones.getAssociation() == null ? "" : phones.getAssociation() %>" class="textfield" />
+				            </td>
+				        	 <td>
+				        	 <br/>
+				            	<input type="button" value="<bean:message key="button.delete.phone" />"
+				            		onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_PHONE %>_<%=i %>', 
+				                '<bean:message key="claim.colname.phoneAssociation" />', 0)"
+				            	id="button" >
+				           </td>
+				           </tr>
+				          
+				          </logic:iterate>
+				          <tr>
+				          <td colspan="5" align="center">
+					          <select name="addPhoneNum">
+						          <option value="1">1</option>
+						          <option value="2">2</option>
+						          <option value="3">3</option>
+						          <option value="4">4</option>
+						          <option value="5">5</option>
+						        </select>
+					
+							    <html:submit styleId="button" property="addPhones" onclick="setField('addedphones');" >
+						        	<bean:message key="button.add.phone" />
+						        </html:submit>
+				          </td>
+				          </tr>
+                    
+                    </table>
+                    </div>
+                    
+                    <% 	String showPhones = (String) request.getAttribute("showPhones");
+						if (showPhones != null && showPhones.equals("true")) { %>
+						<script>
+				   			jQuery('#phonesD').show();
+				   			jQuery('#phshow').hide();
+				   			jQuery('#phhide').show();
+				   		</script>
+					<% } %>
+                    <br />
+                    <br />
+                    <!-- end show phones -->
+                    
+                    
+                    <!-- ip addresses -->
+                   <div style="width:100%;">
+                    <a name="aip" ></a>
+                    <span style="float:left;">
+					<h1 class="green" >
+						<bean:message key="header.associated.ipaddress" />
+						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					</h1>
+					</span>
+					<span style="float:right;" >
+						<a id="ipshow" href="#aip" onClick="show('#ipaddressD','#ipshow','#iphide')" style="display:none;"><bean:message key="link.show" /></a>
+						<a id="iphide" href="#aip" onClick="hide('#ipaddressD','#ipshow','#iphide')" ><bean:message key="link.hide" /></a>
+					</span>
+					</div>
+					<div id="ipaddressD"  >
+	
+						<table class="form2" cellspacing="0" cellpadding="0" >
+						<logic:iterate indexId="i" id="ips" name="claimForm" property="claim.ipAddresses" type="aero.nettracer.fs.model.FsIPAddress" >
+				          <tr id="<%= TracingConstants.JSP_DELETE_IP_ADDRESS %>_<%=i%>">
+				          <td style="margin:0;padding:0;">
+							<bean:message key="claim.colname.ipAddress" />
+							<br/>
+				                <input type="text" name="ipAddress[<%=i %>].ipAddress" size="15" maxlength="15" value="<%=ips.getIpAddress() == null ? "" : ips.getIpAddress() %>" class="textfield" />
+				        	</td>
+				            <td>
+				           	<bean:message key="claim.colname.ipaddressAssociation" />
+							<br/>
+								<input type="text" name="ipAddress[<%=i %>].association"  size="15" maxlength="25" value="<%=ips.getAssociation() == null ? "" : ips.getAssociation() %>" class="textfield" />
+				            </td>
+				            <td>
+				            <br/>
+				            	<input type="button" value="<bean:message key="button.delete.ip" />"
+				            		onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_IP_ADDRESS %>_<%=i %>', 
+				                '<bean:message key="header.associated.ipaddress" />', 0)"
+				            	id="button" >
+				           </td>
+				           </tr>
+				          
+				          </logic:iterate>
+				          <tr>
+				          <td colspan="5" align="center">
+					          <select name="addIPNum">
+						          <option value="1">1</option>
+						          <option value="2">2</option>
+						          <option value="3">3</option>
+						          <option value="4">4</option>
+						          <option value="5">5</option>
+						        </select>
+					
+							    <html:submit styleId="button" property="addIPs" onclick="setField('addedips');" >
+						        	<bean:message key="button.add.ip" />
+						        </html:submit>
+				          </td>
+				          </tr>
+					</table>
+	
+                    </div>
+                    
+                    <% 	String showIpAddresses = (String) request.getAttribute("showIpAddresses");
+						if (showPhones != null && showPhones.equals("true")) { %>
+						<script>
+				   			jQuery('#aip').show();
+				   			jQuery('#ipshow').hide();
+				   			jQuery('#iphide').show();
+				   		</script>
+					<% } %>
+                    <br />
+                    <br />
+                    <!-- end ip addresses -->
+                    
                     <% if (ntUser) { %>
                     <!-- Incident Summary -->
                     <h1 class="green">
@@ -1331,44 +1472,7 @@
 							
 						</td>
 					</tr>
-					<tr>
-						<td colspan=5>
-							
-                    <a name="aip" ></a>
-					<table class="form2" cellspacing="0" cellpadding="0" >
-						<logic:iterate indexId="i" id="ips" name="claimForm" property="claim.ipAddresses" type="aero.nettracer.fs.model.FsIPAddress" >
-				          <tr id="<%= TracingConstants.JSP_DELETE_IP_ADDRESS %>_<%=i%>">
-				          <td style="margin:0;padding:0;">
-							<bean:message key="claim.colname.ipAddress" />
-							<br/>
-				                <input type="text" name="ipAddress[<%=i %>].ipAddress" size="15" maxlength="15" value="<%=ips.getIpAddress() == null ? "" : ips.getIpAddress() %>" class="textfield" />
-				            	&nbsp;&nbsp;
-				            	<input type="button" value="<bean:message key="button.delete.ip" />"
-				            		onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_IP_ADDRESS %>_<%=i %>', 
-				                '<bean:message key="header.reservation.details" />', 0)"
-				            	id="button" >
-				           </td>
-				           </tr>
-				          
-				          </logic:iterate>
-				          <tr>
-				          <td colspan="5" align="center">
-					          <select name="addIPNum">
-						          <option value="1">1</option>
-						          <option value="2">2</option>
-						          <option value="3">3</option>
-						          <option value="4">4</option>
-						          <option value="5">5</option>
-						        </select>
 					
-							    <html:submit styleId="button" property="addIPs" onclick="setField('addedips');" >
-						        	<bean:message key="button.add.ip" />
-						        </html:submit>
-				          </td>
-				          </tr>
-					</table>
-						</td>
-					</tr>
 					<tr>
 						<td colspan="5">
 							<bean:message key="header.reservation.info" />
@@ -1380,9 +1484,9 @@
 					
 					
                     <center>
-                    <html:button property="save" styleId="button" onclick="this.disabled=true; if (validateFsClaimForm(this.form)) {this.disabled=false; this.form.submit();} else {this.disabled=false; return false;}">
+                    <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />
-                    </html:button>
+                    </html:submit>
                     <logic:notEmpty name="back" scope="request" >
                     	&nbsp;&nbsp;
 	            		<input id="button" type="button" value='<bean:message key="claim.button.back" />' onClick="history.back()">
@@ -1390,9 +1494,12 @@
                     </center>
                     <input type="hidden" name="showNames" id="#names" value="<%=request.getAttribute("showNames") %>" />
                     <input type="hidden" name="showReceipts" id="#receipts" value="<%=request.getAttribute("showReceipts") %>" />
+                    <input type="hidden" name="showPhones" id="#phonesD" value="<%=request.getAttribute("showPhones") %>" />
+                    <input type="hidden" name="showIpAddresses" id="#ipaddressD" value="<%=request.getAttribute("showIpAddresses") %>" />
                     <input type="hidden" id="addednames" value="0" />
                     <input type="hidden" id="addedreceipts" value="0" />
                     <input type="hidden" id="addedips" value="0" />
+                    <input type="hidden" id="addedphones" value="0" />
                     <script language="javascript">
 						<logic:present name="an" scope="request">
 							document.location.href="#an";
@@ -1404,6 +1511,10 @@
 						
 						<logic:present name="aip" scope="request">
 							document.location.href="#aip";
+						</logic:present>
+						
+						<logic:present name="ph" scope="request">
+							document.location.href="#ph";
 						</logic:present>
 				    </script>
                   </html:form>

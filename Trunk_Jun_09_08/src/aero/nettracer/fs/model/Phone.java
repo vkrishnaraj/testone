@@ -46,6 +46,10 @@ public class Phone implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private Reservation reservation;
 
+	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
+	@Fetch(FetchMode.SELECT)
+	private FsClaim claim;
+	
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.Person.class)
 	@Fetch(FetchMode.SELECT)
 	private Person person;
@@ -56,6 +60,8 @@ public class Phone implements Serializable {
 	
 	private String phoneNumber;
 	private int type;
+	
+	private String association;
 
 	public int getType() {
 		return type;
@@ -124,6 +130,22 @@ public class Phone implements Serializable {
 
 	public boolean isEmpty() {
 		return phoneNumber != null && !phoneNumber.isEmpty();
+	}
+
+	public void setAssociation(String association) {
+		this.association = association;
+	}
+
+	public String getAssociation() {
+		return association;
+	}
+
+	public void setClaim(FsClaim claim) {
+		this.claim = claim;
+	}
+
+	public FsClaim getClaim() {
+		return claim;
 	}
 	
 }

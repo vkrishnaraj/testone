@@ -201,6 +201,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			claim.setBlacklist(resetBlackListId(claim.getBlacklist()));
 			claim.setReceipts(resetReceiptId(claim.getReceipts()));
 			claim.setIpAddresses(resetIpAddressId(claim.getIpAddresses()));
+			claim.setPhones(resetPhoneId(claim.getPhones()));
 		}
 		return claim;
 	}

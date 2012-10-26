@@ -41,6 +41,7 @@ import aero.nettracer.fs.service.UpdateClaimStatusResponseDocument.UpdateClaimSt
 import aero.nettracer.fs.service.objects.xsd.Address;
 import aero.nettracer.fs.service.objects.xsd.Authentication;
 import aero.nettracer.fs.service.objects.xsd.File;
+import aero.nettracer.fs.service.objects.xsd.IpAddress;
 import aero.nettracer.fs.service.objects.xsd.Receipt;
 import aero.nettracer.fs.service.objects.xsd.Reservation;
 import aero.nettracer.fs.service.objects.xsd.ClaimResponse;
@@ -364,19 +365,33 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
     	// POPULATE CLAIM FROM WS
     	if (wsClaim.getIpaddressArray() != null){
     		Set<FsIPAddress> ips = new LinkedHashSet<FsIPAddress>();
-    		for (String wsIp: wsClaim.getIpaddressArray()) {
-    			if (wsIp.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
+    		for (IpAddress wsIp: wsClaim.getIpaddressArray()) {
+    			if (wsIp.getIpaddress() != null && wsIp.getIpaddress().matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$")) {
     				FsIPAddress ip = new FsIPAddress();
     				ip.setClaim(claim);
-    				ip.setIpAddress(wsIp);
+    				ip.setIpAddress(wsIp.getIpaddress());
+    				ip.setAssociation(wsIp.getAssociation());
     				ips.add(ip);
     			} else {
-    	    		res.addError("" + wsIp +" is not a valid IP Address.");
+    	    		res.addError("" + wsIp.getIpaddress() +" is not a valid IP Address.");
     				res.setSuccess(false);
     	    		return false;
     			}
     		}
     		claim.setIpAddresses(ips);
+    	}
+    	
+    	if(wsClaim.getPhonesArray() != null){
+    		Set<Phone> phones = new LinkedHashSet<Phone>();
+    		for(aero.nettracer.fs.service.objects.xsd.Phone wsphone:wsClaim.getPhonesArray()){
+    			Phone fsphone = new Phone();
+    			fsphone.setPhoneNumber(wsphone.getPhoneNumber());
+    			fsphone.setType(wsphone.getType());
+    			fsphone.setAssociation(wsphone.getAssociation());
+    			fsphone.setClaim(claim);
+    			phones.add(fsphone);
+    		}
+    		claim.setPhones(phones);
     	}
     	
     	claim.setAirline(wsClaim.getAirline());

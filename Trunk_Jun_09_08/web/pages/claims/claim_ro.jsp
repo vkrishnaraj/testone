@@ -1106,6 +1106,111 @@
 					<% } %>
                     <br />
                     <br />
+                    
+                                        <!-- Start show phones -->
+                    <div style="width:100%;">
+                    <a name="ph" ></a>
+                    <span style="float:left;">
+					<h1 class="green" >
+						<bean:message key="header.associated.phones" />
+						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					</h1>
+					</span>
+					</div>
+					<div id="phonesD"  >
+					<table class="form2" cellspacing="0" cellpadding="0">
+                    					<logic:iterate indexId="i" id="phones" name="matchClaim" property="phones" type="aero.nettracer.fs.model.Phone" >
+				          <tr>
+				          <td>
+							<bean:message key="claim.colname.phone" />
+							<br/>
+				                <input disabled="true" type="text" name="phone[<%=i %>].phoneNumber"  size="15" maxlength="25" value="<%=phones.getPhoneNumber() == null ? "" : phones.getPhoneNumber() %>" class="textfield" />
+				            </td>
+				            <td>
+				           	<bean:message key="claim.colname.phoneAssociation" />
+							<br/>
+								<input disabled="true" type="text" name="phone[<%=i %>].association"  size="15" maxlength="25" value="<%=phones.getAssociation() == null ? "" : phones.getAssociation() %>" class="textfield" />
+				            </td>
+				           </tr>
+                    </logic:iterate>
+				          <tr>
+				          <td colspan="5" align="center">
+					          <select name="addPhoneNum" disabled="true" >
+						          <option value="1">1</option>
+						          <option value="2">2</option>
+						          <option value="3">3</option>
+						          <option value="4">4</option>
+						          <option value="5">5</option>
+						        </select>
+
+				          </td>
+				          </tr>
+                    </table>
+                    </div>
+                    
+                    <% 	String showPhones = (String) request.getAttribute("showPhones");
+						if (showPhones != null && showPhones.equals("true")) { %>
+						<script>
+				   			jQuery('#phonesD').show();
+				   			jQuery('#phshow').hide();
+				   			jQuery('#phhide').show();
+				   		</script>
+					<% } %>
+                    <br />
+                    <br />
+                    <!-- end show phones -->
+                    
+                                        
+                    
+                    <!-- ip addresses -->
+                   <div style="width:100%;">
+                    <a name="aip" ></a>
+                    <span style="float:left;">
+					<h1 class="green" >
+						<bean:message key="header.associated.ipaddress" />
+						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					</h1>
+					</span>
+					</div>
+					<div id="ipaddressD"  >
+	
+						<table class="form2" cellspacing="0" cellpadding="0" >
+						<logic:iterate indexId="i" id="ips" name="matchClaim" property="ipAddresses" type="aero.nettracer.fs.model.FsIPAddress" >
+				          <tr>
+				          <td style="margin:0;padding:0;">
+							<bean:message key="claim.colname.ipAddress" />
+							<br/>
+				                <input disabled="true"  type="text" name="ipAddress[<%=i %>].ipAddress" size="15" maxlength="15" value="<%=ips.getIpAddress() == null ? "" : ips.getIpAddress() %>" class="textfield" />
+				        	</td>
+				            <td>
+				           	<bean:message key="claim.colname.ipaddressAssociation" />
+							<br/>
+								<input disabled="true"  type="text" name="ipAddress[<%=i %>].association"  size="15" maxlength="25" value="<%=ips.getAssociation() == null ? "" : ips.getAssociation() %>" class="textfield" />
+				            </td>
+				           </tr>
+				          
+				          </logic:iterate>
+				          <tr>
+				          <td colspan="5" align="center" disabled="true" >
+					          <select name="addIPNum">
+						          <option value="1">1</option>
+						          <option value="2">2</option>
+						          <option value="3">3</option>
+						          <option value="4">4</option>
+						          <option value="5">5</option>
+						        </select>
+
+				          </td>
+				          </tr>
+					</table>
+	
+                    </div>
+                   
+                    <br />
+                    <br />
+                    <!-- end ip addresses -->
+                    
+                    
                     <!-- INCIDENT INFO FOR FRAUD ONLY CUSTOMERS -->
                     	<h1 class="green">
                    			<bean:message key="header.incident_summary" />
@@ -1319,6 +1424,7 @@
 							
 						</td>
 					</tr>
+				
 					<tr>
 						<td colspan="5">
 							<bean:message key="header.reservation.info" />

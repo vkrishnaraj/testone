@@ -1,24 +1,8 @@
 package aero.nettracer.fs.model.transport.v2;
 
 import java.io.Serializable;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Proxy;
-
 import aero.nettracer.fs.model.transport.v2.detection.PhoneWhiteList;
 
-@Entity
-@Proxy(lazy = false)
 public class Phone implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -28,34 +12,18 @@ public class Phone implements Serializable {
 	public static final int ALTERNATE = 4;
 	public static final int PAGER = 5;
 	
-	
-	@Id
-	@GeneratedValue
 	private long id;
-
-	// @OneToOne(targetEntity = aero.nettracer.fs.model.Incident.class)
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
-	@Fetch(FetchMode.SELECT)
 	private FsIncident incident;
-
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.detection.PhoneWhiteList.class)
-	@Fetch(FetchMode.SELECT)
 	private PhoneWhiteList whitelist;
-
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
-	@Fetch(FetchMode.SELECT)
 	private Reservation reservation;
-
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.Person.class)
-	@Fetch(FetchMode.SELECT)
+	private FsClaim claim;
 	private Person person;
-	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.FsReceipt.class)
-	@Fetch(FetchMode.SELECT)
 	private FsReceipt receipt;
-	
 	private String phoneNumber;
 	private int type;
+	
+	private String association;
+
 
 	public int getType() {
 		return type;
@@ -124,6 +92,22 @@ public class Phone implements Serializable {
 
 	public boolean isEmpty() {
 		return phoneNumber != null && !phoneNumber.isEmpty();
+	}
+
+	public void setAssociation(String association) {
+		this.association = association;
+	}
+
+	public String getAssociation() {
+		return association;
+	}
+
+	public void setClaim(FsClaim claim) {
+		this.claim = claim;
+	}
+
+	public FsClaim getClaim() {
+		return claim;
 	}
 	
 }

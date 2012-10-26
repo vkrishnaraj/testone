@@ -105,6 +105,12 @@ public class FsClaim implements Serializable {
 	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<FsIPAddress> ipAddresses;
 	
+	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private Set<Phone> phones;
+	
 	@Transient
 	protected Person claimant = null;
 		
@@ -347,6 +353,14 @@ public class FsClaim implements Serializable {
 			claimant = claimants.iterator().next();
 		}
 		return claimant;
+	}
+
+	public void setPhones(Set<Phone> phones) {
+		this.phones = phones;
+	}
+
+	public Set<Phone> getPhones() {
+		return phones;
 	}
 	
 }
