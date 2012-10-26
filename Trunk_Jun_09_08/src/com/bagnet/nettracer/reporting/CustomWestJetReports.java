@@ -1131,48 +1131,48 @@ public class CustomWestJetReports {
 				null);
 
 		String sql = "select station as column1, total_d as column2, ifnull(both_d,0) as column3, " +
-				"ifnull(station_d,0) as column4, ifnull(code_d,0) as column5, ifnull(none_d,0) as column6 from " +
-				"" +
-				"(select d.before_dispute_fault_station_ID, s.stationcode station, count(d.dispute_res_id) total_d" +
-				"from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
-				"created_timestamp between '" + startDate + "' and '" + endDate + "' " +
-				"group by before_dispute_fault_station_ID order by s.stationcode) total" +
-				"" +
-				"left outer join " +
-				"" +
-				"(select d.before_dispute_fault_station_ID, count(d.dispute_res_id) both_d" +
-				"from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
-				"created_timestamp between '" + startDate + "' and '" + endDate + "'" +
-				"and d.before_dispute_fault_station_ID != d.suggested_station_ID and d.beforeDisputeLossCode != d.suggestedLossCode" +
-				"group by before_dispute_fault_station_ID order by s.stationcode) b " +
-				"on b.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID" +
-				"" +
-				"left outer join " +
-				"" +
-				"(select d.before_dispute_fault_station_ID, count(d.dispute_res_id) station_d" +
-				"from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
-				"created_timestamp between '" + startDate + "' and '" + endDate + "'" +
-				"and d.before_dispute_fault_station_ID != d.suggested_station_ID and d.beforeDisputeLossCode = d.suggestedLossCode" +
-				"group by before_dispute_fault_station_ID order by s.stationcode) station " +
-				"on station.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID" +
-				"" +
-				"left outer join " +
-				"" +
-				"(select d.before_dispute_fault_station_ID, count(d.dispute_res_id) code_d" +
-				"from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
-				"created_timestamp between '" + startDate + "' and '" + endDate + "'" +
-				"and d.beforeDisputeLossCode != d.suggestedLossCode and d.before_dispute_fault_station_ID = d.suggested_station_ID" +
-				"group by before_dispute_fault_station_ID order by s.stationcode) code " +
-				"on code.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID" +
-				"" +
-				"left outer join " +
-				"" +
-				"(select d.before_dispute_fault_station_ID, count(d.dispute_res_id) none_d" +
-				"from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
-				"created_timestamp between '" + startDate + "' and '" + endDate + "'" +
-				"and d.before_dispute_fault_station_ID = d.suggested_station_ID and d.beforeDisputeLossCode = d.suggestedLossCode" +
-				"group by before_dispute_fault_station_ID order by s.stationcode) temp " +
-				"on temp.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID";
+				" ifnull(station_d,0) as column4, ifnull(code_d,0) as column5, ifnull(none_d,0) as column6 from " +
+				" " +
+				" (select d.before_dispute_fault_station_ID, s.stationcode station, count(d.dispute_res_id) total_d" +
+				" from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
+				" created_timestamp between '" + startDate + "' and '" + endDate + "' " +
+				" group by before_dispute_fault_station_ID order by s.stationcode) total" +
+				" " +
+				" left outer join " +
+				" " +
+				" (select d.before_dispute_fault_station_ID, count(d.dispute_res_id) both_d" +
+				" from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
+				" created_timestamp between '" + startDate + "' and '" + endDate + "'" +
+				" and d.before_dispute_fault_station_ID != d.suggested_station_ID and d.beforeDisputeLossCode != d.suggestedLossCode" +
+				" group by before_dispute_fault_station_ID order by s.stationcode) b " +
+				" on b.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID" +
+				" " +
+				"  left outer join " +
+				" " +
+				" (select d.before_dispute_fault_station_ID, count(d.dispute_res_id) station_d" +
+				" from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
+				" created_timestamp between '" + startDate + "' and '" + endDate + "'" +
+				" and d.before_dispute_fault_station_ID != d.suggested_station_ID and d.beforeDisputeLossCode = d.suggestedLossCode" +
+				" group by before_dispute_fault_station_ID order by s.stationcode) station " +
+				" on station.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID" +
+				" " +
+				" left outer join " +
+				" " +
+				" (select d.before_dispute_fault_station_ID, count(d.dispute_res_id) code_d" +
+				" from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
+				" created_timestamp between '" + startDate + "' and '" + endDate + "'" +
+				" and d.beforeDisputeLossCode != d.suggestedLossCode and d.before_dispute_fault_station_ID = d.suggested_station_ID" +
+				" group by before_dispute_fault_station_ID order by s.stationcode) code " +
+				" on code.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID" +
+				" " +
+				" left outer join " +
+				" " +
+				" (select d.before_dispute_fault_station_ID, count(d.dispute_res_id) none_d" +
+				" from dispute d, station s where d.before_dispute_fault_station_ID = s.Station_ID and " +
+				" created_timestamp between '" + startDate + "' and '" + endDate + "'" +
+				" and d.before_dispute_fault_station_ID = d.suggested_station_ID and d.beforeDisputeLossCode = d.suggestedLossCode" +
+				" group by before_dispute_fault_station_ID order by s.stationcode) temp " +
+				" on temp.before_dispute_fault_station_ID = total.before_dispute_fault_station_ID";
 		
 		try {
 			session = HibernateWrapper.getSession().openSession();
