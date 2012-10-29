@@ -63,6 +63,10 @@ public class AccessRequest implements aero.nettracer.fs.model.transport.v0.detec
 
 	private String requestedAgent;
 	//private String contact;
+	private String contactName;
+	private String contactEmail;
+	private String contactPhone;
+	
 	private String requestedAirline;
 
 	public String getRequestedAirline() {
@@ -155,6 +159,30 @@ public class AccessRequest implements aero.nettracer.fs.model.transport.v0.detec
 	@Transient
 	public String getDisRequestedDate(String dateFormat) {
 		return DateUtils.formatDate(requestedDate, dateFormat, "", null);
+	}
+
+	public void setContactName(String contactName) {
+		this.contactName = contactName;
+	}
+
+	public String getContactName() {
+		return contactName;
+	}
+
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
+	}
+
+	public String getContactEmail() {
+		return contactEmail;
+	}
+
+	public void setContactPhone(String contactPhone) {
+		this.contactPhone = contactPhone;
+	}
+
+	public String getContactPhone() {
+		return contactPhone;
 	}
 
 }

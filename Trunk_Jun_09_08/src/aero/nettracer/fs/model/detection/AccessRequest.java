@@ -63,6 +63,11 @@ public class AccessRequest implements Serializable {
 
 	private String requestedAgent;
 	//private String contact;
+	
+	private String contactName;
+	private String contactEmail;
+	private String contactPhone;
+	
 	private String requestedAirline;
 
 	public String getRequestedAirline() {
@@ -155,6 +160,30 @@ public class AccessRequest implements Serializable {
 	@Transient
 	public String getDisRequestedDate(String dateFormat) {
 		return DateUtils.formatDate(requestedDate, dateFormat, "", null);
+	}
+
+	public void setContactPhone(String contactPhone) {
+		this.contactPhone = contactPhone;
+	}
+
+	public String getContactPhone() {
+		return contactPhone;
+	}
+
+	public void setContactEmail(String contactEmail) {
+		this.contactEmail = contactEmail;
+	}
+
+	public String getContactEmail() {
+		return contactEmail;
+	}
+
+	public void setContactName(String contactName) {
+		this.contactName = contactName;
+	}
+
+	public String getContactName() {
+		return contactName;
 	}
 
 }
