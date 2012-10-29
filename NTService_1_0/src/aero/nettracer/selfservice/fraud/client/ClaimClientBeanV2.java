@@ -146,5 +146,10 @@ public class ClaimClientBeanV2 implements ClaimClientRemoteV2{
 	public Map<String, Integer> getMatches(List<String> idList, String companycode) {
 		return bean.getMatches(idList, companycode);
 	}
+
+	@Override
+	public void requestAccess(long fileId, long matchId, String agent, String requestingAirline, String message, String contactName, String contactEmail, String contactPhone) {
+		bean.requestAccess(fileId, matchId, agent, requestingAirline, message, contactName, contactEmail, contactPhone);
+	}
 	
 }

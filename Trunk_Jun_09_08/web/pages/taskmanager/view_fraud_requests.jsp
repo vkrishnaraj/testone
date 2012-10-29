@@ -120,7 +120,7 @@ function updatePagination() {
            				<b><bean:message key="colname.reference.type" /></b>
            			</td>
            			<td class="header">
-           				<b><bean:message key="colname.fraudresults.company" /></b>
+           				<b><bean:message key="colname.contact.info" /></b>
            			</td>
            			<td class="header">
            				<b><bean:message key="colname.fraudresults.claim_date" /></b>
@@ -194,9 +194,16 @@ function updatePagination() {
 		           			</td>
 		           			<td rowspan=<%=rowspan %>>
 		           			<% if(!outgoing){ %>
-	            				<bean:write name="requested" property="requestedAirline" />
+	            				<bean:message key="colname.fraudresults.company" />:<b><bean:write name="requested" property="requestedAirline" /></b>
+	            				<% if(requested.getContactName() != null && requested.getContactName().trim().length() > 0){ %>
+	            					<br/><bean:write name="requested" property="contactName" />
+	            				<% } if(requested.getContactEmail() != null && requested.getContactEmail().trim().length() > 0){ %>
+	            					<br/><bean:write name="requested" property="contactEmail" />
+	            				<% } if(requested.getContactPhone() != null && requested.getContactPhone().trim().length() > 0){ %>
+	            					<br/><bean:write name="requested" property="contactPhone" />
+	            				<% } %>
 	            			<% } else { %>
-	            				<bean:write name="requested" property="file.validatingCompanycode" />
+	            				<bean:message key="colname.fraudresults.company" />:<b><bean:write name="requested" property="file.validatingCompanycode" /></b>
 	            			<% } %>
 	            			</td>
 	            			<td rowspan=<%=rowspan %>>
