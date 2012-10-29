@@ -33,6 +33,7 @@ public class WS_LostfoundTest extends LoginUtil {
 		selenium.type("name=firstname", "");
 		selenium.select("name=category", "label=Book");
 		selenium.click("id=button");
+		waitForPageToLoadImproved();
 		verifyTrue(selenium.isTextPresent(Settings.FOUND_ID_WS));
 	}
 }

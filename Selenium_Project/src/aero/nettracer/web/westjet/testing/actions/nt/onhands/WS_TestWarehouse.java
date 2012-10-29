@@ -38,7 +38,9 @@ public class WS_TestWarehouse extends LoginUtil {
 			waitForPageToLoadImproved();
 			selenium.click("xpath=(//a[contains(text(),'Maintain')])[20]");
 			waitForPageToLoadImproved();
-			selenium.click("name=704");
+//			if(selenium.getValue("name=704").toString().equals("off")){
+				selenium.click("name=704");
+//			}
 			selenium.click("name=save");
 			waitForPageToLoadImproved();
 		}
@@ -86,6 +88,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			selenium.click("id=calendar30");
 			selenium.click("link=Today");
 			selenium.click("name=savetracing");
+			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyTrue(selenium.isTextPresent("OHD has been submitted."));
@@ -115,6 +118,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			selenium.click("xpath=(//a[contains(text(),'Maintain')])[20]");
 			waitForPageToLoadImproved();
 			selenium.click("name=704");
+			
 			selenium.click("name=save");
 			waitForPageToLoadImproved();
 			selenium.click("link=[ Logout ]");
