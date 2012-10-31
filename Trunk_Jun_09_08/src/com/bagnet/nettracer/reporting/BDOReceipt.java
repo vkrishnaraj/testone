@@ -77,8 +77,12 @@ public class BDOReceipt {
 				String CustInfo=messages.getMessage(TracerProperties.BDO_LABEL_REFERENCE_NUMBER)+": "+theform.getIncident_ID()+"\r"+messages.getMessage(TracerProperties.BDO_LABEL_NAME)+":\r  "+(pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : "")+"\r  "+
 						pa.getAddress1()+" "+pa.getAddress2()+"\r  "+pa.getCity()+", ";
 				
-				if(pa.getState_ID()!=null && pa.getState_ID().length()>0) {
-					CustInfo+=pa.getState_ID()+", ";
+				if(pa.getCountrycode_ID()!=null && pa.getCountrycode_ID()==TracingConstants.US_COUNTRY_CODE){
+					if(pa.getState_ID()!=null && pa.getState_ID().length()>0) {
+						CustInfo+=pa.getState_ID()+", ";
+					}
+				} else if(pa.getCountrycode_ID()!=null && pa.getCountrycode_ID().length()>0) {
+					CustInfo+=pa.getCountrycode_ID()+", ";
 				}
 				CustInfo+=pa.getZip()+"\r\r";
 				String phno = pa.getHomephone();
