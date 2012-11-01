@@ -248,6 +248,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 	RuleMapper wtRuleMap = new UsWorldTracerRuleMap();
 
 	private static final int MAX_CONTENT_DESC_LENGTH = 90;
+	private static final int MAX_CONTENT_CAT_LINES = 1;
 	private static final int MAX_CONTENT_SPLIT = 2;
 	private static final int LOSS_COMMENT_MAX = 58;
   
@@ -309,7 +310,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			.replaceAll(Format.CONTENT_FIELD.replaceChars(), " ")
 			.replaceAll("\\s+", " ");
 			ArrayList<String> al = aero.nettracer.serviceprovider.common.utils.StringUtils.splitOnWordBreak(s, MAX_CONTENT_DESC_LENGTH);			
-			for(int j = 0; j < al.size() && j <= 1; j++){
+			for(int j = 0; j < al.size() && j < MAX_CONTENT_CAT_LINES; j++){
 				if(al.get(j).length() > 0){
 					toReturn.put(key+j, al.get(j));
 				}
