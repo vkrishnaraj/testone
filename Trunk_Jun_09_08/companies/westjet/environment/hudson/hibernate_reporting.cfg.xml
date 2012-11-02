@@ -12,12 +12,9 @@
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
     	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-    	<property name="hibernate.connection.url">jdbc:mysql://10.41.103.66:3306/ws_production_temp</property>
-		<property name="hibernate.connection.username">loupas</property>
-		<property name="hibernate.connection.password">nettracer</property>
-		<!--<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ws_training</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ws_training</property>
 		<property name="hibernate.connection.username">hudson</property>
-		<property name="hibernate.connection.password">nettracer</property>-->
+		<property name="hibernate.connection.password">nettracer</property>
 		<property name="hibernate.show_sql">false</property>
 		<property name="jdbc.fetch_size">50</property> 
 		<property name="jdbc.batch_size">25</property> 
