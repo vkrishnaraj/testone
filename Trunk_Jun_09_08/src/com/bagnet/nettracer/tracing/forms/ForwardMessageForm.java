@@ -24,12 +24,14 @@ public final class ForwardMessageForm extends ActionForm {
 	private String companyCode; //company code
 	private List bagitinerarylist = new ArrayList();
 	private List forwarditinerarylist = new ArrayList();
+	private List<TagNumber> taglist = new ArrayList<TagNumber>();
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
 	private String lossCode;
 	private String faultStation;
 	private String specialInstructions;
+	private boolean expediteSticker;
 	
 
 	/**
@@ -45,6 +47,21 @@ public final class ForwardMessageForm extends ActionForm {
 	 */
 	public void setBagitinerarylist(List bagitinerarylist) {
 		this.bagitinerarylist = bagitinerarylist;
+	}
+	
+	/**
+	 * @return Returns the taglist.
+	 */
+	public List getTaglist() {
+		return taglist;
+	}
+
+	/**
+	 * @param taglist
+	 *          The taglist to set.
+	 */
+	public void setTaglist(List taglist) {
+		this.taglist = taglist;
 	}
 
 	/**
@@ -121,6 +138,21 @@ public final class ForwardMessageForm extends ActionForm {
 	public void setExpediteNumber(String expediteNumber) {
 		this.expediteNumber = expediteNumber;
 	}
+	
+	/**
+	 * @return Returns the expediteSticker.
+	 */
+	public boolean getExpediteSticker() {
+		return expediteSticker;
+	}
+
+	/**
+	 * @param expediteSticker
+	 *          The expediteSticker to set.
+	 */
+	public void setExpediteStick(boolean expediteSticker) {
+		this.expediteSticker = expediteSticker;
+	}
 
 	/**
 	 * @return Returns the message.
@@ -188,6 +220,22 @@ public final class ForwardMessageForm extends ActionForm {
 		}
 		return (OHD_Itinerary) this.bagitinerarylist.get(index);
 	}
+	
+	public TagNumber getTagNumber(int index) {
+		if (this.taglist.size() <= index) {
+			TagNumber i = new TagNumber();
+			
+			this.taglist.add(i);
+		}
+		return (TagNumber) this.taglist.get(index);
+	}
+	
+	public TagNumber deleteTagNumber(int index) {
+		if (this.taglist.size() <= index) {
+			return null;
+		}
+		return this.taglist.remove(index);
+	}
 
 	public OHD_Log_Itinerary getItinerary(int index) {
 		if (this.forwarditinerarylist.size() <= index) {
@@ -223,5 +271,56 @@ public final class ForwardMessageForm extends ActionForm {
 	 */
 	public void setSpecialInstructions(String specialInstructions) {
 		this.specialInstructions = specialInstructions;
+	}
+	
+	public class TagNumber {
+		private String bagTagNumber;
+		private String expediteNumber;
+		private boolean expediteSticker;
+		
+		/**
+		 * @return Returns the bagTagNumber.
+		 */
+		public String getBagTagNumber() {
+			return bagTagNumber;
+		}
+
+		/**
+		 * @param bagTagNumber
+		 *          The bagTagNumber to set.
+		 */
+		public void setBagTagNumber(String bagTagNumber) {
+			this.bagTagNumber = bagTagNumber;
+		}
+
+		/**
+		 * @return Returns the expediteNumber.
+		 */
+		public String getExpediteNumber() {
+			return expediteNumber;
+		}
+
+		/**
+		 * @param expediteNumber
+		 *          The expediteNumber to set.
+		 */
+		public void setExpediteNumber(String expediteNumber) {
+			this.expediteNumber = expediteNumber;
+		}
+		
+		/**
+		 * @return Returns the expediteSticker.
+		 */
+		public boolean getExpediteSticker() {
+			return expediteSticker;
+		}
+
+		/**
+		 * @param expediteSticker
+		 *          The expediteSticker to set.
+		 */
+		public void setExpediteSticker(boolean expediteSticker) {
+			this.expediteSticker = expediteSticker;
+		}
 	}
 }

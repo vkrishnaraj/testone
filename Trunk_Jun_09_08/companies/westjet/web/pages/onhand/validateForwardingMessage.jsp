@@ -33,13 +33,16 @@ function validateMessageForm (form)
 {
   expediteElement = null;
   bagTagElement = null;
-
-  
+  var BTTable=document.getElementById("bagTable").firstChild;
+  if(BTTable.childNodes.length<=2){
+	  alert('<%= (String)myMessages.getMessage(myLocale, "error.minimum.bagtag")%>');
+      return false;
+  }
   for (var j=0;j<form.length;j++) {
     currentElement = form.elements[j];
     currentElementName=currentElement.name;
 
-    if (currentElementName.indexOf("expedite") != -1)
+    if (currentElementName.indexOf("expediteNumber") != -1)
   {
       expediteElement = currentElement;
       
@@ -56,7 +59,7 @@ function validateMessageForm (form)
       return false;
     }
   }
-  else if (currentElementName.indexOf("bag_tag") != -1)
+  else if (currentElementName.indexOf("bagTagNumber") != -1)
   {
 	  if (currentElement.value.length == 0) {
 	      alert('<%= (String)myMessages.getMessage(myLocale, "colname.bag_tag_number") + " " + (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>');
@@ -154,6 +157,7 @@ function validateMessageForm (form)
     }
   }
 }
+
 
  i = 0;
  

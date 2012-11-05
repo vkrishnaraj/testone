@@ -24,7 +24,10 @@
 <script language="javascript">
 
   var buttonSelected = null;
-  
+  document.onload=function clearDelete() {
+		del = document.forms[0].delete_these_elements;
+		del.value = "";
+  }
 
   function getstations() {
     o = document.incidentForm;
@@ -48,6 +51,21 @@
     	aButton.disabled = true;
     	aButton.value= "<bean:message key='ajax.please_wait' />";
     }
+    
+    function clearSticker(objectName) {
+    	var parent = objectName.parentElement.parentElement.id;
+    	var target=document.getElementById("expSticker"+parent);
+    	target.checked=false;
+    }
+    
+    function updateExpedite(object) {
+    	var objectName = object.parentElement.parentElement.id;
+    	if(object.checked==true){
+	    	var copiedValue=document.getElementById("bagtag"+objectName);
+	    	var updatedValue=document.getElementById("expNumber"+objectName);
+	    	updatedValue.value=copiedValue.value;
+    	}
+    }
 
   var cal1xx = new CalendarPopup(); 
 
@@ -58,6 +76,7 @@
 <jsp:include page="validateForwardingMessage.jsp" />
 
   <html:form action="forward_message.do" method="post" onsubmit="return validateThis(this);">
+  	<input type="hidden" name="delete_these_elements" value="" />
     <jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
       
@@ -71,25 +90,78 @@
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
             <br />
-            <table class="form2" cellspacing="0" cellpadding="0">
+            <table id="bagTable" class="form2" cellspacing="0" cellpadding="0">
               <tr>
                 <td>
                   * <bean:message key="colname.bag_tag_number" />
                   :
                 </td>
                 <td>
-                  <html:text name="forwardMessageForm" property="bag_tag" size="14" maxlength="13" style="textfield" />
-                </td>
-              </tr>
-              <tr>
-                <td>
                   * <bean:message key="colname.expedite_number" />
                   :
                 </td>
                 <td>
-                  <html:text name="forwardMessageForm" property="expediteNumber" size="20" maxlength="10" />
+                  <bean:message key="colname.expedite_sticker" />
+                  :
+                </td>
+                <td>
+                  <bean:message key="colname.action" />
                 </td>
               </tr>
+              <logic:iterate indexId="i" id="tagNumber" name="forwardMessageForm" property="taglist">
+              	<%
+              		String defprop =  TracingConstants.JSP_DELETE_BAGTAG +"_"+i;
+        			String btprop = "bagtag" + TracingConstants.JSP_DELETE_BAGTAG +"_"+i;
+	    			String enprop = "expNumber" + TracingConstants.JSP_DELETE_BAGTAG +"_"+i;
+	    			String esprop = "expSticker" + TracingConstants.JSP_DELETE_BAGTAG +"_"+i;
+	    			request.setAttribute("defprop", defprop);
+        		%>
+              	<tr id="<%= TracingConstants.JSP_DELETE_BAGTAG %>_<%=i%>">
+	                <td>
+	                  <html:text name="tagNumber" property="bagTagNumber" styleId='<%=btprop %>' size="14" maxlength="13" style="textfield" indexed="true"/>
+	                </td>
+	                <td>
+	                  <html:text name="tagNumber" property="expediteNumber" styleId='<%=enprop %>' size="20" maxlength="10" indexed="true" onkeydown="clearSticker(this)"/>
+	                </td>
+	                <td>
+	                  <html:checkbox name="tagNumber" property="expediteSticker" styleId='<%=esprop %>' onclick="updateExpedite(this)"/>
+	                </td>
+	                <td>
+	                   <input type="button" value="<bean:message key="button.delete_bag_tag" />" 
+			            onclick="hideThisElement('<%= TracingConstants.JSP_DELETE_BAGTAG %>_<%=i%>', 
+			            '<bean:message key="header.forward_message_title" />', 0)" id="button"> 
+	                </td>
+	              </tr>
+              </logic:iterate>
+              <td colspan=4>
+              	<center>
+              	 	
+			        <select name="addBagNum">
+			          <option value="1">1</option>`
+			          <option value="2">2</option>
+			          <option value="3">3</option>
+			          <option value="4">4</option>
+			          <option value="5">5</option>
+			          <option value="6">6</option>
+			          <option value="7">7</option>
+			          <option value="8">8</option>
+			          <option value="9">9</option>
+			          <option value="10">10</option>
+			          <option value="11">11</option>
+			          <option value="12">12</option>
+			          <option value="13">13</option>
+			          <option value="14">14</option>
+			          <option value="15">15</option>
+			          <option value="16">16</option>
+			          <option value="17">17</option>
+			          <option value="18">18</option>
+			          <option value="19">19</option>
+			          <option value="20">20</option>
+			        </select>
+              		<input type="submit" name="addBags" value='<bean:message key="button.add_bag_tag" />' id="button" /></center>
+              </td>
+              </table>
+              <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
                 <td>
                   * <bean:message key="colname.stationForwardTo" />

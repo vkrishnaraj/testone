@@ -346,6 +346,7 @@ public class BagService {
 		oDTO.setHoldingStation(oDTO.getAgent().getStation());
 		oDTO.setItinerary(new HashSet(form.getBagitinerarylist()));
 
+
 		if(form.getFaultStation() != null && !form.getFaultStation().equals("")) {
 			Station faultStation = StationBMO.getStation(form.getFaultStation());
 			oDTO.setFaultstation_ID(faultStation.getStation_ID());
@@ -355,18 +356,52 @@ public class BagService {
 		if(!form.getLossCode().equals("0")) {
 			oDTO.setLoss_code(new Integer(form.getLossCode()).intValue());
 		}
-
+		Set ItinList=new HashSet();
 		for(Iterator i = oDTO.getItinerary().iterator(); i.hasNext();) {
-			OHD_Itinerary oo = (OHD_Itinerary) i.next();
+			
+			OHD_Itinerary oo = new OHD_Itinerary();
+			try {
+				BeanUtils.copyProperties(oo, (OHD_Itinerary) i.next());
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			oo.setOhd(oDTO);
+			ItinList.add(oo);
 		}
-
+		oDTO.setItinerary(ItinList);
+		
+		Set RemList=new HashSet();
+		Remark rem = new Remark();
+		if(form.getMessage()!=null && form.getMessage().length()>0){
+			rem.setRemarktext(form.getMessage());
+			rem.setOhd(oDTO);
+			rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+			RemList.add(rem);
+			rem=new Remark();
+		}
+		rem.setRemarktext(messages.getMessage(new Locale(user.getCurrentlocale()),
+				"bagforwardMessage")
+				+ " "
+				+ form.getDestStation()
+				+ messages.getMessage(new Locale(user.getCurrentlocale()), "aposS")
+				+ " "
+				+ user.getStation().getStationcode() + " station."); //bagforwardMessage
+		rem.setOhd(oDTO);
+		rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+		RemList.add(rem);
+		oDTO.setRemarks(RemList);
 		OhdBMO oBMO = new OhdBMO();
+		
 		boolean result = oBMO.insertOHD(oDTO, user);
 		if(!result) {
 			com.bagnet.nettracer.tracing.utils.general.Logger.logForward(oDTO.getOHD_ID(), "BEORN: NO RESULTS", start);
 			return null;
 		}
+		
 
 		OHD_Log log = new OHD_Log();
 		log.setOhd(oDTO);

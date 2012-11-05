@@ -1,8 +1,11 @@
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,11 +25,16 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
+import com.bagnet.nettracer.tracing.db.salvage.SalvageBox;
+import com.bagnet.nettracer.tracing.db.salvage.SalvageItem;
 import com.bagnet.nettracer.tracing.forms.ForwardMessageForm;
+import com.bagnet.nettracer.tracing.forms.ForwardMessageForm.TagNumber;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+
+import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
  * Implementation of <strong>Action </strong> that is responsible for handling
@@ -81,7 +89,20 @@ public class ForwardMessageAction extends Action {
 		faultstationlist = TracerUtils.getStationList(user.getStation().getCompany().getCompanyCode_ID());
 		request.setAttribute("faultstationlist", faultstationlist);
 		
-		
+		if(request.getParameter("delete_these_elements")!=null && request.getParameter("delete_these_elements").length()>0) {
+			String deleteString=request.getParameter("delete_these_elements");
+			String[] deleteList=deleteString.split(",");
+			List indexList=new ArrayList();
+			for (String delete : deleteList) {
+				int ind=Integer.valueOf(delete.substring(delete.length()-1, delete.length()));
+				indexList.add(ind);
+			}
+			if(indexList.size()>0){
+				Collections.sort(indexList);
+				for(int i=indexList.size()-1; i>=0;i--)
+					theform.deleteTagNumber((Integer)indexList.get(i));
+			}
+		}
 
 		if (request.getParameter("additinerary") != null) {
 			OHD_Log_Itinerary itinerary = theform.getItinerary(theform.getForwarditinerarylist().size());
@@ -91,6 +112,11 @@ public class ForwardMessageAction extends Action {
 			OHD_Itinerary itinerary = theform.getBagItinerary(theform.getBagitinerarylist().size());
 			itinerary.set_DATEFORMAT(user.getDateformat().getFormat());
 			itinerary.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		} else if (request.getParameter("addBags") != null) {
+			int numberToAdd = TracerUtils.getNumberToAdd(request, "addBagNum");
+			for (int i = 0; i < numberToAdd; ++i) {
+				theform.getTaglist().add(theform.new TagNumber());
+			}
 		} else if (request.getParameter("save") != null && request.getParameter("save").length() > 0) {
 			//Invalid or no destination is selected.
 			if (theform.getDestStation() == null || theform.getDestStation().equals("")) {
@@ -99,9 +125,21 @@ public class ForwardMessageAction extends Action {
 				saveMessages(request, errors);
 			} else {
 				// Do the forward
-				String ohd_id = bs.forwardMessage(theform, user, messages);
-				if (ohd_id != null) {
-					request.setAttribute("ohd_ID", ohd_id);
+				String ohd_id=null;
+				List ohdidlist=new ArrayList();
+				for(int i=0; i<theform.getTaglist().size(); i++){
+					ohd_id=null;
+					TagNumber TN=theform.getTagNumber(i);
+					theform.setBag_tag(TN.getBagTagNumber());
+					theform.setExpediteNumber(TN.getExpediteNumber());
+					theform.setExpediteStick(TN.getExpediteSticker());
+					 ohd_id = bs.forwardMessage(theform, user, messages);
+					 if(ohd_id!=null){
+						 ohdidlist.add(ohd_id);
+					 }
+				}
+				if (ohdidlist != null) {
+					request.setAttribute("ohdidlist", ohdidlist);
 					// remove forward form from session
 					session.removeAttribute("forwardMessageForm");
 					return (mapping.findForward(TracingConstants.FORWARD_ON_HAND_SUCCESS));
@@ -143,9 +181,13 @@ public class ForwardMessageAction extends Action {
 
 				return (mapping.findForward(TracingConstants.ENTER_FORWARD_MESSAGE));
 			}//delete forward
+			else { //new Message
+				theform.setTaglist(new ArrayList());
+				
+			}
 		}
 
-		if (theform.getExpediteNumber() == null || theform.getExpediteNumber().length() < 1) {
+		if (theform.getTaglist().size()==0) {
 			//setup 1 default OHD_itinerary..
 			OHD_Itinerary itinerary = theform.getBagItinerary(0);
 			itinerary.set_DATEFORMAT(user.getDateformat().getFormat());
@@ -154,6 +196,8 @@ public class ForwardMessageAction extends Action {
 			OHD_Log_Itinerary logitinerary = theform.getItinerary(0);
 			logitinerary.set_DATEFORMAT(user.getDateformat().getFormat());
 			logitinerary.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			
+			TagNumber TN=theform.getTagNumber(0);
 		}
 
 		//Allow modifications to the forward.
