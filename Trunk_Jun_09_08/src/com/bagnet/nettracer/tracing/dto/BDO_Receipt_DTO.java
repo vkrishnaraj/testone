@@ -27,6 +27,7 @@ public class BDO_Receipt_DTO {
 	private String numbags;
 	private String description;
 	private String bagtag;
+	private String bagtag2;
 	private String remarks;
 	private String agent;
 	private String date1;
@@ -143,6 +144,21 @@ public class BDO_Receipt_DTO {
 	 */
 	public void setBagtag(String bagtag) {
 		this.bagtag = bagtag;
+	}
+
+	/**
+	 * @return Returns the bagtag2.
+	 */
+	public String getBagtag2() {
+		return bagtag2;
+	}
+
+	/**
+	 * @param bagtag2
+	 *          The bagtag2 to set.
+	 */
+	public void setBagtag2(String bagtag2) {
+		this.bagtag2 = bagtag2;
 	}
 
 	/**

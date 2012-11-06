@@ -256,8 +256,8 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
             <td colspan="5">
               <bean:message key="colname.delivery.remarks" />
               <br />
-              <html:textarea rows="7" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,500);" onkeyup="textCounter3(this,textCounter2, 500);"/>
-              <input name="textCounter2" type="text" value="500" size="4" maxlength="4" disabled="true" />
+              <html:textarea rows="7" cols="80" property="delivery_comments" styleClass="textarea_medium" onkeydown="textCounter3(this,textCounter2,300);" onkeyup="textCounter3(this,textCounter2, 300);"/>
+              <input name="textCounter2" type="text" value="300" size="4" maxlength="4" disabled="true" />
             </td>
           </tr>
         </table>
@@ -653,10 +653,15 @@ if (i.intValue() == 0) {
                 <b><bean:message key="colname.bag_number" />
                 : &nbsp;&nbsp;1
               </td>
-              <td valign=top colspan=2>
+              <td valign=top colspan=1>
                 <bean:message key="colname.bag_status" />
                 <br>
                 <input type="text" name = "ohd.status.description" value="<bean:message name="ohd" property="status.key" />" size="25" maxlength="25" styleClass="textfield" readonly="true"/>
+              </td>
+              <td valign=top colspan=1>
+                <bean:message key="colname.claimnum" />
+                <br>
+                <html:text property = "ohd.claimnum" size="25" maxlength="25" styleClass="textfield" readonly="true"/>
               </td>
             </tr>
             <tr>

@@ -8,10 +8,12 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 
 
 <%@page import="org.apache.struts.util.LabelValueBean"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
@@ -19,7 +21,24 @@
   
 	var cal1xx = new CalendarPopup();	
 
-	
+	function insertNewLine2(elementId) {
+		if (window.event && window.event.keyCode == 13) {
+			insertAtCursor(elementId, '\n');
+			window.event.keyCode = 505;
+		}
+  	}
+  
+  function insertAtCursor(myField, myValue) {
+		if (document.selection) {
+			myField.focus();
+			sel = document.selection.createRange();
+			sel.text = myValue;
+			sel.collapse(false);
+			sel.select();
+		} else {
+			myField.value += myValue;
+		}
+	}
 
 	
 
@@ -355,6 +374,16 @@
   						<html:option value="9">9</html:option>
   						<html:option value="10">10</html:option>
   					</html:select>
+	          	</td>
+	          </tr>
+          <% } %>
+           <% if (request.getAttribute("lostdelay") != null && !(i.intValue() > 0) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_DELIVERY_INSTRUCTIONS)) { %> 
+        
+	          <tr>
+	          	<td colspan=5>
+	          		<bean:message key="colname.delivery.instructions" />:<br/>
+	          		 <html:textarea styleId="delInstruct" name="incidentForm" property="deliveryInstructions.instructions" cols="80" rows="5" onkeydown="textCounter2(delInstruct, delInstructCounter, 300);insertNewLine2(delInstruct);" onkeyup="textCounter2(delInstruct, delInstructCounter, 300);"/>
+	          		 <input name="delInstruct2" id="delInstructCounter" type="text" value="300" size="4" maxlength="4" disabled="true" />
 	          	</td>
 	          </tr>
           <% } %>

@@ -30,6 +30,7 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.dto.BDO_Receipt_DTO;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 /**
@@ -74,22 +75,39 @@ public class BDOReceipt {
 
 			for (int j = 0; j < 3; j++) {
 				BDO_Receipt_DTO brd = new BDO_Receipt_DTO();
-				String CustInfo=messages.getMessage(TracerProperties.BDO_LABEL_REFERENCE_NUMBER)+": "+theform.getIncident_ID()+"\r"+messages.getMessage(TracerProperties.BDO_LABEL_NAME)+":\r  "+(pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : "")+"\r  "+
+				brd.setDate1(DateUtils.formatDate(theform.getCreatedate(), theform.getAgent().getDateformat().getFormat(), null, null));
+				String RefInfo=messages.getMessage(TracerProperties.BDO_LABEL_REFERENCE_NUMBER)+": ";
+				if(theform.getIncident_ID()!=null)
+					RefInfo+=theform.getIncident_ID();
+				else if (theform.getOHD_ID()!=null)
+					RefInfo+=theform.getOHD_ID();
+				brd.setRefNum(RefInfo);
+				brd.setAddress(messages.getMessage(TracerProperties.BDO_LABEL_DELIVERY_ADDRESS)+":");
+				String CustInfo=(pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : "")+"\r  "+
 						pa.getAddress1()+" "+pa.getAddress2()+"\r  "+pa.getCity()+", ";
 				
 				if(pa.getCountrycode_ID()!=null && pa.getCountrycode_ID()==TracingConstants.US_COUNTRY_CODE){
 					if(pa.getState_ID()!=null && pa.getState_ID().length()>0) {
 						CustInfo+=pa.getState_ID()+", ";
 					}
-				} else if(pa.getCountrycode_ID()!=null && pa.getCountrycode_ID().length()>0) {
-					CustInfo+=pa.getCountrycode_ID()+", ";
+				} else if(pa.getProvince()!=null && pa.getProvince().length()>0) {
+					CustInfo+=pa.getProvince()+", ";
 				}
-				CustInfo+=pa.getZip()+"\r\r";
+				
+				if(pa.getZip()!=null && pa.getZip().length()>0){
+					CustInfo+=pa.getZip();
+				}
+				
+				if(pa.getCountrycode_ID()!=null && pa.getCountrycode_ID().length()>0 && pa.getCountrycode_ID()!=TracingConstants.US_COUNTRY_CODE ){
+					CustInfo+=", "+pa.getCountrycode_ID();
+				}
+				CustInfo+="\r\r";
+				
 				String phno = pa.getHomephone();
 				String mphno = pa.getMobile();
 				if (phno != null && phno.length() != 0)
 					CustInfo+=messages.getMessage(TracerProperties.BDO_LABEL_PHONE_NUMBER)+": "+phno+"\r";
-				if(mphno==null || mphno.length()==0)
+				if(mphno!=null && mphno.length()!=0)
 					CustInfo+=messages.getMessage(TracerProperties.BDO_LABEL_MOBILE_NUMBER)+": "+mphno+"\r";
 				if(pa.getHotel()!=null && pa.getHotel().length()>0)
 					CustInfo+=messages.getMessage(TracerProperties.BDO_LABEL_HOTEL)+": "+pa.getHotel(); 
@@ -100,12 +118,10 @@ public class BDOReceipt {
 				brd.setCustomerinfo(CustInfo);
 				
 				brd.setToname((pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : ""));
-				brd.setAddress(pa.getAddress1());
 				brd.setApt(pa.getAddress2());
 				brd.setCity(pa.getCity());
 				brd.setState(pa.getState_ID());
 				brd.setZip(pa.getZip());
-				brd.setRefNum(theform.getIncident_ID());
 				
 				brd.setBagInfo(messages.getMessage(TracerProperties.BDO_LABEL_BAG_INFORMATION));
 				brd.setCustInfo(messages.getMessage(TracerProperties.BDO_LABEL_CUSTOMER_INFORMATION));
@@ -115,35 +131,88 @@ public class BDOReceipt {
 				
 
 				brd.setPhone(phno);
-
-				brd.setNumbags(messages.getMessage(TracerProperties.BDO_LABEL_NUMBER_BAGS)+": "+theform.getBagcount() + "");
+				if(theform.getBagcount()<=10){
+					brd.setNumbags(messages.getMessage(TracerProperties.BDO_LABEL_NUMBER_BAGS)+": "+theform.getBagcount() + "");
+				} else {
+					brd.setNumbags(messages.getMessage(TracerProperties.BDO_LABEL_NUMBER_BAGS)+": 10");
+				}
 
 				String deliInfo="";
 
 				String bagInfo="";
-				bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_NUMBER_BAGS)+": "+theform.getBagcount() + "\r\r";
+				String bagInfo2="";
+
+				if(theform.getOhd()!=null && theform.getBagcount()==0) {
+					bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_NUMBER_BAGS)+": 1\r\r";
+				} else {
+					bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_NUMBER_BAGS)+": "+theform.getBagcount() + "\r";
+				}
+				bagInfo2+="\r";
 				StringBuffer sb = new StringBuffer();
 				StringBuffer sb2 = new StringBuffer();
-				for (int i = 0; i < theform.getItemlist().size(); i++) {
-					bagInfo+=(i+1)+":\t";
-					if (((Item) theform.getItemlist().get(i)).getClaimchecknum() != null
-							&& ((Item) theform.getItemlist().get(i)).getClaimchecknum().length() > 0) {
-						bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_BAG_NUMBER)+": "+((Item) theform.getItemlist().get(i)).getClaimchecknum().trim()+"\t";
-						sb.append(((Item) theform.getItemlist().get(i)).getClaimchecknum().trim());
+				if(theform.getItemlist().size()>0){
+					for (int i = 0; i < theform.getItemlist().size(); i++) {
+						if(i<=4){
+							bagInfo+=(i+1)+":\t";
+							if (((Item) theform.getItemlist().get(i)).getClaimchecknum() != null
+									&& ((Item) theform.getItemlist().get(i)).getClaimchecknum().length() > 0) {
+								bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_BAG_NUMBER)+": "+((Item) theform.getItemlist().get(i)).getClaimchecknum().trim()+"\t";
+								sb.append(((Item) theform.getItemlist().get(i)).getClaimchecknum().trim());
+								sb.append("\r");
+							}
+							if (((Item) theform.getItemlist().get(i)).getColor() != null) {
+								bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_COLOR)+": "+((Item) theform.getItemlist().get(i)).getColor()+"\t";
+								sb2.append(((Item) theform.getItemlist().get(i)).getColor());
+								sb2.append(" ");
+							}
+							if (((Item) theform.getItemlist().get(i)).getBagtype() != null) {
+								bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_TYPE)+": "+((Item) theform.getItemlist().get(i)).getBagtype();
+								sb2.append(((Item) theform.getItemlist().get(i)).getBagtype());
+								sb2.append(", ");
+							}
+							bagInfo+="\r";
+						} else if (i<=9) {
+							bagInfo2+=(i+1)+":\t";
+							if (((Item) theform.getItemlist().get(i)).getClaimchecknum() != null
+									&& ((Item) theform.getItemlist().get(i)).getClaimchecknum().length() > 0) {
+								bagInfo2+=messages.getMessage(TracerProperties.BDO_LABEL_BAG_NUMBER)+": "+((Item) theform.getItemlist().get(i)).getClaimchecknum().trim()+"\t";
+								sb.append(((Item) theform.getItemlist().get(i)).getClaimchecknum().trim());
+								sb.append("\r");
+							}
+							if (((Item) theform.getItemlist().get(i)).getColor() != null) {
+								bagInfo2+=messages.getMessage(TracerProperties.BDO_LABEL_COLOR)+": "+((Item) theform.getItemlist().get(i)).getColor()+"\t";
+								sb2.append(((Item) theform.getItemlist().get(i)).getColor());
+								sb2.append(" ");
+							}
+							if (((Item) theform.getItemlist().get(i)).getBagtype() != null) {
+								bagInfo2+=messages.getMessage(TracerProperties.BDO_LABEL_TYPE)+": "+((Item) theform.getItemlist().get(i)).getBagtype();
+								sb2.append(((Item) theform.getItemlist().get(i)).getBagtype());
+								sb2.append(", ");
+							}
+							bagInfo2+="\r";
+						}
+					}
+				} else if(theform.getOhd()!=null) {
+					bagInfo+="1:\t";
+					if (theform.getOhd().getClaimnum() != null
+							&& (theform.getOhd().getClaimnum().length() > 0)) {
+						bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_BAG_NUMBER)+": "+theform.getOhd().getClaimnum().trim()+"\t";
+						sb.append(theform.getOhd().getClaimnum().trim());
 						sb.append("\r");
 					}
-					if (((Item) theform.getItemlist().get(i)).getColor() != null) {
-						bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_COLOR)+": "+((Item) theform.getItemlist().get(i)).getColor()+"\t";
-						sb2.append(((Item) theform.getItemlist().get(i)).getColor());
+					if (theform.getOhd().getColor() != null) {
+						bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_COLOR)+": "+theform.getOhd().getColor()+"\t";
+						sb2.append(theform.getOhd().getColor());
 						sb2.append(" ");
 					}
-					if (((Item) theform.getItemlist().get(i)).getBagtype() != null) {
-						bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_TYPE)+": "+((Item) theform.getItemlist().get(i)).getBagtype();
-						sb2.append(((Item) theform.getItemlist().get(i)).getBagtype());
+					if (theform.getOhd().getType() != null) {
+						bagInfo+=messages.getMessage(TracerProperties.BDO_LABEL_TYPE)+": "+theform.getOhd().getType();
+						sb2.append(theform.getOhd().getType());
 						sb2.append(", ");
 					}
 					bagInfo+="\r";
 				}
+				
 //				if (sb.length() > 0)
 //					brd.setBagtag(sb.toString().substring(0, sb.toString().length() - 1));
 //				else
@@ -151,10 +220,9 @@ public class BDOReceipt {
 				if (sb2.length() > 0)
 					brd.setDescription(sb2.toString().substring(0, sb2.toString().length() - 1));
 				brd.setBagtag(bagInfo);
+				brd.setBagtag2(bagInfo2);
 				brd.setRemarks("");
 				brd.setAgent(theform.getAgent().getUsername());
-				brd.setDate1(theform.getDispcreatetime());
-				brd.setDate2(theform.getDispdeliverydate());
 				brd.setReceivedby(messages.getMessage(TracerProperties.BDO_LABEL_RECEIVED_BY)); //Why blank?
 				brd.setInstructions(theform.getDelivery_comments());
 

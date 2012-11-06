@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MissingReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.0000000000000016"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
@@ -45,11 +45,11 @@
 	<pageHeader>
 		<band height="729">
 			<staticText>
-				<reportElement key="textField-2" mode="Opaque" x="191" y="4" width="313" height="59" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-2" mode="Opaque" x="157" y="22" width="358" height="41" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Recibo de artigos desaparecidos]]></text>
+				<text><![CDATA[RECIBO DE ARTIGOS DESAPARECIDOS]]></text>
 			</staticText>
 			<line>
 				<reportElement key="line-2" mode="Opaque" x="0" y="69" width="1" height="613" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -353,7 +353,7 @@ A menos que o valor seja declarado, a responsabilidade por danos resultante de p
 				<text><![CDATA[Data:]]></text>
 			</staticText>
 			<image scaleImage="RetainShape">
-				<reportElement key="image-3" mode="Transparent" x="3" y="1" width="137" height="62">
+				<reportElement key="image-3" mode="Transparent" x="0" y="1" width="137" height="62">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>

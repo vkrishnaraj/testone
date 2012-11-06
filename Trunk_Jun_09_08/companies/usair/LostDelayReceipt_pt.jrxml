@@ -3,8 +3,8 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="480"/>
+	<property name="ireport.x" value="23"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -45,11 +45,11 @@
 	<pageHeader>
 		<band height="729">
 			<staticText>
-				<reportElement key="textField-2" mode="Opaque" x="148" y="15" width="393" height="49" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-2" mode="Opaque" x="166" y="15" width="375" height="49" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="16" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Recibo de Bagagens Atrasadas]]></text>
+				<text><![CDATA[RECIBO DE BAGAGENS ATRASADAS]]></text>
 			</staticText>
 			<line>
 				<reportElement key="line-1" mode="Opaque" x="0" y="78" width="549" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -236,7 +236,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{prettydate}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="RetainShape" onErrorType="Blank">
-				<reportElement key="image-1" x="2" y="2" width="137" height="62">
+				<reportElement key="image-1" mode="Transparent" x="2" y="2" width="137" height="62">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -336,7 +336,7 @@ A menos que o valor seja declarado, a responsabilidade por danos resultante de p
 ]]></text>
 			</staticText>
 			<image scaleImage="RetainShape">
-				<reportElement key="image-2" x="474" y="690" width="76" height="38">
+				<reportElement key="image-2" mode="Transparent" x="474" y="690" width="76" height="38">
 					<printWhenExpression><![CDATA[new Boolean($P{powered}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
