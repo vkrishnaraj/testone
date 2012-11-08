@@ -635,7 +635,7 @@ public class CustomWestJetReports {
             + " FROM (SELECT it.incident_id,it.itinerary_id,it.departdate,i.createdate, "
             + " concat(it.legfrom, '-', it.legto) legs "
             + " FROM itinerary it inner join incident i on i.incident_id=it.incident_ID "
-            + " WHERE it.incident_id in (select i.incident_id iid from itinerary it join incident i on it.incident_id = i.incident_id where "
+            + " WHERE it.itinerarytype=0 and it.incident_id in (select i.incident_id iid from itinerary it join incident i on it.incident_id = i.incident_id where "
 			+ "   i.createdate >= \'" + startDate
 			+ "\' and i.createdate <= \'" + endDate + "\'"
 			+ "   and itinerarytype = 0 and i.itemtype_id = 2 and "
