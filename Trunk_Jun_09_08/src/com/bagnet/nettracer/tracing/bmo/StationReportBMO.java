@@ -570,6 +570,7 @@ public class StationReportBMO {
 		String reportHeadingIncidentNumber = "Report ID";
 		String reportHeadingDate = "Date";
 		String reportHeadingTime = "Time";
+		String reportHeadingClDate = "ClDate";
 		String reportHeadingItinerary = "Itinerary";
 		String reportHeadingFinal = "Final";
 		String reportHeadingAssigned = "Assigned";
@@ -596,6 +597,11 @@ public class StationReportBMO {
 		String myTime = resourceBundle.getString("report.station.heading.time");
 		if (!( myTime == null || myTime.equalsIgnoreCase("") )) {
 			reportHeadingTime = myTime;
+		}
+
+		String myClDate = resourceBundle.getString("report.station.heading.close.date");
+		if (!( myClDate == null || myClDate.equalsIgnoreCase("") )) {
+			reportHeadingClDate = myClDate;
 		}
 		
 		String myItinerary = resourceBundle.getString("report.station.heading.itinerary");
@@ -634,6 +640,7 @@ public class StationReportBMO {
 		drb = drb.addColumn(reportHeadingIncidentNumber,"incident_ID",String.class.getName(),40);
 		drb = drb.addColumn(reportHeadingDate,"rcreatedate",String.class.getName(),30);
 		drb = drb.addColumn(reportHeadingTime,"rcreatetime",String.class.getName(),30);
+		drb = drb.addColumn(reportHeadingClDate,"rclosedate",String.class.getName(),30);
 		drb = drb.addColumn(reportHeadingItinerary,"itinerary",String.class.getName(),30);
 		drb = drb.addColumn(reportHeadingFinal,"final_destination",String.class.getName(),24);
 		drb = drb.addColumn(reportHeadingAssigned,"stationcode",String.class.getName(),24);
