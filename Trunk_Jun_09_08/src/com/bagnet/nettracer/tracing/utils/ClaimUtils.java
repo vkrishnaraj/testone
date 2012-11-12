@@ -120,7 +120,7 @@ public class ClaimUtils {
 		claim.setAirline(user.getCompanycode_ID());
 		claim.setAmountClaimedCurrency(user.getDefaultcurrency());
 		claim.setAmountPaidCurrency(user.getDefaultcurrency());
-		
+		claim.setCreateagent(user);
 		// create the person
 		Person person = new Person();
 		person.setPassportIssuer(company.getCountrycode_ID());

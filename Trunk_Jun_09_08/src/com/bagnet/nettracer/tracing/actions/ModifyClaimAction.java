@@ -358,7 +358,7 @@ public class ModifyClaimAction extends CheckedAction {
 						BeanUtils.copyProperties(newClaim, current);
 						LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
 						newClaim.setSegments(segs);
-						
+						newClaim.setCreateagent(current.getCreateagent());
 						LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
 						newClaim.setClaimants(pers);
 						
@@ -402,6 +402,11 @@ public class ModifyClaimAction extends CheckedAction {
 					
 					file.setClaims(fsClaims);
 					remoteFileId = remote.insertFile(TransportMapper.map(file));
+					if(remoteFileId==-2){
+						ActionMessage error = new ActionMessage("error.fs.id");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					}
 					claim = ClaimDAO.loadClaim(claim.getId());
 					if (remoteFileId > 0) {
 						claim.getFile().setSwapId(remoteFileId);

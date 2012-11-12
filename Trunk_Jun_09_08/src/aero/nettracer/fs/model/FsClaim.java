@@ -27,6 +27,7 @@ import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.detection.Blacklist;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
@@ -58,6 +59,12 @@ public class FsClaim implements Serializable {
 	protected int statusId;
 	protected String claimRemark;
 	
+	@Transient
+	protected String createagentname;
+
+	@ManyToOne
+	@JoinColumn(name = "createagent_id")
+	protected Agent createagent;
 	
 	@ManyToOne
 	@JoinColumn(name = "file_id")
@@ -138,6 +145,38 @@ public class FsClaim implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+	
+	/**
+	 * @return Returns the createagent that created this incident.
+	 * 
+	 */
+	@ManyToOne
+	@JoinColumn(name = "createagent_id", nullable = false)
+	public Agent getCreateagent() {
+		return createagent;
+	}
+	
+	/**
+	 * @param createAgent
+	 *          The createagent to set.
+	 */
+	public void setCreateagent(Agent createagent) {
+		this.createagent = createagent;
+	}
+	
+	@Transient
+	public String getCreateagentname() {
+		if(createagent!=null){
+			return createagent.getUsername();
+		} else {
+			return createagentname;
+		}
+		
+	}
+	
+	public void setCreateagentname(String createagentname) {
+		this.createagentname=createagentname;
 	}
 	
 	public long getSwapId() {

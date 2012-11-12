@@ -365,7 +365,17 @@
                         	<br />
                         	<html:text property="dispCreateTime" styleClass="textfield" disabled="true" />
                         </td>
-                      	<td>
+                        <td>
+                        	<bean:message key="colname.claim.create.agent" />
+                        	<br />
+                        	<logic:notEmpty name="claimForm" property="claim.createagent">
+                        		<html:text  name="claimForm" property="claim.createagent.username" size="10" styleClass="textfield" disabled="true" />
+                        	</logic:notEmpty>
+                        	<logic:empty name="claimForm" property="claim.createagent">
+                        		<input type="text"  value="" size="10" styleClass="textfield" disabled="true" />
+                        	</logic:empty>
+                        </td></tr><tr>
+                      	<td colspan="2">
                       		<bean:message key="header.claim_type"/>
                       		<br />
                       		<html:select name="claimForm" property="claim.claimType" styleClass="dropdown" >
@@ -394,13 +404,13 @@
                         </td>
                       </tr>
                       <tr>
-                      	<td colspan="2">
+                      	<td colspan="1">
                           <bean:message key="colname.claim_amount" />
                           <br />
                           <html:text property="claim.amountClaimed" size="13" maxlength="13" styleClass="textfield" />
                         </td>
  
-                        <td colspan="2">
+                        <td colspan=2>
                           <bean:message key="colname.currency" />
                           <br />
                           <html:select property="claim.amountClaimedCurrency" styleClass="dropdown">
@@ -409,12 +419,12 @@
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="2">
+                        <td colspan="1">
                           <bean:message key="colname.amount_paid" />
                           <br />
                           <html:text property="claim.amountPaid" size="13" maxlength="13" styleClass="textfield" />
                         </td>
-                        <td colspan="2">
+                        <td colspan=2>
                           <bean:message key="colname.currency" />
                           <br />
                           <html:select property="claim.amountPaidCurrency" styleClass="dropdown">
@@ -422,7 +432,7 @@
                           </html:select>
                         </td>
                       <tr>
-                        <td colspan="4">
+                        <td colspan="3">
                           <bean:message key="colname.reason" />
                           &nbsp;(
                           <bean:message key="colname.for_audit" />
@@ -433,7 +443,7 @@
                         </td>
                       </tr>
                       <tr>
-							<td colspan=4>
+							<td colspan=3>
 								<bean:message key="colname.claim_remarks" />
 								<br/>
 								<html:textarea  name="claimForm" property="claim.claimRemark"  cols="80" rows="10" styleClass="textfield" />

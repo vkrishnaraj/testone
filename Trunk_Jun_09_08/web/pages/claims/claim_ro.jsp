@@ -213,7 +213,7 @@
                           <html:text name="matchClaim" property="amountClaimed" size="13" maxlength="13" styleClass="textfield" disabled="true" />
                         </td>
  
-                        <td colspan="2">
+                        <td colspan=2>
                           <bean:message key="colname.currency" />
                           <br />
                           <html:select  name="matchClaim" property="amountClaimedCurrency" styleClass="dropdown" disabled="true" >
@@ -227,7 +227,7 @@
                           <br />
                           <html:text name="matchClaim" property="amountPaid" size="13" maxlength="13" styleClass="textfield" disabled="true" />
                         </td>
-                        <td colspan="2">
+                        <td colspan=2>
                           <bean:message key="colname.currency" />
                           <br />
                           <html:select name="matchClaim" property="amountPaidCurrency" styleClass="dropdown" disabled="true" >
@@ -235,7 +235,7 @@
                           </html:select>
                         </td>
                       <tr>
-                        <td colspan="4">
+                        <td colspan=4>
                           <bean:message key="colname.reason" />
                           &nbsp;(
                           <bean:message key="colname.for_audit" />

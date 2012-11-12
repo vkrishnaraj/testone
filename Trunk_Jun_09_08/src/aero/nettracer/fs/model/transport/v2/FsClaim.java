@@ -17,6 +17,7 @@ public class FsClaim implements Serializable {
 	protected long swapId;
 	protected String airlineClaimId;
 	protected String airline;
+	protected String createagentname;
 	protected int claimType;
 	protected Date claimDate;
 	protected Date travelDate;
@@ -100,6 +101,14 @@ public class FsClaim implements Serializable {
 
 	public void setAirline(String airline) {
 		this.airline = airline;
+	}
+
+	public String getCreateagentname() {
+	  	return createagentname;
+	}
+
+	public void setCreateagentname(String createagentname) {
+		this.createagentname = createagentname;
 	}
 
 	public int getClaimType() {
