@@ -648,8 +648,26 @@ public class Consumer implements Runnable{
 		Set <MatchDetail> details = match.getDetails();
 		HashSet<String> addressHashSet = new HashSet<String>();
 		
+		boolean addressInfo=false;
+		boolean address1Info=false;
+		boolean address2Info=false;
+		for(FsAddress a1:plist1){
+			if((a1.getAddress1()!=null && a1.getAddress1().length()>0))
+				address1Info=true;
+			
+		}
+		
+		for(FsAddress a2:plist2){
+			if((a2.getAddress1()!=null && a2.getAddress1().length()>0))
+				address2Info=true;
+			
+		}
+		if(address1Info && address2Info)
+			addressInfo=true;
+		
 		boolean hasProxMatch = false;
 		boolean hasCloseProxMatch = false;
+		if(addressInfo){
 		for(FsAddress a1:plist1){
 			String tas1 = getStringVersionOfAddress(a1);
 			for(FsAddress a2:plist2){
@@ -727,6 +745,14 @@ public class Consumer implements Runnable{
 						String str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2());
 						String str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2());
 						
+						if (a1.getProvince() != null && a1.getProvince().trim().length() > 0 && a2.getProvince() != null && a2.getProvince().trim().length() > 0 ) {
+							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a2.getProvince()) + " " + replaceNull(a1.getCity());
+							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getProvince()) + " " + replaceNull(a1.getCity());	
+						} else {
+							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState()) + " " + replaceNull(a1.getCity());
+							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState()) + " " + replaceNull(a1.getCity());
+						}
+						
 						String description = "Similar Address";
 						double percent = 0;
 						boolean isWhitelisted =  false;
@@ -745,11 +771,11 @@ public class Consumer implements Runnable{
 						String str1 = null;
 						String str2 = null;
 						if (a1.getProvince() != null && a1.getProvince().trim().length() > 0 && a2.getProvince() != null && a2.getProvince().trim().length() > 0 ) {
-							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState()) + " " + replaceNull(a1.getProvince());
-							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState()) + " " + replaceNull(a2.getProvince());	
+							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getProvince()) + " " + replaceNull(a1.getCity()) + " "+replaceNull(a1.getCountry());
+							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getProvince()) + " " + replaceNull(a1.getCity()) + " "+replaceNull(a1.getCountry());	
 						} else {
-							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState());
-							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState());
+							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState()) + " " + replaceNull(a1.getCity()) + " "+replaceNull(a1.getCountry());
+							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState()) + " " + replaceNull(a1.getCity()) + " "+replaceNull(a1.getCountry());
 						}
 						
 						String description = "Similar Address";
@@ -769,11 +795,11 @@ public class Consumer implements Runnable{
 						String str1 = null;
 						String str2 = null;
 						if (a1.getProvince() != null && a1.getProvince().trim().length() > 0 && a2.getProvince() != null && a2.getProvince().trim().length() > 0 ) {
-							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState()) + " " + replaceNull(a1.getProvince());
-							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState()) + " " + replaceNull(a2.getProvince());	
+							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a2.getProvince()) + " " + replaceNull(a1.getCity());
+							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getProvince()) + " " + replaceNull(a1.getCity());	
 						} else {
-							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState());
-							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState());
+							str1 = a1.getAddress1() + " " + replaceNull(a1.getAddress2()) + " " + replaceNull(a1.getState()) + " " + replaceNull(a1.getCity());
+							str2 = a2.getAddress1() + " " + replaceNull(a2.getAddress2()) + " " + replaceNull(a2.getState()) + " " + replaceNull(a1.getCity());
 						}
 
 						String description = "Similar Address";
@@ -791,6 +817,7 @@ public class Consumer implements Runnable{
 					}
 				}
 			}
+		}
 		}
 	}
 

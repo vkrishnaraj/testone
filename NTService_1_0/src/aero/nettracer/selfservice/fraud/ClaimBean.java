@@ -97,7 +97,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			if (toSubmit.getId() > 0) {
 				logger.debug("delete and save");
 				File toDelete = (File) sess.load(File.class, toSubmit.getId());
-
+				if(toDelete.getValidatingCompanycode().equals(toSubmit.getValidatingCompanycode())){
 				if (toDelete.getClaims() != null) {
 					for(FsClaim claim: toDelete.getClaims()){
 						sess.delete(claim);
@@ -132,7 +132,11 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				sess.saveOrUpdate(toDelete);
 				t.commit();
 				AuditUtil.saveActionAudit(AuditUtil.ACTION_UPDATE_FILE, file.getId(), file.getValidatingCompanycode());
-
+				} else {
+					logger.debug("Error. Incorrect Validation Company error:" + toSubmit.getId()+" - "+toSubmit.getValidatingCompanycode()+" and " + toDelete.getId()+" - "+toDelete.getValidatingCompanycode());
+					return -2;
+				}
+				
 			} else {
 				logger.debug("saving:" + toSubmit.getId());
 				sess.saveOrUpdate(toSubmit);
