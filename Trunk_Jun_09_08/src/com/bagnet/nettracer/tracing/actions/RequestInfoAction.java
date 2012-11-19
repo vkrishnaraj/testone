@@ -1,6 +1,8 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.naming.Context;
 import javax.naming.NamingException;
@@ -14,6 +16,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.MessageResources;
+import org.apache.taglibs.standard.resources.Resources;
 
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
@@ -28,10 +32,11 @@ import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 public class RequestInfoAction extends CheckedAction {
 	
 	private static final Logger logger = Logger.getLogger(RequestInfoAction.class);
+	private static ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale("US"));
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
-
+		
 		// check session
 		TracerUtils.checkSession(session);
 
@@ -95,7 +100,7 @@ public class RequestInfoAction extends CheckedAction {
 				for (MatchHistory m: form.getRequestedMatches()) {
 					itemId = m.getId();
 					ClaimUtils.enterAuditClaimEntry(agentId, TracingConstants.FS_AUDIT_ITEM_TYPE_MATCH_HISTORY, itemId, TracingConstants.FS_ACTION_REQUEST_INFO);
-					remote.requestAccess(m.getFile2().getId(), itemId, user.getFirstname() + " " + user.getLastname(), user.getCompanycode_ID(), message, form.getContactName(), form.getContactEmail(),form.getContactPhone());
+					remote.requestAccess(m.getFile2().getId(), itemId, user.getFirstname() + " " + user.getLastname(), user.getCompanycode_ID(), resources.getString("request.message")+": "+message, form.getContactName(), form.getContactEmail(),form.getContactPhone());
 				}
 			}
 			ctx.close();

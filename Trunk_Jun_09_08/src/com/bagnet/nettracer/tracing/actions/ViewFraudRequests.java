@@ -11,6 +11,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.naming.Context;
 import javax.servlet.http.HttpServletRequest;
@@ -35,9 +37,11 @@ import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
 import com.bagnet.nettracer.tracing.forms.ViewFraudRequestForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
@@ -55,8 +59,9 @@ public class ViewFraudRequests extends CheckedAction {
 
 		MessageResources messages = MessageResources
 				.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale("US"));
 		HttpSession session = request.getSession();
-
+		
 		// check session
 		TracerUtils.checkSession(session);
 
@@ -140,6 +145,8 @@ public class ViewFraudRequests extends CheckedAction {
 		
 		String approveId = (String) request.getParameter("approveId");
 		String denyId = (String) request.getParameter("denyId");
+		String claimId = (String) request.getParameter("claimId");
+		String airlineRequest = (String) request.getParameter("airlineRequest");
 		Context ctx = ConnectionUtil.getInitialContext();
 		ClaimClientRemote remote = (ClaimClientRemote) ctx
 				.lookup(PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
@@ -147,10 +154,14 @@ public class ViewFraudRequests extends CheckedAction {
 		if (approveId != null) {
 			remote.approveRequest(Long.parseLong(approveId), null, user.getFirstname() + " " + user.getLastname());
 
-		}
-
-		else if (denyId != null) {
-			remote.denyRequest(Long.parseLong(denyId), null, user.getFirstname() + " " + user.getLastname());
+		} else if (denyId != null) {
+			request.setAttribute("deny_ID", denyId);
+			request.setAttribute("airlineRequest", airlineRequest);
+			request.setAttribute("claim_ID", claimId);
+			return mapping.findForward(TracingConstants.DENY_FRAUD_REQUEST);
+			//remote.denyRequest(Long.parseLong(denyId), null, user.getFirstname() + " " + user.getLastname());
+		} else if (request.getParameter("request_ID")!=null && request.getParameter("deny")!=null){
+			remote.denyRequest(Long.parseLong(request.getParameter("request_ID")), resources.getString("deny.message")+": "+linkForm.getMessage(), user.getFirstname() + " " + user.getLastname());
 		}
 		ctx.close();
 		// menu highlite

@@ -288,7 +288,7 @@ public class Consumer implements Runnable{
 			c1.setCcNumber(r1.getCcNumber());
 			c1.setCcNumLastFour(r1.getCcNumLastFour());
 			c1.setCcType(r1.getCcType());
-			ret.add(c1);
+			ret.add(c1); //Does it already map the unique numbers?
 		} 
 		if(file != null && file.getClaims() != null){
 			for(FsClaim claim:file.getClaims()){
@@ -869,9 +869,18 @@ public class Consumer implements Runnable{
 	private static void proccessCreditCards(MatchHistory match){
 		Set<CreditCard> ccs1 = getCreditCards(match.getFile1());
 		Set<CreditCard> ccs2 = getCreditCards(match.getFile2());
+
+		HashSet<String> creditMatches = new HashSet<String>();
+		String hashKey;
 		for(CreditCard c1: ccs1){
 			for(CreditCard c2: ccs2){
-				proccessCreditCard(c1, c2, match);
+				hashKey=c1.getCcType()+c1.getCcNumLastFour()+c2.getCcType()+c2.getCcNumLastFour();
+						
+				if(creditMatches.add(hashKey))		
+				{
+					proccessCreditCard(c1, c2, match);
+				
+				}
 			}
 		}
 	}

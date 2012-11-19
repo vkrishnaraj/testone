@@ -212,7 +212,7 @@ function updatePagination() {
 	            			<td rowspan=<%=rowspan %>>
 	            				<div style="width:200px;word-wrap:break-word;">
 	            				<% if (requested.getMessage() != null) { %>
-	            				<bean:write name="requested" property="message.message" />
+	            				<bean:write name="requested" property="message.message" filter="false"/>
 	            				<% } %>
 	            				</div>
 	            			</td>
@@ -228,7 +228,7 @@ function updatePagination() {
 	            				<a href="fraudRequests.do?approveId=<%=requested.getId() %>">
 	           						<bean:message key="claim.match.approve" />
 	           					</a><br /><br/>
-	            				<a href="fraudRequests.do?denyId=<%=requested.getId() %>">
+	            				<a href="fraudRequests.do?denyId=<%=requested.getId() %>&claimId=<%=claims[i].getSwapId() %>&airlineRequest=<bean:write name="requested" property="requestedAirline" />">
 	           						<bean:message key="claim.match.deny" />
 	           					</a>
 	           					<% } else { %>

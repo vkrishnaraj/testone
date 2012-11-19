@@ -19,9 +19,11 @@ import javax.ejb.Stateless;
 
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Expression;
 
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
@@ -36,6 +38,7 @@ import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.PnrData;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
+import aero.nettracer.fs.model.FsAttachment;
 import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
 import aero.nettracer.fs.model.detection.AccessRequestDTO;
@@ -46,6 +49,7 @@ import aero.nettracer.fs.model.detection.Whitelist;
 import aero.nettracer.fs.model.messaging.FsMessage;
 import aero.nettracer.fs.utilities.AuditUtil;
 import aero.nettracer.fs.utilities.DataRetentionThread;
+import aero.nettracer.fs.utilities.FileUtils;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.GeoLocation;
 import aero.nettracer.fs.utilities.InternationalException;
@@ -724,9 +728,15 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		request.setResponseDate(DateUtils.convertToGMTDate(new Date()));
 
 		if (message != null && message.trim().length() > 0) {
-			FsMessage m = new FsMessage();
+			FsMessage m;
+			if(request.getMessage()!=null){
+				m=request.getMessage();
+				m.setMessage(m.getMessage()+"<br>");
+			} else {
+				m = new FsMessage();
+			}
 			m.setSenderName(agent);
-			m.setMessage(message);
+			m.setMessage(m.getMessage()+message);
 			m.setTimestamp(DateUtils.convertToGMTDate(new Date()));
 			request.setMessage(m);
 		}
@@ -898,6 +908,85 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public Map<String, Integer> getMatches(List<String> idList) {
 		return getMatches(idList, "US");//TODO deprecate when US is updated to 3.2.1.1		
 	}
+	/*public int sharedFileCommand(String command, java.io.File theFile, String company){
+			// Save the file in the local directory.
+			if (theFile != null && theFile.getTotalSpace() > 0) {
+				String st = Long.toString((new Date()).getTime());
+				String lead = "";
+				
+				// now make subfolder with year and month
+				Calendar cal = new GregorianCalendar();
+				int year = cal.get(Calendar.YEAR);
+				int month = cal.get(Calendar.MONTH) + 1;
+				int day = cal.get(Calendar.DAY_OF_MONTH);
+				
+				//compute the folder name
+				String folder = user.getStation().getCompany().getCompanyCode_ID() + "/" + year + "/" + month + "/" + day + "/";;
+				
+				//paths to be stored in the db
+				String fileName = theFile.getName();
+				String filepath = folder + lead + "_" + st + "_" + fileName;
+				String thumbpath = folder + lead + "_" + st + "_thumb_" + fileName;
+				
+				boolean uploadresult = FileUtils.doUpload(theFile, Integer.valueOf(String.valueOf(theFile.getTotalSpace())), folder, filepath, thumbpath);  //is this still needed? altered to check for img types, doc types, or pdf types?
+				if (!uploadresult) {
+					return -1;
+//					error = new ActionMessage("error.uploadfile");
+//					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+//					saveMessages(request, errors);
+//					return (mapping.findForward(TracingConstants.LD_MAIN));
+				} else {
+					// add the image to the DB.
+					Shared_File sf = new Shared_File();
+					sf.setFilepath(filepath);
+					sf.setThumbpath(thumbpath);
+					sf.setFileName(fileName);
+//					ArrayList al = (ArrayList) theform.getItem(fileindex, -1).getPhotolist();
+//					al.add(photo);
+				}
+			} else {
+				// upload file errors.
+				return -1;
+//				error = new ActionMessage("error.uploadfile");
+//				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+//				saveMessages(request, errors);
+			}	
+	//end of new image file save feature code - G
+
+
+	}
+	
+	public int getSharedFile(String FileID) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		String sql = "select count(ar.id) " + getAccessRequestsQuery(dto);
+
+		Query q = sess.createQuery(sql);
+
+		ArrayList<AccessRequest.RequestStatus> status = new ArrayList<AccessRequest.RequestStatus>();
+		if(dto.isApproved()){
+			status.add(AccessRequest.RequestStatus.Approved);
+		}
+		if(dto.isDenied()){
+			status.add(AccessRequest.RequestStatus.Denied);
+		}
+		if(dto.isPending()){
+			status.add(AccessRequest.RequestStatus.Created);
+		}
+		
+		if(status.size() == 0){
+			//no status selected
+			return 0;
+		}
+		
+		q.setParameterList("status", status);
+		q.setParameter("airline", dto.getAirlinecode());
+		if(dto.getStartDate() != null && dto.getEndDate() != null){
+			q.setParameter("start", dto.getStartDate());
+			q.setParameter("end", dto.getEndDate());
+		}
+		List list = q.list();
+		return ((Long) list.get(0)).intValue();
+	}*/
 	
 	public Map<String, Integer> getMatches(List<String> idList, String companycode) {
 		if(companycode == null){
