@@ -11,7 +11,14 @@
 	<ui:define name="body">
 		<h:form id="pageForm">
 			<h:panelGroup style="width: 315px">
-				<p class="contentHeader"><t:outputText value="#{msg.bagunchecked_text_title}" escape="false"/></p>
+				<table class="contentHeaderLine"><tr><td>
+				<p class="contentHeaderText"><t:outputText value="#{msg.bagunchecked_text_title}" escape="false"/></p>
+				</td><td>
+				<div align="right">
+				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToLanding}" />&#160;&#160;&#160;
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.bagunchecked_button_file_lost}" action="#{lostAndFound.goToFormPage}" />
+				</div>
+				</td></tr></table>
 				<p class="twlvPxBlk"><t:outputText value="#{msg.bagunchecked_text_intro}" /></p>
 				<p class="twlvPxBlk"><t:outputText value="#{msg.bagunchecked_text_file_desc}" /></p><br/>
 				<p class="twlvPxBlk">
