@@ -35,6 +35,7 @@ import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -559,6 +560,12 @@ public class MBRActionUtils {
 					theform.setLoss_code(defaultLossCode);
 				} else {
 					theform.setLoss_code(0);
+					if(theform.getDeliveryInstructions()==null)
+					{
+						DeliveryInstructions DI=new DeliveryInstructions();
+						DI.setInstructions("");
+						theform.setDeliveryInstructions(DI);
+					}
 				}
 			}
 			
