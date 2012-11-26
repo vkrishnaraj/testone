@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/airtran_template.xhtml">
+	<ui:define name="title">Airtran Airways: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form id="pageForm">
+			<h:panelGroup style="width: 315px">
+				<p class="contentHeader"><t:outputText value="#{msg.landing_text_title}" escape="false"/></p>
+				<p class="twlvPxBlk"><t:outputText value="#{msg.landing_text_intro}" /></p><br/>
+				<p class="twlvPxBlk"><t:outputText value="#{msg.landing_text_question}" /></p><br/>
+				<div>
+					<rich:messages id="reportMsg" errorClass="errormsg" infoClass="infomsg" layout="list"/>
+					<rich:spacer width="100%" height="15" title="" />
+				</div>
+				<div align="right">
+					<table><tr><td>
+					<span class="submitButtonWhite">
+						<a4j:commandButton value="#{msg.landing_button_unchecked}" action="#{lostAndFoundLogin.goToFormPageAirtran}" /> </span> </td><td>
+					<span class="submitButtonOrange">
+						<a4j:commandButton value="#{msg.landing_button_checked}" action="#{lostAndFoundLogin.goToCheckedPageAirtran}" /> </span> </td></tr></table>
+				</div><br/><br/>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

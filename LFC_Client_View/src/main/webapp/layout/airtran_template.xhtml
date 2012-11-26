@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+<f:view contentType="text/html" encoding="UTF-8">
+<f:loadBundle basename="airtran" var="msg"/>	
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<title><ui:insert name="title">Default Title</ui:insert></title>
+<link rel="stylesheet" type="text/css" href="../_css/airtran_master.css"/>
+<link href="../_images/airtran/favicon.ico" type="image/png" rel="shortcut icon" />
+</head>
+<body>
+<div id="wrapper_a">
+<!-- ########## BEGIN HEADER ########## -->
+<div id="header_a">
+	<div id="mininav_a"></div>
+	<div id="headbar_a">
+		<img width="726" height="49" alt="AirTran Airways - Go. There's nothing stopping you." src="../_images/airtran/header.gif" />
+	</div>
+	<div id="mainnav_a">lost and found.
+		<br/><div id="backto_a">back to airtran.com&#160;<a href="http://www.airtran.com/"><img src="../_images/airtran/btn_go.gif"/></a></div>
+	</div>	
+</div>
+<div id="main_a">
+<!-- ########## END HEADER ########## -->
+<div id="body">	 
+	<!-- #################### END HEADER TEMPLATE ########################## -->
+	<ui:insert name="body" />
+	<!-- #################### BEGIN FOOTER TEMPLATE ######################## -->
+</div>
+<div class="clear"></div>
+<!-- ########## BEGIN FOOTER ########## -->
+</div>
+<div id="footer_a">
+<a href="http://www.airtran.com/policies/privacy_policy.aspx" style="color: #FFFFFF;">Privacy Policy</a><br/>
+<div id="legal_a">
+ © 2012 AirTran Airways. All rights reserved.
+<a style="font-size: 8pt; color: #FFFFFF;" href="http://www.airtranairways.com/about-us/terms_of_use.aspx">Terms of use</a>
+.
+</div>
+</div>
+<!-- ########## END FOOTER ########## -->
+</div> 
+</body>
+</f:view>
+</html>

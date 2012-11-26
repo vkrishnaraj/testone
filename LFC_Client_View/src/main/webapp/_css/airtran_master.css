@@ -1,0 +1,443 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    font-size: 12px;
+    line-height: 16px;
+    font-family: Arial,Helvetica,sans-serif;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+    vertical-align: baseline;
+    color: #222222;
+}
+
+body {
+    background: url("../_images/southwest/wrapShadow.png") repeat-y scroll center top transparent;
+    font-family: Arial,Tahoma,sans-serif;
+    font-size: 11px;
+    line-height: 1em;
+}
+
+a {
+    color: #1A6896;
+    font-weight: bold;
+    outline: medium none;
+    text-decoration: none;
+}
+
+.col25 {
+	width: 25%;
+}
+
+.errormsg {
+	clear: none;
+	color: red;
+	margin-top: 2px;
+	font-size: 8pt;
+}
+
+.infomsg {
+	color: green;
+	list-style: none;
+	font-size: 10pt;
+	font-weight: bold;
+}
+
+#bagItUp {
+    margin: 0 auto;
+    width: 988px;
+}
+
+#header {
+    height: 95px;
+    margin: 5px 0 0;
+    position: relative;
+    width: 988px;
+}
+
+#header a.wings {
+    background: url("../_images/southwest/swaHeart.gif") no-repeat scroll left center transparent;
+    color: #348BF9;
+    display: block;
+    float: none;
+    font-size: 13px;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 0 3px;
+    padding: 1px 0 0 50px;
+    position: absolute;
+    right: 0;
+    text-decoration: none;
+    text-transform: lowercase;
+    top: 50px;
+    width: 123px;
+}
+
+#header a img {
+    padding: 0 15px 15px;
+}
+
+#header img {
+    float: left;
+}
+
+a img {
+    border: medium none;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#nav {
+    background: url("../_images/southwest/navBG.gif") no-repeat scroll left top transparent;
+    color: #FFFFFF;
+    height: 42px;
+    position: relative;
+}
+
+#footer {
+    border-top: 1px dotted #999999;
+    clear: both;
+    height: 70px;
+    position: relative;
+    width: 990px;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+#footer, #footer a {
+    color: #2583F9;
+    font-size: 12px;
+    font-weight: normal;
+    text-transform: capitalize;
+}
+
+#footer p.nuts {
+    background: url("../_images/southwest/nuts.gif") no-repeat scroll left top transparent;
+    height: 90px;
+    left: 0;
+    padding: 12px 0 0 30px;
+    position: absolute;
+    top: 0;
+    width: 140px;
+}
+
+#footer p.nuts span {
+    color: #333333;
+    font: bold 10px Verdana,Tahoma,sans-serif;
+}
+
+#footer p.nuts a {
+    display: block;
+    font-size: 11px;
+    padding: 3px 0 0;
+}
+
+#footer p.copyright {
+    color: #999999;
+    left: 185px;
+    line-height: 14px;
+    position: absolute;
+    top: 10px;
+    width: 360px;
+}
+
+ol, ul {
+    list-style: none outside none;
+}
+
+ul#socialLinks {
+    color: #333333;
+    float: right;
+    font-size: 11px;
+    height: 40px;
+    margin-top: -18px;
+    width: 440px;
+}
+
+ul#socialLinks li {
+    display: block;
+    float: left;
+    height: 40px;
+    position: relative;
+    width: 110px;
+}
+
+ul#socialLinks li span {
+    display: block;
+    left: 28px;
+    position: absolute;
+    top: 1px;
+}
+
+ul#socialLinks li a.sociallink {
+    display: block;
+    font-size: 11px;
+    left: 28px;
+    position: absolute;
+    top: 12px;
+}
+
+ul#socialLinks li a.socialicon {
+    display: block;
+    height: 22px;
+    left: 0;
+    position: absolute;
+    text-indent: -9999px;
+    top: 0;
+    width: 22px;
+}
+
+ul#socialLinks li a.facebook {
+    background: url("../_images/southwest/socialIcons.gif") no-repeat scroll left top transparent;
+}
+
+ul#socialLinks li a.twitter {
+    background: url("../_images/southwest/socialIcons.gif") no-repeat scroll -22px 0 transparent;
+}
+
+ul#socialLinks li a.youtube {
+    background: url("../_images/southwest/socialIcons.gif") no-repeat scroll -44px 0 transparent;
+}
+
+ul#socialLinks li a.flickr {
+    background: url("../_images/southwest/socialIcons.gif") no-repeat scroll right top transparent;
+}
+
+#leftColumn {
+    display: inline;
+    float: left;
+    margin: 20px 0 0;
+    width: 100px;
+}
+
+#middleColumn {
+    width: 735px;
+    color: #222222;
+    font-family: Arial,sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    float: left;
+    margin: 20px 0 0 16px;
+}
+
+#rightColumn {
+    float: right;
+    margin: 20px 20px 0 0;
+    width: 94px;
+}
+
+.contentHeader {
+    margin: 0 0 6px;
+    padding: 10px 0 15px;
+}
+
+.contentHeader span {
+    font-size: 22px;
+    font-weight: normal;
+    line-height: 26px;
+    color: #1c94c0;
+}
+
+.contentHeaderLine {
+    margin: 0 0 6px;
+    padding: 10px 0 15px;
+    width: 100%;
+}
+
+.contentHeaderText {
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 30px;
+}
+
+.contentSubHeader {
+	font-size: 1em;
+    font-weight: bold;
+    position: relative;
+}
+
+.twlvPxBlk {
+}
+
+input[type="button"], input[type="submit"], input[type="reset"] {
+    border: medium none;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 22px;
+    margin-top: 5px;    
+}
+
+.swa_expandables_expandable_list dd, .swa_expandables_expandable_list dt span {
+    padding-left: 30px;
+}
+
+.swa_expandables_expandable_list dt.collapsed span {
+    background: url("../_images/southwest/icon_open_dt.png") no-repeat scroll left 2px transparent;
+    display: inline-block;
+}
+
+.swa_expandables_expandable_list dt.expanded span {
+    background: url("../_images/southwest/icon_close_dt.png") no-repeat scroll left 2px transparent;
+}
+
+dl.swa_expandables_expandable_list {
+    background: url("../_images/southwest/dotted_grayOverBlue_1_2.gif") repeat-x scroll center bottom transparent;
+    margin-top: 0;
+    padding-bottom: 1px;
+}
+
+.swa_expandables_expandable_list dt {
+    background: url("../_images/southwest/dotted_grayOverBlue_1_2.gif") repeat-x scroll center top transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+}
+
+.swa_expandables_expandable_list dt.first_item {
+    background: none repeat scroll 0 0 transparent;
+}
+
+.swa_expandables_expandable_list dd {
+    display: none;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+.swa_expandables_expandable_list dd.active {
+    display: block;
+}
+
+h2.swa_faq_title {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.submitButtonWhite {
+    background: url("../_images/airtran/button_back.gif") no-repeat scroll left top transparent;
+    display: block;
+    height: 30px;
+    margin-right: 5px;
+    width: auto;
+}
+
+.submitButtonWhite input {
+    background: url("../_images/airtran/button_right.gif") no-repeat scroll right top transparent;
+    display: block;
+    height: 30px;
+    color: #FFFFFF;
+}
+
+.submitButtonOrange {
+    background: url("../_images/airtran/button_back.gif") no-repeat scroll left bottom transparent;
+    display: block;
+    height: 30px;
+    margin-right: 5px;
+    width: auto;
+}
+
+.submitButtonOrange input {
+    background: url("../_images/airtran/button_right.gif") no-repeat scroll right bottom transparent;
+    display: block;
+    height: 30px;
+    color: #FFFFFF;
+}
+
+/* START AIRTRAN SPECIAL STUFF */
+
+BODY {
+    background: url("../_images/airtran/page_back.jpg") repeat-x scroll 0 0 #055A8D;
+    color: #222222;
+    font-family: Arial,Helvetica,sans-serif;
+    margin: 3px 0;
+    min-width: 765px;
+    padding: 0;
+    text-align: center;
+}
+
+#main_a, #header_a {
+    width: 750px;
+}
+
+#main_a {
+    background: url("../_images/airtran/content_bottom.gif") no-repeat scroll left bottom transparent;
+    margin: 0;
+    padding: 0 20px 13px;
+    width: auto;
+}
+
+#wrapper_a {
+    background: url("../_images/airtran/content_back.gif") repeat-y scroll 0 0 transparent;
+    margin: 0 auto;
+    position: relative;
+    text-align: left;
+    width: 765px;
+    z-index: 0;
+}	
+
+#header_a {
+    background: url("../_images/airtran/head_left.gif") no-repeat scroll 0 0 transparent;
+    height: 137px;
+    padding: 0 0 0 20px;
+    position: relative;
+}
+
+#mininav_a {
+    background: url("../_images/airtran/mininav_back.gif") no-repeat scroll 0 0 transparent;
+    height: 24px;
+    padding: 12px 0 0;
+    position: relative;
+    text-align: right;
+    width: 732px;
+    z-index: 5;
+}
+
+#headbar_a {
+    background: url("../_images/airtran/head_right.gif") no-repeat scroll right top transparent;
+    height: 103px;
+    left: 20px;
+    padding-top: 36px;
+    position: absolute;
+    text-align: left;
+    top: 0;
+    width: 748px;
+    z-index: 0;
+}
+
+#mainnav_a {
+    background: url("../_images/airtran/mainnav_back.gif") no-repeat scroll 0 0 transparent;
+    height: 50px;
+    color: #CCCCCC;
+    padding: 0 0 10px 80px;
+    position: absolute;
+    top: 85px;
+    width: 646px;
+    z-index: 5;
+    font-size: 24px;
+    text-align: left;
+    font-family: Verdana,Tahoma,sans-serif;
+}
+
+#backto_a {
+    font-size: 14px;
+    width: 100%;
+    text-align: right;
+    color: #FFFFFF;
+}
+
+#footer_a {
+	background: none repeat scroll 0 0 #055A8D;
+    color: #EEEEEE;
+    padding: 5px 20px 15px;
+    text-align: center;
+}
+
+#legal_a {
+	font-size: 11px;
+    line-height: 10px;
+    color: #C0D6E2;
+    padding-top: 15px;
+}

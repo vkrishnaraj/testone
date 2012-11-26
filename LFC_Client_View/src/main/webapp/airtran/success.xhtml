@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/airtran_template.xhtml">
+	<ui:define name="title">Airtran Airways: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form>
+			<h:panelGroup>
+				<p class="contentHeader"><t:outputText value="#{msg.success_text_title}" escape="false"/></p>
+				<p class="contentSubHeader"><t:outputText value="#{msg.success_text_confirm_title}" /></p><br/>
+				<p class="twlvPxBlk"><t:outputText value="#{msg.success_text_thank_you}" /></p><br/>
+				<p class="twlvPxBlk"><t:outputText value="#{msg.success_text_tracking}"/>&#160;<b><t:outputText value="#{lostAndFound.lostReport.reportId}" /></b></p><br/>
+				<p class="twlvPxBlk"><t:outputText value="#{msg.success_text_email}" /></p><br/>
+				<p class="twlvPxBlk"><t:outputText value="#{msg.success_text_print}" /></p><br/><br/>
+				<div align="right">
+					<table><tr><td> <span class="submitButtonWhite">
+				<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToLanding}" />
+				    </span> </td><td> <span class="submitButtonOrange">
+				<a4j:commandButton value="#{msg.general_button_review}" action="#{lostAndFound.goToStatus}" />
+				    </span> </td></tr></table>
+				</div><br/>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>
