@@ -23,6 +23,11 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
 .col25 {
 	width: 25%;
 }

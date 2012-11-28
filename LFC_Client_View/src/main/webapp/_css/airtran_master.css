@@ -25,6 +25,11 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
 .col25 {
 	width: 25%;
 }
@@ -273,12 +278,12 @@ input[type="button"], input[type="submit"], input[type="reset"] {
 }
 
 .swa_expandables_expandable_list dt.collapsed span {
-    background: url("../_images/southwest/icon_open_dt.png") no-repeat scroll left 2px transparent;
+    background: url("../_images/airtran/icon_open_dt.png") no-repeat scroll left 2px transparent;
     display: inline-block;
 }
 
 .swa_expandables_expandable_list dt.expanded span {
-    background: url("../_images/southwest/icon_close_dt.png") no-repeat scroll left 2px transparent;
+    background: url("../_images/airtran/icon_close_dt.png") no-repeat scroll left 2px transparent;
 }
 
 dl.swa_expandables_expandable_list {
