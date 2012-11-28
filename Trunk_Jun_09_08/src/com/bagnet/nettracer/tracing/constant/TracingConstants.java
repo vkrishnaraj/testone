@@ -71,6 +71,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_MAINTAIN_WEB_SERVICE_AGENTS = "Maintain Web Service Agents";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_BAGS = "Incoming Bags";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS = "Incoming Incidents";
+	public final static String SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS = "Shared Attachments";
 	
 	//TODO: adding three sub items under last one to get the itemized view for WS
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED = "Incoming Incidents Type Delayed";
@@ -737,6 +738,7 @@ public class TracingConstants {
 	public final static String CLAIMS_LIST = "claimslist";
 
 	public final static String DENY_REQUEST_ON_HAND = "denyrequestonhand";
+	public final static String DENY_FRAUD_REQUEST= "denyfraudrequest";
 
 	public final static String DENY_REQUEST_ON_HAND_SUCCESS = "successdenyrequestonhand";
 

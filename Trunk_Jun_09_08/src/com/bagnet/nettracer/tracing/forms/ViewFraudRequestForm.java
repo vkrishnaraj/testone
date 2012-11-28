@@ -15,6 +15,7 @@ public class ViewFraudRequestForm extends ValidatorForm {
 	AccessRequestDTO dto;
 	String startDate;
 	String endDate;
+	String message;
 	
 	public String getStartDate() {
 		return startDate;
@@ -27,6 +28,12 @@ public class ViewFraudRequestForm extends ValidatorForm {
 	}
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public AccessRequestDTO getDto() {
