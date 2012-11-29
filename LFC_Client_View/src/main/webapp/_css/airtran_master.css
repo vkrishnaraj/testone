@@ -445,3 +445,7 @@ BODY {
     color: #C0D6E2;
     padding-top: 15px;
 }
+
+.rich-calendar-button {
+	padding: 0 0 2px 4px;
+}
