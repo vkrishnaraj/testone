@@ -86,11 +86,17 @@ public class SERV implements BDOIntegration {
 			Calendar claimCal = new GregorianCalendar();
 			if (bdo.getIncident() != null) {
 				ws.setClaimReferenceNumber(bdo.getIncident().getIncident_ID());
-				claimCal.setTime(bdo.getIncident().getCreatedate());
+				bdo.getIncident().set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
+				bdo.getIncident().set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
+				bdo.getIncident().set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
+				claimCal.setTime(DateUtils.convertToDate(bdo.getIncident().getDisplaydate(), bdo.getIncident().get_DATEFORMAT() + " " + bdo.getIncident().get_TIMEFORMAT(), null));
 				ws.setClaimDate(claimCal);
 			} else if (bdo.getOhd() != null){
 				ws.setClaimReferenceNumber(bdo.getOhd().getOHD_ID());
-				claimCal.setTime(bdo.getOhd().getFounddate());
+				bdo.getOhd().set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
+				bdo.getOhd().set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
+				bdo.getOhd().set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
+				claimCal.setTime(DateUtils.convertToDate(bdo.getOhd().getDisplaydate(), bdo.getOhd().get_DATEFORMAT() + " " + bdo.getOhd().get_TIMEFORMAT(), null));
 				ws.setClaimDate(claimCal);
 			}
 			ws.setClaimDateSpecified(true);
@@ -99,7 +105,9 @@ public class SERV implements BDOIntegration {
 
 			Calendar deliveryCal = new GregorianCalendar();
 			if (bdo.getDeliverydate() != null) {
-				deliveryCal.setTime(bdo.getDeliverydate());
+				bdo.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
+				bdo.set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
+				deliveryCal.setTime(DateUtils.convertToDate(bdo.getDispdeliverydate(), bdo.get_DATEFORMAT(), null));
 				ws.setDeliveryDate(deliveryCal);
 				ws.setDeliveryDateSpecified(true);
 			} else {
@@ -115,10 +123,10 @@ public class SERV implements BDOIntegration {
 			logger.info("POINT 6\n\n");
 			bdo.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
 			bdo.set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
-			bdo.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById("27").getTimezone())); //agent.getCurrenttimezone()
+			bdo.set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
 			Calendar createCal = new GregorianCalendar(); //bdo.get_TIMEZONE()
-			String CDate=DateUtils.formatDate(bdo.getCreatedate(), TracingConstants.DB_DATEFORMAT_MSSQL, null, null);
-			createCal.setTime(DateUtils.convertToDate(CDate, TracingConstants.DB_DATEFORMAT_MSSQL, null));
+			createCal.setTime(DateUtils.convertToDate(bdo.getDispcreatetime(), bdo.get_DATEFORMAT() + " " + bdo.get_TIMEFORMAT(), null));
+			
 			ws.setCreatedDate(createCal);
 			ws.setPickUpDate(createCal);
 			
