@@ -17,7 +17,7 @@ public class PrivacyPermissionsForm extends ValidatorForm {
 	String[] componentList = {"autosend","showallclaiminfo","name","address","phonenumber","email","traveldate","claimtype",
 			"claimdate","claimRemarks","amountclaimed","amountpaid","fraudstatus","denied","denialreason",
 			"cc","drivers","ffn","ssn","passport","pnrloc","pnrdata","dob","itin","ticketamount",
-			"bag","bdo","incdate","incremarks"};
+			"bag","bdo","incdate","incremarks","attachment"};
 	
 
 	public String[] getComponentList() {
