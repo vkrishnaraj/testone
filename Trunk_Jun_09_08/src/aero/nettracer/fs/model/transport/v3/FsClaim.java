@@ -1,48 +1,23 @@
-package aero.nettracer.fs.model;
+package aero.nettracer.fs.model.transport.v3;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.OrderBy;
-import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.detection.Blacklist;
 
-import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="subclass_type", discriminatorType = DiscriminatorType.STRING, length=16)
-@Proxy(lazy = false)
 public class FsClaim implements Serializable {
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue
+	private static final long serialVersionUID = 7010480417198684212L;
+	
 	protected long id;
 	protected long swapId;
 	protected String airlineClaimId;
 	protected String airline;
+	protected String createagentname;
 	protected int claimType;
 	protected Date claimDate;
 	protected Date travelDate;
@@ -59,73 +34,16 @@ public class FsClaim implements Serializable {
 	protected int statusId;
 	protected String claimRemark;
 	
-//	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@OrderBy(clause = "id")
-	@Fetch(FetchMode.SELECT)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	private Set<Attachment> attachments;
 	
-	@Transient
-	protected String createagentname;
-
-	@ManyToOne
-	@JoinColumn(name = "createagent_id")
-	protected Agent createagent;
-	
-	@ManyToOne
-	@JoinColumn(name = "file_id")
 	protected File file;
-
-	//	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@OrderBy(clause = "id")
-	@Fetch(FetchMode.SELECT)
-	
-	//TODO IMPORTANT - this annotation is needed by NetTracer, however, cannot be part of the claim_model.jar that NTFS uses.  If you are rebuilding the model jar, this annotation needs to be commented out - Loupas
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	
 	private Set<Person> claimants;
-
-	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@org.hibernate.annotations.OrderBy(clause = "id")
-	@Fetch(FetchMode.SELECT)
-	
-	//TODO IMPORTANT - this annotation is needed by NetTracer, however, cannot be part of the claim_model.jar that NTFS uses.  If you are rebuilding the model jar, this annotation needs to be commented out - Loupas
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	
 	private Set<Segment> segments;
-
-	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@org.hibernate.annotations.OrderBy(clause = "id")
-	@Fetch(FetchMode.SELECT)
-	
-	//TODO IMPORTANT - this annotation is needed by NetTracer, however, cannot be part of the claim_model.jar that NTFS uses.  If you are rebuilding the model jar, this annotation needs to be commented out - Loupas
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
-	
 	private Set<FsReceipt> receipts;
-	
-	@OneToOne(targetEntity = aero.nettracer.fs.model.detection.Blacklist.class, cascade = CascadeType.ALL)
-	@Fetch(FetchMode.SELECT)
+	private Set<Attachment> attachments;
 	private Blacklist blacklist;
-
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "incident_id")
-	private aero.nettracer.fs.model.FsIncident incident;
-
-	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@org.hibernate.annotations.OrderBy(clause = "id")
-	@Fetch(FetchMode.SELECT)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
+	private FsIncident incident;
 	private Set<FsIPAddress> ipAddresses;
-	
-	@OneToMany(mappedBy = "claim", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@org.hibernate.annotations.OrderBy(clause = "id")
-	@Fetch(FetchMode.SELECT)
-	@Cascade(value = org.hibernate.annotations.CascadeType.DELETE_ORPHAN)
 	private Set<Phone> phones;
-	
-	@Transient
 	protected Person claimant = null;
 		
 	public FsClaim(long id){
@@ -136,11 +54,11 @@ public class FsClaim implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public aero.nettracer.fs.model.FsIncident getIncident() {
+	public FsIncident getIncident() {
 		return incident;
 	}
 
-	public void setIncident(aero.nettracer.fs.model.FsIncident incident) {
+	public void setIncident(FsIncident incident) {
 		this.incident = incident;
 	}
 	
@@ -152,38 +70,6 @@ public class FsClaim implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
-	}
-	
-	/**
-	 * @return Returns the createagent that created this incident.
-	 * 
-	 */
-	@ManyToOne
-	@JoinColumn(name = "createagent_id", nullable = false)
-	public Agent getCreateagent() {
-		return createagent;
-	}
-	
-	/**
-	 * @param createAgent
-	 *          The createagent to set.
-	 */
-	public void setCreateagent(Agent createagent) {
-		this.createagent = createagent;
-	}
-	
-	@Transient
-	public String getCreateagentname() {
-		if(createagent!=null){
-			return createagent.getUsername();
-		} else {
-			return createagentname;
-		}
-		
-	}
-	
-	public void setCreateagentname(String createagentname) {
-		this.createagentname=createagentname;
 	}
 	
 	public long getSwapId() {
@@ -216,6 +102,14 @@ public class FsClaim implements Serializable {
 
 	public void setAirline(String airline) {
 		this.airline = airline;
+	}
+
+	public String getCreateagentname() {
+	  	return createagentname;
+	}
+
+	public void setCreateagentname(String createagentname) {
+		this.createagentname = createagentname;
 	}
 
 	public int getClaimType() {
@@ -370,6 +264,14 @@ public class FsClaim implements Serializable {
 		this.receipts = receipts;
 	}
 	
+	public Set<Attachment> getAttachments() {
+		return attachments;
+	}
+
+	public void setAttachments(Set<Attachment> attachments) {
+		this.attachments = attachments;
+	}
+	
 	public Set<FsIPAddress> getIpAddresses() {
 		return ipAddresses;
 	}
@@ -401,14 +303,6 @@ public class FsClaim implements Serializable {
 		return claimant;
 	}
 
-	public Set<Attachment> getAttachments() {
-		return attachments;
-	}
-
-	public void setAttachments(Set<Attachment> attachments) {
-		this.attachments = attachments;
-	}
-	
 	public void setPhones(Set<Phone> phones) {
 		this.phones = phones;
 	}

@@ -1433,6 +1433,44 @@
 						</td>
 					</tr>
 					</table>
+					
+					<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS, a)) { %>
+					 <h1 class="green">
+                   		<bean:message key="header.shared.files" />
+					 </h1>
+					<table class="form2" cellpadding="0" cellspacing="0">
+				              <tr>
+				                <td colspan="3">
+				                  <bean:message key="header.attachments" />
+				                  :
+				                  <br>
+				                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+				                 	 
+				                      <logic:iterate indexId="i" id="attachment" name="matchClaim" property="attachments" type="aero.nettracer.fs.model.Attachment" >
+										  
+					  				      <tr align="center">
+											
+										  <td align="left">
+										  	<logic:notEqual name="attachment" property="attachment_id" value="-1">
+				                           	<a href='retrieveAttachment?ID=<bean:write name="attachment" property="attachment_id"/>' target="top"><bean:write name="attachment" property="description"/></a>
+				                           	</logic:notEqual>
+				                           	
+										  	<logic:equal name="attachment" property="attachment_id" value="-1">
+										  		<bean:write name="attachment" property="description"/>
+										  	</logic:equal>
+				                          </td>
+				                          
+				                          </tr>
+										
+				                      </logic:iterate>
+				                  
+				                </table>
+				              </td>
+				            </tr>
+			            </table>
+						<%
+				          }
+						%>
                     <center>
                     <!--<html:submit property="save" styleId="button">
                       <bean:message key="button.save" />

@@ -14,6 +14,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="aero.nettracer.fs.model.Person" %>
 <%@ page import="aero.nettracer.fs.model.FsReceipt" %>
+<%@ page import="aero.nettracer.fs.model.Attachment" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.DateUtils" %>
 <%@ page import="org.apache.struts.util.LabelValueBean" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Company" %>
@@ -146,7 +147,7 @@
       
   </SCRIPT>
  
-        <html:form action="claim_resolution.do" method="post" onsubmit="return validateFsClaimForm(this);">
+        <html:form action="claim_resolution.do" method="post" enctype="multipart/form-data" onsubmit="return validateFsClaimForm(this);">
           <input type="hidden" name="delete_these_elements" value="" />
             <html:javascript formName="claimForm" />
             <tr>
@@ -844,6 +845,8 @@
 					                  </select>
 				                </td>
 				           </tr>
+				           
+				           
 				          <tr>
 				            <td colspan=5>
 				            	<input type="button" value="<bean:message key="button.delete.name" />"
@@ -1491,6 +1494,56 @@
 						</td>
 					</tr>
 					</table>
+					
+					<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS, a)) { %>
+					 <h1 class="green">
+                   		<bean:message key="header.shared.files" />
+					 </h1>
+					<table class="form2" cellpadding="0" cellspacing="0">
+				              <tr>
+				                <td colspan="3">
+				                  <bean:message key="header.attachments" />
+				                  :
+				                  <br>
+				                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+				                  	  <tr align="center">
+											
+											  <td align="left" width="75%">
+					                           	<bean:message key="colname.attachname"/>
+					                          </td>
+				                          	  <td align="left">
+					                            <bean:message key="colname.action"/>
+					                          </td>
+				                          
+				                          </tr>
+				                 	  <logic:iterate indexId="i" id="attachment" name="claimForm" property="claim.attachments" type="aero.nettracer.fs.model.Attachment" >
+										  
+					  				      <tr align="center">
+											
+											  <td align="left">
+					                           	<a href='retrieveAttachment?ID=<bean:write name="attachment" property="attachment_id"/>' target="top"><bean:write name="attachment" property="description"/></a>
+					                          </td>
+				                          	  <td align="left">
+					                            <input type="submit" name="removeAttachment_<%= i %>" id="button" value="<bean:message key="button.delete_attachment"/>">
+					                          </td>
+				                          
+				                          </tr>
+										
+				                      </logic:iterate>
+				                  
+				                </table>
+				                <br>
+				                <center><input type="FILE" name='<%= "attachfile" %>' />
+				                &nbsp;
+				                <html:submit property="uploadAttachment" styleId="button">
+				                  <bean:message key="header.addAttachments" />
+				                </html:submit> </center>
+				              </td>
+				            </tr>
+			            </table>
+						<%
+				          }
+						%>
 					
 					
                     <center>

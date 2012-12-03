@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
 
 import javax.naming.Context;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +28,8 @@ import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.Attachment;
+import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
@@ -162,6 +167,10 @@ public class FraudResultsAction extends CheckedAction {
 		if (request.getParameter("matchId") != null) {
 			long matchId = Long.parseLong(request.getParameter("matchId"));
 			MatchHistory match = getMatchHistory(matchId, resultsForm);
+			
+//			AccessRequest req=ClaimDAO.loadRequest(request.getParameter("matchId"));
+//			request.setAttribute("reqResult", req);
+			
 			request.setAttribute("match", match);
 			int status = match.getFile2().getStatusId();
 			if (status == TracingConstants.STATUS_SUSPECTED_FRAUD || status == TracingConstants.STATUS_KNOWN_FRAUD) {
@@ -173,8 +182,16 @@ public class FraudResultsAction extends CheckedAction {
 			if(fsFile!=null)
 			{	
 				FsClaim matchClaim=null;
+				Map<FsClaim,Attachment> attachMap=new HashMap();
 				for(FsClaim fsclaim:fsFile.getClaims()){
+					//Set<Attachment> assocAttachs=ConnectionUtil.getAttachmentsByClaimId(fsclaim.getSwapId(), fsFile.getId(), fsclaim.getAirline());
+//					Set<Attachment> assocAttachs=new HashSet();
+//					for(Attachment attachment:claimAttach){
+//						assocAttachs.add(attachment);
+//					}
+					//fsclaim.setAttachments(assocAttachs);
 					matchClaims.add(fsclaim);
+					
 				}
 				request.setAttribute("matchClaims", (List<FsClaim>)matchClaims);
 			}

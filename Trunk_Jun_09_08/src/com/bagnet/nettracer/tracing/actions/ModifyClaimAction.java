@@ -8,9 +8,18 @@ package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
 
 import javax.naming.Context;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +28,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts.upload.FormFile;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -32,6 +42,7 @@ import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.FsReceipt;
+import aero.nettracer.fs.model.Attachment;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Segment;
@@ -49,15 +60,19 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.dao.FileDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
+//import com.bagnet.nettracer.tracing.db.Attachment;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.history.ClaimHistoryObject;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
+import com.bagnet.nettracer.tracing.utils.FileShareUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
@@ -104,6 +119,29 @@ public class ModifyClaimAction extends CheckedAction {
 		Set<FsClaim> claims = null;
 		Claim claim = null;
 		File file = null;
+		
+		//file save feature
+		int itemindex = -1;
+		int fileindex = -1;
+		StringTokenizer stt = null;
+		Enumeration e = request.getParameterNames();
+		while (e.hasMoreElements()) {
+			String parameter = (String) e.nextElement();
+			try {
+				if (parameter.indexOf("removeAttachment") > -1) {
+					stt = new StringTokenizer(parameter, "_");
+					if (stt.hasMoreElements())
+						stt.nextToken();
+					if (stt.hasMoreElements())
+						itemindex = Integer.parseInt(stt.nextToken());
+				}
+			} catch (Exception removephotoe) {
+				// tempering with data, should never happen
+			}
+			if (parameter.indexOf("uploadAttachment") > -1) {
+				fileindex = 0;
+			}
+		}
 		
 		// only do this if the customer is an NT user
 		if (isNtUser) {
@@ -192,6 +230,10 @@ public class ModifyClaimAction extends CheckedAction {
 			file.setIncident(claim.getIncident());
 			claim.getIncident().setFile(file);
 			
+			if(claim.getAttachments()==null){
+				claim.setAttachments(new HashSet());
+			}
+			
 		} else if (request.getParameter("claimId") != null) {
 			
 			// load an existing claim
@@ -227,7 +269,7 @@ public class ModifyClaimAction extends CheckedAction {
 					if (PropertyBMO.isTrue("ntfs.support.multiple.claims") || ntIncident.getClaims().isEmpty()) {
 						claim.setNtIncident(ntIncident);
 						ntIncident.getClaims().add(claim);
-					} else if (request.getParameter("save") == null && request.getParameter("addNames") == null && request.getParameter("addReceipts") == null) {
+					} else if (request.getParameter("save") == null && request.getParameter("addNames") == null && request.getParameter("addReceipts") == null && fileindex == 0 && itemindex == 0) {
 						// allow single claim only
 						ActionMessage error = new ActionMessage("error.claim.exists");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -246,6 +288,46 @@ public class ModifyClaimAction extends CheckedAction {
 		
 		// add new items
 		addAssociatedItems(claim, request, user);
+		
+		//add attachments
+		if (ntfsUser && (fileindex >= 0 || itemindex >= 0) ) {
+			// 2. save the claim on central services
+			Context ctx = null;
+			ClaimClientRemote remote = null;
+			try {
+				ctx = ConnectionUtil.getInitialContext();
+				remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+			} catch (Exception ex) {
+				logger.error(ex);
+			}
+			
+			long remoteFileId = 0;
+			if (remote == null) {
+				ActionMessage error = new ActionMessage("error.fs.could.not.communicate");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			} else {
+				if (itemindex >= 0) {
+					// don't remove photo for now.
+					Attachment theattachment= (Attachment) cform.getClaim().getAttachments().toArray()[itemindex];
+					remote.deleteAttachment(theattachment.getAttachment_id());
+					cform.getClaim().getAttachments().remove(theattachment);
+					request.setAttribute("upload", Integer.toString(itemindex));
+				} else if (fileindex >= 0) {
+					// add photo
+					request.setAttribute("upload", Integer.toString(fileindex));
+					Attachment a=FileShareUtils.uploadFile(cform, claim, request, user, errors, remote);
+					if(a!=null){
+						cform.getClaim().getAttachments().add(a);
+					} else {
+						ActionMessage error = new ActionMessage("error.fs.attachment.error");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					}
+					
+				} 
+			}
+		}
 		
 		if (claim.getClaimants().size() > 1) {
 			request.setAttribute("showNames", "true");
@@ -284,8 +366,6 @@ public class ModifyClaimAction extends CheckedAction {
 		}
 
 		cform = ClaimUtils.createClaimForm(request);
-
-		/* HANDLE REQUESTS */
 		
 		// save the claim
 		if (request.getParameter("save") != null) {
@@ -330,15 +410,16 @@ public class ModifyClaimAction extends CheckedAction {
 				}
 			}
 			
-			if (ntfsUser && claimSaved) {
+			
+			if (ntfsUser && claimSaved ) {
 				// 2. save the claim on central services
 				Context ctx = null;
 				ClaimClientRemote remote = null;
 				try {
 					ctx = ConnectionUtil.getInitialContext();
 					remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
-				} catch (Exception e) {
-					logger.error(e);
+				} catch (Exception ex) {
+					logger.error(ex);
 				}
 				
 				long remoteFileId = 0;
@@ -347,13 +428,17 @@ public class ModifyClaimAction extends CheckedAction {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
 				} else {
+					
+					
 					LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
 					
 					if (file == null) {
 						file = claim.getFile();
 					}
 					
+//					
 					for (FsClaim current: file.getClaims()) {
+						
 						FsClaim newClaim = new FsClaim();
 						BeanUtils.copyProperties(newClaim, current);
 						LinkedHashSet<Segment> segs = new LinkedHashSet<Segment>();
@@ -361,10 +446,18 @@ public class ModifyClaimAction extends CheckedAction {
 						newClaim.setCreateagent(current.getCreateagent());
 						LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
 						newClaim.setClaimants(pers);
+
+						LinkedHashSet<Attachment> attachs = new LinkedHashSet<Attachment>();
+						newClaim.setAttachments(attachs);
 						
 						for (Person p: current.getClaimants()) {
 							p.setClaim(newClaim);
 							pers.add(p);
+						}
+						
+						for(Attachment attach:claim.getAttachments()){
+							attach.setClaim(newClaim);
+							attachs.add(attach);
 						}
 						
 						for (Segment s: current.getSegments()) {
@@ -409,6 +502,12 @@ public class ModifyClaimAction extends CheckedAction {
 					}
 					claim = ClaimDAO.loadClaim(claim.getId());
 					if (remoteFileId > 0) {
+						List<Integer> attachids=new ArrayList();
+						for(Attachment attach:claim.getAttachments()){
+							attachids.add(attach.getAttachment_id());
+						}
+						remote.saveAttachments(attachids, file.getSwapId(), claim.getAirline(), claim.getId());
+						
 						claim.getFile().setSwapId(remoteFileId);
 						FileDAO.saveFile(claim.getFile(), false);
 					}
@@ -454,6 +553,8 @@ public class ModifyClaimAction extends CheckedAction {
 				return (mapping.findForward(TracingConstants.ERROR_MAIN));
 			}
 		} 
+		
+		
 		
 		cform.setClaim(claim);
 		session.setAttribute("incidentForm", theform);
