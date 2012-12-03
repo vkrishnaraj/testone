@@ -19,6 +19,7 @@ import org.hibernate.Session;
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
+import aero.nettracer.fs.model.FsAttachment;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.FsMatchHistoryAudit;
@@ -1048,6 +1049,34 @@ public class Producer {
 			} else {
 				p1.setAllEnabled(true);
 			}
+		
+		
+		/**/
+
+	}
+	
+	public static boolean censorAttachments(List<FsAttachment> list, String valComp, AccessLevelType level, String userCompany, List<PrivacyPermissions> plist){
+		String s = ACCESS_NOT_GRANTED;
+		PrivacyPermissions p1 = new PrivacyPermissions();
+		String company1 = valComp;
+		
+		for(PrivacyPermissions p: plist){
+			if(p.getKey().getCompanycode().equals(company1) && p.getKey().getLevel().equals(level)){
+				p1 = p;
+			}
+		}
+		
+		if((company1 == null || company1.trim().length() == 0 || !company1.equals(userCompany))  && !p1.isShowallclaiminfo()){
+			if(!p1.isAttachment()){
+				for (FsAttachment a:list){
+					a.setId(-1);
+				}
+				return false;
+			}
+		} else {
+			p1.setAllEnabled(true);
+		}
+		return true;
 		
 		
 		/**/

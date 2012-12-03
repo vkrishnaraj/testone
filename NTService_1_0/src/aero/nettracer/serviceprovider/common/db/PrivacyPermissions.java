@@ -46,6 +46,9 @@ public class PrivacyPermissions implements Serializable{
 	boolean autosend;
 	boolean showallclaiminfo;
 	
+
+	boolean attachment;
+	
 	boolean name;
 	boolean address;
 	boolean phonenumber;
@@ -296,6 +299,14 @@ public class PrivacyPermissions implements Serializable{
 
 	public void setName(boolean name) {
 		this.name = name;
+	}
+	
+	public boolean isAttachment() {
+		return attachment;
+	}
+
+	public void setAttachment(boolean attachment) {
+		this.attachment = attachment;
 	}
 
 	public boolean isAddress() {

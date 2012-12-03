@@ -14,14 +14,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.Map;
 
-//import java.io.InputStream;
-//import java.io.BufferedInputStream;
-//
+import java.io.InputStream;
+import java.io.BufferedInputStream;
+
 
 import javax.ejb.Stateless;
 
-//import com.healthmarketscience.rmiio.RemoteInputStream;
-//import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
+import com.healthmarketscience.rmiio.RemoteInputStream;
+import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
@@ -43,7 +43,7 @@ import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.PnrData;
 import aero.nettracer.fs.model.Reservation;
 import aero.nettracer.fs.model.Segment;
-//import aero.nettracer.fs.model.FsAttachment;
+import aero.nettracer.fs.model.FsAttachment;
 import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.AccessRequest.RequestStatus;
 import aero.nettracer.fs.model.detection.AccessRequestDTO;
@@ -54,7 +54,7 @@ import aero.nettracer.fs.model.detection.Whitelist;
 import aero.nettracer.fs.model.messaging.FsMessage;
 import aero.nettracer.fs.utilities.AuditUtil;
 import aero.nettracer.fs.utilities.DataRetentionThread;
-//import aero.nettracer.fs.utilities.FileUtils;
+import aero.nettracer.fs.utilities.FileUtils;
 import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.GeoLocation;
 import aero.nettracer.fs.utilities.InternationalException;
@@ -100,7 +100,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		}
 		try {
 			File toSubmit = resetIdAndgeocode(file);
-
+			ClaimBean bean=new ClaimBean();
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			if (toSubmit.getId() > 0) {
@@ -108,7 +108,19 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				File toDelete = (File) sess.load(File.class, toSubmit.getId());
 				if(toDelete.getValidatingCompanycode().equals(toSubmit.getValidatingCompanycode())){
 				if (toDelete.getClaims() != null) {
+
 					for(FsClaim claim: toDelete.getClaims()){
+						List<Integer> attachids=new ArrayList();
+//						for(FsAttachment attach:claim.getAttachments()){
+//							attach.setClaim(null);
+//						}
+//						FsClaim toSaveTo=null;
+//						for(FsClaim newclaim:toSubmit.getClaims()){
+//							if(newclaim.getSwapId()==claim.getSwapId()){
+//								toSaveTo=newclaim;
+//							}
+//						}
+//						FileUtils.saveAttachments(attachids, toSaveTo);
 						sess.delete(claim);
 						
 					} 
@@ -234,7 +246,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		}
 		return receipts;
 	}
-
+	
 	public static FsIncident resetIncident(FsIncident inc) {
 		if (inc != null) {
 			inc.setId(0);
@@ -913,29 +925,69 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public Map<String, Integer> getMatches(List<String> idList) {
 		return getMatches(idList, "US");//TODO deprecate when US is updated to 3.2.1.1		
 	}
-//	public int uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, long fileid, String airline, long claimid, int filesize, RemoteInputStream ris){
-//			// Save the file in the local directory.
-//			int attachid=0;
-//			File file=getFile(fileid, airline);
-//			FsClaim claim=null;
-//			for(FsClaim c:file.getClaims()){
-//				if(c.getSwapId()==claimid){
-//					claim=c;
-//				}
-//			}
-//			
-//			attachid=FileUtils.doUpload(theFile, maxSize, folder, picpath, claim, filesize, ris);
-//			if(attachid!=0){
-//				return attachid;
-//			} else {
-//				return -1;
-//			}
-//
-//	}
 	
-//	public FsAttachment getAttachment(String FileID, java.io.File file) {
-//		return FileUtils.getAttachment(;
-//	}
+	public int uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, long fileid, String airline, long claimid, int filesize, RemoteInputStream ris){
+			// Save the file in the local directory.
+			int attachid=0;
+			File file=getFile(fileid, airline);
+			FsClaim claim=null;
+			for(FsClaim c:file.getClaims()){
+				if(c.getSwapId()==claimid){
+					claim=c;
+				}
+			}
+			
+			attachid=FileUtils.doUpload(theFile, maxSize, folder, picpath, claim, filesize, ris);
+			if(attachid!=0){
+				return attachid;
+			} else {
+				return -1;
+			}
+
+	}
+	
+	public boolean saveAttachments(List<Integer> attachIDs, long fileid, String airline, long claimid){
+		// Save the file in the local directory.
+		int attachid=0;
+		File file=getFile(fileid, airline);
+		if(file!=null){
+			FsClaim claim=null;
+			for(FsClaim c:file.getClaims()){
+				if(c.getSwapId()==claimid){
+					claim=c;
+				}
+			}
+		
+		
+		return FileUtils.saveAttachments(attachIDs, claim);
+		}
+		return false;
+
+	}
+	
+	public List<FsAttachment> getAttachmentsByClaimId(long claimId, long fileId, String airline){
+		File file=getFile(fileId, airline);
+		if(file!=null){
+		FsClaim claim=null;
+		for(FsClaim c:file.getClaims()){
+			if(c.getSwapId()==claimId){
+				claim=c;
+			}
+		}
+		return FileUtils.getAttachmentsByClaimId(claim.getId(), airline);
+		}
+		return null;
+	}
+	
+	public List<FsAttachment> getAttachmentsByClaimId(File file, long claimid){
+		FsClaim claim=null;
+		for(FsClaim c:file.getClaims()){
+			if(c.getSwapId()==claimid){
+				claim=c;
+			}
+		}
+		return FileUtils.getAttachmentsByClaimId(claim.getId(), file.getValidatingCompanycode());
+	}
 	
 	public Map<String, Integer> getMatches(List<String> idList, String companycode) {
 		if(companycode == null){

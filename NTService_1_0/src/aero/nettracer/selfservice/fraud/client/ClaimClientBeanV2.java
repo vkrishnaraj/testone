@@ -10,6 +10,8 @@ import javax.ejb.Stateless;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
+import com.healthmarketscience.rmiio.RemoteInputStream;
+
 import aero.nettracer.fs.model.transport.v0.detection.AccessRequestDTO;
 import aero.nettracer.fs.model.transport.v0.detection.AccessRequest;
 import aero.nettracer.fs.model.transport.v0.detection.TraceResponse;
@@ -152,4 +154,18 @@ public class ClaimClientBeanV2 implements ClaimClientRemoteV2{
 		bean.requestAccess(fileId, matchId, agent, requestingAirline, message, contactName, contactEmail, contactPhone);
 	}
 	
+	@Override
+	public int uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, long fileid,String airline,long claimid, int filesize, RemoteInputStream ris)
+	{
+		return -1;
+	}
+
+	@Override
+	public Object[] getAttachment(int attachID, String airline){ return null;}
+
+	@Override
+	public boolean saveAttachments(List<Integer> attachIDs, long fileid, String airline, long claimId) { return false;}
+
+	@Override
+	public boolean deleteAttachment(int attachID) { return false;}
 }
