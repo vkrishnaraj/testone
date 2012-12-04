@@ -149,12 +149,12 @@ public class LostAndFoundController {
 		boolean isValid = true;
 		if (lostReport.getContact().getFirstName() == null												// VALIDATE: FIRST NAME
 				|| lostReport.getContact().getFirstName().trim().length() == 0) {
-			FacesUtil.addError("First Name is required.");
+			FacesUtil.addError("ERROR: First Name is required.");
 			isValid = false;
 		}
 		if (lostReport.getContact().getLastName() == null												// VALIDATE: LAST NAME
 				|| lostReport.getContact().getLastName().trim().length() == 0) {
-			FacesUtil.addError("Last Name is required.");
+			FacesUtil.addError("ERROR: Last Name is required.");
 			isValid = false;
 		}
 		return isValid;
@@ -164,33 +164,33 @@ public class LostAndFoundController {
 		boolean isValid = true;
 		if (lostReport.getContact().getAddress().getAddress1() == null									// VALIDATE: ADDRESS 1
 				|| lostReport.getContact().getAddress().getAddress1().trim().length() == 0) {
-			FacesUtil.addError("Address is required.");
+			FacesUtil.addError("ERROR: Address is required.");
 			isValid = false;
 		}
 		if (lostReport.getContact().getAddress().getCity() == null										// VALIDATE: CITY
 				|| lostReport.getContact().getAddress().getCity().trim().length() == 0) {
-			FacesUtil.addError("City is required.");
+			FacesUtil.addError("ERROR: City is required.");
 			isValid = false;
 		}
 		if (lostReport.getContact().getAddress().getCountry() == null									// VALIDATE: COUNTRY
 				|| lostReport.getContact().getAddress().getCountry().trim().length() == 0) {
-			FacesUtil.addError("Country is required.");
+			FacesUtil.addError("ERROR: Country is required.");
 			isValid = false;
 		} else if (lostReport.getContact().getAddress().getCountry().equals("US")){
 			if (lostReport.getContact().getAddress().getState() == null									// VALIDATE: STATE
 					|| lostReport.getContact().getAddress().getState().trim().length() == 0) {
-				FacesUtil.addError("State is required.");
+				FacesUtil.addError("ERROR: State is required.");
 				isValid = false;
 			}
 			if (lostReport.getContact().getAddress().getPostal() == null								// VALIDATE: ZIP CODE
 					|| lostReport.getContact().getAddress().getPostal().trim().length() == 0) {
-				FacesUtil.addError("Zip Code is required.");
+				FacesUtil.addError("ERROR: Zip Code is required.");
 				isValid = false;
 			}			
 		} else {
 			if (lostReport.getContact().getAddress().getProvince() == null								// VALIDATE: PROVINCE
 					|| lostReport.getContact().getAddress().getProvince().trim().length() == 0) {
-				FacesUtil.addError("Province is required.");
+				FacesUtil.addError("ERROR: Province is required.");
 				isValid = false;
 			}			
 		}
@@ -213,12 +213,12 @@ public class LostAndFoundController {
 			hasContactPhoneOrEmail = true;
 			if (lostReport.getContact().getConfirmEmail() == null										// VALIDATE: CONFIRM EMAIL
 					|| !lostReport.getContact().getConfirmEmail().equals(lostReport.getContact().getEmailAddress())) {
-				FacesUtil.addError("Email Address and Confirm Email Address must match.");
+				FacesUtil.addError("ERROR: Email Address and Confirm Email Address must match.");
 				isValid = false;
 			}
 		}
 		if (!hasContactPhoneOrEmail) {
-			FacesUtil.addError("Contact Information must contain at least one Phone Number or Email Address.");
+			FacesUtil.addError("ERROR: Contact Information must contain at least one Phone Number or Email Address.");
 			isValid = false;
 		}
 		return isValid;
@@ -227,18 +227,18 @@ public class LostAndFoundController {
 	private boolean validateSegments() {
 		boolean isValid = true;
 		if (lostReport.getSegments().size() == 0) {													// VALIDATE: SEGMENT(S) PROVIDED
-			FacesUtil.addError("At least one segment must be provided in the \"About Your Trip\" section.");
+			FacesUtil.addError("ERROR: At least one segment must be provided in the \"About Your Trip\" section.");
 			isValid = false;
 		} else {
 			for (int i = 0; i < lostReport.getSegments().size(); i++) {
 				SegmentBean seg = lostReport.getSegments().get(i);
 				int segNum = i + 1;
 				if (seg.getArrivalLocation() == 0) {												// VALIDATE: SEGMENT - ARRIVAL LOCATION
-					FacesUtil.addError("Arrival Airport required for Segment #" + segNum + " in the \"About Your Trip\" section.");
+					FacesUtil.addError("ERROR: Arrival Airport required for Segment #" + segNum + " in the \"About Your Trip\" section.");
 					isValid = false;
 				}
 				if (seg.getDepartureLocation() == 0) {												// VALIDATE: SEGMENT - DEPARTURE LOCATION
-					FacesUtil.addError("Departure Airport required for Segment #" + segNum + " in the \"About Your Trip\" section.");
+					FacesUtil.addError("ERROR: Departure Airport required for Segment #" + segNum + " in the \"About Your Trip\" section.");
 					isValid = false;
 				}
 			}
@@ -249,15 +249,15 @@ public class LostAndFoundController {
 	private boolean validateAB() {
 		boolean isValid = true;
 		if (lostReport.getDateLost() == null) {													    // VALIDATE: DATE LOST
-			FacesUtil.addError("Rental Date is required.");
+			FacesUtil.addError("ERROR: Rental Date is required.");
 			isValid = false;
 		}
 		if (lostReport.getPickUpLocation() < 1) {													// VALIDATE: PICK UP
-			FacesUtil.addError("Rental Location is required.");
+			FacesUtil.addError("ERROR: Rental Location is required.");
 			isValid = false;
 		}
 		if (lostReport.getDropOffLocation() < 1) {													// VALIDATE: DROP OFF
-			FacesUtil.addError("Drop Off Rental Location is required.");
+			FacesUtil.addError("ERROR: Drop Off Rental Location is required.");
 			isValid = false;
 		}
 		return isValid;
@@ -267,30 +267,30 @@ public class LostAndFoundController {
 		boolean isValid = true;
 		isValid = validateSegments();
 		if (lostReport.getDateLost() == null) {													    // VALIDATE: DATE LOST
-			FacesUtil.addError("Date Lost is required.");
+			FacesUtil.addError("ERROR: Date Lost is required.");
 			isValid = false;
 		}
 		if (lostReport.getItemColor() != null && lostReport.getItemColor().trim().length() == 0) {	// VALIDATE: ITEM COLOR
-			FacesUtil.addError("Item Color is required.");
+			FacesUtil.addError("ERROR: Item Color is required.");
 			isValid = false;
 		}
 		if (lostReport.getItemCaseColor() != null 
 				&& lostReport.getItemCaseColor().trim().length() == 0) {							// VALIDATE: ITEM CASE COLOR
-			FacesUtil.addError("Item Case Color is required.");
+			FacesUtil.addError("ERROR: Item Case Color is required.");
 			isValid = false;
 		}
 		if (lostReport.getItemCategory() < 1) {													 	// VALIDATE: CATEGORY
-			FacesUtil.addError("Item Category is required.");
+			FacesUtil.addError("ERROR: Item Category is required.");
 			isValid = false;
 		} else if (lostReport.getItemSubCategory() == 0) {											// VALIDATE: SUBCATEGORY
-			FacesUtil.addError("Item Subcategory is required for Category \"" + getCategoryDesc() + "\".");
+			FacesUtil.addError("ERROR: Item Subcategory is required for Category \"" + getCategoryDesc() + "\".");
 			isValid = false;
 		}
 		if (lostReport.getItemCategory() == 7) {								 					// VALIDATE: LOST PHONE NUM
 			if (lostReport.getLostPhone() == null 
 					|| lostReport.getLostPhone().getNumber() == null 
 					|| lostReport.getLostPhone().getNumber().trim().length() == 0) {
-				FacesUtil.addError("Lost Phone Phone Number is required for Category \"Cellphone\".");
+				FacesUtil.addError("ERROR: Phone number of lost phone is required for Category \"Cellphone\".");
 				isValid = false;
 			}
 		}

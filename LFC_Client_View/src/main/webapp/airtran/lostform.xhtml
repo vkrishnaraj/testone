@@ -23,7 +23,7 @@
 					</td><td class="twlvPxBlk" style="width: 25%;" colspan="3">
 						<t:outputText value="#{msg.lostform_label_item_color} *" />
 					</td><td class="twlvPxBlk" style="width: 25%;" colspan="3">
-						<t:outputText value="#{msg.lostform_label_item_case_color} *" />
+						<t:outputText value="#{msg.lostform_label_item_case_color} *" escape="false"/>
 					</td></tr>
 					<tr><td colspan="3">
 						<t:selectOneMenu value="#{lostAndFound.lostReport.itemCategory}"  style="width: 95%;">
@@ -74,7 +74,7 @@
 					<tr><td colspan="4">
 						<rich:calendar value="#{lostAndFound.lostReport.dateLost}"  
                            locale="en" buttonIcon="../_images/airtran/cal_icon.gif"
-                           popup="true"  
+                           popup="true" showWeeksBar="false"
                            datePattern="MM/dd/yyyy"
                            enableManualInput="true"                        
                            cellWidth="24px" cellHeight="22px" style="width:250px"/>  

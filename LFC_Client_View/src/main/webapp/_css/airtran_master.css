@@ -34,7 +34,7 @@ a:hover {
 	width: 25%;
 }
 
-.errormsg {
+.errormsg span {
 	clear: none;
 	color: red;
 	margin-top: 2px;
@@ -333,6 +333,7 @@ h2.swa_faq_title {
     display: block;
     height: 30px;
     color: #FFFFFF;
+    width: 100%;
 }
 
 .submitButtonOrange {
@@ -348,6 +349,7 @@ h2.swa_faq_title {
     display: block;
     height: 30px;
     color: #FFFFFF;
+    width: 100%;
 }
 
 /* START AIRTRAN SPECIAL STUFF */
@@ -433,7 +435,7 @@ BODY {
 }
 
 #footer_a {
-	background: none repeat scroll 0 0 #055A8D;
+	background: none repeat scroll 0 0 transparent;
     color: #EEEEEE;
     padding: 5px 20px 15px;
     text-align: center;
@@ -448,4 +450,17 @@ BODY {
 
 .rich-calendar-button {
 	padding: 0 0 2px 4px;
+}
+
+.rich-calendar-weekends {
+	color: black;
+}
+
+.rich-calendar-holly {
+	background-color: white;
+	color: black;
+}
+
+.rich-calendar-boundary-dates {
+	color: #A0A0A0;
 }

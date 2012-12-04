@@ -41,22 +41,22 @@ public class ClientViewServiceImpl implements ClientViewService {
 					if (remote.getReportId() != null) {
 						return remote;
 					}
-					FacesUtil.addError("Server Communication Error.");
+					FacesUtil.addError("ERROR: Server Communication Error.");
 				} else {
-					FacesUtil.addError("Last Name and Report ID combination not found.");
+					FacesUtil.addError("ERROR: Last Name and Report ID combination not found.");
 				}
 			} else {
 				if (name == null || name.length() == 0) {
-					FacesUtil.addError("Last Name required.");
+					FacesUtil.addError("ERROR: Last Name required.");
 				}
 				if (id == null || id.length() == 0) {
-					FacesUtil.addError("Report ID required.");
+					FacesUtil.addError("ERROR: Report ID required.");
 				} else if (!id.matches("^[0-9]*$")){
-					FacesUtil.addError("Report ID may only be numbers.");
+					FacesUtil.addError("ERROR: Report ID may only be numbers.");
 				}
 			}
 		} else {
-			FacesUtil.addError("Login Error!");
+			FacesUtil.addError("ERROR: Login Error!");
 		}
 		return null;
 	}
