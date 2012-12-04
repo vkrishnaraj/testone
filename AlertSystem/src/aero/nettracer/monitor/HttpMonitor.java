@@ -36,6 +36,7 @@ public class HttpMonitor {
 		urls.add(new MonitorUrl("American", "https://live.nettracer.aero/american/logoff.do", "", "NetTracer", true, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
 		urls.add(new MonitorUrl("Delta", "https://live.nettracer.aero/delta/logoff.do", "", "NetTracer", true, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
 		urls.add(new MonitorUrl("LostAndFound", "https://live.lostandfound.aero/lostandfound/logoff.do", "", "NetTracer", true, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
+		urls.add(new MonitorUrl("LostAndFound Paxview", "https://live.lostandfound.aero/client/southwest/landing.do","","Southwest",true,PRODUCTION_TIMEOUT, PRODUCTION_RETRY));	
 		
 		urls.add(new MonitorUrl("B6 Testing", "https://testing.nettracer.aero/jetblue/logoff.do", "", "Owens", false, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
 		urls.add(new MonitorUrl("Avis Testing", "https://testing.nettracer.aero/avis/logoff.do", "", "NetTracer", false, PRODUCTION_TIMEOUT, PRODUCTION_RETRY));
