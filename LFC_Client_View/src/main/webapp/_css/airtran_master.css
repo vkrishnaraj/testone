@@ -238,7 +238,7 @@ ul#socialLinks li a.flickr {
 
 .contentHeader span {
     font-size: 22px;
-    font-weight: normal;
+    font-weight: bold;
     line-height: 26px;
     color: #1c94c0;
 }
@@ -267,10 +267,13 @@ ul#socialLinks li a.flickr {
 input[type="button"], input[type="submit"], input[type="reset"] {
     border: medium none;
     cursor: pointer;
-    font-size: 11px;
+    font-size: 14px;
     font-weight: bold;
-    line-height: 22px;
-    margin-top: 5px;    
+    line-height: 23px;
+    padding-right: 12px;    
+    padding-left: 12px;   
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
 }
 
 .swa_expandables_expandable_list dd, .swa_expandables_expandable_list dt span {
@@ -315,9 +318,11 @@ dl.swa_expandables_expandable_list {
     display: block;
 }
 
-h2.swa_faq_title {
-    font-size: 22px;
+h2.swa_faq_title span {
+    font-size: 14px;
     margin-bottom: 5px;
+    font-weight: bold;
+    color: #055A8D;
 }
 
 .submitButtonWhite {

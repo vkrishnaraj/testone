@@ -23,10 +23,13 @@
 				</tr><tr>
 				<td><t:outputText value="#{msg.landing_label_tracking}" /></td>
 				<td><t:inputText value="#{lostAndFoundLogin.login.trackingNumber}" /></td>
-				</tr></table>
-				<span class="submitButtonOrange" style="width: 40px;">
+				</tr><tr>
+				<td></td>
+				<td>
+				<span class="submitButtonOrange" style="width: 65px;">
 				<a4j:commandButton value="#{msg.landing_button_edit_status}" action="#{lostAndFoundLogin.loginAirtran}" /><br/><br/>
 				</span>
+				</td></tr></table><br/>
 			</h:panelGroup>
 		</h:form>
 	</ui:define>
