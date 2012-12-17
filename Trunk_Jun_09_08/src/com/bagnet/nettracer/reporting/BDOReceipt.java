@@ -86,7 +86,7 @@ public class BDOReceipt {
 				String CustInfo=(pa.getFirstname() != null ? (pa.getFirstname() + " ") : "") + (pa.getLastname() != null ? pa.getLastname() : "")+"\r  "+
 						pa.getAddress1()+" "+pa.getAddress2()+"\r  "+pa.getCity()+", ";
 				
-				if(pa.getCountrycode_ID()!=null && pa.getCountrycode_ID()==TracingConstants.US_COUNTRY_CODE){
+				if(pa.getCountrycode_ID()!=null && pa.getCountrycode_ID().equals(TracingConstants.US_COUNTRY_CODE)){
 					if(pa.getState_ID()!=null && pa.getState_ID().length()>0) {
 						CustInfo+=pa.getState_ID()+", ";
 					}
@@ -104,9 +104,12 @@ public class BDOReceipt {
 				CustInfo+="\r\r";
 				
 				String phno = pa.getHomephone();
+				String wphno = pa.getWorkphone();
 				String mphno = pa.getMobile();
 				if (phno != null && phno.length() != 0)
 					CustInfo+=messages.getMessage(TracerProperties.BDO_LABEL_PHONE_NUMBER)+": "+phno+"\r";
+				if (wphno != null && wphno.length() != 0)
+					CustInfo+=messages.getMessage(TracerProperties.BDO_LABEL_WORK_NUMBER)+": "+wphno+"\r";
 				if(mphno!=null && mphno.length()!=0)
 					CustInfo+=messages.getMessage(TracerProperties.BDO_LABEL_MOBILE_NUMBER)+": "+mphno+"\r";
 				if(pa.getHotel()!=null && pa.getHotel().length()>0)
