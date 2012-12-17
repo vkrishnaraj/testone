@@ -71,6 +71,27 @@
 	   	<% } %>
 	}
 	
+
+	function getStations() {
+		var compList=document.getElementById("foundCompanyId");
+		var stationList=document.getElementById("foundLocationId");
+		var selectedCompany=compList.options[compList.selectedIndex].value;
+		stationList.options.length=1;
+		
+		stationList.options[0]=new Option("<bean:message key="option.lf.please.select" />","0",true,false);
+		<logic:iterate indexId="i" id="cList" name="subComplist"  type="com.bagnet.nettracer.tracing.db.lf.Subcompany" >
+		if("<%=cList.getSubcompanyCode()%>"==selectedCompany)
+			{	
+				<% String source="subComplist"+cList.getSubcompanyCode();%>
+				<logic:iterate indexId="j" id="scList" name="<%=source%>"  type="com.bagnet.nettracer.tracing.db.Station" >
+					stationList.options[<%=j+1%>]=new Option("<%=scList.getStationcode()%>","<%=scList.getStation_ID()%>",false,false);
+				</logic:iterate>
+			}
+		</logic:iterate>
+		
+		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
+	}
+	
 	function fieldChanged(field) {
 		var state = document.getElementById('state');
 		var province = document.getElementById('province');
@@ -450,16 +471,17 @@
 						<td>
 							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
 							<br/>
-         					<html:select name="foundItemForm" property="found.companyId" styleClass="dropdown" >
-         						<html:option value="<%=TracingConstants.LF_SWA_COMPANY_ID %>"><bean:message key="option.lf.southwest" /></html:option>
+         					<html:select name="foundItemForm" property="found.companyId" styleClass="dropdown" styleId="foundCompanyId" onchange="getStations();">
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="subComplist" property="subcompanyCode" labelProperty="name" />
          					</html:select>
 						</td>
 						<td>
 							<bean:message key="colname.lf.found.location" />
 							<br>
-		            		<html:select name="foundItemForm" property="found.locationId" styleClass="dropdown" >
+		            		<html:select name="foundItemForm" property="found.locationId" styleClass="dropdown" styleId="foundLocationId">
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
-		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+		            			<html:options collection="stationList" property="station_ID" labelProperty="stationcode" />
 		            		</html:select>
 						</td>
 						<td>
@@ -890,6 +912,11 @@
 					<% if (request.getAttribute("remark") != null) { %>
 						document.location.href="#remarks";
 					<% } %>
+					getStations();
+
+					var stationList=document.getElementById("foundLocationId");
+					var matchid=<%=request.getAttribute("stationID")%>
+					stationList.value=matchid;
              	</script>
    			</div>
    		</td>

@@ -351,6 +351,10 @@ public class LostFoundBMO {
 			if (daform.getCategory()!=null && daform.getCategory().length()>0  && !daform.getCategory().equals("0")){
 				sql.append(" and lfd.category_id = :catId "); 
 			}
+			
+			if(daform.getCompanyId()!=null && daform.getCompanyId().length()>0){
+				sql.append(" and lfd.companyId = :company");
+			}
 
 
 
@@ -373,7 +377,6 @@ public class LostFoundBMO {
 			}
 			
 			Date srdate = null, erdate = null;
-			System.out.println("HEY! IT PASSES HERE! 1");
 			if (daform.getS_renttime() != null && daform.getS_renttime().length() > 0) {
 				srdate = DateUtils.convertToDate(daform.getS_renttime(), user.getDateformat().getFormat(), null);
 			}
@@ -389,7 +392,6 @@ public class LostFoundBMO {
 					sql.append(" and lfd.dateFoundLost = :srdate ");
 				}
 			}
-			System.out.println("HEY! IT PASSED HERE! 1");
 
 			if (daform.getReport_status_ID() != null && daform.getReport_status_ID().length() > 0) {
 				sql.append(" and lfd.report_status.status_ID = :report_status_ID ");
@@ -491,6 +493,10 @@ public class LostFoundBMO {
 			
 			if (daform.getCategory()!=null && daform.getCategory().length()>0 && !daform.getCategory().equals("0")){
 				q.setInteger("catId", Integer.parseInt(daform.getCategory()));
+			}
+			
+			if(daform.getCompanyId()!=null && daform.getCompanyId().length()>0){
+				q.setString("company", daform.getCompanyId());
 			}
 
 			return q.list();

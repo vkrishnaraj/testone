@@ -320,6 +320,9 @@
     	<put name="center" value="/pages/onhand/deny_request_center.jsp"/>
     </definition>
     
+    <definition name="deny_fraud_request" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/denyfraudrequest.jsp"/>
+    </definition>
     
 
     <definition name="view_incoming_bags" extends="user_menu">
@@ -473,6 +476,14 @@
     	<put name="center" value="/pages/admin/station_edit.jsp"/>
     </definition>
     
+    <definition name="view_subcompany" extends="user_menu">
+    	<put name="center" value="/pages/admin/subcompany.jsp"/>
+    </definition>
+
+ 	<definition name="edit_subcompany" extends="user_menu">
+    	<put name="center" value="/pages/admin/subcompany_edit.jsp"/>
+    </definition>
+    
     <definition name="view_deliverycompany" extends="user_menu">
     	<put name="center" value="/pages/admin/deliverycompany.jsp"/>
     </definition>
@@ -579,6 +590,14 @@
 
     <definition name="edit_agent_station" extends="user_menu">
     	<put name="center" value="/pages/admin/agent_station.jsp"/>
+    </definition>
+    
+    <definition name="edit_station_subcompany" extends="user_menu">
+    	<put name="center" value="/pages/admin/station_subcompany.jsp"/>
+    </definition>
+    
+    <definition name="edit_station_subcompany" extends="user_menu">
+    	<put name="center" value="/pages/admin/station_subcompany.jsp"/>
     </definition>
     
     <definition name="viewtemp_ohd" extends="user_menu">

@@ -236,11 +236,13 @@
 						</td>
 					</tr>
 					<tr>
+						
 						<td>
 							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
 							<br/>
-         					<html:select name="lostReportForm" property="lost.companyId" styleClass="dropdown" >
-         						<html:option value="<%=TracingConstants.LF_SWA_COMPANY_ID %>"><bean:message key="option.lf.southwest" /></html:option>
+         					<html:select name="lostReportForm" property="lost.companyId" styleClass="dropdown" styleId="lostCompanyId">
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="subComplist" property="subcompanyCode" labelProperty="name" />
          					</html:select>
 						</td>
 						<td>

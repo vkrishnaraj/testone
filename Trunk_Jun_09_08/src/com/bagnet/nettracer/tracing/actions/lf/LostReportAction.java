@@ -25,12 +25,14 @@ import aero.nettracer.lf.services.exception.UpdateException;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
 import com.bagnet.nettracer.tracing.db.lf.LFSegment;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.forms.lf.LostReportForm;
 import com.bagnet.nettracer.tracing.history.LostItemHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -239,7 +241,8 @@ public class LostReportAction extends CheckedAction {
 				if (foundId != null && !foundId.trim().equals("")) {
 					long id = Long.valueOf(foundId);
 					LFFound found;
-					if (TracingConstants.LF_SUBCOMPANIES.get(lostReport.getCompanyId()).equals(TracingConstants.LF_AB_COMPANY_ID)) {
+					Subcompany subcomp=SubCompanyDAO.loadSubcompany(lostReport.getCompanyId());
+					if (subcomp.getCompany().getCompanyCode_ID().equals(TracingConstants.LF_AB_COMPANY_ID)) {
 						found = LFServiceWrapper.getInstance().getFoundItem(id);
 					} else if (lostReport.getCompanyId().equals(TracingConstants.LF_DEMO_COMPANY_ID)){
 						found = LFServiceWrapper.getInstance().getFoundItem(id);

@@ -125,6 +125,9 @@
               <b><bean:message key="header.companyDesc" /></b>
             </td>
             <td>
+              <b><bean:message key="header.editSubCompanies" /></b>
+            </td>
+            <td>
               <b><bean:message key="header.editStations" /></b>
             </td>
             <td>
@@ -154,6 +157,9 @@
                 </td>
                 <td>
                   <bean:write name="company" property="companydesc" />
+                </td>
+                <td>
+                  <A HREF="subCompAdmin.do?companyCode=<bean:write name="company" property="companyCode_ID"/>"><bean:message key="manage" /></A>
                 </td>
                 <td>
                   <A HREF="stationAdmin.do?companyCode=<bean:write name="company" property="companyCode_ID"/>"><bean:message key="manage" /></A>

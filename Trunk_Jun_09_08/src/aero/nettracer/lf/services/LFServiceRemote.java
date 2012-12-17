@@ -6,7 +6,6 @@ import java.util.List;
 import javax.ejb.Remote;
 
 import org.apache.struts.util.LabelValueBean;
-import org.hibernate.exception.ConstraintViolationException;
 
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 import aero.nettracer.lf.services.exception.UpdateException;
@@ -15,6 +14,8 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
+import com.bagnet.nettracer.tracing.db.lf.SubcompanyStation;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 
 @Remote
@@ -26,6 +27,8 @@ public interface LFServiceRemote {
 	
 	public ArrayList<LabelValueBean> getColors();
 	public List<LFCategory> getCategories(String companycode);
+	public List<Subcompany> getSubcompanies(String companycode);
+	public List<SubcompanyStation> getSubcompanyStations(String companycode);
 
 	public List<LFMatchHistory> traceFoundItem(long id);
 	public List<LFMatchHistory> traceLostItem(long id);

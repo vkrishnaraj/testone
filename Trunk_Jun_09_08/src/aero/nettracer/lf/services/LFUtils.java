@@ -2,6 +2,7 @@ package aero.nettracer.lf.services;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.TimeZone;
@@ -27,6 +28,8 @@ import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
 import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
+import com.bagnet.nettracer.tracing.db.lf.SubcompanyStation;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -165,12 +168,48 @@ public class LFUtils {
 			session.setAttribute("lfsubcategorylist", new ArrayList<LFSubCategory>());
 		}
 		
+
+		if (session.getAttribute("subComplist") == null) {
+			List<Subcompany> subcomps=new LFServiceBean().getSubcompanies(user.getCompanycode_ID());
+			session.setAttribute("subComplist",subcomps);
+			for(Subcompany sc:subcomps){
+				session.setAttribute("subComplist"+sc.getSubcompanyCode(), new ArrayList());
+			}
+		}
+		
+		if (session.getAttribute("stationList") == null) {
+			session.setAttribute("stationList", new ArrayList<Station>());
+		}
+		
 		List<LFCategory> categories = (List) session.getAttribute("lfcategorylist");
 		for (LFCategory c: categories) {
 				session.setAttribute("lfsubcategorylist"+c.getId(), c.getSubcategories());
 				//success = true;
 				//break;
 		}
+		
+		List<SubcompanyStation> companyStations = new LFServiceBean().getSubcompanyStations(user.getCompanycode_ID());
+		HashMap<String, List<Station>> stationComps=new HashMap();
+		for (SubcompanyStation s: companyStations) {
+			if(stationComps.get(s.getSubcompany().getSubcompanyCode())!=null){
+				List stations=stationComps.get(s.getSubcompany().getSubcompanyCode());
+				stations.add(s.getStation());
+				stationComps.put(s.getSubcompany().getSubcompanyCode(),stations);
+			} else {
+				List stations=new ArrayList();
+				stations.add(s.getStation());
+				stationComps.put(s.getSubcompany().getSubcompanyCode(),stations);
+			}
+				
+//			session.setAttribute("subComplist"+s.getSubcompany().getId(), s.getSubcategories());
+			//success = true;
+			//break;
+		}
+		for(String key:stationComps.keySet()){
+			session.setAttribute("subComplist"+key, stationComps.get(key));
+		}
+		
+		
 		
 		session.setAttribute("lfstatuslist", session
 				.getAttribute("lfstatuslist") != null ? session
@@ -197,6 +236,27 @@ public class LFUtils {
 						break;
 					}
 				}
+			}
+		}
+		return success;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static boolean actionChangeSubCompany(long compId, HttpServletRequest request) {
+		boolean success = false;
+		if (request.getParameter("changestation") != null && request.getParameter("changestation").equals("1")) {
+			if (compId <= 0) {
+				request.getSession().setAttribute("stationList", new ArrayList<LFSubCategory>());
+				success = true;
+			} else {
+//				List<Subcompany> subcompnies = (List) request.getSession().getAttribute("subCompList");
+//				for (Subcompany s: subcompnies) {
+//					if (s.getId() == compId) {
+						request.getSession().setAttribute("lfsubcategorylist", request.getSession().getAttribute("subCompList"+compId));
+						success = true;
+						//break;
+//					}
+//				}
 			}
 		}
 		return success;

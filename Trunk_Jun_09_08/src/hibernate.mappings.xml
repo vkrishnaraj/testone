@@ -285,6 +285,8 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFBoxContainer" />
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFBoxCount" />
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFSegment" />
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.Subcompany" />
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.SubcompanyStation" />
 		
 		<mapping class="com.bagnet.nettracer.tracing.db.Region"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralLog"/>

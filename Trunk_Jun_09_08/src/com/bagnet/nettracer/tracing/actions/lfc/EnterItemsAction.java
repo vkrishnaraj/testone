@@ -50,10 +50,15 @@ public class EnterItemsAction extends CheckedAction {
 		
 		LFUtils.getLists(user, session);
 		if (eiForm.getFound() != null) {
-			if (LFUtils.actionChangeSubCategory(eiForm.getFound().getItem().getCategory(), request)) {
+			if (LFUtils.actionChangeSubCategory(eiForm.getFound().getItem().getCategory(), request) || LFUtils.actionChangeSubCompany(eiForm.getFound().getItem().getCategory(), request)) {
 				request.setAttribute("formName", "enterItemsForm");
 				return mapping.findForward(TracingConstants.AJAX_SUBCATEGORY);
 			}
+			
+//			if (LFUtils.actionChangeSubCompany(eiForm.getFound().getItem().getCategory(), request)) {
+//				request.setAttribute("formName", "enterItemsForm");
+//				return mapping.findForward(TracingConstants.AJAX_SUBCATEGORY);
+//			}
 			
 			String fhoId = (String) request.getParameter("fhoId");
 			if (fhoId != null && !fhoId.isEmpty()) {

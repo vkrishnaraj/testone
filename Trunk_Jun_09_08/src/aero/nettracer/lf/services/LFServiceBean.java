@@ -37,6 +37,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -51,6 +52,8 @@ import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvageFound;
 import com.bagnet.nettracer.tracing.db.lf.LFSegment;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
+import com.bagnet.nettracer.tracing.db.lf.SubcompanyStation;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
@@ -237,6 +240,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		if(dto.getFirstName() != null && dto.getFirstName().trim().length() > 0){
 			sql += " and o.client.firstName = \'" + dto.getFirstName().toUpperCase() + "\'";
+		}
+		if(dto.getCompanyId() !=null && dto.getCompanyId().length()>0){
+			sql+=" and o.companyId = \'"+dto.getCompanyId()+"\'";
 		}
 		if(dto.getStationId() != -1){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
@@ -836,6 +842,46 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess.close();
 		}
 		return categoryList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Subcompany> getSubcompanies(String companycode) {
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.Subcompany sub where sub.company.companyCode_ID = :companycode order by sub.name";
+		Session sess = HibernateWrapper.getSession().openSession();
+		Query q = sess.createQuery(sql);
+		q.setParameter("companycode", companycode);
+		List<Subcompany> subCompList = null;
+		
+		try{
+			subCompList = (List<Subcompany>)q.list();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return subCompList;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SubcompanyStation> getSubcompanyStations(String companycode) {
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.SubcompanyStation sub where sub.subcompany.company.companyCode_ID = :companycode order by sub.subcompany.name";
+		Session sess = HibernateWrapper.getSession().openSession();
+		Query q = sess.createQuery(sql);
+		q.setParameter("companycode", companycode);
+		List<SubcompanyStation> subCompList = null;
+		
+		try{
+			subCompList = (List<SubcompanyStation>)q.list();
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return subCompList;
 	}
 
 	@Override
@@ -1919,11 +1965,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	protected List<Long> getXDayList(int day, int notice) throws Exception{
-		String sql = "select l.id lostid from lflost l " +
+	protected List<Long> getXDayList(String compCode, int notice) throws Exception{
+		String sql = "select l.id lostid from lflost l left outer join subcompany sc on sc.subcompanycode=l.companyId " +
 		" where l.status_ID != " + TracingConstants.LF_STATUS_CLOSED +
-		" and (datediff(curdate(),l.openDate)) = :day " +
-		" and l.id not in (select mh.lost_id from lfmatchhistory mh where mh.lost_id = l.id and mh.status_Status_ID = " +
+		" and sc.company_id=:compCode and (datediff(curdate(),l.openDate)) >= ";
+		switch(notice){
+			case 1: sql += " sc.email_notice_1 ";
+			case 2: sql += " sc.email_notice_2 ";
+		}
+		sql += " and l.id not in (select mh.lost_id from lfmatchhistory mh where mh.lost_id = l.id and mh.status_Status_ID = " +
 		TracingConstants.LF_TRACING_CONFIRMED +
 		" ) ";
 		
@@ -1939,7 +1989,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			pq = sess.createSQLQuery(sql.toString());
-			pq.setParameter("day", day);
+			pq.setParameter("compCode", compCode);
 			pq.addScalar("lostid", Hibernate.LONG);
 			List<Long> listMatchingFiles = pq.list();
 			for (Long strs : listMatchingFiles) {
@@ -1958,7 +2008,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void send1stNoticeEmails(){
 		try {
-			List<Long> lostIds = getXDayList(EMAIL_FIRST_NOTICE_DAY, 1);
+			List<Long> lostIds = getXDayList(TracerProperties.get("wt.company.code"), 1);
 			if(lostIds != null){
 				for(Long id: lostIds){
 					send1stNotice(id);
@@ -1972,7 +2022,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void send2ndNoticeEmails(){
 		try {
-			List<Long> lostIds = getXDayList(EMAIL_SECOND_NOTICE_DAY, 2);
+			List<Long> lostIds = getXDayList(TracerProperties.get("wt.company.code"), 2);
 			if(lostIds != null){
 				for(Long id: lostIds){
 					send2ndNotice(id);
@@ -1999,16 +2049,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			h.put("LASTNAME", WordUtils.capitalize(lost.getClient().getLastName().toLowerCase()));
 		}
 		h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
-		
 		//by default we use the return address from the company variable
 		h.put("RETURNADDRESS", getAutoAgent().getStation().getCompany().getVariable().getEmail_from());
-		
-		if("AB".equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId());
+		if("AB".equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
 			h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
 			h.put("SUBJECTLINE", resources.getString("ab.email.subject"));
-		} else if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
-			h.put("COMPANY", "Southwest");
-			h.put("SUBJECTLINE", resources.getString("wn.email.subject"));
+		} else if ("LF".equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
+			h.put("COMPANY", subcomp.getName());
+			h.put("SUBJECTLINE", subcomp.getEmail_Subject());
 		} else {
 			h.put("COMPANY", "Company");
 			h.put("SUBJECTLINE", resources.getString("dm.email.subject"));
@@ -3220,7 +3269,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				String imgbanner = TracerProperties.get("lf.email.banner");
 				String configpath = root + "/";
 				String imagepath = root + "/";
-				if("AB".equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
+				Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId());
+				
+				if(subcomp!=null && subcomp.getEmail_Path()!=null && subcomp.getEmail_Path().length()>0){
+					configpath = root + subcomp.getEmail_Path();
+					imagepath = root + subcomp.getEmail_Path();
+				} else if("AB".equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
 					configpath = root + "/";
 					imagepath = root + "/";
 				} else if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){

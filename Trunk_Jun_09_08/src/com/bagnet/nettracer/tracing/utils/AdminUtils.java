@@ -1,7 +1,6 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,9 +43,12 @@ import com.bagnet.nettracer.tracing.db.UserGroup;
 import com.bagnet.nettracer.tracing.db.Work_Shift;
 import com.bagnet.nettracer.tracing.db.audit.Audit_GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.audit.Audit_UserGroup;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
+import com.bagnet.nettracer.tracing.db.lf.SubcompanyStation;
 import com.bagnet.nettracer.tracing.dto.ComponentDTO;
 import com.bagnet.nettracer.tracing.forms.MaintainCompanyForm;
 import com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm;
+import com.bagnet.nettracer.tracing.forms.SubCompanyForm;
 import com.bagnet.nettracer.tracing.forms.UserActivityForm;
 import com.bagnet.nettracer.tracing.performance.Cache;
 
@@ -546,11 +548,11 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return the list of all station based on criteria; null on exception
 	 */
-	public static List getStations(String stationcode, String companycode, String locale, int rowsperpage, int currpage) {
+	public static List getStations(String companycode, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Station.class).add(Expression.eq("stationcode", stationcode)).add(Expression.eq("locale", locale));
+			Criteria cri = sess.createCriteria(Station.class);
 			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companycode));
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
@@ -571,7 +573,7 @@ public class AdminUtils {
 			}
 		}
 	}
-
+	
 	/**
 	 * Get the shift based on its id
 	 * 
@@ -1017,6 +1019,19 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of stations
 	 */
+	public static List getSubcompanies(SubCompanyForm form, String companyCode, int rowsperpage, int currpage) {
+		return getCustomSubCompanies(form, companyCode, rowsperpage, currpage);
+	}
+	
+	
+	/**
+	 * Get a list of all the stations within a company
+	 * 
+	 * @param companyCode
+	 * @param rowsperpage
+	 * @param currpage
+	 * @return list of stations
+	 */
 	public static List getCustomStations(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage, TracingConstants.AgentActiveStatus activeStatus) {
 		Session sess = null;
 		try {
@@ -1046,6 +1061,147 @@ public class AdminUtils {
 				cri.setMaxResults(rowsperpage);
 			}
 			return cri.list();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Get a list of all the stations within a subcompany
+	 * 
+	 * @param subcompanyCode
+	 * @param rowsperpage
+	 * @param currpage
+	 * @return list of stations
+	 */
+	public static List getCustomStations(SubCompanyForm form, int rowsperpage, int currpage, TracingConstants.AgentActiveStatus activeStatus) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Station.class);
+			cri.createCriteria("subcompany").add(Expression.eq("subcompany_id", form.getId()));
+
+//			if (activeStatus.equals(TracingConstants.AgentActiveStatus.ACTIVE)) {
+//				cri.add(Expression.eq("active", true));
+//			} else if (activeStatus.equals(TracingConstants.AgentActiveStatus.INACTIVE)) {
+//				cri.add(Expression.eq("active", false));
+//			}
+
+//			String code = null;
+//
+//			if (form != null) {
+//				code = (String) form.get("stationSearchName");
+//			}
+//
+//			if (code != null && code.length() > 0) {
+//				cri.add(Expression.like("stationcode", code));
+//			}
+//			cri.addOrder(Order.asc("stationcode"));
+			if (rowsperpage > 0) {
+				int startnum = currpage * rowsperpage;
+				cri.setFirstResult(startnum);
+				cri.setMaxResults(rowsperpage);
+			}
+			return cri.list();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Get a list of all the subcompanies within a company
+	 * 
+	 * @param companyCode
+	 * @param rowsperpage
+	 * @param currpage
+	 * @return list of stations
+	 */
+	public static List getCustomSubCompanies(SubCompanyForm form, String companyCode, int rowsperpage, int currpage) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Subcompany.class);
+			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+
+//			String code = null;
+//
+//			if (form != null) {
+//				code = form.getSubcompanyCode();
+//			}
+//
+//			if (code != null && code.length() > 0) {
+//				cri.add(Expression.like("subcompanyCode", code));
+//			}
+			cri.addOrder(Order.asc("subcompanyCode"));
+			if (rowsperpage > 0) {
+				int startnum = currpage * rowsperpage;
+				cri.setFirstResult(startnum);
+				cri.setMaxResults(rowsperpage);
+			}
+			return cri.list();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	public static SubcompanyStation getSubcompanyStation(long subcompId, long stationId){
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(SubcompanyStation.class);
+			cri.createCriteria("subcompany").add(Expression.eq("id", subcompId));
+			cri.createCriteria("station").add(Expression.eq("station_ID", Integer.valueOf(String.valueOf(stationId))));
+			return (SubcompanyStation) cri.uniqueResult();
+			
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	public static List getSubcompanyStationsBySubcompany(long subcompId){
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(SubcompanyStation.class);
+			cri.createCriteria("subcompany").add(Expression.eq("id", subcompId));
+			return cri.list();
+			
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;
@@ -1118,6 +1274,31 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			return (Agent) sess.load(Agent.class, Integer.parseInt(agentID));
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Retrieve an agent based on its id
+	 * 
+	 * @param agentID
+	 * @return agent; null if not found or exception
+	 */
+	public static Station getStation(String stationID) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			return (Station) sess.load(Station.class, Integer.parseInt(stationID));
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;
@@ -1227,6 +1408,71 @@ public class AdminUtils {
 	public static List getAgentsByStation(String station_Id, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage) {
 		return getCustomAgents(station_Id, null, sort, dForm, rowsperpage, currpage, TracingConstants.AgentActiveStatus.ACTIVE);
 	}
+	
+	/**
+	 * Retrieves stations belonging to the subcompany
+	 * 
+	 * @param station_Id
+	 * @param sort
+	 * @param rowsperpage
+	 * @param currpage
+	 * @return
+	 */
+	public static List getStationsBySubcompany(String subcompId, String companyCode, int rowsperpage, int currpage) {
+		//return getCustomStations(subcomp_id, null, sort, form, rowsperpage, currpage, TracingConstants.AgentActiveStatus.ACTIVE);
+		Session sess = null;
+
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			
+			String username = null;
+			String fname = null;
+			String lname = null;
+			String agentType = null;
+			
+			StringBuffer sql = new StringBuffer(512);
+			sql.append("select distinct station from com.bagnet.nettracer.tracing.db.Station station, com.bagnet.nettracer.tracing.db.lf.SubcompanyStation scs where station.station_ID= scs.station.station_ID ");
+			if (subcompId != null && subcompId.length() > 0)
+				sql.append(" and scs.subcompany.id = :subcomp_ID ");
+
+			if (companyCode != null && companyCode.length() > 0)
+				sql.append(" and station.company.companyCode_ID = :companyCode_ID ");
+
+//			if (activeStatus.equals(TracingConstants.AgentActiveStatus.ACTIVE))
+//				sql.append(" and station.active = 1 ");
+//
+//			if (activeStatus.equals(TracingConstants.AgentActiveStatus.INACTIVE)) 
+//				sql.append(" and station.active = 0 ");
+
+				sql.append(" order by station.stationcode asc ");
+			
+			Query q = sess.createQuery(sql.toString());
+			if (rowsperpage > 0) {
+				int startnum = currpage * rowsperpage;
+				q.setFirstResult(startnum);
+				q.setMaxResults(rowsperpage);
+			}
+			
+			if (subcompId != null && subcompId.length() > 0)
+				q.setInteger("subcomp_ID", Integer.parseInt(subcompId));
+			if (companyCode != null && companyCode.length() > 0)
+				q.setString("companyCode_ID", companyCode);
+
+			return q.list();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+
 
 	/**
 	 * Retrieves agents belonging to a company, or station and accounts for

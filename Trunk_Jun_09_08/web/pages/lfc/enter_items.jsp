@@ -62,6 +62,26 @@
 		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
 	}
 	
+	function getStations() {
+		var compList=document.getElementById("foundCompanyId");
+		var stationList=document.getElementById("foundLocationId");
+		var selectedCompany=compList.options[compList.selectedIndex].value;
+		stationList.options.length=1;
+		
+		stationList.options[0]=new Option("<bean:message key="option.lf.please.select" />","0",true,false);
+		<logic:iterate indexId="i" id="cList" name="subComplist"  type="com.bagnet.nettracer.tracing.db.lf.Subcompany" >
+		if("<%=cList.getSubcompanyCode()%>"==selectedCompany)
+			{	
+				<% String source="subComplist"+cList.getSubcompanyCode();%>
+				<logic:iterate indexId="j" id="scList" name="<%=source%>"  type="com.bagnet.nettracer.tracing.db.Station" >
+					stationList.options[<%=j+1%>]=new Option("<%=scList.getStationcode()%>","<%=scList.getStation_ID()%>",false,false);
+				</logic:iterate>
+			}
+		</logic:iterate>
+		
+		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
+	}
+	
 	function displayContactDiv() {
 		jQuery('#contactInfoDiv').show();
 		document.getElementById('button').disabled = true;
@@ -231,25 +251,36 @@
    				<bean:message key="message.required" />
 				<table class="<%=cssFormClass %>" cellpadding=0 cellspacing=0 >
 					<tr>
-   						<td style="width:33%;">
+   						<td style="width:33%;"  colspan=2>
 							<bean:message key="colname.lfc.item.received.date" />
 							(<%= a.getDateformat().getFormat() %>)&nbsp;<span class="reqfield">*</span>
 							<html:text property="disReceivedDate" size="12" maxlength="11" styleClass="textfield" styleId="disReceivedDate" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.enterItemsForm,'disReceivedDate','calendar','<%= a.getDateformat().getFormat() %>'); return false;">
 						</td>
-						<td style="width:33%;">
+						<!-- Put in a Company drop down list that determines the available stations, changes with JS -->
+						<td style="width:34%%;" colspan=2>
+							<bean:message key="colname.lf.found.company" />&nbsp;<span class="reqfield">*</span>
+							<br>
+		            		<html:select name="enterItemsForm" property="found.companyId" styleClass="dropdown" styleId="foundCompanyId" onchange="getStations();">
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="subComplist" property="subcompanyCode" labelProperty="subcompanyCode" />
+		            		</html:select>
+           				</td>
+						<td style="width:33%;" colspan=2>
 							<bean:message key="colname.lf.found.location" />&nbsp;<span class="reqfield">*</span>
 							<br>
 		            		<html:select name="enterItemsForm" property="found.locationId" styleClass="dropdown" styleId="foundLocationId" >
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
-		            			<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+		            			<html:options collection="stationList" property="station_ID" labelProperty="stationcode" />
 		            		</html:select>
            				</td>
-					    <td style="width:17%;">
+           			</tr>
+           			<tr>
+					    <td style="width:50%;" colspan=3>
 					        <bean:message key="colname.lf.segment.flight" />
 					        <br>
 					        <html:text name="enterItemsForm" property="found.flightNumber" size="10" maxlength="20" styleClass="textfield" styleId="flightNumber"/>
 					    </td>
-           				<td style="width:17%;">
+           				<td style="width:50%;" colspan=3>
            					<bean:message key="colname.lfc.value" />
            					<br>
            					<html:select name="enterItemsForm" property="found.item.value" styleId="value" styleClass="dropdown" >
@@ -513,6 +544,7 @@
      			<script>
 					fieldChanged('state');
 					fieldChanged('country');
+					getStations();
              	</script>
   			</div>
    		</td>

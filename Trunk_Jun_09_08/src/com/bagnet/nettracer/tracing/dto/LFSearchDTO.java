@@ -35,6 +35,7 @@ public class LFSearchDTO extends ActionForm  {
 	private String mvaNumber; 
 	private String phoneNumber;
 	private String email;
+	private String companyId;
 	private int type; 
 	private long category;
 	private long subCategory;
@@ -147,6 +148,14 @@ public class LFSearchDTO extends ActionForm  {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	public void setCompanyId(String companyId) {
+		this.companyId =companyId;
 	}
 
 	public int getType() {

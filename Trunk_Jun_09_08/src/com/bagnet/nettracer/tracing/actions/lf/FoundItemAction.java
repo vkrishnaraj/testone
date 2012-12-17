@@ -91,6 +91,9 @@ public class FoundItemAction extends CheckedAction {
 		} else {
 			found = fiForm.getFound();
 		}
+		if(found!=null){
+			request.setAttribute("stationID", found.getLocation().getStation_ID());
+		}
 		
 		boolean deleteRemark = false;
 

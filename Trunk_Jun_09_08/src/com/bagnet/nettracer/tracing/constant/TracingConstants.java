@@ -781,6 +781,12 @@ public class TracingConstants {
 	public final static String EDIT_COMPANY = "editcompany";
 	public final static String VIEW_COMPANIES = "viewcompanies";
 	public final static String SAVE_COMPANY_SUCCESS = "companysuccess";
+	
+
+	public final static String EDIT_SUBCOMPANY = "editsubcompany";
+	public final static String EDIT_STATION_SUBCOMPANY = "editstationsubcompany";
+	public final static String VIEW_SUBCOMPANIES = "viewsubcompanies";
+	public final static String SAVE_SUBCOMPANY_SUCCESS = "subcompanysuccess";
 
 	public final static String EDIT_STATION = "editstation";
 	public final static String EDIT_AGENT_STATION = "editagentstation";

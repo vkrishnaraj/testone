@@ -753,6 +753,17 @@
      }
   } 
   
+  
+  function deleteSubcompany (subCompCode,id)
+  {
+    if (confirm("<%= (String)bundle.getString("check.delete") %>" + subCompCode + "?"))
+    {  
+      document.subCompanyForm.delete1.value="1";
+      document.subCompanyForm.id.value=id;
+      document.subCompanyForm.submit();
+     }
+  } 
+  
   function deleteDeliveryCompany (deliveryCompanyId, deliveryCompanyName)
   {
     if (confirm("<%= (String)bundle.getString("check.delivercompany.delete") %> " + deliveryCompanyName + "?"))

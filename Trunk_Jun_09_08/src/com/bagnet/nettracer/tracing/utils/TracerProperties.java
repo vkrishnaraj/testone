@@ -52,6 +52,7 @@ public class TracerProperties {
 	public static final String BDO_LABEL_NAME="bdo.label.name";
 	public static final String BDO_LABEL_ADDRESS="bdo.label.address";
 	public static final String BDO_LABEL_PHONE_NUMBER="bdo.label.phone.number";
+	public static final String BDO_LABEL_WORK_NUMBER="bdo.label.work.number";
 	public static final String BDO_LABEL_HOTEL="bdo.label.hotel";
 	public static final String BDO_LABEL_HOTEL_NUMBER="bdo.label.hotel.number";
 	public static final String BDO_LABEL_MOBILE_NUMBER="bdo.label.mobile.number";

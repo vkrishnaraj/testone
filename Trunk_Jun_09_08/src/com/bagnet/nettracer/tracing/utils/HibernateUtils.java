@@ -38,6 +38,7 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_DeliverCompany;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Deliver_ServiceLevel;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Work_Shift;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.utils.audit.AuditAirportUtils;
 import com.bagnet.nettracer.tracing.utils.audit.AuditDeliveryCompanyUtils;
 import com.bagnet.nettracer.tracing.utils.audit.AuditStationUtils;
@@ -431,6 +432,43 @@ public class HibernateUtils {
 					sess.save(audit_station);
 				}
 			}
+
+			t.commit();
+		} catch (Exception e) {
+			if (t != null) {
+				t.rollback();
+			}
+			throw e;
+		} finally {
+			if (sess != null) sess.close();
+		}
+	}
+	
+	/**
+	 * 
+	 * @param obj
+	 * @throws Exception
+	 */
+	public static void saveSubCompany(Subcompany obj, Agent user) throws Exception {
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			//Figure out if new or old.
+			boolean isNew = obj.getId() != 0 ? false: true;
+			if (isNew) {
+				sess.save(obj);
+			} else {
+				sess.saveOrUpdate(obj);
+			}
+
+//			if (user.getStation().getCompany().getVariable().getAudit_station() == 1) {
+//				Audit_Station audit_station = AuditStationUtils.getAuditStation(obj, user);
+//				if (audit_station != null) {
+//					sess.save(audit_station);
+//				}
+//			}
 
 			t.commit();
 		} catch (Exception e) {

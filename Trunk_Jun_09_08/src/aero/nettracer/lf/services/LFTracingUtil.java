@@ -17,6 +17,7 @@ import com.bagnet.nettracer.match.StringCompare;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
@@ -29,6 +30,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -282,9 +284,10 @@ public class LFTracingUtil {
 	}
 	
 	public static List<Long> getPotentialLostId(LFFound found, LFServiceBean bean, boolean isPrimary){
-		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(found.getCompanyId()))){
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(found.getCompanyId());
+		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
 			return getAvisPotentialLostId(found);
-		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(found.getCompanyId()))){
+		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
 			return getLFCPotentialLostId(found, isPrimary);
 		} else {
 			return getLFCPotentialLostId(found, true);//for demo
@@ -387,9 +390,10 @@ public class LFTracingUtil {
 	}
 	
 	public static List<Long> getPotentialFoundId(LFLost lost, boolean isPrimary){
-		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId());
+		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
 			return getAvisPotentialFoundId(lost);
-		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(lost.getCompanyId()))){
+		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
 			return getLFCPotentialFoundId(lost, isPrimary);
 		} else {
 			return getLFCPotentialFoundId(lost, true);//for demo
@@ -463,8 +467,8 @@ public class LFTracingUtil {
 	}
 	
 	public static double processMatch(LFMatchHistory match, boolean isPrimary){
-		
-		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(TracingConstants.LF_SUBCOMPANIES.get(match.getFound().getCompanyId()));
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(match.getFound().getCompanyId());
+		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID());
 		
 		//process person
 		if(match.getLost().getClient() != null && match.getFound().getClient() != null){

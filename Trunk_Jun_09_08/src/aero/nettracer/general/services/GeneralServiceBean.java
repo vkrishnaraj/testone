@@ -13,6 +13,7 @@ import org.hibernate.criterion.Restrictions;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.State;
@@ -161,6 +162,6 @@ public class GeneralServiceBean implements GeneralServiceRemote{
 	}
 
 	public String getCompanyFromSubCompany(String subcompany){
-		return TracingConstants.LF_SUBCOMPANIES.get(subcompany);
+		return SubCompanyDAO.loadSubcompany(subcompany).getCompany().getCompanyCode_ID();
 	}
 }

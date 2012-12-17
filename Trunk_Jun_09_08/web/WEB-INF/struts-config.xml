@@ -40,6 +40,7 @@
 		<form-bean name="forwardMessageForm" type="com.bagnet.nettracer.tracing.forms.ForwardMessageForm" />
 		<form-bean name="searchIncidentForm" type="com.bagnet.nettracer.tracing.forms.SearchIncidentForm" />
 		<form-bean name="activeTracingForm" type="com.bagnet.nettracer.tracing.forms.ActiveTracingForm" />
+		<form-bean name="subCompanyForm" type="com.bagnet.nettracer.tracing.forms.SubCompanyForm" />
 		<form-bean name="OnHandForm" type="com.bagnet.nettracer.tracing.forms.OnHandForm" />
 		<form-bean name="requestOnHandForm" type="com.bagnet.nettracer.tracing.forms.RequestOnHandForm" />
 		<form-bean name="composeForm" type="com.bagnet.nettracer.tracing.forms.ComposeForm" />
@@ -323,6 +324,7 @@
 		<forward name="massonhandsuccess" path="mass_onhand_success" />
 		<forward name="claimmain" path="claim_resolution" />
 		<forward name="claimprorate" path="claim_prorate" />
+		<forward name="subCompAdmin" path="subCompAdmin" />
 		
 		<forward name="manualQueue" path="manualQueue" />
 		
@@ -343,6 +345,7 @@
 
 		<forward name="requestonhandsuccess" path="request_onhandsuccess" />
 		<forward name="denyrequestonhand" path="deny_roh" />
+		<forward name="denyfraudrequest" path="deny_fraud_request" />
 		<forward name="enterforwardonhand" path="enter_forwardonhand" />
 		<forward name="enterforwardmessage" path="enter_forwardmessage" />
 		<forward name="enterrequestonhand" path="enter_requestonhand" />
@@ -403,6 +406,8 @@
 		<forward name="viewairports" path="view_airport" />
 		<forward name="editstation" path="edit_station" />
 		<forward name="viewstations" path="view_station" />
+		<forward name="viewsubcompanies" path="view_subcompany" />
+		<forward name="editsubcompany" path="edit_subcompany" />
 		<forward name="viewSystemComponents" path="view_system_component" />
 		<forward name="editagent" path="edit_agent" />
 		<forward name="viewagents" path="view_agents" />
@@ -418,6 +423,7 @@
 		<forward name="view_forward_details" path="view_fwd_details" />
 		<forward name="editagentgroup" path="edit_agent_group" />
 		<forward name="editagentstation" path="edit_agent_station" />
+		<forward name="editstationsubcompany" path="edit_station_subcompany" />
 		<forward name="ohdquickmain" path="ohd_quick_main" />
 		<forward name="ohdmassmain" path="ohd_mass_main" />
 		<forward name="claimslist" path="claims_list" />
@@ -761,7 +767,11 @@
 
 		<!-- Administer Stations -->
 		<action path="/stationAdmin" type="com.bagnet.nettracer.tracing.actions.admin.ManageStation" name="stationForm" scope="request" validate="false"></action>
-
+		
+		<!-- Administer Subcompanies -->
+		<action path="/subCompAdmin" type="com.bagnet.nettracer.tracing.actions.admin.ManageSubCompany" name="subCompanyForm" scope="request" validate="false"></action>
+		
+		
 		<action path="/bdoAdmin" type="com.bagnet.nettracer.tracing.actions.admin.ManageDeliveryCompanies" name="MaintainDeliveryCompanyForm" scope="request" validate="false"></action>
 
 		<!-- Administer Shifts -->

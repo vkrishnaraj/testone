@@ -22,6 +22,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.lf.services.LFServiceBean;
+import aero.nettracer.lf.services.LFUtils;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -70,7 +71,7 @@ public class SearchLostFoundAction extends Action {
 
 		List resultlist = null;
 		BagService bs = new BagService();
-
+		LFUtils.getLists(user, session);
 		// get number of records found
 		if ((resultlist = bs.findLostFound(daform, user, 0, 0, true)) == null
 				|| resultlist.size() <= 0) {

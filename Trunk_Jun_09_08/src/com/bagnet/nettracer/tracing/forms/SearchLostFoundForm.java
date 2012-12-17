@@ -23,6 +23,7 @@ public final class SearchLostFoundForm extends ValidatorForm {
 	private String lastname = "";
 	private String location;
 	private String category;
+	private String companyId;
 	private int filing_station;
 	private String item_description;
 	private String disposal_status_ID;
@@ -104,6 +105,20 @@ public final class SearchLostFoundForm extends ValidatorForm {
 		this.firstname = firstname;
 	}
 
+	/**
+	 * @return Returns the company.
+	 */
+	public String getCompanyId() {
+		return companyId;
+	}
+
+	/**
+	 * @param companyId
+	 *          The company to set.
+	 */
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
+	}
 
 	/**
 	 * @return Returns the customer_tel.
