@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.reporting;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -215,7 +216,7 @@ public class CustomWestJetReports {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private ArrayList getRowsFromResultList4(List results, List results2, String dateFormat) {
+	private ArrayList getRowsFromResultList4(List results, List results2, String dateFormat, ResourceBundle resources) {
 		ArrayList toReturn = new ArrayList();
 		SimpleReportRow reportRow;
 		Object[] row;
@@ -267,11 +268,11 @@ public class CustomWestJetReports {
 			toReturn.add(reportRow);
 			
 			reportRow = new SimpleReportRow();
-			reportRow.setColumn1("Incident ID");
-			reportRow.setColumn2("Incident Type");
-			reportRow.setColumn3("Credit Card Refund");
-			reportRow.setColumn4("Check Amount");
-			reportRow.setColumn5("Voucher Amount");
+			reportRow.setColumn1(resources.getString("colname.incident.id")); 
+			reportRow.setColumn2(resources.getString("colname.report_type"));
+			reportRow.setColumn3(resources.getString("colname.cc_refund"));
+			reportRow.setColumn4(resources.getString("colname.checkamt")); 
+			reportRow.setColumn5(resources.getString("colname.voucheramt"));
 			reportRow.setColumn6("Total Compensation");
 			toReturn.add(reportRow);
 			
@@ -391,6 +392,7 @@ public class CustomWestJetReports {
 			reportRow.setColumn2("");
 			reportRow.setColumn3("");
 			reportRow.setColumn4("");
+			reportRow.setColumn5("");
 			toReturn.add(reportRow);
 			
 			reportRow = new SimpleReportRow();
@@ -400,8 +402,9 @@ public class CustomWestJetReports {
 			reportRow = new SimpleReportRow();
 			reportRow.setColumn1("Incident IDs");
 			reportRow.setColumn2("Routing Stations");
-			reportRow.setColumn3("Create Date");
-			reportRow.setColumn4("Flight Date");
+			reportRow.setColumn3("Flight Numbers");
+			reportRow.setColumn4("Create Date");
+			reportRow.setColumn5("Flight Date");
 			toReturn.add(reportRow);
 //			HashMap<String,String> RouteList=new HashMap<String,String>();
 //
@@ -430,9 +433,25 @@ public class CustomWestJetReports {
 				
 				reportRow.setColumn1((String)row[0]);
 				reportRow.setColumn2((String)row[1]); //create method to pick out routing stations
-				reportRow.setColumn3(DateUtils.formatDate((String)row[2], TracingConstants.DB_DATEFORMAT, dateFormat, null, null)); //Create Date
-				reportRow.setColumn4(DateUtils.formatDate((String)row[3], TracingConstants.DB_DATEFORMAT, dateFormat, null, null)); //Flight Date
-				
+				reportRow.setColumn3((String)row[2]); 
+				reportRow.setColumn4(DateUtils.formatDate((String)row[3], TracingConstants.DB_DATEFORMAT, dateFormat, null, null)); //Create Date
+				String[] flightdates=row[4].toString().split(",");
+				String fdates="";
+				int j=0;
+				HashMap<String,String> sameDates=new HashMap();
+				for(String date:flightdates){
+					if(!sameDates.containsKey(date)){
+						if(j==0){
+							fdates=DateUtils.formatDate(date, TracingConstants.DB_DATEFORMAT, dateFormat, null, null);
+							j++;
+							sameDates.put(date, "");
+						} else {
+							fdates+=", "+DateUtils.formatDate(date, TracingConstants.DB_DATEFORMAT, dateFormat, null, null);
+							sameDates.put(date, "");
+						}
+					}
+				}
+				reportRow.setColumn5(fdates); //Flight Date
 				
 				toReturn.add(reportRow);
 			}
@@ -631,8 +650,8 @@ public class CustomWestJetReports {
 			+ " group by groupcol"
 			+ " order by groupcol asc ";
 
-		String sql2 = " SELECT incident_id column1, route column2, createdate column3, departdate column4 FROM (SELECT incident_id, GROUP_CONCAT(legs ORDER BY incident_id ASC, itinerary_id ASC) route, departdate, createdate "
-            + " FROM (SELECT it.incident_id,it.itinerary_id,it.departdate,i.createdate, "
+		String sql2 = " SELECT incident_id column1, route column2,  flightnums column3, createdate column4, departdate column5 FROM (SELECT incident_id, GROUP_CONCAT(legs ORDER BY incident_id ASC, itinerary_id ASC) route, group_concat(departdate ORDER BY incident_id ASC, itinerary_id ASC) departdate, createdate, group_concat(flightnum ORDER BY incident_id ASC, itinerary_id ASC) flightnums "
+            + " FROM (SELECT it.incident_id,it.itinerary_id,it.departdate,i.createdate, it.flightnum, "
             + " concat(it.legfrom, '-', it.legto) legs "
             + " FROM itinerary it inner join incident i on i.incident_id=it.incident_ID "
             + " WHERE it.itinerarytype=0 and it.incident_id in (select i.incident_id iid from itinerary it join incident i on it.incident_id = i.incident_id where "
@@ -669,6 +688,7 @@ public class CustomWestJetReports {
 				query2.addScalar("column2", Hibernate.STRING);
 				query2.addScalar("column3", Hibernate.STRING);
 				query2.addScalar("column4", Hibernate.STRING);
+				query2.addScalar("column5", Hibernate.STRING);
 				results2 = query2.list();
 
 			}
@@ -904,7 +924,11 @@ public class CustomWestJetReports {
 			+ " (select distinct ep.incident_id incident, ep.creditcard_refund ccr, ep.checkamt ca, ep.voucheramt va, "
 			+ "   IF (la.Airline_2_Character_Code is not null, la.Airline_2_Character_Code, substring(case when i.itemtype_ID=1 then ic.claimchecknum else it.claimchecknum end,1,2)) airlines "  
 			+ "  from expensepayout ep left outer join incident i on ep.incident_ID = i.Incident_ID left outer join incident_claimcheck ic on i.incident_id = ic.incident_id left outer join item it on it.incident_ID= i.Incident_ID left outer join lookup_airline_codes la on (case when i.itemtype_ID=1 then substring(ic.claimchecknum, 2,3) else substring(it.claimchecknum, 2,3) end) = la.Airline_3_Digit_Ticketing_Code" 
-			+ " 	where  i.createdate >= '2012-06-01' and i.createdate <= '2012-10-24'   and  (case when i.itemtype_ID=1 then (ic.claimchecknum not like '_838%' and ic.claimchecknum not like 'WS%') else (it.claimchecknum not like '_838%' and it.claimchecknum not like 'WS%') end)) as b on a.incident = b.incident "
+			+ " 	where  i.createdate >= \'"
+			+ startDate 
+			+ "\' and i.createdate <= \'"
+			+ endDate
+			+ "\' and  (case when i.itemtype_ID=1 then (ic.claimchecknum not like '_838%' and ic.claimchecknum not like 'WS%') else (it.claimchecknum not like '_838%' and it.claimchecknum not like 'WS%') end)) as b on a.incident = b.incident "
 			+ "   where"
 			+ "   a.airlines like '" + airlineCode + "'"
 			+ "   group by column1 order by column1 asc";
@@ -935,7 +959,7 @@ public class CustomWestJetReports {
 
 			}
 			
-			toReturn = getRowsFromResultList4(results, results2, srDTO.getDateFormat());
+			toReturn = getRowsFromResultList4(results, results2, srDTO.getDateFormat(), resources);
 			
 			
 		} catch (Exception e) {

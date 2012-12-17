@@ -103,18 +103,18 @@ public class Audit_OHD implements Serializable {
 	}
 	
 	public String getDesc1Key() {
-		if (this.getXdescelement_ID_1() == 0) return "";
+		if (this.getXdescelement_ID_1() == 0) return "NoDesc";
 
 		return TracerUtils.getXdescelement(this.getXdescelement_ID_1()).getKey();
 	}
 
 	public String getDesc2Key() {
-		if (this.getXdescelement_ID_2() == 0) return "";
+		if (this.getXdescelement_ID_2() == 0) return "NoDesc";
 		return TracerUtils.getXdescelement(this.getXdescelement_ID_2()).getKey();
 	}
 
 	public String getDesc3Key() {
-		if (this.getXdescelement_ID_3() == 0) return "";
+		if (this.getXdescelement_ID_3() == 0) return "NoDesc";
 		return TracerUtils.getXdescelement(this.getXdescelement_ID_3()).getKey();
 	}
 

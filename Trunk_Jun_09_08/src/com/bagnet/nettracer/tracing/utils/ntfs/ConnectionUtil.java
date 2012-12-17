@@ -2,6 +2,8 @@ package com.bagnet.nettracer.tracing.utils.ntfs;
 
 import java.util.LinkedHashSet;
 import java.util.Properties;
+import java.util.List;
+import java.util.Set;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -13,6 +15,7 @@ import org.apache.log4j.Logger;
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
+import aero.nettracer.fs.model.Attachment;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;

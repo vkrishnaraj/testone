@@ -7,6 +7,7 @@ public class AccessRequestDTO {
 	boolean pending;
 	boolean approved;
 	boolean denied;
+	String message;
 	int type;
 	Date startDate;
 	Date endDate;
@@ -16,6 +17,13 @@ public class AccessRequestDTO {
 	}
 	public void setAirlinecode(String airlinecode) {
 		this.airlinecode = airlinecode;
+	}
+	
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	public boolean isPending() {
 		return pending;

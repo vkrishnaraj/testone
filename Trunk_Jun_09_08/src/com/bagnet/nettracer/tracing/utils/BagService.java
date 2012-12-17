@@ -180,16 +180,28 @@ public class BagService {
 			OHD_Log_Itinerary oli = null;
 			
 			ArrayList<String> notifyList = new ArrayList<String>();
-			
+			Set ItinLogList=new HashSet();
 			if(log.getItinerary() != null) {
 				for(Iterator i = log.getItinerary().iterator(); i.hasNext();) {
-					oli = (OHD_Log_Itinerary) i.next();
+					oli=new OHD_Log_Itinerary();
+					try {
+						BeanUtils.copyProperties(oli, (OHD_Log_Itinerary) i.next());
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					oli.setLog(log);
 					
 					if (oli.isNotify() && oli.getLegto() != null) {
 						notifyList.add(oli.getLegto());
 					}
+					ItinLogList.add(oli);
 				}
+				log.setItinerary(ItinLogList);
 			}
 
 			// Update the status of OHD as well.`
@@ -415,11 +427,21 @@ public class BagService {
 		OHD_Log_Itinerary oli = null;
 		
 		ArrayList<String> notifyList = new ArrayList<String>();
-		
+
+		Set ItinLogList=new HashSet();
 		if(log.getItinerary() != null) {
 			List itinList = log.getItinerarylist();
 			for (int i = 0; itinList != null && i<itinList.size(); ++i) {
-				oli = (OHD_Log_Itinerary) itinList.get(i);
+				oli=new OHD_Log_Itinerary();
+				try {
+					BeanUtils.copyProperties(oli, (OHD_Log_Itinerary) itinList.get(i));
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				oli.setLog(log);
 				
 				if (oli.isNotify() && oli.getLegto() != null) {
@@ -432,9 +454,10 @@ public class BagService {
   				finalFlightDate = oli.getDepartdate();
   				
   			}
+  			ItinLogList.add(oli);
 			}
 		}
-
+		log.setItinerary(ItinLogList);
 		HibernateUtils.save(log);
 		
 		ForwardNoticeBMO.createForwardNotice(log, notifyList, user);	
@@ -1878,10 +1901,10 @@ public class BagService {
 		theform.setEarlyBag(iDTO.isEarlyBag());
 		theform.setWarehouseReceivedDate(iDTO.getWarehouseReceivedDate());
 		theform.setWarehouseSentDate(iDTO.getWarehouseSentDate());
-		theform.setDispWarehouseReceivedDate(DateUtils.formatDate(iDTO.getWarehouseReceivedDate(), theform.getAgent().getDateformat().getFormat(), 
-				theform.getAgent().getCurrentlocale(), null ));
-		theform.setDispWarehouseSentDate(DateUtils.formatDate(iDTO.getWarehouseSentDate(), theform.getAgent().getDateformat().getFormat(), 
-				theform.getAgent().getCurrentlocale(), null ));
+		theform.setDispWarehouseReceivedDate(DateUtils.formatDate(iDTO.getWarehouseReceivedDate(), iDTO.getAgent().getDateformat().getFormat(), 
+				iDTO.getAgent().getCurrentlocale(), null ));
+		theform.setDispWarehouseSentDate(DateUtils.formatDate(iDTO.getWarehouseSentDate(), iDTO.getAgent().getDateformat().getFormat(), 
+				iDTO.getAgent().getCurrentlocale(), null ));
 
 		BeanUtils.copyProperties(theform, iDTO);
 		if(iDTO.getMembership() == null) {
