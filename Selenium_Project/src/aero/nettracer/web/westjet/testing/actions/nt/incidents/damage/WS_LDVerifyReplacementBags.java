@@ -55,7 +55,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[12]/td[4]/a");
+			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[12]/td[5]/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: Failed to load the 3rd companies page.");
@@ -191,7 +191,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[12]/td[4]/a");
+			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[12]/td[5]/a");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: An error occurred while attempting to load the 3rd companies page.");

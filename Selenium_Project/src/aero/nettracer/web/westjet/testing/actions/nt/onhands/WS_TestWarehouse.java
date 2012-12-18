@@ -34,7 +34,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			selenium.type("name=companySearchName", "WS");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
-			selenium.click("xpath=(//a[contains(text(),'Maintain')])[12]");
+			selenium.click("xpath=(//a[contains(text(),'Maintain')])[13]");
 			waitForPageToLoadImproved();
 			selenium.click("xpath=(//a[contains(text(),'Maintain')])[20]");
 			waitForPageToLoadImproved();
@@ -113,7 +113,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			selenium.type("name=companySearchName", "WS");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
-			selenium.click("xpath=(//a[contains(text(),'Maintain')])[12]");
+			selenium.click("xpath=(//a[contains(text(),'Maintain')])[13]");
 			waitForPageToLoadImproved();
 			selenium.click("xpath=(//a[contains(text(),'Maintain')])[20]");
 			waitForPageToLoadImproved();

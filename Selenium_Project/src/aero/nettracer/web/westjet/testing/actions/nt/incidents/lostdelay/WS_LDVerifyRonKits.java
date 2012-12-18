@@ -21,8 +21,8 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-//			verifyFalse(selenium.isTextPresent("# RON Kits issued:"));
-//			verifyFalse(selenium.isElementPresent("//select[@id='numRonKitsIssued']"));
+			verifyFalse(selenium.isTextPresent("# RON Kits issued:"));
+			verifyFalse(selenium.isElementPresent("//select[@id='numRonKitsIssued']"));
 			selenium.click("link=[ Logout ]");
 			waitForPageToLoadImproved();
 		} else {
@@ -55,7 +55,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("xpath=(//a[contains(text(),'Maintain')])[12]");
+			selenium.click("xpath=(//a[contains(text(),'Maintain')])[13]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: Failed to load the 3rd companies page.");
@@ -214,7 +214,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("xpath=(//a[contains(text(),'Maintain')])[12]");
+			selenium.click("xpath=(//a[contains(text(),'Maintain')])[13]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: An error occurred while attempting to load the 3rd companies page.");
