@@ -333,3 +333,20 @@ h2.swa_faq_title {
     width: 86px;
     color: white;
 }
+
+.rich-calendar-button {
+	padding: 0 0 2px 4px;
+}
+
+.rich-calendar-weekends {
+	color: black;
+}
+
+.rich-calendar-holly {
+	background-color: white;
+	color: black;
+}
+
+.rich-calendar-boundary-dates {
+	color: #A0A0A0;
+}
