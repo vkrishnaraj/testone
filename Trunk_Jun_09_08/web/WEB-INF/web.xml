@@ -105,6 +105,10 @@
   <servlet-class>com.bagnet.nettracer.servlets.showImage</servlet-class>
  </servlet>
  <servlet>
+  <servlet-name>retrieveAttachment</servlet-name>
+  <servlet-class>com.bagnet.nettracer.servlets.retrieveAttachment</servlet-class>
+ </servlet>
+ <servlet>
   <servlet-name>StartSpring</servlet-name>
   <servlet-class>com.bagnet.nettracer.servlets.StartSpring</servlet-class>
   <load-on-startup>0</load-on-startup>
