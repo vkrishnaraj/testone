@@ -58,7 +58,11 @@
     			var temp = req.responseText;
 			    document.getElementById("statusSpan").innerHTML = temp;
     		});
-			
+			if(type==2){
+				document.getElementById("claimtitle").innerHTML="<bean:message key="match.claimchecknum" />";
+			} else {
+				document.getElementById("claimtitle").innerHTML="<bean:message key="colname.claimnum" />";
+			}
     		currentStatusId = type;
     	}
 	}
@@ -404,7 +408,9 @@ function updatePagination() {
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
                 <td>
+                  <div id="claimtitle">	
                   	<bean:message key="colname.claimnum" />
+                  </div>
                   <br>
                   <html:text property="claimchecknum" size="20" maxlength="13" styleClass="textfield" />
                 </td>

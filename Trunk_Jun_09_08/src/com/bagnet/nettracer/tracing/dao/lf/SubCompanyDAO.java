@@ -14,10 +14,11 @@ import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.lf.Subcompany;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class SubCompanyDAO {
 
-	private static final String EXCEPTION_MESSAGE = "Exception in LFLostDAO";
+	private static final String EXCEPTION_MESSAGE = "Exception in SubCompanyDAO";
 	
 	private static Logger logger = Logger.getLogger(SubCompanyDAO.class);
 
@@ -63,6 +64,7 @@ public class SubCompanyDAO {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(Subcompany.class);
 			criteria.add(Expression.eq("subcompanyCode", code));
+			criteria.add(Expression.eq("company.companyCode_ID", TracerProperties.get("wt.company.code")));
 			subcomp=(Subcompany) criteria.uniqueResult();
 			setSubcompany(code,subcomp);
 		} catch (Exception e) {

@@ -164,11 +164,11 @@ ResourceBundle bundle = ResourceBundle.getBundle(
           <table>
           	<tr>
           		<td align="center" valign="top">
-          			<html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 1;">
+          			<html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 2;">
                     	<bean:message key="button.accept.dispute" />
                     </html:submit>
                     
-                    <html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 1;">
+                    <html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 2;">
                     	<bean:message key="button.deny.dispute" />
                     </html:submit>
                 </td>
@@ -213,7 +213,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 
                   &nbsp;
                   
-                  <html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 1; return validateReqDisputeForm(this.form)">
+                  <html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 2; return validateReqDisputeForm(this.form)">
                     <bean:message key="button.manually.modify.dispute" />
                   </html:submit>
                   </logic:notEqual>

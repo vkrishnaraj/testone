@@ -12,7 +12,7 @@
 
 function validateLdClose(form, doCheck)
 {
-	if (doCheck == 1) {
+	if (doCheck == 1 || doCheck == 2) {
     	for (var j=0; j < form.length; j++) {
 	      currentElement = form.elements[j];
 	      currentElementName=currentElement.name;
