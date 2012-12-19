@@ -219,7 +219,7 @@
 			        return false;
 				}
 			} else if (elementName == "found.companyId") {
-				if (currentElement.value == '<%=TracingConstants.LF_ABG_COMPANY_ID %>') {
+				if (currentElement.value == '' || currentElement.value == '<%=TracingConstants.LF_ABG_COMPANY_ID %>') {
 					alert("<%= (String)bundle.getString("colname.lf.company") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
 			        return false;
