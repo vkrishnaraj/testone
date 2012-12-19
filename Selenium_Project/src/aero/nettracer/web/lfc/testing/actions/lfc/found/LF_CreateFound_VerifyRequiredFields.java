@@ -15,10 +15,6 @@ public class LF_CreateFound_VerifyRequiredFields extends DefaultSeleneseTestCase
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("saveButton");
-			//assertEquals("Company is required.", selenium.getAlert());
-			selenium.select("name=found.companyId", "label=Southwest Airlines");
-			selenium.select("name=found.locationId", "label=LZ");
-			selenium.click("saveButton");
 			assertEquals("Report Id is required.", selenium.getAlert());
 			selenium.type("name=found.barcode", "Test");
 			selenium.click("saveButton");
@@ -29,6 +25,12 @@ public class LF_CreateFound_VerifyRequiredFields extends DefaultSeleneseTestCase
 			assertEquals("Date Received is required.", selenium.getAlert());
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
+			selenium.click("name=saveButton");
+			assertEquals("Company is required.", selenium.getAlert());
+			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.click("name=saveButton");
+			assertEquals("Found Station is required.", selenium.getAlert());
+			selenium.select("name=found.locationId", "label=LZ");
 			selenium.click("name=saveButton");
 			assertEquals("Category is required.", selenium.getAlert());
 			selenium.select("//select[@id='category_0']", "label=Bags");

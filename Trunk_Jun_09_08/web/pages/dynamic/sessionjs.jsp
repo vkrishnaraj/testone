@@ -224,6 +224,12 @@
 			        currentElement.focus();
 			        return false;
 				}
+			} else if (elementName == "found.locationId") {
+				if (currentElement.value == '' || currentElement.value == '0') {
+					alert("<%= (String)bundle.getString("colname.lf.found.location") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        currentElement.focus();
+			        return false;
+				}
 			} else if (elementName == "found.statusId") {
 				if (currentElement.value == '-1') {
 					alert("<%= (String)bundle.getString("colname.lf.status") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
