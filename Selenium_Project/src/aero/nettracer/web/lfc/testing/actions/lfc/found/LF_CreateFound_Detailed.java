@@ -15,6 +15,8 @@ public class LF_CreateFound_Detailed extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			String found_id = String.valueOf(System.currentTimeMillis());
+			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.found.locationId", "label=LZ");
 			selenium.type("name=found.barcode", found_id);
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");

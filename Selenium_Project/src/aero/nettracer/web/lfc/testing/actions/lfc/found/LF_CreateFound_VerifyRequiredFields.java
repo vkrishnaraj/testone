@@ -15,6 +15,10 @@ public class LF_CreateFound_VerifyRequiredFields extends DefaultSeleneseTestCase
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("saveButton");
+			assertEquals("Company is required.", selenium.getAlert());
+			selenium.select("name=lost.companyId", "label=Southwest Airlines");
+			selenium.select("name=lost.locationId", "label=LZ");
+			selenium.click("saveButton");
 			assertEquals("Report Id is required.", selenium.getAlert());
 			selenium.type("name=found.barcode", "Test");
 			selenium.click("saveButton");
