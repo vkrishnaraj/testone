@@ -18,9 +18,9 @@ public class WS_ForwardMessage extends DefaultSeleneseTestCase {
 		selenium.type("id=bagtagbagtag_0", "WS345678");
 		selenium.type("id=bagtagbagtag_1", "WS654321");
 		selenium.type("id=bagtagbagtag_3", "WS378945");
-		selenium.click("id=expStickerbagtag_0");
-		selenium.click("id=expStickerbagtag_1");
-		selenium.click("id=expStickerbagtag_3");
+		selenium.type("id=expNumberbagtag_0", "WS345678");
+		selenium.type("id=expNumberbagtag_1", "WS654321");
+		selenium.type("id=expNumberbagtag_3", "WS378945");
 		selenium.select("name=destStation", "label=AUA");
 		selenium.select("name=faultStation", "label=CMW");
 		selenium.select("name=lossCode", "label=14 - Departing baggage found not labelled");
