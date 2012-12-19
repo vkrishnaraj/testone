@@ -442,6 +442,51 @@ ResourceBundle bundle = ResourceBundle.getBundle(
             return false;
           }
         }
+        else if (!(currentElementName.indexOf("itinerary") != -1)) {
+    	    if (currentElementName.indexOf("bagItinerary") != -1 && currentElementName.indexOf(".legfrom") != -1) {  
+    	      if (currentElement.value.length == 0)
+    	      {
+    	        alert("<%= (String)bundle.getString( "colname.fromto") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+    	        currentElement.focus();
+    	        return false;
+    	      }
+    	    } else if (currentElementName.indexOf("bagItinerary") != -1 && currentElementName.indexOf(".legto") != -1) {
+    	      if (currentElement.value.length == 0)
+    	      {
+    	        alert("<%= (String)bundle.getString( "colname.fromto") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+    	        currentElement.focus();
+    	        return false;
+    	      }
+    	    } else if (currentElementName.indexOf("bagItinerary") != -1 && currentElementName.indexOf(".airline") != -1) {
+    	      if (currentElement.value.length == 0)
+    	      {
+    	        alert("<%= (String)bundle.getString( "colname.flightnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+    	        currentElement.focus();
+    	        return false;
+    	      }
+    	    } else if (currentElementName.indexOf("bagItinerary") != -1 && currentElementName.indexOf(".flightnum") != -1) {
+    	      if (currentElement.value.length == 0)
+    	      {
+    	        alert("<%= (String)bundle.getString( "colname.flightnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+    	        currentElement.focus();
+    	        return false;
+    	      }
+    	    } else if (currentElementName.indexOf("bagItinerary") != -1 && currentElementName.indexOf(".disdepartdate") != -1) {
+    	      if (currentElement.value.length == 0)
+    	      {
+    	        alert("<%= (String)bundle.getString( "colname.departdate") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+    	        currentElement.focus();
+    	        return false;
+    	      }
+    	    }  else if (currentElementName.indexOf("bagItinerary") != -1 && currentElementName.indexOf(".disarrivedate") != -1) {
+    	      if (currentElement.value.length == 0)
+    	      {
+    	        alert("<%= (String)bundle.getString( "colname.adate") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+    	        currentElement.focus();
+    	        return false;
+    	      }
+    	    }
+          }
         else if (!(currentElementName.indexOf("bagItinerary") != -1)) {
     	    if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".legfrom") != -1) {  
     	      if (currentElement.value.length == 0)
@@ -468,6 +513,20 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     	      if (currentElement.value.length == 0)
     	      {
     	        alert("<%= (String)bundle.getString( "colname.flightnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+    	        currentElement.focus();
+    	        return false;
+    	      }
+    	    } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".disdepartdate") != -1) {
+    	      if (currentElement.value.length == 0)
+    	      {
+    	        alert("<%= (String)bundle.getString( "colname.departdate") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+    	        currentElement.focus();
+    	        return false;
+    	      }
+    	    } else if (currentElementName.indexOf("itinerary") != -1 && currentElementName.indexOf(".disarrivedate") != -1) {
+    	      if (currentElement.value.length == 0)
+    	      {
+    	        alert("<%= (String)bundle.getString( "colname.adate") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
     	        currentElement.focus();
     	        return false;
     	      }

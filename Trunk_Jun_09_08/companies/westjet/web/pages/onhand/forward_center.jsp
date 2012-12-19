@@ -24,11 +24,25 @@
 <script language="javascript">
 
   var buttonSelected = null;
-  document.onload=function clearDelete() {
-		del = document.forms[0].delete_these_elements;
-		del.value = "";
-  }
+ 
 
+  window.onload=function(){
+	 	del = document.forms[0].delete_these_elements;
+		del.value = "";
+
+		var table=document.getElementById("bagTable").getElementsByTagName('tr');
+		  
+		for(var i=0; i<table.length-1; i++){
+			
+			sticker=document.getElementById("bagtag<%= TracingConstants.JSP_DELETE_BAGTAG %>_"+i);
+			if(sticker){
+				enableSticker(sticker);
+			}
+		}
+  };
+	
+  
+  
   function getstations() {
     o = document.incidentForm;
     o.getstation.value="1";
@@ -46,7 +60,18 @@
         countfield.value = maxlimit - field.value.length;
       }
     }
+	function enableSticker(object) {
 
+    	var parent = object.parentElement.parentElement.id;
+		if((object.value.substring(0,2).toUpperCase()=="WS" && object.value.length==8) || (object.value.substring(1,4)=="838" && object.value.length==10) || (object.value.substring(0,3)=="838" && object.value.length==9)){
+
+	    	var target=document.getElementById("expSticker"+parent);
+	    	target.disabled=false;
+		} else {
+			var target=document.getElementById("expSticker"+parent);
+	    	target.disabled=true;
+		}
+	}
     function disableButton(aButton) {
     	aButton.disabled = true;
     	aButton.value= "<bean:message key='ajax.please_wait' />";
@@ -61,9 +86,14 @@
     function updateExpedite(object) {
     	var objectName = object.parentElement.parentElement.id;
     	if(object.checked==true){
+    		
 	    	var copiedValue=document.getElementById("bagtag"+objectName);
 	    	var updatedValue=document.getElementById("expNumber"+objectName);
-	    	updatedValue.value=copiedValue.value;
+	    	if(copiedValue.value.length==10 && copiedValue.value.substring(1,4)=="838"){
+	    		updatedValue.value="2"+copiedValue.value.substring(1,10);
+	    	} else {
+	    		updatedValue.value=copiedValue.value;
+	    	}
     	}
     }
 
@@ -118,13 +148,13 @@
         		%>
               	<tr id="<%= TracingConstants.JSP_DELETE_BAGTAG %>_<%=i%>">
 	                <td>
-	                  <html:text name="tagNumber" property="bagTagNumber" styleId='<%=btprop %>' size="14" maxlength="13" style="textfield" indexed="true"/>
+	                  <html:text name="tagNumber" property="bagTagNumber" styleId='<%=btprop %>' size="14" maxlength="13" style="textfield"  onkeydown="enableSticker(this)" onkeyup="enableSticker(this)" indexed="true"/>
 	                </td>
 	                <td>
 	                  <html:text name="tagNumber" property="expediteNumber" styleId='<%=enprop %>' size="20" maxlength="10" indexed="true" onkeydown="clearSticker(this)"/>
 	                </td>
 	                <td>
-	                  <html:checkbox name="tagNumber" property="expediteSticker" styleId='<%=esprop %>' onclick="updateExpedite(this)"/>
+	                  <html:checkbox name="tagNumber" property="expediteSticker" disabled="true" styleId='<%=esprop %>' onclick="updateExpedite(this)"/>
 	                </td>
 	                <td>
 	                   <input type="button" value="<bean:message key="button.delete_bag_tag" />" 
@@ -225,18 +255,18 @@
                     </tr>
                     <tr>
                       <td valign=top>
-                        <bean:message key="colname.fromto" />
+                        * <bean:message key="colname.fromto.req" />
                       </td>
                       <td valign=top>
-                        <bean:message key="colname.flightnum" />
+                        <bean:message key="colname.flightnum.req" />
                       </td>
                       <td>
-                        <bean:message key="colname.departdate" /><br>
+                        * <bean:message key="colname.departdate.req" /><br>
                         (
                         <%= a.getDateformat().getFormat() %>)
                       </td>
                       <td>
-                        <bean:message key="colname.arrdate" /><br>
+                        <bean:message key="colname.arrdate.req" /><br>
                         (
                         <%= a.getDateformat().getFormat() %>)
                       </td>
@@ -338,7 +368,7 @@
                         <%= a.getDateformat().getFormat() %>)
                       </td>
                       <td>
-                        <bean:message key="colname.arrdate" /><br>
+                        <bean:message key="colname.arrdate.req" /><br>
                         (
                         <%= a.getDateformat().getFormat() %>)
                       </td>
@@ -427,7 +457,7 @@
               </tr>
               <tr>
                 <td>
-                  <bean:message key="colname.message" />
+                  <bean:message key="colname.remark" />
                   :
                 </td>
                 <td>
