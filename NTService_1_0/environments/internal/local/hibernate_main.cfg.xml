@@ -13,10 +13,10 @@
 	<property name="hibernate.cache.use_second_level_cache">false</property>
 		
 	
-	<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/prep</property>
+	<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/fs_local</property>
 	<property name="hibernate.connection.username">root</property>
 	<property name="hibernate.connection.password">nettracer</property>
-	<property name="show_sql">false</property>
+	<property name="show_sql">true</property>
 	<property name="jdbc.fetch_size">50</property>
 	<property name="jdbc.batch_size">25</property>
 	<property name="jdbc.use_scrollable_resultset">false</property>
@@ -67,7 +67,11 @@
 		<mapping class="aero.nettracer.fs.model.FsActionAudit"/>
 		<mapping class="aero.nettracer.fs.model.FsMatchHistoryAudit"/>
 		<mapping class="aero.nettracer.fs.model.FsIPAddress"/>
+		<mapping class="aero.nettracer.fs.model.FsAttachment"/>
 		<mapping class="aero.nettracer.fs.model.detection.IPWhiteList"/>
+		<mapping class="aero.nettracer.fs.model.forum.FsForumThread"/>
+		<mapping class="aero.nettracer.fs.model.forum.FsForumPost"/>
+		<mapping class="aero.nettracer.fs.model.forum.FsForumTag"/>
 		<!--
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCPassenger" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim" />
