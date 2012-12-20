@@ -10,7 +10,7 @@ import aero.nettracer.fs.model.detection.Blacklist;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-public class FsClaim implements Serializable {
+public class FsClaim implements aero.nettracer.fs.model.transport.v0.FsClaim, Serializable {
 	private static final long serialVersionUID = 7010480417198684212L;
 	
 	protected long id;
@@ -39,7 +39,7 @@ public class FsClaim implements Serializable {
 	private Set<Person> claimants;
 	private Set<Segment> segments;
 	private Set<FsReceipt> receipts;
-	private Set<Attachment> attachments;
+	private Set<FsAttachment> attachments;
 	private Blacklist blacklist;
 	private FsIncident incident;
 	private Set<FsIPAddress> ipAddresses;
@@ -264,11 +264,11 @@ public class FsClaim implements Serializable {
 		this.receipts = receipts;
 	}
 	
-	public Set<Attachment> getAttachments() {
+	public Set<FsAttachment> getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments(Set<Attachment> attachments) {
+	public void setAttachments(Set<FsAttachment> attachments) {
 		this.attachments = attachments;
 	}
 	

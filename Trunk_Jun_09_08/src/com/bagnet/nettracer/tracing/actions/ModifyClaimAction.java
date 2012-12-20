@@ -316,7 +316,8 @@ public class ModifyClaimAction extends CheckedAction {
 				} else if (fileindex >= 0) {
 					// add photo
 					request.setAttribute("upload", Integer.toString(fileindex));
-					Attachment a=FileShareUtils.uploadFile(cform, claim, request, user, errors, remote);
+					String lead = (cform.getClaim().getId() > 0 ? String.valueOf(cform.getClaim().getId()) : "");
+					Attachment a=FileShareUtils.uploadFile(cform, lead, claim, user, errors, remote);
 					if(a!=null){
 						cform.getClaim().getAttachments().add(a);
 					} else {

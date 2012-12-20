@@ -26,11 +26,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
 import aero.nettracer.fs.model.Attachment;
+import aero.nettracer.fs.model.FsAttachment;
+import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
@@ -75,63 +78,64 @@ public class FileShareUtils {
 	
 	static Logger logger = Logger.getLogger(MBRActionUtils.class);
 	
-	public static Attachment uploadFile(ClaimForm cform, Claim claim, HttpServletRequest request, Agent user, ActionMessages errors,
-			ClaimClientRemote remote) {
+	public static Attachment uploadFile(ActionForm aform, String lead, Claim claim, Agent user, ActionMessages errors, ClaimClientRemote remote) {
+		// Save the file in the local directory.
+		FsAttachment fsAttach = uploadFile(aform, lead, user, errors, remote);
+		
+		Attachment attachment = new Attachment();
+		attachment.setAgent(user);
+		attachment.setClaim(claim);
+		attachment.setCreateDate(new Date());
+		attachment.setDescription(fsAttach.getDescription());
+		attachment.setAttachment_id(fsAttach.getId());
+		return attachment;
+	}
+	
+	public static FsAttachment uploadFile(ActionForm aform, String lead, Agent user, ActionMessages errors, ClaimClientRemote remote) {
 		// Save the file in the local directory.
 		
-		Hashtable files = cform.getMultipartRequestHandler().getFileElements();
-		FormFile theFile = (FormFile) files.get("attachfile");
-		java.io.File thisfile=new java.io.File(theFile.getFileName());
-		if (theFile != null && theFile.getFileSize() > 0) {
-			String st = Long.toString((new Date()).getTime());
-			String lead = "";
-			if (cform.getClaim().getId()!=0 && cform.getClaim().getId()  > 0)
-				lead = String.valueOf(cform.getClaim().getId());
-			
-			// now make subfolder with year and month
-			Calendar cal = new GregorianCalendar();
-			int year = cal.get(Calendar.YEAR);
-			int month = cal.get(Calendar.MONTH) + 1;
-			int day = cal.get(Calendar.DAY_OF_MONTH);
-			
-			//compute the folder name
-			String folder = user.getStation().getCompany().getCompanyCode_ID() + "/" + year + "/" + month + "/" + day + "/";;
-			
-			//paths to be stored in the db
-			String fileName = theFile.getFileName();
-			String filepath = folder + lead + "_" + st + "_" + fileName;
-			String thumbpath = folder + lead + "_" + st + "_thumb_" + fileName;
-//			RemoteStreamServer server;
-//			server.
-			try{
-				RemoteInputStream ris=new GZIPRemoteInputStream(theFile.getInputStream()).export(); //change to RMIIO
-				int attachment_id= remote.uploadAttachment(thisfile, user.getStation().getCompany().getVariable().getMax_image_file_size(), 
-						folder, filepath, claim.getFile().getSwapId(), claim.getAirline(), claim.getId(), theFile.getFileSize(), ris);
-				// add the image to the DB.
-				//Send to 
+				Hashtable files = aform.getMultipartRequestHandler().getFileElements();
+				FormFile theFile = (FormFile) files.get("attachfile");
+				java.io.File thisfile=new java.io.File(theFile.getFileName());
+				if (theFile != null && theFile.getFileSize() > 0) {
+					String st = Long.toString((new Date()).getTime());
+					
+					// now make subfolder with year and month
+					Calendar cal = new GregorianCalendar();
+					int year = cal.get(Calendar.YEAR);
+					int month = cal.get(Calendar.MONTH) + 1;
+					int day = cal.get(Calendar.DAY_OF_MONTH);
+					
+					//compute the folder name
+					String folder = user.getStation().getCompany().getCompanyCode_ID() + "/" + year + "/" + month + "/" + day + "/";;
+					
+					//paths to be stored in the db
+					String fileName = theFile.getFileName();
+					String filepath = folder + lead + "_" + st + "_" + fileName;
+					String thumbpath = folder + lead + "_" + st + "_thumb_" + fileName;
+//					RemoteStreamServer server;
+//					server.
+					try{
+						RemoteInputStream ris=new GZIPRemoteInputStream(theFile.getInputStream()).export(); //change to RMIIO
+						FsAttachment fsAttach = TransportMapper.map(remote.uploadAttachment(thisfile, user.getStation().getCompany().getVariable().getMax_image_file_size(), 
+								folder, filepath, user.getCompanycode_ID(), theFile.getFileSize(), ris));
+						// add the image to the DB.
+						//Send to 
 
-				Attachment attachment = new Attachment();
-				attachment.setAgent(user);
-				attachment.setClaim(claim);
-				attachment.setCreateDate(new Date());
-				attachment.setDescription(fileName);
-				attachment.setAttachment_id(attachment_id);
-				return attachment;
-//				Set al = cform.getClaim().getAttachments();
-//				al.add(attachment);
-//				cform.getClaim().setAttachments(a1);
-			}
-			catch(Exception ee) {
-				ee.printStackTrace();
+						return fsAttach;
+					}
+					catch(Exception ee) {
+						ee.printStackTrace();
+							ActionMessage error = new ActionMessage("error.uploadfile");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							
+						} 
+				} else {
+					// upload file errors.
 					ActionMessage error = new ActionMessage("error.uploadfile");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-					
-				} 
-		} else {
-			// upload file errors.
-			ActionMessage error = new ActionMessage("error.uploadfile");
-			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-		}	
-		return null;
+				}	
+				return null;
 	}
+		
 }

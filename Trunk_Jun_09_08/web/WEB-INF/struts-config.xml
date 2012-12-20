@@ -277,7 +277,11 @@
 		<form-bean name="shelvedTraceResultsForm" type="com.bagnet.nettracer.tracing.forms.lfc.ShelvedTraceResultsForm" />	
 		<form-bean name="lfSalvageForm" type="com.bagnet.nettracer.tracing.forms.lfc.SalvageForm" />	
 		<form-bean name="lfBoxCountForm" type="com.bagnet.nettracer.tracing.forms.lfc.BoxCountForm" />	
-		<form-bean name="lfSalvageSearchForm" type="com.bagnet.nettracer.tracing.forms.lfc.SalvageSearchForm" />	
+		<form-bean name="lfSalvageSearchForm" type="com.bagnet.nettracer.tracing.forms.lfc.SalvageSearchForm" />
+		
+		<form-bean name="forumSearchForm" type="com.bagnet.nettracer.tracing.forms.forum.ForumSearchForm" />
+		<form-bean name="forumViewForm" type="com.bagnet.nettracer.tracing.forms.forum.ForumViewForm" />	
+		<form-bean name="forumClaimForm" type="com.bagnet.nettracer.tracing.forms.forum.ForumClaimForm" />	
 
 	</form-beans>
 	<!-- global exception -->
@@ -563,6 +567,11 @@
 		<forward name="lf_salvage" path="lf_salvage" />
 		<forward name="lf_boxcount" path="lf_boxcount" />
 		<forward name="lf_search_salvage" path="lf_search_salvage" />
+		
+		<forward name="fraud_forum_search" path="fraud_forum_search" />
+		<forward name="fraud_forum_create" path="fraud_forum_create" />
+		<forward name="fraud_forum_view" path="fraud_forum_view" />
+		<forward name="fraud_forum_claim" path="fraud_forum_claim" />
 		
 	</global-forwards>
 
@@ -917,6 +926,11 @@
 		<action path="/lf_boxcount" type="com.bagnet.nettracer.tracing.actions.lfc.BoxCountAction" name="lfBoxCountForm" scope="session" validate="false"></action>
 		<action path="/lf_search_salvage" type="com.bagnet.nettracer.tracing.actions.lfc.SalvageSearchAction" name="lfSalvageSearchForm" scope="session" validate="false"></action>
 
+		<action path="/fraud_forum_search" type="com.bagnet.nettracer.tracing.actions.forum.ForumSearchAction" name="forumSearchForm" scope="session" validate="false"></action>
+		<action path="/fraud_forum_create" type="com.bagnet.nettracer.tracing.actions.forum.ForumCreateAction" name="forumViewForm" scope="session" validate="false"></action>
+		<action path="/fraud_forum_view" type="com.bagnet.nettracer.tracing.actions.forum.ForumViewAction" name="forumViewForm" scope="session" validate="false"></action>
+		<action path="/fraud_forum_claim" type="com.bagnet.nettracer.tracing.actions.forum.ForumClaimAction" name="forumClaimForm" scope="session" validate="false"></action>
+		
 	</action-mappings>
 
 	<!-- ========== Controller Configuration ================================ -->

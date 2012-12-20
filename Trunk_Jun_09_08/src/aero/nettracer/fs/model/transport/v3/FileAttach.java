@@ -3,26 +3,26 @@ package aero.nettracer.fs.model.transport.v3;
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.Entity;
-
-import org.hibernate.annotations.Proxy;
-
-@Entity
-@Proxy(lazy = false)
 public class FileAttach implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	File file;
-	Set<Attachment> attachments;
-	
-	public File getFile(){
+	Set<FsAttachment> attachments;
+
+	public File getFile() {
 		return file;
 	}
-	public void setFile(File file){
-		this.file=file;
+
+	public void setFile(File file) {
+		this.file = file;
 	}
-	public Set<Attachment> getAttachments(){
+
+	public Set<FsAttachment> getAttachments() {
 		return attachments;
 	}
-	public void setAttachments(Set<Attachment> attachments){
-		this.attachments=attachments;
+
+	public void setAttachments(Set<FsAttachment> attachments) {
+		this.attachments = attachments;
 	}
 }

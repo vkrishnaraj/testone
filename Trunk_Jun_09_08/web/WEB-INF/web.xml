@@ -156,6 +156,10 @@
   <url-pattern>/showImage</url-pattern>
  </servlet-mapping>
  <servlet-mapping>
+  <servlet-name>retrieveAttachment</servlet-name>
+  <url-pattern>/retrieveAttachment</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
   <servlet-name>showCaptcha</servlet-name>
   <url-pattern>/showCaptcha</url-pattern>
  </servlet-mapping>

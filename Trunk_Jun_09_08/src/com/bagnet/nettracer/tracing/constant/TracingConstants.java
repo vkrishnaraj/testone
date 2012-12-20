@@ -914,6 +914,12 @@ public class TracingConstants {
 	public final static String AJAX_SERVICELEVEL = "ajax_servicelevel";
 	public final static String AJAX_STATUSES = "ajax_statuses";
 	
+	//Forum pages
+	public final static String FRAUD_FORUM_SEARCH = "fraud_forum_search";
+	public final static String FRAUD_FORUM_CREATE = "fraud_forum_create";
+	public final static String FRAUD_FORUM_VIEW = "fraud_forum_view";
+	public final static String FRAUD_FORUM_CLAIM = "fraud_forum_claim";
+	
 	// defaults
 	public final static String US_COUNTRY_CODE = "US";
 	//public final static String DEFAULT_AIRLINE = "FL";
@@ -959,6 +965,8 @@ public class TracingConstants {
 	public static final String WEB_SERVICE_DTO = "web.service.dto";
 	public static final String SYSTEM_COMPONENT_NAME_CLERICAL_CLAIMS_FEATURES = "Clerical Claims Features";
 	public static final String SYSTEM_COMPONENT_NAME_CENTRAL_BAGGAGE_CLAIMS_FEATURES = "Central Baggage Claims Features";
+	
+	public static final int FORUM_ROWS_PER_PAGE = 10;
 
 	
 	// dispute resolution page

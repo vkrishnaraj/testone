@@ -971,5 +971,18 @@
     </definition>
     <definition name="ajax_blank" path="/pages/ajax_divs/lf_blank.jsp">
     </definition>
+    
+    <definition name="fraud_forum_search" extends="user_menu">
+        <put name="center"   value="/pages/fraud_forum/forum_search.jsp"/>
+    </definition>
+    <definition name="fraud_forum_create" extends="user_menu">
+        <put name="center"   value="/pages/fraud_forum/forum_create.jsp"/>
+    </definition>
+    <definition name="fraud_forum_view" extends="user_menu">
+        <put name="center"   value="/pages/fraud_forum/forum_view.jsp"/>
+    </definition>
+    <definition name="fraud_forum_claim" extends="user_menu">
+        <put name="center"   value="/pages/fraud_forum/forum_claim.jsp"/>
+    </definition>
 
  </tiles-definitions>
