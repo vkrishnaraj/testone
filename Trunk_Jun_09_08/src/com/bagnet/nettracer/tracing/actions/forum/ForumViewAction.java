@@ -121,8 +121,8 @@ public class ForumViewAction extends CheckedAction {
 		} else {
 			if (itemindex >= 0) {
 				// don't remove photo for now.
-				Attachment theattachment= (Attachment) fform.getNewAttachments().toArray()[itemindex];
-				remote.deleteAttachment(theattachment.getAttachment_id());
+				FsAttachment theattachment= (FsAttachment) fform.getNewAttachments().toArray()[itemindex];
+				remote.deleteAttachment(theattachment.getId());
 				fform.getNewAttachments().remove(theattachment);
 				request.setAttribute("upload", Integer.toString(itemindex));
 			} else if (fileindex >= 0) {

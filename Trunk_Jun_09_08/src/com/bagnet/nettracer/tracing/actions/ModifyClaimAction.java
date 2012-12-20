@@ -70,6 +70,7 @@ import com.bagnet.nettracer.tracing.history.ClaimHistoryObject;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.FileShareUtils;
+import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.ImageUtils;
@@ -312,6 +313,7 @@ public class ModifyClaimAction extends CheckedAction {
 					Attachment theattachment= (Attachment) cform.getClaim().getAttachments().toArray()[itemindex];
 					remote.deleteAttachment(theattachment.getAttachment_id());
 					cform.getClaim().getAttachments().remove(theattachment);
+					HibernateUtils.delete(theattachment);
 					request.setAttribute("upload", Integer.toString(itemindex));
 				} else if (fileindex >= 0) {
 					// add photo
