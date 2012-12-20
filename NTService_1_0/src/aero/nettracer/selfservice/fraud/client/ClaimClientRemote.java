@@ -7,9 +7,14 @@ import java.util.Set;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 
 import aero.nettracer.fs.model.transport.v0.File;
+import aero.nettracer.fs.model.transport.v0.FsAttachment;
+import aero.nettracer.fs.model.transport.v0.FsClaim;
 import aero.nettracer.fs.model.transport.v0.detection.AccessRequest;
 import aero.nettracer.fs.model.transport.v0.detection.AccessRequestDTO;
 import aero.nettracer.fs.model.transport.v0.detection.TraceResponse;
+import aero.nettracer.fs.model.transport.v0.forum.FsForumThread;
+import aero.nettracer.fs.model.transport.v0.forum.FsForumSearch;
+import aero.nettracer.fs.model.transport.v0.forum.FsForumSearchResults;
 
 
 public interface ClaimClientRemote {
@@ -32,8 +37,13 @@ public interface ClaimClientRemote {
 	public int getAccessRequestsCount(AccessRequestDTO dto);
 	public Map<String, Integer> getMatches(List<String> idList);
 	public Map<String, Integer> getMatches(List<String> idList, String companycode);
-	public int uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, long fileid,String airline,long claimid, int filesize, RemoteInputStream ris);
+	public FsAttachment uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath,String airline, int filesize, RemoteInputStream ris);
 	public Object[] getAttachment(int attachID, String airline);
 	public boolean saveAttachments(List<Integer> attachIDs, long fileid, String airline, long claimId); 
 	public boolean deleteAttachment(int attachID); 
+	public boolean saveThread(FsForumThread thread);
+	public FsForumThread getThread(long threadID);
+	public FsForumSearchResults getTags(int page);
+	public FsForumSearchResults getThreads(FsForumSearch criteria, int page);
+	public FsClaim getClaim(long claimId);
 }

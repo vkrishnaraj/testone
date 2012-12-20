@@ -106,7 +106,7 @@ public class FileUtils {
 	}
 	
 	// upload images or files for the front pages
-	public static int doUpload(File theFile,int maxSize, String folder,String picpath,FsClaim claim, int filesize, RemoteInputStream ris) {
+	public static FsAttachment doUpload(File theFile,int maxSize, String folder,String picpath,String airline, int filesize, RemoteInputStream ris) {
 		RemoteInputStreamServer istream =null;
 		try {
 			//to find out the file extension: if image, then create thumb
@@ -115,7 +115,7 @@ public class FileUtils {
 			
 			// check file size
 			if (maxSize > 0 && Integer.valueOf(String.valueOf(theFile.getTotalSpace())) > maxSize) {
-				return -1;
+				return null;
 			}
 			
 			//retrieve the file data
@@ -123,7 +123,7 @@ public class FileUtils {
 			if (!FileUtils.makeFolder(image_store + folder)) {
 				//Error in creating a directory.
 				logger.error("Unable to create directory");
-				return -1;
+				return null;
 			}
 
 			//file names corresponding to the local store.
@@ -150,17 +150,17 @@ public class FileUtils {
 			FsAttachment attach=new FsAttachment();
 			attach.setPath(picpath);
 			attach.setDescription(myFileName);
-			attach.setCompCode(claim.getAirline());
+			attach.setCompCode(airline);
 			int attachid=saveAttachment(attach);
-				return attachid;
+			return attach;
 			
 
 		} catch (FileNotFoundException fnfe) {
 			logger.error("Exception A: " + fnfe.getMessage());
-			return -1;
+			return null;
 		} catch (IOException ioe) {
 			logger.error("Exception B: " + ioe.getMessage());
-			return -1;
+			return null;
 		}
 		finally {
 			if(istream!=null) istream.close();
@@ -246,8 +246,8 @@ public class FileUtils {
 			FsAttachment attach=(FsAttachment) sess.load(FsAttachment.class, attachID);
 
 			boolean canAccess=true;
-			if(attach.getClaim_id()!=0){
-				FsClaim claim=getClaim(attach.getClaim_id(), sess);
+			if(attach.getClaim() != null && attach.getClaim().getId() != 0){
+				FsClaim claim=attach.getClaim();
 				List<PrivacyPermissions> p = PrivacyPermissionsBean.getPrivacyPermissions();
 				List<FsAttachment> attachList=new ArrayList<FsAttachment>();
 				attachList.add(attach);
@@ -407,7 +407,7 @@ public class FileUtils {
 			List<FsAttachment> attachments=getAttachmentsById(attachIDs);
 			Set<FsAttachment> toSave=new HashSet();
 			for(FsAttachment attach:attachments){
-				attach.setClaim_id(claim.getId());
+				attach.setClaim(claim);
 				toSave.add(attach);
 			}
 			saveAttachments(toSave);

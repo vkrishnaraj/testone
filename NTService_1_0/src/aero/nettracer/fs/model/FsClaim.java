@@ -109,6 +109,11 @@ public class FsClaim implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private Set<Phone> phones;
 	
+	@OneToMany(mappedBy = "claim", cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	private Set<FsAttachment> attachments;
+	
 	
 	@Transient
 	protected Person claimant = null;
@@ -368,6 +373,14 @@ public class FsClaim implements Serializable {
 
 	public Set<Phone> getPhones() {
 		return phones;
+	}
+
+	public Set<FsAttachment> getAttachments() {
+		return attachments;
+	}
+
+	public void setAttachments(Set<FsAttachment> attachments) {
+		this.attachments = attachments;
 	}
 	
 }

@@ -10,13 +10,18 @@ import javax.ejb.Stateless;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
-import com.healthmarketscience.rmiio.RemoteInputStream;
-
-import aero.nettracer.fs.model.transport.v0.detection.AccessRequestDTO;
-import aero.nettracer.fs.model.transport.v0.detection.AccessRequest;
-import aero.nettracer.fs.model.transport.v0.detection.TraceResponse;
 import aero.nettracer.fs.model.transport.v0.File;
+import aero.nettracer.fs.model.transport.v0.FsAttachment;
+import aero.nettracer.fs.model.transport.v0.FsClaim;
+import aero.nettracer.fs.model.transport.v0.detection.AccessRequest;
+import aero.nettracer.fs.model.transport.v0.detection.AccessRequestDTO;
+import aero.nettracer.fs.model.transport.v0.detection.TraceResponse;
+import aero.nettracer.fs.model.transport.v0.forum.FsForumSearch;
+import aero.nettracer.fs.model.transport.v0.forum.FsForumSearchResults;
+import aero.nettracer.fs.model.transport.v0.forum.FsForumThread;
 import aero.nettracer.selfservice.fraud.ClaimBean;
+
+import com.healthmarketscience.rmiio.RemoteInputStream;
 
 
 @Stateless
@@ -155,9 +160,9 @@ public class ClaimClientBeanV2 implements ClaimClientRemoteV2{
 	}
 	
 	@Override
-	public int uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, long fileid,String airline,long claimid, int filesize, RemoteInputStream ris)
+	public FsAttachment uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, String airline, int filesize, RemoteInputStream ris)
 	{
-		return -1;
+		return null;
 	}
 
 	@Override
@@ -168,4 +173,19 @@ public class ClaimClientBeanV2 implements ClaimClientRemoteV2{
 
 	@Override
 	public boolean deleteAttachment(int attachID) { return false;}
+
+	@Override
+	public boolean saveThread(FsForumThread thread) {return false;}
+
+	@Override
+	public FsForumThread getThread(long threadID) {return null;}
+
+	@Override
+	public FsForumSearchResults getTags(int page) {return null;}
+
+	@Override
+	public FsForumSearchResults getThreads(FsForumSearch criteria, int page) {return null;}
+
+	@Override
+	public FsClaim getClaim(long claimId) {return null;}
 }

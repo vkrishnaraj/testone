@@ -12,14 +12,18 @@ import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
 import aero.nettracer.fs.model.transport.v0.File;
+import aero.nettracer.fs.model.transport.v0.FsAttachment;
+import aero.nettracer.fs.model.transport.v0.FsClaim;
 import aero.nettracer.fs.model.transport.v0.detection.AccessRequest;
 import aero.nettracer.fs.model.transport.v0.detection.AccessRequestDTO;
 import aero.nettracer.fs.model.transport.v0.detection.TraceResponse;
+import aero.nettracer.fs.model.transport.v0.forum.FsForumSearch;
+import aero.nettracer.fs.model.transport.v0.forum.FsForumThread;
+import aero.nettracer.fs.model.transport.v0.forum.FsForumSearchResults;
 import aero.nettracer.fs.utilities.FileUtils;
 import aero.nettracer.selfservice.fraud.ClaimBean;
 
 import com.healthmarketscience.rmiio.RemoteInputStream;
-
 
 @Stateless
 public class ClaimClientBeanV3 implements ClaimClientRemoteV3{
@@ -116,15 +120,12 @@ public class ClaimClientBeanV3 implements ClaimClientRemoteV3{
 		for(aero.nettracer.fs.model.transport.v3.FsClaim claim:file.getClaims())
 		{
 			List<aero.nettracer.fs.model.FsAttachment> attachList = FileUtils.getAttachmentsByClaimId(claim.getId(), airline);
-			Set<aero.nettracer.fs.model.transport.v3.Attachment> returnList = null;
+			Set<aero.nettracer.fs.model.transport.v3.FsAttachment> returnList = null;
 			if(attachList != null){
 				returnList = new HashSet();
 				for(aero.nettracer.fs.model.FsAttachment fs:attachList){
-					if(fs.getClaim_id()==claim.getId())	{
-						aero.nettracer.fs.model.transport.v3.Attachment attach=new aero.nettracer.fs.model.transport.v3.Attachment();
-						attach.setAttachment_id(fs.getId());
-						attach.setDescription(fs.getDescription());
-						returnList.add(mapper.map(attach, aero.nettracer.fs.model.transport.v3.Attachment.class));
+					if(fs.getClaim().getId()==claim.getId())	{
+						returnList.add(mapper.map(fs, aero.nettracer.fs.model.transport.v3.FsAttachment.class));
 					}
 				}
 				claim.setAttachments(returnList);
@@ -169,46 +170,19 @@ public class ClaimClientBeanV3 implements ClaimClientRemoteV3{
 	}
 	
 	@Override
-	public int uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, long fileid,String airline,long claimid, int filesize, RemoteInputStream ris) {
-		return bean.uploadAttachment(theFile, maxSize, folder, picpath, fileid, airline, claimid,filesize, ris);
-		//return "";
+	public FsAttachment uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, String airline, int filesize, RemoteInputStream ris) {
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		return mapper.map(bean.uploadAttachment(theFile, maxSize, folder, picpath, airline,filesize, ris), aero.nettracer.fs.model.transport.v3.FsAttachment.class);
 	}
 	
 	@Override
 	public Object[] getAttachment(int attachID, String airline) {
 		return FileUtils.getAttachment(attachID, airline); 
-		//return "";
 	}
-	
-//	@Override
-//	public File getFileWithAttachments(long fileId, String airline) {
-//		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance(); 
-//		aero.nettracer.fs.model.transport.v3.File file=mapper.map(bean.getFile(fileId, airline), aero.nettracer.fs.model.transport.v3.File.class);
-//		
-//		for(aero.nettracer.fs.model.transport.v3.FsClaim claim:file.getClaims())
-//		{
-//			List<aero.nettracer.fs.model.FsAttachment> attachList = bean.getAttachmentsByClaimId(claim.getId(),fileId,airline);
-//			Set<aero.nettracer.fs.model.transport.v3.Attachment> returnList = null;
-//			if(attachList != null){
-//				returnList = new HashSet();
-//				for(aero.nettracer.fs.model.FsAttachment fs:attachList){
-//					if(fs.getClaim_id()==claim.getId())	{
-//						aero.nettracer.fs.model.transport.v3.Attachment attach=new aero.nettracer.fs.model.transport.v3.Attachment();
-//						attach.setAttachment_id(fs.getId());
-//						attach.setDescription(fs.getdescription());
-//						returnList.add(mapper.map(attach, aero.nettracer.fs.model.transport.v3.Attachment.class));
-//					}
-//				}
-//				claim.setAttachments(returnList);
-//			}
-//		}
-//		return file;
-//	}
 	
 	@Override
 	public boolean saveAttachments(List<Integer> attachIDs, long fileid, String airline, long claimId) {
 		return bean.saveAttachments(attachIDs, fileid, airline, claimId); 
-		//return "";
 	}
 	
 	
@@ -226,6 +200,62 @@ public class ClaimClientBeanV3 implements ClaimClientRemoteV3{
 	@Override
 	public boolean deleteAttachment(int attachID) { 
 			return FileUtils.deleteAttachment(attachID);
+	}
+
+	@Override
+	public boolean saveThread(FsForumThread thread) {
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		return bean.saveThread(mapper.map((aero.nettracer.fs.model.transport.v3.forum.FsForumThread)thread, aero.nettracer.fs.model.forum.FsForumThread.class));
+	}
+
+	@Override
+	public FsForumThread getThread(long threadID) {
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		aero.nettracer.fs.model.forum.FsForumThread dbThread = bean.getThread(threadID);
+		FsForumThread ejbThread = mapper.map(dbThread, aero.nettracer.fs.model.transport.v3.forum.FsForumThread.class);
+		return ejbThread;
+	}
+
+	@Override
+	public FsForumSearchResults getTags(int page) {
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		List<aero.nettracer.fs.model.forum.FsForumTag> dbTags = bean.getTags(page);
+		ArrayList<aero.nettracer.fs.model.transport.v3.forum.FsForumTag> ejbTags = null;
+		if(dbTags != null){
+			ejbTags = new ArrayList<aero.nettracer.fs.model.transport.v3.forum.FsForumTag>();
+			for (aero.nettracer.fs.model.forum.FsForumTag dbTag : dbTags) {
+				ejbTags.add(mapper.map(dbTag, aero.nettracer.fs.model.transport.v3.forum.FsForumTag.class));
+			}
+		} 
+		aero.nettracer.fs.model.transport.v3.forum.FsForumSearchResults toReturn = new aero.nettracer.fs.model.transport.v3.forum.FsForumSearchResults();
+		toReturn.setTags(ejbTags);
+		toReturn.setTotal(bean.getTagTotal());
+		return toReturn;
+	}
+
+	@Override
+	public FsForumSearchResults getThreads(FsForumSearch criteria, int page) {
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		aero.nettracer.fs.model.forum.FsForumSearch critModel = 
+				mapper.map((aero.nettracer.fs.model.transport.v3.forum.FsForumSearch)criteria, aero.nettracer.fs.model.forum.FsForumSearch.class);
+		List<aero.nettracer.fs.model.forum.FsForumThreadInfo> dbList = bean.getThreads(critModel, page);
+		ArrayList<aero.nettracer.fs.model.transport.v3.forum.FsForumThreadInfo> ejbList = null;
+		if(dbList != null){
+			ejbList = new ArrayList<aero.nettracer.fs.model.transport.v3.forum.FsForumThreadInfo>();
+			for (aero.nettracer.fs.model.forum.FsForumThreadInfo dbThread : dbList) {
+				ejbList.add(mapper.map(dbThread, aero.nettracer.fs.model.transport.v3.forum.FsForumThreadInfo.class));
+			}
+		} 
+		aero.nettracer.fs.model.transport.v3.forum.FsForumSearchResults toReturn = new aero.nettracer.fs.model.transport.v3.forum.FsForumSearchResults();
+		toReturn.setThreads(ejbList);
+		toReturn.setTotal(bean.getThreadTotal(critModel));
+		return toReturn;
+	}
+
+	@Override
+	public FsClaim getClaim(long claimId) {
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		return mapper.map(bean.getClaim(claimId), aero.nettracer.fs.model.transport.v3.FsClaim.class);
 	}
 	
 }

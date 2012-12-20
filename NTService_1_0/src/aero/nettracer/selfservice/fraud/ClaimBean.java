@@ -29,6 +29,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
@@ -52,6 +53,11 @@ import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.model.detection.Whitelist;
 import aero.nettracer.fs.model.messaging.FsMessage;
+import aero.nettracer.fs.model.forum.FsForumPost;
+import aero.nettracer.fs.model.forum.FsForumTag;
+import aero.nettracer.fs.model.forum.FsForumThread;
+import aero.nettracer.fs.model.forum.FsForumSearch;
+import aero.nettracer.fs.model.forum.FsForumThreadInfo;
 import aero.nettracer.fs.utilities.AuditUtil;
 import aero.nettracer.fs.utilities.DataRetentionThread;
 import aero.nettracer.fs.utilities.FileUtils;
@@ -66,6 +72,7 @@ import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions.AccessLevelType;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
+
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
@@ -74,6 +81,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 public class ClaimBean implements ClaimRemote, ClaimHome {
 	private static final Logger logger = Logger.getLogger(ClaimBean.class);
 	private static Thread DATA_RETENTION_THREAD;
+	private static final int FORUM_ROW_LIMIT = 10;
 	
 
 	public ClaimBean(){
@@ -926,23 +934,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return getMatches(idList, "US");//TODO deprecate when US is updated to 3.2.1.1		
 	}
 	
-	public int uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, long fileid, String airline, long claimid, int filesize, RemoteInputStream ris){
-			// Save the file in the local directory.
-			int attachid=0;
-			File file=getFile(fileid, airline);
-			FsClaim claim=null;
-			for(FsClaim c:file.getClaims()){
-				if(c.getSwapId()==claimid){
-					claim=c;
-				}
-			}
-			
-			attachid=FileUtils.doUpload(theFile, maxSize, folder, picpath, claim, filesize, ris);
-			if(attachid!=0){
-				return attachid;
-			} else {
-				return -1;
-			}
+	public FsAttachment uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, String airline, int filesize, RemoteInputStream ris){
+			// Save the file in the local directory.			
+			return FileUtils.doUpload(theFile, maxSize, folder, picpath, airline, filesize, ris);
 
 	}
 	
@@ -1029,6 +1023,288 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		
 		return toReturn;
 	}
+
+	public boolean saveThread(FsForumThread thread) {
+		if (thread == null) {
+			return false;
+		}
+		Transaction t = null;
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			if (thread.getId() == 0) {
+				sess.save(thread);
+			} else {
+				for (FsForumPost post : thread.getPosts()) {
+					if (post.getId() == 0) {
+						convertClaims(post);
+						sess.saveOrUpdate(post);
+					}
+				}
+			}
+			t.commit();
+		} catch (Exception e) {
+			t.rollback();
+			logger.error("unable to save thread " + e);
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
+		}
+		return true;
+	}
 	
+	private void convertClaims(FsForumPost post) {
+		if (post.getClaims() != null && post.getClaims().size() > 0) {
+			Set<FsClaim> fixedClaims = new LinkedHashSet<FsClaim>();
+			Session sess = null;
+			try {
+				sess = HibernateWrapper.getSession().openSession();
+				for (FsClaim ntClaim : post.getClaims()) {
+					FsClaim fsClaim = (FsClaim) sess.createCriteria(FsClaim.class).
+							add(Restrictions.eq("swapId", ntClaim.getId())).
+							add(Restrictions.eq("airline", ntClaim.getAirline())).
+							setMaxResults(1).uniqueResult();
+					if (fsClaim != null) {
+						fixedClaims.add(fsClaim);
+					}
+				}
+			} catch (Exception e) {
+				logger.error("unable to convert thread " + e);
+				e.printStackTrace();
+			} finally {
+				if (sess != null) {
+					sess.close();
+				}
+			}
+			post.setClaims(fixedClaims);
+		}
+	}
+
+	public FsForumThread getThread(long threadID) {
+		Session sess = null;
+		FsForumThread toReturn = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			toReturn = (FsForumThread) sess.load(FsForumThread.class, threadID);
+		} catch (Exception e) {
+			logger.error("unable to retrieve thread " + threadID + ": " + e);
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
+		}
+		return toReturn;
+	}
+
+	@SuppressWarnings("unchecked")
+	public int getTagTotal() {
+		String sql = "select count(tag.id) from aero.nettracer.fs.model.forum.FsForumTag tag";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			List<Long> result = q.list();
+			sess.close();
+			if (result != null && result.size() > 0) {
+				return ((Long) result.get(0)).intValue();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return 0;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<FsForumTag> getTags(int page) {
+		List<FsForumTag> toReturn = null;
+		String sql = "from aero.nettracer.fs.model.forum.FsForumTag tg order by tg.numThreads";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			if (page > 0) {
+				q.setFirstResult(FORUM_ROW_LIMIT * page);
+			}
+			if (page != -1) {
+				q.setMaxResults(FORUM_ROW_LIMIT);
+			}
+			List<FsForumTag> result = q.list();
+			sess.close();
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return toReturn;
+	}
+
+	@SuppressWarnings("unchecked")
+	public int getThreadTotal(FsForumSearch criteria) {
+		String sql = "select count(t.id) from aero.nettracer.fs.model.forum.FsForumThread t left join t.posts p " 
+				+ generateWhereFromCriteria(criteria) + " group by t.id ";
+		Session sess = null;
+		logger.info("QUERY:\n" + sql + "\nEND QUERY\n\n");
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			setThreadSearchParameters(q, criteria);
+			List<Long> result = q.list();
+			sess.close();
+			if (result != null && result.size() > 0) {
+				return ((Long) result.get(0)).intValue();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return 0;
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<FsForumThreadInfo> getThreads(FsForumSearch criteria, int page) {
+		List<FsForumThreadInfo> toReturn = new ArrayList<FsForumThreadInfo>();
+		String sql = "select t from aero.nettracer.fs.model.forum.FsForumThread t left join t.posts p "
+				+ generateWhereFromCriteria(criteria) + " group by t.id order by p.createDate desc, t.createDate desc, p.id desc";
+		List<FsForumThread> theResult = null;
+		Session sess = null;
+		logger.info("QUERY:\n" + sql + "\nEND QUERY\n\n");
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			setThreadSearchParameters(q, criteria);
+			if (page > 0) {
+				q.setFirstResult(FORUM_ROW_LIMIT * page);
+			}
+			q.setMaxResults(FORUM_ROW_LIMIT);
+			theResult = q.list();
+			sess.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		if (theResult != null) {
+			for (FsForumThread t : theResult) {
+				FsForumThreadInfo ti = new FsForumThreadInfo();
+				ti.setCreateAgent(t.getCreateAgent());
+				ti.setCreateAirline(t.getCreateAirline());
+				ti.setCreateDate(t.getCreateDate());
+				ti.setId(t.getId());
+				ti.setNumAttachments(t.getNumAttachments());
+				ti.setNumFiles(t.getNumFiles());
+				ti.setNumPosts(t.getNumPosts());
+				ti.setTitle(t.getTitle());
+				List<String> tags = new ArrayList<String>();
+				if (t.getTags() != null) {
+					for (FsForumTag tag : t.getTags()) {
+						tags.add(tag.getName());
+					}
+					ti.setTags(tags);
+				}
+				toReturn.add(ti);
+			}
+		}
+		return toReturn;
+	}
+	
+	private String generateWhereFromCriteria(FsForumSearch criteria) {
+		String toReturn = " where 1=1 ";
+		if (criteria.getCreateAgent() != null) {
+			toReturn += " and (t.createAgent = :agent or ";
+			toReturn += " p.createAgent = :agent) ";
+		}
+		if (criteria.getCreateAirline() != null) {
+			toReturn += " and (t.createAirline = :airline or ";
+			toReturn += " p.createAirline = :airline) ";
+		}
+		if (criteria.getStartDate() != null) {
+			toReturn += " and (t.createDate >= :sdate or ";
+			toReturn += " p.createDate >= :sdate) ";
+		}
+		if (criteria.getEndDate() != null) {
+			toReturn += " and (t.createDate <= :edate or ";
+			toReturn += " p.createDate <= :edate) ";
+		}
+		if (criteria.getTags() != null) {
+			toReturn += " and t.tags in (:tagList) ";
+		}
+		if (criteria.getText() != null) {
+			toReturn += " and (t.title like :theText or ";
+			toReturn += " p.title like :theText or ";
+			toReturn += " p.text like :theText) ";
+		}
+		return toReturn;
+	}
+	
+	private void setThreadSearchParameters(Query q, FsForumSearch criteria) {
+		if (criteria.getCreateAgent() != null) {
+			q.setString("agent", criteria.getCreateAgent());
+		}
+		if (criteria.getCreateAirline() != null) {
+			q.setString("airline", criteria.getCreateAirline());
+		}
+		if (criteria.getStartDate() != null) {
+			q.setDate("sdate", criteria.getStartDate());
+		}
+		if (criteria.getEndDate() != null) {
+			q.setDate("edate", criteria.getEndDate());
+		}
+		if (criteria.getTags() != null) {
+			q.setParameterList("tagList", criteria.getTags());
+		}
+		if (criteria.getText() != null) {
+			q.setString("theText","%" + criteria.getText() + "%");
+		}
+	}
+	
+	public FsClaim getClaim(long claimId) {
+		FsClaim toReturn = new FsClaim();
+		String sql = "select count(*) from FsForumPost_Claim where claim_id = " + claimId;
+		List theResult = null;
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createSQLQuery(sql);
+			theResult = q.list();
+			sess.close();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		if (theResult != null && theResult.size() > 0) {
+			try{
+				sess = HibernateWrapper.getSession().openSession();
+				toReturn = (FsClaim) sess.load(FsClaim.class, claimId);
+				sess.close();
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				if(sess != null && sess.isOpen()){
+					sess.close();
+				}
+			}
+		}
+		return toReturn;
+	}
 	
 }
