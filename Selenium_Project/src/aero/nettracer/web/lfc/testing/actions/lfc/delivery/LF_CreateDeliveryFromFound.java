@@ -16,6 +16,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
+			selenium.select("name=lost.companyId", "label=Southwest Airlines");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td/input", "Sanders");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[2]/input", "Mike");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/input", "950 Marietta St");
@@ -58,6 +59,8 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			LF_CreateDeliveryFromFound.foundId = String.valueOf(System.currentTimeMillis());
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_CreateDeliveryFromFound.foundId);
+			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.locationId", "label=LZ");
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			LF_CreateDeliveryFromFound.today = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td[2]/input");

@@ -15,6 +15,9 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
+
+			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.locationId", "label=LZ");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td/input", "Sanders");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[2]/input", "Mike");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/input", "950 Marietta St");

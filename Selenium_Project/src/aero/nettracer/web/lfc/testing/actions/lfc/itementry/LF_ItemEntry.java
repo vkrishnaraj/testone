@@ -15,13 +15,19 @@ public class LF_ItemEntry extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			
+
+			selenium.select("//select[@id='foundCompanyId']", "label=Please select...");
 			selenium.select("//select[@id='foundLocationId']", "label=Please select...");
 			selenium.click("//input[@id='saveButton']");
 			assertEquals("Item Received Date is required.", selenium.getAlert());
 			
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
+			selenium.click("//input[@id='saveButton']");
+
+			assertEquals("Company is required.", selenium.getAlert());
+			
+			selenium.select("//select[@name='found.companyId']", "label=SWA");
 			selenium.click("//input[@id='saveButton']");
 			assertEquals("Found Station is required.", selenium.getAlert());
 			
@@ -142,6 +148,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Briefcase/Portfolio");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[5]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='addr1']", "test");
@@ -166,6 +174,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Camera/Photo Equipment");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[6]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='addr1']", "test");
@@ -190,6 +200,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Cards (ATM, Credit, etc.)");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[7]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='city']", "test");
@@ -214,6 +226,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Cellphone");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("css=option[value=\"7\"]");
 		selenium.click("//input[@id='button']");
 		selenium.select("//select[@id='state']", "label=Alabama");
@@ -240,6 +254,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Cellphone Accessories");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[9]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='province']", "test");
@@ -264,6 +280,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Clothing");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//option[@value='9']");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='zip']", "test");
@@ -288,6 +306,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Computer-Related");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[11]");
 		selenium.click("//input[@id='button']");
 		selenium.select("//select[@id='country']", "label=Afghanistan");
@@ -317,6 +337,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Cosmetic/Shaving Kit");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[12]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='primaryPhone']", "1112223333");
@@ -342,6 +364,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Electronic Equipment");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[13]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='secondaryPhone']", "4445556666");
@@ -367,6 +391,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Glasses");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[14]");
 		selenium.click("//div[@id='itementryleft']/center[2]/input");
 		selenium.type("//input[@id='email']", "test@test.com");
@@ -391,6 +417,8 @@ public class LF_ItemEntry extends LoginUtil {
 		testId = String.valueOf(System.currentTimeMillis());
 		selenium.type("//input[@id='barcode']", testId);
 		selenium.select("//select[@id='category']", "label=Jewelry/Watches");
+		selenium.select("//select[@name='found.companyId']", "label=SWA");
+		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[15]");
 		selenium.select("//div[@id='subcategorydiv']/select", "label=Bracelet");
 		selenium.type("//input[@id='brand']", "test");

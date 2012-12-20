@@ -104,6 +104,8 @@ public class EnterItemsAction extends CheckedAction {
 				
 				// 4. clone the found and set it on the form
 				eiForm.setFound(duplicateFound(found, user));
+
+				request.setAttribute("stationID", eiForm.getFound().getLocation().getStation_ID());
 			} catch (NonUniqueBarcodeException nube) {
 				logger.error(nube, nube);
 				ActionMessage error = new ActionMessage("error.non.unique.barcode");

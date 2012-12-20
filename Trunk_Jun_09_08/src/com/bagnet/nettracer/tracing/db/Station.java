@@ -1,8 +1,14 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.db.lf.SubcompanyStation;
 
 /**
  * @author Administrator
@@ -45,6 +51,9 @@ public class Station implements Serializable {
 	private long currentRegionId;
 	
 	private double currentGoal;
+	
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="station")
+	private Set<SubcompanyStation> subcompanyStations;
 
 	/**
 	 * @hibernate.property type="string"
@@ -62,7 +71,7 @@ public class Station implements Serializable {
 	}
 
 	/**
-	 * @hibernate.property type="integer"
+	 * @hibernate.property type="integer
 	 *                         
 	 * @return Returns the station's incident LZ station.
 	 */

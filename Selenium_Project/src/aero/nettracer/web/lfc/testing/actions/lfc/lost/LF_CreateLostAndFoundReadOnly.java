@@ -79,6 +79,8 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
+
+			selenium.select("name=lost.companyId", "label=Southwest Airlines");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td/input", "Gordon");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[2]/input", "Chris");
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/input", "420 East Ave");

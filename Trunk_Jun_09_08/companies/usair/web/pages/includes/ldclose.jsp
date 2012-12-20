@@ -15,7 +15,7 @@ java.util.Locale                                myLocale   = (java.util.Locale)s
 "org.apache.struts.action.LOCALE");
 %>
 
-function validateLdClose(form, doCheck) { if (doCheck == 1) {
+function validateLdClose(form, doCheck) { if (doCheck == 1 || doCheck == 2) {
 <%
 	Station zzz = StationBMO.getStationByCode("ZZZ", "US");
 	int zzzId = zzz.getStation_ID();

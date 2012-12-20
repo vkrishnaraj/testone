@@ -1,13 +1,17 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
 import java.io.Serializable;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Proxy;
 
@@ -40,6 +44,10 @@ public class Subcompany implements Serializable{
 	private int email_Notice_2;
 	private int auto_Close_Low;
 	private int auto_Close_High;
+	
+
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="subcompany")
+	private Set<SubcompanyStation> subcompanyStations;
 	
 	public long getId() {
 		return id;

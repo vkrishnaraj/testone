@@ -78,7 +78,7 @@
 		var selectedCompany=compList.options[compList.selectedIndex].value;
 		stationList.options.length=1;
 		
-		stationList.options[0]=new Option("<bean:message key="option.lf.please.select" />","0",true,false);
+		stationList.options[0]=new Option("<bean:message key="option.lf.please.select" />","",true,false);
 		<logic:iterate indexId="i" id="cList" name="subComplist"  type="com.bagnet.nettracer.tracing.db.lf.Subcompany" >
 		if("<%=cList.getSubcompanyCode()%>"==selectedCompany)
 			{	

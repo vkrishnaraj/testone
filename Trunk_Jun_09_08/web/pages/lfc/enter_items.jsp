@@ -68,7 +68,7 @@
 		var selectedCompany=compList.options[compList.selectedIndex].value;
 		stationList.options.length=1;
 		
-		stationList.options[0]=new Option("<bean:message key="option.lf.please.select" />","0",true,false);
+		stationList.options[0]=new Option("<bean:message key="option.lf.please.select" />","",true,false);
 		<logic:iterate indexId="i" id="cList" name="subComplist"  type="com.bagnet.nettracer.tracing.db.lf.Subcompany" >
 		if("<%=cList.getSubcompanyCode()%>"==selectedCompany)
 			{	
@@ -150,6 +150,12 @@
 			if (elementName == "disReceivedDate") {
 				if (currentElement.value.length == 0) {
 					alert("<%= (String)bundle.getString("colname.lfc.item.received.date") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        currentElement.focus();
+			        return false;
+				}
+			} else if (elementName == "found.companyId") {
+				if (currentElement.value.length == 0) {
+					alert("<%= (String)bundle.getString("colname.lf.found.company") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 			        currentElement.focus();
 			        return false;
 				}
@@ -545,6 +551,9 @@
 					fieldChanged('state');
 					fieldChanged('country');
 					getStations();
+					var stationList=document.getElementById("foundLocationId");
+					var matchid=<%=request.getAttribute("stationID")%>
+					stationList.value=matchid;
              	</script>
   			</div>
    		</td>
