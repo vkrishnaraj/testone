@@ -73,6 +73,11 @@ public class ForumSearchAction extends CheckedAction {
 		ActionMessages errors = new ActionMessages();
 
 		ForumSearchForm fform = (ForumSearchForm) form;
+		
+		if (request.getParameter("create") != null) {
+			response.sendRedirect("fraud_forum_create.do");
+			return null;
+		}
 
 		int rowsperpage = TracingConstants.FORUM_ROWS_PER_PAGE;
 		int tag_currpage = 0;
