@@ -246,8 +246,8 @@ public class FileUtils {
 			FsAttachment attach=(FsAttachment) sess.load(FsAttachment.class, attachID);
 
 			boolean canAccess=true;
-			if(attach.getClaim() != null && attach.getClaim().getId() != 0){
-				FsClaim claim=attach.getClaim();
+			if(attach.getClaim_id()!=0){
+				FsClaim claim=getClaim(attach.getClaim_id(), sess);
 				List<PrivacyPermissions> p = PrivacyPermissionsBean.getPrivacyPermissions();
 				List<FsAttachment> attachList=new ArrayList<FsAttachment>();
 				attachList.add(attach);
@@ -407,7 +407,7 @@ public class FileUtils {
 			List<FsAttachment> attachments=getAttachmentsById(attachIDs);
 			Set<FsAttachment> toSave=new HashSet();
 			for(FsAttachment attach:attachments){
-				attach.setClaim(claim);
+				attach.setClaim_id(claim.getId());
 				toSave.add(attach);
 			}
 			saveAttachments(toSave);

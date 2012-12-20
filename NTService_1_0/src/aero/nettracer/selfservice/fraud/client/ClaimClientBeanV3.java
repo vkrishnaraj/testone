@@ -124,7 +124,7 @@ public class ClaimClientBeanV3 implements ClaimClientRemoteV3{
 			if(attachList != null){
 				returnList = new HashSet();
 				for(aero.nettracer.fs.model.FsAttachment fs:attachList){
-					if(fs.getClaim().getId()==claim.getId())	{
+					if(fs.getClaim_id()==claim.getId())	{
 						returnList.add(mapper.map(fs, aero.nettracer.fs.model.transport.v3.FsAttachment.class));
 					}
 				}

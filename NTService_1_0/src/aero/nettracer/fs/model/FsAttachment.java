@@ -3,6 +3,7 @@ package aero.nettracer.fs.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -25,9 +26,7 @@ public class FsAttachment implements Serializable {
 	private String description;
 	private String compCode;
 
-	@ManyToOne
-	@JoinColumn(name="claim_id")
-	private FsClaim claim;
+	private long claim_id;
 	
     @ManyToOne
     @JoinColumn(name="post_id")
@@ -48,13 +47,13 @@ public class FsAttachment implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	public FsClaim getClaim() {
-		return claim;
-	}
 
-	public void setClaim(FsClaim claim) {
-		this.claim = claim;
+	public long getClaim_id() {
+		return claim_id;
+	}
+	
+	public void setClaim_id(long claim_id) {
+		this.claim_id = claim_id;
 	}
 
 	public String getPath() {
