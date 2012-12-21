@@ -123,6 +123,8 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			LF_CreateLostAndFoundReadOnly.foundId = String.valueOf(System.currentTimeMillis());
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_CreateLostAndFoundReadOnly.foundId);
+			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.locationId", "label=LZ");
 			selenium.click("//div[@id='maincontent']/table/tbody/tr/td[2]/img");
 			selenium.click("//a[contains(text(),'Today')]");
 			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "Nokia");
