@@ -462,10 +462,12 @@ public class LF_ItemEntry extends LoginUtil {
 		verifyTrue(selenium.isTextPresent("Bin #:"));
 		verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/input"));
 		verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']"));
+		waitForPageToLoadImproved(1000, false);
 		verifyFalse(selenium.isEditable("//input[@id='saveButton']"));
 		selenium.click("//div[@id='moveDiv_" + divId + "']/center/input");
 		verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/input"));
 		verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']"));
+		waitForPageToLoadImproved(1000, false);
 		verifyTrue(selenium.isEditable("//input[@id='saveButton']"));
 	}
 	

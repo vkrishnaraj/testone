@@ -302,7 +302,7 @@ public class US_DisputeManage extends LoginUtil {
 			selenium.select("name=faultstation_id", "label=AUA");
 			selenium.select("name=loss_code", "label=33- Not off-loaded");
 		selenium.click("id=button");
-		assertTrue(selenium.getConfirmation().matches("^Have you verified any Travel Bank Credit\\(s\\) for this file has been created[\\s\\S]$"));
+		//assertTrue(selenium.getConfirmation().matches("^Have you verified any Travel Bank Credit\\(s\\) for this file has been created[\\s\\S]$"));
 		
 		waitForPageToLoadImproved();
 		}
