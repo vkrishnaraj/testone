@@ -350,3 +350,15 @@ h2.swa_faq_title {
 .rich-calendar-boundary-dates {
 	color: #A0A0A0;
 }
+
+.rich-calendar-hover {
+	background-color: #E4F5E2;
+	color: #000000;
+}
+
+.rich-calendar-select {
+background-color: #BED6F8;
+    color: #000000;
+    font-weight: bold;
+}
+

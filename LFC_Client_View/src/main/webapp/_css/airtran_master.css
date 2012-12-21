@@ -240,7 +240,7 @@ ul#socialLinks li a.flickr {
     font-size: 22px;
     font-weight: bold;
     line-height: 26px;
-    color: #1c94c0;
+    color: #055a8d;
 }
 
 .contentHeaderLine {
@@ -469,3 +469,15 @@ BODY {
 .rich-calendar-boundary-dates {
 	color: #A0A0A0;
 }
+
+.rich-calendar-hover {
+	background-color: #E4F5E2;
+	color: #000000;
+}
+
+.rich-calendar-select {
+background-color: #BED6F8;
+    color: #000000;
+    font-weight: bold;
+}
+

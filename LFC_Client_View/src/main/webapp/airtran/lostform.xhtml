@@ -10,6 +10,57 @@
 	<ui:define name="title">Airtran Airways: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form id="lostForm" >
+			<script type="text/javascript">
+				function validateEmail() {
+					var theEmail = document.getElementById("lostForm:email").value;
+					if (!theEmail) {
+						return window.confirm("Please be advised that if an e-mail address is not provided, we" + 
+								" will contact you via telephone and only in the event that we find an item closely" + 
+								" matching the description of your reported lost item.");
+					} else {
+						return true;
+					}
+					
+				}
+				
+				function adjustAddressReq(countryList) {
+					province = document.getElementById("lostForm:province");
+					state = document.getElementById("lostForm:state");
+					if (countryList.options[countryList.selectedIndex].value == "US") {
+						province.value = '';
+						province.readOnly = true;
+					} else {
+						state.selectedIndex = 0;
+						province.readOnly = false;
+					}
+				}
+				
+				function adjustAddressReqState(stateList) {
+					province = document.getElementById("lostForm:province");
+					country = document.getElementById("lostForm:country");
+					if (stateList.options[stateList.selectedIndex].value == "") {
+						province.readOnly = false;
+					} else {
+						province.value = '';
+						province.readOnly = true;
+						country.selectedIndex = 0;
+					}
+				}
+
+		        var curDt = new Date();
+		        
+		        function disablementFunction(day){
+		            if (curDt==undefined){
+		                curDt = day.date.getDate;
+		            }
+		            if (curDt.getTime() - day.date.getTime() &gt;= 0) return true; else return false;  
+		        }
+		        
+		        function disabledClassesProv(day){
+		            if (curDt.getTime() - day.date.getTime() &lt; 0) return 'rich-calendar-boundary-dates';
+		        }
+		        
+			</script>
 			<h:panelGroup>
 				<p class="contentHeader"><t:outputText value="#{msg.lostform_text_title}" escape="false"/></p>
 				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_policy_title}" /></p>
@@ -75,8 +126,8 @@
 						<rich:calendar value="#{lostAndFound.lostReport.dateLost}"  
                            locale="en" buttonIcon="../_images/airtran/cal_icon.gif"
                            popup="true" showWeeksBar="false"
-                           datePattern="MM/dd/yyyy"
-                           enableManualInput="true"                        
+                           datePattern="MM/dd/yyyy" isDayEnabled="disablementFunction"
+                           enableManualInput="true"  dayStyleClass="disabledClassesProv"
                            cellWidth="24px" cellHeight="22px" style="width:250px"/>  
 					</td><td colspan="4">
 						<t:inputText value="#{lostAndFound.lostReport.itemSize}"  style="width: 95%;"/>
@@ -299,48 +350,6 @@
 				    </span> </td></tr></table>
 				</div><br/>
 			</h:panelGroup>
-			<script type="text/javascript">
-				function validateEmail() {
-					var theEmail = document.getElementById("lostForm:email").value;
-					if (!theEmail) {
-						return window.confirm("Please be advised that if an e-mail address is not provided, we" + 
-								" will contact you via telephone and only in the event that we find an item closely" + 
-								" matching the description of your reported lost item.");
-					} else {
-						return true;
-					}
-					
-				}
-				
-				/* 
-								onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
-								onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
-				*/
-				
-				function adjustAddressReq(countryList) {
-					province = document.getElementById("lostForm:province");
-					state = document.getElementById("lostForm:state");
-					if (countryList.options[countryList.selectedIndex].value == "US") {
-						province.value = '';
-						province.readOnly = true;
-					} else {
-						state.selectedIndex = 0;
-						province.readOnly = false;
-					}
-				}
-				
-				function adjustAddressReqState(stateList) {
-					province = document.getElementById("lostForm:province");
-					country = document.getElementById("lostForm:country");
-					if (stateList.options[stateList.selectedIndex].value == "") {
-						province.readOnly = false;
-					} else {
-						province.value = '';
-						province.readOnly = true;
-						country.selectedIndex = 0;
-					}
-				}
-			</script>
 		</h:form>
 	</ui:define>
 </ui:composition>
