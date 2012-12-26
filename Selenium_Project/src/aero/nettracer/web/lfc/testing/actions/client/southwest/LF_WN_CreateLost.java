@@ -14,7 +14,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Did you lose a personal item or a piece of checked baggage during your travels with us?"));
 		verifyTrue(selenium.isTextPresent("We're sorry to hear that you've misplaced your belonging and will do everything in our power to reunite you with your item. To properly guide the search process, please tell us if the item was a part of your checked baggage (i.e. in a piece of luggage that was checked at the ticket counter or at the curbside) or if it was unchecked (i.e. in a carryon bag that you brought onboard the aircraft, or a loose item such as a laptop, a jacket, a child's stuffed animal, etc)?"));
 		selenium.click("id=pageForm:j_id19");
-		waitForPageToLoadImproved(150000);
+		waitForPageToLoadImproved();
 	}
 
 	@Test
@@ -130,11 +130,11 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 	public void testSuccessPage() throws Exception {
 		verifyTrue(selenium.isTextPresent("Thank You For Reporting Your Lost Item"));
 		verifyTrue(selenium.isTextPresent("Lost Item Confirmation"));
-		verifyTrue(selenium.isTextPresent("Thank you for flying with Southwest Airlines and filling out our On-Line Lost Item Report Form."));
+		verifyTrue(selenium.isTextPresent("Thank you for flying with Southwest Airlines and filling out our Online Lost Item Report Form."));
 		String lost_id = selenium.getText("id=j_id7:j_id18");
 		Settings.LOST_ID_LF_WN = lost_id;
 		System.out.println("WN CLIENT VIEW LOST CREATED: " + Settings.LOST_ID_LF_WN);
-		verifyTrue(selenium.isTextPresent("You will be emailed updates on the status of your report every few days."));
+		verifyTrue(selenium.isTextPresent("You will receive e-mail updates with the status of your pending report every few days."));
 		verifyTrue(selenium.isTextPresent("If you would like to see a printable version of your Lost Item Report, please click the review button below."));
 		selenium.click("id=j_id7:j_id26");
 		waitForPageToLoadImproved();
@@ -186,7 +186,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		{
 			verifyTrue(selenium.isTextPresent("Thank You For Updating Your Lost Item"));
 			verifyTrue(selenium.isTextPresent("Edit Lost Item Confirmation"));
-			verifyTrue(selenium.isTextPresent("Thank you for flying with Southwest Airlines and filling out our On-Line Lost Item Report Form."));
+			verifyTrue(selenium.isTextPresent("Thank you for flying with Southwest Airlines and filling out our Online Lost Item Report Form."));
 			String lost_id = selenium.getText("id=j_id7:j_id16");
 			Settings.LOST_ID_LF_WN = lost_id;
 			System.out.println("WN CLIENT VIEW LOST CREATED: " + Settings.LOST_ID_LF_WN);
