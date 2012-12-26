@@ -81,6 +81,7 @@ public class RequestInfoAction extends CheckedAction {
 		requestForm.setContactName(user.getFirstname() + " " + user.getLastname());
 		requestForm.setContactEmail("");
 		requestForm.setContactPhone("");
+		requestForm.setMessage("");
 		
 		return mapping.findForward(TracingConstants.CLAIM_REQUEST_INFO);
 		
