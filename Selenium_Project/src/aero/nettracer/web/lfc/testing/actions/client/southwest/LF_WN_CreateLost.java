@@ -14,7 +14,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Did you lose a personal item or a piece of checked baggage during your travels with us?"));
 		verifyTrue(selenium.isTextPresent("We're sorry to hear that you've misplaced your belonging and will do everything in our power to reunite you with your item. To properly guide the search process, please tell us if the item was a part of your checked baggage (i.e. in a piece of luggage that was checked at the ticket counter or at the curbside) or if it was unchecked (i.e. in a carryon bag that you brought onboard the aircraft, or a loose item such as a laptop, a jacket, a child's stuffed animal, etc)?"));
 		selenium.click("id=pageForm:j_id19");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(150000);
 	}
 
 	@Test
@@ -43,7 +43,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		selenium.click("css=#q2 > span");
 		selenium.click("css=#q3 > span");
 		verifyTrue(selenium.isTextPresent("How will I know if my item has been found?"));
-		verifyTrue(selenium.isTextPresent("If we locate an item that matches the description of your lost item, Lost & Found Central will contact you via email and/or phone to verify that the item is yours and arrange for delivery of the item."));
+		verifyTrue(selenium.isTextPresent("If we locate an item that matches the description of your lost item, Lost & Found Central will contact you via e-mail and/or phone to verify that the item is yours and arrange for delivery of the item."));
 		selenium.click("css=#q3 > span");
 		selenium.click("css=#q4 > span");
 		verifyTrue(selenium.isTextPresent("If my item is found how will it be returned to me?"));
@@ -81,7 +81,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testLostReportPage() throws Exception {
-		selenium.click("id=lostForm:j_id193");
+		selenium.click("id=lostForm:j_id194");
 		waitForPageToLoadImproved(1000, false);
 		assertEquals("Please be advised that if an e-mail address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", selenium.getConfirmation());
 		verifyTrue(selenium.isTextPresent("First Name is required."));
@@ -97,32 +97,32 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Item Category is required."));
 		verifyTrue(selenium.isTextPresent("Arrival Airport required for Segment #1 in the \"About Your Trip\" section."));
 		verifyTrue(selenium.isTextPresent("Departure Airport required for Segment #1 in the \"About Your Trip\" section."));
-		selenium.select("id=lostForm:j_id25", "label=Cellphone");
-		selenium.select("id=lostForm:j_id33", "label=Black");
-		selenium.select("id=lostForm:j_id37", "label=Does Not Apply");
-		selenium.type("id=lostForm:j_id81", "Test");
-		selenium.type("id=lostForm:j_id83", "John");
-		selenium.type("id=lostForm:j_id89", "123 Test");
-		selenium.type("id=lostForm:j_id101", "Test");
+		selenium.select("id=lostForm:j_id26", "label=Cellphone");
+		selenium.select("id=lostForm:j_id34", "label=Black");
+		selenium.select("id=lostForm:j_id38", "label=Does Not Apply");
+		selenium.type("id=lostForm:j_id82", "Test");
+		selenium.type("id=lostForm:j_id84", "John");
+		selenium.type("id=lostForm:j_id90", "123 Test");
+		selenium.type("id=lostForm:j_id102", "Test");
 		selenium.select("id=lostForm:state", "label=Georgia");
-		selenium.type("id=lostForm:j_id106", "30339");
+		selenium.type("id=lostForm:j_id107", "30339");
 		selenium.type("id=lostForm:email", "test@nettracer.aero");
-		selenium.click("id=lostForm:j_id59PopupButton");
-		selenium.click("//td[@id='lostForm:j_id59Footer']/table/tbody/tr/td[5]/div");
-		selenium.select("id=lostForm:segmentTable:0:j_id172", "label=ATL - Atlanta, GA");
-		selenium.select("id=lostForm:segmentTable:0:j_id176", "label=BOS - Boston, MA");
-		selenium.click("id=lostForm:j_id193");
+		selenium.click("id=lostForm:j_id60PopupButton");
+		selenium.click("//td[@id='lostForm:j_id60Footer']/table/tbody/tr/td[5]/div");
+		selenium.select("id=lostForm:segmentTable:0:j_id173", "label=ATL - Atlanta, GA");
+		selenium.select("id=lostForm:segmentTable:0:j_id177", "label=BOS - Boston, MA");
+		selenium.click("id=lostForm:j_id194");
 		waitForPageToLoadImproved(1000, false);
 		verifyTrue(selenium.isTextPresent("Email Address and Confirm Email Address must match."));
 		verifyTrue(selenium.isTextPresent("Phone number of lost phone is required for Category \"Cellphone\"."));
-		selenium.type("id=lostForm:j_id159", "test@nettracer.aero");
-		selenium.select("id=lostForm:j_id25", "label=Bags");
+		selenium.type("id=lostForm:j_id160", "test@nettracer.aero");
+		selenium.select("id=lostForm:j_id26", "label=Bags");
 		waitForPageToLoadImproved(1000, false);
-		selenium.click("id=lostForm:j_id193");
+		selenium.click("id=lostForm:j_id194");
 		waitForPageToLoadImproved(1000, false);
 		verifyTrue(selenium.isTextPresent("Item Subcategory is required for Category \"Bags\"."));
-		selenium.select("id=lostForm:j_id30", "label=Cloth Bag");
-		selenium.click("id=lostForm:j_id193");
+		selenium.select("id=lostForm:j_id31", "label=Cloth Bag");
+		selenium.click("id=lostForm:j_id194");
 		waitForPageToLoadImproved();
 	}
 
@@ -165,19 +165,19 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		{
 			verifyTrue(selenium.isTextPresent("Lost Item Report Form"));
 
-			selenium.type("id=lostForm:j_id47", "2");
-			selenium.type("id=lostForm:j_id49", "2");
-			selenium.type("id=lostForm:j_id51", "2");
-			selenium.type("id=lostForm:j_id61", "2");
-			selenium.type("id=lostForm:j_id63", "2");
-			selenium.type("id=lostForm:j_id67", "2");
-			selenium.type("id=lostForm:j_id71", "21");
-			selenium.type("id=lostForm:j_id83", "2");
-			selenium.type("id=lostForm:j_id85", "2");
-			selenium.type("id=lostForm:j_id89", "2");
-			selenium.type("id=lostForm:j_id93", "2");
-			selenium.type("id=lostForm:j_id101", "2");
-			selenium.click("id=lostForm:j_id194");
+			selenium.type("id=lostForm:j_id48", "2");
+			selenium.type("id=lostForm:j_id50", "2");
+			selenium.type("id=lostForm:j_id52", "2");
+			selenium.type("id=lostForm:j_id62", "2");
+			selenium.type("id=lostForm:j_id64", "2");
+			selenium.type("id=lostForm:j_id68", "2");
+			selenium.type("id=lostForm:j_id72", "21");
+			selenium.type("id=lostForm:j_id84", "2");
+			selenium.type("id=lostForm:j_id86", "2");
+			selenium.type("id=lostForm:j_id90", "2");
+			selenium.type("id=lostForm:j_id94", "2");
+			selenium.type("id=lostForm:j_id102", "2");
+			selenium.click("id=lostForm:j_id195");
 			waitForPageToLoadImproved();
 		}
 
