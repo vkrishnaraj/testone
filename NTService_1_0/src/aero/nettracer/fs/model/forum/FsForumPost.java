@@ -2,7 +2,7 @@ package aero.nettracer.fs.model.forum;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -68,12 +68,12 @@ public class FsForumPost implements Serializable {
 
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	@JoinTable(name = "FsForumPost_Claim", joinColumns = { @JoinColumn(name = "post_id") }, inverseJoinColumns = { @JoinColumn(name = "claim_id") })
-    private Set<FsClaim> claims;
+    private List<FsClaim> claims;
 
 	@OneToMany(mappedBy="post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
-	private Set<FsAttachment> attachments;
+	private List<FsAttachment> attachments;
 
 	public long getId() {
 		return id;
@@ -147,19 +147,19 @@ public class FsForumPost implements Serializable {
 		this.thread = thread;
 	}
 
-	public Set<FsClaim> getClaims() {
+	public List<FsClaim> getClaims() {
 		return claims;
 	}
 
-	public void setClaims(Set<FsClaim> claims) {
+	public void setClaims(List<FsClaim> claims) {
 		this.claims = claims;
 	}
 
-	public Set<FsAttachment> getAttachments() {
+	public List<FsAttachment> getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments(Set<FsAttachment> attachments) {
+	public void setAttachments(List<FsAttachment> attachments) {
 		this.attachments = attachments;
 	}
 

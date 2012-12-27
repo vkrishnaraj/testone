@@ -11,6 +11,7 @@ public class FsForumThreadInfo implements Serializable {
 	private long id;
 	private String title;
 	private Date createDate;
+	private Date lastEdited;
 	private String createAgent;
 	private String createAirline;
 	private boolean locked;
@@ -97,6 +98,14 @@ public class FsForumThreadInfo implements Serializable {
 
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+
+	public Date getLastEdited() {
+		return lastEdited;
+	}
+
+	public void setLastEdited(Date lastEdited) {
+		this.lastEdited = lastEdited;
 	}
 
 }

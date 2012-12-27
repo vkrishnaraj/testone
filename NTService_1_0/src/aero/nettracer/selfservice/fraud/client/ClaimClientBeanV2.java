@@ -175,7 +175,7 @@ public class ClaimClientBeanV2 implements ClaimClientRemoteV2{
 	public boolean deleteAttachment(int attachID) { return false;}
 
 	@Override
-	public boolean saveThread(FsForumThread thread) {return false;}
+	public long saveThread(FsForumThread thread) {return -1;}
 
 	@Override
 	public FsForumThread getThread(long threadID) {return null;}

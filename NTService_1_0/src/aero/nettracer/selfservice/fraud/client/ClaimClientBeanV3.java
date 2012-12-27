@@ -203,7 +203,7 @@ public class ClaimClientBeanV3 implements ClaimClientRemoteV3{
 	}
 
 	@Override
-	public boolean saveThread(FsForumThread thread) {
+	public long saveThread(FsForumThread thread) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 		return bean.saveThread(mapper.map((aero.nettracer.fs.model.transport.v3.forum.FsForumThread)thread, aero.nettracer.fs.model.forum.FsForumThread.class));
 	}

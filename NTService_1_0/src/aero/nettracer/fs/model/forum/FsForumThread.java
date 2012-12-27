@@ -2,7 +2,7 @@ package aero.nettracer.fs.model.forum;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,8 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -40,6 +40,10 @@ public class FsForumThread implements Serializable {
 	@Column(columnDefinition="DATETIME")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createDate;
+	
+	@Column(columnDefinition="DATETIME")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date lastEdited;
 
 	@Column(length=50)
 	private String createAgent;
@@ -58,11 +62,11 @@ public class FsForumThread implements Serializable {
 	@OneToMany(mappedBy="thread", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
-	private Set<FsForumPost> posts;
+	private List<FsForumPost> posts;
 	
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
 	@JoinTable(name = "FsForumThread_Tag", joinColumns = { @JoinColumn(name = "thread_id") }, inverseJoinColumns = { @JoinColumn(name = "tag_id") })
-	private Set<FsForumTag> tags;
+	private List<FsForumTag> tags;
 
 
 	public long getId() {
@@ -137,20 +141,28 @@ public class FsForumThread implements Serializable {
 		this.numAttachments = numAttachments;
 	}
 
-	public Set<FsForumPost> getPosts() {
+	public List<FsForumPost> getPosts() {
 		return posts;
 	}
 
-	public void setPosts(Set<FsForumPost> posts) {
+	public void setPosts(List<FsForumPost> posts) {
 		this.posts = posts;
 	}
 
-	public Set<FsForumTag> getTags() {
+	public List<FsForumTag> getTags() {
 		return tags;
 	}
 
-	public void setTags(Set<FsForumTag> tags) {
+	public void setTags(List<FsForumTag> tags) {
 		this.tags = tags;
+	}
+
+	public Date getLastEdited() {
+		return lastEdited;
+	}
+
+	public void setLastEdited(Date lastEdited) {
+		this.lastEdited = lastEdited;
 	}
 
 }

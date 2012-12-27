@@ -1024,42 +1024,47 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return toReturn;
 	}
 
-	public boolean saveThread(FsForumThread thread) {
+	public long saveThread(FsForumThread thread) {
 		if (thread == null) {
-			return false;
+			return -1;
 		}
 		Transaction t = null;
 		Session sess = null;
 		try {
+			if (thread.getId() == 0 && thread.getTags() != null && !thread.getTags().isEmpty()) {
+				sess = HibernateWrapper.getSession().openSession();
+				t = sess.beginTransaction();
+				for (FsForumTag tag : thread.getTags()) {
+					sess.update(tag);
+				}
+				t.commit();
+				sess.close();
+			}
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
-			if (thread.getId() == 0) {
-				sess.save(thread);
-			} else {
-				for (FsForumPost post : thread.getPosts()) {
-					if (post.getId() == 0) {
-						convertClaims(post);
-						sess.saveOrUpdate(post);
-					}
+			for (FsForumPost post : thread.getPosts()) {
+				if (post.getId() == 0) {
+					convertClaims(post);
 				}
 			}
+			sess.saveOrUpdate(thread);
 			t.commit();
+			return thread.getId();
 		} catch (Exception e) {
 			t.rollback();
 			logger.error("unable to save thread " + e);
 			e.printStackTrace();
-			return false;
+			return -1;
 		} finally {
 			if (sess != null) {
 				sess.close();
 			}
 		}
-		return true;
 	}
 	
 	private void convertClaims(FsForumPost post) {
 		if (post.getClaims() != null && post.getClaims().size() > 0) {
-			Set<FsClaim> fixedClaims = new LinkedHashSet<FsClaim>();
+			List<FsClaim> fixedClaims = new ArrayList<FsClaim>();
 			Session sess = null;
 			try {
 				sess = HibernateWrapper.getSession().openSession();
@@ -1126,7 +1131,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	@SuppressWarnings("unchecked")
 	public List<FsForumTag> getTags(int page) {
 		List<FsForumTag> toReturn = null;
-		String sql = "from aero.nettracer.fs.model.forum.FsForumTag tg order by tg.numThreads";
+		String sql = "from aero.nettracer.fs.model.forum.FsForumTag tg order by tg.numThreads desc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1163,7 +1168,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			List<Long> result = q.list();
 			sess.close();
 			if (result != null && result.size() > 0) {
-				return ((Long) result.get(0)).intValue();
+				return result.size();
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1179,7 +1184,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public List<FsForumThreadInfo> getThreads(FsForumSearch criteria, int page) {
 		List<FsForumThreadInfo> toReturn = new ArrayList<FsForumThreadInfo>();
 		String sql = "select t from aero.nettracer.fs.model.forum.FsForumThread t left join t.posts p "
-				+ generateWhereFromCriteria(criteria) + " group by t.id order by p.createDate desc, t.createDate desc, p.id desc";
+				+ generateWhereFromCriteria(criteria) + " group by t.id order by t.lastEdited desc, t.id desc";
 		List<FsForumThread> theResult = null;
 		Session sess = null;
 		logger.info("QUERY:\n" + sql + "\nEND QUERY\n\n");
@@ -1206,6 +1211,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				ti.setCreateAgent(t.getCreateAgent());
 				ti.setCreateAirline(t.getCreateAirline());
 				ti.setCreateDate(t.getCreateDate());
+				ti.setLastEdited(t.getLastEdited());
 				ti.setId(t.getId());
 				ti.setNumAttachments(t.getNumAttachments());
 				ti.setNumFiles(t.getNumFiles());
@@ -1226,26 +1232,24 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	
 	private String generateWhereFromCriteria(FsForumSearch criteria) {
 		String toReturn = " where 1=1 ";
-		if (criteria.getCreateAgent() != null) {
-			toReturn += " and (t.createAgent = :agent or ";
-			toReturn += " p.createAgent = :agent) ";
+		if (criteria.getTags() != null && !criteria.getTags().isEmpty()) {
+			toReturn = " left join t.tags tg where 1=1 and tg.id in (:tagList) ";
 		}
-		if (criteria.getCreateAirline() != null) {
+		if (criteria.getCreateAgent() != null && !criteria.getCreateAgent().trim().isEmpty()) {
+			toReturn += " and (t.createAgent like :agent or ";
+			toReturn += " p.createAgent like :agent) ";
+		}
+		if (criteria.getCreateAirline() != null && !criteria.getCreateAirline().trim().isEmpty()) {
 			toReturn += " and (t.createAirline = :airline or ";
 			toReturn += " p.createAirline = :airline) ";
 		}
 		if (criteria.getStartDate() != null) {
-			toReturn += " and (t.createDate >= :sdate or ";
-			toReturn += " p.createDate >= :sdate) ";
+			toReturn += " and t.lastEdited >= :sdate ";
 		}
 		if (criteria.getEndDate() != null) {
-			toReturn += " and (t.createDate <= :edate or ";
-			toReturn += " p.createDate <= :edate) ";
+			toReturn += " and t.lastEdited <= :edate ";
 		}
-		if (criteria.getTags() != null) {
-			toReturn += " and t.tags in (:tagList) ";
-		}
-		if (criteria.getText() != null) {
+		if (criteria.getText() != null && !criteria.getText().trim().isEmpty()) {
 			toReturn += " and (t.title like :theText or ";
 			toReturn += " p.title like :theText or ";
 			toReturn += " p.text like :theText) ";
@@ -1254,10 +1258,10 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	}
 	
 	private void setThreadSearchParameters(Query q, FsForumSearch criteria) {
-		if (criteria.getCreateAgent() != null) {
-			q.setString("agent", criteria.getCreateAgent());
+		if (criteria.getCreateAgent() != null && !criteria.getCreateAgent().trim().isEmpty()) {
+			q.setString("agent", "%" + criteria.getCreateAgent() + "%");
 		}
-		if (criteria.getCreateAirline() != null) {
+		if (criteria.getCreateAirline() != null && !criteria.getCreateAirline().trim().isEmpty()) {
 			q.setString("airline", criteria.getCreateAirline());
 		}
 		if (criteria.getStartDate() != null) {
@@ -1266,10 +1270,14 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		if (criteria.getEndDate() != null) {
 			q.setDate("edate", criteria.getEndDate());
 		}
-		if (criteria.getTags() != null) {
-			q.setParameterList("tagList", criteria.getTags());
+		if (criteria.getTags() != null && !criteria.getTags().isEmpty()) {
+			List<Long> toSearch = new ArrayList<Long>();
+			for (String tagId : criteria.getTags()) {
+				toSearch.add(Long.parseLong(tagId));
+			}
+			q.setParameterList("tagList", toSearch);
 		}
-		if (criteria.getText() != null) {
+		if (criteria.getText() != null && !criteria.getText().trim().isEmpty()) {
 			q.setString("theText","%" + criteria.getText() + "%");
 		}
 	}

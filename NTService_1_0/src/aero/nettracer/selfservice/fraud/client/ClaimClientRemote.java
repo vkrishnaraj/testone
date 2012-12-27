@@ -41,7 +41,7 @@ public interface ClaimClientRemote {
 	public Object[] getAttachment(int attachID, String airline);
 	public boolean saveAttachments(List<Integer> attachIDs, long fileid, String airline, long claimId); 
 	public boolean deleteAttachment(int attachID); 
-	public boolean saveThread(FsForumThread thread);
+	public long saveThread(FsForumThread thread);
 	public FsForumThread getThread(long threadID);
 	public FsForumSearchResults getTags(int page);
 	public FsForumSearchResults getThreads(FsForumSearch criteria, int page);
