@@ -1140,6 +1140,7 @@ public class AdminUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Subcompany.class);
 			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			cri.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
 //			String code = null;
 //
