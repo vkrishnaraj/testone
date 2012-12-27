@@ -28,38 +28,44 @@
 	var cal1xx = new CalendarPopup();	
 
 	function goprev_tag() {
-		  o = document.lfSalvageSearchForm;
+		  o = document.forumSearchForm;
 		  o.tag_prevpage.value = "1";
 		  o.submit();
 		}
 		
 		function gonext_tag() {
-		  o = document.lfSalvageSearchForm;
+		  o = document.forumSearchForm;
 		  o.tag_nextpage.value="1";
 		  o.submit();
 		}
 		
 		function gopage_tag(i) {
-			  o = document.lfSalvageSearchForm;
+			  o = document.forumSearchForm;
 			  o.tag_currpage.value = i;
 			  o.submit();
 		}
 
 		function goprev_thread() {
-			  o = document.lfSalvageSearchForm;
+			  o = document.forumSearchForm;
 			  o.thread_prevpage.value = "1";
 			  o.submit();
 			}
 			
 			function gonext_thread() {
-			  o = document.lfSalvageSearchForm;
+			  o = document.forumSearchForm;
 			  o.thread_nextpage.value="1";
 			  o.submit();
 			}
 			
 			function gopage_thread(i) {
-				  o = document.lfSalvageSearchForm;
+				  o = document.forumSearchForm;
 				  o.thread_currpage.value = i;
+				  o.submit();
+			}
+			
+			function callAddTag(i) {
+				  o = document.forumSearchForm;
+				  o.addTag.value = i;
 				  o.submit();
 			}
 
@@ -126,7 +132,15 @@
                         	<html:text property="searchInfo.text" styleClass="textfield" style="width: 97%;"/>
                         </td>
                       </tr>
-              
+					  <logic:notEmpty name="tag_searchList">
+					  <tr>
+					  	<td colspan="3">
+					  		<logic:iterate indexId="i" id="tag" name="tag_searchList" type="aero.nettracer.fs.model.forum.FsForumTag">
+					  			<%=tag.getName() %>&nbsp;&nbsp;&nbsp;
+					  		</logic:iterate>
+					  	</td>
+					  </tr>
+					  </logic:notEmpty>
 		              <tr>
 		                <td colspan="3" align="center" valign="top">
 			                  <html:submit property="search" styleId="button">
@@ -143,11 +157,16 @@
                     <h1 class="green">
                         	<bean:message key="fraud.forum.search.tag.title" />
                         	</h1>
+					<input type="hidden" name="addTag"/>
               <table class="form2" cellspacing="0" cellpadding="0" width="100%">
                 <logic:iterate indexId="i" id="tag" name="tag_resultList" type="aero.nettracer.fs.model.forum.FsForumTag" >
                   <tr>
                     <td>
-                      	<%=tag.getName() %>&nbsp;<%=tag.getNumThreads() %>
+                    	<% if (tag.getNumThreads() > 0) { %>
+                      	<a href="#" onclick="callAddTag(<%=tag.getId() %>);return false;" ><%=tag.getName() %></a>
+                      	<% } else { %>
+                      	<%=tag.getName() %>
+                      	<% } %>
                     </td>
                   </tr>
                 </logic:iterate> 
@@ -201,34 +220,51 @@
                         	<bean:message key="fraud.forum.search.thread.title" />
                         	</h1>
               <table class="form2" cellspacing="0" cellpadding="0" width="100%">
+              <tr>
+                      <td>
+	                     <bean:message key="fraud.forum.search.thread.titlecol" />
+                      </td>
+	                  <td>
+	                     <bean:message key="fraud.forum.search.thread.posts" />
+	                  </td>
+	                  <td>
+	                     <bean:message key="fraud.forum.search.thread.files" />
+	                  </td>
+	                  <td>
+	                     <bean:message key="fraud.forum.search.thread.attachments" />
+	                  </td>
+	                  <td>
+	                     <bean:message key="fraud.forum.search.thread.createdate" />
+	                  </td>
+	                  <td>
+	                     <bean:message key="fraud.forum.search.thread.lastedited" />
+	                  </td>
+                  </tr>
                 <logic:iterate indexId="i" id="thread" name="thread_resultList" type="aero.nettracer.fs.model.forum.FsForumThreadInfo" >
                   <tr>
-                    <td colspan="5">
-              			<a href="fraud_forum_view.do?threadId=<%=thread.getId() %>"><%=thread.getTitle() %></a>
-                        
-                    </td>
-                  </tr>
-                  <tr style="font-size: 10px;">
+                      <td>
+              			 <a href="fraud_forum_view.do?threadId=<%=thread.getId() %>"><%=thread.getTitle() %></a>
+                      </td>
 	                  <td>
-	                     <bean:message key="fraud.forum.search.thread.agent" />&nbsp;<%=thread.getCreateAgent() %>
+	                     <%=thread.getNumPosts() %>
 	                  </td>
 	                  <td>
-	                     <bean:message key="fraud.forum.search.thread.airline" />&nbsp;<%=thread.getCreateAirline() %>
+	                     <%=thread.getNumFiles() %>
 	                  </td>
 	                  <td>
-	                     <bean:message key="fraud.forum.search.thread.posts" />&nbsp;<%=thread.getNumPosts() %>
+	                     <%=thread.getNumAttachments() %>
 	                  </td>
 	                  <td>
-	                     <bean:message key="fraud.forum.search.thread.files" />&nbsp;<%=thread.getNumFiles() %>
+	                     <%=thread.getCreateDateDisp() %>
 	                  </td>
 	                  <td>
-	                     <bean:message key="fraud.forum.search.thread.attachments" />&nbsp;<%=thread.getNumAttachments() %>
+	                     <%=thread.getEditedDateDisp() %>
 	                  </td>
                   </tr>
                 </logic:iterate> 
 					<logic:present name="thread_pages" scope="request">
                 <tr>
-				   <td colspan="5">
+				   <td colspan="6">
 				   	
 					  <logic:equal name="thread_currpage" scope="request" value="0">
 					    &lt;
@@ -270,7 +306,7 @@
 			    </tr>
 					</logic:present>
 		              <tr>
-		                <td colspan="5" align="center" valign="top">
+		                <td colspan="6" align="center" valign="top">
 			                  <html:submit property="create" styleId="button">
 			                    <bean:message key="fraud.forum.search.button.create" />
 			                  </html:submit>

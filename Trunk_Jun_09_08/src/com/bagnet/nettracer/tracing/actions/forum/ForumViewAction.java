@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.actions.forum;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
@@ -49,7 +50,9 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
-public class ForumViewAction extends CheckedAction {
+import org.apache.struts.action.Action;
+
+public class ForumViewAction extends Action {
 	
 	private static final Logger logger = Logger.getLogger(ForumViewAction.class);
 	
@@ -67,10 +70,6 @@ public class ForumViewAction extends CheckedAction {
 
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
-		
-		if(!manageToken(request)) {
-			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
-		}
 		
 		if (request.getParameter("back") != null) {
 			request.setAttribute("back", "1");
@@ -125,6 +124,7 @@ public class ForumViewAction extends CheckedAction {
 				remote.deleteAttachment(theattachment.getId());
 				fform.getNewAttachments().remove(theattachment);
 				request.setAttribute("upload", Integer.toString(itemindex));
+			    return (mapping.findForward(TracingConstants.FRAUD_FORUM_VIEW));
 			} else if (fileindex >= 0) {
 				// add photo
 				request.setAttribute("upload", Integer.toString(fileindex));
@@ -136,6 +136,7 @@ public class ForumViewAction extends CheckedAction {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
 				}
+			    return (mapping.findForward(TracingConstants.FRAUD_FORUM_VIEW));
 			} 
 		}
 		
@@ -145,7 +146,20 @@ public class ForumViewAction extends CheckedAction {
 				FsClaim newFile = bmo.findClaimByID(Long.parseLong(fform.getNewFileID()));
 				if (newFile != null) {
 					if (newFile.getFile().getSwapId() != 0) {
-						fform.getNewFiles().add(newFile);
+						boolean alreadyAdded = false;
+						for (FsClaim claim : fform.getNewFiles()) {
+							if (claim.getId() == newFile.getId()) {
+								alreadyAdded = true;
+								break;
+							}
+						}
+						if (alreadyAdded) {
+							ActionMessage error = new ActionMessage("error.fraud.forum.claim.exist");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+						} else {
+							fform.getNewFiles().add(newFile);
+						}
 					} else {
 						ActionMessage error = new ActionMessage("error.fraud.forum.no.fsclaim");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -157,30 +171,50 @@ public class ForumViewAction extends CheckedAction {
 					saveMessages(request, errors);
 				}
 			}
+			fform.setNewFileID("");
+		    return (mapping.findForward(TracingConstants.FRAUD_FORUM_VIEW));
+		}
+		
+		if (request.getParameter("removeFile") != null && !request.getParameter("removeFile").isEmpty()) {
+			int fileIndex = Integer.parseInt(request.getParameter("removeFile"));
+			FsClaim file = (FsClaim) fform.getNewFiles().toArray()[fileIndex];
+			fform.getNewFiles().remove(file);
 		    return (mapping.findForward(TracingConstants.FRAUD_FORUM_VIEW));
 		}
 		
 		if (request.getParameter("create") != null && remote != null) {
 			FsForumPost newPost = new FsForumPost();
-			newPost.setCreateAgent(user.getUsername());
+			newPost.setCreateAgent(getAgentInfo(user));
 			newPost.setCreateAirline(user.getCompanycode_ID());
 			newPost.setCreateDate(DateUtils.convertToGMTDate(new Date()));
 			newPost.setLastEdited(DateUtils.convertToGMTDate(new Date()));
 			newPost.setTitle(fform.getNewTitle());
 			newPost.setText(fform.getNewText());
+			fform.getThread().setLastEdited(DateUtils.convertToGMTDate(new Date()));
+			fform.getThread().incrementNumPosts();
 			if (fform.getNewFiles() != null && fform.getNewFiles().size() > 0) {
-				newPost.setClaims(new LinkedHashSet<FsClaim>(fform.getNewFiles()));
+				fform.getThread().addNumFiles(fform.getNewFiles().size());
+				newPost.setClaims(fform.getNewFiles());
 			}
 			if (fform.getNewAttachments() != null && fform.getNewAttachments().size() > 0) {
-				newPost.setAttachments(new LinkedHashSet<FsAttachment>(fform.getNewAttachments()));
+				fform.getThread().addNumAttachments(fform.getNewAttachments().size());
+				newPost.setAttachments(fform.getNewAttachments());
 				for (FsAttachment attach : newPost.getAttachments()) {
 					attach.setPost(newPost);
 				}
 			}
 			newPost.setThread(fform.getThread());
 			fform.getThread().getPosts().add(newPost);
-			if (!remote.saveThread(TransportMapper.map(fform.getThread()))) {
+			long newThread = remote.saveThread(TransportMapper.map(fform.getThread()));
+			if (newThread == -1) {
 				return (mapping.findForward(TracingConstants.ERROR_MAIN));
+			} else {
+				fform.setNewAttachments(new ArrayList<FsAttachment>());
+				fform.setNewFiles(new ArrayList<FsClaim>());
+				fform.setNewText("");
+				fform.setNewTitle("");
+				fform.setNewFileID("");
+				fform.setNewTagID("");
 			}
 		}
 		
@@ -188,6 +222,12 @@ public class ForumViewAction extends CheckedAction {
 		
 		if (request.getParameter("threadId") != null) {
 			threadID = request.getParameter("threadId");
+			fform.setNewAttachments(new ArrayList<FsAttachment>());
+			fform.setNewFiles(new ArrayList<FsClaim>());
+			fform.setNewText("");
+			fform.setNewTitle("");
+			fform.setNewFileID("");
+			fform.setNewTagID("");
 		} else if (fform.getThread() != null && fform.getThread().getId() != 0) {
 			threadID = "" + fform.getThread().getId();
 		}
@@ -246,6 +286,7 @@ public class ForumViewAction extends CheckedAction {
 	}
 	
 	private FsForumThread setFormats(FsForumThread thread, ForumViewForm form) {
+		
 		if (thread.getPosts() != null && thread.getPosts().size() > 0) {
 			for (FsForumPost post:thread.getPosts()) {
 				post.set_DATEFORMAT(form.get_DATEFORMAT());
@@ -253,7 +294,16 @@ public class ForumViewAction extends CheckedAction {
 				post.set_TIMEZONE(form.get_TIMEZONE());
 			}
 		}
+		
+		thread.set_DATEFORMAT(form.get_DATEFORMAT());
+		thread.set_TIMEFORMAT(form.get_TIMEFORMAT());
+		thread.set_TIMEZONE(form.get_TIMEZONE());
+		
 		return thread;
+	}
+	
+	private String getAgentInfo(Agent user) {
+		return user.getFirstname() + " " + user.getLastname();
 	}
 	
 }

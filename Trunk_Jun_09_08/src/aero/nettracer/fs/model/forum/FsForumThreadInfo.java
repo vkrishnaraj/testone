@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import com.bagnet.nettracer.tracing.utils.DateUtils;
+
 public class FsForumThreadInfo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -11,6 +13,7 @@ public class FsForumThreadInfo implements Serializable {
 	private long id;
 	private String title;
 	private Date createDate;
+	private Date lastEdited;
 	private String createAgent;
 	private String createAirline;
 	private boolean locked;
@@ -18,6 +21,10 @@ public class FsForumThreadInfo implements Serializable {
 	private int numFiles;
 	private int numAttachments;
 	private List<String> tags;
+	
+	private String _DATEFORMAT;
+	private String _TIMEFORMAT;
+	private java.util.TimeZone _TIMEZONE;
 
 	public long getId() {
 		return id;
@@ -97,6 +104,70 @@ public class FsForumThreadInfo implements Serializable {
 
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+
+	public Date getLastEdited() {
+		return lastEdited;
+	}
+
+	public void setLastEdited(Date lastEdited) {
+		this.lastEdited = lastEdited;
+	}
+	
+	public String get_DATEFORMAT() {
+		return _DATEFORMAT;
+	}
+
+	public void set_DATEFORMAT(String _DATEFORMAT) {
+		this._DATEFORMAT = _DATEFORMAT;
+	}
+
+	public String get_TIMEFORMAT() {
+		return _TIMEFORMAT;
+	}
+
+	public void set_TIMEFORMAT(String _TIMEFORMAT) {
+		this._TIMEFORMAT = _TIMEFORMAT;
+	}
+
+	public java.util.TimeZone get_TIMEZONE() {
+		return _TIMEZONE;
+	}
+
+	public void set_TIMEZONE(java.util.TimeZone _TIMEZONE) {
+		this._TIMEZONE = _TIMEZONE;
+	}
+
+	public String getCreateDateTimeDisp() {
+		String createDateDisp = "";
+		if (getCreateDate() != null) {
+			createDateDisp = DateUtils.formatDate(getCreateDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+		}
+		return createDateDisp;
+	}
+
+	public String getCreateDateDisp() {
+		String createDateDisp = "";
+		if (getCreateDate() != null) {
+			createDateDisp = DateUtils.formatDate(getCreateDate(), _DATEFORMAT, null, _TIMEZONE);
+		}
+		return createDateDisp;
+	}
+
+	public String getEditedDateTimeDisp() {
+		String createDateDisp = "";
+		if (getLastEdited() != null) {
+			createDateDisp = DateUtils.formatDate(getLastEdited(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+		}
+		return createDateDisp;
+	}
+
+	public String getEditedDateDisp() {
+		String createDateDisp = "";
+		if (getLastEdited() != null) {
+			createDateDisp = DateUtils.formatDate(getLastEdited(), _DATEFORMAT, null, _TIMEZONE);
+		}
+		return createDateDisp;
 	}
 
 }

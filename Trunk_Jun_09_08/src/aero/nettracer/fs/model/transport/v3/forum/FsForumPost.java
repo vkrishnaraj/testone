@@ -2,7 +2,7 @@ package aero.nettracer.fs.model.transport.v3.forum;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import aero.nettracer.fs.model.transport.v3.FsAttachment;
 import aero.nettracer.fs.model.transport.v3.FsClaim;
@@ -20,8 +20,8 @@ public class FsForumPost implements Serializable {
 	private Date lastEdited;
 	private FsForumPost parent;
 	private FsForumThread thread;
-	private Set<FsClaim> claims;
-	private Set<FsAttachment> attachments;
+	private List<FsClaim> claims;
+	private List<FsAttachment> attachments;
 
 	public long getId() {
 		return id;
@@ -95,19 +95,19 @@ public class FsForumPost implements Serializable {
 		this.thread = thread;
 	}
 
-	public Set<FsClaim> getClaims() {
+	public List<FsClaim> getClaims() {
 		return claims;
 	}
 
-	public void setClaims(Set<FsClaim> claims) {
+	public void setClaims(List<FsClaim> claims) {
 		this.claims = claims;
 	}
 
-	public Set<FsAttachment> getAttachments() {
+	public List<FsAttachment> getAttachments() {
 		return attachments;
 	}
 
-	public void setAttachments(Set<FsAttachment> attachments) {
+	public void setAttachments(List<FsAttachment> attachments) {
 		this.attachments = attachments;
 	}
 

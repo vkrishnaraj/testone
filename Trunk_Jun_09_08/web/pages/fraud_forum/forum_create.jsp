@@ -23,6 +23,15 @@
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+  <SCRIPT LANGUAGE="JavaScript">
+			
+			function removeTag(i) {
+				  o = document.forumViewForm;
+				  o.removeTag.value = i;
+				  o.submit();
+			}
+
+  </SCRIPT>
  
         <html:form action="fraud_forum_create.do" method="post" enctype="multipart/form-data" >
             <tr>
@@ -62,7 +71,7 @@
                         <td>
                         	<bean:message key="fraud.forum.create.thread.title" />
                         	<br />
-                        	<html:text name="forumViewForm" property="thread.title" size="5" styleClass="textfield" />
+                        	<html:text name="forumViewForm" property="thread.title" styleClass="textfield" style="width:95%;"/>
                         </td>
                       </tr>
                       <tr>
@@ -84,8 +93,9 @@
                       <tr>
                         <td>
                 			<logic:iterate indexId="i" id="tag" name="forumViewForm" property="thread.tags" type="aero.nettracer.fs.model.forum.FsForumTag" >
-                			  <%=tag.getName() %>&nbsp;
+                			  <%=tag.getName() %>&nbsp;<a href="#" onclick="removeTag(<%=i %>)">[X]</a>&nbsp;&nbsp;&nbsp;
                 			</logic:iterate>
+                			<input type="hidden" name="removeTag" />
                 		</td>
                 	  </tr>
                 	  </logic:notEmpty>

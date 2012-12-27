@@ -8,6 +8,7 @@ package com.bagnet.nettracer.tracing.actions.forum;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.naming.Context;
@@ -23,7 +24,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.fs.model.forum.FsForumPost;
 import aero.nettracer.fs.model.forum.FsForumSearch;
+import aero.nettracer.fs.model.forum.FsForumTag;
 import aero.nettracer.fs.model.forum.FsForumThread;
 import aero.nettracer.fs.model.transport.v3.forum.FsForumSearchResults;
 import aero.nettracer.fs.model.transport.v3.forum.FsForumThreadInfo;
@@ -38,12 +41,16 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.forum.ForumSearchForm;
+import com.bagnet.nettracer.tracing.forms.forum.ForumViewForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
-public class ForumSearchAction extends CheckedAction {
+import org.apache.struts.action.Action;
+
+public class ForumSearchAction extends Action {
 	
 	private static final Logger logger = Logger.getLogger(ForumSearchAction.class);
 	
@@ -62,10 +69,6 @@ public class ForumSearchAction extends CheckedAction {
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
-		if(!manageToken(request)) {
-			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
-		}
-		
 		if (request.getParameter("back") != null) {
 			request.setAttribute("back", "1");
 		}
@@ -77,6 +80,14 @@ public class ForumSearchAction extends CheckedAction {
 		if (request.getParameter("create") != null) {
 			response.sendRedirect("fraud_forum_create.do");
 			return null;
+		}
+		
+		if (request.getParameter("addTag") != null && !request.getParameter("addTag").isEmpty()) {
+			String id = request.getParameter("addTag");
+			if (fform.getSearchInfo().getTags() == null) {
+				fform.getSearchInfo().setTags(new ArrayList<String>());
+			}
+			fform.getSearchInfo().getTags().add(id);
 		}
 
 		int rowsperpage = TracingConstants.FORUM_ROWS_PER_PAGE;
@@ -112,6 +123,14 @@ public class ForumSearchAction extends CheckedAction {
 		
 		FsForumSearchResults tagResults = null;
 		FsForumSearchResults threadResults = null;
+		
+		String dateFormat = user.getDateformat().getFormat();
+		if (fform.getStart() != null && !fform.getStart().isEmpty()) {
+			fform.getSearchInfo().setStartDate(DateUtils.convertToDate(fform.getStart(), dateFormat, null));
+		}
+		if (fform.getEnd() != null && !fform.getEnd().isEmpty()) {
+			fform.getSearchInfo().setEndDate(DateUtils.convertToDate(fform.getEnd(), dateFormat, null));
+		}
 		
 		if (remote == null) {
 			ActionMessage error = new ActionMessage("error.fs.could.not.communicate");
@@ -177,6 +196,23 @@ public class ForumSearchAction extends CheckedAction {
 			fform.setThread_currpage("" + thread_currpage);
 			fform.setTags(TransportMapper.mapTags(tagResults.getTags()));
 			fform.setThreads(TransportMapper.mapThreads(threadResults.getThreads()));
+			
+			for (aero.nettracer.fs.model.forum.FsForumThreadInfo thread : fform.getThreads()) {
+				thread.set_DATEFORMAT(fform.get_DATEFORMAT());
+				thread.set_TIMEFORMAT(fform.get_TIMEFORMAT());
+				thread.set_TIMEZONE(fform.get_TIMEZONE());
+			}
+			
+			if (fform.getSearchInfo().getTags() != null && !fform.getSearchInfo().getTags().isEmpty()) {
+				List<FsForumTag> searchTags = new ArrayList<FsForumTag>();
+				for (String tag : fform.getSearchInfo().getTags()) {
+					FsForumTag toSearch = getTag(Long.parseLong(tag), fform.getTags());
+					if (toSearch != null) {
+						searchTags.add(toSearch);
+					}
+				}
+				request.setAttribute("tag_searchList", searchTags);
+			}
 
 			request.setAttribute("tag_resultList", fform.getTags());
 			request.setAttribute("thread_resultList", fform.getThreads());
@@ -193,7 +229,7 @@ public class ForumSearchAction extends CheckedAction {
 		ForumSearchForm fform = null;
 		try {
 			HttpSession session = request.getSession();
-			fform = (ForumSearchForm) session.getAttribute("forumSearchForm");
+			fform = (ForumSearchForm) request.getAttribute("forumSearchForm");
 
 			if (fform == null) {
 				fform = new ForumSearchForm();
@@ -206,13 +242,22 @@ public class ForumSearchAction extends CheckedAction {
 			fform.set_TIMEZONE(TimeZone
 					.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 
-			session.setAttribute("forumSearchForm", fform);
+			request.setAttribute("forumSearchForm", fform);
 
 		} catch (Exception e) {
 			logger.error("bean copy claim form error on populateClaim: " + e);
 			e.printStackTrace();
 		}
 		return fform;
+	}
+	
+	private FsForumTag getTag(long id, List<FsForumTag> threadTags) {
+		for (FsForumTag tag: threadTags) {
+			if (tag.getId() == id) {
+				return tag;
+			}
+		}
+		return null;
 	}
 	
 }

@@ -26,6 +26,15 @@
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+  <SCRIPT LANGUAGE="JavaScript">
+			
+			function removeFile(i) {
+				  o = document.forumViewForm;
+				  o.removeFile.value = i;
+				  o.submit();
+			}
+
+  </SCRIPT>
 					
                     <h1 class="green">
                       <bean:message key="fraud.forum.view.reply" />
@@ -61,8 +70,9 @@
                       <tr>
                         <td>
                 			<logic:iterate indexId="i" id="file" name="forumViewForm" property="newFiles" type="aero.nettracer.fs.model.FsClaim" >
-                			  <a href="claim_resolution.do?claimId=<%=file.getId() %>"><%=file.getId() %></a>&nbsp;
+                			  <a href="claim_resolution.do?claimId=<%=file.getId() %>"><%=file.getId() %></a>&nbsp;<a href="#" onclick="removeFile(<%=i %>)">[X]</a>&nbsp;&nbsp;&nbsp;
                 			</logic:iterate>
+                			<input type="hidden" name="removeFile" />
                 		</td>
                 	  </tr>
                 	  </logic:notEmpty>

@@ -926,7 +926,7 @@
 		<action path="/lf_boxcount" type="com.bagnet.nettracer.tracing.actions.lfc.BoxCountAction" name="lfBoxCountForm" scope="session" validate="false"></action>
 		<action path="/lf_search_salvage" type="com.bagnet.nettracer.tracing.actions.lfc.SalvageSearchAction" name="lfSalvageSearchForm" scope="session" validate="false"></action>
 
-		<action path="/fraud_forum_search" type="com.bagnet.nettracer.tracing.actions.forum.ForumSearchAction" name="forumSearchForm" scope="session" validate="false"></action>
+		<action path="/fraud_forum_search" type="com.bagnet.nettracer.tracing.actions.forum.ForumSearchAction" name="forumSearchForm" scope="request" validate="false"></action>
 		<action path="/fraud_forum_create" type="com.bagnet.nettracer.tracing.actions.forum.ForumCreateAction" name="forumViewForm" scope="session" validate="false"></action>
 		<action path="/fraud_forum_view" type="com.bagnet.nettracer.tracing.actions.forum.ForumViewAction" name="forumViewForm" scope="session" validate="false"></action>
 		<action path="/fraud_forum_claim" type="com.bagnet.nettracer.tracing.actions.forum.ForumClaimAction" name="forumClaimForm" scope="session" validate="false"></action>

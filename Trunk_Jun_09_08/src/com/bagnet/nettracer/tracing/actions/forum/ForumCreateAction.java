@@ -50,7 +50,9 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
-public class ForumCreateAction extends CheckedAction {
+import org.apache.struts.action.Action;
+
+public class ForumCreateAction extends Action {
 	
 	private static final Logger logger = Logger.getLogger(ForumCreateAction.class);
 	
@@ -68,10 +70,6 @@ public class ForumCreateAction extends CheckedAction {
 
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MODIFY_CLAIM, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
-		
-		if(!manageToken(request)) {
-			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
-		}
 		
 		boolean isNtUser = PropertyBMO.isTrue("nt.user");
 		boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
@@ -92,6 +90,8 @@ public class ForumCreateAction extends CheckedAction {
 			fform.setNewFiles(new ArrayList<FsClaim>());
 			fform.setNewText("");
 			fform.setNewTitle("");
+			fform.setNewFileID("");
+			fform.setNewTagID("");
 		}
 		
 		Context ctx = null;
@@ -133,10 +133,11 @@ public class ForumCreateAction extends CheckedAction {
 		} else {
 			if (itemindex >= 0) {
 				// don't remove photo for now.
-				Attachment theattachment= (Attachment) fform.getNewAttachments().toArray()[itemindex];
-				remote.deleteAttachment(theattachment.getAttachment_id());
+				FsAttachment theattachment= (FsAttachment) fform.getNewAttachments().toArray()[itemindex];
+				remote.deleteAttachment(theattachment.getId());
 				fform.getNewAttachments().remove(theattachment);
 				request.setAttribute("upload", Integer.toString(itemindex));
+			    return (mapping.findForward(TracingConstants.FRAUD_FORUM_CREATE));
 			} else if (fileindex >= 0) {
 				// add photo
 				request.setAttribute("upload", Integer.toString(fileindex));
@@ -148,6 +149,7 @@ public class ForumCreateAction extends CheckedAction {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
 				}
+			    return (mapping.findForward(TracingConstants.FRAUD_FORUM_CREATE));
 			} 
 			fform.setTags(TransportMapper.mapTags(((FsForumSearchResults) remote.getTags(-1)).getTags()));
 		}
@@ -158,7 +160,20 @@ public class ForumCreateAction extends CheckedAction {
 				FsClaim newFile = bmo.findClaimByID(Long.parseLong(fform.getNewFileID()));
 				if (newFile != null) {
 					if (newFile.getFile().getSwapId() != 0) {
-						fform.getNewFiles().add(newFile);
+						boolean alreadyAdded = false;
+						for (FsClaim claim : fform.getNewFiles()) {
+							if (claim.getId() == newFile.getId()) {
+								alreadyAdded = true;
+								break;
+							}
+						}
+						if (alreadyAdded) {
+							ActionMessage error = new ActionMessage("error.fraud.forum.claim.exist");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+						} else {
+							fform.getNewFiles().add(newFile);
+						}
 					} else {
 						ActionMessage error = new ActionMessage("error.fraud.forum.no.fsclaim");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -170,6 +185,14 @@ public class ForumCreateAction extends CheckedAction {
 					saveMessages(request, errors);
 				}
 			}
+			fform.setNewFileID("");
+		    return (mapping.findForward(TracingConstants.FRAUD_FORUM_CREATE));
+		}
+		
+		if (request.getParameter("removeFile") != null && !request.getParameter("removeFile").isEmpty()) {
+			int fileIndex = Integer.parseInt(request.getParameter("removeFile"));
+			FsClaim file = (FsClaim) fform.getNewFiles().toArray()[fileIndex];
+			fform.getNewFiles().remove(file);
 		    return (mapping.findForward(TracingConstants.FRAUD_FORUM_CREATE));
 		}
 		
@@ -178,46 +201,63 @@ public class ForumCreateAction extends CheckedAction {
 				long id = Long.parseLong(fform.getNewTagID());
 				if (id != 0) {
 					if (fform.getThread().getTags() == null) {
-						fform.getThread().setTags(new LinkedHashSet<FsForumTag>());
+						fform.getThread().setTags(new ArrayList<FsForumTag>());
 					}
 					FsForumTag tag = getTag(id, fform.getTags(), fform.getThread().getTags());
 					if (tag != null) {
+						tag.setNumThreads(tag.getNumThreads() + 1);
 						fform.getThread().getTags().add(tag);
 					}
 				}
 			}
+			fform.setNewTagID("");
+		    return (mapping.findForward(TracingConstants.FRAUD_FORUM_CREATE));
+		}
+		
+		if (request.getParameter("removeTag") != null && !request.getParameter("removeTag").isEmpty()) {
+			int tagIndex = Integer.parseInt(request.getParameter("removeTag"));
+			FsForumTag tag = (FsForumTag) fform.getThread().getTags().toArray()[tagIndex];
+			fform.getThread().getTags().remove(tag);
 		    return (mapping.findForward(TracingConstants.FRAUD_FORUM_CREATE));
 		}
 		
 		if (request.getParameter("create") != null && remote != null) {
-			fform.getThread().setCreateAgent(user.getUsername());
+			fform.getThread().setCreateAgent(getAgentInfo(user));
 			fform.getThread().setCreateAirline(user.getCompanycode_ID());
 			fform.getThread().setCreateDate(DateUtils.convertToGMTDate(new Date()));
+			fform.getThread().setLastEdited(DateUtils.convertToGMTDate(new Date()));
+			fform.getThread().setNumPosts(1);
+			fform.getThread().setNumAttachments(0);
+			fform.getThread().setNumFiles(0);
 			FsForumPost newPost = new FsForumPost();
-			newPost.setCreateAgent(user.getUsername());
+			newPost.setCreateAgent(getAgentInfo(user));
 			newPost.setCreateAirline(user.getCompanycode_ID());
 			newPost.setCreateDate(DateUtils.convertToGMTDate(new Date()));
 			newPost.setLastEdited(DateUtils.convertToGMTDate(new Date()));
 			newPost.setTitle(fform.getNewTitle());
 			newPost.setText(fform.getNewText());
 			if (fform.getNewFiles() != null && fform.getNewFiles().size() > 0) {
-				newPost.setClaims(new LinkedHashSet<FsClaim>(fform.getNewFiles()));
+				fform.getThread().setNumFiles(fform.getNewFiles().size());
+				newPost.setClaims(fform.getNewFiles());
 			}
 			if (fform.getNewAttachments() != null && fform.getNewAttachments().size() > 0) {
-				newPost.setAttachments(new LinkedHashSet<FsAttachment>(fform.getNewAttachments()));
+				fform.getThread().setNumAttachments(fform.getNewAttachments().size());
+				newPost.setAttachments(fform.getNewAttachments());
 				for (FsAttachment attach : newPost.getAttachments()) {
 					attach.setPost(newPost);
 				}
 			}
 			newPost.setThread(fform.getThread());
 			if (fform.getThread().getPosts() == null) {
-				fform.getThread().setPosts(new LinkedHashSet<FsForumPost>());
+				fform.getThread().setPosts(new ArrayList<FsForumPost>());
 			}
 			fform.getThread().getPosts().add(newPost);
-			if (!remote.saveThread(TransportMapper.map(fform.getThread()))) {
+			long newThread = remote.saveThread(TransportMapper.map(fform.getThread()));
+			if (newThread == -1) {
 				return (mapping.findForward(TracingConstants.ERROR_MAIN));
 			} else {
-				return (mapping.findForward(TracingConstants.FRAUD_FORUM_SEARCH));
+				response.sendRedirect("fraud_forum_view.do?threadId=" + newThread);
+				return null;
 			}
 		}
 		
@@ -250,7 +290,7 @@ public class ForumCreateAction extends CheckedAction {
 		return fform;
 	}
 	
-	private FsForumTag getTag(long id, List<FsForumTag> tags, Set<FsForumTag> threadTags) {
+	private FsForumTag getTag(long id, List<FsForumTag> tags, List<FsForumTag> threadTags) {
 		for (FsForumTag tag: threadTags) {
 			if (tag.getId() == id) {
 				return null;
@@ -262,6 +302,10 @@ public class ForumCreateAction extends CheckedAction {
 			}
 		}
 		return null;
+	}
+	
+	private String getAgentInfo(Agent user) {
+		return user.getFirstname() + " " + user.getLastname();
 	}
 	
 }

@@ -2,7 +2,7 @@ package aero.nettracer.fs.model.transport.v3.forum;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 public class FsForumThread implements aero.nettracer.fs.model.transport.v0.forum.FsForumThread, Serializable {
 
@@ -11,14 +11,15 @@ public class FsForumThread implements aero.nettracer.fs.model.transport.v0.forum
 	private long id;
 	private String title;
 	private Date createDate;
+	private Date lastEdited;
 	private String createAgent;
 	private String createAirline;
 	private boolean locked;
 	private int numPosts;
 	private int numFiles;
 	private int numAttachments;
-	private Set<FsForumPost> posts;
-	private Set<FsForumTag> tags;
+	private List<FsForumPost> posts;
+	private List<FsForumTag> tags;
 
 	public long getId() {
 		return id;
@@ -92,20 +93,28 @@ public class FsForumThread implements aero.nettracer.fs.model.transport.v0.forum
 		this.numAttachments = numAttachments;
 	}
 
-	public Set<FsForumPost> getPosts() {
+	public List<FsForumPost> getPosts() {
 		return posts;
 	}
 
-	public void setPosts(Set<FsForumPost> posts) {
+	public void setPosts(List<FsForumPost> posts) {
 		this.posts = posts;
 	}
 
-	public Set<FsForumTag> getTags() {
+	public List<FsForumTag> getTags() {
 		return tags;
 	}
 
-	public void setTags(Set<FsForumTag> tags) {
+	public void setTags(List<FsForumTag> tags) {
 		this.tags = tags;
+	}
+
+	public Date getLastEdited() {
+		return lastEdited;
+	}
+
+	public void setLastEdited(Date lastEdited) {
+		this.lastEdited = lastEdited;
 	}
 
 }

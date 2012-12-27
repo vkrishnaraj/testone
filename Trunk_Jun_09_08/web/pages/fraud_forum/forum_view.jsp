@@ -87,54 +87,39 @@
                 	<logic:iterate indexId="i" id="post" name="forumViewForm" property="thread.posts" type="aero.nettracer.fs.model.forum.FsForumPost" >
                     <table class="form2" cellspacing="0" cellpadding="0">
                       <tr>
-                        <td colspan="3">
-                        	<strong><bean:write name="post" property="title" /></strong>
+                        <td>
+                        	<strong><bean:write name="post" property="title" /></strong><br/>
+                        	<span style="font-size:8px;" >
+                        	<bean:message key="fraud.forum.view.post.agent" />&nbsp;
+                        	<bean:write name="post" property="createAgent" />&nbsp;(
+                        	<bean:write name="post" property="createAirline" />)&nbsp;On&nbsp;
+                        	<bean:write name="post" property="createDateDisp" />
+                        	</span>
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="3">
+                        <td style="width: 500px;">
                         	<bean:write name="post" property="text" />
                         </td>
                       </tr>
+                      <logic:notEmpty name="post" property="claims">
                       <tr>
                         <td>
-                        	<bean:message key="fraud.forum.view.post.agent" />
-                        	<br />
-                        	<bean:write name="post" property="createAgent" />
-                        </td>
-                        <td>
-                        	<bean:message key="fraud.forum.view.post.airline" />
-                        	<br />
-                        	<bean:write name="post" property="createAirline" />
-                        </td>
-                        <td>
-                        	<bean:message key="fraud.forum.view.post.createdate" />
-                        	<br />
-                        	<bean:write name="post" property="createDateDisp" />
-                        </td>
-                      </tr>
-                      <tr>
-                        <td colspan="3">
 				                  <bean:message key="fraud.forum.view.post.files" />
-				                  :
-				                  <br>
+				                  &nbsp;&nbsp;&nbsp;
                 			<logic:iterate indexId="i" id="file" name="post" property="claims" type="aero.nettracer.fs.model.FsClaim" >
-                			  <a href="fraud_forum_claim.do?claimId=<%=file.getId() %>"><%=file.getAirline() %><%=file.getSwapId() %></a>&nbsp;
+                			  <a href="fraud_forum_claim.do?claimId=<%=file.getId() %>"><%=file.getAirline() %><%=file.getSwapId() %></a>&nbsp;&nbsp;&nbsp;
                 			</logic:iterate>
                 		</td>
                 	  </tr>
+                	  </logic:notEmpty>
+                	  <logic:notEmpty name="post" property="attachments">
                       <tr>
-				                <td colspan="3">
+				                <td>
 				                  <bean:message key="fraud.forum.view.post.attachments" />
-				                  :
-				                  <br>
-				                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
 				                 	 
 				                      <logic:iterate indexId="i" id="attachment" name="post" property="attachments" type="aero.nettracer.fs.model.FsAttachment" >
-										  
-					  				      <tr align="center">
-											
-										  <td align="left">
+										    &nbsp;&nbsp;&nbsp;
 										  	<logic:notEqual name="attachment" property="id" value="-1">
 				                           	<a href='retrieveAttachment?ID=<bean:write name="attachment" property="id"/>' target="top"><bean:write name="attachment" property="description"/></a>
 				                           	</logic:notEqual>
@@ -142,15 +127,11 @@
 										  	<logic:equal name="attachment" property="id" value="-1">
 										  		<bean:write name="attachment" property="description"/>
 										  	</logic:equal>
-				                          </td>
-				                          
-				                          </tr>
 										
 				                      </logic:iterate>
-				                  
-				                </table>
-				              </td>
+				                  				              </td>
 				            </tr>
+				            </logic:notEmpty>
                       </table>
                 	</logic:iterate>
                 	</logic:notEmpty>

@@ -9,6 +9,7 @@ package com.bagnet.nettracer.tracing.actions.forum;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -121,6 +122,9 @@ public class ForumClaimAction extends CheckedAction {
 				session.setAttribute("claimstatuslist", session
 						.getAttribute("claimstatuslist") != null ? session
 						.getAttribute("claimstatuslist") : TracerUtils.getStatusList(TracingConstants.TABLE_CLAIM, user.getCurrentlocale()));
+				if (fsClaim.getAttachments() == null) {
+					fsClaim.setAttachments(new HashSet<Attachment>());
+				}
 					matchClaims.add(fsClaim);
 				request.setAttribute("matchClaims", (List<FsClaim>)matchClaims);
 			}
