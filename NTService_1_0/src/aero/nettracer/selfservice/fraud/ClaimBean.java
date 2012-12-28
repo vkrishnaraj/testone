@@ -1045,9 +1045,21 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			for (FsForumPost post : thread.getPosts()) {
 				if (post.getId() == 0) {
 					convertClaims(post);
+					sess.save(post);
+				} else {
+					sess.merge(post);
 				}
 			}
-			sess.saveOrUpdate(thread);
+			if (thread.getId() == 0) {
+				sess.save(thread);
+			} else {
+				FsForumThread oldThread = (FsForumThread) sess.load(FsForumThread.class, thread.getId());
+				oldThread.setNumAttachments(oldThread.getNumAttachments() + thread.getNumAttachments());
+				oldThread.setNumFiles(oldThread.getNumFiles() + thread.getNumFiles());
+				oldThread.setNumPosts(oldThread.getNumPosts() + thread.getNumPosts());
+				oldThread.setLastEdited(thread.getLastEdited());
+				sess.update(oldThread);
+			}
 			t.commit();
 			return thread.getId();
 		} catch (Exception e) {

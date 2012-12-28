@@ -59,7 +59,7 @@ public class FsForumThread implements Serializable {
 
 	private int numAttachments;
 	
-	@OneToMany(mappedBy="thread", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy="thread", cascade = {CascadeType.REFRESH, CascadeType.REMOVE}, fetch = FetchType.EAGER)
 	@OrderBy(clause = "id")
 	@Fetch(FetchMode.SELECT)
 	private List<FsForumPost> posts;
