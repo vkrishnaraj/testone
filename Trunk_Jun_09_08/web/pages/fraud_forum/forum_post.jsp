@@ -110,7 +110,7 @@
 				      </tr>
 		              <tr>
 		                <td align="center" valign="top">
-			                  <html:submit property="create" styleId="button">
+			                  <html:submit property="create" styleId="button" onclick="return validatePost(this.form);">
 			                    <bean:message key="fraud.forum.view.reply.button" />
 			                  </html:submit>
 		                </td>

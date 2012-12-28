@@ -13,8 +13,13 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.forum.ForumViewForm" %>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+
+ResourceBundle bundle = ResourceBundle.getBundle(
+		"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 	
   boolean ntUser = PropertyBMO.isTrue("nt.user");
   boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
@@ -27,6 +32,30 @@
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+  <SCRIPT LANGUAGE="JavaScript">
+			
+			function validatePost(form) {
+				for (var j=0;j < form.length; j++) {
+					currentElement = form.elements[j];
+					currentElementName=currentElement.name;
+
+					if (currentElementName.indexOf("newTitle") != -1) {  
+				 		if (currentElement.value.length == 0) {
+						    alert("<%= (String)bundle.getString( "fraud.forum.view.reply.title") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+						    currentElement.focus();
+						    return false;
+				  		}
+					} else if (currentElementName.indexOf("newText") != -1) {  
+				      	if (currentElement.value.length == 0) {
+					        alert("<%= (String)bundle.getString( "fraud.forum.view.reply.text") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+					        currentElement.focus();
+					        return false;
+				      	}
+					}
+				}
+			}
+
+  </SCRIPT>
  
         <html:form action="fraud_forum_view.do" method="post" enctype="multipart/form-data" >
             <tr>

@@ -218,6 +218,8 @@ public class ForumSearchAction extends Action {
 			request.setAttribute("thread_resultList", fform.getThreads());
 		} else {
 			logger.error("TAG OR THREAD ERROR");
+			request.setAttribute("tag_resultList", new ArrayList<FsForumTag>());
+			request.setAttribute("thread_resultList", new ArrayList<FsForumThread>());
 		}
 		
 		/***************** end pagination *****************/

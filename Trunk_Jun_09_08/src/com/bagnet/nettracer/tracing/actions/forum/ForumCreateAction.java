@@ -9,9 +9,7 @@ package com.bagnet.nettracer.tracing.actions.forum;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
@@ -21,13 +19,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import aero.nettracer.fs.model.Attachment;
 import aero.nettracer.fs.model.FsAttachment;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.forum.FsForumPost;
@@ -37,7 +35,6 @@ import aero.nettracer.fs.model.transport.v3.forum.FsForumSearchResults;
 import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
-import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -49,8 +46,6 @@ import com.bagnet.nettracer.tracing.utils.FileShareUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
-
-import org.apache.struts.action.Action;
 
 public class ForumCreateAction extends Action {
 	
