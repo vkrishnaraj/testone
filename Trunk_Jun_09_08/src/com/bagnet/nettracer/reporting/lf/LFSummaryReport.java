@@ -29,15 +29,31 @@ public class LFSummaryReport extends AbstractNtJasperReport {
 	protected String getMySqlSqlString(StatReportDTO srDto) {
 		String sql = "select greatest(ifnull(combo.lost_date, 0), ifnull(combo.found_date, 0)) as 'date', ifnull(combo.lost_id_count, 0) as 'nlrr', ifnull(combo.found_id_count, 0) as 'nfie' from ( " +
 					 "select lost.date as 'lost_date',found.date as 'found_date',lost.id_count as 'lost_id_count',found.id_count as 'found_id_count' from " + 
-					 "(select date(lfl.openDate) as 'date',count(lfl.id) as 'id_count' from lflost lfl where lfl.openDate between :startDate and :endDate group by date(lfl.openDate)) lost " +
+					 "(select date(lfl.openDate) as 'date',count(lfl.id) as 'id_count' from lflost lfl where lfl.openDate between :startDate and :endDate ";
+					 if(!srDto.getSubcompCode().equals("0")){
+						 sql+=" and lfl.companyId=\'"+srDto.getSubcompCode()+"\' ";
+					 }
+					 sql+="group by date(lfl.openDate)) lost " +
 					 "left outer join " +
-					 "(select date(lff.foundDate) as 'date',count(lff.id) as 'id_count' from lffound lff where lff.foundDate between :startDate and :endDate group by date(lff.foundDate)) found " +
+					 "(select date(lff.foundDate) as 'date',count(lff.id) as 'id_count' from lffound lff where lff.foundDate between :startDate and :endDate";
+					 if(!srDto.getSubcompCode().equals("0")){
+						 sql+=" and lff.companyId=\'"+srDto.getSubcompCode()+"\' ";
+					 }
+					 sql+=" group by date(lff.foundDate)) found " +
 					 "on lost.date = found.date " +
 					 "union " + 
 					 "select lost.date as 'lost_date',found.date as 'found_date',lost.id_count as 'lost_id_count',found.id_count as 'found_id_count' from " + 
-					 "(select date(lfl.openDate) as 'date',count(lfl.id) as 'id_count' from lflost lfl where lfl.openDate between :startDate and :endDate group by date(lfl.openDate)) lost " +
+					 "(select date(lfl.openDate) as 'date',count(lfl.id) as 'id_count' from lflost lfl where lfl.openDate between :startDate and :endDate";
+					 if(!srDto.getSubcompCode().equals("0")){
+						 sql+=" and lfl.companyId=\'"+srDto.getSubcompCode()+"\' ";
+					 }
+					 sql+=" group by date(lfl.openDate)) lost " +
 					 "right outer join " +
-					 "(select date(lff.foundDate) as 'date',count(lff.id) as 'id_count' from lffound lff where lff.foundDate between :startDate and :endDate group by date(lff.foundDate)) found " +
+					 "(select date(lff.foundDate) as 'date',count(lff.id) as 'id_count' from lffound lff where lff.foundDate between :startDate and :endDate";
+					 if(!srDto.getSubcompCode().equals("0")){
+						 sql+=" and lff.companyId=\'"+srDto.getSubcompCode()+"\' ";
+					 }
+					 sql+=" group by date(lff.foundDate)) found " +
 					 "on lost.date = found.date) as combo " +
 					 "order by date;";
 		

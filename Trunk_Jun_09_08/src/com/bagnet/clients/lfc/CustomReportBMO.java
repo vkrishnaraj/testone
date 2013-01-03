@@ -457,6 +457,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
 		sb.append(resources.getString("lf.ir.report.created.on") + " " + runDate + " ");
 		sb.append("by " + user.getUsername() + " for: " + srDto.getStarttime() + " - " + srDto.getEndtime() + " ");
+		if(!srDto.getSubcompCode().equals("0")){
+			sb.append("for Subcompany: "+srDto.getSubcompCode());
+		}
 		return sb.toString();
 	}
 
