@@ -48,10 +48,10 @@ public class LostFoundManagerAction extends CheckedAction {
 		int type = 0;
 		if (request.getParameter("openLost") != null) {
 			type = TracingConstants.LF_TYPE_LOST;
-			rowcount = serviceBean.getLostCount(user.getStation());
+			rowcount = serviceBean.getLostCount(user);
 		} else {
 			type = TracingConstants.LF_TYPE_FOUND;
-			rowcount = serviceBean.getFoundCount(user.getStation());
+			rowcount = serviceBean.getFoundCount(user);
 		}
 		
 		currpage = lfmForm.getCurrpage() != null ? Integer.parseInt(lfmForm.getCurrpage()) : 0;

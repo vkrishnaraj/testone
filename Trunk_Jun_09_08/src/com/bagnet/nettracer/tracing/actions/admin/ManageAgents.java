@@ -24,6 +24,7 @@ import org.apache.struts.validator.DynaValidatorForm;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.NTDateFormat;
@@ -31,6 +32,7 @@ import com.bagnet.nettracer.tracing.db.NTTimeFormat;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.UserGroup;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Agent;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
@@ -54,6 +56,7 @@ public final class ManageAgents extends Action {
 		// check session
 		TracerUtils.checkSession(session);
 		boolean addStation = false;
+		boolean addSubcompany = false;
 		
 		Agent user = (Agent) session.getAttribute("user");
 		if (user == null || form == null) {
@@ -108,6 +111,9 @@ public final class ManageAgents extends Action {
 			}
 			dForm.set("agent_id", "" + a.getAgent_ID());
 			dForm.set("station_id", "" + a.getStation().getStation_ID());
+			if(a.getSubcompany()!=null){
+				dForm.set("subcompany_id", "" + a.getSubcompany().getId());
+			}
 			companyCode = a.getStation().getCompany().getCompanyCode_ID();
 			dForm.set("companyCode", "" + a.getStation().getCompany().getCompanyCode_ID());
 			dForm.set("group_id", "" + a.getUsergroup_id());
@@ -140,6 +146,7 @@ public final class ManageAgents extends Action {
 			}
 
 			addStation = true;
+			addSubcompany = true;
 		}
 
 		List groupList = AdminUtils.getGroups(null, companyCode, 0, 0);
@@ -149,12 +156,23 @@ public final class ManageAgents extends Action {
 			x.add(new LabelValueBean(group.getDescription(), "" + group.getUserGroup_ID()));
 		}
 
+		List subcompList = AdminUtils.getSubcompanies(null, companyCode, 0, 0);
+		List x3 = new ArrayList();
+		boolean subcompFound = false;
+		if (subcompList != null) {
+			for (Iterator i = subcompList.iterator(); i.hasNext();) {
+				Subcompany subcomp = (Subcompany) i.next();
+				x3.add(new LabelValueBean(subcomp.getSubcompanyCode(), "" + subcomp.getId()));
+				
+			}
+			x3.add(0, new LabelValueBean("No Subcompany", ""));
+		}
+		
 		Station tmp = null;
 		if (addStation && request.getParameter("agentId") != null && request.getParameter("agentId") != "") {
 			Agent tmpAgent = AdminUtils.getAgent(request.getParameter("agentId"));
 			tmp = tmpAgent.getStation();
 		}
-		
 		List stationList = AdminUtils.getStations(null, companyCode, 0, 0);
 		List x2 = new ArrayList();
 		boolean stationFound = false;
@@ -180,6 +198,7 @@ public final class ManageAgents extends Action {
 		request.setAttribute("shiftList", shiftList);
 		request.setAttribute("grouplist", x);
 		request.setAttribute("statList", x2);
+		request.setAttribute("subcompList", x3);
 
 		if (request.getParameter("self_edit") != null) {
 			return mapping.findForward(TracingConstants.EDIT_SELF);
@@ -270,6 +289,16 @@ public final class ManageAgents extends Action {
 					s.setStation_ID(Integer.parseInt(((String) dForm.get("station_id"))));
 					agent.setStation(s);
 				}
+				Subcompany sc = new Subcompany();
+				if (request.getParameter("self") == null) {
+					if((!((String)dForm.get("subcompany_id")).equals(""))){
+						sc=SubCompanyDAO.loadSubcompany(Long.parseLong((String) dForm.get("subcompany_id")));
+						agent.setSubcompany(sc);
+					} else {
+						agent.setSubcompany(null);
+					}
+				}
+				
 				UserGroup g = new UserGroup();
 				if (request.getParameter("self") == null) {
 					g.setUserGroup_ID(Integer.parseInt(((String) dForm.get("group_id"))));

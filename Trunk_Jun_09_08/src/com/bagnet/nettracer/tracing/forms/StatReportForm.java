@@ -21,6 +21,16 @@ public final class StatReportForm extends ValidatorForm {
 	public void setStationCode(String stationCode) {
 		this.stationCode = stationCode;
 	}
+	
+	private String subcompCode;
+
+	public String getSubcompCode() {
+		return subcompCode;
+	}
+
+	public void setSubcompCode(String subcompCode) {
+		this.subcompCode = subcompCode;
+	}
 
 	private int itemType_ID;
 	private int reportnum;

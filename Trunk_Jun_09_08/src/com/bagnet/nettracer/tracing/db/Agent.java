@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 
 /**
  * @author Administrator
@@ -20,6 +21,7 @@ public class Agent implements Serializable {
 
 	private int Agent_ID;
 	private Station station;
+	private Subcompany subcompany;
 
 	private int usergroup_id;
 	private String firstname;
@@ -413,6 +415,23 @@ public class Agent implements Serializable {
 	 */
 	public void setStation(Station station) {
 		this.station = station;
+	}
+	
+	/**
+	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.lf.Subcompany"
+	 *                        column="subcompany_ID" not-null="false"
+	 * @return Returns the station.
+	 */
+	public Subcompany getSubcompany() {
+		return subcompany;
+	}
+
+	/**
+	 * @param subcompany
+	 *          The subcompany to set.
+	 */
+	public void setSubcompany(Subcompany subcompany) {
+		this.subcompany = subcompany;
 	}
 
 	/**

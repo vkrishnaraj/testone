@@ -46,8 +46,10 @@ public interface LFServiceHome {
 	
 	//LF TaskManager services
 	public int getLostCount(Station station);
+	public int getLostCount(Agent agent);
 	public List<LFLost> getLostPaginatedList(Station station, int start, int offset);
 	public int getFoundCount(Station station);
+	public int getFoundCount(Agent agent);
 	public List<LFFound> getFoundPaginatedList(Station station, int start, int offset);
 	public int getItemsToSalvageCount(Station station);
 	public List<LFItem> getItemsToSalvagePaginatedList(Station station, int start, int offset);

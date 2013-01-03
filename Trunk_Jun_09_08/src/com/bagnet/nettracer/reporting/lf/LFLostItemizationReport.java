@@ -44,6 +44,9 @@ public class LFLostItemizationReport extends AbstractNtJasperReport {
 		sql+= "join lfcategory c on i.category = c.id " +
 		"left outer join lfsubcategory sc on i.subCategory = sc.id " +
 		"where date(l.openDate) between :startDate and :endDate " + getStationSql(srDto); 
+		if(!srDto.getSubcompCode().equals("0")){
+			 sql+=" and l.companyId=\'"+srDto.getSubcompCode()+"\' ";
+		 }
 		sql+=  "order by s.stationcode,date;";
 		return sql;
 	}

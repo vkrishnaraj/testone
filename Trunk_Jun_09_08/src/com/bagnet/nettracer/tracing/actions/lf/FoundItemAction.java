@@ -370,7 +370,7 @@ public class FoundItemAction extends CheckedAction {
 			filter.setFoundId(found.getId());
 			fiForm.setTraceResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000));
 
-			if (fiForm.getFound().getStatus().getStatus_ID() == TracingConstants.LF_STATUS_CLOSED) {
+			if (fiForm.getFound().getStatus().getStatus_ID() == TracingConstants.LF_STATUS_CLOSED || user.getSubcompany()!=null) {
 				if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LFC_REOPEN_LOST_FOUND, user)) {
 					return mapping.findForward(TracingConstants.LF_CREATE_FOUND_ITEM_RO);
 				}

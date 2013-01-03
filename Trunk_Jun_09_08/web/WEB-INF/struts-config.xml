@@ -112,6 +112,7 @@
 			<form-property name="agentSearchFName" type="java.lang.String" />
 			<form-property name="agentSearchLName" type="java.lang.String" />
 			<form-property name="agent_id" type="java.lang.String" />
+			<form-property name="subcompany_id" type="java.lang.String" />
 			<form-property name="station_id" type="java.lang.String" />
 			<form-property name="group_id" type="java.lang.String" />
 			<form-property name="shift_id" type="java.lang.String" />

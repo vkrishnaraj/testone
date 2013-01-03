@@ -81,6 +81,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 	private String createDailyStatusReport(StatReportDTO srDTO, String resourceKey, String rootpath, HttpServletRequest request, Agent user) {
 		srDTO.setDateFormat(user.getDateformat().getFormat());
 		srDTO.setCompanyCode(user.getCompanycode_ID());
+		if(user.getSubcompany()!=null){
+			srDTO.setSubcompCode(user.getSubcompany().getSubcompanyCode());
+		} 
 		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		List reportData = new LFDailyStatusReport(resources).getData(srDTO);
@@ -137,6 +140,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 	private String createItemizationReport(StatReportDTO srDTO, String resourceKey, String rootpath, HttpServletRequest request, Agent user) {
 		srDTO.setDateFormat(user.getDateformat().getFormat());
 		srDTO.setCompanyCode(user.getCompanycode_ID());
+		if(user.getSubcompany()!=null){
+			srDTO.setSubcompCode(user.getSubcompany().getSubcompanyCode());
+		} 
 		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		List reportData = new LFItemizationReport(resources).getData(srDTO);
@@ -196,6 +202,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 	private String createLostItemizationReport(StatReportDTO srDTO, String resourceKey, String rootpath, HttpServletRequest request, Agent user) {
 		srDTO.setDateFormat(user.getDateformat().getFormat());
 		srDTO.setCompanyCode(user.getCompanycode_ID());
+		if(user.getSubcompany()!=null){
+			srDTO.setSubcompCode(user.getSubcompany().getSubcompanyCode());
+		} 
 		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		List reportData = new LFLostItemizationReport(resources).getData(srDTO);
@@ -255,6 +264,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 	private String createSummaryReport(StatReportDTO srDTO, String resourceKey, String rootpath, HttpServletRequest request, Agent user) {
 		srDTO.setDateFormat(user.getDateformat().getFormat());
 		srDTO.setCompanyCode(user.getCompanycode_ID());
+		if(user.getSubcompany()!=null){
+			srDTO.setSubcompCode(user.getSubcompany().getSubcompanyCode());
+		} 
 		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		List reportData = new LFSummaryReport(resources).getData(srDTO);
@@ -304,6 +316,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 	private String createDisbursementsReport(StatReportDTO srDTO, String resourceKey, String rootpath, HttpServletRequest request, Agent user) {
 		srDTO.setDateFormat(user.getDateformat().getFormat());
 		srDTO.setCompanyCode(user.getCompanycode_ID());
+		if(user.getSubcompany()!=null){
+			srDTO.setSubcompCode(user.getSubcompany().getSubcompanyCode());
+		} 
 		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		List reportData = new LFDisbursementsReport(resources).getData(srDTO);
@@ -356,6 +371,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 	private String createSalvageReport(StatReportDTO srDTO, String resourceKey, String rootpath, HttpServletRequest request, Agent user) {
 		srDTO.setDateFormat(user.getDateformat().getFormat());
 		srDTO.setCompanyCode(user.getCompanycode_ID());
+		if(user.getSubcompany()!=null){
+			srDTO.setSubcompCode(user.getSubcompany().getSubcompanyCode());
+		} 
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		List reportData = new LFSalvageReport(resources).getData(srDTO);
 		if (reportData == null) {

@@ -170,6 +170,20 @@ String passMin = bundle.getString("error.security.password.minimal").replace("{0
           </tr>
           <tr>
             <td>
+              <bean:message key="header.agentSubcompany" />
+              <font color=red>
+                *
+              </font>
+              :
+            </td>
+            <td>
+              <html:select name="agentForm" property="subcompany_id" styleClass="dropdown">
+                <html:options collection="subcompList" property="value" labelProperty="label" />
+              </html:select>
+            </td>
+          </tr>
+          <tr>
+            <td>
               <bean:message key="header.agentStation" />
               <font color=red>
                 *

@@ -44,6 +44,26 @@
   	</td>
 </tr>
 <tr>
+  	<td>
+    <bean:message key="colname.lf.report.subcompany" />
+    :
+  	</td>
+  	<td>
+  	<% if(agent.getSubcompany()==null){ %>
+    <html:select property="subcompCode" styleClass="dropdown" >
+      <html:option value="0">
+        <bean:message key="select.all" />
+      </html:option>
+      <html:options collection="airlineallsubcomplist" property="subcompanyCode" labelProperty="subcompanyCode"/>
+    </html:select>
+    <% } else { %>
+    <html:select property="subcompCode" styleClass="dropdown" disabled="true">
+      <html:option value="<%=String.valueOf(agent.getSubcompany().getId()) %>" ><%=agent.getSubcompany().getSubcompanyCode() %> </html:option>
+    </html:select>
+    <% } %>
+  	</td>
+</tr>
+<tr>
 	<td colspan="2" align="center" valign="top" bgcolor=white>
 		<br>
 		<INPUT type="button" value="Back" id="button" onClick="history.back()">

@@ -35,8 +35,11 @@ public class LFDisbursementsReport extends AbstractNtJasperReport {
 		String sql = "select date(lff.deliveredDate) as 'deliveredDate',lff.checkAmount,lff.checkNumber,ifnull(lfl.id,0) as 'lost_id',lff.barcode,i.trackingNumber from lffound lff " +
 					 "left outer join lfitem i on lff.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					 "left outer join lflost lfl on i.lost_id = lfl.id " +
-					 "where lff.deliveredDate between :startDate and :endDate " + 
-					 "and lff.checkAmount > 0;";
+					 "where lff.deliveredDate between :startDate and :endDate ";
+					if(!srDto.getSubcompCode().equals("0")){
+						sql+=" and (lff.companyId=\'"+srDto.getSubcompCode()+"\' or lfl.companyId=\'"+srDto.getSubcompCode()+"\') ";
+					}
+					sql+="and lff.checkAmount > 0;";
 		
 		return sql;
 	}

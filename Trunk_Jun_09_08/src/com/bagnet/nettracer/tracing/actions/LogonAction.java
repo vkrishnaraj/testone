@@ -549,12 +549,12 @@ public class LogonAction extends Action {
 																						entries = x;
 																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_OPEN_LOST_REPORTS)) {
-																					int x = new LFServiceBean().getLostCount(agent.getStation());
+																					int x = new LFServiceBean().getLostCount(agent);
 																					if (x != -1) {
 																						entries = x;
 																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_OPEN_FOUND_ITEMS)) {
-																					int x = new LFServiceBean().getFoundCount(agent.getStation());
+																					int x = new LFServiceBean().getFoundCount(agent);
 																					if (x != -1) {
 																						entries = x;
 																					}

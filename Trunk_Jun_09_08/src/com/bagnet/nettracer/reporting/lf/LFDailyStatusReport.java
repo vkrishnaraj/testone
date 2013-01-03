@@ -43,7 +43,7 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 					 "left outer join lfboxcontainer xx on x.container_ID = xx.id where xx.dateCount between :startDate and :endDate group by xx.dateCount UNION "+
 					 "select tt.receivedDate 'received_date', tt.station_ID 'station' from lffound tt where tt.receivedDate between :startDate and :endDate ) zz " +
 					 "left outer join station s on zz.station = s.Station_ID " +
-					 "left outer join lffound lf on zz.received_date = lf.receivedDate " + // left join lfboxcount bcc on bcc.id=bc.container_id
+					 "left outer join lffound lf on zz.received_date = lf.receivedDate "+
 					 "left outer join (select bcc.dateCount as 'received_date', bc.boxCount as 'boxcount', bc.station_ID as 'station' from lfboxcount bc "+
 					 				  "left outer join lfboxcontainer bcc on bc.container_ID = bcc.id where bcc.dateCount between :startDate and :endDate group by bcc.dateCount order by bcc.dateCount, bc.Station_ID) boxc on zz.received_date= boxc.received_date " +
 					 "left outer join (select lf.receivedDate as 'received_date',s.station_id,count(i.id) as 'count' from station s " +
@@ -88,8 +88,11 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 					                  "and (i.disposition_status_id in (" + TracingConstants.LF_DISPOSITION_DELIVERED + "," + TracingConstants.LF_DISPOSITION_PICKED_UP + ") or i.deliveryRejected = 1) " +
 					                  "and i.lost_id is null " +
 					                  "group by lf.receivedDate,s.station_id order by lf.receivedDate,s.station_id) lvirwor on lf.receivedDate = lvirwor.received_date and s.station_id = lvirwor.station_id " +
-					 "where 1 = 1 " + getStationSql(srDto) + "and s.companycode_ID = '" + TracingConstants.LF_LF_COMPANY_ID + "' and zz.received_date between :startDate and :endDate " +
-					 "group by zz.received_date,s.stationcode " +
+					 "where 1 = 1 " + getStationSql(srDto) + "and s.companycode_ID = '" + TracingConstants.LF_LF_COMPANY_ID + "' and zz.received_date between :startDate and :endDate ";
+					 if(!srDto.getSubcompCode().equals("0")){
+						 sql+=" and lf.companyId=\'"+srDto.getSubcompCode()+"\' ";
+					 }
+					 sql+=" group by zz.received_date,s.stationcode " +
 					 "order by s.stationcode,zz.received_date;";
 		
 		return sql;

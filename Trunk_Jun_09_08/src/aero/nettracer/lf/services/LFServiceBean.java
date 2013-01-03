@@ -337,6 +337,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				e.printStackTrace();
 			}
 		}
+		if(dto.getAgent().getSubcompany()!=null){
+			try {
+				String scc = dto.getAgent().getSubcompany().getSubcompanyCode();
+				if(scc != null){
+					sql += " and o.companyId = \'" + scc + "\'";
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 		return sql;
 	}
@@ -901,7 +911,22 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return false;
 	}
-
+	
+	private String getLostQuery(Agent agent){
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l where 1=1 ";
+				if(!TracingConstants.LF_LF_COMPANY_ID.equals(agent.getStation().getCompany().getCompanyCode_ID()))
+				{
+					sql +=" and (l.lossInfo.destination.station_ID = " + agent.getStation().getStation_ID()+
+							" or l.lossInfo.destination.lz_ID = " + agent.getStation().getStation_ID()+") ";
+				}
+				sql += " and l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
+				if(agent.getSubcompany()!=null){
+					sql += " and l.companyId = '"+agent.getSubcompany().getSubcompanyCode()+"'";
+				}
+				
+		return sql;
+	}
+	
 	private String getLostQuery(Station station){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l where ";
 				if(!TracingConstants.LF_LF_COMPANY_ID.equals(station.getCompany().getCompanyCode_ID()))
@@ -911,6 +936,18 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				}
 				sql += " l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
 				
+		return sql;
+	}
+
+	private String getFoundQuery(Agent agent){
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
+				"where (f.location.station_ID = " + agent.getStation().getStation_ID()
+				+ " or f.location.lz_ID = " + agent.getStation().getStation_ID() + ")"
+				+ " and f.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
+
+		if(agent.getSubcompany()!=null){
+			sql += " and f.companyId = '"+agent.getSubcompany().getSubcompanyCode()+"'";
+		}
 		return sql;
 	}
 	
@@ -1149,6 +1186,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	@Override
+	public int getLostCount(Agent agent) {
+		if(agent == null){
+			return 0;
+		}
+		return getLostCount(getLostQuery(agent));
+	}
+	
+	@Override
 	public int getLostCount(Station station) {
 		if(station == null){
 			return 0;
@@ -1162,6 +1207,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return null;
 		}
 		return getLostPaginatedList(getLostQuery(station), start, offset);
+	}
+
+	@Override
+	public int getFoundCount(Agent agent) {
+		if(agent == null){
+			return 0;
+		}
+		return getFoundCount(getFoundQuery(agent));
 	}
 	
 	@Override

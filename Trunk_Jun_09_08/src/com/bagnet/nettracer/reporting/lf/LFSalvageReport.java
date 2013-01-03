@@ -36,8 +36,11 @@ public class LFSalvageReport extends AbstractNtJasperReport {
 					 "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					 "left outer join lfcategory c on i.category = c.id " +
 					 "left outer join lfsubcategory sc on i.subCategory = sc.id " +
-					 "where s.id = " + srDto.getSalvageId() + " " +
-					 "order by lf.id;";
+					 "where s.id = " + srDto.getSalvageId() + " ";
+					 if(!srDto.getSubcompCode().equals("0")){
+						 sql+=" and lf.companyId=\'"+srDto.getSubcompCode()+"\' ";
+					 }
+					sql+="order by lf.id;";
 		return sql;
 	}
 

@@ -72,7 +72,7 @@ public final class ManageSubCompany extends Action {
 
 		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
 
-		if ((request.getParameter("edit") != null &&  !request.getParameter("edit").equals(""))|| request.getParameter("addStations") != null) {
+		if ((request.getParameter("edit") != null &&  !request.getParameter("edit").equals("")) || request.getParameter("addStations") != null) {
 			String subcompId = request.getParameter("id");
 			Subcompany subcomp = SubCompanyDAO.loadSubcompany(Long.valueOf(subcompId));
 			SCForm.setAuto_Close_High(subcomp.getAuto_Close_High());

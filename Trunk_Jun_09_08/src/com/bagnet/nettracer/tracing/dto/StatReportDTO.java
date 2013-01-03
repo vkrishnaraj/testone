@@ -34,6 +34,7 @@ public class StatReportDTO {
 	private String dateFormat;
 	private String event;
 	private String companyCode;
+	private String subcompCode;
 		
 	public String getCompanyCode() {
 		return companyCode;
@@ -41,6 +42,14 @@ public class StatReportDTO {
 
 	public void setCompanyCode(String companyCode) {
 		this.companyCode = companyCode;
+	}
+	
+	public String getSubcompCode() {
+		return subcompCode;
+	}
+
+	public void setSubcompCode(String subcompCode) {
+		this.subcompCode = subcompCode;
 	}
 
 	public String getEvent() {

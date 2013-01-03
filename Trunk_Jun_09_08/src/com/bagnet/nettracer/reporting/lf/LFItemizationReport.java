@@ -47,8 +47,11 @@ public class LFItemizationReport extends AbstractNtJasperReport {
 					 "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " +
 					 "left outer join lfcategory c on i.category = c.id " +
 					 "left outer join lfsubcategory sc on i.subCategory = sc.id " +
-					 "where lf.receivedDate between :startDate and :endDate " + getStationSql(srDto) + "and s.companycode_ID = '" + TracingConstants.LF_LF_COMPANY_ID + "' and lf.receivedDate between :startDate and :endDate " +
-					 "order by s.stationcode,lf.receivedDate;";
+					 "where lf.receivedDate between :startDate and :endDate " + getStationSql(srDto) + "and s.companycode_ID = '" + TracingConstants.LF_LF_COMPANY_ID + "' and lf.receivedDate between :startDate and :endDate ";
+					 if(!srDto.getSubcompCode().equals("0")){
+						 sql+=" and lf.companyId=\'"+srDto.getSubcompCode()+"\' ";
+					 }
+					 sql+=" order by s.stationcode,lf.receivedDate;";
 		return sql;
 	}
 
