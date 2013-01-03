@@ -290,24 +290,24 @@ public class CustomWestJetReports {
 				else if(((Integer)row[1])==(TracingConstants.DAMAGED_BAG)){
 					reportRow.setColumn2("Damaged");
 				}
-				int col3=0;
-				int col4=0;
-				int col5=0;
+				double col3=0;
+				double col4=0;
+				double col5=0;
 				if(row[2]!=null && row[2].toString().length()>0){
 					reportRow.setColumn3("$"+(String)row[2]);
-					col3=Integer.valueOf((String)row[2]);
+					col3=Double.valueOf((String)row[2]);
 				} else {
 					reportRow.setColumn3("$0");
 				}
 				if(row[3]!=null && row[3].toString().length()>0){
 					reportRow.setColumn4("$"+(String)row[3]);
-					col4=Integer.valueOf((String)row[3]);
+					col4=Double.valueOf((String)row[3]);
 				} else {
 					reportRow.setColumn4("$0");
 				}
 				if(row[4]!=null && row[4].toString().length()>0){
 					reportRow.setColumn5("$"+(String)row[4]);
-					col5=Integer.valueOf((String)row[4]);
+					col5=Double.valueOf((String)row[4]);
 				} else {
 					reportRow.setColumn5("$0");
 				}
