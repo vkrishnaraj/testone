@@ -596,10 +596,6 @@
     	<put name="center" value="/pages/admin/station_subcompany.jsp"/>
     </definition>
     
-    <definition name="edit_station_subcompany" extends="user_menu">
-    	<put name="center" value="/pages/admin/station_subcompany.jsp"/>
-    </definition>
-    
     <definition name="viewtemp_ohd" extends="user_menu">
     	<put name="center" value="/pages/taskmanager/viewtemp_ohd.jsp"/>
     </definition> 
