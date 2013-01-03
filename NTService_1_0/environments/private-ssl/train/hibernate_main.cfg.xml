@@ -68,6 +68,10 @@
 		<mapping class="aero.nettracer.fs.model.FsMatchHistoryAudit"/>
 		<mapping class="aero.nettracer.fs.model.FsIPAddress"/>
 		<mapping class="aero.nettracer.fs.model.detection.IPWhiteList"/>
+		<mapping class="aero.nettracer.fs.model.FsAttachment"/>
+		<mapping class="aero.nettracer.fs.model.forum.FsForumThread"/>
+		<mapping class="aero.nettracer.fs.model.forum.FsForumPost"/>
+		<mapping class="aero.nettracer.fs.model.forum.FsForumTag"/>
 </session-factory>
 
 </hibernate-configuration>
