@@ -81,6 +81,8 @@ public class ImportClaimDataVX extends ImportClaimData {
 	
 	static List<State> states;
 	static HashMap<String,FsIncident> incMap=new HashMap<String,FsIncident>();
+	static HashMap<String,Integer> statusMap=new HashMap<String,Integer>();
+	
 	
 	@Override
 	protected Agent loadAgent() {
@@ -295,6 +297,18 @@ public class ImportClaimDataVX extends ImportClaimData {
 				
 				populateIncident(inc,p,infolist);
 				Claim claim = (Claim)claims.get(infolist[fileref]);
+				int statuslevel=statusMap.get(String.valueOf(claim.getStatusId()));
+				if(infolist[1].equalsIgnoreCase("found") && statuslevel<=0){
+					claim.setStatusId(32);
+				} else if(infolist[1].equalsIgnoreCase("pending") && statuslevel<=1){
+					claim.setStatusId(30);
+				} else if(infolist[1].equalsIgnoreCase("approved") && statuslevel<=2){
+					claim.setStatusId(39);
+				} else if(infolist[1].equalsIgnoreCase("rejected") && statuslevel<=3){
+					claim.setStatusId(612);
+				} else if(infolist[1].equalsIgnoreCase("FRAUD!") && statuslevel<=4){
+					claim.setStatusId(TracingConstants.STATUS_KNOWN_FRAUD);
+				} 
 				claim.getClaimants().add(p);
 				claim.setAmountClaimed(Double.valueOf(infolist[claimamount]));
 				claim.setAmountPaid(Double.valueOf(infolist[settleamount]));
@@ -312,7 +326,6 @@ public class ImportClaimDataVX extends ImportClaimData {
 				} else if(infolist[1].equalsIgnoreCase("found")){
 					claim.setStatusId(32);
 				}
-
 				claim.setAirlineClaimId(infolist[0]);
 				claim.setClaimDate(DateUtils.convertToDate(infolist[dateopened], TracingConstants.DISPLAY_DATEFORMAT, null));
 				//TODO claimed or paid
@@ -431,6 +444,8 @@ public class ImportClaimDataVX extends ImportClaimData {
 					|| ct.trim().equalsIgnoreCase("USA") || isIntegerParseInt(ct))
 					&& hasState(s[state])){//US addr
 				p.getAddress().setState(s[state]);
+				p.getAddress().setCountry("US");
+				
 			} else if (ct.trim().equalsIgnoreCase("CANADA")){
 				Matcher matches = canada_zip.matcher(s[zip]);
 				if(matches.find()){
@@ -544,7 +559,13 @@ public class ImportClaimDataVX extends ImportClaimData {
 		}
 		
 		public static void main(String[]args){
-			
+
+			statusMap.put("32", 0);
+			statusMap.put("30", 1);
+			statusMap.put("39", 2);
+			statusMap.put("612", 3);
+			statusMap.put("38", 4);
+			statusMap.put("31", 5);
 			ImportClaimDataVX importer = new ImportClaimDataVX();
 			if (!importer.setVariablesFromArgs(args)) {
 				System.err.println("Usage:\t" + ImportClaimDataUS.class.getSimpleName() + " [username] [password] [company] " +
