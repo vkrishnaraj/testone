@@ -98,9 +98,14 @@ public class DamagedAction extends CheckedAction {
 		Agent user = (Agent) session.getAttribute("user");
 		ActionMessages errors = new ActionMessages();
 		IncidentForm theform = (IncidentForm) form;
+
+		boolean checkLLC = false;
+		if(request.getAttribute("currentstatus") != null) {
+			checkLLC = Integer.parseInt((String)request.getAttribute("currentstatus")) == TracingConstants.MBR_STATUS_CLOSED;
+		}
 		
 		//the company specific codes..
-		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.DAMAGED_BAG, true, user);
+		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.DAMAGED_BAG, true, user, checkLLC);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 

@@ -319,7 +319,7 @@ public class OHD_Address implements Serializable {
 	/**
 	 * @return Returns the zip.
 	 * 
-	 * @hibernate.property type="string" length="9"
+	 * @hibernate.property type="string" length="11"
 	 */
 	public String getZip() {
 		return zip;

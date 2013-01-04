@@ -172,6 +172,10 @@ public class LossCodeBMO {
 			}
 		}
 	}
+	
+	public static List<Company_specific_irregularity_code> getCompanyCodes(String companyCode, int report_type, boolean limit, Agent user) {
+		return getCompanyCodes(companyCode, report_type, limit, user, false);
+	}
 
 	/**
 	 * Get the company specific irregularity codes
@@ -179,11 +183,11 @@ public class LossCodeBMO {
 	 * @param companyCode
 	 * @return list of codes null in case of exception
 	 */
-	public static List<Company_specific_irregularity_code> getCompanyCodes(String companyCode, int report_type, boolean limit, Agent user) {
+	public static List<Company_specific_irregularity_code> getCompanyCodes(String companyCode, int report_type, boolean limit, Agent user, boolean checkLLC) {
 		Session sess = null;
 		boolean limitQuery = false;
 		
-		if (limit && user != null) {
+		if (limit && user != null && !(checkLLC && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, user))) {
 			if (UserPermissions.hasLimitedSavePermissionByType(user, report_type)) {
 				limitQuery = true;
 			}

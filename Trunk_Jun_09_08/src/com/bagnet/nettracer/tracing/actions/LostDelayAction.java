@@ -169,11 +169,13 @@ public class LostDelayAction extends CheckedAction {
 		BagService bs = new BagService();
 		WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
 
-
+		boolean checkLLC = false;
+		if(request.getAttribute("currentstatus") != null) {
+			checkLLC = Integer.parseInt((String)request.getAttribute("currentstatus")) == TracingConstants.MBR_STATUS_CLOSED;
+		}
+		
 		//the company specific codes..
-		
-		
-		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, true, user);
+		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, true, user, checkLLC);
 		//add to the loss codes
 
 		request.setAttribute("losscodes", codes);

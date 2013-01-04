@@ -187,7 +187,7 @@ public class ClaimSettlement {
 	@Basic
 	private boolean verifyTrace3;
 
-	@Column(length = 9)
+	@Column(length = 11)
 	private String zip;
 	
 	@Basic
