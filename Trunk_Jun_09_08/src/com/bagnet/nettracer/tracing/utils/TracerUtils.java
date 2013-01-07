@@ -69,6 +69,7 @@ import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.XDescElement;
 import com.bagnet.nettracer.tracing.db.i8n.KeyValueBean;
 import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.dto.RevenueCode;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
@@ -461,6 +462,14 @@ public class TracerUtils {
 								.getAttribute("airlineallstationlist")
 								: getStationList(company
 										.getCompanyCode_ID(), TracingConstants.AgentActiveStatus.ALL));
+		
+		session
+		.setAttribute(
+				"airlineallsubcomplist",
+				session.getAttribute("airlineallsubcomplist") != null ? session
+						.getAttribute("airlineallsubcomplist")
+						: getSubcompList(company
+								.getCompanyCode_ID(), TracingConstants.AgentActiveStatus.ALL));
 
 		// set company lists
 		if (session.getAttribute("companylistByName") == null
@@ -721,6 +730,56 @@ public class TracerUtils {
 		Prorate_Itinerary toReturn = new Prorate_Itinerary();
 		toReturn.setCurrency_ID(TracingConstants.DEFAULT_AGENT_CURRENCY);
 		return toReturn;
+	}
+	
+	public static ArrayList getSubcompList(String company, TracingConstants.AgentActiveStatus status) throws HibernateException {
+
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			// when company is null, return all distinct stationscodes, for
+			// itinerary
+			// dropdown
+
+			String sql = "";
+			if (company != null) {
+				sql = "select distinct subcomp.id,subcomp.subcompanyCode from com.bagnet.nettracer.tracing.db.lf.Subcompany subcomp where "
+						+ "subcomp.company.companyCode_ID = :company ";
+				sql += " order by subcompanycode";
+
+			} else {
+				sql = "select distinct subcomp.id,subcomp.subcompanyCode from com.bagnet.nettracer.tracing.db.lf.Subcompany subcomp where 1 = 1 ";
+				sql += " order by subcompanycode";
+			}
+			Query q = sess.createQuery(sql);
+			if (company != null)
+				q.setParameter("company", company);
+
+			List list = q.list();
+
+			if (list.size() == 0) {
+				logger.debug("unable to find station");
+				return null;
+			}
+
+			Subcompany subcomp = null;
+			ArrayList al = new ArrayList();
+			Object[] o = null;
+			for (int i = 0; i < list.size(); i++) {
+				o = (Object[]) list.get(i);
+				subcomp = new Subcompany();
+				subcomp.setId(((Long) o[0]).longValue());
+				subcomp.setSubcompanyCode((String) o[1]);
+				al.add(subcomp);
+			}
+			return al;
+
+		} catch (Exception e) {
+			logger.error("unable to retrieve station from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
 	}
 
 	public static ArrayList getStationList(String company, TracingConstants.AgentActiveStatus status) throws HibernateException {

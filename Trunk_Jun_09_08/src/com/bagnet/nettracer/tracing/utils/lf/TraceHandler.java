@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
@@ -67,6 +68,14 @@ public class TraceHandler {
 			t.start();
 			container.setThread(t);
 			v.add(container);
+			if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_SECONDARY_TRACE)){
+				SecondTraceThread thread2 = new SecondTraceThread(queue, container);
+				Thread t2 = new Thread(thread2, id);
+				t2.start();
+				container.setThread(t);
+				v.add(container);
+			}
+			
 		}
 		if(threadCount() == 0){
 			throw new RemoteConnectionException("no connection threads");

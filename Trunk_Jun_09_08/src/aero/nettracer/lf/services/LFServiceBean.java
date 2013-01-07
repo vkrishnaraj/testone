@@ -1621,6 +1621,26 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	@Override
+	public List<LFMatchHistory> traceFoundItemPrimary(long id) {
+		ArrayList<LFMatchHistory> ret = new ArrayList<LFMatchHistory>();
+		List<LFMatchHistory> toAdd = this.traceFoundItem(id, true);
+		if(toAdd!=null){
+			ret.addAll(toAdd);
+		}
+		return ret;
+	}
+	
+	@Override
+	public List<LFMatchHistory> traceFoundItemSecondary(long id) {
+		ArrayList<LFMatchHistory> ret = new ArrayList<LFMatchHistory>();
+		List<LFMatchHistory> toAdd = this.traceFoundItem(id, false);
+		if(toAdd!=null){
+			ret.addAll(toAdd);
+		}
+		return ret;
+	}
+	
+	@Override
 	public List<LFMatchHistory> traceFoundItem(long id, boolean isPrimary) {
 		try {
 			return LFTracingUtil.traceFound(id, this, true, isPrimary);
@@ -1642,6 +1662,26 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			if(toAdd!=null){
 				ret.addAll(toAdd);
 			}
+		}
+		return ret;
+	}
+	
+	@Override
+	public List<LFMatchHistory> traceLostItemPrimary(long id) {
+		ArrayList<LFMatchHistory> ret = new ArrayList<LFMatchHistory>();
+		List<LFMatchHistory> toAdd = this.traceLostItem(id, true);
+		if(toAdd!=null){
+			ret.addAll(toAdd);
+		}
+		return ret;
+	}
+	
+	@Override
+	public List<LFMatchHistory> traceLostItemSecondary(long id) {
+		ArrayList<LFMatchHistory> ret = new ArrayList<LFMatchHistory>();
+		List<LFMatchHistory> toAdd = this.traceLostItem(id, false);
+		if(toAdd!=null){
+			ret.addAll(toAdd);
 		}
 		return ret;
 	}

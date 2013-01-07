@@ -153,6 +153,11 @@ public class PropertyBMO {
 	public static final String LF_TRACING_CACHE_EXPIRE_RAND = "lf.tracing.cache.expire.rand";
 	public static final String LF_TRACING_CACHE_CLEANUP_INTERVAL = "lf.tracing.cache.cleanup.interval";
 	public static final String LF_TRACING_SECONDARY_TRACE = "lf.tracing.secondary.trace";
+	public static final String LF_TRACING_ADDRESS = "lf.tracing.address";
+	public static final String LF_TRACING_NAME = "lf.tracing.name";
+	public static final String LF_TRACING_SERIAL= "lf.tracing.serial";
+	public static final String LF_TRACING_PHONE = "lf.tracing.phone";
+	public static final String LF_TRACING_EMAIL= "lf.tracing.email";
 	
 	public static final String LIMITED_CODES_LOSSDELAY = "limited.codes.lossdelay";
 	public static final String LIMITED_CODES_DAMAGED = "limited.codes.damaged";

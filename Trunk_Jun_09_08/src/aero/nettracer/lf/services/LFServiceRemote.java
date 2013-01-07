@@ -32,6 +32,10 @@ public interface LFServiceRemote {
 
 	public List<LFMatchHistory> traceFoundItem(long id);
 	public List<LFMatchHistory> traceLostItem(long id);
+	public List<LFMatchHistory> traceFoundItemPrimary(long id);
+	public List<LFMatchHistory> traceLostItemPrimary(long id);
+	public List<LFMatchHistory> traceFoundItemSecondary(long id);
+	public List<LFMatchHistory> traceLostItemSecondary(long id);
 	
 	public List<LFMatchHistory> traceFoundItem(long id, boolean isPrimary);
 	public List<LFMatchHistory> traceLostItem(long id, boolean isPrimary);

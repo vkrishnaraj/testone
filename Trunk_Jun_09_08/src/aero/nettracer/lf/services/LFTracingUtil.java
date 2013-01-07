@@ -251,9 +251,9 @@ public class LFTracingUtil {
 		//update leaving this in for now....until we change our mind again
 		if(found != null && found.getLocation() != null){
 			if(isPrimary){
-				sql += " and (s.destination_station_ID = :foundstation or s.origin_station_ID = :foundstation2)" ;
+				sql += " and (s.destination_station_ID = :foundstation or s.origin_station_ID = :foundstation2) and l.companyId= :subcompCode" ;
 			} else {
-				sql += " and (s.destination_station_ID != :foundstation and s.origin_station_ID != :foundstation2)" ;
+				sql += " and (((s.destination_station_ID != :foundstation and s.origin_station_ID != :foundstation2) and l.companyId= :subcompCode) or l.companyId!= :subcompCode) " ;
 			}
 			hasLocation = true;
 		}
@@ -267,6 +267,7 @@ public class LFTracingUtil {
 			if(hasLocation){
 				q.setParameter("foundstation", found.getLocation().getStation_ID());
 				q.setParameter("foundstation2", found.getLocation().getStation_ID());
+				q.setParameter("subcompCode", found.getCompanyId());
 			}
 			q.addScalar("id", Hibernate.LONG);
 			List<Long> results = (List<Long>)q.list();
@@ -355,9 +356,9 @@ public class LFTracingUtil {
 				&& lost.getSegments().size() > 0){
 			String stations = lost.getSegmentSQL();
 			if(isPrimary){
-				sql += " and (f.station_ID in " + stations + ")";
+				sql += " and (f.station_ID in " + stations + ") and f.companyId= \'"+lost.getCompanyId()+"\'";
 			} else {
-				sql += " and (f.station_ID not in " + stations + ")";
+				sql += " and (((f.station_ID not in " + stations + ") and f.companyId= \'"+lost.getCompanyId()+"\') or f.companyId!= \'"+lost.getCompanyId()+"\')";
 			}
 		}
 
@@ -478,7 +479,7 @@ public class LFTracingUtil {
 					&& fc.getLastName() != null && fc.getLastName().trim().length() > 0
 					&& lc.getFirstName() != null && lc.getFirstName().trim().length() > 0
 					&& fc.getFirstName() != null && fc.getFirstName().trim().length() > 0){
-				if(StringCompare.compareStrings(lc.getFirstName()+lc.getLastName(), fc.getFirstName()+fc.getLastName()) > 80.0){
+				if(StringCompare.compareStrings(lc.getFirstName()+lc.getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValue(PropertyBMO.LF_TRACING_NAME)))){
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("Name Match");
 					detail.setMatchHistory(match);
@@ -493,7 +494,7 @@ public class LFTracingUtil {
 				for(LFPhone fphone:getPhones(match.getFound())){
 					if(lphone.getDecryptedPhoneNumber() != null && lphone.getDecryptedPhoneNumber().trim().length() > 0
 							&& fphone.getDecryptedPhoneNumber() != null && fphone.getDecryptedPhoneNumber().trim().length() > 0){
-						if(lphone.getDecryptedPhoneNumber().equalsIgnoreCase(fphone.getDecryptedPhoneNumber())){
+						if(StringCompare.compareStrings(lphone.getDecryptedPhoneNumber(),fphone.getDecryptedPhoneNumber()) > (Double.valueOf(PropertyBMO.getValue(PropertyBMO.LF_TRACING_PHONE)))){
 							LFMatchDetail detail = new LFMatchDetail();
 							detail.setDescription("Phone Number Match");
 							detail.setMatchHistory(match);
@@ -509,7 +510,7 @@ public class LFTracingUtil {
 			//process email
 			if(lc.getDecryptedEmail() != null && lc.getDecryptedEmail().trim().length() > 0 && 
 					fc.getDecryptedEmail() != null && fc.getDecryptedEmail().trim().length() > 0) {
-				if (lc.getDecryptedEmail().equalsIgnoreCase(fc.getDecryptedEmail())) {
+				if (StringCompare.compareStrings(lc.getDecryptedEmail(),fc.getDecryptedEmail()) > (Double.valueOf(PropertyBMO.getValue(PropertyBMO.LF_TRACING_EMAIL)))) {
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("Email Match");
 					detail.setMatchHistory(match);
@@ -544,7 +545,7 @@ public class LFTracingUtil {
 							+ fa.getDecryptedZip()!=null?fa.getDecryptedZip():"";
 					
 
-					if(StringCompare.compareStrings(laddress, faddress) > 60.0){
+					if(StringCompare.compareStrings(laddress, faddress) > (Double.valueOf(PropertyBMO.getValue(PropertyBMO.LF_TRACING_ADDRESS)))){
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Address Match");
 						detail.setMatchHistory(match);
@@ -723,13 +724,12 @@ public class LFTracingUtil {
 				}
 				if(litem.getSerialNumber() != null && litem.getSerialNumber().trim().length() > 0
 						&& fitem.getSerialNumber() != null && fitem.getSerialNumber().trim().length() > 0){
-					if(litem.getSerialNumber().equalsIgnoreCase(fitem.getSerialNumber())){
+					if(StringCompare.compareStrings(litem.getSerialNumber(),fitem.getSerialNumber()) > (Double.valueOf(PropertyBMO.getValue(PropertyBMO.LF_TRACING_SERIAL)))){
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Serial Number Match");
 						detail.setMatchHistory(match);
 						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_SERIAL));
 						detail.setDecryptedFoundValue(fitem.getSerialNumber());
-						detail.setDecryptedLostValue(litem.getSerialNumber());
 						match.getDetails().add(detail);
 					}
 				}

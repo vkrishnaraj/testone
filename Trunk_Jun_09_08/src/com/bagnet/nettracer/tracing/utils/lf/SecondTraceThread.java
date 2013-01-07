@@ -16,13 +16,13 @@ import javax.naming.Context;
 
 import org.apache.log4j.Logger;
 
-public class TraceThread implements Runnable{
+public class SecondTraceThread implements Runnable{
 	private static final Logger logger = Logger.getLogger(TraceThread.class);
 	
 	private ArrayBlockingQueue<Object[]> queue;
 	private ThreadContainer container;
 	
-	public TraceThread(ArrayBlockingQueue queue, ThreadContainer container){
+	public SecondTraceThread(ArrayBlockingQueue queue, ThreadContainer container){
 		this.queue = queue;
 		this.container = container;
 	}
@@ -47,11 +47,11 @@ public class TraceThread implements Runnable{
 					if(bean != null){
 						container.setConnectError(false);
 						if(o[0] == TraceHandler.TYPE_FOUND){
-							bean.traceFoundItemPrimary((Long)o[1]);
+							bean.traceFoundItemSecondary((Long)o[1]);
 						} else if (o[0] == TraceHandler.TYPE_LOST){
-							bean.traceLostItemPrimary((Long)o[1]);
+							bean.traceLostItemSecondary((Long)o[1]);
 						} else if (o[0] == TraceHandler.TYPE_FOUND_HISTORY_OBJECT){
-							List<LFMatchHistory> r = bean.traceFoundItemPrimary(((FoundHistoryObject)o[1]).getFound().getId());
+							List<LFMatchHistory> r = bean.traceFoundItemSecondary(((FoundHistoryObject)o[1]).getFound().getId());
 							((FoundHistoryObject)o[1]).setHasTraceResults(r != null && r.size() > 0);
 						}
 					} else {

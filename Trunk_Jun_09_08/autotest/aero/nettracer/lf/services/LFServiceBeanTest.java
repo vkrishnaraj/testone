@@ -466,7 +466,8 @@ public class LFServiceBeanTest {
 		}
 		
 		assertTrue(bean.getLostCount(location) > 1);
-		
+
+		assertTrue(bean.getLostCount(bean.getAutoAgent()) > 1);
 		int start = 0;
 		int offset = 15;
 		int i = 0;
@@ -996,6 +997,228 @@ public class LFServiceBeanTest {
 		assertTrue(verifyMatchDetails(hasMatch));
 	}
 	
+	@Test
+	public void traceLostTestPrimary(){
+		LFServiceBean bean = new LFServiceBean();
+		LFLost lost = createLostTestCase();
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e1) {
+			e1.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
+		
+		LFLost loaded = bean.getLostReport(lostId);
+		assertTrue(loaded != null && loaded.getId() == lostId);
+	
+		LFFound found = createFoundTestCase();
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, bean.getAutoAgent());
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
+		}
+		assertTrue(foundId != -1);
+		
+		List<LFMatchHistory> results = bean.traceLostItemPrimary(lostId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+		assertTrue(results != null && results.size() > 0);
+		LFMatchHistory hasMatch = null;
+		for(LFMatchHistory match:results){
+			if(match.getFound().getId() == foundId && match.getLost().getId() == lostId){
+				hasMatch = match;
+			}
+		}
+		assertTrue(hasMatch != null);
+		assertTrue(verifyMatchDetails(hasMatch));
+	}
+	
+	@Test
+	public void traceLostTestSecondary(){
+		LFServiceBean bean = new LFServiceBean();
+		LFLost lost = createLostTestCase();
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e1) {
+			e1.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
+		
+		LFLost loaded = bean.getLostReport(lostId);
+		assertTrue(loaded != null && loaded.getId() == lostId);
+	
+		LFFound found = createFoundTestCase();
+		found.setCompanyId(TracingConstants.LF_AA_COMPANY_ID);
+		found.getClient().setDecryptedEmail("mloupas@nettracre.aero");
+		found.getItem().setSerialNumber("123356");
+		for(LFPhone p:found.getClient().getPhones()){
+			p.setDecryptedPhoneNumber("5555555554");
+		}
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, bean.getAutoAgent());
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
+		}
+		assertTrue(foundId != -1);
+		
+		List<LFMatchHistory> results = bean.traceLostItemSecondary(lostId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+		assertTrue(results != null && results.size() > 0);
+		LFMatchHistory hasMatch = null;
+		for(LFMatchHistory match:results){
+			if(match.getFound().getId() == foundId && match.getLost().getId() == lostId){
+				hasMatch = match;
+			}
+		}
+		assertTrue(hasMatch != null);
+		assertTrue(verifyMatchDetails(hasMatch));
+	}
+	
+
+	@Test
+	public void traceLostFailTestPrimary(){
+		LFServiceBean bean = new LFServiceBean();
+		LFLost lost = createLostTestCase();
+		lost.getClient().setDecryptedEmail(lost.getClient().getDecryptedEmail().replace('l', 'f'));
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e1) {
+			e1.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
+		
+		LFLost loaded = bean.getLostReport(lostId);
+		assertTrue(loaded != null && loaded.getId() == lostId);
+	
+		LFFound found = createFoundTestCase();
+
+		found.getClient().setFirstName("Johnathon");
+		found.getClient().setLastName("Charlotte");
+		found.getClient().getAddress().setDecryptedAddress1("577 Fakewood dr");
+		found.getClient().getAddress().setDecryptedAddress2("APT 404");
+		found.getClient().getAddress().setDecryptedCity("Springfield");
+		found.getClient().getAddress().setDecryptedZip("87896");
+		found.getClient().setDecryptedEmail("thisnotmatch@email.com");
+		found.getItem().setCategory(2);
+		found.getItem().setColor("RD");
+		found.getItem().setCaseColor("RD");
+		found.getItem().getPhone().setDecryptedPhoneNumber("9998883333");
+		found.getItem().setSerialNumber("987654321");
+		found.getItem().setDescription("NOT IT!");
+		found.getItem().setModel("android");
+		found.getItem().setBrand("MS");
+//		found.getLossInfo().setMvaNumber("789456");
+//		found.getLossInfo().setAgreementNumber("789654");
+		found.setAgreementNumber("789654");
+		found.setMvaNumber("789456");
+		found.getItem().setLongDescription("This shouldn't match");
+
+		for(LFPhone p:found.getClient().getPhones()){
+			p.setDecryptedPhoneNumber("7777777777");
+		}
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, bean.getAutoAgent());
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
+		}
+		assertTrue(foundId != -1);
+		
+		List<LFMatchHistory> results = bean.traceLostItemPrimary(lostId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+		assertTrue(results != null && results.size() > 0);
+		LFMatchHistory hasMatch = null;
+		for(LFMatchHistory match:results){
+			if(match.getFound().getId() == foundId && match.getLost().getId() == lostId){
+				hasMatch = match;
+			}
+		}
+		assertTrue(hasMatch == null);
+	}
+	
+	@Test
+	public void traceLostFailTestSecondary(){
+		LFServiceBean bean = new LFServiceBean();
+		LFLost lost = createLostTestCase();
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e1) {
+			e1.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
+		
+		LFLost loaded = bean.getLostReport(lostId);
+		assertTrue(loaded != null && loaded.getId() == lostId);
+	
+		LFFound found = createFoundTestCase();found.getClient().setFirstName("Johnathon");
+		found.getClient().setLastName("Charlotte");
+		found.getClient().getAddress().setDecryptedAddress1("577 Fakewood dr");
+		found.getClient().getAddress().setDecryptedAddress2("APT 404");
+		found.getClient().getAddress().setDecryptedCity("Springfield");
+		found.getClient().getAddress().setDecryptedZip("87896");
+		found.getClient().setDecryptedEmail("thisnotmatch@email.com");
+		found.getItem().setCategory(2);
+		found.getItem().setColor("RD");
+		found.getItem().setCaseColor("RD");
+		found.getItem().getPhone().setDecryptedPhoneNumber("9998883333");
+		found.getItem().setSerialNumber("987654321");
+		found.getItem().setDescription("NOT IT!");
+		found.getItem().setModel("android");
+		found.getItem().setBrand("MS");
+//		found.getLossInfo().setMvaNumber("789456");
+//		found.getLossInfo().setAgreementNumber("789654");
+		found.setAgreementNumber("789654");
+		found.setMvaNumber("789456");
+		found.getItem().setLongDescription("This shouldn't match");
+
+		for(LFPhone p:found.getClient().getPhones()){
+			p.setDecryptedPhoneNumber("7777777777");
+		}
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, bean.getAutoAgent());
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
+		}
+		assertTrue(foundId != -1);
+		
+		List<LFMatchHistory> results = bean.traceLostItemSecondary(lostId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+		assertTrue(results != null && results.size() > 0);
+		LFMatchHistory hasMatch = null;
+		for(LFMatchHistory match:results){
+			if(match.getFound().getId() == foundId && match.getLost().getId() == lostId){
+				hasMatch = match;
+			}
+		}
+		assertTrue(hasMatch == null);
+	}
+	
 	private boolean verifyMatchDetails(LFMatchHistory match){
 		boolean name = false;
 		boolean address = false;
@@ -1087,6 +1310,214 @@ public class LFServiceBeanTest {
 		}
 		assertTrue(hasMatch != null);
 		assertTrue(verifyMatchDetails(hasMatch));
+	}
+	
+	@Test
+	public void traceFoundPrimaryTest(){
+		LFServiceBean bean = new LFServiceBean();
+		LFFound found = createFoundTestCase();
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, null);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
+		}
+		assertTrue(foundId != -1);
+		
+		LFFound loaded = bean.getFoundItem(foundId);
+		assertTrue(loaded != null && loaded.getId() == foundId);
+	
+		LFLost lost = createLostTestCase();
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
+		
+		List<LFMatchHistory> results = bean.traceFoundItemPrimary(foundId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+		LFMatchHistory hasMatch = null;
+		for(LFMatchHistory match:results){
+			if(match.getFound().getId() == foundId && match.getLost().getId() == lostId){
+				hasMatch = match;
+			}
+		}
+		assertTrue(hasMatch != null);
+		assertTrue(verifyMatchDetails(hasMatch));
+	}
+	
+
+	@Test
+	public void traceFoundSecondaryTest(){
+		LFServiceBean bean = new LFServiceBean();
+		LFFound found = createFoundTestCase();
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, null);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
+		}
+		assertTrue(foundId != -1);
+		
+		LFFound loaded = bean.getFoundItem(foundId);
+		assertTrue(loaded != null && loaded.getId() == foundId);
+	
+		LFLost lost = createLostTestCase();
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
+		
+		List<LFMatchHistory> results = bean.traceFoundItemSecondary(foundId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+		LFMatchHistory hasMatch = null;
+		for(LFMatchHistory match:results){
+			if(match.getFound().getId() == foundId && match.getLost().getId() == lostId){
+				hasMatch = match;
+			}
+		}
+		assertTrue(hasMatch != null);
+		assertTrue(verifyMatchDetails(hasMatch));
+	}
+	
+	@Test
+	public void traceFoundFailPrimaryTest(){
+		LFServiceBean bean = new LFServiceBean();
+		LFFound found = createFoundTestCase();
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, null);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
+		}
+		assertTrue(foundId != -1);
+		
+		LFFound loaded = bean.getFoundItem(foundId);
+		assertTrue(loaded != null && loaded.getId() == foundId);
+	
+		LFLost lost = createLostTestCase();
+		lost.getClient().setFirstName("Johnathon");
+		lost.getClient().setLastName("Charlotte");
+		lost.getClient().getAddress().setDecryptedAddress1("577 Fakewood dr");
+		lost.getClient().getAddress().setDecryptedAddress2("APT 404");
+		lost.getClient().getAddress().setDecryptedCity("Springfield");
+		lost.getClient().getAddress().setDecryptedZip("87896");
+		lost.getClient().setDecryptedEmail("thisnotmatch@email.com");
+		lost.getItem().setCategory(2);
+		lost.getItem().setColor("RD");
+		lost.getItem().setCaseColor("RD");
+		lost.getItem().getPhone().setDecryptedPhoneNumber("9998883333");
+		lost.getItem().setSerialNumber("987654321");
+		lost.getItem().setDescription("NOT IT!");
+		lost.getItem().setModel("android");
+		lost.getItem().setBrand("MS");
+		lost.getLossInfo().setMvaNumber("789456");
+		lost.getLossInfo().setAgreementNumber("789654");
+		lost.getItem().setLongDescription("This shouldn't match");
+		for(LFPhone p:lost.getClient().getPhones()){
+			p.setDecryptedPhoneNumber("7777777777");
+		}
+		for(LFSegment s:lost.getSegments()){
+			s.setFlightNumber("9876");
+		}
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
+		
+		List<LFMatchHistory> results = bean.traceFoundItemPrimary(foundId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+		LFMatchHistory hasMatch = null;
+		for(LFMatchHistory match:results){
+			if(match.getFound().getId() == foundId && match.getLost().getId() == lostId){
+				hasMatch = match;
+			}
+		}
+		assertTrue(hasMatch == null);
+	}
+	
+
+	@Test
+	public void traceFoundFailSecondaryTest(){
+		LFServiceBean bean = new LFServiceBean();
+		LFFound found = createFoundTestCase();
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, null);
+		} catch (NonUniqueBarcodeException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} catch (UpdateException ue){
+			ue.printStackTrace();
+			fail();
+		}
+		assertTrue(foundId != -1);
+		
+		LFFound loaded = bean.getFoundItem(foundId);
+		assertTrue(loaded != null && loaded.getId() == foundId);
+	
+		LFLost lost = createLostTestCase();
+		lost.setCompanyId(TracingConstants.LF_AA_COMPANY_ID);
+		lost.getClient().setFirstName("Johnathon");
+		lost.getClient().setLastName("Charlotte");
+		lost.getClient().getAddress().setDecryptedAddress1("577 Fakewood dr");
+		lost.getClient().getAddress().setDecryptedAddress2("APT 404");
+		lost.getClient().getAddress().setDecryptedCity("Springfield");
+		lost.getClient().getAddress().setDecryptedZip("87896");
+		lost.getClient().setDecryptedEmail("thisnotmatch@email.com");
+		lost.getItem().setCategory(2);
+		lost.getItem().setColor("RD");
+		lost.getItem().setCaseColor("RD");
+		lost.getItem().getPhone().setDecryptedPhoneNumber("9998883333");
+		lost.getItem().setSerialNumber("987654321");
+		for(LFPhone p:lost.getClient().getPhones()){
+			p.setDecryptedPhoneNumber("7777777777");
+		}
+		for(LFSegment s:lost.getSegments()){
+			s.setFlightNumber("9876");
+		}
+		
+		long lostId = 0;
+		try {
+			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		} catch (UpdateException e) {
+			e.printStackTrace();
+			fail();
+		}
+		assertTrue(lostId > 0);
+		
+		List<LFMatchHistory> results = bean.traceFoundItemSecondary(foundId);
+		System.out.println("trace lost results: " + (results!=null?results.size():"null"));
+		LFMatchHistory hasMatch = null;
+		for(LFMatchHistory match:results){
+			if(match.getFound().getId() == foundId && match.getLost().getId() == lostId){
+				hasMatch = match;
+			}
+		}
+		assertTrue(hasMatch == null);
 	}
 	
 //	@Test
