@@ -3,12 +3,11 @@ package aero.nettracer.fs.model.forum;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
-import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 import aero.nettracer.fs.model.FsAttachment;
 import aero.nettracer.fs.model.FsClaim;
+
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class FsForumPost implements Serializable {
 
@@ -23,7 +22,7 @@ public class FsForumPost implements Serializable {
 	private Date lastEdited;
 	private FsForumPost parent;
 	private FsForumThread thread;
-	private List<FsClaim> claims;
+	private List<FsForumPost_Claim> claims;
 	private List<FsAttachment> attachments;
 	
 	private String _DATEFORMAT;
@@ -48,6 +47,17 @@ public class FsForumPost implements Serializable {
 
 	public String getText() {
 		return text;
+	}
+	
+	public String getTextReadonly() {
+		if(text != null)
+		{
+			return text.replaceAll("\r\n", "<br>");
+		}
+		else
+		{
+			return "";
+		}
 	}
 
 	public void setText(String text) {
@@ -102,11 +112,11 @@ public class FsForumPost implements Serializable {
 		this.thread = thread;
 	}
 
-	public List<FsClaim> getClaims() {
+	public List<FsForumPost_Claim> getClaims() {
 		return claims;
 	}
 
-	public void setClaims(List<FsClaim> claims) {
+	public void setClaims(List<FsForumPost_Claim> claims) {
 		this.claims = claims;
 	}
 

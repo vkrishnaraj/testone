@@ -100,6 +100,17 @@ public class ForumClaimAction extends CheckedAction {
 			return null;
 		}
 		
+		String airline = null;
+		
+		if (request.getParameter("airline") != null) {
+			airline = request.getParameter("airline");
+		}
+		
+		if (airline == null || airline.isEmpty()) {
+			response.sendRedirect("fraud_forum_create.do");
+			return null;
+		}
+		
 		Context ctx = null;
 		ClaimClientRemote remote = null;
 		try {
@@ -115,7 +126,7 @@ public class ForumClaimAction extends CheckedAction {
 			saveMessages(request, errors);
 		} else {
 			FsClaim fsClaim=null;
-			fsClaim = TransportMapper.map(remote.getClaim(Long.parseLong(claimID)));
+			fsClaim = TransportMapper.map(remote.getClaim(Long.parseLong(claimID), airline));
 			List<FsClaim> matchClaims=new ArrayList();
 			if(fsClaim!=null && fsClaim.getId() != 0)
 			{	

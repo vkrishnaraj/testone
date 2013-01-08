@@ -66,6 +66,9 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 				    document.getElementById("tag").focus();
 				    return false;
 				}
+                if (document.getElementsByName("newFileID")[0].value.length > 0) {
+                    return window.confirm("<%= (String)bundle.getString( "fraud.forum.view.link.warning") %>");
+                }
 				return true;
 			}
 

@@ -53,6 +53,10 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 				      	}
 					}
 				}
+                if (document.getElementsByName("newFileID")[0].value.length > 0) {
+                    return window.confirm("<%= (String)bundle.getString( "fraud.forum.view.link.warning") %>");
+                }
+                return true;
 			}
 
   </SCRIPT>
@@ -128,7 +132,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
                       </tr>
                       <tr>
                         <td style="width: 500px;">
-                        	<bean:write name="post" property="text" />
+                        	<bean:write name="post" property="textReadonly" filter="false"/>
                         </td>
                       </tr>
                       <logic:notEmpty name="post" property="claims">
@@ -136,8 +140,12 @@ ResourceBundle bundle = ResourceBundle.getBundle(
                         <td>
 				                  <bean:message key="fraud.forum.view.post.files" />
 				                  &nbsp;&nbsp;&nbsp;
-                			<logic:iterate indexId="i" id="file" name="post" property="claims" type="aero.nettracer.fs.model.FsClaim" >
-                			  <a href="fraud_forum_claim.do?claimId=<%=file.getId() %>"><%=file.getAirline() %><%=file.getSwapId() %></a>&nbsp;&nbsp;&nbsp;
+                			<logic:iterate indexId="i" id="file" name="post" property="claims" type="aero.nettracer.fs.model.forum.FsForumPost_Claim" >
+                			<% if (a.getCompanycode_ID().equals(file.getClaim_airline())) { %>
+                			  <a href="claim_resolution.do?claimId=<%=file.getClaim_id() %>"><%=file.getClaim_airline() %><%=file.getClaim_id() %></a>
+                			<% } else { %>
+                			  <a href="fraud_forum_claim.do?claimId=<%=file.getClaim_id() %>&airline=<%=file.getClaim_airline() %>"><%=file.getClaim_airline() %><%=file.getClaim_id() %></a>
+                			<% } %>&nbsp;&nbsp;&nbsp;
                 			</logic:iterate>
                 		</td>
                 	  </tr>

@@ -69,8 +69,8 @@
                       <logic:notEmpty name="forumViewForm" property="newFiles">
                       <tr>
                         <td>
-                			<logic:iterate indexId="i" id="file" name="forumViewForm" property="newFiles" type="aero.nettracer.fs.model.FsClaim" >
-                			  <a href="claim_resolution.do?claimId=<%=file.getId() %>"><%=file.getId() %></a>&nbsp;<a href="#" onclick="removeFile(<%=i %>)">[X]</a>&nbsp;&nbsp;&nbsp;
+                			<logic:iterate indexId="i" id="file" name="forumViewForm" property="newFiles" type="aero.nettracer.fs.model.forum.FsForumPost_Claim" >
+                			  <a href="claim_resolution.do?claimId=<%=file.getClaim_id() %>"><%=file.getClaim_id() %></a>&nbsp;<a href="#" onclick="removeFile(<%=i %>)">[X]</a>&nbsp;&nbsp;&nbsp;
                 			</logic:iterate>
                 			<input type="hidden" name="removeFile" />
                 		</td>

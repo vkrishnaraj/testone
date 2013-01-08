@@ -10,7 +10,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 import aero.nettracer.fs.model.FsAttachment;
 import aero.nettracer.fs.model.File;
-import aero.nettracer.fs.model.FsClaim;
+import aero.nettracer.fs.model.forum.FsForumPost_Claim;
 import aero.nettracer.fs.model.forum.FsForumTag;
 import aero.nettracer.fs.model.forum.FsForumThread;
 
@@ -31,7 +31,7 @@ public final class ForumViewForm extends ActionForm {
 	private String newText = "";
 	private String newFileID = "";
 	private String newTagID = "";
-	private List<FsClaim> newFiles = new ArrayList<FsClaim>();
+	private List<FsForumPost_Claim> newFiles = new ArrayList<FsForumPost_Claim>();
 	private List<FsAttachment> newAttachments = new ArrayList<FsAttachment>();
 	
 	public String get_DATEFORMAT() {
@@ -102,11 +102,11 @@ public final class ForumViewForm extends ActionForm {
 		this.newText = newText;
 	}
 
-	public List<FsClaim> getNewFiles() {
+	public List<FsForumPost_Claim> getNewFiles() {
 		return newFiles;
 	}
 
-	public void setNewFiles(List<FsClaim> newFiles) {
+	public void setNewFiles(List<FsForumPost_Claim> newFiles) {
 		this.newFiles = newFiles;
 	}
 

@@ -29,6 +29,7 @@ import org.apache.struts.action.ActionMessages;
 import aero.nettracer.fs.model.FsAttachment;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.forum.FsForumPost;
+import aero.nettracer.fs.model.forum.FsForumPost_Claim;
 import aero.nettracer.fs.model.forum.FsForumTag;
 import aero.nettracer.fs.model.forum.FsForumThread;
 import aero.nettracer.fs.model.transport.v3.forum.FsForumSearchResults;
@@ -82,7 +83,7 @@ public class ForumCreateAction extends Action {
 		if (fform.getThread().getId() != 0) {
 			fform.setThread(new FsForumThread());
 			fform.setNewAttachments(new ArrayList<FsAttachment>());
-			fform.setNewFiles(new ArrayList<FsClaim>());
+			fform.setNewFiles(new ArrayList<FsForumPost_Claim>());
 			fform.setNewText("");
 			fform.setNewTitle("");
 			fform.setNewFileID("");
@@ -156,8 +157,8 @@ public class ForumCreateAction extends Action {
 				if (newFile != null) {
 					if (newFile.getFile().getSwapId() != 0) {
 						boolean alreadyAdded = false;
-						for (FsClaim claim : fform.getNewFiles()) {
-							if (claim.getId() == newFile.getId()) {
+						for (FsForumPost_Claim claim : fform.getNewFiles()) {
+							if (claim.getClaim_id() == newFile.getId()) {
 								alreadyAdded = true;
 								break;
 							}
@@ -167,7 +168,10 @@ public class ForumCreateAction extends Action {
 							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 							saveMessages(request, errors);
 						} else {
-							fform.getNewFiles().add(newFile);
+							FsForumPost_Claim newClaim = new FsForumPost_Claim();
+							newClaim.setClaim_id(newFile.getId());
+							newClaim.setClaim_airline(newFile.getAirline());
+							fform.getNewFiles().add(newClaim);
 						}
 					} else {
 						ActionMessage error = new ActionMessage("error.fraud.forum.no.fsclaim");
@@ -234,6 +238,9 @@ public class ForumCreateAction extends Action {
 			if (fform.getNewFiles() != null && fform.getNewFiles().size() > 0) {
 				fform.getThread().setNumFiles(fform.getNewFiles().size());
 				newPost.setClaims(fform.getNewFiles());
+				for (FsForumPost_Claim claim : newPost.getClaims()) {
+					claim.setPost(newPost);
+				}
 			}
 			if (fform.getNewAttachments() != null && fform.getNewAttachments().size() > 0) {
 				fform.getThread().setNumAttachments(fform.getNewAttachments().size());
