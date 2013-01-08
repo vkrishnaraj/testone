@@ -71,6 +71,7 @@
 		<mapping class="aero.nettracer.fs.model.detection.IPWhiteList"/>
 		<mapping class="aero.nettracer.fs.model.forum.FsForumThread"/>
 		<mapping class="aero.nettracer.fs.model.forum.FsForumPost"/>
+		<mapping class="aero.nettracer.fs.model.forum.FsForumPost_Claim"/>
 		<mapping class="aero.nettracer.fs.model.forum.FsForumTag"/>
 		<!--
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCPassenger" />

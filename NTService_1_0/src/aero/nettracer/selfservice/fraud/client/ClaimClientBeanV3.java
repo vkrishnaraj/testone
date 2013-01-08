@@ -253,9 +253,9 @@ public class ClaimClientBeanV3 implements ClaimClientRemoteV3{
 	}
 
 	@Override
-	public FsClaim getClaim(long claimId) {
+	public FsClaim getClaim(long claimId, String airline) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-		return mapper.map(bean.getClaim(claimId), aero.nettracer.fs.model.transport.v3.FsClaim.class);
+		return mapper.map(bean.getClaim(claimId, airline), aero.nettracer.fs.model.transport.v3.FsClaim.class);
 	}
 	
 }

@@ -11,8 +11,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -25,7 +23,6 @@ import org.hibernate.annotations.OrderBy;
 import org.hibernate.annotations.Proxy;
 
 import aero.nettracer.fs.model.FsAttachment;
-import aero.nettracer.fs.model.FsClaim;
 
 @Entity
 @Proxy(lazy = false)
@@ -66,9 +63,10 @@ public class FsForumPost implements Serializable {
     @JoinColumn(name="thread_id")
 	private FsForumThread thread;
 
-	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-	@JoinTable(name = "FsForumPost_Claim", joinColumns = { @JoinColumn(name = "post_id") }, inverseJoinColumns = { @JoinColumn(name = "claim_id") })
-    private List<FsClaim> claims;
+	@OneToMany(mappedBy="key.post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OrderBy(clause = "claim_id")
+	@Fetch(FetchMode.SELECT)
+    private List<FsForumPost_Claim> claims;
 
 	@OneToMany(mappedBy="post", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@OrderBy(clause = "id")
@@ -147,11 +145,11 @@ public class FsForumPost implements Serializable {
 		this.thread = thread;
 	}
 
-	public List<FsClaim> getClaims() {
+	public List<FsForumPost_Claim> getClaims() {
 		return claims;
 	}
 
-	public void setClaims(List<FsClaim> claims) {
+	public void setClaims(List<FsForumPost_Claim> claims) {
 		this.claims = claims;
 	}
 

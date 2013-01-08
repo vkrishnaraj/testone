@@ -1044,7 +1044,6 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			t = sess.beginTransaction();
 			for (FsForumPost post : thread.getPosts()) {
 				if (post.getId() == 0) {
-					convertClaims(post);
 					sess.save(post);
 				} else {
 					sess.merge(post);
@@ -1071,33 +1070,6 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			if (sess != null) {
 				sess.close();
 			}
-		}
-	}
-	
-	private void convertClaims(FsForumPost post) {
-		if (post.getClaims() != null && post.getClaims().size() > 0) {
-			List<FsClaim> fixedClaims = new ArrayList<FsClaim>();
-			Session sess = null;
-			try {
-				sess = HibernateWrapper.getSession().openSession();
-				for (FsClaim ntClaim : post.getClaims()) {
-					FsClaim fsClaim = (FsClaim) sess.createCriteria(FsClaim.class).
-							add(Restrictions.eq("swapId", ntClaim.getId())).
-							add(Restrictions.eq("airline", ntClaim.getAirline())).
-							setMaxResults(1).uniqueResult();
-					if (fsClaim != null) {
-						fixedClaims.add(fsClaim);
-					}
-				}
-			} catch (Exception e) {
-				logger.error("unable to convert thread " + e);
-				e.printStackTrace();
-			} finally {
-				if (sess != null) {
-					sess.close();
-				}
-			}
-			post.setClaims(fixedClaims);
 		}
 	}
 
@@ -1294,9 +1266,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		}
 	}
 	
-	public FsClaim getClaim(long claimId) {
+	public FsClaim getClaim(long claimId, String airline) {
 		FsClaim toReturn = new FsClaim();
-		String sql = "select count(*) from FsForumPost_Claim where claim_id = " + claimId;
+		String sql = "select count(*) from FsForumPost_Claim where claim_id = " + claimId + " and claim_airline = '" + airline + "'";
 		List theResult = null;
 		Session sess = null;
 		try{
@@ -1314,7 +1286,10 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		if (theResult != null && theResult.size() > 0) {
 			try{
 				sess = HibernateWrapper.getSession().openSession();
-				toReturn = (FsClaim) sess.load(FsClaim.class, claimId);
+				toReturn = (FsClaim) sess.createCriteria(FsClaim.class).
+						add(Restrictions.eq("swapId", claimId)).
+						add(Restrictions.eq("airline", airline)).
+						setMaxResults(1).uniqueResult();
 				sess.close();
 			}catch(Exception e){
 				e.printStackTrace();
@@ -1324,6 +1299,18 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				}
 			}
 		}
+		// RUN THROUGH SECURITY HERE!!
+		String company = toReturn.getAirline();
+		List<PrivacyPermissions> plist = PrivacyPermissionsBean.getPrivacyPermissions();
+		PrivacyPermissions p1 = new PrivacyPermissions();
+
+		for(PrivacyPermissions p: plist){
+			if(p.getKey().getCompanycode().equals(company) && p.getKey().getLevel().equals(AccessLevelType.req)){
+				p1 = p;
+			}
+		}
+		Producer.censorFile(toReturn.getFile(), p1);
+		
 		return toReturn;
 	}
 	

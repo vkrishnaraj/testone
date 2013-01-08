@@ -45,5 +45,5 @@ public interface ClaimClientRemote {
 	public FsForumThread getThread(long threadID);
 	public FsForumSearchResults getTags(int page);
 	public FsForumSearchResults getThreads(FsForumSearch criteria, int page);
-	public FsClaim getClaim(long claimId);
+	public FsClaim getClaim(long claimId, String airline);
 }

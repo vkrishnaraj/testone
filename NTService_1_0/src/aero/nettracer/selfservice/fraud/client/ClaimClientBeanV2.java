@@ -187,5 +187,5 @@ public class ClaimClientBeanV2 implements ClaimClientRemoteV2{
 	public FsForumSearchResults getThreads(FsForumSearch criteria, int page) {return null;}
 
 	@Override
-	public FsClaim getClaim(long claimId) {return null;}
+	public FsClaim getClaim(long claimId, String airline) {return null;}
 }
