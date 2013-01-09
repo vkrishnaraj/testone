@@ -491,6 +491,8 @@ public class TracingConstants {
 	public final static String LFC_SALVAGE = "lf_salvage";
 	public final static String LFC_SEARCH_SALVAGE = "lf_search_salvage";
 	public final static String LFC_BOXCOUNT = "lf_boxcount";
+
+	public final static String LFC_DELIVERED_FOUND = "lf_delivered_found";
 	
 	public final static int LF_LOCATION_SHELF = 0;
 	public final static int LF_LOCATION_VERIFICATION = 1;
@@ -533,6 +535,7 @@ public class TracingConstants {
 	public final static String AJAX_SUBCATEGORY = "subcategory";
 	public final static String AJAX_ITEM_SUMMARY = "itemsummary";
 	public final static String AJAX_SALVAGE_ITEMS = "salvageitems";
+	public final static String AJAX_DELIVERED_FOUNDS = "deliveredfounds";
 	public final static String AJAX_NEWSTATION = "newstation";
 	public final static String AJAX_BLANK = "blank";
 	public final static String AJAX_LF_BLANK = "lf_blank";

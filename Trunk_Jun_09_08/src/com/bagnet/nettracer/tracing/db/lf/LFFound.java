@@ -190,6 +190,10 @@ public class LFFound implements LFObject, Serializable {
 	public void setDisReceivedDate(String date, String dateFormat) {
 		this.receivedDate = DateUtils.convertToDate(date, dateFormat, null);
 	}
+
+	public String getDisReceivedDate(String dateFormat) {
+		return DateUtils.formatDate(receivedDate, dateFormat, agent.getCurrenttimezone(), null);
+	}
 	
 	public String getDisDeliveredDate(String dateFormat) {
 		return DateUtils.formatDate(deliveredDate, dateFormat, agent.getCurrenttimezone(), null);

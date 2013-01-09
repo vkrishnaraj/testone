@@ -277,6 +277,7 @@
 		<form-bean name="enterItemsForm" type="com.bagnet.nettracer.tracing.forms.lfc.EnterItemsForm" />	
 		<form-bean name="shelvedTraceResultsForm" type="com.bagnet.nettracer.tracing.forms.lfc.ShelvedTraceResultsForm" />	
 		<form-bean name="lfSalvageForm" type="com.bagnet.nettracer.tracing.forms.lfc.SalvageForm" />	
+		<form-bean name="lfDeliveredFoundForm" type="com.bagnet.nettracer.tracing.forms.lfc.DeliveredFoundForm" />	
 		<form-bean name="lfBoxCountForm" type="com.bagnet.nettracer.tracing.forms.lfc.BoxCountForm" />	
 		<form-bean name="lfSalvageSearchForm" type="com.bagnet.nettracer.tracing.forms.lfc.SalvageSearchForm" />
 		
@@ -559,6 +560,7 @@
 		<forward name="subcategory" path="ajax_subcategory" />
 		<forward name="itemsummary" path="ajax_itemsummary" />
 		<forward name="salvageitems" path="ajax_salvageitems" />
+		<forward name="deliveredfounds" path="ajax_deliveredfounds" />
 		<forward name="newstation" path="ajax_newstation" />
 		<forward name="lf_blank" path="ajax_blank" />
 		<forward name="create_claim_prorate" path="create_claim_prorate" />
@@ -566,6 +568,7 @@
 		<forward name="enter_items" path="enter_items" />
 		<forward name="shelved_trace_results" path="shelved_trace_results" />
 		<forward name="lf_salvage" path="lf_salvage" />
+		<forward name="lf_delivered_found" path="lf_delivered_found" />
 		<forward name="lf_boxcount" path="lf_boxcount" />
 		<forward name="lf_search_salvage" path="lf_search_salvage" />
 		
@@ -924,6 +927,7 @@
 		<action path="/enter_items" type="com.bagnet.nettracer.tracing.actions.lfc.EnterItemsAction" name="enterItemsForm" scope="session" validate="false"></action>
 		<action path="/shelved_trace_results" type="com.bagnet.nettracer.tracing.actions.lfc.ShelvedTraceResultsAction" name="shelvedTraceResultsForm" scope="session" validate="false"></action>
 		<action path="/lf_salvage" type="com.bagnet.nettracer.tracing.actions.lfc.SalvageAction" name="lfSalvageForm" scope="session" validate="false"></action>
+		<action path="/lf_delivered_found" type="com.bagnet.nettracer.tracing.actions.lfc.DeliveredFoundAction" name="lfDeliveredFoundForm" scope="session" validate="false"></action>
 		<action path="/lf_boxcount" type="com.bagnet.nettracer.tracing.actions.lfc.BoxCountAction" name="lfBoxCountForm" scope="session" validate="false"></action>
 		<action path="/lf_search_salvage" type="com.bagnet.nettracer.tracing.actions.lfc.SalvageSearchAction" name="lfSalvageSearchForm" scope="session" validate="false"></action>
 
