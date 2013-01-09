@@ -468,8 +468,8 @@ public class LFTracingUtil {
 	}
 	
 	public static double processMatch(LFMatchHistory match, boolean isPrimary){
-		Subcompany subcomp=SubCompanyDAO.loadSubcompany(match.getFound().getCompanyId());
-		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID());
+//		Subcompany subcomp=SubCompanyDAO.loadSubcompany(match.getFound().getCompanyId());
+//		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID());
 		
 		//process person
 		if(match.getLost().getClient() != null && match.getFound().getClient() != null){
@@ -479,7 +479,7 @@ public class LFTracingUtil {
 					&& fc.getLastName() != null && fc.getLastName().trim().length() > 0
 					&& lc.getFirstName() != null && lc.getFirstName().trim().length() > 0
 					&& fc.getFirstName() != null && fc.getFirstName().trim().length() > 0){
-				if(StringCompare.compareStrings(lc.getFirstName()+lc.getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValue(PropertyBMO.LF_TRACING_NAME)))){
+				if(StringCompare.compareStrings(lc.getFirstName()+lc.getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("Name Match");
 					detail.setMatchHistory(match);
@@ -494,7 +494,7 @@ public class LFTracingUtil {
 				for(LFPhone fphone:getPhones(match.getFound())){
 					if(lphone.getDecryptedPhoneNumber() != null && lphone.getDecryptedPhoneNumber().trim().length() > 0
 							&& fphone.getDecryptedPhoneNumber() != null && fphone.getDecryptedPhoneNumber().trim().length() > 0){
-						if(StringCompare.compareStrings(lphone.getDecryptedPhoneNumber(),fphone.getDecryptedPhoneNumber()) > (Double.valueOf(PropertyBMO.getValue(PropertyBMO.LF_TRACING_PHONE)))){
+						if(StringCompare.compareStrings(lphone.getDecryptedPhoneNumber(),fphone.getDecryptedPhoneNumber()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_PHONE)))){
 							LFMatchDetail detail = new LFMatchDetail();
 							detail.setDescription("Phone Number Match");
 							detail.setMatchHistory(match);
@@ -510,7 +510,7 @@ public class LFTracingUtil {
 			//process email
 			if(lc.getDecryptedEmail() != null && lc.getDecryptedEmail().trim().length() > 0 && 
 					fc.getDecryptedEmail() != null && fc.getDecryptedEmail().trim().length() > 0) {
-				if (StringCompare.compareStrings(lc.getDecryptedEmail(),fc.getDecryptedEmail()) > (Double.valueOf(PropertyBMO.getValue(PropertyBMO.LF_TRACING_EMAIL)))) {
+				if (StringCompare.compareStrings(lc.getDecryptedEmail(),fc.getDecryptedEmail()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_EMAIL)))) {
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("Email Match");
 					detail.setMatchHistory(match);
@@ -545,7 +545,7 @@ public class LFTracingUtil {
 							+ fa.getDecryptedZip()!=null?fa.getDecryptedZip():"";
 					
 
-					if(StringCompare.compareStrings(laddress, faddress) > (Double.valueOf(PropertyBMO.getValue(PropertyBMO.LF_TRACING_ADDRESS)))){
+					if(StringCompare.compareStrings(laddress, faddress) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_ADDRESS)))){
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Address Match");
 						detail.setMatchHistory(match);
@@ -724,7 +724,7 @@ public class LFTracingUtil {
 				}
 				if(litem.getSerialNumber() != null && litem.getSerialNumber().trim().length() > 0
 						&& fitem.getSerialNumber() != null && fitem.getSerialNumber().trim().length() > 0){
-					if(StringCompare.compareStrings(litem.getSerialNumber(),fitem.getSerialNumber()) > (Double.valueOf(PropertyBMO.getValue(PropertyBMO.LF_TRACING_SERIAL)))){
+					if(StringCompare.compareStrings(litem.getSerialNumber(),fitem.getSerialNumber()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_SERIAL)))){
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Serial Number Match");
 						detail.setMatchHistory(match);
