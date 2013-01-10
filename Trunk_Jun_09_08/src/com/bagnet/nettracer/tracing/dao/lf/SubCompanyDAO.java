@@ -66,7 +66,10 @@ public class SubCompanyDAO {
 			criteria.add(Expression.eq("subcompanyCode", code));
 			criteria.add(Expression.eq("company.companyCode_ID", TracerProperties.get("wt.company.code")));
 			subcomp=(Subcompany) criteria.uniqueResult();
-			setSubcompany(code,subcomp);
+			if(subcomp!=null){
+				System.out.print("Got subcomp: "+subcomp.getSubcompanyCode());
+				setSubcompany(code,subcomp);
+			}
 		} catch (Exception e) {
 			logger.error(EXCEPTION_MESSAGE, e);
 		} finally {
