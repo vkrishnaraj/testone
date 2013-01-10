@@ -285,7 +285,7 @@ public class CustomWestJetReports {
 					reportRow.setColumn2("Delayed");
 				}
 				else if(((Integer)row[1])==(TracingConstants.MISSING_ARTICLES)){
-					reportRow.setColumn2("Pilferage");
+					reportRow.setColumn2("Missing");
 				}
 				else if(((Integer)row[1])==(TracingConstants.DAMAGED_BAG)){
 					reportRow.setColumn2("Damaged");
