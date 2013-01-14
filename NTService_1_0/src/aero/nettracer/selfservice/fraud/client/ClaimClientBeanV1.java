@@ -37,7 +37,7 @@ public class ClaimClientBeanV1 implements ClaimClientRemoteV1{
 	@Override
 	public long insertFile(File file) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-		return bean.insertFile(mapper.map((aero.nettracer.fs.model.transport.v1.File)file, aero.nettracer.fs.model.File.class));
+		return bean.insertFile(mapper.map((aero.nettracer.fs.model.transport.v1.File)file, aero.nettracer.fs.model.File.class), true);
 	}
 
 	@Override

@@ -75,6 +75,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 
 @Stateless
 //@WebService
@@ -99,15 +100,19 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public TraceResponse traceFile(long fileId, int maxDelay, boolean isPrimary, boolean returnResults) {
 		return Producer.matchFile(fileId, maxDelay, true, isPrimary, returnResults);
 	}
-
+	
 	public long insertFile(File file) {
+		return insertFile(file, false);
+	}
+
+	public long insertFile(File file, boolean oldEnc) {
 		Transaction t = null;
 		Session sess = null;
 		if(file.getValidatingCompanycode() == null){
 			return -1;
 		}
 		try {
-			File toSubmit = resetIdAndgeocode(file);
+			File toSubmit = resetIdAndgeocode(file, oldEnc);
 			ClaimBean bean=new ClaimBean();
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
@@ -197,7 +202,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		}
 	}
 
-	public static File resetIdAndgeocode(File file) throws Exception {
+	public static File resetIdAndgeocode(File file, boolean oldEnc) throws Exception {
 		if (file != null) {
 			long temp = file.getSwapId();
 			file.setSwapId(file.getId());
@@ -212,11 +217,11 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			
 			if (file.getClaims() != null) {
 				for(FsClaim claim:file.getClaims()){
-					claim = (resetClaim(claim));//TODO this might be illegal
+					claim = (resetClaim(claim, oldEnc));//TODO this might be illegal
 				}	
 			} 
 			if (file.getIncident() != null) {
-				file.setIncident(resetIncident(file.getIncident()));
+				file.setIncident(resetIncident(file.getIncident(), oldEnc));
 			}
 
 			logger.debug(file.toString());
@@ -224,12 +229,12 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return file;
 	}
 
-	public static FsClaim resetClaim(FsClaim claim) {
+	public static FsClaim resetClaim(FsClaim claim, boolean oldEnc) {
 		if (claim != null) {
 			claim.setSwapId(claim.getId());
 			claim.setId(0);
 
-			claim.setClaimants(resetPersonId(claim.getClaimants()));
+			claim.setClaimants(resetPersonId(claim.getClaimants(), oldEnc));
 			claim.setSegments(resetSegmentId(claim.getSegments()));
 			claim.setBlacklist(resetBlackListId(claim.getBlacklist()));
 			claim.setReceipts(resetReceiptId(claim.getReceipts()));
@@ -255,19 +260,19 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return receipts;
 	}
 	
-	public static FsIncident resetIncident(FsIncident inc) {
+	public static FsIncident resetIncident(FsIncident inc, boolean oldEnc) {
 		if (inc != null) {
 			inc.setId(0);
 
-			inc.setReservation(resetReservation(inc.getReservation()));
+			inc.setReservation(resetReservation(inc.getReservation(), oldEnc));
 			inc.setSegments(resetSegmentId(inc.getSegments()));
 			inc.setBags(resetBagId(inc.getBags()));
-			inc.setPassengers(resetPersonId(inc.getPassengers()));
+			inc.setPassengers(resetPersonId(inc.getPassengers(), oldEnc));
 		}
 		return inc;
 	}
 
-	public static Reservation resetReservation(Reservation res) {
+	public static Reservation resetReservation(Reservation res, boolean oldEnc) {
 		if (res != null) {
 			res.setId(0);
 			if (res.getPurchaser() != null) {
@@ -276,10 +281,13 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				res.getPurchaser().setPhones(resetPhoneId(res.getPurchaser().getPhones()));
 			}
 
+			if (oldEnc && res.getCcNumber() != null) {
+				res.setCcNumber("");
+			}
 			res.setSegments(resetSegmentId(res.getSegments()));
 			res.setCcWhitelist(resetWhiteListId(res.getCcWhitelist()));
 			res.setPnrData(resetPnrDataId(res.getPnrData()));
-			res.setPassengers(resetPersonId(res.getPassengers()));
+			res.setPassengers(resetPersonId(res.getPassengers(), oldEnc));
 			res.setPhones(resetPhoneId(res.getPhones()));
 		}
 		return res;
@@ -314,12 +322,17 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return bags;
 	}
 
-	public static Set<Person> resetPersonId(Set<Person> persons) {
+	public static Set<Person> resetPersonId(Set<Person> persons, boolean oldEnc) {
 		if (persons != null) {
 			for (Person person : persons) {
 				person.setId(0);
 				person.setAddresses(resetAddressIdAndGeocode(person.getAddresses()));
 				person.setPhones(resetPhoneId(person.getPhones()));
+				if (oldEnc) {
+					person.setDriversLicenseNumber(StringUtils.sha256(person.getDriversLicenseNumber()));
+					person.setPassportNumber(StringUtils.sha256(person.getPassportNumber()));
+					person.setSocialSecurity(StringUtils.sha256(person.getSocialSecurity()));
+				}
 			}
 		}
 		return persons;
