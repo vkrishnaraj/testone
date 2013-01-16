@@ -1057,11 +1057,6 @@ public class LFServiceBeanTest {
 	
 		LFFound found = createFoundTestCase();
 		found.setCompanyId(TracingConstants.LF_AA_COMPANY_ID);
-		found.getClient().setDecryptedEmail("mloupas@nettracre.aero");
-		found.getItem().setSerialNumber("123356");
-		for(LFPhone p:found.getClient().getPhones()){
-			p.setDecryptedPhoneNumber("5555555554");
-		}
 		long foundId = 0;
 		try {
 			foundId = bean.saveOrUpdateFoundItem(found, bean.getAutoAgent());
@@ -1084,7 +1079,7 @@ public class LFServiceBeanTest {
 			}
 		}
 		assertTrue(hasMatch != null);
-		assertTrue(verifyMatchDetails(hasMatch));
+		assertTrue(verifySecondaryMatchDetails(hasMatch));
 	}
 	
 
@@ -1256,6 +1251,34 @@ public class LFServiceBeanTest {
 		return name && address && phone && cat && color && caseColor && email && mva && ra && brand && ld && sd && model && serial && itemPhone;
 	}
 	
+	private boolean verifySecondaryMatchDetails(LFMatchHistory match){
+		boolean name = false;
+		boolean address = false;
+		boolean phone = false;
+		boolean email = false;
+		boolean serial = false;
+		boolean itemPhone = false;
+		
+		for(LFMatchDetail detail:match.getDetails()){
+			if("Name Match".equals(detail.getDescription()))name=true;
+			if("Phone Number Match".equals(detail.getDescription()))phone=true;
+			if("Email Match".equals(detail.getDescription()))email=true;
+			if("Address Match".equals(detail.getDescription()))address=true;
+//			if("MVA Number Match".equals(detail.getDescription()))mva=true;
+//			if("Rental Agreement Number Match".equals(detail.getDescription()))ra=true;
+//			if("Brand Match".equals(detail.getDescription()))brand=true;
+//			if("Category Match".equals(detail.getDescription()))cat=true;
+//			if("Color Match".equals(detail.getDescription()))color=true;
+//			if("Case Color Match".equals(detail.getDescription()))caseColor=true;
+//			if("Long Description Match".equals(detail.getDescription()))ld=true;
+//			if("Description Match".equals(detail.getDescription()))sd=true;
+//			if("Model Match".equals(detail.getDescription()))model=true;
+			if("Serial Number Match".equals(detail.getDescription()))serial=true;
+			if("7778889999".equals(detail.getDecryptedFoundValue()))itemPhone=true;
+		}
+		return name && address && phone  && email && serial && itemPhone;
+	}
+	
 //	@Test
 	//TODO how do we verify email???
 	public void testEmail(){
@@ -1392,7 +1415,7 @@ public class LFServiceBeanTest {
 			}
 		}
 		assertTrue(hasMatch != null);
-		assertTrue(verifyMatchDetails(hasMatch));
+		assertTrue(verifySecondaryMatchDetails(hasMatch));
 	}
 	
 	@Test

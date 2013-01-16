@@ -83,7 +83,7 @@ public class ImportClaimDataDL extends ImportClaimData {
 	protected Agent loadAgent() {
 		if(agent == null){
 			GeneralServiceBean bean = new GeneralServiceBean();
-			agent = bean.getAgent("ntadmin", "VX");
+			agent = bean.getAgent("ntadmin", "DL");
 		}
 		return agent;
 	}
@@ -114,7 +114,7 @@ public class ImportClaimDataDL extends ImportClaimData {
     			states = gb.getState();
     		}
     		for(State s:states){
-    			if(s.getState_ID().equalsIgnoreCase(state)){
+    			if(s.getState_ID().equalsIgnoreCase(state.trim())){
     				return true;
     			}
     		}
@@ -154,7 +154,7 @@ public class ImportClaimDataDL extends ImportClaimData {
 
 	
 	private static boolean exists(String id){
-		String sql = "select id from fsclaim where airline = 'VX' and airlineClaimId = :claimId";
+		String sql = "select id from fsclaim where airline = 'DL' and airlineClaimId = :claimId";
 		Session sess = HibernateWrapper.getSession().openSession();
 		try{
 			SQLQuery query = sess.createSQLQuery(sql);
@@ -226,7 +226,7 @@ public class ImportClaimDataDL extends ImportClaimData {
 	
 	public static void populateIncident(FsIncident inc, Person p,String[]s){
 //		if(s[claimtype].equalsIgnoreCase("Damaged")){
-			inc.setIncidentType(Integer.getInteger(s[claimtype]));
+			inc.setIncidentType(Integer.parseInt(s[claimtype]));
 //		}
 //		inc.setRemarks(s[notes]);
 //		Set<Bag> baglist=new HashSet();
@@ -332,7 +332,7 @@ public class ImportClaimDataDL extends ImportClaimData {
 //					claim.setStatusId(32);
 //				}
 				claim.setAirlineClaimId(infolist[airlineclaimid]);
-				claim.setClaimType(Integer.getInteger(infolist[claimtype]));
+				claim.setClaimType(Integer.parseInt(infolist[claimtype]));
 				claim.setClaimDate(DateUtils.convertToDate(infolist[claimdate], TracingConstants.DISPLAY_DATEFORMAT, null));
 				//TODO claimed or paid
 				//			claim.setAmountPaid(new Double(s[1]));
@@ -449,15 +449,14 @@ public class ImportClaimDataDL extends ImportClaimData {
 			
 			String c = s[country];
 			String ct = c.split("\\s{2,}")[0];
-			if(ct.trim().length() == 0 && !(ct.trim().equalsIgnoreCase("UNITED STATES")
-					|| ct.trim().equalsIgnoreCase("USA") || isIntegerParseInt(ct))
+			if(!(ct.trim().equalsIgnoreCase("UNITED STATES")
+					|| ct.trim().equalsIgnoreCase("USA") || ct.trim().equalsIgnoreCase("US") || isIntegerParseInt(ct))
 					){
 				p.getAddress().setProvince(s[province]);
 			}
 			
-			if(ct.trim().length() == 0 && (ct.trim().equalsIgnoreCase("UNITED STATES")
-					|| ct.trim().equalsIgnoreCase("USA") || isIntegerParseInt(ct))
-					&& hasState(s[state])){//US addr
+			if((ct.trim().equalsIgnoreCase("UNITED STATES")	|| ct.trim().equalsIgnoreCase("USA") || ct.trim().equalsIgnoreCase("US") || isIntegerParseInt(ct))
+					&& hasState(s[state]) ){//US addr
 				p.getAddress().setState(s[state]);
 				p.getAddress().setCountry("US");
 				
@@ -581,7 +580,7 @@ public class ImportClaimDataDL extends ImportClaimData {
 			statusMap.put("612", 3);
 			statusMap.put("38", 4);
 			statusMap.put("31", 5);
-			ImportClaimDataVX importer = new ImportClaimDataVX();
+			ImportClaimDataDL importer = new ImportClaimDataDL();
 			if (!importer.setVariablesFromArgs(args)) {
 				System.err.println("Usage:\t" + ImportClaimDataUS.class.getSimpleName() + " [username] [password] [company] " +
 						"[process(1=import, 2=third party, 3=submit to FS)] [trace active (0 or 1)] [thread count] [max return] " +
