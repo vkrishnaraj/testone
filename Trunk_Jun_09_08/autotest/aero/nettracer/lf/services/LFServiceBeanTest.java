@@ -1397,7 +1397,7 @@ public class LFServiceBeanTest {
 		assertTrue(loaded != null && loaded.getId() == foundId);
 	
 		LFLost lost = createLostTestCase();
-		lost.setCompanyId(TracingConstants.LF_AA_COMPANY_ID);
+		lost.setCompanyId(TracingConstants.LF_ABG_COMPANY_ID);
 		
 		long lostId = 0;
 		try {
@@ -1505,7 +1505,7 @@ public class LFServiceBeanTest {
 		assertTrue(loaded != null && loaded.getId() == foundId);
 	
 		LFLost lost = createLostTestCase();
-		lost.setCompanyId(TracingConstants.LF_AA_COMPANY_ID);
+		lost.setCompanyId(TracingConstants.LF_ABG_COMPANY_ID);
 		lost.getClient().setFirstName("Johnathon");
 		lost.getClient().setLastName("Charlotte");
 		lost.getClient().getAddress().setDecryptedAddress1("577 Fakewood dr");
