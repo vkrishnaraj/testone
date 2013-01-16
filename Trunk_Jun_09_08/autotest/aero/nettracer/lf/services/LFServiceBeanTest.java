@@ -1397,6 +1397,8 @@ public class LFServiceBeanTest {
 		assertTrue(loaded != null && loaded.getId() == foundId);
 	
 		LFLost lost = createLostTestCase();
+		lost.setCompanyId(TracingConstants.LF_AA_COMPANY_ID);
+		
 		long lostId = 0;
 		try {
 			lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
