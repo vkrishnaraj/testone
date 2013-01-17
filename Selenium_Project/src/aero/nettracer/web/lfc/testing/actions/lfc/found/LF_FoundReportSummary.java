@@ -9,21 +9,22 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testContactInfoNotification() {
-//		selenium.click("id=menucol_0.0");
-		selenium.click("//div[@id='maincontent']/center[3]/input[2]");
+		selenium.click("id=menucol_2.2");
 		waitForPageToLoadImproved();
-//		if (checkNoErrorPage()) {
-//			selenium.type("//input[@id='barcode']", Settings.FOUND_ID_LF);
-//			selenium.click("//input[@id='button']");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("FRS: Failed to load the task manager page.");
-//			return;
-//		}
+		if (checkNoErrorPage()) {
+			selenium.type("name=barcode", Settings.FOUND_ID_LF);
+			selenium.click("//input[@id='button']");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("FRS: Failed to load the task manager page.");
+			return;
+		}
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Report Summary"));
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/input", "Test");
+//			selenium.type("name=found.client.lastName", "Test");
+//			selenium.click("name=saveButton");
+			selenium.type("name=found.client.address.decryptedAddress1", "Test");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
@@ -33,9 +34,9 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr/td/center/a/b"));
-			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td/input", "");
-			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
+			verifyTrue(selenium.isTextPresent("This item has identification information. See below for further details."));
+			selenium.type("name=found.client.address.decryptedAddress1", "");
+			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("Failed to load after adding name: Test");
@@ -45,7 +46,7 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
-			verifyFalse(selenium.isElementPresent("//div[@id='maincontent']/table/tbody/tr/td/center/a/b"));
+			verifyFalse(selenium.isTextPresent("This item has identification information. See below for further details."));
 		} else {
 			System.out.println("Failed to load after removing name: Test");
 			verifyTrue(false);
@@ -112,7 +113,7 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 	@Test
 	public void testLocationField() {
 		verifyTrue(selenium.isTextPresent("Item Location"));
-		verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[5]/select"));
+		verifyTrue(selenium.isElementPresent("name=found.itemLocation"));
 		selenium.select("name=found.itemLocation", "label=Verification Bin");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
