@@ -240,7 +240,11 @@ function updatePagination() {
                   	<bean:define id="station" name="dispute" property="suggestedFaultStation" />
 					<bean:define id="disputeAgent" name="dispute" property="disputeAgent" />
 					<bean:define id="incident" name="dispute" property="incident" />
-					<%	String deptDate= dispute.getIncident().getItinerary_list().get(0).getDisdepartdate();
+					<%	
+						String deptDate= "N/A";
+					    if (!dispute.getIncident().getItinerary_list().isEmpty()) {
+							deptDate = dispute.getIncident().getItinerary_list().get(0).getDisdepartdate();
+					    }
 						String bfs=dispute.getBeforeDisputeFaultStation().getStationcode();
 						String sfs=dispute.getSuggestedFaultStation().getStationcode();
 						int blc=dispute.getBeforeDisputeLossCode();
