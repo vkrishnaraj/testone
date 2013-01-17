@@ -2061,7 +2061,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	protected List<Long> getXDayList(String compCode, int notice) throws Exception{
 		String sql = "select l.id lostid from lflost l left outer join subcompany sc on sc.subcompanycode=l.companyId " +
 		" where l.status_ID != " + TracingConstants.LF_STATUS_CLOSED +
-		" and sc.company_id=:compCode and (datediff(curdate(),l.openDate)) >= ";
+		" and l.companyId=:compCode and (datediff(curdate(),l.openDate)) >= ";
 		switch(notice){
 			case 1: sql += " sc.email_notice_1 "; break;
 			case 2: sql += " sc.email_notice_2 "; break;
