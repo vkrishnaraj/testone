@@ -71,7 +71,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=White");
 			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select", "label=Black");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
-			waitForPageToLoadImproved();
+			waitForPageToLoadImproved(10000);
 		} else {
 			System.out.println("LFPTR: An error occurred while creating the Found Item.");
 			return;
@@ -79,6 +79,8 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
+			waitForPageToLoadImproved(10000);
 			System.out.println("LFPTR: created Found Item: " + LF_ProcessTraceResults.foundId);
 		} else {
 			System.out.println("LFPTR: An error occurred while saving the Found Item.");
@@ -114,7 +116,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Found Item:  " + LF_ProcessTraceResults.foundId));
 			verifyTrue(selenium.isTextPresent("Lost Report:  " + LF_ProcessTraceResults.lostId));
-			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/a");
+			selenium.click("xpath=(//a[contains(text(),'Confirm Match')])[2]");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to verify and confirm trace result info on the Found Item page.");
@@ -122,7 +124,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/table/tbody/tr/td[4]/a");
+			selenium.click("link=" + LF_ProcessTraceResults.lostId);
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to navigate to Lost Report: " + LF_ProcessTraceResults.lostId + " from the Found Item page.");
@@ -130,7 +132,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.select("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select", "label=Closed");
+			selenium.select("name=lost.statusId", "label=Closed");
 			selenium.click("//div[@id='maincontent']/center[4]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
@@ -148,7 +150,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
+			selenium.click("link="+LF_ProcessTraceResults.foundId);
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to navigate to Found Item: " + LF_ProcessTraceResults.foundId + " from the Lost Report page.");
