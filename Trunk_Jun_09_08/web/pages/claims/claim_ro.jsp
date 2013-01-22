@@ -1190,18 +1190,6 @@
 				           </tr>
 				          
 				          </logic:iterate>
-				          <tr>
-				          <td colspan="5" align="center" disabled="true" >
-					          <select name="addIPNum">
-						          <option value="1">1</option>
-						          <option value="2">2</option>
-						          <option value="3">3</option>
-						          <option value="4">4</option>
-						          <option value="5">5</option>
-						        </select>
-
-				          </td>
-				          </tr>
 					</table>
 	
                     </div>
@@ -1433,6 +1421,49 @@
 						</td>
 					</tr>
 					</table>
+                                        
+                    
+                    <!-- segments -->
+                   <div style="width:100%;">
+                    <a name="aseg" ></a>
+                    <span style="float:left;">
+					<h1 class="green" >
+						<bean:message key="header.associated.segment" />
+						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					</h1>
+					</span>
+					</div>
+					<div id="segmentD"  >
+	
+						<table class="form2" cellspacing="0" cellpadding="0" >
+						<logic:iterate indexId="i" id="seg" name="matchClaim" property="segments" type="aero.nettracer.fs.model.Segment" >
+				          <tr>
+				          <td style="margin:0;padding:0;">
+							<bean:message key="claim.colname.segment.depart" />
+							<br/>
+				                <input disabled="true" type="text" name="segment[<%=i %>].departure" size="8" maxlength="3" value="<%=seg.getDeparture() == null ? "" : seg.getDeparture() %>" class="textfield" />
+				        	</td>
+				            <td>
+				           	<bean:message key="claim.colname.segment.arrive" />
+							<br/>
+								<input disabled="true" type="text" name="segment[<%=i %>].arrival"  size="8" maxlength="3" value="<%=seg.getArrival() == null ? "" : seg.getArrival() %>" class="textfield" />
+				            </td>
+				            <td>
+				           	<bean:message key="claim.colname.segment.date" />
+					        (<%= a.getDateformat().getFormat() %>)
+							<br/>
+								<input disabled="true" type="text" name="segment[<%=i %>].disDate"  size="12" maxlength="11" value="<%=seg.getDisDate() == null ? "" : seg.getDisDate() %>" class="textfield" />
+				            </td>
+				           </tr>
+				          
+				          </logic:iterate>
+					</table>
+	
+                    </div>
+                   
+                    <br />
+                    <br />
+                    <!-- segments -->
 					
 					<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS, a)) { %>
 					 <h1 class="green">

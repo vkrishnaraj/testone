@@ -372,7 +372,7 @@ public final class ManageAgents extends Action {
 				
 				if (dForm.get("passwordChanged") != null && dForm.get("passwordChanged").equals("1")) {
 					boolean validPw = SecurityUtils.isPolicyAcceptablePassword(agent.getCompanycode_ID(), (String) dForm.get("password"), agent.getUsername(), request, false);
-					String password = StringUtils.sha1((String)dForm.get("password"),true);
+					String password = StringUtils.sha1_256((String)dForm.get("password"),true);
 					Company comp = CompanyBMO.getCompany(agent.getCompanycode_ID());
 					boolean passX = SecurityUtils.lastXPasswords(agent.getAgent_ID(), comp!=null?comp.getVariable().getPass_x_history():20, password); 
 					if (validPw && !passX) {

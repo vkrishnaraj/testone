@@ -10,6 +10,7 @@ import aero.nettracer.fs.model.FsIPAddress;
 import aero.nettracer.fs.model.FsReceipt;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
+import aero.nettracer.fs.model.Segment;
 
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.utils.CreditCardType;
@@ -228,6 +229,13 @@ public final class ClaimForm extends ActionForm {
 	public Phone getPhone(int index) {
 		if (claim.getPhones() != null && index < claim.getPhones().size()) {
 			return new ArrayList<Phone>(claim.getPhones()).get(index);
+		}
+		return null;
+	}
+	
+	public Segment getSegment(int index) {
+		if (claim.getSegments() != null && index < claim.getSegments().size()) {
+			return new ArrayList<Segment>(claim.getSegments()).get(index);
 		}
 		return null;
 	}

@@ -144,7 +144,7 @@ public class Reservation implements Serializable {
 	public void setCcNumber(String ccNumber) {
 		if (ccNumber != null && ccNumber.trim().length() > 0 && (ccNumber.matches("[0-9]{4,}"))) {
 			if (ccNumber.length() > 12) {
-				this.ccNumber = StringUtils.sha1(ccNumber,true);
+				this.ccNumber = StringUtils.sha1_256(ccNumber,true);
 			} else {
 				this.ccNumber = null;
 			}

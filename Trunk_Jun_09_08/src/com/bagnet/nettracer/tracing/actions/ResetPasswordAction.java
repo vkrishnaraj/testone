@@ -50,7 +50,7 @@ public class ResetPasswordAction extends Action {
 			ActionMessages errors = new ActionMessages();
 			String password1 = (String) PropertyUtils.getSimpleProperty(form, "password1");
 			String password2 = (String) PropertyUtils.getSimpleProperty(form, "password2");
-			String password1sha1 = StringUtils.sha1(password1.trim(),true);
+			String password1sha1 = StringUtils.sha1_256(password1.trim(),true);
 			
 			
 			if (password1.trim().length() == 0) {

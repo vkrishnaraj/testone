@@ -7,10 +7,13 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
+
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Proxy(lazy = false)
@@ -34,6 +37,9 @@ public class Segment implements Serializable {
 	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
 	@Fetch(FetchMode.SELECT)
 	private FsClaim claim;
+
+	@Transient
+	private String dateFormat;
 
 	public long getId() {
 		return id;
@@ -105,6 +111,22 @@ public class Segment implements Serializable {
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+	public String getDisDate() {
+		return DateUtils.formatDate(date, dateFormat, "", null);
+	}
+
+	public void setDisDate(String date) {
+		setDate(DateUtils.convertToDate(date, dateFormat, null));
+	}
+
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public void setDateFormat(String dateFormat) {
+		this.dateFormat = dateFormat;
 	}
 
 }

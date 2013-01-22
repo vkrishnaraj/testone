@@ -64,7 +64,7 @@ public class SecurityUtils {
 			
 			Criteria criteria = sess.createCriteria(Agent.class);
 			criteria.add(Expression.eq("username", username));
-			criteria.add(Expression.eq("password", StringUtils.sha1(password, true)));
+			criteria.add(Expression.eq("password", StringUtils.sha1_256(password, true)));
 			List results = criteria.list();
 			
 			if (results == null || results.size() < 1) {
@@ -152,10 +152,23 @@ public class SecurityUtils {
 	
 				Criteria criteria = sess.createCriteria(Agent.class);
 				criteria.add(Expression.eq("username", username));
-				criteria.add(Expression.eq("password", StringUtils.sha1(password, true)));
+				criteria.add(Expression.eq("password", StringUtils.sha1_256(password, true)));
 				criteria.add(Expression.eq("companycode_ID", companyCode));
-	
 				List results = criteria.list();
+				
+				if (results == null || results.size() < 1){
+					//loupas - check to see if the password is still using TEA encryption, if so, return the agent with reset_password=true
+					Criteria criteriaSHA1 = sess.createCriteria(Agent.class);
+					criteriaSHA1.add(Expression.eq("username", username));
+					criteriaSHA1.add(Expression.eq("password", StringUtils.sha1(password, true)));
+					criteriaSHA1.add(Expression.eq("companycode_ID", companyCode));
+					results = criteriaSHA1.list();
+					// Commenting out because we don't want to force reset for this change. per Byron
+					//if(results != null && results.size() > 0 ){
+					//	((Agent) results.get(0)).setReset_password(true);
+					//}
+				}
+				
 				if (results == null || results.size() < 1){
 					//loupas - check to see if the password is still using TEA encryption, if so, return the agent with reset_password=true
 					Criteria criteriaTEA = sess.createCriteria(Agent.class);

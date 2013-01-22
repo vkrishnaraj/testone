@@ -408,6 +408,36 @@ public class StringUtils {
   public static String sha1(String pass){
 	  return sha1(pass, false);
   }
+  
+  public static String sha1_256(String pass, boolean useSalt){
+	  if(useSalt){
+		  pass = salt + pass;
+	  }
+	  pass = sha1(pass);
+	  return sha256(pass);
+  }
+  
+  public static String sha1_256(String pass){
+	  return sha1_256(pass, false);
+  }
+  
+  public static String sha256(String pass, boolean useSalt){
+	  try{
+		  if(useSalt){
+			  pass = salt + pass;
+		  }
+		  MessageDigest md = MessageDigest.getInstance("SHA-256");
+		  byte [] h = md.digest(pass.getBytes());
+		  return getHex(h);
+	  } catch (Exception e){
+			e.printStackTrace();
+	  }
+	  return null;
+  }
+  
+  public static String sha256(String pass){
+	  return sha256(pass, false);
+  }
 
   public static String keyGen(){  
 	  Date d = new Date();

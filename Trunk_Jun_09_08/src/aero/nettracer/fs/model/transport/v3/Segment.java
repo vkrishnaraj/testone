@@ -3,36 +3,17 @@ package aero.nettracer.fs.model.transport.v3;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Proxy;
-
-@Entity
-@Proxy(lazy = false)
 public class Segment implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@GeneratedValue
 	private long id;
 	private Date date;
 	private String departure;
 	private String arrival;
 	private String airline;
 	private String flight;
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.Reservation.class)
-	@Fetch(FetchMode.SELECT)
 	private Reservation reservation;
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsIncident.class)
-	@Fetch(FetchMode.SELECT)
 	private FsIncident incident;
-	@ManyToOne(targetEntity = aero.nettracer.fs.model.FsClaim.class)
-	@Fetch(FetchMode.SELECT)
 	private FsClaim claim;
 
 	public long getId() {

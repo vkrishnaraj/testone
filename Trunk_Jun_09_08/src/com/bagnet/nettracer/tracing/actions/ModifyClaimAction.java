@@ -348,6 +348,10 @@ public class ModifyClaimAction extends CheckedAction {
 			request.setAttribute("showIpAddresses", "true");
 		}
 		
+		if (claim.getSegments().size() > 0) {
+			request.setAttribute("showSegments", "true");
+		}
+		
 		String showNames = request.getParameter("showNames");
 		if (showNames != null) {
 			request.setAttribute("showNames", showNames);
@@ -366,6 +370,11 @@ public class ModifyClaimAction extends CheckedAction {
 		String showIpAddresses = request.getParameter("showIpAddresses");
 		if (showIpAddresses != null) {
 			request.setAttribute("showIpAddresses", showIpAddresses);
+		}
+		
+		String showSegments = request.getParameter("showSegments");
+		if (showSegments != null) {
+			request.setAttribute("showSegments", showSegments);
 		}
 
 		cform = ClaimUtils.createClaimForm(request);
@@ -570,6 +579,7 @@ public class ModifyClaimAction extends CheckedAction {
 		deleteAssociatedElements(new ArrayList(claim.getReceipts()), claim.getReceipts(), TracingConstants.JSP_DELETE_ASSOCIATED_RECEIPT, request);	
 		deleteAssociatedElements(new ArrayList(claim.getIpAddresses()), claim.getIpAddresses(), TracingConstants.JSP_DELETE_IP_ADDRESS, request);
 		deleteAssociatedElements(new ArrayList(claim.getPhones()), claim.getPhones(), TracingConstants.JSP_DELETE_PHONE, request);	
+		deleteAssociatedElements(new ArrayList(claim.getSegments()), claim.getSegments(), TracingConstants.JSP_DELETE_SEGMENT, request);
 	}
 	
 	private void addAssociatedItems(FsClaim claim, HttpServletRequest request, Agent user) {
@@ -577,6 +587,7 @@ public class ModifyClaimAction extends CheckedAction {
 		addAssociatedReceipts(claim, request, user);
 		addIPAddresses(claim, request, user);
 		addPhones(claim, request, user);
+		addSegments(claim, request, user);
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -666,6 +677,23 @@ public class ModifyClaimAction extends CheckedAction {
 					claim.getIpAddresses().add(ip);
 				}
 				request.setAttribute("aip", 1);
+			} catch (NumberFormatException nfe) {
+				logger.error(nfe);
+			}
+		}
+	}
+	
+	private void addSegments(FsClaim claim, HttpServletRequest request, Agent user) {
+		if (request.getParameter("addSegs") != null) {
+			try {
+				int numToAdd = Integer.parseInt(request.getParameter("addSegNum"));
+				for (int i = 0; i < numToAdd; ++i) {
+					Segment seg = new Segment();
+					seg.setClaim(claim);
+					seg.setDateFormat(user.getDateformat().getFormat());
+					claim.getSegments().add(seg);
+				}
+				request.setAttribute("aseg", 1);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
 			}
