@@ -913,8 +913,8 @@ public class Consumer implements Runnable{
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1(r1.getCcType() + "**************** exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
-					detail.setContent2(r2.getCcType() + "**************** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
+					detail.setContent1(r1.getCcType() + " " + r1.getCcNumber() + "******" + r1.getCcNumLastFour() + " exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
+					detail.setContent2(r2.getCcType() + " " + r2.getCcNumber() + "******" + r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card Full Match");
 					detail.setPercent(P_CC_6 + P_CC_4 + P_CC_EXP + P_CC_TYPE);
 					detail.setMatchtype(MatchType.cc);
@@ -922,62 +922,62 @@ public class Consumer implements Runnable{
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1(r1.getCcType() + "****************");
-					detail.setContent2(r2.getCcType() + "****************");
+					detail.setContent1(r1.getCcNumber() + "******" + r1.getCcNumLastFour() + " exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
+					detail.setContent2(r2.getCcNumber() + "******" + r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card 6 digit, 4 digit, and Expiration Match");
-					detail.setPercent(P_CC_6 + P_CC_TYPE + P_CC_EXP);
+					detail.setPercent(P_CC_6 + P_CC_4 + P_CC_EXP);
 					detail.setMatchtype(MatchType.cc);
-				} else if(type && expEmpty && num4) {
+				} else if(type && num4) {
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1(r1.getCcType() + "****************");
-					detail.setContent2(r2.getCcType() + "****************");
+					detail.setContent1(r1.getCcType() + " " + r1.getCcNumber() + "******" + r1.getCcNumLastFour());
+					detail.setContent2(r2.getCcType() + " " + r2.getCcNumber() + "******" + r2.getCcNumLastFour());
 					detail.setDescription("Credit Card 6 digit, 4 digit, and Type Match");
-					detail.setPercent(P_CC_6 + P_CC_TYPE + P_CC_EXP);
+					detail.setPercent(P_CC_6 + P_CC_TYPE + P_CC_4);
 					detail.setMatchtype(MatchType.cc);
 				} else if(type && exp && num4Empty) {
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1(r1.getCcType() + "****************");
-					detail.setContent2(r2.getCcType() + "****************");
+					detail.setContent1(r1.getCcType() + " " + r1.getCcNumber() + "********** exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
+					detail.setContent2(r2.getCcType() + " " + r2.getCcNumber() + "********** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card 6 digit, Type, and Expiration Match");
 					detail.setPercent(P_CC_6 + P_CC_TYPE + P_CC_EXP);
 					detail.setMatchtype(MatchType.cc);
-				} else if(typeEmpty && expEmpty && num4){
+				} else if(typeEmpty && num4){
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1("**************** exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
-					detail.setContent2("**************** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
+					detail.setContent1(r1.getCcNumber() + "******" + r1.getCcNumLastFour());
+					detail.setContent2(r2.getCcNumber() + "******" + r2.getCcNumLastFour());
 					detail.setDescription("Credit Card 6 digit and 4 digit Match");
-					detail.setPercent(P_CC_6 + P_CC_TYPE);
+					detail.setPercent(P_CC_6 + P_CC_4);
 					detail.setMatchtype(MatchType.cc);
-				} else if(type && expEmpty && num4Empty){
+				} else if(type && num4Empty){
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1("**************** exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
-					detail.setContent2("**************** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
-					detail.setDescription("Credit Card 6 digit and Expiration Match");
+					detail.setContent1(r1.getCcType() + " " + r1.getCcNumber() + "**********");
+					detail.setContent2(r2.getCcType() + " " + r2.getCcNumber() + "**********");
+					detail.setDescription("Credit Card 6 digit and Type Match");
 					detail.setPercent(P_CC_6 + P_CC_TYPE);
 					detail.setMatchtype(MatchType.cc);
 				} else if(exp && typeEmpty && num4Empty){
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1("**************** exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
-					detail.setContent2("**************** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
-					detail.setDescription("Credit Card 6 digit and Type Match");
+					detail.setContent1(r1.getCcNumber() + "********** exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
+					detail.setContent2(r2.getCcNumber() + "********** exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
+					detail.setDescription("Credit Card 6 digit and Expiration Match");
 					detail.setPercent(P_CC_6 + P_CC_EXP);
 					detail.setMatchtype(MatchType.cc);
-				} else if (expEmpty && typeEmpty && num4Empty){
+				} else if (typeEmpty && num4Empty){
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1("**************** exp:");
-					detail.setContent2("**************** exp:");
+					detail.setContent1(r1.getCcNumber() + "**********");
+					detail.setContent2(r2.getCcNumber() + "**********");
 					detail.setDescription("Credit Card 6 digit Match");
 					detail.setPercent(P_CC_6);
 					detail.setMatchtype(MatchType.cc);
@@ -987,17 +987,17 @@ public class Consumer implements Runnable{
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1(r1.getCcType() + r1.getCcNumLastFour() + " exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
-					detail.setContent2(r2.getCcType() + r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
+					detail.setContent1(r1.getCcType() + " ************" + r1.getCcNumLastFour() + " exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
+					detail.setContent2(r2.getCcType() + " ************" + r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card 4 digit, type and expiration Match");
 					detail.setPercent(P_CC_4_TYPE_EXP);
 					detail.setMatchtype(MatchType.cc);
-				} else if(type && expEmpty) {
+				} else if(type) {
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1(r1.getCcType() + r1.getCcNumLastFour());
-					detail.setContent2(r2.getCcType() + r2.getCcNumLastFour());
+					detail.setContent1(r1.getCcType() + " ************" + r1.getCcNumLastFour());
+					detail.setContent2(r2.getCcType() + " ************" + r2.getCcNumLastFour());
 					detail.setDescription("Credit Card 4 digit and Type Match");
 					detail.setPercent(P_CC_4 + P_CC_TYPE);
 					detail.setMatchtype(MatchType.cc);
@@ -1005,17 +1005,17 @@ public class Consumer implements Runnable{
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1(r1.getCcNumLastFour() + " exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
-					detail.setContent2(r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
+					detail.setContent1("************" + r1.getCcNumLastFour() + " exp:" + r1.getCcExpMonth()  + "/" +r1.getCcExpYear());
+					detail.setContent2("************" + r2.getCcNumLastFour() + " exp:" + r2.getCcExpMonth()  + "/" +r2.getCcExpYear());
 					detail.setDescription("Credit Card 4 digit and Expiration Match");
 					detail.setPercent(P_CC_4 + P_CC_EXP);
 					detail.setMatchtype(MatchType.cc);
-				} else if(expEmpty && typeEmpty){
+				} else if(typeEmpty){
 					MatchDetail detail = new MatchDetail();
 					detail.setMatch(match);
 					match.getDetails().add(detail);
-					detail.setContent1(r1.getCcNumLastFour());
-					detail.setContent2(r2.getCcNumLastFour());
+					detail.setContent1("************" + r1.getCcNumLastFour());
+					detail.setContent2("************" + r2.getCcNumLastFour());
 					detail.setDescription("Credit Card 4 digit Match");
 					detail.setPercent(P_CC_4);
 					detail.setMatchtype(MatchType.cc);
