@@ -3069,13 +3069,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		sess = HibernateWrapper.getSession().openSession();
 		sql = "select q1.val, q1.wk1, q1.ct1, q2.ct2, q3.ct3, (q2.ct2+q3.ct3)/q1.ct1*100 as 'Return' "+ 
-			"from (select case  value when 0 then 'Low Value' else 'High Value' END as val, makedate(year(f.receivedDate), 7*week(f.receivedDate,1)-6) as wk1, "+
-			"case count(*) when null then 0 else count(*) end as ct1 from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek group by value, week(f.receivedDate,1)) as q1 left outer join "+
-			"(select case  value when 0 then 'Low Value' else 'High Value' END as val, makedate(year(f.receivedDate), 7*week(f.receivedDate,1)-6) as wk2, "+
-			"case count(*) when null then 0 else count(*) end as ct2 from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1) group by value, week(f.receivedDate, 3)) q2 "+
+			"from (select case  value when 0 then 'Low Value' else 'High Value' END as val,  DATE_ADD(f.receivedDate, INTERVAL(1-DAYOFWEEK(f.receivedDate)) DAY) as wk1, "+
+			"case count(*) when null then 0 else count(*) end as ct1 from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek group by value, wk1) as q1 left outer join "+
+			"(select case  value when 0 then 'Low Value' else 'High Value' END as val, DATE_ADD(f.receivedDate, INTERVAL(1-DAYOFWEEK(f.receivedDate)) DAY) as wk2, "+
+			"case count(*) when null then 0 else count(*) end as ct2 from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1) group by value,wk2) q2 "+
 			"on q2.val = q1.val and q1.wk1 = q2.wk2 left outer join "+
-			"(select case  value when 0 then 'Low Value' else 'High Value' END as val, makedate(year(f.receivedDate), 7*week(f.receivedDate,1)-6) as wk3, "+
-			"case count(*) when null then 0 else count(*) end as ct3  from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and (trackingNumber is null or trackingNumber = '') and lost_id is not null group by value, week(f.receivedDate, 3)) q3 "+
+			"(select case  value when 0 then 'Low Value' else 'High Value' END as val, DATE_ADD(f.receivedDate, INTERVAL(1-DAYOFWEEK(f.receivedDate)) DAY) as wk3, "+
+			"case count(*) when null then 0 else count(*) end as ct3  from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and (trackingNumber is null or trackingNumber = '') and lost_id is not null group by value,wk3) q3 "+
 			"on q3.val = q1.val and q3.wk3 = q1.wk1 group by val, q1.wk1 order by q1.wk1 asc, q1.val desc";
 //		sql = "select case  value when 0 then 'Low Value' else 'High Value' END as val, makedate(year(f.receivedDate), 7*week(f.receivedDate,1)-6) as wk3, "+
 //			"case count(*) when null then 0 else count(*) end as ct2  from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and (trackingNumber is null or trackingNumber = '') and lost_id is not null group by value, week(f.receivedDate, 3)";
