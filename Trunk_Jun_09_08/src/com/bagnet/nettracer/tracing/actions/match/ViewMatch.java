@@ -232,7 +232,7 @@ public final class ViewMatch extends Action {
 
 				// match
 				try{
-				iBMO.updateIncidentNoAudit(false,incident);
+				iBMO.updateIncidentNoAudit(false,true,incident);
 				} catch (StaleStateException sse){
 					//loupas - should never be reach
 				}
@@ -269,7 +269,7 @@ public final class ViewMatch extends Action {
 						// update matching database
 						has_matched = true;
 						try{
-							iBMO.updateIncidentNoAudit(false,incident);
+							iBMO.updateIncidentNoAudit(false,true,incident);
 							} catch (StaleStateException sse){
 								//loupas - should never be reach
 							}
@@ -305,7 +305,7 @@ public final class ViewMatch extends Action {
 						// update matching database
 						has_matched = true;
 						try{
-							iBMO.updateIncidentNoAudit(false,incident);
+							iBMO.updateIncidentNoAudit(false,true,incident);
 							} catch (StaleStateException sse){
 								//loupas - should never be reach
 							}
@@ -373,7 +373,7 @@ public final class ViewMatch extends Action {
 
 						has_unmatched = true;
 						try{
-							iBMO.updateIncidentNoAudit(false,incident);
+							iBMO.updateIncidentNoAudit(false,true,incident);
 							} catch (StaleStateException sse){
 								//loupas - should never be reach
 							}
@@ -426,7 +426,7 @@ public final class ViewMatch extends Action {
 				}*/
 				has_unmatched = true;
 				try{
-					iBMO.updateIncidentNoAudit(false,incident);
+					iBMO.updateIncidentNoAudit(false,true,incident);
 					} catch (StaleStateException sse){
 						//loupas - should never be reach
 					}

@@ -340,7 +340,7 @@ public class ClaimDAO {
 			whereSql.append(addressSql);
 		}
 		
-		String phoneSql = getPhoneSql(form);
+		String phoneSql = getPhoneSql(form, fromSql);
 		if (!phoneSql.isEmpty()) {
 			whereSql.append(phoneSql);
 		}
@@ -402,12 +402,13 @@ public class ClaimDAO {
 		return toReturn.toString();
 	}
 	
-	private String getPhoneSql(SearchClaimForm form) {
+	private String getPhoneSql(SearchClaimForm form, StringBuilder fromSql) {
 		StringBuilder toReturn = new StringBuilder();
 		
 		String value = form.getPhone();
 		if (value != null && !value.isEmpty()) {
-			toReturn.append("and (ph.phoneNumber = :phoneNumber or pph.phoneNumber = :phoneNumber) ");
+			fromSql.append(" left outer join c.phones as cph ");
+			toReturn.append("and (ph.phoneNumber = :phoneNumber or pph.phoneNumber = :phoneNumber or cph.phoneNumber = :phoneNumber) ");
 		}
 		return toReturn.toString();
 	}

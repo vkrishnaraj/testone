@@ -2,11 +2,28 @@
 <wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://objects.service.fs.nettracer.aero/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ns0="http://service.fs.nettracer.aero" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://service.fs.nettracer.aero">
     <wsdl:types>
         <xs:schema xmlns:ns="http://service.fs.nettracer.aero" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://service.fs.nettracer.aero">
+            <xs:element name="getClaimResults">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="version" type="xs:int"/>
+                        <xs:element minOccurs="0" name="authentication" nillable="true" type="ns1:Authentication"/>
+                        <xs:element minOccurs="0" name="fileId" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getClaimResultsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ns1:ClaimResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="submitClaim">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element minOccurs="0" name="version" type="xs:int"/>
                         <xs:element minOccurs="0" name="authentication" nillable="true" type="ns1:Authentication"/>
+                        <xs:element minOccurs="0" name="maxWaitTime" type="xs:int"/>
                         <xs:element minOccurs="0" name="data" nillable="true" type="ns1:File"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -24,6 +41,7 @@
                         <xs:element minOccurs="0" name="version" type="xs:int"/>
                         <xs:element minOccurs="0" name="authentication" nillable="true" type="ns1:Authentication"/>
                         <xs:element minOccurs="0" name="fileId" type="xs:long"/>
+                        <xs:element minOccurs="0" name="maxWaitTime" type="xs:int"/>
                         <xs:element minOccurs="0" name="amountPaid" type="xs:double"/>
                         <xs:element minOccurs="0" name="amountPaidCurrency" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="resolutionStatus" type="xs:int"/>
@@ -59,6 +77,19 @@
                     <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="systemName" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="systemPassword" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ClaimResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="directAccessUrl" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="fileId" type="xs:long"/>
+                    <xs:element minOccurs="0" name="searchSummary" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="secondsUntilComplete" type="xs:int"/>
+                    <xs:element minOccurs="0" name="success" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="traceComplete" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="warningColor" type="xs:int"/>
+                    <xs:element minOccurs="0" name="warningLevel" type="xs:int"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="File">
@@ -178,17 +209,6 @@
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="segments" nillable="true" type="ax21:Segment"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="ClaimResponse">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="directAccessUrl" nillable="true" type="xs:string"/>
-                    <xs:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="fileId" type="xs:long"/>
-                    <xs:element minOccurs="0" name="searchSummary" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="success" type="xs:boolean"/>
-                    <xs:element minOccurs="0" name="warningColor" type="xs:int"/>
-                    <xs:element minOccurs="0" name="warningLevel" type="xs:int"/>
-                </xs:sequence>
-            </xs:complexType>
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="updateClaimStatusRequest">
@@ -202,6 +222,12 @@
     </wsdl:message>
     <wsdl:message name="submitClaimResponse">
         <wsdl:part name="parameters" element="ns0:submitClaimResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getClaimResultsRequest">
+        <wsdl:part name="parameters" element="ns0:getClaimResults"/>
+    </wsdl:message>
+    <wsdl:message name="getClaimResultsResponse">
+        <wsdl:part name="parameters" element="ns0:getClaimResultsResponse"/>
     </wsdl:message>
     <wsdl:message name="echoRequest">
         <wsdl:part name="parameters" element="ns0:echo"/>
@@ -217,6 +243,10 @@
         <wsdl:operation name="submitClaim">
             <wsdl:input message="ns0:submitClaimRequest" wsaw:Action="urn:submitClaim"/>
             <wsdl:output message="ns0:submitClaimResponse" wsaw:Action="urn:submitClaimResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getClaimResults">
+            <wsdl:input message="ns0:getClaimResultsRequest" wsaw:Action="urn:getClaimResults"/>
+            <wsdl:output message="ns0:getClaimResultsResponse" wsaw:Action="urn:getClaimResultsResponse"/>
         </wsdl:operation>
         <wsdl:operation name="echo">
             <wsdl:input message="ns0:echoRequest" wsaw:Action="urn:echo"/>
@@ -236,6 +266,15 @@
         </wsdl:operation>
         <wsdl:operation name="submitClaim">
             <soap:operation soapAction="urn:submitClaim" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getClaimResults">
+            <soap:operation soapAction="urn:getClaimResults" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -273,6 +312,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="getClaimResults">
+            <soap12:operation soapAction="urn:getClaimResults" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="echo">
             <soap12:operation soapAction="urn:echo" style="document"/>
             <wsdl:input>
@@ -301,6 +349,15 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="submitClaim"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getClaimResults">
+            <http:operation location="FraudService/getClaimResults"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getClaimResults"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getClaimResults"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="echo">

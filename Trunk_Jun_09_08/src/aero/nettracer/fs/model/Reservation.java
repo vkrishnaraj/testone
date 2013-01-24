@@ -126,11 +126,12 @@ public class Reservation implements Serializable {
 	}
 
 	public String getRedactedCcNumber() {
-		String toReturn = "";
-		if ((ccNumber != null && !ccNumber.isEmpty()) || (getCcNumLastFour() != null && !getCcNumLastFour().isEmpty())) {
-			toReturn += "************" + getCcNumLastFour();
-		}
-		return toReturn;
+//		String toReturn = "";
+//		if ((ccNumber != null && !ccNumber.isEmpty()) || (getCcNumLastFour() != null && !getCcNumLastFour().isEmpty())) {
+//			toReturn += "************" + getCcNumLastFour();
+//		}
+//		return toReturn;
+		return getCcNumber();
 	}
 	
 	public String getCcNumber() {
@@ -142,17 +143,18 @@ public class Reservation implements Serializable {
 	}
 	
 	public void setCcNumber(String ccNumber) {
-		if (ccNumber != null && ccNumber.trim().length() > 0 && (ccNumber.matches("[0-9]{4,}"))) {
-			if (ccNumber.length() > 12) {
-				this.ccNumber = StringUtils.sha1_256(ccNumber,true);
-			} else {
-				this.ccNumber = null;
-			}
-			this.setCcNumLastFour(ccNumber.substring(ccNumber.length() - 4));
-		} else if(ccNumber == null || ccNumber.trim().length() == 0){
-			this.ccNumber = null;
-			this.ccNumLastFour = null;
-		}
+//		if (ccNumber != null && ccNumber.trim().length() > 0 && (ccNumber.matches("[0-9]{4,}"))) {
+//			if (ccNumber.length() > 12) {
+//				this.ccNumber = StringUtils.sha1_256(ccNumber,true);
+//			} else {
+//				this.ccNumber = null;
+//			}
+//			this.setCcNumLastFour(ccNumber.substring(ccNumber.length() - 4));
+//		} else if(ccNumber == null || ccNumber.trim().length() == 0){
+//			this.ccNumber = null;
+//			this.ccNumLastFour = null;
+//		}
+		this.ccNumber = ccNumber;
 	}
 
 	public double getTicketAmount() {

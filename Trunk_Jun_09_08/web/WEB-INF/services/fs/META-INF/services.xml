@@ -17,5 +17,9 @@
             <actionMapping>urn:submitClaim</actionMapping>
             <outputActionMapping>urn:submitClaimResponse</outputActionMapping>
         </operation>
+        <operation name="getClaimResults" mep="http://www.w3.org/ns/wsdl/in-out">
+            <actionMapping>urn:getClaimResults</actionMapping>
+            <outputActionMapping>urn:getClaimResultsResponse</outputActionMapping>
+        </operation>
     </service>
 </serviceGroup>

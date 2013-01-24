@@ -1388,10 +1388,15 @@
 								<html:option value="DC">Diners Club</html:option>
 							</html:select>
 						</td>
-						<td colspan=2>
+						<td>
 							<bean:message key="claim.colname.cc_num" />
 							<br/>
-							<html:text name="matchClaim" property="file.incident.reservation.redactedCcNumber" size="20" maxlength="16" disabled="true" styleClass="textfield" />
+							<html:text name="matchClaim" property="file.incident.reservation.redactedCcNumber" size="10" maxlength="6" disabled="true" styleClass="textfield" />
+						</td>
+						<td>
+							<bean:message key="claim.colname.cc_num.last.four" />
+							<br/>
+							<html:text name="matchClaim" property="file.incident.reservation.ccNumLastFour" size="10" maxlength="4" disabled="true" styleClass="textfield" />
 						</td>
 						<td>
 							<bean:message key="claim.colname.cc_expdate" />

@@ -13,6 +13,6 @@ function validateMissingClose(form, doCheck)
 {
 
 	if (doCheck == 1) {
-  		return window.confirm("Have you verified any Travel Bank Credit(s) for this file has been created?");
+  		return window.confirm("Have you verified any Service Credit(s) for this file has been created?");
   	}
 }

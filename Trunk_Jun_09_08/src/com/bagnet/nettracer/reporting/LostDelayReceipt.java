@@ -229,7 +229,7 @@ public class LostDelayReceipt {
 			ReportBMO rbmo = new ReportBMO(request);
 			
 			IncidentBMO ibmo = new IncidentBMO();
-			ibmo.incrementPrintedReceipt(theform.getIncident_ID());
+			theform.setPrintedreceipt(ibmo.incrementPrintedReceipt(theform.getIncident_ID()));
 			
 			String filename = rbmo.getReportFileName(TracingConstants.LOST_DELAY, language);
 			

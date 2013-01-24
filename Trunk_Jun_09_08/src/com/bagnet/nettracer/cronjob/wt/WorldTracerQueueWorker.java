@@ -167,7 +167,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						wtqBmo.updateQueue(queue);
 						incident.setWtFile(new WorldTracerFile(wtId));
 						try {
-							iBmo.updateIncidentNoAudit(false,incident);
+							iBmo.updateIncidentNoAudit(false,true,incident);
 						} catch (HibernateException e) {
 							e.printStackTrace();
 						} catch (StaleStateException e) {
@@ -341,7 +341,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					queue.setStatus(WtqStatus.SUCCESS);
 					wtqBmo.updateQueue(queue);
 					try {
-						iBmo.updateIncidentNoAudit(false, incident);
+						iBmo.updateIncidentNoAudit(false, true, incident);
 					} catch (HibernateException e) {
 						e.printStackTrace();
 					} catch (StaleStateException e) {
@@ -450,7 +450,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						wtqBmo.updateQueue(queue);
 						incident.getWtFile().setWt_status(WTStatus.SUSPENDED);
 						try {
-							iBmo.updateIncidentNoAudit(false,incident);
+							iBmo.updateIncidentNoAudit(false,true,incident);
 						} catch (HibernateException e) {
 							e.printStackTrace();
 						} catch (StaleStateException e) {
@@ -518,7 +518,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					wtqBmo.updateQueue(queue);
 					incident.getWtFile().setWt_status(WTStatus.ACTIVE);
 					try {
-						iBmo.updateIncidentNoAudit(false, incident);
+						iBmo.updateIncidentNoAudit(false, true,incident);
 					} catch (HibernateException e) {
 						e.printStackTrace();
 					} catch (StaleStateException e) {
@@ -853,7 +853,7 @@ public class WorldTracerQueueWorker implements Runnable {
 						incident.getWtFile().setWt_status(WTStatus.CLOSED);
 						wtqBmo.updateQueue(queue);
 						try {
-							iBmo.updateIncidentNoAudit(false, incident);
+							iBmo.updateIncidentNoAudit(false, true,incident);
 						} catch (HibernateException e) {
 							e.printStackTrace();
 						} catch (StaleStateException e) {

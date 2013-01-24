@@ -6,63 +6,30 @@
 	      version="5">
 
  <display-name>TracerEAR</display-name>
-  <!--
- <module>
-     <web>
-         <web-uri>avis_production.war</web-uri>
-         <context-root>avis</context-root>
-     </web>
-  </module>
--->  
+ 
    <module>
      <web>
          <web-uri>westjet_production.war</web-uri>
          <context-root>westjet</context-root>
      </web>
   </module>
-  
-  <!--
-  
-   <module>
+ <module>
      <web>
-         <web-uri>jetblue_production.war</web-uri>
-         <context-root>jetblue</context-root>
+         <web-uri>lfc_production.war</web-uri>
+         <context-root>lostandfound</context-root>
      </web>
   </module>
-  
-   <module>
+ <module>
      <web>
-         <web-uri>spirit_production.war</web-uri>
-         <context-root>spirit</context-root>
+         <web-uri>webjet_production.war</web-uri>
+         <context-root>webjet</context-root>
      </web>
   </module>
-  
-  
-   <module>
+ <module>
      <web>
          <web-uri>azul_production.war</web-uri>
          <context-root>azul</context-root>
      </web>
   </module>
-     <module>
-     <web>
-         <web-uri>american_production.war</web-uri>
-         <context-root>american</context-root>
-     </web>
-  </module>
   
-     <module>
-     <web>
-         <web-uri>united_production.war</web-uri>
-         <context-root>united</context-root>
-     </web>
-  </module>
-  
-   <module>
-     <web>
-         <web-uri>delta_production.war</web-uri>
-         <context-root>delta</context-root>
-     </web>
-  </module>
-  -->
 </application> 

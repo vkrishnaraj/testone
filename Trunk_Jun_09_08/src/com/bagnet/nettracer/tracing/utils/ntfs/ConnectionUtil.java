@@ -116,6 +116,10 @@ public class ConnectionUtil {
 	  }
 	  
 	  public static TraceResponse submitClaim(long fileId, boolean primary, boolean hasViewResultsPermission) {
+		  return submitClaim(fileId, primary, hasViewResultsPermission, PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_CHECK_TIMEOUT));
+		}
+	  
+	  public static TraceResponse submitClaim(long fileId, boolean primary, boolean hasViewResultsPermission, int wait) {
 			if (fileId <= 0) {
 				return null;
 			}
@@ -125,12 +129,6 @@ public class ConnectionUtil {
 				ClaimClientRemote remote = (ClaimClientRemote) getRemoteEjb(ctx,PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 				
 				if (remote != null) {
-					int wait = 6;
-					try {
-						wait = PropertyBMO.getValueAsInt(PropertyBMO.CENTRAL_FRAUD_CHECK_TIMEOUT);
-					} catch (Exception e) {
-						//
-					}
 					results = TransportMapper.map(remote.traceFile(fileId, wait, primary, hasViewResultsPermission));
 				}
 				ctx.close();

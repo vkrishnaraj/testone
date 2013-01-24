@@ -14,6 +14,10 @@ import org.hibernate.classic.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.ws.search.QueryNetTracerDocument.QueryNetTracer;
 import com.bagnet.nettracer.ws.search.QueryNetTracerResponseDocument.QueryNetTracerResponse;
 import com.bagnet.nettracer.ws.search.pojo.xsd.Match;
@@ -75,20 +79,28 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     		return;
     	}
     	
+    	Date now = new Date();
+    	Date before = DateUtils.addDays(now, (-1 * subDays));
+
+    	logger.info("TIME " + subDays + ": \n\n" + now + "\n" + before + "\n\nEND TIME\n");
+    	
     	String addTime = "ADDTIME(i.createdate, i.createtime)";
-    	String subTime = "DATE_SUB(UTC_TIMESTAMP(), INTERVAL " + subDays + " DAY)";
+    	String subTime = DateUtils.formatDate(before, TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null); 
     	
     	boolean sqlServer = "org.hibernate.dialect.SQLServerDialect".equals(HibernateWrapper.getConfig().getProperties().getProperty("hibernate.dialect"));
     	
     	if (sqlServer) {
     		addTime = "DATEADD(second, ((DATEPART(hour, i.createtime) * 3600) + (DATEPART(minute, i.createtime) * 60) + DATEPART(second, i.createtime)), i.createdate)";
-    		subTime = "DATEADD(day, -" + subDays + ", GETUTCDATE())";
     	}
     	
-    	String where = " where " + subTime + " <= " + addTime + " and (1=0 ";
-    	
+    	String where = " where :subTime <= i.createdate and (1=0 ";
+
+		HashMap<String, ArrayList<String>> eightDig = new HashMap<String, ArrayList<String>>();
+		HashMap<String, ArrayList<String>> nineDig = new HashMap<String, ArrayList<String>>();
+		HashMap<String, ArrayList<String>> tenDig = new HashMap<String, ArrayList<String>>();
+		
     	String pnrSelect = generatePNR(pnrs, where);
-    	String tagSelect = generateTAG(tags, where);
+    	String tagSelect = generateTAG(tags, where, eightDig, nineDig, tenDig);
     	String unionSelect = "null";
     	if (pnrSelect != null && pnrSelect.length() > 0) {
     		unionSelect = pnrSelect;
@@ -107,7 +119,7 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     	
     	logger.info("QUERY: \n\n" + query + "\n\nEND QUERY\n");
     	
-    	List results = getQueryResults(query);
+    	List results = getQueryResults(query, subTime, pnrs, eightDig, nineDig, tenDig);
     	
     	if (results.isEmpty()) {
     		return;
@@ -127,28 +139,15 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     private String generatePNR(String[] pnrs, String where) {
     	String returnMe = null; 
     	if (pnrs != null && pnrs.length > 0) {
-    		returnMe = "select i.Incident_ID from incident i " + where + " or (i.recordlocator in (";
-    		boolean notFirst = false;
-    		for (String pnr: pnrs) {
-    			if (pnr != null && pnr.trim().length() > 0) {
-	    			if (notFirst) {
-	    				returnMe += ", ";
-	    			}
-	    			returnMe += "'" + pnr + "'";
-	    			notFirst = true;
-    			}
-    		}
-    		returnMe += ")) )";
+    		returnMe = "select i.Incident_ID from incident i " + where + " or (i.recordlocator in (:pnrList)) )";
     	}
     	return returnMe;
     }
     
-    private String generateTAG(String[] tags, String where) {
+    private String generateTAG(String[] tags, String where, HashMap<String, ArrayList<String>> eightDig, HashMap<String, 
+    		ArrayList<String>> nineDig, HashMap<String, ArrayList<String>> tenDig) {
     	String returnMe = null;
     	if (tags != null && tags.length > 0) {
-    		HashMap<String, ArrayList<String>> eightDig = new HashMap<String, ArrayList<String>>();
-    		HashMap<String, ArrayList<String>> nineDig = new HashMap<String, ArrayList<String>>();
-    		HashMap<String, ArrayList<String>> tenDig = new HashMap<String, ArrayList<String>>();
     		for (String tag: tags) {
     			if (tag != null && tag.length() == 8) {
     				String key = tag.substring(0, 2);
@@ -185,45 +184,18 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
         		String itemSelect = "select i.Incident_ID from incident i "
         				+ "left outer join item itm on i.Incident_ID = itm.incident_ID " + where;
 	    		for (String key: eightDig.keySet()) {
-	    			String temp = " or (%TABLE%.claimchecknum_carriercode = '" + key + "' and %TABLE%.claimchecknum_bagnumber in (";
-	        		boolean notFirst = false;
-	        		for (String tag: eightDig.get(key)) {
-	        			if (notFirst) {
-	        				temp += ", ";
-	        			}
-	        			temp += "'" + tag + "'";
-	        			notFirst = true;
-	        		}
-	        		temp += ")) ";
+	    			String temp = " or (%TABLE%.claimchecknum_carriercode = :key8" + key + " and %TABLE%.claimchecknum_bagnumber in (:key8" + key + "List)) ";
 	        		itemSelect += temp.replaceAll("%TABLE%", "itm");
 	        		icSelect += temp.replaceAll("%TABLE%", "c");
 	    		}
 	    		for (String key: nineDig.keySet()) {
-	    			String temp = " or (%TABLE%.claimchecknum_ticketingcode = '" + key + "' and %TABLE%.claimchecknum_bagnumber in (";
-	        		boolean notFirst = false;
-	        		for (String tag: nineDig.get(key)) {
-	        			if (notFirst) {
-	        				temp += ", ";
-	        			}
-	        			temp += "'" + tag + "'";
-	        			notFirst = true;
-	        		}
-	        		temp += ")) ";
+	    			String temp = " or (%TABLE%.claimchecknum_ticketingcode = :key9" + key + " and %TABLE%.claimchecknum_bagnumber in (:key9" + key + "List)) ";
 	        		itemSelect += temp.replaceAll("%TABLE%", "itm");
 	        		icSelect += temp.replaceAll("%TABLE%", "c");
 	    		}
 	    		for (String key: tenDig.keySet()) {
-	    			String temp = " or ((%TABLE%.claimchecknum_leading = '" + key.substring(0, 1) + "' or %TABLE%.claimchecknum_leading is null) "
-	    					+ "and %TABLE%.claimchecknum_ticketingcode = '" + key.substring(1) + "' and %TABLE%.claimchecknum_bagnumber in (";
-	        		boolean notFirst = false;
-	        		for (String tag: tenDig.get(key)) {
-	        			if (notFirst) {
-	        				temp += ", ";
-	        			}
-	        			temp += "'" + tag + "'";
-	        			notFirst = true;
-	        		}
-	        		temp += ")) ";
+	    			String temp = " or ((%TABLE%.claimchecknum_leading = :key10" + key + "One or %TABLE%.claimchecknum_leading is null) "
+	    					+ "and %TABLE%.claimchecknum_ticketingcode = :key10" + key + "Two and %TABLE%.claimchecknum_bagnumber in (:key10" + key + "List)) ";
 	        		itemSelect += temp.replaceAll("%TABLE%", "itm");
 	        		icSelect += temp.replaceAll("%TABLE%", "c");
 	    		}
@@ -234,12 +206,35 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     }
     
 	@SuppressWarnings("rawtypes")
-	public List getQueryResults(String sql) {
+	public List getQueryResults(String sql, String subTime, String[] pnrs, HashMap<String, ArrayList<String>> eightDig, HashMap<String, 
+    		ArrayList<String>> nineDig, HashMap<String, ArrayList<String>> tenDig) {
 		Session session = null;
 		try {
 			session = HibernateWrapper.getDirtySession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
+			
+			//Set Parameters
+			query.setString("subTime", subTime);
+	    	if (pnrs != null && pnrs.length > 0) {
+	    		query.setParameterList("pnrList", pnrs);
+	    	}
+    		if (!eightDig.isEmpty() || !nineDig.isEmpty() || !tenDig.isEmpty()) {
+	    		for (String key: eightDig.keySet()) {
+	    			query.setString("key8" + key, key);
+	    			query.setParameterList("key8" + key + "List", eightDig.get(key));
+	    		}
+	    		for (String key: nineDig.keySet()) {
+	    			query.setString("key9" + key, key);
+	    			query.setParameterList("key9" + key + "List", nineDig.get(key));
+	    		}
+	    		for (String key: tenDig.keySet()) {
+	    			query.setString("key10" + key + "One", key.substring(0, 1));
+	    			query.setString("key10" + key + "Two", key.substring(1));
+	    			query.setParameterList("key10" + key + "List", tenDig.get(key));
+	    		}
+    		}
 
+    		//Set Returns
 			query.addScalar("id", Hibernate.STRING);
 			query.addScalar("type_id", Hibernate.INTEGER);
 			query.addScalar("type", Hibernate.STRING);

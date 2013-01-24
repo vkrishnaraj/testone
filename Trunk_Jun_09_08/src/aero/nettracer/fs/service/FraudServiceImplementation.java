@@ -35,6 +35,7 @@ import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Segment;
 import aero.nettracer.fs.model.detection.MetaWarning;
 import aero.nettracer.fs.model.detection.TraceResponse;
+import aero.nettracer.fs.service.GetClaimResultsResponseDocument.GetClaimResultsResponse;
 import aero.nettracer.fs.service.SubmitClaimDocument.SubmitClaim;
 import aero.nettracer.fs.service.SubmitClaimResponseDocument.SubmitClaimResponse;
 import aero.nettracer.fs.service.UpdateClaimStatusResponseDocument.UpdateClaimStatusResponse;
@@ -82,6 +83,65 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 		return ret;
 	}
 	
+	public aero.nettracer.fs.service.GetClaimResultsResponseDocument getClaimResults (aero.nettracer.fs.service.GetClaimResultsDocument req){
+		GetClaimResultsResponseDocument resDoc = GetClaimResultsResponseDocument.Factory.newInstance();
+		GetClaimResultsResponse resultRes = resDoc.addNewGetClaimResultsResponse();
+		ClaimResponse res = resultRes.addNewReturn();
+		
+		res.setSuccess(true);
+		Agent agent = null;
+		if(req != null && req.getGetClaimResults() != null && req.getGetClaimResults().getAuthentication() != null){
+			Authentication auth = req.getGetClaimResults().getAuthentication();
+			ActionMessages errors = new ActionMessages();
+			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 1, errors);
+			if(!errors.isEmpty()){
+				res.addError("Incorrect username/password");
+				res.setSuccess(false);
+				logger.info(resDoc);
+				return resDoc;
+			}
+		} else {
+			res.addError("username/password not provided");
+			res.setSuccess(false);
+			logger.info(resDoc);
+			return resDoc;
+		}
+		
+		//Get File swapID
+		FsClaim claim = ClaimUtils.loadClaim(req.getGetClaimResults().getFileId());
+		if(claim == null){
+			res.addError("File ID invalid");
+			res.setSuccess(false);
+			return resDoc;
+		}
+		if(claim.getFile() == null || claim.getFile().getSwapId() == 0){
+			res.addError("File failed to submit to FS service, please contact NetTracer");
+			res.setSuccess(false);
+			return resDoc;
+		}
+		ClaimUtils.enterAuditClaimEntry(agent.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_MATCH_HISTORY, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_LOAD);
+		Context ctx = null;
+		ClaimClientRemote remote = null;
+		try {
+			ctx = ConnectionUtil.getInitialContext();
+			remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+		} catch (Exception e) {
+			//logger.error(e);
+		}
+		
+		if (remote == null) {
+			res.addError("There was an error connecting to the fraud service.");
+			res.setSuccess(false);
+			return resDoc;
+		} else {
+			TraceResponse results = (TraceResponse) TransportMapper.map(remote.getFileMatches(claim.getFile().getSwapId()));
+			boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, agent);
+			if (hasViewFraudResultsPermission && results != null) {
+				processTraceResponse(res,results);
+			}
+			return resDoc;
+		}
+	}
 	
     /**
      * Auto generated method signature
@@ -118,7 +178,7 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 		SubmitClaim claim = submitClaim.getSubmitClaim();
 		File file = claim.getData();
 		
-		createClaim(file, res, agent);
+		createClaim(file, res, agent, submitClaim.getSubmitClaim().getMaxWaitTime());
 		logger.info(resDoc);
 		return resDoc;
     }
@@ -133,7 +193,7 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
     	UpdateClaimStatusResponseDocument resDoc = UpdateClaimStatusResponseDocument.Factory.newInstance();
     	UpdateClaimStatusResponse claimRes = resDoc.addNewUpdateClaimStatusResponse();
 		ClaimResponse res = claimRes.addNewReturn();
-    	
+		res.setSuccess(true);
     	
     	Agent agent = null;
     	if(updateClaimStatus != null && updateClaimStatus.getUpdateClaimStatus() != null && updateClaimStatus.getUpdateClaimStatus().getAuthentication() != null){
@@ -202,13 +262,13 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 		
 		boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 		if (claimSaved && ntfsUser) {
-			submitClaimToFs(claim, firstSave, res, agent);
+			submitClaimToFs(claim, firstSave, res, agent, updateClaimStatus.getUpdateClaimStatus().getMaxWaitTime());
 		}
 		logger.info(resDoc);
     	return resDoc;
     }
     
-    private void createClaim(File wsFile, ClaimResponse res, Agent user) {
+    private void createClaim(File wsFile, ClaimResponse res, Agent user, int maxWait) {
     	
     	//TODO required field validation
  
@@ -254,12 +314,12 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 		ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!= null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
 		
 		if (claimSaved && ntfsUser) {
-			submitClaimToFs(claim, firstSave, res, user);
+			submitClaimToFs(claim, firstSave, res, user, maxWait);
 		}
     } // END METHOD createClaim
     
     
-    private void submitClaimToFs(FsClaim claim, boolean firstSave, ClaimResponse res, Agent user){
+    private void submitClaimToFs(FsClaim claim, boolean firstSave, ClaimResponse res, Agent user, int maxWait){
 		Context ctx = null;
 		ClaimClientRemote remote = null;
 		aero.nettracer.fs.model.File file = claim.getFile();
@@ -325,26 +385,14 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 			//logger.info("Claim saved to central services: " + remoteFileId);
 				
 //////////////////3. submit the claim for tracing
+			//sync 0 - default, 1-async, 2-sync
 			boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
-			TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave, hasViewFraudResultsPermission);
+
+			TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave, hasViewFraudResultsPermission, maxWait);
+			
 			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SUBMIT);
 			if (hasViewFraudResultsPermission && results != null) {
-				ArrayList<String> s = new ArrayList<String>();
-				for(MetaWarning mw:results.getMetaWarning()){
-					String toAdd = mw.getDescription();
-					toAdd = toAdd.replace("<ul>", " ");
-					toAdd = toAdd.replace("</ul>", " ");
-					toAdd = toAdd.replace("<li>", " ");
-					toAdd = toAdd.replace("</li>", " ");
-					s.add(toAdd);
-				}
-				res.setSearchSummary(StringUtils.join(s.toArray(), "||"));
-				res.setWarningColor(results.getThreatLevel());
-				res.setWarningLevel(results.getThreatLevel());
-				String directAccessUrl = PropertyBMO.getValue(PropertyBMO.DIRECT_ACCESS_URL);
-				if(res.getFileId() != 0 && directAccessUrl != null){
-					res.setDirectAccessUrl(directAccessUrl + "fraud_results.do?claimId=" + res.getFileId());
-				}
+				processTraceResponse(res,results);
 			}
 				
 			if (ctx != null) {
@@ -355,6 +403,31 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 				}
 			}
 		} // END REMOTE CALLS
+    }
+    
+    private void processTraceResponse(ClaimResponse res, TraceResponse results){
+		ArrayList<String> s = new ArrayList<String>();
+		for(MetaWarning mw:results.getMetaWarning()){
+			String toAdd = mw.getDescription();
+			toAdd = toAdd.replace("<ul>", " ");
+			toAdd = toAdd.replace("</ul>", " ");
+			toAdd = toAdd.replace("<li>", " ");
+			toAdd = toAdd.replace("</li>", " ");
+			s.add(toAdd);
+		}
+		res.setSearchSummary(StringUtils.join(s.toArray(), "||"));
+		res.setWarningColor(results.getThreatLevel());
+		res.setWarningLevel(results.getThreatLevel());
+		String directAccessUrl = PropertyBMO.getValue(PropertyBMO.DIRECT_ACCESS_URL);
+		if(res.getFileId() != 0 && directAccessUrl != null){
+			res.setDirectAccessUrl(directAccessUrl + "fraud_results.do?claimId=" + res.getFileId());
+		}
+		res.setTraceComplete(results.isTraceComplete());
+		if(!results.isTraceComplete()){
+			res.setSecondsUntilComplete(results.getSecondsUntilReload());
+		} else {
+			res.setSecondsUntilComplete(0);
+		}
     }
     
     private boolean copyWStoNTFile(File wsFile, aero.nettracer.fs.model.File file, FsClaim claim, ClaimResponse res) {

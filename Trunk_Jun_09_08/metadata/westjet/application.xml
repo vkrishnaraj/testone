@@ -8,8 +8,8 @@
  <display-name>TracerEAR</display-name>
  <module>
      <web>
-         <web-uri>wjtest.war</web-uri>
-         <context-root>wjtracer</context-root>
+         <web-uri>westjet.war</web-uri>
+         <context-root>westjet</context-root>
      </web>
   </module>
   

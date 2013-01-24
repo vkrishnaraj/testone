@@ -24,8 +24,7 @@
 <script language="javascript">
 
   var buttonSelected = null;
- 
-
+  
   window.onload=function(){
 	 	del = document.forms[0].delete_these_elements;
 		del.value = "";
@@ -40,9 +39,6 @@
 			}
 		}
   };
-	
-  
-  
   function getstations() {
     o = document.incidentForm;
     o.getstation.value="1";
@@ -261,7 +257,7 @@
                         <bean:message key="colname.flightnum.req" />
                       </td>
                       <td>
-                        * <bean:message key="colname.departdate.req" /><br>
+                       	* <bean:message key="colname.departdate.req" /><br>
                         (
                         <%= a.getDateformat().getFormat() %>)
                       </td>

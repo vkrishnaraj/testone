@@ -350,6 +350,10 @@ public class IncidentBMO {
 					if (oldinc.getLanguage() != null && iDTO.getLanguage() == null) {
 						iDTO.setLanguage(oldinc.getLanguage());
 					}
+					
+					if (oldinc.getPrintedreceipt() != null && iDTO.getPrintedreceipt() == null){
+						iDTO.setPrintedreceipt(oldinc.getPrintedreceipt());
+					}
 
 					// The purpose is to allow a user to identify specific incidents that were assigned to them in a given date range.
 					if (oldinc.getStationassigned().getStation_ID() != iDTO.getStationassigned().getStation_ID()) {
@@ -469,12 +473,14 @@ public class IncidentBMO {
 		return 1;
 	}
 
-	public boolean updateIncidentNoAudit(boolean checkStaleState, Incident iDTO) throws HibernateException, StaleStateException {
+	public boolean updateIncidentNoAudit(boolean checkStaleState, boolean updatedLastUpdateTimestamp, Incident iDTO) throws HibernateException, StaleStateException {
 		if(checkStaleState && IncidentBMO.isStale(iDTO)){
 			throw new StaleStateException();
 		}
 		
-		iDTO.setLastupdated(TracerDateTime.getGMTDate());
+		if(updatedLastUpdateTimestamp){
+			iDTO.setLastupdated(TracerDateTime.getGMTDate());
+		}
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -2128,16 +2134,18 @@ public class IncidentBMO {
 		return inc;
 	}
 	
-	public void incrementPrintedReceipt(String incident_id) throws HibernateException {
+	public Date incrementPrintedReceipt(String incident_id) throws HibernateException {
 		Incident inc = this.findIncidentByID(incident_id);
 		if (inc.getPrintedreceipt() == null) {
 			inc.setPrintedreceipt(TracerDateTime.getGMTDate());
 			try{
-				this.updateIncidentNoAudit(false,inc);
+				this.updateIncidentNoAudit(false,false,inc);
 			} catch (StaleStateException sse){
 				//loupas - should never reach this
+				return null;//we failed to successfully save the receipt date, returning null
 			}
 		}
+		return inc.getPrintedreceipt();
 	}
 
 	public static List<String> queryForFaultCode(ItemType iType, int faultStation, int lossCode) {

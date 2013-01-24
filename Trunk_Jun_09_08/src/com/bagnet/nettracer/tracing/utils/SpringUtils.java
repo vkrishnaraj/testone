@@ -1,8 +1,5 @@
 package com.bagnet.nettracer.tracing.utils;
 
-import org.jboss.cache.Cache;
-import org.jboss.cache.CacheManager;
-import org.jboss.ha.framework.server.CacheManagerLocator;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -10,7 +7,6 @@ import com.bagnet.nettracer.integrations.events.ClientEventHandler;
 import com.bagnet.nettracer.integrations.reports.CustomReportBMO;
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
 import com.bagnet.nettracer.tracing.bmo.LockBMO;
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.utils.general.ThreadHandler;
 import com.bagnet.nettracer.tracing.utils.lock.LockFile;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
@@ -56,13 +52,14 @@ public class SpringUtils {
 	}
 	
 	public static void init() {
-		try {
-			CacheManager cacheManager = CacheManagerLocator.getCacheManagerLocator().getCacheManager( null );
-			Cache<Object, Object> myCache = cacheManager.getCache( PropertyBMO.getValue(PropertyBMO.LOCK_CACHE_CLUSTER), true );
-			myCache.start();
-		} catch (Exception e){
-			e.printStackTrace();
-		}
+		/* getting the cache is a blocking call and can prevent the instance from starting if the cluster is locked up - loupas */
+//		try {
+//			CacheManager cacheManager = CacheManagerLocator.getCacheManagerLocator().getCacheManager( null );
+//			Cache<Object, Object> myCache = cacheManager.getCache( PropertyBMO.getValue(PropertyBMO.LOCK_CACHE_CLUSTER), true );
+//			myCache.start();
+//		} catch (Exception e){
+//			e.printStackTrace();
+//		}
 	}
 	
 	public static ReservationIntegration getReservationIntegration() {

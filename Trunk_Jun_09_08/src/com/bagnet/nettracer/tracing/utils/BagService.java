@@ -395,13 +395,18 @@ public class BagService {
 			RemList.add(rem);
 			rem=new Remark();
 		}
+		Station destStation = StationBMO.getStation(form.getDestStation());
+		String destString = form.getDestStation();
+		if (destStation != null) {
+			destString = destStation.getStationcode();
+		}
 		rem.setRemarktext(messages.getMessage(new Locale(user.getCurrentlocale()),
 				"bagforwardMessage")
 				+ " "
-				+ form.getDestStation()
+				+ form.getCompanyCode()
 				+ messages.getMessage(new Locale(user.getCurrentlocale()), "aposS")
 				+ " "
-				+ user.getStation().getStationcode() + " station."); //bagforwardMessage
+				+ destString + " station."); //bagforwardMessage
 		rem.setOhd(oDTO);
 		rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
 		RemList.add(rem);

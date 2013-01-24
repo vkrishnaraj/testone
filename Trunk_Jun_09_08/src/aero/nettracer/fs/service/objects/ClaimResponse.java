@@ -10,6 +10,8 @@ public class ClaimResponse {
 	private int warningColor;
 	private boolean success;
 	private String[] error;
+	private boolean traceComplete;
+	private int secondsUntilComplete;
 
 	
 	public long getFileId() {
@@ -66,6 +68,22 @@ public class ClaimResponse {
 
 	public String[] getError() {
 		return error;
+	}
+
+	public void setTraceComplete(boolean traceComplete) {
+		this.traceComplete = traceComplete;
+	}
+
+	public boolean isTraceComplete() {
+		return traceComplete;
+	}
+
+	public void setSecondsUntilComplete(int secondsUntilComplete) {
+		this.secondsUntilComplete = secondsUntilComplete;
+	}
+
+	public int getSecondsUntilComplete() {
+		return secondsUntilComplete;
 	}
 
 }

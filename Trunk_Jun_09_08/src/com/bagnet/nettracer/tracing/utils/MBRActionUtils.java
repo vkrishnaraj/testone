@@ -560,13 +560,14 @@ public class MBRActionUtils {
 					theform.setLoss_code(defaultLossCode);
 				} else {
 					theform.setLoss_code(0);
-					if(theform.getDeliveryInstructions()==null)
-					{
-						DeliveryInstructions DI=new DeliveryInstructions();
-						DI.setInstructions("");
-						theform.setDeliveryInstructions(DI);
-					}
 				}
+			}
+			
+			if(theform.getDeliveryInstructions()==null && type == TracingConstants.LOST_DELAY)
+			{
+				DeliveryInstructions DI=new DeliveryInstructions();
+				DI.setInstructions("");
+				theform.setDeliveryInstructions(DI);
 			}
 			
 			// set agent

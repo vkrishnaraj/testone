@@ -789,5 +789,24 @@ public class ClaimUtils {
 		}
 		return fsIncident;
 	}
+	
+	public static FsClaim loadClaim(long claimId){
+		Session session = null;
+		FsClaim fsClaim = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(FsClaim.class);
+			criteria.add(Expression.eq("id", claimId));
+			fsClaim = (FsClaim) criteria.uniqueResult();
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return fsClaim;
+	}
 
 }

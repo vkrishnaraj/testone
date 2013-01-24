@@ -34,21 +34,19 @@
   
   var count=<%=myform.getTraceResponse()!=null?myform.getTraceResponse().getSecondsUntilReload():0 %>;
 
-  var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
-
+  var counter=setInterval(timer, 1000); /*1000 will  run it every 1 second*/
+  
   function timer()
   {
     count=count-1;
-    if (count =< 0)
+    if (count <= 0)
     {
     	jQuery("#timer").hide();
     	jQuery("#refresh").show();
         clearInterval(counter);
-       //counter ended, do something here
         return;
     }
 
-    //Do code for showing the number of seconds here
     document.getElementById("timer").innerHTML=count+" seconds";
   }
   </Script>

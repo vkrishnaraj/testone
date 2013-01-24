@@ -50,7 +50,13 @@ public class CacheLockFile implements LockFile{
 	
 	@Override
 	public synchronized boolean lockIncident(Agent agent, Incident inc) {
-		
+		try{
+			String cacheName = PropertyBMO.getValue(PropertyBMO.LOCK_CACHE_CLUSTER);
+			if(cacheName == null || cacheName.trim().length() == 0){
+				//cache disabled
+				return false;
+			}	
+			
 		if(agent == null || inc == null){
 			return false;
 		}
@@ -60,7 +66,7 @@ public class CacheLockFile implements LockFile{
 
 		Cache<Object, Object> myCache = null;
 		try {
-			myCache = cacheManager.getCache( PropertyBMO.getValue(PropertyBMO.LOCK_CACHE_CLUSTER), true );
+			myCache = cacheManager.getCache( cacheName, true );
 			if(myCache.getCacheStatus() != CacheStatus.STARTED){
 				myCache.start();
 			}
@@ -77,16 +83,27 @@ public class CacheLockFile implements LockFile{
 				  agent.getStation().getStationcode()};
 		myCache.put(fqn, agent.getAgent_ID(), payload);
 		return true;
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
 	}
 	
 	@Override
 	public List<Object[]> getIncidentAccessLogs(String incidentId) {
+		try{
+			String cacheName = PropertyBMO.getValue(PropertyBMO.LOCK_CACHE_CLUSTER);
+			if(cacheName == null || cacheName.trim().length() == 0){
+				//cache disabled
+				return null;
+			}
+			
 		Fqn fqn = Fqn.fromString( CacheLockFile.class.getName()+"/"+incidentId );
 		CacheManager cacheManager = CacheManagerLocator.getCacheManagerLocator().getCacheManager( null );
 		Map<Object,Object> incidentMap = null;
 		Cache<Object, Object> myCache = null;
 		try {
-			myCache = cacheManager.getCache( PropertyBMO.getValue(PropertyBMO.LOCK_CACHE_CLUSTER), true );
+			myCache = cacheManager.getCache( cacheName, true );
 			if(myCache.getCacheStatus() != CacheStatus.STARTED){
 				myCache.start();
 			}
@@ -107,6 +124,10 @@ public class CacheLockFile implements LockFile{
 			}
 		}
 		return list;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	@Override
