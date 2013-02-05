@@ -24,7 +24,8 @@ public class TraceHandler {
 	public static final Integer TYPE_FOUND = 2;
 	public static final Integer TYPE_FOUND_HISTORY_OBJECT = 3;
 	
-	private static ArrayBlockingQueue<Object[]> queue;
+	private static ArrayBlockingQueue<Object[]> primaryqueue;
+	private static ArrayBlockingQueue<Object[]> secondaryqueue;
 	
 //	private static ArrayBlockingQueue<FoundHistoryObject> queue;
 	private static Vector<ThreadContainer> v;
@@ -43,18 +44,18 @@ public class TraceHandler {
 	}
 	
 	public static int getQueueSize(){
-		if(queue != null){
-			return queue.size();
+		if(primaryqueue != null){
+			return primaryqueue.size();
 		} else {
 			return 0;
 		}
 	}
 	
 	private static synchronized void startThreads() throws RemoteConnectionException{
-		if(queue == null){
+		if(primaryqueue == null){
 			v = new Vector<ThreadContainer>();
-			queue = new ArrayBlockingQueue<Object[]>(20000);
-			ThreadMonitor tm = new ThreadMonitor(v,queue);
+			primaryqueue = new ArrayBlockingQueue<Object[]>(20000);
+			ThreadMonitor tm = new ThreadMonitor(v,primaryqueue);
 			Thread t = new Thread(tm, "TraceHandlerMonitorThread");
 			t.start();
 		}
@@ -63,13 +64,13 @@ public class TraceHandler {
 			ThreadContainer container = new ThreadContainer();
 			container.setId(id);
 			container.setStartTime(new Date());
-			TraceThread thread = new TraceThread(queue, container);
+			TraceThread thread = new TraceThread(primaryqueue, container);
 			Thread t = new Thread(thread, id);
 			t.start();
 			container.setThread(t);
 			v.add(container);
 			if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_SECONDARY_TRACE)){
-				SecondTraceThread thread2 = new SecondTraceThread(queue, container);
+				SecondTraceThread thread2 = new SecondTraceThread(secondaryqueue, container);
 				Thread t2 = new Thread(thread2, id);
 				t2.start();
 				container.setThread(t);
@@ -85,14 +86,21 @@ public class TraceHandler {
 	public static void trace(FoundHistoryObject f) throws RemoteConnectionException{
 		startThreads();
 		Object[] toAdd = {TYPE_FOUND_HISTORY_OBJECT, f};
-		queue.add(toAdd);
+		primaryqueue.add(toAdd);
+
+		if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_SECONDARY_TRACE)){
+			secondaryqueue.add(toAdd);
+		}
 	}
 	
 	public static void trace(LFLost lost) throws RemoteConnectionException{
 		if(lost != null && lost.getId() > 0){
 			startThreads();
 			Object[] toAdd = {TYPE_LOST, new Long(lost.getId())};
-			queue.add(toAdd);
+			primaryqueue.add(toAdd);
+			if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_SECONDARY_TRACE)){
+				secondaryqueue.add(toAdd);
+			}
 		}
 	}
 	
@@ -100,7 +108,10 @@ public class TraceHandler {
 		if(found != null && found.getId() > 0){
 			startThreads();
 			Object[] toAdd = {TYPE_FOUND, new Long(found.getId())};
-			queue.add(toAdd);
+			primaryqueue.add(toAdd);
+			if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_SECONDARY_TRACE)){
+				secondaryqueue.add(toAdd);
+			}
 		}
 	}
 	
