@@ -732,15 +732,6 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
-	<target name="build-ear-local-jetblue" depends="delete-wars">
-		<property name="staging.project" value="jetblue" />
-		<property name="staging.env" value="local" />
-		<property name="avis.service.includes" value="*.war" />
-		<antcall target="build-war-local-jetblue"/>
-		<property name="app.xml.location" value="metadata/jetblue" />		
-		<antcall target="donotrun-build-ear" />
-	</target>
-	
 	<target name="build-ear-local-virginamerica" depends="delete-wars">
 		<property name="staging.project" value="virginamerica-fs" />
 		<property name="staging.env" value="local" />
