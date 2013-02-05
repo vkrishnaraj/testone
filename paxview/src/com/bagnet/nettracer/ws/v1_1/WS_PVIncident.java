@@ -5,7 +5,7 @@
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package com.bagnet.nettracer.ws.v1_1.paxview.xsd;
+package com.bagnet.nettracer.ws.v1_1;
 
 public class WS_PVIncident  implements java.io.Serializable {
     private java.lang.String comments;
@@ -20,13 +20,13 @@ public class WS_PVIncident  implements java.io.Serializable {
 
     private java.lang.String itemType;
 
-    private com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVItem[] items;
+    private com.bagnet.nettracer.ws.v1_1.WS_PVItem[] items;
 
-    private com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPassenger[] passengers;
+    private com.bagnet.nettracer.ws.v1_1.WS_PVPassenger[] passengers;
 
-    private com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVClaimChecks[] paxClaimchecks;
+    private com.bagnet.nettracer.ws.v1_1.WS_PVClaimChecks[] paxClaimchecks;
 
-    private com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication[] paxCommunication;
+    private com.bagnet.nettracer.ws.v1_1.WS_PVPaxCommunication[] paxCommunication;
 
     public WS_PVIncident() {
     }
@@ -38,10 +38,10 @@ public class WS_PVIncident  implements java.io.Serializable {
            java.lang.String incident_ID,
            java.lang.String incident_status,
            java.lang.String itemType,
-           com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVItem[] items,
-           com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPassenger[] passengers,
-           com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVClaimChecks[] paxClaimchecks,
-           com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication[] paxCommunication) {
+           com.bagnet.nettracer.ws.v1_1.WS_PVItem[] items,
+           com.bagnet.nettracer.ws.v1_1.WS_PVPassenger[] passengers,
+           com.bagnet.nettracer.ws.v1_1.WS_PVClaimChecks[] paxClaimchecks,
+           com.bagnet.nettracer.ws.v1_1.WS_PVPaxCommunication[] paxCommunication) {
            this.comments = comments;
            this.dispcreatetime = dispcreatetime;
            this.errorcode = errorcode;
@@ -180,7 +180,7 @@ public class WS_PVIncident  implements java.io.Serializable {
      * 
      * @return items
      */
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVItem[] getItems() {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVItem[] getItems() {
         return items;
     }
 
@@ -190,15 +190,15 @@ public class WS_PVIncident  implements java.io.Serializable {
      * 
      * @param items
      */
-    public void setItems(com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVItem[] items) {
+    public void setItems(com.bagnet.nettracer.ws.v1_1.WS_PVItem[] items) {
         this.items = items;
     }
 
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVItem getItems(int i) {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVItem getItems(int i) {
         return this.items[i];
     }
 
-    public void setItems(int i, com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVItem _value) {
+    public void setItems(int i, com.bagnet.nettracer.ws.v1_1.WS_PVItem _value) {
         this.items[i] = _value;
     }
 
@@ -208,7 +208,7 @@ public class WS_PVIncident  implements java.io.Serializable {
      * 
      * @return passengers
      */
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPassenger[] getPassengers() {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVPassenger[] getPassengers() {
         return passengers;
     }
 
@@ -218,15 +218,15 @@ public class WS_PVIncident  implements java.io.Serializable {
      * 
      * @param passengers
      */
-    public void setPassengers(com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPassenger[] passengers) {
+    public void setPassengers(com.bagnet.nettracer.ws.v1_1.WS_PVPassenger[] passengers) {
         this.passengers = passengers;
     }
 
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPassenger getPassengers(int i) {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVPassenger getPassengers(int i) {
         return this.passengers[i];
     }
 
-    public void setPassengers(int i, com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPassenger _value) {
+    public void setPassengers(int i, com.bagnet.nettracer.ws.v1_1.WS_PVPassenger _value) {
         this.passengers[i] = _value;
     }
 
@@ -236,7 +236,7 @@ public class WS_PVIncident  implements java.io.Serializable {
      * 
      * @return paxClaimchecks
      */
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVClaimChecks[] getPaxClaimchecks() {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVClaimChecks[] getPaxClaimchecks() {
         return paxClaimchecks;
     }
 
@@ -246,15 +246,15 @@ public class WS_PVIncident  implements java.io.Serializable {
      * 
      * @param paxClaimchecks
      */
-    public void setPaxClaimchecks(com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVClaimChecks[] paxClaimchecks) {
+    public void setPaxClaimchecks(com.bagnet.nettracer.ws.v1_1.WS_PVClaimChecks[] paxClaimchecks) {
         this.paxClaimchecks = paxClaimchecks;
     }
 
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVClaimChecks getPaxClaimchecks(int i) {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVClaimChecks getPaxClaimchecks(int i) {
         return this.paxClaimchecks[i];
     }
 
-    public void setPaxClaimchecks(int i, com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVClaimChecks _value) {
+    public void setPaxClaimchecks(int i, com.bagnet.nettracer.ws.v1_1.WS_PVClaimChecks _value) {
         this.paxClaimchecks[i] = _value;
     }
 
@@ -264,7 +264,7 @@ public class WS_PVIncident  implements java.io.Serializable {
      * 
      * @return paxCommunication
      */
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication[] getPaxCommunication() {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVPaxCommunication[] getPaxCommunication() {
         return paxCommunication;
     }
 
@@ -274,15 +274,15 @@ public class WS_PVIncident  implements java.io.Serializable {
      * 
      * @param paxCommunication
      */
-    public void setPaxCommunication(com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication[] paxCommunication) {
+    public void setPaxCommunication(com.bagnet.nettracer.ws.v1_1.WS_PVPaxCommunication[] paxCommunication) {
         this.paxCommunication = paxCommunication;
     }
 
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication getPaxCommunication(int i) {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVPaxCommunication getPaxCommunication(int i) {
         return this.paxCommunication[i];
     }
 
-    public void setPaxCommunication(int i, com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication _value) {
+    public void setPaxCommunication(int i, com.bagnet.nettracer.ws.v1_1.WS_PVPaxCommunication _value) {
         this.paxCommunication[i] = _value;
     }
 

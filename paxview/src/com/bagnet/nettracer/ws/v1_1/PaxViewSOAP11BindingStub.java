@@ -42,7 +42,7 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
         param.setNillable(true);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "WS_PVIncident"));
-        oper.setReturnClass(com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident.class);
+        oper.setReturnClass(com.bagnet.nettracer.ws.v1_1.WS_PVIncident.class);
         oper.setReturnQName(new javax.xml.namespace.QName("http://v1_1.ws.nettracer.bagnet.com", "return"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
@@ -70,7 +70,7 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
         param.setOmittable(true);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "WS_PVIncident"));
-        oper.setReturnClass(com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident.class);
+        oper.setReturnClass(com.bagnet.nettracer.ws.v1_1.WS_PVIncident.class);
         oper.setReturnQName(new javax.xml.namespace.QName("http://v1_1.ws.nettracer.bagnet.com", "return"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
@@ -91,7 +91,7 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
         param.setNillable(true);
         oper.addParameter(param);
         oper.setReturnType(new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "WS_PVIncident"));
-        oper.setReturnClass(com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident.class);
+        oper.setReturnClass(com.bagnet.nettracer.ws.v1_1.WS_PVIncident.class);
         oper.setReturnQName(new javax.xml.namespace.QName("http://v1_1.ws.nettracer.bagnet.com", "return"));
         oper.setStyle(org.apache.axis.constants.Style.WRAPPED);
         oper.setUse(org.apache.axis.constants.Use.LITERAL);
@@ -130,35 +130,35 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
             java.lang.Class simplelistdf = org.apache.axis.encoding.ser.SimpleListDeserializerFactory.class;
             qName = new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "WS_PVClaimChecks");
             cachedSerQNames.add(qName);
-            cls = com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVClaimChecks.class;
+            cls = com.bagnet.nettracer.ws.v1_1.WS_PVClaimChecks.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "WS_PVIncident");
             cachedSerQNames.add(qName);
-            cls = com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident.class;
+            cls = com.bagnet.nettracer.ws.v1_1.WS_PVIncident.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "WS_PVItem");
             cachedSerQNames.add(qName);
-            cls = com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVItem.class;
+            cls = com.bagnet.nettracer.ws.v1_1.WS_PVItem.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "WS_PVPassenger");
             cachedSerQNames.add(qName);
-            cls = com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPassenger.class;
+            cls = com.bagnet.nettracer.ws.v1_1.WS_PVPassenger.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
 
             qName = new javax.xml.namespace.QName("http://paxview.v1_1.ws.nettracer.bagnet.com/xsd", "WS_PVPaxCommunication");
             cachedSerQNames.add(qName);
-            cls = com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication.class;
+            cls = com.bagnet.nettracer.ws.v1_1.WS_PVPaxCommunication.class;
             cachedSerClasses.add(cls);
             cachedSerFactories.add(beansf);
             cachedDeserFactories.add(beandf);
@@ -229,7 +229,7 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
         }
     }
 
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident writePassengerComment(java.lang.String incident_id, java.lang.String comment, java.lang.String username, java.lang.String password) throws java.rmi.RemoteException {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVIncident writePassengerComment(java.lang.String incident_id, java.lang.String comment, java.lang.String username, java.lang.String password) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -253,9 +253,9 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
         else {
             extractAttachments(_call);
             try {
-                return (com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident) _resp;
+                return (com.bagnet.nettracer.ws.v1_1.WS_PVIncident) _resp;
             } catch (java.lang.Exception _exception) {
-                return (com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident) org.apache.axis.utils.JavaUtils.convert(_resp, com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident.class);
+                return (com.bagnet.nettracer.ws.v1_1.WS_PVIncident) org.apache.axis.utils.JavaUtils.convert(_resp, com.bagnet.nettracer.ws.v1_1.WS_PVIncident.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -263,7 +263,7 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
 }
     }
 
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident getPaxView(java.lang.String incident_id, java.lang.String lastname, java.lang.String username, java.lang.String password, java.lang.Boolean msgsReadByUser) throws java.rmi.RemoteException {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVIncident getPaxView(java.lang.String incident_id, java.lang.String lastname, java.lang.String username, java.lang.String password, java.lang.Boolean msgsReadByUser) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -287,9 +287,9 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
         else {
             extractAttachments(_call);
             try {
-                return (com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident) _resp;
+                return (com.bagnet.nettracer.ws.v1_1.WS_PVIncident) _resp;
             } catch (java.lang.Exception _exception) {
-                return (com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident) org.apache.axis.utils.JavaUtils.convert(_resp, com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident.class);
+                return (com.bagnet.nettracer.ws.v1_1.WS_PVIncident) org.apache.axis.utils.JavaUtils.convert(_resp, com.bagnet.nettracer.ws.v1_1.WS_PVIncident.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {
@@ -297,7 +297,7 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
 }
     }
 
-    public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident getPaxViewIvr(java.lang.String incident_id, java.lang.String username, java.lang.String password) throws java.rmi.RemoteException {
+    public com.bagnet.nettracer.ws.v1_1.WS_PVIncident getPaxViewIvr(java.lang.String incident_id, java.lang.String username, java.lang.String password) throws java.rmi.RemoteException {
         if (super.cachedEndpoint == null) {
             throw new org.apache.axis.NoEndPointException();
         }
@@ -321,9 +321,9 @@ public class PaxViewSOAP11BindingStub extends org.apache.axis.client.Stub implem
         else {
             extractAttachments(_call);
             try {
-                return (com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident) _resp;
+                return (com.bagnet.nettracer.ws.v1_1.WS_PVIncident) _resp;
             } catch (java.lang.Exception _exception) {
-                return (com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident) org.apache.axis.utils.JavaUtils.convert(_resp, com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident.class);
+                return (com.bagnet.nettracer.ws.v1_1.WS_PVIncident) org.apache.axis.utils.JavaUtils.convert(_resp, com.bagnet.nettracer.ws.v1_1.WS_PVIncident.class);
             }
         }
   } catch (org.apache.axis.AxisFault axisFaultException) {

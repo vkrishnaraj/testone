@@ -12,8 +12,8 @@ import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.SimpleFormController;
 
-import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident;
-import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVPaxCommunication;
+import com.bagnet.nettracer.ws.v1_1.WS_PVIncident;
+import com.bagnet.nettracer.ws.v1_1.WS_PVPaxCommunication;
 
 public class ClaimDetailController extends SimpleFormController {
 

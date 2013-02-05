@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.ws.v1_1.PaxViewLocator;
 import com.bagnet.nettracer.ws.v1_1.PaxViewPortType;
-import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident;
+import com.bagnet.nettracer.ws.v1_1.WS_PVIncident;
 
 public class PaxViewServiceImpl implements PaxViewService {
 

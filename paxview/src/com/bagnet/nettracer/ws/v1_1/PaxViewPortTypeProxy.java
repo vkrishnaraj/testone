@@ -44,19 +44,19 @@ public class PaxViewPortTypeProxy implements com.bagnet.nettracer.ws.v1_1.PaxVie
     return paxViewPortType;
   }
   
-  public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident writePassengerComment(java.lang.String incident_id, java.lang.String comment, java.lang.String username, java.lang.String password) throws java.rmi.RemoteException{
+  public com.bagnet.nettracer.ws.v1_1.WS_PVIncident writePassengerComment(java.lang.String incident_id, java.lang.String comment, java.lang.String username, java.lang.String password) throws java.rmi.RemoteException{
     if (paxViewPortType == null)
       _initPaxViewPortTypeProxy();
     return paxViewPortType.writePassengerComment(incident_id, comment, username, password);
   }
   
-  public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident getPaxView(java.lang.String incident_id, java.lang.String lastname, java.lang.String username, java.lang.String password, java.lang.Boolean msgsReadByUser) throws java.rmi.RemoteException{
+  public com.bagnet.nettracer.ws.v1_1.WS_PVIncident getPaxView(java.lang.String incident_id, java.lang.String lastname, java.lang.String username, java.lang.String password, java.lang.Boolean msgsReadByUser) throws java.rmi.RemoteException{
     if (paxViewPortType == null)
       _initPaxViewPortTypeProxy();
     return paxViewPortType.getPaxView(incident_id, lastname, username, password, msgsReadByUser);
   }
   
-  public com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident getPaxViewIvr(java.lang.String incident_id, java.lang.String username, java.lang.String password) throws java.rmi.RemoteException{
+  public com.bagnet.nettracer.ws.v1_1.WS_PVIncident getPaxViewIvr(java.lang.String incident_id, java.lang.String username, java.lang.String password) throws java.rmi.RemoteException{
     if (paxViewPortType == null)
       _initPaxViewPortTypeProxy();
     return paxViewPortType.getPaxViewIvr(incident_id, username, password);

@@ -5,7 +5,7 @@
 
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location" value="resource:/paxview.properties" />
+		<property name="location" value="WEB-INF/classes/paxview.properties" />
 		<property name="properties">
 			<props>
 				<prop key="default.locale">en</prop>

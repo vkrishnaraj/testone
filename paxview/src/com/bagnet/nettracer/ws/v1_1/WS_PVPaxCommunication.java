@@ -5,7 +5,7 @@
  * by the Apache Axis 1.4 Apr 22, 2006 (06:55:48 PDT) WSDL2Java emitter.
  */
 
-package com.bagnet.nettracer.ws.v1_1.paxview.xsd;
+package com.bagnet.nettracer.ws.v1_1;
 
 public class WS_PVPaxCommunication  implements java.io.Serializable {
     private java.lang.String acknowledged_agent;

@@ -42,6 +42,11 @@
 				<include name="index.jsp" />
 			</fileset>
 		</copy>
+	    <manifest file="${build.dir}/${company.name}-war/META-INF/MANIFEST.MF">
+	    	<attribute name="Dependencies" value="
+	    		org.antlr
+	    		"/>
+	    </manifest>
 		<copy todir="${build.dir}/${company.name}-war/WEB-INF/classes" overwrite="true">
 			<fileset dir="${build.classes.dir}" />
 			<fileset file="${companies.dir}/${company.name}/${environment.name}/paxview.properties" />
@@ -54,7 +59,7 @@
 			<fileset file="${companies.dir}/${company.name}/jboss-web.xml" />
 		</copy>
 		<antcall target="delete-jboss-web" />
-		<war destfile="${dist.dir}/${company.name}-pv-${environment.name}.war" duplicate="preserve" compress="true">
+		<war manifest="${build.dir}/${company.name}-war/META-INF/MANIFEST.MF" destfile="${dist.dir}/${company.name}-pv-${environment.name}.war" duplicate="preserve" compress="true">
 			<fileset dir="${build.dir}/${company.name}-war"/>
 		</war>
 	</target>

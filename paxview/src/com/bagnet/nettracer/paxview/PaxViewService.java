@@ -4,7 +4,7 @@ import java.rmi.RemoteException;
 
 import javax.xml.rpc.ServiceException;
 
-import com.bagnet.nettracer.ws.v1_1.paxview.xsd.WS_PVIncident;
+import com.bagnet.nettracer.ws.v1_1.WS_PVIncident;
 
 public interface PaxViewService {
 
