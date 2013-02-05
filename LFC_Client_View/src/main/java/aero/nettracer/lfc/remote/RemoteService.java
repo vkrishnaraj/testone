@@ -2,8 +2,8 @@ package aero.nettracer.lfc.remote;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
-import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -19,11 +19,10 @@ import aero.nettracer.lfc.model.LostReportBean;
 public class RemoteService {
 	static String user = null;
 	static String password = null;
-	// static String url = "jnp://127.0.0.1:1199";
-	// static String url = "jnp://192.168.2.145:1399";
-	// static String url = "jnp://184.172.41.2:1199";
 	static String urlLF = System.getProperty("lfc.remote.url");
 	static String urlAB = System.getProperty("ab.remote.url");
+	static String remoteLF = System.getProperty("lfc.remote.bean");
+	static String remoteAB = System.getProperty("ab.remote.bean");
 	
 	static Context ctx;
 	
@@ -47,33 +46,20 @@ public class RemoteService {
 	}
 	
 	public static Context getInitialContext(String url) throws NamingException {
-		Properties p = new Properties();
-		p.put("jnp.socketFactory", "org.jnp.interfaces.TimedSocketFactory");
-		// p.put("jnp.timeout", "5000");
-		// p.put("jnp.sotimeout", "10000");
-		p.put(Context.INITIAL_CONTEXT_FACTORY,
-				"org.jnp.interfaces.NamingContextFactory");
-		p.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces");
-		p.put(Context.PROVIDER_URL, url);
-		if (user != null) {
-			System.out.println("user: " + user);
-			p.put(Context.SECURITY_PRINCIPAL, user);
-			if (password == null)
-				password = "";
-			p.put(Context.SECURITY_CREDENTIALS, password);
-		}
+		Hashtable p = new Hashtable();
+		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		return new InitialContext(p);
 	}
 	
 	public static LFCClientServiceRemote getRemoteServiceAB() throws NamingException {
 		ctx = getInitialContextAB();
-		LFCClientServiceRemote o = (LFCClientServiceRemote) ctx.lookup("tracer/LFCClientServiceBean/remote");
+		LFCClientServiceRemote o = (LFCClientServiceRemote) ctx.lookup(remoteAB);
 		return o;
 	}
 	
 	public static LFCClientServiceRemote getRemoteServiceLF() throws NamingException {
 		ctx = getInitialContextLF();
-		LFCClientServiceRemote o = (LFCClientServiceRemote) ctx.lookup("tracer/LFCClientServiceBean/remote");
+		LFCClientServiceRemote o = (LFCClientServiceRemote) ctx.lookup(remoteLF);
 		return o;
 	}
 	
