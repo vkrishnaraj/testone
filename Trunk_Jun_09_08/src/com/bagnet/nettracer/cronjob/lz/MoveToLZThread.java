@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
@@ -175,7 +176,9 @@ public class MoveToLZThread {
 		try {
 
 				// rotate through companies
-				String sql = "select * from company_specific_variable order by companycode_ID";
+
+				Session sess = HibernateWrapper.getDirtySession().openSession();
+				String sql = "select mbr_to_lz_days, damaged_to_lz_days, miss_to_lz_days, ohd_to_lz_days, companycode_ID from company_specific_variable order by companycode_ID";
 				if (company.length() > 0) sql = "select * from company_specific_variable where companycode_ID = '" + company + "'";
 				
 				int mbr = 0;	// days to move lost/delay
@@ -187,15 +190,21 @@ public class MoveToLZThread {
 				
 				Connection conn = DriverManager.getConnection(mbr_dburl, mbr_dbuid, mbr_dbpwd);
 				Statement st = conn.createStatement();
-				ResultSet rs = st
-						.executeQuery(sql);
 
-				while (rs.next()) {
-					mbr = rs.getInt("mbr_to_lz_days");
-					damaged = rs.getInt("damaged_to_lz_days");
-					missing = rs.getInt("miss_to_lz_days");
-					ohd = rs.getInt("ohd_to_lz_days");
-					company = rs.getString("companycode_ID");
+				SQLQuery q = sess.createSQLQuery(sql);
+//				ResultSet rs = st
+//						.executeQuery(sql);
+				List results=q.list();
+
+				Object[] row;
+				//while (rs.next()) {
+				for(int i=0;i<results.size();++i){
+					row=(Object[])results.get(i);
+					mbr = (Integer)row[0];//rs.getInt("mbr_to_lz_days");
+					damaged = (Integer)row[1];//rs.getInt("damaged_to_lz_days");
+					missing =(Integer)row[2]; //rs.getInt("miss_to_lz_days");
+					ohd =(Integer)row[3]; //rs.getInt("ohd_to_lz_days");
+					company =(String)row[4]; //rs.getString("companycode_ID");
 					
 
 					// only move if days is greater than 0
@@ -213,19 +222,25 @@ public class MoveToLZThread {
 //				st.executeUpdate("update item set bdo_id = null,status_ID=47 WHERE (BDO_ID NOT IN (SELECT bdo_id FROM bdo))");
 				st.executeUpdate("delete from message_copies where (message_id not in (select message_id from message))");
 				
-				sql = "SELECT station.companycode_id,incident.* FROM incident join station on incident.stationcreated_id = station.station_id WHERE (Incident_ID NOT IN (SELECT report_num FROM billing))";
-				st = conn.createStatement();
-				rs = st.executeQuery(sql);
+				sql = "SELECT station.companycode_id,incident.stationcreated_id,incident.incident_id,incident.createdate, incident.agent_id FROM incident join station on incident.stationcreated_id = station.station_id WHERE (Incident_ID NOT IN (SELECT report_num FROM billing))";
+				//st = conn.createStatement();
+				//rs = st.executeQuery(sql);
 				
 				Statement st2 = conn.createStatement();
+				q = sess.createSQLQuery(sql);
+//				ResultSet rs = st
+//						.executeQuery(sql);
+				results=q.list();
 
-				while (rs.next()) {
+				//while (rs.next()) {
+				for(int i=0;i<results.size();++i){
+					row=(Object[])results.get(i);
 					try {
 						st2.executeUpdate("insert into billing (companyCode,station_id,report_num,create_date_time,status_change_time,agent_id) values ('" 
-								+ rs.getString("companycode_id") + "'," + rs.getInt("stationcreated_id") + ",'" + rs.getString("incident_id") + "','" + rs.getString("createdate") + "','" + rs.getString("createdate") + "'," + rs.getInt("agent_id") + ")");
+								+ ((String)row[0]) + "'," + ((Integer)row[1]) + ",'" + ((String)row[2])+ "','" + ((String)row[3]) + "','" + ((String)row[3]) + "'," + ((Integer)row[4]) + ")");
 					
 						logger.info("insert into billing (companyCode,station_id,report_num,create_date_time,status_change_time,agent_id) values ('" 
-								+ rs.getString("companycode_id") + "'," + rs.getInt("stationcreated_id") + ",'" + rs.getString("incident_id") + "','" + rs.getString("createdate") + "','" + rs.getString("createdate") + "'," + rs.getInt("agent_id") + ")");
+								+ ((String)row[0]) + "'," + ((Integer)row[1]) + ",'" + ((String)row[2])+ "','" + ((String)row[3]) + "','" + ((String)row[3]) + "'," + ((Integer)row[4]) + ")");
 					} catch (Exception e) {
 						logger.error("unable to update billing: " + e);
 					}

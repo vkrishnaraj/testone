@@ -56,7 +56,7 @@ public class ForwardNoticeBMO {
 		HibernateUtils.save(notice, sess);
 	}
 
-	public static int getForwardsForStationCount(Station station, int status) {
+	public static long getForwardsForStationCount(Station station, int status) {
 
 		Session sess = null;
 		try {
@@ -67,7 +67,7 @@ public class ForwardNoticeBMO {
 				cri.add(Expression.eq("status", status));
 			}
 			cri.setProjection(Projections.rowCount());
-			return (Integer) cri.uniqueResult();
+			return (Long) cri.uniqueResult();
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
 import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
@@ -103,15 +104,15 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 		query.setDate("startDate", startDate);
 		query.setDate("endDate", endDate);
 		
-		query.addScalar("received_date", Hibernate.STRING);
-		query.addScalar("stationcode", Hibernate.STRING);
-		query.addScalar("hvir_count", Hibernate.INTEGER);
-		query.addScalar("lvir_count", Hibernate.INTEGER);
-		query.addScalar("hvirwr_count", Hibernate.INTEGER);
-		query.addScalar("lvirwr_count", Hibernate.INTEGER);
-		query.addScalar("hvirwor_count", Hibernate.INTEGER);
-		query.addScalar("lvirwor_count", Hibernate.INTEGER);
-		query.addScalar("box_count", Hibernate.INTEGER);
+		query.addScalar("received_date", StandardBasicTypes.STRING);
+		query.addScalar("stationcode", StandardBasicTypes.STRING);
+		query.addScalar("hvir_count", StandardBasicTypes.INTEGER);
+		query.addScalar("lvir_count", StandardBasicTypes.INTEGER);
+		query.addScalar("hvirwr_count", StandardBasicTypes.INTEGER);
+		query.addScalar("lvirwr_count", StandardBasicTypes.INTEGER);
+		query.addScalar("hvirwor_count", StandardBasicTypes.INTEGER);
+		query.addScalar("lvirwor_count", StandardBasicTypes.INTEGER);
+		query.addScalar("box_count", StandardBasicTypes.INTEGER);
 		
 	}
 	

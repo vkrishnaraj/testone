@@ -8,14 +8,15 @@ import org.hibernate.Session;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.datafeed.DataFeedLog;
 import com.bagnet.nettracer.tracing.db.datafeed.DataFeedLog.DataType;
 
-public class DataFeedLogBmo extends HibernateDaoSupport {
+public class DataFeedLogBmo {
 
-	@Transactional(readOnly = true)
+
 	public boolean isAlreadyProcessedByType(Date fileDate, DataType feedType, String companycode_ID) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		
 		Query q = sess.getNamedQuery(DataFeedLog.ALREADY_PROCESSED_BY_TYPE);
 		q.setParameter("fileDate", fileDate);

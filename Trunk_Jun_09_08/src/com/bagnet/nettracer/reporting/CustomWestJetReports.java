@@ -8,7 +8,9 @@ import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
-import org.hibernate.classic.Session;
+//import org.hibernate.classic.Session;
+import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -124,8 +126,8 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("column1", Hibernate.STRING);
-			query.addScalar("column2", Hibernate.STRING);
+			query.addScalar("column1", StandardBasicTypes.STRING);
+			query.addScalar("column2", StandardBasicTypes.STRING);
 			List results = query.list();
 			
 			if (results.isEmpty()) {
@@ -136,7 +138,7 @@ public class CustomWestJetReports {
 			if (stationCode != null && !stationCode.equals("")) {
 				session = HibernateWrapper.getSession().openSession();
 				SQLQuery query2 = session.createSQLQuery(sql2);
-				query2.addScalar("column1", Hibernate.STRING);
+				query2.addScalar("column1", StandardBasicTypes.STRING);
 				results2 = query2.list();
 
 			}
@@ -478,7 +480,7 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("total", Hibernate.LONG);
+			query.addScalar("total", StandardBasicTypes.LONG);
 			List results = query.list();
 			return ((Long) results.get(0)).intValue();
 
@@ -514,7 +516,7 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("total", Hibernate.LONG);
+			query.addScalar("total", StandardBasicTypes.LONG);
 			List results = query.list();
 			return ((Long) results.get(0)).intValue();
 
@@ -544,7 +546,7 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("total", Hibernate.LONG);
+			query.addScalar("total", StandardBasicTypes.LONG);
 			List results = query.list();
 			return ((Long) results.get(0)).intValue();
 
@@ -574,7 +576,7 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("total", Hibernate.LONG);
+			query.addScalar("total", StandardBasicTypes.LONG);
 			List results = query.list();
 			return ((Long) results.get(0)).intValue();
 
@@ -672,8 +674,8 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("column1", Hibernate.STRING);
-			query.addScalar("column2", Hibernate.STRING);
+			query.addScalar("column1", StandardBasicTypes.STRING);
+			query.addScalar("column2", StandardBasicTypes.STRING);
 			List results = query.list();
 			
 			if (results.isEmpty()) {
@@ -684,11 +686,11 @@ public class CustomWestJetReports {
 			if (stationCode != null && !stationCode.equals("")) {
 				session = HibernateWrapper.getSession().openSession();
 				SQLQuery query2 = session.createSQLQuery(sql2);
-				query2.addScalar("column1", Hibernate.STRING);
-				query2.addScalar("column2", Hibernate.STRING);
-				query2.addScalar("column3", Hibernate.STRING);
-				query2.addScalar("column4", Hibernate.STRING);
-				query2.addScalar("column5", Hibernate.STRING);
+				query2.addScalar("column1", StandardBasicTypes.STRING);
+				query2.addScalar("column2", StandardBasicTypes.STRING);
+				query2.addScalar("column3", StandardBasicTypes.STRING);
+				query2.addScalar("column4", StandardBasicTypes.STRING);
+				query2.addScalar("column5", StandardBasicTypes.STRING);
 				results2 = query2.list();
 
 			}
@@ -791,10 +793,10 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("column1", Hibernate.STRING);
-			query.addScalar("column2", Hibernate.STRING);
-			query.addScalar("column3", Hibernate.STRING);
-			query.addScalar("column4", Hibernate.STRING);
+			query.addScalar("column1", StandardBasicTypes.STRING);
+			query.addScalar("column2", StandardBasicTypes.STRING);
+			query.addScalar("column3", StandardBasicTypes.STRING);
+			query.addScalar("column4", StandardBasicTypes.STRING);
 			List results = query.list();
 			
 			if (results.isEmpty()) {
@@ -840,7 +842,7 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("total", Hibernate.LONG);
+			query.addScalar("total", StandardBasicTypes.LONG);
 			List results = query.list();
 			return ((Long) results.get(0)).intValue();
 
@@ -938,8 +940,8 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("column1", Hibernate.STRING);
-			query.addScalar("column2", Hibernate.STRING);
+			query.addScalar("column1", StandardBasicTypes.STRING);
+			query.addScalar("column2", StandardBasicTypes.STRING);
 			List results = query.list();
 			
 			if (results.isEmpty()) {
@@ -950,11 +952,11 @@ public class CustomWestJetReports {
 			if (airlineCode != null && !airlineCode.equals("")) {
 				session = HibernateWrapper.getSession().openSession();
 				SQLQuery query2 = session.createSQLQuery(sql2);
-				query2.addScalar("column1", Hibernate.STRING);
-				query2.addScalar("column2", Hibernate.INTEGER);
-				query2.addScalar("column3", Hibernate.STRING);
-				query2.addScalar("column4", Hibernate.STRING);
-				query2.addScalar("column5", Hibernate.STRING);
+				query2.addScalar("column1", StandardBasicTypes.STRING);
+				query2.addScalar("column2", StandardBasicTypes.INTEGER);
+				query2.addScalar("column3", StandardBasicTypes.STRING);
+				query2.addScalar("column4", StandardBasicTypes.STRING);
+				query2.addScalar("column5", StandardBasicTypes.STRING);
 				results2 = query2.list();
 
 			}
@@ -1110,16 +1112,16 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("column1", Hibernate.STRING);
-			query.addScalar("column2", Hibernate.INTEGER);
-			query.addScalar("column3", Hibernate.INTEGER);
-			query.addScalar("column4", Hibernate.INTEGER);
-			query.addScalar("column5", Hibernate.INTEGER);
-			query.addScalar("column6", Hibernate.INTEGER);
-			query.addScalar("column7", Hibernate.INTEGER);
-			query.addScalar("column8", Hibernate.INTEGER);
-			query.addScalar("column9", Hibernate.INTEGER);
-			query.addScalar("column10", Hibernate.INTEGER);
+			query.addScalar("column1", StandardBasicTypes.STRING);
+			query.addScalar("column2", StandardBasicTypes.INTEGER);
+			query.addScalar("column3", StandardBasicTypes.INTEGER);
+			query.addScalar("column4", StandardBasicTypes.INTEGER);
+			query.addScalar("column5", StandardBasicTypes.INTEGER);
+			query.addScalar("column6", StandardBasicTypes.INTEGER);
+			query.addScalar("column7", StandardBasicTypes.INTEGER);
+			query.addScalar("column8", StandardBasicTypes.INTEGER);
+			query.addScalar("column9", StandardBasicTypes.INTEGER);
+			query.addScalar("column10", StandardBasicTypes.INTEGER);
 			List results = query.list();
 			
 			if (results.isEmpty()) {
@@ -1201,12 +1203,12 @@ public class CustomWestJetReports {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			SQLQuery query = session.createSQLQuery(sql);
-			query.addScalar("column1", Hibernate.STRING);
-			query.addScalar("column2", Hibernate.STRING);
-			query.addScalar("column3", Hibernate.STRING);
-			query.addScalar("column4", Hibernate.STRING);
-			query.addScalar("column5", Hibernate.STRING);
-			query.addScalar("column6", Hibernate.STRING);
+			query.addScalar("column1", StandardBasicTypes.STRING);
+			query.addScalar("column2", StandardBasicTypes.STRING);
+			query.addScalar("column3", StandardBasicTypes.STRING);
+			query.addScalar("column4", StandardBasicTypes.STRING);
+			query.addScalar("column5", StandardBasicTypes.STRING);
+			query.addScalar("column6", StandardBasicTypes.STRING);
 			List results = query.list();
 			
 			if (results.isEmpty()) {

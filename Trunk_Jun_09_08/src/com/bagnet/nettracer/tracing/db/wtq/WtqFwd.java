@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.Transient;
+import javax.persistence.ElementCollection;
+
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -48,7 +50,7 @@ public abstract class WtqFwd extends WorldTracerQueue {
 		this.handleCopy = handleCopy;
 	}
 
-	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class, fetch = FetchType.EAGER)
+	@ElementCollection(targetClass = java.lang.String.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "wtq_name", joinColumns = @JoinColumn(name = "wt_queue_id"))
 	@Column(name = "pax_name", nullable = false, length = 20)
 	@Fetch(FetchMode.SELECT)
@@ -60,7 +62,7 @@ public abstract class WtqFwd extends WorldTracerQueue {
 		this.name = name;
 	}
 
-	@org.hibernate.annotations.CollectionOfElements(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinTable(name = "WTQ_SEGMENT", joinColumns = @JoinColumn(name = "segment_id"))
 	@org.hibernate.annotations.OrderBy(clause = "departdate asc, departureTime asc")
 	@Fetch(FetchMode.SELECT)
@@ -99,7 +101,7 @@ public abstract class WtqFwd extends WorldTracerQueue {
 		this.fwdDestinationStation = fwdDestinationStation;
 	}
 
-	@org.hibernate.annotations.CollectionOfElements(targetElement = java.lang.String.class, fetch = FetchType.EAGER)
+	@ElementCollection (targetClass = java.lang.String.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "wtq_teletype", joinColumns = @JoinColumn(name = "wt_queue_id"))
 	@Column(name = "ttype_address", nullable = false)
 	@Fetch(FetchMode.SELECT)

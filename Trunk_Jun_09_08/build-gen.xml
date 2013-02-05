@@ -38,9 +38,14 @@
 		<fileset dir="${basedir}/lib/provided">
 			<patternset refid="jar.files" />
 		</fileset>
-		<fileset dir="${app.home.jb5}\common\lib">
+		<fileset dir="${app.home.jb5}\server\all\lib">
 			<patternset refid="jar.files" />
 		</fileset>
+		<!--
+		<fileset dir="${app.home.jb7}\common\lib">
+			<patternset refid="jar.files" />
+		</fileset>
+		-->
 	</path>
 
 	<target name="hibernate_generate" description="Generates Hibernate class descriptor files." depends="compile-web">
@@ -197,9 +202,17 @@
 			<fileset dir="${basedir}/lib/provided">
 				<patternset refid="jar.files" />
 			</fileset>
+			<fileset dir="${app.home.jb5}\server\all\lib">
+				<patternset refid="jar.files" />
+			</fileset>
 			<fileset dir="${app.home.jb5}\common\lib">
 				<patternset refid="jar.files" />
 			</fileset>
+			<!--
+			<fileset dir="${app.home.jb7}\common\lib">
+				<patternset refid="jar.files" />
+			</fileset>
+			-->
 		</path>
 	</target>
 

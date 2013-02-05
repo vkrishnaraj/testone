@@ -497,7 +497,11 @@ public class AuditIncidentUtils {
 			//DeliveryInstructions
 			if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_DELIVERY_INSTRUCTIONS) && incident.getItemtype().getItemType_ID()==TracingConstants.LOST_DELAY){
 				DeliveryInstructions DI = incident.getDeliveryInstructions();
-				audit_inc.setInstructions(DI.getInstructions());
+				if(DI!=null){
+					audit_inc.setInstructions(DI.getInstructions());
+				} else {
+					audit_inc.setInstructions("");
+				}
 			}
 
 			audit_inc.setOc_claim_id(incident.getOc_claim_id());

@@ -16,6 +16,7 @@ import java.util.TimeZone;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -141,7 +142,7 @@ public class ExpensePayout implements Serializable {
 
 
 
-	@org.hibernate.annotations.CollectionOfElements(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinTable(name = "expense_comment", joinColumns = @JoinColumn(name = "expensepayout_ID"))
 	@org.hibernate.annotations.OrderBy(clause = "createDate asc")
 	@Fetch(FetchMode.SELECT)

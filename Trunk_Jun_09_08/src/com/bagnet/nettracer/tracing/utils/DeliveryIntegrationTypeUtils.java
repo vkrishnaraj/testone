@@ -121,9 +121,10 @@ public class DeliveryIntegrationTypeUtils {
 			
 			
 			// Integration with delivery company.
-			if (currentDeliveryCompany.getDelivery_integration_type() != DeliveryIntegrationType.NONE) {
+			if (currentDeliveryCompany.getDelivery_integration_type() != DeliveryIntegrationType.NONE && currentDeliveryCompany.getDelivery_integration_type()!=null) {
 				
 				DeliveryIntegrationType type = currentDeliveryCompany.getDelivery_integration_type();
+				
 				BDOIntegration integration = null;
 				
 				// Add new integration types here. 

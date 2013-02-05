@@ -33,6 +33,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -458,9 +459,9 @@ public class CustomReportBMO implements
 				lossQuery.setDate("enddate", edate);
 			}
 			
-			lossQuery.addScalar("station_id", Hibernate.LONG);
-			lossQuery.addScalar("loss_code", Hibernate.INTEGER);
-			lossQuery.addScalar("count", Hibernate.INTEGER);
+			lossQuery.addScalar("station_id", StandardBasicTypes.LONG);
+			lossQuery.addScalar("loss_code", StandardBasicTypes.INTEGER);
+			lossQuery.addScalar("count", StandardBasicTypes.INTEGER);
 			
 			List<Object[]> lossList = lossQuery.list();
 			return lossList;
@@ -500,15 +501,15 @@ public class CustomReportBMO implements
 					stationQuery.setParameterList("station_ID", stationList);
 			}
 			
-			stationQuery.addScalar("stationcode", Hibernate.STRING);
-			stationQuery.addScalar("region_id", Hibernate.LONG);
-			stationQuery.addScalar("region_name", Hibernate.STRING);
-			stationQuery.addScalar("region_director", Hibernate.STRING);
-			stationQuery.addScalar("station_goal", Hibernate.DOUBLE);
-			stationQuery.addScalar("companycode", Hibernate.STRING);
-			stationQuery.addScalar("station_id", Hibernate.LONG);
-			stationQuery.addScalar("region_target", Hibernate.DOUBLE);
-			stationQuery.addScalar("countryCode", Hibernate.STRING);
+			stationQuery.addScalar("stationcode", StandardBasicTypes.STRING);
+			stationQuery.addScalar("region_id", StandardBasicTypes.LONG);
+			stationQuery.addScalar("region_name", StandardBasicTypes.STRING);
+			stationQuery.addScalar("region_director", StandardBasicTypes.STRING);
+			stationQuery.addScalar("station_goal", StandardBasicTypes.DOUBLE);
+			stationQuery.addScalar("companycode", StandardBasicTypes.STRING);
+			stationQuery.addScalar("station_id", StandardBasicTypes.LONG);
+			stationQuery.addScalar("region_target", StandardBasicTypes.DOUBLE);
+			stationQuery.addScalar("countryCode", StandardBasicTypes.STRING);
 			
 			List<Object[]> stationList = stationQuery.list();
 			return stationList;

@@ -108,6 +108,7 @@ public class PropertyBMO {
 	public static final String CENTRAL_FRAUD_TIMEOUT = "fraud.timeout";
 	
 	public static final String LF_EJB_SERVER_LOCATION = "lf.server.location";
+	public static final String LF_EJB_SERVER_NAME = "lf.server.name";
 	public static final String LF_AUTO_CLOSE_DAYS = "lf.auto.close";
 	public static final String LF_AUTO_SALVAGE_DAYS = "lf.auto.salvage";
 	public static final String LF_USER = "lf.user";

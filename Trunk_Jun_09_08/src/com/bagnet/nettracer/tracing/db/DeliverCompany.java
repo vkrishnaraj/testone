@@ -7,11 +7,13 @@ import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
 
 /**
  * @author Administrator
- *z 
+ * 
  * @hibernate.class table="delivercompany"
- * @hibernate.typedef name="deliveryIntegrationType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
- * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClassname"
+ * @hibernate.typedef name="deliveryIntegrationType" class="org.hibernate.type.EnumType"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClass"
  * 			value="com.bagnet.nettracer.tracing.db.DeliveryIntegrationType"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="type"
+ * 			value="12"
  */
 public class DeliverCompany implements Serializable {
 	
@@ -217,7 +219,12 @@ public class DeliverCompany implements Serializable {
 	 * @return Returns the string representation of the delivery integration type.
 	 */
 	public String getDeliveryIntegrationTypeString() {
-		return DeliveryIntegrationTypeUtils.getIntegrationTypeString(delivery_integration_type);
+		if(delivery_integration_type!=null){
+			return DeliveryIntegrationTypeUtils.getIntegrationTypeString(delivery_integration_type);
+		} else {
+			return DeliveryIntegrationTypeUtils.getIntegrationTypeString(DeliveryIntegrationType.NONE);
+		}
+		
 	}
 
 }

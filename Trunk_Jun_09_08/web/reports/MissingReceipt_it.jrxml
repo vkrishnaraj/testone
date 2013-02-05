@@ -4,7 +4,7 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -234,7 +234,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[A nome di US Airways, La preghiamo di accettare le nostre più sentite scuse per lo smarrimento di qualsiasi articolo/i dal suo bagaglio. Al fine di considerare un eventuale rimborso, sarà necessario compilare il Passenger Property Form (PPF), modulo scaricabile dal sito:]]></text>
+				<text><![CDATA[A nome di US Airways, La preghiamo di accettare le nostre più sentite scuse per lo smarrimento di qualsiasi articolo/i dal suo bagaglio. Al fine di considerare un eventuale rimborso, sarà necessario compilare il Passenger Property Form (PPF), modulo DISPONIBILE SUL sito:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-42" mode="Opaque" x="9" y="210" width="506" height="44" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -259,7 +259,7 @@ TUTTI I PASSEGGERI CHE VIAGGIANO IN EUROPA,SONO PREGATI DI CONTATTARE LA US Airw
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[www.usairways.com/baggage]]></text>
+				<text><![CDATA[www.usairways.com/baggagePPF]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-48" mode="Opaque" x="69" y="254" width="412" height="67" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -300,7 +300,7 @@ A meno che valori superiori non siano stati precedentemente dichiarati, il massi
 ]]></text>
 			</staticText>
 			<image scaleImage="RetainShape">
-				<reportElement key="image-2" x="473" y="688" width="76" height="38">
+				<reportElement key="image-2" mode="Transparent" x="473" y="688" width="76" height="38">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -352,7 +352,7 @@ A meno che valori superiori non siano stati precedentemente dichiarati, il massi
 				<text><![CDATA[Data:]]></text>
 			</staticText>
 			<image scaleImage="RetainShape">
-				<reportElement key="image-3" x="3" y="1" width="137" height="62">
+				<reportElement key="image-3" mode="Transparent" x="3" y="1" width="137" height="62">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>

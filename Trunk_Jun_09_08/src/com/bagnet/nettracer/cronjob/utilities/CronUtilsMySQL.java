@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
@@ -36,7 +37,7 @@ public class CronUtilsMySQL extends CronUtils{
 		Session sess = HibernateWrapper.getSession().openSession();
 		
 		SQLQuery query = sess.createSQLQuery(sql);
-		query.addScalar("wtq_status", Hibernate.STRING);
+		query.addScalar("wtq_status", StandardBasicTypes.STRING);
 		
 		List<String> list = (List<String>) query.list();
 		

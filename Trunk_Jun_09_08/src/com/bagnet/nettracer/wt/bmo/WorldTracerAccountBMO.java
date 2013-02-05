@@ -5,24 +5,23 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.wt.WorldTracerAccount;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
-public class WorldTracerAccountBMO extends HibernateDaoSupport {
+public class WorldTracerAccountBMO {
 	private static String INSTANCE_NAME = TracerProperties.getInstanceLabel();
 	private static final Logger logger = Logger.getLogger(WorldTracerAccountBMO.class);
 	
-	@Transactional(readOnly=true)
 	public List<WorldTracerAccount> getAccountNames(String companyCode) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery("from WorldTracerAccount a where a.companyCode = :companyCode and a.instanceName = :instanceName");
 		q.setString("companyCode", companyCode);
 		q.setString("instanceName", INSTANCE_NAME);
-		return (List<WorldTracerAccount>)q.list();
+		List<WorldTracerAccount> ret = (List<WorldTracerAccount>)q.list();
+		sess.close();
+		return ret;
 	}
 	
 	public static WorldTracerAccount getAccount(long id) {

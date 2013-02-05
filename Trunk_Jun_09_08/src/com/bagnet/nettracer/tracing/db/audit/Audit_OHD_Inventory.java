@@ -76,7 +76,7 @@ public class Audit_OHD_Inventory implements Serializable {
 	/**
 	 * @return Returns the description.
 	 * 
-	 * @hibernate.property type="string" length="255"
+	 * @hibernate.property type="text"
 	 */
 	public String getDescription() {
 		return description;

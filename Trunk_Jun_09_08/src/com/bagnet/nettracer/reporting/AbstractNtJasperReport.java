@@ -8,7 +8,8 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SQLQuery;
-import org.hibernate.classic.Session;
+//import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Agent;

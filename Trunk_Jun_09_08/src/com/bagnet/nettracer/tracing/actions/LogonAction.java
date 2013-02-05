@@ -315,7 +315,7 @@ public class LogonAction extends Action {
 				dto.setGroup(policy.getComponent().getSort_group());
 				dto.setHighPriority(false);
 
-				int entries = 0;
+				long entries = 0;
 				if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_OTHER_TASKS)) {
 					int x = TaskUtils.getActiveTaskCount(s.getStation_ID(), true);
 					if (x != -1)
@@ -324,11 +324,11 @@ public class LogonAction extends Action {
 					PcnSearchDTO pcnDto = new PcnSearchDTO();
 					pcnDto.setDestinationStation(agent.getStation().getStation_ID());
 					pcnDto.setStatus_ID(ProactiveNotification.STATUS_OPEN);
-					int x = ProactiveNotificationBMO.getCount(pcnDto, agent);
+					long x = ProactiveNotificationBMO.getCount(pcnDto, agent);
 					if (x != -1)
 						entries = x;
 				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_NOTICES)) {
-					int x = ForwardNoticeBMO.getForwardsForStationCount(s, ForwardNotice.OPEN_STATUS);
+					long x = ForwardNoticeBMO.getForwardsForStationCount(s, ForwardNotice.OPEN_STATUS);
 					if (x != -1)
 						entries = x;
 				} else {
@@ -449,7 +449,7 @@ public class LogonAction extends Action {
 																				if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVED_EXPENSES)) {
 																					SearchExpenseForm form = new SearchExpenseForm();
 																					form.setStatusId(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
-																					int x = ExpensePayoutBMO.countExpenses(form, agent);
+																					long x = ExpensePayoutBMO.countExpenses(form, agent);
 																					if (x != -1) {
 																						entries = x;
 																					}

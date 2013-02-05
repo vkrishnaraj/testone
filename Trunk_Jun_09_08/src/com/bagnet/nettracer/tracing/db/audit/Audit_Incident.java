@@ -99,7 +99,7 @@ public class Audit_Incident implements Serializable {
 	/**
 	 * @return Returns the tracingStatus.
 	 * 
-	 * @hibernate.property column="tracing_status_id" type="int"
+	 * @hibernate.property column="tracing_status_id" type="integer"
 	 */
 	public int getTracingStatus() {
 		return tracingStatus;
@@ -162,7 +162,7 @@ public class Audit_Incident implements Serializable {
 	/**
 	 * @return Returns the instructions associated with this incident.
 	 * 
-	 * @hibernate.property type="string"
+	 * @hibernate.property type="text"
 	 */
 	public String getInstructions() {
 		return instructions;
@@ -547,7 +547,7 @@ public class Audit_Incident implements Serializable {
 	/**
 	 * @return Returns the courtesyreport.
 	 * 
-	 * @hibernate.property type="int"
+	 * @hibernate.property type="integer"
 	 */
 	public int getCourtesyreport() {
 		return courtesyreport;
@@ -687,7 +687,7 @@ public class Audit_Incident implements Serializable {
 	/**
 	 * @return Returns the numbagchecked.
 	 * 
-	 * @hibernate.property type="integer" length="4"
+	 * @hibernate.property type="integer"
 	 */
 	public int getNumbagchecked() {
 		return numbagchecked;
@@ -704,7 +704,7 @@ public class Audit_Incident implements Serializable {
 	/**
 	 * @return Returns the numbagreceived.
 	 * 
-	 * @hibernate.property type="integer" length="4"
+	 * @hibernate.property type="integer"
 	 */
 	public int getNumbagreceived() {
 		return numbagreceived;
@@ -721,7 +721,7 @@ public class Audit_Incident implements Serializable {
 	/**
 	 * @return Returns the numpassengers.
 	 * 
-	 * @hibernate.property type="integer" length="4"
+	 * @hibernate.property type="integer"
 	 */
 	public int getNumpassengers() {
 		return numpassengers;
@@ -738,7 +738,7 @@ public class Audit_Incident implements Serializable {
 	/**
 	 * @return Returns the reportmethod.
 	 * 
-	 * @hibernate.property type="integer" length="4"
+	 * @hibernate.property type="integer"
 	 */
 	public int getReportmethod() {
 		return reportmethod;
@@ -856,7 +856,7 @@ public class Audit_Incident implements Serializable {
 	/**
 	 * @return Returns the nonrevenue.
 	 * 
-	 * @hibernate.property type="integer" length="1"
+	 * @hibernate.property type="integer"
 	 */
 	public int getNonrevenue() {
 		return nonrevenue;

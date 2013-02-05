@@ -5,16 +5,15 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.NamedQueries;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -26,7 +25,7 @@ public class WtqQoh extends WorldTracerQueue {
 
 	private Collection<OHD> ohdTags = new ArrayList<OHD>();
 
-	@org.hibernate.annotations.CollectionOfElements(fetch = FetchType.EAGER)
+	@ElementCollection(fetch = FetchType.EAGER)
 	@JoinTable(name = "WTQ_OHD_TAG", joinColumns = @JoinColumn(name = "wt_queue_id"))
 	@Column(name = "ohd_id", nullable = false)
 	@Fetch(FetchMode.SELECT)

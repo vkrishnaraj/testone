@@ -3,19 +3,19 @@ package com.bagnet.nettracer.tracing.bmo;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.criterion.Example;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Incident_Assoc;
 import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Lock.LockType;
 
-public class LockBMO extends HibernateDaoSupport {
+public class LockBMO {
 	
-	@Transactional
+	private static Logger logger = Logger.getLogger(LockBMO.class);
+	
 	public Lock createLock(LockType type, String key, Long durationMillis, Agent user) {
 		if(type == null || key == null) return null;
 		
@@ -34,27 +34,27 @@ public class LockBMO extends HibernateDaoSupport {
 		if(user!=null){
 			tmp.setOwner(String.valueOf(user.getAgent_ID()));
 		}
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		sess.save(tmp);
+		sess.close();
 		return tmp;
 	}
 	
-	@Transactional
 	public Lock createLock(LockType type, String key, Long durationMillis) {
 		return createLock(type, key, durationMillis, null);
 	}
 	
-	@Transactional
 	public Lock loadLock(LockType type, String key) {
 		if(type == null || key == null) return null;
 		
 		
 		
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Lock lock = new Lock();
 		lock.setLockKey(key);
 		lock.setLockType(type);
 		List list = sess.createCriteria(Lock.class).add(Example.create(lock)).list();
+		sess.close();
 		if(list != null && list.size() > 0){
 			return (Lock)list.get(0);
 		}
@@ -62,13 +62,14 @@ public class LockBMO extends HibernateDaoSupport {
 		return null;
 	}
 	
-	@Transactional
 	public void releaseLock(Lock lock) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			sess.delete(lock);
 		} catch (Exception ex) {
 			logger.error("LOCK FAILED TO DELETE: " + ex);
+		} finally {
+			sess.close();
 		}
 	}
 

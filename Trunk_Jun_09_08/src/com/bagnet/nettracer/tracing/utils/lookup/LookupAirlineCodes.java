@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
@@ -36,8 +37,8 @@ public class LookupAirlineCodes {
 		Session sess = HibernateWrapper.getSession().openSession();
 
 		SQLQuery query = sess.createSQLQuery("SELECT Airline_2_Character_Code, Airline_3_Digit_Ticketing_Code FROM LOOKUP_AIRLINE_CODES");
-		query.addScalar("Airline_2_Character_Code", Hibernate.STRING);
-		query.addScalar("Airline_3_Digit_Ticketing_Code", Hibernate.STRING);
+		query.addScalar("Airline_2_Character_Code", StandardBasicTypes.STRING);
+		query.addScalar("Airline_3_Digit_Ticketing_Code", StandardBasicTypes.STRING);
 		
 		List results = query.list();
 		sess.close();
@@ -223,8 +224,8 @@ public class LookupAirlineCodes {
 		Session sess = HibernateWrapper.getSession().openSession();
 
 		SQLQuery query = sess.createSQLQuery("SELECT Airline_2_Character_Code, Airline_3_Digit_Ticketing_Code FROM LOOKUP_AIRLINE_CODES");
-		query.addScalar("Airline_2_Character_Code", Hibernate.STRING);
-		query.addScalar("Airline_3_Digit_Ticketing_Code", Hibernate.STRING);
+		query.addScalar("Airline_2_Character_Code", StandardBasicTypes.STRING);
+		query.addScalar("Airline_3_Digit_Ticketing_Code", StandardBasicTypes.STRING);
 		
 		List results = query.list();
 		sess.close();

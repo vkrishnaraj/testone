@@ -29,37 +29,32 @@
 	</bean>
 
 	<!-- Hibernate config -->
-	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper" factory-method="getSession" />
-
-	<bean id="txManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-
-	<tx:annotation-driven transaction-manager="txManager" proxy-target-class="true" />
-
+	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper"
+		factory-method="getSession" />
+	
 	<!-- Data Access Objects -->
 	<bean id="wtq-bmo" class="com.bagnet.nettracer.cronjob.bmo.WTQueueBmo">
-		<property name="sessionFactory" ref="sessionFactory" />
+		
 	</bean>
 
 	<bean id="wtaf-bmo" class="com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo">
-		<property name="sessionFactory" ref="sessionFactory" />
+		
 	</bean>
 	
 	<bean id="wtTx-bmo" class="com.bagnet.nettracer.wt.bmo.WtTransactionBmo">
-		<property name="sessionFactory" ref="sessionFactory" />
+		
 	</bean>
 	
 	<bean id="flight-info-bmo" class="com.bagnet.nettracer.cronjob.bmo.FlightInfoBmo" >
-		<property name="sessionFactory" ref="sessionFactory" />
+		
 	</bean>
 	
 	<bean id="datafeed-log-bmo" class="com.bagnet.nettracer.cronjob.bmo.DataFeedLogBmo" >
-		<property name="sessionFactory" ref="sessionFactory" />
+		
 	</bean>
 	
 	<bean id="worldTracerAccountBmo" class="com.bagnet.nettracer.wt.bmo.WorldTracerAccountBMO">
-		<property name="sessionFactory" ref="sessionFactory" />
+		
 	</bean>
 
 	<!-- services used by the workers-->

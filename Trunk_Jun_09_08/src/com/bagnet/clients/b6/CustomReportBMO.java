@@ -251,7 +251,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			//deal with create station here
 			boolean isAllCreateStation = false;
 			String[] myCreateStationId = srDTO.getCreatestation_ID();
-			if (myCreateStationId != null) {
+			if (myCreateStationId != null && myCreateStationId.length>0 ) {
 				List<String> myCreateStationIdList = Arrays.asList(myCreateStationId);
 				String myCreateStationSql = "(";
 				for (String item : myCreateStationIdList) {
@@ -274,7 +274,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			//deal with charge station here
 			boolean isAllChargeStation = false;
 			String[] myChargeStationId = srDTO.getFaultstation_ID();
-			if (myChargeStationId != null) {
+			if (myChargeStationId != null && myChargeStationId.length>0) {
 				List<String> myChargeStationIdList = Arrays.asList(myChargeStationId);
 				String myChargeStationSql = "(";
 				for (String item : myChargeStationIdList) {
@@ -297,7 +297,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			//to deal with assigned station here
 			boolean isAllAssignedStation = false;
 			String[] myAssignedStationId = srDTO.getStation_ID();
-			if (myAssignedStationId != null) {
+			if (myAssignedStationId != null && myAssignedStationId.length>0) {
 				List<String> myAssignedStationIdList = Arrays.asList(myAssignedStationId);
 				String myAssignedStationSql = "(";
 				for (String item : myAssignedStationIdList) {

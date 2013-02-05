@@ -37,13 +37,13 @@
 		<![CDATA[select incident_ID from incident]]>
 	</queryString>
 	<background>
-		<band />
+		<band/>
 	</background>
 	<title>
-		<band />
+		<band/>
 	</title>
 	<pageHeader>
-		<band height="729" >
+		<band height="729">
 			<staticText>
 				<reportElement key="textField-2" mode="Opaque" x="191" y="4" width="313" height="59" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
@@ -262,7 +262,7 @@ Para passageiros viajando com destino a Europa, por favor contactar US Airways n
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[www.usairways.com/baggage]]></text>
+				<text><![CDATA[www.usairways.com/baggagePPF]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-48" mode="Opaque" x="68" y="291" width="412" height="38" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -301,7 +301,7 @@ A menos que o valor seja declarado, a responsabilidade por danos resultante de p
 ]]></text>
 			</staticText>
 			<image scaleImage="RetainShape">
-				<reportElement key="image-2" x="473" y="688" width="76" height="38">
+				<reportElement key="image-2" mode="Transparent" x="473" y="688" width="76" height="38">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -353,7 +353,7 @@ A menos que o valor seja declarado, a responsabilidade por danos resultante de p
 				<text><![CDATA[Data:]]></text>
 			</staticText>
 			<image scaleImage="RetainShape">
-				<reportElement key="image-3" x="3" y="1" width="137" height="62">
+				<reportElement key="image-3" mode="Transparent" x="3" y="1" width="137" height="62">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -373,18 +373,18 @@ A menos que o valor seja declarado, a responsabilidade por danos resultante de p
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band />
+		<band/>
 	</columnHeader>
 	<detail>
-		<band />
+		<band/>
 	</detail>
 	<columnFooter>
-		<band />
+		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band />
+		<band/>
 	</pageFooter>
 	<summary>
-		<band />
+		<band/>
 	</summary>
 </jasperReport>

@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -1813,7 +1814,7 @@ public class OhdBMO {
 				q.setParameter("companyCode", companyCode);
 				q.setParameter("qStatus", WtqStatus.PENDING);
 				q.setParameter("ohd_type", TracingConstants.NOT_MASS_OHD_TYPE);
-				q.setParameterList("earlyStationList", earlyMoveStations, Hibernate.STRING);
+				q.setParameterList("earlyStationList", earlyMoveStations, StandardBasicTypes.STRING);
 				return q.list();
 			}
 			catch (Exception e) {

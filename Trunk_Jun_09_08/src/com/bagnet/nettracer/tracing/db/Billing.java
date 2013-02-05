@@ -122,7 +122,7 @@ public class Billing implements Serializable {
 	}
 
 	/**
-	 * @hibernate.property type="string"
+	 * @hibernate.property type="timestamp"
 	 * @return Returns the create_date_time.
 	 */
 	public String getCreate_date_time() {

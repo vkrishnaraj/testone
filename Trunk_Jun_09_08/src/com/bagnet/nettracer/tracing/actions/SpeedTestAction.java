@@ -50,5 +50,7 @@ public class SpeedTestAction extends Action {
 				.findForward(TracingConstants.NO_PERMISSION));
 		return null;
 		//return (mapping.findForward(TracingConstants.SPEED_TEST));
+		
+//		javax.servlet.RequestDispatcher.FORWARD_REQUEST_URI;
 	}
 }

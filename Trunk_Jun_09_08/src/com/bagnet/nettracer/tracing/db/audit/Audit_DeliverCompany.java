@@ -17,9 +17,11 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  * @author Administrator
  * 
  * @hibernate.class table="audit_delivercompany"
- * @hibernate.typedef name="deliveryIntegrationType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
- * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClassname"
+ * @hibernate.typedef name="deliveryIntegrationType" class="org.hibernate.type.EnumType"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClass"
  * 			value="com.bagnet.nettracer.tracing.db.DeliveryIntegrationType"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="type"
+ * 			value="12"
  */
 public class Audit_DeliverCompany implements Serializable {
 	

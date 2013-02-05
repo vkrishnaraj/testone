@@ -40,9 +40,9 @@ public class TraceThread implements Runnable{
 					container.setWaiting(false);
 					LFServiceRemote bean = null;
 					try{
-						bean = (LFServiceRemote)ctx.lookup("tracer/LFServiceBean/remote");
+						bean = (LFServiceRemote)ctx.lookup(PropertyBMO.getValue(PropertyBMO.LF_EJB_SERVER_NAME));
 					} catch (Exception e){
-						logger.error("unable to connect to service " + PropertyBMO.getValue(PropertyBMO.LF_EJB_SERVER_LOCATION));
+						logger.error("unable to connect to LFC Primary Trace service " + PropertyBMO.getValue(PropertyBMO.LF_EJB_SERVER_NAME));
 					}
 					if(bean != null){
 						container.setConnectError(false);

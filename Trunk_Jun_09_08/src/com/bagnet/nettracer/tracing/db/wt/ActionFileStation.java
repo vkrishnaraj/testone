@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -49,7 +50,7 @@ public class ActionFileStation implements Serializable {
 		this.stationCode = stationCode;
 	}
 
-	@org.hibernate.annotations.CollectionOfElements(targetElement = ActionFileCount.class)
+	@ElementCollection(targetClass = ActionFileCount.class)
 	@JoinTable(name = "actionfile_station_counts", joinColumns = @JoinColumn(name = "af_station_id"))
 	public Collection<ActionFileCount> getCountList() {
 		return countList;

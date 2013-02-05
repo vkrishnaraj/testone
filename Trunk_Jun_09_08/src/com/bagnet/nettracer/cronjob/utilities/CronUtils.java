@@ -1,6 +1,5 @@
 package com.bagnet.nettracer.cronjob.utilities;
 
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -12,12 +11,12 @@ import java.util.List;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.bagnet.nettracer.cronjob.ErrorHandler;
 import com.bagnet.nettracer.email.HtmlEmail;
@@ -110,7 +109,7 @@ public class CronUtils {
 		query.setDate("24HourFoundDate", hours24Date);
 		query.setTime("24HourFoundTime", hours24Date);
 
-		query.addScalar("OHD_ID", Hibernate.STRING);
+		query.addScalar("OHD_ID", StandardBasicTypes.STRING);
 		
 		List<String> list = (List<String>) query.list();
 		logger.info("OHDs to close: " + list.size());
@@ -151,7 +150,7 @@ public class CronUtils {
 		query.setDate("48HourFoundDate", hours48Date);
 		query.setTime("48HourFoundTime", hours48Date);
 
-		query.addScalar("OHD_ID", Hibernate.STRING);
+		query.addScalar("OHD_ID", StandardBasicTypes.STRING);
 		
 		List<String> list = (List<String>) query.list();
 		logger.info("OHDs to close: " + list.size());
@@ -373,7 +372,7 @@ public class CronUtils {
 		Session sess = HibernateWrapper.getSession().openSession();
 		
 		SQLQuery query = sess.createSQLQuery(sql);
-		query.addScalar("wtq_status", Hibernate.STRING);
+		query.addScalar("wtq_status", StandardBasicTypes.STRING);
 		
 		List<String> list = (List<String>) query.list();
 		
@@ -507,7 +506,7 @@ public class CronUtils {
 		query.setDate("24HourFoundDate", hours24Date);
 		query.setTime("24HourFoundTime", hours24Date);
 
-		query.addScalar("OHD_ID", Hibernate.STRING);
+		query.addScalar("OHD_ID", StandardBasicTypes.STRING);
 		
 		List<String> list = (List<String>) query.list();
 		logger.info("OHDs to close: " + list.size());
@@ -572,7 +571,6 @@ public class CronUtils {
 		try {
 			Session session = HibernateWrapper.getSession().openSession();
 			
-			ResultSet rs = null;
 			Transaction t = null;
 			try {
 

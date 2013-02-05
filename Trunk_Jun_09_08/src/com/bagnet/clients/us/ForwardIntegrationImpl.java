@@ -3,6 +3,7 @@ package com.bagnet.clients.us;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.jms.Connection;
@@ -12,9 +13,14 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
 import javax.mail.internet.InternetAddress;
+import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import org.apache.log4j.Logger;
+import org.hornetq.api.core.TransportConfiguration;
+import org.hornetq.api.jms.HornetQJMSClient;
+import org.hornetq.api.jms.JMSFactoryType;
+import org.hornetq.core.remoting.impl.netty.NettyConnectorFactory;
 
 import aero.nettracer.integrations.us.scanners.data.Forward;
 import aero.nettracer.integrations.us.scanners.data.Segment;
@@ -150,27 +156,27 @@ public class ForwardIntegrationImpl {
 
 	}
 
+    private static final String DEFAULT_DESTINATION = "testQueue";
+    private static final String DEFAULT_USERNAME = "nettracer";
+    private static final String DEFAULT_PASSWORD = "ntMSGpass1!";
+
 	private void sendMessage(ArrayList<Forward> payload) {
 		Connection connection = null;
 		InitialContext initialContext = null;
 
 		try {
-			// Step 1. Create an initial context to perform the JNDI lookup.
-			initialContext = new InitialContext();
-
-			// Step 2. Perfom a lookup on the queue
-			Queue queue = (Queue) initialContext.lookup("/queue/testQueue");
+			Queue queue = HornetQJMSClient.createQueue(DEFAULT_DESTINATION);
 			
-			
+			TransportConfiguration tc = new TransportConfiguration(NettyConnectorFactory.class.getName());
 
 			// Step 3. Perform a lookup on the Connection Factory
-			ConnectionFactory cf = (ConnectionFactory) initialContext.lookup("/ConnectionFactory");
+			ConnectionFactory cf = (ConnectionFactory) HornetQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, tc);
 
 			// Step 4.Create a JMS Connection
-			connection = cf.createConnection();
+			connection = cf.createConnection(DEFAULT_USERNAME, DEFAULT_PASSWORD);
 
-			// Step 5. Create a JMS Session
-			Session s = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+         //Step 5. Create a JMS Session
+         Session s = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			// Step 6. Create a JMS Message Producer
 			MessageProducer producer = s.createProducer(queue);

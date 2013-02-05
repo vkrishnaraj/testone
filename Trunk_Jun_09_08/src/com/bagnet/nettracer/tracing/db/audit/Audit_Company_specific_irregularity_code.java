@@ -139,7 +139,7 @@ public class Audit_Company_specific_irregularity_code implements Serializable {
 	}
 
 	/**
-	 * @hibernate.property type="integer"
+	 * @hibernate.property type="byte"
 	 * @return Returns the report_type.
 	 */
 	public int getReport_type() {
@@ -241,7 +241,7 @@ public class Audit_Company_specific_irregularity_code implements Serializable {
 	
 	/**
 	 * @return the show_to_limited_users
-	 * @hibernate.property type="boolean"
+	 * @hibernate.property type="integer"
 	 */
 	public boolean isShow_to_limited_users() {
 		return show_to_limited_users;

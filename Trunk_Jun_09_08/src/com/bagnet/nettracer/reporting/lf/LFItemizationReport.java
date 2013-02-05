@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
 import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
@@ -61,19 +62,19 @@ public class LFItemizationReport extends AbstractNtJasperReport {
 		query.setDate("startDate", startDate);
 		query.setDate("endDate", endDate);
 		
-		query.addScalar("barcode", Hibernate.STRING);
-		query.addScalar("date_recorded", Hibernate.STRING);
-		query.addScalar("date_received", Hibernate.STRING);
-		query.addScalar("value", Hibernate.INTEGER);
-		query.addScalar("stationcode", Hibernate.STRING);
-		query.addScalar("category", Hibernate.STRING);
-		query.addScalar("subcategory", Hibernate.STRING);
-		query.addScalar("status", Hibernate.INTEGER);
-		query.addScalar("disposition", Hibernate.INTEGER);
-		query.addScalar("title", Hibernate.STRING);
-		query.addScalar("return_time", Hibernate.INTEGER);
-		query.addScalar("tracking_number", Hibernate.STRING);
-		query.addScalar("returned_with_lost_report", Hibernate.INTEGER);
+		query.addScalar("barcode", StandardBasicTypes.STRING);
+		query.addScalar("date_recorded", StandardBasicTypes.STRING);
+		query.addScalar("date_received", StandardBasicTypes.STRING);
+		query.addScalar("value", StandardBasicTypes.INTEGER);
+		query.addScalar("stationcode", StandardBasicTypes.STRING);
+		query.addScalar("category", StandardBasicTypes.STRING);
+		query.addScalar("subcategory", StandardBasicTypes.STRING);
+		query.addScalar("status", StandardBasicTypes.INTEGER);
+		query.addScalar("disposition", StandardBasicTypes.INTEGER);
+		query.addScalar("title", StandardBasicTypes.STRING);
+		query.addScalar("return_time", StandardBasicTypes.INTEGER);
+		query.addScalar("tracking_number", StandardBasicTypes.STRING);
+		query.addScalar("returned_with_lost_report", StandardBasicTypes.INTEGER);
 
 	}
 

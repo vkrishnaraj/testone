@@ -20,7 +20,7 @@
    java.util.Locale                                myLocale   = (java.util.Locale)session.getAttribute(
    "org.apache.struts.action.LOCALE");
    
-   String forwardURI = (String) request.getAttribute(org.apache.catalina.Globals.FORWARD_REQUEST_URI_ATTR);
+   String forwardURI = (String) request.getAttribute(javax.servlet.RequestDispatcher.FORWARD_REQUEST_URI);
    
    if (forwardURI != null && forwardURI.contains("/WebHelp/")) {
   	 response.sendRedirect("/tracer/pages/WebHelp/welcome_to_nettracer.htm");

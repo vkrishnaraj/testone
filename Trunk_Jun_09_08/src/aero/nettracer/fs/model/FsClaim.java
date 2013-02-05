@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
@@ -57,6 +58,8 @@ public class FsClaim implements Serializable {
 	protected String ntIncidentId;
 	protected int claimProrateId;
 	protected int statusId;
+	
+	@Column(name="claimRemark",columnDefinition="text")
 	protected String claimRemark;
 	
 //	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -201,6 +204,7 @@ public class FsClaim implements Serializable {
 	public void setAirlineClaimId(String airlineClaimId) {
 		this.airlineClaimId = airlineClaimId;
 	}
+
 
 	public String getClaimRemark() {
 		return claimRemark;

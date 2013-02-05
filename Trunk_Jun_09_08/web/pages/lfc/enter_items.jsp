@@ -553,7 +553,9 @@
 					getStations();
 					var stationList=document.getElementById("foundLocationId");
 					var matchid=<%=request.getAttribute("stationID")%>
-					stationList.value=matchid;
+					if(matchid!=null){
+						stationList.value=matchid;
+					}
              	</script>
   			</div>
    		</td>

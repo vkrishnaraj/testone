@@ -1,6 +1,6 @@
 package com.bagnet.nettracer.tracing.utils.general;
 
-import java.util.Properties;
+import java.util.Hashtable;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -21,20 +21,8 @@ public class ConnectionUtil {
 
 	
 	static public Context getInitialContext(String url) throws NamingException {
-		Properties p = new Properties();
-		p.put(Context.INITIAL_CONTEXT_FACTORY,
-				"org.jnp.interfaces.NamingContextFactory");
+		Hashtable p = new Hashtable();
 		p.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces"); 
-		p.put(Context.PROVIDER_URL, url);
-		p.put("jnp.socketFactory", "org.jnp.interfaces.TimedSocketFactory");
-
-		if (user != null) {
-			System.out.println ("user: " + user);
-			p.put(Context.SECURITY_PRINCIPAL, user);
-			if (password == null) 
-				password = "";
-			p.put(Context.SECURITY_CREDENTIALS, password);
-		} 
 		return new InitialContext(p);
 	}
 	

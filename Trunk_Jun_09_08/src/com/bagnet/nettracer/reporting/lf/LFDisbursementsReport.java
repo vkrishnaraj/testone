@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
 import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
@@ -49,12 +50,12 @@ public class LFDisbursementsReport extends AbstractNtJasperReport {
 		query.setDate("startDate", startDate);
 		query.setDate("endDate", endDate);
 		
-		query.addScalar("deliveredDate", Hibernate.STRING);
-		query.addScalar("checkAmount", Hibernate.DOUBLE);
-		query.addScalar("checkNumber", Hibernate.INTEGER);
-		query.addScalar("lost_id", Hibernate.LONG);
-		query.addScalar("barcode", Hibernate.LONG);
-		query.addScalar("trackingNumber", Hibernate.STRING);		
+		query.addScalar("deliveredDate", StandardBasicTypes.STRING);
+		query.addScalar("checkAmount", StandardBasicTypes.DOUBLE);
+		query.addScalar("checkNumber", StandardBasicTypes.INTEGER);
+		query.addScalar("lost_id", StandardBasicTypes.LONG);
+		query.addScalar("barcode", StandardBasicTypes.LONG);
+		query.addScalar("trackingNumber", StandardBasicTypes.STRING);		
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

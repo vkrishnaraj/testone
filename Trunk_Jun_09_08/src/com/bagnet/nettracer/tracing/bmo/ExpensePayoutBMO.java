@@ -102,12 +102,12 @@ public class ExpensePayoutBMO {
 
 	}
 
-	public static Integer countExpenses(SearchExpenseForm form, Agent user) {
+	public static Long countExpenses(SearchExpenseForm form, Agent user) {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			Criteria crit = getSearchCriteria(form, user, sess);
 			crit.setProjection(Projections.rowCount());
-			return (Integer) crit.uniqueResult();
+			return (Long) crit.uniqueResult();
 		} catch (Exception e) {
 
 			logger.error("unable to find expenses ", e);

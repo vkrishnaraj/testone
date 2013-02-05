@@ -22,12 +22,16 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  * @author Administrator
  * 
  * @hibernate.class table = "BDO"
- * @hibernate.typedef name="deliveryIntegrationType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
- * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClassname"
+ * @hibernate.typedef name="deliveryIntegrationType" class="org.hibernate.type.EnumType"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="enumClass"
  * 			value="com.bagnet.nettracer.tracing.db.DeliveryIntegrationType"
- * @hibernate.typedef name="deliveryStatusType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
- * @hibernate.typedef-param typedef-name="deliveryStatusType" name="enumClassname"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="type"
+ * 			value="12"
+ * @hibernate.typedef name="deliveryStatusType" class="org.hibernate.type.EnumType"
+ * @hibernate.typedef-param typedef-name="deliveryStatusType" name="enumClass"
  * 			value="com.bagnet.nettracer.tracing.db.DeliveryStatusType"
+ * @hibernate.typedef-param typedef-name="deliveryStatusType" name="type"
+ * 			value="12"
  */
 public class BDO implements Serializable {
 
@@ -466,7 +470,7 @@ public class BDO implements Serializable {
 
 	
 	/**
-	 * @hibernate.property type="string"
+	 * @hibernate.property type="text"
 	 * @return the delivery_comments
 	 */
 	public String getDelivery_comments() {
@@ -509,7 +513,7 @@ public class BDO implements Serializable {
 
 	/**
 	 * @return
-	 * @hibernate.property type="boolean"
+	 * @hibernate.property type="org.hibernate.type.BooleanType"
 	 */
 	public boolean isCanceled() {
 		return canceled;

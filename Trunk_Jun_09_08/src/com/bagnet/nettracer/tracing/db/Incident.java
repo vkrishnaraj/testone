@@ -153,8 +153,8 @@ public class Incident implements Serializable {
 	public void setLocked(boolean locked) {
 		this.locked = locked;
 	}
-	
-	@Column(name="codeLocked", nullable=false)
+
+	@Column(name="codeLocked", nullable=false,columnDefinition = "tinyint")
 	public boolean isCodeLocked() {
 		return codeLocked;
 	}
@@ -162,7 +162,7 @@ public class Incident implements Serializable {
 		this.codeLocked = locked;
 	}
 	
-	@Column(name="stationLocked", nullable=false)
+	@Column(name="stationLocked", nullable=false, columnDefinition="tinyint")
 	public boolean isStationLocked() {
 		return stationLocked;
 	}
@@ -523,7 +523,7 @@ public class Incident implements Serializable {
 	 * @return Returns the checkedlocation.
 	 * 
 	 */
-	@Column(length = 1)
+	@Column(columnDefinition = "char")
 	public String getCheckedlocation() {
 		return checkedlocation;
 	}
@@ -709,7 +709,6 @@ public class Incident implements Serializable {
 	 * @return Returns the numbagchecked.
 	 * 
 	 */
-	@Column(length = 4)
 	public int getNumbagchecked() {
 		return numbagchecked;
 	}
@@ -726,7 +725,6 @@ public class Incident implements Serializable {
 	 * @return Returns the numbagreceived.
 	 * 
 	 */
-	@Column(length = 4)
 	public int getNumbagreceived() {
 		return numbagreceived;
 	}
@@ -743,7 +741,6 @@ public class Incident implements Serializable {
 	 * @return Returns the numpassengers.
 	 * 
 	 */
-	@Column(length = 4)
 	public int getNumpassengers() {
 		return numpassengers;
 	}
@@ -760,7 +757,6 @@ public class Incident implements Serializable {
 	 * @return Returns the reportmethod.
 	 * 
 	 */
-	@Column(length = 4)
 	public int getReportmethod() {
 		return reportmethod;
 	}
@@ -794,7 +790,6 @@ public class Incident implements Serializable {
 	 * @return Returns the tsachecked.
 	 * 
 	 */
-	@Column(length = 1)
 	public int getTsachecked() {
 		return tsachecked;
 	}
@@ -810,7 +805,6 @@ public class Incident implements Serializable {
 	/**
 	 * @return Returns the customcleared.
 	 */
-	@Column(length = 1)
 	public int getCustomcleared() {
 		return customcleared;
 	}
@@ -827,7 +821,6 @@ public class Incident implements Serializable {
 	 * @return Returns the voluntaryseparation.
 	 * 
 	 */
-	@Column(length = 1)
 	public int getVoluntaryseparation() {
 		return voluntaryseparation;
 	}
@@ -878,7 +871,6 @@ public class Incident implements Serializable {
 	 * @return Returns the nonrevenue.
 	 * 
 	 */
-	@Column(length = 1)
 	public int getNonrevenue() {
 		return nonrevenue;
 	}

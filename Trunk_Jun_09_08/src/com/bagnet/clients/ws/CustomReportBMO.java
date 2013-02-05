@@ -316,8 +316,16 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		if(inc.getFaultstationcode() != null);
 		rdto.setFaultStation(inc.getFaultstationcode());
 		if(inc.getLoss_code() > 0) {
+			try{
 			rdto.setLossCode(inc.getLoss_code());
 			rdto.setReasonForLoss(LossCodeBMO.getCode(Integer.toString(inc.getLoss_code())).getDescription());
+			} catch (Exception e){
+				e.printStackTrace();
+
+				rdto.setLossCode(0);
+				rdto.setReasonForLoss("");
+			}
+			
 		}
 		else {
 			rdto.setLossCode(0);

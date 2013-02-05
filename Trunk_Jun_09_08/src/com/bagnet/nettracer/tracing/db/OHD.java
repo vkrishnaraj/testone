@@ -22,9 +22,11 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
  * @author Administrator
  * 
  * @hibernate.class table="OHD"
- * @hibernate.typedef name="worldTracerStatus" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
- * @hibernate.typedef-param typedef-name="worldTracerStatus" name="enumClassname"
+ * @hibernate.typedef name="worldTracerStatus" class="org.hibernate.type.EnumType"
+ * @hibernate.typedef-param typedef-name="worldTracerStatus" name="enumClass"
  * 			value="com.bagnet.nettracer.tracing.db.WorldTracerFile$WTStatus"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="type"
+ * 			value="12"
  */
 public class OHD implements Serializable {
 

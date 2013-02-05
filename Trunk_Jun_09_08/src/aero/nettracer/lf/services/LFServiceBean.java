@@ -20,6 +20,7 @@ import org.apache.commons.lang.WordUtils;
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -2004,7 +2005,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			pq = sess.createSQLQuery(sql.toString());
-			pq.addScalar("lostid", Hibernate.LONG);
+			pq.addScalar("lostid", StandardBasicTypes.LONG);
 			List<Long> listMatchingFiles = pq.list();
 			for (Long strs : listMatchingFiles) {
 				lostIds.add((Long) strs);
@@ -2039,7 +2040,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			pq = sess.createSQLQuery(sql.toString());
-			pq.addScalar("lostid", Hibernate.LONG);
+			pq.addScalar("lostid", StandardBasicTypes.LONG);
 			List<Long> listMatchingFiles = pq.list();
 			for (Long strs : listMatchingFiles) {
 				lostIds.add((Long) strs);
@@ -2083,7 +2084,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			pq = sess.createSQLQuery(sql.toString());
 			pq.setParameter("compCode", compCode);
-			pq.addScalar("lostid", Hibernate.LONG);
+			pq.addScalar("lostid", StandardBasicTypes.LONG);
 			List<Long> listMatchingFiles = pq.list();
 			for (Long strs : listMatchingFiles) {
 				lostIds.add((Long) strs);
@@ -3653,12 +3654,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try {
 			q = sess.createSQLQuery(sql.toString());
 			q.setParameter("sid", id);
-			q.addScalar("s.id",Hibernate.LONG);
-			q.addScalar("s.createdDate",Hibernate.DATE);
-			q.addScalar("s.closedDate",Hibernate.DATE);
-			q.addScalar("s.status_id",Hibernate.INTEGER);
-			q.addScalar("s.agent_ID",Hibernate.INTEGER);
-			q.addScalar("s.station_id",Hibernate.INTEGER);
+			q.addScalar("s.id",StandardBasicTypes.LONG);
+			q.addScalar("s.createdDate",StandardBasicTypes.DATE);
+			q.addScalar("s.closedDate",StandardBasicTypes.DATE);
+			q.addScalar("s.status_id",StandardBasicTypes.INTEGER);
+			q.addScalar("s.agent_ID",StandardBasicTypes.INTEGER);
+			q.addScalar("s.station_id",StandardBasicTypes.INTEGER);
 			List<Object[]> lis = q.list();
 			LFSalvage salv=new LFSalvage();
 			Object[] o=lis.get(0);

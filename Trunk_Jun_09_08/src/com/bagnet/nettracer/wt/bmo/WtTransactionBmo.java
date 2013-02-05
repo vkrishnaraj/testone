@@ -3,33 +3,34 @@ package com.bagnet.nettracer.wt.bmo;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction.Result;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
 
-public class WtTransactionBmo extends HibernateDaoSupport {
+public class WtTransactionBmo {
 
-	@Transactional
+	private static Logger logger = Logger.getLogger(WtTransactionBmo.class);
+	
 	public void saveTransaction(WorldTracerTransaction tx) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		sess.save(tx);
+		sess.close();
 
 	}
 	
-	@Transactional(readOnly=true)
 	public int getTransactionCount(String txType,
 			String result, Date startDate, Date endDate, String incident_id,
 			String ohd_id) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Criteria cri = sess.createCriteria(WorldTracerTransaction.class);
 
 		if(txType != null && !"ALL".equals(txType)) {
@@ -52,14 +53,14 @@ public class WtTransactionBmo extends HibernateDaoSupport {
 		}
 		cri.setProjection(Projections.rowCount());
 		Integer foo = (Integer) cri.uniqueResult();
+		sess.close();
 		return foo;
 	}
 
-	@Transactional(readOnly = true)
 	public List<WorldTracerTransaction> findTransactions(String txType,
 			String result, Date startDate, Date endDate, String incident_id,
 			String ohd_id, int startrow, int rowsperpage) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Criteria cri = sess.createCriteria(WorldTracerTransaction.class);
 		
 		cri.addOrder(Order.desc("createDate"));
@@ -90,12 +91,13 @@ public class WtTransactionBmo extends HibernateDaoSupport {
 		}
 		catch(Throwable t){
 			logger.error("unable to find transactions", t);
+		} finally {
+			sess.close();
 		}
 		return txList;
 	}
 
 	@SuppressWarnings("unchecked")
-	@Transactional(readOnly = true)
 	public List<Object[]> countTransactionResults(long hours) {
 		Long tmp = (new Date()).getTime();
 		
@@ -119,11 +121,13 @@ public class WtTransactionBmo extends HibernateDaoSupport {
 			" group by wtx.txType " +
 			" having successCount = 0 and failureCount > 0 ";
 		
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		
 		Query q = sess.createQuery(queryString);
 		q.setTimestamp("cutoffDate", cutoffDate);
-		return q.list();
+		List ret = q.list();
+		sess.close();
+		return ret;
 	}
 
 }

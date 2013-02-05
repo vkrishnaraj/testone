@@ -392,7 +392,7 @@ public class Passenger implements Serializable {
 	/**
 	 * @return Returns the salutation.
 	 * 
-	 * @hibernate.property type="integer" length="4"
+	 * @hibernate.property type="integer"
 	 */
 	public int getSalutation() {
 		return salutation;

@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
@@ -698,15 +699,21 @@ public class OHDUtils {
 				
 			}
 
-			Connection conn = sess.connection();
-			Statement stmt = conn.createStatement();
+//			Connection conn = sess.connection();
+//			Statement stmt = conn.createStatement();
 
 			String sql = "update ohd_log set log_status = " + TracingConstants.LOG_RECEIVED + " where ohd_id = '" + ohd_id
 					+ "' and log_status = " + TracingConstants.LOG_NOT_RECEIVED;
-			stmt.execute(sql);
+			
+
+			SQLQuery q = sess.createSQLQuery(sql);
+			
+			q.executeUpdate();
+			
+//			stmt.execute(sql);
 			t.commit();
 
-			stmt.close();
+//			stmt.close();
 			
 		} catch (Exception e) {
 			if (t!= null) {

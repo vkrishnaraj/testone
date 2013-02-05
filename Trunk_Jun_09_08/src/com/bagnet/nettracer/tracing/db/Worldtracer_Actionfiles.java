@@ -13,9 +13,11 @@ import org.hibernate.Session;
  * @author matt
  *
  * @hibernate.class table="worldtracer_actionfiles"
- * @hibernate.typedef name="actionFileType" class="com.bagnet.nettracer.tracing.utils.StringEnumUserType"
- * @hibernate.typedef-param typedef-name="actionFileType" name="enumClassname"
+ * @hibernate.typedef name="actionFileType" class="org.hibernate.type.EnumType"
+ * @hibernate.typedef-param typedef-name="actionFileType" name="enumClass"
  * 			value="com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles$ActionFileType"
+ * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="type"
+ * 			value="12"
  */
 public class Worldtracer_Actionfiles implements Serializable {
 	private int id;

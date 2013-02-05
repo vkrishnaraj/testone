@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
 import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
@@ -56,17 +57,17 @@ public class LFLostItemizationReport extends AbstractNtJasperReport {
 		query.setDate("startDate", startDate);
 		query.setDate("endDate", endDate);
 		
-		query.addScalar("id", Hibernate.LONG);
-		query.addScalar("stationcode", Hibernate.STRING);
-		query.addScalar("date", Hibernate.STRING);
-		query.addScalar("category", Hibernate.STRING);
-		query.addScalar("sub_category", Hibernate.STRING);
-		query.addScalar("brand", Hibernate.STRING);
-		query.addScalar("model", Hibernate.STRING);
-		query.addScalar("serial_number", Hibernate.STRING);
-		query.addScalar("color", Hibernate.STRING);
-		query.addScalar("case_color", Hibernate.STRING);
-		query.addScalar("description", Hibernate.STRING);
+		query.addScalar("id", StandardBasicTypes.LONG);
+		query.addScalar("stationcode", StandardBasicTypes.STRING);
+		query.addScalar("date", StandardBasicTypes.STRING);
+		query.addScalar("category", StandardBasicTypes.STRING);
+		query.addScalar("sub_category", StandardBasicTypes.STRING);
+		query.addScalar("brand", StandardBasicTypes.STRING);
+		query.addScalar("model", StandardBasicTypes.STRING);
+		query.addScalar("serial_number", StandardBasicTypes.STRING);
+		query.addScalar("color", StandardBasicTypes.STRING);
+		query.addScalar("case_color", StandardBasicTypes.STRING);
+		query.addScalar("description", StandardBasicTypes.STRING);
 	}
 
 	@Override

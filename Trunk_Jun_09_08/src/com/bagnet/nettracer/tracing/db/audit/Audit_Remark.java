@@ -129,7 +129,7 @@ public class Audit_Remark implements Serializable {
 	/**
 	 * @return Returns the remarktext.
 	 * 
-	 * @hibernate.property type="string"
+	 * @hibernate.property type="text"
 	 */
 	public String getRemarktext() {
 		return remarktext;

@@ -740,7 +740,7 @@ public class AdminUtils {
 				cri.add(Expression.like("companyCode_ID", ccode));
 			}
 			cri.setProjection(Projections.rowCount());
-			return ((Integer)cri.list().get(0)).intValue();
+			return ((Long)cri.list().get(0)).intValue();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return 0;

@@ -20,7 +20,8 @@ import org.apache.log4j.Logger;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 import org.hibernate.Criteria;
-import org.hibernate.classic.Session;
+//import org.hibernate.classic.Session;
+import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -993,11 +994,11 @@ public class IncidentBMO {
 							" from incident i, address a, passenger p where i.status_id = 12 and i.createdate > :cutoff and " +
 							"p.incident_ID = i.Incident_ID and a.passenger_ID = p.Passenger_ID");
 			q.setDate("cutoff", incCutoff);
-			q.addScalar("h", Hibernate.STRING);
-			q.addScalar("w", Hibernate.STRING);
-			q.addScalar("m", Hibernate.STRING);
-			q.addScalar("pg", Hibernate.STRING);
-			q.addScalar("ap", Hibernate.STRING);
+			q.addScalar("h", StandardBasicTypes.STRING);
+			q.addScalar("w", StandardBasicTypes.STRING);
+			q.addScalar("m", StandardBasicTypes.STRING);
+			q.addScalar("pg", StandardBasicTypes.STRING);
+			q.addScalar("ap", StandardBasicTypes.STRING);
 			List<Object[]> list = q.list();
 
 			if (list.size() == 0) {
@@ -2159,7 +2160,7 @@ public class IncidentBMO {
 			SQLQuery query = sess.createSQLQuery("SELECT Incident_ID FROM INCIDENT WHERE itemtype_ID = :itemType "
 					+ "AND faultstation_id = :faultStation AND loss_code = :lossCode AND status_ID = :statusId");
 
-			query.addScalar("Incident_ID", Hibernate.STRING);
+			query.addScalar("Incident_ID", StandardBasicTypes.STRING);
 			query.setInteger("itemType", iType.getItemType_ID());
 			query.setInteger("faultStation", faultStation);
 			query.setInteger("lossCode", lossCode);
@@ -2213,7 +2214,7 @@ public class IncidentBMO {
 			q.setParameter("companyCode", companyCode);
 			q.setParameter("qStatus", WtqStatus.PENDING);
 			q.setParameter("itemType", TracingConstants.LOST_DELAY);
-			q.setParameterList("earlyStationList", earlyMoveStations, Hibernate.STRING);
+			q.setParameterList("earlyStationList", earlyMoveStations, StandardBasicTypes.STRING);
 			return q.list();
 		} catch (Exception e) {
 			logger.error("unable to get move to WT Incident list: " + e);

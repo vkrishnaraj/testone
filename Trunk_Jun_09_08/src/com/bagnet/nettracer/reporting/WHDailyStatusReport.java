@@ -9,6 +9,7 @@ import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -260,27 +261,27 @@ public class WHDailyStatusReport extends AbstractNtJasperReport {
 
 	protected void setQueryArgumentsAndScalars(SQLQuery query) {
 				
-		query.addScalar("mbr", Hibernate.STRING);
-		query.addScalar("type", Hibernate.STRING);
-		query.addScalar("status", Hibernate.STRING);
-		query.addScalar("name", Hibernate.STRING);
-		query.addScalar("airline", Hibernate.STRING);
-		query.addScalar("flight", Hibernate.INTEGER);
-		query.addScalar("origin", Hibernate.STRING);
-		query.addScalar("destination", Hibernate.STRING);
-		query.addScalar("route", Hibernate.STRING);
-		query.addScalar("open_station", Hibernate.STRING);
-		query.addScalar("open_user", Hibernate.STRING);
-		query.addScalar("open_date", Hibernate.STRING);
-		query.addScalar("open_time", Hibernate.STRING);
-		query.addScalar("close_station", Hibernate.STRING);
-		query.addScalar("close_user", Hibernate.STRING);
-		query.addScalar("close_date", Hibernate.STRING);
-		query.addScalar("close_time", Hibernate.STRING);
-		query.addScalar("total", Hibernate.STRING);
-		query.addScalar("fault_station", Hibernate.STRING);
-		query.addScalar("fault_code", Hibernate.INTEGER);
-		query.addScalar("fault_desc", Hibernate.STRING);
+		query.addScalar("mbr", StandardBasicTypes.STRING);
+		query.addScalar("type", StandardBasicTypes.STRING);
+		query.addScalar("status", StandardBasicTypes.STRING);
+		query.addScalar("name", StandardBasicTypes.STRING);
+		query.addScalar("airline", StandardBasicTypes.STRING);
+		query.addScalar("flight", StandardBasicTypes.INTEGER);
+		query.addScalar("origin", StandardBasicTypes.STRING);
+		query.addScalar("destination", StandardBasicTypes.STRING);
+		query.addScalar("route", StandardBasicTypes.STRING);
+		query.addScalar("open_station", StandardBasicTypes.STRING);
+		query.addScalar("open_user", StandardBasicTypes.STRING);
+		query.addScalar("open_date", StandardBasicTypes.STRING);
+		query.addScalar("open_time", StandardBasicTypes.STRING);
+		query.addScalar("close_station", StandardBasicTypes.STRING);
+		query.addScalar("close_user", StandardBasicTypes.STRING);
+		query.addScalar("close_date", StandardBasicTypes.STRING);
+		query.addScalar("close_time", StandardBasicTypes.STRING);
+		query.addScalar("total", StandardBasicTypes.STRING);
+		query.addScalar("fault_station", StandardBasicTypes.STRING);
+		query.addScalar("fault_code", StandardBasicTypes.INTEGER);
+		query.addScalar("fault_desc", StandardBasicTypes.STRING);
 		
 	}
 	

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
 import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
@@ -47,15 +48,15 @@ public class LFSalvageReport extends AbstractNtJasperReport {
 	@Override
 	protected void setQueryArgumentsAndScalars(SQLQuery query) {
 
-		query.addScalar("barcode", Hibernate.LONG);
-		query.addScalar("date_received", Hibernate.STRING);
-		query.addScalar("value", Hibernate.INTEGER);
-		query.addScalar("category", Hibernate.STRING);
-		query.addScalar("subcategory", Hibernate.STRING);
-		query.addScalar("title", Hibernate.STRING);
-		query.addScalar("brand", Hibernate.STRING);
-		query.addScalar("model", Hibernate.STRING);
-		query.addScalar("salvageBoxId", Hibernate.STRING);
+		query.addScalar("barcode", StandardBasicTypes.LONG);
+		query.addScalar("date_received", StandardBasicTypes.STRING);
+		query.addScalar("value", StandardBasicTypes.INTEGER);
+		query.addScalar("category", StandardBasicTypes.STRING);
+		query.addScalar("subcategory", StandardBasicTypes.STRING);
+		query.addScalar("title", StandardBasicTypes.STRING);
+		query.addScalar("brand", StandardBasicTypes.STRING);
+		query.addScalar("model", StandardBasicTypes.STRING);
+		query.addScalar("salvageBoxId", StandardBasicTypes.STRING);
 		
 	}
 

@@ -15,6 +15,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.bagnet.nettracer.cronjob.tracing.dto.ConsumerDTO;
 import com.bagnet.nettracer.cronjob.tracing.dto.MatchResult;
@@ -92,7 +93,7 @@ public class TracingConsumer implements Runnable {
 							.getIncident_ID());
 					matchExistsQuery.setString("ohd_ID", ohd.getOHD_ID());
 					matchExistsQuery.setDouble("matchPercent", percMatch);
-					matchExistsQuery.addScalar("COUNT", Hibernate.INTEGER);
+					matchExistsQuery.addScalar("COUNT", StandardBasicTypes.INTEGER);
 					List<Integer> queryResults = matchExistsQuery.list();
 					int queryCount = queryResults.get(0).intValue();
 

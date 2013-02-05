@@ -2,7 +2,8 @@ package com.bagnet.nettracer.tracing.dao.lf;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
+//import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;

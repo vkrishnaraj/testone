@@ -850,7 +850,7 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	
 	/**
 	 * @return
-	 * @hibernate.property type="boolean"
+	 * @hibernate.property type="org.hibernate.type.BooleanType"
 	 */
 	public boolean isAuto_wt_amend() {
 		return auto_wt_amend;
@@ -865,7 +865,7 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	/**
 	 * @return Returns the email_customer.
 	 * 
-	 * @hibernate.property type="boolean"
+	 * @hibernate.property type="org.hibernate.type.BooleanType"
 	 */
 	public boolean isEmail_customer() {
 		return email_customer;
@@ -877,7 +877,7 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	/**
 	 * @return Returns the email_customer.
 	 * 
-	 * @hibernate.property type="boolean"
+	 * @hibernate.property type="org.hibernate.type.BooleanType"
 	 */
 	public boolean isAutoCloseOhd() {
 		return autoCloseOhd;

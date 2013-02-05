@@ -109,7 +109,7 @@ public class Audit_OHD_Itinerary implements Serializable {
 	/**
 	 * @return Returns the itinerarytype.
 	 * 
-	 * @hibernate.property type="integer" length="1"
+	 * @hibernate.property type="integer"
 	 */
 	public int getItinerarytype() {
 		return itinerarytype;

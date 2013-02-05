@@ -35,6 +35,10 @@
 	</patternset>
 	
 	<path id="project.classpath">
+		<fileset dir="C:\jboss-as-7.1.1.Final\modules\org\jboss\logging\main">
+							<patternset refid="jar.files" />
+		</fileset>
+		
 		<fileset dir="${lib.build-client.dir}">
 			<patternset refid="jar.files" />
 		</fileset>
@@ -47,9 +51,19 @@
 		<fileset dir="${basedir}/lib/client-us">
 			<patternset refid="jar.files" />
 		</fileset>
+		<fileset dir="${app.home.jb5}\server\all\lib">
+			<patternset refid="jar.files" />
+		</fileset>
 		<fileset dir="${app.home.jb5}\common\lib">
 			<patternset refid="jar.files" />
 		</fileset>
+		<fileset dir="${app.home.jb5}\lib">
+					<patternset refid="jar.files" />
+		</fileset>
+
+				
+		
+				
 	</path>	
 
 	<!-- GLOBAL TASKDEFS -->
@@ -125,7 +139,9 @@
 
 	<target name="fast_all" depends="package-web2">
 		<delete dir="${app.deploy.dir.jb5}/tracer.war" failonerror="false" />
+		<delete dir="${app.deploy.dir.jb52}/tracer.war" failonerror="false" />
 		<delete file="${app.deploy.dir.jb5}/tracer.war" failonerror="false" />
+		<delete file="${app.deploy.dir.jb52}/tracer.war" failonerror="false" />
 	</target>
 	
 	<target name="init" unless="flag">
@@ -212,7 +228,7 @@
 
 	<!-- This is used  -->
 	<target name="compile-web" depends="init">
-		<javac srcdir="./src" fork="false" destdir="${build.dir}/${ant_project_name}_web/classes" debug="on" memoryinitialsize="256m" verbose="true" >
+		<javac srcdir="./src" fork="false" destdir="${build.dir}/${ant_project_name}_web/classes" debug="on" memoryinitialsize="512m" verbose="true" >
 			<classpath refid="project.classpath" />
 			<exclude name="com/bagnet/nettracer/cronjob/**" />
 			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl" />
@@ -295,8 +311,11 @@
 			<classpath>
 				<path refid="project.classpath" />
 				<path location="${build.dir}/${ant_project_name}/classes" />
+				<fileset dir="${app.home.jb5}\lib">
+					<patternset refid="jar.files" />
+				</fileset>
 			</classpath>
-			<annotationconfiguration configurationfile="companies/westjet/environment/local/hibernate_main.cfg.xml" />
+			<annotationconfiguration configurationfile="companies/american-fs/environment/local/hibernate_main.cfg.xml" />
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="nettracer-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>
@@ -390,15 +409,43 @@
 		</replaceregexp>
 		-->
 		
-		<war destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
+		<mkdir dir="${build.dir}/${ant_project_name}/META-INF" />
+	    <manifest file="${build.dir}/${ant_project_name}/META-INF/MANIFEST.MF">
+	    	<attribute name="Dependencies" value="
+	    		org.hibernate,
+	    		org.antlr,
+	    		org.apache.commons.logging,
+	    		org.apache.xerces,
+	    		javax.persistence.api,
+	    		org.apache.axis2,
+	    		org.apache.xmlbeans,
+	    		org.apache.axiom,
+	    		com.bagnet.nettracer.ws.pax-view,
+	    		com.bagnet.nettracer.ws.reservation,
+	    		com.bagnet.nettracer.ws.fraud,
+	    		com.bagnet.nettracer.ws.scannerMBR,
+	    		com.rmiio,
+	    		net.sf.jasperreports,
+	    		com.lowagie,
+	    		jxl,
+	    		com.c3p0,
+	    		org.jboss.ejb3,
+	    		org.jboss.ejb-client,
+	    		org.jboss.remote-naming,
+	    		org.jboss.iiop-client,
+	    		org.jboss.remoting3,
+	    		org.jboss.remoting3.remoting-jmx"/>
+	    </manifest>
+		
+		<war manifest="${build.dir}/${ant_project_name}/META-INF/MANIFEST.MF" destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
 			<!--  EDITING HERE -->
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" />
 			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
 			<lib dir="${lib.jar.dir}">
 				<exclude name="log4j*.*" />
-				<exclude name="servlet.jar" />
+
 				<exclude name="netty.jar" />
-				<exclude name="mysql-connector-java*.jar" />
+				<!--<exclude name="mysql-connector-java*.jar" />-->
 				<exclude name="c3p0*.jar" />
 				<exclude name="hibernate*.jar" />
 				<exclude name="ReservationService*.jar" />
@@ -407,31 +454,50 @@
 				<exclude name="axis2*.jar" />
 				<exclude name="jxl*.jar" />
 				<exclude name="iText*.jar" />
-				<exclude name="commons*.jar" />
+				<!--<exclude name="spring*RELEASE.jar" />-->
+				
+				<!--<exclude name="commons-beanutils-1.7.0.jar" />
+				<exclude name="commons-codec-1.3.jar" />-->
+				<!--<exclude name="commons-collections-3.1.jar" />-->
+					<!--<exclude name="commons-digester-1.7.jar" />-->
+					<!--<exclude name="commons-discovery.jar" />
+					<exclude name="commons-fileupload-1.2.1.jar" />
+					<exclude name="commons-httpclient-3.1.jar" />
+					<exclude name="commons-io-1.3.2.jar" />
+				
+				<exclude name="commons-javaflow-20060411.jar" />
+						<exclude name="commons-lang-2.3.jar" />
+						<exclude name="commons-logging-1.1.1.jar" />
+						<exclude name="commons-pool-1.4.jar" />
+						<exclude name="commons-resources.jar" />-->
+						<!--<exclude name="commons-validator-1.3.1.jar" />-->
+
+				
 				<exclude name="dsi.jar" />
 				<exclude name="delivery*.jar" />
 				<exclude name="cglib*.*" />
 				<exclude name="asm*.*" />
-				<exclude name="jasper*.*" />
+				<!--<exclude name="jasper*.*" />-->
 				<exclude name="jfree*.*" />
 				<exclude name="poi*.*" />
 				<exclude name="JetBlue*.*" />
 				<exclude name="sqljdbc*.*" />
-				<exclude name="struts*.*" />
+
 				<exclude name="PaxView*.*" />
 				<exclude name="ehcache*.*" />
 				<exclude name="us-crm*.*" />
-				<exclude name="Dynamic*.*" />
+				<!--<exclude name="Dynamic*.*" />-->
 				<exclude name="hornetq*.*" />
 				<exclude name="axiom*.*" />
 				<exclude name="libphone*.*" />
 				<exclude name="geronimo*.*" />
-				<exclude name="xmlbeans*.*" />
+				<!--<exclude name="xmlbeans*.*" />-->
 				<exclude name="xmlschema*.*" />
 				<exclude name="neethi*.*" />
 				<exclude name="httpcore*.*" />
 				<exclude name="htmlparser*.*" />
 				<exclude name="woden*.*" />
+
 									
 			</lib>
 		</war>
@@ -465,6 +531,16 @@
 		</ear>
 		
 		<copy todir="${app.deploy.dir.jb5}">
+			<fileset dir="${build.dir}">
+				<include name="tracer.ear" />
+			</fileset>
+		</copy>
+		<copy todir="${app.deploy.dir.jb52}">
+			<fileset dir="${build.dir}">
+				<include name="tracer.ear" />
+			</fileset>
+		</copy>
+		<copy todir="C:\jboss-as-7.1.1.Final\standalone\deployments">
 			<fileset dir="${build.dir}">
 				<include name="tracer.ear" />
 			</fileset>
@@ -620,6 +696,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
+	<target name="build-ear-local-jetblue" depends="delete-wars">
+		<property name="staging.project" value="jetblue" />
+		<property name="staging.env" value="local" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-local-jetblue"/>
+		<property name="app.xml.location" value="metadata/jetblue/local" />		
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
 	<target name="build-ear-local-alaska" depends="delete-wars">
 		<property name="staging.project" value="alaska-fs" />
 		<property name="staging.env" value="local" />
@@ -700,6 +785,18 @@
 		<property name="app.xml.location" value="metadata/jetblue" />		
 		<antcall target="donotrun-build-ear" />
 	</target>
+	
+<target name="build-ear-local" depends="delete-wars">
+	<property name="staging.project" value="hosted" />
+	<property name="staging.env" value="local" />
+	<property name="avis.service.includes" value="*.war" />
+	<antcall target="hibernate_generate" />		
+	<antcall target="build-war-local-westjet"/>
+	<antcall target="build-war-local-american"/>
+	<antcall target="build-war-local-jetblue"/>
+	<property name="app.xml.location" value="metadata/local" />
+	<antcall target="donotrun-build-ear" />
+</target>
 	
 	<target name="build-ear-testing" depends="delete-wars">
 		<property name="staging.project" value="hosted" />
@@ -1945,7 +2042,7 @@
 		<delete file="${build.dir}/claim_model.jar" failonerror="false"/>
 		<jar destfile="${build.dir}/claim_model.jar">
 			<!--  MAY NEED TO EDIT THE FRAUD_WEB BELOW TO POINT TO WHAT BUILDS THE CLASSES -->
-			<fileset dir="${build.dir}/ab_web/classes/" >
+			<fileset dir="${build.dir}/american-fs_web/classes/" >
 				<include name="**/**/aero/nettracer/fs/model/transport/**/*.*"/>
 				<include name="**/**/com/bagnet/nettracer/tracing/utils/DateUtils.class"/>
 				<include name="**/**/com/bagnet/nettracer/tracing/constant/TracingConstants.class"/>
@@ -2136,6 +2233,16 @@
 	<!-- END LFC CRON TARGETS -->
 	
 	<!-- WESTJET CRON TARGETS -->
+	
+	<target name="build-cron-local-westjet">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="local" />
+		<property name="ant_project_name" value="westjet" />
+		<property name="sub_path" value="local/" />
+		<property name="cron.job.config.file" value="companies/westjet/environment/local/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="wslocal-" />
+		<antcall target="cron-service" />
+	</target>
 	
 	<target name="build-cron-testing-westjet">
 		<property name="staging.project" value="cron" />
@@ -3491,8 +3598,8 @@
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
 
 		<Java2WSDLTask classPath="${build.dir}/${ant_project_name}_web/classes" 
-			className="aero.nettracer.fs.service.SimpleService" 
-			outputLocation="src/aero/nettracer/fs/service" outputFileName="SimpleService.wsdl">
+			className="aero.nettracer.fs.service.FraudService" 
+			outputLocation="src/aero/nettracer/fs/service" outputFileName="FraudService.wsdl">
 		</Java2WSDLTask>
 
 	</target>
@@ -3500,7 +3607,7 @@
 	<target name="1a_fsService_wsdl2java">
 		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
 			<arg value="-uri" />
-			<arg file="src/aero/nettracer/fs/service/SimpleService.wsdl" />
+			<arg file="src/aero/nettracer/fs/service/FraudService.wsdl" />
 
 			<arg value="-o" />
 			<arg file="${build.dir}/webservices/fs" />
@@ -4216,3 +4323,4 @@
 	</target>
 	
 </project>
+

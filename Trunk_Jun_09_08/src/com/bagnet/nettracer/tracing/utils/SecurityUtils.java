@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -433,7 +434,7 @@ public class SecurityUtils {
 			q.setParameter("agent_id", agent_id);
 			q.setParameter("passcount", passcount);
 			q.setParameter("password", password);
-			q.addScalar("id", Hibernate.LONG);
+			q.addScalar("id", StandardBasicTypes.LONG);
 			List<Long> ret = q.list();
 			if(ret != null && ret.size() > 0){
 				return true;

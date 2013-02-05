@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
 import com.bagnet.nettracer.reporting.AbstractNtJasperReport;
@@ -66,9 +67,9 @@ public class LFSummaryReport extends AbstractNtJasperReport {
 		query.setDate("startDate", startDate);
 		query.setDate("endDate", endDate);
 		
-		query.addScalar("date", Hibernate.STRING);
-		query.addScalar("nlrr", Hibernate.INTEGER);
-		query.addScalar("nfie", Hibernate.INTEGER);
+		query.addScalar("date", StandardBasicTypes.STRING);
+		query.addScalar("nlrr", StandardBasicTypes.INTEGER);
+		query.addScalar("nfie", StandardBasicTypes.INTEGER);
 			
 	}
 	

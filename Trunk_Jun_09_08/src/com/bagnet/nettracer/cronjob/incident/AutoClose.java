@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
@@ -78,7 +79,7 @@ public class AutoClose {
 					
 					SQLQuery query = session.createSQLQuery(sql);
 
-					query.addScalar("Incident_ID", Hibernate.STRING);
+					query.addScalar("Incident_ID", StandardBasicTypes.STRING);
 					
 					List results = query.list();
 					if (results == null) {

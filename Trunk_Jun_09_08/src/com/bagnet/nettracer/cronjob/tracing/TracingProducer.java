@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -121,8 +122,8 @@ public class TracingProducer implements Runnable {
 						query.setTimestamp("lastUpdated", incident.getOhd_lasttraced());
 					}
 
-					query.addScalar("OHD_ID", Hibernate.STRING);
-					query.addScalar("lastupdated", Hibernate.TIMESTAMP);
+					query.addScalar("OHD_ID", StandardBasicTypes.STRING);
+					query.addScalar("lastupdated", StandardBasicTypes.TIMESTAMP);
 
 					List<Object[]> ohdList = query.list();
 					settings.getLogger().debug("Total OHDs found: " + ohdList.size());

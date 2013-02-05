@@ -410,7 +410,7 @@ public class Audit_ExpensePayout implements Serializable {
 	/**
 	 * @return Returns the approval_date.
 	 * 
-	 * @hibernate.property type="string" column="approval_date"
+	 * @hibernate.property type="timestamp" column="approval_date"
 	 */
 	public String getApproval_date() {
 		return approval_date;

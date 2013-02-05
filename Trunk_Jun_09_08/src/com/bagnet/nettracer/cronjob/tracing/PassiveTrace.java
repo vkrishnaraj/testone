@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -203,7 +204,7 @@ public class PassiveTrace {
 				validOhdQuery.setInteger("status1", TracingConstants.OHD_STATUS_OPEN);
 				validOhdQuery.setInteger("status2", TracingConstants.OHD_STATUS_IN_TRANSIT);
 	
-				validOhdQuery.addScalar("OHD_ID", Hibernate.STRING);
+				validOhdQuery.addScalar("OHD_ID", StandardBasicTypes.STRING);
 	
 				List<String> validOhdList = validOhdQuery.list();
 				

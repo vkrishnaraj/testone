@@ -8,6 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -60,11 +61,11 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 				q.setDate("startdate", startDate);
 				q.setDate("enddate", endDate);
 			}
-			q.addScalar("bagtag", Hibernate.STRING);
-			q.addScalar("remarks", Hibernate.STRING);
-			q.addScalar("date", Hibernate.DATE);
-			q.addScalar("loc", Hibernate.STRING);
-			q.addScalar("ohd", Hibernate.STRING);
+			q.addScalar("bagtag", StandardBasicTypes.STRING);
+			q.addScalar("remarks", StandardBasicTypes.STRING);
+			q.addScalar("date", StandardBasicTypes.DATE);
+			q.addScalar("loc", StandardBasicTypes.STRING);
+			q.addScalar("ohd", StandardBasicTypes.STRING);
 			List<Object[]> ret = q.list();
 			
 			for(Object[] o:ret){
@@ -114,7 +115,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 			SQLQuery q = sess.createSQLQuery(sql);
 			q.setDate("start", start);
 			q.setDate("end", end);
-			q.addScalar("id", Hibernate.STRING);
+			q.addScalar("id", StandardBasicTypes.STRING);
 			List<String> ret = q.list();
 			if(ret != null && ret.size() > 0){
 				return ret.get(0);

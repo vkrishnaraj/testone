@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -40,12 +41,12 @@ public class ReplacementBagIssuanceReport extends AbstractNtJasperReport {
 		query.setDate("startDate", startDate);
 		query.setDate("endDate", endDate);
 		
-		query.addScalar("create_date", Hibernate.STRING);
-		query.addScalar("stationcode", Hibernate.STRING);
-		query.addScalar("incident_ID", Hibernate.STRING);
-		query.addScalar("num_bags_affected", Hibernate.INTEGER);		
-		query.addScalar("num_bags_issued", Hibernate.INTEGER);		
-		query.addScalar("lvlofdamage", Hibernate.INTEGER);		
+		query.addScalar("create_date", StandardBasicTypes.STRING);
+		query.addScalar("stationcode", StandardBasicTypes.STRING);
+		query.addScalar("incident_ID", StandardBasicTypes.STRING);
+		query.addScalar("num_bags_affected", StandardBasicTypes.INTEGER);		
+		query.addScalar("num_bags_issued", StandardBasicTypes.INTEGER);		
+		query.addScalar("lvlofdamage", StandardBasicTypes.INTEGER);		
 	}
 
 	@Override

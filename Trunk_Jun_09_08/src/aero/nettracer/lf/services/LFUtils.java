@@ -10,7 +10,8 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.classic.Session;
+//import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;

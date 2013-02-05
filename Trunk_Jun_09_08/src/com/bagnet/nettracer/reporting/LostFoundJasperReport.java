@@ -10,7 +10,9 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
-import org.hibernate.classic.Session;
+//import org.hibernate.classic.Session;
+import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -69,15 +71,15 @@ public class LostFoundJasperReport {
 			session = HibernateWrapper.getSession().openSession();
 			boolean isLost = srDto.getType() == TracingConstants.LF_TYPE_LOST;
 			SQLQuery query = session.createSQLQuery(getSqlFromDto(srDto));
-			query.addScalar("id", Hibernate.LONG);
-			query.addScalar("vantiveNumber", Hibernate.STRING);
-			query.addScalar("lfDate", Hibernate.TIMESTAMP);
-			query.addScalar("stationcode", Hibernate.STRING);
-			query.addScalar("desc", Hibernate.STRING);
-			query.addScalar("desc1", Hibernate.STRING);
-			query.addScalar("trackingNumber", Hibernate.STRING);
+			query.addScalar("id", StandardBasicTypes.LONG);
+			query.addScalar("vantiveNumber", StandardBasicTypes.STRING);
+			query.addScalar("lfDate", StandardBasicTypes.TIMESTAMP);
+			query.addScalar("stationcode", StandardBasicTypes.STRING);
+			query.addScalar("desc", StandardBasicTypes.STRING);
+			query.addScalar("desc1", StandardBasicTypes.STRING);
+			query.addScalar("trackingNumber", StandardBasicTypes.STRING);
 			if (isLost) {
-				query.addScalar("dropoff", Hibernate.STRING);
+				query.addScalar("dropoff", StandardBasicTypes.STRING);
 			}
 			List results = query.list();
 			if (results.isEmpty()) {
@@ -212,11 +214,11 @@ public class LostFoundJasperReport {
 			session = HibernateWrapper.getSession().openSession();
 
 			SQLQuery query = session.createSQLQuery(getItemRecoverySqlFromDto(srDto));
-			query.addScalar("stationcode", Hibernate.STRING);
-			query.addScalar("associated_airport", Hibernate.STRING);
-			query.addScalar("status_id", Hibernate.LONG);
-			query.addScalar("disposition_status_id", Hibernate.LONG);
-			query.addScalar("item_count", Hibernate.INTEGER);
+			query.addScalar("stationcode", StandardBasicTypes.STRING);
+			query.addScalar("associated_airport", StandardBasicTypes.STRING);
+			query.addScalar("status_id", StandardBasicTypes.LONG);
+			query.addScalar("disposition_status_id", StandardBasicTypes.LONG);
+			query.addScalar("item_count", StandardBasicTypes.INTEGER);
 			
 			List results = query.list();
 			if (results.isEmpty()) {
@@ -224,9 +226,9 @@ public class LostFoundJasperReport {
 			}
 			
 			query = session.createSQLQuery(getMatchedByNtSql(srDto));
-			query.addScalar("stationcode", Hibernate.STRING);
-			query.addScalar("associated_airport", Hibernate.STRING);
-			query.addScalar("matchedCount", Hibernate.INTEGER);
+			query.addScalar("stationcode", StandardBasicTypes.STRING);
+			query.addScalar("associated_airport", StandardBasicTypes.STRING);
+			query.addScalar("matchedCount", StandardBasicTypes.INTEGER);
 		
 			List results1 = query.list();
 			if (results1.isEmpty()) {
@@ -236,9 +238,9 @@ public class LostFoundJasperReport {
 			List toBeSalvaged = null;
 			if (!isLost) {
 				query = session.createSQLQuery(getItemsToBeSalvagedSql(srDto));
-				query.addScalar("stationcode", Hibernate.STRING);
-				query.addScalar("associated_airport", Hibernate.STRING);
-				query.addScalar("toBeSalvagedCount", Hibernate.INTEGER);
+				query.addScalar("stationcode", StandardBasicTypes.STRING);
+				query.addScalar("associated_airport", StandardBasicTypes.STRING);
+				query.addScalar("toBeSalvagedCount", StandardBasicTypes.INTEGER);
 				
 				toBeSalvaged = query.list();
 			}
@@ -480,13 +482,13 @@ public class LostFoundJasperReport {
 			session = HibernateWrapper.getSession().openSession();
 
 			SQLQuery query = session.createSQLQuery(getManagementSummarySqlFromDto(srDto));
-			query.addScalar("stationcode", Hibernate.STRING);
-			query.addScalar("lost_count", Hibernate.INTEGER);
-			query.addScalar("found_count", Hibernate.INTEGER);
-			query.addScalar("matched_count", Hibernate.INTEGER);
-			query.addScalar("salvaged_count", Hibernate.INTEGER);
-			query.addScalar("not_matched_count", Hibernate.INTEGER);
-			query.addScalar("matched_by_other_count", Hibernate.INTEGER);
+			query.addScalar("stationcode", StandardBasicTypes.STRING);
+			query.addScalar("lost_count", StandardBasicTypes.INTEGER);
+			query.addScalar("found_count", StandardBasicTypes.INTEGER);
+			query.addScalar("matched_count", StandardBasicTypes.INTEGER);
+			query.addScalar("salvaged_count", StandardBasicTypes.INTEGER);
+			query.addScalar("not_matched_count", StandardBasicTypes.INTEGER);
+			query.addScalar("matched_by_other_count", StandardBasicTypes.INTEGER);
 			
 			List results = query.list();
 			if (results.isEmpty()) {
@@ -624,15 +626,15 @@ public class LostFoundJasperReport {
 			session = HibernateWrapper.getSession().openSession();
 
 			SQLQuery query = session.createSQLQuery(getItemizationSqlFromDto(srDto));
-			query.addScalar("id", Hibernate.LONG);
-			query.addScalar("stationcode", Hibernate.STRING);
-			query.addScalar("date_reported", Hibernate.STRING);
-			query.addScalar("status_id", Hibernate.LONG);
-			query.addScalar("disposition_status_id", Hibernate.LONG);
-			query.addScalar("category", Hibernate.STRING);
-			query.addScalar("subcategory", Hibernate.STRING);
-			query.addScalar("brand", Hibernate.STRING);
-			query.addScalar("description", Hibernate.STRING);
+			query.addScalar("id", StandardBasicTypes.LONG);
+			query.addScalar("stationcode", StandardBasicTypes.STRING);
+			query.addScalar("date_reported", StandardBasicTypes.STRING);
+			query.addScalar("status_id", StandardBasicTypes.LONG);
+			query.addScalar("disposition_status_id", StandardBasicTypes.LONG);
+			query.addScalar("category", StandardBasicTypes.STRING);
+			query.addScalar("subcategory", StandardBasicTypes.STRING);
+			query.addScalar("brand", StandardBasicTypes.STRING);
+			query.addScalar("description", StandardBasicTypes.STRING);
 			
 			List results = query.list();
 			if (results.isEmpty()) {

@@ -37,19 +37,19 @@
 		<![CDATA[select incident_ID from incident]]>
 	</queryString>
 	<background>
-		<band />
+		<band/>
 	</background>
 	<title>
-		<band />
+		<band/>
 	</title>
 	<pageHeader>
-		<band height="729" >
+		<band height="729">
 			<staticText>
 				<reportElement key="textField-2" mode="Opaque" x="191" y="4" width="313" height="59" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="18" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[ MISSING ARTICLE RECEIPT]]></text>
+				<text><![CDATA[BEWIJS VAN AANGIFTE VAN VERLOREN ARTIKELEN]]></text>
 			</staticText>
 			<line>
 				<reportElement key="line-2" mode="Opaque" x="0" y="69" width="1" height="613" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -227,8 +227,8 @@
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Namens US Airways verontschuldigen wij ons voor de ontbrekende artikels uit uw bagage.
-Om te bepalen of u in aanmerking komt voor terugbetaling,  vragen wij u een Passenger Property Form (PPF) in te vullen dat u kan downloaden van onze website:
+				<text><![CDATA[Namens US Airways verontschuldigen wij ons voor de ontbrekende artikelen uit uw Bagage.
+Om te bepalen of U in aanmerking komt voor terugbetaling, vragen wij U een Passenger Property Form (PPF) in te vullen dat U kunt vinden op de website:
 ]]></text>
 			</staticText>
 			<staticText>
@@ -255,7 +255,7 @@ Voor passagiers  reizend binnen Europa, wilt u alstublieft contact opnemen met U
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[www.usairways.com/baggage]]></text>
+				<text><![CDATA[www.usairways.com/baggagePPF]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-48" mode="Opaque" x="69" y="270" width="412" height="50" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -296,7 +296,7 @@ Sauf si la valeur suplementaire a été declaré, la responsabilité concernant 
 ]]></text>
 			</staticText>
 			<image scaleImage="RetainShape">
-				<reportElement key="image-2" x="473" y="688" width="76" height="38">
+				<reportElement key="image-2" mode="Transparent" x="473" y="688" width="76" height="38">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -348,7 +348,7 @@ Sauf si la valeur suplementaire a été declaré, la responsabilité concernant 
 				<text><![CDATA[DATUM]]></text>
 			</staticText>
 			<image scaleImage="RetainShape">
-				<reportElement key="image-3" x="3" y="1" width="137" height="62">
+				<reportElement key="image-3" mode="Transparent" x="3" y="1" width="137" height="62">
 					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -368,18 +368,18 @@ Sauf si la valeur suplementaire a été declaré, la responsabilité concernant 
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band />
+		<band/>
 	</columnHeader>
 	<detail>
-		<band />
+		<band/>
 	</detail>
 	<columnFooter>
-		<band />
+		<band/>
 	</columnFooter>
 	<pageFooter>
-		<band />
+		<band/>
 	</pageFooter>
 	<summary>
-		<band />
+		<band/>
 	</summary>
 </jasperReport>

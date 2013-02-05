@@ -17,7 +17,8 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
+//import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;

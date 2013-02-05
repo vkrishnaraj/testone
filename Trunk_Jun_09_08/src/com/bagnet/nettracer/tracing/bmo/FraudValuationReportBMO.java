@@ -1,81 +1,37 @@
 package com.bagnet.nettracer.tracing.bmo;
 
-import java.awt.Color;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JRParameter;
-import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.export.JExcelApiExporter;
 import net.sf.jasperreports.engine.export.JExcelApiExporterParameter;
-import net.sf.jasperreports.engine.export.JRCsvExporter;
-import net.sf.jasperreports.engine.export.JRHtmlExporter;
-import net.sf.jasperreports.engine.export.JRHtmlExporterParameter;
-import net.sf.jasperreports.engine.export.JRXmlExporter;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
 
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
-import ar.com.fdvs.dj.domain.AutoText;
-import ar.com.fdvs.dj.domain.CustomExpression;
-import ar.com.fdvs.dj.domain.DJCalculation;
-import ar.com.fdvs.dj.domain.DJGroupLabel;
 import ar.com.fdvs.dj.domain.DynamicReport;
-import ar.com.fdvs.dj.domain.ExpressionHelper;
-import ar.com.fdvs.dj.domain.StringExpression;
-import ar.com.fdvs.dj.domain.Style;
-import ar.com.fdvs.dj.domain.builders.ColumnBuilder;
-import ar.com.fdvs.dj.domain.builders.DynamicReportBuilder;
 import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
-import ar.com.fdvs.dj.domain.builders.GroupBuilder;
-import ar.com.fdvs.dj.domain.builders.StyleBuilder;
-import ar.com.fdvs.dj.domain.constants.Border;
-import ar.com.fdvs.dj.domain.constants.Font;
-import ar.com.fdvs.dj.domain.constants.GroupLayout;
-import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
-import ar.com.fdvs.dj.domain.constants.LabelPosition;
 import ar.com.fdvs.dj.domain.constants.Page;
-import ar.com.fdvs.dj.domain.constants.Transparency;
-import ar.com.fdvs.dj.domain.constants.VerticalAlign;
-import ar.com.fdvs.dj.domain.entities.DJGroup;
-import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
-import ar.com.fdvs.dj.domain.entities.columns.PropertyColumn;
 
-import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.other.JRGovernedFileVirtualizer;
 import com.bagnet.nettracer.other.JRMaxFilesException;
 import com.bagnet.nettracer.reporting.ReportingConstants;
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.dto.StatReportDTO;
-import com.bagnet.nettracer.tracing.dto.StatReport_OHD_DTO;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.tracing.utils.TracerProperties;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 //helper class to ReportBMO
 

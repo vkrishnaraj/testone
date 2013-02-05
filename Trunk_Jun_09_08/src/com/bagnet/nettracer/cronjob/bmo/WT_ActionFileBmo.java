@@ -4,13 +4,12 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
 
-public class WT_ActionFileBmo extends HibernateDaoSupport {
+public class WT_ActionFileBmo {
 
 	public static final String DELETE_BY_DAY_TYPE = "delete from Worldtracer_Actionfiles where airline = :airline and station = :station and seq = :seq and day = :day and action_file_type = :actionFileType";
 	
@@ -27,15 +26,14 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 	
 	public static final String FIND_WAF = "from Worldtracer_Actionfiles where airline = :airline and station = :wtStation and action_file_type = :afType and seq = :seq and day = :day and item_number = :itemNum";
 
-	@Transactional
 	public void saveActionFile(Worldtracer_Actionfiles waf) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		sess.save(waf);
+		sess.close();
 	}
 
-	@Transactional
 	public void deleteActionFiles(String airline, String station, ActionFileType actionFileType, String seq, int day) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery(DELETE_BY_DAY_TYPE);
 		q.setParameter("station", station);
 		q.setParameter("airline", airline);
@@ -44,12 +42,12 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 		q.setParameter("seq", seq);
 		
 		q.executeUpdate();
+		sess.close();
 		
 	}
 
-	@Transactional(readOnly = true)
 	public String findTextForAf(Worldtracer_Actionfiles waf) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery(FIND_TEXT_FOR_WAF);
 		q.setParameter("station", waf.getStation());
 		q.setParameter("airline", waf.getAirline());
@@ -59,16 +57,15 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 		q.setParameter("seq", waf.getSeq());
 		
 		List<String> result = q.list();
-		
+		sess.close();
 		if(result.size() > 0) {
 			return result.get(0);
 		}
 		return null;
 	}
 
-	@Transactional
 	public void deleteActionFile(Worldtracer_Actionfiles waf) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery(DELETE_SINGLE);
 		q.setParameter("station", waf.getStation());
 		q.setParameter("airline", waf.getAirline());
@@ -78,10 +75,9 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 		q.setParameter("seq", waf.getSeq());
 
 		q.executeUpdate();
-
+		sess.close();
 	}
 
-	@Transactional
 	public void replaceActionFiles(List<Worldtracer_Actionfiles> result,
 			String companyCode, String stationCode, ActionFileType type, String seq, int day) {
 		deleteActionFiles(companyCode, stationCode, type, seq, day);
@@ -92,10 +88,9 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 		}
 	}
 
-	@Transactional
 	public void deleteActionFiles(String companyCode, String stationCode,
 			ActionFileType afType, String seq) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery(DELETE_BY_TYPE);
 		q.setParameter("station", stationCode);
 		q.setParameter("airline", companyCode);
@@ -103,14 +98,13 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 		q.setParameter("seq", seq);
 
 		q.executeUpdate();
-		
+		sess.close();
 	}
 
-	@Transactional(readOnly = true)
 	public List<Worldtracer_Actionfiles> findActionFileSummary(
 			String companyCode, String wtStation, ActionFileType afType, String seq,
 			int day) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery(FIND_WAF_SUMMARY);
 		q.setParameter("airline", companyCode);
 		q.setParameter("afType", afType);
@@ -118,13 +112,13 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 		q.setParameter("seq", seq);
 		q.setInteger("day", day);
 		List<Worldtracer_Actionfiles> result = q.list();
+		sess.close();
 		return result;
 	}
 
-	@Transactional
 	public void updateDetails(String companyCode, String wtStation,
 			ActionFileType category, String seq, int day, int fileNum, String result, String ahl_id, String ohd_id, double percent) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery(WT_ActionFileBmo.FIND_WAF);
 		q.setParameter("airline", companyCode);
 		q.setParameter("afType", category);
@@ -139,6 +133,7 @@ public class WT_ActionFileBmo extends HibernateDaoSupport {
 		waf.setWt_incident_id(ahl_id);
 		waf.setWt_ohd_id(ohd_id);
 		sess.update(waf);
+		sess.close();
 		return;
 	}
 

@@ -5,22 +5,21 @@ import org.hibernate.Session;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.datafeed.FlightInfo;
 
-public class FlightInfoBmo extends HibernateDaoSupport {
+public class FlightInfoBmo {
 
 
-	@Transactional
 	public void deleteAllFlights() {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		
 		Query q = sess.createQuery("delete from FlightInfo");
 		q.executeUpdate();
 	}
 
-	@Transactional
 	public void save(FlightInfo fi) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		sess.save(fi);
 		
 	}

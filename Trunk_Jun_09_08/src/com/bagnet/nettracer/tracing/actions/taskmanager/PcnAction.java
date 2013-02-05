@@ -94,7 +94,7 @@ public class PcnAction extends Action {
 //		}
 	
 		
-		int rowcount = ProactiveNotificationBMO.getCount(dto, user);
+		long rowcount = ProactiveNotificationBMO.getCount(dto, user);
 
 		/** ************ pagination ************* */
 		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);

@@ -58,7 +58,7 @@ public class SearchForwardNoticeAction extends Action {
 			ForwardNoticeBMO.closeForwardNotice(selectedObject);
 		}
 
-		int rowcount = ForwardNoticeBMO.getForwardsForStationCount(agentStation, theForm.getStatus());
+		long rowcount = ForwardNoticeBMO.getForwardsForStationCount(agentStation, theForm.getStatus());
 
 		/** ************ pagination ************* */
 		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);

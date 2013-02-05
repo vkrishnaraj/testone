@@ -5,7 +5,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
+//import org.hibernate.classic.Session;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -223,7 +224,7 @@ public class LFTracingUtil {
 			if(hasLocation){
 				q.setParameter("foundstation", found.getLocation().getStation_ID());
 			}
-			q.addScalar("id", Hibernate.LONG);
+			q.addScalar("id", StandardBasicTypes.LONG);
 			List<Long> results = (List<Long>)q.list();
 			sess.close();
 			return results;
@@ -269,7 +270,7 @@ public class LFTracingUtil {
 				q.setParameter("foundstation2", found.getLocation().getStation_ID());
 				q.setParameter("subcompCode", found.getCompanyId());
 			}
-			q.addScalar("id", Hibernate.LONG);
+			q.addScalar("id", StandardBasicTypes.LONG);
 			List<Long> results = (List<Long>)q.list();
 			sess.close();
 			return results;
@@ -327,7 +328,7 @@ public class LFTracingUtil {
 				q.setParameter("pickup", lost.getLossInfo().getOrigin().getStation_ID());
 				q.setParameter("dropoff", lost.getLossInfo().getDestination().getStation_ID());
 			}
-			q.addScalar("id", Hibernate.LONG);
+			q.addScalar("id", StandardBasicTypes.LONG);
 			List<Long> results = (List<Long>)q.list();
 			sess.close();
 			return results;
@@ -375,7 +376,7 @@ public class LFTracingUtil {
 			} else {
 				q.setDate("founddate", cal.getTime()); //DATE
 			}
-			q.addScalar("id", Hibernate.LONG);
+			q.addScalar("id", StandardBasicTypes.LONG);
 			List<Long> results = (List<Long>)q.list();
 			sess.close();
 			return results;
@@ -791,7 +792,7 @@ public class LFTracingUtil {
 			q.setParameter("found", match.getFound().getId());
 			q.setParameter("lost", match.getLost().getId());
 			q.setParameter("score", match.getScore());
-			q.addScalar("id", Hibernate.LONG);
+			q.addScalar("id", StandardBasicTypes.LONG);
 			List list = q.list();
 			if(list.size() > 0){
 				return true;
@@ -926,7 +927,7 @@ public class LFTracingUtil {
 			Calendar cal = Calendar.getInstance();
 			cal.add(Calendar.DATE, -1 * PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_SALVAGE_DAYS));
 			q.setDate("salvagedate", cal.getTime()); //DATE
-			q.addScalar("id", Hibernate.LONG);
+			q.addScalar("id", StandardBasicTypes.LONG);
 			
 			List<Long> results = q.list();
 			sess.close();

@@ -124,7 +124,7 @@ public class Address implements Serializable {
 	/**
 	 * @return Returns the addresstype.
 	 * 
-	 * @hibernate.property type="integer" length="6"
+	 * @hibernate.property type="integer"
 	 */
 	public int getAddresstype() {
 		return addresstype;
@@ -142,7 +142,7 @@ public class Address implements Serializable {
 	/**
 	 * @return Returns the is_permanent.
 	 * 
-	 * @hibernate.property type="boolean" column="is_permanent"
+	 * @hibernate.property type="org.hibernate.type.BooleanType" column="is_permanent"
 	 */
 	public boolean isPermanent() {
 		return permanent;

@@ -243,7 +243,7 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		Agent user = (Agent) request.getSession().getAttribute("user");
 		sef.setDateFormat(user.getDateformat().getFormat());
 		sef.setTimeZone(user.getCurrenttimezone());
-		int rowcount = ExpensePayoutBMO.countExpenses(sef, user);
+		long rowcount = ExpensePayoutBMO.countExpenses(sef, user);
 		if(rowcount > 0) {
 			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, request.getSession());
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));

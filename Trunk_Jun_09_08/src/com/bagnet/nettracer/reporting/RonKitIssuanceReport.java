@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.hibernate.Hibernate;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
@@ -38,10 +39,10 @@ public class RonKitIssuanceReport extends AbstractNtJasperReport {
 		query.setDate("startDate", startDate);
 		query.setDate("endDate", endDate);
 		
-		query.addScalar("create_date", Hibernate.STRING);
-		query.addScalar("stationcode", Hibernate.STRING);
-		query.addScalar("incident_ID", Hibernate.STRING);
-		query.addScalar("num_issued", Hibernate.INTEGER);
+		query.addScalar("create_date", StandardBasicTypes.STRING);
+		query.addScalar("stationcode", StandardBasicTypes.STRING);
+		query.addScalar("incident_ID", StandardBasicTypes.STRING);
+		query.addScalar("num_issued", StandardBasicTypes.INTEGER);
 	}
 
 	@Override

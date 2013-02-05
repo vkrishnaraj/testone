@@ -126,7 +126,7 @@ public class Audit_OHD_Address implements Serializable {
 	/**
 	 * @return Returns the addresstype.
 	 * 
-	 * @hibernate.property type="integer" length="6"
+	 * @hibernate.property type="integer"
 	 */
 	public int getAddresstype() {
 		return addresstype;

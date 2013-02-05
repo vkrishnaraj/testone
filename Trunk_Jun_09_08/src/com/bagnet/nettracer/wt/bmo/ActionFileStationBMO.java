@@ -3,12 +3,13 @@ package com.bagnet.nettracer.wt.bmo;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo;
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
@@ -21,26 +22,28 @@ import com.bagnet.nettracer.wt.connector.CaptchaException;
 import com.bagnet.nettracer.wt.connector.WebServiceDto;
 import com.bagnet.nettracer.wt.svc.WorldTracerService;
 
-public class ActionFileStationBMO extends HibernateDaoSupport {
+public class ActionFileStationBMO {
 
+	private static Logger logger = Logger.getLogger(ActionFileStationBMO.class);
+	
 	private static final String GET_COUNT = "select count(*) from Worldtracer_Actionfiles where action_file_type=? and day=? and airline=? and station=? and seq=? and deleted = false";
 
-	@Transactional(readOnly = true)
 	public ActionFileStation getAfStation(String companyCode, String wtStation) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess
 				.createQuery("from ActionFileStation afs where afs.companyCode = :companyCode and afs.stationCode = :wtStation");
 		q.setString("companyCode", companyCode);
 		q.setString("wtStation", wtStation);
-		return (ActionFileStation) q.uniqueResult();
+		ActionFileStation ret = (ActionFileStation) q.uniqueResult();
+		sess.close();
+		return ret;
 	}
 
-	@Transactional
 	public ActionFileStation updateStation(String companyCode,
 			String wtStation, Agent user, WebServiceDto dto)
 			throws CaptchaException {
 		ActionFileStation afStation = getAfStation(companyCode, wtStation);
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		if (!isCurrent(afStation)) {
 			WorldTracerService wtService = SpringUtils.getWorldTracerService();
 			List<ActionFileCount> countList;
@@ -148,6 +151,7 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 			}
 		}
 		sess.saveOrUpdate(afStation);
+		sess.close();
 		return afStation;
 	}
 
@@ -164,7 +168,6 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 		return false;
 	}
 
-	@Transactional
 	public List<Worldtracer_Actionfiles> updateSummary(String companyCode,
 			String wtStation, ActionFileType category, String seq, int day,
 			Agent user, WebServiceDto dto) throws CaptchaException, Exception {
@@ -172,6 +175,7 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 		ActionFileStation afStation = getAfStation(companyCode, wtStation);
 		if (afStation == null)
 			return null;
+		Session sess = null;
 		try {
 			wtService.getWtConnector().initialize();
 			List<Worldtracer_Actionfiles> result = wtService
@@ -226,7 +230,7 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 				return null;
 			}
 
-			Session sess = getSession(false);
+			sess = HibernateWrapper.getSession().openSession();
 			sess.saveOrUpdate(afStation);
 			Query q = sess.createQuery(WT_ActionFileBmo.DELETE_BY_DAY_TYPE);
 			q.setParameter("airline", companyCode);
@@ -246,14 +250,16 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 			return null;
 		} finally {
 			wtService.getWtConnector().logout();
+			if(sess != null){
+				sess.close();
+			}
 		}
 	}
 
-	@Transactional
 	public Worldtracer_Actionfiles eraseActionFile(String companyCode,
 			String wtStation, ActionFileType category, String seq, int day,
 			int fileNum, ActionFileStation afs) {
-		Session sess = getSession(false);
+		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery(WT_ActionFileBmo.FIND_WAF);
 		q.setParameter("airline", companyCode);
 		q.setParameter("afType", category);
@@ -306,6 +312,7 @@ public class ActionFileStationBMO extends HibernateDaoSupport {
 			break;
 		}
 		sess.saveOrUpdate(afs);
+		sess.close();
 		return waf;
 	}
 

@@ -10,7 +10,9 @@ import java.util.TimeZone;
 import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
-import org.hibernate.classic.Session;
+//import org.hibernate.classic.Session;
+import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -235,13 +237,13 @@ public class ScannerMbrQueryServiceImpl extends ScannerMbrQueryServiceSkeleton {
     		}
 
     		//Set Returns
-			query.addScalar("id", Hibernate.STRING);
-			query.addScalar("type_id", Hibernate.INTEGER);
-			query.addScalar("type", Hibernate.STRING);
-			query.addScalar("createdatetime", Hibernate.TIMESTAMP);
-			query.addScalar("c_check", Hibernate.STRING);
-			query.addScalar("itm_check", Hibernate.STRING);
-			query.addScalar("pnr", Hibernate.STRING);
+			query.addScalar("id", StandardBasicTypes.STRING);
+			query.addScalar("type_id", StandardBasicTypes.INTEGER);
+			query.addScalar("type", StandardBasicTypes.STRING);
+			query.addScalar("createdatetime", StandardBasicTypes.TIMESTAMP);
+			query.addScalar("c_check", StandardBasicTypes.STRING);
+			query.addScalar("itm_check", StandardBasicTypes.STRING);
+			query.addScalar("pnr", StandardBasicTypes.STRING);
 
 			return query.list();
 			

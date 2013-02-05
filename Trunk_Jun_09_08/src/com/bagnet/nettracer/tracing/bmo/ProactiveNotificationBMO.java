@@ -26,7 +26,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 public class ProactiveNotificationBMO {
 	private static Logger logger = Logger.getLogger(ProactiveNotificationBMO.class);
 	
-	public static int getCount(PcnSearchDTO dto, Agent user) {
+	public static long getCount(PcnSearchDTO dto, Agent user) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getDirtySession().openSession();
@@ -63,7 +63,7 @@ public class ProactiveNotificationBMO {
 			
 			
 			cri.setProjection(Projections.rowCount());
-			return (Integer) cri.uniqueResult();
+			return (Long) cri.uniqueResult();
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -77,8 +77,8 @@
 						int station_id = a.getStation().getStation_ID();
 						sess = HibernateWrapper.getDirtySession().openSession();
 						SQLQuery query = sess.createSQLQuery("select textArea1, textArea2 from z_task_manager_notice where station_id = " + station_id);
-						query.addScalar("textArea1", Hibernate.STRING);	
-						query.addScalar("textArea2", Hibernate.STRING);
+						query.addScalar("textArea1", org.hibernate.type.StandardBasicTypes.STRING);	
+						query.addScalar("textArea2", org.hibernate.type.StandardBasicTypes.STRING);
 						List queryResults = query.list();
 						if (queryResults != null && queryResults.size() > 0) {
 							Object[] array = (Object[]) queryResults.get(0);

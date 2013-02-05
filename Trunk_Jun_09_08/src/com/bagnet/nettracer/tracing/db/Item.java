@@ -604,7 +604,7 @@ public class Item implements Serializable {
 	/**
 	 * @return Returns the lvlofdamage.
 	 * 
-	 * @hibernate.property type="integer" length="4"
+	 * @hibernate.property type="integer"
 	 */
 	public int getLvlofdamage() {
 		return lvlofdamage;

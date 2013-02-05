@@ -2,7 +2,8 @@ package com.bagnet.nettracer.tracing.dao;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
+//import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import aero.nettracer.fs.model.AuditFsClaim;
 
