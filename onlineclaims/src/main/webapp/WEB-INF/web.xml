@@ -55,23 +55,6 @@
 		<display-name>RichFaces Filter</display-name>
 		<filter-name>richfaces</filter-name>
 		<filter-class>org.ajax4jsf.Filter</filter-class>
-		<!-- Optional Init Params -->
-<!-- 	<init-param>
-			<param-name>forceparser</param-name>
-			<param-value>false</param-value>
-		</init-param>
-		<init-param>
-			<param-name>enable-cache</param-name>
-			<param-value>true</param-value>
-		</init-param>
-		 <init-param>
-   			<param-name>createTempFiles</param-name>
-   			<param-value>false</param-value>
- 		 </init-param>
-		<init-param>
-  			 <param-name>maxRequestSize</param-name>
-   			 <param-value>10000000</param-value>
-  		</init-param>  -->
 	</filter>
 	<filter-mapping>
 		<filter-name>richfaces</filter-name>
@@ -80,28 +63,15 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
-	<!-- All of the following are optional params -->
-<!-- <context-param>
-		<param-name>org.ajax4jsf.COMPRESS_SCRIPT</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<context-param>
-		<param-name>org.richfaces.LoadStyleStrategy</param-name>
-		<param-value>all</param-value>
-	</context-param>
-	<context-param>
-		<param-name>org.richfaces.LoadScriptStrategy</param-name>
-		<param-value>all</param-value>
-	</context-param> -->
 	<!-- End Richfaces Params -->
 	
 	
 	<!-- MyFaces Params -->
-	<!-- Allows for the proper rendering of myfaces components -->
+	<!-- Allows for the proper rendering of myfaces components 
 	<listener>
 		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
 	</listener>
-	<!-- End MyFaces Params -->
+	 End MyFaces Params -->
 	
 	
 	<!-- Tomahawk Params -->
