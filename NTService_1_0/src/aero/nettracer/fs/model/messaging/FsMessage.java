@@ -48,7 +48,7 @@ public class FsMessage implements Serializable{
 	@Column(length=100)
 	private String senderName;
 	
-	@Column(length=2500)
+	@Column(name="message",columnDefinition="text")
 	private String message;
 
 	public long getId() {
