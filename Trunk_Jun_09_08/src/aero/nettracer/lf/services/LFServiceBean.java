@@ -177,13 +177,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		long subCategory = dto.getSubCategory();
 		boolean haveBrand = dto.getBrand() != null && !dto.getBrand().isEmpty();
 		boolean haveDesc = dto.getItemDescription() != null && !dto.getItemDescription().isEmpty();
+		boolean haveSerial = dto.getSerialNumber() != null && !dto.getSerialNumber().isEmpty();
 		
 		if(TracingConstants.LF_LF_COMPANY_ID.equals(dto.getAgent().getCompanycode_ID()) && dto.getType() == TracingConstants.LF_TYPE_LOST && dto.getStationId() != -1)
 		{
 			sql += "left outer join o.segments seg";
 		}
 		
-		if (category > 0 || haveBrand || haveDesc) {
+		if (category > 0 || haveBrand || haveDesc || haveSerial) {
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " left outer join o.items i";
 			} else {
@@ -206,7 +207,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		sql += " where 1=1";
 
-		if (category > 0 || haveBrand || haveDesc) {
+		if (category > 0 || haveBrand || haveDesc || haveSerial) {
 			String itemSql = " and i.type = " + dto.getType();
 			if (category > 0) {
 				itemSql += " and i.category = " + category;
@@ -221,6 +222,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			if (haveDesc) {
 				itemSql += " and i.description like \'%" + dto.getItemDescription().trim() + "%\'";
+			}
+			if(haveSerial){
+				String sn = dto.getSerialNumber().trim();
+				if(sn != null){
+					if(sn.contains("%")){
+						itemSql += " and i.serialNumber like \'" + sn + "\'";
+					} else {
+						itemSql += " and i.serialNumber = \'" + sn + "\'";
+					}
+				}
 			}
 			
 			sql += itemSql;
@@ -338,6 +349,17 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				e.printStackTrace();
 			}
 		}
+		if(dto.getAgent().getSubcompany()!=null){
+			try {
+				String scc = dto.getAgent().getSubcompany().getSubcompanyCode();
+				if(scc != null){
+					sql += " and o.companyId = \'" + scc + "\'";
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		if(dto.getAgent().getSubcompany()!=null){
 			try {
 				String scc = dto.getAgent().getSubcompany().getSubcompanyCode();
@@ -2145,7 +2167,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
 		//by default we use the return address from the company variable
 		h.put("RETURNADDRESS", getAutoAgent().getStation().getCompany().getVariable().getEmail_from());
-		Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId());
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId(), lost.getAgent().getCompanycode_ID());
 		if("AB".equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
 			h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
 			h.put("SUBJECTLINE", resources.getString("ab.email.subject"));
@@ -3359,11 +3381,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public boolean sendEmail(LFLost lost, HashMap params, String htmlFileName, String subjectline){
 		if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
 			try {
-				String root = TracerProperties.get("email.resources");
-				String imgbanner = TracerProperties.get("lf.email.banner");
+				String root = TracerProperties.get(lost.getAgent().getCompanycode_ID(),"email.resources");
+				String imgbanner = TracerProperties.get(lost.getAgent().getCompanycode_ID(),"lf.email.banner");
 				String configpath = root + "/";
 				String imagepath = root + "/";
-				Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId());
+				Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId(), lost.getAgent().getCompanycode_ID());
 				
 				if(subcomp!=null && subcomp.getEmail_Path()!=null && subcomp.getEmail_Path().length()>0){
 					configpath = root + subcomp.getEmail_Path();
@@ -3437,8 +3459,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public boolean sendEmail(Agent a, HashMap params, String htmlFileName, String subjectline){
 		//if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
 			try {
-				String root = TracerProperties.get("email.resources");
-				String imgbanner = TracerProperties.get("lf.email.banner");
+				String root = TracerProperties.get(a.getCompanycode_ID(),"email.resources");
+				String imgbanner = TracerProperties.get(a.getCompanycode_ID(),"lf.email.banner");
 				String configpath = root + "/";
 				String imagepath = root + "/";
 				configpath = root + "/WN/";

@@ -174,12 +174,13 @@
 			                <html:text property="endDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.endDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
 		                </td>
 		                <logic:equal name="searchLostFoundForm" property="type" value="<%=String.valueOf(TracingConstants.LF_TYPE_FOUND) %>" >
+		                <% if(a.getCompanycode_ID().equals(TracingConstants.LF_LF_COMPANY_ID)&&(a.getSubcompany()==null)){ %>
 		                <td nowrap colspan=1>
 			                <bean:message key="colname.agent.name" /><br/>
 			                <html:text name="searchLostFoundForm" property="agentName" size="20" maxlength="20" styleClass="textfield" />
 			               
 		                </td>
-		                
+		                <%} %>
              			<td>
                				<bean:message key="colname.lf.disposition" />
                				<br>
@@ -190,6 +191,7 @@
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_SALVAGED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_SALVAGED) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_STAGED_FOR_SHIPPING) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_STAGED_FOR_SHIPPING) %>" /></html:option>
                				</html:select>                  
              			</td>
 		                </logic:equal>
@@ -247,6 +249,13 @@
 		              		<html:text name="searchLostFoundForm" property="itemDescription" size="25" maxlength="100" styleClass="textfield" />
            				</td>
            			</tr>
+		            <tr>
+           				<td>
+			              <bean:message key="colname.serial.number" />
+			              <br>
+			              <html:text name="searchLostFoundForm" property="serialNumber" size="20" maxlength="20" styleClass="textfield" />
+			            </td>
+			        </tr>
            			<tr>
            				<td colspan=5>
            					<center>
