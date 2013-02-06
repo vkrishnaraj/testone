@@ -26,10 +26,12 @@ import com.healthmarketscience.rmiio.SimpleRemoteInputStream;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.StandardBasicTypes;
 
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
@@ -1013,19 +1015,19 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 
-			Connection conn = sess.connection();
-			Statement stmt = conn.createStatement();
-			ResultSet rs = null;
+			SQLQuery q = sess.createSQLQuery(sql);
+
+			q.addScalar("swapId", StandardBasicTypes.STRING);
+			q.addScalar("matches", StandardBasicTypes.INTEGER);
 			
-			rs = stmt.executeQuery(sql);
+			List<Object[]> theResult = q.list();
 			
-			while (rs.next()) {
-				toReturn.put(rs.getString("swapId"), rs.getInt("matches"));
+			if (theResult != null) {
+				for (Object[] result : theResult) {
+					toReturn.put((String) result[0], (Integer) result[1]);
+				}
 			}
-			
-			stmt.close();
-			rs.close();
-			
+						
 		} catch (Exception e) {
 			logger.error("unable to retrieve matches " + e);
 			e.printStackTrace();

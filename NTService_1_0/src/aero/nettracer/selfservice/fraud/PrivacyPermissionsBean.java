@@ -17,7 +17,7 @@ import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 @Stateless
-public class PrivacyPermissionsBean implements PrivacyPermissionsRemote, PrivacyPermissionsHome{
+public class PrivacyPermissionsBean implements PrivacyPermissionsRemote{
 	
 	private static Date permissionCacheTimeout = (new GregorianCalendar()).getTime();
 	private static List<PrivacyPermissions> permissionsList = null;

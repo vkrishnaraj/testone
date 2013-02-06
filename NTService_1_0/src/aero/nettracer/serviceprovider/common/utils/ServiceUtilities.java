@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
-import org.hibernate.classic.Session;
+import org.hibernate.Session;
 
 import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.common.dao.UserDao;

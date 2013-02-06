@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 
 import aero.nettracer.serviceprovider.common.exceptions.BagtagException;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
@@ -36,7 +37,7 @@ public class BagTagConversion {
 		Session sess = HibernateWrapper.getSession().openSession();
 
 		SQLQuery query = sess.createSQLQuery("SELECT * FROM LOOKUP_AIRLINE_CODES WHERE Airline_3_Digit_Ticketing_Code = :string");
-		query.addScalar("Airline_2_Character_Code", Hibernate.STRING);
+		query.addScalar("Airline_2_Character_Code", StandardBasicTypes.STRING);
 		//query.addScalar("Airline_3_Digit_Ticketing_Code", Hibernate.STRING);
 		query.setString("string", threeDigitCode);
 		
@@ -62,7 +63,7 @@ public class BagTagConversion {
 
 		SQLQuery query = sess.createSQLQuery("SELECT * FROM LOOKUP_AIRLINE_CODES WHERE Airline_2_Character_Code = :string");
 		
-		query.addScalar("Airline_3_Digit_Ticketing_Code", Hibernate.STRING);
+		query.addScalar("Airline_3_Digit_Ticketing_Code", StandardBasicTypes.STRING);
 		query.setString("string", twoCharacterCode);
 		
 		List results = query.list();

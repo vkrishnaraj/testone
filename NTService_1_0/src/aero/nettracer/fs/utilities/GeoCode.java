@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 
 import aero.nettracer.fs.utilities.tracing.TimerThread;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
@@ -194,8 +195,8 @@ public class GeoCode {
 							+ ") or (ltoadd <= " + parsed.getNum()
 							+ " and lfromadd >= " + parsed.getNum() + ")))"
 							: ""));
-			query.addScalar("longitude", Hibernate.DOUBLE);
-			query.addScalar("latitude", Hibernate.DOUBLE);
+			query.addScalar("longitude", StandardBasicTypes.DOUBLE);
+			query.addScalar("latitude", StandardBasicTypes.DOUBLE);
 			List<Object[]> list = query.list();
 			if (list != null && list.size() > 0) {
 				for (int i = 0, j = list.size(); i < j; i++) {
@@ -235,8 +236,8 @@ public class GeoCode {
 							+ state.toLowerCase()
 							+ "_min where "
 							+ "zipl = " + zip + " or zipr = " + zip);
-			query.addScalar("longitude", Hibernate.DOUBLE);
-			query.addScalar("latitude", Hibernate.DOUBLE);
+			query.addScalar("longitude", StandardBasicTypes.DOUBLE);
+			query.addScalar("latitude", StandardBasicTypes.DOUBLE);
 			List<Object[]> list = query.list();
 			if (list != null && list.size() > 0) {
 				for (int i = 0, j = list.size(); i < j; i++) {

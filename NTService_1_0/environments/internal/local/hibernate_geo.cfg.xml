@@ -16,10 +16,11 @@
 	<property name="jdbc.fetch_size">50</property>
 	<property name="jdbc.batch_size">25</property>
 	<property name="jdbc.use_scrollable_resultset">false</property>
-	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+	<property name="dialect">org.hibernate.dialect.Mysql5BitBooleanDialect</property>
 	<property name="hibernate.connection.autoReconnect">true</property>
 	<property name="hibernate.connection.autoReconnectForPools">true</property>
 	<property name="hibernate.connection.is-connection-validation-required">true</property>
+	<property name="hibernate.listeners.envers.autoRegister">false</property>
 
 	<!-- c3p0 -->
 	<property name="hibernate.c3p0.acquire_increment">1</property>

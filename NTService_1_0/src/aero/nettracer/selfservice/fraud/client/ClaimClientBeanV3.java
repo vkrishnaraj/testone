@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import org.dozer.DozerBeanMapperSingletonWrapper;
@@ -26,6 +27,7 @@ import aero.nettracer.selfservice.fraud.ClaimBean;
 import com.healthmarketscience.rmiio.RemoteInputStream;
 
 @Stateless
+@Remote(ClaimClientRemote.class)
 public class ClaimClientBeanV3 implements ClaimClientRemoteV3{
 
 	ClaimBean bean = new ClaimBean();

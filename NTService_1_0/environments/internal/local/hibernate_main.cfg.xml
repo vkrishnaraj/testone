@@ -9,22 +9,22 @@
 
 	<property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
 
-	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+	<!--  <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>-->
 	<property name="hibernate.cache.use_second_level_cache">false</property>
 		
 	
-	<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/fs_local</property>
-	<property name="hibernate.connection.username">root</property>
+	<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/aa_fs_test</property>
+	<property name="hibernate.connection.username">nettracer</property>
 	<property name="hibernate.connection.password">nettracer</property>
 	<property name="show_sql">true</property>
 	<property name="jdbc.fetch_size">50</property>
 	<property name="jdbc.batch_size">25</property>
 	<property name="jdbc.use_scrollable_resultset">false</property>
-	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+	<property name="dialect">org.hibernate.dialect.Mysql5BitBooleanDialect</property>
 	<property name="hibernate.connection.autoReconnect">true</property>
 	<property name="hibernate.connection.autoReconnectForPools">true</property>
 	<property name="hibernate.connection.is-connection-validation-required">true</property>
-	
+	<property name="hibernate.listeners.envers.autoRegister">false</property>
 	<!-- c3p0 -->
 	<property name="hibernate.c3p0.acquire_increment">1</property>
 	<property name="hibernate.c3p0.idle_test_period">100</property>
@@ -73,10 +73,7 @@
 		<mapping class="aero.nettracer.fs.model.forum.FsForumPost"/>
 		<mapping class="aero.nettracer.fs.model.forum.FsForumPost_Claim"/>
 		<mapping class="aero.nettracer.fs.model.forum.FsForumTag"/>
-		<!--
-		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCPassenger" />
-		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim" />
-		-->
+
 </session-factory>
 
 </hibernate-configuration>

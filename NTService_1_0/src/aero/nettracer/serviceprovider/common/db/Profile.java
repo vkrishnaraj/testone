@@ -3,12 +3,15 @@ package aero.nettracer.serviceprovider.common.db;
 import java.util.Map;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.MapKeyColumn;
+import javax.persistence.MapKeyEnumerated;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -46,18 +49,18 @@ public class Profile {
 	}
 	
 
-	@org.hibernate.annotations.CollectionOfElements(targetElement = String.class, fetch = FetchType.EAGER)
+	@ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "svc_profile_parameters", joinColumns = @JoinColumn(name = "profile_id"))
-	@MapKey(columns = @Column(name = "parameter_type", length = 30), type = @Type(type = "org.hibernate.type.EnumType", parameters = {
-			@Parameter(name = EnumType.ENUM, value = "aero.nettracer.serviceprovider.common.db.ParameterType"),
-			@Parameter(name = EnumType.TYPE, value = "12") }))
+	@MapKeyEnumerated(javax.persistence.EnumType.STRING)
+	@MapKeyColumn(name = "parameter_type")
+	@Column(name="element")
 	private Map<ParameterType, String> parameters;
 
-	@org.hibernate.annotations.CollectionOfElements(targetElement = Boolean.class, fetch = FetchType.EAGER)
+	@ElementCollection(targetClass = Boolean.class, fetch = FetchType.EAGER)
 	@JoinTable(name = "svc_profile_permission", joinColumns = @JoinColumn(name = "permission_id"))
-	@MapKey(columns = @Column(name = "permission_type", length = 30), type = @Type(type = "org.hibernate.type.EnumType", parameters = {
-			@Parameter(name = EnumType.ENUM, value = "aero.nettracer.serviceprovider.common.db.PermissionType"),
-			@Parameter(name = EnumType.TYPE, value = "12") }))
+	@MapKeyEnumerated(javax.persistence.EnumType.STRING)
+	@MapKeyColumn(name = "permission_type")
+	@Column(name="element")
 	private Map<PermissionType, Boolean> permissions;
 
 	public long getId() {

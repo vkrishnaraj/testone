@@ -129,7 +129,7 @@
 				<path location="${classes.dir}" />
 				<path location="${client.dir}\slf4j-api.jar" />
 			</classpath>
-			<annotationconfiguration configurationfile="${classes.dir}/hibernate_main.cfg.xml" />
+			<annotationconfiguration configurationfile="C:/workspace/NTService_1_0/src/hibernate_main.cfg.xml" />
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="central-svc-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>
@@ -294,9 +294,6 @@
 		</javac>
 		
 		<jar destfile="${dist.dir}/nt_fs.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">
-			<metainf dir="${src.dir}/../metadata/fs">
-				<include name="ejb-jar.xml"/>
-			</metainf>
 			<include name="${build.dir}/services-war/WEB-INF/classes/" />
 			<include name="**/**/fraud/**/*.class" />
 			<include name="**/**/fraud/client/*.class" />
@@ -312,7 +309,24 @@
 			<include name="**/**/*.xml" />
 		</jar>
 		
+		<mkdir dir="${build.dir}/temp/META-INF" />
+	    <manifest file="${build.dir}/temp/META-INF/MANIFEST.MF">
+	    	<attribute name="Dependencies" value=
+	    	"org.hibernate,
+	    	org.antlr,
+	    	org.apache.commons.logging,
+	    	org.apache.xerces,
+	    	javax.persistence.api,
+	    	com.healthmarketscience.rmiio,
+	    	org.jboss.remote-naming,
+	    	org.javassist,
+	    	org.dozer,
+	    	org.apache.commons.codec"/>
+	    </manifest>
+		
 		<jar destfile="${dist.dir}/nt_fs_client.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">
+			<metainf dir="${build.dir}/temp/META-INF">
+			</metainf>
 			<include name="**/**/fraud/client/ClaimClientRemote*.class" />
 			<include name="**/**/fraud/ClaimRemote.class" />
 			<include name="**/**/fraud/PrivacyPermissionsRemote.class" />
@@ -327,7 +341,7 @@
 		<copy file="${root.dir}/lib/claim_model.jar" todir="${dist.dir}"/>
 		
 
-		<ear destfile="${dist.dir}/${ear.name}" appxml="${src.dir}/../metadata/fs/application.xml">
+		<ear manifest="${build.dir}/temp/META-INF/MANIFEST.MF" destfile="${dist.dir}/${ear.name}" appxml="${src.dir}/../metadata/fs/application.xml">
 			<fileset dir="${dist.dir}" includes="nt_fs.jar, claim_model.jar" />
 		</ear>
 		
@@ -450,6 +464,8 @@
 				<include name="**/*.xml"/>
 			</fileset>
 		</copy>
+
+		<mkdir dir="${build.dir}/services-war/META-INF" />
 		
 		<copy todir="${build.dir}/services-war" overwrite="true">
 			<fileset dir="${webroot.dir}" >
@@ -458,15 +474,23 @@
 			</fileset>
 		</copy>
 		
-<!--
-		<copy todir="${build.dir}/services-war/WEB-INF/classes" overwrite="true">
-			<fileset dir="${build.classes.dir}" />
-		</copy>
-
+	    <manifest file="${build.dir}/services-war/META-INF/MANIFEST.MF">
+	    	<attribute name="Dependencies" value="
+	    		org.hibernate,
+	    		org.antlr,
+	    		org.apache.commons,
+	    		org.apache.commons.logging,
+	    		org.apache.xerces,
+	    		javax.persistence.api,
+	    		org.apache.axis2,
+	    		org.apache.xmlbeans,
+	    		org.apache.axiom,
+	    		org.javassist,
+	    		org.dozer,
+	    		user.central_service
+	    		"/>
+	    </manifest>
 		
-		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_main.cfg.xml" overwrite="true" />
-		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_geo.cfg.xml" overwrite="true" />
-			-->
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" overwrite="true">
 			<fileset dir="${root.dir}/environments/${client.name}/${environment.name}" >
 				<include name="**/hibernate_main.cfg.xml"/>
@@ -477,8 +501,11 @@
 		
 		<delete dir="${dist.dir}" failonerror="false" />
 		<mkdir dir="${dist.dir}"/>
-		<war destfile="${dist.dir}/${war.name}.war" duplicate="preserve" compress="true" webxml="web/WEB-INF/web.xml">
-			<fileset dir="${build.dir}/services-war"/>
+		<war manifest="${build.dir}/services-war/META-INF/MANIFEST.MF" destfile="${dist.dir}/${war.name}.war" duplicate="preserve" compress="true" webxml="web/WEB-INF/web.xml">
+			<fileset dir="${build.dir}/services-war">
+			    <exclude name="**/aero/nettracer/fs/**/*"/>
+			    <exclude name="**/aero/nettracer/selfservice/fraud/**/*"/>
+			</fileset>
 		</war>
 			
 		<jar destfile="${dist.dir}/nt_mdb.jar" basedir="${build.dir}/services-war/WEB-INF/classes/" includes="**/MDB*.class">

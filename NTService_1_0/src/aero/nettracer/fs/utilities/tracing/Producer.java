@@ -15,6 +15,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 
 import aero.nettracer.fs.model.Bag;
 import aero.nettracer.fs.model.File;
@@ -109,8 +110,8 @@ public class Producer {
 			Session sess = HibernateWrapper.getSession().openSession();
 			try{
 			pq = sess.createSQLQuery(ms.toString());
-			pq.addScalar("file2_id", Hibernate.LONG);
-			pq.addScalar("overallScore", Hibernate.DOUBLE);
+			pq.addScalar("file2_id", StandardBasicTypes.LONG);
+			pq.addScalar("overallScore", StandardBasicTypes.DOUBLE);
 			List<Object[]> listMatchingFiles = pq.list();
 			
 			HashMap<Long, List<Double>> matchingMap = new HashMap<Long, List<Double>>();
@@ -380,14 +381,14 @@ public class Producer {
 		SQLQuery pq = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		pq = sess.createSQLQuery(sql.toString());
-		pq.addScalar("f1_id", Hibernate.LONG);
-		pq.addScalar("f2_id", Hibernate.LONG);
-		pq.addScalar("f3_id", Hibernate.LONG);
-		pq.addScalar("f4_id", Hibernate.LONG);
-		pq.addScalar("f5_id", Hibernate.LONG);
-		pq.addScalar("f6_id", Hibernate.LONG);
-		pq.addScalar("f7_id", Hibernate.LONG);
-		pq.addScalar("type", Hibernate.STRING);
+		pq.addScalar("f1_id", StandardBasicTypes.LONG);
+		pq.addScalar("f2_id", StandardBasicTypes.LONG);
+		pq.addScalar("f3_id", StandardBasicTypes.LONG);
+		pq.addScalar("f4_id", StandardBasicTypes.LONG);
+		pq.addScalar("f5_id", StandardBasicTypes.LONG);
+		pq.addScalar("f6_id", StandardBasicTypes.LONG);
+		pq.addScalar("f7_id", StandardBasicTypes.LONG);
+		pq.addScalar("type", StandardBasicTypes.STRING);
 		List<Object[]> result = pq.list();
 
 		sess.close();
@@ -600,7 +601,7 @@ public class Producer {
 		SQLQuery pq = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		pq = sess.createSQLQuery(sql.toString());
-		pq.addScalar("companycode_id", Hibernate.STRING);
+		pq.addScalar("companycode_id", StandardBasicTypes.STRING);
 		List<String> result = pq.list();
 		sess.close();
 		return result;
@@ -699,7 +700,7 @@ public class Producer {
 		q.setParameter("id", fileId);
 		q.setParameter("airline", requestedCompany);
 
-		q.addScalar("status", Hibernate.STRING);
+		q.addScalar("status", StandardBasicTypes.STRING);
 		q.setMaxResults(1);
 		
 		String level = (String)q.uniqueResult();
@@ -720,7 +721,7 @@ public class Producer {
 		q.setParameter("id", fileId);
 		q.setParameter("airline", requestedCompany);
 
-		q.addScalar("status", Hibernate.STRING);
+		q.addScalar("status", StandardBasicTypes.STRING);
 		q.setMaxResults(1);
 		
 		String level = (String)q.uniqueResult();
