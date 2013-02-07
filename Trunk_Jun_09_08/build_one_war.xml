@@ -422,7 +422,7 @@
 	    		org.apache.axiom,
 	    		com.bagnet.nettracer.ws.pax-view,
 	    		com.bagnet.nettracer.ws.reservation,
-	    		com.bagnet.nettracer.ws.fraud,
+
 	    		com.bagnet.nettracer.ws.scannerMBR,
 	    		com.rmiio,
 	    		net.sf.jasperreports,
@@ -450,7 +450,7 @@
 				<exclude name="hibernate*.jar" />
 				<exclude name="ReservationService*.jar" />
 				<exclude name="ScannerMbrQueryService.jar" />
-				<exclude name="SimpleService.jar" />
+				<!--<exclude name="FraudService.jar" />-->
 				<exclude name="axis2*.jar" />
 				<exclude name="jxl*.jar" />
 				<exclude name="iText*.jar" />
