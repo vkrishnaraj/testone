@@ -36,6 +36,18 @@
       field.value = field.value.substring(0, maxlimit);
     } 
   }
+  
+  function checkBagType() {
+			var btype=document.getElementById("bagtype");
+			var cr=document.getElementById("childRestraint");
+			if(btype.value=="71"){
+				document.getElementById("childRestraint").style.display = "block";
+			} else {
+				document.getElementById("childRestraint").style.display = "none";
+			}
+			
+			//document.getElementById("subCategory"+selectedCategory).style.display="inline";
+		}
 
 </SCRIPT>
 
@@ -52,9 +64,9 @@
 		pos = o.name.substring(pos+1,pos2);
 
 		if (o.value == <%= TracingConstants.MANUFACTURER_OTHER_ID %>) {
-			document.getElementById("manu_other" + pos).style.visibility = "visible";
+			document.getElementById("manu_other" + pos).style.display= "block";
 		} else {
-			document.getElementById("manu_other" + pos).style.visibility = "hidden";
+			document.getElementById("manu_other" + pos).style.display = "none";
 		}
 	}
 	
@@ -181,7 +193,7 @@
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=1&key=theitem[<%= i %>].bagtype&type=bagtype',800,280,230);return false;"><bean:message key="chart1" /></a>
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&key=theitem[<%= i %>].bagtype&type=bagtype',800,370,230);return false;"><bean:message key="chart2" /></a>
               <br>
-              <html:select name="theitem" property="bagtype" styleClass="dropdown" indexed="true">
+              <html:select name="theitem" styleId="bagtype" property="bagtype" styleClass="dropdown" indexed="true" onchange="checkBagType()">
                 <html:options collection="typelist" property="value" labelProperty="label" />
               </html:select>
             </td>
@@ -241,7 +253,18 @@
 						<html:option value="kg">kg</html:option>
 			        </html:select>
               </td>
-              <td colspan="2"></td>
+              
+              <td colspan="2" id="childRestraint" style="display:none">
+              	<% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_CHILD_RESTRAINT_SYSTEM, a) && theitem.getItemtype_ID()!=2){ %>
+              	<bean:message key="colname.child.restraint.system" /><br>
+              	 	<html:select name="theitem" property="childRestraint" styleClass="dropdown" indexed="true">
+						<html:option value="0"><bean:message key="child.restraint.0"/></html:option>
+						<html:option value="1"><bean:message key="child.restraint.1"/></html:option>
+						<html:option value="2"><bean:message key="child.restraint.2"/></html:option>
+			        </html:select>
+			        <% } %>
+              </td>
+              <!-- <td colspan="2"></td> -->
           </tr>
        	  <% 
 			    }
@@ -533,3 +556,6 @@
                 <br>
                 <br>
      </logic:notEqual>
+     
+     <script> checkBagType(); </script>
+     

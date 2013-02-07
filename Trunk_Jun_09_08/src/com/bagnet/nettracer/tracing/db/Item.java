@@ -41,6 +41,7 @@ public class Item implements Serializable {
 	private String claimchecknum_bagnumber;
 	private String color;
 	private String bagtype;
+	private int childRestraint;
 	private int xdescelement_ID_1;
 	private int xdescelement_ID_2;
 	private int xdescelement_ID_3;
@@ -633,6 +634,23 @@ public class Item implements Serializable {
 	 */
 	public void setBagtype(String bagtype) {
 		this.bagtype = bagtype;
+	}
+	
+	/**
+	 * @return Returns the childRestraint.
+	 * 
+	 * @hibernate.property type="integer" length="2" column="childrestraint"
+	 */
+	public int getChildRestraint() {
+		return childRestraint;
+	}
+
+	/**
+	 * @param childRestraint
+	 *          The childRestraint to set.
+	 */
+	public void setChildRestraint(int childRestraint) {
+		this.childRestraint = childRestraint;
 	}
 
 	/**
