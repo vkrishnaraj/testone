@@ -533,7 +533,7 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
     	}
     	if(wsRes != null){
     		// BEGIN POPULATE RESERVATION FROM WS
-    		aero.nettracer.fs.model.Reservation reservation = new aero.nettracer.fs.model.Reservation();
+    		aero.nettracer.fs.model.Reservation reservation = file.getIncident().getReservation();
     		reservation.setIncident(incident);
     		reservation.setCcExpMonth(wsRes.getCcExpMonth());
     		reservation.setCcExpYear(wsRes.getCcExpYear());
@@ -544,7 +544,6 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
     		reservation.setRecordLocator(wsRes.getRecordLocator());
     		reservation.setPassengers(copyWStoNTPass(wsRes.getClaimantsArray(), null, reservation, null));
     		reservation.setSegments(copyWStoNTSeg(wsRes.getSegmentsArray(), null, reservation, null));
-    		incident.setReservation(reservation);
     	}
     	// END POPULATE RESERVATION FROM WS
     	return true;
