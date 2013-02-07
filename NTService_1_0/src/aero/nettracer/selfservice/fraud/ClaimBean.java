@@ -912,7 +912,10 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			
 		}catch (Exception e){
 			e.printStackTrace();
-			sess.close();
+		}finally{
+			if(sess != null){
+				sess.close();
+			}
 		}
 	}
 	
