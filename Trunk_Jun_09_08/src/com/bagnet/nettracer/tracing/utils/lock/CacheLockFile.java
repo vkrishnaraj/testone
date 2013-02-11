@@ -2,17 +2,21 @@ package com.bagnet.nettracer.tracing.utils.lock;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.Locale;
 
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.util.MessageResources;
-import org.jboss.cache.Cache;
-import org.jboss.cache.CacheManager;
 import org.jboss.cache.CacheStatus;
 import org.jboss.cache.Fqn;
-import org.jboss.ha.framework.server.CacheManagerLocator;
+
+import javax.naming.InitialContext;
+
+import org.infinispan.lifecycle.ComponentStatus;
+import org.infinispan.manager.CacheContainer;
+import org.infinispan.Cache;
 
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -23,7 +27,7 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class CacheLockFile implements LockFile{
 
-	public static final String CLUSTER_NAME = "lockfile-cache";
+	public static final String CLUSTER_NAME = "java:jboss/infinispan/CacheLockFileContainer";
 	
 	public static final int INCIDENT_ID = 0;
 	public static final int LOAD_TIMESTAMP = 1;
@@ -57,18 +61,24 @@ public class CacheLockFile implements LockFile{
 				return false;
 			}	
 			
-		if(agent == null || inc == null){
+		if(agent == null || inc == null || inc.getIncident_ID() == null){
 			return false;
 		}
 		
-		Fqn fqn = Fqn.fromString( CacheLockFile.class.getName()+"/"+inc.getIncident_ID() );
-		CacheManager cacheManager = CacheManagerLocator.getCacheManagerLocator().getCacheManager( null );
-
+		InitialContext ic = new InitialContext();
+		CacheContainer cc = (CacheContainer) ic.lookup(CLUSTER_NAME);
+		
 		Cache<Object, Object> myCache = null;
+		Map<Integer, Object[]> incidentMap = null;
 		try {
-			myCache = cacheManager.getCache( cacheName, true );
-			if(myCache.getCacheStatus() != CacheStatus.STARTED){
+			myCache = cc.getCache("cacheName");
+
+			if(myCache.getStatus() != ComponentStatus.RUNNING){
 				myCache.start();
+			}
+			incidentMap = (Map<Integer, Object[]>) myCache.get(inc.getIncident_ID());
+			if(incidentMap == null){
+				incidentMap = new HashMap<Integer,Object[]>();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,7 +91,10 @@ public class CacheLockFile implements LockFile{
 				  agent.getFirstname(),
 				  agent.getLastname(),
 				  agent.getStation().getStationcode()};
-		myCache.put(fqn, agent.getAgent_ID(), payload);
+		
+		incidentMap.put(agent.getAgent_ID(), payload);
+		myCache.put(inc.getIncident_ID(), incidentMap);
+		
 		return true;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -97,17 +110,17 @@ public class CacheLockFile implements LockFile{
 				//cache disabled
 				return null;
 			}
+			InitialContext ic = new InitialContext();
+			CacheContainer cc = (CacheContainer) ic.lookup(CLUSTER_NAME);
 			
-		Fqn fqn = Fqn.fromString( CacheLockFile.class.getName()+"/"+incidentId );
-		CacheManager cacheManager = CacheManagerLocator.getCacheManagerLocator().getCacheManager( null );
-		Map<Object,Object> incidentMap = null;
+		Map<Integer, Object[]> incidentMap = null;
 		Cache<Object, Object> myCache = null;
 		try {
-			myCache = cacheManager.getCache( cacheName, true );
-			if(myCache.getCacheStatus() != CacheStatus.STARTED){
+			myCache = cc.getCache("cacheName");
+			if(myCache.getStatus() != ComponentStatus.RUNNING){
 				myCache.start();
 			}
-			incidentMap = myCache.getData(fqn);
+			incidentMap = (Map<Integer, Object[]>) myCache.get(incidentId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -116,8 +129,7 @@ public class CacheLockFile implements LockFile{
 		Date now = new Date();
 		long lock_interval = getLockInterval();
 		if(incidentMap != null){
-			for(Object log:incidentMap.values()){
-				Object[]t = (Object[])log;
+			for(Object[] t:incidentMap.values()){
 				if(now.getTime() - ((Date)t[LOAD_TIMESTAMP]).getTime() < lock_interval){
 					list.add(t);
 				}
