@@ -529,7 +529,7 @@
 				<include name="tracer.ear" />
 			</fileset>
 		</copy>
-		<copy todir="C:\jboss-as-7.1.1.Final\standalone\deployments">
+		<copy todir="${app.home.jb7}\standalone\deployments">
 			<fileset dir="${build.dir}">
 				<include name="tracer.ear" />
 			</fileset>
