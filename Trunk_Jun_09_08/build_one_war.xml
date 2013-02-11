@@ -51,18 +51,8 @@
 		<fileset dir="${basedir}/lib/client-us">
 			<patternset refid="jar.files" />
 		</fileset>
-		<fileset dir="${app.home.jb5}\server\all\lib">
-			<patternset refid="jar.files" />
-		</fileset>
-		<fileset dir="${app.home.jb5}\common\lib">
-			<patternset refid="jar.files" />
-		</fileset>
-		<fileset dir="${app.home.jb5}\lib">
-					<patternset refid="jar.files" />
-		</fileset>
 
-				
-		
+
 				
 	</path>	
 
@@ -422,7 +412,7 @@
 	    		org.apache.axiom,
 	    		com.bagnet.nettracer.ws.pax-view,
 	    		com.bagnet.nettracer.ws.reservation,
-
+				com.bagnet.nettracer.ws.fraud,
 	    		com.bagnet.nettracer.ws.scannerMBR,
 	    		com.rmiio,
 	    		net.sf.jasperreports,
@@ -434,7 +424,8 @@
 	    		org.jboss.remote-naming,
 	    		org.jboss.iiop-client,
 	    		org.jboss.remoting3,
-	    		org.jboss.remoting3.remoting-jmx"/>
+	    		org.jboss.remoting3.remoting-jmx,
+	    		org.infinispan"/>
 	    </manifest>
 		
 		<war manifest="${build.dir}/${ant_project_name}/META-INF/MANIFEST.MF" destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
@@ -450,7 +441,7 @@
 				<exclude name="hibernate*.jar" />
 				<exclude name="ReservationService*.jar" />
 				<exclude name="ScannerMbrQueryService.jar" />
-				<!--<exclude name="FraudService.jar" />-->
+				<exclude name="FraudService.jar" />
 				<exclude name="axis2*.jar" />
 				<exclude name="jxl*.jar" />
 				<exclude name="iText*.jar" />
