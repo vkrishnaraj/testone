@@ -52,8 +52,10 @@ public class SubCompanyDAO {
 		}
 		return subcomp;
 	}
-	
 	public static Subcompany loadSubcompany(String code) {
+		return loadSubcompany(code, null);
+	}
+	public static Subcompany loadSubcompany(String code, String airline) {
 		if(subCompCache.containsKey(code)) {
 			return subCompCache.get(code);
 		}
@@ -64,7 +66,7 @@ public class SubCompanyDAO {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(Subcompany.class);
 			criteria.add(Expression.eq("subcompanyCode", code));
-			criteria.add(Expression.eq("company.companyCode_ID", TracerProperties.get("wt.company.code")));
+			criteria.add(Expression.eq("company.companyCode_ID", TracerProperties.get(airline,"wt.company.code")));
 			subcomp=(Subcompany) criteria.uniqueResult();
 			if(subcomp!=null){
 				System.out.print("Got subcomp: "+subcomp.getSubcompanyCode());

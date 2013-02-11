@@ -42,6 +42,7 @@ public class LFSearchDTO extends ActionForm  {
 	private String brand;
 	private String itemDescription;
 	private String barcode;
+	private String serialNumber;
 	private int dispositionId;
 	private int statusId;
 	private int stationId;
@@ -132,6 +133,14 @@ public class LFSearchDTO extends ActionForm  {
 
 	public void setMvaNumber(String mvaNumber) {
 		this.mvaNumber = mvaNumber;
+	}
+	
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
 	}
 
 	public String getPhoneNumber() {

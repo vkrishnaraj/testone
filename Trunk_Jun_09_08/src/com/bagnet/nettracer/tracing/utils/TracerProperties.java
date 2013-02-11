@@ -94,6 +94,19 @@ public class TracerProperties {
 			lock.readLock().unlock();
 		}
 	}
+	
+	public static String get(String airline, String property) {
+		
+		try {
+			lock.readLock().lock();
+			if(airline!=null && properties.getProperty(airline.toLowerCase()+"."+property)!=null)
+				return properties.getProperty(airline.toLowerCase()+"."+property);
+			else
+				return properties.getProperty(property);
+		} finally {
+			lock.readLock().unlock();
+		}
+	}
 
 	public static boolean isTrue(String property) {
 		String value = null;
@@ -112,8 +125,32 @@ public class TracerProperties {
 		}
 	}
 	
+	public static boolean isTrue(String airline, String property) {
+		String value = null;
+		try {
+			lock.readLock().lock();
+			if(airline!=null){
+				value =  properties.getProperty(airline.toLowerCase()+"."+property);
+			}
+
+		}finally {
+			lock.readLock().unlock();
+		}
+		if ( value != null) {
+			return value.equals("1");
+		} else {
+			// If the value is not found a null value will be returned
+			// and we need to return false.
+			return false;
+		}
+	}
+	
+	public static int getMaxReportRows(String airline) {
+		return Integer.parseInt(TracerProperties.get(airline, PROPERTY_REPORT_MAX_ROWS));
+	}
+	
 	public static int getMaxReportRows() {
-		return Integer.parseInt(TracerProperties.get(PROPERTY_REPORT_MAX_ROWS));
+		return Integer.parseInt(TracerProperties.get(null, PROPERTY_REPORT_MAX_ROWS));
 	}
 	
 	public static String getInstanceLabel() {
