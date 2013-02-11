@@ -291,6 +291,8 @@ public class TracingConstants {
 	
 	public static final String SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT = "Baggage Weight";
 	
+	public static final String SYSTEM_COMPONENT_CHILD_RESTRAINT_SYSTEM = "Child Restraint System";
+	
 	public static final String SYSTEM_COMPONENT_NAME_BAGBUZZ = "BagBuzz";
 	public static final String SYSTEM_COMPONENT_NAME_BAGBUZZ_ADMIN = "BagBuzzAdmin";
 	
