@@ -71,7 +71,7 @@ public class CacheLockFile implements LockFile{
 		Cache<Object, Object> myCache = null;
 		Map<Integer, Object[]> incidentMap = null;
 		try {
-			myCache = cc.getCache("cacheName");
+			myCache = cc.getCache(cacheName);
 
 			if(myCache.getStatus() != ComponentStatus.RUNNING){
 				myCache.start();
@@ -116,7 +116,7 @@ public class CacheLockFile implements LockFile{
 		Map<Integer, Object[]> incidentMap = null;
 		Cache<Object, Object> myCache = null;
 		try {
-			myCache = cc.getCache("cacheName");
+			myCache = cc.getCache(cacheName);
 			if(myCache.getStatus() != ComponentStatus.RUNNING){
 				myCache.start();
 			}
