@@ -39,7 +39,6 @@
 		<form-bean name="forwardOnHandForm" type="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm" />
 		<form-bean name="forwardMessageForm" type="com.bagnet.nettracer.tracing.forms.ForwardMessageForm" />
 		<form-bean name="searchIncidentForm" type="com.bagnet.nettracer.tracing.forms.SearchIncidentForm" />
-		<form-bean name="activeTracingForm" type="com.bagnet.nettracer.tracing.forms.ActiveTracingForm" />
 		<form-bean name="subCompanyForm" type="com.bagnet.nettracer.tracing.forms.SubCompanyForm" />
 		<form-bean name="OnHandForm" type="com.bagnet.nettracer.tracing.forms.OnHandForm" />
 		<form-bean name="requestOnHandForm" type="com.bagnet.nettracer.tracing.forms.RequestOnHandForm" />
@@ -307,7 +306,6 @@
 		<forward name="searchincident" path="search_incident" />
 		<forward name="searchOnHand" path="search_onhand" />
 		<forward name="customquery" path="custom_query" />
-		<forward name="activetracing" path="active_tracing" />
 		<forward name="ldmain" path="lostdelay" />
 		<forward name="missingmain" path="missing_articles" />
 		<forward name="damagedmain" path="damagedbag" />
@@ -600,9 +598,6 @@
 		<action path="/searchOnHand" type="com.bagnet.nettracer.tracing.actions.SearchOnHandAction" name="searchIncidentForm" scope="request" validate="false"></action>
 
 		<action path="/customQuery" type="com.bagnet.nettracer.tracing.actions.CustomQueryAction" name="searchIncidentForm" scope="request" validate="false"></action>
-
-		<!-- activetracing forms -->
-		<action path="/activeTracing" type="com.bagnet.nettracer.tracing.actions.ActiveTracingAction" name="activeTracingForm" scope="request" validate="false"></action>
 
 		<!-- lost delay -->
 		<action path="/lostDelay" type="com.bagnet.nettracer.tracing.actions.LostDelayAction" name="incidentForm" scope="session" validate="false"></action>

@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -32,18 +31,17 @@ import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Session;
 
-import com.bagnet.nettracer.cronjob.tracing.PassiveTracing;
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.events.BeornDTO;
 import com.bagnet.nettracer.reporting.LostDelayReceipt;
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
@@ -94,7 +92,6 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
-import com.bagnet.nettracer.tracing.forms.ActiveTracingForm;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.ForwardMessageForm;
@@ -2168,40 +2165,6 @@ public class BagService {
 			e.printStackTrace();
 			return false;
 		}
-	}
-
-	public boolean activeTracing(ActiveTracingForm daform, Agent user, String path) {
-		String incident_ID = daform.getIncident_ID();
-		int scope = 0;
-		try {
-			scope = Integer.parseInt(daform.getScope());
-		}
-		catch (Exception e) {
-		}
-		Date sdate = DateUtils.convertToDate(daform.getS_createtime(), user.getDateformat().getFormat(), user
-				.getCurrentlocale());
-		Date edate = DateUtils.convertToDate(daform.getE_createtime(), user.getDateformat().getFormat(), user
-				.getCurrentlocale());
-
-		if(incident_ID == null || incident_ID.length() <= 0)
-			return false;
-		try {
-			// check to see if this is a valid mbr
-			IncidentBMO iBMO = new IncidentBMO();
-			Incident iDTO = iBMO.findIncidentByID(incident_ID);
-			if(iDTO == null) {
-				logger.warn("user entered a non existing incident id");
-				return false;
-			}
-		}
-		catch (Exception e) {
-			logger.warn("user entered a non existing incident id");
-			return false;
-		}
-
-		PassiveTracing pt = new PassiveTracing();
-		pt.trace(incident_ID, scope, sdate, edate, user, path);
-		return true;
 	}
 
 

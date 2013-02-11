@@ -35,7 +35,7 @@
 	</patternset>
 	
 	<path id="project.classpath">
-		<fileset dir="C:\jboss-as-7.1.1.Final\modules\org\jboss\logging\main">
+		<fileset dir="${app.home.jb7}\bin\client">
 							<patternset refid="jar.files" />
 		</fileset>
 		
@@ -446,23 +446,20 @@
 				<exclude name="jxl*.jar" />
 				<exclude name="iText*.jar" />
 				<!--<exclude name="spring*RELEASE.jar" />-->
-				
 				<!--<exclude name="commons-beanutils-1.7.0.jar" />
 				<exclude name="commons-codec-1.3.jar" />-->
 				<!--<exclude name="commons-collections-3.1.jar" />-->
-					<!--<exclude name="commons-digester-1.7.jar" />-->
-					<!--<exclude name="commons-discovery.jar" />
-					<exclude name="commons-fileupload-1.2.1.jar" />
-					<exclude name="commons-httpclient-3.1.jar" />
-					<exclude name="commons-io-1.3.2.jar" />
-				
+				<!--<exclude name="commons-digester-1.7.jar" />-->
+				<!--<exclude name="commons-discovery.jar" />
+				<exclude name="commons-fileupload-1.2.1.jar" />
+				<exclude name="commons-httpclient-3.1.jar" />
+				<exclude name="commons-io-1.3.2.jar" />
 				<exclude name="commons-javaflow-20060411.jar" />
-						<exclude name="commons-lang-2.3.jar" />
-						<exclude name="commons-logging-1.1.1.jar" />
-						<exclude name="commons-pool-1.4.jar" />
-						<exclude name="commons-resources.jar" />-->
-						<!--<exclude name="commons-validator-1.3.1.jar" />-->
-
+				<exclude name="commons-lang-2.3.jar" />
+				<exclude name="commons-logging-1.1.1.jar" />
+				<exclude name="commons-pool-1.4.jar" />
+				<exclude name="commons-resources.jar" />-->
+				<!--<exclude name="commons-validator-1.3.1.jar" />-->
 				
 				<exclude name="dsi.jar" />
 				<exclude name="delivery*.jar" />
@@ -482,13 +479,14 @@
 				<exclude name="axiom*.*" />
 				<exclude name="libphone*.*" />
 				<exclude name="geronimo*.*" />
-				<!--<exclude name="xmlbeans*.*" />-->
+				<exclude name="xmlbeans*.*" />
 				<exclude name="xmlschema*.*" />
 				<exclude name="neethi*.*" />
 				<exclude name="httpcore*.*" />
 				<exclude name="htmlparser*.*" />
 				<exclude name="woden*.*" />
-
+				<exclude name="us-*.jar" />
+				<exclude name="navitaire*.jar" />
 									
 			</lib>
 		</war>
@@ -2679,9 +2677,11 @@
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/ab/environment/${environment.name}/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/ab/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/ab/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/report_email.html" />
 		<copy todir="${basedir}/src" file="companies/ab/environment/${environment.name}/report_email_fr.html" />
 		<copy todir="${basedir}/web/reports" file="companies/ab/environment/${environment.name}/LostDelayReceipt.jrxml" />
@@ -2718,9 +2718,11 @@
 		<property name="include.lfc" value="1" />
 		<copy todir="${basedir}/web/pages/login" file="companies/lfc/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/lfc/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/lfc/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/lfc/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/lfc/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/lfc/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<antcall target="jasper_compile" />
 
@@ -2748,9 +2750,11 @@
 	<target name="donotrun-build-alaska" if="alaska.init.complete">
 		<copy todir="${basedir}/web/pages/login" file="companies/alaska-fs/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/alaska-fs/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/alaska-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/alaska-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/alaska-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/alaska-fs/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<antcall target="jasper_compile" />
 
 		<copy todir="${basedir}/src" file="companies/alaska-fs/custom_ui.properties" />
@@ -2766,9 +2770,11 @@
 	<target name="donotrun-build-frontier" if="frontier.init.complete">
 		<copy todir="${basedir}/web/pages/login" file="companies/frontier-fs/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/frontier-fs/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/frontier-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/frontier-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/frontier-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/frontier-fs/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<antcall target="jasper_compile" />
 
 		<copy todir="${basedir}/src" file="companies/frontier-fs/custom_ui.properties" />
@@ -2784,9 +2790,11 @@
 	<target name="donotrun-build-southwest" if="southwest.init.complete">
 		<copy todir="${basedir}/web/pages/login" file="companies/southwest-fs/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/southwest-fs/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/southwest-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/southwest-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/southwest-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/southwest-fs/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<antcall target="jasper_compile" />
 
 		<copy todir="${basedir}/src" file="companies/southwest-fs/custom_ui.properties" />
@@ -2813,9 +2821,11 @@
 		<copy todir="${basedir}/src" file="companies/airtran/report_email.html" />
 		<copy todir="${basedir}/web/pages/login" file="companies/airtran/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/airtran/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/airtran/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/airtran/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/airtran/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/airtran/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="sqlserver" />
+		<antcall target="generate-hibernate-xmls" />
+		
 
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/tracer/ApplicationResources_es.properties" />
 
@@ -2835,9 +2845,11 @@
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/fraud/environment/${environment.name}/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/fraud/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/fraud/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/report_email.html" />
 		<copy todir="${basedir}/src" file="companies/fraud/environment/${environment.name}/report_email_fr.html" />
 		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/LostDelayReceipt.jrxml" />
@@ -2867,9 +2879,11 @@
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/azul/ApplicationResources_pt.properties" overwrite="true"/>
 		
 		<copy todir="${basedir}/src" file="companies/azul/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/azul/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/azul/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/azul/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/azul/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
 			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
@@ -2902,9 +2916,11 @@
 
 	<target name="donotrun-build-delta">		
 		<copy todir="${basedir}/src" file="companies/delta-fs/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/delta-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/delta-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/delta-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/delta-fs/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/web/pages/login" file="companies/delta-fs/environment/${environment.name}/login/center.jsp" />
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
@@ -2937,9 +2953,11 @@
 
 	<target name="donotrun-build-united">		
 		<copy todir="${basedir}/src" file="companies/united-fs/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/united-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/united-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/united-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/united-fs/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/web/pages/login" file="companies/united-fs/environment/${environment.name}/login/center.jsp" />
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
@@ -2972,9 +2990,11 @@
 	
 	<target name="donotrun-build-american">		
 		<copy todir="${basedir}/src" file="companies/american-fs/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/american-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/american-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/american-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/american-fs/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/web/pages/login" file="companies/american-fs/environment/${environment.name}/login/center.jsp" />
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
@@ -3007,9 +3027,11 @@
 	
 	<target name="donotrun-build-virginamerica">		
 		<copy todir="${basedir}/src" file="companies/virginamerica-fs/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/virginamerica-fs/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/virginamerica-fs/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/virginamerica-fs/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/virginamerica-fs/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/web/pages/login" file="companies/virginamerica-fs/environment/${environment.name}/login/center.jsp" />
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
@@ -3038,9 +3060,11 @@
 	
 	<target name="donotrun-build-webjet">		
 		<copy todir="${basedir}/src" file="companies/webjet/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/webjet/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/webjet/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/webjet/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/webjet/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/web/pages/login" file="companies/webjet/environment/${environment.name}/login/center.jsp" />
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
@@ -3077,9 +3101,11 @@
 	</target>
 	
 	<target name="donotrun-build-canadiannorth">		
-		<copy todir="${basedir}/src" file="companies/canadiannorth/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/canadiannorth/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/canadiannorth/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/canadiannorth/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/web/pages/login" file="companies/canadiannorth/environment/${environment.name}/login/center.jsp" />
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
@@ -3114,10 +3140,11 @@
 		<copy todir="${basedir}/web/reports" file="companies/spirit/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/spirit/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/spirit/MissingReceipt.jrxml" />
+
+		<property name="hibernate_props_loc" value="companies/spirit/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
 		
-		<copy todir="${basedir}/src" file="companies/spirit/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/spirit/environment/${environment.name}/hibernate_reporting.cfg.xml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/spirit/environment/${environment.name}/header_bg_noconf.gif" />
@@ -3151,9 +3178,11 @@
 		<property name="include.b6" value="1" />
 		<property name="include.demo" value="1" />
 		<copy todir="${basedir}/web/pages/login" file="companies/jetblue/environment/${environment.name}/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/jetblue/environment/${environment.name}/hibernate_reporting.cfg.xml" />
+
+		<property name="hibernate_props_loc" value="companies/jetblue/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/src" file="companies/jetblue/report_email.html" />
 		<copy todir="${basedir}/src" file="companies/jetblue/report_email_es.html" />
 		<copy todir="${basedir}/src" file="companies/jetblue/custom_ui.properties" />
@@ -3195,11 +3224,13 @@
 		<copy todir="${basedir}/web/deployment/main/images/nettracer" file="companies/westjet/environment/${environment.name}/header_bg_noconf.gif" />
 		<copy todir="${basedir}/web/pages/login" file="companies/westjet/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/tracer.properties" />
-		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_main.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_dirty.cfg.xml" />
-		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/hibernate_reporting.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/report_email.html" />
 		<copy todir="${basedir}/src" file="companies/westjet/environment/${environment.name}/report_email_fr.html" />
+
+		<property name="hibernate_props_loc" value="companies/westjet/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/MissingReceipt.jrxml" />
@@ -3224,6 +3255,24 @@
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 		<delete file="${basedir}/src/report_email_fr.html" />
+	</target>
+	
+	<target name="generate-hibernate-xmls" >
+		<copy toFile="${basedir}/src/hibernate_main.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}.cfg.xml" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
+			</filterset>
+		</copy>
+		<copy toFile="${basedir}/src/hibernate_dirty.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_dirty.cfg.xml" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
+			</filterset>
+		</copy>
+		<copy toFile="${basedir}/src/hibernate_reporting.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_reporting.cfg.xml" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
+			</filterset>
+		</copy>	
 	</target>
 	
 

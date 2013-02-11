@@ -109,10 +109,6 @@
     <definition name="search_onhand" extends="user_menu">
         <put name="center"   value="/pages/onhand/searchonhand.jsp"/>
     </definition>
- 
-    <definition name="active_tracing" extends="user_menu">
-        <put name="center"   value="/pages/onhand/activetracing.jsp"/>
-    </definition>
 
     <definition name="lost_found" extends="user_menu">
         <put name="center"   value="/pages/lostfound/center.jsp"/>
