@@ -93,6 +93,9 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 		case ReportingConstants.RPT_20_CUSTOM_85:
 			creportdata = createDelayedReport(srDTO, ReportBMO.getCustomReport(85).getResource_key(), request, user);
 			break;
+		case ReportingConstants.RPT_20_CUSTOM_97:
+			creportdata = createChildRestraintReport(srDTO, ReportBMO.getCustomReport(97).getResource_key(), request, user);
+			break;
 		case ReportingConstants.RPT_20_CUSTOM_210:
 			creportdata = createDisputeCountReport(srDTO, ReportBMO.getCustomReport(210).getResource_key(), request, user);
 			break;
@@ -545,6 +548,67 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			drb.addColumn("", "column4", String.class.getName(), 200, header, header);
 			drb.addColumn("", "column5", String.class.getName(), 200, header, header);
 			drb.addColumn("", "column6", String.class.getName(), 200, header, header);
+			
+			generateDynamicReport(reportData, parameters, outputpath, drb);
+			
+		} catch (JRException jre) {
+			jre.printStackTrace();
+		} catch (ColumnBuilderException cbe) {
+			cbe.printStackTrace();
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+		} 
+		virtualizer.cleanup();
+		return fileName;
+	}
+	
+	private String createChildRestraintReport(StatReportDTO srDTO, String resource_key,
+			HttpServletRequest request, Agent user) {
+		srDTO.setDateFormat(user.getDateformat().getFormat());
+		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+		CustomWestJetReports custom = new CustomWestJetReports();
+		String runDate = DateUtils.formatDate(new Date(), user.getDateformat().getFormat(), user.getDefaultlocale(), null);
+		
+		List reportData = custom.getChildRestraintReportData(srDTO, resources);
+		
+		if (reportData == null) {
+			return null;
+		}
+		
+		Map parameters = new HashMap();
+		
+		String fileName = ReportingConstants.RPT_20_CUSTOM_97_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + fileName;
+		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
+		virtualizer.setReadOnly(false);
+		
+		FastReportBuilder drb = new FastReportBuilder();
+		drb.setTitle(resources.getString("header.customreportnum.97") + " (" + srDTO.getStarttime() + " - " + srDTO.getEndtime() + ")");
+		
+		String stationCode = srDTO.getStationCode();
+		if (stationCode !=null) {
+			stationCode = stationCode.trim();
+		}
+		
+			String subtitle = resources.getString("lf.ir.report.created.on") + " " + runDate+" by "+user.getUsername()+" for: " + srDTO.getStarttime() + " - " + srDTO.getEndtime() + ";
+			drb.setSubtitle(subtitle);
+		try {
+			Style header = setupHeader(drb);
+
+			if (stationCode == null || stationCode.length() == 0) {
+				drb.addColumn(resources.getString("custom.report.column.bso"), "column1", String.class.getName(), 200, header, header);
+				drb.addColumn(resources.getString("custom.report.column.carseat"), "column2", String.class.getName(), 200, header, header);
+				drb.addColumn(resources.getString("custom.report.column.booster"), "column3", String.class.getName(), 200, header, header);
+				drb.addColumn(resources.getString("custom.report.column.none"), "column4", String.class.getName(), 200, header, header);
+			} else {
+
+				drb.addColumn(resources.getString("custom.report.column.datecreated"), "column1", String.class.getName(), 200, header, header);
+				drb.addColumn(resources.getString("custom.report.column.station"), "column2", String.class.getName(), 200, header, header);
+				drb.addColumn(resources.getString("custom.report.column.incident.id"), "column3", String.class.getName(), 200, header, header);
+				drb.addColumn(resources.getString("custom.report.column.carseat"), "column4", String.class.getName(), 200, header, header);
+				drb.addColumn(resources.getString("custom.report.column.booster"), "column5", String.class.getName(), 200, header, header);
+				drb.addColumn(resources.getString("custom.report.column.none"), "column6", String.class.getName(), 200, header, header);
+			}
 			
 			generateDynamicReport(reportData, parameters, outputpath, drb);
 			

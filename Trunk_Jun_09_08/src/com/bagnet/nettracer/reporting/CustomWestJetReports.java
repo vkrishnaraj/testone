@@ -1,14 +1,13 @@
 package com.bagnet.nettracer.reporting;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
-//import org.hibernate.classic.Session;
 import org.hibernate.Session;
 import org.hibernate.type.StandardBasicTypes;
 
@@ -16,6 +15,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+//import org.hibernate.classic.Session;
 
 public class CustomWestJetReports {
 
@@ -287,7 +287,7 @@ public class CustomWestJetReports {
 					reportRow.setColumn2("Delayed");
 				}
 				else if(((Integer)row[1])==(TracingConstants.MISSING_ARTICLES)){
-					reportRow.setColumn2("Pilferage"); //Should be Pilgerage
+					reportRow.setColumn2("Pilferage");
 				}
 				else if(((Integer)row[1])==(TracingConstants.DAMAGED_BAG)){
 					reportRow.setColumn2("Damaged");
@@ -318,6 +318,142 @@ public class CustomWestJetReports {
 				toReturn.add(reportRow);
 			}
 		}
+		return toReturn;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private ArrayList getRowsFromResultList5(List results, String dateFormat, ResourceBundle resources, String stationCode) {
+		ArrayList toReturn = new ArrayList();
+		SimpleReportRow reportRow;
+		Object[] row;
+		
+		if(stationCode!=null && !stationCode.equals("")){
+			HashMap<String,SimpleReportRow> incidentMap=new HashMap<String,SimpleReportRow>();
+
+			int total=0;
+			int totalcar=0;
+			int totalbooster=0;
+			int totalnone=0;
+			for (int i = 0; i < results.size(); ++i) {
+				row = (Object[])results.get(i);
+				if(incidentMap.containsKey((String)row[2])){
+					reportRow=incidentMap.get((String)row[2]);
+				} else {
+					reportRow = new SimpleReportRow();
+				}
+	
+				reportRow.setColumn1(DateUtils.formatDate((Date)row[0], dateFormat, null, null));
+				reportRow.setColumn2((String)row[1]);
+				reportRow.setColumn3((String)row[2]);
+				
+				int col4=0;
+				int col5=0;
+				int col6=0;
+				if(reportRow.getColumn4()!=null){
+					 col4=Integer.valueOf(reportRow.getColumn4());
+				} 
+				if(reportRow.getColumn5()!=null){
+					 col5=Integer.valueOf(reportRow.getColumn5());
+				} 
+				if(reportRow.getColumn6()!=null){
+					 col6=Integer.valueOf(reportRow.getColumn6());
+				} 
+				if(row[3]!=null){
+					if (((Integer)row[3])==1){
+						col4++;
+						totalcar++;
+					} else if (((Integer)row[3])==2){
+						col5++;
+						totalbooster++;
+					} else if (((Integer)row[3])==0){
+						col6++;
+						totalnone++;
+					}
+				}
+				reportRow.setColumn4(String.valueOf(col4));
+				reportRow.setColumn5(String.valueOf(col5));
+				reportRow.setColumn6(String.valueOf(col6));
+				incidentMap.put((String)row[2], reportRow);
+//				toReturn.add(reportRow);
+			}
+			
+			for(SimpleReportRow s:incidentMap.values()){
+				toReturn.add(s);
+			}
+			reportRow=new SimpleReportRow();
+			toReturn.add(reportRow);
+			reportRow=new SimpleReportRow();
+
+			reportRow.setColumn3(resources.getString("custom.report.column.total.incidents"));
+			reportRow.setColumn4(resources.getString("custom.report.column.total.carseat"));
+			reportRow.setColumn5(resources.getString("custom.report.column.total.booster"));
+			reportRow.setColumn6(resources.getString("custom.report.column.total.none"));
+			toReturn.add(reportRow);
+			reportRow=new SimpleReportRow();
+
+			reportRow.setColumn3(String.valueOf(incidentMap.size()));
+			reportRow.setColumn4(String.valueOf(totalcar));
+			reportRow.setColumn5(String.valueOf(totalbooster));
+			reportRow.setColumn6(String.valueOf(totalnone));
+			toReturn.add(reportRow);
+		} else {
+			HashMap<String,SimpleReportRow> stationMap=new HashMap<String,SimpleReportRow>();
+			int totalcar=0;
+			int totalbooster=0;
+			int totalnone=0;
+			for (int i = 0; i < results.size(); ++i) {
+				row = (Object[])results.get(i);
+				if(stationMap.containsKey((String)row[0])){
+					reportRow=stationMap.get((String)row[0]);
+				} else {
+					reportRow = new SimpleReportRow();
+				}
+				reportRow.setColumn1((String)row[0]);
+				
+				int col4=0;
+				int col5=0;
+				int col6=0;
+				if(reportRow.getColumn2()!=null){
+					 col4=Integer.valueOf(reportRow.getColumn2());
+				} 
+				if(reportRow.getColumn3()!=null){
+					 col5=Integer.valueOf(reportRow.getColumn3());
+				} 
+				if(reportRow.getColumn4()!=null){
+					 col6=Integer.valueOf(reportRow.getColumn4());
+				} 
+				if(row[1]!=null){
+					if (((Integer)row[1])==1){
+						col4++;
+						totalcar++;
+					} else if (((Integer)row[1])==2){
+						col5++;
+						totalbooster++;
+					} else if (((Integer)row[1])==0){
+						col6++;
+						totalnone++;
+					}
+				}
+				reportRow.setColumn2(String.valueOf(col4));
+				reportRow.setColumn3(String.valueOf(col5));
+				reportRow.setColumn4(String.valueOf(col6));
+				stationMap.put((String)row[0], reportRow);
+//				toReturn.add(reportRow);
+			}
+			
+			for(SimpleReportRow s:stationMap.values()){
+				toReturn.add(s);
+			}
+			reportRow=new SimpleReportRow();
+
+			reportRow.setColumn1(resources.getString("custom.report.column.totals"));
+			reportRow.setColumn2(String.valueOf(totalcar));
+			reportRow.setColumn3(String.valueOf(totalbooster));
+			reportRow.setColumn4(String.valueOf(totalnone));
+			toReturn.add(reportRow);
+			
+		}
+		
 		return toReturn;
 	}
 
@@ -963,6 +1099,89 @@ public class CustomWestJetReports {
 			
 			toReturn = getRowsFromResultList4(results, results2, srDTO.getDateFormat(), resources);
 			
+			
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+
+		return toReturn;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public List getChildRestraintReportData(StatReportDTO srDTO, ResourceBundle resources) {
+		
+		ArrayList toReturn = null;
+		Session session = null;
+
+		String startDate = DateUtils.formatDate(srDTO.getStarttime(),
+				srDTO.getDateFormat(), TracingConstants.DB_DATEFORMAT, null,
+				null);
+		String endDate = DateUtils.formatDate(srDTO.getEndtime(),
+				srDTO.getDateFormat(), TracingConstants.DB_DATEFORMAT, null,
+				null);
+
+		String airlineLimit = "";
+		
+		String stationCode = srDTO.getStationCode();
+		
+		if (stationCode.equals("0")) {
+			stationCode = null;
+		}
+		
+		if (stationCode !=null) {
+			stationCode = stationCode.trim();
+			if  (stationCode.length() > 0) {
+				stationCode = stationCode.substring(0,Math.min(3, stationCode.length())).toUpperCase();
+			}
+		}
+			
+		String sql="";
+		if (stationCode != null && !stationCode.equals("")) {
+			sql = " select inc.createDate as column1, s.stationCode as column2, inc.incident_id  as column3, i.childrestraint  as column4 from incident inc inner join item i on i.incident_ID = inc.Incident_ID inner join station s on s.Station_ID=inc.stationassigned_ID where i.bagtype=71 and" 
+			+ "   inc.createdate >= \'"
+			+ startDate
+			+ "\' and inc.createdate <= \'"
+			+ endDate
+			+ "\'"
+			+ " and s.stationCode='" + stationCode + "'"
+			+ "   order by column1 asc, column3";
+		} else {
+			sql = " select s.stationCode  as column1, i.childrestraint as column2 from incident inc inner join item i on i.incident_ID = inc.Incident_ID inner join station s on s.Station_ID=inc.stationassigned_ID  where i.bagtype=71 and" 
+			+ "   inc.createdate >= \'"
+			+ startDate
+			+ "\' and inc.createdate <= \'"
+			+ endDate
+			+ "\'"
+			+ "   order by column1 asc";
+		}
+			
+
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			SQLQuery query = session.createSQLQuery(sql);
+
+			if (stationCode != null && !stationCode.equals("")) {
+				query.addScalar("column1", StandardBasicTypes.DATE);
+				query.addScalar("column2", StandardBasicTypes.STRING);
+				query.addScalar("column3", StandardBasicTypes.STRING);
+				query.addScalar("column4", StandardBasicTypes.INTEGER);
+			} else {
+				query.addScalar("column1", StandardBasicTypes.STRING);
+				query.addScalar("column2", StandardBasicTypes.INTEGER);
+			}
+			
+			List results = query.list();
+			
+			if (results.isEmpty()) {
+				return toReturn;
+			}
+			
+			toReturn = getRowsFromResultList5(results, srDTO.getDateFormat(), resources, stationCode);
 			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
