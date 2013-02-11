@@ -590,7 +590,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			stationCode = stationCode.trim();
 		}
 		
-			String subtitle = resources.getString("lf.ir.report.created.on") + " " + runDate+" by "+user.getUsername()+" for: " + srDTO.getStarttime() + " - " + srDTO.getEndtime() + ";
+			String subtitle = resources.getString("lf.ir.report.created.on") + " " + runDate+" by "+user.getUsername()+" for: " + srDTO.getStarttime() + " - " + srDTO.getEndtime();
 			drb.setSubtitle(subtitle);
 		try {
 			Style header = setupHeader(drb);
