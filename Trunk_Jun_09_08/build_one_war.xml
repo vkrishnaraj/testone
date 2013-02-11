@@ -36,9 +36,8 @@
 	
 	<path id="project.classpath">
 		<fileset dir="${app.home.jb7}\bin\client">
-							<patternset refid="jar.files" />
+			<patternset refid="jar.files" />
 		</fileset>
-		
 		<fileset dir="${lib.build-client.dir}">
 			<patternset refid="jar.files" />
 		</fileset>
@@ -519,16 +518,6 @@
 
 		</ear>
 		
-		<copy todir="${app.deploy.dir.jb5}">
-			<fileset dir="${build.dir}">
-				<include name="tracer.ear" />
-			</fileset>
-		</copy>
-		<copy todir="${app.deploy.dir.jb52}">
-			<fileset dir="${build.dir}">
-				<include name="tracer.ear" />
-			</fileset>
-		</copy>
 		<copy todir="${app.home.jb7}\standalone\deployments">
 			<fileset dir="${build.dir}">
 				<include name="tracer.ear" />

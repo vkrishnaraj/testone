@@ -39,7 +39,7 @@
 		<fileset dir="${basedir}/lib/client-us">
 			<patternset refid="jar.files" />
 		</fileset>
-		<fileset dir="${app.home.jb5}\common\lib">
+		<fileset dir="${app.home.jb7}\bin\client">
 			<patternset refid="jar.files" />
 		</fileset>
 	</path>
