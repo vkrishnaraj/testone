@@ -79,6 +79,7 @@ public final class OnHandForm extends ValidatorForm {
 	private String recordlocator;
 	private Boolean earlyBag;
 	private String matched_incident;
+	private String externaldesc;
 	
 	// forward log
 	private String forwarded_station;
@@ -167,6 +168,23 @@ public final class OnHandForm extends ValidatorForm {
 	 */
 	public void setHolding_company(String holding_company) {
 		this.holding_company = holding_company;
+	}
+	
+
+	/**
+	 * @return Returns the externaldesc.
+	 * 
+	 */
+	public String getExternaldesc() {
+		return externaldesc;
+	}
+
+	/**
+	 * @param externaldesc
+	 *          The externaldesc to set.
+	 */
+	public void setExternaldesc(String externaldesc) {
+		this.externaldesc = externaldesc;
 	}
 
 	/**

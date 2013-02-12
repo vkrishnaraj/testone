@@ -44,6 +44,7 @@ public class TraceItem implements Serializable {
 	private String fnameonbag;
 	private String mnameonbag;
 	private String lnameonbag;
+	private String externaldesc;
 	private String arrivedonflightnum;
 	private String arrivedonairline_ID;
 	private Date arrivedondate;
@@ -210,6 +211,24 @@ public class TraceItem implements Serializable {
 	 */
 	public void setItemtype_ID(int itemtype_ID) {
 		this.itemtype_ID = itemtype_ID;
+	}
+	
+	/**
+	 * @param externaldesc
+	 *          The externaldesc to set.
+	 */
+	public void setExternaldesc(String externaldesc) {
+		this.externaldesc = externaldesc;
+	}
+	
+	/**
+	 * @return Returns the externaldesc.
+	 * 
+	 * @hibernate.property type="string" length="50"
+	 *  
+	 */
+	public String getExternaldesc() {
+		return externaldesc;
 	}
 
 	/**

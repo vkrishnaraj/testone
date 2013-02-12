@@ -196,6 +196,16 @@
               <html:select name="theitem" styleId="bagtype" property="bagtype" styleClass="dropdown" indexed="true" onchange="checkBagType()">
                 <html:options collection="typelist" property="value" labelProperty="label" />
               </html:select>
+              <div id="childRestraint" style="display:none">
+              	<% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_CHILD_RESTRAINT_SYSTEM, a) && theitem.getItemtype_ID()!=2){ %>
+              	<bean:message key="colname.child.restraint.system" /><br>
+              	 	<html:select name="theitem" property="childRestraint" styleClass="dropdown" indexed="true">
+						<html:option value="0"><bean:message key="child.restraint.0"/></html:option>
+						<html:option value="1"><bean:message key="child.restraint.1"/></html:option>
+						<html:option value="2"><bean:message key="child.restraint.2"/></html:option>
+			        </html:select>
+			        <% } %>
+              </div>
             </td>
             <td valign="top">
               <bean:message key="colname.x_desc" />
@@ -253,18 +263,15 @@
 						<html:option value="kg">kg</html:option>
 			        </html:select>
               </td>
-              
-              <td colspan="2" id="childRestraint" style="display:none">
-              	<% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_CHILD_RESTRAINT_SYSTEM, a) && theitem.getItemtype_ID()!=2){ %>
-              	<bean:message key="colname.child.restraint.system" /><br>
-              	 	<html:select name="theitem" property="childRestraint" styleClass="dropdown" indexed="true">
-						<html:option value="0"><bean:message key="child.restraint.0"/></html:option>
-						<html:option value="1"><bean:message key="child.restraint.1"/></html:option>
-						<html:option value="2"><bean:message key="child.restraint.2"/></html:option>
-			        </html:select>
-			        <% } %>
+              <% if(theitem.getItemtype_ID()==1){ %>
+              <td colspan="2">
+              <bean:message key="colname.bag.external.desc" /><br>
+              	<html:text name="theitem" property="externaldesc" maxlength="50" size="75" styleClass="textfield" indexed="true" />
               </td>
-              <!-- <td colspan="2"></td> -->
+               <% } else {%>
+               
+              <td colspan="2"></td>
+               <%}%>
           </tr>
        	  <% 
 			    }
@@ -556,6 +563,4 @@
                 <br>
                 <br>
      </logic:notEqual>
-     
      <script> checkBagType(); </script>
-     

@@ -59,6 +59,7 @@ public class Item implements Serializable {
 	private String lnameonbag;
 	private String arrivedonflightnum;
 	private String arrivedonairline_ID;
+	private String externaldesc;
 	private Date arrivedondate;
 	private Date purchaseDate;
 	private Incident incident;
@@ -661,6 +662,24 @@ public class Item implements Serializable {
 	 */
 	public String getArrivedonairline_ID() {
 		return arrivedonairline_ID;
+	}
+
+	/**
+	 * @param externaldesc
+	 *          The externaldesc to set.
+	 */
+	public void setExternaldesc(String externaldesc) {
+		this.externaldesc = externaldesc;
+	}
+	
+	/**
+	 * @return Returns the externaldesc.
+	 * 
+	 * @hibernate.property type="string" length="50"
+	 *  
+	 */
+	public String getExternaldesc() {
+		return externaldesc;
 	}
 
 	/**

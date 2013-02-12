@@ -34,6 +34,7 @@ public class TraceOHD implements Serializable {
 	private int xdescelement_ID_3;
 	private int manufacturer_ID;
 	private String manufacturer_other;
+	private String externaldesc;
 	private Status status;
 
 	private Set items;
@@ -151,7 +152,23 @@ public class TraceOHD implements Serializable {
 		this.record_locator = record_locator;
 	}
 
+	/**
+	 * @return Returns the externaldesc.
+	 * 
+	 * @hibernate.property type="string" length="50"
+	 */
+	public String getExternaldesc() {
+		return externaldesc;
+	}
 
+	/**
+	 * @param externaldesc
+	 *          The externaldesc to set.
+	 */
+	public void setExternaldesc(String externaldesc) {
+		this.externaldesc = externaldesc;
+	}
+	
 	/**
 	 * @hibernate.property type="string" length="13"
 	 * @return Returns the claimnum.

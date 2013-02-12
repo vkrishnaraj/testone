@@ -897,6 +897,7 @@ public class TracingConstants {
 	public final static String MATCH_ITINERARY = "match.itinerary";
 
 	public final static String MATCH_CONTENTS = "match.contents";
+	public final static String MATCH_BAGDESC = "match.bagdesc";
 
 	public final static String MATCH_ONBAG_NAME = "match.name_on_bag";
 	public final static String MATCH_MANUFACTURER = "match.manufacturer";

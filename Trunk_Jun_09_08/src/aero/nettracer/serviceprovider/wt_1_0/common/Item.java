@@ -10,6 +10,7 @@ public class Item {
 	private String desc2;
 	private String desc3;
 	private String manufacturer;
+	private String externaldesc;
 	private Content[] content;
 
 	public String getColor() {
@@ -26,6 +27,14 @@ public class Item {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public String getExternaldesc() {
+		return externaldesc;
+	}
+
+	public void setExternaldesc(String externaldesc) {
+		this.type = externaldesc;
 	}
 
 	public String getDesc1() {

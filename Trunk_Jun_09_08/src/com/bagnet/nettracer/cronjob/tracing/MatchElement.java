@@ -167,6 +167,15 @@ public enum MatchElement {
 		ArrayList<MatchResult> match(TraceIncident incident, TraceOHD ohd) {
 			return matchContent(this, incident, ohd);
 		}
+	},
+	BAGDESC {
+		String getConstant() {
+			return TracingConstants.MATCH_BAGDESC;
+		}
+
+		ArrayList<MatchResult> match(TraceIncident incident, TraceOHD ohd) {
+			return matchBagDesc(this, incident, ohd);
+		}
 	};
 
 	abstract ArrayList<MatchResult> match(TraceIncident incident, TraceOHD ohd);
@@ -510,7 +519,7 @@ public enum MatchElement {
 
 		String ohdBagTag = ohd.getClaimnum();
 		String ohdTenDigitTag = null;
-		Boolean ignoreCheckDigit = (false || TracerProperties.isTrue(TracerProperties.IGNORE_CHECK_DIGIT));
+		Boolean ignoreCheckDigit = (false || TracerProperties.isTrue(TracerProperties.get("wt.company.code"),TracerProperties.IGNORE_CHECK_DIGIT));
 		try {
 			ohdTenDigitTag = LookupAirlineCodes.getFullBagTag(ohdBagTag,
 					PassiveTrace.AirlineConversionMap);
@@ -791,6 +800,23 @@ public enum MatchElement {
 						}
 					}
 				}
+			}
+		}
+
+		return results;
+	}
+	
+	private static ArrayList<MatchResult> matchBagDesc(MatchElement e,
+			TraceIncident incident, TraceOHD ohd) {
+
+		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
+
+		for (TraceItem item : (List<TraceItem>) incident.getItemlist()) {
+			if (item != null) {
+				String incExternal=item.getExternaldesc();
+				String ohdExternal=ohd.getExternaldesc();
+				MatchResult result = MatchUtils.stringCompare(e, incExternal,
+						ohdExternal, item.getBagnumber());
 			}
 		}
 

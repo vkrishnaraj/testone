@@ -62,6 +62,7 @@ public class OHD implements Serializable {
 	private Status disposal_status;
 	private boolean earlyBag;
 	private String matched_incident;
+	private String externaldesc;
 
 	private Set items;
 	private Set remarks;
@@ -332,6 +333,23 @@ public class OHD implements Serializable {
 	 */
 	public void setClaimchecknum_leading(String claimchecknum_leading) {
 		this.claimchecknum_leading = claimchecknum_leading;
+	}
+	
+	/**
+	 * @return Returns the externaldesc.
+	 * 
+	 * @hibernate.property type="string" length="50"
+	 */
+	public String getExternaldesc() {
+		return externaldesc;
+	}
+
+	/**
+	 * @param externaldesc
+	 *          The externaldesc to set.
+	 */
+	public void setExternaldesc(String externaldesc) {
+		this.externaldesc = externaldesc;
 	}
 
 	/**

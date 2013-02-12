@@ -29,6 +29,8 @@ public final class SearchLostFoundForm extends ValidatorForm {
 	private String disposal_status_ID;
 	private String report_status_ID;
 	private String report_type;
+	private String serialNumber;
+
 
 	/**
 	 * @return Returns the customer_address.
@@ -307,5 +309,20 @@ public final class SearchLostFoundForm extends ValidatorForm {
 	 */
 	public void setE_renttime(String e_renttime) {
 		this.e_renttime = e_renttime;
+	}
+	
+	/**
+	 * @return Returns the serialNumber.
+	 */
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	/**
+	 * @param serialNumber
+	 *          The serialNumber to set.
+	 */
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber= serialNumber;
 	}
 }
