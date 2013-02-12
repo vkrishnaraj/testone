@@ -411,7 +411,7 @@
                           <html:text property="claim.amountClaimed" size="13" maxlength="13" styleClass="textfield" />
                         </td>
  
-                        <td colspan=2>
+                        <td colspan="2">
                           <bean:message key="colname.currency" />
                           <br />
                           <html:select property="claim.amountClaimedCurrency" styleClass="dropdown">
@@ -425,7 +425,7 @@
                           <br />
                           <html:text property="claim.amountPaid" size="13" maxlength="13" styleClass="textfield" />
                         </td>
-                        <td colspan=2>
+                        <td colspan="2">
                           <bean:message key="colname.currency" />
                           <br />
                           <html:select property="claim.amountPaidCurrency" styleClass="dropdown">
@@ -444,7 +444,7 @@
                         </td>
                       </tr>
                       <tr>
-							<td colspan=3>
+							<td colspan="3">
 								<bean:message key="colname.claim_remarks" />
 								<br/>
 								<html:textarea  name="claimForm" property="claim.claimRemark"  cols="80" rows="10" styleClass="textfield" />
@@ -845,8 +845,6 @@
 					                  </select>
 				                </td>
 				           </tr>
-				           
-				           
 				          <tr>
 				            <td colspan=5>
 				            	<input type="button" value="<bean:message key="button.delete.name" />"

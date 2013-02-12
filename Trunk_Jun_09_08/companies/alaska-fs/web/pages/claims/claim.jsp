@@ -14,6 +14,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="aero.nettracer.fs.model.Person" %>
 <%@ page import="aero.nettracer.fs.model.FsReceipt" %>
+<%@ page import="aero.nettracer.fs.model.Attachment" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.DateUtils" %>
 <%@ page import="org.apache.struts.util.LabelValueBean" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Company" %>
@@ -146,7 +147,7 @@
       
   </SCRIPT>
  
-        <html:form action="claim_resolution.do" method="post" onsubmit="return validateFsClaimForm(this);">
+        <html:form action="claim_resolution.do" method="post" enctype="multipart/form-data" onsubmit="return validateFsClaimForm(this);">
           <input type="hidden" name="delete_these_elements" value="" />
             <html:javascript formName="claimForm" />
             <tr>
@@ -365,7 +366,17 @@
                         	<br />
                         	<html:text property="dispCreateTime" styleClass="textfield" disabled="true" />
                         </td>
-                      	<td>
+                        <td>
+                        	<bean:message key="colname.claim.create.agent" />
+                        	<br />
+                        	<logic:notEmpty name="claimForm" property="claim.createagent">
+                        		<html:text  name="claimForm" property="claim.createagent.username" size="10" styleClass="textfield" disabled="true" />
+                        	</logic:notEmpty>
+                        	<logic:empty name="claimForm" property="claim.createagent">
+                        		<input type="text"  value="" size="10" styleClass="textfield" disabled="true" />
+                        	</logic:empty>
+                        </td></tr><tr>
+                      	<td colspan="2">
                       		<bean:message key="header.claim_type"/>
                       		<br />
                       		<html:select name="claimForm" property="claim.claimType" styleClass="dropdown" >
@@ -394,7 +405,7 @@
                         </td>
                       </tr>
                       <tr>
-                      	<td colspan="2">
+                      	<td colspan="1">
                           <bean:message key="colname.claim_amount" />
                           <br />
                           <html:text property="claim.amountClaimed" size="13" maxlength="13" styleClass="textfield" />
@@ -409,7 +420,7 @@
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="2">
+                        <td colspan="1">
                           <bean:message key="colname.amount_paid" />
                           <br />
                           <html:text property="claim.amountPaid" size="13" maxlength="13" styleClass="textfield" />
@@ -422,7 +433,7 @@
                           </html:select>
                         </td>
                       <tr>
-                        <td colspan="4">
+                        <td colspan="3">
                           <bean:message key="colname.reason" />
                           &nbsp;(
                           <bean:message key="colname.for_audit" />
@@ -433,7 +444,7 @@
                         </td>
                       </tr>
                       <tr>
-							<td colspan=4>
+							<td colspan="3">
 								<bean:message key="colname.claim_remarks" />
 								<br/>
 								<html:textarea  name="claimForm" property="claim.claimRemark"  cols="80" rows="10" styleClass="textfield" />
@@ -740,7 +751,7 @@
 				             		<bean:message key="colname.dob" />
 				             		(<%= a.getDateformat().getFormat() %>)
 				             		<br />
-				                  	<input type="text" name="person[<%=i %>].disDateOfBirth" size="12" maxlength="11" value="<%=person.getDisDateOfBirth() == null ? "" : person.getDisDateOfBirth() %>" class="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar_<%=i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.claimForm,'person[<%=i %>].disDateOfBirth','calendar_<%=i %>','<%= a.getDateformat().getFormat() %>'); return false;">
+				                  	<input type="text" disabled="true" name="person[<%=i %>].disDateOfBirth" size="12" maxlength="11" value="<%=person.getDisDateOfBirth() == null ? "" : person.getDisDateOfBirth() %>" class="textfield" />
 				             	</td>
 				           </tr>
 				           <tr>
@@ -774,7 +785,7 @@
 					            <td colspan=2 >
 					            	<bean:message key="colname.common_num" />
 					            	<br />
-				                  	<input type="text" name="person[<%=i %>].redactedPassportNumber" size="20" maxlength="20" value="<%=person.getRedactedPassportNumber() == null ? "" : person.getRedactedPassportNumber() %>" class="textfield" />
+				                  	<input type="text" disabled="true" name="person[<%=i %>].redactedPassportNumber" size="20" maxlength="20" value="<%=person.getRedactedPassportNumber() == null ? "" : person.getRedactedPassportNumber() %>" class="textfield" />
 					            </td>
 					            <td>
 					            	<bean:message key="colname.country_of_issue" />
@@ -796,7 +807,7 @@
 				           		<td>
 					            	<bean:message key="colname.drivers" />
 					            	<br />
-				                  	<input type="text" name="person[<%=i %>].redactedDriversLicenseNumber" size="20" maxlength="20" value="<%=((Person) person).getRedactedDriversLicenseNumber() == null ? "" : ((Person) person).getRedactedDriversLicenseNumber() %>" class="textfield" />
+				                  	<input type="text" disabled="true" name="person[<%=i %>].redactedDriversLicenseNumber" size="20" maxlength="20" value="<%=((Person) person).getRedactedDriversLicenseNumber() == null ? "" : ((Person) person).getRedactedDriversLicenseNumber() %>" class="textfield" />
 					            </td>
 					            <td>
 				                  <bean:message key="colname.state" />
@@ -1169,7 +1180,7 @@
 				          
 				          </logic:iterate>
 				          <tr>
-				          <td colspan="5" align="center">
+				          <td colspan="3" align="center">
 					          <select name="addIPNum">
 						          <option value="1">1</option>
 						          <option value="2">2</option>
@@ -1188,7 +1199,7 @@
                     </div>
                     
                     <% 	String showIpAddresses = (String) request.getAttribute("showIpAddresses");
-						if (showPhones != null && showPhones.equals("true")) { %>
+						if (showIpAddresses != null && showIpAddresses.equals("true")) { %>
 						<script>
 				   			jQuery('#aip').show();
 				   			jQuery('#ipshow').hide();
@@ -1448,10 +1459,15 @@
 								<html:option value="DC">Diners Club</html:option>
 							</html:select>
 						</td>
-						<td colspan=2>
+						<td>
 							<bean:message key="claim.colname.cc_num" />
 							<br/>
 							<html:text name="claimForm" disabled="true" property="claim.file.incident.reservation.redactedCcNumber" size="20" maxlength="16" styleClass="textfield" />
+						</td>
+						<td>
+							<bean:message key="claim.colname.cc_num.last.four" />
+							<br/>
+							<html:text name="claimForm" disabled="true" property="claim.file.incident.reservation.ccNumLastFour" size="10" maxlength="4" styleClass="textfield" />
 						</td>
 						<td>
 							<bean:message key="claim.colname.cc_expdate" />
@@ -1482,6 +1498,132 @@
 					</tr>
 					</table>
 					
+                    <!-- segments -->
+                   <div style="width:100%;">
+                    <a name="aseg" ></a>
+                    <span style="float:left;">
+					<h1 class="green" >
+						<bean:message key="header.associated.segment" />
+						<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+					</h1>
+					</span>
+					<span style="float:right;" >
+						<a id="segshow" href="#aseg" onClick="show('#segmentD','#segshow','#seghide')" style="display:none;"><bean:message key="link.show" /></a>
+						<a id="seghide" href="#aseg" onClick="hide('#segmentD','#segshow','#seghide')" ><bean:message key="link.hide" /></a>
+					</span>
+					</div>
+					<div id="segmentD"  >
+	
+						<table class="form2" cellspacing="0" cellpadding="0" >
+						<logic:iterate indexId="i" id="seg" name="claimForm" property="claim.segments" type="aero.nettracer.fs.model.Segment" >
+				          <tr id="<%= TracingConstants.JSP_DELETE_SEGMENT %>_<%=i%>">
+				          <td style="margin:0;padding:0;">
+							<bean:message key="claim.colname.segment.depart" />
+							<br/>
+				                <input type="text" name="segment[<%=i %>].departure" size="8" maxlength="3" value="<%=seg.getDeparture() == null ? "" : seg.getDeparture() %>" class="textfield" />
+				        	</td>
+				            <td>
+				           	<bean:message key="claim.colname.segment.arrive" />
+							<br/>
+								<input type="text" name="segment[<%=i %>].arrival"  size="8" maxlength="3" value="<%=seg.getArrival() == null ? "" : seg.getArrival() %>" class="textfield" />
+				            </td>
+				            <td>
+				           	<bean:message key="claim.colname.segment.date" />
+				             (<%= a.getDateformat().getFormat() %>)
+				             <br />
+				                <input type="text" name="segment[<%=i %>].disDate" size="12" maxlength="11" value="<%=seg.getDisDate() == null ? "" : seg.getDisDate() %>" class="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar_<%=i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.claimForm,'segment[<%=i %>].disDate','calendar_<%=i %>','<%= a.getDateformat().getFormat() %>'); return false;">
+				            </td>
+				            <td>
+				            <br/>
+				            	<input type="button" value="<bean:message key="button.delete.segment" />"
+				            		onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_SEGMENT %>_<%=i %>', 
+				                '<bean:message key="header.associated.segment" />', 0)"
+				            	id="button" >
+				           </td>
+				           </tr>
+				          
+				          </logic:iterate>
+				          <tr>
+				          <td colspan="4" align="center">
+					          <select name="addSegNum">
+						          <option value="1">1</option>
+						          <option value="2">2</option>
+						          <option value="3">3</option>
+						          <option value="4">4</option>
+						          <option value="5">5</option>
+						        </select>
+					
+							    <html:submit styleId="button" property="addSegs" onclick="setField('addedsegs');" >
+						        	<bean:message key="button.add.seg" />
+						        </html:submit>
+				          </td>
+				          </tr>
+					</table>
+	
+                    </div>
+                    
+                    <% 	String showSegments = (String) request.getAttribute("showSegments");
+						if (showSegments != null && showSegments.equals("true")) { %>
+						<script>
+				   			jQuery('#aseg').show();
+				   			jQuery('#segshow').hide();
+				   			jQuery('#seghide').show();
+				   		</script>
+					<% } %>
+                    <br />
+                    <br />
+                    <!-- end segments -->
+					
+					<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS, a)) { %>
+					 <h1 class="green">
+                   		<bean:message key="header.shared.files" />
+					 </h1>
+					<table class="form2" cellpadding="0" cellspacing="0">
+				              <tr>
+				                <td colspan="3">
+				                  <bean:message key="header.attachments" />
+				                  :
+				                  <br>
+				                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+				                  	  <tr align="center">
+											
+											  <td align="left" width="75%">
+					                           	<bean:message key="colname.attachname"/>
+					                          </td>
+				                          	  <td align="left">
+					                            <bean:message key="colname.action"/>
+					                          </td>
+				                          
+				                          </tr>
+				                 	  <logic:iterate indexId="i" id="attachment" name="claimForm" property="claim.attachments" type="aero.nettracer.fs.model.Attachment" >
+										  
+					  				      <tr align="center">
+											
+											  <td align="left">
+					                           	<a href='retrieveAttachment?ID=<bean:write name="attachment" property="attachment_id"/>' target="top"><bean:write name="attachment" property="description"/></a>
+					                          </td>
+				                          	  <td align="left">
+					                            <input type="submit" name="removeAttachment_<%= i %>" id="button" value="<bean:message key="button.delete_attachment"/>">
+					                          </td>
+				                          
+				                          </tr>
+										
+				                      </logic:iterate>
+				                  
+				                </table>
+				                <br>
+				                <center><input type="FILE" name='<%= "attachfile" %>' />
+				                &nbsp;
+				                <html:submit property="uploadAttachment" styleId="button">
+				                  <bean:message key="header.addAttachments" />
+				                </html:submit> </center>
+				              </td>
+				            </tr>
+			            </table>
+						<%
+				          }
+						%>
+					
 					
                     <center>
                     <html:submit property="save" styleId="button">
@@ -1496,9 +1638,11 @@
                     <input type="hidden" name="showReceipts" id="#receipts" value="<%=request.getAttribute("showReceipts") %>" />
                     <input type="hidden" name="showPhones" id="#phonesD" value="<%=request.getAttribute("showPhones") %>" />
                     <input type="hidden" name="showIpAddresses" id="#ipaddressD" value="<%=request.getAttribute("showIpAddresses") %>" />
+                    <input type="hidden" name="showSegments" id="#segmentD" value="<%=request.getAttribute("showSegments") %>" />
                     <input type="hidden" id="addednames" value="0" />
                     <input type="hidden" id="addedreceipts" value="0" />
                     <input type="hidden" id="addedips" value="0" />
+                    <input type="hidden" id="addedsegs" value="0" />
                     <input type="hidden" id="addedphones" value="0" />
                     <script language="javascript">
 						<logic:present name="an" scope="request">
@@ -1515,6 +1659,10 @@
 						
 						<logic:present name="ph" scope="request">
 							document.location.href="#ph";
+						</logic:present>
+						
+						<logic:present name="aseg" scope="request">
+							document.location.href="#aseg";
 						</logic:present>
 				    </script>
                   </html:form>
