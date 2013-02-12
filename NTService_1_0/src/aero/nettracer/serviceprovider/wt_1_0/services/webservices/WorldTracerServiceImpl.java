@@ -2012,6 +2012,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 //								}
 //							}
 						}
+						if(item.getExternaldesc()!=null && item.getExternaldesc().length()>0){
+							t3.setBagDetails(item.getExternaldesc());
+						}
 					} else {
 						throw new WorldTracerConnectionException("Bag/Item mismatch");
 					}
