@@ -46,7 +46,6 @@
 				document.getElementById("childRestraint").style.display = "none";
 			}
 			
-			//document.getElementById("subCategory"+selectedCategory).style.display="inline";
 		}
 
 </SCRIPT>
