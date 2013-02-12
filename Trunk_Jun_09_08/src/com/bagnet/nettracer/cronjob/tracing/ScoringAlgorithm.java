@@ -50,7 +50,8 @@ public class ScoringAlgorithm {
 							matchResult.getMatchElement().name().equals("COLOR") ||
 							matchResult.getMatchElement().name().equals("TYPE") ||
 							matchResult.getMatchElement().name().equals("ELEMENTS") ||
-							matchResult.getMatchElement().name().equals("CONTENTS")) {
+							matchResult.getMatchElement().name().equals("CONTENTS") ||
+							matchResult.getMatchElement().name().equals("BAGDESC")) {
 						
 						// Get or create the necessary bag.
 						BagMatches bag = null;

@@ -817,6 +817,13 @@ public enum MatchElement {
 				String ohdExternal=ohd.getExternaldesc();
 				MatchResult result = MatchUtils.stringCompare(e, incExternal,
 						ohdExternal, item.getBagnumber());
+				if(result!=null){
+					if (incExternal.equals(ohdExternal)) {
+						
+					}
+					results.add(result);
+				}
+				
 			}
 		}
 
