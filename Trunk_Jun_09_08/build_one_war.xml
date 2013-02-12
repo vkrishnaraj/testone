@@ -2483,6 +2483,7 @@
 		<property name="ant_project_name" value="airtran"/>
 		<property name="jarprefix" value="airtran-test-"/>
 		<property name="sub_path" value="test/"/>
+		<property name="hibernate_dialect" value="sqlserver" />
 		<property name="cron.job.config.file" value="companies/airtran/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
 	</target>
@@ -2493,6 +2494,7 @@
 		<property name="ant_project_name" value="airtran"/>
 		<property name="jarprefix" value="airtran-prod-"/>
 		<property name="sub_path" value="prod/"/>
+		<property name="hibernate_dialect" value="sqlserver" />
 		<property name="cron.job.config.file" value="companies/airtran/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
 	</target>
@@ -2611,9 +2613,11 @@
 			<property name="destinationResource" value="${build.dir}/${ant_project_name}/classes/tracer.properties" />
 		</ant>
 
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_main.cfg.xml" overwrite="true" />
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_dirty.cfg.xml" overwrite="true"/>
-		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/environment/${sub_path}hibernate_reporting.cfg.xml" overwrite="true"/>
+		<property name="hibernate_props_loc" value="companies/${ant_project_name}/environment/${sub_path}" />
+		<!-- Dialect will only be set if not already set by sqlserver client -->
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="cron-generate-hibernate-xmls" />
+
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/hibernate.mappings.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/dozerBeanMapping.xml" />
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/spring-beans.xml" />
@@ -2625,6 +2629,24 @@
 			basedir="${build.dir}/${ant_project_name}/classes"
 			includes="**/*.class,**/*.xml,**/*.properties">
 		</jar>
+	</target>
+	
+	<target name="cron-generate-hibernate-xmls" >
+		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_main.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}.cfg.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
+			</filterset>
+		</copy>
+		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_dirty.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_dirty.cfg.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
+			</filterset>
+		</copy>
+		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_reporting.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_reporting.cfg.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
+			</filterset>
+		</copy>	
 	</target>
 
 	<target name="cron-service" depends="cron-jar">
@@ -3247,17 +3269,17 @@
 	</target>
 	
 	<target name="generate-hibernate-xmls" >
-		<copy toFile="${basedir}/src/hibernate_main.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}.cfg.xml" >
+		<copy toFile="${basedir}/src/hibernate_main.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}.cfg.xml" overwrite="true" >
 			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
 			</filterset>
 		</copy>
-		<copy toFile="${basedir}/src/hibernate_dirty.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_dirty.cfg.xml" >
+		<copy toFile="${basedir}/src/hibernate_dirty.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_dirty.cfg.xml" overwrite="true" >
 			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
 			</filterset>
 		</copy>
-		<copy toFile="${basedir}/src/hibernate_reporting.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_reporting.cfg.xml" >
+		<copy toFile="${basedir}/src/hibernate_reporting.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_reporting.cfg.xml" overwrite="true" >
 			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
 			</filterset>
