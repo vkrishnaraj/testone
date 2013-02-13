@@ -83,7 +83,7 @@
       <bean:message key="Required" />
       <logic:iterate id="passenger" name="incidentForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.Passenger">
       <div id="<%=TracingConstants.JSP_DELETE_PAX %>_<%=i%>">
-        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" id="passid<%=i%>">
           <tr>
             <td colspan=5>
               <a name='addpassenger<%= i %>'></a>

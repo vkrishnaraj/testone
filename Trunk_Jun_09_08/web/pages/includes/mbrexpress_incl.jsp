@@ -133,8 +133,8 @@
                 </h1>
                 <span class="reqfield">*</span>
                 <bean:message key="message.required" />
-                <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-                  <logic:iterate id="theitinerary" indexId="k" name="incidentForm" property="itinerarylist">
+               <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+                <logic:iterate id="theitinerary" indexId="k" name="incidentForm" property="itinerarylist">
                     <logic:equal name="theitinerary" property="itinerarytype" value="0">
                       <tr>
                         <td>
@@ -155,7 +155,7 @@
                         </td>
                       </tr>
                       <tr id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k %>">
-                        <td>
+                        <td id="passItin<%=k%>">
                           <html:hidden name="theitinerary" property="itinerarytype" value="0" indexed="true" />
                           <html:text name="theitinerary" property="legfrom" size="3" maxlength="3" styleClass="textfield" indexed="true" />
                           <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border="0"></a>
@@ -185,7 +185,7 @@
                       </tr>
                     </logic:equal>
                   </logic:iterate>
-                </table>
+            	</table>
                 <center><select name="addpassitNum">
             <option value="1">1</option>
             <option value="2">2</option>

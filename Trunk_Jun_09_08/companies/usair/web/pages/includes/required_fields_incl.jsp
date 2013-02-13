@@ -61,7 +61,22 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     var firstItemIndex = -1;
     var firstClaimcheckIndex = -1;
     var myItineraryDateIndex = -1;
-    
+    var pasTable=document.getElementById("passid0");
+    var expressItin=document.getElementById("passItin0");
+  	var pasItinTable=document.getElementById("hidexItinerary0");
+  	var bagItinTable=document.getElementById("bagItin1");
+  	if(pasTable==null) 	{
+  	  alert("<%=(String) bundle.getString("error.minimum.passengers")%>");
+  	  return false;
+  	}
+  	if(pasItinTable==null && expressItin==null)	{
+  	  alert('<%=(String) bundle.getString("error.minimum.passitin")%>');
+      return false;
+  	}
+  	if(bagItinTable==null && expressItin==null)	{
+  	  alert('<%=(String) bundle.getString("error.minimum.bagitin")%>');
+      return false;
+  	}
     for (var j=0;j < form.length; j++) {
       currentElement = form.elements[j];
       currentElementName=currentElement.name;
