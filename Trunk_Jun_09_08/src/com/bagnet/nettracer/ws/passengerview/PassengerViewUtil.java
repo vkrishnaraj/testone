@@ -401,11 +401,11 @@ public class PassengerViewUtil {
  		Remark r = new Remark();
  		ResourceBundle myResources = ResourceBundle.getBundle(
 				"com.bagnet.nettracer.tracing.resources.ApplicationResources");
- 		Agent agent = AdminUtils.getAgentBasedOnUsername(callingAgent, TracerProperties.get("wt.company.code"));
+ 		Agent agent = AdminUtils.getAgentBasedOnUsername(callingAgent, TracerProperties.get(iDTO.getAgent().getCompanycode_ID(),"wt.company.code"));
  		agent.setUsername(callingAgent);
 		r.setAgent(agent);
 		r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-		r.setRemarktext(myResources.getString("service_load_remark_text") + " " + callingAgent);
+		r.setRemarktext(myResources.getString("service_load_remark_text"));
 		r.setIncident(iDTO);
 		r.setRemarktype(TracingConstants.REMARK_REGULAR);
 		
