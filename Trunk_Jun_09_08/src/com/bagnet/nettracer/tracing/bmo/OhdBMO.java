@@ -1054,6 +1054,15 @@ public class OhdBMO {
 				s.append(" and ohd.status.status_ID != :status_ID");
 			}
 			
+
+			if(siDTO.getStationcreated_ID()>0){
+				s.append(" and ohd.foundAtStation.station_ID = :foundstation_ID");
+			}
+
+			if(siDTO.getStationassigned_ID()>0){
+				s.append(" and ohd.holdingStation.station_ID = :holdingstation_ID");
+			}
+
 			intelligentSearchProcessing(siDTO, s);
 			
 
@@ -1168,6 +1177,13 @@ public class OhdBMO {
 					.toUpperCase());
 			if (siDTO.getAirline().length() > 0) q.setString("airline", siDTO.getAirline().toUpperCase());
 
+			if(siDTO.getStationcreated_ID()>0){
+				q.setInteger("foundstation_ID", siDTO.getStationcreated_ID());
+			}
+
+			if(siDTO.getStationassigned_ID()>0){
+				q.setInteger("holdingstation_ID", siDTO.getStationassigned_ID());
+			}
 			List results = q.list();
 			return results;
 		} catch (Exception e) {

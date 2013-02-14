@@ -1904,6 +1904,14 @@ public class IncidentBMO {
 
 			if (siDTO.getStatus_ID() > 0)
 				s.append(" and incident.status.status_ID = :status_ID");
+			
+			if(siDTO.getStationcreated_ID()>0){
+				s.append(" and incident.stationcreated.station_ID = :createstation_ID");
+			}
+
+			if(siDTO.getStationassigned_ID()>0){
+				s.append(" and incident.stationassigned.station_ID = :assignstation_ID");
+			}
 
 			if (!iscount)
 				s.append(" order by incident.incident_ID");
@@ -2010,7 +2018,13 @@ public class IncidentBMO {
 				q.setString("flightnum", siDTO.getFlightnum().toUpperCase());
 			if (siDTO.getAirline().length() > 0)
 				q.setString("airline", siDTO.getAirline().toUpperCase());
+			if(siDTO.getStationcreated_ID()>0){
+				q.setInteger("createstation_ID", siDTO.getStationcreated_ID());
+			}
 
+			if(siDTO.getStationassigned_ID()>0){
+				q.setInteger("assignstation_ID", siDTO.getStationassigned_ID());
+			}
 			List results = q.list();
 			return results;
 		} catch (Exception e) {

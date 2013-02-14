@@ -59,8 +59,10 @@
 			    document.getElementById("statusSpan").innerHTML = temp;
     		});
 			if(type==2){
+				document.getElementById("assignstation").innerHTML="<bean:message key="colname.holding.station"/>";
 				document.getElementById("claimtitle").innerHTML="<bean:message key="match.claimchecknum" />";
 			} else {
+				document.getElementById("assignstation").innerHTML="<bean:message key="colname.assigned_station"/>";
 				document.getElementById("claimtitle").innerHTML="<bean:message key="colname.claimnum" />";
 			}
     		currentStatusId = type;
@@ -267,6 +269,32 @@ function updatePagination() {
                   <br>
                   <html:text property="s_createtime" size="10" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.s_createtime,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">-
                   <html:text property="e_createtime" size="10" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+              </tr>
+              <tr>
+			<td colspan=2>
+				<bean:message key="reports.create.station"/><br/>
+              	 <html:select property="stationcreated_ID" styleClass="dropdown">
+                    <html:option value="">
+                      <bean:message key="select.all" />
+                    </html:option>
+                    <html:options collection="stationlist"  property="station_ID" labelProperty="stationcode"  />
+                  </html:select>
+              	 
+              	</td>
+              	<td colspan=2>
+              	
+				
+                 
+                  <span id="assignstation">	
+              	 	<bean:message key="colname.assigned_station"/>
+              	 </span><br/>
+              	 <html:select property="stationassigned_ID" styleClass="dropdown">
+                    <html:option value="">
+                      <bean:message key="select.all" />
+                    </html:option>
+                    <html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+                  </html:select>
+              	</td>
               </tr>
             </table>
             <h1 class="green">
@@ -538,7 +566,7 @@ function updatePagination() {
               %>
               <div id="pageheaderright">
                   <select name="outputtype">
-                    <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                    <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                       <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
                     <% } %>
                     <option value="1"><bean:message key="radio.html" /></option>
