@@ -659,8 +659,8 @@
 			<div id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>">
 				<html:hidden name="theitinerary" property="itinerarytype" value="0"
 					indexed="true" />
-				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0"
-					id="hidexItinerary<%=k %>">
+				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" name="hidexItinerary<%=k %>"
+					id="hidexItinerary">
 					<tr>
 						<td><bean:message key="colname.pax.fromto.req" /> <br>
 							<html:text name="theitinerary" property="legfrom" size="3"
@@ -791,9 +791,10 @@
 
 
 			<div id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>">
+			
 				<html:hidden name="theitinerary" property="itinerarytype" value="1"
 					indexed="true" />
-				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" id="bagItin<%=t %>">
+				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" id="bagItin">
 					<tr>
 						<td><bean:message key="colname.bag.fromto.req" /> <br>
 							<html:text name="theitinerary" property="legfrom" size="3"

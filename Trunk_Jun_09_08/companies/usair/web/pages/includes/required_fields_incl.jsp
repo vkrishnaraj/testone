@@ -61,10 +61,10 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     var firstItemIndex = -1;
     var firstClaimcheckIndex = -1;
     var myItineraryDateIndex = -1;
-    var pasTable=document.getElementById("passid0");
-    var expressItin=document.getElementById("passItin0");
-  	var pasItinTable=document.getElementById("hidexItinerary0");
-  	var bagItinTable=document.getElementById("bagItin1");
+    var pasTable=document.getElementById("passid");
+    var expressItin=document.getElementById("passItin");
+  	var pasItinTable=document.getElementById("hidexItinerary");
+  	var bagItinTable=document.getElementById("bagItin");
   	if(pasTable==null) 	{
   	  alert("<%=(String) bundle.getString("error.minimum.passengers")%>");
   	  return false;

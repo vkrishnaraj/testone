@@ -155,7 +155,7 @@
                         </td>
                       </tr>
                       <tr id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k %>">
-                        <td id="passItin<%=k%>">
+                        <td id="passItin">
                           <html:hidden name="theitinerary" property="itinerarytype" value="0" indexed="true" />
                           <html:text name="theitinerary" property="legfrom" size="3" maxlength="3" styleClass="textfield" indexed="true" />
                           <a href="#" onclick="openWindow('pages/popups/airportcodes.jsp?key=theitinerary[<%= k %>].legfrom','airportcode',500,600);return false;"><img src="deployment/main/images/nettracer/airport_codes.gif" border="0"></a>
