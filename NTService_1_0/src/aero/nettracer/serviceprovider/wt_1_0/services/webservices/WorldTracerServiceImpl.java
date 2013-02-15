@@ -3713,9 +3713,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				d2.addNewLossComments().setStringValue("Created in error");
 			}
 			
-			if (incident.isTracingFinalized()) {
+			if (incident.getTracingFinalized() != null) {
 				TracingFinalized tf = TracingFinalized.Factory.newInstance();
-				tf.setDateValue(new Date());
+				tf.setDateValue(incident.getTracingFinalized().getTime());
 				//tf.setPaperClaim(true);
 				d2.setTracingFinalized(tf);
 			}
