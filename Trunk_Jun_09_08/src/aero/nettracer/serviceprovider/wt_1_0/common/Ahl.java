@@ -20,7 +20,7 @@ public class Ahl {
 	private String faultReasonDescription;
 	private String faultStation;
 	private int faultReason;
-	private boolean tracingFinalized;
+	private Calendar tracingFinalized;
 
 	public String getFaultReasonDescription() {
 		return faultReasonDescription;
@@ -158,11 +158,11 @@ public class Ahl {
 		this.expenses = expenses;
 	}
 
-	public boolean isTracingFinalized() {
+	public Calendar isTracingFinalized() {
 		return tracingFinalized;
 	}
 
-	public void setTracingFinalized(boolean tracingFinalized) {
+	public void setTracingFinalized(Calendar tracingFinalized) {
 		this.tracingFinalized = tracingFinalized;
 	}
 

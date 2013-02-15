@@ -200,7 +200,7 @@
 					<br />
 					<c:choose>
 						<c:when test="${incidentForm.wtFile.wt_status == 'ACTIVE'}">
-							<% if (UserPermissions.hasPermission("WorldTracer SUS/RIT", a) && myform.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) { %>
+							<% if (UserPermissions.hasPermission("WorldTracer SUS/RIT", a) && !(PropertyBMO.isTrue(PropertyBMO.TRACING_STATUS_BLOCK_WT) && myform.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING)) { %>
 							<a
 								href="javascript: document.forms[0].wtq_suspend.value = '1'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message
 									key="wt.ahl.suspend" /></a>

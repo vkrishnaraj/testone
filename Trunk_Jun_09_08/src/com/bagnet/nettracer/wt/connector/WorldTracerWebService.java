@@ -2,6 +2,7 @@ package com.bagnet.nettracer.wt.connector;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -1609,7 +1610,11 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			claimChecks.add(cl);
 		}
 		a.setClaimCheck(claimChecks.toArray(new ClaimCheck[claimChecks.size()]));
-		a.setTracingFinalized(i.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_FINAL);
+		if (i.getTracingComplete() != null) {
+			Calendar traceComp = Calendar.getInstance();
+			traceComp.setTime(i.getTracingComplete());
+			a.setTracingFinalized(traceComp);
+		}
 	}
 
 

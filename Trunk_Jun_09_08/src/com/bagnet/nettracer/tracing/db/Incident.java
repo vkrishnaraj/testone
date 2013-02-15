@@ -127,6 +127,9 @@ public class Incident implements Serializable {
 	private String revenueCode;
 	
 	private int tracingStatus;
+	private Date tracingStarted;
+	private Date tracingComplete;
+	private Agent tracingAgent;
 
 	@Column(name="tracing_status_id")
 	public int getTracingStatus() {
@@ -136,7 +139,35 @@ public class Incident implements Serializable {
 	public void setTracingStatus(int tracingStatus) {
 		this.tracingStatus = tracingStatus;
 	}
-	
+
+	@Temporal(value = TemporalType.TIMESTAMP)
+	public Date getTracingStarted() {
+		return tracingStarted;
+	}
+
+	public void setTracingStarted(Date tracingStarted) {
+		this.tracingStarted = tracingStarted;
+	}
+
+	@Temporal(value = TemporalType.TIMESTAMP)
+	public Date getTracingComplete() {
+		return tracingComplete;
+	}
+
+	public void setTracingComplete(Date tracingComplete) {
+		this.tracingComplete = tracingComplete;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "tracing_agent_ID")
+	public Agent getTracingAgent() {
+		return tracingAgent;
+	}
+
+	public void setTracingAgent(Agent tracingAgent) {
+		this.tracingAgent = tracingAgent;
+	}
+
 	@Column(name="revenue_code", length=4)
 	public String getRevenueCode() {
 		return revenueCode;

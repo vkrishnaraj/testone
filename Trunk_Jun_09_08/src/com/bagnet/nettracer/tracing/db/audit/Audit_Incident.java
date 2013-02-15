@@ -14,6 +14,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
@@ -95,6 +100,9 @@ public class Audit_Incident implements Serializable {
 	private String revenueCode;
 	
 	private int tracingStatus;
+	private Date tracingStarted;
+	private Date tracingComplete;
+	private Agent tracingAgent;
 
 	/**
 	 * @return Returns the tracingStatus.
@@ -107,6 +115,49 @@ public class Audit_Incident implements Serializable {
 	
 	public void setTracingStatus(int tracingStatus) {
 		this.tracingStatus = tracingStatus;
+	}
+
+
+	/**
+	 * @return Returns the tracingStarted.
+	 * 
+	 * @hibernate.property type="timestamp"
+	 */
+	public Date getTracingStarted() {
+		return tracingStarted;
+	}
+
+	public void setTracingStarted(Date tracingStarted) {
+		this.tracingStarted = tracingStarted;
+	}
+
+
+	/**
+	 * @return Returns the tracingComplete.
+	 * 
+	 * @hibernate.property type="timestamp"
+	 */
+	public Date getTracingComplete() {
+		return tracingComplete;
+	}
+
+	public void setTracingComplete(Date tracingComplete) {
+		this.tracingComplete = tracingComplete;
+	}
+
+
+	/**
+	 * @return Returns the tracingAgent.
+	 * 
+	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Agent"
+	 *                        column="tracing_agent_ID"   foreign-key="agent_ID"
+	 */
+	public Agent getTracingAgent() {
+		return tracingAgent;
+	}
+
+	public void setTracingAgent(Agent tracingAgent) {
+		this.tracingAgent = tracingAgent;
 	}
 	
 	/**

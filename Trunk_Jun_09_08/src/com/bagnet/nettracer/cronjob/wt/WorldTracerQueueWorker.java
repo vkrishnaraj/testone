@@ -11,6 +11,7 @@ import com.bagnet.nettracer.cronjob.bmo.WTQueueBmo;
 import com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.SpecialFlagBMO;
 import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -401,7 +402,7 @@ public class WorldTracerQueueWorker implements Runnable {
 				else if(queue instanceof WtqSuspendAhl) {
 					String wtId = null;
 					Incident incident = ((WtqIncidentAction) queue).getIncident();
-					if (incident != null && incident.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING
+					if (incident != null && !(PropertyBMO.isTrue(PropertyBMO.TRACING_STATUS_BLOCK_WT) && incident.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING)
 							&& TracingConstants.MBR_STATUS_CLOSED != incident.getStatus().getStatus_ID()) {
 						try {
 							wtId = wtService.suspendIncident(incident, dto);
@@ -460,7 +461,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					} else {
 						if (incident == null) {
 							queue.setStatus(WtqStatus.FAIL);
-						} else if (incident.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING){
+						} else if (PropertyBMO.isTrue(PropertyBMO.TRACING_STATUS_BLOCK_WT) && incident.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING){
 							queue.setStatus(WtqStatus.LOCKED);
 						} else {
 							queue.setStatus(WtqStatus.CANCELED);
@@ -838,7 +839,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					Incident incident = null;
 					try {
 						incident = ((WtqIncidentAction) queue).getIncident();
-						if (incident != null && incident.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_TRACING) {
+						if (incident != null && !(PropertyBMO.isTrue(PropertyBMO.TRACING_STATUS_BLOCK_WT) && incident.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING)) {
 							String result = wtService.amendAhl(incident, dto);
 						}
 					}
@@ -897,7 +898,7 @@ public class WorldTracerQueueWorker implements Runnable {
 					}
 					if (incident == null) {
 						queue.setStatus(WtqStatus.FAIL);
-					} else if (incident.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING) {
+					} else if (PropertyBMO.isTrue(PropertyBMO.TRACING_STATUS_BLOCK_WT) && incident.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_TRACING) {
 						queue.setStatus(WtqStatus.LOCKED);
 					} else {
 						logger.info("amended AHL: " + ((WtqAmendAhl) queue).getIncident().getIncident_ID());
