@@ -178,6 +178,21 @@ function isWhitespace (s)
 		}
 	}
 	
+	function languagefreeflow(var1,o,field){
+		pos = var1.name.indexOf(".");
+		if (pos <=0) addr = "";
+		else addr = var1.name.substring(0,pos+1);
+		lang = addr + field;
+		
+		if(var1.value == 'other'){
+			o.elements[lang].style.display='block';
+			o.elements[lang].value='';
+		} else {
+			o.elements[lang].style.display='none';
+			o.elements[lang].value=var1.options[var1.selectedIndex].text;
+		}
+	}
+	
 	function updateCountryUS(var1, myform, countryField, provinceField) {
 		if (var1.value) {
 			pos = var1.name.indexOf(".");

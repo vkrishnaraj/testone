@@ -107,7 +107,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="2">
+            <td colspan="1">
               <bean:message key="colname.salutation" />
               <br>
               <html:select name="passenger" indexed="true" property="salutation" styleClass="dropdown">
@@ -133,6 +133,18 @@
                   <bean:message key="select.other" />
                 </html:option>
               </html:select>
+            </td>
+            <td colspan="1">
+            	<bean:message key="spoken.language.label" />
+            	<br>
+            	 <html:select name="passenger" indexed="true" property="languageKey" styleClass="dropdown" onchange="languagefreeflow(this,this.form,'languageFreeFlow');">
+                <html:options collection="spokenLanguageList" property="value" labelProperty="label"/>
+              </html:select>
+              <% if("other".equals(passenger.getLanguageKey())){ %>
+              <html:text name="passenger" property="languageFreeFlow" indexed="true" size="25" maxlength="25" styleClass="textfield" />
+          		<% } else { %>
+           <html:text name="passenger" property="languageFreeFlow" indexed="true" size="25" maxlength="25" styleClass="textfield" style="display:none;" />
+           	<% } %>
             </td>
             <td colspan="2">
               <bean:message key="colname.job_title" />

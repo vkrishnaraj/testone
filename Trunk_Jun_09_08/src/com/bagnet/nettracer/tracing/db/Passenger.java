@@ -44,6 +44,8 @@ public class Passenger implements Serializable {
 	private Set addresses;
 	private Incident incident;
 	private int numRonKitsIssued;
+	private String languageKey;
+	private String languageFreeFlow;
 
 	public JRBeanCollectionDataSource getAddressesForReport() {
 		if (addresses == null || addresses.size() < 1) return null;
@@ -469,6 +471,32 @@ public class Passenger implements Serializable {
 
 	public void setNumRonKitsIssued(int numRonKitsIssued) {
 		this.numRonKitsIssued = numRonKitsIssued;
+	}
+
+	/**
+	 * @return Returns the languageKey.
+	 * 
+	 * @hibernate.property type="string" length="50"
+	 */
+	public String getLanguageKey() {
+		return languageKey;
+	}
+
+	public void setLanguageKey(String languageKey) {
+		this.languageKey = languageKey;
+	}
+
+	/**
+	 * @return Returns the languageFreeFlow.
+	 * 
+	 * @hibernate.property type="string" length="50"
+	 */
+	public String getLanguageFreeFlow() {
+		return languageFreeFlow;
+	}
+
+	public void setLanguageFreeFlow(String languageFreeFlow) {
+		this.languageFreeFlow = languageFreeFlow;
 	}
 
 }

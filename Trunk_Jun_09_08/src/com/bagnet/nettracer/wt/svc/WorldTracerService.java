@@ -31,7 +31,7 @@ public interface WorldTracerService {
 				"reason.loss"), RC("loss.comments"), SL("storage.location"), XT("expidite.tag"), FO("fwd.date"), FW(
 				"fwd.stations"), FB("fwd.bag.count"), FT("fault.terminal"), SI("sup.info"), TX("teletype.address"), FI("further.info"),
 				TA("temp.address"), CC("contents"), DD("deliver.date"), LD("local.delivery.inst"), DA("delivery.address"), TI("text.info"), 
-				NF("new.flight"), NR("new.routing"), STATE("web.state"), ZIP("web.zip");
+				NF("new.flight"), NR("new.routing"), STATE("web.state"), ZIP("web.zip"),LA("language");
 	
 		private String description_id;
 	

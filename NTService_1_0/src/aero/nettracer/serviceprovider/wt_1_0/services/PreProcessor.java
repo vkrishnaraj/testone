@@ -332,9 +332,15 @@ public class PreProcessor {
 		List<Address> permAdds = new ArrayList<Address>();
 		List<Address> namedAdds = new ArrayList<Address>();
 		List<Address> tempAdds = new ArrayList<Address>();
+		String language = null;
 		if(data.getPax() != null) {
 			int passengerCount = 0;
 			for (Passenger p : data.getPax()) {
+				if(language == null){
+					if(p.getLanguageFreeFlow() != null && p.getLanguageFreeFlow().trim().length() > 0){
+						addIncidentFieldEntry(WorldTracerField.LA, p.getLanguageFreeFlow(), result);
+					}
+				}
 				if (passengerCount < 3) {
 					++passengerCount;
 

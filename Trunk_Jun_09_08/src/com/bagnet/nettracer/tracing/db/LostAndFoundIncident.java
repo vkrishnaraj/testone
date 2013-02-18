@@ -53,6 +53,9 @@ public class LostAndFoundIncident implements Serializable {
 	private String remark;
 	private Set photos;
 
+	private String languageKey;
+	private String languageFreeFlow;
+	
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE; // timezone
@@ -599,6 +602,30 @@ public class LostAndFoundIncident implements Serializable {
 	public String format(String val) {
 		if (val == null) return " ";
 		else return val + " ";
+	}
+
+	/**
+	 * @hibernate.property type="string"
+	 * @return Returns the languageKey.
+	 */
+	public String getLanguageKey() {
+		return languageKey;
+	}
+
+	public void setLanguageKey(String languageKey) {
+		this.languageKey = languageKey;
+	}
+
+	/**
+	 * @hibernate.property type="string"
+	 * @return Returns the languageFreeFlow.
+	 */
+	public String getLanguageFreeFlow() {
+		return languageFreeFlow;
+	}
+
+	public void setLanguageFreeFlow(String languageFreeFlow) {
+		this.languageFreeFlow = languageFreeFlow;
 	}
 
 }

@@ -77,6 +77,7 @@ import com.bagnet.nettracer.tracing.forms.LostFoundIncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.wt.WorldTracerUtils;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.emory.mathcs.backport.java.util.Collections;
 
 /**
@@ -94,6 +95,15 @@ public class TracerUtils {
 	private static ConcurrentHashMap<Integer, String> cachedXDescElementMap = new ConcurrentHashMap<Integer, String>();
 	
 	private static MessageResources messages = null;
+	
+	private static String [] DEFAULT_LANGUAGES = {
+			"english",
+			"mandarin",
+			"spanish",
+			"portuguese",
+			"french",
+			"arabic",
+			"other"};
 	
 	static {
 		try {
@@ -500,9 +510,32 @@ public class TracerUtils {
 				session.getAttribute("reportmethodlist") != null ?
 						session.getAttribute("reportmethodlist") :
 							((ClientUtils) SpringUtils.getBean("clientUtils")).getReportMethodsList(user.getCurrentlocale()));
+		
+		session.setAttribute("spokenLanguageList",
+				session.getAttribute("spokenLanguageList") != null ?
+				session.getAttribute("spokenLanguageList") :
+					getSpokenLanguageList(locale));
 
 	}
 
+	private static List<LabelValueBean> getSpokenLanguageList(String locale){
+		List<String> langs = PropertyBMO.getSplitList(PropertyBMO.SPOKEN_LANGUAGE_LIST);
+		if(langs == null){
+			langs = Arrays.asList(DEFAULT_LANGUAGES);
+		}
+		ArrayList<LabelValueBean> result = new ArrayList<LabelValueBean>();
+		if(langs != null){
+			for(String lang:langs){
+				String localLang = messages.getMessage(new Locale(locale), "spoken.language."+lang);
+				if(localLang == null || localLang.trim().length() == 0){
+					localLang = "spoken.language."+lang;
+				}
+				result.add(new LabelValueBean(localLang, lang));
+			}
+		}
+		return result;
+	}
+	
 	private static List<LabelValueBean> getPaymentList(String locale) {
 		ArrayList<LabelValueBean> result = new ArrayList<LabelValueBean>();
 		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.draft"), "DRAFT"));

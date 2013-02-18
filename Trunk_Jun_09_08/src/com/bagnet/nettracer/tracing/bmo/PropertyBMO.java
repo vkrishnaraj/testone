@@ -177,8 +177,10 @@ public class PropertyBMO {
 	
 	public static final String AUTO_CLOSE_REMARK = "auto.close.remark";
 	public static final String AUTO_CLOSE_REMARK_LOC = "auto.close.remark.loc";
-
+	
 	public static final String TRACING_STATUS_BLOCK_WT = "tracing.status.block.wt";
+	
+	public static final String SPOKEN_LANGUAGE_LIST = "spoken.language.list";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

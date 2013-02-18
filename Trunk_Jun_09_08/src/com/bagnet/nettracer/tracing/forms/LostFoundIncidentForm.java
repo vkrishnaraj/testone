@@ -57,6 +57,9 @@ public final class LostFoundIncidentForm extends ValidatorForm {
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE; // timezone
+	
+	private String languageKey;
+	private String languageFreeFlow;
 
 	public String getState() {
 		if (customer_state_ID != null && customer_state_ID.length() > 0) {
@@ -596,5 +599,21 @@ public final class LostFoundIncidentForm extends ValidatorForm {
 	 */
 	public void setReport_type(int report_type) {
 		this.report_type = report_type;
+	}
+
+	public String getLanguageKey() {
+		return languageKey;
+	}
+
+	public void setLanguageKey(String languageKey) {
+		this.languageKey = languageKey;
+	}
+
+	public String getLanguageFreeFlow() {
+		return languageFreeFlow;
+	}
+
+	public void setLanguageFreeFlow(String languageFreeFlow) {
+		this.languageFreeFlow = languageFreeFlow;
 	}
 }

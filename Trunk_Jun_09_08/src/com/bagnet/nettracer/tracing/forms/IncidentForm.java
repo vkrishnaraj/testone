@@ -415,7 +415,9 @@ public final class IncidentForm extends ValidatorForm {
 		return this.getPassenger(pIndex).getAddress(aIndex);
 	}
 
-
+	public String getLanguageFreeFlow(int pIndex){
+		return this.getPassenger(pIndex).getLanguageFreeFlow();
+	}
 	
 	public List<BDO_Passenger> getBdo_passengerlist() {
 		return bdo_passengerlist;

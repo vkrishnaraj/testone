@@ -2020,6 +2020,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			// Set Passengers & Contact Information
 			PassengerItineraryType p1 = d1.addNewPassengers();
+			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.NM);
 			fieldList2 = fieldMap.get(DefaultWorldTracerService.WorldTracerField.IT);
 			if (fieldList != null && fieldList.size() > 0) {
@@ -2073,6 +2074,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 
+
+			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.LA);
+			if (fieldList != null && fieldList.size() > 0) {
+				String language = RULES.get(DefaultWorldTracerService.WorldTracerField.LA).formatEntry(fieldList.get(0));
+				p1.setLanguage(language);
+			}
+			
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.PT);
 			if (fieldList != null && fieldList.size() > 0) {
 				String title = RULES.get(DefaultWorldTracerService.WorldTracerField.PT).formatEntry(fieldList.get(0));

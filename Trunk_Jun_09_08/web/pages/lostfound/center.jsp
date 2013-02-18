@@ -174,6 +174,24 @@ function gotoHistoricalReport() {
                     &nbsp;
                   </td>
                 </logic:notEqual>
+               </tr>
+               <tr>
+                <td colspan="2">
+             <bean:message key="spoken.language.label" />
+            	<br>
+            	 <html:select name="LostAndFoundForm" property="languageKey" styleClass="dropdown" onchange="languagefreeflow(this,this.form,'languageFreeFlow');">
+                <html:options collection="spokenLanguageList" property="value" labelProperty="label"/>
+              </html:select>
+              <% LostFoundIncidentForm form = (LostFoundIncidentForm)request.getSession().getAttribute("LostAndFoundForm"); 
+               if ("other".equals(form.getLanguageKey())) {%>
+              <html:text name="LostAndFoundForm" property="languageFreeFlow" size="25" maxlength="25" styleClass="textfield" />
+			<% } else { %>
+			  <html:text name="LostAndFoundForm" property="languageFreeFlow" size="25" maxlength="25" styleClass="textfield" style="display:none;" />
+			<% } %>
+                </td>
+              <td colspan="2">
+              &nbsp;
+              </td>
               </tr>
               <tr>
                 <td>

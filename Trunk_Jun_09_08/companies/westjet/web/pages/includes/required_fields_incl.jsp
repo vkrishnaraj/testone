@@ -104,6 +104,23 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     var firstItemIndex = -1;
     var firstClaimcheckIndex = -1;
     
+    var pasTable=document.getElementById("passid0");
+    var expressItin=document.getElementById("passItin0");
+  	var pasItinTable=document.getElementById("hidexItinerary0");
+  	var bagItinTable=document.getElementById("bagItin1");
+  	if(pasTable==null) 	{
+  	  alert("<%=(String) bundle.getString("error.minimum.passengers")%>");
+  	  return false;
+  	}
+  	if(pasItinTable==null && expressItin==null)	{
+  	  alert('<%=(String) bundle.getString("error.minimum.passitin")%>');
+      return false;
+  	}
+  	if(bagItinTable==null && expressItin==null)	{
+  	  alert('<%=(String) bundle.getString("error.minimum.bagitin")%>');
+      return false;
+  	}
+    
     isRemarkAbsent = true;
     
     for (var j=0;j < form.length; j++) {
@@ -157,6 +174,16 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 	        currentElement.focus();
 	        return false;
 	      }
+	      
+	} else if (currentElementName.indexOf("languageFreeFlow") != -1) {  
+	      if (currentElement.value.length == 0)
+	      {
+	        alert("<%= (String)bundle.getString("spoken.language.label") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+	        currentElement.focus();
+	        return false;
+	      }
+	      
+	      
 	} else if (currentElementName.indexOf("address1") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
@@ -168,6 +195,8 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 	        var right = currentElementName.indexOf("]");
 	        addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));	      
 	      }
+	      
+	  
       } else if (currentElementName.indexOf("city") != -1) {  
 	      if (currentElement.value.length == 0)
 	      {
