@@ -2028,7 +2028,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				Initials pi1 = null;
 				for (int j = 0; j < fieldList.size(); j++) {
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));			
-					pp1.addName(name);
+					if(name.contains(" ")){
+						pp1.addName(name.substring(0, name.indexOf(" ")));
+					} else {
+						pp1.addName(name);
+					}
 
 					if (fieldList2 != null && fieldList2.size() > j) {
 						if(pi1 == null){

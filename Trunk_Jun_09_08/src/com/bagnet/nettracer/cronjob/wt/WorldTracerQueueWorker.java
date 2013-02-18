@@ -174,6 +174,15 @@ public class WorldTracerQueueWorker implements Runnable {
 						} catch (StaleStateException e) {
 							//loupas - should never reach this since the update is ignoring the stale state
 							e.printStackTrace();
+							try {
+								iBmo.updateIncidentNoAudit(false,true,incident);
+							} catch (HibernateException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (StaleStateException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 						
 					} else {

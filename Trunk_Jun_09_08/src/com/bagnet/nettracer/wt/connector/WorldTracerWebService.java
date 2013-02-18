@@ -1736,6 +1736,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		it.setLastNameOnBag(item.getLnameonbag());
 		it.setManufacturer(item.getManufacturer());
 		it.setType(item.getBagtype());
+		it.setExternaldesc(item.getExternaldesc());
 		items.add(it);
 	}
 
