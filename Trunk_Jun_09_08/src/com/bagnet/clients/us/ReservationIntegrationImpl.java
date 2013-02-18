@@ -275,8 +275,12 @@ public class ReservationIntegrationImpl extends
 					for (int j=0; j<segs.length; ++j) {
 						com.bagnet.nettracer.tracing.db.OHD_Itinerary fItin = form.getItinerary(itinCount);
 						Segment seg = segs[j];
-						
-						Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+						Long deptime =null;
+						if(seg.getDepartureEstimated().getTime().getTime() != WS_NULL_DATE){
+							deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+						} else {
+							deptime =  ((new Date()).getTime()) / 3600000;
+						}
 						Long nowtime = ((new Date()).getTime()) / 3600000;
 						Long timeDifference = nowtime - deptime;
 						
@@ -292,10 +296,14 @@ public class ReservationIntegrationImpl extends
 							fItin.setFlightnum(seg.getFlightNumber());
 							fItin.setLegfrom(seg.getDepartureStation());
 							fItin.setLegto(seg.getArrivalStation());
-							fItin.setDepartdate(seg.getDepartureEstimated().getTime());
-							fItin.setArrivedate(seg.getArrivalEstimated().getTime());
-							fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
-							fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
+							if(seg.getDepartureEstimated().getTime().getTime() != WS_NULL_DATE){
+								fItin.setDepartdate(seg.getDepartureEstimated().getTime());
+								fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
+							}
+							if(seg.getArrivalEstimated().getTime().getTime() != WS_NULL_DATE){
+								fItin.setArrivedate(seg.getArrivalEstimated().getTime());
+								fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
+							}
 
 							if (seg.getArrivalActual().getTime().getTime() != WS_NULL_DATE) {
 								fItin.setActarrivetime(seg.getArrivalActual().getTime());
@@ -471,7 +479,12 @@ public class ReservationIntegrationImpl extends
 						com.bagnet.nettracer.tracing.db.Itinerary fItin = form.getItinerary(itinCount, TracingConstants.PASSENGER_ROUTING);
 						Segment seg = segs[j];
 		
-						Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+						Long deptime = null;
+						if(seg.getDepartureEstimated().getTime().getTime() != WS_NULL_DATE){
+							deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+						} else {
+							deptime =  ((new Date()).getTime()) / 3600000;
+						}
 						Long nowtime = ((new Date()).getTime()) / 3600000;
 						Long timeDifference = nowtime - deptime;
 						
@@ -495,10 +508,16 @@ public class ReservationIntegrationImpl extends
 							fItin.setFlightnum(seg.getFlightNumber());
 							fItin.setLegfrom(seg.getDepartureStation());
 							fItin.setLegto(seg.getArrivalStation());
-							fItin.setDepartdate(seg.getDepartureEstimated().getTime());
-							fItin.setArrivedate(seg.getArrivalEstimated().getTime());
-							fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
-							fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
+
+							if(seg.getDepartureEstimated().getTime().getTime() != WS_NULL_DATE){
+								fItin.setDepartdate(seg.getDepartureEstimated().getTime());
+								fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
+							}
+
+							if(seg.getArrivalEstimated().getTime().getTime() != WS_NULL_DATE){
+								fItin.setArrivedate(seg.getArrivalEstimated().getTime());
+								fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
+							}
 							
 
 							if (seg.getArrivalActual().getTime().getTime() != WS_NULL_DATE) {
@@ -546,7 +565,12 @@ public class ReservationIntegrationImpl extends
 						
 						Segment seg = segs[j];
 						
-						Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+						Long deptime = null;
+						if(seg.getDepartureEstimated().getTime().getTime() != WS_NULL_DATE){
+							deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+						} else {
+							deptime =  ((new Date()).getTime()) / 3600000; //What should this be?
+						}
 						Long nowtime = ((new Date()).getTime()) / 3600000;
 						Long timeDifference = nowtime - deptime;
 						
@@ -563,10 +587,14 @@ public class ReservationIntegrationImpl extends
 							fItin.setFlightnum(seg.getFlightNumber());
 							fItin.setLegfrom(seg.getDepartureStation());
 							fItin.setLegto(seg.getArrivalStation());
-							fItin.setDepartdate(seg.getDepartureEstimated().getTime());
-							fItin.setArrivedate(seg.getArrivalEstimated().getTime());
-							fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
-							fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
+							if(seg.getDepartureEstimated().getTime().getTime() != WS_NULL_DATE){
+								fItin.setDepartdate(seg.getDepartureEstimated().getTime());
+								fItin.setSchdeparttime(seg.getDepartureEstimated().getTime());
+							}
+							if(seg.getArrivalEstimated().getTime().getTime() != WS_NULL_DATE){
+								fItin.setArrivedate(seg.getArrivalEstimated().getTime());
+								fItin.setScharrivetime(seg.getArrivalEstimated().getTime());
+							}
 
 							if (seg.getArrivalActual().getTime().getTime() != WS_NULL_DATE) {
 								fItin.setActarrivetime(seg.getArrivalActual().getTime());
@@ -656,7 +684,12 @@ public class ReservationIntegrationImpl extends
 						for (int j=0; j<segs.length; ++j) {
 							Segment seg = segs[j];
 			
-							Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+							Long deptime = null;
+							if(seg.getDepartureEstimated().getTime().getTime() != WS_NULL_DATE){
+								deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+							} else {
+								deptime =  ((new Date()).getTime()) / 3600000;
+							}
 							Long nowtime = ((new Date()).getTime()) / 3600000;
 							Long timeDifference = nowtime - deptime;
 							
@@ -670,9 +703,13 @@ public class ReservationIntegrationImpl extends
 								iItin.setDepartureCity(seg.getDepartureStation());
 								iItin.setArrivalCity(seg.getArrivalStation());
 								Calendar cal = new GregorianCalendar();
-								cal.setTime(seg.getDepartureEstimated().getTime());
+								if(seg.getDepartureEstimated().getTime().getTime() != WS_NULL_DATE){
+									cal.setTime(seg.getDepartureEstimated().getTime());
+								}
 								iItin.setDepartureDate(cal);
-								cal.setTime(seg.getArrivalEstimated().getTime());
+								if(seg.getArrivalEstimated().getTime().getTime() != WS_NULL_DATE){
+									cal.setTime(seg.getArrivalEstimated().getTime());
+								}
 								iItin.setArrivalDate(cal);
 								
 								iItin.setType(TracingConstants.PASSENGER_ROUTING);
@@ -703,7 +740,12 @@ public class ReservationIntegrationImpl extends
 							
 							Segment seg = segs[j];
 							
-							Long deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+							Long deptime = null;
+							if(seg.getDepartureEstimated().getTime().getTime() != WS_NULL_DATE){
+								deptime = (seg.getDepartureEstimated().getTime().getTime()) / 3600000;
+							} else {
+								deptime =  ((new Date()).getTime()) / 3600000;
+							}
 							Long nowtime = ((new Date()).getTime()) / 3600000;
 							Long timeDifference = nowtime - deptime;
 														
@@ -714,9 +756,13 @@ public class ReservationIntegrationImpl extends
 								iItin.setDepartureCity(seg.getDepartureStation());
 								iItin.setArrivalCity(seg.getArrivalStation());
 								Calendar cal = new GregorianCalendar();
-								cal.setTime(seg.getDepartureEstimated().getTime());
+								if(seg.getDepartureEstimated().getTime().getTime() != WS_NULL_DATE){
+									cal.setTime(seg.getDepartureEstimated().getTime());
+								}
 								iItin.setDepartureDate(cal);
-								cal.setTime(seg.getArrivalEstimated().getTime());
+								if(seg.getArrivalEstimated().getTime().getTime() != WS_NULL_DATE){
+									cal.setTime(seg.getArrivalEstimated().getTime());
+								}
 								iItin.setArrivalDate(cal);
 								
 								iItin.setType(TracingConstants.BAGGAGE_ROUTING);
