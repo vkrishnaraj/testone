@@ -256,6 +256,8 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 				return resources.getString("STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP));
 			case TracingConstants.LF_DISPOSITION_SALVAGED:
 				return resources.getString("STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_SALVAGED));
+			case TracingConstants.LF_STAGED_FOR_SHIPPING:
+				return resources.getString("STATUS_KEY_" + String.valueOf(TracingConstants.LF_STAGED_FOR_SHIPPING));
 			default:
 				return "";
 		}

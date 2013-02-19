@@ -118,9 +118,9 @@ public class SmsEmailService {
 							he.setTo(al);
 							he.setSubject(mySubjectLine);
 
-							String imageFileName = TracerProperties.get("email.logo");
+							String imageFileName = TracerProperties.get(incident.getAgent().getCompanycode_ID(),"email.logo");
 
-							URL resource = Thread.currentThread().getContextClassLoader().getResource(TracerProperties.get("email.logo.path"));
+							URL resource = Thread.currentThread().getContextClassLoader().getResource(TracerProperties.get(incident.getAgent().getCompanycode_ID(),"email.logo.path"));
 
 							String img1 = "";
 							if (resource != null) {

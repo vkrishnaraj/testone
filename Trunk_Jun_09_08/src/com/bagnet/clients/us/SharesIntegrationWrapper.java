@@ -71,7 +71,7 @@ public class SharesIntegrationWrapper {
 	}
 	
 	public boolean writeCommentToPNR(String recordLocator, String comment) {
-		if (TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_COMMENT_ON)
+		if (TracerProperties.isTrue(TracerProperties.get("wt.company.code"),TracerProperties.RESERVATION_UPDATE_COMMENT_ON)
 				&& recordLocator != null && recordLocator.trim().length() == 6) {
 			try {
 				ServicesStub stub = new ServicesStub(endpoint);

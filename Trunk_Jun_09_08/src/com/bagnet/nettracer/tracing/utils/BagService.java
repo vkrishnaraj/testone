@@ -904,11 +904,11 @@ public class BagService {
 								h.put("REPORT_TYPE", messages.getMessage(
 										new Locale(currentLocale), "email.mishandled"));
 								
-								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_LD);
-								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
+								tmpHtmlFileName = TracerProperties.get(theform.getCompanycode_ID(),TracerProperties.EMAIL_REPORT_LD);
+								embedImage = !TracerProperties.isTrue(theform.getCompanycode_ID(),TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.email.title"));
 								
-								String myEmailSubjectLine = TracerProperties.get("email.subjectline.lostdelay.key");
+								String myEmailSubjectLine = TracerProperties.get(theform.getCompanycode_ID(),"email.subjectline.lostdelay.key");
 								if (myEmailSubjectLine != null && !myEmailSubjectLine.equalsIgnoreCase("")) {
 									he.setSubject(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
 								} else {
@@ -921,11 +921,11 @@ public class BagService {
 							else if(iDTO.getItemtype_ID() == TracingConstants.DAMAGED_BAG) {
 								h.put("REPORT_TYPE", messages.getMessage(
 										new Locale(currentLocale), "email.damaged"));
-								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_DAM);
-								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_DAM_DISABLE_IMAGE);
+								tmpHtmlFileName = TracerProperties.get(theform.getCompanycode_ID(),TracerProperties.EMAIL_REPORT_DAM);
+								embedImage = !TracerProperties.isTrue(theform.getCompanycode_ID(),TracerProperties.EMAIL_REPORT_DAM_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.email.title"));
 								
-								String myEmailSubjectLine = TracerProperties.get("email.subjectline.damaged.key");
+								String myEmailSubjectLine = TracerProperties.get(theform.getCompanycode_ID(),"email.subjectline.damaged.key");
 								if (myEmailSubjectLine != null && !myEmailSubjectLine.equalsIgnoreCase("")) {
 									he.setSubject(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
 								} else {
@@ -938,11 +938,11 @@ public class BagService {
 							else if(iDTO.getItemtype_ID() == TracingConstants.MISSING_ARTICLES) {
 								h.put("REPORT_TYPE", messages.getMessage(
 										new Locale(currentLocale), "email.missing"));
-								tmpHtmlFileName = TracerProperties.get(TracerProperties.EMAIL_REPORT_PIL);
-								embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_PIL_DISABLE_IMAGE);
+								tmpHtmlFileName = TracerProperties.get(theform.getCompanycode_ID(),TracerProperties.EMAIL_REPORT_PIL);
+								embedImage = !TracerProperties.isTrue(theform.getCompanycode_ID(),TracerProperties.EMAIL_REPORT_PIL_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.email.title"));
 								
-								String myEmailSubjectLine = TracerProperties.get("email.subjectline.pilfered.key");
+								String myEmailSubjectLine = TracerProperties.get(theform.getCompanycode_ID(),"email.subjectline.pilfered.key");
 								if (myEmailSubjectLine != null && !myEmailSubjectLine.equalsIgnoreCase("")) {
 									he.setSubject(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
 								} else {
@@ -1682,6 +1682,7 @@ public class BagService {
 					oDTO.setXdescelement_ID_1(theform.getXDesc1());
 					oDTO.setXdescelement_ID_2(theform.getXDesc2());
 					oDTO.setXdescelement_ID_3(theform.getXDesc3());
+					oDTO.setExternaldesc(theform.getExternaldesc());
 					oDTO.setManufacturer_ID(theform.getManufacturer_ID());
 					oDTO.setManufacturer_other(theform.getManufacturer_other());
 					if(theform.getCompanycode_ID() == null || theform.getCompanycode_ID().equals(""))

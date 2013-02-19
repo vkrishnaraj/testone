@@ -216,7 +216,7 @@ public class CustomQueryAction extends Action {
 				
 				ArrayList countArray = bs.customQuery(daform, user, 0, 0, true, searchtype, true);
 				int rc = ((Long) countArray.get(0)).intValue();
-				int maxRc = TracerProperties.getMaxReportRows(); 
+				int maxRc = TracerProperties.getMaxReportRows(user.getStation().getCompany().getCompanyCode_ID()); 
 
 				if (rc < maxRc) {
 					ArrayList resultArray = bs.customQuery(daform, user, 0, 0, false, searchtype, true);

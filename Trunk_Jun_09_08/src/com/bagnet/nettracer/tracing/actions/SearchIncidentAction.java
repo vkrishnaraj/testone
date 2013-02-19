@@ -152,7 +152,7 @@ public class SearchIncidentAction extends Action {
 					
 					ArrayList countArray = bs.findIncident(daform, user, 0, 0, true, true);
 					int rc = ((Long) countArray.get(0)).intValue();
-					int maxRc = TracerProperties.getMaxReportRows(); 
+					int maxRc = TracerProperties.getMaxReportRows(user.getStation().getCompany().getCompanyCode_ID()); 
 						
 
 					if (rc < maxRc) {

@@ -45,20 +45,20 @@ public class NewSkiesIntegrationWrapper {
 	
 	public boolean useIntegration(String prop) {
 		
-		String useIntegration = TracerProperties.get(prop);
+		String useIntegration = TracerProperties.get(TracerProperties.get("wt.company.code"),prop);
 		if (useIntegration != null && useIntegration.equals("1")) return true;
 		else return false;
 	}
 
 	public boolean readBookingProps(String urlprop) {
 		Properties properties = new Properties();
-		endpoint = TracerProperties.get(urlprop);
+		endpoint = TracerProperties.get(TracerProperties.get("wt.company.code"),urlprop);
 		return true;
 	}
 	
 	public boolean readEnplaneProps(String urlprop, String calltype) {
-		endpoint = TracerProperties.get(urlprop);
-		this.calltype = TracerProperties.get(calltype);
+		endpoint = TracerProperties.get(TracerProperties.get("wt.company.code"),urlprop);
+		this.calltype = TracerProperties.get(TracerProperties.get("wt.company.code"),calltype);
 		return true;
 	}
 

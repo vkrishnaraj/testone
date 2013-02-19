@@ -62,7 +62,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		}
 		LostReportBean remote = new LostReportBean();
 		remote.setSubCompany(host.getCompanyId());
-		remote.setCompany(gbean.getCompanyFromSubCompany(host.getCompanyId()));
+		remote.setCompany(host.getAgent().getCompanycode_ID()); //gbean.getCompanyFromSubCompany(host.getCompanyId())); ??
 		
 		remote.setWhereLost(host.getRemarks());
 		
@@ -190,7 +190,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			host.setAgent(agent);
 			host.setCompanyId(lostReport.getSubCompany());
 			
-			Station station = StationBMO.getStationByCode("WEB", TracerProperties.get("wt.company.code"));
+			Station station = StationBMO.getStationByCode("WEB", TracerProperties.get(agent.getCompanycode_ID(),"wt.company.code"));
 			//TODO web location
 			host.setLocation(station);
 			

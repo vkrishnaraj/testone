@@ -241,7 +241,7 @@ public class LostReportAction extends CheckedAction {
 				if (foundId != null && !foundId.trim().equals("")) {
 					long id = Long.valueOf(foundId);
 					LFFound found;
-					Subcompany subcomp=SubCompanyDAO.loadSubcompany(lostReport.getCompanyId());
+					Subcompany subcomp=SubCompanyDAO.loadSubcompany(lostReport.getCompanyId(), lostReport.getAgent().getCompanycode_ID());
 					if (subcomp.getCompany().getCompanyCode_ID().equals(TracingConstants.LF_AB_COMPANY_ID)) {
 						found = LFServiceWrapper.getInstance().getFoundItem(id);
 					} else if (lostReport.getCompanyId().equals(TracingConstants.LF_DEMO_COMPANY_ID)){

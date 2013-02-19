@@ -847,7 +847,7 @@ public class OnlineClaimsServiceImplementation extends
 		String fileName = "CLAIM_" + lead + "_" + st + "_" + u.getFilename();
 		String filePath = "CLAIMS" + "/" + year + "/" + month + "/" + day + "/";
 		;
-		String image_store = TracerProperties.get("image_store");
+		String image_store = TracerProperties.get(TracerProperties.get("wt.company.code"),"image_store");
 		String picpath = image_store + filePath + fileName;
 
 		if (!ImageUtils.makeFolder(image_store + filePath)) {

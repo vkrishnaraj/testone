@@ -11,6 +11,7 @@ import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -26,10 +27,12 @@ import com.bagnet.nettracer.tracing.actions.LostDelayAction;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.ClaimSettlementForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
@@ -47,6 +50,10 @@ public class PPLCReport {
 	
 	public static String createReport(ClaimSettlementForm theform, ServletContext sc,
 			HttpServletRequest request, String language, int outputtype) throws Exception {
+		HttpSession session = request.getSession(); // check session/user
+		TracerUtils.checkSession(session);
+		
+		Agent user = (Agent) session.getAttribute("user");
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("paxName", theform.getFirstName() + " " + theform.getLastName());
@@ -140,7 +147,7 @@ public class PPLCReport {
 		
 		String outfile = "PPLC" + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
 		
-		if (TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML) || (outputtype == TracingConstants.REPORT_OUTPUT_HTML) ) {
+		if (TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML) || (outputtype == TracingConstants.REPORT_OUTPUT_HTML) ) {
 			outfile += ".html";
 			outputtype = TracingConstants.REPORT_OUTPUT_HTML;
 			request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));

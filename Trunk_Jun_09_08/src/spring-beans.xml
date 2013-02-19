@@ -30,24 +30,24 @@
 	</bean>
 
 	<bean id="scannerDataSource"
-		class="com.bagnet.clients.${scanner.class.path}.ScannerDataSourceImpl" />
+		class="com.bagnet.clients.ScannerDataSourceImpl" />
 
-	<bean id="customReportBmo" class="com.bagnet.clients.${report.class.path}.CustomReportBMO" />
+	<bean id="customReportBmo" class="com.bagnet.clients.CustomReportBMO" />
 	
-	<bean id="clientUtils" class="com.bagnet.clients.${client.utils.class.path}.ClientUtilsImpl" />
+	<bean id="clientUtils" class="com.bagnet.clients.ClientUtilsImpl" />
 
 
 	<bean id="reservationIntegration"
-		class="com.bagnet.clients.${reservation.class.path}.${reservation.version.name}ReservationIntegrationImpl" />
+		class="com.bagnet.clients.ReservationIntegrationImpl" />
 
 	<bean id="eventHandler"
-		class="com.bagnet.clients.${event.class.path}.ClientEventHandlerImpl" />
+		class="com.bagnet.clients.ClientEventHandlerImpl" />
 		
 	<bean id="precoder"
-		class="com.bagnet.clients.${precoder.class.path}.PrecoderImpl" />
+		class="com.bagnet.clients.PrecoderImpl" />
 		
 	<bean id="sharesIntegration"
-		class="com.bagnet.clients.${shares.class.path}.SharesIntegrationThreadHandler" />
+		class="com.bagnet.clients.SharesIntegrationThreadHandler" />
 		
 	<bean id="incidentLock" class="com.bagnet.nettracer.tracing.utils.lock.CacheLockFile" >
 	</bean>

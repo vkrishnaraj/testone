@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 /**
@@ -58,11 +59,12 @@ public class showImage extends HttpServlet {
 		HttpSession session = req.getSession(true);
 
 		String imageID = req.getParameter("ID");
+		Agent user = (Agent) session.getAttribute("user");
 		boolean useOCPath = req.getParameter("useOCPath") != null;
-		String imageStore = TracerProperties.get("image_store");
+		String imageStore = TracerProperties.get(user.getCompanycode_ID(),"image_store");
 		if (useOCPath) {
 			imageID = imageID.replaceAll("c:/nettracer_claims_files/", "");
-			imageStore = TracerProperties.get("oc_image_store");
+			imageStore = TracerProperties.get(user.getCompanycode_ID(),"oc_image_store");
 		}
 		
 		File file = new File(imageStore + imageID);

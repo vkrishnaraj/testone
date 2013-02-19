@@ -286,7 +286,7 @@ public class LFTracingUtil {
 	}
 	
 	public static List<Long> getPotentialLostId(LFFound found, LFServiceBean bean, boolean isPrimary){
-		Subcompany subcomp=SubCompanyDAO.loadSubcompany(found.getCompanyId());
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(found.getCompanyId(),found.getAgent().getCompanycode_ID());
 		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
 			return getAvisPotentialLostId(found);
 		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
@@ -392,7 +392,7 @@ public class LFTracingUtil {
 	}
 	
 	public static List<Long> getPotentialFoundId(LFLost lost, boolean isPrimary){
-		Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId());
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId(), lost.getAgent().getCompanycode_ID());
 		if(TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
 			return getAvisPotentialFoundId(lost);
 		} else if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){

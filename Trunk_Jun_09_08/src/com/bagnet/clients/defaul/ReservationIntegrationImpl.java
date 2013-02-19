@@ -25,19 +25,19 @@ public class ReservationIntegrationImpl implements
 	}
 	
 	public boolean isPopulateIncidentFormOn() {
-		return TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_INCIDENT_ON);
+		return TracerProperties.isTrue(TracerProperties.get("wt.company.code"),TracerProperties.RESERVATION_POPULATE_INCIDENT_ON);
 	}
 
 	public boolean isWriteCommentToPnrOn() {
-		return TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_COMMENT_ON);
+		return TracerProperties.isTrue(TracerProperties.get("wt.company.code"),TracerProperties.RESERVATION_UPDATE_COMMENT_ON);
 	}
 	
 	public boolean isWriteExpensesToPnrOn() {
-		return TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_EXPENSES_ON);
+		return TracerProperties.isTrue(TracerProperties.get("wt.company.code"),TracerProperties.RESERVATION_UPDATE_EXPENSES_ON);
 	}
 	
 	public boolean isPopulateOhdFormOn() {
-		return TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_OHD_ON);
+		return TracerProperties.isTrue(TracerProperties.get("wt.company.code"),TracerProperties.RESERVATION_POPULATE_OHD_ON);
 	}
 
 	public ArrayList<String> populateIncidentForm(HttpServletRequest request, IncidentForm form,

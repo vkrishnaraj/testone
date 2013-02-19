@@ -1017,7 +1017,7 @@ public class OnHandAction extends CheckedAction {
 				if(photos != null && photos.size() > 0) {
 					for(Iterator i = photos.iterator(); i.hasNext();) {
 						OHD_Photo photo = (OHD_Photo) i.next();
-						photo.setThumbpath(TracerProperties.get("image_store")
+						photo.setThumbpath(TracerProperties.get(user.getCompanycode_ID(),"image_store")
 								+ photo.getThumbpath());
 					}
 					parameters.put("photoReport", ReportBMO.getCompiledReport("ohd_photos", sc.getRealPath("/")));

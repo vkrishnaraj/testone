@@ -113,7 +113,7 @@ public class QuickSearchAction extends Action {
 
 		if (tenDigitPattern.matcher(s).find()) {
 			logger.info("Tag Number... 1");
-			if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
+			if (TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
 				dto.setPrepopType(1);
 				dto.setPrepop(true);
 			}
@@ -121,7 +121,7 @@ public class QuickSearchAction extends Action {
 			dto.setRedirect(REDIRECT_TAG_NUMBER_SEARCH);
 		} else if (nineDigitPattern.matcher(s).find()) {
 			logger.info("Tag Number... 2");
-			if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
+			if (TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
 				dto.setPrepopType(1);
 				dto.setPrepop(true);
 			}
@@ -129,7 +129,7 @@ public class QuickSearchAction extends Action {
 			dto.setRedirect(REDIRECT_TAG_NUMBER_SEARCH);
 		} else if (twoCharPattern.matcher(s).find()) {
 			logger.info("Tag Number... 3");
-			if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
+			if (TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
 				dto.setPrepopType(1);
 				dto.setPrepop(true);
 			}
@@ -138,7 +138,7 @@ public class QuickSearchAction extends Action {
 		} else if (pnrPattern.matcher(s).find()) {
 			logger.info("PNR... 4");
 			netTracerPnrSearch(user, s, dto);
-			if (TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_INCIDENT_ON) && !s.contains("%")) {
+			if (TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.RESERVATION_POPULATE_INCIDENT_ON) && !s.contains("%")) {
 				dto.setPrepop(true);
 			}
 			dto.setRedirect(REDIRECT_PNR_SEARCH);

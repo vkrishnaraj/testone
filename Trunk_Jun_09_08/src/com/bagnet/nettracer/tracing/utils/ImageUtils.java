@@ -108,7 +108,7 @@ public class ImageUtils {
 			}
 			
 			//retrieve the file data
-			String image_store = TracerProperties.get("image_store");
+			String image_store = TracerProperties.get(user.getCompanycode_ID(),"image_store");
 			if (!ImageUtils.makeFolder(image_store + folder)) {
 				//Error in creating a directory.
 				logger.error("Unable to create directory");

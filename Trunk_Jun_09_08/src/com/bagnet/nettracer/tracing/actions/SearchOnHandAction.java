@@ -100,7 +100,7 @@ public class SearchOnHandAction extends Action {
 				
 				List countArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, notClosed, true);
 				int rc = ((Long) countArray.get(0)).intValue();
-				int maxRc = TracerProperties.getMaxReportRows(); 
+				int maxRc = TracerProperties.getMaxReportRows(user.getStation().getCompany().getCompanyCode_ID()); 
 									
 				if (rc < maxRc) {
 					List resultArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, false, notClosed, true);

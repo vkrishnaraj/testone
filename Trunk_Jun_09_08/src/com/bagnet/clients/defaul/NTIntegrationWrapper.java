@@ -100,7 +100,7 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 	}
 	
 	public boolean writeCommentToPNR(String recordLocator, String comment) {
-		if (TracerProperties.isTrue(TracerProperties.RESERVATION_UPDATE_COMMENT_ON)
+		if (TracerProperties.isTrue(TracerProperties.get("wt.company.code"),TracerProperties.RESERVATION_UPDATE_COMMENT_ON)
 				&& recordLocator != null && recordLocator.trim().length() == 6) {
 			try {
 				ReservationService_1_0Stub stub = new ReservationService_1_0Stub(endpoint);

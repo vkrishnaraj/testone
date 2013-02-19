@@ -209,7 +209,10 @@ public final class IncidentForm extends ValidatorForm {
 
 	private WorldTracerFile wtFile;
 	{
-		String defChecked = TracerProperties.get(TracerProperties.DEFAULT_CHECKED_LOCATION);
+		String defChecked=null;
+		if(agent!=null){
+			defChecked = TracerProperties.get(agent.getCompanycode_ID(),TracerProperties.DEFAULT_CHECKED_LOCATION);
+		}
 		if(defChecked != null) {
 			checkedlocation = defChecked;
 		}
@@ -272,7 +275,7 @@ public final class IncidentForm extends ValidatorForm {
 				}
 			}
 		}
-		String defChecked = TracerProperties.get(TracerProperties.DEFAULT_CHECKED_LOCATION);
+		String defChecked = TracerProperties.get(agent.getCompanycode_ID(),TracerProperties.DEFAULT_CHECKED_LOCATION);
 		if(defChecked != null) {
 			checkedlocation = defChecked;
 		}

@@ -296,7 +296,7 @@ public class LostDelayAction extends CheckedAction {
 			}
 			else {
 
-				if (TracerProperties.isTrue(TracerProperties.SET_DEFAULT_AIRLINE) && (theform.getFaultcompany_id() == null || theform.getFaultcompany_id().equals(""))) {
+				if (TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.SET_DEFAULT_AIRLINE) && (theform.getFaultcompany_id() == null || theform.getFaultcompany_id().equals(""))) {
 					theform.setFaultcompany_id(user.getCompanycode_ID());
 				}
 				

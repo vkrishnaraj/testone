@@ -57,7 +57,7 @@ public class NTReservationIntegrationImpl extends
 				// If searching by bag tag number
 				booking = wrapper.getReservationData(null, form.getBagTagNumber());
 			} else {
-				if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG)) {
+				if (TracerProperties.isTrue(form.getAgent().getCompanycode_ID(),TracerProperties.RESERVATION_BY_BAGTAG)) {
 					addError(errors, "error.no.recordlocator.bagtag");
 				} else {
 					addError(errors, "error.no.recordlocator");
@@ -92,7 +92,7 @@ public class NTReservationIntegrationImpl extends
 				// If searching by bag tag number
 				booking = wrapper.getReservationData(null, form.getBagTagNumber());
 			} else {
-				if (TracerProperties.isTrue(TracerProperties.RESERVATION_BY_BAGTAG)) {
+				if (TracerProperties.isTrue(form.getAgent().getCompanycode_ID(),TracerProperties.RESERVATION_BY_BAGTAG)) {
 					addError(errors, "error.no.recordlocator.bagtag");
 				} else {
 					addError(errors, "error.no.recordlocator");

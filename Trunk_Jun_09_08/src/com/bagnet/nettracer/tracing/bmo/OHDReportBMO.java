@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
@@ -57,6 +58,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 //helper class to ReportBMO
 
@@ -65,7 +67,11 @@ public class OHDReportBMO {
 	
 	public static String getReportFileDj(JRDataSource ds, Map parameters, String reportname, String rootpath, int outputtype, HttpServletRequest request, ReportBMO rbmo) throws Exception {
 		/** look for compiled reports, if can't find it, compile xml report * */
-
+		HttpSession session = request.getSession(); // check session/user
+		TracerUtils.checkSession(session);
+		
+		Agent user = (Agent) session.getAttribute("user");
+		
 		// added virtualizer to reduce memory
 		String outfile = reportname + "_" + (new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
 		
@@ -103,7 +109,7 @@ public class OHDReportBMO {
 				outfile += ".html";
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
 				// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
-				if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+				if (!TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
 					outfile += ".pdf";
 				} else {
 					outfile += ".html";
@@ -119,7 +125,7 @@ public class OHDReportBMO {
 				outfile += ".xml";
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_UNDECLARED) {
 				// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
-				if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+				if (!TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
 					outfile += ".pdf";
 					outputtype = TracingConstants.REPORT_OUTPUT_PDF;
 				} else {
@@ -187,7 +193,7 @@ public class OHDReportBMO {
 		} catch (JRMaxFilesException e) {
 			logger.error("JRMaxFilesException encountered...");
 			logger.error("Report Name: " + reportname);
-			Agent user = (Agent) request.getSession().getAttribute("user");
+			user = (Agent) request.getSession().getAttribute("user");
 			logger.error("User ID: " + user.getAgent_ID() + " User Name: " + user.getUsername());
 			
 			for (Object obj: parameters.keySet()) {

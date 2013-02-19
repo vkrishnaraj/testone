@@ -10,9 +10,9 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
 public class AlertEmail {
 
 	public static String FROM = "support@nettracer.aero";
-	public static String HOST = TracerProperties.get("smtp.host");
-	public static int PORT = new Integer(TracerProperties.get("smtp.port"));
-	public static String TO = TracerProperties.get("smtp.support.email.address");
+	public static String HOST = TracerProperties.get(TracerProperties.get("wt.company.code"),"smtp.host");
+	public static int PORT = new Integer(TracerProperties.get(TracerProperties.get("wt.company.code"),"smtp.port"));
+	public static String TO = TracerProperties.get(TracerProperties.get("wt.company.code"),"smtp.support.email.address");
 
 	public static boolean sendAlertEmail(String subject, String message){
 		return sendAlertEmail(subject, message, FROM, TO, HOST, PORT);

@@ -369,7 +369,7 @@ public class PaxCommunicationAction extends Action {
 				
 			
 				
-				embedImage = !TracerProperties.isTrue(TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
+				embedImage = !TracerProperties.isTrue(agent.getCompanycode_ID(),TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
 				//h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.email.title"));
 				he.setSubject(messages.getMessage(new Locale(languageOfChoice), "pax.communication.email.subject", messages.getMessage(new Locale(languageOfChoice), "email.mishandled")));
 			
