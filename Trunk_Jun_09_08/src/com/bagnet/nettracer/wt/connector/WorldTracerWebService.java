@@ -1631,6 +1631,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		pax.setLastname(p.getLastname());
 		pax.setMiddlename(p.getMiddlename());
 		pax.setSalutation(p.getSalutation());
+		pax.setLanguageFreeFlow(p.getLanguageFreeFlow());
 		
 		add.setAddress1(ad.getAddress1());
 		add.setAddress2(ad.getAddress2());

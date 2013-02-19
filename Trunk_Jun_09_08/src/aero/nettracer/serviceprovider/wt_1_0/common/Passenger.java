@@ -11,6 +11,7 @@ public class Passenger {
 	private String ffStatus;
 	private Address address;
 	private String initials;
+	private String languageFreeFlow;
 
 	public String getFirstname() {
 		return firstname;
@@ -92,6 +93,12 @@ public class Passenger {
 		return null;
 	}
 
+	public String getLanguageFreeFlow() {
+		return languageFreeFlow;
+	}
 
+	public void setLanguageFreeFlow(String languageFreeFlow) {
+		this.languageFreeFlow = languageFreeFlow;
+	}
 
 }
