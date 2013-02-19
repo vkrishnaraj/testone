@@ -86,6 +86,9 @@
                 </logic:equal>
      	
      }
+     if(document.incidentForm.wtbutton){
+    	 enableButton(document.incidentForm.wtbutton);
+     }
      if(document.incidentForm.saveremarkButton) {
         enableButton(document.incidentForm.saveremarkButton, "<bean:message key='button.saveremark' />");
      }
