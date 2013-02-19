@@ -2716,6 +2716,11 @@
 			<property name="overrideResource" value="${basedir}/companies/ab/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/ab/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/ab/ApplicationResources_fr.properties" />
 		<!--
 		<antcall target="build-war" />
@@ -2749,6 +2754,11 @@
 			<property name="overrideResource" value="${basedir}/companies/lfc/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/lfc/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/lfc/ApplicationResources_fr.properties" />
 		<!--
 		<antcall target="build-war" />
@@ -2774,6 +2784,11 @@
 			<property name="overrideResource" value="${basedir}/companies/alaska-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/alaska-fs/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target>
@@ -2794,6 +2809,11 @@
 			<property name="overrideResource" value="${basedir}/companies/frontier-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/frontier-fs/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target>
@@ -2813,6 +2833,11 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/southwest-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/southwest-fs/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -2844,6 +2869,11 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/airtran/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/airtran/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
 		<antcall target="fast_all" />
@@ -2879,6 +2909,11 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/fraud/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/fraud/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/fraud/ApplicationResources_fr.properties" />
 		<antcall target="fast_all" />
@@ -2920,6 +2955,11 @@
 			<property name="overrideResource" value="${basedir}/companies/azul/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/azul/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
 
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -2956,6 +2996,11 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/delta-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/delta-fs/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
 		<antcall target="fast_all" />
@@ -2994,6 +3039,11 @@
 			<property name="overrideResource" value="${basedir}/companies/united-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/united-fs/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
 
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -3031,6 +3081,11 @@
 			<property name="overrideResource" value="${basedir}/companies/american-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/american-fs/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
 
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -3063,6 +3118,11 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/virginamerica-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/virginamerica-fs/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
 		<antcall target="fast_all" />
@@ -3106,6 +3166,12 @@
 			<property name="overrideResource" value="${basedir}/companies/webjet/ApplicationResources_pt.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources_pt.properties" />
 		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/azul/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+		
 
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -3139,6 +3205,11 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/canadiannorth/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/canadiannorth/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
 		<antcall target="fast_all" />
@@ -3259,7 +3330,14 @@
 			<property name="overrideResource" value="${basedir}/companies/westjet/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/westjet/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/westjet/ApplicationResources_fr.properties" />
+		
+		
 		<!--
 		<antcall target="build-war" />
 		-->

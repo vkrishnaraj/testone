@@ -135,6 +135,7 @@
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_SALVAGED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_SALVAGED) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_STAGED_FOR_SHIPPING) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_STAGED_FOR_SHIPPING) %>" /></html:option>
                				</html:select>                  
              			</td>
            			</tr>
