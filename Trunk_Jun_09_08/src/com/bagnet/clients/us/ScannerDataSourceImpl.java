@@ -21,6 +21,8 @@ import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDataDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.usairways.www.cbro.baggage_scanner.wsdl.BulkUnloadType;
+import com.usairways.www.cbro.baggage_scanner.wsdl.DiversionType;
+import com.usairways.www.cbro.baggage_scanner.wsdl.FlightType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.FlightScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.FlightTaskType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.ForwardLegType;
@@ -180,11 +182,15 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						if (obj instanceof NetTracerScanType) {
 							NetTracerScanType o = (NetTracerScanType) obj;
 							ohdId = o.getNetTracerId();
+							ifNotNull(comment,"PNR: ",o.getPnr(),"<br />");
 						}
 						
 						if (obj instanceof FlightTaskType) {
 							FlightTaskType o = (FlightTaskType) obj;
-							comment.append("Flight: " + o.getFlight().getFlightNumber() + " on " +o.getFlight().getDepartureDate()+ "<br />");
+							comment.append("Flight: " + o.getFlight().getFlightNumber() + " Depart on " +o.getFlight().getDepartureDate()+ " Arrive on: " + o.getFlight().getArrivalDate() + "<br />");
+							comment.append("Depart from: " + o.getFlight().getOrigin() + " to Destination: " +o.getFlight().getDestination()+ "<br />");
+							//comment.append("Flight: " + o.getFlight().getFlightNumber() + " on " +o.getFlight().getDepartureDate()+ "<br />");
+							
 						} 
 
 						if (obj instanceof BulkUnloadType) {
@@ -198,6 +204,8 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							
 							// NetTracer Scan Type
 							ForwardScanType o = (ForwardScanType) obj;
+							comment.append("Agent: " + o.getAgent() + "<br />");
+							comment.append("Agent Comments: " + o.getComment() + "<br />");
 							comment.append("Tag Status: " + o.getTagStatus() + "<br />");
 							comment.append("Fault Reason: " + o.getFaultReason() + "<br />");
 							comment.append("Fault Station: " + o.getFaultStation() + "<br />");
@@ -210,6 +218,8 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							for (ForwardLegType leg: legs) {
 								comment.append("&nbsp;&nbsp;" + leg.getCarrier() + " " + leg.getFlightDate() + " " + leg.getFlightNumber() + " to " + leg.getDestination() + "<br />");
 							}
+							
+							
 						} 
 						
 						if (obj instanceof TrackingScanType) {
@@ -219,10 +229,24 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						} 
 
 						if (obj instanceof FlightScanType) {
-							type = "Tracking";
+							type = "Flight Scan";
 							FlightScanType o = (FlightScanType) obj;
-							comment.append("Flight: " + o.getFlight().getFlightNumber() + " on " +o.getFlight().getDepartureDate()+ "<br />");							
+							comment.append("Flight: " + o.getFlight().getFlightNumber() + " Depart on " +o.getFlight().getDepartureDate()+ " Arrive on: " + o.getFlight().getArrivalDate() + "<br />");
+							comment.append("Depart from: " + o.getFlight().getOrigin() + " to Destination: " +o.getFlight().getDestination()+ "<br />");
 						} 
+						
+						if (obj instanceof FlightType){
+							type = "Flight";
+							FlightType o = (FlightType) obj;
+							comment.append("Flight: " + o.getFlightNumber() + " Depart on " +o.getDepartureDate()+ " Arrive on: " + o.getArrivalDate() + "<br />");
+							comment.append("Depart from: " + o.getOrigin() + " to Destination: " +o.getDestination()+ "<br />");
+						}
+
+						if (obj instanceof DiversionType){
+							type = "Diversion";
+							DiversionType o = (DiversionType) obj;
+							comment.append("Diversion Origin: " + o.getOrigin()+ " to Destination: " +o.getDestination()+ "<br />");
+						}
 						
 						if (obj instanceof LoadScanType) {
 							type = "Load Scan";
@@ -237,6 +261,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							if (o.getWarrant() != null && o.getWarrant().equals(WarrantType.NO)) {
 								comment.append("NOT LOADED<br />");
 							}
+							ifNotNull(comment, "PNR: ",o.getPnr(),"<br/>");
 							ifNotNull(comment, "Destination: ", o.getForwardDestination(), "<br />");				
 						} 
 
@@ -274,6 +299,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							if (o.getWarrant() != null && o.getWarrant().equals(WarrantType.NO)) {
 								comment.append("Bag Not Loaded <br />");
 							}
+							ifNotNull(comment, "PNR: ",o.getPnr(),"<br/>");
 							comment.append("ULD: " + o.getUld() + "<br />");
 						} 
 						
