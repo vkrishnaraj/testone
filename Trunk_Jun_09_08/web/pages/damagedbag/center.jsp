@@ -41,6 +41,9 @@ function disableButton(aButton) {
      	if(document.incidentForm.saveButton) {
  	   disableButton(document.incidentForm.saveButton); 
      	}
+     	if(document.incidentForm.wtbutton){
+     		disableButton(document.incidentForm.wtbutton);
+     	}
      	if(document.incidentForm.saveremarkButton) {
  	   disableButton(document.incidentForm.saveremarkButton); 
      	}
@@ -225,7 +228,7 @@ function disableButton(aButton) {
             
           <%
             boolean val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_DAM, a);
-            if (val && TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_OSI)) {
+            if (val && TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.INCIDENT_TAB_OSI)) {
           %>
 
           <dd><a href="osi.do?incident_id=<bean:write name="incidentForm" property="incident_ID" />"><span class="aa">&nbsp;

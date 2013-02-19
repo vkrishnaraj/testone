@@ -15,6 +15,8 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 
 <%
+Agent agent = (Agent) request.getSession().getAttribute("user");
+	String userLocale = agent.getDefaultlocale();
 boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.getParameter("toprint"));
  %>
  
@@ -133,7 +135,7 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
              %>
                        <input type="radio" value="0" name="outputtype" checked="checked">
 	                   <bean:message key="radio.pdf" />
-	                   <%} else if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+	                   <%} else if (!TracerProperties.isTrue(agent.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                        <input type="radio" value="0" name="outputtype" checked="checked">
 	                   <bean:message key="radio.pdf" />
                       <input type="radio" value="1" name="outputtype">          
@@ -166,10 +168,6 @@ boolean isPPLC = Integer.toString(ReportingConstants.PPLC_RPT).equals(request.ge
                     :
                   </td>
                   <td>
-                  	<%
-                  		Agent agent = (Agent) request.getSession().getAttribute("user");
-                  		String userLocale = agent.getDefaultlocale();
-                  	%>
                     <select name="language" class="dropdown">
                       <logic:iterate id="locale" name="receiptLocaleList" scope="session">
                         <option value='<bean:write name="locale" property="value"/>' <%=(((LabelValueBean)locale).getValue().equals(userLocale)? "selected" : "") %>>

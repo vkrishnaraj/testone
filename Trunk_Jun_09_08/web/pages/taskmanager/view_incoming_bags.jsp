@@ -184,11 +184,11 @@ function sortIncomingBags(sortOrder) {
             <logic:notPresent name="noInboundExpediteBags" scope="request">
             <tr>
               <td colspan="11" align="right">
-                <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                   <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("0")) { %> checked <% } %> value="0">
                   <bean:message key="radio.pdf" />
                 <% } %>
-                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("1") || TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %> checked <% } %> value="1">
+                <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("1") || TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %> checked <% } %> value="1">
                 <bean:message key="radio.html" />
                 <% 
 				if (canTeletype) {

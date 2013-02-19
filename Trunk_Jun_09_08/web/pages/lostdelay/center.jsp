@@ -52,6 +52,9 @@
      	if(document.incidentForm.saveButton) {
  	   disableButton(document.incidentForm.saveButton); 
      	}
+     	if(document.incidentForm.wtbutton){
+     		disableButton(document.incidentForm.wtbutton);
+     	}
      	if(document.incidentForm.saveremarkButton) {
  	   disableButton(document.incidentForm.saveremarkButton); 
      	}
@@ -330,7 +333,7 @@
         <dl>
           <%
           	if (TracerProperties
-          						.isTrue(TracerProperties.INCIDENT_TAB_INC_INFORMATION)) {
+          						.isTrue(a.getCompanycode_ID(),TracerProperties.INCIDENT_TAB_INC_INFORMATION)) {
           %>
           <dd><a href="#incidentinfo"><span class="aa">&nbsp;
           <br />
@@ -343,7 +346,7 @@
           %>
           <%
           	if (TracerProperties
-          						.isTrue(TracerProperties.INCIDENT_TAB_PASSENGER)) {
+          						.isTrue(a.getCompanycode_ID(),TracerProperties.INCIDENT_TAB_PASSENGER)) {
           %>
           <dd><a href="#contact"><span class="aa">&nbsp;
           <br />
@@ -355,7 +358,7 @@
           %>
           <%
           	if (TracerProperties
-          						.isTrue(TracerProperties.INCIDENT_TAB_ITINERARY)) {
+          						.isTrue(a.getCompanycode_ID(),TracerProperties.INCIDENT_TAB_ITINERARY)) {
           %>
           <dd><a href="#passit"><span class="aa">&nbsp;
           <br />
@@ -366,7 +369,7 @@
           	}
           %>
           <%
-          	if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_BAGGAGE)) {
+          	if (TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.INCIDENT_TAB_BAGGAGE)) {
           %>
           <dd><a href="#checkedbaggage"><span class="aa">&nbsp;
           <br />
@@ -377,7 +380,7 @@
           	}
           %>
           <%
-          	if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_INTERIM)) {
+          	if (TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.INCIDENT_TAB_INTERIM)) {
           %>
 
           <logic:notEqual name="incidentForm" property="incident_ID"
@@ -393,7 +396,7 @@
           	}
           %>
           <%
-          	if (TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_REMARKS)) {
+          	if (TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.INCIDENT_TAB_REMARKS)) {
           %>
 
           <dd><a href="#remarks"><span class="aa">&nbsp;
@@ -409,7 +412,7 @@
             
           <%
             boolean val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_LD, a);
-            if (val && TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_OSI)) {
+            if (val && TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.INCIDENT_TAB_OSI)) {
           %>
 
           <dd><a href="osi.do?incident_id=<bean:write name="incidentForm" property="incident_ID" />"><span class="aa">&nbsp;
@@ -436,7 +439,7 @@
           
           <%
             val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUSTOMER_COMMENTS, a);
-            if (val && TracerProperties.isTrue(TracerProperties.INCIDENT_TAB_CUSTOMER_COMMENTS)) {
+            if (val && TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.INCIDENT_TAB_CUSTOMER_COMMENTS)) {
           %>
 
           <dd><a href="customerComments.do?incident_id=<bean:write name="incidentForm" property="incident_ID" />"><span class="aa">&nbsp;

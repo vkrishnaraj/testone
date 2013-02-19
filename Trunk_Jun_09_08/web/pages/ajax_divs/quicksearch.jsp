@@ -122,11 +122,11 @@ jQuery(document).ready(function() {
 		onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  qPrepopulateIncident(document.getElementById('qPrepopulateType').value, '<%=request.getParameter("search")%>', <c:out  value="${quickSearchForm.dto.prepopType}"/>);">Create
 	Incident</button>
 	&nbsp; &nbsp; 
-	<%   if (TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_OHD_ON)) { %>
+	<%   if (TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.RESERVATION_POPULATE_OHD_ON)) { %>
 	or &nbsp; &nbsp;
 	<%   }
 	   } 
-	   if (TracerProperties.isTrue(TracerProperties.RESERVATION_POPULATE_OHD_ON) && createOnHand) { %>
+	   if (TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.RESERVATION_POPULATE_OHD_ON) && createOnHand) { %>
 	<button type="button" id="button"
 		onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  qPrepopulateIncident(4, '<%=request.getParameter("search")%>', <c:out  value="${quickSearchForm.dto.prepopType}" />);">Create
 	On-Hand</button>

@@ -112,7 +112,7 @@
           %>
           <div id="pageheaderright">
               <select name="outputtype">
-                <% if (!TracerProperties.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                   <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
                 <% } %>
                 <option value="1"><bean:message key="radio.html" /></option>

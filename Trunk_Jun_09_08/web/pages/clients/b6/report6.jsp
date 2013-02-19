@@ -58,7 +58,7 @@
 	<td>
 		<%
 			if (!TracerProperties
-					.isTrue(TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
+					.isTrue(agent.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
 		%>
 		<html:radio property="outputtype" value="0" />
 		<bean:message key="radio.pdf" />

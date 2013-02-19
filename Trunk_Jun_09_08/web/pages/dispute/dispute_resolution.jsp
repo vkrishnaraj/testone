@@ -186,7 +186,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
                   </logic:equal>
                   <logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
                   
-                  <% if (TracerProperties.isTrue(TracerProperties.SAVE_ON_CLOSE_PAGE)) { %>
+                  <% if (TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SAVE_ON_CLOSE_PAGE)) { %>
                     <html:submit property="save" styleId="button">
                       <bean:message key="button.save" />
                     </html:submit>

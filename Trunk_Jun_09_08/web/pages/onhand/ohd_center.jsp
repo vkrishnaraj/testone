@@ -659,6 +659,13 @@ function gotoHistoricalReport() {
           maxlength="100" styleClass="textfield" /></div>
         </td>
       </tr>
+      <tr>
+      <td colspan=3>
+      			<bean:message key="colname.bag.external.desc" /><br>
+              	<html:text property="externaldesc" maxlength="50" size="75" styleClass="textfield"/>
+              
+      </td>
+      </tr>
       <% if ( UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ASSIGN_WAREHOUSE_DATES, a) ) { %> 
 	  
        <tr>

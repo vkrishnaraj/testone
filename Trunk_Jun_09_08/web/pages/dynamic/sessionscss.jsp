@@ -9,6 +9,7 @@
 
 <% 
 	LinkedHashMap menu_links = (LinkedHashMap)session.getAttribute("menu_links");
+	Agent user = (Agent) session.getAttribute("user");
    int total_menu = 0;
    
    long expireTime = 0;
@@ -77,7 +78,7 @@ a.starter:hover, a.starter:active, a.starter:focus {
 %>
 
 			#menubuilder<%=j%> {
-				width: <%=TracerProperties.get("menu.width") %>px;
+				width: <%=TracerProperties.get(user.getCompanycode_ID(),"menu.width") %>px;
 				z-index:100;
 			}    
 <%

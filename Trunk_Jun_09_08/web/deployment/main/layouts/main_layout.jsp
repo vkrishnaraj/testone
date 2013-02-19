@@ -32,7 +32,7 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 
 <%
-if(!TracerProperties.isTrue(TracerProperties.ALLOW_CACHING)) {
+if(!TracerProperties.isTrue(TracerProperties.get("wt.carrier.code"),TracerProperties.ALLOW_CACHING)) {
 response.addHeader("Pragma", "No-cache");
 response.addHeader("Cache-Control", "no-cache");
 response.addDateHeader("Expires", -1);
