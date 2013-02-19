@@ -36,7 +36,7 @@ import com.usairways.www.cbro.baggage_scanner.wsdl.QohScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.RerouteClearScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.RerouteForwardScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.RerouteScanType;
-import com.usairways.www.cbro.baggage_scanner.wsdl.ScanPointsStub;
+import com.usairways.www.cbro.baggage_scanner.wsdl.ScanPoints4ServiceBeanServiceStub;
 import com.usairways.www.cbro.baggage_scanner.wsdl.ScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TagType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.TaskType;
@@ -66,11 +66,11 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber, int timeout) {
 		String endpoint = PropertyBMO.getValue(PROPERTY_SCAN_HISTORY_ENDPOINT);
 		
-		ScanPointsStub stub = null;
+		ScanPoints4ServiceBeanServiceStub stub = null;
 		//ScanPointsStub stub = null;
 		try {
 			//stub = new ScanPointsStub(endpoint);
-			stub = new ScanPointsStub(endpoint);
+			stub = new ScanPoints4ServiceBeanServiceStub(endpoint);
 		} catch (AxisFault e) {
 			e.printStackTrace();
 		}
@@ -94,9 +94,9 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 			
 		sp.setStartTime(startCal);
 		sp.setEndTime(endCal);
-		TagType tag = sp.addNewTag();
+		TagType tag = sp.addNewTag(); 
 
-		tag.setType(TagType.Type.B);
+		tag.setType("B"); //B=bag C=cargo S=stores G=ground service
 		tag.setStringValue(bagTagNumber.trim().toUpperCase());
 
 		GetScanPointsResponseDocument responseDoc = null;
@@ -184,7 +184,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						
 						if (obj instanceof FlightTaskType) {
 							FlightTaskType o = (FlightTaskType) obj;
-							comment.append("Flight: " + o.getFlightNumber() + " on " +o.getFlightDate()+ "<br />");
+							comment.append("Flight: " + o.getFlight().getFlightNumber() + " on " +o.getFlight().getDepartureDate()+ "<br />");
 						} 
 
 						if (obj instanceof BulkUnloadType) {
@@ -221,7 +221,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						if (obj instanceof FlightScanType) {
 							type = "Tracking";
 							FlightScanType o = (FlightScanType) obj;
-							comment.append("Flight: " + o.getFlightNumber() + " on " +o.getFlightDate()+ "<br />");							
+							comment.append("Flight: " + o.getFlight().getFlightNumber() + " on " +o.getFlight().getDepartureDate()+ "<br />");							
 						} 
 						
 						if (obj instanceof LoadScanType) {
