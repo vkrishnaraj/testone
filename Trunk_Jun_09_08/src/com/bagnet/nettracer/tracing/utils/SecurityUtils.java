@@ -6,25 +6,22 @@
  */
 package com.bagnet.nettracer.tracing.utils;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
-
-import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
-import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Expression;
+import org.hibernate.type.StandardBasicTypes;
 
 import aero.nettracer.lf.services.LFLogUtil;
 
@@ -33,7 +30,6 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Agent_Logger;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
-import com.bagnet.nettracer.tracing.db.Webservice_Session;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Agent;
 import com.bagnet.nettracer.tracing.utils.audit.AuditAgentUtils;
 
@@ -46,6 +42,8 @@ import com.bagnet.nettracer.tracing.utils.audit.AuditAgentUtils;
 public class SecurityUtils {
 
 	Logger logger = Logger.getLogger(SecurityUtils.class);
+	private final static Logger log = Logger.getLogger("authentication");
+	
 	
 	/**
 	 *  
@@ -86,6 +84,7 @@ public class SecurityUtils {
 						if (failedAttempts >= maxFailedAttempts && !agent.isAccount_locked()) {
 							agent.setAccount_locked(true);
 							HibernateUtils.save(agent);
+							log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" locked");
 							
 							if (AdminUtils.getCompVariable(agent.getCompanycode_ID()).getAudit_agent() == 1) {
 								Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(agent, agent);
@@ -214,6 +213,7 @@ public class SecurityUtils {
 					}
 					if (agent != null) {
 						if (agent.isAccount_locked()) {
+							log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" locked");
 							errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.lockedout"));
 						} else {
 							errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));

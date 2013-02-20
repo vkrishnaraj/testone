@@ -8,7 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.Calendar;
 
 import javax.naming.Context;
 import javax.servlet.ServletContext;
@@ -16,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.axis2.databinding.types.xsd.DateTime;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -60,8 +59,6 @@ import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
-import com.bagnet.nettracer.tracing.history.HistoryObject;
-import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
@@ -77,10 +74,11 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
+
 public class LogonAction extends Action {
 
 	private String foobar;
-
+	private final Logger authenlog = Logger.getLogger("authentication");
 	/**
 	 * Process the specified HTTP request, and create the corresponding HTTP
 	 * response (or forward to another web component that will create it). Return
@@ -106,9 +104,9 @@ public class LogonAction extends Action {
 		Locale locale = getLocale(request);
 		Agent agent = null;
 		HttpSession session = request.getSession();
-
 		ActionMessages errors = new ActionMessages();
 		request.setAttribute("maintask", "1");
+		
 		
 		if (request.getParameter("loadBarcode") != null) {
 			LFFound found = new LFServiceBean().getFoundItemByBarcode(request.getParameter("loadBarcode"));
@@ -137,6 +135,7 @@ public class LogonAction extends Action {
 		// Validate the request parameters specified by the user
 		String username = (String) PropertyUtils.getSimpleProperty(form, "username");
 		String password = (String) PropertyUtils.getSimpleProperty(form, "password");
+		String instance = (String) System.getProperty("instance.ref");
 		String companyCode = request.getParameter("companyCode");
 
 		if (username.length() == 0 && password.length() == 0) {
@@ -146,12 +145,13 @@ public class LogonAction extends Action {
 			response.addDateHeader("Expires", -1);
 			return mapping.findForward(TracingConstants.LOGON);
 		}
-
+		authenlog.info("Authenticating User: "+username+". Company Code: "+companyCode+". Instance: "+instance);
 		agent = SecurityUtils.authUser(username, password, companyCode, 0, errors);
 
 		// Report any errors we have discovered back to the original form
 		if (!errors.isEmpty()) {
 			saveMessages(request, errors);
+			authenlog.info("User: "+username+", Company Code: "+companyCode+", Instance: "+instance+" Authentication Failed");
 			PropertyUtils.setSimpleProperty(form, "username", foobar);
 			response.addHeader("Pragma", "No-cache");
 			response.addHeader("Cache-Control", "no-cache");
@@ -159,6 +159,7 @@ public class LogonAction extends Action {
 			return mapping.findForward(TracingConstants.LOGON);
 		}
 
+		authenlog.info("User: "+username+", Company Code: "+companyCode+", Instance: "+instance+" Authentication Success");
 		// check to see if password needs to be reset
 		if (agent.isReset_password() || !SecurityUtils.isPolicyAcceptablePassword(companyCode, password, username, request, true)) {
 			session.setAttribute("usertemp", agent);
