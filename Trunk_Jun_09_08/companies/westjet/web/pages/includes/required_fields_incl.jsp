@@ -104,6 +104,9 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     var firstItemIndex = -1;
     var firstClaimcheckIndex = -1;
     
+    var langKey = "";
+    var langKeyLabel = "";
+    
     isRemarkAbsent = true;
     
     for (var j=0;j < form.length; j++) {
@@ -157,13 +160,21 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 	        currentElement.focus();
 	        return false;
 	      }
+	
+	} else if (currentElementName.indexOf("languageKey") != -1) {
+		langKey = currentElement.value;
+		langKeyLabel = currentElement.options[currentElement.selectedIndex].text
 	      
 	} else if (currentElementName.indexOf("languageFreeFlow") != -1) {  
-	      if (currentElement.value.length == 0)
-	      {
-	        alert("<%= (String)bundle.getString("spoken.language.label") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-	        currentElement.focus();
-	        return false;
+	      if ('other' == langKey){ 
+	          if (currentElement.value.length == 0)
+	          {
+	             alert("<%= (String)bundle.getString("spoken.language.label") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+	             currentElement.focus();
+	             return false;
+	          }
+	      } else {
+	        currentElement.value = langKeyLabel;
 	      }
 	      
 	      

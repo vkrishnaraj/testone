@@ -20,6 +20,9 @@ ResourceBundle bundle = ResourceBundle.getBundle(
   {
 	var bagIndices = [];
 	
+	var langKey = "";
+    var langKeyLabel = "";
+	
   	var theindex = 0;
   	var addressIndices = [];
   	for (var j=0;j<form.length;j++) {
@@ -45,15 +48,24 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 	        currentElement.focus();
 	        return false;
 	      }
-	      	} else if (currentElementName.indexOf("languageFreeFlow") != -1) {  
-	      if (currentElement.value.length == 0)
-	      {
-	        alert("<%= (String)bundle.getString("spoken.language.label") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-	        currentElement.focus();
-	        return false;
+	 } else if (currentElementName.indexOf("languageKey") != -1) {
+		langKey = currentElement.value;
+		langKeyLabel = currentElement.options[currentElement.selectedIndex].text
+	 }     
+	else if (currentElementName.indexOf("languageFreeFlow") != -1) {  
+	      if ('other' == langKey){ 
+	          if (currentElement.value.length == 0)
+	          {
+	             alert("<%= (String)bundle.getString("spoken.language.label") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+	             currentElement.focus();
+	             return false;
+	          }
+	      } else {
+	        currentElement.value = langKeyLabel;
 	      }
+	}
 	      
-	    } else if (currentElementName.indexOf("address1") != -1) {
+	    else if (currentElementName.indexOf("address1") != -1) {
 	      
 	      addressIndices = addressIndices.concat(currentElementName.substring(left+1, right));
 	        
