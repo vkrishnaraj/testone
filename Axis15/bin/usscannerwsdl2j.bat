@@ -1,1 +1,1 @@
-wsdl2Java -uri ScanPoints2.wsdl -ss -sd -g -d xmlbeans -o service
+wsdl2Java -uri ScanPoints4a.wsdl -ss -sd -g -d xmlbeans -o service

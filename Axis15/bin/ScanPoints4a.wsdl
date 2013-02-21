@@ -1,0 +1,362 @@
+<definitions name='ScanPoints4ServiceBeanService'
+	targetNamespace='http://www.usairways.com/cbro/baggage-scanner/wsdl'
+	xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:ns1='http://www.usairways.com/cbro/baggage-scanner/wsdl'
+	xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://bean.spi.scanning.baggage.cbro.usairways.com/'
+	xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+	<types>
+		<xs:schema targetNamespace='http://www.usairways.com/cbro/baggage-scanner/wsdl'
+			version='1.0' xmlns:tns='http://www.usairways.com/cbro/baggage-scanner/wsdl'
+			xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+			<xs:element name='getScanPoints'>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name='tag' type='tns:tagType' />
+						<xs:element name='startTime' type='xs:dateTime' />
+						<xs:element minOccurs='0' name='endTime' type='xs:dateTime' />
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name='getScanPointsResponse'>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name='out'>
+							<xs:complexType>
+								<xs:sequence>
+									<xs:choice maxOccurs='unbounded' minOccurs='0'>
+										<xs:element name='uldTransfer' type='tns:uldTransferType' />
+										<xs:element name='inventoryIn' type='tns:trackingScanType' />
+										<xs:element name='inventoryClear' type='tns:trackingTaskType' />
+										<xs:element name='uldLoad' type='tns:uldScanType' />
+										<xs:element name='inventoryCount' type='tns:trackingScanType' />
+										<xs:element name='forward' type='tns:forwardScanType' />
+										<xs:element name='unload' type='tns:unloadScanType' />
+										<xs:element name='rerouteHold' type='tns:rerouteScanType' />
+										<xs:element name='uldAssignToBulk' type='tns:uldTaskType' />
+										<xs:element name='inventoryOut' type='tns:trackingScanType' />
+										<xs:element name='uldLoadBag' type='tns:uldLoadBagScanType' />
+										<xs:element name='tracking' type='tns:trackingScanType' />
+										<xs:element name='unloadULD' type='tns:unloadULDScanType' />
+										<xs:element name='cancelFlight' type='tns:flightTaskType' />
+										<xs:element name='rerouteAccept' type='tns:rerouteRouteScanType' />
+										<xs:element name='rerouteCancel' type='tns:rerouteScanType' />
+										<xs:element name='bulkUnload' type='tns:bulkUnloadType' />
+										<xs:element name='uldUnload' type='tns:uldScanType' />
+										<xs:element name='loadULD' type='tns:loadULDScanType' />
+										<xs:element name='rerouteClear' type='tns:rerouteClearScanType' />
+										<xs:element name='qoh' type='tns:qohScanType' />
+										<xs:element name='loadBag' type='tns:loadBagScanType' />
+										<xs:element name='rerouteForward' type='tns:rerouteForwardScanType' />
+										<xs:element name='load' type='tns:loadScanType' />
+										<xs:element name='reroute' type='tns:rerouteRouteScanType' />
+									</xs:choice>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:complexType name='tagType'>
+				<xs:simpleContent>
+					<xs:extension base='xs:string'>
+						<xs:attribute name='type' type='xs:string' />
+					</xs:extension>
+				</xs:simpleContent>
+			</xs:complexType>
+			<xs:complexType name='flightType'>
+				<xs:sequence>
+					<xs:element maxOccurs='unbounded' minOccurs='0' name='diversion'
+						nillable='true' type='tns:diversionType' />
+				</xs:sequence>
+				<xs:attribute name='carrier' type='xs:string' use='required' />
+				<xs:attribute name='flightNumber' type='xs:integer'
+					use='required' />
+				<xs:attribute name='origin' type='xs:string' use='required' />
+				<xs:attribute name='destination' type='xs:string' use='required' />
+				<xs:attribute name='departureDate' type='xs:dateTime'
+					use='required' />
+				<xs:attribute name='arrivalDate' type='xs:dateTime'
+					use='required' />
+			</xs:complexType>
+			<xs:complexType name='diversionType'>
+				<xs:sequence />
+				<xs:attribute name='origin' type='xs:string' use='required' />
+				<xs:attribute name='destination' type='xs:string' use='required' />
+			</xs:complexType>
+			<xs:complexType name='loadScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:flightScanType'>
+						<xs:sequence />
+						<xs:attribute name='bin' type='xs:string' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='flightScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:scanType'>
+						<xs:sequence>
+							<xs:element name='flight' type='tns:flightType' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='scanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:taskType'>
+						<xs:sequence />
+						<xs:attribute name='undo' type='xs:boolean' use='required' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='taskType'>
+				<xs:sequence />
+				<xs:attribute name='instant' type='xs:dateTime' use='required' />
+				<xs:attribute name='city' type='xs:string' use='required' />
+				<xs:attribute name='device' type='xs:string' />
+				<xs:attribute name='tag' type='xs:string' />
+			</xs:complexType>
+			<xs:complexType name='uldScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:flightScanType'>
+						<xs:sequence />
+						<xs:attribute name='uld' type='xs:string' use='required' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='qohScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:netTracerScanType'>
+						<xs:sequence>
+							<xs:element minOccurs='0' name='comment' type='xs:string' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='netTracerScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:scanType'>
+						<xs:sequence />
+						<xs:attribute name='netTracerId' type='xs:string' />
+						<xs:attribute name='pnr' type='xs:string' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='loadULDScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:loadScanType'>
+						<xs:sequence />
+						<xs:attribute name='uld' type='xs:string' use='required' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='unloadULDScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:unloadScanType'>
+						<xs:sequence />
+						<xs:attribute name='uld' type='xs:string' use='required' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='unloadScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:loadScanType'>
+						<xs:sequence>
+							<xs:element minOccurs='0' name='unloadReason' type='xs:string' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='loadBagScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:loadScanType'>
+						<xs:sequence />
+						<xs:attribute name='warrant' type='tns:warrantType' />
+						<xs:attribute name='heavy' type='xs:boolean' />
+						<xs:attribute name='forwardDestination' type='xs:string' />
+						<xs:attribute name='netTracerId' type='xs:string' />
+						<xs:attribute name='pnr' type='xs:string' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='trackingScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:scanType'>
+						<xs:sequence>
+							<xs:element name='location' type='xs:string' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='trackingTaskType'>
+				<xs:complexContent>
+					<xs:extension base='tns:taskType'>
+						<xs:sequence>
+							<xs:element name='location' type='xs:string' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='flightTaskType'>
+				<xs:complexContent>
+					<xs:extension base='tns:taskType'>
+						<xs:sequence>
+							<xs:element name='flight' type='tns:flightType' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='rerouteScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:scanType'>
+						<xs:sequence>
+							<xs:element minOccurs='0' name='location' type='xs:string' />
+						</xs:sequence>
+						<xs:attribute name='pnr' type='xs:string' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='rerouteClearScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:rerouteScanType'>
+						<xs:sequence>
+							<xs:element name='reason' type='xs:string' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='uldLoadBagScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:uldScanType'>
+						<xs:sequence />
+						<xs:attribute name='warrant' type='tns:warrantType' />
+						<xs:attribute name='heavy' type='xs:boolean' />
+						<xs:attribute name='forwardDestination' type='xs:string' />
+						<xs:attribute name='netTracerId' type='xs:string' />
+						<xs:attribute name='pnr' type='xs:string' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='forwardScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:netTracerScanType'>
+						<xs:sequence>
+							<xs:element name='agent' type='xs:string' />
+							<xs:element name='faultReason' type='xs:string' />
+							<xs:element minOccurs='0' name='comment' type='xs:string' />
+							<xs:element maxOccurs='unbounded' name='leg'
+								type='tns:forwardLegType' />
+						</xs:sequence>
+						<xs:attribute name='tagStatus' type='xs:string' use='required' />
+						<xs:attribute name='faultStation' type='xs:string' />
+						<xs:attribute name='faultReasonId' type='xs:integer'
+							use='required' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='forwardLegType'>
+				<xs:sequence />
+				<xs:attribute name='carrier' type='xs:string' use='required' />
+				<xs:attribute name='destination' type='xs:string' use='required' />
+				<xs:attribute name='flightNumber' type='xs:integer'
+					use='required' />
+				<xs:attribute name='flightDate' type='xs:date' use='required' />
+			</xs:complexType>
+			<xs:complexType name='uldTransferType'>
+				<xs:complexContent>
+					<xs:extension base='tns:flightTaskType'>
+						<xs:sequence />
+						<xs:attribute name='uldFrom' type='xs:string' use='required' />
+						<xs:attribute name='uldTo' type='xs:string' use='required' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='rerouteForwardScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:rerouteScanType'>
+						<xs:sequence>
+							<xs:element name='faultReason' type='xs:string' />
+							<xs:element maxOccurs='unbounded' name='leg'
+								type='tns:forwardLegType' />
+						</xs:sequence>
+						<xs:attribute name='netTracerId' type='xs:string' />
+						<xs:attribute name='bulk' type='xs:boolean' use='required' />
+						<xs:attribute name='faultStation' type='xs:string' />
+						<xs:attribute name='faultReasonId' type='xs:integer'
+							use='required' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='uldTaskType'>
+				<xs:complexContent>
+					<xs:extension base='tns:flightTaskType'>
+						<xs:sequence />
+						<xs:attribute name='uld' type='xs:string' use='required' />
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='rerouteRouteScanType'>
+				<xs:complexContent>
+					<xs:extension base='tns:rerouteScanType'>
+						<xs:sequence>
+							<xs:element maxOccurs='unbounded' minOccurs='0' name='leg'
+								nillable='true' type='tns:forwardLegType' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name='bulkUnloadType'>
+				<xs:complexContent>
+					<xs:extension base='tns:flightTaskType'>
+						<xs:sequence>
+							<xs:element minOccurs='0' name='unloadReason' type='xs:string' />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:simpleType name='warrantType'>
+				<xs:restriction base='xs:string'>
+					<xs:enumeration value='SH' />
+					<xs:enumeration value='GV' />
+					<xs:enumeration value='GC' />
+					<xs:enumeration value='FW' />
+					<xs:enumeration value='OA' />
+					<xs:enumeration value='BB' />
+					<xs:enumeration value='NO' />
+					<xs:enumeration value='NS' />
+					<xs:enumeration value='RD' />
+					<xs:enumeration value='NC' />
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:schema>
+	</types>
+	<message name='ScanPoints_getScanPoints'>
+		<part element='ns1:getScanPoints' name='getScanPoints'></part>
+	</message>
+	<message name='ScanPoints_getScanPointsResponse'>
+		<part element='ns1:getScanPointsResponse' name='getScanPointsResponse'></part>
+	</message>
+	<portType name='ScanPoints'>
+		<operation name='getScanPoints' parameterOrder='getScanPoints'>
+			<input message='ns1:ScanPoints_getScanPoints'></input>
+			<output message='ns1:ScanPoints_getScanPointsResponse'></output>
+		</operation>
+	</portType>
+	<binding name='ScanPointsBinding' type='ns1:ScanPoints'>
+		<soap:binding style='document'
+			transport='http://schemas.xmlsoap.org/soap/http' />
+		<operation name='getScanPoints'>
+			<soap:operation soapAction='' />
+			<input>
+				<soap:body use='literal' />
+			</input>
+			<output>
+				<soap:body use='literal' />
+			</output>
+		</operation>
+	</binding>
+	<service name="ScanPoints4ServiceBeanService">
+		<port binding="ns1:ScanPointsBinding" name="ScanPoints4ServiceBeanPort">
+			<soap:address location="http://10.52.113.102:8080/ws/ScanPoints4" />
+		</port>
+	</service>
+
+</definitions>
