@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.HashSet;
 import java.util.List;
@@ -1086,6 +1087,10 @@ public class IncidentBMO {
 	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
 			boolean dirtyRead) throws HibernateException {
 		Session sess = null;
+
+		HashMap<String, ArrayList<String>> eightDig=new HashMap<String, ArrayList<String>>();
+		HashMap<String, ArrayList<String>> nineDig=new HashMap<String, ArrayList<String>>();
+		HashMap<String, ArrayList<String>> tenDig=new HashMap<String, ArrayList<String>>();
 		if (dirtyRead) {
 			sess = HibernateWrapper.getDirtySession().openSession();
 		} else {
@@ -1251,7 +1256,7 @@ public class IncidentBMO {
 				s.append(" and passenger.membership.companycode_ID like :companyCode_ID)");
 			}
 			
-			intelligentSearchProcessing(siDTO, s, tagPresent);
+			intelligentSearchProcessing(siDTO, s, tagPresent, eightDig, nineDig, tenDig);
 			
 
 			if (siDTO.getAirline().length() > 0) {
@@ -1312,6 +1317,22 @@ public class IncidentBMO {
 					q.setTime("starttime", stime);
 				}
 			}
+			
+			if (!eightDig.isEmpty() || !nineDig.isEmpty() || !tenDig.isEmpty()) {
+	    		for (String key: eightDig.keySet()) {
+	    			q.setString("key8" + key, key);
+	    			q.setParameterList("key8" + key + "List", eightDig.get(key));
+	    		}
+	    		for (String key: nineDig.keySet()) {
+	    			q.setString("key9" + key, key);
+	    			q.setParameterList("key9" + key + "List", nineDig.get(key));
+	    		}
+	    		for (String key: tenDig.keySet()) {
+	    			q.setString("key10" + key + "One", key.substring(0, 1));
+	    			q.setString("key10" + key + "Two", key.substring(1,4));
+	    			q.setParameterList("key10" + key + "List", tenDig.get(key));
+	    		}
+    		}
 			
 			// station assignment date related
 			if (sAssignedDate != null) {
@@ -1375,12 +1396,6 @@ public class IncidentBMO {
 				q.setString("companyCode_ID", siDTO.getCompanycode_ID());
 			}
 
-			if (siDTO.getClaimchecknum().length() > 0)
-				q.setString("claimchecknum", siDTO.getClaimchecknum().trim());
-			
-			if (siDTO.getClaimchecknum2().length() > 0)
-				q.setString("claimchecknum2", siDTO.getClaimchecknum2().trim());
-
 			if (siDTO.getAirline().length() > 0) {
 				q.setString("airline", siDTO.getAirline().toUpperCase());
 			}
@@ -1403,8 +1418,43 @@ public class IncidentBMO {
 		}
 	}
 
-	private void intelligentSearchProcessing(SearchIncident_DTO siDTO, StringBuffer s, boolean tagPresent) {
-
+	private void intelligentSearchProcessing(SearchIncident_DTO siDTO, StringBuffer s, boolean tagPresent,HashMap<String, ArrayList<String>> eightDig,HashMap<String, ArrayList<String>> nineDig, HashMap<String, ArrayList<String>> tenDig) {
+		
+		String returnMe = null;
+		String tag=siDTO.getClaimchecknum();
+    	if (tag != null && tag.length() > 0) {
+    		
+    			if (tag != null && tag.length() == 8) {
+    				String key = tag.substring(0, 2);
+    				if (eightDig.containsKey(key)) {
+    					eightDig.get(key).add(tag.substring(2));
+    				} else {
+    					ArrayList<String> value = new ArrayList<String>();
+    					value.add(tag.substring(2));
+    					eightDig.put(key, value);
+    				}
+    			} else if (tag != null && tag.length() == 9) {
+    				String key = tag.substring(0, 3);
+    				if (nineDig.containsKey(key)) {
+    					nineDig.get(key).add(tag.substring(3));
+    				} else {
+    					ArrayList<String> value = new ArrayList<String>();
+    					value.add(tag.substring(3));
+    					nineDig.put(key, value);
+    				}
+    			} else if (tag != null && tag.length() == 10) {
+    				String key = tag.substring(0, 1);
+    				String key2 = tag.substring(1, 4);
+    				if (tenDig.containsKey(""+key+key2)) {
+    					tenDig.get(key).add(tag.substring(4));
+    				} else {
+    					ArrayList<String> value = new ArrayList<String>();
+    					value.add(tag.substring(4));
+    					tenDig.put(""+key+key2, value);
+    				}
+    			}
+    		}
+		
 		int searchType = siDTO.getIntelligentTagSearchType();
 		if (siDTO.isIntelligentTagSearch() && tagPresent && searchType == 0) {
 			Pattern pattern = Pattern.compile(LookupAirlineCodes.PATTERN_10_DIGIT_BAG_TAG);
@@ -1425,54 +1475,23 @@ public class IncidentBMO {
 				}
 			}
 		}
-		
-		
-			
-		if (siDTO.isIntelligentTagSearch() && searchType > 0) {
-			String nineDigitWildcardTag = null;
-			String genericTag = null;
-			
-			String claimcheck = siDTO.getClaimchecknum().trim();
-			if (claimcheck.indexOf("%") == -1) {
-				if (searchType == 10) {
-					nineDigitWildcardTag = "%" + claimcheck.substring(1);
-					try {
-						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-					} catch (BagtagException e) {
-						// Ignore
-						logger.error("Unable to convert bag tag: " + claimcheck);
-						genericTag = claimcheck;
-					}
-				} else if (searchType == 9) {
-					nineDigitWildcardTag = "%" + claimcheck;
-					try {
-						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-					} catch (BagtagException e) {
-						// Ignore
-						logger.error("Unable to convert bag tag: " + claimcheck);
-						genericTag = claimcheck;
-					}
-				} else if (searchType == 8) {
-					genericTag = claimcheck;
-					try {
-						nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
-					} catch (BagtagException e) {
-						// Ignore
-						logger.error("Unable to convert bag tag: " + claimcheck);
-						nineDigitWildcardTag = claimcheck;
-					}
-				}
-
-				siDTO.setClaimchecknum(nineDigitWildcardTag);
-				siDTO.setClaimchecknum2(genericTag);
-			}
-			s.append(" and (item.claimchecknum like :claimchecknum or item.claimchecknum like :claimchecknum2");
-			s.append(" or claimcheck.claimchecknum like :claimchecknum or claimcheck.claimchecknum like :claimchecknum2)");
-
-		} else if (siDTO.getClaimchecknum().length() > 0) {
-			s.append(" and (item.claimchecknum like :claimchecknum");
-			s.append(" or claimcheck.claimchecknum like :claimchecknum)");
+		if (!eightDig.isEmpty() || !nineDig.isEmpty() || !tenDig.isEmpty()) {
+    		String itemSelect = "";
+    		for (String key: eightDig.keySet()) {
+    			itemSelect = " and ((item.claimchecknum_carriercode = :key8" + key + " and item.claimchecknum_bagnumber in (:key8" + key + "List)) or (claimcheck.claimchecknum_carriercode = :key8" + key + " and claimcheck.claimchecknum_bagnumber in (:key8" + key + "List)))";
+    		}
+    		for (String key: nineDig.keySet()) {
+    			itemSelect = " and ((item.claimchecknum_ticketingcode = :key9" + key + " and item.claimchecknum_bagnumber in (:key9" + key + "List)) or (claimcheck.claimchecknum_ticketingcode = :key9" + key + " and claimcheck.claimchecknum_bagnumber in (:key9" + key + "List)))";
+    		}
+    		for (String key: tenDig.keySet()) {
+    			itemSelect = " and (((item.claimchecknum_leading = :key10" + key + "One or item.claimchecknum_leading is null) "
+    					+ "and (item.claimchecknum_ticketingcode = :key10" + key + "Two and item.claimchecknum_bagnumber in (:key10" + key + "List))) or "
+    					+ "((claimcheck.claimchecknum_leading = :key10" + key + "One or claimcheck.claimchecknum_leading is null) "
+    					+ "and (claimcheck.claimchecknum_ticketingcode = :key10" + key + "Two and claimcheck.claimchecknum_bagnumber in (:key10" + key + "List)))) ";
+    		}
+    		s.append(itemSelect );
 		}
+		
 	}
 	
 	private void intelligentSearchProcessing(SearchIncidentForm siDTO, StringBuffer s, boolean tagPresent) {
