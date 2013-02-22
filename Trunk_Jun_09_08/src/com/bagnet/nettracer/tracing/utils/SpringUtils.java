@@ -1,7 +1,7 @@
 package com.bagnet.nettracer.tracing.utils;
 
-import org.jboss.cache.Cache;
-import org.jboss.cache.CacheManager;
+//import org.jboss.cache.Cache;
+//import org.jboss.cache.CacheManager;
 import org.jboss.ha.framework.server.CacheManagerLocator;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
