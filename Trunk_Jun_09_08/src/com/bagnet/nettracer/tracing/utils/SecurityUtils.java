@@ -67,13 +67,14 @@ public class SecurityUtils {
 			List results = criteria.list();
 			
 			if (results == null || results.size() < 1) {
-
+				
 				// Add 1 to # of times login failed.
 				Criteria criteria2 = sess.createCriteria(Agent.class);
 				criteria2.add(Expression.eq("username", username));
-
+				
 				List results2 = criteria2.list();
 				if (results2.size() == 1) {
+					log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" entered a wrong password.");
 					agent = (Agent)results2.get(0);
 					int maxFailedAttempts = AdminUtils.getCompVariable(agent.getCompanycode_ID()).getMax_failed_logins();
 					
@@ -189,6 +190,8 @@ public class SecurityUtils {
 					List results2 = criteria2.list();
 					if (results2.size() == 1) {
 						agent = (Agent)results2.get(0);
+						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" entered a wrong password.");
+						
 						int maxFailedAttempts = AdminUtils.getCompVariable(companyCode).getMax_failed_logins();
 	
 						if (maxFailedAttempts > 0) {
@@ -213,7 +216,7 @@ public class SecurityUtils {
 					}
 					if (agent != null) {
 						if (agent.isAccount_locked()) {
-							log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" locked");
+							log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" is locked");
 							errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.lockedout"));
 						} else {
 							errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
@@ -224,15 +227,22 @@ public class SecurityUtils {
 				} else {
 					agent = (Agent) results.get(0);
 					if (!agent.isActive()) {
+						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" is inactive.");
+						
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.inactive"));
 					}
 					
 					if (logintype == 1 && agent.isWs_enabled() != true) {
+						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" does not have access to webservice.");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.ws_disabled"));
 					} else if (logintype == 0 && agent.isWeb_enabled() != true) {
+						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" does not have access to web application.");
+						
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.web_disabled"));
 					}
 					if (agent.isAccount_locked()) {
+						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" is locked");
+						
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.lockedout"));
 					} else {
 						agent.setFailed_logins(0);
