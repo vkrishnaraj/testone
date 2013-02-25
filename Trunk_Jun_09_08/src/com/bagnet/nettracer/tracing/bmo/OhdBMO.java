@@ -1149,19 +1149,25 @@ public class OhdBMO {
 				q.setString("companyCode_ID", siDTO.getCompanycode_ID());
 			}
 
-			if (!eightDig.isEmpty() || !nineDig.isEmpty() || !tenDig.isEmpty()) {
-	    		for (String key: eightDig.keySet()) {
+			if (siDTO.getClaimchecknum()!=null && siDTO.getClaimchecknum().length()>0) {
+				String tag=siDTO.getClaimchecknum();
+		    		
+    			if (tag != null && tag.length() == 8) {
+    				String key = tag.substring(0, 2);
 	    			q.setString("key8" + key, key);
-	    			q.setParameterList("key8" + key + "List", eightDig.get(key));
+	    			q.setString("key8" + key + "List", tag.substring(2));
 	    		}
-	    		for (String key: nineDig.keySet()) {
+    			if (tag != null && tag.length() == 9) {
+
+    				String key = tag.substring(0, 3);
 	    			q.setString("key9" + key, key);
-	    			q.setParameterList("key9" + key + "List", nineDig.get(key));
+	    			q.setString("key9" + key + "List", tag.substring(3));
 	    		}
-	    		for (String key: tenDig.keySet()) {
+    			if (tag != null && tag.length() == 10) {
+    				String key = tag.substring(0, 4);
 	    			q.setString("key10" + key + "One", key.substring(0, 1));
 	    			q.setString("key10" + key + "Two", key.substring(1,4));
-	    			q.setParameterList("key10" + key + "List", tenDig.get(key));
+	    			q.setString("key10" + key + "List", tag.substring(4));
 	    		}
     		}
 			
@@ -1211,78 +1217,23 @@ public class OhdBMO {
 	
 	
 	private void intelligentSearchProcessing(SearchIncidentForm siDTO, StringBuffer s,HashMap<String, ArrayList<String>> eightDig,HashMap<String, ArrayList<String>> nineDig, HashMap<String, ArrayList<String>> tenDig) {
-		boolean tagPresent = siDTO.getClaimchecknum() != null && siDTO.getClaimchecknum().trim().length() > 0;
-		int searchType = siDTO.getIntelligentTagSearchType();
-
 		String tag=siDTO.getClaimchecknum();
     	if (tag != null && tag.length() > 0) {
+    		String itemSelect = "";
     		
     			if (tag != null && tag.length() == 8) {
     				String key = tag.substring(0, 2);
-    				if (eightDig.containsKey(key)) {
-    					eightDig.get(key).add(tag.substring(2));
-    				} else {
-    					ArrayList<String> value = new ArrayList<String>();
-    					value.add(tag.substring(2));
-    					eightDig.put(key, value);
-    				}
+    				itemSelect = " and (ohd.claimchecknum_carriercode = :key8" + key + " and ohd.claimchecknum_bagnumber = :key8" + key + "List)";
     			} else if (tag != null && tag.length() == 9) {
     				String key = tag.substring(0, 3);
-    				if (nineDig.containsKey(key)) {
-    					nineDig.get(key).add(tag.substring(3));
-    				} else {
-    					ArrayList<String> value = new ArrayList<String>();
-    					value.add(tag.substring(3));
-    					nineDig.put(key, value);
-    				}
+    				itemSelect = " and (ohd.claimchecknum_ticketingcode = :key9" + key + " and ohd.claimchecknum_bagnumber = :key9" + key + "List)";
     			} else if (tag != null && tag.length() == 10) {
-    				String key = tag.substring(0, 1);
-    				String key2 = tag.substring(1, 4);
-    				if (tenDig.containsKey(""+key+key2)) {
-    					tenDig.get(key).add(tag.substring(4));
-    				} else {
-    					ArrayList<String> value = new ArrayList<String>();
-    					value.add(tag.substring(4));
-    					tenDig.put(""+key+key2, value);
-    				}
+    				String key = tag.substring(0, 4);
+    				itemSelect = " and ((ohd.claimchecknum_leading = :key10" + key + "One or ohd.claimchecknum_leading is null) "
+        					+ "and (ohd.claimchecknum_ticketingcode = :key10" + key + "Two and ohd.claimchecknum_bagnumber = :key10" + key + "List))";
     			}
-    		}
-		
-		if (siDTO.isIntelligentTagSearch() && tagPresent && searchType == 0) {
-			Pattern pattern = Pattern.compile(LookupAirlineCodes.PATTERN_10_DIGIT_BAG_TAG);
-			if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
-				siDTO.setIntelligentTagSearchType(10);
-				searchType = 10;
-			} else {
-				pattern = Pattern.compile(LookupAirlineCodes.PATTERN_9_DIGIT_BAG_TAG);
-				if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
-					siDTO.setIntelligentTagSearchType(9);
-					searchType = 9;
-				} else {
-					pattern = Pattern.compile(LookupAirlineCodes.PATTERN_8_CHAR_BAG_TAG);
-					if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
-						siDTO.setIntelligentTagSearchType(8);
-						searchType = 8;
-					}
-				}
-			}
-		}
-
-		if (!eightDig.isEmpty() || !nineDig.isEmpty() || !tenDig.isEmpty()) {
-    		String itemSelect = "";
-    		for (String key: eightDig.keySet()) {
-    			itemSelect = " and (ohd.claimchecknum_carriercode = :key8" + key + " and ohd.claimchecknum_bagnumber in (:key8" + key + "List))";
-    		}
-    		for (String key: nineDig.keySet()) {
-    			itemSelect = " and (ohd.claimchecknum_ticketingcode = :key9" + key + " and ohd.claimchecknum_bagnumber in (:key9" + key + "List))";
-    		}
-    		for (String key: tenDig.keySet()) {
-    			itemSelect = " and ((ohd.claimchecknum_leading = :key10" + key + "One or ohd.claimchecknum_leading is null) "
-    					+ "and (ohd.claimchecknum_ticketingcode = :key10" + key + "Two and ohd.claimchecknum_bagnumber in (:key10" + key + "List)))";
-    		}
     		s.append(itemSelect );
 		}
-		
 	}
 	
 	private void intelligentSearchProcessing(Ohd_DTO siDTO, StringBuffer s) {
