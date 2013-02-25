@@ -202,7 +202,7 @@
              		<bean:message key="colname.dob" />
              		(<%= a.getDateformat().getFormat() %>)
              		<br />
-             		<html:text name="claimForm" property="claimantDateOfBirth" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.claimForm.claimantDateOfBirth,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+             		<html:text disabled="true" name="claimForm" property="claimantDateOfBirth" size="12" maxlength="11" styleClass="textfield" />
              		
              	</td>
              </tr>
@@ -232,7 +232,7 @@
 	            <td colspan=2 >
 	            	<bean:message key="colname.common_num" />
 	            	<br />
-	            	<html:text name="claimForm" property="claimant.redactedPassportNumber" size="20" maxlength="20" styleClass="textfield" />
+	            	<html:text disabled="true" name="claimForm" property="claimant.redactedPassportNumber" size="20" maxlength="20" styleClass="textfield" />
 	            </td>
 	            <td>
 	            	<bean:message key="colname.country_of_issue" />
@@ -249,7 +249,7 @@
                <td>
 	            	<bean:message key="colname.drivers" />
 	            	<br />
-	            	<html:text name="claimForm" property="claimant.redactedDriversLicenseNumber" size="20" maxlength="20" styleClass="textfield" />
+	            	<html:text disabled="true" name="claimForm" property="claimant.redactedDriversLicenseNumber" size="20" maxlength="20" styleClass="textfield" />
 	            </td>
 	            <td>
                   <bean:message key="colname.state" />
