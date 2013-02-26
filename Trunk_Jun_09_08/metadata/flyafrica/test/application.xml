@@ -8,30 +8,9 @@
  <display-name>TracerEAR</display-name>
  <module>
      <web>
-         <web-uri>canadiannorth_testing.war</web-uri>
-         <context-root>canadiannorth</context-root>
-     </web>
-  </module>
-  
-   <module>
-     <web>
-         <web-uri>frontier_testing.war</web-uri>
-         <context-root>frontier</context-root>
-     </web>
-  </module>
-  
-  
-   <module>
-     <web>
-         <web-uri>southwest_testing.war</web-uri>
-         <context-root>southwest</context-root>
-     </web>
-  </module>
-   <module>
-     <web>
          <web-uri>flyafrica_testing.war</web-uri>
          <context-root>flyafrica</context-root>
      </web>
   </module>
-
+  
 </application> 

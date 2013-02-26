@@ -8,30 +8,8 @@
  <display-name>TracerEAR</display-name>
  <module>
      <web>
-         <web-uri>canadiannorth_training.war</web-uri>
-         <context-root>canadiannorth</context-root>
-     </web>
-  </module>
-  
-   <module>
-     <web>
-         <web-uri>frontier_training.war</web-uri>
-         <context-root>frontier</context-root>
-     </web>
-  </module>
-  
-  
-   <module>
-     <web>
-         <web-uri>southwest_training.war</web-uri>
-         <context-root>southwest</context-root>
-     </web>
-  </module>
-   <module>
-     <web>
          <web-uri>flyafrica_training.war</web-uri>
          <context-root>flyafrica</context-root>
      </web>
   </module>
- 
 </application> 

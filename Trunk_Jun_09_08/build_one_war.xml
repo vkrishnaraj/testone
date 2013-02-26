@@ -737,6 +737,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 
+	<target name="build-ear-local-flyafrica" depends="delete-wars">
+		<property name="staging.project" value="flyafrica" />
+		<property name="staging.env" value="local" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-local-flyafrica"/>
+		<property name="app.xml.location" value="metadata/flyafrica/local" />		
+		<antcall target="donotrun-build-ear" />
+	</target>
+
 	<target name="build-ear-local-fraud" depends="delete-wars">
 		<property name="staging.project" value="fstracer" />
 		<property name="staging.env" value="local" />
@@ -796,6 +805,7 @@
 		<antcall target="build-war-testing-frontier"/>
 		<antcall target="build-war-testing-southwest"/>
 		<antcall target="build-war-testing-canadiannorth"/>
+		<antcall target="build-war-testing-flyafrica"/>
 		<property name="app.xml.location" value="metadata/testing/hosted2" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -829,6 +839,7 @@
 		<antcall target="build-war-hudson-frontier"/>
 		<antcall target="build-war-hudson-southwest"/>
 		<antcall target="build-war-hudson-canadiannorth"/>
+		<antcall target="build-war-hudson-flyafrica"/>
 		<property name="app.xml.location" value="metadata/hudson/hosted2" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -997,6 +1008,15 @@
 		<property name="app.xml.location" value="metadata/canadiannorth/test" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+
+	<target name="build-ear-testing-flyafrica" depends="delete-wars">
+		<property name="staging.project" value="flyafrica" />
+		<property name="staging.env" value="testing" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-testing-flyafrica"/>
+		<property name="app.xml.location" value="metadata/flyafrica/test" />
+		<antcall target="donotrun-build-ear" />
+	</target>
 	
 	<target name="build-ear-testing-lfc" depends="delete-wars">
 		<property name="staging.project" value="lfc" />
@@ -1046,6 +1066,7 @@
 		<antcall target="build-war-training-frontier"/>
 		<antcall target="build-war-training-southwest"/>
 		<antcall target="build-war-training-canadiannorth"/>
+		<antcall target="build-war-training-flyafrica"/>
 		<property name="app.xml.location" value="metadata/training/hosted2" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -1123,6 +1144,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 
+	<target name="build-ear-training-flyafrica" depends="delete-wars">
+		<property name="staging.project" value="flyafrica" />
+		<property name="staging.env" value="training" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-training-flyafrica"/>
+		<property name="app.xml.location" value="metadata/flyafrica/train" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
 	<target name="build-ear-training-webjet" depends="delete-wars">
 		<property name="staging.project" value="webjet" />
 		<property name="staging.env" value="training" />
@@ -1181,6 +1211,7 @@
 		<antcall target="build-war-production-frontier"/>		
 		<antcall target="build-war-production-southwest"/>
 		<antcall target="build-war-production-canadiannorth"/>
+		<antcall target="build-war-production-flyafrica"/>
 		<property name="app.xml.location" value="metadata/production/hosted2" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -1274,6 +1305,15 @@
 		<property name="avis.service.includes" value="*.war"/>
 		<antcall target="build-war-production-canadiannorth"/>
 		<property name="app.xml.location" value="metadata/canadiannorth/prod" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-production-flyafrica" depends="delete-wars">
+		<property name="staging.project" value="flyafrica" />
+		<property name="staging.env" value="production" />
+		<property name="avis.service.includes" value="*.war"/>
+		<antcall target="build-war-production-flyafrica"/>
+		<property name="app.xml.location" value="metadata/flyafrica/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
@@ -1440,6 +1480,14 @@
 		<antcall target="donotrun-build-canadiannorth" />
 	</target>
 
+	<target name="build-war-testing-flyafrica" depends="delete">
+		<property name="ant_project_name" value="flyafrica" />
+		<property name="ant_war_name" value="flyafrica_testing" />
+		<property name="environment.name" value="test"/>
+		<property name="flyafrica.init.complete" value="true" />
+		<antcall target="donotrun-build-flyafrica" />
+	</target>
+
 	<target name="build-war-testing-airtran" depends="delete">
 		<property name="ant_project_name" value="airtran" />
 		<property name="ant_war_name" value="airtran-test" />
@@ -1577,6 +1625,14 @@
 		<property name="environment.name" value="hudson"/>
 		<property name="canadiannorth.init.complete" value="true" />
 		<antcall target="donotrun-build-canadiannorth" />
+	</target>
+
+	<target name="build-war-hudson-flyafrica" depends="delete">
+		<property name="ant_project_name" value="flyafrica" />
+		<property name="ant_war_name" value="flyafrica_hudson" />
+		<property name="environment.name" value="hudson"/>
+		<property name="flyafrica.init.complete" value="true" />
+		<antcall target="donotrun-build-flyafrica" />
 	</target>
 
 	<target name="build-war-hudson-webjet" depends="delete">
@@ -1717,6 +1773,14 @@
 		<antcall target="donotrun-build-canadiannorth" />
 	</target>
 
+	<target name="build-war-production-flyafrica" depends="delete">
+		<property name="ant_project_name" value="flyafrica" />
+		<property name="ant_war_name" value="flyafrica_production" />
+		<property name="environment.name" value="prod"/>
+		<property name="flyafrica.init.complete" value="true" />
+		<antcall target="donotrun-build-flyafrica" />
+	</target>
+
 	<target name="build-war-production-webjet" depends="delete">
 		<property name="ant_project_name" value="webjet" />
 		<property name="ant_war_name" value="webjet_production" />
@@ -1807,6 +1871,14 @@
 		<property name="environment.name" value="train"/>
 		<property name="canadiannorth.init.complete" value="true" />
 		<antcall target="donotrun-build-canadiannorth" />
+	</target>
+
+	<target name="build-war-training-flyafrica" depends="delete">
+		<property name="ant_project_name" value="flyafrica" />
+		<property name="ant_war_name" value="flyafrica_training" />
+		<property name="environment.name" value="train"/>
+		<property name="flyafrica.init.complete" value="true" />
+		<antcall target="donotrun-build-flyafrica" />
 	</target>
 
 	<target name="build-war-training-webjet" depends="delete">
@@ -1924,6 +1996,14 @@
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-canadiannorth" />
 	</target>
+
+	<target name="build-war-local-flyafrica" depends="delete">
+		<property name="ant_project_name" value="flyafrica" />
+		<property name="ant_war_name" value="z7" />
+		<property name="flyafrica.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-flyafrica" />
+	</target>
 	
 	<target name="build-war-local-webjet" depends="delete">
 		<property name="ant_project_name" value="webjet" />
@@ -2034,6 +2114,7 @@
 		<antcall target="build-cron-testing-lfc"/>
 		<antcall target="build-cron-testing-webjet"/>
 		<antcall target="build-cron-testing-canadiannorth"/>
+		<antcall target="build-cron-testing-flyafrica"/>
 		<antcall target="build-cron-testing-airtran"/>
 				
 	</target>
@@ -2046,6 +2127,7 @@
 		<antcall target="build-cron-training-lfc"/>
 		<antcall target="build-cron-training-webjet"/>
 		<antcall target="build-cron-training-canadiannorth"/>
+		<antcall target="build-cron-training-flyafrica"/>
 	</target>
 	<target name="build-cron-production-all">
 		<antcall target="build-cron-production-avis"/>
@@ -2056,6 +2138,7 @@
 		<antcall target="build-cron-production-lfc"/>
 		<antcall target="build-cron-production-webjet"/>
 		<antcall target="build-cron-production-canadiannorth"/>
+		<antcall target="build-cron-production-flyafrica"/>
 		<antcall target="build-cron-production-airtran"/>
 	</target>
 	<target name="build-cron-hudson-all">
@@ -2067,6 +2150,7 @@
 		<antcall target="build-cron-hudson-lfc"/>
 		<antcall target="build-cron-hudson-webjet"/>
 		<antcall target="build-cron-hudson-canadiannorth"/>
+		<antcall target="build-cron-hudson-flyafrica"/>
 	</target>
 	<target name="build-cron-demo-all">
 		<antcall target="build-cron-demo-lfc"/>
@@ -2342,6 +2426,50 @@
 	</target>
 		
 	<!-- END CANADIAN NORTH CRON TARGETS -->
+	
+	<!-- FLY AFRICA CRON TARGETS -->
+		
+	<target name="build-cron-testing-flyafrica">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="testing" />
+		<property name="ant_project_name" value="flyafrica" />
+		<property name="sub_path" value="test/" />
+		<property name="cron.job.config.file" value="companies/flyafrica/environment/test/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="z7test-" />
+		<antcall target="cron-service" />
+	</target>
+		
+	<target name="build-cron-training-flyafrica">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="training" />
+		<property name="ant_project_name" value="flyafrica" />
+		<property name="sub_path" value="train/" />
+		<property name="cron.job.config.file" value="companies/flyafrica/environment/train/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="z7train-" />
+		<antcall target="cron-service" />
+	</target>
+
+	<target name="build-cron-production-flyafrica">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="production" />
+		<property name="ant_project_name" value="flyafrica" />
+		<property name="sub_path" value="prod/" />
+		<property name="jarprefix" value="z7prod-" />
+		<property name="cron.job.config.file" value="companies/flyafrica/environment/prod/jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
+
+	<target name="build-cron-hudson-flyafrica">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="hudson" />
+		<property name="ant_project_name" value="flyafrica" />
+		<property name="sub_path" value="hudson/" />
+		<property name="jarprefix" value="z7hudson-" />
+		<property name="cron.job.config.file" value="companies/flyafrica/environment/hudson/jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
+		
+	<!-- END FLY AFRICA CRON TARGETS -->
 	
 	<!-- JETBLUE CRON TARGETS -->
 	
@@ -3210,6 +3338,40 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/canadiannorth/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+	</target>
+	
+	<target name="donotrun-build-flyafrica">		
+
+		<property name="hibernate_props_loc" value="companies/flyafrica/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
+		<copy todir="${basedir}/web/pages/login" file="companies/flyafrica/environment/${environment.name}/login/center.jsp" />
+		
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/flyafrica/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
+			
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/flyafrica/custom_ui.properties" />
+
+		<!-- Hibernate main dependent on environment -->
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/flyafrica/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 
 		<antcall target="fast_all" />
