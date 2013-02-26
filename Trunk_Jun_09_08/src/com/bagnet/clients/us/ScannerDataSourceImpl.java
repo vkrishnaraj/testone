@@ -197,6 +197,8 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							type = "Bulk Unload";
 							BulkUnloadType o = (BulkUnloadType) obj;
 							ifNotNull(comment, "Unload Reason: ", o.getUnloadReason(), "<br />");
+							comment.append("Flight Info, Flight Number: "+o.getFlight().getFlightNumber()+" Origin: "+o.getFlight().getOrigin()+", Destination: "+o.getFlight().getDestination()+",<br/>" +
+									"Deparature date: "+o.getFlight().getDepartureDate()+", Arrival Date: "+o.getFlight().getArrivalDate());
 						} 
 						
 						if (obj instanceof ForwardScanType) {
@@ -252,6 +254,9 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							type = "Load Scan";
 							LoadScanType o = (LoadScanType) obj;
 							comment.append("Bin: " + o.getBin() + "<br />");
+
+							comment.append("Flight Info, Flight Number: "+o.getFlight().getFlightNumber()+" Origin: "+o.getFlight().getOrigin()+", Destination: "+o.getFlight().getDestination()+",<br/>" +
+									"Deparature date: "+o.getFlight().getDepartureDate()+", Arrival Date: "+o.getFlight().getArrivalDate());
 						} 
 						
 						if (obj instanceof LoadBagScanType) {
@@ -262,7 +267,9 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 								comment.append("NOT LOADED<br />");
 							}
 							ifNotNull(comment, "PNR: ",o.getPnr(),"<br/>");
-							ifNotNull(comment, "Destination: ", o.getForwardDestination(), "<br />");				
+							ifNotNull(comment, "Destination: ", o.getForwardDestination(), "<br />");
+							comment.append("Flight Info, Flight Number: "+o.getFlight().getFlightNumber()+" Origin: "+o.getFlight().getOrigin()+", Destination: "+o.getFlight().getDestination()+",<br/>" +
+									"Deparature date: "+o.getFlight().getDepartureDate()+", Arrival Date: "+o.getFlight().getArrivalDate());		
 						} 
 
 						if (obj instanceof UldTaskType) {
@@ -275,6 +282,8 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							type = "ULD Task Scan";
 							UldScanType o = (UldScanType) obj;
 							comment.append("ULD: " + o.getUld() + "<br />");
+							comment.append("Flight Info, Flight Number: "+o.getFlight().getFlightNumber()+" Origin: "+o.getFlight().getOrigin()+", Destination: "+o.getFlight().getDestination()+",<br/>" +
+									"Deparature date: "+o.getFlight().getDepartureDate()+", Arrival Date: "+o.getFlight().getArrivalDate());
 						} 
 
 						
@@ -282,6 +291,9 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							type = "Load ULD Scan";
 							LoadULDScanType o = (LoadULDScanType) obj;
 							comment.append("ULD: " + o.getUld() + "<br />");
+
+							comment.append("Flight Info, Flight Number: "+o.getFlight().getFlightNumber()+" Origin: "+o.getFlight().getOrigin()+", Destination: "+o.getFlight().getDestination()+",<br/>" +
+									"Deparature date: "+o.getFlight().getDepartureDate()+", Arrival Date: "+o.getFlight().getArrivalDate());
 						} 
 
 						if (obj instanceof QohScanType) {
@@ -301,24 +313,32 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							}
 							ifNotNull(comment, "PNR: ",o.getPnr(),"<br/>");
 							comment.append("ULD: " + o.getUld() + "<br />");
+							comment.append("Flight Info, Flight Number: "+o.getFlight().getFlightNumber()+" Origin: "+o.getFlight().getOrigin()+", Destination: "+o.getFlight().getDestination()+",<br/>" +
+									"Deparature date: "+o.getFlight().getDepartureDate()+", Arrival Date: "+o.getFlight().getArrivalDate());
 						} 
 						
 						if (obj instanceof UldTransferType) {
 							type = "ULD Transfer";
 							UldTransferType o = (UldTransferType) obj;
 							comment.append("Transfer from: " + o.getUldFrom() + " to " + o.getUldTo() + "<br />");
+							comment.append("Flight Info, Flight Number: "+o.getFlight().getFlightNumber()+" Origin: "+o.getFlight().getOrigin()+", Destination: "+o.getFlight().getDestination()+",<br/>" +
+									"Deparature date: "+o.getFlight().getDepartureDate()+", Arrival Date: "+o.getFlight().getArrivalDate());
 						} 
-						
+												
 						if (obj instanceof UnloadScanType) {
 							type = "Unload Scan";
 							UnloadScanType o = (UnloadScanType) obj;
 							ifNotNull(comment, "Unload Reason: ", o.getUnloadReason(), "<br />");
+							comment.append("Flight Info, Flight Number: "+o.getFlight().getFlightNumber()+" Origin: "+o.getFlight().getOrigin()+", Destination: "+o.getFlight().getDestination()+",<br/>" +
+									"Deparature date: "+o.getFlight().getDepartureDate()+", Arrival Date: "+o.getFlight().getArrivalDate());
 						} 
 						
 						if (obj instanceof UnloadULDScanType) {
 							type = "Unload ULD Scan";
 							UnloadULDScanType o = (UnloadULDScanType) obj;
 							comment.append("ULD: " + o.getUld() + "<br />");
+							comment.append("Flight Info, Flight Number: "+o.getFlight().getFlightNumber()+" Origin: "+o.getFlight().getOrigin()+", Destination: "+o.getFlight().getDestination()+",<br/>" +
+									"Deparature date: "+o.getFlight().getDepartureDate()+", Arrival Date: "+o.getFlight().getArrivalDate());
 						}
 				
 						if (obj instanceof RerouteScanType) {
