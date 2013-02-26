@@ -37,16 +37,16 @@
     } 
   }
   
-  function checkBagType() {
-			var btype=document.getElementById("bagtype");
-			var cr=document.getElementById("childRestraint");
-			if(btype.value=="71"){
-				document.getElementById("childRestraint").style.display = "block";
-			} else {
-				document.getElementById("childRestraint").style.display = "none";
-			}
-			
+  function checkBagType(pos) {
+		var btype=document.getElementById("bagtype");
+		var cr=document.getElementById("childRestraint");
+		if(btype.value=="71"){
+			document.getElementById("childRestraint"+pos).style.display = "block";
+		} else {
+			document.getElementById("childRestraint"+pos).style.display = "none";
 		}
+		
+	}
 
 </SCRIPT>
 
@@ -192,10 +192,11 @@
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=1&key=theitem[<%= i %>].bagtype&type=bagtype',800,280,230);return false;"><bean:message key="chart1" /></a>
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&key=theitem[<%= i %>].bagtype&type=bagtype',800,370,230);return false;"><bean:message key="chart2" /></a>
               <br>
-              <html:select name="theitem" styleId="bagtype" property="bagtype" styleClass="dropdown" indexed="true" onchange="checkBagType()">
-                <html:options collection="typelist" property="value" labelProperty="label" />
+              <%	String funcCall = "checkBagType(" + i + ")"; %> 
+			  <html:select name="theitem" styleId="bagtype"	property="bagtype" styleClass="dropdown" indexed="true"	onchange="<%=funcCall%>">
+						  <html:options collection="typelist" property="value" labelProperty="label" />
               </html:select>
-              <div id="childRestraint" style="display:none">
+              <div id="childRestraint<%=i %>" style="display:none">
               	<% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_CHILD_RESTRAINT_SYSTEM, a) && theitem.getItemtype_ID()!=2){ %>
               	<bean:message key="colname.child.restraint.system" /><br>
               	 	<html:select name="theitem" property="childRestraint" styleClass="dropdown" indexed="true">
@@ -562,4 +563,6 @@
                 <br>
                 <br>
      </logic:notEqual>
-     <script> checkBagType(); </script>
+<script> <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
+     		checkBagType(<%=i%>);
+		</logic:iterate></script>
