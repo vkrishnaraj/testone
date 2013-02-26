@@ -171,14 +171,14 @@
 						<t:outputText value="#{msg.lostform_label_address_addr1} *" />
 					</td></tr>
 					<tr><td colspan="6">
-						<t:inputText value="#{lostAndFound.lostReport.contact.address.address1}" maxlength="50" style="width: 100%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.address1}" maxlength="511" style="width: 100%" />
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="6">
 						<t:outputText value="#{msg.lostform_label_address_addr2}" />
 					</td></tr>
 					<tr><td colspan="6">
-						<t:inputText value="#{lostAndFound.lostReport.contact.address.address2}" maxlength="50"  style="width: 100%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.address2}" maxlength="511"  style="width: 100%" />
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="2">
@@ -189,7 +189,7 @@
 						<t:outputText value="#{msg.lostform_label_address_postal}" />
 					</td></tr>
 					<tr><td colspan="2">
-						<t:inputText value="#{lostAndFound.lostReport.contact.address.city}" maxlength="50"  style="width: 95%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.city}" maxlength="511"  style="width: 95%" />
 					</td><td colspan="2">
 						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.state}" onchange="adjustAddressReqState(this);"
 				       		style="width: 95%" id="state">
@@ -197,7 +197,7 @@
 							<f:selectItems value="#{lostAndFound.states}" />
 						</t:selectOneMenu>
 					</td><td colspan="2">
-						<t:inputText value="#{lostAndFound.lostReport.contact.address.postal}" maxlength="11"  style="width: 100%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.postal}" maxlength="255"  style="width: 100%" />
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="3" style="width: 50%;">
@@ -212,7 +212,7 @@
 							<f:selectItems value="#{lostAndFound.countries}" />
 						</t:selectOneMenu>
 					</td><td colspan="3">
-						<t:inputText id="province" value="#{lostAndFound.lostReport.contact.address.province}"  maxlength="100"
+						<t:inputText id="province" value="#{lostAndFound.lostReport.contact.address.province}"  maxlength="255"
 							style="width: 100%" />
 					</td></tr>                                                     
 <!-- END ADDRESS INFO UI -->
