@@ -81,7 +81,9 @@ public class CustomReportBMO implements
 			parameters.put("companyname", user.getStation().getCompany()
 					.getCompanydesc().toUpperCase());
 			
-
+			Date date2113=DateUtils.convertToDate("02/01/2013", TracingConstants.DISPLAY_DATEFORMAT, null);
+			Date startdate=DateUtils.convertToDate(srDTO.getStarttime(), TracingConstants.DISPLAY_DATEFORMAT, null);
+			Date enddate=DateUtils.convertToDate(srDTO.getEndtime(), TracingConstants.DISPLAY_DATEFORMAT, null);
 			List<Object[]> stationList = get501StationList(srDTO);
 			List<Object[]> lossList = get501LossList(srDTO, parameters);
 			if(stationList == null || lossList == null){
@@ -166,7 +168,7 @@ public class CustomReportBMO implements
 					if (station.isDomestic()) {
 						domesticTotal.setLoss12(domesticTotal.getLoss12() + incidents);
 					}
-				} else if (((Integer) loss[1]).intValue() == 15){
+				} else if ((((Integer) loss[1]).intValue() == 15) && startdate.before(date2113)){
 					station.setLoss15(incidents);
 					region.setLoss15(region.getLoss15() + incidents);
 					companyTotal.setLoss15(companyTotal.getLoss15() + incidents);
@@ -180,14 +182,14 @@ public class CustomReportBMO implements
 					if (station.isDomestic()) {
 						domesticTotal.setLoss18(domesticTotal.getLoss18() + incidents);
 					}
-			    } else if (((Integer) loss[1]).intValue() == 23){
+			    } else if ((((Integer) loss[1]).intValue() == 23) && startdate.before(date2113)){
 					station.setLoss23(incidents);
 					region.setLoss23(region.getLoss23() + incidents);
 					companyTotal.setLoss23(companyTotal.getLoss23() + incidents);
 					if (station.isDomestic()) {
 						domesticTotal.setLoss23(domesticTotal.getLoss23() + incidents);
 					}
-			    } else if (((Integer) loss[1]).intValue() == 24){
+			    } else if ((((Integer) loss[1]).intValue() == 24) && startdate.before(date2113)){
 					station.setLoss24(incidents);
 					region.setLoss24(region.getLoss24() + incidents);
 					companyTotal.setLoss24(companyTotal.getLoss24() + incidents);
@@ -201,14 +203,14 @@ public class CustomReportBMO implements
 					if (station.isDomestic()) {
 						domesticTotal.setLoss25(domesticTotal.getLoss25() + incidents);
 					}
-			    } else if (((Integer) loss[1]).intValue() == 26){
+			    } else if ((((Integer) loss[1]).intValue() == 26) && startdate.before(date2113)){
 					station.setLoss26(incidents);
 					region.setLoss26(region.getLoss26() + incidents);
 					companyTotal.setLoss26(companyTotal.getLoss26() + incidents);
 					if (station.isDomestic()) {
 						domesticTotal.setLoss26(domesticTotal.getLoss26() + incidents);
 					}
-			    } else if (((Integer) loss[1]).intValue() == 30){
+			    } else if ((((Integer) loss[1]).intValue() == 30) && startdate.before(date2113)){
 					station.setLoss30(incidents);
 					region.setLoss30(region.getLoss30() + incidents);
 					companyTotal.setLoss30(companyTotal.getLoss30() + incidents);
@@ -229,7 +231,7 @@ public class CustomReportBMO implements
 					if (station.isDomestic()) {
 						domesticTotal.setLoss33(domesticTotal.getLoss33() + incidents);
 					}
-			    } else if (((Integer) loss[1]).intValue() == 35){
+			    } else if ((((Integer) loss[1]).intValue() == 35) && startdate.before(date2113)){
 					station.setLoss35(incidents);
 					region.setLoss35(region.getLoss35() + incidents);
 					companyTotal.setLoss35(companyTotal.getLoss35() + incidents);
@@ -257,6 +259,13 @@ public class CustomReportBMO implements
 					if (station.isDomestic()) {
 						domesticTotal.setLoss54(domesticTotal.getLoss54() + incidents);
 					}
+			    } else if ((((Integer) loss[1]).intValue() == 55)  && (enddate.after(date2113) || enddate.equals(date2113))){
+					station.setLoss55(incidents);
+					region.setLoss55(region.getLoss55() + incidents);
+					companyTotal.setLoss55(companyTotal.getLoss55() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss55(domesticTotal.getLoss55() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 56){
 					station.setLoss56(incidents);
 					region.setLoss56(region.getLoss56() + incidents);
@@ -278,7 +287,14 @@ public class CustomReportBMO implements
 					if (station.isDomestic()) {
 						domesticTotal.setLoss64(domesticTotal.getLoss64() + incidents);
 					}
-			    } else if (((Integer) loss[1]).intValue() == 73){
+			    }  else if ((((Integer) loss[1]).intValue() == 65) && (enddate.after(date2113) || enddate.equals(date2113))){
+					station.setLoss65(incidents);
+					region.setLoss65(region.getLoss65() + incidents);
+					companyTotal.setLoss65(companyTotal.getLoss65() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss65(domesticTotal.getLoss65() + incidents);
+					}
+			    } else if ((((Integer) loss[1]).intValue() == 73) && startdate.before(date2113)){
 					station.setLoss73(incidents);
 					region.setLoss73(region.getLoss73() + incidents);
 					companyTotal.setLoss73(companyTotal.getLoss73() + incidents);
@@ -292,12 +308,26 @@ public class CustomReportBMO implements
 					if (station.isDomestic()) {
 						domesticTotal.setLoss74(domesticTotal.getLoss74() + incidents);
 					}
+			    } else if ((((Integer) loss[1]).intValue() == 75) && (enddate.after(date2113) || enddate.equals(date2113))){
+					station.setLoss75(incidents);
+					region.setLoss75(region.getLoss75() + incidents);
+					companyTotal.setLoss75(companyTotal.getLoss75() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss75(domesticTotal.getLoss75() + incidents);
+					}
 			    } else if (((Integer) loss[1]).intValue() == 76){
 					station.setLoss76(incidents);
 					region.setLoss76(region.getLoss76() + incidents);
 					companyTotal.setLoss76(companyTotal.getLoss76() + incidents);
 					if (station.isDomestic()) {
 						domesticTotal.setLoss76(domesticTotal.getLoss76() + incidents);
+					}
+			    } else if ((((Integer) loss[1]).intValue() == 77) && (enddate.after(date2113) || enddate.equals(date2113))){
+					station.setLoss77(incidents);
+					region.setLoss77(region.getLoss77() + incidents);
+					companyTotal.setLoss77(companyTotal.getLoss77() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss77(domesticTotal.getLoss77() + incidents);
 					}
 			    } else if (((Integer) loss[1]).intValue() == 78){
 					station.setLoss78(incidents);
@@ -313,14 +343,14 @@ public class CustomReportBMO implements
 					if (station.isDomestic()) {
 						domesticTotal.setLoss80(domesticTotal.getLoss80() + incidents);
 					}
-			    } else if (((Integer) loss[1]).intValue() == 81){
+			    } else if ((((Integer) loss[1]).intValue() == 81) && startdate.before(date2113)){
 					station.setLoss81(incidents);
 					region.setLoss81(region.getLoss81() + incidents);
 					companyTotal.setLoss81(companyTotal.getLoss81() + incidents);
 					if (station.isDomestic()) {
 						domesticTotal.setLoss81(domesticTotal.getLoss81() + incidents);
 					}
-			    } else if (((Integer) loss[1]).intValue() == 82){
+			    } else if ((((Integer) loss[1]).intValue() == 82) && startdate.before(date2113)){
 					station.setLoss82(incidents);
 					region.setLoss82(region.getLoss82() + incidents);
 					companyTotal.setLoss82(companyTotal.getLoss82() + incidents);
@@ -334,7 +364,35 @@ public class CustomReportBMO implements
 					if (station.isDomestic()) {
 						domesticTotal.setLoss90(domesticTotal.getLoss90() + incidents);
 					}
-			    }
+			    } else if ((((Integer) loss[1]).intValue() == 91) && (enddate.after(date2113) || enddate.equals(date2113))){
+					station.setLoss91(incidents);
+					region.setLoss91(region.getLoss91() + incidents);
+					companyTotal.setLoss91(companyTotal.getLoss91() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss91(domesticTotal.getLoss91() + incidents);
+					}
+			    } else if ((((Integer) loss[1]).intValue() == 92) && (enddate.after(date2113) || enddate.equals(date2113))){
+					station.setLoss92(incidents);
+					region.setLoss92(region.getLoss92() + incidents);
+					companyTotal.setLoss92(companyTotal.getLoss92() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss92(domesticTotal.getLoss92() + incidents);
+					}
+			    } else if ((((Integer) loss[1]).intValue() == 93) && (enddate.after(date2113) || enddate.equals(date2113))){
+					station.setLoss93(incidents);
+					region.setLoss93(region.getLoss93() + incidents);
+					companyTotal.setLoss93(companyTotal.getLoss93() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss93(domesticTotal.getLoss93() + incidents);
+					}
+			    } else if ((((Integer) loss[1]).intValue() == 99) && (enddate.after(date2113) || enddate.equals(date2113))){
+					station.setLoss99(incidents);
+					region.setLoss99(region.getLoss99() + incidents);
+					companyTotal.setLoss99(companyTotal.getLoss99() + incidents);
+					if (station.isDomestic()) {
+						domesticTotal.setLoss99(domesticTotal.getLoss99() + incidents);
+					}
+			    } 
 				
 			}
 			
@@ -344,7 +402,7 @@ public class CustomReportBMO implements
 			double domesticBoarded = 0;
 
 			for(StatReport_Custom_1_DTO station:stationMap.values()){
-				stationDataList.add(createStatReportElement(station, false));
+				stationDataList.add(createStatReportElement(station, false, startdate,enddate,date2113));
 				StatReport_Custom_1_DTO r = regionMap.get(station.getRegionid());
 				r.setBoarded(r.getBoarded() + station.getBoarded());
 				companyBoarded += station.getBoarded();
@@ -355,22 +413,30 @@ public class CustomReportBMO implements
 			
 			for(StatReport_Custom_1_DTO region:regionMap.values()){
 				if(srDTO.getOutputtype() == TracingConstants.REPORT_OUTPUT_XLS){
-					summaryList.add(createStatReportElement(region, false));
+					summaryList.add(createStatReportElement(region, false, startdate,enddate,date2113));
 				} else {
-					summaryList.add(createStatReportElement(region, false));
+					summaryList.add(createStatReportElement(region, false, startdate,enddate,date2113));
 				}
 			}
 			
 			companyTotal.setBoarded(companyBoarded);
 			domesticTotal.setBoarded(domesticBoarded);
-			summaryList.add(createStatReportElement(companyTotal, false));
-			summaryList.add(createStatReportElement(domesticTotal, true));
+			summaryList.add(createStatReportElement(companyTotal, false, startdate,enddate,date2113));
+			summaryList.add(createStatReportElement(domesticTotal, true, startdate,enddate,date2113));
 			
 			if(srDTO.getOutputtype() == TracingConstants.REPORT_OUTPUT_XLS){
-				return create501ExcelReport(rootpath, 0, user, summaryList, stationDataList, parameters);
+				return create501ExcelReport(rootpath, 0, user, summaryList, stationDataList, parameters, startdate, enddate, date2113);
 			} else {
-				return ReportBMO.getReportFile(new ArrayList(stationMap.values()), parameters, reportname, rootpath, srDTO
+				if((enddate.after(date2113) || enddate.equals(date2113)) && (startdate.before(date2113))){
+					return ReportBMO.getReportFile(new ArrayList(stationMap.values()), parameters, reportname+"-full", rootpath, srDTO
 						.getOutputtype(), request);
+				} else if ((enddate.after(date2113) || enddate.equals(date2113)) && (!(startdate.before(date2113)))){
+					return ReportBMO.getReportFile(new ArrayList(stationMap.values()), parameters, reportname+"-post", rootpath, srDTO
+						.getOutputtype(), request);
+				} else {
+					return ReportBMO.getReportFile(new ArrayList(stationMap.values()), parameters, reportname, rootpath, srDTO
+						.getOutputtype(), request);
+				}
 			}
 			
 		} catch (Exception e) {
@@ -523,7 +589,7 @@ public class CustomReportBMO implements
 		}
 	}
 	
-	private StatReportElement createStatReportElement(StatReport_Custom_1_DTO stat, boolean dot){
+	private StatReportElement createStatReportElement(StatReport_Custom_1_DTO stat, boolean dot, Date startdate,Date enddate,Date date2113){
 		DecimalFormat df = new DecimalFormat("#.##");
 		DecimalFormat dfBoarded = new DecimalFormat("#");
 		
@@ -532,40 +598,82 @@ public class CustomReportBMO implements
 		toAdd.setE1(stat.getStationcode());
 		toAdd.setE2(stat.getLoss10());
 		toAdd.setE3(stat.getLoss12());
-		toAdd.setE4(stat.getLoss15());
+		if(startdate.before(date2113)){
+			toAdd.setE4(stat.getLoss15());
+		}
 		toAdd.setE5(stat.getLoss18());
-		toAdd.setE6(stat.getLoss23());
-		toAdd.setE7(stat.getLoss24());
+		if(startdate.before(date2113)){
+			toAdd.setE6(stat.getLoss23());
+		}
+		if(startdate.before(date2113)){
+			toAdd.setE7(stat.getLoss24());
+		}
 		toAdd.setE8(stat.getLoss25());
-		toAdd.setE9(stat.getLoss26());
-		toAdd.setE10(stat.getLoss30());
+		if(startdate.before(date2113)){
+			toAdd.setE9(stat.getLoss26());
+		}
+		if(startdate.before(date2113)){
+			toAdd.setE10(stat.getLoss30());
+		}
 		toAdd.setE11(stat.getLoss32());
 		toAdd.setE12(stat.getLoss33());
-		toAdd.setE13(stat.getLoss35());
+		if(startdate.before(date2113)){
+			toAdd.setE13(stat.getLoss35());
+		}
 		toAdd.setE14(stat.getLoss42());
 		toAdd.setE15(stat.getLoss51());
 		toAdd.setE16(stat.getLoss54());
-		toAdd.setE17(stat.getLoss56());
-		toAdd.setE18(stat.getLoss63());
-		toAdd.setE19(stat.getLoss64());
-		toAdd.setE20(stat.getLoss73());
-		toAdd.setE21(stat.getLoss74());
-		toAdd.setE22(stat.getLoss76());
-		toAdd.setE23(stat.getLoss78());
-		toAdd.setE24(stat.getLoss80());
-		toAdd.setE25(stat.getLoss81());
-		toAdd.setE26(stat.getLoss82());
-		toAdd.setE27(stat.getLoss90());
-		toAdd.setE28(new Long(stat.getTotal()).toString());
-		toAdd.setE29(dfBoarded.format(stat.getBoarded()));
-		if(dot){
-			toAdd.setE30(df.format(stat.getDOTRatio()));
-		} else {
-			toAdd.setE30(df.format(stat.getRatio501()));
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			toAdd.setE17(stat.getLoss55());
 		}
-		toAdd.setE31(df.format(stat.getGoal()));
-		toAdd.setE32(stat.getStation_region());
-		toAdd.setE33(df.format(stat.getRegion_goal()));
+		toAdd.setE18(stat.getLoss56());
+		toAdd.setE19(stat.getLoss63());
+		toAdd.setE20(stat.getLoss64());
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			toAdd.setE21(stat.getLoss65());
+		}
+		if(startdate.before(date2113)){
+			toAdd.setE22(stat.getLoss73());
+		}
+		toAdd.setE23(stat.getLoss74());
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			toAdd.setE24(stat.getLoss75());
+		}
+		toAdd.setE25(stat.getLoss76());
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			toAdd.setE26(stat.getLoss77());
+		}
+		toAdd.setE27(stat.getLoss78());
+		toAdd.setE28(stat.getLoss80());
+		if(startdate.before(date2113)){
+			toAdd.setE29(stat.getLoss81());
+		}
+		if(startdate.before(date2113)){
+			toAdd.setE30(stat.getLoss82());
+		}
+		toAdd.setE31(stat.getLoss90());
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			toAdd.setE32(stat.getLoss91());
+		}
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			toAdd.setE33(stat.getLoss92());
+		}
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			toAdd.setE34(stat.getLoss93());
+		}
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			toAdd.setE35(stat.getLoss99());
+		}
+		toAdd.setE36(new Long(stat.getTotal()).toString());
+		toAdd.setE37(dfBoarded.format(stat.getBoarded()));
+		if(dot){
+			toAdd.setE38(df.format(stat.getDOTRatio()));
+		} else {
+			toAdd.setE38(df.format(stat.getRatio501()));
+		}
+		toAdd.setE39(df.format(stat.getGoal()));
+		toAdd.setE40(stat.getStation_region());
+		toAdd.setE41(df.format(stat.getRegion_goal()));
 		return toAdd;
 	}
 	
@@ -1642,17 +1750,17 @@ public class CustomReportBMO implements
 		}
 	}*/
 
-	public String create501ExcelReport(String root, int salvageId, Agent user, List summaryList, List stationDataList, Map parameters) {
+	public String create501ExcelReport(String root, int salvageId, Agent user, List summaryList, List stationDataList, Map parameters, Date startdate, Date enddate, Date date2113) {
 
 		ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
-		String fileName = ReportingConstants.RPT_20_CUSTOM_501_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate())) + ReportingConstants.EXCEL_FILE_TYPE;
+		String fileName = ReportingConstants.RPT_20_CUSTOM_501_NAME + "_" + (new SimpleDateFormat(ReportingConstants.DATETIME_FORMAT).format(TracerDateTime.getGMTDate()))+ReportingConstants.EXCEL_FILE_TYPE;
 		String outputpath = root + ReportingConstants.REPORT_TMP_PATH + fileName;
 		JRGovernedFileVirtualizer virtualizer = new JRGovernedFileVirtualizer(100, rootpath + ReportingConstants.REPORT_TMP_PATH, 501);
 		virtualizer.setReadOnly(false);
 				
 		try {
-			JasperPrint summary = generateReportTab(summaryList, parameters, true);
-			JasperPrint stations = generateReportTab(stationDataList, parameters, false);
+			JasperPrint summary = generateReportTab(summaryList, parameters, true, startdate,enddate,date2113);
+			JasperPrint stations = generateReportTab(stationDataList, parameters, false, startdate,enddate,date2113);
 			
 			
 			ArrayList<JasperPrint> tabs = new ArrayList<JasperPrint>();
@@ -1690,9 +1798,8 @@ public class CustomReportBMO implements
 		virtualizer.cleanup();
 		return fileName;
 	}
-
 	private JasperPrint generateReportTab(List dlist, Map parameters,
-			boolean summaryTab) throws ColumnBuilderException,
+			boolean summaryTab, Date startdate, Date enddate, Date date2113) throws ColumnBuilderException,
 			ClassNotFoundException, JRException {
 		FastReportBuilder drb = new FastReportBuilder();
 		
@@ -1710,42 +1817,84 @@ public class CustomReportBMO implements
 		column.setOverridesExistingStyle(true);
 		drb.setIgnorePagination(true);
 		
-		drb.addColumn("REGION", "e32", String.class.getName(), 200, column, header);
+		drb.addColumn("REGION", "e40", String.class.getName(), 150, column, header);
 		drb.addColumn("LOCN", "e1", String.class.getName(), 50, column, header);
 		if (!summaryTab) {
 			drb.addColumn("DOM", "dot", String.class.getName(), 50, column, header);
 		}
-		drb.addColumn("10", "e2", Integer.class.getName(), 50, column, header);
-		drb.addColumn("12", "e3", Integer.class.getName(), 50, column, header);
-		drb.addColumn("15", "e4", Integer.class.getName(), 50, column, header);
-		drb.addColumn("18", "e5", Integer.class.getName(), 50, column, header);
-		drb.addColumn("23", "e6", Integer.class.getName(), 50, column, header);
-		drb.addColumn("24", "e7", Integer.class.getName(), 50, column, header);
-		drb.addColumn("25", "e8", Integer.class.getName(), 50, column, header);
-		drb.addColumn("26", "e9", Integer.class.getName(), 50, column, header);
-		drb.addColumn("30", "e10", Integer.class.getName(), 50, column, header);
-		drb.addColumn("32", "e11", Integer.class.getName(), 50, column, header);
-		drb.addColumn("33", "e12", Integer.class.getName(), 50, column, header);
-		drb.addColumn("35", "e13", Integer.class.getName(), 50, column, header);
-		drb.addColumn("42", "e14", Integer.class.getName(), 50, column, header);
-		drb.addColumn("51", "e15", Integer.class.getName(), 50, column, header);
-		drb.addColumn("54", "e16", Integer.class.getName(), 50, column, header);
-		drb.addColumn("56", "e17", Integer.class.getName(), 50, column, header);
-		drb.addColumn("63", "e18", Integer.class.getName(), 50, column, header);
-		drb.addColumn("64", "e19", Integer.class.getName(), 50, column, header);
-		drb.addColumn("73", "e20", Integer.class.getName(), 50, column, header);
-		drb.addColumn("74", "e21", Integer.class.getName(), 50, column, header);
-		drb.addColumn("76", "e22", Integer.class.getName(), 50, column, header);
-		drb.addColumn("78", "e23", Integer.class.getName(), 50, column, header);
-		drb.addColumn("80", "e24", Integer.class.getName(), 50, column, header);
-		drb.addColumn("81", "e25", Integer.class.getName(), 50, column, header);
-		drb.addColumn("82", "e26", Integer.class.getName(), 50, column, header);
-		drb.addColumn("90", "e27", Integer.class.getName(), 50, column, header);
-		drb.addColumn("TOTAL", "e28i", Integer.class.getName(), 50, column, header);
-		drb.addColumn("BOARD", "e29i", Integer.class.getName(), 50, column, header);
-		drb.addColumn("RATIO", "e30f", Float.class.getName(), 50, column, header);
-		drb.addColumn("GOALS", "e31f", Float.class.getName(), 50, column, header);
-		drb.addColumn("REGION GOALS", "e33f", Float.class.getName(), 50, column, header);
+		drb.addColumn("10", "e2", Integer.class.getName(), 25, column, header);
+		drb.addColumn("12", "e3", Integer.class.getName(), 25, column, header);
+		if(startdate.before(date2113)){
+			drb.addColumn("15", "e4", Integer.class.getName(), 25, column, header);
+		}
+		drb.addColumn("18", "e5", Integer.class.getName(), 25, column, header);
+		if(startdate.before(date2113)){
+			drb.addColumn("23", "e6", Integer.class.getName(), 25, column, header);
+		}
+		if(startdate.before(date2113)){
+			drb.addColumn("24", "e7", Integer.class.getName(), 25, column, header);
+		}
+		drb.addColumn("25", "e8", Integer.class.getName(), 25, column, header);
+		if(startdate.before(date2113)){
+			drb.addColumn("26", "e9", Integer.class.getName(), 25, column, header);
+		}
+		if(startdate.before(date2113)){
+			drb.addColumn("30", "e10", Integer.class.getName(), 25, column, header);
+		}
+		drb.addColumn("32", "e11", Integer.class.getName(), 25, column, header);
+		drb.addColumn("33", "e12", Integer.class.getName(), 25, column, header);
+		if(startdate.before(date2113)){
+			drb.addColumn("35", "e13", Integer.class.getName(), 25, column, header);
+		}
+		drb.addColumn("42", "e14", Integer.class.getName(), 25, column, header);
+		drb.addColumn("51", "e15", Integer.class.getName(), 25, column, header);
+		drb.addColumn("54", "e16", Integer.class.getName(), 25, column, header);
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			drb.addColumn("55", "e17", Integer.class.getName(), 25, column, header);
+		}
+		drb.addColumn("56", "e18", Integer.class.getName(), 25, column, header);
+		drb.addColumn("63", "e19", Integer.class.getName(), 25, column, header);
+		drb.addColumn("64", "e20", Integer.class.getName(), 25, column, header);
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			drb.addColumn("65", "e21", Integer.class.getName(), 25, column, header);
+		}
+		if(startdate.before(date2113)){
+			drb.addColumn("73", "e22", Integer.class.getName(), 25, column, header);
+		}
+		drb.addColumn("74", "e23", Integer.class.getName(), 25, column, header);
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			drb.addColumn("75", "e24", Integer.class.getName(), 25, column, header);
+		}
+		drb.addColumn("76", "e25", Integer.class.getName(), 25, column, header);
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			drb.addColumn("77", "e26", Integer.class.getName(), 25, column, header);
+		}
+		drb.addColumn("78", "e27", Integer.class.getName(), 25, column, header);
+		drb.addColumn("80", "e28", Integer.class.getName(), 25, column, header);
+		if(startdate.before(date2113)){
+			drb.addColumn("81", "e29", Integer.class.getName(), 25, column, header);
+		}
+		if(startdate.before(date2113)){
+			drb.addColumn("82", "e30", Integer.class.getName(), 25, column, header);
+		}
+		drb.addColumn("90", "e31", Integer.class.getName(), 25, column, header);
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			drb.addColumn("91", "e32", Integer.class.getName(), 25, column, header);
+		}
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			drb.addColumn("92", "e33", Integer.class.getName(), 25, column, header);
+		}
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			drb.addColumn("93", "e34", Integer.class.getName(), 25, column, header);
+		}
+		if(enddate.after(date2113) || enddate.equals(date2113)){
+			drb.addColumn("99", "e35", Integer.class.getName(), 25, column, header);
+		}
+		drb.addColumn("TOTAL", "e36i", Integer.class.getName(), 50, column, header);
+		drb.addColumn("BOARD", "e37i", Integer.class.getName(), 50, column, header);
+		drb.addColumn("RATIO", "e38f", Float.class.getName(), 50, column, header);
+		drb.addColumn("GOALS", "e39f", Float.class.getName(), 50, column, header);
+		drb.addColumn("REGION GOALS", "e41f", Float.class.getName(), 50, column, header);
 		
 		DynamicReport report = drb.build();
 		JRDataSource data = new JRBeanCollectionDataSource(dlist);

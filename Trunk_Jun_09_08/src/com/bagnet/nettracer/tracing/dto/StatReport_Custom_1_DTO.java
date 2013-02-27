@@ -42,17 +42,25 @@ public class StatReport_Custom_1_DTO {
 	private int loss42;
 	private int loss51;
 	private int loss54;
+	private int loss55;
 	private int loss56;
 	private int loss63;
 	private int loss64;
+	private int loss65;
 	private int loss73;
 	private int loss74;
+	private int loss75;
 	private int loss76;
+	private int loss77;
 	private int loss78;
 	private int loss80;
 	private int loss81;
 	private int loss82;
 	private int loss90;
+	private int loss91;
+	private int loss92;
+	private int loss93;
+	private int loss99;
 	private long total;
 	private double boarded;
 	private double ratio;
@@ -287,6 +295,18 @@ public class StatReport_Custom_1_DTO {
 		this.loss54 = loss54;
 	}
 	/**
+	 * @return Returns the loss55.
+	 */
+	public int getLoss55() {
+		return loss55;
+	}
+	/**
+	 * @param loss55 The loss55 to set.
+	 */
+	public void setLoss55(int loss55) {
+		this.loss55 = loss55;
+	}
+	/**
 	 * @return Returns the loss56.
 	 */
 	public int getLoss56() {
@@ -323,6 +343,18 @@ public class StatReport_Custom_1_DTO {
 		this.loss64 = loss64;
 	}
 	/**
+	 * @return Returns the loss65.
+	 */
+	public int getLoss65() {
+		return loss65;
+	}
+	/**
+	 * @param loss65 The loss65 to set.
+	 */
+	public void setLoss65(int loss65) {
+		this.loss65 = loss65;
+	}
+	/**
 	 * @return Returns the loss73.
 	 */
 	public int getLoss73() {
@@ -347,6 +379,18 @@ public class StatReport_Custom_1_DTO {
 		this.loss74 = loss74;
 	}
 	/**
+	 * @return Returns the loss75.
+	 */
+	public int getLoss75() {
+		return loss75;
+	}
+	/**
+	 * @param loss75 The loss75 to set.
+	 */
+	public void setLoss75(int loss75) {
+		this.loss75 = loss75;
+	}
+	/**
 	 * @return Returns the loss76.
 	 */
 	public int getLoss76() {
@@ -357,6 +401,18 @@ public class StatReport_Custom_1_DTO {
 	 */
 	public void setLoss76(int loss76) {
 		this.loss76 = loss76;
+	}
+	/**
+	 * @return Returns the loss77.
+	 */
+	public int getLoss77() {
+		return loss77;
+	}
+	/**
+	 * @param loss77 The loss77 to set.
+	 */
+	public void setLoss77(int loss77) {
+		this.loss77 = loss77;
 	}
 	/**
 	 * @return Returns the loss78.
@@ -419,6 +475,54 @@ public class StatReport_Custom_1_DTO {
 		this.loss90 = loss90;
 	}
 	/**
+	 * @return Returns the loss91.
+	 */
+	public int getLoss91() {
+		return loss91;
+	}
+	/**
+	 * @param loss91 The loss91 to set.
+	 */
+	public void setLoss91(int loss91) {
+		this.loss91 = loss91;
+	}
+	/**
+	 * @return Returns the loss92.
+	 */
+	public int getLoss92() {
+		return loss92;
+	}
+	/**
+	 * @param loss92 The loss92 to set.
+	 */
+	public void setLoss92(int loss92) {
+		this.loss92 = loss92;
+	}
+	/**
+	 * @return Returns the loss93.
+	 */
+	public int getLoss93() {
+		return loss93;
+	}
+	/**
+	 * @param loss93 The loss93 to set.
+	 */
+	public void setLoss93(int loss93) {
+		this.loss93 = loss93;
+	}
+	/**
+	 * @return Returns the loss99.
+	 */
+	public int getLoss99() {
+		return loss99;
+	}
+	/**
+	 * @param loss99 The loss99 to set.
+	 */
+	public void setLoss99(int loss99) {
+		this.loss99 = loss99;
+	}
+	/**
 	 * @return Returns the ratio.
 	 * (total claim - passenger convenience) / boarded (1000)
 	 */
@@ -447,7 +551,7 @@ public class StatReport_Custom_1_DTO {
 	 */
 	public double getRatio501() {
 		if (boarded > 0) {
-			return Double.parseDouble(TracerUtils.format((getTotal() - getLoss81()) * 1000 / boarded,"%"));
+			return Double.parseDouble(TracerUtils.format((getTotal() - getLoss81() - getLoss91()- getLoss92()- getLoss93()) * 1000 / boarded,"%"));
 		} else {
 			return 0;
 		}
@@ -477,8 +581,8 @@ public class StatReport_Custom_1_DTO {
 	public long getTotal() {
 		return loss10 + loss12 + loss15 + loss18 + loss23 + loss24 + loss25
 				+ loss26 + loss30 + loss32 + loss33 + loss35 + loss42 + loss51
-				+ loss54 + loss56 + loss63 + loss64 + loss73 + loss74 + loss76
-				+ loss78 + loss80 + loss81 + loss82 + loss90;
+				+ loss54 + loss55 + loss56 + loss63 + loss64 + loss65 + loss73 + loss74 +  loss75 + loss76
+				+ loss77 + loss78 + loss80 + loss81 + loss82 + loss90 + loss91 + loss92 + loss93 + loss99;
 	}
 	/**
 	 * @param total The total to set.

@@ -596,18 +596,18 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			Style header = setupHeader(drb);
 
 			if (stationCode == null || stationCode.length() == 0) {
-				drb.addColumn(resources.getString("custom.report.column.bso"), "column1", String.class.getName(), 200, header, header);
-				drb.addColumn(resources.getString("custom.report.column.carseat"), "column2", String.class.getName(), 200, header, header);
-				drb.addColumn(resources.getString("custom.report.column.booster"), "column3", String.class.getName(), 200, header, header);
-				drb.addColumn(resources.getString("custom.report.column.none"), "column4", String.class.getName(), 200, header, header);
+				drb.addColumn(resources.getString("custom.report.column.bso"), "column1", String.class.getName(), 100, header, header);
+				drb.addColumn(resources.getString("custom.report.column.carseat"), "column2", String.class.getName(), 100, header, header);
+				drb.addColumn(resources.getString("custom.report.column.booster"), "column3", String.class.getName(), 100, header, header);
+				drb.addColumn(resources.getString("custom.report.column.none"), "column4", String.class.getName(), 100, header, header);
 			} else {
 
-				drb.addColumn(resources.getString("custom.report.column.datecreated"), "column1", String.class.getName(), 200, header, header);
-				drb.addColumn(resources.getString("custom.report.column.station"), "column2", String.class.getName(), 200, header, header);
-				drb.addColumn(resources.getString("custom.report.column.incident.id"), "column3", String.class.getName(), 200, header, header);
-				drb.addColumn(resources.getString("custom.report.column.carseat"), "column4", String.class.getName(), 200, header, header);
-				drb.addColumn(resources.getString("custom.report.column.booster"), "column5", String.class.getName(), 200, header, header);
-				drb.addColumn(resources.getString("custom.report.column.none"), "column6", String.class.getName(), 200, header, header);
+				drb.addColumn(resources.getString("custom.report.column.datecreated"), "column1", String.class.getName(), 100, header, header);
+				drb.addColumn(resources.getString("custom.report.column.station"), "column2", String.class.getName(), 50, header, header);
+				drb.addColumn(resources.getString("custom.report.column.incident.id"), "column3", String.class.getName(), 150, header, header);
+				drb.addColumn(resources.getString("custom.report.column.carseat"), "column4", String.class.getName(), 100, header, header);
+				drb.addColumn(resources.getString("custom.report.column.booster"), "column5", String.class.getName(), 100, header, header);
+				drb.addColumn(resources.getString("custom.report.column.none"), "column6", String.class.getName(), 100, header, header);
 			}
 			
 			generateDynamicReport(reportData, parameters, outputpath, drb);

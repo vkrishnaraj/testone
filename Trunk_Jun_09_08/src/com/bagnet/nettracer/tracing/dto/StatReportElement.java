@@ -34,6 +34,14 @@ public class StatReportElement {
 	Object e31;	
 	Object e32;	
 	Object e33;
+	Object e34;
+	Object e35;
+	Object e36;
+	Object e37;
+	Object e38;
+	Object e39;
+	Object e40;
+	Object e41;
 	Object dot;
 	
 	public Object getE1() {
@@ -234,6 +242,54 @@ public class StatReportElement {
 	public void setE33(Object e33) {
 		this.e33 = e33;
 	}	
+	public Object getE34() {
+		return e34;
+	}
+	public void setE34(Object e34) {
+		this.e34 = e34;
+	}	
+	public Object getE35() {
+		return e35;
+	}
+	public void setE35(Object e35) {
+		this.e35 = e35;
+	}	
+	public Object getE36() {
+		return e36;
+	}
+	public void setE36(Object e36) {
+		this.e36 = e36;
+	}	
+	public Object getE37() {
+		return e37;
+	}
+	public void setE37(Object e37) {
+		this.e37 = e37;
+	}	
+	public Object getE38() {
+		return e38;
+	}
+	public void setE38(Object e38) {
+		this.e38 = e38;
+	}	
+	public Object getE39() {
+		return e39;
+	}
+	public void setE39(Object e39) {
+		this.e39 = e39;
+	}	
+	public Object getE40() {
+		return e40;
+	}
+	public void setE40(Object e40) {
+		this.e40 = e40;
+	}	
+	public Object getE41() {
+		return e41;
+	}
+	public void setE41(Object e41) {
+		this.e41 = e41;
+	}	
 
 	
 	public Object getDot() {
@@ -243,24 +299,24 @@ public class StatReportElement {
 		this.dot = dot;
 	}
 	
-	public Integer getE28i() {
-		return Integer.valueOf((String)e28);
+	public Integer getE36i() {
+		return Integer.valueOf((String)e36);
 	}
 	
-	public Integer getE29i() {
-		return Integer.valueOf((String)e29);
+	public Integer getE37i() {
+		return Integer.valueOf((String)e37);
 	}
 
-	public Float getE30f() {
-		return Float.valueOf((String)e30);
+	public Float getE38f() {
+		return Float.valueOf((String)e38);
 	}
 	
-	public Float getE31f() {
-		return Float.valueOf((String)e31);
+	public Float getE39f() {
+		return Float.valueOf((String)e39);
 	}
 	
-	public Float getE33f() {
-		return Float.valueOf((String)e33);
+	public Float getE41f() {
+		return Float.valueOf((String)e41);
 	}
 	
 }
