@@ -177,7 +177,7 @@
 		                <% if(a.getCompanycode_ID().equals(TracingConstants.LF_LF_COMPANY_ID)&&(a.getSubcompany()==null)){ %>
 		                <td nowrap colspan=1>
 			                <bean:message key="colname.agent.name" /><br/>
-			                <html:text name="searchLostFoundForm" property="agentName" size="20" maxlength="20" styleClass="textfield" />
+			                <html:text name="searchLostFoundForm" property="agentName" size="15" maxlength="20" styleClass="textfield" />
 			               
 		                </td>
 		                <%} %>
@@ -200,22 +200,22 @@
            				<td>
 			              <bean:message key="colname.last_name.req" />
 			              <br>
-			              <html:text name="searchLostFoundForm" property="lastName" size="20" maxlength="20" styleClass="textfield" />
+			              <html:text name="searchLostFoundForm" property="lastName" size="15" maxlength="20" styleClass="textfield" />
 			            </td>
 			            <td>
 			              <bean:message key="colname.first_name.req" />
 			              <br>
-			              <html:text name="searchLostFoundForm" property="firstName" size="20" maxlength="20" styleClass="textfield" />
+			              <html:text name="searchLostFoundForm" property="firstName" size="15" maxlength="20" styleClass="textfield" />
 			            </td>
 			            <td>
 		              		<bean:message key="colname.lf.phone.number" />
 		              		<br/>
 		              		<html:text name="searchLostFoundForm" property="phoneNumber" size="15" maxlength="25" styleClass="textfield" />
 		              	</td>
-		              	<td colspan=2>
+		              	<td>
 		              		<bean:message key="colname.lf.email" />
 		              		<br />
-		              		<html:text name="searchLostFoundForm" property="email" size="30" maxlength="100" styleClass="textfield" />
+		              		<html:text name="searchLostFoundForm" property="email" size="20" maxlength="100" styleClass="textfield" />
 		              	</td>
            			</tr>
            			<tr>
@@ -243,7 +243,7 @@
            					<br>
            					<html:text name="searchLostFoundForm" property="brand" size="15" maxlength="30" styleClass="textfield" />
            				</td>
-           				<td colspan=2>
+           				<td >
            					<bean:message key="colname.lf.description" />
          					<br>
 		              		<html:text name="searchLostFoundForm" property="itemDescription" size="25" maxlength="100" styleClass="textfield" />
@@ -255,9 +255,11 @@
 			              <br>
 			              <html:text name="searchLostFoundForm" property="serialNumber" size="20" maxlength="20" styleClass="textfield" />
 			            </td>
+			            <td colspan=3>
+			            </td>
 			        </tr>
            			<tr>
-           				<td colspan=5>
+           				<td colspan=4>
            					<center>
 			              		<html:submit property="search" styleId="button" >
 			              			<bean:message key="button.retrieve" />

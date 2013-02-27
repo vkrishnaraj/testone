@@ -343,7 +343,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			try {
 				String ag = dto.getAgentName();
 				if(ag != null){
-					sql += " and o.agent.username = \'" + ag + "\'";
+					sql += " and o.agent.username like \'" + ag + "\'"; //= \'" + ag + "\'";
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
