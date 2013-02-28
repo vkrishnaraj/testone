@@ -317,7 +317,7 @@
 	    	org.apache.commons.logging,
 	    	org.apache.xerces,
 	    	javax.persistence.api,
-	    	com.healthmarketscience.rmiio,
+	    	com.rmiio,
 	    	org.jboss.remote-naming,
 	    	org.javassist,
 	    	org.dozer,
