@@ -189,7 +189,7 @@
 						<t:outputText value="#{msg.lostform_label_address_postal}" />
 					</td></tr>
 					<tr><td colspan="2">
-						<t:inputText value="#{lostAndFound.lostReport.contact.address.city}" maxlength="511"  style="width: 95%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.city}" maxlength="255"  style="width: 95%" />
 					</td><td colspan="2">
 						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.state}" onchange="adjustAddressReqState(this);"
 				       		style="width: 95%" id="state">
