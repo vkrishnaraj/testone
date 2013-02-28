@@ -424,7 +424,9 @@
 	    		org.jboss.iiop-client,
 	    		org.jboss.remoting3,
 	    		org.jboss.remoting3.remoting-jmx,
-	    		org.infinispan"/>
+	    		org.infinispan,
+	    		org.jboss.xnio,
+	    		org.jboss.xnio.nio"/>
 	    </manifest>
 		
 		<war manifest="${build.dir}/${ant_project_name}/META-INF/MANIFEST.MF" destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
