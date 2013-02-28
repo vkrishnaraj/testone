@@ -3663,7 +3663,9 @@ public class ReportBMO {
 
 				sr.setDate_incident_created((java.sql.Date) row[0]);
 				sr.setDate_created(new java.sql.Date(((Date) row[1]).getTime()));
-				sr.setDate_resolved(new java.sql.Date(((Date) row[2]).getTime()));
+				if(row[2]!=null){
+					sr.setDate_resolved(new java.sql.Date(((Date) row[2]).getTime()));
+				}
 				sr.setIncident_id((String)row[3]);
 				sr.setStatus((Integer)row[4]);
 				sr.setStatusDesc(TracerUtils.getText(
