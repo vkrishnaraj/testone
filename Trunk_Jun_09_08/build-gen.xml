@@ -287,6 +287,8 @@
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" includes="**/*.jsp" />
 		</replaceregexp>
 		
+		<mkdir dir="${build.dir}/${ant_project_name}/META-INF" />
+		
 	    <manifest file="${build.dir}/${ant_project_name}/META-INF/MANIFEST.MF">
 	    	<attribute name="Dependencies" value="
 	    		org.hibernate,
