@@ -287,39 +287,80 @@
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" includes="**/*.jsp" />
 		</replaceregexp>
 		
-		
+	    <manifest file="${build.dir}/${ant_project_name}/META-INF/MANIFEST.MF">
+	    	<attribute name="Dependencies" value="
+	    		org.hibernate,
+	    		org.antlr,
+	    		org.apache.commons.logging,
+	    		org.apache.xerces,
+	    		javax.persistence.api,
+	    		org.apache.axis2,
+	    		org.apache.xmlbeans,
+	    		org.apache.axiom,
+	    		com.bagnet.nettracer.ws.pax-view,
+	    		com.bagnet.nettracer.ws.reservation,
+				com.bagnet.nettracer.ws.fraud,
+	    		com.bagnet.nettracer.ws.scannerMBR,
+	    		com.rmiio,
+	    		net.sf.jasperreports,
+	    		com.lowagie,
+	    		jxl,
+	    		com.c3p0,
+	    		org.jboss.ejb3,
+	    		org.jboss.ejb-client,
+	    		org.jboss.remote-naming,
+	    		org.jboss.iiop-client,
+	    		org.jboss.remoting3,
+	    		org.jboss.remoting3.remoting-jmx,
+	    		org.infinispan"/>
+	    </manifest>
 
-		<war destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
+		<war manifest="${build.dir}/${ant_project_name}/META-INF/MANIFEST.MF" destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" />
 			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
 			<lib dir="${lib.jar.dir}">
 				<exclude name="log4j*.*" />
-				<exclude name="servlet.jar" />
+
 				<exclude name="netty.jar" />
-				<exclude name="mysql-connector-java*.jar" />
+				<!--<exclude name="mysql-connector-java*.jar" />-->
 				<exclude name="c3p0*.jar" />
 				<exclude name="hibernate*.jar" />
 				<exclude name="ReservationService*.jar" />
 				<exclude name="ScannerMbrQueryService.jar" />
-				<exclude name="SimpleService.jar" />
+				<exclude name="FraudService.jar" />
 				<exclude name="axis2*.jar" />
 				<exclude name="jxl*.jar" />
 				<exclude name="iText*.jar" />
-				<exclude name="commons*.jar" />
+				<!--<exclude name="spring*RELEASE.jar" />-->
+				<!--<exclude name="commons-beanutils-1.7.0.jar" />
+				<exclude name="commons-codec-1.3.jar" />-->
+				<!--<exclude name="commons-collections-3.1.jar" />-->
+				<!--<exclude name="commons-digester-1.7.jar" />-->
+				<!--<exclude name="commons-discovery.jar" />
+				<exclude name="commons-fileupload-1.2.1.jar" />
+				<exclude name="commons-httpclient-3.1.jar" />
+				<exclude name="commons-io-1.3.2.jar" />
+				<exclude name="commons-javaflow-20060411.jar" />
+				<exclude name="commons-lang-2.3.jar" />
+				<exclude name="commons-logging-1.1.1.jar" />
+				<exclude name="commons-pool-1.4.jar" />
+				<exclude name="commons-resources.jar" />-->
+				<!--<exclude name="commons-validator-1.3.1.jar" />-->
+				
 				<exclude name="dsi.jar" />
 				<exclude name="delivery*.jar" />
 				<exclude name="cglib*.*" />
 				<exclude name="asm*.*" />
-				<exclude name="jasper*.*" />
+				<!--<exclude name="jasper*.*" />-->
 				<exclude name="jfree*.*" />
 				<exclude name="poi*.*" />
 				<exclude name="JetBlue*.*" />
 				<exclude name="sqljdbc*.*" />
-				<exclude name="struts*.*" />
+
 				<exclude name="PaxView*.*" />
 				<exclude name="ehcache*.*" />
 				<exclude name="us-crm*.*" />
-				<exclude name="Dynamic*.*" />
+				<!--<exclude name="Dynamic*.*" />-->
 				<exclude name="hornetq*.*" />
 				<exclude name="axiom*.*" />
 				<exclude name="libphone*.*" />
@@ -330,6 +371,8 @@
 				<exclude name="httpcore*.*" />
 				<exclude name="htmlparser*.*" />
 				<exclude name="woden*.*" />
+				<exclude name="us-*.jar" />
+				<exclude name="navitaire*.jar" />
 			</lib>
 		</war>
 	</target>
