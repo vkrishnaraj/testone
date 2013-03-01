@@ -654,7 +654,7 @@ public class IncidentBMO {
 	 * @param tagNumber
 	 * @return
 	 */
-	public static List<Incident> queryLDIncidentsForTagTrace(String tagNumber, boolean convert) {
+	public static List<Incident> queryLDIncidentsForTagTrace(String tagNumber) {
 
 		if (tagNumber == null || tagNumber.trim().length() == 0) {
 			return null;
@@ -680,7 +680,7 @@ public class IncidentBMO {
 				// Ignore
 			}
 			
-			if(convert){
+			if(PropertyBMO.getObject(PropertyBMO.CONVERT_BAGTAG).equals("1")){
 				try {
 					basicTag = LookupAirlineCodes.getTwoCharacterBagTag(tagNumber);
 				} catch (BagtagException e) {

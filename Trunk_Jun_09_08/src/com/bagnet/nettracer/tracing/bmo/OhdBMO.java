@@ -1697,7 +1697,7 @@ public class OhdBMO {
 	 * @param tagNumber
 	 * @return
 	 */
-	public static List<OHD> queryOhdsForTagTrace(String tagNumber, boolean convert) {
+	public static List<OHD> queryOhdsForTagTrace(String tagNumber) {
 
 		if (tagNumber == null || tagNumber.trim().length() == 0) {
 			return null;
@@ -1722,7 +1722,7 @@ public class OhdBMO {
 				// Ignore
 			}
 			
-			if(convert){
+			if(PropertyBMO.getObject(PropertyBMO.CONVERT_BAGTAG).equals("1")){
 				try {
 					basicTag = LookupAirlineCodes.getTwoCharacterBagTag(tagNumber);
 				} catch (BagtagException e) {

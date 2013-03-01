@@ -97,7 +97,6 @@ public final class IncidentForm extends ValidatorForm {
 	private boolean locked = false;	//for dispute resolution process
 	private boolean codelocked = false;	//for dispute resolution process
 	private boolean stationlocked = false;	//for dispute resolution process
-	private boolean convertBagTag =false; //for prepopulation
 	
 	private String teletypeAddress; //for the big Teletype String for historical reporting
 	private long oc_claim_id;
@@ -152,12 +151,6 @@ public final class IncidentForm extends ValidatorForm {
 	}
 	public void setStationLocked(boolean locked) {
 		this.stationlocked = locked;
-	}
-	public boolean isConvertBagTag() {
-		return convertBagTag;
-	}
-	public void setConvertBagTag(boolean convertBagTag) {
-		this.convertBagTag = convertBagTag;
 	}
 	public String getResolutionRemarks() {
 		return resolutionRemarks;

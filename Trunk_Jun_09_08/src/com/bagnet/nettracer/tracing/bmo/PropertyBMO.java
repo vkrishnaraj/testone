@@ -70,6 +70,8 @@ public class PropertyBMO {
 
 	public static final String CRM_INTEGRATION_ENDPOINT = "crm.integration.endpoint";
 	public static final String US_CRM_COUNTRY_MAP = "us.crm.country.map";
+	
+	public static final String CONVERT_BAGTAG = "convert.bagtag";
 
 	public static final String CUSTOM_DELAY_RECEIPT_FILES = "custom.delay.receipt.files";
 	public static final String CUSTOM_DAMAGE_RECEIPT_FILES = "custom.damage.receipt.files";
