@@ -29,7 +29,10 @@ public class ConnectionUtil {
 
 	static public Context getInitialContext() throws NamingException {
 		Hashtable p = new Hashtable();
-		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+		p.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+//		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+		p.put(Context.PROVIDER_URL, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVER_LOCATION));
+//		p.put("jboss.naming.client.ejb.context", "true");
 		return new InitialContext(p);
 
 	}
