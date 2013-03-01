@@ -199,8 +199,8 @@ public class LostDelayAction extends CheckedAction {
 
 		if (request.getParameter("prepopSearch") != null) {
 			
-			List prepopIncList = IncidentBMO.queryLDIncidentsForTagTrace(theform.getBagTagNumber());
-			List prepopOhdList = OhdBMO.queryOhdsForTagTrace(theform.getBagTagNumber());
+			List prepopIncList = IncidentBMO.queryLDIncidentsForTagTrace(theform.getBagTagNumber(), theform.isConvertBagTag());
+			List prepopOhdList = OhdBMO.queryOhdsForTagTrace(theform.getBagTagNumber(), theform.isConvertBagTag());
 			
 			if (prepopIncList != null) {
 				request.setAttribute("prepopIncList", prepopIncList);
