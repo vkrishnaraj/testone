@@ -15,6 +15,11 @@ public class SubCompanyForm extends ValidatorForm {
 	private String companyCode;
 	private String subCompSearchName;
 
+	private String currpage;
+	private String nextpage;
+	private String prevpage;
+	private String pagination;
+	
 	private String name;
 	private String email_Subject;
 	private String email_Path;
@@ -38,6 +43,38 @@ public class SubCompanyForm extends ValidatorForm {
 
 	public void setSubcompanyCode(String subcompanyCode) {
 		this.subcompanyCode = subcompanyCode;
+	}
+
+	public String getCurrpage() {
+		return currpage;
+	}
+	
+	public void setCurrpage(String currpage) {
+		this.currpage = currpage;
+	}
+	
+	public String getNextpage() {
+		return nextpage;
+	}
+	
+	public void setNextpage(String nextpage) {
+		this.nextpage = nextpage;
+	}
+	
+	public String getPrevpage() {
+		return prevpage;
+	}
+	
+	public void setPrevpage(String prevpage) {
+		this.prevpage = prevpage;
+	}
+	
+	public String getPagination() {
+		return pagination;
+	}
+	
+	public void setPagination(String pagination) {
+		this.pagination = pagination;
 	}
 
 	public void setSubCompSearchName(String subCompSearchName) {
