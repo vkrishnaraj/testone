@@ -27,9 +27,11 @@ import aero.nettracer.serviceprovider.ws_1_0.res.sabre.Reservation;
 public class ServiceUtilities {
 
 	private static Logger logger = Logger.getLogger(ServiceUtilities.class);
+	private static Logger log = Logger.getLogger("authentication");
 	
 	public static User getAndAuthorizeUser(String username, String password,
 			PermissionType permissionType) throws UserNotAuthorizedException {
+		log.info("Authorizing User: "+username+" for permission type: "+permissionType.toString());
 		Session sess = HibernateWrapper.getSession().openSession();
 		User user = null;
 		try {
@@ -39,8 +41,12 @@ public class ServiceUtilities {
 		} finally {
 			sess.close();
 		}
-		if (!authorize(user, permissionType))
+		if (!authorize(user, permissionType)){
 			throw new UserNotAuthorizedException();
+			log.info("User: "+username+" for permission type: "+permissionType.toString()+" Authorization successful!");
+		} else {
+			log.info("User: "+username+" for permission type: "+permissionType.toString()+" Authorization failed!");
+		}
 		return user;
 	}
 
