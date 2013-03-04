@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.utils.ntfs;
 
 import java.util.Hashtable;
+import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -8,6 +9,11 @@ import javax.naming.NamingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.jboss.ejb.client.ContextSelector;
+import org.jboss.ejb.client.EJBClientConfiguration;
+import org.jboss.ejb.client.EJBClientContext;
+import org.jboss.ejb.client.PropertiesBasedEJBClientConfiguration;
+import org.jboss.ejb.client.remoting.ConfigBasedEJBClientContextSelector;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsIncident;
@@ -28,11 +34,22 @@ public class ConnectionUtil {
 	private final static long DEFAULT_TIMEOUT = 1000;
 
 	static public Context getInitialContext() throws NamingException {
-		Hashtable p = new Hashtable();
+		Properties props = new Properties();
+	    props.put("endpoint.name","endpoint");
+	    props.put("remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED","false");
+	    props.put("remote.connections","default");
+	    props.put("remote.connection.default.host","10.41.103.66");
+	    props.put("remote.connection.default.port","4747");
+	    props.put("remote.connection.default.connect.options.org.xnio.Options.SASL_POLICY_NOANONYMOUS","false");
+	    EJBClientConfiguration ejbClientConfiguration = new PropertiesBasedEJBClientConfiguration(props);
+	    ContextSelector<EJBClientContext> ejbClientContextSelector = new ConfigBasedEJBClientContextSelector(ejbClientConfiguration);
+	    EJBClientContext.setSelector(ejbClientContextSelector);
+	 
+	    Properties p = new Properties();
 		p.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
 //		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		p.put(Context.PROVIDER_URL, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVER_LOCATION));
-		p.put("jboss.naming.client.ejb.context", "true");
+//		p.put("jboss.naming.client.ejb.context", "true");
 		p.put(Context.SECURITY_PRINCIPAL, "hudson");
 		p.put(Context.SECURITY_CREDENTIALS, "nettracer");
 		return new InitialContext(p);
