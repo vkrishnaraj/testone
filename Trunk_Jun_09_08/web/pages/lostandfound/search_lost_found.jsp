@@ -140,7 +140,7 @@
              			</td>
              			
 						<td>
-							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
+							<bean:message key="colname.lf.company" />
 							<br/>
          					<html:select name="searchLostFoundForm" property="companyId" styleClass="dropdown" styleId="companyId" onchange="getStations();">
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
