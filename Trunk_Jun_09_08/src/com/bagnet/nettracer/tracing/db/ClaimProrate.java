@@ -169,7 +169,7 @@ public class ClaimProrate implements Serializable {
 	/**
 	 * @return Returns the all_prorate.
 	 * 
-	 * @hibernate.property type="byte"
+	 * @hibernate.property type="integer"
 	 */
 	public int getAll_prorate() {
 		return all_prorate;
@@ -203,7 +203,7 @@ public class ClaimProrate implements Serializable {
 	/**
 	 * @return Returns the claim_attached.
 	 * 
-	 * @hibernate.property type="byte"
+	 * @hibernate.property type="integer"
 	 */
 	public int getClaim_attached() {
 		return claim_attached;
@@ -241,7 +241,7 @@ public class ClaimProrate implements Serializable {
 	/**
 	 * @return Returns the clearing_bill.
 	 * 
-	 * @hibernate.property type="byte"
+	 * @hibernate.property type="integer"
 	 */
 	public int getClearing_bill() {
 		return clearing_bill;
@@ -275,7 +275,7 @@ public class ClaimProrate implements Serializable {
 	/**
 	 * @return Returns the confirmpayment_attached.
 	 * 
-	 * @hibernate.property type="byte"
+	 * @hibernate.property type="integer"
 	 */
 	public int getConfirmpayment_attached() {
 		return confirmpayment_attached;
@@ -360,7 +360,7 @@ public class ClaimProrate implements Serializable {
 	/**
 	 * @return Returns the pir_attached.
 	 * 
-	 * @hibernate.property type="byte"
+	 * @hibernate.property type="integer"
 	 */
 	public int getPir_attached() {
 		return pir_attached;
@@ -394,7 +394,7 @@ public class ClaimProrate implements Serializable {
 	/**
 	 * @return Returns the remit.
 	 * 
-	 * @hibernate.property type="byte"
+	 * @hibernate.property type="integer"
 	 */
 	public int getRemit() {
 		return remit;
