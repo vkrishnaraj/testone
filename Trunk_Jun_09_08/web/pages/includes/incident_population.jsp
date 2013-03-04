@@ -18,13 +18,12 @@
           <tr>
             <td width="25%"><bean:message key="colname.bag_tag_number" />:</td>
             <td><html:text property="bagTagNumber" size="15" maxlength="10" styleClass="textfield"/>
-            	<html:checkbox property="convertBagTag"></html:checkbox>
+            	
               <% if (TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.RESERVATION_POPULATION_SEARCH) && request.getAttribute("lostdelay") != null) { %>
                 &nbsp;<html:submit property="prepopSearch" styleId="button" onclick="buttonSelected = 'prepopSearch'">
                   <bean:message key="button.prepopulate.search" />
                 </html:submit>
               <% } %>
-            
             </td>
           </tr>
         <% } %>
