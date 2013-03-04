@@ -87,7 +87,7 @@ public class UserPermissions {
 									.getComponent_action_link());
 						}
 						*/
-						SystemComponent sc = (SystemComponent) j.next();
+						SystemComponent sc = (SystemComponent) ((Object[]) j.next())[0];
 						if (sc.getDisplay() != 0) {
 							childMap.put(sc.getComponent_Name(), sc.getComponent_action_link());
 						}
@@ -108,7 +108,7 @@ public class UserPermissions {
 									.getComponent_action_link());
 						}
 						*/
-						SystemComponent sc = (SystemComponent) j.next();
+						SystemComponent sc = (SystemComponent) ((Object[]) j.next())[0];
 						if (sc.getDisplay() != 0) {
 							childMap.put(sc.getComponent_Name(), sc.getComponent_action_link());
 						}
@@ -184,7 +184,7 @@ public class UserPermissions {
 
 			StringBuffer sql = new StringBuffer(1024);
 			sql
-					.append("select distinct policy.component from com.bagnet.nettracer.tracing.db.GroupComponentPolicy policy ");
+					.append("select distinct policy.component, policy.component.sort_group, policy.component.sort_order from com.bagnet.nettracer.tracing.db.GroupComponentPolicy policy ");
 			sql.append(" where 1=1 ");
 
 			sql.append(" and policy.component.component_ID != policy.component.parent.component_ID");
