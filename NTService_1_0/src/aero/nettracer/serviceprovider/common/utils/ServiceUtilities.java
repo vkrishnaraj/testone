@@ -42,8 +42,8 @@ public class ServiceUtilities {
 			sess.close();
 		}
 		if (!authorize(user, permissionType)){
-			throw new UserNotAuthorizedException();
 			log.info("User: "+username+" for permission type: "+permissionType.toString()+" Authorization successful!");
+			throw new UserNotAuthorizedException();
 		} else {
 			log.info("User: "+username+" for permission type: "+permissionType.toString()+" Authorization failed!");
 		}
