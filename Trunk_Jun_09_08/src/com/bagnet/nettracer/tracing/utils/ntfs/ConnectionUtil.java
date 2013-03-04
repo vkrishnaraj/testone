@@ -34,24 +34,24 @@ public class ConnectionUtil {
 	private final static long DEFAULT_TIMEOUT = 1000;
 
 	static public Context getInitialContext() throws NamingException {
-		Properties props = new Properties();
-	    props.put("endpoint.name","endpoint");
-	    props.put("remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED","false");
-	    props.put("remote.connections","default");
-	    props.put("remote.connection.default.host","10.41.103.66");
-	    props.put("remote.connection.default.port","4747");
-	    props.put("remote.connection.default.connect.options.org.xnio.Options.SASL_POLICY_NOANONYMOUS","false");
-	    EJBClientConfiguration ejbClientConfiguration = new PropertiesBasedEJBClientConfiguration(props);
-	    ContextSelector<EJBClientContext> ejbClientContextSelector = new ConfigBasedEJBClientContextSelector(ejbClientConfiguration);
-	    EJBClientContext.setSelector(ejbClientContextSelector);
+//		Properties props = new Properties();
+//	    props.put("endpoint.name","endpoint");
+//	    props.put("remote.connectionprovider.create.options.org.xnio.Options.SSL_ENABLED","false");
+//	    props.put("remote.connections","default");
+//	    props.put("remote.connection.default.host","10.41.103.66");
+//	    props.put("remote.connection.default.port","4747");
+//	    props.put("remote.connection.default.connect.options.org.xnio.Options.SASL_POLICY_NOANONYMOUS","false");
+//	    EJBClientConfiguration ejbClientConfiguration = new PropertiesBasedEJBClientConfiguration(props);
+//	    ContextSelector<EJBClientContext> ejbClientContextSelector = new ConfigBasedEJBClientContextSelector(ejbClientConfiguration);
+//	    EJBClientContext.setSelector(ejbClientContextSelector);
 	 
 	    Properties p = new Properties();
-		p.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
-//		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
-		p.put(Context.PROVIDER_URL, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVER_LOCATION));
+//		p.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
+//		p.put(Context.PROVIDER_URL, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVER_LOCATION));
 //		p.put("jboss.naming.client.ejb.context", "true");
-		p.put(Context.SECURITY_PRINCIPAL, "hudson");
-		p.put(Context.SECURITY_CREDENTIALS, "nettracer");
+//		p.put(Context.SECURITY_PRINCIPAL, "hudson");
+//		p.put(Context.SECURITY_CREDENTIALS, "nettracer");
 		return new InitialContext(p);
 
 	}
