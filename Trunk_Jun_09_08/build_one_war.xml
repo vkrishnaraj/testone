@@ -516,8 +516,8 @@
 		</copy> 
 		
 		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/${app.xml.location}/application.xml">
+			<metainf dir="${basedir}/metadata/META-INF" includes="*.xml" />
 			<fileset dir="${build.dir}/dist/web" includes="${avis.service.includes}"/>
-
 		</ear>
 		
 		<copy todir="${app.home.jb7}\standalone\deployments">
@@ -843,6 +843,16 @@
 		<antcall target="build-war-hudson-canadiannorth"/>
 		<antcall target="build-war-hudson-flyafrica"/>
 		<property name="app.xml.location" value="metadata/hudson/hosted2" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-hudson-american" depends="delete-wars">
+		<property name="staging.project" value="hosted" />
+		<property name="staging.env" value="hudson" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="hibernate_generate" />		
+		<antcall target="build-war-hudson-american"/>
+		<property name="app.xml.location" value="metadata/american-fs/hudson" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 	

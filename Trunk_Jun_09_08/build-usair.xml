@@ -27,6 +27,9 @@
 		<include name="**/**/*.hbm.xml" />
 	</patternset>
 	<path id="project.classpath">
+		<fileset dir="${app.home.jb7}\bin\client">
+			<patternset refid="jar.files" />
+		</fileset>
 		<fileset dir="${lib.build-client.dir}">
 			<patternset refid="jar.files" />
 		</fileset>
@@ -37,9 +40,6 @@
 			<patternset refid="jar.files" />
 		</fileset>
 		<fileset dir="${basedir}/lib/client-us">
-			<patternset refid="jar.files" />
-		</fileset>
-		<fileset dir="${app.home.jb7}\bin\client">
 			<patternset refid="jar.files" />
 		</fileset>
 	</path>
@@ -482,6 +482,7 @@
 		
 		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/${app.xml.location}/application.xml">
 			<fileset dir="${build.dir}/dist/web" includes="*.war"/>
+			<metainf dir="${basedir}/metadata/META-INF" />
 
 		</ear>
 		
