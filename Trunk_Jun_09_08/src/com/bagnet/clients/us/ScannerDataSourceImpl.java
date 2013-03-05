@@ -399,14 +399,16 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 				comment.append("Destination to: " +f.getDestination());
 			}
 			comment.append("<br />");
-			for(DiversionType d:f.getDiversionArray()){
-				if(d.getOrigin()!=null){
-					comment.append("Diversion Origin: "+d.getOrigin()+" ");
+			if(f.getDiversionArray()!=null){
+				for(DiversionType d:f.getDiversionArray()){
+					if(d.getOrigin()!=null){
+						comment.append("Diversion Origin: "+d.getOrigin()+" ");
+					}
+					if(d.getDestination()!=null){
+						comment.append("Diversion Destination: "+d.getDestination());
+					}
+					comment.append(". ");
 				}
-				if(d.getDestination()!=null){
-					comment.append("Diversion Destination: "+d.getDestination());
-				}
-				comment.append(". ");
 			}
 		}
 	}
