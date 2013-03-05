@@ -918,6 +918,19 @@
 		<property name="app.xml.location" value="metadata/lfc/service" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+
+	<target name="build-ear-hudson-avis-lfc-service" depends="delete-wars">
+		<property name="staging.project" value="ab-lfcservice" />
+		<property name="staging.env" value="hudson" />
+		<property name="avis.service.includes" value="lib/avis-client-model.jar,lib/orchestra.jar,avis-service.jar,lfc-service.jar,lib/lfc-client-model.jar" />
+		<antcall target="hibernate_generate" />
+		<antcall target="build-war-hudson-avis"/>
+		<antcall target="build-jar-avis-service"/>
+		<antcall target="build-war-hudson-lfc"/>
+		<antcall target="build-jar-lfc-service"/>
+		<property name="app.xml.location" value="metadata/ab-lfc/service" />
+		<antcall target="donotrun-build-ear" />
+	</target>
 	
 	<target name="build-ear-demo-lfc-service" depends="delete-wars">
 		<property name="staging.project" value="lfcservice" />

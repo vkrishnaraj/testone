@@ -5,4 +5,23 @@ Class-Path:
  lib/orchestra.jar   
  lib/avis-client-model.jar 
  lib/lfc-client-model.jar
+Dependencies: 
+ org.hibernate,
+ org.antlr,
+ org.apache.commons.logging,
+ org.apache.xerces,
+ javax.persistence.api,
+ jxl,
+ com.c3p0,
+ org.jboss.ejb3,
+ org.jboss.ejb-client,
+ org.jboss.remote-naming,
+ org.jboss.iiop-client,
+ org.jboss.remoting3,
+ org.jboss.remoting3.remoting-jmx,
+ org.infinispan,
+ org.jboss.xnio,
+ org.jboss.xnio.nio,
+ user.lfc_service
+ 
 
