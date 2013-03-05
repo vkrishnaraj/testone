@@ -293,7 +293,13 @@
 			<classpath refid="project.classpath" />
 		</javac>
 		
-		<jar destfile="${dist.dir}/nt_fs.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">
+		<mkdir dir="${build.dir}/temp/META-INF" />
+	    <manifest file="${build.dir}/temp/META-INF/MANIFEST.MF">
+	    	<attribute name="Class-Path" value=
+	    	"claim_model.jar"/>   
+	    </manifest>
+		
+		<jar manifest="${build.dir}/temp/META-INF/MANIFEST.MF" destfile="${dist.dir}/nt_fs.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">
 			<include name="${build.dir}/services-war/WEB-INF/classes/" />
 			<include name="**/**/fraud/**/*.class" />
 			<include name="**/**/fraud/client/*.class" />
@@ -309,7 +315,6 @@
 			<include name="**/**/*.xml" />
 		</jar>
 		
-		<mkdir dir="${build.dir}/temp/META-INF" />
 	    <manifest file="${build.dir}/temp/META-INF/MANIFEST.MF">
 	    	<attribute name="Dependencies" value=
 	    	"org.hibernate,
