@@ -21,4 +21,5 @@ Dependencies:
  org.jboss.remoting3.remoting-jmx,
  org.infinispan,
  org.jboss.xnio,
- org.jboss.xnio.nio
+ org.jboss.xnio.nio,
+ user.lfc_service
