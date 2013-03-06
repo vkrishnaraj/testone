@@ -38,7 +38,7 @@
   }
   
   function checkBagType(pos) {
-		var btype=document.getElementById("bagtype");
+		var btype=document.getElementById("bagtype"+pos);
 		var cr=document.getElementById("childRestraint");
 		if(btype.value=="71"){
 			document.getElementById("childRestraint"+pos).style.display = "block";
@@ -179,8 +179,10 @@
 					onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=1&key=theitem[<%= i %>].bagtype&type=bagtype',800,280,230);return false;"><bean:message
 							key="chart1" /></a> <a href="#"
 					onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&key=theitem[<%= i %>].bagtype&type=bagtype',800,370,230);return false;"><bean:message
-							key="chart2" /></a> <br> <%	String funcCall = "checkBagType(" + i + ")"; %> 
- 					<html:select name="theitem" styleId="bagtype"
+							key="chart2" /></a> <br> 
+							<%	String bagpos="bagtype"+i;	
+							String funcCall = "checkBagType(" + i + ")"; %> 
+ 					<html:select name="theitem" styleId="<%=bagpos%>"
 						property="bagtype" styleClass="dropdown" indexed="true"
 						onchange="<%=funcCall%>">
 						<html:options collection="typelist" property="value"
