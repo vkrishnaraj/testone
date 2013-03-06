@@ -101,7 +101,7 @@ public class TraceHandler {
 			ThreadContainer container = new ThreadContainer();
 			container.setId(id);
 			container.setStartTime(new Date());
-			TraceThread thread = new TraceThread(secondaryqueue, container);
+			SecondTraceThread thread = new SecondTraceThread(secondaryqueue, container);
 			Thread t = new Thread(thread, id);
 			t.start();
 			container.setThread(t);
