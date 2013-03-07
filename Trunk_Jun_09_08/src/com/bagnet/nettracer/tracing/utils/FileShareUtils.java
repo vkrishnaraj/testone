@@ -76,7 +76,7 @@ import com.bagnet.nettracer.tracing.forms.ClaimForm;
  */
 public class FileShareUtils {
 	
-	static Logger logger = Logger.getLogger(MBRActionUtils.class);
+	static Logger logger = Logger.getLogger(FileShareUtils.class);
 	
 	public static Attachment uploadFile(ActionForm aform, String lead, Claim claim, Agent user, ActionMessages errors, ClaimClientRemote remote) {
 		// Save the file in the local directory.
@@ -93,6 +93,8 @@ public class FileShareUtils {
 	
 	public static FsAttachment uploadFile(ActionForm aform, String lead, Agent user, ActionMessages errors, ClaimClientRemote remote) {
 		// Save the file in the local directory.
+		
+		logger.debug("UPLOADING FILE TO FS. REMOTE: " + remote);
 		
 				Hashtable files = aform.getMultipartRequestHandler().getFileElements();
 				FormFile theFile = (FormFile) files.get("attachfile");
@@ -115,12 +117,19 @@ public class FileShareUtils {
 					String thumbpath = folder + lead + "_" + st + "_thumb_" + fileName;
 //					RemoteStreamServer server;
 //					server.
+					
+					logger.debug("FILE PREPARED. TRYING TO GENERATE REMOTE INPUT STREAM.");
+					
 					try{
 						RemoteInputStream ris=new GZIPRemoteInputStream(theFile.getInputStream()).export(); //change to RMIIO
+						
+						logger.debug("INPUT STREAM PREPARED: " + ris + "\n\nSENDING OVER CLAIMREMOTE: " + remote);
+						
 						FsAttachment fsAttach = TransportMapper.map(remote.uploadAttachment(thisfile, user.getStation().getCompany().getVariable().getMax_image_file_size(), 
 								folder, filepath, user.getCompanycode_ID(), theFile.getFileSize(), ris));
 						// add the image to the DB.
 						//Send to 
+						logger.debug("FILE ATTACHMENT SUCCESSFUL!!!");
 
 						return fsAttach;
 					}
