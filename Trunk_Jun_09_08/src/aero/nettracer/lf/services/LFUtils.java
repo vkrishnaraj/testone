@@ -84,7 +84,9 @@ public class LFUtils {
 		lost.setOpenDate(new Date());
 		lost.setAgent(agent);
 		lost.setLocation(agent.getStation());
-
+		if(agent.getSubcompany()!=null){
+			lost.setCompanyId(agent.getSubcompany().getSubcompanyCode());
+		}
 		LFRemark r = new LFRemark();
 		r.getRemark().setType(TracingConstants.REMARK_REGULAR);
 		r.getRemark().setRemarkdate(TracerDateTime.getGMTDate());
@@ -139,6 +141,9 @@ public class LFUtils {
 		found.setFoundDate(new Date());
 		found.setAgent(agent);
 		found.setLocation(agent.getStation());
+		if(agent.getSubcompany()!=null){
+			found.setCompanyId(agent.getSubcompany().getSubcompanyCode());
+		}
 
 		LFRemark r = new LFRemark();
 		r.getRemark().setType(TracingConstants.REMARK_REGULAR);
