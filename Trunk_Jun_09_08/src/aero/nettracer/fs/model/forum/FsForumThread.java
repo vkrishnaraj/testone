@@ -190,5 +190,12 @@ public class FsForumThread implements Serializable {
 		}
 		return createDateDisp;
 	}
+	
+	public FsForumTag getTags(int index) {
+		if (index < tags.size()) {
+			return tags.get(index);
+		}
+		return new FsForumTag();
+	}
 
 }

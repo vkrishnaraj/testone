@@ -115,7 +115,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
                         	<html:text name="forumViewForm" property="thread.title" styleClass="textfield" style="width:95%;" maxlength="100" />
                         </td>
                       </tr>
-                      <tr>
+                  <!--    <tr>
                         <td>
                         	<bean:message key="fraud.forum.create.thread.tags" />
                         	<br />
@@ -129,17 +129,27 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 			                    <bean:message key="fraud.forum.create.thread.add.tag" />
 			                </html:submit>
                         </td>
-                      </tr>
-                      <logic:notEmpty name="forumViewForm" property="thread.tags">
+                      </tr> 
+                      <logic:notEmpty name="forumViewForm" property="thread.tags">   --> 
                       <tr>
                         <td>
-                			<logic:iterate indexId="i" id="tag" name="forumViewForm" property="thread.tags" type="aero.nettracer.fs.model.forum.FsForumTag" >
-                			  <%=tag.getName() %>&nbsp;<a href="#" onclick="removeTag(<%=i %>)">[X]</a>&nbsp;&nbsp;&nbsp;
+                        	<bean:message key="fraud.forum.create.thread.tags" />
+                        	<br />
+                			<logic:iterate indexId="i" id="ttag" name="forumViewForm" property="thread.tags" type="aero.nettracer.fs.model.forum.FsForumTag" >
+                			  <select name="thread.tags[<%=i%>].id" id="tag[<%=i%>]" class="dropdown" >
+				                  		<option value="0"><bean:message key="select.none"/></option>
+                					<logic:iterate indexId="j" id="tag" name="forumViewForm" property="tags" type="aero.nettracer.fs.model.forum.FsForumTag" >
+                			   			<option value="<%=tag.getId() %>" <% if (ttag.getId()==tag.getId()) {%>selected <%}%>><%=tag.getName() %></option>
+									</logic:iterate>
+				              </select>&nbsp;<a href="#" onclick="removeTag(<%=i %>)">[X]</a>&nbsp;&nbsp;&nbsp;
                 			</logic:iterate>
+			                <html:submit property="addTag" styleId="button">
+			                    <bean:message key="fraud.forum.create.thread.add.tag" />
+			                </html:submit>
                 			<input type="hidden" name="removeTag" />
                 		</td>
                 	  </tr>
-                	  </logic:notEmpty>
+                	<!--   </logic:notEmpty>  -->
                     </table>
                     <br />
             		<jsp:include page="/pages/fraud_forum/forum_post.jsp" />

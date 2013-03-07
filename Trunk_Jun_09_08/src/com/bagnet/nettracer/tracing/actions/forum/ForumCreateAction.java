@@ -196,20 +196,24 @@ public class ForumCreateAction extends Action {
 		}
 		
 		if (request.getParameter("addTag") != null) {
-			if (fform.getNewTagID() != null && fform.getNewTagID().matches("^\\d+$")) {
-				long id = Long.parseLong(fform.getNewTagID());
-				if (id != 0) {
-					if (fform.getThread().getTags() == null) {
-						fform.getThread().setTags(new ArrayList<FsForumTag>());
-					}
-					FsForumTag tag = getTag(id, fform.getTags(), fform.getThread().getTags());
-					if (tag != null) {
-						tag.setNumThreads(tag.getNumThreads() + 1);
-						fform.getThread().getTags().add(tag);
-					}
-				}
+//			if (fform.getNewTagID() != null && fform.getNewTagID().matches("^\\d+$")) {
+//				long id = Long.parseLong(fform.getNewTagID());
+//				if (id != 0) {
+//					if (fform.getThread().getTags() == null) {
+//						fform.getThread().setTags(new ArrayList<FsForumTag>());
+//					}
+//					FsForumTag tag = getTag(id, fform.getTags(), fform.getThread().getTags());
+//					if (tag != null) {
+//						tag.setNumThreads(tag.getNumThreads() + 1);
+//						fform.getThread().getTags().add(tag);
+//					}
+//				}
+//			}
+//			fform.setNewTagID("");
+			if (fform.getThread().getTags() == null) {
+				fform.getThread().setTags(new ArrayList<FsForumTag>());
 			}
-			fform.setNewTagID("");
+			fform.getThread().getTags().add(new FsForumTag());
 		    return (mapping.findForward(TracingConstants.FRAUD_FORUM_CREATE));
 		}
 		
@@ -250,6 +254,7 @@ public class ForumCreateAction extends Action {
 				}
 			}
 			newPost.setThread(fform.getThread());
+			cleanTags(fform.getTags(), fform.getThread());
 			if (fform.getThread().getPosts() == null) {
 				fform.getThread().setPosts(new ArrayList<FsForumPost>());
 			}
@@ -304,6 +309,28 @@ public class ForumCreateAction extends Action {
 			}
 		}
 		return null;
+	}
+	
+	private void cleanTags(List<FsForumTag> tags, FsForumThread thread) {
+		List<FsForumTag> dirtyTags = thread.getTags();
+		if (dirtyTags != null && !dirtyTags.isEmpty()) {
+			List<FsForumTag> cleanTags = new ArrayList<FsForumTag>();
+			FsForumTag tag = getTag(dirtyTags.get(0).getId(), tags, cleanTags);
+			if (tag != null) {
+				tag.setNumThreads(tag.getNumThreads() + 1);
+				cleanTags.add(tag);
+			}
+			if (dirtyTags.size() > 1) {
+				for (int i = 1; i < dirtyTags.size(); i++) {
+					tag = getTag(dirtyTags.get(i).getId(), tags, cleanTags);
+					if (tag != null) {
+						tag.setNumThreads(tag.getNumThreads() + 1);
+						cleanTags.add(tag);
+					}
+				}
+			}
+			thread.setTags(cleanTags);
+		}
 	}
 	
 	private String getAgentInfo(Agent user) {
