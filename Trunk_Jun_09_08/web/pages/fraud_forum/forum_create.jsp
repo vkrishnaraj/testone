@@ -112,7 +112,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
                         <td>
                         	<bean:message key="fraud.forum.create.thread.title" />
                         	<br />
-                        	<html:text name="forumViewForm" property="thread.title" styleClass="textfield" style="width:95%;"/>
+                        	<html:text name="forumViewForm" property="thread.title" styleClass="textfield" style="width:95%;" maxlength="100" />
                         </td>
                       </tr>
                       <tr>

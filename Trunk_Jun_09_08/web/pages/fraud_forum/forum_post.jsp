@@ -45,7 +45,7 @@
                         <td>
                         	<bean:message key="fraud.forum.view.reply.title" />
                         	<br />
-                        	<html:text property="newTitle" styleClass="textfield" style="width: 97%;"/>
+                        	<html:text property="newTitle" styleClass="textfield" style="width: 97%;" maxlength="100" />
                         </td>
                       </tr>
                       <tr>
