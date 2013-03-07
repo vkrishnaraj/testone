@@ -67,14 +67,17 @@ ResourceBundle bundle = ResourceBundle.getBundle(
   	var bagItinTable=document.getElementById("bagItin");
   	if(pasTable==null) 	{
   	  alert("<%=(String) bundle.getString("error.minimum.passengers")%>");
+  	  document.getElementsByName("addPassenger")[0].focus();
   	  return false;
   	}
   	if(pasItinTable==null && expressItin==null)	{
   	  alert('<%=(String) bundle.getString("error.minimum.passitin")%>');
+  	  document.getElementsByName("addpassit")[0].focus();
       return false;
   	}
   	if(bagItinTable==null && expressItin==null)	{
   	  alert('<%=(String) bundle.getString("error.minimum.bagitin")%>');
+  	  document.getElementsByName("addbagit")[0].focus();
       return false;
   	}
     for (var j=0;j < form.length; j++) {
