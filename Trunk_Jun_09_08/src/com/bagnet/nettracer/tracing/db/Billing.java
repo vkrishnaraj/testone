@@ -15,7 +15,7 @@ public class Billing implements Serializable {
 	private int billing_id;
 	private String companyCode;
 	private int station_id;
-	private String create_date_time;
+	private Date create_date_time;
 	private Date status_change_time;
 	private int agent_id;
 
@@ -125,7 +125,7 @@ public class Billing implements Serializable {
 	 * @hibernate.property type="timestamp"
 	 * @return Returns the create_date_time.
 	 */
-	public String getCreate_date_time() {
+	public Date getCreate_date_time() {
 		return create_date_time;
 	}
 
@@ -133,7 +133,7 @@ public class Billing implements Serializable {
 	 * @param create_date_time
 	 *          The create_date_time to set.
 	 */
-	public void setCreate_date_time(String create_date_time) {
+	public void setCreate_date_time(Date create_date_time) {
 		this.create_date_time = create_date_time;
 	}
 

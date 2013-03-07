@@ -823,8 +823,8 @@ public class BagService {
 					bill.setCompanyCode(iDTO.getStationcreated().getCompany().getCompanyCode_ID());
 					bill.setStation_id(iDTO.getStationcreated().getStation_ID());
 					bill.setIncident(iDTO);
-					bill.setCreate_date_time(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(iDTO
-							.getCreatedate()));
+					bill.setCreate_date_time(DateUtils.convertToDate(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(iDTO
+							.getCreatedate()), TracingConstants.DB_DATETIMEFORMAT, null));
 					if(iDTO.getStatus().getStatus_ID() != TracingConstants.MBR_STATUS_TEMP) {
 						bill.setStatus_change_time(iDTO.getCreatedate());
 					}

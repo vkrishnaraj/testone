@@ -108,6 +108,14 @@ public class LostReportAction extends CheckedAction {
 		} else {
 			lostReport = lrForm.getLost();
 		}
+		if(lostReport!=null){
+			if(user.getSubcompany()!=null)
+			{
+				if(!lostReport.getCompanyId().equals(user.getSubcompany().getSubcompanyCode())){
+					return (mapping.findForward(TracingConstants.NO_PERMISSION));
+				}
+			}
+		}
 		
 		if (deleteRemark) {
 			Set<LFRemark> remarkList = lostReport.getAgentRemarks();
@@ -247,7 +255,7 @@ public class LostReportAction extends CheckedAction {
 					} else if (lostReport.getCompanyId().equals(TracingConstants.LF_DEMO_COMPANY_ID)){
 						found = LFServiceWrapper.getInstance().getFoundItem(id);
 					} else {
-						found = LFServiceWrapper.getInstance().getFoundItemByBarcode(id + "");//LFC user, use barcode
+						found = LFServiceWrapper.getInstance().getFoundItemByBarcode(foundId + "");//LFC user, use barcode
 					}
 					if (found == null) {
 						ActionMessage error = new ActionMessage("error.invalid.found.id");

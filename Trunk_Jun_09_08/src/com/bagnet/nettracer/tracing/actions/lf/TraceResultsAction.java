@@ -105,9 +105,9 @@ public class TraceResultsAction extends CheckedAction {
 		boolean resultsFiltered = trForm.getFilter().filterResults();
 		long rowcount = 0;
 		if (resultsFiltered) {
-			rowcount = serviceBean.getFilteredTraceResultsCount(user.getStation(), trForm.getFilter());
+			rowcount = serviceBean.getFilteredTraceResultsCount(user.getStation(), trForm.getFilter(), user.getSubcompany());
 		} else {
-			rowcount = serviceBean.getTraceResultsCount(user.getStation());
+			rowcount = serviceBean.getTraceResultsCount(user.getStation(),user.getSubcompany());
 		}
 		
 		currpage = trForm.getCurrpage() != null ? Integer.parseInt(trForm.getCurrpage()) : 0;
@@ -119,9 +119,9 @@ public class TraceResultsAction extends CheckedAction {
 		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 
 		if (resultsFiltered) {
-			matches = serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), trForm.getFilter(), (currpage * rowsperpage), rowsperpage);
+			matches = serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), trForm.getFilter(), (currpage * rowsperpage), rowsperpage, user.getSubcompany());
 		} else {
-			matches = serviceBean.getTraceResultsPaginated(user.getStation(), (currpage * rowsperpage), rowsperpage);
+			matches = serviceBean.getTraceResultsPaginated(user.getStation(), (currpage * rowsperpage), rowsperpage, user.getSubcompany());
 			trForm.getFilter().setOpen(true);
 		}
 		

@@ -18,6 +18,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.forms.lfc.SalvageSearchForm;
@@ -45,20 +46,20 @@ public interface LFServiceHome {
 	public void sendStillSearching(long id);
 	
 	//LF TaskManager services
-	public int getLostCount(Station station);
+	public int getLostCount(Station station, Subcompany subcomp);
 	public int getLostCount(Agent agent);
-	public List<LFLost> getLostPaginatedList(Station station, int start, int offset);
-	public int getFoundCount(Station station);
+	public List<LFLost> getLostPaginatedList(Station station, int start, int offset, Subcompany subcomp);
+	public int getFoundCount(Station station, Subcompany subcomp);
 	public int getFoundCount(Agent agent);
-	public List<LFFound> getFoundPaginatedList(Station station, int start, int offset);
-	public int getItemsToSalvageCount(Station station);
-	public List<LFItem> getItemsToSalvagePaginatedList(Station station, int start, int offset);
-	public int getTraceResultsCount(Station station);
-	public List<LFMatchHistory> getTraceResultsPaginated(Station station, int start, int offset);
-	public int getDeliveryPendingCount(Station station);
-	public List<LFItem> getDeliveryPendingPaginatedList(Station station, int start, int offset);
+	public List<LFFound> getFoundPaginatedList(Station station, int start, int offset, Subcompany subcomp);
+	public int getItemsToSalvageCount(Station station, Subcompany subcomp);
+	public List<LFItem> getItemsToSalvagePaginatedList(Station station, int start, int offset, Subcompany subcomp);
+	public int getTraceResultsCount(Station station, Subcompany subcomp);
+	public List<LFMatchHistory> getTraceResultsPaginated(Station station, int start, int offset, Subcompany subcomp);
+	public int getDeliveryPendingCount(Station station, Subcompany subcomp);
+	public List<LFItem> getDeliveryPendingPaginatedList(Station station, int start, int offset, Subcompany subcomp);
 	public int getShelvedTraceResultsCount(Station station, int value);
-	public List<LFFound> getShelvedTraceResultsPaginated(Station station, int value, int start, int offset);
+	public List<LFFound> getShelvedTraceResultsPaginated(Station station, int value, int start, int offset, Subcompany subcomp);
 	public int getSalvageCount(Station station, SalvageSearchForm ssForm);
 	public List<LFSalvage> getSalvagesPaginated(Station station, SalvageSearchForm ssForm, int start, int offset);
 	

@@ -52,9 +52,9 @@ public class SalvageItemsAction extends CheckedAction {
 		List<LFItem> resultSet = new ArrayList<LFItem>();
 		
 		if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"")) {
-			rowcount = serviceBean.getLFItemsToSalvageCount(user.getStation(), hiForm);
+			rowcount = serviceBean.getLFItemsToSalvageCount(user.getStation(), hiForm, user.getSubcompany());
 		} else {
-			rowcount = serviceBean.getItemsToSalvageCount(user.getStation());
+			rowcount = serviceBean.getItemsToSalvageCount(user.getStation(), user.getSubcompany());
 		}
 		
 		currpage = hiForm.getCurrpage() != null ? Integer.parseInt(hiForm.getCurrpage()) : 0;
@@ -69,9 +69,9 @@ public class SalvageItemsAction extends CheckedAction {
 		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 		
 		if (TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"")) {
-			resultSet = serviceBean.getLFItemsToSalvagePaginatedList(user.getStation(), hiForm, (currpage * rowsperpage), rowsperpage);
+			resultSet = serviceBean.getLFItemsToSalvagePaginatedList(user.getStation(), hiForm, (currpage * rowsperpage), rowsperpage, user.getSubcompany());
 		} else {
-			resultSet = serviceBean.getItemsToSalvagePaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage);
+			resultSet = serviceBean.getItemsToSalvagePaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage, user.getSubcompany());
 		}
 
 		if (totalpages <= currpage) {

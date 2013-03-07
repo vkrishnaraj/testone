@@ -17,7 +17,7 @@ import javax.naming.Context;
 import org.apache.log4j.Logger;
 
 public class SecondTraceThread implements Runnable{
-	private static final Logger logger = Logger.getLogger(TraceThread.class);
+	private static final Logger logger = Logger.getLogger(SecondTraceThread.class);
 	
 	private ArrayBlockingQueue<Object[]> queue;
 	private ThreadContainer container;

@@ -545,7 +545,7 @@ public class LogonAction extends Action {
 																						entries = x;
 																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_TRACE_RESULTS)) {
-																					int x = new LFServiceBean().getTraceResultsCount(agent.getStation());
+																					int x = new LFServiceBean().getTraceResultsCount(agent.getStation(), agent.getSubcompany());
 																					if (x != -1) {
 																						entries = x;
 																					}
@@ -560,12 +560,12 @@ public class LogonAction extends Action {
 																						entries = x;
 																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_SALVAGE)) {
-																					int x = new LFServiceBean().getItemsToSalvageCount(agent.getStation());
+																					int x = new LFServiceBean().getItemsToSalvageCount(agent.getStation(),agent.getSubcompany());
 																					if (x != -1) {
 																						entries = x;
 																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_DELIVER)) {
-																					int x = new LFServiceBean().getDeliveryPendingCount(agent.getStation());
+																					int x = new LFServiceBean().getDeliveryPendingCount(agent.getStation(), agent.getSubcompany());
 																					if (x != -1) {
 																						entries = x;
 																					}

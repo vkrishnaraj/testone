@@ -92,6 +92,12 @@ public class FoundItemAction extends CheckedAction {
 			found = fiForm.getFound();
 		}
 		if(found!=null){
+			if(user.getSubcompany()!=null)
+			{
+				if(!found.getCompanyId().equals(user.getSubcompany().getSubcompanyCode())){
+					return (mapping.findForward(TracingConstants.NO_PERMISSION));
+				}
+			}
 			request.setAttribute("stationID", found.getLocation().getStation_ID());
 		}
 		
@@ -143,6 +149,17 @@ public class FoundItemAction extends CheckedAction {
 						if(found.getItem().getLost().getItem() != null){
 							found.getItem().getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
 							found.getItem().getLost().getItem().setTrackingNumber(found.getItem().getTrackingNumber());
+						}
+					} else {
+						List<LFItem> itemList=serviceBean.getItemsByLostFoundId(found.getId(), 2);
+						for(LFItem i:itemList){
+							if(i.getFound().getId()==found.getId() && i.getLost()!=null){
+								i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
+								if(i.getLost().getItem() != null){
+									i.getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
+									i.getLost().getItem().setTrackingNumber(found.getItem().getTrackingNumber());
+								}
+							}
 						}
 					}
 				}
@@ -286,6 +303,17 @@ public class FoundItemAction extends CheckedAction {
 						found.getItem().getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_PICKED_UP);
 					}
 					LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
+				} else {
+					List<LFItem> itemList=serviceBean.getItemsByLostFoundId(found.getId(), 2);
+					for(LFItem i:itemList){
+						if(i.getFound().getId()==found.getId() && i.getLost()!=null){
+							i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
+							if(i.getLost().getItem() != null){
+								i.getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_PICKED_UP);
+							}
+							LFServiceWrapper.getInstance().saveOrUpdateLostReport(i.getLost(), user);
+						}
+					}
 				}
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 			} else {
@@ -347,6 +375,19 @@ public class FoundItemAction extends CheckedAction {
 						found.getItem().getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
 					}
 					LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
+				} else {
+					List<LFItem> itemList=serviceBean.getItemsByLostFoundId(found.getId(), 2);
+					for(LFItem i:itemList){
+						if(i.getFound().getId()==found.getId() && i.getLost()!=null){
+							i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
+							if(i.getLost().getItem() != null){
+								i.getLost().getItem().setDeliveryRejected(true);
+								i.getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
+							}
+
+							LFServiceWrapper.getInstance().saveOrUpdateLostReport(i.getLost(), user);
+						}
+					}
 				}
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 			} else {
@@ -361,14 +402,14 @@ public class FoundItemAction extends CheckedAction {
 			TraceResultsFilter filter = new TraceResultsFilter();
 			filter.setRejected(true);
 			filter.setFoundId(found.getId());
-			fiForm.setRejectedResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000));
+			fiForm.setRejectedResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000,user.getSubcompany()));
 			
 			filter.setBarcode(found.getBarcode());
 			filter.setOpen(true);
 			filter.setConfirmed(true);
 			filter.setRejected(false);
 			filter.setFoundId(found.getId());
-			fiForm.setTraceResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000));
+			fiForm.setTraceResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000,user.getSubcompany()));
 
 			if (fiForm.getFound().getStatus().getStatus_ID() == TracingConstants.LF_STATUS_CLOSED || user.getSubcompany()!=null) {
 				if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LFC_REOPEN_LOST_FOUND, user)) {

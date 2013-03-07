@@ -45,7 +45,7 @@ public class DeliverItemsAction extends CheckedAction {
 		int currpage = 0;
 		List<LFItem> resultSet = new ArrayList<LFItem>();
 		
-		rowcount = serviceBean.getDeliveryPendingCount(user.getStation());
+		rowcount = serviceBean.getDeliveryPendingCount(user.getStation(), user.getSubcompany());
 		
 		currpage = hiForm.getCurrpage() != null ? Integer.parseInt(hiForm.getCurrpage()) : 0;
 		if (hiForm.getNextpage() != null && hiForm.getNextpage().equals("1")) {
@@ -58,7 +58,7 @@ public class DeliverItemsAction extends CheckedAction {
 		
 		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 		
-		resultSet = serviceBean.getDeliveryPendingPaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage);
+		resultSet = serviceBean.getDeliveryPendingPaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage, user.getSubcompany());
 
 		if (totalpages <= currpage) {
 			currpage = 0;

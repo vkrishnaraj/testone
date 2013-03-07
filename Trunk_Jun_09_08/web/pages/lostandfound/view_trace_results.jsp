@@ -149,16 +149,39 @@
          					<bean:message key="colname.lf.action" />
          				</td>		
          			</tr>
+         			<% String subcompCode="";
+         				if(a.getSubcompany()!=null){
+							subcompCode=a.getSubcompany().getSubcompanyCode();
+         				}
+        			%>
          			<logic:iterate indexId="i" id="match" name="traceResultsForm" property="matches" type="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory" >
          				<tr>
          					<td>
          						<input type="checkbox" name="match[<%=i %>].selected" />
          					</td>
          					<td>
-         						<a href='create_lost_report.do?lostId=<bean:write name="match" property="lost.id" />' ><bean:write name="match" property="lost.id" /></a>
+         						<% if(subcompCode!=""){ %>
+	         						<logic:equal name="match" property="lost.companyId" value="<%=subcompCode %>">
+	         							<a href='create_lost_report.do?lostId=<bean:write name="match" property="lost.id" />' ><bean:write name="match" property="lost.id" /></a>
+	         						</logic:equal>
+	         						<logic:notEqual name="match" property="lost.companyId" value="<%=subcompCode %>">
+	         							<bean:write name="match" property="lost.id" />
+	         						</logic:notEqual>
+         						<% } else { %>
+         							<a href='create_lost_report.do?lostId=<bean:write name="match" property="lost.id" />' ><bean:write name="match" property="lost.id" /></a>
+         						<% } %>
          					</td>
          					<td>
-         						<a href='create_found_item.do?foundId=<bean:write name="match" property="found.id" />' ><bean:write name="match" property="found.barcode" /></a>
+         						<% if(subcompCode!=""){ %>
+	         						<logic:equal name="match" property="found.companyId" value="<%=subcompCode %>">
+	         							<a href='create_found_item.do?foundId=<bean:write name="match" property="found.id" />' ><bean:write name="match" property="found.barcode" /></a>
+	         						</logic:equal>
+	         						<logic:notEqual name="match" property="found.companyId" value="<%=subcompCode %>">
+	         							<bean:write name="match" property="found.barcode" />
+	         						</logic:notEqual>
+         						<% } else { %>
+	         							<a href='create_found_item.do?foundId=<bean:write name="match" property="found.id" />' ><bean:write name="match" property="found.barcode" /></a>
+         						<% } %>
          					</td>
          					<td>
          						<bean:write name="match" property="totalScore" />

@@ -78,7 +78,7 @@ public class ShelvedTraceResultsAction extends CheckedAction {
 		
 		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 
-		List<LFFound> founds = serviceBean.getShelvedTraceResultsPaginated(user.getStation(), strForm.getValue(), (currpage * rowsperpage), rowsperpage);
+		List<LFFound> founds = serviceBean.getShelvedTraceResultsPaginated(user.getStation(), strForm.getValue(), (currpage * rowsperpage), rowsperpage, user.getSubcompany());
 		
 		if (totalpages <= currpage) {
 			currpage = 0;

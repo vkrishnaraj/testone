@@ -66,9 +66,9 @@ public class LostFoundManagerAction extends CheckedAction {
 		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 		
 		if (request.getParameter("openLost") != null) {
-			resultSet = serviceBean.getLostPaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage);
+			resultSet = serviceBean.getLostPaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage, user.getSubcompany());
 		} else {
-			resultSet = serviceBean.getFoundPaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage);
+			resultSet = serviceBean.getFoundPaginatedList(user.getStation(), (currpage * rowsperpage), rowsperpage, user.getSubcompany());
 		}
 
 		if (totalpages <= currpage) {

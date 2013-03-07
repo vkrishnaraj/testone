@@ -359,17 +359,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				e.printStackTrace();
 			}
 		}
-
-		if(dto.getAgent().getSubcompany()!=null){
-			try {
-				String scc = dto.getAgent().getSubcompany().getSubcompanyCode();
-				if(scc != null){
-					sql += " and o.companyId = \'" + scc + "\'";
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
 		
 		return sql;
 	}
@@ -950,7 +939,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return sql;
 	}
 	
-	private String getLostQuery(Station station){
+	private String getLostQuery(Station station, Subcompany subcomp){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l where ";
 				if(!TracingConstants.LF_LF_COMPANY_ID.equals(station.getCompany().getCompanyCode_ID()))
 				{
@@ -958,6 +947,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 							" or l.lossInfo.destination.lz_ID = " + station.getStation_ID()+") and";
 				}
 				sql += " l.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
+				if(subcomp!=null){
+					sql+=" and l.companyId = '"+subcomp.getSubcompanyCode()+"'";
+				}
 				
 		return sql;
 	}
@@ -974,11 +966,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return sql;
 	}
 	
-	private String getFoundQuery(Station station){
+	private String getFoundQuery(Station station,Subcompany subcomp){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFFound f " +
 				"where (f.location.station_ID = " + station.getStation_ID()
 				+ " or f.location.lz_ID = " + station.getStation_ID() + ")"
 				+ " and f.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
+		if(subcomp!=null){
+			sql+=" and l.companyId = '"+subcomp.getSubcompanyCode()+"'";
+		}
 		return sql;
 	}
 	
@@ -997,7 +992,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return sql;
 	}
 	
-	private String getLFCItemsToSalvageQuery(Station station, HandleItemsForm hiForm) {
+	private String getLFCItemsToSalvageQuery(Station station, HandleItemsForm hiForm, Subcompany subcomp) {
 		
 		int lowValueSalvageDays = PropertyBMO.getValueAsInt("lf.low.value.salvage.days");
 		int highValueSalvageDays = PropertyBMO.getValueAsInt("lf.high.value.salvage.days");
@@ -1041,6 +1036,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			endDate = DateUtils.formatDate(end.getTime(), TracingConstants.DB_DATEFORMAT, null, null);
 			
 			sql += "and i.found.receivedDate between \'" + startDate + "\' and \'" + endDate + "\' ";
+		}
+		if(subcomp!=null){
+			sql+= " and i.found.companyId=\'"+subcomp.getSubcompanyCode()+"\'";
 		}
 		
 		return sql;
@@ -1217,19 +1215,19 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	@Override
-	public int getLostCount(Station station) {
+	public int getLostCount(Station station,Subcompany subcomp) {
 		if(station == null){
 			return 0;
 		}
-		return getLostCount(getLostQuery(station));
+		return getLostCount(getLostQuery(station,subcomp));
 	}
 
 	@Override
-	public List<LFLost> getLostPaginatedList(Station station, int start, int offset) {
+	public List<LFLost> getLostPaginatedList(Station station, int start, int offset, Subcompany subcomp) {
 		if(station == null){
 			return null;
 		}
-		return getLostPaginatedList(getLostQuery(station), start, offset);
+		return getLostPaginatedList(getLostQuery(station,subcomp), start, offset);
 	}
 
 	@Override
@@ -1241,53 +1239,53 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	@Override
-	public int getFoundCount(Station station) {
+	public int getFoundCount(Station station,Subcompany subcomp) {
 		if(station == null){
 			return 0;
 		}
-		return getFoundCount(getFoundQuery(station));
+		return getFoundCount(getFoundQuery(station,subcomp));
 	}
 
 	@Override
-	public List<LFFound> getFoundPaginatedList(Station station, int start, int offset) {
+	public List<LFFound> getFoundPaginatedList(Station station, int start, int offset, Subcompany subcomp) {
 		if(station == null){
 			return null;
 		}
-		return getFoundPaginatedList(getFoundQuery(station), start, offset);
+		return getFoundPaginatedList(getFoundQuery(station,subcomp), start, offset);
 	}
 
 	@Override
-	public int getItemsToSalvageCount(Station station) {
+	public int getItemsToSalvageCount(Station station, Subcompany subcomp) {
 		if(station == null){
 			return 0;
 		} else if (station.getCompany().getCompanyCode_ID().equals(TracingConstants.LF_AB_COMPANY_ID)) {
 			return getItemCount(getItemsToSalvageQuery(station));
 		} else if (station.getCompany().getCompanyCode_ID().equals(TracingConstants.LF_LF_COMPANY_ID)) {
-			return getItemCount(getLFCItemsToSalvageQuery(station, null));
+			return getItemCount(getLFCItemsToSalvageQuery(station, null,subcomp));
 		}
 		return 0;
 	}
 	
-	public int getLFItemsToSalvageCount(Station station, HandleItemsForm hiForm) {
-		return getItemCount(getLFCItemsToSalvageQuery(station, hiForm));
+	public int getLFItemsToSalvageCount(Station station, HandleItemsForm hiForm, Subcompany subcomp) {
+		return getItemCount(getLFCItemsToSalvageQuery(station, hiForm,subcomp));
 	}
 
 	@Override
-	public List<LFItem> getItemsToSalvagePaginatedList(Station station, int start, int offset) {
+	public List<LFItem> getItemsToSalvagePaginatedList(Station station, int start, int offset, Subcompany subcomp) {
 		if(station == null){
 			return null;
 		}
 		return getItemPaginatedList(getItemsToSalvageQuery(station), start, offset);
 	}
 	
-	public List<LFItem> getLFItemsToSalvagePaginatedList(Station station, HandleItemsForm hiForm, int start, int offset) {
+	public List<LFItem> getLFItemsToSalvagePaginatedList(Station station, HandleItemsForm hiForm, int start, int offset, Subcompany subcomp) {
 		if (station == null || hiForm == null) {
 			return null;
 		}
-		return getItemPaginatedList(getLFCItemsToSalvageQuery(station, hiForm), start, offset);
+		return getItemPaginatedList(getLFCItemsToSalvageQuery(station, hiForm, subcomp), start, offset);
 	}
 
-	private String getTraceResultsQuery(Station station){
+	private String getTraceResultsQuery(Station station, Subcompany subcomp){
 		//TODO location criteria
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh";
 				
@@ -1299,16 +1297,19 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					" mh.found.location.station_ID = " + station.getStation_ID() + " or " +
 					" mh.found.location.lz_ID = " + station.getStation_ID() + ")";
 		} 
+		if(subcomp!=null){
+			sql +=" and (mh.found.companyId='"+subcomp.getSubcompanyCode()+"' or mh.lost.companyId='"+subcomp.getSubcompanyCode()+"')";
+		}
 		return sql;
 	}
 	
 	@Override
 	//TODO review if this needs to be deprecated
-	public int getTraceResultsCount(Station station) {
+	public int getTraceResultsCount(Station station, Subcompany subcomp) {
 		if(station == null){
 			return 0;
 		}
-		String query = "select count(mh.id) " + getTraceResultsQuery(station);
+		String query = "select count(mh.id) " + getTraceResultsQuery(station, subcomp);
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1328,11 +1329,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	//TODO review if this needs to be deprecated
-	public List<LFMatchHistory> getTraceResultsPaginated(Station station, int start, int offset) {
+	public List<LFMatchHistory> getTraceResultsPaginated(Station station, int start, int offset, Subcompany subcomp) {
 		if(station == null){
 			return null;
 		}
-		String query = getTraceResultsQuery(station) + " order by score desc, id";
+		String query = getTraceResultsQuery(station, subcomp) + " order by score desc, id";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1361,7 +1362,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	
 	@Override
-	public int getDeliveryPendingCount(Station station) {
+	public int getDeliveryPendingCount(Station station, Subcompany subcomp) {
 		if(station == null){
 			return 0;
 		}
@@ -1370,6 +1371,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				" or i.found.location.lz_ID = " + station.getStation_ID() + ")" +
 				" and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED +
 				" and i.type = " + TracingConstants.LF_TYPE_FOUND;
+		if(subcomp!=null){
+			query += " and i.found.companyId='"+subcomp.getSubcompanyCode()+"'";
+		}
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1388,7 +1392,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	@Override
-	public List<LFItem> getDeliveryPendingPaginatedList(Station station, int start, int offset) {
+	public List<LFItem> getDeliveryPendingPaginatedList(Station station, int start, int offset, Subcompany subcomp) {
 		if(station == null){
 			return null;
 		}
@@ -1397,8 +1401,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		"where (i.found.location.station_ID = " + station.getStation_ID() +
 		" or i.found.location.lz_ID = " + station.getStation_ID() + ")" +
 		" and i.disposition.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED + 
-		" and i.type = " + TracingConstants.LF_TYPE_FOUND + 
-		" order by i.found.foundDate asc";
+		" and i.type = " + TracingConstants.LF_TYPE_FOUND; 
+		if(subcomp!=null){
+			query += " and i.found.companyId='"+subcomp.getSubcompanyCode()+"'";
+		}
+		query += " order by i.found.foundDate asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1873,7 +1880,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return false;
 	}
 	
-	public long getFilteredTraceResultsCount(Station station, TraceResultsFilter filter) {
+	public long getFilteredTraceResultsCount(Station station, TraceResultsFilter filter, Subcompany subcomp) {
 		String sql = "select count(distinct m) from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m where 1 = 1";
 		sql += getSqlFromTraceResultsForm(filter);
 		if(!TracingConstants.LF_LF_COMPANY_ID.equals(station.getCompany().getCompanyCode_ID()))
@@ -1883,6 +1890,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					" m.found.location.station_ID = " + station.getStation_ID() + " or " +
 			 		" m.found.location.lz_ID = " + station.getStation_ID() + ")";
 		}
+		if(subcomp!=null){
+			sql+=" and (m.lost.companyId='"+subcomp.getSubcompanyCode()+"' or m.found.companyId='"+subcomp.getSubcompanyCode()+"')";
+		}
+		
 		
 		Session sess = null;
 		try{
@@ -1929,7 +1940,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 	}
 	
-	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(Station station, TraceResultsFilter filter, int start, int offset) {
+	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(Station station, TraceResultsFilter filter, int start, int offset, Subcompany subcomp) {
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m ";
 		
 		sql+=" where 1 = 1 ";
@@ -1940,6 +1951,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					" m.lost.lossInfo.destination.lz_ID = " + station.getStation_ID() + " or " +
 					" m.found.location.station_ID = " + station.getStation_ID() + " or " +
 			 		" m.found.location.lz_ID = " + station.getStation_ID() + ")";
+		}
+		if(subcomp!=null){
+			sql+=" and (m.lost.companyId='"+subcomp.getSubcompanyCode()+"' or m.found.companyId='"+subcomp.getSubcompanyCode()+"')";
 		}
 		
  		sql +=	" order by score desc, id";
@@ -3579,7 +3593,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 
 	@Override
-	public List<LFFound> getShelvedTraceResultsPaginated(Station station, int value, int start, int offset) {
+	public List<LFFound> getShelvedTraceResultsPaginated(Station station, int value, int start, int offset, Subcompany subcomp) {
 		if(station == null){
 			return null;
 		}
@@ -3590,6 +3604,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				   + "and m.found.itemLocation = " + TracingConstants.LF_LOCATION_SHELF + " "
 				   + "and not exists (from com.bagnet.nettracer.tracing.db.Lock l where l.lockKey = m.found.barcode) "
 				   + "group by m.found.id order by m.id asc";
+		if(subcomp!=null){
+			sql += " and m.found.companyId='"+subcomp.getSubcompanyCode()+"'";
+		}
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
