@@ -2114,7 +2114,14 @@
 	
 	<target name="build-jar-ntfs-model">
 		<delete file="${build.dir}/claim_model.jar" failonerror="false"/>
-		<jar destfile="${build.dir}/claim_model.jar">
+		
+		<mkdir dir="${build.dir}/temp/META-INF" />
+	    <manifest file="${build.dir}/temp/META-INF/MANIFEST.MF">
+	    	<attribute name="Class-Path" value=
+	    	"nt_fs.jar"/>   
+	    </manifest>
+		
+		<jar manifest="${build.dir}/temp/META-INF/MANIFEST.MF" destfile="${build.dir}/claim_model.jar">
 			<!--  MAY NEED TO EDIT THE FRAUD_WEB BELOW TO POINT TO WHAT BUILDS THE CLASSES -->
 			<fileset dir="${build.dir}/american-fs_web/classes/" >
 				<include name="**/**/aero/nettracer/fs/model/transport/**/*.*"/>
