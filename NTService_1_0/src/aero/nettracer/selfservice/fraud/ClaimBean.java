@@ -970,8 +970,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				}
 			}
 		
-		
-		return FileUtils.saveAttachments(attachIDs, claim);
+			if(claim!=null){
+				return FileUtils.saveAttachments(attachIDs, claim);
+			}
 		}
 		return false;
 
