@@ -35,6 +35,7 @@ import com.usairways.www.cbro.baggage_scanner.wsdl.LoadScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.LoadULDScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.NetTracerScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.QohScanType;
+import com.usairways.www.cbro.baggage_scanner.wsdl.RerouteRouteScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.RerouteClearScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.RerouteForwardScanType;
 import com.usairways.www.cbro.baggage_scanner.wsdl.RerouteScanType;
@@ -154,6 +155,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 			
 			
 			if (arr != null && arr.length > 0) {
+				boolean flightShown=false;
 
 				for (int j = 0; j < arr.length; ++j) {
 					Object obj = arr[j];
@@ -187,7 +189,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						
 						if (obj instanceof FlightTaskType) {
 							FlightTaskType o = (FlightTaskType) obj;
-							buildFlightInfo(o.getFlight(),comment);
+							buildFlightInfo(o.getFlight(),comment,flightShown);
 							
 						} 
 
@@ -195,7 +197,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							type = "Bulk Unload";
 							BulkUnloadType o = (BulkUnloadType) obj;
 							ifNotNull(comment, "Unload Reason: ", o.getUnloadReason(), "<br />");
-							buildFlightInfo(o.getFlight(),comment);
+							buildFlightInfo(o.getFlight(),comment,flightShown);
 						} 
 						
 						if (obj instanceof ForwardScanType) {
@@ -221,6 +223,26 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							
 						} 
 						
+						if(obj instanceof RerouteRouteScanType){
+							type="Reroute Route Scan";
+							RerouteRouteScanType o=(RerouteRouteScanType) obj;
+							ifNotNull(comment,"PNR: ",o.getPnr(),"<br />");
+							ifNotNull(comment,"Location: ",o.getLocation(),"<br />");
+							int ln=1;
+							for(ForwardLegType l:o.getLegArray()){
+								comment.append("Leg "+ln+": ");
+								if(l.getFlightNumber()!=null){
+									ifNotNull(comment,"",l.getFlightNumber().toString()," ");
+								}
+								if(l.getFlightDate()!=null){
+									ifNotNull(comment,"",l.getFlightDate().toString()," ");
+								}
+								if(l.getDestination()!=null){
+									ifNotNull(comment,"",l.getDestination(),"");
+								}
+							}
+						}
+						
 						if (obj instanceof TrackingScanType) {
 							type = "Tracking";
 							TrackingScanType o = (TrackingScanType) obj;
@@ -230,7 +252,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 						if (obj instanceof FlightScanType) {
 							type = "Flight Scan";
 							FlightScanType o = (FlightScanType) obj;
-							buildFlightInfo(o.getFlight(), comment);
+							buildFlightInfo(o.getFlight(), comment,flightShown);
 						} 
 						
 						if (obj instanceof LoadScanType) {
@@ -239,7 +261,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							comment.append("Bin: " + o.getBin() + "<br />");
 
 
-							buildFlightInfo(o.getFlight(),comment);
+							buildFlightInfo(o.getFlight(),comment,flightShown);
 						} 
 						
 						if (obj instanceof LoadBagScanType) {
@@ -252,7 +274,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							ifNotNull(comment, "PNR: ",o.getPnr(),"<br/>");
 							ifNotNull(comment, "Destination: ", o.getForwardDestination(), "<br />");
 
-							buildFlightInfo(o.getFlight(),comment);		
+							buildFlightInfo(o.getFlight(),comment,flightShown);		
 						} 
 
 						if (obj instanceof UldTaskType) {
@@ -265,7 +287,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							type = "ULD Task Scan";
 							UldScanType o = (UldScanType) obj;
 							comment.append("ULD: " + o.getUld() + "<br />");
-							buildFlightInfo(o.getFlight(),comment);
+							buildFlightInfo(o.getFlight(),comment,flightShown);
 						} 
 
 						
@@ -275,7 +297,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							comment.append("ULD: " + o.getUld() + "<br />");
 
 
-							buildFlightInfo(o.getFlight(),comment);
+							buildFlightInfo(o.getFlight(),comment,flightShown);
 						} 
 
 						if (obj instanceof QohScanType) {
@@ -296,7 +318,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							ifNotNull(comment, "PNR: ",o.getPnr(),"<br/>");
 							comment.append("ULD: " + o.getUld() + "<br />");
 
-							buildFlightInfo(o.getFlight(),comment);
+							buildFlightInfo(o.getFlight(),comment,flightShown);
 						} 
 						
 						if (obj instanceof UldTransferType) {
@@ -304,7 +326,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							UldTransferType o = (UldTransferType) obj;
 							comment.append("Transfer from: " + o.getUldFrom() + " to " + o.getUldTo() + "<br />");
 
-							buildFlightInfo(o.getFlight(),comment);
+							buildFlightInfo(o.getFlight(),comment,flightShown);
 						} 
 												
 						if (obj instanceof UnloadScanType) {
@@ -312,7 +334,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							UnloadScanType o = (UnloadScanType) obj;
 							ifNotNull(comment, "Unload Reason: ", o.getUnloadReason(), "<br />");
 
-							buildFlightInfo(o.getFlight(),comment);
+							buildFlightInfo(o.getFlight(),comment,flightShown);
 						} 
 						
 						if (obj instanceof UnloadULDScanType) {
@@ -320,7 +342,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 							UnloadULDScanType o = (UnloadULDScanType) obj;
 							comment.append("ULD: " + o.getUld() + "<br />");
 
-							buildFlightInfo(o.getFlight(),comment);
+							buildFlightInfo(o.getFlight(),comment,flightShown);
 						}
 				
 						if (obj instanceof RerouteScanType) {
@@ -380,8 +402,8 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 		
 	}
 	
-	private void buildFlightInfo(FlightType f, StringBuffer comment){
-		if(f!=null){
+	private void buildFlightInfo(FlightType f, StringBuffer comment, boolean shown){
+		if(f!=null && !shown){
 			comment.append("Flight Information, ");
 			if(f.getFlightNumber()!=null){
 				comment.append("Flight number: " + f.getFlightNumber()+" ");
@@ -410,6 +432,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 					comment.append(". ");
 				}
 			}
+			shown=true;
 		}
 	}
 
