@@ -291,7 +291,7 @@ public class ModifyClaimAction extends CheckedAction {
 		addAssociatedItems(claim, request, user);
 		
 		//add attachments
-		if (ntfsUser && (fileindex >= 0 || itemindex >= 0) ) {
+		if (ntfsUser && (fileindex >= 0 || itemindex >= 0) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS, user) ) {
 			// 2. save the claim on central services
 			Context ctx = null;
 			ClaimClientRemote remote = null;
@@ -518,7 +518,9 @@ public class ModifyClaimAction extends CheckedAction {
 						for(Attachment attach:claim.getAttachments()){
 							attachids.add(attach.getAttachment_id());
 						}
-						remote.saveAttachments(attachids, file.getSwapId(), claim.getAirline(), claim.getId());
+						if(attachids.size()>0){
+							remote.saveAttachments(attachids, remoteFileId, claim.getAirline(), claim.getId());
+						}
 						
 						claim.getFile().setSwapId(remoteFileId);
 						FileDAO.saveFile(claim.getFile(), false);
@@ -565,8 +567,6 @@ public class ModifyClaimAction extends CheckedAction {
 				return (mapping.findForward(TracingConstants.ERROR_MAIN));
 			}
 		} 
-		
-		
 		
 		cform.setClaim(claim);
 		session.setAttribute("incidentForm", theform);

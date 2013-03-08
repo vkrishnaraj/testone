@@ -35,7 +35,8 @@
 		 || document.getElementById('addedreceipts').value == 1
 		 || document.getElementById('addedips').value == 1
 		 || document.getElementById('addedsegs').value == 1
-		 || document.getElementById('addedphones').value == 1) {
+		 || document.getElementById('addedphones').value == 1
+		 || document.getElementById('addedattachments').value==1) {
 			checkFields = false;
 		}
 		

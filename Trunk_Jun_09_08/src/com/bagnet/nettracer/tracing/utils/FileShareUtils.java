@@ -121,7 +121,13 @@ public class FileShareUtils {
 					logger.debug("FILE PREPARED. TRYING TO GENERATE REMOTE INPUT STREAM.");
 					
 					try{
-						RemoteInputStream ris=new GZIPRemoteInputStream(theFile.getInputStream()).export(); //change to RMIIO
+						InputStream is=theFile.getInputStream();
+
+						logger.debug("MADE INPUT STREAM.");
+						GZIPRemoteInputStream GRIS=new GZIPRemoteInputStream(is);
+
+						logger.debug("MADE GZIP Remote Input Stream.");
+						RemoteInputStream ris=GRIS.export(); //change to RMIIO
 						
 						logger.debug("INPUT STREAM PREPARED: " + ris + "\n\nSENDING OVER CLAIMREMOTE: " + remote);
 						

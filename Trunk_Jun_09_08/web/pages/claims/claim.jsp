@@ -1614,7 +1614,7 @@
 				                <br>
 				                <center><input type="FILE" name='<%= "attachfile" %>' />
 				                &nbsp;
-				                <html:submit property="uploadAttachment" styleId="button">
+				                <html:submit property="uploadAttachment" styleId="button" onclick="setField('addedattachments');" >
 				                  <bean:message key="header.addAttachments" />
 				                </html:submit> </center>
 				              </td>
@@ -1643,6 +1643,7 @@
                     <input type="hidden" id="addedreceipts" value="0" />
                     <input type="hidden" id="addedips" value="0" />
                     <input type="hidden" id="addedsegs" value="0" />
+                    <input type="hidden" id="addedattachments" value="0" />
                     <input type="hidden" id="addedphones" value="0" />
                     <script language="javascript">
 						<logic:present name="an" scope="request">
