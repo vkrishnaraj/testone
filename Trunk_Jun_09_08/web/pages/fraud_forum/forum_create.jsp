@@ -59,11 +59,17 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 					        currentElement.focus();
 					        return false;
 				      	}
+					} else if (currentElementName.indexOf("thread.tags[") != -1) {  
+				      	if (currentElement.value == 0) {
+					        alert("<%= (String)bundle.getString( "fraud.forum.view.reply.text") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+					        currentElement.focus();
+					        return false;
+				      	}
 					}
 				}
-				if (document.getElementsByName("removeTag").length == 0) {
+				if (document.getElementsByName("thread.tags[0].id").length == 0) {
 				    alert("<%= (String)bundle.getString( "fraud.forum.create.thread.tags") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-				    document.getElementById("tag").focus();
+				    document.getElementsByName("addTag")[0].focus();
 				    return false;
 				}
                 if (document.getElementsByName("newFileID")[0].value.length > 0) {
