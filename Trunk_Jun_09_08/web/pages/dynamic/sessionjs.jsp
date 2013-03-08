@@ -31,10 +31,14 @@
 			checkFields = false;
 		}
 		
-		if (document.getElementById('addednames').value == 1 || document.getElementById('addedreceipts').value == 1) {
+		if (document.getElementById('addednames').value == 1
+		 || document.getElementById('addedreceipts').value == 1
+		 || document.getElementById('addedips').value == 1
+		 || document.getElementById('addedsegs').value == 1
+		 || document.getElementById('addedphones').value == 1) {
 			checkFields = false;
 		}
-	
+		
 		if (checkFields) {
 			for (var i = 0; i < form.length; ++i) {
 			
