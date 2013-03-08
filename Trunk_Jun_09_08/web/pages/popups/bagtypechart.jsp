@@ -142,6 +142,7 @@ function choosetype(o) {
 		for (i = 0; i < field.length; i++) {
 			if (field.options[i].value == o) {
 				field.options[i].selected = true;
+				field.onchange();
 				break;
 			}
 		}
