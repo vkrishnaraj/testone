@@ -3732,7 +3732,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public List<LFSalvageFound> loadSalvageFound(long id) {
 		String sql = "select f.id, f.barcode, f.receivedDate, i.brand, i.model, i.serialNumber, i.color, i.description, i.longDescription, a.username, a.currentTimeZone, i.category, i.subcategory, f.salvageBoxId from LFFound f" +
-				" left join Agent a on f.agent_ID=a.agent_ID left join LFItem i on f.item_id=i.id where salvage_id=:sid ";
+				" left join Agent a on f.agent_ID=a.agent_ID left join LFItem i on f.item_id=i.id where f.salvage_id=:sid ";
 		SQLQuery q = null;
 		
 		Session sess = HibernateWrapper.getSession().openSession();

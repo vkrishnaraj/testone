@@ -240,10 +240,18 @@
 						<td>
 							<bean:message key="colname.lf.company" />&nbsp;<span class="reqfield">*</span>
 							<br/>
+							
+							<% if(a.getSubcompany()!=null){ %>
+         					<html:select name="lostReportForm" property="lost.companyId" disabled="true" styleClass="dropdown" styleId="lostCompanyId">
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="subComplist" property="subcompanyCode" labelProperty="name" />
+         					</html:select>
+         					<% } else { %>
          					<html:select name="lostReportForm" property="lost.companyId" styleClass="dropdown" styleId="lostCompanyId">
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		            			<html:options collection="subComplist" property="subcompanyCode" labelProperty="name" />
          					</html:select>
+         					<% } %>
 						</td>
 						<td>
          					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
