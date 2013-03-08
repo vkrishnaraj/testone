@@ -24,6 +24,9 @@ public class ReservationIntegrationImpl implements
 				"reservation.class.path"); // Use new TP get method
 		String path2 = TracerProperties.get(companyCode,
 				"reservation.version.name"); // Use new TP get method
+		if(path2==null){
+			path2="";
+		}
 		try {
 			Class cls = Class.forName("com.bagnet.clients." + path1 + "."
 					+ path2 + "ReservationIntegrationImpl");
