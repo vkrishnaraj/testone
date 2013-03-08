@@ -112,8 +112,9 @@
 		<ant antfile="build-gen.xml" target="delete" />
 		<property name="ant_project_name" value="usair" />
 		<property name="ant_war_name" value="usair-dev" />
+		<property name="tracer.environment.name" value="test"/>
+		<property name="us.environment.name" value="dev"/>
 		<copy todir="${basedir}/web/pages/login" file="companies/usair/dev/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/usair/dev/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/dev/hibernate_reporting.cfg.xml" />
@@ -124,8 +125,9 @@
 		<ant antfile="build-gen.xml" target="delete" />
 		<property name="ant_project_name" value="usair" />
 		<property name="ant_war_name" value="usair-fraud-dev" />
+		<property name="tracer.environment.name" value="test"/>
+		<property name="us.environment.name" value="fraud-dev"/>
 		<copy todir="${basedir}/web/pages/login" file="companies/usair/fraud-dev/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/usair/fraud-dev/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/usair/fraud-dev/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/fraud-dev/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/fraud-dev/hibernate_reporting.cfg.xml" />
@@ -146,6 +148,8 @@
 		<ant antfile="build-gen.xml" target="delete" />
 		<property name="ant_project_name" value="usair" />
 		<property name="ant_war_name" value="usair-beta" />
+		<property name="tracer.environment.name" value="train"/>
+		<property name="us.environment.name" value="beta"/>
 		<copy todir="${basedir}/web/pages/login" file="companies/usair/beta/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/usair/beta/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/usair/beta/hibernate_main.cfg.xml" />
@@ -168,8 +172,9 @@
 		<ant antfile="build-gen.xml" target="delete" />
 		<property name="ant_project_name" value="usair" />
 		<property name="ant_war_name" value="usair-prod" />
+		<property name="tracer.environment.name" value="production"/>
+		<property name="us.environment.name" value="production"/>
 		<copy todir="${basedir}/web/pages/login" file="companies/usair/production/login/center.jsp" />
-		<copy todir="${basedir}/src" file="companies/usair/tracer.properties" />
 		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_main.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_dirty.cfg.xml" />
 		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_reporting.cfg.xml" />
@@ -181,9 +186,9 @@
 		<property name="include.us" value="1" />
 		<antcall target="usair-libraries-create" />
 		
-		<ant antfile="build-gen.xml" target="combineResourceFiles">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/usair/tracer.properties" />
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${tracer.environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/usair/${us.environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
@@ -251,7 +256,7 @@
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_de.properties" overwrite="true" />
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_es.properties" overwrite="true" />
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/usair/ApplicationResources_fr.properties" overwrite="true" />
-		
+	
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
