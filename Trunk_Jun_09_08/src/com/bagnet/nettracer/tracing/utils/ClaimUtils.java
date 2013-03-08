@@ -231,6 +231,7 @@ public class ClaimUtils {
 		
 		Segment s = new Segment();
 		s.setClaim(claim);
+		s.setDateFormat(user.getDateformat().getFormat());
 		LinkedHashSet<Segment> segments = new LinkedHashSet<Segment>();
 		segments.add(s);
 		claim.setSegments(segments);
