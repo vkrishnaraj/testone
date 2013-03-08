@@ -168,9 +168,7 @@ function updatePagination() {
 		           					<%=claims[i].getSwapId() %>
 		           				</a>
 		           				<% } else { %>
-		           				<a href='claim_resolution.do?claimId=<%=claims[i].getSwapId() %>&back=1'>
 		           					<%=claims[i].getSwapId() %>
-	           					</a>
 		           				<% } %>
 		           			</td>
 		           			<td>
