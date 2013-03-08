@@ -679,14 +679,13 @@ public class IncidentBMO {
 			} catch (BagtagException e) {
 				// Ignore
 			}
-			
-			if(PropertyBMO.getObject(PropertyBMO.CONVERT_BAGTAG).equals("1")){
-				try {
-					basicTag = LookupAirlineCodes.getTwoCharacterBagTag(tagNumber);
-				} catch (BagtagException e) {
-					// Ignore
-				}
+		
+			try {
+				basicTag = LookupAirlineCodes.getTwoCharacterBagTag(tagNumber);
+			} catch (BagtagException e) {
+				// Ignore
 			}
+			
 
 			if (fullTag != null && basicTag != null) {
 				queryString.append(" and ((item.claimchecknum like :fullTag");

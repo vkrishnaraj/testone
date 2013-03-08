@@ -118,7 +118,9 @@ public class SharesIntegrationWrapper {
 			} else if (bagTag != null) {
 				bagTag = bagTag.toUpperCase();
 				try {
-					bagTag = LookupAirlineCodes.getTwoCharacterBagTag(bagTag);
+					if(PropertyBMO.isTrue(PropertyBMO.CONVERT_BAGTAG)){
+						bagTag = LookupAirlineCodes.getTwoCharacterBagTag(bagTag);
+					}
 				} catch (BagtagException e) {
 					// Ignore
 				}

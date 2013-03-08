@@ -55,6 +55,7 @@ public class MatchUtils {
 				try {
 					sess.close();
 				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		}

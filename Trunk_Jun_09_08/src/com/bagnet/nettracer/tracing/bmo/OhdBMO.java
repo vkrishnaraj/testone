@@ -1722,13 +1722,12 @@ public class OhdBMO {
 				// Ignore
 			}
 			
-			if(PropertyBMO.getObject(PropertyBMO.CONVERT_BAGTAG).equals("1")){
-				try {
-					basicTag = LookupAirlineCodes.getTwoCharacterBagTag(tagNumber);
-				} catch (BagtagException e) {
-					// Ignore
-				}
+			try {
+				basicTag = LookupAirlineCodes.getTwoCharacterBagTag(tagNumber);
+			} catch (BagtagException e) {
+				// Ignore
 			}
+			
 			
 			if (fullTag != null && basicTag != null) {
 				queryString.append(" and (o.claimnum like :basicTag or ");
