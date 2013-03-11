@@ -128,9 +128,10 @@ public class SharesIntegrationWrapper {
 			} else {
 				return false;
 			}
-
+			logger.info(biDoc);
 			GetBookingInformationResponseDocument responseDoc = stub
 					.getBookingInformation(biDoc);
+			logger.info(responseDoc); 
 			booking = responseDoc.getGetBookingInformationResponse()
 					.getGetBookingInformationResult();		
 
