@@ -492,7 +492,8 @@
 	    		org.apache.axiom,
 	    		org.javassist,
 	    		org.dozer,
-	    		user.central_service
+	    		user.central_service,
+	    		org.apache.commons.pool
 	    		"/>
 	    </manifest>
 		
