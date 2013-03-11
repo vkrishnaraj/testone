@@ -494,7 +494,8 @@
 	    		org.dozer,
 	    		user.central_service,
 	    		org.apache.commons.pool,
-	    		org.apache.neethi
+	    		org.apache.neethi,
+	    		org.apache.commons.lang
 	    		"/>
 	    </manifest>
 		
