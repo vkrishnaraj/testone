@@ -495,7 +495,8 @@
 	    		user.central_service,
 	    		org.apache.commons.pool,
 	    		org.apache.neethi,
-	    		org.apache.commons.lang
+	    		org.apache.commons.lang,
+	    		org.apache.santuario.xmlsec
 	    		"/>
 	    </manifest>
 		
