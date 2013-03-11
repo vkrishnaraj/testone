@@ -24,6 +24,7 @@
 	<property name="hibernate.connection.autoReconnect">true</property>
 	<property name="hibernate.connection.autoReconnectForPools">true</property>
 	<property name="hibernate.connection.is-connection-validation-required">true</property>
+	<property name="hibernate.listeners.envers.autoRegister">false</property>
 	
 	<!-- c3p0 -->
 	<property name="hibernate.c3p0.acquire_increment">1</property>
@@ -35,12 +36,7 @@
 	<property name="hibernate.c3p0.timeout">5000</property>
 
 	<!-- Java5 Annotated Classes -->
-	<mapping class="aero.nettracer.serviceprovider.common.db.User" />
-	<mapping class="aero.nettracer.serviceprovider.common.db.Profile" />
-	<mapping class="aero.nettracer.serviceprovider.common.db.SabreConnection" />
-	<mapping class="aero.nettracer.serviceprovider.common.db.WorldTracerWebAccount" />
-	<mapping class="aero.nettracer.serviceprovider.common.db.WorldTracerISharesAccount" />
-
+	
 		<mapping class="aero.nettracer.serviceprovider.common.db.PrivacyPermissions"/>
 		<mapping class="aero.nettracer.fs.model.detection.Blacklist"/>
 		<mapping class="aero.nettracer.fs.model.detection.InternalSummary"/>
@@ -71,6 +67,7 @@
 		<mapping class="aero.nettracer.fs.model.FsAttachment"/>
 		<mapping class="aero.nettracer.fs.model.forum.FsForumThread"/>
 		<mapping class="aero.nettracer.fs.model.forum.FsForumPost"/>
+		<mapping class="aero.nettracer.fs.model.forum.FsForumPost_Claim"/>
 		<mapping class="aero.nettracer.fs.model.forum.FsForumTag"/>
 </session-factory>
 
