@@ -493,7 +493,8 @@
 	    		org.javassist,
 	    		org.dozer,
 	    		user.central_service,
-	    		org.apache.commons.pool
+	    		org.apache.commons.pool,
+	    		org.apache.neethi
 	    		"/>
 	    </manifest>
 		
