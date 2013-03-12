@@ -494,9 +494,9 @@
 	    		org.dozer,
 	    		user.central_service,
 	    		org.apache.commons.pool,
-	    		org.apache.neethi,
+	    		org.apache.neethi:2.0,
 	    		org.apache.commons.lang,
-	    		org.apache.santuario.xmlsec
+	    		org.apache.santuario.xmlsec:1.4
 	    		"/>
 	    </manifest>
 		
