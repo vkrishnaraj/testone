@@ -21,6 +21,7 @@
 		<property name="company.code">US</property>
 <property name="show_sql">false</property>
 <property name="hibernate.show_sql">false</property>
+<property name="hibernate.listeners.envers.autoRegister">false</property>	
 
 
 		<!-- c3p0 -->
@@ -34,7 +35,7 @@
 		
 		<property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
 		<property name="hibernate.cache.provider_configuration_file_resource_path">/ehcache.xml</property> 
-		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.use_second_level_cache">false</property>
 		<property name="hibernate.cache.use_query_cache">false</property>
 		
 		
