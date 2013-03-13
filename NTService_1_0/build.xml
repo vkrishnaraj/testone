@@ -483,7 +483,7 @@
 	    	<attribute name="Dependencies" value="
 	    		org.hibernate,
 	    		org.javassist,
-	    		user.central_service"/>
+	    		user.central_service:full"/>
 <!--    		org.antlr,
 	    		org.apache.commons,
 	    		org.apache.commons.logging,
