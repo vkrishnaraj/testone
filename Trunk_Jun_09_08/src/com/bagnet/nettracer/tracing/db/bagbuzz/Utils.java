@@ -30,13 +30,29 @@ public class Utils {
 			+ "and bt.status = :btstatus "
 			+ "and bt.bagBuzz.status = :bbstatus";
 		Query q = null;
-		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setInteger("agentID", user.getAgent_ID());
-		q.setLong("btstatus", TracingConstants.TASK_MANAGER_OPEN);
-		q.setLong("bbstatus", TracingConstants.BAGBUZZ_PUBLISHED);
-		List result = q.list();
-		return result.size();
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			q = sess.createQuery(sql.toString());
+			q.setInteger("agentID", user.getAgent_ID());
+			q.setLong("btstatus", TracingConstants.TASK_MANAGER_OPEN);
+			q.setLong("bbstatus", TracingConstants.BAGBUZZ_PUBLISHED);
+			List result = q.list();
+			return result.size();
+		} catch (Exception e){
+			logger.error("Error Saving: ", e);
+			e.printStackTrace();
+		}
+		finally{
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return 0;
 	}
 	
 	public static List <BagBuzz> getBagBuzzList(Object user){
@@ -44,13 +60,29 @@ public class Utils {
 		sql += " where status != :deleted order by created_timestamp desc";
 		Query q = null;
 		
-		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setLong("deleted", TracingConstants.BAGBUZZ_DELETED);
-		
-		LinkedHashSet qlhs = new LinkedHashSet(q.list());
-		ArrayList al = new ArrayList(qlhs);
-		return al;
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			q = sess.createQuery(sql.toString());
+			q.setLong("deleted", TracingConstants.BAGBUZZ_DELETED);
+			
+			LinkedHashSet qlhs = new LinkedHashSet(q.list());
+			ArrayList al = new ArrayList(qlhs);
+			return al;
+		} catch (Exception e){
+			logger.error("Error Saving: ", e);
+			e.printStackTrace();
+		}
+		finally{
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 	
 	public static List <BagBuzzTask> getBagBuzzTaskList(Agent user){
@@ -63,42 +95,60 @@ public class Utils {
 		bbsql += " where status = :publish order by created_timestamp desc";
 		
 		Query bbtq = null;
-		Session sess = HibernateWrapper.getSession().openSession();
-		bbtq = sess.createQuery(bbtsql.toString());
-		bbtq.setInteger("agentID", user.getAgent_ID());
-		bbtq.setLong("bbtstatus", TracingConstants.TASK_MANAGER_CLOSED);
+		Session sess = null;
 		
-		LinkedHashSet bbtqlhs = new LinkedHashSet(bbtq.list());
-		ArrayList <BagBuzzTask> bbtal = new ArrayList(bbtqlhs);
-		
-		Query bbq = null;
-		bbq = sess.createQuery(bbsql.toString());
-		bbq.setLong("publish", TracingConstants.BAGBUZZ_PUBLISHED);
-		LinkedHashSet <BagBuzz> bbqlhs = new LinkedHashSet<BagBuzz>(bbq.list());
-		ArrayList <BagBuzz>bbal = new ArrayList<BagBuzz>(bbqlhs);
-		
-		ArrayList <BagBuzzTask> newTasks = new ArrayList();
-		Status s = new Status();
-		s.setStatus_ID(TracingConstants.TASK_MANAGER_CLOSED);
-		for (BagBuzz bb: bbal){
-			boolean hasTask = false;
-			for (BagBuzzTask bbt: bbtal){
-				if(bbt.getBagBuzz().getBagbuzz_id() == bb.getBagbuzz_id()){
-					hasTask = true;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			bbtq = sess.createQuery(bbtsql.toString());
+			bbtq.setInteger("agentID", user.getAgent_ID());
+			bbtq.setLong("bbtstatus", TracingConstants.TASK_MANAGER_CLOSED);
+			
+			LinkedHashSet bbtqlhs = new LinkedHashSet(bbtq.list());
+			ArrayList <BagBuzzTask> bbtal = new ArrayList(bbtqlhs);
+			
+			Query bbq = null;
+			bbq = sess.createQuery(bbsql.toString());
+			bbq.setLong("publish", TracingConstants.BAGBUZZ_PUBLISHED);
+			LinkedHashSet <BagBuzz> bbqlhs = new LinkedHashSet<BagBuzz>(bbq.list());
+			ArrayList <BagBuzz>bbal = new ArrayList<BagBuzz>(bbqlhs);
+			
+			ArrayList <BagBuzzTask> newTasks = new ArrayList();
+			Status s = new Status();
+			s.setStatus_ID(TracingConstants.TASK_MANAGER_CLOSED);
+			for (BagBuzz bb: bbal){
+				boolean hasTask = false;
+				for (BagBuzzTask bbt: bbtal){
+					if(bbt.getBagBuzz().getBagbuzz_id() == bb.getBagbuzz_id()){
+						hasTask = true;
+					}
+				}
+				if(!hasTask){
+					BagBuzzTask toAdd = new BagBuzzTask();
+					toAdd.setAssigned_agent(user);
+					toAdd.setStatus(s);
+					toAdd.setOpened_timestamp(bb.getCreated_timestamp());
+					toAdd.setBagBuzz(bb);
+					toAdd.setTask_id(0);
+					newTasks.add(toAdd);
 				}
 			}
-			if(!hasTask){
-				BagBuzzTask toAdd = new BagBuzzTask();
-				toAdd.setAssigned_agent(user);
-				toAdd.setStatus(s);
-				toAdd.setOpened_timestamp(bb.getCreated_timestamp());
-				toAdd.setBagBuzz(bb);
-				toAdd.setTask_id(0);
-				newTasks.add(toAdd);
+			bbtal.addAll(newTasks);
+			return bbtal;
+		} catch (Exception e){
+			logger.error("Error Saving: ", e);
+			e.printStackTrace();
+		}
+		finally{
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
-		bbtal.addAll(newTasks);
-		return bbtal;
+		return null;
+		
 	}
 	
 	public static void updateBagBuzzTaskReadStatus(long bbt_id){
@@ -107,14 +157,16 @@ public class Utils {
 			+ " and status = :currentStatus";
 		
 		Query q = null;
-		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setLong("taskID", bbt_id);
-		q.setLong("status", TracingConstants.TASK_MANAGER_PROCESSED);
-		q.setLong("currentStatus", TracingConstants.TASK_MANAGER_OPEN);
-		
+		Session sess = null;
 		Transaction t = null;
+		
 		try{
+			sess = HibernateWrapper.getSession().openSession();
+			q = sess.createQuery(sql.toString());
+			q.setLong("taskID", bbt_id);
+			q.setLong("status", TracingConstants.TASK_MANAGER_PROCESSED);
+			q.setLong("currentStatus", TracingConstants.TASK_MANAGER_OPEN);
+			
 			t = sess.beginTransaction();
 			q.executeUpdate();
 			t.commit();
@@ -144,16 +196,30 @@ public class Utils {
 		sql += "where bb.bagbuzz_id = :id";
 		
 		Query q = null;
-		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setLong("id", id);
-		List l = q.list();
-		if(l.isEmpty() == false){
-			return (BagBuzz) l.get(0);
-		} else {
-			//throw exception
-			return null;
+		Session sess = null;
+		
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			q = sess.createQuery(sql.toString());
+			q.setLong("id", id);
+			List l = q.list();
+			if(l.isEmpty() == false){
+				return (BagBuzz) l.get(0);
+			}
+		} catch (Exception e){
+			logger.error("Error Saving: ", e);
+			e.printStackTrace();
 		}
+		finally{
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 		
 	}
 	
@@ -168,8 +234,9 @@ public class Utils {
 		s.setStatus_ID(TracingConstants.BAGBUZZ_NEW);
 		bb.setStatus(s);
 		
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = null;
 		try{
+			sess = HibernateWrapper.getSession().openSession();
 			HibernateUtils.save(bb, sess);
 		}
 		catch (Exception e){
@@ -188,51 +255,15 @@ public class Utils {
 		}
 		return bb;
 	}
-
-	
-//TODO loupas - replace the other delete	
-//	public static void deleteBagBuzzTemp(BagBuzz bb){
-//		String updateBagBuzz = "update com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz bb set status = :status where bagbuzz_id = :bbid";
-//		
-//		Session sess = HibernateWrapper.getSession().openSession();
-//		Transaction t = null;
-//		
-//		Query bbq = sess.createQuery(updateBagBuzz);
-//		bbq.setLong("status", TracingConstants.BAGBUZZ_DELETED);
-//		bbq.setLong("bbid", bb.getBagbuzz_id());
-//		
-//		try{
-//			t = sess.beginTransaction();
-//			bbq.executeUpdate();
-//			t.commit();
-//		} catch (Exception e){
-//			logger.error("Error Saving: ", e);
-//			e.printStackTrace();
-//			if (t != null) {
-//				try {
-//					t.rollback();
-//				} catch (Exception ex) {
-//					logger.error("Error Saving: ", ex);
-//				}
-//			}
-//		} finally {
-//			if (sess != null) {
-//				try {
-//					sess.close();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//	}
 	
 	public static void deleteBagBuzz(BagBuzz bb){
 		Status s = new Status();
 		s.setStatus_ID(TracingConstants.BAGBUZZ_DELETED);
 		bb.setStatus(s);
 		
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = null; 
 		try{
+			sess = HibernateWrapper.getSession().openSession();
 			HibernateUtils.save(bb, sess);
 		}
 		catch (Exception e){
@@ -260,20 +291,22 @@ public class Utils {
 	
 	public static void publishBagBuzz(BagBuzz bb, List roles){
 		String sql = "select agent.agent_ID from com.bagnet.nettracer.tracing.db.Agent agent where agent.active = 1";
-		Session sess = HibernateWrapper.getSession().openSession();
-		Transaction t = sess.getTransaction();
-		
-		Status s = new Status();
-		s.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
-		
-		Query q = sess.createQuery(sql);
-		List <Integer>list = q.list();
-		Date currentDate = new Date();
-		
-		//I just need the id, is there a way not to cascade
-		bb = Utils.getBagBuzz(bb.getBagbuzz_id());
+		Session sess = null;
+		Transaction t = null;
 		
 		try{
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.getTransaction();
+			
+			Status s = new Status();
+			s.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
+			
+			Query q = sess.createQuery(sql);
+			List <Integer>list = q.list();
+			Date currentDate = new Date();
+			
+			//I just need the id, is there a way not to cascade
+			bb = Utils.getBagBuzz(bb.getBagbuzz_id());
 			t = sess.beginTransaction();
 			for (Integer i:list){
 				BagBuzzTask bbt = new BagBuzzTask();
@@ -318,19 +351,20 @@ public class Utils {
 		String updateTasks = "update com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask t set status = :status, closed_timestamp = :closed_timestamp where bagbuzz_id = :bbid";
 		String updateBagBuzz = "update com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz bb set status = :status where bagbuzz_id = :bbid";
 		
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = null;
 		Transaction t = null;
-		
-		Query tq = sess.createQuery(updateTasks);
-		tq.setLong("status", TracingConstants.TASK_MANAGER_CLOSED);
-		tq.setTimestamp("closed_timestamp", new Date());
-		tq.setLong("bbid", bb.getBagbuzz_id());
-		
-		Query bbq = sess.createQuery(updateBagBuzz);
-		bbq.setLong("status", TracingConstants.BAGBUZZ_UNPUBLISHED);
-		bbq.setLong("bbid", bb.getBagbuzz_id());
-		
+
 		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query tq = sess.createQuery(updateTasks);
+			tq.setLong("status", TracingConstants.TASK_MANAGER_CLOSED);
+			tq.setTimestamp("closed_timestamp", new Date());
+			tq.setLong("bbid", bb.getBagbuzz_id());
+			
+			Query bbq = sess.createQuery(updateBagBuzz);
+			bbq.setLong("status", TracingConstants.BAGBUZZ_UNPUBLISHED);
+			bbq.setLong("bbid", bb.getBagbuzz_id());
+		
 			t = sess.beginTransaction();
 			tq.executeUpdate();
 			bbq.executeUpdate();
