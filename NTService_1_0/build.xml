@@ -481,9 +481,9 @@
 		
 	    <manifest file="${build.dir}/services-war/META-INF/MANIFEST.MF">
 	    	<attribute name="Dependencies" value="
+	    		org.hibernate,
 	    		user.central_service"/>
-<!--    		org.hibernate,
-	    		org.antlr,
+<!--    		org.antlr,
 	    		org.apache.commons,
 	    		org.apache.commons.logging,
 	    		org.apache.xerces,
