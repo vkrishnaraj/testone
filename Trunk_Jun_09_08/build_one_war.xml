@@ -1035,6 +1035,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 
+	<target name="build-ear-testing-westjet" depends="delete-wars">
+		<property name="staging.project" value="westjet" />
+		<property name="staging.env" value="testing" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-testing-westjet"/>
+		<property name="app.xml.location" value="metadata/westjet/test" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
 	<target name="build-ear-testing-canadiannorth" depends="delete-wars">
 		<property name="staging.project" value="canadiannorth" />
 		<property name="staging.env" value="testing" />
@@ -2809,7 +2818,7 @@
 			<property name="destinationResource" value="${build.dir}/${ant_project_name}/classes/tracer.properties" />
 		</ant>
 
-		<property name="hibernate_props_loc" value="companies/${ant_project_name}/environment/${sub_path}" />
+		<property name="hibernate_props_loc" value="${basedir}/companies/${ant_project_name}/environment/${sub_path}" />
 		<!-- Dialect will only be set if not already set by sqlserver client -->
 		<property name="hibernate_dialect" value="mysql" />
 		<antcall target="cron-generate-hibernate-xmls" />
@@ -2831,16 +2840,19 @@
 		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_main.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}.cfg.xml" overwrite="true" >
 			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
+				<filtersfile file="${basedir}/companies/tracer/environment/${sub_path}hibernate.properties" />
 			</filterset>
 		</copy>
 		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_dirty.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_dirty.cfg.xml" overwrite="true" >
 			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
+				<filtersfile file="${basedir}/companies/tracer/environment/${sub_path}hibernate.properties" />
 			</filterset>
 		</copy>
 		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_reporting.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_reporting.cfg.xml" overwrite="true" >
 			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
+				<filtersfile file="${basedir}/companies/tracer/environment/${sub_path}hibernate.properties" />
 			</filterset>
 		</copy>	
 	</target>
@@ -3580,16 +3592,19 @@
 		<copy toFile="${basedir}/src/hibernate_main.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}.cfg.xml" overwrite="true" >
 			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
+				<filtersfile file="${basedir}/companies/tracer/environment/${environment.name}/hibernate.properties" />
 			</filterset>
 		</copy>
 		<copy toFile="${basedir}/src/hibernate_dirty.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_dirty.cfg.xml" overwrite="true" >
 			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
+				<filtersfile file="${basedir}/companies/tracer/environment/${environment.name}/hibernate.properties" />
 			</filterset>
 		</copy>
 		<copy toFile="${basedir}/src/hibernate_reporting.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_reporting.cfg.xml" overwrite="true" >
 			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
+				<filtersfile file="${basedir}/companies/tracer/environment/${environment.name}/hibernate.properties" />
 			</filterset>
 		</copy>	
 	</target>

@@ -31,6 +31,8 @@
 		<property name="hibernate.c3p0.max_statements">0</property> 
 		<property name="hibernate.c3p0.min_size">${dirty.c3p0.min}</property> 
 		<property name="hibernate.c3p0.timeout">5000</property> <!-- seconds --> 
+		${c3p0.additional.1}
+		${c3p0.additional.2}
 		
 		<property name="hibernate.cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
 		<property name="hibernate.cache.provider_configuration_file_resource_path">/ehcache.xml</property>
