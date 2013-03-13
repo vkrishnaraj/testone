@@ -482,6 +482,7 @@
 	    <manifest file="${build.dir}/services-war/META-INF/MANIFEST.MF">
 	    	<attribute name="Dependencies" value="
 	    		org.hibernate,
+	    		org.javassist,
 	    		user.central_service"/>
 <!--    		org.antlr,
 	    		org.apache.commons,
@@ -491,7 +492,6 @@
 	    		org.apache.axis2,
 	    		org.apache.xmlbeans,
 	    		org.apache.axiom,
-	    		org.javassist,
 	    		org.dozer,
 	    		org.apache.commons.pool,
 	    		org.apache.neethi:2.0,
