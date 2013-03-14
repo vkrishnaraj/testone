@@ -50,10 +50,10 @@ public class TracingProducer implements Runnable {
 		ProducerDTO dto;
 		while (true) {
 			try {
-				if (sess == null) {
+				if (sess == null || !sess.isOpen()) {
 					sess = HibernateWrapper.getSession().openSession();
 				}
-				if(dirtySess == null) {
+				if(dirtySess == null || !dirtySess.isOpen()) {
 					dirtySess = HibernateWrapper.getDirtySession().openSession();
 				}
 				dto = queue.take();
