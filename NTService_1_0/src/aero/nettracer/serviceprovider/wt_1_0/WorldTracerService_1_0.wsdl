@@ -52,6 +52,7 @@
                     <xs:element minOccurs="0" name="desc1" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="desc2" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="desc3" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="externaldesc" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="firstNameOnBag" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="lastNameOnBag" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="manufacturer" nillable="true" type="xs:string"/>
@@ -72,6 +73,7 @@
                     <xs:element minOccurs="0" name="ffStatus" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="initials" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="languageFreeFlow" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="salutation" type="xs:int"/>
@@ -143,7 +145,7 @@
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="paxItinerary" nillable="true" type="ax23:Itinerary"/>
                     <xs:element minOccurs="0" name="pnrLocator" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="tracingFinalized" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="tracingFinalized" nillable="true" type="xs:dateTime"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Expenses">
