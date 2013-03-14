@@ -495,17 +495,25 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	}
 	
 	public static boolean hasRequest(long fileId, String requestingAirline){
-		Session sess = HibernateWrapper.getSession().openSession();
-		String sql = "from aero.nettracer.fs.model.detection.AccessRequest where file.id = :id and requestedAirline =:airline";
-		Query q = sess.createQuery(sql);
-		q.setParameter("id", fileId);
-		q.setParameter("airline", requestingAirline);
-		List results = q.list();
-		if(results != null && results.size() > 0){
-			return true;
-		} else {
-			return false;
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			String sql = "from aero.nettracer.fs.model.detection.AccessRequest where file.id = :id and requestedAirline =:airline";
+			Query q = sess.createQuery(sql);
+			q.setParameter("id", fileId);
+			q.setParameter("airline", requestingAirline);
+			List results = q.list();
+			if(results != null && results.size() > 0){
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
 		}
+		return false;
 		
 	}
 	
@@ -517,46 +525,46 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 //		}
 		AuditUtil.saveActionAudit(AuditUtil.ACTION_REQUEST_ACCESS, fileId, requestingAirline);
 		
-		Session sess = HibernateWrapper.getSession().openSession();
-
-		AccessRequest request = new AccessRequest();
-		File file = (File) sess.load(File.class, fileId);
-		MatchHistory mh = (MatchHistory) sess.load(MatchHistory.class, matchHistory);
-		
-		boolean autosend = false;
-		if(file.getValidatingCompanycode() != null){
-			PrivacyPermissionsBean bean = new PrivacyPermissionsBean();
-			PrivacyPermissions permissions = bean.getPrivacyPermissions(file.getValidatingCompanycode(), AccessLevelType.req);
-			if (permissions != null) {
-				if(permissions.isAutosend()){
-					autosend = true;
-				}
-			}
-		}
-		
-		request.setFile(file);
-		request.setMatchHistory(mh);
-		request.setRequestedAgent(agent);
-		request.setContactName(contactName!=null&&contactName.trim().length()>0?contactName:null);
-		request.setContactEmail(contactEmail!=null&&contactEmail.trim().length()>0?contactEmail:null);
-		request.setContactPhone(contactPhone!=null&&contactPhone.trim().length()>0?contactPhone:null);
-		request.setRequestedDate(DateUtils.convertToGMTDate(new Date()));
-		request.setRequestedAirline(requestingAirline);
-		if(autosend){
-			request.setStatus(RequestStatus.Approved);
-		} else {
-			request.setStatus(RequestStatus.Created);
-		}
-		if (message != null && message.trim().length() > 0) {
-			FsMessage m = new FsMessage();
-			m.setSenderName(agent);
-			m.setMessage(message);
-			m.setTimestamp(DateUtils.convertToGMTDate(new Date()));
-			request.setMessage(m);
-		}
+		Session sess = null;
 
 		Transaction t = null;
 		try {
+	        sess = HibernateWrapper.getSession().openSession();
+			AccessRequest request = new AccessRequest();
+			File file = (File) sess.load(File.class, fileId);
+			MatchHistory mh = (MatchHistory) sess.load(MatchHistory.class, matchHistory);
+			
+			boolean autosend = false;
+			if(file.getValidatingCompanycode() != null){
+				PrivacyPermissionsBean bean = new PrivacyPermissionsBean();
+				PrivacyPermissions permissions = bean.getPrivacyPermissions(file.getValidatingCompanycode(), AccessLevelType.req);
+				if (permissions != null) {
+					if(permissions.isAutosend()){
+						autosend = true;
+					}
+				}
+			}
+			
+			request.setFile(file);
+			request.setMatchHistory(mh);
+			request.setRequestedAgent(agent);
+			request.setContactName(contactName!=null&&contactName.trim().length()>0?contactName:null);
+			request.setContactEmail(contactEmail!=null&&contactEmail.trim().length()>0?contactEmail:null);
+			request.setContactPhone(contactPhone!=null&&contactPhone.trim().length()>0?contactPhone:null);
+			request.setRequestedDate(DateUtils.convertToGMTDate(new Date()));
+			request.setRequestedAirline(requestingAirline);
+			if(autosend){
+				request.setStatus(RequestStatus.Approved);
+			} else {
+				request.setStatus(RequestStatus.Created);
+			}
+			if (message != null && message.trim().length() > 0) {
+				FsMessage m = new FsMessage();
+				m.setSenderName(agent);
+				m.setMessage(message);
+				m.setTimestamp(DateUtils.convertToGMTDate(new Date()));
+				request.setMessage(m);
+			}
 			t = sess.beginTransaction();
 			sess.save(request);
 			t.commit();
@@ -577,17 +585,27 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	@Override
 	public List<AccessRequest> getOutstandingRequests(String airlineId, int begin, int perPage) {
 		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_ACCESS_REQUESTS, -1, airlineId);
-		Session sess = HibernateWrapper.getSession().openSession();
-		String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status = :status and ar.file.validatingCompanycode = :airline";
-
-		Query q = sess.createQuery(sql);
-
-		q.setParameter("status", AccessRequest.RequestStatus.Created);
-		q.setParameter("airline", airlineId);
-		q.setMaxResults(perPage);
-		q.setFirstResult(begin);
-
-		return q.list();
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			String sql = "from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status = :status and ar.file.validatingCompanycode = :airline";
+	
+			Query q = sess.createQuery(sql);
+	
+			q.setParameter("status", AccessRequest.RequestStatus.Created);
+			q.setParameter("airline", airlineId);
+			q.setMaxResults(perPage);
+			q.setFirstResult(begin);
+	
+			return q.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
+		}
+		return null;
 
 	}
 	
@@ -610,96 +628,116 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	
 	public List<AccessRequest> getAccessRequests(AccessRequestDTO dto, int begin, int perPage) {
 		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_ACCESS_REQUESTS, -1, dto.getAirlinecode());
-		Session sess = HibernateWrapper.getSession().openSession();
-		String sql = getAccessRequestsQuery(dto) + " order by ar.requestedDate desc";
-
-		Query q = sess.createQuery(sql);
-
-		ArrayList<AccessRequest.RequestStatus> status = new ArrayList<AccessRequest.RequestStatus>();
-		if(dto.isApproved()){
-			status.add(AccessRequest.RequestStatus.Approved);
-		}
-		if(dto.isDenied()){
-			status.add(AccessRequest.RequestStatus.Denied);
-		}
-		if(dto.isPending()){
-			status.add(AccessRequest.RequestStatus.Created);
-		}
-		
-		if(status.size() == 0){
-			//no status selected
-			return null;
-		}
-		
-		q.setParameterList("status", status);
-		q.setParameter("airline", dto.getAirlinecode());
-		if(dto.getStartDate() != null && dto.getEndDate() != null){
-			q.setParameter("start", dto.getStartDate());
-			q.setParameter("end", dto.getEndDate());
-		}
-		q.setMaxResults(perPage);
-		q.setFirstResult(begin);
-
-		List<AccessRequest> arlist = (List<AccessRequest>)q.list();
-		
-		if(arlist != null){
-			List<PrivacyPermissions> plist = PrivacyPermissionsBean.getPrivacyPermissions();
-			for(AccessRequest ar:arlist){
-				if(ar.getMatchHistory() != null){
-					String company = ar.getFile().getValidatingCompanycode();
-					RequestStatus rs = ar.getStatus();
-					AccessLevelType level = AccessLevelType.def;
-					PrivacyPermissions filePermission = null;
-					if(rs != null && rs.equals(RequestStatus.Approved)){
-						level = AccessLevelType.req;
-					}
-					for(PrivacyPermissions p:plist){
-						if(p.getKey().getCompanycode().equals(company) && p.getKey().getLevel().equals(level)){
-							filePermission = p;
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			String sql = getAccessRequestsQuery(dto) + " order by ar.requestedDate desc";
+	
+			Query q = sess.createQuery(sql);
+	
+			ArrayList<AccessRequest.RequestStatus> status = new ArrayList<AccessRequest.RequestStatus>();
+			if(dto.isApproved()){
+				status.add(AccessRequest.RequestStatus.Approved);
+			}
+			if(dto.isDenied()){
+				status.add(AccessRequest.RequestStatus.Denied);
+			}
+			if(dto.isPending()){
+				status.add(AccessRequest.RequestStatus.Created);
+			}
+			
+			if(status.size() == 0){
+				//no status selected
+				return null;
+			}
+			
+			q.setParameterList("status", status);
+			q.setParameter("airline", dto.getAirlinecode());
+			if(dto.getStartDate() != null && dto.getEndDate() != null){
+				q.setParameter("start", dto.getStartDate());
+				q.setParameter("end", dto.getEndDate());
+			}
+			q.setMaxResults(perPage);
+			q.setFirstResult(begin);
+	
+			List<AccessRequest> arlist = (List<AccessRequest>)q.list();
+			
+			if(arlist != null){
+				List<PrivacyPermissions> plist = PrivacyPermissionsBean.getPrivacyPermissions();
+				for(AccessRequest ar:arlist){
+					if(ar.getMatchHistory() != null){
+						String company = ar.getFile().getValidatingCompanycode();
+						RequestStatus rs = ar.getStatus();
+						AccessLevelType level = AccessLevelType.def;
+						PrivacyPermissions filePermission = null;
+						if(rs != null && rs.equals(RequestStatus.Approved)){
+							level = AccessLevelType.req;
 						}
-					}
-					
-					Producer.censor(ar.getMatchHistory(), level, dto.getAirlinecode(), plist);
-					if(!ar.getFile().getValidatingCompanycode().equalsIgnoreCase(dto.getAirlinecode())){
-						Producer.censorFile(ar.getFile(), filePermission);
+						for(PrivacyPermissions p:plist){
+							if(p.getKey().getCompanycode().equals(company) && p.getKey().getLevel().equals(level)){
+								filePermission = p;
+							}
+						}
+						
+						Producer.censor(ar.getMatchHistory(), level, dto.getAirlinecode(), plist);
+						if(!ar.getFile().getValidatingCompanycode().equalsIgnoreCase(dto.getAirlinecode())){
+							Producer.censorFile(ar.getFile(), filePermission);
+						}
 					}
 				}
 			}
+			
+			return arlist;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
 		}
-		
-		return arlist;
+		return null;
 	}
 	
 	public int getAccessRequestsCount(AccessRequestDTO dto) {
-		Session sess = HibernateWrapper.getSession().openSession();
-		String sql = "select count(ar.id) " + getAccessRequestsQuery(dto);
-
-		Query q = sess.createQuery(sql);
-
-		ArrayList<AccessRequest.RequestStatus> status = new ArrayList<AccessRequest.RequestStatus>();
-		if(dto.isApproved()){
-			status.add(AccessRequest.RequestStatus.Approved);
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			String sql = "select count(ar.id) " + getAccessRequestsQuery(dto);
+	
+			Query q = sess.createQuery(sql);
+	
+			ArrayList<AccessRequest.RequestStatus> status = new ArrayList<AccessRequest.RequestStatus>();
+			if(dto.isApproved()){
+				status.add(AccessRequest.RequestStatus.Approved);
+			}
+			if(dto.isDenied()){
+				status.add(AccessRequest.RequestStatus.Denied);
+			}
+			if(dto.isPending()){
+				status.add(AccessRequest.RequestStatus.Created);
+			}
+			
+			if(status.size() == 0){
+				//no status selected
+				return 0;
+			}
+			
+			q.setParameterList("status", status);
+			q.setParameter("airline", dto.getAirlinecode());
+			if(dto.getStartDate() != null && dto.getEndDate() != null){
+				q.setParameter("start", dto.getStartDate());
+				q.setParameter("end", dto.getEndDate());
+			}
+			List list = q.list();
+			return ((Long) list.get(0)).intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
 		}
-		if(dto.isDenied()){
-			status.add(AccessRequest.RequestStatus.Denied);
-		}
-		if(dto.isPending()){
-			status.add(AccessRequest.RequestStatus.Created);
-		}
-		
-		if(status.size() == 0){
-			//no status selected
-			return 0;
-		}
-		
-		q.setParameterList("status", status);
-		q.setParameter("airline", dto.getAirlinecode());
-		if(dto.getStartDate() != null && dto.getEndDate() != null){
-			q.setParameter("start", dto.getStartDate());
-			q.setParameter("end", dto.getEndDate());
-		}
-		List list = q.list();
-		return ((Long) list.get(0)).intValue();
+		return 0;
 	}
 	
 	@Override
@@ -761,28 +799,29 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 
 
 	private void approveOrDenyRequest(long requestId, String message, String agent, RequestStatus status) {
-		Session sess = HibernateWrapper.getSession().openSession();
-		AccessRequest request = (AccessRequest) sess.load(AccessRequest.class, requestId);
-		request.setStatus(status);
-		request.setResponseAgent(agent);
-		request.setResponseDate(DateUtils.convertToGMTDate(new Date()));
-
-		if (message != null && message.trim().length() > 0) {
-			FsMessage m;
-			if(request.getMessage()!=null){
-				m=request.getMessage();
-				m.setMessage(m.getMessage()+"<br>");
-			} else {
-				m = new FsMessage();
-			}
-			m.setSenderName(agent);
-			m.setMessage(m.getMessage()+message);
-			m.setTimestamp(DateUtils.convertToGMTDate(new Date()));
-			request.setMessage(m);
-		}
-
+		Session sess = null;
+		AccessRequest request = null;
 		Transaction t = null;
 		try {
+			sess = HibernateWrapper.getSession().openSession();
+			request = (AccessRequest) sess.load(AccessRequest.class, requestId);
+			request.setStatus(status);
+			request.setResponseAgent(agent);
+			request.setResponseDate(DateUtils.convertToGMTDate(new Date()));
+	
+			if (message != null && message.trim().length() > 0) {
+				FsMessage m;
+				if(request.getMessage()!=null){
+					m=request.getMessage();
+					m.setMessage(m.getMessage()+"<br>");
+				} else {
+					m = new FsMessage();
+				}
+				m.setSenderName(agent);
+				m.setMessage(m.getMessage()+message);
+				m.setTimestamp(DateUtils.convertToGMTDate(new Date()));
+				request.setMessage(m);
+			}
 			t = sess.beginTransaction();
 			sess.save(request);
 			t.commit();
@@ -790,27 +829,41 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			if (t != null)
 				t.rollback();
 		} finally {
-			if(status.equals(RequestStatus.Approved)){
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_APPROVE_REQUEST, request.getFile().getId(), request.getFile().getValidatingCompanycode());
-			} else {
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_DENY_REQUEST, request.getFile().getId(), request.getFile().getValidatingCompanycode());
+			if (request != null) {
+				if(status.equals(RequestStatus.Approved)){
+					AuditUtil.saveActionAudit(AuditUtil.ACTION_APPROVE_REQUEST, request.getFile().getId(), request.getFile().getValidatingCompanycode());
+				} else {
+					AuditUtil.saveActionAudit(AuditUtil.ACTION_DENY_REQUEST, request.getFile().getId(), request.getFile().getValidatingCompanycode());
+				}
 			}
-			sess.close();
+			if (sess != null) {
+				sess.close();
+			}
 		}
 	}
 
 	@Override
 	public int getOutstandingRequetsCount(String airlineId) {
-		Session sess = HibernateWrapper.getSession().openSession();
-		String sql = "select count(ar.id) from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status = :status and ar.file.incident.airline = :airline";
-
-		Query q = sess.createQuery(sql);
-
-		q.setParameter("status", AccessRequest.RequestStatus.Created);
-		q.setParameter("airline", airlineId);
-
-		List list = q.list();
-		return ((Long) list.get(0)).intValue();
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			String sql = "select count(ar.id) from aero.nettracer.fs.model.detection.AccessRequest ar where ar.status = :status and ar.file.incident.airline = :airline";
+	
+			Query q = sess.createQuery(sql);
+	
+			q.setParameter("status", AccessRequest.RequestStatus.Created);
+			q.setParameter("airline", airlineId);
+	
+			List list = q.list();
+			return ((Long) list.get(0)).intValue();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
+		}
+		return 0;
 	}
 
 	public boolean deleteMatch(Set<Long>matchIds){
@@ -833,7 +886,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			e.printStackTrace();
 			sess.close();
 			return false;
-		}
+		} 
 	}
 	
 	@Override
@@ -859,8 +912,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	
 	public void deleteOldFiles(){
 		String sql = "select distinct(key.companycode) from aero.nettracer.serviceprovider.common.db.PrivacyPermissions";
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = null;
 		try{
+			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 
 			List<String> list = (List<String>)q.list();
@@ -872,9 +926,8 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			
 		}catch (Exception e){
 			e.printStackTrace();
-			sess.close();
 		} finally {
-			if(sess != null){
+			if (sess != null) {
 				sess.close();
 			}
 		}
@@ -934,12 +987,10 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 					t.begin();
 					sess.delete(file);
 					t.commit();
-					sess.close();
 					AuditUtil.saveActionAudit(AuditUtil.ACTION_DELETE_FILE, id, (file!=null?file.getValidatingCompanycode():null));
 					return true;
 				} catch (Exception e){
 					e.printStackTrace();
-					sess.close();
 					return false;
 				}
 			} else {
@@ -947,8 +998,11 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 			}
 		} catch (Exception e){
 			e.printStackTrace();
-			sess.close();
 			return false;
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
 		}
 	}
 	
