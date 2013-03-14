@@ -15,6 +15,8 @@
   <property name="jdbc.batch_size">25</property> 
   <property name="jdbc.use_scrollable_resultset">false</property> 
   <property name="dialect">org.hibernate.dialect.SQLServerDialect</property> 
+      <property name="hibernate.listeners.envers.autoRegister">false</property>	
+  
   <!--  c3p0 
   --> 
   <property name="hibernate.c3p0.acquire_increment">1</property> 
@@ -25,6 +27,9 @@
   <property name="hibernate.c3p0.max_statements">0</property> 
   <property name="hibernate.c3p0.min_size">5</property> 
   <property name="hibernate.c3p0.timeout">5000</property> 	
+	<property name="hibernate.c3p0.unreturnedConnectionTimeout">600</property> <!-- seconds -->
+    <property name="hibernate.c3p0.debugUnreturnedConnectionStackTraces">true</property>
+  
 
 
 	<!-- Java5 Annotated Classes -->
