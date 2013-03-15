@@ -17,7 +17,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.MapKey;
+//import org.hibernate.annotations.MapKey;
 import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Proxy;
 import org.hibernate.annotations.Type;
