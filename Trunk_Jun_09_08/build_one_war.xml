@@ -2839,11 +2839,17 @@
 	<target name="cron-generate-hibernate-xmls" >
 		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_main.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}.cfg.xml" overwrite="true" >
 			<filterset begintoken="${" endtoken="}" >
+				<filter token="main.c3p0.max" value="40" />
+			</filterset>
+			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
 				<filtersfile file="${basedir}/companies/tracer/environment/prod/hibernate.properties" />
 			</filterset>
 		</copy>
 		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_dirty.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_dirty.cfg.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filter token="dirty.c3p0.max" value="40" />
+			</filterset>
 			<filterset begintoken="${" endtoken="}" >
 				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
 				<filtersfile file="${basedir}/companies/tracer/environment/prod/hibernate.properties" />
