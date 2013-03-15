@@ -18,7 +18,7 @@ import java.util.zip.ZipInputStream;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
+import org.hibernate.SessionFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bagnet.nettracer.cronjob.bmo.DataFeedLogBmo;
@@ -30,7 +30,17 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
-public class FlightInfoUpdate extends HibernateDaoSupport {
+public class FlightInfoUpdate {
+
+    private SessionFactory sessionFactory;
+    
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
+    }
+    
+    public void setSessionFactory(SessionFactory sessionFactory) {
+         this.sessionFactory = sessionFactory;
+    }
 
 	private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
@@ -67,7 +77,7 @@ public class FlightInfoUpdate extends HibernateDaoSupport {
 		long i = 0;
 		ZipInputStream zin = null;
 		try {
-			sess = getSession(false);
+			sess = getSessionFactory().openSession();
 
 			File dataFile = processDataFiles();
 
@@ -138,6 +148,10 @@ public class FlightInfoUpdate extends HibernateDaoSupport {
 			}
 			catch (Throwable t) {
 				logger.error("Unable to save DataFeed log entry");
+			} finally {
+				if (sess != null) {
+					sess.close();
+				}
 			}
 		}
 		return i;

@@ -58,13 +58,6 @@
 	<bean id="sessionFactory" class="com.bagnet.nettracer.hibernate.HibernateWrapper"
 		factory-method="getSession" />
 		
-		<!--
-		<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"> 
-				<property name="configLocation">
-				<value>file:hibernate_main.cfg.xml</value>
-				</property>
-		</bean>
-
 	<bean id="txManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory" />
@@ -72,22 +65,25 @@
 
 	<tx:annotation-driven transaction-manager="txManager"
 		proxy-target-class="true" />
--->
+		
 	<!-- Data Access Objects -->
 
 	<bean id="wtTx-bmo" class="com.bagnet.nettracer.wt.bmo.WtTransactionBmo">
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
 	<bean id="actionFileStationBmo" class="com.bagnet.nettracer.wt.bmo.ActionFileStationBMO">
 	</bean>
 
 	<bean id="worldTracerAccountBmo" class="com.bagnet.nettracer.wt.bmo.WorldTracerAccountBMO">
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
 	<bean id="lockBMO" class="com.bagnet.nettracer.tracing.bmo.LockBMO">
 	</bean>
 
 	<bean id="wafBmo" class="com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo">
+		<property name="sessionFactory" ref="sessionFactory" />
 	</bean>
 
 	
