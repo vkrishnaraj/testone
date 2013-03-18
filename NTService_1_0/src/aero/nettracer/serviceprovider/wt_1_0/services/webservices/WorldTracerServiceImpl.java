@@ -1981,7 +1981,12 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					if (items.length > i ){
 						Item item = items[i];
 						if (item.getManufacturer() != null && item.getManufacturer().length() > 0) {
-							t3.addNewBrandInfo().setStringValue((RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer())+"/"+item.getExternaldesc()).substring(0, 50));
+							String brandinfo=(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer())+"/"+item.getExternaldesc());
+							if(brandinfo.length()>50){
+								t3.addNewBrandInfo().setStringValue(brandinfo.substring(0, 50));
+							} else {
+								t3.addNewBrandInfo().setStringValue(brandinfo);
+							}
 						}
 						if (item.getContent() != null){
 							Content[] cList = item.getContent();
