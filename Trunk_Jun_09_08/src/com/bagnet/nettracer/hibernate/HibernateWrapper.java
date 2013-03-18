@@ -4,7 +4,9 @@ import java.io.File;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.service.ServiceRegistryBuilder;
 /**
  * @author Ankur Gupta
  * 
@@ -13,12 +15,12 @@ import org.hibernate.cfg.AnnotationConfiguration;
 public class HibernateWrapper {
 
 	private static Logger logger = Logger.getLogger(HibernateWrapper.class);
-	private static AnnotationConfiguration cfg_prod = new AnnotationConfiguration();
-	private static AnnotationConfiguration cfg_prod_dirty = new AnnotationConfiguration();
-	private static AnnotationConfiguration cfg_prod_reporting = new AnnotationConfiguration();
+	private static Configuration cfg_prod = new Configuration();
+	private static Configuration cfg_prod_dirty = new Configuration();
+	private static Configuration cfg_prod_reporting = new Configuration();
 	
-	private static AnnotationConfiguration cfg_ntbak = new AnnotationConfiguration();
-	private static AnnotationConfiguration cfg_nt = new AnnotationConfiguration();
+	private static Configuration cfg_ntbak = new Configuration();
+	private static Configuration cfg_nt = new Configuration();
 
 	private static SessionFactory sf_prod;
 	private static SessionFactory sf_prod_dirty;
@@ -43,8 +45,14 @@ public class HibernateWrapper {
 		
 		try {
 
-				sf_prod = cfg_prod.configure(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml")).buildSessionFactory();
-				sf_prod_dirty = cfg_prod_dirty.configure(HibernateWrapper.class.getResource("/hibernate_dirty.cfg.xml")).buildSessionFactory();
+				//sf_prod = cfg_prod.configure(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml")).buildSessionFactory();
+			cfg_prod.configure(new File(hibernate_main_path));
+			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(cfg_prod.getProperties()).buildServiceRegistry();  
+			sf_prod = cfg_prod.buildSessionFactory(serviceRegistry);
+//				sf_prod_dirty = cfg_prod_dirty.configure(HibernateWrapper.class.getResource("/hibernate_dirty.cfg.xml")).buildSessionFactory();
+			cfg_prod_dirty.configure(new File(hibernate_dirty_path));
+			ServiceRegistry serviceRegistry2 = new ServiceRegistryBuilder().applySettings(cfg_prod_dirty.getProperties()).buildServiceRegistry();  
+			sf_prod_dirty = cfg_prod_dirty.buildSessionFactory(serviceRegistry2);
 		} catch (Exception e) {
 			logger.fatal("Unable to initiate hibernate: " + e);
 			e.printStackTrace();
@@ -61,7 +69,9 @@ public class HibernateWrapper {
 			// Obtain the correct session factory.
 			
 			if (sf_prod == null) {
-				sf_prod = cfg_prod.configure(new File(hibernate_main_path)).buildSessionFactory();
+				 cfg_prod.configure(new File(hibernate_main_path));
+				ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(cfg_prod.getProperties()).buildServiceRegistry();  
+				sf_prod = cfg_prod.buildSessionFactory(serviceRegistry);
 			}
 			return sf_prod;
 		} catch (Exception e) {
@@ -84,7 +94,10 @@ public class HibernateWrapper {
 			
 
 				if (sf_prod_dirty == null) {
-					sf_prod_dirty = cfg_prod_dirty.configure(new File(hibernate_dirty_path)).buildSessionFactory();
+
+					cfg_prod_dirty.configure(new File(hibernate_dirty_path));
+					ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(cfg_prod_dirty.getProperties()).buildServiceRegistry();  
+					sf_prod_dirty = cfg_prod_dirty.buildSessionFactory(serviceRegistry);
 				}
 				return sf_prod_dirty;
 			
@@ -109,7 +122,10 @@ public class HibernateWrapper {
 					//         is some how conflicting with the path.  Have seen this problem in other areas of the application
 					//         Use HibernateWrapper.class.getResource instead of File
 //					sf_prod_reporting = cfg_prod_reporting.configure(new File(hibernate_reporting_path)).buildSessionFactory();
-					sf_prod_reporting = cfg_prod_reporting.configure(HibernateWrapper.class.getResource("/hibernate_reporting.cfg.xml")).buildSessionFactory();
+					cfg_prod_reporting.configure(HibernateWrapper.class.getResource("/hibernate_reporting.cfg.xml"));
+					ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(cfg_prod_reporting.getProperties()).buildServiceRegistry();  
+					sf_prod_reporting = cfg_prod_reporting.buildSessionFactory(serviceRegistry);
+					
 				}
 				return sf_prod_reporting;
 			
@@ -120,7 +136,7 @@ public class HibernateWrapper {
 		
 	}
 
-	public static AnnotationConfiguration getConfig() {
+	public static Configuration getConfig() {
 
 			return cfg_prod;
 	}
@@ -128,8 +144,10 @@ public class HibernateWrapper {
 		try {
 			// Obtain the correct session factory.	
 			        if (sf_nt==null){
-//					addClasses(cfg_nt);			
-					sf_nt = cfg_nt.configure(new File(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml").getPath())).buildSessionFactory();
+//					addClasses(cfg_nt);	
+			        	cfg_nt.configure(new File(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml").getPath()));
+						ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(cfg_nt.getProperties()).buildServiceRegistry();  
+						sf_nt = cfg_nt.buildSessionFactory(serviceRegistry);
 			        }
 				    return sf_nt;
 		} catch (Exception e) {
@@ -142,7 +160,9 @@ public class HibernateWrapper {
 			// Obtain the correct session factory.	
 			        if(sf_ntbak==null){
 //					addClasses(cfg_ntbak);			
-					sf_ntbak = cfg_ntbak.configure(new File(HibernateWrapper.class.getResource("/hibernate_main_bak.cfg.xml").getPath())).buildSessionFactory();
+			        	cfg_ntbak.configure(new File(HibernateWrapper.class.getResource("/hibernate_main_bak.cfg.xml").getPath()));
+						ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(cfg_ntbak.getProperties()).buildServiceRegistry();  
+						sf_ntbak = cfg_ntbak.buildSessionFactory(serviceRegistry);
 			        }
 				    return sf_ntbak;
 		} catch (Exception e) {
@@ -150,10 +170,10 @@ public class HibernateWrapper {
 			return null;
 		}		
 	}
-	public static AnnotationConfiguration getNtConfig() {
+	public static Configuration getNtConfig() {
 		return cfg_nt;
     }
-    public static AnnotationConfiguration getNtBakConfig() {
+    public static Configuration getNtBakConfig() {
 	    return cfg_ntbak;
     }
     
