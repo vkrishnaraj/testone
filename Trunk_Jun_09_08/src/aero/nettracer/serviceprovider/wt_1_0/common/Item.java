@@ -34,7 +34,7 @@ public class Item {
 	}
 
 	public void setExternaldesc(String externaldesc) {
-		this.type = externaldesc;
+		this.externaldesc = externaldesc;
 	}
 
 	public String getDesc1() {

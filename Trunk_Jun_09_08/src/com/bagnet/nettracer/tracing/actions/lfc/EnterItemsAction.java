@@ -74,7 +74,7 @@ public class EnterItemsAction extends CheckedAction {
 		LFFound found = eiForm.getFound();
 		if (found == null) {
 			eiForm.setFound(LFUtils.createLFFound(user));
-			eiForm.getFound().setCompanyId(TracingConstants.LF_SWA_COMPANY_ID);
+			//eiForm.getFound().setCompanyId(TracingConstants.LF_SWA_COMPANY_ID);
 		} else if (request.getParameter("save") != null) {
 			try {
 				if (found.hasContactInfo()) {
