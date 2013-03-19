@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -34,9 +35,25 @@ public class LockBMO {
 		if(user!=null){
 			tmp.setOwner(String.valueOf(user.getAgent_ID()));
 		}
-		Session sess = HibernateWrapper.getSession().openSession();
-		sess.save(tmp);
-		sess.close();
+		Session sess = null;
+		Transaction tx = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			tx = sess.beginTransaction();
+			sess.save(tmp);
+			tx.commit();
+		} catch (Exception ex) {
+			logger.error("LOCK FAILED TO CREATE: " + ex);
+			try {
+				tx.rollback();
+			} catch (Exception etx) {
+				etx.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
+		}
 		return tmp;
 	}
 	
@@ -47,29 +64,46 @@ public class LockBMO {
 	public Lock loadLock(LockType type, String key) {
 		if(type == null || key == null) return null;
 		
-		
-		
-		Session sess = HibernateWrapper.getSession().openSession();
-		Lock lock = new Lock();
-		lock.setLockKey(key);
-		lock.setLockType(type);
-		List list = sess.createCriteria(Lock.class).add(Example.create(lock)).list();
-		sess.close();
-		if(list != null && list.size() > 0){
-			return (Lock)list.get(0);
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Lock lock = new Lock();
+			lock.setLockKey(key);
+			lock.setLockType(type);
+			List list = sess.createCriteria(Lock.class).add(Example.create(lock)).list();
+			if(list != null && list.size() > 0){
+				return (Lock)list.get(0);
+			}
+		} catch (Exception ex) {
+			logger.error("LOCK FAILED TO LOAD: " + ex);
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
 		}
 		
 		return null;
 	}
 	
 	public void releaseLock(Lock lock) {
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = null;
+		Transaction tx = null;
 		try {
+			sess = HibernateWrapper.getSession().openSession();
+			tx = sess.beginTransaction();
 			sess.delete(lock);
+			tx.commit();
 		} catch (Exception ex) {
 			logger.error("LOCK FAILED TO DELETE: " + ex);
+			try {
+				tx.rollback();
+			} catch (Exception etx) {
+				etx.printStackTrace();
+			}
 		} finally {
-			sess.close();
+			if (sess != null) {
+				sess.close();
+			}
 		}
 	}
 

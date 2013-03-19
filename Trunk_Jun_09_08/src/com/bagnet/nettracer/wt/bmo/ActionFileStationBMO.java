@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.cronjob.bmo.WT_ActionFileBmo;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -29,13 +30,22 @@ public class ActionFileStationBMO {
 	private static final String GET_COUNT = "select count(*) from Worldtracer_Actionfiles where action_file_type=? and day=? and airline=? and station=? and seq=? and deleted = false";
 
 	public ActionFileStation getAfStation(String companyCode, String wtStation) {
-		Session sess = HibernateWrapper.getSession().openSession();
-		Query q = sess
-				.createQuery("from ActionFileStation afs where afs.companyCode = :companyCode and afs.stationCode = :wtStation");
-		q.setString("companyCode", companyCode);
-		q.setString("wtStation", wtStation);
-		ActionFileStation ret = (ActionFileStation) q.uniqueResult();
-		sess.close();
+		Session sess = null; 
+		ActionFileStation ret = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess
+					.createQuery("from ActionFileStation afs where afs.companyCode = :companyCode and afs.stationCode = :wtStation");
+			q.setString("companyCode", companyCode);
+			q.setString("wtStation", wtStation);
+			ret = (ActionFileStation) q.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
+		}
 		return ret;
 	}
 
@@ -43,115 +53,130 @@ public class ActionFileStationBMO {
 			String wtStation, Agent user, WebServiceDto dto)
 			throws CaptchaException {
 		ActionFileStation afStation = getAfStation(companyCode, wtStation);
-		Session sess = HibernateWrapper.getSession().openSession();
-		if (!isCurrent(afStation)) {
-			WorldTracerService wtService = SpringUtils.getWorldTracerService();
-			List<ActionFileCount> countList;
+		Session sess = null;
+		Transaction tx = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			tx = sess.beginTransaction();
+			if (!isCurrent(afStation)) {
+				WorldTracerService wtService = SpringUtils.getWorldTracerService();
+				List<ActionFileCount> countList;
+				try {
+					wtService.getWtConnector().initialize();
+					countList = wtService.getActionFileCount(companyCode,
+							wtStation, user, dto);
+				} catch (CaptchaException e) {
+					throw e;
+				} finally {
+					wtService.getWtConnector().logout();
+				}
+				if (afStation == null) {
+					afStation = new ActionFileStation();
+					afStation.setCompanyCode(companyCode);
+					afStation.setStationCode(wtStation);
+				}
+				afStation.setCountList(countList);
+				afStation.setLastUpdated(new Date());
+				Query q = sess.createQuery(WT_ActionFileBmo.DELETE_BY_STATION);
+				q.setString("airline", companyCode);
+				q.setString("station", wtStation);
+				q.executeUpdate();	
+			}
+			Collection<ActionFileCount> countCollection = afStation.getCountList();
+			for (ActionFileCount afc : countCollection) {
+				ActionFileType type = afc.getAf_type();
+				if (afc.isDayOneLoaded()) {
+					Query query = sess.createQuery(GET_COUNT);
+					query.setParameter(0, type);
+					query.setParameter(1, 1);
+					query.setParameter(2, companyCode);
+					query.setParameter(3, wtStation);
+					query.setParameter(4, afc.getAf_seq());
+					String string_count = query.uniqueResult().toString();
+					int finalCount = Integer.parseInt(string_count);
+					afc.setDayOne(finalCount);
+				}
+				if (afc.isDayTwoLoaded()) {
+					Query query = sess.createQuery(GET_COUNT);
+					query.setParameter(0, type);
+					query.setParameter(1, 2);
+					query.setParameter(2, companyCode);
+					query.setParameter(3, wtStation);
+					query.setParameter(4, afc.getAf_seq());
+					String string_count = query.uniqueResult().toString();
+					int finalCount = Integer.parseInt(string_count);
+					afc.setDayTwo(finalCount);
+				}
+				if (afc.isDayThreeLoaded()) {
+					Query query = sess.createQuery(GET_COUNT);
+					query.setParameter(0, type);
+					query.setParameter(1, 3);
+					query.setParameter(2, companyCode);
+					query.setParameter(3, wtStation);
+					query.setParameter(4, afc.getAf_seq());
+					String string_count = query.uniqueResult().toString();
+					int finalCount = Integer.parseInt(string_count);
+					afc.setDayThree(finalCount);
+				}
+				if (afc.isDayFourLoaded()) {
+					Query query = sess.createQuery(GET_COUNT);
+					query.setParameter(0, type);
+					query.setParameter(1, 4);
+					query.setParameter(2, companyCode);
+					query.setParameter(3, wtStation);
+					query.setParameter(4, afc.getAf_seq());
+					String string_count = query.uniqueResult().toString();
+					int finalCount = Integer.parseInt(string_count);
+					afc.setDayFour(finalCount);
+				}
+				if (afc.isDayFiveLoaded()) {
+					Query query = sess.createQuery(GET_COUNT);
+					query.setParameter(0, type);
+					query.setParameter(1, 5);
+					query.setParameter(2, companyCode);
+					query.setParameter(3, wtStation);
+					query.setParameter(4, afc.getAf_seq());
+					String string_count = query.uniqueResult().toString();
+					int finalCount = Integer.parseInt(string_count);
+					afc.setDayFive(finalCount);
+				}
+				if (afc.isDaySixLoaded()) {
+					Query query = sess.createQuery(GET_COUNT);
+					query.setParameter(0, type);
+					query.setParameter(1, 6);
+					query.setParameter(2, companyCode);
+					query.setParameter(3, wtStation);
+					query.setParameter(4, afc.getAf_seq());
+					String string_count = query.uniqueResult().toString();
+					int finalCount = Integer.parseInt(string_count);
+					afc.setDaySix(finalCount);
+				}
+				if (afc.isDaySevenLoaded()) {
+					Query query = sess.createQuery(GET_COUNT);
+					query.setParameter(0, type);
+					query.setParameter(1, 7);
+					query.setParameter(2, companyCode);
+					query.setParameter(3, wtStation);
+					query.setParameter(4, afc.getAf_seq());
+					String string_count = query.uniqueResult().toString();
+					int finalCount = Integer.parseInt(string_count);
+					afc.setDaySeven(finalCount);
+				}
+			}
+			sess.saveOrUpdate(afStation);
+			tx.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
 			try {
-				wtService.getWtConnector().initialize();
-				countList = wtService.getActionFileCount(companyCode,
-						wtStation, user, dto);
-			} catch (CaptchaException e) {
-				throw e;
-			} finally {
-				wtService.getWtConnector().logout();
+				tx.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-			if (afStation == null) {
-				afStation = new ActionFileStation();
-				afStation.setCompanyCode(companyCode);
-				afStation.setStationCode(wtStation);
-			}
-			afStation.setCountList(countList);
-			afStation.setLastUpdated(new Date());
-			Query q = sess.createQuery(WT_ActionFileBmo.DELETE_BY_STATION);
-			q.setString("airline", companyCode);
-			q.setString("station", wtStation);
-			q.executeUpdate();
-
-		}
-		Collection<ActionFileCount> countCollection = afStation.getCountList();
-		for (ActionFileCount afc : countCollection) {
-			ActionFileType type = afc.getAf_type();
-			if (afc.isDayOneLoaded()) {
-				Query query = sess.createQuery(GET_COUNT);
-				query.setParameter(0, type);
-				query.setParameter(1, 1);
-				query.setParameter(2, companyCode);
-				query.setParameter(3, wtStation);
-				query.setParameter(4, afc.getAf_seq());
-				String string_count = query.uniqueResult().toString();
-				int finalCount = Integer.parseInt(string_count);
-				afc.setDayOne(finalCount);
-			}
-			if (afc.isDayTwoLoaded()) {
-				Query query = sess.createQuery(GET_COUNT);
-				query.setParameter(0, type);
-				query.setParameter(1, 2);
-				query.setParameter(2, companyCode);
-				query.setParameter(3, wtStation);
-				query.setParameter(4, afc.getAf_seq());
-				String string_count = query.uniqueResult().toString();
-				int finalCount = Integer.parseInt(string_count);
-				afc.setDayTwo(finalCount);
-			}
-			if (afc.isDayThreeLoaded()) {
-				Query query = sess.createQuery(GET_COUNT);
-				query.setParameter(0, type);
-				query.setParameter(1, 3);
-				query.setParameter(2, companyCode);
-				query.setParameter(3, wtStation);
-				query.setParameter(4, afc.getAf_seq());
-				String string_count = query.uniqueResult().toString();
-				int finalCount = Integer.parseInt(string_count);
-				afc.setDayThree(finalCount);
-			}
-			if (afc.isDayFourLoaded()) {
-				Query query = sess.createQuery(GET_COUNT);
-				query.setParameter(0, type);
-				query.setParameter(1, 4);
-				query.setParameter(2, companyCode);
-				query.setParameter(3, wtStation);
-				query.setParameter(4, afc.getAf_seq());
-				String string_count = query.uniqueResult().toString();
-				int finalCount = Integer.parseInt(string_count);
-				afc.setDayFour(finalCount);
-			}
-			if (afc.isDayFiveLoaded()) {
-				Query query = sess.createQuery(GET_COUNT);
-				query.setParameter(0, type);
-				query.setParameter(1, 5);
-				query.setParameter(2, companyCode);
-				query.setParameter(3, wtStation);
-				query.setParameter(4, afc.getAf_seq());
-				String string_count = query.uniqueResult().toString();
-				int finalCount = Integer.parseInt(string_count);
-				afc.setDayFive(finalCount);
-			}
-			if (afc.isDaySixLoaded()) {
-				Query query = sess.createQuery(GET_COUNT);
-				query.setParameter(0, type);
-				query.setParameter(1, 6);
-				query.setParameter(2, companyCode);
-				query.setParameter(3, wtStation);
-				query.setParameter(4, afc.getAf_seq());
-				String string_count = query.uniqueResult().toString();
-				int finalCount = Integer.parseInt(string_count);
-				afc.setDaySix(finalCount);
-			}
-			if (afc.isDaySevenLoaded()) {
-				Query query = sess.createQuery(GET_COUNT);
-				query.setParameter(0, type);
-				query.setParameter(1, 7);
-				query.setParameter(2, companyCode);
-				query.setParameter(3, wtStation);
-				query.setParameter(4, afc.getAf_seq());
-				String string_count = query.uniqueResult().toString();
-				int finalCount = Integer.parseInt(string_count);
-				afc.setDaySeven(finalCount);
+		} finally {
+			if (sess != null) {
+				sess.close();
 			}
 		}
-		sess.saveOrUpdate(afStation);
-		sess.close();
 		return afStation;
 	}
 
@@ -176,6 +201,7 @@ public class ActionFileStationBMO {
 		if (afStation == null)
 			return null;
 		Session sess = null;
+		Transaction tx = null;
 		try {
 			wtService.getWtConnector().initialize();
 			List<Worldtracer_Actionfiles> result = wtService
@@ -233,6 +259,7 @@ public class ActionFileStationBMO {
 			}
 
 			sess = HibernateWrapper.getSession().openSession();
+			tx = sess.beginTransaction();
 			sess.saveOrUpdate(afStation);
 			Query q = sess.createQuery(WT_ActionFileBmo.DELETE_BY_DAY_TYPE);
 			q.setParameter("airline", companyCode);
@@ -244,11 +271,20 @@ public class ActionFileStationBMO {
 			for (Worldtracer_Actionfiles af : result) {
 				sess.save(af);
 			}
+			tx.commit();
 			return result;
 		} catch (CaptchaException e) {
 			throw e;
 		} catch (WorldTracerRecordNotFoundException ex) {
 			logger.error("No ActionFiles found");
+			return null;
+		} catch (Exception et) {
+			et.printStackTrace();
+			try {
+				tx.rollback();
+			} catch (Exception etx) {
+				etx.printStackTrace();
+			}
 			return null;
 		} finally {
 			wtService.getWtConnector().logout();
@@ -261,60 +297,78 @@ public class ActionFileStationBMO {
 	public Worldtracer_Actionfiles eraseActionFile(String companyCode,
 			String wtStation, ActionFileType category, String seq, int day,
 			int fileNum, ActionFileStation afs) {
-		Session sess = HibernateWrapper.getSession().openSession();
-		Query q = sess.createQuery(WT_ActionFileBmo.FIND_WAF);
-		q.setParameter("airline", companyCode);
-		q.setParameter("afType", category);
-		q.setParameter("seq", seq);
-		q.setParameter("wtStation", wtStation);
-		q.setInteger("day", day);
-		q.setInteger("itemNum", fileNum);
-		Worldtracer_Actionfiles waf = (Worldtracer_Actionfiles) q
-		.uniqueResult();
-		waf.setDeleted(true);
-		sess.update(waf);
-		ActionFileCount count = null;
-		for (ActionFileCount afc : afs.getCountList()) {
-			if (afc.getAf_type().equals(category) && afc.getAf_seq().equals(seq)) {
-				count = afc;
+		Session sess = null;
+		Transaction tx = null;
+		Worldtracer_Actionfiles waf = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			tx = sess.beginTransaction();
+			Query q = sess.createQuery(WT_ActionFileBmo.FIND_WAF);
+			q.setParameter("airline", companyCode);
+			q.setParameter("afType", category);
+			q.setParameter("seq", seq);
+			q.setParameter("wtStation", wtStation);
+			q.setInteger("day", day);
+			q.setInteger("itemNum", fileNum);
+			waf = (Worldtracer_Actionfiles) q
+			.uniqueResult();
+			waf.setDeleted(true);
+			sess.update(waf);
+			ActionFileCount count = null;
+			for (ActionFileCount afc : afs.getCountList()) {
+				if (afc.getAf_type().equals(category) && afc.getAf_seq().equals(seq)) {
+					count = afc;
+				}
+			}
+			switch (day) {
+			case 1:
+				count.setDayOne(count.getDayOne() - 1 >= 0 ? count.getDayOne() - 1
+						: 0);
+				break;
+			case 2:
+				count.setDayTwo(count.getDayTwo() - 1 >= 0 ? count.getDayTwo() - 1
+						: 0);
+				break;
+			case 3:
+				count.setDayThree(count.getDayThree() - 1 >= 0 ? count
+						.getDayThree() - 1 : 0);
+				break;
+			case 4:
+				count
+						.setDayFour(count.getDayFour() - 1 >= 0 ? count
+								.getDayFour() - 1 : 0);
+				break;
+			case 5:
+				count
+						.setDayFive(count.getDayFive() - 1 >= 0 ? count
+								.getDayFive() - 1 : 0);
+				break;
+			case 6:
+				count.setDaySix(count.getDaySix() - 1 >= 0 ? count.getDaySix() - 1
+						: 0);
+				break;
+			case 7:
+				count.setDaySeven(count.getDaySeven() - 1 >= 0 ? count
+						.getDaySeven() - 1 : 0);
+				break;
+			default:
+				break;
+			}
+			sess.saveOrUpdate(afs);
+			tx.commit();
+		} catch (Exception et) {
+			et.printStackTrace();
+			try {
+				tx.rollback();
+			} catch (Exception etx) {
+				etx.printStackTrace();
+			}
+			return null;
+		} finally {
+			if(sess != null){
+				sess.close();
 			}
 		}
-		switch (day) {
-		case 1:
-			count.setDayOne(count.getDayOne() - 1 >= 0 ? count.getDayOne() - 1
-					: 0);
-			break;
-		case 2:
-			count.setDayTwo(count.getDayTwo() - 1 >= 0 ? count.getDayTwo() - 1
-					: 0);
-			break;
-		case 3:
-			count.setDayThree(count.getDayThree() - 1 >= 0 ? count
-					.getDayThree() - 1 : 0);
-			break;
-		case 4:
-			count
-					.setDayFour(count.getDayFour() - 1 >= 0 ? count
-							.getDayFour() - 1 : 0);
-			break;
-		case 5:
-			count
-					.setDayFive(count.getDayFive() - 1 >= 0 ? count
-							.getDayFive() - 1 : 0);
-			break;
-		case 6:
-			count.setDaySix(count.getDaySix() - 1 >= 0 ? count.getDaySix() - 1
-					: 0);
-			break;
-		case 7:
-			count.setDaySeven(count.getDaySeven() - 1 >= 0 ? count
-					.getDaySeven() - 1 : 0);
-			break;
-		default:
-			break;
-		}
-		sess.saveOrUpdate(afs);
-		sess.close();
 		return waf;
 	}
 
