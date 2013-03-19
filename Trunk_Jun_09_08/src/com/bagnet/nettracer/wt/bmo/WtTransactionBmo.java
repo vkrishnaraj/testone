@@ -48,7 +48,7 @@ public class WtTransactionBmo {
 	}
 	
 	@Transactional(readOnly=true)
-	public int getTransactionCount(String txType,
+	public long getTransactionCount(String txType,
 			String result, Date startDate, Date endDate, String incident_id,
 			String ohd_id) {
 		Session sess = null;
@@ -75,7 +75,7 @@ public class WtTransactionBmo {
 				cri.add(Restrictions.like("ohd.OHD_ID", ohd_id).ignoreCase());
 			}
 			cri.setProjection(Projections.rowCount());
-			Integer foo = (Integer) cri.uniqueResult();
+			Long foo = (Long) cri.uniqueResult();
 			return foo;
 		} catch (Exception e) {
 			e.printStackTrace();

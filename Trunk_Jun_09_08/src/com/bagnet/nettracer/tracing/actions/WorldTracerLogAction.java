@@ -100,7 +100,7 @@ public class WorldTracerLogAction extends Action {
 
 			// find out total pages
 			
-			int totalRows = wttBmo.getTransactionCount(wtForm.getTxType(), wtForm.getResult(), startDate, endDate, wtForm.getIncident_id(), wtForm.getOhd_id());
+			long totalRows = wttBmo.getTransactionCount(wtForm.getTxType(), wtForm.getResult(), startDate, endDate, wtForm.getIncident_id(), wtForm.getOhd_id());
 			totalpages = (int) Math.ceil((double) totalRows / (double) rowsperpage);
 
 			if (totalpages <= currpage) {
