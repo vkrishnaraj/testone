@@ -25,7 +25,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -79,7 +79,7 @@ public class MoveToLZThread {
 	public MoveToLZThread(int type) {
 		
 		try {
-			AnnotationConfiguration foo = HibernateWrapper.getConfig();
+			Configuration foo = HibernateWrapper.getConfig();
 			Properties properties = foo.getProperties();
 			Connection conn = null;
 			this.type = type;

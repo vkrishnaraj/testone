@@ -45,12 +45,12 @@ public class HibernateWrapper {
 		
 		try {
 
-				//sf_prod = cfg_prod.configure(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml")).buildSessionFactory();
-			cfg_prod.configure(new File(hibernate_main_path));
+			//sf_prod = cfg_prod.configure(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml")).buildSessionFactory();
+			cfg_prod.configure(HibernateWrapper.class.getResource("/hibernate_main.cfg.xml"));
 			ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(cfg_prod.getProperties()).buildServiceRegistry();  
 			sf_prod = cfg_prod.buildSessionFactory(serviceRegistry);
-//				sf_prod_dirty = cfg_prod_dirty.configure(HibernateWrapper.class.getResource("/hibernate_dirty.cfg.xml")).buildSessionFactory();
-			cfg_prod_dirty.configure(new File(hibernate_dirty_path));
+//			sf_prod_dirty = cfg_prod_dirty.configure(HibernateWrapper.class.getResource("/hibernate_dirty.cfg.xml")).buildSessionFactory();
+			cfg_prod_dirty.configure(HibernateWrapper.class.getResource("/hibernate_dirty.cfg.xml"));
 			ServiceRegistry serviceRegistry2 = new ServiceRegistryBuilder().applySettings(cfg_prod_dirty.getProperties()).buildServiceRegistry();  
 			sf_prod_dirty = cfg_prod_dirty.buildSessionFactory(serviceRegistry2);
 		} catch (Exception e) {
