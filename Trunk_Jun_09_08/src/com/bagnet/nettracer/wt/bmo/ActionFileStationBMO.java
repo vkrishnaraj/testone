@@ -186,10 +186,12 @@ public class ActionFileStationBMO {
 				return null;
 			}
 			ActionFileCount counts = null;
-			for (ActionFileCount afc : afStation.getCountList()) {
-				if (afc.getAf_type().equals(category)
-						&& afc.getAf_seq().equals(seq)) {
-					counts = afc;
+			if (afStation.getCountList() != null) {
+				for (ActionFileCount afc : afStation.getCountList()) {
+					if (afc.getAf_type().equals(category)
+							&& afc.getAf_seq().equals(seq)) {
+						counts = afc;
+					}
 				}
 			}
 

@@ -8,6 +8,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -34,11 +35,19 @@ public class WtTransactionBmo {
 	@Transactional
 	public void saveTransaction(WorldTracerTransaction tx) {
 		Session sess = null;
+		Transaction t = null;
 		try {
 			sess = getSessionFactory().openSession();
+			t = sess.beginTransaction();
 			sess.save(tx);
+			t.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			if (sess != null) {
 				sess.close();

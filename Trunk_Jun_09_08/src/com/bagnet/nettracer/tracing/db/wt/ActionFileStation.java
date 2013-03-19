@@ -6,6 +6,7 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -50,7 +51,7 @@ public class ActionFileStation implements Serializable {
 		this.stationCode = stationCode;
 	}
 
-	@ElementCollection(targetClass = ActionFileCount.class)
+	@ElementCollection(targetClass = ActionFileCount.class, fetch=FetchType.EAGER)
 	@JoinTable(name = "actionfile_station_counts", joinColumns = @JoinColumn(name = "af_station_id"))
 	public Collection<ActionFileCount> getCountList() {
 		return countList;

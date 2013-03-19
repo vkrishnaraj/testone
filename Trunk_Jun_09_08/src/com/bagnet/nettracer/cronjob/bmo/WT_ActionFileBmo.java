@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
@@ -40,11 +41,19 @@ public class WT_ActionFileBmo {
 	@Transactional
 	public void saveActionFile(Worldtracer_Actionfiles waf) {
 		Session sess = null;
+		Transaction tx = null;
 		try {
 			sess = getSessionFactory().openSession();
+			tx = sess.beginTransaction();
 			sess.save(waf);
+			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				tx.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			if (sess != null) {
 				sess.close();
@@ -55,8 +64,10 @@ public class WT_ActionFileBmo {
 	@Transactional
 	public void deleteActionFiles(String airline, String station, ActionFileType actionFileType, String seq, int day) {
 		Session sess = null;
+		Transaction tx = null;
 		try {
 			sess = getSessionFactory().openSession();
+			tx = sess.beginTransaction();
 		
 			Query q = sess.createQuery(DELETE_BY_DAY_TYPE);
 			q.setParameter("station", station);
@@ -66,8 +77,14 @@ public class WT_ActionFileBmo {
 			q.setParameter("seq", seq);
 			
 			q.executeUpdate();
+			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				tx.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			if (sess != null) {
 				sess.close();
@@ -108,8 +125,10 @@ public class WT_ActionFileBmo {
 	@Transactional
 	public void deleteActionFile(Worldtracer_Actionfiles waf) {
 		Session sess = null;
+		Transaction tx = null;
 		try {
 			sess = getSessionFactory().openSession();
+			tx = sess.beginTransaction();
 		
 			Query q = sess.createQuery(DELETE_SINGLE);
 			q.setParameter("station", waf.getStation());
@@ -120,8 +139,14 @@ public class WT_ActionFileBmo {
 			q.setParameter("seq", waf.getSeq());
 	
 			q.executeUpdate();
+			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				tx.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			if (sess != null) {
 				sess.close();
@@ -145,8 +170,10 @@ public class WT_ActionFileBmo {
 	public void deleteActionFiles(String companyCode, String stationCode,
 			ActionFileType afType, String seq) {
 		Session sess = null;
+		Transaction tx = null;
 		try {
 			sess = getSessionFactory().openSession();
+			tx = sess.beginTransaction();
 		
 			Query q = sess.createQuery(DELETE_BY_TYPE);
 			q.setParameter("station", stationCode);
@@ -155,8 +182,14 @@ public class WT_ActionFileBmo {
 			q.setParameter("seq", seq);
 	
 			q.executeUpdate();
+			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				tx.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			if (sess != null) {
 				sess.close();
@@ -195,6 +228,7 @@ public class WT_ActionFileBmo {
 	public void updateDetails(String companyCode, String wtStation,
 			ActionFileType category, String seq, int day, int fileNum, String result, String ahl_id, String ohd_id, double percent) {
 		Session sess = null;
+		Transaction tx = null;
 		try {
 			sess = getSessionFactory().openSession();
 		
@@ -211,9 +245,18 @@ public class WT_ActionFileBmo {
 			waf.setPercent_match(percent);
 			waf.setWt_incident_id(ahl_id);
 			waf.setWt_ohd_id(ohd_id);
+			tx = sess.beginTransaction();
 			sess.update(waf);
+			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				if (tx != null) {
+					tx.rollback();
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			if (sess != null) {
 				sess.close();
