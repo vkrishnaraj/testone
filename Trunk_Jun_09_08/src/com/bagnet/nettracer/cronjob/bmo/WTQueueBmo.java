@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -31,11 +32,19 @@ public class WTQueueBmo {
 	@Transactional
 	public void updateQueue(WorldTracerQueue queue) {
 		Session sess = null;
+		Transaction tx = null;
 		try {
 			sess = getSessionFactory().openSession();
+			tx = sess.beginTransaction();
 			sess.update(queue);
+			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
+			try {
+				tx.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			if (sess != null) {
 				sess.close();
