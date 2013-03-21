@@ -1211,7 +1211,7 @@ public class OhdBMO {
 			e.printStackTrace();
 			return null;
 		} finally {
-			sess.close();
+			if (sess != null) sess.close();
 		}
 	}
 	
@@ -1460,10 +1460,11 @@ public class OhdBMO {
 	 * @return station if found; null otherwise
 	 */
 	public Station findStationByID(int station_ID) {
+		Session sess = null;
 		try {
 			String query = "select station from com.bagnet.nettracer.tracing.db.Station station "
 					+ "where station.station_ID=:station_ID";
-			Session sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			q.setInteger("station_ID", station_ID);
 			List list = q.list();
@@ -1473,11 +1474,12 @@ public class OhdBMO {
 				return null;
 			}
 			Station station = (Station) list.get(0);
-			sess.close();
 			return station;
 		} catch (Exception e) {
 			logger.error("unable to retrieve station: " + e);
 			return null;
+		} finally {
+			if (sess != null) sess.close();
 		}
 	}
 

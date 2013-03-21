@@ -100,188 +100,188 @@ public class PaxCommunicationAction extends Action {
     	String incident_ID =  (String) theForm.get("incident_id");
     	
 		Session sess = HibernateWrapper.getSession().openSession();
-		Incident inc = IncidentBMO.getIncidentByID(incident_ID, sess);
-		
-		boolean  hasSysCompPaxCommunicationPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION, user);
-		boolean  hasSysCompPaxCommunicationReadOnlyPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION_READ_ONLY, user);
-		
-		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-				&& !hasSysCompPaxCommunicationPermission && !hasSysCompPaxCommunicationReadOnlyPermission){
-			sess.close();
-			return (mapping.findForward(TracingConstants.NO_PERMISSION));			
-		}
-
-		
-
-		
-		if(hasSysCompPaxCommunicationReadOnlyPermission
-				&& (!hasSysCompPaxCommunicationPermission)) {
-			theForm.set("readOnly", "true");
-		}
-		
-		//find out if we will display the radio buttons
-		//if YES, display radio buttons
-		String isThereNewPaxComment = "NO";
-		boolean isThereNewPaxCommunications = PaxCommunicationBMO.isThereNewPaxCommunications(incident_ID, sess);
-		if(isThereNewPaxCommunications) {
-			isThereNewPaxComment = "YES";
-		}
-		
-		//find out if pax email is on file, if not alert agent about this
-		//because it compromises this feature
-		String ifPaxEmailNotOnFile = "YES";
-		String myToemail = getPaxEmailAddress(inc);
-		if(!myToemail.equals("")) {
-			ifPaxEmailNotOnFile = "NO";
-		}
-		
-		if (request.getParameter("save") != null) {
+		try {
+			Incident inc = IncidentBMO.getIncidentByID(incident_ID, sess);
 			
-			String newAgentComment = "" + theForm.get("agentNewComment");
-			newAgentComment = newAgentComment.trim();
+			boolean  hasSysCompPaxCommunicationPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION, user);
+			boolean  hasSysCompPaxCommunicationReadOnlyPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAX_COMMUNICATION_READ_ONLY, user);
 			
-			String agentActionType = "" + theForm.getString("agentActionType");
-			String addNewAgentCommentSuccess = "NO";
-			String acknowledgeNewPaxCommentSuccess = "NO";  //remove this later
+			if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+					&& !hasSysCompPaxCommunicationPermission && !hasSysCompPaxCommunicationReadOnlyPermission){
+				return (mapping.findForward(TracingConstants.NO_PERMISSION));			
+			}
+	
 			
-			String myNewStatus = "Respond";
-			//old code block starts
-			//comments not empty, should save except when acknowledge
-			if(!newAgentComment.equalsIgnoreCase("")) {  //insert a new row in db + set the status of historical new guest messages
-				PaxCommunication newPaxCommunication = new PaxCommunication();
-				newPaxCommunication.setComment(newAgentComment);
-				newPaxCommunication.setIncident(inc);
-				newPaxCommunication.setAgent(user);
-				//newPaxCommunication.setAcknowledge_agent(user);
-				newPaxCommunication.setStatus(PaxCommunicationStatus.NEW);
-				java.util.Date myDate = TracerDateTime.getGMTDate();
-				newPaxCommunication.setCreatedate(myDate);
-				//newPaxCommunication.setAcknowledge_timestamp(myDate);
-				HibernateUtils.save(newPaxCommunication, sess);
-				
-				// add a new entry in Remarks section
-				Remark r = new Remark();
-				r.setAgent(user);
-				r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-				//r.setRemarktext("An agent has entered a new message.");
-				r.setRemarktext(myAgentHasEnteredANewMessage);
-				r.setIncident(inc);
-				// Add a remark to the incident to complete the two-way reference.
-				Set remarks = inc.getRemarks();
-				remarks.add(r);
-				//save inc and audit inc here
-				HibernateUtils.save(inc, sess);  //this does not do all of what we want
-				// check if audit is enabled for this company....
-				Transaction transaction = sess.beginTransaction();  //persist audit incident
-				Incident iDTO = inc;
-				if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation()
-						.getCompany().getVariable().getAudit_lost_delayed() == 1)
-						|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent()
-								.getStation().getCompany().getVariable().getAudit_damaged() == 1)
-						|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent()
-								.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
-					Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(iDTO, user);
+	
 			
-					if (audit_dto != null) {
-						transaction = sess.beginTransaction();
-						sess.save(audit_dto);
-						transaction.commit();
-					}
-				}
-				
-				addNewAgentCommentSuccess = "YES";
-				//send email here
-				isSendEmail2PaxSuccess = sendEmail2Pax(user, inc, realpath, newAgentComment);
-				logger.warn("Was email sent successful? " + isSendEmail2PaxSuccess);
-			} else {
-				myNewStatus = "Acknowledge";
+			if(hasSysCompPaxCommunicationReadOnlyPermission
+					&& (!hasSysCompPaxCommunicationPermission)) {
+				theForm.set("readOnly", "true");
 			}
 			
-			//update status for the historical guest comments with new status
-			boolean isUpdateSuccess = PaxCommunicationBMO.updateNEWPaxCommunicationStatus(historicalPaxCommunicationsStatusNewEnteredByPax, myNewStatus, user);
-			if(isUpdateSuccess) {
-				acknowledgeNewPaxCommentSuccess = "YES";
-				isThereNewPaxComment = "NO";
+			//find out if we will display the radio buttons
+			//if YES, display radio buttons
+			String isThereNewPaxComment = "NO";
+			boolean isThereNewPaxCommunications = PaxCommunicationBMO.isThereNewPaxCommunications(incident_ID, sess);
+			if(isThereNewPaxCommunications) {
+				isThereNewPaxComment = "YES";
 			}
 			
-			theForm.set("addNewAgentCommentSuccess", addNewAgentCommentSuccess);
-		}
-		
-		//List<PaxCommunication> myPaxCommunications = PaxCommunicationBMO.getPaxCommunication(incident_ID, sess);
-		List<PaxCommunication> myPaxCommunications = PaxCommunicationBMO.getPaxCommunication(incident_ID, null);
-		
-		//List<PaxCommunication> historicalPaxCommunicationsStatusNewEnteredByPax = new ArrayList<PaxCommunication>();
-		// is it necessary to clear() here?
-		historicalPaxCommunicationsStatusNewEnteredByPax.clear();
-		
-		StringBuffer sbMyPaxCommunications = new StringBuffer("");
-		if(myPaxCommunications == null) {
+			//find out if pax email is on file, if not alert agent about this
+			//because it compromises this feature
+			String ifPaxEmailNotOnFile = "YES";
+			String myToemail = getPaxEmailAddress(inc);
+			if(!myToemail.equals("")) {
+				ifPaxEmailNotOnFile = "NO";
+			}
 			
-		} else {
-			Iterator<PaxCommunication> it = myPaxCommunications.listIterator();
-			while (it.hasNext()) {
-				PaxCommunication myPaxCommunication = (PaxCommunication) it.next();
-				myPaxCommunication.set_DATEFORMAT(user.getDateformat().getFormat());
-				myPaxCommunication.set_TIMEFORMAT(user.getTimeformat().getFormat());
-				TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getCurrenttimezone()).getTimezone());
-				myPaxCommunication.set_TIMEZONE(tz);
-				String sEnteredBy = "Guest";
+			if (request.getParameter("save") != null) {
 				
-				String sAcknowledgedBy = "";
-				Agent myAgent = myPaxCommunication.getAgent();
-				if(myAgent != null) { // it must be agent comment
-					sEnteredBy = myAgent.getUsername();
-				} else { // it must be pax comment
-					Agent myAcknowledgeAgent = myPaxCommunication.getAcknowledge_agent();
-					PaxCommunicationStatus myStatus = myPaxCommunication.getStatus();
-					if(myAcknowledgeAgent != null) {
-						//PaxCommunicationStatus myStatus = myPaxCommunication.getStatus();
-						switch(myStatus) {
-							case ACKNOWLEDGED: 
-								sAcknowledgedBy = "----Comment acknowledged by ";
-								sAcknowledgedBy += myAcknowledgeAgent.getUsername();
-								sAcknowledgedBy += " on " + myPaxCommunication.getDispAcknowledgedDate();
-								break;
-							case RESPONDED:
-								sAcknowledgedBy = "----Comment responded to by ";
-								sAcknowledgedBy += myAcknowledgeAgent.getUsername();
-								sAcknowledgedBy += " on " + myPaxCommunication.getDispAcknowledgedDate();
+				String newAgentComment = "" + theForm.get("agentNewComment");
+				newAgentComment = newAgentComment.trim();
+				
+				String agentActionType = "" + theForm.getString("agentActionType");
+				String addNewAgentCommentSuccess = "NO";
+				String acknowledgeNewPaxCommentSuccess = "NO";  //remove this later
+				
+				String myNewStatus = "Respond";
+				//old code block starts
+				//comments not empty, should save except when acknowledge
+				if(!newAgentComment.equalsIgnoreCase("")) {  //insert a new row in db + set the status of historical new guest messages
+					PaxCommunication newPaxCommunication = new PaxCommunication();
+					newPaxCommunication.setComment(newAgentComment);
+					newPaxCommunication.setIncident(inc);
+					newPaxCommunication.setAgent(user);
+					//newPaxCommunication.setAcknowledge_agent(user);
+					newPaxCommunication.setStatus(PaxCommunicationStatus.NEW);
+					java.util.Date myDate = TracerDateTime.getGMTDate();
+					newPaxCommunication.setCreatedate(myDate);
+					//newPaxCommunication.setAcknowledge_timestamp(myDate);
+					HibernateUtils.save(newPaxCommunication, sess);
+					
+					// add a new entry in Remarks section
+					Remark r = new Remark();
+					r.setAgent(user);
+					r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+					//r.setRemarktext("An agent has entered a new message.");
+					r.setRemarktext(myAgentHasEnteredANewMessage);
+					r.setIncident(inc);
+					// Add a remark to the incident to complete the two-way reference.
+					Set remarks = inc.getRemarks();
+					remarks.add(r);
+					//save inc and audit inc here
+					HibernateUtils.save(inc, sess);  //this does not do all of what we want
+					// check if audit is enabled for this company....
+					Transaction transaction = sess.beginTransaction();  //persist audit incident
+					Incident iDTO = inc;
+					if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation()
+							.getCompany().getVariable().getAudit_lost_delayed() == 1)
+							|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent()
+									.getStation().getCompany().getVariable().getAudit_damaged() == 1)
+							|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent()
+									.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
+						Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(iDTO, user);
+				
+						if (audit_dto != null) {
+							transaction = sess.beginTransaction();
+							sess.save(audit_dto);
+							transaction.commit();
 						}
 					}
-					//put together the historicalPaxCommunicationsStatusNewEnteredByPax
-					//we know here that this is a pax comment - next search for NEW status
-					if(myStatus.equals(PaxCommunicationStatus.NEW)) {
-						historicalPaxCommunicationsStatusNewEnteredByPax.add(myPaxCommunication);
-					}
+					
+					addNewAgentCommentSuccess = "YES";
+					//send email here
+					isSendEmail2PaxSuccess = sendEmail2Pax(user, inc, realpath, newAgentComment);
+					logger.warn("Was email sent successful? " + isSendEmail2PaxSuccess);
+				} else {
+					myNewStatus = "Acknowledge";
 				}
 				
-				sbMyPaxCommunications.append(myPaxCommunication.getDispDate() + " - " + sEnteredBy + "\n");
-				sbMyPaxCommunications.append(myPaxCommunication.getComment() + "\n");
-				if(!sAcknowledgedBy.equals("")) {
-					sbMyPaxCommunications.append(sAcknowledgedBy + "\n");
+				//update status for the historical guest comments with new status
+				boolean isUpdateSuccess = PaxCommunicationBMO.updateNEWPaxCommunicationStatus(historicalPaxCommunicationsStatusNewEnteredByPax, myNewStatus, user);
+				if(isUpdateSuccess) {
+					acknowledgeNewPaxCommentSuccess = "YES";
+					isThereNewPaxComment = "NO";
 				}
-				sbMyPaxCommunications.append("\n----------------------------------\n\n");
+				
+				theForm.set("addNewAgentCommentSuccess", addNewAgentCommentSuccess);
 			}
+			
+			//List<PaxCommunication> myPaxCommunications = PaxCommunicationBMO.getPaxCommunication(incident_ID, sess);
+			List<PaxCommunication> myPaxCommunications = PaxCommunicationBMO.getPaxCommunication(incident_ID, null);
+			
+			//List<PaxCommunication> historicalPaxCommunicationsStatusNewEnteredByPax = new ArrayList<PaxCommunication>();
+			// is it necessary to clear() here?
+			historicalPaxCommunicationsStatusNewEnteredByPax.clear();
+			
+			StringBuffer sbMyPaxCommunications = new StringBuffer("");
+			if(myPaxCommunications == null) {
+				
+			} else {
+				Iterator<PaxCommunication> it = myPaxCommunications.listIterator();
+				while (it.hasNext()) {
+					PaxCommunication myPaxCommunication = (PaxCommunication) it.next();
+					myPaxCommunication.set_DATEFORMAT(user.getDateformat().getFormat());
+					myPaxCommunication.set_TIMEFORMAT(user.getTimeformat().getFormat());
+					TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getCurrenttimezone()).getTimezone());
+					myPaxCommunication.set_TIMEZONE(tz);
+					String sEnteredBy = "Guest";
+					
+					String sAcknowledgedBy = "";
+					Agent myAgent = myPaxCommunication.getAgent();
+					if(myAgent != null) { // it must be agent comment
+						sEnteredBy = myAgent.getUsername();
+					} else { // it must be pax comment
+						Agent myAcknowledgeAgent = myPaxCommunication.getAcknowledge_agent();
+						PaxCommunicationStatus myStatus = myPaxCommunication.getStatus();
+						if(myAcknowledgeAgent != null) {
+							//PaxCommunicationStatus myStatus = myPaxCommunication.getStatus();
+							switch(myStatus) {
+								case ACKNOWLEDGED: 
+									sAcknowledgedBy = "----Comment acknowledged by ";
+									sAcknowledgedBy += myAcknowledgeAgent.getUsername();
+									sAcknowledgedBy += " on " + myPaxCommunication.getDispAcknowledgedDate();
+									break;
+								case RESPONDED:
+									sAcknowledgedBy = "----Comment responded to by ";
+									sAcknowledgedBy += myAcknowledgeAgent.getUsername();
+									sAcknowledgedBy += " on " + myPaxCommunication.getDispAcknowledgedDate();
+							}
+						}
+						//put together the historicalPaxCommunicationsStatusNewEnteredByPax
+						//we know here that this is a pax comment - next search for NEW status
+						if(myStatus.equals(PaxCommunicationStatus.NEW)) {
+							historicalPaxCommunicationsStatusNewEnteredByPax.add(myPaxCommunication);
+						}
+					}
+					
+					sbMyPaxCommunications.append(myPaxCommunication.getDispDate() + " - " + sEnteredBy + "\n");
+					sbMyPaxCommunications.append(myPaxCommunication.getComment() + "\n");
+					if(!sAcknowledgedBy.equals("")) {
+						sbMyPaxCommunications.append(sAcknowledgedBy + "\n");
+					}
+					sbMyPaxCommunications.append("\n----------------------------------\n\n");
+				}
+			}
+	
+			// POPULATE THE FORM
+			//theForm.set("incident_id", inc.getIncident_ID());
+			theForm.set("incident_id", incident_ID);
+			theForm.set("text", sbMyPaxCommunications.toString());
+			theForm.set("agentNewComment", "");
+			theForm.set("agentActionType", "Acknowledge");
+			theForm.set("isThereNewPaxComment", isThereNewPaxComment);
+			theForm.set("ifPaxEmailNotOnFile", ifPaxEmailNotOnFile);
+			
+			if (!UserPermissions.hasIncidentSavePermission(user, inc)) {
+				theForm.set("readOnly", "true");
+			}  	
+	    	
+			session.setAttribute("historicalNewPaxCommentList", historicalPaxCommunicationsStatusNewEnteredByPax);
+	    	return (mapping.findForward(TracingConstants.PAX_COMMUNICATION));
+		} finally {
+			sess.close();
 		}
-
-		
-		sess.close();
-		
-		// POPULATE THE FORM
-		//theForm.set("incident_id", inc.getIncident_ID());
-		theForm.set("incident_id", incident_ID);
-		theForm.set("text", sbMyPaxCommunications.toString());
-		theForm.set("agentNewComment", "");
-		theForm.set("agentActionType", "Acknowledge");
-		theForm.set("isThereNewPaxComment", isThereNewPaxComment);
-		theForm.set("ifPaxEmailNotOnFile", ifPaxEmailNotOnFile);
-		
-		if (!UserPermissions.hasIncidentSavePermission(user, inc)) {
-			theForm.set("readOnly", "true");
-		}  	
-    	
-		session.setAttribute("historicalNewPaxCommentList", historicalPaxCommunicationsStatusNewEnteredByPax);
-    	return (mapping.findForward(TracingConstants.PAX_COMMUNICATION));
     }
     
     private String getPaxEmailAddress(Incident incident) {

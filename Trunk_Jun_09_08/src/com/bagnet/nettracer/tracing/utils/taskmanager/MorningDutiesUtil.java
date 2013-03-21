@@ -158,12 +158,15 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		Query q = null;
 //		System.out.println(sql);
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setInteger("agentID", user.getAgent_ID());
-		q.setLong("status", TracingConstants.TASK_MANAGER_PAUSED);
-		List<Incident> result = q.list();
-		sess.close();
-		return result;
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setInteger("agentID", user.getAgent_ID());
+			q.setLong("status", TracingConstants.TASK_MANAGER_PAUSED);
+			List<Incident> result = q.list();
+			return result;
+		} finally {
+			sess.close();
+		}
 	}
 	
 	public static List<Incident> getTaskList(Agent agent, int day) {
@@ -171,17 +174,20 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 //		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
-		q.setParameter("station", agent.getStation().getStation_ID());
-		q.setParameter("lz", agent.getStation().getLz_ID());
-		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
-		q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
-		List result = q.list();
-		LinkedHashSet<Incident> qlhs = new LinkedHashSet<Incident>(q.list());
-		List<Incident> al = new ArrayList<Incident>(qlhs);
-		sess.close();
-		return al;
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
+			q.setParameter("station", agent.getStation().getStation_ID());
+			q.setParameter("lz", agent.getStation().getLz_ID());
+			q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
+			q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
+			List result = q.list();
+			LinkedHashSet<Incident> qlhs = new LinkedHashSet<Incident>(q.list());
+			List<Incident> al = new ArrayList<Incident>(qlhs);
+			return al;
+		} finally {
+			sess.close();
+		}
 	}
 	
 	public static List<Incident> getPaginatedList(Agent user, int day, int rowsperpage, int currpage){
@@ -226,20 +232,23 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 				+ " and (mdt.status.status_ID = :working or mdt.status.status_ID = :paused)";
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		
-		q.setParameter("agent", agent.getAgent_ID());
-		q.setParameter("working", TracingConstants.TASK_MANAGER_WORKING);
-		q.setParameter("paused", TracingConstants.TASK_MANAGER_PAUSED);
-
-		List result = q.list();
-		LinkedHashSet<MorningDutiesTask> qlhs = new LinkedHashSet<MorningDutiesTask>(q.list());
-		List<MorningDutiesTask> al = new ArrayList<MorningDutiesTask>(qlhs);
-		sess.close();
-		if(al.size() > 0){
-			return al.get(0);
+		try {
+			q = sess.createQuery(sql.toString());
+			
+			q.setParameter("agent", agent.getAgent_ID());
+			q.setParameter("working", TracingConstants.TASK_MANAGER_WORKING);
+			q.setParameter("paused", TracingConstants.TASK_MANAGER_PAUSED);
+	
+			List result = q.list();
+			LinkedHashSet<MorningDutiesTask> qlhs = new LinkedHashSet<MorningDutiesTask>(q.list());
+			List<MorningDutiesTask> al = new ArrayList<MorningDutiesTask>(qlhs);
+			if(al.size() > 0){
+				return al.get(0);
+			}
+			return null;
+		} finally {
+			sess.close();
 		}
-		return null;
 	}
 	
 	public static GeneralTask getTask(Agent agent, int day) {
@@ -317,18 +326,21 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 //		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		
-		if (lz_id > 0){
-			q.setParameter("lz", lz_id);
+		try {
+			q = sess.createQuery(sql.toString());
+			
+			if (lz_id > 0){
+				q.setParameter("lz", lz_id);
+			}
+			
+			List result = q.list();
+			if (result.size() > 0) {
+				return ((Long) result.get(0)).intValue();
+			}
+			return -1;
+		} finally {
+			sess.close();
 		}
-		
-		List result = q.list();
-		sess.close();
-		if (result.size() > 0) {
-			return ((Long) result.get(0)).intValue();
-		}
-		return -1;
 	}
 	
 	public static int getMorningDutiesReportCompletedCount(int day, int station_id, int offset){
@@ -342,14 +354,17 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 //		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_CLOSED);
-		List result = q.list();
-		sess.close();
-		if (result.size() > 0) {
-			return ((Long) result.get(0)).intValue();
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_CLOSED);
+			List result = q.list();
+			if (result.size() > 0) {
+				return ((Long) result.get(0)).intValue();
+			}
+			return -1;
+		} finally {
+			sess.close();
 		}
-		return -1;
 	}
 	
 	public static String validateWork(MorningDutiesTask taskVal){
@@ -459,19 +474,22 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 //		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
-		q.setParameter("station", agent.getStation().getStation_ID());
-		q.setParameter("lz", agent.getStation().getLz_ID());
-		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
-		q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
-		q.setMaxResults(1);
-		List result = q.list();
-		sess.close();
-		if (result.size() > 0) {
-			return (Incident) result.get(0);
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
+			q.setParameter("station", agent.getStation().getStation_ID());
+			q.setParameter("lz", agent.getStation().getLz_ID());
+			q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
+			q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
+			q.setMaxResults(1);
+			List result = q.list();
+			if (result.size() > 0) {
+				return (Incident) result.get(0);
+			}
+			return null;
+		} finally {
+			sess.close();
 		}
-		return null;
 	}
 	
 	private static Incident getIncident(Agent agent, int day) {
@@ -479,19 +497,22 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 //		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
-		q.setParameter("station", agent.getStation().getStation_ID());
-		q.setParameter("lz", agent.getStation().getLz_ID());
-		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
-		q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
-		q.setMaxResults(1);
-		List result = q.list();
-		sess.close();
-		if (result.size() > 0) {
-			return (Incident) result.get(0);
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
+			q.setParameter("station", agent.getStation().getStation_ID());
+			q.setParameter("lz", agent.getStation().getLz_ID());
+			q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
+			q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
+			q.setMaxResults(1);
+			List result = q.list();
+			if (result.size() > 0) {
+				return (Incident) result.get(0);
+			}
+			return null;
+		} finally {
+			sess.close();
 		}
-		return null;
 	}
 	
 
@@ -501,18 +522,21 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 //		System.out.println(sql);
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
-		q.setParameter("station", agent.getStation().getStation_ID());
-		q.setParameter("lz", agent.getStation().getLz_ID());	
-		q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
-		q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
-		List result = q.list();
-		sess.close();
-		if (result.size() > 0) {
-			return ((Long) result.get(0)).intValue();
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
+			q.setParameter("station", agent.getStation().getStation_ID());
+			q.setParameter("lz", agent.getStation().getLz_ID());	
+			q.setParameter("taskStatus", TracingConstants.TASK_MANAGER_OPEN);
+			q.setParameter("curTime", DateUtils.convertToGMTDate(new Date()));
+			List result = q.list();
+			if (result.size() > 0) {
+				return ((Long) result.get(0)).intValue();
+			}
+			return -1;
+		} finally {
+			sess.close();
 		}
-		return -1;
 	}
 
 
@@ -626,13 +650,16 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 			+ "and (mdt.status = :statusPaused or mdt.status = :statusWorking)";
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setInteger("agentID", agent.getAgent_ID());
-		q.setLong("statusPaused", TracingConstants.TASK_MANAGER_PAUSED);
-		q.setLong("statusWorking", TracingConstants.TASK_MANAGER_WORKING);
-		List result = q.list();
-		sess.close();
-		return ((Long) result.get(0)).intValue();
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setInteger("agentID", agent.getAgent_ID());
+			q.setLong("statusPaused", TracingConstants.TASK_MANAGER_PAUSED);
+			q.setLong("statusWorking", TracingConstants.TASK_MANAGER_WORKING);
+			List result = q.list();
+			return ((Long) result.get(0)).intValue();
+		} finally { 
+			sess.close();
+		}
 	}
 	
 }

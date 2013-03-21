@@ -313,146 +313,150 @@ public class ClaimSettlementAction extends Action {
 		Agent a = (Agent) session.getAttribute("user");
 		
 		Session oldSess = HibernateWrapper.getSession().openSession();
-		ClaimSettlement oldCs = ClaimSettlementBMO.getClaimSettlement(form.getIncident_ID(), oldSess);
-		oldSess.close();
+		ClaimSettlement oldCs = null;
+		try {
+			oldCs = ClaimSettlementBMO.getClaimSettlement(form.getIncident_ID(), oldSess);
+		} finally {
+			oldSess.close();
+		}
 		
 		Session sess = HibernateWrapper.getSession().openSession();
 		
-		ClaimSettlement cs = ClaimSettlementBMO.getClaimSettlement(form.getIncident_ID(), sess);
+		ClaimSettlement cs = null;
 		List bagList = null;
-		
-		switch (saveButton) {
-			case 1:
-				cs.setClaimAgent(form.getClaimAgent());
-				cs.setDateTakeover(convertDate(form.getDateTakeover(), a));
-				cs.setDepreciationComplete(convertDate(form.getDepreciationComplete(), a));
-				cs.setDepreciationDue(convertDate(form.getDepreciationDue(), a));
-				cs.setFirstContact(convertDate(form.getFirstContact(), a));
-				cs.setClaimType(form.getClaimType());
-
-				if (form.getNewComment() != null && form.getNewComment().length() > 0)
-				{
-					String comments = cs.getComments();
-					if (comments == null) {
-						comments = new String();
-					}
-					if (comments.length() > 0)
-						comments += "\n\n";
-					String dateTime = 
-					DateUtils.formatDate(TracerDateTime.getGMTDate(), TracingConstants.DISPLAY_DATETIMEFORMAT, null, null);
-					comments += dateTime + " GMT  <" + a.getUsername() + ">\n";
-					comments += form.getNewComment();
-					cs.setComments(comments);
-					form.setNewComment("");
-				}
-				
-				cs.setPplcDue(convertDate(form.getPplcDue(), a));
-				cs.setPplcReceived(convertDate(form.getPplcReceived(), a));
-				cs.setPplcSent(convertDate(form.getPplcSent(), a));
-				cs.setPplcVia(form.getPplcVia());
-				cs.setOfferDue(convertDate(form.getOfferDue(), a));
-				cs.setSecondContact(convertDate(form.getSecondContact(), a));
-				cs.setVerifyAddress(form.isVerifyAddress());
-				cs.setVerifyBagColor(form.isVerifyBagColor());
-				cs.setVerifyBrand(form.isVerifyBrand());
-				cs.setVerifyContents(form.isVerifyContents());
-				cs.setVerifyEmail(form.isVerifyEmail());
-				cs.setVerifyFraudCC(form.isVerifyFraudCC());
-				cs.setVerifyFraudName(form.isVerifyFraudName());
-				cs.setVerifyFraudPhone(form.isVerifyFraudPhone());
-				cs.setVerifyPhone(form.isVerifyPhone());
-				cs.setVerifyTrace1(form.isVerifyTrace1());
-				cs.setVerifyTrace2(form.isVerifyTrace2());
-				cs.setVerifyTrace3(form.isVerifyTrace3());
-				cs.setDateStatusChange(convertDate(form.getDateStatusChange(), a));
-				cs.setOfferSent(convertDate(form.getOfferSent(), a));
-				cs.setOfferSentVia(form.getOfferSentVia());
-				cs.setReleaseDue(convertDate(form.getReleaseDue(), a));
-				cs.setRevisitRequested(convertDate(form.getRevisitRequested(), a));
-				cs.setRevisitedBy(form.getRevisitedBy());
-				
-				cs.setOverall_weight(form.getOverall_weight());
-
-				break;
-			case 2:
-				cs.setAddress1(form.getAddress1());
-				cs.setAddress2(form.getAddress2());
-				cs.setBusinessPhone(form.getBusinessPhone());
-				cs.setCity(form.getCity());
-				cs.setCountryCode_ID(form.getCountrycode_ID());
-				cs.setEmail(form.getEmail());
-				cs.setFax(form.getFax());
-				cs.setFirstName(form.getFirstName());
-				cs.setHomePhone(form.getHomePhone());
-				cs.setLanguage(form.getLanguage());
-				cs.setLastName(form.getLastName());
-				cs.setMembership(form.getMembership());
-				cs.setMobilePhone(form.getMobilePhone());
-				cs.setPager(form.getPager());
-				cs.setProvince(form.getProvince());
-				cs.setSalutation(form.getSalutation());
-				cs.setState_ID(form.getState_ID());
-				cs.setZip(form.getZip());
-				
-				break;
-			case 3:
-								
-				bagList = form.getBagList();
-				for (int i=0; i<bagList.size(); ++i) {
-					ClaimSettlementBag bag = (ClaimSettlementBag)bagList.get(i);
-					bag.setPosition(i);
-					for (int j=0; j<bag.getInventory().size(); ++ j) {
-						SettlementBagInventory inv = bag.getInventory().get(j);
-						inv.setPosition(j);
-					}
-				}
-				cs.setBagList(bagList);
-				break;
-			case 4:
-				cs.setDateStatusChange(convertDate(form.getDateStatusChange(), a));
-				cs.setOfferSent(convertDate(form.getOfferSent(), a));
-				cs.setOfferSentVia(form.getOfferSentVia());
-				cs.setReleaseDue(convertDate(form.getReleaseDue(), a));
-				cs.setRevisitRequested(convertDate(form.getRevisitRequested(), a));
-				cs.setRevisitedBy(form.getRevisitedBy());
-				break;
-		}
-		
-			
-		Transaction t = null;
 		try {
-			t = sess.beginTransaction();
+			cs = ClaimSettlementBMO.getClaimSettlement(form.getIncident_ID(), sess);
+			switch (saveButton) {
+				case 1:
+					cs.setClaimAgent(form.getClaimAgent());
+					cs.setDateTakeover(convertDate(form.getDateTakeover(), a));
+					cs.setDepreciationComplete(convertDate(form.getDepreciationComplete(), a));
+					cs.setDepreciationDue(convertDate(form.getDepreciationDue(), a));
+					cs.setFirstContact(convertDate(form.getFirstContact(), a));
+					cs.setClaimType(form.getClaimType());
+	
+					if (form.getNewComment() != null && form.getNewComment().length() > 0)
+					{
+						String comments = cs.getComments();
+						if (comments == null) {
+							comments = new String();
+						}
+						if (comments.length() > 0)
+							comments += "\n\n";
+						String dateTime = 
+						DateUtils.formatDate(TracerDateTime.getGMTDate(), TracingConstants.DISPLAY_DATETIMEFORMAT, null, null);
+						comments += dateTime + " GMT  <" + a.getUsername() + ">\n";
+						comments += form.getNewComment();
+						cs.setComments(comments);
+						form.setNewComment("");
+					}
+					
+					cs.setPplcDue(convertDate(form.getPplcDue(), a));
+					cs.setPplcReceived(convertDate(form.getPplcReceived(), a));
+					cs.setPplcSent(convertDate(form.getPplcSent(), a));
+					cs.setPplcVia(form.getPplcVia());
+					cs.setOfferDue(convertDate(form.getOfferDue(), a));
+					cs.setSecondContact(convertDate(form.getSecondContact(), a));
+					cs.setVerifyAddress(form.isVerifyAddress());
+					cs.setVerifyBagColor(form.isVerifyBagColor());
+					cs.setVerifyBrand(form.isVerifyBrand());
+					cs.setVerifyContents(form.isVerifyContents());
+					cs.setVerifyEmail(form.isVerifyEmail());
+					cs.setVerifyFraudCC(form.isVerifyFraudCC());
+					cs.setVerifyFraudName(form.isVerifyFraudName());
+					cs.setVerifyFraudPhone(form.isVerifyFraudPhone());
+					cs.setVerifyPhone(form.isVerifyPhone());
+					cs.setVerifyTrace1(form.isVerifyTrace1());
+					cs.setVerifyTrace2(form.isVerifyTrace2());
+					cs.setVerifyTrace3(form.isVerifyTrace3());
+					cs.setDateStatusChange(convertDate(form.getDateStatusChange(), a));
+					cs.setOfferSent(convertDate(form.getOfferSent(), a));
+					cs.setOfferSentVia(form.getOfferSentVia());
+					cs.setReleaseDue(convertDate(form.getReleaseDue(), a));
+					cs.setRevisitRequested(convertDate(form.getRevisitRequested(), a));
+					cs.setRevisitedBy(form.getRevisitedBy());
+					
+					cs.setOverall_weight(form.getOverall_weight());
+	
+					break;
+				case 2:
+					cs.setAddress1(form.getAddress1());
+					cs.setAddress2(form.getAddress2());
+					cs.setBusinessPhone(form.getBusinessPhone());
+					cs.setCity(form.getCity());
+					cs.setCountryCode_ID(form.getCountrycode_ID());
+					cs.setEmail(form.getEmail());
+					cs.setFax(form.getFax());
+					cs.setFirstName(form.getFirstName());
+					cs.setHomePhone(form.getHomePhone());
+					cs.setLanguage(form.getLanguage());
+					cs.setLastName(form.getLastName());
+					cs.setMembership(form.getMembership());
+					cs.setMobilePhone(form.getMobilePhone());
+					cs.setPager(form.getPager());
+					cs.setProvince(form.getProvince());
+					cs.setSalutation(form.getSalutation());
+					cs.setState_ID(form.getState_ID());
+					cs.setZip(form.getZip());
+					
+					break;
+				case 3:
+									
+					bagList = form.getBagList();
+					for (int i=0; i<bagList.size(); ++i) {
+						ClaimSettlementBag bag = (ClaimSettlementBag)bagList.get(i);
+						bag.setPosition(i);
+						for (int j=0; j<bag.getInventory().size(); ++ j) {
+							SettlementBagInventory inv = bag.getInventory().get(j);
+							inv.setPosition(j);
+						}
+					}
+					cs.setBagList(bagList);
+					break;
+				case 4:
+					cs.setDateStatusChange(convertDate(form.getDateStatusChange(), a));
+					cs.setOfferSent(convertDate(form.getOfferSent(), a));
+					cs.setOfferSentVia(form.getOfferSentVia());
+					cs.setReleaseDue(convertDate(form.getReleaseDue(), a));
+					cs.setRevisitRequested(convertDate(form.getRevisitRequested(), a));
+					cs.setRevisitedBy(form.getRevisitedBy());
+					break;
+			}
 			
-			ArrayList<SettlementBagInventory> removeList = new ArrayList<SettlementBagInventory>();
-			for (ClaimSettlementBag bag: cs.getBagList()) {
-				for (SettlementBagInventory inv: bag.getInventory()) {
-					if (inv.isFlaggedForRemoval()) {
-						removeList.add(inv);
+				
+			Transaction t = null;
+			try {
+				t = sess.beginTransaction();
+				
+				ArrayList<SettlementBagInventory> removeList = new ArrayList<SettlementBagInventory>();
+				for (ClaimSettlementBag bag: cs.getBagList()) {
+					for (SettlementBagInventory inv: bag.getInventory()) {
+						if (inv.isFlaggedForRemoval()) {
+							removeList.add(inv);
+						}
 					}
 				}
+	
+				for (SettlementBagInventory item: removeList) {
+					item.getClaimSettlementBag().getInventory().remove(item);
+					SettlementBagInventory sbi = (SettlementBagInventory) sess.load(SettlementBagInventory.class, item.getInventoryId());
+					sbi.getClaimSettlementBag().getInventory().remove(sbi);
+					sess.delete(sbi);
+				}
+				
+				sess.merge(cs);
+				
+				t.commit();
+				ClaimSettlementBMO.auditClaimSettlement(cs, sess, a);
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (t != null) {
+					t.rollback();
+				}
 			}
-
-			for (SettlementBagInventory item: removeList) {
-				item.getClaimSettlementBag().getInventory().remove(item);
-				SettlementBagInventory sbi = (SettlementBagInventory) sess.load(SettlementBagInventory.class, item.getInventoryId());
-				sbi.getClaimSettlementBag().getInventory().remove(sbi);
-				sess.delete(sbi);
-			}
-			
-			sess.merge(cs);
-			
-			t.commit();
-			ClaimSettlementBMO.auditClaimSettlement(cs, sess, a);
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (t != null) {
-				t.rollback();
-			}
+		} finally {
+			sess.close();
 		}
-		
-		
-		
-		sess.close();
 		
 	}
 
@@ -470,89 +474,92 @@ public class ClaimSettlementAction extends Action {
 	private ClaimSettlement generateClaimObjectsFromIncidentId(String incidentId, Agent agent) {
 		
 		Session sess = HibernateWrapper.getSession().openSession();
-		Incident incident = IncidentBMO.getIncidentByID(incidentId, sess);
-		
-		ClaimSettlement cs = new ClaimSettlement();
-		cs.setIncident(incident);
-		
-		//overall weight gets copied
-		// do a conversion from kg to lbs if in kg
-		Double myWeight = incident.getOverall_weight();
-		String myWeight_unit = incident.getOverall_weight_unit();
-		if (myWeight_unit.equalsIgnoreCase("kg")) {
-			myWeight = myWeight * 2.20462262;
-		}
-		myWeight = roundToTwoDecimals(myWeight);
-		cs.setOverall_weight(myWeight);
-		
-		if (incident.getPassenger_list().size() > 0) {
-			Passenger pax = (Passenger) incident.getPassenger_list().get(0);
+		ClaimSettlement cs = null;
+		try {
+			Incident incident = IncidentBMO.getIncidentByID(incidentId, sess);
 			
-			if (pax != null) {
-				cs.setSalutation(pax.getSalutation());
-				cs.setFirstName(pax.getFirstname());
-				cs.setLastName(pax.getLastname());
-				cs.setMembership(pax.getAirlinememnumber());
-				
-				Address addr = (Address) pax.getAddress(0);
-				
-				if (addr != null) {
-					cs.setAddress1(addr.getAddress1());
-					cs.setAddress2(addr.getAddress2());
-					cs.setBusinessPhone(addr.getWorkphone());
-					cs.setCity(addr.getCity());
-					cs.setCountryCode_ID(addr.getCountrycode_ID());
-					cs.setEmail(addr.getEmail());
-					cs.setFax(addr.getAltphone());
-					cs.setHomePhone(addr.getHomephone());
-					cs.setMobilePhone(addr.getMobile());
-					cs.setPager(addr.getPager());
-					cs.setProvince(addr.getProvince());
-					cs.setState_ID(addr.getState_ID());
-					cs.setZip(addr.getZip());
-					cs.setEmail(addr.getEmail());
-				}
+			cs = new ClaimSettlement();
+			cs.setIncident(incident);
+			
+			//overall weight gets copied
+			// do a conversion from kg to lbs if in kg
+			Double myWeight = incident.getOverall_weight();
+			String myWeight_unit = incident.getOverall_weight_unit();
+			if (myWeight_unit.equalsIgnoreCase("kg")) {
+				myWeight = myWeight * 2.20462262;
 			}
-		}	
-	
-		String claimType = incident.getItemtype().getDescription();
-		
-		ArrayList bagList = new ArrayList<ClaimSettlementBag>();
-		cs.setBagList(bagList);
-		int bagIndex = 0;
-		for (Item item: (List<Item>) incident.getItemlist()) {
+			myWeight = roundToTwoDecimals(myWeight);
+			cs.setOverall_weight(myWeight);
 			
-			ClaimSettlementBag bag = new ClaimSettlementBag();
-			
-			bag.setClaimSettlement(cs);
-			bag.setColor(item.getColor());
-			bag.setType(item.getBagtype());
-			bag.setManufacturer(item.getManufacturer());
-			bag.setPosition(bagIndex++);
-			
-			List<SettlementBagInventory> bagInventory = new ArrayList<SettlementBagInventory>();
-			bag.setInventory(bagInventory);
-			
-			int invIndex = 0;
-			for (Item_Inventory inventory: (List<Item_Inventory>) item.getInventorylist()) {
-				if (inventory.getDescription() != null && inventory.getDescription().trim().length() > 0) {
-					SettlementBagInventory bagItem = new SettlementBagInventory();
-					bagItem.setPosition(invIndex++);
-					bagItem.setCategoryType_ID(inventory.getCategorytype_ID());
-					bagItem.setDescription(inventory.getDescription());
-					bagItem.setClaimSettlementBag(bag);
-					bagInventory.add(bagItem);
+			if (incident.getPassenger_list().size() > 0) {
+				Passenger pax = (Passenger) incident.getPassenger_list().get(0);
+				
+				if (pax != null) {
+					cs.setSalutation(pax.getSalutation());
+					cs.setFirstName(pax.getFirstname());
+					cs.setLastName(pax.getLastname());
+					cs.setMembership(pax.getAirlinememnumber());
+					
+					Address addr = (Address) pax.getAddress(0);
+					
+					if (addr != null) {
+						cs.setAddress1(addr.getAddress1());
+						cs.setAddress2(addr.getAddress2());
+						cs.setBusinessPhone(addr.getWorkphone());
+						cs.setCity(addr.getCity());
+						cs.setCountryCode_ID(addr.getCountrycode_ID());
+						cs.setEmail(addr.getEmail());
+						cs.setFax(addr.getAltphone());
+						cs.setHomePhone(addr.getHomephone());
+						cs.setMobilePhone(addr.getMobile());
+						cs.setPager(addr.getPager());
+						cs.setProvince(addr.getProvince());
+						cs.setState_ID(addr.getState_ID());
+						cs.setZip(addr.getZip());
+						cs.setEmail(addr.getEmail());
+					}
 				}
+			}	
+		
+			String claimType = incident.getItemtype().getDescription();
+			
+			ArrayList bagList = new ArrayList<ClaimSettlementBag>();
+			cs.setBagList(bagList);
+			int bagIndex = 0;
+			for (Item item: (List<Item>) incident.getItemlist()) {
+				
+				ClaimSettlementBag bag = new ClaimSettlementBag();
+				
+				bag.setClaimSettlement(cs);
+				bag.setColor(item.getColor());
+				bag.setType(item.getBagtype());
+				bag.setManufacturer(item.getManufacturer());
+				bag.setPosition(bagIndex++);
+				
+				List<SettlementBagInventory> bagInventory = new ArrayList<SettlementBagInventory>();
+				bag.setInventory(bagInventory);
+				
+				int invIndex = 0;
+				for (Item_Inventory inventory: (List<Item_Inventory>) item.getInventorylist()) {
+					if (inventory.getDescription() != null && inventory.getDescription().trim().length() > 0) {
+						SettlementBagInventory bagItem = new SettlementBagInventory();
+						bagItem.setPosition(invIndex++);
+						bagItem.setCategoryType_ID(inventory.getCategorytype_ID());
+						bagItem.setDescription(inventory.getDescription());
+						bagItem.setClaimSettlementBag(bag);
+						bagInventory.add(bagItem);
+					}
+				}
+				
+				bagList.add(bag);
+				
 			}
 			
-			bagList.add(bag);
 			
+			ClaimSettlementBMO.saveClaimSettlement(cs, sess, agent);
+		} finally {
+			sess.close();
 		}
-		
-		
-		ClaimSettlementBMO.saveClaimSettlement(cs, sess, agent);
-		
-		sess.close();
 		return cs;
 	}
 	

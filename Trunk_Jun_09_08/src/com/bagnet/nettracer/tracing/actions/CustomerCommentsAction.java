@@ -43,55 +43,58 @@ public class CustomerCommentsAction extends Action {
 		String incident_ID =  (String) theForm.get("incident_id");
 		
 		Session sess = HibernateWrapper.getSession().openSession();
-		Incident inc = IncidentBMO.getIncidentByID(incident_ID, sess);
-		
-		CustomerViewableComment comment = CustomerViewableCommentBMO.getComment(incident_ID, sess);
-		
-		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUSTOMER_COMMENTS, user))
-			return (mapping.findForward(TracingConstants.NO_PERMISSION));
-		
-		// SAVE OSI
-		if (request.getParameter("save") != null) {
-			if (comment == null) {
-				comment = new CustomerViewableComment();
-			}
-		
-			String text = (String) theForm.get("text");
-			 		
-			comment.setIncident(inc);
-			comment.setComment(text);
+		try {
+			Incident inc = IncidentBMO.getIncidentByID(incident_ID, sess);
 			
-			HibernateUtils.save(comment, sess);
+			CustomerViewableComment comment = CustomerViewableCommentBMO.getComment(incident_ID, sess);
 			
-//			Audit_CustomerViewableComment auditComment = new Audit_CustomerViewableComment();
-//			BeanUtils.copyProperties(auditComment, comment);
-//			auditComment.setModifying_agent(user);
-//			auditComment.setTime_modified(TracerDateTime.getGMTDate());
-//			HibernateUtils.save(auditComment, sess);
-
+			if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+					&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUSTOMER_COMMENTS, user))
+				return (mapping.findForward(TracingConstants.NO_PERMISSION));
 			
-			//OtherSystemInformationBMO.saveOsi(inc, osi);
-		} else {
-			// GET OSI OR CREATE NEW OSI
-			if (comment == null) {
-				comment = new CustomerViewableComment();
+			// SAVE OSI
+			if (request.getParameter("save") != null) {
+				if (comment == null) {
+					comment = new CustomerViewableComment();
+				}
+			
+				String text = (String) theForm.get("text");
+				 		
 				comment.setIncident(inc);
+				comment.setComment(text);
+				
+				HibernateUtils.save(comment, sess);
+				
+	//			Audit_CustomerViewableComment auditComment = new Audit_CustomerViewableComment();
+	//			BeanUtils.copyProperties(auditComment, comment);
+	//			auditComment.setModifying_agent(user);
+	//			auditComment.setTime_modified(TracerDateTime.getGMTDate());
+	//			HibernateUtils.save(auditComment, sess);
+	
+				
+				//OtherSystemInformationBMO.saveOsi(inc, osi);
+			} else {
+				// GET OSI OR CREATE NEW OSI
+				if (comment == null) {
+					comment = new CustomerViewableComment();
+					comment.setIncident(inc);
+				}
 			}
+		
+			// POPULATE THE FORM
+			theForm.set("id", Integer.toString(comment.getId()));
+			theForm.set("incident_id", comment.getIncident().getIncident_ID());
+			theForm.set("text", comment.getComment());
+			
+			
+			if (!UserPermissions.hasIncidentSavePermission(user, inc)) {
+				theForm.set("readOnly", "true");
+			}
+			
+			return (mapping.findForward(TracingConstants.FORWARD_CUSTOMER_COMMENTS));
+		} finally {
+		
+			sess.close();
 		}
-		
-		sess.close();
-		
-		// POPULATE THE FORM
-		theForm.set("id", Integer.toString(comment.getId()));
-		theForm.set("incident_id", comment.getIncident().getIncident_ID());
-		theForm.set("text", comment.getComment());
-		
-		
-		if (!UserPermissions.hasIncidentSavePermission(user, inc)) {
-			theForm.set("readOnly", "true");
-		}
-		
-		return (mapping.findForward(TracingConstants.FORWARD_CUSTOMER_COMMENTS));
 	}
 }

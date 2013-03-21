@@ -113,8 +113,9 @@ public class HibernateAppender extends AppenderSkeleton implements Appender {
 				}
 			}
 		}
+		Session session = null;
 		try {
-			Session session = HibernateWrapper.getSession().openSession();
+			session = HibernateWrapper.getSession().openSession();
 			/*
 			 * Ensure exclusive access to the buffer in case another thread is
 			 * currently adding to the buffer.
@@ -174,7 +175,6 @@ public class HibernateAppender extends AppenderSkeleton implements Appender {
 					session.save(loggingEventWrapper);
 				}
 				session.flush();
-				session.close();
 				buffer.clear();
 				/*
 				 * Ensure exclusive access to the appending flag - this really shouldn't
@@ -194,6 +194,8 @@ public class HibernateAppender extends AppenderSkeleton implements Appender {
 			// Reset the appending flag
 			appending = Boolean.FALSE;
 			return;
+		} finally {
+			if (session != null) session.close();
 		}
 	}
 

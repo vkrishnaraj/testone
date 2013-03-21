@@ -38,9 +38,9 @@ public class PushToCrmAction extends Action {
 
 		String incidentId = request.getParameter("incident_id");
 		IncidentForm iForm = (IncidentForm) session.getAttribute("incidentForm");
-
+		Session sess = null;
 		try {
-			Session sess = HibernateWrapper.getSession().openSession();
+			sess = HibernateWrapper.getSession().openSession();
 			Incident i = (Incident) sess.load(Incident.class, incidentId);
 			int itemType = i.getItemtype_ID();
 			switch (itemType) {
@@ -61,9 +61,10 @@ public class PushToCrmAction extends Action {
 				break;
 			}
 
-			sess.close();
 		} catch (Exception e) {
 			return mapping.findForward(TracingConstants.AJAX_PUSH_TO_CRM);
+		} finally {
+			if (sess != null) sess.close();
 		}
 
 		if (incidentId != null && incidentId.equals(iForm.getIncident_ID())) {

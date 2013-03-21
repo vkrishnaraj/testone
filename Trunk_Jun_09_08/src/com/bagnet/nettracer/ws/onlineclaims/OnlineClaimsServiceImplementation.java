@@ -509,6 +509,7 @@ public class OnlineClaimsServiceImplementation extends
 			}
 
 		} finally {
+			if (sess != null)
 			sess.close();
 		}
 
@@ -602,7 +603,7 @@ public class OnlineClaimsServiceImplementation extends
 				// Ignore Authorization Exception
 				e.printStackTrace();
 			} finally {
-				sess.close();
+				if (sess != null) sess.close();
 			}
 		}
 		logger.info("Response: \n" + res);
@@ -701,7 +702,7 @@ public class OnlineClaimsServiceImplementation extends
 					claimId = c.getClaimId();
 				}
 			} finally {
-				sess.close();
+				if (sess != null) sess.close();
 			}
 		}
 
@@ -779,7 +780,7 @@ public class OnlineClaimsServiceImplementation extends
 			} catch (AuthorizationException e) {
 				// Ignore AuthorizationException
 			} finally {
-				sess.close();
+				if (sess != null) sess.close();
 			}
 		}
 		logger.info("Response: \n" + res);

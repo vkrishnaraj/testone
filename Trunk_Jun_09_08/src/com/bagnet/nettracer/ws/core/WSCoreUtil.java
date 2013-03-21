@@ -126,9 +126,10 @@ public class WSCoreUtil {
 							return resDoc;
 						}
 					}
-					if (sess != null) sess.close();
 				} catch (Exception e) {
 					e.printStackTrace();
+				} finally {
+					if (sess != null) sess.close();
 				}
 
 				// create the md5 between username and password
@@ -197,14 +198,19 @@ public class WSCoreUtil {
 	
 	public static Agent getWebsessionAgent(String session_id, String component_id) throws AuthenticationException {
 
-		Session sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Webservice_Session.class);
-			cri.add(Expression.eq("session_id", session_id));
-			ArrayList thelist = (ArrayList) cri.list();
-			try {
-				sess.close();
+		    Session sess = null;
+		    ArrayList thelist = null;
+		    try {
+				sess = HibernateWrapper.getSession().openSession();
+				Criteria cri = sess.createCriteria(Webservice_Session.class);
+				cri.add(Expression.eq("session_id", session_id));
+				thelist = (ArrayList) cri.list();
 			} catch (Exception e) {
 				e.printStackTrace();
+			} finally {
+				if (sess != null) {
+					sess.close();
+				}
 			}
 			if (thelist != null && thelist.size() > 0) {
 				Webservice_Session ws = (Webservice_Session) thelist.get(0);

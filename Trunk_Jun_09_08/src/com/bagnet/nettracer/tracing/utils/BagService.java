@@ -1044,8 +1044,9 @@ public class BagService {
 					
 					for (String ohdId: ohdIds) {
 						if (ohdId != null && ohdId.trim().length() > 0) {
+							Session sess = null;
 							try {
-								Session sess = HibernateWrapper.getSession().openSession();
+								sess = HibernateWrapper.getSession().openSession();
 								
 								OHD ohd = OhdBMO.getOHDByID(ohdId, sess);
 								if (ohd == null) {
@@ -1055,7 +1056,6 @@ public class BagService {
 									newStatus.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
 									ohd.setStatus(newStatus);
 									OhdBMO.updateOHD(ohd, mod_agent, sess);
-									sess.close();
 									
 									if (ohd.getWtFile() != null) {
 										WtqOhdAction wtq = new WtqCloseOhd();
@@ -1067,6 +1067,8 @@ public class BagService {
 								}
 							} catch (Exception e) {
 								e.printStackTrace();
+							} finally {
+								if (sess != null) sess.close();
 							}
 						}
 					}

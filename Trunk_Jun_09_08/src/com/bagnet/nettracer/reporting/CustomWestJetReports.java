@@ -136,6 +136,7 @@ public class CustomWestJetReports {
 			
 			List results2 = null;
 			if (stationCode != null && !stationCode.equals("")) {
+				session.close();
 				session = HibernateWrapper.getSession().openSession();
 				SQLQuery query2 = session.createSQLQuery(sql2);
 				query2.addScalar("column1", StandardBasicTypes.STRING);
@@ -820,6 +821,7 @@ public class CustomWestJetReports {
 			
 			List results2 = null;
 			if (stationCode != null && !stationCode.equals("")) {
+				session.close();
 				session = HibernateWrapper.getSession().openSession();
 				SQLQuery query2 = session.createSQLQuery(sql2);
 				query2.addScalar("column1", StandardBasicTypes.STRING);
@@ -1086,6 +1088,7 @@ public class CustomWestJetReports {
 			
 			List results2 = null;
 			if (airlineCode != null && !airlineCode.equals("")) {
+				session.close();
 				session = HibernateWrapper.getSession().openSession();
 				SQLQuery query2 = session.createSQLQuery(sql2);
 				query2.addScalar("column1", StandardBasicTypes.STRING);

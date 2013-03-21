@@ -21,18 +21,21 @@ public class ForwardNoticeBMO {
 
 	public static void createForwardNotice(OHD_Log log, List<String> stations, Agent user) {
 		Session sess = HibernateWrapper.getSession().openSession();
-		for (String stationCode : stations) {
-			Station  station= null;
-			try {
-				station = StationBMO.getStationByCode(stationCode, user.getStation().getCompany().getCompanyCode_ID());
-			} catch (Exception e) {
-				logger.error("Station does not exist and cannot be notified: ", e);
+		try {
+			for (String stationCode : stations) {
+				Station  station= null;
+				try {
+					station = StationBMO.getStationByCode(stationCode, user.getStation().getCompany().getCompanyCode_ID());
+				} catch (Exception e) {
+					logger.error("Station does not exist and cannot be notified: ", e);
+				}
+				if (station != null) {
+					createForwardNotices(log, station, sess);
+				}
 			}
-			if (station != null) {
-				createForwardNotices(log, station, sess);
-			}
+		} finally {
+			sess.close();
 		}
-		sess.close();
 	}
 
 	private static void createForwardNotices(OHD_Log log, Station station, Session sess) {
@@ -44,11 +47,14 @@ public class ForwardNoticeBMO {
 	
 	public static void closeForwardNotice(String[] noticeIds) {
 		Session sess = HibernateWrapper.getSession().openSession();
-		for (String noticeId : noticeIds) {
-			ForwardNotice notice = (ForwardNotice) sess.load(ForwardNotice.class, Long.parseLong(noticeId));
-			closeForwardNotices(notice, sess);
+		try {
+			for (String noticeId : noticeIds) {
+				ForwardNotice notice = (ForwardNotice) sess.load(ForwardNotice.class, Long.parseLong(noticeId));
+				closeForwardNotices(notice, sess);
+			}
+		} finally {
+			sess.close();
 		}
-		sess.close();
 	}
 
 	public static void closeForwardNotices(ForwardNotice notice, Session sess) {

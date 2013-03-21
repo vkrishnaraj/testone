@@ -69,16 +69,20 @@ public class CronUtils {
 		
 		// FIRST HALF
 		
-		Session writeSession = HibernateWrapper.getSession().openSession();
-		Session readSess = HibernateWrapper.getDirtySession().openSession();
+		Session writeSession = null;
+		Session readSess = null;
 		
+		try {
+			writeSession = HibernateWrapper.getSession().openSession();
+			readSess = HibernateWrapper.getDirtySession().openSession();
+			usAirTwentyFourHourBusinessRules(writeSession, readSess);
+			usAirFortyEightHourBusinessRules(writeSession, readSess);
+		} finally {
 		
-		usAirTwentyFourHourBusinessRules(writeSession, readSess);
-		usAirFortyEightHourBusinessRules(writeSession, readSess);
-		
-		// SECOND HALF
-		readSess.close();
-		writeSession.close();
+			// SECOND HALF
+			readSess.close();
+			writeSession.close();
+		}
 	}
 
 	private void usAirTwentyFourHourBusinessRules(Session writeSession,
@@ -200,15 +204,21 @@ public class CronUtils {
 		form.setItemType_ID(0);
 		
 		//String output = BillingAction.createReport("", form, user, null);
-		Session sess = HibernateWrapper.getSession().openSession();
-		Query q = BillingAction.generateQuery(form, sess, user);
-		
-		if (q == null) {
-			logger.info("Exception...");
-			return;
+		Session sess = null;
+		List results = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = BillingAction.generateQuery(form, sess, user);
+			
+			if (q == null) {
+				logger.info("Exception...");
+				return;
+			}
+			
+			results = q.list();
+		} finally {
+			if (sess != null && sess.isOpen()) sess.close();
 		}
-		
-		List results = q.list();
 		ArrayList<BillingDTO> reportList = new ArrayList<BillingDTO>();
 		Company company = CompanyBMO.getCompany(companyCode);
 		String companyName = company.getCompanydesc();
@@ -266,10 +276,12 @@ public class CronUtils {
 	}
 	
 	public void expireGlobalLocks() {
-		Session writeSession = HibernateWrapper.getSession().openSession();
+		Session writeSession = null;
 		Date now = new Date();
-		Transaction tx = writeSession.beginTransaction();
+		Transaction tx = null;
 		try {
+			writeSession = HibernateWrapper.getSession().openSession();
+			tx = writeSession.beginTransaction();
 			tx.begin();
 			Query q = writeSession
 					.createQuery("delete Lock lock where lock.expirationDate < :now");
@@ -285,7 +297,7 @@ public class CronUtils {
 				}
 			}
 		} finally {
-			writeSession.close();
+			if (writeSession != null) writeSession.close();
 		}
 	}
 	
@@ -358,46 +370,58 @@ public class CronUtils {
 				"(SELECT top 50 wtq_status FROM wt_queue ORDER BY CREATEDATE DESC) count_table " +
 				"WHERE wtq_status = 'FAIL'";
 		
-		Session sess = HibernateWrapper.getSession().openSession();
-		SQLQuery query = sess.createSQLQuery(sql);
-		List<Integer> list = (List<Integer>) query.list();
-		sess.close();
-		return ((Integer)list.get(0)).intValue();
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery query = sess.createSQLQuery(sql);
+			List<Integer> list = (List<Integer>) query.list();
+			return ((Integer)list.get(0)).intValue();
+		} finally {
+			if (sess != null) sess.close();
+		}
 	}
 	
 	protected int checkSQLServerSequentialFailures() {
 		
 		String sql = "SELECT top 50 wtq_status FROM wt_queue " +
 		"ORDER BY CREATEDATE DESC";
-		Session sess = HibernateWrapper.getSession().openSession();
-		
-		SQLQuery query = sess.createSQLQuery(sql);
-		query.addScalar("wtq_status", StandardBasicTypes.STRING);
-		
-		List<String> list = (List<String>) query.list();
-		
-		int sequentialFails = 0;
-		for (String str: list) {
-			if (str.equals(WorldTracerQueue.WtqStatus.SUCCESS.name())) {
-				sequentialFails = 0;
-				break;
-			}  else if (str.equals(WorldTracerQueue.WtqStatus.FAIL.name())) {
-				sequentialFails++;
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			
+			SQLQuery query = sess.createSQLQuery(sql);
+			query.addScalar("wtq_status", StandardBasicTypes.STRING);
+			
+			List<String> list = (List<String>) query.list();
+			
+			int sequentialFails = 0;
+			for (String str: list) {
+				if (str.equals(WorldTracerQueue.WtqStatus.SUCCESS.name())) {
+					sequentialFails = 0;
+					break;
+				}  else if (str.equals(WorldTracerQueue.WtqStatus.FAIL.name())) {
+					sequentialFails++;
+				}
 			}
+			
+			return sequentialFails;
+		} finally {
+			if (sess != null) sess.close();
 		}
-		
-		sess.close();
-		return sequentialFails;
 	}
 
 	protected int checkPendingSize() {
 		String sql = "SELECT count(*) as icount FROM wt_queue " +
 		"WHERE wtq_status = 'PENDING'";
-		Session sess = HibernateWrapper.getSession().openSession();
-		SQLQuery query = sess.createSQLQuery(sql);
-		List<Integer> list = (List<Integer>) query.list();
-		sess.close();
-		return ((Integer)list.get(0)).intValue();
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery query = sess.createSQLQuery(sql);
+			List<Integer> list = (List<Integer>) query.list();
+			return ((Integer)list.get(0)).intValue();
+		} finally {
+			if (sess != null) sess.close();
+		}
 	}
 	
 	public void emailWtTransactions() {
@@ -468,14 +492,17 @@ public class CronUtils {
 	public void closeAirTranOldMassOhdsInSQLServer() {
 		
 		// FIRST HALF	
-		Session writeSession = HibernateWrapper.getSession().openSession();
-		Session readSess = HibernateWrapper.getDirtySession().openSession();
-		
-		airtranTwentyFourHourBusinessRules(writeSession, readSess);
-		
-		// SECOND HALF
-		readSess.close();
-		writeSession.close();
+		Session writeSession = null;
+		Session readSess = null;
+		try {
+			writeSession = HibernateWrapper.getSession().openSession();
+			readSess = HibernateWrapper.getDirtySession().openSession();
+			airtranTwentyFourHourBusinessRules(writeSession, readSess);
+		} finally {
+			// SECOND HALF
+			if (readSess != null) readSess.close();
+			if (writeSession != null) writeSession.close();
+		}
 	}
 
 	private void airtranTwentyFourHourBusinessRules(Session writeSession,
@@ -529,51 +556,56 @@ public class CronUtils {
 	}
 	
 	public void sendUSFilesToCRM() {
-		Session sess = HibernateWrapper.getSession().openSession();
-
-		String query = "select i.incident_ID from Incident i left outer join i.crmFile c" + " where i.crmFile.incident is null and i.createdate >= :startDate "
-				+ " and ((i.createdate < :incCutoff) or (i.createdate = :incCutoff and i.createtime <= :incTimeCutoff)) " 
-				+ " and i.status.status_ID = :openStatus order by i.createdate asc, i.createtime asc";
-
-		Query q = sess.createQuery(query);
-		
-		Date startDate = DateUtils.convertToGMTDate(PropertyBMO.getValue("us.crm.start.date"), TracingConstants.DB_DATEFORMAT);
-//		logger.info("**Start Date: " + startDate);
-
-		Calendar c = new GregorianCalendar();
-		c.setTime(TracerDateTime.getGMTDate());
-		c.add(Calendar.HOUR, (0 - 96));
-		Date incCutoff = c.getTime();
-
-
-		q.setDate("startDate", startDate);
-		q.setDate("incCutoff", incCutoff);
-		q.setTime("incTimeCutoff", incCutoff);
-		q.setInteger("openStatus", TracingConstants.MBR_STATUS_OPEN);
-
-		List<String> results = (List<String>) q.list();
-
-		logger.info("Total files ready to send to CRM: " + results.size());
-		int countUpdated = 0;
-
-		for (String o : results) {
-			ClientEventHandler h = new com.bagnet.clients.us.ClientEventHandlerImpl();
-			h.sendCrm(o, sess);
-			countUpdated += 1;
-		}
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+	
+			String query = "select i.incident_ID from Incident i left outer join i.crmFile c" + " where i.crmFile.incident is null and i.createdate >= :startDate "
+					+ " and ((i.createdate < :incCutoff) or (i.createdate = :incCutoff and i.createtime <= :incTimeCutoff)) " 
+					+ " and i.status.status_ID = :openStatus order by i.createdate asc, i.createtime asc";
+	
+			Query q = sess.createQuery(query);
 			
-		logger.info("Total files sent to CRM: " + countUpdated);
-		sess.close();
+			Date startDate = DateUtils.convertToGMTDate(PropertyBMO.getValue("us.crm.start.date"), TracingConstants.DB_DATEFORMAT);
+	//		logger.info("**Start Date: " + startDate);
+	
+			Calendar c = new GregorianCalendar();
+			c.setTime(TracerDateTime.getGMTDate());
+			c.add(Calendar.HOUR, (0 - 96));
+			Date incCutoff = c.getTime();
+	
+	
+			q.setDate("startDate", startDate);
+			q.setDate("incCutoff", incCutoff);
+			q.setTime("incTimeCutoff", incCutoff);
+			q.setInteger("openStatus", TracingConstants.MBR_STATUS_OPEN);
+	
+			List<String> results = (List<String>) q.list();
+	
+			logger.info("Total files ready to send to CRM: " + results.size());
+			int countUpdated = 0;
+	
+			for (String o : results) {
+				ClientEventHandler h = new com.bagnet.clients.us.ClientEventHandlerImpl();
+				h.sendCrm(o, sess);
+				countUpdated += 1;
+			}
+				
+			logger.info("Total files sent to CRM: " + countUpdated);
+		} finally {
+			if (sess != null) sess.close();
+		}
 	}
 	
 	
 	public void process24HoursEmails() {
 		try {
-			Session session = HibernateWrapper.getSession().openSession();
+			Session session = null;
 			
 			Transaction t = null;
 			try {
 
+				session = HibernateWrapper.getSession().openSession();
 				// String query =
 				String query = "select * from incident ";
 				query += "where status_ID = 12 ";

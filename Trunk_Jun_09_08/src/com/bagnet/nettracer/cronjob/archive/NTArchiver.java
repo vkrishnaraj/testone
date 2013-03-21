@@ -210,9 +210,6 @@ public class NTArchiver {
 
 				List list = q.list();
 
-				// if (sess.isOpen() == true)
-				sess.close();
-
 				LostAndFoundIncident inc = null;
 				System.out.println("begin bak LostAndFoundIncident....");
 				if (list != null && list.size() > 0) {
@@ -233,6 +230,8 @@ public class NTArchiver {
 			}
 		} catch (Exception e) {
 			logger.fatal("error lostandfoundincident into bak: " + e);
+		} finally {
+			if (sess != null) sess.close();
 		}
 	}
 
@@ -255,11 +254,12 @@ public class NTArchiver {
 				Query q = sess.createQuery(sql);
 				q.setParameter("dt", righttime);
 				list = q.list();
-				sess.close();
 			}
 
 		} catch (Exception e) {
 			logger.fatal("error query incident: " + e);
+		} finally {
+			if (sess != null) sess.close();
 		}
 		return list;
 	}
@@ -283,11 +283,12 @@ public class NTArchiver {
 				Query q = sess.createQuery(sql);
 				q.setParameter("dt", righttime);
 				list = q.list();
-				sess.close();
 			}
 
 		} catch (Exception e) {
 			logger.fatal("error query incident: " + e);
+		} finally {
+			if (sess != null) sess.close();
 		}
 		return list;
 	}
@@ -311,11 +312,12 @@ public class NTArchiver {
 				Query q = sess.createQuery(sql);
 				q.setParameter("dt", righttime);
 				list = q.list();
-				sess.close();
 			}
 
 		} catch (Exception e) {
 			logger.fatal("error query lostandfoundincident: " + e);
+		} finally {
+			if (sess != null) sess.close();
 		}
 		return list;
 	}
@@ -340,7 +342,6 @@ public class NTArchiver {
 				Query q = sess.createQuery(sql);
 				q.setParameter("dt", righttime);
 				List list = q.list();
-				sess.close();
 				Incident inc = null;
 				if (list != null && list.size() > 0) {
 
@@ -361,6 +362,8 @@ public class NTArchiver {
 			}
 		} catch (Exception e) {
 			logger.fatal("error incident into bak: " + e);
+		} finally {
+			if (sess != null) sess.close();
 		}
 
 	}
@@ -462,7 +465,6 @@ public class NTArchiver {
 			q.setParameter("dt", righttime);
 
 			list = q.list();
-			sess.close();
 
 			// OHD inc = null;
 
@@ -482,6 +484,8 @@ public class NTArchiver {
 			System.out.println("end bak OHD....");
 		} catch (Exception e) {
 			logger.fatal("error incident into bak: " + e);
+		} finally {
+			if (sess != null) sess.close();
 		}
 	}
 

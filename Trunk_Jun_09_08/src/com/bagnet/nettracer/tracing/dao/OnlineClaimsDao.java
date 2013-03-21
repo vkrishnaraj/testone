@@ -576,11 +576,15 @@ public class OnlineClaimsDao {
 		}
 		retVal.setBag(bagsRet);
 		Session sess = HibernateWrapper.getSession().openSession();
-		Incident i = IncidentBMO.getIncidentByID(incidentId, sess);
-		retVal.setIncident(i);
-		retVal = fixTime(retVal, timeDiff);
-		logAfter(retVal);
-		return retVal;
+		try {
+			Incident i = IncidentBMO.getIncidentByID(incidentId, sess);
+			retVal.setIncident(i);
+			retVal = fixTime(retVal, timeDiff);
+			logAfter(retVal);
+			return retVal;
+		} finally {
+			sess.close();
+		}
 	}
 	
 	private OnlineClaim fixTime(OnlineClaim retVal, int timeDiff) {

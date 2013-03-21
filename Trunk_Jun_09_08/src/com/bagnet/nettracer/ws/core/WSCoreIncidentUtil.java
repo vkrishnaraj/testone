@@ -1051,7 +1051,9 @@ public class WSCoreIncidentUtil {
 					t.rollback();
 				}
 			} finally {
-				sess.close();
+				if (sess != null) {
+					sess.close();
+				}
 			}
 		}
 

@@ -101,13 +101,12 @@ public class HibernateUtils {
 	public static boolean delete(Object obj, Session sess) {
 		boolean sessionNull = (sess == null);
 
-		if (sessionNull) {
-			sess = HibernateWrapper.getSession().openSession();
-		}
 		
 		Transaction t = null;
 		try {
-			sess = HibernateWrapper.getSession().openSession();
+			if (sessionNull) {
+				sess = HibernateWrapper.getSession().openSession();
+			}
 			t = sess.beginTransaction();
 			sess.delete(obj);
 			t.commit();

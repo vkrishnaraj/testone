@@ -825,19 +825,23 @@ public class WorldTracerUtils {
 	public static boolean insertWTInfo(String requestContext,
 			String responseContext) {
 		boolean flag = true;
+		Session session = null;
 		try {
-			Session session = HibernateWrapper.getSession().openSession();
+			session = HibernateWrapper.getSession().openSession();
 			Transaction tx = session.beginTransaction();
 			WT_Info wt_info = new WT_Info();
 			wt_info.setRequestContext(requestContext);
 			wt_info.setResponseContext(responseContext);
 			session.save(wt_info);
 			tx.commit();
-			session.close();
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			flag = false;
 			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
 		}
 		return flag;
 	}
@@ -846,7 +850,7 @@ public class WorldTracerUtils {
 	public static List<CountActionFile> countActionFile(String airline, String station) {
 		List<CountActionFile> list = new ArrayList<CountActionFile>();
 		int count;
-		Session session;
+		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			for (ActionFileType type : ActionFileType.values()) {
@@ -868,6 +872,10 @@ public class WorldTracerUtils {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (session != null) {
+				session.close();
+			}
 		}
 		return list;
 	}
@@ -891,6 +899,10 @@ public class WorldTracerUtils {
 		} catch (HibernateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
 		}
 		return count;
 	}

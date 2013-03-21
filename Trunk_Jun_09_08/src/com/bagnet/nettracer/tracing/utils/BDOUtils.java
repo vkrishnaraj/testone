@@ -1126,16 +1126,22 @@ public class BDOUtils {
 		SessionFactory sessionFactory = HibernateWrapper.getSession();
 
 		Session hibernateSession = sessionFactory.openSession();
+		
+		try {
 
-		Query query = hibernateSession.createQuery("from BDO as b where b.BDO_ID=?");
-
-		query.setInteger(0, bdo_id);
-
-		List list2 = query.list();
-
-		Iterator it = list2.iterator();
-
-		return it;
+			Query query = hibernateSession.createQuery("from BDO as b where b.BDO_ID=?");
+	
+			query.setInteger(0, bdo_id);
+	
+			List list2 = query.list();
+	
+			Iterator it = list2.iterator();
+	
+			return it;
+		
+		} finally {
+			hibernateSession.close();
+		}
 	}
 
 	public static void cancelBdo(int bdo_id, int item_id, Agent a) {

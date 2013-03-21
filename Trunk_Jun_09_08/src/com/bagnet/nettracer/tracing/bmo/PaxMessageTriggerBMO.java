@@ -25,6 +25,10 @@ public class PaxMessageTriggerBMO {
 			result = (PaxMessageTrigger) session.get(PaxMessageTrigger.class, triggerKey);
 		} catch (Exception e) {
 			logger.error(e);
+		} finally {
+			if (sessionNull) {
+				session.close();
+			}
 		}
 		return result;
 	}

@@ -226,7 +226,6 @@ public class LFTracingUtil {
 			}
 			q.addScalar("id", StandardBasicTypes.LONG);
 			List<Long> results = (List<Long>)q.list();
-			sess.close();
 			return results;
 
 		}catch(Exception e){
@@ -272,7 +271,6 @@ public class LFTracingUtil {
 			}
 			q.addScalar("id", StandardBasicTypes.LONG);
 			List<Long> results = (List<Long>)q.list();
-			sess.close();
 			return results;
 
 		}catch(Exception e){
@@ -330,7 +328,6 @@ public class LFTracingUtil {
 			}
 			q.addScalar("id", StandardBasicTypes.LONG);
 			List<Long> results = (List<Long>)q.list();
-			sess.close();
 			return results;
 
 		}catch(Exception e){
@@ -378,7 +375,6 @@ public class LFTracingUtil {
 			}
 			q.addScalar("id", StandardBasicTypes.LONG);
 			List<Long> results = (List<Long>)q.list();
-			sess.close();
 			return results;
 
 		}catch(Exception e){

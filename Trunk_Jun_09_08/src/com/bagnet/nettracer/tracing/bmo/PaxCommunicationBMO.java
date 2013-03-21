@@ -167,8 +167,9 @@ public class PaxCommunicationBMO {
 		if(list == null) {
 			flag=false;
 		} else {
+			Session session = null;
 			try {
-				Session session=HibernateWrapper.getSession().openSession();
+				session=HibernateWrapper.getSession().openSession();
 				Transaction tx=session.beginTransaction();
 				PaxCommunicationStatus myPaxCommunicationStatus;
 				if (myNewStatus.equals("Acknowledge")) {
@@ -193,11 +194,12 @@ public class PaxCommunicationBMO {
 						tx.commit();
 					}
 				}
-				session.close();
 			} catch (HibernateException e) {
 				flag=false;
 				e.printStackTrace();
-			}	
+			}	finally {
+				if (session != null) session.close();
+			}
 			
 		}
 		return flag;

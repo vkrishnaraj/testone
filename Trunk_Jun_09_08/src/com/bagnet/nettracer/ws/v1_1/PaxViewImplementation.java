@@ -171,13 +171,20 @@ public class PaxViewImplementation extends PaxViewSkeleton {
 
 				
 				if (agentMessageReadByPax &&  pc.getStatus().equals(PaxCommunicationStatus.NEW) && pc.getAgent() != null) {
-					Session sess = HibernateWrapper.getSession().openSession();
-					org.hibernate.Transaction t = sess.beginTransaction();
-
-					pc.setStatus(PaxCommunicationStatus.READ);
-					sess.saveOrUpdate(pc);
-					t.commit();
-					sess.close();
+					Session sess = null;
+					org.hibernate.Transaction t = null;
+					
+					try {
+						sess = HibernateWrapper.getSession().openSession();
+						t = sess.beginTransaction();
+						pc.setStatus(PaxCommunicationStatus.READ);
+						sess.saveOrUpdate(pc);
+						t.commit();
+					} catch (Exception e) {
+						e.printStackTrace();
+					} finally {
+						if (sess != null) sess.close();
+					}
 				}
 				pvComm.setStatus(pc.getDescription());
 				

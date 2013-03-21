@@ -173,11 +173,12 @@ public class MoveToLZThread {
 	
 
 	public void moveToLz() {
+		Session sess = null;
 		try {
 
 				// rotate through companies
 
-				Session sess = HibernateWrapper.getDirtySession().openSession();
+				sess = HibernateWrapper.getDirtySession().openSession();
 				String sql = "select mbr_to_lz_days, damaged_to_lz_days, miss_to_lz_days, ohd_to_lz_days, companycode_ID from company_specific_variable order by companycode_ID";
 				if (company.length() > 0) sql = "select * from company_specific_variable where companycode_ID = '" + company + "'";
 				
@@ -248,6 +249,8 @@ public class MoveToLZThread {
 
 		} catch (Exception e) {
 			logger.fatal("cron thread error: " + e);
+		} finally {
+			if (sess != null) sess.close();
 		}
 	}
 
@@ -300,7 +303,7 @@ public class MoveToLZThread {
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				sess.close();
+				if (sess != null) sess.close();
 			}
 			
 		}

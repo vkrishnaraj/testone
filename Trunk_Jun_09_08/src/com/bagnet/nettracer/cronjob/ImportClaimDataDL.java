@@ -164,6 +164,8 @@ public class ImportClaimDataDL extends ImportClaimData {
 			return l.size()>0;
 		}catch(Exception e){
 			e.printStackTrace();
+		} finally {
+			sess.close();
 		}
 		return false;
 	}

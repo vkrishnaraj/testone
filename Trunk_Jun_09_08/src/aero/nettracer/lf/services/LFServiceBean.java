@@ -1055,7 +1055,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			Query q = sess.createQuery(query);
 			@SuppressWarnings("unchecked")
 			List<Long> result = q.list();
-			sess.close();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1086,7 +1085,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			@SuppressWarnings("unchecked")
 			List<LFLost> results = q.list();
-			sess.close();
 			return results;
 			
 		}catch(Exception e){
@@ -1109,7 +1107,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			List result = q.list();
-			sess.close();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1131,7 +1128,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			List result = q.list();
-			sess.close();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1161,7 +1157,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 			
 			List<LFFound> results = q.list();
-			sess.close();
 			return results;
 			
 		}catch(Exception e){
@@ -1193,7 +1188,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 			
 			List<LFItem> results = q.list();
-			sess.close();
 			return results;
 			
 		}catch(Exception e){
@@ -1315,7 +1309,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			List result = q.list();
-			sess.close();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1347,7 +1340,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 			
 			List<LFMatchHistory> results = q.list();
-			sess.close();
 			return results;
 			
 		}catch(Exception e){
@@ -1379,7 +1371,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			List result = q.list();
-			sess.close();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1419,7 +1410,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 			
 			List<LFItem> results = q.list();
-			sess.close();
 			return results;
 			
 		}catch(Exception e){
@@ -1458,7 +1448,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			List result = q.list();
-			sess.close();
 			return  (List<LFMatchHistory>)result;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1480,7 +1469,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			List result = q.list();
-			sess.close();
 			return  (List<LFMatchHistory>)result;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1594,7 +1582,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			q.setParameter("foundId", foundId);
 			q.setParameter("score", -1.0);
 			Long result = (Long) q.uniqueResult();
-			sess.close();
 			return  result;
 		} catch (org.hibernate.NonUniqueResultException e){
 			throw e;
@@ -1620,7 +1607,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			q.setParameter("foundId", foundId);
 			q.setParameter("status", TracingConstants.LF_TRACING_CONFIRMED);
 			Long result = (Long) q.uniqueResult();
-			sess.close();
 			return  result;
 		} catch (org.hibernate.NonUniqueResultException e){
 			throw e;
@@ -1900,7 +1886,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			List result = q.list();
-			sess.close();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1926,7 +1911,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			q.setParameter("lostid", match.getLost().getId());
 			q.setParameter("foundid", match.getFound().getId());
 			results = q.list();
-			sess.close();
 			return results;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1971,7 +1955,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 			
 			results = q.list();
-			sess.close();
 			return results;
 			
 		}catch(Exception e){
@@ -3579,7 +3562,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createSQLQuery(query);
 			List result = q.list();
-			sess.close();
 			return ((BigInteger) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -3886,7 +3868,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			List result = q.list();
-			sess.close();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();

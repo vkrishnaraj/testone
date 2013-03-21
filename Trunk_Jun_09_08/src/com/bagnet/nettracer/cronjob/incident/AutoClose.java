@@ -162,7 +162,7 @@ public class AutoClose {
 				} catch (Exception e) {
 					logger.error("AUTO-CLOSE FAILURE: " + e);
 				} finally {
-					session.close();
+					if (session != null) session.close();
 				}
 			}
 		}

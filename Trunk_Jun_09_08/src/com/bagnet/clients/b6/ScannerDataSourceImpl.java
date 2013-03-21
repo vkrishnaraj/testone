@@ -176,6 +176,47 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 			t.commit();
 		}catch (Exception e1) {
 			e1.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception te) {
+				te.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public void consumeBAG_A(String file){
+		List<String[]>list = this.consumeScannerDataFromCSV(file);
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			if(list!=null){
+				for(String[]s:list){
+					String bagtag = s[0]+s[1];
+					String date = s[3] + " " + s[4];
+					Date d = DateUtils.convertToDate(date, "MMM dd yyyy", "US");
+					String remark = "Tag Number: "+bagtag;
+					if(s[9].trim().length()>0){
+						remark+="<br/>"+s[9].trim();
+					}
+					if(s[16].trim().length()>0){
+						remark+="<br/>"+s[16].trim();
+					}
+					if(s[17].trim().length()>0){
+						remark+="<br/>"+s[17].trim();
+					}
+					this.insertData(sess,d, bagtag, remark,null,null,null);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
 			if (sess != null) {
 				try {
 					sess.close();
@@ -183,73 +224,40 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 					e2.printStackTrace();
 				}
 			}
-		} finally {
-//			if (sess != null) {
-//				try {
-//					sess.close();
-//				} catch (Exception e1) {
-//					e1.printStackTrace();
-//				}
-//			}
-		}
-	}
-	
-	public void consumeBAG_A(String file){
-		List<String[]>list = this.consumeScannerDataFromCSV(file);
-		Session sess = HibernateWrapper.getSession().openSession();
-		if(list!=null){
-			for(String[]s:list){
-				String bagtag = s[0]+s[1];
-				String date = s[3] + " " + s[4];
-				Date d = DateUtils.convertToDate(date, "MMM dd yyyy", "US");
-				String remark = "Tag Number: "+bagtag;
-				if(s[9].trim().length()>0){
-					remark+="<br/>"+s[9].trim();
-				}
-				if(s[16].trim().length()>0){
-					remark+="<br/>"+s[16].trim();
-				}
-				if(s[17].trim().length()>0){
-					remark+="<br/>"+s[17].trim();
-				}
-				this.insertData(sess,d, bagtag, remark,null,null,null);
-			}
-		}
-		if (sess != null) {
-			try {
-				sess.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
 		}
 	}
 	
 	public void consumeBAG_B(String file){
 		List<String[]>list = this.consumeScannerDataFromCSV(file);
 		Session sess = HibernateWrapper.getSession().openSession();
-		if(list!=null){
-			for(String[]s:list){
-				String bagtag = s[0]+s[1];
-				String date = s[3];
-				Date d = DateUtils.convertToDate(date, "yyyyMMdd", "US");
-				String remark = "Tag Number: "+bagtag;
-				if(s[8].trim().length()>0){
-					remark+="<br/>"+s[8].trim();
+		try {
+			if(list!=null){
+				for(String[]s:list){
+					String bagtag = s[0]+s[1];
+					String date = s[3];
+					Date d = DateUtils.convertToDate(date, "yyyyMMdd", "US");
+					String remark = "Tag Number: "+bagtag;
+					if(s[8].trim().length()>0){
+						remark+="<br/>"+s[8].trim();
+					}
+					if(s[14].trim().length()>0){
+						remark+="<br/>"+s[14].trim();
+					}
+					if(s[15].trim().length()>0){
+						remark+="<br/>"+s[15].trim();
+					}
+					this.insertData(sess,d, bagtag, remark,null,null,null);
 				}
-				if(s[14].trim().length()>0){
-					remark+="<br/>"+s[14].trim();
-				}
-				if(s[15].trim().length()>0){
-					remark+="<br/>"+s[15].trim();
-				}
-				this.insertData(sess,d, bagtag, remark,null,null,null);
 			}
-		}
-		if (sess != null) {
-			try {
-				sess.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
 			}
 		}
 	}
@@ -257,32 +265,37 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 	public void consumeHISTORY_A(String file){
 		List<String[]>list = this.consumeScannerDataFromCSV(file);
 		Session sess = HibernateWrapper.getSession().openSession();
-		if(list!=null){
-			for(String[]s:list){
-				String bagtag = s[3]+s[4];
-				String date = s[1] + " " + s[2];
-				Date d = DateUtils.convertToDate(date, "MMM dd yyyy", "US");
-				String loc = "MCO";
-				if(s[5].trim().length() > 0){
-					loc += ":" + s[5].trim();
+		try {
+			if(list!=null){
+				for(String[]s:list){
+					String bagtag = s[3]+s[4];
+					String date = s[1] + " " + s[2];
+					Date d = DateUtils.convertToDate(date, "MMM dd yyyy", "US");
+					String loc = "MCO";
+					if(s[5].trim().length() > 0){
+						loc += ":" + s[5].trim();
+					}
+					String scanner = s[7];
+					
+					String remark = "Tag Number: " + bagtag;
+					if(scanner.trim().length() > 0){
+						remark += "<br/>" + scanner.trim();
+					}
+					if(s[6].trim().length()>0){
+						remark += "<br/>" + s[6].trim();
+					}
+					this.insertData(sess,d,bagtag, remark,loc,null,null);
 				}
-				String scanner = s[7];
-				
-				String remark = "Tag Number: " + bagtag;
-				if(scanner.trim().length() > 0){
-					remark += "<br/>" + scanner.trim();
-				}
-				if(s[6].trim().length()>0){
-					remark += "<br/>" + s[6].trim();
-				}
-				this.insertData(sess,d,bagtag, remark,loc,null,null);
 			}
-		}
-		if (sess != null) {
-			try {
-				sess.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
 			}
 		}
 	}
@@ -290,32 +303,37 @@ public class ScannerDataSourceImpl implements ScannerDataSource{
 	public void consumeHISTORY_B(String file){
 		List<String[]>list = this.consumeScannerDataFromCSV(file);
 		Session sess = HibernateWrapper.getSession().openSession();
-		if(list!=null){
-			for(String[]s:list){
-				String bagtag = s[2]+s[3];
-				String date = s[1];
-				Date d = DateUtils.convertToDate(date, "yyyyMMdd", "US");
-				String loc = "MCO";
-				if(s[4].trim().length() > 0){
-					loc += ":" + s[4].trim();
+		try {
+			if(list!=null){
+				for(String[]s:list){
+					String bagtag = s[2]+s[3];
+					String date = s[1];
+					Date d = DateUtils.convertToDate(date, "yyyyMMdd", "US");
+					String loc = "MCO";
+					if(s[4].trim().length() > 0){
+						loc += ":" + s[4].trim();
+					}
+					String scanner = s[6];
+					
+					String remark = "Tag Number: " + bagtag;
+					if(scanner.trim().length() > 0){
+						remark += "<br/>" + scanner.trim();
+					}
+					if(s[5].trim().length()>0){
+						remark += "<br/>" + s[5].trim();
+					}
+					this.insertData(sess,d,bagtag, remark,loc,null,null);
 				}
-				String scanner = s[6];
-				
-				String remark = "Tag Number: " + bagtag;
-				if(scanner.trim().length() > 0){
-					remark += "<br/>" + scanner.trim();
-				}
-				if(s[5].trim().length()>0){
-					remark += "<br/>" + s[5].trim();
-				}
-				this.insertData(sess,d,bagtag, remark,loc,null,null);
 			}
-		}
-		if (sess != null) {
-			try {
-				sess.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
 			}
 		}
 	}

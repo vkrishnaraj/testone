@@ -21,47 +21,59 @@ public class CronUtilsMySQL extends CronUtils{
 				"(SELECT wtq_status FROM wt_queue ORDER BY CREATEDATE DESC limit 50) count_table " +
 				"WHERE wtq_status = 'FAIL'";
 		
-		Session sess = HibernateWrapper.getSession().openSession();
-		SQLQuery query = sess.createSQLQuery(sql);
-
-		List<BigInteger> list = (List<BigInteger>) query.list();
-		
-		sess.close();
-		return ((BigInteger)list.get(0)).intValue();
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery query = sess.createSQLQuery(sql);
+	
+			List<BigInteger> list = (List<BigInteger>) query.list();
+			
+			return ((BigInteger)list.get(0)).intValue();
+		} finally {
+			if (sess != null) sess.close();
+		}
 	}
 	
 	protected int checkSQLServerSequentialFailures() {
 		
 		String sql = "SELECT wtq_status FROM wt_queue " +
 		"ORDER BY CREATEDATE DESC limit 50";
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
 		
-		SQLQuery query = sess.createSQLQuery(sql);
-		query.addScalar("wtq_status", StandardBasicTypes.STRING);
-		
-		List<String> list = (List<String>) query.list();
-		
-		int sequentialFails = 0;
-		for (String str: list) {
-			if (str.equals(WorldTracerQueue.WtqStatus.SUCCESS.name())) {
-				sequentialFails = 0;
-				break;
-			}  else if (str.equals(WorldTracerQueue.WtqStatus.FAIL.name())) {
-				sequentialFails++;
+			SQLQuery query = sess.createSQLQuery(sql);
+			query.addScalar("wtq_status", StandardBasicTypes.STRING);
+			
+			List<String> list = (List<String>) query.list();
+			
+			int sequentialFails = 0;
+			for (String str: list) {
+				if (str.equals(WorldTracerQueue.WtqStatus.SUCCESS.name())) {
+					sequentialFails = 0;
+					break;
+				}  else if (str.equals(WorldTracerQueue.WtqStatus.FAIL.name())) {
+					sequentialFails++;
+				}
 			}
+			
+			return sequentialFails;
+		} finally {
+			if (sess != null) sess.close();
 		}
-		
-		sess.close();
-		return sequentialFails;
 	}
 
 	protected int checkPendingSize() {
 		String sql = "SELECT count(*) as icount FROM wt_queue " +
 		"WHERE wtq_status = 'PENDING'";
-		Session sess = HibernateWrapper.getSession().openSession();
-		SQLQuery query = sess.createSQLQuery(sql);
-		List<BigInteger> list = (List<BigInteger>) query.list();
-		sess.close();
-		return ((BigInteger)list.get(0)).intValue();
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery query = sess.createSQLQuery(sql);
+			List<BigInteger> list = (List<BigInteger>) query.list();
+			return ((BigInteger)list.get(0)).intValue();
+		} finally {
+			if (sess != null) sess.close();
+		}
 	}
 }

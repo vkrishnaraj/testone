@@ -43,65 +43,67 @@ public class OsiAction extends Action {
 		String incident_ID =  (String) theForm.get("incident_id");
 		
 		Session sess = HibernateWrapper.getSession().openSession();
-		Incident inc = IncidentBMO.getIncidentByID(incident_ID, sess);
-		OtherSystemInformation osi = OtherSystemInformationBMO.getOsi(incident_ID, sess);
-		
-		switch(inc.getItemtype_ID()) {
-			case TracingConstants.LOST_DELAY: 
-				if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_LD, user))
-					return (mapping.findForward(TracingConstants.NO_PERMISSION));
-				break;
-			case TracingConstants.MISSING_ARTICLES: 
-				if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_PIL, user))
-					return (mapping.findForward(TracingConstants.NO_PERMISSION));
-				break;
-			case TracingConstants.DAMAGED_BAG: 
-				if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_DAM, user))
-					return (mapping.findForward(TracingConstants.NO_PERMISSION));
-				break;
-		}
-		
-		// SAVE OSI
-		if (request.getParameter("save") != null) {
-			if (osi == null) {
-				osi = new OtherSystemInformation();
+		try {
+			Incident inc = IncidentBMO.getIncidentByID(incident_ID, sess);
+			OtherSystemInformation osi = OtherSystemInformationBMO.getOsi(incident_ID, sess);
+			
+			switch(inc.getItemtype_ID()) {
+				case TracingConstants.LOST_DELAY: 
+					if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+							&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_LD, user))
+						return (mapping.findForward(TracingConstants.NO_PERMISSION));
+					break;
+				case TracingConstants.MISSING_ARTICLES: 
+					if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+							&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_PIL, user))
+						return (mapping.findForward(TracingConstants.NO_PERMISSION));
+					break;
+				case TracingConstants.DAMAGED_BAG: 
+					if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+							&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_OSI_DAM, user))
+						return (mapping.findForward(TracingConstants.NO_PERMISSION));
+					break;
 			}
-		
-			String text = (String) theForm.get("text");
-			 		
-			osi.setIncident(inc);
-			osi.setInfo(text);
 			
-			HibernateUtils.save(osi, sess);
+			// SAVE OSI
+			if (request.getParameter("save") != null) {
+				if (osi == null) {
+					osi = new OtherSystemInformation();
+				}
 			
-//			Audit_OtherSystemInformation auditOsi = new Audit_OtherSystemInformation();
-//			BeanUtils.copyProperties(auditOsi, osi);
-//			auditOsi.setModifying_agent(user);
-//			auditOsi.setTime_modified(TracerDateTime.getGMTDate());
-//			HibernateUtils.save(auditOsi, sess);
-			
-		} else {
-			// GET OSI OR CREATE NEW OSI
-			if (osi == null) {
-				osi = new OtherSystemInformation();
+				String text = (String) theForm.get("text");
+				 		
 				osi.setIncident(inc);
+				osi.setInfo(text);
+				
+				HibernateUtils.save(osi, sess);
+				
+	//			Audit_OtherSystemInformation auditOsi = new Audit_OtherSystemInformation();
+	//			BeanUtils.copyProperties(auditOsi, osi);
+	//			auditOsi.setModifying_agent(user);
+	//			auditOsi.setTime_modified(TracerDateTime.getGMTDate());
+	//			HibernateUtils.save(auditOsi, sess);
+				
+			} else {
+				// GET OSI OR CREATE NEW OSI
+				if (osi == null) {
+					osi = new OtherSystemInformation();
+					osi.setIncident(inc);
+				}
 			}
+			
+			// POPULATE THE FORM
+			theForm.set("id", Integer.toString(osi.getId()));
+			theForm.set("incident_id", osi.getIncident().getIncident_ID());
+			theForm.set("text", osi.getInfo());
+			
+			if (!UserPermissions.hasIncidentSavePermission(user, inc)) {
+				theForm.set("readOnly", "true");
+			}
+			
+			return (mapping.findForward(TracingConstants.FORWARD_OSI));
+		} finally {
+			sess.close();
 		}
-		
-		sess.close();
-		
-		// POPULATE THE FORM
-		theForm.set("id", Integer.toString(osi.getId()));
-		theForm.set("incident_id", osi.getIncident().getIncident_ID());
-		theForm.set("text", osi.getInfo());
-		
-		if (!UserPermissions.hasIncidentSavePermission(user, inc)) {
-			theForm.set("readOnly", "true");
-		}
-		
-		return (mapping.findForward(TracingConstants.FORWARD_OSI));
 	}
 }

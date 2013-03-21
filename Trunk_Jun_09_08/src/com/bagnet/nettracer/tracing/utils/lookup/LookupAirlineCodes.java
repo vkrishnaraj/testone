@@ -35,20 +35,22 @@ public class LookupAirlineCodes {
 
 	static {
 		Session sess = HibernateWrapper.getSession().openSession();
-
-		SQLQuery query = sess.createSQLQuery("SELECT Airline_2_Character_Code, Airline_3_Digit_Ticketing_Code FROM LOOKUP_AIRLINE_CODES");
-		query.addScalar("Airline_2_Character_Code", StandardBasicTypes.STRING);
-		query.addScalar("Airline_3_Digit_Ticketing_Code", StandardBasicTypes.STRING);
-		
-		List results = query.list();
-		sess.close();
-		
-		if (results != null && results.size() >0) {
-			for(Object result: results) {
-				Object[] res = (Object[]) result;
-				TWO_CHAR_TO_THREE_DIGIT.put(((String) res[0]).toUpperCase(), (String) res[1]);
-				THREE_DIGIT_TO_TWO_CHAR.put((String) res[1], ((String) res[0]).toUpperCase());
+		try {
+			SQLQuery query = sess.createSQLQuery("SELECT Airline_2_Character_Code, Airline_3_Digit_Ticketing_Code FROM LOOKUP_AIRLINE_CODES");
+			query.addScalar("Airline_2_Character_Code", StandardBasicTypes.STRING);
+			query.addScalar("Airline_3_Digit_Ticketing_Code", StandardBasicTypes.STRING);
+			
+			List results = query.list();
+			
+			if (results != null && results.size() >0) {
+				for(Object result: results) {
+					Object[] res = (Object[]) result;
+					TWO_CHAR_TO_THREE_DIGIT.put(((String) res[0]).toUpperCase(), (String) res[1]);
+					THREE_DIGIT_TO_TWO_CHAR.put((String) res[1], ((String) res[0]).toUpperCase());
+				}
 			}
+		} finally {
+			sess.close();
 		}
 	}
 
@@ -222,22 +224,25 @@ public class LookupAirlineCodes {
 	@SuppressWarnings("rawtypes")
 	public static void reloadTable() {
 		Session sess = HibernateWrapper.getSession().openSession();
+		try {
 
-		SQLQuery query = sess.createSQLQuery("SELECT Airline_2_Character_Code, Airline_3_Digit_Ticketing_Code FROM LOOKUP_AIRLINE_CODES");
-		query.addScalar("Airline_2_Character_Code", StandardBasicTypes.STRING);
-		query.addScalar("Airline_3_Digit_Ticketing_Code", StandardBasicTypes.STRING);
-		
-		List results = query.list();
-		sess.close();
-		
-		if (results != null && results.size() >0) {
-			TWO_CHAR_TO_THREE_DIGIT.clear();
-			THREE_DIGIT_TO_TWO_CHAR.clear();
-			for(Object result: results) {
-				Object[] res = (Object[]) result;
-				TWO_CHAR_TO_THREE_DIGIT.put(((String) res[0]).toUpperCase(), (String) res[1]);
-				THREE_DIGIT_TO_TWO_CHAR.put((String) res[1], ((String) res[0]).toUpperCase());
+			SQLQuery query = sess.createSQLQuery("SELECT Airline_2_Character_Code, Airline_3_Digit_Ticketing_Code FROM LOOKUP_AIRLINE_CODES");
+			query.addScalar("Airline_2_Character_Code", StandardBasicTypes.STRING);
+			query.addScalar("Airline_3_Digit_Ticketing_Code", StandardBasicTypes.STRING);
+			
+			List results = query.list();
+			
+			if (results != null && results.size() >0) {
+				TWO_CHAR_TO_THREE_DIGIT.clear();
+				THREE_DIGIT_TO_TWO_CHAR.clear();
+				for(Object result: results) {
+					Object[] res = (Object[]) result;
+					TWO_CHAR_TO_THREE_DIGIT.put(((String) res[0]).toUpperCase(), (String) res[1]);
+					THREE_DIGIT_TO_TWO_CHAR.put((String) res[1], ((String) res[0]).toUpperCase());
+				}
 			}
+		} finally {
+			sess.close();
 		}
 		
 	}

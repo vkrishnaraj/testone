@@ -44,11 +44,14 @@ public class TaskManagerBMO {
 			+ "where t.incident.incident_ID = :id";
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setParameter("id", incident_id);
-		List <MorningDutiesTask>l = q.list();
-		sess.close();
-		return l;
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setParameter("id", incident_id);
+			List <MorningDutiesTask>l = q.list();
+			return l;
+		} finally {
+			sess.close();
+		}
 	}
 	
 	public static List<DisputeResolutionTask>getTaskByDisputeId(long dispute_id, Status status){
@@ -56,12 +59,15 @@ public class TaskManagerBMO {
 			+ "where t.dispute.dispute_res_id = :id and t.status = :taskstatus";
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setParameter("id", dispute_id);
-		q.setParameter("taskstatus", status);
-		List <DisputeResolutionTask>l = q.list();
-		sess.close();
-		return l;
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setParameter("id", dispute_id);
+			q.setParameter("taskstatus", status);
+			List <DisputeResolutionTask>l = q.list();
+			return l;
+		} finally {
+			sess.close();
+		}
 	}
 	
 	public static GeneralTask getTaskById(long id){
@@ -69,15 +75,18 @@ public class TaskManagerBMO {
 		sql += "where gt.task_id = :id";
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setLong("id", id);
-		List l = q.list();
-		GeneralTask task = null;
-		if(l.isEmpty() == false){
-			task = (GeneralTask)l.get(0);
-		} 
-		sess.close();
-		return task;
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setLong("id", id);
+			List l = q.list();
+			GeneralTask task = null;
+			if(l.isEmpty() == false){
+				task = (GeneralTask)l.get(0);
+			} 
+			return task;
+		} finally {
+			sess.close();
+		}
 	}
 	
 	public static TaskActivity saveTaskActivity(TaskActivity ta){
@@ -105,15 +114,18 @@ public class TaskManagerBMO {
 		sql += "where ta.taskactivity_id = :id";
 		Query q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
-		q = sess.createQuery(sql.toString());
-		q.setLong("id", id);
-		List l = q.list();
-		TaskActivity activity = null;
-		if(l.isEmpty() == false){
-			activity = (TaskActivity) l.get(0);
-		} 
-		sess.close();
-		return activity;
+		try {
+			q = sess.createQuery(sql.toString());
+			q.setLong("id", id);
+			List l = q.list();
+			TaskActivity activity = null;
+			if(l.isEmpty() == false){
+				activity = (TaskActivity) l.get(0);
+			} 
+			return activity;
+		} finally {
+			sess.close();
+		}
 	}
 	
 	public static List<TaskActivity> getTaskActivityListByTask(GeneralTask task){

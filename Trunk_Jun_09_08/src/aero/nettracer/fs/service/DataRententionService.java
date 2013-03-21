@@ -51,7 +51,10 @@ public class DataRententionService {
 			
 		}catch (Exception e){
 			e.printStackTrace();
-			sess.close();
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
 		}
 	}
 	
@@ -78,8 +81,11 @@ public class DataRententionService {
 			}
 		} catch (Exception e){
 			e.printStackTrace();
-			sess.close();
 			return false;
+		} finally {
+			if (sess != null) {
+				sess.close();
+			}
 		}
 	}
 }

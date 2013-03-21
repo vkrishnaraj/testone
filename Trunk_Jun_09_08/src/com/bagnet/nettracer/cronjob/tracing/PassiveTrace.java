@@ -125,6 +125,7 @@ public class PassiveTrace {
 		
 		// Produce List of incidents for consumers to consume.
 		while (true) {
+			Session sess = null;
 			try {
 				Calendar startTime = new GregorianCalendar();
 				// Reset cache if necessary
@@ -141,7 +142,7 @@ public class PassiveTrace {
 				settings.setRuleSet(new RuleSet());
 
 				
-				Session sess = HibernateWrapper.getDirtySession().openSession();
+				sess = HibernateWrapper.getDirtySession().openSession();
 				Calendar c;
 				Date cutoff = null;
 				String hsql = "";
@@ -208,8 +209,6 @@ public class PassiveTrace {
 	
 				List<String> validOhdList = validOhdQuery.list();
 				
-				sess.close();
-				
 				ohdCache.reset(validOhdList);
 				// TODO: HERE
 				//OhdReference reference = new OhdReference();
@@ -240,6 +239,8 @@ public class PassiveTrace {
 				logger.fatal("Passive tracer encountered a FATAL error while running...", e);
 				errorHandler.sendEmail("Passive tracer encountered a FATAL error while running...", true, false);
 				
+			} finally {
+				if (sess != null) sess.close();
 			}
 		}
 	}

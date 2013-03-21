@@ -1650,8 +1650,9 @@ public class TracerUtils {
 	}
 	public static boolean madeSuspendWT_BAG_SELECTED(List list){
 		boolean flag=true;
+		Session session = null;
 		try {
-			Session session=HibernateWrapper.getSession().openSession();
+			session=HibernateWrapper.getSession().openSession();
 			Transaction tx=session.beginTransaction();
 			Iterator it=list.iterator();
 			while(it.hasNext()){
@@ -1666,27 +1667,32 @@ public class TracerUtils {
 					tx.commit();
 				}
 			}
-			session.close();
 		} catch (HibernateException e) {
 			flag=false;
 			e.printStackTrace();
+		} finally {
+			if (session != null) session.close();
 		}
 		return flag;
 	}
 	public static Item findItemByItemID(int itemID){
 		Session session=HibernateWrapper.getSession().openSession();
-		Query query=session.createQuery("from com.bagnet.nettracer.tracing.db.Item as item where item.item_ID=?");
-		query.setParameter(0, itemID);
-		List list=query.list();
-		Item item=(Item)list.get(0);
-		session.close();
-		return item;
+		try {
+			Query query=session.createQuery("from com.bagnet.nettracer.tracing.db.Item as item where item.item_ID=?");
+			query.setParameter(0, itemID);
+			List list=query.list();
+			Item item=(Item)list.get(0);
+			return item;
+		} finally {
+			session.close();
+		}
 	}
 	public static Boolean madePartSuspendWT_BAG_SELECTED(String[] checkbox)
 	{
 		Boolean flag=true;
+		Session session = null;
 		try {
-			Session session = HibernateWrapper.getSession().openSession();
+			session = HibernateWrapper.getSession().openSession();
 			Transaction tx=session.beginTransaction();
 			for(int i=0;i<checkbox.length;i++){
 				Item item=TracerUtils.findItemByItemID(Integer.parseInt(checkbox[i]));
@@ -1700,11 +1706,12 @@ public class TracerUtils {
 					tx.commit();
 				}
 			}
-			session.close();
 		} catch (HibernateException e) {
 			flag=false;
 			e.printStackTrace();
-		} 
+		} finally {
+			if (session != null) session.close();
+		}
 		return flag;
 	}
 	

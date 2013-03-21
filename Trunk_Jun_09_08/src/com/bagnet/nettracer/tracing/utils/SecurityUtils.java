@@ -337,9 +337,10 @@ public class SecurityUtils {
 			if (csv != null) {
 				return csv.getWebs_enabled() == 1 ? true : false;
 			}
-			if (sess != null) sess.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (sess != null) sess.close();			
 		}
 		return false;
 	}
@@ -370,9 +371,10 @@ public class SecurityUtils {
 			if(csv != null){
 				passlength = csv.getMin_pass_size();
 			}
-			if (sess != null) sess.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (sess != null) sess.close();
 		}
 
 		// Must not have a space on either end
