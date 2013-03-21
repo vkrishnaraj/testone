@@ -2,6 +2,7 @@ import java.util.List;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.type.StandardBasicTypes;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -35,32 +36,50 @@ public class SHA256Test {
     		}
     	}
     	
+    	Transaction tx = null;
     	if (toChange != null) {
     		Object[] row;
     		for (int i = 0; i < toChange.size(); ++i) {
     			row = (Object[]) toChange.get(i);
     			if (row != null) {
     				long id = (Long) row[0];
-    				String dl = (String) row[1];
-    				String ss = (String) row[2];
-    				String pn = (String) row[3];
+    				String dl = null;
+    				String ss = null;
+    				String pn = null;
     				String updSql = "update person set driversLicenseNumber = :dln , socialSecurity = :ss , passportNumber = :ppn where id = :id";
     				
     				// SHA256 the salted SHA1 entry
-    				dl = StringUtils.sha256(dl);
-    				ss = StringUtils.sha256(ss); 
-    				pn = StringUtils.sha256(pn);
+    				if (row[1] != null) {
+    					dl = StringUtils.sha256((String) row[1]);
+    				}
+    				if (row[2] != null) {
+    					ss = StringUtils.sha256((String) row[2]); 
+    				}
+    				if (row[3] != null) {
+    					pn = StringUtils.sha256((String) row[3]);
+    				}
     				
-    				sess = HibernateWrapper.getSession().openSession();
-    				SQLQuery query = sess.createSQLQuery(updSql);
-    				
-    				query.setParameter("id", id);
-    				query.setParameter("dln", dl);
-    				query.setParameter("ss", ss);
-    				query.setParameter("ppn", pn);
-    				
-    				query.executeUpdate();
-    				System.out.println("Person ID " + id + " has been updated!");
+    				try {
+    					
+	    				sess = HibernateWrapper.getSession().openSession();
+	    				tx = sess.beginTransaction();
+	    				SQLQuery query = sess.createSQLQuery(updSql);
+	    				
+	    				query.setParameter("id", id);
+	    				query.setParameter("dln", dl, StandardBasicTypes.STRING);
+	    				query.setParameter("ss", ss, StandardBasicTypes.STRING);
+	    				query.setParameter("ppn", pn, StandardBasicTypes.STRING);
+	    				
+	    				query.executeUpdate();
+	    				tx.commit();
+	    				System.out.println("Person ID " + id + " has been updated!");
+    				} catch (Exception e) {
+    					tx.rollback();
+    				} finally {
+    					if (sess != null) {
+    						sess.close();
+    					}
+    				}
     			}
     		}
     	}
