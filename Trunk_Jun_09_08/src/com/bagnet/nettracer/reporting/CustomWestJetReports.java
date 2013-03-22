@@ -26,6 +26,7 @@ public class CustomWestJetReports {
 	public List getLossReportData(StatReportDTO srDTO, ResourceBundle resources) {
 		ArrayList toReturn = null;
 		Session session = null;
+		Session session2 = null;
 
 		String startDate = DateUtils.formatDate(srDTO.getStarttime(),
 				srDTO.getDateFormat(), TracingConstants.DB_DATEFORMAT, null,
@@ -136,9 +137,8 @@ public class CustomWestJetReports {
 			
 			List results2 = null;
 			if (stationCode != null && !stationCode.equals("")) {
-				session.close();
-				session = HibernateWrapper.getSession().openSession();
-				SQLQuery query2 = session.createSQLQuery(sql2);
+				session2 = HibernateWrapper.getSession().openSession();
+				SQLQuery query2 = session2.createSQLQuery(sql2);
 				query2.addScalar("column1", StandardBasicTypes.STRING);
 				results2 = query2.list();
 
@@ -152,6 +152,9 @@ public class CustomWestJetReports {
 		} finally {
 			if (session != null) {
 				session.close();
+			}
+			if (session2 != null) {
+				session2.close();
 			}
 		}
 
@@ -731,6 +734,7 @@ public class CustomWestJetReports {
 	public List getPilferageReportData(StatReportDTO srDTO, ResourceBundle resources) {
 		ArrayList toReturn = null;
 		Session session = null;
+		Session session2 = null;
 
 		String startDate = DateUtils.formatDate(srDTO.getStarttime(),
 				srDTO.getDateFormat(), TracingConstants.DB_DATEFORMAT, null,
@@ -821,9 +825,8 @@ public class CustomWestJetReports {
 			
 			List results2 = null;
 			if (stationCode != null && !stationCode.equals("")) {
-				session.close();
-				session = HibernateWrapper.getSession().openSession();
-				SQLQuery query2 = session.createSQLQuery(sql2);
+				session2 = HibernateWrapper.getSession().openSession();
+				SQLQuery query2 = session2.createSQLQuery(sql2);
 				query2.addScalar("column1", StandardBasicTypes.STRING);
 				query2.addScalar("column2", StandardBasicTypes.STRING);
 				query2.addScalar("column3", StandardBasicTypes.STRING);
@@ -841,6 +844,9 @@ public class CustomWestJetReports {
 		} finally {
 			if (session != null) {
 				session.close();
+			}
+			if (session2 != null) {
+				session2.close();
 			}
 		}
 
@@ -999,6 +1005,7 @@ public class CustomWestJetReports {
 		
 		ArrayList toReturn = null;
 		Session session = null;
+		Session session2 = null;
 
 		String startDate = DateUtils.formatDate(srDTO.getStarttime(),
 				srDTO.getDateFormat(), TracingConstants.DB_DATEFORMAT, null,
@@ -1088,9 +1095,8 @@ public class CustomWestJetReports {
 			
 			List results2 = null;
 			if (airlineCode != null && !airlineCode.equals("")) {
-				session.close();
-				session = HibernateWrapper.getSession().openSession();
-				SQLQuery query2 = session.createSQLQuery(sql2);
+				session2 = HibernateWrapper.getSession().openSession();
+				SQLQuery query2 = session2.createSQLQuery(sql2);
 				query2.addScalar("column1", StandardBasicTypes.STRING);
 				query2.addScalar("column2", StandardBasicTypes.INTEGER);
 				query2.addScalar("column3", StandardBasicTypes.STRING);
@@ -1108,6 +1114,9 @@ public class CustomWestJetReports {
 		} finally {
 			if (session != null) {
 				session.close();
+			}
+			if (session2 != null) {
+				session2.close();
 			}
 		}
 
