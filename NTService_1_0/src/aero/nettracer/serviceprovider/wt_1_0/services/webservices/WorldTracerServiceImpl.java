@@ -1444,7 +1444,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.BI);
 			if (fieldList != null && fieldList.size() > 0) {
-				d2.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList.get(0)));
+				String bi = RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList.get(0));
+				if(ohd.getItem() != null && ohd.getItem().getExternaldesc() != null && ohd.getItem().getExternaldesc().trim().length() > 0){
+					bi = bi + "/" + RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(ohd.getItem().getExternaldesc().trim());
+				}
+				d2.addNewBrandInfo().setStringValue(bi);
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
@@ -1981,7 +1985,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					if (items.length > i ){
 						Item item = items[i];
 						if (item.getManufacturer() != null && item.getManufacturer().length() > 0) {
-							String brandinfo=(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer())+"/"+item.getExternaldesc());
+							String brandinfo=(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer())+"/"+
+									RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getExternaldesc()));
 							if(brandinfo.length()>50){
 								t3.addNewBrandInfo().setStringValue(brandinfo.substring(0, 50));
 							} else {
@@ -3446,7 +3451,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.BI);
 			if (fieldList != null && fieldList.size() > 0) {
-				d2.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList.get(0)));
+				String bi = RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList.get(0));
+				if(ohd.getItem() != null && ohd.getItem().getExternaldesc() != null && ohd.getItem().getExternaldesc().trim().length() > 0){
+					bi = bi + "/" + RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(ohd.getItem().getExternaldesc().trim());
+				}
+				d2.addNewBrandInfo().setStringValue(bi);
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
@@ -3841,7 +3850,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						Item item = items[i];
 						
 						if (item.getManufacturer() != null && item.getManufacturer().length() > 0) {
-							t3.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer()));
+							t3.addNewBrandInfo().setStringValue((RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer())+"/"+
+									RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getExternaldesc())));
 						}
 						
 						if (item.getContent() != null){
