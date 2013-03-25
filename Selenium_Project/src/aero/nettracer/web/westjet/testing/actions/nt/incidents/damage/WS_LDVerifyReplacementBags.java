@@ -22,7 +22,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyFalse(selenium.isTextPresent("Replacement bag issued"));
+			verifyFalse(selenium.isTextPresent("Tradeout Issued"));
 			verifyFalse(selenium.isElementPresent("//select[@id='replacementBagIssued']"));
 			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
 			waitForPageToLoadImproved();
@@ -111,7 +111,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 	
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Replacement bag issued"));
+			verifyTrue(selenium.isTextPresent("Tradeout Issued"));
 			verifyTrue(selenium.isElementPresent("//select[@id='replacementBagIssued']"));
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[4]/input", "444444");
 			selenium.type("//div[@id='pax_0']/table/tbody/tr[2]/td/input", "test");
