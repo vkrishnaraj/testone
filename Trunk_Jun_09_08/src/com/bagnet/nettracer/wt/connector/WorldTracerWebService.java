@@ -1860,6 +1860,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		item.setFirstNameOnBag(onhand.getFirstname());
 		item.setLastNameOnBag(onhand.getLastname());
 		item.setManufacturer(onhand.getManufacturer());
+		item.setExternaldesc(onhand.getExternaldesc());
 		item.setType(onhand.getType());		
 		ohd.setItem(item);
 		
