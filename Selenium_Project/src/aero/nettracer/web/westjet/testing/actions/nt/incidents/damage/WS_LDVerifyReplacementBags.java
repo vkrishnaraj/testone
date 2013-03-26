@@ -122,9 +122,9 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 			selenium.type("//div[@id='pax_0']/table/tbody/tr[6]/td[4]/input", "test");
 			selenium.type("//div[@id='pax_0']/table/tbody/tr[8]/td[3]/input", "test");
 			selenium.type("//div[@id='pax_0']/table/tbody/tr[9]/td[3]/input", "test@test.com");
-			selenium.type("//table[@id='hidexItinerary0']/tbody/tr/td/input", "ABI");
-			selenium.type("//table[@id='hidexItinerary0']/tbody/tr/td/input[2]", "ABI");
-			selenium.type("//table[@id='hidexItinerary0']/tbody/tr/td[2]/input", "1234");
+			selenium.type("//table[@id='hidexItinerary']/tbody/tr/td/input", "ABI");
+			selenium.type("//table[@id='hidexItinerary']/tbody/tr/td/input[2]", "ABI");
+			selenium.type("//table[@id='hidexItinerary']/tbody/tr/td[2]/input", "1234");
 			selenium.click("id=itcalendar0");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			selenium.click("id=itcalendar20");
@@ -140,7 +140,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 			selenium.type("//tr[@id='inventory_0_2']/td[2]/input", "test");
 			selenium.type("//div[@id='item_0']/table/tbody/tr[7]/td/input", "test");
 			selenium.click("//div[@id='maincontent']/table[5]/tbody/tr/td/input[2]");
-			assertEquals("Please select a value for  Replacement bag issued", selenium.getAlert());
+			assertEquals("Please select a value for  Tradeout Issued", selenium.getAlert());
 			selenium.select("//select[@id='replacementBagIssued']", "label=yes");
 			selenium.click("//div[@id='maincontent']/table[5]/tbody/tr/td/input[2]");
 			waitForPageToLoadImproved();
