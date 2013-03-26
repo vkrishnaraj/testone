@@ -212,6 +212,9 @@ public final class ManageAgents extends Action {
 				dForm.set("currentTimezone", TracingConstants.DEFAULT_AGENT_TIMEZONE);
 				dForm.set("defaultTimezone", TracingConstants.DEFAULT_AGENT_TIMEZONE);
 				dForm.set("defCurrency", "" + TracingConstants.DEFAULT_AGENT_CURRENCY);
+				if(user.getSubcompany()!=null){
+					dForm.set("subcompany_id",""+user.getSubcompany().getId());
+				}
 			}
 
 			return mapping.findForward(TracingConstants.EDIT_AGENT);

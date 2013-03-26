@@ -129,8 +129,10 @@ public class TracerProperties {
 		String value = null;
 		try {
 			lock.readLock().lock();
-			if(airline!=null){
+			if(airline!=null && properties.getProperty(airline.toLowerCase()+"."+property)!=null){
 				value =  properties.getProperty(airline.toLowerCase()+"."+property);
+			} else {
+				value = properties.getProperty(property);
 			}
 
 		}finally {
