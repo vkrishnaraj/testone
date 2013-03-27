@@ -21,7 +21,9 @@ import org.apache.taglibs.standard.resources.Resources;
 
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.selfservice.fraud.ClaimRemote;
+import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.RequestInfoForm;
@@ -91,8 +93,7 @@ public class RequestInfoAction extends CheckedAction {
 		boolean success = true;
 		try {
 			Context ctx = ConnectionUtil.getInitialContext();
-			ClaimRemote remote = (ClaimRemote) ctx
-					.lookup("NTServices_1_0/ClaimBean/remote");
+			ClaimClientRemote remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 			String message = form.getMessage();
 
 			if (remote != null) {
