@@ -1,7 +1,6 @@
 package com.bagnet.nettracer.integrations.delivery;
 
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -83,32 +82,30 @@ public class SERV implements BDOIntegration {
 			ws.setServiceLevel(DelivercompanyBMO.getServiceLevel(bdo.getServicelevel().getServicelevel_ID()).getService_code());
 
 			logger.info("POINT 4\n\n");
-			Calendar claimCal = new GregorianCalendar();
+			Calendar claimCal = Calendar.getInstance();
 			if (bdo.getIncident() != null) {
 				ws.setClaimReferenceNumber(bdo.getIncident().getIncident_ID());
 				bdo.getIncident().set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
 				bdo.getIncident().set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
 				bdo.getIncident().set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
-				claimCal.setTime(DateUtils.convertToDate(bdo.getIncident().getDisplaydate(), bdo.getIncident().get_DATEFORMAT() + " " + bdo.getIncident().get_TIMEFORMAT(), null));
-				ws.setClaimDate(claimCal);
+				claimCal.setTime(DateUtils.convertToDate(bdo.getIncident().getDisplaydate(), bdo.getIncident().get_DATEFORMAT() + " " + bdo.getIncident().get_TIMEFORMAT(), null,TimeZone.getTimeZone("GMT")));
+				ws.setClaimDate(fixTimeZone(claimCal,"GMT"));
 			} else if (bdo.getOhd() != null){
 				ws.setClaimReferenceNumber(bdo.getOhd().getOHD_ID());
 				bdo.getOhd().set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
 				bdo.getOhd().set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
 				bdo.getOhd().set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
-				claimCal.setTime(DateUtils.convertToDate(bdo.getOhd().getDisplaydate(), bdo.getOhd().get_DATEFORMAT() + " " + bdo.getOhd().get_TIMEFORMAT(), null));
-				ws.setClaimDate(claimCal);
+				claimCal.setTime(DateUtils.convertToDate(bdo.getOhd().getDisplaydate(), bdo.getOhd().get_DATEFORMAT() + " " + bdo.getOhd().get_TIMEFORMAT(), null,TimeZone.getTimeZone("GMT")));
+				ws.setClaimDate(fixTimeZone(claimCal,"GMT"));
 			}
 			ws.setClaimDateSpecified(true);
 
 			logger.info("POINT 5\n\n");
 
-			Calendar deliveryCal = new GregorianCalendar();
+			Calendar deliveryCal = Calendar.getInstance();
 			if (bdo.getDeliverydate() != null) {
-				bdo.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
-				bdo.set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
-				deliveryCal.setTime(DateUtils.convertToDate(bdo.getDispdeliverydate(), bdo.get_DATEFORMAT(), null));
-				ws.setDeliveryDate(deliveryCal);
+				deliveryCal.setTime(bdo.getDeliverydate());
+				ws.setDeliveryDate(fixTimeZone(deliveryCal,"GMT"));
 				ws.setDeliveryDateSpecified(true);
 			} else {
 				ws.setDeliveryDateSpecified(false);
@@ -124,11 +121,11 @@ public class SERV implements BDOIntegration {
 			bdo.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
 			bdo.set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
 			bdo.set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
-			Calendar createCal = new GregorianCalendar(); //bdo.get_TIMEZONE()
-			createCal.setTime(DateUtils.convertToDate(bdo.getDispcreatetime(), bdo.get_DATEFORMAT() + " " + bdo.get_TIMEFORMAT(), null));
+			Calendar createCal = Calendar.getInstance();
+			createCal.setTime(DateUtils.convertToDate(bdo.getDispcreatetime(), bdo.get_DATEFORMAT() + " " + bdo.get_TIMEFORMAT(), null,TimeZone.getTimeZone("GMT")));
 			
-			ws.setCreatedDate(createCal);
-			ws.setPickUpDate(createCal);
+			ws.setCreatedDate(fixTimeZone(createCal,"GMT"));
+			ws.setPickUpDate(fixTimeZone(createCal,"GMT"));
 			
 			ArrayOfItemData array = ws.addNewItemsData();
 
@@ -189,6 +186,16 @@ public class SERV implements BDOIntegration {
 		response.setUniqueIntegrationId(integrationId);
 		response.setSuccess(success);
 		return response;
+	}
+	
+	private Calendar fixTimeZone(Calendar cal, String timezone){
+		Calendar ret = Calendar.getInstance(TimeZone.getTimeZone(timezone));
+		for (int i = 0; i < Calendar.FIELD_COUNT; i++){
+			if(i != Calendar.ZONE_OFFSET && i != Calendar.DST_OFFSET){
+				ret.set(i, cal.get(i));
+			}
+		}
+		return ret;
 	}
 	
 }
