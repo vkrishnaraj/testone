@@ -2027,6 +2027,15 @@
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-american" />
 	</target>
+	
+	
+	<target name="build-war-local-azul" depends="delete">
+		<property name="ant_project_name" value="azul" />
+		<property name="ant_war_name" value="azul" />
+		<property name="environment.name" value="local"/>
+		<property name="azul.init.complete" value="true" />
+		<antcall target="donotrun-build-azul" />
+	</target>
 
 	<target name="build-war-local-virginamerica" depends="delete">
 		<property name="ant_project_name" value="virginamerica-fs" />
@@ -3345,20 +3354,12 @@
 	</target>
 	
 	<target name="donotrun-build-webjet">		
-		<copy todir="${basedir}/src" file="companies/webjet/environment/${environment.name}/tracer.properties" />
-
 		<property name="hibernate_props_loc" value="companies/webjet/environment/${environment.name}" />
 		<property name="hibernate_dialect" value="mysql" />
 		<antcall target="generate-hibernate-xmls" />
 		
 		<copy todir="${basedir}/web/pages/login" file="companies/webjet/environment/${environment.name}/login/center.jsp" />
 		
-		<ant antfile="build-gen.xml" target="combineResourceFiles">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/webjet/environment/${environment.name}/tracer.properties" />
-			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
-		</ant>
-
 		<copy todir="${basedir}/web/reports" file="companies/webjet/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/webjet/MissingReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/webjet/DamageReceipt.jrxml" />
@@ -3383,7 +3384,7 @@
 		</ant>
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/azul/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/webjet/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 		
