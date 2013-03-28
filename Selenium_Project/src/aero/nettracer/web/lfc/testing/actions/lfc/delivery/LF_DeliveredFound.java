@@ -18,6 +18,7 @@ public class LF_DeliveredFound extends DefaultSeleneseTestCase {
 		selenium.type("id=addBarcode", Settings.FOUND_ID_LF);
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		waitForPageToLoadImproved(1000,false);
 		if (checkNoErrorPage()) {
 			selenium.isTextPresent("Found Item: "+Settings.FOUND_ID_LF+", matched with Lost Report: "+Settings.LOST_ID_LF+", has been delivered with Tracking Number: Delivered for DMV");
 		} else {
@@ -29,6 +30,7 @@ public class LF_DeliveredFound extends DefaultSeleneseTestCase {
 		selenium.type("id=addBarcode", Settings.FOUND_ID_LF);
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		waitForPageToLoadImproved(1000,false);
 
 		if (checkNoErrorPage()) {
 			selenium.isTextPresent("Found Item: "+Settings.FOUND_ID_LF+" is already delivered");

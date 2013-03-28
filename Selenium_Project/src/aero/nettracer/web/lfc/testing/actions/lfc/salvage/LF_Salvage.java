@@ -271,6 +271,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_LT_30);
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		waitForPageToLoadImproved(1000, false);
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.LOW_LT_30 + " was received on: " + LF_Salvage.TODAY + " and cannot be salvaged before: 30 days."));
@@ -282,6 +283,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// try to enter LOW_GT_30
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		waitForPageToLoadImproved(1000, false);
 		try {
 			synchronized (selenium) {
 				selenium.wait(LF_Salvage.TIMEOUT);
@@ -302,6 +304,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.HIGH_LT_60);
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		waitForPageToLoadImproved(1000, false);
 		try {
 			synchronized (selenium) {
 				selenium.wait(LF_Salvage.TIMEOUT);
@@ -321,6 +324,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.HIGH_GT_60);
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		waitForPageToLoadImproved(1000, false);
 		try {
 			synchronized (selenium) {
 				selenium.wait(LF_Salvage.TIMEOUT);
@@ -333,6 +337,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.type("xpath=(//input[@id='prevBoxId'])[2]","BOX2");
 			selenium.focus("xpath=(//input[@id='prevBoxId'])[2]");
 			selenium.keyDown("xpath=(//input[@id='prevBoxId'])[2]", "\\13");
+			waitForPageToLoadImproved(1000, false);
 			try {
 				synchronized (selenium) {
 					selenium.wait(LF_Salvage.TIMEOUT);
@@ -412,6 +417,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 		selenium.focus("//input[@id='addBarcode']");
 		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		waitForPageToLoadImproved(1000, false);
 
 		try {
 			synchronized (selenium) {
@@ -443,6 +449,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 			selenium.focus("//input[@id='addBarcode']");
 			selenium.keyDown("//input[@id='addBarcode']", "\\13");
+			waitForPageToLoadImproved(1000, false);
 		} else {
 			System.out.println("LFS: failed to save the new salvage for adding duplicate items.");
 			return;
