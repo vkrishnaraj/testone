@@ -71,7 +71,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.check("//div[@id='maincontent']/table/tbody/tr[12]/td[2]/table/tbody/tr[4]/td/input");
+			selenium.check("name=627");
 			selenium.click("//div[@id='maincontent']/table/tbody/tr[32]/td/input[2]");
 			waitForPageToLoadImproved();
 		} else {
@@ -207,7 +207,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.uncheck("//div[@id='maincontent']/table/tbody/tr[12]/td[2]/table/tbody/tr[4]/td/input");
+			selenium.uncheck("name=627");
 			selenium.click("//div[@id='maincontent']/table/tbody/tr[32]/td/input[2]");
 			waitForPageToLoadImproved();
 		} else {

@@ -367,8 +367,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyEquals("601", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
-			verifyEquals("4", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/select"));
+			verifyEquals("601", selenium.getValue("name=found.statusId"));
+			verifyEquals("4", selenium.getValue("name=found.itemLocation"));
 			selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
 			waitForPageToLoadImproved();
 		} else {

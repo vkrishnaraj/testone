@@ -212,7 +212,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("id=menucol_1.4");
+		selenium.click("id=menucol_2.3");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -235,8 +235,8 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("//td[@id='navmenucell']/div/dl/dd[13]/a/span[2]");
-		waitForPageToLoadImproved();
+			selenium.click("//td[@id='navmenucell']/div/dl/dd[13]/a/span[2]");
+			waitForPageToLoadImproved();
 		}
 		else
 		{

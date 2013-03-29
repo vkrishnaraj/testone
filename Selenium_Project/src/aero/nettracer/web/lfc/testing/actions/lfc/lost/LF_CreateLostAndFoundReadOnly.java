@@ -41,7 +41,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.uncheck("//div[@id='maincontent']/table/tbody/tr[6]/td[2]/table/tbody/tr[18]/td/input");
+			selenium.uncheck("name=618");
 			selenium.click("xpath=(//input[@id='button'])[2]");
 			waitForPageToLoadImproved();
 		} else {
@@ -219,7 +219,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.check("//div[@id='maincontent']/table/tbody/tr[6]/td[2]/table/tbody/tr[18]/td/input");
+			selenium.check("name=618");
 			selenium.click("xpath=(//input[@id='button'])[2]");
 			waitForPageToLoadImproved();
 		} else {
