@@ -22,6 +22,8 @@ Dependencies:
  org.infinispan,
  org.jboss.xnio,
  org.jboss.xnio.nio,
- user.lfc_service
+ user.lfc_service,
+ net.sf.jasperreports,
+ org.javassist
  
 
