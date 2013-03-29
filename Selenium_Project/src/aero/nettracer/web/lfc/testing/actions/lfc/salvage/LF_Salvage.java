@@ -224,8 +224,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
-			verifyEquals("600", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/select"));
-			verifyEquals("0", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[5]/select"));
+			verifyEquals("600",selenium.getValue("name=found.statusId"));
+			verifyEquals("0", selenium.getValue("name=found.itemLocation"));
 			System.out.println("LFS: Created High value, > 60 Found Item: " + LF_Salvage.HIGH_GT_60 + " with date: " + hvCutoff);
 		} else {
 			System.out.println("LFS: Failed to save found item: HIGH_GT_60.");

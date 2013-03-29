@@ -235,7 +235,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("//td[@id='navmenucell']/div/dl/dd[13]/a/span[2]");
+			selenium.click("//a[contains(@href,'damaged.do?close=1')]");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -290,7 +290,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("xpath=(//input[@id='button'])[6]");
+		selenium.click("xpath=(//input[@id='button'])[5]");
 		waitForPageToLoadImproved();
 		}
 		else
@@ -302,7 +302,7 @@ public class US_DisputeManage extends LoginUtil {
 		if(checkNoErrorPage())
 		{
 			selenium.select("name=faultstation_id", "label=AUA");
-			selenium.select("name=loss_code", "label=33- Not off-loaded");
+			selenium.select("name=loss_code", "label=80- Damage");
 		selenium.click("id=button");
 		//assertTrue(selenium.getConfirmation().matches("^Have you verified any Travel Bank Credit\\(s\\) for this file has been created[\\s\\S]$"));
 		
