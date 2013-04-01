@@ -110,6 +110,7 @@ import aero.sita.www.bag.wtr._2009._01.OnHandBagAmendType;
 import aero.sita.www.bag.wtr._2009._01.OnHandBagType;
 import aero.sita.www.bag.wtr._2009._01.OriginDestinationType;
 import aero.sita.www.bag.wtr._2009._01.PassengerAmendType;
+import aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Language;
 import aero.sita.www.bag.wtr._2009._01.PassengerItineraryAmendType;
 import aero.sita.www.bag.wtr._2009._01.PassengerItineraryType;
 import aero.sita.www.bag.wtr._2009._01.PassengerPaymentAmendType;
@@ -3935,6 +3936,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 
+			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.LA);
+			if (fieldList != null && fieldList.size() > 0) {
+				Language language = Language.Factory.newInstance();
+				language.setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.LA).formatEntry(fieldList.get(0)));
+				p1.setLanguage(language);
+			}
+			
 			if (fieldList != null && fieldList.size() > 0) {
 				p1.addNewStatus().setStringValue(fieldList.get(0));
 				p1.addNewFareBasis().setStringValue(fieldList.get(0));
