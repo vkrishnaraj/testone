@@ -157,7 +157,7 @@ public class US_DisputeManage extends LoginUtil {
 		if(checkNoErrorPage())
 		{
 			String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-			Settings.INCIDENT_ID_WS = incident_id;
+			Settings.DAMAGE_ID_WS = incident_id;
 			selenium.click("id=menucol_2.3");
 			waitForPageToLoadImproved();
 		}
@@ -175,7 +175,7 @@ public class US_DisputeManage extends LoginUtil {
 		selenium.click("link=Today");
 		selenium.type("name=lastname", "Test");
 		selenium.type("name=firstname", "Test");
-		selenium.type("name=incident_ID", Settings.INCIDENT_ID_WS);
+		selenium.type("name=incident_ID", Settings.DAMAGE_ID_WS);
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
 		}
@@ -223,7 +223,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.type("name=incident_ID", Settings.INCIDENT_ID_WS);
+		selenium.type("name=incident_ID", Settings.DAMAGE_ID_WS);
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
 		}

@@ -17,6 +17,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			selenium.open("/lostandfound/logon.do?companyCode=OW&username=ogadmin&password=Ladendead51!");
+			waitForPageToLoadImproved();
 			selenium.click("//a[contains(@href, 'companyAdmin.do')]");
 			waitForPageToLoadImproved();
 		} else {

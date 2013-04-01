@@ -40,7 +40,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			//selenium.type("incident_ID", Settings.DAMAGE_ID_WS);
+			selenium.type("incident_ID", Settings.DAMAGE_ID_WS);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		}
@@ -76,7 +76,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			//selenium.type("incident_ID", Settings.PILFERAGE_ID_WS);
+			selenium.type("incident_ID", Settings.PILFERAGE_ID_WS);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		}
@@ -112,7 +112,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			//selenium.type("incident_ID", Settings.ONHAND_ID_WS);
+			selenium.type("incident_ID", Settings.ONHAND_ID_WS);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		}
