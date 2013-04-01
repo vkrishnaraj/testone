@@ -50,16 +50,16 @@ public class WS_QuickHistory extends LoginUtil {
 			return;
 		}
 		
-		if(checkNoErrorPage())
-		{
-			selenium.click("xpath=(//a[contains(@href, 'searchIncident.do?incident=')])[1]");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
-			return;
-		}
+//		if(checkNoErrorPage())
+//		{
+//			selenium.click("name=saveButton");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
+//			return;
+//		}
 		
 		if(checkNoErrorPage())
 		{
@@ -86,16 +86,16 @@ public class WS_QuickHistory extends LoginUtil {
 			return;
 		}
 		
-		if(checkNoErrorPage())
-		{
-			selenium.click("xpath=(//a[contains(@href, 'searchIncident.do?incident=')])[1]");
-			waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
-			return;
-		}
+//		if(checkNoErrorPage())
+//		{
+//			selenium.click("xpath=(//a[contains(@href, 'searchIncident.do?incident=')])[1]");
+//			waitForPageToLoadImproved();
+//		}
+//		else
+//		{
+//			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
+//			return;
+//		}
 		
 		if(checkNoErrorPage())
 		{

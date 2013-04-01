@@ -8,6 +8,7 @@ import aero.nettracer.web.utility.Settings;
 public class WS_LostfoundTest extends LoginUtil {
 	@Test
 	public void testFirstLastCategory() throws Exception {
+		waitForPageToLoadImproved(3000,false);
 		selenium.click("id=menucol_5.2");
 		waitForPageToLoadImproved();
 		selenium.type("name=customer_firstname", "TestFirst");
