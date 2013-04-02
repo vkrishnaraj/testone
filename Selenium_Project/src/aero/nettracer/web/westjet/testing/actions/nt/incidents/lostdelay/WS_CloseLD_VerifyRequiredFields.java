@@ -16,18 +16,14 @@ public class WS_CloseLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				selenium.chooseOkOnNextConfirmation();
 				selenium.click("name=doclose");
 				assertTrue(selenium.getConfirmation().matches("^Have you verified any Service Credit\\(s\\) for this file has been created[\\s\\S]$"));
-				System.out.println(selenium.getConfirmation());				
 				
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Please select a reason for loss"));
 				selenium.select("name=loss_code", "label=32- Off-loaded by error");
-				selenium.chooseOkOnNextConfirmation();
 				selenium.click("name=doclose");
 				assertTrue(selenium.getConfirmation().matches("^Have you verified any Service Credit\\(s\\) for this file has been created[\\s\\S]$"));
-				System.out.println(selenium.getConfirmation());				
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();

@@ -16,18 +16,14 @@ public class WS_CloseDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				selenium.chooseOkOnNextConfirmation();
 				selenium.click("name=doclose");
 				assertTrue(selenium.getConfirmation().matches("^Have you verified any Service Credit\\(s\\) for this file has been created[\\s\\S]$"));
-				System.out.println(selenium.getConfirmation());				
 				
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Please select a reason for loss"));
 				selenium.select("name=loss_code", "label=80- Damage");
-				selenium.chooseOkOnNextConfirmation();
 				selenium.click("name=doclose");
 				assertTrue(selenium.getConfirmation().matches("^Have you verified any Service Credit\\(s\\) for this file has been created[\\s\\S]$"));
-				System.out.println(selenium.getConfirmation());				
 				
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
