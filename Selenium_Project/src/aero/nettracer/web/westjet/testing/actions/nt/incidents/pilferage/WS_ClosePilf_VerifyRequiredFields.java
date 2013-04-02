@@ -18,7 +18,7 @@ public class WS_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				checkCopyrightAndQuestionMarks();
 				selenium.chooseOkOnNextConfirmation();
 				selenium.click("name=doclose");
-				assertTrue(selenium.getConfirmation().matches("^Have you verified any Travel Bank Credit\\(s\\) for this file has been created[\\s\\S]$"));
+				assertTrue(selenium.getConfirmation().matches("^Have you verified any Service Credit\\(s\\) for this file has been created[\\s\\S]$"));
 				System.out.println(selenium.getConfirmation());
 				
 				waitForPageToLoadImproved();
@@ -26,7 +26,7 @@ public class WS_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.select("name=loss_code", "label=90- Pilferage");
 				selenium.chooseOkOnNextConfirmation();
 				selenium.click("name=doclose");
-				assertTrue(selenium.getConfirmation().matches("^Have you verified any Travel Bank Credit\\(s\\) for this file has been created[\\s\\S]$"));
+				assertTrue(selenium.getConfirmation().matches("^Have you verified any Service Credit\\(s\\) for this file has been created[\\s\\S]$"));
 				System.out.println(selenium.getConfirmation());				
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
