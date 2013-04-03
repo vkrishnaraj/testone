@@ -1308,39 +1308,39 @@ public class Consumer implements Runnable{
 			}
 		}
 		
-		Set<FsIPAddress> iplist2 = null;
-		for (FsClaim claim:match.getFile2().getClaims()) {
-			if (claim.getIpAddresses() != null) {
-				if (iplist2 == null) {
-					iplist2 = new LinkedHashSet<FsIPAddress>();
-				}
-				iplist2.addAll(claim.getIpAddresses());
-			}
-		}
-		
-		Set <MatchDetail> details = match.getDetails();
-		
-		for(FsIPAddress ip1:iplist1){
-			for(FsIPAddress ip2:iplist2){
-				if(ip1.getIpAddress() != null){
-					if(ip1.getIpAddress().equals(ip2.getIpAddress())){
-						MatchDetail detail = new MatchDetail();
-						detail.setContent1(ip1.getIpAddress());
-						detail.setContent2(ip2.getIpAddress());
-						detail.setMatch(match);
-						detail.setMatchtype(MatchType.ipAddress);
-						if (ip1.getWhitelist() != null) {
-							detail.setDescription("IP Address Match (Whitelisted - " + ip1.getWhitelist().getDescription()+")");
-							detail.setPercent(0);
-						} else {
-							detail.setDescription("IP Address Match");
-							detail.setPercent(P_IP);
-						}
-						details.add(detail);
+		if (iplist1 != null) {
+			Set<FsIPAddress> iplist2 = null;
+			for (FsClaim claim:match.getFile2().getClaims()) {
+				if (claim.getIpAddresses() != null) {
+					if (iplist2 == null) {
+						iplist2 = new LinkedHashSet<FsIPAddress>();
 					}
+					iplist2.addAll(claim.getIpAddresses());
 				}
 			}
+			if (iplist2 != null) {
+				Set <MatchDetail> details = match.getDetails();
+				
+				for(FsIPAddress ip1:iplist1){
+					for(FsIPAddress ip2:iplist2){
+						if(ip1.getIpAddress() != null && ip2.getIpAddress() != null && ip1.getIpAddress().equals(ip2.getIpAddress())){
+							MatchDetail detail = new MatchDetail();
+							detail.setContent1(ip1.getIpAddress());
+							detail.setContent2(ip2.getIpAddress());
+							detail.setMatch(match);
+							detail.setMatchtype(MatchType.ipAddress);
+							if (ip1.getWhitelist() != null) {
+								detail.setDescription("IP Address Match (Whitelisted - " + ip1.getWhitelist().getDescription()+")");
+								detail.setPercent(0);
+							} else {
+								detail.setDescription("IP Address Match");
+								detail.setPercent(P_IP);
+							}
+							details.add(detail);
+						}
+					}
+				} // END FOR LOOP iplist1
+			}
 		}
-	}
-
+	} // END processIP method
 }
