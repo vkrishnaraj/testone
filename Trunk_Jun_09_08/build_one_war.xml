@@ -285,6 +285,14 @@
 			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${build.dir}/${ant_project_name}/classes" version="3.0" />
 		</hibernatedoclet>
 
+			 <replaceregexp byline="true">
+			    <regexp pattern="hibernate\.sourceforge\.net" />
+			    <substitution expression="www.hibernate.org/dtd" />
+			    <fileset dir="src/">
+			      <include name="**/*.hbm.xml" />
+			    </fileset>
+			  </replaceregexp>
+		
 		<replace dir="${build.dir}/${ant_project_name}/classes" value="&lt;hibernate-mapping default-lazy=&quot;false&quot; &gt;">
 			<include name="com/bagnet/nettracer/tracing/db/*.hbm.xml" />
 			<include name="com/bagnet/nettracer/tracing/db/audit/*.hbm.xml" />
