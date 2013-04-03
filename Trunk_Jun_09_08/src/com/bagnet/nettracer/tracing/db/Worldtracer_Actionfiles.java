@@ -16,7 +16,7 @@ import org.hibernate.Session;
  * @hibernate.typedef name="actionFileType" class="org.hibernate.type.EnumType"
  * @hibernate.typedef-param typedef-name="actionFileType" name="enumClass"
  * 			value="com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles$ActionFileType"
- * @hibernate.typedef-param typedef-name="deliveryIntegrationType" name="type"
+ * @hibernate.typedef-param typedef-name="actionFileType" name="type"
  * 			value="12"
  */
 public class Worldtracer_Actionfiles implements Serializable {
