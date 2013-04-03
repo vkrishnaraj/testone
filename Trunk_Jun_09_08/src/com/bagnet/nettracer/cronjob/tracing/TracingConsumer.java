@@ -58,6 +58,8 @@ public class TracingConsumer implements Runnable {
 		while (true) {
 			try {
 				
+				ConsumerDTO dto = queue.take();
+				
 				if (sess == null || !sess.isOpen()) {
 					sess = HibernateWrapper.getSession().openSession();
 				}
@@ -66,7 +68,6 @@ public class TracingConsumer implements Runnable {
 					dirtySess = HibernateWrapper.getDirtySession().openSession();
 				}
 				
-				ConsumerDTO dto = queue.take();
 				
 				message = "Exception thrown - TracingConsumer: "
 					+ dto.getIncident().getIncident_ID() + " OHD:" + dto.getOhdId();
@@ -192,6 +193,16 @@ public class TracingConsumer implements Runnable {
 					Thread.sleep(300 * 1000);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
+				}
+			}
+			finally{
+				if(sess != null){
+					sess.close();
+					sess = null;
+				}
+				if(dirtySess != null){
+					dirtySess.close();
+					dirtySess = null;
 				}
 			}
 		}

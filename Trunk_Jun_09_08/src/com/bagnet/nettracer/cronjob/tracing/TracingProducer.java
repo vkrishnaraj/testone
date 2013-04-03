@@ -50,13 +50,14 @@ public class TracingProducer implements Runnable {
 		ProducerDTO dto;
 		while (true) {
 			try {
+				dto = queue.take();
+				
 				if (sess == null || !sess.isOpen()) {
 					sess = HibernateWrapper.getSession().openSession();
 				}
 				if(dirtySess == null || !dirtySess.isOpen()) {
 					dirtySess = HibernateWrapper.getDirtySession().openSession();
 				}
-				dto = queue.take();
 
 				TraceIncident incident = settings.getIncidentCache().loadIncident(
 						dto.getIncidentId(), dto.getOhdLastTraced(), sess);
@@ -183,6 +184,15 @@ public class TracingProducer implements Runnable {
 					Thread.sleep(300 * 1000);
 				} catch (InterruptedException e1) {
 					e1.printStackTrace();
+				}
+			} finally{
+				if(sess != null){
+					sess.close();
+					sess = null;
+				}
+				if(dirtySess != null){
+					dirtySess.close();
+					dirtySess = null;
 				}
 			}
 		}
