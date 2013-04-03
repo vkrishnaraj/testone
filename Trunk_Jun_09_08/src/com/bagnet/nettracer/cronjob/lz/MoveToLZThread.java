@@ -180,7 +180,7 @@ public class MoveToLZThread {
 
 				sess = HibernateWrapper.getDirtySession().openSession();
 				String sql = "select mbr_to_lz_days, damaged_to_lz_days, miss_to_lz_days, ohd_to_lz_days, companycode_ID from company_specific_variable order by companycode_ID";
-				if (company.length() > 0) sql = "select * from company_specific_variable where companycode_ID = '" + company + "'";
+				if (company.length() > 0) sql = "select mbr_to_lz_days, damaged_to_lz_days, miss_to_lz_days, ohd_to_lz_days, companycode_ID from company_specific_variable where companycode_ID = '" + company + "'";
 				
 				int mbr = 0;	// days to move lost/delay
 				int damaged = 0;	// days to move damaged
