@@ -3162,14 +3162,6 @@
 		<property name="hibernate_dialect" value="mysql" />
 		<antcall target="generate-hibernate-xmls" />
 		
-		
-		<ant antfile="build-gen.xml" target="combineResourceFiles">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/azul/tracer.properties" />
-			<property name="tertiaryResource" value="${basedir}/companies/azul/environment/${environment.name}/tracer.properties" />
-			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
-		</ant>
-
 		<copy todir="${basedir}/web/reports" file="companies/azul/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/azul/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/azul/MissingReceipt.jrxml" />
@@ -3189,7 +3181,8 @@
 		</ant>
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/azul/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/azul/tracer.properties" />
+			<property name="tertiaryResource" value="${basedir}/companies/azul/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
@@ -3206,12 +3199,6 @@
 		
 		<copy todir="${basedir}/web/pages/login" file="companies/delta-fs/environment/${environment.name}/login/center.jsp" />
 		
-		<ant antfile="build-gen.xml" target="combineResourceFiles">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/delta-fs/environment/${environment.name}/tracer.properties" />
-			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
-		</ant>
-
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/LostDelayReceipt.jrxml" /> -->
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/DamageReceipt.jrxml" /> -->
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/MissingReceipt.jrxml" /> -->
@@ -3248,12 +3235,6 @@
 		
 		<copy todir="${basedir}/web/pages/login" file="companies/united-fs/environment/${environment.name}/login/center.jsp" />
 		
-		<ant antfile="build-gen.xml" target="combineResourceFiles">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/united-fs/environment/${environment.name}/tracer.properties" />
-			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
-		</ant>
-
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/LostDelayReceipt.jrxml" /> -->
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/DamageReceipt.jrxml" /> -->
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/MissingReceipt.jrxml" /> -->
@@ -3290,12 +3271,6 @@
 		
 		<copy todir="${basedir}/web/pages/login" file="companies/american-fs/environment/${environment.name}/login/center.jsp" />
 		
-		<ant antfile="build-gen.xml" target="combineResourceFiles">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/american-fs/environment/${environment.name}/tracer.properties" />
-			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
-		</ant>
-
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/LostDelayReceipt.jrxml" /> -->
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/DamageReceipt.jrxml" /> -->
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/MissingReceipt.jrxml" /> -->
@@ -3332,12 +3307,6 @@
 		
 		<copy todir="${basedir}/web/pages/login" file="companies/virginamerica-fs/environment/${environment.name}/login/center.jsp" />
 		
-		<ant antfile="build-gen.xml" target="combineResourceFiles">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/virginamerica-fs/environment/${environment.name}/tracer.properties" />
-			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
-		</ant>
-
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 
 		<antcall target="jasper_compile" />
@@ -3409,12 +3378,6 @@
 		
 		<copy todir="${basedir}/web/pages/login" file="companies/canadiannorth/environment/${environment.name}/login/center.jsp" />
 		
-		<ant antfile="build-gen.xml" target="combineResourceFiles">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/canadiannorth/environment/${environment.name}/tracer.properties" />
-			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
-		</ant>
-
 		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
@@ -3449,7 +3412,7 @@
 		<copy todir="${basedir}/web/pages/login" file="companies/flyafrica/environment/${environment.name}/login/center.jsp" />
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/flyafrica/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
@@ -3542,7 +3505,7 @@
 		</ant>
 
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/jetblue/tracer.properties" />
 			<property name="tertiaryResource" value="${basedir}/companies/jetblue/environment/${environment.name}/tracer.properties"/>
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
