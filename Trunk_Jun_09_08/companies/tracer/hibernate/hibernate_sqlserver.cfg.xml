@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd"
         [
         <!ENTITY mappings SYSTEM "classpath://hibernate.mappings.xml">
         ]>
@@ -11,7 +11,7 @@
     <session-factory>	
     	
     	<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-    	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+    	<property name="connection.provider_class">org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider</property>
 		<property name="hibernate.connection.url">jdbc:sqlserver://${main.db.url}</property>
 		<property name="hibernate.connection.username">${main.db.user}</property>
 		<property name="hibernate.connection.password">${main.db.pass}</property>

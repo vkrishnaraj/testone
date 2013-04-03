@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
 
- "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"        [
+ "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd"        [
         <!ENTITY mappings SYSTEM "classpath://hibernate.mappings.xml">
         ]>
 
@@ -11,7 +11,7 @@
     <session-factory>	
     	
     	<property name="hibernate.connection.driver_class">org.gjt.mm.mysql.Driver</property>
-    	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+    	<property name="connection.provider_class">org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider</property>
 		<property name="hibernate.connection.url">jdbc:mysql://${reporting.db.url}</property>
 		<property name="hibernate.connection.username">${reporting.db.user}</property>
 		<property name="hibernate.connection.password">${reporting.db.pass}</property>
