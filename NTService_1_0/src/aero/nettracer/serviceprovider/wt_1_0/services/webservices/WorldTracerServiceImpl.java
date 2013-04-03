@@ -3936,11 +3936,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			}
 			
-			if (fieldList != null && fieldList.size() > 0) {
-				p1.addNewStatus().setStringValue(fieldList.get(0));
-				p1.addNewFareBasis().setStringValue(fieldList.get(0));
-			}
-
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.LA);
 			if (fieldList != null && fieldList.size() > 0) {
 				Language language = Language.Factory.newInstance();
