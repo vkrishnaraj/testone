@@ -54,6 +54,9 @@ public class TracingIncidentCache{
 			newMap.put(incidentId, tmp);
 			return tmp;
 		} else {
+			if(sess == null || !sess.isOpen()){
+				logger.info("Session is closed, failed to load incident: " + incidentId);
+			}
 			TraceIncident inc = (TraceIncident) sess.get(TraceIncident.class, incidentId);
 			sess.evict(inc);
 			if (!stopCaching || containsKey) {

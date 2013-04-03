@@ -63,6 +63,9 @@ public class TracingOhdCache{
 		if (containsKey && ohd.getLastupdated().equals(lastUpdated)) {
 			return ohd;
 		} else {
+			if(sess == null || !sess.isOpen()){
+				logger.info("Session is closed, failed to load ohd: " + ohdId);
+			}
 			int limit = 0;
 			do {
 				if (limit > 0) {
@@ -77,6 +80,7 @@ public class TracingOhdCache{
 			} while (ohd == null && limit < 3);
 			
 			sess.evict(ohd);
+
 			if (!stopCaching || containsKey) {
 				ohdMap.put(ohdId, ohd);
 				if (containsKey) {
