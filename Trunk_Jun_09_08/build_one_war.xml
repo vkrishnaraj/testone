@@ -463,6 +463,7 @@
 				<exclude name="axis2*.jar" />
 				<exclude name="jxl*.jar" />
 				<exclude name="iText*.jar" />
+				<exclude name="javassist*.jar"/>
 				<!--<exclude name="spring*RELEASE.jar" />-->
 				<!--<exclude name="commons-beanutils-1.7.0.jar" />
 				<exclude name="commons-codec-1.3.jar" />-->

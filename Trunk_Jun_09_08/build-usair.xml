@@ -491,7 +491,7 @@
 
 		</ear>
 		
-		<copy todir="${app.deploy.dir.jb5}">
+		<copy todir="${app.deploy.dir.jb7}">
 			<fileset dir="${build.dir}">
 				<include name="tracer.ear" />
 			</fileset>

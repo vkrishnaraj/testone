@@ -341,6 +341,7 @@
 				<exclude name="axis2*.jar" />
 				<exclude name="jxl*.jar" />
 				<exclude name="iText*.jar" />
+				<exclude name="javassist*.jar" />
 				
 				<exclude name="dsi.jar" />
 				<exclude name="delivery*.jar" />
