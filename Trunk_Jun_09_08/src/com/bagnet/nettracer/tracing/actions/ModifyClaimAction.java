@@ -568,6 +568,13 @@ public class ModifyClaimAction extends CheckedAction {
 			}
 		} 
 		
+		//fix segment dateformat
+		if(claim.getSegments() != null){
+			for(Segment seg:claim.getSegments()){
+				seg.setDateFormat(user.getDateformat().getFormat());
+			}
+		}
+		
 		cform.setClaim(claim);
 		session.setAttribute("incidentForm", theform);
 		return (mapping.findForward(TracingConstants.CLAIM_PAY_MAIN));
