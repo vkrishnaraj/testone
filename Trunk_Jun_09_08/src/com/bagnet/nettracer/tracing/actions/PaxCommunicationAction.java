@@ -172,7 +172,7 @@ public class PaxCommunicationAction extends Action {
 					//save inc and audit inc here
 					HibernateUtils.save(inc, sess);  //this does not do all of what we want
 					// check if audit is enabled for this company....
-					Transaction transaction = sess.beginTransaction();  //persist audit incident
+					Transaction transaction = null;  //persist audit incident
 					Incident iDTO = inc;
 					if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation()
 							.getCompany().getVariable().getAudit_lost_delayed() == 1)
