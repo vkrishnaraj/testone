@@ -313,7 +313,7 @@ public class ClaimUtils {
 			pnrData.setPnrData(osi.getInfo());
 			ParsedData pd = parseInterestingData(osi.getInfo());
 
-			reservation.setCcNumber(pd.last4);
+			reservation.setCcNumLastFour(pd.last4);
 			reservation.setTicketAmount(pd.ticketPrice);
 			reservation.setFormOfPayment(pd.fop);
 			reservation.setCcType(pd.cardType);
