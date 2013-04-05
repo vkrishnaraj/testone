@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.utils.general;
 
 import java.util.Hashtable;
+import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -21,8 +22,8 @@ public class ConnectionUtil {
 
 	
 	static public Context getInitialContext(String url) throws NamingException {
-		Hashtable p = new Hashtable();
-		p.put(Context.URL_PKG_PREFIXES, "org.jboss.naming:org.jnp.interfaces"); 
+	    Properties p = new Properties();
+		p.put(Context.URL_PKG_PREFIXES, "org.jboss.ejb.client.naming");
 		return new InitialContext(p);
 	}
 	
