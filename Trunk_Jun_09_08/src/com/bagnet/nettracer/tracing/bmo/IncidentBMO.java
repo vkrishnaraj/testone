@@ -343,10 +343,15 @@ public class IncidentBMO {
 					if (oldinc.getTracingStarted() == null && iDTO.getTracingStatus() != TracingConstants.INCIDENT_TRACING_STATUS_DEFAULT) {
 						iDTO.setTracingStarted(TracerDateTime.getGMTDate());
 						iDTO.setTracingAgent(mod_agent);
+					} else {
+						iDTO.setTracingStarted(oldinc.getTracingStarted());
+						iDTO.setTracingAgent(oldinc.getTracingAgent());
 					}
 					
 					if (oldinc.getTracingStatus() != iDTO.getTracingStatus() && iDTO.getTracingStatus() == TracingConstants.INCIDENT_TRACING_STATUS_FINAL) {
 						iDTO.setTracingComplete(TracerDateTime.getGMTDate());
+					} else {
+						iDTO.setTracingComplete(oldinc.getTracingComplete());
 					}
 
 					if (oldinc.getWtFile() != null && iDTO.getWtFile() == null) {

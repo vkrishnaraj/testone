@@ -158,7 +158,7 @@ public class Ahl {
 		this.expenses = expenses;
 	}
 
-	public Calendar isTracingFinalized() {
+	public Calendar getTracingFinalized() {
 		return tracingFinalized;
 	}
 

@@ -12,11 +12,10 @@ public class PaxMessageTriggerBMO {
 	
 	private static Logger logger = Logger.getLogger(PaxMessageTriggerBMO.class);
 	
-	private static Session session;
-
 	private static PaxMessageTrigger getPaxMessageTriggerByTriggerKey(String triggerKey) {
 		PaxMessageTrigger result = null;
-		boolean sessionNull = (session == null);
+		Session session=null;
+		boolean sessionNull = true;
 		
 		try {
 			if (sessionNull) {
