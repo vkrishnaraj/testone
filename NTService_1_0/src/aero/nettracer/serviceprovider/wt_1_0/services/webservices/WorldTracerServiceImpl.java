@@ -1449,7 +1449,18 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if(ohd.getItem() != null && ohd.getItem().getExternaldesc() != null && ohd.getItem().getExternaldesc().trim().length() > 0){
 					bi = bi + "/" + RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(ohd.getItem().getExternaldesc().trim());
 				}
-				d2.addNewBrandInfo().setStringValue(bi);
+				if(bi.length()>50){
+					d2.addNewBrandInfo().setStringValue(bi.substring(0,50));
+				} else {
+					d2.addNewBrandInfo().setStringValue(bi);
+				}
+			} else if(ohd.getItem() != null && ohd.getItem().getExternaldesc() != null && ohd.getItem().getExternaldesc().trim().length() > 0){
+				String bi = "YY/" + RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(ohd.getItem().getExternaldesc().trim());
+				if(bi.length()>50){
+					d2.addNewBrandInfo().setStringValue(bi.substring(0,50));
+				} else {
+					d2.addNewBrandInfo().setStringValue(bi);
+				}
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
@@ -1988,6 +1999,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						if (item.getManufacturer() != null && item.getManufacturer().length() > 0) {
 							String brandinfo=(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer())+"/"+
 									RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getExternaldesc()));
+							if(brandinfo.length()>50){
+								t3.addNewBrandInfo().setStringValue(brandinfo.substring(0, 50));
+							} else {
+								t3.addNewBrandInfo().setStringValue(brandinfo);
+							}
+						} else if(item.getExternaldesc() != null && item.getExternaldesc().trim().length() > 0){
+							String brandinfo=("YY/"+	RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getExternaldesc()));
 							if(brandinfo.length()>50){
 								t3.addNewBrandInfo().setStringValue(brandinfo.substring(0, 50));
 							} else {
@@ -3456,9 +3474,19 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if(ohd.getItem() != null && ohd.getItem().getExternaldesc() != null && ohd.getItem().getExternaldesc().trim().length() > 0){
 					bi = bi + "/" + RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(ohd.getItem().getExternaldesc().trim());
 				}
-				d2.addNewBrandInfo().setStringValue(bi);
+				if(bi.length()>50){
+					d2.addNewBrandInfo().setStringValue(bi.substring(0,50));
+				} else {
+					d2.addNewBrandInfo().setStringValue(bi);
+				}
+			} else if(ohd.getItem() != null && ohd.getItem().getExternaldesc() != null && ohd.getItem().getExternaldesc().trim().length() > 0){
+				String bi = "YY/" + RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(ohd.getItem().getExternaldesc().trim());
+				if(bi.length()>50){
+					d2.addNewBrandInfo().setStringValue(bi.substring(0,50));
+				} else {
+					d2.addNewBrandInfo().setStringValue(bi);
+				}
 			}
-
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
 			if (fieldList != null && fieldList.size() > 0) {
 				String airtag = fieldList.get(0);
@@ -3851,8 +3879,20 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						Item item = items[i];
 						
 						if (item.getManufacturer() != null && item.getManufacturer().length() > 0) {
-							t3.addNewBrandInfo().setStringValue((RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer())+"/"+
-									RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getExternaldesc())));
+							String brandinfo=(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getManufacturer())+"/"+
+									RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getExternaldesc()));
+							if(brandinfo.length()>50){
+								t3.addNewBrandInfo().setStringValue(brandinfo.substring(0, 50));
+							} else {
+								t3.addNewBrandInfo().setStringValue(brandinfo);
+							}
+						} else if(item.getExternaldesc() != null && item.getExternaldesc().trim().length() > 0){
+							String brandinfo=("YY/"+	RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(item.getExternaldesc()));
+							if(brandinfo.length()>50){
+								t3.addNewBrandInfo().setStringValue(brandinfo.substring(0, 50));
+							} else {
+								t3.addNewBrandInfo().setStringValue(brandinfo);
+							}
 						}
 						
 						if (item.getContent() != null){
