@@ -79,6 +79,7 @@ public class ViewFraudRequests extends CheckedAction {
 			theForm.getDto().setType(TracingConstants.FS_ACCESS_REQUEST_TYPE_INCOMING);
 			theForm.setEndDate(null);
 			theForm.setStartDate(null);
+			theForm.setMessage("");
 		} else if ((request.getParameter("matchId") != null || request.getParameter("approveId") != null || request.getParameter("denyId") != null) 
 				&& session.getAttribute("linkForm") != null){
 			theForm = (ViewFraudRequestForm) session.getAttribute("linkForm");
@@ -158,8 +159,9 @@ public class ViewFraudRequests extends CheckedAction {
 			request.setAttribute("deny_ID", denyId);
 			request.setAttribute("airlineRequest", airlineRequest);
 			request.setAttribute("claim_ID", claimId);
+			linkForm.setMessage("");
+			session.setAttribute("linkForm", linkForm);
 			return mapping.findForward(TracingConstants.DENY_FRAUD_REQUEST);
-			//remote.denyRequest(Long.parseLong(denyId), null, user.getFirstname() + " " + user.getLastname());
 		} else if (request.getParameter("request_ID")!=null && request.getParameter("deny")!=null){
 			remote.denyRequest(Long.parseLong(request.getParameter("request_ID")), resources.getString("deny.message")+": "+linkForm.getMessage(), user.getFirstname() + " " + user.getLastname());
 		}
