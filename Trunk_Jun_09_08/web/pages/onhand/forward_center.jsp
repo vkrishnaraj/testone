@@ -24,11 +24,11 @@
 <script language="javascript">
 
   var buttonSelected = null;
-  document.onload=function clearDelete() {
-		del = document.forms[0].delete_these_elements;
+  
+  jQuery(document).ready(function () {
+	 	del = document.forms[0].delete_these_elements;
 		del.value = "";
-  }
-
+  });
   function getstations() {
     o = document.incidentForm;
     o.getstation.value="1";

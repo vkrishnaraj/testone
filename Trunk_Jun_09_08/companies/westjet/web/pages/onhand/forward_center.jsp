@@ -25,7 +25,7 @@
 
   var buttonSelected = null;
   
-  window.onload=function(){
+  jQuery(document).ready(function () {
 	 	del = document.forms[0].delete_these_elements;
 		del.value = "";
 
@@ -38,7 +38,7 @@
 				enableSticker(sticker);
 			}
 		}
-  };
+  });
   function getstations() {
     o = document.incidentForm;
     o.getstation.value="1";
