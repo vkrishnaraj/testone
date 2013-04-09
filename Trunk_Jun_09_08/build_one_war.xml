@@ -801,7 +801,6 @@
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-war-testing-avis"/>
 		<antcall target="build-war-testing-westjet"/>
-		<antcall target="build-war-testing-jetblue"/>
 		<antcall target="build-war-testing-spirit"/>
 		<antcall target="build-war-testing-azul"/>
 		<antcall target="build-war-testing-delta"/>
@@ -809,7 +808,6 @@
 		<antcall target="build-war-testing-virginamerica"/>
 		<antcall target="build-war-testing-united"/>
 		<antcall target="build-war-testing-webjet"/>
-		<antcall target="build-war-testing-lfc"/>
 		<antcall target="build-war-testing-alaska"/>
 		<property name="app.xml.location" value="metadata/testing/hosted" />
 		<antcall target="donotrun-build-ear" />
@@ -820,6 +818,8 @@
 		<property name="staging.env" value="testing" />
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="hibernate_generate" />		
+		<antcall target="build-war-testing-jetblue"/>
+		<antcall target="build-war-testing-lfc"/>
 		<antcall target="build-war-testing-frontier"/>
 		<antcall target="build-war-testing-southwest"/>
 		<antcall target="build-war-testing-canadiannorth"/>
@@ -1107,7 +1107,6 @@
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-war-training-avis"/>
 		<antcall target="build-war-training-westjet"/>
-		<antcall target="build-war-training-jetblue"/>
 		<antcall target="build-war-training-spirit"/>
 		<antcall target="build-war-training-azul"/>
 		<antcall target="build-war-training-delta"/>
@@ -1115,7 +1114,6 @@
 		<antcall target="build-war-training-american"/>
 		<antcall target="build-war-training-virginamerica"/>
 		<antcall target="build-war-training-webjet"/>
-		<antcall target="build-war-training-lfc"/>
 		<antcall target="build-war-training-alaska"/>
 		<property name="app.xml.location" value="metadata/training/hosted" />
 		<antcall target="donotrun-build-ear" />
@@ -1126,6 +1124,8 @@
 		<property name="staging.env" value="training" />
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="hibernate_generate" />		
+		<antcall target="build-war-training-jetblue"/>
+		<antcall target="build-war-training-lfc"/>
 		<antcall target="build-war-training-frontier"/>
 		<antcall target="build-war-training-southwest"/>
 		<antcall target="build-war-training-canadiannorth"/>
@@ -1264,12 +1264,10 @@
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-war-production-avis"/>
-		<antcall target="build-war-production-lfc"/>
 		<antcall target="build-war-production-webjet"/>
 		<antcall target="build-war-production-united"/>
 		<antcall target="build-war-production-american"/>
 		<antcall target="build-war-production-delta"/>
-		<antcall target="build-war-production-jetblue"/>
 		<antcall target="build-war-production-azul"/>
 		<antcall target="build-war-production-spirit"/>
 		<antcall target="build-war-production-westjet"/>	
@@ -1284,6 +1282,8 @@
 		<property name="staging.env" value="production" />
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="hibernate_generate" />		
+		<antcall target="build-war-production-jetblue"/>
+		<antcall target="build-war-production-lfc"/>
 		<antcall target="build-war-production-frontier"/>		
 		<antcall target="build-war-production-southwest"/>
 		<antcall target="build-war-production-canadiannorth"/>
@@ -1372,6 +1372,15 @@
 		<property name="avis.service.includes" value="*.war"/>
 		<antcall target="build-war-production-webjet"/>
 		<property name="app.xml.location" value="metadata/webjet/prod" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-production-westjet" depends="delete-wars">
+		<property name="staging.project" value="westjet" />
+		<property name="staging.env" value="production" />
+		<property name="avis.service.includes" value="*.war"/>
+		<antcall target="build-war-production-westjet"/>
+		<property name="app.xml.location" value="metadata/westjet/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 

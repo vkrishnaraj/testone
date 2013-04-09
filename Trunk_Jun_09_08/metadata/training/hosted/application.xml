@@ -20,15 +20,7 @@
      </web>
   </module>
   
-  
-   <module>
-     <web>
-         <web-uri>jetblue_training.war</web-uri>
-         <context-root>jetblue</context-root>
-     </web>
-  </module>
-  
-   <module>
+  <module>
      <web>
          <web-uri>spirit_training.war</web-uri>
          <context-root>spirit</context-root>
@@ -67,12 +59,6 @@
      <web>
          <web-uri>webjet_training.war</web-uri>
          <context-root>webjet</context-root>
-     </web>
-  </module>
-   <module>
-     <web>
-         <web-uri>lfc_training.war</web-uri>
-         <context-root>lostandfound</context-root>
      </web>
   </module>
    <module>

@@ -20,15 +20,7 @@
      </web>
   </module>
   
-  
-   <module>
-     <web>
-         <web-uri>jetblue_testing.war</web-uri>
-         <context-root>jetblue</context-root>
-     </web>
-  </module>
-  
-   <module>
+  <module>
      <web>
          <web-uri>spirit_testing.war</web-uri>
          <context-root>spirit</context-root>
@@ -77,12 +69,6 @@
      </web>
   </module>
 
-   <module>
-     <web>
-         <web-uri>lfc_testing.war</web-uri>
-         <context-root>lostandfound</context-root>
-     </web>
-  </module>
    <module>
      <web>
          <web-uri>alaska_testing.war</web-uri>
