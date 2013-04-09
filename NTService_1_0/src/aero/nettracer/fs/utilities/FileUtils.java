@@ -119,7 +119,8 @@ public class FileUtils {
 			}
 			
 			//retrieve the file data
-			String image_store = "c:/nettracer_files/";
+			String env=HibernateWrapper.getConfig().getProperty("environment.code");
+			String image_store = "\\\\10.60.98.66\\"+env+"\\NTFS\\";     //c:/nettracer_files/";
 			if (!FileUtils.makeFolder(image_store + folder)) {
 				//Error in creating a directory.
 				logger.error("Unable to create directory");
