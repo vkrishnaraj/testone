@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -93,6 +94,7 @@ public class TracerUtils {
 	private static Logger logger = Logger.getLogger(TracerUtils.class);
 	private static ConcurrentHashMap<Integer, String> cachedManufacturerMap = new ConcurrentHashMap<Integer, String>();
 	private static ConcurrentHashMap<Integer, String> cachedXDescElementMap = new ConcurrentHashMap<Integer, String>();
+	private static ConcurrentHashMap<String, String> cachedStates = null;
 	
 	private static MessageResources messages = null;
 	
@@ -1287,6 +1289,17 @@ public class TracerUtils {
 			}
 		}
 		return al;
+	}
+	
+	public static boolean isValidState(String state) {
+		if (cachedStates == null) {
+			cachedStates = new ConcurrentHashMap<String, String>();
+			ArrayList<LabelValueBean> stateList = getStatelist();
+			for (LabelValueBean stateObj : stateList) {
+				cachedStates.put(stateObj.getValue().toUpperCase(), stateObj.getLabel());
+			}
+		}
+		return cachedStates.containsKey(state.toUpperCase());
 	}
 
 	public static ArrayList getCountryList() {

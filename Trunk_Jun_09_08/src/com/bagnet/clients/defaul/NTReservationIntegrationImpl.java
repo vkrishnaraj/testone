@@ -3,6 +3,7 @@ package com.bagnet.clients.defaul;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +28,11 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
+import com.bagnet.nettracer.tracing.db.State;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 
 public class NTReservationIntegrationImpl extends
@@ -213,7 +216,7 @@ public class NTReservationIntegrationImpl extends
 			
 			
 			if (add.getCountry() == null){
-				if(user.getCompanycode_ID().equals("WS")) {
+				if(user.getCompanycode_ID().equals("WS") || !TracerUtils.isValidState(add.getState())) {
 					faddr.setProvince(fMap.mapStringAndTrim(NetTracerField.ADDR_PROVINCE, add.getState()));
 				} else {
 					faddr.setState_ID(fMap.mapStringAndTrim(NetTracerField.ADDR_STATE, add.getState()));
@@ -448,11 +451,19 @@ public class NTReservationIntegrationImpl extends
 			faddr.setAddress2(fMap.mapStringAndTrim(NetTracerField.ADDRESS2, add.getAddress2()));
 			faddr.setCity(fMap.mapStringAndTrim(NetTracerField.ADDRESS2, add.getCity()));
 			
-			
-			if (add.getCountry() == null || add.getCountry().equals("US")) {
-				faddr.setState_ID(fMap.mapStringAndTrim(NetTracerField.ADDR_STATE, add.getState()));
+
+			if (add.getCountry() == null){
+				if(user.getCompanycode_ID().equals("WS") || !TracerUtils.isValidState(add.getState())) {
+					faddr.setProvince(fMap.mapStringAndTrim(NetTracerField.ADDR_PROVINCE, add.getState()));
+				} else {
+					faddr.setState_ID(fMap.mapStringAndTrim(NetTracerField.ADDR_STATE, add.getState()));
+				}
 			} else {
-				faddr.setProvince(fMap.mapStringAndTrim(NetTracerField.ADDR_PROVINCE, add.getState()));
+				if(add.getCountry().equals("US")){
+					faddr.setState_ID(fMap.mapStringAndTrim(NetTracerField.ADDR_STATE, add.getState()));
+				} else {
+					faddr.setProvince(fMap.mapStringAndTrim(NetTracerField.ADDR_PROVINCE, add.getState()));
+				}
 			}
 			
 			faddr.setZip(fMap.mapString(NetTracerField.ADDR_ZIP, add.getZip()));
