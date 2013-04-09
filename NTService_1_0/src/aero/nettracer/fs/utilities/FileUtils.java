@@ -323,7 +323,8 @@ public class FileUtils {
 	    try {
 	      String attachpath=getPath(attachID, null, valComp);
 
-			String image_store = "c:/nettracer_files/";
+			String env=HibernateWrapper.getConfig().getProperty("environment.code");
+			String image_store = "\\\\10.60.98.66\\"+env+"\\NTFS\\"; //"c:/nettracer_files/";
 	      istream = new GZIPRemoteInputStream(new BufferedInputStream(
 	        new FileInputStream(image_store+attachpath)));
 	      java.io.File file =new File(image_store+attachpath);
@@ -425,8 +426,9 @@ public class FileUtils {
 			alist.add(attachID);
 			List<FsAttachment> attachments=getAttachmentsById(alist);
 			Set<FsAttachment> toDelete=new HashSet();
+			String env=HibernateWrapper.getConfig().getProperty("environment.code");
 			for(FsAttachment attach:attachments){
-				File f=new File("c:/nettracer_files/"+attach.getPath());
+				File f=new File("\\\\10.60.98.66\\"+env+"\\NTFS\\"+attach.getPath());
 				boolean success=f.delete();
 				toDelete.add(attach);
 			}
