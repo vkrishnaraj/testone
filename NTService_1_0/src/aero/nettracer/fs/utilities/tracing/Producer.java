@@ -353,7 +353,7 @@ public class Producer {
 						mileSearch = MILE_SEARCH_ZIP;
 					}
 					double latRadius = GeoCode.getLatRadius(mileSearch);
-					double longRadius = GeoCode.getLongRadius(a.getLongitude(), mileSearch);
+					double longRadius = GeoCode.getLongRadius(a.getLattitude(), mileSearch);
 					double y1 = a.getLattitude() - latRadius;
 					double y2 = a.getLattitude() + latRadius;
 					double x1 = a.getLongitude() - longRadius;
