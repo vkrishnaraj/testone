@@ -64,9 +64,7 @@ public class RemoteService {
 	}
 	
 	public static boolean getLists() {
-		getListsAB();
-		getListsLF();
-		return true;
+		return (getListsAB() && getListsLF());
 	}
 	
 	public static boolean getListsAB() {
