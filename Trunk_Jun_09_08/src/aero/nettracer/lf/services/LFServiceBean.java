@@ -2078,7 +2078,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	protected List<Long> getXDayList(String compCode, int notice) throws Exception{
+	protected List<Long> getXDayList(int notice) throws Exception{
 		String sql = "select l.id lostid from lflost l left outer join subcompany sc on sc.subcompanycode=l.companyId " +
 		" where l.status_ID != " + TracingConstants.LF_STATUS_CLOSED +
 		" and (datediff(curdate(),l.openDate)) >= ";
@@ -2120,7 +2120,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void send1stNoticeEmails(){
 		try {
-			List<Long> lostIds = getXDayList(TracerProperties.get("wt.company.code"), 1);
+			List<Long> lostIds = getXDayList(1);
 			if(lostIds != null){
 				for(Long id: lostIds){
 					send1stNotice(id);
@@ -2134,7 +2134,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void send2ndNoticeEmails(){
 		try {
-			List<Long> lostIds = getXDayList(TracerProperties.get("wt.company.code"), 2);
+			List<Long> lostIds = getXDayList(2);
 			if(lostIds != null){
 				for(Long id: lostIds){
 					send2ndNotice(id);
