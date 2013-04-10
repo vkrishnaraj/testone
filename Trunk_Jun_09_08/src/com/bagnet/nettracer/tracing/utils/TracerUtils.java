@@ -1292,6 +1292,9 @@ public class TracerUtils {
 	}
 	
 	public static boolean isValidState(String state) {
+		if(state==null || state.length()==0){
+			return false;
+		}
 		if (cachedStates == null) {
 			cachedStates = new ConcurrentHashMap<String, String>();
 			ArrayList<LabelValueBean> stateList = getStatelist();
