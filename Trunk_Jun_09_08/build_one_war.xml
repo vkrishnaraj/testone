@@ -497,7 +497,6 @@
 				<!--<exclude name="Dynamic*.*" />-->
 				<exclude name="hornetq*.*" />
 				<exclude name="axiom*.*" />
-				<exclude name="libphone*.*" />
 				<exclude name="geronimo*.*" />
 				<exclude name="xmlbeans*.*" />
 				<exclude name="xmlschema*.*" />
