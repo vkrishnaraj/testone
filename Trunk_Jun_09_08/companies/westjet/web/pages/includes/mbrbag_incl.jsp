@@ -63,9 +63,9 @@
 		pos = o.name.substring(pos+1,pos2);
 
 		if (o.value == <%=TracingConstants.MANUFACTURER_OTHER_ID%>) {
-			document.getElementById("manu_other" + pos).style.display= "block";
+			document.getElementById("manu_other" + pos).style.visibility = "visible";
 		} else {
-			document.getElementById("manu_other" + pos).style.display = "none";
+			document.getElementById("manu_other" + pos).style.visibility = "hidden";
 		}
 	}
 	
