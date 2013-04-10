@@ -186,14 +186,14 @@ public class GeoCode {
 					+ "%' and "
 					+ (useFIPs ? "countyfp in " + zip + " " : "(zipl = '" + zip
 							+ "' or zipr = '" + zip + "') ")
-					+ (useNumber ? "and (((rfromadd <= '" + parsed.getNum()
-							+ "' and rtoadd >= '" + parsed.getNum()
-							+ "') or (lfromadd <= '" + parsed.getNum()
-							+ "' and ltoadd >= '" + parsed.getNum()
-							+ "')) or ((rtoadd <= '" + parsed.getNum()
-							+ "' and rfromadd >= '" + parsed.getNum()
-							+ "') or (ltoadd <= '" + parsed.getNum()
-							+ "' and lfromadd >= '" + parsed.getNum() + "')))"
+					+ (useNumber ? "and (((rfromadd <= " + parsed.getNum()
+							+ " and rtoadd >= " + parsed.getNum()
+							+ ") or (lfromadd <= " + parsed.getNum()
+							+ " and ltoadd >= " + parsed.getNum()
+							+ ")) or ((rtoadd <= " + parsed.getNum()
+							+ " and rfromadd >= " + parsed.getNum()
+							+ ") or (ltoadd <= " + parsed.getNum()
+							+ " and lfromadd >= " + parsed.getNum() + ")))"
 							: ""));
 			query.addScalar("longitude", StandardBasicTypes.DOUBLE);
 			query.addScalar("latitude", StandardBasicTypes.DOUBLE);
