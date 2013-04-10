@@ -32,6 +32,12 @@
          <context-root>lostandfound</context-root>
      </web>
   </module>
+ <module>
+     <web>
+         <web-uri>avis_testing.war</web-uri>
+         <context-root>avis</context-root>
+     </web>
+  </module>
   
    <module>
      <web>

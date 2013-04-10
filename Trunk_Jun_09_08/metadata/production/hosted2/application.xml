@@ -43,5 +43,11 @@
          <context-root>jetblue</context-root>
      </web>
   </module>
+ <module>
+     <web>
+         <web-uri>avis_production.war</web-uri>
+         <context-root>abtracer</context-root>
+     </web>
+  </module>
   
 </application> 

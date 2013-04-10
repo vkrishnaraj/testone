@@ -8,12 +8,6 @@
  <display-name>TracerEAR</display-name>
  <module>
      <web>
-         <web-uri>avis_production.war</web-uri>
-         <context-root>abtracer</context-root>
-     </web>
-  </module>
- <module>
-     <web>
          <web-uri>webjet_production.war</web-uri>
          <context-root>webjet</context-root>
      </web>

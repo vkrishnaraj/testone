@@ -6,12 +6,6 @@
 	      version="5">
 
  <display-name>TracerEAR</display-name>
- <module>
-     <web>
-         <web-uri>avis_training.war</web-uri>
-         <context-root>avis</context-root>
-     </web>
-  </module>
   
    <module>
      <web>

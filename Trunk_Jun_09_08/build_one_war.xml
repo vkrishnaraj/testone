@@ -799,7 +799,6 @@
 		<property name="staging.env" value="testing" />
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="hibernate_generate" />		
-		<antcall target="build-war-testing-avis"/>
 		<antcall target="build-war-testing-westjet"/>
 		<antcall target="build-war-testing-spirit"/>
 		<antcall target="build-war-testing-azul"/>
@@ -820,6 +819,7 @@
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-war-testing-jetblue"/>
 		<antcall target="build-war-testing-lfc"/>
+		<antcall target="build-war-testing-avis"/>
 		<antcall target="build-war-testing-frontier"/>
 		<antcall target="build-war-testing-southwest"/>
 		<antcall target="build-war-testing-canadiannorth"/>
@@ -1105,7 +1105,6 @@
 		<property name="staging.env" value="training" />
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="hibernate_generate" />		
-		<antcall target="build-war-training-avis"/>
 		<antcall target="build-war-training-westjet"/>
 		<antcall target="build-war-training-spirit"/>
 		<antcall target="build-war-training-azul"/>
@@ -1126,6 +1125,7 @@
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-war-training-jetblue"/>
 		<antcall target="build-war-training-lfc"/>
+		<antcall target="build-war-training-avis"/>
 		<antcall target="build-war-training-frontier"/>
 		<antcall target="build-war-training-southwest"/>
 		<antcall target="build-war-training-canadiannorth"/>
@@ -1263,7 +1263,6 @@
 		<property name="staging.env" value="production" />
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="hibernate_generate" />		
-		<antcall target="build-war-production-avis"/>
 		<antcall target="build-war-production-webjet"/>
 		<antcall target="build-war-production-united"/>
 		<antcall target="build-war-production-american"/>
@@ -1284,6 +1283,7 @@
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-war-production-jetblue"/>
 		<antcall target="build-war-production-lfc"/>
+		<antcall target="build-war-production-avis"/>
 		<antcall target="build-war-production-frontier"/>		
 		<antcall target="build-war-production-southwest"/>
 		<antcall target="build-war-production-canadiannorth"/>

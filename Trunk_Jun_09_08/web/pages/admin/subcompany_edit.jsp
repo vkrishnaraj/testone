@@ -90,7 +90,7 @@
                   *:
                 </td>
                 <td>
-                  <html:text styleClass="textfield" property="subcompanyCode" size="12" maxlength="12" />
+                  <html:text styleClass="textfield" property="subcompanyCode" size="12" maxlength="3" />
                 </td>
               </tr>
               <tr>
@@ -102,7 +102,7 @@
                   :
                 </td>
                 <td>
-                  <html:text styleClass="textfield" property="name" size="20" maxlength="25" />
+                  <html:text styleClass="textfield" property="name" size="20" maxlength="50" />
                 </td>
               </tr>
               <tr>
@@ -111,7 +111,7 @@
                   :
                 </td>
                 <td>
-                  <html:text styleClass="textfield" property="companyCode" size="20" maxlength="25" readonly="true" />
+                  <html:text styleClass="textfield" property="companyCode" size="12" maxlength="2" readonly="true" />
                 </td>
               </tr>
               <tr>
@@ -120,7 +120,7 @@
                   :
                 </td>
                 <td>
-                  <html:text styleClass="textfield" property="email_Subject" size="20" maxlength="25" />
+                  <html:text styleClass="textfield" property="email_Subject" size="20" maxlength="200" />
                 </td>
               </tr>
               <tr>
@@ -129,7 +129,7 @@
                   :
                 </td>
                 <td>
-                  <html:text styleClass="textfield" property="email_Notice_1" size="20" maxlength="25" />
+                  <html:text styleClass="textfield" property="email_Notice_1" size="20" maxlength="200" />
                 </td>
               </tr>
               <tr>
@@ -138,7 +138,7 @@
                   :
                 </td>
                 <td>
-                  <html:text styleClass="textfield" property="email_Notice_2" size="20" maxlength="25" />
+                  <html:text styleClass="textfield" property="email_Notice_2" size="20" maxlength="200" />
                 </td>
               </tr>
               <tr>
@@ -147,7 +147,7 @@
                   :
                 </td>
                 <td>
-                  <html:text styleClass="textfield" property="auto_Close_Low" size="20" maxlength="25" />
+                  <html:text styleClass="textfield" property="auto_Close_Low" size="20" maxlength="3" />
                 </td>
               </tr>
               <tr>
@@ -156,7 +156,7 @@
                   :
                 </td>
                 <td>
-                  <html:text styleClass="textfield" property="auto_Close_High" size="20" maxlength="25" />
+                  <html:text styleClass="textfield" property="auto_Close_High" size="20" maxlength="3" />
                 </td>
               </tr>
               <tr>
