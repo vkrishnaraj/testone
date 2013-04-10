@@ -889,7 +889,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SubcompanyStation> getSubcompanyStations(String companycode) {
-		String sql = "from com.bagnet.nettracer.tracing.db.lf.SubcompanyStation sub where sub.subcompany.company.companyCode_ID = :companycode order by sub.subcompany.name";
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.SubcompanyStation sub where sub.subcompany.company.companyCode_ID = :companycode order by sub.station.stationcode";
 		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = sess.createQuery(sql);
 		q.setParameter("companycode", companycode);
