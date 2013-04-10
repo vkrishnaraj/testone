@@ -83,6 +83,9 @@ public class RemoteService {
 		} catch (NamingException ex) {
 			ex.printStackTrace();
 			return false;
+		} catch (Exception e){
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}
@@ -100,6 +103,9 @@ public class RemoteService {
 			ctx.close();
 		} catch (NamingException ex) {
 			ex.printStackTrace();
+			return false;
+		} catch (Exception e){
+			e.printStackTrace();
 			return false;
 		}
 		return true;
