@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
  <display-name>NetTracer</display-name>
  <filter>
   <filter-name>ExpiresHeaderFilter</filter-name>
@@ -237,6 +237,13 @@
    <taglib-location>/WEB-INF/struts-tiles.tld</taglib-location>
   </taglib>
  </jsp-config>
+ <session-config>
+ 	<cookie-config>
+ 		<http-only>true</http-only>
+ 		<secure>true</secure>
+ 	</cookie-config>
+ 	<tracking-mode>COOKIE</tracking-mode>
+ </session-config>
  
  
 </web-app>
