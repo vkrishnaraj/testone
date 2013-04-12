@@ -51,8 +51,8 @@ public class Reservation implements ReservationInterface {
 			String endpoint = user.getProfile().getParameters().get(ParameterType.RESERVATION_ENDPOINT);
 			
 			
-			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\cacerts");
-			System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+			//System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\cacerts");
+			//System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 			System.out.println(System.getProperty("javax.net.ssl.trustStore"));
 			System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
 
@@ -256,8 +256,8 @@ public class Reservation implements ReservationInterface {
 			String endpoint = user.getProfile().getParameters().get(ParameterType.RESERVATION_ENDPOINT);
 				//"https://206.57.4.54/NetTracerInternal/NetTracerService.svc";
 			
-			System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\cacerts");
-			System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
+			//System.setProperty("javax.net.ssl.trustStore", "c:\\secure\\cacerts");
+			//System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
 			System.out.println(System.getProperty("javax.net.ssl.trustStore"));
 			System.out.println(System.getProperty("javax.net.ssl.trustStorePassword"));
 
