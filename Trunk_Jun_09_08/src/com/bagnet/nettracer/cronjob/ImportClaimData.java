@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -74,6 +75,7 @@ public abstract class ImportClaimData {
 	private static Logger logger = Logger.getLogger(ImportClaimData.class);
 	private static LinkedHashMap<String, String> failedIncidents;
 	private Thread[] threads;
+	private LinkedHashSet<Long> failedmap = new LinkedHashSet<Long>();		
 	
 	public void importClaims() {
 		
@@ -430,7 +432,7 @@ public abstract class ImportClaimData {
 			logger.info("Submitting file: " + originalFileId + " to central services...");
 			double start = System.currentTimeMillis();
 			remoteFileId = remote.insertFile(TransportMapper.map(file));
-			if (remoteFileId > 0) {
+			if (remoteFileId > 0 ) {
 				file = FileDAO.loadFile(originalFileId);
 				file.setSwapId(remoteFileId);
 				FileDAO.saveFile(file, false);
@@ -438,8 +440,10 @@ public abstract class ImportClaimData {
 					remote.traceFile(remoteFileId, 6, true, false);
 				}
 				logger.info("File: " + file.getId() + " saved to central services with remote id: " + remoteFileId);
+				failedmap.remove(originalFileId);
 			} else {
 				logger.info("Failed to save file: " + file.getId() + " to fraud services.");
+				
 			}
 			double end = System.currentTimeMillis();
 			double duration = (end - start) / 1000;
@@ -449,7 +453,7 @@ public abstract class ImportClaimData {
 	
 	@SuppressWarnings("unchecked")
 	protected void submitFilesToFraudServices() {
-		LinkedHashSet<Long> map = new LinkedHashSet<Long>();		
+		LinkedHashSet<Long> map = new LinkedHashSet<Long>();			
 		Session session = null;
 		boolean haveFiles = false;
 		int noneAdded = 0;
@@ -458,7 +462,14 @@ public abstract class ImportClaimData {
 				session = HibernateWrapper.getSession().openSession();
 	
 				String sql = "from aero.nettracer.fs.model.File as file where file.swapId = 0";
+				if(failedmap.size()>0){
+					sql+="and id not in (:failedList)";
+				}
 				Query query = session.createQuery(sql);
+				if(failedmap.size()>0){
+					ArrayList currentfailed=new ArrayList(failedmap);
+					query.setParameterList("failedList", currentfailed);
+				}
 				query.setMaxResults(maxReturn);
 				List<aero.nettracer.fs.model.File> files = query.list();
 				session.close();
@@ -475,6 +486,7 @@ public abstract class ImportClaimData {
 					if (map.add(f.getId())) {
 						queue.put(f);
 						haveFiles = true;
+						failedmap.add(f.getId());
 					}
 				}
 
@@ -489,10 +501,10 @@ public abstract class ImportClaimData {
 					noneAdded = 0;
 				}
 				
-				while (queue.size() > submissionThreadCount + 5) {
+				while (queue.size() > submissionThreadCount * 6) {
 					try {
 						outputFile.println("Waiting for threads to work the queue...");
-						Thread.sleep(5000);
+						Thread.sleep(1000);
 					} catch (InterruptedException e) { }
 				}
 				
