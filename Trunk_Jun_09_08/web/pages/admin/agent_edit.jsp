@@ -177,9 +177,15 @@ String passMin = bundle.getString("error.security.password.minimal").replace("{0
               :
             </td>
             <td>
-              <html:select name="agentForm" property="subcompany_id" styleClass="dropdown">
-                <html:options collection="subcompList" property="value" labelProperty="label" />
-              </html:select>
+            	<% if(a.getSubcompany()!=null){ %>
+       			<html:select name="agentForm" property="subcompany_id" disabled="true" styleClass="dropdown">
+               	 	<html:options collection="subcompList" property="value" labelProperty="label" />
+              	</html:select>
+         		<% } else { %>
+         		<html:select name="agentForm" property="subcompany_id" styleClass="dropdown">
+                	<html:options collection="subcompList" property="value" labelProperty="label" />
+             	</html:select>
+         		<% } %>
             </td>
           </tr>
           <tr>

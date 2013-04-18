@@ -266,10 +266,17 @@
 						<td style="width:34%%;" colspan=2>
 							<bean:message key="colname.lf.found.company" />&nbsp;<span class="reqfield">*</span>
 							<br>
-		            		<html:select name="enterItemsForm" property="found.companyId" styleClass="dropdown" styleId="foundCompanyId" onchange="getStations();">
+		            		<% if(a.getSubcompany()!=null){ %>
+         					<html:select name="enterItemsForm" property="found.companyId" disabled="true" styleClass="dropdown" styleId="foundCompanyId" onchange="getStations();">
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		            			<html:options collection="subComplist" property="subcompanyCode" labelProperty="subcompanyCode" />
 		            		</html:select>
+         					<% } else { %>
+         					<html:select name="enterItemsForm" property="found.companyId" styleClass="dropdown" styleId="foundCompanyId" onchange="getStations();">
+		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+		            			<html:options collection="subComplist" property="subcompanyCode" labelProperty="subcompanyCode" />
+		            		</html:select>
+         					<% } %>
            				</td>
 						<td style="width:33%;" colspan=2>
 							<bean:message key="colname.lf.found.location" />&nbsp;<span class="reqfield">*</span>

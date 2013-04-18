@@ -119,13 +119,14 @@ public class SmsEmailService {
 							he.setSubject(mySubjectLine);
 
 							String imageFileName = TracerProperties.get(incident.getAgent().getCompanycode_ID(),"email.logo");
-
-							URL resource = Thread.currentThread().getContextClassLoader().getResource(TracerProperties.get(incident.getAgent().getCompanycode_ID(),"email.logo.path"));
+							String root = TracerProperties.get(incident.getAgent().getCompanycode_ID(),"email.logo.path");
+							
+							//URL resource = Thread.currentThread().getContextClassLoader().getResource(TracerProperties.get(incident.getAgent().getCompanycode_ID(),"email.logo.path"));
 
 							String img1 = "";
-							if (resource != null) {
-								logger.info("resource is set to:" + resource.toString());
-								img1 = he.embed(new URL(resource.toString()), imageFileName);
+							if (root != null) {
+								logger.info("resource is set to:" + root+imageFileName);
+								img1 = he.embed(new URL("file:"+root+imageFileName),imageFileName);
 							}
 							h.put("LOGO_IMG", img1);
 
