@@ -275,6 +275,8 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFPerson"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFPhone"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFLossInfo"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFShipping"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFTransaction"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFCategory" />
