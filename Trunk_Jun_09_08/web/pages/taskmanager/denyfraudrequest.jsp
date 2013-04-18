@@ -18,7 +18,6 @@
 <html:form action="fraudRequests.do" method="post">
   <input type="hidden" name="request_ID" value='<%= request.getAttribute("deny_ID") %>'>
   <input type="hidden" name="deny" value="1">
-  <input type="hidden" name="resetFilter" value="1">
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   <tr>
     
