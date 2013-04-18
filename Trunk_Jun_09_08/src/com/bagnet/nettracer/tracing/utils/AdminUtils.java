@@ -1138,26 +1138,20 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Subcompany.class);
-			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
-			cri.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-//			String code = null;
-//
-//			if (form != null) {
-//				code = form.getSubcompanyCode();
-//			}
-//
-//			if (code != null && code.length() > 0) {
-//				cri.add(Expression.like("subcompanyCode", code));
-//			}
-			cri.addOrder(Order.asc("subcompanyCode"));
+			String sql = "from Subcompany s where s.company.companyCode_ID = :companycode" +
+					" order by subcompanyCode asc";
+			
+			Query q = sess.createQuery(sql);
+			q.setParameter("companycode", companyCode);
+
+		
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
-				cri.setFirstResult(startnum);
-				cri.setMaxResults(rowsperpage);
+				q.setFirstResult(startnum);
+				q.setMaxResults(rowsperpage);
 			}
-			return cri.list();
+			return q.list();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;
@@ -1198,9 +1192,11 @@ public class AdminUtils {
 	public static List getSubcompanyStationsBySubcompany(long subcompId){
 		Session sess = null;
 		try {
+			Subcompany sub = new Subcompany();
+			sub.setId(subcompId);
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(SubcompanyStation.class);
-			cri.createCriteria("subcompany").add(Expression.eq("id", subcompId));
+			cri.add(Expression.eq("subcompany", sub));
 			return cri.list();
 			
 		} catch (Exception e) {

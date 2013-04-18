@@ -317,7 +317,7 @@ public final class ManageSubCompany extends Action {
 //								rowsperpage, currpage);
 //						else 
 							stations = AdminUtils.getStations(subcomp.getCompany().getCompanyCode_ID(), //"", SCForm,
-								rowsperpage, currpage);
+								0, 0);
 							
 						if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 						if (totalpages > 1) {

@@ -16,7 +16,6 @@
     o.prevpage.value = "1";
     o.pagination.value="1";
     o.edit.value = "1";
-    o.Id.value = "<bean:write name="subCompanyForm" property="id"/>";
     o.submit();
   }
 
@@ -25,7 +24,6 @@
     o.nextpage.value="1";
     o.pagination.value="1";
     o.edit.value = "1";
-    o.Id.value = "<bean:write name="subCompanyForm" property="id"/>";
     o.submit();
   }
 
@@ -34,11 +32,11 @@
     o.currpage.value = i;
     o.pagination.value="1";
     o.edit.value = "1";
-    o.Id.value = "<bean:write name="subCompanyForm" property="id"/>";
     o.submit();
 
   }
   function updatePagination() {
+	    o.edit.value = "1";
 	    return true;
 	}
 

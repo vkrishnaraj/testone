@@ -9,21 +9,21 @@
 <script language="javascript">
   
   function goprev() {
-    o = document.stationForm;
+    o = document.subCompanyForm;
     o.prevpage.value = "1";
     o.pagination.value="1";
     o.submit();
   }
 
   function gonext() {
-    o = document.stationForm;
+    o = document.subCompanyForm;
     o.nextpage.value="1";
     o.pagination.value="1";
     o.submit();
   }
 
   function gopage(i) {
-    o = document.stationForm;
+    o = document.subCompanyForm;
     o.currpage.value = i;
     o.pagination.value="1";
     o.submit();

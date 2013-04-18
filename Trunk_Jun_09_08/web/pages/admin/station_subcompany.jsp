@@ -91,17 +91,6 @@ function updatePagination() {
                 <span class="bold"><bean:message key="companyCodeText" />
                   :</span>
                 <bean:write name="subCompanyForm" property="companyCode" />
-                |
-                <span class="bold"><bean:message key="header.stationCode" />
-                  :</span>
-                <logic:present name="stationList">
-                  <html:select styleClass="dropdown" property="id" onchange="submit()">
-                    <html:option value="-1">
-                      <bean:message key="select.all" />
-                    </html:option>
-                    <html:options collection="subCompList" property="id" labelProperty="subcompanyCode" />
-                  </html:select>
-                </logic:present>
                 <logic:present name="subCompantForm" property="id">
                   <html:hidden property="id" />
                 </logic:present>
@@ -160,12 +149,6 @@ function updatePagination() {
 		            </logic:present>
             
               
-              
-              <tr>
-                <td colspan="10">
-                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                </td>
-              </tr>
               
               <tr>
                 <td colspan="10">
