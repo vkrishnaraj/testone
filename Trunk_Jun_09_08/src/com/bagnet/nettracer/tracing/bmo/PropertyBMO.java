@@ -150,6 +150,8 @@ public class PropertyBMO {
 	public static final String LF_EMAIL_RETURNADDR_SECOND = "lf.email.returnaddr.second";
 	public static final String LF_EMAIL_RETURNADDR_CLOSE = "lf.email.returnaddr.close";
 	
+	public static final String LF_EMAIL_ONLINE_BILLING = "lf.email.online.billing";
+	
 	public static final String LF_TRACING_USE_CACHE = "lf.tracing.use.cache";
 	public static final String LF_TRACING_CACHE_SIZE = "lf.tracing.cache.size";
 	public static final String LF_TRACING_CACHE_EXPIRE = "lf.tracing.cache.expire";
@@ -183,6 +185,13 @@ public class PropertyBMO {
 	public static final String TRACING_STATUS_BLOCK_WT = "tracing.status.block.wt";
 	
 	public static final String SPOKEN_LANGUAGE_LIST = "spoken.language.list";
+	
+	public static final String FEDEX_ADDRESS_ENDPOINT = "fedex.address.endpoint";
+	public static final String FEDEX_RATE_ENDPOINT = "fedex.rate.endpoint";
+	public static final String FEDEX_ACCOUNT_NUMBER = "fedex.account.number";
+	public static final String FEDEX_METER_NUMBER = "fedex.meter.number";
+	public static final String FEDEX_KEY = "fedex.key";
+	public static final String FEDEX_PASSWORD = "fedex.password";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

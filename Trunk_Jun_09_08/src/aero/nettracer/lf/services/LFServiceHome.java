@@ -18,6 +18,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
+import com.bagnet.nettracer.tracing.db.lf.LFShipping;
 import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
@@ -103,5 +104,7 @@ public interface LFServiceHome {
 
 	public List<LFMatchHistory> traceLostItem(long id, boolean isPrimary);
 	public List<LFMatchHistory> traceFoundItem(long id, boolean isPrimary);
+
+	public LFShipping getShipment(long id);
 	
 }

@@ -74,6 +74,9 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 	private String remarks;
 	
 	private String vantiveNumber;
+	
+	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFShipping.class, cascade = CascadeType.ALL)
+	private LFShipping shipment;
 
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPerson.class, cascade = CascadeType.ALL)
 	private LFPerson client;
@@ -160,6 +163,14 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 
 	public void setClient(LFPerson client) {
 		this.client = client;
+	}
+
+	public LFShipping getShipment() {
+		return shipment;
+	}
+
+	public void setShipment(LFShipping shipment) {
+		this.shipment = shipment;
 	}
 
 	public LFLossInfo getLossInfo() {

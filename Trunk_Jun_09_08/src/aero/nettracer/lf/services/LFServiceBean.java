@@ -19,14 +19,14 @@ import javax.mail.internet.InternetAddress;
 import org.apache.commons.lang.WordUtils;
 import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
-import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.StandardBasicTypes;
+import org.springframework.beans.BeanUtils;
 
 import aero.nettracer.general.services.GeneralServiceBean;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
@@ -42,6 +42,7 @@ import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.lf.LFAddress;
 import com.bagnet.nettracer.tracing.db.lf.LFBoxContainer;
 import com.bagnet.nettracer.tracing.db.lf.LFBoxCount;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
@@ -53,6 +54,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvageFound;
 import com.bagnet.nettracer.tracing.db.lf.LFSegment;
+import com.bagnet.nettracer.tracing.db.lf.LFShipping;
 import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.db.lf.SubcompanyStation;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
@@ -108,6 +110,29 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess.close();
 		}
 		return f;
+	}
+	
+	@Override
+	public LFShipping getShipment(long id) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		List<LFShipping> f = null;
+		LFShipping shipment=null;
+		try{
+			String sql;
+			sql="from com.bagnet.nettracer.tracing.db.lf.LFShipping s where s.lost.id= ";
+			Query q = sess.createQuery(sql + id);
+			f = (List<LFShipping>)  q.list();
+			if(f!=null){
+				shipment=f.get(0);
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return shipment;
+		
 	}
 
 	@Override
@@ -509,6 +534,35 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	@Override
 	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent) throws UpdateException {
 		return saveOrUpdateLostReport(lostReport, agent, false);
+	}
+	
+
+	public void saveOrUpdateShipping(LFShipping shipment) throws UpdateException {
+		Session sess = null;
+		Transaction t = null;
+		
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(shipment);
+			t.commit();
+		}catch (Exception e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent, boolean paxView) throws UpdateException {
@@ -2175,6 +2229,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			h.put("SUBJECTLINE", resources.getString("dm.email.subject"));
 		}
 		
+		h.put("HASH", ""+lost.getClient().getDecryptedEmail().hashCode());
+		
 		return h;
 	}
 	
@@ -3310,21 +3366,75 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 //			}
 //		}
 //	}
+	public LFAddress createShippingAddress(LFLost lost){
+		LFAddress shipping=new LFAddress();
+		BeanUtils.copyProperties(lost.getClient().getAddress(), shipping);
+		shipping.setId(0);
+		return shipping;
+	}
+	
+	public LFShipping createAndSaveShipping(LFLost lost){
+		LFShipping shipment=new LFShipping();
+		shipment.setLost(lost);
+		shipment.setClient(lost.getClient());
+		shipment.setShippingAddress(createShippingAddress(lost));
+		Session sess = null;
+		Transaction t = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(shipment);
+			t.commit();
+			return shipment;
+		}catch (Exception e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
 	
 	public boolean sendFoundEmail(long id){
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
 		if(!lost.isFoundEmail()){
-			if(sendEmail(lost, h, "found_report_email.html", h.get("SUBJECTLINE"))){
-				lost.setEmailSentDate(new Date());
-				lost.setFoundEmail(true);
-				try {
-					saveOrUpdateLostReport(lost,getAutoAgent());
-					Logger.logLF(""+id, "FOUND EMAIL SENT", 0);
-				} catch (UpdateException e) {
-					e.printStackTrace();
+			if(PropertyBMO.isTrue(PropertyBMO.LF_EMAIL_ONLINE_BILLING)){
+				if(sendEmail(lost, h, "found_report_online.html", h.get("SUBJECTLINE"))){
+					try {
+						lost.setShipment(createAndSaveShipping(lost));
+						lost.setEmailSentDate(new Date());
+						lost.setFoundEmail(true);
+						saveOrUpdateLostReport(lost,getAutoAgent());
+						Logger.logLF(""+id, "FOUND EMAIL SENT", 0);
+					} catch (UpdateException e) {
+						e.printStackTrace();
+					}
+					return true;
 				}
-				return true;
+			} else {
+				if(sendEmail(lost, h, "found_report_email.html", h.get("SUBJECTLINE"))){
+					lost.setEmailSentDate(new Date());
+					lost.setFoundEmail(true);
+					try {
+						saveOrUpdateLostReport(lost,getAutoAgent());
+						Logger.logLF(""+id, "FOUND EMAIL SENT", 0);
+					} catch (UpdateException e) {
+						e.printStackTrace();
+					}
+					return true;
+				}
 			}
 		}
 		return false;
