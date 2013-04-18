@@ -12,9 +12,12 @@ import javax.naming.NamingException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 import aero.nettracer.lf.services.LFCClientServiceRemote;
+import aero.nettracer.lfc.model.AddressBean;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.KeyValueBean;
 import aero.nettracer.lfc.model.LostReportBean;
+import aero.nettracer.lfc.model.RateBean;
+import aero.nettracer.lfc.model.ShippingBean;
 
 public class RemoteService {
 	static String user = null;
@@ -213,6 +216,63 @@ public class RemoteService {
 			}
 			if (o != null) {
 				toReturn = o.saveOrUpdateLostReport(bean);
+			}
+			ctx.close();
+		} catch (NamingException ex) {
+			ex.printStackTrace();
+		}
+		return toReturn;
+	}
+	
+	public static ShippingBean createReportAndShip(LostReportBean bean) {
+		ShippingBean toReturn = null;
+		try {
+			LFCClientServiceRemote o;
+			if (bean != null && bean.getCompany() != null && bean.getCompany().equals(TracingConstants.LF_AB_COMPANY_ID)) {
+				o = getRemoteServiceAB();
+			} else {
+				o = getRemoteServiceLF();
+			}
+			if (o != null) {
+				toReturn = o.saveOrUpdateShipping(bean);
+			}
+			ctx.close();
+		} catch (NamingException ex) {
+			ex.printStackTrace();
+		}
+		return toReturn;
+	}
+	
+	public static AddressBean validateAddressFedex(LostReportBean bean) {
+		AddressBean toReturn = null;
+		try {
+			LFCClientServiceRemote o;
+			if (bean != null && bean.getCompany() != null && bean.getCompany().equals(TracingConstants.LF_AB_COMPANY_ID)) {
+				o = getRemoteServiceAB();
+			} else {
+				o = getRemoteServiceLF();
+			}
+			if (o != null) {
+				toReturn = o.validateAddressFedex(bean);
+			}
+			ctx.close();
+		} catch (NamingException ex) {
+			ex.printStackTrace();
+		}
+		return toReturn;
+	}
+	
+	public static List<RateBean> getRatesForAddress(LostReportBean bean) {
+		List<RateBean> toReturn = null;
+		try {
+			LFCClientServiceRemote o;
+			if (bean != null && bean.getCompany() != null && bean.getCompany().equals(TracingConstants.LF_AB_COMPANY_ID)) {
+				o = getRemoteServiceAB();
+			} else {
+				o = getRemoteServiceLF();
+			}
+			if (o != null) {
+				toReturn = o.getRatesForAddress(bean);
 			}
 			ctx.close();
 		} catch (NamingException ex) {

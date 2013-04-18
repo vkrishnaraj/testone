@@ -1,13 +1,13 @@
 package aero.nettracer.lfc.control;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -17,10 +17,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import aero.nettracer.lfc.faces.util.FacesUtil;
+import aero.nettracer.lfc.model.AddressBean;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.KeyValueBean;
 import aero.nettracer.lfc.model.LostReportBean;
+import aero.nettracer.lfc.model.PhoneBean;
+import aero.nettracer.lfc.model.RateBean;
 import aero.nettracer.lfc.model.SegmentBean;
+import aero.nettracer.lfc.model.ShippingBean;
 import aero.nettracer.lfc.service.ClientViewService;
 
 @Component("lostAndFound")
@@ -30,7 +34,7 @@ public class LostAndFoundController {
 
 	private static Logger logger = Logger
 			.getLogger(LostAndFoundController.class);
-	private LostReportBean lostReport = new LostReportBean();
+	private LostReportBean lostReport = new LostReportBean(); 
 	private boolean update;
 	
 	private List<SelectItem> locations;
@@ -40,10 +44,25 @@ public class LostAndFoundController {
 	private List<SelectItem> states;
 	private List<SelectItem> countries;
 	private List<CategoryBean> categories;
+	private List<RateBean> rates;
+	private List<SelectItem> ratesList;
 	private String statePickUp;
 	private String stateDropOff;
 	private List<SelectItem> locationsPickUp;
 	private List<SelectItem> locationsDropOff;
+	private AddressBean billingAddress;
+	private AddressBean shippingAddress;
+	private PhoneBean shippingPhone;
+	private String selectedoption;
+	private String ccnumber;
+	private String ccname;
+	private String ccvendor;
+	private String ccexpirationmonth;
+	private String ccexpirationyear;
+	private String ccsecurity;
+	private List<SelectItem> ccvendors;
+	
+	private String prefAddress;
 	
  
 	@Autowired
@@ -54,8 +73,37 @@ public class LostAndFoundController {
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 		.getExternalContext().getSession(false);
 		lostReport = (LostReportBean) session.getAttribute("lostReport");
+		shippingAddress=(AddressBean)session.getAttribute("shippingAddress");
+		shippingPhone=lostReport.getContact().getShippingPhone();
+		rates=(List<RateBean>)session.getAttribute("rates");
+		
 		if (getSubCompany() != null && getSubCompany().equals("SWA") ) {
 			setSegmentLocationDesc(lostReport.getSegments());
+		}
+		
+		if(lostReport!=null && lostReport.getContact()!=null && lostReport.getContact().getPrefshipaddress()!=null && lostReport.getContact().getPrefshipaddress().getAddress1()!=null){
+			session.setAttribute("shippingOptions", (List<SelectItem>)session.getAttribute("shippingOptions")); //To Make method to get FedEx options based on PrefShipAddress
+		}
+		
+		if(lostReport!=null && lostReport.getContact()!=null){
+			if(shippingAddress==null || (shippingAddress!=null && shippingAddress.getAddress1()==null)){
+				shippingAddress=new AddressBean();
+				if(lostReport.getContact().getPrefshipaddress().getAddress1()!=null){
+					populateShippingAddress(lostReport.getContact().getPrefshipaddress());
+				} else {
+					populateShippingAddress(lostReport.getContact().getAddress());
+				}
+			}
+			if(shippingPhone==null){
+				shippingPhone=new PhoneBean();
+				shippingPhone.setNumber(lostReport.getContact().getPrimaryPhone().getNumber());
+				shippingPhone.setExtension(lostReport.getContact().getPrimaryPhone().getExtension());
+			}
+			
+			session.setAttribute("shippingAddress", shippingAddress);
+			session.setAttribute("shippingPhone", shippingPhone);
+			session.setAttribute("rates", rates);
+			session.setAttribute("optionselected", false);
 		}
 		update = (session.getAttribute("edit")!=null && session.getAttribute("edit").equals(true));
 		if (getCompany() == null) {
@@ -79,7 +127,15 @@ public class LostAndFoundController {
 	public void setLostReport(LostReportBean lostReport) {
 		this.lostReport = lostReport;
 	}
-	
+	public void populateShippingAddress(AddressBean address){
+		shippingAddress.setAddress1(address.getAddress1());
+		shippingAddress.setAddress2(address.getAddress2());
+		shippingAddress.setCity(address.getCity());
+		shippingAddress.setCountry(address.getCountry());
+		shippingAddress.setProvince(address.getProvince());
+		shippingAddress.setPostal(address.getPostal());
+		shippingAddress.setState(address.getState());
+	}
 	public String createReport() {
 		if (validate()) {
 			long id = clientViewService.create(lostReport);
@@ -110,12 +166,113 @@ public class LostAndFoundController {
 		return null;
 	}
 	
+	public String confirmShipping() {
+
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+		.getExternalContext().getSession(false);
+		if(prefAddress!=null){
+			if(prefAddress.equals("Current")){
+				lostReport.getContact().setPrefshipaddress(shippingAddress);
+			} else if (prefAddress.equals("Proposed")){
+				lostReport.getContact().setPrefshipaddress((AddressBean)session.getAttribute("proposedAddress"));
+			}
+		} else {
+			lostReport.getContact().setPrefshipaddress(shippingAddress);
+		}
+		lostReport.getContact().setShippingPhone(shippingPhone);
+		if (validateShipAddress()) { //checkAddressViaFedex
+			
+			rates=clientViewService.getRatesForAddress(lostReport);
+			List<SelectItem> shippingOptions=getRatesList();
+			if (shippingOptions != null) {
+				long id = clientViewService.create(lostReport);
+				//List<SelectItem> shippingOptions=ratesToSelectItem(rates); // new ArrayList<SelectItem>();//=getOptionsOnAddress();
+				//create Shipping Address for contact and mark it as the preferred Shipping Address and then get Shipping options and rates
+				lostReport.setReportId(id + "");
+				session.setAttribute("lostReport", lostReport);
+				session.setAttribute("shippingAddress", lostReport.getContact().getPrefshipaddress());
+				session.setAttribute("shippingPhone", lostReport.getContact().getShippingPhone());
+				session.setAttribute("shippingOptions", shippingOptions);
+				session.setAttribute("rates", rates);
+				return "shippingrates?faces-redirect=true";
+			} 
+			FacesUtil.addError("Server Communication Error.");
+		} else if(session.getAttribute("proposedAddress")!=null){
+			return "shippingconfirm?faces-redirect=true";
+		}
+		FacesUtil.addError("Shipping address was not valid. Please confirm.");
+		return null;
+	}
+	
+	public String confirmPayment() {
+		//Check If shipping information is the same.
+		if(validateSameShipping()){
+			if (validateCCInfo()) { //checkCCInf
+				lostReport.setStatus("Ready for Shipping"); //Is this right?
+				ShippingBean shipbean=clientViewService.createAndShip(lostReport);
+				if (clientViewService.sendConfirmationEmail(lostReport) && shipbean!=null) {
+					//Record successful authorization code. Email Customer
+					HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+					.getExternalContext().getSession(false);
+					session.setAttribute("shipbean", shipbean);
+					return "shippingsuccess?faces-redirect=true";
+				}
+				FacesUtil.addError("Server Communication Error.");
+			}
+		//Record invalid CC transaction
+			FacesUtil.addError("Credit Card information is invalid. Please enter double check your credit card information.");
+		} else {
+			FacesUtil.addError("Shipping Information has been changed. Please resubmit Shipping Information to determine proper shipping options and pricing.");
+			return "shippingconfirm?faces-redirect=true";
+		}
+		return null;
+	}
+	
+	public String shipSelectOption() {
+		
+		if (!selectedoption.equals("0")) {
+			RateBean rate=getRate();
+			lostReport.setShippingOption(rate.getRateType());
+			lostReport.setShippingPayment(rate.getRateAmount());
+			long id = clientViewService.create(lostReport); //Save the selected Shipping Option and Rate
+			if (id != -1) {
+				//create Shipping Address for contact and mark it as the preferred Shipping Address and then get Shipping options and rates
+				
+				lostReport.setReportId(id + "");
+				HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+				session.setAttribute("lostReport", lostReport);
+				session.setAttribute("optionselected", true);
+				return "shippingpayment?faces-redirect=true";
+			}
+			FacesUtil.addError("Server Communication Error.");
+		}
+		FacesUtil.addError("Please select a shipping option.");
+		return null;
+	}
+	
 	public String backToLanding() {
 		return "landing?faces-redirect=true";
 	}
 	
 	public String backToLogin() {
 		return "login?faces-redirect=true";
+	}
+	
+	public String backToShippingLogin() {
+		return "shippinglogin?faces-redirect=true";
+	}
+	
+	public String backToShippingConfirm() {
+		return "shippingconfirm?faces-redirect=true";
+	}
+	
+	public String backToShippingRates() {
+		return "shippingrates?faces-redirect=true";
+	}
+	
+	public String backToShippingPayment() {
+		return "shippingpayment?faces-redirect=true";
 	}
 	
 	public String backToBagcheck() {
@@ -141,6 +298,52 @@ public class LostAndFoundController {
 			isValid = validateLF_DEM() && isValid;
 		} else {
 			isValid = validateAB() && isValid;
+		}
+		return isValid;
+	}
+	
+	private boolean validateSameShipping() {
+		boolean isValid=true;
+		if(!shippingAddress.getAddress1().equals(lostReport.getContact().getPrefshipaddress().getAddress1())){
+			isValid=false;
+		}
+		if(!shippingAddress.getAddress2().equals(lostReport.getContact().getPrefshipaddress().getAddress2())){
+			isValid=false;
+		}
+		if(!shippingAddress.getCity().equals(lostReport.getContact().getPrefshipaddress().getCity())){
+			isValid=false;
+		}
+		if(!shippingAddress.getState().equals(lostReport.getContact().getPrefshipaddress().getState())){
+			isValid=false;
+		}
+		if(!shippingAddress.getProvince().equals(lostReport.getContact().getPrefshipaddress().getProvince())){
+			isValid=false;
+		}
+		if(!shippingAddress.getCountry().equals(lostReport.getContact().getPrefshipaddress().getCountry())){
+			isValid=false;
+		}
+		if(!shippingAddress.getPostal().equals(lostReport.getContact().getPrefshipaddress().getPostal())){
+			isValid=false;
+		}
+		if(!shippingAddress.getAddress2().equals(lostReport.getContact().getPrefshipaddress().getAddress2())){
+			isValid=false;
+		}
+		
+		return isValid;
+	}
+	
+	
+	private boolean validateFedex() {
+		boolean isValid = true;
+		if (lostReport.getContact().getFirstName() == null												// VALIDATE: FIRST NAME
+				|| lostReport.getContact().getFirstName().trim().length() == 0) {
+			FacesUtil.addError("ERROR: First Name is required.");
+			isValid = false;
+		}
+		if (lostReport.getContact().getLastName() == null												// VALIDATE: LAST NAME
+				|| lostReport.getContact().getLastName().trim().length() == 0) {
+			FacesUtil.addError("ERROR: Last Name is required.");
+			isValid = false;
 		}
 		return isValid;
 	}
@@ -194,6 +397,127 @@ public class LostAndFoundController {
 				isValid = false;
 			}			
 		}
+		return isValid;
+	}
+	
+	private boolean validateShipAddress() {
+		boolean isValid = true;
+		if(prefAddress!=null && !validateSameShipping()){
+			FacesUtil.addError("ERROR: Shipping Address information has been modified. Resubmitting to Fedex");
+			
+		}
+		if (shippingAddress.getAddress1() == null									// VALIDATE: ADDRESS 1
+				|| shippingAddress.getAddress1().trim().length() == 0) {
+			FacesUtil.addError("ERROR: Address is required.");
+			isValid = false;
+		}
+		if (shippingAddress.getCity() == null										// VALIDATE: CITY
+				|| shippingAddress.getCity().trim().length() == 0) {
+			FacesUtil.addError("ERROR: City is required.");
+			isValid = false;
+		}
+		if (shippingAddress.getCountry() == null									// VALIDATE: COUNTRY
+				|| shippingAddress.getCountry().trim().length() == 0) {
+			FacesUtil.addError("ERROR: Country is required.");
+			isValid = false;
+		} else if (shippingAddress.getCountry().equals("US")){
+			if (shippingAddress.getState() == null									// VALIDATE: STATE
+					|| shippingAddress.getState().trim().length() == 0) {
+				FacesUtil.addError("ERROR: State is required.");
+				isValid = false;
+			}
+			if (shippingAddress.getPostal() == null								// VALIDATE: ZIP CODE
+					|| shippingAddress.getPostal().trim().length() == 0) {
+				FacesUtil.addError("ERROR: Zip Code is required.");
+				isValid = false;
+			}			
+		} else {
+			if (shippingAddress.getProvince() == null								// VALIDATE: PROVINCE
+					|| shippingAddress.getProvince().trim().length() == 0) {
+				FacesUtil.addError("ERROR: Province is required.");
+				isValid = false;
+			}			
+		}
+		if(isValid && (prefAddress==null || (prefAddress!=null && prefAddress.length()==0))){
+			AddressBean validAddress=clientViewService.validateAddressFedex(lostReport);
+			if(validAddress!=null && !validAddress.getScore().equals(BigInteger.valueOf(100))){
+				//Set property to show list of potentially valid options???
+				HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+						.getExternalContext().getSession(false);
+				session.setAttribute("proposedAddress", validAddress);
+				isValid=false;
+			} else if(validAddress==null || (validAddress!=null && !validAddress.getScore().equals(BigInteger.valueOf(100)))){
+				FacesUtil.addError("ERROR: Address not valid by FedEx. Please check your address and confirm it's accurate before submitting again.");
+				isValid = false;
+			}
+		}
+//		if(isValid && !clientViewService.validateAddressFedex(lostReport)){
+//			FacesUtil.addError("ERROR: Address not valid by FedEx.");
+//			isValid=false;
+//		}
+		
+		return isValid;
+	}
+	
+	private boolean validateCCInfo() {
+		boolean isValid = true;
+		if (ccnumber== null || ccnumber.length() == 0) {
+			FacesUtil.addError("ERROR: Credit Card Number is required.");
+			isValid = false;
+		}
+		if (ccname == null || ccname.length() == 0) {
+			FacesUtil.addError("ERROR: Name on Credit Card is required.");
+			isValid = false;
+		}
+		if (ccvendor == null || ccvendor.length() == 0) {
+			FacesUtil.addError("ERROR: Credit Card Vendor is required.");
+			isValid = false;
+		}
+		if (ccexpirationmonth==null || ccexpirationmonth.length() == 0 || ccexpirationyear== null || ccexpirationyear.length() == 0) {
+			FacesUtil.addError("ERROR: Credit Card Expiration is required.");
+			isValid = false;
+		}
+		if (ccsecurity==null || ccsecurity.length() == 0) {
+			FacesUtil.addError("ERROR: Credit Card Security Code is required.");
+			isValid = false;
+		}
+		if (lostReport.getContact().getBillingaddress().getAddress1() == null									// VALIDATE: ADDRESS 1
+				|| lostReport.getContact().getBillingaddress().getAddress1().trim().length() == 0) {
+			FacesUtil.addError("ERROR: Billing Address is required.");
+			isValid = false;
+		}
+		if (lostReport.getContact().getBillingaddress().getCity() == null										// VALIDATE: CITY
+				|| lostReport.getContact().getBillingaddress().getCity().trim().length() == 0) {
+			FacesUtil.addError("ERROR: Billing City is required.");
+			isValid = false;
+		}
+		if (lostReport.getContact().getBillingaddress().getCountry() == null									// VALIDATE: COUNTRY
+				|| lostReport.getContact().getBillingaddress().getCountry().trim().length() == 0) {
+			FacesUtil.addError("ERROR: Billing Country is required.");
+			isValid = false;
+		} else if (lostReport.getContact().getBillingaddress().getCountry().equals("US")){
+			if (lostReport.getContact().getBillingaddress().getState() == null									// VALIDATE: STATE
+					|| lostReport.getContact().getBillingaddress().getState().trim().length() == 0) {
+				FacesUtil.addError("ERROR: Billing State is required.");
+				isValid = false;
+			}
+			if (lostReport.getContact().getBillingaddress().getPostal() == null								// VALIDATE: ZIP CODE
+					|| lostReport.getContact().getBillingaddress().getPostal().trim().length() == 0) {
+				FacesUtil.addError("ERROR: Billing Zip Code is required.");
+				isValid = false;
+			}			
+		} else {
+			if (lostReport.getContact().getBillingaddress().getProvince() == null								// VALIDATE: PROVINCE
+					|| lostReport.getContact().getBillingaddress().getProvince().trim().length() == 0) {
+				FacesUtil.addError("ERROR: Billing Province is required.");
+				isValid = false;
+			}
+		}
+		if(isValid && !ccnumber.equals("3214697890")){ //TODO: Implement call to Credit Card validation service
+			FacesUtil.addError("ERROR: Credit Card is not valid. Please reenter correct credit card information.");
+			isValid=false;
+		}
+		
 		return isValid;
 	}
 	
@@ -363,6 +687,22 @@ public class LostAndFoundController {
 
 	public void setCategoryList(List<SelectItem> categoryList) {
 		this.categoryList = categoryList;
+	}
+	
+	public List<SelectItem> getCcvendors() {
+		if(ccvendors==null){
+			List<SelectItem> vendors=new ArrayList<SelectItem>();
+			vendors.add(new SelectItem("VI", "Visa"));
+			vendors.add(new SelectItem("AE", "American Express"));
+			vendors.add(new SelectItem("DS", "Discover"));
+			vendors.add(new SelectItem("MC", "Mastercard"));
+			ccvendors=vendors;
+		}
+		return ccvendors;
+	}
+
+	public void setCcvendors(List<SelectItem> ccvendors) {
+		this.ccvendors = ccvendors;
 	}
 
 	public List<SelectItem> getSubCategories() {
@@ -555,6 +895,21 @@ public class LostAndFoundController {
 		}
 		return testIt;
 	}
+	
+
+	public RateBean getRate() {
+		String ratekey=selectedoption;
+		if (ratekey==null || (ratekey!=null && ratekey.length()==0)) {
+			return null;
+		}
+		if(rates!=null)
+		for (RateBean key : rates) {
+			if (key.getRateKey().equals(ratekey)) {
+				return key;
+			}
+		}
+		return null;
+	}
 
 	public String getStatePickUp() {
 		return statePickUp;
@@ -564,8 +919,96 @@ public class LostAndFoundController {
 		this.statePickUp = statePickUp;
 	}
 
+	public String getPrefAddress() {
+		return prefAddress;
+	}
+
+	public void setPrefAddress(String prefAddress) {
+		this.prefAddress = prefAddress;
+	}
+	
 	public String getStateDropOff() {
 		return stateDropOff;
+	}
+
+	public void setSelectedoption(String selectedoption) {
+		this.selectedoption = selectedoption;
+	}
+
+	public String getSelectedoption() {
+		return selectedoption;
+	}
+
+	public void setCcnumber(String ccnumber) {
+		this.ccnumber = ccnumber;
+	}
+
+	public String getCcnumber() {
+		return ccnumber;
+	}
+
+	public void setCcname(String ccname) {
+		this.ccname = ccname;
+	}
+
+	public String getCcname() {
+		return ccname;
+	}
+
+	public void setCcvendor(String ccvendor) {
+		this.ccvendor = ccvendor;
+	}
+
+	public String getCcvendor() {
+		return ccvendor;
+	}
+
+	public void setCcsecurity(String ccsecurity) {
+		this.ccsecurity = ccsecurity;
+	}
+
+	public String getCcsecurity() {
+		return ccsecurity;
+	}
+	
+	public AddressBean getBillingAddress() {
+		return billingAddress;
+	}
+	
+	public void setBillingAddress(AddressBean billingAddress) {
+		this.billingAddress = billingAddress;
+	}
+	
+	public AddressBean getShippingAddress() {
+		return shippingAddress;
+	}
+	
+	public void setShippingAddress(AddressBean shippingAddress) {
+		this.shippingAddress = shippingAddress;
+	}
+	
+	public PhoneBean getShippingPhone() {
+		return shippingPhone;
+	}
+	
+	public void setShippingPhone(PhoneBean shippingPhone) {
+		this.shippingPhone= shippingPhone;
+	}
+
+	public void setCcexpirationmonth(String ccexpirationmonth) {
+		this.ccexpirationmonth = ccexpirationmonth;
+	}
+	
+	public String getCcexpirationmonth() {
+		return ccexpirationmonth;
+	}
+
+	public void setCcexpirationyear(String ccexpirationyear) {
+		this.ccexpirationyear = ccexpirationyear;
+	}
+	
+	public String getCcexpirationyear() {
+		return ccexpirationyear;
 	}
 
 	public void setStateDropOff(String stateDropOff) {
@@ -584,6 +1027,30 @@ public class LostAndFoundController {
 			lostReport.getSegments().remove(size - 1);
 		}
 		return null;
+	}
+
+	public List<RateBean> getRates() {
+		return rates;
+	}
+
+	public void setRates(List<RateBean> rates) {
+		this.rates = rates;
+	}
+
+	public List<SelectItem> getRatesList() {
+		ratesList = new ArrayList<SelectItem>();
+		if (rates != null) {
+			for (RateBean rate: rates) {
+				if (rate != null) {
+					ratesList.add(new SelectItem(rate.getRateKey()+ "", rate.getRateType()+" - "+rate.getRateAmount()));
+				}
+			}
+		}
+		return ratesList;
+	}
+
+	public void setRatesList(List<SelectItem> ratesList) {
+		this.ratesList = ratesList;
 	}
 	
 }

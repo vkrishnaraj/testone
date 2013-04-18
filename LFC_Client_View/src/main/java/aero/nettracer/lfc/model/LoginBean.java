@@ -8,6 +8,7 @@ public class LoginBean implements Serializable{
 	
 	private String lastName;
 	private String trackingNumber;
+	private String hashKey;
 
 	public String getLastName() {
 		return lastName;
@@ -24,5 +25,14 @@ public class LoginBean implements Serializable{
 	public void setTrackingNumber(String trackingNumber) {
 		this.trackingNumber = trackingNumber;
 	}
+
+	public String getHashKey() {
+		return hashKey;
+	}
+
+	public void setHashKey(String hashKey) {
+		this.hashKey = hashKey;
+	}
+
 
 }

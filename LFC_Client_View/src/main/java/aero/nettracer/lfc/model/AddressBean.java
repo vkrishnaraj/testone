@@ -1,6 +1,7 @@
 package aero.nettracer.lfc.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 public class AddressBean implements Serializable{
 
@@ -13,6 +14,7 @@ public class AddressBean implements Serializable{
 	private String province;
 	private String postal;
 	private String country;
+	private BigInteger score;
 
 	public String getAddress1() {
 		return address1;
@@ -68,6 +70,14 @@ public class AddressBean implements Serializable{
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public BigInteger getScore() {
+		return score;
+	}
+
+	public void setScore(BigInteger score) {
+		this.score = score;
 	}
 
 }

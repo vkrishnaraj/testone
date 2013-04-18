@@ -9,6 +9,7 @@ public class PhoneBean implements Serializable{
 	private static final long serialVersionUID = -6086762016588491652L;
 	
 	private String number;
+	private String extension;
 	private int type;
 	
 	//Putting Constants here so that ui has access.
@@ -23,6 +24,14 @@ public class PhoneBean implements Serializable{
 
 	public void setNumber(String number) {
 		this.number = number;
+	}
+
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
 	}
 
 	public int getType() {

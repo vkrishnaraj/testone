@@ -39,6 +39,13 @@ public class LostReportBean implements Serializable{
 	private String disposition;
 	private String trackingNumber;
 	private String reportId;
+	
+	//Shipping
+	private double declaredValue;
+	private String shippingPayment;
+	private String shippingOption;
+	
+	private boolean shipping=false;
 
 	public String getItemDate() {
 		return itemDate;
@@ -56,6 +63,14 @@ public class LostReportBean implements Serializable{
 		this.agreementNumber = agreementNumber;
 	}
 
+	public boolean IsShipping() {
+		return shipping;
+	}
+
+	public void setShipping(boolean shipping) {
+		this. shipping =  shipping;
+	}
+	
 	public String getMvaNumber() {
 		return mvaNumber;
 	}
@@ -78,6 +93,14 @@ public class LostReportBean implements Serializable{
 
 	public void setItemBrand(String itemBrand) {
 		this.itemBrand = itemBrand;
+	}
+
+	public double getDeclaredValue() {
+		return declaredValue;
+	}
+
+	public void setDeclaredValue(double declaredValue) {
+		this.declaredValue = declaredValue;
 	}
 
 	public String getItemSerial() {
@@ -267,6 +290,22 @@ public class LostReportBean implements Serializable{
 
 	public void setSegments(List<SegmentBean> segments) {
 		this.segments = segments;
+	}
+
+	public String getShippingPayment() {
+		return shippingPayment;
+	}
+
+	public void setShippingPayment(String shippingPayment) {
+		this.shippingPayment = shippingPayment;
+	}
+
+	public String getShippingOption() {
+		return shippingOption;
+	}
+
+	public void setShippingOption(String shippingOption) {
+		this.shippingOption = shippingOption;
 	}
 
 }

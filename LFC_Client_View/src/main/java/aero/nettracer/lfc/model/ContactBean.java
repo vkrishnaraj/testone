@@ -13,7 +13,10 @@ public class ContactBean implements Serializable{
 	private String confirmEmail;
 	private PhoneBean primaryPhone = new PhoneBean();
 	private PhoneBean secondaryPhone = new PhoneBean();
+	private PhoneBean shippingPhone = new PhoneBean();
 	private AddressBean address = new AddressBean();
+	private AddressBean prefshipaddress = new AddressBean();
+	private AddressBean billingaddress = new AddressBean();
 	
 	public String getLastName() {
 		return lastName;
@@ -77,6 +80,30 @@ public class ContactBean implements Serializable{
 
 	public void setAddress(AddressBean address) {
 		this.address = address;
+	}
+
+	public AddressBean getPrefshipaddress() {
+		return prefshipaddress;
+	}
+
+	public void setPrefshipaddress(AddressBean prefshipaddress) {
+		this.prefshipaddress = prefshipaddress;
+	}
+
+	public AddressBean getBillingaddress() {
+		return billingaddress;
+	}
+
+	public void setBillingaddress(AddressBean billingaddress) {
+		this.billingaddress = billingaddress;
+	}
+
+	public PhoneBean getShippingPhone() {
+		return shippingPhone;
+	}
+
+	public void setShippingPhone(PhoneBean shippingPhone) {
+		this.shippingPhone = shippingPhone;
 	}
 
 }

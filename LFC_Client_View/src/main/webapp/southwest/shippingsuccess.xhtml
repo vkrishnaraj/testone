@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/southwest_template.xhtml">
+	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form>
+			<h:panelGroup>
+				<p class="contentHeader"><t:outputText value="#{msg.success_shipping_text_title}" escape="false"/></p>
+				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_confirm_title}" /></p><br/>
+				<!-- Receipt Information -->
+				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_order_summary}" /></p><br/>
+				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_purchase_info}" /></p><br/>
+				<p><t:outputText value="#{msg.success_purchase_info_email}" />: <t:outputText value="#{shipbean.client.emailAddress}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_purchase_billing}" />:<br/>
+				 	<t:outputText value="#{shipbean.client.firstName} #{shipbean.client.lastName}"/><br/>
+				 	<t:outputText value="#{shipbean.billingAddress.address1} #{shipbean.billingAddress.address2}"/><br/>
+				 	<t:outputText value="#{shipbean.billingAddress.city}, #{shipbean.billingAddress.state} #{shipbean.billingAddress.postal} #{shipbean.billingAddress.country}"/><br/><br/>
+				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}" />:<br/>
+				 	<t:outputText value="#{shipbean.shippingAddress.address1} #{shipbean.shippingAddress.address2}"/><br/>
+				 	<t:outputText value="#{shipbean.shippingAddress.city}, #{shipbean.shippingAddress.state} #{shipbean.shippingAddress.postal} #{shipbean.shippingAddress.country}"/></p><br/><br/>
+				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}" />: <t:outputText value="#{shipbean.shippingOption}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_order_total}" />: <t:outputText value="#{shipbean.totalPayment}"/><br/><br/>
+				<!-- End Receipt Information -->
+				<!-- Add Transaction Information -->
+				<t:outputText value="TO BE ADDED: TRANSACTIONAL INFORMATION"/>
+				<!-- End Transaction Info -->
+				<p class="twlvPxBlk"><t:outputText value="#{msg.success_shipping_text_print}" /></p><br/><br/>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

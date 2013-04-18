@@ -3,6 +3,8 @@ package aero.nettracer.lfc.control;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Component;
 import aero.nettracer.lfc.faces.util.FacesUtil;
 import aero.nettracer.lfc.model.LoginBean;
 import aero.nettracer.lfc.model.LostReportBean;
+import aero.nettracer.lfc.model.AddressBean;
 import aero.nettracer.lfc.remote.RemoteService;
 import aero.nettracer.lfc.service.ClientViewService;
 
@@ -63,6 +66,22 @@ public class LostAndFoundLoginController {
 		return login(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_SWA_COMPANY_ID);
 	}
 	
+	public String loginShippingAvis() {
+		return loginShipping(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_AVIS_COMPANY_ID);
+	}
+	
+	public String loginShippingBudget() {
+		return loginShipping(TracingConstants.LF_AB_COMPANY_ID, TracingConstants.LF_BUDGET_COMPANY_ID);
+	}
+	
+	public String loginShippingSouthwest() {
+		return loginShipping(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_SWA_COMPANY_ID);
+	}
+	
+	public String loginShippingAirtran() {
+		return loginShipping(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_SWA_COMPANY_ID);
+	}
+	
 	public String loginDemo() {
 		return login(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_DEMO_COMPANY_ID);
 	}
@@ -88,6 +107,36 @@ public class LostAndFoundLoginController {
 				
 			} else {
 				return "status?faces-redirect=true";
+			}
+		}
+		return null;
+	}
+	
+	public String loginShipping(String company, String subCompany) {
+		FacesContext context = FacesContext.getCurrentInstance();
+		Map<String, String> paramMap = context.getExternalContext().getRequestParameterMap();
+		String hashKey= paramMap.get("id");
+		LostReportBean report=null;
+		report = clientViewService.loginShipping(login, company,"");
+		
+		if (report != null) {
+			report.setSubCompany(subCompany);
+			report.setCompany(company);
+			report.setShipping(true);
+			HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+			.getExternalContext().getSession(false);
+			session.setAttribute("lostReport", report);
+			session.setAttribute("shippingAddress", null);
+			session.setAttribute("proposedAddress", null);
+			if(TracingConstants.LF_SWA_COMPANY_ID.equals(subCompany)) {
+				if(report.getStatus().equals("Closed") || report.getDaysFromCreate() > 30 )  { 
+					return "closedform?faces-redirect=true";
+				} else {
+					session.setAttribute("edit", true);
+					return "shippingconfirm?faces-redirect=true";
+				} 
+			} else {
+				return "shippingconfirm?faces-redirect=true";
 			}
 		}
 		return null;
