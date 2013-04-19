@@ -282,7 +282,7 @@ public class FedexUtils {
 		}
 	}
 	
-	static ArrayList<RateBean> getRates(AddressBean ship, double declaredValue){
+	static ArrayList<RateBean> getRates(AddressBean ship, double declaredValue, float weight){
 		boolean getAllRatesFlag = true; 
 		RateServiceStub stub=null;
 		try {
@@ -360,11 +360,11 @@ public class FedexUtils {
 	    RequestedPackageLineItem rp = requestedShipment.addNewRequestedPackageLineItems();
 	    rp.setGroupPackageCount(new NonNegativeInteger("1"));
 	    Weight w=rp.addNewWeight();
-	    w.setUnits(WeightUnits.LB); //update method to be dynamic with weight
-	    w.setValue(new BigDecimal(15.0)); //update method to be dynamic with weight
+	    w.setUnits(WeightUnits.LB); 
+	    w.setValue(new BigDecimal(weight)); 
 	    rp.setWeight(w);
 	    Money m=rp.addNewInsuredValue();
-	    m.setCurrency("USD"); //update method to be dynamic?
+	    m.setCurrency("USD"); 
 	    BigDecimal insuredValue=new BigDecimal("0.00");
 	    if(declaredValue>=150){
 			DecimalFormat format = (DecimalFormat) java.text.NumberFormat.getInstance();

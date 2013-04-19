@@ -71,6 +71,19 @@
 	   	<% } %>
 	}
 	
+	function validateWeight(matchId, form) {
+	   var validWeight=prompt("Please confirm this is the correct weight:",document.getElementById("weight").value)
+	   if(validWeight != "" && validWeight !== null) {
+		    /*document.getElementById("confirm").value="1";
+		    document.getElementById("matchId").value=matchId;
+	   		document.getElementById("weight").value=validWeight;
+	   		form.submit();*/
+	   		location.replace("create_found_item.do?confirm=1&matchId="+matchId+"&validWeight="+validWeight);
+	   } else {
+		   return false;
+	   }
+   }
+	
 
 	function getStations() {
 		var compList=document.getElementById("foundCompanyId");
@@ -343,7 +356,7 @@
 				         							<% } 
 			         								}%>
 			         						<% } else { %>
-			         							<a href='create_found_item.do?confirm=1&matchId=<%=match.getId() %>'><bean:message key="button.do_match" /></a>,&nbsp;
+			         							<a href='#' onclick='validateWeight(<%=match.getId() %>)'><bean:message key="button.do_match" /></a>,&nbsp;
 			         							<a href='create_found_item.do?reject=1&matchId=<%=match.getId() %>'><bean:message key="button.reject" /></a>
 			         						<% } %>
 				        					</td>
@@ -792,10 +805,15 @@
 	         				</td>
 	         			</tr>
 	         			<tr>
-	         				<td colspan=3>
+	         				<td colspan=2>
 	         					<bean:message key="colname.lf.description" />
 	         					<br>
 	         					<input type="text" name="item[<%=i %>].description" class="textfield" size="250" style="width: 95%;" value="<%=item.getDescription() == null ? "" : item.getDescription() %>" />
+	         				</td>
+	         				<td colspan=1>
+	         					<bean:message key="colname.lf.weight" />
+	         					<br>
+	         					<input type="text" id="weight" name="item[<%=i %>].weight" class="textfield" value="<%=item.getWeight()%>" />
 	         				</td>
 	         			</tr>
 	         			<tr>

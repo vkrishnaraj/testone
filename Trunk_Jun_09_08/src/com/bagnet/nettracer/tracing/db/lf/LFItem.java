@@ -54,6 +54,8 @@ public class LFItem implements Serializable{
 	
 	private int value;
 	
+	private float weight;
+	
 	private boolean deliveryRejected;
 	
 	public String getLongDescription() {
@@ -329,6 +331,14 @@ public class LFItem implements Serializable{
 
 	public void setDeliveryRejected(boolean deliveryRejected) {
 		this.deliveryRejected = deliveryRejected;
+	}
+
+	public float getWeight() {
+		return weight;
+	}
+
+	public void setWeight(float weight) {
+		this.weight = weight;
 	}
 
 }

@@ -317,7 +317,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		item.setCaseColor(lostReport.getItemCaseColor());
 		item.setLongDescription(lostReport.getItemLongDesc());
 		item.setSize(lostReport.getItemSize());
-
+		
 		if(lostReport.getLostPhone() != null){
 			LFPhone lostPhone = new LFPhone();
 			if (update && item.getPhone()!=null) {
@@ -407,18 +407,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 					phones.add(toAdd);
 				}
 			}
-			if(lostReport.getContact().getShippingPhone() != null){
-				LFPhone toAdd = new LFPhone();
-				if (update && host.getShipment().getShippingPhone()!=null) {
-					toAdd = host.getShipment().getShippingPhone();
-				}
-				toAdd.setPhoneType(TracingConstants.LF_PHONE_PRIMARY);
-				toAdd.setNumberType(lostReport.getContact().getShippingPhone().getType());
-				toAdd.setPerson(client);
-				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getShippingPhone().getNumber());
-				toAdd.setExtension(lostReport.getContact().getShippingPhone().getExtension());
-				host.getShipment().setShippingPhone(toAdd);
-			}
+			
 			if(!update && phones.size() > 0){
 				client.setPhones(phones);
 			}
@@ -469,6 +458,19 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			host.getShipment().setLost(host);
 			host.getShipment().setShippingOption(lostReport.getShippingOption()); //???
 			host.getShipment().setTotalPayment(lostReport.getShippingPayment()); //???
+			
+			if(lostReport.getContact().getShippingPhone()!=null){
+				LFPhone toAdd = new LFPhone();
+				if (update && host.getShipment().getShippingPhone()!=null) {
+					toAdd = host.getShipment().getShippingPhone();
+				}
+				toAdd.setPhoneType(TracingConstants.LF_PHONE_PRIMARY);
+				toAdd.setNumberType(lostReport.getContact().getShippingPhone().getType());
+				toAdd.setPerson(host.getClient());
+				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getShippingPhone().getNumber());
+				toAdd.setExtension(lostReport.getContact().getShippingPhone().getExtension());
+				host.getShipment().setShippingPhone(toAdd);
+			}
 			
 			if(lostReport.getContact().getPrefshipaddress() != null){
 				LFAddress address = new LFAddress();
@@ -748,7 +750,13 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 	
 	@Override
 	public List<RateBean> getRatesForAddress(LostReportBean bean){
-		return FedexUtils.getRates(bean.getContact().getPrefshipaddress(), bean.getDeclaredValue());
+		LFServiceBean servicebean=new LFServiceBean();
+		LFLost lost =servicebean.getLostReport(Long.valueOf(bean.getReportId()));
+		float weight=(float) 1.0;
+		if(lost.getItem().getFound()!=null && lost.getItem().getFound().getItem()!=null){
+			weight=lost.getItem().getFound().getItem().getWeight();
+		}
+		return FedexUtils.getRates(bean.getContact().getPrefshipaddress(), bean.getDeclaredValue(),weight);
 		
 	}
 

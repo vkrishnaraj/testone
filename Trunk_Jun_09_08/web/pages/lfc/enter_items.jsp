@@ -378,10 +378,15 @@
      						</td>
      					</tr>
      					<tr>
-     						<td colspan=3>
+     						<td colspan=2>
      							<bean:message key="colname.lfc.description" />
      							<br>
      							<html:text name="enterItemsForm" property="found.item.description" size="40" maxlength="30" styleClass="textfield" styleId="description" />
+     						</td>
+     						<td>
+     							<bean:message key="colname.lfc.weight" />
+     							<br>
+     							<html:text name="enterItemsForm" property="found.item.weight" size="15" maxlength="30" styleClass="textfield" styleId="description" value="1.0"/>
      						</td>
      					</tr>
      				</table>
