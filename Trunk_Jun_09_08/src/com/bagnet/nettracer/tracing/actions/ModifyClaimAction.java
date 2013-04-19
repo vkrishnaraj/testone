@@ -35,7 +35,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.type.StandardBasicTypes;
 
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsAddress;
@@ -737,23 +739,22 @@ public class ModifyClaimAction extends CheckedAction {
 		if(IncidentID==null || IncidentID.isEmpty()){
 			return true;
 		}
-		String sql = "select fsi.id from aero.nettracer.fs.model.FsIncident fsi where airlineIncidentId= :incident_id"; //airlineIncMark
+		
+		String sql = "select c.id claim_id, i.id incident_id from fsincident i left outer join fsclaim c on c.incident_id = i.id where i.airlineIncidentId = :incident_id";
+		
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
-			Query q = sess.createQuery(sql);
+			SQLQuery q = sess.createSQLQuery(sql);
 			q.setParameter("incident_id", IncidentID);
-			List result = q.list();
+			q.addScalar("claim_id", StandardBasicTypes.LONG);
+			q.addScalar("incident_id", StandardBasicTypes.LONG);
+			List<Object[]> result = q.list();
 			
 			if(result.isEmpty()){
 				return true;
-			} else if(FSID==0 || !FSID.equals(((Long) result.get(0)))) {
-				String errorsql = "select id from aero.nettracer.fs.model.FsClaim where incident_id= :incident_id"; //airlineIncMark
-				
-				Query q2 = sess.createQuery(sql);
-				q2.setParameter("incident_id", result.get(0));
-				List errorResult = q.list();
-				request.setAttribute("validateAirline", (Long) errorResult.get(0));
+			} else if(FSID==0 || !FSID.equals(((Long) result.get(0)[1]))) {
+				request.setAttribute("validateAirline", (Long) result.get(0)[0]);
 				ActionMessage error = new ActionMessage("error.airlineincident");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
