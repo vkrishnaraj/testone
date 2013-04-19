@@ -89,7 +89,9 @@ public class CacheLockFile implements LockFile{
 				  agent.getAgent_ID(),
 				  agent.getUsername(),
 				  agent.getFirstname(),
-				  agent.getLastname(),
+				  //By US request, to compile with EU privacy policy, only include first initial of last name
+				  (agent.getLastname()!=null && agent.getLastname().trim().length()>0?
+						  agent.getLastname().trim().substring(0,1):""),
 				  agent.getStation().getStationcode()};
 		
 		incidentMap.put(agent.getAgent_ID(), payload);
