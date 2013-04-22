@@ -235,6 +235,17 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		
 		return remote;
 	}
+	
+
+	@Override
+	public LostReportBean getLostReportShipping(long id, String lastname) {
+		LFServiceBean bean=new LFServiceBean();
+		if(bean.getShipment(id)!=null){
+			return getLostReport(id,lastname);
+		}
+		return null;
+		
+	}
 
 	private Agent getWebAgent(){
 		GeneralServiceBean bean = new GeneralServiceBean();

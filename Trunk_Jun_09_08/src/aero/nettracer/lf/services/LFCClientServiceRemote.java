@@ -18,6 +18,7 @@ public interface LFCClientServiceRemote {
 	public String echo(String s);
 
 	public LostReportBean getLostReport(long id, String lastname);
+	public LostReportBean getLostReportShipping(long id, String lastname);
 	public long saveOrUpdateLostReport(LostReportBean lostReport);
 	
 	public ArrayList<KeyValueBean> getColors();
