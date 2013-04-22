@@ -74,7 +74,7 @@ public class ClientViewServiceImpl implements ClientViewService {
 				if (company != null && company.equals(TracingConstants.LF_AB_COMPANY_ID)) {
 					remote = RemoteService.getReportAB(Long.parseLong(id), name);
 				} else {
-					remote = RemoteService.getReportLF(Long.parseLong(id), name); //Check for HashKey before getting report 
+					remote = RemoteService.getReportShippingLF(Long.parseLong(id), name); //Check for HashKey before getting report 
 				}
 				if (remote != null) {
 					if (remote.getReportId() != null) {
@@ -92,7 +92,7 @@ public class ClientViewServiceImpl implements ClientViewService {
 					}
 					FacesUtil.addError("ERROR: Server Communication Error.");
 				} else {
-					FacesUtil.addError("ERROR: Last Name and Report ID combination not found.");
+					FacesUtil.addError("ERROR: Last Name and Report ID combination not found or Shipping Information was not Created properly.");
 				}
 			} else {
 				if (name == null || name.length() == 0) {

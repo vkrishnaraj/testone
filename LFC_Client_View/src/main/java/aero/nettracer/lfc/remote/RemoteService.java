@@ -205,6 +205,20 @@ public class RemoteService {
 		return toReturn;
 	}
 	
+	public static LostReportBean getReportShippingLF(long id, String name) {
+		LostReportBean toReturn = new LostReportBean();
+		try {
+			LFCClientServiceRemote o = getRemoteServiceLF();
+			if (o != null) {
+				toReturn = o.getLostReportShipping(id, name);
+			}
+			ctx.close();
+		} catch (NamingException ex) {
+			ex.printStackTrace();
+		}
+		return toReturn;
+	}
+	
 	public static long createReport(LostReportBean bean) {
 		long toReturn = -1;
 		try {
