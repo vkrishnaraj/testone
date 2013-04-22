@@ -207,9 +207,9 @@ public class ForwardIntegrationImpl {
 				al.add(new InternetAddress("support@nettracer.aero"));
 				he.setTo(al);
 				
-				he.setSubject("Alert: US Airways TestQueue not bound");
+				he.setSubject("Alert: US Airways TestQueue not bound. "+System.getProperty("instance.ref") );
 				
-				he.setHtmlMsg("Test queue not bound - please restart ntservice.");
+				he.setHtmlMsg("Test queue not bound - please restart ntservice.\n" + e.getStackTrace().toString());
 				he.send();
 				
 			}catch(Exception ex2){
