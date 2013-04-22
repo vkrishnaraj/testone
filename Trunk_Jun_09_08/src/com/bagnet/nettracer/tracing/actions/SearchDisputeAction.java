@@ -113,7 +113,7 @@ public class SearchDisputeAction extends CheckedAction {
 
 				request.setAttribute("viewOnlyWithNoUpdate", viewOnlyWithNoUpdate);
 			}
-			forwardTarget = TracingConstants.VIEW_ONLY_DISPUTE;
+			forwardTarget = TracingConstants.VIEW_DISPUTES;
 		} else {
 			rowcount = DisputeUtils.getDisputeCount(user, disputeType);
 			if (rowcount <= 0) {
