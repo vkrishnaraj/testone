@@ -1,0 +1,349 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/southwest_template.xhtml">
+	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form id="lostForm" >
+			<script type="text/javascript">
+				function validateEmail() {
+					var theEmail = document.getElementById("lostForm:email").value;
+					if (!theEmail) {
+						return window.confirm("Please be advised that if an e-mail address is not provided, we" + 
+								" will contact you via telephone and only in the event that we find an item closely" + 
+								" matching the description of your reported lost item.");
+					} else {
+						return true;
+					}
+					
+				}
+				
+				function adjustAddressReq(countryList) {
+					province = document.getElementById("lostForm:province");
+					state = document.getElementById("lostForm:state");
+					if (countryList.options[countryList.selectedIndex].value == "US") {
+						province.value = '';
+						province.readOnly = true;
+					} else {
+						state.selectedIndex = 0;
+						province.readOnly = false;
+					}
+				}
+				
+				function adjustAddressReqState(stateList) {
+					province = document.getElementById("lostForm:province");
+					country = document.getElementById("lostForm:country");
+					if (stateList.options[stateList.selectedIndex].value == "") {
+						province.readOnly = false;
+					} else {
+						province.value = '';
+						province.readOnly = true;
+						country.selectedIndex = 0;
+					}
+				}
+
+		        var curDt = new Date();
+		        
+		        function disablementFunction(day){
+		            if (curDt==undefined){
+		                curDt = day.date.getDate;
+		            }
+		            if (curDt.getTime() - day.date.getTime() &gt;= 0) return true; else return false;  
+		        }
+		        
+		        function disabledClassesProv(day){
+		            if (curDt.getTime() - day.date.getTime() &lt; 0) return 'rich-calendar-boundary-dates';
+		        }
+
+			</script>
+			<h:panelGroup>
+				<p class="contentHeader"><t:outputText value="#{msg.lostform_text_title}" escape="false"/></p>
+				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_policy_title}" /></p>
+				<p class="twlvPxBlk"><t:outputText value="#{msg.lostform_text_policy_desc}" /></p><br/>
+				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_about_title}" /></p><br/><br/>
+				<table style="width: 95%;">
+					<tr><td class="twlvPxBlk" style="width: 25%;" colspan="3">
+						<t:outputText value="#{msg.lostform_label_item_category} *" />
+					</td><td class="twlvPxBlk" style="width: 25%;" colspan="3">
+						<t:outputText value="#{msg.lostform_label_item_subcat}" />
+					</td><td class="twlvPxBlk" style="width: 25%;" colspan="3">
+						<t:outputText value="#{msg.lostform_label_item_color} *" />
+					</td><td class="twlvPxBlk" style="width: 25%;" colspan="3">
+						<t:outputText value="#{msg.lostform_label_item_case_color} *" escape="false" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:selectOneMenu value="#{lostAndFound.lostReport.itemCategory}"  style="width: 95%;">
+							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="0" />
+							<f:selectItems value="#{lostAndFound.categoryList}" />
+							<a4j:support event="onchange" reRender="subcat" limitToList="true"/>
+						</t:selectOneMenu>
+					</td><td colspan="3">
+						<a4j:outputPanel id="subcat" ajaxRendered="true">
+							<t:selectOneMenu value="#{lostAndFound.lostReport.itemSubCategory}"  style="width: 95%;">
+								<f:selectItems value="#{lostAndFound.subCategories}" />
+							</t:selectOneMenu>
+						</a4j:outputPanel>
+					</td><td colspan="3">
+						<t:selectOneMenu value="#{lostAndFound.lostReport.itemColor}"  style="width: 95%;">
+							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="" />
+							<f:selectItems value="#{lostAndFound.colors}" />
+						</t:selectOneMenu>
+					</td><td colspan="3">
+						<t:selectOneMenu value="#{lostAndFound.lostReport.itemCaseColor}"  style="width: 100%;">
+							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="" />
+							<f:selectItems value="#{lostAndFound.colors}" />
+						</t:selectOneMenu>
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" style="width: 34%;" colspan="4">
+						<t:outputText value="#{msg.lostform_label_item_brand}" />
+					</td><td class="twlvPxBlk" style="width: 33%;" colspan="4">
+						<t:outputText value="#{msg.lostform_label_item_model}" />
+					</td><td class="twlvPxBlk" style="width: 33%;" colspan="4">
+						<t:outputText value="#{msg.lostform_label_item_serial}" />
+					</td></tr>
+					<tr><td colspan="4">
+						<t:inputText value="#{lostAndFound.lostReport.itemBrand}" maxlength="255" style="width: 95%;"/>
+					</td><td colspan="4">
+						<t:inputText value="#{lostAndFound.lostReport.itemModel}" maxlength="255" style="width: 95%;"/>
+					</td><td colspan="4">
+						<t:inputText value="#{lostAndFound.lostReport.itemSerial}" maxlength="255" style="width: 100%;"/>
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="4">
+						<t:outputText value="#{msg.lostform_label_date_lost} *" />
+					</td><td class="twlvPxBlk" colspan="4">
+						<t:outputText value="#{msg.lostform_label_item_size}" />
+					</td><td class="twlvPxBlk" colspan="4">
+						<t:outputText value="#{msg.lostform_label_item_phone}" />
+					</td></tr>
+					<tr><td colspan="4">
+						<rich:calendar value="#{lostAndFound.lostReport.dateLost}"  
+                           locale="en" isDayEnabled="disablementFunction"
+                           popup="true" showWeeksBar="false" 
+                           datePattern="MM/dd/yyyy" dayStyleClass="disabledClassesProv"
+                           enableManualInput="true" 
+                           cellWidth="24px" cellHeight="22px" style="width:250px"/>  
+					</td><td colspan="4">
+						<t:inputText value="#{lostAndFound.lostReport.itemSize}" maxlength="255" style="width: 95%;"/>
+					</td><td colspan="4">
+						<t:inputText value="#{lostAndFound.lostReport.lostPhone.number}" maxlength="511" style="width: 100%;"/>
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="12">
+						<t:outputText value="#{msg.lostform_label_item_desc}" />
+					</td></tr>
+					<tr><td colspan="12">
+						<t:inputText value="#{lostAndFound.lostReport.itemDesc}" style="width: 100%;"  maxlength="250" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="12">
+						<t:outputText value="#{msg.lostform_label_item_long_desc}" />
+					</td></tr>
+					<tr><td colspan="12">
+						<t:inputTextarea rows="3" value="#{lostAndFound.lostReport.itemLongDesc}" style="width: 100%;" />
+					</td></tr>
+				</table><br/>
+				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_contact_title}" /></p><br/><br/>
+				<table style="width: 95%;">
+					<tr><td class="twlvPxBlk" colspan="2" style="width: 34%;">
+						<t:outputText value="#{msg.lostform_label_name_last} *"/>
+					</td><td class="twlvPxBlk" colspan="2" style="width: 33%;">
+						<t:outputText value="#{msg.lostform_label_name_first} *"/>
+					</td><td class="twlvPxBlk" colspan="2" style="width: 33%;">
+						<t:outputText value="#{msg.lostform_label_name_mi}"/>
+					</td></tr>
+					<tr><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.lastName}" maxlength="255" style="width: 95%" />
+					</td><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.firstName}" maxlength="255"  style="width: 95%" />
+					</td><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.middleInitial}" maxlength="255"  style="width: 100%" />
+					</td></tr>
+<!-- BEGIN ADDRESS INFO UI -->
+	 				<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="6">
+						<t:outputText value="#{msg.lostform_label_address_addr1} *" />
+					</td></tr>
+					<tr><td colspan="6">
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.address1}" maxlength="511"  style="width: 100%" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="6">
+						<t:outputText value="#{msg.lostform_label_address_addr2}" />
+					</td></tr>
+					<tr><td colspan="6">
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.address2}" maxlength="511" style="width: 100%" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="2">
+						<t:outputText value="#{msg.lostform_label_address_city} *" />
+					</td><td class="twlvPxBlk" colspan="2">
+						<t:outputText value="#{msg.lostform_label_address_state}" />
+					</td><td class="twlvPxBlk" colspan="2">
+						<t:outputText value="#{msg.lostform_label_address_postal}" />
+					</td></tr>
+					<tr><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.city}" maxlength="255" style="width: 95%" />
+					</td><td colspan="2">
+						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.state}" onchange="adjustAddressReqState(this);"
+				       		style="width: 95%" id="state">
+							<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="" />
+							<f:selectItems value="#{lostAndFound.states}" />
+						</t:selectOneMenu>
+					</td><td colspan="2">
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.postal}"  maxlength="255" style="width: 100%" />
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="3" style="width: 50%;">
+						<t:outputText value="#{msg.lostform_label_address_country} *" />
+					</td><td class="twlvPxBlk" colspan="3" style="width: 50%;">
+						<t:outputText value="#{msg.lostform_label_address_province}" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.country}"  onchange="adjustAddressReq(this);"
+							style="width: 95%" id="country">
+							<f:selectItem itemLabel="#{msg.general_list_united_states}" itemValue="US" />
+							<f:selectItems value="#{lostAndFound.countries}" />
+						</t:selectOneMenu>
+					</td><td colspan="3">
+						<t:inputText id="province" value="#{lostAndFound.lostReport.contact.address.province}"  maxlength="255"
+							style="width: 100%" />
+					</td></tr>                                                     
+<!-- END ADDRESS INFO UI -->
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="6">
+						<t:outputText value="#{msg.lostform_label_phone_primary}" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:inputText value="#{lostAndFound.lostReport.contact.primaryPhone.number}"  maxlength="511" style="width: 95%" />
+					</td><td colspan="3">
+					    <h:panelGroup style="width: 100%" >
+					      <t:selectOneRadio id="primaryType" layout="spread" value="#{lostAndFound.lostReport.contact.primaryPhone.type}">
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.work}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.home}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.mobile}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.other}" itemLabel=""/>
+					      </t:selectOneRadio>
+					      <h:panelGrid columns="4" columnClasses="col25, col25, col25, col25" style="width: 100%;" >
+					      	<t:outputLabel value="#{msg.lostform_label_phone_work}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_home}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_mobile}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_other}" />
+					        <t:radio for="primaryType" index="0" />
+					        <t:radio for="primaryType" index="1" />
+					        <t:radio for="primaryType" index="2" />
+					        <t:radio for="primaryType" index="3" />
+					      </h:panelGrid>
+					    </h:panelGroup>	
+					</td></tr>
+					<tr><td class="twlvPxBlk" colspan="6">
+						<t:outputText value="#{msg.lostform_label_phone_secondary}" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:inputText value="#{lostAndFound.lostReport.contact.secondaryPhone.number}" maxlength="511" style="width: 95%" />
+					</td><td colspan="3">
+					    <h:panelGroup style="width: 100%" >
+					      <t:selectOneRadio id="secondaryType" layout="spread" value="#{lostAndFound.lostReport.contact.secondaryPhone.type}">
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.work}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.home}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.mobile}" itemLabel=""/>
+					        <f:selectItem itemValue="#{lostAndFound.lostReport.contact.primaryPhone.other}" itemLabel=""/>
+					      </t:selectOneRadio>
+					      <h:panelGrid columns="4" columnClasses="col25, col25, col25, col25" style="width: 100%;" >
+					      	<t:outputLabel value="#{msg.lostform_label_phone_work}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_home}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_mobile}" />
+					      	<t:outputLabel value="#{msg.lostform_label_phone_other}" />
+					        <t:radio for="secondaryType" index="0" />
+					        <t:radio for="secondaryType" index="1" />
+					        <t:radio for="secondaryType" index="2" />
+					        <t:radio for="secondaryType" index="3" />
+					      </h:panelGrid>
+					    </h:panelGroup>	
+					</td></tr>
+					<tr><td>&#160;</td></tr>
+					<tr><td class="twlvPxBlk" colspan="3">
+						<t:outputText value="#{msg.lostform_label_email}" />
+					</td><td class="twlvPxBlk" colspan="3">
+						<t:outputText value="#{msg.lostform_label_email_confirm}" />
+					</td></tr>
+					<tr><td colspan="3">
+						<t:inputText value="#{lostAndFound.lostReport.contact.emailAddress}" maxlength="511" style="width: 95%" id="email"/>
+					</td><td colspan="3">
+						<t:inputText value="#{lostAndFound.lostReport.contact.confirmEmail}" maxlength="511" style="width: 100%" />
+					</td></tr>
+				</table><br/>
+				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_trip_title}" /></p><br/><br/>
+				<a4j:region renderRegionOnly="true"  >
+					<a4j:outputPanel id="segmentPanel" >
+						<rich:dataTable id="segmentTable" style="width: 95%"
+								value="#{lostAndFound.lostReport.segments}" var="segment" >
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column>
+										<t:outputText value="#{msg.lostform_header_segment_departure}" />
+									</rich:column>
+									<rich:column>
+										<t:outputText value="#{msg.lostform_header_segment_arrival}" />
+									</rich:column>
+									<rich:column>
+										<t:outputText value="#{msg.lostform_header_segment_flight}" />
+									</rich:column>
+								</rich:columnGroup>
+							</f:facet>
+							
+							<rich:column>
+								<t:selectOneMenu value="#{segment.departureLocation}"  style="width: 100%;">
+									<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="0" />
+									<f:selectItems value="#{lostAndFound.locations}" />
+								</t:selectOneMenu>
+							</rich:column>
+							<rich:column>
+								<t:selectOneMenu value="#{segment.arrivalLocation}"  style="width: 100%;">
+									<f:selectItem itemLabel="#{msg.general_list_please_select}" itemValue="0" />
+									<f:selectItems value="#{lostAndFound.locations}" />
+								</t:selectOneMenu>
+							</rich:column>
+							<rich:column>
+								<h:inputText value="#{segment.flightNumber}" maxlength="20" style="width: 95%;"/>
+							</rich:column>
+						</rich:dataTable>
+	
+						<rich:spacer width="100%" height="10" title="" />
+						<div style="width: 95%">
+							<div align="center">
+								<a4j:commandButton value="#{msg.general_button_add}"  
+									  action="#{lostAndFound.addSegment}" limitToList="true"
+									reRender="segmentPanel" styleClass="submitButtonOrange">								
+								</a4j:commandButton>&#160;&#160;&#160;
+								<a4j:commandButton value="#{msg.general_button_delete}"  
+									  action="#{lostAndFound.deleteSegment}" limitToList="true"
+									reRender="segmentPanel" styleClass="submitButtonOrange">								
+								</a4j:commandButton>
+							</div>
+						</div>
+					</a4j:outputPanel>
+				</a4j:region><br/><br/>
+				<div>
+					<rich:messages id="reportMsg" errorClass="errormsg" infoClass="infomsg" layout="list"/>
+					<rich:spacer width="100%" height="15" title="" />
+				</div>
+				<div align="right">
+				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}"  rendered="#{empty lostAndFound.lostReport.reportId}" />
+				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToLogin}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_create}" action="#{lostAndFound.createReport}" 
+				onclick="if (!validateEmail()) {return false;} else { this.disabled=true }" oncomplete="this.disabled=false" rendered="#{empty lostAndFound.lostReport.reportId}"/>
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_update}" action="#{lostAndFound.editReport}" 
+				onclick="if (!validateEmail()) {return false;} else { this.disabled=true }" oncomplete="this.disabled=false" rendered="#{not empty lostAndFound.lostReport.reportId}"/>
+				
+				</div><br/>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

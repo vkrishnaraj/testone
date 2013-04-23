@@ -62,6 +62,10 @@ public class LostAndFoundLoginController {
 		return login(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_SWA_COMPANY_ID);
 	}
 	
+	public String loginAmerican() {
+		return login(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_AA_COMPANY_ID);
+	}
+	
 	public String loginAirtran() {
 		return login(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_SWA_COMPANY_ID);
 	}
@@ -76,6 +80,10 @@ public class LostAndFoundLoginController {
 	
 	public String loginShippingSouthwest() {
 		return loginShipping(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_SWA_COMPANY_ID);
+	}
+
+	public String loginShippingAmerican() {
+		return loginShipping(TracingConstants.LF_LF_COMPANY_ID, TracingConstants.LF_AA_COMPANY_ID);
 	}
 	
 	public String loginShippingAirtran() {
@@ -170,11 +178,30 @@ public class LostAndFoundLoginController {
 		return goToFormPage("bagunchecked");
 	}
 	
+	public String goToFormPageAmerican() {
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+				session.setAttribute("edit", false);
+		lostReport.setSubCompany(TracingConstants.LF_AA_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
+		return goToFormPage("bagunchecked");
+	}
+	
 	public String goToCheckedPageSouthwest() {
 		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 				session.setAttribute("edit", false);
 		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
+		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
+		return goToFormPage("bagchecked");
+	}
+
+	
+	public String goToCheckedPageAmerican() {
+		HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+				session.setAttribute("edit", false);
+		lostReport.setSubCompany(TracingConstants.LF_AA_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
 		return goToFormPage("bagchecked");
 	}

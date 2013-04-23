@@ -292,7 +292,7 @@ public class LostAndFoundController {
 		isValid = validateName();
 		isValid = validateAddress() && isValid;
 		isValid = validateContact() && isValid;
-		if (getSubCompany() != null && getSubCompany().equals("SWA") ) {
+		if (getSubCompany() != null && (getSubCompany().equals("SWA") || getSubCompany().equals("AA"))) {
 			isValid = validateLF_SWA() && isValid;
 		}else if (getSubCompany().equals("DEM")){
 			isValid = validateLF_DEM() && isValid;
