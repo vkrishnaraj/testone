@@ -92,7 +92,7 @@ public class ClientViewServiceImpl implements ClientViewService {
 					}
 					FacesUtil.addError("ERROR: Server Communication Error.");
 				} else {
-					FacesUtil.addError("ERROR: Last Name and Report ID combination not found or Shipping Information was not Created properly.");
+					FacesUtil.addError("ERROR: Last Name and Report ID combination not found or Shipping Information was not created properly.");
 				}
 			} else {
 				if (name == null || name.length() == 0) {

@@ -220,7 +220,7 @@ public class LostAndFoundController {
 				FacesUtil.addError("Server Communication Error.");
 			}
 		//Record invalid CC transaction
-			FacesUtil.addError("Credit Card information is invalid. Please enter double check your credit card information.");
+			FacesUtil.addError("Credit Card information is invalid. Please double check your credit card information and resubmit.");
 		} else {
 			FacesUtil.addError("Shipping Information has been changed. Please resubmit Shipping Information to determine proper shipping options and pricing.");
 			return "shippingconfirm?faces-redirect=true";
@@ -447,7 +447,7 @@ public class LostAndFoundController {
 				session.setAttribute("proposedAddress", validAddress);
 				isValid=false;
 			} else if(validAddress==null || (validAddress!=null && !validAddress.getScore().equals(BigInteger.valueOf(100)))){
-				FacesUtil.addError("ERROR: Address not valid by FedEx. Please check your address and confirm it's accurate before submitting again.");
+				FacesUtil.addError("ERROR: Address not valid within FedEx. Please check your address and confirm it's accurate before submitting again.");
 				isValid = false;
 			}
 		}
