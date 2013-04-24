@@ -1,6 +1,7 @@
 package aero.nettracer.fs.model;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -32,6 +33,12 @@ public class FsActionAudit {
 	@Fetch(FetchMode.SELECT)
 	Set<FsMatchHistoryAudit> matchhistory;
 	
+	
+	@OneToMany(mappedBy = "action", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SELECT)
+	Set<FsActionAuditMetric> metric;
+	
+
 	public long getId() {
 		return id;
 	}
@@ -69,5 +76,22 @@ public class FsActionAudit {
 	}
 	public void setCompanycode_id(String companycode_id) {
 		this.companycode_id = companycode_id;
+	}
+	
+	public Set<FsActionAuditMetric> getMetric() {
+		return metric;
+	}
+	public void setMetric(Set<FsActionAuditMetric> metric) {
+		this.metric = metric;
+	}
+	
+	public synchronized FsActionAudit addMetric(String metric, long duration, int traceElements, String remark){
+		FsActionAuditMetric m = new FsActionAuditMetric(metric,duration,traceElements,remark);
+		if(this.metric == null){
+			this.metric = new HashSet<FsActionAuditMetric>();
+		}
+		m.setAction(this);
+		this.metric.add(m);
+		return this;
 	}
 }
