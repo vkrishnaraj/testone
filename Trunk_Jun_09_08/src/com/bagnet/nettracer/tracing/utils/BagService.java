@@ -389,6 +389,7 @@ public class BagService {
 			rem.setRemarktext(form.getMessage());
 			rem.setOhd(oDTO);
 			rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+			rem.setAgent(user);
 			RemList.add(rem);
 			rem=new Remark();
 		}
@@ -406,6 +407,7 @@ public class BagService {
 				+ destString + " station."); //bagforwardMessage
 		rem.setOhd(oDTO);
 		rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+		rem.setAgent(user);
 		RemList.add(rem);
 		oDTO.setRemarks(RemList);
 		OhdBMO oBMO = new OhdBMO();
