@@ -7,18 +7,16 @@ public class TraceProgress {
 	
 	private long fileId;
 	private long startTime;
-	private Vector v;
-	private int matches;
+	private ConsumerQueueElement element;
 	
 	private static final int MAX_SECONDS = 9999;
 	
-	public TraceProgress(long fileId, long startTime, Vector v, int matches){
-		this.fileId = fileId;
+	public TraceProgress(long startTime, ConsumerQueueElement element){
+		this.fileId = element.getFile().getId();
 		this.startTime = startTime;
-		this.v = v;
-		this.matches = matches;
+		this.element = element;
 	}
-	
+
 	public long getFileId() {
 		return fileId;
 	}
@@ -34,32 +32,24 @@ public class TraceProgress {
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
 	}
-
-	public Vector getV() {
-		return v;
+	
+	public ConsumerQueueElement getElement() {
+		return element;
 	}
 
-	public void setV(Vector v) {
-		this.v = v;
-	}
-
-	public int getMatches() {
-		return matches;
-	}
-
-	public void setMatches(int matches) {
-		this.matches = matches;
+	public void setElement(ConsumerQueueElement element) {
+		this.element = element;
 	}
 	
 	public boolean stillRunning(){
-		return v.size() < matches;
+		return !element.isTraceFinished();
 	}
 	
 	public int getPercentComplete(){
-		if(matches == 0){
+		if(element.getProducerCount() == 0){
 			return 100;
 		} else {
-			return 100 * v.size() / matches;
+			return 100 * (1 - (element.getQueue().size() / element.getProducerCount()));
 		}
 	}
 	

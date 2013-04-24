@@ -158,6 +158,7 @@ public class TraceWrapper {
 	}
 	
 	
+	@Deprecated
 	public static ArrayBlockingQueue<MatchHistory> getMatchQueue(){
 		Vector <ThreadContainer>v = new Vector<ThreadContainer>();
 		if(matchQueue == null){
@@ -183,5 +184,27 @@ public class TraceWrapper {
 		}
 		return matchQueue;
 	}
-
+	
+	public static void startConsumerThreads(){
+		Vector <ThreadContainer>v = new Vector<ThreadContainer>();
+		for (int i=0; i<maxThreads; ++i) {
+			try{
+				ThreadContainer tc =  new ThreadContainer();
+				tc.setStartTime(new Date());
+				Consumer consumer = new Consumer(matchQueue, Consumer.MATCH, tc);
+				Thread t = new Thread(consumer, "CosumerThread " + i);
+				tc.setConsumer(t);
+				tc.setId(i);
+				v.add(tc);
+				t.setPriority(Thread.MIN_PRIORITY);
+				t.start();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		ThreadMonitor tm = new ThreadMonitor(v, matchQueue);
+		Thread t = new Thread(tm, "TraceWrapperMonitorThread");
+		t.start();
+	}
+	
 }

@@ -108,6 +108,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	}
 
 	public long insertFile(File file, boolean oldEnc) {
+		Date starttime = new Date();
 		Transaction t = null;
 		Session sess = null;
 		if(file.getValidatingCompanycode() == null){
@@ -167,7 +168,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				
 				sess.saveOrUpdate(toDelete);
 				t.commit();
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_UPDATE_FILE, file.getId(), file.getValidatingCompanycode());
+				AuditUtil.saveActionAudit(
+						AuditUtil.createAuditAction(AuditUtil.ACTION_UPDATE_FILE, file.getId(), file.getValidatingCompanycode(),null)
+						.addMetric(AuditUtil.ACTION_UPDATE_FILE, (new Date()).getTime() - starttime.getTime(), 0, null));
 				} else {
 					logger.debug("Error. Incorrect Validation Company error:" + toSubmit.getId()+" - "+toSubmit.getValidatingCompanycode()+" and " + toDelete.getId()+" - "+toDelete.getValidatingCompanycode());
 					return -2;
@@ -177,7 +180,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 				logger.debug("saving:" + toSubmit.getId());
 				sess.saveOrUpdate(toSubmit);
 				t.commit();
-				AuditUtil.saveActionAudit(AuditUtil.ACTION_CREATE_FILE, file.getId(), file.getValidatingCompanycode());
+				AuditUtil.saveActionAudit(
+						AuditUtil.createAuditAction(AuditUtil.ACTION_CREATE_FILE, file.getId(), file.getValidatingCompanycode(),null)
+						.addMetric(AuditUtil.ACTION_CREATE_FILE, (new Date()).getTime() - starttime.getTime(), 0, null));
 			}
 			return toSubmit.getId();
 		} catch (Exception e) {
@@ -484,13 +489,18 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 
 	@Override
 	public TraceResponse getFileMatches(long fileId) {
+		Date starttime = new Date();
 		TraceResponse tr = new TraceResponse();
 		File file = TraceWrapper.loadFileFromCache(fileId);
-		Set<MatchHistory> mh = Producer.getCensoredFileMatches(fileId);
+		Set<FsMatchHistoryAudit> matchAuditSet = new HashSet<FsMatchHistoryAudit>();
+		Set<MatchHistory> mh = Producer.getCensoredFileMatches(fileId, matchAuditSet);
 		tr.setMatchHistory(mh);
 		tr.setTraceComplete(true);
 		Set<FsAddress> addresses = Consumer.getAddresses(file);
 		Producer.analyzeFile(file, tr, addresses);
+		AuditUtil.saveActionAudit(
+				AuditUtil.createAuditAction(AuditUtil.ACTION_GET_TRACE_RESULTS, file.getId(), file.getValidatingCompanycode(),matchAuditSet)
+				.addMetric(AuditUtil.ACTION_GET_TRACE_RESULTS, (new Date()).getTime() - starttime.getTime(), 0, "seconds until reload: " + tr.getSecondsUntilReload()));
 		return tr;
 	}
 	

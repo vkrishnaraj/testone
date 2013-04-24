@@ -11,7 +11,6 @@ import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -44,7 +43,6 @@ import aero.nettracer.selfservice.fraud.PrivacyPermissionsBean;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions.AccessLevelType;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
-import aero.nettracer.serviceprovider.wt_1_0.services.webservices.WorldTracerServiceImpl;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
@@ -66,7 +64,6 @@ public class Producer {
 	public static TraceResponse matchFile(long fileId, int maxDelay, boolean persistData, boolean isPrimary, boolean returnResults){
 		File file = TraceWrapper.loadFileFromCache(fileId);
 		if(file != null){
-			AuditUtil.saveActionAudit(AuditUtil.ACTION_TRACE_FILE, file.getId(), file.getValidatingCompanycode());
 			return matchFile(file, maxDelay, persistData, isPrimary, returnResults);
 		} else {
 			return null;
@@ -74,19 +71,16 @@ public class Producer {
 	}
 
 	
-	
-	private static void queueFile(Long id, HashSet<Long> queue, File file, Vector v, Date createDate, boolean isPrimary){
-		if(queue.add(new Long(id))){
+	private static void queueFile(Long id, ConsumerQueueElement element, File file, Date createDate, boolean isPrimary){
+		if(element.getTraceIds().put(id, id) == null){
 			MatchHistory match = new MatchHistory();
 			match.setDetails(new LinkedHashSet<MatchDetail>());
 			match.setFile1(file);
 			match.setFile2(new File(id));
-			match.setTraceCount(v);
 			match.setCreatedate(createDate);
 			match.setPrimarymatch(isPrimary);
 			try{
-				TraceWrapper.getMatchQueue().put(match);
-//				if(debug)System.out.println("Producer add file: " + id);
+				element.getQueue().add(match);
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -95,12 +89,8 @@ public class Producer {
 	
 	public static TraceResponse matchFile(File file, int maxDelay, boolean persistData, boolean isPrimary, boolean returnResults) {
 		
-		Date starttime = new Date();
-		
-		HashSet<Long> fileQueue = new HashSet<Long>();
-		fileQueue.add(file.getId());//adding search claim to queue so we don't trace against itself
+		Date producerStarttime = new Date();
 
-		Vector v = new Vector();
 		
 		// so we are to keep old match histories
 
@@ -395,6 +385,8 @@ public class Producer {
 		
 		Date createDate = DateUtils.convertToGMTDate(new Date());
 		
+		ConsumerQueueElement element = ConsumerQueueElement.getInstance(file);
+		
 		for (Object[] strs : result) {
 			Long f1 = (Long) strs[0];
 			Long f2 = (Long) strs[1];
@@ -406,39 +398,44 @@ public class Producer {
 			String type = (String) strs[7];
 			
 			if(f1 != null){
-				queueFile(f1, fileQueue, file, v, createDate, isPrimary);
+				queueFile(f1, element, file, createDate, isPrimary);
 			} else if (f2 != null){
-				queueFile(f2, fileQueue, file, v, createDate, isPrimary);
+				queueFile(f2, element, file, createDate, isPrimary);
 			} else if (f3 != null){
-				queueFile(f3, fileQueue, file, v, createDate, isPrimary);
+				queueFile(f3, element, file, createDate, isPrimary);
 			} else if (f4 != null){
-				queueFile(f4, fileQueue, file, v, createDate, isPrimary);
+				queueFile(f4, element, file, createDate, isPrimary);
 			} else if (f5 != null){
-				queueFile(f5, fileQueue, file, v, createDate, isPrimary);
+				queueFile(f5, element, file, createDate, isPrimary);
 			} else if (f6 != null){
-				queueFile(f6, fileQueue, file, v, createDate, isPrimary);
+				queueFile(f6, element, file, createDate, isPrimary);
 			} else if (f7 != null){
-				queueFile(f7, fileQueue, file, v, createDate, isPrimary);
+				queueFile(f7, element, file, createDate, isPrimary);
 			}
 		}		
-		Date endtime = new Date();
-		fileQueue.remove(new Long(file.getId()));//removing dup from queue to get accurate count
-		//		System.out.println("Producer completed: " + (endtime.getTime() - starttime.getTime()));
+		
+		Date producerEndtime = new Date();
+		element.setProducerStart(producerStarttime);
+		element.setProducerEnd(producerEndtime);
+		element.setConsumerStart(producerEndtime);
+		element.setMainProducerThread(true);
 		//		System.out.println("Consumer BEGIN: " + (new Date()));
 		
-		traceProgress.put(file.getId(), new TraceProgress(file.getId(),(new Date()).getTime(),v,fileQueue.size()));
+		ConsumerQueueManager.getInstance().put(element);
+
+		traceProgress.put(file.getId(), new TraceProgress((new Date()).getTime(),element));
 		
 		if(returnResults){
 			//		System.out.println("  Potential results: " + fileQueue.size());
 			//		System.out.println("  MaxDelay: " + maxDelay);
 			try {
 				int i = 0;
-				for(i= 0; v.size() < fileQueue.size() && (i < (maxDelay * 1000)/WAIT_TIME || maxDelay == -1); i++){
+				for(i= 0; !element.isTraceFinished() && (i < (maxDelay * 1000)/WAIT_TIME || maxDelay == -1); i++){
 					Thread.sleep(WAIT_TIME);
 				}
-				endtime = new Date();
+				Date endtime = new Date();
 				if (maxDelay == -1) {
-					logger.debug("  Complete Trace Elapsed Time: "  + (endtime.getTime() - starttime.getTime()));
+					logger.debug("  Complete Trace Elapsed Time: "  + (endtime.getTime() - producerEndtime.getTime()));
 					file.setPersonCache(null, true);
 					file.setPersonCache(null, false);
 					file.setAddressCache(null);
@@ -452,12 +449,22 @@ public class Producer {
 			}
 			//		System.out.println("Consumer END: " + (new Date()));
 
-			Set<MatchHistory> mh = getCensoredFileMatches(file.getId());
+			
+			Set<FsMatchHistoryAudit> matchAuditSet = new HashSet<FsMatchHistoryAudit>();
+			Set<MatchHistory> mh = getCensoredFileMatches(file.getId(), matchAuditSet);
 			//		System.out.println("Returning RESULTS: " + mh.size());
 			TraceResponse tr = new TraceResponse();
 
 			tr.setMatchHistory(mh);
 			analyzeFile(file, tr, addresses);
+			
+			
+			Date end = new Date();
+			AuditUtil.saveActionAudit(
+					AuditUtil.createAuditAction(AuditUtil.ACTION_GET_AUTO_TRACE_RESULTS, file.getId(), file.getValidatingCompanycode(),matchAuditSet)
+					.addMetric(AuditUtil.ACTION_GET_AUTO_TRACE_RESULTS, end.getTime() - producerEndtime.getTime(), 0, "seconds until reload: " + tr.getSecondsUntilReload())
+					.addMetric(AuditUtil.METRIC_TOTAL_USER_WAIT,end.getTime() - producerEndtime.getTime(), 0, null));
+			
 			return tr; 
 		} else {
 			return null;
@@ -468,7 +475,7 @@ public class Producer {
 	public static void analyzeFile(File file, TraceResponse tr, Set<FsAddress> addresses) {
 		Producer.cleanTraceProgress();
 		TraceProgress tp = traceProgress.get(file.getId());
-		if(tp != null && traceProgress.get(file.getId()).stillRunning()){
+		if(tp != null && tp.stillRunning()){
 			tr.setTraceComplete(false);
 			tr.setSecondsUntilReload(tp.getSecondsUntilComplete());
 		} else {
@@ -659,12 +666,11 @@ public class Producer {
 		return ret;
 	}
 	
-	public static Set<MatchHistory> getCensoredFileMatches(long fileId) {
+	public static Set<MatchHistory> getCensoredFileMatches(long fileId, Set<FsMatchHistoryAudit> matchAuditSet) {
 		File f = TraceWrapper.loadFileFromCache(fileId);
 		String company = f.getValidatingCompanycode();
 		Set<MatchHistory> histories = Producer.getMatchHistoryResult(fileId);
 		List<PrivacyPermissions> p = PrivacyPermissionsBean.getPrivacyPermissions();
-		Set<FsMatchHistoryAudit> matchAuditSet = new HashSet<FsMatchHistoryAudit>();
 		for(MatchHistory history:histories){
 			//TODO change level based on access request
 			RequestStatus rs;
@@ -687,7 +693,6 @@ public class Producer {
 				matchAuditSet.add(new FsMatchHistoryAudit(history.getId(), "DEF"));
 			}
 		}
-		AuditUtil.saveActionAudit(AuditUtil.ACTION_GET_TRACE_RESULTS, fileId, f.getValidatingCompanycode(), matchAuditSet);
 		return histories;
 	}
 	

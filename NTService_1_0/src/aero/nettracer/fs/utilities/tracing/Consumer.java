@@ -83,6 +83,8 @@ public class Consumer implements Runnable{
 	
 	private static final Pattern invalidPhone = Pattern.compile("^(0+|1+|3+|4+|5+|6+|7+|8+|9+)$");
 	
+	private static final long MAX_THREAD_WAIT_TIME = 300000;//5min
+	
 	
 	
 	private int threadnumber;
@@ -108,12 +110,24 @@ public class Consumer implements Runnable{
 			tc.setWaiting(true);
 			try{
 				if (this.threadtype == MATCH){
-					MatchHistory match = matchQueue.take();
-					tc.setStartTime(new Date());
-					tc.setWaiting(false);
-//					System.out.println(matchQueue.size());
-					logger.debug("consumer " + threadnumber);
-					processMatch(match);
+					MatchHistory match = ConsumerQueueManager.getInstance().take();
+					if(match != null){
+						tc.setStartTime(new Date());
+						tc.setWaiting(false);
+//						System.out.println(matchQueue.size());
+						logger.debug("consumer " + threadnumber);
+						processMatch(match);
+					} else {
+						try{
+							ConsumerQueueManager manager = ConsumerQueueManager.getInstance();
+							synchronized(manager){
+								manager.wait(MAX_THREAD_WAIT_TIME);
+							}
+						} catch (InterruptedException e){
+							e.printStackTrace();
+							//ignore
+						}
+					}
 				}
 			}catch (Exception e){
 				e.printStackTrace();
@@ -185,7 +199,7 @@ public class Consumer implements Runnable{
 		}catch (Exception e){
 			e.printStackTrace();
 		}finally{
-			match.getTraceCount().add(null);
+//			match.getTraceCount().add(null);
 //			if(debug)System.out.println("consumer consumed count: " + match.getTraceCount().size());
 //			System.out.println("consumer consumed count: " + match.getTraceCount().size());
 

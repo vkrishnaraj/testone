@@ -76,6 +76,7 @@
 		<mapping class="aero.nettracer.fs.model.forum.FsForumThread"/>
 		<mapping class="aero.nettracer.fs.model.forum.FsForumPost"/>
 		<mapping class="aero.nettracer.fs.model.forum.FsForumTag"/>
+		<mapping class="aero.nettracer.fs.model.FsActionAuditMetric"/>
 </session-factory>
 
 </hibernate-configuration>

@@ -19,6 +19,7 @@ public class AuditUtil {
 	public static final String ACTION_TRACE_FILE = "trace_file";
 	public static final String ACTION_GET_FILE = "get_file";
 	public static final String ACTION_GET_TRACE_RESULTS = "get_trace_results";
+	public static final String ACTION_GET_AUTO_TRACE_RESULTS = "get_auto_trace_results";
 	public static final String ACTION_REQUEST_ACCESS = "request_access";
 	public static final String ACTION_GET_ACCESS_REQUESTS = "get_access_requests";
 	public static final String ACTION_APPROVE_REQUEST = "approve_access_request";
@@ -26,6 +27,28 @@ public class AuditUtil {
 	public static final String ACTION_DELETE_MATCH = "delete_match";
 	public static final String ACTION_DATARETENTION = "data_retention";
 	public static final String ACTION_DELETE_FILE = "delete_file";
+	
+	public static final String METRIC_TOTAL_TRACE = "total_trace";
+	public static final String METRIC_TOTAL_PRODUCER = "total_producer";
+	public static final String METRIC_TOTAL_CONSUMER = "total_consumer";
+	public static final String METRIC_TOTAL_USER_WAIT = "total_user_wait";
+	
+	
+	public static FsActionAudit createAuditAction(String action, long file_id, String companycode_id, Set<FsMatchHistoryAudit> matches){
+		FsActionAudit toSave = new FsActionAudit();
+		toSave.setAction(action);
+		toSave.setFile_id(file_id);
+		toSave.setCompanycode_id(companycode_id);
+		toSave.setActiondate(new Date());
+		if(matches != null){
+			for(FsMatchHistoryAudit match:matches){
+				match.setAction(toSave);
+			}
+			toSave.setMatchdetails(matches);
+		}
+		return toSave;
+	}
+	
 	
 	public static long saveActionAudit(String action, long file_id, String companycode_id, Set<FsMatchHistoryAudit> matches){
 		FsActionAudit toSave = new FsActionAudit();
