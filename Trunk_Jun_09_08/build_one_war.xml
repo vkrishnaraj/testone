@@ -2173,6 +2173,8 @@
 			<include name="**/**/*.xml" />
 			<include name="**/**/*.properties" />
 			<exclude name="**/**/jndi.properties"/>
+			<exclude name="aero/nettracer/lf/services/Fedex*.class" />
+			<exclude name="aero/nettracer/lf/services/LFCClientService*.class" />
 		</jar>
 	</target>
 
@@ -2190,6 +2192,8 @@
 			<include name="**/**/*.xml" />
 			<include name="**/**/*.properties" />
 			<exclude name="**/**/jndi.properties"/>
+			<exclude name="aero/nettracer/lf/services/Fedex*.class" />
+			<exclude name="aero/nettracer/lf/services/LFCClientService*.class" />
 		</jar>
 	</target>
 	
