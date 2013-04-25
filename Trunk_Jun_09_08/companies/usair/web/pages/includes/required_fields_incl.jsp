@@ -64,7 +64,6 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     var pasTable=document.getElementById("passid");
     var expressItin=document.getElementById("passItin");
   	var pasItinTable=document.getElementById("hidexItinerary");
-  	var bagItinTable=document.getElementById("bagItin");
   	if(pasTable==null) 	{
   	  alert("<%=(String) bundle.getString("error.minimum.passengers")%>");
   	  document.getElementsByName("addPassenger")[0].focus();
@@ -73,11 +72,6 @@ ResourceBundle bundle = ResourceBundle.getBundle(
   	if(pasItinTable==null && expressItin==null)	{
   	  alert('<%=(String) bundle.getString("error.minimum.passitin")%>');
   	  document.getElementsByName("addpassit")[0].focus();
-      return false;
-  	}
-  	if(bagItinTable==null && expressItin==null)	{
-  	  alert('<%=(String) bundle.getString("error.minimum.bagitin")%>');
-  	  document.getElementsByName("addbagit")[0].focus();
       return false;
   	}
     for (var j=0;j < form.length; j++) {
