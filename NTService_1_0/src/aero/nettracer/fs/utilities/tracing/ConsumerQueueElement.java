@@ -33,6 +33,7 @@ public class ConsumerQueueElement {
 		element.traceIds = new ConcurrentHashMap<Long,Object>();
 		element.traceIds.put(file.getId(), file.getId());//adding search claim to map so we don't trace against itself
 		element.audit = new FsActionAudit();
+		element.audit.setFile_id(file.getId());
 		element.audit.setAction(AuditUtil.ACTION_TRACE_FILE);
 		element.audit.setActiondate(new Date());
 		element.audit.setCompanycode_id(file.getValidatingCompanycode());
