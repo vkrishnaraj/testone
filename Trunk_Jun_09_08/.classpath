@@ -6,7 +6,6 @@
 	<classpathentry kind="lib" path="lib/jars/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ajaxtags-1.2-beta2.jar"/>
 	<classpathentry kind="lib" path="lib/jars/annogen-0.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/jars/antlr.jar"/>
 	<classpathentry kind="lib" path="lib/jars/barbecue-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jars/c3p0-0.9.1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jars/c3p0-oracle-thin-extras-0.9.1.2.jar"/>
@@ -53,24 +52,18 @@
 	<classpathentry kind="lib" path="lib/build-client/dom4j-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jta.jar"/>
 	<classpathentry kind="lib" path="lib/jars/sqljdbc.jar"/>
-	<classpathentry kind="lib" path="lib/cron/spring-2.5.5.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-digester-1.7.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-javaflow-20060411.jar"/>
 	<classpathentry kind="lib" path="lib/jars/iText-2.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/jars/mysql-connector-java-5.1.6-bin.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jars/backport-util-concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/catalina.jar"/>
 	<classpathentry kind="lib" path="lib/jars/aspectjrt.jar"/>
 	<classpathentry kind="lib" path="lib/jars/aspectjweaver.jar"/>
-	<classpathentry kind="lib" path="lib/jars/ejb3-persistence.jar"/>
 	<classpathentry kind="lib" path="lib/jars/slf4j-api.jar"/>
 	<classpathentry kind="lib" path="lib/jars/slf4j-log4j12-1.5.2.jar"/>
-	<classpathentry kind="lib" path="lib/jars/hibernate-annotations.jar"/>
-	<classpathentry kind="lib" path="lib/jars/hibernate-commons-annotations.jar"/>
 	<classpathentry kind="lib" path="lib/client-us/us-shares.jar"/>
 	<classpathentry kind="lib" path="lib/client-fl/navitaire_newskies.jar"/>
-	<classpathentry kind="lib" path="lib/jars/hibernate3.jar"/>
 	<classpathentry kind="lib" path="lib/provided/classes12.jar"/>
 	<classpathentry kind="lib" path="lib/provided/commons-collections-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/provided/jaxb-api-2.0.jar"/>
@@ -81,8 +74,6 @@
 	<classpathentry kind="lib" path="lib/provided/xml-apis-1.3.03.jar"/>
 	<classpathentry kind="lib" path="lib/cron/backport-util-concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/cron/commons-collections.jar"/>
-	<classpathentry kind="lib" path="lib/cron/hibernate-annotations.jar"/>
-	<classpathentry kind="lib" path="lib/cron/mysql-connector-java-5.1.6-bin.jar"/>
 	<classpathentry kind="lib" path="lib/cron/quartz-all-1.6.1-RC1.jar"/>
 	<classpathentry kind="lib" path="lib/cron/wrapper.jar"/>
 	<classpathentry kind="lib" path="lib/jars/dsi.jar"/>
@@ -126,9 +117,6 @@
 	<classpathentry kind="lib" path="lib/jars/jfreechart-1.0.13.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jcommon-1.0.16.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ehcache-core-2.0.0.jar"/>
-	<classpathentry kind="lib" path="lib/jars/hornetq-core-client.jar"/>
-	<classpathentry kind="lib" path="lib/jars/hornetq-jms-client.jar"/>
-	<classpathentry kind="lib" path="lib/jars/hornetq-transports.jar"/>
 	<classpathentry kind="lib" path="lib/jars/jboss-jms-api.jar"/>
 	<classpathentry kind="lib" path="lib/jars/netty.jar"/>
 	<classpathentry kind="lib" path="lib/client-us/us-crmclient.jar"/>
@@ -136,7 +124,6 @@
 	<classpathentry kind="lib" path="lib/jars/libphonenumber-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/jars/java-core-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/jars/deliverySERV.jar"/>
-	<classpathentry kind="lib" path="C:/jboss-5.1.0.GA-clean/client/jbossall-client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/avis-client-model.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="lib/client-us/us-scanpointsclient.jar"/>
@@ -145,8 +132,40 @@
 	<classpathentry kind="lib" path="lib/jars/nt_fs_client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ScannerMbrQueryService.jar"/>
 	<classpathentry kind="lib" path="C:/workspace/Trunk/lib/jars/FraudService.jar"/>
-	<classpathentry kind="lib" path="C:/jboss-5.1.0.GA-clean/common/lib/jboss-ha-server-api.jar"/>
 	<classpathentry kind="lib" path="lib/provided/jbosscache-core.jar"/>
 	<classpathentry kind="lib" path="lib/jars/rmiio-2.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/jars/FraudService.jar"/>
+	<classpathentry kind="lib" path="lib/jars/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/bin/client/jboss-client.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/jboss/ejb3/main/jboss-ejb3-ext-api-2.0.0.jar" sourcepath="C:/Users/Tyrillius/.m2/repository/org/jboss/ejb3/jboss-ejb3-ext-api/2.0.0/jboss-ejb3-ext-api-2.0.0-sources.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/jboss/msc/main/jboss-msc-1.0.2.GA.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/jboss/as/remoting/main/jboss-as-remoting-7.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/jboss/as/ejb3/main/jboss-as-ejb3-7.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/jboss/as/clustering/registry/main/jboss-as-clustering-registry-7.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/jars/javassist.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-infinispan-4.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/mysql-connector-java-5.1.6-bin.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/envers/main/hibernate-envers-4.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/jboss/as/jpa/hibernate/4/jboss-as-jpa-hibernate4-7.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-aop-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-aspects-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-beans-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-context-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-core-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-expression-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-instrument-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-instrument-tomcat-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-jdbc-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-jms-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-orm-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-struts-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-tx-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-webmvc-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/jars/spring-webmvc-portlet-3.2.0.RELEASE.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-core-4.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/antlr/main/antlr-2.7.7.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-c3p0-4.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-commons-annotations-4.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-entitymanager-4.0.1.Final.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
