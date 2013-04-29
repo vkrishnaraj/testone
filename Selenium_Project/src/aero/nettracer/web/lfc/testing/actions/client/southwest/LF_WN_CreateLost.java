@@ -14,7 +14,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Did you lose a personal item or a piece of checked baggage during your travels with us?"));
 		verifyTrue(selenium.isTextPresent("We're sorry to hear that you've misplaced your belonging and will do everything in our power to reunite you with your item. To properly guide the search process, please tell us if the item was a part of your checked baggage (i.e. in a piece of luggage that was checked at the ticket counter or at the curbside) or if it was unchecked (i.e. in a carryon bag that you brought onboard the aircraft, or a loose item such as a laptop, a jacket, a child's stuffed animal, etc)?"));
 		selenium.click("id=pageForm:j_id19");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(false);
 	}
 
 	@Test
@@ -22,9 +22,9 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Contact Southwest Airlines Baggage Service Office"));
 		verifyTrue(selenium.isTextPresent("This service is for unchecked items left on the plane or gate areas only. Please contact your local Southwest Baggage Service Office located in the airport baggage claim area or at the ticket counter to report your situation. For general baggage questions, please call 1-888-202-1024."));
 		selenium.click("id=pageForm:j_id13");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(false);
 		selenium.click("id=pageForm:j_id17");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(false);
 	}
 
 	@Test
@@ -76,7 +76,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Please provide detailed, accurate descriptions on the Lost Item Report Form. If possible, gather the descriptive information about the item(s) prior to filling out the form and be sure to include any and all identifiable details to help in our search. Please enter the information just as it appears on the item. Also, be sure to include the flight date and flight number reflecting when your item(s) were lost. You may also provide additional information in both the \"brief description\" field, as well as the \"help us find your item\" area. Failing to include information in either of these fields will limit our ability to find your item. We also ask that you file your report within 14 days of your item becoming lost. Reports filed after 14 days have a decreased chance of item recovery."));
 		selenium.click("css=#q10 > span");
 		selenium.click("id=pageForm:j_id13");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(false);
 	}
 
 	@Test
@@ -123,7 +123,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Item Subcategory is required for Category \"Bags\"."));
 		selenium.select("id=lostForm:j_id31", "label=Cloth Bag");
 		selenium.click("id=lostForm:j_id194");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(false);
 	}
 
 	@Test
@@ -137,7 +137,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("You will receive e-mail updates with the status of your pending report every few days."));
 		verifyTrue(selenium.isTextPresent("If you would like to see a printable version of your Lost Item Report, please click the review button below."));
 		selenium.click("id=j_id7:j_id26");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(false);
 	}
 
 	@Test
@@ -149,7 +149,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("United States"));
 		verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
 		selenium.click("id=j_id7:j_id102");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(false);
 	}
 	
 	@Test
@@ -159,7 +159,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		selenium.type("id=pageForm:j_id17", "Test");
 		selenium.type("id=pageForm:j_id21", Settings.LOST_ID_LF_WN);
 		selenium.click("id=pageForm:j_id23");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(false);
 		
 		if(checkNoErrorPage())
 		{
@@ -178,7 +178,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			selenium.type("id=lostForm:j_id94", "2");
 			selenium.type("id=lostForm:j_id102", "2");
 			selenium.click("id=lostForm:j_id195");
-			waitForPageToLoadImproved();
+			waitForPageToLoadImproved(false);
 		}
 
 
@@ -192,7 +192,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			System.out.println("WN CLIENT VIEW LOST CREATED: " + Settings.LOST_ID_LF_WN);
 			verifyTrue(selenium.isTextPresent("If you would like to see a printable version of your Lost Item Report, please click the review button below."));
 			selenium.click("id=j_id7:j_id24");
-			waitForPageToLoadImproved();
+			waitForPageToLoadImproved(false);
 		}
 
 		if(checkNoErrorPage())
@@ -204,7 +204,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("United States"));
 			verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
 			selenium.click("id=j_id7:j_id103");
-			waitForPageToLoadImproved();
+			waitForPageToLoadImproved(false);
 		}
 		
 		if(checkNoErrorPage())
@@ -254,7 +254,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			selenium.type("id=pageForm:j_id17", "Test");
 			selenium.type("id=pageForm:j_id21", Settings.LOST_ID_LF_WN);
 			selenium.click("id=pageForm:j_id23");
-			waitForPageToLoadImproved();
+			waitForPageToLoadImproved(false);
 		}
 		
 		if(checkNoErrorPage())

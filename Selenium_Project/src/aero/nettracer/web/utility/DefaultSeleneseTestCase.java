@@ -45,7 +45,18 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	public void waitForPageToLoadImproved() {
+		waitForPageToLoadImproved(true, 0);
+	}
+	
+	public void waitForPageToLoadImproved(boolean doCheck) {
+		waitForPageToLoadImproved(doCheck, 0);
+	}
+	
+	public void waitForPageToLoadImproved(boolean doCheck, int check) {
 		selenium.waitForPageToLoad(Settings.PAGE_LOAD_TIMEOUT);
+		if (doCheck && check < Settings.CHECK_TIMES && !selenium.isElementPresent("id=copyright")) {
+			waitForPageToLoadImproved(true, check++);
+		}
 	}
 	
 	public void verifyTrue(boolean testThis) {
