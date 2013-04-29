@@ -52,7 +52,7 @@ public class LoginUtil extends DefaultSeleneseTestCase {
 	}
 	
 	public void waitForPageToLoadImproved() {
-		selenium.waitForPageToLoad(Settings.LOGIN_TIMEOUT);
+		waitForPageToLoadImproved(true, 0, Settings.LOGIN_TIMEOUT);
 	}
 
 	

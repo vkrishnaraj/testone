@@ -45,24 +45,24 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	public void waitForPageToLoadImproved() {
-		waitForPageToLoadImproved(true, 0);
+		waitForPageToLoadImproved(true, 0, Settings.PAGE_LOAD_TIMEOUT);
 	}
 	
 	public void waitForPageToLoadImproved(boolean doCheck) {
-		waitForPageToLoadImproved(doCheck, 0);
+		waitForPageToLoadImproved(doCheck, 0, Settings.PAGE_LOAD_TIMEOUT);
 	}
 	
-	public void waitForPageToLoadImproved(boolean doCheck, int check) {
+	public void waitForPageToLoadImproved(boolean doCheck, int check, String timeout) {
 		boolean loadFailed = false;
 		try {
-			selenium.waitForPageToLoad(Settings.PAGE_LOAD_TIMEOUT);
+			selenium.waitForPageToLoad(timeout);
 		} catch (Exception e) {
 			loadFailed = true;
 			System.out.println("PAGE DID NOT LOAD: CHECKING FOR COPYRIGHT!");
 		}
 		if (doCheck && loadFailed && check < Settings.CHECK_TIMES && !selenium.isElementPresent("id=copyright")) {
 			System.out.println("COPYRIGHT NOT LOADED: TRY NUMBER " + (check + 2) + " OF " + Settings.CHECK_TIMES);
-			waitForPageToLoadImproved(true, check++);
+			waitForPageToLoadImproved(true, check++, timeout);
 		}
 	}
 	
