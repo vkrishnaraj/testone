@@ -150,7 +150,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-//			selenium.click("link="+LF_ProcessTraceResults.foundId);
+			selenium.click("link="+LF_ProcessTraceResults.foundId);
 			selenium.click("saveButton");
 			waitForPageToLoadImproved();
 		} else {
