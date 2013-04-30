@@ -101,7 +101,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			System.out.println("LFPTR: Failed to pull up high value trace results.");
 			return;
 		}
-
+		System.out.println("LFPTR: 1");
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_ProcessTraceResults.foundId));
 			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
@@ -122,6 +122,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			System.out.println("LFPTR: Failed to verify and confirm trace result info on the Found Item page.");
 			return;
 		}
+		System.out.println("LFPTR: 2");
 		
 		if (checkNoErrorPage()) {
 			selenium.click("link=" + LF_ProcessTraceResults.lostId);
@@ -139,6 +140,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			System.out.println("LFPTR: Failed to close Lost Report: " + LF_ProcessTraceResults.lostId);
 			return;		
 		}
+		System.out.println("LFPTR: 3");
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your lost report was successfully saved."));
@@ -157,6 +159,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			System.out.println("LFPTR: Failed to navigate to Found Item: " + LF_ProcessTraceResults.foundId + " from the Lost Report page.");
 			return;		
 		}
+		System.out.println("LFPTR: 4");
 		
 		if (checkNoErrorPage()) {
 			selenium.click("//a[contains(@href, 'shelved_trace_results.do')]");
@@ -175,6 +178,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			System.out.println("LFPTR: Failed to load the Shelved Trace Results page after closing the Lost Report and Found Item.");
 			return;
 		}
+		System.out.println("LFPTR: 5");
 		
 	}
 
