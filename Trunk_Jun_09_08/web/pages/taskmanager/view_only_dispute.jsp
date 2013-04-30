@@ -80,6 +80,22 @@ function updatePagination() {
                   <html:text property="incident_ID" size="20" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
                 </td>
                 <td>
+                	<bean:message key="colname.dispute.type"/>
+                	<html:select property="dispute_type" styleClass="dropdown">      
+				        <html:option value="0">
+				          <bean:message key="select.please_select" />
+				        </html:option>
+				        <html:option value="1">
+				          <bean:message key="select.code_dispute" />
+				        </html:option>
+				        <html:option value="2">
+				          <bean:message key="select.station_dispute" />
+				        </html:option>
+				        <html:option value="3">
+				          <bean:message key="select.code_station_dispute" />
+				        </html:option>
+				    </html:select>
+				        
                 </td>
               </tr>
 

@@ -52,6 +52,67 @@ public final class FoundItemForm extends ActionForm {
 	public String getDisFoundDate() {
 		return found.getDisFoundDate(dateFormat);
 	}
+
+	public String getPrimaryInternationalNumber() {
+		if(getPhone(LFPhone.PRIMARY).getDecryptedCountry()!=null && getPhone(LFPhone.PRIMARY).getDecryptedCountry().length()>0){
+			return getPhone(LFPhone.PRIMARY).getDecryptedCountry();
+		} else {
+			String phone=getPhone(LFPhone.PRIMARY).getDecryptedPhoneNumber();
+			if(phone!=null && phone.length()==11){
+				return phone.substring(0,1);
+			}
+		}
+		return null;
+	}
+
+	public String getPrimaryAreaNumber() {
+		if(getPhone(LFPhone.PRIMARY).getDecryptedArea()!=null && getPhone(LFPhone.PRIMARY).getDecryptedArea().length()>0){
+			return getPhone(LFPhone.PRIMARY).getDecryptedArea();
+		} else {
+			String phone=getPhone(LFPhone.PRIMARY).getDecryptedPhoneNumber();
+			if(phone!=null && phone.length()>0)
+			if(phone.length()==11){
+				return phone.substring(1,4);
+			} else {
+				return phone.substring(0,3);
+			}
+		}
+		return null;
+	}
+	
+	public String getPrimaryExchangeNumber() {
+		if(getPhone(LFPhone.PRIMARY).getDecryptedExchange()!=null && getPhone(LFPhone.PRIMARY).getDecryptedExchange().length()>0){
+			return getPhone(LFPhone.PRIMARY).getDecryptedExchange();
+		} else {
+			String phone=getPhone(LFPhone.PRIMARY).getDecryptedPhoneNumber();
+			if(phone!=null && phone.length()>0)
+			if(phone.length()==11){
+				return phone.substring(4,7);
+			} else {
+				return phone.substring(3,6);
+			}
+		}
+		return null;
+	}
+	
+	public String getPrimaryLineNumber() {
+		if(getPhone(LFPhone.PRIMARY).getDecryptedLine()!=null && getPhone(LFPhone.PRIMARY).getDecryptedLine().length()>0){
+			return getPhone(LFPhone.PRIMARY).getDecryptedLine();
+		} else {
+			String phone=getPhone(LFPhone.PRIMARY).getDecryptedPhoneNumber();
+			if(phone!=null && phone.length()>0)
+			if(phone.length()==11){
+				return phone.substring(7,11);
+			} else {
+				return phone.substring(6,10);
+			}
+		}
+		return null;
+	}
+	
+	public String getPrimaryExtension() {
+		return getPhone(LFPhone.PRIMARY).getExtension();
+	}
 	
 	public String getPrimaryPhoneNumber() {
 		return getPhone(LFPhone.PRIMARY).getDecryptedPhoneNumber();
@@ -63,6 +124,98 @@ public final class FoundItemForm extends ActionForm {
 		setPhone(phone);
 	}
 	
+	public void setPrimaryInternationalNumber(String primaryInternationalNumber) {
+		LFPhone phone = getPhone(LFPhone.PRIMARY);
+		phone.setDecryptedCountry(primaryInternationalNumber);
+		setPhone(phone);
+	}
+
+	public void setPrimaryAreaNumber(String primaryAreaNumber) {
+		LFPhone phone = getPhone(LFPhone.PRIMARY);
+		phone.setDecryptedArea(primaryAreaNumber);
+		setPhone(phone);
+	}
+
+	public void setPrimaryExchangeNumber(String primaryExchangeNumber) {
+		LFPhone phone = getPhone(LFPhone.PRIMARY);
+		phone.setDecryptedExchange(primaryExchangeNumber);
+		setPhone(phone);
+	}
+
+	public void setPrimaryLineNumber(String primaryLineNumber) {
+		LFPhone phone = getPhone(LFPhone.PRIMARY);
+		phone.setDecryptedLine(primaryLineNumber);
+		setPhone(phone);
+	}
+	
+	public void setPrimaryExtension(String primaryExtension) {
+		LFPhone phone = getPhone(LFPhone.PRIMARY);
+		phone.setExtension(primaryExtension);
+		setPhone(phone);
+	}
+	
+	public String getSecondaryInternationalNumber() {
+		if(getPhone(LFPhone.SECONDARY).getDecryptedCountry()!=null && getPhone(LFPhone.SECONDARY).getDecryptedCountry().length()>0){
+			return getPhone(LFPhone.SECONDARY).getDecryptedCountry();
+		} else {
+			String phone=getPhone(LFPhone.SECONDARY).getDecryptedPhoneNumber();
+			if(phone!=null && phone.length()==11){
+				return phone.substring(0,1);
+			}
+		}
+		return null;
+	}
+
+	public String getSecondaryAreaNumber() {
+
+		if(getPhone(LFPhone.SECONDARY).getDecryptedArea()!=null && getPhone(LFPhone.SECONDARY).getDecryptedArea().length()>0){
+			return getPhone(LFPhone.SECONDARY).getDecryptedArea();
+		} else {
+			String phone=getPhone(LFPhone.SECONDARY).getDecryptedPhoneNumber();
+			if(phone!=null && phone.length()>0)
+			if(phone.length()==11){
+				return phone.substring(1,4);
+			} else {
+				return phone.substring(0,3);
+			}
+		}
+		return null;
+	}
+	
+	public String getSecondaryExchangeNumber() {
+		if(getPhone(LFPhone.SECONDARY).getDecryptedExchange()!=null && getPhone(LFPhone.SECONDARY).getDecryptedExchange().length()>0){
+			return getPhone(LFPhone.SECONDARY).getDecryptedExchange();
+		} else {
+			String phone=getPhone(LFPhone.SECONDARY).getDecryptedPhoneNumber();
+			if(phone!=null && phone.length()>0)
+			if(phone.length()==11){
+				return phone.substring(4,7);
+			} else {
+				return phone.substring(3,6);
+			}
+		}
+		return null;
+	}
+	
+	public String getSecondaryLineNumber() {
+		if(getPhone(LFPhone.SECONDARY).getDecryptedLine()!=null && getPhone(LFPhone.SECONDARY).getDecryptedLine().length()>0){
+			return getPhone(LFPhone.SECONDARY).getDecryptedLine();
+		} else {
+			String phone=getPhone(LFPhone.SECONDARY).getDecryptedPhoneNumber();
+			if(phone!=null && phone.length()>0)
+			if(phone.length()==11){
+				return phone.substring(7,11);
+			} else {
+				return phone.substring(6,10);
+			}
+		}
+		return null;
+	}
+	
+	public String getSecondaryExtension() {
+		return getPhone(LFPhone.SECONDARY).getExtension();
+	}
+	
 	public String getSecondaryPhoneNumber() {
 		return getPhone(LFPhone.SECONDARY).getDecryptedPhoneNumber();
 	}
@@ -70,6 +223,36 @@ public final class FoundItemForm extends ActionForm {
 	public void setSecondaryPhoneNumber(String secondaryPhoneNumber) {
 		LFPhone phone = getPhone(LFPhone.SECONDARY);
 		phone.setDecryptedPhoneNumber(secondaryPhoneNumber);
+		setPhone(phone);
+	}
+	
+	public void setSecondaryInternationalNumber(String secondaryInternationalNumber) {
+		LFPhone phone = getPhone(LFPhone.SECONDARY);
+		phone.setDecryptedCountry(secondaryInternationalNumber);
+		setPhone(phone);
+	}
+
+	public void setSecondaryAreaNumber(String secondaryAreaNumber) {
+		LFPhone phone = getPhone(LFPhone.SECONDARY);
+		phone.setDecryptedArea(secondaryAreaNumber);
+		setPhone(phone);
+	}
+
+	public void setSecondaryExchangeNumber(String secondaryExchangeNumber) {
+		LFPhone phone = getPhone(LFPhone.SECONDARY);
+		phone.setDecryptedExchange(secondaryExchangeNumber);
+		setPhone(phone);
+	}
+
+	public void setSecondaryLineNumber(String secondaryLineNumber) {
+		LFPhone phone = getPhone(LFPhone.SECONDARY);
+		phone.setDecryptedLine(secondaryLineNumber);
+		setPhone(phone);
+	}
+	
+	public void setSecondaryExtension(String secondaryExtension) {
+		LFPhone phone = getPhone(LFPhone.SECONDARY);
+		phone.setExtension(secondaryExtension);
 		setPhone(phone);
 	}
 	
@@ -116,6 +299,10 @@ public final class FoundItemForm extends ActionForm {
 		}
 		if(phone.getDecryptedPhoneNumber()!=null && !phone.getDecryptedPhoneNumber().isEmpty()){
 			phone.setPerson(found.getClient());
+			found.getClient().getPhones().add(phone);
+		} else { //Temporary - need to think about how to incorporate 'normalized' field
+			phone.setPerson(found.getClient());
+			phone.setDecryptedPhoneNumber(phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
 			found.getClient().getPhones().add(phone);
 		}
 	}

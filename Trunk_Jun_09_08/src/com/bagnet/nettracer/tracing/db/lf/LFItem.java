@@ -324,6 +324,86 @@ public class LFItem implements Serializable{
 			phone.setDecryptedPhoneNumber(dispPhone);
 		}
 	}
+	
+	public String getDispCountry() {
+		if (phone != null && phone.getDecryptedCountry() != null && phone.getDecryptedCountry()!="") {
+			return phone.getDecryptedCountry();
+		}
+		return "";
+	}
+	
+	public void setDispCountry(String dispCountry) {
+		if (dispCountry != null && !dispCountry.trim().equals("")) {
+			if (phone == null) {
+				phone = new LFPhone();
+			}
+			phone.setDecryptedCountry(dispCountry);
+		}
+	}
+	
+	public String getDispArea() {
+		if (phone != null && phone.getDecryptedArea() != null && phone.getDecryptedArea()!="") {
+			return phone.getDecryptedArea();
+		}
+		return "";
+	}
+	
+	public void setDispArea(String dispArea) {
+		if (dispArea != null && !dispArea.trim().equals("")) {
+			if (phone == null) {
+				phone = new LFPhone();
+			}
+			phone.setDecryptedArea(dispArea);
+		}
+	}
+	
+	public String getDispExchange() {
+		if (phone != null && phone.getDecryptedExchange() != null && phone.getDecryptedExchange()!="") {
+			return phone.getDecryptedExchange();
+		}
+		return "";
+	}
+	
+	public void setDispExchange(String dispExchange) {
+		if (dispExchange != null && !dispExchange.trim().equals("")) {
+			if (phone == null) {
+				phone = new LFPhone();
+			}
+			phone.setDecryptedExchange(dispExchange);
+		}
+	}
+	
+	public String getDispLine() {
+		if (phone != null && phone.getDecryptedLine() != null && phone.getDecryptedLine()!="") {
+			return phone.getDecryptedLine();
+		}
+		return "";
+	}
+	
+	public void setDispLine(String dispLine) {
+		if (dispLine != null && !dispLine.trim().equals("")) {
+			if (phone == null) {
+				phone = new LFPhone();
+			}
+			phone.setDecryptedLine(dispLine);
+		}
+	}
+	
+	public String getDispExtension() {
+		if (phone != null && phone.getExtension() != null && phone.getExtension()!="") {
+			return phone.getExtension();
+		}
+		return "";
+	}
+	
+	public void setDispExtension(String dispExtension) {
+		if (dispExtension != null && !dispExtension.trim().equals("")) {
+			if (phone == null) {
+				phone = new LFPhone();
+			}
+			phone.setExtension(dispExtension);
+		}
+	}
 
 	public boolean getDeliveryRejected() {
 		return deliveryRejected;
@@ -340,5 +420,4 @@ public class LFItem implements Serializable{
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
-
 }

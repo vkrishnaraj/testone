@@ -374,7 +374,11 @@
      						<td style="width:33%;">
     							<bean:message key="colname.lf.lostPhoneNumber" />
      							<br>
-     							<html:text name="enterItemsForm" property="disFoundPhoneNumber" size="15" maxlength="25" styleClass="textfield" styleId="disFoundPhoneNumber" />
+		              		<html:text name="enterItemsForm" property="disFoundInternationalNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="enterItemsForm" property="disFoundAreaNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="enterItemsForm" property="disFoundExchangeNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="enterItemsForm" property="disFoundLineNumber" size="5" maxlength="10" styleClass="textfield" /><br/>
+		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="enterItemsForm" property="disFoundExtension" size="3" maxlength="3" styleClass="textfield" />
      						</td>
      					</tr>
      					<tr>
@@ -467,9 +471,14 @@
 				              </tr>
 				              <tr>
 				              	<td colspan="2">
-				              		<bean:message key="colname.lf.primary.phone" />
+				              		<bean:message key="colname.lf.primary.phone" /><br/>
+		              		<bean:message key="colname.lf.phone.logic" />
 				              		<br/>
-				              		<html:text name="enterItemsForm" property="primaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" styleId="primaryPhone"/>
+						              		
+				              		<html:text name="enterItemsForm" property="primaryInternationalNumber" size="10" maxlength="10" styleClass="textfield" />
+				              		<html:text name="enterItemsForm" property="primaryAreaNumber" size="" maxlength="10" styleClass="textfield" />
+				              		<html:text name="enterItemsForm" property="primaryExchangeNumber" size="10" maxlength="10" styleClass="textfield" />
+				              		<html:text name="enterItemsForm" property="primaryLineNumber" size="10" maxlength="10" styleClass="textfield" /><br/>
 				              		<html:select name="enterItemsForm" property="primaryNumberType" styleClass="dropdown" >
 				              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
@@ -477,18 +486,24 @@
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 				              		</html:select>
+				              		<bean:message key="colname.lf.phone.extension" />: <html:text name="enterItemsForm" property="primaryExtension" size="3" maxlength="3" styleClass="textfield" />
 				              	</td>
 				              	<td colspan="3">
-				              		<bean:message key="colname.lf.secondary.phone" />
+				              		<bean:message key="colname.lf.secondary.phone" /><br/>
+		              				<bean:message key="colname.lf.phone.logic" />
 				              		<br/>
-				              		<html:text name="enterItemsForm" property="secondaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" styleId="secondaryPhone" />
+				              		<html:text name="enterItemsForm" property="secondaryInternationalNumber" size="10" maxlength="10" styleClass="textfield" />
+				              		<html:text name="enterItemsForm" property="secondaryAreaNumber" size="10" maxlength="10" styleClass="textfield" />
+				              		<html:text name="enterItemsForm" property="secondaryExchangeNumber" size="10" maxlength="10" styleClass="textfield" />
+				              		<html:text name="enterItemsForm" property="secondaryLineNumber" size="10" maxlength="10" styleClass="textfield" /><br/>
 				              		<html:select name="enterItemsForm" property="secondaryNumberType" styleClass="dropdown" >
 				              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
-				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME)%>"><bean:message key="option.lf.home" /></html:option>
+				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_MOBILE) %>"><bean:message key="option.lf.mobile" /></html:option>
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 				              		</html:select>
+				              		<bean:message key="colname.lf.phone.extension" />: <html:text name="enterItemsForm" property="secondaryExtension" size="3" maxlength="3" styleClass="textfield" />
 				              	</td>
 				              </tr>
 				              <tr>

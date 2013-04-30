@@ -126,8 +126,17 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			if(host.getItem().getPhone() != null){
 				PhoneBean phone = new PhoneBean();
 				phone.setNumber(host.getItem().getPhone().getDecryptedPhoneNumber());
+				phone.setCountry(host.getItem().getPhone().getDecryptedCountry());
+				phone.setArea(host.getItem().getPhone().getDecryptedArea());
+				phone.setExchange(host.getItem().getPhone().getDecryptedExchange());
+				phone.setLine(host.getItem().getPhone().getDecryptedLine());
+				phone.setExtension(host.getItem().getPhone().getExtension());
 				remote.setLostPhone(phone);
 			}
+
+			remote.setFirstNameBag(host.getFirstName());
+			remote.setLastNameBag(host.getLastName());
+			remote.setMiddleNameBag(host.getMiddleName());
 		}
 		
 		remote.setReportId("" + host.getId());
@@ -184,6 +193,8 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 					address.setState(host.getShipment().getBillingAddress().getDecryptedState());
 					contact.setBillingaddress(address);
 				}
+				
+				remote.setShippingOption(host.getShipment().getShippingOption());
 				remote.setDeclaredValue(host.getShipment().getDeclaredValue());
 			}
 
@@ -191,6 +202,10 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 				for(LFPhone phone: host.getClient().getPhones()){
 					PhoneBean toAdd = new PhoneBean();
 					toAdd.setNumber(phone.getDecryptedPhoneNumber());
+					toAdd.setCountry(phone.getDecryptedCountry());
+					toAdd.setArea(phone.getDecryptedArea());
+					toAdd.setExchange(phone.getDecryptedExchange());
+					toAdd.setLine(phone.getDecryptedLine());
 					toAdd.setType(phone.getNumberType());
 					if(phone.getPhoneType() == TracingConstants.LF_PHONE_PRIMARY){
 						contact.setPrimaryPhone(toAdd);
@@ -209,6 +224,10 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 				if(host.getShipment()!=null && host.getShipment().getShippingPhone()!=null){
 					PhoneBean toAdd = new PhoneBean();
 					toAdd.setNumber(host.getShipment().getShippingPhone().getDecryptedPhoneNumber());
+					toAdd.setCountry(host.getShipment().getShippingPhone().getDecryptedCountry());
+					toAdd.setArea(host.getShipment().getShippingPhone().getDecryptedArea());
+					toAdd.setExchange(host.getShipment().getShippingPhone().getDecryptedExchange());
+					toAdd.setLine(host.getShipment().getShippingPhone().getDecryptedLine());
 					toAdd.setType(host.getShipment().getShippingPhone().getNumberType());
 					toAdd.setExtension(host.getShipment().getShippingPhone().getExtension());
 					contact.setShippingPhone(toAdd);
@@ -335,6 +354,10 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 				lostPhone = item.getPhone();
 			}
 			lostPhone.setDecryptedPhoneNumber(lostReport.getLostPhone().getNumber());
+			lostPhone.setDecryptedCountry(lostReport.getLostPhone().getCountry());
+			lostPhone.setDecryptedArea(lostReport.getLostPhone().getArea());
+			lostPhone.setDecryptedExchange(lostReport.getLostPhone().getExchange());
+			lostPhone.setDecryptedLine(lostReport.getLostPhone().getLine());
 			lostPhone.setPhoneType(lostReport.getLostPhone().getType());
 			lostPhone.setItem(item);
 			
@@ -346,6 +369,9 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		if (!update) {
 			host.setItem(item);
 		}
+		host.setFirstName(lostReport.getFirstNameBag());
+		host.setLastName(lostReport.getLastNameBag());
+		host.setMiddleName(lostReport.getMiddleNameBag());
 		
 		LFLossInfo lossinfo = new LFLossInfo();
 		if (update) {
@@ -399,6 +425,10 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 				toAdd.setNumberType(lostReport.getContact().getPrimaryPhone().getType());
 				toAdd.setPerson(client);
 				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getPrimaryPhone().getNumber());
+				toAdd.setDecryptedCountry(lostReport.getContact().getPrimaryPhone().getCountry());
+				toAdd.setDecryptedArea(lostReport.getContact().getPrimaryPhone().getArea());
+				toAdd.setDecryptedExchange(lostReport.getContact().getPrimaryPhone().getExchange());
+				toAdd.setDecryptedLine(lostReport.getContact().getPrimaryPhone().getLine());
 				if (addPhone) {
 					phones.add(toAdd);
 				}
@@ -414,6 +444,10 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 				toAdd.setNumberType(lostReport.getContact().getSecondaryPhone().getType());
 				toAdd.setPerson(client);
 				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getSecondaryPhone().getNumber());
+				toAdd.setDecryptedCountry(lostReport.getContact().getSecondaryPhone().getCountry());
+				toAdd.setDecryptedArea(lostReport.getContact().getSecondaryPhone().getArea());
+				toAdd.setDecryptedExchange(lostReport.getContact().getSecondaryPhone().getExchange());
+				toAdd.setDecryptedLine(lostReport.getContact().getSecondaryPhone().getLine());
 				if (addPhone) {
 					phones.add(toAdd);
 				}
@@ -479,6 +513,10 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 				toAdd.setNumberType(lostReport.getContact().getShippingPhone().getType());
 				toAdd.setPerson(host.getClient());
 				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getShippingPhone().getNumber());
+				toAdd.setDecryptedCountry(lostReport.getContact().getShippingPhone().getCountry());
+				toAdd.setDecryptedArea(lostReport.getContact().getShippingPhone().getArea());
+				toAdd.setDecryptedExchange(lostReport.getContact().getShippingPhone().getExchange());
+				toAdd.setDecryptedLine(lostReport.getContact().getShippingPhone().getLine());
 				toAdd.setExtension(lostReport.getContact().getShippingPhone().getExtension());
 				host.getShipment().setShippingPhone(toAdd);
 			}

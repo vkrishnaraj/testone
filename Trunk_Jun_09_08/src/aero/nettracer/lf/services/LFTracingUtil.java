@@ -9,9 +9,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.hibernate.Hibernate;
 import org.hibernate.type.StandardBasicTypes;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import aero.nettracer.fs.model.Person;
 
 import com.bagnet.nettracer.match.StringCompare;
 
@@ -43,6 +46,7 @@ public class LFTracingUtil {
 	
 	private static ConcurrentHashMap<Long, LFLost> lostCache;
 	private static ConcurrentHashMap<Long, LFFound> foundCache;
+	private static ConcurrentHashMap<String, Object> nicknameCache = new ConcurrentHashMap<String, Object>();
 	
 	private static long lastCacheClean = 0;
 	private static long lastCacheAlert = 0;
@@ -473,31 +477,102 @@ public class LFTracingUtil {
 			LFPerson lc = match.getLost().getClient();
 			LFPerson fc = match.getFound().getClient();
 			if(lc.getLastName() != null && lc.getLastName().trim().length() > 0
+					&& fc.getLastName() != null && fc.getLastName().trim().length() > 0 && isPrimary){
+				if(StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_LAST_NAME)))){ //What the comparescore we want?
+					LFMatchDetail detail = new LFMatchDetail();
+					detail.setDescription("Last Name Match");
+					detail.setMatchHistory(match);
+					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_LAST_NAME)); //What's the value?
+					detail.setDecryptedFoundValue(fc.getLastName());
+					detail.setDecryptedLostValue(lc.getLastName());
+					match.getDetails().add(detail);
+				}
+			}
+			
+			if(lc.getLastName() != null && lc.getLastName().trim().length() > 0
 					&& fc.getLastName() != null && fc.getLastName().trim().length() > 0
 					&& lc.getFirstName() != null && lc.getFirstName().trim().length() > 0
 					&& fc.getFirstName() != null && fc.getFirstName().trim().length() > 0){
-				if(StringCompare.compareStrings(lc.getFirstName()+lc.getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){
+				boolean namematch=false;
+				if(StringCompare.compareStrings(lc.getFirstName()+lc.getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //|| nickmatch
 					LFMatchDetail detail = new LFMatchDetail();
-					detail.setDescription("Name Match");
+					detail.setDescription("Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
 					detail.setMatchHistory(match);
 					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NAME));
 					detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
 					detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
 					match.getDetails().add(detail);
+					namematch=true;
+				}
+				
+				if(match.getLost().getFirstName()!=null && match.getLost().getFirstName().trim().length()>0 &&
+						match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0 &&
+							StringCompare.compareStrings(match.getLost().getFirstName()+match.getLost().getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){
+					LFMatchDetail detail = new LFMatchDetail();
+					detail.setDescription("Bag Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
+					detail.setMatchHistory(match);
+					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_BAG_NAME));
+					detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
+					detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
+					match.getDetails().add(detail);
+					namematch=true;
+				}
+				
+				if(!namematch){
+					List<String> fnickname=getNickName(fc.getFirstName().toUpperCase());
+					List<String> lnickname=getNickName(lc.getFirstName().toUpperCase());
+					for(String name:fnickname){
+						if(StringCompare.compareStrings(name+fc.getLastName(), lc.getFirstName()+lc.getLastName())>
+						(Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NICK_NAME))) && !namematch){
+							LFMatchDetail detail = new LFMatchDetail();
+							detail.setDescription("Nick Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
+							detail.setMatchHistory(match);
+							detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NICK_NAME));
+							detail.setDecryptedFoundValue(name + " " + fc.getLastName());
+							detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
+							match.getDetails().add(detail);
+							namematch=true;
+						}
+					}
+					for(String name:lnickname){
+						if(StringCompare.compareStrings(fc.getFirstName()+fc.getLastName(), name+lc.getLastName())>
+						(Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NICK_NAME))) && !namematch){
+							LFMatchDetail detail = new LFMatchDetail();
+							detail.setDescription("Nick Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
+							detail.setMatchHistory(match);
+							detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NICK_NAME));
+							detail.setDecryptedFoundValue(lc.getFirstName()+ " " + fc.getLastName());
+							detail.setDecryptedLostValue(name + " " + lc.getLastName());
+							match.getDetails().add(detail);
+							namematch=true;
+						}
+					}
 				}
 			}
 			
 			for(LFPhone lphone:getPhones(match.getLost())){
 				for(LFPhone fphone:getPhones(match.getFound())){
-					if(lphone.getDecryptedPhoneNumber() != null && lphone.getDecryptedPhoneNumber().trim().length() > 0
-							&& fphone.getDecryptedPhoneNumber() != null && fphone.getDecryptedPhoneNumber().trim().length() > 0){
-						if(StringCompare.compareStrings(lphone.getDecryptedPhoneNumber(),fphone.getDecryptedPhoneNumber()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_PHONE)))){
+					String lphonenumber=null;
+					String fphonenumber=null;
+					if(lphone.getDecryptedPhoneNumber()!= null && lphone.getDecryptedPhoneNumber().trim().length() > 0){
+						lphonenumber=lphone.getDecryptedPhoneNumber();
+					} else {
+						lphonenumber=lphone.getDecryptedCountry()+lphone.getDecryptedArea()+lphone.getExchangeNumber()+lphone.getDecryptedLine();
+					}
+					if(fphone.getDecryptedPhoneNumber()!= null && fphone.getDecryptedPhoneNumber().trim().length() > 0){
+						fphonenumber=fphone.getDecryptedPhoneNumber();
+					} else {
+						fphonenumber=fphone.getDecryptedCountry()+fphone.getDecryptedArea()+fphone.getExchangeNumber()+fphone.getDecryptedLine();
+					}
+					if(fphonenumber != null && fphonenumber.trim().length() > 0
+							&& lphonenumber != null && lphonenumber.trim().length() > 0){
+						if(StringCompare.compareStrings(lphonenumber,fphonenumber) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_PHONE)))){
 							LFMatchDetail detail = new LFMatchDetail();
 							detail.setDescription("Phone Number Match");
 							detail.setMatchHistory(match);
 							detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_PHONE));
-							detail.setDecryptedFoundValue(fphone.getDecryptedPhoneNumber());
-							detail.setDecryptedLostValue(lphone.getDecryptedPhoneNumber());
+							detail.setDecryptedFoundValue(fphonenumber);
+							detail.setDecryptedLostValue(lphonenumber);
 							match.getDetails().add(detail);
 						}
 					}
@@ -721,13 +796,27 @@ public class LFTracingUtil {
 				}
 				if(litem.getSerialNumber() != null && litem.getSerialNumber().trim().length() > 0
 						&& fitem.getSerialNumber() != null && fitem.getSerialNumber().trim().length() > 0){
-					if(StringCompare.compareStrings(litem.getSerialNumber(),fitem.getSerialNumber()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_SERIAL)))){
-						LFMatchDetail detail = new LFMatchDetail();
-						detail.setDescription("Serial Number Match");
-						detail.setMatchHistory(match);
-						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_SERIAL));
-						detail.setDecryptedFoundValue(fitem.getSerialNumber());
-						match.getDetails().add(detail);
+					String[] lserialnumbers=litem.getSerialNumber().trim().split(",");
+					String[] fserialnumbers=fitem.getSerialNumber().trim().split(",");
+					
+					for(int i=0;i<lserialnumbers.length;i++){
+						String lsnumber=lserialnumbers[i].trim().replaceAll("[^a-zA-Z0-9\\s]", "");
+						if(lsnumber!=null && lsnumber.length()>0){
+							for(int j=0;j<fserialnumbers.length;j++){
+								String fsnumber=fserialnumbers[j].trim().replaceAll("[^a-zA-Z0-9\\s]", "");
+								if(fsnumber!=null && fsnumber.length()>0){
+									if(StringCompare.compareStrings(lsnumber,fsnumber) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_SERIAL)))){
+										LFMatchDetail detail = new LFMatchDetail();
+										detail.setDescription("Serial Number Match");
+										detail.setMatchHistory(match);
+										detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_SERIAL));
+										detail.setDecryptedFoundValue(fsnumber);
+										detail.setDecryptedLostValue(lsnumber);
+										match.getDetails().add(detail);
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -735,6 +824,28 @@ public class LFTracingUtil {
 		return match.getTotalScore();
 	}
 	
+	private static List<String> getNickName(String firstName) {
+		// TODO Auto-generated method stub
+		if(nicknameCache.containsKey(firstName)) {
+			return (List<String>) nicknameCache.get(firstName);
+		}
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			Query q = sess.createQuery("select alias from  com.bagnet.nettracer.tracing.db.lf.LFNameAlias n where n.name = :name");
+			q.setString("name", firstName);
+			List<String> list = q.list();
+			nicknameCache.put(firstName, list);
+			if (list == null || list.size() == 0) {
+				return new ArrayList<String>();
+			}
+			return list;
+		} catch (Exception e) {
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+
 	public static List<LFMatchHistory> traceLost(long id, LFServiceBean bean, boolean log, boolean isPrimary) throws Exception{
 		if(PropertyBMO.isTrue(PropertyBMO.LF_TRACING_USE_CACHE)){
 			cleanCache();

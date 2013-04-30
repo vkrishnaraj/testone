@@ -37,11 +37,23 @@ public class LFPhone implements Serializable{
 	private long id;
 	
 	private String phoneNumber;
+	private String countryNumber;
+	private String areaNumber;
+	private String exchangeNumber;
+	private String lineNumber;
 	
 	private String extension;
 	
 	@Transient
 	private String decryptedNumber;
+	@Transient
+	private String decryptedCountry;
+	@Transient
+	private String decryptedArea;
+	@Transient
+	private String decryptedExchange;
+	@Transient
+	private String decryptedLine;
 	
 	/* Primary/Secondary */
 	private int numberType;
@@ -94,6 +106,11 @@ public class LFPhone implements Serializable{
 	public void setDecryptedPhoneNumber(String phoneNumber){
 		this.decryptedNumber = null; 
 		try {
+			if(phoneNumber!=null && phoneNumber.length()>0){
+				phoneNumber=phoneNumber.replaceAll("[^\\d.]", "");
+			} else {
+				phoneNumber="";
+			}
 			this.phoneNumber = AES.encrypt(normalizePhone(phoneNumber));
 		} catch (Exception e){
 			e.printStackTrace();
@@ -130,6 +147,10 @@ public class LFPhone implements Serializable{
 	}
 
 	public void setExtension(String extension) {
+
+		if(extension.length()>0){
+			extension=extension.replaceAll("[^\\d.]", "");
+		}
 		this.extension = extension;
 	}
 	
@@ -159,6 +180,142 @@ public class LFPhone implements Serializable{
 			empty = false;
 		}
 		return empty;
+	}
+
+	public String getCountryNumber() {
+		return countryNumber;
+	}
+	
+	public String getDecryptedCountry(){
+		if(this.decryptedCountry == null){
+			try {
+				this.decryptedCountry = AES.decrypt(this.countryNumber);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		return this.decryptedCountry;
+	}
+	
+	public void setDecryptedCountry(String countryNumber){
+		this.decryptedCountry = null; 
+		try {
+			if(countryNumber!=null && countryNumber.length()>0){
+				countryNumber=countryNumber.replaceAll("[^\\d.]", "");
+			} else {
+				countryNumber="";
+			}
+			this.countryNumber = AES.encrypt(normalizePhone(countryNumber));
+		} catch (Exception e){
+			e.printStackTrace();
+			this.countryNumber = null;
+		}
+	}
+
+	public void setCountryNumber(String countryNumber) {
+		this.countryNumber = countryNumber;
+	}
+
+	public String getAreaNumber() {
+		return areaNumber;
+	}
+	
+	public String getDecryptedArea(){
+		if(this.decryptedArea == null){
+			try {
+				this.decryptedArea = AES.decrypt(this.areaNumber);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		return this.decryptedArea;
+	}
+
+	public void setDecryptedArea(String areaNumber){
+		this.decryptedArea = null; 
+		try {
+			if(areaNumber!=null && areaNumber.length()>0){
+				areaNumber=areaNumber.replaceAll("[^\\d.]", "");
+			} else {
+				areaNumber="";
+			}
+			this.areaNumber = AES.encrypt(normalizePhone(areaNumber));
+		} catch (Exception e){
+			e.printStackTrace();
+			this.areaNumber = null;
+		}
+	}
+
+	public void setAreaNumber(String areaNumber) {
+		this.areaNumber = areaNumber;
+	}
+
+	public String getExchangeNumber() {
+		return exchangeNumber;
+	}
+	
+	public String getDecryptedExchange(){
+		if(this.decryptedExchange== null){
+			try {
+				this.decryptedExchange = AES.decrypt(this.exchangeNumber);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		return this.decryptedExchange;
+	}
+
+	public void setDecryptedExchange(String exchangeNumber){
+		this.decryptedExchange = null; 
+		try {
+			if(exchangeNumber!=null && exchangeNumber.length()>0){
+				exchangeNumber=exchangeNumber.replaceAll("[^\\d.]", "");
+			} else {
+				exchangeNumber="";
+			}
+			this.exchangeNumber = AES.encrypt(normalizePhone(exchangeNumber));
+		} catch (Exception e){
+			e.printStackTrace();
+			this.exchangeNumber = null;
+		}
+	}	
+
+	public void setExchangeNumber(String exchangeNumber) {
+		this.exchangeNumber = exchangeNumber;
+	}
+
+	public String getLineNumber() {
+		return lineNumber;
+	}
+	
+	public String getDecryptedLine(){
+		if(this.decryptedLine== null){
+			try {
+				this.decryptedLine = AES.decrypt(this.lineNumber);
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
+		return this.decryptedLine;
+	}
+	
+	public void setDecryptedLine(String lineNumber){
+		this.decryptedLine= null; 
+		try {
+			if(lineNumber!=null && lineNumber.length()>0){
+				lineNumber=lineNumber.replaceAll("[^\\d.]", "");
+			}  else {
+				lineNumber="";
+			}
+			this.lineNumber = AES.encrypt(normalizePhone(lineNumber));
+		} catch (Exception e){
+			e.printStackTrace();
+			this.lineNumber = null;
+		}
+	}	
+
+	public void setLineNumber(String lineNumber) {
+		this.lineNumber = lineNumber;
 	}
 	
 }

@@ -349,9 +349,13 @@
 		              </tr>
 		              <tr>
 		              	<td colspan="2">
-		              		<bean:message key="colname.lf.primary.phone" />
+		              		<bean:message key="colname.lf.primary.phone" /><br/>
+		              		<bean:message key="colname.lf.phone.logic" />
 		              		<br/>
-		              		<html:text name="lostReportForm" property="primaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="primaryInternationalNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="primaryAreaNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="primaryExchangeNumber" size="10" maxlength="10" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="primaryLineNumber" size="10" maxlength="10" styleClass="textfield" /><br/>
 		              		<html:select name="lostReportForm" property="primaryNumberType" styleClass="dropdown" >
 		              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
@@ -359,11 +363,18 @@
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 		              		</html:select>
+		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="lostReportForm" property="primaryExtension" size="3" maxlength="3" styleClass="textfield" />
+		              		
 		              	</td>
 		              	<td colspan="3">
-		              		<bean:message key="colname.lf.secondary.phone" />
+		              		<bean:message key="colname.lf.secondary.phone" /><br/>
+		              		<bean:message key="colname.lf.phone.logic" />
 		              		<br/>
-		              		<html:text name="lostReportForm" property="secondaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="secondaryInternationalNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="secondaryAreaNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="secondaryExchangeNumber" size="10" maxlength="10" styleClass="textfield" />
+		              		<html:text name="lostReportForm" property="secondaryLineNumber" size="10" maxlength="10" styleClass="textfield" /><br/>
+		              		<br/>
 		              		<html:select name="lostReportForm" property="secondaryNumberType" styleClass="dropdown" >
 		              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
@@ -371,6 +382,7 @@
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 		              		</html:select>
+		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="lostReportForm" property="secondaryExtension" size="3" maxlength="3" styleClass="textfield" />
 		              	</td>
 		              </tr>
 		              <tr>
@@ -511,6 +523,24 @@
         					</td>
        							
     	   					</tr>
+   	   					<tr>
+   	   					
+	         				<td>
+	         					<bean:message key="colname.lf.last.name.item" />
+	         					<br>
+	         					<html:text name="lostReportForm" property="lost.lastName" maxlength="50" styleClass="textfield" />
+	         				</td>
+	         				<td>
+	         					<bean:message key="colname.lf.first.name.item" />
+	         					<br>
+	         					<html:text name="lostReportForm" property="lost.firstName" maxlength="50" styleClass="textfield" />
+	         				</td>
+	         				<td>
+	         					<bean:message key="colname.lf.middle.name.item" />
+	         					<br>
+	         					<html:text name="lostReportForm" property="lost.middleName" maxlength="50" styleClass="textfield" />
+	         				</td>
+	         			</tr>
          				<tr>
 	         				<td>
 	         					<bean:message key="colname.lf.brand" />
@@ -599,7 +629,12 @@
 	         				<td>
 	         					<bean:message key="colname.lf.lostPhoneNumber" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].dispPhone" class="textfield" value="<%=item.getDispPhone()%>" />
+	         					<input type="text" name="item[<%=i %>].dispCountry" size="3" class="textfield" value="<%=item.getDispCountry()%>" />
+	         					 <input type="text" name="item[<%=i %>].dispArea" size="3"  class="textfield" value="<%=item.getDispArea()%>" />
+	         					 <input type="text" name="item[<%=i %>].dispExchange" size="3"  class="textfield" value="<%=item.getDispExchange()%>" />
+	         					 <input type="text" name="item[<%=i %>].dispLine" size="4" class="textfield" value="<%=item.getDispLine()%>" /><br/>
+	         					 <bean:message key="colname.lf.phone.extension" />: <input type="text" name="item[<%=i %>].dispExtension" size="3"  class="textfield" value="<%=item.getDispExchange()%>" />
+	         					
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.caseColor" />

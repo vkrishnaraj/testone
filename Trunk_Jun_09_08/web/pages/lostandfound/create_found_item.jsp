@@ -607,9 +607,13 @@
 		              </tr>
 		              <tr>
 		              	<td colspan="2">
-		              		<bean:message key="colname.lf.primary.phone" />
+		              		<bean:message key="colname.lf.primary.phone" /><br/>
+		              		<bean:message key="colname.lf.phone.logic" />
 		              		<br/>
-		              		<html:text name="foundItemForm" property="primaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
+		              		<html:text name="foundItemForm" property="primaryInternationalNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="foundItemForm" property="primaryAreaNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="foundItemForm" property="primaryExchangeNumber" size="10" maxlength="10" styleClass="textfield" />
+		              		<html:text name="foundItemForm" property="primaryLineNumber" size="10" maxlength="10" styleClass="textfield" /><br/>
 		              		<html:select name="foundItemForm" property="primaryNumberType" styleClass="dropdown" >
 		              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
@@ -617,11 +621,16 @@
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 		              		</html:select>
+		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="foundItemForm" property="primaryExtension" size="3" maxlength="3" styleClass="textfield" />
 		              	</td>
 		              	<td colspan="3">
-		              		<bean:message key="colname.lf.secondary.phone" />
+		              		<bean:message key="colname.lf.secondary.phone" /> <br/>
+		              		<bean:message key="colname.lf.phone.logic" />
 		              		<br/>
-		              		<html:text name="foundItemForm" property="secondaryPhoneNumber" size="15" maxlength="25" styleClass="textfield" />
+		              		<html:text name="foundItemForm" property="secondaryInternationalNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="foundItemForm" property="secondaryAreaNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="foundItemForm" property="secondaryExchangeNumber" size="5" maxlength="10" styleClass="textfield" />
+		              		<html:text name="foundItemForm" property="secondaryLineNumber" size="5" maxlength="10" styleClass="textfield" /><br/>
 		              		<html:select name="foundItemForm" property="secondaryNumberType" styleClass="dropdown" >
 		              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME)%>"><bean:message key="option.lf.home" /></html:option>
@@ -629,6 +638,7 @@
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 		              		</html:select>
+		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="foundItemForm" property="secondaryExtension" size="4" maxlength="4" styleClass="textfield" /> 
 		              	</td>
 		              </tr>
 		              <tr>
@@ -784,7 +794,12 @@
 	         				<td>
 	         					<bean:message key="colname.lf.lostPhoneNumber" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].dispPhone" class="textfield" value="<%=item.getDispPhone()%>" />
+	         					 <input type="text" name="item[<%=i %>].dispCountry" size="3" class="textfield" value="<%=item.getDispCountry()%>" />
+	         					 <input type="text" name="item[<%=i %>].dispArea" size="3"  class="textfield" value="<%=item.getDispArea()%>" />
+	         					 <input type="text" name="item[<%=i %>].dispExchange" size="3"  class="textfield" value="<%=item.getDispExchange()%>" />
+	         					 <input type="text" name="item[<%=i %>].dispLine" size="4" class="textfield" value="<%=item.getDispLine()%>" /><br/>
+	         					 <bean:message key="colname.lf.phone.extension" />: <input type="text" name="item[<%=i %>].dispExtension" size="3"  class="textfield" value="<%=item.getDispExchange()%>" />
+	         					<!-- <input type="text" name="item[<%=i %>].dispPhone" class="textfield" value="<%=item.getDispPhone()%>" />-->
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.caseColor" />
@@ -811,7 +826,7 @@
 	         					<input type="text" name="item[<%=i %>].description" class="textfield" size="250" style="width: 95%;" value="<%=item.getDescription() == null ? "" : item.getDescription() %>" />
 	         				</td>
 	         				<td colspan=1>
-	         					<bean:message key="colname.lf.weight" />
+	         					<bean:message key="colname.lfc.weight" />
 	         					<br>
 	         					<input type="text" id="weight" name="item[<%=i %>].weight" class="textfield" value="<%=item.getWeight()%>" />
 	         				</td>
