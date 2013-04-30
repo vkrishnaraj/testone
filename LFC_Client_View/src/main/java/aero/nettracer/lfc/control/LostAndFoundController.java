@@ -92,7 +92,7 @@ public class LostAndFoundController {
 					populateShippingAddress(lostReport.getContact().getAddress());
 				}
 			}
-			if(selectedoption==null){
+			if(selectedoption==null && lostReport.getShippingOption()!=null){
 				selectedoption=lostReport.getShippingOption().replace(" ", "_");
 			}
 			if(shippingPhone==null){
@@ -469,6 +469,9 @@ public class LostAndFoundController {
 		boolean isValid = true;
 		if (ccnumber== null || ccnumber.length() == 0) {
 			FacesUtil.addError("ERROR: Credit Card Number is required.");
+			isValid = false;
+		} else if(ccnumber.length()!=10) {
+			FacesUtil.addError("ERROR: Credit Card Number is incorrect length.");
 			isValid = false;
 		}
 		if (ccname == null || ccname.length() == 0) {
