@@ -6,7 +6,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.ejb.Stateless;
 
@@ -66,6 +68,25 @@ import com.fedex.ws.rate.v13.WeightUnits;
 @Stateless
 public class FedexUtils {
 //Begin Fedex Logic
+	private static final ConcurrentHashMap<String, String> provCache;
+	static{
+		provCache=new ConcurrentHashMap<String,String>();
+		provCache.put("ALBERTA","AB");
+		provCache.put("BRITISH COLUMBIA","BC");
+		provCache.put("MANITOBA","MB");
+		provCache.put("NEW BRUNSWICK","NB");
+		provCache.put("NEWFOUNDLAND","NL");
+		provCache.put("LABRADOR","NL");
+		provCache.put("NOVA SCOTIA","NS");
+		provCache.put("NUNAVUT","NU");
+		provCache.put("ONTARIO","ON");
+		provCache.put("QUEBEC","QC"); //Special characters?
+		provCache.put("SASKATCHEWAN","SK");
+		provCache.put("YUKON","YT");
+		provCache.put("YUKON TERRITORY","YT");
+		provCache.put("PRINCE EDWARD ISLAND","PE");
+	}
+	
 	static AddressBean validateAddressFedex(AddressBean ship){
 		AddressValidationServiceStub stub=null;
 		try {
@@ -111,8 +132,8 @@ public class FedexUtils {
 	    a1.setCountryCode(ship.getCountry());
 	    if(ship.getCountry().equals("US")){
 	    	a1.setStateOrProvinceCode(ship.getState());
-	    } else {
-	    	a1.setStateOrProvinceCode(ship.getProvince());
+	    } else if (ship.getCountry().equals("CA") && provCache.get(ship.getProvince().toUpperCase())!=null){
+	    	a1.setStateOrProvinceCode(provCache.get(ship.getProvince().toUpperCase()));
 	    }
 	    a1.setPostalCode(ship.getPostal());
 	    request.setAddressesToValidateArray(new AddressToValidate[] {av1});
@@ -144,9 +165,9 @@ public class FedexUtils {
 				proposedAddress.setPostal(pa.getPostalCode());
 				if(pa.getCountryCode().equals("US")){
 					proposedAddress.setState(pa.getStateOrProvinceCode());
-				} else {
-					proposedAddress.setProvince(pa.getStateOrProvinceCode());
-				}
+				} else if (ship.getCountry().equals("CA") && provCache.get(pa.getStateOrProvinceCode().toUpperCase())!=null){
+					proposedAddress.setProvince(pa.getStateOrProvinceCode().toUpperCase());
+			    }
 			}
 			if (isResponseOk(reply.getHighestSeverity()))
 			{
@@ -343,8 +364,8 @@ public class FedexUtils {
 	    recipientAddress.setCity(ship.getCity());
 	    if(ship.getCountry().equals("US")){
 	    	recipientAddress.setStateOrProvinceCode(ship.getState());
-	    } else {
-	    	recipientAddress.setStateOrProvinceCode(ship.getProvince());
+	    } else if (ship.getCountry().equals("CA") && provCache.get(ship.getProvince().toUpperCase())!=null){
+	    	recipientAddress.setStateOrProvinceCode(provCache.get(ship.getProvince().toUpperCase()));
 	    }
 	    recipientAddress.setPostalCode(ship.getPostal());
 	    recipientAddress.setCity(ship.getCity());
@@ -404,6 +425,9 @@ public class FedexUtils {
 			BigDecimal shippingCost;
 			//Logic for if SWA, add 1. If AA, add 5
 			shippingCost=new BigDecimal(1);
+			if(replyDoc.getRateReply().getRateReplyDetailsArray().length==0){
+				return null;
+			}
 			for(RateReplyDetail r:replyDoc.getRateReply().getRateReplyDetailsArray()){
 				RateBean rbean=new RateBean();
 				rbean.setRateKey(r.getCommitDetailsArray(0).getServiceType().toString());

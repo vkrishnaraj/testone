@@ -794,7 +794,6 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 	@Override
 	public AddressBean validateAddressFedex(LostReportBean bean){
 		return FedexUtils.validateAddressFedex(bean.getContact().getPrefshipaddress());
-		
 	}
 	
 	@Override

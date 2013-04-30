@@ -111,36 +111,25 @@
 							<td colspan="8" >&#160;</td>
 						</tr>
 						<tr>
-							<td class="twlvPxBlk" colspan="6"><t:outputText
-									value="#{msg.shipping_label_address_addr1} *" /></td>
+							<td class="twlvPxBlk" colspan="6"><b><t:outputText
+									value="#{msg.shipping_label_address_addr1}" /></b></td>
 						</tr>
 						<tr>
+							<td colspan="6">
+							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.address1}"/><br/>
+							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.address2}"/><br/>
+							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.city}, #{lostAndFound.lostReport.contact.prefshipaddress.state} #{lostAndFound.lostReport.contact.prefshipaddress.postal} #{lostAndFound.lostReport.contact.prefshipaddress.country}"/>
+						 	</td>
+					 	</tr>
+						<!-- tr>
 							<td colspan="6"><t:outputText
 									value="#{lostAndFound.lostReport.contact.prefshipaddress.address1}"
 									style="width: 100%" id="shipAddress1" /></td>
 						</tr>
 						<tr>
-							<td>&#160;</td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="6"><t:outputText
-									value="#{msg.shipping_label_address_addr2}" /></td>
-						</tr>
-						<tr>
 							<td colspan="6"><t:outputText
 									value="#{lostAndFound.lostReport.contact.prefshipaddress.address2}"
 									style="width: 100%" id="shipAddress2" /></td>
-						</tr>
-						<tr>
-							<td >&#160;</td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
-									value="#{msg.shipping_label_address_city} *" /></td>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
-									value="#{msg.shipping_label_address_state}" /></td>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
-									value="#{msg.shipping_label_address_postal}" /></td>
 						</tr>
 						<tr>
 							<td colspan="2"><t:outputText
@@ -154,22 +143,13 @@
 									style="width: 100%" id="shipPostal" /></td>
 						</tr>
 						<tr>
-							<td>&#160;</td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
-									value="#{msg.shipping_label_address_country} *" /></td>
-							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
-									value="#{msg.shipping_label_address_province}" /></td>
-						</tr>
-						<tr>
 							<td colspan="3"><t:outputText
 									value="#{lostAndFound.lostReport.contact.prefshipaddress.country}" style="width: 95%"
 									id="shipCountry"/></td>
 							<td colspan="3"><t:outputText id="shipProvince"
 									value="#{lostAndFound.lostReport.contact.prefshipaddress.province}"
 									style="width: 100%" /></td>
-						</tr>
+						</tr>-->
 					</table>
 				<br />
 				<br/>

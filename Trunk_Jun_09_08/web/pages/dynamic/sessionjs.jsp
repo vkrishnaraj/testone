@@ -189,8 +189,8 @@
 
 		}
 		
-		var primaryPhone = getFieldByName("primaryPhoneNumber", form).value;
-		var secondaryPhone = getFieldByName("secondaryPhoneNumber", form).value;
+		var primaryPhone =  getFieldByName("primaryInternationalNumber",form).value+getFieldByName("primaryAreaNumber",form).value+getFieldByName("primaryExchangeNumber",form).value+getFieldByName("primaryLineNumber",form).value;  /*getFieldByName("primaryPhoneNumber", form).value;*/
+		var secondaryPhone = getFieldByName("secondaryInternationalNumber",form).value+getFieldByName("secondaryAreaNumber",form).value+getFieldByName("secondaryExchangeNumber",form).value+getFieldByName("secondaryLineNumber",form).value;   /*getFieldByName("secondaryPhoneNumber", form).value;*/
 		var email = getFieldByName("lost.client.decryptedEmail", form).value;
 		if (primaryPhone.length == 0 && secondaryPhone.length == 0 && email.length == 0) {
 			alert("<%= (String)bundle.getString("colname.lf.phone.or.email") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");

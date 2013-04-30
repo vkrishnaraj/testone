@@ -22,6 +22,9 @@ public class LostReportBean implements Serializable{
 	private String itemColor;
 	private String itemDesc;
 	private String itemLongDesc;
+	private String firstNameBag;
+	private String middleNameBag;
+	private String lastNameBag;
 	private String whereLost;
 	private String company;
 	private String subCompany;
@@ -306,6 +309,30 @@ public class LostReportBean implements Serializable{
 
 	public void setShippingOption(String shippingOption) {
 		this.shippingOption = shippingOption;
+	}
+
+	public String getFirstNameBag() {
+		return firstNameBag;
+	}
+
+	public void setFirstNameBag(String firstNameBag) {
+		this.firstNameBag = firstNameBag;
+	}
+
+	public String getMiddleNameBag() {
+		return middleNameBag;
+	}
+
+	public void setMiddleNameBag(String middleNameBag) {
+		this.middleNameBag = middleNameBag;
+	}
+
+	public String getLastNameBag() {
+		return lastNameBag;
+	}
+
+	public void setLastNameBag(String lastNameBag) {
+		this.lastNameBag = lastNameBag;
 	}
 
 }

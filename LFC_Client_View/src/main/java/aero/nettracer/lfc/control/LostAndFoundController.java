@@ -74,15 +74,13 @@ public class LostAndFoundController {
 		.getExternalContext().getSession(false);
 		lostReport = (LostReportBean) session.getAttribute("lostReport");
 		shippingAddress=(AddressBean)session.getAttribute("shippingAddress");
+		selectedoption=(String)session.getAttribute("selectedOption");
 		shippingPhone=lostReport.getContact().getShippingPhone();
 		rates=(List<RateBean>)session.getAttribute("rates");
+		session.setAttribute("shippingOptions", (List<SelectItem>)session.getAttribute("shippingOptions")); //To Make method to get FedEx options based on PrefShipAddress
 		
 		if (getSubCompany() != null && getSubCompany().equals("SWA") ) {
 			setSegmentLocationDesc(lostReport.getSegments());
-		}
-		
-		if(lostReport!=null && lostReport.getContact()!=null && lostReport.getContact().getPrefshipaddress()!=null && lostReport.getContact().getPrefshipaddress().getAddress1()!=null){
-			session.setAttribute("shippingOptions", (List<SelectItem>)session.getAttribute("shippingOptions")); //To Make method to get FedEx options based on PrefShipAddress
 		}
 		
 		if(lostReport!=null && lostReport.getContact()!=null){
@@ -94,6 +92,9 @@ public class LostAndFoundController {
 					populateShippingAddress(lostReport.getContact().getAddress());
 				}
 			}
+			if(selectedoption==null){
+				selectedoption=lostReport.getShippingOption().replace(" ", "_");
+			}
 			if(shippingPhone==null){
 				shippingPhone=new PhoneBean();
 				shippingPhone.setNumber(lostReport.getContact().getPrimaryPhone().getNumber());
@@ -102,6 +103,7 @@ public class LostAndFoundController {
 			
 			session.setAttribute("shippingAddress", shippingAddress);
 			session.setAttribute("shippingPhone", shippingPhone);
+			session.setAttribute("selectedOption", selectedoption);
 			session.setAttribute("rates", rates);
 			session.setAttribute("optionselected", false);
 		}
@@ -184,7 +186,7 @@ public class LostAndFoundController {
 			
 			rates=clientViewService.getRatesForAddress(lostReport);
 			List<SelectItem> shippingOptions=getRatesList();
-			if (shippingOptions != null) {
+			if (shippingOptions != null && shippingOptions.size()!=0) {
 				long id = clientViewService.create(lostReport);
 				//List<SelectItem> shippingOptions=ratesToSelectItem(rates); // new ArrayList<SelectItem>();//=getOptionsOnAddress();
 				//create Shipping Address for contact and mark it as the preferred Shipping Address and then get Shipping options and rates
@@ -195,12 +197,15 @@ public class LostAndFoundController {
 				session.setAttribute("shippingOptions", shippingOptions);
 				session.setAttribute("rates", rates);
 				return "shippingrates?faces-redirect=true";
-			} 
-			FacesUtil.addError("Server Communication Error.");
+			} else {
+				FacesUtil.addError("Shipping address did not return any services. Please confirm your address is correct. If this issue continues, please contact us at 1+(555)-555-5555");
+				return null;
+			}
+			//FacesUtil.addError("Server Communication Error.");
 		} else if(session.getAttribute("proposedAddress")!=null){
 			return "shippingconfirm?faces-redirect=true";
 		}
-		FacesUtil.addError("Shipping address was not valid. Please confirm.");
+		FacesUtil.addError("Shipping address was not valid. Please confirm your address is correct.");
 		return null;
 	}
 	
@@ -243,6 +248,7 @@ public class LostAndFoundController {
 				.getExternalContext().getSession(false);
 				session.setAttribute("lostReport", lostReport);
 				session.setAttribute("optionselected", true);
+				session.setAttribute("selectedOption", selectedoption);
 				return "shippingpayment?faces-redirect=true";
 			}
 			FacesUtil.addError("Server Communication Error.");
@@ -438,7 +444,7 @@ public class LostAndFoundController {
 				isValid = false;
 			}			
 		}
-		if(isValid && (prefAddress==null || (prefAddress!=null && prefAddress.length()==0))){
+		if(isValid && (shippingAddress.getCountry().equals("US") || shippingAddress.getCountry().equals("CA")) &&(prefAddress==null || (prefAddress!=null && prefAddress.length()==0))){
 			AddressBean validAddress=clientViewService.validateAddressFedex(lostReport);
 			if(validAddress!=null && !validAddress.getScore().equals(BigInteger.valueOf(100))){
 				//Set property to show list of potentially valid options???
@@ -513,7 +519,7 @@ public class LostAndFoundController {
 				isValid = false;
 			}
 		}
-		if(isValid && !ccnumber.equals("3214697890")){ //TODO: Implement call to Credit Card validation service
+		if(isValid && false){ //TODO: Implement call to Credit Card validation service
 			FacesUtil.addError("ERROR: Credit Card is not valid. Please reenter correct credit card information.");
 			isValid=false;
 		}

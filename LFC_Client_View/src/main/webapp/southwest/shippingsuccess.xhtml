@@ -16,16 +16,16 @@
 				<!-- Receipt Information -->
 				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_order_summary}" /></p><br/>
 				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_purchase_info}" /></p><br/>
-				<p><t:outputText value="#{msg.success_purchase_info_email}" />: <t:outputText value="#{shipbean.client.emailAddress}"/><br/>
-				<t:outputText value="#{msg.success_shipping_text_purchase_billing}" />:<br/>
+				<p><t:outputText value="#{msg.success_purchase_info_email}: " /> <t:outputText value="#{shipbean.client.emailAddress}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_purchase_billing}:" /><br/>
 				 	<t:outputText value="#{shipbean.client.firstName} #{shipbean.client.lastName}"/><br/>
 				 	<t:outputText value="#{shipbean.billingAddress.address1} #{shipbean.billingAddress.address2}"/><br/>
 				 	<t:outputText value="#{shipbean.billingAddress.city}, #{shipbean.billingAddress.state} #{shipbean.billingAddress.postal} #{shipbean.billingAddress.country}"/><br/><br/>
-				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}" />:<br/>
+				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}:" /><br/>
 				 	<t:outputText value="#{shipbean.shippingAddress.address1} #{shipbean.shippingAddress.address2}"/><br/>
 				 	<t:outputText value="#{shipbean.shippingAddress.city}, #{shipbean.shippingAddress.state} #{shipbean.shippingAddress.postal} #{shipbean.shippingAddress.country}"/></p><br/><br/>
-				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}" />: <t:outputText value="#{shipbean.shippingOption}"/><br/>
-				<t:outputText value="#{msg.success_shipping_text_order_total}" />: <t:outputText value="#{shipbean.totalPayment}"/><br/><br/>
+				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}: " /> <t:outputText value="#{shipbean.shippingOption}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_order_total}: " /> <t:outputText value="#{shipbean.totalPayment}"/><br/><br/>
 				<!-- End Receipt Information -->
 				<!-- Add Transaction Information -->
 				<t:outputText value="Transactional Info to be added"/>

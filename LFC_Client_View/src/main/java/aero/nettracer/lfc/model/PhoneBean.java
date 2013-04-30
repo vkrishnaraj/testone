@@ -9,6 +9,10 @@ public class PhoneBean implements Serializable{
 	private static final long serialVersionUID = -6086762016588491652L;
 	
 	private String number;
+	private String country;
+	private String area;
+	private String exchange;
+	private String line;
 	private String extension;
 	private int type;
 	
@@ -87,6 +91,38 @@ public class PhoneBean implements Serializable{
 		default:
 			return "";	
 		}
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	public String getExchange() {
+		return exchange;
+	}
+
+	public void setExchange(String exchange) {
+		this.exchange = exchange;
+	}
+
+	public String getLine() {
+		return line;
+	}
+
+	public void setLine(String line) {
+		this.line = line;
 	}
 
 }
