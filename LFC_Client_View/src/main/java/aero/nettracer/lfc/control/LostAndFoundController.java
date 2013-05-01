@@ -75,7 +75,6 @@ public class LostAndFoundController {
 		lostReport = (LostReportBean) session.getAttribute("lostReport");
 		shippingAddress=(AddressBean)session.getAttribute("shippingAddress");
 		selectedoption=(String)session.getAttribute("selectedOption");
-		shippingPhone=lostReport.getContact().getShippingPhone();
 		rates=(List<RateBean>)session.getAttribute("rates");
 		session.setAttribute("shippingOptions", (List<SelectItem>)session.getAttribute("shippingOptions")); //To Make method to get FedEx options based on PrefShipAddress
 		
@@ -84,9 +83,10 @@ public class LostAndFoundController {
 		}
 		
 		if(lostReport!=null && lostReport.getContact()!=null){
+			shippingPhone=lostReport.getContact().getShippingPhone();
 			if(shippingAddress==null || (shippingAddress!=null && shippingAddress.getAddress1()==null)){
 				shippingAddress=new AddressBean();
-				if(lostReport.getContact().getPrefshipaddress().getAddress1()!=null){
+				if(lostReport.getContact().getPrefshipaddress()!=null && lostReport.getContact().getPrefshipaddress().getAddress1()!=null){
 					populateShippingAddress(lostReport.getContact().getPrefshipaddress());
 				} else {
 					populateShippingAddress(lostReport.getContact().getAddress());
@@ -470,10 +470,11 @@ public class LostAndFoundController {
 		if (ccnumber== null || ccnumber.length() == 0) {
 			FacesUtil.addError("ERROR: Credit Card Number is required.");
 			isValid = false;
-		} else if(ccnumber.length()!=10) {
-			FacesUtil.addError("ERROR: Credit Card Number is incorrect length.");
-			isValid = false;
-		}
+		} 
+//		else if(ccnumber.length()!=10) {
+//			FacesUtil.addError("ERROR: Credit Card Number is incorrect length.");
+//			isValid = false;
+//		}
 		if (ccname == null || ccname.length() == 0) {
 			FacesUtil.addError("ERROR: Name on Credit Card is required.");
 			isValid = false;
