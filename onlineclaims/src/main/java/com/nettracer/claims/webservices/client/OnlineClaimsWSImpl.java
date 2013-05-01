@@ -311,6 +311,14 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         passengerBean.setReportedAirline(claim.getReportedAirline());
         passengerBean.setReportedCity(claim.getReportedCity());
         passengerBean.setReportedFileNumber(claim.getReportedFileNumber());
+        passengerBean.setRequestForeignCurrency(intToBool(claim.getRequestForeignCurrency()));
+        passengerBean.setForeignCurrencyEmail(claim.getForeignCurrencyEmail());
+        if(null != claim.getBagReceivedDate()){
+        	Calendar temp = claim.getBagReceivedDate();
+        	int timeDiff = figureTimeDifference(temp);
+        	temp.add(Calendar.HOUR_OF_DAY, timeDiff);
+        	passengerBean.setBagReceivedDate(temp.getTime());
+        }
         
         passengerBean.setStatus(claim.getStatus());
         
@@ -418,6 +426,13 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		 claimType = encodeBit(claimType, 2, passengerBean.isDamaged());
 		 claimType = encodeBit(claimType, 3, passengerBean.isInterim());
 		 claim.setClaimType(claimType);
+		 Calendar calendar;
+			if(null !=passengerBean.getBagReceivedDate()){
+				calendar=Calendar.getInstance();
+				calendar.setTime(passengerBean.getBagReceivedDate());
+				claim.setBagReceivedDate(calendar);
+				calendar=null;//GC
+			}
 		 
          subDoc1.setIncidentId(passengerBean.getIncidentID()); //claim number is the incident Id
          subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
@@ -605,6 +620,8 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         claim.setPrivateInsurance(boolToInt(passengerBean.getPrivateInsurance()));
         claim.setPrivateInsuranceName(passengerBean.getPrivateInsuranceName());
         claim.setPrivateInsuranceAddr(passengerBean.getPrivateInsuranceAddr());
+        claim.setRequestForeignCurrency(boolToInt(passengerBean.getRequestForeignCurrency()));
+        claim.setForeignCurrencyEmail(passengerBean.getForeignCurrencyEmail());
 		 
 		subDoc1.setClaim(claim);
 		if(null != subDoc1.getAuth()){
@@ -801,6 +818,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					contentList= new ArrayList<Content>();
 					for (int j = 0; j < wsContents.length; j++) {
 						content=new Content();
+						content.setQuantity(wsContents[j].getQuantity());
 						content.setMale(wsContents[j].getMale());
 						content.setArticle(wsContents[j].getArticle());
 						content.setColor(wsContents[j].getColor());
@@ -955,6 +973,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 							wsContent = com.bagnet.nettracer.ws.onlineclaims.xsd.Contents.Factory.newInstance();
 							content=contents.get(j);
 							if(null != content){
+								wsContent.setQuantity(content.getQuantity());
 								wsContent.setMale(content.getMale());
 								wsContent.setArticle(content.getArticle());
 								wsContent.setColor(content.getColor());

@@ -13,6 +13,15 @@ public class Content {
 	private String currency;
 	private String priceString;
 	private String contentOwner;
+	private int quantity;
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 
 	public String getContentOwner() {
 		return contentOwner;

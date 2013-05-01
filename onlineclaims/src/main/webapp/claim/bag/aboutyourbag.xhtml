@@ -406,6 +406,9 @@
 				<f:facet name="header">
 					<rich:columnGroup>
 						<rich:column>
+							<h:outputLabel 	value="Quantity" styleClass="subheadColumn"/>
+						</rich:column>
+						<rich:column>
 							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.article.label}" styleClass="subheadColumn"/>
 						</rich:column>
 							<rich:column>
@@ -435,6 +438,10 @@
 					</rich:columnGroup>
 				</f:facet>
 				
+				<rich:column>
+					<h:inputText value="#{contentItem.quantity}"  size="3"
+						readonly="#{passengerController.readOnlyOnSubmitted}"/>
+				</rich:column>
 				<rich:column>
 					<h:inputText value="#{contentItem.article}" size="4" 
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>

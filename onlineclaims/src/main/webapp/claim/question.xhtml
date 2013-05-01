@@ -97,6 +97,61 @@
 				<h:panelGrid columns="3" width="88%"  columnClasses="width1,width2,width3">
 					<h:panelGrid columns="1" width="100%" >
 						<h:panelGroup>
+							<t:outputText value="Please indicate if you would like to be compensated in your local currency." styleClass="formLabel"/>
+							<h:outputText value="&#160;" />
+							<h:graphicImage value="../_images/reqbullet.gif"  
+								rendered="false"/>
+						</h:panelGroup>	
+					</h:panelGrid>
+					<rich:spacer width="20px"/>
+					<h:panelGrid columns="1" width="60%" >
+					<h:selectOneRadio   value="#{passengerBean.requestForeignCurrency}" label="Local Currency"
+							disabled="#{passengerController.readOnlyOnSubmitted}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'Local Currency?'" 
+							required="false">
+										<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
+										<f:selectItem itemLabel="No" itemValue="false"/>
+					</h:selectOneRadio>
+					</h:panelGrid>
+				</h:panelGrid>
+				</div>
+				<rich:spacer width="100%" height="10" title=""/>
+				<div>
+					<h:outputText value="If Yes, please provide an email address and you will be contacted for further information." styleClass="formLabel"/>	
+				</div>
+				<div>
+					<h:panelGrid columns="4">
+					
+						<rich:spacer  height="10" title=""/>
+						<rich:spacer  height="10" title=""/>
+						<rich:spacer  height="10" title=""/>
+						<rich:spacer  height="10" title=""/>
+					
+						<rich:spacer width="60px"/>
+						<h:panelGroup>
+							<t:outputText value="Email:" styleClass="formLabel"/>
+							<h:outputText value="&#160;" />
+							<h:graphicImage value="../_images/reqbullet.gif"  
+								rendered="false"/>
+						</h:panelGroup>	
+						<rich:spacer width="20px"/>
+						<t:inputText value="#{passengerBean.foreignCurrencyEmail}" label="Email" tabindex="1"
+							readonly="#{passengerController.readOnlyOnSubmitted}"
+							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+								'Email'" 
+								validatorMessage="Email :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 100"
+								required="false">
+							<f:validateLength maximum="100"/>
+						</t:inputText>
+					</h:panelGrid>
+					<rich:spacer width="100%" height="20" title=""/>
+				</div>
+				<div>
+				<h:panelGrid columns="3" width="88%"  columnClasses="width1,width2,width3">
+					<h:panelGrid columns="1" width="100%" >
+						<h:panelGroup>
 							<t:outputText value="Do you have private insurance or credit card coverage for this loss?" styleClass="formLabel"/>
 							<h:outputText value="&#160;" />
 							<h:graphicImage value="../_images/reqbullet.gif"  
@@ -290,8 +345,7 @@
 					</h:panelGrid>
 					<rich:spacer width="100%" height="20" title=""/>
 				<div>
-					<h:outputText value="If you have filed claims with more than 1 airline in the last 3 years, please enter 
-	additional information in comment section below." styleClass="formLabel"/>	
+					<h:outputText value="If you have filed claims with more than 1 airline in the last 3 years, please list all airlines and dates in comment section below." styleClass="formLabel"/>	
 				</div>
 					<rich:spacer width="100%" height="20" title=""/>
 				</div>

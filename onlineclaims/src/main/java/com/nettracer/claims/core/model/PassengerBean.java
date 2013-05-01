@@ -112,6 +112,9 @@ public class PassengerBean {
 	private Boolean onlineAvailable;
 	private Boolean claimsAvailable;
 	private Boolean completeClaim;
+	private Boolean requestForeignCurrency;
+	private String foreignCurrencyEmail;
+	private Date bagReceivedDate;
 	
 	public String getClaimAmount() {
 		return claimAmount;
@@ -502,6 +505,24 @@ public class PassengerBean {
 	}
 	public void setPilferage(boolean pilferage) {
 		this.pilferage = pilferage;
+	}
+	public Boolean getRequestForeignCurrency() {
+		return requestForeignCurrency;
+	}
+	public void setRequestForeignCurrency(Boolean requestForeignCurrency) {
+		this.requestForeignCurrency = requestForeignCurrency;
+	}
+	public String getForeignCurrencyEmail() {
+		return foreignCurrencyEmail;
+	}
+	public void setForeignCurrencyEmail(String foreignCurrencyEmail) {
+		this.foreignCurrencyEmail = foreignCurrencyEmail;
+	}
+	public Date getBagReceivedDate() {
+		return bagReceivedDate;
+	}
+	public void setBagReceivedDate(Date bagReceivedDate) {
+		this.bagReceivedDate = bagReceivedDate;
 	}
 	public void setPassengerData(WSPVAdvancedIncident passengerData) {
 		this.passengerData = passengerData; 
