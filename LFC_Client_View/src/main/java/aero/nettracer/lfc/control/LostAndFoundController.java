@@ -78,7 +78,7 @@ public class LostAndFoundController {
 		rates=(List<RateBean>)session.getAttribute("rates");
 		session.setAttribute("shippingOptions", (List<SelectItem>)session.getAttribute("shippingOptions")); //To Make method to get FedEx options based on PrefShipAddress
 		
-		if (getSubCompany() != null && getSubCompany().equals("SWA") ) {
+		if (getSubCompany() != null && !(getSubCompany().equals("AVS") || getSubCompany().equals("BGT") || getSubCompany().equals("ABG"))) {
 			setSegmentLocationDesc(lostReport.getSegments());
 		}
 		
