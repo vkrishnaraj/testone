@@ -352,7 +352,6 @@ public class Producer {
 		Date producerEndtime = new Date();
 		element.setProducerStart(producerStarttime);
 		element.setProducerEnd(producerEndtime);
-		element.setConsumerStart(producerEndtime);
 		element.setProducerCount(count);
 		element.setProducerFinished(true);
 		//System.out.println("Consumer BEGIN: " + (new Date()));

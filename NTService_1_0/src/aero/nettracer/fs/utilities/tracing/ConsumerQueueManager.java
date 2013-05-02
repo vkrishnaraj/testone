@@ -52,14 +52,12 @@ public class ConsumerQueueManager {
 			}
 			element = consumerQueue.get(index);
 			if(element.getQueue().peek() != null){
-				element.startConusmerTimer();
 				return element.getQueue().poll();
 			} else {
+				consumerQueue.remove(element);
+				element.setOnConsumerQueue(false);
 				if(element.isAllProducersFinished()){
-					consumerQueue.remove(element);
 					element.setConsumerEnd(new Date());
-				} else {
-					element.pauseConsumerTimer();
 				}
 			}
 		}//end synchronized
@@ -83,7 +81,7 @@ public class ConsumerQueueManager {
 					
 			AuditUtil.saveActionAudit(element.getAudit());
 		}
-		return null;//TODO for now it is okay since queue is fifo, need to revisit later
+		return this.take();
 	}
 	
 	private static int getNextIndex(){

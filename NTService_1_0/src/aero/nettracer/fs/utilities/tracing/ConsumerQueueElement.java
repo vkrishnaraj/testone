@@ -34,6 +34,8 @@ public class ConsumerQueueElement {
 	FsActionAudit audit;
 	ConcurrentHashMap<Long,Object> traceIds;
 	File file;
+	boolean onConsumerQueue;
+
 
 	public static ConsumerQueueElement getInstance(File file){
 		ConsumerQueueElement element = new ConsumerQueueElement();
@@ -112,7 +114,7 @@ public class ConsumerQueueElement {
 			setProducerTotalEnd(new Date());
 		}
 		if(this.producerFinished == true){
-			ConsumerQueueManager.getInstance().consumerNotify();
+			this.setOnConsumerQueue(true);
 		}
 	}
 	
@@ -150,7 +152,7 @@ public class ConsumerQueueElement {
 			setProducerTotalEnd(new Date());
 		}
 		if(this.producerGeoFinished == true){
-			ConsumerQueueManager.getInstance().consumerNotify();
+			this.setOnConsumerQueue(true);
 		}
 	}
 
@@ -214,6 +216,27 @@ public class ConsumerQueueElement {
 
 	public void setFile(File file) {
 		this.file = file;
+	}
+	
+	public boolean isOnConsumerQueue() {
+		return onConsumerQueue;
+	}
+
+
+	
+	public void setOnConsumerQueue(boolean onConsumerQueue) {
+		synchronized(this){
+			if(onConsumerQueue == true){
+				this.startConusmerTimer();
+				if(this.isOnConsumerQueue() == false){
+					ConsumerQueueManager.getInstance().put(this);
+				}
+				ConsumerQueueManager.getInstance().consumerNotify();
+			} else {
+				this.pauseConsumerTimer();
+			}
+			this.onConsumerQueue = onConsumerQueue;
+		}
 	}
 	
 	public boolean isAllProducersFinished(){
