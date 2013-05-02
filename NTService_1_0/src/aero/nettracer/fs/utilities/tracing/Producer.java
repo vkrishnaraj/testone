@@ -53,8 +53,8 @@ public class Producer {
 	private static final int MAX_WAIT = 40;
 	public static final double MILE_SEARCH_RADIUS = 10;
 	private static final long WAIT_TIME = 250;
-	private static final double MILE_SEARCH_ZIP = 10;
-	private static final double MILE_SEARCH_CITY = 10;
+	public static final double MILE_SEARCH_ZIP = 10;
+	public static final double MILE_SEARCH_CITY = 10;
 	public static final String invalidChars = "[\'%\"]";
 	
 	public static String format(String s){
@@ -71,7 +71,7 @@ public class Producer {
 	}
 
 	
-	private static void queueFile(Long id, ConsumerQueueElement element, File file, Date createDate, boolean isPrimary){
+	protected static boolean queueFile(Long id, ConsumerQueueElement element, File file, Date createDate, boolean isPrimary){
 		if(element.getTraceIds().put(id, id) == null){
 			MatchHistory match = new MatchHistory();
 			match.setDetails(new LinkedHashSet<MatchDetail>());
@@ -81,17 +81,21 @@ public class Producer {
 			match.setPrimarymatch(isPrimary);
 			try{
 				element.getQueue().add(match);
+				return true;
 			}catch(Exception e){
 				e.printStackTrace();
 			}
 		}
+		return false;
 	}
 	
 	public static TraceResponse matchFile(File file, int maxDelay, boolean persistData, boolean isPrimary, boolean returnResults) {
 		
 		Date producerStarttime = new Date();
+		Date createDate = DateUtils.convertToGMTDate(new Date());
+		ConsumerQueueElement element = startProducerThreads(file, isPrimary, createDate);
+		element.setProducerTotalStart(producerStarttime);
 
-		
 		// so we are to keep old match histories
 
 		if (file.getId() != 0) {
@@ -296,77 +300,9 @@ public class Producer {
 					
 			
 		}
-				
-		Set<FsAddress> addresses = Consumer.getAddresses(file);
-		file.setAddressCache(addresses);
-		if (addresses != null && addresses.size() > 0) {
-			sql += " union select f1.id as f1_id, " +
-			"f2.id as f2_id, " +
-			"f3.id as f3_id, " +
-			"f4.id as f4_id, " +
-			"f5.id as f5_id, " +
-			"null as f6_id, " +
-			"null as f7_id, " +
-			"'geo' as type " +
-			"from fsaddress ad " + 
-      "left outer join person p on ad.person_id = p.id " +
-            "left outer join fsclaim c1 on p.claim_id = c1.id " +
-            "left outer join FsFile f1 on f1.id = c1.file_id " +
-            
-            "left outer join fsincident i2 on p.incident_id = i2.id " +
-                  "left outer join fsclaim c2 on i2.claim_id = c2.id " +
-                  "left outer join FsFile f2 on f2.id = c2.file_id " +
-                  "left outer join FsFile f3 on f3.id = i2.file_id " +
-                  
-            "left outer join reservation r3 on p.reservation_id = r3.id " +
-                  "left outer join fsincident i3 on r3.incident_id = i3.id " +
-                  "left outer join fsclaim c3 on i3.claim_id = c3.id " +
-                  "left outer join FsFile f4 on f4.id = c3.file_id " +
-                  "left outer join FsFile f5 on f5.id = i3.file_id " +
-                  
-                  "where 1=0 ";
-
-			for (FsAddress a: addresses) {
-				// If it was geocoded, compare against other geocoded items.
-				if (a.getLattitude() != 0) {
-					// If the address has been geocoded we will calculate
-					// the area (min/max latitude and longitude) in which to
-					// search.
-					double mileSearch = MILE_SEARCH_RADIUS;
-					if (a.getGeocodeType() == GeoCode.ACCURACY_STREET) {
-						a.setGeocodeType(GeoCode.ACCURACY_STREET);
-					} else if (a.getGeocodeType() == GeoCode.ACCURACY_CITY) {
-						a.setGeocodeType(GeoCode.ACCURACY_CITY);
-						mileSearch = MILE_SEARCH_CITY;
-					} else if (a.getGeocodeType() == GeoCode.ACCURACY_ZIP) {
-						a.setGeocodeType(GeoCode.ACCURACY_ZIP);
-						mileSearch = MILE_SEARCH_ZIP;
-					}
-					double latRadius = GeoCode.getLatRadius(mileSearch);
-					double longRadius = GeoCode.getLongRadius(a.getLattitude(), mileSearch);
-					double y1 = a.getLattitude() - latRadius;
-					double y2 = a.getLattitude() + latRadius;
-					double x1 = a.getLongitude() - longRadius;
-					double x2 = a.getLongitude() + longRadius;
-
-					// If there is a latitude or longitude.
-					sql += "or (lattitude >= " + y1 + " and lattitude <= " + y2 + " and longitude >= " + x1+ " and longitude <= " + x2 + ") ";
-
-					// Compare against non-geocoded items.
-					// Country / City
-					if (a.getCity() != null && a.getCity().trim().length() > 0 && a.getCountry() != null && a.getCountry().trim().length() > 0) {
-						sql += "or (lattitude = 0 and longitude = 0 and ad.country = \'" + format(a.getCountry()) + "\' and ad.city = \'" + format(a.getCity()) + "\' ) ";
-					}
-				} else {
-					// This else is if the address wasn't geocoded.
-					if (a.getCity() != null && a.getCity().trim().length() > 0 && a.getCountry() != null && a.getCountry().trim().length() > 0) {
-					sql += "or (ad.country = \'" + format(a.getCountry()) + "\' and ad.city = \'" + format(a.getCity()) + "\' ) ";
-					}
-				}
-			}		
-		}
 		
 		logger.debug("Producer query: " + sql);
+	
 		
 		SQLQuery pq = null;
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -383,9 +319,7 @@ public class Producer {
 
 		sess.close();
 		
-		Date createDate = DateUtils.convertToGMTDate(new Date());
-		
-		ConsumerQueueElement element = ConsumerQueueElement.getInstance(file);
+		int count = -1;//remove match against self
 		
 		for (Object[] strs : result) {
 			Long f1 = (Long) strs[0];
@@ -412,14 +346,16 @@ public class Producer {
 			} else if (f7 != null){
 				queueFile(f7, element, file, createDate, isPrimary);
 			}
+			count++;
 		}		
 		
 		Date producerEndtime = new Date();
 		element.setProducerStart(producerStarttime);
 		element.setProducerEnd(producerEndtime);
 		element.setConsumerStart(producerEndtime);
-		element.setMainProducerThread(true);
-		//		System.out.println("Consumer BEGIN: " + (new Date()));
+		element.setProducerCount(count);
+		element.setProducerFinished(true);
+		//System.out.println("Consumer BEGIN: " + (new Date()));
 		
 		ConsumerQueueManager.getInstance().put(element);
 
@@ -456,6 +392,11 @@ public class Producer {
 			TraceResponse tr = new TraceResponse();
 
 			tr.setMatchHistory(mh);
+			
+			//TODO review me
+			Set<FsAddress> addresses = Consumer.getAddresses(file);
+			file.setAddressCache(addresses);
+			
 			analyzeFile(file, tr, addresses);
 			
 			
@@ -1100,5 +1041,11 @@ public class Producer {
 		}
 	}
 	
+	
+	private static ConsumerQueueElement startProducerThreads(File file, boolean isPrimary, Date createDate){
+		ConsumerQueueElement element = ConsumerQueueElement.getInstance(file);
+		TraceWrapper.startProducerGeoThread(element, file, isPrimary, createDate);
+		return element;
+	}
 	
 }

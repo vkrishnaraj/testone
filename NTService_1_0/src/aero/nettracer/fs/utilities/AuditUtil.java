@@ -30,6 +30,8 @@ public class AuditUtil {
 	
 	public static final String METRIC_TOTAL_TRACE = "total_trace";
 	public static final String METRIC_TOTAL_PRODUCER = "total_producer";
+	public static final String METRIC_PRODUCER_GEO = "producer_geo";
+	public static final String METRIC_PRODUCER_MAIN = "producer_main";
 	public static final String METRIC_TOTAL_CONSUMER = "total_consumer";
 	public static final String METRIC_TOTAL_USER_WAIT = "total_user_wait";
 	

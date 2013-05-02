@@ -19,7 +19,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class TraceWrapper {
 	private static ArrayBlockingQueue<MatchHistory> matchQueue;
-	static int maxThreads = 20;
+	static final int DEFAULT_MAX_THREADS = 20;
 	
 	private static ConcurrentHashMap<Long, FsIncident> incidentCache = new ConcurrentHashMap<Long, FsIncident>(3000);
 	private static ConcurrentHashMap<Long, FsClaim> claimCache = new ConcurrentHashMap<Long, FsClaim>(3000);
@@ -157,35 +157,15 @@ public class TraceWrapper {
 		return claimCache.size();
 	}
 	
-	
-	@Deprecated
-	public static ArrayBlockingQueue<MatchHistory> getMatchQueue(){
-		Vector <ThreadContainer>v = new Vector<ThreadContainer>();
-		if(matchQueue == null){
-			matchQueue = new ArrayBlockingQueue<MatchHistory>(10000);
-			for (int i=0; i<maxThreads; ++i) {
-				try{
-					ThreadContainer tc =  new ThreadContainer();
-					tc.setStartTime(new Date());
-					Consumer consumer = new Consumer(matchQueue, Consumer.MATCH, tc);
-					Thread t = new Thread(consumer, "CosumerThread " + i);
-					tc.setConsumer(t);
-					tc.setId(i);
-					v.add(tc);
-					t.setPriority(Thread.MIN_PRIORITY);
-					t.start();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-			ThreadMonitor tm = new ThreadMonitor(v, matchQueue);
-			Thread t = new Thread(tm, "TraceWrapperMonitorThread");
-			t.start();
-		}
-		return matchQueue;
-	}
-	
 	public static void startConsumerThreads(){
+		int maxThreads = DEFAULT_MAX_THREADS;
+		try{
+			maxThreads = new Integer(System.getProperty("fs.consumer.max.threads"));
+		} catch (Exception e){
+			maxThreads = DEFAULT_MAX_THREADS;//unable to parse system property, use default
+		}
+		System.out.println("Consumer Thread Count: " + maxThreads);
+		
 		Vector <ThreadContainer>v = new Vector<ThreadContainer>();
 		for (int i=0; i<maxThreads; ++i) {
 			try{
@@ -205,6 +185,14 @@ public class TraceWrapper {
 		ThreadMonitor tm = new ThreadMonitor(v, matchQueue);
 		Thread t = new Thread(tm, "TraceWrapperMonitorThread");
 		t.start();
+	}
+	
+	public static Thread startProducerGeoThread(ConsumerQueueElement element, File file, boolean isPrimary, Date createDate){
+		ProducerGeo pg = new ProducerGeo(element,file,isPrimary,createDate);
+		Thread t = new Thread(pg, "ProducerGeo " + file.getId());
+		t.setPriority(Thread.MIN_PRIORITY);
+		t.start();
+		return t;
 	}
 	
 }

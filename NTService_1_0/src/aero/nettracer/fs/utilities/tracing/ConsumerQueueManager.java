@@ -37,6 +37,12 @@ public class ConsumerQueueManager {
 		}
 	}
 	
+	public void consumerNotify(){
+		synchronized(this){
+			notifyAll();
+		}
+	}
+	
 	public MatchHistory take(){
 		ConsumerQueueElement element = null;
 		synchronized(consumerQueue){
@@ -46,26 +52,36 @@ public class ConsumerQueueManager {
 			}
 			element = consumerQueue.get(index);
 			if(element.getQueue().peek() != null){
+				element.startConusmerTimer();
 				return element.getQueue().poll();
 			} else {
-				if(element.isProducerFinished()){
+				if(element.isAllProducersFinished()){
 					consumerQueue.remove(element);
 					element.setConsumerEnd(new Date());
+				} else {
+					element.pauseConsumerTimer();
 				}
 			}
 		}//end synchronized
 		
 		if(element != null && element.getConsumerEnd() != null){
-			AuditUtil.saveActionAudit(element.getAudit()
-					.addMetric(AuditUtil.METRIC_TOTAL_PRODUCER, 
-							element.getProducerEnd().getTime() - element.getProducerStart().getTime(), 
-							element.getProducerCount(), null)
-					.addMetric(AuditUtil.METRIC_TOTAL_CONSUMER, 
-							element.getConsumerEnd().getTime() - element.getConsumerStart().getTime(), 
-							element.getProducerCount(), null)
-					.addMetric(AuditUtil.METRIC_TOTAL_TRACE, 
-							element.getConsumerEnd().getTime() - element.getProducerStart().getTime(), 
-							element.getProducerCount(), null));
+			element.getAudit().addMetric(AuditUtil.METRIC_TOTAL_PRODUCER, 
+					element.getProducerTotalEnd().getTime() - element.getProducerTotalStart().getTime(), 
+					element.getProducerTotalCount(), null);
+			element.getAudit().addMetric(AuditUtil.METRIC_PRODUCER_MAIN, 
+					element.getProducerEnd().getTime() - element.getProducerStart().getTime(), 
+					element.getProducerCount(), null);
+			element.getAudit().addMetric(AuditUtil.METRIC_PRODUCER_GEO, 
+					element.getProducerGeoEnd().getTime() - element.getProducerGeoStart().getTime(), 
+					element.getProducerGeoCount(), null);
+			element.getAudit().addMetric(AuditUtil.METRIC_TOTAL_CONSUMER, 
+					element.getConsumerEnd().getTime() - element.getConsumerStart().getTime(), 
+					element.getProducerTotalCount(), null);//TODO when does consumer start?
+			element.getAudit().addMetric(AuditUtil.METRIC_TOTAL_TRACE, 
+					element.getConsumerEnd().getTime() - element.getProducerTotalStart().getTime(), 
+					element.getProducerTotalCount(), null);
+					
+			AuditUtil.saveActionAudit(element.getAudit());
 		}
 		return null;//TODO for now it is okay since queue is fifo, need to revisit later
 	}

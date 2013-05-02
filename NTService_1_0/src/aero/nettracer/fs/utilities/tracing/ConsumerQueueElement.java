@@ -12,19 +12,28 @@ import aero.nettracer.fs.utilities.AuditUtil;
 public class ConsumerQueueElement {
 
 	long id;//unique trace id
-	boolean mainProducerThread = false;
-	boolean geoProducerThread = true;
 	ConcurrentLinkedQueue<MatchHistory> queue;
+
+	Date producerTotalStart;
+	Date producerTotalEnd;
+	
 	Date producerStart;
 	Date producerEnd;
+	boolean producerFinished = false;
+	int producerCount;
+
+	Date producerGeoStart;
+	Date producerGeoEnd;
+	boolean producerGeoFinished = false;
+	int producerGeoCount;
+	
 	Date consumerStart;
 	Date consumerEnd;
+	Date consumerPaused;
+
 	FsActionAudit audit;
 	ConcurrentHashMap<Long,Object> traceIds;
 	File file;
-
-	
-
 
 	public static ConsumerQueueElement getInstance(File file){
 		ConsumerQueueElement element = new ConsumerQueueElement();
@@ -48,25 +57,6 @@ public class ConsumerQueueElement {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
-	public boolean isGeoProducerThread() {
-		return geoProducerThread;
-	}
-
-
-	public void setGeoProducerThread(boolean geoProducerThread) {
-		this.geoProducerThread = geoProducerThread;
-	}
-
-
-	public boolean isMainProducerThread() {
-		return mainProducerThread;
-	}
-
-
-	public void setMainProducerThread(boolean mainProducerThread) {
-		this.mainProducerThread = mainProducerThread;
-	}
 
 	public ConcurrentLinkedQueue<MatchHistory> getQueue() {
 		return queue;
@@ -76,7 +66,22 @@ public class ConsumerQueueElement {
 	public void setQueue(ConcurrentLinkedQueue<MatchHistory> queue) {
 		this.queue = queue;
 	}
+	
+	public Date getProducerTotalStart() {
+		return producerTotalStart;
+	}
 
+	public void setProducerTotalStart(Date producerTotalStart) {
+		this.producerTotalStart = producerTotalStart;
+	}
+
+	public Date getProducerTotalEnd() {
+		return producerTotalEnd;
+	}
+
+	public void setProducerTotalEnd(Date producerTotalEnd) {
+		this.producerTotalEnd = producerTotalEnd;
+	}
 	
 	public Date getProducerStart() {
 		return producerStart;
@@ -97,7 +102,66 @@ public class ConsumerQueueElement {
 		this.producerEnd = producerEnd;
 	}
 
+	public boolean isProducerFinished() {
+		return producerFinished;
+	}
 
+	public void setProducerFinished(boolean producerFinished) {
+		this.producerFinished = producerFinished;
+		if(isAllProducersFinished()){
+			setProducerTotalEnd(new Date());
+		}
+		if(this.producerFinished == true){
+			ConsumerQueueManager.getInstance().consumerNotify();
+		}
+	}
+	
+	public int getProducerCount() {
+		return producerCount;
+	}
+
+	public void setProducerCount(int producerCount) {
+		this.producerCount = producerCount;
+	}
+	
+	public Date getProducerGeoStart() {
+		return producerGeoStart;
+	}
+
+	public void setProducerGeoStart(Date producerGeoStart) {
+		this.producerGeoStart = producerGeoStart;
+	}
+
+	public Date getProducerGeoEnd() {
+		return producerGeoEnd;
+	}
+	
+	public void setProducerGeoEnd(Date producerGeoEnd) {
+		this.producerGeoEnd = producerGeoEnd;
+	}
+	
+	public boolean isProducerGeoFinished() {
+		return producerGeoFinished;
+	}
+
+	public void setProducerGeoFinished(boolean producerGeoFinished) {
+		this.producerGeoFinished = producerGeoFinished;
+		if(isAllProducersFinished()){
+			setProducerTotalEnd(new Date());
+		}
+		if(this.producerGeoFinished == true){
+			ConsumerQueueManager.getInstance().consumerNotify();
+		}
+	}
+
+	public int getProducerGeoCount() {
+		return producerGeoCount;
+	}
+
+	public void setProducerGeoCount(int producerGeoCount) {
+		this.producerGeoCount = producerGeoCount;
+	}
+	
 	public Date getConsumerStart() {
 		return consumerStart;
 	}
@@ -110,6 +174,14 @@ public class ConsumerQueueElement {
 
 	public Date getConsumerEnd() {
 		return consumerEnd;
+	}
+	
+	public Date getConsumerPaused() {
+		return consumerPaused;
+	}
+
+	public void setConsumerPaused(Date consumerPaused) {
+		this.consumerPaused = consumerPaused;
 	}
 
 	public FsActionAudit getAudit() {
@@ -144,17 +216,30 @@ public class ConsumerQueueElement {
 		this.file = file;
 	}
 	
-	public boolean isProducerFinished(){
-		return mainProducerThread && geoProducerThread;
+	public boolean isAllProducersFinished(){
+		return producerFinished && producerGeoFinished;
 	}
 	
 	public boolean isTraceFinished(){
-		return this.isProducerFinished() && this.queue.size() == 0;
+		return this.isAllProducersFinished() && this.queue.size() == 0;
 	}
 	
-	public int getProducerCount(){
+	public int getProducerTotalCount(){
 		return this.traceIds.size() - 1;//remove reference to self
 	}
 	
+	public void startConusmerTimer(){
+		if(this.consumerStart == null){
+			this.consumerStart = new Date();
+		}
+		if(this.consumerPaused != null){
+			//adjust start time
+			this.consumerStart.setTime(this.consumerStart.getTime() + ((new Date()).getTime() - this.consumerPaused.getTime()));
+			this.consumerPaused = null;
+		}
+	}
 	
+	public void pauseConsumerTimer(){
+		this.consumerPaused = new Date();
+	}
 }

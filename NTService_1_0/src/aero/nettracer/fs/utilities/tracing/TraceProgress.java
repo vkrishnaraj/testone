@@ -46,10 +46,10 @@ public class TraceProgress {
 	}
 	
 	public int getPercentComplete(){
-		if(element.getProducerCount() == 0){
+		if(element.getProducerTotalCount() == 0){
 			return 100;
 		} else {
-			return 100 * (1 - (element.getQueue().size() / element.getProducerCount()));
+			return 100 * (1 - (element.getQueue().size() / element.getProducerTotalCount()));
 		}
 	}
 	
