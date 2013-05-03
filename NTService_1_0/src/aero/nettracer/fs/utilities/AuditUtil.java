@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 
 import aero.nettracer.fs.model.FsActionAudit;
 import aero.nettracer.fs.model.FsMatchHistoryAudit;
+import aero.nettracer.fs.utilities.tracing.SaveAuditThread;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class AuditUtil {
@@ -69,6 +70,18 @@ public class AuditUtil {
 	
 	public static long saveActionAudit(String action, long file_id, String companycode_id){
 		return saveActionAudit(action, file_id, companycode_id, null);
+	}
+	
+	public static long saveActionAudit(FsActionAudit action, boolean async){
+		if(async){
+			SaveAuditThread sat = new SaveAuditThread(action);
+			Thread t = new Thread(sat);
+			t.setPriority(Thread.MIN_PRIORITY);
+			t.start();
+			return 0;
+		} else {
+			return AuditUtil.saveActionAudit(action);
+		}
 	}
 	
 	public static long saveActionAudit(FsActionAudit action){

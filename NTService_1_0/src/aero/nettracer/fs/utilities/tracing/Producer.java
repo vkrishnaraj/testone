@@ -355,8 +355,6 @@ public class Producer {
 		element.setProducerCount(count);
 		element.setProducerFinished(true);
 		//System.out.println("Consumer BEGIN: " + (new Date()));
-		
-		ConsumerQueueManager.getInstance().put(element);
 
 		traceProgress.put(file.getId(), new TraceProgress((new Date()).getTime(),element));
 		
@@ -368,6 +366,7 @@ public class Producer {
 				for(i= 0; !element.isTraceFinished() && (i < (maxDelay * 1000)/WAIT_TIME || maxDelay == -1); i++){
 					Thread.sleep(WAIT_TIME);
 				}
+				Thread.sleep(WAIT_TIME);//TODO isTraceFininshed marks when the last element is being worked, not when it is finished work, wait one additional cycle for now. may implement a notify later
 				Date endtime = new Date();
 				if (maxDelay == -1) {
 					logger.debug("  Complete Trace Elapsed Time: "  + (endtime.getTime() - producerEndtime.getTime()));

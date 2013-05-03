@@ -44,43 +44,54 @@ public class ConsumerQueueManager {
 	}
 	
 	public MatchHistory take(){
+//		Date start = new Date();
 		ConsumerQueueElement element = null;
 		synchronized(consumerQueue){
 			int index = getNextIndex();
 			if(index == -1){
+//				Date end = new Date();
+//				System.out.println("Consumer TAKE: " + (end.getTime() - start.getTime()));
 				return null;
 			}
 			element = consumerQueue.get(index);
 			if(element.getQueue().peek() != null){
+//				Date end = new Date();
+//				System.out.println("Consumer TAKE: " + (end.getTime() - start.getTime()));
 				return element.getQueue().poll();
 			} else {
 				consumerQueue.remove(element);
 				element.setOnConsumerQueue(false);
 				if(element.isAllProducersFinished()){
-					element.setConsumerEnd(new Date());
+					Date consumerEnd = new Date();
+					element.getAudit().addMetric(AuditUtil.METRIC_TOTAL_PRODUCER, 
+							element.getProducerTotalEnd().getTime() - element.getProducerTotalStart().getTime(), 
+							element.getProducerTotalCount(), null);
+					element.getAudit().addMetric(AuditUtil.METRIC_PRODUCER_MAIN, 
+							element.getProducerEnd().getTime() - element.getProducerStart().getTime(), 
+							element.getProducerCount(), null);
+					element.getAudit().addMetric(AuditUtil.METRIC_PRODUCER_GEO, 
+							element.getProducerGeoEnd().getTime() - element.getProducerGeoStart().getTime(), 
+							element.getProducerGeoCount(), null);
+					element.getAudit().addMetric(AuditUtil.METRIC_TOTAL_CONSUMER, 
+							consumerEnd.getTime() - element.getConsumerStart().getTime(), 
+							element.getProducerTotalCount(), null);
+					element.getAudit().addMetric(AuditUtil.METRIC_TOTAL_TRACE, 
+							consumerEnd.getTime() - element.getProducerTotalStart().getTime(), 
+							element.getProducerTotalCount(), null);
+					element.setConsumerEnd(consumerEnd);
+					System.out.println("Saving Trace Audit");
+
 				}
 			}
 		}//end synchronized
-		
 		if(element != null && element.getConsumerEnd() != null){
-			element.getAudit().addMetric(AuditUtil.METRIC_TOTAL_PRODUCER, 
-					element.getProducerTotalEnd().getTime() - element.getProducerTotalStart().getTime(), 
-					element.getProducerTotalCount(), null);
-			element.getAudit().addMetric(AuditUtil.METRIC_PRODUCER_MAIN, 
-					element.getProducerEnd().getTime() - element.getProducerStart().getTime(), 
-					element.getProducerCount(), null);
-			element.getAudit().addMetric(AuditUtil.METRIC_PRODUCER_GEO, 
-					element.getProducerGeoEnd().getTime() - element.getProducerGeoStart().getTime(), 
-					element.getProducerGeoCount(), null);
-			element.getAudit().addMetric(AuditUtil.METRIC_TOTAL_CONSUMER, 
-					element.getConsumerEnd().getTime() - element.getConsumerStart().getTime(), 
-					element.getProducerTotalCount(), null);//TODO when does consumer start?
-			element.getAudit().addMetric(AuditUtil.METRIC_TOTAL_TRACE, 
-					element.getConsumerEnd().getTime() - element.getProducerTotalStart().getTime(), 
-					element.getProducerTotalCount(), null);
-					
-			AuditUtil.saveActionAudit(element.getAudit());
+//			Date s = new Date();
+			AuditUtil.saveActionAudit(element.getAudit(),true);
+//			Date e = new Date();
+//			System.out.println("Consumer audit thread createion: " + (e.getTime() - s.getTime()));
 		}
+//		Date end = new Date();
+//		System.out.println("Consumer TAKE: " + (end.getTime() - start.getTime()));
 		return this.take();
 	}
 	
