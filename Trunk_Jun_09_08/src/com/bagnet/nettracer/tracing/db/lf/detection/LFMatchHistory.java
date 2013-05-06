@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.db.lf.detection;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -52,6 +53,7 @@ public class LFMatchHistory implements Serializable {
 	private Status status;
 	
 	private double score;
+	private Date matchTimeStamp;
 	
 	@Transient
 	private boolean selected;
@@ -127,6 +129,14 @@ public class LFMatchHistory implements Serializable {
 
 	public double getScore() {
 		return score;
+	}
+
+	public Date getMatchTimeStamp() {
+		return matchTimeStamp;
+	}
+
+	public void setMatchTimeStamp(Date matchTimeStamp) {
+		this.matchTimeStamp = matchTimeStamp;
 	}
 	
 }

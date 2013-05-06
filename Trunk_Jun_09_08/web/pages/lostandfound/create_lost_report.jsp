@@ -363,7 +363,7 @@
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 		              		</html:select>
-		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="lostReportForm" property="primaryExtension" size="3" maxlength="3" styleClass="textfield" />
+		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="lostReportForm" property="primaryExtension" size="3" maxlength="4" styleClass="textfield" />
 		              		
 		              	</td>
 		              	<td colspan="3">
@@ -382,7 +382,7 @@
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 		              		</html:select>
-		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="lostReportForm" property="secondaryExtension" size="3" maxlength="3" styleClass="textfield" />
+		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="lostReportForm" property="secondaryExtension" size="3" maxlength="4" styleClass="textfield" />
 		              	</td>
 		              </tr>
 		              <tr>
@@ -633,7 +633,7 @@
 	         					 <input type="text" name="item[<%=i %>].dispArea" size="3"  class="textfield" value="<%=item.getDispArea()%>" />
 	         					 <input type="text" name="item[<%=i %>].dispExchange" size="3"  class="textfield" value="<%=item.getDispExchange()%>" />
 	         					 <input type="text" name="item[<%=i %>].dispLine" size="4" class="textfield" value="<%=item.getDispLine()%>" /><br/>
-	         					 <bean:message key="colname.lf.phone.extension" />: <input type="text" name="item[<%=i %>].dispExtension" size="3"  class="textfield" value="<%=item.getDispExchange()%>" />
+	         					 <bean:message key="colname.lf.phone.extension" />: <input type="text" name="item[<%=i %>].dispExtension" size="4"  class="textfield" value="<%=item.getDispExchange()%>" />
 	         					
 	         				</td>
 	         				<td>

@@ -31,6 +31,7 @@ import org.springframework.beans.BeanUtils;
 import aero.nettracer.general.services.GeneralServiceBean;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 import aero.nettracer.lf.services.exception.UpdateException;
+import aero.nettracer.lfc.model.ShippingBean;
 import aero.nettracer.security.AES;
 
 import com.bagnet.nettracer.email.HtmlEmail;
@@ -55,6 +56,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvageFound;
 import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.LFShipping;
+import com.bagnet.nettracer.tracing.db.lf.LFTransaction;
 import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.db.lf.SubcompanyStation;
 import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchDetail;
@@ -89,7 +91,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return auto;
 	}
-	
 	
 	@Override
 	public String echo(String s) {
@@ -565,6 +566,34 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	public void saveTransaction(LFTransaction tran) throws UpdateException {
+		Session sess = null;
+		Transaction t = null;
+		
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(tran);
+			t.commit();
+		}catch (Exception e) {
+			e.printStackTrace();
+			try {
+				t.rollback();
+			} catch (Exception ex) {
+				// Fails
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public long saveOrUpdateLostReport(LFLost lostReport, Agent agent, boolean paxView) throws UpdateException {
 		Session sess = null;
 		Transaction t = null;
@@ -977,6 +1006,22 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return false;
 	}
+
+	private String getToBeShippedQuery(Agent agent){
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh where 1=1 ";
+//				if(!TracingConstants.LF_LF_COMPANY_ID.equals(agent.getStation().getCompany().getCompanyCode_ID()))
+//				{
+//					sql +=" and (l.lossInfo.destination.station_ID = " + agent.getStation().getStation_ID()+
+//							" or l.lossInfo.destination.lz_ID = " + agent.getStation().getStation_ID()+") ";
+//				}
+				sql += " and mh.lost.status.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED +
+						" and mh.lost.shipment.transaction!=null";
+				if(agent.getSubcompany()!=null){
+					sql += " and l.companyId = '"+agent.getSubcompany().getSubcompanyCode()+"'";
+				}
+				
+		return sql;
+	}
 	
 	private String getLostQuery(Agent agent){
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.LFLost l where 1=1 ";
@@ -1103,6 +1148,28 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			return 0;
 		}
 		String query = "select count(l.id) " + sql;
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(query);
+			@SuppressWarnings("unchecked")
+			List<Long> result = q.list();
+			return ((Long) result.get(0)).intValue();
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return 0;
+	}
+
+	private int getToBeShippedCount(String sql){
+		if(sql == null){
+			return 0;
+		}
+		String query = "select count(mh.id) " + sql;
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1253,7 +1320,54 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return null;
 	}
+
+	@Override
+	public int getToBeShippedCount(Agent agent) {
+		if(agent == null){
+			return 0;
+		}
+		return getToBeShippedCount(getToBeShippedQuery(agent));
+	}
+
+	@Override
+	public List<LFMatchHistory> getToBeShippedList(Agent agent, int start, int offset) {
+		if(agent == null){
+			return null;
+		}
+		return getToBeShippedList(getToBeShippedQuery(agent), start, offset);
+	}
 	
+	private List<LFMatchHistory> getToBeShippedList(String sql, int start, int offset) {
+		if(sql == null){
+			return null;
+		}
+		String query = sql + " order by mh.lost.shipment.transaction.transactionDate asc";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(query);
+			
+			if (start > -1 && offset > -1 ) {
+				q.setFirstResult(start);
+				q.setMaxResults(offset);
+			} else {
+				throw new Exception("Invalided pagination bounds");
+			}
+			
+			@SuppressWarnings("unchecked")
+			List<LFMatchHistory> results = q.list();
+			return results;
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}finally{
+			if(sess != null && sess.isOpen()){
+				sess.close();
+			}
+		}
+		return null;
+	}
+
 	@Override
 	public int getLostCount(Agent agent) {
 		if(agent == null){
@@ -1800,7 +1914,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 						return false;
 					}
 				}
-				
+				match.setMatchTimeStamp(new Date());
 				saveOrUpdateTraceResult(match);
 				
 				List<LFMatchHistory> matchList = getAssociatedTraceResults(match);
@@ -2214,6 +2328,59 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			h.put("FIRSTNAME", WordUtils.capitalize(lost.getClient().getFirstName().toLowerCase()));
 			h.put("LASTNAME", WordUtils.capitalize(lost.getClient().getLastName().toLowerCase()));
 		}
+		h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
+		//by default we use the return address from the company variable
+		h.put("RETURNADDRESS", getAutoAgent().getStation().getCompany().getVariable().getEmail_from());
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId(), lost.getAgent().getCompanycode_ID());
+		if("AB".equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
+			h.put("COMPANY", (lost.getCompanyId().equals(TracingConstants.LF_BUDGET_COMPANY_ID) ? "Budget" : "Avis"));
+			h.put("SUBJECTLINE", resources.getString("ab.email.subject"));
+		} else if ("LF".equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID())){
+			h.put("COMPANY", subcomp.getName());
+			h.put("SUBJECTLINE", subcomp.getEmail_Subject());
+		} else {
+			h.put("COMPANY", "Company");
+			h.put("SUBJECTLINE", resources.getString("dm.email.subject"));
+		}
+		
+		h.put("HASH", ""+lost.getClient().getDecryptedEmail().hashCode());
+		
+		return h;
+	}
+
+	private HashMap<String, String> getEmailParams(LFLost lost,
+			ShippingBean bean) {
+		HashMap<String,String> h = new HashMap<String,String>();
+		h.put("LOSTID", (new Long(lost.getId())).toString());
+		
+		if(lost.getLossInfo()!=null && lost.getLossInfo().getDestination()!= null){
+			h.put("DAYS", (new Integer(lost.getLossInfo().getDestination().getPriority()).toString()));
+		}
+				
+		if(lost.getClient() != null){
+			h.put("FIRSTNAME", WordUtils.capitalize(lost.getClient().getFirstName().toLowerCase()));
+			h.put("LASTNAME", WordUtils.capitalize(lost.getClient().getLastName().toLowerCase()));
+		}
+		h.put("TRANNUM", bean.getTransactionNum());
+		h.put("CARDNUM", bean.getCredit4num());
+		h.put("CARDTYPE", bean.getCardType());
+		h.put("DATEPAID", bean.getDatePaid());
+		h.put("SHIPTYPE", bean.getShippingOption());
+		h.put("TOTAL", bean.getTotalPayment());
+		h.put("EMAIL", bean.getLost().getContact().getEmailAddress());
+		h.put("ADDRESS1", bean.getShippingAddress().getAddress1());
+		h.put("ADDRESS2", bean.getShippingAddress().getAddress2());
+		if(bean.getShippingAddress().getCountry().equals("US")){
+			h.put("CITYSTATEPROVINCE", bean.getShippingAddress().getCity()+", "+bean.getShippingAddress().getState());
+		} else if (bean.getShippingAddress().getCountry().equals("CA")){
+			h.put("CITYSTATEPROVINCE", bean.getShippingAddress().getCity()+", "+bean.getShippingAddress().getProvince());
+		} else {
+			h.put("CITYSTATEPROVINCE", bean.getShippingAddress().getCity()+",");
+		}
+		h.put("ZIP", bean.getShippingAddress().getPostal());
+		h.put("COUNTRY", bean.getShippingAddress().getCountry());
+		
+		h.put("ADDRESS2", bean.getShippingAddress().getAddress2());
 		h.put("MAXDAYS", PropertyBMO.getValue(PropertyBMO.LF_AUTO_CLOSE_DAYS));
 		//by default we use the return address from the company variable
 		h.put("RETURNADDRESS", getAutoAgent().getStation().getCompany().getVariable().getEmail_from());
@@ -3285,6 +3452,26 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	public void sendShippedEmail(ShippingBean bean){
+		LFLost lost = getLostReport(Long.valueOf(bean.getLost().getReportId()));
+		HashMap<String,String> h = getEmailParams(lost, bean);
+		
+		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
+			//use no reply email
+			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_INIT));
+		}
+		
+		if(sendEmail(lost, h, "shipped_email.html", h.get("SUBJECTLINE"))){
+			lost.setEmailSentDate(new Date());
+			try {
+				saveOrUpdateLostReport(lost,getAutoAgent());
+				Logger.logLF(""+bean.getLost().getReportId(), "SHIPPED EMAIL SENT", 0);
+			} catch (UpdateException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void sendLFWeekly(){
 //		Agent a=GeneralServiceBean.getAgent(id);
 		Agent a = getAutoAgent();

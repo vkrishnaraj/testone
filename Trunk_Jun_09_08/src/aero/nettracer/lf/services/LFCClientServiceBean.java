@@ -22,6 +22,7 @@ import org.springframework.beans.BeanUtils;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.State;
@@ -37,10 +38,12 @@ import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.lf.LFSegment;
 import com.bagnet.nettracer.tracing.db.lf.LFShipping;
 import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
+import com.bagnet.nettracer.tracing.db.lf.LFTransaction;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.lf.RemoteConnectionException;
 import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
-
 
 import com.fedex.ws.addressvalidation.v2.Address;
 import com.fedex.ws.addressvalidation.v2.AddressToValidate;
@@ -64,6 +67,7 @@ import com.fedex.ws.addressvalidation.v2.WebAuthenticationDetail;
 
 import aero.nettracer.lf.services.exception.UpdateException;
 import aero.nettracer.lfc.model.AddressBean;
+import aero.nettracer.lfc.model.CCBean;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.ContactBean;
 import aero.nettracer.lfc.model.KeyValueBean;
@@ -75,7 +79,7 @@ import aero.nettracer.lfc.model.ShippingBean;
 import aero.nettracer.general.services.GeneralServiceBean;
 
 @Stateless
-public class LFCClientServiceBean implements LFCClientServiceRemote{
+public class LFCClientServiceBean implements LFCClientServiceRemote {
 
 	@Override
 	public String echo(String s) {
@@ -87,26 +91,28 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		GeneralServiceBean gbean = new GeneralServiceBean();
 		LFServiceBean bean = new LFServiceBean();
 		LFLost host = bean.getLostReport(id, lastname);
-		if(host == null){
+		if (host == null) {
 			return null;
 		}
 		LostReportBean remote = new LostReportBean();
 		remote.setSubCompany(host.getCompanyId());
-		remote.setCompany(host.getAgent().getCompanycode_ID()); //gbean.getCompanyFromSubCompany(host.getCompanyId())); ??
-		
+		remote.setCompany(host.getAgent().getCompanycode_ID()); // gbean.getCompanyFromSubCompany(host.getCompanyId()));
+																// ??
+
 		remote.setWhereLost(host.getRemarks());
-		
-		if(host.getLossInfo() != null){
+
+		if (host.getLossInfo() != null) {
 			remote.setMvaNumber(host.getLossInfo().getMvaNumber());
 			remote.setAgreementNumber(host.getLossInfo().getAgreementNumber());
 			remote.setDropOffLocation(host.getLossInfo().getDestinationId());
 			remote.setPickUpLocation(host.getLossInfo().getOriginId());
 			remote.setDateLost(host.getLossInfo().getLossdate());
 		}
-		
-		if(host.getItem() != null){
-			if(host.getItem().getDisposition() != null){
-				remote.setDisposition(host.getItem().getDisposition().getDescription());
+
+		if (host.getItem() != null) {
+			if (host.getItem().getDisposition() != null) {
+				remote.setDisposition(host.getItem().getDisposition()
+						.getDescription());
 			}
 			remote.setItemBrand(host.getItem().getBrand());
 			remote.setItemColor(host.getItem().getColor());
@@ -119,16 +125,19 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			remote.setItemLongDesc(host.getItem().getLongDescription());
 			remote.setItemCaseColor(host.getItem().getCaseColor());
 			remote.setItemModel(host.getItem().getModel());
-			if(host.getShipment()!=null){
+			if (host.getShipment() != null) {
 				remote.setShippingOption(host.getShipment().getShippingOption());
 				remote.setShippingPayment(host.getShipment().getTotalPayment());
 			}
-			if(host.getItem().getPhone() != null){
+			if (host.getItem().getPhone() != null) {
 				PhoneBean phone = new PhoneBean();
-				phone.setNumber(host.getItem().getPhone().getDecryptedPhoneNumber());
-				phone.setCountry(host.getItem().getPhone().getDecryptedCountry());
+				phone.setNumber(host.getItem().getPhone()
+						.getDecryptedPhoneNumber());
+				phone.setCountry(host.getItem().getPhone()
+						.getDecryptedCountry());
 				phone.setArea(host.getItem().getPhone().getDecryptedArea());
-				phone.setExchange(host.getItem().getPhone().getDecryptedExchange());
+				phone.setExchange(host.getItem().getPhone()
+						.getDecryptedExchange());
 				phone.setLine(host.getItem().getPhone().getDecryptedLine());
 				phone.setExtension(host.getItem().getPhone().getExtension());
 				remote.setLostPhone(phone);
@@ -138,18 +147,20 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			remote.setLastNameBag(host.getLastName());
 			remote.setMiddleNameBag(host.getMiddleName());
 		}
-		
+
 		remote.setReportId("" + host.getId());
-		
-		if(host.getStatus() != null){
+
+		if (host.getStatus() != null) {
 			remote.setStatus(host.getStatus().getDescription());
 		}
-		
-		if(TracingConstants.LF_LF_COMPANY_ID.equals(remote.getCompany())){
-			remote.setDaysFromCreate( (Calendar.getInstance().getTime().getTime() - host.getOpenDate().getTime() ) /(1000*60*60*24) );
+
+		if (TracingConstants.LF_LF_COMPANY_ID.equals(remote.getCompany())) {
+			remote.setDaysFromCreate((Calendar.getInstance().getTime()
+					.getTime() - host.getOpenDate().getTime())
+					/ (1000 * 60 * 60 * 24));
 		}
-		
-		if(host.getClient() != null){
+
+		if (host.getClient() != null) {
 			ContactBean contact = new ContactBean();
 			contact.setConfirmEmail(host.getClient().getConfirmEmail());
 			contact.setEmailAddress(host.getClient().getDecryptedEmail());
@@ -157,49 +168,69 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			contact.setLastName(host.getClient().getLastName());
 			contact.setMiddleInitial(host.getClient().getMiddleName());
 
-			if(host.getClient().getAddress() != null){
+			if (host.getClient().getAddress() != null) {
 				AddressBean address = new AddressBean();
-				address.setAddress1(host.getClient().getAddress().getDecryptedAddress1());
-				address.setAddress2(host.getClient().getAddress().getDecryptedAddress2());
-				address.setCity(host.getClient().getAddress().getDecryptedCity());
+				address.setAddress1(host.getClient().getAddress()
+						.getDecryptedAddress1());
+				address.setAddress2(host.getClient().getAddress()
+						.getDecryptedAddress2());
+				address.setCity(host.getClient().getAddress()
+						.getDecryptedCity());
 				address.setCountry(host.getClient().getAddress().getCountry());
-				address.setPostal(host.getClient().getAddress().getDecryptedZip());
-				address.setProvince(host.getClient().getAddress().getDecryptedProvince());
-				address.setState(host.getClient().getAddress().getDecryptedState());
+				address.setPostal(host.getClient().getAddress()
+						.getDecryptedZip());
+				address.setProvince(host.getClient().getAddress()
+						.getDecryptedProvince());
+				address.setState(host.getClient().getAddress()
+						.getDecryptedState());
 				contact.setAddress(address);
 			}
-			
-			if(host.getShipment()!=null){
-				if(host.getShipment().getShippingAddress() != null){
+
+			if (host.getShipment() != null) {
+				if (host.getShipment().getShippingAddress() != null) {
 					AddressBean address = new AddressBean();
-					address.setAddress1(host.getShipment().getShippingAddress().getDecryptedAddress1());
-					address.setAddress2(host.getShipment().getShippingAddress().getDecryptedAddress2());
-					address.setCity(host.getShipment().getShippingAddress().getDecryptedCity());
-					address.setCountry(host.getShipment().getShippingAddress().getCountry());
-					address.setPostal(host.getShipment().getShippingAddress().getDecryptedZip());
-					address.setProvince(host.getShipment().getShippingAddress().getDecryptedProvince());
-					address.setState(host.getShipment().getShippingAddress().getDecryptedState());
+					address.setAddress1(host.getShipment().getShippingAddress()
+							.getDecryptedAddress1());
+					address.setAddress2(host.getShipment().getShippingAddress()
+							.getDecryptedAddress2());
+					address.setCity(host.getShipment().getShippingAddress()
+							.getDecryptedCity());
+					address.setCountry(host.getShipment().getShippingAddress()
+							.getCountry());
+					address.setPostal(host.getShipment().getShippingAddress()
+							.getDecryptedZip());
+					address.setProvince(host.getShipment().getShippingAddress()
+							.getDecryptedProvince());
+					address.setState(host.getShipment().getShippingAddress()
+							.getDecryptedState());
 					contact.setPrefshipaddress(address);
 				}
-				
-				if(host.getShipment().getBillingAddress() != null){
+
+				if (host.getShipment().getBillingAddress() != null) {
 					AddressBean address = new AddressBean();
-					address.setAddress1(host.getShipment().getBillingAddress().getDecryptedAddress1());
-					address.setAddress2(host.getShipment().getBillingAddress().getDecryptedAddress2());
-					address.setCity(host.getShipment().getBillingAddress().getDecryptedCity());
-					address.setCountry(host.getShipment().getBillingAddress().getCountry());
-					address.setPostal(host.getShipment().getBillingAddress().getDecryptedZip());
-					address.setProvince(host.getShipment().getBillingAddress().getDecryptedProvince());
-					address.setState(host.getShipment().getBillingAddress().getDecryptedState());
+					address.setAddress1(host.getShipment().getBillingAddress()
+							.getDecryptedAddress1());
+					address.setAddress2(host.getShipment().getBillingAddress()
+							.getDecryptedAddress2());
+					address.setCity(host.getShipment().getBillingAddress()
+							.getDecryptedCity());
+					address.setCountry(host.getShipment().getBillingAddress()
+							.getCountry());
+					address.setPostal(host.getShipment().getBillingAddress()
+							.getDecryptedZip());
+					address.setProvince(host.getShipment().getBillingAddress()
+							.getDecryptedProvince());
+					address.setState(host.getShipment().getBillingAddress()
+							.getDecryptedState());
 					contact.setBillingaddress(address);
 				}
-				
+
 				remote.setShippingOption(host.getShipment().getShippingOption());
 				remote.setDeclaredValue(host.getShipment().getDeclaredValue());
 			}
 
-			if(host.getClient().getPhones() != null){
-				for(LFPhone phone: host.getClient().getPhones()){
+			if (host.getClient().getPhones() != null) {
+				for (LFPhone phone : host.getClient().getPhones()) {
 					PhoneBean toAdd = new PhoneBean();
 					toAdd.setNumber(phone.getDecryptedPhoneNumber());
 					toAdd.setCountry(phone.getDecryptedCountry());
@@ -207,127 +238,141 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 					toAdd.setExchange(phone.getDecryptedExchange());
 					toAdd.setLine(phone.getDecryptedLine());
 					toAdd.setType(phone.getNumberType());
-					if(phone.getPhoneType() == TracingConstants.LF_PHONE_PRIMARY){
+					if (phone.getPhoneType() == TracingConstants.LF_PHONE_PRIMARY) {
 						contact.setPrimaryPhone(toAdd);
 
-						if(host.getShipment()!=null && host.getShipment().getShippingPhone()==null){
+						if (host.getShipment() != null
+								&& host.getShipment().getShippingPhone() == null) {
 							PhoneBean toAdd2 = new PhoneBean();
 							BeanUtils.copyProperties(toAdd, toAdd2);
 							contact.setShippingPhone(toAdd2);
 						}
 					}
-					if(phone.getPhoneType() == TracingConstants.LF_PHONE_SECONDARY){
+					if (phone.getPhoneType() == TracingConstants.LF_PHONE_SECONDARY) {
 						contact.setSecondaryPhone(toAdd);
 					}
 				}
-				
-				if(host.getShipment()!=null && host.getShipment().getShippingPhone()!=null){
+
+				if (host.getShipment() != null
+						&& host.getShipment().getShippingPhone() != null) {
 					PhoneBean toAdd = new PhoneBean();
-					toAdd.setNumber(host.getShipment().getShippingPhone().getDecryptedPhoneNumber());
-					toAdd.setCountry(host.getShipment().getShippingPhone().getDecryptedCountry());
-					toAdd.setArea(host.getShipment().getShippingPhone().getDecryptedArea());
-					toAdd.setExchange(host.getShipment().getShippingPhone().getDecryptedExchange());
-					toAdd.setLine(host.getShipment().getShippingPhone().getDecryptedLine());
-					toAdd.setType(host.getShipment().getShippingPhone().getNumberType());
-					toAdd.setExtension(host.getShipment().getShippingPhone().getExtension());
+					toAdd.setNumber(host.getShipment().getShippingPhone()
+							.getDecryptedPhoneNumber());
+					toAdd.setCountry(host.getShipment().getShippingPhone()
+							.getDecryptedCountry());
+					toAdd.setArea(host.getShipment().getShippingPhone()
+							.getDecryptedArea());
+					toAdd.setExchange(host.getShipment().getShippingPhone()
+							.getDecryptedExchange());
+					toAdd.setLine(host.getShipment().getShippingPhone()
+							.getDecryptedLine());
+					toAdd.setType(host.getShipment().getShippingPhone()
+							.getNumberType());
+					toAdd.setExtension(host.getShipment().getShippingPhone()
+							.getExtension());
 					contact.setShippingPhone(toAdd);
-				} 
-					
+				}
+
 			}
 			remote.setContact(contact);
 		}
-		
+
 		if (host.getSegments() != null) {
 			List<SegmentBean> remoteSegs = new ArrayList<SegmentBean>();
 			for (LFSegment seg : host.getSegments()) {
 				SegmentBean remoteSeg = new SegmentBean();
 				remoteSeg.setArrivalLocation(seg.getDestinationId());
-				remoteSeg.setArrivalLocationDesc(seg.getDestination().getStationdesc());
+				remoteSeg.setArrivalLocationDesc(seg.getDestination()
+						.getStationdesc());
 				remoteSeg.setDepartureLocation(seg.getOriginId());
-				remoteSeg.setDepartureLocationDesc(seg.getOrigin().getStationdesc());
+				remoteSeg.setDepartureLocationDesc(seg.getOrigin()
+						.getStationdesc());
 				remoteSeg.setFlightNumber(seg.getFlightNumber());
 				remoteSeg.setId(seg.getId());
 				remoteSegs.add(remoteSeg);
 			}
 			remote.setSegments(remoteSegs);
 		}
-		
+
 		return remote;
 	}
-	
 
 	@Override
 	public LostReportBean getLostReportShipping(long id, String lastname) {
-		LFServiceBean bean=new LFServiceBean();
-		if(bean.getShipment(id)!=null){
-			return getLostReport(id,lastname);
+		LFServiceBean bean = new LFServiceBean();
+		if (bean.getShipment(id) != null) {
+			return getLostReport(id, lastname);
 		}
 		return null;
-		
+
 	}
 
-	private Agent getWebAgent(){
+	private Agent getWebAgent() {
 		GeneralServiceBean bean = new GeneralServiceBean();
-		return bean.getAgent("webagent", TracerProperties.get("wt.company.code"));
+		return bean.getAgent("webagent",
+				TracerProperties.get("wt.company.code"));
 	}
-	
-	
+
 	@Override
 	public long saveOrUpdateLostReport(LostReportBean lostReport) {
-		
-		if(lostReport == null){
+
+		if (lostReport == null) {
 			return -1;
-		}// else if (lostReport.IsShipping() && !FedexUtils.validateAddressFedex(lostReport.getContact().getPrefshipaddress())){
-//			return -1;
-//		}
-		
+		}// else if (lostReport.IsShipping() &&
+			// !FedexUtils.validateAddressFedex(lostReport.getContact().getPrefshipaddress())){
+			// return -1;
+		// }
+
 		LFLost host = null;
 		boolean update = false;
 
-		if (lostReport.getReportId()!=null) {
+		if (lostReport.getReportId() != null) {
 			LFServiceBean bean = new LFServiceBean();
 			host = bean.getLostReport(Long.valueOf(lostReport.getReportId()));
-//			shipment = bean.getShipment(Long.valueOf(lostReport.getReportId()));
+			// shipment =
+			// bean.getShipment(Long.valueOf(lostReport.getReportId()));
 		}
-		
-		
-		
+
 		if (host != null) {
 			update = true;
 		} else {
 			host = new LFLost();
 		}
-		
+
 		if (!update) {
 			Agent agent = getWebAgent();
-			//TODO web agent
+			// TODO web agent
 			host.setAgent(agent);
 			host.setCompanyId(lostReport.getSubCompany());
-			
-			Station station = StationBMO.getStationByCode("WEB", TracerProperties.get(agent.getCompanycode_ID(),"wt.company.code"));
-			//TODO web location
+
+			Station station = StationBMO.getStationByCode("WEB",
+					TracerProperties.get(agent.getCompanycode_ID(),
+							"wt.company.code"));
+			// TODO web location
 			host.setLocation(station);
-			
-			//TODO normalize dates
+
+			// TODO normalize dates
 			host.setOpenDate(new Date());
-			
+
 			Status status = new Status();
 			status.setStatus_ID(TracingConstants.LF_STATUS_OPEN);
 			host.setStatus(status);
 		}
-		
+
 		host.setVantiveNumber(lostReport.getVantiveNumber());
-		
+
 		host.setRemarks(lostReport.getWhereLost());
-		
-		double insuredValue=0;
-		if(lostReport.getDeclaredValue()>=150){
-			DecimalFormat format = (DecimalFormat) java.text.NumberFormat.getInstance();
+
+		double insuredValue = 0;
+		if (lostReport.getDeclaredValue() >= 150) {
+			DecimalFormat format = (DecimalFormat) java.text.NumberFormat
+					.getInstance();
 			format.applyPattern("##0.00");
 			format.setMinimumFractionDigits(2);
-			insuredValue = Double.valueOf(format.format((lostReport.getDeclaredValue()/100)*.85));
+			insuredValue = Double.valueOf(format.format((lostReport
+					.getDeclaredValue() / 100) * .85));
 		}
-		
+
 		LFItem item = new LFItem();
 		if (update) {
 			item = host.getItem();
@@ -347,37 +392,40 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		item.setCaseColor(lostReport.getItemCaseColor());
 		item.setLongDescription(lostReport.getItemLongDesc());
 		item.setSize(lostReport.getItemSize());
-		
-		if(lostReport.getLostPhone() != null){
+
+		if (lostReport.getLostPhone() != null) {
 			LFPhone lostPhone = new LFPhone();
-			if (update && item.getPhone()!=null) {
+			if (update && item.getPhone() != null) {
 				lostPhone = item.getPhone();
 			}
-			lostPhone.setDecryptedPhoneNumber(lostReport.getLostPhone().getNumber());
-			lostPhone.setDecryptedCountry(lostReport.getLostPhone().getCountry());
+			lostPhone.setDecryptedPhoneNumber(lostReport.getLostPhone()
+					.getNumber());
+			lostPhone.setDecryptedCountry(lostReport.getLostPhone()
+					.getCountry());
 			lostPhone.setDecryptedArea(lostReport.getLostPhone().getArea());
-			lostPhone.setDecryptedExchange(lostReport.getLostPhone().getExchange());
+			lostPhone.setDecryptedExchange(lostReport.getLostPhone()
+					.getExchange());
 			lostPhone.setDecryptedLine(lostReport.getLostPhone().getLine());
 			lostPhone.setPhoneType(lostReport.getLostPhone().getType());
 			lostPhone.setItem(item);
-			
-			if (!update || item.getPhone()==null) {
+
+			if (!update || item.getPhone() == null) {
 				item.setPhone(lostPhone);
 			}
 		}
-		
+
 		if (!update) {
 			host.setItem(item);
 		}
 		host.setFirstName(lostReport.getFirstNameBag());
 		host.setLastName(lostReport.getLastNameBag());
 		host.setMiddleName(lostReport.getMiddleNameBag());
-		
+
 		LFLossInfo lossinfo = new LFLossInfo();
 		if (update) {
 			lossinfo = host.getLossInfo();
 		}
-		
+
 		lossinfo.setAgreementNumber(lostReport.getAgreementNumber());
 		if (lostReport.getDropOffLocation() > 0) {
 			Station dropoff = new Station();
@@ -391,23 +439,23 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			lossinfo.setOrigin(pickup);
 		}
 		lossinfo.setLossdate(lostReport.getDateLost());
-		
+
 		if (!update) {
 			host.setLossInfo(lossinfo);
 		}
-		
-		if(lostReport.getContact() != null){
+
+		if (lostReport.getContact() != null) {
 			LFPerson client = new LFPerson();
 			if (update) {
 				client = host.getClient();
 			}
-			
+
 			client.setConfirmEmail(lostReport.getContact().getConfirmEmail());
 			client.setDecryptedEmail(lostReport.getContact().getEmailAddress());
 			client.setFirstName(lostReport.getContact().getFirstName());
 			client.setLastName(lostReport.getContact().getLastName());
 			client.setMiddleName(lostReport.getContact().getMiddleInitial());
-			
+
 			Set<LFPhone> phones = new HashSet<LFPhone>();
 			Iterator<LFPhone> phoneIter = null;
 			boolean addPhone = true;
@@ -415,75 +463,99 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 				phones = client.getPhones();
 				phoneIter = phones.iterator();
 			}
-			if(lostReport.getContact().getPrimaryPhone() != null){
+			if (lostReport.getContact().getPrimaryPhone() != null) {
 				LFPhone toAdd = new LFPhone();
 				if (update && phoneIter != null && phoneIter.hasNext()) {
 					toAdd = phoneIter.next();
 					addPhone = false;
 				}
 				toAdd.setPhoneType(TracingConstants.LF_PHONE_PRIMARY);
-				toAdd.setNumberType(lostReport.getContact().getPrimaryPhone().getType());
+				toAdd.setNumberType(lostReport.getContact().getPrimaryPhone()
+						.getType());
 				toAdd.setPerson(client);
-				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getPrimaryPhone().getNumber());
-				toAdd.setDecryptedCountry(lostReport.getContact().getPrimaryPhone().getCountry());
-				toAdd.setDecryptedArea(lostReport.getContact().getPrimaryPhone().getArea());
-				toAdd.setDecryptedExchange(lostReport.getContact().getPrimaryPhone().getExchange());
-				toAdd.setDecryptedLine(lostReport.getContact().getPrimaryPhone().getLine());
+				toAdd.setDecryptedPhoneNumber(lostReport.getContact()
+						.getPrimaryPhone().getNumber());
+				toAdd.setDecryptedCountry(lostReport.getContact()
+						.getPrimaryPhone().getCountry());
+				toAdd.setDecryptedArea(lostReport.getContact()
+						.getPrimaryPhone().getArea());
+				toAdd.setDecryptedExchange(lostReport.getContact()
+						.getPrimaryPhone().getExchange());
+				toAdd.setDecryptedLine(lostReport.getContact()
+						.getPrimaryPhone().getLine());
 				if (addPhone) {
 					phones.add(toAdd);
 				}
 			}
 			addPhone = true;
-			if(lostReport.getContact().getSecondaryPhone() != null){
+			if (lostReport.getContact().getSecondaryPhone() != null) {
 				LFPhone toAdd = new LFPhone();
-				if (update && phoneIter != null  && phoneIter.hasNext()) {
+				if (update && phoneIter != null && phoneIter.hasNext()) {
 					toAdd = phoneIter.next();
 					addPhone = false;
 				}
 				toAdd.setPhoneType(TracingConstants.LF_PHONE_SECONDARY);
-				toAdd.setNumberType(lostReport.getContact().getSecondaryPhone().getType());
+				toAdd.setNumberType(lostReport.getContact().getSecondaryPhone()
+						.getType());
 				toAdd.setPerson(client);
-				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getSecondaryPhone().getNumber());
-				toAdd.setDecryptedCountry(lostReport.getContact().getSecondaryPhone().getCountry());
-				toAdd.setDecryptedArea(lostReport.getContact().getSecondaryPhone().getArea());
-				toAdd.setDecryptedExchange(lostReport.getContact().getSecondaryPhone().getExchange());
-				toAdd.setDecryptedLine(lostReport.getContact().getSecondaryPhone().getLine());
+				toAdd.setDecryptedPhoneNumber(lostReport.getContact()
+						.getSecondaryPhone().getNumber());
+				toAdd.setDecryptedCountry(lostReport.getContact()
+						.getSecondaryPhone().getCountry());
+				toAdd.setDecryptedArea(lostReport.getContact()
+						.getSecondaryPhone().getArea());
+				toAdd.setDecryptedExchange(lostReport.getContact()
+						.getSecondaryPhone().getExchange());
+				toAdd.setDecryptedLine(lostReport.getContact()
+						.getSecondaryPhone().getLine());
 				if (addPhone) {
 					phones.add(toAdd);
 				}
 			}
-			
-			if(!update && phones.size() > 0){
+
+			if (!update && phones.size() > 0) {
 				client.setPhones(phones);
 			}
 
-			if(lostReport.getContact().getAddress() != null){
+			if (lostReport.getContact().getAddress() != null) {
 				LFAddress address = new LFAddress();
 				if (update) {
 					address = client.getAddress();
 				}
-				address.setDecryptedAddress1(lostReport.getContact().getAddress().getAddress1());
-				address.setDecryptedAddress2(lostReport.getContact().getAddress().getAddress2());
-				address.setDecryptedCity(lostReport.getContact().getAddress().getCity());
-				address.setCountry(lostReport.getContact().getAddress().getCountry());
-				address.setDecryptedProvince(lostReport.getContact().getAddress().getProvince());
-				address.setDecryptedState(lostReport.getContact().getAddress().getState());
-				address.setDecryptedZip(lostReport.getContact().getAddress().getPostal());
+				address.setDecryptedAddress1(lostReport.getContact()
+						.getAddress().getAddress1());
+				address.setDecryptedAddress2(lostReport.getContact()
+						.getAddress().getAddress2());
+				address.setDecryptedCity(lostReport.getContact().getAddress()
+						.getCity());
+				address.setCountry(lostReport.getContact().getAddress()
+						.getCountry());
+				address.setDecryptedProvince(lostReport.getContact()
+						.getAddress().getProvince());
+				address.setDecryptedState(lostReport.getContact().getAddress()
+						.getState());
+				address.setDecryptedZip(lostReport.getContact().getAddress()
+						.getPostal());
 				if (!update) {
 					client.setAddress(address);
 				}
 			}
-			
+
 			if (!update) {
 				host.setClient(client);
 			}
 		}
-		
-		if(lostReport.getReportId()!=null) {
+
+		if (lostReport.getReportId() != null) {
 			host.setId(Long.valueOf(lostReport.getReportId()));
 		}
-		
-		if (lostReport.getSegments() != null && TracingConstants.LF_SWA_COMPANY_ID.equals(host.getCompanyId())) {
+
+		if (lostReport.getSegments() != null
+				&& !(TracingConstants.LF_AVIS_COMPANY_ID.equals(host
+						.getCompanyId())
+						|| TracingConstants.LF_BUDGET_COMPANY_ID.equals(host
+								.getCompanyId()) || TracingConstants.LF_ABG_COMPANY_ID
+							.equals(host.getCompanyId()))) {
 			Set<LFSegment> segments = new LinkedHashSet<LFSegment>();
 			for (SegmentBean remoteSeg : lostReport.getSegments()) {
 				LFSegment segment = new LFSegment();
@@ -498,76 +570,98 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			}
 			host.setSegments(segments);
 		}
-		
-		if(host.getShipment()!=null){
+
+		if (host.getShipment() != null) {
 			host.getShipment().setLost(host);
-			host.getShipment().setShippingOption(lostReport.getShippingOption()); //???
-			host.getShipment().setTotalPayment(lostReport.getShippingPayment()); //???
-			
-			if(lostReport.getContact().getShippingPhone()!=null){
+			host.getShipment()
+					.setShippingOption(lostReport.getShippingOption()); // ???
+			host.getShipment().setTotalPayment(lostReport.getShippingPayment()); // ???
+
+			if (lostReport.getContact().getShippingPhone() != null) {
 				LFPhone toAdd = new LFPhone();
-				if (update && host.getShipment().getShippingPhone()!=null) {
+				if (update && host.getShipment().getShippingPhone() != null) {
 					toAdd = host.getShipment().getShippingPhone();
 				}
 				toAdd.setPhoneType(TracingConstants.LF_PHONE_PRIMARY);
-				toAdd.setNumberType(lostReport.getContact().getShippingPhone().getType());
+				toAdd.setNumberType(lostReport.getContact().getShippingPhone()
+						.getType());
 				toAdd.setPerson(host.getClient());
-				toAdd.setDecryptedPhoneNumber(lostReport.getContact().getShippingPhone().getNumber());
-				toAdd.setDecryptedCountry(lostReport.getContact().getShippingPhone().getCountry());
-				toAdd.setDecryptedArea(lostReport.getContact().getShippingPhone().getArea());
-				toAdd.setDecryptedExchange(lostReport.getContact().getShippingPhone().getExchange());
-				toAdd.setDecryptedLine(lostReport.getContact().getShippingPhone().getLine());
-				toAdd.setExtension(lostReport.getContact().getShippingPhone().getExtension());
+				toAdd.setDecryptedPhoneNumber(lostReport.getContact()
+						.getShippingPhone().getNumber());
+				toAdd.setDecryptedCountry(lostReport.getContact()
+						.getShippingPhone().getCountry());
+				toAdd.setDecryptedArea(lostReport.getContact()
+						.getShippingPhone().getArea());
+				toAdd.setDecryptedExchange(lostReport.getContact()
+						.getShippingPhone().getExchange());
+				toAdd.setDecryptedLine(lostReport.getContact()
+						.getShippingPhone().getLine());
+				toAdd.setExtension(lostReport.getContact().getShippingPhone()
+						.getExtension());
 				host.getShipment().setShippingPhone(toAdd);
 			}
-			
-			if(lostReport.getContact().getPrefshipaddress() != null){
+
+			if (lostReport.getContact().getPrefshipaddress() != null) {
 				LFAddress address = new LFAddress();
-				if (update && host.getShipment().getShippingAddress()!=null) {
+				if (update && host.getShipment().getShippingAddress() != null) {
 					address = host.getShipment().getShippingAddress();
 				}
-				address.setDecryptedAddress1(lostReport.getContact().getPrefshipaddress().getAddress1());
-				address.setDecryptedAddress2(lostReport.getContact().getPrefshipaddress().getAddress2());
-				address.setDecryptedCity(lostReport.getContact().getPrefshipaddress().getCity());
-				address.setCountry(lostReport.getContact().getPrefshipaddress().getCountry());
-				address.setDecryptedProvince(lostReport.getContact().getPrefshipaddress().getProvince());
-				address.setDecryptedState(lostReport.getContact().getPrefshipaddress().getState());
-				address.setDecryptedZip(lostReport.getContact().getPrefshipaddress().getPostal());
+				address.setDecryptedAddress1(lostReport.getContact()
+						.getPrefshipaddress().getAddress1());
+				address.setDecryptedAddress2(lostReport.getContact()
+						.getPrefshipaddress().getAddress2());
+				address.setDecryptedCity(lostReport.getContact()
+						.getPrefshipaddress().getCity());
+				address.setCountry(lostReport.getContact().getPrefshipaddress()
+						.getCountry());
+				address.setDecryptedProvince(lostReport.getContact()
+						.getPrefshipaddress().getProvince());
+				address.setDecryptedState(lostReport.getContact()
+						.getPrefshipaddress().getState());
+				address.setDecryptedZip(lostReport.getContact()
+						.getPrefshipaddress().getPostal());
 				host.getShipment().setShippingAddress(address);
 			}
-			
-			if(lostReport.getContact().getBillingaddress()!=null){
+
+			if (lostReport.getContact().getBillingaddress() != null) {
 				LFAddress address = new LFAddress();
-				if (host.getShipment().getBillingAddress()!=null) {
+				if (host.getShipment().getBillingAddress() != null) {
 					address = host.getShipment().getBillingAddress();
 				}
-				address.setDecryptedAddress1(lostReport.getContact().getBillingaddress().getAddress1());
-				address.setDecryptedAddress2(lostReport.getContact().getBillingaddress().getAddress2());
-				address.setDecryptedCity(lostReport.getContact().getBillingaddress().getCity());
-				address.setCountry(lostReport.getContact().getBillingaddress().getCountry());
-				address.setDecryptedProvince(lostReport.getContact().getBillingaddress().getProvince());
-				address.setDecryptedState(lostReport.getContact().getBillingaddress().getState());
-				address.setDecryptedZip(lostReport.getContact().getBillingaddress().getPostal());
+				address.setDecryptedAddress1(lostReport.getContact()
+						.getBillingaddress().getAddress1());
+				address.setDecryptedAddress2(lostReport.getContact()
+						.getBillingaddress().getAddress2());
+				address.setDecryptedCity(lostReport.getContact()
+						.getBillingaddress().getCity());
+				address.setCountry(lostReport.getContact().getBillingaddress()
+						.getCountry());
+				address.setDecryptedProvince(lostReport.getContact()
+						.getBillingaddress().getProvince());
+				address.setDecryptedState(lostReport.getContact()
+						.getBillingaddress().getState());
+				address.setDecryptedZip(lostReport.getContact()
+						.getBillingaddress().getPostal());
 				host.getShipment().setBillingAddress(address);
-				
+
 			}
 
 			host.getShipment().setDeclaredValue(lostReport.getDeclaredValue());
 		}
-		
+
 		LFServiceBean bean = new LFServiceBean();
 		try {
-			
-//			if(shipment!=null){
-//				bean.saveOrUpdateShipping(shipment);
-//				host.setShipment(shipment);
-//			}
+
+			// if(shipment!=null){
+			// bean.saveOrUpdateShipping(shipment);
+			// host.setShipment(shipment);
+			// }
 			long ret = bean.saveOrUpdateLostReport(host, getWebAgent(), true);
-			if(ret > 0){
+			if (ret > 0) {
 				try {
 					TraceHandler.trace(host);
 				} catch (RemoteConnectionException e) {
-					//unable to connect to trace service, fail silently
+					// unable to connect to trace service, fail silently
 				}
 			}
 			return ret;
@@ -576,66 +670,87 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 			return -1;
 		}
 	}
-	
-	@Override
-	public ShippingBean saveOrUpdateShipping(LostReportBean lost){
-		long id=saveOrUpdateLostReport(lost);
 
-		LFServiceBean bean = new LFServiceBean();
-		
-		LFShipping shipment=bean.getShipment(id);
-		if(shipment!=null){
-			ShippingBean shipbean=new ShippingBean();
-			ContactBean client=new ContactBean();
-			client.setFirstName(shipment.getClient().getFirstName());
-			client.setLastName(shipment.getClient().getLastName());
-			client.setEmailAddress(shipment.getClient().getDecryptedEmail());
-			if(shipment.getClient().getMiddleName()!=null && shipment.getClient().getMiddleName().length()>0){
-				client.setMiddleInitial(shipment.getClient().getMiddleName().substring(0,1));
+	@Override
+	public ShippingBean saveOrUpdateShipping(LostReportBean lost) {
+		LFTransaction tran=transactionCc(lost);
+		if(tran!=null){
+			
+			long id = saveOrUpdateLostReport(lost);
+			
+			LFServiceBean bean = new LFServiceBean();
+			
+			LFShipping shipment = tran.getShipment();
+			
+			if (shipment != null) {
+				ShippingBean shipbean = new ShippingBean();
+				ContactBean client = new ContactBean();
+				client.setFirstName(shipment.getClient().getFirstName());
+				client.setLastName(shipment.getClient().getLastName());
+				client.setEmailAddress(shipment.getClient().getDecryptedEmail());
+				if (shipment.getClient().getMiddleName() != null
+						&& shipment.getClient().getMiddleName().length() > 0) {
+					client.setMiddleInitial(shipment.getClient().getMiddleName()
+							.substring(0, 1));
+				}
+	
+				AddressBean address = new AddressBean();
+				address.setAddress1(shipment.getBillingAddress()
+						.getDecryptedAddress1());
+				address.setAddress2(shipment.getBillingAddress()
+						.getDecryptedAddress2());
+				address.setCity(shipment.getBillingAddress().getDecryptedCity());
+				address.setCountry(shipment.getBillingAddress().getCountry());
+				address.setPostal(shipment.getBillingAddress().getDecryptedZip());
+				if (shipment.getBillingAddress().getCountry().equals("US")) {
+					address.setState(shipment.getBillingAddress()
+							.getDecryptedState());
+				} else {
+					address.setProvince(shipment.getBillingAddress()
+							.getDecryptedProvince());
+				}
+				shipbean.setBillingAddress(address);
+				client.setBillingaddress(address);
+				address.setAddress1(shipment.getShippingAddress()
+						.getDecryptedAddress1());
+				address.setAddress2(shipment.getShippingAddress()
+						.getDecryptedAddress2());
+				address.setCity(shipment.getShippingAddress().getDecryptedCity());
+				address.setCountry(shipment.getShippingAddress().getCountry());
+				address.setPostal(shipment.getShippingAddress().getDecryptedZip());
+	
+				if (shipment.getShippingAddress().getCountry().equals("US")) {
+					address.setState(shipment.getShippingAddress()
+							.getDecryptedState());
+				} else {
+					address.setProvince(shipment.getShippingAddress()
+							.getDecryptedProvince());
+				}
+	
+				shipbean.setShippingAddress(address);
+				client.setPrefshipaddress(address);
+	
+				if (shipment.getShippingPhone() != null) {
+					PhoneBean shipPhone = new PhoneBean();
+					shipPhone.setNumber(shipment.getShippingPhone()
+							.getDecryptedPhoneNumber());
+					shipPhone.setType(shipment.getShippingPhone().getNumberType());
+					client.setPrimaryPhone(shipPhone);
+				}
+				shipbean.setClient(client);
+				shipbean.setLost(lost);
+				shipbean.setTotalPayment(shipment.getTotalPayment());
+				shipbean.setShippingOption(shipment.getShippingOption());
+				shipbean.setDeclaredValue(shipment.getDeclaredValue());
+				
+				shipbean.setTransactionNum(tran.getTranNum());
+				shipbean.setDatePaid(DateUtils.formatDate(tran.getTransactionDate(), TracingConstants.DISPLAY_DATETIMEFORMAT, null, null));
+				shipbean.setCredit4num("************"+lost.getCc().getCcnumber().substring(lost.getCc().getCcnumber().length()-4));
+				shipbean.setCardType(lost.getCc().getCcvendor());
+				bean.sendShippedEmail(shipbean);
+				return shipbean;
+	
 			}
-			
-			AddressBean address=new AddressBean();
-			address.setAddress1(shipment.getBillingAddress().getDecryptedAddress1());
-			address.setAddress2(shipment.getBillingAddress().getDecryptedAddress2());
-			address.setCity(shipment.getBillingAddress().getDecryptedCity());
-			address.setCountry(shipment.getBillingAddress().getCountry());
-			address.setPostal(shipment.getBillingAddress().getDecryptedZip());
-			if(shipment.getBillingAddress().getCountry().equals("US")){
-				address.setState(shipment.getBillingAddress().getDecryptedState());
-			} else {
-				address.setProvince(shipment.getBillingAddress().getDecryptedProvince());
-			}
-			shipbean.setBillingAddress(address);
-			client.setBillingaddress(address);
-			address.setAddress1(shipment.getShippingAddress().getDecryptedAddress1());
-			address.setAddress2(shipment.getShippingAddress().getDecryptedAddress2());
-			address.setCity(shipment.getShippingAddress().getDecryptedCity());
-			address.setCountry(shipment.getShippingAddress().getCountry());
-			address.setPostal(shipment.getShippingAddress().getDecryptedZip());
-			
-			if(shipment.getShippingAddress().getCountry().equals("US")){
-				address.setState(shipment.getShippingAddress().getDecryptedState());
-			} else {
-				address.setProvince(shipment.getShippingAddress().getDecryptedProvince());
-			}
-			
-			shipbean.setShippingAddress(address);
-			client.setPrefshipaddress(address);
-			
-			if(shipment.getShippingPhone()!=null){
-				PhoneBean shipPhone=new PhoneBean();
-				shipPhone.setNumber(shipment.getShippingPhone().getDecryptedPhoneNumber());
-				shipPhone.setType(shipment.getShippingPhone().getNumberType());
-				client.setPrimaryPhone(shipPhone);
-			}
-			shipbean.setClient(client);
-			shipbean.setLost(lost);
-			shipbean.setTotalPayment(shipment.getTotalPayment());
-			shipbean.setShippingOption(shipment.getShippingOption());
-			shipbean.setDeclaredValue(shipment.getDeclaredValue());
-			return shipbean;
-			
-			
 		}
 		return null;
 	}
@@ -644,11 +759,11 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 	public ArrayList<KeyValueBean> getColors() {
 		LFServiceBean bean = new LFServiceBean();
 		ArrayList<LabelValueBean> colors = bean.getColors();
-		if(colors == null){
+		if (colors == null) {
 			return null;
 		}
-		ArrayList<KeyValueBean>ret = new ArrayList<KeyValueBean>();
-		for(LabelValueBean color:colors){
+		ArrayList<KeyValueBean> ret = new ArrayList<KeyValueBean>();
+		for (LabelValueBean color : colors) {
 			KeyValueBean toAdd = new KeyValueBean();
 			toAdd.setKey(color.getValue());
 			toAdd.setValue(color.getLabel());
@@ -661,17 +776,17 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 	public List<CategoryBean> getCategories(String companycode) {
 		LFServiceBean bean = new LFServiceBean();
 		List<LFCategory> categories = bean.getCategories(companycode);
-		if(categories == null){
+		if (categories == null) {
 			return null;
 		}
 		ArrayList<CategoryBean> ret = new ArrayList<CategoryBean>();
-		for(LFCategory lfcat:categories){
+		for (LFCategory lfcat : categories) {
 			CategoryBean cat = new CategoryBean();
 			cat.setDescription(lfcat.getDescription());
 			cat.setId(lfcat.getId());
-			if(lfcat.getSubcategories() != null){
+			if (lfcat.getSubcategories() != null) {
 				LinkedHashSet<KeyValueBean> subSet = new LinkedHashSet<KeyValueBean>();
-				for(LFSubCategory lfsub:lfcat.getSubcategories()){
+				for (LFSubCategory lfsub : lfcat.getSubcategories()) {
 					KeyValueBean sub = new KeyValueBean();
 					sub.setKey("" + lfsub.getId());
 					sub.setValue(lfsub.getDescription());
@@ -688,11 +803,11 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 	public List<KeyValueBean> getCountries() {
 		GeneralServiceBean bean = new GeneralServiceBean();
 		List<CountryCode> countries = bean.getCountries();
-		if(countries == null){
+		if (countries == null) {
 			return null;
 		}
-		ArrayList<KeyValueBean>ret = new ArrayList<KeyValueBean>();
-		for(CountryCode country:countries){
+		ArrayList<KeyValueBean> ret = new ArrayList<KeyValueBean>();
+		for (CountryCode country : countries) {
 			KeyValueBean toAdd = new KeyValueBean();
 			toAdd.setKey(country.getCountryCode_ID());
 			toAdd.setValue(country.getCountry());
@@ -702,12 +817,13 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 	}
 
 	@Override
-	public HashMap<String,ArrayList<KeyValueBean>> getStationsByState(String companycode, String sub_company){
+	public HashMap<String, ArrayList<KeyValueBean>> getStationsByState(
+			String companycode, String sub_company) {
 		GeneralServiceBean bean = new GeneralServiceBean();
 		List<Station> stations = null;
-		
-		//get stations
-		if(sub_company != null){
+
+		// get stations
+		if (sub_company != null) {
 			List<String> companies = new ArrayList<String>();
 			if (!sub_company.equals(TracingConstants.LF_ABG_COMPANY_ID)) {
 				companies.add(TracingConstants.LF_ABG_COMPANY_ID);
@@ -717,31 +833,33 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		} else {
 			stations = bean.getStations(companycode);
 		}
-		if(stations == null){
+		if (stations == null) {
 			return null;
 		}
 		HashMap<String, ArrayList<KeyValueBean>> map = new HashMap<String, ArrayList<KeyValueBean>>();
-		
-		//populate station map by state
-		for(Station station:stations){
+
+		// populate station map by state
+		for (Station station : stations) {
 			KeyValueBean toAdd = new KeyValueBean();
 			toAdd.setKey("" + station.getStation_ID());
 			toAdd.setValue(station.getStationdesc());
-			String key = station.getState_ID()!=null&&station.getState_ID().trim().length()>0?station.getState_ID():"XX";
-			if(!map.containsKey(key)){
+			String key = station.getState_ID() != null
+					&& station.getState_ID().trim().length() > 0 ? station
+					.getState_ID() : "XX";
+			if (!map.containsKey(key)) {
 				map.put(key, new ArrayList<KeyValueBean>());
 			}
 			map.get(key).add(toAdd);
 		}
 		return map;
 	}
-	
+
 	@Override
 	public List<KeyValueBean> getStations(String companycode, String sub_company) {
 		GeneralServiceBean bean = new GeneralServiceBean();
 		List<Station> stations = null;
-		
-		if(sub_company != null){
+
+		if (sub_company != null) {
 			List<String> companies = new ArrayList<String>();
 			if (!sub_company.equals(TracingConstants.LF_ABG_COMPANY_ID)) {
 				companies.add(TracingConstants.LF_ABG_COMPANY_ID);
@@ -751,12 +869,14 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		} else {
 			stations = bean.getStations(companycode);
 		}
-		if(stations == null){
+		if (stations == null) {
 			return null;
 		}
-		ArrayList<KeyValueBean>ret = new ArrayList<KeyValueBean>();
-		for(Station station:stations){
-			if(station.getAssociated_airport() != null && station.getAssociated_airport().equalsIgnoreCase(TracingConstants.LF_LFC_COMPANY_ID)){
+		ArrayList<KeyValueBean> ret = new ArrayList<KeyValueBean>();
+		for (Station station : stations) {
+			if (station.getAssociated_airport() != null
+					&& station.getAssociated_airport().equalsIgnoreCase(
+							TracingConstants.LF_LFC_COMPANY_ID)) {
 				continue;
 			}
 			KeyValueBean toAdd = new KeyValueBean();
@@ -766,7 +886,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 		}
 		return ret;
 	}
-	
+
 	@Override
 	public List<KeyValueBean> getStations(String companycode) {
 		return getStations(companycode, null);
@@ -776,36 +896,96 @@ public class LFCClientServiceBean implements LFCClientServiceRemote{
 	public List<KeyValueBean> getState() {
 		GeneralServiceBean bean = new GeneralServiceBean();
 		List<State> states = bean.getState();
-		if(states == null){
+		if (states == null) {
 			return null;
 		}
-		ArrayList<KeyValueBean>ret = new ArrayList<KeyValueBean>();
-		for(State state:states){
+		ArrayList<KeyValueBean> ret = new ArrayList<KeyValueBean>();
+		for (State state : states) {
 			KeyValueBean toAdd = new KeyValueBean();
 			toAdd.setKey(state.getState_ID());
 			toAdd.setValue(state.getState());
 			ret.add(toAdd);
 		}
-		
+
 		return ret;
 	}
-	
-	//Begin Fedex Logic
+
+	// Begin Fedex Logic
 	@Override
-	public AddressBean validateAddressFedex(LostReportBean bean){
-		return FedexUtils.validateAddressFedex(bean.getContact().getPrefshipaddress());
+	public AddressBean validateAddressFedex(LostReportBean bean) {
+		return FedexUtils.validateAddressFedex(bean.getContact()
+				.getPrefshipaddress());
+	}
+
+	@Override
+	public List<RateBean> getRatesForAddress(LostReportBean bean) {
+		LFServiceBean servicebean = new LFServiceBean();
+		LFLost lost = servicebean
+				.getLostReport(Long.valueOf(bean.getReportId()));
+		float weight = (float) 1.0;
+		if (lost.getItem().getFound() != null
+				&& lost.getItem().getFound().getItem() != null) {
+			weight = lost.getItem().getFound().getItem().getWeight();
+		}
+		return FedexUtils.getRates(bean.getContact().getPrefshipaddress(),
+				bean.getDeclaredValue(), weight);
+
+	}
+
+	@Override
+	public boolean authorizeCc(LostReportBean bean) {
+		LFServiceBean servicebean = new LFServiceBean();
+		LFTransaction tran = TransFirstUtils.sendTransaction(bean, 9);
+		if (tran != null) {
+			try {
+				tran.setShipment(servicebean.getShipment(Long.valueOf(bean.getReportId())));
+				servicebean.saveTransaction(tran);
+				if (tran.getRspCode().equals("00")) {
+					return true;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
 	}
 	
-	@Override
-	public List<RateBean> getRatesForAddress(LostReportBean bean){
-		LFServiceBean servicebean=new LFServiceBean();
-		LFLost lost =servicebean.getLostReport(Long.valueOf(bean.getReportId()));
-		float weight=(float) 1.0;
-		if(lost.getItem().getFound()!=null && lost.getItem().getFound().getItem()!=null){
-			weight=lost.getItem().getFound().getItem().getWeight();
+	public LFTransaction transactionCc(LostReportBean bean) {
+		LFServiceBean servicebean = new LFServiceBean();
+		LFTransaction tran = TransFirstUtils.sendTransaction(bean, 1);
+		if (tran != null) {
+			try {
+				LFLost report=servicebean.getLostReport(Long.valueOf(bean.getReportId()));
+				tran.setShipment(report.getShipment());
+				servicebean.saveTransaction(tran);
+				if (tran.getRspCode().equals("00")) {
+					report.getShipment().setTransaction(tran);
+					report.setStatusId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+					servicebean.saveOrUpdateLostReport(report,  getWebAgent());
+					return tran;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-		return FedexUtils.getRates(bean.getContact().getPrefshipaddress(), bean.getDeclaredValue(),weight);
-		
+		return null;
+	}
+
+	public boolean isLFSubCompany(String compCode) {
+		if (compCode == null) {
+			return false;
+		}
+		Set<Subcompany> subcompanies = (Set<Subcompany>) SubCompanyDAO
+				.loadSubcompaniesByCompCode(TracingConstants.LF_LF_COMPANY_ID);
+		boolean isLF = false;
+		if (subcompanies != null) {
+			for (Subcompany sc : subcompanies) {
+				if (sc.getSubcompanyCode().equals(compCode)) {
+					isLF = true;
+				}
+			}
+		}
+		return isLF;
 	}
 
 }

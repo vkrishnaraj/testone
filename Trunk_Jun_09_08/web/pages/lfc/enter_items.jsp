@@ -378,7 +378,7 @@
 		              		<html:text name="enterItemsForm" property="disFoundAreaNumber" size="5" maxlength="10" styleClass="textfield" />
 		              		<html:text name="enterItemsForm" property="disFoundExchangeNumber" size="5" maxlength="10" styleClass="textfield" />
 		              		<html:text name="enterItemsForm" property="disFoundLineNumber" size="5" maxlength="10" styleClass="textfield" /><br/>
-		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="enterItemsForm" property="disFoundExtension" size="3" maxlength="3" styleClass="textfield" />
+		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="enterItemsForm" property="disFoundExtension" size="3" maxlength="4" styleClass="textfield" />
      						</td>
      					</tr>
      					<tr>
@@ -486,7 +486,7 @@
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 				              		</html:select>
-				              		<bean:message key="colname.lf.phone.extension" />: <html:text name="enterItemsForm" property="primaryExtension" size="3" maxlength="3" styleClass="textfield" />
+				              		<bean:message key="colname.lf.phone.extension" />: <html:text name="enterItemsForm" property="primaryExtension" size="3" maxlength="4" styleClass="textfield" />
 				              	</td>
 				              	<td colspan="3">
 				              		<bean:message key="colname.lf.secondary.phone" /><br/>
@@ -503,7 +503,7 @@
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_WORK) %>"><bean:message key="option.lf.work" /></html:option>
 				              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_OTHER) %>"><bean:message key="option.lf.other" /></html:option>
 				              		</html:select>
-				              		<bean:message key="colname.lf.phone.extension" />: <html:text name="enterItemsForm" property="secondaryExtension" size="3" maxlength="3" styleClass="textfield" />
+				              		<bean:message key="colname.lf.phone.extension" />: <html:text name="enterItemsForm" property="secondaryExtension" size="3" maxlength="4" styleClass="textfield" />
 				              	</td>
 				              </tr>
 				              <tr>

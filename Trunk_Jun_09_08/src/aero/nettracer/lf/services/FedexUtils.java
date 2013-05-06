@@ -19,6 +19,8 @@ import aero.nettracer.lfc.model.AddressBean;
 import aero.nettracer.lfc.model.RateBean;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.fedex.ws.addressvalidation.v2.Address;
 import com.fedex.ws.addressvalidation.v2.AddressToValidate;
 import com.fedex.ws.addressvalidation.v2.AddressValidationAccuracyType;
@@ -387,10 +389,10 @@ public class FedexUtils {
 	    Money m=rp.addNewInsuredValue();
 	    m.setCurrency("USD"); 
 	    BigDecimal insuredValue=new BigDecimal("0.00");
+	    DecimalFormat format = (DecimalFormat) java.text.NumberFormat.getInstance();
+	    format.applyPattern("##0.00");
+	    format.setMinimumFractionDigits(2);
 	    if(declaredValue>=150){
-			DecimalFormat format = (DecimalFormat) java.text.NumberFormat.getInstance();
-			format.applyPattern("##0.00");
-			format.setMinimumFractionDigits(2);
 			insuredValue = BigDecimal.valueOf(Double.valueOf(format.format((declaredValue/100)*.85)));
 		}
 	    m.setAmount(insuredValue); // Right?
@@ -430,9 +432,14 @@ public class FedexUtils {
 			}
 			for(RateReplyDetail r:replyDoc.getRateReply().getRateReplyDetailsArray()){
 				RateBean rbean=new RateBean();
+				r.getDeliveryDayOfWeek();
 				rbean.setRateKey(r.getCommitDetailsArray(0).getServiceType().toString());
-				rbean.setRateAmount((r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTotalNetCharge().getAmount().add(shippingCost)).doubleValue()+" "+r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTotalNetCharge().getCurrency());//Update after demo
+				rbean.setRateAmount(format.format((r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTotalNetCharge().getAmount().add(shippingCost)).doubleValue())+" "+r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTotalNetCharge().getCurrency());//Update after demo
+				rbean.setEstDeliveryDate(DateUtils.formatDate(r.getDeliveryTimestamp().getTime(), TracingConstants.DISPLAY_DATETIMEFORMAT, null, null));
 				rbean.setRateType(r.getCommitDetailsArray(0).getServiceType().toString().replace("_", " "));
+				if(r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTaxesArray().length>0){
+					rbean.setRateTax(r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTaxesArray(0).toString());
+				}
 				ratesList.add(rbean);
 			}
 			System.out.println("MADE IT!");

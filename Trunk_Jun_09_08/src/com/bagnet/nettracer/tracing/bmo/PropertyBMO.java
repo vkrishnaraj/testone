@@ -21,8 +21,8 @@ public class PropertyBMO {
 	private static ConcurrentHashMap<String, Object> propCache = new ConcurrentHashMap<String, Object>();
 
 	// PROPERTIES USED TO LIMIT STATIONS TO CODE TO
-	public static final String PROPERTY_LIMIT_LD_STATIONS = "losscode.ld.limitstations";
 	public static final String PROPERTY_LIMIT_MISSING_STATIONS = "losscode.missing.limitstations";
+	public static final String PROPERTY_LIMIT_LD_STATIONS = "losscode.ld.limitstations";
 	public static final String PROPERTY_LIMIT_DAMAGED_STATIONS = "losscode.dam.limitstations";
 	public static final String PROPERTY_LIMIT_LD_ADDSTATIONS = "losscode.ld.addstations";
 	public static final String PROPERTY_LIMIT_MISSING_ADDSTATIONS = "losscode.missing.addstations";
@@ -198,6 +198,10 @@ public class PropertyBMO {
 	public static final String FEDEX_METER_NUMBER = "fedex.meter.number";
 	public static final String FEDEX_KEY = "fedex.key";
 	public static final String FEDEX_PASSWORD = "fedex.password";
+	
+	public static final String TRANSFIRST_USER_ID="transfirst.user.id";
+	public static final String TRANSFIRST_REG_KEY="transfirst.reg.key";
+	public static final String TRANSFIRST_ADDRESS_ENDPOINT="transfirst.address.endpoint";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

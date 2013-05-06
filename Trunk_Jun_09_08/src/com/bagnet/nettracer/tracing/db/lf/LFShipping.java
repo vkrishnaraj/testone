@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.db.lf;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -49,10 +50,13 @@ public class LFShipping implements Serializable{
 	private LFAddress billingAddress;
 	private String shippingOption;
 	private String totalPayment;
-	private String transactionId;
 	private String authorizationCode;
 	private double declaredValue;
 //	private ArrayList<String> transactionLog;
+	
+	@OneToOne
+	@JoinColumn(name = "transaction_id", nullable = false)
+	private LFTransaction transaction;
 	
 	public int getId() {
 		return id;
@@ -143,12 +147,12 @@ public class LFShipping implements Serializable{
 		this.authorizationCode = authorizationCode;
 	}
 
-	public String getTransactionId() {
-		return transactionId;
+	public LFTransaction getTransaction() {
+		return transaction;
 	}
 
-	public void setTransactionId(String transactionId) {
-		this.transactionId = transactionId;
+	public void setTransaction(LFTransaction transaction) {
+		this.transaction = transaction;
 	}
 
 	public double getDeclaredValue() {
@@ -158,7 +162,6 @@ public class LFShipping implements Serializable{
 	public void setDeclaredValue(double declaredValue) {
 		this.declaredValue = declaredValue;
 	}
-
 
 	
 }

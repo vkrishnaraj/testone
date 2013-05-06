@@ -929,6 +929,10 @@
         <put name="center"   value="/pages/lostandfound/view_items_deliver.jsp"/>
     </definition>
 
+    <definition name="view_to_be_shipped" extends="user_menu">
+        <put name="center"   value="/pages/lostandfound/to_be_shipped.jsp"/>
+    </definition>
+    
     <definition name="create_delivery" extends="user_menu">
         <put name="center"   value="/pages/lostandfound/create_delivery.jsp"/>
     </definition>

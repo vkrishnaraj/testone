@@ -106,5 +106,8 @@ public interface LFServiceHome {
 	public List<LFMatchHistory> traceFoundItem(long id, boolean isPrimary);
 
 	public LFShipping getShipment(long id);
-	
+
+	public int getToBeShippedCount(Agent agent);
+
+	public List<LFMatchHistory> getToBeShippedList(Agent agent, int start, int offset);
 }

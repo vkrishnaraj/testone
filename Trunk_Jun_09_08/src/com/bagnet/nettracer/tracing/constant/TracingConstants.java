@@ -189,6 +189,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_LF_OPEN_FOUND_ITEMS = "Open Found Items";
 	public static final String SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_SALVAGE = "Items to Salvage";
 	public static final String SYSTEM_COMPONENT_NAME_LF_ITEMS_TO_DELIVER = "Items to Deliver";
+	public static final String SYSTEM_COMPONENT_NAME_LF_TO_BE_SHIPPED = "Items Ready for Shipping";
 
 	public static final String SYSTEM_COMPONENT_NAME_LFC_ITEM_ENTRY_WORKFLOW = "LFC Item Entry Workflow";
 	public static final String SYSTEM_COMPONENT_NAME_LFC_SHELVED_ITEMS_WITH_TRACE_RESULTS = "Shelved Items with Trace Results";
@@ -488,6 +489,7 @@ public class TracingConstants {
 	public final static String LF_VIEW_OPEN_FOUND = "view_open_found";
 	public final static String LF_VIEW_ITEMS_TO_SALVAGE = "view_items_salvage";
 	public final static String LF_VIEW_ITEMS_TO_DELIVER = "view_items_deliver";
+	public static final String LF_VIEW_TO_BE_SHIPPED = "view_to_be_shipped";
 	
 	public final static String LFC_ENTER_ITEMS = "enter_items";
 	public final static String LFC_SHELVED_TRACE_RESULTS = "shelved_trace_results";

@@ -268,6 +268,7 @@
 		<form-bean name="searchLostFoundForm" type="com.bagnet.nettracer.tracing.dto.LFSearchDTO" />	
 		<form-bean name="lostFoundManagerForm" type="com.bagnet.nettracer.tracing.forms.lf.LostFoundManagerForm" />	
 		<form-bean name="handleItemsForm" type="com.bagnet.nettracer.tracing.forms.lf.HandleItemsForm" />	
+		<form-bean name="toBeShippedForm" type="com.bagnet.nettracer.tracing.forms.lf.ToBeShippedForm" />	
 		<form-bean name="traceResultsForm" type="com.bagnet.nettracer.tracing.forms.lf.TraceResultsForm" />	
 		<form-bean name="createDeliveryForm" type="com.bagnet.nettracer.tracing.forms.lf.CreateDeliveryForm" />	
 		
@@ -552,6 +553,7 @@
 		<forward name="view_open_found" path="view_open_found" />
 		<forward name="view_items_salvage" path="view_items_salvage" />
 		<forward name="view_items_deliver" path="view_items_deliver" />
+		<forward name="view_to_be_shipped" path="view_to_be_shipped" />
 		<forward name="create_delivery" path="create_delivery" />
 		<forward name="select_claim" path="select_claim" />
 		
@@ -917,6 +919,7 @@
 		<action path="/view_trace_results" type="com.bagnet.nettracer.tracing.actions.lf.TraceResultsAction" name="traceResultsForm" scope="session" validate="false"></action>
 		<action path="/view_items_salvage" type="com.bagnet.nettracer.tracing.actions.lf.SalvageItemsAction" name="handleItemsForm" scope="session" validate="false"></action>
 		<action path="/view_items_deliver" type="com.bagnet.nettracer.tracing.actions.lf.DeliverItemsAction" name="handleItemsForm" scope="session" validate="false"></action>
+		<action path="/view_to_be_shipped" type="com.bagnet.nettracer.tracing.actions.lf.ToBeShippedAction" name="toBeShippedForm" scope="session" validate="false"></action>
 		<action path="/create_delivery" type="com.bagnet.nettracer.tracing.actions.lf.CreateDeliveryAction" name="createDeliveryForm" scope="session" validate="false"></action>
 
 		<action path="/enter_items" type="com.bagnet.nettracer.tracing.actions.lfc.EnterItemsAction" name="enterItemsForm" scope="session" validate="false"></action>
