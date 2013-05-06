@@ -5,6 +5,7 @@ import java.util.List;
 import javax.faces.model.SelectItem;
 
 import aero.nettracer.lfc.model.AddressBean;
+import aero.nettracer.lfc.model.CCBean;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.LoginBean;
 import aero.nettracer.lfc.model.LostReportBean;
@@ -26,4 +27,5 @@ public interface ClientViewService {
 	public List<SelectItem> getLocationsByState(String subCompany, String state);
 	public AddressBean validateAddressFedex(LostReportBean bean);
 	public List<RateBean> getRatesForAddress(LostReportBean bean);
+	public boolean authorizeCC(LostReportBean lostReport);
 }

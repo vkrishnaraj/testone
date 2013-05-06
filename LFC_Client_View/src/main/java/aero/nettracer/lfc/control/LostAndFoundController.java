@@ -54,12 +54,6 @@ public class LostAndFoundController {
 	private AddressBean shippingAddress;
 	private PhoneBean shippingPhone;
 	private String selectedoption;
-	private String ccnumber;
-	private String ccname;
-	private String ccvendor;
-	private String ccexpirationmonth;
-	private String ccexpirationyear;
-	private String ccsecurity;
 	private List<SelectItem> ccvendors;
 	
 	private String prefAddress;
@@ -209,20 +203,14 @@ public class LostAndFoundController {
 		return null;
 	}
 	
-	public String confirmPayment() {
+	public String confirmCCInfo() {
 		//Check If shipping information is the same.
 		if(validateSameShipping()){
 			if (validateCCInfo()) { //checkCCInf
-				lostReport.setStatus("Ready for Shipping"); //Is this right?
-				ShippingBean shipbean=clientViewService.createAndShip(lostReport);
-				if (clientViewService.sendConfirmationEmail(lostReport) && shipbean!=null) {
 					//Record successful authorization code. Email Customer
-					HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
-					.getExternalContext().getSession(false);
-					session.setAttribute("shipbean", shipbean);
-					return "shippingsuccess?faces-redirect=true";
-				}
-				FacesUtil.addError("Server Communication Error.");
+				HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+				.getExternalContext().getSession(false);
+				return "shipconfirmation?faces-redirect=true";
 			}
 		//Record invalid CC transaction
 			FacesUtil.addError("Credit Card information is invalid. Please double check your credit card information and resubmit.");
@@ -230,6 +218,21 @@ public class LostAndFoundController {
 			FacesUtil.addError("Shipping Information has been changed. Please resubmit Shipping Information to determine proper shipping options and pricing.");
 			return "shippingconfirm?faces-redirect=true";
 		}
+		return null;
+	}
+	
+	public String confirmPayment() {
+		// Check If shipping information is the same.
+		ShippingBean shipbean = clientViewService.createAndShip(lostReport);
+		if (shipbean != null) {
+			// Record successful authorization code. Email Customer
+			HttpSession session = (HttpSession) FacesContext
+					.getCurrentInstance().getExternalContext()
+					.getSession(false);
+			session.setAttribute("shipbean", shipbean);
+			return "shippingsuccess?faces-redirect=true";
+		}
+		FacesUtil.addError("Server Communication Error.");
 		return null;
 	}
 	
@@ -319,11 +322,15 @@ public class LostAndFoundController {
 		if(!shippingAddress.getCity().equals(lostReport.getContact().getPrefshipaddress().getCity())){
 			isValid=false;
 		}
-		if(!shippingAddress.getState().equals(lostReport.getContact().getPrefshipaddress().getState())){
+		if(!shippingAddress.getCountry().equals(lostReport.getContact().getPrefshipaddress().getCountry())){
 			isValid=false;
-		}
-		if(!shippingAddress.getProvince().equals(lostReport.getContact().getPrefshipaddress().getProvince())){
-			isValid=false;
+		} else {
+			if(shippingAddress.getCountry().equals("US") && !shippingAddress.getState().equals(lostReport.getContact().getPrefshipaddress().getState())){
+				isValid=false;
+			}
+			if(shippingAddress.getCountry().equals("CA") && !shippingAddress.getProvince().equals(lostReport.getContact().getPrefshipaddress().getProvince())){
+				isValid=false;
+			}
 		}
 		if(!shippingAddress.getCountry().equals(lostReport.getContact().getPrefshipaddress().getCountry())){
 			isValid=false;
@@ -335,22 +342,6 @@ public class LostAndFoundController {
 			isValid=false;
 		}
 		
-		return isValid;
-	}
-	
-	
-	private boolean validateFedex() {
-		boolean isValid = true;
-		if (lostReport.getContact().getFirstName() == null												// VALIDATE: FIRST NAME
-				|| lostReport.getContact().getFirstName().trim().length() == 0) {
-			FacesUtil.addError("ERROR: First Name is required.");
-			isValid = false;
-		}
-		if (lostReport.getContact().getLastName() == null												// VALIDATE: LAST NAME
-				|| lostReport.getContact().getLastName().trim().length() == 0) {
-			FacesUtil.addError("ERROR: Last Name is required.");
-			isValid = false;
-		}
 		return isValid;
 	}
 	
@@ -374,6 +365,12 @@ public class LostAndFoundController {
 		if (lostReport.getContact().getAddress().getAddress1() == null									// VALIDATE: ADDRESS 1
 				|| lostReport.getContact().getAddress().getAddress1().trim().length() == 0) {
 			FacesUtil.addError("ERROR: Address is required.");
+			isValid = false;
+		}
+
+		if(lostReport.getContact().getAddress().getAddress1() != null
+				&& lostReport.getContact().getAddress().getAddress1().matches("[PO.]*\\s?B(ox)?.*\\d+")){
+			FacesUtil.addError("ERROR: PO Box Addresses are invalid.");
 			isValid = false;
 		}
 		if (lostReport.getContact().getAddress().getCity() == null										// VALIDATE: CITY
@@ -417,6 +414,11 @@ public class LostAndFoundController {
 			FacesUtil.addError("ERROR: Address is required.");
 			isValid = false;
 		}
+		if(shippingAddress.getAddress1() != null
+				&& shippingAddress.getAddress1().matches("[PO.]*\\s?B(ox)?.*\\d+")){
+			FacesUtil.addError("ERROR: PO Box Addresses are invalid.");
+			isValid = false;
+		}
 		if (shippingAddress.getCity() == null										// VALIDATE: CITY
 				|| shippingAddress.getCity().trim().length() == 0) {
 			FacesUtil.addError("ERROR: City is required.");
@@ -437,7 +439,7 @@ public class LostAndFoundController {
 				FacesUtil.addError("ERROR: Zip Code is required.");
 				isValid = false;
 			}			
-		} else {
+		} else if (lostReport.getContact().getAddress().getCountry().equals("CA")){
 			if (shippingAddress.getProvince() == null								// VALIDATE: PROVINCE
 					|| shippingAddress.getProvince().trim().length() == 0) {
 				FacesUtil.addError("ERROR: Province is required.");
@@ -457,38 +459,26 @@ public class LostAndFoundController {
 				isValid = false;
 			}
 		}
-//		if(isValid && !clientViewService.validateAddressFedex(lostReport)){
-//			FacesUtil.addError("ERROR: Address not valid by FedEx.");
-//			isValid=false;
-//		}
 		
 		return isValid;
 	}
 	
 	private boolean validateCCInfo() {
 		boolean isValid = true;
-		if (ccnumber== null || ccnumber.length() == 0) {
+		if (lostReport.getCc().getCcnumber()== null || lostReport.getCc().getCcnumber().length() == 0) {
 			FacesUtil.addError("ERROR: Credit Card Number is required.");
 			isValid = false;
 		} 
-//		else if(ccnumber.length()!=10) {
-//			FacesUtil.addError("ERROR: Credit Card Number is incorrect length.");
-//			isValid = false;
-//		}
-		if (ccname == null || ccname.length() == 0) {
+		if (lostReport.getCc().getCcname() == null || lostReport.getCc().getCcname().length() == 0) {
 			FacesUtil.addError("ERROR: Name on Credit Card is required.");
 			isValid = false;
 		}
-		if (ccvendor == null || ccvendor.length() == 0) {
+		if (lostReport.getCc().getCcvendor() == null || lostReport.getCc().getCcvendor().length() == 0) {
 			FacesUtil.addError("ERROR: Credit Card Vendor is required.");
 			isValid = false;
 		}
-		if (ccexpirationmonth==null || ccexpirationmonth.length() == 0 || ccexpirationyear== null || ccexpirationyear.length() == 0) {
+		if (lostReport.getCc().getCcexpirationmonth()==null || lostReport.getCc().getCcexpirationmonth().length() == 0 || lostReport.getCc().getCcexpirationyear()== null || lostReport.getCc().getCcexpirationyear().length() == 0) {
 			FacesUtil.addError("ERROR: Credit Card Expiration is required.");
-			isValid = false;
-		}
-		if (ccsecurity==null || ccsecurity.length() == 0) {
-			FacesUtil.addError("ERROR: Credit Card Security Code is required.");
 			isValid = false;
 		}
 		if (lostReport.getContact().getBillingaddress().getAddress1() == null									// VALIDATE: ADDRESS 1
@@ -516,14 +506,15 @@ public class LostAndFoundController {
 				FacesUtil.addError("ERROR: Billing Zip Code is required.");
 				isValid = false;
 			}			
-		} else {
+		} else if (lostReport.getContact().getAddress().getCountry().equals("CA")){
 			if (lostReport.getContact().getBillingaddress().getProvince() == null								// VALIDATE: PROVINCE
 					|| lostReport.getContact().getBillingaddress().getProvince().trim().length() == 0) {
 				FacesUtil.addError("ERROR: Billing Province is required.");
 				isValid = false;
 			}
 		}
-		if(isValid && false){ //TODO: Implement call to Credit Card validation service
+		
+		if(isValid && !clientViewService.authorizeCC(lostReport)){ //TODO: Implement call to Credit Card validation service
 			FacesUtil.addError("ERROR: Credit Card is not valid. Please reenter correct credit card information.");
 			isValid=false;
 		}
@@ -702,9 +693,9 @@ public class LostAndFoundController {
 	public List<SelectItem> getCcvendors() {
 		if(ccvendors==null){
 			List<SelectItem> vendors=new ArrayList<SelectItem>();
-			vendors.add(new SelectItem("VI", "Visa"));
-			vendors.add(new SelectItem("AE", "American Express"));
-			vendors.add(new SelectItem("DS", "Discover"));
+			vendors.add(new SelectItem("Visa", "Visa"));
+			vendors.add(new SelectItem("AmEx", "American Express"));
+			vendors.add(new SelectItem("Disc", "Discover"));
 			vendors.add(new SelectItem("MC", "Mastercard"));
 			ccvendors=vendors;
 		}
@@ -949,38 +940,6 @@ public class LostAndFoundController {
 		return selectedoption;
 	}
 
-	public void setCcnumber(String ccnumber) {
-		this.ccnumber = ccnumber;
-	}
-
-	public String getCcnumber() {
-		return ccnumber;
-	}
-
-	public void setCcname(String ccname) {
-		this.ccname = ccname;
-	}
-
-	public String getCcname() {
-		return ccname;
-	}
-
-	public void setCcvendor(String ccvendor) {
-		this.ccvendor = ccvendor;
-	}
-
-	public String getCcvendor() {
-		return ccvendor;
-	}
-
-	public void setCcsecurity(String ccsecurity) {
-		this.ccsecurity = ccsecurity;
-	}
-
-	public String getCcsecurity() {
-		return ccsecurity;
-	}
-	
 	public AddressBean getBillingAddress() {
 		return billingAddress;
 	}
@@ -1003,22 +962,6 @@ public class LostAndFoundController {
 	
 	public void setShippingPhone(PhoneBean shippingPhone) {
 		this.shippingPhone= shippingPhone;
-	}
-
-	public void setCcexpirationmonth(String ccexpirationmonth) {
-		this.ccexpirationmonth = ccexpirationmonth;
-	}
-	
-	public String getCcexpirationmonth() {
-		return ccexpirationmonth;
-	}
-
-	public void setCcexpirationyear(String ccexpirationyear) {
-		this.ccexpirationyear = ccexpirationyear;
-	}
-	
-	public String getCcexpirationyear() {
-		return ccexpirationyear;
 	}
 
 	public void setStateDropOff(String stateDropOff) {
@@ -1052,7 +995,7 @@ public class LostAndFoundController {
 		if (rates != null) {
 			for (RateBean rate: rates) {
 				if (rate != null) {
-					ratesList.add(new SelectItem(rate.getRateKey()+ "", rate.getRateType()+" - "+rate.getRateAmount()));
+					ratesList.add(new SelectItem(rate.getRateKey()+ "", rate.getRateType()+" (Est Delivery Date: "+rate.getEstDeliveryDate()+") - "+rate.getRateAmount()));
 				}
 			}
 		}

@@ -107,9 +107,21 @@
 					</td></tr>                                                     
 <!-- END ADDRESS INFO UI -->
 					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.primaryPhone.number}" />
+						<!-- <t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.primaryPhone.number}" />-->
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.primaryPhone.country}" />
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.primaryPhone.area}" />
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.primaryPhone.exchange}" />
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.primaryPhone.line}" /><br/>
+						<t:outputText value="#{msg.lostform_label_item_extension} "/> 
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.primaryPhone.extension}" />
 					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.typeText}#{lostAndFound.lostReport.contact.secondaryPhone.number}" />
+						<!-- <t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.typeText}#{lostAndFound.lostReport.contact.secondaryPhone.number}" />-->
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.secondaryPhone.country}" />
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.secondaryPhone.area}" />
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.secondaryPhone.exchange}" />
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.secondaryPhone.line}" /><br/>
+						<t:outputText value="#{msg.lostform_label_item_extension} "/> 
+						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.secondaryPhone.extension}" />
 					</td></tr>
 					<tr><td class="twlvPxBlk">
 						<t:outputText value="#{lostAndFound.lostReport.contact.emailAddress}" />

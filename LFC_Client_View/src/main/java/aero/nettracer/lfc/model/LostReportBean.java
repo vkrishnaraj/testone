@@ -28,14 +28,16 @@ public class LostReportBean implements Serializable{
 	private String whereLost;
 	private String company;
 	private String subCompany;
-	private ContactBean contact = new ContactBean();
 	private Date dateLost;
 	private String itemModel;
 	private String itemSize;
 	private String itemCaseColor;
-	private PhoneBean lostPhone = new PhoneBean();
 	private long daysFromCreate;
 	private List<SegmentBean> segments;
+
+	private ContactBean contact = new ContactBean();
+	private PhoneBean lostPhone = new PhoneBean();
+	private CCBean cc = new CCBean();
 	
 	//For Status Page
 	private String status;
@@ -47,6 +49,7 @@ public class LostReportBean implements Serializable{
 	private double declaredValue;
 	private String shippingPayment;
 	private String shippingOption;
+	private String shippingTax;
 	
 	private boolean shipping=false;
 
@@ -333,6 +336,22 @@ public class LostReportBean implements Serializable{
 
 	public void setLastNameBag(String lastNameBag) {
 		this.lastNameBag = lastNameBag;
+	}
+
+	public String getShippingTax() {
+		return shippingTax;
+	}
+
+	public void setShippingTax(String shippingTax) {
+		this.shippingTax = shippingTax;
+	}
+
+	public CCBean getCc() {
+		return cc;
+	}
+
+	public void setCc(CCBean cc) {
+		this.cc = cc;
 	}
 
 }

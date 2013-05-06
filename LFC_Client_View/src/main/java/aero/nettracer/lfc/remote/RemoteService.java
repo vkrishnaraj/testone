@@ -13,6 +13,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 import aero.nettracer.lf.services.LFCClientServiceRemote;
 import aero.nettracer.lfc.model.AddressBean;
+import aero.nettracer.lfc.model.CCBean;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.KeyValueBean;
 import aero.nettracer.lfc.model.LostReportBean;
@@ -293,6 +294,24 @@ public class RemoteService {
 			ex.printStackTrace();
 		}
 		return toReturn;
+	}
+
+	public static boolean authorizeCc(LostReportBean bean) {
+		try {
+			LFCClientServiceRemote o;
+			if (bean != null && bean.getCompany() != null && bean.getCompany().equals(TracingConstants.LF_AB_COMPANY_ID)) {
+				o = getRemoteServiceAB();
+			} else {
+				o = getRemoteServiceLF();
+			}
+			if (o != null) {
+				return o.authorizeCc(bean);
+			}
+			ctx.close();
+		} catch (NamingException ex) {
+			ex.printStackTrace();
+		}
+		return false;
 	}
 
 }

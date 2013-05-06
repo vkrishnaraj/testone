@@ -11,43 +11,30 @@
 	<ui:define name="body">
 		<h:form id="lostForm">
 			<script type="text/javascript">
-				function validateEmail() {
-					var theEmail = document.getElementById("lostForm:email").value;
-					if (!theEmail) {
-						return window.confirm("Please be advised that if an e-mail address is not provided, we" + 
-								" will contact you via telephone and only in the event that we find an item closely" + 
-								" matching the description of your reported lost item.");
-					} else {
-						return true;
-					}
-					
+				window.onload=function(){
+					adjustAddressReq(document.getElementById("lostForm:shipCountry"));
 				}
 				
 				function adjustAddressReq(countryList) {
-					province = document.getElementById("lostForm:province");
-					state = document.getElementById("lostForm:state");
+					var province = document.getElementById("province");
+					var state = document.getElementById("state");
 					if (countryList.options[countryList.selectedIndex].value == "US") {
-						province.value = '';
-						province.readOnly = true;
+						document.getElementById("lostForm:shipProvince").value="";
+						state.style.display = "block";
+						province.style.display= "none";
+					} else if(countryList.options[countryList.selectedIndex].value == "CA") {
+						document.getElementById("lostForm:shipState").selectedIndex=0;
+						state.style.display = "none";
+						province.style.display= "block";
 					} else {
-						state.selectedIndex = 0;
-						province.readOnly = false;
+						document.getElementById("lostForm:shipProvince").value="";
+						document.getElementById("lostForm:shipState").selectedIndex=0;
+						province.style.display= "none";
+						state.style.display= "none";						
 					}
 				}
 				
-				function adjustAddressReqState(stateList) {
-					province = document.getElementById("lostForm:province");
-					country = document.getElementById("lostForm:country");
-					if (stateList.options[stateList.selectedIndex].value == "") {
-						province.readOnly = false;
-					} else {
-						province.value = '';
-						province.readOnly = true;
-						country.selectedIndex = 0;
-					}
-				}
-
-		        var curDt = new Date();
+				var curDt = new Date();
 		        
 		        function disablementFunction(day){
 		            if (curDt==undefined){
@@ -59,20 +46,7 @@
 		        function disabledClassesProv(day){
 		            if (curDt.getTime() - day.date.getTime() &lt; 0) return 'rich-calendar-boundary-dates';
 		        }
-		        
-		        function sameAsShippingCheck(){
-		            same = document.getElementById("lostForm:sameAsShipping");
-		            if(same.value=="on"){
-		            	document.getElementById("lostForm:billAddress1").value=document.getElementById("lostForm:shipAddress1").value;
-		            	document.getElementById("lostForm:billAddress2").value=document.getElementById("lostForm:shipAddress2").value;
-		            	document.getElementById("lostForm:billCity").value=document.getElementById("lostForm:shipCity").value;
-		            	document.getElementById("lostForm:billState").value=document.getElementById("lostForm:shipState").value;
-		            	document.getElementById("lostForm:billPostal").value=document.getElementById("lostForm:shipPostal").value;
-		            	document.getElementById("lostForm:billCountry").value=document.getElementById("lostForm:shipCountry").value;
-		            	document.getElementById("lostForm:billProvince").value=document.getElementById("lostForm:shipProvince").value;
-		            }
-		        }
-
+		       
 			</script>
 			<a4j:outputPanel id="outerPanel">
 				<!-- BEGIN ADDRESS INFO UI -->
@@ -89,6 +63,23 @@
 					<t:outputText value="#{msg.shipping_confirm_text_desc}" escape="false" />
 				</p>
 				<table style="width: 95%;">
+					<tr>
+						<td colspan="8" >&#160;</td>
+					</tr>
+					<tr>
+						<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
+								value="#{msg.shipping_label_address_country} *" /></td>
+					</tr>
+					<tr>
+						<td colspan="3"><t:selectOneMenu
+								value="#{lostAndFound.shippingAddress.country}"
+								onchange="adjustAddressReq(this);" style="width: 95%"
+								id="shipCountry">
+								<f:selectItem itemLabel="#{msg.general_list_united_states}"
+									itemValue="US" />
+								<f:selectItems value="#{lostAndFound.countries}" />
+							</t:selectOneMenu></td>
+					</tr>
 					<tr>
 						<td colspan="8" >&#160;</td>
 					</tr>
@@ -117,50 +108,40 @@
 						<td >&#160;</td>
 					</tr>
 					<tr>
-						<td class="twlvPxBlk" colspan="2"><t:outputText
+						<td class="twlvPxBlk" colspan="3"><t:outputText
 								value="#{msg.shipping_label_address_city} *" /></td>
-						<td class="twlvPxBlk" colspan="2"><t:outputText
-								value="#{msg.shipping_label_address_state}" /></td>
-						<td class="twlvPxBlk" colspan="2"><t:outputText
+						<td class="twlvPxBlk" colspan="3"><t:outputText
 								value="#{msg.shipping_label_address_postal}" /></td>
 					</tr>
 					<tr>
-						<td colspan="2"><t:inputText
+						<td colspan="3"><t:inputText
 								value="#{lostAndFound.shippingAddress.city}"
 								maxlength="255" style="width: 95%" id="shipCity"/></td>
-						<td colspan="2"><t:selectOneMenu
-								value="#{lostAndFound.shippingAddress.state}"
-								onchange="adjustAddressReqState(this);" style="width: 95%"
-								 id="shipState">
-								<f:selectItem itemLabel="#{msg.general_list_please_select}"
-									itemValue="" />
-								<f:selectItems value="#{lostAndFound.states}" />
-							</t:selectOneMenu></td>
-						<td colspan="2"><t:inputText
+						<td colspan="3"><t:inputText
 								value="#{lostAndFound.shippingAddress.postal}"
 								maxlength="255" style="width: 100%" id="shipPostal" /></td>
 					</tr>
 					<tr>
 						<td>&#160;</td>
 					</tr>
-					<tr>
-						<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
-								value="#{msg.shipping_label_address_country} *" /></td>
+					<tr id="state" style="display:none">
+						<td class="twlvPxBlk" colspan="3"><t:outputText
+							value="#{msg.shipping_label_address_state}" /></td>	
+						<td colspan="3"><t:selectOneMenu
+								value="#{lostAndFound.shippingAddress.state}" style="width: 95%" id="shipState">
+								<f:selectItem itemLabel="#{msg.general_list_please_select}"
+									itemValue="" />
+								<f:selectItems value="#{lostAndFound.states}" />
+							</t:selectOneMenu></td>
+						
+					</tr>
+					<tr id="province" style="display:none">
 						<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
 								value="#{msg.shipping_label_address_province}" /></td>
-					</tr>
-					<tr>
-						<td colspan="3"><t:selectOneMenu
-								value="#{lostAndFound.shippingAddress.country}"
-								onchange="adjustAddressReq(this);" style="width: 95%"
-								id="shipCountry">
-								<f:selectItem itemLabel="#{msg.general_list_united_states}"
-									itemValue="US" />
-								<f:selectItems value="#{lostAndFound.countries}" />
-							</t:selectOneMenu></td>
 						<td colspan="3"><t:inputText id="shipProvince"
 								value="#{lostAndFound.shippingAddress.province}"
 								maxlength="255" style="width: 100%" /></td>
+						
 					</tr>
 					<tr>
 						<td class="twlvPxBlk" colspan="2" ><t:outputText
@@ -181,7 +162,8 @@
 					</tr>
 					<tr>
 						<td class="twlvPxBlk" colspan="2" ><t:outputText
-								value="#{msg.shipping_label_declared_value} *" /></td>
+								value="#{msg.shipping_label_declared_value} *" /><t:outputText
+								value="#{msg.declared_currency}" /></td>
 						<td class="twlvPxBlk" colspan="2" ><t:inputText
 								value="#{lostAndFound.lostReport.declaredValue}"
 								maxlength="100" id="declaredValue" /></td>
@@ -262,8 +244,8 @@
 				<!-- END ADDRESS INFO UI -->
 			<h:panelGroup  >
 				<div>
-					<rich:messages id="reportMsg" errorClass="errormsg"
-						infoClass="infomsg" layout="list" />
+					<b><rich:messages id="reportMsg" errorClass="errormsg"
+						infoClass="infomsg" style="color:red" layout="list" /></b>
 					<rich:spacer width="100%" height="15" title="" />
 				</div>
 				<div align="right">

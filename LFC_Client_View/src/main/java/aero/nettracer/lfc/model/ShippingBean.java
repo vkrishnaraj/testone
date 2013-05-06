@@ -14,8 +14,10 @@ public class ShippingBean implements Serializable{
 	private AddressBean billingAddress;
 	private String shippingOption;
 	private String totalPayment;
-	private String transaction_id;
-	private String authorizationCode;
+	private String transactionNum;
+	private String cardType;
+	private String credit4num;
+	private String datePaid;
 	private double declaredValue;
 //	private ArrayList<String> transactionLog;
 	
@@ -83,22 +85,6 @@ public class ShippingBean implements Serializable{
 		this.totalPayment = totalPayment;
 	}
 
-	public String getTransaction_id() {
-		return transaction_id;
-	}
-
-	public void setTransaction_id(String transaction_id) {
-		this.transaction_id= transaction_id;
-	}
-
-	public String getAuthorizationCode() {
-		return authorizationCode;
-	}
-
-	public void setAuthorizationCode(String authorizationCode) {
-		this.authorizationCode = authorizationCode;
-	}
-
 	public String getShippingOption() {
 		return shippingOption;
 	}
@@ -113,6 +99,38 @@ public class ShippingBean implements Serializable{
 
 	public void setDeclaredValue(double declaredValue) {
 		this.declaredValue = declaredValue;
+	}
+
+	public String getCardType() {
+		return cardType;
+	}
+
+	public void setCardType(String cardType) {
+		this.cardType = cardType;
+	}
+
+	public String getCredit4num() {
+		return credit4num;
+	}
+
+	public void setCredit4num(String credit4num) {
+		this.credit4num = credit4num;
+	}
+
+	public String getDatePaid() {
+		return datePaid;
+	}
+
+	public void setDatePaid(String datePaid) {
+		this.datePaid = datePaid;
+	}
+
+	public String getTransactionNum() {
+		return transactionNum;
+	}
+
+	public void setTransactionNum(String transactionNum) {
+		this.transactionNum = transactionNum;
 	}
 
 

@@ -1,6 +1,8 @@
 package aero.nettracer.lfc.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class RateBean implements Serializable{
 
@@ -9,6 +11,8 @@ public class RateBean implements Serializable{
 	private String rateType;
 	private String rateKey;
 	private String rateAmount;
+	private String rateTax;
+	private String estDeliveryDate;
 	
 	
 	public String getRateType() {
@@ -33,5 +37,21 @@ public class RateBean implements Serializable{
 
 	public void setRateAmount(String rateAmount) {
 		this.rateAmount = rateAmount;
+	}
+
+	public String getRateTax() {
+		return rateTax;
+	}
+
+	public void setRateTax(String rateTax) {
+		this.rateTax = rateTax;
+	}
+
+	public String getEstDeliveryDate() {
+		return estDeliveryDate;
+	}
+	
+	public void setEstDeliveryDate(String estDeliveryDate) {
+		this.estDeliveryDate = estDeliveryDate;
 	}
 }

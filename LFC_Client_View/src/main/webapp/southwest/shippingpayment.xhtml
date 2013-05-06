@@ -11,58 +11,53 @@
 	<ui:define name="body">
 		<h:form id="lostForm">
 			<script type="text/javascript">
-				function validateEmail() {
-					var theEmail = document.getElementById("lostForm:email").value;
-					if (!theEmail) {
-						return window.confirm("Please be advised that if an e-mail address is not provided, we" + 
-								" will contact you via telephone and only in the event that we find an item closely" + 
-								" matching the description of your reported lost item.");
-					} else {
-						return true;
-					}
-					
-				}
-				
-				function adjustAddressReq(countryList) {
-					province = document.getElementById("lostForm:province");
-					state = document.getElementById("lostForm:state");
-					if (countryList.options[countryList.selectedIndex].value == "US") {
-						province.value = '';
-						province.readOnly = true;
-					} else {
-						state.selectedIndex = 0;
-						province.readOnly = false;
-					}
-				}
-				
-				function adjustAddressReqState(stateList) {
-					province = document.getElementById("lostForm:province");
-					country = document.getElementById("lostForm:country");
-					if (stateList.options[stateList.selectedIndex].value == "") {
-						province.readOnly = false;
-					} else {
-						province.value = '';
-						province.readOnly = true;
-						country.selectedIndex = 0;
-					}
+				window.onload=function(){
+					adjustShipAddressReq(document.getElementById("lostForm:shipCountry"));
+					adjustBillAddressReq(document.getElementById("lostForm:billCountry"));
 				}
 
-		        var curDt = new Date();
-		        
-		        function disablementFunction(day){
-		            if (curDt==undefined){
-		                curDt = day.date.getDate;
-		            }
-		            if (curDt.getTime() - day.date.getTime() &gt;= 0) return true; else return false;  
-		        }
-		        
-		        function disabledClassesProv(day){
-		            if (curDt.getTime() - day.date.getTime() &lt; 0) return 'rich-calendar-boundary-dates';
-		        }
-		        
+				function adjustShipAddressReq(countryList) {
+					var province = document.getElementById("shipProvince");
+					var state = document.getElementById("shipState");
+					if (countryList.options[countryList.selectedIndex].value == "US") {
+						document.getElementById("lostForm:shipProvince").value="";
+						state.style.display = "block";
+						province.style.display= "none";
+					} else if(countryList.options[countryList.selectedIndex].value == "CA") {
+						document.getElementById("lostForm:shipState").selectedIndex=0;
+						state.style.display = "none";
+						province.style.display= "block";
+					} else {
+						document.getElementById("lostForm:shipProvince").value="";
+						document.getElementById("lostForm:shipState").selectedIndex=0;
+						province.style.display= "none";
+						state.style.display= "none";						
+					}
+				} 
+
+				function adjustBillAddressReq(countryList) {
+					var province = document.getElementById("billProvince");
+					var state = document.getElementById("billState");
+					if (countryList.options[countryList.selectedIndex].value == "US") {
+						document.getElementById("lostForm:billProvince").value="";
+						state.style.display = "block";
+						province.style.display= "none";
+					} else if(countryList.options[countryList.selectedIndex].value == "CA") {
+						document.getElementById("lostForm:billState").selectedIndex=0;
+						state.style.display = "none";
+						province.style.display= "block";
+					} else {
+						document.getElementById("lostForm:billProvince").value="";
+						document.getElementById("lostForm:billState").selectedIndex=0;
+						province.style.display= "none";
+						state.style.display= "none";						
+					}
+				} 
+				
 		        function sameAsShippingCheck(){
-		            same = document.getElementById("lostForm:sameAsShipping");
-		            if(same.value=="on"){
+		            var same = document.getElementById("lostForm:sameAsShipping");
+		            if(same.checked==true){
+		            	
 		            	document.getElementById("lostForm:billAddress1").value=document.getElementById("lostForm:shipAddress1").value;
 		            	document.getElementById("lostForm:billAddress2").value=document.getElementById("lostForm:shipAddress2").value;
 		            	document.getElementById("lostForm:billCity").value=document.getElementById("lostForm:shipCity").value;
@@ -70,9 +65,69 @@
 		            	document.getElementById("lostForm:billPostal").value=document.getElementById("lostForm:shipPostal").value;
 		            	document.getElementById("lostForm:billCountry").value=document.getElementById("lostForm:shipCountry").value;
 		            	document.getElementById("lostForm:billProvince").value=document.getElementById("lostForm:shipProvince").value;
+		            	document.getElementById("lostForm:billAddress1").disabled="true";
+		            	document.getElementById("lostForm:billAddress2").disabled="true";
+		            	document.getElementById("lostForm:billCity").disabled="true";
+		            	document.getElementById("lostForm:billState").disabled="true";
+		            	document.getElementById("lostForm:billPostal").disabled="true";
+		            	document.getElementById("lostForm:billCountry").disabled="true";
+		            	document.getElementById("lostForm:billProvince").disabled="true";
+						adjustBillAddressReq(document.getElementById("lostForm:billCountry"));
+		            } else { 
+		            	document.getElementById("lostForm:billAddress1").disabled="";
+		            	document.getElementById("lostForm:billAddress2").disabled="";
+		            	document.getElementById("lostForm:billCity").disabled="";
+		            	document.getElementById("lostForm:billState").disabled="";
+		            	document.getElementById("lostForm:billPostal").disabled="";
+		            	document.getElementById("lostForm:billCountry").disabled="";
+		            	document.getElementById("lostForm:billProvince").disabled="";
 		            }
 		        }
+		        
+		        function isValidCreditCard() {
+		        	type =document.getElementById("lostForm:ccVendor");
+		        	ccnum =document.getElementById("lostForm:ccNum");
+		            if (type.value == "Visa") {
+		               // Visa: length 16, prefix 4, dashes optional.
+		               var re = /^4\d{3}-?\d{4}-?\d{4}-?\d{4}$/;
+		            } else if (type.value == "MC") {
+		               // Mastercard: length 16, prefix 51-55, dashes optional.
+		               var re = /^5[1-5]\d{2}-?\d{4}-?\d{4}-?\d{4}$/;
+		            } else if (type.value == "Disc") {
+		               // Discover: length 16, prefix 6011, dashes optional.
+		               var re = /^6011-?\d{4}-?\d{4}-?\d{4}$/;
+		            } else if (type.value == "AmEx") {
+		               // American Express: length 15, prefix 34 or 37.
+		               var re = /^3[4,7]\d{13}$/;
+		            } 
 
+		            ccnum.value = ccnum.value.split(" ").join("");
+		            if (!re.test(ccnum.value)) {
+		            	window.alert("Credit Card is invalid.\nPlease review your credit card information and try again."); 
+		            	return false;
+	            	}
+		            // Remove all dashes for the checksum checks to eliminate negative numbers
+		            ccnum.value = ccnum.value.split("-").join("");
+		            // Checksum ("Mod 10")
+		            // Add even digits in even length strings or odd digits in odd length strings.
+		            var checksum = 0;
+		            for (var i=(2-(ccnum.value.length % 2));
+		            	i&lt;=ccnum.value.length;
+		            	i+=2) {
+		               checksum += parseInt(ccnum.value.charAt(i-1));
+		            }
+		            // Analyze odd digits in even length strings or even digits in odd length strings.
+		            for (var i=(ccnum.value.length % 2) + 1; i&lt;ccnum.value.length; i+=2) {
+		               var digit = parseInt(ccnum.value.charAt(i-1)) * 2;
+		               if (digit &lt; 10) { checksum += digit; } else { checksum += (digit-9); }
+		            }
+		            if ((checksum % 10) == 0) 
+		            	return true; 
+		            else {
+		            	window.alert('Credit Card is invalid.\nPlease review your credit card information and try again.'); 
+		            	return false;
+		            }
+		         }
 			</script>
 			<a4j:outputPanel id="outerPanel">
 			<a4j:outputPanel id="payment">
@@ -90,54 +145,56 @@
 
 				<!-- IF Shipping is Selected. Gather CC Info -->
 					<table style="width: 95%;">
-					
 						<tr>
+							<td class="twlvPxBlk" colspan="3"><t:outputText
+								value="#{msg.lostform_label_cc_vendor} *" /></td>
+							<td class="twlvPxBlk"  colspan="3"><t:outputText
+								value="#{msg.lostform_label_total_payment} *" /></td>
+						</tr>
+						<tr>
+							<td colspan="3"><t:selectOneMenu
+									value="#{lostAndFound.lostReport.cc.ccvendor}"  id="ccVendor" style="width: 95%;">
+									<f:selectItem itemLabel="#{msg.credit_card_list}" itemValue="" />
+									<f:selectItems value="#{lostAndFound.ccvendors}" />
+									</t:selectOneMenu></td>
+							<td class="twlvPxBlk"  colspan="3"><t:outputText
+								value="#{lostAndFound.lostReport.shippingPayment}" /></td>
+						</tr>
+						
+						<tr>
+							<td class="twlvPxBlk" style="width: 25%;" colspan="3"><t:outputText
+									value="#{msg.lostform_label_cc_name} *" /></td>
 							<td class="twlvPxBlk" style="width: 25%;" colspan="3"><t:outputText
 									value="#{msg.lostform_label_cc_number} *" /></td>
 						</tr>
 						<tr>
-							<td colspan="3"><t:inputText value="#{lostAndFound.ccnumber}"
-									maxlength="255" style="width: 95%;" /></td>
+							<td colspan="3"><t:inputText value="#{lostAndFound.lostReport.cc.ccname}"
+									maxlength="100" style="width: 95%;" /></td>
+							<td colspan="3"><t:inputText id="ccNum" value="#{lostAndFound.lostReport.cc.ccnumber}"
+									maxlength="20" style="width: 95%;" /></td>
 						</tr>
 						<tr>
-							<td class="twlvPxBlk" style="width: 25%;" colspan="3"><t:outputText
-									value="#{msg.lostform_label_cc_name} *" /></td>
-						</tr>
-						<tr>
-							<td colspan="3"><t:inputText value="#{lostAndFound.ccname}"
-									maxlength="255" style="width: 95%;" /></td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" style="width: 25%;" colspan="1"><t:outputText
-									value="#{msg.lostform_label_cc_vendor} *" /></td>
-							<td class="twlvPxBlk" style="width: 25%;" colspan="1"><t:outputText
+							<td class="twlvPxBlk" style="width: 25%;" colspan="6"><t:outputText
 									value="#{msg.lostform_label_cc_expiration} *" /></td>
-							<td class="twlvPxBlk" style="width: 25%;" colspan="1"><t:outputText
-									value="#{msg.lostform_label_cc_security} *" /></td>
 						</tr>
 						<tr>
-							<td colspan="1"><t:selectOneMenu
-									value="#{lostAndFound.ccvendor}" style="width: 95%;">
-									<f:selectItem itemLabel="#{msg.credit_card_list}" itemValue="" />
-									<f:selectItems value="#{lostAndFound.ccvendors}" />
-									</t:selectOneMenu></td>
-							<td colspan="1">
-								<t:selectOneMenu value="#{lostAndFound.ccexpirationmonth}" style="width: 45%;">
+							<td colspan="6">
+								<t:selectOneMenu value="#{lostAndFound.lostReport.cc.ccexpirationmonth}" style="width: 45%;">
 									<f:selectItem itemLabel="Select" itemValue="" />
-									<f:selectItem itemLabel="1" itemValue="1" />
-									<f:selectItem itemLabel="2" itemValue="2" />
-									<f:selectItem itemLabel="3" itemValue="3" />
-									<f:selectItem itemLabel="4" itemValue="4" />
-									<f:selectItem itemLabel="5" itemValue="5" />
-									<f:selectItem itemLabel="6" itemValue="6" />
-									<f:selectItem itemLabel="7" itemValue="7" />
-									<f:selectItem itemLabel="8" itemValue="8" />
-									<f:selectItem itemLabel="9" itemValue="9" />
+									<f:selectItem itemLabel="1" itemValue="01" />
+									<f:selectItem itemLabel="2" itemValue="02" />
+									<f:selectItem itemLabel="3" itemValue="03" />
+									<f:selectItem itemLabel="4" itemValue="04" />
+									<f:selectItem itemLabel="5" itemValue="05" />
+									<f:selectItem itemLabel="6" itemValue="06" />
+									<f:selectItem itemLabel="7" itemValue="07" />
+									<f:selectItem itemLabel="8" itemValue="08" />
+									<f:selectItem itemLabel="9" itemValue="09" />
 									<f:selectItem itemLabel="10" itemValue="10" />
 									<f:selectItem itemLabel="11" itemValue="11" />
 									<f:selectItem itemLabel="12" itemValue="12" />
 								</t:selectOneMenu>/
-								<t:selectOneMenu value="#{lostAndFound.ccexpirationyear}" style="width: 45%;">
+								<t:selectOneMenu value="#{lostAndFound.lostReport.cc.ccexpirationyear}" style="width: 45%;">
 									<f:selectItem itemLabel="Select" itemValue="" />
 									<f:selectItem itemLabel="13" itemValue="13" />
 									<f:selectItem itemLabel="14" itemValue="14" />
@@ -152,16 +209,32 @@
 									<f:selectItem itemLabel="23" itemValue="23" />
 								</t:selectOneMenu>
 							</td>
-							<td colspan="1"><t:inputText
-									value="#{lostAndFound.ccsecurity}" maxlength="255"
-									style="width: 95%;" /></td>
 						</tr>
 					</table>
 					<br/>
 					<table style="width: 95%;" >
+						
 						<tr>
 							<td class="twlvPxBlk" colspan="8"><b><t:outputText
 									value="#{msg.billing_label_address_addr1} *" /></b></td>
+						</tr>
+						<tr>
+							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
+									value="#{msg.billing_label_address_country} *" /></td>
+						</tr>
+						<tr>
+							<td colspan="3"><t:selectOneMenu
+									value="#{lostAndFound.lostReport.contact.billingaddress.country}"
+									onchange="adjustBillAddressReq(this);" style="width: 95%"
+									id="billCountry">
+									<f:selectItem itemLabel="#{msg.general_list_united_states}"
+										itemValue="US" />
+									<f:selectItems value="#{lostAndFound.countries}" />
+								</t:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td class="twlvPxBlk" colspan="8"><t:outputText
+									value="#{msg.lostform_label_address_addr1} *" /></td>
 						</tr>
 						<tr>
 							<td colspan="8"><t:inputText
@@ -180,8 +253,6 @@
 						<tr>
 							<td class="twlvPxBlk" colspan="3"><t:outputText
 									value="#{msg.billing_label_address_city} *" /></td>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
-									value="#{msg.billing_label_address_state}" /></td>
 							<td class="twlvPxBlk" colspan="3"><t:outputText
 									value="#{msg.billing_label_address_postal}" /></td>
 						</tr>
@@ -189,7 +260,14 @@
 							<td colspan="3"><t:inputText
 									value="#{lostAndFound.lostReport.contact.billingaddress.city}"
 									maxlength="255" style="width: 95%" id="billCity"/></td>
-							<td colspan="2"><t:selectOneMenu
+							<td colspan="3"><t:inputText
+									value="#{lostAndFound.lostReport.contact.billingaddress.postal}"
+									maxlength="255" style="width: 100%" id="billPostal" /></td>
+						</tr>
+						<tr id="billState" style="display:none">
+							<td class="twlvPxBlk" colspan="3"><t:outputText
+									value="#{msg.billing_label_address_state}" /></td>
+							<td colspan="3"><t:selectOneMenu
 									value="#{lostAndFound.lostReport.contact.billingaddress.state}"
 									onchange="adjustAddressReqState(this);" style="width: 95%"
 									id="billState">
@@ -197,25 +275,10 @@
 										itemValue="" />
 									<f:selectItems value="#{lostAndFound.states}" />
 								</t:selectOneMenu></td>
-							<td colspan="3"><t:inputText
-									value="#{lostAndFound.lostReport.contact.billingaddress.postal}"
-									maxlength="255" style="width: 100%" id="billPostal" /></td>
 						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
-									value="#{msg.billing_label_address_country} *" /></td>
+						<tr id="billProvince" style="display:none">
 							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
 									value="#{msg.billing_label_address_province}" /></td>
-						</tr>
-						<tr>
-							<td colspan="3"><t:selectOneMenu
-									value="#{lostAndFound.lostReport.contact.billingaddress.country}"
-									onchange="adjustAddressReq(this);" style="width: 95%"
-									id="billCountry">
-									<f:selectItem itemLabel="#{msg.general_list_united_states}"
-										itemValue="US" />
-									<f:selectItems value="#{lostAndFound.countries}" />
-								</t:selectOneMenu></td>
 							<td colspan="3"><t:inputText id="billProvince"
 									value="#{lostAndFound.lostReport.contact.billingaddress.province}"
 									maxlength="255" style="width: 100%" /></td>
@@ -229,6 +292,24 @@
 						<tr>
 							<td class="twlvPxBlk" colspan="6"><b><t:outputText
 									value="#{msg.shipping_label_address_addr1} *" /></b></td>
+						</tr>
+						<tr>
+							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
+									value="#{msg.shipping_label_address_country} *" /></td>
+						</tr>
+						<tr>
+							<td colspan="3"><t:selectOneMenu
+									value="#{lostAndFound.shippingAddress.country}"
+									onchange="adjustShipAddressReq(this);" style="width: 95%"
+									id="shipCountry">
+									<f:selectItem itemLabel="#{msg.general_list_united_states}"
+										itemValue="US" />
+									<f:selectItems value="#{lostAndFound.countries}" />
+								</t:selectOneMenu></td>
+						</tr>
+						<tr>
+							<td class="twlvPxBlk" colspan="6"><t:outputText
+									value="#{msg.lostform_label_address_addr1} *" /></td>
 						</tr>
 						<tr>
 							<td colspan="6"><t:inputText
@@ -245,18 +326,23 @@
 									maxlength="511" style="width: 100%" id="shipAddress2" /></td>
 						</tr>
 						<tr>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
+							<td class="twlvPxBlk" colspan="3"><t:outputText
 									value="#{msg.shipping_label_address_city} *" /></td>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
-									value="#{msg.shipping_label_address_state}" /></td>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
+							<td class="twlvPxBlk" colspan="3"><t:outputText
 									value="#{msg.shipping_label_address_postal}" /></td>
 						</tr>
 						<tr>
-							<td colspan="2"><t:inputText
+							<td colspan="3"><t:inputText
 									value="#{lostAndFound.shippingAddress.city}"
 									maxlength="255" style="width: 95%" id="shipCity"/></td>
-							<td colspan="2"><t:selectOneMenu
+							<td colspan="3"><t:inputText
+									value="#{lostAndFound.shippingAddress.postal}"
+									maxlength="255" style="width: 100%" id="shipPostal" /></td>
+						</tr>
+						<tr id="shipState" style="display:none">
+							<td class="twlvPxBlk" colspan="3"><t:outputText
+									value="#{msg.shipping_label_address_state}" /></td>
+							<td colspan="3"><t:selectOneMenu
 									value="#{lostAndFound.shippingAddress.state}"
 									onchange="adjustAddressReqState(this);" style="width: 95%"
 									 id="shipState">
@@ -264,25 +350,10 @@
 										itemValue="" />
 									<f:selectItems value="#{lostAndFound.states}" />
 								</t:selectOneMenu></td>
-							<td colspan="2"><t:inputText
-									value="#{lostAndFound.shippingAddress.postal}"
-									maxlength="255" style="width: 100%" id="shipPostal" /></td>
 						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
-									value="#{msg.shipping_label_address_country} *" /></td>
+						<tr id="shipProvince" style="display:none">
 							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
 									value="#{msg.shipping_label_address_province}" /></td>
-						</tr>
-						<tr>
-							<td colspan="3"><t:selectOneMenu
-									value="#{lostAndFound.shippingAddress.country}"
-									onchange="adjustAddressReq(this);" style="width: 95%"
-									id="shipCountry">
-									<f:selectItem itemLabel="#{msg.general_list_united_states}"
-										itemValue="US" />
-									<f:selectItems value="#{lostAndFound.countries}" />
-								</t:selectOneMenu></td>
 							<td colspan="3"><t:inputText id="shipProvince"
 									value="#{lostAndFound.shippingAddress.province}"
 									maxlength="255" style="width: 100%" /></td>
@@ -293,14 +364,14 @@
 				<!-- END ADDRESS INFO UI -->
 			<h:panelGroup  >
 				<div>
-					<rich:messages id="reportMsg" errorClass="errormsg"
-						infoClass="infomsg" layout="list" />
+					<b><rich:messages id="reportMsg" errorClass="errormsg" style="color:red"
+						infoClass="infomsg" layout="list" /></b>
 					<rich:spacer width="100%" height="15" title="" />
 				</div>
 				<div align="right">
 					<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToShippingRates}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
 					
-					<a4j:commandButton styleClass="submitButtonOrange"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.confirmPayment}"	oncomplete="this.disabled=false" id="paymentbutton" render="outerPanel" />
+					<a4j:commandButton styleClass="submitButtonOrange"	value="#{msg.shipping_button_submit}" onclick="if(!isValidCreditCard()){return false;} else {this.disabled=true}"	action="#{lostAndFound.confirmCCInfo}"	oncomplete="this.disabled=false" id="paymentbutton" render="outerPanel" />
 				
 				</div>
 				<br />

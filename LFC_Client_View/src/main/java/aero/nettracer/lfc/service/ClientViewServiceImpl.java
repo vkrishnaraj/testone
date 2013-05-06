@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import aero.nettracer.lfc.faces.util.FacesUtil;
 import aero.nettracer.lfc.model.AddressBean;
+import aero.nettracer.lfc.model.CCBean;
 import aero.nettracer.lfc.model.RateBean;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.KeyValueBean;
@@ -238,6 +239,14 @@ public class ClientViewServiceImpl implements ClientViewService {
 			toReturn.add(new SelectItem("XXX", "Remote Error"));
 		}
 		return toReturn;
+	}
+
+	@Override
+	public boolean authorizeCC(LostReportBean lostReport) {
+		if(lostReport!=null && lostReport.getCc()!=null){
+			return RemoteService.authorizeCc(lostReport);
+		}
+		return false;
 	}
 
 }
