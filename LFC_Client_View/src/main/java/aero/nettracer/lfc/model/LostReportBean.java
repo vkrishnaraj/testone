@@ -50,6 +50,8 @@ public class LostReportBean implements Serializable{
 	private String shippingPayment;
 	private String shippingOption;
 	private String shippingTax;
+
+	private String feedback;
 	
 	private boolean shipping=false;
 
@@ -352,6 +354,14 @@ public class LostReportBean implements Serializable{
 
 	public void setCc(CCBean cc) {
 		this.cc = cc;
+	}
+
+	public String getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
 	}
 
 }

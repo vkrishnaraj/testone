@@ -57,7 +57,6 @@ public class LostAndFoundController {
 	private List<SelectItem> ccvendors;
 	
 	private String prefAddress;
-	
  
 	@Autowired
 	private ClientViewService clientViewService;
@@ -70,6 +69,7 @@ public class LostAndFoundController {
 		shippingAddress=(AddressBean)session.getAttribute("shippingAddress");
 		selectedoption=(String)session.getAttribute("selectedOption");
 		rates=(List<RateBean>)session.getAttribute("rates");
+		
 		session.setAttribute("shippingOptions", (List<SelectItem>)session.getAttribute("shippingOptions")); //To Make method to get FedEx options based on PrefShipAddress
 		
 		if (getSubCompany() != null && !(getSubCompany().equals("AVS") || getSubCompany().equals("BGT") || getSubCompany().equals("ABG"))) {
@@ -234,6 +234,22 @@ public class LostAndFoundController {
 		}
 		FacesUtil.addError("Server Communication Error.");
 		return null;
+	}
+	
+	public String sendFeedback(){
+		long id = clientViewService.create(lostReport);
+		//List<SelectItem> shippingOptions=ratesToSelectItem(rates); // new ArrayList<SelectItem>();//=getOptionsOnAddress();
+		//create Shipping Address for contact and mark it as the preferred Shipping Address and then get Shipping options and rates
+		if(id!=-1){
+			HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+			.getExternalContext().getSession(false);
+			lostReport.setReportId(id + "");
+			session.setAttribute("lostReport", lostReport);
+			return null;
+		}
+		FacesUtil.addError("Server Communication Error.");
+		return null;
+		
 	}
 	
 	public String shipSelectOption() {

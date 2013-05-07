@@ -35,6 +35,24 @@
 				 	<t:outputText value="#{shipbean.shippingAddress.address1} #{shipbean.shippingAddress.address2}"/><br/>
 				 	<t:outputText value="#{shipbean.shippingAddress.city}, #{shipbean.shippingAddress.state} #{shipbean.shippingAddress.postal} #{shipbean.shippingAddress.country}"/></p><br/><br/>
 				<!-- End Receipt Information -->
+				
+			</h:panelGroup>
+			<br />
+			
+			<h:panelGroup >
+				<div id="feedback">
+				<p><t:outputText value="#{msg.success_feedback}"/><br/>
+				<t:inputTextarea value="#{lostReport.feedback}" style="width:55%" rows="5"/><br/>
+				</p>
+				<div align="right">
+					<a4j:commandButton styleClass="submitButtonOrange"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.sendFeedback}" 
+						onclick="document.getElementById('feedback').style.display='none'; document.getElementById('feedbacksent').style.display='block'; this.style.display='none'"  render="outerPanel" />
+				</div>
+				<br />
+				</div>
+				<div id="feedbacksent" style="display:none">
+					<p><t:outputText value="#{msg.success_thankyou_feedback}"/></p><br/><br/>
+				</div>
 			</h:panelGroup>
 		</h:form>
 	</ui:define>
