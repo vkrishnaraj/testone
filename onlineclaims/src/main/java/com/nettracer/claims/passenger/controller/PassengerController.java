@@ -919,7 +919,7 @@ public class PassengerController {
 		logger.info("addNewSegment method call");
 		passengerBean.getItineraryList().add(new Itinerary());
 		setItineraryTableIndex(0);
-		return "";
+		return null;
 	}
 
 	/**
@@ -935,7 +935,7 @@ public class PassengerController {
 					passengerBean.getItineraryList().size() - 1);
 		}
 		setItineraryTableIndex(0);
-		return "";
+		return null;
 	}
 
 	/**
@@ -946,7 +946,7 @@ public class PassengerController {
 	public String addNewPass() {
 		logger.info("addNewPass method call");
 		passengerBean.getPassengers().add(new Passenger());
-		return "";
+		return null;
 	}
 
 	/**
@@ -961,7 +961,7 @@ public class PassengerController {
 			passengerBean.getPassengers().remove(
 					passengerBean.getPassengers().size() - 1);
 		}
-		return "";
+		return null;
 	}
 
 	public boolean isRenderDeleteSegment() {
@@ -1225,7 +1225,7 @@ public class PassengerController {
 		tempContent.setPriceString("0.00");
 		bag.getContentList().add(tempContent);
 		passengerBean.getBagList().set(getBagIndex(), bag);
-		return "";
+		return null;
 	}
 
 	/**
@@ -1241,7 +1241,7 @@ public class PassengerController {
 			bag.getContentList().remove(bag.getContentList().size() - 1);
 			passengerBean.getBagList().set(getBagIndex(), bag);
 		}
-		return "";
+		return null;
 	}
 
 	/**
@@ -1254,7 +1254,7 @@ public class PassengerController {
 		Bag bag = passengerBean.getBagList().get(getBagPageIndex());
 		bag.setBagType(getBagChartType());
 		passengerBean.getBagList().set(getBagPageIndex(), bag);
-		return "";
+		return null;
 	}
 
 	/**
@@ -1369,7 +1369,7 @@ public class PassengerController {
 									logger.warn("File is already existing");
 									FacesUtil
 											.addError("File is already existing");
-									return "no";
+									return null; //"no";
 								}
 							}
 							HttpSession session = (HttpSession) FacesUtil
@@ -1385,7 +1385,7 @@ public class PassengerController {
 							logger.info("File Uploaded Successfully.");
 						}
 						file = null;
-						return "ok";
+						return null; //"ok";
 					} else {
 						logger.error("File type not supported");
 						FacesUtil.addError("File type not supported");
@@ -1393,13 +1393,13 @@ public class PassengerController {
 				}
 
 			}
-			return "no";
+			return null; //"no";
 		} catch (Exception ioe) {
 			logger.info("File Upload Unsuccessful.");
 			ioe.printStackTrace();
 			rendSuccess = false;
 			rendFailure = true;
-			return "no";
+			return null; //"no";
 		}
 	}
 
