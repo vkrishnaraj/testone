@@ -778,4 +778,10 @@ public class PassengerBean {
 		}
 		return "No";
 	}
+	public String getRequestForeignCurrencyDisp() {
+		if (requestForeignCurrency != null) {
+			return (requestForeignCurrency ? "Yes" : "No");
+		}
+		return "No";
+	}
 }

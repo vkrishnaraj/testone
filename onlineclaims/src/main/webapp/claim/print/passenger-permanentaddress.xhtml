@@ -12,15 +12,15 @@
 		<t:outputText value="Please select the type(s) of claims you are filing." styleClass="subHeader" />
 	</div>
 	<rich:spacer width="100%" height="10" title="" />
-	<h:panelGrid columns="16">
+	<h:panelGrid columns="20">
 		<h:selectBooleanCheckbox value="#{passengerBean.delayed}" disabled="true" />
 		<rich:spacer width="5"/>
 		<t:outputText value="Lost Luggage"  styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
-		<h:selectBooleanCheckbox value="#{passengerBean.interim}" disabled="true"/>
+		<h:selectBooleanCheckbox value="#{passengerBean.damaged}" disabled="true"/>
 		<rich:spacer width="5"/>
-		<t:outputText value="Delayed Expenses" styleClass="requiredField"/>
+		<t:outputText value="Damage" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
 		<h:selectBooleanCheckbox value="#{passengerBean.pilferage}" disabled="true"/>
@@ -28,9 +28,14 @@
 		<t:outputText value="Contents Missing" styleClass="requiredField"/>
 		<rich:spacer width="20"/>
 		
-		<h:selectBooleanCheckbox value="#{passengerBean.damaged}" disabled="true"/>
+		<h:selectBooleanCheckbox value="#{passengerBean.interim}" disabled="true"/>
 		<rich:spacer width="5"/>
-		<t:outputText value="Damage" styleClass="requiredField"/>
+		<t:outputText value="Delayed Expenses" styleClass="requiredField"/>
+		<rich:spacer width="20"/>
+		
+		<t:outputText value="Date Bag Was Received" styleClass="requiredField"/>
+		<rich:spacer width="5"/>
+		<h:outputText value="#{passengerBean.bagReceivedDate}"  />
 		<rich:spacer width="20"/>
 	</h:panelGrid>
 	<rich:spacer width="100%" height="20" title="" />

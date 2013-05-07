@@ -298,6 +298,9 @@
 				<f:facet name="header">
 					<rich:columnGroup>
 						<rich:column>
+							<h:outputLabel 	value="Quantity" styleClass="subheadColumn"/>
+						</rich:column>
+						<rich:column>
 							<h:outputText  value="#{passengerController.bagDetailsLabel.gender.label}"/>
 						</rich:column>
 						<rich:column>
@@ -327,6 +330,9 @@
 					</rich:columnGroup>
 				</f:facet>
 				
+				<rich:column>
+					<h:outputText value="#{contentItem.quantity}" />
+				</rich:column>
 				<rich:column>
 					<h:outputText value="#{contentItem.maleDisp}" />
 				</rich:column>
