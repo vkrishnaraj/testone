@@ -569,6 +569,11 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_TO_BE_SHIPPED)) {
+																					int x = new LFServiceBean().getToBeShippedCount(agent);
+																					if (x != -1) {
+																						entries = x;
+																					}
 																				}
 																			}
 																		}

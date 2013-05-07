@@ -960,7 +960,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 				servicebean.saveTransaction(tran);
 				if (tran.getRspCode().equals("00")) {
 					report.getShipment().setTransaction(tran);
-					report.setStatusId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
+					report.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED);
 					servicebean.saveOrUpdateLostReport(report,  getWebAgent());
 					return tran;
 				}

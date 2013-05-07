@@ -114,6 +114,8 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 	
 	private boolean foundEmail;
 	
+	private String feedback;
+	
 	@Transient
 	private long lastLoaded;
 	
@@ -421,6 +423,14 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getFeedback() {
+		return feedback;
+	}
+
+	public void setFeedback(String feedback) {
+		this.feedback = feedback;
 	}
 
 	
