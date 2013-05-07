@@ -552,14 +552,14 @@
 					}
 					for (i = 1; i < l; i++) {
 						if (singleCurr) {
-							theSel = theRows[i].getElementsByTagName("td")[7].getElementsByTagName("select")[0];
+							theSel = theRows[i].getElementsByTagName("td")[8].getElementsByTagName("select")[0];
 							if (!theCurr) {
 								theCurr = theSel.options[theSel.selectedIndex].value;
 							}
 							if (theCurr != theSel.options[theSel.selectedIndex].value) {
 								singleCurr = null;
 							}
-							var addOn = theRows[i].getElementsByTagName("td")[7].getElementsByTagName("input")[0].value;
+							var addOn = theRows[i].getElementsByTagName("td")[8].getElementsByTagName("input")[0].value;
 							addOn = addOn.replace(",","");
 							theTotal = theTotal + parseFloat(addOn);
 						}
