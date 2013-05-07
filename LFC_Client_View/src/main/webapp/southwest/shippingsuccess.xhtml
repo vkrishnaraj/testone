@@ -24,6 +24,10 @@
 				<t:outputText value="#{msg.success_shipping_text_date_paid}: "/><t:outputText value="#{shipbean.datePaid}"/><br/>
 				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}: " /> <t:outputText value="#{shipbean.shippingOption}"/><br/>
 				<t:outputText value="#{msg.success_shipping_text_order_total}: " /> <t:outputText value="#{shipbean.totalPayment}"/><br/><br/>
+				<t:outputText value="#{msg.success_shipping_text_purchase_billing}:" /><br/>
+				 	<t:outputText value="#{shipbean.client.firstName} #{shipbean.client.lastName}"/><br/>
+				 	<t:outputText value="#{shipbean.billingAddress.address1} #{shipbean.billingAddress.address2}"/><br/>
+				 	<t:outputText value="#{shipbean.billingAddress.city}, #{shipbean.billingAddress.state} #{shipbean.billingAddress.postal} #{shipbean.billingAddress.country}"/><br/><br/>
 				<!-- End Transaction Info -->
 				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_purchase_info}" /></p><br/>
 				<p><t:outputText value="#{msg.success_purchase_info_email}: " /> <t:outputText value="#{shipbean.client.emailAddress}"/><br/>
