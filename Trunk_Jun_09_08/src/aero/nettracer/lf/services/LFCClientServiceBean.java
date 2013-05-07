@@ -293,6 +293,9 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 			}
 			remote.setSegments(remoteSegs);
 		}
+		
+		remote.setFeedback(host.getFeedback());
+		
 
 		return remote;
 	}
@@ -645,7 +648,8 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 				host.getShipment().setBillingAddress(address);
 
 			}
-
+			host.setFeedback(lostReport.getFeedback());
+			
 			host.getShipment().setDeclaredValue(lostReport.getDeclaredValue());
 		}
 

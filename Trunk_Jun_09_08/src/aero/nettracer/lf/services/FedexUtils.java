@@ -436,7 +436,7 @@ public class FedexUtils {
 				rbean.setRateKey(r.getCommitDetailsArray(0).getServiceType().toString());
 				rbean.setRateAmount(format.format((r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTotalNetCharge().getAmount().add(shippingCost)).doubleValue())+" "+r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTotalNetCharge().getCurrency());//Update after demo
 				rbean.setEstDeliveryDate(DateUtils.formatDate(r.getDeliveryTimestamp().getTime(), TracingConstants.DISPLAY_DATETIMEFORMAT, null, null));
-				rbean.setRateType(r.getCommitDetailsArray(0).getServiceType().toString().replace("_", " "));
+				rbean.setRateType(r.getCommitDetailsArray(0).getServiceType().toString().replace("FEDEX_", "").replace("_", " "));
 				if(r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTaxesArray().length>0){
 					rbean.setRateTax(r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTaxesArray(0).toString());
 				}

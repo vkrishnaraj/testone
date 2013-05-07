@@ -397,6 +397,13 @@
 		              		<html:text name="lostReportForm" property="lost.client.confirmEmail" size="35" maxlength="100" styleClass="textfield" />
 		              	</td>
 		              </tr>
+		              <tr>
+		              	<td colspan="5" >
+		              		<bean:message key="colname.lf.feedback" />
+		              		<br />
+		              		<html:textarea name="lostReportForm" property="lost.feedback" disabled="true" cols="70" styleClass="textfield" />
+		              	</td>
+		              </tr>
 				</table>
 				<br/>
 				<h1 class="green">

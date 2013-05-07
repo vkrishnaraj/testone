@@ -161,19 +161,6 @@ ResourceBundle bundle = ResourceBundle.getBundle(
             <jsp:include page="/pages/includes/disputereport_ro_incl.jsp" />
           </table>
           
-          <table>
-          	<tr>
-          		<td align="center" valign="top">
-          			<html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 2;">
-                    	<bean:message key="button.accept.dispute" />
-                    </html:submit>
-                    
-                    <html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 2;">
-                    	<bean:message key="button.deny.dispute" />
-                    </html:submit>
-                </td>
-          	</tr>
-          </table>
           
           
           <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
@@ -213,6 +200,12 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 
                   &nbsp;
                   
+         		   <html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 2;">
+                   	<bean:message key="button.accept.dispute" />
+                   </html:submit>
+                   <html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 2;">
+                   	<bean:message key="button.deny.dispute" />
+                   </html:submit>
                   <html:submit property="btnUpdateDispute" styleId="button" onclick="doCheck = 2; return validateReqDisputeForm(this.form)">
                     <bean:message key="button.manually.modify.dispute" />
                   </html:submit>
