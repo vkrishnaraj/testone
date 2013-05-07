@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+	
+<f:view contentType="text/html" encoding="UTF-8">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title><ui:insert name="pageTitle">Facelets Template</ui:insert></title>
+	<link rel="stylesheet" type="text/css" href="../_css/browserInit.css"/>
+	<link rel="stylesheet" type="text/css" href="../_css/common.css"/>
+	<link rel="stylesheet" type="text/css" href="../_css/master.css"/>
+	<link rel="stylesheet" type="text/css" href="../_css/topnav.css"/>
+	
+	<link rel="javascript" type="text/javascript" href="../_js/iehover-fix.js"/>
+	<link rel="javascript" type="text/javascript" href="../_js/nav.js"/>
+	<link rel="javascript" type="text/javascript" href="../_js/safariCheck.js"/>
+	
+	<style type="text/css">
+	.footer_new { height:53px; background:url(../_images/footer_new.png) no-repeat; text-align:center; padding:20px 0 0 0; background-position:top; 
+	/*IE6 hack*/ _background:url(_images/footer_new.jpg) no-repeat }
+    </style>
+	
+</head>
+	<!--<div id="header">
+		<ui:include src="header.xhtml" />
+	</div>
+-->
+<body >
+	<!--<div id="footer">
+		<ui:include src="footer.xhtml" />
+	</div>
+	
+	-->
+<div class="pagewrapper">
+<div class="wrappercontent">
+	<div class="wrappercontentbody">
+			
+		<ui:insert name="mainContent" />
+		<div class="clear"></div>
+			
+
+	</div><!-- ends wrappercontentbody -->
+</div><!-- ends wrappercontent -->
+</div><!-- ends pagewrapper -->
+	
+	
+	
+</body>
+</f:view>
+</html>

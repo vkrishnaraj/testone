@@ -5,7 +5,8 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:a4j="http://richfaces.org/a4j"
 	xmlns:rich="http://richfaces.org/rich"
-	xmlns:t="http://myfaces.apache.org/tomahawk">
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/layout/printtemplate.xhtml">
 
 	<ui:define name="pageTitle">Application | Print Your Claim</ui:define>
 	
@@ -105,7 +106,7 @@
 				<rich:spacer width="115px"/>
 			
 				<h:commandButton id="print" value="#{passengerController.submitClaimLabel.print.label}"
-				 		tabindex="2" action="#" immediate="true" onclick="window.print();return false"
+				 		tabindex="2" onclick="window.print();return false"
 						styleClass="button140pxred button140pxred2" />
 			
 			</div>
