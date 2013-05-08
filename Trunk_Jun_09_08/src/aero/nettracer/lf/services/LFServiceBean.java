@@ -1014,7 +1014,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 //					sql +=" and (l.lossInfo.destination.station_ID = " + agent.getStation().getStation_ID()+
 //							" or l.lossInfo.destination.lz_ID = " + agent.getStation().getStation_ID()+") ";
 //				}
-				sql += " and mh.status.status_ID = "+TracingConstants.LF_TRACING_CONFIRMED+" and mh.lost.status.status_ID = " + TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED +
+				sql += " and mh.status.status_ID = "+TracingConstants.LF_TRACING_CONFIRMED+
 						" and mh.lost.shipment.transaction!=null and mh.found!=null";
 				if(agent.getSubcompany()!=null){
 					sql += " and mh.lost.companyId = '"+agent.getSubcompany().getSubcompanyCode()+"'";

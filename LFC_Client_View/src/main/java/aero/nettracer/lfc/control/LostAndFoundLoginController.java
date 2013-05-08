@@ -1,12 +1,17 @@
 package aero.nettracer.lfc.control;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +23,8 @@ import aero.nettracer.lfc.faces.util.FacesUtil;
 import aero.nettracer.lfc.model.LoginBean;
 import aero.nettracer.lfc.model.LostReportBean;
 import aero.nettracer.lfc.model.AddressBean;
+import aero.nettracer.lfc.model.PhoneBean;
+import aero.nettracer.lfc.model.RateBean;
 import aero.nettracer.lfc.remote.RemoteService;
 import aero.nettracer.lfc.service.ClientViewService;
 
@@ -34,6 +41,14 @@ public class LostAndFoundLoginController {
 	private LoginBean login = new LoginBean();
 	private LostReportBean lostReport = new LostReportBean();
 
+	@PostConstruct
+	public void init() {
+		HttpServletRequest request=(HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		if(request.getParameter("reportNum")!=null){
+			login.setTrackingNumber(request.getParameter("reportNum"));
+		}
+	}
+	
 	public LoginBean getLogin() {
 		return login;
 	}

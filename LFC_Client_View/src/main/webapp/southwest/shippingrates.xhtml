@@ -79,13 +79,13 @@
 				<h:panelGroup  >
 				
 				<p class="contentHeader">
-					<t:outputText value="#{msg.shipping_title}" />
+					<t:outputText value="#{msg.shipping_option_text_title}" />
 				</p>
 				<p class="contentSubHeader">
 					<t:outputText value="#{msg.shipping_option_text_title}" />
 				</p>
 				<p>
-					<t:outputText value="#{msg.shipping_option_text_desc}" />
+					<t:outputText value="#{msg.shipping_option_text_desc}" escape="false" />
 				</p>
 				<!-- Iterate through the options -->
 				<a4j:region renderRegionOnly="true">

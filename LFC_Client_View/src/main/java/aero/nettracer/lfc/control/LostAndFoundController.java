@@ -462,6 +462,10 @@ public class LostAndFoundController {
 				isValid = false;
 			}			
 		}
+		if(lostReport.getDeclaredValue()==0){
+			FacesUtil.addError("ERROR: Please provide a declared value for your item.");
+			isValid = false;
+		}
 		if(isValid && (shippingAddress.getCountry().equals("US") || shippingAddress.getCountry().equals("CA")) &&(prefAddress==null || (prefAddress!=null && prefAddress.length()==0))){
 			AddressBean validAddress=clientViewService.validateAddressFedex(lostReport);
 			if(validAddress!=null && !validAddress.getScore().equals(BigInteger.valueOf(100))){

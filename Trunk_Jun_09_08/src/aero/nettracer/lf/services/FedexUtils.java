@@ -335,7 +335,8 @@ public class FedexUtils {
 	    
 	    //
 	    RequestedShipment requestedShipment = request.addNewRequestedShipment();
-	    requestedShipment.setShipTimestamp(Calendar.getInstance());
+	    	requestedShipment.setShipTimestamp(Calendar.getInstance());
+	    
 	    
 	    requestedShipment.setDropoffType(DropoffType.REGULAR_PICKUP);
 	    if (! getAllRatesFlag) {
@@ -430,13 +431,25 @@ public class FedexUtils {
 			if(replyDoc.getRateReply().getRateReplyDetailsArray().length==0){
 				return null;
 			}
+
+		    Calendar expressCutoff=Calendar.getInstance();
+		    expressCutoff.set(Calendar.HOUR_OF_DAY, 12);
+		    expressCutoff.set(Calendar.MINUTE, 0);
+		    expressCutoff.set(Calendar.SECOND, 0);
 			for(RateReplyDetail r:replyDoc.getRateReply().getRateReplyDetailsArray()){
 				RateBean rbean=new RateBean();
 				r.getDeliveryDayOfWeek();
 				rbean.setRateKey(r.getCommitDetailsArray(0).getServiceType().toString());
 				rbean.setRateAmount(format.format((r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTotalNetCharge().getAmount().add(shippingCost)).doubleValue())+" "+r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTotalNetCharge().getCurrency());//Update after demo
 				if(r.getDeliveryTimestamp()!=null){
-					rbean.setEstDeliveryDate(DateUtils.formatDate(r.getDeliveryTimestamp().getTime(), TracingConstants.DISPLAY_DATETIMEFORMAT, null, null));
+
+				    if(Calendar.getInstance().getTime().after(expressCutoff.getTime()) && r.getCommitDetailsArray(0).getServiceType().toString().contains("EXPRESS")){
+				    	Calendar nextDay=r.getDeliveryTimestamp();
+				    	nextDay.add(Calendar.DATE, 1);
+				    	rbean.setEstDeliveryDate(DateUtils.formatDate(nextDay.getTime(), TracingConstants.DISPLAY_DATETIMEFORMAT, null, null));
+				    } else{
+				    	rbean.setEstDeliveryDate(DateUtils.formatDate(r.getDeliveryTimestamp().getTime(), TracingConstants.DISPLAY_DATETIMEFORMAT, null, null));
+				    }
 				} else {
 					rbean.setEstDeliveryDate("Unknown Delivery Date");
 				}

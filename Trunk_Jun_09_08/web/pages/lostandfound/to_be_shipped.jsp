@@ -114,6 +114,9 @@
               			<td class="header">
               				<bean:message key="colname.lf.feedback" />
               			</td>
+              			<td class="header">
+              				<bean:message key="colname.lf.service.type" />
+              			</td>
               		</tr>
               		<logic:iterate id="result" name="resultList" type="com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory">
               			<logic:notEmpty name="result" property="lost.shipment.transaction"> 
@@ -145,10 +148,13 @@
               					<%=subcatMap.get(String.valueOf(result.getLost().getItem().getSubCategory()))!=null?subcatMap.get(String.valueOf(result.getLost().getItem().getSubCategory())):"" %>
               				</td>
               				<td>
-              					<bean:write name="result" property="lost.item.description" />
+              					<bean:write name="result" property="found.item.description" />
               				</td>
               				<td>
               					<bean:write name="result" property="lost.feedback" />
+              				</td>
+              				<td>
+              					<bean:write name="result" property="lost.shipment.shippingOption" />
               				</td>
               			</tr>
               			</logic:notEmpty>

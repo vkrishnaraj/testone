@@ -20,15 +20,24 @@
 					var state = document.getElementById("state");
 					if (countryList.options[countryList.selectedIndex].value == "US") {
 						document.getElementById("lostForm:shipProvince").value="";
+						document.getElementById("countryPhone").style.display="none";
+						document.getElementById("lostForm:nUsPhoneForm").style.display="none";
+						document.getElementById("lostForm:UsPhoneForm").style.display="block";
 						state.style.display = "block";
 						province.style.display= "none";
 					} else if(countryList.options[countryList.selectedIndex].value == "CA") {
 						document.getElementById("lostForm:shipState").selectedIndex=0;
 						state.style.display = "none";
+						document.getElementById("countryPhone").style.display="inline";
+						document.getElementById("lostForm:nUsPhoneForm").style.display="block";
+						document.getElementById("lostForm:UsPhoneForm").style.display="none";
 						province.style.display= "block";
 					} else {
 						document.getElementById("lostForm:shipProvince").value="";
 						document.getElementById("lostForm:shipState").selectedIndex=0;
+						document.getElementById("countryPhone").style.display="inline";
+						document.getElementById("lostForm:nUsPhoneForm").style.display="block";
+						document.getElementById("lostForm:UsPhoneForm").style.display="none";
 						province.style.display= "none";
 						state.style.display= "none";						
 					}
@@ -53,7 +62,7 @@
 			<a4j:outputPanel id="confirmshipping">
 			<h:panelGroup >
 				<p class="contentHeader">
-					<t:outputText value="#{msg.shipping_title}" />
+					<t:outputText value="#{msg.shipping_confirm_text_title}" />
 				</p>
 				
 				<p class="contentSubHeader">
@@ -146,10 +155,11 @@
 					<tr>
 						<td class="twlvPxBlk" colspan="2" ><t:outputText
 							value="#{msg.shipping_label_telephone}" /><br/>
-						<t:outputText value="#{msg.lostform_label_item_format}" /></td>
+						<t:outputText value="#{msg.lostform_label_item_format}" style="display:none" id="nUsPhoneForm"/>
+						<t:outputText value="#{msg.lostform_label_item_us_format}" style="display:none" id="UsPhoneForm"/></td>
 						<td class="twlvPxBlk" colspan="4" >
 						
-						<t:inputText value="#{lostAndFound.shippingPhone.country}" maxlength="511" style="width: 20%;"/>-
+						<div style="display:none" id="countryPhone"><t:inputText value="#{lostAndFound.shippingPhone.country}" maxlength="511" style="width: 20%;"/>-</div>
 						<t:inputText value="#{lostAndFound.shippingPhone.area}" maxlength="511" style="width: 20%;"/>-
 						<t:inputText value="#{lostAndFound.shippingPhone.exchange}" maxlength="511" style="width: 20%;"/>-
 						<t:inputText value="#{lostAndFound.shippingPhone.line}" maxlength="511" style="width: 20%;"/><br/>

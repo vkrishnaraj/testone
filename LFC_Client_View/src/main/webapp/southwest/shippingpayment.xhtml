@@ -99,7 +99,10 @@
 		            } else if (type.value == "AmEx") {
 		               // American Express: length 15, prefix 34 or 37.
 		               var re = /^3[4,7]\d{13}$/;
-		            } 
+		            } else {
+		            	window.alert("Credit Card is invalid.\nPlease review your credit card information and try again."); 
+		            	return false;
+		            }
 
 		            ccnum.value = ccnum.value.split(" ").join("");
 		            if (!re.test(ccnum.value)) {
@@ -134,7 +137,7 @@
 			<h:panelGroup >
 			
 				<p class="contentHeader">
-					<t:outputText value="#{msg.shipping_title}" />
+					<t:outputText value="#{msg.shipping_text_payment_title}" />
 				</p>
 				<p class="contentSubHeader">
 					<t:outputText value="#{msg.shipping_text_payment_title}" />
@@ -146,39 +149,36 @@
 				<!-- IF Shipping is Selected. Gather CC Info -->
 					<table style="width: 95%;">
 						<tr>
-							<td class="twlvPxBlk" colspan="3"><t:outputText
+							<td class="twlvPxBlk" colspan="2"><t:outputText
 								value="#{msg.lostform_label_cc_vendor} *" /></td>
-							<td class="twlvPxBlk"  colspan="3"><t:outputText
-								value="#{msg.lostform_label_total_payment} *" /></td>
+							<td class="twlvPxBlk" style="width: 25%;" colspan="2"><t:outputText
+									value="#{msg.lostform_label_cc_name} *" /></td>
+							<td class="twlvPxBlk"  colspan="2"><b><t:outputText
+								value="#{msg.lostform_label_total_payment}" /></b></td>
 						</tr>
 						<tr>
-							<td colspan="3"><t:selectOneMenu
+							<td colspan="2"><t:selectOneMenu
 									value="#{lostAndFound.lostReport.cc.ccvendor}"  id="ccVendor" style="width: 95%;">
 									<f:selectItem itemLabel="#{msg.credit_card_list}" itemValue="" />
 									<f:selectItems value="#{lostAndFound.ccvendors}" />
 									</t:selectOneMenu></td>
-							<td class="twlvPxBlk"  colspan="3"><t:outputText
-								value="#{lostAndFound.lostReport.shippingPayment}" /></td>
+									
+							<td colspan="2"><t:inputText value="#{lostAndFound.lostReport.cc.ccname}"
+									maxlength="100" style="width: 50%;" /></td>
+							<td class="twlvPxBlk"  colspan="2"><b><t:outputText
+								value="#{lostAndFound.lostReport.shippingPayment}" /></b></td>
 						</tr>
 						
 						<tr>
-							<td class="twlvPxBlk" style="width: 25%;" colspan="3"><t:outputText
-									value="#{msg.lostform_label_cc_name} *" /></td>
-							<td class="twlvPxBlk" style="width: 25%;" colspan="3"><t:outputText
+							<td class="twlvPxBlk"  colspan="2"><t:outputText
 									value="#{msg.lostform_label_cc_number} *" /></td>
-						</tr>
-						<tr>
-							<td colspan="3"><t:inputText value="#{lostAndFound.lostReport.cc.ccname}"
-									maxlength="100" style="width: 95%;" /></td>
-							<td colspan="3"><t:inputText id="ccNum" value="#{lostAndFound.lostReport.cc.ccnumber}"
-									maxlength="20" style="width: 95%;" /></td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" style="width: 25%;" colspan="6"><t:outputText
+							<td class="twlvPxBlk" colspan="2"><t:outputText
 									value="#{msg.lostform_label_cc_expiration} *" /></td>
 						</tr>
 						<tr>
-							<td colspan="6">
+							<td colspan="2"><t:inputText id="ccNum" value="#{lostAndFound.lostReport.cc.ccnumber}"
+									maxlength="20" style="width: 80%;" /></td>
+							<td colspan="2">
 								<t:selectOneMenu value="#{lostAndFound.lostReport.cc.ccexpirationmonth}" style="width: 45%;">
 									<f:selectItem itemLabel="Select" itemValue="" />
 									<f:selectItem itemLabel="1" itemValue="01" />
