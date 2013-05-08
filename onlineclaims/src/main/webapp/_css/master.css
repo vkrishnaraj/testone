@@ -1368,3 +1368,13 @@ td.dottedhr {
 #stepThreeInputTable td {
 	padding-left: 5px;
 }
+
+.bagContentTable {
+	border: 2px solid rgb(125,125,125);
+	border-collapse: separate;
+}
+
+.bagContentCell {
+	border-bottom: 0;
+ 	border-top: 2px solid rgb(125,125,125);
+}

@@ -298,22 +298,18 @@
 				<f:facet name="header">
 					<rich:columnGroup>
 						<rich:column>
-							<h:outputLabel 	value="Quantity" styleClass="subheadColumn"/>
-						</rich:column>
-						<rich:column>
-							<h:outputText  value="#{passengerController.bagDetailsLabel.gender.label}"/>
-						</rich:column>
-						<rich:column>
+							<h:outputText 	value="Quantity &amp;" /><br/>
 							<h:outputText 	value="#{passengerController.bagDetailsLabel.article.label}"/>
 						</rich:column>
 							<rich:column>
 							<h:outputText  value="#{passengerController.bagDetailsLabel.color.label}"/>
 						</rich:column>
-						<rich:column>
-							<h:outputText 	value="#{passengerController.bagDetailsLabel.size.label}"/>
-						</rich:column>
 							<rich:column>
 							<h:outputText  value="#{passengerController.bagDetailsLabel.brandOrDescription.label}"/>
+						</rich:column>
+						<rich:column>
+							<h:outputText 	value="#{passengerController.bagDetailsLabel.size.label} &amp;"/><br/>
+							<h:outputText  value="#{passengerController.bagDetailsLabel.gender.label}"/>
 						</rich:column>
 						<rich:column>
 							<h:outputText 	value="#{passengerController.bagDetailsLabel.storePurchased.label}" />
@@ -325,28 +321,24 @@
 							<h:outputText 	value="#{passengerController.bagDetailsLabel.price.label}" />
 						</rich:column>
 							<rich:column>
-							<h:outputLabel  value="Owner" />
+							<h:outputText  value="Owner" />
 						</rich:column>
 					</rich:columnGroup>
 				</f:facet>
 				
 				<rich:column>
-					<h:outputText value="#{contentItem.quantity}" />
-				</rich:column>
-				<rich:column>
-					<h:outputText value="#{contentItem.maleDisp}" />
-				</rich:column>
-				<rich:column>
+					<h:outputText value="#{contentItem.quantity}" />&#160;&#160;
 					<h:outputText value="#{contentItem.article}" />
 				</rich:column>
 				<rich:column>
 					<h:outputText value="#{contentItem.color}" />
 				</rich:column>
 				<rich:column>
-					<h:outputText value="#{contentItem.size}" />
+					<h:outputText value="#{contentItem.brandOrDescription}" />
 				</rich:column>
 				<rich:column>
-					<h:outputText value="#{contentItem.brandOrDescription}" />
+					<h:outputText value="#{contentItem.size}" />&#160;&#160;
+					<h:outputText value="#{contentItem.maleDisp}" />
 				</rich:column>
 				<rich:column>
 					<h:outputText value="#{contentItem.storePurchased}" />

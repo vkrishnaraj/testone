@@ -399,30 +399,26 @@
 	<rich:spacer width="100%" height="10" title="" />
 	<a4j:region renderRegionOnly="true"  >
 		<a4j:outputPanel id="contentPanel" >
-			<rich:dataTable align="center"  id="contentTable" 
+			<rich:dataTable align="center"  id="contentTable" styleClass="bagContentTable" columnClasses="bagContentCell"
 					value="#{bagItem.contentList}" var="contentItem" 
 					onRowMouseOver="this.style.backgroundColor='#F1F1F1'"
 					onRowMouseOut="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">
 				<f:facet name="header">
 					<rich:columnGroup>
 						<rich:column>
-							<h:outputLabel 	value="Quantity" styleClass="subheadColumn"/>
-						</rich:column>
-						<rich:column>
+							<h:outputLabel 	value="Quantity &amp;" styleClass="subheadColumn"/><br/>
 							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.article.label}" styleClass="subheadColumn"/>
 						</rich:column>
 							<rich:column>
 							<h:outputLabel  value="#{passengerController.bagDetailsLabel.color.label}" styleClass="subheadColumn"/>
 						</rich:column>
 							<rich:column>
-							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.size.label}" styleClass="subheadColumn"/>
-						</rich:column>
-							<rich:column>
 							<h:outputLabel  value="#{passengerController.bagDetailsLabel.brandOrDescription.label}" styleClass="subheadColumn"/>
-						</rich:column>
-						<rich:column>
+						</rich:column>					
+							<rich:column>
+							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.size.label} &amp;" styleClass="subheadColumn"/><br/>
 							<h:outputLabel  value="#{passengerController.bagDetailsLabel.gender.label}" styleClass="subheadColumn"/>
-						</rich:column>						
+						</rich:column>
 						<rich:column>
 							<h:outputLabel 	value="#{passengerController.bagDetailsLabel.storePurchased.label}" styleClass="subheadColumn"/>
 						</rich:column>
@@ -440,10 +436,8 @@
 				
 				<rich:column>
 					<h:inputText value="#{contentItem.quantity}"  size="3"
-						readonly="#{passengerController.readOnlyOnSubmitted}"/>
-				</rich:column>
-				<rich:column>
-					<h:inputText value="#{contentItem.article}" size="4" 
+						readonly="#{passengerController.readOnlyOnSubmitted}"/>&#160;&amp;<br/>
+					<h:inputText value="#{contentItem.article}" size="6" 
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
 				</rich:column>
 				<rich:column>
@@ -451,14 +445,12 @@
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
 				</rich:column>
 				<rich:column>
-					<h:inputText value="#{contentItem.size}"  size="3"
-						readonly="#{passengerController.readOnlyOnSubmitted}"/>
-				</rich:column>
-				<rich:column>
 					<h:inputText value="#{contentItem.brandOrDescription}"  size="6"
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
 				</rich:column>
 				<rich:column>
+					<h:inputText value="#{contentItem.size}"  size="3"
+						readonly="#{passengerController.readOnlyOnSubmitted}"/>&#160;&amp;<br/>
 					<h:selectOneMenu value="#{contentItem.male}" disabled="#{passengerController.readOnlyOnSubmitted}"
 					style="width:70px;">
 						<f:selectItem itemValue="0" itemLabel="N/A" />
@@ -552,14 +544,14 @@
 					}
 					for (i = 1; i < l; i++) {
 						if (singleCurr) {
-							theSel = theRows[i].getElementsByTagName("td")[8].getElementsByTagName("select")[0];
+							theSel = theRows[i].getElementsByTagName("td")[6].getElementsByTagName("select")[0];
 							if (!theCurr) {
 								theCurr = theSel.options[theSel.selectedIndex].value;
 							}
 							if (theCurr != theSel.options[theSel.selectedIndex].value) {
 								singleCurr = null;
 							}
-							var addOn = theRows[i].getElementsByTagName("td")[8].getElementsByTagName("input")[0].value;
+							var addOn = theRows[i].getElementsByTagName("td")[6].getElementsByTagName("input")[0].value;
 							addOn = addOn.replace(",","");
 							theTotal = theTotal + parseFloat(addOn);
 						}
