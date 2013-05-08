@@ -51,24 +51,28 @@ public class TransFirstUtils {
 		}
 		
 		c.setAddrLn1(lbean.getContact().getBillingaddress().getAddress1());
-		c.setAddrLn2(lbean.getContact().getBillingaddress().getAddress2());
+		if(lbean.getContact().getBillingaddress().getAddress2()!=null && lbean.getContact().getBillingaddress().getAddress2().length()>0){
+			c.setAddrLn2(lbean.getContact().getBillingaddress().getAddress2());
+		}
 		c.setCity(lbean.getContact().getBillingaddress().getCity());
 		if(lbean.getContact().getBillingaddress().getCountry().equals("US") || lbean.getContact().getBillingaddress().getCountry().equals("CA")){
 			c.setState(postilion.realtime.merchantframework.xsd.v1.Contact.State.Enum.forString(lbean.getContact().getBillingaddress().getState())); //ENUM?
 		}
-		c.setZipCode(lbean.getContact().getBillingaddress().getPostal());
+		c.setZipCode(lbean.getContact().getBillingaddress().getPostal().replace("-", ""));
 		c.setCtry(lbean.getContact().getBillingaddress().getCountry());
 		c.setEmail(lbean.getContact().getEmailAddress());
 		
 		Ship s=c.addNewShip();
 		s.setFullName(lbean.getContact().getFirstName()+" "+lbean.getContact().getLastName());
 		s.setAddrLn1(lbean.getContact().getPrefshipaddress().getAddress1());
-		s.setAddrLn2(lbean.getContact().getPrefshipaddress().getAddress2());
+		if(lbean.getContact().getPrefshipaddress().getAddress2()!=null  && lbean.getContact().getPrefshipaddress().getAddress2().length()>0){
+			s.setAddrLn2(lbean.getContact().getPrefshipaddress().getAddress2());
+		}
 		s.setCity(lbean.getContact().getPrefshipaddress().getCity());
 		if(lbean.getContact().getPrefshipaddress().getCountry().equals("US") || lbean.getContact().getPrefshipaddress().getCountry().equals("CA")){
 			s.setState(postilion.realtime.merchantframework.xsd.v1.Ship.State.Enum.forString(lbean.getContact().getPrefshipaddress().getState())); //Enum?
 		}
-		s.setZipCode(lbean.getContact().getPrefshipaddress().getPostal()); 
+		s.setZipCode(lbean.getContact().getPrefshipaddress().getPostal().replace("-", "")); 
 		
 		if(pNumber!=null && pNumber.length()>=10 && pNumber.length()<=12){
 			s.setPhone(pNumber);
