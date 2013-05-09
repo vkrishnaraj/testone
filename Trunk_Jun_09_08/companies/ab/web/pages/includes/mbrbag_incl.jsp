@@ -23,6 +23,15 @@
       cssFormClass = "form2_pil";
     }
   }
+	
+	boolean val2=false;
+	if(request.getAttribute("lostdelay")!=null){
+		val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
+	} else if (request.getAttribute("missing")!=null){
+		val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
+	} else {
+		val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
+	}
 %>
 
 
@@ -289,15 +298,26 @@
 							width="100%">
 							<tr
 								id="<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>">
-								<td><bean:message key="colname.category.req" /><br> <html:select
-										property='<%= "inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].categorytype_ID" %>'
+								<td><bean:message key="colname.category.req" /><br>
+								<%if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())	|| (val2 && inventorylist.getInventory_ID() == 0)) { %>
+									<html:select property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'	styleClass="dropdown">
+										<html:option value="">
+											<bean:message key="select.please_select" />
+										</html:option>
+										<html:options collection="categorylist"
+											property="OHD_CategoryType_ID" labelProperty="description" />
+									</html:select> 
+								<% 	} else { %> <html:select disabled="true" 
+										property='<%="inventorylist["
+								+ (i.intValue() * 20 + j.intValue())
+								+ "].categorytype_ID"%>'
 										styleClass="dropdown">
 										<html:option value="">
 											<bean:message key="select.please_select" />
 										</html:option>
 										<html:options collection="categorylist"
 											property="OHD_CategoryType_ID" labelProperty="description" />
-									</html:select></td>
+									</html:select>  <%} %> </td>
 								<td>
 									<% if (report_type == 1) { %> <bean:message
 										key="colname.ld.description" /> <% } else if (report_type == 2) { %>
@@ -335,6 +355,12 @@
 							indexed="true">
 							<bean:message key="button.add_content" />
 						</html:submit>
+						
+						<% if (!UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) && val2 && theitem.getIncident().getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_OPEN) { %>
+						<html:submit styleId="button" property="saveadditions">
+							<bean:message key="button.save" />
+						</html:submit>
+						<%}%>
 					</center></td>
 			</tr>
 
