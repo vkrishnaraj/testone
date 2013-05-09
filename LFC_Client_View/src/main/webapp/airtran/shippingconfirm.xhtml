@@ -94,6 +94,18 @@
 					</tr>
 					<tr>
 						<td class="twlvPxBlk" colspan="6"><t:outputText
+								value="#{msg.shipping_label_shipping_name} *" /></td>
+					</tr>
+					<tr>
+						<td colspan="6"><t:inputText
+								value="#{lostReport.contact.shippingName}"
+								maxlength="511" style="width: 100%" id="shippingName" /></td>
+					</tr>
+					<tr>
+						<td colspan="8" >&#160;</td>
+					</tr>
+					<tr>
+						<td class="twlvPxBlk" colspan="6"><t:outputText
 								value="#{msg.shipping_label_address_addr1} *" /></td>
 					</tr>
 					<tr>
@@ -179,6 +191,8 @@
 								maxlength="100" id="declaredValue" /></td>
 					</tr>
 				</table>
+				<br/><br/>
+				<t:outputText value="#{msg.required_field}"/>
 				<br/><br/>
 				<a4j:outputPanel id="validateAddress" rendered="#{not empty proposedAddress}">
 					<t:outputText value="#{msg.shipping_confirm_proposed_or_current}" />

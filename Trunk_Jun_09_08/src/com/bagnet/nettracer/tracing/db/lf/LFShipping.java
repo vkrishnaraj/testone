@@ -49,6 +49,7 @@ public class LFShipping implements Serializable{
 	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
 	private LFAddress billingAddress;
 	private String shippingOption;
+	private String shippingName;
 	private String totalPayment;
 	private String authorizationCode;
 	private double declaredValue;
@@ -161,6 +162,14 @@ public class LFShipping implements Serializable{
 
 	public void setDeclaredValue(double declaredValue) {
 		this.declaredValue = declaredValue;
+	}
+
+	public String getShippingName() {
+		return shippingName;
+	}
+
+	public void setShippingName(String shippingName) {
+		this.shippingName = shippingName;
 	}
 
 	

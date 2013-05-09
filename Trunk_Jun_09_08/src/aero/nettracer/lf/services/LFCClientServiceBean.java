@@ -146,6 +146,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 			remote.setFirstNameBag(host.getFirstName());
 			remote.setLastNameBag(host.getLastName());
 			remote.setMiddleNameBag(host.getMiddleName());
+			
 		}
 
 		remote.setReportId("" + host.getId());
@@ -224,7 +225,11 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 							.getDecryptedState());
 					contact.setBillingaddress(address);
 				}
-
+				if(host.getShipment().getShippingName()!=null && host.getShipment().getShippingName().length()>0){
+					contact.setShippingName(host.getShipment().getShippingName());
+				} else {
+					contact.setShippingName(host.getClient().getFirstName()+" "+host.getClient().getLastName());
+				}
 				remote.setShippingOption(host.getShipment().getShippingOption());
 				remote.setDeclaredValue(host.getShipment().getDeclaredValue());
 			}
@@ -648,6 +653,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 				host.getShipment().setBillingAddress(address);
 
 			}
+			host.getShipment().setShippingName(lostReport.getContact().getShippingName());
 			host.setFeedback(lostReport.getFeedback());
 			
 			host.getShipment().setDeclaredValue(lostReport.getDeclaredValue());

@@ -291,7 +291,14 @@
 					<table style="width: 95%;">
 						<tr>
 							<td class="twlvPxBlk" colspan="6"><b><t:outputText
-									value="#{msg.shipping_label_address_addr1} *" /></b></td>
+									value="#{msg.shipping_label_address_addr1}" /></b></td>
+						</tr>
+						<tr>
+							<td class="twlvPxBlk" colspan="6"><t:outputText
+									value="#{msg.shipping_label_shipping_name} *" /></td>
+						</tr>
+						<tr>
+							<td><t:inputText value="#{lostReport.contact.shippingName}" maxlength="100" /></td>
 						</tr>
 						<tr>
 							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
@@ -359,6 +366,9 @@
 									maxlength="255" style="width: 100%" /></td>
 						</tr>
 					</table>
+					<br/>
+					<t:outputText value="#{msg.required_field}"/>
+					<br/>
 			</h:panelGroup>
 			</a4j:outputPanel><br/>
 				<!-- END ADDRESS INFO UI -->

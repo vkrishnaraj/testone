@@ -8,6 +8,7 @@ public class ContactBean implements Serializable{
 	
 	private String lastName;
 	private String firstName;
+	private String shippingName;
 	private String middleInitial;
 	private String emailAddress;
 	private String confirmEmail;
@@ -104,6 +105,14 @@ public class ContactBean implements Serializable{
 
 	public void setShippingPhone(PhoneBean shippingPhone) {
 		this.shippingPhone = shippingPhone;
+	}
+
+	public String getShippingName() {
+		return shippingName;
+	}
+
+	public void setShippingName(String shippingName) {
+		this.shippingName = shippingName;
 	}
 
 }

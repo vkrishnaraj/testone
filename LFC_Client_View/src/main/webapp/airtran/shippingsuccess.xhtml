@@ -32,6 +32,7 @@
 				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_purchase_info}" /></p><br/>
 				<p><t:outputText value="#{msg.success_purchase_info_email}: " /> <t:outputText value="#{shipbean.client.emailAddress}"/><br/>
 				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}:" /><br/>
+					<t:outputText value="#{lostReport.contact.shippingName}"/>
 				 	<t:outputText value="#{shipbean.shippingAddress.address1} #{shipbean.shippingAddress.address2}"/><br/>
 				 	<t:outputText value="#{shipbean.shippingAddress.city}, #{shipbean.shippingAddress.state} #{shipbean.shippingAddress.postal} #{shipbean.shippingAddress.country}"/></p><br/><br/>
 				<!-- End Receipt Information -->
