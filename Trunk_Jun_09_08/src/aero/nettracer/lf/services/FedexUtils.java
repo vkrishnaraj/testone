@@ -439,7 +439,7 @@ public class FedexUtils {
 			for(RateReplyDetail r:replyDoc.getRateReply().getRateReplyDetailsArray()){
 				RateBean rbean=new RateBean();
 				r.getDeliveryDayOfWeek();
-				rbean.setRateKey(r.getCommitDetailsArray(0).getServiceType().toString());
+				rbean.setRateKey(r.getCommitDetailsArray(0).getServiceType().toString().replace("FEDEX_", ""));
 				rbean.setRateAmount(format.format((r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTotalNetCharge().getAmount().add(shippingCost)).doubleValue())+" "+r.getRatedShipmentDetailsArray(0).getShipmentRateDetail().getTotalNetCharge().getCurrency());//Update after demo
 				if(r.getDeliveryTimestamp()!=null){
 
