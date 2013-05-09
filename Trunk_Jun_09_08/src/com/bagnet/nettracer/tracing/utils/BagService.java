@@ -1087,6 +1087,107 @@ public class BagService {
 			return new ActionMessage("error.unable_to_insert_incident");
 		}
 	}
+	
+	public ActionMessage saveItems(Incident iDTO, IncidentForm theform, int itemtype, String realpath,
+			Agent mod_agent, boolean checkClosedStatus) {
+		try {
+			IncidentBMO iBMO = new IncidentBMO(); // init lostdelay pojo or ejb
+			// copy into incident bean
+			BeanUtils.copyProperties(iDTO, theform);
+			
+			if(iDTO.getAgentassigned() == null || iDTO.getAgentassigned().getAgent_ID() == 0)
+				iDTO.setAgentassigned(null);
+
+			String configpath = realpath + "/WEB-INF/classes/";
+			String imagepath = realpath + "/deployment/main/images/nettracer/";
+
+			// set itemtype to incident
+			ItemType it = new ItemType();
+			it.setItemType_ID(itemtype);
+			iDTO.setItemtype(it);
+
+			if(itemtype == TracingConstants.MISSING_ARTICLES) {
+				iDTO.setArticles(new LinkedHashSet(theform.getArticlelist()));
+				Articles art = null;
+				for(int i = 0; i < theform.getArticlelist().size(); i++) {
+					art = (Articles) theform.getArticlelist().get(i);
+					art.setIncident(iDTO);
+				}
+			}
+			
+			
+			
+			// remove spaces between claimcheck numbers for missing articles and
+			// damaged or remove the bag from item list if it is lostdelay and
+			// nothing
+			// is entered
+			Item item = null;
+			Status itemstatus = null;
+			Item_Inventory ii = null;
+			
+			if(iDTO.getItemlist() != null) {
+				List<Item> ilist=iDTO.getItemlist();
+				for(int i = ilist.size() - 1; i >= 0; i--) {
+					item = (Item)ilist.get(i);
+					item.setIncident(iDTO);
+
+					// remove the item from list if nothing is entered for lost
+					// delay only
+					// since it is traced
+					if(item.getItemtype_ID() == TracingConstants.LOST_DELAY
+							&& (item.getBagtype() == null || item.getBagtype().length() == 0)
+							&& (item.getColor() == null || item.getColor().length() == 0)
+							&& (item.getFnameonbag() == null || item.getFnameonbag().trim().length() == 0)
+							&& (item.getLnameonbag() == null || item.getLnameonbag().trim().length() == 0)
+							&& (item.getMnameonbag() == null || item.getMnameonbag().trim().length() == 0)
+							&& item.getManufacturer_ID() == 0
+							&& item.getXdescelement_ID_1() == TracingConstants.XDESC_TYPE_X
+							&& item.getXdescelement_ID_2() == TracingConstants.XDESC_TYPE_X
+							&& item.getXdescelement_ID_3() == TracingConstants.XDESC_TYPE_X
+							&& item.getBag_weight() == 0) {
+						boolean t_rem = true;
+						for(int j = item.getInventory().size() - 1; j >= 0; j--) {
+							ii = (Item_Inventory) item.getInventorylist().get(j);
+							if(ii.getCategorytype_ID() > 0
+									|| (ii.getDescription() != null && ii.getDescription().trim().length() > 0)) {
+								t_rem = false;
+							}
+							else {
+								item.getInventorylist().remove(j);
+							}
+						}
+						if(t_rem)
+							iDTO.getItemlist().remove(i);
+					}
+					else {
+						if(item.getClaimchecknum() != null && item.getClaimchecknum().length() > 0) {
+							item.setClaimchecknum(TracerUtils.removeSpaces(item.getClaimchecknum().toUpperCase()));
+						}
+					}
+				}
+				int result = -1;
+				try{
+					result=iBMO.insertItemContents(true, ilist,mod_agent);
+				} catch(Exception e){
+					e.printStackTrace();
+				}
+				if(result <= 0) {
+					if(result == -1)
+						return new ActionMessage("error.version.unable_to_insert_incident");
+					else
+						return new ActionMessage("error.unable_to_insert_incident");
+				}
+				
+			}
+			return null;
+
+		}
+		catch (Exception e) {
+			logger.error("unable to insert incident due to bean copyproperties error: " + e);
+			e.printStackTrace();
+			return new ActionMessage("error.unable_to_save_items");
+		}
+	}
 
 	/** for use with html rewrite find by incident_ID * */
 	public Incident findIncidentByID(String incident_ID, IncidentForm theform, Agent user, int itemtype) {

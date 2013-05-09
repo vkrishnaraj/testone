@@ -400,7 +400,7 @@ public class LostDelayAction extends CheckedAction {
 		if (MBRActionUtils.actionDelete(theform, request)) {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
-		if(MBRActionUtils.actionAdd(theform, request, user)) {
+		if(MBRActionUtils.actionAdd(theform, request, user,TracingConstants.LOST_DELAY)) {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
 
@@ -509,7 +509,7 @@ public class LostDelayAction extends CheckedAction {
 		if(request.getParameter("save") != null || request.getParameter("close") != null
 				|| request.getParameter("doclose") != null || request.getParameter("doclosewt") != null
 				|| request.getParameter("savetemp") != null || request.getParameter("savetracing") != null
-				|| request.getParameter("savetowt") != null || request.getParameter("amendWT") != null ) {
+				|| request.getParameter("savetowt") != null || request.getParameter("amendWT") != null || request.getParameter("saveadditions")!=null) {
 
 			Incident iDTO = new Incident();
 			
@@ -542,6 +542,8 @@ public class LostDelayAction extends CheckedAction {
 				
 				if( request.getParameter("close") != null && request.getParameter("doclose") != null) {
 					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, false);
+				} else if(request.getParameter("saveadditions")!=null){
+					error = bs.saveItems(iDTO,theform, TracingConstants.LOST_DELAY, realpath, user, false);
 				}
 				else {
 					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, true);

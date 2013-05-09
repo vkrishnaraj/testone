@@ -290,7 +290,7 @@ public class MissingAction extends CheckedAction {
 		if (MBRActionUtils.actionDelete(theform, request)) {
 			return (mapping.findForward(TracingConstants.MISSING_MAIN));
 		}
-		if (MBRActionUtils.actionAdd(theform, request, user)) {
+		if (MBRActionUtils.actionAdd(theform, request, user,TracingConstants.MISSING_ARTICLES)) {
 			return (mapping.findForward(TracingConstants.MISSING_MAIN));
 		}
 
@@ -394,7 +394,7 @@ public class MissingAction extends CheckedAction {
 
 
 		// save incident
-		if (request.getParameter("save") != null || request.getParameter("doclose") != null) {
+		if (request.getParameter("save") != null || request.getParameter("doclose") != null || request.getParameter("saveadditions") != null) {
 			Incident iDTO = new Incident();
 			
 			//key to determine whether the action is add new, close, or update
@@ -417,6 +417,8 @@ public class MissingAction extends CheckedAction {
 
 			if (request.getParameter("close") != null && request.getParameter("close").equals("1")) {
 				error = bs.insertIncident(iDTO, theform, TracingConstants.MISSING_ARTICLES, realpath, user);
+			} else if(request.getParameter("saveadditions") != null) {
+				error=bs.saveItems(iDTO,theform, TracingConstants.MISSING_ARTICLES, realpath, user, false);
 			} else {
 				error = bs.insertIncident(iDTO, theform, TracingConstants.MISSING_ARTICLES, realpath, user, true);
 			}

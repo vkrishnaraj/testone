@@ -294,7 +294,7 @@ public class DamagedAction extends CheckedAction {
 		if (MBRActionUtils.actionDelete(theform, request)) {
 			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 		}
-		if (MBRActionUtils.actionAdd(theform, request, user)) {
+		if (MBRActionUtils.actionAdd(theform, request, user,TracingConstants.DAMAGED_BAG)) {
 			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 		}
 
@@ -401,7 +401,7 @@ public class DamagedAction extends CheckedAction {
 		String realpath = sc.getRealPath("/");
 		
 		// save incident
-		if (request.getParameter("save") != null || request.getParameter("doclose") != null) {
+		if (request.getParameter("save") != null || request.getParameter("doclose") != null || request.getParameter("saveadditions")!=null) {
 			Incident iDTO = new Incident();
 			
 			//key to determine whether the action is add new, close, or update
@@ -427,6 +427,8 @@ public class DamagedAction extends CheckedAction {
 			}
 			if (request.getParameter("close") != null && request.getParameter("close").equals("1")) {
 				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, realpath, user);
+			} else if(request.getParameter("saveadditions") != null) {
+				error=bs.saveItems(iDTO,theform, TracingConstants.DAMAGED_BAG, realpath, user, false);
 			} else {
 				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, realpath, user, true);
 			}

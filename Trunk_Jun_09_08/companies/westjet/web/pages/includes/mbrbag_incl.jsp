@@ -10,6 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.db.Item_Inventory"%>
 <%
 	Agent a = (Agent) session.getAttribute("user");
 	String cssFormClass;
@@ -22,6 +23,15 @@
 		if (request.getAttribute("missing") != null) {
 			cssFormClass = "form2_pil";
 		}
+	}
+	
+	boolean val2=false;
+	if(request.getAttribute("lostdelay")!=null){
+		val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
+	} else if (request.getAttribute("missing")!=null){
+		val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
+	} else {
+		val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
 	}
 %>
 
@@ -179,11 +189,12 @@
 					onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=1&key=theitem[<%=i%>].bagtype&type=bagtype',800,280,230);return false;"><bean:message
 							key="chart1" /></a> <a href="#"
 					onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&key=theitem[<%=i%>].bagtype&type=bagtype',800,370,230);return false;"><bean:message
-							key="chart2" /></a> <br> <% String bagpos="bagtype"+i;	
- 					String funcCall = "checkBagType(" + i + ")";%>
- 					 <html:select name="theitem" styleId="<%=bagpos%>"
-						property="bagtype" styleClass="dropdown" indexed="true"
-						onchange="<%=funcCall%>">
+							key="chart2" /></a> <br> <%
+ 	String bagpos = "bagtype" + i;
+ 		String funcCall = "checkBagType(" + i + ")";
+ %> <html:select
+						name="theitem" styleId="<%=bagpos%>" property="bagtype"
+						styleClass="dropdown" indexed="true" onchange="<%=funcCall%>">
 						<html:options collection="typelist" property="value"
 							labelProperty="label" />
 					</html:select>
@@ -302,54 +313,56 @@
 						type="com.bagnet.nettracer.tracing.db.Item_Inventory">
 						<table class="<%=cssFormClass%>" cellspacing="0" cellpadding="0"
 							width="100%">
-							<tr
-								id="<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>">
-								<td><bean:message key="colname.category.req" /><br> <html:select
-										property='<%="inventorylist["
-								+ (i.intValue() * 20 + j.intValue())
-								+ "].categorytype_ID"%>'
-										styleClass="dropdown">
+							<tr id="<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>">
+								<td><bean:message key="colname.category.req" /><br> <%
+ 								if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())	|| (val2 && inventorylist.getInventory_ID() == 0)) { %>
+									<html:select property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'	styleClass="dropdown">
 										<html:option value="">
 											<bean:message key="select.please_select" />
 										</html:option>
 										<html:options collection="categorylist"
 											property="OHD_CategoryType_ID" labelProperty="description" />
-									</html:select></td>
+									</html:select> 
+								<% 	} else { %> 
+									<html:select
+										property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'
+										disabled="true" styleClass="dropdown">
+										<html:option value="">
+											<bean:message key="select.please_select" />
+										</html:option>
+										<html:options collection="categorylist"
+											property="OHD_CategoryType_ID" labelProperty="description" />
+									</html:select> <%} %>
+								</td>
 								<td>
 									<%
 										if (report_type == 1) {
-									%> <bean:message
-										key="colname.ld.description" /> <%
- 	} else if (report_type == 2) {
- %>
-									<bean:message key="colname.pil.description" /> <%
- 	} else {
- %> <bean:message
-										key="colname.dam.description" /> <%
- 	}
- %> <br> <html:text
-										property="<%="inventorylist["
-							+ (i.intValue() * 20 + j.intValue())
-							+ "].description"%>"
-										size="80" maxlength="255" styleClass="textfield" />
+									%> <bean:message key="colname.ld.description" /> <%
+									 	} else if (report_type == 2) {
+									 %> <bean:message key="colname.pil.description" /> <%
+									 	} else {
+									 %> <bean:message key="colname.dam.description" /> <%
+									 	}
+									 %> <br> <% if (UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) || (val2 && inventorylist.getInventory_ID() == 0)) { %>
+									<html:text property="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
+									<%	} else { %>
+									<html:text disabled="true" property="<%="inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
+									<% } %>
 								</td>
 								<td align="center">&nbsp;<br> <%
- 	String check = "true";
- 			if (report_type != 2) {
- 				check = "checkDeleteCount(" + i + ", " + report_type
- 						+ ")";
- 			}
- %> <input type="button"
-									name="deleteinventory_<%=i%>"
-									value="<bean:message key="button.delete_content"/>"
-									onclick="if (<%=check%>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>', '<bean:message key="colname.lc.content" />', 0);}"
-									id="button">
+									 	String check = "true";
+									 			if (report_type != 2) {
+									 				check = "checkDeleteCount(" + i + ", " + report_type
+									 						+ ")";
+									 			}
+									 if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())) { %>
+									<input type="button" name="deleteinventory_<%=i%>" value="<bean:message key="button.delete_content"/>" onclick="if (<%=check%>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>', '<bean:message key="colname.lc.content" />', 0);}" id="button"> 
+									<%	} %>
 								</td>
 							</tr>
 						</table>
 
 					</logic:iterate>
-
 					<center>
 
 						<select name="addNumInventory[<%=i%>]">
@@ -363,6 +376,12 @@
 							indexed="true">
 							<bean:message key="button.add_content" />
 						</html:submit>
+
+						<% if (!UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) && val2 && theitem.getIncident().getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_OPEN) { %>
+						<html:submit styleId="button" property="saveadditions">
+							<bean:message key="button.save" />
+						</html:submit>
+						<%}%>
 					</center></td>
 			</tr>
 
@@ -425,8 +444,7 @@
  							.hasPermission(
  									TracingConstants.SYSTEM_COMPONENT_NAME_ISSUE_REPLACEMENT_BAGS,
  									a)) {
- %>
-					<br /> <bean:message key="replacement.bag.issued" /><br /> <html:select
+ %> <br /> <bean:message key="replacement.bag.issued" /><br /> <html:select
 						name="theitem" property="replacementBagIssued"
 						styleId="replacementBagIssued" styleClass="dropdown"
 						indexed="true">

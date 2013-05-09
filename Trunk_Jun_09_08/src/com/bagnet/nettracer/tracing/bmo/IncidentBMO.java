@@ -276,6 +276,49 @@ public class IncidentBMO {
 		return 1;
 	}
 	
+	public int insertItemContents(boolean checkStaleState, List<Item> ilist, Agent mod_agent) 
+			throws HibernateException, StaleStateException {
+		Transaction t = null;
+		Session sess = HibernateWrapper.getSession().openSession();
+		List<Item_Inventory> newcontents=new ArrayList<Item_Inventory>();
+		for(Item i:ilist){
+			for(Object o:i.getInventorylist()){
+				Item_Inventory iv=(Item_Inventory)o;
+				if(iv.getInventory_ID()==0){
+					newcontents.add(iv);
+				}
+				
+			}
+		}
+		try {
+			t = sess.beginTransaction();
+			
+			// save contents
+			for(Item_Inventory iv:newcontents){
+				sess.save(iv);
+			}
+
+			t.commit();
+			sess.flush();
+		} catch (StaleObjectStateException e) {
+			logger.error("unable to insert into database because someone else updated the table already: " + e);
+
+			if (t != null)
+				t.rollback();
+			return -1;
+		} catch (Exception e) {
+			logger.error("unable to insert into database: " + e);
+
+			if (t != null)
+				t.rollback();
+			return 0;
+		} finally {
+
+			sess.close();
+		}
+		return 1;
+	}
+	
 	public int insertIncident(boolean checkStaleState, Incident iDTO, String assoc_ID, Agent mod_agent, boolean checkClosedStatus)
 			throws HibernateException, StaleStateException {
 		boolean oldStatusKept = false;

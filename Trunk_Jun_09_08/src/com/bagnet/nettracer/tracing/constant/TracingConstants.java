@@ -136,6 +136,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_REOPEN_LOSTDELAY = "Reopen Lost Delayed";
 	public final static String SYSTEM_COMPONENT_NAME_REOPEN_DAMAGED_BAG = "Reopen Damaged";
 	public final static String SYSTEM_COMPONENT_NAME_REOPEN_MISSING_ARTICLES= "Reopen Pilferage";
+	public final static String SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS= "Add New Contents";
 	
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER = "WorldTracer";
 	public final static String SYSTEM_COMPONENT_NAME_WORLD_TRACER_ACTION_FILES = "WorldTracer Action Files";

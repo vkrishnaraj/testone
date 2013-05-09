@@ -58,9 +58,20 @@ public class MBRActionUtils {
 	
 	static Logger logger = Logger.getLogger(MBRActionUtils.class);
 	
-	public static boolean actionAdd(IncidentForm theform, HttpServletRequest request, Agent user) {
+	public static boolean actionAdd(IncidentForm theform, HttpServletRequest request, Agent user, int itemtype) {
 		// when adding or deleting from the page,
 		// email_customer checkbox needs to be set to 0 if user unchecked it
+		boolean val2=false;
+		if(itemtype==TracingConstants.LOST_DELAY){
+			val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user);
+		} else if (itemtype==TracingConstants.MISSING_ARTICLES){
+			val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, user);
+		} else if (itemtype==TracingConstants.DAMAGED_BAG){
+			val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user);
+		}
+		if(UserPermissions.hasIncidentSavePermission(user, theform.getIncident_ID()) || (val2 && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, user)) ) {
+		
+		
 		
 		if (request.getParameter("email_customer") == null)
 			theform.setEmail_customer(0);
@@ -167,11 +178,13 @@ public class MBRActionUtils {
 			request.setAttribute("bagit", "1");
 			return true;
 		}
-
+		}
 		return false;
+		
 	}
 
 	public static boolean actionDelete(IncidentForm theform, HttpServletRequest request) {
+		if(UserPermissions.hasIncidentSavePermission(theform.getAgent(), theform.getIncident_ID())) {
 		
 		if (request.getParameter("delete_these_elements") != null && request.getParameter("delete_these_elements").length() > 0) {
 			String deleteTheseElements =  request.getParameter("delete_these_elements");
@@ -283,6 +296,7 @@ public class MBRActionUtils {
 				remarkList.remove(Integer.parseInt(index));
 			request.setAttribute("remark", Integer.toString(theform.getRemarklist().size() - 1));
 			return true;
+		}
 		}
 		return false;
 	}
