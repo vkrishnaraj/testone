@@ -406,6 +406,129 @@
 		              </tr>
 				</table>
 				<br/>
+				<logic:empty name="lost" name="shipment">
+					<h1 class="green">
+			        	<bean:message key="header.shipping.information" />
+			        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+			        </h1>
+    				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+				        <tr>
+				            <td colspan=5>
+				              <bean:message key="colname.shipping_name" />&nbsp;<span class="reqfield">*</span>
+				              <br>
+				              <html:text name="lostReportForm" property="lost.shipment.shippingName" size="20" maxlength="20" styleClass="textfield" />
+				            
+				        </tr>
+				        
+	            	<tr>
+		                <td colspan=2>
+		                  <bean:message key="colname.shipping_address" /><br/>
+		                  <bean:message key="colname.street_addr1" />&nbsp;<span class="reqfield">*</span>
+		                  <br>
+		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedAddress1" size="45" maxlength="50" styleClass="textfield" />
+		                </td>
+		                <td colspan=3>
+		                  <bean:message key="colname.street_addr2" />
+		                  <br>
+		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedAddress2" size="35" maxlength="50" styleClass="textfield" />
+		                </td>
+		              </tr>
+		              <tr>
+		                <td>
+		                  <bean:message key="colname.city" />&nbsp;<span class="reqfield">*</span>
+		                  <br>
+		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedCity" size="10" maxlength="50" styleClass="textfield" />
+		                </td>
+		                <td>
+		                  <bean:message key="colname.state" />
+		                  <br />
+		                  <html:select disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" >
+		                  	<html:option value="">
+			                    <bean:message key="select.none" />
+		                    </html:option>
+			                <html:options collection="statelist" property="value" labelProperty="label" />
+		                  </html:select>
+		                </td>
+		                <td>
+		                  <bean:message key="colname.province" />
+		                  <br />
+		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedProvince" size="10" maxlength="100" styleId="province" styleClass="textfield" onchange="fieldChanged('province');" />
+		                </td>
+		                <td>
+		                  <bean:message key="colname.zip" />
+		                  <br>
+		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedZip" size="11" maxlength="11" styleClass="textfield" />
+		                </td>
+		                <td>
+		                  <bean:message key="colname.country" />&nbsp;<span class="reqfield">*</span>
+		                  <br>
+		                  <html:select disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.country" styleId="country" styleClass="dropdown" onchange="fieldChanged('country');">
+		                    <html:option value="">
+		                      <bean:message key="select.none" />
+		                    </html:option>
+		                    <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
+		                  </html:select>
+		                </td>
+		              </tr>
+		              <tr>
+		                <td colspan=2>
+		                  <bean:message key="colname.billing_address" /><br/>
+		                  <bean:message key="colname.street_addr1" />&nbsp;<span class="reqfield">*</span>
+		                  <br>
+		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.billingAddress.decryptedAddress1" size="45" maxlength="50" styleClass="textfield" />
+		                </td>
+		                <td colspan=3>
+		                  <bean:message key="colname.street_addr2" />
+		                  <br>
+		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.billingAddress.decryptedAddress2" size="35" maxlength="50" styleClass="textfield" />
+		                </td>
+		              </tr>
+		              <tr>
+		                <td>
+		                  <bean:message key="colname.city" />&nbsp;<span class="reqfield">*</span>
+		                  <br>
+		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.billingAddress.decryptedCity" size="10" maxlength="50" styleClass="textfield" />
+		                </td>
+		                <td>
+		                  <bean:message key="colname.state" />
+		                  <br />
+		                  <html:select disabled="true" name="lostReportForm" property="lost.shipment.billingAddress.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" >
+		                  	<html:option value="">
+			                    <bean:message key="select.none" />
+		                    </html:option>
+			                <html:options collection="statelist" property="value" labelProperty="label" />
+		                  </html:select>
+		                </td>
+		                <td>
+		                  <bean:message key="colname.province" />
+		                  <br />
+		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.billingAddress.decryptedProvince" size="10" maxlength="100" styleId="province" styleClass="textfield" onchange="fieldChanged('province');" />
+		                </td>
+		                <td>
+		                  <bean:message key="colname.zip" />
+		                  <br>
+		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.billingAddress.decryptedZip" size="11" maxlength="11" styleClass="textfield" />
+		                </td>
+		                <td>
+		                  <bean:message key="colname.country" />&nbsp;<span class="reqfield">*</span>
+		                  <br>
+		                  <html:select disabled="true" name="lostReportForm" property="lost.shipment.billingAddress.country" styleId="country" styleClass="dropdown" onchange="fieldChanged('country');">
+		                    <html:option value="">
+		                      <bean:message key="select.none" />
+		                    </html:option>
+		                    <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
+		                  </html:select>
+		                </td>
+		              </tr>
+		              <tr>
+		              	<td colspan=5>
+		              		<bean:message key="colname.shipping_option" /><br/>
+		              		<html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingOption"  styleClass="textfield" />
+		              	</td>
+		              </tr>
+			        </table>
+			    </logic:empty>
+				<br/>
 				<h1 class="green">
 		        	<bean:message key="header.itinerary.information" />
 		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>

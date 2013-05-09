@@ -333,7 +333,21 @@
                   </select>
                   <html:submit styleId="button" property="addinventory" indexed="true" >
 		            <bean:message key="button.add_content" />
-		          </html:submit></center>
+		          </html:submit>
+		          <% boolean val2=false;
+					if(report_type==1){
+						val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, a);
+					} else if (report_type==2){
+						val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, a);
+					} else if (report_type==3){
+						val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, a);
+					}
+					if(!UserPermissions.hasIncidentSavePermission(a, theitem.getIncident()) && val2 && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a) ) {%>
+							<html:submit styleId="button" property="saveadditions"
+								indexed="true">
+								<bean:message key="button.save" />
+							</html:submit>
+						<%}%></center>
 
             </td>
           </tr>
