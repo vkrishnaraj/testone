@@ -358,12 +358,10 @@
 			</fileset>
 		</copy>
 		
-		<!--
 		<copy todir="${app.deploy.dir}" verbose="true">
-			<fileset file="${dist.dir}/ntfs_internal_test.ear">
+			<fileset file="${dist.dir}/${ear.name}">
 			</fileset>
 		</copy>
-		-->
 		
 		<!--
 		<copy todir="c:/upload" verbose="true">
