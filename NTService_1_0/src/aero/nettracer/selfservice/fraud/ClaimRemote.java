@@ -5,9 +5,6 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 
-import org.jboss.ejb3.annotation.RemoteBinding;
-import org.jboss.ejb3.annotation.RemoteBindings;
-
 import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.detection.AccessRequest;
 import aero.nettracer.fs.model.detection.TraceResponse;

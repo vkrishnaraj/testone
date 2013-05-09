@@ -37,10 +37,12 @@
 		<fileset dir="${root.dir}\\lib">
 			<patternset refid="jar.files" />
 		</fileset>
+		<fileset dir="${client.ejb.dir}">
+			<patternset refid="jar.files" />
+		</fileset>
 		<fileset dir="${client.dir}">
 			<patternset refid="jar.files" />
 		</fileset>
-
 	</path>
 
 	<property name="axis2.classpath" value="base.libraries" />
