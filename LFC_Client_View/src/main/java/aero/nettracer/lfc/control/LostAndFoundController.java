@@ -296,7 +296,7 @@ public class LostAndFoundController {
 		return "shippingrates?faces-redirect=true";
 	}
 	
-	public String backToShippingPayment() {
+	public String backToCCInfo() {
 		return "shippingpayment?faces-redirect=true";
 	}
 	
