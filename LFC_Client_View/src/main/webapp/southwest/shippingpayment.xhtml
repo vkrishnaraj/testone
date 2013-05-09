@@ -149,22 +149,22 @@
 				<!-- IF Shipping is Selected. Gather CC Info -->
 					<table style="width: 95%;">
 						<tr>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
+							<td class="twlvPxBlk"  style="width: 40%;" colspan="2"><t:outputText
 								value="#{msg.lostform_label_cc_vendor} *" /></td>
-							<td class="twlvPxBlk" style="width: 25%;" colspan="2"><t:outputText
+							<td class="twlvPxBlk" style="width:35%;" colspan="2"><t:outputText
 									value="#{msg.lostform_label_cc_name} *" /></td>
-							<td class="twlvPxBlk"  colspan="2"><b><t:outputText
+							<td class="twlvPxBlk"  colspan="2" ><b><t:outputText
 								value="#{msg.lostform_label_total_payment}" /></b></td>
 						</tr>
 						<tr>
 							<td colspan="2"><t:selectOneMenu
-									value="#{lostAndFound.lostReport.cc.ccvendor}"  id="ccVendor" style="width: 95%;">
+									value="#{lostAndFound.lostReport.cc.ccvendor}"  id="ccVendor" style="width: 70%;">
 									<f:selectItem itemLabel="#{msg.credit_card_list}" itemValue="" />
 									<f:selectItems value="#{lostAndFound.ccvendors}" />
 									</t:selectOneMenu></td>
 									
 							<td colspan="2"><t:inputText value="#{lostAndFound.lostReport.cc.ccname}"
-									maxlength="100" style="width: 50%;" /></td>
+									maxlength="100" /></td>
 							<td class="twlvPxBlk"  colspan="2"><b><t:outputText
 								value="#{lostAndFound.lostReport.shippingPayment}" /></b></td>
 						</tr>
@@ -179,7 +179,7 @@
 							<td colspan="2"><t:inputText id="ccNum" value="#{lostAndFound.lostReport.cc.ccnumber}"
 									maxlength="20" style="width: 80%;" /></td>
 							<td colspan="2">
-								<t:selectOneMenu value="#{lostAndFound.lostReport.cc.ccexpirationmonth}" style="width: 45%;">
+								<t:selectOneMenu value="#{lostAndFound.lostReport.cc.ccexpirationmonth}" style="width: 35%;">
 									<f:selectItem itemLabel="Select" itemValue="" />
 									<f:selectItem itemLabel="1" itemValue="01" />
 									<f:selectItem itemLabel="2" itemValue="02" />
@@ -194,7 +194,7 @@
 									<f:selectItem itemLabel="11" itemValue="11" />
 									<f:selectItem itemLabel="12" itemValue="12" />
 								</t:selectOneMenu>/
-								<t:selectOneMenu value="#{lostAndFound.lostReport.cc.ccexpirationyear}" style="width: 45%;">
+								<t:selectOneMenu value="#{lostAndFound.lostReport.cc.ccexpirationyear}" style="width: 35%;">
 									<f:selectItem itemLabel="Select" itemValue="" />
 									<f:selectItem itemLabel="13" itemValue="13" />
 									<f:selectItem itemLabel="14" itemValue="14" />

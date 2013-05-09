@@ -46,6 +46,15 @@
 						country.selectedIndex = 0;
 					}
 				}
+				
+				function populateBag(){
+					same = document.getElementById("lostForm:sameAsContact");
+					if(same.value=="on"){
+						document.getElementById("lostForm:firstBag").value=document.getElementById("lostForm:firstName").value;
+						document.getElementById("lostForm:lastBag").value=document.getElementById("lostForm:lastName").value;
+						document.getElementById("lostForm:middleBag").value=document.getElementById("lostForm:middleInitial").value;
+					}					
+				}
 
 		        var curDt = new Date();
 		        
@@ -120,7 +129,8 @@
 					</td><td class="twlvPxBlk" colspan="4">
 						<t:outputText value="#{msg.lostform_label_item_size}" />
 					</td><td class="twlvPxBlk" colspan="4">
-						<t:outputText value="#{msg.lostform_label_item_phone}" />
+						<t:outputText value="#{msg.lostform_label_item_phone}" /><br/>
+						<t:outputText value="#{msg.lostform_label_item_format}" />
 					</td></tr>
 					<tr><td colspan="4">
 						<rich:calendar value="#{lostAndFound.lostReport.dateLost}"  
@@ -130,9 +140,15 @@
                            enableManualInput="true"  dayStyleClass="disabledClassesProv"
                            cellWidth="24px" cellHeight="22px" style="width:250px"/>  
 					</td><td colspan="4">
-						<t:inputText value="#{lostAndFound.lostReport.itemSize}" maxlength="255"  style="width: 95%;"/>
+						<t:inputText value="#{lostAndFound.lostReport.itemSize}" maxlength="255" style="width: 95%;"/>
 					</td><td colspan="4">
-						<t:inputText value="#{lostAndFound.lostReport.lostPhone.number}" maxlength="511" style="width: 100%;"/>
+						<!-- <t:inputText value="#{lostAndFound.lostReport.lostPhone.number}" maxlength="511" style="width: 100%;"/>-->
+						<t:inputText value="#{lostAndFound.lostReport.lostPhone.country}" maxlength="4" style="width: 20%;"/>-
+						<t:inputText value="#{lostAndFound.lostReport.lostPhone.area}" maxlength="4" style="width: 20%;"/>-
+						<t:inputText value="#{lostAndFound.lostReport.lostPhone.exchange}" maxlength="4" style="width: 20%;"/>-
+						<t:inputText value="#{lostAndFound.lostReport.lostPhone.line}" maxlength="4" style="width: 20%;"/><br/>
+						<t:outputText value="#{msg.lostform_label_item_extension} "/> 
+						<t:inputText value="#{lostAndFound.lostReport.lostPhone.extension}" maxlength="4" style="width: 24%;"/>
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="12">
@@ -159,11 +175,11 @@
 						<t:outputText value="#{msg.lostform_label_name_mi}"/>
 					</td></tr>
 					<tr><td colspan="2">
-						<t:inputText value="#{lostAndFound.lostReport.contact.lastName}" maxlength="255" style="width: 95%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.lastName}" maxlength="255" style="width: 95%" id="lastName" />
 					</td><td colspan="2">
-						<t:inputText value="#{lostAndFound.lostReport.contact.firstName}" maxlength="255" style="width: 95%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.firstName}" maxlength="255"  style="width: 95%" id="firstName" />
 					</td><td colspan="2">
-						<t:inputText value="#{lostAndFound.lostReport.contact.middleInitial}" maxlength="255" style="width: 100%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.middleInitial}" maxlength="255"  style="width: 100%" id="middleInitial"/>
 					</td></tr>
 <!-- BEGIN ADDRESS INFO UI -->
 	 				<tr><td>&#160;</td></tr>
@@ -178,7 +194,7 @@
 						<t:outputText value="#{msg.lostform_label_address_addr2}" />
 					</td></tr>
 					<tr><td colspan="6">
-						<t:inputText value="#{lostAndFound.lostReport.contact.address.address2}" maxlength="511"  style="width: 100%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.address2}" maxlength="511" style="width: 100%" />
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="2">
@@ -189,7 +205,7 @@
 						<t:outputText value="#{msg.lostform_label_address_postal}" />
 					</td></tr>
 					<tr><td colspan="2">
-						<t:inputText value="#{lostAndFound.lostReport.contact.address.city}" maxlength="255"  style="width: 95%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.city}" maxlength="255" style="width: 95%" />
 					</td><td colspan="2">
 						<t:selectOneMenu value="#{lostAndFound.lostReport.contact.address.state}" onchange="adjustAddressReqState(this);"
 				       		style="width: 95%" id="state">
@@ -197,7 +213,7 @@
 							<f:selectItems value="#{lostAndFound.states}" />
 						</t:selectOneMenu>
 					</td><td colspan="2">
-						<t:inputText value="#{lostAndFound.lostReport.contact.address.postal}" maxlength="255"  style="width: 100%" />
+						<t:inputText value="#{lostAndFound.lostReport.contact.address.postal}" maxlength="255" style="width: 100%" />
 					</td></tr>
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="3" style="width: 50%;">
@@ -221,7 +237,13 @@
 						<t:outputText value="#{msg.lostform_label_phone_primary}" />
 					</td></tr>
 					<tr><td colspan="3">
-						<t:inputText value="#{lostAndFound.lostReport.contact.primaryPhone.number}" maxlength="511" style="width: 95%" />
+						<!-- <t:inputText value="#{lostAndFound.lostReport.contact.primaryPhone.number}"  maxlength="511" style="width: 95%" />-->
+						<t:inputText value="#{lostAndFound.lostReport.contact.primaryPhone.country}" maxlength="4" style="width: 20%;"/>-
+						<t:inputText value="#{lostAndFound.lostReport.contact.primaryPhone.area}" maxlength="4" style="width: 20%;"/>-
+						<t:inputText value="#{lostAndFound.lostReport.contact.primaryPhone.exchange}" maxlength="4" style="width: 20%;"/>-
+						<t:inputText value="#{lostAndFound.lostReport.contact.primaryPhone.line}" maxlength="4" style="width: 20%;"/><br/>
+						<t:outputText value="#{msg.lostform_label_item_extension} "/> 
+						<t:inputText value="#{lostAndFound.lostReport.contact.primaryPhone.extension}" maxlength="4" style="width: 24%;"/>
 					</td><td colspan="3">
 					    <h:panelGroup style="width: 100%" >
 					      <t:selectOneRadio id="primaryType" layout="spread" value="#{lostAndFound.lostReport.contact.primaryPhone.type}">
@@ -246,7 +268,13 @@
 						<t:outputText value="#{msg.lostform_label_phone_secondary}" />
 					</td></tr>
 					<tr><td colspan="3">
-						<t:inputText value="#{lostAndFound.lostReport.contact.secondaryPhone.number}" maxlength="511" style="width: 95%" />
+						<!-- <t:inputText value="#{lostAndFound.lostReport.contact.secondaryPhone.number}" maxlength="511" style="width: 95%" />-->
+						<t:inputText value="#{lostAndFound.lostReport.contact.secondaryPhone.country}" maxlength="4" style="width: 20%;"/>-
+						<t:inputText value="#{lostAndFound.lostReport.contact.secondaryPhone.area}" maxlength="4" style="width: 20%;"/>-
+						<t:inputText value="#{lostAndFound.lostReport.contact.secondaryPhone.exchange}" maxlength="4" style="width: 20%;"/>-
+						<t:inputText value="#{lostAndFound.lostReport.contact.secondaryPhone.line}" maxlength="4" style="width: 20%;"/><br/>
+						<t:outputText value="#{msg.lostform_label_item_extension} "/> 
+						<t:inputText value="#{lostAndFound.lostReport.contact.secondaryPhone.extension}" maxlength="4" style="width: 24%;"/>
 					</td><td colspan="3">
 					    <h:panelGroup style="width: 100%" >
 					      <t:selectOneRadio id="secondaryType" layout="spread" value="#{lostAndFound.lostReport.contact.secondaryPhone.type}">
@@ -278,6 +306,22 @@
 					</td><td colspan="3">
 						<t:inputText value="#{lostAndFound.lostReport.contact.confirmEmail}" maxlength="511" style="width: 100%" />
 					</td></tr>
+					<tr><td colspan="1">
+						<t:outputText value="#{msg.lostform_label_name_bag_check}" />
+					</td><td colspan="2">
+						<h:selectBooleanCheckbox id="sameAsContact" onclick="populateBag()"/> 
+					</td><td colspan="3"/></tr>
+					<tr><td colspan="2">
+						<t:outputText value="#{msg.lostform_label_name_bag_last}" /><br/>
+						<t:inputText value="#{lostAndFound.lostReport.lastNameBag}" maxlength="511" style="width: 95%" id="lastBag"/>
+					</td><td colspan="2">
+						<t:outputText value="#{msg.lostform_label_name_bag_first}" /><br/>
+						<t:inputText value="#{lostAndFound.lostReport.firstNameBag}" maxlength="511" style="width: 95%" id="firstBag"/>
+					</td><td colspan="2">
+						<t:outputText value="#{msg.lostform_label_name_bag_middle}" /><br/>
+						<t:inputText value="#{lostAndFound.lostReport.middleNameBag}" maxlength="511" style="width: 95%" id="middleBag"/>
+					</td>
+					</tr>
 				</table><br/>
 				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_trip_title}" /></p><br/><br/>
 				<a4j:region renderRegionOnly="true"  >
