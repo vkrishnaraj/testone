@@ -245,8 +245,8 @@
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.fraudQuestionLabel.anotherClaim.label}'" 
 							required="#{passengerController.fraudQuestionLabel.anotherClaim.required}">
-										<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
-										<f:selectItem itemLabel="No" itemValue="false"/>
+										<f:selectItem itemLabel="Yes&#160;" itemValue="1"/>
+										<f:selectItem itemLabel="No" itemValue="2"/>
 							<a4j:support event="onchange" 
 								reRender="which,whichInput,dateOfClaim,dateOfClaimInput,claimantName,claimantNameInput" 
 								limitToList="true"/>

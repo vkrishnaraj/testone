@@ -96,7 +96,7 @@ public class PassengerBean {
 			=new ArrayList<com.nettracer.claims.faces.util.File>();
 	
 	//For Fraud Question
-	private Boolean anotherClaim;
+	private int anotherClaim;
 	private String whichAirline;
 	private Date dateOfClaim;
 	private String claimantName;
@@ -380,10 +380,10 @@ public class PassengerBean {
 	public void setTicketNumber(String ticketNumber) {
 		this.ticketNumber = ticketNumber;
 	}
-	public Boolean getAnotherClaim() {
+	public int getAnotherClaim() {
 		return anotherClaim;
 	}
-	public void setAnotherClaim(Boolean anotherClaim) {
+	public void setAnotherClaim(int anotherClaim) {
 		this.anotherClaim = anotherClaim;
 	}
 	public String getWhichAirline() {
@@ -755,10 +755,10 @@ public class PassengerBean {
 		return "No";
 	}
 	public String getAnotherClaimDisp() {
-		if (anotherClaim != null) {
-			return (anotherClaim ? "Yes" : "No");
+		if (anotherClaim != 0) {
+			return (anotherClaim == 1 ? "Yes" : "No");
 		}
-		return "No";
+		return "N/A";
 	}
 	public String getTsaInspectDisp() {
 		if (tsaInspect != null) {

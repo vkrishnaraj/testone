@@ -290,7 +290,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         setFiles(claim,passengerBean);
        
         //Fraud Question
-        passengerBean.setAnotherClaim(intToBool(claim.getFiledPreviousClaim()));
+        passengerBean.setAnotherClaim(claim.getFiledPreviousClaim());
         passengerBean.setWhichAirline(claim.getFiledPreviousAirline());
         if(null != claim.getFiledPrevoiusDate()){
         	Calendar temp = claim.getFiledPrevoiusDate();
@@ -603,7 +603,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		subDoc1.setIncidentId(passengerBean.getIncidentID()); //claim number is the incident Id
 		subDoc1.setName(passengerBean.getPassengers().get(0).getLastName());
 
-		claim.setFiledPreviousClaim(boolToInt(passengerBean.getAnotherClaim()));
+		claim.setFiledPreviousClaim(passengerBean.getAnotherClaim());
         claim.setFiledPreviousAirline(passengerBean.getWhichAirline());
         if(null != passengerBean.getDateOfClaim()){
        	 calendar=Calendar.getInstance();

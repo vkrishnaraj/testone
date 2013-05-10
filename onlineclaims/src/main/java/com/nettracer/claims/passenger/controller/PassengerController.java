@@ -1447,8 +1447,7 @@ public class PassengerController {
 				.getExternalContext().getSession(false);
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			try {
-				if (null != passengerBean.getAnotherClaim()
-						&& passengerBean.getAnotherClaim()) {
+				if (1 == passengerBean.getAnotherClaim()) {
 					fraudQuestionLabel.getWhichAirline().setState(
 							LabelText.STATUS_REQUIRED);
 					fraudQuestionLabel.getDateOfClaim().setState(
