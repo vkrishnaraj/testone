@@ -307,9 +307,7 @@
 											property="OHD_CategoryType_ID" labelProperty="description" />
 									</html:select> 
 								<% 	} else { %> 
-									<html:select
-										property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'
-										disabled="true" styleClass="dropdown">
+									<html:select property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'	disabled="true" styleClass="dropdown">
 										<html:option value="">
 											<bean:message key="select.please_select" />
 										</html:option>
@@ -326,11 +324,11 @@
 	                  <bean:message key="colname.dam.description" />
 	                  <% }%>
 	                  <br> 
-									 <% if (UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) || (val2 && inventorylist.getInventory_ID() == 0)) { %>
-									<html:text property="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
-									<%	} else { %>
-									<html:text disabled="true" property="<%="inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
-									<% } %>
+						<% if (UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) || (val2 && inventorylist.getInventory_ID() == 0)) { %>
+							<html:text property="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
+						<%	} else { %>
+							<html:text disabled="true" property="<%="inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
+						<% } %>
 	                </td>
 	                <td align="center">&nbsp;<br>
                       <% 
@@ -338,9 +336,9 @@
                       if (report_type !=2) {
                         check = "checkDeleteCount(" + i + ", " + report_type + ")";
                       }
-                      	%>
-                      <input type="button" name="deleteinventory_<%=i %>" value="<bean:message key="button.delete_content"/>" 
-                      onclick="if (<%=check %>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>', '<bean:message key="colname.lc.content" />', 0);}" id="button">
+                      if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())) { %>
+						<input type="button" name="deleteinventory_<%=i%>" value="<bean:message key="button.delete_content"/>" onclick="if (<%=check%>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>', '<bean:message key="colname.lc.content" />', 0);}" id="button"> 
+					  <%	} %>
 	                </td>
 	              </tr>
 	            </table>
@@ -360,11 +358,11 @@
 		            <bean:message key="button.add_content" />
 		          </html:submit>
 		          <% if (!UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) && val2 && theitem.getIncident().getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_OPEN) { %>
-							<html:submit styleId="button" property="saveadditions"
-								indexed="true">
+							<html:submit styleId="button" property="saveadditions">
 								<bean:message key="button.save" />
 							</html:submit>
-						<%}%></center>
+						<%}%>
+				</center>
 
             </td>
           </tr>

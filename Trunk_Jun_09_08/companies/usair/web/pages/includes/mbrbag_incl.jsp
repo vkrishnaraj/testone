@@ -331,15 +331,14 @@
 											property="OHD_CategoryType_ID" labelProperty="description" />
 									</html:select>  <%} %> </td>
 								<td>
-									<%
-										if (report_type == 1) {							%>
-										<bean:message key="colname.ld.description" /> 
-										<%} else if (report_type == 2) { %>
+									<% if (report_type == 1) {%>
+									<bean:message key="colname.ld.description" /> 
+									<%} else if (report_type == 2) {%>
 									<bean:message key="colname.pil.description" /> 
 									<%	} else { %> 
 									<bean:message key="colname.dam.description" /> 
 									<%	} %> 
-									<br> 
+									<br/> 
 									<% if (UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) || (val2 && inventorylist.getInventory_ID() == 0)) { %>
 									<html:text property="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" size="80" maxlength="255" styleClass="textfield" />
 									<%	} else { %>
@@ -347,20 +346,19 @@
 									<% } %>
 								</td>
 								<td align="center">&nbsp;<br> <%
- 	String check = "true";
- 			if (report_type != 2) {
- 				check = "checkDeleteCount(" + i + ", " + report_type
- 						+ ")";
- 			}
- 									if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())) { %>
-									<input type="button" name="deleteinventory_<%=i%>" value="<bean:message key="button.delete_content"/>" onclick="if (<%=check%>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>', '<bean:message key="colname.lc.content" />', 0);}" id="button"> 
+									 	String check = "true";
+									 			if (report_type != 2) {
+									 				check = "checkDeleteCount(" + i + ", " + report_type
+									 						+ ")";
+									 			}
+									 if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())) { %>
+										<input type="button" name="deleteinventory_<%=i%>" value="<bean:message key="button.delete_content"/>" onclick="if (<%=check%>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>', '<bean:message key="colname.lc.content" />', 0);}" id="button"> 
 									<%	} %>
 								</td>
 							</tr>
 						</table>
 
 					</logic:iterate>
-
 					<center>
 
 						<select name="addNumInventory[<%=i%>]">

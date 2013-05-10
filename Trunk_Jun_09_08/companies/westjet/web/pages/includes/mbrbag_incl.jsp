@@ -337,9 +337,12 @@
 								<td>
 									<% if (report_type == 1) {%> 
 									<bean:message key="colname.ld.description" /> 
-									<%} else if (report_type == 2) {%> <bean:message key="colname.pil.description" /> 
-									<%} else {%> <bean:message key="colname.dam.description" /> 
-									<%} %> <br> 
+									<%} else if (report_type == 2) {%> 
+									<bean:message key="colname.pil.description" /> 
+									<%} else {%> 
+									<bean:message key="colname.dam.description" /> 
+									<%} %> 
+									<br/> 
 									 <% if (UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) || (val2 && inventorylist.getInventory_ID() == 0)) { %>
 									<html:text property="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
 									<%	} else { %>

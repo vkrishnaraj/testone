@@ -331,11 +331,9 @@
                       if (report_type !=2) {
                         check = "checkDeleteCount(" + i + ", " + report_type + ")";
                       }
-                      	%> <input type="button"
-									name="deleteinventory_<%=i %>"
-									value="<bean:message key="button.delete_content"/>"
-									onclick="if (<%=check %>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>', '<bean:message key="colname.lc.content" />', 0);}"
-									id="button">
+                      if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())) { %>
+						<input type="button" name="deleteinventory_<%=i%>" value="<bean:message key="button.delete_content"/>" onclick="if (<%=check%>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>', '<bean:message key="colname.lc.content" />', 0);}" id="button"> 
+					  <%	} %>
 								</td>
 							</tr>
 						</table>
