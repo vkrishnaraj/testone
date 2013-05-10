@@ -1383,6 +1383,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return getLostCount(getLostQuery(station,subcomp));
 	}
+	
+	public int getLostCount(Station station) {
+		if(station == null){
+			return 0;
+		}
+		return getLostCount(getLostQuery(station,null));
+	}
 
 	@Override
 	public List<LFLost> getLostPaginatedList(Station station, int start, int offset, Subcompany subcomp) {
@@ -1391,6 +1398,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return getLostPaginatedList(getLostQuery(station,subcomp), start, offset);
 	}
+	
+	public List<LFLost> getLostPaginatedList(Station station, int start, int offset) {
+		if(station == null){
+			return null;
+		}
+		return getLostPaginatedList(getLostQuery(station,null), start, offset);
+	}
+
 
 	@Override
 	public int getFoundCount(Agent agent) {
@@ -1408,12 +1423,26 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return getFoundCount(getFoundQuery(station,subcomp));
 	}
 
+	public int getFoundCount(Station station) {
+		if(station == null){
+			return 0;
+		}
+		return getFoundCount(getFoundQuery(station,null));
+	}
+
 	@Override
 	public List<LFFound> getFoundPaginatedList(Station station, int start, int offset, Subcompany subcomp) {
 		if(station == null){
 			return null;
 		}
 		return getFoundPaginatedList(getFoundQuery(station,subcomp), start, offset);
+	}
+	
+	public List<LFFound> getFoundPaginatedList(Station station, int start, int offset) {
+		if(station == null){
+			return null;
+		}
+		return getFoundPaginatedList(getFoundQuery(station,null), start, offset);
 	}
 
 	@Override
@@ -1427,6 +1456,17 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		return 0;
 	}
+
+	public int getItemsToSalvageCount(Station station) {
+		if(station == null){
+			return 0;
+		} else if (station.getCompany().getCompanyCode_ID().equals(TracingConstants.LF_AB_COMPANY_ID)) {
+			return getItemCount(getItemsToSalvageQuery(station));
+		} else if (station.getCompany().getCompanyCode_ID().equals(TracingConstants.LF_LF_COMPANY_ID)) {
+			return getItemCount(getLFCItemsToSalvageQuery(station, null,null));
+		}
+		return 0;
+	}
 	
 	public int getLFItemsToSalvageCount(Station station, HandleItemsForm hiForm, Subcompany subcomp) {
 		return getItemCount(getLFCItemsToSalvageQuery(station, hiForm,subcomp));
@@ -1434,6 +1474,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	@Override
 	public List<LFItem> getItemsToSalvagePaginatedList(Station station, int start, int offset, Subcompany subcomp) {
+		if(station == null){
+			return null;
+		}
+		return getItemPaginatedList(getItemsToSalvageQuery(station), start, offset);
+	}
+
+	public List<LFItem> getItemsToSalvagePaginatedList(Station station, int start, int offset) {
 		if(station == null){
 			return null;
 		}
@@ -1465,6 +1512,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return sql;
 	}
 	
+
+	public int getTraceResultsCount(Station station) {
+		return getTraceResultsCount(station,null);
+	}
+	
 	@Override
 	//TODO review if this needs to be deprecated
 	public int getTraceResultsCount(Station station, Subcompany subcomp) {
@@ -1488,6 +1540,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return 0;
 	}
 
+	public List<LFMatchHistory> getTraceResultsPaginated(Station station, int start, int offset){
+		return getTraceResultsPaginated(station, start, offset, null);
+	}
+	
 	@Override
 	//TODO review if this needs to be deprecated
 	public List<LFMatchHistory> getTraceResultsPaginated(Station station, int start, int offset, Subcompany subcomp) {
@@ -1520,6 +1576,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 
+	public int getDeliveryPendingCount(Station station){
+		return getDeliveryPendingCount(station, null);
+	}
 	
 	@Override
 	public int getDeliveryPendingCount(Station station, Subcompany subcomp) {
@@ -1550,6 +1609,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return 0;
 	}
 
+	public List<LFItem> getDeliveryPendingPaginatedList(Station station, int start, int offset){
+		return getDeliveryPendingPaginatedList(station, start, offset,null); 
+	}
+	
+	
 	@Override
 	public List<LFItem> getDeliveryPendingPaginatedList(Station station, int start, int offset, Subcompany subcomp) {
 		if(station == null){
@@ -3540,19 +3604,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-//	public void sendFoundEmail(long id){
-//		LFLost lost = getLostReport(id);
-//		HashMap<String,String> h = getEmailParams(lost);
-//		if(sendEmail(lost, h, "found_report_email.html", h.get("SUBJECTLINE"))){
-//			lost.setEmailSentDate(new Date());
-//			try {
-//				saveOrUpdateLostReport(lost,getAutoAgent());
-//				Logger.logLF(""+id, "FOUND EMAIL SENT", 0);
-//			} catch (UpdateException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//	}
 	public LFAddress createShippingAddress(LFLost lost){
 		LFAddress shipping=new LFAddress();
 		BeanUtils.copyProperties(lost.getClient().getAddress(), shipping);

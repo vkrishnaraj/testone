@@ -19,6 +19,7 @@ import aero.nettracer.lf.services.LFUtils;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
@@ -64,6 +65,7 @@ public class EnterItemsAction extends CheckedAction {
 			if (fhoId != null && !fhoId.isEmpty()) {
 				HistoryContainer hc = (HistoryContainer) session.getAttribute("historyContainer");
 				FoundHistoryObject fho = (FoundHistoryObject) hc.get(fhoId);
+				fho.getFound().setLocation(StationBMO.getStationByCode(fho.getFound().getLocation().getStationcode()));
 				fho.getFound().setEntryStatus(TracingConstants.LF_STATUS_MOVED);
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(fho.getFound(), user);
 				request.setAttribute("divId", request.getParameter("divId"));
@@ -85,6 +87,7 @@ public class EnterItemsAction extends CheckedAction {
 				
 				// 1. create the history object
 				FoundHistoryObject fho = new FoundHistoryObject();
+				found.setLocation(StationBMO.getStation(found.getLocationId()));
 				fho.setFound(found);
 				fho.setDate(Calendar.getInstance().getTime()); 
 				fho.setStatusDesc(TracingConstants.HIST_DESCRIPTION_ADD + " " + TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
