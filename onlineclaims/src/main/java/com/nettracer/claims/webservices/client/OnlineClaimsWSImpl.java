@@ -299,19 +299,19 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         	passengerBean.setDateOfClaim(temp.getTime());
         }
         passengerBean.setClaimantName(claim.getFiledPreviousClaimant());
-        passengerBean.setTsaInspect(intToBool(claim.getTsaInspected()));
-        passengerBean.setBagConfirmNote(intToBool(claim.getTsaNotePresent()));
+        passengerBean.setTsaInspect(claim.getTsaInspected());
+        passengerBean.setBagConfirmNote(claim.getTsaNotePresent());
         passengerBean.setInspectionPlace(claim.getTsaInspectionLocation());
         passengerBean.setAdditionalComments(claim.getComments());
         passengerBean.setClaimAmount(claim.getPaxClaimAmount());
         passengerBean.setClaimDate(claim.getPaxClaimDate());
-        passengerBean.setPrivateInsurance(intToBool(claim.getPrivateInsurance()));
+        passengerBean.setPrivateInsurance(claim.getPrivateInsurance());
         passengerBean.setPrivateInsuranceName(claim.getPrivateInsuranceName());
         passengerBean.setPrivateInsuranceAddr(claim.getPrivateInsuranceAddr());
         passengerBean.setReportedAirline(claim.getReportedAirline());
         passengerBean.setReportedCity(claim.getReportedCity());
         passengerBean.setReportedFileNumber(claim.getReportedFileNumber());
-        passengerBean.setRequestForeignCurrency(intToBool(claim.getRequestForeignCurrency()));
+        passengerBean.setRequestForeignCurrency(claim.getRequestForeignCurrency());
         passengerBean.setForeignCurrencyEmail(claim.getForeignCurrencyEmail());
         if(null != claim.getBagReceivedDate()){
         	Calendar temp = claim.getBagReceivedDate();
@@ -613,14 +613,14 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
        	 calendar=null; //GC
         }
         claim.setFiledPreviousClaimant(passengerBean.getClaimantName());
-        claim.setTsaInspected(boolToInt(passengerBean.getTsaInspect()));
-        claim.setTsaNotePresent(boolToInt(passengerBean.getBagConfirmNote()));
+        claim.setTsaInspected(passengerBean.getTsaInspect());
+        claim.setTsaNotePresent(passengerBean.getBagConfirmNote());
         claim.setTsaInspectionLocation(passengerBean.getInspectionPlace());
         claim.setComments(passengerBean.getAdditionalComments());
-        claim.setPrivateInsurance(boolToInt(passengerBean.getPrivateInsurance()));
+        claim.setPrivateInsurance(passengerBean.getPrivateInsurance());
         claim.setPrivateInsuranceName(passengerBean.getPrivateInsuranceName());
         claim.setPrivateInsuranceAddr(passengerBean.getPrivateInsuranceAddr());
-        claim.setRequestForeignCurrency(boolToInt(passengerBean.getRequestForeignCurrency()));
+        claim.setRequestForeignCurrency(passengerBean.getRequestForeignCurrency());
         claim.setForeignCurrencyEmail(passengerBean.getForeignCurrencyEmail());
 		 
 		subDoc1.setClaim(claim);

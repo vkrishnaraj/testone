@@ -31,8 +31,8 @@
 						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.fraudQuestionLabel.tsaInspect.label}'" 
 						required="#{passengerController.fraudQuestionLabel.tsaInspect.required}">
-										<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
-										<f:selectItem itemLabel="No" itemValue="false"/>
+										<f:selectItem itemLabel="Yes&#160;" itemValue="1"/>
+										<f:selectItem itemLabel="No" itemValue="2"/>
 					</h:selectOneRadio>
 					
 					<rich:spacer  height="10" title=""/>
@@ -54,8 +54,8 @@
 								'#{passengerController.fraudQuestionLabel.bagConfirmNote.label}'" 
 						readonly="#{passengerController.fraudQuestionLabel.bagConfirmNote.hidden}"
 						required="#{passengerController.fraudQuestionLabel.bagConfirmNote.required}">
-						<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
-						<f:selectItem itemLabel="No" itemValue="false"/>
+						<f:selectItem itemLabel="Yes&#160;" itemValue="1"/>
+						<f:selectItem itemLabel="No" itemValue="2"/>
 					</h:selectOneRadio>
 					
 					<rich:spacer  height="10" title=""/>
@@ -110,8 +110,8 @@
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'Local Currency?'" 
 							required="false">
-										<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
-										<f:selectItem itemLabel="No" itemValue="false"/>
+										<f:selectItem itemLabel="Yes&#160;" itemValue="1"/>
+										<f:selectItem itemLabel="No" itemValue="2"/>
 					</h:selectOneRadio>
 					</h:panelGrid>
 				</h:panelGrid>
@@ -165,8 +165,8 @@
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'Private Insurance'" 
 							required="false">
-										<f:selectItem itemLabel="Yes&#160;" itemValue="true"/>
-										<f:selectItem itemLabel="No" itemValue="false"/>
+										<f:selectItem itemLabel="Yes&#160;" itemValue="1"/>
+										<f:selectItem itemLabel="No" itemValue="2"/>
 					</h:selectOneRadio>
 					</h:panelGrid>
 				</h:panelGrid>

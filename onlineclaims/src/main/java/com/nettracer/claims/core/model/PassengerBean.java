@@ -77,7 +77,7 @@ public class PassengerBean {
 	private String reportedAirline;
 	private String reportedCity;
 	private String reportedFileNumber;
-	private Boolean privateInsurance;
+	private int privateInsurance;
 	private String privateInsuranceName;
 	private String privateInsuranceAddr;
 	private boolean delayed;
@@ -100,8 +100,8 @@ public class PassengerBean {
 	private String whichAirline;
 	private Date dateOfClaim;
 	private String claimantName;
-	private Boolean tsaInspect;
-	private Boolean bagConfirmNote;
+	private int tsaInspect;
+	private int bagConfirmNote;
 	private String inspectionPlace;
 	private String additionalComments;
 	
@@ -112,7 +112,7 @@ public class PassengerBean {
 	private Boolean onlineAvailable;
 	private Boolean claimsAvailable;
 	private Boolean completeClaim;
-	private Boolean requestForeignCurrency;
+	private int requestForeignCurrency;
 	private String foreignCurrencyEmail;
 	private Date bagReceivedDate;
 	
@@ -404,16 +404,16 @@ public class PassengerBean {
 	public void setClaimantName(String claimantName) {
 		this.claimantName = claimantName;
 	}
-	public Boolean getTsaInspect() {
+	public int getTsaInspect() {
 		return tsaInspect;
 	}
-	public void setTsaInspect(Boolean tsaInspect) {
+	public void setTsaInspect(int tsaInspect) {
 		this.tsaInspect = tsaInspect;
 	}
-	public Boolean getBagConfirmNote() {
+	public int getBagConfirmNote() {
 		return bagConfirmNote;
 	}
-	public void setBagConfirmNote(Boolean bagConfirmNote) {
+	public void setBagConfirmNote(int bagConfirmNote) {
 		this.bagConfirmNote = bagConfirmNote;
 	}
 	public String getInspectionPlace() {
@@ -506,10 +506,10 @@ public class PassengerBean {
 	public void setPilferage(boolean pilferage) {
 		this.pilferage = pilferage;
 	}
-	public Boolean getRequestForeignCurrency() {
+	public int getRequestForeignCurrency() {
 		return requestForeignCurrency;
 	}
-	public void setRequestForeignCurrency(Boolean requestForeignCurrency) {
+	public void setRequestForeignCurrency(int requestForeignCurrency) {
 		this.requestForeignCurrency = requestForeignCurrency;
 	}
 	public String getForeignCurrencyEmail() {
@@ -674,10 +674,10 @@ public class PassengerBean {
 	public void setReportedFileNumber(String reportedFileNumber) {
 		this.reportedFileNumber = reportedFileNumber;
 	}
-	public Boolean getPrivateInsurance() {
+	public int getPrivateInsurance() {
 		return privateInsurance;
 	}
-	public void setPrivateInsurance(Boolean privateInsurance) {
+	public void setPrivateInsurance(int privateInsurance) {
 		this.privateInsurance = privateInsurance;
 	}
 	public String getPrivateInsuranceName() {
@@ -761,27 +761,27 @@ public class PassengerBean {
 		return "N/A";
 	}
 	public String getTsaInspectDisp() {
-		if (tsaInspect != null) {
-			return (tsaInspect ? "Yes" : "No");
+		if (tsaInspect != 0) {
+			return (tsaInspect == 1 ? "Yes" : "No");
 		}
-		return "No";
+		return "N/A";
 	}
 	public String getBagConfirmNoteDisp() {
-		if (bagConfirmNote != null) {
-			return (bagConfirmNote ? "Yes" : "No");
+		if (bagConfirmNote != 0) {
+			return (bagConfirmNote == 1 ? "Yes" : "No");
 		}
-		return "No";
+		return "N/A";
 	}
 	public String getPrivateInsuranceDisp() {
-		if (privateInsurance != null) {
-			return (privateInsurance ? "Yes" : "No");
+		if (privateInsurance != 0) {
+			return (privateInsurance == 1 ? "Yes" : "No");
 		}
-		return "No";
+		return "N/A";
 	}
 	public String getRequestForeignCurrencyDisp() {
-		if (requestForeignCurrency != null) {
-			return (requestForeignCurrency ? "Yes" : "No");
+		if (requestForeignCurrency != 0) {
+			return (requestForeignCurrency == 1 ? "Yes" : "No");
 		}
-		return "No";
+		return "N/A";
 	}
 }

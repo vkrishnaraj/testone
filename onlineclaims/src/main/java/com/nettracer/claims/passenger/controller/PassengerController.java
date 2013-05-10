@@ -1483,8 +1483,8 @@ public class PassengerController {
 	 */
 	public void selectAnotherClaim(ValueChangeEvent valueChangeEvent) {
 		logger.info("Listener: selectAnotherClaim called");
-		int anotherClaim = (int) valueChangeEvent.getNewValue();
-		if (anotherClaim == 1) {
+		Integer anotherClaim = (Integer) valueChangeEvent.getNewValue();
+		if (anotherClaim != null && anotherClaim == 1) {
 			fraudQuestionLabel.getWhichAirline().setState(
 					LabelText.STATUS_REQUIRED);
 			fraudQuestionLabel.getDateOfClaim().setState(
