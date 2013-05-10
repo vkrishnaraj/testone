@@ -7,7 +7,6 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 
-	<ui:define name="mainContent">
 		<t:dataTable id="psngrDtbl"
 			value="#{((contentsAndLanguageController.languageMap[lang])[index])['Fraud']}"
 			var="item" rowIndexVar="row">
@@ -38,7 +37,6 @@
 				</div>
 			</t:column>
 		</t:dataTable>
-	</ui:define>
 
 
 

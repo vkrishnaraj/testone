@@ -8,7 +8,6 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 
-	<ui:define name="mainContent">
 		<t:dataTable id="savDtbl"
 			value="#{((contentsAndLanguageController.languageMap[lang])[index])['Saved']}"
 			var="saved" rowIndexVar="row">
@@ -39,7 +38,6 @@
 				</div>
 			</h:column>
 		</t:dataTable>
-	</ui:define>
 
 
 

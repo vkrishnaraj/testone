@@ -8,7 +8,6 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 
-	<ui:define name="mainContent">
 		<t:dataTable id="uplDtbl"
 			value="#{((contentsAndLanguageController.languageMap[lang])[index])['Upload']}"
 			var="upload" rowIndexVar="row">
@@ -39,7 +38,6 @@
 				</div>
 			</h:column>
 		</t:dataTable>
-	</ui:define>
 
 
 

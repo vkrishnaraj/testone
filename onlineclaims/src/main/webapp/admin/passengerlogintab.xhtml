@@ -7,7 +7,6 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 
-	<ui:define name="mainContent">
 		<t:dataTable id="psngrLoginDtbl" 
 			value="#{((contentsAndLanguageController.languageMap[lang])[index])['Login']}"
 			var="passenger" rowIndexVar="row">
@@ -37,7 +36,6 @@
 				
 			</t:column>
 		</t:dataTable>
-	</ui:define>
 
 
 

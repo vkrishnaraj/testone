@@ -7,7 +7,6 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
 
-	<ui:define name="mainContent">
 		<t:dataTable id="bagDtbl"
 			value="#{((contentsAndLanguageController.languageMap[lang])[index])['Baggage']}"
 			var="baggage" rowIndexVar="row">
@@ -34,7 +33,6 @@
 				</div>
 			</t:column>
 		</t:dataTable>
-	</ui:define>
 
 
 
