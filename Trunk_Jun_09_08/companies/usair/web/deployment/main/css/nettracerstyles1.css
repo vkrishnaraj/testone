@@ -353,6 +353,14 @@ div#maincontent table.form2_ld{
 	background-color:#D1E4F1;
 }
 
+div#maincontent table.form2_bag{
+	background-color:#FF8500
+}
+
+div#maincontent table.form2_pax{
+	background-color:#FFD200
+}
+
 div#maincontent table.form2_dam{
 	background-color:#D1E4F1;
 }

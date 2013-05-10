@@ -15,7 +15,8 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
   String cssFormClass;
- 
+  String bagItinCss="form2_bag";
+  String paxItinCss="form2_pax";
   cssFormClass = "form2_dam";
 
   if (request.getAttribute("lostdelay") != null) {
@@ -659,7 +660,7 @@
 			<div id="<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>">
 				<html:hidden name="theitinerary" property="itinerarytype" value="0"
 					indexed="true" />
-				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" name="hidexItinerary<%=k %>"
+				<table class="<%=paxItinCss  %> <%=cssFormClass %>" cellspacing="0" cellpadding="0" name="hidexItinerary<%=k %>"
 					id="hidexItinerary">
 					<tr>
 						<td><bean:message key="colname.pax.fromto.req" /> <br>
@@ -794,7 +795,7 @@
 			
 				<html:hidden name="theitinerary" property="itinerarytype" value="1"
 					indexed="true" />
-				<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" id="bagItin">
+				<table class="<%=bagItinCss %> <%=cssFormClass %>" cellspacing="0" cellpadding="0" id="bagItin">
 					<tr>
 						<td><bean:message key="colname.bag.fromto.req" /> <br>
 							<html:text name="theitinerary" property="legfrom" size="3"
