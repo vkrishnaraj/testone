@@ -97,6 +97,20 @@
       }
     }
     
+    function deleteBag(bagtag_pos, isNew) {
+    	if(isNew=='true'){
+	    	var del=window.confirm("Delete the corresponding bag for this tag?");
+	    	if(del==true){
+	    		hideThisDiv(bagtag_pos);
+	    	}
+    	} else {
+	    	var del=window.confirm("A claim check has been deleted. Do you wish to edit and delete a bag as well?");
+	    	if(del==true){
+	    		window.location.hash="#"+bagtag_pos;
+	    	}
+    	} 
+    }
+    
   </script>
   
 <logic:present name="prepopulate" scope="request">
@@ -606,8 +620,16 @@
             </tr>
             <tr id="claimcheck_<%=i %>_1">
               <td colspan="3">
-              <input type="button" value="<bean:message key="button.delete_claim" />" onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_CLAIMCHECK %>_<%=i%>', '<bean:message
-                key="colname.claimnum.req" />', 1)" id="button">
+              <logic:notEqual name="incidentForm"
+                property="incident_ID" value="">
+	              <input type="button" value="<bean:message key="button.delete_claim" />" onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_CLAIMCHECK %>_<%=i%>', 
+	              '<bean:message key="colname.claimnum.req" />', 1); <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DELETE_BAGTAG_BAGS, a)) {%> deleteBag('<%=TracingConstants.JSP_DELETE_ITEM%>_<%=i%>', 'false') <%} %>" id="button">
+              </logic:notEqual>
+              <logic:equal name="incidentForm"
+                property="incident_ID" value="">
+                <input type="button" value="<bean:message key="button.delete_claim" />" onclick="hideThisElement('<%=TracingConstants.JSP_DELETE_CLAIMCHECK %>_<%=i%>', 
+	              '<bean:message key="colname.claimnum.req" />', 1); <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DELETE_BAGTAG_BAGS, a)) {%> deleteBag('<%=TracingConstants.JSP_DELETE_ITEM%>_<%=i%>', 'true') <%} %>" id="button">
+              </logic:equal>
               </td>
             </tr>
           </logic:iterate>
