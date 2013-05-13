@@ -6,7 +6,7 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
-	template="../layout/southwest_template.xhtml">
+	template="../layout/airtran_template.xhtml">
 	<ui:define name="title">Airtran Airways: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form id="pageForm">
@@ -28,8 +28,11 @@
 				</tr><tr>
 				<td><t:outputText value="#{msg.shipping_label_tracking}" /></td>
 				<td><t:inputText value="#{lostAndFoundLogin.login.trackingNumber}" /></td>
-				</tr></table>
-				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.shipping_button_login}" action="#{lostAndFoundLogin.loginShippingAirtran}" /><br/><br/>
+				</tr></table>	
+				<table><tr><td> 
+				<span class="submitButtonOrange">
+					<a4j:commandButton value="#{msg.shipping_button_login}" action="#{lostAndFoundLogin.loginShippingAirtran}" /><br/><br/>
+				</span></td></tr></table>
 			</h:panelGroup>
 		</h:form>
 	</ui:define>

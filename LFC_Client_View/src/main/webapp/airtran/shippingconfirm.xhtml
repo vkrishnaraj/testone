@@ -6,7 +6,7 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
-	template="../layout/southwest_template.xhtml">
+	template="../layout/airtran_template.xhtml">
 	<ui:define name="title">Airtran Airways: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form id="lostForm">
@@ -270,9 +270,14 @@
 					<rich:spacer width="100%" height="15" title="" />
 				</div>
 				<div align="right">
-					<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToShippingLogin}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
 				
-					<a4j:commandButton styleClass="submitButtonOrange"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.confirmShipping}" oncomplete="this.disabled=false"  id="addressbutton" render="outerPanel" />
+				<table><tr><td> 
+				<span class="submitButtonWhite">
+					<a4j:commandButton value="#{msg.general_button_back}" action="#{lostAndFound.backToShippingLogin}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+				</span>	</td><td>				
+				<span class="submitButtonOrange">
+					<a4j:commandButton value="#{msg.shipping_button_submit}"	action="#{lostAndFound.confirmShipping}" oncomplete="this.disabled=false"  id="addressbutton" render="outerPanel" />
+				</span></td></tr></table>
 				</div>
 				<br />
 			</h:panelGroup>
