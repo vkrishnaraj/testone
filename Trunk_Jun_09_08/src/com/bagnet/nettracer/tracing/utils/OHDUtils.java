@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
@@ -34,12 +35,15 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
+import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
+import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.audit.Audit_OHD;
+import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.forms.ViewCreatedRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm;
@@ -1747,5 +1751,58 @@ public class OHDUtils {
 				}
 			}
 		}
+	}
+
+	public static OnHandForm cloneOnHand(String ohd_id, Agent user, OnHandForm form) {
+		if(ohd_id==null){
+			return null;
+		}
+		
+		OHD o=getOHD(ohd_id);
+		OHD co=new OHD();
+		if(o!=null){
+//			BeanUtils.copyProperties(o, co);
+//			co.setOHD_ID(null);
+			Set<OHD_Passenger> plist=(Set<OHD_Passenger>)o.getPassengers();
+			List<OHD_Passenger> nplist=new ArrayList<OHD_Passenger>();
+			int i=0;
+			for(OHD_Passenger p:plist){
+				OHD_Passenger np=form.getPassenger(i);
+				//OHD_Passenger np=co.getPassenger();
+				np.setFirstname(p.getFirstname());
+				np.setLastname(p.getLastname());
+				np.setMiddlename(p.getMiddlename());
+				Set<OHD_Address> oalist=(Set<OHD_Address>)p.getAddresses();
+				int j=0;
+				for(OHD_Address oa:oalist){
+					OHD_Address na=np.getAddress(j);
+					na.setAddress1(oa.getAddress1());
+					na.setAddress2(oa.getAddress2());
+					na.setCity(oa.getCity());
+					na.setState_ID(oa.getState_ID());
+					na.setProvince(oa.getProvince());
+					na.setZip(oa.getZip());
+					na.setCountrycode_ID(oa.getCountrycode_ID());
+					na.setHomephone(oa.getHomephone());
+					na.setWorkphone(oa.getWorkphone());
+					na.setMobile(oa.getMobile());
+					na.setPager(oa.getPager());
+					na.setAltphone(oa.getAltphone());
+					na.setEmail(oa.getEmail());
+					na.setOhd_passenger(np);
+					np.addAddress(na);
+					j++;
+				}
+				
+				np.setIsprimary(p.getIsprimary());
+				nplist.add(np);
+				i++;
+			}
+			form.setPassengerList(nplist);
+			return form;
+		}
+		
+		
+		return null;
 	}
 }

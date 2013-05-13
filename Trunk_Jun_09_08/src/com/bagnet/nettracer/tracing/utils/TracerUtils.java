@@ -5,6 +5,7 @@
  */
 package com.bagnet.nettracer.tracing.utils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -353,9 +354,30 @@ public class TracerUtils {
 		theform.setFound_station(user.getStation().getStationcode());
 		theform.setFoundTime(x);
 		theform.setFoundDate(x);
-		theform.getPassenger(theform.getPassengerList().size());
 		theform.getItinerary(theform.getItinerarylist().size());
 		theform.getItem(theform.getItemlist().size());
+		
+		if (request.getParameter("cloneOnHand") != null
+				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLONE_OHD, user)) {
+			OnHandForm nform = OHDUtils.cloneOnHand(request.getParameter("cloneOnHand"),user,theform); 
+			int i = 0;
+			if (nform!=null) {
+				for (Object p : nform.getPassengerList()) {
+					try {
+						BeanUtils.copyProperties(theform.getPassenger(i), p);
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					i++;
+				}
+			}
+		} else {
+			theform.getPassenger(theform.getPassengerList().size());
+		}
 
 		theform.setXDesc1(TracingConstants.XDESC_TYPE_X);
 		theform.setXDesc2(TracingConstants.XDESC_TYPE_X);

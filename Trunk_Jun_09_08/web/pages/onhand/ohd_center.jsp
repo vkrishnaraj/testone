@@ -482,6 +482,7 @@ function gotoHistoricalReport() {
                }
          else {
       %>
+      
    
 <c:if test="${!empty OnHandForm.wt_id }">
         WorldTracer ID: <a href="worldtraceraf.do?rawtext=1&ohd_id=${OnHandForm.wt_id}">
@@ -493,8 +494,14 @@ function gotoHistoricalReport() {
 </c:if>
 
 <%} %>
+<% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLONE_OHD, a)){ %>
 
-      <%
+         
+<c:if test="${!empty OnHandForm.ohd_id}">
+	<br /><a href="addOnHandBag.do?cloneOnHand=${OnHandForm.ohd_id}"><bean:message key="ohd.clone"/></a>
+</c:if>
+
+      <% }
          if (UserPermissions.hasPermission(
                      TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, a)) {
       %>

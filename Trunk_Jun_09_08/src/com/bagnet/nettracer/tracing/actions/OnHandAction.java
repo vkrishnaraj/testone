@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
+import org.springframework.beans.BeanUtils;
 
 import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
@@ -167,6 +168,15 @@ public class OnHandAction extends CheckedAction {
 		if (request.getParameter("cancelFwd") != null && request.getParameter("ohd_ID") != null) {
 			OHDUtils.cancelForward(request.getParameter("ohd_ID"), user);
 		}
+		
+//		if (request.getParameter("cloneOnHand") != null) {
+//			OHD co=OHDUtils.cloneOnHand(request.getParameter("cloneOnHand"), user);
+//			int i=0;
+//			for(Object p:co.getPassengers()){
+//				BeanUtils.copyProperties(p, theform.getPassenger(i));
+//				i++;
+//			}
+//		}
 		
 		// add new remark box -- set new remark with current gmt time
 		if(request.getParameter("addremark") != null) {
@@ -640,6 +650,7 @@ public class OnHandAction extends CheckedAction {
 				else {
 					// Create a new on-hand entry
 					TracerUtils.populateOnHand(theform, request);
+					
 					// Begin Prepopulate
 					
 					ArrayList alerrors = new ArrayList();
