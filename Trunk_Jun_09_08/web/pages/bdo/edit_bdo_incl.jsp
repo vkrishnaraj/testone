@@ -364,16 +364,16 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 		StringTemplateProcessor p = new StringTemplateProcessor();
 		p.addClass(passenger);
 		String paxNames = p.fillValues("{firstname} {lastname}");
-		String paxData = p.fillValues("'passenger[0].firstname': '{firstname}', 'passenger[0].lastname': '{lastname}'");
+		String paxData = p.fillValues("'passenger[0].firstname': \"{firstname}\", 'passenger[0].lastname': \"{lastname}\"");
 		
 		
 		String addShort = messages.getMessage(locale, "gen.passenger") + " " + i + " " + messages.getMessage(locale, "gen.address");
 		String addLong = p.fillValues("{firstname} {lastname} <br />{address1} {address2}<br/>{city}, {state_ID}{province} {zip}<br />{countrycode_ID}");
-		String addData = p.fillValues("'passenger[0].address1': '{address1}', 'passenger[0].address2': '{address2}', 'passenger[0].city': '{city}', 'passenger[0].state_ID': '{state_ID}', 'passenger[0].province': '{province}','passenger[0].zip': '{zip}','passenger[0].countrycode_ID': '{countrycode_ID}','passenger[0].dispvalid_bdate': '{dispvalid_bdate}', 'passenger[0].dispvalid_edate': '{dispvalid_edate}','passenger[0].email':'{email}'");
+		String addData = p.fillValues("'passenger[0].address1': \"{address1}\", 'passenger[0].address2': \"{address2}\", 'passenger[0].city': \"{city}\", 'passenger[0].state_ID': '{state_ID}', 'passenger[0].province': \"{province}\",'passenger[0].zip': \"{zip}\",'passenger[0].countrycode_ID': '{countrycode_ID}','passenger[0].dispvalid_bdate': '{dispvalid_bdate}', 'passenger[0].dispvalid_edate': '{dispvalid_edate}','passenger[0].email':'{email}'");
 		
 		String phoneShort = messages.getMessage(locale, "gen.passenger") + " " + i + " " + messages.getMessage(locale, "gen.phone");
 		String phoneLong = p.fillValues("Name: {firstname} {lastname}<br />Home: {homephone}<br/> Work: {workphone}<br/>Others: {altphone}{mobile} {pager}<br/> Hotel: {hotel} {hotelphone} ");
-		String phoneData = p.fillValues("'passenger[0].homephone': '{homephone}', 'passenger[0].workphone': '{workphone}', 'passenger[0].altphone': '{altphone}', 'passenger[0].mobile': '{mobile}', 'passenger[0].pager': '{pager}', 'passenger[0].hotel':'{hotel}', 'passenger[0].hotelphone':'{hotelphone}'");
+		String phoneData = p.fillValues("'passenger[0].homephone': \"{homephone}\", 'passenger[0].workphone': \"{workphone}\", 'passenger[0].altphone': \"{altphone}\", 'passenger[0].mobile': \"{mobile}\", 'passenger[0].pager': \"{pager}\", 'passenger[0].hotel':\"{hotel}\", 'passenger[0].hotelphone':\"{hotelphone}\"");
 		%>
 
 		var pax = new DropdownData();
