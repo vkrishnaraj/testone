@@ -184,8 +184,6 @@ public class MBRActionUtils {
 	}
 
 	public static boolean actionDelete(IncidentForm theform, HttpServletRequest request) {
-		if(UserPermissions.hasIncidentSavePermission(theform.getAgent(), theform.getIncident_ID())) {
-		
 		if (request.getParameter("delete_these_elements") != null && request.getParameter("delete_these_elements").length() > 0) {
 			String deleteTheseElements =  request.getParameter("delete_these_elements");
 			String[] elements = deleteTheseElements.split(",");
@@ -296,7 +294,6 @@ public class MBRActionUtils {
 				remarkList.remove(Integer.parseInt(index));
 			request.setAttribute("remark", Integer.toString(theform.getRemarklist().size() - 1));
 			return true;
-		}
 		}
 		return false;
 	}

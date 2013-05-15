@@ -137,6 +137,20 @@ public class StatReportDTO {
 	private Integer[] loss_code_combo;
 	private String primary_sort_order;
 	private String secondary_sort_order;
+
+	private boolean showAll;
+	private boolean showAssignCity;
+	private boolean showType;
+	private boolean showLastName;
+	private boolean showFirstName;
+	private boolean showReportID;
+	private boolean showDate;
+	private boolean showTime;
+	private boolean showItinerary;
+	private boolean showDestination;
+	private boolean showStatus;
+	private boolean showFaultCity;
+	private boolean showLossCode;
 	
 
 	public String getSecondary_sort_order() {
@@ -606,4 +620,130 @@ public class StatReportDTO {
 		this.salvageId = salvageId;
 	}
 
+	public boolean isShowAssignCity() {
+		return showAssignCity;
+	}
+
+	public void setShowAssignCity(boolean showAssignCity) {
+		this.showAssignCity = showAssignCity;
+	}
+
+	public boolean isShowType() {
+		return showType;
+	}
+
+	public void setShowType(boolean showType) {
+		this.showType = showType;
+	}
+
+	public boolean isShowLastName() {
+		return showLastName;
+	}
+
+	public void setShowLastName(boolean showLastName) {
+		this.showLastName = showLastName;
+	}
+
+	public boolean isShowFirstName() {
+		return showFirstName;
+	}
+
+	public void setShowFirstName(boolean showFirstName) {
+		this.showFirstName = showFirstName;
+	}
+
+	public boolean isShowReportID() {
+		return showReportID;
+	}
+
+	public void setShowReportID(boolean showReportID) {
+		this.showReportID = showReportID;
+	}
+
+	public boolean isShowDate() {
+		return showDate;
+	}
+
+	public void setShowDate(boolean showDate) {
+		this.showDate = showDate;
+	}
+
+	public boolean isShowTime() {
+		return showTime;
+	}
+
+	public void setShowTime(boolean showTime) {
+		this.showTime = showTime;
+	}
+
+	public boolean isShowItinerary() {
+		return showItinerary;
+	}
+
+	public void setShowItinerary(boolean showItinerary) {
+		this.showItinerary = showItinerary;
+	}
+
+	public boolean isShowDestination() {
+		return showDestination;
+	}
+
+	public void setShowDestination(boolean showDestination) {
+		this.showDestination = showDestination;
+	}
+
+	public boolean isShowLossCode() {
+		return showLossCode;
+	}
+
+	public void setShowLossCode(boolean showLossCode) {
+		this.showLossCode = showLossCode;
+	}
+
+	public boolean isShowFaultCity() {
+		return showFaultCity;
+	}
+
+	public void setShowFaultCity(boolean showFaultCity) {
+		this.showFaultCity = showFaultCity;
+	}
+
+	public boolean isShowStatus() {
+		return showStatus;
+	}
+
+	public void setShowStatus(boolean showStatus) {
+		this.showStatus = showStatus;
+	}
+
+	public boolean isShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(boolean showAll) {
+		this.showAll = showAll;
+	}
+
+
+	public int getNumChecked()
+	{
+		int checked=0;
+		if(!this.showAll){
+		if(this.showAssignCity) checked++;
+		if(this.showType) checked++;
+		if(this.showLastName) checked++;
+		if(this.showFirstName) checked++;
+		if(this.showReportID) checked++;
+		if(this.showDate) checked++;
+		if(this.showTime) checked++;
+		if(this.showItinerary) checked++;
+		if(this.showDestination) checked++;
+		if(this.showStatus) checked++;
+		if(this.showFaultCity) checked++;
+		if(this.showLossCode) checked++;}
+		else {
+			checked=12;
+		}
+		return checked;
+	}
 }

@@ -425,24 +425,24 @@
 		                  <bean:message key="colname.shipping_address" /><br/>
 		                  <bean:message key="colname.street_addr1" />&nbsp;<span class="reqfield">*</span>
 		                  <br>
-		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedAddress1" size="45" maxlength="50" styleClass="textfield" />
+		                  <html:text disabled="true" name="lostReportForm" styleId="shipAddress1" property="lost.shipment.shippingAddress.decryptedAddress1" size="45" maxlength="50" styleClass="textfield" />
 		                </td>
 		                <td colspan=3>
 		                  <bean:message key="colname.street_addr2" />
 		                  <br>
-		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedAddress2" size="35" maxlength="50" styleClass="textfield" />
+		                  <html:text disabled="true" name="lostReportForm" styleId="shipAddress2" property="lost.shipment.shippingAddress.decryptedAddress2" size="35" maxlength="50" styleClass="textfield" />
 		                </td>
 		              </tr>
 		              <tr>
 		                <td>
 		                  <bean:message key="colname.city" />&nbsp;<span class="reqfield">*</span>
 		                  <br>
-		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedCity" size="10" maxlength="50" styleClass="textfield" />
+		                  <html:text disabled="true" name="lostReportForm" styleId="shipCity" property="lost.shipment.shippingAddress.decryptedCity" size="10" maxlength="50" styleClass="textfield" />
 		                </td>
 		                <td>
 		                  <bean:message key="colname.state" />
 		                  <br />
-		                  <html:select disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" >
+		                  <html:select disabled="true" name="lostReportForm" styleId="shipState" property="lost.shipment.shippingAddress.decryptedState" styleId="state" styleClass="dropdown" onchange="fieldChanged('state');" >
 		                  	<html:option value="">
 			                    <bean:message key="select.none" />
 		                    </html:option>
@@ -452,17 +452,17 @@
 		                <td>
 		                  <bean:message key="colname.province" />
 		                  <br />
-		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedProvince" size="10" maxlength="100" styleId="province" styleClass="textfield" onchange="fieldChanged('province');" />
+		                  <html:text disabled="true" name="lostReportForm" styleId="shipProvince" property="lost.shipment.shippingAddress.decryptedProvince" size="10" maxlength="100" styleId="province" styleClass="textfield" onchange="fieldChanged('province');" />
 		                </td>
 		                <td>
 		                  <bean:message key="colname.zip" />
 		                  <br>
-		                  <html:text disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.decryptedZip" size="11" maxlength="11" styleClass="textfield" />
+		                  <html:text disabled="true" name="lostReportForm" styleId="shipZip"  property="lost.shipment.shippingAddress.decryptedZip" size="11" maxlength="11" styleClass="textfield" />
 		                </td>
 		                <td>
 		                  <bean:message key="colname.country" />&nbsp;<span class="reqfield">*</span>
 		                  <br>
-		                  <html:select disabled="true" name="lostReportForm" property="lost.shipment.shippingAddress.country" styleId="country" styleClass="dropdown" onchange="fieldChanged('country');">
+		                  <html:select disabled="true" name="lostReportForm" styleId="shipCountry"  property="lost.shipment.shippingAddress.country" styleId="country" styleClass="dropdown" onchange="fieldChanged('country');">
 		                    <html:option value="">
 		                      <bean:message key="select.none" />
 		                    </html:option>

@@ -48,7 +48,74 @@
                         <html:text property="starttime" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.statReportForm.starttime,'calendar','<%= agent.getDateformat().getFormat() %>'); return false;">-
                         <html:text property="endtime" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.statReportForm.endtime,'calendar2','<%= agent.getDateformat().getFormat() %>'); return false;"></td>
                     </tr>
-
+					<tr>
+                    <td>
+                      <bean:message key="colname.mbr.print" /><font color=red>
+                          *
+                        </font>
+                      :
+                    </td>
+                    <td>
+                    <table>
+                    	<tr>
+	                    	<td>
+		                    	
+		                      	<html:checkbox property="showAll"/><bean:message key="colname.show.all"/>
+	                      	</td>
+	                      	</tr><tr>
+	                      	<td>
+		                    	
+		                      	<html:checkbox property="showAssignCity"/><bean:message key="colname.show.assigncity"/>
+	                      	</td>
+	                    	<td>
+		                    	
+                      			<html:checkbox property="showType"/><bean:message key="colname.show.type"/>
+	                      	</td>
+	                    	<td>
+		                    	
+                      			<html:checkbox property="showLastName"/><bean:message key="colname.show.lastname"/>
+	                      	</td>
+	                    	<td>
+		                    	
+                      			<html:checkbox property="showFirstName"/><bean:message key="colname.show.firstname"/>
+	                      	</td>
+	                      	</tr><tr>
+	                    	<td>
+		                    	
+                      			<html:checkbox property="showReportID"/><bean:message key="colname.show.reportid"/>
+	                      	</td>
+	                    	<td>
+		                    	
+                      			<html:checkbox property="showDate"/><bean:message key="colname.show.date"/>
+	                      	</td>
+	                    	<td>
+		                    	
+                      			<html:checkbox property="showTime"/><bean:message key="colname.show.time"/>
+	                      	</td>
+	                    	<td>
+		                    	
+                      			<html:checkbox property="showItinerary"/><bean:message key="colname.show.itinerary"/>
+	                      	</td>
+	                      	</tr><tr>
+	                    	<td>
+                      			<html:checkbox property="showDestination"/>
+		                    	<bean:message key="colname.show.destination"/>
+	                      	</td>
+	                    	<td>
+                      			<html:checkbox property="showStatus"/><bean:message key="colname.show.status"/>	
+	                      	</td>
+	                    	<td>
+		                    	
+                      			<html:checkbox property="showFaultCity"/><bean:message key="colname.show.faultcity"/>
+	                      	</td>
+	                    	<td>
+		                    	
+                      			<html:checkbox property="showLossCode"/><bean:message key="colname.show.losscode"/>
+	                      	</td>
+                      </tr>
+                      </table>
+                    </td>
+                  </tr>
 
                       <tr>
                         <td>

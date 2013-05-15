@@ -2,6 +2,9 @@ package com.bagnet.nettracer.tracing.forms;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 
 /**
@@ -45,6 +48,20 @@ public final class StatReportForm extends ValidatorForm {
 
 	private int dispositionId;
 	private int type;
+
+	private boolean showAll;
+	private boolean showAssignCity;
+	private boolean showType;
+	private boolean showLastName;
+	private boolean showFirstName;
+	private boolean showReportID;
+	private boolean showDate;
+	private boolean showTime;
+	private boolean showItinerary;
+	private boolean showDestination;
+	private boolean showStatus;
+	private boolean showFaultCity;
+	private boolean showLossCode;
 
 	public int getDispositionId() {
 		return dispositionId;
@@ -634,6 +651,126 @@ public final class StatReportForm extends ValidatorForm {
 	public void setSalvageId(long salvageId) {
 		this.salvageId = salvageId;
 	}
+
+	public boolean isShowAssignCity() {
+		return showAssignCity;
+	}
+
+	public void setShowAssignCity(boolean showAssignCity) {
+		this.showAssignCity = showAssignCity;
+	}
+
+	public boolean isShowType() {
+		return showType;
+	}
+
+	public void setShowType(boolean showType) {
+		this.showType = showType;
+	}
+
+	public boolean isShowLastName() {
+		return showLastName;
+	}
+
+	public void setShowLastName(boolean showLastName) {
+		this.showLastName = showLastName;
+	}
+
+	public boolean isShowFirstName() {
+		return showFirstName;
+	}
+
+	public void setShowFirstName(boolean showFirstName) {
+		this.showFirstName = showFirstName;
+	}
+
+	public boolean isShowReportID() {
+		return showReportID;
+	}
+
+	public void setShowReportID(boolean showReportID) {
+		this.showReportID = showReportID;
+	}
+
+	public boolean isShowDate() {
+		return showDate;
+	}
+
+	public void setShowDate(boolean showDate) {
+		this.showDate = showDate;
+	}
+
+	public boolean isShowTime() {
+		return showTime;
+	}
+
+	public void setShowTime(boolean showTime) {
+		this.showTime = showTime;
+	}
+
+	public boolean isShowItinerary() {
+		return showItinerary;
+	}
+
+	public void setShowItinerary(boolean showItinerary) {
+		this.showItinerary = showItinerary;
+	}
+
+	public boolean isShowDestination() {
+		return showDestination;
+	}
+
+	public void setShowDestination(boolean showDestination) {
+		this.showDestination = showDestination;
+	}
+
+	public boolean isShowStatus() {
+		return showStatus;
+	}
+
+	public void setShowStatus(boolean showStatus) {
+		this.showStatus = showStatus;
+	}
+
+	public boolean isShowFaultCity() {
+		return showFaultCity;
+	}
+
+	public void setShowFaultCity(boolean showFaultCity) {
+		this.showFaultCity = showFaultCity;
+	}
+
+	public boolean isShowLossCode() {
+		return showLossCode;
+	}
+
+	public void setShowLossCode(boolean showLossCode) {
+		this.showLossCode = showLossCode;
+	}
+
+	public boolean isShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(boolean showAll) {
+		this.showAll = showAll;
+	}
 	
+	public void reset(ActionMapping mapping, 
+			HttpServletRequest request) {
+		this.showAll = false;
+		this.showAssignCity=false;
+		this.showType=false;
+		this.showLastName=false;
+		this.showFirstName=false;
+		this.showReportID=false;
+		this.showDate=false;
+		this.showTime=false;
+		this.showItinerary=false;
+		this.showDestination=false;
+		this.showStatus=false;
+		this.showFaultCity=false;
+		this.showLossCode=false;
+	}
 	
 }

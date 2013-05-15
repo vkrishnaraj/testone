@@ -772,7 +772,7 @@ public class ReportBMO {
 					}
 					sr = new StatReport_3_DTO();
 					if (srDTO.getGroupby() == GROUP_BY_FAULT_STATION) {
-						sr.setStation_ID((Integer) row[5]);
+						sr.setStation_ID((Integer) row[4]);
 						sr.setStationcode((String) row[3]);
 					} else {
 						// DEFAULT (0) is grouped by station assigned
@@ -804,25 +804,21 @@ public class ReportBMO {
 														sr.setTypedesc((String) row[12]);
 
 														if (row.length > 14) {
-															if (row[14] != null
-																	&& ((String) row[14])
-																			.length() > 0)
+															if (row[14] != null && ((String) row[14]).length() > 0 && srDTO.isShowLastName())
 																temppassname += (String) row[14];
-															if (row[13] != null
-																	&& ((String) row[13])
-																			.length() > 0)
-																temppassname += ", "
-																		+ (String) row[13];
-															if (lastpassname
-																	.length() > 0) {
-																if (lastpassname
-																		.indexOf(temppassname) < 0)
-																	lastpassname += "\n"
-																			+ temppassname;
+															if (row[13] != null && ((String) row[13]).length() > 0  && srDTO.isShowFirstName()){
+																if( srDTO.isShowLastName()&& srDTO.isShowFirstName())
+																	temppassname += ", ";
+																temppassname +=(String) row[13];
+																}
+															if (lastpassname.length() > 0) {
+																if (lastpassname.indexOf(temppassname) < 0)
+																	lastpassname += "\n"+ temppassname;
 															} else
 																lastpassname = temppassname;
 															temppassname = "";
 															sr.setCustomer_name(lastpassname);
+															
 															if (row.length > 16) {
 																if ((String) row[15] != null
 																		&& ((String) row[15])
@@ -923,131 +919,6 @@ public class ReportBMO {
 
 				// toReturn.add(reportRow);
 			}
-//			while (rs.next()) {
-//				if (lastincid == null
-//						|| !(rs.getString("incident_ID").equals(lastincid))) {
-//					if (lastincid != null) {
-//						list2.add(sr);
-//						lastpassname = "";
-//						lastit = "";
-//					}
-//					sr = new StatReport_3_DTO();
-//
-//					if (srDTO.getGroupby() == GROUP_BY_FAULT_STATION) {
-//						sr.setStation_ID(rs.getInt("fsid"));
-//						sr.setStationcode(rs.getString("fscode"));
-//					} else {
-//						// DEFAULT (0) is grouped by station assigned
-//						sr.setStation_ID(rs.getInt("stationassigned_ID"));
-//						sr.setStationcode(rs.getString("ascode"));
-//					}
-//
-//					sr.setFaultcompany(rs.getString("fccode"));
-//					sr.setFaultstationcode(rs.getString("fscode"));
-//					sr.setIncident_ID(rs.getString("incident_ID"));
-//					lastincid = sr.getIncident_ID();
-//					sr.setItemtype_ID(rs.getInt("itemtype_ID"));
-//					sr.setLoss_code(rs.getInt("loss_code"));
-//					sr.setCreatedate(rs.getDate("createdate"));
-//					sr.setCreatetime(rs.getTime("createtime"));
-//
-//					Status a = new Status();
-//					a.setStatus_ID(rs.getInt("stdesc"));
-//					a.setLocale(user);
-//					sr.setStatusdesc(a.getDescription());
-//					sr.setTypedesc(rs.getString("itdesc"));
-//
-//					// passenger
-//					if (rs.getString("lastname") != null
-//							&& rs.getString("lastname").length() > 0)
-//						temppassname += rs.getString("lastname");
-//					if (rs.getString("firstname") != null
-//							&& rs.getString("firstname").length() > 0)
-//						temppassname += ", " + rs.getString("firstname");
-//
-//					if (lastpassname.length() > 0) {
-//						if (lastpassname.indexOf(temppassname) < 0)
-//							lastpassname += "\n" + temppassname;
-//					} else
-//						lastpassname = temppassname;
-//					temppassname = "";
-//
-//					sr.setCustomer_name(lastpassname);
-//
-//					// itinerary
-//					if (rs.getString("legfrom") != null
-//							&& rs.getString("legfrom").length() > 0)
-//						tempit += rs.getString("legfrom");
-//					if (rs.getString("flightnum") != null
-//							&& rs.getString("flightnum").length() > 0)
-//						tempit += " " + rs.getString("flightnum");
-//
-//					if (lastit.length() > 0) {
-//						if (lastit.indexOf(tempit) < 0)
-//							lastit += "\n" + tempit;
-//					} else
-//						lastit = tempit;
-//					tempit = "";
-//
-//					sr.setItinerary(lastit);
-//
-//					if (rs.getString("legto") != null
-//							&& rs.getString("legto").length() > 0)
-//						sr.setFinal_destination(rs.getString("legto"));
-//
-//				} else {
-//					// equal to last incident, simply attach passenger and leg
-//					// to
-//					// passenger
-//					if (rs.getString("lastname") != null
-//							&& rs.getString("lastname").length() > 0)
-//						temppassname += rs.getString("lastname");
-//					if (rs.getString("firstname") != null
-//							&& rs.getString("firstname").length() > 0)
-//						temppassname += ", " + rs.getString("firstname");
-//
-//					if (lastpassname.length() > 0) {
-//						if (lastpassname.indexOf(temppassname) < 0)
-//							lastpassname += "\n" + temppassname;
-//					} else
-//						lastpassname = temppassname;
-//					temppassname = "";
-//
-//					sr.setCustomer_name(lastpassname);
-//
-//					// itinerary
-//					if (rs.getString("legfrom") != null
-//							&& rs.getString("legfrom").length() > 0)
-//						tempit += rs.getString("legfrom");
-//					if (rs.getString("flightnum") != null
-//							&& rs.getString("flightnum").length() > 0)
-//						tempit += " " + rs.getString("flightnum");
-//
-//					if (lastit.length() > 0) {
-//						if (lastit.indexOf(tempit) < 0)
-//							lastit += "\n" + tempit;
-//					} else
-//						lastit = tempit;
-//					tempit = "";
-//
-//					sr.setItinerary(lastit);
-//
-//					if (rs.getString("legto") != null
-//							&& rs.getString("legto").length() > 0)
-//						sr.setFinal_destination(rs.getString("legto"));
-//				}
-//
-//				if (sr.getFinal_destination() == null)
-//					sr.setFinal_destination("");
-//
-//				sr.set_DATEFORMAT(user.getDateformat().getFormat());
-//				sr.set_TIMEFORMAT(user.getTimeformat().getFormat());
-//				sr.set_TIMEZONE(tz);
-//
-//			}
-
-			// stmt.close();
-//			rs.close();
 
 			if (sr == null) {
 				logger.debug("no data for report");
@@ -1067,9 +938,70 @@ public class ReportBMO {
 			}
 
 			// summary or detail; summary = 0; detail = 1
+			boolean checked=false;
+			if (!srDTO.isShowAll()){
+				if(srDTO.isShowAssignCity()){
+					checked=true;
+					parameters.put("showassigncity", true);
+					if(srDTO.getGroupby()!=GROUP_BY_FAULT_STATION){
+						parameters.put("groupassigncity", "1");
+					}
+				}
+				if(srDTO.isShowDate()){
+					checked=true;
+					parameters.put("showdate", true);
+				}
+				if(srDTO.isShowTime()){
+					checked=true;
+					parameters.put("showtime", true);
+				}
+				if(srDTO.isShowType()){
+					checked=true;
+					parameters.put("showtype", true);
+				}
+				if(srDTO.isShowReportID()){
+					checked=true;
+					parameters.put("showreportid", true);
+				}
+				if(srDTO.isShowLastName()){
+					checked=true;
+					parameters.put("showlastname", true);
+				}
+				if(srDTO.isShowFirstName()){
+					checked=true;
+					parameters.put("showfirstname", true);
+				}
+				if(srDTO.isShowItinerary()){
+					checked=true;
+					parameters.put("showitinerary", true);
+				}
+				if(srDTO.isShowDestination()){
+					checked=true;
+					parameters.put("showdestination", true);
+				}
+				if(srDTO.isShowStatus()){
+					checked=true;
+					parameters.put("showstatus", true);
+				}
+				if(srDTO.isShowFaultCity()){
+					checked=true;
+					parameters.put("showfaultcity", true);
+					if(srDTO.getGroupby()==GROUP_BY_FAULT_STATION){
+						parameters.put("groupfaultcity", "1");
+					}
+				}
+				if(srDTO.isShowLossCode()){
+					checked=true;
+					parameters.put("showlosscode", true);
+				}
+			} else {
+				checked=true;
+				parameters.put("showall", true);
+			}
 			if (srDTO.getSumordet() == 1) {
 				parameters.put("showdetail", "1");
 			}
+			parameters.put("checknum", srDTO.getNumChecked());
 
 			// toggle between old and new implementations
 			// return getReportFile(list2, parameters, reportname, rootpath,
@@ -1078,9 +1010,11 @@ public class ReportBMO {
 			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
 			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(
 					list2);
-
-			return MBRReportBMO.getReportFileDj(ds, parameters, reportname,
+			if(checked)
+				return MBRReportBMO.getReportFileDj(ds, parameters, reportname,
 					rootpath, srDTO.getOutputtype(), req, this);
+			else
+				return null;
 
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);

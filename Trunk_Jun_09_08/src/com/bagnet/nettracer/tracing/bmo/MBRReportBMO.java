@@ -118,7 +118,11 @@ public class MBRReportBMO {
 			if (outputtype == TracingConstants.REPORT_OUTPUT_XLS) {
 				dr = buildExcelReport(parameters);
 			} else {
-				dr = buildReport(parameters);
+				if(parameters.get("showall")!=null || (parameters.get("showassigncity")!=null && parameters.get("groupassigncity")!=null) || (parameters.get("showfaultcity")!=null && parameters.get("groupfaultcity")!=null))
+					dr = buildReport(parameters);
+				else{
+					logger.error("Neither Assign City or Fault City are available for grouping");
+				}
 			}
 			
 			JasperReport jasperReport = DynamicJasperHelper.generateJasperReport(dr, new ClassicLayoutManager(), parameters);
@@ -170,7 +174,8 @@ public class MBRReportBMO {
 				exporter = new JRHtmlExporter();
 	
 				Map imagesMap = new HashMap();
-				
+				exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<style>table{border-collapse:collapse}</style>");
+
 				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
 				request.getSession().setAttribute("IMAGES_MAP", imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
@@ -323,21 +328,31 @@ public class MBRReportBMO {
 		if (!( myAssignedStation == null || myAssignedStation.equalsIgnoreCase("") )) {
 			reportHeadingAssignedStation = myAssignedStation;
 		}
-		
+
+		int columnchecked=Integer.valueOf(parameters.get("checknum").toString());
+		int fontsize;
+		if(columnchecked<=12 && columnchecked>=9){
+			fontsize=10;
+		} else if (columnchecked>=4&& columnchecked<9){
+			fontsize=11;
+		} else {
+			fontsize=12;
+		}
 		
 		Style detailStyle = new Style("detail");
 		detailStyle.setVerticalAlign(VerticalAlign.TOP);
-		detailStyle.setFont(new Font(8, Font._FONT_ARIAL, false));
+		detailStyle.setFont(new Font(fontsize, Font._FONT_ARIAL, false));
 
 		Style headerStyle = new Style("header");
 		headerStyle.setBackgroundColor(Color.LIGHT_GRAY);
 		headerStyle.setVerticalAlign(VerticalAlign.MIDDLE);
 		headerStyle.setTransparency(Transparency.OPAQUE);
+		headerStyle.setFont(new Font(fontsize, Font._FONT_TIMES_NEW_ROMAN, false));
 
 		Style headerVariables = new Style("headerVariables");
 		headerVariables.setHorizontalAlign(HorizontalAlign.RIGHT);
 		headerVariables.setVerticalAlign(VerticalAlign.TOP);
-		headerVariables.setFont(new Font(10, Font._FONT_TIMES_NEW_ROMAN, true));
+		headerVariables.setFont(new Font(fontsize, Font._FONT_TIMES_NEW_ROMAN, true));
 
 		Style groupVariables = new Style("groupVariables");
 		groupVariables.setHorizontalAlign(HorizontalAlign.LEFT);
@@ -465,29 +480,27 @@ public class MBRReportBMO {
 				reportHeadingLossCode).setWidth(new Integer(30)).setStyle(detailStyle)
 				.setHeaderStyle(headerStyle).build();
 
-
-		// grand total count
-		drb.addGlobalFooterVariable(columnClaimNumber, DJCalculation.COUNT, headerVariables);
-		drb.setGlobalFooterVariableHeight(new Integer(45));
-		
-		
 		Map<String, AbstractColumn> reportColumns = new HashMap<String, AbstractColumn>();
-
-		reportColumns.put("columnSortByAssignedStation", columnSortByAssignedStation);
-		reportColumns.put("columnSortByFaultStation", columnSortByFaultStation);
-		reportColumns.put("columnSortByType", columnSortByType);
+		if(parameters.get("showall")!=null || parameters.get("showassigncity")!=null) reportColumns.put("columnSortByAssignedStation", columnSortByAssignedStation);
+		if(parameters.get("showall")!=null || parameters.get("showfaultcity")!=null) reportColumns.put("columnSortByFaultStation", columnSortByFaultStation);
+		if(parameters.get("showall")!=null || parameters.get("showtype")!=null) reportColumns.put("columnSortByType", columnSortByType);
 		
-		reportColumns.put("columnLastNameFirstName", columnLastNameFirstName);
-		reportColumns.put("columnClaimNumber", columnClaimNumber);
-		reportColumns.put("columnDate", columnDate);
-		reportColumns.put("columnTime", columnTime);
-		reportColumns.put("columnItinerary", columnItinerary);
-		reportColumns.put("columnFinal", columnFinal);
-		reportColumns.put("columnStatus", columnStatus);
-		reportColumns.put("columnFaultStationCode", columnFaultStationCode);
-		reportColumns.put("columnLossCode", columnLossCode);
+		if(parameters.get("showall")!=null || parameters.get("showlastname")!=null || parameters.get("showfirstname")!=null) reportColumns.put("columnLastNameFirstName", columnLastNameFirstName);
+		if(parameters.get("showall")!=null || parameters.get("showreportid")!=null) reportColumns.put("columnClaimNumber", columnClaimNumber);
+		if(parameters.get("showall")!=null || parameters.get("showdate")!=null) reportColumns.put("columnDate", columnDate);
+		if(parameters.get("showall")!=null || parameters.get("showtime")!=null) reportColumns.put("columnTime", columnTime);
+		if(parameters.get("showall")!=null || parameters.get("showitinerary")!=null) reportColumns.put("columnItinerary", columnItinerary);
+		if(parameters.get("showall")!=null || parameters.get("showdestination")!=null) reportColumns.put("columnFinal", columnFinal);
+		if(parameters.get("showall")!=null || parameters.get("showstatus")!=null) reportColumns.put("columnStatus", columnStatus);
+		if(parameters.get("showall")!=null || parameters.get("showfaultcity")!=null) reportColumns.put("columnFaultStationCode", columnFaultStationCode);
+		if(parameters.get("showall")!=null || parameters.get("showlosscode")!=null) reportColumns.put("columnLossCode", columnLossCode);
 
 		drb = reportStyleSelector(drb, reportColumns, reportStyle);
+
+		// grand total count
+		
+		if(drb.getColumn(2)!=null) drb.addGlobalFooterVariable(drb.getColumn(2), DJCalculation.COUNT, headerVariables);
+		drb.setGlobalFooterVariableHeight(new Integer(45));
 		
 		//drb.setAllowDetailSplit(false);
 
@@ -592,7 +605,25 @@ public class MBRReportBMO {
 		if (!( myAssignedStation == null || myAssignedStation.equalsIgnoreCase("") )) {
 			reportHeadingAssignedStation = myAssignedStation;
 		}
+		int columnchecked=Integer.valueOf(parameters.get("checknum").toString());
+		int fontsize;
+		if(columnchecked==12){
+			fontsize=10;
+		} else if (columnchecked<12&& columnchecked>=8){
+			fontsize=11;
+		} else {
+			fontsize=12;
+		}
+		Style detailStyle = new Style("titleStyle");
+		detailStyle.setFont(new Font(fontsize, Font._FONT_ARIAL, false));
 		
+
+//		Style headerStyle = new Style("header");
+//		headerStyle.setBackgroundColor(Color.LIGHT_GRAY);
+//		headerStyle.setVerticalAlign(VerticalAlign.MIDDLE);
+//		headerStyle.setTransparency(Transparency.OPAQUE);
+//		headerStyle.setFont(new Font(fontsize, Font._FONT_TIMES_NEW_ROMAN, true));
+
 		//sort out the report styles
 		//ex : 00-Groupby Assigned Station, Summary; 01-Groupby Assigned Station, Detail;
 		//     10-Groupby Fault Station, Summary; 11-Groupby Fault Station, Detail
@@ -612,17 +643,17 @@ public class MBRReportBMO {
         
     			break;
             case 01: 
-            	drb = drb.addColumn(reportHeadingSortByAssignedStation, "stationcode", String.class.getName(), 24);
-            	drb = drb.addColumn(reportHeadingSortByType, "typedesc", String.class.getName(), 30);
-        		drb = drb.addColumn(reportHeadingLastNameFirstName,"customer_name",String.class.getName(),54);
-        		drb = drb.addColumn(reportHeadingIncidentNumber,"incident_ID",String.class.getName(),40);
-        		drb = drb.addColumn(reportHeadingDate,"rcreatedate",String.class.getName(),30);
-        		drb = drb.addColumn(reportHeadingTime,"rcreatetime",String.class.getName(),30);
-        		drb = drb.addColumn(reportHeadingItinerary,"itinerary",String.class.getName(),30);
-        		drb = drb.addColumn(reportHeadingFinal,"final_destination",String.class.getName(),30);
-        		drb = drb.addColumn(reportHeadingStatus,"statusdesc",String.class.getName(),30);
-        		drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),14);
-        		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),24);
+            	if(parameters.get("showall")!=null || parameters.get("showassigncity")!=null) drb = drb.addColumn(reportHeadingSortByAssignedStation, "stationcode", String.class.getName(), 24,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showtype")!=null) drb = drb.addColumn(reportHeadingSortByType, "typedesc", String.class.getName(), 30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showlastname")!=null || parameters.get("showfirstname")!=null) drb = drb.addColumn(reportHeadingLastNameFirstName,"customer_name",String.class.getName(),54,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showreportid")!=null) drb = drb.addColumn(reportHeadingIncidentNumber,"incident_ID",String.class.getName(),40,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showdate")!=null) drb = drb.addColumn(reportHeadingDate,"rcreatedate",String.class.getName(),30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showtime")!=null) drb = drb.addColumn(reportHeadingTime,"rcreatetime",String.class.getName(),30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showitinerary")!=null) drb = drb.addColumn(reportHeadingItinerary,"itinerary",String.class.getName(),30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showdestination")!=null) drb = drb.addColumn(reportHeadingFinal,"final_destination",String.class.getName(),30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showstatus")!=null) drb = drb.addColumn(reportHeadingStatus,"statusdesc",String.class.getName(),30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showfaultcity")!=null) drb = drb.addColumn(reportHeadingFaultStation,"faultstationcode",String.class.getName(),14,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showlosscode")!=null) drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),24,detailStyle);
         		
     			break;
             case 10: 
@@ -639,16 +670,16 @@ public class MBRReportBMO {
         
     			break;
             case 11: 
-            	drb = drb.addColumn(reportHeadingSortByFaultStation, "faultstationcode", String.class.getName(), 14);
-            	drb = drb.addColumn(reportHeadingSortByType, "typedesc", String.class.getName(), 30);
-        		drb = drb.addColumn(reportHeadingLastNameFirstName,"customer_name",String.class.getName(),54);
-        		drb = drb.addColumn(reportHeadingIncidentNumber,"incident_ID",String.class.getName(),40);
-        		drb = drb.addColumn(reportHeadingDate,"rcreatedate",String.class.getName(),30);
-        		drb = drb.addColumn(reportHeadingTime,"rcreatetime",String.class.getName(),30);
-        		drb = drb.addColumn(reportHeadingItinerary,"itinerary",String.class.getName(),30);
-        		drb = drb.addColumn(reportHeadingFinal,"final_destination",String.class.getName(),30);
-        		drb = drb.addColumn(reportHeadingStatus,"statusdesc",String.class.getName(),30);
-        		drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),24);
+            	if(parameters.get("showall")!=null || parameters.get("showfaultcity")!=null) drb = drb.addColumn(reportHeadingSortByFaultStation, "faultstationcode", String.class.getName(), 14,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showtype")!=null) drb = drb.addColumn(reportHeadingSortByType, "typedesc", String.class.getName(), 30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showlastname")!=null) drb = drb.addColumn(reportHeadingLastNameFirstName,"customer_name",String.class.getName(),54,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showreportid")!=null) drb = drb.addColumn(reportHeadingIncidentNumber,"incident_ID",String.class.getName(),40,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showdate")!=null) drb = drb.addColumn(reportHeadingDate,"rcreatedate",String.class.getName(),30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showtime")!=null) drb = drb.addColumn(reportHeadingTime,"rcreatetime",String.class.getName(),30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showitinerary")!=null) drb = drb.addColumn(reportHeadingItinerary,"itinerary",String.class.getName(),30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showdestination")!=null) drb = drb.addColumn(reportHeadingFinal,"final_destination",String.class.getName(),30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showstatus")!=null) drb = drb.addColumn(reportHeadingStatus,"statusdesc",String.class.getName(),30,detailStyle);
+            	if(parameters.get("showall")!=null || parameters.get("showlosscode")!=null) drb = drb.addColumn(reportHeadingLossCode,"loss_code",Integer.class.getName(),24,detailStyle);
         		
     			break;
             default: 	    			
@@ -666,7 +697,6 @@ public class MBRReportBMO {
 	    		
     			break;
         }
-        
 		//get the general information of the report, such as Report Title
 		String myReportTitle = "MBR Report";
 		if (parameters.get("title") != null) {
@@ -693,7 +723,7 @@ public class MBRReportBMO {
 		
 		
         drb.setReportLocale(reportLocale);
-		
+//		drb.setSubtitleStyle(subtitleStyle)
 		drb.setSubtitle(mySubtitle);
 		
 		Page page = new Page();
@@ -721,6 +751,7 @@ public class MBRReportBMO {
 			
 			//a style switch
 			AbstractColumn columnSortByAssignedStation = reportColumns.get("columnSortByAssignedStation");
+			
 			AbstractColumn columnSortByFaultStation = reportColumns.get("columnSortByFaultStation");
 			AbstractColumn columnSortByType = reportColumns.get("columnSortByType");
 			
@@ -742,7 +773,7 @@ public class MBRReportBMO {
 			//sort out the report styles
 			//by fault station or last assigned station
 			
-			if (reportStyle == 00 || reportStyle == 01) {
+			if ((reportStyle == 00 || reportStyle == 01) && columnSortByAssignedStation!=null) {
 				groupByColumn = columnSortByAssignedStation;	//default
 				invisibleFieldName = "stationcode";
 			}
@@ -752,29 +783,29 @@ public class MBRReportBMO {
 			drb.addField(invisibleFieldName, String.class.getName());
 			CustomExpression mySubTotalExpression = getSubTotalCustomExpression();
 			
-			drb.addColumn(groupByColumn);
-			drb.addColumn(columnSortByType);
-			drb.addColumn(columnLastNameFirstName);
-			drb.addColumn(columnClaimNumber);
-			drb.addColumn(columnDate);
-			drb.addColumn(columnTime);
-			drb.addColumn(columnItinerary);
-			drb.addColumn(columnFinal);
-			drb.addColumn(columnStatus);
-			drb.addColumn(columnFaultStationCode);
-			drb.addColumn(columnLossCode);
+			if(groupByColumn!=null) drb.addColumn(groupByColumn);
+			if(columnSortByType!=null) drb.addColumn(columnSortByType);
+			if(columnLastNameFirstName!=null) drb.addColumn(columnLastNameFirstName);
+			if(columnClaimNumber!=null) drb.addColumn(columnClaimNumber);
+			if(columnDate!=null) drb.addColumn(columnDate);
+			if(columnTime!=null) drb.addColumn(columnTime);
+			if(columnItinerary!=null) drb.addColumn(columnItinerary);
+			if(columnFinal!=null) drb.addColumn(columnFinal);
+			if(columnStatus!=null) drb.addColumn(columnStatus);
+			if(columnFaultStationCode!=null) drb.addColumn(columnFaultStationCode);
+			if(columnLossCode!=null) drb.addColumn(columnLossCode);
 	        
 	        gb1 = new GroupBuilder();
-	        g1 = gb1.setCriteriaColumn((PropertyColumn) groupByColumn)
-	        .addVariable("myGroupLabel", groupByColumn, DJCalculation.FIRST)
-	        .addFooterVariable(columnLastNameFirstName, mySubTotalExpression,groupVariablesLegend)
-	        .addFooterVariable(columnClaimNumber, DJCalculation.COUNT, groupVariables)   //sub-totals
-			.setGroupLayout(GroupLayout.DEFAULT)
-			.setFooterVariablesHeight(new Integer(20))
-			.setFooterHeight(new Integer(50))
-			.setHeaderVariablesHeight(new Integer(35))
-			.build();
-
+	        gb1 = gb1.setCriteriaColumn((PropertyColumn) groupByColumn)
+	        .addVariable("myGroupLabel", groupByColumn, DJCalculation.FIRST);
+	        if(drb.getColumn(2)!=null) gb1.addFooterVariable(drb.getColumn(2), mySubTotalExpression,groupVariablesLegend);
+	        if(drb.getColumn(3)!=null) gb1.addFooterVariable(drb.getColumn(3), DJCalculation.COUNT, groupVariables);   //sub-totals
+			
+	        g1 = gb1.setGroupLayout(GroupLayout.DEFAULT)
+	    			.setFooterVariablesHeight(new Integer(20))
+	    			.setFooterHeight(new Integer(50))
+	    			.setHeaderVariablesHeight(new Integer(35))
+	    			.build();
 			drb.addGroup(g1);
 			
 			//deal with summary and detail options
