@@ -172,14 +172,13 @@ public class MBRReportBMO {
 				JasperExportManager.exportReportToPdfFile(jasperPrint, outputpath);
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) {
 				exporter = new JRHtmlExporter();
-	
 				Map imagesMap = new HashMap();
-				exporter.setParameter(JRHtmlExporterParameter.HTML_HEADER, "<style>table{border-collapse:collapse}</style>");
 
 				exporter.setParameter(JRHtmlExporterParameter.BETWEEN_PAGES_HTML, "<div style=\"page-break-after: always\" border=\"0\">&nbsp;</div>");
 				request.getSession().setAttribute("IMAGES_MAP", imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_MAP, imagesMap);
 				exporter.setParameter(JRHtmlExporterParameter.IMAGES_URI, "image?image=");
+				exporter.setParameter( JRExporterParameter.IGNORE_PAGE_MARGINS, Boolean.TRUE);
 				
 				exporter.setParameter(JRHtmlExporterParameter.IS_USING_IMAGES_TO_ALIGN, false);
 	
