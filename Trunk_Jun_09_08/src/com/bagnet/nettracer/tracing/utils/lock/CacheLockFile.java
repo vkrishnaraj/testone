@@ -175,7 +175,7 @@ public class CacheLockFile implements LockFile{
 			if(agent.getAgent_ID() != (Integer)log[AGENT_ID]){
 				long diff = ((now.getTime() - ((Date)log[LOAD_TIMESTAMP]).getTime())/60000) + 1;//+1 to round up to the nearest minute
 				String[] vars = {messages.getMessage(new Locale(agent.getCurrentlocale()), "incident"),
-						log[AGENT_FIRSTNAME] + " " + log[AGENT_LASTNAME] +" (" + (String)log[AGENT_USERNAME] + ")",
+						log[AGENT_FIRSTNAME] + " " + log[AGENT_LASTNAME].toString().substring(0,1) +" (" + (String)log[AGENT_USERNAME] + ")",
 						(String)log[AGENT_STATION],
 						""+diff};
 				ActionMessage toAdd = new ActionMessage("error.incident.lock", vars);

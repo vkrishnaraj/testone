@@ -202,6 +202,8 @@ public class PropertyBMO {
 	public static final String TRANSFIRST_USER_ID="transfirst.user.id";
 	public static final String TRANSFIRST_REG_KEY="transfirst.reg.key";
 	public static final String TRANSFIRST_ADDRESS_ENDPOINT="transfirst.address.endpoint";
+
+	public static final String POPULATE_STORAGE_LOCATION = "populate.storage.location";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
