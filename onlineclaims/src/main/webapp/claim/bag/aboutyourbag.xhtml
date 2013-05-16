@@ -435,8 +435,11 @@
 				</f:facet>
 				
 				<rich:column>
-					<h:inputText value="#{contentItem.quantity}"  size="3"
-						readonly="#{passengerController.readOnlyOnSubmitted}"/>&#160;&amp;<br/>
+					<h:inputText value="#{contentItem.quantity}"  size="3" label="Bag #{rowIndex+1} - Contents Description - Quantity" readonly="#{passengerController.readOnlyOnSubmitted}"
+						rendered="#{!(bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM')}" />
+					<h:inputText value="#{contentItem.quantity}"  size="3" label="Delayed Expenses - Quantity" readonly="#{passengerController.readOnlyOnSubmitted}"
+						rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM'}" />
+						&#160;&amp;<br/>
 					<h:inputText value="#{contentItem.article}" size="6" 
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
 				</rich:column>
