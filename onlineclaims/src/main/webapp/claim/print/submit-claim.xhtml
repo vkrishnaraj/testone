@@ -7,48 +7,11 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:t="http://myfaces.apache.org/tomahawk">
 
-	<ui:define name="pageTitle">Application | Submit Your Claim</ui:define>
-	
-	<ui:define name="mainContent">
-	<a4j:form id="appForm">
-			
-						
-						<!-- Start body content -->
-				
-				<div>
-					<t:outputText value="#{passengerController.submitClaimLabel.requiredFieldMessage.label}" styleClass="font1-1em"/>	
-				</div>	
-				<div><h:outputText value="&#160;" /></div>
-				<div>
-					<rich:messages id="submitClaimMsg"  errorClass="passerrormsg" infoClass="appInfo" layout="list"/>
-				</div>
 				<rich:spacer width="100%" height="10" title=""/>
-				
-				<div>
-					<rich:modalPanel id="helpmodalpanel7" autosized="true" minHeight="380" 
-						zindex="10" minWidth="380" height="380" width="500" left="500" top="50" >
-						<f:facet name="controls">
-								<h:panelGroup >
-									<a4j:commandLink value="Close" 
-									style="text-decoration: underline; cursor: pointer; margin-right: 22px;" 
-											immediate="true"	id="linkToHidePanel" />
-										<rich:componentControl for="helpmodalpanel7"
-											attachTo="linkToHidePanel" operation="hide" event="onclick" />
-								</h:panelGroup>
-						</f:facet>
-						<h:panelGrid styleClass="modalPanelBody">
-							<t:outputText value="#{passengerController.submitClaimLabel.help.label}" styleClass="font1-1em"/>
-						</h:panelGrid>
-					</rich:modalPanel>
-				</div>
 				
 				<div>
 					<rich:panel>
 						<h:panelGrid >
-							<t:outputText value="#{passengerController.submitClaimLabel.useOfInformation.label}:"/>
-							<rich:spacer width="100%" height="10" title=""/>
-							<t:outputText value="#{passengerController.submitClaimLabel.reservedRights.label}"/>
-							<rich:spacer width="100%" height="10" title=""/>
 						<h:column>
 							<t:outputText value="#{passengerController.submitClaimLabel.agreement.label}" styleClass="bodycopy"/>
 						<h:outputText value="#{passengerBean.claimAmount}" >
@@ -59,6 +22,11 @@
 						<h:outputText value="#{passengerBean.claimDate}" >
 						</h:outputText>
 						</h:column>
+							<rich:spacer width="100%" height="10" title=""/>
+							<t:outputText value="#{passengerController.submitClaimLabel.useOfInformation.label}:"/>
+							<rich:spacer width="100%" height="10" title=""/>
+							<t:outputText value="#{passengerController.submitClaimLabel.reservedRights.label}"/>
+							<rich:spacer width="100%" height="10" title=""/>
 						</h:panelGrid>
 					</rich:panel>
 					<rich:spacer width="100%" height="10" title=""/>
@@ -105,6 +73,4 @@
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			<h:outputText value="&#160;" styleClass="passfontstyle"/>
 			
-		</a4j:form>
-	</ui:define>
 </ui:composition>
