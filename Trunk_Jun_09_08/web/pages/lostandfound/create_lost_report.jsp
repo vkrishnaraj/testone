@@ -675,24 +675,24 @@
 	         				<td>
 	         					<bean:message key="colname.lf.brand" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].brand" class="textfield"  styleId="itembrand_<%=i %>" value="<%=item.getBrand() == null ? "" : item.getBrand() %>" />
+	         					<input type="text" name="item[<%=i %>].brand" class="textfield"  id="itembrand_<%=i %>" value="<%=item.getBrand() == null ? "" : item.getBrand() %>" />
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.serial" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" styleId="itemserial_<%=i %>" value="<%=item.getSerialNumber() == null ? "" : item.getSerialNumber() %>" />
+	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" id="itemserial_<%=i %>" value="<%=item.getSerialNumber() == null ? "" : item.getSerialNumber() %>" />
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.model" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].model" class="textfield"  styleId="itemmodel_<%=i %>" value="<%=item.getModel() == null ? "" : item.getModel() %>" />
+	         					<input type="text" name="item[<%=i %>].model" class="textfield"  id="itemmodel_<%=i %>" value="<%=item.getModel() == null ? "" : item.getModel() %>" />
 	         				</td>
 	         			</tr>
 	         			<tr>
 	         				<td>
 	         					<bean:message key="colname.lf.category" />
 	         					<br>
-	         					<select name="item[<%=i %>].category" class="dropdown"  styleId="itemcategory_<%=i %>" onchange="updateSubCategories('category_<%=i %>', <%=i %>);" id="category_<%=i %>" >
+	         					<select name="item[<%=i %>].category" class="dropdown"  id="itemcategory_<%=i %>" onchange="updateSubCategories('category_<%=i %>', <%=i %>);" id="category_<%=i %>" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							LFCategory category;
@@ -708,7 +708,7 @@
 	         				<td>
 	         					<bean:message key="colname.lf.subcategory" />
 	         					<br>
-	         					<select name="item[<%=i %>].subCategory"  styleId="itemsubcat_<%=i %>" class="dropdown" id="subcategories_<%=i %>" onchange="" >
+	         					<select name="item[<%=i %>].subCategory"  id="itemsubcat_<%=i %>" class="dropdown" id="subcategories_<%=i %>" onchange="" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList subCategories = new ArrayList();
@@ -735,7 +735,7 @@
 	         				<td>
 	         					<bean:message key="colname.lf.color" />
 	         					<br>
-	         					<select name="item[<%=i %>].color" class="dropdown"   styleId="itemcolor_<%=i %>" >
+	         					<select name="item[<%=i %>].color" class="dropdown" id="itemcolor_<%=i %>" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList colorList = (ArrayList) request.getSession().getAttribute("lfcolorlist");
