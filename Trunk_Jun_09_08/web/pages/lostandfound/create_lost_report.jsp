@@ -658,41 +658,41 @@
 	         				<td>
 	         					<bean:message key="colname.lf.last.name.item" />
 	         					<br>
-	         					<html:text name="lostReportForm" property="lost.lastName" maxlength="50" styleClass="textfield" />
+	         					<html:text name="lostReportForm" property="lost.lastName" styleId="lastnameBag" maxlength="50" styleClass="textfield" />
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.first.name.item" />
 	         					<br>
-	         					<html:text name="lostReportForm" property="lost.firstName" maxlength="50" styleClass="textfield" />
+	         					<html:text name="lostReportForm" property="lost.firstName" styleId="firstnameBag"  maxlength="50" styleClass="textfield" />
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.middle.name.item" />
 	         					<br>
-	         					<html:text name="lostReportForm" property="lost.middleName" maxlength="50" styleClass="textfield" />
+	         					<html:text name="lostReportForm" property="lost.middleName" styleId="middlenameBag" maxlength="50" styleClass="textfield" />
 	         				</td>
 	         			</tr>
          				<tr>
 	         				<td>
 	         					<bean:message key="colname.lf.brand" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].brand" class="textfield" value="<%=item.getBrand() == null ? "" : item.getBrand() %>" />
+	         					<input type="text" name="item[<%=i %>].brand" class="textfield"  styleId="itembrand_<%=i %>" value="<%=item.getBrand() == null ? "" : item.getBrand() %>" />
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.serial" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" value="<%=item.getSerialNumber() == null ? "" : item.getSerialNumber() %>" />
+	         					<input type="text" name="item[<%=i %>].serialNumber" class="textfield" styleId="itemserial_<%=i %>" value="<%=item.getSerialNumber() == null ? "" : item.getSerialNumber() %>" />
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.model" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].model" class="textfield" value="<%=item.getModel() == null ? "" : item.getModel() %>" />
+	         					<input type="text" name="item[<%=i %>].model" class="textfield"  styleId="itemmodel_<%=i %>" value="<%=item.getModel() == null ? "" : item.getModel() %>" />
 	         				</td>
 	         			</tr>
 	         			<tr>
 	         				<td>
 	         					<bean:message key="colname.lf.category" />
 	         					<br>
-	         					<select name="item[<%=i %>].category" class="dropdown" onchange="updateSubCategories('category_<%=i %>', <%=i %>);" id="category_<%=i %>" >
+	         					<select name="item[<%=i %>].category" class="dropdown"  styleId="itemcategory_<%=i %>" onchange="updateSubCategories('category_<%=i %>', <%=i %>);" id="category_<%=i %>" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							LFCategory category;
@@ -708,7 +708,7 @@
 	         				<td>
 	         					<bean:message key="colname.lf.subcategory" />
 	         					<br>
-	         					<select name="item[<%=i %>].subCategory" class="dropdown" id="subcategories_<%=i %>" onchange="" >
+	         					<select name="item[<%=i %>].subCategory"  styleId="itemsubcat_<%=i %>" class="dropdown" id="subcategories_<%=i %>" onchange="" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList subCategories = new ArrayList();
@@ -735,7 +735,7 @@
 	         				<td>
 	         					<bean:message key="colname.lf.color" />
 	         					<br>
-	         					<select name="item[<%=i %>].color" class="dropdown" >
+	         					<select name="item[<%=i %>].color" class="dropdown"   styleId="itemcolor_<%=i %>" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList colorList = (ArrayList) request.getSession().getAttribute("lfcolorlist");
@@ -754,22 +754,22 @@
 	         				<td>
 	         					<bean:message key="colname.lf.size" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].size" class="textfield" value="<%=item.getSize() == null ? "" : item.getSize() %>" />
+	         					<input type="text"  id="itemsize_<%=i %>" name="item[<%=i %>].size" class="textfield" value="<%=item.getSize() == null ? "" : item.getSize() %>" />
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.lostPhoneNumber" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].dispCountry" size="3" class="textfield" value="<%=item.getDispCountry()%>" />
-	         					 <input type="text" name="item[<%=i %>].dispArea" size="3"  class="textfield" value="<%=item.getDispArea()%>" />
-	         					 <input type="text" name="item[<%=i %>].dispExchange" size="3"  class="textfield" value="<%=item.getDispExchange()%>" />
-	         					 <input type="text" name="item[<%=i %>].dispLine" size="4" class="textfield" value="<%=item.getDispLine()%>" /><br/>
-	         					 <bean:message key="colname.lf.phone.extension" />: <input type="text" name="item[<%=i %>].dispExtension" size="4"  class="textfield" value="<%=item.getDispExchange()%>" />
+	         					<input type="text" name="item[<%=i %>].dispCountry" size="3"  id="iteminter_<%=i %>" class="textfield" value="<%=item.getDispCountry()%>" />
+	         					 <input type="text" name="item[<%=i %>].dispArea" size="3"  id="itemarea_<%=i %>" class="textfield" value="<%=item.getDispArea()%>" />
+	         					 <input type="text" name="item[<%=i %>].dispExchange" size="3"  id="itemexchange_<%=i %>"  class="textfield" value="<%=item.getDispExchange()%>" />
+	         					 <input type="text" name="item[<%=i %>].dispLine" size="4"  id="itemline_<%=i %>" class="textfield" value="<%=item.getDispLine()%>" /><br/>
+	         					 <bean:message key="colname.lf.phone.extension" />: <input  id="itemext_<%=i %>" type="text" name="item[<%=i %>].dispExtension" size="4"  class="textfield" value="<%=item.getDispExchange()%>" />
 	         					
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.caseColor" />
 	         					<br>
-	         					<select name="item[<%=i %>].caseColor" class="dropdown" >
+	         					<select name="item[<%=i %>].caseColor" class="dropdown" "id=itemcasecolor_<%=i %>" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList caseColorList = (ArrayList) request.getSession().getAttribute("lfcolorlist");
@@ -788,14 +788,14 @@
 	         				<td colspan=3>
 	         					<bean:message key="colname.lf.description" />
 	         					<br>
-	         					<input type="text" name="item[<%=i %>].description" size="250" class="textfield" style="width: 95%;" value="<%=item.getDescription() == null ? "" : item.getDescription() %>" />
+	         					<input type="text" name="item[<%=i %>].description"  id="itemdesc_<%=i %>" size="250" class="textfield" style="width: 95%;" value="<%=item.getDescription() == null ? "" : item.getDescription() %>" />
 	         				</td>
 	         			</tr>
 	         			<tr>
 	         				<td colspan=3>
 	         					<bean:message key="colname.lf.long.description" />
 	         					<br>
-	         					<textarea name="item[<%=i %>].longDescription" cols="80" rows="3" class="textfield" 
+	         					<textarea name="item[<%=i %>].longDescription" cols="80" rows="3" class="textfield"   id="itemlongdesc_<%=i %>" 
 	         					onblur="textCounter2(this.form.elements['item[<%=i %>].description'],2000);" 
 	         					onkeydown="textCounter2(this.form.elements['item[<%=i %>].description'],2000);" 
 	         					onkeyup="textCounter2(this.form.elements['item[<%=i %>].description'],2000);"
