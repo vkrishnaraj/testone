@@ -242,12 +242,12 @@
 							<br/>
 							
 							<% if(a.getSubcompany()!=null){ %>
-         					<html:select name="lostReportForm" property="lost.companyId" disabled="true" styleClass="dropdown" styleId="lostCompanyId">
+         					<html:select name="lostReportForm" property="lost.companyId" styleId="company" disabled="true" styleClass="dropdown" styleId="lostCompanyId">
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		            			<html:options collection="subComplist" property="subcompanyCode" labelProperty="name" />
          					</html:select>
          					<% } else { %>
-         					<html:select name="lostReportForm" property="lost.companyId" styleClass="dropdown" styleId="lostCompanyId">
+         					<html:select name="lostReportForm" property="lost.companyId" styleId="company" styleClass="dropdown" styleId="lostCompanyId">
 		            			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		            			<html:options collection="subComplist" property="subcompanyCode" labelProperty="name" />
          					</html:select>
@@ -356,7 +356,7 @@
 		              		<html:text name="lostReportForm" property="primaryAreaNumber" styleId="priAreaNum" size="5" maxlength="10" styleClass="textfield" />
 		              		<html:text name="lostReportForm" property="primaryExchangeNumber" styleId="priExchaNum" size="10" maxlength="10" styleClass="textfield" />
 		              		<html:text name="lostReportForm" property="primaryLineNumber" styleId="priLineNum" size="10" maxlength="10" styleClass="textfield" /><br/>
-		              		<html:select name="lostReportForm" property="primaryNumberType" styleClass="dropdown" >
+		              		<html:select name="lostReportForm" property="primaryNumberType" styleId="priPhoneType" styleClass="dropdown" >
 		              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_HOME) %>"><bean:message key="option.lf.home" /></html:option>
 		              			<html:option value="<%=String.valueOf(TracingConstants.LF_PHONE_TYPE_MOBILE) %>"><bean:message key="option.lf.mobile" /></html:option>

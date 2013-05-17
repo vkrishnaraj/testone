@@ -17,14 +17,17 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		if (checkNoErrorPage()) {
 
 			selenium.select("name=lost.companyId", "label=Southwest Airlines");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td/input", "Sanders");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[2]/input", "Mike");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/input", "950 Marietta St");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[3]/td/input", "Atlanta");
-			selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[3]/td[2]/select", "label=Georgia");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[3]/td[4]/input", "30318");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/input", "1112223333");
-			selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/select", "label=Home");
+			selenium.type("id=lastName", "Sanders");
+			selenium.type("id=firstName", "Mike");
+			selenium.type("id=address1", "950 Marietta St");
+			selenium.type("id=address2", "Atlanta");
+			selenium.select("id=state", "label=Georgia");
+			selenium.type("id=zip", "30318");
+			selenium.type("id=priInterNum", "1"); //112223333
+			selenium.type("id=priAreaNum", "122");
+			selenium.type("id=priExchaNum", "23");
+			selenium.type("id=priInterNum", "333");
+			selenium.select("id=priPhoneType", "label=Home");
 			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td/input", "Apple");
 			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[2]/input", "AP1234");
 			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[3]/input", "iPhone 4S");
