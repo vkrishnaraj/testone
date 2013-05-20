@@ -99,7 +99,12 @@ public class StatReportAction extends Action {
 			BeanUtils.copyProperties(srDTO, daform);
 			ReportBMO rBMO = new ReportBMO(request);
 			boolean minimalitems=(srDTO.isShowAll() || (srDTO.isShowAssignCity() && srDTO.getGroupby()!=1) || (srDTO.isShowFaultCity() && srDTO.getGroupby()==1) || srDTO.getReportnum()!=3);
-			if (((daform.getStarttime() != null && daform.getStarttime().length() > 0) || (daform.getCstarttime() != null && daform.getCstarttime().length() > 0)) && minimalitems) {
+			if(!minimalitems){
+				if(srDTO.getGroupby()!=1)
+					rBMO.setErrormsg("error.minimalAssign");
+				else if (srDTO.getGroupby()==1)
+					rBMO.setErrormsg("error.minimalFault");
+			} else if (((daform.getStarttime() != null && daform.getStarttime().length() > 0) || (daform.getCstarttime() != null && daform.getCstarttime().length() > 0)) && minimalitems) {
 
 				reportfile = rBMO.createReport(reportpath, srDTO, user);
 			} else if (customreportnum != null && reportnum != null 

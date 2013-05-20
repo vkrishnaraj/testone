@@ -313,8 +313,9 @@ public class IncidentBMO {
 				t.rollback();
 			return 0;
 		} finally {
-
-			sess.close();
+			if(sess!=null){
+				sess.close();
+			}
 		}
 		return 1;
 	}
