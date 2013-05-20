@@ -177,7 +177,7 @@ function gotoHistoricalReport() {
 
   </SCRIPT>
 
-<html:form action="addOnHandBag.do" method="post"
+<html:form styleId="dirtyCheck-form" action="addOnHandBag.do" method="post"
   enctype="multipart/form-data" onsubmit="return validateRest(this);">
   <tr>
     <td colspan="3" id="pageheadercell">
@@ -482,7 +482,6 @@ function gotoHistoricalReport() {
                }
          else {
       %>
-      
    
 <c:if test="${!empty OnHandForm.wt_id }">
         WorldTracer ID: <a href="worldtraceraf.do?rawtext=1&ohd_id=${OnHandForm.wt_id}">

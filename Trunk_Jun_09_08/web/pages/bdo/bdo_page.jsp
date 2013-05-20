@@ -39,7 +39,7 @@
   Agent a = (Agent)session.getAttribute("user");
 %>
   
-  <html:form action="bdo.do" method="post" onsubmit="return validateReqBDO(this);">
+  <html:form styleId="dirtyCheck-form" action="bdo.do" method="post" onsubmit="return validateReqBDO(this);">
     <logic:notPresent name="onhand" scope="request">
       <logic:notPresent name="mbr" scope="request">
         <logic:notEqual name="BDOForm" property="OHD_ID" value="">

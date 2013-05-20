@@ -41,7 +41,7 @@
     
   </script>
   
-<html:form action="missing.do" method="post" enctype="multipart/form-data"  onsubmit="return validateMissingClose(this, doCheck);">
+<html:form styleId="dirtyCheck-form" action="missing.do" method="post" enctype="multipart/form-data"  onsubmit="return validateMissingClose(this, doCheck);">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">

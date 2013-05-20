@@ -52,11 +52,11 @@ function gotoHistoricalReport() {
 <%
   if (found == null) {
 %>
-    <form name="LostAndFoundForm" method="post"action="addLost.do" onsubmit="return validateLostFound(this);">
+    <form id="dirtyCheck-form" name="LostAndFoundForm" method="post"action="addLost.do" onsubmit="return validateLostFound(this);">
 <%
     } else {
 %>
-      <form name="LostAndFoundForm" method="post" action="addFound.do"  enctype="multipart/form-data" onsubmit="return validateLostFound(this);">
+      <form id="dirtyCheck-form" name="LostAndFoundForm" method="post" action="addFound.do"  enctype="multipart/form-data" onsubmit="return validateLostFound(this);">
 <%
       }
 %>

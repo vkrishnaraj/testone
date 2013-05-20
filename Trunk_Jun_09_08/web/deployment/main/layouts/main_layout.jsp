@@ -56,13 +56,16 @@ response.addDateHeader("Expires", -1);
 <logic:present name="user" scope="session">
 
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/nettracer_menu.js"></script>
-<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery-1.3.2.min.js"></script>
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery-1.8.2.min.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery-ui-1.7.2.custom.min.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery.form.js"></script>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery.bgiframe.min.js"></script>
+<script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/jquery.dirtyform.js"></script>
 <script language="javascript" SRC="<%=request.getContextPath()%>/deployment/main/js/date.js"></SCRIPT>
 <script language="javascript" SRC="<%=request.getContextPath()%>/deployment/main/js/field_validation.js"></SCRIPT>
-
+<script>
+	jQuery.noConflict();
+</script>
 
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
@@ -348,7 +351,12 @@ jQuery(document).ready(function () {
 	jQuery("#closeLink").click(function(event) {handleEvent(event)});
 	jQuery("#openLink").click(function(event) {handleEvent(event)});
 	jQuery("#switchLink").click(function(event) {switchLocation(event)});
-	});
+    jQuery("#dirtyCheck-form").areYouSure( {
+	<% if (request.getParameter("dirtyForm") != null) { %>
+		startDirty:true
+	<% } %>
+    });
+});
 
 </script>
 

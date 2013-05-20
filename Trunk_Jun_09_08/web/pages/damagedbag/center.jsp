@@ -130,7 +130,7 @@ function disableButton(aButton) {
 
 
   
-  <html:form action="damaged.do" method="post"
+  <html:form styleId="dirtyCheck-form" action="damaged.do" method="post"
     enctype="multipart/form-data" onsubmit="return validateRest(this);">
     <input type="hidden" name="delete_these_elements" value="" />
     <html:hidden property="otherSystemInformation" />

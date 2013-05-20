@@ -147,7 +147,7 @@
       
   </SCRIPT>
  
-        <html:form action="claim_resolution.do" method="post" enctype="multipart/form-data" onsubmit="return validateFsClaimForm(this);">
+        <html:form styleId="dirtyCheck-form" action="claim_resolution.do" method="post" enctype="multipart/form-data" onsubmit="return validateFsClaimForm(this);">
           <input type="hidden" name="delete_these_elements" value="" />
             <html:javascript formName="claimForm" />
             <tr>

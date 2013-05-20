@@ -50,7 +50,7 @@
     
   </script>
   
-  <html:form action="lostDelay.do" method="post" enctype="multipart/form-data" onsubmit="return validateLdClose(this, doCheck);">
+  <html:form styleId="dirtyCheck-form" action="lostDelay.do" method="post" enctype="multipart/form-data" onsubmit="return validateLdClose(this, doCheck);">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">

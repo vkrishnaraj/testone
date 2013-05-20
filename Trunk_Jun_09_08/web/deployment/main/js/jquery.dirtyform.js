@@ -1,5 +1,3 @@
-
-
 /*!
 * jQuery Plugin: Are-You-Sure (Dirty Form Detection)
 * https://github.com/codedance/jquery.AreYouSure/
@@ -9,8 +7,8 @@
 * http://jquery.org/license
 *
 * Author: chris.dance@papercut.com
-* Version: 1.1.0
-* Date: 3rd Feb 2013
+* Version: 1.3.0
+* Date: 14th May 2013
 */
 (function($) {
   $.fn.areYouSure = function(options) {
@@ -19,8 +17,7 @@
             'message' : 'You have unsaved changes!',
             'dirtyClass' : 'dirty',
             'change' : null,
-            'startDirty' : false,
-            'fieldSelector' : "select,textarea,input[type='text'],input[type='password'],input[type='checkbox'],input[type='radio']"
+            'fieldSelector' : "select,textarea,input[type='text'],input[type='password'],input[type='checkbox'],input[type='radio'],input[type='hidden']"
           }, options);
 
     var getValue = function($field) {
@@ -28,6 +25,10 @@
           || $field.hasClass('aysIgnore')
           || $field.attr('data-ays-ignore')) {
         return null;
+      }
+
+      if ($field.is(':disabled')) {
+        return 'ays-disabled';
       }
 
       var val;
@@ -53,6 +54,7 @@
         default:
           val = $field.val();
       }
+
       return val;
     };
 
@@ -69,7 +71,7 @@
       var isDirty = false;
       var $form = $(this).parents('form');
 
-      /* Test on the target first as it's the most likely to be dirty. */
+      // Test on the target first as it's the most likely to be dirty.
       if (isFieldDirty($(evt.target))) {
         isDirty = true;
       }
@@ -79,15 +81,19 @@
           $field = $(this);
           if (isFieldDirty($field)) {
             isDirty = true;
-            return false; /* break */
+            return false; // break
           }
         });
       }
-      var changed = isDirty != $form.hasClass(settings.dirtyClass);
 
+      markDirty($form, isDirty);
+    };
+    
+    var markDirty = function($form, isDirty) {
+      var changed = isDirty != $form.hasClass(settings.dirtyClass);
       $form.toggleClass(settings.dirtyClass, isDirty);
 
-      /* Fire change event if required */
+      // Fire change event if required
       if (changed && settings.change) {
         settings.change.call($form, $form);
       }
@@ -96,7 +102,7 @@
     $(window).bind('beforeunload', function() {
       $dirtyForms = $("form").filter('.' + settings.dirtyClass);
       if ($dirtyForms.length > 0) {
-        /* $dirtyForms.removeClass(settings.dirtyClass); Prevent multiple calls? */
+        // $dirtyForms.removeClass(settings.dirtyClass); // Prevent multiple calls?
         return settings.message;
       }
     });
@@ -105,15 +111,13 @@
       if (!$(this).is('form')) {
         return;
       }
-      
       $(this).submit(function() {
         $(this).removeClass(settings.dirtyClass);
       });
-      
-      /* $(this).toggleClass(settings.dirtyClass, settings.startDirty); */
 
       $(this).find(settings.fieldSelector).each(storeOrigValue);
       $(this).find(settings.fieldSelector).bind('change keyup', checkForm);
+      $(this).bind('reset', function() { markDirty($(this), false); });
     });
   };
 })(jQuery);

@@ -138,7 +138,7 @@
 
   </script>
   
-  <html:form action="lostDelay.do" method="post" enctype="multipart/form-data" onsubmit="return validateThis(this);">
+  <html:form styleId="dirtyCheck-form" action="lostDelay.do" method="post" enctype="multipart/form-data" onsubmit="return validateThis(this);">
     
 
     <html:hidden property="doprepopulate" value="" />
@@ -287,7 +287,7 @@
 
 
 
-  <html:form action="lostDelay.do" method="post" enctype="multipart/form-data"
+  <html:form  styleId="dirtyCheck-form" action="lostDelay.do" method="post" enctype="multipart/form-data"
     onsubmit="return validateRest(this);">
     <input type="hidden" name="delete_these_elements" value="" />
     <html:hidden property="otherSystemInformation" />

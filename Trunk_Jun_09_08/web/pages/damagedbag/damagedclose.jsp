@@ -41,7 +41,7 @@
     
   </script>
   
-<html:form action="damaged.do" method="post" enctype="multipart/form-data" onsubmit="return validateDamClose(this, doCheck);">
+<html:form styleId="dirtyCheck-form" action="damaged.do" method="post" enctype="multipart/form-data" onsubmit="return validateDamClose(this, doCheck);">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">
