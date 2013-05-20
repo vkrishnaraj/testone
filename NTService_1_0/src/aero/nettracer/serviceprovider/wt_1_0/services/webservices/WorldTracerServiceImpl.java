@@ -1523,7 +1523,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						names = p1.addNewNames();
 					}
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
-					names.addName(name);
+					names.addName(name.replace(" ", ""));
 					if (fieldList2 != null && fieldList2.size() > j) {
 						if(initials == null){
 							initials = p1.addNewInitials();
