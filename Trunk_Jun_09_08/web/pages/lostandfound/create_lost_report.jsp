@@ -769,7 +769,7 @@
 	         				<td>
 	         					<bean:message key="colname.lf.caseColor" />
 	         					<br>
-	         					<select name="item[<%=i %>].caseColor" class="dropdown" "id=itemcasecolor_<%=i %>" >
+	         					<select name="item[<%=i %>].caseColor" class="dropdown" id="itemcasecolor_<%=i %>" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList caseColorList = (ArrayList) request.getSession().getAttribute("lfcolorlist");
