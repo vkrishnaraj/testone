@@ -10,7 +10,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.sql.Time;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -793,7 +793,7 @@ public class ReportBMO {
 										if (row.length > 9) {
 											sr.setCreatedate((Date) row[9]);
 											if (row.length > 10) {
-												sr.setCreatetime((Time) row[10]);
+												sr.setCreatetime((Date) row[10]);
 												if (row.length > 11) {
 													Status a = new Status();
 													a.setStatus_ID((Integer) row[11]);
@@ -4107,7 +4107,7 @@ public class ReportBMO {
 							if (row.length > 5) {
 								sr.setFounddate((Date) row[5]);
 								if (row.length > 6) {
-									sr.setFoundtime((Time) row[6]);
+									sr.setFoundtime((Date) row[6]);
 									if (row.length > 7) {
 										sr.setStatusdesc(resources
 												.getString("STATUS_KEY_"
