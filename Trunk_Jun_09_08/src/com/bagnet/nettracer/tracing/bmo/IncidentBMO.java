@@ -279,7 +279,7 @@ public class IncidentBMO {
 	public int insertItemContents(boolean checkStaleState, List<Item> ilist, Agent mod_agent) 
 			throws HibernateException, StaleStateException {
 		Transaction t = null;
-		Session sess = HibernateWrapper.getSession().openSession();
+		Session sess = null;
 		List<Item_Inventory> newcontents=new ArrayList<Item_Inventory>();
 		for(Item i:ilist){
 			for(Object o:i.getInventorylist()){
@@ -291,6 +291,7 @@ public class IncidentBMO {
 			}
 		}
 		try {
+			sess=HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			
 			// save contents

@@ -1133,7 +1133,10 @@ public class WSCoreOHDUtil {
 		ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN));
 		if(comment != null){
 			if(PropertyBMO.isTrue(PropertyBMO.POPULATE_STORAGE_LOCATION)){
-				ohd.setStorage_location(comment.substring(0, 50));
+				if(comment.length()>50)
+					ohd.setStorage_location(comment.substring(0, 50));
+				else
+					ohd.setStorage_location(comment);
 			} else {
 				Remark r = new Remark();
 				r.setAgent(agent);
