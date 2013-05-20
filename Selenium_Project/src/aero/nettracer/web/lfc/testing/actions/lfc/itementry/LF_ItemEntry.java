@@ -341,7 +341,12 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[12]");
 		selenium.click("//input[@id='button']");
-		selenium.type("//input[@id='primaryPhone']", "1112223333");
+
+		selenium.type("//input[@name='primaryInternationalNumber']", "4"); //556666
+		selenium.type("//input[@name='primaryAreaNumber']", "445");
+		selenium.type("//input[@name='primaryExchangeNumber']", "556");
+		selenium.type("//input[@name='primaryLineNumber']", "666");
+		selenium.select("//select[@name='primaryNumberType']", "label=Home");
 		selenium.select("//div[@id='contactInfoDiv']/table/tbody/tr[4]/td/select", "label=Home");
 		selenium.click("//input[@id='saveButton']");
 		waitForPageToLoadImproved();
@@ -368,8 +373,11 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//select[@id='category']/option[13]");
 		selenium.click("//input[@id='button']");
-		selenium.type("//input[@id='secondaryPhone']", "4445556666");
-		selenium.select("//div[@id='contactInfoDiv']/table/tbody/tr[4]/td[2]/select", "label=Mobile");
+		selenium.type("//input[@name='secondaryInternationalNumber']", "4"); //556666
+		selenium.type("//input[@name='secondaryAreaNumber']", "445");
+		selenium.type("//input[@name='secondaryExchangeNumber']", "556");
+		selenium.type("//input[@name='secondaryLineNumber']", "666");
+		selenium.select("//select[@name='secondaryNumberType']", "label=Mobile");
 		selenium.click("//input[@id='saveButton']");
 		waitForPageToLoadImproved();
 		
@@ -462,12 +470,12 @@ public class LF_ItemEntry extends LoginUtil {
 		verifyTrue(selenium.isTextPresent("Bin #:"));
 		verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/input"));
 		verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']"));
-		waitForPageToLoadImproved(1000, false);
+		waitForPageToLoadImproved(3000, false);
 		verifyFalse(selenium.isEditable("//input[@id='saveButton']"));
 		selenium.click("//div[@id='moveDiv_" + divId + "']/center/input");
 		verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/input"));
 		verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']"));
-		waitForPageToLoadImproved(1000, false);
+		waitForPageToLoadImproved(3000, false);
 		verifyTrue(selenium.isEditable("//input[@id='saveButton']"));
 	}
 	

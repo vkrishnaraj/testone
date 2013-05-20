@@ -119,7 +119,10 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Found Item:  " + LF_ProcessTraceResults.foundId));
 			verifyTrue(selenium.isTextPresent("Lost Report:  " + LF_ProcessTraceResults.lostId));
+			selenium.answerOnNextPrompt("10");
 			selenium.click("xpath=(//a[contains(text(),'Confirm Match')])[2]");
+			assertEquals("Please confirm this is the correct weight:", selenium.getPrompt());
+
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to verify and confirm trace result info on the Found Item page.");

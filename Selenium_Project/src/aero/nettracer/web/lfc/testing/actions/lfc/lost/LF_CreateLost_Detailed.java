@@ -21,10 +21,15 @@ public class LF_CreateLost_Detailed extends DefaultSeleneseTestCase {
 			selenium.type("name=lost.client.address.decryptedCity", "Test");
 			selenium.select("id=state", "label=Georgia");
 			selenium.type("name=lost.client.address.decryptedZip", "30152");
-			selenium.type("name=primaryPhoneNumber", "555-555-5555");
+//			selenium.type("name=primaryPhoneNumber", "555-555-5555");
+
+			selenium.type("id=priInterNum", "1"); //112223333
+			selenium.type("id=priAreaNum", "122");
+			selenium.type("id=priExchaNum", "23");
+			selenium.type("id=priLineNum", "333");
 			selenium.type("name=item[0].brand", "Test Brand");
 			selenium.type("name=item[0].serialNumber", "123321456");
-			selenium.select("id=category_0", "label=Bags");
+			selenium.select("id=itemcategory_0", "label=Bags");
 			selenium.select("name=item[0].color", "label=Black");
 			selenium.type("name=item[0].description", "Test Description Test Description Test Description Test Description Test Description Test Description Test DescriptionTest Description Test Description Test Description Test Description Test Description Test Description I Hate Matt.");
 			selenium.fireEvent("name=item[0].description", "blur");

@@ -17,20 +17,25 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			selenium.select("name=lost.companyId", "label=Southwest Airlines");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td/input", "Sanders");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[2]/input", "Mike");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/input", "950 Marietta St");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[3]/td/input", "Atlanta");
-			selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[3]/td[2]/select", "label=Georgia");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[3]/td[4]/input", "30318");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/input", "1112223333");
-			selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/select", "label=Home");
-			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td/input", "HTC");
-			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[2]/input", "HTC1234");
-			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[3]/input", "Eris");
-			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[3]/td/select", "label=Cellphone");
-			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[3]/td[3]/select", "label=Black");
-			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[4]/td[3]/select", "label=White");
+			selenium.type("name=lost.client.lastName", "Sanders");
+			selenium.type("name=lost.client.firstName", "Mike");
+			selenium.type("name=lost.client.address.decryptedAddress1", "950 Marietta St");
+			selenium.type("name=lost.client.address.decryptedCity", "Atlanta");
+			selenium.select("id=state", "label=Georgia");
+			selenium.type("name=lost.client.address.decryptedZip", "30318");
+//			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/input", "1112223333");
+			selenium.type("id=priInterNum", "1"); //112223333
+			selenium.type("id=priAreaNum", "122");
+			selenium.type("id=priExchaNum", "23");
+			selenium.type("id=priLineNum", "333");
+			selenium.type("id=priLineNum", "333");
+			selenium.select("id=priPhoneType", "label=Home");
+			selenium.type("id=itembrand_0", "HTC");
+			selenium.type("id=itemserial_0", "HTC1234");
+			selenium.type("id=itemmodel_0", "Eris");
+			selenium.select("id=itemcategory_0", "label=Cellphone");
+			selenium.select("id=itemcolor_0", "label=White");
+			selenium.select("id=itemcasecolor_0", "label=Black");
 			selenium.select("segment[0].originId", "label=ATL");
 			selenium.select("segment[0].destinationId", "label=BOS");
 			selenium.click("//div[@id='maincontent']/center[4]/input[2]");
@@ -64,12 +69,12 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			LF_CreateDeliveryFromFound.today = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td[2]/input");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "HTC");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input", "HTC1234");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input", "Eris");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td/select", "label=Cellphone");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=Black");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select", "label=White");
+			selenium.type("id=itembrand_0", "HTC");
+			selenium.type("id=itemserial_0", "HTC1234");
+			selenium.type("id=itemmodel_0", "Eris");
+			selenium.select("id=itemcategory_0", "label=Cellphone");
+			selenium.select("id=itemcolor_0", "label=White");
+			selenium.select("id=itemcasecolor_0", "label=Black");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved();
 		} else {
