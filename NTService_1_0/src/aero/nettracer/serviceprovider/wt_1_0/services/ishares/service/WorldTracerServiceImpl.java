@@ -402,7 +402,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		if (data.getAhl().getPax() != null && data.getAhl().getPax().length > 0) {
 			Passenger myPax = data.getAhl().getPax()[0];
 			if(myPax != null) {
-				String myNAME_LINE = "NM " + myPax.getLastname();
+				String myNAME_LINE = "NM " + myPax.getLastname().replace(" ", "/");
 				map.put("[NAME_LINE]", myNAME_LINE);
 			}
 		}
@@ -474,7 +474,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		if (data.getAhl().getPax() != null && data.getAhl().getPax().length > 0) {
 			Passenger myPax = data.getAhl().getPax()[0];
 			if(myPax != null) {
-				String myNAME_LINE = "NM " + myPax.getLastname();
+				String myNAME_LINE = "NM " + myPax.getLastname().replace(" ", "/");
 				map.put("[NAME_LINE]", myNAME_LINE);
 			}
 		}

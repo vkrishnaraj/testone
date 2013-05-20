@@ -1301,7 +1301,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			for (String name : nameList) {
 				if (addedCount > 2)
 					break;
-				search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.names[" + addedCount + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(name));
+				search.setParameter("avoidBindingdeliveryOrderVO.deliveryOrder.names[" + addedCount + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(name.replace(" ", "")));
 				addedCount++;
 
 			}
@@ -1580,7 +1580,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 		if (fieldMap.containsKey(WorldTracerField.NM)) {
 			List<String> nameList = fieldMap.get(WorldTracerField.NM);
 			for(int i=0; i < nameList.size() && i < 3; i++){
-				requestMethod.setParameter("wtrForwardRequest.passenger.names[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(nameList.get(i)));
+				requestMethod.setParameter("wtrForwardRequest.passenger.names[" + i + "]", RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(nameList.get(i).replace(" ", "")));
 			}
 		}
 		if (fieldMap.containsKey(WorldTracerField.FI)) {
