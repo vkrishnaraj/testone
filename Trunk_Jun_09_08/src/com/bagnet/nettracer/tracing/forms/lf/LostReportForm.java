@@ -293,6 +293,11 @@ public final class LostReportForm extends ActionForm {
 		if(phone.getDecryptedPhoneNumber()!=null && !phone.getDecryptedPhoneNumber().isEmpty()){
 			phone.setPerson(lost.getClient());
 			lost.getClient().getPhones().add(phone);
+		} else if ((phone.getDecryptedCountry() != null && !phone.getDecryptedCountry().isEmpty())  || (phone.getDecryptedArea() != null && !phone.getDecryptedArea().isEmpty()) || (phone.getDecryptedExchange() != null && !phone.getDecryptedExchange().isEmpty()) || (phone.getDecryptedLine() != null && !phone.getDecryptedLine().isEmpty())) { //Temporary - need to think about how to incorporate 'normalized' field
+			phone.setPerson(lost.getClient());
+			phone.setDecryptedPhoneNumber(phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
+			phone.setPhoneType(phone.getPhoneType());
+			lost.getClient().getPhones().add(phone);
 		}
 	}
 	
