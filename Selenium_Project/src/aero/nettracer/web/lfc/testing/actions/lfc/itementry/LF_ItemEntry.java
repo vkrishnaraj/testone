@@ -434,7 +434,10 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.type("//input[@id='serialNumber']", "test");
 		selenium.select("//select[@id='color']", "label=White");
 		selenium.select("//select[@id='caseColor']", "label=White");
-		selenium.type("//input[@id='disFoundPhoneNumber']", "7778889999");
+		selenium.type("//input[@name='disFoundInternationalNumber']", "7"); //556666
+		selenium.type("//input[@name='disFoundAreaNumber']", "778");
+		selenium.type("//input[@name='disFoundExchangeNumber']", "889");
+		selenium.type("//input[@name='disFoundLineNumber']", "999");
 		selenium.type("//input[@id='description']", "test");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='lastName']", "test");
@@ -445,9 +448,15 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.type("//input[@id='city']", "test");
 		selenium.select("//select[@id='state']", "label=Alabama");
 		selenium.type("//input[@id='zip']", "test");
-		selenium.type("//input[@id='primaryPhone']", "0001112222");
+		selenium.type("//input[@name='primaryInternationalNumber']", "4"); //556666
+		selenium.type("//input[@name='primaryAreaNumber']", "445");
+		selenium.type("//input[@name='primaryExchangeNumber']", "556");
+		selenium.type("//input[@name='primaryLineNumber']", "666");
 		selenium.select("//select[@name='primaryNumberType']", "label=Home");
-		selenium.type("//input[@id='secondaryPhone']", "3334445555");
+		selenium.type("//input[@name='secondaryInternationalNumber']", "4"); //556666
+		selenium.type("//input[@name='secondaryAreaNumber']", "445");
+		selenium.type("//input[@name='secondaryExchangeNumber']", "556");
+		selenium.type("//input[@name='secondaryLineNumber']", "666");
 		selenium.select("//div[@id='contactInfoDiv']/table/tbody/tr[4]/td[2]/select", "label=Mobile");
 		selenium.type("//input[@id='email']", "test@test.net");
 		selenium.click("//input[@id='saveButton']");

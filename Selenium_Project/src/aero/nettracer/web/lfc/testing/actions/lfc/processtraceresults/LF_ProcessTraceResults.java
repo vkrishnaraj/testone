@@ -150,31 +150,32 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your lost report was successfully saved."));
-			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
+			selenium.click("//a[contains(@href, 'shelved_trace_results.do')]");
 			waitForPageToLoadImproved();
+//			selenium.click("link="+LF_ProcessTraceResults.foundId);
+//			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to save Lost Report: " + LF_ProcessTraceResults.lostId);
 			return;		
 		}
 		System.out.println("LFPTR: 4");
 		
-		if (checkNoErrorPage()) {
-			selenium.click("link="+LF_ProcessTraceResults.foundId);
-			selenium.click("saveButton");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LFPTR: Failed to navigate to Found Item: " + LF_ProcessTraceResults.foundId + " from the Lost Report page.");
-			return;		
-		}
-		System.out.println("LFPTR: 5");
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//a[contains(@href, 'shelved_trace_results.do')]");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LFPTR: Failed to save the Found Item.");
-			return;
-		}
+//		if (checkNoErrorPage()) {
+//			selenium.click("saveButton");
+//			waitForPageToLoadImproved();
+//		} else {
+//			System.out.println("LFPTR: Failed to navigate to Found Item: " + LF_ProcessTraceResults.foundId + " from the Lost Report page.");
+//			return;		
+//		}
+//		System.out.println("LFPTR: 5");
+//		
+//		if (checkNoErrorPage()) {
+//			selenium.click("//a[contains(@href, 'shelved_trace_results.do')]");
+//			waitForPageToLoadImproved();
+//		} else {
+//			System.out.println("LFPTR: Failed to save the Found Item.");
+//			return;
+//		}
 		
 		if (checkNoErrorPage()) {
 			verifyFalse(selenium.isTextPresent(LF_ProcessTraceResults.foundId));
