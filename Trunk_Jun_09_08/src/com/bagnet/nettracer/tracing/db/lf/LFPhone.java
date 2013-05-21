@@ -176,7 +176,7 @@ public class LFPhone implements Serializable{
 	
 	public boolean isEmpty() {
 		boolean empty = true;
-		if (getDecryptedPhoneNumber() != null && !getDecryptedPhoneNumber().isEmpty()) {
+		if ((getDecryptedPhoneNumber() != null && !getDecryptedPhoneNumber().isEmpty()) || (getDecryptedCountry() != null && !getDecryptedCountry().isEmpty())  || (getDecryptedArea() != null && !getDecryptedArea().isEmpty()) || (getDecryptedExchange() != null && !getDecryptedExchange().isEmpty()) || (getDecryptedLine() != null && !getDecryptedLine().isEmpty())) {
 			empty = false;
 		}
 		return empty;
