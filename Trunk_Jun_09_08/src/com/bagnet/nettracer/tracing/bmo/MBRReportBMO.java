@@ -497,9 +497,13 @@ public class MBRReportBMO {
 		drb = reportStyleSelector(drb, reportColumns, reportStyle);
 
 		// grand total count
-		
-		if(drb.getColumn(2)!=null) drb.addGlobalFooterVariable(drb.getColumn(2), DJCalculation.COUNT, headerVariables);
-		drb.setGlobalFooterVariableHeight(new Integer(45));
+		if(columnchecked>=3){
+			drb.addGlobalFooterVariable(drb.getColumn(2), DJCalculation.COUNT, headerVariables);
+			drb.setGlobalFooterVariableHeight(new Integer(45));
+		} else if(columnchecked==2) {
+			drb.addGlobalFooterVariable(drb.getColumn(1), DJCalculation.COUNT, headerVariables);
+			drb.setGlobalFooterVariableHeight(new Integer(45));
+		}
 		
 		//drb.setAllowDetailSplit(false);
 
@@ -781,24 +785,34 @@ public class MBRReportBMO {
 			//invisible field for subtotal
 			drb.addField(invisibleFieldName, String.class.getName());
 			CustomExpression mySubTotalExpression = getSubTotalCustomExpression();
-			
-			if(groupByColumn!=null) drb.addColumn(groupByColumn);
-			if(columnSortByType!=null) drb.addColumn(columnSortByType);
-			if(columnLastNameFirstName!=null) drb.addColumn(columnLastNameFirstName);
-			if(columnClaimNumber!=null) drb.addColumn(columnClaimNumber);
-			if(columnDate!=null) drb.addColumn(columnDate);
-			if(columnTime!=null) drb.addColumn(columnTime);
-			if(columnItinerary!=null) drb.addColumn(columnItinerary);
-			if(columnFinal!=null) drb.addColumn(columnFinal);
-			if(columnStatus!=null) drb.addColumn(columnStatus);
-			if(columnFaultStationCode!=null) drb.addColumn(columnFaultStationCode);
-			if(columnLossCode!=null) drb.addColumn(columnLossCode);
+			int colnum=0;
+			if(groupByColumn!=null){ drb.addColumn(groupByColumn); colnum++;}
+			if(columnSortByType!=null){ drb.addColumn(columnSortByType); colnum++;}
+			if(columnLastNameFirstName!=null){ drb.addColumn(columnLastNameFirstName); colnum++;}
+			if(columnClaimNumber!=null){ drb.addColumn(columnClaimNumber); colnum++;}
+			if(columnDate!=null){ drb.addColumn(columnDate); colnum++;}
+			if(columnTime!=null){ drb.addColumn(columnTime); colnum++;}
+			if(columnItinerary!=null){ drb.addColumn(columnItinerary); colnum++;}
+			if(columnFinal!=null){ drb.addColumn(columnFinal); colnum++;}
+			if(columnStatus!=null){ drb.addColumn(columnStatus); colnum++;}
+			if(columnFaultStationCode!=null){ drb.addColumn(columnFaultStationCode);colnum++;}
+			if(columnLossCode!=null){ drb.addColumn(columnLossCode); colnum++;}
 	        
 	        gb1 = new GroupBuilder();
 	        gb1 = gb1.setCriteriaColumn((PropertyColumn) groupByColumn)
 	        .addVariable("myGroupLabel", groupByColumn, DJCalculation.FIRST);
-	        if(drb.getColumn(2)!=null) gb1.addFooterVariable(drb.getColumn(2), mySubTotalExpression,groupVariablesLegend);
-	        if(drb.getColumn(3)!=null) gb1.addFooterVariable(drb.getColumn(3), DJCalculation.COUNT, groupVariables);   //sub-totals
+			if (colnum >= 3) {
+				gb1.addFooterVariable(drb.getColumn(1), mySubTotalExpression,
+						groupVariablesLegend);
+				gb1.addFooterVariable(drb.getColumn(2), DJCalculation.COUNT,
+						groupVariables);
+			} else if(colnum==2){
+				gb1.addFooterVariable(drb.getColumn(1), DJCalculation.COUNT,
+						groupVariables);
+				gb1.addFooterVariable(drb.getColumn(0), mySubTotalExpression,
+						groupVariablesLegend);
+				//sub-totals
+			}
 			
 	        g1 = gb1.setGroupLayout(GroupLayout.DEFAULT)
 	    			.setFooterVariablesHeight(new Integer(20))
