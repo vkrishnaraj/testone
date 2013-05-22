@@ -38,16 +38,20 @@
 		stationList.options.length=1;
 		
 		stationList.options[0]=new Option("<bean:message key="search.option.all" />","<%=String.valueOf(TracingConstants.LF_STATUS_ALL) %>",true,false);
+		var selectedStation;
 		<logic:iterate indexId="i" id="cList" name="subComplist"  type="com.bagnet.nettracer.tracing.db.lf.Subcompany" >
 		if("<%=cList.getSubcompanyCode()%>"==selectedCompany)
 			{	
 				<% String source="subComplist"+cList.getSubcompanyCode();%>
 				<logic:iterate indexId="j" id="scList" name="<%=source%>"  type="com.bagnet.nettracer.tracing.db.Station" >
 					stationList.options[<%=j+1%>]=new Option("<%=scList.getStationcode()%>","<%=scList.getStation_ID()%>",false,false);
+					if(<%=request.getAttribute("selectStation")%>==<%=scList.getStation_ID()%>){
+						selectedStation=<%=request.getAttribute("selectStation")%>;
+					}
 				</logic:iterate>
 			}
 		</logic:iterate>
-		
+		stationList.value=selectedStation;
 		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
 	}
     
