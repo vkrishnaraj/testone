@@ -680,7 +680,7 @@
       									<bean:message key="lf.match.lost" />:&nbsp;
   										<input type="text" size="10" class="textfield" id="foundInput" onchange="setLostId(this.value,1,<%=item.getId() %>)" />&nbsp;
 										<!-- [<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" ><bean:message key="button.do_match" /></a>]-->
-										[<a style="color:#fff;" href="javascript:document.foundItemForm.submit();" onclick="return validateId('foundInput');" ><bean:message key="button.do_match" /></a>]
+										[<a style="color:#fff;" id="confirmInput" href="javascript:document.foundItemForm.submit();" onclick="return validateId('foundInput');" ><bean:message key="button.do_match" /></a>]
       								<% } %>
       							</td>
 	       					</tr>
@@ -727,7 +727,7 @@
 	         				<td>
 	         					<bean:message key="colname.lf.category" />&nbsp;<span class="reqfield">*</span>
 	         					<br>
-	         					<select name="item[<%=i %>].category" class="dropdown"  id="itemcategory_<%=i %>" onchange="updateSubCategories('category_<%=i %>', <%=i %>);" id="category_<%=i %>" >
+	         					<select name="item[<%=i %>].category" class="dropdown"  id="category_<%=i %>" onchange="updateSubCategories('category_<%=i %>', <%=i %>);" id="category_<%=i %>" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							LFCategory category;
@@ -743,7 +743,7 @@
 	         				<td>
 	         					<bean:message key="colname.lf.subcategory" />
 	         					<br>
-	         					<select name="item[<%=i %>].subCategory"  id="itemsubcat_<%=i %>" class="dropdown" id="subcategories_<%=i %>" onchange="" >
+	         					<select name="item[<%=i %>].subCategory"  class="dropdown" id="subcategories_<%=i %>" onchange="" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList subCategories = new ArrayList();
