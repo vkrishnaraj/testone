@@ -12,7 +12,7 @@ public class LF_ManualMatch_FoundToLost extends DefaultSeleneseTestCase {
 		selenium.click("link=Confirm Match");
 		assertEquals("ID is required.", selenium.getAlert());
 		selenium.type("id=foundInput", Settings.LOST_ID_LF);
-		selenium.click("link=Confirm Match");
+		selenium.click("id=confirmInput");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Match lost report Id: " + Settings.LOST_ID_LF));

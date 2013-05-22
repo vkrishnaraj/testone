@@ -29,10 +29,9 @@ public class LF_CreateLost_Detailed extends DefaultSeleneseTestCase {
 			selenium.type("id=priLineNum", "333");
 			selenium.type("name=item[0].brand", "Test Brand");
 			selenium.type("name=item[0].serialNumber", "123321456");
-			selenium.select("id=itemcategory_0", "label=Bags");
+			selenium.select("id=category_0", "label=Bags");
 			selenium.select("name=item[0].color", "label=Black");
 			selenium.type("name=item[0].description", "Test Description Test Description Test Description Test Description Test Description Test Description Test DescriptionTest Description Test Description Test Description Test Description Test Description Test Description I Hate Matt.");
-			selenium.fireEvent("name=item[0].description", "blur");
 			selenium.select("name=segment[0].originId", "label=ATL");
 			selenium.select("name=segment[0].destinationId", "label=BOS");
 			selenium.click("saveButton");

@@ -22,7 +22,7 @@ public class LF_CreateFound_Detailed extends DefaultSeleneseTestCase {
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			selenium.type("name=item[0].brand", "Test Brand");
 			selenium.type("name=item[0].serialNumber", "123321456");
-			selenium.select("id=itemcategory_0", "label=Bags");
+			selenium.select("id=category_0", "label=Bags");
 			selenium.select("name=item[0].color", "label=Black");
 			selenium.type("name=item[0].description", "Test Description Test Description Test Description Test Description Test Description Test Description Test DescriptionTest Description Test Description Test Description Test Description Test Description Test Description Test Description 241 245");
 			selenium.fireEvent("name=item[0].description", "blur");

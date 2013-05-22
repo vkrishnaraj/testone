@@ -81,48 +81,29 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testLostReportPage() throws Exception {
-		selenium.click("id=lostForm:j_id194");
+		selenium.click("id=lostForm:j_id232");
 		waitForPageToLoadImproved(1000, false);
 		assertEquals("Please be advised that if an e-mail address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", selenium.getConfirmation());
-		verifyTrue(selenium.isTextPresent("First Name is required."));
-		verifyTrue(selenium.isTextPresent("Last Name is required."));
-		verifyTrue(selenium.isTextPresent("Address is required."));
-		verifyTrue(selenium.isTextPresent("City is required."));
-		verifyTrue(selenium.isTextPresent("State is required."));
-		verifyTrue(selenium.isTextPresent("Zip Code is required."));
-		verifyTrue(selenium.isTextPresent("Contact Information must contain at least one Phone Number or Email Address."));
-		verifyTrue(selenium.isTextPresent("Date Lost is required."));
-		verifyTrue(selenium.isTextPresent("Item Color is required."));
-		verifyTrue(selenium.isTextPresent("Item Case Color is required."));
-		verifyTrue(selenium.isTextPresent("Item Category is required."));
-		verifyTrue(selenium.isTextPresent("Arrival Airport required for Segment #1 in the \"About Your Trip\" section."));
-		verifyTrue(selenium.isTextPresent("Departure Airport required for Segment #1 in the \"About Your Trip\" section."));
 		selenium.select("id=lostForm:j_id26", "label=Cellphone");
 		selenium.select("id=lostForm:j_id34", "label=Black");
 		selenium.select("id=lostForm:j_id38", "label=Does Not Apply");
-		selenium.type("id=lostForm:j_id82", "Test");
-		selenium.type("id=lostForm:j_id84", "John");
-		selenium.type("id=lostForm:j_id90", "123 Test");
-		selenium.type("id=lostForm:j_id102", "Test");
+		selenium.type("id=lostForm:lastName", "Test");
+		selenium.type("id=lostForm:firstName", "John");
+		selenium.type("id=lostForm:j_id98", "123 Test");
+		selenium.type("id=lostForm:j_id110", "Test");
 		selenium.select("id=lostForm:state", "label=Georgia");
-		selenium.type("id=lostForm:j_id107", "30339");
+		selenium.type("id=lostForm:j_id115", "30339");
 		selenium.type("id=lostForm:email", "test@nettracer.aero");
-		selenium.click("id=lostForm:j_id60PopupButton");
-		selenium.click("//td[@id='lostForm:j_id60Footer']/table/tbody/tr/td[5]/div");
-		selenium.select("id=lostForm:segmentTable:0:j_id173", "label=ATL - Atlanta, GA");
-		selenium.select("id=lostForm:segmentTable:0:j_id177", "label=BOS - Boston, MA");
-		selenium.click("id=lostForm:j_id194");
-		waitForPageToLoadImproved(1000, false);
-		verifyTrue(selenium.isTextPresent("Email Address and Confirm Email Address must match."));
-		verifyTrue(selenium.isTextPresent("Phone number of lost phone is required for Category \"Cellphone\"."));
-		selenium.type("id=lostForm:j_id160", "test@nettracer.aero");
+		selenium.click("id=lostForm:j_id62PopupButton");
+		selenium.click("//td[@id='lostForm:j_id62Footer']/table/tbody/tr/td[5]/div");
+		selenium.select("id=lostForm:segmentTable:0:j_id211", "label=ATL - Atlanta, GA");
+		selenium.select("id=lostForm:segmentTable:0:j_id215", "label=BOS - Boston, MA");
+		selenium.click("id=lostForm:j_id232");
+		selenium.type("id=lostForm:j_id186", "test@nettracer.aero");
 		selenium.select("id=lostForm:j_id26", "label=Bags");
-		waitForPageToLoadImproved(1000, false);
-		selenium.click("id=lostForm:j_id194");
-		waitForPageToLoadImproved(1000, false);
-		verifyTrue(selenium.isTextPresent("Item Subcategory is required for Category \"Bags\"."));
+		selenium.click("id=lostForm:j_id232");
 		selenium.select("id=lostForm:j_id31", "label=Cloth Bag");
-		selenium.click("id=lostForm:j_id194");
+		selenium.click("id=lostForm:j_id232");
 		waitForPageToLoadImproved(false);
 	}
 
@@ -203,7 +184,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("2, GA 30339"));
 			verifyTrue(selenium.isTextPresent("United States"));
 			verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
-			selenium.click("id=j_id7:j_id103");
+			selenium.click("id=j_id7:j_id114");
 			waitForPageToLoadImproved(false);
 		}
 		

@@ -31,7 +31,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			selenium.type("id=itembrand_0", "Apple");
 			selenium.type("id=itemserial_0", "AP1234");
 			selenium.type("id=itemmodel_0", "iPhone 4S");
-			selenium.select("id=itemcategory_0", "label=Cellphone");
+			selenium.select("id=category_0", "label=Cellphone");
 			selenium.select("id=itemcolor_0", "label=White");
 			selenium.select("id=itemcasecolor_0", "label=Black");
 			selenium.select("segment[0].originId", "label=ATL");
@@ -70,7 +70,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 			selenium.type("id=itembrand_0", "Apple");
 			selenium.type("id=itemserial_0", "AP1234");
 			selenium.type("id=itemmodel_0", "iPhone 4S");
-			selenium.select("id=itemcategory_0", "label=Cellphone");
+			selenium.select("id=category_0", "label=Cellphone");
 			selenium.select("id=itemcolor_0", "label=White");
 			selenium.select("id=itemcasecolor_0", "label=Black");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");

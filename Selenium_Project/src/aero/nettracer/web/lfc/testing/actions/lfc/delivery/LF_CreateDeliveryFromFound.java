@@ -33,7 +33,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			selenium.type("id=itembrand_0", "HTC");
 			selenium.type("id=itemserial_0", "HTC1234");
 			selenium.type("id=itemmodel_0", "Eris");
-			selenium.select("id=itemcategory_0", "label=Cellphone");
+			selenium.select("id=category_0", "label=Cellphone");
 			selenium.select("id=itemcolor_0", "label=White");
 			selenium.select("id=itemcasecolor_0", "label=Black");
 			selenium.select("segment[0].originId", "label=ATL");
@@ -72,7 +72,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 			selenium.type("id=itembrand_0", "HTC");
 			selenium.type("id=itemserial_0", "HTC1234");
 			selenium.type("id=itemmodel_0", "Eris");
-			selenium.select("id=itemcategory_0", "label=Cellphone");
+			selenium.select("id=category_0", "label=Cellphone");
 			selenium.select("id=itemcolor_0", "label=White");
 			selenium.select("id=itemcasecolor_0", "label=Black");
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
@@ -91,7 +91,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		}
 		
 		selenium.type("//input[@id='foundInput']", LF_CreateDeliveryFromFound.lostId);
-		selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td/a");
+		selenium.click("id=confirmInput");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -125,15 +125,15 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testTrackingNumber() throws Exception {
-    	selenium.type("//div[@id='maincontent']/table[5]/tbody/tr[2]/td/input", "12341234");
+    	selenium.type("name=foundItem.trackingNumber", "12341234");
 		selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Tracking Number:  12341234"));
 			verifyEquals(LF_CreateDeliveryFromFound.today, selenium.getTable("//div[@id='maincontent']/table[5].1.1"));
-			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
-			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[4]/select"));
+//			verifyTrue(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
+			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
 		} else {
@@ -143,17 +143,22 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/input"));
-			verifyEquals("12341234", selenium.getValue("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/input"));
-			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a");
+			verifyTrue(selenium.isElementPresent("name=trackingNumber"));
+			verifyEquals("12341234", selenium.getValue("name=trackingNumber"));
+			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
+//			selenium.click("link=Undo");
+//			selenium.select("name=lost.statusId", "label=Open");
+//			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
+//			selenium.click("link=Undo");
+//			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CDFF: Failed to load the Lost Report after saving the tracking number.");
 			return;
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyEquals("Open", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
+			verifyEquals("Open", selenium.getSelectedLabel("name=lost.statusId"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
 		} else {
@@ -162,8 +167,8 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyEquals("Open", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[4]/select"));
-			verifyEquals("", selenium.getValue("//div[@id='maincontent']/table[5]/tbody/tr[2]/td/input"));
+			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
+			verifyEquals("", selenium.getValue("id=trackingNumber"));
 			verifyDeliveryOptions();
 		} else {
 			System.out.println("CDFF: Failed to load the Found Item after verifying the Lost Report.");

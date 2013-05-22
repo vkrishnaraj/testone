@@ -82,20 +82,23 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 
 			selenium.select("name=lost.companyId", "label=Southwest Airlines");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td/input", "Gordon");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[2]/input", "Chris");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/input", "420 East Ave");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[3]/td/input", "Lithia Springs");
-			selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[3]/td[2]/select", "label=Georgia");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[3]/td[4]/input", "30314");
-			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/input", "5556667777");
-			selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/select", "label=Home");
-			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td/input", "Nokia");
-			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[2]/input", "NKC987");
-			selenium.type("//div[@id='maincontent']/table[4]/tbody/tr[2]/td[3]/input", "Old Brick");
-			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[3]/td/select", "label=Cellphone");
-			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[3]/td[3]/select", "label=Yellow");
-			selenium.select("//div[@id='maincontent']/table[4]/tbody/tr[4]/td[3]/select", "label=Red");
+			selenium.type("name=lost.client.lastName", "Gordon");
+			selenium.type("name=lost.client.firstName", "Chris");
+			selenium.type("name=lost.client.address.decryptedAddress1", "420 East Ave");
+			selenium.type("name=lost.client.address.decryptedCity", "Lithia Springs");
+			selenium.select("id=state", "label=Georgia");
+			selenium.type("name=lost.client.address.decryptedZip", "30314");
+			selenium.type("id=priInterNum", "1"); //112223333
+			selenium.type("id=priAreaNum", "122");
+			selenium.type("id=priExchaNum", "23");
+			selenium.type("id=priLineNum", "333");
+			selenium.select("id=priPhoneType", "label=Home");
+			selenium.type("name=item[0].brand", "Nokia");
+			selenium.type("name=item[0].serialNumber", "NKC987");
+			selenium.type("name=item[0].description", "Old Brick");
+			selenium.select("id=category_0", "label=Cellphone");
+			selenium.select("name=item[0].color", "label=Yellow");
+			selenium.select("name=item[0].caseColor", "label=Red");
 			selenium.select("segment[0].originId", "label=ATL");
 			selenium.select("segment[0].destinationId", "label=BOS");
 			selenium.click("xpath=(//input[@id='button'])[5]");
@@ -128,12 +131,12 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 			selenium.select("name=found.locationId", "label=LZ");
 			selenium.click("//div[@id='maincontent']/table/tbody/tr/td[2]/img");
 			selenium.click("//a[contains(text(),'Today')]");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td/input", "Nokia");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[2]/input", "NKC987");
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr[3]/td[3]/input", "Old Brick");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td/select", "label=Cellphone");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[4]/td[3]/select", "label=Yellow");
-			selenium.select("//div[@id='maincontent']/table[3]/tbody/tr[5]/td[3]/select", "label=Red");
+			selenium.type("name=item[0].brand", "Nokia");
+			selenium.type("name=item[0].serialNumber", "NKC987");
+			selenium.type("name=item[0].description", "Old Brick");
+			selenium.select("id=category_0", "label=Cellphone");
+			selenium.select("name=item[0].color", "label=Yellow");
+			selenium.select("name=item[0].caseColor", "label=Red");
 			selenium.click("xpath=(//input[@id='button'])[3]");
 			waitForPageToLoadImproved();
 		} else {
@@ -146,8 +149,8 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 			System.out.println("CLAFRO: Created Found Item: " + LF_CreateLostAndFoundReadOnly.foundId);
 			
 			// Manually match to the Lost Report that we just created.
-			selenium.type("//div[@id='maincontent']/table[3]/tbody/tr/td/input", LF_CreateLostAndFoundReadOnly.lostId);
-			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr/td/a");
+			selenium.type("id=foundInput", LF_CreateLostAndFoundReadOnly.lostId);
+			selenium.click("id=confirmInput");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLAFRO: Failed to create the Found Item.");
@@ -162,7 +165,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testDLostAndFoundReadOnly() {
-		selenium.select("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[4]/select", "label=Closed");
+		selenium.select("name=found.statusId", "label=Closed");
 		selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 		waitForPageToLoadImproved();
 		

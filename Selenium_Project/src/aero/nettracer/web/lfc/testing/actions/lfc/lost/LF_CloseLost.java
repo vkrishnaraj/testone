@@ -8,16 +8,6 @@ public class LF_CloseLost extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testAB_Login() throws Exception {
-		selenium.select("name=lost.statusId", "label=Closed");
-		selenium.click("saveButton");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			System.out.println("VERIFYING CLOSE AGENT: " + selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/input"));
-			verifyEquals("ntauto", selenium.getValue("//div[@id='maincontent']/table/tbody/tr[2]/td[4]/input"));
-		} else {
-			System.err.println("Edit Lost Page Did Not Load After Close. Error Page Loaded Instead.");
-			verifyTrue(false);
-		}
-		
+		verifyEquals(selenium.getValue("name=lost.statusId"), "601");
 	}
 }

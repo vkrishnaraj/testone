@@ -33,7 +33,7 @@ public class LF_CreateFound_VerifyRequiredFields extends DefaultSeleneseTestCase
 			selenium.select("name=found.locationId", "label=LZ");
 			selenium.click("name=saveButton");
 			assertEquals("Category is required.", selenium.getAlert());
-			selenium.select("//select[@id='itemcategory_0']", "label=Bags");
+			selenium.select("//select[@id='category_0']", "label=Bags");
 			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
