@@ -25,28 +25,28 @@ public class LF_BoxCount extends DefaultSeleneseTestCase {
 		{
 			selenium.select("id=stationLists", "label=ABE");
 			selenium.click("css=input[type=\"button\"]");
-			waitForPageToLoadImproved(1000, false);
+			waitForPageToLoadImproved(3000, false);
 			selenium.select("id=stationLists", "label=BOI");
 			selenium.click("css=input[type=\"button\"]");
-			waitForPageToLoadImproved(1000, false);
+			waitForPageToLoadImproved(3000, false);
 			selenium.select("id=stationLists", "label=AUS");
 			selenium.click("css=input[type=\"button\"]");
-			waitForPageToLoadImproved(1000, false);
+			waitForPageToLoadImproved(3000, false);
 			selenium.select("id=stationLists", "label=AUS");
 			selenium.click("css=input[type=\"button\"]");
-			waitForPageToLoadImproved(1000, false);
+			waitForPageToLoadImproved(3000, false);
 		}
 		
 		if(checkNoErrorPage())
 		{
 			selenium.click("link=Remove");
-			waitForPageToLoadImproved(1000, false);
+			waitForPageToLoadImproved(3000, false);
 			selenium.click("link=Remove");
-			waitForPageToLoadImproved(1000, false);
+			waitForPageToLoadImproved(3000, false);
 			selenium.click("link=Remove");
-			waitForPageToLoadImproved(1000, false);
+			waitForPageToLoadImproved(3000, false);
 			selenium.click("link=Remove");
-			waitForPageToLoadImproved(1000, false);
+			waitForPageToLoadImproved(3000, false);
 		}
 		
 	}

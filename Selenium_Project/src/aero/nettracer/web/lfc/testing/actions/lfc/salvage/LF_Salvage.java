@@ -283,7 +283,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		// try to enter LOW_GT_30
 		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
 		selenium.keyDown("//input[@id='addBarcode']", "\\13");
-		waitForPageToLoadImproved(1000, false);
+		waitForPageToLoadImproved(3000, false);
 		try {
 			synchronized (selenium) {
 				selenium.wait(LF_Salvage.TIMEOUT);
@@ -294,7 +294,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_Salvage.LOW_GT_30));
-			verifyTrue(selenium.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics, Backbeat, PN5678"));
+			verifyTrue(selenium.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics,"));
 		} else {
 			System.out.println("LFS: failed to enter LOW_GT_30: " + LF_Salvage.LOW_GT_30);
 			return;
@@ -337,7 +337,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			selenium.type("xpath=(//input[@id='prevBoxId'])[2]","BOX2");
 			selenium.focus("xpath=(//input[@id='prevBoxId'])[2]");
 			selenium.keyDown("xpath=(//input[@id='prevBoxId'])[2]", "\\13");
-			waitForPageToLoadImproved(1000, false);
+			waitForPageToLoadImproved(3000, false);
 			try {
 				synchronized (selenium) {
 					selenium.wait(LF_Salvage.TIMEOUT);
@@ -349,7 +349,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_Salvage.HIGH_GT_60));
-			verifyTrue(selenium.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics, Backbeat, PN4567"));
+			verifyTrue(selenium.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics,"));
 			selenium.click("//a[@id='menucol_0.0']/u");
 			waitForPageToLoadImproved();
 		} else {
