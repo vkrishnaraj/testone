@@ -9,7 +9,7 @@ function openChart(url)
 	var options = "width=" + w + ",height=" + h + ",menubar=no";
 	chartWin = window.open(url,"bagtypechart",options);
 }
-<!--
+//<!--
 var imgObj;
 function checkImg(theURL,winName){
 
