@@ -51,7 +51,11 @@
 				</logic:iterate>
 			}
 		</logic:iterate>
-		stationList.value=selectedStation;
+		if(selectedStation!=null){
+			stationList.value=selectedStation;
+		} else {
+			stationList.value=<%=String.valueOf(TracingConstants.LF_STATUS_ALL) %>;
+		}
 		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
 	}
     
