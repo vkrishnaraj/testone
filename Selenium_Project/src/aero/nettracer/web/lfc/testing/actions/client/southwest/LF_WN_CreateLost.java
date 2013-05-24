@@ -102,6 +102,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		selenium.type("id=lostForm:j_id186", "test@nettracer.aero");
 		selenium.select("id=lostForm:j_id26", "label=Bags");
 		selenium.click("id=lostForm:j_id232");
+		waitForPageToLoadImproved(2000,false);
 		selenium.select("id=lostForm:j_id31", "label=Cloth Bag");
 		selenium.click("id=lostForm:j_id232");
 		waitForPageToLoadImproved(false);
@@ -147,7 +148,8 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("Lost Item Report Form"));
 
 			selenium.type("id=lostForm:firstName", "2");
-			selenium.type("id=lostForm:j_id94", "2");
+			selenium.type("lostForm:j_id98", "2");
+			selenium.type("lostForm:j_id110", "2");
 			selenium.click("id=lostForm:j_id233");
 			waitForPageToLoadImproved(false);
 		}
@@ -174,7 +176,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("2, GA 30339"));
 			verifyTrue(selenium.isTextPresent("United States"));
 			verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
-			selenium.click("id=j_id7:j_id114");
+			selenium.click("id=j_id7:j_id115");
 			waitForPageToLoadImproved(false);
 		}
 		
