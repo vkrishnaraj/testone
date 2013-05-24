@@ -1799,6 +1799,18 @@ public class OHDUtils {
 				i++;
 			}
 			form.setPassengerList(nplist);
+			
+			form.setFirstname(o.getFirstname());
+			form.setLastname(o.getLastname());
+			form.setMiddlename(o.getMiddlename());
+			form.setRecordlocator(o.getRecord_locator());
+			form.setStorage_location(o.getStorage_location());
+			if(o.getMembership()!=null){
+				form.setCompanycode_ID(o.getMembership().getCompanycode_ID());
+				form.setMembershipnum(o.getMembership().getMembershipnum());
+				form.setMembershipstatus(o.getMembership().getMembershipstatus());
+			}
+			
 			return form;
 		}
 		
