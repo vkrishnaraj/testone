@@ -218,7 +218,7 @@ function loadQuickSearchModal() {
 	jQuery("#dialog").dialog("open");
 	jQuery("#dialog").dialog("option", "title","Quick Search");
 	}
-		var currentElement = document.getElementById("dialog-inner-content");
+		var currentElement = document.getElementById("quickSearchQuery3"); /*dialog-inner-content*/
 		
 		currentElement.focus();
 	}
