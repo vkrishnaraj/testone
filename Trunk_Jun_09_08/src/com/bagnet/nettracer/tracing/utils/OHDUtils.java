@@ -1803,7 +1803,7 @@ public class OHDUtils {
 			form.setFirstname(o.getFirstname());
 			form.setLastname(o.getLastname());
 			form.setMiddlename(o.getMiddlename());
-			form.setRecordlocator(o.getRecord_locator());
+			form.setPnr(o.getRecord_locator());
 			form.setStorage_location(o.getStorage_location());
 			if(o.getMembership()!=null){
 				form.setCompanycode_ID(o.getMembership().getCompanycode_ID());
