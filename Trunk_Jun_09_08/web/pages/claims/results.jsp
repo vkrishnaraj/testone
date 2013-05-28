@@ -50,12 +50,12 @@
 	AccessRequest.RequestStatus status = result.getFile2().getRequestStatus();
 	String company = request.getParameter("company");
 	String disStatus = result.getFile2().getDisStatus();
-	boolean sameCompany = result.getFile2().getValidatingCompanycode().equals(company) || status != null;
+	boolean sameCompany = result.getFile2().getValidatingCompanycode().equals(company);
 	boolean ntUser = PropertyBMO.isTrue("nt.user");
 	FsClaim[] claims = result.getFile2().getClaims().toArray(new FsClaim[0]);
 	if (claims != null && claims.length > 0) { %>
 	<tr <%=disStatus %>>
-		<td rowspan=<%=claims.length %>><input type="checkbox" name="<%=results%>[<%=i%>].requestSelected" <% if (sameCompany) { %>disabled<% } %> /></td>
+		<td rowspan=<%=claims.length %>><input type="checkbox" name="<%=results%>[<%=i%>].requestSelected" <% if (sameCompany || status != null) { %>disabled<% } %> /></td>
 		<td rowspan=<%=claims.length %>><input type="checkbox" name="<%=results%>[<%=i%>].deleteSelected" /></td>
 		<% 
 			int j = 0;
@@ -161,7 +161,7 @@
 		
 			<% } else { %>
 				<tr <%=disStatus %>>
-					<td><input type="checkbox" name="<%=results%>[<%=i%>].requestSelected" <% if (sameCompany) { %>disabled<% } %> /></td>
+					<td><input type="checkbox" name="<%=results%>[<%=i%>].requestSelected" <% if (sameCompany || status != null) { %>disabled<% } %> /></td>
 					<td><input type="checkbox" name="<%=results%>[<%=i%>].deleteSelected" /></td>
 					<% if (result.getFile2().getIncident().getAirline().equals(company)) { %>
 					<td>
