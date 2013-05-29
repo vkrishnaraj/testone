@@ -811,7 +811,7 @@ if (i.intValue() == 0) {
         <logic:equal name="BDOForm" property="canceled" value="false">
         <html:hidden property="save" value = ""/>
                 <html:hidden property="save" value = ""/>
-        <html:button property="saveButton" styleId="button" onclick="changebutton(); if(validateReqBDO(document.BDOForm)) {document.BDOForm.submit();} else {undoChangebutton();}">
+        <html:button property="saveButton" styleId="button" onclick="changebutton(); if(validateReqBDO(document.BDOForm)) {window.onbeforeunload = null; document.BDOForm.submit();} else {undoChangebutton();}">
           <bean:message key="button.bdo_send" />
         </html:button>
         </logic:equal>

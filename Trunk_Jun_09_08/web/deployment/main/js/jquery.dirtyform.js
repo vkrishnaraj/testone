@@ -7,8 +7,8 @@
 * http://jquery.org/license
 *
 * Author: chris.dance@papercut.com
-* Version: 1.3.0
-* Date: 14th May 2013
+* Version: 1.1.0
+* Date: 3rd Feb 2013
 */
 (function($) {
   $.fn.areYouSure = function(options) {
@@ -17,7 +17,7 @@
             'message' : 'You have unsaved changes!',
             'dirtyClass' : 'dirty',
             'change' : null,
-            'fieldSelector' : "select,textarea,input[type='text'],input[type='password'],input[type='checkbox'],input[type='radio'],input[type='hidden']"
+            'fieldSelector' : "select,textarea,input[type='text'],input[type='password'],input[type='checkbox'],input[type='radio']"
           }, options);
 
     var getValue = function($field) {
@@ -25,10 +25,6 @@
           || $field.hasClass('aysIgnore')
           || $field.attr('data-ays-ignore')) {
         return null;
-      }
-
-      if ($field.is(':disabled')) {
-        return 'ays-disabled';
       }
 
       var val;
@@ -54,7 +50,6 @@
         default:
           val = $field.val();
       }
-
       return val;
     };
 
@@ -85,12 +80,8 @@
           }
         });
       }
-
-      markDirty($form, isDirty);
-    };
-    
-    var markDirty = function($form, isDirty) {
       var changed = isDirty != $form.hasClass(settings.dirtyClass);
+
       $form.toggleClass(settings.dirtyClass, isDirty);
 
       // Fire change event if required
@@ -113,11 +104,11 @@
       }
       $(this).submit(function() {
         $(this).removeClass(settings.dirtyClass);
+        $(window).bind('beforeunload', null);
       });
 
       $(this).find(settings.fieldSelector).each(storeOrigValue);
       $(this).find(settings.fieldSelector).bind('change keyup', checkForm);
-      $(this).bind('reset', function() { markDirty($(this), false); });
     });
   };
 })(jQuery);

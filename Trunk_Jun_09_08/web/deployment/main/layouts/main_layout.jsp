@@ -351,11 +351,16 @@ jQuery(document).ready(function () {
 	jQuery("#closeLink").click(function(event) {handleEvent(event)});
 	jQuery("#openLink").click(function(event) {handleEvent(event)});
 	jQuery("#switchLink").click(function(event) {switchLocation(event)});
-    jQuery("#dirtyCheck-form").areYouSure( {
-	<% if (request.getParameter("dirtyForm") != null) { %>
-		startDirty:true
-	<% } %>
-    });
+    jQuery("#dirtyCheck-form").areYouSure();
+    /*store onbeforeunload for later use */
+    $(window).data('beforeunload',window.onbeforeunload);  
+
+      /*remove||re-assign onbeforeunload on hover */
+    $('a[href^="javascript:"]')
+      .hover( 
+             function(){window.onbeforeunload=null;},
+             function(){window.onbeforeunload=$(window).data('beforeunload');}
+            );
 });
 
 </script>

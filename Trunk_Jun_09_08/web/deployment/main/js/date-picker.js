@@ -329,7 +329,7 @@ Calendar.prototype.show = function() {
 	"<FONT COLOR=white FACE='" + fontface + "' SIZE=2><B>" + this.gTitle + "</B></FONT>" + 
 	"</TD><TD BGCOLOR='#000099' ALIGN=RIGHT>" + 
 	"<FONT COLOR=white FACE='" + fontface + "' SIZE=2><B>" + 
-	"<A HREF='javascript:" +
+	"<A HREF='###' onclick='" +
 	this.WHO + "Calendar.Close(\"" + this.gType + "\", \"" + this.INLINE + "\");' " +
 	"STYLE='color:white'>" + 
 	"x</A></B></FONT></TR><TR>" + 
@@ -352,30 +352,30 @@ Calendar.prototype.show = function() {
 	
 	this.wwrite("<FONT COLOR=black FACE='" + fontface + "' SIZE=2>" + 
 			"[<A HREF=\"" +
-			"javascript:" + this.WHO + "Build(" + 
+			"###\" onclick=\"" + this.WHO + "Build(" + 
 			"'" + this.gReturnItem + "', '" + this.gMonth + "', '" + (parseInt(this.gYear)-1) + "', '" + this.gFormat + "', '" + this.gType + "'" + 
 			");\"><<<\/A>]</FONT></TD><TD ALIGN=center>");
 	this.wwrite("<FONT COLOR=black FACE='" + fontface + "' SIZE=2>" + 
 			"[<A HREF=\"" +
-			"javascript:" + this.WHO + "Build(" + 
+			"###\" onclick=\"" + this.WHO + "Build(" + 
 			"'" + this.gReturnItem + "', '" + prevMM + "', '" + prevYYYY + "', '" + this.gFormat + "', '" + this.gType + "'" + 
 			");\"><<\/A>]</FONT></TD><TD ALIGN=center>");
 	this.wwrite("<FONT COLOR=black FACE='" + fontface + "' SIZE=2>" + 
-			"[<A HREF=\"javascript:window.print();\">" + 
+			"[<A HREF=\"###\" onclick=\"window.print();\">" + 
 			"Print</A>]</FONT></TD><TD ALIGN=center>");
 	this.wwrite("<FONT COLOR=black FACE='" + fontface + "' SIZE=2>" + 
 			"[<A HREF=\"" +
-			"javascript:" + this.WHO + "Build(" + 
+			"###\" onclick=\"" + this.WHO + "Build(" + 
 			"'" + this.gReturnItem + "', '" + gNow.getMonth() + "', '" + gNow.getFullYear() + "', '" + this.gFormat + "', '" + this.gType + "'" + 
 			");\">Today<\/A>]</FONT></TD><TD ALIGN=center>");
 	this.wwrite("<FONT COLOR=black FACE='" + fontface + "' SIZE=2>" + 
 			"[<A HREF=\"" +
-			"javascript:" + this.WHO + "Build(" + 
+			"###\" onclick=\"" + this.WHO + "Build(" + 
 			"'" + this.gReturnItem + "', '" + nextMM + "', '" + nextYYYY + "', '" + this.gFormat + "', '" + this.gType + "'" + 
 			");\">><\/A>]</FONT></TD><TD ALIGN=center>");
 	this.wwrite("<FONT COLOR=black FACE='" + fontface + "' SIZE=2>" + 
 			"[<A HREF=\"" +
-			"javascript:" + this.WHO + "Build(" + 
+			"###\" onclick=\"" + this.WHO + "Build(" + 
 			"'" + this.gReturnItem + "', '" + this.gMonth + "', '" + (parseInt(this.gYear)+1) + "', '" + this.gFormat + "', '" + this.gType + "'" + 
 			");\">>><\/A>]</FONT></TD></TR></TABLE><BR>");
 
@@ -451,13 +451,13 @@ Calendar.prototype.showY = function() {
 
 	this.wwrite("<TABLE WIDTH='100%' BORDER=1 CELLSPACING=0 CELLPADDING=0 BGCOLOR='#e0e0e0'><TR><TD ALIGN=center>");
 	this.wwrite("[<A HREF=\"" +
-			"javascript:window.opener.Build(" + 
+			"###\" onclick=\"window.opener.Build(" + 
 			"'" + this.gReturnItem + "', null, '" + prevYYYY + "', '" + this.gFormat + "'" +
 			");" +
 			"\" alt='Prev Year'><<<\/A>]</TD><TD ALIGN=center>");
-	this.wwrite("[<A HREF=\"javascript:window.print();\">Print</A>]</TD><TD ALIGN=center>");
+	this.wwrite("[<A HREF=\"###\" onclick=\"window.print();\">Print</A>]</TD><TD ALIGN=center>");
 	this.wwrite("[<A HREF=\"" +
-			"javascript:window.opener.Build(" + 
+			"###\" onclick=\"window.opener.Build(" + 
 			"'" + this.gReturnItem + "', null, '" + nextYYYY + "', '" + this.gFormat + "'" +
 			");" +
 			"\">>><\/A>]</TD></TR></TABLE><BR>");
@@ -548,7 +548,7 @@ Calendar.prototype.cal_data = function() {
 					linkText = "";
 					linkCloseText = "";
 		} else {
-			linkText = "<A HREF='javascript:" + closecodeI + "' " +
+			linkText = "<A HREF='###' onclick='" + closecodeI + "' " +
 				"onClick=\"onClickFn('" + 
 				
 				((this.returnData == "Date") ? 
@@ -582,7 +582,7 @@ Calendar.prototype.cal_data = function() {
 					linkText = "";
 					linkCloseText = "";
 			} else {
-				linkText = "<A HREF='javascript:" + closecodeI + "' " +
+				linkText = "<A HREF='###' onclick='" + closecodeI + "' " +
 					"onClick=\"onClickFn('" + 
 				
 					((this.returnData == "Date") ? 
