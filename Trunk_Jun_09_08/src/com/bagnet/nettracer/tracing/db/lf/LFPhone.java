@@ -148,10 +148,10 @@ public class LFPhone implements Serializable{
 
 	public void setExtension(String extension) {
 
-		if(extension.length()>0){
+		if(extension!=null && extension.length()>0){
 			extension=extension.replaceAll("[^\\d.]", "");
+			this.extension = extension;
 		}
-		this.extension = extension;
 	}
 	
 	public static String normalizePhone(String phone){

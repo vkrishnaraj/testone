@@ -414,6 +414,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 			lostPhone.setDecryptedExchange(lostReport.getLostPhone()
 					.getExchange());
 			lostPhone.setDecryptedLine(lostReport.getLostPhone().getLine());
+			lostPhone.setExtension(lostReport.getLostPhone().getExtension());
 			lostPhone.setPhoneType(lostReport.getLostPhone().getType());
 			lostPhone.setItem(item);
 
@@ -491,6 +492,8 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 						.getPrimaryPhone().getExchange());
 				toAdd.setDecryptedLine(lostReport.getContact()
 						.getPrimaryPhone().getLine());
+
+				toAdd.setExtension(lostReport.getContact().getPrimaryPhone().getExtension());
 				if (addPhone) {
 					phones.add(toAdd);
 				}
@@ -516,6 +519,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 						.getSecondaryPhone().getExchange());
 				toAdd.setDecryptedLine(lostReport.getContact()
 						.getSecondaryPhone().getLine());
+				toAdd.setExtension(lostReport.getContact().getSecondaryPhone().getExtension());
 				if (addPhone) {
 					phones.add(toAdd);
 				}
@@ -744,6 +748,16 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 					PhoneBean shipPhone = new PhoneBean();
 					shipPhone.setNumber(shipment.getShippingPhone()
 							.getDecryptedPhoneNumber());
+					shipPhone.setCountry(shipment.getShippingPhone()
+							.getDecryptedCountry());
+					shipPhone.setArea(shipment.getShippingPhone()
+							.getDecryptedArea());
+					shipPhone.setExchange(shipment.getShippingPhone()
+							.getDecryptedExchange());
+					shipPhone.setLine(shipment.getShippingPhone()
+							.getDecryptedLine());
+					shipPhone.setExtension(shipment.getShippingPhone()
+							.getExtension());
 					shipPhone.setType(shipment.getShippingPhone().getNumberType());
 					client.setPrimaryPhone(shipPhone);
 				}

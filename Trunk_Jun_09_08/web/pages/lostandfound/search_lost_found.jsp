@@ -217,8 +217,16 @@
 			            </td>
 			            <td>
 		              		<bean:message key="colname.lf.phone.number" />
+		              		<br/><bean:message key="colname.lf.phone.logic"/>
 		              		<br/>
-		              		<html:text name="searchLostFoundForm" property="phoneNumber" size="15" maxlength="25" styleClass="textfield" />
+		              		
+		              		<html:text name="searchLostFoundForm" property="intNumber" styleId="priInterNum" size="1" maxlength="10" styleClass="textfield" />
+		              		<html:text name="searchLostFoundForm" property="areaNumber" styleId="priAreaNum" size="3" maxlength="10" styleClass="textfield" />
+		              		<html:text name="searchLostFoundForm" property="exchangeNumber" styleId="priExchaNum" size="3" maxlength="10" styleClass="textfield" />
+		              		<html:text name="searchLostFoundForm" property="lineNumber" styleId="priLineNum" size="3" maxlength="10" styleClass="textfield" /><br/>
+		              		<bean:message key="colname.lf.phone.extension" />: <html:text name="searchLostFoundForm" property="extension" size="3" maxlength="4" styleClass="textfield" />
+		              		
+		              		<!--<html:text name="searchLostFoundForm" property="phoneNumber" size="15" maxlength="25" styleClass="textfield" />-->
 		              	</td>
 		              	<td>
 		              		<bean:message key="colname.lf.email" />

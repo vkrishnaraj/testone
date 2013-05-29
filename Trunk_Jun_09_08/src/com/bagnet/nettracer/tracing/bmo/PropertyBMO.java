@@ -135,6 +135,7 @@ public class PropertyBMO {
 	public static final String LF_TRACING_WEIGHT_ADDRESS = "lf.tracing.weight.address";
 	public static final String LF_TRACING_WEIGHT_PHONE = "lf.tracing.weight.phone";
 	public static final String LF_TRACING_WEIGHT_EMAIL = "lf.tracing.weight.email";
+	public static final String LF_TRACING_WEIGHT_INITIAL_NAME = "lf.tracing.weight.initial.name";
 
 	public static final String LF_TRACING_WEIGHT_MVA = "lf.tracing.weight.mva";
 	public static final String LF_TRACING_WEIGHT_AGREEMENT = "lf.tracing.weight.agreement";
@@ -165,7 +166,6 @@ public class PropertyBMO {
 	public static final String LF_TRACING_NAME = "lf.tracing.name";
 	public static final String LF_TRACING_LAST_NAME = "lf.tracing.last.name";
 	public static final String LF_TRACING_NICK_NAME = "lf.tracing.nick.name";
-	public static final String LF_TRACING_BAG_NAME = "lf.tracing.bag.name";
 	public static final String LF_TRACING_SERIAL= "lf.tracing.serial";
 	public static final String LF_TRACING_PHONE = "lf.tracing.phone";
 	public static final String LF_TRACING_EMAIL= "lf.tracing.email";

@@ -34,6 +34,11 @@ public class LFSearchDTO extends ActionForm  {
 	private String agreementNumber;
 	private String mvaNumber; 
 	private String phoneNumber;
+	private String intNumber;
+	private String areaNumber;
+	private String exchangeNumber;
+	private String lineNumber;
+	private String extension;
 	private String email;
 	private String companyId;
 	private int type; 
@@ -309,6 +314,46 @@ public class LFSearchDTO extends ActionForm  {
 
 	public void setEndRentDate(String endRentDate) {
 		this.endRentDate = endRentDate;
+	}
+
+	public String getIntNumber() {
+		return intNumber;
+	}
+
+	public void setIntNumber(String intNumber) {
+		this.intNumber = intNumber;
+	}
+
+	public String getAreaNumber() {
+		return areaNumber;
+	}
+
+	public void setAreaNumber(String areaNumber) {
+		this.areaNumber = areaNumber;
+	}
+
+	public String getExchangeNumber() {
+		return exchangeNumber;
+	}
+
+	public void setExchangeNumber(String exchangeNumber) {
+		this.exchangeNumber = exchangeNumber;
+	}
+
+	public String getLineNumber() {
+		return lineNumber;
+	}
+
+	public void setLineNumber(String lineNumber) {
+		this.lineNumber = lineNumber;
+	}
+
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
 	}
 		
 }

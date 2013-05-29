@@ -220,17 +220,70 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 
 		String phone = null;
-		if(dto.getPhoneNumber() != null && dto.getPhoneNumber().trim().length() > 0){
+//		if(dto.getPhoneNumber() != null && dto.getPhoneNumber().trim().length() > 0){
+//			try{
+//				phone = AES.encrypt(LFPhone.normalizePhone(dto.getPhoneNumber()));
+//			} catch (Exception e){
+//				e.printStackTrace();
+//			}
+//		} 
+
+		String intnum = null;
+
+		String toEncrypt="";
+		if(dto.getIntNumber() != null && dto.getIntNumber().trim().length() > 0){
 			try{
-				phone = AES.encrypt(LFPhone.normalizePhone(dto.getPhoneNumber()));
-				if(phone != null){
-					sql += " left outer join o.client.phones p";
-				}
+				intnum = AES.encrypt(LFPhone.normalizePhone(dto.getIntNumber()));
+				toEncrypt+=dto.getIntNumber();
 			} catch (Exception e){
 				e.printStackTrace();
 			}
 		} 
+		String areanum = null;
+		if(dto.getAreaNumber() != null && dto.getAreaNumber().trim().length() > 0){
+			try{
+				areanum = AES.encrypt(LFPhone.normalizePhone(dto.getAreaNumber()));
+				toEncrypt+=dto.getAreaNumber();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		} 
+		String exchangenum = null;
+		if(dto.getExchangeNumber() != null && dto.getExchangeNumber().trim().length() > 0){
+			try{
+				exchangenum = AES.encrypt(LFPhone.normalizePhone(dto.getExchangeNumber()));
+				toEncrypt+=dto.getExchangeNumber();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		} 
+		String linenum = null;
+		if(dto.getLineNumber() != null && dto.getLineNumber().trim().length() > 0){
+			try{
+				linenum = AES.encrypt(LFPhone.normalizePhone(dto.getLineNumber()));
+				toEncrypt+=dto.getLineNumber();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		} 
+		String extension = null;
+		if(dto.getExtension() != null && dto.getExtension().trim().length() > 0){
+			try{
+				extension = dto.getExtension();
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		} 
+		try{
+			if(toEncrypt!=null && toEncrypt.length()>0)
+				phone = AES.encrypt(LFPhone.normalizePhone(toEncrypt));
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		
+		if(phone!=null || intnum != null || areanum!=null || exchangenum!=null || linenum!=null || extension!=null){
+			sql += " left outer join o.client.phones p";
+		}
 		sql += " where 1=1";
 
 		if (category > 0 || haveBrand || haveDesc || haveSerial) {
@@ -263,10 +316,25 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sql += itemSql;
 		}
 		
-		if (phone != null) {
-			sql += " and p.phoneNumber = \'" + phone + "\'";
+		if(intnum!=null){
+			sql += " and p.countryNumber = \'" + intnum + "\'";
 		}
-		
+		if(areanum!=null){
+			sql += " and p.areaNumber = \'" + areanum + "\'";
+		}
+		if(exchangenum!=null){
+			sql += " and p.exchangeNumber = \'" + exchangenum + "\'";
+		}
+		if(linenum!=null){
+			sql += " and p.lineNumber = \'" + linenum + "\'";
+		}
+		if(extension!=null){
+			sql += " and p.extension = \'" + extension + "\'";
+		}
+
+		if (phone != null) {
+			sql += " or (p.phoneNumber = \'" + phone + "\')";
+		}
 		if(dto.getType() == TracingConstants.LF_TYPE_FOUND && dto.getBarcode() != null && dto.getBarcode().trim().length() > 0){
 			sql += " and o.barcode = \'" + dto.getBarcode() + "\'";
 		} else if(dto.getId() > 0){

@@ -65,7 +65,7 @@ public class EnterItemsAction extends CheckedAction {
 			if (fhoId != null && !fhoId.isEmpty()) {
 				HistoryContainer hc = (HistoryContainer) session.getAttribute("historyContainer");
 				FoundHistoryObject fho = (FoundHistoryObject) hc.get(fhoId);
-				fho.getFound().setLocation(StationBMO.getStationByCode(fho.getFound().getLocation().getStationcode()));
+				fho.getFound().setLocation(StationBMO.getStationByCode(fho.getFound().getLocation().getStationcode(), user.getCompanycode_ID()));
 				fho.getFound().setEntryStatus(TracingConstants.LF_STATUS_MOVED);
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(fho.getFound(), user);
 				request.setAttribute("divId", request.getParameter("divId"));

@@ -476,24 +476,15 @@ public class LFTracingUtil {
 		if(match.getLost().getClient() != null && match.getFound().getClient() != null){
 			LFPerson lc = match.getLost().getClient();
 			LFPerson fc = match.getFound().getClient();
-			if(lc.getLastName() != null && lc.getLastName().trim().length() > 0
-					&& fc.getLastName() != null && fc.getLastName().trim().length() > 0 && isPrimary){
-				if(StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_LAST_NAME)))){ //What the comparescore we want?
-					LFMatchDetail detail = new LFMatchDetail();
-					detail.setDescription("Last Name Match");
-					detail.setMatchHistory(match);
-					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_LAST_NAME)); //What's the value?
-					detail.setDecryptedFoundValue(fc.getLastName());
-					detail.setDecryptedLostValue(lc.getLastName());
-					match.getDetails().add(detail);
-				}
-			}
-			
+
+			boolean exactname=true;
+			boolean namematch=false;
+			boolean bagnamematch=false;
 			if(lc.getLastName() != null && lc.getLastName().trim().length() > 0
 					&& fc.getLastName() != null && fc.getLastName().trim().length() > 0
 					&& lc.getFirstName() != null && lc.getFirstName().trim().length() > 0
 					&& fc.getFirstName() != null && fc.getFirstName().trim().length() > 0){
-				boolean namematch=false;
+				List<String> fnickname=getNickName(fc.getFirstName().toUpperCase());
 				if(StringCompare.compareStrings(lc.getFirstName()+lc.getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //|| nickmatch
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
@@ -503,23 +494,10 @@ public class LFTracingUtil {
 					detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
 					match.getDetails().add(detail);
 					namematch=true;
-				}
-				
-				if(match.getLost().getFirstName()!=null && match.getLost().getFirstName().trim().length()>0 &&
-						match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0 &&
-							StringCompare.compareStrings(match.getLost().getFirstName()+match.getLost().getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){
-					LFMatchDetail detail = new LFMatchDetail();
-					detail.setDescription("Bag Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
-					detail.setMatchHistory(match);
-					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_BAG_NAME));
-					detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
-					detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
-					match.getDetails().add(detail);
-					namematch=true;
+					exactname=true;
 				}
 				
 				if(!namematch){
-					List<String> fnickname=getNickName(fc.getFirstName().toUpperCase());
 					List<String> lnickname=getNickName(lc.getFirstName().toUpperCase());
 					for(String name:fnickname){
 						if(StringCompare.compareStrings(name+fc.getLastName(), lc.getFirstName()+lc.getLastName())>
@@ -528,7 +506,7 @@ public class LFTracingUtil {
 							detail.setDescription("Nick Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
 							detail.setMatchHistory(match);
 							detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NICK_NAME));
-							detail.setDecryptedFoundValue(name + " " + fc.getLastName());
+							detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
 							detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
 							match.getDetails().add(detail);
 							namematch=true;
@@ -541,12 +519,111 @@ public class LFTracingUtil {
 							detail.setDescription("Nick Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
 							detail.setMatchHistory(match);
 							detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NICK_NAME));
-							detail.setDecryptedFoundValue(lc.getFirstName()+ " " + fc.getLastName());
-							detail.setDecryptedLostValue(name + " " + lc.getLastName());
+							detail.setDecryptedFoundValue(fc.getFirstName()+ " " + fc.getLastName());
+							detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
 							match.getDetails().add(detail);
 							namematch=true;
 						}
 					}
+				}
+				
+				if(!namematch){
+					if(StringCompare.compareStrings(lc.getFirstName().substring(0, 1)+lc.getLastName(), fc.getFirstName().substring(0, 1)+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("First initial Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
+						detail.setMatchHistory(match);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_INITIAL_NAME));
+						detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
+						detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
+						match.getDetails().add(detail);
+						namematch=true;
+					}
+				}
+				
+				if(((match.getLost().getFirstName()!=null && match.getLost().getFirstName().trim().length()>0)
+						&& (match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0))
+						&& (!match.getLost().getFirstName().equals(lc.getFirstName()) && !match.getLost().getLastName().equals(lc.getLastName()))){
+					if(StringCompare.compareStrings(match.getLost().getFirstName()+match.getLost().getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){
+						LFMatchDetail detail = new LFMatchDetail();
+						detail.setDescription("Bag Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
+						detail.setMatchHistory(match);
+						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NAME));
+						detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
+						detail.setDecryptedLostValue(match.getLost().getFirstName() + " " + match.getLost().getLastName());
+						match.getDetails().add(detail);
+						bagnamematch=true;
+						exactname=true;
+					}
+
+					if(!bagnamematch){
+						List<String> lnickname=getNickName(match.getLost().getFirstName().toUpperCase());
+						
+						for(String name:fnickname){
+							if(StringCompare.compareStrings(name+fc.getLastName(), match.getLost().getFirstName()+match.getLost().getLastName())>
+							(Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NICK_NAME))) && !namematch){
+								LFMatchDetail detail = new LFMatchDetail();
+								detail.setDescription("Bag Nick Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
+								detail.setMatchHistory(match);
+								detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NICK_NAME));
+								detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
+								detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
+								match.getDetails().add(detail);
+								bagnamematch=true;
+							}
+						}
+						for(String name:lnickname){
+							if(StringCompare.compareStrings(fc.getFirstName()+fc.getLastName(), name+match.getLost().getLastName())>
+							(Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NICK_NAME))) && !namematch){
+								LFMatchDetail detail = new LFMatchDetail();
+								detail.setDescription("Bag Nick Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
+								detail.setMatchHistory(match);
+								detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NICK_NAME));
+								detail.setDecryptedFoundValue(fc.getFirstName()+ " " + fc.getLastName());
+								detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
+								match.getDetails().add(detail);
+								bagnamematch=true;
+							}
+						}
+					}
+					
+
+					if(!bagnamematch){
+						if(StringCompare.compareStrings(lc.getFirstName().substring(0, 1)+lc.getLastName(), fc.getFirstName().substring(0, 1)+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //
+							LFMatchDetail detail = new LFMatchDetail();
+							detail.setDescription("First initial Bag Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
+							detail.setMatchHistory(match);
+							detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_INITIAL_NAME));
+							detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
+							detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
+							match.getDetails().add(detail);
+							bagnamematch=true;
+						}
+					}
+					
+				}
+			}
+			
+			if(!exactname && lc.getLastName() != null && lc.getLastName().trim().length() > 0 && isPrimary){
+				if(StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_LAST_NAME)))){ //What the comparescore we want?
+					LFMatchDetail detail = new LFMatchDetail();
+					detail.setDescription("Last Name Match");
+					detail.setMatchHistory(match);
+					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_LAST_NAME)); //What's the value?
+					detail.setDecryptedFoundValue(fc.getLastName());
+					detail.setDecryptedLostValue(lc.getLastName());
+					match.getDetails().add(detail);
+				}
+			}
+			
+			if(!exactname && match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0 && isPrimary){
+				if(StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_LAST_NAME)))){ //What the comparescore we want?
+					LFMatchDetail detail = new LFMatchDetail();
+					detail.setDescription("Bag Last Name Match");
+					detail.setMatchHistory(match);
+					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_LAST_NAME)); //What's the value?
+					detail.setDecryptedFoundValue(fc.getLastName());
+					detail.setDecryptedLostValue(lc.getLastName());
+					match.getDetails().add(detail);
 				}
 			}
 			
@@ -557,12 +634,30 @@ public class LFTracingUtil {
 					if(lphone.getDecryptedPhoneNumber()!= null && lphone.getDecryptedPhoneNumber().trim().length() > 0){
 						lphonenumber=lphone.getDecryptedPhoneNumber();
 					} else {
-						lphonenumber=lphone.getDecryptedCountry()+lphone.getDecryptedArea()+lphone.getExchangeNumber()+lphone.getDecryptedLine();
+						lphonenumber="";
+						if(lphone.getDecryptedCountry()!=null && lphone.getDecryptedCountry().length()>0)
+							lphonenumber+=lphone.getDecryptedCountry();
+						if(lphone.getDecryptedCountry()!=null && lphone.getDecryptedCountry().length()>0)
+							lphonenumber+=lphone.getDecryptedArea();
+						if(lphone.getDecryptedCountry()!=null && lphone.getDecryptedCountry().length()>0)
+							lphonenumber+=lphone.getDecryptedExchange();
+						if(lphone.getDecryptedCountry()!=null && lphone.getDecryptedCountry().length()>0)
+							lphonenumber+=lphone.getDecryptedLine();
 					}
 					if(fphone.getDecryptedPhoneNumber()!= null && fphone.getDecryptedPhoneNumber().trim().length() > 0){
 						fphonenumber=fphone.getDecryptedPhoneNumber();
 					} else {
-						fphonenumber=fphone.getDecryptedCountry()+fphone.getDecryptedArea()+fphone.getExchangeNumber()+fphone.getDecryptedLine();
+
+						fphonenumber="";
+						if(fphone.getDecryptedCountry()!=null && fphone.getDecryptedCountry().length()>0)
+							fphonenumber+=fphone.getDecryptedCountry();
+						if(fphone.getDecryptedCountry()!=null && fphone.getDecryptedCountry().length()>0)
+							fphonenumber+=fphone.getDecryptedArea();
+						if(fphone.getDecryptedCountry()!=null && fphone.getDecryptedCountry().length()>0)
+							fphonenumber+=fphone.getDecryptedExchange();
+						if(fphone.getDecryptedCountry()!=null && fphone.getDecryptedCountry().length()>0)
+							fphonenumber+=fphone.getDecryptedLine();
+						
 					}
 					if(fphonenumber != null && fphonenumber.trim().length() > 0
 							&& lphonenumber != null && lphonenumber.trim().length() > 0){

@@ -300,9 +300,10 @@ public final class FoundItemForm extends ActionForm {
 		if(phone.getDecryptedPhoneNumber()!=null && !phone.getDecryptedPhoneNumber().isEmpty()){
 			phone.setPerson(found.getClient());
 			found.getClient().getPhones().add(phone);
-		} else if ((phone.getDecryptedCountry() != null && !phone.getDecryptedCountry().isEmpty())  || (phone.getDecryptedArea() != null && !phone.getDecryptedArea().isEmpty()) || (phone.getDecryptedExchange() != null && !phone.getDecryptedExchange().isEmpty()) || (phone.getDecryptedLine() != null && !phone.getDecryptedLine().isEmpty())) { //Temporary - need to think about how to incorporate 'normalized' field
+		} else if ((phone.getDecryptedCountry() != null && !phone.getDecryptedCountry().isEmpty())  || (phone.getDecryptedArea() != null && !phone.getDecryptedArea().isEmpty()) || (phone.getDecryptedExchange() != null && !phone.getDecryptedExchange().isEmpty()) || (phone.getDecryptedLine() != null && !phone.getDecryptedLine().isEmpty()) || (phone.getExtension() != null && !phone.getExtension().isEmpty())) { //Temporary - need to think about how to incorporate 'normalized' field
 			phone.setPerson(found.getClient());
 			phone.setDecryptedPhoneNumber(phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
+			phone.setExtension(phone.getExtension());
 			phone.setPhoneType(phone.getPhoneType());
 			found.getClient().getPhones().add(phone);
 		}
