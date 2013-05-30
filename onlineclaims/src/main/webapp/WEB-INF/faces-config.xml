@@ -184,7 +184,7 @@
   </navigation-case>
  </navigation-rule>
  <factory>
-	<exception-handler-factory>aero.nettracer.lfc.exception.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
+	<exception-handler-factory>com.nettracer.claims.exception.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
  </factory>
  <application>
   <variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>
