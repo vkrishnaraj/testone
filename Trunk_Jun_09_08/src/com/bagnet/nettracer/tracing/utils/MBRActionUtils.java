@@ -94,6 +94,7 @@ public class MBRActionUtils {
 
 				}
 				request.setAttribute("inventory", Integer.toString(fileindex));
+				request.setAttribute("markDirty", 1);
 				return true;
 			}
 		}
@@ -110,6 +111,7 @@ public class MBRActionUtils {
 			r.set_TIMEFORMAT(user.getTimeformat().getFormat());
 			r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 			request.setAttribute("remark", Integer.toString(theform.getRemarklist().size() - 1));
+			request.setAttribute("markDirty", 1);
 			return true;
 		}
 		// add passenger
@@ -119,6 +121,7 @@ public class MBRActionUtils {
 				theform.getPassenger(theform.getPassengerlist().size());
 			}
 			request.setAttribute("passenger", Integer.toString(theform.getPassengerlist().size() - 1));
+			request.setAttribute("markDirty", 1);
 			return true;
 		}
 
@@ -129,6 +132,7 @@ public class MBRActionUtils {
 				theform.getClaimcheck(theform.getClaimchecklist().size());
 			}
 			request.setAttribute("claimcheck", "1");
+			request.setAttribute("markDirty", 1);
 			return true;
 		}
 		// add new item box
@@ -149,6 +153,7 @@ public class MBRActionUtils {
 				item.setBag_weight_unit(myDefaultWeightUnit);
 			}
 			request.setAttribute("item", Integer.toString(theform.getItemlist().size() - 1));
+			request.setAttribute("markDirty", 1);
 			return true;
 		}
 
@@ -159,6 +164,7 @@ public class MBRActionUtils {
 				a.setCurrency_ID(user.getDefaultcurrency());
 			}
 			request.setAttribute("articles", Integer.toString(theform.getArticlelist().size() - 1));
+			request.setAttribute("markDirty", 1);
 			return true;
 		}
 		// add new itinerary box
@@ -168,6 +174,7 @@ public class MBRActionUtils {
 				theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.PASSENGER_ROUTING);
 			}
 			request.setAttribute("passit", "1");
+			request.setAttribute("markDirty", 1);
 			return true;
 		}
 		if (request.getParameter("addbagit") != null) {
@@ -176,6 +183,7 @@ public class MBRActionUtils {
 				theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.BAGGAGE_ROUTING);
 			}
 			request.setAttribute("bagit", "1");
+			request.setAttribute("markDirty", 1);
 			return true;
 		}
 		}
@@ -293,6 +301,7 @@ public class MBRActionUtils {
 			if (remarkList != null)
 				remarkList.remove(Integer.parseInt(index));
 			request.setAttribute("remark", Integer.toString(theform.getRemarklist().size() - 1));
+			request.setAttribute("markDirty", 1);
 			return true;
 		}
 		return false;

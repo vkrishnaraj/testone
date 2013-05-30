@@ -352,6 +352,9 @@ jQuery(document).ready(function () {
 	jQuery("#openLink").click(function(event) {handleEvent(event)});
 	jQuery("#switchLink").click(function(event) {switchLocation(event)});
     jQuery("#dirtyCheck-form").areYouSure();
+    <% if (request.getAttribute("markDirty") != null) { %>
+    	jQuery("#dirtyCheck-form").addClass("dirty");
+    <% } %>
     /*store onbeforeunload for later use */
     jQuery(window).data('beforeunload',window.onbeforeunload);  
 
