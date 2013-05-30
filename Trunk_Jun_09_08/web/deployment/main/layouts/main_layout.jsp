@@ -366,8 +366,21 @@ jQuery(document).ready(function () {
             );
 });
 
-</script>
+function clearBeforeUnload() {
+	var isOld = jQuery('html').hasClass('oldBrowser');
+	if (isOld) {
+		window.document.body.onbeforeunload = null;
+	} else {
+		window.onbeforeunload = null;
+	}
+}
 
+</script>
+<!--[if lt IE 9]>
+<script language="javascript" >
+jQuery('html').addClass("oldBrowser");
+</script>
+<![endif]-->
 
 <%
 	String isVis = request.getParameter("slideUpContainerVisible");

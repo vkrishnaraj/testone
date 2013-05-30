@@ -30,7 +30,7 @@
 function gotoHistoricalReport() {
   o = document.LostAndFoundForm;
 	o.historical_report.value = "1";
-	window.onbeforeunload = function() {}; 
+	clearBeforeUnload(); 
 	o.submit();
 }
 
