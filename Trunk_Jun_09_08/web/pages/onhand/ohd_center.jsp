@@ -498,7 +498,7 @@ function gotoHistoricalReport() {
 
          
 <c:if test="${!empty OnHandForm.ohd_id}">
-	<br /><a href="addOnHandBag.do?cloneOnHand=${OnHandForm.ohd_id}"><bean:message key="ohd.clone"/></a>
+	<br /><a href="addOnHandBag.do?cloneOnHand=${OnHandForm.ohd_id}&skip_prepopulate=1"><bean:message key="ohd.clone"/></a>
 </c:if>
 
       <% }

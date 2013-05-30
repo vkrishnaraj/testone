@@ -272,7 +272,7 @@ public class MBRReportBMO {
 		String reportHeadingDate = "Date";
 		String reportHeadingTime = "Time";
 		String reportHeadingItinerary = "Itinerary";
-		String reportHeadingFinal = "Destination";
+		String reportHeadingFinal = "Dest";
 		String reportHeadingStatus = "Status";
 		String reportHeadingFaultStation = "Fault";
 		String reportHeadingLossCode = "Loss Code";
@@ -421,7 +421,7 @@ public class MBRReportBMO {
 		
 		AbstractColumn columnSortByAssignedStation = ColumnBuilder.getNew()
 				.setColumnProperty("stationcode", String.class.getName())
-				.setTitle(reportHeadingAssignedStation).setWidth(new Integer(30)).setStyle(
+				.setTitle(reportHeadingAssignedStation).setWidth(new Integer(40)).setStyle(
 				detailStyle).setHeaderStyle(headerStyle).build();
 
 		AbstractColumn columnSortByFaultStation = ColumnBuilder.getNew()
@@ -431,12 +431,12 @@ public class MBRReportBMO {
 
 		AbstractColumn columnSortByType = ColumnBuilder.getNew()
 				.setColumnProperty("typedesc", String.class.getName()).setTitle(
-				reportHeadingSortByType).setWidth(new Integer(60))
+				reportHeadingSortByType).setWidth(new Integer(45))
 				.setStyle(detailStyle).setHeaderStyle(headerStyle).build();
 		
 		AbstractColumn columnLastNameFirstName = ColumnBuilder.getNew()
 				.setColumnProperty("customer_name", String.class.getName()).setTitle(
-				reportHeadingLastNameFirstName).setWidth(new Integer(80))
+				reportHeadingLastNameFirstName).setWidth(new Integer(75))
 				.setStyle(detailStyle).setHeaderStyle(headerStyle).build();
 
 		AbstractColumn columnClaimNumber = ColumnBuilder.getNew()
@@ -446,7 +446,7 @@ public class MBRReportBMO {
 		
 		AbstractColumn columnDate = ColumnBuilder.getNew()
 				.setColumnProperty("rcreatedate", String.class.getName()).setTitle(
-				reportHeadingDate).setWidth(new Integer(43)).setStyle(detailStyle)
+				reportHeadingDate).setWidth(new Integer(50)).setStyle(detailStyle)
 				.setHeaderStyle(headerStyle).build();
 		
 		AbstractColumn columnTime = ColumnBuilder.getNew()
@@ -456,12 +456,12 @@ public class MBRReportBMO {
 		
 		AbstractColumn columnItinerary = ColumnBuilder.getNew()
 				.setColumnProperty("itinerary", String.class.getName()).setTitle(
-				reportHeadingItinerary).setWidth(new Integer(40)).setStyle(detailStyle)
+				reportHeadingItinerary).setWidth(new Integer(45)).setStyle(detailStyle)
 				.setHeaderStyle(headerStyle).build();
 		
 		AbstractColumn columnFinal = ColumnBuilder.getNew()
 				.setColumnProperty("final_destination", String.class.getName())
-				.setTitle(reportHeadingFinal).setWidth(new Integer(50)).setStyle(
+				.setTitle(reportHeadingFinal).setWidth(new Integer(25)).setStyle(
 				detailStyle).setHeaderStyle(headerStyle).build();
 
 		AbstractColumn columnStatus = ColumnBuilder.getNew()
@@ -476,7 +476,7 @@ public class MBRReportBMO {
 
 		AbstractColumn columnLossCode = ColumnBuilder.getNew()
 				.setColumnProperty("loss_code", Integer.class.getName()).setTitle(
-				reportHeadingLossCode).setWidth(new Integer(30)).setStyle(detailStyle)
+				reportHeadingLossCode).setWidth(new Integer(25)).setStyle(detailStyle)
 				.setHeaderStyle(headerStyle).build();
 
 		Map<String, AbstractColumn> reportColumns = new HashMap<String, AbstractColumn>();
@@ -553,7 +553,7 @@ public class MBRReportBMO {
 		String reportHeadingDate = "Date";
 		String reportHeadingTime = "Time";
 		String reportHeadingItinerary = "Itinerary";
-		String reportHeadingFinal = "Destination";
+		String reportHeadingFinal = "Dest";
 		String reportHeadingStatus = "Status";
 		String reportHeadingFaultStation = "Fault";
 		String reportHeadingLossCode = "Loss Code";

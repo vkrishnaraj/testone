@@ -25,7 +25,7 @@
               <a href='addOnHandBag.do?ohd_ID=<bean:write name="ohd_ID" scope="request"/>'><bean:write name="ohd_ID" scope="request" /></a>
               <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLONE_OHD,a)) {%>
               <p>
-              <a href="addOnHandBag.do?cloneOnHand=<bean:write name="ohd_ID" scope="request" />"><bean:message key="ohd.similar"/></a>
+              <a href="addOnHandBag.do?cloneOnHand=<bean:write name="ohd_ID" scope="request" />&skip_prepopulate=1"><bean:message key="ohd.similar"/></a>
               <% } %>
               
             </td>

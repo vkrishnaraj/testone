@@ -804,10 +804,10 @@ public class ReportBMO {
 														sr.setTypedesc((String) row[12]);
 
 														if (row.length > 14) {
-															if (row[14] != null && ((String) row[14]).length() > 0 && srDTO.isShowLastName())
+															if (row[14] != null && ((String) row[14]).length() > 0 && (srDTO.isShowLastName() || srDTO.isShowAll()))
 																temppassname += (String) row[14];
-															if (row[13] != null && ((String) row[13]).length() > 0  && srDTO.isShowFirstName()){
-																if( srDTO.isShowLastName()&& srDTO.isShowFirstName())
+															if (row[13] != null && ((String) row[13]).length() > 0  && (srDTO.isShowFirstName() || srDTO.isShowAll())){
+																if( (srDTO.isShowLastName( )&& srDTO.isShowFirstName()) || srDTO.isShowAll())
 																	temppassname += ", ";
 																temppassname +=(String) row[13];
 																}
