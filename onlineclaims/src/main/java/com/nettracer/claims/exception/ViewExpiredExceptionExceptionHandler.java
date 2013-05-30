@@ -13,7 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 
-import aero.nettracer.lfc.faces.util.FacesUtil;
+import com.nettracer.claims.faces.util.FacesUtil;
  
 public class ViewExpiredExceptionExceptionHandler extends ExceptionHandlerWrapper {
  
@@ -44,7 +44,7 @@ public class ViewExpiredExceptionExceptionHandler extends ExceptionHandlerWrappe
                     // Push some useful stuff to the request scope for
                     // use in the page
                     requestMap.put("currentViewId", vee.getViewId());
-                    FacesUtil.addError("ERROR: User timed out. Please Try Again.");
+                    FacesUtil.addError("User timed out. Please Try Again.");
                     
                     if ( fc.getViewRoot() == null ) {
 	                    UIViewRoot view = fc.getApplication().getViewHandler().createView( fc, vee.getViewId() );
