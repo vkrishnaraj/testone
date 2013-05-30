@@ -333,11 +333,6 @@ public class FoundItemAction extends CheckedAction {
 						found = serviceBean.getFoundItem(fiForm.getFound().getId());
 					}
 				} else if (request.getParameter("confirm") != null) {
-					String validWeight=request.getParameter("validWeight");
-					if(validWeight!=null && Float.valueOf(validWeight)!=fiForm.getFound().getItem().getWeight()){
-						found.getItem().setWeight(Float.valueOf(validWeight));
-						serviceBean.saveOrUpdateFoundItem(found, user);
-					}
 					if (serviceBean.confirmMatch(matchId, user)) {
 						found = serviceBean.getFoundItem(fiForm.getFound().getId());
 					}
@@ -346,6 +341,11 @@ public class FoundItemAction extends CheckedAction {
 						found = serviceBean.getFoundItem(fiForm.getFound().getId());
 					}
 				} else if (request.getParameter("email") != null) {
+					String validWeight=request.getParameter("validWeight");
+					if(validWeight!=null && Float.valueOf(validWeight)!=fiForm.getFound().getItem().getWeight()){
+						found.getItem().setWeight(Float.valueOf(validWeight));
+						serviceBean.saveOrUpdateFoundItem(found, user);
+					}
 					try {
 						LFMatchHistory match = getMatchById(fiForm.getTraceResults(), matchId);
 						if (match != null && serviceBean.sendFoundEmail(match.getLost().getId())) {

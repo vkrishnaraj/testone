@@ -78,7 +78,7 @@
 		    document.getElementById("matchId").value=matchId;
 	   		document.getElementById("weight").value=validWeight;
 	   		form.submit();*/
-	   		location.replace("create_found_item.do?confirm=1&matchId="+matchId+"&validWeight="+validWeight);
+	   		location.replace("create_found_item.do?email=1&matchId="+matchId+"&validWeight="+validWeight);
 	   } else {
 		   return false;
 	   }
@@ -352,11 +352,11 @@
 				         							   if (match.getLost().isFoundEmail()) { %>
 				         								,<br/><bean:message key="message.customer.notified" />
 				         							<% } else { %>
-				         								,<br/><a href='create_found_item.do?email=1&matchId=<%=match.getId() %>'><bean:message key="button.email.customer" /></a>
+				         								,<br/><a href='#' onclick='validateWeight(<%=match.getId() %>)'><bean:message key="button.email.customer" /></a>
 				         							<% } 
 			         								}%>
 			         						<% } else { %>
-			         							<a href='#' onclick='validateWeight(<%=match.getId() %>)'><bean:message key="button.do_match" /></a>,&nbsp;
+			         							<a href='create_found_item.do?confirm=1&matchId=<%=match.getId() %>'><bean:message key="button.do_match" /></a>,&nbsp;
 			         							<a href='create_found_item.do?reject=1&matchId=<%=match.getId() %>'><bean:message key="button.reject" /></a>
 			         						<% } %>
 				        					</td>
