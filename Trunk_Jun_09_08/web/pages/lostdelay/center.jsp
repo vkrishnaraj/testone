@@ -23,6 +23,8 @@
 	IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
 	Station stationAss = StationBMO.getStation(myform.getStationassigned_ID());
 	boolean submitOnSave = PropertyBMO.isTrue("ntfs.submit.lostdelay");
+	boolean val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
+	
 	ResourceBundle bundle = ResourceBundle.getBundle(
 			"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 %>
@@ -52,6 +54,9 @@
      function disableButtons() {
      	if(document.incidentForm.saveButton) {
  	   disableButton(document.incidentForm.saveButton); 
+     	}
+     	if(document.incidentForm.limitSaveButton){
+      	   disableButton(document.incidentForm.saveadditionsbutton); 
      	}
      	if(document.incidentForm.wtbutton){
      		disableButton(document.incidentForm.wtbutton);
@@ -87,6 +92,10 @@
                 </logic:equal>
      	
      }
+
+  	if(document.incidentForm.limitSaveButton){
+   	   enableButton(document.incidentForm.saveadditionsbutton, "<bean:message key='button.save' />"); 
+  	}
      if(document.incidentForm.wtbutton){
     	 enableButton(document.incidentForm.wtbutton);
      }
@@ -764,10 +773,23 @@
 			onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false  && validateRest(this.form) != false) {this.form.save.disabled = false; window.onbeforeunload = function() {}; this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
                   <bean:message key="button.saveremark" />
                 </html:button>
+                 <% if (!UserPermissions.hasIncidentSavePermission(a,myform.getIncident_ID()) && val2 && myform.getStatus_ID()==TracingConstants.MBR_STATUS_OPEN) { %>
+					
+					<html:hidden property="saveadditions" value="" disabled="true" />
+					<html:button property="saveadditionsbutton" styleId="button"
+						onclick="disableButtons(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false) {this.form.saveadditions.disabled = false; window.onbeforeunload = function() {}; this.form.submit();} else {enableButtons(); this.form.saveadditions.disabled = true; return false;}">
+						<bean:message key="button.save" />
+					</html:button>
+				<%}%>
+				
                 </logic:notEqual></td>
+                
+                
+         
               </tr>
             </table>
           </logic:equal>
+          
         </logic:equal>
     </logic:notPresent>
     

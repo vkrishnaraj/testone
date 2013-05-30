@@ -357,11 +357,7 @@
                   <html:submit styleId="button" property="addinventory" indexed="true" >
 		            <bean:message key="button.add_content" />
 		          </html:submit>
-		          <% if (!UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) && val2 && theitem.getIncident().getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_OPEN) { %>
-							<html:submit styleId="button" property="saveadditions">
-								<bean:message key="button.save" />
-							</html:submit>
-						<%}%>
+		          
 				</center>
 
             </td>

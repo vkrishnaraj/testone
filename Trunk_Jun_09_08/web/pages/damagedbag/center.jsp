@@ -10,12 +10,15 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 
 <%
 	Agent a = (Agent) session.getAttribute("user");
     String cssFormClass = "form2_dam";
     boolean submitOnSave = PropertyBMO.isTrue("ntfs.submit.damaged");
+    IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
+	boolean val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
 %>
 
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -360,6 +363,15 @@ function disableButton(aButton) {
                   <html:button property="saveremarkButton" styleId="button" onclick="disableButtons(); this.form.save.disabled = false; window.onbeforeunload = function() {}; this.form.submit();">
                     <bean:message key="button.saveremark" />
                   </html:button>
+                  
+                 <% if (!UserPermissions.hasIncidentSavePermission(a,myform.getIncident_ID()) && val2 && myform.getStatus_ID()==TracingConstants.MBR_STATUS_OPEN) { %>
+					
+					<html:hidden property="saveadditions" value="" disabled="true" />
+					<html:button property="saveadditionsbutton" styleId="button"
+						onclick="disableButtons(); if(validatereqFields(this.form, 'damaged') != false && validateRest(this.form) != false) {this.form.saveadditions.disabled = false; window.onbeforeunload = null; this.form.submit();} else {enableButtons(); this.form.saveadditions.disabled = true; return false;}">
+						<bean:message key="button.save" />
+					</html:button>
+				<%}%>
                 </logic:notEqual></td>
               </tr>
             </table>
