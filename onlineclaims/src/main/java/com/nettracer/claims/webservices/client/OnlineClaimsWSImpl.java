@@ -319,6 +319,8 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         	temp.add(Calendar.HOUR_OF_DAY, timeDiff);
         	passengerBean.setBagReceivedDate(temp.getTime());
         }
+        passengerBean.setReasonForTravel(claim.getReasonForTravel());
+        passengerBean.setLengthOfStay(claim.getLengthOfStay());
         
         passengerBean.setStatus(claim.getStatus());
         
@@ -496,6 +498,8 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          claim.setReportedAirline(passengerBean.getReportedAirline());
          claim.setReportedCity(passengerBean.getReportedCity());
          claim.setReportedFileNumber(passengerBean.getReportedFileNumber());
+         claim.setReasonForTravel(passengerBean.getReasonForTravel());
+         claim.setLengthOfStay(passengerBean.getLengthOfStay());
          
          //Bag Tags
          setBagTags(passengerBean.getBagTagList(),claim);

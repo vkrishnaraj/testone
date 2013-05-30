@@ -436,7 +436,7 @@
 				
 				<rich:column>
 					<h:inputText value="#{contentItem.quantity}"  size="3" label="Bag #{rowIndex+1} - Contents Description - Quantity" readonly="#{passengerController.readOnlyOnSubmitted}"
-						rendered="#{!(bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM')}" />
+						rendered="#{!(bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM')}" onkeyup="numOnly(this)"/>
 					<h:inputText value="#{contentItem.quantity}"  size="3" label="Delayed Expenses - Quantity" readonly="#{passengerController.readOnlyOnSubmitted}"
 						rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM'}" />
 						&#160;&amp;<br/>
@@ -598,6 +598,13 @@
 				} else if (numConts % 20 == 0) {
 					window.alert("You have created " + numConts + " for bag #" + (bagRow + 1) + ". We suggest that you click \"Save\" " +
 							"before adding additional contents.");
+				}
+			}
+			
+			function numOnly(ob) {
+				var invalidChars = /[^0-9]/gi
+				if(invalidChars.test(ob.value)) {
+				    ob.value = ob.value.replace(invalidChars,"");
 				}
 			}
 	//-->

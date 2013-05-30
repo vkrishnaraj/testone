@@ -115,6 +115,24 @@ public class PassengerBean {
 	private int requestForeignCurrency;
 	private String foreignCurrencyEmail;
 	private Date bagReceivedDate;
+	private String reasonForTravel;
+	private String lengthOfStay;
+
+	public String getReasonForTravel() {
+		return reasonForTravel;
+	}
+
+	public void setReasonForTravel(String reasonForTravel) {
+		this.reasonForTravel = reasonForTravel;
+	}
+
+	public String getLengthOfStay() {
+		return lengthOfStay;
+	}
+
+	public void setLengthOfStay(String lengthOfStay) {
+		this.lengthOfStay = lengthOfStay;
+	}
 	
 	public String getClaimAmount() {
 		return claimAmount;

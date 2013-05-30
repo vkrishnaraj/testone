@@ -192,6 +192,57 @@
 
 	<h:panelGrid columns="3" width="75%">
 	
+		<h:panelGroup rendered="true">
+			<t:outputText value="Reason for Travel" styleClass="formLabel"/>
+			<h:outputText value="&#160;" />
+			<h:graphicImage value="../_images/reqbullet.gif" 
+				rendered="false" />
+			
+		</h:panelGroup>
+
+		<rich:spacer width="18" title="" rendered="true" />
+
+		<h:selectOneMenu id="reasonForTravel" value="#{passengerBean.reasonForTravel}" tabindex="5"
+				required="false"
+				readonly="false"
+				disabled="#{passengerController.readOnlyOnSubmitted}"
+				requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+									'Reason for Travel'"
+				label="Reason for Travel" rendered="true">
+			<f:selectItem itemLabel="--" itemValue="" />
+			<f:selectItem itemLabel="Business" itemValue="Business" />
+			<f:selectItem itemLabel="Leisure" itemValue="Leisure" />
+		</h:selectOneMenu>
+	
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+	
+		<h:panelGroup rendered="true">
+			<t:outputText value="Length of Stay" styleClass="formLabel"/>
+			<h:outputText value="&#160;" />
+			<h:graphicImage value="../_images/reqbullet.gif" 
+				rendered="false" />
+			
+		</h:panelGroup>
+
+		<rich:spacer width="18" title="" rendered="true" />
+
+		<t:inputText value="#{passengerBean.lengthOfStay}" id="lengthOfStay"
+			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
+					'Length of Stay'"
+			validatorMessage="Length of Stay :
+								#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+			readonly="#{passengerController.readOnlyOnSubmitted}"
+			styleClass="passInout" required="false"
+			tabindex="8"  label="Length of Stay" rendered="true">	
+			<f:validateLength maximum="20"/>
+		</t:inputText>
+
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+
 		<h:panelGroup rendered="#{!passengerController.flightLabel.recheckBag.hidden}">
 			<t:outputText value="#{passengerController.flightLabel.recheckBag.label}" styleClass="formLabel"/>
 			<h:outputText value="&#160;" />
