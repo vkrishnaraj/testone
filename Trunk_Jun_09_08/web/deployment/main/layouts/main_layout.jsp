@@ -353,10 +353,10 @@ jQuery(document).ready(function () {
 	jQuery("#switchLink").click(function(event) {switchLocation(event)});
     jQuery("#dirtyCheck-form").areYouSure();
     /*store onbeforeunload for later use */
-    $(window).data('beforeunload',window.onbeforeunload);  
+    jQuery(window).data('beforeunload',window.onbeforeunload);  
 
       /*remove||re-assign onbeforeunload on hover */
-    $('a[href^="javascript:"]')
+    jQuery('a[href^="javascript:"]')
       .hover( 
              function(){window.onbeforeunload=null;},
              function(){window.onbeforeunload=$(window).data('beforeunload');}
