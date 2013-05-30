@@ -162,7 +162,7 @@
 function gotoHistoricalReport() {
   o = document.OnHandForm;
     o.historical_report.value = "1";
-    window.onbeforeunload = null; 
+    window.onbeforeunload = function() {}; 
     o.submit();
 }
 

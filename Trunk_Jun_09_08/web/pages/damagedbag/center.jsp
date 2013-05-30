@@ -25,7 +25,7 @@
 function gotoHistoricalReport() {
   o = document.incidentForm;
 	o.historical_report.value = "1";
-	window.onbeforeunload = null; 
+	window.onbeforeunload = function() {}; 
 	o.submit();
 }
 function disableButton(aButton) {
@@ -337,7 +337,7 @@ function disableButton(aButton) {
               <td align="center" valign="top"><br>
 		<html:hidden property="save" value="" disabled="true" />
               <html:button property="saveButton" styleId="button"
-		      onclick="disableButtons(); if(validatereqFields(this.form, 'damaged') != false && validateRest(this.form) != false) {this.form.save.disabled = false; window.onbeforeunload = null; this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
+		      onclick="disableButtons(); if(validatereqFields(this.form, 'damaged') != false && validateRest(this.form) != false) {this.form.save.disabled = false; window.onbeforeunload = function() {}; this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
               	  <bean:message key="button.save" />
                 </logic:notEqual>
@@ -357,7 +357,7 @@ function disableButton(aButton) {
                 <logic:notEqual name="incidentForm"
                   property="incident_ID" value="">
 		<html:hidden property="save" value="" disabled="true" />
-                  <html:button property="saveremarkButton" styleId="button" onclick="disableButtons(); this.form.save.disabled = false; window.onbeforeunload = null; this.form.submit();">
+                  <html:button property="saveremarkButton" styleId="button" onclick="disableButtons(); this.form.save.disabled = false; window.onbeforeunload = function() {}; this.form.submit();">
                     <bean:message key="button.saveremark" />
                   </html:button>
                 </logic:notEqual></td>
