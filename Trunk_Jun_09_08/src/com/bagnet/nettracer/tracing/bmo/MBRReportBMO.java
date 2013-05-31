@@ -431,7 +431,7 @@ public class MBRReportBMO {
 
 		AbstractColumn columnSortByType = ColumnBuilder.getNew()
 				.setColumnProperty("typedesc", String.class.getName()).setTitle(
-				reportHeadingSortByType).setWidth(new Integer(45))
+				reportHeadingSortByType).setWidth(new Integer(40))
 				.setStyle(detailStyle).setHeaderStyle(headerStyle).build();
 		
 		AbstractColumn columnLastNameFirstName = ColumnBuilder.getNew()
@@ -466,7 +466,7 @@ public class MBRReportBMO {
 
 		AbstractColumn columnStatus = ColumnBuilder.getNew()
 				.setColumnProperty("statusdesc", String.class.getName()).setTitle(
-				reportHeadingStatus).setWidth(new Integer(30)).setStyle(detailStyle)
+				reportHeadingStatus).setWidth(new Integer(35)).setStyle(detailStyle)
 				.setHeaderStyle(headerStyle).build();
 		
 		AbstractColumn columnFaultStationCode = ColumnBuilder.getNew()
