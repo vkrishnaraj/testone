@@ -109,6 +109,9 @@ public class NK_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		selenium.keyDown(locator, "\\13");
 		selenium.keyDown(locator, "\\13");
 		verifyEquals("1487", selenium.getValue("//input[@id='remark[0].counter']"));
+		selenium.click("name=saveButton");
+		selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
+		waitForPageToLoadImproved();
 
 	}
 	
