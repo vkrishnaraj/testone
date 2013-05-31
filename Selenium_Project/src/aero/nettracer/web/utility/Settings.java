@@ -29,7 +29,7 @@ public class Settings {
 	public static final String BROWSER_CUSTOM = "*custom";
 	public static final String BROWSER_FIREFOXCUSTOM = "*firefox C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
 	
-	public static final boolean ECLIPSE_RUNS_SERVER = true;
+	public static final boolean ECLIPSE_RUNS_SERVER = false;
 	
 	//DELAY IN MS BETWEEN ACTIONS
 	public static final String EXECUTION_SPEED_FAST = "2";
@@ -41,8 +41,8 @@ public class Settings {
 	//////////////////////////////////////////////////////////GENERIC TEST SETTINGS////////////////////////////////////////////////////////
 	
 	//URL ROOT FOR WEB APP BEING TESTED
-//	public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
-	public static final String APP_URL_LOCAL = "http://192.168.2.107:8080/";
+	public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
+//	public static final String APP_URL_LOCAL = "http://192.168.2.106:8080/";
 	
 	//LOGIN CREDENTIALS
 	public static final String USERNAME_ADMIN = "ntauto";
