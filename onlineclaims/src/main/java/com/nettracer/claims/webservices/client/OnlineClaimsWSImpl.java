@@ -932,9 +932,9 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			for (int i=0; i<bagList.size();i++) {
 				wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
 				bag=bagList.get(i);
-				if(null != bag){
+				if(null != bag && null != bag.getBagTagNumber()){
 					wsBag.setTag(bag.getBagTagNumber());
-					if (!bag.getBagTagNumber().equals("INTERIM")) {
+					if (!"INTERIM".equals(bag.getBagTagNumber())) {
 						wsBag.setNameOnBag(bag.getNameonBag());
 						wsBag.setBrand(bag.getBrandOftheBag());
 						wsBag.setExternalMarkings(bag.getExternalMarkings());
