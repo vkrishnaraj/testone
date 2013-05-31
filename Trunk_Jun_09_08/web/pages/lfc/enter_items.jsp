@@ -312,7 +312,7 @@
    				<bean:message key="message.required" />
      				<table class="<%=cssFormClass %>" cellpadding=0 cellspacing=0 >
      					<tr>
-     						<td style="width:33%;">
+     						<td style="width:25%;">
 								<bean:message key="colname.lfc.item.id" />&nbsp;<span class="reqfield">*</span>
 								<br>
 								<html:text property="found.barcode" size="12" styleId="barcode" styleClass="textfield" />
@@ -326,7 +326,7 @@
 	           						<html:options collection="lfcategorylist" property="id" labelProperty="description" />
 	           					</html:select>
 	           				</td>
-	           				<td style="width:33%;">
+	           				<td style="width:41%;">
 	           					<div id="subcategorydiv">
 	           					<bean:message key="colname.lfc.subcategory" />
 	           					<br/>
@@ -338,7 +338,7 @@
 	           				</td>
      					</tr>
      					<tr>
-     						<td style="width:33%;">
+     						<td style="width:25%;">
      							<bean:message key="colname.lfc.brand" />
      							<br>
      							<html:text name="enterItemsForm" property="found.item.brand" size="12" styleClass="textfield" styleId="brand" />
@@ -347,7 +347,7 @@
      							<bean:message key="colname.lfc.model" />
      							<br>
      							<html:text name="enterItemsForm" property="found.item.model" size="12" styleClass="textfield" styleId="model" />
-     						</td style="width:33%;">
+     						</td style="width:41%;">
      						<td>
     							<bean:message key="colname.lfc.serial.number" />
      							<br>
@@ -355,7 +355,7 @@
      						</td>
    						</tr>
    						<tr>
-     						<td style="width:33%;">
+     						<td style="width:25%;">
 	         					<bean:message key="colname.lfc.color" />
 	         					<br>
 	         					<html:select name="enterItemsForm" property="found.item.color" styleClass="dropdown" styleId="color" >
@@ -371,8 +371,8 @@
 	      							<html:options collection="lfcolorlist" property="value" labelProperty="label" />
 	           					</html:select>
 	         				</td>
-     						<td style="width:33%;">
-    							<bean:message key="colname.lf.lostPhoneNumber" />
+     						<td style="width:41%;">
+    							<bean:message key="colname.lf.lostPhoneNumber" /><br/><bean:message key="colname.lf.phone.logic"/>
      							<br>
 		              		<html:text name="enterItemsForm" property="disFoundInternationalNumber" size="1" maxlength="10" styleClass="textfield" />
 		              		<html:text name="enterItemsForm" property="disFoundAreaNumber" size="3" maxlength="10" styleClass="textfield" />

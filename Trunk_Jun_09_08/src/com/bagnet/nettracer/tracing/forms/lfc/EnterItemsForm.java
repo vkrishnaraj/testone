@@ -347,10 +347,6 @@ public final class EnterItemsForm extends ActionForm {
 		if(found.getItem().getPhone() != null){
 			if(found.getItem().getPhone().getDecryptedCountry()!=null && found.getItem().getPhone().getDecryptedCountry().length()>0){
 				toReturn=found.getItem().getPhone().getDecryptedCountry();
-			} else {
-				if(found.getItem().getPhone().getDecryptedPhoneNumber().length()==11) {
-					toReturn= found.getItem().getPhone().getDecryptedPhoneNumber().substring(0,1);
-				}
 			}
 		}
 		return toReturn;
@@ -373,12 +369,6 @@ public final class EnterItemsForm extends ActionForm {
 		if(found.getItem().getPhone() != null)
 		if(found.getItem().getPhone().getDecryptedArea()!=null && found.getItem().getPhone().getDecryptedArea().length()>0){
 			toReturn=found.getItem().getPhone().getDecryptedArea();
-		} else {
-			if (found.getItem().getPhone().getDecryptedPhoneNumber().length()==11) {
-				toReturn = found.getItem().getPhone().getDecryptedPhoneNumber().substring(1,4);
-			} else {
-				toReturn = found.getItem().getPhone().getDecryptedPhoneNumber().substring(0,3);
-			}
 		}
 		return toReturn;
 	}
@@ -397,15 +387,9 @@ public final class EnterItemsForm extends ActionForm {
 	public String getDisFoundExchangeNumber() {
 		String toReturn = "";
 		if(found.getItem().getPhone() != null){
-		if(found.getItem().getPhone().getDecryptedExchange()!=null && found.getItem().getPhone().getDecryptedExchange().length()>0){
-			toReturn=found.getItem().getPhone().getDecryptedExchange();
-		} else {
-			if (found.getItem().getPhone().getDecryptedPhoneNumber().length()==11) {
-				toReturn = found.getItem().getPhone().getDecryptedPhoneNumber().substring(4,7);
-			} else {
-				toReturn = found.getItem().getPhone().getDecryptedPhoneNumber().substring(3,6);
-			}
-		}
+			if(found.getItem().getPhone().getDecryptedExchange()!=null && found.getItem().getPhone().getDecryptedExchange().length()>0){
+				toReturn=found.getItem().getPhone().getDecryptedExchange();
+			} 
 		}
 		return toReturn;
 	}
@@ -426,12 +410,6 @@ public final class EnterItemsForm extends ActionForm {
 		if(found.getItem().getPhone() != null){
 			if(found.getItem().getPhone().getDecryptedLine()!=null && found.getItem().getPhone().getDecryptedLine().length()>0){
 				toReturn=found.getItem().getPhone().getDecryptedLine();
-			} else {
-				if (found.getItem().getPhone().getDecryptedPhoneNumber().length()==11) {
-					toReturn=found.getItem().getPhone().getDecryptedPhoneNumber().substring(7,11);
-				} else {
-					toReturn=found.getItem().getPhone().getDecryptedPhoneNumber().substring(6,10);
-				}
 			}
 		}
 		return toReturn;

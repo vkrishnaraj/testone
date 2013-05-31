@@ -756,7 +756,7 @@
 	         					<input type="text"  id="itemsize_<%=i %>" name="item[<%=i %>].size" class="textfield" value="<%=item.getSize() == null ? "" : item.getSize() %>" />
 	         				</td>
 	         				<td>
-	         					<bean:message key="colname.lf.lostPhoneNumber" />
+	         					<bean:message key="colname.lf.lostPhoneNumber" /><br/><bean:message key="colname.lf.phone.logic"/>
 	         					<br>
 	         					<input type="text" name="item[<%=i %>].dispCountry" size="2"  id="iteminter_<%=i %>" class="textfield" value="<%=item.getDispCountry()%>" />
 	         					 <input type="text" name="item[<%=i %>].dispArea" size="3"  id="itemarea_<%=i %>" class="textfield" value="<%=item.getDispArea()%>" />

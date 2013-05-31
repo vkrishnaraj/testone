@@ -28,10 +28,12 @@ public class LFShipping implements Serializable{
 	
 	@OneToOne
 	@JoinColumn(name = "lost_id", nullable = false)
+	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
 	private LFLost lost;
 	
 	@OneToOne
 	@JoinColumn(name = "client_id", nullable = false)
+	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
 	private LFPerson client;
 	
 	@OneToOne
@@ -57,6 +59,7 @@ public class LFShipping implements Serializable{
 	
 	@OneToOne
 	@JoinColumn(name = "transaction_id", nullable = false)
+	@Cascade(value = org.hibernate.annotations.CascadeType.ALL)
 	private LFTransaction transaction;
 	
 	public int getId() {

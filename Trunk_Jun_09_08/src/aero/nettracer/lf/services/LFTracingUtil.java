@@ -477,13 +477,11 @@ public class LFTracingUtil {
 			LFPerson lc = match.getLost().getClient();
 			LFPerson fc = match.getFound().getClient();
 
-			boolean exactname=true;
+			boolean exactname=false;
 			boolean namematch=false;
 			boolean bagnamematch=false;
 			if(lc.getLastName() != null && lc.getLastName().trim().length() > 0
-					&& fc.getLastName() != null && fc.getLastName().trim().length() > 0
-					&& lc.getFirstName() != null && lc.getFirstName().trim().length() > 0
-					&& fc.getFirstName() != null && fc.getFirstName().trim().length() > 0){
+					&& fc.getLastName() != null && fc.getLastName().trim().length() > 0){
 				List<String> fnickname=getNickName(fc.getFirstName().toUpperCase());
 				if(StringCompare.compareStrings(lc.getFirstName()+lc.getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //|| nickmatch
 					LFMatchDetail detail = new LFMatchDetail();
@@ -528,7 +526,7 @@ public class LFTracingUtil {
 				}
 				
 				if(!namematch){
-					if(StringCompare.compareStrings(lc.getFirstName().substring(0, 1)+lc.getLastName(), fc.getFirstName().substring(0, 1)+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //
+					if(lc.getFirstName().substring(0, 1).equals(fc.getFirstName().substring(0,1)) && StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("First initial Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
 						detail.setMatchHistory(match);
@@ -539,10 +537,7 @@ public class LFTracingUtil {
 						namematch=true;
 					}
 				}
-				
-				if(((match.getLost().getFirstName()!=null && match.getLost().getFirstName().trim().length()>0)
-						&& (match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0))
-						&& (!match.getLost().getFirstName().equals(lc.getFirstName()) && !match.getLost().getLastName().equals(lc.getLastName()))){
+				if((match.getLost().getFirstName()!=null && match.getLost().getFirstName().trim().length()>0) && (match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0)){
 					if(StringCompare.compareStrings(match.getLost().getFirstName()+match.getLost().getLastName(), fc.getFirstName()+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("Bag Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
@@ -560,7 +555,7 @@ public class LFTracingUtil {
 						
 						for(String name:fnickname){
 							if(StringCompare.compareStrings(name+fc.getLastName(), match.getLost().getFirstName()+match.getLost().getLastName())>
-							(Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NICK_NAME))) && !namematch){
+							(Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NICK_NAME)))){
 								LFMatchDetail detail = new LFMatchDetail();
 								detail.setDescription("Bag Nick Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
 								detail.setMatchHistory(match);
@@ -588,7 +583,7 @@ public class LFTracingUtil {
 					
 
 					if(!bagnamematch){
-						if(StringCompare.compareStrings(lc.getFirstName().substring(0, 1)+lc.getLastName(), fc.getFirstName().substring(0, 1)+fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //
+						if(lc.getFirstName().substring(0, 1).equals(fc.getFirstName().substring(0,1)) && StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //
 							LFMatchDetail detail = new LFMatchDetail();
 							detail.setDescription("First initial Bag Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
 							detail.setMatchHistory(match);
@@ -615,7 +610,7 @@ public class LFTracingUtil {
 				}
 			}
 			
-			if(!exactname && match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0 && isPrimary){
+			if(match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0 && isPrimary){
 				if(StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_LAST_NAME)))){ //What the comparescore we want?
 					LFMatchDetail detail = new LFMatchDetail();
 					detail.setDescription("Bag Last Name Match");
@@ -637,11 +632,11 @@ public class LFTracingUtil {
 						lphonenumber="";
 						if(lphone.getDecryptedCountry()!=null && lphone.getDecryptedCountry().length()>0)
 							lphonenumber+=lphone.getDecryptedCountry();
-						if(lphone.getDecryptedCountry()!=null && lphone.getDecryptedCountry().length()>0)
+						if(lphone.getDecryptedArea()!=null && lphone.getDecryptedArea().length()>0)
 							lphonenumber+=lphone.getDecryptedArea();
-						if(lphone.getDecryptedCountry()!=null && lphone.getDecryptedCountry().length()>0)
+						if(lphone.getDecryptedExchange()!=null && lphone.getDecryptedExchange().length()>0)
 							lphonenumber+=lphone.getDecryptedExchange();
-						if(lphone.getDecryptedCountry()!=null && lphone.getDecryptedCountry().length()>0)
+						if(lphone.getDecryptedLine()!=null && lphone.getDecryptedLine().length()>0)
 							lphonenumber+=lphone.getDecryptedLine();
 					}
 					if(fphone.getDecryptedPhoneNumber()!= null && fphone.getDecryptedPhoneNumber().trim().length() > 0){

@@ -75,7 +75,7 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 	
 	private String vantiveNumber;
 	
-	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFShipping.class, cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "lost", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private LFShipping shipment;
 
 	@OneToOne(targetEntity = com.bagnet.nettracer.tracing.db.lf.LFPerson.class, cascade = CascadeType.ALL)
