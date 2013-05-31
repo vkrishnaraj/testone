@@ -79,6 +79,38 @@
 
 	<h:panelGrid columns="3" width="75%">
 	
+		<h:panelGroup rendered="true">
+			<t:outputText value="Reason for Travel" styleClass="formLabel"/>
+			<h:outputText value="&#160;" />
+			<h:graphicImage value="../_images/reqbullet.gif" 
+				rendered="false" />
+			
+		</h:panelGroup>
+
+		<rich:spacer width="18" title="" rendered="true" />
+
+		<h:outputText id="reasonForTravel" value="#{passengerBean.reasonForTravel}" />
+	
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+	
+		<h:panelGroup rendered="true">
+			<t:outputText value="Length of Stay" styleClass="formLabel"/>
+			<h:outputText value="&#160;" />
+			<h:graphicImage value="../_images/reqbullet.gif" 
+				rendered="false" />
+			
+		</h:panelGroup>
+
+		<rich:spacer width="18" title="" rendered="true" />
+
+		<h:outputText value="#{passengerBean.lengthOfStay}" id="lengthOfStay" />
+
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+		<rich:spacer width="100%" height="15" title="" rendered="true" />
+	
 		<h:panelGroup rendered="#{!passengerController.flightLabel.recheckBag.hidden}">
 			<t:outputText value="#{passengerController.flightLabel.recheckBag.label}" />
 			<h:outputText value="&#160;" />
