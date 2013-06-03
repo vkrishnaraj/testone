@@ -526,7 +526,9 @@ public class LFTracingUtil {
 				}
 				
 				if(!namematch){
-					if(lc.getFirstName().substring(0, 1).equals(fc.getFirstName().substring(0,1)) && StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //
+					if(lc.getFirstName()!=null && lc.getFirstName().trim().length()>0 && fc.getFirstName()!=null && fc.getFirstName().trim().length()>0 
+							&& lc.getLastName()!=null && lc.getLastName().trim().length()>0 && fc.getLastName()!=null && fc.getLastName().trim().length()>0 
+							&& lc.getFirstName().substring(0, 1).equals(fc.getFirstName().substring(0,1)) && StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //
 						LFMatchDetail detail = new LFMatchDetail();
 						detail.setDescription("First initial Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
 						detail.setMatchHistory(match);
@@ -583,7 +585,9 @@ public class LFTracingUtil {
 					
 
 					if(!bagnamematch){
-						if(lc.getFirstName().substring(0, 1).equals(fc.getFirstName().substring(0,1)) && StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //
+						if(match.getLost().getFirstName()!=null && match.getLost().getFirstName().trim().length()>0 && fc.getFirstName()!=null && fc.getFirstName().length()>0  
+								&& match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0 && fc.getLastName()!=null && fc.getLastName().trim().length()>0
+								&& match.getLost().getFirstName().substring(0, 1).equals(fc.getFirstName().substring(0,1)) && StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NAME)))){ //
 							LFMatchDetail detail = new LFMatchDetail();
 							detail.setDescription("First initial Bag Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
 							detail.setMatchHistory(match);
