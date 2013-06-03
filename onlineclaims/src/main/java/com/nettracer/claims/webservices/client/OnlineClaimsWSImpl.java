@@ -719,7 +719,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					if (!bagArrStat) {
 						for (int j = 0; j < wsBagArrayTemp.length; j++) {
 							wsBag = wsBagArrayTemp[j];
-							if (wsBag != null && !wsBag.getBagArrive() && wsBag.getTag().equals(bag.getBagTagNumber())) {
+							if (wsBag != null && !wsBag.getBagArrive() && wsBag.getTag() != null && wsBag.getTag().equals(bag.getBagTagNumber())) {
 								notAdded = false;
 								wsBagArrayTemp[j] = null;
 								break;
