@@ -632,23 +632,16 @@ public class LostAndFoundController {
 			isValid = false;
 		}
 		if (lostReport.getItemCategory() == 7) {								 					// VALIDATE: LOST PHONE NUM
-			if (lostReport.getLostPhone() == null 
-					|| lostReport.getLostPhone().getNumber() == null 
-					|| lostReport.getLostPhone().getNumber().replaceAll("[^\\d.]", "").trim().length() == 0) {
+			if (lostReport.getLostPhone() == null || (
+					(lostReport.getLostPhone().getNumber() == null	|| (lostReport.getLostPhone().getNumber() != null && lostReport.getLostPhone().getNumber().replaceAll("[^\\d.]", "").trim().length() == 0)) && 
+					(lostReport.getLostPhone().getCountry() == null || (lostReport.getLostPhone().getCountry()!=null && lostReport.getLostPhone().getCountry().replaceAll("[^\\d.]", "").trim().length() == 0)) && 
+					(lostReport.getLostPhone().getArea() == null || (lostReport.getLostPhone().getArea()!=null && lostReport.getLostPhone().getArea().replaceAll("[^\\d.]", "").trim().length() == 0)) &&
+					(lostReport.getLostPhone().getExchange() == null || (lostReport.getLostPhone().getExchange()!=null &&  lostReport.getLostPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() == 0)) &&
+					(lostReport.getLostPhone().getLine() == null || (lostReport.getLostPhone().getLine()!=null && lostReport.getLostPhone().getLine().replaceAll("[^\\d.]", "").trim().length() == 0))
+					)) {
 				FacesUtil.addError("ERROR: Phone number of lost phone is required for Category \"Cellphone\".");
 				isValid = false;
-			} else if (lostReport.getLostPhone() == null 
-					|| ((lostReport.getLostPhone().getCountry() == null 
-					|| lostReport.getLostPhone().getCountry().replaceAll("[^\\d.]", "").trim().length() == 0) && 
-					(lostReport.getLostPhone().getArea() == null 
-					|| lostReport.getLostPhone().getArea().replaceAll("[^\\d.]", "").trim().length() == 0) &&
-					(lostReport.getLostPhone().getExchange() == null 
-					|| lostReport.getLostPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() == 0) &&
-					(lostReport.getLostPhone().getLine() == null 
-					|| lostReport.getLostPhone().getLine().replaceAll("[^\\d.]", "").trim().length() == 0))) {
-				FacesUtil.addError("ERROR: Phone number of lost phone is required for Category \"Cellphone\".");
-				isValid = false;
-			}
+			} 
 		}
 		return isValid;
 	}
