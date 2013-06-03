@@ -25,22 +25,14 @@
 						document.getElementById("lostForm:UsPhoneForm").style.display="block";
 						state.style.display = "block";
 						province.style.display= "none";
-					} else if(countryList.options[countryList.selectedIndex].value == "CA") {
+					} else {
 						document.getElementById("lostForm:shipState").selectedIndex=0;
 						state.style.display = "none";
 						document.getElementById("countryPhone").style.display="inline";
 						document.getElementById("lostForm:nUsPhoneForm").style.display="block";
 						document.getElementById("lostForm:UsPhoneForm").style.display="none";
 						province.style.display= "block";
-					} else {
-						document.getElementById("lostForm:shipProvince").value="";
-						document.getElementById("lostForm:shipState").selectedIndex=0;
-						document.getElementById("countryPhone").style.display="inline";
-						document.getElementById("lostForm:nUsPhoneForm").style.display="block";
-						document.getElementById("lostForm:UsPhoneForm").style.display="none";
-						province.style.display= "none";
-						state.style.display= "none";						
-					}
+					} 
 				}
 				
 				var curDt = new Date();
