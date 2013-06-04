@@ -545,12 +545,21 @@ public class LostAndFoundController {
 	private boolean validateContact() {
 		boolean isValid = true;
 		boolean hasContactPhoneOrEmail = false;
-		if (lostReport.getContact().getPrimaryPhone().getNumber() != null								// VALIDATE: PHONE AND EMAIL
-				&& lostReport.getContact().getPrimaryPhone().getNumber().trim().length() > 0) {
+		if ((lostReport.getContact().getPrimaryPhone().getNumber() != null								// VALIDATE: PHONE AND EMAIL
+				&& lostReport.getContact().getPrimaryPhone().getNumber().replaceAll("[^\\d.]", "").trim().length() > 0) ||
+				((lostReport.getContact().getPrimaryPhone().getCountry()!=null && lostReport.getContact().getPrimaryPhone().getCountry().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+				(lostReport.getContact().getPrimaryPhone().getArea()!=null && lostReport.getContact().getPrimaryPhone().getArea().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+				(lostReport.getContact().getPrimaryPhone().getExchange()!=null && lostReport.getContact().getPrimaryPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+				(lostReport.getContact().getPrimaryPhone().getLine()!=null && lostReport.getContact().getPrimaryPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0)))
+					 {
 			hasContactPhoneOrEmail = true;
 		}
-		if (lostReport.getContact().getSecondaryPhone().getNumber() != null
-				&& lostReport.getContact().getSecondaryPhone().getNumber().trim().length() > 0) {
+		if ((lostReport.getContact().getSecondaryPhone().getNumber() != null
+				&& lostReport.getContact().getSecondaryPhone().getNumber().trim().length() > 0) ||
+				((lostReport.getContact().getSecondaryPhone().getCountry()!=null && lostReport.getContact().getSecondaryPhone().getCountry().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+				(lostReport.getContact().getSecondaryPhone().getArea()!=null && lostReport.getContact().getSecondaryPhone().getArea().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+				(lostReport.getContact().getSecondaryPhone().getExchange()!=null && lostReport.getContact().getSecondaryPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+				(lostReport.getContact().getSecondaryPhone().getLine()!=null && lostReport.getContact().getSecondaryPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0))) {
 			hasContactPhoneOrEmail = true;
 		}
 		if (lostReport.getContact().getEmailAddress() != null
