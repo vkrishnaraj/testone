@@ -573,7 +573,7 @@ public class LFTracingUtil {
 								detail.setMatchHistory(match);
 								detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NICK_NAME));
 								detail.setDecryptedFoundValue(fc.getFirstName()+ " " + fc.getLastName());
-								detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
+								detail.setDecryptedLostValue(match.getLost().getFirstName() + " " + match.getLost().getLastName());
 								match.getDetails().add(detail);
 								bagnamematch=true;
 							}
@@ -590,7 +590,7 @@ public class LFTracingUtil {
 							detail.setMatchHistory(match);
 							detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_INITIAL_NAME));
 							detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
-							detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
+							detail.setDecryptedLostValue(match.getLost().getFirstName() + " " + match.getLost().getLastName());
 							match.getDetails().add(detail);
 							bagnamematch=true;
 						}
