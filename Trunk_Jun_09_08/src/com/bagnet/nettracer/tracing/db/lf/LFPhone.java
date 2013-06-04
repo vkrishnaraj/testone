@@ -106,7 +106,7 @@ public class LFPhone implements Serializable{
 	public void setDecryptedPhoneNumber(String phoneNumber){
 		this.decryptedNumber = null; 
 		try {
-			if(phoneNumber!=null && phoneNumber.length()>0){
+			if(phoneNumber!=null && phoneNumber.replaceAll("[^\\d.]", "").length()>0){
 				phoneNumber=phoneNumber.replaceAll("[^\\d.]", "");
 			} else {
 				phoneNumber="";
@@ -148,7 +148,7 @@ public class LFPhone implements Serializable{
 
 	public void setExtension(String extension) {
 
-		if(extension!=null && extension.length()>0){
+		if(extension!=null && extension.replaceAll("[^\\d.]", "").length()>0){
 			extension=extension.replaceAll("[^\\d.]", "");
 			this.extension = extension;
 		}
@@ -200,7 +200,7 @@ public class LFPhone implements Serializable{
 	public void setDecryptedCountry(String countryNumber){
 		this.decryptedCountry = null; 
 		try {
-			if(countryNumber!=null && countryNumber.length()>0){
+			if(countryNumber!=null && countryNumber.replaceAll("[^\\d.]", "").length()>0){
 				countryNumber=countryNumber.replaceAll("[^\\d.]", "");
 			} else {
 				countryNumber="";
@@ -234,7 +234,7 @@ public class LFPhone implements Serializable{
 	public void setDecryptedArea(String areaNumber){
 		this.decryptedArea = null; 
 		try {
-			if(areaNumber!=null && areaNumber.length()>0){
+			if(areaNumber!=null && areaNumber.replaceAll("[^\\d.]", "").length()>0){
 				areaNumber=areaNumber.replaceAll("[^\\d.]", "");
 			} else {
 				areaNumber="";
@@ -268,7 +268,7 @@ public class LFPhone implements Serializable{
 	public void setDecryptedExchange(String exchangeNumber){
 		this.decryptedExchange = null; 
 		try {
-			if(exchangeNumber!=null && exchangeNumber.length()>0){
+			if(exchangeNumber!=null && exchangeNumber.replaceAll("[^\\d.]", "").length()>0){
 				exchangeNumber=exchangeNumber.replaceAll("[^\\d.]", "");
 			} else {
 				exchangeNumber="";
@@ -302,7 +302,7 @@ public class LFPhone implements Serializable{
 	public void setDecryptedLine(String lineNumber){
 		this.decryptedLine= null; 
 		try {
-			if(lineNumber!=null && lineNumber.length()>0){
+			if(lineNumber!=null && lineNumber.replaceAll("[^\\d.]", "").length()>0){
 				lineNumber=lineNumber.replaceAll("[^\\d.]", "");
 			}  else {
 				lineNumber="";

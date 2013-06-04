@@ -324,9 +324,7 @@
 											property="OHD_CategoryType_ID" labelProperty="description" />
 									</html:select> 
 								<% 	} else { %> 
-									<html:select
-										property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'
-										disabled="true" styleClass="dropdown">
+									<html:select property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'	disabled="true" styleClass="dropdown">
 										<html:option value="">
 											<bean:message key="select.please_select" />
 										</html:option>
