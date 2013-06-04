@@ -477,7 +477,6 @@ public class LFTracingUtil {
 			LFPerson lc = match.getLost().getClient();
 			LFPerson fc = match.getFound().getClient();
 
-			boolean exactname=false;
 			boolean namematch=false;
 			boolean bagnamematch=false;
 			if(lc.getLastName() != null && lc.getLastName().trim().length() > 0
@@ -492,7 +491,6 @@ public class LFTracingUtil {
 					detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
 					match.getDetails().add(detail);
 					namematch=true;
-					exactname=true;
 				}
 				
 				if(!namematch){
@@ -549,7 +547,6 @@ public class LFTracingUtil {
 						detail.setDecryptedLostValue(match.getLost().getFirstName() + " " + match.getLost().getLastName());
 						match.getDetails().add(detail);
 						bagnamematch=true;
-						exactname=true;
 					}
 
 					if(!bagnamematch){
@@ -563,7 +560,7 @@ public class LFTracingUtil {
 								detail.setMatchHistory(match);
 								detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_NICK_NAME));
 								detail.setDecryptedFoundValue(fc.getFirstName() + " " + fc.getLastName());
-								detail.setDecryptedLostValue(lc.getFirstName() + " " + lc.getLastName());
+								detail.setDecryptedLostValue(match.getLost().getFirstName() + " " + match.getLost().getLastName());
 								match.getDetails().add(detail);
 								bagnamematch=true;
 							}
@@ -601,31 +598,31 @@ public class LFTracingUtil {
 					
 				}
 			}
-			else {
-				if(lc.getLastName() != null && lc.getLastName().trim().length() > 0 && isPrimary){
-					if(StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_LAST_NAME)))){ //What the comparescore we want?
-						LFMatchDetail detail = new LFMatchDetail();
-						detail.setDescription("Last Name Match");
-						detail.setMatchHistory(match);
-						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_LAST_NAME)); //What's the value?
-						detail.setDecryptedFoundValue(fc.getLastName());
-						detail.setDecryptedLostValue(lc.getLastName());
-						match.getDetails().add(detail);
-					}
-				}
-				
-				if(match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0 && isPrimary){
-					if(StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_LAST_NAME)))){ //What the comparescore we want?
-						LFMatchDetail detail = new LFMatchDetail();
-						detail.setDescription("Bag Last Name Match");
-						detail.setMatchHistory(match);
-						detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_LAST_NAME)); //What's the value?
-						detail.setDecryptedFoundValue(fc.getLastName());
-						detail.setDecryptedLostValue(lc.getLastName());
-						match.getDetails().add(detail);
-					}
+			
+			if(!namematch && lc.getLastName() != null && lc.getLastName().trim().length() > 0 && isPrimary){
+				if(StringCompare.compareStrings(lc.getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_LAST_NAME)))){ //What the comparescore we want?
+					LFMatchDetail detail = new LFMatchDetail();
+					detail.setDescription("Last Name Match");
+					detail.setMatchHistory(match);
+					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_LAST_NAME)); //What's the value?
+					detail.setDecryptedFoundValue(fc.getLastName());
+					detail.setDecryptedLostValue(lc.getLastName());
+					match.getDetails().add(detail);
 				}
 			}
+				
+			if(!bagnamematch && match.getLost().getLastName()!=null && match.getLost().getLastName().trim().length()>0 && isPrimary){
+				if(StringCompare.compareStrings(match.getLost().getLastName(), fc.getLastName()) > (Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_LAST_NAME)))){ //What the comparescore we want?
+					LFMatchDetail detail = new LFMatchDetail();
+					detail.setDescription("Bag Last Name Match");
+					detail.setMatchHistory(match);
+					detail.setScore(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_WEIGHT_LAST_NAME)); //What's the value?
+					detail.setDecryptedFoundValue(fc.getLastName());
+					detail.setDecryptedLostValue(match.getLost().getLastName());
+					match.getDetails().add(detail);
+				}
+			}
+		
 			
 			for(LFPhone lphone:getPhones(match.getLost())){
 				for(LFPhone fphone:getPhones(match.getFound())){
