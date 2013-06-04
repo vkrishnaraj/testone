@@ -100,6 +100,7 @@ public class AD_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
+		waitForPageToLoadImproved();
 
 	}
 	
