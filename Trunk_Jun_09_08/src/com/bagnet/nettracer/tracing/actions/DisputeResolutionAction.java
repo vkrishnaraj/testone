@@ -168,6 +168,9 @@ public class DisputeResolutionAction extends CheckedAction {
 			//the other cases are probably never used since ld, dam, pil uses their own actions
 			faultStationList = TracerUtils.getStationList(theform.getFaultcompany_id());
 			faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
+		} else if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, user)){
+			faultStationList = TracerUtils.getStationList(theform.getFaultcompany_id());
+			faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
 		} else if (UserPermissions.hasLimitedSavePermission(user, incident)) {
 			faultStationList = UserPermissions.getLimitedSaveStations(user, incident);
 			faultCompanyList = new ArrayList<Company>();
