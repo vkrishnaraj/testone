@@ -707,7 +707,7 @@
 	         				<td>
 	         					<bean:message key="colname.lf.subcategory" />
 	         					<br>
-	         					<select name="item[<%=i %>].subCategory"  id="itemsubcat_<%=i %>" class="dropdown" id="subcategories_<%=i %>" onchange="" >
+	         					<select name="item[<%=i %>].subCategory"  class="dropdown" id="subcategories_<%=i %>" onchange="" >
 	         						<option value=""><bean:message key="option.lf.please.select" /></option>
 	         						<%
 	         							ArrayList subCategories = new ArrayList();
