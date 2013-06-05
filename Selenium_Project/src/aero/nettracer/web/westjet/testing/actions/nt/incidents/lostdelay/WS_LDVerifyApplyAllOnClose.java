@@ -102,6 +102,8 @@ public class WS_LDVerifyApplyAllOnClose extends DefaultSeleneseTestCase {
 			selenium.click("id=button");
 			verifyEquals("1234", selenium.getValue("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[2]/input"));
 			verifyEquals(Settings.TODAYS_DATE, selenium.getValue("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[3]/input"));
+			selenium.click("//input[@name='save']");
+			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVAAOC: Failed to reload the lost delayed incident.");
 			verifyTrue(false);

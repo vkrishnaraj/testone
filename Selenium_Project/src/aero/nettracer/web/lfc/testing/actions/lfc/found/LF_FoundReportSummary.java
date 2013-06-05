@@ -61,9 +61,8 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Lost Report:  " + Settings.LOST_ID_LF));
 		verifyTrue(selenium.isElementPresent("link=Confirm Match"));
 		verifyTrue(selenium.isElementPresent("link=Reject"));
-		selenium.answerOnNextPrompt("10");
+		
 		selenium.click("link=Confirm Match");
-		assertEquals("Please confirm this is the correct weight:", selenium.getPrompt());
 
 		waitForPageToLoadImproved(3000);
 		
