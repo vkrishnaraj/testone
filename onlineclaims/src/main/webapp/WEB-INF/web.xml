@@ -135,4 +135,9 @@
 	</welcome-file-list>
 	<!-- End Spring Params -->
 	
+	<error-page>
+    	<error-code>500</error-code>
+    	<location>/error.xhtml</location>
+	</error-page>
+	
 </web-app>
