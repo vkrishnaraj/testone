@@ -567,7 +567,7 @@ public class LFTracingUtil {
 						}
 						for(String name:lnickname){
 							if(StringCompare.compareStrings(fc.getFirstName()+fc.getLastName(), name+match.getLost().getLastName())>
-							(Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NICK_NAME))) && !namematch){
+							(Double.valueOf(PropertyBMO.getValueAsInt(PropertyBMO.LF_TRACING_NICK_NAME))) && !bagnamematch){
 								LFMatchDetail detail = new LFMatchDetail();
 								detail.setDescription("Bag Nick Name Match"); //Do we want to change the label if the nickmatch value is true? Should there be a different weight for 'Nicknames'?
 								detail.setMatchHistory(match);
