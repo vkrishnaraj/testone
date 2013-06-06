@@ -943,22 +943,6 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 
 		return ret;
 	}
-	
-	public boolean isLFSubCompany(String compCode){
-		if(compCode==null){
-			return false;
-		}
-		Set<Subcompany> subcompanies=(Set<Subcompany>)SubCompanyDAO.loadSubcompaniesByCompCode(TracingConstants.LF_LF_COMPANY_ID);
-		boolean isLF=false;
-		if(subcompanies!=null){
-			for(Subcompany sc:subcompanies){
-				if(sc.getSubcompanyCode().equals(compCode)){
-					isLF=true;
-				}
-			}
-		}
-		return isLF;
-	}
 
 	// Begin Fedex Logic
 	@Override
