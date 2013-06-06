@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Contents extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Contents.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s98E262C17E4126EFC6F6431E510A6845").resolveHandle("contents82c9type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Contents.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s88BD0230C96D0EEDE5A966901E77F2BE").resolveHandle("contents82c9type");
     
     /**
      * Gets the "article" element
@@ -357,6 +357,36 @@ public interface Contents extends org.apache.xmlbeans.XmlObject
      * Unsets the "purchasedDate" element
      */
     void unsetPurchasedDate();
+    
+    /**
+     * Gets the "quantity" element
+     */
+    int getQuantity();
+    
+    /**
+     * Gets (as xml) the "quantity" element
+     */
+    org.apache.xmlbeans.XmlInt xgetQuantity();
+    
+    /**
+     * True if has "quantity" element
+     */
+    boolean isSetQuantity();
+    
+    /**
+     * Sets the "quantity" element
+     */
+    void setQuantity(int quantity);
+    
+    /**
+     * Sets (as xml) the "quantity" element
+     */
+    void xsetQuantity(org.apache.xmlbeans.XmlInt quantity);
+    
+    /**
+     * Unsets the "quantity" element
+     */
+    void unsetQuantity();
     
     /**
      * Gets the "size" element

@@ -236,6 +236,7 @@
                     <xs:element minOccurs="0" name="attemptToClaimAtArrival" type="xs:int"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="bag" nillable="true" type="ax21:Bag"/>
                     <xs:element minOccurs="0" name="bagClearCustoms" type="xs:int"/>
+                    <xs:element minOccurs="0" name="bagReceivedDate" nillable="true" type="xs:date"/>
                     <xs:element minOccurs="0" name="bagWeight" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="baggageReroutedEnRoute" type="xs:int"/>
                     <xs:element minOccurs="0" name="bagsDelayed" type="xs:int"/>
@@ -258,10 +259,12 @@
                     <xs:element minOccurs="0" name="filedPreviousClaim" type="xs:int"/>
                     <xs:element minOccurs="0" name="filedPreviousClaimant" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="filedPrevoiusDate" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="foreignCurrencyEmail" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="frequentFlierNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="haveToRecheck" type="xs:int"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="itinerary" nillable="true" type="ax21:Itinerary"/>
                     <xs:element minOccurs="0" name="lastSawBaggage" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lengthOfStay" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="mailingAddress" nillable="true" type="ax21:Address"/>
                     <xs:element minOccurs="0" name="occupation" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="passenger" nillable="true" type="ax21:Passenger"/>
@@ -275,10 +278,12 @@
                     <xs:element minOccurs="0" name="privateInsurance" type="xs:int"/>
                     <xs:element minOccurs="0" name="privateInsuranceAddr" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="privateInsuranceName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="reasonForTravel" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="reportedAirline" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="reportedCity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="reportedFileNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="reportedToAnotherAirline" type="xs:int"/>
+                    <xs:element minOccurs="0" name="requestForeignCurrency" type="xs:int"/>
                     <xs:element minOccurs="0" name="reroutedAirlineCity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="reroutedReason" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="socialSecurity" nillable="true" type="xs:string"/>
@@ -336,6 +341,7 @@
                     <xs:element minOccurs="0" name="price" type="xs:double"/>
                     <xs:element minOccurs="0" name="purchasedAt" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="purchasedDate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="quantity" type="xs:int"/>
                     <xs:element minOccurs="0" name="size" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>

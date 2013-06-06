@@ -602,6 +602,7 @@
 		<antcall target="build-ear-production-airtran"/>
 		<antcall target="build-ear-production-united"/>
 		<antcall target="build-ear-production-webjet"/>
+		<antcall target="build-ear-production-american"/>
 		<antcall target="build-cron-production-all"/>
 	</target>
 	

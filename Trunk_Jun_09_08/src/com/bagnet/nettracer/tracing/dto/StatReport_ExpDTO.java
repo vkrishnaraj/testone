@@ -5,7 +5,7 @@
  */
 package com.bagnet.nettracer.tracing.dto;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Station;

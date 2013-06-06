@@ -191,6 +191,16 @@ public class PropertyBMO {
 	public static final String TRACING_STATUS_BLOCK_WT = "tracing.status.block.wt";
 	
 	public static final String SPOKEN_LANGUAGE_LIST = "spoken.language.list";
+
+	public static final String DUP_CLAIM_CACHE_EXPIRE_TIME = "dup.claim.cache.expire.time";
+	
+	public static final String HORNETQ_URL = "hornetq.url";
+	public static final String HORNETQ_DEST = "hornetq.dest";
+	public static final String HORNETQ_FACTORY = "hornetq.factory";
+	public static final String HORNETQ_USER = "hornetq.user";
+	public static final String HORNETQ_PASS = "hornetq.pass";
+	
+	public static final String RES_WS_TIMEOUT = "res.ws.timeout";
 	
 	public static final String FEDEX_ADDRESS_ENDPOINT = "fedex.address.endpoint";
 	public static final String FEDEX_RATE_ENDPOINT = "fedex.rate.endpoint";

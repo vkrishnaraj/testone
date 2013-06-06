@@ -231,6 +231,61 @@ public class OnlineClaim {
 	
 	@Column(length = 100)
 	private String privateInsuranceAddr;
+	
+	@Basic
+	private int requestForeignCurrency;
+	
+	@Column(length = 100)
+	private String foreignCurrencyEmail;
+
+	@Temporal(TemporalType.DATE)
+	private Date bagReceivedDate;
+	
+	@Column(length = 10)
+	private String reasonForTravel;
+	
+	@Column(length = 20)
+	private String lengthOfStay;
+
+	public String getReasonForTravel() {
+		return reasonForTravel;
+	}
+
+	public void setReasonForTravel(String reasonForTravel) {
+		this.reasonForTravel = reasonForTravel;
+	}
+
+	public String getLengthOfStay() {
+		return lengthOfStay;
+	}
+
+	public void setLengthOfStay(String lengthOfStay) {
+		this.lengthOfStay = lengthOfStay;
+	}
+
+	public int getRequestForeignCurrency() {
+		return requestForeignCurrency;
+	}
+
+	public void setRequestForeignCurrency(int requestForeignCurrency) {
+		this.requestForeignCurrency = requestForeignCurrency;
+	}
+
+	public String getForeignCurrencyEmail() {
+		return foreignCurrencyEmail;
+	}
+
+	public void setForeignCurrencyEmail(String foreignCurrencyEmail) {
+		this.foreignCurrencyEmail = foreignCurrencyEmail;
+	}
+
+	public Date getBagReceivedDate() {
+		return bagReceivedDate;
+	}
+
+	public void setBagReceivedDate(Date bagReceivedDate) {
+		this.bagReceivedDate = bagReceivedDate;
+	}
 
 	public int getClaimType() {
 		return claimType;

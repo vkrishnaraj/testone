@@ -3,6 +3,7 @@ package com.bagnet.clients.us;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
@@ -30,6 +31,7 @@ public class SharesIntegrationWrapper {
 	private Logger logger = Logger.getLogger(SharesIntegrationWrapper.class);
 	private String endpoint = PropertyBMO.getValue(PropertyBMO.PROPERTY_BOOKING_ENDPOINT);
 	
+	private int DEFAULT_RES_WS_TIMEOUT = 30000;
 	
 	public void sendTelex(String message, String address, boolean async){
 		if(async){
@@ -129,6 +131,9 @@ public class SharesIntegrationWrapper {
 				return false;
 			}
 			logger.info(biDoc);
+			int timeout = PropertyBMO.getValueAsInt(PropertyBMO.RES_WS_TIMEOUT);
+			stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, timeout==0?DEFAULT_RES_WS_TIMEOUT:timeout);
+			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeout==0?DEFAULT_RES_WS_TIMEOUT:timeout);
 			GetBookingInformationResponseDocument responseDoc = stub
 					.getBookingInformation(biDoc);
 			logger.info(responseDoc); 

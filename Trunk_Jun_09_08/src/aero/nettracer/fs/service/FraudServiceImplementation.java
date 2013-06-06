@@ -262,7 +262,7 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 		
 		boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 		if (claimSaved && ntfsUser) {
-			submitClaimToFs(claim, firstSave, res, agent, updateClaimStatus.getUpdateClaimStatus().getMaxWaitTime());
+			submitClaimToFs(claim, firstSave, res, agent, updateClaimStatus.getUpdateClaimStatus().getMaxWaitTime(), true);
 		}
 		logger.info(resDoc);
     	return resDoc;
@@ -300,9 +300,46 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 		
 ////////// 1. save the claim locally
 		boolean firstSave = claim.getId() == 0;
-		boolean claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);
+		Claim dupClaim = null;
+		String key = null;
+		
+		if (firstSave) {
+			String fName = null;
+			String lName = null;
+			String add = null;
+			String rLoc = null;
+			if (claim != null && claim.getClaimant() != null) {
+				fName = claim.getClaimant().getFirstName();
+				lName = claim.getClaimant().getLastName();
+				if (claim.getClaimant().getAddress() != null) {
+					add = claim.getClaimant().getAddress().getAddress1();
+				}
+			}
+			if (claim != null && claim.getIncident() != null && claim.getIncident().getReservation() != null) {
+				rLoc = claim.getIncident().getReservation().getRecordLocator();
+			}
+			key = ClaimUtils.createKey(fName, lName, add, rLoc);
+			dupClaim = ClaimUtils.getClaimFromCache(key);
+		}
+		
+		boolean isDupClaim = (dupClaim != null);
+		boolean claimSaved = false;
+		if (!isDupClaim) {
+			claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);
+		}
 		if (claimSaved) {
 			claim = ClaimDAO.loadClaim(claim.getId());
+			if (firstSave) {
+				Claim claimCache = ClaimDAO.loadClaim(claim.getId());
+				Calendar tzFix = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+				Calendar time = Calendar.getInstance();
+				time.set(tzFix.get(Calendar.YEAR), tzFix.get(Calendar.MONTH), tzFix.get(Calendar.DAY_OF_MONTH), 
+						tzFix.get(Calendar.HOUR_OF_DAY), tzFix.get(Calendar.MINUTE), tzFix.get(Calendar.SECOND));
+				claimCache.setClaimDate(time.getTime());
+				ClaimUtils.addClaimToCache(key, claimCache);
+			}
+		} else if (isDupClaim) {
+			claim = ClaimDAO.loadClaim(dupClaim.getId());
 		} else {
 			//TODO handle error
 			res.addError("There was an error saving this claim");
@@ -313,13 +350,13 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 		res.setFileId(claim.getId());
 		ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!= null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
 		
-		if (claimSaved && ntfsUser) {
-			submitClaimToFs(claim, firstSave, res, user, maxWait);
+		if (ntfsUser) {
+			submitClaimToFs(claim, firstSave, res, user, maxWait, false);
 		}
     } // END METHOD createClaim
     
     
-    private void submitClaimToFs(FsClaim claim, boolean firstSave, ClaimResponse res, Agent user, int maxWait){
+    private void submitClaimToFs(FsClaim claim, boolean firstSave, ClaimResponse res, Agent user, int maxWait, boolean saveAnyway){
 		Context ctx = null;
 		ClaimClientRemote remote = null;
 		aero.nettracer.fs.model.File file = claim.getFile();
@@ -329,13 +366,14 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 		} catch (Exception e) {
 			//logger.error(e);
 		}
-		
+
+		boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
 		long remoteFileId = 0;
 		if (remote == null) {
 			res.addError("There was an error connecting to the fraud service.");
 			res.setSuccess(false);
 			return;
-		} else {
+		} else if (saveAnyway || (claim != null && claim.getFile() != null && claim.getFile().getSwapId() == 0)) {
 			LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
 			
 			for (FsClaim current: file.getClaims()) {
@@ -382,11 +420,6 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 				claim.getFile().setSwapId(remoteFileId);
 				FileDAO.saveFile(claim.getFile(), false);
 			}
-			//logger.info("Claim saved to central services: " + remoteFileId);
-				
-//////////////////3. submit the claim for tracing
-			//sync 0 - default, 1-async, 2-sync
-			boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
 
 			TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave, hasViewFraudResultsPermission, maxWait);
 			
@@ -394,15 +427,20 @@ public class FraudServiceImplementation extends FraudServiceSkeleton {
 			if (hasViewFraudResultsPermission && results != null) {
 				processTraceResponse(res,results);
 			}
-				
-			if (ctx != null) {
-				try {
-					ctx.close();
-				} catch (Exception e) {
-					
-				}
+		} else {
+			TraceResponse traceResponse = ConnectionUtil.getFraudResults(claim.getFile().getSwapId(), maxWait);
+			if (hasViewFraudResultsPermission && traceResponse != null) {
+				processTraceResponse(res,traceResponse);
 			}
 		} // END REMOTE CALLS
+		
+		if (ctx != null) {
+			try {
+				ctx.close();
+			} catch (Exception e) {
+				
+			}
+		}
     }
     
     private void processTraceResponse(ClaimResponse res, TraceResponse results){

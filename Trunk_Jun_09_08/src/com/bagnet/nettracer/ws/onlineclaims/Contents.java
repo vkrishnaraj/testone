@@ -12,6 +12,15 @@ public class Contents {
 	private double price;
 	private String currency;
 	private String contentOwner;
+	private int quantity;
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 
 	public int getMale() {
 		return male;

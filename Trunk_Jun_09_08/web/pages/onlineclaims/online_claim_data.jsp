@@ -191,6 +191,9 @@ phIndex++; %>
 </td>
 <td class="boldCell"><bean:message key="oc.label.num.passengers" /></td><td><bean:write name="claim" property="passengersTravelingWithYou" scope="request"/></td>
 </tr><tr>
+<td class="boldCell"><bean:message key="oc.label.reason.travel" /></td><td><bean:write name="claim" property="reasonForTravel" scope="request"/></td>
+<td class="boldCell"><bean:message key="oc.label.length.stay" /></td><td><bean:write name="claim" property="lengthOfStay" scope="request"/></td>
+</tr><tr>
 <td class="boldCell"><bean:message key="oc.label.excess.charge" /></td>
 <td><logic:match value="1" name="claim" property="chargedForExcessBaggage" scope="request">
 <bean:message key="oc.label.yes"/>
@@ -316,6 +319,7 @@ phIndex++; %>
 <logic:present name="bags" property="contents">
 <logic:notEmpty name="bags" property="contents">
 <tr>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.quantity" /></td>
 <td class="ocHeader"><bean:message key="oc.label.bag.contents.gender" /></td>
 <td class="ocHeader"><bean:message key="oc.label.bag.contents.article" /></td>
 <td class="ocHeader"><bean:message key="oc.label.bag.contents.color" /></td>
@@ -328,6 +332,7 @@ phIndex++; %>
 </tr>
 <logic:iterate id="conts" name="bags" property="contents" type="com.bagnet.nettracer.tracing.db.onlineclaims.OCContents">
 <tr>
+<td><bean:write name="conts" property="quantity"/></td>
 <td>
 <logic:equal value="0" name="conts" property="male">
 <bean:message key="oc.label.bag.contents.gender.na"/>
@@ -358,14 +363,14 @@ phIndex++; %>
 <td><bean:write name="conts" property="contentOwner"/></td>
 </tr>
 </logic:iterate>
-<tr><td colspan="9">Total Cost: <bean:write name="bags" property="grandTotal"/></td></tr>
+<tr><td colspan="10">Total Cost: <bean:write name="bags" property="grandTotal"/></td></tr>
 </logic:notEmpty>
 <logic:empty name="bags" property="contents">
-<tr><td colspan="9"><bean:message key="oc.label.bag.contents.none" /></td></tr>
+<tr><td colspan="10"><bean:message key="oc.label.bag.contents.none" /></td></tr>
 </logic:empty>
 </logic:present>
 <logic:notPresent name="bags" property="contents">
-<tr><td colspan="9"><bean:message key="oc.label.bag.contents.none" /></td></tr>
+<tr><td colspan="10"><bean:message key="oc.label.bag.contents.none" /></td></tr>
 </logic:notPresent>
 </table>
 <% } else { %>
@@ -373,32 +378,32 @@ phIndex++; %>
 <table class="ocTable" width="95%"><tr>
 <%     if (bags.isBagArrive()) { 
 	       if (!c.isDamaged()) {%>
-<td class="boldCell" colspan="9"><bean:message key="oc.title.missing.claim" /></td>
+<td class="boldCell" colspan="10"><bean:message key="oc.title.missing.claim" /></td>
 <%         } else if (!c.isMissing()) { %>
-<td class="boldCell" colspan="9"><bean:message key="oc.title.damaged.claim" /></td>
+<td class="boldCell" colspan="10"><bean:message key="oc.title.damaged.claim" /></td>
 <%         } else { %>
-<td class="boldCell" colspan="9"><bean:message key="oc.title.miss.damage.claim" /></td>
+<td class="boldCell" colspan="10"><bean:message key="oc.title.miss.damage.claim" /></td>
 <%         } 
        } else { %>
-<td class="boldCell" colspan="9"><bean:message key="oc.title.delayed.claim" /></td>
+<td class="boldCell" colspan="10"><bean:message key="oc.title.delayed.claim" /></td>
 <%     } %>
 </tr><tr>
-<td class="boldCell" colspan="3"><bean:message key="oc.label.bag.tag" /></td><td colspan="2"><bean:write name="bags" property="tag"/></td>
+<td class="boldCell" colspan="3"><bean:message key="oc.label.bag.tag" /></td><td colspan="3"><bean:write name="bags" property="tag"/></td>
 <td class="boldCell" colspan="2"><bean:message key="oc.label.bag.brand" /></td><td colspan="2"><bean:write name="bags" property="brand"/></td>
 </tr><tr>
-<td class="boldCell" colspan="3"><bean:message key="oc.label.bag.name" /></td><td colspan="6"><bean:write name="bags" property="nameOnBag"/></td>
+<td class="boldCell" colspan="3"><bean:message key="oc.label.bag.name" /></td><td colspan="7"><bean:write name="bags" property="nameOnBag"/></td>
 </tr><tr>
-<td class="boldCell" colspan="3"><bean:message key="oc.label.bag.purchase" /></td><td colspan="2"><bean:write name="bags" property="purchaseDate"/></td>
+<td class="boldCell" colspan="3"><bean:message key="oc.label.bag.purchase" /></td><td colspan="3"><bean:write name="bags" property="purchaseDate"/></td>
 <td class="boldCell" colspan="2"><bean:message key="oc.label.bag.markings" /></td><td colspan="2"><bean:write name="bags" property="externalMarkings"/></td>
 </tr><tr>
-<td class="boldCell" colspan="3"><bean:message key="oc.label.bag.color" /></td><td colspan="2"><bean:write name="bags" property="bagColor"/></td>
+<td class="boldCell" colspan="3"><bean:message key="oc.label.bag.color" /></td><td colspan="3"><bean:write name="bags" property="bagColor"/></td>
 <td class="boldCell" colspan="2"><bean:message key="oc.label.bag.type" /></td><td colspan="2"><bean:write name="bags" property="bagType"/></td>
 </tr><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.bag.value" /></td>
-<td colspan="2"><bean:write name="bags" property="bagValue"/>&#160;<bean:write name="bags" property="bagCurrency"/></td>
+<td colspan="3"><bean:write name="bags" property="bagValue"/>&#160;<bean:write name="bags" property="bagCurrency"/></td>
 <td class="boldCell" colspan="2"><bean:message key="oc.label.bag.owner" /></td><td colspan="2"><bean:write name="bags" property="bagOwner"/></td>
 </tr><tr>
-<td class="boldCell" colspan="3"><bean:message key="oc.label.bag.selected" /></td><td colspan="6">
+<td class="boldCell" colspan="3"><bean:message key="oc.label.bag.selected" /></td><td colspan="7">
 <logic:match value="true" name="bags" property="hardSided">
 <bean:message key="oc.label.bag.elem.hard"/>,&#160;
 </logic:match>
@@ -443,10 +448,11 @@ phIndex++; %>
 </logic:match>
 </td>
 </tr><tr><td style="background-color: #FFFFFF;">&#160;</td></tr><tr>
-<td class="boldCell" colspan="9"><bean:message key="oc.label.bag.contents.title" /></td></tr>
+<td class="boldCell" colspan="10"><bean:message key="oc.label.bag.contents.title" /></td></tr>
 <logic:present name="bags" property="contents">
 <logic:notEmpty name="bags" property="contents">
 <tr>
+<td class="ocHeader"><bean:message key="oc.label.bag.contents.quantity" /></td>
 <td class="ocHeader"><bean:message key="oc.label.bag.contents.gender" /></td>
 <td class="ocHeader"><bean:message key="oc.label.bag.contents.article" /></td>
 <td class="ocHeader"><bean:message key="oc.label.bag.contents.color" /></td>
@@ -459,6 +465,7 @@ phIndex++; %>
 </tr>
 <logic:iterate id="conts" name="bags" property="contents" type="com.bagnet.nettracer.tracing.db.onlineclaims.OCContents">
 <tr>
+<td><bean:write name="conts" property="quantity"/></td>
 <td>
 <logic:equal value="0" name="conts" property="male">
 <bean:message key="oc.label.bag.contents.gender.na"/>
@@ -489,14 +496,14 @@ phIndex++; %>
 <td><bean:write name="conts" property="contentOwner"/></td>
 </tr>
 </logic:iterate>
-<tr><td colspan="9">Total Cost: <bean:write name="bags" property="grandTotal"/></td></tr>
+<tr><td colspan="10">Total Cost: <bean:write name="bags" property="grandTotal"/></td></tr>
 </logic:notEmpty>
 <logic:empty name="bags" property="contents">
-<tr><td colspan="9"><bean:message key="oc.label.bag.contents.none" /></td></tr>
+<tr><td colspan="10"><bean:message key="oc.label.bag.contents.none" /></td></tr>
 </logic:empty>
 </logic:present>
 <logic:notPresent name="bags" property="contents">
-<tr><td colspan="9"><bean:message key="oc.label.bag.contents.none" /></td></tr>
+<tr><td colspan="10"><bean:message key="oc.label.bag.contents.none" /></td></tr>
 </logic:notPresent>
 </table>
 <% } %>
@@ -547,7 +554,7 @@ phIndex++; %>
 <h1><bean:message key="oc.label.prev.claim.title" /></h1>
 <table class="ocTable" width="95%"><tr>
 <td class="boldCell"><bean:message key="oc.label.claim.type" /></td>
-<td colspan="3"><logic:match value="true" name="claim" property="delayed" scope="request">
+<td><logic:match value="true" name="claim" property="delayed" scope="request">
 <bean:message key="oc.label.type.ld"/>,&#160;
 </logic:match>
 <logic:match value="true" name="claim" property="missing" scope="request">
@@ -559,6 +566,16 @@ phIndex++; %>
 <logic:match value="true" name="claim" property="interim" scope="request">
 <bean:message key="oc.label.type.inter"/>
 </logic:match></td>
+<td class="boldCell"><bean:message key="oc.label.bag.received.date" /></td><td><bean:write name="claim" property="bagReceivedDate" scope="request"/></td>
+</tr><tr>
+<td class="boldCell"><bean:message key="oc.label.paid.foreign.curr" /></td>
+<td><logic:match value="1" name="claim" property="requestForeignCurrency" scope="request">
+<bean:message key="oc.label.yes"/>
+</logic:match>
+<logic:match value="2" name="claim" property="requestForeignCurrency" scope="request">
+<bean:message key="oc.label.no"/>
+</logic:match></td>
+<td class="boldCell"><bean:message key="oc.label.foreign.curr.email" /></td><td><bean:write name="claim" property="foreignCurrencyEmail" scope="request"/></td>
 </tr><tr>
 <td class="boldCell" colspan="3"><bean:message key="oc.label.priv.insur" /></td>
 <td><logic:match value="1" name="claim" property="privateInsurance" scope="request">

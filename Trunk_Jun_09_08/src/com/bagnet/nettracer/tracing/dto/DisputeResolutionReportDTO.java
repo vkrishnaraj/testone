@@ -1,13 +1,10 @@
 package com.bagnet.nettracer.tracing.dto;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.TimeZone;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.tracing.db.Status;
 
 public class DisputeResolutionReportDTO {
 	

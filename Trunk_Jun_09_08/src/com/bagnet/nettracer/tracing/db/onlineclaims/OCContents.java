@@ -52,6 +52,17 @@ public class OCContents {
 
 	@Column(length = 50)
 	private String contentOwner;
+	
+	@Basic
+	private int quantity;
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 
 	public int getMale() {
 		return male;

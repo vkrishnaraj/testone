@@ -389,8 +389,30 @@ public class ModifyClaimAction extends CheckedAction {
 			deleteEmptyNames(claim);
 
 			boolean firstSave = claim.getId() == 0;
+			Claim dupClaim = null;
+			String key = null;
+			
+			if (firstSave) {
+				String fName = null;
+				String lName = null;
+				String add = null;
+				String rLoc = null;
+				if (claim != null && claim.getClaimant() != null) {
+					fName = claim.getClaimant().getFirstName();
+					lName = claim.getClaimant().getLastName();
+					if (claim.getClaimant().getAddress() != null) {
+						add = claim.getClaimant().getAddress().getAddress1();
+					}
+				}
+				if (claim != null && claim.getIncident() != null && claim.getIncident().getReservation() != null) {
+					rLoc = claim.getIncident().getReservation().getRecordLocator();
+				}
+				key = ClaimUtils.createKey(fName, lName, add, rLoc);
+				dupClaim = ClaimUtils.getClaimFromCache(key);
+			}
+			
 			boolean claimSaved=false;
-			if(validateAirlineIncidentId(claim.getIncident().getAirlineIncidentId(), errors, request, claim.getIncident().getId())) {//checks for fs_incident on local database, return turn is incidentid isn't in the table - airlineIncMark
+			if(dupClaim == null && validateAirlineIncidentId(claim.getIncident().getAirlineIncidentId(), errors, request, claim.getIncident().getId())) {//checks for fs_incident on local database, return turn is incidentid isn't in the table - airlineIncMark
 				claimSaved = FileDAO.saveFile(claim.getFile(), firstSave);
 			}
 			if (claimSaved) {
@@ -402,6 +424,9 @@ public class ModifyClaimAction extends CheckedAction {
 				CHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_SAVE+" "+TracingConstants.HIST_DESCRIPTION_CLAIM);
 				CHO.setObjectType(TracingConstants.HIST_DESCRIPTION_CLAIM);
 				HistoryUtils.AddToHistoryContainer(session, CHO, null);
+				if (firstSave) {
+					ClaimUtils.addClaimToCache(key, claim);
+				}
 			}
 			
 			ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!= null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SAVE);
@@ -423,9 +448,10 @@ public class ModifyClaimAction extends CheckedAction {
 					request.setAttribute("fail", "1");
 				}
 			}
+
+			boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
 			
-			
-			if (ntfsUser && claimSaved ) {
+			if (ntfsUser && claimSaved) {
 				// 2. save the claim on central services
 				Context ctx = null;
 				ClaimClientRemote remote = null;
@@ -443,14 +469,13 @@ public class ModifyClaimAction extends CheckedAction {
 					saveMessages(request, errors);
 				} else {
 					
-					
 					LinkedHashSet<FsClaim> fsClaims = new LinkedHashSet<FsClaim>();
-					
+						
 					if (file == null) {
 						file = claim.getFile();
 					}
-					
-//					
+						
+	//					
 					for (FsClaim current: file.getClaims()) {
 						
 						FsClaim newClaim = new FsClaim();
@@ -460,46 +485,46 @@ public class ModifyClaimAction extends CheckedAction {
 						newClaim.setCreateagent(current.getCreateagent());
 						LinkedHashSet<Person> pers = new LinkedHashSet<Person>();
 						newClaim.setClaimants(pers);
-
+	
 						LinkedHashSet<Attachment> attachs = new LinkedHashSet<Attachment>();
 						newClaim.setAttachments(attachs);
-						
+							
 						for (Person p: current.getClaimants()) {
 							p.setClaim(newClaim);
 							pers.add(p);
 						}
-						
+							
 						for(Attachment attach:claim.getAttachments()){
 							attach.setClaim(newClaim);
 							attachs.add(attach);
 						}
-						
+							
 						for (Segment s: current.getSegments()) {
 							s.setClaim(newClaim);
 							segs.add(s);
 						}
-						
+							
 						LinkedHashSet<FsReceipt> receipts = new LinkedHashSet<FsReceipt>();
 						newClaim.setReceipts(receipts);
 						for (FsReceipt r: current.getReceipts()) {
 							r.setClaim(newClaim);
 							receipts.add(r);
 						}
-						
+							
 						LinkedHashSet<FsIPAddress> ipaddresses = new LinkedHashSet<FsIPAddress>();
 						newClaim.setIpAddresses(ipaddresses);
 						for(FsIPAddress ipaddress: current.getIpAddresses()){
 							ipaddress.setClaim(newClaim);
 							ipaddresses.add(ipaddress);
 						}
-						
+							
 						LinkedHashSet<Phone> phones = new LinkedHashSet<Phone>();
 						newClaim.setPhones(phones);
 						for(Phone phone: current.getPhones()){
 							phone.setClaim(newClaim);
 							phones.add(phone);
 						}
-						
+							
 						file.setStatusId(claim.getStatusId());
 						newClaim.setFile(file);
 						file.setIncident(newClaim.getIncident());
@@ -523,14 +548,13 @@ public class ModifyClaimAction extends CheckedAction {
 						if(attachids.size()>0){
 							remote.saveAttachments(attachids, remoteFileId, claim.getAirline(), claim.getId());
 						}
-						
+							
 						claim.getFile().setSwapId(remoteFileId);
 						FileDAO.saveFile(claim.getFile(), false);
 					}
 					logger.info("Claim saved to central services: " + remoteFileId);
 					
 					// 3. submit the claim for tracing
-					boolean hasViewFraudResultsPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user);
 					TraceResponse results = ConnectionUtil.submitClaim(remoteFileId, firstSave, hasViewFraudResultsPermission);
 					ClaimUtils.enterAuditClaimEntry(user.getAgent_ID(), TracingConstants.FS_AUDIT_ITEM_TYPE_FILE, (claim.getFile()!=null?claim.getFile().getId():-1), TracingConstants.FS_ACTION_SUBMIT);
 					if (hasViewFraudResultsPermission && results != null) {
@@ -548,6 +572,13 @@ public class ModifyClaimAction extends CheckedAction {
 					if (ctx != null) {
 						ctx.close();
 					}
+				}
+			}
+			if (dupClaim != null) {
+				claim = dupClaim;
+				if (hasViewFraudResultsPermission) {
+					response.sendRedirect("fraud_results.do?claimId=" + claim.getId());
+					return null;
 				}
 			}
 			

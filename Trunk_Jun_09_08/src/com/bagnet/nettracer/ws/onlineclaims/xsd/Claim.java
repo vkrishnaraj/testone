@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Claim extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s98E262C17E4126EFC6F6431E510A6845").resolveHandle("claimd979type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s88BD0230C96D0EEDE5A966901E77F2BE").resolveHandle("claimd979type");
     
     /**
      * Gets the "attemptToClaimAtArrival" element
@@ -127,6 +127,46 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "bagClearCustoms" element
      */
     void unsetBagClearCustoms();
+    
+    /**
+     * Gets the "bagReceivedDate" element
+     */
+    java.util.Calendar getBagReceivedDate();
+    
+    /**
+     * Gets (as xml) the "bagReceivedDate" element
+     */
+    org.apache.xmlbeans.XmlDate xgetBagReceivedDate();
+    
+    /**
+     * Tests for nil "bagReceivedDate" element
+     */
+    boolean isNilBagReceivedDate();
+    
+    /**
+     * True if has "bagReceivedDate" element
+     */
+    boolean isSetBagReceivedDate();
+    
+    /**
+     * Sets the "bagReceivedDate" element
+     */
+    void setBagReceivedDate(java.util.Calendar bagReceivedDate);
+    
+    /**
+     * Sets (as xml) the "bagReceivedDate" element
+     */
+    void xsetBagReceivedDate(org.apache.xmlbeans.XmlDate bagReceivedDate);
+    
+    /**
+     * Nils the "bagReceivedDate" element
+     */
+    void setNilBagReceivedDate();
+    
+    /**
+     * Unsets the "bagReceivedDate" element
+     */
+    void unsetBagReceivedDate();
     
     /**
      * Gets the "bagWeight" element
@@ -919,6 +959,46 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     void unsetFiledPrevoiusDate();
     
     /**
+     * Gets the "foreignCurrencyEmail" element
+     */
+    java.lang.String getForeignCurrencyEmail();
+    
+    /**
+     * Gets (as xml) the "foreignCurrencyEmail" element
+     */
+    org.apache.xmlbeans.XmlString xgetForeignCurrencyEmail();
+    
+    /**
+     * Tests for nil "foreignCurrencyEmail" element
+     */
+    boolean isNilForeignCurrencyEmail();
+    
+    /**
+     * True if has "foreignCurrencyEmail" element
+     */
+    boolean isSetForeignCurrencyEmail();
+    
+    /**
+     * Sets the "foreignCurrencyEmail" element
+     */
+    void setForeignCurrencyEmail(java.lang.String foreignCurrencyEmail);
+    
+    /**
+     * Sets (as xml) the "foreignCurrencyEmail" element
+     */
+    void xsetForeignCurrencyEmail(org.apache.xmlbeans.XmlString foreignCurrencyEmail);
+    
+    /**
+     * Nils the "foreignCurrencyEmail" element
+     */
+    void setNilForeignCurrencyEmail();
+    
+    /**
+     * Unsets the "foreignCurrencyEmail" element
+     */
+    void unsetForeignCurrencyEmail();
+    
+    /**
      * Gets the "frequentFlierNumber" element
      */
     java.lang.String getFrequentFlierNumber();
@@ -1077,6 +1157,46 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "lastSawBaggage" element
      */
     void unsetLastSawBaggage();
+    
+    /**
+     * Gets the "lengthOfStay" element
+     */
+    java.lang.String getLengthOfStay();
+    
+    /**
+     * Gets (as xml) the "lengthOfStay" element
+     */
+    org.apache.xmlbeans.XmlString xgetLengthOfStay();
+    
+    /**
+     * Tests for nil "lengthOfStay" element
+     */
+    boolean isNilLengthOfStay();
+    
+    /**
+     * True if has "lengthOfStay" element
+     */
+    boolean isSetLengthOfStay();
+    
+    /**
+     * Sets the "lengthOfStay" element
+     */
+    void setLengthOfStay(java.lang.String lengthOfStay);
+    
+    /**
+     * Sets (as xml) the "lengthOfStay" element
+     */
+    void xsetLengthOfStay(org.apache.xmlbeans.XmlString lengthOfStay);
+    
+    /**
+     * Nils the "lengthOfStay" element
+     */
+    void setNilLengthOfStay();
+    
+    /**
+     * Unsets the "lengthOfStay" element
+     */
+    void unsetLengthOfStay();
     
     /**
      * Gets the "mailingAddress" element
@@ -1589,6 +1709,46 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
     void unsetPrivateInsuranceName();
     
     /**
+     * Gets the "reasonForTravel" element
+     */
+    java.lang.String getReasonForTravel();
+    
+    /**
+     * Gets (as xml) the "reasonForTravel" element
+     */
+    org.apache.xmlbeans.XmlString xgetReasonForTravel();
+    
+    /**
+     * Tests for nil "reasonForTravel" element
+     */
+    boolean isNilReasonForTravel();
+    
+    /**
+     * True if has "reasonForTravel" element
+     */
+    boolean isSetReasonForTravel();
+    
+    /**
+     * Sets the "reasonForTravel" element
+     */
+    void setReasonForTravel(java.lang.String reasonForTravel);
+    
+    /**
+     * Sets (as xml) the "reasonForTravel" element
+     */
+    void xsetReasonForTravel(org.apache.xmlbeans.XmlString reasonForTravel);
+    
+    /**
+     * Nils the "reasonForTravel" element
+     */
+    void setNilReasonForTravel();
+    
+    /**
+     * Unsets the "reasonForTravel" element
+     */
+    void unsetReasonForTravel();
+    
+    /**
      * Gets the "reportedAirline" element
      */
     java.lang.String getReportedAirline();
@@ -1737,6 +1897,36 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "reportedToAnotherAirline" element
      */
     void unsetReportedToAnotherAirline();
+    
+    /**
+     * Gets the "requestForeignCurrency" element
+     */
+    int getRequestForeignCurrency();
+    
+    /**
+     * Gets (as xml) the "requestForeignCurrency" element
+     */
+    org.apache.xmlbeans.XmlInt xgetRequestForeignCurrency();
+    
+    /**
+     * True if has "requestForeignCurrency" element
+     */
+    boolean isSetRequestForeignCurrency();
+    
+    /**
+     * Sets the "requestForeignCurrency" element
+     */
+    void setRequestForeignCurrency(int requestForeignCurrency);
+    
+    /**
+     * Sets (as xml) the "requestForeignCurrency" element
+     */
+    void xsetRequestForeignCurrency(org.apache.xmlbeans.XmlInt requestForeignCurrency);
+    
+    /**
+     * Unsets the "requestForeignCurrency" element
+     */
+    void unsetRequestForeignCurrency();
     
     /**
      * Gets the "reroutedAirlineCity" element

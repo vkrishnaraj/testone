@@ -1885,7 +1885,7 @@ public class ReportBMO {
 				st.setStationcode((String) o[6]);
 				exp.setStation(st);
 
-				exp.setDraftpaiddate((java.sql.Date) o[7]);
+				exp.setDraftpaiddate((Date) o[7]);
 
 				int j = 8;
 				if (srDTO.getStatus_ID() >= 1) {
@@ -3595,10 +3595,10 @@ public class ReportBMO {
 				row=(Object[])results.get(i);
 				sr = new DisputeResolutionReportDTO();
 
-				sr.setDate_incident_created((java.sql.Date) row[0]);
-				sr.setDate_created(new java.sql.Date(((Date) row[1]).getTime()));
+				sr.setDate_incident_created((Date) row[0]);
+				sr.setDate_created((Date) row[1]);
 				if(row[2]!=null){
-					sr.setDate_resolved(new java.sql.Date(((Date) row[2]).getTime()));
+					sr.setDate_resolved((Date) row[2]);
 				}
 				sr.setIncident_id((String)row[3]);
 				sr.setStatus((Integer)row[4]);

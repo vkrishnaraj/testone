@@ -172,7 +172,7 @@
 		<ant antfile="build-gen.xml" target="delete" />
 		<property name="ant_project_name" value="usair" />
 		<property name="ant_war_name" value="usair-prod" />
-		<property name="tracer.environment.name" value="production"/>
+		<property name="tracer.environment.name" value="prod"/>
 		<property name="us.environment.name" value="production"/>
 		<copy todir="${basedir}/web/pages/login" file="companies/usair/production/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/usair/production/hibernate_main.cfg.xml" />

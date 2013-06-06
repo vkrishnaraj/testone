@@ -20,6 +20,16 @@ import org.apache.axis2.AxisFault;
 import org.apache.struts.util.LabelValueBean;
 import org.springframework.beans.BeanUtils;
 
+import aero.nettracer.general.services.GeneralServiceBean;
+import aero.nettracer.lf.services.exception.UpdateException;
+import aero.nettracer.lfc.model.AddressBean;
+import aero.nettracer.lfc.model.CategoryBean;
+import aero.nettracer.lfc.model.ContactBean;
+import aero.nettracer.lfc.model.KeyValueBean;
+import aero.nettracer.lfc.model.LostReportBean;
+import aero.nettracer.lfc.model.PhoneBean;
+import aero.nettracer.lfc.model.SegmentBean;
+
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
@@ -932,6 +942,22 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 		}
 
 		return ret;
+	}
+	
+	public boolean isLFSubCompany(String compCode){
+		if(compCode==null){
+			return false;
+		}
+		Set<Subcompany> subcompanies=(Set<Subcompany>)SubCompanyDAO.loadSubcompaniesByCompCode(TracingConstants.LF_LF_COMPANY_ID);
+		boolean isLF=false;
+		if(subcompanies!=null){
+			for(Subcompany sc:subcompanies){
+				if(sc.getSubcompanyCode().equals(compCode)){
+					isLF=true;
+				}
+			}
+		}
+		return isLF;
 	}
 
 	// Begin Fedex Logic

@@ -33,6 +33,7 @@ public class ConnectionUtil {
 	private static boolean selectorNotSet = true;
 
 	private final static long DEFAULT_TIMEOUT = 1000;
+	private final static long CHECK_INCREMENT_SECONDS = 30;
 
 	static public Context getInitialContext() throws NamingException {
 	    Properties p = new Properties();
@@ -110,19 +111,77 @@ public class ConnectionUtil {
 		if (fileId <= 0) {
 			return null;
 		}
+		int ejbWait = 1;
+		if (wait >= ejbWait) {
+			wait = wait - ejbWait;
+		} else if (wait >= 0) {
+			ejbWait = wait;
+			wait = 0;
+		}
 		TraceResponse results = null;
 		try {
 			Context ctx = ConnectionUtil.getInitialContext();
 			ClaimClientRemote remote = (ClaimClientRemote) getRemoteEjb(ctx,PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 
 			if (remote != null) {
-				results = TransportMapper.map(remote.traceFile(fileId, wait, primary, hasViewResultsPermission));
+				results = TransportMapper.map(remote.traceFile(fileId, ejbWait, primary, hasViewResultsPermission));
 			}
 			ctx.close();
 		} catch (Exception e) {
 			logger.error(e);	
 		}
-		return results;
+		return (checkResults(results, fileId, wait));
+	}
+	
+	public static TraceResponse getFraudResults(long fileId, int wait) {
+		if (fileId <= 0) {
+			return null;
+		}
+		TraceResponse traceResponse = null;
+		try {
+			Context ctx = ConnectionUtil.getInitialContext();
+			ClaimClientRemote remote = (ClaimClientRemote) getRemoteEjb(ctx,PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+
+			if (remote != null) {
+				traceResponse = (TraceResponse) TransportMapper.map(remote.getFileMatches(fileId));
+			}
+			ctx.close();
+		} catch (Exception e) {
+			logger.error(e);	
+		}
+		return (checkResults(traceResponse, fileId, wait));
+		
+	}
+	
+	private static TraceResponse checkResults(TraceResponse toCheck, long fileId, int wait) {
+		if (wait != 0 && toCheck != null && !toCheck.isTraceComplete()) {
+			long timeToWait = toCheck.getSecondsUntilReload();
+			if (wait > 0) {
+				if (wait <= CHECK_INCREMENT_SECONDS) {
+					if (timeToWait < wait) {
+						wait -= timeToWait;
+					} else {
+						timeToWait = wait;
+						wait = 0;
+					}
+				} else {
+					if (timeToWait < CHECK_INCREMENT_SECONDS) {
+						wait -= timeToWait;
+					} else {
+						timeToWait = CHECK_INCREMENT_SECONDS;
+						wait -= CHECK_INCREMENT_SECONDS;
+					}
+				}
+			} else if (timeToWait > CHECK_INCREMENT_SECONDS) {
+				timeToWait = CHECK_INCREMENT_SECONDS;
+			}
+			try {
+				Thread.sleep(timeToWait * 1000);
+			} catch (Exception e) {
+			}
+			return getFraudResults(fileId, wait);
+		}
+		return toCheck;
 	}
 
 	public static File createAndSubmitForTracing(Incident iDTO, Agent user, HttpServletRequest request, boolean hasViewResultsPermission) {

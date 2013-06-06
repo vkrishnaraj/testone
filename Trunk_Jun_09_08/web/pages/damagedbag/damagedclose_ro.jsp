@@ -174,7 +174,7 @@
 			            <bean:message key="select.please_select" />
 			          </html:option>
 			    <%
-			          java.util.List codes = (java.util.List)request.getAttribute("losscodes");
+			          java.util.List codes = LossCodeBMO.getCompanyCodes(a.getStation().getCompany().getCompanyCode_ID(), TracingConstants.DAMAGED_BAG, true, a, inc.getStatus().getStatus_ID()==13);
 			    	 
 			          for (java.util.Iterator i = codes.iterator(); i.hasNext(); ) {
 			            com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (

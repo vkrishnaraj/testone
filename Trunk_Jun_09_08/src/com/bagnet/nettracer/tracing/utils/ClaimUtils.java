@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,6 +42,7 @@ import aero.nettracer.fs.model.Segment;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.AuditClaimDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -87,6 +89,8 @@ public class ClaimUtils {
 	private static Logger logger = Logger.getLogger(TracerUtils.class);
 
 	private static HashMap<String,Company> companyCache = null;
+	
+	private static ConcurrentHashMap<String,Claim> createdClaims = null;
 	
 	public static Company getCompany(String companycode){
 		if(companyCache == null){
@@ -809,6 +813,53 @@ public class ClaimUtils {
 			}
 		}
 		return fsClaim;
+	}
+	
+	public static String createKey(String fName, String lName, String address, String recordLocator) {
+		if (fName == null) {
+			fName = "";
+		}
+		if (lName == null) {
+			lName = "";
+		}
+		if (address == null) {
+			address = "";
+		}
+		if (recordLocator == null) {
+			recordLocator = "";
+		}
+		return "KEY:" + fName.toUpperCase() + ":" + lName.toUpperCase() + ":" + address.toUpperCase() + ":" + recordLocator.toUpperCase();
+	}
+	
+	public static synchronized Claim getClaimFromCache(String key) {
+		if (createdClaims != null) {
+			cleanClaimCache();
+			return createdClaims.get(key);
+		}
+		return null;
+	}
+	
+	public static synchronized void addClaimToCache(String key, Claim claim) {
+		if (createdClaims == null) {
+			createdClaims = new ConcurrentHashMap<String, Claim>();
+		}
+		if(claim != null){
+			createdClaims.put(key, claim);
+		}
+	}
+	
+	private static void cleanClaimCache() {
+		Calendar tzFix = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		Calendar time = Calendar.getInstance();
+		time.set(tzFix.get(Calendar.YEAR), tzFix.get(Calendar.MONTH), tzFix.get(Calendar.DAY_OF_MONTH), 
+				tzFix.get(Calendar.HOUR_OF_DAY), tzFix.get(Calendar.MINUTE), tzFix.get(Calendar.SECOND));
+		time.add(Calendar.HOUR_OF_DAY, (-1 * PropertyBMO.getValueAsInt(PropertyBMO.DUP_CLAIM_CACHE_EXPIRE_TIME)));
+		for (String key : createdClaims.keySet()) {
+			Claim claim = createdClaims.get(key);
+			if (claim.getClaimDate().before(time.getTime())) {
+				createdClaims.remove(key);
+			}
+		}
 	}
 
 }

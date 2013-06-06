@@ -11,6 +11,7 @@ import javax.jms.ConnectionFactory;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
+import javax.jms.QueueConnectionFactory;
 import javax.jms.Session;
 import javax.mail.internet.InternetAddress;
 import javax.naming.Context;
@@ -156,21 +157,33 @@ public class ForwardIntegrationImpl {
 
 	}
 
-    private static final String DEFAULT_DESTINATION = "testQueue";
-    private static final String DEFAULT_USERNAME = "nettracer";
-    private static final String DEFAULT_PASSWORD = "ntMSGpass1!";
+    private static final String DEFAULT_DESTINATION = PropertyBMO.getValue(PropertyBMO.HORNETQ_DEST);
+    private static final String DEFAULT_FACTORY= PropertyBMO.getValue(PropertyBMO.HORNETQ_FACTORY);
+    private static final String DEFAULT_URL= PropertyBMO.getValue(PropertyBMO.HORNETQ_URL);
+    private static final String DEFAULT_USERNAME = PropertyBMO.getValue(PropertyBMO.HORNETQ_USER);//"nettracer";
+    private static final String DEFAULT_PASSWORD = PropertyBMO.getValue(PropertyBMO.HORNETQ_PASS);//"ntMSGpass1!";
 
 	private void sendMessage(ArrayList<Forward> payload) {
 		Connection connection = null;
 		InitialContext initialContext = null;
 
 		try {
-			Queue queue = HornetQJMSClient.createQueue(DEFAULT_DESTINATION);
+			Properties props = new Properties();
+			props.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+			props.put(Context.PROVIDER_URL, DEFAULT_URL);
+			props.put(Context.SECURITY_PRINCIPAL, DEFAULT_USERNAME);
+			props.put(Context.SECURITY_CREDENTIALS, DEFAULT_PASSWORD);
+			initialContext = new InitialContext(props);			
 			
-			TransportConfiguration tc = new TransportConfiguration(NettyConnectorFactory.class.getName());
-
-			// Step 3. Perform a lookup on the Connection Factory
-			ConnectionFactory cf = (ConnectionFactory) HornetQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, tc);
+			QueueConnectionFactory cf = (QueueConnectionFactory) initialContext.lookup(DEFAULT_FACTORY);
+			Queue queue = (Queue) initialContext.lookup(DEFAULT_DESTINATION);
+			
+//			Queue queue = HornetQJMSClient.createQueue(DEFAULT_DESTINATION);
+//			
+//			TransportConfiguration tc = new TransportConfiguration(NettyConnectorFactory.class.getName());
+//
+//			// Step 3. Perform a lookup on the Connection Factory
+//			ConnectionFactory cf = (ConnectionFactory) HornetQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, tc);
 
 			// Step 4.Create a JMS Connection
 			connection = cf.createConnection(DEFAULT_USERNAME, DEFAULT_PASSWORD);

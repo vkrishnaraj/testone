@@ -1,6 +1,5 @@
 package com.bagnet.nettracer.tracing.actions;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
