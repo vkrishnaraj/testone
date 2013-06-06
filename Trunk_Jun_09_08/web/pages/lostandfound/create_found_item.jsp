@@ -356,7 +356,7 @@
 				         							<% } 
 			         								}%>
 			         						<% } else { %>
-			         							<a href='create_found_item.do?confirm=1&matchId=<%=match.getId() %>'><bean:message key="button.do_match" /></a>,&nbsp;
+			         							<a id='confirm<%=match.getLost().getId()%>' href='create_found_item.do?confirm=1&matchId=<%=match.getId() %>'><bean:message key="button.do_match" /></a>,&nbsp;
 			         							<a href='create_found_item.do?reject=1&matchId=<%=match.getId() %>'><bean:message key="button.reject" /></a>
 			         						<% } %>
 				        					</td>
