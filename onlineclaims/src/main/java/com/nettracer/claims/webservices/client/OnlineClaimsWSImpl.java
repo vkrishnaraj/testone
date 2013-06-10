@@ -402,15 +402,24 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          com.bagnet.nettracer.ws.onlineclaims.xsd.Bag wsBag=null;
          Bag bag=null;
          if(null != bagTagList && bagTagList.size() >0){
-			com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBagArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[bagTagList.size()];
-				for (int i=0; i<bagTagList.size();i++) {
-					wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
-					bag=bagTagList.get(i);
-					wsBag.setTag(bag.getBagTagNumber());
-					wsBag.setBagArrive(new Boolean (bag.getBagArrivalStatus()));
-					wsBagArray[i]=wsBag;
+        	List<Bag> cleanBagList = new ArrayList<Bag>();
+			for (int i=0; i<bagTagList.size();i++) {
+				bag=bagTagList.get(i);
+				if (null != bag.getBagTagNumber()) {
+					cleanBagList.add(bag);
 				}
-			claim.setBagArray(wsBagArray);
+			}
+	        if(null != cleanBagList && cleanBagList.size() >0){
+				com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBagArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[cleanBagList.size()];
+					for (int i=0; i<cleanBagList.size();i++) {
+						wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
+						bag=cleanBagList.get(i);
+						wsBag.setTag(bag.getBagTagNumber());
+						wsBag.setBagArrive(new Boolean (bag.getBagArrivalStatus()));
+						wsBagArray[i]=wsBag;
+					}
+				claim.setBagArray(wsBagArray);
+	        }
          }
          
          //Itineraries
@@ -702,39 +711,48 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		com.bagnet.nettracer.ws.onlineclaims.xsd.Bag wsBag=null;
 		Bag bag=null;
 		if(null != bagTagList && bagTagList.size() >0){
-			com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBagArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[bagTagList.size()];
-			if (wsBagArrayTemp == null || wsBagArrayTemp.length == 0) {
-				for (int i=0; i<bagTagList.size();i++) {
-					wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
-					bag=bagTagList.get(i);
-					wsBag.setTag(bag.getBagTagNumber());
-					wsBag.setBagArrive(new Boolean (bag.getBagArrivalStatus()));
-					wsBagArray[i]=wsBag;
-				}
-			} else {
-				for (int i=0; i<bagTagList.size();i++) {
-					bag=bagTagList.get(i);
-					boolean bagArrStat = Boolean.parseBoolean(bag.getBagArrivalStatus());
-					boolean notAdded = true;
-					if (!bagArrStat) {
-						for (int j = 0; j < wsBagArrayTemp.length; j++) {
-							wsBag = wsBagArrayTemp[j];
-							if (wsBag != null && !wsBag.getBagArrive() && wsBag.getTag() != null && wsBag.getTag().equals(bag.getBagTagNumber())) {
-								notAdded = false;
-								wsBagArrayTemp[j] = null;
-								break;
-							}
-						}					
-					}
-					if (notAdded) {
-						wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
-					}
-					wsBag.setTag(bag.getBagTagNumber());
-					wsBag.setBagArrive(new Boolean (bag.getBagArrivalStatus()));
-					wsBagArray[i]=wsBag;
+        	List<Bag> cleanBagList = new ArrayList<Bag>();
+			for (int i=0; i<bagTagList.size();i++) {
+				bag=bagTagList.get(i);
+				if (null != bag.getBagTagNumber()) {
+					cleanBagList.add(bag);
 				}
 			}
-			claim.setBagArray(wsBagArray);
+	        if(null != cleanBagList && cleanBagList.size() >0){
+				com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBagArray=new com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[cleanBagList.size()];
+				if (wsBagArrayTemp == null || wsBagArrayTemp.length == 0) {
+					for (int i=0; i<cleanBagList.size();i++) {
+						wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
+						bag=cleanBagList.get(i);
+						wsBag.setTag(bag.getBagTagNumber());
+						wsBag.setBagArrive(new Boolean (bag.getBagArrivalStatus()));
+						wsBagArray[i]=wsBag;
+					}
+				} else {
+					for (int i=0; i<cleanBagList.size();i++) {
+						bag=cleanBagList.get(i);
+						boolean bagArrStat = Boolean.parseBoolean(bag.getBagArrivalStatus());
+						boolean notAdded = true;
+						if (!bagArrStat) {
+							for (int j = 0; j < wsBagArrayTemp.length; j++) {
+								wsBag = wsBagArrayTemp[j];
+								if (wsBag != null && !wsBag.getBagArrive() && wsBag.getTag() != null && wsBag.getTag().equals(bag.getBagTagNumber())) {
+									notAdded = false;
+									wsBagArrayTemp[j] = null;
+									break;
+								}
+							}					
+						}
+						if (notAdded) {
+							wsBag = com.bagnet.nettracer.ws.onlineclaims.xsd.Bag.Factory.newInstance();
+						}
+						wsBag.setTag(bag.getBagTagNumber());
+						wsBag.setBagArrive(new Boolean (bag.getBagArrivalStatus()));
+						wsBagArray[i]=wsBag;
+					}
+				}
+				claim.setBagArray(wsBagArray);
+	        }
 		}
 
 	}
