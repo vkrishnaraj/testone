@@ -92,6 +92,10 @@ public class LostAndFoundController {
 			if(shippingPhone==null){
 				shippingPhone=new PhoneBean();
 				shippingPhone.setNumber(lostReport.getContact().getPrimaryPhone().getNumber());
+				shippingPhone.setCountry(lostReport.getContact().getPrimaryPhone().getCountry());
+				shippingPhone.setArea(lostReport.getContact().getPrimaryPhone().getArea());
+				shippingPhone.setExchange(lostReport.getContact().getPrimaryPhone().getExchange());
+				shippingPhone.setLine(lostReport.getContact().getPrimaryPhone().getLine());
 				shippingPhone.setExtension(lostReport.getContact().getPrimaryPhone().getExtension());
 			}
 			
@@ -545,23 +549,62 @@ public class LostAndFoundController {
 	private boolean validateContact() {
 		boolean isValid = true;
 		boolean hasContactPhoneOrEmail = false;
-		if ((lostReport.getContact().getPrimaryPhone().getNumber() != null								// VALIDATE: PHONE AND EMAIL
-				&& lostReport.getContact().getPrimaryPhone().getNumber().replaceAll("[^\\d.]", "").trim().length() > 0) ||
-				((lostReport.getContact().getPrimaryPhone().getCountry()!=null && lostReport.getContact().getPrimaryPhone().getCountry().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+		if (lostReport.getContact().getAddress().getCountry()!=null && lostReport.getContact().getAddress().getCountry().equals("US")){
+			lostReport.getContact().getPrimaryPhone().setCountry("");
+			if((lostReport.getContact().getPrimaryPhone().getArea()!=null && lostReport.getContact().getPrimaryPhone().getArea().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+				(lostReport.getContact().getPrimaryPhone().getExchange()!=null && lostReport.getContact().getPrimaryPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+				(lostReport.getContact().getPrimaryPhone().getLine()!=null && lostReport.getContact().getPrimaryPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0))
+					 {
+						hasContactPhoneOrEmail = true;
+					 }
+			else {
+				FacesUtil.addError("ERROR: Primary US Phone Number Must contain a Area-Exchange-Line number.");
+			}
+		} else {
+			if((lostReport.getContact().getPrimaryPhone().getCountry()!=null && lostReport.getContact().getPrimaryPhone().getCountry().replaceAll("[^\\d.]", "").trim().length() > 0) && 
 				(lostReport.getContact().getPrimaryPhone().getArea()!=null && lostReport.getContact().getPrimaryPhone().getArea().replaceAll("[^\\d.]", "").trim().length() > 0) && 
 				(lostReport.getContact().getPrimaryPhone().getExchange()!=null && lostReport.getContact().getPrimaryPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() > 0) && 
-				(lostReport.getContact().getPrimaryPhone().getLine()!=null && lostReport.getContact().getPrimaryPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0)))
+				(lostReport.getContact().getPrimaryPhone().getLine()!=null && lostReport.getContact().getPrimaryPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0))
 					 {
-			hasContactPhoneOrEmail = true;
+						hasContactPhoneOrEmail = true;
+					 }
+			else {
+				FacesUtil.addError("ERROR: Primary International Phone Numbers Must contain a Country-Area-Exchange-Line number.");
+			}
 		}
-		if ((lostReport.getContact().getSecondaryPhone().getNumber() != null
-				&& lostReport.getContact().getSecondaryPhone().getNumber().trim().length() > 0) ||
-				((lostReport.getContact().getSecondaryPhone().getCountry()!=null && lostReport.getContact().getSecondaryPhone().getCountry().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+		
+		if (lostReport.getContact().getAddress().getCountry()!=null && lostReport.getContact().getAddress().getCountry().equals("US")){
+			lostReport.getContact().getSecondaryPhone().setCountry("");
+			if((lostReport.getContact().getSecondaryPhone().getArea()!=null && lostReport.getContact().getSecondaryPhone().getArea().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+				(lostReport.getContact().getSecondaryPhone().getExchange()!=null && lostReport.getContact().getSecondaryPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+				(lostReport.getContact().getSecondaryPhone().getLine()!=null && lostReport.getContact().getSecondaryPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0))
+					 {
+						hasContactPhoneOrEmail = true;
+					 }
+			else {
+				FacesUtil.addError("ERROR: Secondary US Phone Number Must contain a Area-Exchange-Line number.");
+			}
+		} else {
+			if((lostReport.getContact().getSecondaryPhone().getCountry()!=null && lostReport.getContact().getSecondaryPhone().getCountry().replaceAll("[^\\d.]", "").trim().length() > 0) && 
 				(lostReport.getContact().getSecondaryPhone().getArea()!=null && lostReport.getContact().getSecondaryPhone().getArea().replaceAll("[^\\d.]", "").trim().length() > 0) && 
 				(lostReport.getContact().getSecondaryPhone().getExchange()!=null && lostReport.getContact().getSecondaryPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() > 0) && 
-				(lostReport.getContact().getSecondaryPhone().getLine()!=null && lostReport.getContact().getSecondaryPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0))) {
-			hasContactPhoneOrEmail = true;
+				(lostReport.getContact().getSecondaryPhone().getLine()!=null && lostReport.getContact().getSecondaryPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0))
+					 {
+						hasContactPhoneOrEmail = true;
+					 }
+			else {
+				FacesUtil.addError("ERROR: Secondary International Phone Number Must contain a Country-Area-Exchange-Line number.");
+			}
 		}
+		
+//		if ((lostReport.getContact().getSecondaryPhone().getNumber() != null
+//				&& lostReport.getContact().getSecondaryPhone().getNumber().trim().length() > 0) ||
+//				((lostReport.getContact().getSecondaryPhone().getCountry()!=null && lostReport.getContact().getSecondaryPhone().getCountry().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+//				(lostReport.getContact().getSecondaryPhone().getArea()!=null && lostReport.getContact().getSecondaryPhone().getArea().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+//				(lostReport.getContact().getSecondaryPhone().getExchange()!=null && lostReport.getContact().getSecondaryPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() > 0) && 
+//				(lostReport.getContact().getSecondaryPhone().getLine()!=null && lostReport.getContact().getSecondaryPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0))) {
+//			hasContactPhoneOrEmail = true;
+//		}
 		if (lostReport.getContact().getEmailAddress() != null
 				&& lostReport.getContact().getEmailAddress().trim().length() > 0) {
 			hasContactPhoneOrEmail = true;
@@ -572,7 +615,7 @@ public class LostAndFoundController {
 			}
 		}
 		if (!hasContactPhoneOrEmail) {
-			FacesUtil.addError("ERROR: Contact Information must contain at least one Phone Number or Email Address.");
+			FacesUtil.addError("ERROR: Contact Information must contain at least one valid Phone Number or Email Address.");
 			isValid = false;
 		}
 		return isValid;
@@ -640,17 +683,68 @@ public class LostAndFoundController {
 			FacesUtil.addError("ERROR: Item Subcategory is required for Category \"" + getCategoryDesc() + "\".");
 			isValid = false;
 		}
-		if (lostReport.getItemCategory() == 7) {								 					// VALIDATE: LOST PHONE NUM
-			if (lostReport.getLostPhone() == null || (
-					(lostReport.getLostPhone().getNumber() == null	|| (lostReport.getLostPhone().getNumber() != null && lostReport.getLostPhone().getNumber().replaceAll("[^\\d.]", "").trim().length() == 0)) && 
-					(lostReport.getLostPhone().getCountry() == null || (lostReport.getLostPhone().getCountry()!=null && lostReport.getLostPhone().getCountry().replaceAll("[^\\d.]", "").trim().length() == 0)) && 
-					(lostReport.getLostPhone().getArea() == null || (lostReport.getLostPhone().getArea()!=null && lostReport.getLostPhone().getArea().replaceAll("[^\\d.]", "").trim().length() == 0)) &&
-					(lostReport.getLostPhone().getExchange() == null || (lostReport.getLostPhone().getExchange()!=null &&  lostReport.getLostPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() == 0)) &&
-					(lostReport.getLostPhone().getLine() == null || (lostReport.getLostPhone().getLine()!=null && lostReport.getLostPhone().getLine().replaceAll("[^\\d.]", "").trim().length() == 0))
-					)) {
-				FacesUtil.addError("ERROR: Phone number of lost phone is required for Category \"Cellphone\".");
-				isValid = false;
-			} 
+		if (lostReport.getItemCategory() == 7) { // VALIDATE: LOST PHONE NUM
+			if (lostReport.getContact().getAddress().getCountry() != null
+					&& lostReport.getContact().getAddress().getCountry()
+							.equals("US")) {
+				lostReport.getLostPhone().setCountry("");
+				if (!((lostReport.getLostPhone().getArea() != null && lostReport
+						.getLostPhone().getArea().replaceAll("[^\\d.]", "")
+						.trim().length() > 0)
+						&& (lostReport.getLostPhone().getExchange() != null && lostReport
+								.getLostPhone().getExchange()
+								.replaceAll("[^\\d.]", "").trim().length() > 0) && (lostReport
+						.getLostPhone().getLine() != null && lostReport
+						.getLostPhone().getLine().replaceAll("[^\\d.]", "")
+						.trim().length() > 0))) {
+					FacesUtil
+							.addError("ERROR: Valid Area-Exchange-Line number of lost phone is required for Category \"Cellphone\".");
+					isValid = false;
+				}
+			} else {
+				if (!((lostReport.getLostPhone().getCountry() != null && lostReport
+						.getLostPhone().getCountry().replaceAll("[^\\d.]", "")
+						.trim().length() > 0)
+						&& (lostReport.getLostPhone().getArea() != null && lostReport
+								.getLostPhone().getArea()
+								.replaceAll("[^\\d.]", "").trim().length() > 0)
+						&& (lostReport.getLostPhone().getExchange() != null && lostReport
+								.getLostPhone().getExchange()
+								.replaceAll("[^\\d.]", "").trim().length() > 0) && (lostReport
+						.getLostPhone().getLine() != null && lostReport
+						.getLostPhone().getLine().replaceAll("[^\\d.]", "")
+						.trim().length() > 0))) {
+
+					FacesUtil
+							.addError("ERROR: Valid Country-Area-Exchange-Line number of lost phone is required for Category \"Cellphone\".");
+					isValid = false;
+				}
+			}
+			// if (lostReport.getLostPhone() == null || (
+			// (lostReport.getLostPhone().getNumber() == null ||
+			// (lostReport.getLostPhone().getNumber() != null &&
+			// lostReport.getLostPhone().getNumber().replaceAll("[^\\d.]",
+			// "").trim().length() == 0)) &&
+			// (lostReport.getLostPhone().getCountry() == null ||
+			// (lostReport.getLostPhone().getCountry()!=null &&
+			// lostReport.getLostPhone().getCountry().replaceAll("[^\\d.]",
+			// "").trim().length() == 0)) &&
+			// (lostReport.getLostPhone().getArea() == null ||
+			// (lostReport.getLostPhone().getArea()!=null &&
+			// lostReport.getLostPhone().getArea().replaceAll("[^\\d.]",
+			// "").trim().length() == 0)) &&
+			// (lostReport.getLostPhone().getExchange() == null ||
+			// (lostReport.getLostPhone().getExchange()!=null &&
+			// lostReport.getLostPhone().getExchange().replaceAll("[^\\d.]",
+			// "").trim().length() == 0)) &&
+			// (lostReport.getLostPhone().getLine() == null ||
+			// (lostReport.getLostPhone().getLine()!=null &&
+			// lostReport.getLostPhone().getLine().replaceAll("[^\\d.]",
+			// "").trim().length() == 0))
+			// )) {
+			// FacesUtil.addError("ERROR: Phone number of lost phone is required for Category \"Cellphone\".");
+			// isValid = false;
+			// }
 		}
 		return isValid;
 	}

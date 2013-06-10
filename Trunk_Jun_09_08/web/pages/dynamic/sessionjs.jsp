@@ -188,9 +188,21 @@
 			}
 
 		}
-		
-		var primaryPhone =  getFieldByName("primaryInternationalNumber",form).value+getFieldByName("primaryAreaNumber",form).value+getFieldByName("primaryExchangeNumber",form).value+getFieldByName("primaryLineNumber",form).value;  /*getFieldByName("primaryPhoneNumber", form).value;*/
-		var secondaryPhone = getFieldByName("secondaryInternationalNumber",form).value+getFieldByName("secondaryAreaNumber",form).value+getFieldByName("secondaryExchangeNumber",form).value+getFieldByName("secondaryLineNumber",form).value;   /*getFieldByName("secondaryPhoneNumber", form).value;*/
+		var country = getFieldByName("lost.client.address.country",form).value;
+		var primaryPhone="";
+		var secondaryPhone="";
+		if(country=="US" && getFieldByName("primaryAreaNumber",form).value.length>0 && getFieldByName("primaryExchangeNumber",form).value.length>0 && getFieldByName("primaryLineNumber",form).value.length>0){
+			primaryPhone =  getFieldByName("primaryAreaNumber",form).value+getFieldByName("primaryExchangeNumber",form).value+getFieldByName("primaryLineNumber",form).value;
+		} else if(country!="US" && getFieldByName("primaryInternationalNumber",form).value.length >0 && getFieldByName("primaryAreaNumber",form).value.length>0 && getFieldByName("primaryExchangeNumber",form).value.length>0 && getFieldByName("primaryLineNumber",form).value.length>0){
+			primaryPhone =  getFieldByName("primaryInternationalNumber",form).value+getFieldByName("primaryAreaNumber",form).value+getFieldByName("primaryExchangeNumber",form).value+getFieldByName("primaryLineNumber",form).value;
+		}
+		/*var primaryPhone =  getFieldByName("primaryInternationalNumber",form).value+getFieldByName("primaryAreaNumber",form).value+getFieldByName("primaryExchangeNumber",form).value+getFieldByName("primaryLineNumber",form).value;  getFieldByName("primaryPhoneNumber", form).value;*/
+		if(country=="US" && getFieldByName("secondaryAreaNumber",form).value.length>0 && getFieldByName("secondaryExchangeNumber",form).value.length>0 && getFieldByName("secondaryLineNumber",form).value.length>0){
+			secondaryPhone =  getFieldByName("secondaryAreaNumber",form).value+getFieldByName("secondaryExchangeNumber",form).value+getFieldByName("secondaryLineNumber",form).value;
+		} else if(country!="US" && getFieldByName("secondaryInternationalNumber",form).value.length >0 && getFieldByName("secondaryAreaNumber",form).value.length>0 && getFieldByName("secondaryExchangeNumber",form).value.length>0 && getFieldByName("secondaryLineNumber",form).value.length>0){
+			secondaryPhone =  getFieldByName("secondaryInternationalNumber",form).value+getFieldByName("secondaryAreaNumber",form).value+getFieldByName("secondaryExchangeNumber",form).value+getFieldByName("secondaryLineNumber",form).value;
+		}
+		/*var secondaryPhone = getFieldByName("secondaryInternationalNumber",form).value+getFieldByName("secondaryAreaNumber",form).value+getFieldByName("secondaryExchangeNumber",form).value+getFieldByName("secondaryLineNumber",form).value;   getFieldByName("secondaryPhoneNumber", form).value;*/
 		var email = getFieldByName("lost.client.decryptedEmail", form).value;
 		if (primaryPhone.length == 0 && secondaryPhone.length == 0 && email.length == 0) {
 			alert("<%= (String)bundle.getString("colname.lf.phone.or.email") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
