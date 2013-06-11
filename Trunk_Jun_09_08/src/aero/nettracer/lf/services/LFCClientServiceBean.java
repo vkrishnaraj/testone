@@ -704,7 +704,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 			
 			LFServiceBean bean = new LFServiceBean();
 			
-			LFShipping shipment = tran.getShipment();
+			LFShipping shipment = bean.getShipment(Long.valueOf(id));
 			
 			if (shipment != null) {
 				ShippingBean shipbean = new ShippingBean();
@@ -726,7 +726,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 				address.setCity(shipment.getBillingAddress().getDecryptedCity());
 				address.setCountry(shipment.getBillingAddress().getCountry());
 				address.setPostal(shipment.getBillingAddress().getDecryptedZip());
-				if (shipment.getBillingAddress().getCountry().equals("US")) {
+				if (shipment.getBillingAddress().getCountry()!=null && shipment.getBillingAddress().getCountry().equals("US")) {
 					address.setState(shipment.getBillingAddress()
 							.getDecryptedState());
 				} else {

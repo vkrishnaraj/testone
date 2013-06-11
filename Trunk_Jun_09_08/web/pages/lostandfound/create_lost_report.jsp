@@ -469,6 +469,7 @@
 		                  </html:select>
 		                </td>
 		              </tr>
+		              <logic:notEmpty  name="lostReportForm" property="lost.shipment.billingAddress">
 		              <tr>
 		                <td colspan=2>
 		                  <bean:message key="colname.billing_address" /><br/>
@@ -519,6 +520,7 @@
 		                  </html:select>
 		                </td>
 		              </tr>
+		              </logic:notEmpty>
 		              <tr>
 		              	<td colspan=5>
 		              		<bean:message key="colname.shipping_option" /><br/>
