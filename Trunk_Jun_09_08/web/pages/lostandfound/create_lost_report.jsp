@@ -405,7 +405,7 @@
 		              </tr>
 				</table>
 				<br/>
-				<logic:notEmpty name="lost" name="shipment">
+				<logic:notEmpty  name="lostReportForm" property="lost.shipment">
 					<h1 class="green">
 			        	<bean:message key="header.shipping.information" />
 			        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
