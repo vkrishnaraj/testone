@@ -6,9 +6,11 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.UserGroup" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.AdminUtils" %>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
@@ -23,7 +25,7 @@
   Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
   java.util.List LimitedLossCodes=PropertyBMO.getSplitList(PropertyBMO.LIMITED_CODES_LOSSDELAY);
   boolean updateLossCodes=false;
-  boolean limitedCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && inc.getStatus().getStatus_ID()==13 && !(inc.isLocked())  && UserPermissions.hasIncidentSavePermission(a, inc));
+  //boolean limitedCodes=(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MAINTAIN_GROUPS, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && inc.getStatus().getStatus_ID()==13 && UserPermissions.hasIncidentSavePermission(a, inc));
   
   
   Company_specific_irregularity_code lc = null;
@@ -129,10 +131,10 @@
             com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
                                                                                       com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
             
-            /*if(!updateLossCodes && limitedCodes && code.getLoss_code()!=lossCodeInt && LimitedLossCodes!=null && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
+            if(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MAINTAIN_GROUPS, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && code.getLoss_code()!=lossCodeInt && LimitedLossCodes!=null && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
             {
             	continue;
-            }*/
+            }
     %>
             <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code(); %>>
             <%= "" + code.getLoss_code() %>-
@@ -153,10 +155,10 @@
           for (java.util.Iterator i = codes.iterator(); i.hasNext(); ) {
             com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
                                                                                       com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
-            /*if(!updateLossCodes && limitedCodes && code.getLoss_code()!=lossCodeInt && LimitedLossCodes!=null && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
+            if(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MAINTAIN_GROUPS, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && code.getLoss_code()!=lossCodeInt && LimitedLossCodes!=null && LimitedLossCodes.contains(String.valueOf(code.getLoss_code())))
             {
             	continue;
-            }*/
+            }
     %>
             <OPTION VALUE="<%= "" + code.getLoss_code() %>" <% String lost_code = "" + ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();  if (lost_code.equals("" + code.getLoss_code())) { %> SELECTED <% } %>>
             <%= "" + code.getLoss_code() %>-
