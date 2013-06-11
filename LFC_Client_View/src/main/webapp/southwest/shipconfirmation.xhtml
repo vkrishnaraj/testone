@@ -19,17 +19,24 @@
 					<t:outputText value="#{msg.confirm_shipping_text_cc_vendor}: #{lostReport.cc.ccvendor}" /><br/>
 					<t:outputText value="#{msg.confirm_shipping_text_cc_name}: #{lostReport.cc.ccname}" /><br/>
 					<t:outputText value="#{msg.confirm_shipping_text_cc_number}: #{lostReport.cc.ccnumber}" /><br/>
-					<t:outputText value="#{msg.confirm_shipping_text_cc_exp}: #{lostReport.cc.ccexpirationmonth}/#{lostReport.cc.ccexpirationyear}" /><br/><br/>
+					<t:outputText value="#{msg.confirm_shipping_text_cc_exp}: #{lostReport.cc.ccexpirationmonth}/#{lostReport.cc.ccexpirationyear}" /><br/>
+					<br/>
 				<t:outputText value="#{msg.success_shipping_text_purchase_billing}:" /><br/>
 				 	<t:outputText value="#{lostReport.cc.ccname}"/><br/>
 				 	<t:outputText value="#{lostReport.contact.billingaddress.address1} #{lostReport.contact.billingaddress.address2}"/><br/>
-				 	<t:outputText value="#{lostReport.contact.billingaddress.city}, #{lostReport.contact.billingaddress.state} #{lostReport.contact.billingaddress.postal} #{lostReport.contact.billingaddress.country}"/><br/><br/>
+				 	<t:outputText value="#{lostReport.contact.billingaddress.city}, #{lostReport.contact.billingaddress.state} #{lostReport.contact.billingaddress.postal} #{lostReport.contact.billingaddress.country}"/><br/><div align="left">
+						<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_edit}" action="#{lostAndFound.backToCCInfo}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+					</div><br/>
 				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}:" /><br/>
 				 	<t:outputText value="#{lostReport.contact.shippingName}"/><br/>
 				 	<t:outputText value="#{lostReport.contact.prefshipaddress.address1} #{lostReport.contact.prefshipaddress.address2}"/><br/>
-				 	<t:outputText value="#{lostReport.contact.prefshipaddress.city}, #{lostReport.contact.prefshipaddress.state} #{lostReport.contact.prefshipaddress.postal} #{lostReport.contact.prefshipaddress.country}"/></p><br/><br/>
+				 	<t:outputText value="#{lostReport.contact.prefshipaddress.city}, #{lostReport.contact.prefshipaddress.state} #{lostReport.contact.prefshipaddress.postal} #{lostReport.contact.prefshipaddress.country}"/><br/><div align="left">
+						<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_edit}" action="#{lostAndFound.backToShippingConfirm}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+					</div><br/></p>
 				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}: " /> <t:outputText value="#{lostReport.shippingOption}"/><br/>
-				<b><t:outputText value="#{msg.success_shipping_text_order_total}: " /> <t:outputText value="#{lostReport.shippingPayment}"/></b><br/><br/>
+				<b><t:outputText value="#{msg.success_shipping_text_order_total}: " /> <t:outputText value="#{lostReport.shippingPayment}"/></b><br/><div align="left">
+						<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_edit}" action="#{lostAndFound.backToShippingRates}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+					</div><br/><br/>
 				
 			</h:panelGroup><br/>
 			
