@@ -202,17 +202,24 @@
 				<rich:spacer width="450px" rendered="#{passengerController.readOnlyOnSubmitted}"/>
 			
 				<rich:spacer width="160px"/>
-			
-				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.previous.label}"
-				 	tabindex="4" immediate="true" action="#{passengerController.goBackToFraudQuestion}" 
-				 	onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
-					styleClass="button140pxred button140pxred2" />
-					
-				<rich:spacer width="20px" rendered="#{!passengerController.readOnlyOnSubmitted}"/>
 				
 				<h:commandButton id="forwardSubmit" value="#{passengerController.submitClaimLabel.claimSubmit.label}"
-				 	tabindex="5" action="#{passengerController.submitPassengerInfo}"
+				 	tabindex="4" action="#{passengerController.submitPassengerInfo}"
 				 	rendered="#{!passengerController.readOnlyOnSubmitted}" 
+				 	onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
+					styleClass="button140pxred button140pxred2" style="position:relative; left:160px;" />
+					
+				<rich:spacer width="20px" rendered="#{!passengerController.readOnlyOnSubmitted}"/>
+			
+				<h:commandButton id="prevsubmit" value="#{passengerController.flightLabel.previous.label}"
+				 	tabindex="5" immediate="true" action="#{passengerController.goBackToFraudQuestion}" 
+				 	rendered="#{!passengerController.readOnlyOnSubmitted}" 
+				 	onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
+					styleClass="button140pxred button140pxred2" style="position:relative; left:-160px;" />
+			
+				<h:commandButton id="prevsubmit_ro" value="#{passengerController.flightLabel.previous.label}"
+				 	tabindex="5" immediate="true" action="#{passengerController.goBackToFraudQuestion}" 
+				 	rendered="#{passengerController.readOnlyOnSubmitted}" 
 				 	onclick="setTimeout('document.getElementById(\'' + this.id + '\').disabled=true;', 50);"
 					styleClass="button140pxred button140pxred2" />
 				
