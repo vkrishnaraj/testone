@@ -122,39 +122,39 @@
               			<logic:notEmpty name="result" property="lost.shipment.transaction"> 
               			<tr>
               				<td>
-              					<%=DateUtils.formatDate(result.getLost().getShipment().getTransaction().getTransactionDate(), TracingConstants.DISPLAY_DATETIMEFORMAT,null,null)%>
+              					<%=DateUtils.formatDate(result.getLost().getShipment().getTransaction().getTransactionDate(), TracingConstants.DISPLAY_DATETIMEFORMAT,null,null)%>&nbsp;
               				</td>
               				<td>
-              					<%=DateUtils.formatDate(result.getMatchTimeStamp(), TracingConstants.DISPLAY_DATETIMEFORMAT,null,null)%>
+              					<%=DateUtils.formatDate(result.getMatchTimeStamp(), TracingConstants.DISPLAY_DATETIMEFORMAT,null,null)%>&nbsp;
               				</td>
               				<td>
               				<% if(result.getLost()!=null){ %>
-              					<a href="create_lost_report.do?lostId=<%=result.getLost().getId() %>"><bean:write name="result" property="lost.id" /></a>
+              					<a href="create_lost_report.do?lostId=<%=result.getLost().getId() %>"><bean:write name="result" property="lost.id" /></a>&nbsp;
               					<% } %>
               				</td>
               				<td>
               				<% if(result.getFound()!=null){ %>
-              					<a href="create_found_item.do?foundId=<%=result.getFound().getId() %>"><bean:write name="result" property="found.barcode" /></a>
+              					<a href="create_found_item.do?foundId=<%=result.getFound().getId() %>"><bean:write name="result" property="found.barcode" /></a>&nbsp;
               					
               					<% } %>
               				</td>
               				<td>
-              					<bean:write name="result" property="lost.location.stationcode" />
+              					<bean:write name="result" property="lost.location.stationcode" />&nbsp;
               				</td>
               				<td>
-              					<%=catMap.get(String.valueOf(result.getLost().getItem().getCategory()))!=null?catMap.get(String.valueOf(result.getLost().getItem().getCategory())):"" %>
+              					<%=catMap.get(String.valueOf(result.getLost().getItem().getCategory()))!=null?catMap.get(String.valueOf(result.getLost().getItem().getCategory())):"" %>&nbsp;
               				</td>
               				<td>
-              					<%=subcatMap.get(String.valueOf(result.getLost().getItem().getSubCategory()))!=null?subcatMap.get(String.valueOf(result.getLost().getItem().getSubCategory())):"" %>
+              					<%=subcatMap.get(String.valueOf(result.getLost().getItem().getSubCategory()))!=null?subcatMap.get(String.valueOf(result.getLost().getItem().getSubCategory())):"" %>&nbsp;
               				</td>
               				<td>
-              					<bean:write name="result" property="found.item.description" />
+              					<bean:write name="result" property="found.item.description" />&nbsp;
               				</td>
               				<td>
-              					<bean:write name="result" property="lost.feedback" />
+              					<bean:write name="result" property="lost.feedback" />&nbsp;
               				</td>
               				<td>
-              					<bean:write name="result" property="lost.shipment.shippingOption" />
+              					<bean:write name="result" property="lost.shipment.shippingOption" />&nbsp;
               				</td>
               			</tr>
               			</logic:notEmpty>
