@@ -96,7 +96,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		selenium.type("id=lostForm:email", "test@nettracer.aero");
 		selenium.click("id=lostForm:dateLostPopupButton");
 		selenium.click("//td[@id='lostForm:dateLostFooter']/table/tbody/tr/td[5]/div");
-		selenium.select("id=lostForm:segmentTable:0:departureLoc", "label=ATL - Atlanta, GA");
+		selenium.select("id=lostForm:segmentTable:0:departLoc", "label=ATL - Atlanta, GA");
 		selenium.select("id=lostForm:segmentTable:0:arrivalLoc", "label=BOS - Boston, MA");
 		selenium.click("id=lostForm:buttonCreate");
 		selenium.type("id=lostForm:confirmEmail", "test@nettracer.aero");
