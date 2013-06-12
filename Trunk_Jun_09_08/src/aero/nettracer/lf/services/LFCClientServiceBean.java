@@ -743,7 +743,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 				address.setCountry(shipment.getShippingAddress().getCountry());
 				address.setPostal(shipment.getShippingAddress().getDecryptedZip());
 	
-				if (shipment.getShippingAddress().getCountry().equals("US")) {
+				if (shipment.getShippingAddress().getCountry()!=null && shipment.getShippingAddress().getCountry().equals("US")) {
 					address.setState(shipment.getShippingAddress()
 							.getDecryptedState());
 				} else {
