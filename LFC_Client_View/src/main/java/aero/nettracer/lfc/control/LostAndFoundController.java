@@ -550,7 +550,6 @@ public class LostAndFoundController {
 		boolean isValid = true;
 		boolean hasContactPhoneOrEmail = false;
 		if (lostReport.getContact().getAddress().getCountry()!=null && lostReport.getContact().getAddress().getCountry().equals("US")){
-			lostReport.getContact().getPrimaryPhone().setCountry("");
 			if((lostReport.getContact().getPrimaryPhone().getArea()!=null && lostReport.getContact().getPrimaryPhone().getArea().replaceAll("[^\\d.]", "").trim().length() > 0) && 
 				(lostReport.getContact().getPrimaryPhone().getExchange()!=null && lostReport.getContact().getPrimaryPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() > 0) && 
 				(lostReport.getContact().getPrimaryPhone().getLine()!=null && lostReport.getContact().getPrimaryPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0))
@@ -567,7 +566,7 @@ public class LostAndFoundController {
 						hasContactPhoneOrEmail = true;
 					 }
 			else {
-				FacesUtil.addError("ERROR: Primary International Phone Numbers Must contain a Country-Area-Exchange-Line number.");
+				FacesUtil.addError("ERROR: Primary International Phone Numbers Must contain a Country-Line number.");
 			}
 		}
 		
@@ -588,7 +587,7 @@ public class LostAndFoundController {
 						hasContactPhoneOrEmail = true;
 					 }
 			else {
-				FacesUtil.addError("ERROR: Secondary International Phone Number Must contain a Country-Area-Exchange-Line number.");
+				FacesUtil.addError("ERROR: Secondary International Phone Number Must contain a Country-Line number.");
 			}
 		}
 		
@@ -674,7 +673,6 @@ public class LostAndFoundController {
 			if (lostReport.getContact().getAddress().getCountry() != null
 					&& lostReport.getContact().getAddress().getCountry()
 							.equals("US")) {
-				lostReport.getLostPhone().setCountry("");
 				if (!((lostReport.getLostPhone().getArea() != null && lostReport.getLostPhone().getArea().replaceAll("[^\\d.]", "").trim().length() > 0)
 						&& (lostReport.getLostPhone().getExchange() != null && lostReport.getLostPhone().getExchange().replaceAll("[^\\d.]", "").trim().length() > 0)
 						&& (lostReport.getLostPhone().getLine() != null && lostReport.getLostPhone().getLine().replaceAll("[^\\d.]", "").trim().length() > 0))) {
