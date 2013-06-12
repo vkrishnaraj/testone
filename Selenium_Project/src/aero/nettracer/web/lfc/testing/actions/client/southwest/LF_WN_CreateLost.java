@@ -81,30 +81,30 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testLostReportPage() throws Exception {
-		selenium.click("id=lostForm:j_id232");
+		selenium.click("id=lostForm:buttonCreate");
 		waitForPageToLoadImproved(1000, false);
 		assertEquals("Please be advised that if an e-mail address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", selenium.getConfirmation());
-		selenium.select("id=lostForm:j_id26", "label=Cellphone");
-		selenium.select("id=lostForm:j_id34", "label=Black");
-		selenium.select("id=lostForm:j_id38", "label=Does Not Apply");
+		selenium.select("id=lostForm:itemCategory", "label=Cellphone");
+		selenium.select("id=lostForm:itemColor", "label=Black");
+		selenium.select("id=lostForm:itemCaseColor", "label=Does Not Apply");
 		selenium.type("id=lostForm:lastName", "Test");
 		selenium.type("id=lostForm:firstName", "John");
-		selenium.type("id=lostForm:j_id98", "123 Test");
-		selenium.type("id=lostForm:j_id110", "Test");
+		selenium.type("id=lostForm:address1", "123 Test");
+		selenium.type("id=lostForm:city", "Test");
 		selenium.select("id=lostForm:state", "label=Georgia");
-		selenium.type("id=lostForm:j_id115", "30339");
+		selenium.type("id=lostForm:postal", "30339");
 		selenium.type("id=lostForm:email", "test@nettracer.aero");
-		selenium.click("id=lostForm:j_id62PopupButton");
-		selenium.click("//td[@id='lostForm:j_id62Footer']/table/tbody/tr/td[5]/div");
-		selenium.select("id=lostForm:segmentTable:0:j_id211", "label=ATL - Atlanta, GA");
-		selenium.select("id=lostForm:segmentTable:0:j_id215", "label=BOS - Boston, MA");
-		selenium.click("id=lostForm:j_id232");
-		selenium.type("id=lostForm:j_id186", "test@nettracer.aero");
-		selenium.select("id=lostForm:j_id26", "label=Bags");
-		selenium.click("id=lostForm:j_id232");
+		selenium.click("id=lostForm:dateLostPopupButton");
+		selenium.click("//td[@id='lostForm:dateLostFooter']/table/tbody/tr/td[5]/div");
+		selenium.select("id=lostForm:segmentTable:0:departureLoc", "label=ATL - Atlanta, GA");
+		selenium.select("id=lostForm:segmentTable:0:arrivalLoc", "label=BOS - Boston, MA");
+		selenium.click("id=lostForm:buttonCreate");
+		selenium.type("id=lostForm:confirmEmail", "test@nettracer.aero");
+		selenium.select("id=lostForm:itemCategory", "label=Bags");
+		selenium.click("id=lostForm:buttonCreate");
 		waitForPageToLoadImproved(2000,false);
-		selenium.select("id=lostForm:j_id31", "label=Cloth Bag");
-		selenium.click("id=lostForm:j_id232");
+		selenium.select("id=lostForm:itemSubCategory", "label=Cloth Bag");
+		selenium.click("id=lostForm:buttonCreate");
 		waitForPageToLoadImproved(false);
 	}
 
@@ -148,9 +148,9 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("Lost Item Report Form"));
 
 			selenium.type("id=lostForm:firstName", "2");
-			selenium.type("lostForm:j_id98", "2");
-			selenium.type("lostForm:j_id110", "2");
-			selenium.click("id=lostForm:j_id233");
+			selenium.type("lostForm:city", "2");
+			selenium.type("lostForm:address1", "2");
+			selenium.click("id=lostForm:buttonEdit");
 			waitForPageToLoadImproved(false);
 		}
 
