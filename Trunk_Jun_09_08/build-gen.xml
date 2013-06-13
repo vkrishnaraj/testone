@@ -328,7 +328,14 @@
 	    		org.hornetq"/>
 	    </manifest>
 
-		<war manifest="${build.dir}/${ant_project_name}/META-INF/MANIFEST.MF" destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${basedir}/web/WEB-INF/web.xml" duplicate="preserve">
+		<mkdir dir="${build.dir}/${ant_project_name}/webxml" />
+		
+		<copy toFile="${build.dir}/${ant_project_name}/webxml/web.xml" file="${basedir}/web/WEB-INF/web.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filter token="timeout" value="60" />
+			</filterset>
+		</copy>	
+		<war manifest="${build.dir}/${ant_project_name}/META-INF/MANIFEST.MF" destfile="${build.dir}/dist/web/${ant_war_name}.war" webxml="${build.dir}/${ant_project_name}/webxml/web.xml" duplicate="preserve">
 			<fileset dir="${build.dir}/${ant_project_name}/webWorking" />
 			<classes dir="${build.dir}/${ant_project_name}_web/classes" />
 			<lib dir="${lib.jar.dir}">
