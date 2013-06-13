@@ -6,8 +6,8 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
-	template="../layout/southwest_template.xhtml">
-	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
+	template="../layout/american_template.xhtml">
+	<ui:define name="title">American Airlines: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form id="pageForm">
 			<h:panelGroup style="width: 315px">
@@ -15,7 +15,6 @@
 				<p><t:outputText value="#{msg.landing_text_edit_desc}" /></p>
 				<div>
 					<rich:messages id="reportMsg" errorClass="errormsg" infoClass="infomsg" layout="list"/>
-					<rich:spacer width="100%" height="15" title="" />
 				</div>
 				<table><tr>
 				<td><t:outputText value="#{msg.landing_label_last_name}" /></td>
@@ -25,7 +24,7 @@
 				<td><t:inputText value="#{lostAndFoundLogin.login.trackingNumber}" /></td>
 				</tr></table>
 				
-				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.landing_button_edit_status}" action="#{lostAndFoundLogin.loginSouthwest}" /><br/><br/>
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.landing_button_edit_status}" action="#{lostAndFoundLogin.loginAmerican}" /><br/><br/>
 				
 			</h:panelGroup>
 		</h:form>

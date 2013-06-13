@@ -6,7 +6,7 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
-	template="../layout/southwest_template.xhtml">
+	template="../layout/american_template.xhtml">
 	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form>
@@ -15,22 +15,45 @@
 				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_confirm_title}" /></p><br/>
 				<!-- Receipt Information -->
 				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_order_summary}" /></p><br/>
-				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_purchase_info}" /></p><br/>
-				<p><t:outputText value="#{msg.success_purchase_info_email}" />: <t:outputText value="#{shipbean.client.emailAddress}"/><br/>
-				<t:outputText value="#{msg.success_shipping_text_purchase_billing}" />:<br/>
+				
+				<!-- Add Transaction Information -->
+				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_transaction_info}"/></p><br/>
+				<t:outputText value="#{msg.success_shipping_text_transaction_num}: "/><t:outputText value="#{shipbean.transactionNum}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_credit_num}: "/><t:outputText value="#{shipbean.credit4num}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_credit_type}: "/><t:outputText value="#{shipbean.cardType}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_date_paid}: "/><t:outputText value="#{shipbean.datePaid}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}: " /> <t:outputText value="#{shipbean.shippingOption}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_order_total}: " /> <t:outputText value="#{shipbean.totalPayment}"/><br/><br/>
+				<t:outputText value="#{msg.success_shipping_text_purchase_billing}:" /><br/>
 				 	<t:outputText value="#{shipbean.client.firstName} #{shipbean.client.lastName}"/><br/>
 				 	<t:outputText value="#{shipbean.billingAddress.address1} #{shipbean.billingAddress.address2}"/><br/>
 				 	<t:outputText value="#{shipbean.billingAddress.city}, #{shipbean.billingAddress.state} #{shipbean.billingAddress.postal} #{shipbean.billingAddress.country}"/><br/><br/>
-				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}" />:<br/>
+				<!-- End Transaction Info -->
+				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_purchase_info}" /></p><br/>
+				<p><t:outputText value="#{msg.success_purchase_info_email}: " /> <t:outputText value="#{shipbean.client.emailAddress}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}:" /><br/>
+					<t:outputText value="#{lostReport.contact.shippingName}"/>
 				 	<t:outputText value="#{shipbean.shippingAddress.address1} #{shipbean.shippingAddress.address2}"/><br/>
 				 	<t:outputText value="#{shipbean.shippingAddress.city}, #{shipbean.shippingAddress.state} #{shipbean.shippingAddress.postal} #{shipbean.shippingAddress.country}"/></p><br/><br/>
-				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}" />: <t:outputText value="#{shipbean.shippingOption}"/><br/>
-				<t:outputText value="#{msg.success_shipping_text_order_total}" />: <t:outputText value="#{shipbean.totalPayment}"/><br/><br/>
 				<!-- End Receipt Information -->
-				<!-- Add Transaction Information -->
-				<t:outputText value="Transactional Info to be added"/>
-				<!-- End Transaction Info -->
-				<p class="twlvPxBlk"><t:outputText value="#{msg.success_shipping_text_print}" /></p><br/><br/>
+				
+			</h:panelGroup>
+			<br />
+			
+			<h:panelGroup >
+				<div id="feedback">
+				<p><t:outputText value="#{msg.success_feedback}"/><br/>
+				<t:inputTextarea value="#{lostReport.feedback}" style="width:55%" rows="5"/><br/>
+				</p>
+				<div align="right">
+					<a4j:commandButton styleClass="submitButtonOrange"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.sendFeedback}" 
+						onclick="document.getElementById('feedback').style.display='none'; document.getElementById('feedbacksent').style.display='block'; this.style.display='none'"  render="outerPanel" />
+				</div>
+				<br />
+				</div>
+				<div id="feedbacksent" style="display:none">
+					<p><t:outputText value="#{msg.success_thankyou_feedback}"/></p><br/><br/>
+				</div>
 			</h:panelGroup>
 		</h:form>
 	</ui:define>

@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+<f:view contentType="text/html" encoding="UTF-8">
+<f:loadBundle basename="southwest" var="msg"/>	
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<title><ui:insert name="title">Default Title</ui:insert></title>
+<!-- Foundation 3 for IE 8 and earlier -->
+<!--[if lt IE 9]>
+	<link rel="stylesheet" href="../_css/american/foundation4/normalize.css"/>
+	<link rel="stylesheet" href="../_css/american/foundation4/foundation.css"/>
+	<link rel="stylesheet" href="../_css/american/foundation4/aa.css"/>
+	<link rel="stylesheet" href="../_css/american/foundation4/app.css"/>
+	<script src="../_js/american/foundation3/vendor/custom.modernizr.js"></script>
+<![endif]-->
+<!-- Foundation 4 for IE 9 and Later -->
+<!--[if gt IE 8]><!-->
+	<link rel="stylesheet" href="../_css/american/foundation4/normalize.css"/>
+		<link rel="stylesheet" href="../_css/american/foundation4/foundation.css" />
+		<link rel="stylesheet" href="../_css/american/foundation4/aa.css" />
+		<link rel="stylesheet" href="../_css/american/foundation4/app.css"/>
+	<script src="../_js/american/foundation4/vendor/custom.modernizr.js"></script>
+<!--<![endif]-->
+<link href="../_images/american/favicon.ico" type="image/png" rel="shortcut icon" />
+</head>
+<body>
+<div id="main">
+<!-- ########## BEGIN HEADER ########## -->
+<div id="bagItUp">   
+<header class="row">
+<div id="header" class="twelve large-12 columns">
+		<h2 class="site-logo"><a class="site-logo" href="www.aa.com" title="American Airlines - home page"><img src="../_images/american/aa-logo.png" alt="American Airlines logo"/></a></h2>
+		<ul id="utility-nav" class="menu-utility">
+				<li id="aa-meta-skip-nav" class="menu-item-utility is-hidden"><a href="#aa-main-nav">Skip to global navigation</a></li>
+				<li id="aa-meta-skip-content" class="menu-item-utility is-hidden"><a href="#aa-content-frame">Skip to content</a></li>
+				<li id="aa-meta-skip-footer" class="menu-item-utility is-hidden"><a href="#aa-footer">Skip to footer</a></li>
+				<li class="menu-item-utility"> <a href="http://www.aa.com/homePage.do">Back to AA.com</a> </li>
+				<li class="menu-item-utility"><a href="#" title="link">Relevant Link Here</a></li>
+		</ul>
+		<h3 class="siteTitle">Lost and Found</h3>
+		<a class="oneworld-logo" title="oneworld" href="#"> <img style="vertical-align: middle" alt="oneworld" src="http://www.aa.com/content/images/chrome/rebrand/oneworld.png"/> </a> 
+</div>
+</header>
+<!-- ########## END HEADER ########## -->
+<div id="nav"></div>
+<div id="body">	 
+	<div id="leftColumn" ></div>
+	<div id="middleColumn"> 
+		<!-- #################### END HEADER TEMPLATE ########################## -->
+		<ui:insert name="body" />
+		<!-- #################### BEGIN FOOTER TEMPLATE ######################## -->
+	</div>
+	<div id="rightColumn"></div>
+</div>
+<div class="clear"></div>
+<!-- ########## BEGIN FOOTER ########## -->
+</div>
+<footer>
+ <div id="footer" class="row container"><div class="columns large-3">
+								<h4 class="footer-head">Footer Heading One</h4>
+								<hr class="short" />
+								<ul class="list-standard">
+										<li><a href="#">Link One</a></li>
+										<li><a href="#">Link Two</a></li>
+										<li><a href="#">Link Three</a></li>
+										<li><a href="#">Link Four</a></li>
+										<li><a href="#">Link Five</a></li>
+								</ul>
+						</div>
+						<div class="columns large-3">
+								<h4 class="footer-head">Footer Heading Two</h4>
+								<hr class="short" />
+								<ul class="list-standard">
+										<li><a href="#">Link One</a></li>
+										<li><a href="#">Link Two</a></li>
+										<li><a href="#">Link Three</a></li>
+										<li><a href="#">Link Four</a></li>
+										<li><a href="#">Link Five</a></li>
+								</ul>
+						</div>
+						<div class="columns large-3">
+								<h4 class="footer-head">Footer Heading Three</h4>
+								<hr class="short" />
+								<ul class="list-standard">
+										<li><a href="#">Link One</a></li>
+										<li><a href="#">Link Two</a></li>
+										<li><a href="#">Link Three</a></li>
+										<li><a href="#">Link Four</a></li>
+										<li><a href="#">Link Five</a></li>
+								</ul>
+						</div>
+						<div class="columns large-3">
+								<div class="panel">
+										<p class="center"><img src="http://placehold.it/320x140&amp;text=Marketing"/></p>
+								</div>
+								<div class="panel">
+										<p class="center"><img src="http://placehold.it/320x240&amp;text=Marketing"/></p>
+								</div>
+						</div>
+				<hr class="full"/>
+				<p class="columns large-12"><a href="#">Space for Copyright "TOBEFILL" 2013 and/or legal information.</a></p>
+</div>
+</footer>
+<!-- ########## END FOOTER ########## -->
+</div> 
+</body>
+</f:view>
+</html>

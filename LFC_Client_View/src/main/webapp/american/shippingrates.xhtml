@@ -6,7 +6,7 @@
 	xmlns:t="http://myfaces.apache.org/tomahawk"
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
-	template="../layout/southwest_template.xhtml">
+	template="../layout/american_template.xhtml">
 	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form id="lostForm">
@@ -79,13 +79,10 @@
 				<h:panelGroup  >
 				
 				<p class="contentHeader">
-					<t:outputText value="#{msg.shipping_title}" />
-				</p>
-				<p class="contentSubHeader">
 					<t:outputText value="#{msg.shipping_option_text_title}" />
 				</p>
 				<p>
-					<t:outputText value="#{msg.shipping_option_text_desc}" />
+					<t:outputText value="#{msg.shipping_option_text_desc}" escape="false" />
 				</p>
 				<!-- Iterate through the options -->
 				<a4j:region renderRegionOnly="true">
@@ -111,67 +108,21 @@
 							<td colspan="8" >&#160;</td>
 						</tr>
 						<tr>
-							<td class="twlvPxBlk" colspan="6"><t:outputText
-									value="#{msg.shipping_label_address_addr1} *" /></td>
+							<td class="twlvPxBlk" colspan="6"><b><t:outputText
+									value="#{msg.shipping_label_address_addr1}" /></b></td>
 						</tr>
 						<tr>
-							<td colspan="6"><t:outputText
-									value="#{lostAndFound.lostReport.contact.prefshipaddress.address1}"
-									style="width: 100%" id="shipAddress1" /></td>
-						</tr>
-						<tr>
-							<td>&#160;</td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="6"><t:outputText
-									value="#{msg.shipping_label_address_addr2}" /></td>
-						</tr>
-						<tr>
-							<td colspan="6"><t:outputText
-									value="#{lostAndFound.lostReport.contact.prefshipaddress.address2}"
-									style="width: 100%" id="shipAddress2" /></td>
-						</tr>
-						<tr>
-							<td >&#160;</td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
-									value="#{msg.shipping_label_address_city} *" /></td>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
-									value="#{msg.shipping_label_address_state}" /></td>
-							<td class="twlvPxBlk" colspan="2"><t:outputText
-									value="#{msg.shipping_label_address_postal}" /></td>
-						</tr>
-						<tr>
-							<td colspan="2"><t:outputText
-									value="#{lostAndFound.lostReport.contact.prefshipaddress.city}"
-									style="width: 95%" id="shipCity"/></td>
-							<td colspan="2"><t:outputText
-									value="#{lostAndFound.lostReport.contact.prefshipaddress.state}" style="width: 95%"
-									 id="shipState"/></td>
-							<td colspan="2"><t:outputText
-									value="#{lostAndFound.lostReport.contact.prefshipaddress.postal}"
-									style="width: 100%" id="shipPostal" /></td>
-						</tr>
-						<tr>
-							<td>&#160;</td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
-									value="#{msg.shipping_label_address_country} *" /></td>
-							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
-									value="#{msg.shipping_label_address_province}" /></td>
-						</tr>
-						<tr>
-							<td colspan="3"><t:outputText
-									value="#{lostAndFound.lostReport.contact.prefshipaddress.country}" style="width: 95%"
-									id="shipCountry"/></td>
-							<td colspan="3"><t:outputText id="shipProvince"
-									value="#{lostAndFound.lostReport.contact.prefshipaddress.province}"
-									style="width: 100%" /></td>
-						</tr>
+							<td colspan="6">
+							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.address1}"/><br/>
+							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.address2}"/><br/>
+							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.city}, #{lostAndFound.lostReport.contact.prefshipaddress.state} #{lostAndFound.lostReport.contact.prefshipaddress.postal} #{lostAndFound.lostReport.contact.prefshipaddress.country}"/>
+						 	</td>
+					 	</tr>
 					</table>
 				<br />
+				<br/>
+				<t:outputText value="#{msg.required_field}"/>
+				<br/>
 				<br/>
 
 			</h:panelGroup>
@@ -181,7 +132,6 @@
 				<div>
 					<b><rich:messages id="reportMsg" errorClass="errormsg" style="color:red"
 						infoClass="infomsg" layout="list" /></b>
-					<rich:spacer width="100%" height="15" title="" />
 				</div>
 				<div align="right">
 					<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToShippingConfirm}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;

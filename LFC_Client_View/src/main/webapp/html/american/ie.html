@@ -1,0 +1,21 @@
+<div class="twelve large-12 columns">
+				<h1>Internet Explorer 8 Support</h1>
+				<p><strong>IMPORTANT:</strong> AA.com no longer develops nor supports fixes for Internet Explorer 7 or older!</p>
+				<h2>The setup</h2>
+				<p>The first step involves setting telling IE which version of Foundation to choose —3 or 4 — based on Explorer's own version. Below is what we came up with, which looks fairly solid.</p>
+				<p>In the HTML head:</p>
+				<script type="text/javascript" src="https://snipt.net/embed/cc8cff4d7b93cc90c182aba947811d81/"></script>
+				<div class="snipt-embed" onmouseover="document.getElementById('snipt-60816').style.display = 'block'; return false;" onmouseout="document.getElementById('snipt-60816').style.display = 'none'; return false;" style="position: relative;"> </div>
+				<br>
+				<p>And after the close body tag:</p>
+				<script type="text/javascript" src="https://snipt.net/embed/61deafb93317ebcbedfad069cf5139be/"></script>
+				<div class="snipt-embed" onmouseover="document.getElementById('snipt-60817').style.display = 'block'; return false;" onmouseout="document.getElementById('snipt-60817').style.display = 'none'; return false;" style="position: relative;"> </div>
+				<br>
+				<p><a href="http://msdn.microsoft.com/en-us/library/ms537512(v=vs.85).aspx" title="About conditional comments | reference | Microsoft" rel="external">The conditionals</a> determine which version of Foundation IE loads. IE8 and older will grab Foundation 3 code. Others, Foundation 4.</p>
+				<h2>The grid</h2>
+				<p>The syntax for Foundation 4's grid, which accounts for mobile and widescreen devices, uses two prefixes: <code>small-#</code> and <code>large-#</code>. Foundation 3, though, uses spelled out English words: <code>one</code>, <code>six</code>, <code>twelve</code> etc. That means the two systems can intermingle without interfering:</p>
+				<script type="text/javascript" src="https://snipt.net/embed/dacce3402081e7beb7785aceb9aed51e/"></script>
+				<div class="snipt-embed" onmouseover="document.getElementById('snipt-60820').style.display = 'block'; return false;" onmouseout="document.getElementById('snipt-60820').style.display = 'none'; return false;" style="position: relative;"> </div>
+				<br />
+				<p>Having to manage three sets of grids isn't ideal, but if you use Foundation 4 and need to support older browsers, this unofficial workaround may do the trick.</p>
+		</div>

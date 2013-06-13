@@ -381,7 +381,7 @@
 					<rich:spacer width="100%" height="15" title="" />
 				</div>
 				<div align="right">
-				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}"  id="buttonBackBagCheck" rendered="#{empty lostAndFound.lostReport.reportId}" />
+				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}" id="buttonBackBagCheck"  rendered="#{empty lostAndFound.lostReport.reportId}" />
 				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToLogin}" id="buttonLogin"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
 				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_create}" id="buttonCreate" action="#{lostAndFound.createReport}" 
 				onclick="if (!validateEmail()) {return false;} else { this.disabled=true }" oncomplete="this.disabled=false" rendered="#{empty lostAndFound.lostReport.reportId}"/>
