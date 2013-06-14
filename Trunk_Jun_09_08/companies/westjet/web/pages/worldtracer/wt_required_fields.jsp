@@ -264,7 +264,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
       } 
     }
   
-  var bag0 = document.getElementById("theitem["+firstItemIndex+"].lnameonbag");
+  var bag0 = document.getElementsByName("theitem["+firstItemIndex+"].lnameonbag")[0];
   
   if(bag0 == null) {
     alert("<%=(String) bundle.getString(
