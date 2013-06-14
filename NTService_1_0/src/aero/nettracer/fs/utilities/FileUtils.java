@@ -106,67 +106,9 @@ public class FileUtils {
 	}
 	
 	// upload images or files for the front pages
-	public static FsAttachment doUpload(File theFile,int maxSize, String folder,String picpath,String airline, int filesize, RemoteInputStream ris) {
-		RemoteInputStreamServer istream =null;
-		try {
-			//to find out the file extension: if image, then create thumb
-			String myFileName = theFile.getName();
-			String myFileExt = myFileName.substring(myFileName.lastIndexOf('.')+1, myFileName.length());
-			
-			// check file size
-			if (maxSize > 0 && Integer.valueOf(String.valueOf(theFile.getTotalSpace())) > maxSize) {
-				return null;
-			}
-			
-			//retrieve the file data
-			String env=HibernateWrapper.getConfig().getProperty("environment.code");
-			String image_store = "\\\\10.60.98.66\\"+env+"\\NTFS\\";     //c:/nettracer_files/";
-			if (!FileUtils.makeFolder(image_store + folder)) {
-				//Error in creating a directory.
-				logger.error("Unable to create directory");
-				return null;
-			}
-
-			//file names corresponding to the local store.
-			String sfileName = image_store + picpath;
-			
-			
-			//write the file to the file specified
-			byte databytes[] = new byte[Integer.valueOf(String.valueOf(filesize))];
-			InputStream ins = null;
-			ins=RemoteInputStreamClient.wrap(ris);
-			int bytesRead = 0;
-			int totalRead = 0;
-			while (totalRead < filesize) {
-				bytesRead = ins.read(databytes, totalRead, filesize-totalRead);
-				totalRead += bytesRead;
-			}
-			ins.close();
-			
-			OutputStream outs = new FileOutputStream(sfileName);
-			outs.write(databytes);
-			outs.flush();
-			outs.close();
-			
-			FsAttachment attach=new FsAttachment();
-			attach.setPath(picpath);
-			attach.setDescription(myFileName);
-			attach.setCompCode(airline);
-			int attachid=saveAttachment(attach);
-			return attach;
-			
-
-		} catch (FileNotFoundException fnfe) {
-			logger.error("Exception A: " + fnfe.getMessage());
-			return null;
-		} catch (IOException ioe) {
-			logger.error("Exception B: " + ioe.getMessage());
-			return null;
-		}
-		finally {
-			if(istream!=null) istream.close();
-		}
-		
+	public static FsAttachment doUpload(FsAttachment attach) {
+		int attachid=saveAttachment(attach);
+		return attach;
 	}
 	
 	public static int saveAttachment(FsAttachment file) {
@@ -236,7 +178,7 @@ public class FileUtils {
 		}
 	}
 	
-	public static String getPath(int attachID, Session sess, String airline) {
+	public static FsAttachment getPath(int attachID, Session sess, String airline) {
 		if (attachID < 0) return null;
 		boolean sessionNull = (sess == null);
 
@@ -265,7 +207,7 @@ public class FileUtils {
 				}
 			}
 			if(canAccess) 
-				return attach.getPath();
+				return attach;
 			else 
 				return null;
 		} catch (Exception e) {
@@ -316,36 +258,10 @@ public class FileUtils {
 		return true;
 	}
 	
-	public static Object[] getAttachment(int attachID, String valComp){
+	public static FsAttachment getAttachment(int attachID, String valComp){
 		
-		
-		RemoteInputStreamServer istream = null;
-	    try {
-	      String attachpath=getPath(attachID, null, valComp);
-
-			String env=HibernateWrapper.getConfig().getProperty("environment.code");
-			String image_store = "\\\\10.60.98.66\\"+env+"\\NTFS\\"; //"c:/nettracer_files/";
-	      istream = new GZIPRemoteInputStream(new BufferedInputStream(
-	        new FileInputStream(image_store+attachpath)));
-	      java.io.File file =new File(image_store+attachpath);
-	      // export the final stream for returning to the client
-	      RemoteInputStream result = istream.export();
-	      // after all the hard work, discard the local reference (we are passing
-	      // responsibility to the client)
-	      istream = null;
-	      Object[] results=new Object[2];
-	      results[0]=result;
-	      results[1]=file;
-	      return results;
-	    } catch(Exception e) {
-	    	logger.error("unable to retrieve InputStream: " + e);
-	    	e.printStackTrace();
-			return null;
-	    } finally {
-	      // we will only close the stream here if the server fails before
-	      // returning an exported stream
-	      if(istream != null) istream.close();
-	    }
+	    FsAttachment attach=getPath(attachID, null, valComp);
+	    return attach;
 	}
 	
 	public static List<FsAttachment> getAttachmentsById(List<Integer> attachIDs){
@@ -425,13 +341,7 @@ public class FileUtils {
 			List alist=new ArrayList();
 			alist.add(attachID);
 			List<FsAttachment> attachments=getAttachmentsById(alist);
-			Set<FsAttachment> toDelete=new HashSet();
-			String env=HibernateWrapper.getConfig().getProperty("environment.code");
-			for(FsAttachment attach:attachments){
-				File f=new File("\\\\10.60.98.66\\"+env+"\\NTFS\\"+attach.getPath());
-				boolean success=f.delete();
-				toDelete.add(attach);
-			}
+			Set<FsAttachment> toDelete=new HashSet(attachments);
 			deleteAttachments(toDelete);
 			return true;
 		} catch (Exception e) {

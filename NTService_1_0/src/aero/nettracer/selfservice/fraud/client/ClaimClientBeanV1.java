@@ -160,13 +160,14 @@ public class ClaimClientBeanV1 implements ClaimClientRemoteV1{
 	}
 	
 	@Override
-	public FsAttachment uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, String airline, int filesize, RemoteInputStream ris)
+
+	public FsAttachment uploadAttachment(FsAttachment attach)
 	{
 		return null;
 	}
 
 	@Override
-	public Object[] getAttachment(int attachID, String airline){ return null;}
+	public FsAttachment getAttachment(int attachID, String airline){ return null;}
 
 	@Override
 	public boolean saveAttachments(List<Integer> attachIDs, long fileid, String airline, long claimId) { return false;}

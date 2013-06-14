@@ -172,14 +172,15 @@ public class ClaimClientBeanV3 implements ClaimClientRemoteV3{
 	}
 	
 	@Override
-	public FsAttachment uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, String airline, int filesize, RemoteInputStream ris) {
+	public FsAttachment uploadAttachment(FsAttachment attach) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-		return mapper.map(bean.uploadAttachment(theFile, maxSize, folder, picpath, airline,filesize, ris), aero.nettracer.fs.model.transport.v3.FsAttachment.class);
+		return mapper.map(bean.uploadAttachment(mapper.map((aero.nettracer.fs.model.transport.v3.FsAttachment)attach, aero.nettracer.fs.model.FsAttachment.class)), aero.nettracer.fs.model.transport.v3.FsAttachment.class);
 	}
 	
 	@Override
-	public Object[] getAttachment(int attachID, String airline) {
-		return FileUtils.getAttachment(attachID, airline); 
+	public FsAttachment getAttachment(int attachID, String airline) {
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		return mapper.map(FileUtils.getAttachment(attachID, airline),aero.nettracer.fs.model.transport.v3.FsAttachment.class); 
 	}
 	
 	@Override

@@ -1020,9 +1020,9 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 		return getMatches(idList, "US");//TODO deprecate when US is updated to 3.2.1.1		
 	}
 	
-	public FsAttachment uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath, String airline, int filesize, RemoteInputStream ris){
+	public FsAttachment uploadAttachment(FsAttachment attach){
 			// Save the file in the local directory.			
-			return FileUtils.doUpload(theFile, maxSize, folder, picpath, airline, filesize, ris);
+			return FileUtils.doUpload(attach);
 
 	}
 	

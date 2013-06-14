@@ -37,8 +37,8 @@ public interface ClaimClientRemote {
 	public int getAccessRequestsCount(AccessRequestDTO dto);
 	public Map<String, Integer> getMatches(List<String> idList);
 	public Map<String, Integer> getMatches(List<String> idList, String companycode);
-	public FsAttachment uploadAttachment(java.io.File theFile, int maxSize,String folder,String picpath,String airline, int filesize, RemoteInputStream ris);
-	public Object[] getAttachment(int attachID, String airline);
+	public FsAttachment uploadAttachment(FsAttachment attach);
+	public FsAttachment getAttachment(int attachID, String airline);
 	public boolean saveAttachments(List<Integer> attachIDs, long fileid, String airline, long claimId); 
 	public boolean deleteAttachment(int attachID); 
 	public long saveThread(FsForumThread thread);
