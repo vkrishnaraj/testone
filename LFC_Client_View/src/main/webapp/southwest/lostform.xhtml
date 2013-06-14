@@ -47,12 +47,15 @@
 					}
 				}
 				
-				function populateBag(){
+				function displayNames(){
 					same = document.getElementById("lostForm:sameAsContact");
-					if(same.value=="on"){
-						document.getElementById("lostForm:firstBag").value=document.getElementById("lostForm:firstName").value;
-						document.getElementById("lostForm:lastBag").value=document.getElementById("lostForm:lastName").value;
-						document.getElementById("lostForm:middleBag").value=document.getElementById("lostForm:middleInitial").value;
+					if(same.checked==true){
+						document.getElementById("itemNames").style.display="";
+					} else {
+
+						document.getElementById("itemNames").style.display="none";
+						document.getElementById("lostForm:firstBag").value='';
+						document.getElementById("lostForm:lastBag").value='';
 					}					
 				}
 
@@ -311,18 +314,15 @@
 					<tr><td colspan="1">
 						<t:outputText value="#{msg.lostform_label_name_bag_check}" />
 					</td><td colspan="2">
-						<h:selectBooleanCheckbox id="sameAsContact" onclick="populateBag()"/> 
+						<h:selectBooleanCheckbox id="sameAsContact" onclick="displayNames()"/> 
 					</td><td colspan="3"/></tr>
-					<tr><td colspan="2">
+					<tr style="display:none" id="itemNames"><td colspan="2">
 						<t:outputText value="#{msg.lostform_label_name_bag_last}" /><br/>
 						<t:inputText value="#{lostAndFound.lostReport.lastNameBag}" maxlength="511" style="width: 95%" id="lastBag"/>
 					</td><td colspan="2">
 						<t:outputText value="#{msg.lostform_label_name_bag_first}" /><br/>
 						<t:inputText value="#{lostAndFound.lostReport.firstNameBag}" maxlength="511" style="width: 95%" id="firstBag"/>
-					</td><td colspan="2">
-						<t:outputText value="#{msg.lostform_label_name_bag_middle}" /><br/>
-						<t:inputText value="#{lostAndFound.lostReport.middleNameBag}" maxlength="511" style="width: 95%" id="middleBag"/>
-					</td>
+					</td> <td colspan="2"/>
 					</tr>
 				</table><br/>
 				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_trip_title}" /></p><br/><br/>
