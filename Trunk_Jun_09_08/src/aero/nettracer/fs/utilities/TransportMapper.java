@@ -94,6 +94,11 @@ public class TransportMapper {
 		return mapper.map((FsAttachment) fsat, aero.nettracer.fs.model.FsAttachment.class);
 	}
 	
+	public static FsAttachment map(aero.nettracer.fs.model.FsAttachment fsat) {
+		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		return mapper.map(fsat, FsAttachment.class);
+	}
+	
 	public static aero.nettracer.fs.model.FsClaim map(aero.nettracer.fs.model.transport.v0.FsClaim fscl) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 		return mapper.map((FsClaim) fscl, aero.nettracer.fs.model.FsClaim.class);

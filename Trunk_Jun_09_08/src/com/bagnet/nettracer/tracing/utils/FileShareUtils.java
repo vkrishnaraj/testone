@@ -134,7 +134,7 @@ public class FileShareUtils {
 							attach.setPath(filepath);
 							attach.setDescription(fileName);
 							attach.setCompCode(user.getStation().getCompany().getCompanyCode_ID());
-							fsAttach = TransportMapper.map(remote.uploadAttachment(attach));
+							fsAttach = TransportMapper.map(remote.uploadAttachment(TransportMapper.map(attach)));
 						}	
 						
 						// add the image to the DB.
