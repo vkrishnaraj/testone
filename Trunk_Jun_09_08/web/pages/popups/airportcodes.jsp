@@ -38,6 +38,7 @@
       </title>
       <link href="<%= path %>/deployment/main/css/nettracerstyles1.css" rel="stylesheet" type="text/css">
       <link href="<%= path %>/deployment/main/css/formstyles.css" rel="stylesheet" type="text/css">
+	  <script language="javascript" src="<%=path%>/deployment/main/js/jquery-1.8.2.min.js"></script>
       <script language="javascript">
         
 function choosetype(o) {
@@ -54,6 +55,9 @@ function choosetype(o) {
 			break;
 		}
 	}
+
+	var theForm = window.opener.document.forms[0];
+	jQuery(theForm).addClass("dirty");
 <%
                                     }
 %>

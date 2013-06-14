@@ -338,6 +338,7 @@ public class DamagedAction extends CheckedAction {
 			// thephoto.getThumbpath());
 			//if (pfile.exists()) pfile.delete();
 			request.setAttribute("upload", Integer.toString(itemindex));
+			request.setAttribute("markDirty", 1);
 			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 		}
 
@@ -350,6 +351,7 @@ public class DamagedAction extends CheckedAction {
 			// Save the file in the local directory.
 			Hashtable files = theform.getMultipartRequestHandler().getFileElements();
 			FormFile theFile = (FormFile) files.get("imagefile" + fileindex);
+			request.setAttribute("markDirty", 1);
 			if (theFile != null && theFile.getFileSize() > 0) {
 				String st = Long.toString((new Date()).getTime());
 				String lead = "";
@@ -391,8 +393,7 @@ public class DamagedAction extends CheckedAction {
 				ActionMessage error = new ActionMessage("error.uploadfile");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
-			}
-	
+			}	
 
 			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 		}
@@ -547,6 +548,8 @@ public class DamagedAction extends CheckedAction {
 					}
 					saveMessages(request, errors);
 					request.setAttribute("prepopulate",new Integer("1"));
+				} else {
+					request.setAttribute("markDirty", 1);
 				}
 				return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 			}

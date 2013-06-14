@@ -217,6 +217,7 @@ public class ModifyClaimAction extends CheckedAction {
 					claim = ntIncident.getClaims().iterator().next();
 				}
 				file = FileDAO.loadFile(ntIncident.getIncident_ID()); //airlineIncMark
+				request.setAttribute("markDirty", 1);
 			} else {
 				claim = ClaimUtils.createClaim(user);
 			}
@@ -310,6 +311,7 @@ public class ModifyClaimAction extends CheckedAction {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			} else {
+				request.setAttribute("markDirty", 1);
 				if (itemindex >= 0) {
 					// don't remove photo for now.
 					Attachment theattachment= (Attachment) cform.getClaim().getAttachments().toArray()[itemindex];
@@ -667,6 +669,7 @@ public class ModifyClaimAction extends CheckedAction {
 					
 					claim.getClaimants().add(p);
 				}
+				request.setAttribute("markDirty", 1);
 				request.setAttribute("an", 1);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
@@ -684,6 +687,7 @@ public class ModifyClaimAction extends CheckedAction {
 					r.setClaim(claim);
 					claim.getReceipts().add(r);
 				}
+				request.setAttribute("markDirty", 1);
 				request.setAttribute("rs", 1);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
@@ -700,6 +704,7 @@ public class ModifyClaimAction extends CheckedAction {
 					p.setClaim(claim);
 					claim.getPhones().add(p);
 				}
+				request.setAttribute("markDirty", 1);
 				request.setAttribute("ph", 1);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
@@ -716,6 +721,7 @@ public class ModifyClaimAction extends CheckedAction {
 					ip.setClaim(claim);
 					claim.getIpAddresses().add(ip);
 				}
+				request.setAttribute("markDirty", 1);
 				request.setAttribute("aip", 1);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);
@@ -733,6 +739,7 @@ public class ModifyClaimAction extends CheckedAction {
 					seg.setDateFormat(user.getDateformat().getFormat());
 					claim.getSegments().add(seg);
 				}
+				request.setAttribute("markDirty", 1);
 				request.setAttribute("aseg", 1);
 			} catch (NumberFormatException nfe) {
 				logger.error(nfe);

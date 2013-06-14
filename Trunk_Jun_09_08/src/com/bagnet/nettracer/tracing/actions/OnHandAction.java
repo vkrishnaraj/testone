@@ -187,11 +187,13 @@ public class OnHandAction extends CheckedAction {
 			r.set_TIMEFORMAT(user.getTimeformat().getFormat());
 			r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 			request.setAttribute("remark", "1");
+			request.setAttribute("markDirty", 1);
 			return (mapping.findForward(TracingConstants.OHD_MAIN));
 		}// add new itinerary box
 		else if(request.getParameter("additinerary") != null) {
 			theform.getItinerary(theform.getItinerarylist().size());
 			request.setAttribute("itinerary", "1");
+			request.setAttribute("markDirty", 1);
 			if(request.getParameter("express") != null)
 				return mapping.findForward(TracingConstants.OHD_QUICK_MAIN);
 			return (mapping.findForward(TracingConstants.OHD_MAIN));
@@ -199,6 +201,7 @@ public class OnHandAction extends CheckedAction {
 		else if(request.getParameter("additem") != null) {
 			theform.getItem(theform.getItemlist().size());
 			request.setAttribute("item", "1");
+			request.setAttribute("markDirty", 1);
 			if(request.getParameter("express") != null)
 				return mapping.findForward(TracingConstants.OHD_QUICK_MAIN);
 			return (mapping.findForward(TracingConstants.OHD_MAIN));
@@ -206,6 +209,7 @@ public class OnHandAction extends CheckedAction {
 		else if(request.getParameter("addPassenger") != null) {
 			request.setAttribute("passenger", "1");
 			theform.getPassenger(theform.getPassengerList().size());
+			request.setAttribute("markDirty", 1);
 			if(request.getParameter("express") != null)
 				return mapping.findForward(TracingConstants.OHD_QUICK_MAIN);
 			return (mapping.findForward(TracingConstants.OHD_MAIN));
@@ -216,6 +220,7 @@ public class OnHandAction extends CheckedAction {
 			// Save the file in the local directory.
 			Hashtable files = theform.getMultipartRequestHandler().getFileElements();
 			FormFile theFile = (FormFile) files.get("theFile1");
+			request.setAttribute("markDirty", 1);
 			if(theFile != null && theFile.getFileSize() > 0) {
 				String st = Long.toString((new Date()).getTime());
 				String lead = "";
@@ -468,6 +473,7 @@ public class OnHandAction extends CheckedAction {
 				else if(request.getParameter("mass") != null)
 					return mapping.findForward(TracingConstants.OHD_MASS_MAIN);
 
+				request.setAttribute("markDirty", 1);
 				return (mapping.findForward(TracingConstants.OHD_MAIN));
 			}// delete passenger
 			else if(deletePassenger) {
@@ -481,11 +487,13 @@ public class OnHandAction extends CheckedAction {
 				else if(request.getParameter("mass") != null)
 					return mapping.findForward(TracingConstants.OHD_MASS_MAIN);
 
+				request.setAttribute("markDirty", 1);
 				return (mapping.findForward(TracingConstants.OHD_MAIN));
 			}// delete address
 			else if(deleteAddress) {
 				request.setAttribute("passenger", "1");
 				theform.removeAddress(Integer.parseInt(index));
+				request.setAttribute("markDirty", 1);
 				return (mapping.findForward(TracingConstants.OHD_MAIN));
 			}// delete bag
 			else if(deleteBagItin) {
@@ -497,6 +505,7 @@ public class OnHandAction extends CheckedAction {
 					return mapping.findForward(TracingConstants.OHD_QUICK_MAIN);
 				else if(request.getParameter("mass") != null)
 					return mapping.findForward(TracingConstants.OHD_MASS_MAIN);
+				request.setAttribute("markDirty", 1);
 				return (mapping.findForward(TracingConstants.OHD_MAIN));
 			}// delete bag-item
 			else if(deleteItem) {
@@ -504,6 +513,7 @@ public class OnHandAction extends CheckedAction {
 				List itemList = theform.getItemlist();
 				if(itemList != null)
 					itemList.remove(Integer.parseInt(index));
+				request.setAttribute("markDirty", 1);
 				return (mapping.findForward(TracingConstants.OHD_MAIN));
 			}// delete photo
 			else if(deletePhoto) {
@@ -511,6 +521,7 @@ public class OnHandAction extends CheckedAction {
 				List photoList = theform.getPhotoList();
 				if(photoList != null)
 					photoList.remove(Integer.parseInt(index));
+				request.setAttribute("markDirty", 1);
 				return (mapping.findForward(TracingConstants.OHD_MAIN));
 			}// delete remark
 			else if(deleteRemark) {
@@ -518,6 +529,7 @@ public class OnHandAction extends CheckedAction {
 				List remarkList = theform.getRemarklist();
 				if(remarkList != null)
 					remarkList.remove(Integer.parseInt(index));
+				request.setAttribute("markDirty", 1);
 				return (mapping.findForward(TracingConstants.OHD_MAIN));
 			}
 			else if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {
@@ -664,6 +676,8 @@ public class OnHandAction extends CheckedAction {
 							}
 							saveMessages(request, errors);
 							request.setAttribute("prepopulate", new Integer("1"));
+						} else {
+							request.setAttribute("markDirty", 1);
 						}
 					} else if (SpringUtils.getReservationIntegration().isPopulateOhdFormOn() && request.getParameter("skip_prepopulate") == null && request.getParameter("wt_af_id") == null) {
 						request.setAttribute("prepopulate",new Integer("1"));

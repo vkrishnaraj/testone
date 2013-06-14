@@ -329,6 +329,7 @@ public class MissingAction extends CheckedAction {
 			Item_Photo thephoto = (Item_Photo) theform.getItem(itemindex, -1).getPhotolist().get(photoindex);
 			theform.getItem(itemindex, -1).getPhotolist().remove(photoindex);
 			request.setAttribute("upload", Integer.toString(itemindex));
+			request.setAttribute("markDirty", 1);
 			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 		}
 
@@ -341,6 +342,7 @@ public class MissingAction extends CheckedAction {
 			// Save the file in the local directory.
 			Hashtable files = theform.getMultipartRequestHandler().getFileElements();
 			FormFile theFile = (FormFile) files.get("imagefile" + fileindex);
+			request.setAttribute("markDirty", 1);
 			if (theFile != null && theFile.getFileSize() > 0) {
 				String st = Long.toString((new Date()).getTime());
 				String lead = "";
@@ -539,6 +541,8 @@ public class MissingAction extends CheckedAction {
 					}
 					saveMessages(request, errors);
 					request.setAttribute("prepopulate",new Integer("1"));
+				} else {
+					request.setAttribute("markDirty", 1);
 				}
 				return (mapping.findForward(TracingConstants.MISSING_MAIN));
 			}

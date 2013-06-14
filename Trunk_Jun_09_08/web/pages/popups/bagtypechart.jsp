@@ -16,6 +16,7 @@
       <title>
         <%= messages.getMessage(new Locale(a.getDefaultlocale()), "title.bagchart") %>
       </title>
+	  <script language="javascript" src="<%=path%>/deployment/main/js/jquery-1.8.2.min.js"></script>
       <script language="javascript">
 
 function choosexdescelement(o) {
@@ -94,6 +95,9 @@ function choosexdescelement(o) {
 		}
 	}
 
+	var theForm = window.opener.document.forms[0];
+	jQuery(theForm).addClass("dirty");
+
 self.close();
 }
 
@@ -142,11 +146,21 @@ function choosetype(o) {
 		for (i = 0; i < field.length; i++) {
 			if (field.options[i].value == o) {
 				field.options[i].selected = true;
+<% 
+	String type = request.getParameter("type");
+	if (type.equalsIgnoreCase("bagtype")) {
+%>
 				field.onchange();
+<%
+	}
+%>
 				break;
 			}
 		}
 	}
+
+	var theForm = window.opener.document.forms[0];
+	jQuery(theForm).addClass("dirty");
 	
 	self.close();
 }

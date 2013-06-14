@@ -438,6 +438,7 @@ public class MBRActionUtils {
 			r.set_DATEFORMAT(user.getDateformat().getFormat());
 			r.set_TIMEFORMAT(user.getTimeformat().getFormat());
 			r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+			request.setAttribute("markDirty", 1);
 			return true;
 		}
 		// delete closing remark
@@ -458,6 +459,7 @@ public class MBRActionUtils {
 			List remarkList = theform.getRemarklist();
 			if (remarkList != null)
 				remarkList.remove(Integer.parseInt(index));
+			request.setAttribute("markDirty", 1);
 			return true;
 		}
 
@@ -549,6 +551,8 @@ public class MBRActionUtils {
 			if (osi != null) {
 				theform.setOtherSystemInformation(osi.getInfo());
 			}
+			
+			request.setAttribute("markDirty", 1);
 			
 			// initialize vars
 			request.setAttribute("newform", "1");

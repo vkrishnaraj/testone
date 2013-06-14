@@ -229,6 +229,7 @@ function hideThisElement(objectName, objectType, num) {
 	}
 	del = document.forms[0].delete_these_elements;
 	del.value += objectName + ",";
+	jQuery("#dirtyCheck-form").addClass("dirty");
 }
 
 function removeElement(obj) {
