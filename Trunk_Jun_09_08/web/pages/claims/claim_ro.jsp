@@ -1470,7 +1470,7 @@
                     <br />
                     <!-- segments -->
 					
-					<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS, a)) { %>
+					<% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS, a) && !(a.getCompanycode_ID() != matchClaim.getAirline() && ("US".equals(a.getCompanycode_ID()) || "US".equals(matchClaim.getAirline())))) { %>
 					 <h1 class="green">
                    		<bean:message key="header.shared.files" />
 					 </h1>

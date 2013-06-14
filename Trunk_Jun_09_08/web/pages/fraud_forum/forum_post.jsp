@@ -76,6 +76,7 @@
                 		</td>
                 	  </tr>
                 	  </logic:notEmpty>
+                	  <% if (!"US".equals(a.getCompanycode_ID())) { %>
 				      <tr>
 				        <td>
 				            <bean:message key="header.attachments" />:<br>
@@ -108,6 +109,7 @@
 				           </center>
 				        </td>
 				      </tr>
+				      <% } %>
 		              <tr>
 		                <td align="center" valign="top">
 			                  <html:submit property="create" styleId="button" onclick="return validatePost(this.form);">

@@ -150,6 +150,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
                 		</td>
                 	  </tr>
                 	  </logic:notEmpty>
+                	  <% if (!"US".equals(a.getCompanycode_ID())) { %>
                 	  <logic:notEmpty name="post" property="attachments">
                       <tr>
 				                <td>
@@ -169,6 +170,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
 				                  				              </td>
 				            </tr>
 				            </logic:notEmpty>
+				            <% } %>
                       </table>
                 	</logic:iterate>
                 	</logic:notEmpty>

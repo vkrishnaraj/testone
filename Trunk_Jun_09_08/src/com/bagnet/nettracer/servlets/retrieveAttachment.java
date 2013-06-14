@@ -18,6 +18,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.fs.model.FsAttachment;
+import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
 import com.healthmarketscience.rmiio.RemoteInputStreamClient;
@@ -39,22 +41,25 @@ import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
  * 
  * @author Ankur Gupta
  * 
- * create date - Feb 28, 2005
+ *         create date - Feb 28, 2005
  */
 public class retrieveAttachment extends HttpServlet {
-	//~ Constructors
+	// ~ Constructors
 	// *******************************************************************************
 
-	private static final Logger logger = Logger.getLogger(retrieveAttachment.class);
-	public void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException,
-			IOException {
+	private static final Logger logger = Logger
+			.getLogger(retrieveAttachment.class);
+
+	public void doGet(HttpServletRequest req, HttpServletResponse res)
+			throws ServletException, IOException {
 		doPost(req, res);
 	}
-	
+
 	private static String fileMimeTypeSelector(String imageID) {
 		String result = "image/jpeg";
-		if ( !(imageID == null || imageID.equals(""))) {
-			String myFileExt = imageID.substring(imageID.lastIndexOf('.')+1, imageID.length());
+		if (!(imageID == null || imageID.equals(""))) {
+			String myFileExt = imageID.substring(imageID.lastIndexOf('.') + 1,
+					imageID.length());
 			if (myFileExt.equalsIgnoreCase("doc")) {
 				result = "application/msword";
 			} else if (myFileExt.equalsIgnoreCase("xls")) {
@@ -65,18 +70,19 @@ public class retrieveAttachment extends HttpServlet {
 				result = "image/tiff";
 			} else if (myFileExt.equalsIgnoreCase("tiff")) {
 				result = "image/x-tiff";
-			} else if ((myFileExt.equalsIgnoreCase("jpg")) || (myFileExt.equalsIgnoreCase("png"))) {
+			} else if ((myFileExt.equalsIgnoreCase("jpg"))
+					|| (myFileExt.equalsIgnoreCase("png"))) {
 				result = "image/jpeg";
 			} else {
 				result = "application/octet-stream";
 			}
 		}
-		
+
 		return result;
 	}
-	
-	public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException,
-			IOException {
+
+	public void doPost(HttpServletRequest req, HttpServletResponse res)
+			throws ServletException, IOException {
 
 		boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 		Context ctx = null;
@@ -84,79 +90,79 @@ public class retrieveAttachment extends HttpServlet {
 		ActionMessages errors = new ActionMessages();
 		try {
 			ctx = ConnectionUtil.getInitialContext();
-			remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx, PropertyBMO.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
+			remote = (ClaimClientRemote) ConnectionUtil.getRemoteEjb(ctx,
+					PropertyBMO
+							.getValue(PropertyBMO.CENTRAL_FRAUD_SERVICE_NAME));
 		} catch (Exception ex) {
 			logger.error(ex);
 		}
-		
+
 		if (remote == null) {
-			ActionMessage error = new ActionMessage("error.fs.could.not.communicate");
+			ActionMessage error = new ActionMessage(
+					"error.fs.could.not.communicate");
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 		} else {
-		HttpSession session = req.getSession(true);
-		if(session.getAttribute("user") == null) {
-			
-			res.sendRedirect("logoff.do");
-			return;
+			HttpSession session = req.getSession(true);
+			if (session.getAttribute("user") == null) {
+
+				res.sendRedirect("logoff.do");
+				return;
+			}
+			Agent user = (Agent) session.getAttribute("user");
+			String attachID = req.getParameter("ID");
+
+				FsAttachment results = TransportMapper.map(remote.getAttachment(Integer.valueOf(attachID),user.getCompanycode_ID())); // Should check for Permissions too
+				if (results == null) {
+					res.sendRedirect("invalid_attachment.do");
+					return;
+				}
+				String imageStore = TracerProperties.get(user.getCompanycode_ID(),"image_store");
+				
+				File file = new File(imageStore + results.getPath());
+				
+				if (! file.exists()) {
+					file = new File(imageStore + "image-file-icon.png");
+				}
+
+				InputStream is = new FileInputStream(file);
+
+				// Get the size of the file
+				long length = file.length();
+
+				// You cannot create an array using a long type.
+				// It needs to be an int type.
+				// Before converting to an int type, check
+				// to ensure that file is not larger than Integer.MAX_VALUE.
+				if (length > Integer.MAX_VALUE) {
+					// File is too large
+				}
+
+				// Create the byte array to hold the data
+				byte[] img = new byte[(int) length];
+
+				// Read in the bytes
+				int offset = 0;
+				int numRead = 0;
+				while (offset < img.length
+						&& (numRead = is.read(img, offset, img.length - offset)) >= 0) {
+					offset += numRead;
+				}
+
+				// Ensure all the bytes have been read in
+				if (offset < img.length) {
+					throw new IOException("File not completely read: "
+							+ file.getName());
+				}
+
+				// Close the input stream and return bytes
+				is.close();
+				String fileMimeType = fileMimeTypeSelector(file.getPath());
+				res.setContentType(fileMimeType);
+				res.setContentLength(img.length);
+				OutputStream out = res.getOutputStream();
+				out.write(img);
+				out.flush();
+				out.close();
 		}
-		Agent user = (Agent) session.getAttribute("user");
-		String attachID = req.getParameter("ID");
-
-	    RemoteInputStreamServer istream = null;
-	    try {
-		Object[] results= remote.getAttachment(Integer.valueOf(attachID), user.getCompanycode_ID()); //Should check for Permissions too
-		if(results==null){
-			res.sendRedirect("invalid_attachment.do");
-			return;
-		}
-		RemoteInputStream ris = (RemoteInputStream)results[0];
-		File file = (File)results[1];
-		
-		
-		InputStream is = null;
-		is=RemoteInputStreamClient.wrap(ris); 
-		
-
-		// Get the size of the file
-		long length = file.length();
-
-		// You cannot create an array using a long type.
-		// It needs to be an int type.
-		// Before converting to an int type, check
-		// to ensure that file is not larger than Integer.MAX_VALUE.
-		if (length > Integer.MAX_VALUE) {
-			 //File is too large
-		}
-
-		// Create the byte array to hold the data
-		byte[] img = new byte[(int) length];
-
-		// Read in the bytes
-		int offset = 0;
-		int numRead = 0;
-		while (offset < img.length && (numRead = is.read(img, offset, img.length - offset)) >= 0) {
-			offset += numRead;
-		}
-
-		// Ensure all the bytes have been read in
-		if (offset < img.length) {
-			throw new IOException("File not completely read: " + file.getName());
-		}
-
-		// Close the input stream and return bytes
-		is.close();
-		String fileMimeType = fileMimeTypeSelector(file.getPath());
-		res.setContentType(fileMimeType);
-		res.setContentLength(img.length);
-		OutputStream out = res.getOutputStream();
-		out.write(img);
-		out.flush();
-		out.close();
-	    }  finally {
-		      // we will only close the stream here if the server fails before
-		      // returning an exported stream
-		      if(istream != null) istream.close();
-		    }
-	  }
 	}
 }

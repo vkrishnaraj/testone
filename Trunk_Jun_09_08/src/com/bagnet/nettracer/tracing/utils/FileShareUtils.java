@@ -58,6 +58,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
+import com.bagnet.nettracer.tracing.db.Item_Photo;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
@@ -110,29 +111,32 @@ public class FileShareUtils {
 					
 					//compute the folder name
 					String folder = user.getStation().getCompany().getCompanyCode_ID() + "/" + year + "/" + month + "/" + day + "/";;
-					
+
 					//paths to be stored in the db
 					String fileName = theFile.getFileName();
-					String filepath = folder + lead + "_" + st + "_" + fileName;
-					String thumbpath = folder + lead + "_" + st + "_thumb_" + fileName;
+					String filepath = folder + "FS_" + lead + "_" + st + "_" + fileName;
+					String thumbpath = folder + "FS_" + lead + "_" + st + "_thumb_" + fileName;
 //					RemoteStreamServer server;
 //					server.
 					
 					logger.debug("FILE PREPARED. TRYING TO GENERATE REMOTE INPUT STREAM.");
 					
 					try{
-						InputStream is=theFile.getInputStream();
-
-						logger.debug("MADE INPUT STREAM.");
-						GZIPRemoteInputStream GRIS=new GZIPRemoteInputStream(is);
-
-						logger.debug("MADE GZIP Remote Input Stream.");
-						RemoteInputStream ris=GRIS.export(); //change to RMIIO
+						FsAttachment fsAttach = null;
+						boolean uploadresult = ImageUtils.doUpload(theFile, user, folder, filepath, thumbpath);
+						if (!uploadresult) {
+							ActionMessage error = new ActionMessage("error.uploadfile");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							return null;
+						} else {
+							// add the image to the DB.
+							FsAttachment attach = new FsAttachment();
+							attach.setPath(filepath);
+							attach.setDescription(fileName);
+							attach.setCompCode(user.getStation().getCompany().getCompanyCode_ID());
+							fsAttach = TransportMapper.map(remote.uploadAttachment(attach));
+						}	
 						
-						logger.debug("INPUT STREAM PREPARED: " + ris + "\n\nSENDING OVER CLAIMREMOTE: " + remote);
-						
-						FsAttachment fsAttach = TransportMapper.map(remote.uploadAttachment(thisfile, user.getStation().getCompany().getVariable().getMax_image_file_size(), 
-								folder, filepath, user.getCompanycode_ID(), theFile.getFileSize(), ris));
 						// add the image to the DB.
 						//Send to 
 						logger.debug("FILE ATTACHMENT SUCCESSFUL!!!");
