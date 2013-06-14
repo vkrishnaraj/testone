@@ -25,7 +25,7 @@
   Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
   java.util.List LimitedLossCodes=PropertyBMO.getSplitList(PropertyBMO.LIMITED_CODES_LOSSDELAY);
   boolean updateLossCodes=false;
-  //boolean limitedCodes=(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MAINTAIN_GROUPS, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && inc.getStatus().getStatus_ID()==13 && UserPermissions.hasIncidentSavePermission(a, inc));
+  /*boolean limitedCodes=(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MAINTAIN_GROUPS, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && inc.getStatus().getStatus_ID()==13 && UserPermissions.hasIncidentSavePermission(a, inc));*/
   
   
   Company_specific_irregularity_code lc = null;
