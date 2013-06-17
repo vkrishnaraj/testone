@@ -203,25 +203,21 @@ public class LostAndFoundController {
 		} else if(session.getAttribute("proposedAddress")!=null){
 			return "shippingconfirm?faces-redirect=true";
 		}
-		FacesUtil.addError("Shipping address was not valid. Please confirm your address is correct.");
+		
 		return null;
 	}
 	
 	public String confirmCCInfo() {
 		//Check If shipping information is the same.
-		if(validateSameShipping()){
-			if (validateCCInfo()) { //checkCCInf
-					//Record successful authorization code. Email Customer
-				HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
-				.getExternalContext().getSession(false);
-				return "shipconfirmation?faces-redirect=true";
-			}
+		if (validateCCInfo()) { //checkCCInf
+				//Record successful authorization code. Email Customer
+			HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
+			.getExternalContext().getSession(false);
+			return "shipconfirmation?faces-redirect=true";
+		}
 		//Record invalid CC transaction
 			FacesUtil.addError("Credit Card information is invalid. Please double check your credit card information and resubmit.");
-		} else {
-			FacesUtil.addError("Shipping Information has been changed. Please resubmit Shipping Information to determine proper shipping options and pricing.");
-			return "shippingconfirm?faces-redirect=true";
-		}
+		
 		return null;
 	}
 	
@@ -336,7 +332,7 @@ public class LostAndFoundController {
 		if(!shippingAddress.getAddress1().equals(lostReport.getContact().getPrefshipaddress().getAddress1())){
 			isValid=false;
 		}
-		if(!shippingAddress.getAddress2().equals(lostReport.getContact().getPrefshipaddress().getAddress2())){
+		if(shippingAddress.getAddress2()!=null && !shippingAddress.getAddress2().equals(lostReport.getContact().getPrefshipaddress().getAddress2())){
 			isValid=false;
 		}
 		if(!shippingAddress.getCity().equals(lostReport.getContact().getPrefshipaddress().getCity())){
@@ -425,6 +421,7 @@ public class LostAndFoundController {
 	
 	private boolean validateShipAddress() {
 		boolean isValid = true;
+		boolean addressvalid=true;
 		if(prefAddress!=null && !validateSameShipping()){
 			FacesUtil.addError("ERROR: Shipping Address information has been modified. Resubmitting to Fedex");
 			
@@ -432,37 +429,44 @@ public class LostAndFoundController {
 		if (shippingAddress.getAddress1() == null									// VALIDATE: ADDRESS 1
 				|| shippingAddress.getAddress1().trim().length() == 0) {
 			FacesUtil.addError("ERROR: Address is required.");
+			addressvalid=false;
 			isValid = false;
 		}
 		if(shippingAddress.getAddress1() != null
 				&& shippingAddress.getAddress1().matches("[PO.]*\\s?B(ox)?.*\\d+")){
 			FacesUtil.addError("ERROR: PO Box Addresses are invalid.");
+			addressvalid=false;
 			isValid = false;
 		}
 		if (shippingAddress.getCity() == null										// VALIDATE: CITY
 				|| shippingAddress.getCity().trim().length() == 0) {
 			FacesUtil.addError("ERROR: City is required.");
+			addressvalid=false;
 			isValid = false;
 		}
 		if (shippingAddress.getCountry() == null									// VALIDATE: COUNTRY
 				|| shippingAddress.getCountry().trim().length() == 0) {
 			FacesUtil.addError("ERROR: Country is required.");
+			addressvalid=false;
 			isValid = false;
 		} else if (shippingAddress.getCountry().equals("US")){
 			if (shippingAddress.getState() == null									// VALIDATE: STATE
 					|| shippingAddress.getState().trim().length() == 0) {
 				FacesUtil.addError("ERROR: State is required.");
+				addressvalid=false;
 				isValid = false;
 			}
 			if (shippingAddress.getPostal() == null								// VALIDATE: ZIP CODE
 					|| shippingAddress.getPostal().trim().length() == 0) {
 				FacesUtil.addError("ERROR: Zip Code is required.");
+				addressvalid=false;
 				isValid = false;
 			}			
 		} else if (lostReport.getContact().getAddress().getCountry().equals("CA")){
 			if (shippingAddress.getProvince() == null								// VALIDATE: PROVINCE
 					|| shippingAddress.getProvince().trim().length() == 0) {
 				FacesUtil.addError("ERROR: Province is required.");
+				addressvalid=false;
 				isValid = false;
 			}			
 		}
@@ -480,8 +484,13 @@ public class LostAndFoundController {
 				isValid=false;
 			} else if(validAddress==null || (validAddress!=null && !validAddress.getScore().equals(BigInteger.valueOf(100)))){
 				FacesUtil.addError("ERROR: Address not valid within FedEx. Please check your address and confirm it's accurate before submitting again.");
+				addressvalid=false;
 				isValid = false;
 			}
+		}
+		
+		if(!addressvalid){
+			FacesUtil.addError("Shipping address was not valid. Please confirm your address is correct.");
 		}
 		
 		return isValid;
