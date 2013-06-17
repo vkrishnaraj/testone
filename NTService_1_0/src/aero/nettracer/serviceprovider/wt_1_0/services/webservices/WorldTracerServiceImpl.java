@@ -2645,8 +2645,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					}
 
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
-					
-					na", "");
+					if(name!=null && name.length()>0)
+						name=name.replace(" ", "");
 					names.addName(name.trim().toUpperCase());
 
 				}
