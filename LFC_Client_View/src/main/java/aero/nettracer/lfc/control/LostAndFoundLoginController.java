@@ -117,7 +117,7 @@ public class LostAndFoundLoginController {
 			HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 			.getExternalContext().getSession(false);
 			session.setAttribute("lostReport", report);
-			if(TracingConstants.LF_SWA_COMPANY_ID.equals(subCompany)) {
+			if(TracingConstants.LF_LF_COMPANY_ID.equals(company)) {
 				if(report.getStatus().equals("Closed") || report.getDaysFromCreate() > 30 )  { 
 					return "closedform?faces-redirect=true";
 				} else if(report.getDaysFromCreate()>14) {
