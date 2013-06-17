@@ -309,7 +309,11 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 			remote.setSegments(remoteSegs);
 		}
 		
-		remote.setFeedback(host.getFeedback());
+		if(host.getFeedback()!=null && host.getFeedback().length()<=500){
+			remote.setFeedback(host.getFeedback());
+		} else if(host.getFeedback()!=null && host.getFeedback().length()>500){
+			remote.setFeedback(host.getFeedback().substring(0,500));
+		}
 		
 
 		return remote;
