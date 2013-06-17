@@ -8,106 +8,69 @@
 <f:view contentType="text/html" encoding="UTF-8">
 <f:loadBundle basename="american" var="msg"/>	
 <head>
-<meta http-equiv="X-UA-Compatible" content="IE=8" />
-<title><ui:insert name="title">Default Title</ui:insert></title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title><ui:insert name="title">Default Title</ui:insert></title>
 <!-- Foundation 3 for IE 8 and earlier -->
 <!--[if lt IE 9]>
-	<link rel="stylesheet" href="../_css/american/foundation3/normalize.css"/>
-	<link rel="stylesheet" href="../_css/american/foundation3/foundation.css"/>
-	<link rel="stylesheet" href="../_css/american/foundation3/aa.css"/>
-	<link rel="stylesheet" href="../_css/american/foundation3/app.css"/>
-	<script src="../_js/american/foundation3/vendor/custom.modernizr.js"></script>
+    	<script src="../_js/american/html5shiv.js"></script>
+		<link rel="stylesheet" href="../_css/american/foundation4/normalize.css">
+		<link rel="stylesheet" href="../_css/american/foundation3/foundation.css">
+		<link rel="stylesheet" href="../_css/american/foundation3/aa.css">
+		<link rel="stylesheet" href="../_css/american/foundation3/app.css">
 <![endif]-->
 <!-- Foundation 4 for IE 9 and Later -->
 <!--[if gt IE 8]><!-->
-	<link rel="stylesheet" href="../_css/american/foundation4/normalize.css"/>
-		<link rel="stylesheet" href="../_css/american/foundation4/foundation.css" />
+		<link rel="stylesheet" href="../_css/american/foundation4/normalize.css">
+		<link rel="stylesheet" href="../_css/american/foundation4/foundation.min.css" />
 		<link rel="stylesheet" href="../_css/american/foundation4/aa.css" />
-		<link rel="stylesheet" href="../_css/american/foundation4/app.css"/>
-	<script src="../_js/american/foundation4/vendor/custom.modernizr.js"></script>
+		<link rel="stylesheet" href="../_css/american/foundation4/app.css">
 <!--<![endif]-->
-<link href="../_images/american/favicon.ico" type="image/png" rel="shortcut icon" />
+		<link href="../_images/american/favicon.ico" type="image/png" rel="shortcut icon" />
 </head>
 <body>
-<div id="main">
 <!-- ########## BEGIN HEADER ########## -->
-<div id="bagItUp">   
-<header class="row">
-<div id="header" class="twelve large-12 columns">
-		<h2 class="site-logo"><a class="site-logo" href="www.aa.com" title="American Airlines - home page"><img src="../_images/american/aa-logo.png" alt="American Airlines logo"/></a></h2>
-		<ul id="utility-nav" class="menu-utility">
-				<li id="aa-meta-skip-nav" class="menu-item-utility is-hidden"><a href="#aa-main-nav">Skip to global navigation</a></li>
-				<li id="aa-meta-skip-content" class="menu-item-utility is-hidden"><a href="#aa-content-frame">Skip to content</a></li>
-				<li id="aa-meta-skip-footer" class="menu-item-utility is-hidden"><a href="#aa-footer">Skip to footer</a></li>
-				<li class="menu-item-utility"> <a href="http://www.aa.com/homePage.do">Back to AA.com</a> </li>
-				<li class="menu-item-utility"><a href="#" title="link">Relevant Link Here</a></li>
-		</ul>
-		<h3 class="siteTitle">Lost and Found</h3>
-		<a class="oneworld-logo" title="oneworld" href="#"> <img style="vertical-align: middle" alt="oneworld" src="http://www.aa.com/content/images/chrome/rebrand/oneworld.png"/> </a> 
-</div>
-</header>
+		<header class="row">
+				<div class="twelve large-12 columns">
+						<h2 class="site-logo"><a class="site-logo" href="#" title="American Airlines - home page"><img src="../_images/american/aa-logo.png" alt="American Airlines logo"></a></h2>
+						<ul id="utility-nav" class="menu-utility">
+								<li class="menu-item-utility"> <a href="http://www.aa.com/homePage.do">Back to AA.com</a> </li>
+						</ul>
+						<h3 class="siteTitle">Lost and Found</h3>
+						<a class="oneworld-logo" title="oneworld" href="#"> <img style="vertical-align: middle" alt="oneworld" src="http://www.aa.com/content/images/chrome/rebrand/oneworld.png"> </a> </div>
+		</header>
 <!-- ########## END HEADER ########## -->
-<div id="nav"></div>
-<div id="body">	 
-	<div id="leftColumn" ></div>
-	<div id="middleColumn"> 
+		<hr class="full" />
+		<section class="row content">
+		<div class="twelve large-12 columns">
 		<!-- #################### END HEADER TEMPLATE ########################## -->
 		<ui:insert name="body" />
 		<!-- #################### BEGIN FOOTER TEMPLATE ######################## -->
-	</div>
-	<div id="rightColumn"></div>
-</div>
-<div class="clear"></div>
+		</div>
+		</section>
+		<hr class="full" />
 <!-- ########## BEGIN FOOTER ########## -->
-</div>
-<footer>
- <div id="footer" class="row container"><div class="columns large-3">
-								<h4 class="footer-head">Footer Heading One</h4>
-								<hr class="short" />
-								<ul class="list-standard">
-										<li><a href="#">Link One</a></li>
-										<li><a href="#">Link Two</a></li>
-										<li><a href="#">Link Three</a></li>
-										<li><a href="#">Link Four</a></li>
-										<li><a href="#">Link Five</a></li>
-								</ul>
-						</div>
-						<div class="columns large-3">
-								<h4 class="footer-head">Footer Heading Two</h4>
-								<hr class="short" />
-								<ul class="list-standard">
-										<li><a href="#">Link One</a></li>
-										<li><a href="#">Link Two</a></li>
-										<li><a href="#">Link Three</a></li>
-										<li><a href="#">Link Four</a></li>
-										<li><a href="#">Link Five</a></li>
-								</ul>
-						</div>
-						<div class="columns large-3">
-								<h4 class="footer-head">Footer Heading Three</h4>
-								<hr class="short" />
-								<ul class="list-standard">
-										<li><a href="#">Link One</a></li>
-										<li><a href="#">Link Two</a></li>
-										<li><a href="#">Link Three</a></li>
-										<li><a href="#">Link Four</a></li>
-										<li><a href="#">Link Five</a></li>
-								</ul>
-						</div>
-						<div class="columns large-3">
-								<div class="panel">
-										<p class="center"><img src="http://placehold.it/320x140&amp;text=Marketing"/></p>
-								</div>
-								<div class="panel">
-										<p class="center"><img src="http://placehold.it/320x240&amp;text=Marketing"/></p>
-								</div>
-						</div>
+		<footer>
+				<div class="row container">
 				<hr class="full"/>
-				<p class="columns large-12"><a href="#">Space for Copyright "TOBEFILL" 2013 and/or legal information.</a></p>
-</div>
-</footer>
+				<p class="twelve columns large-12"><a href="#">Copyright &copy; 2013 NetTracer Inc.</a></p>
+				</div>
+		</footer>
+		<!-- Foundation 3 for IE 8 and earlier -->
+<!--[if lt IE 9]>
+    	<script src="../_js/american/foundation3/foundation.min.js"></script>
+    	<script src="../_js/american/foundation3/aa.js"></script>
+<![endif]-->
+
+<!-- Foundation 4 for IE 9 and later -->
+<!--[if gt IE 8]><!-->
+    	<script src="../_js/american/foundation4/foundation.min.js"></script>
+    	<script>
+        	$(document).foundation();
+    	</script>
+<!--<![endif]-->
+		
 <!-- ########## END FOOTER ########## -->
-</div> 
 </body>
 </f:view>
 </html>
