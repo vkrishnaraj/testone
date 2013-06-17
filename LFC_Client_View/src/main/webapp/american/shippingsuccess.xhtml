@@ -7,7 +7,7 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
 	template="../layout/american_template.xhtml">
-	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="title">American Airlines: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form>
 			<h:panelGroup>
@@ -21,19 +21,20 @@
 				<t:outputText value="#{msg.success_shipping_text_transaction_num}: "/><t:outputText value="#{shipbean.transactionNum}"/><br/>
 				<t:outputText value="#{msg.success_shipping_text_credit_num}: "/><t:outputText value="#{shipbean.credit4num}"/><br/>
 				<t:outputText value="#{msg.success_shipping_text_credit_type}: "/><t:outputText value="#{shipbean.cardType}"/><br/>
-				<t:outputText value="#{msg.success_shipping_text_date_paid}: "/><t:outputText value="#{shipbean.datePaid}"/><br/>
-				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}: " /> <t:outputText value="#{shipbean.shippingOption}"/><br/>
-				<t:outputText value="#{msg.success_shipping_text_order_total}: " /> <t:outputText value="#{shipbean.totalPayment}"/><br/><br/>
+				<t:outputText value="#{msg.success_shipping_text_date_paid}: "/><t:outputText value="#{shipbean.datePaid}"/><br/><br/>
 				<t:outputText value="#{msg.success_shipping_text_purchase_billing}:" /><br/>
 				 	<t:outputText value="#{shipbean.client.firstName} #{shipbean.client.lastName}"/><br/>
 				 	<t:outputText value="#{shipbean.billingAddress.address1} #{shipbean.billingAddress.address2}"/><br/>
 				 	<t:outputText value="#{shipbean.billingAddress.city}, #{shipbean.billingAddress.state} #{shipbean.billingAddress.postal} #{shipbean.billingAddress.country}"/><br/><br/>
 				<!-- End Transaction Info -->
-				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_purchase_info}" /></p><br/>
+				<p class="contentSubHeader"><b><t:outputText value="#{msg.success_shipping_text_purchase_info}" /></b></p><br/>
+				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}: " /> <t:outputText value="#{shipbean.shippingOption}"/><br/>
+				<t:outputText value="#{msg.success_shipping_text_order_total}: " /> <b><t:outputText value="#{shipbean.totalPayment}"/></b><br/><br/>
 				<p><t:outputText value="#{msg.success_purchase_info_email}: " /> <t:outputText value="#{shipbean.client.emailAddress}"/><br/>
 				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}:" /><br/>
-					<t:outputText value="#{lostReport.contact.shippingName}"/>
-				 	<t:outputText value="#{shipbean.shippingAddress.address1} #{shipbean.shippingAddress.address2}"/><br/>
+					<t:outputText value="#{lostReport.contact.shippingName}"/><br/>
+				 	<t:outputText value="#{shipbean.shippingAddress.address1}"/><br/>
+				 	<t:outputText value="#{shipbean.shippingAddress.address2}"/><br/>
 				 	<t:outputText value="#{shipbean.shippingAddress.city}, #{shipbean.shippingAddress.state} #{shipbean.shippingAddress.postal} #{shipbean.shippingAddress.country}"/></p><br/><br/>
 				<!-- End Receipt Information -->
 				

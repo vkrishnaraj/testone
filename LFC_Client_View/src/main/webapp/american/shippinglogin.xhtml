@@ -7,7 +7,7 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
 	template="../layout/american_template.xhtml">
-	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="title">American Airlines: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form id="pageForm">
 			<script type="text/javascript">
@@ -28,7 +28,7 @@
 				<td><t:outputText value="#{msg.shipping_label_tracking}" /></td>
 				<td><t:inputText value="#{lostAndFoundLogin.login.trackingNumber}" /></td>
 				</tr></table>
-				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.shipping_button_login}" action="#{lostAndFoundLogin.loginShippingSouthwest}" /><br/><br/>
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.shipping_button_login}" action="#{lostAndFoundLogin.loginShippingAmerican}" /><br/><br/>
 			</h:panelGroup>
 		</h:form>
 	</ui:define>

@@ -7,7 +7,7 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
 	template="../layout/american_template.xhtml">
-	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="title">American Airlines: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form id="lostForm" >
 			<script type="text/javascript">
@@ -325,7 +325,8 @@
 					</td> <td colspan="2"/>
 					</tr>
 				</table><br/>
-				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_trip_title}" /></p><br/><br/>
+				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_trip_title}" /></p><br/>
+				<p class="twlvPxBlk"><t:outputText value="#{msg.lostform_text_trip_desc}" /></p><br/><br/>
 				<a4j:region renderRegionOnly="true"  >
 					<a4j:outputPanel id="segmentPanel" >
 						<rich:dataTable id="segmentTable" style="width: 95%"
