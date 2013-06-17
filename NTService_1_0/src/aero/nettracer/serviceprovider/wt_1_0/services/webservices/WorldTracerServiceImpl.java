@@ -1523,7 +1523,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						names = p1.addNewNames();
 					}
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
-					names.addName(name.replace(" ", ""));
+
+					String name2="";
+					if(name!=null && name.length()>0)
+						name2=name.replace(" ", "");
+					names.addName(name2);
 					if (fieldList2 != null && fieldList2.size() > j) {
 						if(initials == null){
 							initials = p1.addNewInitials();
@@ -2056,8 +2060,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				Names pp1 = p1.addNewNames();
 				Initials pi1 = null;
 				for (int j = 0; j < fieldList.size(); j++) {
-					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));			
-					name=name.replace(" ", "");
+					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
+					if(name!=null && name.length()>0)
+						name=name.replace(" ", "");
 					pp1.addName(name);
 					
 
@@ -2640,7 +2645,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					}
 
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
-					name=name.replace(" ", "");
+					
+					na", "");
 					names.addName(name.trim().toUpperCase());
 
 				}
@@ -3549,7 +3555,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 					Name nm = names.addNewName();
 					nm.setSeq(j + 1);
-					nm.setStringValue(name.replace(" ", ""));
+						
+					String name2="";
+					if(name!=null && name.length()>0)
+						name2=name.replace(" ", "");
+					nm.setStringValue(name2);
 					
 					if (fieldList2 != null && fieldList2.size() > j) {
 						if(initials == null){
@@ -3927,7 +3937,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				for (int j = 0; j < fieldList.size(); j++) {
 					String name = RULES.get(DefaultWorldTracerService.WorldTracerField.NM).formatEntry(fieldList.get(j));
 					Name nm = p11.addNewName();
-					nm.setStringValue(name.replace(" ", ""));
+
+					String name2="";
+					if(name!=null && name.length()>0)
+						name2=name.replace(" ", "");
+					nm.setStringValue(name2);
 					nm.setSeq(j + 1);
 					if (fieldList2 != null && fieldList2.size() > j) {
 						if(initials == null){
