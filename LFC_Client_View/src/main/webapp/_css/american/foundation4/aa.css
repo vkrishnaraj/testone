@@ -499,7 +499,7 @@ height:10px;
      text-align:center;
 }
 hr.full {
-     background-image: url(../_images/american/shadow12-up.png);
+     background-image: url(../../../_images/american/shadow12-up.png);
      background-position: 50% center;
      background-repeat: no-repeat;
      border:0;
@@ -508,7 +508,7 @@ hr.full {
      padding:0;
 }
 hr.short {
-     background-image: url(../_images/american/shadow3-down.png);
+     background-image: url(../../../_images/american/shadow3-down.png);
      background-position: 50% left;
      background-repeat: no-repeat;
      border:0;
