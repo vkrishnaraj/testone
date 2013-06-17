@@ -263,10 +263,13 @@
 			</tr>
 			<!-- provide space for bag weight feature - start -->
 			<%
-			    boolean val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT, a);
-			    if (val) {
-		  %>
+				boolean val = UserPermissions.hasPermission(
+							TracingConstants.SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT,
+							a);
+					if (val || theitem.getItemtype_ID() == 1) {
+			%>
 			<tr id="bag_weight">
+			<% if (val){ %>
 				<td><bean:message key="colname.bag.weight.and.units" /><br>
 					<html:text name="theitem" property="bag_weight" size="8"
 						maxlength="10" styleClass="textfield" indexed="true" /> <html:select
@@ -275,18 +278,25 @@
 						<html:option value="lbs">lbs</html:option>
 						<html:option value="kg">kg</html:option>
 					</html:select></td>
-				<% if(theitem.getItemtype_ID()==1){ %>
+				<%
+					}
+					if (theitem.getItemtype_ID() == 1) {
+				%>
 				<td colspan="2"><bean:message key="colname.bag.external.desc" /><br>
 					<html:text name="theitem" property="externaldesc" maxlength="50"
 						size="75" styleClass="textfield" indexed="true" /></td>
-				<% } else {%>
+				<%
+					} else {
+				%>
 
 				<td colspan="2"></td>
-				<%}%>
+				<%
+					}
+				%>
 			</tr>
-			<% 
-			    }
-		  %>
+			<%
+				}
+			%>
 			<!-- provide space for bag weight feature - end -->
 			<tr>
 				<td colspan="3"><bean:message key="colname.key_contents" /> <a

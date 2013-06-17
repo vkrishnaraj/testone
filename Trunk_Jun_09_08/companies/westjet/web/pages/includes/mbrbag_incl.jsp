@@ -275,9 +275,10 @@
 				boolean val = UserPermissions.hasPermission(
 							TracingConstants.SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT,
 							a);
-					if (val) {
+					if (val || theitem.getItemtype_ID() == 1) {
 			%>
 			<tr id="bag_weight">
+			<% if (val){ %>
 				<td><bean:message key="colname.bag.weight.and.units" /><br>
 					<html:text name="theitem" property="bag_weight" size="8"
 						maxlength="10" styleClass="textfield" indexed="true" /> <html:select
@@ -287,6 +288,7 @@
 						<html:option value="kg">kg</html:option>
 					</html:select></td>
 				<%
+					}
 					if (theitem.getItemtype_ID() == 1) {
 				%>
 				<td colspan="2"><bean:message key="colname.bag.external.desc" /><br>
