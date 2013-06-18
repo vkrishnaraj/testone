@@ -11,7 +11,8 @@
 	<ui:define name="body">
 		<h:form id="pageForm">
 			<h:panelGroup style="width: 315px">
-				<p class="contentHeader"><t:outputText value="#{msg.general_error_has_occurred}" /></p>		
+				<p class="contentHeader"><t:outputText value="#{msg.general_error_has_occurred}" /></p>
+				<a href="#{session.getAttribute('prev')}">Previous Page</a><br/><br/>
 			</h:panelGroup>
 		</h:form>
 	</ui:define>

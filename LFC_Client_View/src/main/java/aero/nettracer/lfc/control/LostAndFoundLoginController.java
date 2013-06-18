@@ -241,9 +241,9 @@ public class LostAndFoundLoginController {
 		return goToFormPage("bagchecked",lostReport.getSubCompany());
 	}
 	
-	public String goToFormPage(String page,String Subcompany) {
-		if (RemoteService.getLists(Subcompany)) {
-			//invalidateSession();
+	public String goToFormPage(String page, String subcompany) {
+		//generate500();
+		if (RemoteService.getLists(subcompany)) {
 			HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 			.getExternalContext().getSession(false);
 			session.setAttribute("lostReport", lostReport);
@@ -259,6 +259,13 @@ public class LostAndFoundLoginController {
 
 	public void setClientViewService(ClientViewService clientViewService) {
 		this.clientViewService = clientViewService;
+	}
+	
+	private void generate500() {
+		String hi = null;
+		if (hi.equals("")) {
+			hi = "ERROR";
+		}
 	}
 
 }
