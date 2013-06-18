@@ -7,14 +7,25 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
 	template="../layout/southwest_template.xhtml">
+	
 	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form>
+			<script type="text/javascript">
+			 function textCounter2(fieldid, countfield, maxlimit) {
+				 field=document.getElementById(fieldid);
+				    if (field.value.length > maxlimit) {
+				      field.value = field.value.substring(0, maxlimit);
+				    } else {
+				      countfield.value = maxlimit - field.value.length;
+				    }
+				  }
+			</script>
 			<h:panelGroup>
 				<p class="contentHeader"><t:outputText value="#{msg.success_shipping_text_title}" escape="false"/></p>
 				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_confirm_title}" /></p><br/>
 				<!-- Receipt Information -->
-				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_order_summary}" /></p><br/>
+				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_order_summary1} " /> <t:outputText value="#{lostAndFound.lostReport.reportId}. " /><t:outputText value="#{msg.success_shipping_text_order_summary2} " /></p><br/>
 				
 				<!-- Add Transaction Information -->
 				<p class="contentSubHeader"><t:outputText value="#{msg.success_shipping_text_transaction_info}"/></p><br/>
@@ -22,10 +33,6 @@
 				<t:outputText value="#{msg.success_shipping_text_credit_num}: "/><t:outputText value="#{shipbean.credit4num}"/><br/>
 				<t:outputText value="#{msg.success_shipping_text_credit_type}: "/><t:outputText value="#{shipbean.cardType}"/><br/>
 				<t:outputText value="#{msg.success_shipping_text_date_paid}: "/><t:outputText value="#{shipbean.datePaid}"/><br/><br/>
-				<t:outputText value="#{msg.success_shipping_text_purchase_billing}:" /><br/>
-				 	<t:outputText value="#{shipbean.client.firstName} #{shipbean.client.lastName}"/><br/>
-				 	<t:outputText value="#{shipbean.billingAddress.address1} #{shipbean.billingAddress.address2}"/><br/>
-				 	<t:outputText value="#{shipbean.billingAddress.city}, #{shipbean.billingAddress.state} #{shipbean.billingAddress.postal} #{shipbean.billingAddress.country}"/><br/><br/>
 				<!-- End Transaction Info -->
 				<p class="contentSubHeader"><b><t:outputText value="#{msg.success_shipping_text_purchase_info}" /></b></p><br/>
 				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}: " /> <t:outputText value="#{shipbean.shippingOption}"/><br/>
@@ -43,8 +50,8 @@
 			
 			<h:panelGroup >
 				<div id="feedback">
-				<p><t:outputText value="#{msg.success_feedback}"/><br/>
-				<t:inputTextarea value="#{lostReport.feedback}" style="width:55%" rows="5"/><br/>
+				<p><t:outputText value="#{msg.success_feedback}"/><br/><input name="feedback2" id="feedbackCounter" type="text" value="500" size="4" maxlength="4" disabled="true" /><br/>
+				<t:inputTextarea value="#{lostReport.feedback}" id="feedback" style="width:55%" rows="5" onkeydown="textCounter2('j_id7:feedback', feedbackCounter, 500);" onkeyup="textCounter2('j_id7:feedback', feedbackCounter, 500);"/><br/>
 				</p>
 				<div align="right">
 					<a4j:commandButton styleClass="submitButtonOrange"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.sendFeedback}" 
