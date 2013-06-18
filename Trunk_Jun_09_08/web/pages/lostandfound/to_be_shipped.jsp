@@ -31,31 +31,6 @@
     
 	var cal1xx = new CalendarPopup();	
     
-	function goprev() {
-	  o = document.lostFoundManagerForm;
-	  o.prevpage.value = "1";
-	  o.pagination.value="1";
-	  o.submit();
-	}
-	
-	function gonext() {
-	  o = document.lostFoundManagerForm;
-	  o.nextpage.value="1";
-	  o.pagination.value="1";
-	  o.submit();
-	}
-	
-	function gopage(i) {
-		  o = document.lostFoundManagerForm;
-		  o.currpage.value = i;
-		  o.pagination.value="1";
-		  o.submit();
-	}
-	
-	function updatePagination() {
-	    return true;
-	}
-
 </script>
 <jsp:include page="/pages/includes/validation_search.jsp" />
 <html:form action="view_to_be_shipped.do" method="post" onsubmit="return validateSearch(this);">
@@ -142,10 +117,10 @@
               					<bean:write name="result" property="lost.location.stationcode" />&nbsp;
               				</td>
               				<td>
-              					<%=catMap.get(String.valueOf(result.getLost().getItem().getCategory()))!=null?catMap.get(String.valueOf(result.getLost().getItem().getCategory())):"" %>&nbsp;
+              					<%=catMap.get(String.valueOf(result.getFound().getItem().getCategory()))!=null?catMap.get(String.valueOf(result.getFound().getItem().getCategory())):"" %>&nbsp;
               				</td>
               				<td>
-              					<%=subcatMap.get(String.valueOf(result.getLost().getItem().getSubCategory()))!=null?subcatMap.get(String.valueOf(result.getLost().getItem().getSubCategory())):"" %>&nbsp;
+              					<%=subcatMap.get(String.valueOf(result.getFound().getItem().getSubCategory()))!=null?subcatMap.get(String.valueOf(result.getFound().getItem().getSubCategory())):"" %>&nbsp;
               				</td>
               				<td>
               					<bean:write name="result" property="found.item.description" />&nbsp;
@@ -159,11 +134,6 @@
               			</tr>
               			</logic:notEmpty>
               		</logic:iterate>
-				   	<tr>
-						   <td colspan="11">
-						   	<jsp:include page="/pages/includes/pagination_incl.jsp" />
-						   </td>
-				    </tr>
 			    </table>
    			</div>
  		</td>

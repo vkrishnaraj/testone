@@ -22,6 +22,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFCategory;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.LFSubCategory;
 import com.bagnet.nettracer.tracing.forms.lf.LostFoundManagerForm;
 import com.bagnet.nettracer.tracing.forms.lf.ToBeShippedForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -43,7 +44,7 @@ public class ToBeShippedAction extends CheckedAction {
 		
 		LFUtils.getLists(user, session);
 		List<LFCategory> categories=(List<LFCategory>)session.getAttribute("lfcategorylist");
-		List<LFCategory> subcategories=(List<LFCategory>)session.getAttribute("lfsubcategorylist");
+		List<LFSubCategory> subcategories=(List<LFSubCategory>)session.getAttribute("lfsubcategorylist");
 		HashMap<String,String> catMap=new HashMap<String,String>();
 		HashMap<String,String> subcatMap=new HashMap<String,String>();
 		for(LFCategory lf:categories)
@@ -52,7 +53,7 @@ public class ToBeShippedAction extends CheckedAction {
 		}
 		session.setAttribute("catmap", catMap);
 		
-		for(LFCategory lf:subcategories)
+		for(LFSubCategory lf:subcategories)
 		{
 			subcatMap.put(String.valueOf(lf.getId()), lf.getDescription());
 		}
@@ -67,7 +68,7 @@ public class ToBeShippedAction extends CheckedAction {
 		int currpage = 0;
 		List resultSet = new ArrayList();
 		int type = 0;
-			rowcount = serviceBean.getToBeShippedCount(user);
+//			rowcount = serviceBean.getToBeShippedCount(user);
 		
 		currpage = tbsform.getCurrpage() != null ? Integer.parseInt(tbsform.getCurrpage()) : 0;
 		if (tbsform.getNextpage() != null && tbsform.getNextpage().equals("1")) {

@@ -1415,12 +1415,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			
-			if (start > -1 && offset > -1 ) {
-				q.setFirstResult(start);
-				q.setMaxResults(offset);
-			} else {
-				throw new Exception("Invalided pagination bounds");
-			}
+//			if (start > -1 && offset > -1 ) {
+//				q.setFirstResult(start);
+//				q.setMaxResults(offset);
+//			} else {
+//				throw new Exception("Invalided pagination bounds");
+//			}
 			
 			@SuppressWarnings("unchecked")
 			List<LFMatchHistory> results = q.list();

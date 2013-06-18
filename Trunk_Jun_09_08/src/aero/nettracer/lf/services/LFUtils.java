@@ -188,11 +188,20 @@ public class LFUtils {
 		}
 		
 		List<LFCategory> categories = (List) session.getAttribute("lfcategorylist");
+		HashMap<Long,LFSubCategory> subcatmap=new HashMap<Long,LFSubCategory>();
 		for (LFCategory c: categories) {
 				session.setAttribute("lfsubcategorylist"+c.getId(), c.getSubcategories());
+				for(LFSubCategory sc:c.getSubcategories()){
+					subcatmap.put(sc.getId(), sc);
+				}
 				//success = true;
 				//break;
 		}
+		List<LFSubCategory> sclist=new ArrayList<LFSubCategory>();
+		for(LFSubCategory sc:subcatmap.values()){
+			sclist.add(sc);
+		}
+		session.setAttribute("lfsubcategorylist",sclist);
 		
 		List<SubcompanyStation> companyStations = new LFServiceBean().getSubcompanyStations(user.getCompanycode_ID());
 		HashMap<String, List<Station>> stationComps=new HashMap();
