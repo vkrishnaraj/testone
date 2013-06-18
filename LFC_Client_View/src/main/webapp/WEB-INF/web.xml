@@ -106,7 +106,7 @@
 	</context-param>
 	<context-param>
 		<param-name>facelets.DEVELOPMENT</param-name>
-		<param-value>true</param-value>
+		<param-value>false</param-value>
 	</context-param>
 	<!-- End Facelets Params -->
 	
@@ -126,4 +126,10 @@
     	<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 	<!-- End Spring Params -->
+	
+	<error-page>
+    	<error-code>500</error-code>
+    	<location>error.do</location>
+	</error-page>
+	
 </web-app>
