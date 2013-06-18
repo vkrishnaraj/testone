@@ -24,14 +24,14 @@
 				<t:outputText value="#{msg.success_shipping_text_purchase_billing}:" /><br/>
 				 	<t:outputText value="#{lostReport.cc.ccname}"/><br/>
 				 	<t:outputText value="#{lostReport.contact.billingaddress.address1}"/><br/>
-				 	<t:outputText value="#{lostReport.contact.billingaddress.address2}"/><br/>
+				 	<t:outputText value="#{lostReport.contact.billingaddress.address2}&lt;br /&gt;" escape="false" rendered="#{not empty lostReport.contact.billingaddress.address2}"/> 
 				 	<t:outputText value="#{lostReport.contact.billingaddress.city}, #{lostReport.contact.billingaddress.state} #{lostReport.contact.billingaddress.postal} #{lostReport.contact.billingaddress.country}"/><br/><div align="left">
 						<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_edit}" action="#{lostAndFound.backToCCInfo}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
 					</div><br/>
 				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}:" /><br/>
 				 	<t:outputText value="#{lostReport.contact.shippingName}"/><br/>
 				 	<t:outputText value="#{lostReport.contact.prefshipaddress.address1}"/><br/>
-				 	<t:outputText value="#{lostReport.contact.prefshipaddress.address2}"/><br/>
+				 	<t:outputText value="#{lostReport.contact.prefshipaddress.address2}&lt;br /&gt;" escape="false" rendered="#{not empty lostReport.contact.prefshipaddress.address2}"/> 
 				 	<t:outputText value="#{lostReport.contact.prefshipaddress.city}, #{lostReport.contact.prefshipaddress.state} #{lostReport.contact.prefshipaddress.postal} #{lostReport.contact.prefshipaddress.country}"/><br/><div align="left">
 						<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_edit}" action="#{lostAndFound.backToShippingConfirm}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
 					</div><br/></p>

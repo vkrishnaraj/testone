@@ -230,9 +230,16 @@ public class LostAndFoundController {
 					.getCurrentInstance().getExternalContext()
 					.getSession(false);
 			session.setAttribute("shipbean", shipbean);
-			return "shippingsuccess?faces-redirect=true";
+			if(shipbean.getLost().isPaid()){
+				FacesUtil.addInfo("INFO: This Report has already been paid for.");
+			} else {
+				lostReport.setPaid(true);
+				shipbean.getLost().setPaid(true);
+				return "shippingsuccess?faces-redirect=true";
+			}
+		} else {
+			FacesUtil.addError("Server Communication Error.");
 		}
-		FacesUtil.addError("Server Communication Error.");
 		return null;
 	}
 	
@@ -425,6 +432,10 @@ public class LostAndFoundController {
 		if(prefAddress!=null && !validateSameShipping()){
 			FacesUtil.addError("ERROR: Shipping Address information has been modified. Resubmitting to Fedex");
 			
+		}
+		if(lostReport.getContact().getShippingName()== null || lostReport.getContact().getShippingName().trim().length()==0){
+			FacesUtil.addError("ERROR: Shipping Name is required.");
+			isValid = false;
 		}
 		if (shippingAddress.getAddress1() == null									// VALIDATE: ADDRESS 1
 				|| shippingAddress.getAddress1().trim().length() == 0) {

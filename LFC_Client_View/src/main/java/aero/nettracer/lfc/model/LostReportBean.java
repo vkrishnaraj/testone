@@ -52,6 +52,7 @@ public class LostReportBean implements Serializable{
 	private String shippingTax;
 
 	private String feedback;
+	private boolean paid=false;
 	
 	private boolean shipping=false;
 
@@ -362,6 +363,14 @@ public class LostReportBean implements Serializable{
 
 	public void setFeedback(String feedback) {
 		this.feedback = feedback;
+	}
+
+	public boolean isPaid() {
+		return paid;
+	}
+
+	public void setPaid(boolean paid) {
+		this.paid = paid;
 	}
 
 }

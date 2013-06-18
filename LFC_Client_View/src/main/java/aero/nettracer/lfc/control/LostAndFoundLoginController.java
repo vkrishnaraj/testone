@@ -151,10 +151,12 @@ public class LostAndFoundLoginController {
 			session.setAttribute("lostReport", report);
 			session.setAttribute("shippingAddress", null);
 			session.setAttribute("proposedAddress", null);
-			if(TracingConstants.LF_SWA_COMPANY_ID.equals(subCompany)) {
+			if(TracingConstants.LF_LF_COMPANY_ID.equals(company)) {
 				if(report.getStatus().equals("Closed") || report.getDaysFromCreate() > 30 )  { 
 					return "closedform?faces-redirect=true";
-				} else {
+				} else if(report.isPaid()){
+					FacesUtil.addInfo("INFO: This lost report has already been paid for.");
+				}   else {
 					session.setAttribute("edit", true);
 					return "shippingconfirm?faces-redirect=true";
 				} 
