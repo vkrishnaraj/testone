@@ -83,9 +83,13 @@ public class ImageUtils {
 		}
 		return success;
 	}
-	
 	// upload images or files for the front pages
 	public static boolean doUpload(FormFile theFile,Agent user, String folder,String picpath,String thumbpath) {
+		return doUpload(theFile, user, folder, picpath, thumbpath, false);
+	}
+	
+	// upload images or files for the front pages
+	public static boolean doUpload(FormFile theFile,Agent user, String folder,String picpath,String thumbpath, boolean isFs) {
 
 		try {
 			//to find out the file extension: if image, then create thumb
@@ -109,6 +113,9 @@ public class ImageUtils {
 			
 			//retrieve the file data
 			String image_store = TracerProperties.get(user.getCompanycode_ID(),"image_store");
+			if (isFs && !"US".equals(user.getCompanycode_ID())) {
+				image_store = TracerProperties.get("fs_image_store");
+			}
 			if (!ImageUtils.makeFolder(image_store + folder)) {
 				//Error in creating a directory.
 				logger.error("Unable to create directory");

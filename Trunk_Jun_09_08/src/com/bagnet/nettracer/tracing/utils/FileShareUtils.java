@@ -83,6 +83,10 @@ public class FileShareUtils {
 		// Save the file in the local directory.
 		FsAttachment fsAttach = uploadFile(aform, lead, user, errors, remote);
 		
+		if (fsAttach == null) {
+			return null;
+		}
+		
 		Attachment attachment = new Attachment();
 		attachment.setAgent(user);
 		attachment.setClaim(claim);
@@ -110,7 +114,7 @@ public class FileShareUtils {
 					int day = cal.get(Calendar.DAY_OF_MONTH);
 					
 					//compute the folder name
-					String folder = user.getStation().getCompany().getCompanyCode_ID() + "/" + year + "/" + month + "/" + day + "/";;
+					String folder = "NTFS/" + user.getStation().getCompany().getCompanyCode_ID() + "/" + year + "/" + month + "/" + day + "/";;
 
 					//paths to be stored in the db
 					String fileName = theFile.getFileName();
@@ -123,7 +127,7 @@ public class FileShareUtils {
 					
 					try{
 						FsAttachment fsAttach = null;
-						boolean uploadresult = ImageUtils.doUpload(theFile, user, folder, filepath, thumbpath);
+						boolean uploadresult = ImageUtils.doUpload(theFile, user, folder, filepath, thumbpath, true);
 						if (!uploadresult) {
 							ActionMessage error = new ActionMessage("error.uploadfile");
 							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
