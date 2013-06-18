@@ -66,9 +66,12 @@ public class RemoteService {
 		LFCClientServiceRemote o = (LFCClientServiceRemote) ctx.lookup(remoteLF);
 		return o;
 	}
-	
+
 	public static boolean getLists() {
-		return (getListsAB() && getListsLF());
+		return getLists(null);
+	}
+	public static boolean getLists(String subCompany) {
+		return (getListsAB() && getListsLF(subCompany));
 	}
 	
 	public static boolean getListsAB() {
@@ -92,7 +95,7 @@ public class RemoteService {
 		return true;
 	}
 	
-	public static boolean getListsLF() {
+	public static boolean getListsLF(String subcompany) {
 		try {
 			LFCClientServiceRemote o = getRemoteServiceLF();
 			if (o != null) {
@@ -100,7 +103,10 @@ public class RemoteService {
 				colors = o.getColors();
 				states = o.getState();
 				countries = o.getCountries();
-				locationsLF = o.getStations(TracingConstants.LF_LF_COMPANY_ID);
+				if(subcompany!=null)
+					locationsLF = o.getStationsBySubCompany(TracingConstants.LF_LF_COMPANY_ID,subcompany);
+				else
+					locationsLF = o.getStations(TracingConstants.LF_LF_COMPANY_ID);
 			}
 			ctx.close();
 		} catch (NamingException ex) {
@@ -154,7 +160,7 @@ public class RemoteService {
 	
 	public static List<KeyValueBean> getLocations(String subCompany) {
 		if (locationsAB_AVS == null || locationsAB_BGT == null || locationsLF == null) {
-			if (!getLists()) {
+			if (!getLists(subCompany)) {
 				return null;
 			}
 		}

@@ -6,10 +6,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 
-import com.bagnet.nettracer.tracing.db.lf.LFTransaction;
-
 import aero.nettracer.lfc.model.AddressBean;
-import aero.nettracer.lfc.model.CCBean;
 import aero.nettracer.lfc.model.CategoryBean;
 import aero.nettracer.lfc.model.KeyValueBean;
 import aero.nettracer.lfc.model.LostReportBean;
@@ -43,5 +40,6 @@ public interface LFCClientServiceRemote {
 
 	public ShippingBean saveOrUpdateShipping(LostReportBean lost);
 
-	public LFTransaction transactionCc(LostReportBean bean);
+	public List<KeyValueBean> getStationsBySubCompany(String companycode,
+			String subcompany);
 }

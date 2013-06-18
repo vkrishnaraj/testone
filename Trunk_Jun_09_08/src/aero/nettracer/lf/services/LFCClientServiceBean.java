@@ -948,6 +948,32 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 		}
 		return ret;
 	}
+	
+	@Override
+	public List<KeyValueBean> getStationsBySubCompany(String companycode, String subcompany) {
+		GeneralServiceBean bean = new GeneralServiceBean();
+		List<Station> stations = null;
+
+		
+		stations = bean.getStations(companycode,subcompany);
+		
+		if (stations == null) {
+			return null;
+		}
+		ArrayList<KeyValueBean> ret = new ArrayList<KeyValueBean>();
+		for (Station station : stations) {
+			if (station.getAssociated_airport() != null
+					&& station.getAssociated_airport().equalsIgnoreCase(
+							TracingConstants.LF_LFC_COMPANY_ID)) {
+				continue;
+			}
+			KeyValueBean toAdd = new KeyValueBean();
+			toAdd.setKey("" + station.getStation_ID());
+			toAdd.setValue(station.getStationdesc());
+			ret.add(toAdd);
+		}
+		return ret;
+	}
 
 	@Override
 	public List<KeyValueBean> getStations(String companycode) {

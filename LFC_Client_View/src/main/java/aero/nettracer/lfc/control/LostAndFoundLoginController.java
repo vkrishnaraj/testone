@@ -171,19 +171,19 @@ public class LostAndFoundLoginController {
 	public String goToFormPageAvis() {
 		lostReport.setSubCompany(TracingConstants.LF_AVIS_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_AB_COMPANY_ID);
-		return goToFormPage("lostform");
+		return goToFormPage("lostform",lostReport.getSubCompany());
 	}
 	
 	public String goToFormPageDemo() {
 		lostReport.setSubCompany(TracingConstants.LF_DEMO_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
-		return goToFormPage("lostform");
+		return goToFormPage("lostform",lostReport.getSubCompany());
 	}
 	
 	public String goToFormPageBudget() {
 		lostReport.setSubCompany(TracingConstants.LF_BUDGET_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_AB_COMPANY_ID);
-		return goToFormPage("lostform");
+		return goToFormPage("lostform",lostReport.getSubCompany());
 	}
 	
 	public String goToFormPageSouthwest() {
@@ -192,7 +192,7 @@ public class LostAndFoundLoginController {
 				session.setAttribute("edit", false);
 		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
-		return goToFormPage("bagunchecked");
+		return goToFormPage("bagunchecked",lostReport.getSubCompany());
 	}
 	
 	public String goToFormPageAmerican() {
@@ -201,7 +201,7 @@ public class LostAndFoundLoginController {
 				session.setAttribute("edit", false);
 		lostReport.setSubCompany(TracingConstants.LF_AA_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
-		return goToFormPage("bagunchecked");
+		return goToFormPage("bagunchecked",lostReport.getSubCompany());
 	}
 	
 	public String goToCheckedPageSouthwest() {
@@ -210,7 +210,7 @@ public class LostAndFoundLoginController {
 				session.setAttribute("edit", false);
 		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
-		return goToFormPage("bagchecked");
+		return goToFormPage("bagchecked",lostReport.getSubCompany());
 	}
 
 	
@@ -220,7 +220,7 @@ public class LostAndFoundLoginController {
 				session.setAttribute("edit", false);
 		lostReport.setSubCompany(TracingConstants.LF_AA_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
-		return goToFormPage("bagchecked");
+		return goToFormPage("bagchecked",lostReport.getSubCompany());
 	}
 	
 	public String goToFormPageAirtran() {
@@ -229,7 +229,7 @@ public class LostAndFoundLoginController {
 				session.setAttribute("edit", false);
 		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
-		return goToFormPage("bagunchecked");
+		return goToFormPage("bagunchecked",lostReport.getSubCompany());
 	}
 	
 	public String goToCheckedPageAirtran() {
@@ -238,11 +238,11 @@ public class LostAndFoundLoginController {
 				session.setAttribute("edit", false);
 		lostReport.setSubCompany(TracingConstants.LF_SWA_COMPANY_ID);
 		lostReport.setCompany(TracingConstants.LF_LF_COMPANY_ID);
-		return goToFormPage("bagchecked");
+		return goToFormPage("bagchecked",lostReport.getSubCompany());
 	}
 	
-	public String goToFormPage(String page) {
-		if (RemoteService.getLists()) {
+	public String goToFormPage(String page,String Subcompany) {
+		if (RemoteService.getLists(Subcompany)) {
 			//invalidateSession();
 			HttpSession session = (HttpSession)FacesContext.getCurrentInstance()
 			.getExternalContext().getSession(false);

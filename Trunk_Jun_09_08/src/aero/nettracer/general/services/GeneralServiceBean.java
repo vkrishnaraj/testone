@@ -1,5 +1,6 @@
 package aero.nettracer.general.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
@@ -18,6 +19,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.State;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.lf.SubcompanyStation;
 
 @Stateless
 public class GeneralServiceBean implements GeneralServiceRemote{
@@ -62,7 +64,30 @@ public class GeneralServiceBean implements GeneralServiceRemote{
 		}
 		return stationList;
 	}
-	
+
+	@Override
+	public List<Station> getStations(String companycode,String subcompany) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		String sql = "from com.bagnet.nettracer.tracing.db.lf.SubcompanyStation s where s.station.company.companyCode_ID = :companycode and s.subcompany.subcompanyCode=:subcompanycode order by s.station.stationdesc";
+		Query q = sess.createQuery(sql);
+		q.setParameter("companycode", companycode);
+		q.setParameter("subcompanycode", subcompany);
+		List<Station> stationList = new ArrayList<Station>();
+		try{
+			List<SubcompanyStation> substationList = (List<SubcompanyStation>)q.list();
+			
+			for(SubcompanyStation ss:substationList){
+				stationList.add(ss.getStation());
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		finally{
+			sess.close();
+		}
+		return stationList;
+	}
+		
 	@Override
 	public List<Station> getStations(String companycode, List<String> associated_airports) {
 		Session sess = HibernateWrapper.getSession().openSession();

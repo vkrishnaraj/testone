@@ -16,4 +16,5 @@ public interface GeneralServiceRemote {
 	public List<State> getState();
 	public List<Station> getStations(String companycode, List<String> associated_airports);
 	public String getCompanyFromSubCompany(String subcompany);
+	public List<Station> getStations(String companycode, String subcompany);
 }
