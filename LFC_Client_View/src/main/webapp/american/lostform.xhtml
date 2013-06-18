@@ -366,11 +366,11 @@
 							<div align="center">
 								<a4j:commandButton value="#{msg.general_button_add}"   id="addFlight" 
 									  action="#{lostAndFound.addSegment}" limitToList="true"
-									reRender="segmentPanel" styleClass="submitButtonOrange">								
+									reRender="segmentPanel" styleClass="small button">								
 								</a4j:commandButton>&#160;&#160;&#160;
 								<a4j:commandButton value="#{msg.general_button_delete}"   id="delFlight" 
 									  action="#{lostAndFound.deleteSegment}" limitToList="true"
-									reRender="segmentPanel" styleClass="submitButtonOrange">								
+									reRender="segmentPanel" styleClass="small button">								
 								</a4j:commandButton>
 							</div>
 						</div>
@@ -380,11 +380,11 @@
 					<rich:messages id="reportMsg" errorClass="errormsg" infoClass="infomsg" layout="list"/>
 				</div>
 				<div align="right">
-				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}" id="buttonBackBagCheck"  rendered="#{empty lostAndFound.lostReport.reportId}" />
-				<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToLogin}" id="buttonLogin"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
-				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_create}" id="buttonCreate" action="#{lostAndFound.createReport}" 
+				<a4j:commandButton styleClass="small button" value="#{msg.general_button_back}" action="#{lostAndFound.backToBagcheck}" id="buttonBackBagCheck"  rendered="#{empty lostAndFound.lostReport.reportId}" />
+				<a4j:commandButton styleClass="small button" value="#{msg.general_button_back}" action="#{lostAndFound.backToLogin}" id="buttonLogin"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+				<a4j:commandButton styleClass="small button" value="#{msg.lostform_button_create}" id="buttonCreate" action="#{lostAndFound.createReport}" 
 				onclick="if (!validateEmail()) {return false;} else { this.disabled=true }" oncomplete="this.disabled=false" rendered="#{empty lostAndFound.lostReport.reportId}"/>
-				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.lostform_button_update}" id="buttonEdit" action="#{lostAndFound.editReport}" 
+				<a4j:commandButton styleClass="small button" value="#{msg.lostform_button_update}" id="buttonEdit" action="#{lostAndFound.editReport}" 
 				onclick="if (!validateEmail()) {return false;} else { this.disabled=true }" oncomplete="this.disabled=false" rendered="#{not empty lostAndFound.lostReport.reportId}"/>
 				
 				</div><br/>

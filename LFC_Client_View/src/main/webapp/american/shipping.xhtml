@@ -186,7 +186,7 @@
 					</tr>
 				</table>
 				<div align="right">
-					<a4j:commandButton styleClass="submitButtonOrange"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.confirmShipping}" oncomplete="this.disabled=false" render="outerPanel" id="addressbutton"/>
+					<a4j:commandButton styleClass="small button"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.confirmShipping}" oncomplete="this.disabled=false" render="outerPanel" id="addressbutton"/>
 				</div>
 				
 			</h:panelGroup>
@@ -224,7 +224,7 @@
 				<br />
 				<br />
 				<div align="right">
-					<a4j:commandButton styleClass="submitButtonOrange"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.shipSelectOption}"	oncomplete="this.disabled=false" id="optionbutton" render="outerPanel" />
+					<a4j:commandButton styleClass="small button"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.shipSelectOption}"	oncomplete="this.disabled=false" id="optionbutton" render="outerPanel" />
 				</div>
 
 			</h:panelGroup>
@@ -403,7 +403,7 @@
 						infoClass="infomsg" layout="list" />
 				</div>
 				<div align="right">
-					<a4j:commandButton styleClass="submitButtonOrange"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.confirmPayment}"	oncomplete="this.disabled=false" rendered="#{optionselected}" id="paymentbutton" render="outerPanel" />
+					<a4j:commandButton styleClass="small button"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.confirmPayment}"	oncomplete="this.disabled=false" rendered="#{optionselected}" id="paymentbutton" render="outerPanel" />
 				</div>
 				<br />
 			</h:panelGroup>

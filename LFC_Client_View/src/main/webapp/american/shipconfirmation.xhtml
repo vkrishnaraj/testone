@@ -25,17 +25,17 @@
 				 	<t:outputText value="#{lostReport.cc.ccname}"/><br/>
 				 	<t:outputText value="#{lostReport.contact.billingaddress.address1} #{lostReport.contact.billingaddress.address2}"/><br/>
 				 	<t:outputText value="#{lostReport.contact.billingaddress.city}, #{lostReport.contact.billingaddress.state} #{lostReport.contact.billingaddress.postal} #{lostReport.contact.billingaddress.country}"/><br/><div align="left">
-						<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_edit}" action="#{lostAndFound.backToCCInfo}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+						<a4j:commandButton styleClass="small button" value="#{msg.general_button_edit}" action="#{lostAndFound.backToCCInfo}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
 					</div><br/>
 				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}:" /><br/>
 				 	<t:outputText value="#{lostReport.contact.shippingName}"/><br/>
 				 	<t:outputText value="#{lostReport.contact.prefshipaddress.address1} #{lostReport.contact.prefshipaddress.address2}"/><br/>
 				 	<t:outputText value="#{lostReport.contact.prefshipaddress.city}, #{lostReport.contact.prefshipaddress.state} #{lostReport.contact.prefshipaddress.postal} #{lostReport.contact.prefshipaddress.country}"/><br/><div align="left">
-						<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_edit}" action="#{lostAndFound.backToShippingConfirm}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+						<a4j:commandButton styleClass="small button" value="#{msg.general_button_edit}" action="#{lostAndFound.backToShippingConfirm}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
 					</div><br/></p>
 				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}: " /> <t:outputText value="#{lostReport.shippingOption}"/><br/>
 				<b><t:outputText value="#{msg.success_shipping_text_order_total}: " /> <t:outputText value="#{lostReport.shippingPayment}"/></b><br/><div align="left">
-						<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_edit}" action="#{lostAndFound.backToShippingRates}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+						<a4j:commandButton styleClass="small button" value="#{msg.general_button_edit}" action="#{lostAndFound.backToShippingRates}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
 					</div><br/><br/>
 				
 			</h:panelGroup><br/>
@@ -46,9 +46,9 @@
 						infoClass="infomsg" layout="list" /></b>
 				</div>
 				<div align="right">
-					<a4j:commandButton styleClass="submitButtonWhite" value="#{msg.general_button_back}" action="#{lostAndFound.backToCCInfo}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+					<a4j:commandButton styleClass="small button" value="#{msg.general_button_back}" action="#{lostAndFound.backToCCInfo}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
 					
-					<a4j:commandButton styleClass="submitButtonOrange"	value="#{msg.shipping_button_submit}" action="#{lostAndFound.confirmPayment}"	oncomplete="this.disabled=false" id="paymentbutton" render="outerPanel" />
+					<a4j:commandButton styleClass="small button"	value="#{msg.shipping_button_submit}" action="#{lostAndFound.confirmPayment}"	oncomplete="this.disabled=false" id="paymentbutton" render="outerPanel" />
 				
 				</div>
 				<br />
