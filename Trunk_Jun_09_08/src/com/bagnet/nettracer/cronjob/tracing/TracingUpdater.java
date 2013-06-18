@@ -40,11 +40,11 @@ public class TracingUpdater implements Runnable {
 
 		while (keepGoing) {
 			try {
+				UpdateDTO updateDto = queue.take();
 				if (sess == null) {
 					sess = HibernateWrapper.getSession().openSession();
 					updateQuery = sess.createSQLQuery(UPDATE_SQL);
 				}
-				UpdateDTO updateDto = queue.take();
 				if (updateDto != null) {
 					trans = sess.beginTransaction();
 					updateQuery.setTimestamp("lastTraced", updateDto
@@ -64,6 +64,7 @@ public class TracingUpdater implements Runnable {
 				if(trans != null) {
 					trans.rollback();
 				}
+			} finally {
 				if (sess != null) {
 					sess.close();
 					sess = null;
