@@ -159,6 +159,7 @@ public class FoundItemAction extends CheckedAction {
 									i.getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
 									i.getLost().getItem().setTrackingNumber(found.getItem().getTrackingNumber());
 								}
+								found.getItem().setLost(i.getLost());
 							}
 						}
 					}
