@@ -43,8 +43,7 @@
 		<property name="triggers">
 			<list>
 				<ref bean="cronLfAutoClose" />
-				<ref bean="cronLf1stNotice" />
-				<ref bean="cronLf2ndNotice" />
+				<ref bean="cronLfNotice" />
 				<ref bean="cronLfTraceAll" />
 				<ref bean="cronLfWeekly" />
 				<ref bean="LockCleanupTrigger" />

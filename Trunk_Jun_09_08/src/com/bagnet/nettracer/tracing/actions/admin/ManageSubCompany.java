@@ -80,6 +80,9 @@ public final class ManageSubCompany extends Action {
 			SCForm.setCompanyCode(subcomp.getCompany().getCompanyCode_ID());
 			SCForm.setEmail_Notice_1(subcomp.getEmail_Notice_1());
 			SCForm.setEmail_Notice_2(subcomp.getEmail_Notice_2());
+			SCForm.setEmail_Notice_3(subcomp.getEmail_Notice_3());
+			SCForm.setEmail_Notice_4(subcomp.getEmail_Notice_4());
+			SCForm.setEmail_Notice_5(subcomp.getEmail_Notice_5());
 			SCForm.setName(subcomp.getName());
 			SCForm.setSubcompanyCode(subcomp.getSubcompanyCode());
 			SCForm.setId(subcomp.getId());
@@ -352,6 +355,9 @@ public final class ManageSubCompany extends Action {
 					SCForm.setAuto_Close_Low(subcomp.getAuto_Close_Low());
 					SCForm.setEmail_Notice_1(subcomp.getEmail_Notice_1());
 					SCForm.setEmail_Notice_2(subcomp.getEmail_Notice_2());
+					SCForm.setEmail_Notice_3(subcomp.getEmail_Notice_3());
+					SCForm.setEmail_Notice_4(subcomp.getEmail_Notice_4());
+					SCForm.setEmail_Notice_5(subcomp.getEmail_Notice_5());
 					SCForm.setEmail_Subject(subcomp.getEmail_Path());
 				}
 
@@ -400,6 +406,9 @@ public final class ManageSubCompany extends Action {
 			sc.setName(SCForm.getName());
 			sc.setEmail_Notice_1(SCForm.getEmail_Notice_1());
 			sc.setEmail_Notice_2(SCForm.getEmail_Notice_2());
+			sc.setEmail_Notice_3(SCForm.getEmail_Notice_3());
+			sc.setEmail_Notice_4(SCForm.getEmail_Notice_4());
+			sc.setEmail_Notice_5(SCForm.getEmail_Notice_5());
 			sc.setEmail_Subject(SCForm.getEmail_Subject());
 			sc.setAuto_Close_High(SCForm.getAuto_Close_High());
 			sc.setAuto_Close_Low(SCForm.getAuto_Close_Low());

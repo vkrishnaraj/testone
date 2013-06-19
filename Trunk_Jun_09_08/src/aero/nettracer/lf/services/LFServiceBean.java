@@ -2383,8 +2383,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		" where l.status_ID != " + TracingConstants.LF_STATUS_CLOSED +
 		" and (datediff(curdate(),l.openDate)) >= ";
 		switch(notice){
-			case 1: sql += " sc.email_notice_1 "; break;
-			case 2: sql += " sc.email_notice_2 "; break;
+			case 1: sql += " sc.email_notice_1 and sc.email_notice_1 > 0 "; break;
+			case 2: sql += " sc.email_notice_2 and sc.email_notice_2 > 0 "; break;
+			case 3: sql += " sc.email_notice_3 and sc.email_notice_3 > 0 "; break;
+			case 4: sql += " sc.email_notice_4 and sc.email_notice_4 > 0 "; break;
+			case 5: sql += " sc.email_notice_5 and sc.email_notice_5 > 0 "; break;
 		}
 		sql += " and l.id not in (select mh.lost_id from lfmatchhistory mh where mh.lost_id = l.id and mh.status_Status_ID = " +
 		TracingConstants.LF_TRACING_CONFIRMED +
@@ -2393,6 +2396,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		switch(notice){
 		case 1: sql+=" and l.email1 = 0";break;
 		case 2: sql+=" and l.email2 = 0";break;
+		case 3: sql+=" and l.email3 = 0";break;
+		case 4: sql+=" and l.email4 = 0";break;
+		case 5: sql+=" and l.email5 = 0";break;
 		default:throw new Exception();
 		}
 		
@@ -2418,12 +2424,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return lostIds;
 	}
 	
-	public void send1stNoticeEmails(){
+	public void sendNoticeEmails(int notice){
 		try {
-			List<Long> lostIds = getXDayList(1);
+			List<Long> lostIds = getXDayList(notice);
 			if(lostIds != null){
 				for(Long id: lostIds){
-					send1stNotice(id);
+					sendNotice(id,notice);
 				}
 			}
 		} catch (Exception e) {
@@ -2432,20 +2438,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	public void send2ndNoticeEmails(){
-		try {
-			List<Long> lostIds = getXDayList(2);
-			if(lostIds != null){
-				for(Long id: lostIds){
-					send2ndNotice(id);
-				}
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void sendNoticeEmails(){
+		sendNoticeEmails(1);
+		sendNoticeEmails(2);
+		sendNoticeEmails(3);
+		sendNoticeEmails(4);
+		sendNoticeEmails(5);
 	}
-	
 
 	
 	private HashMap<String,String> getEmailParams(LFLost lost){
@@ -3626,46 +3625,59 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 		}
 	}
-	public void send1stNotice(long id){
-		LFLost lost = getLostReport(id);
-		HashMap<String,String> h = getEmailParams(lost);
-		
-		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
-			//use no reply email
-			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_FIRST));
-		}
-		
-		if(!lost.isEmail1() && sendEmail(lost, h, "update_1_report_email.html", h.get("SUBJECTLINE"))){
-			lost.setEmailSentDate(new Date());
-			lost.setEmail1(true);
-			try {
-				saveOrUpdateLostReport(lost,getAutoAgent());
-				Logger.logLF(""+id, "1ST NOTICE EMAIL SENT", 0);
-			} catch (UpdateException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 	
-	public void send2ndNotice(long id){
+	public void sendNotice(long id, int notice){
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
 		
-		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
-			//use no reply email
+		String email = null;
+		String logMessage = null;
+
+		switch (notice){
+		case 1:
+			/*mloupas - at some point during initial development we had different retaddrs depending on the email.
+			 *however, looking at the current prod db, all retaddrs are set to noreply@lostandfound.aero
+			 *need to confirm with project owner if we can reduce to single retaddr
+			 *
+			 *also, if in the future if different subcompanies need different return addrs, the addrs need to be part of
+			 *the subcompany table as opposed to the properties table
+			 */
+			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_FIRST));
+			email = "update_1_report_email.html";
+			logMessage = "1ST NOTICE EMAIL SENT";
+			break;
+		case 2:
 			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_SECOND));
+			email = "update_2_report_email.html";
+			if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId()) && dataplan(lost)){//Probably should normalize dataplan emails in a future ticket
+				email = "update_2_ipad_report_email.html";
+			}
+			logMessage = "2ND NOTICE EMAIL SENT";
+			break;
+		case 3:
+			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_THIRD));
+			email = "update_3_report_email.html";
+			logMessage = "3RD NOTICE EMAIL SENT";
+			break;
+		case 4:
+			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_FORTH));
+			email = "update_4_report_email.html";
+			logMessage = "4TH NOTICE EMAIL SENT";
+			break;
+		case 5:
+			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_FIFTH));
+			email = "update_5_report_email.html";
+			logMessage = "5TH NOTICE EMAIL SENT";
+			break;
 		}
-		
-		String email = "update_2_report_email.html";
-		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId()) && dataplan(lost)){
-			email = "update_2_ipad_report_email.html";
-		}
-		if(!lost.isEmail2() && sendEmail(lost, h, email, h.get("SUBJECTLINE"))){
+
+
+		if(!lost.isEmail(notice) && sendEmail(lost, h, email, h.get("SUBJECTLINE"))){
 			lost.setEmailSentDate(new Date());
-			lost.setEmail2(true);
+			lost.setEmail(notice,true);
 			try {
 				saveOrUpdateLostReport(lost,getAutoAgent());
-				Logger.logLF(""+id, "2ND NOTICE EMAIL SENT", 0);
+				Logger.logLF(""+id, logMessage, 0);
 			} catch (UpdateException e) {
 				e.printStackTrace();
 			}
@@ -3750,7 +3762,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
 
-		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId(), lost.getAgent().getCompanycode_ID());
+		boolean isAvis = (TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID()));
+		
+		if (!isAvis){
 			//use no reply email
 			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_CLOSE));
 		}
@@ -3762,7 +3777,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		boolean isNotMatched = !(lost.getItem() != null && lost.getItem().getFound() != null && lost.getItem().getLost() != null);
 		
-		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId()) && isNotMatched) {
+		if (!isAvis && isNotMatched) {
 			if(sendEmail(lost, h, email, h.get("SUBJECTLINE"))){
 			//regardless of the send status of the email, close the report
 			}

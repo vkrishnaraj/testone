@@ -141,6 +141,33 @@
               </tr>
               <tr>
                 <td>
+                  <bean:message key="colname.emailnotice3" />
+                  :
+                </td>
+                <td>
+                  <html:text styleClass="textfield" property="email_Notice_3" size="20" maxlength="200" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <bean:message key="colname.emailnotice4" />
+                  :
+                </td>
+                <td>
+                  <html:text styleClass="textfield" property="email_Notice_4" size="20" maxlength="200" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <bean:message key="colname.emailnotice5" />
+                  :
+                </td>
+                <td>
+                  <html:text styleClass="textfield" property="email_Notice_5" size="20" maxlength="200" />
+                </td>
+              </tr>
+              <tr>
+                <td>
                   <bean:message key="colname.autocloselow" />
                   :
                 </td>

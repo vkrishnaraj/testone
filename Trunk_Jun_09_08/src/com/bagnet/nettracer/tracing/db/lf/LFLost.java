@@ -112,6 +112,12 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 	
 	private boolean email2;
 	
+	private boolean email3;
+	
+	private boolean email4;
+	
+	private boolean email5;
+	
 	private boolean foundEmail;
 	
 	private String feedback;
@@ -357,6 +363,30 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 		return email2;
 	}
 
+	public boolean isEmail3() {
+		return email3;
+	}
+
+	public void setEmail3(boolean email3) {
+		this.email3 = email3;
+	}
+
+	public boolean isEmail4() {
+		return email4;
+	}
+
+	public void setEmail4(boolean email4) {
+		this.email4 = email4;
+	}
+
+	public boolean isEmail5() {
+		return email5;
+	}
+
+	public void setEmail5(boolean email5) {
+		this.email5 = email5;
+	}
+	
 	public void setFoundEmail(boolean foundEmail) {
 		this.foundEmail = foundEmail;
 	}
@@ -433,6 +463,27 @@ public class LFLost implements LFObject, Serializable, Cloneable {
 		this.feedback = feedback;
 	}
 
+	@Transient
+	public boolean isEmail(int notice){
+		switch (notice){
+		case 1:return isEmail1();
+		case 2:return isEmail2();
+		case 3:return isEmail3();
+		case 4:return isEmail4();
+		case 5:return isEmail5();
+		default:return false;
+		}
+	}
 	
+	@Transient
+	public void setEmail(int notice, boolean sent){
+		switch (notice){
+		case 1:setEmail1(sent);break;
+		case 2:setEmail2(sent);break;
+		case 3:setEmail3(sent);break;
+		case 4:setEmail4(sent);break;
+		case 5:setEmail5(sent);break;
+		}
+	}
 }
 

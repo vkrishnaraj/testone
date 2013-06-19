@@ -152,6 +152,9 @@ public class PropertyBMO {
 	public static final String LF_EMAIL_RETURNADDR_INIT = "lf.email.returnaddr.init";
 	public static final String LF_EMAIL_RETURNADDR_FIRST = "lf.email.returnaddr.first";
 	public static final String LF_EMAIL_RETURNADDR_SECOND = "lf.email.returnaddr.second";
+	public static final String LF_EMAIL_RETURNADDR_THIRD = "lf.email.returnaddr.third";
+	public static final String LF_EMAIL_RETURNADDR_FORTH = "lf.email.returnaddr.forth";
+	public static final String LF_EMAIL_RETURNADDR_FIFTH = "lf.email.returnaddr.fifth";
 	public static final String LF_EMAIL_RETURNADDR_CLOSE = "lf.email.returnaddr.close";
 	
 	public static final String LF_EMAIL_ONLINE_BILLING = "lf.email.online.billing";

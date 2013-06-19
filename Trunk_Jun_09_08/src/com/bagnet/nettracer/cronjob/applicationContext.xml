@@ -185,15 +185,9 @@
 		<property name="concurrent" value="false" />
 	</bean>
 	
-	<bean id="lf1NoticeEmail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	<bean id="lfNoticeEmail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetBeanName" value="lf" />
-		<property name="targetMethod" value="send1stNoticeEmails" />
-		<property name="concurrent" value="false" />
-	</bean>
-	
-	<bean id="lf2NoticeEmail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetBeanName" value="lf" />
-		<property name="targetMethod" value="send2ndNoticeEmails" />
+		<property name="targetMethod" value="sendNoticeEmails" />
 		<property name="concurrent" value="false" />
 	</bean>
 	
@@ -267,13 +261,8 @@
 		<property name="cronExpression" value="${lf.autoclose.cron}" />
 	</bean>
 	
-	<bean id="cronLf1stNotice" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="lf1NoticeEmail" />
-		<property name="cronExpression" value="${lf.stillsearch.cron}" />
-	</bean>
-	
-	<bean id="cronLf2ndNotice" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="lf2NoticeEmail" />
+	<bean id="cronLfNotice" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="lfNoticeEmail" />
 		<property name="cronExpression" value="${lf.stillsearch.cron}" />
 	</bean>
 		

@@ -42,6 +42,9 @@ public class Subcompany implements Serializable{
 	private String email_Path;
 	private int email_Notice_1;
 	private int email_Notice_2;
+	private int email_Notice_3;
+	private int email_Notice_4;
+	private int email_Notice_5;
 	private int auto_Close_Low;
 	private int auto_Close_High;
 	
@@ -111,6 +114,30 @@ public class Subcompany implements Serializable{
 
 	public void setEmail_Notice_2(int email_Notice_2) {
 		this.email_Notice_2 = email_Notice_2;
+	}
+	
+	public int getEmail_Notice_3() {
+		return email_Notice_3;
+	}
+
+	public void setEmail_Notice_3(int email_Notice_3) {
+		this.email_Notice_3 = email_Notice_3;
+	}
+
+	public int getEmail_Notice_4() {
+		return email_Notice_4;
+	}
+
+	public void setEmail_Notice_4(int email_Notice_4) {
+		this.email_Notice_4 = email_Notice_4;
+	}
+
+	public int getEmail_Notice_5() {
+		return email_Notice_5;
+	}
+
+	public void setEmail_Notice_5(int email_Notice_5) {
+		this.email_Notice_5 = email_Notice_5;
 	}
 
 	public int getAuto_Close_Low() {
