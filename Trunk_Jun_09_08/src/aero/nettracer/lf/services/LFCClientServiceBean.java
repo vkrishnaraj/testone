@@ -677,7 +677,12 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 
 			}
 			host.getShipment().setShippingName(lostReport.getContact().getShippingName());
-			host.setFeedback(lostReport.getFeedback());
+			
+			if(lostReport.getFeedback()!=null && lostReport.getFeedback().length()<=500){
+				host.setFeedback(lostReport.getFeedback());
+			} else if(lostReport.getFeedback()!=null && lostReport.getFeedback().length()>500){
+				host.setFeedback(lostReport.getFeedback().substring(0,500));
+			}
 			
 			host.getShipment().setDeclaredValue(lostReport.getDeclaredValue());
 		}
