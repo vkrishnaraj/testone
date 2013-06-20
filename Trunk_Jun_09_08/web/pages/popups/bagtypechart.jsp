@@ -96,7 +96,9 @@ function choosexdescelement(o) {
 	}
 
 	var theForm = window.opener.document.forms[0];
-	jQuery(theForm).addClass("dirty");
+	if (theForm.id == "dirtyCheck-form") {
+		jQuery(theForm).addClass("dirty");
+	}
 
 self.close();
 }
@@ -160,7 +162,9 @@ function choosetype(o) {
 	}
 
 	var theForm = window.opener.document.forms[0];
-	jQuery(theForm).addClass("dirty");
+	if (theForm.id == "dirtyCheck-form") {
+		jQuery(theForm).addClass("dirty");
+	}
 	
 	self.close();
 }

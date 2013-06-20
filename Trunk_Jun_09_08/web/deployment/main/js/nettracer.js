@@ -216,7 +216,7 @@ function hideThisDiv(object, objectType) {
 	document.getElementById(object).innerHTML = "";
 	del = document.forms[0].delete_these_elements;
 	del.value += object + ",";
-	jQuery(document.forms[0]).addClass("dirty");
+	jQuery("#dirtyCheck-form").addClass("dirty");
 }
  
 function hideThisElement(objectName, objectType, num) {
@@ -230,7 +230,7 @@ function hideThisElement(objectName, objectType, num) {
 	}
 	del = document.forms[0].delete_these_elements;
 	del.value += objectName + ",";
-	jQuery(document.forms[0]).addClass("dirty");
+	jQuery("#dirtyCheck-form").addClass("dirty");
 }
 
 function removeElement(obj) {
