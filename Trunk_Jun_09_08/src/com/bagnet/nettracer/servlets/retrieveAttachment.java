@@ -116,7 +116,10 @@ public class retrieveAttachment extends HttpServlet {
 					res.sendRedirect("invalid_attachment.do");
 					return;
 				}
-				String imageStore = TracerProperties.get(user.getCompanycode_ID(),"image_store");
+				String imageStore = TracerProperties.get("fs_image_store");
+				if ("US".equals(user.getCompanycode_ID())) {
+					imageStore = TracerProperties.get(user.getCompanycode_ID(),"image_store");
+				}
 				
 				File file = new File(imageStore + results.getPath());
 				
