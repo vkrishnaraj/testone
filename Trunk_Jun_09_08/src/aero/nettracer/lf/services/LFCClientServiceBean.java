@@ -715,7 +715,9 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 		LFShipping shipment = bean
 				.getShipment(Long.valueOf(lost.getReportId()));
 		LFTransaction tran;
+		boolean emailcus=true;
 		if (shipment.getTransaction() != null) {
+			emailcus=false;
 			tran=shipment.getTransaction() ;
 		} else {
 			tran = transactionCc(lost);
@@ -814,7 +816,9 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 								.substring(
 										lost.getCc().getCcnumber().length() - 4));
 				shipbean.setCardType(lost.getCc().getCcvendor());
-				bean.sendShippedEmail(shipbean);
+				if(emailcus){
+					bean.sendShippedEmail(shipbean);
+				}
 				return shipbean;
 
 			}
