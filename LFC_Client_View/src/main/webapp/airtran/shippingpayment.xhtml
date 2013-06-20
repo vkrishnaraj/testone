@@ -17,8 +17,8 @@
 				}
 
 				function adjustShipAddressReq(countryList) {
-					var province = document.getElementById("shipProvince");
-					var state = document.getElementById("shipState");
+					var province = document.getElementById("lostForm:shipProvince");
+					var state = document.getElementById("lostForm:shipState");
 					if (countryList.innerHTML == "US") {
 						state.style.display = "block";
 						province.style.display= "none";
@@ -35,29 +35,24 @@
 						document.getElementById("lostForm:billProvince").value="";
 						state.style.display = "block";
 						province.style.display= "none";
-					} else if(countryList.options[countryList.selectedIndex].value == "CA") {
+					} else {
 						document.getElementById("lostForm:billState").selectedIndex=0;
 						state.style.display = "none";
 						province.style.display= "block";
-					} else {
-						document.getElementById("lostForm:billProvince").value="";
-						document.getElementById("lostForm:billState").selectedIndex=0;
-						province.style.display= "none";
-						state.style.display= "none";						
-					}
+					} 
 				} 
 				
 		        function sameAsShippingCheck(){
 		            var same = document.getElementById("lostForm:sameAsShipping");
 		            if(same.checked==true){
 		            	
-		            	document.getElementById("lostForm:billAddress1").value=document.getElementById("lostForm:shipAddress1").innerHTML;
-		            	document.getElementById("lostForm:billAddress2").value=document.getElementById("lostForm:shipAddress2").innerHTML;
-		            	document.getElementById("lostForm:billCity").value=document.getElementById("lostForm:shipCity").innerHTML;
-		            	document.getElementById("lostForm:billState").value=document.getElementById("lostForm:shipState").innerHTML;
-		            	document.getElementById("lostForm:billPostal").value=document.getElementById("lostForm:shipPostal").innerHTML;
-		            	document.getElementById("lostForm:billCountry").value=document.getElementById("lostForm:shipCountry").innerHTML;
-		            	document.getElementById("lostForm:billProvince").value=document.getElementById("lostForm:shipProvince").innerHTML;
+		            	document.getElementById("lostForm:billAddress1").value=document.getElementById("lostForm:shipAddress1").value;
+		            	document.getElementById("lostForm:billAddress2").value=document.getElementById("lostForm:shipAddress2").value;
+		            	document.getElementById("lostForm:billCity").value=document.getElementById("lostForm:shipCity").value;
+		            	document.getElementById("lostForm:billState").value=document.getElementById("lostForm:shipState").value;
+		            	document.getElementById("lostForm:billPostal").value=document.getElementById("lostForm:shipPostal").value;
+		            	document.getElementById("lostForm:billCountry").value=document.getElementById("lostForm:shipCountry").value;
+		            	document.getElementById("lostForm:billProvince").value=document.getElementById("lostForm:shipProvince").value;
 		            	document.getElementById("lostForm:billAddress1").disabled="true";
 		            	document.getElementById("lostForm:billAddress2").disabled="true";
 		            	document.getElementById("lostForm:billCity").disabled="true";
@@ -284,62 +279,22 @@
 									value="#{msg.shipping_label_address_addr1}" /></b></td>
 						</tr>
 						<tr>
-							<td class="twlvPxBlk" colspan="6"><t:outputText
-									value="#{msg.shipping_label_shipping_name}" /></td>
-						</tr>
-						<tr>
 							<td class="twlvPxBlk" colspan="6"><t:outputText id="shipName" value="#{lostReport.contact.shippingName}"/></td>
 						</tr>
 						<tr>
-							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
-									value="#{msg.shipping_label_address_country}" /></td>
-						</tr>
-						<tr>
-							<td colspan="3"><t:outputText id="shipCountry" value="#{lostReport.contact.prefshipaddress.country}"/></td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="6"><t:outputText
-									value="#{msg.lostform_label_address_addr1}" /></td>
-						</tr>
-						<tr>
-							<td colspan="6"><t:outputText
-									value="#{lostAndFound.shippingAddress.address1}"
-									style="width: 100%" id="shipAddress1" /></td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="6"><t:outputText
-									value="#{msg.shipping_label_address_addr2}" /></td>
-						</tr>
-						<tr>
-							<td colspan="6"><t:outputText
-									value="#{lostAndFound.shippingAddress.address2}"
-									 style="width: 100%" id="shipAddress2" /></td>
-						</tr>
-						<tr>
-							<td class="twlvPxBlk" colspan="3"><t:outputText
-									value="#{msg.shipping_label_address_city}" /></td>
-							<td class="twlvPxBlk" colspan="3"><t:outputText
-									value="#{msg.shipping_label_address_postal}" /></td>
-						</tr>
-						<tr>
-							<td colspan="3"><t:outputText
-									value="#{lostAndFound.shippingAddress.city}"
-									style="width: 95%" id="shipCity"/></td>
-							<td colspan="3"><t:outputText
-									value="#{lostAndFound.shippingAddress.postal}"
-									style="width: 100%" id="shipPostal" /></td>
-						</tr>
-						<tr id="shipState" style="display:none">
-							<td class="twlvPxBlk" colspan="3"><t:outputText
-									value="#{msg.shipping_label_address_state}" /></td>
-							<td colspan="3"><t:outputText value="#{lostAndFound.shippingAddress.state}" id="shipState"/></td>
-						</tr>
-						<tr id="shipProvince" style="display:none">
-							<td class="twlvPxBlk" colspan="3" style="width: 50%;"><t:outputText
-									value="#{msg.shipping_label_address_province}" /></td>
-							<td colspan="3"><t:outputText id="shipProvince"
-									value="#{lostAndFound.shippingAddress.province}"
-									 style="width: 100%" /></td>
+							<td colspan="6" style="width: 100%" >
+								<t:outputText value="#{lostAndFound.shippingAddress.address1}" style="width: 100%" /><br/>
+								<t:outputText value="#{lostAndFound.shippingAddress.address2}&lt;br /&gt;" escape="false" rendered="#{not empty lostAndFound.shippingAddress.address2}"/>
+								<t:outputText value="#{lostAndFound.shippingAddress.city}, #{lostAndFound.shippingAddress.state} #{lostAndFound.shippingAddress.postal} #{lostReport.contact.prefshipaddress.country}" rendered="#{lostReport.contact.prefshipaddress.country == 'US'}"/>
+								<t:outputText value="#{lostAndFound.shippingAddress.city}, #{lostAndFound.shippingAddress.province} #{lostAndFound.shippingAddress.postal} #{lostReport.contact.prefshipaddress.country}" rendered="#{lostReport.contact.prefshipaddress.country != 'US'}"/>
+								<h:inputHidden value="#{lostAndFound.shippingAddress.address1}" id="shipAddress1"/>
+								<h:inputHidden value="#{lostAndFound.shippingAddress.address2}" id="shipAddress2"/>
+								<h:inputHidden value="#{lostAndFound.shippingAddress.state}" id="shipState"/>
+								<h:inputHidden value="#{lostAndFound.shippingAddress.city}" id="shipCity"/>
+								<h:inputHidden value="#{lostAndFound.shippingAddress.province}" id="shipProvince"/>
+								<h:inputHidden value="#{lostAndFound.shippingAddress.country}" id="shipCountry"/>
+								<h:inputHidden value="#{lostAndFound.shippingAddress.postal}" id="shipPostal"/>
+							</td>
 						</tr>
 					</table>
 					<div align="left"><span class="submitButtonWhite">

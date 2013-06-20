@@ -40,8 +40,9 @@
 				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}:" /><br/>
 					<t:outputText value="#{lostReport.contact.shippingName}"/><br/>
 				 	<t:outputText value="#{shipbean.shippingAddress.address1}"/><br/>
-				 	<t:outputText value="#{shipbean.shippingAddress.address2}"/><br/>
-				 	<t:outputText value="#{shipbean.shippingAddress.city}, #{shipbean.shippingAddress.state} #{shipbean.shippingAddress.postal} #{shipbean.shippingAddress.country}"/></p><br/><br/>
+				 	<t:outputText value="#{shipbean.shippingAddress.address2}&lt;br /&gt;" escape="false" rendered="#{not empty shipbean.shippingAddress.address2}"/>
+				 	<t:outputText value="#{shipbean.shippingAddress.city}, #{shipbean.shippingAddress.state} #{shipbean.shippingAddress.postal} #{shipbean.shippingAddress.country}" rendered="#{shipbean.shippingAddress.country == 'US'}"/>
+				 	<t:outputText value="#{shipbean.shippingAddress.city}, #{shipbean.shippingAddress.province} #{shipbean.shippingAddress.postal} #{shipbean.shippingAddress.country}" rendered="#{shipbean.shippingAddress.country != 'US'}"/></p><br/><br/>
 				<!-- End Receipt Information -->
 				
 			</h:panelGroup>

@@ -114,7 +114,7 @@
 						<tr>
 							<td colspan="6">
 							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.address1}"/><br/>
-							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.address2}"/><br/>
+							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.address2}&lt;br /&gt;" escape="false" rendered="#{not empty lostAndFound.lostReport.contact.prefshipaddress.address2}"/>
 							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.city}, #{lostAndFound.lostReport.contact.prefshipaddress.state} #{lostAndFound.lostReport.contact.prefshipaddress.postal} #{lostAndFound.lostReport.contact.prefshipaddress.country}"/>
 						 	</td>
 					 	</tr>
