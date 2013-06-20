@@ -438,7 +438,7 @@
 					<h:inputText value="#{contentItem.quantity}"  size="3" label="Bag #{rowIndex+1} - Contents Description - Quantity" readonly="#{passengerController.readOnlyOnSubmitted}"
 						rendered="#{!(bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM')}" onkeyup="numOnly(this)"/>
 					<h:inputText value="#{contentItem.quantity}"  size="3" label="Delayed Expenses - Quantity" readonly="#{passengerController.readOnlyOnSubmitted}"
-						rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM'}" />
+						rendered="#{bagItem.bagArrivalStatus eq 'true' and passengerBean.interim and bagItem.bagTagNumber eq 'INTERIM'}" onkeyup="numOnly(this)"/>
 						&#160;&amp;<br/>
 					<h:inputText value="#{contentItem.article}" size="6" 
 						readonly="#{passengerController.readOnlyOnSubmitted}"/>
