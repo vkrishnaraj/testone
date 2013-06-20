@@ -26,14 +26,15 @@
 									rendered="#{passengerController.fraudQuestionLabel.tsaInspect.required}"/>
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>
-					<h:selectOneRadio   value="#{passengerBean.tsaInspect}"  label="Tsa Inspected" 
+					<h:selectOneMenu  value="#{passengerBean.tsaInspect}"  label="Tsa Inspected" 
 						disabled="#{passengerController.readOnlyOnSubmitted}"
 						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.fraudQuestionLabel.tsaInspect.label}'" 
 						required="#{passengerController.fraudQuestionLabel.tsaInspect.required}">
-										<f:selectItem itemLabel="Yes&#160;" itemValue="1"/>
+										<f:selectItem itemLabel="N/A" itemValue="0"/>
+										<f:selectItem itemLabel="Yes" itemValue="1"/>
 										<f:selectItem itemLabel="No" itemValue="2"/>
-					</h:selectOneRadio>
+					</h:selectOneMenu>
 					
 					<rich:spacer  height="10" title=""/>
 					<rich:spacer  height="10" title=""/>
@@ -47,16 +48,16 @@
 					</h:panelGroup>	
 					<rich:spacer width="20px"/>	
 					
-					<h:selectOneRadio   value="#{passengerBean.bagConfirmNote}"	label="Bag Confirm Note"
-						layout="lineDirection"
+					<h:selectOneMenu  value="#{passengerBean.bagConfirmNote}"	label="Bag Confirm Note"
 						disabled="#{passengerController.readOnlyOnSubmitted}"
 						requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.fraudQuestionLabel.bagConfirmNote.label}'" 
 						readonly="#{passengerController.fraudQuestionLabel.bagConfirmNote.hidden}"
 						required="#{passengerController.fraudQuestionLabel.bagConfirmNote.required}">
-						<f:selectItem itemLabel="Yes&#160;" itemValue="1"/>
-						<f:selectItem itemLabel="No" itemValue="2"/>
-					</h:selectOneRadio>
+										<f:selectItem itemLabel="N/A" itemValue="0"/>
+										<f:selectItem itemLabel="Yes" itemValue="1"/>
+										<f:selectItem itemLabel="No" itemValue="2"/>
+					</h:selectOneMenu>
 					
 					<rich:spacer  height="10" title=""/>
 					<rich:spacer  height="10" title=""/>
@@ -105,14 +106,16 @@
 					</h:panelGrid>
 					<rich:spacer width="20px"/>
 					<h:panelGrid columns="1" width="60%" >
-					<h:selectOneRadio   value="#{passengerBean.requestForeignCurrency}" label="Local Currency"
+					
+					<h:selectOneMenu  value="#{passengerBean.requestForeignCurrency}" label="Local Currency"
 							disabled="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'Local Currency?'" 
 							required="false">
-										<f:selectItem itemLabel="Yes&#160;" itemValue="1"/>
+										<f:selectItem itemLabel="N/A" itemValue="0"/>
+										<f:selectItem itemLabel="Yes" itemValue="1"/>
 										<f:selectItem itemLabel="No" itemValue="2"/>
-					</h:selectOneRadio>
+					</h:selectOneMenu>
 					</h:panelGrid>
 				</h:panelGrid>
 				</div>
@@ -160,14 +163,15 @@
 					</h:panelGrid>
 					<rich:spacer width="20px"/>
 					<h:panelGrid columns="1" width="60%" >
-					<h:selectOneRadio   value="#{passengerBean.privateInsurance}" label="Private Insurance"
+					<h:selectOneMenu  value="#{passengerBean.privateInsurance}" label="Private Insurance"
 							disabled="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'Private Insurance'" 
 							required="false">
-										<f:selectItem itemLabel="Yes&#160;" itemValue="1"/>
+										<f:selectItem itemLabel="N/A" itemValue="0"/>
+										<f:selectItem itemLabel="Yes" itemValue="1"/>
 										<f:selectItem itemLabel="No" itemValue="2"/>
-					</h:selectOneRadio>
+					</h:selectOneMenu>
 					</h:panelGrid>
 				</h:panelGrid>
 				</div>
@@ -239,18 +243,18 @@
 					</h:panelGrid>
 					<rich:spacer width="20px"/>
 					<h:panelGrid columns="1" width="60%" >
-					<h:selectOneRadio   value="#{passengerBean.anotherClaim}" label="Another Claim"
+					<h:selectOneMenu   value="#{passengerBean.anotherClaim}" label="Another Claim"
 							valueChangeListener="#{passengerController.selectAnotherClaim}"
 							disabled="#{passengerController.readOnlyOnSubmitted}"
 							requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
 								'#{passengerController.fraudQuestionLabel.anotherClaim.label}'" 
 							required="#{passengerController.fraudQuestionLabel.anotherClaim.required}">
-										<f:selectItem itemLabel="Yes&#160;" itemValue="1"/>
+										<f:selectItem itemLabel="Please Select" itemValue="0"/>
+										<f:selectItem itemLabel="Yes" itemValue="1"/>
 										<f:selectItem itemLabel="No" itemValue="2"/>
-							<a4j:support event="onchange" 
-								reRender="which,whichInput,dateOfClaim,dateOfClaimInput,claimantName,claimantNameInput" 
-								limitToList="true"/>
-					</h:selectOneRadio>
+										<a4j:support event="onchange" limitToList="true"
+											reRender="which,whichInput,dateOfClaim,dateOfClaimInput,claimantName,claimantNameInput" />
+					</h:selectOneMenu>
 					</h:panelGrid>
 				</h:panelGrid>
 				</div>
