@@ -1,7 +1,17 @@
 package aero.nettracer.serviceprovider.ws_1_0.res.navitaire;
 
+import java.util.List;
+
+import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.client.ServiceClient;
+import org.apache.axis2.description.HandlerDescription;
+import org.apache.axis2.engine.Handler;
+import org.apache.axis2.engine.Phase;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.log4j.Logger;
+import org.apache.neethi.Policy;
+import org.apache.neethi.PolicyEngine;
 
 import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.common.db.ParameterType;
@@ -59,6 +69,12 @@ public class Reservation implements ReservationInterface {
 	private static final String PASSWORD = "Nettracer13*";
 	private static final String DOMAIN_CODE = "EXT";
 	private static final int CONTRACT_VERSION = 344;
+	private static final String RAMPART = "rampart";
+	private static final String POLICY_XML = "NAVITAIRE_policy.xml";
+	private static final String POST_DISPATCH_SECURITY_VERIFICATION_HANDLER = "Post dispatch security verification handler";
+	private static final String DISPATCH = "Dispatch";
+	private static final String SECURITY = "Security";
+	private static final String APACHE_RAMPART_INFLOW_HANDLER = "Apache Rampart inflow handler";
 	
 	
 	@Override
@@ -70,6 +86,72 @@ public class Reservation implements ReservationInterface {
 	public OsiResponse getOsiContents(User user, String pnr, String bagTag) throws UnexpectedException {
 		return null;
 	}
+
+	private static void configureClient(org.apache.axis2.client.Stub stub) throws AxisFault {
+		
+		stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(1 * 60 * 1000));
+		stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
+
+		ServiceClient client = stub._getServiceClient();
+
+		client.engageModule(RAMPART);
+		try {
+			String policy = "/" + POLICY_XML;
+			logger.debug("Policy: " + policy);
+			client.getAxisService().getPolicySubject().attachPolicy(loadPolicy(policy));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		removeFaultPhases(client);
+		removePhases(client);
+	}
+
+	private static Policy loadPolicy(String xmlPath) throws Exception {
+		StAXOMBuilder builder = new StAXOMBuilder(Reservation.class.getResourceAsStream(xmlPath));
+		return PolicyEngine.getPolicy(builder.getDocumentElement());
+	}
+
+	private static void removeFaultPhases(ServiceClient client) {
+		List<Phase> phases = client.getAxisConfiguration().getInFaultFlowPhases();
+
+		for (Phase p : phases) {
+			HandlerDescription removeThis = null;
+			if (p.getPhaseName().equals(SECURITY) || p.getPhaseName().equals(DISPATCH)) {
+				List<Handler> l = p.getHandlers();
+				for (Handler h : l) {
+					if (h.getName().equals(APACHE_RAMPART_INFLOW_HANDLER) || h.getName().equals(POST_DISPATCH_SECURITY_VERIFICATION_HANDLER)) {
+						removeThis = h.getHandlerDesc();
+					}
+				}
+			}
+
+			if (removeThis != null) {
+				p.removeHandler(removeThis);
+			}
+		}
+	}
+
+	private static void removePhases(ServiceClient client) {
+		List<Phase> phases = client.getAxisConfiguration().getInFlowPhases();
+
+		for (Phase p : phases) {
+			HandlerDescription removeThis = null;
+			if (p.getPhaseName().equals(SECURITY) || p.getPhaseName().equals(DISPATCH)) {
+				List<Handler> l = p.getHandlers();
+				for (Handler h : l) {
+
+					if (h.getName().equals(APACHE_RAMPART_INFLOW_HANDLER) || h.getName().equals(POST_DISPATCH_SECURITY_VERIFICATION_HANDLER)) {
+						removeThis = h.getHandlerDesc();
+					}
+				}
+			}
+
+			if (removeThis != null) {
+				p.removeHandler(removeThis);
+			}
+		}
+	}
 	
 	public String logon(User user) throws UnexpectedException {
 
@@ -79,8 +161,7 @@ public class Reservation implements ReservationInterface {
 			
 			// 1) STUB & TIMEOUTES
 			SessionManagerStub stub = new SessionManagerStub(endpoint);
-			stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(1 * 60 * 1000));
-			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
+			configureClient(stub);
 
 			// CREATE OUTGOING DOCUMENT
 			String resUser = user.getProfile().getParameters().get(ParameterType.RESERVATION_USER);
@@ -116,8 +197,7 @@ public class Reservation implements ReservationInterface {
 			
 			// 1) STUB & TIMEOUTES
 			SessionManagerStub stub = new SessionManagerStub(endpoint);
-			stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(1 * 60 * 1000));
-			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
+			configureClient(stub);
 
 			// CREATE OUTGOING DOCUMENT
 			String resUser = user.getProfile().getParameters().get(ParameterType.RESERVATION_USER);
@@ -171,8 +251,7 @@ public class Reservation implements ReservationInterface {
 			
 			// 1) STUB & TIMEOUTES
 			BookingManagerStub stub = new BookingManagerStub(endpoint);
-			stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(1 * 60 * 1000));
-			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
+			configureClient(stub);
 
 			// CREATE OUTGOING DOCUMENT
 			GetBookingRequestDocument bi = GetBookingRequestDocument.Factory.newInstance();
@@ -407,6 +486,8 @@ public class Reservation implements ReservationInterface {
 			String endpoint = user.getProfile().getParameters().get(ParameterType.RESERVATION_ENDPOINT);
 
 			BookingManagerStub stub = new BookingManagerStub(endpoint);
+			configureClient(stub);
+			
 			AddBookingCommentsRequestDocument bi = AddBookingCommentsRequestDocument.Factory.newInstance();
 			AddBookingCommentsRequest bi2 = bi.addNewAddBookingCommentsRequest();
 			AddBookingCommentsRequestData bi3 = bi2.addNewAddBookingCommentsReqData();
