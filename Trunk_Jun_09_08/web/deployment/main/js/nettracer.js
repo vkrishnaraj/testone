@@ -292,8 +292,7 @@ function loadSlideupContainer(url) {
 	}
 }
 
-function handleEvent(event) {
-	event.preventDefault();
+function handleEvent() {
 	var slideUpContainer = jQuery("#slideUpContainer");
 	if (slideUpContainer.is( ":visible" )){
 		slideUpContainer.slideUp( 500 );
@@ -304,8 +303,7 @@ function handleEvent(event) {
 	}
 }
 
-function switchLocation(event) {
-	event.preventDefault();
+function switchLocation() {
 	var slideUpContainer = jQuery("#slideUpContainer");
 	if (slideUpContainerState == 0) {
 		slideUpContainer.style.bottom="";

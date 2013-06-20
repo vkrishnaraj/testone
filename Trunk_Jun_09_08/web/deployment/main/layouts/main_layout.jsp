@@ -348,9 +348,6 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 <script language="javascript">
 
 jQuery(document).ready(function () {
-	jQuery("#closeLink").click(function(event) {handleEvent(event)});
-	jQuery("#openLink").click(function(event) {handleEvent(event)});
-	jQuery("#switchLink").click(function(event) {switchLocation(event)});
     jQuery("#dirtyCheck-form").areYouSure();
     <% if (request.getAttribute("markDirty") != null) { %>
     	jQuery("#dirtyCheck-form").addClass("dirty");
@@ -392,8 +389,8 @@ jQuery('html').addClass("oldBrowser");
 <div id="slideUpContainer">
 	<div id="sliderInner">
 	<div style="float: right; margin-right: 10px;">
-	<!-- 	<a id="switchLink" href="#">Switch Location</a>&nbsp;&nbsp; -->
-		<a id="closeLink" href="#">Close</a>
+	 	<a id="switchLink" href="###" onclick="switchLocation();return false;">Switch Location</a>&nbsp;&nbsp;
+		<a id="closeLink" href="###" onclick="handleEvent();return false;">Close</a>
 	</div><br/>
 	<div id="sliderContentFrame" style="float: none"></div>
 </div>
