@@ -257,6 +257,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 					toAdd.setExchange(phone.getDecryptedExchange());
 					toAdd.setLine(phone.getDecryptedLine());
 					toAdd.setType(phone.getNumberType());
+					toAdd.setExtension(phone.getExtension());
 					if (phone.getPhoneType() == TracingConstants.LF_PHONE_PRIMARY) {
 						contact.setPrimaryPhone(toAdd);
 

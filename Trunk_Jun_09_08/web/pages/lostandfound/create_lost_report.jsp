@@ -400,7 +400,7 @@
 		              	<td colspan="5" >
 		              		<bean:message key="colname.lf.feedback" />
 		              		<br />
-		              		<html:textarea name="lostReportForm" property="lost.feedback" styleId="feedback" disabled="true" cols="70" styleClass="textfield" />
+		              		<html:textarea name="lostReportForm" property="lost.feedback" styleId="feedback" disabled="true" cols="70" rows="9" styleClass="textfield" />
 		              	</td>
 		              </tr>
 				</table>
