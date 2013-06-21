@@ -1,0 +1,41 @@
+button, input, select, textarea {
+    margin: 0.5em 0px 0.5em;
+}
+
+input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], textarea {
+    display: inline;
+    margin: 0.5em 0px 0.5em;
+}
+
+table tr th, table tr td {
+    padding: 0.25em 0.25em;
+}
+
+.rich-calendar-button {
+	padding: 0 0 2px 4px;
+}
+
+.rich-calendar-weekends {
+	color: black;
+}
+
+.rich-calendar-holly {
+	background-color: white;
+	color: black;
+}
+
+.rich-calendar-boundary-dates {
+	color: #A0A0A0;
+}
+
+.rich-calendar-hover {
+	background-color: #E4F5E2;
+	color: #000000;
+}
+
+.rich-calendar-select {
+background-color: #BED6F8;
+    color: #000000;
+    font-weight: bold;
+}
+
