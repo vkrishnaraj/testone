@@ -8,12 +8,11 @@
 <f:view contentType="text/html" encoding="UTF-8">
 <f:loadBundle basename="american" var="msg"/>	
 <head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
 		<title><ui:insert name="title">Default Title</ui:insert></title>
 <!-- Foundation 3 for IE 8 and earlier -->
 <!--[if lt IE 9]>
-    	<script src="../_js/american/html5shiv.js"></script>
+	<script src="../_js/american/foundation3/vendor/custom.modernizr.js"></script>
 		<link rel="stylesheet" href="../_css/american/foundation4/normalize.css" />
 		<link rel="stylesheet" href="../_css/american/foundation3/foundation.css" />
 		<link rel="stylesheet" href="../_css/american/foundation3/aa.css" />
@@ -21,6 +20,7 @@
 <![endif]-->
 <!-- Foundation 4 for IE 9 and Later -->
 <!--[if gt IE 8]><!-->
+	<script src="../_js/american/foundation4/vendor/custom.modernizr.js"></script>
 		<link rel="stylesheet" href="../_css/american/foundation4/normalize.css" />
 		<link rel="stylesheet" href="../_css/american/foundation4/foundation.min.css" />
 		<link rel="stylesheet" href="../_css/american/foundation4/aa.css" />
@@ -56,20 +56,6 @@
 				<p class="twelve columns large-12"><a href="#">Copyright &copy; 2013 NetTracer Inc.</a></p>
 				</div>
 		</footer>
-		<!-- Foundation 3 for IE 8 and earlier -->
-<!--[if lt IE 9]>
-    	<script src="../_js/american/foundation3/foundation.min.js"></script>
-    	<script src="../_js/american/foundation3/aa.js"></script>
-<![endif]-->
-
-<!-- Foundation 4 for IE 9 and later -->
-<!--[if gt IE 8]><!-->
-    	<script src="../_js/american/foundation4/foundation.min.js"></script>
-    	<script>
-        	$(document).foundation();
-    	</script>
-<!--<![endif]-->
-		
 <!-- ########## END FOOTER ########## -->
 </body>
 </f:view>
