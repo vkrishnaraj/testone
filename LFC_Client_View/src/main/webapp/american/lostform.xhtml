@@ -11,6 +11,15 @@
 	<ui:define name="body">
 		<h:form id="lostForm" >
 			<script type="text/javascript">
+			window.onload=function(){
+				fbag=document.getElementById("lostForm:firstBag");
+				lbag=document.getElementById("lostForm:lastBag");
+				if((fbag.value!='') || (lbag.value!='')){
+					document.getElementById("itemNames").style.display="";
+					document.getElementById("lostForm:sameAsContact").checked=true;
+				}
+			}
+			
 				function validateEmail() {
 					var theEmail = document.getElementById("lostForm:email").value;
 					if (!theEmail) {

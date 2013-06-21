@@ -11,6 +11,15 @@
 	<ui:define name="body">
 		<h:form id="lostForm" >
 			<script type="text/javascript">
+			window.onload=function(){
+				fbag=document.getElementById("lostForm:firstBag");
+				lbag=document.getElementById("lostForm:lastBag");
+				if((fbag.value!='') || (lbag.value!='')){
+					document.getElementById("itemNames").style.display="";
+					document.getElementById("lostForm:sameAsContact").checked=true;
+				}
+			}
+			
 				function validateEmail() {
 					var theEmail = document.getElementById("lostForm:email").value;
 					if (!theEmail) {
@@ -237,7 +246,8 @@
 <!-- END ADDRESS INFO UI -->
 					<tr><td>&#160;</td></tr>
 					<tr><td class="twlvPxBlk" colspan="6">
-						<t:outputText value="#{msg.lostform_label_phone_primary}" />
+						<t:outputText value="#{msg.lostform_label_phone_primary}" /><br/>
+						<t:outputText value="#{msg.lostform_label_item_format}" />
 					</td></tr>
 					<tr><td colspan="3">
 						<!-- <t:inputText value="#{lostAndFound.lostReport.contact.primaryPhone.number}"  maxlength="511" style="width: 95%" />-->
@@ -268,7 +278,8 @@
 					    </h:panelGroup>	
 					</td></tr>
 					<tr><td class="twlvPxBlk" colspan="6">
-						<t:outputText value="#{msg.lostform_label_phone_secondary}" />
+						<t:outputText value="#{msg.lostform_label_phone_secondary}" /><br/>
+						<t:outputText value="#{msg.lostform_label_item_format}" />
 					</td></tr>
 					<tr><td colspan="3">
 						<!-- <t:inputText value="#{lostAndFound.lostReport.contact.secondaryPhone.number}" maxlength="511" style="width: 95%" />-->

@@ -71,16 +71,7 @@ public class LostAndFoundController {
 		rates = (List<RateBean>) session.getAttribute("rates");
 
 		session.setAttribute("shippingOptions",
-				(List<SelectItem>) session.getAttribute("shippingOptions")); // To
-																				// Make
-																				// method
-																				// to
-																				// get
-																				// FedEx
-																				// options
-																				// based
-																				// on
-																				// PrefShipAddress
+				(List<SelectItem>) session.getAttribute("shippingOptions")); 
 
 		if (getSubCompany() != null
 				&& !(getSubCompany().equals("AVS")
@@ -207,6 +198,8 @@ public class LostAndFoundController {
 			} else if (prefAddress.equals("Proposed")) {
 				lostReport.getContact().setPrefshipaddress(
 						(AddressBean) session.getAttribute("proposedAddress"));
+			} else {
+				FacesUtil.addError("Please select a preferred address.");
 			}
 		} else {
 			lostReport.getContact().setPrefshipaddress(shippingAddress);
@@ -238,7 +231,7 @@ public class LostAndFoundController {
 				return null;
 			}
 			// FacesUtil.addError("Server Communication Error.");
-		} else if (session.getAttribute("proposedAddress") != null) {
+		} else if (session.getAttribute("proposedAddress") != null && prefAddress==null) {
 			return "shippingconfirm?faces-redirect=true";
 		}
 
