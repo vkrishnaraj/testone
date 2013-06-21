@@ -1,11 +1,14 @@
 package aero.nettracer.fs.utilities;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 
+import aero.nettracer.fs.model.Attachment;
 import aero.nettracer.fs.model.transport.v3.File;
 import aero.nettracer.fs.model.transport.v3.FsClaim;
 import aero.nettracer.fs.model.transport.v3.detection.AccessRequestDTO;
@@ -42,7 +45,13 @@ public class TransportMapper {
 	
 	public static aero.nettracer.fs.model.File map(aero.nettracer.fs.model.transport.v0.File fsfile){
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-		return mapper.map(fsfile, aero.nettracer.fs.model.File.class);
+		aero.nettracer.fs.model.File ntFile = mapper.map(fsfile, aero.nettracer.fs.model.File.class);
+		Set<aero.nettracer.fs.model.FsClaim> ntclaims = new HashSet<aero.nettracer.fs.model.FsClaim>();
+		for (FsClaim claim : ((File) fsfile).getClaims()) {
+			ntclaims.add(mapAttachments(claim));
+		}
+		ntFile.setClaims(ntclaims);
+		return ntFile;
 	}
 	
 	public static AccessRequestDTO map(aero.nettracer.fs.model.detection.AccessRequestDTO dto){
@@ -100,8 +109,22 @@ public class TransportMapper {
 	}
 	
 	public static aero.nettracer.fs.model.FsClaim map(aero.nettracer.fs.model.transport.v0.FsClaim fscl) {
+		return mapAttachments((FsClaim) fscl);
+	}
+	
+	private static aero.nettracer.fs.model.FsClaim mapAttachments(FsClaim fsClaim) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-		return mapper.map((FsClaim) fscl, aero.nettracer.fs.model.FsClaim.class);
+		aero.nettracer.fs.model.FsClaim ntclaim = mapper.map(fsClaim, aero.nettracer.fs.model.FsClaim.class);
+		Set<Attachment> ntattachs = new HashSet<Attachment>();
+		for (FsAttachment attach : fsClaim.getAttachments()) {
+			Attachment ntattach = new Attachment();
+			ntattach.setClaim(ntclaim);
+			ntattach.setAttachment_id(attach.getId());
+			ntattach.setDescription(attach.getDescription());
+			ntattachs.add(ntattach);
+		}
+		ntclaim.setAttachments(ntattachs);
+		return ntclaim;
 	}
 
 }
