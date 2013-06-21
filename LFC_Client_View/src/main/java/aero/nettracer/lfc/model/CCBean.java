@@ -59,6 +59,9 @@ public class CCBean implements Serializable{
 		this.ccexpirationmonth = ccexpirationmonth;
 	}
 	public String getCc4number() {
+		if (ccnumber == null || ccnumber.length() < 4) {
+			return "";
+		}
 		return "************"+ccnumber.substring(ccnumber.length()-4,ccnumber.length());
 	}
 }
