@@ -130,7 +130,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Test, GA 30339"));
 		verifyTrue(selenium.isTextPresent("United States"));
 		verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
-		selenium.click("id=j_id7:backButton");
+		selenium.click("id=j_id7:backButton1");
 		waitForPageToLoadImproved(false);
 	}
 	
@@ -176,7 +176,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("2, GA 30339"));
 			verifyTrue(selenium.isTextPresent("United States"));
 			verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
-			selenium.click("id=j_id7:backButton");
+			selenium.click("id=j_id7:backButton2");
 			waitForPageToLoadImproved(false);
 		}
 		
