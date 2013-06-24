@@ -35,23 +35,23 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Frequently Asked Questions"));
 		selenium.click("css=#q1 > span");
 		verifyTrue(selenium.isTextPresent("Will you keep me updated on the status of the search for my lost item?"));
-		verifyTrue(selenium.isTextPresent("You will receive an e-mail from Lost & Found Central when you file the report for your lost item. If we find an item that matches the description of your lost item, we will send you an e-mail notification with further instructions to allow for confirmation that the item is yours. While we are searching for your lost item, (for up to 30 days), we will update you via e-mail throughout the search process."));
+		verifyTrue(selenium.isTextPresent("You will receive an email from Lost & Found Central when you file the report for your lost item. If we find an item that matches the description of your lost item, we will send you an email notification with further instructions to allow for confirmation that the item is yours. While we are searching for your lost item, (for up to 30 days), we will update you via email throughout the search process."));
 		selenium.click("css=#q1 > span");
 		selenium.click("css=#q2 > span");
 		verifyTrue(selenium.isTextPresent("How long will you search for my lost item?"));
-		verifyTrue(selenium.isTextPresent("A thorough search will take place for approximately 30 days after we receive the lost item report. If we are unable to find your item, you will receive an e-mail notification informing you that we have been unsuccessful in our efforts."));
+		verifyTrue(selenium.isTextPresent("A thorough search will take place for approximately 30 days after we receive the lost item report. If we are unable to find your item, you will receive an email notification informing you that we have been unsuccessful in our efforts."));
 		selenium.click("css=#q2 > span");
 		selenium.click("css=#q3 > span");
 		verifyTrue(selenium.isTextPresent("How will I know if my item has been found?"));
-		verifyTrue(selenium.isTextPresent("If we locate an item that matches the description of your lost item, Lost & Found Central will contact you via e-mail and/or phone to verify that the item is yours and arrange for delivery of the item."));
+		verifyTrue(selenium.isTextPresent("If we locate an item that matches the description of your lost item, Lost & Found Central will contact you via email and/or phone to verify that the item is yours and arrange for delivery of the item."));
 		selenium.click("css=#q3 > span");
 		selenium.click("css=#q4 > span");
 		verifyTrue(selenium.isTextPresent("If my item is found how will it be returned to me?"));
 		verifyTrue(selenium.isTextPresent("Lost & Found Central will ask you to provide a FedEx account number for billing purposes and a shipping address. If you do not have a FedEx account, you can easily create one at FedEx.com."));
 		selenium.click("css=#q4 > span");
 		selenium.click("css=#q5 > span");
-		verifyTrue(selenium.isTextPresent("I don't have an e-mail address, how will I be contacted?"));
-		verifyTrue(selenium.isTextPresent("If you do not have an e-mail address you will be contacted via telephone only if it appears that your item has been located. We will not provide status updates via telephone."));
+		verifyTrue(selenium.isTextPresent("I don't have an email address, how will I be contacted?"));
+		verifyTrue(selenium.isTextPresent("If you do not have an email address you will be contacted via telephone only if it appears that your item has been located. We will not provide status updates via telephone."));
 		selenium.click("css=#q5 > span");
 		selenium.click("css=#q6 > span");
 		verifyTrue(selenium.isTextPresent("What happens to the items that cannot be returned to their owner?"));
@@ -83,7 +83,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 	public void testLostReportPage() throws Exception {
 		selenium.click("id=lostForm:buttonCreate");
 		waitForPageToLoadImproved(1000, false);
-		assertEquals("Please be advised that if an e-mail address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", selenium.getConfirmation());
+		assertEquals("Please be advised that if an email address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", selenium.getConfirmation());
 		selenium.select("id=lostForm:itemCategory", "label=Cellphone");
 		selenium.select("id=lostForm:itemColor", "label=Black");
 		selenium.select("id=lostForm:itemCaseColor", "label=Does Not Apply");
@@ -116,7 +116,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		String lost_id = selenium.getText("id=j_id7:j_id18");
 		Settings.LOST_ID_LF_WN = lost_id;
 		System.out.println("WN CLIENT VIEW LOST CREATED: " + Settings.LOST_ID_LF_WN);
-		verifyTrue(selenium.isTextPresent("You will receive e-mail updates with the status of your pending report every few days."));
+		verifyTrue(selenium.isTextPresent("You will receive email updates with the status of your pending report every few days."));
 		verifyTrue(selenium.isTextPresent("If you would like to see a printable version of your Lost Item Report, please click the review button below."));
 		selenium.click("id=j_id7:j_id26");
 		waitForPageToLoadImproved(false);
@@ -130,7 +130,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Test, GA 30339"));
 		verifyTrue(selenium.isTextPresent("United States"));
 		verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
-		selenium.click("id=lostForum:printButton");
+		selenium.click("id=j_id7:backButton");
 		waitForPageToLoadImproved(false);
 	}
 	
@@ -176,7 +176,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 			verifyTrue(selenium.isTextPresent("2, GA 30339"));
 			verifyTrue(selenium.isTextPresent("United States"));
 			verifyTrue(selenium.isTextPresent("test@nettracer.aero"));
-			selenium.click("id=lostForm:backButton");
+			selenium.click("id=j_id7:backButton");
 			waitForPageToLoadImproved(false);
 		}
 		
