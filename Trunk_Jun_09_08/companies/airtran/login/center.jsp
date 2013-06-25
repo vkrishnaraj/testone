@@ -9,7 +9,7 @@
 <%@ page import="java.util.List,
                  java.util.Iterator" %>
 
-<html:form action="/logon" focus="username" onsubmit="return validateLogonForm(this);">
+<html:form action="/logon" focus="username" onsubmit="return validateLogonForm(this);" >
     <table class=login2 width="50%" align=center>
       <tr>
         <td align="center" colspan=2>
@@ -58,7 +58,7 @@
               :
             </td>
             <td>
-              <html:password property="password" size="16" maxlength="25" redisplay="false" styleClass="textfield" />
+              <html:password property="password" size="16\" autocomplete=\"off" maxlength="25" redisplay="false" styleClass="textfield" />
             </td>
           </tr>
           <tr>

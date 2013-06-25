@@ -125,7 +125,7 @@ String passMin = bundle.getString("error.security.password.minimal").replace("{0
               :
             </td>
             <td>
-              <html:password name="agentForm" property="password" size="12" maxlength="18" styleClass="textfield" onchange="document.getElementById('passwordChanged').value='1'; document.getElementsByName('resetPassword')[0].options[0].selected=true;"/>
+              <html:password name="agentForm" property="password" size="12\" autocomplete=\"off"  maxlength="18" styleClass="textfield" onchange="document.getElementById('passwordChanged').value='1'; document.getElementsByName('resetPassword')[0].options[0].selected=true;"/>
             </td>
           </tr>
           <tr>

@@ -57,7 +57,7 @@
               :
             </td>
             <td>
-              <html:password property="password" size="16" maxlength="18" redisplay="false" styleClass="textfield" />
+              <html:password property="password" size="16\" autocomplete=\"off" maxlength="18" redisplay="false" styleClass="textfield" />
             </td>
           </tr>
           <tr>

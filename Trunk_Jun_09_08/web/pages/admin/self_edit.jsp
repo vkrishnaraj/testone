@@ -63,7 +63,7 @@
             </td>
             <td>
               <input id="passwordChanged" type="hidden" name="passwordChanged" value="0">
-              <html:password name="agentForm" property="password" size="12" maxlength="18" styleClass="textfield"  onchange="document.getElementById('passwordChanged').value='1';"/>
+              <html:password name="agentForm" property="password" size="12\" autocomplete=\"off" maxlength="18" styleClass="textfield"  onchange="document.getElementById('passwordChanged').value='1';"/>
             </td>
           </tr>
           <tr>
