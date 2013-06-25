@@ -44,7 +44,7 @@ response.addDateHeader("Expires", -1);
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%><html>
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-<meta http-equiv="X-Frame-Options" content="deny"/>
+<meta http-equiv="X-Frame-Options" content="sameorigin"/>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <title>NetTracer</title>
 <script language="javascript" src="<%=request.getContextPath()%>/deployment/main/js/javascript-xpath-latest.js"></script>
