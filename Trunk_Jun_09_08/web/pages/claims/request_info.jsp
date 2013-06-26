@@ -105,7 +105,7 @@
             	<%if(request.getParameter("incident")!=null){ %>
             	<input type="hidden" id="incident" name="incident" value="<%=request.getParameter("incident") %>" />
             	<%} %>
-					<html:submit property="send" styleId="button">
+					<html:submit property="send" styleId="button" onclick="this.disabled = true;">
                       <bean:message key="send_message" />
                     </html:submit>
                     &nbsp;&nbsp;
