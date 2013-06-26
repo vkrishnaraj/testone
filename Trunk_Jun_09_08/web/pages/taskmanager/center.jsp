@@ -16,14 +16,6 @@
 	boolean hasLoadFoundPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LFC_LOAD_FOUND_FROM_TASK_MANAGER, a);
 %>
 <jsp:include page="/pages/includes/taskmanager_header.jsp" />
-<script>
-	window.onload = function()
-	{
-		for (i = 0; i < document.forms.length; i++) {
-			document.forms[i].setAttribute("autocomplete", "off");
-		}
-	}
-</script>
 
 <tr>
   
