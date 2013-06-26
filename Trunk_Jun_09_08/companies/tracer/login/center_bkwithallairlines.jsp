@@ -9,6 +9,14 @@
                  com.bagnet.nettracer.tracing.db.Company" %>
 <%@ page import="java.util.List,
                  java.util.Iterator" %>
+<script>
+	window.onload = function()
+	{
+		for (i = 0; i < document.forms.length; i++) {
+			document.forms[i].setAttribute("autocomplete", "off");
+		}
+	}
+</script>
 <html:form action="/logon" focus="username" onsubmit="return validateLogonForm(this);">
   <div id=mainlogin>
 <%

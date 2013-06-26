@@ -9,6 +9,14 @@
 <%@ page import="java.util.List,
                  java.util.Iterator" %>
 
+<script>
+	window.onload = function()
+	{
+		for (i = 0; i < document.forms.length; i++) {
+			document.forms[i].setAttribute("autocomplete", "off");
+		}
+	}
+</script>
 <html:form action="/logon" focus="username" onsubmit="return validateLogonForm(this);" >
     <table class=login2 width="50%" align=center>
       <tr>
