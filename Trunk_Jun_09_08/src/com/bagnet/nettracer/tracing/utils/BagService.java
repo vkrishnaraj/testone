@@ -1167,7 +1167,7 @@ public class BagService {
 				}
 				int result = -1;
 				try{
-					result=iBMO.insertItemContents(true, ilist,mod_agent);
+					result=iBMO.insertItemContents(true, ilist,mod_agent, iDTO);
 				} catch(Exception e){
 					e.printStackTrace();
 				}

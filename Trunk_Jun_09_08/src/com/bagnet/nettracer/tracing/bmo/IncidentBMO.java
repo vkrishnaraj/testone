@@ -276,7 +276,7 @@ public class IncidentBMO {
 		return 1;
 	}
 	
-	public int insertItemContents(boolean checkStaleState, List<Item> ilist, Agent mod_agent) 
+	public int insertItemContents(boolean checkStaleState, List<Item> ilist, Agent mod_agent, Incident iDTO) 
 			throws HibernateException, StaleStateException {
 		Transaction t = null;
 		Session sess = null;
@@ -301,6 +301,22 @@ public class IncidentBMO {
 
 			t.commit();
 			sess.flush();
+			
+			// check if audit is enabled for this company....
+			if ((iDTO.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && iDTO.getAgent().getStation()
+					.getCompany().getVariable().getAudit_lost_delayed() == 1)
+					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.DAMAGED_BAG && iDTO.getAgent()
+							.getStation().getCompany().getVariable().getAudit_damaged() == 1)
+					|| (iDTO.getItemtype().getItemType_ID() == TracingConstants.MISSING_ARTICLES && iDTO.getAgent()
+							.getStation().getCompany().getVariable().getAudit_missing_articles() == 1)) {
+				Audit_Incident audit_dto = AuditIncidentUtils.getAuditIncident(iDTO, mod_agent);
+		
+				if (audit_dto != null) {
+					t = sess.beginTransaction();
+					sess.save(audit_dto);
+					t.commit();
+				}
+			}
 		} catch (StaleObjectStateException e) {
 			logger.error("unable to insert into database because someone else updated the table already: " + e);
 
