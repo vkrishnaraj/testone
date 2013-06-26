@@ -337,8 +337,6 @@ td.mh {
 
 
 #slideUpContainer {
-bottom: 0px ;
-display: none ;
 left: 20px;
 position: fixed;
 width: 94% ;
@@ -349,8 +347,8 @@ width: 94% ;
 background-color: #F0F0F0;
 border: 1px solid #666666;
 border-bottom-width: 1px;
-height: 300px;
 padding: 20px 20px 20px 20px ;
+height: 300px;
 overflow: auto;
 }
 

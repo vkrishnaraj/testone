@@ -177,15 +177,14 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
         
 <p>&nbsp;</p>
-<!-- <img src="<%=request.getContextPath()%>/deployment/main/images/nettracer/poweredby_net_tracer.jpg"  alt="Powered by Net Tracer" class="imgAlignBottom">
- -->
- <div class="imgAlignBottom">&#160;</div>
+<a href="http://www.nettracer.aero" >
+<img src="<%=request.getContextPath()%>/deployment/main/images/nettracer/Powered_By_NetTracer_7-20-2011.jpg"  alt="Powered by NetTracer" class="imgAlignBottom">
+</a>
 
 
 </logic:notPresent>
 
 <logic:present name="user" scope="session">
-
 
 <table cellspacing="0" id="bodytable"> 
   <tr> 
@@ -359,8 +358,8 @@ jQuery(document).ready(function () {
       /*remove||re-assign onbeforeunload on hover */
     jQuery('a[href^="javascript:"]')
       .hover( 
-             function(){window.onbeforeunload=null;},
-             function(){window.onbeforeunload=$(window).data('beforeunload');}
+             function(){clearBeforeUnload();},
+             function(){loadBeforeUnload($(window).data('beforeunload'));}
             );
 });
 
@@ -373,12 +372,22 @@ function clearBeforeUnload() {
 	}
 }
 
+function loadBeforeUnload(var data) {
+	var isOld = jQuery('html').hasClass('oldBrowser');
+	if (isOld) {
+		window.document.body.onbeforeunload = data;
+	} else {
+		window.onbeforeunload = data;
+	}
+}
+
 </script>
 <!--[if lt IE 9]>
 <script language="javascript" >
 jQuery('html').addClass("oldBrowser");
 </script>
 <![endif]-->
+
 
 <%
 	String isVis = request.getParameter("slideUpContainerVisible");
@@ -387,11 +396,13 @@ jQuery('html').addClass("oldBrowser");
 	}
 %>
 <input type="hidden" value="<%=isVis %>" name="slideUpContainerVisible" id="slideUpContainerVisible" />
-<div id="slideUpContainer">
+
+<div id="slideUpContainer" style="bottom: -342px;">
 	<div id="sliderInner">
 	<div style="float: right; margin-right: 10px;">
 	 	<a id="switchLink" href="###" onclick="switchLocation();return false;">Switch Location</a>&nbsp;&nbsp;
-		<a id="closeLink" href="###" onclick="handleEvent();return false;">Close</a>
+		<a id="closeLink" href="###" onclick="handleEvent();return false;">Minimize</a>
+		<a id="openLink" href="###" onclick="handleEvent();return false;" style="display: none;">Maximize</a>
 	</div><br/>
 	<div id="sliderContentFrame" style="float: none"></div>
 </div>
