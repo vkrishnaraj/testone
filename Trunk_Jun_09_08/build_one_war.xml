@@ -553,6 +553,28 @@
 		</copy>
 		<copy todir="${staging.dir}/${staging.env}/${staging.project}" file="${build.dir}/tracer.ear"/>
 	</target>
+	
+	<target name="donotrun-build-service-ear">
+		
+		<copy todir="${build.dir}/dist/web/lib" >
+			<fileset dir="${lib.jar.dir}"
+			includes="*.jar"
+			excludes="mysql-connector-java*.jar,
+					  netty.jar"
+			/>
+		</copy> 
+		
+		<ear destfile="${build.dir}/tracer.ear" appxml="${basedir}/${app.xml.location}/application.xml">
+			<fileset dir="${build.dir}/dist/web" includes="${avis.service.includes}"/>
+		</ear>
+		
+		<copy todir="${app.home.jb7}\standalone\deployments">
+			<fileset dir="${build.dir}">
+				<include name="tracer.ear" />
+			</fileset>
+		</copy>
+		<copy todir="${staging.dir}/${staging.env}/${staging.project}" file="${build.dir}/tracer.ear"/>
+	</target>
 
 	<!-- END EAR BUILD TARGETS -->
 	
@@ -632,7 +654,7 @@
 		<antcall target="build-war-local-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 	 
 	 <target name="build-ear-local-azul" depends="delete-wars">
@@ -660,7 +682,7 @@
 		<antcall target="build-war-local-lfc"/>
 		<antcall target="build-jar-lfc-service"/>
 		<property name="app.xml.location" value="metadata/lfc/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 	
 	<target name="build-ear-local-westjet-jetblue" depends="delete-wars">
@@ -908,7 +930,7 @@
 		<antcall target="build-war-testing-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 	
 	<target name="build-ear-testing-lfc-service" depends="delete-wars">
@@ -918,7 +940,7 @@
 		<antcall target="build-war-testing-lfc"/>
 		<antcall target="build-jar-lfc-service"/>
 		<property name="app.xml.location" value="metadata/lfc/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 
 	<target name="build-ear-testing-avis-lfc-service" depends="delete-wars">
@@ -931,7 +953,7 @@
 		<antcall target="build-war-testing-lfc"/>
 		<antcall target="build-jar-lfc-service"/>
 		<property name="app.xml.location" value="metadata/ab-lfc/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 
 	<target name="build-ear-hudson-avis-service" depends="delete-wars">
@@ -942,7 +964,7 @@
 		<antcall target="build-war-hudson-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 
 	<target name="build-ear-hudson-lfc-service" depends="delete-wars">
@@ -953,7 +975,7 @@
 		<antcall target="build-war-hudson-lfc"/>
 		<antcall target="build-jar-lfc-service"/>
 		<property name="app.xml.location" value="metadata/lfc/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 
 	<target name="build-ear-hudson-avis-lfc-service" depends="delete-wars">
@@ -966,7 +988,7 @@
 		<antcall target="build-war-hudson-lfc"/>
 		<antcall target="build-jar-lfc-service"/>
 		<property name="app.xml.location" value="metadata/ab-lfc/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 	
 	<target name="build-ear-demo-lfc-service" depends="delete-wars">
@@ -1240,7 +1262,7 @@
 		<antcall target="build-war-training-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 	
 	<target name="build-ear-training-lfc-service" depends="delete-wars">
@@ -1250,7 +1272,7 @@
 		<antcall target="build-war-training-lfc"/>
 		<antcall target="build-jar-lfc-service"/>
 		<property name="app.xml.location" value="metadata/lfc/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 
 	<target name="build-ear-training-avis-lfc-service" depends="delete-wars">
@@ -1263,7 +1285,7 @@
 		<antcall target="build-war-training-lfc"/>
 		<antcall target="build-jar-lfc-service"/>
 		<property name="app.xml.location" value="metadata/ab-lfc/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 	
 	<target name="build-ear-production" depends="delete-wars">
@@ -1417,7 +1439,7 @@
 		<antcall target="build-war-production-avis"/>
 		<antcall target="build-jar-avis-service"/>
 		<property name="app.xml.location" value="metadata/ab/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 	
 	<target name="build-ear-production-lfc" depends="delete-wars">
@@ -1436,7 +1458,7 @@
 		<antcall target="build-war-production-lfc"/>
 		<antcall target="build-jar-lfc-service"/>
 		<property name="app.xml.location" value="metadata/lfc/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 
 	<target name="build-ear-production-avis-lfc-service" depends="delete-wars">
@@ -1449,7 +1471,7 @@
 		<antcall target="build-war-production-lfc"/>
 		<antcall target="build-jar-lfc-service"/>
 		<property name="app.xml.location" value="metadata/ab-lfc/service" />
-		<antcall target="donotrun-build-ear" />
+		<antcall target="donotrun-build-service-ear" />
 	</target>
 	
 	<target name="build-ear-production-airtran" depends="delete-wars">
