@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
 
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -62,14 +63,14 @@ public class ForwardOnHandAction extends Action {
 		ForwardOnHandForm theform = (ForwardOnHandForm) form;
 		
 		String companyCode = null;
-		if (theform.getCompanyCode() != null && !theform.getCompanyCode().equals("")) companyCode = theform
+		if (theform.getCompanyCode() != null && !theform.getCompanyCode().equals("") && CompanyBMO.getCompany(theform.getCompanyCode())!=null) companyCode = theform
 				.getCompanyCode();
 		else companyCode = user.getCompanycode_ID();
 
 		theform.setCompanyCode(companyCode);
 		
 		List stationList = null;
-		if (theform.getCompanyCode() != null && !theform.getCompanyCode().equals("")) stationList = TracerUtils
+		if (theform.getCompanyCode() != null && !theform.getCompanyCode().equals("") && CompanyBMO.getCompany(theform.getCompanyCode())!=null) stationList = TracerUtils
 				.getStationList(theform.getCompanyCode());
 		else stationList = TracerUtils
 				.getStationList(user.getCompanycode_ID());
@@ -112,7 +113,7 @@ public class ForwardOnHandAction extends Action {
 			return mapping.findForward(TracingConstants.ENTER_FORWARD_ON_HAND);
 		} else if (request.getParameter("save") != null) {
 			//Invalid or no destination is selected.
-			if (theform.getDestStation() == null || theform.getDestStation().equals("")) {
+			if (theform.getDestStation() == null || theform.getDestStation().equals("") || StationBMO.getStation(theform.getDestStation())==null) {
 				ActionMessage error = new ActionMessage("error.noStationcode");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
@@ -150,7 +151,13 @@ public class ForwardOnHandAction extends Action {
 		if (request.getParameter("log_ID") != null) {
 			String log_id = request.getParameter("log_ID");
 		}
-		String ohd_ID = request.getParameter("ohd_ID");
+		String ohd_ID = theform.getOhd_ID();
+		
+		if(ohd_ID==null || ohd_ID.length()==0){
+			request.getParameter("ohd_ID");
+			if(ohd_ID!=null && OHDUtils.getOHD(ohd_ID)==null)
+				ohd_ID=null;
+		}
 
 		if (request.getParameter("batch") != null) {
 			ohd_ID = request.getParameter("batch_id");
@@ -158,13 +165,14 @@ public class ForwardOnHandAction extends Action {
 		
 		ArrayList<LabelValueBean> oList = new ArrayList<LabelValueBean>();
 		
-		String[] ohdArray = ohd_ID.split(",");
-		
-		for (String o: ohdArray) {
-			oList.add(new LabelValueBean(o, ""));
-		}		
 
 		if (ohd_ID != null) {
+			String[] ohdArray = ohd_ID.split(",");
+			
+			for (String o: ohdArray) {
+				if(OHDUtils.getOHD(o)!=null)
+					oList.add(new LabelValueBean(o, ""));
+			}		
 			//reset the forward form
 			theform = new ForwardOnHandForm();
 			List list = new ArrayList();
@@ -174,7 +182,11 @@ public class ForwardOnHandAction extends Action {
 			list.add(itinerary);
 			theform.setOhd_ID(ohd_ID);
 			theform.setOhdList(oList);
-			theform.setCompanyCode(user.getCompanycode_ID());
+			if(companyCode!=null && companyCode.length()>0){
+				theform.setCompanyCode(companyCode);
+			} else {
+				theform.setCompanyCode(user.getCompanycode_ID());
+			}
 			session.setAttribute("forwardOnHandForm", theform);
 		}
 		String request_ID = request.getParameter("request_ID");

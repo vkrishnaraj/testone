@@ -32,12 +32,8 @@ public class AuditCompanyUtils {
 	public static List getAuditsForComparison(String audit_id) {
 		Session sess = null;
 		try {
+			String sql = "from com.bagnet.nettracer.tracing.db.audit.Audit_Company aa  where 1=1 "; 
 			sess = HibernateWrapper.getSession().openSession();
-			StringBuffer sql = new StringBuffer(512);
-
-			sql.append("select aa from com.bagnet.nettracer.tracing.db.audit.Audit_Company aa ");
-			sql.append(" where 1=1 ");
-
 			List audit_ohd_list = new ArrayList();
 
 			StringTokenizer st = new StringTokenizer(audit_id, ",");
@@ -46,20 +42,21 @@ public class AuditCompanyUtils {
 			while (st.hasMoreTokens()) {
 				audit_ohd_list.add(st.nextToken());
 				if (i < 1) {
-					sql.append(" and audit_id = :audit_id" + i);
+					sql+=" and audit_id = :audit_id" + i;
 				} else {
-					sql.append(" or audit_id = :audit_id" + i);
+					sql+=" or audit_id = :audit_id" + i;
 				}
 				i++;
 			}
-			sql.append(" order by aa.audit_id ");
+			sql+=" order by aa.audit_id ";
 
-			Query q = sess.createQuery(sql.toString());
+			Query q = sess.createQuery(sql);
 
 			for (int j = 0; j < i; j++) {
-				q.setString("audit_id" + j, (String) audit_ohd_list.get(j));
+				q.setParameter("audit_id" + j, Integer.valueOf((String.valueOf(audit_ohd_list.get(j)))));
 			}
 			return q.list();
+			
 		} catch (Exception e) {
 			logger.error("unable to retrieve company: " + e);
 			return null;

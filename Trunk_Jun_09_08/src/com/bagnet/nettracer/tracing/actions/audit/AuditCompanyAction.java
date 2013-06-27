@@ -56,6 +56,7 @@ public class AuditCompanyAction extends Action {
 		String audit_id = request.getParameter("audit_id");
 		if (audit_id != null && audit_id.length() > 0) {
 			List compareList = AuditCompanyUtils.getAuditsForComparison(audit_id);
+			if(compareList!=null && compareList.size()>0){
 			for (int i = 0; i < compareList.size(); i++) {
 				Audit_Company ic = (Audit_Company) compareList.get(i);
 				ic.set_DATEFORMAT(user.getDateformat().getFormat());
@@ -66,6 +67,7 @@ public class AuditCompanyAction extends Action {
 			request.setAttribute("compareList", compareList);
 
 			return (mapping.findForward(TracingConstants.AUDIT_COMPANY_COMPARE_DETAIL));
+			}
 		}
 
 		//Obtain list of all audit's made to this report.
