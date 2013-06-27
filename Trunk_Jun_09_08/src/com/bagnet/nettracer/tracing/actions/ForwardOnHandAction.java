@@ -119,8 +119,13 @@ public class ForwardOnHandAction extends Action {
 				saveMessages(request, errors);
 			} else {
 				// Do the forward
-				if (bs.forwardOnHand(theform, user, messages)) {
+				if (((theform.getOhd_ID()!=null && theform.getOhd_ID().length()>0 && OHDUtils.getOHD(String.valueOf(theform.getOhd_ID()))!=null) || (theform.getOhdList()!=null && theform.getOhdList().size()>0) 
+						|| (theform.getBag_request_id()!=null && OHDUtils.getOHD(String.valueOf(theform.getBag_request_id()))!=null)) && bs.forwardOnHand(theform, user, messages)) {
 					return (mapping.findForward(TracingConstants.FORWARD_ON_HAND_SUCCESS));
+				} else {
+					ActionMessage error = new ActionMessage("error.noForwardcode");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
 				}
 			}
 			return (mapping.findForward(TracingConstants.ENTER_FORWARD_ON_HAND));
