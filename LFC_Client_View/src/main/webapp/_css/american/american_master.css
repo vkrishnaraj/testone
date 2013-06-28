@@ -39,3 +39,11 @@ background-color: #BED6F8;
     font-weight: bold;
 }
 
+.poweredby-logo {
+	bottom: 0.3em;
+	right: 3.8em;
+	margin: 0;
+	position: absolute;
+	z-index: 1;
+}
+
